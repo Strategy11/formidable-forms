@@ -162,6 +162,9 @@ class FrmListHelper {
 		return current_user_can( 'administrator' );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_columns() {
 		return array();
 	}
@@ -527,6 +530,7 @@ class FrmListHelper {
 	 * @param string $current_mode
 	 */
 	protected function view_switcher( $current_mode ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="hidden" name="mode" value="<?php echo esc_attr( $current_mode ); ?>"/>
 		<div class="view-switch">
@@ -549,6 +553,7 @@ class FrmListHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -650,11 +655,11 @@ class FrmListHelper {
 
 		if ( 'bottom' === $which ) {
 			$html_current_page  = $current;
-			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'formidable' ) . '</span><span id="table-paging" class="paging-input">';
+			$total_pages_before = '<span class="screen-reader-text">' . esc_html__( 'Current Page', 'formidable' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
 			$html_current_page = sprintf(
 				"%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
-				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', 'formidable' ) . '</label>',
+				'<label for="current-page-selector" class="screen-reader-text">' . esc_html__( 'Current Page', 'formidable' ) . '</label>',
 				$current,
 				strlen( $total_pages )
 			);
@@ -819,7 +824,7 @@ class FrmListHelper {
 		$column  = '';
 
 		// We need a primary defined so responsive views show something,
-		// so let's fall back to the first non-checkbox column.
+		// So let's fall back to the first non-checkbox column.
 		foreach ( $columns as $col => $column_name ) {
 			if ( 'cb' === $col ) {
 				continue;
@@ -844,7 +849,7 @@ class FrmListHelper {
 		$default = $this->get_default_primary_column_name();
 
 		// If the primary column doesn't exist fall back to the
-		// first non-checkbox column.
+		// First non-checkbox column.
 		if ( ! isset( $columns[ $default ] ) ) {
 			$default = self::get_default_primary_column_name();
 		}
@@ -962,7 +967,7 @@ class FrmListHelper {
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
-			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'formidable' ) . '</label>';
+			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', 'formidable' ) . '</label>';
 			$columns['cb']    .= '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" />';
 			++$cb_counter;
 		}
@@ -1072,6 +1077,7 @@ class FrmListHelper {
 		}
 		$this->screen->render_screen_reader_content( 'heading_list' );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
 			<?php if ( $this->has_min_items( 1 ) ) { ?>
@@ -1095,6 +1101,8 @@ class FrmListHelper {
 			<?php } ?>
 		</table>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+
 		if ( $this->should_display( $args, 'display-bottom-nav' ) ) {
 			$this->display_tablenav( 'bottom' );
 		}
@@ -1139,9 +1147,10 @@ class FrmListHelper {
 				return;
 			}
 		} elseif ( ! $this->has_min_items() ) {
-			// don't show the bulk actions when there aren't many rows.
+			// Don't show the bulk actions when there aren't many rows.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
@@ -1156,6 +1165,7 @@ class FrmListHelper {
 			<br class="clear"/>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

@@ -10,7 +10,7 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_front_head() {
 		$this->set_front_end();
 
-		// reset if the style was loaded in another test
+		// Reset if the style was loaded in another test
 		global $frm_vars, $wp_styles;
 		$frm_vars['css_loaded'] = false;
 

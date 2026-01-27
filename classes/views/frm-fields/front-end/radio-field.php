@@ -76,7 +76,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?>/><?php
 
 		if ( $include_label ) {
-			echo ' ' . FrmAppHelper::kses( $label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo ' ';
+			FrmAppHelper::kses( $label, 'all' );
 			FrmFieldsHelper::after_choice_input( $field, $opt_key );
 			echo '</label>';
 		}

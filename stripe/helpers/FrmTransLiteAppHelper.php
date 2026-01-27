@@ -404,7 +404,9 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
-		if ( $value ) { ?>
+		if ( $value ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
+			?>
 			<tr>
 				<th scope="row"><?php echo esc_html( $label ); ?>:</th>
 				<td>
@@ -412,6 +414,7 @@ class FrmTransLiteAppHelper {
 				</td>
 			</tr>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
@@ -565,6 +568,7 @@ class FrmTransLiteAppHelper {
 		}
 
 		$currencies = FrmCurrencyHelper::get_currencies();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
 			<?php
@@ -592,6 +596,7 @@ class FrmTransLiteAppHelper {
 			?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

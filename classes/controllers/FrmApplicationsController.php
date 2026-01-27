@@ -82,7 +82,7 @@ class FrmApplicationsController {
 		if ( 'applications' !== $view ) {
 			FrmAppHelper::permission_check( self::get_required_capability() );
 
-			// view may be 'applications', 'templates', or empty.
+			// View may be 'applications', 'templates', or empty.
 			$data['templates']  = self::get_prepared_template_data();
 			$data['categories'] = FrmApplicationTemplate::get_categories();
 		} else {

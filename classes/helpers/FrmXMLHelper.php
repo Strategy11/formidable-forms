@@ -74,7 +74,7 @@ class FrmXMLHelper {
 		$xml = simplexml_import_dom( $dom );
 		unset( $dom );
 
-		// halt if loading produces an error
+		// Halt if loading produces an error
 		if ( ! $xml ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
@@ -334,7 +334,7 @@ class FrmXMLHelper {
 	 * @return false|object
 	 */
 	private static function maybe_get_form( $form ) {
-		// if template, allow to edit if form keys match, otherwise, creation date must also match
+		// If template, allow to edit if form keys match, otherwise, creation date must also match
 		$edit_query = array(
 			'form_key'    => $form['form_key'],
 			'is_template' => $form['is_template'],
@@ -498,7 +498,7 @@ class FrmXMLHelper {
 			self::migrate_placeholders( $f );
 
 			if ( $this_form ) {
-				// check for field to edit by field id
+				// Check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
 					FrmField::update( $f['id'], $f );
 					++$imported['updated']['fields'];
@@ -513,7 +513,7 @@ class FrmXMLHelper {
 					$keys_by_original_field_id[ $f['id'] ] = $f['field_key'];
 					$old_field_id                          = $f['id'];
 
-					// check for field to edit by field key
+					// Check for field to edit by field key
 					unset( $f['id'] );
 
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
@@ -941,7 +941,7 @@ class FrmXMLHelper {
 			return;
 		}
 
-		// save the old style to maybe update after styles import
+		// Save the old style to maybe update after styles import
 		$form['options']['old_style'] = $form['options']['custom_style'];
 
 		// Set to default
@@ -961,16 +961,18 @@ class FrmXMLHelper {
 	private static function update_custom_style_setting_after_import( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 
-		if ( $form && isset( $form->options['old_style'] ) ) {
-			$form                            = (array) $form;
-			$saved_style                     = $form['options']['custom_style'];
-			$form['options']['custom_style'] = $form['options']['old_style'];
-			self::update_custom_style_setting_on_import( $form );
-			$has_changed = $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style']; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		if ( ! $form || ! isset( $form->options['old_style'] ) ) {
+			return;
+		}
 
-			if ( $has_changed ) {
-				FrmForm::update( $form['id'], $form );
-			}
+		$form                            = (array) $form;
+		$saved_style                     = $form['options']['custom_style'];
+		$form['options']['custom_style'] = $form['options']['old_style'];
+		self::update_custom_style_setting_on_import( $form );
+		$has_changed = $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style']; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+
+		if ( $has_changed ) {
+			FrmForm::update( $form['id'], $form );
 		}
 	}
 
@@ -1099,7 +1101,7 @@ class FrmXMLHelper {
 		unset( $posts_with_shortcodes, $view_ids );
 
 		if ( ! empty( $imported['forms'] ) ) {
-			// clear imported forms style cache to make sure the new styles are applied to the forms
+			// Clear imported forms style cache to make sure the new styles are applied to the forms
 			self::clear_forms_style_caches( $imported['forms'] );
 		}
 
@@ -1264,7 +1266,7 @@ class FrmXMLHelper {
 		}
 
 		if ( $post['post_type'] === FrmFormActionsController::$action_post_type && isset( $imported['forms'][ (int) $post['menu_order'] ] ) ) {
-			// update to new form id
+			// Update to new form id
 			$post['menu_order'] = $imported['forms'][ (int) $post['menu_order'] ];
 		}
 
@@ -1307,7 +1309,7 @@ class FrmXMLHelper {
 		} else {
 			$m['value'] = FrmAppHelper::maybe_json_decode( $m['value'] );
 
-			if ( ! empty( $frm_duplicate_ids ) ) {
+			if ( $frm_duplicate_ids ) {
 				if ( 'frm_dyncontent' === $m['key'] ) {
 					$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
@@ -1448,7 +1450,7 @@ class FrmXMLHelper {
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $editing && current( $editing )->post_date == $post['post_date'] ) {
-			// set the id of the post to edit
+			// Set the id of the post to edit
 			$post['ID'] = current( $editing )->ID;
 		}
 	}
@@ -1544,7 +1546,7 @@ class FrmXMLHelper {
 
 			foreach ( $error_codes as $error_code ) {
 				// Clone WP_Error data because WP_Error removes all error messages and data
-				// associated with the specified error code when an item is removed.
+				// Associated with the specified error code when an item is removed.
 				// Source: https://developer.wordpress.org/reference/classes/wp_error/remove/#source
 				$error_details = $result->get_error_data( $error_code );
 
@@ -1579,7 +1581,7 @@ class FrmXMLHelper {
 
 		foreach ( $result as $type => $results ) {
 			if ( ! isset( $t_strings[ $type ] ) ) {
-				// only print imported and updated
+				// Only print imported and updated
 				continue;
 			}
 
@@ -1684,7 +1686,7 @@ class FrmXMLHelper {
 
 		if ( $primary_form ) {
 			$primary_form = FrmForm::getOne( $primary_form );
-			$form_id      = empty( $primary_form->parent_form_id ) ? $primary_form->id : $primary_form->parent_form_id;
+			$form_id      = ! empty( $primary_form->parent_form_id ) ? $primary_form->parent_form_id : $primary_form->id;
 			$message     .= '<li><a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html__( 'Go to imported form', 'formidable' ) . '</a></li>';
 		}
 	}
@@ -2029,7 +2031,7 @@ class FrmXMLHelper {
 		);
 
 		if ( ! $exists ) {
-			// this isn't an email, but we need to use a class that will always be included
+			// This isn't an email, but we need to use a class that will always be included
 			FrmDb::save_json_post( $new_action );
 			++$imported['imported']['actions'];
 		}
@@ -2178,10 +2180,10 @@ class FrmXMLHelper {
 	 */
 	private static function migrate_notifications_to_action( $form_options, $form_id, &$notifications ) {
 		if ( ! isset( $form_options['notification'] ) && ! empty( $form_options['email_to'] ) ) {
-			// add old settings into notification array
+			// Add old settings into notification array
 			$form_options['notification'] = array( 0 => $form_options );
 		} elseif ( isset( $form_options['notification']['email_to'] ) ) {
-			// make sure it's in the correct format
+			// Make sure it's in the correct format
 			$form_options['notification'] = array( 0 => $form_options['notification'] );
 		}
 
@@ -2327,7 +2329,7 @@ class FrmXMLHelper {
 
 		// Set from
 		if ( ! empty( $atts['reply_to'] ) || ! empty( $atts['reply_to_name'] ) ) {
-			$new_notification['post_content']['from'] = ( empty( $atts['reply_to_name'] ) ? '[sitename]' : $atts['reply_to_name'] ) . ' <' . ( empty( $atts['reply_to'] ) ? '[admin_email]' : $atts['reply_to'] ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$new_notification['post_content']['from'] = ( ! empty( $atts['reply_to_name'] ) ? $atts['reply_to_name'] : '[sitename]' ) . ' <' . ( ! empty( $atts['reply_to'] ) ? $atts['reply_to'] : '[admin_email]' ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 	}
 
@@ -2364,12 +2366,12 @@ class FrmXMLHelper {
 			return;
 		}
 
-		// migrate autoresponder
+		// Migrate autoresponder
 
 		$email_field = $form_options['ar_email_to'] ?? 0;
 
 		if ( str_contains( $email_field, '|' ) ) {
-			// data from entries field
+			// Data from entries field
 			$email_field = explode( '|', $email_field );
 
 			if ( isset( $email_field[1] ) ) {

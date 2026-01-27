@@ -445,7 +445,7 @@ class FrmDashboardController {
 	 * @return string
 	 */
 	private static function inbox_clean_messages_cta( $cta ) {
-		// remove dismiss button
+		// Remove dismiss button
 		$pattern = '/<a[^>]*class="[^"]*frm_inbox_dismiss[^"]*"[^>]*>.*?<\/a>/is';
 		return preg_replace( $pattern, ' ', $cta );
 	}

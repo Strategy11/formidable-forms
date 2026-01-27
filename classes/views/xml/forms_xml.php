@@ -13,7 +13,7 @@ if ( ! $item_ids ) {
 	return;
 }
 
-// fetch 20 posts at a time rather than loading the entire table into memory
+// Fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 	$forms = FrmDb::get_results( 'frm_forms', array( 'id' => $next_set ) );
 

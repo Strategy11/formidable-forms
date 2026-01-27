@@ -73,8 +73,8 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 *
 	 * @since 6.7
 	 *
-	 * @param string $from_date From date.
-	 * @param string $to_date   To date.
+	 * @param string|null $from_date From date.
+	 * @param string|null $to_date   To date.
 	 *
 	 * @return array            Contains `count` and `total`.
 	 */

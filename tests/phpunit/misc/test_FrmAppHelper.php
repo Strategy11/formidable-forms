@@ -382,6 +382,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( $this->is_a_valid_color( 'Not a color' ) );
 	}
 
+	/**
+	 * @param string $value
+	 */
 	private function is_a_valid_color( $value ) {
 		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
 	}
@@ -539,7 +542,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertIsNotNumeric( $key, 'key should never be numeric.' );
 
 		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
-		// reserve the form key so one has to be generated with this as the base.
+		// Reserve the form key so one has to be generated with this as the base.
 		$this->factory->form->create(
 			array( 'form_key' => $super_long_form_key )
 		);
@@ -579,6 +582,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function underscore_key_separator() {
 		return '___';
 	}

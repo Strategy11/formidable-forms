@@ -64,6 +64,11 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @param string $expected
+	 * @param string $url
+	 * @param string $message
+	 */
 	private function assert_maybe_add_sanitize_url_attr( $expected, $url, $message = '' ) {
 		$this->assertEquals( $expected, FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $this->form->id ), $message );
 	}
@@ -78,6 +83,10 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_get_plan_required( 'Plus', array( 'Plus', 'Category2' ) );
 	}
 
+	/**
+	 * @param string $expected
+	 * @param array $categories
+	 */
 	private function assert_get_plan_required( $expected, $categories ) {
 		$link = compact( 'categories' );
 		$this->assertEquals( $expected, FrmFormsHelper::get_plan_required( $link ) );
@@ -125,6 +134,9 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertEquals( '0', FrmFormsHelper::get_form_style( $form ) );
 	}
 
+	/**
+	 * @param string $custom_style
+	 */
 	private function create_form_with_custom_style_value( $custom_style ) {
 		return $this->factory->form->create_and_get(
 			array(

@@ -203,7 +203,7 @@ class FrmAppHelper {
 
 		$query_args = wp_parse_args( $parsed['query'] );
 
-		return empty( $query_args['utm_medium'] ) ? '' : $query_args['utm_medium'];
+		return ! empty( $query_args['utm_medium'] ) ? $query_args['utm_medium'] : '';
 	}
 
 	/**
@@ -276,7 +276,7 @@ class FrmAppHelper {
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
 
-		if ( empty( $frm_settings ) ) {
+		if ( ! $frm_settings ) {
 			$frm_settings = new FrmSettings( $args );
 		} elseif ( isset( $args['current_form'] ) ) {
 			// If the global has already been set, allow strings to be filtered.
@@ -498,7 +498,7 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 
 		if ( $pagenow ) {
-			// allow this to be true during ajax load i.e. ajax form builder loading
+			// Allow this to be true during ajax load i.e. ajax form builder loading
 			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
 
 			if ( $is_page ) {
@@ -853,9 +853,8 @@ class FrmAppHelper {
 				}
 			}
 		} elseif ( isset( $_REQUEST[ $args['param'] ] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$value = wp_unslash( $_REQUEST[ $args['param'] ] );
+			// phpcs:ignore phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$value = wp_unslash( $_REQUEST[ $args['param'] ] );
 		}
 
 		self::sanitize_value( $args['sanitize'], $value );
@@ -1167,6 +1166,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.05.03
+	 *
+	 * @return array
 	 */
 	private static function safe_html() {
 		$allow_class = array(
@@ -1392,7 +1393,7 @@ class FrmAppHelper {
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
-			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
+			$class = str_contains( $icon, ' ' ) ? ' ' . $icon : '';
 
 			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
@@ -1581,11 +1582,13 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function import_link( $type = 'secondary' ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-<?php echo esc_attr( $type ); ?> frm_animate_bg">
 			<?php esc_html_e( 'Import', 'formidable' ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1608,6 +1611,7 @@ class FrmAppHelper {
 			// And exit before printing the upgrade bar if it shouldn't be shown.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-upgrade-bar">
 			<div class="frm-upgrade-bar-inner">
@@ -1637,6 +1641,7 @@ class FrmAppHelper {
 			</div>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1736,6 +1741,7 @@ class FrmAppHelper {
 		if ( ! empty( $atts['tosearch'] ) ) {
 			$input_atts['autocomplete'] = 'off';
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p class="frm-search <?php echo esc_attr( $atts['class'] ); ?>">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
@@ -1750,6 +1756,7 @@ class FrmAppHelper {
 			?>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1945,6 +1952,7 @@ class FrmAppHelper {
 			$html_attrs['id'] = $args['id'];
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( count( $args['source'] ) <= $args['dropdown_limit'] ) {
 			?>
 			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
@@ -1963,6 +1971,7 @@ class FrmAppHelper {
 			<?php
 			return;
 		}
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$options            = array();
 		$autocomplete_value = '';
@@ -2022,6 +2031,7 @@ class FrmAppHelper {
 
 		$pages    = self::get_post_ids_and_titles( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
@@ -2032,6 +2042,7 @@ class FrmAppHelper {
 			<?php } ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -2105,9 +2116,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_full_screen() {
-		return self::is_form_builder_page() ||
-			self::is_style_editor_page() ||
-			self::is_full_screen_view_builder_page();
+		return self::is_form_builder_page() || self::is_style_editor_page() || self::is_full_screen_view_builder_page();
 	}
 
 	/**
@@ -2158,6 +2167,7 @@ class FrmAppHelper {
 	 * @param string       $multiple 'single' and 'multiple'.
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>"
 			<?php echo 'multiple' === $multiple ? 'multiple="multiple"' : ''; ?>
@@ -2165,6 +2175,7 @@ class FrmAppHelper {
 			<?php self::roles_options( $capability ); ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -2430,7 +2441,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param array|string $values
-	 * @param string       $current
+	 * @param string|null  $current
 	 *
 	 * @return bool
 	 */
@@ -2513,7 +2524,7 @@ class FrmAppHelper {
 			if ( is_array( $value ) ) {
 				$return = array_merge( $return, self::array_flatten( $value, $keys ) );
 			} elseif ( $keys === 'keep' ) {
-					$return[ $key ] = $value;
+				$return[ $key ] = $value;
 			} else {
 				$return[] = $value;
 			}
@@ -2903,17 +2914,17 @@ class FrmAppHelper {
 				$field->field_options['custom_field'] = '';
 			}
 
-				$meta_value = FrmProEntryMetaHelper::get_post_value(
-					$record->post_id,
-					$field->field_options['post_field'],
-					$field->field_options['custom_field'],
-					array(
-						'truncate' => false,
-						'type'     => $field->type,
-						'form_id'  => $field->form_id,
-						'field'    => $field,
-					)
-				);
+			$meta_value = FrmProEntryMetaHelper::get_post_value(
+				$record->post_id,
+				$field->field_options['post_field'],
+				$field->field_options['custom_field'],
+				array(
+					'truncate' => false,
+					'type'     => $field->type,
+					'form_id'  => $field->form_id,
+					'field'    => $field,
+				)
+			);
 		} else {
 			$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
 		}//end if
@@ -3226,7 +3237,7 @@ class FrmAppHelper {
 	 * @return string Time ago.
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
+		$now = ! $to && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
 		$ago = new DateTime( '@' . $from );
 
 		// Get the time difference
@@ -3591,7 +3602,7 @@ class FrmAppHelper {
 		// Add extra slashes for \r\n since WP strips them.
 		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t' ), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t' ), $post_content );
 
-		// allow for &quot
+		// Allow for &quot
 		return str_replace( '&quot;', '\\"', $post_content );
 	}
 
@@ -3939,7 +3950,7 @@ class FrmAppHelper {
 				'noTitleText'                        => FrmFormsHelper::get_no_title_text(),
 
 				// In older versions this event listener causes the section to immediately close again
-				// when the h3 element is clicked. It's only required in WP 6.7+.
+				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
 			);
 			/**
@@ -4023,8 +4034,8 @@ class FrmAppHelper {
 
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		echo '<tr class="plugin-update-tr active"><th colspan="' . absint( $wp_list_table->get_column_count() ) . '" class="check-column plugin-update colspanchange"><div class="update-message">' . // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			esc_html__( 'You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable.', 'formidable' ) .
-			'</div></td></tr>';
+		esc_html__( 'You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable.', 'formidable' ) .
+		'</div></td></tr>';
 	}
 
 	/**
@@ -4080,6 +4091,7 @@ class FrmAppHelper {
 			$message[] = __( 'The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		foreach ( $message as $m ) {
 			?>
 			<div class="frm-banner-alert frm_error_style frm_previous_install">
@@ -4087,6 +4099,7 @@ class FrmAppHelper {
 			</div>
 			<?php
 		}
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -4187,10 +4200,10 @@ class FrmAppHelper {
 		);
 
 		if ( $type === 'captcha' ) {
-			// remove the languages unavailable for the captcha
+			// Remove the languages unavailable for the captcha
 			$unset = array( 'sq', 'bs', 'eo', 'fo', 'fr-CH', 'sr-SR', 'ar-DZ', 'be', 'cy-GB', 'kk', 'km', 'ky', 'lb', 'mk', 'nb', 'nn', 'rm', 'tj' );
 		} else {
-			// remove the languages unavailable for the datepicker
+			// Remove the languages unavailable for the datepicker
 			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'mr', 'lo', 'kn', 'si', 'gu', 'bn', 'zu', 'ur', 'te', 'sw', 'am' );
 		}
 
@@ -4677,7 +4690,7 @@ class FrmAppHelper {
 	 *
 	 * @since 5.2.02
 	 *
-	 * @param string $text Text in the pill. Default is NEW.
+	 * @param string|null $text Text in the pill. Default is NEW.
 	 */
 	public static function show_pill_text( $text = null ) {
 		if ( null === $text ) {
@@ -4918,11 +4931,13 @@ class FrmAppHelper {
 		} else {
 			$atts['class'] = 'frm_help';
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span <?php self::array_to_html_params( $atts, true ); ?>>
 			<?php self::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
 		</span>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -4945,6 +4960,8 @@ class FrmAppHelper {
 		);
 
 		$args['class'] .= ' frm-validation-error frm-mt-xs frm_hidden';
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $args['class'] ); ?>">
 			<?php
@@ -4960,6 +4977,7 @@ class FrmAppHelper {
 			?>
 		</span>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

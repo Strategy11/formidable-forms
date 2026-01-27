@@ -240,7 +240,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$api_js_url = apply_filters( 'frm_turnstile_js_url', $api_js_url );
 
 		// Prevent render=explicit from happening twice in case someone patched
-		// the double rendering issue using the frm_turnstile_js_url hook.
+		// The double rendering issue using the frm_turnstile_js_url hook.
 		return str_replace(
 			'&render=explicit&render=explicit',
 			'&render=explicit',
@@ -404,7 +404,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return false;
 		}
 
-		// don't require the captcha if it shouldn't be shown
+		// Don't require the captcha if it shouldn't be shown
 		return self::should_show_captcha();
 	}
 

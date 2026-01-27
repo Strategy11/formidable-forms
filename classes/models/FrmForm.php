@@ -127,7 +127,7 @@ class FrmForm {
 			$form_id = $wpdb->insert_id;
 			FrmField::duplicate( $id, $form_id, $copy_keys, $blog_id );
 
-			// update form settings after fields are created
+			// Update form settings after fields are created
 			do_action( 'frm_after_duplicate_form', $form_id, $new_values, array( 'old_id' => $id ) );
 
 			return $form_id;
@@ -605,8 +605,8 @@ class FrmForm {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $status
+	 * @param array|int $id
+	 * @param string    $status
 	 *
 	 * @return bool|int
 	 */
@@ -837,7 +837,7 @@ class FrmForm {
 	 *
 	 * @since 2.0.9
 	 *
-	 * @param int|object $form
+	 * @param array|int|object $form
 	 *
 	 * @return void
 	 */
@@ -921,7 +921,7 @@ class FrmForm {
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && $where ) {
 			if ( ! empty( $where['is_template'] ) && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
-				// don't get trashed templates
+				// Don't get trashed templates
 				$where['status'] = array( null, '', 'published' );
 			}
 
@@ -942,7 +942,7 @@ class FrmForm {
 		}
 
 		if ( $limit === ' LIMIT 1' || (int) $limit === 1 ) {
-			// return the first form object if we are only getting one form
+			// Return the first form object if we are only getting one form
 			$results = reset( $results );
 		}
 

@@ -195,9 +195,11 @@ class FrmPluginSearch {
 	 * @return string The URL with 'formidable' instead of 'frm-plugin-search'.
 	 */
 	public function plugin_details( $url ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return false !== stripos( $url, 'tab=plugin-information&amp;plugin=' . self::$slug )
 			? 'plugin-install.php?tab=plugin-information&amp;plugin=formidable&amp;TB_iframe=true&amp;width=600&amp;height=550'
 			: $url;
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -272,10 +274,10 @@ class FrmPluginSearch {
 	private function sanitize_search_term( $term ) {
 		$term = strtolower( urldecode( $term ) );
 
-		// remove non-alpha/space chars.
+		// Remove non-alpha/space chars.
 		$term = preg_replace( '/[^a-z ]/', '', $term );
 
-		// remove strings that don't help matches.
+		// Remove strings that don't help matches.
 		return trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
 	}
 
@@ -322,14 +324,14 @@ class FrmPluginSearch {
 					),
 					admin_url( 'plugins.php' )
 				);
-				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . __( 'Activate', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . esc_html__( 'Activate', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 		} elseif ( ! $is_active && isset( $plugin['url'] ) ) {
 			// Go to the add-ons page to install.
 			$links[] = '<a
 				class="button-secondary"
 				href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '"
-				>' . __( 'Install Now', 'formidable' ) . '</a>';
+				>' . esc_html__( 'Install Now', 'formidable' ) . '</a>';
 		} elseif ( ! empty( $plugin['link'] ) ) {
 			// Add link pointing to a relevant doc page in formidable.com.
 			$links[] = '<a

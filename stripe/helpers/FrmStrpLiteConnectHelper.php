@@ -616,6 +616,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function render_stripe_connect_settings_container() {
 		self::register_settings_scripts();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			<tr>
 				<td>
@@ -626,6 +627,7 @@ class FrmStrpLiteConnectHelper {
 				</td>
 			</tr>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -656,9 +658,11 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	public static function stripe_icon() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<svg height="16" aria-hidden="true" style="vertical-align:text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M155.3 154.6c0-22.3 18.6-30.9 48.4-30.9a320 320 0 01141.9 36.7V26.1A376.2 376.2 0 00203.8 0C88.1 0 11 60.4 11 161.4c0 157.9 216.8 132.3 216.8 200.4 0 26.4-22.9 34.9-54.7 34.9-47.2 0-108.2-19.5-156.1-45.5v128.5a396 396 0 00156 32.4c118.6 0 200.3-51 200.3-153.6 0-170.2-218-139.7-218-203.9z"/></svg><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -706,7 +710,7 @@ class FrmStrpLiteConnectHelper {
 			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
 		}
 
-		return empty( $data->customer_id ) ? false : $data->customer_id;
+		return ! empty( $data->customer_id ) ? $data->customer_id : false;
 	}
 
 	/**
@@ -734,8 +738,8 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		if ( is_array( $response ) ) {
-			// reformat empty arrays as empty objects
-			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			// Reformat empty arrays as empty objects
+			// If the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
 

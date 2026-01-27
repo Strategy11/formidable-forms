@@ -24,25 +24,30 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnLoopVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnGlobal" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIsArrayBeforeEmptyArrayCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIssetBeforeNotEmpty" />
 	<rule ref="Formidable.CodeAnalysis.RedundantNotIssetBeforeEmpty" />
-	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
-	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
 	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
 	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantEmptyAfterTruthy" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
-	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
 	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
+	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
+	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
+	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
@@ -64,6 +69,16 @@
 	<rule ref="Formidable.PHPUnit.PreferAssertFileExists" />
 
 	<!-- Commenting -->
+	<rule ref="Formidable.Commenting.CommentSpacing" />
 	<rule ref="Formidable.Commenting.FixIncorrectReturnType" />
 	<rule ref="Formidable.Commenting.ConvertReturnVariableToDescription" />
+	<rule ref="Formidable.Commenting.AddMissingDocblock" />
+	<rule ref="Formidable.Commenting.AddMissingParamType" />
+	<rule ref="Formidable.Commenting.AddMissingParamTypeFromDefault" />
+	<rule ref="Formidable.Commenting.AddMissingParamTypeFromCalls" />
+
+	<!-- Security -->
+	<rule ref="Formidable.Security.AddDirectFileAccessCheck" />
+	<rule ref="Formidable.Security.EscapeInHtml" />
+	<rule ref="Formidable.Security.BreakEchoConcatenation" />
 </ruleset>
