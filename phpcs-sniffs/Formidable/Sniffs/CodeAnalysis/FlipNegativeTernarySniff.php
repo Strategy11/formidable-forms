@@ -3,9 +3,9 @@
  * Sniff to detect ternary conditions using !== and flip them to use ===.
  *
  * Detects patterns like:
- * return null !== $var ? $value1 : $value2;
+ * return 'value' !== $var ? $value1 : $value2;
  *
- * These should be flipped to: return null === $var ? $value2 : $value1;
+ * These should be flipped to: return 'value' === $var ? $value2 : $value1;
  *
  * @package Formidable\Sniffs\CodeAnalysis
  */
