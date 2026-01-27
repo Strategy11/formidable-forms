@@ -20,7 +20,9 @@ use PHP_CodeSniffer\Files\File;
  * echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
  *
  * Good:
- * echo ' ' . FrmAppHelper::kses_echo( $label, 'all' ) . '</label>';
+ * echo ' ';
+ * FrmAppHelper::kses_echo( $label, 'all' );
+ * echo '</label>';
  */
 class BreakEchoConcatenationSniff implements Sniff {
 
