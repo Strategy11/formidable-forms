@@ -24,41 +24,7 @@ class FrmPayPalLiteConnectHelper {
 
 		FrmPayPalLiteAppHelper::fee_education( 'paypal-global-settings-tip' );
 
-		?>
-		<table class="form-table" style="width: 400px;">
-			<tr class="form-field">
-				<td>
-		<?php esc_html_e( 'Test Mode', 'formidable' ); ?>
-				</td>
-				<td>
-					<label>
-						<input type="checkbox" name="frm_paypal_test_mode" id="frm_paypal_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
-		<?php esc_html_e( 'Use the PayPal test mode', 'formidable' ); ?>
-					</label>
-				</td>
-			</tr>
-		</table>
-
-		<div>
-			<div class="frm_grid_container">
-		<?php
-
-		$modes = array( 'live', 'test' );
-
-		foreach ( $modes as $mode ) {
-			self::render_settings_for_mode( $mode );
-		}
-		?>
-			</div>
-		</div>
-		<?php if ( ! is_ssl() ) { ?>
-			<div>
-				<em>
-			<?php esc_html_e( 'Your site is not using SSL. Before using PayPal to collect payments, you will need to install an SSL certificate on your site.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-				</em>
-			</div>
-		<?php } ?>
-		<?php
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-container.php';
 	}
 
 	/**
@@ -146,56 +112,10 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return void
 	 */
-	private static function render_settings_for_mode( $mode ) {
-		?>
-		<div class="frm-card-item frm6">
-			<div class="frm-flex-col" style="width: 100%;">
-				<div>
-					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
-		<?php
-		echo $mode === 'test' ? esc_html__( 'Test', 'formidable' ) : esc_html__( 'Live', 'formidable' );
-		?>
-					</span>
-		<?php
+	public static function render_settings_for_mode( $mode ) {
+		$connected = (bool) self::get_merchant_id( $mode );
 
-		$connected   = (bool) self::get_merchant_id( $mode );
-		$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
-		?>
-					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
-		<?php
-		if ( $connected ) {
-			FrmAppHelper::icon_by_class( 'frm_icon_font frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
-			echo 'Connected';
-		} else {
-			echo 'Not configured';
-		}
-		?>
-					</div>
-				</div>
-				<div style="margin-top: 5px; flex: 1;">
-		<?php
-		if ( 'live' === $mode ) {
-			esc_html_e( 'Live version to process real customer transactions', 'formidable' );
-		} else {
-			esc_html_e( 'Simulate payments and ensure everything works smoothly before going live.', 'formidable' );
-		}
-		?>
-				</div>
-		<?php self::render_seller_status( $mode ); ?>
-				<div class="frm-card-bottom">
-		<?php if ( $connected ) { ?>
-						<a id="frm_disconnect_paypal_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
-			<?php esc_html_e( 'Disconnect', 'formidable' ); ?>
-						</a>
-					<?php } else { ?>
-						<a class="frm-connect-paypal-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
-			<?php esc_html_e( 'Connect', 'formidable' ); ?>
-						</a>
-					<?php } ?>
-				</div>
-			</div>
-		</div>
-		<?php
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-box.php';
 	}
 
 	/**
