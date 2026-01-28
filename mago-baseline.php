@@ -12760,7 +12760,7 @@ count = 1
 file = "classes/helpers/FrmFieldsHelper.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 1
+count = 2
 
 [[issues]]
 file = "classes/helpers/FrmFieldsHelper.php"
@@ -24839,6 +24839,12 @@ file = "classes/models/FrmFormAction.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
 count = 16
+
+[[issues]]
+file = "classes/models/FrmFormAction.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
+count = 1
 
 [[issues]]
 file = "classes/models/FrmFormAction.php"
