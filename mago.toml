@@ -34,7 +34,6 @@ braced-string-interpolation = { enabled = false }
 class-name = { enabled = false }
 combine-consecutive-issets = { enabled = false }
 cyclomatic-complexity = { enabled = false }
-excessive-nesting = { enabled = false } # Consider enabling this soon.
 excessive-parameter-list = { enabled = false }
 explicit-octal = { enabled = false }
 halstead = { enabled = false } # Consider enabling this soon.
@@ -94,6 +93,7 @@ ignore = [
     "impossible-condition",
     "impossible-nonnull-entry-check",
     "impossible-type-comparison", # Fix this soon
+    "incompatible-parameter-name",
     "incompatible-parameter-type",
     "invalid-argument",
     "invalid-array-access",
@@ -138,11 +138,7 @@ ignore = [
     "non-existent-method",
     "non-existent-property",
     "null-argument",
-    "null-array-access",
-    "null-array-index",
     "null-iterator",
-    "null-operand",
-    "null-property-access",
     "nullable-return-statement",
     "possible-method-access-on-null",
     "possibly-false-argument",
@@ -172,6 +168,7 @@ ignore = [
     "reference-to-undefined-variable",
     "string-member-selector",
     "too-few-arguments",
+    "too-many-arguments",
     "undefined-int-array-index",
     "undefined-string-array-index",
     "undefined-variable",
@@ -181,6 +178,4 @@ ignore = [
     "unsafe-instantiation",
     "unused-method",
     "unused-property",
-    "too-many-arguments",
-    "incompatible-parameter-name",
 ]
