@@ -31,7 +31,7 @@ $tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
 			}
 			?>
 		</div>
-		<?php self::render_seller_status( $mode ); ?>
+		<?php FrmPayPalLiteConnectHelper::render_seller_status( $mode ); ?>
 		<div class="frm-card-bottom">
 			<?php if ( $connected ) { ?>
 				<a id="frm_disconnect_paypal_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">

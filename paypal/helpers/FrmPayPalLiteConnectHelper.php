@@ -32,7 +32,7 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return void
 	 */
-	private static function render_seller_status( $mode ) {
+	public static function render_seller_status( $mode ) {
 		if ( ! self::get_merchant_id( $mode ) ) {
 			// If not connected, show no status.
 			return;
