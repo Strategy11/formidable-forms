@@ -228,7 +228,7 @@ class FrmFieldFormHtml {
 		$this->maybe_add_description_id();
 		$description = FrmAppHelper::maybe_kses( $this->field_obj->get_field_column( 'description' ) );
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		FrmShortcodeHelper::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $this->html );
+		FrmShortcodeHelper::remove_inline_conditions( $description && $description != '', 'description', $description, $this->html );
 	}
 
 	/**

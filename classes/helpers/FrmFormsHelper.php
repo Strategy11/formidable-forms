@@ -923,7 +923,7 @@ BEFORE_HTML;
 				$replace_with = '';
 			}
 
-			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			FrmShortcodeHelper::remove_inline_conditions( FrmAppHelper::is_true( $show ) && $replace_with != '', $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		// Replace [form_key].

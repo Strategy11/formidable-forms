@@ -60,8 +60,6 @@ require-preg-quote-delimiter = { enabled = false }
 no-assign-in-condition = { enabled = false }
 no-insecure-comparison = { enabled = false } # Consider enabling this soon.
 excessive-nesting = { enabled = false } # Consider enabling this soon.
-no-redundant-parentheses = { enabled = false } # Fix this first.
-inline-variable-return = { enabled = false } # Fix this first.
 no-redundant-method-override = { enabled = false } # Fix this first.
 
 [analyzer]
