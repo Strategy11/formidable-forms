@@ -27,4 +27,4 @@ jobs:
         run: ./bin/mago lint
 
       - name: "🔎 Mago Analyze"
-        run: ./bin/mago analyze --baseline=mago-baseline.php
+        run: ./bin/mago analyze

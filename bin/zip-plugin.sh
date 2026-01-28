@@ -116,7 +116,6 @@ zip -r $zipname $destination \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
 	-x "*/mago.toml" \
-	-x "*/mago-baseline.php" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
 	-x "*/phpcs-sniffs/*"
