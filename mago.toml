@@ -174,7 +174,6 @@ ignore = [
     "invalid-array-index",
     "possibly-null-array-access",
     "possibly-null-iterator",
-    "false-operand",
     "null-property-access",
     "redundant-key-check",
     "possibly-null-array-index",
