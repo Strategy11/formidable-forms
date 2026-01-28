@@ -49,6 +49,7 @@ no-nested-ternary = { enabled = false }
 no-redundant-math = { enabled = false }
 no-redundant-method-override = { enabled = false } # Fix this first.
 no-request-variable = { enabled = false }
+no-sprintf-concat = { enabled = false }
 prefer-arrow-function = { enabled = false }
 prefer-early-continue = { enabled = false }
 prefer-static-closure = { enabled = false }
