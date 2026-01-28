@@ -1,0 +1,30 @@
+on: [push]
+
+name: Mago Code Analysis and Linting
+jobs:
+  mago:
+    name: Mago
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Fetching Repository Contents"
+        uses: actions/checkout@v4.1.1
+
+      - name: "💽  Installing PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          coverage: none
+          ini-values: display_errors=On, error_reporting=E_ALL
+
+      - name: "⚡ Install Mago"
+        run: |
+          mkdir -p bin
+          curl --proto '=https' --tlsv1.2 -sSf https://carthage.software/mago.sh | bash -s -- --install-dir=bin
+
+      - name: "✅ Mago Lint"
+        run: ./bin/mago lint
+
+      - name: "🔎 Mago Analyze"
+        run: ./bin/mago analyze

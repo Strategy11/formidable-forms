@@ -96,15 +96,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 
         // @codingStandardsIgnoreStart
-        $query = $wpdb->prepare(
+        return $wpdb->prepare(
             "FROM `{$wpdb->prefix}{$table_name}` p
             JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
             WHERE i.form_id = %d",
             $form_id
         );
         // @codingStandardsIgnoreEnd
-
-		return $query;
 	}
 
 	/**
