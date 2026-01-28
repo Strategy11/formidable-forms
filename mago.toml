@@ -12,8 +12,11 @@ paths = [
     "square",
     "tests",
 ]
-includes = []
-excludes = ["vendor", "node_modules"]
+includes = [
+    "vendor/php-stubs/wordpress-stubs/wordpress-stubs.php",
+    "stubs.php",
+]
+excludes = ["node_modules"]
 extensions = ["php"]
 
 [formatter]
@@ -129,10 +132,8 @@ ignore = [
     "never-return",
     "no-value",
     "non-documented-property",
-    "non-existent-class",
     "non-existent-class-like",
     "non-existent-constant",
-    "non-existent-function",
     "non-existent-method",
     "non-existent-property",
     "null-argument",
@@ -179,4 +180,6 @@ ignore = [
     "unsafe-instantiation",
     "unused-method",
     "unused-property",
+    "too-many-arguments",
+    "incompatible-parameter-name",
 ]
