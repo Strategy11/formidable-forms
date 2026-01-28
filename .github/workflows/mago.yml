@@ -19,7 +19,9 @@ jobs:
           ini-values: display_errors=On, error_reporting=E_ALL
 
       - name: "⚡ Install Mago"
-        run: curl --proto '=https' --tlsv1.2 -sSf https://carthage.software/mago.sh | bash
+        run: |
+          mkdir -p bin
+          curl --proto '=https' --tlsv1.2 -sSf https://carthage.software/mago.sh | bash -s -- --install-dir=bin
 
       - name: "✅ Mago Lint"
         run: ./bin/mago lint
