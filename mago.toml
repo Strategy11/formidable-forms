@@ -13,7 +13,7 @@ paths = [
     "tests",
 ]
 includes = []
-excludes = ["vendor", "node_modules", "mago"]
+excludes = ["vendor", "node_modules"]
 extensions = ["php"]
 
 [formatter]
@@ -25,42 +25,41 @@ integrations = []
 
 [linter.rules]
 ambiguous-function-call = { enabled = false }
-literal-named-argument = { enabled = false }
 array-style = { enabled = false }
-strict-types = { enabled = false }
+braced-string-interpolation = { enabled = false }
+class-name = { enabled = false }
+combine-consecutive-issets = { enabled = false }
+cyclomatic-complexity = { enabled = false }
+excessive-nesting = { enabled = false } # Consider enabling this soon.
+excessive-parameter-list = { enabled = false }
+explicit-octal = { enabled = false }
+halstead = { enabled = false } # Consider enabling this soon.
+identity-comparison = { enabled = false }
+kan-defect = { enabled = false }
+literal-named-argument = { enabled = false }
+loop-does-not-iterate = { enabled = false }
+no-assign-in-condition = { enabled = false }
+no-closing-tag = { enabled = false }
 no-else-clause = { enabled = false }
 no-empty = { enabled = false }
-no-global = { enabled = false }
-identity-comparison = { enabled = false }
-prefer-static-closure = { enabled = false }
-prefer-arrow-function = { enabled = false }
-class-name = { enabled = false }
-no-sprintf-concat = { enabled = false }
-prefer-early-continue = { enabled = false }
-excessive-parameter-list = { enabled = false }
-no-nested-ternary = { enabled = false }
-braced-string-interpolation = { enabled = false }
-combine-consecutive-issets = { enabled = false }
-kan-defect = { enabled = false }
-no-request-variable = { enabled = false }
-too-many-methods = { enabled = false }
-cyclomatic-complexity = { enabled = false }
-tagged-todo = { enabled = false }
-strict-behavior = { enabled = false }
-loop-does-not-iterate = { enabled = false }
-explicit-octal = { enabled = false }
-no-redundant-math = { enabled = false }
 no-error-control-operator = { enabled = false }
-no-closing-tag = { enabled = false }
-too-many-properties = { enabled = false }
-sensitive-parameter = { enabled = false }
-halstead = { enabled = false } # Consider enabling this soon.
-use-compound-assignment = { enabled = false } # Consider enabling this soon.
-require-preg-quote-delimiter = { enabled = false }
-no-assign-in-condition = { enabled = false }
+no-global = { enabled = false }
 no-insecure-comparison = { enabled = false } # Consider enabling this soon.
-excessive-nesting = { enabled = false } # Consider enabling this soon.
+no-nested-ternary = { enabled = false }
+no-redundant-math = { enabled = false }
 no-redundant-method-override = { enabled = false } # Fix this first.
+no-request-variable = { enabled = false }
+prefer-arrow-function = { enabled = false }
+prefer-early-continue = { enabled = false }
+prefer-static-closure = { enabled = false }
+require-preg-quote-delimiter = { enabled = false }
+sensitive-parameter = { enabled = false }
+strict-behavior = { enabled = false }
+strict-types = { enabled = false }
+tagged-todo = { enabled = false }
+too-many-methods = { enabled = false }
+too-many-properties = { enabled = false }
+use-compound-assignment = { enabled = false } # Consider enabling this soon.
 
 [analyzer]
 plugins = []
@@ -77,109 +76,106 @@ no-boolean-literal-comparison = false
 check-missing-type-hints = false
 register-super-globals = true
 ignore = [
+    "ambiguous-instantiation-target",
+    "ambiguous-object-method-access",
+    "ambiguous-object-property-access",
+    "array-to-string-conversion",
+    "conflicting-reference-constraint",
+    "deprecated-function",
+    "falsable-return-statement",
+    "false-argument", # Fix this soon
+    "generic-object-iteration",
+    "impossible-assignment",
+    "impossible-condition",
+    "impossible-nonnull-entry-check",
+    "impossible-type-comparison", # Fix this soon
+    "incompatible-parameter-type",
+    "invalid-argument",
+    "invalid-array-access",
+    "invalid-array-element-key",
+    "invalid-array-index",
+    "invalid-destructuring-source",
+    "invalid-global",
+    "invalid-iterator",
+    "invalid-member-selector",
+    "invalid-method-access",
+    "invalid-operand",
     "invalid-param-tag",
-    "non-existent-function",
-    "undefined-variable",
+    "invalid-property-access",
+    "invalid-property-assignment-value",
+    "invalid-property-read",
+    "invalid-return-statement",
+    "invalid-type-cast",
+    "invalid-unset",
+    "less-specific-argument",
+    "less-specific-nested-argument-type",
+    "less-specific-nested-return-statement",
+    "less-specific-return-statement",
+    "method-access-on-null",
+    "mismatched-array-index",
+    "missing-return-statement",
     "mixed-argument",
-    "redundant-condition",
     "mixed-array-access",
+    "mixed-array-assignment",
+    "mixed-array-index",
+    "mixed-assignment",
+    "mixed-clone",
+    "mixed-method-access",
     "mixed-operand",
     "mixed-property-access",
-    "invalid-global",
-    "possibly-false-argument",
-    "unknown-class-instantiation",
-    "unused-method",
-    "non-existent-method",
-    "invalid-return-statement",
-    "invalid-iterator",
-    "less-specific-nested-argument-type",
-    "reference-to-undefined-variable",
-    "mixed-return-statement",
-    "redundant-logical-operation",
-    "undefined-int-array-index",
-    "possibly-invalid-argument",
-    "mixed-assignment",
-    "possibly-null-argument",
-    "invalid-argument",
-    "invalid-operand",
-    "less-specific-return-statement",
-    "non-existent-constant",
-    "ambiguous-object-property-access",
-    "less-specific-argument",
-    "invalid-type-cast",
-    "reference-constraint-violation",
-    "possibly-false-operand",
-    "nullable-return-statement",
-    "array-to-string-conversion",
-    "possibly-undefined-string-array-index",
-    "redundant-comparison",
-    "mixed-array-assignment",
-    "generic-object-iteration",
-    "mixed-method-access",
-    "mixed-array-assignment",
-    "redundant-type-comparison",
-    "false-argument", # Fix this soon
     "mixed-property-type-coercion",
-    "invalid-method-access",
-    "possible-method-access-on-null",
-    "possibly-null-property-access",
-    "mixed-array-index",
-    "less-specific-nested-return-statement",
-    "null-operand",
-    "invalid-property-access",
-    "impossible-assignment",
-    "non-existent-class",
+    "mixed-return-statement",
     "never-return",
-    "non-existent-class-like",
-    "invalid-member-selector",
-    "non-existent-property",
-    "invalid-member-selector",
-    "too-few-arguments",
-    "impossible-type-comparison", # Fix this soon
-    "string-member-selector",
-    "impossible-condition",
-    "falsable-return-statement",
-    "property-type-coercion",
-    "invalid-property-assignment-value",
-    "unused-property",
-    "possibly-undefined-variable",
-    "impossible-nonnull-entry-check",
-    "ambiguous-object-method-access",
-    "null-array-index",
-    "possibly-null-operand",
-    "missing-return-statement",
-    "incompatible-parameter-type",
-    "null-array-access",
-    "null-argument",
-    "mismatched-array-index",
     "no-value",
-    "possibly-invalid-operand",
     "non-documented-property",
-    "conflicting-reference-constraint",
-    "redundant-null-coalesce",
-    "unsafe-instantiation",
-    "invalid-destructuring-source",
-    "unknown-iterator-type",
-    "invalid-array-access",
-    "undefined-variable-in-closure-use",
-    "possibly-false-iterator",
-    "invalid-unset",
-    "redundant-isset-check",
-    "possibly-invalid-iterator",
-    "undefined-string-array-index",
-    "invalid-array-element-key",
-    "deprecated-function",
-    "redundant-isset-check",
-    "mixed-clone",
-    "invalid-array-index",
-    "possibly-null-array-access",
-    "possibly-null-iterator",
-    "null-property-access",
-    "redundant-key-check",
-    "possibly-null-array-index",
-    "invalid-property-read",
-    "possibly-invalid-clone",
-    "ambiguous-instantiation-target",
-    "method-access-on-null",
+    "non-existent-class",
+    "non-existent-class-like",
+    "non-existent-constant",
+    "non-existent-function",
+    "non-existent-method",
+    "non-existent-property",
+    "null-argument",
+    "null-array-access",
+    "null-array-index",
     "null-iterator",
+    "null-operand",
+    "null-property-access",
+    "nullable-return-statement",
+    "possible-method-access-on-null",
+    "possibly-false-argument",
+    "possibly-false-iterator",
+    "possibly-false-operand",
+    "possibly-invalid-argument",
+    "possibly-invalid-clone",
+    "possibly-invalid-iterator",
+    "possibly-invalid-operand",
+    "possibly-null-argument",
+    "possibly-null-array-access",
+    "possibly-null-array-index",
+    "possibly-null-iterator",
+    "possibly-null-operand",
+    "possibly-null-property-access",
+    "possibly-undefined-string-array-index",
+    "possibly-undefined-variable",
+    "property-type-coercion",
+    "redundant-comparison",
+    "redundant-condition",
+    "redundant-isset-check",
+    "redundant-key-check",
+    "redundant-logical-operation",
+    "redundant-null-coalesce",
+    "redundant-type-comparison",
+    "reference-constraint-violation",
+    "reference-to-undefined-variable",
+    "string-member-selector",
+    "too-few-arguments",
+    "undefined-int-array-index",
+    "undefined-string-array-index",
+    "undefined-variable",
+    "undefined-variable-in-closure-use",
+    "unknown-class-instantiation",
+    "unknown-iterator-type",
+    "unsafe-instantiation",
+    "unused-method",
+    "unused-property",
 ]
