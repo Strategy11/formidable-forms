@@ -474,6 +474,14 @@ class FrmFieldsHelper {
 			),
 		);
 
+		/**
+		 * @since x.x
+		 *
+		 * @param array        $defaults
+		 * @param array|object $field
+		 */
+		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults, $field );
+
 		$msg = FrmField::get_option( $field, $error );
 		$msg = $msg ? $msg : $defaults[ $error ]['part'];
 		$msg = do_shortcode( $msg );
@@ -2797,5 +2805,86 @@ class FrmFieldsHelper {
 				'frm-mb-12',
 			)
 		);
+	}
+
+	/**
+	 * Checks if the field choice should be hidden due to choice limit being reached.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $choice_key
+	 * @param array  $field
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_key, $field ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $hide_field_choice
+		 * @param string $choice_key
+		 * @param array  $field
+		 */
+		return (bool) apply_filters( 'frm_hide_field_choice', false, $choice_key, $field );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	public static function should_skip_rendering_options_for_field( $field ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool  $skip_rendering_options_for_field
+		 * @param array $field
+		 */
+		return (bool) apply_filters( 'frm_should_skip_rendering_options_for_field', false, $field );
+	}
+
+	/**
+	 * Determine if 'disabled' attribute should be echoed in a field choice's HTML.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $choice_key
+	 * @param bool   $is_selected_choice
+	 * @param array  $field
+	 *
+	 * @return bool
+	 */
+	public static function should_disable_option( $choice_key, $is_selected_choice, $field ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $echo_disabled_attribute
+		 * @param string $choice_key
+		 * @param bool   $is_selected_choice
+		 * @param array  $field
+		 */
+		return (bool) apply_filters( 'frm_disable_option', false, $choice_key, $is_selected_choice, $field );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $choice_key
+	 *
+	 * @return void
+	 */
+	public static function after_option_input( $field, $choice_key ) {
+		/**
+		 * Allows adding content after checkbox, radio button, or dropdown fields.
+		 *
+		 * @since x.x
+		 *
+		 * @param array  $field The field data.
+		 * @param string $opt_key The option key.
+		 */
+		do_action( 'frm_after_option_input', $field, $choice_key );
 	}
 }
