@@ -10,6 +10,7 @@ paths = [
     "paypal",
     "stripe",
     "square",
+    "css",
     "tests",
 ]
 includes = [
