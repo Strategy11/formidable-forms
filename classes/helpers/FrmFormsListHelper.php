@@ -280,9 +280,15 @@ class FrmFormsListHelper extends FrmListHelper {
 				$class .= ' column-primary';
 			}
 
-			$class        = 'class="' . esc_attr( $class ) . '"';
-			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
-			$attributes   = $class . $style . $data_colname;
+			$class = 'class="' . esc_attr( $class ) . '"';
+
+			if ( 'settings' === $column_name ) {
+				$data_colname = ' data-colname="' . esc_attr( trim( strip_tags( $column_display_name ) ) ) . '"';
+			} else {
+				$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
+			}
+
+			$attributes = $class . $style . $data_colname;
 
 			switch ( $column_name ) {
 				case 'cb':

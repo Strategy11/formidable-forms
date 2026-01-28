@@ -1239,8 +1239,8 @@ class FrmFormsController {
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
-			$columns['settings'] = '<div id="frm-forms-list-settings-btn-wrappper">
-				<a href="#" id="frm-forms-list-settings-btn">
+			$columns['settings'] = '<div class="frm-forms-list-settings-btn-wrappper">
+				<a href="#" class="frm-forms-list-settings-btn">
 					<span class="dashicons dashicons-admin-generic"></span>
 					<span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span>
 				</a>
@@ -3712,7 +3712,7 @@ class FrmFormsController {
 		$columns   = get_column_headers( $screen );
 		$skip_cols = array( 'cb', 'settings' );
 		?>
-		<div id="frm-forms-list-settings" class="frm_hidden">
+		<div id="frm-forms-list-settings-tmpl" class="frm-forms-list-settings frm_hidden">
 			<div class="frm-collapsible-box">
 				<div class="frm-collapsible-box__header">
 					<a href="#" class="frm-collapsible-box__btn"><?php esc_html_e( 'Columns', 'formidable' ); ?></a>
