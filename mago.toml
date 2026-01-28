@@ -68,7 +68,7 @@ no-redundant-method-override = { enabled = false } # Fix this first.
 plugins = []
 find-unused-definitions = true
 find-unused-expressions = false
-analyze-dead-code = 
+analyze-dead-code = true
 memoize-properties = true
 allow-possibly-undefined-array-keys = true
 check-throws = false
