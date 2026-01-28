@@ -649,7 +649,7 @@ class FrmFormActionsController {
 		$action_status = array(
 			'post_status' => 'publish',
 		);
-		$form_actions  = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
+		$form_actions  = FrmFormAction::get_action_for_form( is_object( $form ) ? $form->id : $form, $type, $action_status );
 
 		if ( ! $form_actions ) {
 			return;

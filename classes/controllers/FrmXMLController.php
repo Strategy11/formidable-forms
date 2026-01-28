@@ -691,7 +691,7 @@ class FrmXMLController {
 
 		if ( ! $form_id ) {
 			$form_id = FrmAppHelper::get_param( 'form', '', 'get', 'sanitize_text_field' );
-			$search  = FrmAppHelper::get_param( ( isset( $_REQUEST['s'] ) ? 's' : 'search' ), '', 'get', 'sanitize_text_field' );
+			$search  = FrmAppHelper::get_param( isset( $_REQUEST['s'] ) ? 's' : 'search', '', 'get', 'sanitize_text_field' );
 			$fid     = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
 		}
 

@@ -395,7 +395,7 @@ class FrmEntryMeta {
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$cache_key = 'all_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit;
-		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit === ' LIMIT 1' ? 'get_row' : 'get_results' ) );
+		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, $limit === ' LIMIT 1' ? 'get_row' : 'get_results' );
 
 		if ( ! $results || ! $stripslashes ) {
 			return $results;
