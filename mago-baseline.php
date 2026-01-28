@@ -12760,7 +12760,7 @@ count = 1
 file = "classes/helpers/FrmFieldsHelper.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
+count = 4
 
 [[issues]]
 file = "classes/helpers/FrmFieldsHelper.php"
