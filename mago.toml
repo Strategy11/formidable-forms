@@ -52,7 +52,6 @@ explicit-octal = { enabled = false }
 no-redundant-math = { enabled = false }
 no-error-control-operator = { enabled = false }
 no-closing-tag = { enabled = false }
-too-many-properties = { enabled = false }
 sensitive-parameter = { enabled = false }
 halstead = { enabled = false } # Consider enabling this soon.
 use-compound-assignment = { enabled = false } # Consider enabling this soon.
@@ -118,7 +117,6 @@ ignore = [
     "redundant-comparison",
     "mixed-array-assignment",
     "generic-object-iteration",
-    "mixed-method-access",
     "mixed-array-assignment",
     "redundant-type-comparison",
     "false-argument", # Fix this soon
@@ -128,7 +126,6 @@ ignore = [
     "possibly-null-property-access",
     "mixed-array-index",
     "less-specific-nested-return-statement",
-    "null-operand",
     "invalid-property-access",
     "impossible-assignment",
     "non-existent-class",
