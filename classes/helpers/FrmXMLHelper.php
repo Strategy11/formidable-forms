@@ -819,7 +819,6 @@ class FrmXMLHelper {
 
 		$new_id = FrmField::create( $f );
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_id ) {
 			++$imported['imported']['fields'];
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
