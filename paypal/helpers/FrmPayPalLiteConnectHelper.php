@@ -54,7 +54,7 @@ class FrmPayPalLiteConnectHelper {
 			return;
 		}
 
-		$email = ! empty( $status->primary_email ) ? $status->primary_email : '';
+		$email = $status->primary_email ?? '';
 
 		if ( ! $status->primary_email_confirmed ) {
 			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email );
@@ -71,7 +71,11 @@ class FrmPayPalLiteConnectHelper {
 			return;
 		}
 
-		$email = $status->primary_email ?? '';
+		$product = self::check_for_product( $status->products );
+		if ( ! $product || empty( $product->capabilities ) ) {
+			self::render_error( __( 'No data was found for expected PayPal product.', 'formidable' ), $email );
+			return;
+		}
 
 		if ( $email ) {
 			update_option( self::get_paypal_seller_status_option_name( $mode ), $status, false );
@@ -80,7 +84,31 @@ class FrmPayPalLiteConnectHelper {
 		echo '<div class="frm_message">';
 		esc_html_e( 'Your seller status is valid', 'formidable' );
 		self::echo_email( $email );
+
+		echo '<br>';
+		echo '<br>';
+		echo '<b>' . esc_html__( 'Enabled capabilities:', 'formidable' ) . '</b>';
+		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0;">';
+		$can_process_card_fields = in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities );
+		if ( $can_process_card_fields ) {
+			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
+		}
+		echo '</ul>';
 		echo '</div>';
+	}
+
+	/**
+	 * @param array $products
+	 *
+	 * @return bool|object
+	 */
+	private static function check_for_product( $products ) {
+		foreach ( $products as $current_product ) {
+			if ( 'PPCP_CUSTOM' === $current_product->name ) {
+				return $current_product;
+			}
+		}
+		return false;
 	}
 
 	private static function echo_email( $email ) {

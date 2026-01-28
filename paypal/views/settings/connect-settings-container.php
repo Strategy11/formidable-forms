@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php if ( ! is_ssl() ) { ?>
 	<div>
 		<em>
-	<?php esc_html_e( 'Your site is not using SSL. Before using PayPal to collect payments, you will need to install an SSL certificate on your site.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+			<?php esc_html_e( 'Your site is not using SSL. Before using PayPal to collect payments, you will need to install an SSL certificate on your site.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		</em>
 	</div>
 <?php } ?>
