@@ -42,6 +42,7 @@ webpack.config.js export-ignore
 rector.php export-ignore
 _typos.toml export-ignore
 mago.toml export-ignore
+mago-baseline.php export-ignore
 /resources/ export-ignore
 webpack.dev.js export-ignore
 .browserslistrc export-ignore
