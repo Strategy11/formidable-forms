@@ -12758,6 +12758,18 @@ count = 1
 
 [[issues]]
 file = "classes/helpers/FrmFieldsHelper.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
+count = 1
+
+[[issues]]
+file = "classes/helpers/FrmFieldsHelper.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `frmapphelper::unserialize_or_decode`: expected `array<array-key, mixed>|string`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "classes/helpers/FrmFieldsHelper.php"
 code = "less-specific-argument"
 message = "Argument type mismatch for argument #1 of `frmfieldshelper::is_other_opt`: expected `string`, but provided type `array-key` is less specific."
 count = 1
@@ -19684,6 +19696,12 @@ count = 1
 file = "classes/models/FrmApplicationTemplate.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `array_filter`: expected `array<('K.array_filter() extends array-key), ('V.array_filter() extends mixed)>`, but found `nonnull`."
+count = 1
+
+[[issues]]
+file = "classes/models/FrmApplicationTemplate.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #1 of `str_contains`: expected `string`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -46930,6 +46948,12 @@ count = 16
 file = "stripe/controllers/FrmStrpLiteHooksController.php"
 code = "invalid-property-access"
 message = "Attempting to access a property on a non-object type (`array-key`)."
+count = 1
+
+[[issues]]
+file = "stripe/controllers/FrmStrpLiteHooksController.php"
+code = "mixed-property-access"
+message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 1
 
 [[issues]]
