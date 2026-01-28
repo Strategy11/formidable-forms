@@ -89,7 +89,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		selected( $selected );
 		echo '>';
 		echo esc_html( $opt === '' ? ' ' : $opt );
-		FrmFieldsHelper::after_choice_input( $field, $opt_key );
+		FrmFieldsHelper::after_option_input( $field, $opt_key );
 
 		echo '</option>';
 

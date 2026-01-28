@@ -2876,7 +2876,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return void
 	 */
-	public static function after_choice_input( $field, $choice_key ) {
+	public static function after_option_input( $field, $choice_key ) {
 		/**
 		 * Allows adding content after checkbox, radio button, or dropdown fields.
 		 *
