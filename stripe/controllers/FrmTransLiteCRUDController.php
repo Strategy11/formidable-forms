@@ -68,7 +68,7 @@ class FrmTransLiteCRUDController {
 		$table_name = self::table_name();
 
 		// @codingStandardsIgnoreStart
-		$payment = $wpdb->get_row(
+		return $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT
 					p.*, e.user_id
@@ -79,8 +79,6 @@ class FrmTransLiteCRUDController {
 			)
 		);
 		// @codingStandardsIgnoreEnd
-
-		return $payment;
 	}
 
 	/**

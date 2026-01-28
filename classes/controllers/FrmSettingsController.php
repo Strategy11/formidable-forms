@@ -261,7 +261,7 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( $section['function'] ?? $section ) );
+			call_user_func( $section['function'] ?? $section );
 		}
 
 		wp_die();
