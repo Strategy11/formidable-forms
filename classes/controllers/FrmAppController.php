@@ -1572,8 +1572,8 @@ class FrmAppController {
 	 *
 	 * @since 6.19
 	 *
-	 * @param string &$orderby Reference to the current 'orderby' parameter.
-	 * @param string &$order   Reference to the current 'order' parameter.
+	 * @param string $orderby Reference to the current 'orderby' parameter.
+	 * @param string $order   Reference to the current 'order' parameter.
 	 *
 	 * @return void
 	 */

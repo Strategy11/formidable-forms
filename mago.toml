@@ -78,7 +78,6 @@ check-missing-type-hints = false
 register-super-globals = true
 ignore = [
     "invalid-param-tag",
-    "malformed-docblock-comment",
     "non-existent-function",
     "undefined-variable",
     "mixed-argument",
@@ -175,7 +174,6 @@ ignore = [
     "invalid-array-index",
     "possibly-null-array-access",
     "possibly-null-iterator",
-    "false-operand",
     "null-property-access",
     "redundant-key-check",
     "possibly-null-array-index",
