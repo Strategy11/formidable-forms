@@ -27,19 +27,46 @@ class FrmPayPalLiteConnectHelper {
 		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-container.php';
 	}
 
+	public static function handle_render_seller_status() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
+		if ( ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
+			wp_send_json_error();
+		}
+
+		ob_start();
+		$success  = self::render_seller_status();
+		$response = ob_get_clean();
+
+		if ( ! $success ) {
+			wp_send_json_error( $response );
+		}
+
+		wp_send_json_success( $response );
+	}
+
 	/**
 	 * @since x.x
 	 *
-	 * @return void
+	 * @return bool
 	 */
-	public static function render_seller_status( $mode ) {
-		if ( ! self::get_merchant_id( $mode ) ) {
-			// If not connected, show no status.
-			return;
+	public static function render_seller_status() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
+		if ( ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
+			self::render_error( __( 'Invalid nonce.', 'formidable' ) );
+			return false;
 		}
 
+		$mode = self::get_mode_value_from_post();
+		if ( ! self::get_merchant_id( $mode ) ) {
+			// Do not render any message when not connected.
+			// And return true so it does not try to handle it as an error.
+			return true;
+		}
+		
 		// TODO: Only render when we visit the PayPal tab.
-		$status = self::get_seller_status( $mode );
+		$status = self::get_seller_status();
 
 		/*
 		$status = new stdClass();
@@ -51,30 +78,30 @@ class FrmPayPalLiteConnectHelper {
 
 		if ( ! is_object( $status ) ) {
 			self::render_error( __( 'Unable to retrieve seller status.', 'formidable' ) );
-			return;
+			return false;
 		}
 
 		$email = $status->primary_email ?? '';
 
 		if ( ! $status->primary_email_confirmed ) {
 			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email );
-			return;
+			return false;
 		}
 
 		if ( ! $status->payments_receivable ) {
 			self::render_error( __( 'Payments are not receivable.', 'formidable' ), $email );
-			return;
+			return false;
 		}
 
 		if ( ! $status->oauth_integrations ) {
 			self::render_error( __( 'OAuth integrations are not enabled.', 'formidable' ), $email );
-			return;
+			return false;
 		}
 
 		$product = self::check_for_product( $status->products );
 		if ( ! $product || empty( $product->capabilities ) ) {
 			self::render_error( __( 'No data was found for expected PayPal product.', 'formidable' ), $email );
-			return;
+			return false;
 		}
 
 		if ( $email ) {
@@ -88,13 +115,26 @@ class FrmPayPalLiteConnectHelper {
 		echo '<br>';
 		echo '<br>';
 		echo '<b>' . esc_html__( 'Enabled capabilities:', 'formidable' ) . '</b>';
-		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0;">';
+		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
 		$can_process_card_fields = in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities );
 		if ( $can_process_card_fields ) {
 			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
 		}
 		echo '</ul>';
 		echo '</div>';
+
+		return true;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $mode
+	 *
+	 * @return void
+	 */
+	public static function render_seller_status_placeholder( $mode ) {
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/seller-status-placeholder.php';
 	}
 
 	/**
@@ -749,15 +789,14 @@ class FrmPayPalLiteConnectHelper {
 		return self::post_with_authenticated_body( 'create_vault_setup_token' );
 	}
 
-	public static function get_seller_status( $mode ) {
+	public static function get_seller_status() {
+		$mode   = self::get_mode_value_from_post();
 		$status = get_option( self::get_paypal_seller_status_option_name( $mode ) );
+
 		if ( is_object( $status ) ) {
 			return $status;
 		}
 
-		$additional_body = array(
-			'frm_paypal_api_mode' => $mode,
-		);
-		return self::post_with_authenticated_body( 'get_seller_status', $additional_body );
+		return self::post_with_authenticated_body( 'get_seller_status' );
 	}
 }

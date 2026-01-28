@@ -36,4 +36,37 @@
 			);
 		}
 	);
+
+	document.querySelectorAll( '.frm_paypal_seller_status_placeholder' ).forEach(
+		function( placeholder ) {
+			const mode = placeholder.dataset.mode;
+			const interval = setInterval(
+				function() {
+					if ( placeholder.offsetParent === null ) {
+						return;
+					}
+
+					clearInterval( interval );
+
+					const formData = new FormData();
+					formData.append( 'testMode', 'test' === mode ? 1 : 0 );
+					frmDom.ajax.doJsonPost( 'paypal_render_seller_status', formData )
+						.then(
+							function( sellerStatus ) {
+								placeholder.innerHTML = sellerStatus;
+							}
+						).catch(
+							function( error ) {
+								if ( 'string' === typeof error ) {
+									placeholder.innerHTML = error;
+								}
+
+								clearInterval( interval );
+							}
+						);
+				},
+				100
+			);
+		}
+	);
 }() );
