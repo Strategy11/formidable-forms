@@ -1338,6 +1338,7 @@ class FrmXMLHelper {
 					if ( ! empty( $m['value']['timeline_options'] ) ) {
 						foreach ( $m['value']['timeline_options'] as $timeline_option_group_key => $timeline_group_option ) {
 							foreach ( $timeline_group_option as $timeline_option_key => $timeline_option ) {
+								// @mago-expect lint:excessive-nesting
 								if ( isset( $frm_duplicate_ids[ $timeline_option ] ) ) {
 									$m['value']['timeline_options'][ $timeline_option_group_key ][ $timeline_option_key ] = $frm_duplicate_ids[ $timeline_option ];
 								}
