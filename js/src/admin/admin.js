@@ -6094,7 +6094,7 @@ window.frmAdminBuildJS = function() {
 
 		showLabelWithImage = showingLabelWithImage( fieldId );
 		fieldType = radioOrCheckbox( fieldId );
-		return getImageLabel( label.val(), showLabelWithImage, imageUrl, fieldType );
+		return getImageLabel( label.val(), showLabelWithImage, imageUrl );
 	}
 
 	function getImageOptionSize( fieldId ) {
@@ -6347,7 +6347,6 @@ window.frmAdminBuildJS = function() {
 	 */
 	function getMultipleOpts( fieldId, showValueAsLabel = false ) {
 		let i, saved, labelName, label, key, optObj,
-			fieldType,
 			checked = false,
 			opts = [],
 			imageUrl = '';
@@ -6378,8 +6377,7 @@ window.frmAdminBuildJS = function() {
 
 			if ( hasImageOptions ) {
 				imageUrl = getImageUrlFromInput( optVals[ i ] );
-				fieldType = radioOrCheckbox( fieldId );
-				label = getImageLabel( label, showLabelWithImage, imageUrl, fieldType );
+				label = getImageLabel( label, showLabelWithImage, imageUrl );
 			}
 
 			/**
@@ -6458,7 +6456,7 @@ window.frmAdminBuildJS = function() {
 		return clean;
 	}
 
-	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
+	function getImageLabel( label, showLabelWithImage, imageUrl ) {
 		let imageLabelClass,
 			originalLabel = label,
 			labelImage,
