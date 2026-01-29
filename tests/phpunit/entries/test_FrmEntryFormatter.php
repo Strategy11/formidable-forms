@@ -21,11 +21,11 @@ class test_FrmEntryFormatter extends FrmUnitTest {
 		);
 
 		$this->formatter = new FrmEntryFormatter( $atts );
-		$this->assertEquals( 'Option 1, Option 2, Option 3', $this->flatten_array( $values ) );
+		$this->assertSame( 'Option 1, Option 2, Option 3', $this->flatten_array( $values ) );
 
 		$atts['array_separator'] = '<br/>';
 		$this->formatter         = new FrmEntryFormatter( $atts );
-		$this->assertEquals( 'Option 1<br/>Option 2<br/>Option 3', $this->flatten_array( $values ) );
+		$this->assertSame( 'Option 1<br/>Option 2<br/>Option 3', $this->flatten_array( $values ) );
 	}
 
 	private function flatten_array( $value ) {

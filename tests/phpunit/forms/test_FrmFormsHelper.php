@@ -97,16 +97,16 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 */
 	public function test_get_form_style() {
 		// Test null and 'default' form values.
-		$this->assertEquals( '1', FrmFormsHelper::get_form_style( null ) );
-		$this->assertEquals( '1', FrmFormsHelper::get_form_style( 'default' ) );
+		$this->assertSame( '1', FrmFormsHelper::get_form_style( null ) );
+		$this->assertSame( '1', FrmFormsHelper::get_form_style( 'default' ) );
 
 		// Test object form values.
 		// Test "disable Formidable styling" first.
 		$form = $this->create_form_with_custom_style_value( '0' );
-		$this->assertEquals( '0', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '0', FrmFormsHelper::get_form_style( $form ) );
 
 		$form = $this->create_form_with_custom_style_value( '' );
-		$this->assertEquals( '', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '', FrmFormsHelper::get_form_style( $form ) );
 
 		// Create a style and test a custom style value as well.
 		$frm_style = new FrmStyle();
@@ -125,13 +125,13 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertEquals( $style_id, FrmFormsHelper::get_form_style( $form ) );
 
 		unset( $form['custom_style'] );
-		$this->assertEquals( '1', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '1', FrmFormsHelper::get_form_style( $form ) );
 
 		$form['custom_style'] = '';
-		$this->assertEquals( '', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '', FrmFormsHelper::get_form_style( $form ) );
 
 		$form['custom_style'] = '0';
-		$this->assertEquals( '0', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '0', FrmFormsHelper::get_form_style( $form ) );
 	}
 
 	/**

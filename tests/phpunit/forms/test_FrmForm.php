@@ -194,14 +194,14 @@ class test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::normalize_calc_spaces
 	 */
 	public function test_normalize_calc_spaces() {
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
-		$this->assertEquals( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
-		$this->assertEquals( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
+		$this->assertSame( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
+		$this->assertSame( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
 	}
 
 	/**

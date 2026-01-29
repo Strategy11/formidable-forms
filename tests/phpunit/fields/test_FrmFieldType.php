@@ -198,9 +198,9 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$checkbox = FrmFieldFactory::get_field_type( 'checkbox', $field );
 
-		$this->assertEquals( $checkbox->get_import_value( 'a,b' ), 'a,b' );
+		$this->assertSame( $checkbox->get_import_value( 'a,b' ), 'a,b' );
 		$this->assertEquals( $checkbox->get_import_value( 'a,c' ), array( 'a', 'c' ) );
-		$this->assertEquals( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
+		$this->assertSame( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
 	}
 
 	/**
@@ -315,7 +315,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
 		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
 		$html         = $field_object->prepare_field_html( $args );
-		$this->assertEquals( '', $html );
+		$this->assertSame( '', $html );
 
 		// Test a draft field on a preview page for a privileged user (the HTML should not be empty).
 		$this->reset_should_hide_draft_fields_flag();
