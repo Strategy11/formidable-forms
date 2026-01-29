@@ -2052,7 +2052,7 @@ function frmFrontFormJS() {
 			/*jshint validthis:true */
 
 			const fieldId = frmFrontForm.getFieldId( this, false );
-			if ( ! fieldId || typeof fieldId === 'undefined' ) {
+			if ( ! fieldId ) {
 				return;
 			}
 

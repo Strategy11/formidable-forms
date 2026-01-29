@@ -40,7 +40,7 @@
 		}
 
 		if ( 'frm-send-test-email' === e.target.id ) {
-			showSendTestEmailModal( e );
+			showSendTestEmailModal();
 			return;
 		}
 
@@ -62,7 +62,7 @@
 		document.getElementById( 'frm-email-style-value' ).value = styleKey;
 	}
 
-	function showSendTestEmailModal( e ) {
+	function showSendTestEmailModal() {
 		if ( ! globalVars.sendTestEmailModal ) {
 			globalVars.sendTestEmailModal = frmAdminBuild.initModal( '#frm-send-test-email-modal', '400px' );
 		}
