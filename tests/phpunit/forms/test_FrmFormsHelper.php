@@ -131,7 +131,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertSame( '', FrmFormsHelper::get_form_style( $form ) );
 
 		$form['custom_style'] = '0';
-		$this->assertSame( 0, FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '0', FrmFormsHelper::get_form_style( $form ) );
 	}
 
 	/**
