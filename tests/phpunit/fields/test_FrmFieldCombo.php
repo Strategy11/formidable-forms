@@ -262,7 +262,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 		$atts = ob_get_clean();
 
-		$this->assertEquals( $atts, ' placeholder="First placeholder" class="frm-custom-class"  maxlength="10" data-attr="custom-attr" ' );
+		$this->assertSame( $atts, ' placeholder="First placeholder" class="frm-custom-class"  maxlength="10" data-attr="custom-attr" ' );
 
 		$sub_field = array(
 			'name'     => 'second',
@@ -283,7 +283,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 		$atts = ob_get_clean();
 
-		$this->assertEquals( $atts, ' class="frm-class1 frm-class2 frm_optional"  ' );
+		$this->assertSame( $atts, ' class="frm-class1 frm-class2 frm_optional"  ' );
 
 		$sub_field = array(
 			'name'    => 'forth',
@@ -299,7 +299,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 		$atts = ob_get_clean();
 
-		$this->assertEquals( $atts, '   ' );
+		$this->assertSame( $atts, '   ' );
 	}
 
 	public function test_get_export_headings() {

@@ -25,7 +25,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		);
 
 		$this->assertTrue( $date instanceof DateTime );
-		$this->assertEquals( $date->format( 'Y-m-d' ), '2023-08-13' );
+		$this->assertSame( $date->format( 'Y-m-d' ), '2023-08-13' );
 
 		$this->assertFalse(
 			$this->run_private_method(
@@ -36,7 +36,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 	}
 
 	public function test_get_date_diff() {
-		$this->assertEquals(
+		$this->assertSame(
 			$this->run_private_method(
 				array( 'FrmEmailSummaryHelper', 'get_date_diff' ),
 				array( '2023-08-12', '2023-08-16' )
@@ -175,10 +175,10 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
 		$recipients = 'test@example.com';
 		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
-		$this->assertEquals( '', $recipients );
+		$this->assertSame( '', $recipients );
 
 		$recipients = 'test@example.com,recipient2@example.com';
 		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
-		$this->assertEquals( 'recipient2@example.com', $recipients );
+		$this->assertSame( 'recipient2@example.com', $recipients );
 	}
 }
