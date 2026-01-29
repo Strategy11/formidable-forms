@@ -18,6 +18,8 @@ use PHP_CodeSniffer\Files\File;
  * - echo esc_attr( __( ... ) ) -> esc_attr_e( ... )
  * - echo esc_html( _x( ... ) ) -> esc_html_x( ... )
  * - echo esc_attr( _x( ... ) ) -> esc_attr_x( ... )
+ * - echo esc_html__( ... ) -> esc_html_e( ... )
+ * - echo esc_attr__( ... ) -> esc_attr_e( ... )
  */
 class PreferEscHtmlESniff implements Sniff {
 
@@ -35,6 +37,16 @@ class PreferEscHtmlESniff implements Sniff {
 			'__' => 'esc_attr_e',
 			'_x' => 'esc_attr_x',
 		),
+	);
+
+	/**
+	 * Mapping of already combined functions that should drop echo entirely.
+	 *
+	 * @var array
+	 */
+	private $directReplacements = array(
+		'esc_html__' => 'esc_html_e',
+		'esc_attr__' => 'esc_attr_e',
 	);
 
 	/**
@@ -70,6 +82,11 @@ class PreferEscHtmlESniff implements Sniff {
 		}
 
 		$escapeFunc = $tokens[ $nextToken ]['content'];
+
+		if ( isset( $this->directReplacements[ $escapeFunc ] ) ) {
+			$this->processDirectCombinedFunction( $phpcsFile, $stackPtr, $nextToken, $escapeFunc );
+			return;
+		}
 
 		if ( ! isset( $this->replacements[ $escapeFunc ] ) ) {
 			return;
@@ -144,17 +161,76 @@ class PreferEscHtmlESniff implements Sniff {
 		);
 
 		if ( true === $fix ) {
-			$phpcsFile->fixer->beginChangeset();
-
-			// Remove everything from echo to the semicolon.
-			for ( $i = $stackPtr; $i <= $semicolon; $i++ ) {
-				$phpcsFile->fixer->replaceToken( $i, '' );
-			}
-
-			// Add the new combined function call.
-			$phpcsFile->fixer->addContent( $stackPtr, $replacementFunc . '( ' . trim( $translateArgs ) . ' );' );
-
-			$phpcsFile->fixer->endChangeset();
+			$this->replaceEchoWithCombinedFunction( $phpcsFile, $stackPtr, $semicolon, $replacementFunc, $translateArgs );
 		}
+	}
+
+	/**
+	 * Handle echo statements that already use combined translation helpers.
+	 *
+	 * @param File   $phpcsFile       The file being scanned.
+	 * @param int    $stackPtr        Pointer to the echo token.
+	 * @param int    $functionPointer Pointer to the combined function token.
+	 * @param string $functionName    The function currently in use (e.g. esc_html__).
+	 *
+	 * @return void
+	 */
+	private function processDirectCombinedFunction( File $phpcsFile, $stackPtr, $functionPointer, $functionName ) {
+		$tokens = $phpcsFile->getTokens();
+
+		$openParen = $phpcsFile->findNext( T_WHITESPACE, $functionPointer + 1, null, true );
+
+		if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+			return;
+		}
+
+		if ( ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+			return;
+		}
+
+		$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+
+		$semicolon = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, null, true );
+
+		if ( false === $semicolon || $tokens[ $semicolon ]['code'] !== T_SEMICOLON ) {
+			return;
+		}
+
+		$args            = $phpcsFile->getTokensAsString( $openParen + 1, $closeParen - $openParen - 1 );
+		$replacementFunc = $this->directReplacements[ $functionName ];
+
+		$fix = $phpcsFile->addFixableError(
+			'Use %s() instead of echo %s().',
+			$stackPtr,
+			'PreferCombinedFunctionDirect',
+			array( $replacementFunc, $functionName )
+		);
+
+		if ( true === $fix ) {
+			$this->replaceEchoWithCombinedFunction( $phpcsFile, $stackPtr, $semicolon, $replacementFunc, $args );
+		}
+	}
+
+	/**
+	 * Replace an echo statement with the combined helper.
+	 *
+	 * @param File   $phpcsFile      The file being scanned.
+	 * @param int    $stackPtr       Pointer to the echo token.
+	 * @param int    $semicolonPtr   Pointer to the semicolon.
+	 * @param string $replacement    Function name to use.
+	 * @param string $argumentString Function arguments as a string.
+	 *
+	 * @return void
+	 */
+	private function replaceEchoWithCombinedFunction( File $phpcsFile, $stackPtr, $semicolonPtr, $replacement, $argumentString ) {
+		$phpcsFile->fixer->beginChangeset();
+
+		for ( $i = $stackPtr; $i <= $semicolonPtr; $i++ ) {
+			$phpcsFile->fixer->replaceToken( $i, '' );
+		}
+
+		$phpcsFile->fixer->addContent( $stackPtr, $replacement . '( ' . trim( $argumentString ) . ' );' );
+
+		$phpcsFile->fixer->endChangeset();
 	}
 }
