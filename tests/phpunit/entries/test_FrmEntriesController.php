@@ -20,7 +20,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 		$post = get_post( $post_id );
 		$this->assertNotEmpty( $post );
-		$this->assertEquals( 'publish', $post->post_status );
+		$this->assertSame( 'publish', $post->post_status );
 
 		$no_save_form = $this->create_form( array( 'no_save' => 1 ) );
 		$this->assertNotEmpty( $no_save_form->options['no_save'] );
@@ -31,7 +31,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 		$post = get_post( $created_post );
 		$this->assertNotEmpty( $post );
-		$this->assertEquals( 'publish', $post->post_status );
+		$this->assertSame( 'publish', $post->post_status );
 	}
 
 	/**

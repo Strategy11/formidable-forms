@@ -48,7 +48,7 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 
 			$this->assertNotEmpty( $matches[0][0] );
 			$tag = FrmShortcodeHelper::get_shortcode_tag( $matches, 0, $args );
-			$this->assertEquals( '25', $tag );
+			$this->assertSame( '25', $tag );
 		}
 	}
 

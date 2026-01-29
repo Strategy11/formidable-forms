@@ -88,7 +88,7 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 						esc_html( date_i18n( get_option( 'date_format' ), strtotime( $template['created_at'] ) ) )
 					);
 				} else {
-					echo esc_html__( 'No description', 'formidable' );
+					esc_html_e( 'No description', 'formidable' );
 				}
 				?>
 			</p>

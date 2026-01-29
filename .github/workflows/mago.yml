@@ -11,12 +11,8 @@ jobs:
       - name: "📥 Fetching Repository Contents"
         uses: actions/checkout@v4.1.1
 
-      - name: "💽  Installing PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          coverage: none
-          ini-values: display_errors=On, error_reporting=E_ALL
+      - name: Install dependencies
+        run: composer install --dev --prefer-dist --no-progress
 
       - name: "⚡ Install Mago"
         run: |

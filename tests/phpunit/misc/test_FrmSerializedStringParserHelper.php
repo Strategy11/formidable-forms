@@ -16,6 +16,6 @@ class test_FrmSerializedStringParserHelper extends FrmUnitTest {
 		$parsed = FrmSerializedStringParserHelper::get()->parse( $string );
 		$this->assertIsArray( $parsed );
 		$this->assertArrayHasKey( 'key', $parsed );
-		$this->assertEquals( 'value', $parsed['key'] );
+		$this->assertSame( 'value', $parsed['key'] );
 	}
 }
