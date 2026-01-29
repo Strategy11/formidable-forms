@@ -240,7 +240,7 @@ window.frmAdminBuildJS = function() {
 	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
-	const { doJsonFetch, doJsonPost } = frmDom.ajax;
+	const { doJsonPost } = frmDom.ajax;
 	frmAdminJs.contextualShortcodes = getContextualShortcodes();
 	const icons = {
 		save: svg( { href: '#frm_save_icon' } ),
@@ -2943,18 +2943,6 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function scrollToField( field ) {
-		const newPos = field.getBoundingClientRect().top,
-			container = document.getElementById( 'post-body-content' );
-
-		if ( typeof animate === 'undefined' ) {
-			jQuery( container ).scrollTop( newPos );
-		} else {
-			// TODO: smooth scroll
-			jQuery( container ).animate( { scrollTop: newPos }, 500 );
-		}
-	}
-
 	function checkCalculationCreatedByUser() {
 		const calculation = this.value;
 		let warningMessage = checkMatchingParens( calculation );
@@ -5318,10 +5306,10 @@ window.frmAdminBuildJS = function() {
 
 	function addWatchLookupRow() {
 		/*jshint validthis:true */
-		let lastRowId,
-			id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+		let id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
 			lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children;
+
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
@@ -6473,7 +6461,6 @@ window.frmAdminBuildJS = function() {
 	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
 		let imageLabelClass,
 			originalLabel = label,
-			shape = fieldType === 'checkbox' ? 'square' : 'circle',
 			labelImage,
 			labelNode,
 			imageLabel;
@@ -9310,63 +9297,6 @@ window.frmAdminBuildJS = function() {
 	function toggleAddonState( clicked, action ) {
 		const addonState = require( './addon-state' );
 		addonState.toggleAddonState( clicked, action );
-	}
-
-	function installAddonWithCreds( e ) {
-		// Prevent the default action, let the user know we are attempting to install again and go with it.
-		e.preventDefault();
-
-		// Now let's make another Ajax request once the user has submitted their credentials.
-		const proceed = jQuery( this );
-		const el = proceed.parent().parent();
-		const plugin = proceed.attr( 'rel' );
-
-		proceed.addClass( 'frm_loading_button' );
-
-		jQuery.ajax( {
-			url: ajaxurl,
-			type: 'POST',
-			async: true,
-			cache: false,
-			dataType: 'json',
-			data: {
-				action: 'frm_install_addon',
-				nonce: frmAdminJs.nonce,
-				plugin: plugin,
-				hostname: el.find( '#hostname' ).val(),
-				username: el.find( '#username' ).val(),
-				password: el.find( '#password' ).val()
-			},
-			success: function( response ) {
-				response = response?.data ?? response;
-
-				const error = extractErrorFromAddOnResponse( response );
-				if ( error ) {
-					addonError( error, el, proceed );
-					return;
-				}
-
-				afterAddonInstall( response, proceed, message, el );
-			},
-			error: function() {
-				proceed.removeClass( 'frm_loading_button' );
-			}
-		} );
-	}
-
-	function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
-		const addonState = require( './addon-state' );
-		addonState.afterAddonInstall( response, button, message, el, saveAndReload, action );
-	}
-
-	function extractErrorFromAddOnResponse( response ) {
-		const addonState = require( './addon-state' );
-		return addonState.extractErrorFromAddOnResponse( response );
-	}
-
-	function addonError( response, el, button ) {
-		const addonState = require( './addon-state' );
-		addonState.addonError( response, el, button );
 	}
 
 	/* Templates */
