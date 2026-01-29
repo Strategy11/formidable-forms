@@ -915,14 +915,6 @@
 	}
 
 	/**
-	 * @param {string} templateKey
-	 * @return {HTMLElement} The template card element.
-	 */
-	function getTemplateCard( templateKey ) {
-		return document.getElementById( 'frm_template_style_cards_wrapper' ).querySelector( '.frm-style-card[data-template-key="' + templateKey + '"]' );
-	}
-
-	/**
 	 * @param {string} styleId
 	 * @return {HTMLElement} The card element.
 	 */
@@ -1330,22 +1322,6 @@
 				} );
 			} );
 		}
-	}
-
-	/**
-	 * @param {Event} event
-	 */
-	function maybeCollapseSettings( event ) {
-		let expanded;
-		const sectionParent = event.target.parentElement;
-		if ( event.type === 'keydown' ) {
-			expanded = sectionParent.classList.toggle( 'open' );
-			jQuery( sectionParent.querySelector( '.accordion-section-content' ) ).toggle( ! expanded ).slideToggle( 150 ); // Animate toggle as in click/enter.
-		} else {
-			expanded = sectionParent.classList.contains( 'open' );
-		}
-
-		event.target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**

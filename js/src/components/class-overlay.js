@@ -71,7 +71,7 @@ export class frmOverlay {
 
 	getButtons() {
 		const buttons = this.overlayData.buttons.map( ( button, index ) => {
-			if ( ! button.url || '' === button.url ) {
+			if ( ! button.url ) {
 				return '';
 			}
 			const buttonTypeClassname = 1 === index ? 'frm-button-primary' : 'frm-button-secondary';

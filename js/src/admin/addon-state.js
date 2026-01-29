@@ -248,3 +248,45 @@ function showUpgradeModalSuccess() {
 		circledIcon.querySelector( 'svg' )?.replaceWith( svg( { href: '#frm_checkmark_icon' } ) );
 	}
 }
+
+function installAddonWithCreds( e ) {
+	// Prevent the default action, let the user know we are attempting to install again and go with it.
+	e.preventDefault();
+
+	// Now let's make another Ajax request once the user has submitted their credentials.
+	const proceed = jQuery( this );
+	const el = proceed.parent().parent();
+	const plugin = proceed.attr( 'rel' );
+
+	proceed.addClass( 'frm_loading_button' );
+
+	jQuery.ajax( {
+		url: ajaxurl,
+		type: 'POST',
+		async: true,
+		cache: false,
+		dataType: 'json',
+		data: {
+			action: 'frm_install_addon',
+			nonce: frmAdminJs.nonce,
+			plugin: plugin,
+			hostname: el.find( '#hostname' ).val(),
+			username: el.find( '#username' ).val(),
+			password: el.find( '#password' ).val()
+		},
+		success: function( response ) {
+			response = response?.data ?? response;
+
+			const error = extractErrorFromAddOnResponse( response );
+			if ( error ) {
+				addonError( error, el, proceed );
+				return;
+			}
+
+			afterAddonInstall( response, proceed, message, el );
+		},
+		error: function() {
+			proceed.removeClass( 'frm_loading_button' );
+		}
+	} );
+}
