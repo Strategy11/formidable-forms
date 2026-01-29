@@ -1105,7 +1105,7 @@ BEFORE_HTML;
 	/**
 	 * @param array|bool|int|object|string $form
 	 *
-	 * @return string
+	 * @return int|string
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;

@@ -97,8 +97,8 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 */
 	public function test_get_form_style() {
 		// Test null and 'default' form values.
-		$this->assertSame( '1', FrmFormsHelper::get_form_style( null ) );
-		$this->assertSame( '1', FrmFormsHelper::get_form_style( 'default' ) );
+		$this->assertSame( 1, FrmFormsHelper::get_form_style( null ) );
+		$this->assertSame( 1, FrmFormsHelper::get_form_style( 'default' ) );
 
 		// Test object form values.
 		// Test "disable Formidable styling" first.
@@ -125,13 +125,13 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertEquals( $style_id, FrmFormsHelper::get_form_style( $form ) );
 
 		unset( $form['custom_style'] );
-		$this->assertSame( '1', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( 1, FrmFormsHelper::get_form_style( $form ) );
 
 		$form['custom_style'] = '';
 		$this->assertSame( '', FrmFormsHelper::get_form_style( $form ) );
 
 		$form['custom_style'] = '0';
-		$this->assertSame( '0', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( 0, FrmFormsHelper::get_form_style( $form ) );
 	}
 
 	/**
