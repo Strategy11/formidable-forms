@@ -48,7 +48,7 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 if ( ! empty( $warnings ) && is_array( $warnings ) ) {
 	?>
 	<div class="frm_warning_style inline" role="alert">
-		<div class="frm_warning_heading"> <?php echo esc_html__( 'Warning:', 'formidable' ); ?></div>
+		<div class="frm_warning_heading"> <?php esc_html_e( 'Warning:', 'formidable' ); ?></div>
 		<ul id="frm_warnings">
 			<?php
 			foreach ( $warnings as $warning ) {
