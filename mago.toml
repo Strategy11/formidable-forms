@@ -25,7 +25,7 @@ preset = "default"
 use-tabs = true
 
 [linter]
-integrations = []
+integrations = [ "phpunit" ]
 
 [linter.rules]
 ambiguous-function-call = { enabled = false }
@@ -64,6 +64,7 @@ tagged-todo = { enabled = false }
 too-many-methods = { enabled = false }
 too-many-properties = { enabled = false }
 use-compound-assignment = { enabled = false } # Consider enabling this soon.
+assertion-style = { enabled = false }
 
 [analyzer]
 plugins = []
