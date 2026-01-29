@@ -35,6 +35,15 @@
 		// Create the card fields container structure
 		// TODO: Make these IDs unique.
 		cardElement.innerHTML = `
+			<div
+			data-pp-message
+			data-pp-placement="product"
+			data-pp-amount="120.00"
+			data-pp-style-layout="text"
+			data-pp-style-logo-type="inline"
+			data-pp-style-text-color="black">
+			</div>
+
 			<div id="paypal-button-container"></div>
 			<div class="separator">OR</div>
 			<div class="frm-paypal-card-number frm6" id="frm-paypal-card-number"></div>
@@ -67,6 +76,7 @@
 		disableSubmit( thisForm );
 
 		paypal.Buttons( {
+			fundingSource: paypal.FUNDING.PAYLATER,
 			createOrder: createOrder,
 		//	createSubscription: createSubscription,
 			onApprove: onApprove,

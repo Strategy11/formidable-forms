@@ -382,6 +382,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				// Subscriptions appear to require vault=true.
 			//	'intent'     => 'subscription',
 			//	'vault'      => 'true',
+				'enable-funding' => 'paylater',
 			),
 			'https://www.paypal.com/sdk/js'
 		);
