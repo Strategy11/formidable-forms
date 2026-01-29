@@ -30,6 +30,7 @@ class FrmOnSubmitHelper {
 	 */
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_form_field frm_has_shortcodes">
 			<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
@@ -70,6 +71,7 @@ class FrmOnSubmitHelper {
 			</label>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -108,6 +110,7 @@ class FrmOnSubmitHelper {
 	 */
 	public static function show_page_settings( $args ) {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_form_field">
 			<div class="frm_note_style">
@@ -127,6 +130,7 @@ class FrmOnSubmitHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -237,9 +241,9 @@ class FrmOnSubmitHelper {
 	/**
 	 * Populates the On Submit data to form options.
 	 *
-	 * @param array  $form_options Form options.
-	 * @param object $action       Optional. The On Submit action object.
-	 * @param string $event        Form event. Default is `create`.
+	 * @param array       $form_options Form options.
+	 * @param object|null $action       Optional. The On Submit action object.
+	 * @param string      $event        Form event. Default is `create`.
 	 *
 	 * @return void
 	 */

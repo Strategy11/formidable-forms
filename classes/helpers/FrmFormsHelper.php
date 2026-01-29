@@ -68,6 +68,7 @@ class FrmFormsHelper {
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
@@ -82,6 +83,7 @@ class FrmFormsHelper {
 			<?php } ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -154,6 +156,7 @@ class FrmFormsHelper {
 		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( count( $forms ) < 2 ) {
 			?>
 			<div id="frm_bs_dropdown">
@@ -208,7 +211,7 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? self::get_no_title_text() : $form->name;
+					$form_name = ! empty( $form->name ) ? $form->name : self::get_no_title_text();
 					?>
 					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
@@ -232,6 +235,7 @@ class FrmFormsHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -701,6 +705,7 @@ BEFORE_HTML;
 
 		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
@@ -725,6 +730,7 @@ BEFORE_HTML;
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -760,6 +766,7 @@ BEFORE_HTML;
 		$args        = array_merge( $defaults, $args );
 		$has_tooltip = ! empty( $args['title'] );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $args['class'] ); ?>">
 			<a href="javascript:void(0)" class="frm_insert_code <?php echo $has_tooltip ? 'frm_help' : ''; ?>"
@@ -772,6 +779,7 @@ BEFORE_HTML;
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -879,7 +887,7 @@ BEFORE_HTML;
 		FrmField::create( $end_section_values );
 
 		if ( $move === 'move' ) {
-			// bump the order of current field unless we're at the end of the form
+			// Bump the order of current field unless we're at the end of the form
 			FrmField::update( $field->id, array( 'field_order' => $field->field_order + 2 ) );
 		}
 
@@ -915,7 +923,7 @@ BEFORE_HTML;
 				$replace_with = '';
 			}
 
-			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			FrmShortcodeHelper::remove_inline_conditions( FrmAppHelper::is_true( $show ) && $replace_with != '', $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		// Replace [form_key].
@@ -1031,7 +1039,7 @@ BEFORE_HTML;
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
 		if ( isset( $form['form_class'] ) && str_contains( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
-			// not missing class, avoid adding it twice.
+			// Not missing class, avoid adding it twice.
 			return false;
 		}
 		return ! empty( $form['submit_html'] ) && str_contains( $form['submit_html'], 'frm_inline_submit' );
@@ -1107,7 +1115,7 @@ BEFORE_HTML;
 		}
 
 		if ( is_object( $form ) && $form->parent_form_id ) {
-			// get the parent form if this is a child
+			// Get the parent form if this is a child
 			$form = $form->parent_form_id;
 		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
@@ -1162,7 +1170,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function show_error( $args ) {
-		// remove any blank messages
+		// Remove any blank messages
 		$args['errors'] = array_filter( (array) $args['errors'] );
 
 		$line_break_first = $args['show_img'];
@@ -1604,8 +1612,9 @@ BEFORE_HTML;
 		if ( $bg_color && $atts['bg'] ) {
 			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
 		}
+
 		echo '>';
-			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
 	}
 
@@ -1694,6 +1703,7 @@ BEFORE_HTML;
 			return;
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p class="frm_plan_required">
 			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
@@ -1702,6 +1712,7 @@ BEFORE_HTML;
 			</a>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1853,14 +1864,15 @@ BEFORE_HTML;
 	 * @return bool|string A string with an unsafe param message or false.
 	 */
 	private static function create_unsafe_param_warning( $unsafe_params_in_redirect ) {
-		$count                = count( $unsafe_params_in_redirect );
-		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
-		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
-		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
+		$count = count( $unsafe_params_in_redirect );
 
 		if ( $count === 0 ) {
 			return false;
 		}
+
+		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
+		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
 
 		if ( $count === 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */

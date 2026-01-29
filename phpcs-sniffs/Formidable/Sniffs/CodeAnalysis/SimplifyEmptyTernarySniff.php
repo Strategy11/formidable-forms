@@ -66,6 +66,12 @@ class SimplifyEmptyTernarySniff implements Sniff {
 
 		$variableName = $tokens[ $varToken ]['content'];
 
+		// Only apply this transformation if we can verify the variable is definitely set.
+		// This is safe for function parameters, but not for arbitrary variables.
+		if ( ! $this->isVariableDefinitelySet( $phpcsFile, $stackPtr, $variableName ) ) {
+			return;
+		}
+
 		// Check if there's only the variable inside empty() (no array access, etc.).
 		$nextInParen = $phpcsFile->findNext( T_WHITESPACE, $varToken + 1, $closeParen, true );
 
@@ -146,5 +152,168 @@ class SimplifyEmptyTernarySniff implements Sniff {
 
 			$phpcsFile->fixer->endChangeset();
 		}
+	}
+
+	/**
+	 * Check if a variable is definitely set (e.g., it's a function parameter).
+	 *
+	 * @param File   $phpcsFile    The file being scanned.
+	 * @param int    $stackPtr     The current token position.
+	 * @param string $variableName The variable name to check.
+	 *
+	 * @return bool True if the variable is definitely set.
+	 */
+	private function isVariableDefinitelySet( File $phpcsFile, $stackPtr, $variableName ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the containing function.
+		$functionToken = $this->findContainingFunction( $phpcsFile, $stackPtr );
+
+		if ( false === $functionToken ) {
+			// Not inside a function - can't verify variable is set.
+			return false;
+		}
+
+		// Check if the variable is a function parameter.
+		if ( $this->isFunctionParameter( $phpcsFile, $functionToken, $variableName ) ) {
+			return true;
+		}
+
+		// Check if the variable is unconditionally assigned before this point.
+		if ( $this->isUnconditionallyAssigned( $phpcsFile, $functionToken, $stackPtr, $variableName ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find the containing function for a token.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The token position.
+	 *
+	 * @return false|int The function token position or false.
+	 */
+	private function findContainingFunction( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( ! isset( $tokens[ $stackPtr ]['conditions'] ) ) {
+			return false;
+		}
+
+		$conditions = $tokens[ $stackPtr ]['conditions'];
+
+		foreach ( $conditions as $conditionPtr => $conditionType ) {
+			if ( $conditionType === T_FUNCTION || $conditionType === T_CLOSURE ) {
+				return $conditionPtr;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a variable is a parameter of the given function.
+	 *
+	 * @param File   $phpcsFile     The file being scanned.
+	 * @param int    $functionToken The function token position.
+	 * @param string $variableName  The variable name to check.
+	 *
+	 * @return bool True if the variable is a function parameter.
+	 */
+	private function isFunctionParameter( File $phpcsFile, $functionToken, $variableName ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( ! isset( $tokens[ $functionToken ]['parenthesis_opener'] ) || ! isset( $tokens[ $functionToken ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$opener = $tokens[ $functionToken ]['parenthesis_opener'];
+		$closer = $tokens[ $functionToken ]['parenthesis_closer'];
+
+		// Find all variables in the parameter list.
+		for ( $i = $opener + 1; $i < $closer; $i++ ) {
+			if ( $tokens[ $i ]['code'] === T_VARIABLE && $tokens[ $i ]['content'] === $variableName ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a variable is unconditionally assigned before a given position.
+	 *
+	 * @param File   $phpcsFile     The file being scanned.
+	 * @param int    $functionToken The function token position.
+	 * @param int    $stackPtr      The current token position.
+	 * @param string $variableName  The variable name to check.
+	 *
+	 * @return bool True if the variable is unconditionally assigned.
+	 */
+	private function isUnconditionallyAssigned( File $phpcsFile, $functionToken, $stackPtr, $variableName ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( ! isset( $tokens[ $functionToken ]['scope_opener'] ) ) {
+			return false;
+		}
+
+		$scopeOpener = $tokens[ $functionToken ]['scope_opener'];
+
+		// Look for assignments of this variable between function start and current position.
+		for ( $i = $scopeOpener + 1; $i < $stackPtr; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_VARIABLE || $tokens[ $i ]['content'] !== $variableName ) {
+				continue;
+			}
+
+			// Check if this is an assignment (variable followed by =).
+			$nextToken = $phpcsFile->findNext( T_WHITESPACE, $i + 1, null, true );
+
+			if ( false === $nextToken || $tokens[ $nextToken ]['code'] !== T_EQUAL ) {
+				continue;
+			}
+
+			// Check if this assignment is at the function's top level (not inside a condition).
+			if ( $this->isAtFunctionTopLevel( $phpcsFile, $i, $functionToken ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a token is at the function's top level (not inside a condition).
+	 *
+	 * @param File $phpcsFile     The file being scanned.
+	 * @param int  $stackPtr      The token position.
+	 * @param int  $functionToken The function token position.
+	 *
+	 * @return bool True if the token is at the function's top level.
+	 */
+	private function isAtFunctionTopLevel( File $phpcsFile, $stackPtr, $functionToken ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( ! isset( $tokens[ $stackPtr ]['conditions'] ) ) {
+			return false;
+		}
+
+		$conditions = $tokens[ $stackPtr ]['conditions'];
+
+		// The only condition should be the function itself.
+		// If there are other conditions (if, foreach, etc.), it's not at top level.
+		foreach ( $conditions as $conditionPtr => $conditionType ) {
+			if ( $conditionPtr === $functionToken ) {
+				continue;
+			}
+
+			// Any other condition means it's not at top level.
+			if ( in_array( $conditionType, array( T_IF, T_ELSEIF, T_ELSE, T_FOREACH, T_FOR, T_WHILE, T_DO, T_SWITCH, T_TRY, T_CATCH ), true ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

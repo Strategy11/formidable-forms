@@ -440,11 +440,12 @@ class FrmField {
 		}
 
 		self::delete_form_transient( $new_values['form_id'] );
-		$new_id = $wpdb->insert_id;
 
 		if ( ! $return ) {
 			return false;
 		}
+
+		$new_id = $wpdb->insert_id;
 
 		if ( isset( $values['id'] ) ) {
 			$frm_duplicate_ids[ $values['id'] ] = $new_id;
@@ -622,7 +623,7 @@ class FrmField {
 
 			// If this is a repeating section, create new form
 			if ( self::is_repeating_field( $field ) ) {
-				// create the repeatable form
+				// Create the repeatable form
 				$new_repeat_form_id = apply_filters(
 					'frm_create_repeat_form',
 					0,
@@ -692,12 +693,12 @@ class FrmField {
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values, $id );
 
 			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
-				// don't keep the old placeholder setting for hidden fields
+				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
 		}
 
-		// serialize array values
+		// Serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
 				if ( 'field_options' === $opt ) {
@@ -1030,14 +1031,14 @@ class FrmField {
 	 * @return void
 	 */
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
-		$no_sub_forms = empty( $results ) && $type === 'all';
+		$no_sub_forms = ! $results && $type === 'all';
 
 		if ( 'include' !== $inc_embed || $no_sub_forms ) {
 			return;
 		}
 
 		$form_fields         = $results;
-		$should_get_subforms = $type !== 'all' && $type !== 'form' && ! empty( $form_id );
+		$should_get_subforms = $type !== 'all' && $type !== 'form' && $form_id;
 
 		if ( $should_get_subforms ) {
 			$form_fields = self::get_all_types_in_form( $form_id, 'form' );
@@ -1077,7 +1078,7 @@ class FrmField {
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
 
 		if ( self::$use_cache ) {
-			// make sure old cache doesn't get saved as a transient
+			// Make sure old cache doesn't get saved as a transient
 			$results = wp_cache_get( $cache_key, 'frm_field' );
 
 			if ( false !== $results ) {
@@ -1111,7 +1112,7 @@ class FrmField {
 			);
 			$results = FrmDb::get_var( $table_name . ' fi JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
 		} else {
-			// if the query is not an array, then it has already been prepared
+			// If the query is not an array, then it has already been prepared
 			$query .= FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			$function_name = $query_type === 'row' ? 'get_row' : 'get_results';
@@ -1239,7 +1240,7 @@ class FrmField {
 			$fields = array_merge( $fields, $next_fields );
 
 			if ( count( $next_fields ) >= self::$transient_size ) {
-				// if this transient is full, check for another
+				// If this transient is full, check for another
 				++$next;
 				self::get_next_transient( $fields, $base_name, $next );
 			}
@@ -1267,9 +1268,9 @@ class FrmField {
 			$set  = set_transient( $name, $field, 60 * 60 * 6 );
 
 			if ( ! $set ) {
-				// the transient didn't save
+				// The transient didn't save
 				if ( $name !== $base_name ) {
-					// if the first saved an others fail, this will show an incomplete form
+					// If the first saved an others fail, this will show an incomplete form
 					self::delete_form_transient( $form_id );
 				}
 
@@ -1312,9 +1313,7 @@ class FrmField {
 
 		$field_type = self::get_original_field_type( $field );
 
-		return self::is_checkbox( $field ) ||
-			$field_type === 'address' ||
-			self::is_multiple_select( $field );
+		return self::is_checkbox( $field ) || $field_type === 'address' || self::is_multiple_select( $field );
 	}
 
 	/**
@@ -1593,13 +1592,9 @@ class FrmField {
 	 * @return bool true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_field_type( $field, $is_type ) {
-		$field_type = self::get_original_field_type( $field );
-		$data_type  = self::get_option( $field, 'data_type' );
-
-		$is_field_type = $is_type === $field_type ||
-			( 'data' === $field_type && $is_type === $data_type ) ||
-			( 'lookup' === $field_type && $is_type === $data_type ) ||
-			( 'product' === $field_type && $is_type === $data_type );
+		$field_type    = self::get_original_field_type( $field );
+		$data_type     = self::get_option( $field, 'data_type' );
+		$is_field_type = $is_type === $field_type || ( 'data' === $field_type && $is_type === $data_type ) || ( 'lookup' === $field_type && $is_type === $data_type ) || ( 'product' === $field_type && $is_type === $data_type ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		/**
 		 * When a field type is checked, allow individual fields

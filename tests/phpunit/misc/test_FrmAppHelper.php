@@ -27,7 +27,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_plugin_folder() {
 		$folder   = FrmAppHelper::plugin_folder();
 		$expected = array( 'formidable', 'formidable-forms' );
-		$this->assertTrue( in_array( $folder, $expected, true ) );
+		$this->assertContains( $folder, $expected );
 	}
 
 	/**
@@ -36,7 +36,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_plugin_path() {
 		$path          = FrmAppHelper::plugin_path();
 		$expected_file = $path . '/formidable.php';
-		$this->assertTrue( file_exists( $expected_file ) );
+		$this->assertFileExists( $expected_file );
 	}
 
 	/**
@@ -382,6 +382,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( $this->is_a_valid_color( 'Not a color' ) );
 	}
 
+	/**
+	 * @param string $value
+	 */
 	private function is_a_valid_color( $value ) {
 		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
 	}
@@ -507,7 +510,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( str_contains( $output, $substring ), $message );
+		$this->assertStringContainsString( $substring, $output, $message );
 	}
 
 	/**
@@ -516,7 +519,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_not_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( ! str_contains( $output, $substring ), $message );
+		$this->assertStringNotContainsString( $substring, $output, $message );
 	}
 
 	/**
@@ -539,7 +542,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertIsNotNumeric( $key, 'key should never be numeric.' );
 
 		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
-		// reserve the form key so one has to be generated with this as the base.
+		// Reserve the form key so one has to be generated with this as the base.
 		$this->factory->form->create(
 			array( 'form_key' => $super_long_form_key )
 		);
@@ -579,6 +582,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function underscore_key_separator() {
 		return '___';
 	}

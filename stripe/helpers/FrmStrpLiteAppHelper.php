@@ -137,6 +137,7 @@ class FrmStrpLiteAppHelper {
 	 * @return void
 	 */
 	public static function not_connected_warning() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_warning_style frm-with-icon">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
@@ -148,6 +149,7 @@ class FrmStrpLiteAppHelper {
 			</span>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

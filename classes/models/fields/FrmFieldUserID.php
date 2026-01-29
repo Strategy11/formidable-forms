@@ -48,6 +48,9 @@ class FrmFieldUserID extends FrmFieldType {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-user-id.php';
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function prepare_field_html( $args ) {
 		$args  = $this->fill_display_field_values( $args );
 		$value = $this->get_field_value( $args );
@@ -71,6 +74,11 @@ class FrmFieldUserID extends FrmFieldType {
 		return is_numeric( $this->field['value'] ) || $posted_value || $updating ? $this->field['value'] : $user_ID;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 */
 	public function validate( $args ) {
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( '' == $args['value'] ) {

@@ -1,0 +1,181 @@
+# Welcome to Mago!
+# For full documentation, see https://mago.carthage.software/tools/overview
+php-version = "8.5.0"
+
+[source]
+workspace = "."
+paths = [
+    "formidable.php",
+    "classes",
+    "paypal",
+    "stripe",
+    "square",
+    "css",
+    "tests",
+]
+includes = [
+    "vendor/php-stubs/wordpress-stubs/wordpress-stubs.php",
+    "stubs.php",
+]
+excludes = ["node_modules"]
+extensions = ["php"]
+
+[formatter]
+preset = "default"
+use-tabs = true
+
+[linter]
+integrations = []
+
+[linter.rules]
+ambiguous-function-call = { enabled = false }
+array-style = { enabled = false }
+braced-string-interpolation = { enabled = false }
+class-name = { enabled = false }
+combine-consecutive-issets = { enabled = false }
+cyclomatic-complexity = { enabled = false }
+excessive-parameter-list = { enabled = false }
+explicit-octal = { enabled = false }
+halstead = { enabled = false } # Consider enabling this soon.
+identity-comparison = { enabled = false }
+kan-defect = { enabled = false }
+literal-named-argument = { enabled = false }
+loop-does-not-iterate = { enabled = false }
+no-assign-in-condition = { enabled = false }
+no-closing-tag = { enabled = false }
+no-else-clause = { enabled = false }
+no-empty = { enabled = false }
+no-error-control-operator = { enabled = false }
+no-global = { enabled = false }
+no-insecure-comparison = { enabled = false } # Consider enabling this soon.
+no-nested-ternary = { enabled = false }
+no-redundant-math = { enabled = false }
+no-redundant-method-override = { enabled = false } # Fix this first.
+no-request-variable = { enabled = false }
+no-sprintf-concat = { enabled = false }
+prefer-arrow-function = { enabled = false }
+prefer-early-continue = { enabled = false }
+prefer-static-closure = { enabled = false }
+require-preg-quote-delimiter = { enabled = false }
+sensitive-parameter = { enabled = false }
+strict-behavior = { enabled = false }
+strict-types = { enabled = false }
+tagged-todo = { enabled = false }
+too-many-methods = { enabled = false }
+too-many-properties = { enabled = false }
+use-compound-assignment = { enabled = false } # Consider enabling this soon.
+
+[analyzer]
+plugins = []
+find-unused-definitions = true
+find-unused-expressions = false
+analyze-dead-code = true
+memoize-properties = true
+allow-possibly-undefined-array-keys = true
+check-throws = false
+check-missing-override = false
+find-unused-parameters = false
+strict-list-index-checks = false
+no-boolean-literal-comparison = false
+check-missing-type-hints = false
+register-super-globals = true
+ignore = [
+    "ambiguous-instantiation-target",
+    "ambiguous-object-method-access",
+    "ambiguous-object-property-access",
+    "array-to-string-conversion",
+    "conflicting-reference-constraint",
+    "deprecated-function",
+    "falsable-return-statement",
+    "false-argument", # Fix this soon
+    "generic-object-iteration",
+    "impossible-assignment",
+    "impossible-condition",
+    "impossible-nonnull-entry-check",
+    "impossible-type-comparison", # Fix this soon
+    "incompatible-parameter-name",
+    "incompatible-parameter-type",
+    "invalid-argument",
+    "invalid-array-access",
+    "invalid-array-element-key",
+    "invalid-array-index",
+    "invalid-destructuring-source",
+    "invalid-global",
+    "invalid-iterator",
+    "invalid-member-selector",
+    "invalid-method-access",
+    "invalid-operand",
+    "invalid-param-tag",
+    "invalid-property-access",
+    "invalid-property-assignment-value",
+    "invalid-property-read",
+    "invalid-return-statement",
+    "invalid-type-cast",
+    "invalid-unset",
+    "less-specific-argument",
+    "less-specific-nested-argument-type",
+    "less-specific-nested-return-statement",
+    "less-specific-return-statement",
+    "method-access-on-null",
+    "mismatched-array-index",
+    "missing-return-statement",
+    "mixed-argument",
+    "mixed-array-access",
+    "mixed-array-assignment",
+    "mixed-array-index",
+    "mixed-assignment",
+    "mixed-clone",
+    "mixed-method-access",
+    "mixed-operand",
+    "mixed-property-access",
+    "mixed-property-type-coercion",
+    "mixed-return-statement",
+    "never-return",
+    "no-value",
+    "non-documented-property",
+    "non-existent-class-like",
+    "non-existent-constant",
+    "non-existent-method",
+    "non-existent-property",
+    "null-argument",
+    "null-iterator",
+    "nullable-return-statement",
+    "possible-method-access-on-null",
+    "possibly-false-argument",
+    "possibly-false-iterator",
+    "possibly-false-operand",
+    "possibly-invalid-argument",
+    "possibly-invalid-clone",
+    "possibly-invalid-iterator",
+    "possibly-invalid-operand",
+    "possibly-null-argument",
+    "possibly-null-array-access",
+    "possibly-null-array-index",
+    "possibly-null-iterator",
+    "possibly-null-operand",
+    "possibly-null-property-access",
+    "possibly-undefined-string-array-index",
+    "possibly-undefined-variable",
+    "property-type-coercion",
+    "redundant-comparison",
+    "redundant-condition",
+    "redundant-isset-check",
+    "redundant-key-check",
+    "redundant-logical-operation",
+    "redundant-null-coalesce",
+    "redundant-type-comparison",
+    "reference-constraint-violation",
+    "reference-to-undefined-variable",
+    "string-member-selector",
+    "too-few-arguments",
+    "too-many-arguments",
+    "undefined-int-array-index",
+    "undefined-string-array-index",
+    "undefined-variable",
+    "undefined-variable-in-closure-use",
+    "unknown-class-instantiation",
+    "unknown-iterator-type",
+    "unsafe-instantiation",
+    "unused-method",
+    "unused-property",
+]

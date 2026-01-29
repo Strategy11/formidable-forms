@@ -455,7 +455,7 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	public static function mark_onboarding_as_skipped() {
-		update_option( self::ONBOARDING_SKIPPED_OPTION, true, 'no' );
+		update_option( self::ONBOARDING_SKIPPED_OPTION, true, false );
 	}
 
 	/**
@@ -507,7 +507,7 @@ class FrmOnboardingWizardController {
 			return true;
 		}
 
-		update_option( self::REDIRECT_STATUS_OPTION, FrmAppHelper::plugin_version(), 'no' );
+		update_option( self::REDIRECT_STATUS_OPTION, FrmAppHelper::plugin_version(), false );
 		return false;
 	}
 
