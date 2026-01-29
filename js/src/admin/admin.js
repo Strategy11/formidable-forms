@@ -6085,7 +6085,7 @@ window.frmAdminBuildJS = function() {
 	 * Set the displayed value for an image option.
 	 */
 	function getImageDisplayValue( thisOpt, fieldId, label ) {
-		let image, imageUrl, showLabelWithImage, fieldType;
+		let image, imageUrl, showLabelWithImage;
 
 		image = thisOpt.find( 'img' );
 		if ( image ) {
@@ -6093,7 +6093,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		showLabelWithImage = showingLabelWithImage( fieldId );
-		fieldType = radioOrCheckbox( fieldId );
 		return getImageLabel( label.val(), showLabelWithImage, imageUrl );
 	}
 
@@ -6403,15 +6402,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		return opts;
-	}
-
-	function radioOrCheckbox( fieldId ) {
-		const settings = document.getElementById( 'frm-single-settings-' + fieldId );
-		if ( settings === null ) {
-			return 'radio';
-		}
-
-		return settings.classList.contains( 'frm-type-checkbox' ) ? 'checkbox' : 'radio';
 	}
 
 	function getImageUrlFromInput( optVal ) {
