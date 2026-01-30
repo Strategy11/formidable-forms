@@ -631,8 +631,9 @@ class FrmEntriesController {
 			if ( headers_sent() ) {
 				FrmAppHelper::js_redirect( $url, true );
 			} else {
-				wp_redirect( esc_url_raw( $url ) );
+				wp_safe_redirect( esc_url_raw( $url ) );
 			}
+
 			die();
 		}
 
