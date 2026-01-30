@@ -544,11 +544,11 @@ class FrmListHelper {
 				}
 
 				printf(
-			'<a href="%s" class="%s" id="view-switch-' . esc_attr( $mode ) . '"><span class="screen-reader-text">%s</span></a>' . "\n",
-			esc_url( add_query_arg( 'mode', $mode ) ),
-			esc_attr( implode( ' ', $classes ) ),
-			esc_html( $title )
-		);
+					'<a href="%s" class="%s" id="view-switch-' . esc_attr( $mode ) . '"><span class="screen-reader-text">%s</span></a>' . "\n",
+					esc_url( add_query_arg( 'mode', $mode ) ),
+					esc_attr( implode( ' ', $classes ) ),
+					esc_html( $title )
+				);
 			}
 			?>
 		</div>
