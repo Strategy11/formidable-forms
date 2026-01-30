@@ -1,0 +1,32 @@
+version = 1
+
+# 1. Global Exclude Patterns
+# Tell DeepSource which files to completely ignore (e.g., external libraries).
+exclude_patterns = [
+  "**/node_modules/**",
+  "**/vendor/**",
+  "**/venv/**",
+  "**/dist/**",
+  "**/build/**"
+]
+
+# 2. Test Patterns
+# Tell DeepSource which files are tests. This prevents false positives
+# (e.g., allowing "assert" statements in test files).
+test_patterns = [
+  "**/tests/**"
+]
+
+# 3. Analyzers
+# Add a block like this for every language you use.
+[[analyzers]]
+name = "php"
+enabled = true
+
+  # Optional: Specify version if you need specific syntax support
+  [analyzers.meta]
+  runtime_version = "8.x"
+
+[[analyzers]]
+name = "javascript"
+enabled = true

@@ -46,3 +46,4 @@ mago.toml export-ignore
 webpack.dev.js export-ignore
 .browserslistrc export-ignore
 /phpcs-sniffs/ export-ignore
+.deepsource.toml export-ignore
