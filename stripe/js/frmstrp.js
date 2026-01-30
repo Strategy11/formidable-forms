@@ -857,7 +857,7 @@
 
 				if ( isNaN( currentFieldId ) ) {
 					// If it is not a number, try as a field key.
-					fieldMatchByKey = fieldContainer = document.getElementById( 'field_' + currentFieldId );
+					fieldMatchByKey = document.getElementById( 'field_' + currentFieldId );
 				}
 			} else {
 				// First name and last name are not wrapped as shortcodes.
