@@ -460,18 +460,6 @@ class BreakEchoConcatenationSniff implements Sniff {
 	}
 
 	/**
-	 * Determine if there's leading whitespace before a token on its line.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $stackPtr  Token position.
-	 *
-	 * @return bool
-	 */
-	private function hasLeadingWhitespaceBeforeToken( File $phpcsFile, $stackPtr ) {
-		return ( '' !== $this->getLeadingWhitespaceBeforeToken( $phpcsFile, $stackPtr ) );
-	}
-
-	/**
 	 * Remove the phpcs ignore comment.
 	 *
 	 * @param File $phpcsFile The file being scanned.

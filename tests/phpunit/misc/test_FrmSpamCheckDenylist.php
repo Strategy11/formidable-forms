@@ -97,10 +97,6 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->set_private_property( $this->spam_check, 'denylist', $denylist_data );
 	}
 
-	private function set_values( $values ) {
-		$this->set_private_property( $this->spam_check, 'values', $values );
-	}
-
 	public function test_get_field_ids_to_check() {
 		$denylist = $this->custom_denylist_data['denylist_with_all_fields'];
 
