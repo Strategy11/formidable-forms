@@ -342,19 +342,22 @@ window.frmAdminBuildJS = function() {
 
 		if ( verify ) {
 			$confirmMessage.append( document.createTextNode( verify ) );
-			if ( btnClass ) {
+			if ( btnClass && continueButton ) {
 				continueButton.classList.add( btnClass );
 			}
 		}
 
-		for ( i in continueButton.dataset ) {
-			continueButton.removeAttribute( 'data-' + i );
-		}
-
 		dataAtts = link.dataset;
-		for ( i in dataAtts ) {
-			if ( i !== 'frmverify' ) {
-				continueButton.setAttribute( 'data-' + i, dataAtts[ i ] );
+
+		if ( continueButton ) {
+			for ( i in continueButton.dataset ) {
+				continueButton.removeAttribute( 'data-' + i );
+			}
+
+			for ( i in dataAtts ) {
+				if ( i !== 'frmverify' ) {
+					continueButton.setAttribute( 'data-' + i, dataAtts[ i ] );
+				}
 			}
 		}
 
@@ -2103,13 +2106,11 @@ window.frmAdminBuildJS = function() {
 			}
 		};
 
-		let nextElement = thisField;
-		addHtmlToField( nextElement );
+		addHtmlToField( thisField );
 
-		let nextField = getNextField( nextElement );
+		let nextField = getNextField( thisField );
 		while ( nextField && field.length < 15 ) {
 			addHtmlToField( nextField );
-			nextElement = nextField;
 			nextField = getNextField( nextField );
 		}
 
@@ -2967,7 +2968,7 @@ window.frmAdminBuildJS = function() {
 				')': '(',
 				']': '['
 			},
-			unmatchedClosing = [],
+			hasUnmatchedClosing = false,
 			msg = '',
 			i, top;
 
@@ -2979,12 +2980,12 @@ window.frmAdminBuildJS = function() {
 			if ( closing.hasOwnProperty( formulaArray[ i ] ) ) {
 				top = stack.pop();
 				if ( top !== closing[ formulaArray[ i ] ] ) {
-					unmatchedClosing.push( formulaArray[ i ] );
+					hasUnmatchedClosing = true;
 				}
 			}
 		}
 
-		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
+		if ( stack.length > 0 || hasUnmatchedClosing ) {
 			msg = frmAdminJs.unmatched_parens + '\n\n';
 			return msg;
 		}
@@ -6108,7 +6109,6 @@ window.frmAdminBuildJS = function() {
 
 		return size;
 	}
-
 	function resetDisplayedOpts( fieldId ) {
 		let i, opts, type, placeholder, fieldInfo,
 			input = jQuery( '[name^="item_meta[' + fieldId + ']"]' );
@@ -6119,7 +6119,7 @@ window.frmAdminBuildJS = function() {
 
 		if ( input.is( 'select' ) ) {
 			placeholder = document.getElementById( 'frm_placeholder_' + fieldId );
-			if ( placeholder !== null && placeholder.value === '' ) {
+			if ( placeholder === null || placeholder.value === '' ) {
 				fillDropdownOpts( input[ 0 ], { sourceID: fieldId } );
 			} else {
 				fillDropdownOpts( input[ 0 ], {
@@ -7116,7 +7116,7 @@ window.frmAdminBuildJS = function() {
 		// Attach keydown event listener
 		newFormNameInput.addEventListener( 'keydown', function( event ) {
 			if ( event.key === 'Enter' ) {
-				onSaveFormNameButton.call( this, event );
+				onSaveFormNameButton( event );
 			}
 		} );
 	}
