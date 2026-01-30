@@ -23,10 +23,6 @@ test_patterns = [
 name = "php"
 enabled = true
 
-  # Optional: Specify version if you need specific syntax support
-  [analyzers.meta]
-  runtime_version = "8.x"
-
 [[analyzers]]
 name = "javascript"
 enabled = true
