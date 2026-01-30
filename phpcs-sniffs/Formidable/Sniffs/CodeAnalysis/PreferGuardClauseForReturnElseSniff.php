@@ -380,7 +380,7 @@ class PreferGuardClauseForReturnElseSniff implements Sniff {
 	 *
 	 * @param string $condition Condition string.
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private function flipComparisonOperator( $condition ) {
 		$map = array(
@@ -421,7 +421,7 @@ class PreferGuardClauseForReturnElseSniff implements Sniff {
 	 * @param string $condition Condition string.
 	 * @param string $operator  Operator to match.
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	private function findStandaloneComparison( $condition, $operator ) {
 		$pos = 0;
