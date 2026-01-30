@@ -633,6 +633,7 @@ class FrmEntriesController {
 			} else {
 				wp_safe_redirect( esc_url_raw( $url ) );
 			}
+
 			die();
 		}
 
