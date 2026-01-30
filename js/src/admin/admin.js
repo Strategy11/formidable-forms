@@ -342,8 +342,8 @@ window.frmAdminBuildJS = function() {
 
 		if ( verify ) {
 			$confirmMessage.append( document.createTextNode( verify ) );
-			if ( btnClass && continueButton ) {
-				continueButton.classList.add( btnClass );
+			if ( btnClass ) {
+				continueButton?.classList.add( btnClass );
 			}
 		}
 
@@ -372,7 +372,7 @@ window.frmAdminBuildJS = function() {
 		wp.hooks.doAction( 'frmAdmin.beforeOpenConfirmModal', { $info, link } );
 
 		$info.dialog( 'open' );
-		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) || link.getAttribute( 'data-href' ) );
+		continueButton?.setAttribute( 'href', link.getAttribute( 'href' ) || link.getAttribute( 'data-href' ) );
 		return false;
 	}
 
