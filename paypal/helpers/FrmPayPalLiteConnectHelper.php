@@ -98,10 +98,28 @@ class FrmPayPalLiteConnectHelper {
 			return false;
 		}
 
-		$product = self::check_for_product( $status->products );
+//		echo '<pre>';
+//		var_dump( $status );
+//		echo '</pre>';
+//		return false;
+
+		$product                       = self::check_for_product( $status->products, 'PPCP_CUSTOM' );
+		$only_supports_checkout_button = false;
+
 		if ( ! $product || empty( $product->capabilities ) ) {
-			self::render_error( __( 'No data was found for expected PayPal product.', 'formidable' ), $email );
-			return false;
+			$product = self::check_for_product( $status->products, 'EXPRESS_CHECKOUT' );
+
+			if ( ! $product ) {
+				self::render_error( __( 'No data was found for expected PayPal product.', 'formidable' ), $email );
+				return false;
+			}
+
+			if ( 'ACTIVE' !== $product->status ) {
+				self::render_error( __( 'PayPal Checkout is not available.', 'formidable' ), $email );
+				return false;
+			}
+
+			$only_supports_checkout_button = true;
 		}
 
 		if ( $email ) {
@@ -116,10 +134,14 @@ class FrmPayPalLiteConnectHelper {
 		echo '<br>';
 		echo '<b>' . esc_html__( 'Enabled capabilities:', 'formidable' ) . '</b>';
 		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
-		$can_process_card_fields = in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities );
+
+		echo '<li>' . esc_html__( 'PayPal Checkout', 'formidable' ) . '</li>';
+
+		$can_process_card_fields = ! $only_supports_checkout_button && in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities );
 		if ( $can_process_card_fields ) {
 			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
 		}
+
 		echo '</ul>';
 		echo '</div>';
 
@@ -138,13 +160,14 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @param array $products
+	 * @param array  $products
+	 * @param string $name
 	 *
 	 * @return bool|object
 	 */
-	private static function check_for_product( $products ) {
+	private static function check_for_product( $products, $name = 'PPCP_CUSTOM' ) {
 		foreach ( $products as $current_product ) {
-			if ( 'PPCP_CUSTOM' === $current_product->name ) {
+			if ( $name === $current_product->name ) {
 				return $current_product;
 			}
 		}
