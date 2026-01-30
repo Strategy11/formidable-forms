@@ -231,9 +231,10 @@ class FrmListHelper {
 
 			if ( headers_sent() ) {
 				FrmAppHelper::js_redirect( $url, true );
-			} else {
-				wp_safe_redirect( $url );
+				exit;
 			}
+
+			wp_safe_redirect( $url );
 			exit;
 		}
 
