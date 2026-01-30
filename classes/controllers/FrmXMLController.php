@@ -427,7 +427,7 @@ class FrmXMLController {
 		$format = FrmAppHelper::get_post_param( 'format', 'xml', 'sanitize_title' );
 
 		if ( ! headers_sent() && ! $type ) {
-			wp_redirect( esc_url_raw( admin_url( 'admin.php?page=formidable-import' ) ) );
+			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=formidable-import' ) ) );
 			die();
 		}
 
