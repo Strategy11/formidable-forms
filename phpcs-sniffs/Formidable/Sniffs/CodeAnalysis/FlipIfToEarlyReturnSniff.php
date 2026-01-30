@@ -417,27 +417,6 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	}
 
 	/**
-	 * Check if a condition is simple (single variable/function call).
-	 *
-	 * @param string $condition The condition to check.
-	 *
-	 * @return bool
-	 */
-	private function isSimpleCondition( $condition ) {
-		// Simple conditions: $var, function(), $obj->method(), etc.
-		// Complex conditions contain: &&, ||, and, or, comparisons.
-		$complexPatterns = array( '&&', '||', ' and ', ' or ', '===', '!==', '==', '!=', '<=', '>=', '<', '>' );
-
-		foreach ( $complexPatterns as $pattern ) {
-			if ( strpos( $condition, $pattern ) !== false ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get the indentation of a token.
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -461,33 +440,6 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		}
 
 		return '';
-	}
-
-	/**
-	 * Check if an if statement has an else or elseif clause.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $ifToken   The position of the if token.
-	 *
-	 * @return bool
-	 */
-	private function hasElseOrElseif( File $phpcsFile, $ifToken ) {
-		$tokens = $phpcsFile->getTokens();
-
-		if ( ! isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
-			return false;
-		}
-
-		$scopeCloser = $tokens[ $ifToken ]['scope_closer'];
-
-		// Look for else or elseif after the if's closing brace.
-		$next = $phpcsFile->findNext( T_WHITESPACE, $scopeCloser + 1, null, true );
-
-		if ( false === $next ) {
-			return false;
-		}
-
-		return in_array( $tokens[ $next ]['code'], array( T_ELSE, T_ELSEIF ), true );
 	}
 
 	/**

@@ -56,6 +56,8 @@ zip -r $zipname $destination \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
 	-x "*/.coderabbit.yaml" \
+	-x "*/.deepsource.toml" \
+	-x "*/.semgrepignore" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
