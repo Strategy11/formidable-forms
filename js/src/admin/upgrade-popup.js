@@ -51,7 +51,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	}
 
 	// If one click upgrade, hide other content.
-	if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
+	if ( oneclickMessage !== null && button !== null && typeof oneclick !== 'undefined' && oneclick ) {
 		if ( newMessage === null ) {
 			showMsg = 'none';
 		}
@@ -100,8 +100,12 @@ export function addOneClick( link, context, upgradeLabel ) {
 
 	addonStatus.style.display = 'none';
 
-	oneclickMessage.style.display = hideIt;
-	button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
+	if ( oneclickMessage ) {
+		oneclickMessage.style.display = hideIt;
+	}
+	if ( button ) {
+		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
+	}
 	upgradeMessage.style.display = showMsg;
 	showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
 
@@ -230,10 +234,8 @@ export function initUpgradeModal() {
 			oldImage.remove();
 		}
 
-		if ( element.dataset.image ) {
-			if ( lockIcon ) {
-				lockIcon.style.display = 'none';
-			}
+		if ( element.dataset.image && lockIcon ) {
+			lockIcon.style.display = 'none';
 			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image } ), lockIcon );
 		}
 
