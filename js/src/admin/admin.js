@@ -892,12 +892,10 @@ window.frmAdminBuildJS = function() {
 		if ( draggable.hasAttribute( 'data-ftype' ) ) {
 			const fieldType = draggable.getAttribute( 'data-ftype' );
 			copyTarget = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_t' + fieldType );
-			copyTarget = copyTarget.cloneNode( true );
-			copyTarget.classList.add( 'form-field' );
-
-			copyTarget.classList.add( 'ui-sortable-helper' );
-
 			if ( copyTarget ) {
+				copyTarget = copyTarget.cloneNode( true );
+				copyTarget.classList.add( 'form-field' );
+				copyTarget.classList.add( 'ui-sortable-helper' );
 				return copyTarget.cloneNode( true );
 			}
 		}
