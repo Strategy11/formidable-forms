@@ -19,26 +19,25 @@
 		const opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
 		if ( show ) {
 			opts.show();
+			opts.removeClass( 'frm_hidden' );
 		} else {
 			opts.hide();
+			opts.addClass( 'frm_hidden' );
 		}
 	}
 
 	function toggleGateway() {
-		if ( ! this.checked ) {
-			return;
-		}
-
 		const gateway = this.value;
 		const checked = this.checked;
 
 		toggleOpts( this, checked, '.show_' + gateway );
+		console.log( 'Toggle opts', gateway, checked );
 
 		const gateways = [ 'stripe', 'square', 'paypal' ];
 		const toggleOff = gateways.filter( g => g !== gateway );
 
 		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
-		const showClass = 'show_' + settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' );
+		const showClass = 'show_' + settings.find( '.frm_gateway_opt + input:checked' ).attr( 'value' );
 
 		toggleOff.forEach(
 			function( gateway ) {
@@ -62,7 +61,19 @@
 				const actions = document.getElementById( 'frm_notification_settings' );
 				if ( actions !== null ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
-					jQuery( '.frm_form_settings' ).on( 'change', '.frm_gateway_opt input', toggleGateway );
+
+					document.addEventListener(
+						'change',
+						function( event ) {
+							if ( ! event.target || ! event.target.checked || 'radio' !== event.target.type ) {
+								return;
+							}
+
+							if ( event.target.closest( '.frm-long-icon-buttons') && event.target.closest( '.frm_form_action_settings' ) ) {
+								toggleGateway.call( event.target );
+							}
+						}
+					);
 				}
 
 				document.querySelectorAll( '.frm_trans_ajax_link' ).forEach(
