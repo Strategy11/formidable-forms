@@ -32,8 +32,10 @@ class FrmDefRegAction extends FrmFormAction {
  */
 class FrmDefPayPalAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops          = FrmFormAction::default_action_opts( 'frm_paypal_icon frm-inverse frm_show_upgrade' );
-		$action_ops['color'] = 'var(--primary-700)';
+		$action_ops          = array(
+			'classes' => 'frmfont frm_paypal_icon frm-inverse',
+			'color'   => 'var(--primary-700)',
+		);
 
 		parent::__construct( 'paypal', 'PayPal', $action_ops );
 	}

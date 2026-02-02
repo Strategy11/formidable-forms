@@ -134,6 +134,16 @@ class FrmPayPalLiteConnectHelper {
 
 		echo '<br>';
 		echo '<br>';
+		echo '<b>' . esc_html__( 'Enabled scopes:', 'formidable' ) . '</b>';
+		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
+		echo '<li>';
+		echo implode( '</li><li>', $status->oauth_integrations[0]->oauth_third_party[0]->scopes );
+		echo '</li>';
+		echo '</ul>';
+//		echo '</div>'; // Test line.
+
+//		echo '<br>';
+		echo '<br>';
 		echo '<b>' . esc_html__( 'Enabled capabilities:', 'formidable' ) . '</b>';
 		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
 
@@ -159,7 +169,7 @@ class FrmPayPalLiteConnectHelper {
 		// CUSTOM_CARD_PROCESSING
 		// GOOGLE_PAY
 
-		echo implode( '<br>', $product->capabilities );
+	//	echo implode( '<br>', $product->capabilities );
 
 		echo '</ul>';
 		echo '</div>';

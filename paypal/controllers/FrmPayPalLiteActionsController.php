@@ -598,6 +598,55 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Modify the new action post data to use the payment action type when the PayPal plugin is not active.
+	 * This works better than having it disabled even when PayPal is supported.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function maybe_modify_new_action_post_data() {
+		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
+
+		if ( 'paypal' !== $action_type ) {
+			return;
+		}
+
+		$paypal_plugin_is_active = class_exists( 'FrmPaymentsController' );
+
+		if ( $paypal_plugin_is_active ) {
+			// Do not override the action if the PayPal plugin is active.
+			return;
+		}
+
+		$_POST['type']            = 'payment';
+
+		add_filter(
+			'frm_form_payment_action_settings',
+			/**
+			 * @param WP_Post $action_settings
+			 *
+			 * @return WP_Post
+			 */
+			function ( $action_settings ) {
+				return self::set_paypal_gateway_as_default( $action_settings );
+			}
+		);
+	}
+
+	/**
+	 * Set the gateway to PayPal as the default.
+	 *
+	 * @param WP_Post $action_settings
+	 *
+	 * @return WP_Post
+	 */
+	private static function set_paypal_gateway_as_default( $action_settings ) {
+		$action_settings->post_content['gateway'] = 'paypal';
+		return $action_settings;
+	}
+
+	/**
 	 * @since x.x
 	 *
 	 * @return string

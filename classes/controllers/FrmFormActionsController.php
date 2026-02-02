@@ -452,8 +452,6 @@ class FrmFormActionsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		global $frm_vars;
-
 		$action_key  = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
 		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 

@@ -58,5 +58,7 @@ class FrmPayPalLiteHooksController {
 		add_action( 'wp_ajax_nopriv_frm_paypal_create_vault_setup_token', 'FrmPayPalLiteAppController::create_vault_setup_token' );
 
 		add_action( 'wp_ajax_frm_paypal_render_seller_status', 'FrmPayPalLiteConnectHelper::handle_render_seller_status' );
+
+		add_action( 'wp_ajax_frm_add_form_action', 'FrmPayPalLiteActionsController::maybe_modify_new_action_post_data', 1 );
 	}
 }
