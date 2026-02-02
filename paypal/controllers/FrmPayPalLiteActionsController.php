@@ -619,7 +619,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		$_POST['type']            = 'payment';
+		$_POST['type'] = 'payment';
 
 		add_filter(
 			'frm_form_payment_action_settings',
