@@ -788,7 +788,7 @@ class FrmStyle {
 	 * @return string
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		return 'frm_style_setting' . ( empty( $post_field ) ? '' : '[' . $post_field . ']' ) . '[' . $field_name . ']';
+		return 'frm_style_setting' . ( $post_field ? '[' . $post_field . ']' : '' ) . '[' . $field_name . ']';
 	}
 
 	/**
