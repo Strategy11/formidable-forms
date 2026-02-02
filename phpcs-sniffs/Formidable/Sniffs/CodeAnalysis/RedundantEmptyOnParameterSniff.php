@@ -199,6 +199,47 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 	}
 
 	/**
+	 * Check if empty() is used as the condition of a ternary (?:) expression.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the empty token.
+	 *
+	 * @return bool
+	 */
+	private function isPartOfTernaryCondition( File $phpcsFile, $stackPtr ) {
+		$tokens    = $phpcsFile->getTokens();
+		$openParen = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+			return false;
+		}
+
+		if ( ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$nextPtr = $tokens[ $openParen ]['parenthesis_closer'] + 1;
+
+		while ( $nextPtr < count( $tokens ) ) {
+			$code = $tokens[ $nextPtr ]['code'];
+
+			if ( $code === T_WHITESPACE || $code === T_CLOSE_PARENTHESIS ) {
+				++$nextPtr;
+				continue;
+			}
+
+			if ( $code === T_COMMENT || $code === T_DOC_COMMENT_OPEN_TAG || $code === T_DOC_COMMENT_CLOSE_TAG || $code === T_DOC_COMMENT_STRING || $code === T_DOC_COMMENT_WHITESPACE || $code === T_DOC_COMMENT_STAR ) {
+				++$nextPtr;
+				continue;
+			}
+
+			return $code === T_INLINE_THEN;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the parameter names for a function.
 	 *
 	 * @param File $phpcsFile     The file being scanned.
@@ -239,6 +280,11 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 
 		// Check if empty() is used with || or && (before or after).
 		if ( $this->hasAdjacentLogicalOperator( $phpcsFile, $stackPtr ) ) {
+			return true;
+		}
+
+		// Check if empty() is being used as the condition of a ternary operator.
+		if ( $this->isPartOfTernaryCondition( $phpcsFile, $stackPtr ) ) {
 			return true;
 		}
 

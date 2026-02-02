@@ -47,6 +47,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrcasecmp" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
 	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
 	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
