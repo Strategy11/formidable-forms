@@ -2835,14 +2835,14 @@ class FrmFieldsHelper {
 	 *
 	 * @return bool
 	 */
-	public static function should_skip_rendering_options_for_field( $field ) {
+	public static function should_skip_rendering_choices_for_field( $field ) {
 		/**
 		 * @since x.x
 		 *
 		 * @param bool  $skip_rendering_options_for_field
 		 * @param array $field
 		 */
-		return (bool) apply_filters( 'frm_should_skip_rendering_options_for_field', false, $field );
+		return (bool) apply_filters( 'frm_should_skip_rendering_choices_for_field', false, $field );
 	}
 
 	/**
@@ -2856,7 +2856,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return bool
 	 */
-	public static function should_disable_option( $choice_key, $is_selected_choice, $field ) {
+	public static function should_disable_choice( $choice_key, $is_selected_choice, $field ) {
 		/**
 		 * @since x.x
 		 *
@@ -2865,7 +2865,7 @@ class FrmFieldsHelper {
 		 * @param bool   $is_selected_choice
 		 * @param array  $field
 		 */
-		return (bool) apply_filters( 'frm_disable_option', false, $choice_key, $is_selected_choice, $field );
+		return (bool) apply_filters( 'frm_disable_choice', false, $choice_key, $is_selected_choice, $field );
 	}
 
 	/**
@@ -2876,7 +2876,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return void
 	 */
-	public static function after_option_input( $field, $choice_key ) {
+	public static function after_choice_input( $field, $choice_key ) {
 		/**
 		 * Allows adding content after checkbox, radio button, or dropdown fields.
 		 *
@@ -2885,6 +2885,6 @@ class FrmFieldsHelper {
 		 * @param array  $field The field data.
 		 * @param string $opt_key The option key.
 		 */
-		do_action( 'frm_after_option_input', $field, $choice_key );
+		do_action( 'frm_after_choice_input', $field, $choice_key );
 	}
 }

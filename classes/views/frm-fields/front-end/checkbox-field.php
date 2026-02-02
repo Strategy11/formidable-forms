@@ -15,7 +15,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
-	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field ) ) {
+	if ( FrmFieldsHelper::should_skip_rendering_choices_for_field( $field ) ) {
 		return;
 	}
 
@@ -57,7 +57,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		$other_opt  = false;
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key', 'field_val' ), $other_opt, $checked );
 
-		$should_echo_disabled_att = FrmFieldsHelper::should_disable_option( $opt_key, $checked, $field );
+		$should_echo_disabled_att = FrmFieldsHelper::should_disable_choice( $opt_key, $checked, $field );
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
@@ -95,7 +95,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		if ( $include_label ) {
 			echo ' ';
 			FrmAppHelper::kses_echo( $label, 'all' );
-			FrmFieldsHelper::after_option_input( $field, $opt_key );
+			FrmFieldsHelper::after_choice_input( $field, $opt_key );
 			echo '</label>';
 		}
 

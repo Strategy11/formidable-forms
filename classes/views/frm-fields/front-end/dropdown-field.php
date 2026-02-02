@@ -19,7 +19,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		)
 	);
 } else {
-	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field ) ) {
+	if ( FrmFieldsHelper::should_skip_rendering_choices_for_field( $field ) ) {
 		return;
 	}
 
@@ -80,7 +80,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 			$option_params['class'] = 'frm_other_trigger';
 		}
 
-		if ( FrmFieldsHelper::should_disable_option( $opt_key, $selected, $field ) ) {
+		if ( FrmFieldsHelper::should_disable_choice( $opt_key, $selected, $field ) ) {
 			$option_params['disabled'] = 'disabled';
 		}
 
@@ -89,7 +89,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		selected( $selected );
 		echo '>';
 		echo esc_html( $opt === '' ? ' ' : $opt );
-		FrmFieldsHelper::after_option_input( $field, $opt_key );
+		FrmFieldsHelper::after_choice_input( $field, $opt_key );
 
 		echo '</option>';
 

@@ -15,7 +15,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( is_array( $field['options'] ) ) {
-	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field ) ) {
+	if ( FrmFieldsHelper::should_skip_rendering_choices_for_field( $field ) ) {
 		return;
 	}
 	$include_label = ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'];
@@ -45,7 +45,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
 
 		$checked                  = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
-		$should_echo_disabled_att = FrmFieldsHelper::should_disable_option( $opt_key, trim( $checked ) !== '', $field );
+		$should_echo_disabled_att = FrmFieldsHelper::should_disable_choice( $opt_key, trim( $checked ) !== '', $field );
 
 		if ( $include_label ) {
 			$label_attributes = array(
@@ -77,7 +77,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		if ( $include_label ) {
 			echo ' ';
 			FrmAppHelper::kses_echo( $label, 'all' );
-			FrmFieldsHelper::after_option_input( $field, $opt_key );
+			FrmFieldsHelper::after_choice_input( $field, $opt_key );
 			echo '</label>';
 		}
 
