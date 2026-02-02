@@ -2883,7 +2883,7 @@ class FrmFieldsHelper {
 		 * @since x.x
 		 *
 		 * @param array  $field The field data.
-		 * @param string $opt_key The option key.
+		 * @param string $choice_key The option key.
 		 */
 		do_action( 'frm_after_choice_input', $field, $choice_key );
 	}
