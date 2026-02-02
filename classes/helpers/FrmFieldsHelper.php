@@ -1415,7 +1415,7 @@ class FrmFieldsHelper {
 				$info = $user->$user_info ?? '';
 			}
 
-			if ( 'display_name' === $user_info && empty( $info ) && ! $args['blank'] ) {
+			if ( 'display_name' === $user_info && ! $info && ! $args['blank'] ) {
 				$info = $user->user_login;
 			}
 		}
