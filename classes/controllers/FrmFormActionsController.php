@@ -57,6 +57,8 @@ class FrmFormActionsController {
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'paypal'            => 'FrmDefPayPalAction',
+			'stripe'            => 'FrmDefStripeAction',
+			'square'            => 'FrmDefSquareAction',
 			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',

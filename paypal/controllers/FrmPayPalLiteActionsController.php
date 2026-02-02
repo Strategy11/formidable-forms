@@ -608,13 +608,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	public static function maybe_modify_new_action_post_data() {
 		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 
-		if ( 'paypal' !== $action_type ) {
+		if ( ! in_array( $action_type, array( 'paypal', 'stripe', 'square' ), true ) ) {
 			return;
 		}
 
-		$paypal_plugin_is_active = class_exists( 'FrmPaymentsController' );
-
-		if ( $paypal_plugin_is_active ) {
+		if ( 'paypal' === $action_type && class_exists( 'FrmPaymentsController' ) ) {
 			// Do not override the action if the PayPal plugin is active.
 			return;
 		}
@@ -628,8 +626,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 *
 			 * @return WP_Post
 			 */
-			function ( $action_settings ) {
-				return self::set_paypal_gateway_as_default( $action_settings );
+			function ( $action_settings ) use ( $action_type ) {
+				return self::set_gateway_as_default( $action_settings, $action_type );
 			}
 		);
 	}
@@ -641,8 +639,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return WP_Post
 	 */
-	private static function set_paypal_gateway_as_default( $action_settings ) {
-		$action_settings->post_content['gateway'] = 'paypal';
+	private static function set_gateway_as_default( $action_settings, $action_type ) {
+		$action_settings->post_content['gateway'] = $action_type;
 		return $action_settings;
 	}
 
