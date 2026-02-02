@@ -56,7 +56,7 @@ class FrmDb {
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
 		if ( ! $args ) {
-			// add an arg to prevent prepare from failing
+			// Add an arg to prevent prepare from failing
 			$args = array(
 				'where'  => $starts_with . '1=%d',
 				'values' => array( 1 ),
@@ -143,7 +143,7 @@ class FrmDb {
 		$lowercase_key = end( $lowercase_key );
 
 		if ( is_array( $value ) ) {
-			// translate array of values to "in"
+			// Translate array of values to "in"
 			if ( str_contains( $lowercase_key, 'like' ) ) {
 				$where  = preg_replace( '/' . $key . '$/', '', $where );
 				$where .= '(';
@@ -388,7 +388,7 @@ class FrmDb {
 			$table = $wpdb->prefix . $table;
 		}
 
-		// switch to singular group name
+		// Switch to singular group name
 		$group = rtrim( $group, 's' );
 	}
 
@@ -649,9 +649,9 @@ class FrmDb {
 		if ( ! $where ) {
 			$where = '';
 		} elseif ( is_array( $where ) ) {
-				global $wpdb;
-				self::get_where_clause_and_values( $where, $starts_with );
-				$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			global $wpdb;
+			self::get_where_clause_and_values( $where, $starts_with );
+			$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$where = $starts_with . $where;
 		}
@@ -685,7 +685,7 @@ class FrmDb {
 			unset( $settings['ID'] );
 		}
 
-		// delete all caches for this group
+		// Delete all caches for this group
 		self::cache_delete_group( $group );
 
 		return self::save_json_post( $settings );
@@ -716,7 +716,7 @@ class FrmDb {
 
 		$post = wp_insert_post( $settings );
 
-		// add the content filters back for views or posts
+		// Add the content filters back for views or posts
 		if ( isset( $filters ) ) {
 			$wp_filter['content_save_pre'] = $filters;
 		}

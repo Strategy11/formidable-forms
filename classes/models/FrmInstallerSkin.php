@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! class_exists( 'WP_Upgrader_Skin' ) ) {
-	// this is to prevent a unit test from failing
+	// This is to prevent a unit test from failing
 	return;
 }
 

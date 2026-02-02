@@ -175,9 +175,9 @@ class FrmAddon {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param mixed  $_data
-	 * @param string $_action
-	 * @param object $_args
+	 * @param mixed       $_data
+	 * @param string      $_action
+	 * @param object|null $_args
 	 *
 	 * @return object Data.
 	 */
@@ -200,7 +200,7 @@ class FrmAddon {
 
 			// Force new API info so we can pull changelog data.
 			// Change log data is intentionally omitted from the cached API response
-			// to help reduce the size of the autoloaded option.
+			// To help reduce the size of the autoloaded option.
 			$api->force_api_request();
 			$plugins = $api->get_api_info();
 
@@ -256,7 +256,7 @@ class FrmAddon {
 	 * @return false|string
 	 */
 	protected function maybe_get_pro_license() {
-		// prevent a loop if $this is the pro plugin
+		// Prevent a loop if $this is the pro plugin
 		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name !== 'Formidable Pro';
 
 		if ( ! $get_license ) {
@@ -468,7 +468,7 @@ class FrmAddon {
 	 */
 	public function maybe_show_license_message( $file, $plugin ) {
 		if ( $this->is_expired_addon || isset( $plugin['package'] ) ) {
-			// let's not show a ton of duplicate messages
+			// Let's not show a ton of duplicate messages
 			return;
 		}
 
@@ -527,7 +527,7 @@ class FrmAddon {
 		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
 			$this->prepare_update_details( $transient->response[ $this->plugin_folder ] );
 
-			// if the transient has expired, clear the update and trigger it again
+			// If the transient has expired, clear the update and trigger it again
 			if ( $transient->response[ $this->plugin_folder ] === false ) {
 				if ( ! $this->has_been_cleared() ) {
 					$this->cleared_plugins();
@@ -586,11 +586,11 @@ class FrmAddon {
 		$api   = new FrmFormApi( $license );
 		$addon = $api->get_addon_for_license( $this );
 
-		// if there is no download url, this license does not apply to the addon
+		// If there is no download url, this license does not apply to the addon
 		if ( isset( $addon['package'] ) ) {
 			$this->is_parent_licence = true;
 		} elseif ( isset( $addon['error'] ) ) {
-			// if the license is expired, we must assume all add-ons were packaged
+			// If the license is expired, we must assume all add-ons were packaged
 			$this->is_parent_licence = true;
 			$this->is_expired_addon  = true;
 		}

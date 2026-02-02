@@ -64,6 +64,11 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @param string $expected
+	 * @param string $url
+	 * @param string $message
+	 */
 	private function assert_maybe_add_sanitize_url_attr( $expected, $url, $message = '' ) {
 		$this->assertEquals( $expected, FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $this->form->id ), $message );
 	}
@@ -78,6 +83,10 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_get_plan_required( 'Plus', array( 'Plus', 'Category2' ) );
 	}
 
+	/**
+	 * @param string $expected
+	 * @param array $categories
+	 */
 	private function assert_get_plan_required( $expected, $categories ) {
 		$link = compact( 'categories' );
 		$this->assertEquals( $expected, FrmFormsHelper::get_plan_required( $link ) );
@@ -88,16 +97,16 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 */
 	public function test_get_form_style() {
 		// Test null and 'default' form values.
-		$this->assertEquals( '1', FrmFormsHelper::get_form_style( null ) );
-		$this->assertEquals( '1', FrmFormsHelper::get_form_style( 'default' ) );
+		$this->assertSame( 1, FrmFormsHelper::get_form_style( null ) );
+		$this->assertSame( 1, FrmFormsHelper::get_form_style( 'default' ) );
 
 		// Test object form values.
 		// Test "disable Formidable styling" first.
 		$form = $this->create_form_with_custom_style_value( '0' );
-		$this->assertEquals( '0', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '0', FrmFormsHelper::get_form_style( $form ) );
 
 		$form = $this->create_form_with_custom_style_value( '' );
-		$this->assertEquals( '', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '', FrmFormsHelper::get_form_style( $form ) );
 
 		// Create a style and test a custom style value as well.
 		$frm_style = new FrmStyle();
@@ -116,15 +125,18 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertEquals( $style_id, FrmFormsHelper::get_form_style( $form ) );
 
 		unset( $form['custom_style'] );
-		$this->assertEquals( '1', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( 1, FrmFormsHelper::get_form_style( $form ) );
 
 		$form['custom_style'] = '';
-		$this->assertEquals( '', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '', FrmFormsHelper::get_form_style( $form ) );
 
 		$form['custom_style'] = '0';
-		$this->assertEquals( '0', FrmFormsHelper::get_form_style( $form ) );
+		$this->assertSame( '0', FrmFormsHelper::get_form_style( $form ) );
 	}
 
+	/**
+	 * @param string $custom_style
+	 */
 	private function create_form_with_custom_style_value( $custom_style ) {
 		return $this->factory->form->create_and_get(
 			array(

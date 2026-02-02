@@ -26,9 +26,11 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function save_button() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -193,6 +195,7 @@ class FrmStylesHelper {
 		unset( $function_name );
 
 		$name = 'arrow' === $type ? 'collapse_icon' : 'repeat_icon';
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
@@ -219,6 +222,7 @@ class FrmStylesHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1116,7 +1120,7 @@ class FrmStylesHelper {
 		}
 
 		// Handle the case where the submit_bg_img is a full URL string. If the
-		// settings were saved with the older styler version prior to 6.14, the
+		// Settings were saved with the older styler version prior to 6.14, the
 		// submit_bg_img will be a full URL string.
 		if ( ! is_numeric( $background_image ) ) {
 			return $background_image;
@@ -1137,9 +1141,7 @@ class FrmStylesHelper {
 			return false;
 		}
 
-		return is_callable( 'FrmProAppHelper::use_chosen_js' )
-			? FrmProAppHelper::use_chosen_js()
-			: true;
+		return is_callable( 'FrmProAppHelper::use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true;
 	}
 
 	/**

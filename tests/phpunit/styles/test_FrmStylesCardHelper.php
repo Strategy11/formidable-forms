@@ -19,6 +19,10 @@ class test_FrmStylesCardHelper extends FrmUnitTest {
 		$this->assert_bg_is_dark( 'rgba(130,36,227,0)', false );
 	}
 
+	/**
+	 * @param string $color
+	 * @param bool $expected
+	 */
 	private function assert_bg_is_dark( $color, $expected = true ) {
 		$style               = new stdClass();
 		$style->post_content = array(

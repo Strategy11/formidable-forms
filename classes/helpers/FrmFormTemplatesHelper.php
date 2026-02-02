@@ -228,11 +228,13 @@ class FrmFormTemplatesHelper {
 			'direction' => 'vertical',
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-card-item frm-px-sm">
 			<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/get-free-templates-banner.php'; ?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -256,9 +258,11 @@ class FrmFormTemplatesHelper {
 	 * @return bool
 	 */
 	private static function needs_free_plan( $template ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return self::needs_get_free_templates_banner()
 			&& ! empty( $template['category_slugs'] )
 			&& in_array( 'free', $template['category_slugs'], true )
 			&& ! in_array( $template['id'], FrmFormTemplatesController::FREE_TEMPLATES_IDS, true );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 }

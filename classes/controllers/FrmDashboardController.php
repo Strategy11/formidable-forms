@@ -445,7 +445,7 @@ class FrmDashboardController {
 	 * @return string
 	 */
 	private static function inbox_clean_messages_cta( $cta ) {
-		// remove dismiss button
+		// Remove dismiss button
 		$pattern = '/<a[^>]*class="[^"]*frm_inbox_dismiss[^"]*"[^>]*>.*?<\/a>/is';
 		return preg_replace( $pattern, ' ', $cta );
 	}
@@ -541,7 +541,7 @@ class FrmDashboardController {
 	private static function update_dashboard_options( $data, $option_name ) {
 		$options                 = self::get_dashboard_options();
 		$options[ $option_name ] = $data;
-		update_option( self::OPTION_META_NAME, $options, 'no' );
+		update_option( self::OPTION_META_NAME, $options, false );
 	}
 
 	/**

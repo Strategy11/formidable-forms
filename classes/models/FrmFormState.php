@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormState {
 
 	/**
-	 * @var FrmFormState
+	 * @var FrmFormState|null
 	 */
 	private static $instance;
 
@@ -260,7 +260,7 @@ class FrmFormState {
 
 		// We don't have a secret, so let's generate one.
 		$secret_key = is_callable( 'sodium_crypto_secretbox_keygen' ) ? sodium_crypto_secretbox_keygen() : wp_generate_password( 32, true, true );
-		update_option( 'frm_form_state_key', base64_encode( $secret_key ), 'no' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		update_option( 'frm_form_state_key', base64_encode( $secret_key ), false ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 
 		return $secret_key;
 	}

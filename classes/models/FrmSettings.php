@@ -174,7 +174,7 @@ class FrmSettings {
 	public $current_form = 0;
 
 	/**
-	 * @var bool
+	 * @var bool|int
 	 */
 	public $tracking;
 
@@ -211,7 +211,7 @@ class FrmSettings {
 	public $custom_css;
 
 	/**
-	 * @var string
+	 * @var int
 	 */
 	public $honeypot;
 
@@ -280,7 +280,7 @@ class FrmSettings {
 		// If unserializing didn't work.
 		$settings = $this;
 
-		update_option( $this->option_name, $settings, 'yes' );
+		update_option( $this->option_name, $settings, true );
 
 		return $settings;
 	}

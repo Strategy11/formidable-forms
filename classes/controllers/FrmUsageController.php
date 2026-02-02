@@ -78,8 +78,7 @@ class FrmUsageController {
 	 * @return bool
 	 */
 	public static function tracking_allowed() {
-		$settings = FrmAppHelper::get_settings();
-		return $settings->tracking;
+		return (bool) FrmAppHelper::get_settings()->tracking;
 	}
 
 	/**

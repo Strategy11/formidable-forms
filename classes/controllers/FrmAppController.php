@@ -396,7 +396,7 @@ class FrmAppController {
 			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}//end if
 
-		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
+		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . esc_html__( 'Build a Form', 'formidable' ) . '</a>';
 
 		return array_merge( $settings, $links );
 	}
@@ -532,10 +532,12 @@ class FrmAppController {
 	 */
 	public static function install_js_fallback() {
 		FrmAppHelper::load_admin_wide_js();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			<div id="frm_install_message"></div>
 			<script>jQuery(document).ready( frm_install_now );</script>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -634,7 +636,7 @@ class FrmAppController {
 		}
 
 		if ( ! FrmAppHelper::doing_ajax() ) {
-			// don't continue during ajax calls
+			// Don't continue during ajax calls
 			self::admin_js();
 		}
 
@@ -909,10 +911,7 @@ class FrmAppController {
 			return false;
 		}
 
-		$should_show = FrmAppHelper::is_formidable_admin() &&
-			! FrmAppHelper::is_style_editor_page() &&
-			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
-			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$should_show = FrmAppHelper::is_formidable_admin() && ! FrmAppHelper::is_style_editor_page() && ! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		/**
 		 * Filters whether the floating links should be displayed.
@@ -1166,7 +1165,7 @@ class FrmAppController {
 		}
 
 		if ( $response->is_error() ) {
-			// if the remove post fails, use javascript instead
+			// If the remove post fails, use javascript instead
 			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
 		}
 	}
@@ -1199,7 +1198,7 @@ class FrmAppController {
 			$running = get_option( 'frm_install_running' );
 
 			if ( false === $running || $running < strtotime( '-5 minutes' ) ) {
-				update_option( 'frm_install_running', time(), 'no' );
+				update_option( 'frm_install_running', time(), false );
 				self::install();
 				delete_option( 'frm_install_running' );
 			}
@@ -1572,8 +1571,8 @@ class FrmAppController {
 	 *
 	 * @since 6.19
 	 *
-	 * @param string &$orderby Reference to the current 'orderby' parameter.
-	 * @param string &$order   Reference to the current 'order' parameter.
+	 * @param string $orderby Reference to the current 'orderby' parameter.
+	 * @param string $order   Reference to the current 'order' parameter.
 	 *
 	 * @return void
 	 */
@@ -1636,10 +1635,7 @@ class FrmAppController {
 	 * @return bool
 	 */
 	private static function is_our_callback_array( $callback ) {
-		return ! empty( $callback['function'] ) &&
-			is_array( $callback['function'] ) &&
-			! empty( $callback['function'][0] ) &&
-			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
+		return ! empty( $callback['function'] ) && is_array( $callback['function'] ) && ! empty( $callback['function'][0] ) && self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**

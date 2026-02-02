@@ -46,7 +46,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_relative_plugin_url() {
 		$path = FrmAppHelper::relative_plugin_url();
-		$this->assertEquals( strpos( $path, '/' ), 0 );
+		$this->assertSame( strpos( $path, '/' ), 0 );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_site_url() {
 		$url = FrmAppHelper::site_url();
-		$this->assertEquals( 'http://example.org', $url );
+		$this->assertSame( 'http://example.org', $url );
 	}
 
 	/**
@@ -171,11 +171,11 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_get_server_value() {
 		$url = FrmAppHelper::get_server_value( 'HTTP_HOST' );
-		$this->assertEquals( $url, 'example.org' );
+		$this->assertSame( $url, 'example.org' );
 
 		$_SERVER['HTTP_HOST'] = '<script>alert()</script>example.org';
 		$url                  = FrmAppHelper::get_server_value( 'HTTP_HOST' );
-		$this->assertEquals( $url, 'example.org' );
+		$this->assertSame( $url, 'example.org' );
 	}
 
 	/**
@@ -259,7 +259,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 				'param' => 'test5',
 			)
 		);
-		$this->assertEquals( '', $result );
+		$this->assertSame( '', $result );
 
 		$set_value         = '<script></script>test';
 		$expected          = 'test';
@@ -308,7 +308,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$safe_value     = 'Hello, <a href="/test">click here</a>';
 		$start_value   .= $safe_value;
 		$stripped_value = FrmAppHelper::kses( $start_value );
-		$this->assertEquals( $stripped_value, 'Hello, click here' );
+		$this->assertSame( $stripped_value, 'Hello, click here' );
 
 		$stripped_value = FrmAppHelper::kses( $start_value, array( 'a' ) );
 		$this->assertEquals( $stripped_value, $safe_value );
@@ -382,6 +382,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( $this->is_a_valid_color( 'Not a color' ) );
 	}
 
+	/**
+	 * @param string $value
+	 */
 	private function is_a_valid_color( $value ) {
 		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
 	}
@@ -539,7 +542,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertIsNotNumeric( $key, 'key should never be numeric.' );
 
 		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
-		// reserve the form key so one has to be generated with this as the base.
+		// Reserve the form key so one has to be generated with this as the base.
 		$this->factory->form->create(
 			array( 'form_key' => $super_long_form_key )
 		);
@@ -579,6 +582,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function underscore_key_separator() {
 		return '___';
 	}
@@ -598,12 +604,12 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_count_decimals() {
 		$this->assertFalse( FrmAppHelper::count_decimals( 'str' ) );
 		$this->assertFalse( FrmAppHelper::count_decimals( '1.0.0' ) );
-		$this->assertEquals( 0, FrmAppHelper::count_decimals( 13 ) );
-		$this->assertEquals( 0, FrmAppHelper::count_decimals( '13' ) );
-		$this->assertEquals( 1, FrmAppHelper::count_decimals( 13.1 ) );
-		$this->assertEquals( 1, FrmAppHelper::count_decimals( '13.1' ) );
-		$this->assertEquals( 3, FrmAppHelper::count_decimals( 13.123 ) );
-		$this->assertEquals( 3, FrmAppHelper::count_decimals( '13.123' ) );
+		$this->assertSame( 0, FrmAppHelper::count_decimals( 13 ) );
+		$this->assertSame( 0, FrmAppHelper::count_decimals( '13' ) );
+		$this->assertSame( 1, FrmAppHelper::count_decimals( 13.1 ) );
+		$this->assertSame( 1, FrmAppHelper::count_decimals( '13.1' ) );
+		$this->assertSame( 3, FrmAppHelper::count_decimals( 13.123 ) );
+		$this->assertSame( 3, FrmAppHelper::count_decimals( '13.123' ) );
 	}
 
 	/**
@@ -616,7 +622,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address(), 'When custom header IPs are disabled, ignore headers like HTTP_X_FORWARDED_FOR.' );
 		add_filter( 'frm_use_custom_header_ip', '__return_true' );
-		$this->assertEquals( '1.2.3.4', FrmAppHelper::get_ip_address(), 'When custom header IPs are enabled, we should check for headers like HTTP_X_FORWARDED_FOR' );
+		$this->assertSame( '1.2.3.4', FrmAppHelper::get_ip_address(), 'When custom header IPs are enabled, we should check for headers like HTTP_X_FORWARDED_FOR' );
 	}
 
 	/**
@@ -624,19 +630,19 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_human_time_diff() {
 		$difference = FrmAppHelper::human_time_diff( 0, 0 );
-		$this->assertEquals( '0 seconds', $difference );
+		$this->assertSame( '0 seconds', $difference );
 
 		$difference = FrmAppHelper::human_time_diff( 0, 1 );
-		$this->assertEquals( '1 second', $difference );
+		$this->assertSame( '1 second', $difference );
 
 		$difference = FrmAppHelper::human_time_diff( 0, HOUR_IN_SECONDS );
-		$this->assertEquals( '1 hour', $difference );
+		$this->assertSame( '1 hour', $difference );
 
 		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS );
-		$this->assertEquals( '1 day', $difference );
+		$this->assertSame( '1 day', $difference );
 
 		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS * 2 );
-		$this->assertEquals( '2 days', $difference );
+		$this->assertSame( '2 days', $difference );
 	}
 
 	/**
@@ -647,13 +653,13 @@ class test_FrmAppHelper extends FrmUnitTest {
 		FrmAppHelper::unserialize_or_decode( $json_encoded_string );
 		$this->assertIsArray( $json_encoded_string );
 		$this->assertArrayHasKey( 'key', $json_encoded_string );
-		$this->assertEquals( 'value', $json_encoded_string['key'] );
+		$this->assertSame( 'value', $json_encoded_string['key'] );
 
 		$serialized_string = 'a:1:{s:3:"key";s:5:"value";}';
 		FrmAppHelper::unserialize_or_decode( $serialized_string );
 		$this->assertIsArray( $serialized_string );
 		$this->assertArrayHasKey( 'key', $serialized_string );
-		$this->assertEquals( 'value', $serialized_string['key'] );
+		$this->assertSame( 'value', $serialized_string['key'] );
 	}
 
 	/**
@@ -664,12 +670,12 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$unserialized_array = FrmAppHelper::maybe_unserialize_array( $serialized_string );
 		$this->assertIsArray( $unserialized_array );
 		$this->assertArrayHasKey( 'key', $unserialized_array );
-		$this->assertEquals( 'value', $unserialized_array['key'] );
+		$this->assertSame( 'value', $unserialized_array['key'] );
 
 		$serialized_string = 'O:8:"DateTime":0:{}';
 		$unserialized      = FrmAppHelper::maybe_unserialize_array( $serialized_string );
 		$this->assertIsString( $unserialized );
-		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
+		$this->assertSame( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
 	}
 
 	/**
@@ -681,18 +687,18 @@ class test_FrmAppHelper extends FrmUnitTest {
 			echo '<div>My html</div>';
 		};
 		$html          = FrmAppHelper::clip( $echo_function );
-		$this->assertEquals( '<div>My html</div>', $html );
+		$this->assertSame( '<div>My html</div>', $html );
 
 		// Test a callable string.
 		$echo_function = self::class . '::echo_function';
 		$html          = FrmAppHelper::clip( $echo_function );
-		$this->assertEquals( '<div>My echo function content</div>', $html );
+		$this->assertSame( '<div>My echo function content</div>', $html );
 
 		// Test something uncallable.
 		// Make sure it isn't fatal just in case.
 		$echo_function = self::class . '::something_uncallable';
 		$html          = FrmAppHelper::clip( $echo_function );
-		$this->assertEquals( '', $html );
+		$this->assertSame( '', $html );
 	}
 
 	/**

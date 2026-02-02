@@ -17,7 +17,7 @@ if ( isset( $message ) && $message != '' ) {
 	} else {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );
 
-		// we need to allow scripts here for javascript in the success message
+		// We need to allow scripts here for javascript in the success message
 		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
@@ -34,7 +34,7 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 	if ( ! FrmAppHelper::is_admin() ) {
 		$img = apply_filters( 'frm_error_icon', $img );
 
-		if ( $img && ! empty( $img ) ) {
+		if ( $img ) {
 			echo '<img src="' . esc_url( $img ) . '" alt="" />';
 		}
 	}

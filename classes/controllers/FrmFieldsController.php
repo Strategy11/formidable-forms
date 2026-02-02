@@ -37,7 +37,7 @@ class FrmFieldsController {
 			$field = json_decode( $field );
 
 			if ( ! isset( $field->id ) || ! is_numeric( $field->id ) ) {
-				// this field may have already been loaded
+				// This field may have already been loaded
 				continue;
 			}
 
@@ -73,7 +73,7 @@ class FrmFieldsController {
 
 		$field = self::include_new_field( $field_type, $form_id, $field_options );
 
-		// this hook will allow for multiple fields to be added at once
+		// This hook will allow for multiple fields to be added at once
 		do_action( 'frm_after_field_created', $field, $form_id );
 
 		wp_die();
@@ -155,9 +155,9 @@ class FrmFieldsController {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array|int|object $field_object
-	 * @param array            $values
-	 * @param int              $form_id
+	 * @param array|int|object|string $field_object
+	 * @param array                   $values
+	 * @param int                     $form_id
 	 *
 	 * @return void
 	 */
@@ -625,7 +625,7 @@ class FrmFieldsController {
 			'em'  => 0.544,
 		);
 
-		// include "col" for valid html
+		// Include "col" for valid html
 		$unit = trim( preg_replace( '/[0-9]+/', '', $field['size'] ) );
 
 		if ( ! isset( $calc[ $unit ] ) ) {
@@ -684,7 +684,7 @@ class FrmFieldsController {
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['placeholder'] == '' || is_array( $field['placeholder'] ) ) {
-			// don't include a json placeholder
+			// Don't include a json placeholder
 			return;
 		}
 
@@ -951,12 +951,14 @@ class FrmFieldsController {
 	 * @return void
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		$excluded_field_types =
 			FrmField::is_radio( $field ) ||
 			FrmField::is_checkbox( $field ) ||
 			FrmField::is_field_type( $field, 'file' ) ||
 			FrmField::is_field_type( $field, 'nps' ) ||
 			FrmField::is_field_type( $field, 'scale' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		if ( $excluded_field_types ) {
 			return;

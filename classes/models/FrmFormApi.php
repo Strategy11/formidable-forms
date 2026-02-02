@@ -440,7 +440,7 @@ class FrmFormApi {
 		if ( isset( $addon['categories'] ) ) {
 			if ( 'views' === $addon['slug'] ) {
 				// Legacy views has no categories set, but we should still
-				// include it in cache since it is a valid add-on.
+				// Include it in cache since it is a valid add-on.
 				return true;
 			}
 
