@@ -58,13 +58,14 @@ class FrmPayPalLiteConnectHelper {
 			return false;
 		}
 
-		$mode = self::get_mode_value_from_post();
-		if ( ! self::get_merchant_id( $mode ) ) {
+		$mode        = self::get_mode_value_from_post();
+		$merchant_id = self::get_merchant_id( $mode );
+		if ( ! $merchant_id ) {
 			// Do not render any message when not connected.
 			// And return true so it does not try to handle it as an error.
 			return true;
 		}
-		
+
 		// TODO: Only render when we visit the PayPal tab.
 		$status = self::get_seller_status();
 
@@ -110,12 +111,12 @@ class FrmPayPalLiteConnectHelper {
 			$product = self::check_for_product( $status->products, 'EXPRESS_CHECKOUT' );
 
 			if ( ! $product ) {
-				self::render_error( __( 'No data was found for expected PayPal product.', 'formidable' ), $email );
+				self::render_error( __( 'No data was found for expected PayPal product.', 'formidable' ), $email, $merchant_id );
 				return false;
 			}
 
 			if ( 'ACTIVE' !== $product->status ) {
-				self::render_error( __( 'PayPal Checkout is not available.', 'formidable' ), $email );
+				self::render_error( __( 'PayPal Checkout is not available.', 'formidable' ), $email, $merchant_id );
 				return false;
 			}
 
@@ -129,6 +130,7 @@ class FrmPayPalLiteConnectHelper {
 		echo '<div class="frm_message">';
 		esc_html_e( 'Your seller status is valid', 'formidable' );
 		self::echo_email( $email );
+		self::echo_merchant_id( $merchant_id );
 
 		echo '<br>';
 		echo '<br>';
@@ -141,6 +143,23 @@ class FrmPayPalLiteConnectHelper {
 		if ( $can_process_card_fields ) {
 			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
 		}
+
+		// TODO:
+		// Possibly list other capabitilies:
+		// CARD_PROCESSING_VIRTUAL_TERMINAL
+		// COMMERCIAL_ENTITY
+		// DEBIT_CARD_SWITCH
+		// VENMO_PAY_PROCESSING
+		// FRAUD_TOOL_ACCESS
+		// AMEX_OPTBLUE
+		// APPLE_PAY
+		// CUSTOM_BANK_PROCESSING
+		// FASTLANE_CHECKOUT
+		// PAYPAL_WALLET_VAULTING_ADVANCED
+		// CUSTOM_CARD_PROCESSING
+		// GOOGLE_PAY
+
+		echo implode( '<br>', $product->capabilities );
 
 		echo '</ul>';
 		echo '</div>';
@@ -185,16 +204,25 @@ class FrmPayPalLiteConnectHelper {
 		echo esc_html( $email );
 	}
 
+	private static function echo_merchant_id( $merchant_id ) {
+		echo '<br>';
+		echo '<b>' . esc_html__( 'Merchant ID:', 'formidable' ) . '</b>';
+		echo '&nbsp;';
+		echo esc_html( $merchant_id );
+	}
+
 	/**
 	 * @param string $message
 	 * @param string $email
+	 * @param string $merchant_id
 	 *
 	 * @return void
 	 */
-	private static function render_error( $message, $email = '' ) {
+	private static function render_error( $message, $email = '', $merchant_id = '' ) {
 		echo '<div class="frm_error_style">';
 		echo wp_kses_post( $message );
 		self::echo_email( $email );
+		self::echo_merchant_id( $merchant_id );
 		echo '</div>';
 	}
 
