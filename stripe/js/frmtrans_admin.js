@@ -69,7 +69,7 @@
 								return;
 							}
 
-							if ( event.target.closest( '.frm-long-icon-buttons') && event.target.closest( '.frm_form_action_settings' ) ) {
+							if ( event.target.closest( '.frm-long-icon-buttons' ) && event.target.closest( '.frm_form_action_settings' ) ) {
 								toggleGateway.call( event.target );
 							}
 						}

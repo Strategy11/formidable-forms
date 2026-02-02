@@ -145,7 +145,7 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		// TODO:
-		// Possibly list other capabitilies:
+		// Possibly list other capabilities:
 		// CARD_PROCESSING_VIRTUAL_TERMINAL
 		// COMMERCIAL_ENTITY
 		// DEBIT_CARD_SWITCH
