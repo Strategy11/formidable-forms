@@ -189,6 +189,8 @@ class FrmFormActionsController {
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
 				'actions' => array(
 					'paypal',
+					'stripe',
+					'square',
 					'payment',
 				),
 			),

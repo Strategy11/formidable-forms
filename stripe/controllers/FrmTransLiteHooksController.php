@@ -48,6 +48,15 @@ class FrmTransLiteHooksController {
 			return;
 		}
 
+		if ( 'formidable' === FrmAppHelper::simple_get( 'page' ) && 'settings' === FrmAppHelper::simple_get( 'frm_action' ) ) {
+			// TODO Handle this better.
+			echo '
+			<style>
+				li.frm-action:has(.frm_payment_action) { display: none; }
+			</style>
+			';
+		}
+
 		// Actions.
 		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );

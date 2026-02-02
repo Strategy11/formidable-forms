@@ -45,7 +45,7 @@ class FrmDefStripeAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = array(
 			'classes' => 'frmfont frm_stripe_icon frm-inverse',
-			'color'   => 'var(--primary-700)',
+			'color'   => '#635bff',
 		);
 
 		parent::__construct( 'stripe', 'Stripe', $action_ops );
@@ -55,11 +55,9 @@ class FrmDefStripeAction extends FrmFormAction {
 class FrmDefSquareAction extends FrmFormAction {
 	public function __construct() {
 
-		echo '<style>.frm_square_icon { position: relative; top: 4px; left: 3px; } </style>';
-
 		$action_ops          = array(
 			'classes' => 'frmfont frm_square_icon frm-inverse',
-			'color'   => 'var(--primary-700)',
+			'color'   => '#000',
 		);
 
 		parent::__construct( 'square', 'Square', $action_ops );
