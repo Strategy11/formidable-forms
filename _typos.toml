@@ -37,6 +37,8 @@ fo = "fo"
 Ags = "Ags"
 # This is used as a class name, so changing it could introduce issues with backward compatibility.
 unmergable = "unmergable"
+# This is detected in our Stripe publishable key.
+iz = "is"
 
 [default.extend-identifiers]
 66afe9 = "66afe9"
