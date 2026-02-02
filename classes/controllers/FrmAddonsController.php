@@ -773,7 +773,7 @@ class FrmAddonsController {
 
 		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
-				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
+				if ( 0 === strcasecmp( $license->plugin_name, $addon['title'] ) ) {
 					return $addon;
 				}
 			}
