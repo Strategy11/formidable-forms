@@ -14,31 +14,33 @@ import { PLANS, PREFIX, VIEWS } from '../constants';
 
 const { bodyContent, sidebar } = getElements();
 
-bodyContent
-	.querySelectorAll( '.frm-card-item:not(.plugin-card-formidable-pro)' )
-	.forEach( addon => {
-		const categories = addon.dataset.categories;
-		switch ( true ) {
-			case categories.includes( PLANS.BUSINESS ):
-				addon.setAttribute(
-					'data-categories',
-					`${ categories },${ PLANS.ELITE }`
-				);
-				break;
-			case categories.includes( PLANS.PLUS ):
-				addon.setAttribute(
-					'data-categories',
-					`${ categories },${ PLANS.BUSINESS },${ PLANS.ELITE }`
-				);
-				break;
-			case categories.includes( PLANS.BASIC ):
-				addon.setAttribute(
-					'data-categories',
-					`${ categories },${ PLANS.PLUS },${ PLANS.BUSINESS },${ PLANS.ELITE }`
-				);
-				break;
-		}
-	} );
+if ( bodyContent ) {
+	bodyContent
+		.querySelectorAll( '.frm-card-item:not(.plugin-card-formidable-pro)' )
+		.forEach( addon => {
+			const categories = addon.dataset.categories;
+			switch ( true ) {
+				case categories.includes( PLANS.BUSINESS ):
+					addon.setAttribute(
+						'data-categories',
+						`${ categories },${ PLANS.ELITE }`
+					);
+					break;
+				case categories.includes( PLANS.PLUS ):
+					addon.setAttribute(
+						'data-categories',
+						`${ categories },${ PLANS.BUSINESS },${ PLANS.ELITE }`
+					);
+					break;
+				case categories.includes( PLANS.BASIC ):
+					addon.setAttribute(
+						'data-categories',
+						`${ categories },${ PLANS.PLUS },${ PLANS.BUSINESS },${ PLANS.ELITE }`
+					);
+					break;
+			}
+		} );
+}
 
 addElements( {
 	// Body elements
@@ -69,11 +71,11 @@ addElements( {
 
 	// Card elements
 	addonsList: document.getElementById( `${ PREFIX }-list` ),
-	addons: bodyContent.querySelectorAll( '.frm-card-item' ),
-	availableAddons: bodyContent.querySelectorAll(
+	addons: bodyContent?.querySelectorAll( '.frm-card-item' ),
+	availableAddons: bodyContent?.querySelectorAll(
 		'.frm-card-item:not(.frm-locked-item)'
 	),
-	addonsToggle: bodyContent.querySelectorAll( '.frm_toggle_block' ),
+	addonsToggle: bodyContent?.querySelectorAll( '.frm_toggle_block' ),
 
 	// Add children of the bodyContent to the elements object
 	bodyContentChildren: bodyContent?.children,
