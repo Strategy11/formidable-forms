@@ -33,7 +33,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 		if ( null !== this.componentId ) {
 			this.input.id = this.componentId;
 		}
-
+		this.input.addEventListener( 'blur', event => this.#onChange( event, null ) );
 		return this.input;
 	}
 
@@ -46,7 +46,8 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 			defaultColor: this.#defaultValue,
 		};
 		if ( 'function' === typeof this.#onChange ) {
-			colorPickerOptions.change = ( event, ui ) => this.#onChange( event, ui );
+			// Use the setTimeout when calling the callback for onChange to make sure the latest color is fetched.
+			colorPickerOptions.change = ( event, ui ) => setTimeout( () => this.#onChange( event, ui ), 20 );
 		}
 
 		jQuery( this.input ).wpColorPicker( colorPickerOptions );

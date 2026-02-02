@@ -689,7 +689,7 @@ class FrmAppController {
 	public static function admin_js() {
 		$plugin_url                  = FrmAppHelper::plugin_url();
 		$version                     = FrmAppHelper::plugin_version();
-		$frm_components_dependencies = FrmAppHelper::pro_is_installed() ? array( 'formidable_admin', 'formidable-pro-web-components' ) : array( 'formidable_admin' );
+		$frm_components_dependencies = FrmAppHelper::meets_min_pro_version( 'x.x' ) ? array( 'formidable_admin', 'formidable-pro-web-components' ) : array( 'formidable_admin' );
 
 		FrmAppHelper::load_admin_wide_js();
 		// Register component assets early to ensure they can be enqueued later in controllers.
@@ -1696,9 +1696,8 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function enqueue_components_scripts() {
-		if ( FrmAppHelper::pro_is_installed() ) {
-			wp_enqueue_script( 'wp-color-picker-alpha', FrmProAppHelper::plugin_url() . '/js/admin/settings/wp-color-picker-alpha.js', array( 'wp-color-picker' ), '3.0.2', true );
-			wp_enqueue_script( 'formidable-pro-web-components' );
+		if ( is_callable( array( 'FrmProFormsController', 'enqueue_pro_web_components_script' ) ) ) {
+			FrmProFormsController::enqueue_pro_web_components_script();
 		}
 
 		wp_enqueue_script( 'formidable-web-components' );

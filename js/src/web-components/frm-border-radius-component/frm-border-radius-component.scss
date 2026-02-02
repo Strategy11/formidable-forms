@@ -22,6 +22,9 @@
 			box-sizing: border-box;
 			background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.95837 12.2915V14.3748C3.95837 15.2953 4.70457 16.0415 5.62504 16.0415H7.70837" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.0416 12.2915V14.3748C16.0416 15.2953 15.2955 16.0415 14.375 16.0415H12.2916" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.0416 7.7085V5.62516C16.0416 4.70469 15.2955 3.9585 14.375 3.9585H12.2916" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.95837 7.7085V5.62516C3.95837 4.70469 4.70457 3.9585 5.62504 3.9585H7.70837" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat center center;
 			background-size: 20px;
+			&.frm-active, &:hover {
+				background-color: rgba( 0, 0, 0, 0.05 );
+			}
 		}
 		.frm-border-individual-inputs-wrapper {
 			&:not( .frm_hidden ) {

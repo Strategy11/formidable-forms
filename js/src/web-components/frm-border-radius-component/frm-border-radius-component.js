@@ -212,7 +212,13 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.button = document.createElement( 'button' );
 		this.button.type = 'button';
 		this.button.textContent = __( 'Border Radius', 'formidable' );
+
+		if ( this.#usesMultipleValues ) {
+			this.button.classList.add( 'frm-active' );
+		}
+
 		this.button.addEventListener( 'click', () => {
+			this.button.classList.toggle( 'frm-active' );
 			this.borderIndividualInputsWrapper.classList.toggle( 'frm_hidden' );
 		} );
 

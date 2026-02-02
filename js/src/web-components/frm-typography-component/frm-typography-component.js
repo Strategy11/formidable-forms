@@ -11,7 +11,6 @@ export class frmTypographyComponent extends frmWebComponent {
 		},
 	];
 	#unitTypeOptions = [ 'px', 'em', '%' ];
-	#value = '21px';
 	#defaultValue = '21px';
 
 	constructor() {
@@ -19,7 +18,7 @@ export class frmTypographyComponent extends frmWebComponent {
 		this.componentStyle = style;
 		this.#defaultOptions = [
 			{
-				value: '21px',
+				value: '',
 				label: __( 'Default', 'formidable' )
 			},
 			{
@@ -39,7 +38,7 @@ export class frmTypographyComponent extends frmWebComponent {
 				label: __( 'Larger', 'formidable' )
 			},
 			{
-				value: '',
+				value: 'custom',
 				label: __( 'Custom', 'formidable' )
 			},
 		];
@@ -90,8 +89,31 @@ export class frmTypographyComponent extends frmWebComponent {
 			const opt = document.createElement( 'option' );
 			opt.value = option.value;
 			opt.textContent = option.label;
-			opt.selected = option.value === this.#defaultValue;
+			opt.selected = ( option.value === 'custom' && this.isCustomFonSize( this.#defaultValue ) ) || option.value === this.#defaultValue;
 			select.append( opt );
+		} );
+	}
+
+	/**
+	 * A method to check if the value is a custom font size.
+	 *
+	 * @param {string} value - The value to check if it is a custom font size.
+	 * @return {boolean} - True if the value is a custom font size, false otherwise.
+	 */
+	isCustomFonSize( value ) {
+		return -1 === [ '', '18px', '21px', '26px', '32px' ].indexOf( value );
+	}
+
+	/**
+	 * A method to change the select value.
+	 *
+	 * @param {string} value - The value to change the select value for.
+	 * @return {void}
+	 */
+	changeSelectValue( value ) {
+		const isCustomFonSize = this.isCustomFonSize( value );
+		Array.from( this.select.options ).forEach( option => {
+			option.selected = ( option.value === 'custom' && isCustomFonSize ) || option.value === value;
 		} );
 	}
 
@@ -123,14 +145,12 @@ export class frmTypographyComponent extends frmWebComponent {
 		}
 
 		this.unitValueInput.type = 'text';
-		this.unitValueInput.value = `${ parseInt( this.#defaultOptions.find( option => option.value === this.#defaultValue )?.value ) || 21 }`;
+		this.unitValueInput.value = '' !== this.#defaultValue ? `${ parseInt( this.#defaultValue, 10 ) }` : '';
 
 		this.unitValueInput.addEventListener( 'change', event => {
-			const selectValue = this.select.value;
-			if ( this.#defaultOptions.some( option => option.value === selectValue ) && '' !== selectValue ) {
-				return;
-			}
-			this.#onChange( event.target.value + this.unitTypeSelect.value );
+			const value = '' !== event.target.value ? event.target.value + this.unitTypeSelect.value : '';
+			this.changeSelectValue( value );
+			this.#onChange( value );
 		} );
 
 		return this.unitValueInput;
@@ -171,7 +191,7 @@ export class frmTypographyComponent extends frmWebComponent {
 		if ( null !== this.fieldName ) {
 			this.hiddenInput.name = `${ this.fieldName }[value]`;
 		}
-		this.hiddenInput.value = this.#value;
+		this.hiddenInput.value = this.#defaultValue;
 		return this.hiddenInput;
 	}
 
@@ -197,7 +217,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @return {Object} - The unit value.
 	 */
 	getUnitValue( value ) {
-		const defaultValue = { value: 0, unit: 'px' };
+		const defaultValue = { value: '', unit: '' };
 		if ( ! value ) {
 			return defaultValue;
 		}
@@ -208,7 +228,7 @@ export class frmTypographyComponent extends frmWebComponent {
 		}
 
 		return {
-			value: parseInt( value ),
+			value: parseInt( value, 10 ),
 			unit: unitType
 		};
 	}
