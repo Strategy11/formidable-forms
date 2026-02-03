@@ -11,7 +11,7 @@ class FrmEntryFormatter {
 	/**
 	 * @since 2.04
 	 *
-	 * @var stdClass|null
+	 * @var false|stdClass|null
 	 */
 	protected $entry;
 

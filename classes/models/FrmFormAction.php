@@ -773,8 +773,8 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param int $form_id
-	 * @param int $limit
+	 * @param int|string $form_id
+	 * @param int        $limit
 	 *
 	 * @return array
 	 */
