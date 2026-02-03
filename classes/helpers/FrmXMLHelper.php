@@ -1518,7 +1518,7 @@ class FrmXMLHelper {
 		$new_styles     = ! empty( $imported['imported']['styles'] );
 		$updated_styles = ! empty( $imported['updated']['styles'] );
 
-		if ( ! ( $new_styles || $updated_styles ) ) {
+		if ( ! $new_styles && ! $updated_styles ) {
 			return;
 		}
 
