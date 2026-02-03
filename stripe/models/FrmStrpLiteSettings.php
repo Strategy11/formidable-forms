@@ -90,7 +90,14 @@ class FrmStrpLiteSettings {
 
 		foreach ( $settings as $setting => $default ) {
 			if ( isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
-				$this->settings->{$setting} = trim( sanitize_text_field( $params[ 'frm_' . $this->param() . '_' . $setting ] ) );
+				$value = $params[ 'frm_' . $this->param() . '_' . $setting ];
+
+				// Strip accumulated backslashes from previous buggy saves.
+				if ( 'processing_message' === $setting ) {
+					$value = stripslashes( $value );
+				}
+
+				$this->settings->{$setting} = trim( sanitize_text_field( $value ) );
 			}
 		}
 
