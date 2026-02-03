@@ -2166,6 +2166,7 @@ class FrmXMLHelper {
 				unset( $form_options[ $index ] );
 			}
 		}
+
 		FrmForm::update( $form_id, array( 'options' => $form_options ) );
 	}
 
