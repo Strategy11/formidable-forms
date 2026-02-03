@@ -675,11 +675,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function get_client_id() {
-		// TODO: We might not need this for sandbox. "sb" might work.
 		// TODO: This will need logic for a production client ID as well.
 		// This is currently just for testing.
-		return 'BAABzk6QfPMGeAZQ9eBZAfuWSMUUjWlP7yNgzpv930d821zAg05j9i2-Jyu8dIYxZoyn3HyKVZq4gA_u-0';
-	//	return 'AZUUCRP30tCfLbgayJAwEMaVoeWhtdu9agSgl8W0kX17-tVHqxqFAhWeoriqo61yAAwRzB2PoJSG-8wo';
-//		return 'AV8DLwHFtnUai9Yuy8B5ocRSgtlCBiRAh6Vkl4vhgeuiKRLzilt-vzjd6O1tjIVI_5AiPG0H-HtBssrE';
+		return 'AZUUCRP30tCfLbgayJAwEMaVoeWhtdu9agSgl8W0kX17-tVHqxqFAhWeoriqo61yAAwRzB2PoJSG-8wo';
 	}
 }
