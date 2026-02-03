@@ -122,10 +122,10 @@ class FrmDb {
 	}
 
 	/**
-	 * @param string       $key
-	 * @param array|string $value
-	 * @param string       $where
-	 * @param array        $values
+	 * @param string            $key
+	 * @param array|string|null $value
+	 * @param string            $where
+	 * @param array             $values
 	 *
 	 * @return void
 	 */

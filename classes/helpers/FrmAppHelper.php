@@ -1829,7 +1829,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param int|string $value The value to compare.
+	 * @param bool|int|string $value The value to compare.
 	 *
 	 * @return bool
 	 */
