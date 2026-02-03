@@ -226,7 +226,7 @@ class FrmEntriesHelper {
 			$empty = empty( $field_value );
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
 
-			if ( $empty && ! empty( $field_value ) ) {
+			if ( $empty && $field_value ) {
 				// We've got an entry id, so switch it to a value.
 				$atts['force_id'] = true;
 			}

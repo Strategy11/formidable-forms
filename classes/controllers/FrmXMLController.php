@@ -97,7 +97,7 @@ class FrmXMLController {
 				$pages = $imported['posts'];
 			}
 
-			if ( ! empty( $form ) ) {
+			if ( $form ) {
 				// Create selected pages with the correct shortcodes.
 				$pages = self::create_pages_for_import( $form );
 			}
