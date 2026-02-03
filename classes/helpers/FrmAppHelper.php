@@ -805,7 +805,7 @@ class FrmAppHelper {
 	 * @param string $sanitize
 	 * @param string $default
 	 *
-	 * @return array|string
+	 * @return array|int|string
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::get_simple_request(
