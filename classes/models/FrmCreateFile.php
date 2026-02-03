@@ -81,17 +81,19 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function create_file( $file_content ) {
-		if ( $this->has_permission ) {
-			$dirs_exist = true;
+		if ( ! $this->has_permission ) {
+			return;
+		}
 
-			// Create the directories if need be.
-			$this->create_directories( $dirs_exist );
+		$dirs_exist = true;
 
-			// Only write the file if the folders exist.
-			if ( $dirs_exist ) {
-				global $wp_filesystem;
-				$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
-			}
+		// Create the directories if need be.
+		$this->create_directories( $dirs_exist );
+
+		// Only write the file if the folders exist.
+		if ( $dirs_exist ) {
+			global $wp_filesystem;
+			$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
 		}
 	}
 

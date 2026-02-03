@@ -401,13 +401,15 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function delete_removed_fields( $form_fields ) {
-		if ( $form_fields ) {
-			foreach ( $form_fields as $field ) {
-				if ( is_object( $field ) ) {
-					FrmField::destroy( $field->id );
-				}
-				unset( $field );
+		if ( ! $form_fields ) {
+			return;
+		}
+
+		foreach ( $form_fields as $field ) {
+			if ( is_object( $field ) ) {
+				FrmField::destroy( $field->id );
 			}
+			unset( $field );
 		}
 	}
 
@@ -1516,15 +1518,17 @@ class FrmXMLHelper {
 		$new_styles     = ! empty( $imported['imported']['styles'] );
 		$updated_styles = ! empty( $imported['updated']['styles'] );
 
-		if ( $new_styles || $updated_styles ) {
-			if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
-				$frm_style = new FrmStyle();
-				$frm_style->update( 'default' );
-			}
+		if ( ! ( $new_styles || $updated_styles ) ) {
+			return;
+		}
 
-			foreach ( $imported['forms'] as $form_id ) {
-				self::update_custom_style_setting_after_import( $form_id );
-			}
+		if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
+			$frm_style = new FrmStyle();
+			$frm_style->update( 'default' );
+		}
+
+		foreach ( $imported['forms'] as $form_id ) {
+			self::update_custom_style_setting_after_import( $form_id );
 		}
 	}
 
