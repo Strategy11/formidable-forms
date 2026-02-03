@@ -76,7 +76,7 @@
 		disableSubmit( thisForm );
 
 		paypal.Buttons( {
-			fundingSource: paypal.FUNDING.PAYLATER,
+		//	fundingSource: paypal.FUNDING.PAYLATER,
 			createOrder: createOrder,
 		//	createSubscription: createSubscription,
 			onApprove: onApprove,
