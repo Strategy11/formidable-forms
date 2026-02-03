@@ -62,6 +62,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnInitialValue" />
 	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
+	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
 	<rule ref="Formidable.CodeAnalysis.CheckFunctionCallable" />
 	<rule ref="Formidable.CodeAnalysis.UpdateOptionAutoloadBoolean" />
 
