@@ -383,6 +383,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			//	'intent'     => 'subscription',
 			//	'vault'      => 'true',
 				'enable-funding' => 'paylater',
+				// True is for "Pay Now" flow. False is for "Continue" flow.
+				// 'commit'         => 'true',
 			),
 			'https://www.paypal.com/sdk/js'
 		);
