@@ -3,23 +3,82 @@
 }
 
 #frm-forms-list-settings {
+	font-size: var(--text-sm);
 	position: absolute;
 	top: 100%;
 	right: 0;
-	min-width: 200px;
+	z-index: 999;
+	width: 225px;
 	background-color: #fff;
 	border-radius: 8px;
 	border: 1px solid #F2F4F7;
 	box-shadow: 0 1.88px 4px -1px rgba(16, 24, 40, 0.03);
+	padding: 4px;
 
 	tfoot & {
 		top: auto;
 		bottom: 100%;
 	}
+
+	> div {
+		border-bottom: 1px solid var(--grey-200);
+		padding: 8px 10px;
+	}
+
+	> div:last-child {
+		border-bottom: 0;
+	}
+}
+
+#frm-forms-list-per-page {
+	width: 65px;
+	font-size: var(--text-sm);
+}
+
+#frm-save-forms-list-settings-btn {
+	font-size: var(--text-xs);
+	line-height: var(--h-xs);
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 .wp-list-table.toplevel_page_formidable {
 	.column-settings {
 		width: 25px;
+	}
+}
+
+// Collapsible box
+.frm-collapsible-box {
+	&__btn {
+		display: flex;
+		justify-content: space-between;
+		padding-bottom: 10px;
+		font-weight: 600;
+		color: var(--grey-900);
+
+		.frmsvg {
+			width: 12px;
+			height: 12px;
+		}
+	}
+
+	&__content {
+		overflow: hidden;
+
+		&.frm-collapsible-box__content--collapsed {
+			height: 0;
+		}
+	}
+}
+
+.frm-forms-list-column-checkboxes {
+	label {
+		display: block;
+		padding: 6px 0;
+	}
+
+	input {
+		margin-left: 0 !important;
 	}
 }
