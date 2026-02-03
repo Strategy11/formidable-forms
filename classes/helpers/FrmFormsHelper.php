@@ -97,7 +97,7 @@ class FrmFormsHelper {
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( $class ) {
-			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
+			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( sanitize_text_field( $class ) ) . '"';
 		}
 	}
 
@@ -923,7 +923,7 @@ BEFORE_HTML;
 				$replace_with = '';
 			}
 
-			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			FrmShortcodeHelper::remove_inline_conditions( FrmAppHelper::is_true( $show ) && $replace_with != '', $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		// Replace [form_key].
@@ -1105,7 +1105,7 @@ BEFORE_HTML;
 	/**
 	 * @param array|bool|int|object|string $form
 	 *
-	 * @return string
+	 * @return int|string
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;

@@ -178,8 +178,7 @@ function frmAdminPopupJS() {
 				attrName = attrId.replace( 'frmsc_' + sc + '_', '' );
 				attrVal = $thisInput.val();
 
-				if ( ( $thisInput.attr( 'type' ) === 'checkbox' && ! this.checked ) || ( ( $thisInput.attr( 'type' ) === 'text' || $thisInput.is( 'select' ) ) && attrVal === '' ) ) {
-				} else {
+				if ( ( $thisInput.attr( 'type' ) !== 'checkbox' || this.checked ) && ( ( $thisInput.attr( 'type' ) !== 'text' && ! $thisInput.is( 'select' ) ) || attrVal !== '' ) ) {
 					output += ' ' + attrName + '="' + attrVal + '"';
 				}
 			}

@@ -1423,7 +1423,7 @@ class FrmFieldsHelper {
 				$info = $user->$user_info ?? '';
 			}
 
-			if ( 'display_name' === $user_info && empty( $info ) && ! $args['blank'] ) {
+			if ( 'display_name' === $user_info && ! $info && ! $args['blank'] ) {
 				$info = $user->user_login;
 			}
 		}
@@ -2462,6 +2462,7 @@ class FrmFieldsHelper {
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
 		}
+
 		FrmAppHelper::kses_echo( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) );
 		?>
 		</li>

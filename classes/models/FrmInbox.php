@@ -54,7 +54,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 *
-	 * @param array|false $filter
+	 * @param false|string $filter
 	 *
 	 * @return array
 	 */
@@ -406,7 +406,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	private function update_list() {
-		update_option( $this->option, self::$messages, 'no' );
+		update_option( $this->option, self::$messages, false );
 	}
 
 	/**

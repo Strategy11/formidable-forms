@@ -1906,7 +1906,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
-		$value = empty( $value ) ? $defaults : array_merge( $defaults, (array) $value );
+		$value = $value ? array_merge( $defaults, (array) $value ) : $defaults;
 	}
 
 	/**

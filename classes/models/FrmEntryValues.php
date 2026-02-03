@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValues {
 
 	/**
-	 * @var stdClass|null
+	 * @var false|stdClass|null
 	 */
 	protected $entry;
 

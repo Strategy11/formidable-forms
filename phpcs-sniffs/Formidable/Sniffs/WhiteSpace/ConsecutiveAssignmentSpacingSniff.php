@@ -263,34 +263,6 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 	}
 
 	/**
-	 * Get a signature for the variable being assigned.
-	 * This includes array access like $styles[] or $data['key'].
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $varPtr    The position of the variable token.
-	 *
-	 * @return string The variable signature.
-	 */
-	private function getVariableSignature( File $phpcsFile, $varPtr ) {
-		$tokens    = $phpcsFile->getTokens();
-		$signature = $tokens[ $varPtr ]['content'];
-
-		// Check for array access after the variable.
-		$next = $phpcsFile->findNext( T_WHITESPACE, $varPtr + 1, null, true );
-
-		if ( false !== $next && $tokens[ $next ]['code'] === T_OPEN_SQUARE_BRACKET ) {
-			// Include the array access in the signature.
-			$closeBracket = $tokens[ $next ]['bracket_closer'];
-
-			for ( $i = $next; $i <= $closeBracket; $i++ ) {
-				$signature .= $tokens[ $i ]['content'];
-			}
-		}
-
-		return $signature;
-	}
-
-	/**
 	 * Check if the token is the start of a simple variable assignment.
 	 *
 	 * @param File $phpcsFile The file being scanned.

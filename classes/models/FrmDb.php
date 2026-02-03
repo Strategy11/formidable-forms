@@ -93,7 +93,7 @@ class FrmDb {
 		}
 
 		foreach ( $args as $key => $value ) {
-			$where .= empty( $where ) ? $base_where : $condition;
+			$where .= $where ? $condition : $base_where;
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$array_inc_null = ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value );
 
@@ -122,10 +122,10 @@ class FrmDb {
 	}
 
 	/**
-	 * @param string       $key
-	 * @param array|string $value
-	 * @param string       $where
-	 * @param array        $values
+	 * @param string            $key
+	 * @param array|string|null $value
+	 * @param string            $where
+	 * @param array             $values
 	 *
 	 * @return void
 	 */

@@ -647,7 +647,7 @@ class FrmAddonsController {
 			$checked_licenses[] = $new_license;
 			$api                = new FrmFormApi( $new_license );
 
-			if ( empty( $version_info ) ) {
+			if ( ! $version_info ) {
 				$version_info = $api->get_api_info();
 				continue;
 			}
@@ -773,7 +773,7 @@ class FrmAddonsController {
 
 		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
-				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
+				if ( 0 === strcasecmp( $license->plugin_name, $addon['title'] ) ) {
 					return $addon;
 				}
 			}
@@ -1293,7 +1293,7 @@ class FrmAddonsController {
 
 		if ( ! $auth ) {
 			$auth = hash( 'sha512', wp_rand() );
-			update_option( 'frm_connect_token', $auth, 'no' );
+			update_option( 'frm_connect_token', $auth, false );
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );

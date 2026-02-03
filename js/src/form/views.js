@@ -7,7 +7,7 @@ import './css/button.module.css';
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { Notice } = wp.components;
-const { useState, useEffect } = wp.element;
+const { useState } = wp.element;
 const { useBlockProps } = wp.blockEditor;
 
 const blockData = formidable_form_selector; // eslint-disable-line camelcase

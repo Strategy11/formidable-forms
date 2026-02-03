@@ -1496,7 +1496,7 @@ function frmFrontFormJS() {
 
 			// loop parent nodes from the target to the delegation node.
 			for ( target = e.target; target && target != this; target = target.parentNode ) {
-				if ( target && target.matches && target.matches( selector ) ) {
+				if ( target.matches && target.matches( selector ) ) {
 					handler.call( target, e );
 					break;
 				}
@@ -2052,7 +2052,7 @@ function frmFrontFormJS() {
 			/*jshint validthis:true */
 
 			const fieldId = frmFrontForm.getFieldId( this, false );
-			if ( ! fieldId || typeof fieldId === 'undefined' ) {
+			if ( ! fieldId ) {
 				return;
 			}
 

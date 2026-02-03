@@ -35,6 +35,7 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantEmptyAfterTruthy" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantTrimAfterSanitize" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
@@ -42,13 +43,16 @@
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
-	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
-	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
-	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
-	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
+	<rule ref="Formidable.CodeAnalysis.PreferGuardClauseForReturnElse" />
+	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
+	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
 	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrcasecmp" />
+	<rule ref="Formidable.CodeAnalysis.PreferTruthyOverNotEmptyForFunctionCall" />
+	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
@@ -61,6 +65,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
 	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
 	<rule ref="Formidable.CodeAnalysis.CheckFunctionCallable" />
+	<rule ref="Formidable.CodeAnalysis.UpdateOptionAutoloadBoolean" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
@@ -83,4 +88,5 @@
 	<rule ref="Formidable.Security.AddDirectFileAccessCheck" />
 	<rule ref="Formidable.Security.EscapeInHtml" />
 	<rule ref="Formidable.Security.BreakEchoConcatenation" />
+	<rule ref="Formidable.Security.PreferWpSafeRedirect" />
 </ruleset>

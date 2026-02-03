@@ -1199,7 +1199,7 @@ class FrmAppController {
 			$running = get_option( 'frm_install_running' );
 
 			if ( false === $running || $running < strtotime( '-5 minutes' ) ) {
-				update_option( 'frm_install_running', time(), 'no' );
+				update_option( 'frm_install_running', time(), false );
 				self::install();
 				delete_option( 'frm_install_running' );
 			}
@@ -1572,8 +1572,8 @@ class FrmAppController {
 	 *
 	 * @since 6.19
 	 *
-	 * @param string &$orderby Reference to the current 'orderby' parameter.
-	 * @param string &$order   Reference to the current 'order' parameter.
+	 * @param string $orderby Reference to the current 'orderby' parameter.
+	 * @param string $order   Reference to the current 'order' parameter.
 	 *
 	 * @return void
 	 */

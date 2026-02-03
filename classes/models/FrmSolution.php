@@ -564,7 +564,7 @@ class FrmSolution {
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
 
-		if ( ! empty( $this->form_options() ) && ! $is_complete ) {
+		if ( $this->form_options() && ! $is_complete ) {
 			$step['description'] = __( 'Select the form or view you would like to create.', 'formidable' );
 		}
 

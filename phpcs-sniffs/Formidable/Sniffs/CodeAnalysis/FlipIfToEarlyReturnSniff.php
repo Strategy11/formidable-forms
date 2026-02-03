@@ -417,27 +417,6 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	}
 
 	/**
-	 * Check if a condition is simple (single variable/function call).
-	 *
-	 * @param string $condition The condition to check.
-	 *
-	 * @return bool
-	 */
-	private function isSimpleCondition( $condition ) {
-		// Simple conditions: $var, function(), $obj->method(), etc.
-		// Complex conditions contain: &&, ||, and, or, comparisons.
-		$complexPatterns = array( '&&', '||', ' and ', ' or ', '===', '!==', '==', '!=', '<=', '>=', '<', '>' );
-
-		foreach ( $complexPatterns as $pattern ) {
-			if ( strpos( $condition, $pattern ) !== false ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get the indentation of a token.
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -464,33 +443,6 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	}
 
 	/**
-	 * Check if an if statement has an else or elseif clause.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $ifToken   The position of the if token.
-	 *
-	 * @return bool
-	 */
-	private function hasElseOrElseif( File $phpcsFile, $ifToken ) {
-		$tokens = $phpcsFile->getTokens();
-
-		if ( ! isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
-			return false;
-		}
-
-		$scopeCloser = $tokens[ $ifToken ]['scope_closer'];
-
-		// Look for else or elseif after the if's closing brace.
-		$next = $phpcsFile->findNext( T_WHITESPACE, $scopeCloser + 1, null, true );
-
-		if ( false === $next ) {
-			return false;
-		}
-
-		return in_array( $tokens[ $next ]['code'], array( T_ELSE, T_ELSEIF ), true );
-	}
-
-	/**
 	 * Count the number of statements inside a scope (recursively).
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -508,12 +460,48 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		$scopeOpener = $tokens[ $scopeToken ]['scope_opener'];
 		$scopeCloser = $tokens[ $scopeToken ]['scope_closer'];
 
-		$count = 0;
+		$count             = 0;
+		$structureTokens   = array(
+			T_IF,
+			T_ELSE,
+			T_ELSEIF,
+			T_SWITCH,
+			T_CASE,
+			T_DEFAULT,
+			T_FOR,
+			T_FOREACH,
+			T_WHILE,
+			T_DO,
+			T_TRY,
+			T_CATCH,
+			T_FINALLY,
+			T_RETURN,
+			T_THROW,
+			T_BREAK,
+			T_CONTINUE,
+			T_EXIT,
+			T_ECHO,
+			T_PRINT,
+			T_GLOBAL,
+			T_STATIC,
+			T_UNSET,
+		);
 
 		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
-			// Count all semicolons (statements) at any nesting level.
-			if ( $tokens[ $i ]['code'] === T_SEMICOLON ) {
+			$code = $tokens[ $i ]['code'];
+
+			if ( T_SEMICOLON === $code ) {
 				++$count;
+				continue;
+			}
+
+			if ( in_array( $code, $structureTokens, true ) ) {
+				++$count;
+
+				if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
+					$count += $this->countStatementsInScope( $phpcsFile, $i );
+					$i      = $tokens[ $i ]['scope_closer'];
+				}
 			}
 		}
 

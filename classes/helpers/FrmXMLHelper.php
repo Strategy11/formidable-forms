@@ -401,13 +401,15 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function delete_removed_fields( $form_fields ) {
-		if ( $form_fields ) {
-			foreach ( $form_fields as $field ) {
-				if ( is_object( $field ) ) {
-					FrmField::destroy( $field->id );
-				}
-				unset( $field );
+		if ( ! $form_fields ) {
+			return;
+		}
+
+		foreach ( $form_fields as $field ) {
+			if ( is_object( $field ) ) {
+				FrmField::destroy( $field->id );
 			}
+			unset( $field );
 		}
 	}
 
@@ -819,8 +821,7 @@ class FrmXMLHelper {
 
 		$new_id = FrmField::create( $f );
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( $new_id != false ) {
+		if ( $new_id ) {
 			++$imported['imported']['fields'];
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
 		}
@@ -1339,6 +1340,7 @@ class FrmXMLHelper {
 					if ( ! empty( $m['value']['timeline_options'] ) ) {
 						foreach ( $m['value']['timeline_options'] as $timeline_option_group_key => $timeline_group_option ) {
 							foreach ( $timeline_group_option as $timeline_option_key => $timeline_option ) {
+								// @mago-expect lint:excessive-nesting
 								if ( isset( $frm_duplicate_ids[ $timeline_option ] ) ) {
 									$m['value']['timeline_options'][ $timeline_option_group_key ][ $timeline_option_key ] = $frm_duplicate_ids[ $timeline_option ];
 								}
@@ -1516,15 +1518,17 @@ class FrmXMLHelper {
 		$new_styles     = ! empty( $imported['imported']['styles'] );
 		$updated_styles = ! empty( $imported['updated']['styles'] );
 
-		if ( $new_styles || $updated_styles ) {
-			if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
-				$frm_style = new FrmStyle();
-				$frm_style->update( 'default' );
-			}
+		if ( ! $new_styles && ! $updated_styles ) {
+			return;
+		}
 
-			foreach ( $imported['forms'] as $form_id ) {
-				self::update_custom_style_setting_after_import( $form_id );
-			}
+		if ( is_admin() && function_exists( 'get_filesystem_method' ) ) {
+			$frm_style = new FrmStyle();
+			$frm_style->update( 'default' );
+		}
+
+		foreach ( $imported['forms'] as $form_id ) {
+			self::update_custom_style_setting_after_import( $form_id );
 		}
 	}
 
@@ -2166,6 +2170,7 @@ class FrmXMLHelper {
 				unset( $form_options[ $index ] );
 			}
 		}
+
 		FrmForm::update( $form_id, array( 'options' => $form_options ) );
 	}
 

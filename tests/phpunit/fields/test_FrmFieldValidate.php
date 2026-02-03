@@ -219,7 +219,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 20, $field->field_options['maxnum'] );
+		$this->assertSame( 20, $field->field_options['maxnum'] );
 
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
 		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed range validation ' . print_r( $errors, 1 ) );
@@ -357,7 +357,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 'logged', $akismet_logged->options['akismet'] );
+		$this->assertSame( 'logged', $akismet_logged->options['akismet'] );
 
 		wp_set_current_user( 0 );
 		$this->assertFalse( is_user_logged_in() );

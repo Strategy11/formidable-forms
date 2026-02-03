@@ -17,7 +17,7 @@ class test_FrmStrpLiteAuth extends FrmUnitTest {
 
 		add_filter( 'frm_stripe_statement_descriptor', $callback );
 
-		$this->assertEquals( 'My Company', $this->get_statement_descriptor() );
+		$this->assertSame( 'My Company', $this->get_statement_descriptor() );
 
 		remove_filter( 'frm_stripe_statement_descriptor', $callback );
 	}

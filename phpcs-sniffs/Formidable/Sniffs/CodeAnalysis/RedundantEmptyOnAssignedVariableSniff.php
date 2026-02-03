@@ -423,11 +423,11 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 
 			$hasAnyAssignment = true;
 
-			// Check if the assignment is at the same scope level as the statement.
-			// This ensures the variable was assigned unconditionally before the statement.
+			// Check if the assignment executes before (or at the same level as) the statement.
+			// Assignments inside deeper nested scopes might not always run, so skip those.
 			$assignmentLevel = $tokens[ $i ]['level'];
 
-			if ( $assignmentLevel !== $statementLevel ) {
+			if ( $assignmentLevel > $statementLevel ) {
 				continue;
 			}
 
@@ -528,33 +528,6 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 		// Check for closing parenthesis (if, elseif, while, for, foreach, switch, catch).
 		if ( $code === T_CLOSE_PARENTHESIS && isset( $tokens[ $prevToken ]['parenthesis_owner'] ) ) {
 			return $tokens[ $prevToken ]['parenthesis_owner'];
-		}
-
-		return false;
-	}
-
-	/**
-	 * Find the if/elseif statement that contains the given token.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $stackPtr  The position of the current token.
-	 *
-	 * @return false|int The position of the if/elseif token, or false if not found.
-	 */
-	private function findContainingIf( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-
-		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
-			$code = $tokens[ $i ]['code'];
-
-			if ( $code === T_IF || $code === T_ELSEIF ) {
-				return $i;
-			}
-
-			// Stop if we hit a function or class boundary.
-			if ( $code === T_FUNCTION || $code === T_CLOSURE || $code === T_CLASS ) {
-				return false;
-			}
 		}
 
 		return false;

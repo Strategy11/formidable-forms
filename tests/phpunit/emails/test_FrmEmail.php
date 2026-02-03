@@ -595,7 +595,7 @@ class test_FrmEmail extends FrmUnitTest {
 		$action->post_content['reply_to']            = '[' . $email_field_key . ']';
 		$email                                       = new FrmEmail( $action, $entry, $this->contact_form );
 		$actual                                      = $this->get_private_property( $email, 'reply_to' );
-		$this->assertEquals( 'fromemail@example.com', $actual );
+		$this->assertSame( 'fromemail@example.com', $actual );
 	}
 
 	/**
