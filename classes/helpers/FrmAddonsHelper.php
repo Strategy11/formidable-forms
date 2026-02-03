@@ -290,13 +290,12 @@ class FrmAddonsHelper {
 	 * @return void
 	 */
 	public static function show_five_star_rating( $color = 'black' ) {
-		$icon = file_get_contents( FrmAppHelper::plugin_path() . '/images/star.svg' );
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span style="color: <?php echo esc_attr( $color ); ?>;">
 			<?php
 			for ( $i = 0; $i < 5; $i++ ) {
-				echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				readfile( FrmAppHelper::plugin_path() . '/images/star.svg' );
 			}
 			?>
 		</span>
