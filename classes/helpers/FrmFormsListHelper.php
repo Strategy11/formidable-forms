@@ -299,7 +299,12 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = $item->{$column_name};
 					break;
 				case 'name':
-					$val  = $this->get_form_name( $item, $actions, $edit_link, $mode );
+					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
+
+					if ( get_user_option( 'frm_forms_show_desc' ) && ! empty( $item->description ) ) {
+						$val .= '<p class="frm_form_desc">' . nl2br( $item->description ) . '</p>';
+					}
+
 					$val .= $action_links;
 					break;
 				case 'created_at':
