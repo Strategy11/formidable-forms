@@ -354,38 +354,61 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		$action_settings = self::prepare_settings_for_js( $form_id );
-		$found_gateway   = false;
+		$payment_action_by_id = array();
+
+		add_filter(
+			'frm_trans_settings_for_js',
+			/**
+			 * @param array   $settings_for_action
+			 * @param WP_Post $payment_action
+			 *
+			 * @return array
+			 */
+			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
+				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
+				return $settings_for_action;
+			},
+			10,
+			2
+		);
+
+		$action_settings      = self::prepare_settings_for_js( $form_id );
+		$action_setting_match = false;
 
 		foreach ( $action_settings as $action ) {
 			$gateways = $action['gateways'];
 
 			if ( ! $gateways || in_array( 'paypal', (array) $gateways, true ) ) {
-				$found_gateway = true;
+				$action_setting_match = $action;
 				break;
 			}
 		}
 
-		if ( ! $found_gateway ) {
+		if ( false === $action_setting_match || ! array_key_exists( $action_setting_match['id'], $payment_action_by_id ) ) {
 			return;
 		}
 
-		$client_id = self::get_client_id();
+		$action = $payment_action_by_id[ $action_setting_match['id'] ];
 
-		// Build the PayPal SDK URL with required parameters.
+		// Use capture for one-time payments and subscription for recurring payments.
+		$intent = $action->post_content['type'] === 'single' ? 'capture' : 'subscription';
+
+		/**
+		 * Build the PayPal SDK URL with required parameters.
+		 *
+		 * - Subscriptions require intent=subscription.
+		 * - Subscriptions maybe also require vault=true.
+		 * - To enable paylater, include enable-funding=paylater.
+		 * - To enable Pay Now, include commit=true.
+		 * - To use Continue instead, use commit=false
+		 */
 		$sdk_url = add_query_arg(
 			array(
-				'client-id'  => $client_id,//'sb',
-				'components' => 'buttons,card-fields',
-				// Use capture for one time payments.
-				'intent'     => 'capture',
-				// Subscriptions appear to require vault=true.
-			//	'intent'     => 'subscription',
-			//	'vault'      => 'true',
-			//	'enable-funding' => 'paylater',
-				// True is for "Pay Now" flow. False is for "Continue" flow.
-				// 'commit'         => 'true',
-				'currency' => 'CAD', // TODO Pull from this from the action settings data.
+				'client-id'   => self::get_client_id(),
+				'components'  => 'buttons,card-fields',
+				'intent'      => $intent,
+				'currency'    => strtoupper( $action->post_content['currency'] ?? 'USD' ),
+				'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
 			),
 			'https://www.paypal.com/sdk/js'
 		);
@@ -410,7 +433,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$paypal_vars = array(
-			'clientId' => $client_id,
 			'formId'   => $form_id,
 			'nonce'    => wp_create_nonce( 'frm_paypal_ajax' ),
 			'ajax'     => esc_url_raw( FrmAppHelper::get_ajax_url() ),

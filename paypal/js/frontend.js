@@ -3,8 +3,6 @@
 		return;
 	}
 
-	const clientId = frmPayPalVars.clientId;
-
 	// Track the state of the PayPal card fields
 	let cardFieldsValid = false;
 	let thisForm = null;
