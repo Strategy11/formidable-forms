@@ -460,12 +460,48 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		$scopeOpener = $tokens[ $scopeToken ]['scope_opener'];
 		$scopeCloser = $tokens[ $scopeToken ]['scope_closer'];
 
-		$count = 0;
+		$count             = 0;
+		$structureTokens   = array(
+			T_IF,
+			T_ELSE,
+			T_ELSEIF,
+			T_SWITCH,
+			T_CASE,
+			T_DEFAULT,
+			T_FOR,
+			T_FOREACH,
+			T_WHILE,
+			T_DO,
+			T_TRY,
+			T_CATCH,
+			T_FINALLY,
+			T_RETURN,
+			T_THROW,
+			T_BREAK,
+			T_CONTINUE,
+			T_EXIT,
+			T_ECHO,
+			T_PRINT,
+			T_GLOBAL,
+			T_STATIC,
+			T_UNSET,
+		);
 
 		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
-			// Count all semicolons (statements) at any nesting level.
-			if ( $tokens[ $i ]['code'] === T_SEMICOLON ) {
+			$code = $tokens[ $i ]['code'];
+
+			if ( T_SEMICOLON === $code ) {
 				++$count;
+				continue;
+			}
+
+			if ( in_array( $code, $structureTokens, true ) ) {
+				++$count;
+
+				if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
+					$count += $this->countStatementsInScope( $phpcsFile, $i );
+					$i      = $tokens[ $i ]['scope_closer'];
+				}
 			}
 		}
 

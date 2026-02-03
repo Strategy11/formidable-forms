@@ -2884,15 +2884,18 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
-		if ( $fields ) {
-			foreach ( (array) $fields as $field ) {
-				if ( ! self::is_admin_page() ) {
-					// Don't prep default values on the form settings page.
-					$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
-				}
-				$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
-				self::fill_field_defaults( $field, $record, $values, $args );
+		if ( ! $fields ) {
+			return;
+		}
+
+		foreach ( (array) $fields as $field ) {
+			if ( ! self::is_admin_page() ) {
+				// Don't prep default values on the form settings page.
+				$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
 			}
+
+			$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
+			self::fill_field_defaults( $field, $record, $values, $args );
 		}
 	}
 
