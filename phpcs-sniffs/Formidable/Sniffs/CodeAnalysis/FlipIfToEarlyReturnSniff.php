@@ -24,6 +24,15 @@ use PHP_CodeSniffer\Files\File;
  *     }
  * }
  *
+ * Also catches:
+ * function example($value) {
+ *     $var = get_value();
+ *     if ($var && $condition) {
+ *         // 5+ lines of code
+ *         return $result;
+ *     }
+ * }
+ *
  * Good:
  * function example($value) {
  *     if (! $value) {
@@ -89,10 +98,16 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 
 		// Check if the first statement is an if.
 		if ( $tokens[ $firstStatement ]['code'] !== T_IF ) {
-			return;
-		}
+			// If the first statement isn't an if, check if it's a simple assignment
+			// followed by an if statement (pattern: $var = value; if ($var && condition) {...})
+			$ifToken = $this->findIfAfterSimpleSetup( $phpcsFile, $firstStatement, $scopeCloser );
 
-		$ifToken = $firstStatement;
+			if ( false === $ifToken ) {
+				return;
+			}
+		} else {
+			$ifToken = $firstStatement;
+		}
 
 		// Check if this if has an else or elseif - skip those.
 		if ( isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
@@ -110,7 +125,7 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 
 		$ifScopeCloser = $tokens[ $ifToken ]['scope_closer'];
 
-		// Check if the if statement is the only thing in the function body.
+		// Check if the if statement is the main logic in the function body.
 		// The next non-whitespace/non-comment token after the if's closing brace should be the function's closing brace.
 		$afterIf = $phpcsFile->findNext(
 			array( T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR, T_DOC_COMMENT_STRING, T_DOC_COMMENT_TAG, T_DOC_COMMENT_WHITESPACE ),
@@ -402,27 +417,6 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	}
 
 	/**
-	 * Check if a condition is simple (single variable/function call).
-	 *
-	 * @param string $condition The condition to check.
-	 *
-	 * @return bool
-	 */
-	private function isSimpleCondition( $condition ) {
-		// Simple conditions: $var, function(), $obj->method(), etc.
-		// Complex conditions contain: &&, ||, and, or, comparisons.
-		$complexPatterns = array( '&&', '||', ' and ', ' or ', '===', '!==', '==', '!=', '<=', '>=', '<', '>' );
-
-		foreach ( $complexPatterns as $pattern ) {
-			if ( strpos( $condition, $pattern ) !== false ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get the indentation of a token.
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -446,33 +440,6 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		}
 
 		return '';
-	}
-
-	/**
-	 * Check if an if statement has an else or elseif clause.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $ifToken   The position of the if token.
-	 *
-	 * @return bool
-	 */
-	private function hasElseOrElseif( File $phpcsFile, $ifToken ) {
-		$tokens = $phpcsFile->getTokens();
-
-		if ( ! isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
-			return false;
-		}
-
-		$scopeCloser = $tokens[ $ifToken ]['scope_closer'];
-
-		// Look for else or elseif after the if's closing brace.
-		$next = $phpcsFile->findNext( T_WHITESPACE, $scopeCloser + 1, null, true );
-
-		if ( false === $next ) {
-			return false;
-		}
-
-		return in_array( $tokens[ $next ]['code'], array( T_ELSE, T_ELSEIF ), true );
 	}
 
 	/**
@@ -537,5 +504,82 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		}
 
 		return $condition;
+	}
+
+	/**
+	 * Find an if statement that comes after simple setup code.
+	 *
+	 * @param File $phpcsFile     The file being scanned.
+	 * @param int  $firstToken    The first token in the function.
+	 * @param int  $scopeCloser   The function's scope closer.
+	 *
+	 * @return false|int Position of the if token, or false if not found.
+	 */
+	private function findIfAfterSimpleSetup( File $phpcsFile, $firstToken, $scopeCloser ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Allow simple assignments: $var = value;
+		$current = $firstToken;
+		$setupStatements = 0;
+		$maxSetupStatements = 3; // Allow up to 3 simple setup statements
+
+		while ( $current < $scopeCloser && $setupStatements < $maxSetupStatements ) {
+			// Skip whitespace
+			if ( $tokens[ $current ]['code'] === T_WHITESPACE ) {
+				$current++;
+				continue;
+			}
+
+			// Check if this is a simple assignment
+			if ( $this->isSimpleAssignment( $phpcsFile, $current ) ) {
+				$setupStatements++;
+				// Move to the end of this statement (semicolon)
+				$semicolon = $phpcsFile->findNext( T_SEMICOLON, $current + 1, $scopeCloser );
+
+				if ( false === $semicolon ) {
+					return false;
+				}
+				$current = $semicolon + 1;
+				continue;
+			}
+
+			// If we find an if after the setup, return it
+			if ( $tokens[ $current ]['code'] === T_IF ) {
+				return $current;
+			}
+
+			// Anything else means this pattern doesn't match
+			return false;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a token represents a simple assignment statement.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the token to check.
+	 *
+	 * @return bool True if this is a simple assignment.
+	 */
+	private function isSimpleAssignment( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Look for pattern: $variable = value;
+		if ( $tokens[ $stackPtr ]['code'] !== T_VARIABLE ) {
+			return false;
+		}
+
+		// Next non-whitespace should be =
+		$next = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		if ( false === $next || $tokens[ $next ]['code'] !== T_EQUAL ) {
+			return false;
+		}
+
+		// Find the semicolon to confirm this is a complete assignment
+		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $next + 1, null );
+		return false !== $semicolon;
 	}
 }

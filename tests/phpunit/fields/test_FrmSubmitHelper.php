@@ -15,7 +15,7 @@ class test_FrmSubmitHelper extends FrmUnitTest {
 		);
 
 		$new_form = FrmSubmitHelper::copy_submit_field_settings_to_form( $form );
-		$this->assertEquals( $new_form->options['submit_value'], 'Submit form' );
+		$this->assertSame( $new_form->options['submit_value'], 'Submit form' );
 	}
 
 	public function test_only_contains_submit_field() {

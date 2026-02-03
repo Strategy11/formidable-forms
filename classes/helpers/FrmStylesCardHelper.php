@@ -356,6 +356,7 @@ class FrmStylesCardHelper {
 
 		$first_style         = reset( $styles );
 		$is_template_wrapper = is_array( $first_style );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
 			<?php
@@ -367,6 +368,7 @@ class FrmStylesCardHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -464,6 +466,7 @@ class FrmStylesCardHelper {
 			// Not enough cards to require pagination.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-style-card-pagination frm_wrap">
 			<a href="#" class="frm-show-all-styles">
@@ -477,6 +480,7 @@ class FrmStylesCardHelper {
 			</a>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

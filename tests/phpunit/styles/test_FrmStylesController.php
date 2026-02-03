@@ -10,7 +10,7 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_front_head() {
 		$this->set_front_end();
 
-		// reset if the style was loaded in another test
+		// Reset if the style was loaded in another test
 		global $frm_vars, $wp_styles;
 		$frm_vars['css_loaded'] = false;
 
@@ -29,11 +29,11 @@ class test_FrmStylesController extends FrmUnitTest {
 		$css_html        = "<link rel='stylesheet' id='formidable-css'";
 
 		if ( $frm_settings->load_style === 'all' ) {
-			$this->assertNotFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
+			$this->assertStringContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
 			// $this->assertContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is missing' );
 		} else {
-			$this->assertFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
-			$this->assertFalse( strpos( $styles, $stylesheet_urls['formidable'] ), 'The formidablepro stylesheet is included when it should not be' );
+			$this->assertStringNotContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
+			$this->assertStringNotContainsString( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is included when it should not be' );
 		}
 	}
 

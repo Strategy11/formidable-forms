@@ -20,7 +20,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 * @covers FrmFormTemplatesController::menu
 	 */
 	public function test_menu() {
-		$this->assertEquals( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
+		$this->assertSame( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
 	}
 
 	/**

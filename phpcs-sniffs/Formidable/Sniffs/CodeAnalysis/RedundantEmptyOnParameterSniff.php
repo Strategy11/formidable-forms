@@ -51,8 +51,8 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 	public function process( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
-		// Only process if empty() is directly inside an if/elseif condition.
-		if ( ! $this->isInIfCondition( $phpcsFile, $stackPtr ) ) {
+		// Only process if empty() is in a boolean context (if/elseif condition or with || / &&).
+		if ( ! $this->isInBooleanContext( $phpcsFile, $stackPtr ) ) {
 			return;
 		}
 
@@ -199,6 +199,47 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 	}
 
 	/**
+	 * Check if empty() is used as the condition of a ternary (?:) expression.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the empty token.
+	 *
+	 * @return bool
+	 */
+	private function isPartOfTernaryCondition( File $phpcsFile, $stackPtr ) {
+		$tokens    = $phpcsFile->getTokens();
+		$openParen = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+			return false;
+		}
+
+		if ( ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$nextPtr = $tokens[ $openParen ]['parenthesis_closer'] + 1;
+
+		while ( $nextPtr < count( $tokens ) ) {
+			$code = $tokens[ $nextPtr ]['code'];
+
+			if ( $code === T_WHITESPACE || $code === T_CLOSE_PARENTHESIS ) {
+				++$nextPtr;
+				continue;
+			}
+
+			if ( $code === T_COMMENT || $code === T_DOC_COMMENT_OPEN_TAG || $code === T_DOC_COMMENT_CLOSE_TAG || $code === T_DOC_COMMENT_STRING || $code === T_DOC_COMMENT_WHITESPACE || $code === T_DOC_COMMENT_STAR ) {
+				++$nextPtr;
+				continue;
+			}
+
+			return $code === T_INLINE_THEN;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the parameter names for a function.
 	 *
 	 * @param File $phpcsFile     The file being scanned.
@@ -227,15 +268,25 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 	}
 
 	/**
-	 * Check if the empty() call is directly inside an if/elseif condition.
+	 * Check if the empty() call is in a boolean context (if/elseif condition or with || / &&).
 	 *
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the empty token.
 	 *
-	 * @return bool True if inside an if/elseif condition, false otherwise.
+	 * @return bool True if in a boolean context, false otherwise.
 	 */
-	private function isInIfCondition( File $phpcsFile, $stackPtr ) {
+	private function isInBooleanContext( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
+
+		// Check if empty() is used with || or && (before or after).
+		if ( $this->hasAdjacentLogicalOperator( $phpcsFile, $stackPtr ) ) {
+			return true;
+		}
+
+		// Check if empty() is being used as the condition of a ternary operator.
+		if ( $this->isPartOfTernaryCondition( $phpcsFile, $stackPtr ) ) {
+			return true;
+		}
 
 		// Track parenthesis nesting to find the outermost condition parenthesis.
 		$parenDepth = 0;
@@ -306,6 +357,58 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 
 			// Hit something unexpected, stop searching.
 			return false;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if empty() has an adjacent logical operator (|| or &&).
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the empty token.
+	 *
+	 * @return bool True if there's an adjacent logical operator.
+	 */
+	private function hasAdjacentLogicalOperator( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the closing paren of empty().
+		$openParen = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+			return false;
+		}
+
+		if ( ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+
+		$logicalOperators = array(
+			T_BOOLEAN_AND,
+			T_BOOLEAN_OR,
+			T_LOGICAL_AND,
+			T_LOGICAL_OR,
+		);
+
+		// Check before empty() (skip ! if present).
+		$beforeEmpty = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+
+		if ( false !== $beforeEmpty && $tokens[ $beforeEmpty ]['code'] === T_BOOLEAN_NOT ) {
+			$beforeEmpty = $phpcsFile->findPrevious( T_WHITESPACE, $beforeEmpty - 1, null, true );
+		}
+
+		if ( false !== $beforeEmpty && in_array( $tokens[ $beforeEmpty ]['code'], $logicalOperators, true ) ) {
+			return true;
+		}
+
+		// Check after empty().
+		$afterEmpty = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, null, true );
+
+		if ( false !== $afterEmpty && in_array( $tokens[ $afterEmpty ]['code'], $logicalOperators, true ) ) {
+			return true;
 		}
 
 		return false;

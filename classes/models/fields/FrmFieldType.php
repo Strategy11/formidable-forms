@@ -283,6 +283,7 @@ DEFAULT_HTML;
 	 */
 	public function show_label_on_form_builder() {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
@@ -294,6 +295,7 @@ DEFAULT_HTML;
 			</span>
 		</label>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -718,6 +720,7 @@ DEFAULT_HTML;
 	 */
 	protected function field_choices_heading( $args ) {
 		$all_field_types = self::get_all_field_types();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
@@ -730,6 +733,7 @@ DEFAULT_HTML;
 			?>
 		</h3>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1264,7 +1268,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
-		// override from other fields
+		// Override from other fields
 	}
 
 	/**
@@ -1627,7 +1631,7 @@ DEFAULT_HTML;
 	private function value_has_already_been_validated_as_unique( $value ) {
 		global $frm_validated_unique_values;
 
-		if ( empty( $frm_validated_unique_values ) ) {
+		if ( ! $frm_validated_unique_values ) {
 			$frm_validated_unique_values = array();
 			return false;
 		}
@@ -1902,7 +1906,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
-		$value = empty( $value ) ? $defaults : array_merge( $defaults, (array) $value );
+		$value = $value ? array_merge( $defaults, (array) $value ) : $defaults;
 	}
 
 	/**

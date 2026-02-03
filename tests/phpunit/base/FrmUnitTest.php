@@ -78,7 +78,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
-			// set this to false so all our tests won't be done with this active
+			// Set this to false so all our tests won't be done with this active
 			define( 'WP_IMPORTING', false );
 		}
 
@@ -143,7 +143,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function import_xml() {
-		// install test data in older format
+		// Install test data in older format
 		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
 		FrmXMLController::add_default_templates();
 
@@ -240,8 +240,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 						$media_ids = array();
 					}
 
-					$id          = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
-					$media_ids[] = $id;
+					$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
 				}
 			}
 
@@ -465,6 +464,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return ob_get_clean();
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function install_data() {
 		return array(
 			__DIR__ . '/testdata.xml',
@@ -474,6 +476,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * @param array $type
+	 */
 	public static function generate_xml( $type, $xml_args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		// Code copied from FrmXMLController::generate_xml
 		global $wpdb;
@@ -481,12 +486,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$type = (array) $type;
 
 		if ( in_array( 'items', $type, true ) && ! in_array( 'forms', $type, true ) ) {
-			// make sure the form is included if there are entries
+			// Make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
 		if ( in_array( 'forms', $type, true ) ) {
-			// include actions with forms
+			// Include actions with forms
 			$type[] = 'actions';
 		}
 
@@ -639,6 +644,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $subscriber );
 	}
 
+	/**
+	 * @param array $method
+	 * @param array $args
+	 */
 	protected function run_private_method( $method, $args = array() ) {
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );
@@ -694,7 +703,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			case 'formidable_custom_role':
 				$user = wp_get_current_user();
 
-				// remove any standard roles to make room for a custom one
+				// Remove any standard roles to make room for a custom one
 				foreach ( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
 					$user->remove_role( $role );
 				}

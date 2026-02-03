@@ -532,31 +532,4 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 
 		return false;
 	}
-
-	/**
-	 * Find the if/elseif statement that contains the given token.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $stackPtr  The position of the current token.
-	 *
-	 * @return false|int The position of the if/elseif token, or false if not found.
-	 */
-	private function findContainingIf( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-
-		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
-			$code = $tokens[ $i ]['code'];
-
-			if ( $code === T_IF || $code === T_ELSEIF ) {
-				return $i;
-			}
-
-			// Stop if we hit a function or class boundary.
-			if ( $code === T_FUNCTION || $code === T_CLOSURE || $code === T_CLASS ) {
-				return false;
-			}
-		}
-
-		return false;
-	}
 }

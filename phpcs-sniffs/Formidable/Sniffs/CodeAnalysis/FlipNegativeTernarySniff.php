@@ -3,9 +3,9 @@
  * Sniff to detect ternary conditions using !== and flip them to use ===.
  *
  * Detects patterns like:
- * return null !== $var ? $value1 : $value2;
+ * return 'value' !== $var ? $value1 : $value2;
  *
- * These should be flipped to: return null === $var ? $value2 : $value1;
+ * These should be flipped to: return 'value' === $var ? $value2 : $value1;
  *
  * @package Formidable\Sniffs\CodeAnalysis
  */
@@ -79,11 +79,11 @@ class FlipNegativeTernarySniff implements Sniff {
 			return;
 		}
 
-		// Check for negated function call pattern: ! function() ? false : value.
-		$negationInfo = $this->findNegatedFunctionCall( $phpcsFile, $statementStart, $stackPtr );
+		// Check for negated condition pattern: ! function() ? false : value or ! $var ? false : value.
+		$negationInfo = $this->findNegatedCondition( $phpcsFile, $statementStart, $stackPtr );
 
 		if ( false !== $negationInfo ) {
-			$this->processNegatedFunctionCall( $phpcsFile, $stackPtr, $colonPtr, $ternaryEnd, $negationInfo, $trueBranch, $falseBranch );
+			$this->processNegatedCondition( $phpcsFile, $stackPtr, $colonPtr, $ternaryEnd, $negationInfo, $trueBranch, $falseBranch );
 			return;
 		}
 
@@ -134,15 +134,15 @@ class FlipNegativeTernarySniff implements Sniff {
 	}
 
 	/**
-	 * Find a negated function call pattern: ! function().
+	 * Find a negated condition pattern: ! function() or ! $variable.
 	 *
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $start     Start position to search.
 	 * @param int  $end       End position to search.
 	 *
-	 * @return array|false Array with 'negation' and 'function_end' keys, or false.
+	 * @return array|false Array with 'negation' and 'condition_end' keys, or false.
 	 */
-	private function findNegatedFunctionCall( File $phpcsFile, $start, $end ) {
+	private function findNegatedCondition( File $phpcsFile, $start, $end ) {
 		$tokens = $phpcsFile->getTokens();
 
 		// Look for ! operator.
@@ -151,19 +151,36 @@ class FlipNegativeTernarySniff implements Sniff {
 				continue;
 			}
 
-			// Found !, now check if followed by a function call.
+			// Found !, now check what follows.
 			$nextToken = $phpcsFile->findNext( T_WHITESPACE, $i + 1, $end, true );
 
 			if ( false === $nextToken ) {
 				continue;
 			}
 
-			// Check for function call (T_STRING followed by open paren).
 			// Skip T_EMPTY - ! empty() is a common pattern that shouldn't be flipped.
 			if ( $tokens[ $nextToken ]['code'] === T_EMPTY ) {
 				continue;
 			}
 
+			// Check for variable: ! $var.
+			if ( $tokens[ $nextToken ]['code'] === T_VARIABLE ) {
+				// Check there's nothing significant between variable and ?.
+				$afterVar = $phpcsFile->findNext( T_WHITESPACE, $nextToken + 1, $end, true );
+
+				if ( false !== $afterVar ) {
+					// There's something else - not a simple negated variable.
+					continue;
+				}
+
+				return array(
+					'negation'      => $i,
+					'condition'     => $nextToken,
+					'condition_end' => $nextToken,
+				);
+			}
+
+			// Check for function call (T_STRING followed by open paren).
 			if ( $tokens[ $nextToken ]['code'] !== T_STRING ) {
 				continue;
 			}
@@ -194,9 +211,9 @@ class FlipNegativeTernarySniff implements Sniff {
 			}
 
 			return array(
-				'negation'     => $i,
-				'function'     => $nextToken,
-				'function_end' => $closeParen,
+				'negation'      => $i,
+				'condition'     => $nextToken,
+				'condition_end' => $closeParen,
 			);
 		}
 
@@ -204,19 +221,19 @@ class FlipNegativeTernarySniff implements Sniff {
 	}
 
 	/**
-	 * Process a negated function call ternary: ! function() ? false : value.
+	 * Process a negated condition ternary: ! function() ? false : value or ! $var ? false : value.
 	 *
-	 * @param File  $phpcsFile   The file being scanned.
-	 * @param int   $stackPtr    The position of the ? token.
-	 * @param int   $colonPtr    The position of the : token.
-	 * @param int   $ternaryEnd  The end of the ternary.
-	 * @param array $negationInfo Info about the negation.
+	 * @param File   $phpcsFile   The file being scanned.
+	 * @param int    $stackPtr    The position of the ? token.
+	 * @param int    $colonPtr    The position of the : token.
+	 * @param int    $ternaryEnd  The end of the ternary.
+	 * @param array  $negationInfo Info about the negation.
 	 * @param string $trueBranch  The true branch content.
 	 * @param string $falseBranch The false branch content.
 	 *
 	 * @return void
 	 */
-	private function processNegatedFunctionCall( File $phpcsFile, $stackPtr, $colonPtr, $ternaryEnd, $negationInfo, $trueBranch, $falseBranch ) {
+	private function processNegatedCondition( File $phpcsFile, $stackPtr, $colonPtr, $ternaryEnd, $negationInfo, $trueBranch, $falseBranch ) {
 		$tokens = $phpcsFile->getTokens();
 
 		// Only flip if the true branch is false/null.
@@ -247,9 +264,9 @@ class FlipNegativeTernarySniff implements Sniff {
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			'Ternary condition uses negated function call. Flip to use positive condition instead.',
+			'Ternary condition uses negation. Flip to use positive condition instead.',
 			$negationInfo['negation'],
-			'NegatedFunctionTernary'
+			'NegatedTernary'
 		);
 
 		if ( true === $fix ) {

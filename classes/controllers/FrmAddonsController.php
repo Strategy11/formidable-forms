@@ -103,7 +103,7 @@ class FrmAddonsController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
-		// remove default created subpage, make the page with highest priority as default.
+		// Remove default created subpage, make the page with highest priority as default.
 		remove_submenu_page( 'formidable', 'formidable' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -451,7 +451,7 @@ class FrmAddonsController {
 		}
 
 		if ( str_contains( $license, '-' ) ) {
-			// this is a fix for licenses saved in the past
+			// This is a fix for licenses saved in the past
 			$license = strtoupper( $license );
 		}
 
@@ -571,7 +571,7 @@ class FrmAddonsController {
 			}
 
 			if ( ! self::is_installed( $folder ) ) {
-				// don't show an update if the plugin isn't installed
+				// Don't show an update if the plugin isn't installed
 				continue;
 			}
 
@@ -634,7 +634,7 @@ class FrmAddonsController {
 
 		foreach ( $installed_addons as $addon ) {
 			if ( $addon->store_url !== 'https://formidableforms.com' ) {
-				// check if this is a third-party addon
+				// Check if this is a third-party addon
 				continue;
 			}
 
@@ -661,7 +661,7 @@ class FrmAddonsController {
 			$download_id = $plugin['id'] ?? 0;
 
 			if ( $download_id && ! isset( $version_info[ $download_id ]['package'] ) ) {
-				// if this addon is using its own license, get the update url
+				// If this addon is using its own license, get the update url
 				$addon_info = $api->get_api_info();
 
 				$version_info[ $download_id ] = $addon_info[ $download_id ];
@@ -773,7 +773,7 @@ class FrmAddonsController {
 
 		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
-				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
+				if ( 0 === strcasecmp( $license->plugin_name, $addon['title'] ) ) {
 					return $addon;
 				}
 			}
@@ -1293,7 +1293,7 @@ class FrmAddonsController {
 
 		if ( ! $auth ) {
 			$auth = hash( 'sha512', wp_rand() );
-			update_option( 'frm_connect_token', $auth, 'no' );
+			update_option( 'frm_connect_token', $auth, false );
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
@@ -1362,7 +1362,7 @@ class FrmAddonsController {
 		}
 
 		// If empty license, save it now.
-		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
+		if ( ! self::get_pro_license() && function_exists( 'load_formidable_pro' ) ) {
 			load_formidable_pro();
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 
@@ -1493,11 +1493,13 @@ class FrmAddonsController {
 		if ( ! str_contains( $class, 'frm-button' ) ) {
 			$class .= ' frm-button-secondary frm-button-sm';
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

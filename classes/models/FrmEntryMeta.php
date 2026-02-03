@@ -17,7 +17,7 @@ class FrmEntryMeta {
 		global $wpdb;
 
 		if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
-			// don't save blank fields
+			// Don't save blank fields
 			return 0;
 		}
 
@@ -47,7 +47,7 @@ class FrmEntryMeta {
 	 * @param string       $meta_key   Deprecated.
 	 * @param array|string $meta_value
 	 *
-	 * @return bool|false|int
+	 * @return bool|int
 	 */
 	public static function update_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		if ( ! $field_id ) {
@@ -153,7 +153,7 @@ class FrmEntryMeta {
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
 			if ( ! $previous_field_ids || ! in_array( $field_id, $previous_field_ids, true ) ) {
-				// if value does not exist, then create it
+				// If value does not exist, then create it
 				self::add_entry_meta( $entry_id, $field_id, '', $meta_value );
 				continue;
 			}
@@ -162,7 +162,7 @@ class FrmEntryMeta {
 				// Remove blank fields.
 				unset( $values_indexed_by_field_id[ $field_id ] );
 			} else {
-				// if value exists, then update it
+				// If value exists, then update it
 				self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
 			}
 		}//end foreach
@@ -177,7 +177,7 @@ class FrmEntryMeta {
 			return;
 		}
 
-		// prepare the query
+		// Prepare the query
 		$where = array(
 			'item_id'  => $entry_id,
 			'field_id' => $field_ids_to_remove,
@@ -387,13 +387,15 @@ class FrmEntryMeta {
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
 		global $wpdb;
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		$query = 'SELECT it.*, fi.type as field_type, fi.field_key as field_key,
             fi.required as required, fi.form_id as field_form_id, fi.name as field_name, fi.options as fi_options
 			FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id' .
 			FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$cache_key = 'all_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit;
-		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit === ' LIMIT 1' ? 'get_row' : 'get_results' ) );
+		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, $limit === ' LIMIT 1' ? 'get_row' : 'get_results' );
 
 		if ( ! $results || ! $stripslashes ) {
 			return $results;
@@ -575,7 +577,7 @@ class FrmEntryMeta {
 		}
 
 		if ( str_contains( $where, ' GROUP BY ' ) ) {
-			// don't inject WHERE filtering after GROUP BY
+			// Don't inject WHERE filtering after GROUP BY
 			$parts  = explode( ' GROUP BY ', $where );
 			$where  = $parts[0];
 			$where .= $draft_where . $user_where;

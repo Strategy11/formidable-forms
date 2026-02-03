@@ -261,7 +261,7 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( $section['function'] ?? $section ) );
+			call_user_func( $section['function'] ?? $section );
 		}
 
 		wp_die();
@@ -471,7 +471,7 @@ class FrmSettingsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		update_option( 'frm_lite_settings_upgrade', time(), 'no' );
+		update_option( 'frm_lite_settings_upgrade', time(), false );
 
 		wp_send_json_success();
 	}

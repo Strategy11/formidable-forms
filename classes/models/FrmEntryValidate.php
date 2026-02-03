@@ -548,7 +548,7 @@ class FrmEntryValidate {
 		}
 
 		if ( $exclude || empty( $values['item_meta'] ) || $errors ) {
-			// only check spam if there are no other errors
+			// Only check spam if there are no other errors
 			return;
 		}
 
@@ -586,9 +586,11 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return FrmAppHelper::pro_is_installed() &&
 			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || FrmAppHelper::get_post_param( 'frm_next_page' ) ) &&
 			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1021,7 +1023,7 @@ class FrmEntryValidate {
 
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
-			$option_value = ! is_array( $option ) ? $option : ( $option['value'] ?? '' );
+			$option_value = is_array( $option ) ? ( $option['value'] ?? '' ) : $option;
 
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
@@ -1071,8 +1073,7 @@ class FrmEntryValidate {
 	 * @return void
 	 */
 	public static function prepare_values_for_spam_check( &$values ) {
-		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
-		$values['form_ids'] = $form_ids;
+		$values['form_ids'] = self::get_all_form_ids_and_flatten_meta( $values );
 	}
 
 	/**

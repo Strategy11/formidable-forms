@@ -661,7 +661,7 @@ class FrmEmail {
 	 * @return array|string Emails.
 	 */
 	private function explode_emails( $emails ) {
-		$emails = ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '';
+		$emails = $emails ? preg_split( '/(,|;)/', $emails ) : '';
 		return is_array( $emails ) ? array_map( 'trim', $emails ) : trim( $emails );
 	}
 
@@ -721,7 +721,7 @@ class FrmEmail {
 			list( $from_name, $from_email ) = $this->get_name_and_email_for_sender( $from );
 		}
 
-		// if sending the email from a yahoo address, change it to the WordPress default
+		// If sending the email from a yahoo address, change it to the WordPress default
 		if ( str_contains( $from_email, '@yahoo.com' ) ) {
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
@@ -826,31 +826,34 @@ class FrmEmail {
 	 */
 	private function handle_phone_numbers() {
 		foreach ( $this->to as $key => $recipient ) {
-			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
-				$recipient = explode( ' ', $recipient );
+			if ( '[admin_email]' === $recipient || is_email( $recipient ) ) {
+				continue;
+			}
 
-				if ( is_email( end( $recipient ) ) ) {
-					continue;
-				}
+			$recipient = explode( ' ', $recipient );
 
-				do_action(
-					'frm_send_to_not_email',
-					array(
-						'e'           => $recipient,
-						'subject'     => $this->subject,
-						'mail_body'   => $this->message,
-						'reply_to'    => $this->reply_to,
-						'from'        => $this->from,
-						'plain_text'  => $this->is_plain_text,
-						'attachments' => $this->attachments,
-						'form'        => $this->form,
-						'email_key'   => $key,
-					)
-				);
+			if ( is_email( end( $recipient ) ) ) {
+				continue;
+			}
 
-				// Remove phone number from to addresses
-				unset( $this->to[ $key ] );
-			}//end if
+			do_action(
+				'frm_send_to_not_email',
+				array(
+					'e'           => $recipient,
+					'subject'     => $this->subject,
+					'mail_body'   => $this->message,
+					'reply_to'    => $this->reply_to,
+					'from'        => $this->from,
+					'plain_text'  => $this->is_plain_text,
+					'attachments' => $this->attachments,
+					'form'        => $this->form,
+					'email_key'   => $key,
+				)
+			);
+
+			// Remove phone number from to addresses
+			unset( $this->to[ $key ] );
+		// end if
 		}//end foreach
 	}
 

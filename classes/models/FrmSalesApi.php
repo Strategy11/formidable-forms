@@ -192,8 +192,8 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		if ( ! is_array( $sale ) || ! isset( $sale['key'] ) ) {
-			// if the API response is invalid, $sale may not be an array.
-			// if there are no sales from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
+			// If the API response is invalid, $sale may not be an array.
+			// If there are no sales from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
@@ -437,6 +437,7 @@ class FrmSalesApi extends FrmFormApi {
 			$dismiss_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
 			<div>
@@ -458,6 +459,7 @@ class FrmSalesApi extends FrmFormApi {
 			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?></a>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		return true;
 	}

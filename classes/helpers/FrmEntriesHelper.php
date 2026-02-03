@@ -258,11 +258,11 @@ class FrmEntriesHelper {
 			}
 		}
 
-		$field_value = array();
-
 		if ( empty( $child_entries ) ) {
 			return '';
 		}
+
+		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
 			$atts['item_id'] = $child_entry->id;
@@ -272,7 +272,7 @@ class FrmEntriesHelper {
 			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
 
 			if ( $entry_val || '0' === $entry_val ) {
-				// foreach entry get display_value.
+				// For each entry get display_value.
 				$field_value[] = self::display_value( $entry_val, $field, $atts );
 			}
 
@@ -416,9 +416,9 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @param array|int|object $field
-	 * @param mixed            $value
-	 * @param array            $args
+	 * @param array|int|object|string $field
+	 * @param mixed                   $value
+	 * @param array                   $args
 	 *
 	 * @return void
 	 */
@@ -678,18 +678,18 @@ class FrmEntriesHelper {
 			}
 		}
 
-		// finally get the correct version number
+		// Finally get the correct version number
 		$known   = array( 'Version', $ub, 'other' );
 		$pattern = '#(?<browser>' . implode( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
 		// Get the matching numbers.
 		preg_match_all( $pattern, $u_agent, $matches );
 
-		// see how many we have
+		// See how many we have
 		$i = count( $matches['browser'] );
 
 		if ( $i > 1 ) {
 			// We will have two since we are not using 'other' argument yet
-			// see if version is before or after the name.
+			// See if version is before or after the name.
 			$version = strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ? $matches['version'][0] : $matches['version'][1];
 		} elseif ( $i === 1 ) {
 			$version = $matches['version'][0];
@@ -697,7 +697,7 @@ class FrmEntriesHelper {
 			$version = '';
 		}
 
-		// check if we have a number
+		// Check if we have a number
 		if ( $version === '' ) {
 			$version = '?';
 		}
@@ -717,6 +717,7 @@ class FrmEntriesHelper {
 		$links = self::get_action_links( $id, $atts['entry'] );
 
 		foreach ( $links as $link ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 		<div class="misc-pub-section">
 			<a href="<?php echo esc_url( $link['url'] ); ?>"
@@ -741,6 +742,7 @@ class FrmEntriesHelper {
 			</a>
 		</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}//end foreach
 	}
 

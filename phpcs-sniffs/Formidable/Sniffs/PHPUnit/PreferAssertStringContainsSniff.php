@@ -80,6 +80,18 @@ class PreferAssertStringContainsSniff implements Sniff {
 			return;
 		}
 
+		// Check for negation (! str_contains).
+		$isNegated = false;
+
+		if ( $tokens[ $firstArg ]['code'] === T_BOOLEAN_NOT ) {
+			$isNegated = true;
+			$firstArg  = $phpcsFile->findNext( T_WHITESPACE, $firstArg + 1, null, true );
+
+			if ( false === $firstArg ) {
+				return;
+			}
+		}
+
 		// Check if first argument is str_contains or strpos function call.
 		if ( $tokens[ $firstArg ]['code'] !== T_STRING ) {
 			return;
@@ -110,12 +122,26 @@ class PreferAssertStringContainsSniff implements Sniff {
 		}
 		$assertCloseParen = $tokens[ $openParen ]['parenthesis_closer'];
 
-		// Check that str_contains is the only argument (no && or || after it).
+		// Check what comes after str_contains - allow comma for message argument, but not && or ||.
 		$nextAfterFunc = $phpcsFile->findNext( T_WHITESPACE, $funcCloseParen + 1, $assertCloseParen, true );
+		$messageArg    = '';
 
 		if ( false !== $nextAfterFunc ) {
-			// There's something else after the str_contains call - skip this.
-			return;
+			// If it's a comma, there might be a message argument - that's OK.
+			if ( $tokens[ $nextAfterFunc ]['code'] === T_COMMA ) {
+				// Capture the message argument.
+				$messageStart = $phpcsFile->findNext( T_WHITESPACE, $nextAfterFunc + 1, $assertCloseParen, true );
+
+				if ( false !== $messageStart ) {
+					for ( $i = $messageStart; $i < $assertCloseParen; $i++ ) {
+						$messageArg .= $tokens[ $i ]['content'];
+					}
+					$messageArg = trim( $messageArg );
+				}
+			} elseif ( in_array( $tokens[ $nextAfterFunc ]['code'], array( T_BOOLEAN_AND, T_BOOLEAN_OR ), true ) ) {
+				// There's a boolean operator - skip this complex expression.
+				return;
+			}
 		}
 
 		// Parse the two arguments of str_contains.
@@ -127,14 +153,18 @@ class PreferAssertStringContainsSniff implements Sniff {
 
 		// Determine the new method name.
 		// assertTrue(str_contains()) -> assertStringContainsString
+		// assertTrue(! str_contains()) -> assertStringNotContainsString
 		// assertFalse(str_contains()) -> assertStringNotContainsString
 		// assertNotFalse(strpos()) -> assertStringContainsString
 		// assertFalse(strpos()) -> assertStringNotContainsString
-		if ( 'asserttrue' === $methodName || 'assertnotfalse' === $methodName ) {
-			$newMethodName = 'assertStringContainsString';
-		} else {
-			$newMethodName = 'assertStringNotContainsString';
+		$wantsContains = ( 'asserttrue' === $methodName || 'assertnotfalse' === $methodName );
+
+		// Negation flips the result.
+		if ( $isNegated ) {
+			$wantsContains = ! $wantsContains;
 		}
+
+		$newMethodName = $wantsContains ? 'assertStringContainsString' : 'assertStringNotContainsString';
 
 		$fix = $phpcsFile->addFixableError(
 			'Use %s() instead of %s(%s()).',
@@ -144,7 +174,7 @@ class PreferAssertStringContainsSniff implements Sniff {
 		);
 
 		if ( true === $fix ) {
-			$this->applyFix( $phpcsFile, $stackPtr, $openParen, $assertCloseParen, $newMethodName, $args );
+			$this->applyFix( $phpcsFile, $stackPtr, $openParen, $assertCloseParen, $newMethodName, $args, $messageArg );
 		}
 	}
 
@@ -203,10 +233,11 @@ class PreferAssertStringContainsSniff implements Sniff {
 	 * @param int    $assertCloseParen The closing parenthesis of assertTrue.
 	 * @param string $newMethodName    The new method name.
 	 * @param array  $args             The parsed arguments (haystack, needle).
+	 * @param string $messageArg       Optional message argument.
 	 *
 	 * @return void
 	 */
-	private function applyFix( File $phpcsFile, $methodNamePtr, $openParen, $assertCloseParen, $newMethodName, $args ) {
+	private function applyFix( File $phpcsFile, $methodNamePtr, $openParen, $assertCloseParen, $newMethodName, $args, $messageArg = '' ) {
 		$fixer = $phpcsFile->fixer;
 
 		$fixer->beginChangeset();
@@ -224,8 +255,17 @@ class PreferAssertStringContainsSniff implements Sniff {
 			$fixer->replaceToken( $i, '' );
 		}
 
+		// Build the new content.
+		$newContent = ' ' . $needle . ', ' . $haystack;
+
+		if ( '' !== $messageArg ) {
+			$newContent .= ', ' . $messageArg;
+		}
+
+		$newContent .= ' ';
+
 		// Insert the new content after the opening paren.
-		$fixer->addContent( $openParen, ' ' . $needle . ', ' . $haystack . ' ' );
+		$fixer->addContent( $openParen, $newContent );
 
 		$fixer->endChangeset();
 	}

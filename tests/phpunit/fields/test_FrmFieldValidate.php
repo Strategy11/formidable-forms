@@ -80,6 +80,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function expected_format_errors() {
 		return array(
 			array(
@@ -216,7 +219,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 20, $field->field_options['maxnum'] );
+		$this->assertSame( 20, $field->field_options['maxnum'] );
 
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
 		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed range validation ' . print_r( $errors, 1 ) );
@@ -250,10 +253,16 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @param string $field_type
+	 */
 	protected function get_field_key( $field_type ) {
 		return $field_type . '-form' . $this->form->id;
 	}
 
+	/**
+	 * @param array $item_meta
+	 */
 	protected function check_single_value( $item_meta ) {
 		$_POST = array(
 			'form_id'   => $this->form->id,
@@ -282,7 +291,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			array(
 				'field_key' => 'phone_with_regex',
 				'format'    => '^\d{3}-\d{4}$',
-				'expected'  => '^\d{3}-\d{4}$', // leave it alone
+				'expected'  => '^\d{3}-\d{4}$', // Leave it alone
 			),
 		);
 
@@ -348,7 +357,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 'logged', $akismet_logged->options['akismet'] );
+		$this->assertSame( 'logged', $akismet_logged->options['akismet'] );
 
 		wp_set_current_user( 0 );
 		$this->assertFalse( is_user_logged_in() );
