@@ -502,7 +502,7 @@ class FrmFormActionsController {
 	 * @return bool
 	 */
 	private static function should_show_log_message( $action_type ) {
-		$logging = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
+		$logging = array( 'api', 'aweber', 'campaignmonitor', 'getresponse', 'hubspot', 'mailchimp', 'mailpoet', 'salesforce', 'constantcontact', 'activecampaign', 'zapier' );
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
