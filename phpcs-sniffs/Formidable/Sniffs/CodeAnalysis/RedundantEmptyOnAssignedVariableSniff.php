@@ -423,11 +423,11 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 
 			$hasAnyAssignment = true;
 
-			// Check if the assignment is at the same scope level as the statement.
-			// This ensures the variable was assigned unconditionally before the statement.
+			// Check if the assignment executes before (or at the same level as) the statement.
+			// Assignments inside deeper nested scopes might not always run, so skip those.
 			$assignmentLevel = $tokens[ $i ]['level'];
 
-			if ( $assignmentLevel !== $statementLevel ) {
+			if ( $assignmentLevel > $statementLevel ) {
 				continue;
 			}
 
