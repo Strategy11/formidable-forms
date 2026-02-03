@@ -97,7 +97,7 @@ class FrmFormsHelper {
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( $class ) {
-			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
+			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( sanitize_text_field( $class ) ) . '"';
 		}
 	}
 
