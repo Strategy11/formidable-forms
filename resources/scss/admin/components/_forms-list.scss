@@ -2,7 +2,7 @@
 	position: relative;
 }
 
-.frm-forms-list-settings {
+#frm-forms-list-settings {
 	position: absolute;
 	top: 100%;
 	right: 0;
@@ -11,4 +11,15 @@
 	border-radius: 8px;
 	border: 1px solid #F2F4F7;
 	box-shadow: 0 1.88px 4px -1px rgba(16, 24, 40, 0.03);
+
+	tfoot & {
+		top: auto;
+		bottom: 100%;
+	}
+}
+
+.wp-list-table.toplevel_page_formidable {
+	.column-settings {
+		width: 25px;
+	}
 }

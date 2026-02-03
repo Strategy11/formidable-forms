@@ -3,24 +3,52 @@
 
 	const { documentOn } = frmDom.util;
 
-	// Click the gear icon.
-	documentOn( 'click', '.frm-forms-list-settings-btn', event => {
+	function handleClickFormsListSettings( event ) {
 		event.preventDefault();
+		const btn = 'A' === event.target.tagName ? event.target : event.target.closest( 'a' );
 
-		if ( event.target.nextElementSibling && event.target.nextElementSibling.classList.contains( 'frm-forms-list-settings' ) ) {
-			event.target.nextElementSibling.classList.toggle( 'frm_hidden' );
+		// If the dropdown is already moved here, toggle it.
+		if ( btn.nextElementSibling && 'frm-forms-list-settings' === btn.nextElementSibling.id ) {
+			btn.nextElementSibling.classList.toggle( 'frm_hidden' );
 			return;
 		}
 
-		const dropdownWrapper = document.getElementById( 'frm-forms-list-settings-tmpl' );
+		// Move the dropdown to after the button.
+		const dropdownWrapper = document.getElementById( 'frm-forms-list-settings' );
 		if ( ! dropdownWrapper ) {
 			return;
 		}
 
-		const clonedEl = dropdownWrapper.cloneNode( true );
-		clonedEl.id = '';
+		btn.after( dropdownWrapper );
+		dropdownWrapper.classList.remove( 'frm_hidden' );
+	}
 
-		event.target.after( clonedEl );
-		clonedEl.classList.toggle( 'frm_hidden' );
-	});
+	function handleClickFormsListSettingsApplyBtn( event ) {
+		// Update the screen options form inputs.
+		const screenOptionsForm = document.getElementById( 'adv-settings' );
+		if ( ! screenOptionsForm ) {
+			// This page may not support screen options.
+			return;
+		}
+
+		document.querySelectorAll( '#frm-forms-list-settings [data-screen-option-id]' ).forEach( input => {
+			const screenOptionInput = document.getElementById( input.dataset.screenOptionId );
+			if ( ! screenOptionInput ) {
+				return;
+			}
+
+			if ( 'INPUT' === input.tagName && 'checkbox' === input.type ) {
+				screenOptionInput.checked = input.checked;
+			} else {
+				screenOptionInput.value = input.value;
+			}
+		} );
+
+		screenOptionsForm.submit();
+	}
+
+	// Click the gear icon.
+	documentOn( 'click', '.frm-forms-list-settings-btn', handleClickFormsListSettings );
+
+	documentOn( 'click', '#frm-save-forms-list-settings-btn', handleClickFormsListSettingsApplyBtn );
 }() );

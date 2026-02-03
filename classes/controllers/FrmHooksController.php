@@ -155,6 +155,7 @@ class FrmHooksController {
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields' );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
+		add_filter( 'screen_settings', 'FrmFormsController::add_screen_options' );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
 		add_action( 'admin_footer', 'FrmFormsController::print_forms_list_templates' );
 
