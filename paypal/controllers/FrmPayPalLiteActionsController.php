@@ -665,7 +665,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return WP_Post
 	 */
 	private static function set_gateway_as_default( $action_settings, $action_type ) {
-		$action_settings->post_content['gateway'] = $action_type;
+		$action_settings->post_content['gateway'] = array( $action_type );
 		return $action_settings;
 	}
 
