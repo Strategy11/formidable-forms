@@ -375,17 +375,15 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function get_user_link( $user_id ) {
-		$user_link = esc_html__( 'Guest', 'formidable' );
-
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
 
 			if ( $user ) {
-				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
+                return '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
 		}
 
-		return $user_link;
+        return esc_html__( 'Guest', 'formidable' );
 	}
 
 	/**
@@ -565,10 +563,10 @@ class FrmTransLiteAppHelper {
 			<?php
 			if ( in_array( 'square', $gateways, true ) ) {
 				$option_params = array(
-					'class'    => 'square-currency',
-					'selected' => 'selected',
-					'value'    => 'square',
-				);
+			'class'    => 'square-currency',
+			'selected' => 'selected',
+			'value'    => 'square',
+			);
 				?>
 				<option <?php FrmAppHelper::array_to_html_params( $option_params, true ); ?>><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
 				<?php
@@ -576,12 +574,12 @@ class FrmTransLiteAppHelper {
 
 			foreach ( $currencies as $code => $currency ) {
 				FrmHtmlHelper::echo_dropdown_option(
-					$currency['name'] . ' (' . strtoupper( $code ) . ')',
-					$selected === strtolower( $code ),
-					array(
-						'value' => strtolower( $code ),
-					)
-				);
+			$currency['name'] . ' (' . strtoupper( $code ) . ')',
+			$selected === strtolower( $code ),
+			array(
+			'value' => strtolower( $code ),
+			)
+		);
 				unset( $currency, $code );
 			}
 			?>
