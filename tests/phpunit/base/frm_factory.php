@@ -47,6 +47,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		if ( isset( $args['field_options'] ) ) {
 			$field_values = array_merge( $field_values, $args['field_options'] );
 		}
+
 		FrmField::create( $field_values );
 
 		return $form;

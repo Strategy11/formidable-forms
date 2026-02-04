@@ -96,7 +96,7 @@ class FrmStrpLiteSettings {
 				if ( 'processing_message' === $setting ) {
 					$value = str_replace( '\\', '', $value );
 				}
-				$this->settings->{$setting} = trim( sanitize_text_field( $value ) );
+				$this->settings->{$setting} = sanitize_text_field( $value );
 			}
 		}
 
