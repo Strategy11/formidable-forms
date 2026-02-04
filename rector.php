@@ -52,7 +52,6 @@ use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 // EarlyReturn
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
-use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 
 // Php53, Php54, Php70
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
