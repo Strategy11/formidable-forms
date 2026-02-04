@@ -25,7 +25,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		);
 
 		$this->assertTrue( $date instanceof DateTime );
-		$this->assertEquals( $date->format( 'Y-m-d' ), '2023-08-13' );
+		$this->assertSame( $date->format( 'Y-m-d' ), '2023-08-13' );
 
 		$this->assertFalse(
 			$this->run_private_method(
@@ -36,7 +36,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 	}
 
 	public function test_get_date_diff() {
-		$this->assertEquals(
+		$this->assertSame(
 			$this->run_private_method(
 				array( 'FrmEmailSummaryHelper', 'get_date_diff' ),
 				array( '2023-08-12', '2023-08-16' )
@@ -121,19 +121,19 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$this->save_options( $options );
 		$this->assertEquals( array( 'monthly' ), FrmEmailSummaryHelper::should_send_emails() );
 
-		// renewal date is coming, but monthly was sent less than 30 days ago.
+		// Renewal date is coming, but monthly was sent less than 30 days ago.
 		$options['last_monthly'] = FrmEmailSummaryHelper::get_date_from_today( '-29 days' );
 		$options['renewal_date'] = FrmEmailSummaryHelper::get_date_from_today( '+1 day' );
 		$this->save_options( $options );
 		$this->assertEquals( array(), FrmEmailSummaryHelper::should_send_emails() );
 
-		// renewal date is coming, but yearly was sent less than 1 year ago.
+		// Renewal date is coming, but yearly was sent less than 1 year ago.
 		$options['last_monthly'] = '';
 		$options['last_yearly']  = FrmEmailSummaryHelper::get_date_from_today( '-300 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array( 'monthly' ), FrmEmailSummaryHelper::should_send_emails() );
 
-		// renewal date is coming in more than 45 days, but yearly was sent more than 1 year ago.
+		// Renewal date is coming in more than 45 days, but yearly was sent more than 1 year ago.
 		$options['last_yearly'] = FrmEmailSummaryHelper::get_date_from_today( '-365 days' );
 		$this->save_options( $options );
 		$this->assertEquals( array( 'yearly' ), FrmEmailSummaryHelper::should_send_emails() );
@@ -157,7 +157,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		add_filter(
 			'pre_http_request',
 			function ( $pre, $parsed_args, $url ) {
-				if ( strpos( $url, 'formidableforms.com' ) === false ) {
+				if ( ! str_contains( $url, 'formidableforms.com' ) ) {
 					return $pre;
 				}
 
@@ -175,10 +175,10 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
 		$recipients = 'test@example.com';
 		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
-		$this->assertEquals( '', $recipients );
+		$this->assertSame( '', $recipients );
 
 		$recipients = 'test@example.com,recipient2@example.com';
 		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
-		$this->assertEquals( 'recipient2@example.com', $recipients );
+		$this->assertSame( 'recipient2@example.com', $recipients );
 	}
 }

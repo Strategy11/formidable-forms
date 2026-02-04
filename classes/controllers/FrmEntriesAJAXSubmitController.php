@@ -80,8 +80,7 @@ class FrmEntriesAJAXSubmitController {
 			if ( ! empty( $frm_vars['forms_loaded'] ) ) {
 				ob_start();
 				self::print_ajax_scripts();
-				$response['content'] .= ob_get_contents();
-				ob_end_clean();
+				$response['content'] .= ob_get_clean();
 
 				// Mark the end of added footer content.
 				$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';
@@ -203,7 +202,7 @@ class FrmEntriesAJAXSubmitController {
 	private static function check_for_failed_form_submission( $response, $form_id ) {
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form_id ) );
 
-		if ( false !== strpos( $response['content'], $frm_settings->failed_msg ) ) {
+		if ( str_contains( $response['content'], $frm_settings->failed_msg ) ) {
 			$response['errors']['failed'] = $frm_settings->failed_msg;
 			$response['content']          = '';
 		}

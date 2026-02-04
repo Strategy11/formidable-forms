@@ -1,4 +1,94 @@
 <?xml version="1.0"?>
 <ruleset name="Formidable">
 	<description>Custom sniffs for Formidable Forms</description>
+
+	<!-- Whitespace -->
+	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
+	<rule ref="Formidable.WhiteSpace.BlankLineBeforeReturnAfterBrace" />
+	<rule ref="Formidable.WhiteSpace.ConsecutiveAssignmentSpacing" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterLoopOpen" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterIfOpen" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterFunctionOpen" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineBeforeCloseBrace" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineInShortIf" />
+	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
+
+	<!-- Code Analysis -->
+	<rule ref="Formidable.CodeAnalysis.CheckFunctionCallable" />
+	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
+	<rule ref="Formidable.CodeAnalysis.FlipIfElseToEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnInitialValue" />
+	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
+	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
+	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
+	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
+	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
+	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
+	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
+	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
+	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
+	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
+	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
+	<rule ref="Formidable.CodeAnalysis.PreferGuardClauseForReturnElse" />
+	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
+	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
+	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
+	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrcasecmp" />
+	<rule ref="Formidable.CodeAnalysis.PreferTruthyOverNotEmptyForFunctionCall" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnGlobal" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnLoopVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIsArrayBeforeEmptyArrayCheck" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIssetBeforeNotEmpty" />
+	<rule ref="Formidable.CodeAnalysis.RedundantNotIssetBeforeEmpty" />
+	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
+	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
+	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantEmptyAfterTruthy" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantTrimAfterSanitize" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantReturnVariable" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyDualConditionToTernary" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyEmptyTernary" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetEmptyCheck" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyRedundantFalsyCheck" />
+	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
+	<rule ref="Formidable.CodeAnalysis.UpdateOptionAutoloadBoolean" />
+
+	<!-- PHPUnit -->
+	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
+	<rule ref="Formidable.PHPUnit.PreferAssertArrayHasKey" />
+	<rule ref="Formidable.PHPUnit.PreferAssertStringContains" />
+	<rule ref="Formidable.PHPUnit.PreferAssertContains" />
+	<rule ref="Formidable.PHPUnit.PreferAssertFileExists" />
+
+	<!-- Commenting -->
+	<rule ref="Formidable.Commenting.AddBoolReturnTag" />
+	<rule ref="Formidable.Commenting.AddMissingDocblock" />
+	<rule ref="Formidable.Commenting.AddMissingParamType" />
+	<rule ref="Formidable.Commenting.AddMissingParamTypeFromDefault" />
+	<rule ref="Formidable.Commenting.AddMissingParamTypeFromCalls" />
+	<rule ref="Formidable.Commenting.AlignFilterParamTypesWithFunction" />
+	<rule ref="Formidable.Commenting.CommentSpacing" />
+	<rule ref="Formidable.Commenting.ConvertReturnVariableToDescription" />
+	<rule ref="Formidable.Commenting.FixIncorrectReturnType" />
+
+	<!-- Security -->
+	<rule ref="Formidable.Security.AddDirectFileAccessCheck" />
+	<rule ref="Formidable.Security.BreakEchoConcatenation" />
+	<rule ref="Formidable.Security.EscapeInHtml" />
+	<rule ref="Formidable.Security.PreferWpSafeRedirect" />
 </ruleset>

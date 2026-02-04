@@ -79,7 +79,7 @@ class FrmSalesApi extends FrmFormApi {
 
 		$api = $this->get_api_info();
 
-		if ( empty( $api ) ) {
+		if ( ! $api ) {
 			return;
 		}
 
@@ -192,8 +192,8 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		if ( ! is_array( $sale ) || ! isset( $sale['key'] ) ) {
-			// if the API response is invalid, $sale may not be an array.
-			// if there are no sales from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
+			// If the API response is invalid, $sale may not be an array.
+			// If there are no sales from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
@@ -345,6 +345,7 @@ class FrmSalesApi extends FrmFormApi {
 			$option = mt_rand( 0, 1 );
 			update_option( 'frm_sale_ab_group', $option, false );
 		}
+
 		return (int) $option;
 	}
 
@@ -436,6 +437,7 @@ class FrmSalesApi extends FrmFormApi {
 			$dismiss_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
 			<div>
@@ -454,9 +456,10 @@ class FrmSalesApi extends FrmFormApi {
 					<?php echo esc_html( $banner_cta_text ); ?>
 				</a>
 			</div>
-			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon' ); ?></a>
+			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?></a>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		return true;
 	}

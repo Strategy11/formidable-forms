@@ -63,9 +63,6 @@ class FrmFieldCreditCard extends FrmFieldType {
 			FrmStrpLiteActionsController::show_card( $this->field, $args['field_name'], $pass_args );
 		}
 
-		$input_html = ob_get_contents();
-		ob_end_clean();
-
-		return $input_html;
+		return ob_get_clean();
 	}
 }

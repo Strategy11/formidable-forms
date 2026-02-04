@@ -34,9 +34,9 @@ class test_FrmMisc extends FrmUnitTest {
 
 	public function test_no_references_to_map_files() {
 		$popper_js = file_get_contents( FrmAppHelper::plugin_path() . '/js/popper.min.js' );
-		$this->assertStringNotContainsString( 'sourceMappingURL=popper.min.js.map', $popper_js, 'We do not want the popper JS file to include a source map reference. Since the sourcem ap is not included, this shows 404 errors in Safari.' );
+		$this->assertStringNotContainsString( 'sourceMappingURL=popper.min.js.map', $popper_js, 'We do not want the popper JS file to include a source map reference. Since the sourcem ap is not included, this shows 404 errors in Safari.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$bootstrap_js = file_get_contents( FrmAppHelper::plugin_path() . '/js/bootstrap.min.js' );
-		$this->assertStringNotContainsString( 'sourceMappingURL=bootstrap.min.js.map', $bootstrap_js, 'We do not want the popper JS file to include a source map reference. Since the sourcem ap is not included, this shows 404 errors in Safari.' );
+		$this->assertStringNotContainsString( 'sourceMappingURL=bootstrap.min.js.map', $bootstrap_js, 'We do not want the popper JS file to include a source map reference. Since the sourcem ap is not included, this shows 404 errors in Safari.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 }

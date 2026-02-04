@@ -26,7 +26,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		$defaults = FrmFormsHelper::setup_new_vars( false );
 
 		if ( isset( $defaults['submit_conditions'] ) ) {
-			// the array default is causing errors with unit test code
+			// The array default is causing errors with unit test code
 			unset( $defaults['submit_conditions'] );
 		}
 		$this->default_generation_definitions = $defaults;
@@ -37,14 +37,17 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		$this->default_generation_definitions['protect_files_role'] = '';
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function create_object( $args ) {
-		$form = FrmForm::create( $args );
-
+		$form         = FrmForm::create( $args );
 		$field_values = FrmFieldsHelper::setup_new_vars( 'text', $form );
 
 		if ( isset( $args['field_options'] ) ) {
 			$field_values = array_merge( $field_values, $args['field_options'] );
 		}
+
 		FrmField::create( $field_values );
 
 		return $form;
@@ -76,6 +79,9 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		);
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function create_object( $args ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $args['type'], $args['form_id'] );
 		unset( $args['type'], $args['form_id'] );
@@ -113,6 +119,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		foreach ( $form_fields as $field ) {
 			$entry_data['item_meta'][ $field->id ] = $this->set_field_value( $field );
 		}
+
 		return $entry_data;
 	}
 
@@ -141,7 +148,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'url'      => 'http://sometest.com',
 			'number'   => 120,
 			'scale'    => 8,
-			'date'     => '2015-01-01',
+			'date'     => '2026-01-01',
 			'time'     => '13:30:00',
 			'user_id'  => get_current_user_id(),
 			'phone'    => '222-222-2222',
@@ -149,11 +156,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'quantity' => 2,
 		);
 
-		if ( isset( $field_values[ $field->type ] ) ) {
-			$value = $field_values[ $field->type ];
-		}
-
-		return $value;
+		return $field_values[ $field->type ] ?? $value;
 	}
 
 	public function get_id_by_key( $field_key ) {
@@ -173,6 +176,9 @@ class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 		);
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function create_object( $args ) {
 		$default_values = array(
 			'form_id'   => $args['form_id'],

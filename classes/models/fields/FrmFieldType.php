@@ -120,10 +120,7 @@ abstract class FrmFieldType {
 	 * @return string
 	 */
 	public function __get( $key ) {
-		if ( property_exists( $this, $key ) ) {
-			return $this->{$key};
-		}
-		return '';
+		return property_exists( $this, $key ) ? $this->{$key} : '';
 	}
 
 	/**
@@ -135,7 +132,7 @@ abstract class FrmFieldType {
 		if ( empty( $this->type ) ) {
 			$this->type = $this->get_field_column( 'type' );
 
-			if ( empty( $this->type ) && ! empty( $type ) ) {
+			if ( empty( $this->type ) && $type ) {
 				$this->type = $type;
 			}
 		}
@@ -270,7 +267,7 @@ DEFAULT_HTML;
 		$field        = FrmFieldsHelper::setup_edit_vars( $this->field );
 		$include_file = $this->include_form_builder_file();
 
-		if ( ! empty( $include_file ) ) {
+		if ( $include_file ) {
 			$this->include_on_form_builder( $name, $field );
 		} elseif ( $this->has_input ) {
 			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -286,6 +283,7 @@ DEFAULT_HTML;
 	 */
 	public function show_label_on_form_builder() {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
@@ -297,6 +295,7 @@ DEFAULT_HTML;
 			</span>
 		</label>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -335,8 +334,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function builder_text_field( $name = '' ) {
-		$read_only = FrmField::get_option( $this->field, 'read_only' );
-
+		$read_only   = FrmField::get_option( $this->field, 'read_only' );
 		$placeholder = FrmField::get_option( $this->field, 'placeholder' );
 
 		if ( is_array( $placeholder ) ) {
@@ -371,8 +369,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function html_name( $name = '' ) {
-		$prefix = empty( $name ) ? 'item_meta' : $name;
-
+		$prefix = $name ? $name : 'item_meta';
 		return $prefix . '[' . $this->get_field_column( 'id' ) . ']';
 	}
 
@@ -476,7 +473,6 @@ DEFAULT_HTML;
 	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
-
 		return $this->alter_builder_classes( $classes );
 	}
 
@@ -602,7 +598,7 @@ DEFAULT_HTML;
 	public function display_smart_values_modal_trigger_icon( $field ) {
 		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
 		FrmAppHelper::icon_by_class(
-			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+			'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 			array(
 				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
@@ -724,6 +720,7 @@ DEFAULT_HTML;
 	 */
 	protected function field_choices_heading( $args ) {
 		$all_field_types = self::get_all_field_types();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
@@ -736,6 +733,7 @@ DEFAULT_HTML;
 			?>
 		</h3>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -814,9 +812,8 @@ DEFAULT_HTML;
 			return;
 		}
 
-		$is_empty = array_filter( $default_value );
-
-		$default_value = empty( $is_empty ) ? '' : implode( ',', $default_value );
+		$is_empty      = array_filter( $default_value );
+		$default_value = $is_empty === array() ? '' : implode( ',', $default_value );
 	}
 
 	/**
@@ -827,7 +824,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function auto_width_setting( $args ) {
-		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
+		$use_style = ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'];
 
 		if ( $use_style ) {
 			$field = $args['field'];
@@ -873,7 +870,7 @@ DEFAULT_HTML;
 		$fields = array_merge( $fields, $pro_fields );
 
 		if ( isset( $fields[ $this->type ] ) ) {
-			$name = is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
+			return is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
 		}
 
 		return $name;
@@ -936,7 +933,6 @@ DEFAULT_HTML;
 	 */
 	public function prepare_front_field( $values, $atts ) {
 		$values['value'] = $this->prepare_field_value( $values['value'], $atts );
-
 		return $values;
 	}
 
@@ -958,7 +954,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function get_options( $values ) {
-		if ( empty( $values ) ) {
+		if ( ! $values ) {
 			$values = (array) $this->field;
 		}
 
@@ -993,7 +989,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function get_field_scripts_hook( $args ) {
-		$form_id = isset( $args['parent_form_id'] ) && $args['parent_form_id'] ? $args['parent_form_id'] : $args['form']->id;
+		$form_id = ! empty( $args['parent_form_id'] ) ? $args['parent_form_id'] : $args['form']->id;
 		do_action( 'frm_get_field_scripts', $this->field, $args['form'], $form_id );
 	}
 
@@ -1010,21 +1006,21 @@ DEFAULT_HTML;
 
 		$args = $this->fill_display_field_values( $args );
 
-		if ( $this->has_html ) {
-			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
-			$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
-			$args['field_obj'] = $this;
-
-			$label = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
-			$this->set_field_column( 'label', $label );
-
-			$html_shortcode = new FrmFieldFormHtml( $args );
-			$html           = $html_shortcode->get_html();
-			$html           = $this->after_replace_html_shortcodes( $args, $html );
-			$html_shortcode->remove_collapse_shortcode( $html );
-		} else {
-			$html = $this->include_front_field_input( $args, array() );
+		if ( ! $this->has_html ) {
+			return $this->include_front_field_input( $args, array() );
 		}
+
+		$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
+		$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
+		$args['field_obj'] = $this;
+
+		$label = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
+		$this->set_field_column( 'label', $label );
+
+		$html_shortcode = new FrmFieldFormHtml( $args );
+		$html           = $html_shortcode->get_html();
+		$html           = $this->after_replace_html_shortcodes( $args, $html );
+		$html_shortcode->remove_collapse_shortcode( $html );
 
 		return $html;
 	}
@@ -1070,10 +1066,9 @@ DEFAULT_HTML;
 		$is_radio    = FrmField::is_radio( $this->field );
 		$is_checkbox = FrmField::is_checkbox( $this->field );
 		$align       = FrmField::get_option( $this->field, 'align' );
+		$class       = '';
 
-		$class = '';
-
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
+		if ( $align && ( $is_radio || $is_checkbox ) ) {
 			self::prepare_align_class( $align );
 			$class .= ' ' . $align;
 		}
@@ -1114,7 +1109,7 @@ DEFAULT_HTML;
 		$input_class   = FrmField::get_option( $this->field, 'input_class' );
 		$extra_classes = $this->get_input_class();
 
-		if ( ! empty( $extra_classes ) ) {
+		if ( $extra_classes ) {
 			$input_class .= ' ' . $extra_classes;
 		}
 
@@ -1161,7 +1156,7 @@ DEFAULT_HTML;
 	public function include_front_field_input( $args, $shortcode_atts ) {
 		$include_file = $this->include_front_form_file();
 
-		if ( ! empty( $include_file ) ) {
+		if ( $include_file ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
 			$input = $this->front_field_input( $args, $shortcode_atts );
@@ -1190,7 +1185,7 @@ DEFAULT_HTML;
 
 		$include_file = $this->include_front_form_file();
 
-		if ( empty( $include_file ) ) {
+		if ( ! $include_file ) {
 			return null;
 		}
 
@@ -1209,8 +1204,7 @@ DEFAULT_HTML;
 
 		ob_start();
 		include $include_file;
-		$input_html = ob_get_contents();
-		ob_end_clean();
+		$input_html = ob_get_clean();
 
 		return $hidden . $input_html;
 	}
@@ -1227,7 +1221,7 @@ DEFAULT_HTML;
 		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
-		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>';
+		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -1255,10 +1249,7 @@ DEFAULT_HTML;
 			$value = implode( ', ', $value );
 		}
 
-		if ( strpos( $value, '&lt;' ) !== false ) {
-			$value = htmlentities( $value );
-		}
-		return $value;
+		return str_contains( $value, '&lt;' ) ? htmlentities( $value ) : $value;
 	}
 
 	/**
@@ -1273,7 +1264,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
-		// override from other fields
+		// Override from other fields
 	}
 
 	/**
@@ -1316,7 +1307,7 @@ DEFAULT_HTML;
 		$is_read_only = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
 
 		if ( $is_read_only && $this->show_readonly_hidden() ) {
-			$hidden = $this->show_hidden_values( $args );
+			return $this->show_hidden_values( $args );
 		}
 
 		return $hidden;
@@ -1389,15 +1380,15 @@ DEFAULT_HTML;
 		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
 
-		if ( is_array( $selected_value ) ) {
-			$args['save_array'] = true;
-
-			foreach ( $selected_value as $selected ) {
-				$hidden .= $this->show_single_hidden( $selected, $args );
-			}
-		} else {
+		if ( ! is_array( $selected_value ) ) {
 			$args['save_array'] = $this->is_readonly_array();
-			$hidden            .= $this->show_single_hidden( $selected_value, $args );
+			return $hidden . $this->show_single_hidden( $selected_value, $args );
+		}
+
+		$args['save_array'] = true;
+
+		foreach ( $selected_value as $selected ) {
+			$hidden .= $this->show_single_hidden( $selected, $args );
 		}
 
 		return $hidden;
@@ -1471,18 +1462,20 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function get_select_attributes( $values ) {
-		$readonly    = ( FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin() );
+		$readonly    = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
 		$select_atts = array();
 
-		if ( ! $readonly ) {
-			if ( isset( $values['combo_name'] ) ) {
-				$values['field_name'] .= '[' . $values['combo_name'] . ']';
-				$values['html_id']    .= '_' . $values['combo_name'];
-			}
-
-			$select_atts['name'] = $values['field_name'];
-			$select_atts['id']   = $values['html_id'];
+		if ( $readonly ) {
+			return $select_atts;
 		}
+
+		if ( isset( $values['combo_name'] ) ) {
+			$values['field_name'] .= '[' . $values['combo_name'] . ']';
+			$values['html_id']    .= '_' . $values['combo_name'];
+		}
+
+		$select_atts['name'] = $values['field_name'];
+		$select_atts['id']   = $values['html_id'];
 
 		return $select_atts;
 	}
@@ -1530,10 +1523,7 @@ DEFAULT_HTML;
 
 		ob_start();
 		do_action( 'frm_field_input_html', $field );
-		$input_html = ob_get_contents();
-		ob_end_clean();
-
-		return $input_html;
+		return ob_get_clean();
 	}
 
 	/**
@@ -1548,19 +1538,13 @@ DEFAULT_HTML;
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
-
-		$describedby = $aria_describedby_exists ? preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) ) : array();
-
-		$error_comes_first = true;
-
-		$custom_error_fields = preg_grep( '/frm_error_field_*/', $describedby );
-		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
+		$describedby             = $aria_describedby_exists ? preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) ) : array();
+		$error_comes_first       = true;
+		$custom_error_fields     = preg_grep( '/frm_error_field_*/', $describedby );
+		$custom_desc_fields      = preg_grep( '/frm_desc_field_*/', $describedby );
 
 		if ( $custom_desc_fields && $custom_error_fields ) {
-			reset( $custom_error_fields );
-			reset( $custom_desc_fields );
-
-			if ( key( $custom_error_fields ) > key( $custom_desc_fields ) ) {
+			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
 				$error_comes_first = false;
 			}
 		}
@@ -1643,7 +1627,7 @@ DEFAULT_HTML;
 	private function value_has_already_been_validated_as_unique( $value ) {
 		global $frm_validated_unique_values;
 
-		if ( empty( $frm_validated_unique_values ) ) {
+		if ( ! $frm_validated_unique_values ) {
 			$frm_validated_unique_values = array();
 			return false;
 		}
@@ -1654,6 +1638,7 @@ DEFAULT_HTML;
 			$frm_validated_unique_values[ $field_id ] = array();
 			return false;
 		}
+
 		return in_array( $value, $frm_validated_unique_values[ $field_id ], true );
 	}
 
@@ -1727,13 +1712,15 @@ DEFAULT_HTML;
 
 		$value = $this->prepare_display_value( $value, $atts );
 
-		if ( is_array( $value ) ) {
-			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
-				$value = $value[ $atts['show'] ];
-			} elseif ( empty( $atts['return_array'] ) ) {
-				$sep   = $atts['sep'] ?? ', ';
-				$value = FrmAppHelper::safe_implode( $sep, $value );
-			}
+		if ( ! is_array( $value ) ) {
+			return $value;
+		}
+
+		if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
+			$value = $value[ $atts['show'] ];
+		} elseif ( empty( $atts['return_array'] ) ) {
+			$sep   = $atts['sep'] ?? ', ';
+			$value = FrmAppHelper::safe_implode( $sep, $value );
 		}
 
 		return $value;
@@ -1854,7 +1841,7 @@ DEFAULT_HTML;
 	 *     @type array $saved_entries
 	 * }
 	 *
-	 * @return array $new_value
+	 * @return array New value.
 	 */
 	protected function get_new_child_ids( $value, $atts ) {
 		$saved_entries = $atts['ids'];
@@ -1875,6 +1862,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function get_multi_opts_for_import( $value ) {
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( ! $this->field || ! $value || in_array( $value, (array) $this->field->options ) ) {
 			return $value;
 		}
@@ -1890,22 +1878,17 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && strpos( $filtered_checked, $option['value'] ) !== false ) {
+				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
 					$csv_values_checked[] = $option['value'];
 					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 				}
 			}
 
 			$csv_values_checked = array_reverse( $csv_values_checked );
-
-			$checked = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
+			$checked            = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
 		}
 
-		if ( ! empty( $checked ) && count( $checked ) > 1 ) {
-			$value = array_map( 'trim', $checked );
-		}
-
-		return $value;
+		return count( $checked ) > 1 ? array_map( 'trim', $checked ) : $value;
 	}
 
 	/**
@@ -1915,7 +1898,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
-		$value = empty( $value ) ? $defaults : array_merge( $defaults, (array) $value );
+		$value = $value ? array_merge( $defaults, (array) $value ) : $defaults;
 	}
 
 	/**
@@ -1973,6 +1956,7 @@ DEFAULT_HTML;
 					}
 				}
 			}
+
 			return $return_value;
 		}
 
@@ -2026,21 +2010,6 @@ DEFAULT_HTML;
 	 */
 	public function filter_value_for_table_html( $value ) {
 		return wp_kses_post( $value );
-	}
-
-	/**
-	 * This function is deprecated since it has a typo in the name.
-	 *
-	 * @since 3.0
-	 * @deprecated 6.11.2
-	 *
-	 * @param array $values
-	 *
-	 * @return array
-	 */
-	protected function get_select_atributes( $values ) {
-		_deprecated_function( __METHOD__, '6.11.2', 'FrmFieldType::get_select_attributes' );
-		return $this->get_select_attributes( $values );
 	}
 
 	/**

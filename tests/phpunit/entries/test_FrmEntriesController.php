@@ -20,7 +20,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 		$post = get_post( $post_id );
 		$this->assertNotEmpty( $post );
-		$this->assertEquals( 'publish', $post->post_status );
+		$this->assertSame( 'publish', $post->post_status );
 
 		$no_save_form = $this->create_form( array( 'no_save' => 1 ) );
 		$this->assertNotEmpty( $no_save_form->options['no_save'] );
@@ -31,9 +31,12 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 		$post = get_post( $created_post );
 		$this->assertNotEmpty( $post );
-		$this->assertEquals( 'publish', $post->post_status );
+		$this->assertSame( 'publish', $post->post_status );
 	}
 
+	/**
+	 * @param array $options
+	 */
 	private function create_form( $options = array() ) {
 		return $this->factory->form->create_and_get(
 			array(
@@ -49,8 +52,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 			FrmEntry::destroy( $exists );
 		}
 
-		$new_post = $this->factory->post->create_and_get();
-
+		$new_post          = $this->factory->post->create_and_get();
 		$_POST             = $this->factory->field->generate_entry_array( $form );
 		$_POST['item_key'] = $entry_key;
 		$_POST['action']   = 'create';
@@ -61,7 +63,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$this->assertNotEmpty( $entry );
 		$this->assertEquals( $entry->post_id, $new_post->ID );
 
-		FrmFormsController::get_form( $form, false, false ); // this is where the entry is deleted
+		FrmFormsController::get_form( $form, false, false ); // This is where the entry is deleted
 
 		return $new_post->ID;
 	}

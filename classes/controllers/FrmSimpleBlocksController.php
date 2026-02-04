@@ -23,7 +23,7 @@ class FrmSimpleBlocksController {
 
 		$icon = apply_filters( 'frm_icon', 'svg' );
 
-		if ( 0 === strpos( $icon, 'data:image/svg+xml;base64,' ) ) {
+		if ( str_starts_with( $icon, 'data:image/svg+xml;base64,' ) ) {
 			$icon = ' ' . FrmAppHelper::get_menu_icon_class();
 		} else {
 			$icon = str_replace( 'dashicons-', '', $icon );
@@ -222,7 +222,7 @@ class FrmSimpleBlocksController {
 		unset( $params['formId'] );
 
 		// Still pass false for title and description options if nothing is set,
-		// so a default doesn't overwrite the block option.
+		// So a default doesn't overwrite the block option.
 		$params['title']       = ! empty( $params['title'] );
 		$params['description'] = ! empty( $params['description'] );
 
@@ -231,6 +231,7 @@ class FrmSimpleBlocksController {
 		if ( ! empty( $attributes['className'] ) ) {
 			$form = preg_replace( '/\bfrm_forms\b/', 'frm_forms ' . esc_attr( $attributes['className'] ), $form, 1 );
 		}
+
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );
 	}
 
@@ -244,7 +245,7 @@ class FrmSimpleBlocksController {
 	 */
 	private static function maybe_remove_fade_on_load_for_block_preview( $form ) {
 		if ( is_callable( 'wp_is_json_request' ) && wp_is_json_request() ) {
-			$form = str_replace( ' frm_logic_form ', ' ', $form );
+			return str_replace( ' frm_logic_form ', ' ', $form );
 		}
 		return $form;
 	}

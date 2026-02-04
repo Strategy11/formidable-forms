@@ -61,6 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					continue;
 				}
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $f->type === 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] === 'data' || $f->field_options['data_type'] == '' ) ) {
 					continue;
 				}
@@ -206,9 +207,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			$classes  = 'frm-advanced-list';
 			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ), true ) ? ' show_before_content show_after_content' : '';
-			$classes .= strpos( $skey, 'default-' ) === 0 ? ' hide_frm_not_email_subject' : '';
+			$classes .= str_starts_with( $skey, 'default-' ) ? ' hide_frm_not_email_subject' : '';
 
-			if ( in_array( $skey, array_keys( $contextual_codes ), true ) ) {
+			if ( array_key_exists( $skey, $contextual_codes ) ) {
 				$classes .= ' frm_hidden';
 			}
 
@@ -237,8 +238,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			foreach ( $helper['codes'] as $code => $code_label ) {
-				$code = isset( $uid ) ? str_replace( '|user_id|', $uid, $code ) : str_replace( '|user_id|', 'x', $code );
-
+				$code      = isset( $uid ) ? str_replace( '|user_id|', $uid, $code ) : str_replace( '|user_id|', 'x', $code );
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 
 				if ( ! is_array( $code_label ) ) {

@@ -20,7 +20,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_icon_font frm_checkmark_icon',
+			'classes'  => 'frmfont frm_checkmark_icon',
 			'active'   => true,
 			'event'    => array( 'create' ),
 			'limit'    => 99,
@@ -50,6 +50,9 @@ class FrmOnSubmitAction extends FrmFormAction {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_settings.php';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_defaults() {
 		return array(
 			'success_action'      => FrmOnSubmitHelper::get_default_action_type(),

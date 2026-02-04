@@ -16,6 +16,7 @@
 .php-cs-fixer.php export-ignore
 .php-cs-fixer.cache export-ignore
 .wp-env.json export-ignore
+.coderabbit.yaml export-ignore
 cypress.config.js export-ignore
 /bin/ export-ignore
 changelog.txt export-ignore
@@ -40,7 +41,10 @@ webpack.config.js export-ignore
 /stripe/js/frmstrp.js export-ignore
 rector.php export-ignore
 _typos.toml export-ignore
+mago.toml export-ignore
 /resources/ export-ignore
 webpack.dev.js export-ignore
 .browserslistrc export-ignore
 /phpcs-sniffs/ export-ignore
+.deepsource.toml export-ignore
+.semgrepignore export-ignore

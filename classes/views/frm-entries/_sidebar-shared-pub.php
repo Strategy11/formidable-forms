@@ -9,12 +9,11 @@ if ( ! isset( $entry ) ) {
 ?>
 
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 
 	$date_format = get_option( 'date_format' );
-
 	$date_format = $date_format ? str_replace( 'F', 'M', $date_format ) : __( 'M j, Y', 'formidable' );
 
 	/**
@@ -38,9 +37,10 @@ if ( ! isset( $entry ) ) {
 	</span>
 </div>
 
+<?php // phpcs:ignore Universal.Operators.StrictComparisons ?>
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 	printf(

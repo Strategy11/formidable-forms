@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { frmAnimate, getQueryParam, removeQueryParam, hasQueryParam } from 'core/utils';
+import { frmAnimate, getQueryParam, removeQueryParam } from 'core/utils';
 
 /**
  * Internal dependencies

@@ -9,11 +9,10 @@ extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 $is_loaded_via_ajax = $is_loaded_via_ajax ?? false;
 FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
 
-$important = empty( $important_style ) ? '' : ' !important';
-
-$submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
-$use_chosen_js = FrmStylesHelper::use_chosen_js();
-
+$important        = empty( $important_style ) ? '' : ' !important';
+$submit_bg_img    = FrmStylesHelper::get_submit_image_bg_url( $settings );
+$use_chosen_js    = $use_chosen_js ?? FrmStylesHelper::use_chosen_js();
+$pro_is_installed = $pro_is_installed ?? FrmAppHelper::pro_is_installed();
 ?>
 .<?php echo esc_html( $style_class ); ?>{
 <?php FrmStylesHelper::output_vars( $settings, $defaults ); ?>
@@ -42,9 +41,11 @@ $use_chosen_js = FrmStylesHelper::use_chosen_js();
 }
 <?php } ?>
 
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .form-field.frm_section_heading{
 	margin-bottom:0<?php echo esc_html( $important ); ?>;
 }
+<?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> p.description,
 .<?php echo esc_html( $style_class ); ?> div.description,
@@ -127,7 +128,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	display:none<?php echo esc_html( $important ); ?>;
 }
 
-<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+<?php if ( $pro_is_installed ) : ?>
 .<?php echo esc_html( $style_class ); ?> .frm_scale label{
 	<?php if ( ! empty( $check_weight ) ) { ?>
 		font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
@@ -180,7 +181,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background-color:var(--bg-color-active)<?php echo esc_html( $important ); ?>;
 	border-color:var(--border-color-active)<?php echo esc_html( $important ); ?>;
 	color:var(--text-color);
-	<?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
+	<?php if ( ! empty( $remove_box_shadow_active ) ) { ?>
 	box-shadow:none;
 	outline: none;
 	<?php } else { ?>
@@ -189,13 +190,15 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 <?php if ( ! $submit_style ) { ?>
+	<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn,
+	<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit],
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button],
 .<?php echo esc_html( $style_class ); ?> .frm_submit button,
-.frm_form_submit_style,
-.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn {
-	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
+.frm_form_submit_style {
+	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); // phpcs:ignore Universal.Operators.StrictComparisons ?>;
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
 	<?php } ?>
@@ -231,7 +234,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin:<?php echo esc_html( $submit_margin ); ?>;
 	<?php
 	// For reverse compatibility... But allow "10px 10px".
-	if ( strpos( trim( $submit_margin ), ' ' ) === false ) {
+	if ( ! str_contains( trim( $submit_margin ), ' ' ) ) {
 		?>
 		margin-left:0;
 		margin-right:0;
@@ -239,12 +242,16 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	vertical-align:middle;
 }
 
+	<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message{
 	margin:0;
 }
+	<?php } ?>
 
 	<?php if ( empty( $submit_bg_img ) ) { ?>
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:hover{
@@ -257,7 +264,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin-bottom:<?php echo esc_html( FrmStylesHelper::get_bottom_value( $submit_margin ) ); ?>;
 }
 
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:focus,
@@ -270,10 +279,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	outline: none;
 }
 
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:active,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:focus,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:active,
@@ -283,7 +294,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	border-color:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
 }
 
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:before {
 	border-bottom-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
 	border-right-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
@@ -348,7 +361,9 @@ endif;
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=checkbox],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=radio],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field textarea,
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .mce-edit-area iframe,
+<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field select:not(.ui-datepicker-month):not(.ui-datepicker-year),
 .frm_form_fields_error_style,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-g-recaptcha iframe,
@@ -393,6 +408,7 @@ endif;
 	margin-bottom:var(--field-margin);
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-striped .progress-bar{
 	background-image:linear-gradient(45deg, <?php echo esc_html( $border_color ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $border_color ); ?> 50%, <?php echo esc_html( $border_color ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
 }
@@ -400,6 +416,7 @@ endif;
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-bar{
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
+<?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big input,
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big textarea,

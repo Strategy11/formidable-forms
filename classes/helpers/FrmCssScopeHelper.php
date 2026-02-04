@@ -41,7 +41,7 @@ class FrmCssScopeHelper {
 				$inner_content = substr( $css, $brace_pos + 1, $closing_brace - $brace_pos - 1 );
 
 				// Don't nest keyframes content
-				if ( strpos( $rule, '@keyframes' ) !== false ) {
+				if ( str_contains( $rule, '@keyframes' ) ) {
 					$output[] = "\n" . $rule . ' {' . $inner_content . '}' . "\n";
 				} else {
 					$output[] = "\n" . $rule . ' {';
@@ -73,7 +73,7 @@ class FrmCssScopeHelper {
 						}
 					}
 
-					if ( ! empty( $prefixed_selectors ) ) {
+					if ( $prefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $prefixed_selectors ) . ' {' . $declarations . '}' . "\n";
 					}
 				}
@@ -156,12 +156,10 @@ class FrmCssScopeHelper {
 					$unprefixed_selectors = array();
 
 					foreach ( $selectors as $single_selector ) {
-						$unprefixed_selectors[] = 0 === strpos( $single_selector, $prefix )
-							? trim( substr( $single_selector, $prefix_length ) )
-							: $single_selector;
+						$unprefixed_selectors[] = str_starts_with( $single_selector, $prefix ) ? trim( substr( $single_selector, $prefix_length ) ) : $single_selector;
 					}
 
-					if ( ! empty( $unprefixed_selectors ) ) {
+					if ( $unprefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $unprefixed_selectors ) . ' {' . $declarations . '}' . "\n";
 					}
 				}
@@ -193,7 +191,7 @@ class FrmCssScopeHelper {
 		}
 
 		// Check if declarations are already on multiple lines
-		if ( strpos( $declarations, "\n" ) !== false ) {
+		if ( str_contains( $declarations, "\n" ) ) {
 			// Already formatted - preserve it
 			$lines           = explode( "\n", $declarations );
 			$formatted_lines = array();

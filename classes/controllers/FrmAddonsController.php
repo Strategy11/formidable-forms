@@ -103,7 +103,7 @@ class FrmAddonsController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
-		// remove default created subpage, make the page with highest priority as default.
+		// Remove default created subpage, make the page with highest priority as default.
 		remove_submenu_page( 'formidable', 'formidable' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -267,9 +267,8 @@ class FrmAddonsController {
 	public static function license_settings() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $plugins ) ) {
+		if ( ! $plugins ) {
 			esc_html_e( 'There are no plugins on your site that require a license', 'formidable' );
-
 			return;
 		}
 
@@ -285,7 +284,7 @@ class FrmAddonsController {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = self::fallback_plugin_list();
 		} else {
 			foreach ( $addons as $k => $addon ) {
@@ -307,7 +306,6 @@ class FrmAddonsController {
 	 */
 	public static function get_addons_count() {
 		$addons = self::get_api_addons();
-
 		return count( $addons );
 	}
 
@@ -328,17 +326,17 @@ class FrmAddonsController {
 			),
 			'mailchimp'      => array(
 				'title'   => 'Mailchimp Forms',
-				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.',
+				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'registration'   => array(
 				'title'   => 'User Registration Forms',
 				'link'    => 'downloads/user-registration/',
-				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.',
+				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'paypal'         => array(
 				'title'   => 'PayPal Standard Forms',
 				'link'    => 'downloads/paypal-standard/',
-				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.',
+				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'stripe'         => array(
 				'title'   => 'Stripe Forms',
@@ -372,7 +370,7 @@ class FrmAddonsController {
 			),
 			'zapier'         => array(
 				'title'   => 'Zapier Forms',
-				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.',
+				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'signature'      => array(
 				'title'   => 'Digital Signature Forms',
@@ -407,6 +405,7 @@ class FrmAddonsController {
 			$info['slug'] = $k;
 			$list[ $k ]   = array_merge( $defaults, $info );
 		}
+
 		return $list;
 	}
 
@@ -447,14 +446,15 @@ class FrmAddonsController {
 
 		$license = $creds['license'];
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			return '';
 		}
 
-		if ( strpos( $license, '-' ) ) {
-			// this is a fix for licenses saved in the past
-			$license = strtoupper( $license );
+		if ( str_contains( $license, '-' ) ) {
+			// This is a fix for licenses saved in the past
+			return strtoupper( $license );
 		}
+
 		return $license;
 	}
 
@@ -496,7 +496,7 @@ class FrmAddonsController {
 
 		$expires = $version_info['error']['expires'] ?? 0;
 
-		if ( empty( $expires ) || $expires > time() ) {
+		if ( ! $expires || $expires > time() ) {
 			return false;
 		}
 
@@ -519,7 +519,7 @@ class FrmAddonsController {
 	public static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
+		if ( ! $installed_addons || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
 		}
 
@@ -549,7 +549,7 @@ class FrmAddonsController {
 
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) ) {
+		if ( ! $installed_addons ) {
 			return $transient;
 		}
 
@@ -566,12 +566,12 @@ class FrmAddonsController {
 
 			$folder = $plugin->plugin;
 
-			if ( empty( $folder ) ) {
+			if ( ! $folder ) {
 				continue;
 			}
 
 			if ( ! self::is_installed( $folder ) ) {
-				// don't show an update if the plugin isn't installed
+				// Don't show an update if the plugin isn't installed
 				continue;
 			}
 
@@ -586,7 +586,6 @@ class FrmAddonsController {
 			}
 
 			$transient->checked[ $folder ] = $wp_version;
-
 		}//end foreach
 
 		return $transient;
@@ -635,35 +634,34 @@ class FrmAddonsController {
 
 		foreach ( $installed_addons as $addon ) {
 			if ( $addon->store_url !== 'https://formidableforms.com' ) {
-				// check if this is a third-party addon
+				// Check if this is a third-party addon
 				continue;
 			}
 
 			$new_license = $addon->license;
 
-			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses ) ) {
+			if ( ! $new_license || in_array( $new_license, $checked_licenses, true ) ) {
 				continue;
 			}
 
 			$checked_licenses[] = $new_license;
+			$api                = new FrmFormApi( $new_license );
 
-			$api = new FrmFormApi( $new_license );
-
-			if ( empty( $version_info ) ) {
+			if ( ! $version_info ) {
 				$version_info = $api->get_api_info();
 				continue;
 			}
 
 			$plugin = $api->get_addon_for_license( $addon, $version_info );
 
-			if ( empty( $plugin ) ) {
+			if ( ! $plugin ) {
 				continue;
 			}
 
 			$download_id = $plugin['id'] ?? 0;
 
-			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
-				// if this addon is using its own license, get the update url
+			if ( $download_id && ! isset( $version_info[ $download_id ]['package'] ) ) {
+				// If this addon is using its own license, get the update url
 				$addon_info = $api->get_api_info();
 
 				$version_info[ $download_id ] = $addon_info[ $download_id ];
@@ -710,7 +708,7 @@ class FrmAddonsController {
 				);
 			}
 
-			if ( ! empty( $link ) ) {
+			if ( $link ) {
 				$link['status'] = $addon['status']['type'];
 			}
 		} elseif ( current_user_can( 'activate_plugins' ) && self::is_installed( 'formidable-' . $plugin . '/formidable-' . $plugin . '.php' ) ) {
@@ -741,6 +739,7 @@ class FrmAddonsController {
 				return $addon;
 			}
 		}
+
 		return false;
 	}
 
@@ -754,8 +753,9 @@ class FrmAddonsController {
 		$addons       = self::get_api_addons();
 
 		if ( isset( $addons['error'] ) && isset( $addons['error']['type'] ) ) {
-			$license_type = $addons['error']['type'];
+			return $addons['error']['type'];
 		}
+
 		return $license_type;
 	}
 
@@ -771,9 +771,9 @@ class FrmAddonsController {
 		$download_id = $license->download_id;
 		$plugin      = array();
 
-		if ( empty( $download_id ) && ! empty( $addons ) ) {
+		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
-				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
+				if ( 0 === strcasecmp( $license->plugin_name, $addon['title'] ) ) {
 					return $addon;
 				}
 			}
@@ -790,6 +790,9 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function prepare_addons( &$addons ) {
+		// Reset categories to prevent count accumulation across multiple calls.
+		self::$categories = array();
+
 		$activate_url = '';
 
 		if ( current_user_can( 'activate_plugins' ) ) {
@@ -803,10 +806,8 @@ class FrmAddonsController {
 				$slug      = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
 				$file_name = $addon['plugin'];
 			} else {
-				$slug = $id;
-
+				$slug      = $id;
 				$base_file = $addon['file'] ?? 'formidable-' . $slug;
-
 				$file_name = $base_file . '/' . $base_file . '.php';
 
 				if ( ! isset( $addon['plugin'] ) ) {
@@ -826,7 +827,7 @@ class FrmAddonsController {
 
 			$addon['activate_url'] = '';
 
-			if ( $addon['installed'] && ! empty( $activate_url ) && ! self::is_plugin_active( $file_name, $slug ) ) {
+			if ( $addon['installed'] && $activate_url && ! self::is_plugin_active( $file_name, $slug ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
 						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
@@ -888,7 +889,7 @@ class FrmAddonsController {
 	protected static function prepare_addon_link( &$link ) {
 		$site_url = 'https://formidableforms.com/';
 
-		if ( strpos( $link, 'http' ) !== 0 ) {
+		if ( ! str_starts_with( $link, 'http' ) ) {
 			$link = $site_url . $link;
 		}
 
@@ -984,11 +985,7 @@ class FrmAddonsController {
 		self::deactivate_plugin( $plugin, true );
 		$result = delete_plugins( array( $plugin ) );
 
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
-
-		return true;
+		return is_wp_error( $result ) ? $result : true;
 	}
 
 	/**
@@ -1112,6 +1109,7 @@ class FrmAddonsController {
 				'success' => false,
 			);
 		}
+
 		return $plugin;
 	}
 
@@ -1229,6 +1227,7 @@ class FrmAddonsController {
 				if ( wp_doing_ajax() ) {
 					wp_send_json_error( array( 'error' => $result->get_error_message() ) );
 				}
+
 				return array(
 					'message' => $result->get_error_message(),
 					'success' => false,
@@ -1244,8 +1243,7 @@ class FrmAddonsController {
 	 */
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
-
-		$message = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
+		$message         = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return array(
 			'message'       => $message,
@@ -1262,15 +1260,11 @@ class FrmAddonsController {
 	private static function get_activating_page() {
 		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 
-		if ( false !== strpos( $referer, 'frm_action=settings' ) ) {
+		if ( str_contains( $referer, 'frm_action=settings' ) ) {
 			return 'settings';
 		}
 
-		if ( false !== strpos( $referer, 'frm_action=edit' ) ) {
-			return 'form_builder';
-		}
-
-		return '';
+		return str_contains( $referer, 'frm_action=edit' ) ? 'form_builder' : '';
 	}
 
 	/**
@@ -1297,9 +1291,9 @@ class FrmAddonsController {
 	public static function connect_link() {
 		$auth = get_option( 'frm_connect_token' );
 
-		if ( empty( $auth ) ) {
+		if ( ! $auth ) {
 			$auth = hash( 'sha512', wp_rand() );
-			update_option( 'frm_connect_token', $auth, 'no' );
+			update_option( 'frm_connect_token', $auth, false );
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
@@ -1331,7 +1325,7 @@ class FrmAddonsController {
 
 		// The download link is not required if already installed.
 		$is_installed = FrmAppHelper::pro_is_included();
-		$file_missing = ! $is_installed && empty( $post_url );
+		$file_missing = ! $is_installed && ! $post_url;
 
 		if ( ! $post_auth || $file_missing ) {
 			return false;
@@ -1339,7 +1333,7 @@ class FrmAddonsController {
 
 		// Verify auth.
 		$auth = get_option( 'frm_connect_token' );
-		return ! empty( $auth ) && hash_equals( $auth, $post_auth );
+		return $auth && hash_equals( $auth, $post_auth );
 	}
 
 	/**
@@ -1368,7 +1362,7 @@ class FrmAddonsController {
 		}
 
 		// If empty license, save it now.
-		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
+		if ( ! self::get_pro_license() && function_exists( 'load_formidable_pro' ) ) {
 			load_formidable_pro();
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 
@@ -1496,14 +1490,16 @@ class FrmAddonsController {
 
 		$class = ! empty( $atts['class'] ) ? $atts['class'] : '';
 
-		if ( strpos( $class, 'frm-button' ) === false ) {
+		if ( ! str_contains( $class, 'frm-button' ) ) {
 			$class .= ' frm-button-secondary frm-button-sm';
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1550,7 +1546,6 @@ class FrmAddonsController {
 
 		if ( ! is_array( $allowed_url_list ) ) {
 			_doing_it_wrong( __METHOD__, 'Only an array of URLs could be used within this filter.', '6.3.1' );
-
 			return array();
 		}
 
@@ -1576,7 +1571,7 @@ class FrmAddonsController {
 		}
 
 		if ( ! isset( $requires ) || ! is_string( $requires ) ) {
-			$requires = '';
+			return '';
 		}
 
 		return $requires;

@@ -64,8 +64,7 @@ class FrmFieldName extends FrmFieldCombo {
 		$name_layout = $this->get_name_layout();
 		$names       = explode( '_', $name_layout );
 		$col_class   = 'frm' . intval( 12 / count( $names ) );
-
-		$result = array();
+		$result      = array();
 
 		foreach ( $names as $name ) {
 			if ( empty( $this->sub_fields[ $name ] ) ) {
@@ -93,11 +92,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected function get_name_layout() {
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
-
-		if ( ! $name_layout ) {
-			$name_layout = 'first_last';
-		}
-		return $name_layout;
+		return $name_layout ? $name_layout : 'first_last';
 	}
 
 	/**
@@ -148,11 +143,11 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value;
 		}
 
-		$name_layout = $this->get_name_layout();
-
 		if ( ! empty( $atts['show'] ) ) {
 			return $value[ $atts['show'] ] ?? '';
 		}
+
+		$name_layout = $this->get_name_layout();
 
 		$value = wp_parse_args(
 			$value,
@@ -293,15 +288,17 @@ class FrmFieldName extends FrmFieldCombo {
 		if ( ! $show_warning ) {
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_warning_style">
 			<?php
-			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) );
+			FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) );
 			echo ' ';
 			esc_html_e( 'Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like "First Name" instead of "First".', 'formidable' );
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -333,8 +330,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_sub_field_input_attrs( $sub_field, $args ) {
-		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
-
+		$attrs   = parent::get_sub_field_input_attrs( $sub_field, $args );
 		$form_id = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
 
 		if ( ! self::$first_name_field_ids || empty( self::$first_name_field_ids[ $form_id ] ) ) {

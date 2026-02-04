@@ -23,6 +23,10 @@ class test_FrmInbox extends FrmUnitTest {
 		$this->assert_message_count( $initial_count + 1, 'Message count should not go up after an invalid message is added.' );
 	}
 
+	/**
+	 * @param int $count
+	 * @param string $message
+	 */
 	private function assert_message_count( $count, $message ) {
 		$this->assertEquals( $count, $this->get_message_count(), $message );
 	}

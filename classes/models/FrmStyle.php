@@ -89,8 +89,7 @@ class FrmStyle {
 		$css_scope_helper = new FrmCssScopeHelper();
 
 		if ( ! $id ) {
-			$new_style       = (array) $this->get_new();
-			$all_instances[] = $new_style;
+			$all_instances[] = (array) $this->get_new();
 		}
 
 		$action_ids = array();
@@ -99,7 +98,8 @@ class FrmStyle {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
 
-			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing, Universal.Operators.StrictComparisons
+			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
 				// Don't continue if not saving this style.
 				continue;
 			}
@@ -115,7 +115,7 @@ class FrmStyle {
 				$new_instance['post_title'] = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
 			}
 
-			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
 
@@ -141,7 +141,7 @@ class FrmStyle {
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
 
-					if ( $color_val !== '' && false !== strpos( $color_val, 'rgb' ) ) {
+					if ( $color_val !== '' && str_contains( $color_val, 'rgb' ) ) {
 						// Maybe sanitize if invalid rgba value is entered.
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
@@ -154,8 +154,7 @@ class FrmStyle {
 			}
 
 			$new_instance['post_content'] = FrmStylesHelper::update_base_font_size( $new_instance['post_content'], $this->get_defaults() );
-
-			$action_ids[] = $this->save( $new_instance );
+			$action_ids[]                 = $this->save( $new_instance );
 		}//end foreach
 
 		$this->save_settings();
@@ -172,7 +171,7 @@ class FrmStyle {
 	 *
 	 * @return void
 	 */
-	private function maybe_sanitize_rgba_value( &$color_val ) {
+	private function maybe_sanitize_rgba_value( &$color_val ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
 			return;
 		}
@@ -203,7 +202,7 @@ class FrmStyle {
 			$new_value             = null;
 			$value_is_empty_string = '' === trim( $value ) || '' === $value;
 
-			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
+			if ( 3 === $length_of_color_codes || $index !== $length_of_color_codes - 1 ) {
 				// Insert a value for r, g, or b.
 				if ( $value < 0 ) {
 					$new_value = 0;
@@ -248,7 +247,6 @@ class FrmStyle {
 		// Limit the number of opening braces after rgb/rgba. There should only be one.
 		$prefix    = rtrim( $prefix, '(' ) . '(';
 		$new_color = $prefix . $new_color . ')';
-
 		$color_val = $new_color;
 	}
 
@@ -271,6 +269,7 @@ class FrmStyle {
 				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
 			}
 		}
+
 		return $sanitized_settings;
 	}
 
@@ -287,7 +286,7 @@ class FrmStyle {
 		$characters_to_remove = array( '{', '}', ';', '[', ']' );
 
 		// RGB is handled instead in self::maybe_sanitize_rgba_value.
-		if ( 0 !== strpos( $setting, 'rgb' ) ) {
+		if ( ! str_starts_with( $setting, 'rgb' ) ) {
 			$setting = $this->maybe_fix_braces( $setting, $characters_to_remove );
 		}
 
@@ -338,10 +337,11 @@ class FrmStyle {
 		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
 			$output = rtrim( $output, '()' );
 
-			if ( false !== strpos( $output, '(' ) ) {
+			if ( str_contains( $output, '(' ) ) {
 				$output .= ')';
 			}
 		}
+
 		return $output;
 	}
 
@@ -353,7 +353,7 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function should_remove_every_brace( $setting ) {
-		if ( 0 === strpos( trim( $setting, '()' ), 'calc' ) ) {
+		if ( str_starts_with( trim( $setting, '()' ), 'calc' ) ) {
 			// Support calc() sizes. We do not want to remove all braces when calc is used.
 			return false;
 		}
@@ -379,8 +379,11 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function is_color( $setting ) {
-		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors, true );
+		if ( str_contains( $setting, 'color' ) ) {
+			return true;
+		}
+
+		return in_array( $setting, array( 'error_bg', 'error_border', 'error_text' ), true );
 	}
 
 	/**
@@ -419,7 +422,7 @@ class FrmStyle {
 		);
 		$create_file->create_file( $css );
 
-		update_option( 'frmpro_css', $css, 'no' );
+		update_option( 'frmpro_css', $css, false );
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
 	}
 
@@ -429,15 +432,13 @@ class FrmStyle {
 	 * @return string
 	 */
 	private function get_css_content( $filename ) {
-		$css = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
-
+		$css       = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
 		$saving    = true;
 		$frm_style = $this;
 
 		ob_start();
 		include $filename;
-		$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_contents() ) );
-		ob_end_clean();
+		$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_clean() ) );
 
 		return FrmStylesController::replace_relative_url( $css );
 	}
@@ -495,7 +496,7 @@ class FrmStyle {
 
 		$default_values = $this->get_defaults();
 
-		// fill default values
+		// Fill default values
 		$style->post_content = $this->override_defaults( $style->post_content );
 		$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
@@ -520,14 +521,14 @@ class FrmStyle {
 
 		$temp_styles = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
 
-		if ( empty( $temp_styles ) ) {
+		if ( ! $temp_styles ) {
 			global $wpdb;
-			// make sure there wasn't a conflict with the query
-			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' );
+			// Make sure there wasn't a conflict with the query
+			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
 
-			if ( empty( $temp_styles ) ) {
-				// create a new style if there are none
+			if ( ! $temp_styles ) {
+				// Create a new style if there are none
 				$new             = $this->get_new();
 				$new->post_title = __( 'Formidable Style', 'formidable' );
 				$new->post_name  = $new->post_title;
@@ -536,32 +537,30 @@ class FrmStyle {
 				$this->update( 'default' );
 
 				$post_atts['include'] = $new;
-
-				$temp_styles = get_posts( $post_atts );
+				$temp_styles          = get_posts( $post_atts );
 			}
 		}
 
 		$default_values = $this->get_defaults();
 		$default_style  = false;
-
-		$styles = array();
+		$styles         = array();
 
 		foreach ( $temp_styles as $style ) {
 			$this->id = $style->ID;
 
 			if ( $style->menu_order ) {
 				if ( $default_style ) {
-					// only return one default
+					// Only return one default
 					$style->menu_order = 0;
 				} else {
-					// check for a default style
+					// Check for a default style
 					$default_style = $style->ID;
 				}
 			}
 
 			$style->post_content = FrmAppHelper::maybe_json_decode( $style->post_content );
 
-			// fill default values
+			// Fill default values
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
@@ -569,8 +568,7 @@ class FrmStyle {
 		}//end foreach
 
 		if ( ! $default_style ) {
-			$default_style = reset( $styles );
-
+			$default_style                            = reset( $styles );
 			$styles[ $default_style->ID ]->menu_order = 1;
 		}
 
@@ -606,7 +604,7 @@ class FrmStyle {
 			return $settings;
 		}
 
-		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height'];
+		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height']; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		if ( ! isset( $settings['form_desc_size'] ) && isset( $settings['description_font_size'] ) ) {
 			$settings['form_desc_size']  = $settings['description_font_size'];
@@ -790,7 +788,7 @@ class FrmStyle {
 	 * @return string
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		return 'frm_style_setting' . ( empty( $post_field ) ? '' : '[' . $post_field . ']' ) . '[' . $field_name . ']';
+		return 'frm_style_setting' . ( $post_field ? '[' . $post_field . ']' : '' ) . '[' . $field_name . ']';
 	}
 
 	/**
@@ -822,7 +820,7 @@ class FrmStyle {
 
 		foreach ( $balanced_characters as $char ) {
 			$char_count  = substr_count( $value, $char );
-			$is_balanced = $char_count % 2 == 0;
+			$is_balanced = $char_count % 2 === 0;
 
 			if ( $is_balanced ) {
 				continue;
@@ -834,6 +832,7 @@ class FrmStyle {
 				$value .= $char;
 			}
 		}
+
 		return $value;
 	}
 
@@ -849,9 +848,10 @@ class FrmStyle {
 	public function get_default_template_style( $style_id ) {
 		$default_template = get_post_meta( (int) $style_id, $this->default_template_style_meta_name, true );
 
-		if ( empty( $default_template ) ) {
+		if ( ! $default_template ) {
 			return FrmAppHelper::prepare_and_encode( $this->get_defaults() );
 		}
+
 		return $default_template;
 	}
 }

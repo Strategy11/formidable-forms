@@ -13,10 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 
+	/**
+	 * @return bool
+	 */
 	public function check() {
 		$mod_keys = trim( $this->get_disallowed_words() );
 
-		if ( empty( $mod_keys ) ) {
+		if ( ! $mod_keys ) {
 			return false;
 		}
 
@@ -49,8 +52,9 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 		if ( false === $keys ) {
 			// Fallback for WP < 5.5.
 			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
-			$keys = get_option( 'blacklist_keys' );
+			return get_option( 'blacklist_keys' );
 		}
+
 		return $keys;
 	}
 

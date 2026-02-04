@@ -28,9 +28,9 @@ class test_FrmFieldType extends FrmUnitTest {
 				'id' => $form_id,
 			)
 		);
-		$this->assertNotFalse( strpos( $form, ' min="10"' ) );
-		$this->assertNotFalse( strpos( $form, ' max="999"' ) );
-		$this->assertNotFalse( strpos( $form, ' step="any"' ) );
+		$this->assertStringContainsString( ' min="10"', $form );
+		$this->assertStringContainsString( ' max="999"', $form );
+		$this->assertStringContainsString( ' step="any"', $form );
 	}
 
 	/**
@@ -198,16 +198,15 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$checkbox = FrmFieldFactory::get_field_type( 'checkbox', $field );
 
-		$this->assertEquals( $checkbox->get_import_value( 'a,b' ), 'a,b' );
+		$this->assertSame( $checkbox->get_import_value( 'a,b' ), 'a,b' );
 		$this->assertEquals( $checkbox->get_import_value( 'a,c' ), array( 'a', 'c' ) );
-		$this->assertEquals( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
+		$this->assertSame( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
 	}
 
 	/**
 	 * @covers FrmFieldType::is_not_unique
 	 */
 	public function test_is_not_unique() {
-
 		$form_id = $this->factory->form->create();
 		$field1  = $this->factory->field->create_and_get(
 			array(
@@ -265,16 +264,16 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$input_html_actual_expected = array(
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby" aria-invalid="true" ' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_field_' . $field->field_key . ' my_custom_aria_describedby frm_desc_field_' . $field->field_key . '" aria-invalid="true" ',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_field_' . $field->field_key . ' my_custom_aria_describedby frm_desc_field_' . $field->field_key . '" aria-invalid="true" ', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' => // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			// Make sure that a duplicate description ID is not added.
-			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"',
+			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {
@@ -315,9 +314,8 @@ class test_FrmFieldType extends FrmUnitTest {
 		$field        = FrmField::getOne( $field->id );
 		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
 		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
-
-		$html = $field_object->prepare_field_html( $args );
-		$this->assertEquals( '', $html );
+		$html         = $field_object->prepare_field_html( $args );
+		$this->assertSame( '', $html );
 
 		// Test a draft field on a preview page for a privileged user (the HTML should not be empty).
 		$this->reset_should_hide_draft_fields_flag();

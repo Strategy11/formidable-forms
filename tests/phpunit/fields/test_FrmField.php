@@ -22,7 +22,7 @@ class test_FrmField extends FrmUnitTest {
 					'form_id' => $form_id,
 				)
 			);
-			$this->assertTrue( is_numeric( $field_id ) );
+			$this->assertIsNumeric( $field_id );
 			$this->assertTrue( $field_id > 0 );
 		}
 	}

@@ -26,14 +26,14 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		// Case 1: Ensure no redirect action is taken when already on the Onboarding Wizard page.
 		$_GET['page'] = $this->controller::PAGE_SLUG;
 		$this->controller::do_admin_redirects();
-		$this->assertNotEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'No change to the transient is expected when already on the Onboarding Wizard page.' );
+		$this->assertNotSame( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'No change to the transient is expected when already on the Onboarding Wizard page.' );
 		// Reset for the next case.
 		unset( $_GET['page'] );
 
 		// Case 2: Ensure no redirect action is taken when onboarding has been previously skipped.
 		update_option( $this->controller::ONBOARDING_SKIPPED_OPTION, true );
 		$this->controller::do_admin_redirects();
-		$this->assertNotEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'No change to the transient is expected when onboarding has been skipped.' );
+		$this->assertNotSame( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'No change to the transient is expected when onboarding has been skipped.' );
 		// Reset for the next case.
 		delete_option( $this->controller::ONBOARDING_SKIPPED_OPTION );
 
@@ -41,7 +41,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		add_filter( 'wp_redirect', '__return_false' ); // Bypasses redirect and exit for uninterrupted PHPUnit execution.
 		$_GET['page'] = 'formidable';
 		$this->controller::do_admin_redirects();
-		$this->assertEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'Transient should be set to "no" to indicate a redirect to the Onboarding Wizard is expected.' );
+		$this->assertSame( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'Transient should be set to "no" to indicate a redirect to the Onboarding Wizard is expected.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		// Reset for the next case.
 		unset( $_GET['page'] );
 
@@ -59,7 +59,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 
 		$this->controller::maybe_load_page();
 
-		$this->assertEquals( 99, has_action( 'admin_menu', $this->controller . '::menu' ) );
+		$this->assertSame( 99, has_action( 'admin_menu', $this->controller . '::menu' ) );
 	}
 
 	/**

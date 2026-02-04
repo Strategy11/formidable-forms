@@ -11,7 +11,7 @@ abstract class FrmValidate {
 	protected $form_id;
 
 	/**
-	 * @var object
+	 * @var object|null
 	 */
 	protected $form;
 
@@ -30,7 +30,7 @@ abstract class FrmValidate {
 	}
 
 	/**
-	 * @return object $form
+	 * @return object|null Form.
 	 */
 	protected function get_form() {
 		if ( empty( $this->form ) ) {

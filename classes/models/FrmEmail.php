@@ -224,7 +224,6 @@ class FrmEmail {
 	private function prepare_additional_recipients( $recipients, $user_id_args ) {
 		$recipients = $this->prepare_email_setting( $recipients, $user_id_args );
 		$recipients = $this->explode_emails( $recipients );
-
 		$recipients = array_unique( (array) $recipients );
 
 		return $this->format_recipients( $recipients );
@@ -561,8 +560,7 @@ class FrmEmail {
 		);
 
 		$subject = $this->encode_subject( $this->subject );
-
-		$sent = wp_mail( $recipient, $subject, $this->message, $header, $this->attachments );
+		$sent    = wp_mail( $recipient, $subject, $this->message, $header, $this->attachments );
 
 		if ( ! $sent ) {
 			if ( is_array( $header ) ) {
@@ -638,9 +636,9 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function prepare_email_setting( $value, $user_id_args ) {
-		if ( strpos( $value, '[' . $user_id_args['field_id'] . ']' ) !== false ) {
+		if ( str_contains( $value, '[' . $user_id_args['field_id'] . ']' ) ) {
 			$value = str_replace( '[' . $user_id_args['field_id'] . ']', '[' . $user_id_args['field_id'] . ' show="user_email"]', $value );
-		} elseif ( strpos( $value, '[' . $user_id_args['field_key'] . ']' ) !== false ) {
+		} elseif ( str_contains( $value, '[' . $user_id_args['field_key'] . ']' ) ) {
 			$value = str_replace( '[' . $user_id_args['field_key'] . ']', '[' . $user_id_args['field_key'] . ' show="user_email"]', $value );
 		}
 
@@ -660,11 +658,10 @@ class FrmEmail {
 	 *
 	 * @param string $emails
 	 *
-	 * @return array|string $emails
+	 * @return array|string Emails.
 	 */
 	private function explode_emails( $emails ) {
-		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
-
+		$emails = $emails ? preg_split( '/(,|;)/', $emails ) : '';
 		return is_array( $emails ) ? array_map( 'trim', $emails ) : trim( $emails );
 	}
 
@@ -676,7 +673,7 @@ class FrmEmail {
 	 * @return array
 	 */
 	private function format_recipients( $recipients ) {
-		if ( empty( $recipients ) ) {
+		if ( ! $recipients ) {
 			return $recipients;
 		}
 
@@ -724,13 +721,12 @@ class FrmEmail {
 			list( $from_name, $from_email ) = $this->get_name_and_email_for_sender( $from );
 		}
 
-		// if sending the email from a yahoo address, change it to the WordPress default
-		if ( strpos( $from_email, '@yahoo.com' ) ) {
-
+		// If sending the email from a yahoo address, change it to the WordPress default
+		if ( str_contains( $from_email, '@yahoo.com' ) ) {
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 
-			if ( substr( $sitename, 0, 4 ) === 'www.' ) {
+			if ( str_starts_with( $sitename, 'www.' ) ) {
 				$sitename = substr( $sitename, 4 );
 			}
 
@@ -772,7 +768,7 @@ class FrmEmail {
 	private function get_email_from_name( $name ) {
 		$email = trim( trim( $name, '>' ), '<' );
 
-		if ( strpos( $email, '<' ) !== false ) {
+		if ( str_contains( $email, '<' ) ) {
 			$parts = explode( '<', $email );
 			$email = trim( $parts[1], '>' );
 		}
@@ -813,11 +809,7 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function format_from_email( $name, $email ) {
-		if ( '' !== $name ) {
-			$email = $name . ' <' . $email . '>';
-		}
-
-		return $email;
+		return '' !== $name ? $name . ' <' . $email . '>' : $email;
 	}
 
 	/**
@@ -829,33 +821,35 @@ class FrmEmail {
 	 * @return void
 	 */
 	private function handle_phone_numbers() {
-
 		foreach ( $this->to as $key => $recipient ) {
-			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
-				$recipient = explode( ' ', $recipient );
+			if ( '[admin_email]' === $recipient || is_email( $recipient ) ) {
+				continue;
+			}
 
-				if ( is_email( end( $recipient ) ) ) {
-					continue;
-				}
+			$recipient = explode( ' ', $recipient );
 
-				do_action(
-					'frm_send_to_not_email',
-					array(
-						'e'           => $recipient,
-						'subject'     => $this->subject,
-						'mail_body'   => $this->message,
-						'reply_to'    => $this->reply_to,
-						'from'        => $this->from,
-						'plain_text'  => $this->is_plain_text,
-						'attachments' => $this->attachments,
-						'form'        => $this->form,
-						'email_key'   => $key,
-					)
-				);
+			if ( is_email( end( $recipient ) ) ) {
+				continue;
+			}
 
-				// Remove phone number from to addresses
-				unset( $this->to[ $key ] );
-			}//end if
+			do_action(
+				'frm_send_to_not_email',
+				array(
+					'e'           => $recipient,
+					'subject'     => $this->subject,
+					'mail_body'   => $this->message,
+					'reply_to'    => $this->reply_to,
+					'from'        => $this->from,
+					'plain_text'  => $this->is_plain_text,
+					'attachments' => $this->attachments,
+					'form'        => $this->form,
+					'email_key'   => $key,
+				)
+			);
+
+			// Remove phone number from to addresses
+			unset( $this->to[ $key ] );
+		// end if
 		}//end foreach
 	}
 
@@ -930,7 +924,7 @@ class FrmEmail {
 	 */
 	private function encode_subject( $subject ) {
 		if ( apply_filters( 'frm_encode_subject', false, $subject ) ) {
-			$subject = '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
+			return '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
 		}
 
 		return $subject;

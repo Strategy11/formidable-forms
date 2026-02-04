@@ -25,7 +25,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertIsArray( $errors );
 
 		$this->assertArrayHasKey( 'custom_error', $errors );
-		$this->assertEquals( 'Error message', $errors['custom_error'] );
+		$this->assertSame( 'Error message', $errors['custom_error'] );
 
 		remove_filter( 'frm_validate_entry', $add_a_custom_error );
 	}
@@ -58,7 +58,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$check = $this->get_spam_check_user_info( $values );
 		$this->assertTrue( empty( $check['user_ID'] ) );
 		$this->assertTrue( empty( $check['user_id'] ) );
-		$this->assertEquals( 'Some Guy', $check['comment_author'] );
+		$this->assertSame( 'Some Guy', $check['comment_author'] );
 		$this->assertEquals( $test_email, $check['comment_author_email'] );
 		$this->assertEquals( $test_url, $check['comment_author_url'] );
 
@@ -92,7 +92,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$_POST['form_id'] = $form_id;
 		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
 		$check = $this->get_spam_check_user_info( $values );
-		$this->assertEquals( 'John Doe', $check['comment_author'] );
+		$this->assertSame( 'John Doe', $check['comment_author'] );
 
 		// Test with repeater/embedded field.
 		$values['item_meta'][ $made_up_name_field_id ]  = array(
@@ -109,9 +109,9 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		);
 
 		$check = $this->get_spam_check_user_info( $values );
-		$this->assertEquals( 'John Doe', $check['comment_author'] );
-		$this->assertEquals( 'johndoe@gmail.com', $check['comment_author_email'] );
-		$this->assertEquals( 'https://johndoe.com', $check['comment_author_url'] );
+		$this->assertSame( 'John Doe', $check['comment_author'] );
+		$this->assertSame( 'johndoe@gmail.com', $check['comment_author_email'] );
+		$this->assertSame( 'https://johndoe.com', $check['comment_author_url'] );
 
 		wp_set_current_user( 1 );
 		$user  = wp_get_current_user();
@@ -193,7 +193,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertFalse( isset( $test_values['item_meta'][165] ) );
 		$this->assertEquals( $test_values['item_meta'][162], array( 'Option 2', 'Option 1' ) );
 		$this->assertEquals( $test_values['item_meta'][118], array( 'John Doe' ) );
-		$this->assertEquals( $test_values['item_meta'][1], 'John Doe' );
+		$this->assertSame( $test_values['item_meta'][1], 'John Doe' );
 	}
 
 	public function test_skip_adding_values_to_akismet() {

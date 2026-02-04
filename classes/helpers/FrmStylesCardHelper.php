@@ -151,7 +151,7 @@ class FrmStylesCardHelper {
 
 		$color = $style->post_content[ $key ];
 
-		if ( 0 === strpos( $color, 'rgba' ) ) {
+		if ( str_starts_with( $color, 'rgba' ) ) {
 			preg_match_all( '/([\\d.]+)/', $color, $matches );
 
 			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
@@ -271,8 +271,9 @@ class FrmStylesCardHelper {
 		if ( empty( $style->post_content['fieldset_bg_color'] ) ) {
 			$background_color = '#fff';
 		} else {
-			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
+			$background_color = str_starts_with( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color']; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
+
 		$styles[] = '--preview-background-color: ' . $background_color;
 
 		if ( empty( $style->post_content['submit_border_color'] ) ) {
@@ -281,7 +282,6 @@ class FrmStylesCardHelper {
 
 		// Apply additional styles from the style.
 		$rules_to_apply = self::get_style_keys_for_card();
-
 		$frm_style      = new FrmStyle();
 		$color_settings = $frm_style->get_color_settings();
 
@@ -291,9 +291,8 @@ class FrmStylesCardHelper {
 				continue;
 			}
 
-			$value = $style->post_content[ $key ];
-
-			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) && $value !== 'transparent';
+			$value  = $style->post_content[ $key ];
+			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && ! str_contains( $value, 'rgb' ) && $value !== 'transparent';
 
 			if ( $is_hex ) {
 				$value = '#' . $value;
@@ -357,6 +356,7 @@ class FrmStylesCardHelper {
 
 		$first_style         = reset( $styles );
 		$is_template_wrapper = is_array( $first_style );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
 			<?php
@@ -368,6 +368,7 @@ class FrmStylesCardHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -465,6 +466,7 @@ class FrmStylesCardHelper {
 			// Not enough cards to require pagination.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-style-card-pagination frm_wrap">
 			<a href="#" class="frm-show-all-styles">
@@ -478,6 +480,7 @@ class FrmStylesCardHelper {
 			</a>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

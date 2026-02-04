@@ -75,7 +75,7 @@ class S11FloatingLinks {
 
 		const slideIn = this.getInboxSlideIn();
 		slideIn.classList.add( 's11-fadein' );
-		document.body.appendChild( slideIn );
+		document.body.append( slideIn );
 
 		// Make sure the events are set for dismissing the inbox message.
 		if ( ! document.querySelector( '.frm-inbox-wrapper' ) ) {
@@ -116,7 +116,7 @@ class S11FloatingLinks {
 		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
 		slideIn.querySelector( '.frm-button-secondary' )?.remove();
 		this.updateSlideInCtaUtm( slideIn );
-		slideIn.appendChild( frmDom.span( { child: dismissIcon } ) );
+		slideIn.append( frmDom.span( { child: dismissIcon } ) );
 		slideIn.querySelector( 'a[href].frm-button-primary' )?.setAttribute(
 			'aria-description',
 			( frmGlobal.inboxSlideIn.subject + ' ' + frmGlobal.inboxSlideIn.slidein ).replace( '&amp;', '&' )
@@ -154,7 +154,7 @@ class S11FloatingLinks {
 		this.wrapperElement.classList.add( 's11-floating-links', 's11-fadein' );
 
 		// Add the wrapper to the DOM
-		document.body.appendChild( this.wrapperElement );
+		document.body.append( this.wrapperElement );
 	}
 
 	/**
@@ -189,11 +189,11 @@ class S11FloatingLinks {
 				<span class="s11-floating-links-nav-icon">${ link.icon }</span>
 			`;
 
-			this.navMenuElement.appendChild( linkElement );
+			this.navMenuElement.append( linkElement );
 		} );
 
 		// Append the navigation menu to the wrapper element
-		this.wrapperElement.appendChild( this.navMenuElement );
+		this.wrapperElement.append( this.navMenuElement );
 	}
 
 	linkHasRequiredProperties( link ) {
@@ -233,7 +233,7 @@ class S11FloatingLinks {
 		} );
 
 		// Append the icon button to the wrapper element
-		this.wrapperElement.appendChild( this.iconButtonElement );
+		this.wrapperElement.append( this.iconButtonElement );
 	}
 
 	/**

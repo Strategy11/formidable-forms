@@ -50,9 +50,14 @@ zip -r $zipname $destination \
 	-x "*/.stylelintrc.json" \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
+	-x "*/.prettierrc" \
+	-x "*/.scannerwork" \
 	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
+	-x "*/.coderabbit.yaml" \
+	-x "*/.deepsource.toml" \
+	-x "*/.semgrepignore" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -102,6 +107,8 @@ zip -r $zipname $destination \
 	-x "formidable-api/js/embed.js" \
 	-x "formidable-api/js/iframe-embed.js" \
 	-x "formidable-hubspot/js/admin.js" \
+	-x "formidable-coupons/js/frontend.js" \
+	-x "formidable-coupons/js/admin.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip" \
 	-x "*/rector.php" \
@@ -110,6 +117,7 @@ zip -r $zipname $destination \
 	-x "*/report-task.txt" \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
+	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
 	-x "*/phpcs-sniffs/*"

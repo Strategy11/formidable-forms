@@ -15,7 +15,8 @@ class FrmFormMigratorsHelper {
 		if ( $dismissed === null ) {
 			$dismissed = get_option( 'frm_dismissed' );
 		}
-		return ! empty( $dismissed ) && in_array( $form['class'], $dismissed );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		return $dismissed && in_array( $form['class'], $dismissed );
 	}
 
 	/**
@@ -55,7 +56,7 @@ class FrmFormMigratorsHelper {
 					'key'     => $form['class'],
 					'subject' => 'You have new importable forms',
 					'message' => 'Did you know you can import your forms created in ' . esc_html( $form['name'] ) . '?',
-					'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-import' ) ) . '" class="button-primary frm-button-primary">' . esc_html__( 'Learn More', 'formidable' ) . '</a>',
+					'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-import' ) ) . '" class="button-primary frm-button-primary">' . esc_html__( 'Learn More', 'formidable' ) . '</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					'icon'    => 'frm_cloud_upload_solid_icon',
 					'type'    => 'news',
 				)
@@ -85,6 +86,7 @@ class FrmFormMigratorsHelper {
 
 			$forms[] = $form;
 		}
+
 		return $forms;
 	}
 
@@ -120,6 +122,7 @@ class FrmFormMigratorsHelper {
 			return '';
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-feature-banner">
 			<a href="#" class="dismiss alignright" id="<?php echo esc_attr( $install['class'] ); ?>" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
@@ -132,6 +135,7 @@ class FrmFormMigratorsHelper {
 			<?php self::install_button( $install ); ?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		return null;
 	}
 
@@ -144,14 +148,15 @@ class FrmFormMigratorsHelper {
 	private static function install_button( $install, $label = '' ) {
 		$primary = 'button-secondary frm-button-secondary ';
 
-		if ( empty( $label ) ) {
+		if ( ! $label ) {
 			$label   = __( 'Get Started', 'formidable' );
 			$primary = 'button-primary frm-button-primary ';
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( $install['installed'] ) {
 			?>
-			<a rel="<?php echo esc_attr( $install['importer'] ); ?>" class="button frm-activate-addon <?php echo esc_attr( $primary . ( empty( $install['link'] ) ? 'frm_hidden' : '' ) ); ?>">
+			<a rel="<?php echo esc_attr( $install['importer'] ); ?>" class="button frm-activate-addon <?php echo esc_attr( $primary . ( empty( $install['link'] ) ? 'frm_hidden' : '' ) ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php
 			if ( $label === 'auto' ) {
 				/* translators: %s: Name of the plugin */
@@ -159,7 +164,7 @@ class FrmFormMigratorsHelper {
 			}
 		} else {
 			?>
-			<a rel="<?php echo esc_attr( $install['package'] ); ?>" class="frm-install-addon button <?php echo esc_attr( $primary ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
+			<a rel="<?php echo esc_attr( $install['package'] ); ?>" class="frm-install-addon button <?php echo esc_attr( $primary ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php
 			if ( $label === 'auto' ) {
 				/* translators: %s: Name of the plugin */
@@ -170,6 +175,7 @@ class FrmFormMigratorsHelper {
 		<?php echo esc_html( $label ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -179,11 +185,12 @@ class FrmFormMigratorsHelper {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		$dismissed = get_option( 'frm_dismissed' );
 
-		if ( empty( $dismissed ) ) {
+		if ( ! $dismissed ) {
 			$dismissed = array();
 		}
+
 		$dismissed[] = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
-		update_option( 'frm_dismissed', array_filter( $dismissed ), 'no' );
+		update_option( 'frm_dismissed', array_filter( $dismissed ), false );
 		wp_die();
 	}
 }

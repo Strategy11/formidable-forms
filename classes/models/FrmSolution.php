@@ -36,7 +36,7 @@ class FrmSolution {
 	/**
 	 * @var string
 	 */
-	protected $icon = 'frm_icon_font frm_settings_icon';
+	protected $icon = 'frmfont frm_settings_icon';
 
 	/**
 	 * @param array $atts
@@ -90,7 +90,7 @@ class FrmSolution {
 	 */
 	public function plugin_links( $links ) {
 		if ( ! $this->is_complete() ) {
-			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . __( 'Setup', 'formidable' ) . '</a>';
+			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . esc_html__( 'Setup', 'formidable' ) . '</a>';
 			array_unshift( $links, $settings );
 		}
 
@@ -108,7 +108,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function register() {
-
 		// Getting started - shows after installation.
 		add_dashboard_page(
 			esc_html( $this->page_title() ),
@@ -166,7 +165,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function redirect() {
-
 		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		if ( $current_page === $this->page ) {
@@ -233,8 +231,7 @@ class FrmSolution {
 			return;
 		}
 
-		$all_imported = $this->is_complete( 'all' );
-
+		$all_imported   = $this->is_complete( 'all' );
 		$step           = $steps['import'];
 		$step['label']  = '';
 		$step['nested'] = true;
@@ -289,6 +286,7 @@ class FrmSolution {
 			'width'  => 90,
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<section class="top">
 			<div class="frm-smtp-logos">
@@ -314,6 +312,7 @@ class FrmSolution {
 			<p><?php echo esc_html( $this->page_description() ); ?></p>
 		</section>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -410,7 +409,7 @@ class FrmSolution {
 	protected function adjust_plugin_install_step( &$steps ) {
 		$plugins = $this->required_plugins();
 
-		if ( empty( $plugins ) ) {
+		if ( ! $plugins ) {
 			unset( $steps['plugin'] );
 			$steps['import']['num']   = 2;
 			$steps['complete']['num'] = 3;
@@ -435,9 +434,9 @@ class FrmSolution {
 			}
 		}
 
-		if ( empty( $rel ) && empty( $missing ) ) {
+		if ( ! $rel && ! $missing ) {
 			$steps['plugin']['complete'] = true;
-		} elseif ( ! empty( $missing ) ) {
+		} elseif ( $missing ) {
 			$steps['plugin']['error'] = sprintf(
 				/* translators: %1$s: Plugin name */
 				esc_html__( 'You need permission to download the Formidable %1$s plugin', 'formidable' ),
@@ -461,11 +460,12 @@ class FrmSolution {
 	protected function step_top( $step ) {
 		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 			<aside class="num">
 			<?php
-			if ( isset( $step['complete'] ) && $step['complete'] ) {
+			if ( ! empty( $step['complete'] ) ) {
 				FrmAppHelper::icon_by_class(
 					'frmfont frm_step_complete_icon',
 					array(
@@ -476,7 +476,7 @@ class FrmSolution {
 				);
 			} else {
 				?>
-				<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#ccc"/><text x="50%" y="50%" text-anchor="middle" fill="#fff" stroke="#fff" stroke-width="2px" dy=".3em" font-size="3.7em"><?php echo esc_html( $step['num'] ); ?></text></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#ccc"/><text x="50%" y="50%" text-anchor="middle" fill="#fff" stroke="#fff" stroke-width="2px" dy=".3em" font-size="3.7em"><?php echo esc_html( $step['num'] ); ?></text></svg><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<?php
 			}
 			?>
@@ -491,6 +491,7 @@ class FrmSolution {
 					<p class="frm_error"><?php echo esc_html( $step['error'] ); ?></p>
 				<?php } ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -499,10 +500,12 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_bottom( $step ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			</div>
 		</section>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -516,11 +519,13 @@ class FrmSolution {
 		$this->step_top( $step );
 
 		if ( $step['complete'] ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		} else {
 			FrmSettingsController::license_box();
 		}
@@ -539,11 +544,13 @@ class FrmSolution {
 		if ( ! isset( $step['error'] ) ) {
 			$rel = $step['links'] ?? array();
 
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a rel="<?php echo esc_attr( implode( ',', $rel ) ); ?>" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 
 		$this->step_bottom( $step );
@@ -557,18 +564,18 @@ class FrmSolution {
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
 
-		if ( ! empty( $this->form_options() ) && ! $is_complete ) {
+		if ( $this->form_options() && ! $is_complete ) {
 			$step['description'] = __( 'Select the form or view you would like to create.', 'formidable' );
 		}
 
 		$this->step_top( $step );
 
-		$api    = new FrmFormApi();
-		$addons = $api->get_api_info();
-
+		$api      = new FrmFormApi();
+		$addons   = $api->get_api_info();
 		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( ! $step['current'] ) {
 			?>
 			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
@@ -583,7 +590,7 @@ class FrmSolution {
 		if ( ! $has_file ) {
 			echo '<p class="frm_error_style">' . esc_html__( 'We didn\'t find anything to import. Please contact our team.', 'formidable' ) . '</p>';
 		} elseif ( ! isset( $addons[ $id ]['beta']['package'] ) ) {
-			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>';
+			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
 			$xml = $addons[ $id ]['beta']['package'];
 
@@ -626,6 +633,7 @@ class FrmSolution {
 				echo '</form>';
 			}
 		}//end if
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$this->step_bottom( $step );
 	}
@@ -656,7 +664,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function show_import_options( $options, $importing, $xml = '' ) {
-		if ( empty( $options ) ) {
+		if ( ! $options ) {
 			return;
 		}
 
@@ -684,21 +692,23 @@ class FrmSolution {
 	protected function show_page_options() {
 		$pages = $this->needed_pages();
 
-		if ( empty( $pages ) ) {
+		if ( ! $pages ) {
 			return;
 		}
 
 		echo '<h3>Choose New Page Title</h3>';
 
 		foreach ( $pages as $page ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<p>
 				<label for="pages_<?php echo esc_html( $page['type'] ); ?>">
 					<?php echo esc_html( $page['label'] ); ?>
 				</label>
-				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required />
+				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			</p>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
@@ -714,11 +724,13 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a href="#" target="_blank" rel="noopener" id="frm-redirect-link" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 			<?php echo esc_html( $step['button_label'] ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$this->step_bottom( $step );
 	}
@@ -730,7 +742,7 @@ class FrmSolution {
 	 */
 	protected function is_current_plugin() {
 		$to_redirect = get_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
-		return $to_redirect === $this->plugin_slug && empty( $this->is_complete() );
+		return $to_redirect === $this->plugin_slug && ! $this->is_complete();
 	}
 
 	/**
@@ -748,6 +760,7 @@ class FrmSolution {
 		if ( $count === 'all' ) {
 			return count( $imported ) >= count( $this->form_options() );
 		}
+
 		return ! empty( $imported );
 	}
 

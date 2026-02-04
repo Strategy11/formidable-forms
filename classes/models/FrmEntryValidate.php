@@ -24,11 +24,10 @@ class FrmEntryValidate {
 
 		if ( ! isset( $values['form_id'] ) || ! isset( $values['item_meta'] ) ) {
 			$errors['form'] = __( 'There was a problem with your submission. Please try again.', 'formidable' );
-
 			return $errors;
 		}
 
-		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) {
+		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$frm_settings   = FrmAppHelper::get_settings();
 			$errors['form'] = $frm_settings->admin_permission;
 		}
@@ -46,7 +45,7 @@ class FrmEntryValidate {
 			unset( $posted_field );
 		}
 
-		if ( empty( $errors ) ) {
+		if ( ! $errors ) {
 			self::spam_check( $exclude, $values, $errors );
 		}
 
@@ -91,6 +90,7 @@ class FrmEntryValidate {
 	 * @return void
 	 */
 	private static function set_item_key( &$values ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
 			global $wpdb;
 			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
@@ -111,7 +111,7 @@ class FrmEntryValidate {
 		$where['fr.parent_form_id'] = array( null, 0 );
 
 		// Don't get excluded fields (like file upload fields in the ajax validation)
-		if ( ! empty( $exclude ) ) {
+		if ( $exclude ) {
 			$where['fi.type not'] = $exclude;
 		}
 
@@ -147,8 +147,7 @@ class FrmEntryValidate {
 			'exclude'         => array(),
 
 		);
-		$args = wp_parse_args( $args, $defaults );
-
+		$args  = wp_parse_args( $args, $defaults );
 		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
 
 		// Check for values in "Other" fields
@@ -156,7 +155,7 @@ class FrmEntryValidate {
 
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
-		$should_trim = is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+		$should_trim = is_array( $value ) && count( $value ) === 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
 
 		if ( $should_trim ) {
 			$value = reset( $value );
@@ -166,6 +165,7 @@ class FrmEntryValidate {
 			$value = trim( $value );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
 		} elseif ( ! isset( $_POST['item_name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -181,6 +181,7 @@ class FrmEntryValidate {
 		// e.g. trim off excess values like in the case of fields with limit.
 		$value = apply_filters( 'frm_modify_posted_field_value', $value, $errors, $posted_field, $args );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value != '' ) {
 			self::validate_phone_field( $errors, $posted_field, $value, $args );
 		}
@@ -235,7 +236,7 @@ class FrmEntryValidate {
 	 *
 	 * @return bool
 	 */
-	private static function option_is_valid( $field, $value, $options ) {
+	private static function option_is_valid( $field, $value, $options ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( '' === $value ) {
 			return true;
 		}
@@ -265,7 +266,7 @@ class FrmEntryValidate {
 			$match = false;
 
 			foreach ( $options as $key => $option ) {
-				if ( strpos( $key, 'other_' ) === 0 ) {
+				if ( str_starts_with( $key, 'other_' ) ) {
 					// Always return true if an other option is found.
 					return true;
 				}
@@ -337,6 +338,7 @@ class FrmEntryValidate {
 		if ( is_numeric( $filter_priority ) ) {
 			add_filter( 'the_content', 'wpautop', $filter_priority );
 		}
+
 		return trim( $value ) === trim( $filtered_option );
 	}
 
@@ -433,7 +435,7 @@ class FrmEntryValidate {
 
 		$new_errors = $field_obj->validate( $args );
 
-		if ( ! empty( $new_errors ) ) {
+		if ( $new_errors ) {
 			$errors = array_merge( $errors, $new_errors );
 		}
 	}
@@ -476,7 +478,7 @@ class FrmEntryValidate {
 		$pattern = apply_filters( 'frm_phone_pattern', $pattern, $field );
 
 		// Create a regexp if format is not already a regexp
-		if ( strpos( $pattern, '^' ) !== 0 ) {
+		if ( ! str_starts_with( $pattern, '^' ) ) {
 			$pattern = self::create_regular_expression_from_format( $pattern );
 		}
 
@@ -514,12 +516,12 @@ class FrmEntryValidate {
 		$pattern = str_replace( '*', 'w', $pattern );
 		$pattern = str_replace( '/', '\/', $pattern );
 
-		if ( strpos( $pattern, '\?' ) !== false ) {
+		if ( str_contains( $pattern, '\?' ) ) {
 			$parts   = explode( '\?', $pattern );
 			$pattern = '';
 
 			foreach ( $parts as $part ) {
-				if ( empty( $pattern ) ) {
+				if ( ! $pattern ) {
 					$pattern .= $part;
 				} else {
 					$pattern .= '(' . $part . ')?';
@@ -545,8 +547,8 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
-			// only check spam if there are no other errors
+		if ( $exclude || empty( $values['item_meta'] ) || $errors ) {
+			// Only check spam if there are no other errors
 			return;
 		}
 
@@ -584,9 +586,11 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return FrmAppHelper::pro_is_installed() &&
 			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || FrmAppHelper::get_post_param( 'frm_next_page' ) ) &&
 			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -614,7 +618,6 @@ class FrmEntryValidate {
 	 */
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
-
 		return empty( $ip );
 	}
 
@@ -625,8 +628,7 @@ class FrmEntryValidate {
 	 */
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
-
-		return ( is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values ) );
+		return is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values );
 	}
 
 	/**
@@ -636,8 +638,7 @@ class FrmEntryValidate {
 	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
-
-		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
+		return ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() );
 	}
 
 	/**
@@ -680,7 +681,7 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return ( is_array( $response ) && $response[1] === 'true' );
+		return is_array( $response ) && $response[1] === 'true';
 	}
 
 	/**
@@ -850,10 +851,10 @@ class FrmEntryValidate {
 
 		switch ( $key ) {
 			case 'comment_author_email':
-				return strpos( $value, '@' ) && is_email( $value );
+				return str_contains( $value, '@' ) && is_email( $value );
 
 			case 'comment_author_url':
-				return 0 === strpos( $value, 'http' );
+				return str_starts_with( $value, 'http' );
 
 			case 'comment_author':
 				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
@@ -1008,11 +1009,10 @@ class FrmEntryValidate {
 			return true;
 		}
 
-		end( $field_data->options );
-		$last_key = key( $field_data->options );
+		$last_key = array_key_last( $field_data->options );
 
 		// If a choice field has no Other option.
-		if ( is_numeric( $last_key ) || 0 !== strpos( $last_key, 'other_' ) ) {
+		if ( is_numeric( $last_key ) || ! str_starts_with( $last_key, 'other_' ) ) {
 			return true;
 		}
 
@@ -1023,7 +1023,7 @@ class FrmEntryValidate {
 
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
-			$option_value = ! is_array( $option ) ? $option : ( $option['value'] ?? '' );
+			$option_value = is_array( $option ) ? ( $option['value'] ?? '' ) : $option;
 
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
@@ -1073,8 +1073,7 @@ class FrmEntryValidate {
 	 * @return void
 	 */
 	public static function prepare_values_for_spam_check( &$values ) {
-		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
-		$values['form_ids'] = $form_ids;
+		$values['form_ids'] = self::get_all_form_ids_and_flatten_meta( $values );
 	}
 
 	/**
@@ -1088,7 +1087,7 @@ class FrmEntryValidate {
 	 *
 	 * @return array Form IDs.
 	 */
-	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+	private static function get_all_form_ids_and_flatten_meta( &$values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$values['name_field_ids'] = array();
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
@@ -1129,8 +1128,7 @@ class FrmEntryValidate {
 
 					// Convert name array to string.
 					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
-						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
-
+						$subsubvalue                = trim( implode( ' ', $subsubvalue ) );
 						$values['name_field_ids'][] = $subsubindex;
 					}
 

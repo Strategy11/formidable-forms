@@ -16,7 +16,7 @@ class test_FrmForm extends FrmUnitTest {
 	public function test_create() {
 		$values  = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
-		$this->assertTrue( is_numeric( $form_id ) );
+		$this->assertIsNumeric( $form_id );
 		$this->assertNotEmpty( $form_id );
 	}
 
@@ -25,12 +25,11 @@ class test_FrmForm extends FrmUnitTest {
 	 */
 	public function test_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->all_fields_form_key );
-
-		$id = FrmForm::duplicate( $form->id );
-		$this->assertTrue( is_numeric( $id ) );
+		$id   = FrmForm::duplicate( $form->id );
+		$this->assertIsNumeric( $id );
 		$this->assertNotEmpty( $id );
 
-		// check the number of form actions
+		// Check the number of form actions
 		$original_actions = FrmFormAction::get_action_for_form( $form->id );
 		$new_actions      = FrmFormAction::get_action_for_form( $id );
 		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
@@ -46,7 +45,7 @@ class test_FrmForm extends FrmUnitTest {
 		$new_child_form_fields = FrmField::get_all_for_form( $new_child_form->id );
 
 		// Check if there are the same number of child form fields in the duplicated child form
-		$this->assertEquals( count( $old_child_form_fields ), count( $new_child_form_fields ), 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' );
+		$this->assertEquals( count( $old_child_form_fields ), count( $new_child_form_fields ), 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -94,7 +93,7 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assert_form_is_hidden( 'subscriber', array( 'editor', 'author' ), 'Contributors should not set a form assigned to editors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'author', 'administrator' ), 'Contributors should not set a form assigned to authors and administrators' );
 
-		// test custom roles
+		// Test custom roles
 		$this->assert_form_is_visible( 'formidable_custom_role', 'formidable_custom_role', 'Custom role should be able to see a form assigned to it' );
 		$this->assert_form_is_visible( 'formidable_custom_role', '', 'Custom role should be able to see a form assigned to logged in users' );
 		$this->assert_form_is_hidden( 'formidable_custom_role', array( 'administrator' ), 'Custom role should not be able to see a form not assigned to it' );
@@ -151,7 +150,7 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50< 100 ? 1 : 0' );
 
 		$original_value = '50>100 ? 1 : 0';
-		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'greater than comparisons do not get stripped, so they do not get any additional string padding.' );
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'greater than comparisons do not get stripped, so they do not get any additional string padding.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$original_value = '50 >100 ? 1 : 0';
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
@@ -170,12 +169,20 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
 	}
 
+	/**
+	 * @param string $expected
+	 * @param string $original_value
+	 * @param string $message
+	 */
 	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {
 		$value = $original_value;
 		$this->sanitize_field_opt( 'calc', $value );
 		$this->assertEquals( $expected, $value, $message );
 	}
 
+	/**
+	 * @param string $opt
+	 */
 	private function sanitize_field_opt( $opt, &$value ) {
 		return $this->run_private_method(
 			array( 'FrmForm', 'sanitize_field_opt' ),
@@ -187,16 +194,19 @@ class test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::normalize_calc_spaces
 	 */
 	public function test_normalize_calc_spaces() {
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
-		$this->assertEquals( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
-		$this->assertEquals( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
+		$this->assertSame( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
+		$this->assertSame( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
 	}
 
+	/**
+	 * @param string $calc
+	 */
 	private function normalize_calc_spaces( $calc ) {
 		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
 	}
