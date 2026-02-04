@@ -154,7 +154,7 @@ class FrmEntriesController {
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 
 		if ( $screen->id === $menu_name . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries' ) {
-			$show_screen = false;
+			return false;
 		}
 
 		return $show_screen;
@@ -454,7 +454,7 @@ class FrmEntriesController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
-			$save = (int) $value;
+			return (int) $value;
 		}
 
 		return $save;

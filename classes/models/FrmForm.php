@@ -1191,11 +1191,7 @@ class FrmForm {
 
 		$form_id = FrmAppHelper::get_param( 'form', $form_id, 'get', 'absint' );
 
-		if ( $form_id ) {
-			$form_id = self::set_current_form( $form_id );
-		}
-
-		return $form_id;
+		return $form_id ? self::set_current_form( $form_id ) : $form_id;
 	}
 
 	/**
@@ -1205,12 +1201,7 @@ class FrmForm {
 	 */
 	public static function get_current_form( $form_id = 0 ) {
 		$form = self::maybe_get_current_form( $form_id );
-
-		if ( is_numeric( $form ) ) {
-			$form = self::set_current_form( $form );
-		}
-
-		return $form;
+		return is_numeric( $form ) ? self::set_current_form( $form ) : $form;
 	}
 
 	/**

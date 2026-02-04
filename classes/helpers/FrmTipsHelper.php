@@ -95,7 +95,7 @@ class FrmTipsHelper {
 
 		if ( $cta_link ) {
 			if ( is_array( $tip['link'] ) ) {
-				$cta_link = FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
+				return FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
 			}
 
 			return $cta_link;

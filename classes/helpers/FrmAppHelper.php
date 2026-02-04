@@ -873,11 +873,7 @@ class FrmAppHelper {
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
-		if ( ! str_contains( $value, '\\\\' ) ) {
-			$value = addslashes( $value );
-		}
-
-		return $value;
+		return str_contains( $value, '\\\\' ) ? $value : addslashes( $value );
 	}
 
 	/**
@@ -1103,7 +1099,7 @@ class FrmAppHelper {
 		}
 
 		if ( $included_draft_hook ) {
-			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
+			return str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
 
 		return $html;
@@ -1351,11 +1347,7 @@ class FrmAppHelper {
 
 		global $wp_query;
 
-		if ( isset( $wp_query->query_vars[ $param ] ) ) {
-			$value = $wp_query->query_vars[ $param ];
-		}
-
-		return $value;
+		return $wp_query->query_vars[ $param ] ?? $value;
 	}
 
 	/**
@@ -2494,7 +2486,7 @@ class FrmAppHelper {
 	 */
 	private static function maybe_update_value_if_null( $value, $function ) {
 		if ( null === $value && in_array( $function, array( 'trim', 'strlen' ), true ) ) {
-			$value = '';
+			return '';
 		}
 
 		return $value;
@@ -2581,7 +2573,7 @@ class FrmAppHelper {
 	 */
 	public static function use_wpautop( $content ) {
 		if ( apply_filters( 'frm_use_wpautop', true ) && is_string( $content ) ) {
-			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
+			return wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 
 		return $content;
@@ -2624,7 +2616,7 @@ class FrmAppHelper {
 		$query = $wp_scripts->registered[ $handle ];
 
 		if ( is_object( $query ) && ! empty( $query->ver ) ) {
-			$ver = $query->ver;
+			return $query->ver;
 		}
 
 		return $ver;
@@ -2781,7 +2773,7 @@ class FrmAppHelper {
 	 */
 	private static function maybe_clear_long_key( $key, $column ) {
 		if ( 'field_key' === $column && strlen( $key ) >= 70 ) {
-			$key = '';
+			return '';
 		}
 		return $key;
 	}
@@ -3677,11 +3669,7 @@ class FrmAppHelper {
 
 		$parsed = FrmSerializedStringParserHelper::get()->parse( $value );
 
-		if ( is_array( $parsed ) ) {
-			$value = $parsed;
-		}
-
-		return $value;
+		return is_array( $parsed ) ? $parsed : $value;
 	}
 
 	/**
@@ -3706,7 +3694,7 @@ class FrmAppHelper {
 		}
 
 		if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
-			$string = $new_string;
+			return $new_string;
 		}
 
 		return $string;
@@ -3785,10 +3773,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function maybe_json_encode( $value ) {
-		if ( is_array( $value ) ) {
-			$value = wp_json_encode( $value );
-		}
-		return $value;
+		return is_array( $value ) ? wp_json_encode( $value ) : $value;
 	}
 
 	/**
@@ -4522,7 +4507,7 @@ class FrmAppHelper {
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {
 		if ( self::should_never_allow_unfiltered_html() ) {
-			$value = self::kses( $value, $allowed );
+			return self::kses( $value, $allowed );
 		}
 		return $value;
 	}

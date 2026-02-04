@@ -449,12 +449,7 @@ class FrmEntry {
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
 		$name = $values['item_name'] ?? $values['name'] ?? $default;
-
-		if ( is_array( $name ) ) {
-			$name = reset( $name );
-		}
-
-		return $name;
+		return is_array( $name ) ? reset( $name ) : $name;
 	}
 
 	/**
@@ -905,7 +900,7 @@ class FrmEntry {
 		$ip = FrmAppHelper::get_ip_address();
 
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
-			$ip = self::get_entry_value( $values, 'ip', $ip );
+			return self::get_entry_value( $values, 'ip', $ip );
 		}
 
 		return $ip;

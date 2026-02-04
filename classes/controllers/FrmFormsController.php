@@ -671,11 +671,7 @@ class FrmFormsController {
 	 * @return string
 	 */
 	public static function preview_page_title( $title ) {
-		if ( in_the_loop() ) {
-			$title = self::preview_title( $title );
-		}
-
-		return $title;
+		return in_the_loop() ? self::preview_title( $title ) : $title;
 	}
 
 	/**
@@ -791,10 +787,7 @@ class FrmFormsController {
 			 * @return string
 			 */
 			function ( $src ) {
-				if ( is_null( $src ) ) {
-					$src = '';
-				}
-				return $src;
+				return is_null( $src ) ? '' : $src;
 			}
 		);
 	}
@@ -1299,7 +1292,7 @@ class FrmFormsController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_per_page' ) {
-			$save = (int) $value;
+			return (int) $value;
 		}
 
 		return $save;
@@ -2655,7 +2648,7 @@ class FrmFormsController {
 		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], $action );
 
 		if ( $method !== 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
-			$method = 'message';
+			return 'message';
 		}
 
 		return $method;
@@ -2837,7 +2830,7 @@ class FrmFormsController {
 		$met_actions = apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
 
 		if ( ! $met_actions ) {
-			$met_actions = array( FrmOnSubmitHelper::get_fallback_action( $event ) );
+			return array( FrmOnSubmitHelper::get_fallback_action( $event ) );
 		}
 
 		return $met_actions;
@@ -3516,7 +3509,7 @@ class FrmFormsController {
 	 */
 	public static function defer_script_loading( $tag, $handle ) {
 		if ( 'captcha-api' === $handle && ! str_contains( $tag, 'defer' ) ) {
-			$tag = str_replace( ' src', ' defer="defer" async="async" src', $tag );
+			return str_replace( ' src', ' defer="defer" async="async" src', $tag );
 		}
 
 		return $tag;

@@ -210,7 +210,7 @@ class FrmFormAction {
 		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
 
 		if ( $updated_action === $action ) {
-			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
+			return FrmFieldsHelper::switch_field_ids( $action );
 		}
 
 		return $updated_action;
@@ -640,11 +640,7 @@ class FrmFormAction {
 			}
 		}
 
-		if ( 1 === $limit ) {
-			$settings = reset( $settings );
-		}
-
-		return $settings;
+		return 1 === $limit ? reset( $settings ) : $settings;
 	}
 
 	/**
@@ -765,11 +761,7 @@ class FrmFormAction {
 			$settings[ $action->ID ] = $action;
 		}
 
-		if ( 1 === $limit ) {
-			$settings = reset( $settings );
-		}
-
-		return $settings;
+		return 1 === $limit ? reset( $settings ) : $settings;
 	}
 
 	/**

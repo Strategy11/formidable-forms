@@ -243,11 +243,7 @@ class FrmAddon {
 
 		$license = trim( get_option( $this->option_name . 'key' ) );
 
-		if ( ! $license ) {
-			$license = $this->activate_defined_license();
-		}
-
-		return $license;
+		return $license ? $license : $this->activate_defined_license();
 	}
 
 	/**
@@ -273,11 +269,7 @@ class FrmAddon {
 
 		$this->get_api_info( $license );
 
-		if ( ! $this->is_parent_licence ) {
-			$license = false;
-		}
-
-		return $license;
+		return $this->is_parent_licence ? $license : false;
 	}
 
 	/**
