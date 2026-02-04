@@ -402,16 +402,20 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 * - To enable Pay Now, include commit=true.
 		 * - To use Continue instead, use commit=false
 		 */
-		$sdk_url = add_query_arg(
-			array(
-				'client-id'   => self::get_client_id(),
-				'components'  => 'buttons,card-fields',
-				'intent'      => $intent,
-				'currency'    => strtoupper( $action->post_content['currency'] ?? 'USD' ),
-				'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
-			),
-			'https://www.paypal.com/sdk/js'
+		$query_args = array(
+			'client-id'   => self::get_client_id(),
+			'components'  => 'buttons,card-fields',
+			'intent'      => $intent,
+			'currency'    => strtoupper( $action->post_content['currency'] ?? 'USD' ),
+			'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
 		);
+
+		$pay_later = $action->post_content['pay_later'] ?? 'auto';
+		if ( 'off' === $pay_later ) {
+			$query_args['disable-funding'] = 'paylater';
+		}
+
+		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
 
 		wp_register_script(
 			'paypal-sdk',
