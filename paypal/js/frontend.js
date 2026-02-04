@@ -79,7 +79,10 @@
 		//	createSubscription: createSubscription,
 			onApprove: onApprove,
 			onError: onError,
-			// TODO: Add onCancel? We can remove the loading spinner from the submit button.
+			onCancel: function() {
+				thisForm.classList.add( 'frm_loading_form' );
+				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
+			},
 			style: {},
 		} ).render( '#paypal-button-container' );
 
