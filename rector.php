@@ -30,7 +30,6 @@ use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
-use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
@@ -142,9 +141,12 @@ return RectorConfig::configure()
 			AbsolutizeRequireAndIncludePathRector::class,
 			ChangeArrayPushToArrayAssignRector::class,
 			CombinedAssignRector::class,
+			// This gets rid of comments as well, so the resulting code can be less easy to follow.
 			CombineIfRector::class,
+			// Prefer compact() for now since it uses less code.
 			CompactToVariablesRector::class,
 			CompleteDynamicPropertiesRector::class,
+			// Ignore this rule. Truthy and falsy checks are encouraged.
 			ExplicitBoolCompareRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			IssetOnPropertyObjectToPropertyExistsRector::class,
@@ -152,6 +154,7 @@ return RectorConfig::configure()
 			JoinStringConcatRector::class,
 			LocallyCalledStaticMethodToNonStaticRector::class,
 			ShortenElseIfRector::class,
+			// This change seems unsafe. It replace empty in cases where the variable might never be set.
 			SimplifyEmptyCheckOnEmptyArrayRector::class,
 			SimplifyRegexPatternRector::class,
 			SingleInArrayToCompareRector::class,
@@ -163,7 +166,6 @@ return RectorConfig::configure()
 			// CodingStyle
 			CallUserFuncArrayToVariadicRector::class,
 			CatchExceptionNameMatchingTypeRector::class,
-			CountArrayToEmptyArrayComparisonRector::class,
 			EncapsedStringsToSprintfRector::class,
 			MakeInheritedMethodVisibilitySameAsParentRector::class,
 			// We do not need these many new lines.
