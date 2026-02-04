@@ -805,7 +805,7 @@ class FrmDb {
 		$cached = wp_cache_get( 'cached_keys', $group );
 
 		if ( ! $cached || ! is_array( $cached ) ) {
-			$cached = array();
+			return array();
 		}
 
 		return $cached;

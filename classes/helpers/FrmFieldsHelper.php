@@ -629,7 +629,7 @@ class FrmFieldsHelper {
 	public static function label_position( $position, $field, $form ) {
 		if ( $position ) {
 			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
-				$position = 'top';
+				return 'top';
 			}
 
 			return $position;
@@ -1352,7 +1352,7 @@ class FrmFieldsHelper {
 		}
 
 		if ( is_array( $new_value ) && ! $return_array ) {
-			$new_value = implode( ', ', $new_value );
+			return implode( ', ', $new_value );
 		}
 
 		return $new_value;
@@ -1429,7 +1429,7 @@ class FrmFieldsHelper {
 		}
 
 		if ( $args['link'] ) {
-			$info = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
+			return '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
 		}
 
 		return $info;

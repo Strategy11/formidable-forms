@@ -613,7 +613,7 @@ abstract class FrmFormMigrator {
 
 		if ( $new_form_id && ! FrmForm::get_key_by_id( $new_form_id ) ) {
 			// Allow reimport if the form was deleted.
-			$new_form_id = 0;
+			return 0;
 		}
 
 		return $new_form_id;

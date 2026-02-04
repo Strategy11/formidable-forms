@@ -199,7 +199,6 @@ return RectorConfig::configure()
 			ChangeOrIfContinueToMultiContinueRector::class,
 			// This breaks a return statement up into multiple return statements. It adds too many lines.
 			ReturnBinaryOrToEarlyReturnRector::class,
-			ReturnEarlyIfVariableRector::class,
 
 			// Php53, Php54, Php70
 			// The WP standard still uses the long array syntax, so ignore this for now.

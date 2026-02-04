@@ -489,7 +489,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	private function maybe_fix_column_name( $column_name ) {
 		if ( str_starts_with( $column_name, '0_' ) ) {
-			$column_name = substr( $column_name, 2 );
+			return substr( $column_name, 2 );
 		}
 		return $column_name;
 	}
