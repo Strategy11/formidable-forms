@@ -11,6 +11,7 @@ $pay_later_value = $form_action->post_content['pay_later'] ?? 'auto';
 	</label>
 	<select id="<?php echo esc_attr( $action_control->get_field_id( 'pay_later' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'pay_later' ) ); ?>">
 		<option value="auto" <?php selected( $pay_later_value, 'auto' ); ?>><?php esc_html_e( 'Automatic', 'formidable' ); ?></option>
+		<option value="no-messaging" <?php selected( $pay_later_value, 'no-message' ); ?>><?php esc_html_e( 'Turn off messaging', 'formidable' ); ?></option>
 		<option value="off" <?php selected( $pay_later_value, 'off' ); ?>><?php esc_html_e( 'Always Disable', 'formidable' ); ?></option>
 	</select>
 </p>

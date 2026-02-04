@@ -33,21 +33,39 @@
 		// Create the card fields container structure
 		// TODO: Make these IDs unique.
 		cardElement.innerHTML = `
-			<div
-			data-pp-message
-			data-pp-placement="product"
-			data-pp-amount="120.00"
-			data-pp-style-layout="text"
-			data-pp-style-logo-type="inline"
-			data-pp-style-text-color="black">
-			</div>
-
 			<div id="paypal-button-container"></div>
 			<div class="separator">OR</div>
 			<div class="frm-paypal-card-number frm6" id="frm-paypal-card-number"></div>
 			<div class="frm-paypal-card-expiry frm3" id="frm-paypal-card-expiry"></div>
 			<div class="frm-paypal-card-cvv frm3" id="frm-paypal-card-cvv"></div>
 		`;
+
+		if ( 'function' === typeof paypal.Messages ) {
+			const payLaterMessage = document.createElement( 'div' );
+			payLaterMessage.toggleAttribute( 'data-pp-message', true );
+			payLaterMessage.setAttribute( 'data-pp-placement', 'product' );
+			payLaterMessage.setAttribute( 'data-pp-amount', '120.00' );
+			payLaterMessage.setAttribute( 'data-pp-style-layout', 'text' );
+			payLaterMessage.setAttribute( 'data-pp-style-logo-type', 'inline' );
+			payLaterMessage.setAttribute( 'data-pp-style-text-color', 'black' );
+			cardElement.prepend( payLaterMessage );
+
+			const payLaterBanner = document.createElement( 'div' );
+			payLaterBanner.id = 'my-pay-later-banner';
+			cardElement.prepend( payLaterBanner );
+
+			// TODO We can use a value here if the amount is not dynamic.
+			// Otherwise we might need to wait until we know an amount
+			// and we might need to try refreshing this message when the amount
+			// changes.
+			paypal.Messages({
+				amount: 100.00,
+				style: {
+					layout: 'text',
+					logo: { type: 'primary' }
+				}
+			}).render( '#my-pay-later-banner' );
+		}
 
 		thisForm = cardElement.closest( 'form' );
 
@@ -83,7 +101,17 @@
 				thisForm.classList.add( 'frm_loading_form' );
 				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 			},
-			style: {},
+			// https://developer.paypal.com/sdk/js/reference/#style
+			style: {
+				// TODO borderRadius is also supported.
+				layout: 'vertical', // this supports horizontal. Should we add a setting for this?
+				color:  'gold', // this supports blue, silver, white, black. Should we add a setting for this?
+				shape:  'rect', // this supports pill and sharp. Should we add a setting for this?
+				// This is the key part:
+				label:  'paypal', // this supports checkout, buynow, pay, installment. Should we add a setting for this?
+				messaging: true,  // Set this to true to show the sub-text under the button
+				borderRadius: 20
+			},
 		} ).render( '#paypal-button-container' );
 
 		const cardFields = window.paypal.CardFields( cardFieldsConfig );

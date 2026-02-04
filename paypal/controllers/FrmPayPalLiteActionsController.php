@@ -404,16 +404,31 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 */
 		$query_args = array(
 			'client-id'   => self::get_client_id(),
-			'components'  => 'buttons,card-fields',
 			'intent'      => $intent,
 			'currency'    => strtoupper( $action->post_content['currency'] ?? 'USD' ),
 			'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
 		);
 
-		$pay_later = $action->post_content['pay_later'] ?? 'auto';
-		if ( 'off' === $pay_later ) {
-			$query_args['disable-funding'] = 'paylater';
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$query_args['debug'] = 'true';
 		}
+
+		$components = array(
+			'buttons',
+			'card-fields',
+			'messages',
+		);
+
+		switch( $action->post_content['pay_later'] ?? 'auto' ) {
+			case 'off':
+				$query_args['disable-funding'] = 'paylater';
+				break;
+			case 'no-messaging':
+				$components = array_diff( $components, array( 'messages' ) );
+				break;
+		}
+
+		$query_args['components'] = implode( ',', $components );
 
 		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
 
