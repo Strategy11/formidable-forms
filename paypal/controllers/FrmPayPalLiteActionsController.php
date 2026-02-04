@@ -670,6 +670,20 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Print additional options for Stripe action settings.
+	 *
+	 * @param array $atts
+	 *
+	 * @return void
+	 */
+	public static function add_action_options( $atts ) {
+		$form_action    = $atts['form_action'];
+		$action_control = $atts['action_control'];
+
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/action-settings-options.php';
+	}
+
+	/**
 	 * @since x.x
 	 *
 	 * @return string

@@ -157,6 +157,13 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 			'action_control' => $this,
 		)
 	);
+
+	FrmPayPalLiteActionsController::add_action_options(
+		array(
+			'form_action'    => $form_action,
+			'action_control' => $this,
+		)
+	);
 	?>
 </div>
 <div class="frm_grid_container">
