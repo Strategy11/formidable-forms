@@ -374,6 +374,7 @@ class RemoveRedundantReturnVariableSniff implements Sniff {
 
 		if ( isset( $tokens[ $next ] ) && $tokens[ $next ]['code'] === T_WHITESPACE ) {
 			$ws = $tokens[ $next ]['content'];
+
 			if ( strpos( $ws, "\n" ) === 0 ) {
 				$fixer->replaceToken( $next, substr( $ws, 1 ) );
 			}
@@ -398,6 +399,7 @@ class RemoveRedundantReturnVariableSniff implements Sniff {
 
 		if ( isset( $tokens[ $next ] ) && $tokens[ $next ]['code'] === T_WHITESPACE ) {
 			$ws = $tokens[ $next ]['content'];
+
 			if ( strpos( $ws, "\n" ) === 0 ) {
 				$fixer->replaceToken( $next, substr( $ws, 1 ) );
 			}
