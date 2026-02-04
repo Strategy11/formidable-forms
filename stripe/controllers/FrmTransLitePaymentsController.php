@@ -254,4 +254,18 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		$frm_payment->update( $payment->id, array( 'status' => $status ) );
 		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array|string $expected_gateways
+	 * @param array|string $selected_gateways
+	 *
+	 * @return void
+	 */
+	public static function maybe_hide_payment_setting( $expected_gateways, $selected_gateways ) {
+		if ( ! array_intersect( (array) $expected_gateways, (array) $selected_gateways ) ) {
+			echo ' frm_hidden';
+		}
+	}
 }

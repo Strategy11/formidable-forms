@@ -67,12 +67,7 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 </div>
 
 <div class="frm_grid_container">
-	<p class="show_paypal<?php echo in_array( 'paypal', (array) $form_action->post_content['gateway'], true ) ? '' : ' frm_hidden'; ?>">
-		<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
-			<?php esc_html_e( 'Product Name', 'formidable' ); ?>
-		</label>
-		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ); ?>" class="frm_not_email_subject large-text" />
-	</p>
+	<?php include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/product-name-action-setting.php'; ?>
 
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
@@ -103,6 +98,7 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 
 	<?php $this->echo_capture_payment_upsell( $form_action->post_content['gateway'] ); ?>
 
+	<div class="frm_grid_container">
 	<p class="frm6 frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
 			<?php esc_html_e( 'Repeat', 'formidable' ); ?>
