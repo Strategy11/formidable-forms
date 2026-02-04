@@ -1333,7 +1333,7 @@ class FrmField {
 
 		if ( $original_type && $original_type !== $field_type ) {
 			// Check the original type for arrays.
-			$field_type = $original_type;
+			return $original_type;
 		}
 
 		return $field_type;

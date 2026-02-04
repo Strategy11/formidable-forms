@@ -452,7 +452,7 @@ class FrmAddonsController {
 
 		if ( str_contains( $license, '-' ) ) {
 			// This is a fix for licenses saved in the past
-			$license = strtoupper( $license );
+			return strtoupper( $license );
 		}
 
 		return $license;
@@ -753,7 +753,7 @@ class FrmAddonsController {
 		$addons       = self::get_api_addons();
 
 		if ( isset( $addons['error'] ) && isset( $addons['error']['type'] ) ) {
-			$license_type = $addons['error']['type'];
+			return $addons['error']['type'];
 		}
 
 		return $license_type;
@@ -1571,7 +1571,7 @@ class FrmAddonsController {
 		}
 
 		if ( ! isset( $requires ) || ! is_string( $requires ) ) {
-			$requires = '';
+			return '';
 		}
 
 		return $requires;

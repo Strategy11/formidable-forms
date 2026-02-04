@@ -557,7 +557,7 @@ class FrmAppController {
 		);
 
 		if ( ! $needs_upgrade ) {
-			$needs_upgrade = apply_filters( 'frm_db_needs_upgrade', $needs_upgrade );
+			return apply_filters( 'frm_db_needs_upgrade', $needs_upgrade );
 		}
 
 		return $needs_upgrade;
@@ -1309,11 +1309,7 @@ class FrmAppController {
 	 * @return string
 	 */
 	public static function set_footer_text( $text ) {
-		if ( FrmAppHelper::is_formidable_admin() ) {
-			$text = '';
-		}
-
-		return $text;
+		return FrmAppHelper::is_formidable_admin() ? '' : $text;
 	}
 
 	/**

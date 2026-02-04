@@ -225,7 +225,7 @@ class FrmFieldsController {
 		$li_classes .= 'frmend';
 
 		if ( $field ) {
-			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
+			return apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
 
 		return $li_classes;
@@ -471,11 +471,7 @@ class FrmFieldsController {
 		// The credit_card key is set for backward compatibility.
 		unset( $pro_fields['credit_card'] );
 
-		if ( array_key_exists( $type, $pro_fields ) ) {
-			$type = 'text';
-		}
-
-		return $type;
+		return array_key_exists( $type, $pro_fields ) ? 'text' : $type;
 	}
 
 	/**
@@ -1075,10 +1071,6 @@ class FrmFieldsController {
 	 * @return mixed
 	 */
 	public static function check_label( $opt ) {
-		if ( is_array( $opt ) ) {
-			$opt = $opt['label'] ?? reset( $opt );
-		}
-
-		return $opt;
+		return is_array( $opt ) ? ( $opt['label'] ?? reset( $opt ) ) : $opt;
 	}
 }

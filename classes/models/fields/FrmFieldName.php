@@ -92,12 +92,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected function get_name_layout() {
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
-
-		if ( ! $name_layout ) {
-			$name_layout = 'first_last';
-		}
-
-		return $name_layout;
+		return $name_layout ? $name_layout : 'first_last';
 	}
 
 	/**

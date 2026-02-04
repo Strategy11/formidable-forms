@@ -462,11 +462,7 @@ class FrmEntryFormatter {
 
 		$content .= $this->table_generator->generate_table_footer();
 
-		if ( $this->is_clickable ) {
-			$content = make_clickable( $content );
-		}
-
-		return $content;
+		return $this->is_clickable ? make_clickable( $content ) : $content;
 	}
 
 	/**
@@ -922,7 +918,7 @@ class FrmEntryFormatter {
 		$display_value = $this->flatten_array( $display_value );
 
 		if ( ! isset( $this->atts['line_breaks'] ) || ! empty( $this->atts['line_breaks'] ) ) {
-			$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
+			return str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
 		}
 
 		return $display_value;

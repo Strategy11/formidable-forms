@@ -456,7 +456,7 @@ class FrmTransLiteActionsController {
 		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
 
 		if ( ! $payment_actions ) {
-			$payment_actions = array();
+			return array();
 		}
 
 		return $payment_actions;

@@ -129,7 +129,7 @@ class FrmEntriesHelper {
 		}
 
 		if ( ! is_array( $new_value ) ) {
-			$new_value = str_replace( '"', '&quot;', $new_value );
+			return str_replace( '"', '&quot;', $new_value );
 		}
 
 		return $new_value;

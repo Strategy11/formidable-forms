@@ -115,11 +115,7 @@ class FrmTransLiteCRUDController {
 		$default = reset( $allowed );
 		$name    = FrmAppHelper::get_param( 'type', $default, 'get', 'sanitize_text_field' );
 
-		if ( ! in_array( $name, $allowed, true ) ) {
-			$name = $default;
-		}
-
-		return $name;
+		return in_array( $name, $allowed, true ) ? $name : $default;
 	}
 
 	/**

@@ -393,7 +393,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}//end foreach
 
 		if ( isset( $denylist['extract_value'] ) && is_callable( $denylist['extract_value'] ) ) {
-			$values_to_check = call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
+			return call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
 		}
 
 		return $values_to_check;

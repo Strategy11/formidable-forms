@@ -56,11 +56,7 @@ class FrmFieldHTML extends FrmFieldType {
 		$pre_filter = $html;
 		$html       = apply_filters( 'frm_get_default_value', $html, (object) $this->field, false );
 
-		if ( $pre_filter === $html ) {
-			$html = do_shortcode( $html );
-		}
-
-		return $html;
+		return $pre_filter === $html ? do_shortcode( $html ) : $html;
 	}
 
 	/**
