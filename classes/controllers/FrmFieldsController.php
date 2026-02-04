@@ -1071,6 +1071,6 @@ class FrmFieldsController {
 	 * @return mixed
 	 */
 	public static function check_label( $opt ) {
-		return is_array( $opt ) ? $opt['label'] ?? reset( $opt ) : $opt;
+		return is_array( $opt ) ? ( $opt['label'] ?? reset( $opt ) ) : $opt;
 	}
 }
