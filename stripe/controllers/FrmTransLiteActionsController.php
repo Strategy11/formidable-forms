@@ -641,4 +641,26 @@ class FrmTransLiteActionsController {
 		$new_values['name'] = $field_name;
 		return FrmField::create( $new_values );
 	}
+
+	/**
+	 * Remove credit card validation errors if the form is submitted with a valid PayPal order id.
+	 *
+	 * @param array    $errors
+	 * @param stdClass $field
+	 *
+	 * @return array
+	 */
+	public static function remove_cc_errors( $errors, $field ) {
+		$field_id = $field->temp_id ?? $field->id;
+
+		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
+			unset( $errors[ 'field' . $field_id . '-cc' ] );
+		}
+
+		if ( isset( $errors[ 'field' . $field_id ] ) ) {
+			unset( $errors[ 'field' . $field_id ] );
+		}
+
+		return $errors;
+	}
 }

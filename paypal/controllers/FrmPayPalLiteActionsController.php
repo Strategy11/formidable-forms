@@ -591,25 +591,14 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return array
 	 */
-	public static function remove_cc_validation( $errors, $field, $values ) {
-		// TODO
-		$has_processed = false;
+	public static function remove_cc_validation( $errors, $field ) {
+		$paypal_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
 
-		if ( ! $has_processed ) {
+		if ( ! $paypal_order_id ) {
 			return $errors;
 		}
 
-		$field_id = $field->temp_id ?? $field->id;
-
-		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
-			unset( $errors[ 'field' . $field_id . '-cc' ] );
-		}
-
-		if ( isset( $errors[ 'field' . $field_id ] ) ) {
-			unset( $errors[ 'field' . $field_id ] );
-		}
-
-		return $errors;
+		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
 	}
 
 	/**
