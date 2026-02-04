@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import style from './frm-border-radius-component.css';
 
 export class frmBorderRadiusComponent extends frmWebComponent {
-	#onChange = () => {};
+	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
 	#unitTypeOptions = [ 'px', 'em', '%' ];
 	#value = '0px';
 	#defaultValue = '0px';
@@ -43,14 +43,14 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 
 		const parts = this.#defaultValue.split( ' ' );
 		return {
-			top: this.parseValueUnit( parts[ 0 ] || '0px' ),
-			bottom: this.parseValueUnit( parts[ 2 ] || parts[ 0 ] || '0px' ),
-			left: this.parseValueUnit( parts[ 3 ] || parts[ 1 ] || parts[ 0 ] || '0px' ),
-			right: this.parseValueUnit( parts[ 1 ] || parts[ 0 ] || '0px' )
+			top: frmBorderRadiusComponent.parseValueUnit( parts[ 0 ] || '0px' ),
+			bottom: frmBorderRadiusComponent.parseValueUnit( parts[ 2 ] || parts[ 0 ] || '0px' ),
+			left: frmBorderRadiusComponent.parseValueUnit( parts[ 3 ] || parts[ 1 ] || parts[ 0 ] || '0px' ),
+			right: frmBorderRadiusComponent.parseValueUnit( parts[ 1 ] || parts[ 0 ] || '0px' )
 		};
 	}
 
-	parseValueUnit( valueStr ) {
+	static parseValueUnit( valueStr ) {
 		const match = valueStr.match( /^(\d+)(px|em|%)?$/ );
 		if ( ! match ) {
 			return { value: 0, unit: 'px' };
@@ -225,7 +225,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		return this.button;
 	}
 
-	set onChange( callback ) {
+	set onChange( callback ) { // eslint-disable-line accessor-pairs
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -233,8 +233,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.#onChange = callback;
 	}
 
-	set borderRadiusDefaultValue( value ) {
+	set borderRadiusDefaultValue( value ) { // eslint-disable-line accessor-pairs
 		this.#defaultValue = value;
-		this.#usesMultipleValues = ! value.match( /^(\d+)(px|em|%)?$/ ) && '' !== value;
+		this.#usesMultipleValues = ! /^(\d+)(px|em|%)?$/.test( value ) && '' !== value;
 	}
 }

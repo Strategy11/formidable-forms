@@ -1,10 +1,10 @@
 import { frmWebComponent } from '../frm-web-component';
-import frmSliderComponent from '../../../src/settings-components/components/slider-component.js';
+import frmSliderComponent from '../../settings-components/components/slider-component.js';
 import style from './frm-range-slider-component.css';
 import { __ } from '@wordpress/i18n';
 
 export class frmRangeSliderComponent extends frmWebComponent {
-	#onChange = () => {};
+	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
 	#sliderDefaultValue = '0px';
 	#sliderDefaultMultipleValues = {
 		vertical: { value: 0, unit: 'px' },
@@ -30,7 +30,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the slider component is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) {
+	set onChange( callback ) { // eslint-disable-line accessor-pairs
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -44,7 +44,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {boolean} value - The value to set.
 	 * @return {void}
 	 */
-	set hasMultipleValues( value ) {
+	set hasMultipleValues( value ) { // eslint-disable-line accessor-pairs
 		this.#hasMultipleValues = value;
 	}
 
@@ -54,7 +54,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Object} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderDefaultMultipleValues( value ) {
+	set sliderDefaultMultipleValues( value ) { // eslint-disable-line accessor-pairs
 		this.#sliderDefaultMultipleValues = value;
 	}
 
@@ -64,7 +64,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string|number} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderDefaultValue( value ) {
+	set sliderDefaultValue( value ) { // eslint-disable-line accessor-pairs
 		this.#sliderDefaultValue = String( value );
 	}
 
@@ -74,7 +74,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Array} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderAvailableUnits( value ) {
+	set sliderAvailableUnits( value ) { // eslint-disable-line accessor-pairs
 		this.#sliderAvailableUnits = value;
 	}
 
@@ -84,15 +84,15 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string|number} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderMaxValue( value ) {
+	set sliderMaxValue( value ) { // eslint-disable-line accessor-pairs
 		this.#sliderMaxValue = value.toString();
 	}
 
-	set steps( value ) {
+	set steps( value ) { // eslint-disable-line accessor-pairs
 		this.#sliderSteps = value;
 	}
 
-	useShadowDom() {
+	useShadowDom() { // eslint-disable-line class-methods-use-this
 		return false;
 	}
 
@@ -121,7 +121,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		this.slidersContainer.append( this.createSlider( {
 			maxValue: config.maxValue,
 			units: config.units,
-			value: this.parseValueUnit( config.fieldValue ),
+			value: frmRangeSliderComponent.parseValueUnit( config.fieldValue ),
 			addHiddenInputValue: true
 		} ) );
 
@@ -156,12 +156,12 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		const getPart = ( id, fallbackId ) => parts[ id ] || parts[ fallbackId ] || '0px';
 
 		return {
-			vertical: this.parseValueUnit( getPart( 0 ) ),
-			top: this.parseValueUnit( getPart( 0 ) ),
-			bottom: this.parseValueUnit( getPart( 2, 0 ) ),
-			horizontal: this.parseValueUnit( getPart( 1, 0 ) ),
-			left: this.parseValueUnit( getPart( 3, 1 ) ),
-			right: this.parseValueUnit( getPart( 1, 0 ) )
+			vertical: frmRangeSliderComponent.parseValueUnit( getPart( 0 ) ),
+			top: frmRangeSliderComponent.parseValueUnit( getPart( 0 ) ),
+			bottom: frmRangeSliderComponent.parseValueUnit( getPart( 2, 0 ) ),
+			horizontal: frmRangeSliderComponent.parseValueUnit( getPart( 1, 0 ) ),
+			left: frmRangeSliderComponent.parseValueUnit( getPart( 3, 1 ) ),
+			right: frmRangeSliderComponent.parseValueUnit( getPart( 1, 0 ) )
 		};
 	}
 
@@ -171,7 +171,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string} valueStr - The value string to parse.
 	 * @return {Object} - The value and unit object.
 	 */
-	parseValueUnit( valueStr ) {
+	static parseValueUnit( valueStr ) {
 		const defaultValue = { value: 0, unit: 'px' };
 
 		if ( ! valueStr ) {
@@ -205,7 +205,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @return {void}
 	 */
 	createMultipleValuesSlider( wrapper, options ) {
-		const { maxValue, units, componentClass, componentId, fieldName, fieldValue, defaultValues } = options;
+		const { maxValue, units, componentClass, fieldValue, defaultValues } = options;
 		const groups = [
 			{
 				type: 'vertical',
@@ -311,7 +311,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Object} value - The value of the slider.
 	 * @return {Element} - The slider track element.
 	 */
-	createSliderTrack( value ) {
+	static createSliderTrack( value ) {
 		const slider = document.createElement( 'span' );
 		slider.classList.add( 'frm-slider' );
 		slider.setAttribute( 'tabindex', '0' );
@@ -356,7 +356,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		const unitSelect = document.createElement( 'select' );
 		unitSelect.setAttribute( 'aria-label', __( 'Value unit', 'formidable' ) );
 
-		units.forEach( unit => unitSelect.append( this.createDropdownOption( unit, unit, value.unit === unit ) ) );
+		units.forEach( unit => unitSelect.append( frmRangeSliderComponent.createDropdownOption( unit, unit, value.unit === unit ) ) );
 
 		valueContainer.append( valueInput, unitSelect );
 
@@ -371,7 +371,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {boolean} selected - Whether the option is selected.
 	 * @return {Element} - The dropdown option element.
 	 */
-	createDropdownOption( value, label, selected = false ) {
+	static createDropdownOption( value, label, selected = false ) {
 		const option = document.createElement( 'option' );
 		option.value = value;
 		option.textContent = label;
@@ -385,7 +385,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string} iconSvgId - The ID of the SVG icon.
 	 * @return {Element} - The SVG icon element.
 	 */
-	createSvgIcon( iconSvgId ) {
+	static createSvgIcon( iconSvgId ) {
 		const svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 		svg.classList.add( 'frmsvg' );
 
@@ -426,11 +426,11 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 		// Icon
 		if ( iconSvgId ) {
-			sliderContainer.append( this.createSvgIcon( iconSvgId ) );
+			sliderContainer.append( frmRangeSliderComponent.createSvgIcon( iconSvgId ) );
 		}
 
 		// Slider track
-		sliderContainer.append( this.createSliderTrack( value ) );
+		sliderContainer.append( frmRangeSliderComponent.createSliderTrack( value ) );
 		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
@@ -447,8 +447,8 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	}
 
 	afterViewInit() {
-		const defaultValues = this.hasMultipleSliderValues() ? this.parseDefaultMultipleValues() : this.parseValueUnit( this.defaultValue );
+		const defaultValues = this.hasMultipleSliderValues() ? this.parseDefaultMultipleValues() : frmRangeSliderComponent.parseValueUnit( this.defaultValue );
 		const options = Object.assign( { defaultValues }, { steps: this.#sliderSteps } );
-		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), options );
+		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), options ); // eslint-disable-line no-new
 	}
 }

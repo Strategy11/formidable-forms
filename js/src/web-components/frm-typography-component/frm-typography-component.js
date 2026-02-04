@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import style from './frm-typography-component.css';
 
 export class frmTypographyComponent extends frmWebComponent {
-	#onChange = () => {};
+	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
 	#defaultOptions = [
 		{
 			value: '21px',
@@ -89,7 +89,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			const opt = document.createElement( 'option' );
 			opt.value = option.value;
 			opt.textContent = option.label;
-			opt.selected = ( option.value === 'custom' && this.isCustomFonSize( this.#defaultValue ) ) || option.value === this.#defaultValue;
+			opt.selected = ( option.value === 'custom' && frmTypographyComponent.isCustomFonSize( this.#defaultValue ) ) || option.value === this.#defaultValue;
 			select.append( opt );
 		} );
 	}
@@ -100,7 +100,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {string} value - The value to check if it is a custom font size.
 	 * @return {boolean} - True if the value is a custom font size, false otherwise.
 	 */
-	isCustomFonSize( value ) {
+	static isCustomFonSize( value ) {
 		return -1 === [ '', '18px', '21px', '26px', '32px' ].indexOf( value );
 	}
 
@@ -111,7 +111,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @return {void}
 	 */
 	changeSelectValue( value ) {
-		const isCustomFonSize = this.isCustomFonSize( value );
+		const isCustomFonSize = frmTypographyComponent.isCustomFonSize( value );
 		Array.from( this.select.options ).forEach( option => {
 			option.selected = ( option.value === 'custom' && isCustomFonSize ) || option.value === value;
 		} );
@@ -138,7 +138,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	getUnitValueInput() {
 		this.unitValueInput = document.createElement( 'input' );
 		if ( null !== this.componentId ) {
-			this.unitValueInput.id = this.componentId + '-unit';
+			this.unitValueInput.id = `${ this.componentId }-unit`;
 		}
 		if ( null !== this.fieldName ) {
 			this.unitValueInput.name = `${ this.fieldName }[unit]`;
@@ -165,7 +165,7 @@ export class frmTypographyComponent extends frmWebComponent {
 		this.unitTypeSelect = document.createElement( 'select' );
 
 		if ( null !== this.componentId ) {
-			this.unitTypeSelect.id = this.componentId + '-unit-type';
+			this.unitTypeSelect.id = `${ this.componentId }-unit-type`;
 		}
 		if ( null !== this.fieldName ) {
 			this.unitTypeSelect.name = `${ this.fieldName }[unit-type]`;
@@ -221,15 +221,15 @@ export class frmTypographyComponent extends frmWebComponent {
 		if ( ! value ) {
 			return defaultValue;
 		}
-		const unitType = value.match( /^([\d.]+)(px|em|%)?$/ )[ 2 ] || 'px';
+		const match = value.match( /^([\d.]+)(px|em|%)?$/ );
 
-		if ( ! unitType ) {
+		if ( ! match ) {
 			return defaultValue;
 		}
 
 		return {
 			value: parseInt( value, 10 ),
-			unit: unitType
+			unit: match[ 2 ] || 'px'
 		};
 	}
 
@@ -239,7 +239,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the select element is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) {
+	set onChange( callback ) { // eslint-disable-line accessor-pairs
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -253,7 +253,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {string} value - The value to set dynamically the default value for.
 	 * @return {void}
 	 */
-	set typographyDefaultValue( value ) {
+	set typographyDefaultValue( value ) { // eslint-disable-line accessor-pairs
 		this.#defaultValue = value;
 	}
 }

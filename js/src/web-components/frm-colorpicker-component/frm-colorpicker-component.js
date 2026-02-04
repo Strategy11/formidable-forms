@@ -2,7 +2,7 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-colorpicker-component.css';
 
 class frmColorpickerLiteComponent extends frmWebComponent {
-	#onChange = () => {};
+	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
 	#defaultValue = '#ffffff';
 
 	constructor() {
@@ -37,7 +37,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 		return this.input;
 	}
 
-	useShadowDom() {
+	useShadowDom() { // eslint-disable-line class-methods-use-this
 		return false;
 	}
 
@@ -79,7 +79,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the color picker component is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) {
+	set onChange( callback ) { // eslint-disable-line accessor-pairs
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}

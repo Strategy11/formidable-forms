@@ -95,7 +95,7 @@ export default class frmSliderComponent {
 			this.expandSliderGroup( element );
 			this.updateOnUnitChange( element, valueInput, index );
 			this.changeSliderPositionOnClick( element, valueInput, index );
-			this.maybeDisableUnitDropdown( element );
+			frmSliderComponent.maybeDisableUnitDropdown( element );
 
 			draggableBullet.addEventListener( 'mousedown', event => {
 				event.preventDefault();
@@ -181,7 +181,7 @@ export default class frmSliderComponent {
 			const sliderRect = frmSlider.getBoundingClientRect();
 			const deltaX = event.clientX - sliderRect.left - this.sliderBulletWidth;
 			const unit = element.querySelector( 'select' ).value;
-			const value = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
+			const value = frmSliderComponent.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
 
 			if ( value < 0 ) {
 				return;
@@ -200,7 +200,7 @@ export default class frmSliderComponent {
 	 *
 	 * @param {HTMLElement} element - The slider element.
 	 */
-	maybeDisableUnitDropdown( element ) {
+	static maybeDisableUnitDropdown( element ) {
 		const select = element.querySelector( 'select' );
 		if ( ! select ) {
 			return;
@@ -325,14 +325,12 @@ export default class frmSliderComponent {
 		const value = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
 		const unit = slider.querySelector( 'select' ).value;
 		const steps = this.options[ index ].steps;
-		let deltaX;
+		let deltaX = Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
 
 		if ( '%' === unit ) {
 			deltaX = Math.round( sliderWidth * value / 100 );
 		} else if ( steps && steps.length > 0 ) {
 			deltaX = this.calculateDeltaXFromSteps( value, steps, sliderWidth );
-		} else {
-			deltaX = Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
 		}
 
 		slider.querySelector( '.frm-slider-active-track' ).style.width = `${ deltaX }px`;
@@ -352,7 +350,7 @@ export default class frmSliderComponent {
 		const stepIndex = steps.indexOf( value );
 		if ( -1 === stepIndex ) {
 			// If value not in steps, find closest and use its position
-			const closestValue = this.snapToStep( value, steps );
+			const closestValue = frmSliderComponent.snapToStep( value, steps );
 			const closestIndex = steps.indexOf( closestValue );
 			return Math.round( ( closestIndex / ( steps.length - 1 ) ) * sliderWidth );
 		}
@@ -414,7 +412,7 @@ export default class frmSliderComponent {
 			return;
 		}
 		const unit = element.querySelector( 'select' ).value;
-		const value = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
+		const value = frmSliderComponent.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
 
 		element.querySelector( '.frm-slider-value input[type="text"]' ).value = value;
 		element.querySelector( '.frm-slider-bullet .frm-slider-value-label' ).innerText = value;
@@ -495,7 +493,7 @@ export default class frmSliderComponent {
 	 * @param {Array|null} steps    - Optional array of step values to snap to.
 	 * @return {number} - The calculated value.
 	 */
-	calculateValue( width, deltaX, maxValue, steps = null ) {
+	static calculateValue( width, deltaX, maxValue, steps = null ) {
 		if ( steps && steps.length > 0 ) {
 			// For stepped sliders, map position directly to step index
 			const position = deltaX / width;
@@ -517,7 +515,7 @@ export default class frmSliderComponent {
 	 * @param {Array}  steps - Array of step values to snap to.
 	 * @return {number} - The nearest step value.
 	 */
-	snapToStep( value, steps ) {
+	static snapToStep( value, steps ) {
 		let nearest = steps[ 0 ];
 		let minDiff = Math.abs( value - nearest );
 

@@ -2,7 +2,7 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-dropdown-component.css';
 
 export class frmDropdownComponent extends frmWebComponent {
-	#onChange = () => {};
+	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
 	#select = document.createElement( 'select' );
 
 	constructor() {
@@ -44,7 +44,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 *
 	 * @return {boolean} - True if the component should use shadow DOM, false otherwise.
 	 */
-	useShadowDom() {
+	useShadowDom() { // eslint-disable-line class-methods-use-this
 		return true;
 	}
 
@@ -82,7 +82,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * @param {Array} options - The options to add.
 	 * @return {void}
 	 */
-	set addOptions( options ) {
+	set addOptions( options ) { // eslint-disable-line accessor-pairs
 		options.forEach( option => {
 			const opt = document.createElement( 'option' );
 			opt.value = option.value;
@@ -98,7 +98,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * @param {boolean} value - The value to set.
 	 * @return {void}
 	 */
-	set disabled( value ) {
+	set disabled( value ) { // eslint-disable-line accessor-pairs
 		this.#select.disabled = value;
 	}
 
@@ -108,7 +108,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the select element is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) {
+	set onChange( callback ) { // eslint-disable-line accessor-pairs
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -122,7 +122,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * @param {string} value - The value to set.
 	 * @return {void}
 	 */
-	set selectedValue( value ) {
+	set selectedValue( value ) { // eslint-disable-line accessor-pairs
 		const option = Array.from( this.#select.options ).find( option => option.value === value );
 		if ( option ) {
 			option.selected = true;

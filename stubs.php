@@ -534,6 +534,11 @@ namespace Elementor {
 		const SELECT2     = 'select2';
 		const SWITCHER    = 'switcher';
 	}
+
+	class FrmProFormsController{
+		public static function enqueue_pro_web_components_script(){
+		}
+	}
 }
 
 namespace WPMailSMTP {

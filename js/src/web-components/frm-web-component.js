@@ -119,7 +119,7 @@ export class frmWebComponent extends HTMLElement {
 		} );
 	}
 
-	set frmLabel( text ) {
+	set frmLabel( text ) { // eslint-disable-line accessor-pairs
 		this._labelText = text;
 	}
 
@@ -153,5 +153,5 @@ export class frmWebComponent extends HTMLElement {
 	* Called by browser when the component is removed from the DOM.
 	* @return void
 	*/
-	disconnectedCallback() {}
+	disconnectedCallback() {} // eslint-disable-line class-methods-use-this, no-empty-function
 }
