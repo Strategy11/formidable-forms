@@ -90,7 +90,13 @@ class FrmStrpLiteSettings {
 
 		foreach ( $settings as $setting => $default ) {
 			if ( isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
-				$this->settings->{$setting} = trim( sanitize_text_field( $params[ 'frm_' . $this->param() . '_' . $setting ] ) );
+				$value = $params[ 'frm_' . $this->param() . '_' . $setting ];
+				// Clean up any accumulated backslashes from previous bug.
+				// @see https://github.com/Strategy11/formidable-pro/issues/6294
+				if ( 'processing_message' === $setting ) {
+					$value = str_replace( '\\', '', $value );
+				}
+				$this->settings->{$setting} = trim( sanitize_text_field( $value ) );
 			}
 		}
 
