@@ -88,6 +88,17 @@ if ( ! empty( $should_show_warning ) ) {
 				}
 				?>
 				</select>
+
+				<?php
+				// Prints hidden inputs to map the form action ID and type.
+				foreach ( $form_actions as $form_action ) {
+					printf(
+						'<input type="hidden" name="frm_testmode[form_action_types][%d]" value="%s">',
+						intval( $form_action->ID ),
+						esc_attr( $form_action->post_excerpt )
+					);
+				}
+				?>
 			</div>
 		</label>
 	</div>
