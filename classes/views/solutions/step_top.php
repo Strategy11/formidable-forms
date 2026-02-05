@@ -2,17 +2,15 @@
 /**
  * Solutions step top view
  *
- * @since 4.0
+ * @since x.x
+ *
+ * @var array  $step           Step information including current status, completion, label, description, and error
+ * @var string $section_class CSS class for the step section
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-/**
- * @var array  $step           Step information including current status, completion, label, description, and error
- * @var string $section_class CSS class for the step section
- */
 ?>
 <section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 	<aside class="num">

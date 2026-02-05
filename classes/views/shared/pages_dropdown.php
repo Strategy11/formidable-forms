@@ -2,18 +2,16 @@
 /**
  * Pages dropdown view
  *
- * @since 3.0
+ * @since x.x
+ *
+ * @var array  $args     Pages dropdown arguments
+ * @var object $pages    List of WordPress pages
+ * @var int    $selected Currently selected page ID
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-/**
- * @var array  $args     Pages dropdown arguments
- * @var object $pages    List of WordPress pages
- * @var int    $selected Currently selected page ID
- */
 ?>
 <select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
 	<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>

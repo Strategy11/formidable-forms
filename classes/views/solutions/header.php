@@ -2,16 +2,14 @@
 /**
  * Solutions header view
  *
- * @since 4.0
+ * @since x.x
+ *
+ * @var array $size Logo dimensions (height and width)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-/**
- * @var array $size Logo dimensions (height and width)
- */
 ?>
 <section class="top">
 	<div class="frm-smtp-logos">

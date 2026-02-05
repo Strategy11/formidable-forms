@@ -2,7 +2,7 @@
 /**
  * Solutions step bottom view
  *
- * @since 4.0
+ * @since x.x
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

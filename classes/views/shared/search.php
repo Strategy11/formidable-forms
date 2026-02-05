@@ -2,18 +2,16 @@
 /**
  * Search view
  *
- * @since 3.06
+ * @since x.x
+ *
+ * @var array  $atts       Search attributes including class, text, and tosearch
+ * @var string $input_id   Input element ID
+ * @var array  $input_atts Input HTML attributes
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-/**
- * @var array  $atts       Search attributes including class, text, and tosearch
- * @var string $input_id   Input element ID
- * @var array  $input_atts Input HTML attributes
- */
 ?>
 <p class="frm-search <?php echo esc_attr( $atts['class'] ); ?>">
 	<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">

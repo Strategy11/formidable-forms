@@ -2,16 +2,15 @@
 /**
  * Solutions app install form view
  *
- * @since 4.0
+ * @since x.x
+ *
+ * @var array $step Step information including button_class, button_label, and nested flag
+ * @var string $xml  XML package URL for the template
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-/**
- * @var array $step Step information including button_class, button_label, and nested flag
- * @var string $xml  XML package URL for the template
- */
 ?>
 				<input type="hidden" name="link" id="frm_link" value="<?php echo esc_attr( $xml ); ?>" />
 				<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />

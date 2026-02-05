@@ -2,16 +2,14 @@
 /**
  * Validation error view
  *
- * @since 6.15
+ * @since x.x
+ *
+ * @var array $args Arguments including id, errors, and class
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-/**
- * @var array $args Arguments including id, errors, and class
- */
 ?>
 <span id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $args['class'] ); ?>">
 	<?php

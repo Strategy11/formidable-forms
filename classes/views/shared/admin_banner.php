@@ -2,7 +2,11 @@
 /**
  * Admin banner view
  *
- * @since 5.4.2
+ * @since x.x
+ *
+ * @var string $cta_text    Call-to-action text for the upgrade banner
+ * @var string $upgrade_link URL for the upgrade link
+ * @var array  $utm         UTM parameters for tracking
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,23 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm-upgrade-bar">
 	<div class="frm-upgrade-bar-inner">
 		<?php
-		/**
-		 * @var string $cta_text Call-to-action text for the upgrade banner
-		 */
 		$cta_text = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_text' );
 
 		if ( ! $cta_text ) {
 			$cta_text = __( 'upgrading to PRO', 'formidable' );
 		}
 
-		/**
-		 * @var string $upgrade_link URL for the upgrade link
-		 */
 		$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
-		
-		/**
-		 * @var array $utm UTM parameters for tracking
-		 */
 		$utm          = array(
 			'campaign' => 'settings-license',
 			'content'  => 'lite-banner',

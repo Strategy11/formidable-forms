@@ -2,16 +2,14 @@
 /**
  * Solutions page options view
  *
- * @since 4.0
+ * @since x.x
+ *
+ * @var array $pages Array of page information including type, label, and name
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-/**
- * @var array $pages Array of page information including type, label, and name
- */
 ?>
 <h3>Choose New Page Title</h3>
 
