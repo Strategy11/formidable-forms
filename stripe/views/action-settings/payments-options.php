@@ -98,7 +98,6 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 
 	<?php $this->echo_capture_payment_upsell( $form_action->post_content['gateway'] ); ?>
 
-	<div class="frm_grid_container">
 	<p class="frm6 frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
 			<?php esc_html_e( 'Repeat', 'formidable' ); ?>
