@@ -41,15 +41,6 @@
 		`;
 
 		if ( 'function' === typeof paypal.Messages ) {
-			const payLaterMessage = document.createElement( 'div' );
-			payLaterMessage.toggleAttribute( 'data-pp-message', true );
-			payLaterMessage.setAttribute( 'data-pp-placement', 'product' );
-			payLaterMessage.setAttribute( 'data-pp-amount', '120.00' );
-			payLaterMessage.setAttribute( 'data-pp-style-layout', 'text' );
-			payLaterMessage.setAttribute( 'data-pp-style-logo-type', 'inline' );
-			payLaterMessage.setAttribute( 'data-pp-style-text-color', 'black' );
-			cardElement.prepend( payLaterMessage );
-
 			const payLaterBanner = document.createElement( 'div' );
 			payLaterBanner.id = 'my-pay-later-banner';
 			cardElement.prepend( payLaterBanner );
@@ -75,7 +66,7 @@
 		//	createVaultSetupToken: createVaultSetupToken,
 			onApprove: onApprove,
 			onError: onError,
-			style: getCardFieldStyles(),
+			style: frmPayPalVars.style,
 			inputEvents: {
 				onChange: data => {
 					cardFieldsValid = data.isFormValid;
@@ -119,19 +110,6 @@
 		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
 
 		return cardFields;
-	}
-
-	/**
-	 * Get card field styles from localized vars or use defaults.
-	 *
-	 * @return {Object} Style configuration for PayPal card fields.
-	 */
-	function getCardFieldStyles() {
-		if ( frmPayPalVars.style ) {
-			return frmPayPalVars.style;
-		}
-
-		return {};
 	}
 
 	/**

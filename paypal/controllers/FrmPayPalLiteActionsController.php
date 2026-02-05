@@ -399,7 +399,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 * - Subscriptions require intent=subscription.
 		 * - Subscriptions maybe also require vault=true.
 		 * - To enable paylater, include enable-funding=paylater.
-		 * - To enable Pay Now, include commit=true.
+		 * - To enable Pay Now, include commit=true. This is the default, and what we support in this plugin.
 		 * - To use Continue instead, use commit=false
 		 */
 		$query_args = array(
