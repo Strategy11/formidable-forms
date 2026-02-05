@@ -2351,13 +2351,12 @@ class FrmXMLHelper {
 			return;
 		}
 
-        foreach ( $post_content['conditions'] as $email_key => $val ) {
-            if ( is_numeric( $email_key ) ) {
-                $post_content['conditions'][ $email_key ] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
-            }
-            unset( $email_key, $val );
-        }
-    
+		foreach ( $post_content['conditions'] as $email_key => $val ) {
+			if ( is_numeric( $email_key ) ) {
+				$post_content['conditions'][ $email_key ] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
+			}
+			unset( $email_key, $val );
+		}
 	}
 
 	/**

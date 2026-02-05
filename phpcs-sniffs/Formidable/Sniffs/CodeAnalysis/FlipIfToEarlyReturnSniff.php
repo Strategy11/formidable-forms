@@ -725,7 +725,7 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	 *
 	 * @param File   $phpcsFile
 	 * @param int    $start
-	 * @param int|false $end
+	 * @param false|int $end
 	 *
 	 * @return false|int
 	 */
