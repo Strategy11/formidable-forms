@@ -286,33 +286,7 @@ class FrmSolution {
 			'width'  => 90,
 		);
 
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<section class="top">
-			<div class="frm-smtp-logos">
-				<?php FrmAppHelper::show_logo( $size ); ?>
-				<?php
-				FrmAppHelper::icon_by_class(
-					'frmfont frm_arrow_right_icon',
-					array(
-						'aria-label' => 'Install',
-						'style'      => 'width:30px;height:30px;margin:0 35px;',
-					)
-				);
-				FrmAppHelper::icon_by_class(
-					'frmfont frm_wordpress_icon',
-					array(
-						'aria-label' => 'WordPress',
-						'style'      => 'width:90px;height:90px;',
-					)
-				);
-				?>
-			</div>
-			<h1><?php echo esc_html( $this->page_title() ); ?></h1>
-			<p><?php echo esc_html( $this->page_description() ); ?></p>
-		</section>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/solutions/header.php';
 	}
 
 	/**
@@ -460,38 +434,7 @@ class FrmSolution {
 	protected function step_top( $step ) {
 		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
 
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
-			<aside class="num">
-			<?php
-			if ( ! empty( $step['complete'] ) ) {
-				FrmAppHelper::icon_by_class(
-					'frmfont frm_step_complete_icon',
-					array(
-						/* translators: %1$s: Step number */
-						'aria-label' => sprintf( __( 'Step %1$d', 'formidable' ), $step['num'] ),
-						'style'      => 'width:50px;height:50px;',
-					)
-				);
-			} else {
-				?>
-				<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#ccc"/><text x="50%" y="50%" text-anchor="middle" fill="#fff" stroke="#fff" stroke-width="2px" dy=".3em" font-size="3.7em"><?php echo esc_html( $step['num'] ); ?></text></svg><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-				<?php
-			}
-			?>
-				<i class="loader hidden"></i>
-			</aside>
-			<div>
-				<?php if ( $step['label'] ) { ?>
-				<h3 class="frm-step-heading"><?php echo esc_html( $step['label'] ); ?></h3>
-				<?php } ?>
-				<p><?php echo esc_html( $step['description'] ); ?></p>
-				<?php if ( isset( $step['error'] ) ) { ?>
-					<p class="frm_error"><?php echo esc_html( $step['error'] ); ?></p>
-				<?php } ?>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/solutions/step_top.php';
 	}
 
 	/**
@@ -500,12 +443,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_bottom( $step ) {
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-			</div>
-		</section>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/solutions/step_bottom.php';
 	}
 
 	/**
@@ -519,13 +457,7 @@ class FrmSolution {
 		$this->step_top( $step );
 
 		if ( $step['complete'] ) {
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
-				<?php echo esc_html( $step['button_label'] ); ?>
-			</a>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
+			include FrmAppHelper::plugin_path() . '/classes/views/solutions/license_complete_button.php';
 		} else {
 			FrmSettingsController::license_box();
 		}
@@ -544,13 +476,7 @@ class FrmSolution {
 		if ( ! isset( $step['error'] ) ) {
 			$rel = $step['links'] ?? array();
 
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<a rel="<?php echo esc_attr( implode( ',', $rel ) ); ?>" class="<?php echo esc_attr( $step['button_class'] ); ?>">
-				<?php echo esc_html( $step['button_label'] ); ?>
-			</a>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
+			include FrmAppHelper::plugin_path() . '/classes/views/solutions/plugin_install_button.php';
 		}
 
 		$this->step_bottom( $step );
@@ -577,15 +503,12 @@ class FrmSolution {
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( ! $step['current'] ) {
-			?>
-			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
-				<?php echo esc_html( $step['button_label'] ); ?>
-			</a>
-			<?php
+			include FrmAppHelper::plugin_path() . '/classes/views/solutions/app_install_disabled_button.php';
 
 			$this->step_bottom( $step );
 			return;
 		}
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		if ( ! $has_file ) {
 			echo '<p class="frm_error_style">' . esc_html__( 'We didn\'t find anything to import. Please contact our team.', 'formidable' ) . '</p>';
@@ -604,36 +527,14 @@ class FrmSolution {
 				echo '<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">';
 			}
 
-			?>
-				<input type="hidden" name="link" id="frm_link" value="<?php echo esc_attr( $xml ); ?>" />
-				<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
-				<input type="hidden" name="template_name" id="frm_template_name" value="" />
-				<input type="hidden" name="template_desc" id="frm_template_desc" value="" />
-				<input type="hidden" name="redirect" value="0" />
-				<input type="hidden" name="show_response" value="frm_install_error" />
-				<?php
-				$this->show_form_options( $xml );
-				$this->show_view_options();
+			include FrmAppHelper::plugin_path() . '/classes/views/solutions/app_install_form.php';
 
-				if ( ! $this->is_complete( 'all' ) ) {
-					// Don't show on the settings page when complete.
-					$this->show_page_options();
-				}
-				?>
-				<p>
-					<button <?php echo esc_html( isset( $step['nested'] ) ? '' : 'type="submit" ' ); ?>class="<?php echo esc_attr( $step['button_class'] ); ?>">
-						<?php echo esc_html( $step['button_label'] ); ?>
-					</button>
-				</p>
-				<p id="frm_install_error" class="frm_error_style frm_hidden"></p>
-			<?php
 			if ( isset( $step['nested'] ) ) {
 				echo '</fieldset>';
 			} else {
 				echo '</form>';
 			}
 		}//end if
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$this->step_bottom( $step );
 	}
@@ -696,20 +597,7 @@ class FrmSolution {
 			return;
 		}
 
-		echo '<h3>Choose New Page Title</h3>';
-
-		foreach ( $pages as $page ) {
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<p>
-				<label for="pages_<?php echo esc_html( $page['type'] ); ?>">
-					<?php echo esc_html( $page['label'] ); ?>
-				</label>
-				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-			</p>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
-		}
+		include FrmAppHelper::plugin_path() . '/classes/views/solutions/page_options.php';
 	}
 
 	/**
@@ -724,13 +612,7 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<a href="#" target="_blank" rel="noopener" id="frm-redirect-link" class="<?php echo esc_attr( $step['button_class'] ); ?>">
-			<?php echo esc_html( $step['button_label'] ); ?>
-		</a>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/solutions/page_links.php';
 
 		$this->step_bottom( $step );
 	}

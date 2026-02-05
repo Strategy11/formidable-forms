@@ -1574,13 +1574,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function import_link( $type = 'secondary' ) {
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-<?php echo esc_attr( $type ); ?> frm_animate_bg">
-			<?php esc_html_e( 'Import', 'formidable' ); ?>
-		</a>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/import_link.php';
 	}
 
 	/**
@@ -1603,37 +1597,8 @@ class FrmAppHelper {
 			// And exit before printing the upgrade bar if it shouldn't be shown.
 			return;
 		}
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<div class="frm-upgrade-bar">
-			<div class="frm-upgrade-bar-inner">
-				<?php
-				$cta_text = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_text' );
 
-				if ( ! $cta_text ) {
-					$cta_text = __( 'upgrading to PRO', 'formidable' );
-				}
-
-				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
-				$utm          = array(
-					'campaign' => 'settings-license',
-					'content'  => 'lite-banner',
-				);
-
-				$upgrade_link = $upgrade_link ? self::maybe_add_missing_utm( $upgrade_link, $utm ) : self::admin_upgrade_link( $utm );
-
-				printf(
-					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
-					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$s%2$s%3$s.', 'formidable' ),
-					'<a href="' . esc_url( $upgrade_link ) . '">',
-					esc_html( $cta_text ),
-					'</a>'
-				);
-				?>
-			</div>
-		</div>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin_banner.php';
 	}
 
 	/**
@@ -1733,22 +1698,8 @@ class FrmAppHelper {
 		if ( ! empty( $atts['tosearch'] ) ) {
 			$input_atts['autocomplete'] = 'off';
 		}
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<p class="frm-search <?php echo esc_attr( $atts['class'] ); ?>">
-			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
-				<?php echo esc_html( $atts['text'] ); ?>:
-			</label>
-			<?php self::icon_by_class( 'frmfont frm_search_icon frm_svg20' ); ?>
-			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
-			<?php
-			if ( empty( $atts['tosearch'] ) ) {
-				submit_button( $atts['text'], 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
-			}
-			?>
-		</p>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/search.php';
 	}
 
 	/**
@@ -1946,21 +1897,7 @@ class FrmAppHelper {
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( count( $args['source'] ) <= $args['dropdown_limit'] ) {
-			?>
-			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
-				<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
-				<?php
-				foreach ( $args['source'] as $key => $source ) :
-					$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
-
-					if ( ! empty( $args['truncate'] ) ) {
-						$value_label['label'] = self::truncate( $value_label['label'], $args['truncate'] );
-					}
-					?>
-					<option value="<?php echo esc_attr( $value_label['value'] ); ?>" <?php selected( $value_label['value'], $args['selected'] ); ?>><?php echo esc_html( $value_label['label'] ); ?></option><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-				<?php endforeach; ?>
-			</select>
-			<?php
+			include FrmAppHelper::plugin_path() . '/classes/views/shared/dropdown_select.php';
 			return;
 		}
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
@@ -2023,18 +1960,8 @@ class FrmAppHelper {
 
 		$pages    = self::get_post_ids_and_titles( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
-			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
-			<?php foreach ( $pages as $page ) { ?>
-				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
-				</option>
-			<?php } ?>
-		</select>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/pages_dropdown.php';
 	}
 
 	/**
@@ -2159,15 +2086,7 @@ class FrmAppHelper {
 	 * @param string       $multiple 'single' and 'multiple'.
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>"
-			<?php echo 'multiple' === $multiple ? 'multiple="multiple"' : ''; ?>
-			class="frm_multiselect">
-			<?php self::roles_options( $capability ); ?>
-		</select>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/roles_dropdown.php';
 	}
 
 	/**
@@ -4079,15 +3998,7 @@ class FrmAppHelper {
 			$message[] = __( 'The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		foreach ( $message as $m ) {
-			?>
-			<div class="frm-banner-alert frm_error_style frm_previous_install">
-				<?php echo esc_html( $m ); ?>
-			</div>
-			<?php
-		}
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin_messages.php';
 	}
 
 	/**
@@ -4919,13 +4830,8 @@ class FrmAppHelper {
 		} else {
 			$atts['class'] = 'frm_help';
 		}
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<span <?php self::array_to_html_params( $atts, true ); ?>>
-			<?php self::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
-		</span>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/tooltip.php';
 	}
 
 	/**
@@ -4949,23 +4855,7 @@ class FrmAppHelper {
 
 		$args['class'] .= ' frm-validation-error frm-mt-xs frm_hidden';
 
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<span id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $args['class'] ); ?>">
-			<?php
-			if ( is_array( $args['errors'] ) ) {
-				foreach ( $args['errors'] as $key => $msg ) {
-					?>
-					<span frm-error="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $msg ); ?></span>
-					<?php
-				}
-			} else {
-				echo '<span>' . esc_html( $args['errors'] ) . '</span>';
-			}
-			?>
-		</span>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/validation_error.php';
 	}
 
 	/**
