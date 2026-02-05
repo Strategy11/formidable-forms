@@ -162,6 +162,7 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 	);
 	?>
 </div>
+<?php FrmPayPalLiteActionsController::add_button_settings_section( $action_control, $form_action ); ?>
 <div class="frm_grid_container">
 	<h3>
 		<?php esc_html_e( 'Customer Information', 'formidable' ); ?>

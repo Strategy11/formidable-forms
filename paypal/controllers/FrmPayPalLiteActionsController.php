@@ -452,11 +452,12 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$paypal_vars = array(
-			'formId'   => $form_id,
-			'nonce'    => wp_create_nonce( 'frm_paypal_ajax' ),
-			'ajax'     => esc_url_raw( FrmAppHelper::get_ajax_url() ),
-			'settings' => $action_settings,
-			'style'    => self::get_style_for_js( $form_id ),
+			'formId'      => $form_id,
+			'nonce'       => wp_create_nonce( 'frm_paypal_ajax' ),
+			'ajax'        => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'settings'    => $action_settings,
+			'style'       => self::get_style_for_js( $form_id ),
+			'buttonStyle' => self::get_button_style_for_js( $action ),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
@@ -507,6 +508,29 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 * @param int   $form_id
 		 */
 		return apply_filters( 'frm_paypal_style', $style, $settings, $form_id );
+	}
+
+	/**
+	 * Get PayPal button style configuration from form action settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $form_action The form action containing button settings.
+	 *
+	 * @return array The style configuration array for PayPal button.
+	 */
+	private static function get_button_style_for_js( $form_action ) {
+		$button_layout        = $form_action->post_content['button_layout'] ?? 'vertical';
+		$button_color         = $form_action->post_content['button_color'] ?? 'gold';
+		$button_label         = $form_action->post_content['button_label'] ?? 'paypal';
+		$button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
+
+		return array(
+			'layout'       => $button_layout,
+			'color'        => $button_color,
+			'label'        => $button_label,
+			'borderRadius' => (int) $button_border_radius,
+		);
 	}
 
 	/**
@@ -692,8 +716,18 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * Print additional options for button settings.
 	 *
+	 * @param FrmFormAction $action_control
+	 * @param WP_Post       $form_action
+	 *
+	 * @return void
+	 */
+	public static function add_button_settings_section( $action_control, $form_action ) {
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/button-settings.php';
+	}
+
+	/**
 	 * @return string
 	 */
 	private static function get_client_id() {

@@ -102,16 +102,7 @@
 				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 			},
 			// https://developer.paypal.com/sdk/js/reference/#style
-			style: {
-				// TODO borderRadius is also supported.
-				layout: 'vertical', // this supports horizontal. Should we add a setting for this?
-				color:  'gold', // this supports blue, silver, white, black. Should we add a setting for this?
-				shape:  'rect', // this supports pill and sharp. Should we add a setting for this?
-				// This is the key part:
-				label:  'paypal', // this supports checkout, buynow, pay, installment. Should we add a setting for this?
-				messaging: true,  // Set this to true to show the sub-text under the button
-				borderRadius: 20
-			},
+			style: frmPayPalVars.buttonStyle,
 		} ).render( '#paypal-button-container' );
 
 		const cardFields = window.paypal.CardFields( cardFieldsConfig );
