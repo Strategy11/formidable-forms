@@ -34,8 +34,6 @@ $is_gdpr_enabled = FrmAppHelper::is_gdpr_enabled();
 </p>
 
 <?php
-ob_start();
-
 /**
  * Trigger an action so Pro can display additional General settings in the Other section.
  *
@@ -43,11 +41,7 @@ ob_start();
  */
 do_action( 'frm_settings_form', $frm_settings );
 
-$more_html = ob_get_clean();
-echo $more_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-FrmSettingsController::maybe_render_currency_selector( $frm_settings, $more_html );
-unset( $more_html );
+FrmSettingsController::maybe_render_currency_selector( $frm_settings );
 ?>
 
 <div class="clear"></div>

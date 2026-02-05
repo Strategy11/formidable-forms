@@ -155,7 +155,7 @@ class FrmCSVExportHelper {
 
 		unset( $filename );
 
-		$comment_count       = FrmDb::get_count(
+		self::$comment_count = FrmDb::get_count(
 			'frm_item_metas',
 			array(
 				'item_id'         => $atts['entry_ids'],
@@ -168,7 +168,6 @@ class FrmCSVExportHelper {
 				'limit'    => 1,
 			)
 		);
-		self::$comment_count = $comment_count;
 
 		self::prepare_csv_headings();
 
@@ -256,7 +255,8 @@ class FrmCSVExportHelper {
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
-		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator;
 
 		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, $args );
 	}
@@ -375,7 +375,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @return void
 	 */
-	private static function csv_headings( &$headings ) {
+	private static function csv_headings( &$headings ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$fields_by_repeater_id = array();
 		$repeater_ids          = array();
 
@@ -418,22 +418,22 @@ class FrmCSVExportHelper {
 			$flat = array();
 
 			foreach ( $headings as $key => $heading ) {
-				if ( is_array( $heading ) ) {
-					$repeater_id = str_replace( 'repeater', '', $key );
-
-					$repeater_headings = array();
-
-					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
-						$repeater_headings += self::field_headings( $col );
-					}
-
-					for ( $i = 0; $i < $max[ $repeater_id ]; $i++ ) {
-						foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
-							$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
-						}
-					}
-				} else {
+				if ( ! is_array( $heading ) ) {
 					$flat[ $key ] = $heading;
+					continue;
+				}
+
+				$repeater_id       = str_replace( 'repeater', '', $key );
+				$repeater_headings = array();
+
+				foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
+					$repeater_headings += self::field_headings( $col );
+				}
+
+				for ( $i = 0; $i < $max[ $repeater_id ]; $i++ ) {
+					foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
+						$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
+					}
 				}
 			}
 
@@ -483,11 +483,7 @@ class FrmCSVExportHelper {
 		$section_id = $field->field_options['in_section'];
 		$section    = FrmField::getOne( $section_id );
 
-		if ( ! $section ) {
-			return false;
-		}
-
-		return FrmField::is_repeating_field( $section );
+		return $section && FrmField::is_repeating_field( $section );
 	}
 
 	/**
@@ -513,7 +509,7 @@ class FrmCSVExportHelper {
 			$order_by = ' ORDER BY parent_item_id DESC';
 		} else {
 			// When Pro is not installed, only query for direct ID matches only as we do not expect parent item id
-			// matches and the more simplified query is faster.
+			// Matches and the more simplified query is faster.
 			$where    = array(
 				'id' => $next_set,
 			);
@@ -561,11 +557,11 @@ class FrmCSVExportHelper {
 	 */
 	private static function add_repeat_field_values_to_csv( &$entries ) {
 		if ( isset( self::$entry->metas ) ) {
-			// add child entries to the parent
+			// Add child entries to the parent
 			foreach ( self::$entry->metas as $meta_id => $meta_value ) {
 				if ( ! is_numeric( $meta_id ) || '' === $meta_value ) {
-					// if the hook is being used to include field keys in the metas array,
-					// we need to skip the keys and only process field ids
+					// If the hook is being used to include field keys in the metas array,
+					// We need to skip the keys and only process field ids
 					continue;
 				}
 
@@ -577,8 +573,8 @@ class FrmCSVExportHelper {
 				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = array();
 				} elseif ( ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
-					// if the data is here, it should be an array but if this field has collected data
-					// both while inside and outside of the repeating section, it's possible this is a string.
+					// If the data is here, it should be an array but if this field has collected data
+					// Both while inside and outside of the repeating section, it's possible this is a string.
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = (array) $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ];
 				}
 
@@ -590,10 +586,11 @@ class FrmCSVExportHelper {
 			$entries[ self::$entry->parent_item_id ]->metas += self::$entry->metas;
 		}//end if
 
-		// add the embedded form id
+		// Add the embedded form id
 		if ( ! isset( $entries[ self::$entry->parent_item_id ]->embedded_fields ) ) {
 			$entries[ self::$entry->parent_item_id ]->embedded_fields = array();
 		}
+
 		$entries[ self::$entry->parent_item_id ]->embedded_fields[ self::$entry->id ] = self::$entry->form_id;
 	}
 
@@ -607,9 +604,8 @@ class FrmCSVExportHelper {
 	 * @return array
 	 */
 	private static function fill_missing_repeater_metas( $metas, &$entries ) {
-		$field_ids = array_keys( $metas );
-		$field_id  = end( $field_ids );
-		$field     = self::get_field( $field_id );
+		$field_id = array_key_last( $metas );
+		$field    = self::get_field( $field_id );
 
 		if ( ! $field || empty( $field->field_options['in_section'] ) ) {
 			return $metas;
@@ -625,7 +621,7 @@ class FrmCSVExportHelper {
 			if ( ! isset( $metas[ $repeater_child->id ] ) ) {
 				$metas[ $repeater_child->id ] = '';
 
-				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) || ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) {
+				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) || ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] = array();
 				}
 
@@ -649,6 +645,7 @@ class FrmCSVExportHelper {
 				return $field;
 			}
 		}
+
 		return false;
 	}
 
@@ -716,7 +713,7 @@ class FrmCSVExportHelper {
 				'show_icon'         => false,
 				'entry_id'          => self::$entry->id,
 				'sep'               => self::$separator,
-				'embedded_field_id' => isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+				'embedded_field_id' => isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0, // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			)
 		);
 	}
@@ -730,28 +727,30 @@ class FrmCSVExportHelper {
 	 * @return void
 	 */
 	private static function add_array_values_to_columns( &$row, $atts ) {
-		if ( is_array( $atts['field_value'] ) ) {
-			foreach ( $atts['field_value'] as $key => $sub_value ) {
-				if ( is_array( $sub_value ) ) {
-					// This is combo field inside repeater. The heading key has this format: [86_first[0]].
-					foreach ( $sub_value as $sub_key => $sub_sub_value ) {
-						$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+		if ( ! is_array( $atts['field_value'] ) ) {
+			return;
+		}
 
-						if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
-							$row[ $column_key ] = $sub_sub_value;
-						}
+		foreach ( $atts['field_value'] as $key => $sub_value ) {
+			if ( is_array( $sub_value ) ) {
+				// This is combo field inside repeater. The heading key has this format: [86_first[0]].
+				foreach ( $sub_value as $sub_key => $sub_sub_value ) {
+					$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+
+					if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
+						$row[ $column_key ] = $sub_sub_value;
 					}
-
-					continue;
 				}
 
-				$column_key = $atts['col']->id . '_' . $key;
-
-				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
-					$row[ $column_key ] = $sub_value;
-				}
+				continue;
 			}
-		}//end if
+
+			$column_key = $atts['col']->id . '_' . $key;
+
+			if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
+				$row[ $column_key ] = $sub_value;
+			}
+		}
 	}
 
 	/**
@@ -804,7 +803,7 @@ class FrmCSVExportHelper {
 			}
 
 			if ( is_array( $row ) ) {
-				// implode the repeated field values
+				// Implode the repeated field values
 				$row = implode( self::$separator, FrmAppHelper::array_flatten( $row, 'reset' ) );
 			}
 
@@ -846,10 +845,10 @@ class FrmCSVExportHelper {
 
 		switch ( self::$to_encoding ) {
 			case 'macintosh':
-				// this map was derived from the differences between the MacRoman and UTF-8 Charsets
+				// This map was derived from the differences between the MacRoman and UTF-8 Charsets
 				// Reference:
 				// http://www.alanwood.net/demos/macroman.html.
-				$convmap = array( 256, 304, 0, 0xffff, 306, 337, 0, 0xffff, 340, 375, 0, 0xffff, 377, 401, 0, 0xffff, 403, 709, 0, 0xffff, 712, 727, 0, 0xffff, 734, 936, 0, 0xffff, 938, 959, 0, 0xffff, 961, 8210, 0, 0xffff, 8213, 8215, 0, 0xffff, 8219, 8219, 0, 0xffff, 8227, 8229, 0, 0xffff, 8231, 8239, 0, 0xffff, 8241, 8248, 0, 0xffff, 8251, 8259, 0, 0xffff, 8261, 8363, 0, 0xffff, 8365, 8481, 0, 0xffff, 8483, 8705, 0, 0xffff, 8707, 8709, 0, 0xffff, 8711, 8718, 0, 0xffff, 8720, 8720, 0, 0xffff, 8722, 8729, 0, 0xffff, 8731, 8733, 0, 0xffff, 8735, 8746, 0, 0xffff, 8748, 8775, 0, 0xffff, 8777, 8799, 0, 0xffff, 8801, 8803, 0, 0xffff, 8806, 9673, 0, 0xffff, 9675, 63742, 0, 0xffff, 63744, 64256, 0, 0xffff );
+				$convmap = array( 256, 304, 0, 0xffff, 306, 337, 0, 0xffff, 340, 375, 0, 0xffff, 377, 401, 0, 0xffff, 403, 709, 0, 0xffff, 712, 727, 0, 0xffff, 734, 936, 0, 0xffff, 938, 959, 0, 0xffff, 961, 8210, 0, 0xffff, 8213, 8215, 0, 0xffff, 8219, 8219, 0, 0xffff, 8227, 8229, 0, 0xffff, 8231, 8239, 0, 0xffff, 8241, 8248, 0, 0xffff, 8251, 8259, 0, 0xffff, 8261, 8363, 0, 0xffff, 8365, 8481, 0, 0xffff, 8483, 8705, 0, 0xffff, 8707, 8709, 0, 0xffff, 8711, 8718, 0, 0xffff, 8720, 8720, 0, 0xffff, 8722, 8729, 0, 0xffff, 8731, 8733, 0, 0xffff, 8735, 8746, 0, 0xffff, 8748, 8775, 0, 0xffff, 8777, 8799, 0, 0xffff, 8801, 8803, 0, 0xffff, 8806, 9673, 0, 0xffff, 9675, 63742, 0, 0xffff, 63744, 64256, 0, 0xffff ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				break;
 			case 'ISO-8859-1':
 				$convmap = array( 256, 10000, 0, 0xffff );

@@ -92,8 +92,7 @@ class FrmTransLiteListsController {
 			return $show_screen;
 		}
 
-		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
-
+		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 
 		if ( $unread_count ) {
@@ -101,7 +100,7 @@ class FrmTransLiteListsController {
 		}
 
 		if ( $screen->id === $menu_name . '_page_formidable-payments' ) {
-			$show_screen = false;
+			return false;
 		}
 
 		return $show_screen;
@@ -123,7 +122,7 @@ class FrmTransLiteListsController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.27
 		 *
 		 * @param bool   $route_handled
 		 * @param string $action
@@ -167,24 +166,22 @@ class FrmTransLiteListsController {
 	public static function display_list( $response = array() ) {
 		FrmAppHelper::include_svg();
 
-		$defaults = array(
+		$defaults      = array(
 			'errors'  => array(),
 			'message' => '',
 		);
-		$response = array_merge( $defaults, $response );
-		$errors   = $response['errors'];
-		$message  = $response['message'];
-
+		$response      = array_merge( $defaults, $response );
+		$errors        = $response['errors'];
+		$message       = $response['message'];
 		$wp_list_table = new FrmTransLiteListHelper( self::list_page_params() );
-
-		$pagenum = $wp_list_table->get_pagenum();
+		$pagenum       = $wp_list_table->get_pagenum();
 
 		$wp_list_table->prepare_items();
 
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
 
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
-			// if the current page is higher than the total pages,
+			// If the current page is higher than the total pages,
 			// reset it and prepare again to get the right entries.
 			$_GET['paged']     = $total_pages;
 			$_REQUEST['paged'] = $total_pages;
@@ -204,7 +201,7 @@ class FrmTransLiteListsController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {
-			$save = absint( $value );
+			return absint( $value );
 		}
 		return $save;
 	}

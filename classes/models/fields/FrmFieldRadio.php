@@ -78,7 +78,7 @@ class FrmFieldRadio extends FrmFieldType {
 		$form_id = $this->get_field_column( 'form_id' );
 
 		return array(
-			'align' => FrmStylesController::get_style_val( 'radio_align', ( empty( $form_id ) ? 'default' : $form_id ) ),
+			'align' => FrmStylesController::get_style_val( 'radio_align', $form_id ? $form_id : 'default' ),
 		);
 	}
 

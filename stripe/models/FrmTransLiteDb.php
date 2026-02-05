@@ -35,6 +35,7 @@ class FrmTransLiteDb {
 			$old_db_version = get_option( $this->db_opt_name );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $this->db_version == $old_db_version ) {
 			return;
 		}
@@ -136,7 +137,7 @@ class FrmTransLiteDb {
 	 *
 	 * @return bool|int
 	 */
-	public function &destroy( $id ) {
+	public function destroy( $id ) {
 		FrmAppHelper::permission_check( 'administrator' );
 
 		global $wpdb;
@@ -148,15 +149,8 @@ class FrmTransLiteDb {
 		do_action( 'frm_before_destroy_' . $this->singular, $id );
 
 		// @codingStandardsIgnoreStart
-		$result = $wpdb->query(
-			$wpdb->prepare(
-				'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d',
-				$id
-			)
-		);
+		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d', $id ) );
 		// @codingStandardsIgnoreEnd
-
-		return $result;
 	}
 
 	/**
@@ -166,6 +160,7 @@ class FrmTransLiteDb {
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
+
 		// @codingStandardsIgnoreStart
 		return $wpdb->get_row(
 			$wpdb->prepare(
@@ -334,7 +329,7 @@ class FrmTransLiteDb {
 		global $wpdb;
 		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . 'frm_payments LIKE %s', 'completed' ) );
 
-		if ( empty( $result ) ) {
+		if ( ! $result ) {
 			return;
 		}
 

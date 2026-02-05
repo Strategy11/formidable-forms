@@ -48,8 +48,8 @@ class FrmTipsHelper {
 		);
 		$tip      = array_merge( $defaults, $tip );
 
-		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) ) {
-			$tip['link']['medium'] = 'tip';
+		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) && ! isset( $tip['link']['campaign'] ) ) {
+			$tip['link']['campaign'] = 'tip';
 		}
 
 		if ( 'p' === $html ) {
@@ -57,6 +57,7 @@ class FrmTipsHelper {
 		}
 
 		$link = self::get_tip_link( $tip );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm_pro_tip frm-gradient">
 			<span class="frm-tip-badge"><?php esc_html_e( 'PRO TIP', 'formidable' ); ?></span>
@@ -71,6 +72,7 @@ class FrmTipsHelper {
 			</span>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		if ( 'p' === $html ) {
 			echo '</p>';
@@ -93,8 +95,9 @@ class FrmTipsHelper {
 
 		if ( $cta_link ) {
 			if ( is_array( $tip['link'] ) ) {
-				$cta_link = FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
+				return FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
 			}
+
 			return $cta_link;
 		}
 
@@ -114,6 +117,7 @@ class FrmTipsHelper {
 		if ( $cta_text ) {
 			return $cta_text;
 		}
+
 		return FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro.', 'formidable' );
 	}
 

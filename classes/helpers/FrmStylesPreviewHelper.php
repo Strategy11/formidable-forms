@@ -124,10 +124,7 @@ class FrmStylesPreviewHelper {
 			 * @return bool
 			 */
 			function ( $show, $field_type ) {
-				if ( 'captcha' === $field_type ) {
-					$show = false;
-				}
-				return $show;
+				return 'captcha' === $field_type ? false : $show;
 			},
 			10,
 			2
@@ -192,8 +189,7 @@ class FrmStylesPreviewHelper {
 	 * @return array<string>
 	 */
 	public function get_notes_for_styler_preview() {
-		$notes = array();
-
+		$notes              = array();
 		$fallback_form_note = $this->get_fallback_form_note();
 
 		if ( is_string( $fallback_form_note ) ) {
@@ -322,7 +318,7 @@ class FrmStylesPreviewHelper {
 		$styles->remove( 'edit' );
 
 		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
-		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+		$edit_key              = array_search( 'edit', $wp_admin_dependencies, true );
 
 		if ( false === $edit_key ) {
 			return;
@@ -389,7 +385,8 @@ class FrmStylesPreviewHelper {
 	 */
 	private static function remove_wp_admin_dependency( $styles, $key ) {
 		$dependencies = $styles->registered['wp-admin']->deps;
-		$index        = array_search( $key, $dependencies );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$index = array_search( $key, $dependencies );
 
 		if ( false === $index ) {
 			return;

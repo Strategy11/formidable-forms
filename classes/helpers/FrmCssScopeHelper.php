@@ -73,7 +73,7 @@ class FrmCssScopeHelper {
 						}
 					}
 
-					if ( ! empty( $prefixed_selectors ) ) {
+					if ( $prefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $prefixed_selectors ) . ' {' . $declarations . '}' . "\n";
 					}
 				}
@@ -156,12 +156,10 @@ class FrmCssScopeHelper {
 					$unprefixed_selectors = array();
 
 					foreach ( $selectors as $single_selector ) {
-						$unprefixed_selectors[] = str_starts_with( $single_selector, $prefix )
-							? trim( substr( $single_selector, $prefix_length ) )
-							: $single_selector;
+						$unprefixed_selectors[] = str_starts_with( $single_selector, $prefix ) ? trim( substr( $single_selector, $prefix_length ) ) : $single_selector;
 					}
 
-					if ( ! empty( $unprefixed_selectors ) ) {
+					if ( $unprefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $unprefixed_selectors ) . ' {' . $declarations . '}' . "\n";
 					}
 				}

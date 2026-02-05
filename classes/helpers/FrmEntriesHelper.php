@@ -42,15 +42,14 @@ class FrmEntriesHelper {
 
 		$values['fields'] = array();
 
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
 		}
 
 		foreach ( (array) $fields as $field ) {
 			$original_default = $field->default_value;
 			self::prepare_field_default_value( $field );
-			$new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
-
+			$new_value                       = self::get_field_value_for_new_entry( $field, $reset, $args );
 			$field_array                     = FrmAppHelper::start_field_array( $field );
 			$field_array['value']            = $new_value;
 			$field_array['type']             = apply_filters( 'frm_field_type', $field->type, $field, $new_value );
@@ -120,7 +119,7 @@ class FrmEntriesHelper {
 	 * @param bool   $reset
 	 * @param array  $args
 	 *
-	 * @return array|string $new_value
+	 * @return array|string New value.
 	 */
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
 		$new_value = $field->default_value;
@@ -130,7 +129,7 @@ class FrmEntriesHelper {
 		}
 
 		if ( ! is_array( $new_value ) ) {
-			$new_value = str_replace( '"', '&quot;', $new_value );
+			return str_replace( '"', '&quot;', $new_value );
 		}
 
 		return $new_value;
@@ -144,21 +143,23 @@ class FrmEntriesHelper {
 	 * @param object $field
 	 * @param array  $args
 	 *
-	 * @return bool $value_is_posted
+	 * @return bool True if a value is posted.
 	 */
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;
 
-		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$repeating = isset( $args['repeating'] ) && $args['repeating'];
+		if ( ! $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return $value_is_posted;
+		}
 
-			if ( $repeating ) {
-				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-					$value_is_posted = true;
-				}
-			} elseif ( isset( $_POST['item_meta'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$repeating = ! empty( $args['repeating'] );
+
+		if ( $repeating ) {
+			if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$value_is_posted = true;
 			}
+		} elseif ( isset( $_POST['item_meta'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$value_is_posted = true;
 		}
 
 		return $value_is_posted;
@@ -189,22 +190,20 @@ class FrmEntriesHelper {
 	public static function replace_default_message( $message, $atts ) {
 		if ( ! str_contains( $message, '[default-message' ) &&
 			! str_contains( $message, '[default_message' ) &&
-			! empty( $message ) ) {
+			$message ) {
 			return $message;
 		}
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			$message = '[default-message]';
 		}
 
 		preg_match_all( "/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER );
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
-			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-
-			$this_atts = ! empty( $add_atts ) ? array_merge( $atts, $add_atts ) : $atts;
-
-			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
+			$add_atts  = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
+			$this_atts = $add_atts ? array_merge( $atts, $add_atts ) : $atts;
+			$default   = FrmEntriesController::show_entry_shortcode( $this_atts );
 
 			// Add the default message.
 			$message = str_replace( $shortcodes[0][ $short_key ], $default, $message );
@@ -227,12 +226,13 @@ class FrmEntriesHelper {
 			$empty = empty( $field_value );
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
 
-			if ( $empty && ! empty( $field_value ) ) {
+			if ( $empty && $field_value ) {
 				// We've got an entry id, so switch it to a value.
 				$atts['force_id'] = true;
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field->form_id == $entry->form_id || empty( $atts['embedded_field_id'] ) ) {
 			return self::display_value( $field_value, $field, $atts );
 		}
@@ -258,11 +258,11 @@ class FrmEntriesHelper {
 			}
 		}
 
-		$field_value = array();
-
 		if ( empty( $child_entries ) ) {
 			return '';
 		}
+
+		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
 			$atts['item_id'] = $child_entry->id;
@@ -272,7 +272,7 @@ class FrmEntriesHelper {
 			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
 
 			if ( $entry_val || '0' === $entry_val ) {
-				// foreach entry get display_value.
+				// For each entry get display_value.
 				$field_value[] = self::display_value( $entry_val, $field, $atts );
 			}
 
@@ -300,7 +300,6 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
-
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
@@ -344,6 +343,7 @@ class FrmEntriesHelper {
 			$atts['truncate'] = $atts['pre_truncate'];
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == '' ) {
 			return $value;
 		}
@@ -354,6 +354,7 @@ class FrmEntriesHelper {
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == $unfiltered_value ) {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
@@ -401,8 +402,8 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
-		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 		} else {
@@ -415,9 +416,9 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @param array|int|object $field
-	 * @param mixed            $value
-	 * @param array            $args
+	 * @param array|int|object|string $field
+	 * @param mixed                   $value
+	 * @param array                   $args
 	 *
 	 * @return void
 	 */
@@ -458,9 +459,9 @@ class FrmEntriesHelper {
 	private static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
-			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
-			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 		return $value;
 	}
@@ -501,7 +502,7 @@ class FrmEntriesHelper {
 			$args['other']      = true;
 
 			// Sanitizing is done next.
-			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now
@@ -526,17 +527,18 @@ class FrmEntriesHelper {
 		}
 
 		// Check if there are any other posted "other" values for this field.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			// Save original value
-			$args['temp_value'] = $value;
-			$args['other']      = true;
-
-			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
-
-			// Set the validation value now.
-			self::set_other_validation_val( $value, $other_vals, $field, $args );
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			return;
 		}
+
+		// Save original value
+		$args['temp_value'] = $value;
+		$args['other']      = true;
+		$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
+
+		// Set the validation value now.
+		self::set_other_validation_val( $value, $other_vals, $field, $args );
 	}
 
 	/**
@@ -556,7 +558,7 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	public static function set_other_validation_val( &$value, $other_vals, $field, &$args ) {
-		// Checkboxes and multi-select dropdowns.
+		// Checkboxes.
 		if ( is_array( $value ) && $field->type === 'checkbox' ) {
 			// Combine "Other" values with checked values. "Other" values will override checked box values.
 			foreach ( $other_vals as $k => $v ) {
@@ -567,38 +569,41 @@ class FrmEntriesHelper {
 				}
 			}
 
-			if ( is_array( $value ) && ! empty( $value ) ) {
+			if ( is_array( $value ) && $value ) {
 				$value = array_merge( $value, $other_vals );
 			}
-		} else {
-			// Radio and dropdowns.
-			$other_key = array_filter( array_keys( $field->options ), 'is_string' );
-			$other_key = reset( $other_key );
 
-			// Multi-select dropdown.
-			if ( is_array( $value ) ) {
-				$o_key = array_search( $field->options[ $other_key ], $value );
+			return;
+		}
 
-				if ( $o_key !== false ) {
-					// Modify the original value so other key will be preserved.
-					$value[ $other_key ] = $value[ $o_key ];
+		// Radio and dropdowns.
+		$other_key = array_filter( array_keys( $field->options ), 'is_string' );
+		$other_key = reset( $other_key );
 
-					// By default, the array keys will be numeric for multi-select dropdowns.
-					// If going backwards and forwards between pages, the array key will match the other key.
-					if ( $o_key !== $other_key ) {
-						unset( $value[ $o_key ] );
-					}
+		// Multi-select dropdown.
+		if ( is_array( $value ) ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			$o_key = array_search( $field->options[ $other_key ], $value );
 
-					$args['temp_value']  = $value;
-					$value[ $other_key ] = reset( $other_vals );
+			if ( $o_key !== false ) {
+				// Modify the original value so other key will be preserved.
+				$value[ $other_key ] = $value[ $o_key ];
 
-					if ( FrmAppHelper::is_empty_value( $value[ $other_key ] ) ) {
-						unset( $value[ $other_key ] );
-					}
+				// By default, the array keys will be numeric for multi-select dropdowns.
+				// If going backwards and forwards between pages, the array key will match the other key.
+				if ( $o_key !== $other_key ) {
+					unset( $value[ $o_key ] );
 				}
-			} elseif ( $field->options[ $other_key ] == $value ) {
-				$value = $other_vals;
-			}//end if
+
+				$args['temp_value']  = $value;
+				$value[ $other_key ] = reset( $other_vals );
+
+				if ( FrmAppHelper::is_empty_value( $value[ $other_key ] ) ) {
+					unset( $value[ $other_key ] );
+				}
+			}
+		} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
+			$value = $other_vals;
 		}//end if
 	}
 
@@ -675,18 +680,18 @@ class FrmEntriesHelper {
 			}
 		}
 
-		// finally get the correct version number
+		// Finally get the correct version number
 		$known   = array( 'Version', $ub, 'other' );
 		$pattern = '#(?<browser>' . implode( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
 		// Get the matching numbers.
 		preg_match_all( $pattern, $u_agent, $matches );
 
-		// see how many we have
+		// See how many we have
 		$i = count( $matches['browser'] );
 
 		if ( $i > 1 ) {
 			// We will have two since we are not using 'other' argument yet
-			// see if version is before or after the name.
+			// See if version is before or after the name.
 			$version = strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ? $matches['version'][0] : $matches['version'][1];
 		} elseif ( $i === 1 ) {
 			$version = $matches['version'][0];
@@ -694,7 +699,7 @@ class FrmEntriesHelper {
 			$version = '';
 		}
 
-		// check if we have a number
+		// Check if we have a number
 		if ( $version === '' ) {
 			$version = '?';
 		}
@@ -714,6 +719,7 @@ class FrmEntriesHelper {
 		$links = self::get_action_links( $id, $atts['entry'] );
 
 		foreach ( $links as $link ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 		<div class="misc-pub-section">
 			<a href="<?php echo esc_url( $link['url'] ); ?>"
@@ -738,6 +744,7 @@ class FrmEntriesHelper {
 			</a>
 		</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}//end foreach
 	}
 
@@ -862,14 +869,16 @@ class FrmEntriesHelper {
 		$metas_without_a_field = (array) FrmEntryMeta::getAll( $query, ' ORDER BY it.created_at DESC', '', true );
 
 		foreach ( $metas_without_a_field as $meta ) {
-			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
-				echo '<div class="misc-pub-section">';
-				FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
-				echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
-				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
-				echo '</div>';
-				return;
+			if ( empty( $meta->meta_value['captcha_score'] ) ) {
+				continue;
 			}
+
+			echo '<div class="misc-pub-section">';
+			FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
+			echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
+			echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
+			echo '</div>';
+			return;
 		}
 	}
 
@@ -889,7 +898,7 @@ class FrmEntriesHelper {
 			return $status;
 		}
 
-		if ( empty( $status ) ) {
+		if ( ! $status ) {
 			// If the status is empty, let's default to 0.
 			return self::SUBMITTED_ENTRY_STATUS;
 		}
@@ -909,7 +918,6 @@ class FrmEntriesHelper {
 	 */
 	public static function get_entry_status_label( $status ) {
 		$statuses = self::get_entry_statuses();
-
 		return $statuses[ self::get_entry_status( $status ) ];
 	}
 
@@ -922,7 +930,6 @@ class FrmEntriesHelper {
 	 * @return array<string>
 	 */
 	public static function get_entry_statuses() {
-
 		$default_entry_statuses = array(
 			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),

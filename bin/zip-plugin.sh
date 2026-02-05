@@ -51,9 +51,13 @@ zip -r $zipname $destination \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
 	-x "*/.prettierrc" \
+	-x "*/.scannerwork" \
 	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
+	-x "*/.coderabbit.yaml" \
+	-x "*/.deepsource.toml" \
+	-x "*/.semgrepignore" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -113,6 +117,7 @@ zip -r $zipname $destination \
 	-x "*/report-task.txt" \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
+	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
 	-x "*/phpcs-sniffs/*"

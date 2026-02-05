@@ -397,7 +397,7 @@
 		let i;
 		let data;
 		const price = getPriceFields();
-		let run = price.indexOf( fieldId ) > -1 || price.indexOf( field.id ) > -1;
+		let run = price.includes( fieldId ) || price.includes( field.id );
 		if ( ! run ) {
 			for ( i = 0; i < price.length; i++ ) {
 				if ( field.id.indexOf( price[ i ] ) === 0 ) {
@@ -669,7 +669,7 @@
 	 * @return {void}
 	 */
 	function replaceEmailField( emailField, emailInput, authenticationMountTarget ) {
-		emailField.insertBefore( authenticationMountTarget, emailInput );
+		emailInput.before( authenticationMountTarget );
 		emailInput.type = 'hidden';
 		const emailLabel = emailField.querySelector( '.frm_primary_label' );
 
@@ -857,7 +857,7 @@
 
 				if ( isNaN( currentFieldId ) ) {
 					// If it is not a number, try as a field key.
-					fieldMatchByKey = fieldContainer = document.getElementById( 'field_' + currentFieldId );
+					fieldMatchByKey = document.getElementById( 'field_' + currentFieldId );
 				}
 			} else {
 				// First name and last name are not wrapped as shortcodes.

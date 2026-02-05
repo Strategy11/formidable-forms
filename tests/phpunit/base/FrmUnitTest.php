@@ -78,7 +78,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
-			// set this to false so all our tests won't be done with this active
+			// Set this to false so all our tests won't be done with this active
 			define( 'WP_IMPORTING', false );
 		}
 
@@ -143,7 +143,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function import_xml() {
-		// install test data in older format
+		// Install test data in older format
 		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
 		FrmXMLController::add_default_templates();
 
@@ -240,8 +240,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 						$media_ids = array();
 					}
 
-					$id          = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
-					$media_ids[] = $id;
+					$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
 				}
 			}
 
@@ -274,12 +273,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$this->repeat_sec_form_key  => 3,
 		);
 		$expected_field_num = $field_totals[ $form_key ] ?? 0;
-
-		$form_id = $this->factory->form->get_id_by_key( $form_key );
-		$fields  = FrmField::get_all_for_form( $form_id, '', 'include' );
-
-		$actual_field_num = count( $fields );
-		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' );
+		$form_id            = $this->factory->form->get_id_by_key( $form_key );
+		$fields             = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$actual_field_num   = count( $fields );
+		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return $fields;
 	}
@@ -332,7 +329,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			)
 		);
 
-		if ( empty( $users ) ) {
+		if ( ! $users ) {
 			$this->fail( 'No users with this role currently exist.' );
 			return null;
 		}
@@ -349,6 +346,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public function set_front_end( $page = '' ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $page == '' ) {
 			$page = home_url( '/' );
 		}
@@ -463,12 +461,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public function get_footer_output() {
 		ob_start();
 		do_action( 'wp_footer' );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
+		return ob_get_clean();
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function install_data() {
 		return array(
 			__DIR__ . '/testdata.xml',
@@ -478,19 +476,22 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 	}
 
-	public static function generate_xml( $type, $xml_args ) {
+	/**
+	 * @param array $type
+	 */
+	public static function generate_xml( $type, $xml_args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		// Code copied from FrmXMLController::generate_xml
 		global $wpdb;
 
 		$type = (array) $type;
 
 		if ( in_array( 'items', $type, true ) && ! in_array( 'forms', $type, true ) ) {
-			// make sure the form is included if there are entries
+			// Make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
 		if ( in_array( 'forms', $type, true ) ) {
-			// include actions with forms
+			// Include actions with forms
 			$type[] = 'actions';
 		}
 
@@ -506,17 +507,16 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$args     = wp_parse_args( $xml_args, $defaults );
 
 		// Make sure ids are numeric.
-		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
+		if ( is_array( $args['ids'] ) && $args['ids'] ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
 
 		$records = array();
 
 		foreach ( $type as $tb_type ) {
-			$where = array();
-			$join  = '';
-			$table = $tables[ $tb_type ];
-
+			$where      = array();
+			$join       = '';
+			$table      = $tables[ $tb_type ];
 			$select     = $table . '.id';
 			$query_vars = array();
 
@@ -566,7 +566,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 					$where['post_type'] = 'frm_styles';
 
 					// Only export selected styles
-					if ( ! empty( $style_ids ) ) {
+					if ( $style_ids ) {
 						$where['ID'] = $style_ids;
 					}
 					break;
@@ -590,13 +590,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php';
-		$xml_body = ob_get_contents();
-		ob_end_clean();
-
-		$xml = $xml_header . $xml_body;
-
-		$cwd  = getcwd();
-		$path = "{$cwd}/temp.xml";
+		$xml_body = ob_get_clean();
+		$xml      = $xml_header . $xml_body;
+		$cwd      = getcwd();
+		$path     = "{$cwd}/temp.xml";
 		@chmod( $path, 0755 );
 		$fw = fopen( $path, 'w' );
 		fwrite( $fw, $xml, strlen( $xml ) );
@@ -647,6 +644,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $subscriber );
 	}
 
+	/**
+	 * @param array $method
+	 * @param array $args
+	 */
 	protected function run_private_method( $method, $args = array() ) {
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );
@@ -702,7 +703,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			case 'formidable_custom_role':
 				$user = wp_get_current_user();
 
-				// remove any standard roles to make room for a custom one
+				// Remove any standard roles to make room for a custom one
 				foreach ( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
 					$user->remove_role( $role );
 				}

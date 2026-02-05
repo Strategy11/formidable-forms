@@ -179,13 +179,15 @@ class FrmFieldGdpr extends FrmFieldType {
 	public function validate( $args ) {
 		$errors = parent::validate( $args );
 
-		if ( ! $errors && ! FrmFieldGdprHelper::hide_gdpr_field() ) {
-			$required = FrmField::get_option( $this->field, 'required' );
+		if ( $errors || FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return $errors;
+		}
 
-			if ( ! $required && empty( $args['value'] ) ) {
-				$frm_settings                    = FrmAppHelper::get_settings();
-				$errors[ 'field' . $args['id'] ] = str_replace( '[field_name]', is_object( $this->field ) ? $this->field->name : $this->field['name'], $frm_settings->blank_msg );
-			}
+		$required = FrmField::get_option( $this->field, 'required' );
+
+		if ( ! $required && empty( $args['value'] ) ) {
+			$frm_settings                    = FrmAppHelper::get_settings();
+			$errors[ 'field' . $args['id'] ] = str_replace( '[field_name]', is_object( $this->field ) ? $this->field->name : $this->field['name'], $frm_settings->blank_msg );
 		}
 
 		return $errors;
@@ -203,7 +205,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 */
 	public static function force_required_field( $required, $field ) {
 		if ( ! $required && 'gdpr' === $field['type'] && ! FrmFieldGdprHelper::hide_gdpr_field() ) {
-			$required = true;
+			return true;
 		}
 
 		return $required;

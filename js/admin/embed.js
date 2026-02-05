@@ -148,11 +148,11 @@
 					const spinner = tag( 'span' );
 					spinner.className = 'frm-wait frm_spinner';
 					spinner.style.visibility = 'visible';
-					content.appendChild( spinner );
+					content.append( spinner );
 
 					const gap = div();
 					gap.style.height = '20px';
-					content.appendChild( gap );
+					content.append( gap );
 
 					content.classList.add( 'frm-loading-page-options' );
 
@@ -182,7 +182,7 @@
 
 						const title = getLabel( titleText );
 						title.setAttribute( 'for', 'frm_page_dropdown' );
-						content.appendChild( title );
+						content.append( title );
 
 						let editPageUrl;
 
@@ -194,7 +194,7 @@
 
 						const dropdownWrapper = div();
 						dropdownWrapper.innerHTML = response.html;
-						content.appendChild( dropdownWrapper );
+						content.append( dropdownWrapper );
 
 						if ( 'form' === state.type ) {
 							editPageUrl = response.edit_page_url + '&frmForm=' + state.objectId;
@@ -281,15 +281,15 @@
 
 					const title = getLabel( __( 'What will you call the new page?', 'formidable' ) );
 					title.setAttribute( 'for', 'frm_name_your_page' );
-					form.appendChild( title );
+					form.append( title );
 
 					const input = tag( 'input' );
 					input.id = 'frm_name_your_page';
 					input.placeholder = __( 'Name your page', 'formidable' );
-					form.appendChild( input );
+					form.append( input );
 
-					wrapper.appendChild( form );
-					content.appendChild( wrapper );
+					wrapper.append( form );
+					content.append( wrapper );
 
 					input.type = 'text';
 					input.focus();
@@ -313,7 +313,7 @@
 					content.innerHTML = '';
 
 					if ( 'form' === state.type ) {
-						getEmbedFormManualExamples().forEach( example => content.appendChild( getEmbedExample( example ) ) );
+						getEmbedFormManualExamples().forEach( example => content.append( getEmbedExample( example ) ) );
 					} else {
 						const hookName = 'frm_embed_examples';
 						const hookArgs = {
@@ -322,7 +322,7 @@
 							objectKey: state.objectKey
 						};
 						wp.hooks.applyFilters( hookName, [], hookArgs ).forEach(
-							example => content.appendChild( getEmbedExample( example ) )
+							example => content.append( getEmbedExample( example ) )
 						);
 					}
 				}
@@ -330,7 +330,7 @@
 		];
 
 		options.forEach(
-			option => content.appendChild( getModalOption( option ) )
+			option => content.append( getModalOption( option ) )
 		);
 
 		return content;
@@ -348,17 +348,17 @@
 
 	function getModalOption( { icon, label, description, callback } ) {
 		const output = div();
-		output.appendChild( wrapModalOptionIcon( icon ) );
+		output.append( wrapModalOptionIcon( icon ) );
 		output.className = 'frm-embed-modal-option';
 		output.setAttribute( 'tabindex', 0 );
 		output.setAttribute( 'role', 'button' );
 
 		const textWrapper = div();
-		textWrapper.appendChild( getLabel( label ) );
-		textWrapper.appendChild( div( description ) );
-		output.appendChild( textWrapper );
+		textWrapper.append( getLabel( label ) );
+		textWrapper.append( div( description ) );
+		output.append( textWrapper );
 
-		output.appendChild( div( { className: 'caret' } ) );
+		output.append( div( { className: 'caret' } ) );
 
 		output.addEventListener(
 			'click',
@@ -407,7 +407,7 @@
 		labelElement.id = 'frm_embed_example_label_' + unique;
 
 		const element = div();
-		element.appendChild( labelElement );
+		element.append( labelElement );
 
 		let exampleElement;
 		if ( example.length > 80 ) {
@@ -428,11 +428,11 @@
 			linkElement.href = link;
 			linkElement.textContent = linkLabel;
 			linkElement.setAttribute( 'target', '_blank' );
-			element.appendChild( linkElement );
+			element.append( linkElement );
 		}
 
-		element.appendChild( exampleElement );
-		element.appendChild( getCopyIcon( label ) );
+		element.append( exampleElement );
+		element.append( getCopyIcon( label ) );
 
 		return element;
 	}
@@ -493,9 +493,9 @@
 		element.setAttribute( 'id', id );
 		element.className = 'frm_screen_reader frm_hidden';
 		element.textContent = message;
-		document.body.appendChild( element );
+		document.body.append( element );
 
-		setTimeout( () => document.body.removeChild( element ), 1000 );
+		setTimeout( () => element.remove(), 1000 );
 	}
 
 	/**

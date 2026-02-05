@@ -192,8 +192,7 @@ abstract class FrmEmailSummary {
 
 		$subject = $this->get_subject();
 		$headers = $this->get_headers();
-
-		$sent = wp_mail( $recipients, $subject, $content, $headers );
+		$sent    = wp_mail( $recipients, $subject, $content, $headers );
 
 		if ( ! $sent ) {
 			$headers = implode( "\r\n", $headers );

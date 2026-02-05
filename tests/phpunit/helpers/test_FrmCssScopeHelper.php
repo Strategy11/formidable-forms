@@ -156,7 +156,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 		$css    = '';
 		$result = $this->helper->nest( $css, $this->scope_name );
 
-		$this->assertEquals( '', $result );
+		$this->assertSame( '', $result );
 	}
 
 	/**
@@ -310,6 +310,6 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 		$css    = '';
 		$result = $this->helper->unnest( $css, $this->scope_name );
 
-		$this->assertEquals( '', $result );
+		$this->assertSame( '', $result );
 	}
 }

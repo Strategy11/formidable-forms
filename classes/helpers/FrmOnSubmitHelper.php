@@ -30,6 +30,7 @@ class FrmOnSubmitHelper {
 	 */
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_form_field frm_has_shortcodes">
 			<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
@@ -70,6 +71,7 @@ class FrmOnSubmitHelper {
 			</label>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -108,6 +110,7 @@ class FrmOnSubmitHelper {
 	 */
 	public static function show_page_settings( $args ) {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_form_field">
 			<div class="frm_note_style">
@@ -127,6 +130,7 @@ class FrmOnSubmitHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -229,7 +233,7 @@ class FrmOnSubmitHelper {
 			}
 		}
 
-		if ( ! empty( $form_options ) ) {
+		if ( $form_options ) {
 			$_POST['options'] += $form_options;
 		}
 	}
@@ -237,9 +241,9 @@ class FrmOnSubmitHelper {
 	/**
 	 * Populates the On Submit data to form options.
 	 *
-	 * @param array  $form_options Form options.
-	 * @param object $action       Optional. The On Submit action object.
-	 * @param string $event        Form event. Default is `create`.
+	 * @param array       $form_options Form options.
+	 * @param object|null $action       Optional. The On Submit action object.
+	 * @param string      $event        Form event. Default is `create`.
 	 *
 	 * @return void
 	 */
@@ -303,7 +307,7 @@ class FrmOnSubmitHelper {
 		// Check if form already has form actions to avoid creating duplicates.
 		$has_actions = FrmFormAction::form_has_action_type( $form_id, $action_type );
 
-		if ( ! empty( $has_actions ) ) {
+		if ( $has_actions ) {
 			// Don't migrate again.
 			self::save_migrated_success_actions( $form );
 			return;
@@ -422,8 +426,7 @@ class FrmOnSubmitHelper {
 	 * @return object
 	 */
 	public static function get_fallback_action( $event = 'create' ) {
-		$action = new stdClass();
-
+		$action      = new stdClass();
 		$default_msg = self::get_default_msg();
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {

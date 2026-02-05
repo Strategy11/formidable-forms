@@ -80,7 +80,7 @@ class FrmSquareLiteAppController {
 
 		$actions = FrmSquareLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			wp_send_json_error( __( 'No Square actions found for this form', 'formidable' ) );
 		}
 
@@ -225,16 +225,17 @@ class FrmSquareLiteAppController {
 			$k = sanitize_text_field( stripslashes( $k ) );
 			$v = wp_unslash( $v );
 
-			if ( $k === 'item_meta' ) {
-				if ( is_array( $v ) ) {
-					foreach ( $v as $f => $value ) {
-						FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-						$entry->metas[ absint( $f ) ] = $value;
-					}
-				}
-			} else {
+			if ( $k !== 'item_meta' ) {
 				FrmAppHelper::sanitize_value( 'wp_kses_post', $v );
 				$entry->{$k} = $v;
+				continue;
+			}
+
+			if ( is_array( $v ) ) {
+				foreach ( $v as $f => $value ) {
+					FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+					$entry->metas[ absint( $f ) ] = $value;
+				}
 			}
 		}
 

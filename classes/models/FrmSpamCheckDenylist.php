@@ -156,11 +156,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return bool
 	 */
 	public function check() {
-		if ( $this->check_ip() ) {
-			return true;
-		}
-
-		return $this->check_values();
+		return $this->check_ip() ? true : $this->check_values();
 	}
 
 	/**
@@ -231,7 +227,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		// Some field types should never be checked.
 		$denylist['skip_field_types'] = array_merge(
 			$denylist['skip_field_types'],
-			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select' )
+			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select', 'ranking' )
 		);
 	}
 
@@ -290,6 +286,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 					return true;
 				}
 			}
+
 			return false;
 		}
 
@@ -396,7 +393,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}//end foreach
 
 		if ( isset( $denylist['extract_value'] ) && is_callable( $denylist['extract_value'] ) ) {
-			$values_to_check = call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
+			return call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
 		}
 
 		return $values_to_check;
@@ -424,7 +421,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return void
 	 */
 	protected function add_to_values_to_check( &$values_to_check, $value ) {
-		$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
+		$values_to_check[] = is_array( $value ) ? FrmAppHelper::safe_implode( ' ', $value ) : $value;
 	}
 
 	/**

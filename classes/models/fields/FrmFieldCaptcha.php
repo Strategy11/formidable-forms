@@ -91,12 +91,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
-		$frm_settings = FrmAppHelper::get_settings();
-
 		if ( ! self::should_show_captcha() ) {
 			return '';
 		}
 
+		$frm_settings   = FrmAppHelper::get_settings();
 		$settings       = FrmCaptchaFactory::get_settings_object();
 		$div_attributes = array(
 			'id'           => $args['html_id'],
@@ -193,9 +192,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		/**
 		 * @param string $api_js_url
 		 */
-		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
-
-		return $api_js_url;
+		return apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 	}
 
 	/**
@@ -205,8 +202,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function hcaptcha_api_url() {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
-
-		$lang = $this->get_captcha_language();
+		$lang       = $this->get_captcha_language();
 
 		if ( $lang ) {
 			// Language might be in the format of en-US, fr-FR, etc. In that case, we need to extract the first part to comply with the hcaptcha api request format.
@@ -223,9 +219,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 *
 		 * @param string $api_js_url
 		 */
-		$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
-
-		return $api_js_url;
+		return apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
 	}
 
 	/**
@@ -246,14 +240,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$api_js_url = apply_filters( 'frm_turnstile_js_url', $api_js_url );
 
 		// Prevent render=explicit from happening twice in case someone patched
-		// the double rendering issue using the frm_turnstile_js_url hook.
-		$api_js_url = str_replace(
+		// The double rendering issue using the frm_turnstile_js_url hook.
+		return str_replace(
 			'&render=explicit&render=explicit',
 			'&render=explicit',
 			$api_js_url
 		);
-
-		return $api_js_url;
 	}
 
 	/**
@@ -298,7 +290,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function validate_against_api( $args ) {
 		$errors       = array();
 		$frm_settings = FrmAppHelper::get_settings();
-		$resp         = $this->send_api_check( $frm_settings );
+		$resp         = $this->send_api_check();
 		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
 		if ( is_wp_error( $resp ) ) {
@@ -325,15 +317,18 @@ class FrmFieldCaptcha extends FrmFieldType {
 			}
 		}
 
-		if ( isset( $response['success'] ) && ! $response['success'] ) {
-			// What happens when the CAPTCHA was entered incorrectly
-			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
-
-			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
-				$invalid_message = '';
-			}
-			$errors[ 'field' . $args['id'] ] = ( $invalid_message === '' ? $frm_settings->re_msg : $invalid_message );
+		if ( ! isset( $response['success'] ) || $response['success'] ) {
+			return $errors;
 		}
+
+		// What happens when the CAPTCHA was entered incorrectly
+		$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+
+		if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
+			$invalid_message = '';
+		}
+
+		$errors[ 'field' . $args['id'] ] = $invalid_message === '' ? $frm_settings->re_msg : $invalid_message;
 
 		return $errors;
 	}
@@ -409,16 +404,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return false;
 		}
 
-		// don't require the captcha if it shouldn't be shown
+		// Don't require the captcha if it shouldn't be shown
 		return self::should_show_captcha();
 	}
 
 	/**
-	 * @param FrmSettings $frm_settings
-	 *
 	 * @return array|WP_Error
 	 */
-	protected function send_api_check( $frm_settings ) {
+	protected function send_api_check() {
 		$captcha_settings = FrmCaptchaFactory::get_settings_object();
 		$arg_array        = array(
 			'body' => array(
@@ -438,7 +431,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 *
 	 * @param array $values
 	 *
-	 * @return array $values
+	 * @return array Values.
 	 */
 	public static function update_field_name( $values ) {
 		if ( $values['type'] === 'captcha' ) {
@@ -450,15 +443,5 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		return $values;
-	}
-
-	/**
-	 * @param FrmSettings $frm_settings
-	 *
-	 * @return string
-	 */
-	protected function captcha_size( $frm_settings ) {
-		_deprecated_function( __METHOD__, '6.8.4' );
-		return 'normal';
 	}
 }

@@ -3,8 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
-
+$a           = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 $form_action = apply_filters( 'frm_form_action_settings', $form_action, $form_action->post_excerpt );
 $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_action_settings', $form_action );
 
@@ -53,7 +52,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 		</span>
 		<div class="widget-title">
 			<h4>
-				<span class="frm_form_action_icon frm-outer-circle <?php echo esc_attr( ! str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? '' : ' frm-inverse' ); ?>">
+				<span class="frm_form_action_icon frm-outer-circle <?php echo esc_attr( str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? ' frm-inverse' : '' ); ?>">
 					<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'] ); ?>
 				</span>
 				<?php echo esc_html( $form_action->post_title ); ?>
@@ -63,10 +62,10 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	<div class="widget-inside">
 		<?php
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			// only load settings if they are just added or are open
+			// Only load settings if they are just added or are open
 			include __DIR__ . '/_action_inside.php';
 		} else {
-			// include hidden settings so action won't get lost on update
+			// Include hidden settings so action won't get lost on update
 			?>
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />

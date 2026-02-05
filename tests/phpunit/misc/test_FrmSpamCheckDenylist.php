@@ -90,12 +90,11 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @param array $denylist_data
+	 */
 	private function set_denylist_data( $denylist_data ) {
 		$this->set_private_property( $this->spam_check, 'denylist', $denylist_data );
-	}
-
-	private function set_values( $values ) {
-		$this->set_private_property( $this->spam_check, 'values', $values );
 	}
 
 	public function test_get_field_ids_to_check() {
@@ -310,6 +309,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 				'files'  => array(),
 			);
 		}
+
 		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data' );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
 
@@ -329,6 +329,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 				'files'  => array( __DIR__ . '/denylist-ip.txt' ),
 			);
 		}
+
 		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
 		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );

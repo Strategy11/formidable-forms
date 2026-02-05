@@ -23,6 +23,14 @@ namespace {
 
 	class FrmProFormState {
 		public static function get_from_request( $key, $default ) {}
+		/**
+		 * @param string $key
+		 * @param mixed  $value
+		 *
+		 * @return void
+		 */
+		public static function set_initial_value( $key, $value ) {
+		}
 	}
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
@@ -93,7 +101,7 @@ namespace {
 		 *
 		 * @return array|object|string|null
 		 */
-		public static function &value_exists( $field_id, $value, $entry_id = false ) {
+		public static function value_exists( $field_id, $value, $entry_id = false ) {
 		}
 		public static function get_post_value( $post_id, $post_field, $custom_field, $atts ) {
 		}
@@ -249,7 +257,7 @@ namespace {
 		}
 	}
 	class FrmProFormsHelper {
-		public static function &post_type( $form ) {
+		public static function post_type( $form ) {
 		}
 		/**
 		 * @return array
@@ -306,7 +314,7 @@ namespace {
 		 *
 		 * @return bool
 		 */
-		public static function &is_field_visible_to_user( $field ) {
+		public static function is_field_visible_to_user( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {
@@ -480,6 +488,24 @@ namespace {
 	}
 
 	class FrmProComboFieldsController {
+	}
+
+	class FrmProEntryMeta {
+		/**
+		 * @param object $field
+		 *
+		 * @return bool
+		 */
+		public static function skip_required_validation( $field ) {
+		}
+	}
+
+	class FrmProDashboardController {
+		/**
+		 * @return array
+		 */
+		public static function get_counters() {
+		}
 	}
 }
 

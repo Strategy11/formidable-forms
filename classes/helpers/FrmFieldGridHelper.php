@@ -36,12 +36,12 @@ class FrmFieldGridHelper {
 	private $is_frm_first;
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
 	private $field;
 
 	/**
-	 * @var FrmFieldGridHelper
+	 * @var FrmFieldGridHelper|null
 	 */
 	private $section_helper;
 
@@ -162,6 +162,7 @@ class FrmFieldGridHelper {
 		if ( 'end_divider' === $this->field->type ) {
 			return false;
 		}
+
 		return ! $this->can_support_current_layout() || $this->is_frm_first;
 	}
 
@@ -226,6 +227,7 @@ class FrmFieldGridHelper {
 			if ( 'end_divider' === $this->field->type ) {
 				$this->maybe_close_section_helper();
 			}
+
 			return;
 		}
 

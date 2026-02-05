@@ -26,9 +26,11 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function save_button() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -193,6 +195,7 @@ class FrmStylesHelper {
 		unset( $function_name );
 
 		$name = 'arrow' === $type ? 'collapse_icon' : 'repeat_icon';
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
@@ -202,10 +205,10 @@ class FrmStylesHelper {
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; ?>>
+					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons ?>>
 						<a href="javascript:void(0);">
 							<label>
-								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
+								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 								<span>
 									<?php
 									FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) );
@@ -219,6 +222,7 @@ class FrmStylesHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -252,6 +256,7 @@ class FrmStylesHelper {
 			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
 			array_pop( $rgb );
 		}
+
 		return $rgb;
 	}
 
@@ -280,7 +285,6 @@ class FrmStylesHelper {
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
-
 		return 'rgba(' . $rgb . ',' . $a . ')';
 	}
 
@@ -358,9 +362,7 @@ class FrmStylesHelper {
 		$b = round( ( $b + $m ) * 255 );
 
 		// Convert RGB to hex
-		$hex = sprintf( '%02x%02x%02x', $r, $g, $b );
-
-		return $hex;
+		return sprintf( '%02x%02x%02x', $r, $g, $b );
 	}
 
 	/**
@@ -473,7 +475,7 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
-		if ( empty( $vars ) ) {
+		if ( ! $vars ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
 
@@ -491,7 +493,8 @@ class FrmStylesHelper {
 			$prepared_value = '';
 
 			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
-				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';';
 			}
 		}
 	}
@@ -678,7 +681,8 @@ class FrmStylesHelper {
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 				// Sanitizing is done later.
-				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+				//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+				$posted = wp_unslash( $_POST['frm_style_setting'] );
 
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
@@ -862,7 +866,7 @@ class FrmStylesHelper {
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
 
-		if ( empty( $color ) ) {
+		if ( ! $color ) {
 			$color = $default;
 		} elseif ( str_contains( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
@@ -930,7 +934,8 @@ class FrmStylesHelper {
 	 * @return bool
 	 */
 	public static function previewing_style() {
-		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}
@@ -1090,7 +1095,7 @@ class FrmStylesHelper {
 	 * @return string The style editor wrapper classname.
 	 */
 	public static function style_editor_get_wrapper_classname( $section_type ) {
-		$is_quick_settings = ( 'quick-settings' === $section_type );
+		$is_quick_settings = 'quick-settings' === $section_type;
 		$classname         = 'frm-style-editor-form';
 		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
 
@@ -1110,11 +1115,13 @@ class FrmStylesHelper {
 	public static function get_submit_image_bg_url( $settings ) {
 		$background_image = $settings['submit_bg_img'];
 
-		if ( empty( $background_image ) ) {
+		if ( ! $background_image ) {
 			return false;
 		}
 
-		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to 6.14, the submit_bg_img will be a full URL string.
+		// Handle the case where the submit_bg_img is a full URL string. If the
+		// Settings were saved with the older styler version prior to 6.14, the
+		// submit_bg_img will be a full URL string.
 		if ( ! is_numeric( $background_image ) ) {
 			return $background_image;
 		}
@@ -1134,9 +1141,7 @@ class FrmStylesHelper {
 			return false;
 		}
 
-		return is_callable( 'FrmProAppHelper::use_chosen_js' )
-			? FrmProAppHelper::use_chosen_js()
-			: true;
+		return is_callable( 'FrmProAppHelper::use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true;
 	}
 
 	/**
@@ -1155,9 +1160,6 @@ class FrmStylesHelper {
 
 		$parts = explode( ' ', $value );
 
-		if ( count( $parts ) < 3 ) {
-			return $parts[0];
-		}
-		return $parts[2];
+		return count( $parts ) < 3 ? $parts[0] : $parts[2];
 	}
 }
