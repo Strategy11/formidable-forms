@@ -475,20 +475,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * For testing, we can set the country.
-	 *
-	 * Use:
-	 * - 'BE' for Belgium (Bancontact - EUR),
-	 * - 'PL' for Poland (BLIK - PLN),
-	 * - 'AT' for Austria (EPS - EUR),
-	 * - 'NL' for Netherlands (iDEAL - EUR),
-	 * - 'FR' for France,
-	 * - 'DE' for Germany,
-	 * - 'ES' for Spain,
-	 * - 'IT' for Italy,
-	 * - 'PT' for Portugal,
-	 * - 'GB' for United Kingdom,
-	 * - 'US' for United States.
+	 * For testing, we can set the country instead of having it determined
+	 * based on IP.
 	 *
 	 * @return array|false
 	 */
@@ -507,6 +495,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'EPS'        => array( 'AT', 'EUR' ),
 			'P24'        => array( 'PL', 'EUR' ), // PLN also works.
 			'Trustly'    => array( 'DK', 'DKK' ), // SE - SEK and NL - EUR also work.
+			// 'iDEAL'   => array( 'NL', 'EUR' ),
 		);
 		return $gateway_test_data[ $test_gateway ] ?? false;
 	}

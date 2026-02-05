@@ -46,8 +46,8 @@
 			paypal.FUNDING.BLIK,
 			paypal.FUNDING.EPS,
 			paypal.FUNDING.P24,
-			paypal.FUNDING.TRUSTLY,
-			// paypal.FUNDING.IDEAL,
+		//	paypal.FUNDING.TRUSTLY,
+			paypal.FUNDING.IDEAL,
 		];
 		fundingSources.forEach( renderPayPalButton );
 
@@ -573,3 +573,4 @@
 		} );
 	} );
 }() );
+
