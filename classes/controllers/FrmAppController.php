@@ -745,7 +745,71 @@ class FrmAppController {
 			);
 		}
 
-		self::enqueue_page_specific_assets( $plugin_url, $version );
+		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+
+		global $pagenow;
+
+		if ( str_starts_with( $page, 'formidable' ) || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
+			self::enqueue_global_settings_scripts( $page );
+
+			wp_enqueue_script( 'admin-widgets' );
+			wp_enqueue_style( 'widgets' );
+			self::maybe_deregister_popper1();
+			wp_enqueue_script( 'formidable_admin' );
+			wp_set_script_translations( 'formidable_admin', 'formidable' );
+			wp_enqueue_script( 'formidable_embed' );
+			wp_set_script_translations( 'formidable_embed', 'formidable' );
+			FrmAppHelper::localize_script( 'admin' );
+
+			wp_enqueue_style( 'formidable-animations' );
+			wp_enqueue_style( 'formidable-admin' );
+
+			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
+				wp_enqueue_style( 'formidable-grids' );
+				self::maybe_enqueue_dropzone_css( $page );
+			} else {
+				wp_enqueue_style( 'formidable-grids' );
+			}
+
+			if ( 'formidable-entries' === $page ) {
+				// Load front end js for entries.
+				wp_enqueue_script( 'formidable' );
+
+				// Registers and enqueues the entries page scripts.
+				wp_register_script( 'formidable_entries', $plugin_url . '/js/admin/entries.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
+				wp_enqueue_script( 'formidable_entries' );
+			}
+
+			do_action( 'frm_enqueue_builder_scripts' );
+			self::include_upgrade_overlay();
+			self::include_info_overlay();
+		} elseif ( FrmAppHelper::is_view_builder_page() ) {
+			if ( isset( $_REQUEST['post_type'] ) ) {
+				$post_type = sanitize_title( wp_unslash( $_REQUEST['post_type'] ) );
+			} elseif ( isset( $_REQUEST['post'] ) && absint( $_REQUEST['post'] ) ) {
+				$post = get_post( absint( wp_unslash( $_REQUEST['post'] ) ) );
+
+				if ( ! $post ) {
+					return;
+				}
+
+				$post_type = $post->post_type;
+			} else {
+				return;
+			}
+
+			if ( $post_type === 'frm_display' ) {
+				self::enqueue_legacy_views_assets();
+			}
+		}//end if
+
+		if ( 'formidable-addons' === $page ) {
+			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
+			wp_enqueue_script( 'formidable_addons' );
+		}
+
+		self::enqueue_builder_assets( $plugin_url, $version );
 	}
 
 	/**
@@ -775,110 +839,6 @@ class FrmAppController {
 		}
 
 		return $dependencies;
-	}
-
-	/**
-	 * Enqueue page-specific admin assets based on the current page context.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $plugin_url The plugin URL.
-	 * @param string $version    The plugin version.
-	 *
-	 * @return void
-	 */
-	private static function enqueue_page_specific_assets( $plugin_url, $version ) {
-		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
-
-		global $pagenow;
-
-		if ( str_starts_with( $page, 'formidable' ) || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
-			self::enqueue_formidable_page_assets( $page, $plugin_url, $version );
-		} elseif ( FrmAppHelper::is_view_builder_page() ) {
-			self::maybe_enqueue_view_builder_assets();
-		}
-
-		if ( 'formidable-addons' === $page ) {
-			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
-			wp_enqueue_script( 'formidable_addons' );
-		}
-
-		self::enqueue_builder_assets( $plugin_url, $version );
-	}
-
-	/**
-	 * Enqueue assets for Formidable admin pages.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $page       The current admin page slug.
-	 * @param string $plugin_url The plugin URL.
-	 * @param string $version    The plugin version.
-	 *
-	 * @return void
-	 */
-	private static function enqueue_formidable_page_assets( $page, $plugin_url, $version ) {
-		self::enqueue_global_settings_scripts( $page );
-
-		wp_enqueue_script( 'admin-widgets' );
-		wp_enqueue_style( 'widgets' );
-		self::maybe_deregister_popper1();
-		wp_enqueue_script( 'formidable_admin' );
-		wp_set_script_translations( 'formidable_admin', 'formidable' );
-		wp_enqueue_script( 'formidable_embed' );
-		wp_set_script_translations( 'formidable_embed', 'formidable' );
-		FrmAppHelper::localize_script( 'admin' );
-
-		wp_enqueue_style( 'formidable-animations' );
-		wp_enqueue_style( 'formidable-admin' );
-
-		if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
-			wp_enqueue_style( 'formidable-grids' );
-			self::maybe_enqueue_dropzone_css( $page );
-		} else {
-			wp_enqueue_style( 'formidable-grids' );
-		}
-
-		if ( 'formidable-entries' === $page ) {
-			// Load front end js for entries.
-			wp_enqueue_script( 'formidable' );
-
-			// Registers and enqueues the entries page scripts.
-			wp_register_script( 'formidable_entries', $plugin_url . '/js/admin/entries.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
-			wp_enqueue_script( 'formidable_entries' );
-		}
-
-		do_action( 'frm_enqueue_builder_scripts' );
-		self::include_upgrade_overlay();
-		self::include_info_overlay();
-	}
-
-	/**
-	 * Enqueue legacy Views assets when on the view builder page.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function maybe_enqueue_view_builder_assets() {
-		if ( isset( $_REQUEST['post_type'] ) ) {
-			$post_type = sanitize_title( wp_unslash( $_REQUEST['post_type'] ) );
-		} elseif ( isset( $_REQUEST['post'] ) && absint( $_REQUEST['post'] ) ) {
-			$post = get_post( absint( wp_unslash( $_REQUEST['post'] ) ) );
-
-			if ( ! $post ) {
-				return;
-			}
-
-			$post_type = $post->post_type;
-		} else {
-			return;
-		}
-
-		if ( $post_type === 'frm_display' ) {
-			self::enqueue_legacy_views_assets();
-		}
 	}
 
 	/**
