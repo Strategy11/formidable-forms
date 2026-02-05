@@ -330,7 +330,7 @@ export default class frmSliderComponent {
 		if ( '%' === unit ) {
 			deltaX = Math.round( sliderWidth * value / 100 );
 		} else if ( steps && steps.length > 0 ) {
-			deltaX = this.calculateDeltaXFromSteps( value, steps, sliderWidth );
+			deltaX = frmSliderComponent.calculateDeltaXFromSteps( value, steps, sliderWidth );
 		}
 
 		slider.querySelector( '.frm-slider-active-track' ).style.width = `${ deltaX }px`;
@@ -346,7 +346,7 @@ export default class frmSliderComponent {
 	 * @param {number} sliderWidth - The width of the slider.
 	 * @return {number} - The calculated deltaX position.
 	 */
-	calculateDeltaXFromSteps( value, steps, sliderWidth ) {
+	static calculateDeltaXFromSteps( value, steps, sliderWidth ) {
 		const stepIndex = steps.indexOf( value );
 		if ( -1 === stepIndex ) {
 			// If value not in steps, find closest and use its position
