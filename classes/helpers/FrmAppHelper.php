@@ -1598,7 +1598,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		include FrmAppHelper::plugin_path() . '/classes/views/shared/admin_banner.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_bar.php';
 	}
 
 	/**

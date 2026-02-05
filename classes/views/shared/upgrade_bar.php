@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin banner view
+ * Upgrade bar view
  *
  * @since x.x
  *
