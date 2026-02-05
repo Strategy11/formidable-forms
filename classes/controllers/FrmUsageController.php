@@ -15,7 +15,7 @@ class FrmUsageController {
 	 *
 	 * @var string
 	 */
-	const FLOWS_ACTION_NAME = 'frm_usage_tracking_flows';
+	private const FLOWS_ACTION_NAME = 'frm_usage_tracking_flows';
 
 	/**
 	 * Randomize the first send to prevent our servers from crashing.
