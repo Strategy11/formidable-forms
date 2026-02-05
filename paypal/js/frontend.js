@@ -40,6 +40,17 @@
 			<div class="frm-paypal-card-cvv frm3" id="frm-paypal-card-cvv"></div>
 		`;
 
+		const renderPayPalButton = makeRenderPayPalButton( cardElement );
+		const fundingSources = [
+			paypal.FUNDING.BANCONTACT,
+			paypal.FUNDING.BLIK,
+			paypal.FUNDING.EPS,
+			paypal.FUNDING.P24,
+			paypal.FUNDING.TRUSTLY,
+			// paypal.FUNDING.IDEAL,
+		];
+		fundingSources.forEach( renderPayPalButton );
+
 		if ( 'function' === typeof paypal.Messages ) {
 			const payLaterBanner = document.createElement( 'div' );
 			payLaterBanner.id = 'my-pay-later-banner';
@@ -110,6 +121,28 @@
 		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
 
 		return cardFields;
+	}
+
+	function makeRenderPayPalButton( cardElement ) {
+		return function( fundingSource ) {
+				const button = paypal.Buttons({
+				fundingSource,
+				createOrder,
+				onApprove,
+				onError,
+			});
+
+			if ( ! button.isEligible() ) {
+				return;
+			}
+
+			const containerId = 'frm-paypal-button-' + fundingSource + '-container';
+			const container = document.createElement( 'div' );
+			container.id = containerId;
+			cardElement.prepend( container );
+
+			button.render( '#' + containerId );
+		};
 	}
 
 	/**

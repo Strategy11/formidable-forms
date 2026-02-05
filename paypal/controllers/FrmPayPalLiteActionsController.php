@@ -409,6 +409,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
 		);
 
+		$test_gateway_data = self::get_test_gateway();
+		if ( $test_gateway_data ) {
+			list( $buyer_country, $currency ) = $test_gateway_data;
+			$query_args['buyer-country']      = $buyer_country;
+			$query_args['currency']           = $currency;
+		}
+
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			$query_args['debug'] = 'true';
 		}
@@ -417,6 +424,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'buttons',
 			'card-fields',
 			'messages',
+			// 'payment-fields',
+			// 'marks',
 		);
 
 		switch( $action->post_content['pay_later'] ?? 'auto' ) {
@@ -424,6 +433,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				$query_args['disable-funding'] = 'paylater';
 				break;
 			case 'no-messaging':
+				// PayPal throws a  TypeError: can't access property "PAGE_TYPE", trackingDetails is undefined error
+				// a lot of the time if you include messages. If you see this error, try using this 'no-messaging' option.
 				$components = array_diff( $components, array( 'messages' ) );
 				break;
 		}
@@ -461,6 +472,51 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
+	}
+
+	/**
+	 * For testing, we can set the country.
+	 *
+	 * Use:
+	 * - 'BE' for Belgium (Bancontact - EUR),
+	 * - 'PL' for Poland (BLIK - PLN),
+	 * - 'AT' for Austria (EPS - EUR),
+	 * - 'NL' for Netherlands (iDEAL - EUR),
+	 * - 'FR' for France,
+	 * - 'DE' for Germany,
+	 * - 'ES' for Spain,
+	 * - 'IT' for Italy,
+	 * - 'PT' for Portugal,
+	 * - 'GB' for United Kingdom,
+	 * - 'US' for United States.
+	 *
+	 * @return array|false
+	 */
+	private static function get_test_gateway() {
+		// For testing.
+		$test_gateway = false;
+
+		if ( ! $test_gateway ) {
+			return false;
+		}
+
+		// TODO: Add iDEAL.
+		$gateway_test_data = array(
+			'Bancontact' => array( 'BE', 'EUR' ),
+			'BLIK'       => array( 'PL', 'PLN' ),
+			'EPS'        => array( 'AT', 'EUR' ),
+			'P24'        => array( 'PL', 'EUR' ), // PLN also works.
+			'Trustly'    => array( 'DK', 'DKK' ), // SE - SEK and NL - EUR also work.
+		);
+		return $gateway_test_data[ $test_gateway ] ?? false;
+	}
+
+	private static function get_components() {
+		$components = array(
+			'buttons',
+			'card-fields',
+			'messages',
+		);
 	}
 
 	/**
