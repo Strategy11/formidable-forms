@@ -202,7 +202,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 */
 	afterViewInit() {
 		this.select.addEventListener( 'change', () => {
-			const value = this.getUnitValue( this.select.value );
+			const value = frmTypographyComponent.getUnitValue( this.select.value );
 			this.unitValueInput.value = value.value;
 			this.hiddenInput.value = value.value + value.unit;
 			this.#onChange( this.hiddenInput.value );
@@ -216,7 +216,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {string} value - The value to get the unit value for.
 	 * @return {Object} - The unit value.
 	 */
-	getUnitValue( value ) {
+	static getUnitValue( value ) {
 		const defaultValue = { value: '', unit: '' };
 		if ( ! value ) {
 			return defaultValue;

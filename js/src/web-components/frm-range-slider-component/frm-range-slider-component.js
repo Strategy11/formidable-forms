@@ -341,7 +341,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Array}  units     - The units of the slider.
 	 * @return {Element} - The value and unit selection element.
 	 */
-	createSliderValueAndUnitSelection( value, ariaLabel, units ) {
+	static createSliderValueAndUnitSelection( value, ariaLabel, units ) {
 		const valueContainer = document.createElement( 'div' );
 		valueContainer.classList.add( 'frm-slider-value' );
 
@@ -434,7 +434,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
-		const valueContainer = this.createSliderValueAndUnitSelection( value, ariaLabel, units );
+		const valueContainer = frmRangeSliderComponent.createSliderValueAndUnitSelection( value, ariaLabel, units );
 
 		if ( addHiddenInputValue ) {
 			valueContainer.append( this.createSliderHiddenInputValue( options ) );
