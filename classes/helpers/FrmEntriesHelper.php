@@ -527,11 +527,10 @@ class FrmEntriesHelper {
 		}
 
 		// Check if there are any other posted "other" values for this field.
-		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) {
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			return;
 		}
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
         // Save original value
         $args['temp_value'] = $value;
         $args['other']      = true;
