@@ -2347,14 +2347,17 @@ class FrmXMLHelper {
 	 */
 	private static function switch_email_condition_field_ids( &$post_content ) {
 		// Switch field IDs in conditional logic
-		if ( isset( $post_content['conditions'] ) && is_array( $post_content['conditions'] ) ) {
-			foreach ( $post_content['conditions'] as $email_key => $val ) {
-				if ( is_numeric( $email_key ) ) {
-					$post_content['conditions'][ $email_key ] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
-				}
-				unset( $email_key, $val );
-			}
+		if ( ! isset( $post_content['conditions'] ) || ! is_array( $post_content['conditions'] ) ) {
+			return;
 		}
+
+        foreach ( $post_content['conditions'] as $email_key => $val ) {
+            if ( is_numeric( $email_key ) ) {
+                $post_content['conditions'][ $email_key ] = self::switch_action_field_ids( $val, array( 'hide_field' ) );
+            }
+            unset( $email_key, $val );
+        }
+    
 	}
 
 	/**

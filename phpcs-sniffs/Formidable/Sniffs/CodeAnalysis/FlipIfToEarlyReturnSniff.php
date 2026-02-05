@@ -85,12 +85,13 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		$scopeCloser = $tokens[ $stackPtr ]['scope_closer'];
 
 		// Find the first non-whitespace token inside the function.
-		$firstStatement = $phpcsFile->findNext(
-			T_WHITESPACE,
-			$scopeOpener + 1,
-			$scopeCloser,
-			true
-		);
+		$firstStatement = $this->findNextSignificantToken( $phpcsFile, $scopeOpener + 1, $scopeCloser );
+
+		if ( false === $firstStatement ) {
+			return;
+		}
+
+		$firstStatement = $this->skipGuardClauses( $phpcsFile, $firstStatement, $scopeCloser );
 
 		if ( false === $firstStatement ) {
 			return;
@@ -127,12 +128,7 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 
 		// Check if the if statement is the main logic in the function body.
 		// The next non-whitespace/non-comment token after the if's closing brace should be the function's closing brace.
-		$afterIf = $phpcsFile->findNext(
-			array( T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR, T_DOC_COMMENT_STRING, T_DOC_COMMENT_TAG, T_DOC_COMMENT_WHITESPACE ),
-			$ifScopeCloser + 1,
-			null,
-			true
-		);
+		$afterIf = $this->findNextSignificantToken( $phpcsFile, $ifScopeCloser + 1, null );
 
 		// If the next token after the if isn't the function's closing brace, there's more code.
 		if ( false === $afterIf || $afterIf !== $scopeCloser ) {
@@ -617,5 +613,135 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		// Find the semicolon to confirm this is a complete assignment
 		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $next + 1, null );
 		return false !== $semicolon;
+	}
+
+	/**
+	 * Skip over leading guard clauses (returns/throws) before analyzing the primary if.
+	 *
+	 * @param File $phpcsFile
+	 * @param int  $current
+	 * @param int  $scopeCloser
+	 *
+	 * @return false|int
+	 */
+	private function skipGuardClauses( File $phpcsFile, $current, $scopeCloser ) {
+		while ( false !== $current && $current < $scopeCloser ) {
+			if ( $this->isGuardStatement( $phpcsFile, $current, $scopeCloser ) ) {
+				$semicolon = $phpcsFile->findNext( T_SEMICOLON, $current + 1, $scopeCloser );
+
+				if ( false === $semicolon ) {
+					return $current;
+				}
+
+				$current = $this->findNextSignificantToken( $phpcsFile, $semicolon + 1, $scopeCloser );
+				continue;
+			}
+
+			$tokens = $phpcsFile->getTokens();
+
+			if ( T_IF === $tokens[ $current ]['code'] && $this->isGuardClauseIf( $phpcsFile, $current ) ) {
+				$afterGuard = $this->findNextSignificantToken( $phpcsFile, $tokens[ $current ]['scope_closer'] + 1, $scopeCloser );
+				$current    = $afterGuard;
+				continue;
+			}
+
+			break;
+		}
+
+		return $current;
+	}
+
+	/**
+	 * Determine if the token represents a guard statement like return or throw.
+	 *
+	 * @param File $phpcsFile
+	 * @param int  $stackPtr
+	 * @param int  $scopeCloser
+	 *
+	 * @return bool
+	 */
+	private function isGuardStatement( File $phpcsFile, $stackPtr, $scopeCloser ) {
+		$tokens      = $phpcsFile->getTokens();
+		$guardTokens = array( T_RETURN, T_THROW, T_BREAK, T_CONTINUE );
+
+		if ( ! in_array( $tokens[ $stackPtr ]['code'], $guardTokens, true ) ) {
+			return false;
+		}
+
+		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $stackPtr + 1, $scopeCloser );
+
+		return false !== $semicolon;
+	}
+
+	/**
+	 * Determine if an if statement is a guard clause (e.g., if ( ! cond ) { return; }).
+	 *
+	 * @param File $phpcsFile
+	 * @param int  $ifToken
+	 *
+	 * @return bool
+	 */
+	private function isGuardClauseIf( File $phpcsFile, $ifToken ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( ! isset( $tokens[ $ifToken ]['scope_opener'] ) || ! isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
+			return false;
+		}
+
+		// Skip if there is an else/elseif attached.
+		$afterIf = $this->findNextSignificantToken( $phpcsFile, $tokens[ $ifToken ]['scope_closer'] + 1, null );
+
+		if ( false !== $afterIf ) {
+			$code = $tokens[ $afterIf ]['code'];
+
+			if ( T_ELSE === $code || T_ELSEIF === $code ) {
+				return false;
+			}
+		}
+
+		$bodyStart = $this->findNextSignificantToken( $phpcsFile, $tokens[ $ifToken ]['scope_opener'] + 1, $tokens[ $ifToken ]['scope_closer'] );
+
+		if ( false === $bodyStart ) {
+			return false;
+		}
+
+		if ( ! $this->isGuardStatement( $phpcsFile, $bodyStart, $tokens[ $ifToken ]['scope_closer'] ) ) {
+			return false;
+		}
+
+		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $bodyStart + 1, $tokens[ $ifToken ]['scope_closer'] );
+
+		if ( false === $semicolon ) {
+			return false;
+		}
+
+		$afterBody = $this->findNextSignificantToken( $phpcsFile, $semicolon + 1, $tokens[ $ifToken ]['scope_closer'] );
+
+		return false === $afterBody;
+	}
+
+	/**
+	 * Find the next non-whitespace/comment token.
+	 *
+	 * @param File   $phpcsFile
+	 * @param int    $start
+	 * @param int|false $end
+	 *
+	 * @return false|int
+	 */
+	private function findNextSignificantToken( File $phpcsFile, $start, $end = false ) {
+		$skip = array(
+			T_WHITESPACE,
+			T_COMMENT,
+			T_DOC_COMMENT,
+			T_DOC_COMMENT_OPEN_TAG,
+			T_DOC_COMMENT_CLOSE_TAG,
+			T_DOC_COMMENT_STAR,
+			T_DOC_COMMENT_STRING,
+			T_DOC_COMMENT_TAG,
+			T_DOC_COMMENT_WHITESPACE,
+		);
+
+		return $phpcsFile->findNext( $skip, $start, $end, true );
 	}
 }
