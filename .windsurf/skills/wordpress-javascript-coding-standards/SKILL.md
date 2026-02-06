@@ -1,3 +1,8 @@
+---
+name: wordpress-javascript-coding-standards
+description: WordPress JavaScript coding standards for maintaining, generating, or refactoring JS code. Apply when working with JavaScript files in WordPress plugins or themes.
+---
+
 # WordPress JavaScript Coding Standards
 
 **Version 1.0.0**  

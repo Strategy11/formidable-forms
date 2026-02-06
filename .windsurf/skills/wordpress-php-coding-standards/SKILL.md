@@ -1,3 +1,8 @@
+---
+name: wordpress-php-coding-standards
+description: WordPress PHP coding standards for maintaining, generating, or refactoring PHP code. Apply when working with PHP files in WordPress plugins or themes.
+---
+
 # WordPress PHP Coding Standards
 
 **Version 1.0.0**  

@@ -1,3 +1,8 @@
+---
+name: wordpress-css-coding-standards
+description: WordPress CSS coding standards for maintaining, generating, or refactoring CSS code. Apply when working with CSS files in WordPress plugins or themes.
+---
+
 # WordPress CSS Coding Standards
 
 **Version 1.0.0**  

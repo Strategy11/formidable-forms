@@ -1,127 +1,172 @@
 # Windsurf Configuration for Formidable Forms
 
-This directory contains comprehensive Windsurf configuration files for Formidable Forms development.
+This directory contains comprehensive Windsurf configuration files for Formidable Forms development following WordPress VIP standards.
 
-## Installation
+## How It All Works Together
 
-Copy the contents to your Formidable plugins directory:
+Windsurf has **four mechanisms** for customizing Cascade behavior. Here's how they interact:
 
-```bash
-# Copy to formidable-master (Lite)
-cp -r rules/ /path/to/formidable-master/.windsurf/rules/
-cp -r skills/ /path/to/formidable-master/.windsurf/skills/
-cp -r workflows/ /path/to/formidable-master/.windsurf/workflows/
-cp AGENTS.md /path/to/formidable-master/AGENTS.md
+| Mechanism     | Purpose                       | Trigger                                   | Best For                             |
+| ------------- | ----------------------------- | ----------------------------------------- | ------------------------------------ |
+| **Rules**     | Behavioral guidelines         | Always-on, glob, model decision, manual   | Coding style, project conventions    |
+| **Skills**    | Complex tasks with resources  | Auto (progressive disclosure) or @mention | Multi-step workflows, reference docs |
+| **Workflows** | Repetitive task sequences     | /slash-command                            | Deployment, testing, bug fixing      |
+| **AGENTS.md** | Directory-scoped instructions | Auto based on file location               | Location-specific conventions        |
 
-# Copy to formidable-pro-master (Pro)
-cp -r rules/ /path/to/formidable-pro-master/.windsurf/rules/
-cp -r skills/ /path/to/formidable-pro-master/.windsurf/skills/
-cp -r workflows/ /path/to/formidable-pro-master/.windsurf/workflows/
-cp AGENTS.md /path/to/formidable-pro-master/AGENTS.md
-```
+### Activation Flow
+
+1. **AGENTS.md** at root applies to ALL files (always on)
+2. **Rules** with `trigger: always_on` apply to every conversation
+3. **Rules** with `trigger: glob` apply when matching files are involved
+4. **Skills** auto-invoke based on task relevance (via description matching)
+5. **Workflows** invoke explicitly via `/command`
 
 ## Directory Structure
 
 ```
-windsurf-formidable/
+.windsurf/
 ├── README.md                          # This file
-├── AGENTS.md                          # Root-level project guidelines
+├── AGENTS.md                          # Root-level project guidelines (always applies)
 ├── rules/
+│   ├── conventional-commits.md        # Commit message format (always_on)
 │   ├── formidable-core.md             # Core development rules (always_on)
 │   ├── php-wordpress.md               # PHP/WordPress standards (*.php glob)
 │   └── web-search-policy.md           # Mandatory web search rules (always_on)
 ├── skills/
-│   ├── add-field-type/
-│   │   └── SKILL.md                   # Guide for creating new field types
-│   └── code-review/
-│       └── SKILL.md                   # Code review checklist and guidelines
+│   ├── add-field-type/                # Guide for creating new field types
+│   │   └── SKILL.md
+│   ├── code-review/                   # Code review checklist and guidelines
+│   │   └── SKILL.md
+│   ├── wordpress-php-coding-standards/
+│   │   ├── SKILL.md                   # Skill definition with frontmatter
+│   │   ├── AGENTS.md                  # Full reference (supporting file)
+│   │   └── rules/                     # Detailed rule files
+│   ├── wordpress-css-coding-standards/
+│   ├── wordpress-javascript-coding-standards/
+│   ├── wordpress-html-coding-standards/
+│   └── wordpress-accessibility-coding-standards/
 └── workflows/
-    ├── run-tests.md                   # /run-tests workflow
-    ├── phpcs-check.md                 # /phpcs-check workflow
     ├── fix-bug.md                     # /fix-bug workflow
+    ├── phpcs-check.md                 # /phpcs-check workflow
+    ├── run-tests.md                   # /run-tests workflow
     └── security-audit.md              # /security-audit workflow
 ```
 
-## Usage
-
-### Rules (Automatic)
+## Rules (Automatic Application)
 
 Rules are automatically applied based on their trigger:
 
-- **formidable-core.md** - Always active, enforces core development practices
-- **php-wordpress.md** - Active for all PHP files
-- **web-search-policy.md** - Always active, ensures web searches for best practices
+| Rule                      | Trigger       | When Active             |
+| ------------------------- | ------------- | ----------------------- |
+| `conventional-commits.md` | `always_on`   | Every conversation      |
+| `formidable-core.md`      | `always_on`   | Every conversation      |
+| `web-search-policy.md`    | `always_on`   | Every conversation      |
+| `php-wordpress.md`        | `glob: *.php` | When PHP files involved |
 
-### Skills (Manual or Automatic)
+## Skills (Progressive Disclosure + Manual)
 
-Invoke skills by typing `@skill-name` or let Cascade auto-invoke based on context:
+Skills are invoked in two ways:
 
-- `@add-field-type` - Guides creation of new field types
-- `@code-review` - Performs comprehensive code review
+### Automatic Invocation
 
-### Workflows (Slash Commands)
+Cascade reads the skill's `description` field and automatically invokes when relevant:
+
+- Working with PHP files → `wordpress-php-coding-standards` may auto-invoke
+- Working with CSS files → `wordpress-css-coding-standards` may auto-invoke
+- Creating new field types → `add-field-type` may auto-invoke
+
+### Manual Invocation
+
+Type `@skill-name` in Cascade:
+
+- `@wordpress-php-coding-standards` - Full PHP standards reference
+- `@wordpress-css-coding-standards` - CSS standards reference
+- `@wordpress-javascript-coding-standards` - JavaScript standards reference
+- `@wordpress-html-coding-standards` - HTML standards reference
+- `@wordpress-accessibility-coding-standards` - WCAG 2.2 Level AA standards
+- `@add-field-type` - Step-by-step field type creation
+- `@code-review` - Code review checklist
+
+### Why Skills Have AGENTS.md Files
+
+The `AGENTS.md` files inside skill folders are **supporting resources**, not directory-scoped rules. When a skill is invoked, Cascade can read these comprehensive reference documents.
+
+## Workflows (Slash Commands)
 
 Invoke workflows using slash commands:
 
-- `/run-tests` - Run PHPUnit tests
-- `/phpcs-check` - Run PHP CodeSniffer
-- `/fix-bug` - Structured bug fixing workflow
-- `/security-audit` - Security audit checklist
+| Command           | Purpose                        |
+| ----------------- | ------------------------------ |
+| `/fix-bug`        | Structured bug fixing workflow |
+| `/run-tests`      | Run PHPUnit tests              |
+| `/phpcs-check`    | Run PHP CodeSniffer            |
+| `/security-audit` | Security audit checklist       |
 
-## Key Features
+### Skills Apply During Workflows
 
-### 1. Mandatory Web Search
+When using `/fix-bug` on a PHP file, Cascade will:
 
-The rules enforce searching WordPress docs before:
+1. Follow the workflow steps
+2. Auto-invoke `wordpress-php-coding-standards` if relevant
+3. Apply all `always_on` rules (formidable-core, web-search-policy, conventional-commits)
 
-- Using any WordPress function
-- Writing database queries
-- Implementing security measures
-- Making performance optimizations
+## Ensuring WordPress Standards Always Apply
 
-### 2. WordPress VIP Compliance
+To ensure WordPress coding standards always apply:
 
-All rules align with WordPress VIP coding standards:
+### Option 1: Let Auto-Invocation Work (Recommended)
 
-- Prepared SQL queries
-- Input sanitization
-- Output escaping
-- Performance optimization
+The skill descriptions are crafted to trigger when working with relevant file types:
 
-### 3. Formidable Patterns
+- "Apply when working with PHP files" → triggers for PHP work
+- "Apply when working with CSS files" → triggers for CSS work
 
-Rules enforce Formidable-specific patterns:
+### Option 2: Explicit @mention
 
-- Class naming conventions (Frm*, FrmPro*)
-- Hook naming conventions (frm*\*, frm_pro*\*)
-- Factory pattern usage
-- Helper method usage
+Add `@wordpress-php-coding-standards` to your prompt when you want explicit standards enforcement.
 
-### 4. Pro Compatibility
+### Option 3: Add to Workflow
 
-All changes must work:
+Edit workflows to include skill references:
 
-- When Pro plugin is active
-- When Pro plugin is inactive
-- With empty/null data
-- With missing configuration
+```markdown
+## Phase 5: Implement the Fix
+
+Follow @wordpress-php-coding-standards for all code changes.
+```
+
+## Commit Messages
+
+All commits must follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:** `fix`, `feat`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
+
+**Scopes:** `builder`, `entries`, `fields`, `api`, `admin`, `frontend`, `db`, `i18n`, `security`, `deps`
+
+**Examples:**
+
+```
+fix(fields): resolve date field validation error
+feat(builder): add drag-and-drop field reordering
+refactor(entries)!: change entry meta storage format
+```
 
 ## Lint Warnings
 
 The markdown lint warnings (MD033, MD040) in these files are **intentional**:
 
 - XML-style tags (`<security>`, `<phpdoc>`) help Cascade parse grouped rules
-- Some code blocks without language specs are for search query examples
+- Code blocks without language specs are for commit message examples
 
 These do not affect Windsurf functionality.
-
-## Customization
-
-Feel free to modify these files for your specific needs:
-
-1. **Add new rules** - Create new `.md` files in `rules/`
-2. **Add new skills** - Create new directories in `skills/` with `SKILL.md`
-3. **Add new workflows** - Create new `.md` files in `workflows/`
 
 ## Related Documentation
 
@@ -129,5 +174,6 @@ Feel free to modify these files for your specific needs:
 - [Windsurf Skills](https://docs.windsurf.com/windsurf/cascade/skills)
 - [Windsurf Workflows](https://docs.windsurf.com/windsurf/cascade/workflows)
 - [Windsurf AGENTS.md](https://docs.windsurf.com/windsurf/cascade/agents-md)
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/)
 - [WordPress VIP Documentation](https://docs.wpvip.com/)

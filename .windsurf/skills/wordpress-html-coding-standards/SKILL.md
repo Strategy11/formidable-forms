@@ -1,3 +1,8 @@
+---
+name: wordpress-html-coding-standards
+description: WordPress HTML coding standards for maintaining, generating, or refactoring HTML code. Apply when working with HTML or PHP template files in WordPress plugins or themes.
+---
+
 # WordPress HTML Coding Standards
 
 **Version 1.0.0**  

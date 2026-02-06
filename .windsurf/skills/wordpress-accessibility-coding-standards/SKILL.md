@@ -1,3 +1,8 @@
+---
+name: wordpress-accessibility-coding-standards
+description: WordPress accessibility coding standards (WCAG 2.2 Level AA). Apply when working with UI elements, forms, or any user-facing code in WordPress plugins or themes.
+---
+
 # WordPress Accessibility Coding Standards
 
 **Version 1.0.0**  
