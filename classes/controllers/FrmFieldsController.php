@@ -184,8 +184,13 @@ class FrmFieldsController {
 		}
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			$field_object->parent_form_id = $values['id'] ?? $field_object->form_id;
-			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
+			if ( isset( $values['form_key'] ) ) {
+				$field_object->parent_form_id = $values['id'];
+			} else {
+				$parent_form_id               = FrmDb::get_var( 'frm_forms', array( 'id' => $field_object->form_id ), 'parent_form_id' );
+				$field_object->parent_form_id = $parent_form_id ? $parent_form_id : $field_object->form_id;
+			}
+			$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
 		/**
