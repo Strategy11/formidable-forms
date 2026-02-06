@@ -315,7 +315,7 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertSame( $expected['to']['first'], $previous_mock_email['to'], 'To address is not set correctly when using User ID field.' );
 		$this->assertSame( $expected['to']['second'], $mock_email['to'], 'To address is not set correctly when using User ID field.' );
 		$this->assertSame( $expected['cc'], $mock_email['cc'], 'CC not set correctly when using User ID field' );
-		$this->assertEquals( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly when conditional statement with quotes' );
+		$this->assertSame( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly when conditional statement with quotes' );
 
 		$this->check_senders( $expected, $mock_email );
 		$this->check_subject( $expected, $mock_email );
@@ -691,7 +691,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			$action->post_content['email_message'] = $message;
 			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                                = $this->get_private_property( $email, 'message' );
-			$this->assertEquals( $expected, $actual );
+			$this->assertSame( $expected, $actual );
 		}
 	}
 
@@ -746,7 +746,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			$action->post_content['plain_text'] = $setting;
 			$email                              = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                             = $this->get_private_property( $email, 'message' );
-			$this->assertEquals( $actual, $expected );
+			$this->assertSame( $actual, $expected );
 		}
 	}
 
@@ -765,7 +765,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			$action->post_content[ $setting_name ] = $setting;
 			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                                = $this->get_private_property( $email, $property );
-			$this->assertEquals( $expected, $actual );
+			$this->assertSame( $expected, $actual );
 		}
 	}
 }

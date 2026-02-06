@@ -148,7 +148,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		FrmXMLController::add_default_templates();
 
 		$form = FrmForm::getOne( 'contact-db12' );
-		self::assertEquals( 'contact-db12', $form->form_key );
+		self::assertSame( 'contact-db12', $form->form_key );
 	}
 
 	public static function create_files() {
@@ -276,7 +276,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$form_id            = $this->factory->form->get_id_by_key( $form_key );
 		$fields             = FrmField::get_all_for_form( $form_id, '', 'include' );
 		$actual_field_num   = count( $fields );
-		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$this->assertSame( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return $fields;
 	}
@@ -393,7 +393,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->set_get_params( $page );
 		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
 		$this->assertTrue( is_admin(), 'Failed to switch to the back-end' );
-		$this->assertEquals( $screen->base, $current_screen->base, $page );
+		$this->assertSame( $screen->base, $current_screen->base, $page );
 
 		FrmHooksController::trigger_load_hook();
 	}

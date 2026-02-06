@@ -10,7 +10,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 			array( 'FrmXMLHelper', 'remove_defaults' ),
 			array( $defaults, &$saved )
 		);
-		$this->assertEquals( array(), $saved );
+		$this->assertSame( array(), $saved );
 
 		$defaults = array(
 			'x'    => 'X',
@@ -37,7 +37,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 			array( 'FrmXMLHelper', 'remove_defaults' ),
 			array( $defaults, &$saved )
 		);
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'a'   => 'A',
 				'c'   => 'C',
@@ -71,7 +71,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 			array( 'FrmXMLHelper', 'remove_defaults' ),
 			array( $defaults, &$saved )
 		);
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'c'   => 'C',
 				'arr' => array(
@@ -101,7 +101,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->assertTrue( ! empty( $post['postmeta'] ) );
 		$this->assertArrayHasKey( 'frm_dyncontent', $post['postmeta'] );
 		$this->assertIsArray( $post['postmeta']['frm_dyncontent'] );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				array(
 					'box'     => 1,
@@ -129,13 +129,13 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$xml_string        = chr( 13 ) . $simple_xml_string;
 		$this->maybe_fix_xml( $xml_string );
 
-		$this->assertEquals( $simple_xml_string, $xml_string );
+		$this->assertSame( $simple_xml_string, $xml_string );
 
 		$conflicting_meta_tag = '<meta name="generator" content="Equity 1.7.13" />';
 		$xml_string           = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . $conflicting_meta_tag . '<channel></channel>';
 		$this->maybe_fix_xml( $xml_string );
 
-		$this->assertEquals( $simple_xml_string, $xml_string );
+		$this->assertSame( $simple_xml_string, $xml_string );
 	}
 
 	private function maybe_fix_xml( &$xml_string ) {

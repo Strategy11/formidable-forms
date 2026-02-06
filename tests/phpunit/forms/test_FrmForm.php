@@ -177,7 +177,7 @@ class test_FrmForm extends FrmUnitTest {
 	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {
 		$value = $original_value;
 		$this->sanitize_field_opt( 'calc', $value );
-		$this->assertEquals( $expected, $value, $message );
+		$this->assertSame( $expected, $value, $message );
 	}
 
 	/**
@@ -218,7 +218,7 @@ class test_FrmForm extends FrmUnitTest {
 		$form_name = 'Test form';
 		$form_id   = $this->factory->form->create( array( 'name' => $form_name ) );
 		$name      = FrmForm::getName( (string) $form_id );
-		$this->assertEquals( $form_name, $name );
+		$this->assertSame( $form_name, $name );
 	}
 
 	/**

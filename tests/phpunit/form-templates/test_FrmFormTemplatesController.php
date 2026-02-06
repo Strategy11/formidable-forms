@@ -136,7 +136,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 			$this->assertTrue( isset( $favorites['default'] ), 'Missing default in favorites.' );
 
 			$expected = array_merge( $test_favorite, $default );
-			$this->assertEquals( $expected, $favorites, 'Favorite templates should match the example data.' );
+			$this->assertSame( $expected, $favorites, 'Favorite templates should match the example data.' );
 		}
 	}
 
@@ -207,7 +207,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 						$expected_count = 0;
 						break;
 				}
-				$this->assertEquals( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
+				$this->assertSame( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
 			}
 		}
 	}
@@ -232,7 +232,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Assert that the links are unchanged.
 		foreach ( $modified_nav_items as $index => $item ) {
-			$this->assertEquals( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
+			$this->assertSame( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
 		}
 
 		// Case 2: 'new_template' is present in the URL.
@@ -242,7 +242,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Assert that 'new_template=true' is appended to each link.
 		foreach ( $modified_nav_items as $index => $item ) {
 			$expected_link = $nav_items[ $index ]['link'] . '&new_template=true';
-			$this->assertEquals( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
+			$this->assertSame( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
 		}
 	}
 

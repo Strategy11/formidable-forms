@@ -124,7 +124,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			// Check default value
 			$posted_val = $_POST[ 'default_value_' . $field->id ];
 			$actual_val = $field->default_value;
-			$this->assertEquals( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
+			$this->assertSame( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
 		}
 	}
 
@@ -149,7 +149,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		} else {
 			$file = 'formidable.js';
 		}
-		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
+		$this->assertSame( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
 	/**
@@ -229,10 +229,10 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		// Test get_met_on_submit_actions.
 		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ) );
-		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $message_action->ID, $page_action->ID, $redirect_action_1->ID ) );
+		$this->assertSame( wp_list_pluck( $actions, 'ID' ), array( $message_action->ID, $page_action->ID, $redirect_action_1->ID ) );
 
 		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ), 'update' );
-		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $page_action->ID, $redirect_action_2->ID ) );
+		$this->assertSame( wp_list_pluck( $actions, 'ID' ), array( $page_action->ID, $redirect_action_2->ID ) );
 
 		// Test the output.
 		$response = FrmFormsController::show_form( $form->id ); // This is where the message is returned
@@ -324,7 +324,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		);
 
 		// Test default action.
-		$this->assertEquals( 'message', $form->options['success_action'] );
+		$this->assertSame( 'message', $form->options['success_action'] );
 
 		$this->create_on_submit_action(
 			$form->id,
