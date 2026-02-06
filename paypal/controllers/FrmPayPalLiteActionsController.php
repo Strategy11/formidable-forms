@@ -409,10 +409,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
 		);
 
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$query_args['debug'] = 'true';
-		}
-
 		$components = array(
 			'buttons',
 			'card-fields',
