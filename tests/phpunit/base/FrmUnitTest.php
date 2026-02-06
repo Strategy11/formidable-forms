@@ -459,12 +459,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'prev_page'         => array(),
 		);
 
-		if ( ! class_exists( 'FrmProEddController' ) ) {
-			return;
+		// phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
+		if ( class_exists( 'FrmProEddController' ) ) {
+			$frmedd_update                 = new FrmProEddController();
+			$frm_vars['pro_is_authorized'] = $frmedd_update->pro_is_authorized();
 		}
-
-		$frmedd_update                 = new FrmProEddController();
-		$frm_vars['pro_is_authorized'] = $frmedd_update->pro_is_authorized();
 	}
 
 	public function get_footer_output() {
