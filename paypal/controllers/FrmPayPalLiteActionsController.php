@@ -500,14 +500,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		return $gateway_test_data[ $test_gateway ] ?? false;
 	}
 
-	private static function get_components() {
-		$components = array(
-			'buttons',
-			'card-fields',
-			'messages',
-		);
-	}
-
 	/**
 	 * Get the style for the PayPal form.
 	 *
