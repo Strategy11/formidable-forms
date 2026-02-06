@@ -642,22 +642,24 @@ class FrmAppController {
 
 		self::trigger_page_load_hooks();
 
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			// Redirect to the "Form Templates" page if the 'frm_action' parameter matches specific actions.
-			// This provides backward compatibility for old addons that use legacy modal templates.
-			$action             = FrmAppHelper::get_param( 'frm_action' );
-			$trigger_name_modal = FrmAppHelper::get_param( 'triggerNewFormModal' );
-
-			if ( $trigger_name_modal || in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
-				$application_id = FrmAppHelper::simple_get( 'applicationId', 'absint' );
-				$url_param      = $application_id ? '&applicationId=' . $application_id : '';
-
-				wp_safe_redirect( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . $url_param ) );
-				exit;
-			}
-
-			FrmInbox::maybe_disable_screen_options();
+		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return;
 		}
+
+		// Redirect to the "Form Templates" page if the 'frm_action' parameter matches specific actions.
+		// This provides backward compatibility for old addons that use legacy modal templates.
+		$action             = FrmAppHelper::get_param( 'frm_action' );
+		$trigger_name_modal = FrmAppHelper::get_param( 'triggerNewFormModal' );
+
+		if ( $trigger_name_modal || in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
+			$application_id = FrmAppHelper::simple_get( 'applicationId', 'absint' );
+			$url_param      = $application_id ? '&applicationId=' . $application_id : '';
+
+			wp_safe_redirect( admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . $url_param ) );
+			exit;
+		}
+
+		FrmInbox::maybe_disable_screen_options();
 	}
 
 	/**
@@ -996,10 +998,12 @@ class FrmAppController {
 
 		$popper = $wp_scripts->registered['popper'];
 
-		if ( version_compare( $popper->ver, '2.0', '<' ) ) {
-			wp_deregister_script( 'popper' );
-			self::register_popper2();
+		if ( ! version_compare( $popper->ver, '2.0', '<' ) ) {
+			return;
 		}
+
+		wp_deregister_script( 'popper' );
+		self::register_popper2();
 	}
 
 	/**
@@ -1548,19 +1552,21 @@ class FrmAppController {
 			$current_sort = $current_sort[ $form_id ];
 		}
 
-		if ( $new_sort !== $current_sort ) {
-			$new_meta = $new_sort;
-
-			if ( $is_entry_list && $form_id && is_int( $form_id ) ) {
-				// Index meta by form ID.
-				$temp_meta             = is_array( $previous_meta ) ? $previous_meta : array();
-				$temp_meta[ $form_id ] = $new_meta;
-				$new_meta              = $temp_meta;
-				unset( $temp_meta );
-			}
-
-			update_user_meta( $user_id, $meta_key, $new_meta );
+		if ( $new_sort === $current_sort ) {
+			return;
 		}
+
+		$new_meta = $new_sort;
+
+		if ( $is_entry_list && $form_id && is_int( $form_id ) ) {
+			// Index meta by form ID.
+			$temp_meta             = is_array( $previous_meta ) ? $previous_meta : array();
+			$temp_meta[ $form_id ] = $new_meta;
+			$new_meta              = $temp_meta;
+			unset( $temp_meta );
+		}
+
+		update_user_meta( $user_id, $meta_key, $new_meta );
 	}
 
 	/**
@@ -1588,12 +1594,14 @@ class FrmAppController {
 			$preferred_list_sort = $preferred_list_sort[ $form_id ];
 		}
 
-		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
-			$orderby = $preferred_list_sort['orderby'];
+		if ( ! is_array( $preferred_list_sort ) || empty( $preferred_list_sort['orderby'] ) ) {
+			return;
+		}
 
-			if ( ! empty( $preferred_list_sort['order'] ) ) {
-				$order = $preferred_list_sort['order'];
-			}
+		$orderby = $preferred_list_sort['orderby'];
+
+		if ( ! empty( $preferred_list_sort['order'] ) ) {
+			$order = $preferred_list_sort['order'];
 		}
 	}
 

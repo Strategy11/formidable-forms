@@ -191,24 +191,26 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 			$this->assertArrayHasKey( $expected_category, $categories, "Should contain the '{$expected_category}' category." );
 
 			// Calculate the expected count for each category and validate it.
-			if ( isset( $categories[ $expected_category ] ) ) {
-				$expected_count = 0;
-				switch ( $expected_category ) {
-					case 'favorites':
-						$expected_count = $this->controller::get_favorite_templates_count();
-						break;
-					case 'custom':
-						$expected_count = count( $this->controller::get_custom_templates() );
-						break;
-					case 'all-items':
-						$expected_count = count( $this->controller::get_templates() );
-						break;
-					case 'available-templates':
-						$expected_count = 0;
-						break;
-				}
-				$this->assertSame( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
+			if ( ! isset( $categories[ $expected_category ] ) ) {
+				continue;
 			}
+
+			$expected_count = 0;
+			switch ( $expected_category ) {
+				case 'favorites':
+					$expected_count = $this->controller::get_favorite_templates_count();
+					break;
+				case 'custom':
+					$expected_count = count( $this->controller::get_custom_templates() );
+					break;
+				case 'all-items':
+					$expected_count = count( $this->controller::get_templates() );
+					break;
+				case 'available-templates':
+					$expected_count = 0;
+					break;
+			}
+			$this->assertSame( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
 		}
 	}
 

@@ -284,11 +284,13 @@ class FrmTransLiteActionsController {
 	public static function prepare_description( &$action, $atts ) {
 		$description = $action->post_content['description'];
 
-		if ( $description ) {
-			$atts['value']                       = $description;
-			$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
-			$action->post_content['description'] = $description;
+		if ( ! $description ) {
+			return;
 		}
+
+		$atts['value']                       = $description;
+		$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
+		$action->post_content['description'] = $description;
 	}
 
 	/**

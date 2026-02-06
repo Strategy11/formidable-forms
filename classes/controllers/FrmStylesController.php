@@ -1196,10 +1196,12 @@ class FrmStylesController {
 
 		$frm_settings = FrmAppHelper::get_settings();
 
-		if ( $frm_settings->load_style !== 'none' ) {
-			wp_enqueue_style( 'formidable' );
-			$frm_vars['css_loaded'] = true;
+		if ( $frm_settings->load_style === 'none' ) {
+			return;
 		}
+
+		wp_enqueue_style( 'formidable' );
+		$frm_vars['css_loaded'] = true;
 	}
 
 	/**

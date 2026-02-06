@@ -103,11 +103,13 @@ class FrmFieldValueSelector {
 
 		$this->set_db_row();
 
-		if ( $this->has_db_row() ) {
-			$this->set_field_key();
-			$this->set_field_settings();
-			$this->set_options();
+		if ( ! $this->has_db_row() ) {
+			return;
 		}
+
+		$this->set_field_key();
+		$this->set_field_settings();
+		$this->set_options();
 	}
 
 	/**

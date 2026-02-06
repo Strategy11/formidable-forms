@@ -606,13 +606,15 @@ class FrmFieldsHelper {
 	public static function run_wpautop( $atts, &$value ) {
 		$autop = $atts['wpautop'] ?? true;
 
-		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
-			if ( is_array( $value ) ) {
-				$value = implode( "\n", $value );
-			}
-
-			$value = wpautop( $value );
+		if ( ! apply_filters( 'frm_use_wpautop', $autop ) ) {
+			return;
 		}
+
+		if ( is_array( $value ) ) {
+			$value = implode( "\n", $value );
+		}
+
+		$value = wpautop( $value );
 	}
 
 	/**
@@ -818,13 +820,15 @@ class FrmFieldsHelper {
 	public static function smart_values() {
 		$continue = apply_filters( 'frm_smart_values_box', true );
 
-		if ( $continue === true ) {
-			$upgrade_link = array(
-				'medium'  => 'builder',
-				'content' => 'smart-tags',
-			);
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php';
+		if ( $continue !== true ) {
+			return;
 		}
+
+		$upgrade_link = array(
+			'medium'  => 'builder',
+			'content' => 'smart-tags',
+		);
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php';
 	}
 
 	/**

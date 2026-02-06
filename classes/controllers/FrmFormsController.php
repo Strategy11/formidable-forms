@@ -127,13 +127,15 @@ class FrmFormsController {
 
 		$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
-		if ( $create_email ) {
-			/**
-			 * @var FrmFormAction
-			 */
-			$action_control = FrmFormActionsController::get_form_actions( 'email' );
-			$action_control->create( $form->id );
+		if ( ! $create_email ) {
+			return;
 		}
+
+		/**
+		 * @var FrmFormAction
+		 */
+		$action_control = FrmFormActionsController::get_form_actions( 'email' );
+		$action_control->create( $form->id );
 	}
 
 	/**
@@ -162,13 +164,15 @@ class FrmFormsController {
 		 */
 		$create = apply_filters( 'frm_create_default_on_submit_action', true, $form );
 
-		if ( $create ) {
-			/**
-			 * @var FrmFormAction
-			 */
-			$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
-			$action_control->create( $form->id );
+		if ( ! $create ) {
+			return;
 		}
+
+		/**
+		 * @var FrmFormAction
+		 */
+		$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
+		$action_control->create( $form->id );
 	}
 
 	/**
@@ -567,12 +571,14 @@ class FrmFormsController {
 		add_filter( 'is_active_sidebar', '__return_false' );
 		FrmStylesController::enqueue_css( 'enqueue', true );
 
-		if ( false === get_template_part( 'page' ) ) {
-			if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
-				add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
-			}
-			self::fallback_when_page_template_part_is_not_supported_by_theme();
+		if ( false !== get_template_part( 'page' ) ) {
+			return;
 		}
+
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
+		}
+		self::fallback_when_page_template_part_is_not_supported_by_theme();
 	}
 
 	/**
@@ -1092,17 +1098,19 @@ class FrmFormsController {
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php';
 
-		if ( FrmAppHelper::is_form_builder_page() && ! class_exists( '_WP_Editors', false ) ) {
-			// Initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
-			require ABSPATH . WPINC . '/class-wp-editor.php';
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<div class="frm_hidden">
-				<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
-			</div>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		if ( ! FrmAppHelper::is_form_builder_page() || class_exists( '_WP_Editors', false ) ) {
+			return;
 		}
+
+		// Initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
+		require ABSPATH . WPINC . '/class-wp-editor.php';
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<div class="frm_hidden">
+			<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
+		</div>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -2934,11 +2942,13 @@ class FrmFormsController {
 			unset( $action );
 		}
 
-		if ( $redirect_action ) {
-			// Show script to delay the redirection.
-			$args['force_delay_redirect'] = true;
-			self::run_single_on_submit_action( $args, $redirect_action );
+		if ( ! $redirect_action ) {
+			return;
 		}
+
+		// Show script to delay the redirection.
+		$args['force_delay_redirect'] = true;
+		self::run_single_on_submit_action( $args, $redirect_action );
 	}
 
 	/**
@@ -3525,12 +3535,14 @@ class FrmFormsController {
 
 		FrmStylesController::enqueue_css();
 
-		if ( ! FrmAppHelper::is_admin() && $location !== 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
-			// Load formidable js
-			wp_enqueue_script( 'formidable' );
-
-			FrmHoneypot::maybe_print_honeypot_js();
+		if ( FrmAppHelper::is_admin() || $location === 'header' || empty( $frm_vars['forms_loaded'] ) ) {
+			return;
 		}
+
+		// Load formidable js
+		wp_enqueue_script( 'formidable' );
+
+		FrmHoneypot::maybe_print_honeypot_js();
 	}
 
 	/**

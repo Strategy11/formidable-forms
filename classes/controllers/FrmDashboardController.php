@@ -489,10 +489,12 @@ class FrmDashboardController {
 	private static function save_subscribed_email( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
 
-		if ( ! in_array( $email, $subscribed_emails, true ) ) {
-			$subscribed_emails[] = $email;
-			self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
+		if ( in_array( $email, $subscribed_emails, true ) ) {
+			return;
 		}
+
+		$subscribed_emails[] = $email;
+		self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
 	}
 
 	/**
@@ -553,9 +555,11 @@ class FrmDashboardController {
 		$users_list = self::get_closed_welcome_banner_user_ids();
 		$user_id    = get_current_user_id();
 
-		if ( ! in_array( $user_id, $users_list, true ) ) {
-			$users_list[] = $user_id;
-			self::update_dashboard_options( $users_list, 'closed-welcome-banner-user-ids' );
+		if ( in_array( $user_id, $users_list, true ) ) {
+			return;
 		}
+
+		$users_list[] = $user_id;
+		self::update_dashboard_options( $users_list, 'closed-welcome-banner-user-ids' );
 	}
 }

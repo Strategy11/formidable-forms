@@ -826,10 +826,12 @@ DEFAULT_HTML;
 	protected function auto_width_setting( $args ) {
 		$use_style = ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'];
 
-		if ( $use_style ) {
-			$field = $args['field'];
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php';
+		if ( ! $use_style ) {
+			return;
 		}
+
+		$field = $args['field'];
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php';
 	}
 
 	/**
