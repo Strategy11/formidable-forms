@@ -56,7 +56,7 @@
 			return;
 		}
 
-		if ( svgUse.href.baseVal.indexOf( 'down' ) > -1 ) {
+		if ( svgUse.href.baseVal.includes( 'down' ) ) {
 			svgUse.href.baseVal = svgUse.href.baseVal.replace( 'down', 'up' );
 		} else {
 			svgUse.href.baseVal = svgUse.href.baseVal.replace( 'up', 'down' );
