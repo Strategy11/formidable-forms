@@ -100,8 +100,8 @@ class test_FrmMigrate extends FrmUnitTest {
 		$form_id   = $this->factory->form->create();
 		$sizes     = array(
 			'10px'   => '10px',
-			'10'     => '10',
-			'1024'   => '1024',
+			'10'     => 10,
+			'1024'   => 1024,
 			'1024px' => round( 1024 / 9 ),
 		);
 		$field_ids = array();

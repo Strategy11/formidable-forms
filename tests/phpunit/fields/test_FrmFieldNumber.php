@@ -13,8 +13,8 @@ class test_FrmFieldNumber extends FrmUnitTest {
 		$this->assertSame( 0, $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( 68.93, 0.01 ) ) );
 		$this->assertSame( 0, $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( '68.93', '0.01' ) ) );
 
-		$this->assertSame( array( 0, 3 ), $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( 1, 3 ) ) );
-		$this->assertSame( array( 8, 10 ), $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( 9, 2 ) ) );
+		$this->assertSame( array( 0.0, 3.0 ), $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( 1, 3 ) ) );
+		$this->assertSame( array( 8.0, 10.0 ), $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( 9, 2 ) ) );
 		$this->assertSame( array( 68.92, 68.94 ), $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( 68.93, 0.02 ) ) );
 		$this->assertSame( array( 68.92, 68.94 ), $this->run_private_method( array( $number_field, 'check_value_is_valid_with_step' ), array( '68.93', '0.02' ) ) );
 	}

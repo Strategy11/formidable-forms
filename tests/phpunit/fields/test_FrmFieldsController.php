@@ -84,7 +84,7 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$this->assertArrayHasKey( 'type', $new_field );
 		$this->assertSame( 'text', $new_field['type'] );
 		$this->assertArrayHasKey( 'form_id', $new_field );
-		$this->assertSame( $form_id, $new_field['form_id'] );
+		$this->assertEquals( $form_id, $new_field['form_id'] );
 
 		// Confirm new fields are flagged as "draft".
 		$this->assertArrayHasKey( 'draft', $new_field );

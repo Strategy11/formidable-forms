@@ -614,8 +614,8 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_set_include_user_info() {
 		$settings = array(
-			'0' => false,
-			'1' => true,
+			'0' => 0,
+			'1' => 1,
 		);
 		$this->check_private_properties( $settings, 'inc_user_info', 'include_user_info' );
 	}

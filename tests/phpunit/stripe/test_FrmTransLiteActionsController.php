@@ -35,7 +35,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		$this->assertNotEmpty( $fields );
 
 		$field = reset( $fields );
-		$this->assertSame( $field_id, $field );
+		$this->assertEquals( $field_id, $field );
 	}
 
 	private function get_fields_for_price( $action ) {

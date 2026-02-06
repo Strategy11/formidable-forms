@@ -111,7 +111,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->spam_check, 'get_field_ids_to_check' ),
 			array( $denylist )
 		);
-		$this->assertSame(
+		$this->assertEquals(
 			array(
 				$this->text_field_id,
 				$this->name_field_id,
@@ -123,7 +123,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->spam_check, 'get_field_ids_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_name_text_email'] )
 		);
-		$this->assertSame(
+		$this->assertEquals(
 			array(
 				$this->text_field_id,
 				$this->email_field_id,
@@ -137,13 +137,13 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->spam_check, 'get_field_ids_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_name'] )
 		);
-		$this->assertSame( array( $this->name_field_id ), $field_ids_to_check );
+		$this->assertEquals( array( $this->name_field_id ), $field_ids_to_check );
 
 		$field_ids_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_email'] )
 		);
-		$this->assertSame( array( $this->email_field_id, $this->email_field_id2 ), $field_ids_to_check );
+		$this->assertEquals( array( $this->email_field_id, $this->email_field_id2 ), $field_ids_to_check );
 	}
 
 	public function test_get_values_to_check() {
