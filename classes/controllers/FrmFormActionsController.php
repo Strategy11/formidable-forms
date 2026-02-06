@@ -57,6 +57,8 @@ class FrmFormActionsController {
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'paypal'            => 'FrmDefPayPalAction',
+			'stripe'            => 'FrmDefStripeAction',
+			'square'            => 'FrmDefSquareAction',
 			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
@@ -183,6 +185,8 @@ class FrmFormActionsController {
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
 				'actions' => array(
 					'paypal',
+					'stripe',
+					'square',
 					'payment',
 				),
 			),
@@ -447,8 +451,6 @@ class FrmFormActionsController {
 	public static function add_form_action() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		global $frm_vars;
 
 		$action_key  = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
 		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
