@@ -363,7 +363,7 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		$this->assertTrue( ! isset( $form->options['notification'] ), 'The migrated notification settings are not cleared from form.' );
 
-		$this->assertCount( 1,  $form_actions , 'Old form settings are not converted to email action.' );
+		$this->assertCount( 1, $form_actions, 'Old form settings are not converted to email action.' );
 
 		foreach ( $form_actions as $action ) {
 			$this->assertStringContainsString( 'emailto@test.com', $action->post_content['email_to'] );
