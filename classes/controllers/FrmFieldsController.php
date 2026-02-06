@@ -185,7 +185,7 @@ class FrmFieldsController {
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
 			$field_object->parent_form_id = self::get_parent_form_id( $field_object, $values );
-			$field = FrmFieldsHelper::setup_edit_vars( $field_object );
+			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
 		/**
