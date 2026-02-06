@@ -47,8 +47,9 @@
 			paypal.FUNDING.EPS,
 			paypal.FUNDING.P24,
 			paypal.FUNDING.TRUSTLY,
-			paypal.FUNDING.SATISPAY, // Appears for Germany (EUR).
-			paypal.FUNDING.SEPA, // Appears for Germany (EUR).
+			paypal.FUNDING.SATISPAY,
+			paypal.FUNDING.SEPA,
+			paypal.FUNDING.MYBANK,
 		];
 		fundingSources.forEach( renderPayPalButton );
 
