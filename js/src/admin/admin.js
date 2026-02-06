@@ -5859,7 +5859,7 @@ window.frmAdminBuildJS = function() {
 		if ( e?.metaKey || e?.ctrlKey ) {
 			const groupIsActive = this.closest( 'ul' ).classList.contains( 'frm-selected-field-group' );
 			const $selectedFieldGroups = getSelectedFieldGroups();
-		
+
 			let numberOfSelectedGroups = $selectedFieldGroups.length;
 			if ( groupIsActive ) {
 				// Unselect if holding ctrl or cmd and the group was already active.
@@ -5868,12 +5868,12 @@ window.frmAdminBuildJS = function() {
 				syncAfterMultiSelect( numberOfSelectedGroups );
 				return;
 			}
-		
+
 			// Add the target to list of selected fields.
 			this.closest( 'ul' ).classList.add( 'frm-selected-field-group' );
 			++numberOfSelectedGroups;
 			syncAfterMultiSelect( numberOfSelectedGroups );
-		
+
 			return;
 		}
 
