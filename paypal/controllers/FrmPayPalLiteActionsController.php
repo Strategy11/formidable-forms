@@ -526,16 +526,24 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function get_button_style_for_js( $form_action ) {
 		$button_layout        = $form_action->post_content['button_layout'] ?? 'vertical';
-		$button_color         = $form_action->post_content['button_color'] ?? 'gold';
+		$button_color         = $form_action->post_content['button_color'] ?? 'default';
 		$button_label         = $form_action->post_content['button_label'] ?? 'paypal';
 		$button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
 
-		return array(
+		$style_for_js = array(
 			'layout'       => $button_layout,
 			'color'        => $button_color,
 			'label'        => $button_label,
 			'borderRadius' => (int) $button_border_radius,
 		);
+
+		// Unset the color so PayPal can use its defaults.
+		// Many buttons have different colors
+		if ( 'default' === $button_color ) {
+			unset( $style_for_js['color'] );
+		}
+
+		return $style_for_js;
 	}
 
 	/**

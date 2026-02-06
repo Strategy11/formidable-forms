@@ -154,27 +154,43 @@ class FrmPayPalLiteConnectHelper {
 			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
 		}
 
-		// TODO:
-		// Possibly list other capabilities:
-		// CARD_PROCESSING_VIRTUAL_TERMINAL
-		// COMMERCIAL_ENTITY
-		// DEBIT_CARD_SWITCH
-		// VENMO_PAY_PROCESSING
-		// FRAUD_TOOL_ACCESS
-		// AMEX_OPTBLUE
-		// APPLE_PAY
-		// CUSTOM_BANK_PROCESSING
-		// FASTLANE_CHECKOUT
-		// PAYPAL_WALLET_VAULTING_ADVANCED
-		// CUSTOM_CARD_PROCESSING
-		// GOOGLE_PAY
-
+		self::render_acdc_vetting_status( $product );
 	//	echo implode( '<br>', $product->capabilities );
+
+		echo 'Vetting Status: ' . $vetting_status;
 
 		echo '</ul>';
 		echo '</div>';
 
 		return true;
+	}
+
+	private static function render_acdc_vetting_status( $product ) {
+		$vetting_status = $product && ! empty( $product->vetting_status ) ? $product->vetting_status : 'NOT_SET';
+		echo '<li>' . esc_html__( 'ACDC Application Vetting Status:', 'formidable' ) . '</li>';
+		echo '<li>' . esc_html__( $vetting_status, 'formidable' ) . '</li>';
+	}
+
+	private static function get_acdc_vetting_status_message( $vetting_status ) {
+		switch ( $vetting_status ) {
+			case 'NOT_SET':
+				return '';
+			case 'APPROVED':
+			case 'SUBSCRIBED':
+				return '';
+			case 'PENDING':
+				return '';
+			case 'IN_REVIEW':
+				return '';
+			case 'DECLINED':
+				return '';
+			case 'NEED_MORE_DATA':
+				return '';
+			case 'DENIED':
+				return '';
+			default:
+				return '';
+		}
 	}
 
 	/**

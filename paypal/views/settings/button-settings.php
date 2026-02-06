@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Extract button settings with defaults
 $button_layout        = $form_action->post_content['button_layout'] ?? 'vertical';
-$button_color         = $form_action->post_content['button_color'] ?? 'gold';
+$button_color         = $form_action->post_content['button_color'] ?? 'default';
 $button_label         = $form_action->post_content['button_label'] ?? 'paypal';
 $button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
 ?>
@@ -37,6 +37,7 @@ $button_border_radius = $form_action->post_content['button_border_radius'] ?? 10
 				<?php esc_html_e( 'Color', 'formidable' ); ?>
 			</label>
 			<select name="<?php echo esc_attr( $action_control->get_field_name( 'button_color' ) ); ?>">
+				<option value="default" <?php selected( $button_color, 'default' ); ?>><?php esc_html_e( 'Use Defaults', 'formidable' ); ?></option>
 				<option value="gold" <?php selected( $button_color, 'gold' ); ?>><?php esc_html_e( 'Gold', 'formidable' ); ?></option>
 				<option value="blue" <?php selected( $button_color, 'blue' ); ?>><?php esc_html_e( 'Blue', 'formidable' ); ?></option>
 				<option value="silver" <?php selected( $button_color, 'silver' ); ?>><?php esc_html_e( 'Silver', 'formidable' ); ?></option>

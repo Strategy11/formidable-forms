@@ -59,7 +59,7 @@ class FrmPayPalLiteAppHelper {
 	 */
 	public static function get_paypal_button_style( $form_action ) {
 		$button_layout        = $form_action->post_content['button_layout'] ?? 'vertical';
-		$button_color         = $form_action->post_content['button_color'] ?? 'gold';
+		$button_color         = $form_action->post_content['button_color'] ?? 'default';
 		$button_label         = $form_action->post_content['button_label'] ?? 'paypal';
 		$button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
 

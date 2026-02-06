@@ -84,10 +84,7 @@
 		//	createSubscription: createSubscription,
 			onApprove: onApprove,
 			onError: onError,
-			onCancel: function() {
-				thisForm.classList.add( 'frm_loading_form' );
-				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
-			},
+			onCancel: onCancel,
 			style: frmPayPalVars.buttonStyle,
 		} ).render( '#paypal-button-container' );
 
@@ -150,6 +147,8 @@
 				createOrder,
 				onApprove,
 				onError,
+				onCancel,
+				style: frmPayPalVars.buttonStyle,
 			});
 
 			if ( ! button.isEligible() ) {
@@ -306,6 +305,11 @@
 			enableSubmit();
 		}
 		displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
+	}
+
+	function onCancel() {
+		thisForm.classList.add( 'frm_loading_form' );
+		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 	}
 
 	/**

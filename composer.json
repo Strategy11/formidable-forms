@@ -41,7 +41,8 @@
 		"friendsofphp/php-cs-fixer": "^3.54",
 		"rector/rector": "^2.3.4",
 		"phpstan/phpstan-strict-rules": "^2.0",
-		"kubawerlos/php-cs-fixer-custom-fixers": "^3.36"
+		"kubawerlos/php-cs-fixer-custom-fixers": "^3.36",
+		"vimeo/psalm": "^6.15"
 	},
 	"config": {
 		"allow-plugins": {
