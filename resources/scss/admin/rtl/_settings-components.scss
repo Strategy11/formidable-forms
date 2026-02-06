@@ -16,14 +16,6 @@
 	.frm-tabs-active-underline {
 		left: unset !important;
 		right: 0;
-
-		&.frm-first {
-			right: var(--gap-xs);
-		}
-
-		&.frm-last {
-			right: calc( -1 * var(--gap-xs) );
-		}
 	}
 }
 

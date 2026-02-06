@@ -26,10 +26,13 @@ export class frmTabsNavigator {
 			return;
 		}
 
-		this.initDefaultSlideTrackerWidth();
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
+			if ( nav.classList.contains( 'frm-active' ) ) {
+				this.initSlideTrackUnderline( nav );
+			}
 		} );
+		this.slideTrackLine.style.display = 'block';
 
 		this.setupScrollbarObserver();
 		// Cleanup observers when page unloads to prevent memory leaks
@@ -43,7 +46,7 @@ export class frmTabsNavigator {
 
 		this.removeActiveClassnameFromNavs();
 		navItem.classList.add( 'frm-active' );
-		this.initSlideTrackUnderline( navItem, index );
+		this.initSlideTrackUnderline( navItem );
 		this.changeSlide( index );
 
 		// Handle special case for frm_insert_fields_tab
@@ -53,14 +56,7 @@ export class frmTabsNavigator {
 		}
 	}
 
-	initDefaultSlideTrackerWidth() {
-		if ( ! this.slideTrackLine.dataset.initialWidth ) {
-			return;
-		}
-		this.slideTrackLine.style.width = `${ this.slideTrackLine.dataset.initialWidth }px`;
-	}
-	initSlideTrackUnderline( nav, index ) {
-		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
+	initSlideTrackUnderline( nav ) {
 		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
 		this.positionUnderlineIndicator( activeNav );
 	}
@@ -70,9 +66,8 @@ export class frmTabsNavigator {
 	 * Automatically repositions the underline indicator when layout changes occur.
 	 */
 	setupScrollbarObserver() {
-		const scrollbarWrapper = this.wrapper.closest( '.frm-scrollbar-wrapper' );
-
-		if ( ! scrollbarWrapper || ! ( 'ResizeObserver' in window ) ) {
+		const resizeObserverTarget = document.querySelector( '.frm-scrollbar-wrapper, .styling_settings' ) || document.body;
+		if ( ! resizeObserverTarget || ! ( 'ResizeObserver' in window ) ) {
 			return;
 		}
 
@@ -82,8 +77,7 @@ export class frmTabsNavigator {
 				this.positionUnderlineIndicator( activeNav );
 			}
 		} );
-
-		this.resizeObserver.observe( scrollbarWrapper );
+		this.resizeObserver.observe( resizeObserverTarget );
 	}
 
 	/**
