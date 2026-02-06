@@ -3718,6 +3718,7 @@ class FrmFormsController {
 		$hidden    = get_hidden_columns( $screen );
 		$skip_cols = array( 'cb', 'settings' );
 		$per_page  = get_user_option( 'formidable_page_formidable_per_page' );
+
 		if ( $per_page < 1 ) {
 			$per_page = 20;
 		}
