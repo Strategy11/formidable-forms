@@ -79,7 +79,6 @@
 		disableSubmit( thisForm );
 
 		paypal.Buttons( {
-		//	fundingSource: paypal.FUNDING.PAYLATER,
 			createOrder: createOrder,
 		//	createSubscription: createSubscription,
 			onApprove: onApprove,
@@ -88,7 +87,6 @@
 				thisForm.classList.add( 'frm_loading_form' );
 				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 			},
-			// https://developer.paypal.com/sdk/js/reference/#style
 			style: frmPayPalVars.buttonStyle,
 		} ).render( '#paypal-button-container' );
 

@@ -516,6 +516,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
 	 * Get PayPal button style configuration from form action settings.
+	 * Documentation at https://developer.paypal.com/sdk/js/reference/#style
 	 *
 	 * @since x.x
 	 *
