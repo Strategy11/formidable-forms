@@ -3802,13 +3802,11 @@ class FrmFormsController {
 			return $settings_html;
 		}
 
-		$show_desc      = get_user_option( 'frm_forms_show_desc' );
-		$settings_html .= '<p>
+		$show_desc = get_user_option( 'frm_forms_show_desc' );
+		return $settings_html . '<p>
 			<label for="frm-forms-show-desc">' . esc_html__( 'Show form description', 'formidable' ) . '</label>
 			<input type="checkbox" name="frm_forms_show_desc" id="frm-forms-show-desc" value="1" ' . checked( $show_desc, '1', false ) . ' />
 		</p>';
-
-		return $settings_html;
 	}
 
 	/**
