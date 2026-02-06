@@ -161,13 +161,15 @@ class FrmAddon {
 
 		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'maybe_show_license_message' ), 10, 2 );
 
-		if ( $license ) {
-			if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
-				add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
-			}
-
-			add_filter( 'site_transient_update_plugins', array( &$this, 'clear_expired_download' ) );
+		if ( ! $license ) {
+			return;
 		}
+
+		if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
+			add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
+		}
+
+		add_filter( 'site_transient_update_plugins', array( &$this, 'clear_expired_download' ) );
 	}
 
 	/**
@@ -341,12 +343,14 @@ class FrmAddon {
 		delete_option( $this->option_name . 'active' );
 		delete_option( $this->option_name . 'key' );
 
-		if ( $this->should_clear_cache ) {
-			delete_site_option( $this->transient_key() );
-			delete_option( $this->transient_key() );
-			$this->delete_cache();
-			$this->should_clear_cache = true;
+		if ( ! $this->should_clear_cache ) {
+			return;
 		}
+
+		delete_site_option( $this->transient_key() );
+		delete_option( $this->transient_key() );
+		$this->delete_cache();
+		$this->should_clear_cache = true;
 	}
 
 	/**
@@ -549,19 +553,23 @@ class FrmAddon {
 			$version_info = (object) $this->get_api_info( $this->license );
 		}
 
-		if ( ! empty( $version_info->new_version ) ) {
-			$this->clear_old_plugin_version( $version_info );
+		if ( empty( $version_info->new_version ) ) {
+			return;
+		}
 
-			if ( $version_info === false ) {
-				// Was cleared with timeout.
-				$transient = false;
-			} else {
-				$this->maybe_use_beta_url( $version_info );
+		$this->clear_old_plugin_version( $version_info );
 
-				if ( version_compare( $version_info->new_version, $this->version, '>' ) ) {
-					$transient = $version_info;
-				}
-			}
+		if ( $version_info === false ) {
+			// Was cleared with timeout.
+			$transient = false;
+
+			return;
+		}
+
+		$this->maybe_use_beta_url( $version_info );
+
+		if ( version_compare( $version_info->new_version, $this->version, '>' ) ) {
+			$transient = $version_info;
 		}
 	}
 
@@ -603,12 +611,14 @@ class FrmAddon {
 	private function clear_old_plugin_version( &$version_info ) {
 		$timeout = ! empty( $version_info->timeout ) ? $version_info->timeout : 0;
 
-		if ( $timeout && time() > $timeout ) {
-			// Cache is expired.
-			$version_info = false;
-			$api          = new FrmFormApi( $this->license );
-			$api->reset_cached();
+		if ( ! $timeout || time() <= $timeout ) {
+			return;
 		}
+
+		// Cache is expired.
+		$version_info = false;
+		$api          = new FrmFormApi( $this->license );
+		$api->reset_cached();
 	}
 
 	/**

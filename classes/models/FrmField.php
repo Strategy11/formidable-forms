@@ -1184,12 +1184,14 @@ class FrmField {
 
 		$field_object = FrmFieldFactory::get_field_type( $results->type );
 
-		if ( $field_object->should_unserialize_value() ) {
-			FrmAppHelper::unserialize_or_decode( $results->default_value );
+		if ( ! $field_object->should_unserialize_value() ) {
+			return;
+		}
 
-			if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
-				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
-			}
+		FrmAppHelper::unserialize_or_decode( $results->default_value );
+
+		if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
+			$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 		}
 	}
 
@@ -1226,15 +1228,19 @@ class FrmField {
 		$name        = $next ? $base_name . $next : $base_name;
 		$next_fields = get_transient( $name );
 
-		if ( $next_fields ) {
-			$fields = array_merge( $fields, $next_fields );
-
-			if ( count( $next_fields ) >= self::$transient_size ) {
-				// If this transient is full, check for another
-				++$next;
-				self::get_next_transient( $fields, $base_name, $next );
-			}
+		if ( ! $next_fields ) {
+			return;
 		}
+
+		$fields = array_merge( $fields, $next_fields );
+
+		if ( count( $next_fields ) < self::$transient_size ) {
+			return;
+		}
+
+		// If this transient is full, check for another
+		++$next;
+		self::get_next_transient( $fields, $base_name, $next );
 	}
 
 	/**

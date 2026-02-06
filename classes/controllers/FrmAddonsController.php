@@ -34,12 +34,14 @@ class FrmAddonsController {
 		add_action( 'admin_menu', self::class . '::menu', 100 );
 		add_filter( 'pre_set_site_transient_update_plugins', self::class . '::check_update' );
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
-			self::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
-
-			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
-			add_filter( 'frm_show_footer_links', '__return_false' );
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
+			return;
 		}
+
+		self::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
+
+		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+		add_filter( 'frm_show_footer_links', '__return_false' );
 	}
 
 	/**
@@ -660,18 +662,20 @@ class FrmAddonsController {
 
 			$download_id = $plugin['id'] ?? 0;
 
-			if ( $download_id && ! isset( $version_info[ $download_id ]['package'] ) ) {
-				// If this addon is using its own license, get the update url
-				$addon_info = $api->get_api_info();
+			if ( ! $download_id || isset( $version_info[ $download_id ]['package'] ) ) {
+				continue;
+			}
 
-				$version_info[ $download_id ] = $addon_info[ $download_id ];
+			// If this addon is using its own license, get the update url
+			$addon_info = $api->get_api_info();
 
-				if ( isset( $addon_info['error'] ) ) {
-					$version_info[ $download_id ]['error'] = array(
-						'message' => $addon_info['error']['message'],
-						'code'    => $addon_info['error']['code'],
-					);
-				}
+			$version_info[ $download_id ] = $addon_info[ $download_id ];
+
+			if ( isset( $addon_info['error'] ) ) {
+				$version_info[ $download_id ]['error'] = array(
+					'message' => $addon_info['error']['message'],
+					'code'    => $addon_info['error']['code'],
+				);
 			}
 		}//end foreach
 
@@ -1277,10 +1281,12 @@ class FrmAddonsController {
 	protected static function install_addon_permissions() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		if ( ! current_user_can( 'activate_plugins' ) || ! self::get_current_plugin() ) {
-			echo json_encode( true );
-			wp_die();
+		if ( current_user_can( 'activate_plugins' ) && self::get_current_plugin() ) {
+			return;
 		}
+
+		echo json_encode( true );
+		wp_die();
 	}
 
 	/**

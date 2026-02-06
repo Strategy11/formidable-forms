@@ -1059,10 +1059,12 @@ class FrmEntry {
 		// It is used to check for duplicate entries.
 		$unique_id = sanitize_key( $values['unique_id'] );
 
-		if ( $unique_id ) {
-			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
-			self::flag_new_unique_key( $unique_id );
+		if ( ! $unique_id ) {
+			return;
 		}
+
+		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
+		self::flag_new_unique_key( $unique_id );
 	}
 
 	/**
@@ -1076,10 +1078,12 @@ class FrmEntry {
 	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {
 		global $frm_vars;
 
-		if ( array_key_exists( 'captcha_scores', $frm_vars ) && array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
-			$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
-			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
+		if ( ! array_key_exists( 'captcha_scores', $frm_vars ) || ! array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
+			return;
 		}
+
+		$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
+		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
 	}
 
 	/**

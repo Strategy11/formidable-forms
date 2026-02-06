@@ -535,13 +535,15 @@ class FrmForm {
 			$prev_opts = $field->field_options;
 		}
 
-		if ( isset( $prev_opts ) ) {
-			$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
+		if ( ! isset( $prev_opts ) ) {
+			return;
+		}
 
-			// phpcs:ignore Universal.Operators.StrictComparisons
-			if ( $prev_opts != $field->field_options ) {
-				FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
-			}
+		$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
+
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( $prev_opts != $field->field_options ) {
+			FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
 		}
 	}
 
