@@ -244,13 +244,15 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		global $wpdb;
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', array( 'required' => 1 ), array( 'id' => $field->id ) );
 
-		if ( $query_results ) {
-			wp_cache_delete( $field->id, 'frm_field' );
-			FrmField::delete_form_transient( $this->form->id );
-
-			$field = FrmField::getOne( $field->id );
-			$this->assertNotEmpty( $field->required );
+		if ( ! $query_results ) {
+			return;
 		}
+
+		wp_cache_delete( $field->id, 'frm_field' );
+		FrmField::delete_form_transient( $this->form->id );
+
+		$field = FrmField::getOne( $field->id );
+		$this->assertNotEmpty( $field->required );
 	}
 
 	/**

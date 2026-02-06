@@ -2377,13 +2377,15 @@ class FrmAppHelper {
 	public static function permission_check( $permission, $show_message = 'show' ) {
 		$permission_error = self::permission_nonce_error( $permission );
 
-		if ( $permission_error !== false ) {
-			if ( 'hide' === $show_message ) {
-				$permission_error = '';
-			}
-
-			wp_die( esc_html( $permission_error ) );
+		if ( $permission_error === false ) {
+			return;
 		}
+
+		if ( 'hide' === $show_message ) {
+			$permission_error = '';
+		}
+
+		wp_die( esc_html( $permission_error ) );
 	}
 
 	/**

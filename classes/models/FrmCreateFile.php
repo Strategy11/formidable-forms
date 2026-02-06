@@ -91,10 +91,12 @@ class FrmCreateFile {
 		$this->create_directories( $dirs_exist );
 
 		// Only write the file if the folders exist.
-		if ( $dirs_exist ) {
-			global $wp_filesystem;
-			$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
+		if ( ! $dirs_exist ) {
+			return;
 		}
+
+		global $wp_filesystem;
+		$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
 	}
 
 	/**
@@ -171,11 +173,13 @@ class FrmCreateFile {
 
 		$this->has_permission = true;
 
-		if ( ! $creds || ! WP_Filesystem( $creds ) ) {
-			// Initialize the API - any problems and we exit
-			$this->show_error_message();
-			$this->has_permission = false;
+		if ( $creds && WP_Filesystem( $creds ) ) {
+			return;
 		}
+
+		// Initialize the API - any problems and we exit
+		$this->show_error_message();
+		$this->has_permission = false;
 	}
 
 	/**

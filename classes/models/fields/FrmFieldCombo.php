@@ -408,10 +408,12 @@ class FrmFieldCombo extends FrmFieldType {
 		do_action( 'frm_field_input_html', $field );
 
 		// Print custom attributes.
-		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
-			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
-				echo esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '" ';
-			}
+		if ( empty( $sub_field['atts'] ) || ! is_array( $sub_field['atts'] ) ) {
+			return;
+		}
+
+		foreach ( $sub_field['atts'] as $att_name => $att_value ) {
+			echo esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '" ';
 		}
 	}
 

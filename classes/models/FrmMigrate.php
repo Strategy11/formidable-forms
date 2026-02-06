@@ -86,10 +86,12 @@ class FrmMigrate {
 		FrmAppHelper::save_combined_js();
 
 		// Update the styling settings
-		if ( function_exists( 'get_filesystem_method' ) ) {
-			$frm_style = new FrmStyle();
-			$frm_style->update( 'default' );
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			return;
 		}
+
+		$frm_style = new FrmStyle();
+		$frm_style->update( 'default' );
 	}
 
 	/**

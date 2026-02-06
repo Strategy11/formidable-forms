@@ -296,12 +296,14 @@ class FrmEntryValidate {
 					break;
 				}
 
-				if ( is_numeric( $current_value ) ) {
-					$match = (int) $current_value === (int) $option_value;
+				if ( ! is_numeric( $current_value ) ) {
+					continue;
+				}
 
-					if ( $match ) {
-						break;
-					}
+				$match = (int) $current_value === (int) $option_value;
+
+				if ( $match ) {
+					break;
 				}
 			}//end foreach
 
@@ -451,12 +453,14 @@ class FrmEntryValidate {
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		$format_value = FrmField::get_option( $field, 'format' );
 
-		if ( $field->type === 'phone' || ( $field->type === 'text' && $format_value && ! FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
-			$pattern = self::phone_format( $field );
+		if ( $field->type !== 'phone' && ( $field->type !== 'text' || ! $format_value || FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
+			return;
+		}
 
-			if ( ! preg_match( $pattern, $value ) ) {
-				$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
-			}
+		$pattern = self::phone_format( $field );
+
+		if ( ! preg_match( $pattern, $value ) ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		}
 	}
 
@@ -822,11 +826,13 @@ class FrmEntryValidate {
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
 
-				if ( $found ) {
-					$datas[ $key ]             = $value;
-					$datas['frm_duplicated'][] = $field_id;
-					unset( $datas['missing_keys'][ $key_index ] );
+				if ( ! $found ) {
+					continue;
 				}
+
+				$datas[ $key ]             = $value;
+				$datas['frm_duplicated'][] = $field_id;
+				unset( $datas['missing_keys'][ $key_index ] );
 			}
 		}//end foreach
 	}
@@ -976,12 +982,14 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			if ( self::should_really_skip_field( $skipped_field, $values ) ) {
-				unset( $values['item_meta'][ $skipped_field->id ] );
+			if ( ! self::should_really_skip_field( $skipped_field, $values ) ) {
+				continue;
+			}
 
-				if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
-					unset( $values['item_meta']['other'][ $skipped_field->id ] );
-				}
+			unset( $values['item_meta'][ $skipped_field->id ] );
+
+			if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
+				unset( $values['item_meta']['other'][ $skipped_field->id ] );
 			}
 		}
 	}

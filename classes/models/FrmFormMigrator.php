@@ -319,13 +319,15 @@ abstract class FrmFormMigrator {
 			// List field, as field_order would already be prepared to be used.
 			++$field_order;
 
-			if ( ! empty( $new_field['fields'] ) && is_array( $new_field['fields'] ) ) {
-				// we have (inner) fields to merge
-
-				$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
-				// Set the new field_order as it would have changed
-				$field_order = $new_field['current_order'];
+			if ( empty( $new_field['fields'] ) || ! is_array( $new_field['fields'] ) ) {
+				continue;
 			}
+
+			// we have (inner) fields to merge
+
+			$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
+			// Set the new field_order as it would have changed
+			$field_order = $new_field['current_order'];
 		}//end foreach
 	}
 

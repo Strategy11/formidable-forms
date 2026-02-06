@@ -688,14 +688,14 @@ class FrmEmail {
 			$parts = explode( ' ', $val );
 			$email = end( $parts );
 
-			if ( is_email( $email ) ) {
-				// If user enters a name and email
-				$name = trim( str_replace( $email, '', $val ) );
-			} else {
+			if ( ! is_email( $email ) ) {
 				// If user enters a name without an email
 				unset( $recipients[ $key ] );
 				continue;
 			}
+
+			// If user enters a name and email
+			$name = trim( str_replace( $email, '', $val ) );
 
 			$recipients[ $key ] = $this->format_from_email( $name, $email );
 		}//end foreach
