@@ -324,7 +324,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		);
 
 		// Test default action.
-		$this->assertEquals( $form->options['success_action'], 'message' );
+		$this->assertEquals( 'message', $form->options['success_action'] );
 
 		$this->create_on_submit_action(
 			$form->id,

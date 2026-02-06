@@ -148,11 +148,11 @@ class RedundantIconEchoArgSniff implements Sniff {
 
 			// Look for leading comma (this arg comes after another).
 			$beforeStart = $phpcsFile->findPrevious( T_WHITESPACE, $i - 1, $openParen, true );
-			$hasLeadingComma = ( false !== $beforeStart && $tokens[ $beforeStart ]['code'] === T_COMMA );
+			$hasLeadingComma = false !== $beforeStart && $tokens[ $beforeStart ]['code'] === T_COMMA;
 
 			// Look for trailing comma.
 			$afterEnd = $phpcsFile->findNext( T_WHITESPACE, $value + 1, $closeParen, true );
-			$hasTrailingComma = ( false !== $afterEnd && $tokens[ $afterEnd ]['code'] === T_COMMA );
+			$hasTrailingComma = false !== $afterEnd && $tokens[ $afterEnd ]['code'] === T_COMMA;
 
 			if ( $hasLeadingComma ) {
 				// Include the leading comma and whitespace.

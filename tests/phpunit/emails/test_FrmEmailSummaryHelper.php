@@ -25,7 +25,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		);
 
 		$this->assertTrue( $date instanceof DateTime );
-		$this->assertSame( $date->format( 'Y-m-d' ), '2023-08-13' );
+		$this->assertSame( '2023-08-13', $date->format( 'Y-m-d' ) );
 
 		$this->assertFalse(
 			$this->run_private_method(
@@ -37,11 +37,11 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
 	public function test_get_date_diff() {
 		$this->assertSame(
+			4,
 			$this->run_private_method(
 				array( 'FrmEmailSummaryHelper', 'get_date_diff' ),
 				array( '2023-08-12', '2023-08-16' )
-			),
-			4
+			)
 		);
 
 		$this->assertFalse(

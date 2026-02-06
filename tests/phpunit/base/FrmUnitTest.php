@@ -148,7 +148,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		FrmXMLController::add_default_templates();
 
 		$form = FrmForm::getOne( 'contact-db12' );
-		self::assertEquals( $form->form_key, 'contact-db12' );
+		self::assertEquals( 'contact-db12', $form->form_key );
 	}
 
 	public static function create_files() {

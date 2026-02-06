@@ -198,9 +198,9 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$checkbox = FrmFieldFactory::get_field_type( 'checkbox', $field );
 
-		$this->assertSame( $checkbox->get_import_value( 'a,b' ), 'a,b' );
-		$this->assertEquals( $checkbox->get_import_value( 'a,c' ), array( 'a', 'c' ) );
-		$this->assertSame( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
+		$this->assertSame( 'a,b', $checkbox->get_import_value( 'a,b' ) );
+		$this->assertEquals( array( 'a', 'c' ), $checkbox->get_import_value( 'a,c' ) );
+		$this->assertSame( 'a,b,c', $checkbox->get_import_value( 'a,b,c' ) );
 	}
 
 	/**
