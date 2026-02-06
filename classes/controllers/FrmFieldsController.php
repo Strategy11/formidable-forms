@@ -184,12 +184,8 @@ class FrmFieldsController {
 		}
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			if ( isset( $values['form_key'] ) ) {
-				$field_object->parent_form_id = $values['id'];
-			} else {
-				$parent_form_id               = FrmDb::get_var( 'frm_forms', array( 'id' => $field_object->form_id ), 'parent_form_id' );
-				$field_object->parent_form_id = $parent_form_id ? $parent_form_id : $field_object->form_id;
-			}
+			$field_object->parent_form_id = self::get_parent_form_id( $field_object, $values );
+
 			$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
@@ -208,6 +204,25 @@ class FrmFieldsController {
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+	}
+
+	/**
+	 * Get the parent form id for the field.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $field_object The field object.
+	 * @param array  $values       Either form or field values.
+	 *
+	 * @return int
+	 */
+	private static function get_parent_form_id( $field_object, $values ) {
+		$form_id = $field_object->form_id;
+		if ( isset( $values['form_key'] ) ) {
+			return $values['id'] ?? $form_id;
+		}
+
+		return FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' ) ?? $form_id;
 	}
 
 	/**
