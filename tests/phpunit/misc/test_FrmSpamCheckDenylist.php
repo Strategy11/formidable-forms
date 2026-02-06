@@ -152,13 +152,13 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->custom_denylist_data['denylist_with_all_fields'] )
 		);
 		$this->assertEquals(
-			$values_to_check,
 			array(
 				'test@gmail.com',
 				'this text contains test@domain.com',
 				'WordPress Plugin',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
@@ -166,13 +166,13 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->custom_denylist_data['denylist_with_name_text_email'] )
 		);
 		$this->assertEquals(
-			$values_to_check,
 			array(
 				'test@gmail.com',
 				'this text contains test@domain.com',
 				'WordPress Plugin',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
@@ -180,10 +180,10 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->custom_denylist_data['denylist_with_name'] )
 		);
 		$this->assertEquals(
-			$values_to_check,
 			array(
 				'WordPress Plugin',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
@@ -191,12 +191,12 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->custom_denylist_data['denylist_with_extract_email'] )
 		);
 		$this->assertEquals(
-			$values_to_check,
 			array(
 				'test@gmail.com',
 				'test@domain.com',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
@@ -204,11 +204,11 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->custom_denylist_data['denylist_with_email'] )
 		);
 		$this->assertEquals(
-			$values_to_check,
 			array(
 				'test@gmail.com',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 	}
 

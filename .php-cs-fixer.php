@@ -37,9 +37,15 @@ $rules  = array(
 	'phpdoc_types_order'                   => array(
 		'null_adjustment' => 'always_last',
 	),
+	'no_superfluous_phpdoc_tags' => false,
+	PhpCsFixerCustomFixers\Fixer\PhpUnitAssertArgumentsOrderFixer::name() => true,
+	PhpCsFixerCustomFixers\Fixer\PhpUnitDedicatedAssertFixer::name() => true,
+	PhpCsFixerCustomFixers\Fixer\NoUselessStrlenFixer::name() => true,
+	PhpCsFixerCustomFixers\Fixer\NoUselessParenthesisFixer::name() => true,
 );
 
 $config = new PhpCsFixer\Config();
+$config->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers());
 $config->setRules( $rules );
 
 return $config->setFinder( $finder );

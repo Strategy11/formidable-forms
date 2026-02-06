@@ -100,7 +100,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 
 		// Check if there's a boolean NOT before empty.
 		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
-		$isNegated = ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT );
+		$isNegated = false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT;
 
 		// Determine the suggested replacement.
 		if ( $isNegated ) {

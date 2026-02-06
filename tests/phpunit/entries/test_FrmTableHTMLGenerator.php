@@ -53,7 +53,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 		);
 
 		$html = '<div style="border-top:3px solid #eee;"></div>';
-		$this->assertSame( $table_generator->remove_border( $html ), '<div style=""></div>' );
+		$this->assertSame( '<div style=""></div>', $table_generator->remove_border( $html ) );
 		$this->assertEquals( $table_generator->remove_border( $html, 'bottom' ), $html );
 
 		$html = '<div style="border-top:1px solid #eee;"></div>';

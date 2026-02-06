@@ -40,7 +40,7 @@ class test_FrmField extends FrmUnitTest {
 			$form_id = $this->factory->form->get_id_by_key( $form_key );
 			$fields  = FrmField::getAll( array( 'fi.form_id' => (int) $form_id ) );
 			$this->assertNotEmpty( $fields );
-			$this->assertEquals( $expected_count, count( $fields ), 'An incorrect number of fields are retrieved with FrmField::getAll.' );
+			$this->assertCount( $expected_count,  $fields , 'An incorrect number of fields are retrieved with FrmField::getAll.' );
 		}
 	}
 
@@ -69,7 +69,7 @@ class test_FrmField extends FrmUnitTest {
 			}
 
 			$this->assertNotEmpty( $fields );
-			$this->assertEquals( $args['count'], count( $fields ), 'An incorrect number of fields are retrieved with FrmField::get_all_for_form for ' . $test . '.' );
+			$this->assertCount( $args['count'],  $fields , 'An incorrect number of fields are retrieved with FrmField::get_all_for_form for ' . $test . '.' );
 		}
 	}
 }

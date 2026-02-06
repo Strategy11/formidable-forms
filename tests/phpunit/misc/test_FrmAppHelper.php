@@ -46,7 +46,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_relative_plugin_url() {
 		$path = FrmAppHelper::relative_plugin_url();
-		$this->assertSame( strpos( $path, '/' ), 0 );
+		$this->assertSame( 0, strpos( $path, '/' ) );
 	}
 
 	/**
@@ -171,11 +171,11 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_get_server_value() {
 		$url = FrmAppHelper::get_server_value( 'HTTP_HOST' );
-		$this->assertSame( $url, 'example.org' );
+		$this->assertSame( 'example.org', $url );
 
 		$_SERVER['HTTP_HOST'] = '<script>alert()</script>example.org';
 		$url                  = FrmAppHelper::get_server_value( 'HTTP_HOST' );
-		$this->assertSame( $url, 'example.org' );
+		$this->assertSame( 'example.org', $url );
 	}
 
 	/**
@@ -308,7 +308,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$safe_value     = 'Hello, <a href="/test">click here</a>';
 		$start_value   .= $safe_value;
 		$stripped_value = FrmAppHelper::kses( $start_value );
-		$this->assertSame( $stripped_value, 'Hello, click here' );
+		$this->assertSame( 'Hello, click here', $stripped_value );
 
 		$stripped_value = FrmAppHelper::kses( $start_value, array( 'a' ) );
 		$this->assertEquals( $stripped_value, $safe_value );

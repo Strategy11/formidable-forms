@@ -32,7 +32,7 @@ class test_FrmForm extends FrmUnitTest {
 		// Check the number of form actions
 		$original_actions = FrmFormAction::get_action_for_form( $form->id );
 		$new_actions      = FrmFormAction::get_action_for_form( $id );
-		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
+		$this->assertCount( count( $original_actions ),  $new_actions  );
 	}
 
 	protected function _check_if_child_fields_duplicate( $old_child_forms, $new_child_forms ) {
@@ -45,7 +45,7 @@ class test_FrmForm extends FrmUnitTest {
 		$new_child_form_fields = FrmField::get_all_for_form( $new_child_form->id );
 
 		// Check if there are the same number of child form fields in the duplicated child form
-		$this->assertEquals( count( $old_child_form_fields ), count( $new_child_form_fields ), 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$this->assertCount( count( $old_child_form_fields ),  $new_child_form_fields , 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**

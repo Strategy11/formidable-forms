@@ -188,12 +188,12 @@ class test_FrmEntryValidate extends FrmUnitTest {
 			array( &$test_values )
 		);
 
-		$this->assertEquals( $form_ids, array( 1, 17, 11 ) );
+		$this->assertEquals( array( 1, 17, 11 ), $form_ids );
 		$this->assertFalse( isset( $test_values['item_meta'][163] ) );
 		$this->assertFalse( isset( $test_values['item_meta'][165] ) );
-		$this->assertEquals( $test_values['item_meta'][162], array( 'Option 2', 'Option 1' ) );
-		$this->assertEquals( $test_values['item_meta'][118], array( 'John Doe' ) );
-		$this->assertSame( $test_values['item_meta'][1], 'John Doe' );
+		$this->assertEquals( array( 'Option 2', 'Option 1' ), $test_values['item_meta'][162] );
+		$this->assertEquals( array( 'John Doe' ), $test_values['item_meta'][118] );
+		$this->assertSame( 'John Doe', $test_values['item_meta'][1] );
 	}
 
 	public function test_skip_adding_values_to_akismet() {
