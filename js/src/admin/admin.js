@@ -5856,7 +5856,7 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
-		if ( e?.metaKey || e?.ctrlKey ) {
+		if ( e.metaKey || e.ctrlKey ) {
 			const target = this.closest( 'ul' );
 			const groupIsActive = target.classList.contains( 'frm-selected-field-group' );
 			const $selectedFieldGroups = getSelectedFieldGroups();
