@@ -4,7 +4,7 @@ class test_FrmSubmitHelper extends FrmUnitTest {
 
 	public function test_copy_submit_field_settings_to_form() {
 		$form = $this->factory->form->create_and_get();
-		$this->assertEquals( $form, FrmSubmitHelper::copy_submit_field_settings_to_form( $form ) );
+		$this->assertSame( $form, FrmSubmitHelper::copy_submit_field_settings_to_form( $form ) );
 
 		$this->factory->field->create(
 			array(
@@ -30,13 +30,13 @@ class test_FrmSubmitHelper extends FrmUnitTest {
 		$this->assertFalse( FrmSubmitHelper::only_contains_submit_field( $fields ) );
 
 		unset( $fields[0], $fields[1] );
-		$this->assertEquals( array( 'type' => 'submit' ), FrmSubmitHelper::only_contains_submit_field( $fields ) );
+		$this->assertSame( array( 'type' => 'submit' ), FrmSubmitHelper::only_contains_submit_field( $fields ) );
 
 		$last_submit = array(
 			'type' => 'submit',
 			'id'   => 2,
 		);
 		$fields[]    = $last_submit;
-		$this->assertEquals( $last_submit, FrmSubmitHelper::only_contains_submit_field( $fields ) );
+		$this->assertSame( $last_submit, FrmSubmitHelper::only_contains_submit_field( $fields ) );
 	}
 }

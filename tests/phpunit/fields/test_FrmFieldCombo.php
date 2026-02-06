@@ -83,7 +83,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 	public function test_register_sub_fields() {
 		$combo_field = new FrmFieldCombo();
 
-		$this->assertEquals( array(), $this->get_private_property( $combo_field, 'sub_fields' ) );
+		$this->assertSame( array(), $this->get_private_property( $combo_field, 'sub_fields' ) );
 
 		$this->run_private_method(
 			array( $combo_field, 'register_sub_fields' ),
@@ -180,11 +180,11 @@ class test_FrmFieldCombo extends FrmUnitTest {
 	public function test_extra_field_opts() {
 		$combo_field = $this->get_combo_field_without_sub_field_options();
 
-		$this->assertEquals( array(), $this->run_private_method( array( $combo_field, 'extra_field_opts' ) ) );
+		$this->assertSame( array(), $this->run_private_method( array( $combo_field, 'extra_field_opts' ) ) );
 
 		$combo_field = $this->get_combo_field_with_sub_field_options();
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'name_desc'         => '',
 				'email_placeholder' => '',
@@ -198,7 +198,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 	public function test_get_default_value() {
 		$combo_field = $this->get_combo_field_without_sub_field_options();
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'first_child'  => '',
 				'second_child' => '',
@@ -210,7 +210,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$combo_field = $this->get_combo_field_with_sub_field_options();
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'name'  => '',
 				'email' => '',
@@ -317,7 +317,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$this->set_private_property( $combo_field, 'field', $field );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				$field_id . '_first_child'  => $field_name . ' (' . $field_key . ') - First child',
 				$field_id . '_second_child' => $field_name . ' (' . $field_key . ') - Second child',

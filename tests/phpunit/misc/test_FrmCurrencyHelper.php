@@ -41,9 +41,9 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 	 * @return void
 	 */
 	private function assert_usd( $currency ) {
-		$this->assertEquals( 'U.S. Dollar', $currency['name'] );
-		$this->assertEquals( '$', $currency['symbol_left'] );
-		$this->assertEquals( '.', $currency['decimal_separator'] );
+		$this->assertSame( 'U.S. Dollar', $currency['name'] );
+		$this->assertSame( '$', $currency['symbol_left'] );
+		$this->assertSame( '.', $currency['decimal_separator'] );
 	}
 
 	/**
@@ -52,9 +52,9 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 	 * @return void
 	 */
 	private function assert_euro( $currency ) {
-		$this->assertEquals( 'Euro', $currency['name'] );
-		$this->assertEquals( '&#8364;', $currency['symbol_right'] );
-		$this->assertEquals( ',', $currency['decimal_separator'] );
+		$this->assertSame( 'Euro', $currency['name'] );
+		$this->assertSame( '&#8364;', $currency['symbol_right'] );
+		$this->assertSame( ',', $currency['decimal_separator'] );
 	}
 
 	/**
@@ -63,8 +63,8 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 	 * @return void
 	 */
 	private function assert_cad( $currency ) {
-		$this->assertEquals( 'Canadian Dollar', $currency['name'] );
-		$this->assertEquals( '$', $currency['symbol_left'] );
-		$this->assertEquals( '.', $currency['decimal_separator'] );
+		$this->assertSame( 'Canadian Dollar', $currency['name'] );
+		$this->assertSame( '$', $currency['symbol_left'] );
+		$this->assertSame( '.', $currency['decimal_separator'] );
 	}
 }
