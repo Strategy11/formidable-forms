@@ -1311,6 +1311,7 @@ class FrmFormsController {
 			return (int) $value;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		update_user_option( get_current_user_id(), 'frm_forms_show_desc', ! empty( $_POST['frm_forms_show_desc'] ) );
 
 		return $save;
@@ -3737,6 +3738,7 @@ class FrmFormsController {
 							if ( in_array( $key, $skip_cols, true ) ) {
 								continue;
 							}
+
 							$is_hidden = in_array( $key, $hidden, true );
 							?>
 							<label>
@@ -3774,10 +3776,14 @@ class FrmFormsController {
 				</div>
 
 				<div class="frm-flex frm-items-center frm-justify-between">
-					<label for="frm-forms-list-per-page">
-						<?php esc_html_e( 'Items per page', 'formidable' ); ?>
-					</label>
-					<input id="frm-forms-list-per-page" type="number" value="<?php echo intval( $per_page ); ?>" min="1" data-screen-option-id="formidable_page_formidable_per_page" />
+					<label for="frm-forms-list-per-page"><?php esc_html_e( 'Items per page', 'formidable' ); ?></label>
+					<input
+						type="number"
+						id="frm-forms-list-per-page"
+						value="<?php echo intval( $per_page ); ?>"
+						min="1"
+						data-screen-option-id="formidable_page_formidable_per_page"
+					/>
 				</div>
 			</div>
 
