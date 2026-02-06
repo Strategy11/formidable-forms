@@ -5856,6 +5856,27 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
+		if ( e.metaKey || e.ctrlKey ) {
+			const target = this.closest( 'ul' );
+			const groupIsActive = target.classList.contains( 'frm-selected-field-group' );
+			const $selectedFieldGroups = getSelectedFieldGroups();
+
+			let numberOfSelectedGroups = $selectedFieldGroups.length;
+			if ( groupIsActive ) {
+				// Unselect if holding ctrl or cmd and the group was already active.
+				--numberOfSelectedGroups;
+				target.classList.remove( 'frm-selected-field-group' );
+				syncAfterMultiSelect( numberOfSelectedGroups );
+				return;
+			}
+
+			++numberOfSelectedGroups;
+			target.classList.add( 'frm-selected-field-group' );
+			syncAfterMultiSelect( numberOfSelectedGroups );
+
+			return;
+		}
+
 		clickAction( this );
 	}
 
