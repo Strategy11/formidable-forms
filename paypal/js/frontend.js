@@ -138,29 +138,11 @@
 		// and we might need to try refreshing this message when the amount
 		// changes.
 
-		paypal.Messages( buildMessagesArgs( countryDropdown ) ).render( '#my-pay-later-banner' );
-
-		if ( ! countryDropdown ) {
-			return;
-		}
-
-		// Sync the message country based on the selected country.
-		countryDropdown.addEventListener( 'change', function() {
-			let payLaterBanner = document.getElementById( 'my-pay-later-banner' );
-			if ( payLaterBanner ) {
-				payLaterBanner.remove();
-			}
-
-			payLaterBanner = document.createElement( 'div' );
-			payLaterBanner.id = 'my-pay-later-banner';
-			cardElement.prepend( payLaterBanner );
-
-			paypal.Messages( buildMessagesArgs( countryDropdown ) ).render( '#my-pay-later-banner' );
-		} );
+		paypal.Messages( buildMessagesArgs() ).render( '#my-pay-later-banner' );
 	}
 
-	function buildMessagesArgs( countryDropdown ) {
-		const messagesArgs = {
+	function buildMessagesArgs() {
+		return {
 			amount: 100.00,
 			style: {
 				layout: 'text',
@@ -169,13 +151,6 @@
 				},
 			}
 		};
-
-		const selectedCountry = countryDropdown.querySelector( 'option:checked' )?.dataset.code;
-		if ( selectedCountry ) {
-			messagesArgs.buyerCountry = selectedCountry;
-		}
-
-		return messagesArgs;
 	}
 
 	function makeRenderPayPalButton( cardElement ) {

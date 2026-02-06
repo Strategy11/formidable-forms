@@ -409,13 +409,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
 		);
 
-		$test_gateway_data = self::get_test_gateway();
-		if ( $test_gateway_data ) {
-			list( $buyer_country, $currency ) = $test_gateway_data;
-			$query_args['buyer-country']      = $buyer_country;
-			$query_args['currency']           = $currency;
-		}
-
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			$query_args['debug'] = 'true';
 		}
@@ -441,15 +434,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$query_args['components'] = implode( ',', $components );
 
+		/**
+		 * Allow customization of the PayPal SDK URL query arguments.
+		 *
+		 * @since x.x
+		 *
+		 * @param array   $query_args
+		 * @param WP_Post $action
+		 */
+		$query_args = apply_filters( 'frm_paypal_sdk_url_query_args', $query_args, $action );
+
 		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
 
-		wp_register_script(
-			'paypal-sdk',
-			$sdk_url,
-			array(),
-			null,
-			false
-		);
+		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
 
 		$dependencies = array( 'paypal-sdk', 'formidable' );
 		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
@@ -472,32 +469,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
-	}
-
-	/**
-	 * For testing, we can set the country instead of having it determined
-	 * based on IP.
-	 *
-	 * @return array|false
-	 */
-	private static function get_test_gateway() {
-		// For testing.
-		$test_gateway = false;
-
-		if ( ! $test_gateway ) {
-			return false;
-		}
-
-		// TODO: Add iDEAL.
-		$gateway_test_data = array(
-			'Bancontact' => array( 'BE', 'EUR' ),
-			'BLIK'       => array( 'PL', 'PLN' ),
-			'EPS'        => array( 'AT', 'EUR' ),
-			'P24'        => array( 'PL', 'EUR' ), // PLN also works.
-			'Trustly'    => array( 'DK', 'DKK' ), // SE - SEK and NL - EUR also work.
-			// 'iDEAL'   => array( 'NL', 'EUR' ),
-		);
-		return $gateway_test_data[ $test_gateway ] ?? false;
 	}
 
 	/**
