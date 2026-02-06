@@ -746,7 +746,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			$action->post_content['plain_text'] = $setting;
 			$email                              = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                             = $this->get_private_property( $email, 'message' );
-			$this->assertSame( $actual, $expected );
+			$this->assertSame( $expected, $actual );
 		}
 	}
 
