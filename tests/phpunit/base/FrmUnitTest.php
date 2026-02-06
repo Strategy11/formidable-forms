@@ -450,10 +450,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		global $frm_vars;
 
-		if ( ! class_exists( 'FrmProEddController' ) ) {
-			return;
-		}
-
 		$frm_vars = array(
 			'load_css'          => false,
 			'forms_loaded'      => array(),
@@ -462,6 +458,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'next_page'         => array(),
 			'prev_page'         => array(),
 		);
+
+		if ( ! class_exists( 'FrmProEddController' ) ) {
+			return;
+		}
 
 		$frmedd_update                 = new FrmProEddController();
 		$frm_vars['pro_is_authorized'] = $frmedd_update->pro_is_authorized();
