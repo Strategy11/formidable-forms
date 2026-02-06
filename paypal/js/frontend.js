@@ -123,16 +123,6 @@
 			}
 		} );
 
-		let countryDropdown = null;
-		let selectedCountry = null;
-		if ( action && action.address ) {
-			const countryContainer = document.getElementById( 'frm_field_' + action.address + '-country_container' );
-			if ( countryContainer ) {
-				countryDropdown = countryContainer.querySelector( 'select' );
-				selectedCountry = countryDropdown.querySelector( 'option:checked' )?.dataset.code;
-			}
-		}
-
 		// TODO We can use a value here if the amount is not dynamic.
 		// Otherwise we might need to wait until we know an amount
 		// and we might need to try refreshing this message when the amount
