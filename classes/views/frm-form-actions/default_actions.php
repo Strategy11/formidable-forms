@@ -96,6 +96,17 @@ class FrmDefZapierAction extends FrmFormAction {
 }
 
 /**
+ * Add n8n action.
+ */
+class FrmDefN8NAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops          = FrmFormAction::default_action_opts( 'frm_n8n_icon frm_show_upgrade' );
+		$action_ops['color'] = '#EA4B71';
+		parent::__construct( 'n8n', 'n8n', $action_ops );
+	}
+}
+
+/**
  * Add twilio action.
  */
 class FrmDefTwilioAction extends FrmFormAction {
@@ -143,9 +154,11 @@ class FrmDefHubspotAction extends FrmFormAction {
 		$action_ops['color'] = 'var(--orange)';
 
 		$action_ops['message'] = '';
+
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$action_ops['message'] .= __( 'The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?', 'formidable' ) . '<br/><br/>';
 		}
+
 		$link                   = FrmAppHelper::admin_upgrade_link( 'add-action', 'knowledgebase/hubspot-forms/' );
 		$action_ops['message'] .= '<a href="' . esc_url( $link ) . '" target="_blank" rel="noopener" class="button button-secondary frm-button-secondary">Get Free HubSpot Account</a>';
 		parent::__construct( 'hubspot', 'Hubspot', $action_ops );

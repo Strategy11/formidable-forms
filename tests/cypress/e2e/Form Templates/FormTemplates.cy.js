@@ -31,7 +31,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '[frm-search-text="contact us"] .frm-form-templates-item-description' )
 			.should( 'contain.text', 'A basic contact form for any WordPress website.' );
 		cy.get( '[frm-search-text="contact us"] span.frm-category-icon svg use' )
-			.should( 'have.attr', 'xlink:href', '#frm_align_right_icon' );
+			.should( 'have.attr', 'href', '#frm_align_right_icon' );
 
 		cy.log( 'Stripe Payment Template' );
 		cy.get( '[frm-search-text="stripe payment"] .frm-form-templates-item-title-text' )
@@ -39,7 +39,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '[frm-search-text="stripe payment"] .frm-form-templates-item-description' )
 			.should( 'contain.text', 'Effortlessly gather payment information from customers using our secure Stripe payment form. Simplify the payment process and ensure a seamless transaction experience.' );
 		cy.get( '[frm-search-text="stripe payment"] span.frm-category-icon svg use' )
-			.should( 'have.attr', 'xlink:href', '#frm_credit_card_icon' );
+			.should( 'have.attr', 'href', '#frm_credit_card_icon' );
 
 		cy.log( 'User Registration Template' );
 		cy.get( '[frm-search-text="user registration"] .frm-form-templates-item-title-text' )
@@ -47,7 +47,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '[frm-search-text="user registration"] .frm-form-templates-item-description' )
 			.should( 'contain.text', 'Let users register on the front-end of your site and set their username, email, password, name, and avatar.' );
 		cy.get( '[frm-search-text="user registration"] span.frm-category-icon svg use' )
-			.should( 'have.attr', 'xlink:href', '#frm_register_icon' );
+			.should( 'have.attr', 'href', '#frm_register_icon' );
 
 		cy.log( 'Create WordPress Post Template' );
 		cy.get( '[frm-search-text="create wordpress post"] .frm-form-templates-item-title-text' )
@@ -55,7 +55,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '[frm-search-text="create wordpress post"] .frm-form-templates-item-description' )
 			.should( 'contain.text', 'Allow users to create WordPress posts from the front-end of your site with the Create WordPress Post form template.' );
 		cy.get( '[frm-search-text="create wordpress post"] span.frm-category-icon svg use' )
-			.should( 'have.attr', 'xlink:href', '#frm_wordpress_icon' );
+			.should( 'have.attr', 'href', '#frm_wordpress_icon' );
 
 		cy.log( 'Survey Template' );
 		cy.get( '[frm-search-text="survey"] .frm-form-templates-item-title-text' )
@@ -63,7 +63,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '[frm-search-text="survey"] .frm-form-templates-item-description' )
 			.should( 'contain.text', 'Collect feedback from your customers, employees, or other members of your community using an online survey form.' );
 		cy.get( '[frm-search-text="survey"] span.frm-category-icon svg use' )
-			.should( 'have.attr', 'xlink:href', '#frm_smile_icon' );
+			.should( 'have.attr', 'href', '#frm_smile_icon' );
 
 		cy.log( 'Quiz Template' );
 		cy.get( '[frm-search-text="quiz"] .frm-form-templates-item-title-text' )
@@ -71,7 +71,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '[frm-search-text="quiz"] .frm-form-templates-item-description' )
 			.should( 'contain.text', 'This multiple-choice quiz template is a great example of basic quiz scoring.' );
 		cy.get( '[frm-search-text="quiz"] span.frm-category-icon svg use' )
-			.should( 'have.attr', 'xlink:href', '#frm_percent_icon' );
+			.should( 'have.attr', 'href', '#frm_percent_icon' );
 
 		cy.log( 'Car payment calculator Template' );
 		cy.get( '[frm-search-text="car payment calculator"] .frm-form-templates-item-title-text' )

@@ -32,12 +32,12 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	}
 
 	public function set_as_user_role( $role ) {
-		// create user
+		// Create user
 		$user_id = $this->factory->user->create( array( 'role' => $role ) );
 		$user    = new WP_User( $user_id );
 		$this->assertTrue( $user->exists(), 'Problem getting user ' . $user_id );
 
-		// log in as user
+		// Log in as user
 		wp_set_current_user( $user_id );
 		$this->user_id = $user_id;
 		$this->assertTrue( current_user_can( $role ) );
@@ -45,6 +45,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
 	public function trigger_action( $action ) {
 		$response = '';
+
 		try {
 			$this->_handleAjax( $action );
 		} catch ( WPAjaxDieStopException $e ) {
@@ -54,10 +55,6 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		if ( '' === $response ) {
-			$response = $this->_last_response;
-		}
-
-		return $response;
+		return '' === $response ? $this->_last_response : $response;
 	}
 }

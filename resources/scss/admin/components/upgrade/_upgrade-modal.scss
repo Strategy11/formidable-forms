@@ -6,7 +6,73 @@
 	max-width: 200px;
 }
 
-#frm_upgrade_modal .frm-upgrade-message img {
-	margin-top: 10px;
-	width: 100%;
+#frm_upgrade_modal {
+
+	.cta-inside {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap-sm);
+	}
+
+	.frm-upgrade-message img {
+		width: 100%;
+		margin: var(--gap-sm) 0 10px;
+	}
+
+	.frm-oneclick.frm_hidden {
+		display: none !important;
+	}
+
+	.frm-oneclick-button {
+		margin-left: auto;
+	}
+
+	.frm-upgrade-modal-actions {
+		flex-direction: row-reverse;
+		justify-content: flex-start;
+		margin: 0 !important;
+	}
+
+	.frm-upgrade-link {
+		align-self: end;
+	}
+
+	&.frm-success {
+
+		.frm-circled-icon svg {
+			width: 24px;
+			height: 24px;
+		}
+
+		.frm-upgrade-modal-title-prefix,
+		.frm_are_not_installed {
+			display: none !important;
+		}
+
+		.frm-upgrade-modal-title-suffix {
+			display: inline !important;
+		}
+
+		.frm-addon-status {
+			margin: 0;
+
+			.frm-save-and-reload-options {
+					display: flex;
+					gap: var(--gap-xs);
+					flex-direction: row-reverse;
+					margin: 0;
+
+					.frm-save-and-reload {
+						margin: 0;
+					}
+			}
+		}
+	}
+}
+
+.frm-dialog[aria-describedby="frm_upgrade_modal"] {
+	position: fixed !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
 }

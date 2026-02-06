@@ -3,6 +3,7 @@
  * @since 6.8
  *
  * @var array $features The list of pro features.
+ *
  * @package Formidable
  */
 
@@ -20,9 +21,10 @@ $discount_text = sprintf(
 
 $discount_link = FrmSalesApi::get_best_sale_value( 'global_settings_upgrade_cta_link' );
 $utm           = array(
-	'medium'  => 'dashboard-discount',
-	'content' => 'dashboard-defy-limits-cta',
+	'campaign' => 'dashboard-discount',
+	'content'  => 'dashboard-defy-limits-cta',
 );
+
 if ( $discount_link ) {
 	$discount_link = FrmAppHelper::maybe_add_missing_utm( $discount_link, $utm );
 } else {

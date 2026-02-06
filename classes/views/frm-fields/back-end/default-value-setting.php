@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<span class="frm-flex-col frm-with-right-icon">
 		<?php
-		if ( isset( $display['default_value'] ) && $display['default_value'] ) {
+		if ( ! empty( $display['default_value'] ) ) {
 			$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
 			$default_value = $field['dyn_default_value'] ?? '';
 		} else {

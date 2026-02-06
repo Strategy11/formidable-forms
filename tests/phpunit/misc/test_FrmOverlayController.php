@@ -2,17 +2,11 @@
 
 class test_FrmOverlayController extends FrmUnitTest {
 
-	private $time_mock;
-
 	public function setUp(): void {
 		parent::setUp();
-		$this->time_mock = $this->getMockBuilder( 'FrmOverlayController' )
-			->setMethods( array( 'time', 'strtotime', 'date' ) )
-			->getMock();
 	}
 
 	public function test_open_overlay() {
-
 		$test_data                                   = array(
 			'hero_image' => FrmAppHelper::plugin_url() . '/images/overlay/lock.svg',
 			'heading'    => 'Overlay Heading Test',
@@ -51,9 +45,9 @@ class test_FrmOverlayController extends FrmUnitTest {
 		$this->assertNotFalse( $overlay_recurring_execution_controller_mock->open_overlay( $test_data ), 'The overlay controller doesn\'t open - recurring execution' );
 
 		$get_time_mock->willReturn( strtotime( '+3 day', time() ) );
-		$this->assertFalse( $overlay_recurring_execution_controller_mock->open_overlay( $test_data ), 'The overlay controller should not execute before the recurring time interval has passed.' );
+		$this->assertFalse( $overlay_recurring_execution_controller_mock->open_overlay( $test_data ), 'The overlay controller should not execute before the recurring time interval has passed.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$get_time_mock->willReturn( strtotime( $recurring_execution_interval, time() ) );
-		$this->assertNotFalse( $overlay_recurring_execution_controller_mock->open_overlay( $test_data ), 'The overlay controller doesn\'t open after the recurring time interval has passed.' );
+		$this->assertNotFalse( $overlay_recurring_execution_controller_mock->open_overlay( $test_data ), 'The overlay controller doesn\'t open after the recurring time interval has passed.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 }

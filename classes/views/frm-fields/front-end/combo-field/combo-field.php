@@ -3,6 +3,7 @@
  * Frontend template for combo field
  *
  * @package Formidable
+ *
  * @since 4.10.02
  *
  * @var array         $args           Data passed to this view. See FrmFieldCombo::load_field_output().
@@ -57,18 +58,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				<?php
 				switch ( $sub_field['type'] ) {
 					default:
-						$attrs = array(
-							'type'  => $sub_field['type'],
-							'id'    => $html_id . '_' . $name,
-							'value' => $field_value[ $name ] ?? '',
-						);
-
-						if ( ! empty( $field_value[ $name ] ) ) {
-							$attrs['data-frmval'] = $field_value[ $name ];
-						}
-						if ( empty( $args['remove_names'] ) ) {
-							$attrs['name'] = $field_name . '[' . $name . ']';
-						}
+						$attrs = $this->get_sub_field_input_attrs( $sub_field, $args );
 
 						echo '<input ';
 						FrmAppHelper::array_to_html_params( $attrs, true );
@@ -77,7 +67,9 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				}
 
 				if ( $sub_field['label'] && ( $sub_field_desc || $this->should_print_hidden_sub_fields() ) ) {
-					echo '<div class="frm_description" id="frm_field_' . esc_attr( $field_id . '_' . $sub_field['name'] ) . '_desc">' . FrmAppHelper::kses( $sub_field_desc ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '<div class="frm_description" id="frm_field_' . esc_attr( $field_id . '_' . $sub_field['name'] ) . '_desc">';
+					FrmAppHelper::kses_echo( $sub_field_desc );
+					echo '</div>';
 				}
 
 				// Don't show individual field errors when there is a combo field error.

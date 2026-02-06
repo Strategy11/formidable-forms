@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $email_styles   = FrmEmailStylesController::get_email_styles();
-$frm_settings   = FrmAppHelper::get_settings();
 $selected_style = FrmEmailStylesController::get_default_email_style();
 ?>
 <p><?php esc_html_e( 'Customize your email template and sending preferences.', 'formidable' ); ?></p>

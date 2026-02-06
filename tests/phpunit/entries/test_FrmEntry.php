@@ -22,7 +22,7 @@ class test_FrmEntry extends FrmUnitTest {
 		$entry      = $this->factory->entry->create_object( $entry_data );
 
 		$this->assertNotEmpty( $entry );
-		$this->assertTrue( is_numeric( $entry ) );
+		$this->assertIsNumeric( $entry );
 
 		$entry = $this->factory->entry->create_object( $entry_data );
 		$this->assertEmpty( $entry, 'Failed to detect duplicate entry' );
@@ -103,6 +103,6 @@ class test_FrmEntry extends FrmUnitTest {
 
 		$checkbox_value = $item->metas[ $checkbox_field_id ];
 		$this->assertIsArray( $checkbox_value );
-		$this->assertEquals( array( 'Option 1', 'Option 2' ), $checkbox_value );
+		$this->assertSame( array( 'Option 1', 'Option 2' ), $checkbox_value );
 	}
 }

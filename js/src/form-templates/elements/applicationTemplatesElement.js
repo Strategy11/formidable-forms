@@ -7,7 +7,6 @@ import { __ } from '@wordpress/i18n';
  * External dependencies
  */
 import { PLUGIN_URL, HIDDEN_CLASS } from 'core/constants';
-import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
 
 /**
  * Internal dependencies
@@ -111,7 +110,7 @@ export function addApplicationTemplatesElement() {
 		return;
 	}
 
-	elements.bodyContent.appendChild( applicationTemplates );
+	elements.bodyContent.append( applicationTemplates );
 
 	addElements( {
 		applicationTemplates,

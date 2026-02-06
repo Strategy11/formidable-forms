@@ -4,7 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @todo Show opt-in popup after plugin activation.
  * @since 3.06.04
  */
 class FrmUsageController {
@@ -27,11 +26,13 @@ class FrmUsageController {
 	 */
 	public static function schedule_send() {
 		$timestamp = wp_next_scheduled( 'formidable_send_usage' );
+
 		if ( ! self::tracking_allowed() ) {
 			if ( $timestamp ) {
 				// Remove the scheduled event if it's not allowed and it's scheduled.
 				wp_unschedule_event( $timestamp, 'formidable_send_usage' );
 			}
+
 			return;
 		}
 
@@ -56,6 +57,10 @@ class FrmUsageController {
 	 * Adds once weekly to the existing schedules.
 	 *
 	 * @since 3.06.04
+	 *
+	 * @param array $schedules Schedules.
+	 *
+	 * @return array
 	 */
 	public static function add_schedules( $schedules = array() ) {
 		$schedules['weekly'] = array(
@@ -73,8 +78,7 @@ class FrmUsageController {
 	 * @return bool
 	 */
 	public static function tracking_allowed() {
-		$settings = FrmAppHelper::get_settings();
-		return $settings->tracking;
+		return (bool) FrmAppHelper::get_settings()->tracking;
 	}
 
 	/**
@@ -91,9 +95,11 @@ class FrmUsageController {
 	 * Loads scripts.
 	 *
 	 * @since 6.16.1
+	 *
+	 * @return void
 	 */
 	public static function load_scripts() {
-		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) ) {
+		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) || FrmAppHelper::is_admin_page() ) {
 			wp_enqueue_script( 'frm-usage-tracking', FrmAppHelper::plugin_url() . '/js/admin/usage-tracking.js', array( 'formidable_dom' ), FrmAppHelper::$plug_version, true );
 		}
 	}
@@ -112,13 +118,15 @@ class FrmUsageController {
 
 		// Exclude Trash page.
 		$form_type = FrmAppHelper::simple_get( 'form_type' );
-		return $form_type && 'published' === $form_type;
+		return 'published' === $form_type;
 	}
 
 	/**
 	 * AJAX handler to track flows.
 	 *
 	 * @since 6.16.1
+	 *
+	 * @return void
 	 */
 	public static function ajax_track_flows() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
@@ -143,11 +151,11 @@ class FrmUsageController {
 	 * @return void
 	 */
 	public static function update_flows_data( $key, $value ) {
-		$flows_data = self::get_flows_data();
-
 		if ( '' === $key || '' === $value ) {
 			return;
 		}
+
+		$flows_data = self::get_flows_data();
 
 		if ( ! isset( $flows_data[ $key ] ) ) {
 			$flows_data[ $key ] = array();

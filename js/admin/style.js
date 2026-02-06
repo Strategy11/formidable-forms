@@ -161,7 +161,7 @@
 
 	/**
 	 * @param {string} labelPosition
-	 * @return {void}
+	 * @return {void} Changes the label position in the preview.
 	 */
 	function changeLabelPositionsInPreview( labelPosition ) {
 		const input = tag( 'input' );
@@ -271,7 +271,6 @@
 
 		if ( target.classList.contains( 'frm-edit-style' ) || null !== target.closest( '.frm-edit-style' ) || 'frm_edit_style' === target.id ) {
 			modifyStylerUrl( target );
-			return; // eslint-disable-line
 		}
 	}
 
@@ -327,7 +326,6 @@
 
 		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
-			return; // eslint-disable-line
 		}
 	}
 
@@ -374,11 +372,9 @@
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
 
-		if ( ! cardIsLocked ) {
-			// Don't update the form when a locked card is clicked.
-			styleIdInput.value = card.dataset.styleId;
-			trackListPageChange();
-		}
+		// cardIsLocked is always false here due to early return above.
+		styleIdInput.value = card.dataset.styleId;
+		trackListPageChange();
 
 		setTimeout( enableLabelTransitions, 1 );
 
@@ -588,7 +584,7 @@
 			return;
 		}
 
-		card.appendChild( getHamburgerMenu( card.dataset ) );
+		card.append( getHamburgerMenu( card.dataset ) );
 	}
 
 	/**
@@ -633,8 +629,8 @@
 			className: 'frm-dropdown-toggle dropdown-toggle',
 			child: svg( { href: '#frm_thick_more_vert_icon' } )
 		} );
-		hamburgerMenu.setAttribute( 'data-toggle', 'dropdown' );
-		hamburgerMenu.setAttribute( 'data-container', 'body' );
+		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
+		hamburgerMenu.setAttribute( 'data-bs-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
@@ -917,14 +913,6 @@
 	}
 
 	/**
-	 * @param {string} templateKey
-	 * @return {HTMLElement} The template card element.
-	 */
-	function getTemplateCard( templateKey ) {
-		return document.getElementById( 'frm_template_style_cards_wrapper' ).querySelector( '.frm-style-card[data-template-key="' + templateKey + '"]' );
-	}
-
-	/**
 	 * @param {string} styleId
 	 * @return {HTMLElement} The card element.
 	 */
@@ -1085,9 +1073,25 @@
 			}
 		}
 
+		resetCustomCSSEditor();
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
+	}
+
+	/**
+	 * Reset the custom CSS editor.
+	 *
+	 * @return {void}
+	 */
+	function resetCustomCSSEditor() {
+		const checkbox = document.getElementById( 'frm_enable_single_style_custom_css' );
+		const editorWrapper = document.getElementById( 'frm_single_style_custom_css_editor' );
+		if ( ! checkbox || ! editorWrapper ) {
+			return;
+		}
+		checkbox.checked = false;
+		editorWrapper.classList.add( 'frm_hidden' );
 	}
 
 	/**
@@ -1110,13 +1114,13 @@
 		newStyle.addEventListener(
 			'load',
 			() => {
-				style.parentNode.removeChild( style );
+				style.remove();
 				newStyle.id = 'frm-custom-theme-css'; // Assign the old ID to the new style so it can be removed in the next reset action.
 			}
 		);
 
 		const head = document.getElementsByTagName( 'HEAD' )[ 0 ];
-		head.appendChild( newStyle );
+		head.append( newStyle );
 	}
 
 	/**
@@ -1316,22 +1320,6 @@
 				} );
 			} );
 		}
-	}
-
-	/**
-	 * @param {Event} event
-	 */
-	function maybeCollapseSettings( event ) {
-		let expanded;
-		const sectionParent = event.target.parentElement;
-		if ( event.type === 'keydown' ) {
-			expanded = sectionParent.classList.toggle( 'open' );
-			jQuery( sectionParent.querySelector( '.accordion-section-content' ) ).toggle( ! expanded ).slideToggle( 150 ); // Animate toggle as in click/enter.
-		} else {
-			expanded = sectionParent.classList.contains( 'open' );
-		}
-
-		event.target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**

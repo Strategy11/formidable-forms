@@ -87,3 +87,8 @@ form .frm_primary_label input {
 #frm_form_editor_container .divider_section_only .frm_primary_label .frm-sub-label {
 	padding: 0;
 }
+
+// Hide the field ID when the field group has over 6 fields.
+#frm-show-fields ul:has(> li:nth-child(7)) .frm-sub-label.frm-field-id {
+	display: none;
+}

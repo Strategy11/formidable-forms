@@ -45,8 +45,10 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	}
 
 	echo '<div id="frm-publishing">';
+
 	if ( ! empty( $atts['publish'] ) || ! empty( $atts['import_link'] ) ) {
 		$btn_type = 'primary';
+
 		if ( isset( $atts['publish'] ) && is_array( $atts['publish'] ) ) {
 			call_user_func( $atts['publish'][0], $atts['publish'][1] );
 			$btn_type = 'secondary';

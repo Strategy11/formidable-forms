@@ -14,7 +14,31 @@
 .frm-fadein-down-short {
 	animation: fadeInDownShort 300ms ease-out forwards;
 }
+
+.frm-fadeout {
+	animation: fadeOut var(--fadeout-time, 400ms) ease-in-out forwards;
+}
 /* END fadeIn */
+
+/* pulse */
+.frm-pulse {
+	position: relative;
+}
+
+.frm-pulse::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	background-color: inherit;
+	z-index: -1;
+	animation: pulse 2s ease-out 650ms infinite;
+	will-change: transform, opacity;
+}
+/* END pulse */
 
 /* slide down */
 .frm-slide-down,
@@ -66,6 +90,16 @@
 
 	100% {
 		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
 	}
 }
 
@@ -137,5 +171,22 @@
 
 	100% {
 		background-color: #fff;
+	}
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+		opacity: 0.8;
+	}
+
+	70% {
+		transform: scale(2.2);
+		opacity: 0;
+	}
+
+	100% {
+		transform: scale(2.2);
+		opacity: 0;
 	}
 }

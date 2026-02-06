@@ -34,6 +34,7 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * @param string $function
 	 * @param array  ...$params
+	 *
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {
@@ -67,9 +68,11 @@ class FrmStrpLiteAppHelper {
 	 */
 	public static function get_customer_id_meta_name() {
 		$meta_name = '_frmstrp_customer_id';
+
 		if ( 'test' === self::active_mode() ) {
 			$meta_name .= '_test';
 		}
+
 		return $meta_name;
 	}
 
@@ -96,15 +99,20 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * Add education about Stripe fees.
 	 *
+	 * @param string             $content UTM Content for the admin upgrade link.
+	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
+	 *
 	 * @return void
 	 */
-	public static function fee_education( $medium = 'tip', $gateway = false ) {
+	public static function fee_education( $content = 'tip', $gateway = false ) {
 		$license_type = FrmAddonsController::license_type();
+
 		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
 			return;
 		}
 
 		$classes = 'frm-light-tip show_stripe';
+
 		if ( $gateway && ! array_intersect( (array) $gateway, array( 'stripe' ) ) ) {
 			$classes .= ' frm_hidden';
 		}
@@ -112,8 +120,8 @@ class FrmStrpLiteAppHelper {
 		FrmTipsHelper::show_tip(
 			array(
 				'link'  => array(
-					'content' => 'stripe-fee',
-					'medium'  => $medium,
+					'campaign' => 'stripe-fee',
+					'content'  => $content,
 				),
 				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Stripe fees.',
 				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
@@ -129,17 +137,19 @@ class FrmStrpLiteAppHelper {
 	 * @return void
 	 */
 	public static function not_connected_warning() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_warning_style frm-with-icon">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 			<span>
 				<?php
 				/* translators: %1$s: Link HTML, %2$s: End link */
-				printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s or %3$sconnecting Square%4$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>', '<a href="?page=formidable-settings&t=square_settings" target="_blank">', '</a>' );
+				printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s or %3$sconnecting Square%4$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>', '<a href="?page=formidable-settings&t=square_settings" target="_blank">', '</a>' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				?>
 			</span>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

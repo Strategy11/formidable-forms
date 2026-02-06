@@ -165,6 +165,11 @@
 		width: 9px;
 		height: 9px;
 	}
+
+	&.frm_svg7 {
+		width: 7px;
+		height: 7px;
+	}
 }
 
 input[disabled] {
@@ -225,4 +230,8 @@ input[disabled] {
 		padding: 11px var(--gap-md) 11px var(--gap-xs) !important;
 		box-shadow: var(--box-shadow-md);
 	}
+}
+
+.frmbutton.frm_at_limit {
+	opacity: .5;
 }

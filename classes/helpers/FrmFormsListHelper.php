@@ -4,10 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormsListHelper extends FrmListHelper {
+
+	/**
+	 * @var string
+	 */
 	public $status = '';
 
 	public $total_items = 0;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
@@ -23,7 +30,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function prepare_items() {
-		global $wpdb, $per_page, $mode;
+		global $per_page, $mode;
 
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
@@ -49,7 +56,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		$start   = self::get_param(
+		$start = self::get_param(
 			array(
 				'param'   => 'start',
 				'default' => ( $page - 1 ) * $per_page,
@@ -83,9 +90,11 @@ class FrmFormsListHelper extends FrmListHelper {
 				'sanitize' => 'sanitize_text_field',
 			)
 		);
-		if ( $s != '' ) {
+
+		if ( $s !== '' ) {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
+
 			foreach ( $search_terms as $term ) {
 				$s_query[] = array(
 					'or'               => true,
@@ -118,11 +127,13 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( $this->status === 'trash' ) {
 			echo '<p>';
 			esc_html_e( 'No forms found in the trash.', 'formidable' );
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
 				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 			echo '</p>';
 		} else {
 			$title = __( 'No Forms Found', 'formidable' );
@@ -151,6 +162,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
@@ -159,11 +172,13 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( 'trash' === $this->status && current_user_can( 'frm_delete_forms' ) ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<div class="alignleft actions frm_visible_overflow">
 				<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
 			</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
@@ -193,16 +208,11 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		foreach ( $statuses as $status => $name ) {
-
-			if ( $status == $form_type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status == $form_type ? ' class="current"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */
-				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>';
+				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 
 			unset( $status, $name );
@@ -213,6 +223,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function pagination( $which ) {
@@ -228,10 +239,11 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * @param stdClass $item
 	 * @param string   $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
-		global $frm_vars, $mode;
+		global $mode;
 
 		// Set up the hover actions for this user
 		$actions   = array();
@@ -250,20 +262,20 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
-
-		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
+		$r         = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
 		$format = 'Y/m/d';
+
 		if ( 'list' !== $mode ) {
 			$format .= ' \<\b\r \/\> g:i:s a';
 		}
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name . ' column-' . $column_name . ( 'name' === $column_name ? ' post-title page-title column-title' : '' );
-
 			$style = '';
+
 			if ( in_array( $column_name, $hidden, true ) ) {
 				$class .= ' frm_hidden';
 			}
@@ -293,7 +305,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'entries':
-					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
+					if ( ! empty( $item->options['no_save'] ) ) {
 						$val = FrmAppHelper::icon_by_class(
 							'frmfont frm_forbid_icon frm_bstooltip',
 							array(
@@ -303,7 +315,7 @@ class FrmFormsListHelper extends FrmListHelper {
 						);
 					} else {
 						$text = FrmEntry::getRecordCount( $item->id );
-						$val  = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;
+						$val  = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 						unset( $text );
 					}
 					break;
@@ -321,9 +333,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 			unset( $val );
 		}//end foreach
-		$r .= '</tr>';
-
-		return $r;
+		return $r . '</tr>';
 	}
 
 	/**
@@ -333,17 +343,17 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.0
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
-		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$val .= $this->column_style( $form );
 		$val .= $this->column_views( $form );
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
 		$val = str_replace( '&nbsp;', '', $val );
-		$val = '<div>' . $val . '</div>';
-		return $val;
+		return '<div>' . $val . '</div>';
 	}
 
 	/**
@@ -352,6 +362,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.0
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	protected function column_style( $form ) {
@@ -364,6 +375,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$style = FrmStylesController::get_form_style( $form );
+
 		if ( ! $style ) {
 			// Do a second pass to avoid null values.
 			$frm_style = new FrmStyle( 'default' );
@@ -371,7 +383,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$href = FrmStylesHelper::get_edit_url( $style, $form->id );
-		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr( $style->post_title ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_pallet_icon', array( 'echo' => false ) ) . '</a>';
+		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr( $style->post_title ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_pallet_icon', array( 'echo' => false ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -380,18 +392,21 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.19
 	 *
 	 * @param stdClass $form Form object.
+	 *
 	 * @return string
 	 */
 	protected function column_views( $form ) {
 		$attributes = array(
 			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) . '&show_nav=1' ),
-			'title'  => __( 'View Form', 'formidable' ),
+			'title'  => __( 'Link to list of all views for this form.', 'formidable' ),
 			'target' => '_blank',
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
 					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
 				'</a>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -403,6 +418,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function get_actions( &$actions, $item, $edit_link ) {
 		$new_actions = FrmFormsHelper::get_action_links( $item->id, $item );
+
 		foreach ( $new_actions as $link => $action ) {
 			$new_actions[ $link ] = FrmFormsHelper::format_link_html( $action, 'short' );
 		}
@@ -413,12 +429,12 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {
-			$actions['frm_edit']     = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
-			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
+			$actions['frm_edit']     = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
+			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . esc_html__( 'Settings', 'formidable' ) . '</a>';
 		}
 
 		$actions         = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview', 'formidable' ) . '</a>';
+		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -431,19 +447,23 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
-		if ( is_null( $form_name ) || trim( $form_name ) == '' ) {
+
+		if ( is_null( $form_name ) || trim( $form_name ) === '' ) {
 			$form_name = FrmFormsHelper::get_no_title_text();
 		}
+
 		$form_name = FrmAppHelper::kses( $form_name );
-		if ( 'excerpt' != $mode ) {
+
+		if ( 'excerpt' !== $mode ) {
 			$form_name = FrmAppHelper::truncate( $form_name, 50 );
 		}
 
 		$val = '<strong>';
+
 		if ( 'trash' === $this->status ) {
 			$val .= $form_name;
 		} else {
-			$val .= '<a href="' . esc_url( isset( $actions['frm_edit'] ) ? $edit_link : FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" class="row-title">' . FrmAppHelper::kses( $form_name ) . '</a> ';
+			$val .= '<a href="' . esc_url( isset( $actions['frm_edit'] ) ? $edit_link : FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" class="row-title">' . FrmAppHelper::kses( $form_name ) . '</a> '; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$this->add_draft_label( $item, $val );
@@ -461,7 +481,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	private function add_draft_label( $item, &$val ) {
-		if ( 'draft' === $item->status && 'draft' != $this->status ) {
+		if ( 'draft' === $item->status && 'draft' !== $this->status ) {
 			$val .= ' - <span class="post-state">' . esc_html__( 'Draft', 'formidable' ) . '</span>';
 		}
 	}
@@ -474,6 +494,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function add_form_description( $item, &$val ) {
 		global $mode;
+
 		if ( 'excerpt' === $mode && ! is_null( $item->description ) ) {
 			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
 		}

@@ -1,0 +1,71 @@
+.frm-spotlight {
+	$self: &;
+
+	--fadeout-time: 25ms;
+
+	position: fixed;
+	cursor: default;
+
+	&[data-placement="right"] {
+		transform: translateY(-50%);
+	}
+
+	&[data-placement="bottom"] {
+		transform: translateX(-50%);
+	}
+
+	> * {
+		flex: 0 0 auto
+	}
+
+	&__content {
+		position: relative;
+		box-sizing: border-box;
+		flex-shrink: 0;
+		width: 242px;
+		border: 1px solid var(--grey-200);
+		overflow: visible;
+
+		&::after {
+			content: '';
+			position: absolute;
+			width: 11px;
+			height: 11px;
+			background-color: inherit;
+			transform: translateY(-50%) rotate(45deg);
+			border-left: 1px solid var(--grey-200);
+			border-radius: 2px;
+
+			#{$self}[data-placement="right"] & {
+				top: 50%;
+				left: -6px;
+				transform: translateY(-50%) rotate(45deg);
+				border-bottom: 1px solid var(--grey-200);
+			}
+
+			#{$self}[data-placement="bottom"] & {
+				top: -6px;
+				left: 50%;
+				transform: translateX(-50%) rotate(45deg);
+				border-top: 1px solid var(--grey-200);
+			}
+		}
+	}
+
+	&__pointer {
+		box-sizing: border-box;
+		width: 14px;
+		height: 14px;
+		background-color: var(--grey-600);
+		padding: 3px;
+		border-radius: 50%;
+
+		#{$self}[data-placement="right"] & {
+			margin-right: var(--gap-2xs);
+		}
+
+		#{$self}[data-placement="bottom"] & {
+			margin-bottom: var(--gap-2xs);
+		}
+	}
+}

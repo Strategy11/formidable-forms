@@ -16,6 +16,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		self::frm_install();
 	}
 
+	public function setUp(): void {
+		parent::setUp();
+
+		$defaults       = $this->get_defaults();
+		$this->td_style = str_replace( '#1D2939', $defaults['text_color'], $this->td_style );
+		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );
+	}
+
 	protected $include_fields = array();
 	protected $exclude_fields = array();
 	protected $include_extras = array();
@@ -25,14 +33,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected $td_style     = ' style="text-align:left;color:#1D2939;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
 	protected $is_repeater_child = false;
-
-	public function __construct() {
-		parent::__construct();
-
-		$defaults       = $this->get_defaults();
-		$this->td_style = str_replace( '#1D2939', $defaults['text_color'], $this->td_style );
-		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );
-	}
 
 	/**
 	 * Tests no entry or id passed
@@ -111,8 +111,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'user_info'  => false,
 		);
 
-		$content = $this->get_formatted_content( $atts );
-
+		$content          = $this->get_formatted_content( $atts );
 		$atts['entry']    = $entry;
 		$expected_content = $this->expected_html_content( $atts );
 
@@ -136,8 +135,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'user_info'  => false,
 		);
 
-		$content = $this->get_formatted_content( $atts );
-
+		$content          = $this->get_formatted_content( $atts );
 		$atts['entry']    = FrmEntry::getOne( $entry->id, true );
 		$expected_content = $this->expected_html_content( $atts );
 
@@ -265,8 +263,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'fields'     => implode( ',', $this->include_fields ),
 		);
 
-		$content = $this->get_formatted_content( $atts );
-
+		$content                     = $this->get_formatted_content( $atts );
 		$pass_atts                   = $atts;
 		$pass_atts['include_fields'] = $atts['fields'];
 		unset( $pass_atts['fields'] );
@@ -703,6 +700,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->assertSame( $expected_json, $actual_json );
 	}
 
+	/**
+	 * @param bool $include_meta
+	 */
 	protected function get_test_entry( $include_meta ) {
 		$new_entry = array(
 			'form_id'     => FrmForm::get_id_by_key( 'free_field_types' ),
@@ -720,6 +720,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return FrmEntry::getOne( $entry_id, $include_meta );
 	}
 
+	/**
+	 * @return array
+	 */
 	private function expected_free_meta() {
 		return array(
 			FrmField::get_id_by_key( 'free-text-field' )   => 'Test Testerson',
@@ -735,13 +738,18 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function get_formatted_content( $atts ) {
 		return FrmEntriesController::show_entry_shortcode( $atts );
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function expected_html_content( $atts ) {
-		$table = $this->table_header( $atts );
-
+		$table  = $this->table_header( $atts );
 		$table .= $this->two_cell_table_row( 'free-text-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-paragraph-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-checkboxes', $atts );
@@ -753,14 +761,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$table .= $this->two_cell_table_row( 'free-phone-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-hidden-field', $atts );
 		$table .= $this->one_cell_table_row( 'free-html-field', $atts );
-
 		$table .= $this->user_info_rows( $atts );
 
-		$table .= $this->table_footer();
-
-		return $table;
+		return $table . $this->table_footer();
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function expected_plain_text_content( $atts ) {
 		$content  = $this->label_and_value_plain_text_row( 'free-text-field', $atts );
 		$content .= $this->label_and_value_plain_text_row( 'free-paragraph-field', $atts );
@@ -774,32 +782,33 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$content .= $this->label_and_value_plain_text_row( 'free-hidden-field', $atts );
 		$content .= $this->single_value_plain_text_row( 'free-html-field', $atts );
 
-		$content .= $this->user_info_plain_text_rows( $atts );
-
-		return $content;
+		return $content . $this->user_info_plain_text_rows( $atts );
 	}
 
+	/**
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
 	protected function table_header( $atts ) {
-		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+		if ( ! empty( $atts['plain_text'] ) ) {
 			return '';
 		}
 
 		$header = '<table cellspacing="0"';
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
 			$defaults     = $this->get_defaults();
 			$atts         = array_merge( $defaults, $atts );
 			$font_size    = $atts['font_size'];
-			$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : $atts['field_border_width'];
+			$border_width = $atts['border_width'] ?? $atts['field_border_width'];
 			$border_color = $atts['border_color'];
-
-			$header .= ' style="border-spacing:0;font-size:' . $font_size . ';line-height:135%;';
-			$header .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
+			$header      .= ' style="border-spacing:0;font-size:' . $font_size . ';line-height:135%;';
+			$header      .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
 		}
 
-		$header .= '><tbody>' . "\r\n";
-
-		return $header;
+		return $header . '><tbody>' . "\r\n";
 	}
 
 	protected function get_defaults() {
@@ -809,10 +818,19 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $defaults;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function table_footer() {
 		return '</tbody></table>';
 	}
 
+	/**
+	 * @param array $atts
+	 * @param string $field_key
+	 *
+	 * @return string
+	 */
 	protected function two_cell_table_row( $field_key, $atts ) {
 		$field       = FrmField::getOne( $field_key );
 		$field_value = $this->get_field_html_value( $atts['entry'], $field, $atts );
@@ -824,13 +842,17 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $this->two_cell_table_row_for_value( $field->name, $field_value, $atts );
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function two_cell_table_row_for_value( $label, $field_value, $atts ) {
 		$html = '<tr' . $this->tr_style;
+
 		if ( $this->is_repeater_child ) {
 			$html .= ' class="frm-child-row"';
 		}
-		$html .= '>';
 
+		$html       .= '>';
 		$label       = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$field_value = '<td' . $this->td_style . '>' . wp_kses_post( $field_value ) . '</td>';
 
@@ -842,11 +864,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$html .= $field_value;
 		}
 
-		$html .= '</tr>' . "\r\n";
-
-		return $html;
+		return $html . '</tr>' . "\r\n";
 	}
 
+	/**
+	 * @param array $atts
+	 * @param string $field_key
+	 *
+	 * @return string
+	 */
 	protected function one_cell_table_row( $field_key, $atts ) {
 		$field       = FrmField::getOne( $field_key );
 		$field_value = $this->get_field_html_value( $atts['entry'], $field, $atts );
@@ -857,11 +883,16 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$html  = '<tr' . $this->tr_style . '>';
 		$html .= '<td colspan="2"' . $this->td_style . '>' . $field_value . '</td>';
-		$html .= '</tr>' . "\r\n";
 
-		return $html;
+		return $html . '</tr>' . "\r\n";
 	}
 
+	/**
+	 * @param array $atts
+	 * @param string $field_key
+	 *
+	 * @return string
+	 */
 	protected function label_and_value_plain_text_row( $field_key, $atts ) {
 		$field       = FrmField::getOne( $field_key );
 		$field_value = $this->get_field_plain_text_value( $atts['entry'], $field, $atts );
@@ -876,11 +907,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$content = $field->name . ': ' . $field_value;
 		}
 
-		$content .= "\r\n";
-
-		return $content;
+		return $content . "\r\n";
 	}
 
+	/**
+	 * @param array $atts
+	 * @param string $field_key
+	 *
+	 * @return string
+	 */
 	protected function single_value_plain_text_row( $field_key, $atts ) {
 		$field       = FrmField::getOne( $field_key );
 		$field_value = $this->get_field_plain_text_value( $atts['entry'], $field, $atts );
@@ -889,9 +924,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			return '';
 		}
 
-		$content = $field_value . "\r\n";
-
-		return $content;
+		return $field_value . "\r\n";
 	}
 
 	/**
@@ -908,7 +941,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$include = in_array( $field->type, $this->include_extras, true );
 		}
 
-		if ( $include === true ) {
+		if ( $include ) {
 			if ( ! empty( $this->include_fields ) ) {
 				$include = $this->is_self_or_parent_in_array( $field->field_key, $this->include_fields );
 			} elseif ( ! empty( $this->exclude_fields ) ) {
@@ -916,24 +949,26 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			}
 		}
 
-		if ( FrmAppHelper::is_empty_value( $field_value, '' ) ) {
-			if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
-				$include = false;
-			}
+		if ( FrmAppHelper::is_empty_value( $field_value, '' ) && empty( $atts['include_blank'] ) ) {
+			return false;
 		}
 
 		return $include;
 	}
 
 	protected function is_self_or_parent_in_array( $field_key, $array ) {
-		return in_array( $field_key, array_keys( $array ), true );
+		return array_key_exists( $field_key, $array );
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function user_info_rows( $atts ) {
-		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! empty( $atts['user_info'] ) ) {
 			$html  = '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>IP Address</th><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
-			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>User-Agent (Browser/OS)</th><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
-			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>Referrer</th><td' . $this->td_style . '>' . wp_kses_post( 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd' ) . '</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>User-Agent (Browser/OS)</th><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n"; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>Referrer</th><td' . $this->td_style . '>' . wp_kses_post( 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd' ) . '</td></tr>' . "\r\n"; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
 			$html = '';
 		}
@@ -941,8 +976,12 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $html;
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function user_info_plain_text_rows( $atts ) {
-		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! empty( $atts['user_info'] ) ) {
 			$content  = "IP Address: 127.0.0.1\r\n";
 			$content .= "User-Agent (Browser/OS): Mozilla Firefox 37.0 / OS X\r\n";
 			$content .= "Referrer: http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd\r\n";
@@ -953,31 +992,33 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $content;
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function get_field_html_value( $entry, $field, $atts ) {
 		$field_value = $this->get_field_value( $entry, $field, $atts );
-		$field_value = str_replace( array( "\r\n", "\n" ), '<br/>', $field_value );
-
-		return $field_value;
+		return str_replace( array( "\r\n", "\n" ), '<br/>', $field_value );
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function get_field_plain_text_value( $entry, $field, $atts ) {
-		$field_value = $this->get_field_value( $entry, $field, $atts );
-
-		return $field_value;
+		return $this->get_field_value( $entry, $field, $atts );
 	}
 
 	/**
 	 * @param stdClass $entry
 	 * @param stdClass $field
+	 * @param array    $atts
 	 *
 	 * @return mixed|string
 	 */
 	protected function get_field_value( $entry, $field, $atts ) {
-
 		if ( $field->field_key === 'free-html-field' ) {
 			$field_value = 'Lorem ipsum.';
 		} else {
-			$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : '';
+			$field_value = $entry->metas[ $field->id ] ?? '';
 
 			if ( is_array( $field_value ) ) {
 				$field_value = implode( ', ', $field_value );
@@ -987,10 +1028,16 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $field_value;
 	}
 
+	/**
+	 * @param string $type
+	 */
 	protected function set_included_fields( $type ) {
 		$this->include_fields = $this->set_field_array( $type );
 	}
 
+	/**
+	 * @param string $type
+	 */
 	protected function set_excluded_fields( $type ) {
 		$this->exclude_fields = $this->set_field_array( $type );
 	}
@@ -1005,6 +1052,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $fields;
 	}
 
+	/**
+	 * @param string $type
+	 */
 	protected function get_single_included_field( $type ) {
 		$include_fields = array(
 			'free-text-field' => 'free-text-field',
@@ -1023,12 +1073,18 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @param array $array
+	 */
 	protected function convert_field_keys_to_ids( &$array ) {
 		foreach ( $array as $key => $field_key ) {
 			$array[ $key ] = FrmField::get_id_by_key( $field_key );
 		}
 	}
 
+	/**
+	 * @param array $array
+	 */
 	protected function convert_field_keys_to_objects( &$array ) {
 		foreach ( $array as $key => $field_key ) {
 			$array[ $key ] = FrmField::getOne( $field_key );
@@ -1067,16 +1123,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 */
 	protected function get_expected_default_shortcodes( $type, $atts ) {
 		$content = '';
-
-		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
+		$fields  = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 
 		if ( $type === 'html' ) {
 			$content .= $this->table_header( $atts );
 		}
 
 		foreach ( $fields as $field ) {
-
-			if ( in_array( $field->type, array( 'html', 'captcha' ) ) ) {
+			if ( in_array( $field->type, array( 'html', 'captcha' ), true ) ) {
 				continue;
 			}
 
@@ -1097,54 +1151,43 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $content;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function table_row_start_tags( $type, $field ) {
-		if ( $type === 'html' ) {
-			$html = '<tr style="[frm-alt-color]"><th scope="row"' . $this->td_style . '>';
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $type === 'html' ? '<tr style="[frm-alt-color]"><th scope="row"' . $this->td_style . '>' : '';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function cell_separator( $type ) {
-		if ( $type === 'html' ) {
-			$html = '</th><td' . $this->td_style . '>';
-		} else {
-			$html = ': ';
-		}
-
-		return $html;
+		return $type === 'html' ? '</th><td' . $this->td_style . '>' : ': ';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function table_row_end_tags( $type ) {
-		if ( $type === 'html' ) {
-			$html = '</td></tr>';
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $type === 'html' ? '</td></tr>' : '';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function after_table_row_tags( $type ) {
-		if ( $type === 'html' ) {
-			$html = "\r\n";
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $type === 'html' ? "\r\n" : '';
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function expected_default_array( $atts ) {
-		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
-
+		$fields   = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 		$expected = array();
 
 		foreach ( $fields as $field ) {
-
-			if ( in_array( $field->type, array( 'html', 'captcha' ) ) ) {
+			if ( in_array( $field->type, array( 'html', 'captcha' ), true ) ) {
 				continue;
 			}
 
@@ -1158,6 +1201,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $expected;
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function expected_array( $entry, $atts ) {
 		$expected = array(
 			'free-text-field'         => 'Test Testerson',
@@ -1173,9 +1219,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'free-user-id-field'      => '',
 		);
 
-		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( empty( $atts['include_blank'] ) ) {
 			foreach ( $expected as $field_key => $value ) {
-				if ( $value == '' || empty( $value ) ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
+				if ( ! $value ) {
 					unset( $expected[ $field_key ] );
 				}
 			}
@@ -1184,6 +1232,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $expected;
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function expected_json( $entry, $atts ) {
 		$array = $this->expected_array( $entry, $atts );
 		return json_encode( $array );
@@ -1193,6 +1244,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return FrmForm::get_id_by_key( 'free_field_types' );
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $actual
+	 */
 	protected function compare_array( $expected, $actual ) {
 		if ( $expected !== $actual ) {
 			foreach ( $expected as $k => $v ) {

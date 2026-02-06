@@ -35,6 +35,7 @@ Cypress.Commands.add( 'createNewForm', () => {
 	cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 	cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
 } );
+
 Cypress.Commands.add( 'deleteForm', () => {
 	cy.log( 'Delete Form' );
 	cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {

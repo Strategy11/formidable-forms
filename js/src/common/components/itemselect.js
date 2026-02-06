@@ -62,6 +62,8 @@ export default class ItemSelect extends Component {
 				label={ label }
 				help={ help }
 				onChange={ onChange }
+				__next40pxDefaultSize={ true }
+				__nextHasNoMarginBottom={ true }
 			/>
 		);
 	}

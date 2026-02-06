@@ -10,18 +10,18 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_front_head() {
 		$this->set_front_end();
 
-		// reset if the style was loaded in another test
+		// Reset if the style was loaded in another test
 		global $frm_vars, $wp_styles;
 		$frm_vars['css_loaded'] = false;
+
 		if ( in_array( 'formidable', $wp_styles->done, true ) ) {
-			$k = array_search( 'formidable', $wp_styles->done );
+			$k = array_search( 'formidable', $wp_styles->done, true );
 			unset( $wp_styles->done[ $k ] );
 		}
 
 		ob_start();
 		wp_head();
-		$styles = ob_get_contents();
-		ob_end_clean();
+		$styles = ob_get_clean();
 		$this->assertNotEmpty( $styles );
 
 		$frm_settings    = FrmAppHelper::get_settings();
@@ -29,11 +29,11 @@ class test_FrmStylesController extends FrmUnitTest {
 		$css_html        = "<link rel='stylesheet' id='formidable-css'";
 
 		if ( $frm_settings->load_style === 'all' ) {
-			$this->assertNotFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
+			$this->assertStringContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
 			// $this->assertContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is missing' );
 		} else {
-			$this->assertFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
-			$this->assertFalse( strpos( $styles, $stylesheet_urls['formidable'] ), 'The formidablepro stylesheet is included when it should not be' );
+			$this->assertStringNotContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
+			$this->assertStringNotContainsString( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is included when it should not be' );
 		}
 	}
 
@@ -43,8 +43,7 @@ class test_FrmStylesController extends FrmUnitTest {
 	private function get_custom_stylesheet() {
 		global $frm_vars;
 		$frm_vars['css_loaded'] = false;
-
-		$stylesheet_urls = FrmStylesController::custom_stylesheet();
+		$stylesheet_urls        = FrmStylesController::custom_stylesheet();
 		$this->assertTrue( isset( $stylesheet_urls['formidable'] ), 'The stylesheet array is empty' );
 		return $stylesheet_urls;
 	}
@@ -56,7 +55,6 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_save() {
 		$frm_style = new FrmStyle( 'default' );
 		$style     = $frm_style->get_one();
-		$defaults  = $frm_style->get_defaults();
 
 		$_POST = array(
 			'ID'                => $style->ID,
@@ -73,12 +71,11 @@ class test_FrmStylesController extends FrmUnitTest {
 
 		ob_start();
 		FrmStylesController::save();
-		$returned = ob_get_contents();
-		ob_end_clean();
+		$returned = ob_get_clean();
 
-		$this->assertNotFalse( strpos( $returned, 'Your styling settings have been saved.' ) );
+		$this->assertStringContainsString( 'Your styling settings have been saved.', $returned );
 		$frm_style     = new FrmStyle( $style->ID );
 		$updated_style = $frm_style->get_one();
-		$this->assertEquals( $style->post_title . ' Updated', $updated_style->post_title );
+		$this->assertSame( $style->post_title . ' Updated', $updated_style->post_title );
 	}
 }

@@ -1,4 +1,54 @@
 == Changelog ==
+= 6.27 =
+* New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
+* New: A new coupons tab is available on the payments page.
+* New: Required updates to support a new View-Specific CSS setting in the Visual Views add-on.
+* New: The submit button will now be enabled when a Square postal code is successfully completed. This fixes issues where the submit button would never get enabled when a Square card field was auto-filled.
+* New: Many references to old font icons have been removed, removing about 10KB of data from admin CSS.
+* New: Several styles have been optimized in the generated formidableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
+* Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
+* Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
+* Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.
+* Fix: A PHP warning would get logged when checking data for a ranking field as spam.
+* Fix: Add-on category counts were not always correct.
+* Breaking: Many modern PHP functions are now being used including str_contains, str_starts_with, str_ends_with, array_key_last, and array_key_first. If you are using both a WordPress version older than 5.9, and a PHP version lower than 8.0, this will introduce fatal errors. Note that the minimum required WordPress version is already set to 6.3.
+* Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
+* Breaking: The deprecated FrmFormsHelper::actions_dropdown function and actions-dropdown.php view file have been removed.
+* An unused FrmTransLiteSubscriptionsController::list_subscriptions_shortcode function and its related view file have been deprecated.
+
+= 6.26.1 =
+* New: The cached data for license checks is now set to autoload to help reduce calls to the database, and an option check for a request lock has been moved so it only happens when the option data has expired. These changes should help with performance.
+* New: SVG icon updates have been made to avoid use of the deprecated xlink:href attribute.
+* Fix: Field step settings were changed to only accept numbers in last release, causing issues with "any" as a value.
+* Fix: Bootstrap dropdowns would not properly initialize for fields loaded with AJAX in long forms, preventing access to the more options dropdown, hiding the option to delete a field.
+* Breaking: Old logic that would trigger blur events for inputs with no value set with the onblur attribute has been removed.
+
+= 6.26 =
+* New: Gutenberg blocks now use API version 3. As of WordPress 6.9, a deprecated message would appear for older block API versions.
+* New: Styles now include a Custom CSS setting in Quick Settings that can be exported and imported to other sites. The custom CSS is automatically prefixed with the style's class name to prevent conflicts.
+* New: Admin pages now use Bootstrap 5 and Popper 2, updated from Bootstrap 4 and Popper 1.
+* New: 12 Fields can now be added to a row in the form builder, up from the previous limit of 6.
+* New: An htaccess file is now included that prevents access to text files included in this plugin on Apache servers.
+* New: The first name field in a form will now automatically include the given-name and family-name autocomplete attributes to improve accessibility and user experience.
+* Fix: Field errors were using the input text error color setting incorrectly. This has been reverted to use the error border color setting like it did in older versions.
+* Fix: Square would throw a styling error when using a style with comma separated font family options. To prevent this error, the first font is used only.
+* Fix: The mobile responsiveness of email styles has been improved.
+* Breaking: The minimum required WordPress version is now 6.3. This is because older versions do not support Gutenberg's API version 3.
+* Breaking: The deprecated FrmEDD_SL_Plugin_Updater class has been removed.
+* Breaking: The deprecated frmFrontForm.visible and frmFrontForm.invisible functions have been removed.
+
+= 6.25.1 =
+* New: The frm_email_message filter now includes email_key in the passed attribute data.
+* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
+* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
+* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
+* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
+* Fix: Large email header images used in emails would extend beyond the image container boundaries.
+* Fix: The payments list would not properly sort in descending order.
+* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
+* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
+* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
+
 = 6.25 =
 * New: Style settings have been added to Email actions.
 * New: reCAPTCHA and Turnstile now support a new frm_captcha_lang filter for modifying the captcha language.

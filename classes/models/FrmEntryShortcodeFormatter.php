@@ -10,48 +10,56 @@ class FrmEntryShortcodeFormatter {
 
 	/**
 	 * @var int
+	 *
 	 * @since 2.04
 	 */
 	protected $form_id = 0;
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	protected $skip_fields = array( 'captcha', 'html' );
 
 	/**
 	 * @var array
+	 *
 	 * @since 3.0
 	 */
 	protected $single_cell_fields = array( 'html' );
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	protected $fields = array();
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.05
 	 */
 	protected $is_plain_text = false;
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 */
 	protected $format = 'text';
 
 	/**
 	 * @var FrmTableHTMLGenerator|null
+	 *
 	 * @since 2.04
 	 */
 	protected $table_generator;
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	protected $array_content = array();
@@ -116,7 +124,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return void
 	 */
 	protected function init_plain_text( $atts ) {
-		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+		if ( ! empty( $atts['plain_text'] ) ) {
 			$this->is_plain_text = true;
 		}
 	}
@@ -153,6 +161,8 @@ class FrmEntryShortcodeFormatter {
 	 * Return the default HTML for an entry
 	 *
 	 * @since 2.04
+	 *
+	 * @return array|string
 	 */
 	public function content() {
 		if ( ! $this->form_id || empty( $this->fields ) ) {
@@ -206,9 +216,8 @@ class FrmEntryShortcodeFormatter {
 	protected function get_table() {
 		$content  = $this->table_generator->generate_table_header();
 		$content .= $this->generate_content_for_all_fields();
-		$content .= $this->table_generator->generate_table_footer();
 
-		return $content;
+		return $content . $this->table_generator->generate_table_footer();
 	}
 
 	/**
@@ -238,13 +247,11 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function generate_field_content( $field ) {
-		if ( in_array( $field->type, $this->skip_fields ) ) {
+		if ( in_array( $field->type, $this->skip_fields, true ) ) {
 			return '';
 		}
 
-		$row = $this->generate_two_cell_shortcode_row( $field );
-
-		return $row;
+		return $this->generate_two_cell_shortcode_row( $field );
 	}
 
 	/**
@@ -258,8 +265,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function generate_two_cell_shortcode_row( $field, $value = null ) {
-		$row = '[if ' . $field->id . ']';
-
+		$row   = '[if ' . $field->id . ']';
 		$label = '[' . $field->id . ' show=field_label]';
 
 		if ( $value === null ) {
@@ -291,7 +297,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return void
 	 */
 	protected function add_field_array( $field ) {
-		if ( in_array( $field->type, $this->skip_fields ) ) {
+		if ( in_array( $field->type, $this->skip_fields, true ) ) {
 			return;
 		}
 
@@ -326,7 +332,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_plain_text_format() {
-		return ( $this->format === 'text' && $this->is_plain_text === true );
+		return $this->format === 'text' && $this->is_plain_text === true;
 	}
 
 	/**
@@ -337,6 +343,6 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_table_format() {
-		return ( $this->format === 'text' && $this->is_plain_text === false );
+		return $this->format === 'text' && $this->is_plain_text === false;
 	}
 }

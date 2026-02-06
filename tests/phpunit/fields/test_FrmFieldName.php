@@ -15,13 +15,12 @@ class test_FrmFieldName extends FrmUnitTest {
 
 		$field->field_options['name_layout'] = 'first_middle_last';
 
-		$name_field = new FrmFieldName( $field );
-
+		$name_field           = new FrmFieldName( $field );
 		$processed_sub_fields = $this->run_private_method( array( $name_field, 'get_processed_sub_fields' ) );
 
-		$this->assertEquals( array( 'first', 'middle', 'last' ), array_keys( $processed_sub_fields ) );
-		$this->assertNotFalse( strpos( $processed_sub_fields['first']['wrapper_classes'], 'frm4' ) );
-		$this->assertNotFalse( strpos( $processed_sub_fields['middle']['wrapper_classes'], 'frm4' ) );
-		$this->assertNotFalse( strpos( $processed_sub_fields['last']['wrapper_classes'], 'frm4' ) );
+		$this->assertSame( array( 'first', 'middle', 'last' ), array_keys( $processed_sub_fields ) );
+		$this->assertStringContainsString( 'frm4', $processed_sub_fields['first']['wrapper_classes'] );
+		$this->assertStringContainsString( 'frm4', $processed_sub_fields['middle']['wrapper_classes'] );
+		$this->assertStringContainsString( 'frm4', $processed_sub_fields['last']['wrapper_classes'] );
 	}
 }

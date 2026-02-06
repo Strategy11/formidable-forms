@@ -3,6 +3,7 @@
  * View for submit button field in form builder
  *
  * @since 6.9
+ *
  * @package Formidable
  *
  * @var array $field Field array.

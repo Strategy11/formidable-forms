@@ -51,7 +51,7 @@ h1 .fa-caret-down {
 	left: 0;
 	z-index: 1000;
 	display: none;
-	float: left;
+	min-width: 10rem;
 	padding-left: 4px;
 	padding-right: 4px;
 	margin: var(--gap-xs) 0 0;
@@ -91,7 +91,8 @@ h1 .fa-caret-down {
 	min-width: 180px !important;
 }
 
-.frm-field-action-icons .frm-dropdown-toggle svg {
+.frm-field-action-icons .frm-dropdown-toggle svg,
+#frm_field_group_controls .frm-dropdown-toggle svg {
 	color: #9EA9B8;
 }
 
@@ -232,11 +233,6 @@ a.frm_option_icon:hover::before {
 	font-size: 13px;
 	color: var(--grey-700);
 	padding: 7px 20px;
-}
-
-.frm_actions_dropdown .frm-dropdown-menu {
-	font-size: var(--text-sm);
-	color: #5F6C72;
 }
 
 .frm-dropdown-menu .frm_icon_font {

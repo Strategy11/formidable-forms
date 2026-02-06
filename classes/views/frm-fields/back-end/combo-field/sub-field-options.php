@@ -3,6 +3,7 @@
  * Sub field options
  *
  * @package Formidable
+ *
  * @since 4.10.02
  *
  * @var FrmFieldCombo $this            Field type object.
@@ -53,7 +54,7 @@ $labels    = $this->get_built_in_option_labels();
 						/>
 						<?php
 						FrmAppHelper::icon_by_class(
-							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+							'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 							array(
 								'data-open' => 'frm-smart-values-box',
 								'tabindex'  => '0',

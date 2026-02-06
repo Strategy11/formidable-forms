@@ -17,11 +17,11 @@ jobs:
       matrix:
         include:
           - php: 7.0
-          - php: 8.3
+          - php: 8.4
     steps:
       - uses: actions/checkout@v4.1.1
 
-      - uses: shivammathur/setup-php@2.25.5
+      - uses: shivammathur/setup-php@2.36.0
         with:
           php-version: ${{ matrix.php }}
       - name: Check PHP ${{ matrix.multisite }} syntax

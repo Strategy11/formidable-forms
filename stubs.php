@@ -23,6 +23,14 @@ namespace {
 
 	class FrmProFormState {
 		public static function get_from_request( $key, $default ) {}
+		/**
+		 * @param string $key
+		 * @param mixed  $value
+		 *
+		 * @return void
+		 */
+		public static function set_initial_value( $key, $value ) {
+		}
 	}
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
@@ -65,6 +73,7 @@ namespace {
 		 * @param array|string $selected
 		 * @param string       $current
 		 * @param bool         $echo
+		 *
 		 * @return string
 		 */
 		public static function selected( $selected, $current, $echo = true ) {
@@ -89,9 +98,10 @@ namespace {
 		 * @param int|object|string $field_id
 		 * @param array|string      $value
 		 * @param false|int|string  $entry_id
+		 *
 		 * @return array|object|string|null
 		 */
-		public static function &value_exists( $field_id, $value, $entry_id = false ) {
+		public static function value_exists( $field_id, $value, $entry_id = false ) {
 		}
 		public static function get_post_value( $post_id, $post_field, $custom_field, $atts ) {
 		}
@@ -100,6 +110,7 @@ namespace {
 		/**
 		 * @param WP_Post  $action
 		 * @param stdClass $entry
+		 *
 		 * @return bool
 		 */
 		public static function action_conditions_met( $action, $entry ) {
@@ -116,6 +127,7 @@ namespace {
 		/**
 		 * @param int          $view_id
 		 * @param false|string $type
+		 *
 		 * @return array|false|object
 		 */
 		public static function get_layouts_for_view( $view_id, $type = false ) {
@@ -128,6 +140,7 @@ namespace {
 	class FrmProAddonsController {
 		/**
 		 * @param bool $force_type
+		 *
 		 * @return string
 		 */
 		public static function license_type( $force_type = false ) {
@@ -140,12 +153,14 @@ namespace {
 		/**
 		 * @param string       $plugin
 		 * @param array|string $upgrade_link_args
+		 *
 		 * @return void
 		 */
 		public static function conditional_action_button( $plugin, $upgrade_link_args ) {
 		}
 		/**
 		 * @param array $atts
+		 *
 		 * @return void
 		 */
 		public static function show_conditional_action_button( $atts ) {
@@ -165,17 +180,22 @@ namespace {
 		public static function normalize_formatted_numbers( $field, $formatted_value ) {}
 	}
 	class FrmProDb {
+		/**
+		 * @var string
+		 */
 		public static $plug_version;
 	}
 	class FrmProStylesController extends FrmStylesController {
 		/**
 		 * @param int $form_id
+		 *
 		 * @return WP_Post
 		 */
 		public static function get_active_style_for_form( $form_id ) {
 		}
 		/**
 		 * @param stdClass|WP_Post $active_style
+		 *
 		 * @return array<WP_Post>
 		 */
 		public static function get_styles_for_styler( $active_style ) {
@@ -195,6 +215,7 @@ namespace {
 		/**
 		 * @param array $field
 		 * @param array $args
+		 *
 		 * @return string
 		 */
 		public static function get_category_dropdown( $field, $args ) {
@@ -205,6 +226,7 @@ namespace {
 		}
 		/**
 		 * @param array $atts
+		 *
 		 * @return string
 		 */
 		public static function entry_delete_link( $atts ) {
@@ -214,11 +236,13 @@ namespace {
 		 * @param stdClass $form
 		 * @param int      $entry_id
 		 * @param array    $args
+		 * @param array    $form_options
 		 */
 		public static function confirmation( $method, $form, $form_options, $entry_id, $args = array() ) {
 		}
 		/**
 		 * @param object $form
+		 *
 		 * @return bool
 		 */
 		public static function is_form_displayed_after_edit( $form ) {
@@ -226,13 +250,14 @@ namespace {
 		/**
 		 * @param object $entry
 		 * @param array  $args
+		 *
 		 * @return void
 		 */
 		public static function show_front_end_form_with_entry( $entry, $args ) {
 		}
 	}
 	class FrmProFormsHelper {
-		public static function &post_type( $form ) {
+		public static function post_type( $form ) {
 		}
 		/**
 		 * @return array
@@ -244,6 +269,7 @@ namespace {
 		/**
 		 * @param array|false $values
 		 * @param string      $location
+		 *
 		 * @return array
 		 */
 		public static function mod_other_vals( $values = false, $location = 'front' ) {
@@ -258,6 +284,7 @@ namespace {
 		 * @param object           $field
 		 * @param object           $entry
 		 * @param array|int|string $field_value
+		 *
 		 * @return void
 		 */
 		public static function get_dynamic_list_values( $field, $entry, &$field_value ) {
@@ -277,15 +304,17 @@ namespace {
 		/**
 		 * @param array  $args
 		 * @param string $value
+		 *
 		 * @return void
 		 */
 		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
 		}
 		/**
 		 * @param array|object $field
+		 *
 		 * @return bool
 		 */
-		public static function &is_field_visible_to_user( $field ) {
+		public static function is_field_visible_to_user( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {
@@ -300,6 +329,7 @@ namespace {
 		 * @param array  $field
 		 * @param string $field_name
 		 * @param array  $atts
+		 *
 		 * @return void
 		 */
 		public static function show_in_form( $field, $field_name, $atts ) {
@@ -317,6 +347,7 @@ namespace {
 		 * @param string $request
 		 * @param string $path
 		 * @param string $ip
+		 *
 		 * @return array
 		 */
 		public static function http_post( $request, $path, $ip = null ) {
@@ -329,9 +360,13 @@ namespace {
 		}
 	}
 	class FrmPaymentsController {
+		/**
+		 * @var string
+		 */
 		public static $db_opt_name = 'frm_pay_db_version';
 		/**
 		 * @param array $cols
+		 *
 		 * @return array
 		 */
 		public static function payment_columns( $cols = array() ) {
@@ -345,18 +380,21 @@ namespace {
 		}
 		/**
 		 * @param array $entries_template
+		 *
 		 * @return void
 		 */
 		public static function get_main_widget( $entries_template ) {
 		}
 		/**
 		 * @param array $entries_template
+		 *
 		 * @return void
 		 */
 		public static function get_bottom_widget( $entries_template ) {
 		}
 		/**
 		 * @param array $template
+		 *
 		 * @return void
 		 */
 		public static function load_license_management( $template ) {
@@ -413,6 +451,7 @@ namespace {
 	 * Function from W3 Total cache.
 	 *
 	 * @param array|null $extras Extras.
+	 *
 	 * @return void
 	 */
 	function w3tc_flush_all( $extras = null ) {
@@ -420,6 +459,7 @@ namespace {
 	class FrmTransListsController {
 		/**
 		 * @param array $columns
+		 *
 		 * @return array
 		 */
 		public static function payment_columns( $columns = array() ) {
@@ -428,6 +468,7 @@ namespace {
 	class FrmProSettingsController {
 		/**
 		 * @param string $count
+		 *
 		 * @return string
 		 */
 		public static function inbox_badge( $count ) {}
@@ -439,6 +480,7 @@ namespace {
 	class FrmProAddressesController extends FrmProComboFieldsController {
 		/**
 		 * @param string $country
+		 *
 		 * @return string
 		 */
 		public static function get_country_code( $country ) {
@@ -446,6 +488,24 @@ namespace {
 	}
 
 	class FrmProComboFieldsController {
+	}
+
+	class FrmProEntryMeta {
+		/**
+		 * @param object $field
+		 *
+		 * @return bool
+		 */
+		public static function skip_required_validation( $field ) {
+		}
+	}
+
+	class FrmProDashboardController {
+		/**
+		 * @return array
+		 */
+		public static function get_counters() {
+		}
 	}
 }
 
@@ -487,6 +547,7 @@ namespace WPMailSMTP {
 		 * @param string $group
 		 * @param string $key
 		 * @param bool   $strip_slashes
+		 *
 		 * @return mixed|null
 		 */
 		public function get( $group, $key, $strip_slashes = true ) {

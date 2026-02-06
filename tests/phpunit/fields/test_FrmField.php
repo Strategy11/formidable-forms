@@ -14,6 +14,7 @@ class test_FrmField extends FrmUnitTest {
 	public function test_create() {
 		$form_id     = $this->factory->form->get_id_by_key( 'contact-db12' );
 		$field_types = array_merge( FrmField::field_selection(), FrmField::pro_field_selection() );
+
 		foreach ( $field_types as $field_type => $field_info ) {
 			$field_id = $this->factory->field->create(
 				array(
@@ -21,7 +22,7 @@ class test_FrmField extends FrmUnitTest {
 					'form_id' => $form_id,
 				)
 			);
-			$this->assertTrue( is_numeric( $field_id ) );
+			$this->assertIsNumeric( $field_id );
 			$this->assertTrue( $field_id > 0 );
 		}
 	}
@@ -39,7 +40,7 @@ class test_FrmField extends FrmUnitTest {
 			$form_id = $this->factory->form->get_id_by_key( $form_key );
 			$fields  = FrmField::getAll( array( 'fi.form_id' => (int) $form_id ) );
 			$this->assertNotEmpty( $fields );
-			$this->assertEquals( $expected_count, count( $fields ), 'An incorrect number of fields are retrieved with FrmField::getAll.' );
+			$this->assertCount( $expected_count, $fields, 'An incorrect number of fields are retrieved with FrmField::getAll.' );
 		}
 	}
 
@@ -68,7 +69,7 @@ class test_FrmField extends FrmUnitTest {
 			}
 
 			$this->assertNotEmpty( $fields );
-			$this->assertEquals( $args['count'], count( $fields ), 'An incorrect number of fields are retrieved with FrmField::get_all_for_form for ' . $test . '.' );
+			$this->assertCount( $args['count'], $fields, 'An incorrect number of fields are retrieved with FrmField::get_all_for_form for ' . $test . '.' );
 		}
 	}
 }

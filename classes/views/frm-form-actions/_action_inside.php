@@ -20,21 +20,21 @@ do_action( 'frm_action_settings_before_action_name', $form_action );
 	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>">
 			<?php esc_html_e( 'Action Name', 'formidable' ); ?>
-			<span <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+			<span <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 		</label>
 		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
 	</p>
 <?php
 
 if ( ! isset( $action_control->action_options['event'] ) ) {
-	$events = 'create';
+	$action_control->action_options['event'] = 'create';
 }
 
 if ( ! is_array( $action_control->action_options['event'] ) ) {
 	$action_control->action_options['event'] = explode( ',', $action_control->action_options['event'] );
 }
 
-if ( count( $action_control->action_options['event'] ) == 1 || $action_control->action_options['force_event'] ) {
+if ( count( $action_control->action_options['event'] ) === 1 || $action_control->action_options['force_event'] ) {
 	foreach ( $action_control->action_options['event'] as $e ) {
 		?>
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" value="<?php echo esc_attr( $e ); ?>" />
@@ -50,9 +50,10 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	<?php
 
 	$event_labels = FrmFormAction::trigger_labels();
+
 	foreach ( $action_control->action_options['event'] as $event ) {
 		?>
-		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( $event_labels[ $event ] ?? $event ); ?></option>
+		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'], true ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( $event_labels[ $event ] ?? $event ); ?></option>
 <?php } ?>
 		</select>
 	</p>
@@ -127,6 +128,7 @@ if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->po
 // Show link to install logs.
 if ( $use_logging ) {
 	$upgrading = FrmAddonsController::install_link( 'logs' );
+
 	if ( isset( $upgrading['url'] ) ) {
 		?>
 		<p>

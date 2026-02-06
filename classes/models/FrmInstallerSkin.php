@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! class_exists( 'WP_Upgrader_Skin' ) ) {
-	// this is to prevent a unit test from failing
+	// This is to prevent a unit test from failing
 	return;
 }
 
@@ -24,6 +24,8 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * @since 3.04.02
 	 *
 	 * @param object $upgrader The upgrader object (passed by reference).
+	 *
+	 * @return void
 	 */
 	public function set_upgrader( &$upgrader ) {
 		if ( is_object( $upgrader ) ) {
@@ -37,6 +39,8 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * @since 3.04.02
 	 *
 	 * @param object $result The result of the install process.
+	 *
+	 * @return void
 	 */
 	public function set_result( $result ) {
 		$this->result = $result;
@@ -66,24 +70,27 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * @param string|\WP_Error $errors The WP Error object of errors with the install process.
 	 */
 	public function error( $errors ) {
-		if ( ! empty( $errors ) ) {
-			if ( ! is_string( $errors ) ) {
-				$error   = $errors->get_error_message();
-				$message = $errors->get_error_data();
-				$errors  = $error . ' ' . $message;
-			}
-			echo json_encode(
-				array(
-					'error'   => $errors,
-					'message' => $errors,
-					'success' => false,
-				)
-			);
-			if ( wp_doing_ajax() ) {
-				wp_die();
-			} else {
-				die();
-			}
+		if ( ! $errors ) {
+			return;
+		}
+
+		if ( ! is_string( $errors ) ) {
+			$error   = $errors->get_error_message();
+			$message = $errors->get_error_data();
+			$errors  = $error . ' ' . $message;
+		}
+		echo json_encode(
+			array(
+				'error'   => $errors,
+				'message' => $errors,
+				'success' => false,
+			)
+		);
+
+		if ( wp_doing_ajax() ) {
+			wp_die();
+		} else {
+			die();
 		}
 	}
 

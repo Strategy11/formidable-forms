@@ -52,7 +52,9 @@ describe( 'Entries submitted from a form', () => {
 			const text = $el.text().trim();
 			expect( text ).to.be.oneOf( [
 				'Upgrade to Pro.',
-				'Get 60% Off Pro!'
+				'Get 60% Off Pro!',
+				'Black Friday Deals',
+				'Cyber Monday Deals',
 			] );
 		} );
 
@@ -73,7 +75,7 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '.frm_form_nav > :nth-child(1) > a' ).should( 'contain', 'Build' ).click();
 		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click( { force: true } );
 		cy.log( 'Verify that entries are not allowed from the forms list' );
-		cy.get( 'td[data-colname="Entries"] svg[data-original-title="Saving entries is disabled for this form"]' ).should( 'exist' );
+		cy.get( 'td[data-colname="Entries"] svg[title="Saving entries is disabled for this form"]' ).should( 'exist' );
 	} );
 
 	it( 'should be stored and validated in the entry list', () => {

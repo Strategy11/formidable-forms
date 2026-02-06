@@ -44,6 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								foreach ( $frm_field_selection as $field_key => $field_type ) {
 									$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 									$classes     = 'frmbutton frm6 frm_t' . $field_key;
+
 									if ( ! empty( $field_type['hide'] ) ) {
 										$classes .= ' frm_hidden';
 									}
@@ -72,6 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<ul class="field_type_list frm_grid_container">
 								<?php
 								$no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
+
 								if ( $no_allow_class === 'frm_noallow' ) {
 									$no_allow_class .= ' frm_show_upgrade';
 								}
@@ -81,8 +83,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 								unset( $pro_fields['credit_card'] );
 
 								$field_sections = array();
-								foreach ( $pro_fields as $field_key => $field_type ) {
 
+								foreach ( $pro_fields as $field_key => $field_type ) {
 									if ( isset( $field_type['section'] ) ) {
 										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
 											$field_sections[ $field_type['section'] ] = array();
@@ -108,7 +110,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 											<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ); ?>Drop">
 											<?php foreach ( $field_type['types'] as $k => $type ) { ?>
 												<li class="frm_t<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>|<?php echo esc_attr( $k ); ?>">
-													<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+													<?php FrmAppHelper::kses_echo( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); ?>
 												</li>
 												<?php
 												unset( $k, $type );

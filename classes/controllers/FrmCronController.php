@@ -35,6 +35,8 @@ class FrmCronController {
 	 * Schedules cron events.
 	 *
 	 * @since 6.7
+	 *
+	 * @return void
 	 */
 	public static function schedule_events() {
 		$events = self::get_events();
@@ -62,6 +64,7 @@ class FrmCronController {
 
 		foreach ( $events as $event => $recurrence ) {
 			$timestamp = wp_next_scheduled( $event );
+
 			if ( false !== $timestamp ) {
 				wp_unschedule_event( $timestamp, $event );
 			}

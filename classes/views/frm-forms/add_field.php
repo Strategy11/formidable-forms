@@ -37,12 +37,12 @@ do_action( 'frm_extra_field_actions', $field['id'] );
 		<?php endif; ?>
 
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>" data-container="body" aria-label="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_move_icon' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_thick_move_icon' ); ?>
 		</a>
 
 		<div class="dropdown">
-			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" data-trigger="hover" aria-expanded="false">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
+			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" data-trigger="hover" aria-expanded="false" data-bs-display="static">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_thick_more_vert_icon' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Toggle More Options Dropdown', 'formidable' ); ?></span>
 			</a>
 			<ul class="frm-dropdown-menu frm-p-1 <?php echo esc_attr( is_rtl() ? 'dropdown-menu-left' : 'dropdown-menu-right' ); ?>" role="menu"></ul>

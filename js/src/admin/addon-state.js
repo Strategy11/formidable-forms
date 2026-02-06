@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 
-const { div } = frmDom;
+const { div, svg } = frmDom;
 
 /**
  * Toggles the state of an add-on (ie. enable or disable an add-on).
@@ -105,9 +105,7 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 		}
 	);
 
-	jQuery( '#frm_upgrade_modal h2' ).hide();
-	jQuery( '#frm_upgrade_modal .frm_lock_icon' ).addClass( 'frm_lock_open_icon' );
-	jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
+	showUpgradeModalSuccess();
 
 	// Proceed with CSS changes
 	const actionMap = {
@@ -140,7 +138,7 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 		addonStatuses.forEach(
 			addonStatus => {
 				const inModal = null !== addonStatus.closest( '#frm_upgrade_modal' );
-				addonStatus.appendChild( getSaveAndReloadSettingsOptions( saveAndReload, inModal ) );
+				addonStatus.append( getSaveAndReloadSettingsOptions( saveAndReload, inModal ) );
 			}
 		);
 	}
@@ -200,7 +198,7 @@ function closePopupButton() {
 	const a = document.createElement( 'a' );
 	a.setAttribute( 'href', '#' );
 	a.classList.add( 'button', 'button-secondary', 'frm-button-secondary', 'dismiss' );
-	a.textContent = __( 'Close', 'formidable' );
+	a.textContent = __( 'Not Now', 'formidable' );
 	return a;
 }
 
@@ -210,4 +208,85 @@ function saveAndReloadFormBuilder() {
 		submitButton.setAttribute( 'data-new-addon-installed', true );
 	}
 	submitButton.click();
+}
+
+/**
+ * Updates the upgrade modal to show successful addon installation state.
+ *
+ * @private
+ * @return {void}
+ */
+function showUpgradeModalSuccess() {
+	const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
+	if ( ! upgradeModal ) {
+		return;
+	}
+
+	upgradeModal.classList.add( 'frm-success' );
+
+	const upgradeMessage = upgradeModal.querySelector( '.frm-upgrade-message' );
+	if ( upgradeMessage ) {
+		const image = upgradeMessage.querySelector( 'img' );
+		upgradeMessage.replaceChildren(
+			__( 'Great! Everything\'s ready to go!', 'formidable' ),
+			document.createElement( 'br' ),
+			__( 'You just need to refresh the builder so the new field becomes available.', 'formidable' )
+		);
+		if ( image ) {
+			upgradeMessage.append( image );
+		}
+	}
+
+	const frmAddonStatus = document.querySelector( '.frm-addon-status' );
+	if ( frmAddonStatus ) {
+		frmAddonStatus.textContent = '';
+	}
+
+	const circledIcon = upgradeModal.querySelector( '.frm-circled-icon' );
+	if ( circledIcon ) {
+		circledIcon.classList.add( 'frm-circled-icon-green' );
+		circledIcon.querySelector( 'svg' )?.replaceWith( svg( { href: '#frm_checkmark_icon' } ) );
+	}
+}
+
+function installAddonWithCreds( e ) {
+	// Prevent the default action, let the user know we are attempting to install again and go with it.
+	e.preventDefault();
+
+	// Now let's make another Ajax request once the user has submitted their credentials.
+	const proceed = jQuery( this );
+	const el = proceed.parent().parent();
+	const plugin = proceed.attr( 'rel' );
+
+	proceed.addClass( 'frm_loading_button' );
+
+	jQuery.ajax( {
+		url: ajaxurl,
+		type: 'POST',
+		async: true,
+		cache: false,
+		dataType: 'json',
+		data: {
+			action: 'frm_install_addon',
+			nonce: frmAdminJs.nonce,
+			plugin: plugin,
+			hostname: el.find( '#hostname' ).val(),
+			username: el.find( '#username' ).val(),
+			password: el.find( '#password' ).val()
+		},
+		success: function( response ) {
+			response = response?.data ?? response;
+
+			const error = extractErrorFromAddOnResponse( response );
+			if ( error ) {
+				addonError( error, el, proceed );
+				return;
+			}
+
+			afterAddonInstall( response, proceed, message, el );
+		},
+		error: function() {
+			proceed.removeClass( 'frm_loading_button' );
+		}
+	} );
 }

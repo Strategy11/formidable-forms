@@ -15,6 +15,7 @@ class FrmInboxController {
 	 * @since 6.8.4 The $filtered parameter was added.
 	 *
 	 * @param bool $filtered Set this to false to avoid the frm_inbox_badge filter.
+	 *
 	 * @return string
 	 */
 	public static function get_notice_count( $filtered = true ) {
@@ -57,7 +58,8 @@ class FrmInboxController {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		$key = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_text_field' );
-		if ( ! empty( $key ) ) {
+
+		if ( $key ) {
 			$message = new FrmInbox();
 			$message->dismiss( $key );
 
@@ -82,19 +84,19 @@ class FrmInboxController {
 	 */
 	private static function add_tracking_request() {
 		$settings = FrmAppHelper::get_settings();
+
 		if ( $settings->tracking ) {
 			return;
 		}
 
-		$link = admin_url( 'admin.php?page=formidable-settings&t=misc_settings' );
-
+		$link    = admin_url( 'admin.php?page=formidable-settings&t=misc_settings' );
 		$message = new FrmInbox();
 		$message->add_message(
 			array(
 				'key'     => 'usage',
-				'message' => 'Gathering usage data allows us to improve Formidable. Your forms will be considered as we evaluate new features, judge the quality of an update, or determine if an improvement makes sense. You can always visit the <a href="' . esc_url( $link ) . '">Global Settings</a> and choose to stop sharing data. <a href="https://formidableforms.com/knowledgebase/global-settings-overview/#kb-usage-tracking" target="_blank" rel="noopener noreferrer">Read more about what data we collect</a>.',
+				'message' => 'Gathering usage data allows us to improve Formidable. Your forms will be considered as we evaluate new features, judge the quality of an update, or determine if an improvement makes sense. You can always visit the <a href="' . esc_url( $link ) . '">Global Settings</a> and choose to stop sharing data. <a href="https://formidableforms.com/knowledgebase/global-settings-overview/#kb-usage-tracking" target="_blank" rel="noopener noreferrer">Read more about what data we collect</a>.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'subject' => __( 'Help Formidable improve with usage tracking', 'formidable' ),
-				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary frm_inbox_dismiss">Activate usage tracking</a>',
+				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary frm_inbox_dismiss">Activate usage tracking</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'type'    => 'feedback',
 			)
 		);
@@ -112,15 +114,5 @@ class FrmInboxController {
 			$message = new FrmInbox();
 			$message->dismiss( 'free_templates' );
 		}
-	}
-
-	/**
-	 * @since 4.06
-	 * @deprecated 6.16
-	 *
-	 * @return void
-	 */
-	public static function dismiss_all_button( $atts ) {
-		_deprecated_function( __METHOD__, '6.16' );
 	}
 }

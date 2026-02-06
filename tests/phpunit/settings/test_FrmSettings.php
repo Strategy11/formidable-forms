@@ -23,12 +23,11 @@ class Test_FrmSettings extends FrmUnitTest {
 		$key      = 'example_key';
 		$value    = 'New Value';
 		$sanitize = 'sanitize_text_field';
-
-		$result = $this->frm_settings->update_setting( $key, $value, $sanitize );
+		$result   = $this->frm_settings->update_setting( $key, $value, $sanitize );
 
 		// Assert the setting was updated successfully
 		$this->assertTrue( $result, 'The setting should be updated successfully.' );
-		$this->assertEquals( $value, $this->frm_settings->{$key}, 'The value of the setting should match the new value.' );
+		$this->assertSame( $value, $this->frm_settings->{$key}, 'The value of the setting should match the new value.' );
 	}
 
 	/**

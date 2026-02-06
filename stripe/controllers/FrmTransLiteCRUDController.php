@@ -13,11 +13,13 @@ class FrmTransLiteCRUDController {
 	 * Show a table of either payments for subscriptions.
 	 *
 	 * @param int $id
+	 *
 	 * @return void
 	 */
 	public static function show( $id = 0 ) {
 		if ( ! $id ) {
 			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+
 			if ( ! $id ) {
 				wp_die( esc_html__( 'Please select a payment to view', 'formidable' ) );
 			}
@@ -57,6 +59,7 @@ class FrmTransLiteCRUDController {
 
 	/**
 	 * @param int $id
+	 *
 	 * @return object|null
 	 */
 	private static function get_payment_row( $id ) {
@@ -65,7 +68,7 @@ class FrmTransLiteCRUDController {
 		$table_name = self::table_name();
 
 		// @codingStandardsIgnoreStart
-		$payment = $wpdb->get_row(
+		return $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT
 					p.*, e.user_id
@@ -76,8 +79,6 @@ class FrmTransLiteCRUDController {
 			)
 		);
 		// @codingStandardsIgnoreEnd
-
-		return $payment;
 	}
 
 	/**
@@ -114,11 +115,7 @@ class FrmTransLiteCRUDController {
 		$default = reset( $allowed );
 		$name    = FrmAppHelper::get_param( 'type', $default, 'get', 'sanitize_text_field' );
 
-		if ( ! in_array( $name, $allowed, true ) ) {
-			$name = $default;
-		}
-
-		return $name;
+		return in_array( $name, $allowed, true ) ? $name : $default;
 	}
 
 	/**

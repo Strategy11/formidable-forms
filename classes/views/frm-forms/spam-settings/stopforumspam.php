@@ -3,6 +3,7 @@
  * Settings for stopforumspam check
  *
  * @since 6.21
+ *
  * @package Formidable
  *
  * @var array $values Form values.

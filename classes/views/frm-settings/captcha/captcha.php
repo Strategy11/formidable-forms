@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm_note_style frm-with-icon frm-mb-0 frm_hidden">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon' ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
 	<span><?php esc_html_e( 'Changing the captcha type here will replace it in all any forms where it is used.', 'formidable' ); ?></span>
 </div>
 
@@ -145,6 +145,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php
 	$transient = get_transient( 'frm_recent_spam_detected' );
+
 	if ( ! empty( $transient ) ) {
 		?>
 		<div class="frm_note_style">

@@ -28,7 +28,19 @@ class FrmFormApi {
 	protected $new_days = 90;
 
 	/**
+	 * If true, calls to get_api_info will bypass cache.
+	 * This is set true by calling force_api_request.
+	 *
+	 * @var bool
+	 */
+	protected $force = false;
+
+	/**
 	 * @since 3.06
+	 *
+	 * @param string|null $license The license key.
+	 *
+	 * @return void
 	 */
 	public function __construct( $license = null ) {
 		$this->set_license( $license );
@@ -38,12 +50,15 @@ class FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
+	 * @param string|null $license The license key.
+	 *
 	 * @return void
 	 */
 	private function set_license( $license ) {
 		if ( $license === null ) {
 			$edd_update = $this->get_pro_updater();
-			if ( ! empty( $edd_update ) ) {
+
+			if ( $edd_update ) {
 				$license = $edd_update->license;
 			}
 		}
@@ -52,6 +67,7 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return string
 	 */
 	public function get_license() {
@@ -69,6 +85,7 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return string
 	 */
 	public function get_cache_key() {
@@ -76,16 +93,36 @@ class FrmFormApi {
 	}
 
 	/**
+	 * Flag the force property as true, so the next API request bypasses cache.
+	 * This is used to pull API data for change logs, which are excluded from the cached data.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function force_api_request() {
+		$this->force = true;
+	}
+
+	/**
 	 * @since 3.06
+	 *
 	 * @return array
 	 */
 	public function get_api_info() {
 		$url = $this->api_url();
+
 		if ( ! empty( $this->license ) ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
-		$addons = $this->get_cached();
+		if ( $this->force ) {
+			$addons      = false;
+			$this->force = false;
+		} else {
+			$addons = $this->get_cached();
+		}
+
 		if ( is_array( $addons ) ) {
 			return $addons;
 		}
@@ -99,6 +136,7 @@ class FrmFormApi {
 
 		// We need to know the version number to allow different downloads.
 		$agent = 'formidable/' . FrmAppHelper::plugin_version();
+
 		if ( class_exists( 'FrmProDb' ) ) {
 			$agent = 'formidable-pro/' . FrmProDb::$plug_version;
 		}
@@ -128,7 +166,8 @@ class FrmFormApi {
 
 			if ( isset( $addon['categories'] ) ) {
 				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
-				if ( ! empty( $cats ) ) {
+
+				if ( $cats ) {
 					unset( $addons[ $k ] );
 					continue;
 				}
@@ -166,6 +205,7 @@ class FrmFormApi {
 	 */
 	protected function set_running() {
 		$expires = 2 * MINUTE_IN_SECONDS;
+
 		if ( $this->run_as_multisite() ) {
 			set_site_transient( $this->transient_key(), true, $expires );
 			return;
@@ -238,14 +278,16 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function get_addon_for_license( $license_plugin, $addons = array() ) {
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = $this->get_api_info();
 		}
+
 		$download_id = $license_plugin->download_id;
 		$plugin      = array();
-		if ( empty( $download_id ) && ! empty( $addons ) ) {
+
+		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
-				if ( is_array( $addon ) && ! empty( $addon['title'] ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
+				if ( is_array( $addon ) && ! empty( $addon['title'] ) && 0 === strcasecmp( $license_plugin->plugin_name, $addon['title'] ) ) {
 					return $addon;
 				}
 			}
@@ -258,6 +300,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return false|object
 	 */
 	public function get_pro_updater() {
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) ) {
@@ -277,28 +321,25 @@ class FrmFormApi {
 	 */
 	protected function get_cached() {
 		$cache = $this->get_cached_option();
-		if ( empty( $cache ) ) {
+
+		if ( ! $cache ) {
 			return false;
 		}
 
-		// If the api call is running, we can use the expired cache.
-		if ( ! $this->is_running() ) {
-			if ( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
-				// Cache is expired.
-				return false;
-			}
+		$is_expired = empty( $cache['timeout'] ) || time() > $cache['timeout'];
 
-			$version     = FrmAppHelper::plugin_version();
-			$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
-			if ( ! $for_current ) {
-				// Force a new check.
-				return false;
-			}
+		if ( ! $is_expired && isset( $cache['version'] ) && $cache['version'] !== FrmAppHelper::plugin_version() ) {
+			$is_expired = true;
 		}
 
-		$values = json_decode( $cache['value'], true );
+		// Avoid old cached data, unless we're currently trying to query for new data.
+		// The call to $this->is_running likely triggers a database query, so only call if if we're expired.
+		// (Rather than the other way around, which is less efficient).
+		if ( $is_expired && ! $this->is_running() ) {
+			return false;
+		}
 
-		return $values;
+		return json_decode( $cache['value'], true );
 	}
 
 	/**
@@ -311,6 +352,7 @@ class FrmFormApi {
 	protected function get_cached_option() {
 		if ( is_multisite() ) {
 			$cached = get_site_option( $this->cache_key );
+
 			if ( $cached ) {
 				return $cached;
 			}
@@ -327,6 +369,8 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cached( $addons ) {
+		$addons = $this->reduce_addon_data_before_caching( $addons );
+
 		$data = array(
 			'timeout' => strtotime( $this->get_cache_timeout( $addons ), time() ),
 			'value'   => wp_json_encode( $addons ),
@@ -336,8 +380,78 @@ class FrmFormApi {
 		if ( is_multisite() ) {
 			update_site_option( $this->cache_key, $data );
 		} else {
-			update_option( $this->cache_key, $data, 'no' );
+			// Autoload the license cache because it gets called everywhere.
+			$autoload = str_starts_with( $this->cache_key, 'frm_addons_l' );
+			update_option( $this->cache_key, $data, $autoload );
 		}
+	}
+
+	/**
+	 * Remove certain add-on API data that we don't need to cache.
+	 * This is to help keep the option data (which is auto-loaded) small.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addons
+	 *
+	 * @return array
+	 */
+	private function reduce_addon_data_before_caching( $addons ) {
+		if ( is_subclass_of( $this, 'FrmFormApi' ) ) {
+			// We only want to modify FrmFormApi. Leave the other APIs alone for now.
+			return $addons;
+		}
+
+		$reduced_addons = array();
+
+		foreach ( $addons as $key => $addon ) {
+			if ( ! is_array( $addon ) ) {
+				$reduced_addons[ $key ] = $addon;
+				continue;
+			}
+
+			if ( ! $this->should_include_addon_in_cached_data( $addon ) ) {
+				continue;
+			}
+
+			if ( isset( $addon['changelog'] ) ) {
+				unset( $addon['changelog'], $addon['banners'] );
+			}
+
+			$reduced_addons[ $key ] = $addon;
+		}
+
+		return $reduced_addons;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $addon
+	 *
+	 * @return bool True if the add-on should be included in cached data.
+	 */
+	private function should_include_addon_in_cached_data( $addon ) {
+		if ( isset( $addon['version'] ) && '' === $addon['version'] ) {
+			// If version is set but blank, the plugin is not actually live.
+			return false;
+		}
+
+		if ( isset( $addon['categories'] ) ) {
+			if ( 'views' === $addon['slug'] ) {
+				// Legacy views has no categories set, but we should still
+				// Include it in cache since it is a valid add-on.
+				return true;
+			}
+
+			$categories_are_empty = ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' );
+
+			if ( $categories_are_empty ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -350,11 +464,10 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function get_cache_timeout( $addons ) {
-		$timeout = $this->cache_timeout;
 		if ( isset( $addons['response_code'] ) && 429 === $addons['response_code'] ) {
-			$timeout = '+5 minutes';
+			return '+5 minutes';
 		}
-		return $timeout;
+		return $this->cache_timeout;
 	}
 
 	/**
@@ -373,35 +486,41 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return array
 	 */
 	public function error_for_license() {
-		$errors = array();
 		if ( ! empty( $this->license ) ) {
-			$errors = $this->get_error_from_response();
+			return $this->get_error_from_response();
 		}
-
-		return $errors;
+		return array();
 	}
 
 	/**
 	 * @since 3.06
+	 *
+	 * @param array $addons
+	 *
 	 * @return array
 	 */
 	public function get_error_from_response( $addons = array() ) {
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = $this->get_api_info();
 		}
-		$errors = array();
-		if ( isset( $addons['error'] ) ) {
-			if ( is_string( $addons['error'] ) ) {
-				$errors[] = $addons['error'];
-			} elseif ( ! empty( $addons['error']['message'] ) ) {
-				$errors[] = $addons['error']['message'];
-			}
 
-			do_action( 'frm_license_error', $addons['error'] );
+		$errors = array();
+
+		if ( ! isset( $addons['error'] ) ) {
+			return $errors;
 		}
+
+		if ( is_string( $addons['error'] ) ) {
+			$errors[] = $addons['error'];
+		} elseif ( ! empty( $addons['error']['message'] ) ) {
+			$errors[] = $addons['error']['message'];
+		}
+
+		do_action( 'frm_license_error', $addons['error'] );
 
 		return $errors;
 	}
@@ -412,6 +531,7 @@ class FrmFormApi {
 	 * @since 6.0
 	 *
 	 * @param array $addon
+	 *
 	 * @return bool
 	 */
 	protected function is_new( $addon ) {

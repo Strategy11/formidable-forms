@@ -3,6 +3,7 @@
  * Small device message.
  *
  * @since 6.20
+ *
  * @package Formidable
  */
 

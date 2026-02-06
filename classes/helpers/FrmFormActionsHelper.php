@@ -8,6 +8,12 @@ class FrmFormActionsHelper {
 	/**
 	 * @deprecated 2.0.9 This is still referenced in our docs as of May 8, 2024.
 	 * @since 6.1.3 - Uncommented the deprecated message.
+	 *
+	 * @param int|string $form_id
+	 * @param string     $type
+	 * @param int        $limit
+	 *
+	 * @return array
 	 */
 	public static function get_action_for_form( $form_id, $type = 'all', $limit = 99 ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormAction::get_action_for_form' );

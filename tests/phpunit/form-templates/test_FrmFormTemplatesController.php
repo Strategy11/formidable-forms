@@ -20,7 +20,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 * @covers FrmFormTemplatesController::menu
 	 */
 	public function test_menu() {
-		$this->assertEquals( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
+		$this->assertSame( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
 	}
 
 	/**
@@ -172,6 +172,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Ensure the organized categories are structured correctly.
 		$this->assertIsArray( $categories, 'Organized categories should be an array.' );
+
 		foreach ( $categories as $slug => $category ) {
 			$this->assertIsArray( $category, 'Each category should be an array.' );
 			$this->assertArrayHasKey( 'name', $category, "Category '{$slug}' should have a 'name' key." );
@@ -180,6 +181,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Define and validate the presence of specific categories.
 		$expected_categories = array( 'favorites', 'custom', 'all-items' );
+
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$expected_categories[] = 'available-templates';
 		}
@@ -205,7 +207,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 						$expected_count = 0;
 						break;
 				}
-				$this->assertEquals( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
+				$this->assertSame( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
 			}
 		}
 	}
@@ -227,18 +229,20 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Case 1: 'new_template' not present in the URL.
 		$_GET['new_template'] = null;
 		$modified_nav_items   = $this->controller::append_new_template_to_nav( $nav_items, array() );
+
 		// Assert that the links are unchanged.
 		foreach ( $modified_nav_items as $index => $item ) {
-			$this->assertEquals( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
+			$this->assertSame( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
 		}
 
 		// Case 2: 'new_template' is present in the URL.
 		$_GET['new_template'] = 'true';
 		$modified_nav_items   = $this->controller::append_new_template_to_nav( $nav_items, array() );
+
 		// Assert that 'new_template=true' is appended to each link.
 		foreach ( $modified_nav_items as $index => $item ) {
 			$expected_link = $nav_items[ $index ]['link'] . '&new_template=true';
-			$this->assertEquals( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
+			$this->assertSame( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
 		}
 	}
 

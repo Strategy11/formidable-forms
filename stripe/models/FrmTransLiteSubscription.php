@@ -12,7 +12,7 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	 * @return array
 	 */
 	public function get_defaults() {
-		$values = array(
+		return array(
 			'sub_id'         => array(
 				'sanitize' => 'sanitize_text_field',
 				'default'  => '',
@@ -74,8 +74,6 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 				'default'  => null,
 			),
 		);
-
-		return $values;
 	}
 
 	/**

@@ -3,6 +3,7 @@
  * Monthly summary email class
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
