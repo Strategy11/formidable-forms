@@ -495,10 +495,9 @@ class FrmEntriesHelper {
 		self::set_other_repeating_vals( $field, $value, $args );
 
 		// Check if there are any posted "Other" values.
-		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta']['other'][ $field->id ] ) ) {
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		// Save original value.
 		$args['temp_value'] = $value;

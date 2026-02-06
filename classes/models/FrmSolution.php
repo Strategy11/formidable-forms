@@ -247,14 +247,18 @@ class FrmSolution {
 		if ( $all_imported ) {
 			$step['description'] = __( 'The following form(s) have been created.', 'formidable' );
 		}
+
 		$this->show_app_install( $step );
 
-		if ( ! $all_imported ) {
-			$step                  = $steps['complete'];
-			$step['current']       = false;
-			$step['button_class'] .= ' frm_grey disabled';
-			$this->show_page_links( $step );
+		if ( $all_imported ) {
+			return;
 		}
+
+		$step                  = $steps['complete'];
+		$step['current']       = false;
+		$step['button_class'] .= ' frm_grey disabled';
+
+		$this->show_page_links( $step );
 	}
 
 	/**
