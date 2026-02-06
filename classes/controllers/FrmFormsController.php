@@ -1241,7 +1241,7 @@ class FrmFormsController {
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
-			$columns['settings'] = '<div class="frm-forms-list-settings-btn-wrappper">
+			$columns['settings'] = '<div class="frm-forms-list-settings-btn-wrapper">
 				<a href="#" class="frm-forms-list-settings-btn">
 					<span class="dashicons dashicons-admin-generic"></span>
 					<span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span>
