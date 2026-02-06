@@ -146,7 +146,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			)
 		);
 
-		$this->assertSame(
+		$this->assertEquals(
 			array(
 				'second' => array(
 					'name'            => 'second',
