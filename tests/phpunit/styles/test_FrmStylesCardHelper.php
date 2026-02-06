@@ -28,7 +28,7 @@ class test_FrmStylesCardHelper extends FrmUnitTest {
 		$style->post_content = array(
 			'fieldset_bg_color' => $color,
 		);
-		$this->assertEquals( $expected, $this->has_dark_background( $style ) );
+		$this->assertSame( $expected, $this->has_dark_background( $style ) );
 	}
 
 	private function has_dark_background( $style ) {

@@ -326,18 +326,15 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
-		);
-
-		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
-			$fields['coupon'] = array(
+			'coupon'          => array(
 				'name'    => __( 'Coupon', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
 				'addon'   => 'coupons',
 				'section' => 'pricing',
 				'limit'   => 1,
 				'is_new'  => self::field_is_new( 'coupon' ),
-			);
-		}
+			),
+		);
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();

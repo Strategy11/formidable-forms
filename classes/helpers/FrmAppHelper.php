@@ -3413,7 +3413,7 @@ class FrmAppHelper {
 	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
-		return ( $r_count < $current_p * $p_size ? $r_count : $current_p * $p_size );
+		return $r_count < $current_p * $p_size ? $r_count : $current_p * $p_size;
 	}
 
 	/**

@@ -43,7 +43,7 @@ class test_FrmAddon extends FrmUnitTest {
 		$license_key = 'testlicense-232';
 		define( 'FRM_SIGNATURE_LICENSE', $license_key );
 		$license = $this->addon->get_defined_license();
-		$this->assertEquals( $license_key, $license );
+		$this->assertSame( $license_key, $license );
 	}
 
 	/**
@@ -88,7 +88,7 @@ class test_FrmAddon extends FrmUnitTest {
 			}
 
 			$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
-			$this->assertEquals( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
+			$this->assertSame( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
 		}
 	}
 

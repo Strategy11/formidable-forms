@@ -33,7 +33,7 @@ class test_FrmStyle extends FrmUnitTest {
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {
 			$this->run_private_method( array( $frm_style, 'maybe_sanitize_rgba_value' ), array( &$color_val ) );
-			$this->assertEquals( $expected_color_val, $color_val );
+			$this->assertSame( $expected_color_val, $color_val );
 		}
 	}
 
