@@ -278,6 +278,9 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
+				/**
+				 * @var string $current_value
+				 */
 				$match = trim( $current_value ) === trim( $option_value );
 
 				if ( $match ) {
