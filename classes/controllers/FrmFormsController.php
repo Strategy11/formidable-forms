@@ -48,6 +48,13 @@ class FrmFormsController {
 		add_filter( 'manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
 	}
 
+	/**
+	 * Runs on admin head of the formidable forms page.
+	 *
+	 * @since x.x This adds screen options.
+	 *
+	 * @return void
+	 */
 	public static function head() {
 		if ( wp_is_mobile() ) {
 			wp_enqueue_script( 'jquery-touch-punch' );
@@ -1241,6 +1248,15 @@ class FrmFormsController {
 
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+			$columns['settings'] = '<div class="frm-forms-list-settings-btn-wrapper">
+				<a href="#" class="frm-forms-list-settings-btn">
+					<span class="dashicons dashicons-admin-generic"></span>
+					<span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span>
+				</a>
+			</div>';
+		}
+
 		add_screen_option(
 			'per_page',
 			array(
@@ -1302,6 +1318,9 @@ class FrmFormsController {
 		if ( $option === 'formidable_page_formidable_per_page' ) {
 			return (int) $value;
 		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		update_user_option( get_current_user_id(), 'frm_forms_show_desc', ! empty( $_POST['frm_forms_show_desc'] ) );
 
 		return $save;
 	}
@@ -3692,6 +3711,121 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
+	}
+
+	/**
+	 * Prints necessary templates for the forms list page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function print_forms_list_templates() {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
+			return;
+		}
+
+		$screen    = get_current_screen();
+		$columns   = get_column_headers( $screen );
+		$hidden    = get_hidden_columns( $screen );
+		$skip_cols = array( 'cb', 'settings' );
+		$per_page  = get_user_option( 'formidable_page_formidable_per_page' );
+
+		if ( $per_page < 1 ) {
+			$per_page = 20;
+		}
+		?>
+		<div id="frm-forms-list-settings" class="frm_hidden">
+			<div class="frm-collapsible-box">
+				<a href="#" class="frm-collapsible-box__btn">
+					<?php
+					esc_html_e( 'Columns', 'formidable' );
+					FrmAppHelper::icon_by_class( 'frmfont frm_arrowup6_icon' );
+					?>
+				</a>
+
+				<div class="frm-collapsible-box__content">
+					<div class="frm-forms-list-column-checkboxes">
+						<?php
+						foreach ( $columns as $key => $label ) {
+							if ( in_array( $key, $skip_cols, true ) ) {
+								continue;
+							}
+
+							$is_hidden = in_array( $key, $hidden, true );
+							?>
+							<label>
+								<input
+									type="checkbox"
+									value="1"
+									data-screen-option-id="<?php echo esc_attr( $key ); ?>-hide"
+									<?php checked( ! $is_hidden ); ?>
+								/>
+								<?php echo esc_html( $label ); ?>
+							</label>
+							<?php
+						}//end foreach
+						?>
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm">
+					<label for="frm-forms-list-show-desc"><?php esc_html_e( 'Form description', 'formidable' ); ?></label>
+					<?php
+					FrmHtmlHelper::toggle(
+						'frm-forms-list-show-desc',
+						'show_desc',
+						array(
+							'echo'       => true,
+							'checked'    => intval( get_user_option( 'frm_forms_show_desc' ) ) === 1,
+							'input_html' => array(
+								'data-screen-option-id' => 'frm-forms-show-desc',
+							),
+						)
+					);
+					?>
+				</div>
+
+				<div class="frm-flex frm-items-center frm-justify-between">
+					<label for="frm-forms-list-per-page"><?php esc_html_e( 'Items per page', 'formidable' ); ?></label>
+					<input
+						type="number"
+						id="frm-forms-list-per-page"
+						value="<?php echo intval( $per_page ); ?>"
+						min="1"
+						data-screen-option-id="formidable_page_formidable_per_page"
+					/>
+				</div>
+			</div>
+
+			<div style="text-align: right;">
+				<button type="button" class="frm-button-primary button-primary" id="frm-save-forms-list-settings-btn"><?php esc_html_e( 'Apply', 'formidable' ); ?></button>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Adds custom screen options.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $settings_html Settings HTML.
+	 *
+	 * @return string
+	 */
+	public static function add_screen_options( $settings_html ) {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
+			return $settings_html;
+		}
+
+		$show_desc = get_user_option( 'frm_forms_show_desc' );
+		return $settings_html . '<p>
+			<label for="frm-forms-show-desc">' . esc_html__( 'Show form description', 'formidable' ) . '</label>
+			<input type="checkbox" name="frm_forms_show_desc" id="frm-forms-show-desc" value="1" ' . checked( $show_desc, '1', false ) . ' />
+		</p>';
 	}
 
 	/**

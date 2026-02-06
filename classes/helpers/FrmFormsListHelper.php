@@ -286,9 +286,15 @@ class FrmFormsListHelper extends FrmListHelper {
 				$class .= ' column-primary';
 			}
 
-			$class        = 'class="' . esc_attr( $class ) . '"';
-			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
-			$attributes   = $class . $style . $data_colname;
+			$class = 'class="' . esc_attr( $class ) . '"';
+
+			if ( 'settings' === $column_name ) {
+				$data_colname = ' data-colname="' . esc_attr( trim( strip_tags( $column_display_name ) ) ) . '"';
+			} else {
+				$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
+			}
+
+			$attributes = $class . $style . $data_colname;
 
 			switch ( $column_name ) {
 				case 'cb':
@@ -299,7 +305,12 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = $item->{$column_name};
 					break;
 				case 'name':
-					$val  = $this->get_form_name( $item, $actions, $edit_link, $mode );
+					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
+
+					if ( get_user_option( 'frm_forms_show_desc' ) && ! empty( $item->description ) ) {
+						$val .= '<p class="frm_form_desc">' . nl2br( $item->description ) . '</p>';
+					}
+
 					$val .= $action_links;
 					break;
 				case 'created_at':
@@ -320,6 +331,9 @@ class FrmFormsListHelper extends FrmListHelper {
 						$val  = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 						unset( $text );
 					}
+					break;
+				case 'settings':
+					$val = '&nbsp;';
 					break;
 				default:
 					if ( method_exists( $this, 'column_' . $column_name ) ) {
