@@ -5870,9 +5870,8 @@ window.frmAdminBuildJS = function() {
 				return;
 			}
 
-			// Add the target to list of selected fields.
-			target.classList.add( 'frm-selected-field-group' );
 			++numberOfSelectedGroups;
+			target.classList.add( 'frm-selected-field-group' );
 			syncAfterMultiSelect( numberOfSelectedGroups );
 
 			return;
