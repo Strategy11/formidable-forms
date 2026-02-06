@@ -4765,6 +4765,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function syncAfterMultiSelect( numberOfSelectedGroups ) {
+		console.log('AFTER')
 		clearSettingsBox( true ); // unselect any fields if one is selected.
 		if ( numberOfSelectedGroups >= 2 || ( 1 === numberOfSelectedGroups && selectedGroupHasMultipleFields() ) ) {
 			addFieldMultiselectPopup();
@@ -5688,8 +5689,23 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 		if ( e?.metaKey || e?.ctrlKey ) {
+			const groupIsActive = this.closest( 'ul' ).classList.contains( 'frm-selected-field-group' );
+			const $selectedFieldGroups = getSelectedFieldGroups();
+
+			let numberOfSelectedGroups = $selectedFieldGroups.length;
+			if ( groupIsActive ) {
+				// Unselect if holding ctrl or cmd and the group was already active.
+				--numberOfSelectedGroups;
+				this.closest( 'ul' ).classList.remove( 'frm-selected-field-group' );
+				syncAfterMultiSelect( numberOfSelectedGroups );
+				return;
+			}
+
 			// Add the target to list of selected fields.
 			this.closest( 'ul' ).classList.add( 'frm-selected-field-group' );
+			++numberOfSelectedGroups;
+			syncAfterMultiSelect( numberOfSelectedGroups );
+
 			return;
 		}
 
