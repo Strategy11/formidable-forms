@@ -173,12 +173,14 @@ class FrmStrpLiteAuth {
 
 		$actions = FrmFormsController::get_met_on_submit_actions( $atts, 'create' );
 
-		if ( $actions ) {
-			$action = reset( $actions );
+		if ( ! $actions ) {
+			return;
+		}
 
-			if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
-				$atts['conf_method'] = $action->post_content['success_action'];
-			}
+		$action = reset( $actions );
+
+		if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
+			$atts['conf_method'] = $action->post_content['success_action'];
 		}
 	}
 

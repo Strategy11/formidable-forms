@@ -30,7 +30,7 @@ class test_FrmEntriesAJAXSubmitController extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals(
+		$this->assertSame(
 			'<div class="frm_error my_custom_error_class" id="frm_error_field_modify_ajax_error_test_key">My custom error label: This field cannot be blank.</div>',
 			$this->maybe_modify_ajax_error( $error, $field_id, $form )
 		);

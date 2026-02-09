@@ -20,7 +20,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 * @covers FrmFormTemplatesController::menu
 	 */
 	public function test_menu() {
-		$this->assertEquals( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
+		$this->assertSame( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
 	}
 
 	/**
@@ -191,24 +191,26 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 			$this->assertArrayHasKey( $expected_category, $categories, "Should contain the '{$expected_category}' category." );
 
 			// Calculate the expected count for each category and validate it.
-			if ( isset( $categories[ $expected_category ] ) ) {
-				$expected_count = 0;
-				switch ( $expected_category ) {
-					case 'favorites':
-						$expected_count = $this->controller::get_favorite_templates_count();
-						break;
-					case 'custom':
-						$expected_count = count( $this->controller::get_custom_templates() );
-						break;
-					case 'all-items':
-						$expected_count = count( $this->controller::get_templates() );
-						break;
-					case 'available-templates':
-						$expected_count = 0;
-						break;
-				}
-				$this->assertEquals( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
+			if ( ! isset( $categories[ $expected_category ] ) ) {
+				continue;
 			}
+
+			$expected_count = 0;
+			switch ( $expected_category ) {
+				case 'favorites':
+					$expected_count = $this->controller::get_favorite_templates_count();
+					break;
+				case 'custom':
+					$expected_count = count( $this->controller::get_custom_templates() );
+					break;
+				case 'all-items':
+					$expected_count = count( $this->controller::get_templates() );
+					break;
+				case 'available-templates':
+					$expected_count = 0;
+					break;
+			}
+			$this->assertSame( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
 		}
 	}
 
@@ -232,7 +234,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Assert that the links are unchanged.
 		foreach ( $modified_nav_items as $index => $item ) {
-			$this->assertEquals( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
+			$this->assertSame( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
 		}
 
 		// Case 2: 'new_template' is present in the URL.
@@ -242,7 +244,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Assert that 'new_template=true' is appended to each link.
 		foreach ( $modified_nav_items as $index => $item ) {
 			$expected_link = $nav_items[ $index ]['link'] . '&new_template=true';
-			$this->assertEquals( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
+			$this->assertSame( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
 		}
 	}
 

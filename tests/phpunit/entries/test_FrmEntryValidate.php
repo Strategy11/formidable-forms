@@ -25,7 +25,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertIsArray( $errors );
 
 		$this->assertArrayHasKey( 'custom_error', $errors );
-		$this->assertEquals( 'Error message', $errors['custom_error'] );
+		$this->assertSame( 'Error message', $errors['custom_error'] );
 
 		remove_filter( 'frm_validate_entry', $add_a_custom_error );
 	}
@@ -58,9 +58,9 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$check = $this->get_spam_check_user_info( $values );
 		$this->assertTrue( empty( $check['user_ID'] ) );
 		$this->assertTrue( empty( $check['user_id'] ) );
-		$this->assertEquals( 'Some Guy', $check['comment_author'] );
-		$this->assertEquals( $test_email, $check['comment_author_email'] );
-		$this->assertEquals( $test_url, $check['comment_author_url'] );
+		$this->assertSame( 'Some Guy', $check['comment_author'] );
+		$this->assertSame( $test_email, $check['comment_author_email'] );
+		$this->assertSame( $test_url, $check['comment_author_url'] );
 
 		// Test "Name" + "Last" field name pattern to build the comment_author
 		$form_id       = $this->factory->form->create();
@@ -92,7 +92,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$_POST['form_id'] = $form_id;
 		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
 		$check = $this->get_spam_check_user_info( $values );
-		$this->assertEquals( 'John Doe', $check['comment_author'] );
+		$this->assertSame( 'John Doe', $check['comment_author'] );
 
 		// Test with repeater/embedded field.
 		$values['item_meta'][ $made_up_name_field_id ]  = array(
@@ -109,18 +109,18 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		);
 
 		$check = $this->get_spam_check_user_info( $values );
-		$this->assertEquals( 'John Doe', $check['comment_author'] );
-		$this->assertEquals( 'johndoe@gmail.com', $check['comment_author_email'] );
-		$this->assertEquals( 'https://johndoe.com', $check['comment_author_url'] );
+		$this->assertSame( 'John Doe', $check['comment_author'] );
+		$this->assertSame( 'johndoe@gmail.com', $check['comment_author_email'] );
+		$this->assertSame( 'https://johndoe.com', $check['comment_author_url'] );
 
 		wp_set_current_user( 1 );
 		$user  = wp_get_current_user();
 		$check = $this->get_spam_check_user_info( $values );
-		$this->assertEquals( $user->ID, $check['user_ID'] );
-		$this->assertEquals( $user->ID, $check['user_id'] );
-		$this->assertEquals( $user->display_name, $check['comment_author'] );
-		$this->assertEquals( $user->user_email, $check['comment_author_email'] );
-		$this->assertEquals( $user->user_url, $check['comment_author_url'] );
+		$this->assertSame( $user->ID, $check['user_ID'] );
+		$this->assertSame( $user->ID, $check['user_id'] );
+		$this->assertSame( $user->display_name, $check['comment_author'] );
+		$this->assertSame( $user->user_email, $check['comment_author_email'] );
+		$this->assertSame( $user->user_url, $check['comment_author_url'] );
 	}
 
 	private function get_spam_check_user_info( $values ) {
@@ -188,12 +188,12 @@ class test_FrmEntryValidate extends FrmUnitTest {
 			array( &$test_values )
 		);
 
-		$this->assertEquals( $form_ids, array( 1, 17, 11 ) );
+		$this->assertSame( array( 1, 17, 11 ), $form_ids );
 		$this->assertFalse( isset( $test_values['item_meta'][163] ) );
 		$this->assertFalse( isset( $test_values['item_meta'][165] ) );
-		$this->assertEquals( $test_values['item_meta'][162], array( 'Option 2', 'Option 1' ) );
-		$this->assertEquals( $test_values['item_meta'][118], array( 'John Doe' ) );
-		$this->assertEquals( $test_values['item_meta'][1], 'John Doe' );
+		$this->assertSame( array( 'Option 2', 'Option 1' ), $test_values['item_meta'][162] );
+		$this->assertSame( array( 'John Doe' ), $test_values['item_meta'][118] );
+		$this->assertSame( 'John Doe', $test_values['item_meta'][1] );
 	}
 
 	public function test_skip_adding_values_to_akismet() {

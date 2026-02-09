@@ -97,10 +97,6 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->set_private_property( $this->spam_check, 'denylist', $denylist_data );
 	}
 
-	private function set_values( $values ) {
-		$this->set_private_property( $this->spam_check, 'values', $values );
-	}
-
 	public function test_get_field_ids_to_check() {
 		$denylist = $this->custom_denylist_data['denylist_with_all_fields'];
 
@@ -155,64 +151,64 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			array( $this->spam_check, 'get_values_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_all_fields'] )
 		);
-		$this->assertEquals(
-			$values_to_check,
+		$this->assertSame(
 			array(
 				'test@gmail.com',
 				'this text contains test@domain.com',
 				'WordPress Plugin',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_name_text_email'] )
 		);
-		$this->assertEquals(
-			$values_to_check,
+		$this->assertSame(
 			array(
 				'test@gmail.com',
 				'this text contains test@domain.com',
 				'WordPress Plugin',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_name'] )
 		);
-		$this->assertEquals(
-			$values_to_check,
+		$this->assertSame(
 			array(
 				'WordPress Plugin',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_extract_email'] )
 		);
-		$this->assertEquals(
-			$values_to_check,
+		$this->assertSame(
 			array(
 				'test@gmail.com',
 				'test@domain.com',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
 			array( $this->custom_denylist_data['denylist_with_email'] )
 		);
-		$this->assertEquals(
-			$values_to_check,
+		$this->assertSame(
 			array(
 				'test@gmail.com',
 				'john@doe.com',
-			)
+			),
+			$values_to_check
 		);
 	}
 

@@ -47,6 +47,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		if ( isset( $args['field_options'] ) ) {
 			$field_values = array_merge( $field_values, $args['field_options'] );
 		}
+
 		FrmField::create( $field_values );
 
 		return $form;
@@ -155,11 +156,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'quantity' => 2,
 		);
 
-		if ( isset( $field_values[ $field->type ] ) ) {
-			$value = $field_values[ $field->type ];
-		}
-
-		return $value;
+		return $field_values[ $field->type ] ?? $value;
 	}
 
 	public function get_id_by_key( $field_key ) {

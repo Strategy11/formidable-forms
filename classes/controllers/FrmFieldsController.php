@@ -225,7 +225,7 @@ class FrmFieldsController {
 		$li_classes .= 'frmend';
 
 		if ( $field ) {
-			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
+			return apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
 
 		return $li_classes;
@@ -471,11 +471,7 @@ class FrmFieldsController {
 		// The credit_card key is set for backward compatibility.
 		unset( $pro_fields['credit_card'] );
 
-		if ( array_key_exists( $type, $pro_fields ) ) {
-			$type = 'text';
-		}
-
-		return $type;
+		return array_key_exists( $type, $pro_fields ) ? 'text' : $type;
 	}
 
 	/**
@@ -872,10 +868,12 @@ class FrmFieldsController {
 
 		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
 
-		if ( false !== $error_body ) {
-			$error_body                  = urlencode( $error_body );
-			$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
+		if ( false === $error_body ) {
+			return;
 		}
+
+		$error_body                  = urlencode( $error_body );
+		$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
 	}
 
 	/**
@@ -1042,12 +1040,14 @@ class FrmFieldsController {
 		$has_format   = $format_value && ! FrmCurrencyHelper::is_currency_format( $format_value );
 		$format_field = FrmField::is_field_type( $field, 'text' );
 
-		if ( $field['type'] === 'phone' || ( $has_format && $format_field ) ) {
-			$format = FrmEntryValidate::phone_format( $field );
-			$format = substr( $format, 2, - 1 );
-
-			$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
+		if ( $field['type'] !== 'phone' && ( ! $has_format || ! $format_field ) ) {
+			return;
 		}
+
+		$format = FrmEntryValidate::phone_format( $field );
+		$format = substr( $format, 2, - 1 );
+
+		$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
 	}
 
 	/**
@@ -1075,10 +1075,6 @@ class FrmFieldsController {
 	 * @return mixed
 	 */
 	public static function check_label( $opt ) {
-		if ( is_array( $opt ) ) {
-			$opt = $opt['label'] ?? reset( $opt );
-		}
-
-		return $opt;
+		return is_array( $opt ) ? ( $opt['label'] ?? reset( $opt ) ) : $opt;
 	}
 }

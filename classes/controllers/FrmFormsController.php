@@ -127,13 +127,15 @@ class FrmFormsController {
 
 		$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
-		if ( $create_email ) {
-			/**
-			 * @var FrmFormAction
-			 */
-			$action_control = FrmFormActionsController::get_form_actions( 'email' );
-			$action_control->create( $form->id );
+		if ( ! $create_email ) {
+			return;
 		}
+
+		/**
+		 * @var FrmFormAction
+		 */
+		$action_control = FrmFormActionsController::get_form_actions( 'email' );
+		$action_control->create( $form->id );
 	}
 
 	/**
@@ -162,13 +164,15 @@ class FrmFormsController {
 		 */
 		$create = apply_filters( 'frm_create_default_on_submit_action', true, $form );
 
-		if ( $create ) {
-			/**
-			 * @var FrmFormAction
-			 */
-			$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
-			$action_control->create( $form->id );
+		if ( ! $create ) {
+			return;
 		}
+
+		/**
+		 * @var FrmFormAction
+		 */
+		$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
+		$action_control->create( $form->id );
 	}
 
 	/**
@@ -567,12 +571,14 @@ class FrmFormsController {
 		add_filter( 'is_active_sidebar', '__return_false' );
 		FrmStylesController::enqueue_css( 'enqueue', true );
 
-		if ( false === get_template_part( 'page' ) ) {
-			if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
-				add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
-			}
-			self::fallback_when_page_template_part_is_not_supported_by_theme();
+		if ( false !== get_template_part( 'page' ) ) {
+			return;
 		}
+
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
+		}
+		self::fallback_when_page_template_part_is_not_supported_by_theme();
 	}
 
 	/**
@@ -671,11 +677,7 @@ class FrmFormsController {
 	 * @return string
 	 */
 	public static function preview_page_title( $title ) {
-		if ( in_the_loop() ) {
-			$title = self::preview_title( $title );
-		}
-
-		return $title;
+		return in_the_loop() ? self::preview_title( $title ) : $title;
 	}
 
 	/**
@@ -791,10 +793,7 @@ class FrmFormsController {
 			 * @return string
 			 */
 			function ( $src ) {
-				if ( is_null( $src ) ) {
-					$src = '';
-				}
-				return $src;
+				return is_null( $src ) ? '' : $src;
 			}
 		);
 	}
@@ -1099,17 +1098,19 @@ class FrmFormsController {
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php';
 
-		if ( FrmAppHelper::is_form_builder_page() && ! class_exists( '_WP_Editors', false ) ) {
-			// Initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
-			require ABSPATH . WPINC . '/class-wp-editor.php';
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<div class="frm_hidden">
-				<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
-			</div>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		if ( ! FrmAppHelper::is_form_builder_page() || class_exists( '_WP_Editors', false ) ) {
+			return;
 		}
+
+		// Initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
+		require ABSPATH . WPINC . '/class-wp-editor.php';
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<div class="frm_hidden">
+			<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
+		</div>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1209,7 +1210,7 @@ class FrmFormsController {
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
 
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
-			wp_redirect( esc_url_raw( add_query_arg( 'paged', $total_pages ) ) );
+			wp_safe_redirect( esc_url_raw( add_query_arg( 'paged', $total_pages ) ) );
 			die();
 		}
 
@@ -1299,7 +1300,7 @@ class FrmFormsController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_per_page' ) {
-			$save = (int) $value;
+			return (int) $value;
 		}
 
 		return $save;
@@ -2655,7 +2656,7 @@ class FrmFormsController {
 		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], $action );
 
 		if ( $method !== 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
-			$method = 'message';
+			return 'message';
 		}
 
 		return $method;
@@ -2837,7 +2838,7 @@ class FrmFormsController {
 		$met_actions = apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
 
 		if ( ! $met_actions ) {
-			$met_actions = array( FrmOnSubmitHelper::get_fallback_action( $event ) );
+			return array( FrmOnSubmitHelper::get_fallback_action( $event ) );
 		}
 
 		return $met_actions;
@@ -2941,11 +2942,13 @@ class FrmFormsController {
 			unset( $action );
 		}
 
-		if ( $redirect_action ) {
-			// Show script to delay the redirection.
-			$args['force_delay_redirect'] = true;
-			self::run_single_on_submit_action( $args, $redirect_action );
+		if ( ! $redirect_action ) {
+			return;
 		}
+
+		// Show script to delay the redirection.
+		$args['force_delay_redirect'] = true;
+		self::run_single_on_submit_action( $args, $redirect_action );
 	}
 
 	/**
@@ -3516,7 +3519,7 @@ class FrmFormsController {
 	 */
 	public static function defer_script_loading( $tag, $handle ) {
 		if ( 'captcha-api' === $handle && ! str_contains( $tag, 'defer' ) ) {
-			$tag = str_replace( ' src', ' defer="defer" async="async" src', $tag );
+			return str_replace( ' src', ' defer="defer" async="async" src', $tag );
 		}
 
 		return $tag;
@@ -3532,12 +3535,14 @@ class FrmFormsController {
 
 		FrmStylesController::enqueue_css();
 
-		if ( ! FrmAppHelper::is_admin() && $location !== 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
-			// Load formidable js
-			wp_enqueue_script( 'formidable' );
-
-			FrmHoneypot::maybe_print_honeypot_js();
+		if ( FrmAppHelper::is_admin() || $location === 'header' || empty( $frm_vars['forms_loaded'] ) ) {
+			return;
 		}
+
+		// Load formidable js
+		wp_enqueue_script( 'formidable' );
+
+		FrmHoneypot::maybe_print_honeypot_js();
 	}
 
 	/**

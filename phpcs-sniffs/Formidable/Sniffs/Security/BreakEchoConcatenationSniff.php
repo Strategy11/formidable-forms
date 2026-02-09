@@ -161,7 +161,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 		}
 
 		$afterConcat = $phpcsFile->findNext( T_STRING_CONCAT, $closeParen + 1, $semicolon );
-		return ( false !== $afterConcat );
+		return false !== $afterConcat;
 	}
 
 	/**
@@ -259,7 +259,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 			$leadingWhitespace = '';
 		}
 
-		$hasLeadingWhitespace = ( '' !== $leadingWhitespace );
+		$hasLeadingWhitespace = '' !== $leadingWhitespace;
 		$lineIndent = $indentation;
 
 		$newLines = array();
@@ -457,18 +457,6 @@ class BreakEchoConcatenationSniff implements Sniff {
 		}
 
 		return $prefix;
-	}
-
-	/**
-	 * Determine if there's leading whitespace before a token on its line.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $stackPtr  Token position.
-	 *
-	 * @return bool
-	 */
-	private function hasLeadingWhitespaceBeforeToken( File $phpcsFile, $stackPtr ) {
-		return ( '' !== $this->getLeadingWhitespaceBeforeToken( $phpcsFile, $stackPtr ) );
 	}
 
 	/**

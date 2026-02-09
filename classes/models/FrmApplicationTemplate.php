@@ -284,12 +284,7 @@ class FrmApplicationTemplate {
 	 */
 	private function get_required_license() {
 		$required_license = strtolower( $this->api_data['min_plan'] );
-
-		if ( 'plus' === $required_license ) {
-			$required_license = 'personal';
-		}
-
-		return $required_license;
+		return 'plus' === $required_license ? 'personal' : $required_license;
 	}
 
 	/**

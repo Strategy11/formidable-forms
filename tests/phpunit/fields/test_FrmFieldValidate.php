@@ -219,7 +219,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 20, $field->field_options['maxnum'] );
+		$this->assertSame( 20, $field->field_options['maxnum'] );
 
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
 		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed range validation ' . print_r( $errors, 1 ) );
@@ -244,13 +244,15 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		global $wpdb;
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', array( 'required' => 1 ), array( 'id' => $field->id ) );
 
-		if ( $query_results ) {
-			wp_cache_delete( $field->id, 'frm_field' );
-			FrmField::delete_form_transient( $this->form->id );
-
-			$field = FrmField::getOne( $field->id );
-			$this->assertNotEmpty( $field->required );
+		if ( ! $query_results ) {
+			return;
 		}
+
+		wp_cache_delete( $field->id, 'frm_field' );
+		FrmField::delete_form_transient( $this->form->id );
+
+		$field = FrmField::getOne( $field->id );
+		$this->assertNotEmpty( $field->required );
 	}
 
 	/**
@@ -306,10 +308,10 @@ class test_FrmFieldValidate extends FrmUnitTest {
 					),
 				)
 			);
-			$this->assertEquals( $check_it['format'], $field->field_options['format'] );
+			$this->assertSame( $check_it['format'], $field->field_options['format'] );
 
 			$format = FrmEntryValidate::phone_format( $field );
-			$this->assertEquals( '/' . $check_it['expected'] . '/', $format );
+			$this->assertSame( '/' . $check_it['expected'] . '/', $format );
 		}
 	}
 
@@ -327,7 +329,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		foreach ( $formats as $start => $expected ) {
 			$new_format = $this->run_private_method( array( 'FrmEntryValidate', 'create_regular_expression_from_format' ), array( $start ) );
-			$this->assertEquals( $expected, $new_format );
+			$this->assertSame( $expected, $new_format );
 		}
 	}
 
@@ -357,7 +359,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 'logged', $akismet_logged->options['akismet'] );
+		$this->assertSame( 'logged', $akismet_logged->options['akismet'] );
 
 		wp_set_current_user( 0 );
 		$this->assertFalse( is_user_logged_in() );

@@ -265,12 +265,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_repeat_label_from_value( $value, $number ) {
 		$times = self::get_plural_repeat_times( $number );
-
-		if ( isset( $times[ $value ] ) ) {
-			$value = $times[ $value ];
-		}
-
-		return $value;
+		return $times[ $value ] ?? $value;
 	}
 
 	/**
@@ -349,11 +344,7 @@ class FrmTransLiteAppHelper {
 		$date_format     = 'm/d/Y';
 		$frmpro_settings = FrmProAppHelper::get_settings();
 
-		if ( $frmpro_settings ) {
-			$date_format = $frmpro_settings->date_format;
-		}
-
-		return $date_format;
+		return $frmpro_settings ? $frmpro_settings->date_format : $date_format;
 	}
 
 	/**
@@ -384,17 +375,15 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function get_user_link( $user_id ) {
-		$user_link = esc_html__( 'Guest', 'formidable' );
-
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
 
 			if ( $user ) {
-				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
+				return '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
 		}
 
-		return $user_link;
+		return esc_html__( 'Guest', 'formidable' );
 	}
 
 	/**
@@ -470,7 +459,7 @@ class FrmTransLiteAppHelper {
 		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
 
 		if ( ! empty( $currency['decimals'] ) ) {
-			$amount = number_format( $amount / 100, 2, '.', '' );
+			return number_format( $amount / 100, 2, '.', '' );
 		}
 
 		return $amount;
@@ -536,7 +525,7 @@ class FrmTransLiteAppHelper {
 		}
 
 		if ( isset( $gateways[ $gateway ] ) ) {
-			$value = $gateways[ $gateway ][ $setting ];
+			return $gateways[ $gateway ][ $setting ];
 		}
 
 		return $value;

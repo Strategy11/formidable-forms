@@ -226,8 +226,15 @@ class FrmListHelper {
 		}
 
 		// Redirect if page number is invalid and headers are not already sent.
-		if ( ! headers_sent() && ! wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
-			wp_redirect( add_query_arg( 'paged', $args['total_pages'] ) );
+		if ( ! wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
+			$url = add_query_arg( 'paged', $args['total_pages'] );
+
+			if ( headers_sent() ) {
+				FrmAppHelper::js_redirect( $url, true );
+				exit;
+			}
+
+			wp_safe_redirect( $url );
 			exit;
 		}
 
@@ -462,11 +469,7 @@ class FrmListHelper {
 
 		$action = $this->get_bulk_action( 'action' );
 
-		if ( $action === false ) {
-			$action = $this->get_bulk_action( 'action2' );
-		}
-
-		return $action;
+		return $action === false ? $this->get_bulk_action( 'action2' ) : $action;
 	}
 
 	/**
@@ -485,7 +488,7 @@ class FrmListHelper {
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $action_param && - 1 != $action_param ) {
-			$action = $action_param;
+			return $action_param;
 		}
 
 		return $action;
@@ -865,7 +868,7 @@ class FrmListHelper {
 		$column = apply_filters( 'list_table_primary_column', $default, $this->screen->id );
 
 		if ( ! $column || ! isset( $columns[ $column ] ) ) {
-			$column = $default;
+			return $default;
 		}
 
 		return $column;

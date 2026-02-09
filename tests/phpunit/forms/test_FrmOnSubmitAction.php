@@ -44,6 +44,6 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 		$post_content   = (array) FrmAppHelper::maybe_json_decode( $updated_action->post_content );
 
 		$this->assertFalse( empty( $post_content['success_url'] ) );
-		$this->assertEquals( 'https://example.com/?param=[' . $field_id . ' sanitize_url=1]', $post_content['success_url'] );
+		$this->assertSame( 'https://example.com/?param=[' . $field_id . ' sanitize_url=1]', $post_content['success_url'] );
 	}
 }

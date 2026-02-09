@@ -950,7 +950,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 
 		if ( FrmAppHelper::is_empty_value( $field_value, '' ) && empty( $atts['include_blank'] ) ) {
-			$include = false;
+			return false;
 		}
 
 		return $include;

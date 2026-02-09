@@ -17,7 +17,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		self::do_tables_exist();
 
 		$new_version = get_option( 'frm_db_version' );
-		$this->assertEquals( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
+		$this->assertSame( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
 	}
 
 	/**
@@ -31,7 +31,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		// Check for auto contact form.
 		$form = FrmForm::getOne( 'contact-form' );
 		$this->assertNotEmpty( $form );
-		$this->assertEquals( $form->form_key, 'contact-form' );
+		$this->assertSame( 'contact-form', $form->form_key );
 
 		// Make sure the form isn't recreated after delete
 		FrmForm::destroy( 'contact-form' );
@@ -65,32 +65,32 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		$field         = $this->factory->field->get_object_by_id( $field_id );
 		$expected_size = '90px';
-		$this->assertEquals( $expected_size, $field->field_options['size'] );
+		$this->assertSame( $expected_size, $field->field_options['size'] );
 
 		// Set it to a numeric value
 		$expected_size                = '10';
 		$field->field_options['size'] = $expected_size;
 		FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
 		$field = $this->factory->field->get_object_by_id( $field_id );
-		$this->assertEquals( $expected_size, $field->field_options['size'] );
+		$this->assertSame( $expected_size, $field->field_options['size'] );
 
 		// Make sure 17 does not fire and change the size again
 		update_option( 'frm_db_version', 20 );
 		$frmdb->upgrade();
 
 		$field = $this->factory->field->get_object_by_id( $field_id );
-		$this->assertEquals( $expected_size, $field->field_options['size'] );
+		$this->assertSame( $expected_size, $field->field_options['size'] );
 
 		update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
 		$frmdb->upgrade();
 
 		$field = $this->factory->field->get_object_by_id( $field_id );
-		$this->assertEquals( $expected_size, $field->field_options['size'] );
+		$this->assertSame( $expected_size, $field->field_options['size'] );
 
 		$frmdb->upgrade();
 
 		$field = $this->factory->field->get_object_by_id( $field_id );
-		$this->assertEquals( $expected_size, $field->field_options['size'] );
+		$this->assertSame( $expected_size, $field->field_options['size'] );
 	}
 
 	/**
@@ -100,8 +100,8 @@ class test_FrmMigrate extends FrmUnitTest {
 		$form_id   = $this->factory->form->create();
 		$sizes     = array(
 			'10px'   => '10px',
-			'10'     => '10',
-			'1024'   => '1024',
+			'10'     => 10,
+			'1024'   => 1024,
 			'1024px' => round( 1024 / 9 ),
 		);
 		$field_ids = array();
@@ -126,7 +126,7 @@ class test_FrmMigrate extends FrmUnitTest {
 			$this->assertNotEmpty( $field );
 
 			$new_size = $field->field_options['size'];
-			$this->assertEquals( $expected, $new_size );
+			$this->assertSame( $expected, $new_size );
 		}
 	}
 
@@ -275,7 +275,7 @@ class test_FrmMigrate extends FrmUnitTest {
 			$this->assertNotEmpty( $field );
 
 			if ( isset( $new_field['default_value'] ) ) {
-				$this->assertEquals( $new_field['default_value'], $field->default_value );
+				$this->assertSame( $new_field['default_value'], $field->default_value );
 			}
 
 			$field_ids[ $key ] = $field_id;
@@ -288,8 +288,8 @@ class test_FrmMigrate extends FrmUnitTest {
 			$field = $this->factory->field->get_object_by_id( $field_ids[ $key ] );
 			$this->assertNotEmpty( $field );
 
-			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$this->assertEquals( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$this->assertSame( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$this->assertSame( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( isset( $setting['start']['options'] ) ) {
 				$this->assertNotContains( $setting['start']['default_value'], $field->options );
@@ -363,7 +363,7 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		$this->assertTrue( ! isset( $form->options['notification'] ), 'The migrated notification settings are not cleared from form.' );
 
-		$this->assertEquals( 1, count( $form_actions ), 'Old form settings are not converted to email action.' );
+		$this->assertCount( 1, $form_actions, 'Old form settings are not converted to email action.' );
 
 		foreach ( $form_actions as $action ) {
 			$this->assertStringContainsString( 'emailto@test.com', $action->post_content['email_to'] );

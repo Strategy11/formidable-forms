@@ -26,7 +26,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$style     = $frm_style->get_one();
 		$settings  = FrmStylesHelper::get_settings_for_output( $style );
 		$expected  = 'frm_style_' . $style->post_name . '.with_frm_style';
-		$this->assertEquals( $expected, $settings['style_class'] );
+		$this->assertSame( $expected, $settings['style_class'] );
 
 		$_POST = array(
 			'action'            => 'frm_change_styling',
@@ -38,8 +38,8 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		$settings = FrmStylesHelper::get_settings_for_output( $style );
 		$expected = 'frm_style_test.with_frm_style';
-		$this->assertEquals( $expected, $settings['style_class'] );
-		$this->assertEquals( '#000000', $settings['fieldset_color'] );
+		$this->assertSame( $expected, $settings['style_class'] );
+		$this->assertSame( '#000000', $settings['fieldset_color'] );
 	}
 
 	/**
@@ -53,7 +53,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$style        = $frm_style->get_one();
 		$settings     = FrmStylesHelper::get_settings_for_output( $style );
 		$css_contains = substr_count( $compiled_css, '}.frm_forms.' . $settings['style_class'] . '{' );
-		$this->assertEquals( 1, $css_contains, 'Multiple or no occurrences of style found' );
+		$this->assertSame( 1, $css_contains, 'Multiple or no occurrences of style found' );
 	}
 
 	/**
@@ -69,7 +69,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		);
 
 		foreach ( $colors as $hex => $rgb ) {
-			$this->assertEquals( $rgb, FrmStylesHelper::hex2rgb( $hex ), 'Hex ' . $hex . ' did not convert to ' . $rgb );
+			$this->assertSame( $rgb, FrmStylesHelper::hex2rgb( $hex ), 'Hex ' . $hex . ' did not convert to ' . $rgb );
 		}
 	}
 
@@ -97,7 +97,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		foreach ( $colors as $color ) {
 			$result = FrmStylesHelper::adjust_brightness( $color['start'], $color['steps'] );
-			$this->assertEquals( $color['end'], $result, $color['start'] . ' was not adjusted as expected by ' . $color['steps'] . ' steps' );
+			$this->assertSame( $color['end'], $result, $color['start'] . ' was not adjusted as expected by ' . $color['steps'] . ' steps' );
 		}
 	}
 
@@ -108,7 +108,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$new_style_id = $this->factory->post->create(
 			array( 'post_type' => FrmStylesController::$post_type )
 		);
-		$this->assertEquals( 0, FrmStylesHelper::get_form_count_for_style( $new_style_id, false ) );
+		$this->assertSame( 0, FrmStylesHelper::get_form_count_for_style( $new_style_id, false ) );
 
 		$this->factory->form->create(
 			array(
@@ -118,7 +118,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 1, FrmStylesHelper::get_form_count_for_style( $new_style_id, false ) );
+		$this->assertSame( 1, FrmStylesHelper::get_form_count_for_style( $new_style_id, false ) );
 
 		$data_for_all_published_forms = FrmDb::get_results( 'frm_forms', array( 'status' => 'published' ), 'id, options' );
 		$default_count                = 0;
@@ -136,7 +136,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		unset( $data_for_all_published_forms );
 
-		$this->assertEquals( 1 + $default_count, FrmStylesHelper::get_form_count_for_style( $new_style_id, true ) );
+		$this->assertSame( 1 + $default_count, FrmStylesHelper::get_form_count_for_style( $new_style_id, true ) );
 
 		$conversational_style_id = $this->factory->post->create(
 			array(
@@ -151,7 +151,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$cache_key = FrmDb::generate_cache_key( $where, $args, 'ID', 'var' );
 		wp_cache_delete( $cache_key, 'post' );
 
-		$this->assertEquals( 0, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
+		$this->assertSame( 0, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
 
 		// Add a form with the conversational default.
 		$this->factory->form->create(
@@ -163,8 +163,8 @@ class test_FrmStylesHelper extends FrmUnitTest {
 			)
 		);
 
-		$this->assertEquals( 1, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
-		$this->assertEquals( 0, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, false ) );
+		$this->assertSame( 1, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
+		$this->assertSame( 0, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, false ) );
 
 		// Create a second conversational form.
 		$this->factory->form->create(
@@ -176,8 +176,8 @@ class test_FrmStylesHelper extends FrmUnitTest {
 			)
 		);
 
-		$this->assertEquals( 1, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, false ) );
-		$this->assertEquals( 2, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
+		$this->assertSame( 1, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, false ) );
+		$this->assertSame( 2, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
 	}
 
 	/**
@@ -233,7 +233,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	 * @return void
 	 */
 	private function assert_color_brightness( $expected, $color ) {
-		$this->assertEquals( $expected, FrmStylesHelper::get_color_brightness( $color ) );
+		$this->assertSame( $expected, FrmStylesHelper::get_color_brightness( $color ) );
 	}
 
 	/**
@@ -249,7 +249,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		);
 
 		foreach ( $expected as $input => $output ) {
-			$this->assertEquals( $output, FrmStylesHelper::get_bottom_value( $input ) );
+			$this->assertSame( $output, FrmStylesHelper::get_bottom_value( $input ) );
 		}
 	}
 }

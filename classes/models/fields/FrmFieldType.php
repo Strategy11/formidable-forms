@@ -826,10 +826,12 @@ DEFAULT_HTML;
 	protected function auto_width_setting( $args ) {
 		$use_style = ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'];
 
-		if ( $use_style ) {
-			$field = $args['field'];
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php';
+		if ( ! $use_style ) {
+			return;
 		}
+
+		$field = $args['field'];
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php';
 	}
 
 	/**
@@ -870,7 +872,7 @@ DEFAULT_HTML;
 		$fields = array_merge( $fields, $pro_fields );
 
 		if ( isset( $fields[ $this->type ] ) ) {
-			$name = is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
+			return is_array( $fields[ $this->type ] ) ? $fields[ $this->type ]['name'] : $fields[ $this->type ];
 		}
 
 		return $name;
@@ -1249,11 +1251,7 @@ DEFAULT_HTML;
 			$value = implode( ', ', $value );
 		}
 
-		if ( str_contains( $value, '&lt;' ) ) {
-			$value = htmlentities( $value );
-		}
-
-		return $value;
+		return str_contains( $value, '&lt;' ) ? htmlentities( $value ) : $value;
 	}
 
 	/**
@@ -1311,7 +1309,7 @@ DEFAULT_HTML;
 		$is_read_only = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
 
 		if ( $is_read_only && $this->show_readonly_hidden() ) {
-			$hidden = $this->show_hidden_values( $args );
+			return $this->show_hidden_values( $args );
 		}
 
 		return $hidden;
@@ -1892,11 +1890,7 @@ DEFAULT_HTML;
 			$checked            = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
 		}
 
-		if ( count( $checked ) > 1 ) {
-			$value = array_map( 'trim', $checked );
-		}
-
-		return $value;
+		return count( $checked ) > 1 ? array_map( 'trim', $checked ) : $value;
 	}
 
 	/**
@@ -1906,7 +1900,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
-		$value = empty( $value ) ? $defaults : array_merge( $defaults, (array) $value );
+		$value = $value ? array_merge( $defaults, (array) $value ) : $defaults;
 	}
 
 	/**

@@ -240,7 +240,7 @@ window.frmAdminBuildJS = function() {
 	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
-	const { doJsonFetch, doJsonPost } = frmDom.ajax;
+	const { doJsonPost } = frmDom.ajax;
 	frmAdminJs.contextualShortcodes = getContextualShortcodes();
 	const icons = {
 		save: svg( { href: '#frm_save_icon' } ),
@@ -343,18 +343,21 @@ window.frmAdminBuildJS = function() {
 		if ( verify ) {
 			$confirmMessage.append( document.createTextNode( verify ) );
 			if ( btnClass ) {
-				continueButton.classList.add( btnClass );
+				continueButton?.classList.add( btnClass );
 			}
 		}
 
-		for ( i in continueButton.dataset ) {
-			continueButton.removeAttribute( 'data-' + i );
-		}
-
 		dataAtts = link.dataset;
-		for ( i in dataAtts ) {
-			if ( i !== 'frmverify' ) {
-				continueButton.setAttribute( 'data-' + i, dataAtts[ i ] );
+
+		if ( continueButton ) {
+			for ( i in continueButton.dataset ) {
+				continueButton.removeAttribute( 'data-' + i );
+			}
+
+			for ( i in dataAtts ) {
+				if ( i !== 'frmverify' ) {
+					continueButton.setAttribute( 'data-' + i, dataAtts[ i ] );
+				}
 			}
 		}
 
@@ -369,7 +372,7 @@ window.frmAdminBuildJS = function() {
 		wp.hooks.doAction( 'frmAdmin.beforeOpenConfirmModal', { $info, link } );
 
 		$info.dialog( 'open' );
-		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) || link.getAttribute( 'data-href' ) );
+		continueButton?.setAttribute( 'href', link.getAttribute( 'href' ) || link.getAttribute( 'data-href' ) );
 		return false;
 	}
 
@@ -892,12 +895,10 @@ window.frmAdminBuildJS = function() {
 		if ( draggable.hasAttribute( 'data-ftype' ) ) {
 			const fieldType = draggable.getAttribute( 'data-ftype' );
 			copyTarget = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_t' + fieldType );
-			copyTarget = copyTarget.cloneNode( true );
-			copyTarget.classList.add( 'form-field' );
-
-			copyTarget.classList.add( 'ui-sortable-helper' );
-
 			if ( copyTarget ) {
+				copyTarget = copyTarget.cloneNode( true );
+				copyTarget.classList.add( 'form-field' );
+				copyTarget.classList.add( 'ui-sortable-helper' );
 				return copyTarget.cloneNode( true );
 			}
 		}
@@ -2105,13 +2106,11 @@ window.frmAdminBuildJS = function() {
 			}
 		};
 
-		let nextElement = thisField;
-		addHtmlToField( nextElement );
+		addHtmlToField( thisField );
 
-		let nextField = getNextField( nextElement );
+		let nextField = getNextField( thisField );
 		while ( nextField && field.length < 15 ) {
 			addHtmlToField( nextField );
-			nextElement = nextField;
 			nextField = getNextField( nextField );
 		}
 
@@ -2943,18 +2942,6 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function scrollToField( field ) {
-		const newPos = field.getBoundingClientRect().top,
-			container = document.getElementById( 'post-body-content' );
-
-		if ( typeof animate === 'undefined' ) {
-			jQuery( container ).scrollTop( newPos );
-		} else {
-			// TODO: smooth scroll
-			jQuery( container ).animate( { scrollTop: newPos }, 500 );
-		}
-	}
-
 	function checkCalculationCreatedByUser() {
 		const calculation = this.value;
 		let warningMessage = checkMatchingParens( calculation );
@@ -2981,7 +2968,7 @@ window.frmAdminBuildJS = function() {
 				')': '(',
 				']': '['
 			},
-			unmatchedClosing = [],
+			hasUnmatchedClosing = false,
 			msg = '',
 			i, top;
 
@@ -2993,12 +2980,12 @@ window.frmAdminBuildJS = function() {
 			if ( closing.hasOwnProperty( formulaArray[ i ] ) ) {
 				top = stack.pop();
 				if ( top !== closing[ formulaArray[ i ] ] ) {
-					unmatchedClosing.push( formulaArray[ i ] );
+					hasUnmatchedClosing = true;
 				}
 			}
 		}
 
-		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
+		if ( stack.length > 0 || hasUnmatchedClosing ) {
 			msg = frmAdminJs.unmatched_parens + '\n\n';
 			return msg;
 		}
@@ -5318,10 +5305,10 @@ window.frmAdminBuildJS = function() {
 
 	function addWatchLookupRow() {
 		/*jshint validthis:true */
-		let lastRowId,
-			id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+		let id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
 			lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children;
+
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
@@ -6097,7 +6084,7 @@ window.frmAdminBuildJS = function() {
 	 * Set the displayed value for an image option.
 	 */
 	function getImageDisplayValue( thisOpt, fieldId, label ) {
-		let image, imageUrl, showLabelWithImage, fieldType;
+		let image, imageUrl, showLabelWithImage;
 
 		image = thisOpt.find( 'img' );
 		if ( image ) {
@@ -6105,8 +6092,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		showLabelWithImage = showingLabelWithImage( fieldId );
-		fieldType = radioOrCheckbox( fieldId );
-		return getImageLabel( label.val(), showLabelWithImage, imageUrl, fieldType );
+		return getImageLabel( label.val(), showLabelWithImage, imageUrl );
 	}
 
 	function getImageOptionSize( fieldId ) {
@@ -6123,7 +6109,6 @@ window.frmAdminBuildJS = function() {
 
 		return size;
 	}
-
 	function resetDisplayedOpts( fieldId ) {
 		let i, opts, type, placeholder, fieldInfo,
 			input = jQuery( '[name^="item_meta[' + fieldId + ']"]' );
@@ -6134,7 +6119,7 @@ window.frmAdminBuildJS = function() {
 
 		if ( input.is( 'select' ) ) {
 			placeholder = document.getElementById( 'frm_placeholder_' + fieldId );
-			if ( placeholder !== null && placeholder.value === '' ) {
+			if ( placeholder === null || placeholder.value === '' ) {
 				fillDropdownOpts( input[ 0 ], { sourceID: fieldId } );
 			} else {
 				fillDropdownOpts( input[ 0 ], {
@@ -6359,7 +6344,6 @@ window.frmAdminBuildJS = function() {
 	 */
 	function getMultipleOpts( fieldId, showValueAsLabel = false ) {
 		let i, saved, labelName, label, key, optObj,
-			fieldType,
 			checked = false,
 			opts = [],
 			imageUrl = '';
@@ -6390,8 +6374,7 @@ window.frmAdminBuildJS = function() {
 
 			if ( hasImageOptions ) {
 				imageUrl = getImageUrlFromInput( optVals[ i ] );
-				fieldType = radioOrCheckbox( fieldId );
-				label = getImageLabel( label, showLabelWithImage, imageUrl, fieldType );
+				label = getImageLabel( label, showLabelWithImage, imageUrl );
 			}
 
 			/**
@@ -6417,15 +6400,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		return opts;
-	}
-
-	function radioOrCheckbox( fieldId ) {
-		const settings = document.getElementById( 'frm-single-settings-' + fieldId );
-		if ( settings === null ) {
-			return 'radio';
-		}
-
-		return settings.classList.contains( 'frm-type-checkbox' ) ? 'checkbox' : 'radio';
 	}
 
 	function getImageUrlFromInput( optVal ) {
@@ -6470,10 +6444,9 @@ window.frmAdminBuildJS = function() {
 		return clean;
 	}
 
-	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
+	function getImageLabel( label, showLabelWithImage, imageUrl ) {
 		let imageLabelClass,
 			originalLabel = label,
-			shape = fieldType === 'checkbox' ? 'square' : 'circle',
 			labelImage,
 			labelNode,
 			imageLabel;
@@ -7143,7 +7116,7 @@ window.frmAdminBuildJS = function() {
 		// Attach keydown event listener
 		newFormNameInput.addEventListener( 'keydown', function( event ) {
 			if ( event.key === 'Enter' ) {
-				onSaveFormNameButton.call( this, event );
+				onSaveFormNameButton( event );
 			}
 		} );
 	}
@@ -9310,63 +9283,6 @@ window.frmAdminBuildJS = function() {
 	function toggleAddonState( clicked, action ) {
 		const addonState = require( './addon-state' );
 		addonState.toggleAddonState( clicked, action );
-	}
-
-	function installAddonWithCreds( e ) {
-		// Prevent the default action, let the user know we are attempting to install again and go with it.
-		e.preventDefault();
-
-		// Now let's make another Ajax request once the user has submitted their credentials.
-		const proceed = jQuery( this );
-		const el = proceed.parent().parent();
-		const plugin = proceed.attr( 'rel' );
-
-		proceed.addClass( 'frm_loading_button' );
-
-		jQuery.ajax( {
-			url: ajaxurl,
-			type: 'POST',
-			async: true,
-			cache: false,
-			dataType: 'json',
-			data: {
-				action: 'frm_install_addon',
-				nonce: frmAdminJs.nonce,
-				plugin: plugin,
-				hostname: el.find( '#hostname' ).val(),
-				username: el.find( '#username' ).val(),
-				password: el.find( '#password' ).val()
-			},
-			success: function( response ) {
-				response = response?.data ?? response;
-
-				const error = extractErrorFromAddOnResponse( response );
-				if ( error ) {
-					addonError( error, el, proceed );
-					return;
-				}
-
-				afterAddonInstall( response, proceed, message, el );
-			},
-			error: function() {
-				proceed.removeClass( 'frm_loading_button' );
-			}
-		} );
-	}
-
-	function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
-		const addonState = require( './addon-state' );
-		addonState.afterAddonInstall( response, button, message, el, saveAndReload, action );
-	}
-
-	function extractErrorFromAddOnResponse( response ) {
-		const addonState = require( './addon-state' );
-		return addonState.extractErrorFromAddOnResponse( response );
-	}
-
-	function addonError( response, el, button ) {
-		const addonState = require( './addon-state' );
-		addonState.addonError( response, el, button );
 	}
 
 	/* Templates */

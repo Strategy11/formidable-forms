@@ -25,7 +25,7 @@ class FrmShortcodeHelper {
 		}
 
 		if ( ! is_array( $atts ) ) {
-			$atts = array();
+			return array();
 		}
 
 		return $atts;
@@ -129,11 +129,7 @@ class FrmShortcodeHelper {
 		$tag  = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
 		$tags = preg_split( '/\s+/', $tag, 2 );
 
-		if ( is_array( $tags ) ) {
-			$tag = $tags[0];
-		}
-
-		return $tag;
+		return is_array( $tags ) ? $tags[0] : $tag;
 	}
 
 	/**

@@ -269,6 +269,7 @@ class FrmTransLiteActionsController {
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
 			$trigger_event = $payment->status === 'complete' ? 'payment-success' : 'payment-failed';
 		}
+
 		FrmFormActionsController::trigger_actions( $trigger_event, $entry->form_id, $entry->id );
 	}
 
@@ -283,11 +284,13 @@ class FrmTransLiteActionsController {
 	public static function prepare_description( &$action, $atts ) {
 		$description = $action->post_content['description'];
 
-		if ( $description ) {
-			$atts['value']                       = $description;
-			$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
-			$action->post_content['description'] = $description;
+		if ( ! $description ) {
+			return;
 		}
+
+		$atts['value']                       = $description;
+		$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
+		$action->post_content['description'] = $description;
 	}
 
 	/**
@@ -455,7 +458,7 @@ class FrmTransLiteActionsController {
 		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
 
 		if ( ! $payment_actions ) {
-			$payment_actions = array();
+			return array();
 		}
 
 		return $payment_actions;

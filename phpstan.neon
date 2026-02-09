@@ -148,15 +148,9 @@ parameters:
 				- classes/views/frm-entries/show.php
 				- classes/views/frm-forms/add_field.php
 		-
-			message: '#is never read, only written#'
-			path: classes/helpers/FrmFieldGridHelper.php
-		-
 			message: '#is unused.#'
 			paths:
-				- classes/models/FrmField.php
 				- classes/controllers/FrmSimpleBlocksController.php
-				- classes/helpers/FrmFieldGridHelper.php
-				- square/controllers/FrmSquareLiteActionsController.php
 		-
 			message: '#on left side of \?\?#'
 			path: stripe/controllers/FrmTransLiteActionsController.php

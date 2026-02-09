@@ -25,7 +25,7 @@ preset = "default"
 use-tabs = true
 
 [linter]
-integrations = []
+integrations = [ "wordpress", "phpunit" ]
 
 [linter.rules]
 ambiguous-function-call = { enabled = false }
@@ -64,6 +64,14 @@ tagged-todo = { enabled = false }
 too-many-methods = { enabled = false }
 too-many-properties = { enabled = false }
 use-compound-assignment = { enabled = false } # Consider enabling this soon.
+# PHPUnit Rules
+assertion-style = { enabled = false }
+# WordPress Rules
+no-db-schema-change = { enabled = false }
+no-direct-db-query = { enabled = false }
+no-roles-as-capabilities = { enabled = false }
+no-unescaped-output = { enabled = false }
+use-wp-functions = { enabled = false }
 
 [analyzer]
 plugins = []
@@ -87,12 +95,11 @@ ignore = [
     "conflicting-reference-constraint",
     "deprecated-function",
     "falsable-return-statement",
-    "false-argument", # Fix this soon
+    "false-argument",
     "generic-object-iteration",
-    "impossible-assignment",
     "impossible-condition",
     "impossible-nonnull-entry-check",
-    "impossible-type-comparison", # Fix this soon
+    "impossible-type-comparison",
     "incompatible-parameter-name",
     "incompatible-parameter-type",
     "invalid-argument",
@@ -145,7 +152,6 @@ ignore = [
     "possibly-false-iterator",
     "possibly-false-operand",
     "possibly-invalid-argument",
-    "possibly-invalid-clone",
     "possibly-invalid-iterator",
     "possibly-invalid-operand",
     "possibly-null-argument",
@@ -160,7 +166,6 @@ ignore = [
     "redundant-comparison",
     "redundant-condition",
     "redundant-isset-check",
-    "redundant-key-check",
     "redundant-logical-operation",
     "redundant-null-coalesce",
     "redundant-type-comparison",
@@ -175,6 +180,7 @@ ignore = [
     "undefined-variable-in-closure-use",
     "unknown-class-instantiation",
     "unknown-iterator-type",
+    "unreachable-else-clause", # This is new. Fix this soon.
     "unsafe-instantiation",
     "unused-method",
     "unused-property",
