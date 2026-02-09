@@ -177,7 +177,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			 * @param string $link
 			 * @param object $payment
 			 */
-			$link = apply_filters( 'frm_pay_' . $paysys . '_refund_link', $link, $payment );
+			return apply_filters( 'frm_pay_' . $paysys . '_refund_link', $link, $payment );
 		}
 
 		return $link;

@@ -535,13 +535,15 @@ class FrmForm {
 			$prev_opts = $field->field_options;
 		}
 
-		if ( isset( $prev_opts ) ) {
-			$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
+		if ( ! isset( $prev_opts ) ) {
+			return;
+		}
 
-			// phpcs:ignore Universal.Operators.StrictComparisons
-			if ( $prev_opts != $field->field_options ) {
-				FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
-			}
+		$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
+
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( $prev_opts != $field->field_options ) {
+			FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
 		}
 	}
 
@@ -1191,11 +1193,7 @@ class FrmForm {
 
 		$form_id = FrmAppHelper::get_param( 'form', $form_id, 'get', 'absint' );
 
-		if ( $form_id ) {
-			$form_id = self::set_current_form( $form_id );
-		}
-
-		return $form_id;
+		return $form_id ? self::set_current_form( $form_id ) : $form_id;
 	}
 
 	/**
@@ -1205,12 +1203,7 @@ class FrmForm {
 	 */
 	public static function get_current_form( $form_id = 0 ) {
 		$form = self::maybe_get_current_form( $form_id );
-
-		if ( is_numeric( $form ) ) {
-			$form = self::set_current_form( $form );
-		}
-
-		return $form;
+		return is_numeric( $form ) ? self::set_current_form( $form ) : $form;
 	}
 
 	/**

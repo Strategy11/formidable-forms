@@ -469,11 +469,7 @@ class FrmListHelper {
 
 		$action = $this->get_bulk_action( 'action' );
 
-		if ( $action === false ) {
-			$action = $this->get_bulk_action( 'action2' );
-		}
-
-		return $action;
+		return $action === false ? $this->get_bulk_action( 'action2' ) : $action;
 	}
 
 	/**
@@ -492,7 +488,7 @@ class FrmListHelper {
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $action_param && - 1 != $action_param ) {
-			$action = $action_param;
+			return $action_param;
 		}
 
 		return $action;
@@ -872,7 +868,7 @@ class FrmListHelper {
 		$column = apply_filters( 'list_table_primary_column', $default, $this->screen->id );
 
 		if ( ! $column || ! isset( $columns[ $column ] ) ) {
-			$column = $default;
+			return $default;
 		}
 
 		return $column;

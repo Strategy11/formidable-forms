@@ -93,11 +93,13 @@ class FrmFieldGridHelper {
 			$this->active_field_size  = self::get_size_of_class( $this->field_layout_class );
 		}
 
-		if ( 'divider' === $field->type && empty( $this->nested ) ) {
-			$this->section_size      = $this->active_field_size;
-			$this->active_field_size = 0;
-			$this->section_helper    = new self( true );
+		if ( 'divider' !== $field->type || ! empty( $this->nested ) ) {
+			return;
 		}
+
+		$this->section_size      = $this->active_field_size;
+		$this->active_field_size = 0;
+		$this->section_helper    = new self( true );
 	}
 
 	/**
@@ -231,13 +233,15 @@ class FrmFieldGridHelper {
 			return;
 		}
 
-		if ( false !== $this->parent_li ) {
-			++$this->current_field_count;
-			$this->current_list_size += $this->active_field_size;
+		if ( false === $this->parent_li ) {
+			return;
+		}
 
-			if ( 12 === $this->current_list_size ) {
-				$this->close_field_wrapper();
-			}
+		++$this->current_field_count;
+		$this->current_list_size += $this->active_field_size;
+
+		if ( 12 === $this->current_list_size ) {
+			$this->close_field_wrapper();
 		}
 	}
 

@@ -97,7 +97,7 @@ class FrmFormsHelper {
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( $class ) {
-			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
+			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( sanitize_text_field( $class ) ) . '"';
 		}
 	}
 
@@ -954,7 +954,7 @@ BEFORE_HTML;
 		}
 
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
-			$html = do_shortcode( $html );
+			return do_shortcode( $html );
 		}
 
 		return $html;
@@ -1750,7 +1750,7 @@ BEFORE_HTML;
 	 */
 	public static function convert_legacy_package_names( $package_name ) {
 		if ( in_array( $package_name, array( 'Creator', 'Personal' ), true ) ) {
-			$package_name = 'Plus';
+			return 'Plus';
 		}
 
 		return $package_name;
@@ -1778,7 +1778,7 @@ BEFORE_HTML;
 		}
 
 		if ( $args['case_lower'] ) {
-			$license_types = array_map( 'strtolower', $license_types );
+			return array_map( 'strtolower', $license_types );
 		}
 
 		return $license_types;

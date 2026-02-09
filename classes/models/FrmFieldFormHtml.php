@@ -269,14 +269,18 @@ class FrmFieldFormHtml {
 			$inner_html[2] = $inner_html[2][0];
 		}
 
-		if ( is_string( $inner_html[2] ) ) {
-			$has_id = str_contains( $inner_html[2], ' id=' );
-
-			if ( ! $has_id ) {
-				$id         = 'frm_' . $id . '_' . $this->html_id;
-				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
-			}
+		if ( ! is_string( $inner_html[2] ) ) {
+			return;
 		}
+
+		$has_id = str_contains( $inner_html[2], ' id=' );
+
+		if ( $has_id ) {
+			return;
+		}
+
+		$id         = 'frm_' . $id . '_' . $this->html_id;
+		$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 	}
 
 	/**

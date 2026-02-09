@@ -51,11 +51,11 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 
 		$values['item_meta']['25'] = $blocked;
 		$is_spam                   = FrmAntiSpamController::contains_wp_disallowed_words( $values );
-		$this->assertEquals( $is_spam, $spam_msg, 'Exact match for spam missed' );
+		$this->assertSame( $is_spam, $spam_msg, 'Exact match for spam missed' );
 
 		$values['item_meta']['25'] = $blocked . '23.343.1233234323';
 		$is_spam                   = FrmAntiSpamController::contains_wp_disallowed_words( $values );
-		$this->assertEquals( $is_spam, $spam_msg );
+		$this->assertSame( $is_spam, $spam_msg );
 	}
 
 	/**

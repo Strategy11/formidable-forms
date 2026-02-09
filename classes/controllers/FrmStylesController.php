@@ -278,11 +278,7 @@ class FrmStylesController {
 
 		$this_version = get_option( 'frm_last_style_update' );
 
-		if ( ! $this_version ) {
-			$this_version = $version;
-		}
-
-		return $this_version;
+		return $this_version ? $this_version : $version;
 	}
 
 	/**
@@ -293,7 +289,7 @@ class FrmStylesController {
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
 		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && ! str_contains( $tag, ' property=' ) ) {
-			$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
+			return str_replace( ' type="', ' property="stylesheet" type="', $tag );
 		}
 
 		return $tag;
@@ -1200,10 +1196,12 @@ class FrmStylesController {
 
 		$frm_settings = FrmAppHelper::get_settings();
 
-		if ( $frm_settings->load_style !== 'none' ) {
-			wp_enqueue_style( 'formidable' );
-			$frm_vars['css_loaded'] = true;
+		if ( $frm_settings->load_style === 'none' ) {
+			return;
 		}
+
+		wp_enqueue_style( 'formidable' );
+		$frm_vars['css_loaded'] = true;
 	}
 
 	/**

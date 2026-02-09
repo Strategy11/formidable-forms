@@ -210,7 +210,7 @@ class FrmFormAction {
 		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
 
 		if ( $updated_action === $action ) {
-			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
+			return FrmFieldsHelper::switch_field_ids( $action );
 		}
 
 		return $updated_action;
@@ -256,7 +256,7 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
+		$name .= $post_field ? '[' . $post_field . ']' : '';
 
 		return $name . ( '[' . $field_name . ']' );
 	}
@@ -640,11 +640,7 @@ class FrmFormAction {
 			}
 		}
 
-		if ( 1 === $limit ) {
-			$settings = reset( $settings );
-		}
-
-		return $settings;
+		return 1 === $limit ? reset( $settings ) : $settings;
 	}
 
 	/**
@@ -765,16 +761,12 @@ class FrmFormAction {
 			$settings[ $action->ID ] = $action;
 		}
 
-		if ( 1 === $limit ) {
-			$settings = reset( $settings );
-		}
-
-		return $settings;
+		return 1 === $limit ? reset( $settings ) : $settings;
 	}
 
 	/**
-	 * @param int $form_id
-	 * @param int $limit
+	 * @param int|string $form_id
+	 * @param int        $limit
 	 *
 	 * @return array
 	 */

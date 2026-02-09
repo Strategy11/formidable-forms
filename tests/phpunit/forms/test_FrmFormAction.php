@@ -31,7 +31,7 @@ class test_FrmFormAction extends FrmUnitTest {
 		$action_ids            = $action->update_callback( $form_id );
 
 		$this->assertIsArray( $action_ids );
-		$this->assertEquals( array( $new_post_id ), $action_ids );
+		$this->assertSame( array( $new_post_id ), $action_ids );
 		$this->assertTrue( $action->updated );
 	}
 }

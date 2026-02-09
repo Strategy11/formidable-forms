@@ -180,11 +180,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @return float
 	 */
 	public function set_value_before_save( $value ) {
-		if ( ! is_numeric( $value ) ) {
-			$value = (float) $value;
-		}
-
-		return $value;
+		return is_numeric( $value ) ? $value : (float) $value;
 	}
 
 	/**
