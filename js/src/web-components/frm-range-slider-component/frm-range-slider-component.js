@@ -390,7 +390,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		svg.classList.add( 'frmsvg' );
 
 		const use = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
-		use.setAttributeNS( 'http://www.w3.org/1999/xlink', 'xlink:href', `#${ iconSvgId }` );
+		use.setAttribute( 'href', `#${ iconSvgId }` );
 		svg.append( use );
 
 		return svg;

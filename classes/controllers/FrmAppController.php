@@ -693,7 +693,7 @@ class FrmAppController {
 	public static function admin_js() {
 		$plugin_url                  = FrmAppHelper::plugin_url();
 		$version                     = FrmAppHelper::plugin_version();
-		$frm_components_dependencies = FrmAppHelper::meets_min_pro_version( 'x.x' ) ? array( 'formidable_admin', 'formidable-pro-web-components' ) : array( 'formidable_admin' );
+		$frm_components_dependencies = FrmAppHelper::meets_min_pro_version( '6.28' ) ? array( 'formidable_admin', 'formidable-pro-web-components' ) : array( 'formidable_admin' );
 
 		FrmAppHelper::load_admin_wide_js();
 		// Register component assets early to ensure they can be enqueued later in controllers.
