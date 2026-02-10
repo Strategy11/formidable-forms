@@ -180,6 +180,7 @@ ignore = [
     "undefined-variable-in-closure-use",
     "unknown-class-instantiation",
     "unknown-iterator-type",
+    "unreachable-else-clause", # This is new. Fix this soon.
     "unsafe-instantiation",
     "unused-method",
     "unused-property",

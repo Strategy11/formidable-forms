@@ -129,7 +129,7 @@ class FrmEntriesHelper {
 		}
 
 		if ( ! is_array( $new_value ) ) {
-			$new_value = str_replace( '"', '&quot;', $new_value );
+			return str_replace( '"', '&quot;', $new_value );
 		}
 
 		return $new_value;
@@ -226,7 +226,7 @@ class FrmEntriesHelper {
 			$empty = empty( $field_value );
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
 
-			if ( $empty && ! empty( $field_value ) ) {
+			if ( $empty && $field_value ) {
 				// We've got an entry id, so switch it to a value.
 				$atts['force_id'] = true;
 			}
@@ -495,19 +495,20 @@ class FrmEntriesHelper {
 		self::set_other_repeating_vals( $field, $value, $args );
 
 		// Check if there are any posted "Other" values.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-
-			// Save original value.
-			$args['temp_value'] = $value;
-			$args['other']      = true;
-
-			// Sanitizing is done next.
-			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
-
-			// Set the validation value now
-			self::set_other_validation_val( $value, $other_vals, $field, $args );
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
 		}
+
+		// Save original value.
+		$args['temp_value'] = $value;
+		$args['other']      = true;
+
+		// Sanitizing is done next.
+		$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
+
+		// Set the validation value now
+		self::set_other_validation_val( $value, $other_vals, $field, $args );
 	}
 
 	/**
@@ -527,16 +528,18 @@ class FrmEntriesHelper {
 		}
 
 		// Check if there are any other posted "other" values for this field.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			// Save original value
-			$args['temp_value'] = $value;
-			$args['other']      = true;
-			$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
-
-			// Set the validation value now.
-			self::set_other_validation_val( $value, $other_vals, $field, $args );
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			return;
 		}
+
+		// Save original value
+		$args['temp_value'] = $value;
+		$args['other']      = true;
+		$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
+
+		// Set the validation value now.
+		self::set_other_validation_val( $value, $other_vals, $field, $args );
 	}
 
 	/**

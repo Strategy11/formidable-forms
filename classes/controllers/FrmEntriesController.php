@@ -154,7 +154,7 @@ class FrmEntriesController {
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 
 		if ( $screen->id === $menu_name . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries' ) {
-			$show_screen = false;
+			return false;
 		}
 
 		return $show_screen;
@@ -410,10 +410,12 @@ class FrmEntriesController {
 			unset( $form_prefix );
 		}
 
-		if ( $save ) {
-			$user_id = get_current_user_id();
-			update_user_option( $user_id, $this_page_name, $meta_value, true );
+		if ( ! $save ) {
+			return;
 		}
+
+		$user_id = get_current_user_id();
+		update_user_option( $user_id, $this_page_name, $meta_value, true );
 	}
 
 	/**
@@ -454,7 +456,7 @@ class FrmEntriesController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
-			$save = (int) $value;
+			return (int) $value;
 		}
 
 		return $save;
@@ -790,26 +792,28 @@ class FrmEntriesController {
 
 		$frm_vars['created_entries'][ $form_id ] = array( 'errors' => $errors );
 
-		if ( ! $errors ) {
-			$_POST['frm_skip_cookie'] = 1;
-			$do_success               = false;
-
-			if ( $params['action'] === 'create' ) {
-				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
-					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-
-					$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
-					$do_success   = true;
-				}
-			}
-
-			do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );
-
-			if ( $do_success ) {
-				FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
-			}
-			unset( $_POST['frm_skip_cookie'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( $errors ) {
+			return;
 		}
+
+		$_POST['frm_skip_cookie'] = 1;
+		$do_success               = false;
+
+		if ( $params['action'] === 'create' ) {
+			if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
+				$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+				$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
+				$do_success   = true;
+			}
+		}
+
+		do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );
+
+		if ( $do_success ) {
+			FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
+		}
+		unset( $_POST['frm_skip_cookie'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -865,10 +869,12 @@ class FrmEntriesController {
 
 		FrmAppHelper::unserialize_or_decode( $form->options );
 
-		if ( ! empty( $form->options['no_save'] ) ) {
-			self::unlink_post( $entry_id );
-			FrmEntry::destroy( $entry_id );
+		if ( empty( $form->options['no_save'] ) ) {
+			return;
 		}
+
+		self::unlink_post( $entry_id );
+		FrmEntry::destroy( $entry_id );
 	}
 
 	/**

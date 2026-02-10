@@ -148,7 +148,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		FrmXMLController::add_default_templates();
 
 		$form = FrmForm::getOne( 'contact-db12' );
-		self::assertEquals( $form->form_key, 'contact-db12' );
+		self::assertSame( 'contact-db12', $form->form_key );
 	}
 
 	public static function create_files() {
@@ -235,13 +235,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 					unset( $form_id_path );
 				}
 
-				if ( file_exists( $path ) ) {
-					if ( ! is_array( $media_ids ) ) {
-						$media_ids = array();
-					}
-
-					$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
+				if ( ! file_exists( $path ) ) {
+					continue;
 				}
+
+				if ( ! is_array( $media_ids ) ) {
+					$media_ids = array();
+				}
+
+				$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
 			}
 
 			if ( is_array( $media_ids ) ) {
@@ -276,7 +278,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$form_id            = $this->factory->form->get_id_by_key( $form_key );
 		$fields             = FrmField::get_all_for_form( $form_id, '', 'include' );
 		$actual_field_num   = count( $fields );
-		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$this->assertSame( $expected_field_num, $actual_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return $fields;
 	}
@@ -393,7 +395,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->set_get_params( $page );
 		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
 		$this->assertTrue( is_admin(), 'Failed to switch to the back-end' );
-		$this->assertEquals( $screen->base, $current_screen->base, $page );
+		$this->assertSame( $screen->base, $current_screen->base, $page );
 
 		FrmHooksController::trigger_load_hook();
 	}
@@ -419,19 +421,23 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$_GET['pagenow']  = $base;
 		$_POST['pagenow'] = $base;
 
-		if ( ! empty( $url_params ) ) {
-			$url_params = explode( '&', $url_params );
+		if ( empty( $url_params ) ) {
+			return;
+		}
 
-			foreach ( $url_params as $param ) {
-				list( $name, $value ) = explode( '=', $param );
-				$_GET[ $name ]        = $value;
-				$_REQUEST[ $name ]    = $value;
+		$url_params = explode( '&', $url_params );
 
-				if ( $name === 'post' ) {
-					global $post;
-					$post = $this->factory->post->get_object_by_id( $value );
-				}
+		foreach ( $url_params as $param ) {
+			list( $name, $value ) = explode( '=', $param );
+			$_GET[ $name ]        = $value;
+			$_REQUEST[ $name ]    = $value;
+
+			if ( $name !== 'post' ) {
+				continue;
 			}
+
+			global $post;
+			$post = $this->factory->post->get_object_by_id( $value );
 		}
 	}
 
@@ -443,6 +449,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		global $frm_vars;
+
 		$frm_vars = array(
 			'load_css'          => false,
 			'forms_loaded'      => array(),
@@ -452,6 +459,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'prev_page'         => array(),
 		);
 
+		// phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
 		if ( class_exists( 'FrmProEddController' ) ) {
 			$frmedd_update                 = new FrmProEddController();
 			$frm_vars['pro_is_authorized'] = $frmedd_update->pro_is_authorized();

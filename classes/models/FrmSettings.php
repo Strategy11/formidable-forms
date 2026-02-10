@@ -549,11 +549,13 @@ class FrmSettings {
 
 		do_action( 'frm_update_settings', $params );
 
-		if ( function_exists( 'get_filesystem_method' ) ) {
-			// Save styling settings in case fallback setting changes.
-			$frm_style = new FrmStyle();
-			$frm_style->update( 'default' );
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			return;
 		}
+
+		// Save styling settings in case fallback setting changes.
+		$frm_style = new FrmStyle();
+		$frm_style->update( 'default' );
 	}
 
 	/**

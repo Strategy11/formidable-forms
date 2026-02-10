@@ -261,7 +261,7 @@ class FrmTableHTMLGenerator {
 
 		// Check if each character in string is valid hex digit
 		if ( FrmAppHelper::ctype_xdigit( $color_markup ) ) {
-			$color_markup = '#' . $color_markup;
+			return '#' . $color_markup;
 		}
 
 		return $color_markup;
@@ -447,10 +447,6 @@ class FrmTableHTMLGenerator {
 			$class .= ' frm-child-row';
 		}
 
-		if ( $class ) {
-			$class = ' class="' . trim( $class ) . '"';
-		}
-
-		return $class;
+		return $class ? ' class="' . trim( $class ) . '"' : $class;
 	}
 }

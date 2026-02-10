@@ -326,18 +326,15 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
-		);
-
-		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
-			$fields['coupon'] = array(
+			'coupon'          => array(
 				'name'    => __( 'Coupon', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
 				'addon'   => 'coupons',
 				'section' => 'pricing',
 				'limit'   => 1,
 				'is_new'  => self::field_is_new( 'coupon' ),
-			);
-		}
+			),
+		);
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
@@ -1187,12 +1184,14 @@ class FrmField {
 
 		$field_object = FrmFieldFactory::get_field_type( $results->type );
 
-		if ( $field_object->should_unserialize_value() ) {
-			FrmAppHelper::unserialize_or_decode( $results->default_value );
+		if ( ! $field_object->should_unserialize_value() ) {
+			return;
+		}
 
-			if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
-				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
-			}
+		FrmAppHelper::unserialize_or_decode( $results->default_value );
+
+		if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
+			$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 		}
 	}
 
@@ -1229,15 +1228,19 @@ class FrmField {
 		$name        = $next ? $base_name . $next : $base_name;
 		$next_fields = get_transient( $name );
 
-		if ( $next_fields ) {
-			$fields = array_merge( $fields, $next_fields );
-
-			if ( count( $next_fields ) >= self::$transient_size ) {
-				// If this transient is full, check for another
-				++$next;
-				self::get_next_transient( $fields, $base_name, $next );
-			}
+		if ( ! $next_fields ) {
+			return;
 		}
+
+		$fields = array_merge( $fields, $next_fields );
+
+		if ( count( $next_fields ) < self::$transient_size ) {
+			return;
+		}
+
+		// If this transient is full, check for another
+		++$next;
+		self::get_next_transient( $fields, $base_name, $next );
 	}
 
 	/**
@@ -1333,7 +1336,7 @@ class FrmField {
 
 		if ( $original_type && $original_type !== $field_type ) {
 			// Check the original type for arrays.
-			$field_type = $original_type;
+			return $original_type;
 		}
 
 		return $field_type;

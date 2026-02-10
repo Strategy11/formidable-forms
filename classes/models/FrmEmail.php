@@ -688,14 +688,14 @@ class FrmEmail {
 			$parts = explode( ' ', $val );
 			$email = end( $parts );
 
-			if ( is_email( $email ) ) {
-				// If user enters a name and email
-				$name = trim( str_replace( $email, '', $val ) );
-			} else {
+			if ( ! is_email( $email ) ) {
 				// If user enters a name without an email
 				unset( $recipients[ $key ] );
 				continue;
 			}
+
+			// If user enters a name and email
+			$name = trim( str_replace( $email, '', $val ) );
 
 			$recipients[ $key ] = $this->format_from_email( $name, $email );
 		}//end foreach
@@ -809,11 +809,7 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function format_from_email( $name, $email ) {
-		if ( '' !== $name ) {
-			$email = $name . ' <' . $email . '>';
-		}
-
-		return $email;
+		return '' !== $name ? $name . ' <' . $email . '>' : $email;
 	}
 
 	/**
@@ -928,7 +924,7 @@ class FrmEmail {
 	 */
 	private function encode_subject( $subject ) {
 		if ( apply_filters( 'frm_encode_subject', false, $subject ) ) {
-			$subject = '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
+			return '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
 		}
 
 		return $subject;

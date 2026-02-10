@@ -74,7 +74,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	}
 
 	private function assert_current_list_size( $expected, $message = '' ) {
-		$this->assertEquals( $expected, $this->get_private_property( $this->helper, 'current_list_size' ), $message );
+		$this->assertSame( $expected, $this->get_private_property( $this->helper, 'current_list_size' ), $message );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	 * @param int $expected
 	 */
 	private function assert_section_helper_size( $expected ) {
-		$this->assertEquals( $expected, $this->get_private_property( $this->section_helper, 'current_list_size' ) );
+		$this->assertSame( $expected, $this->get_private_property( $this->section_helper, 'current_list_size' ) );
 	}
 
 	public function test_frm_first() {

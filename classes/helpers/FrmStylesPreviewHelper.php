@@ -124,10 +124,7 @@ class FrmStylesPreviewHelper {
 			 * @return bool
 			 */
 			function ( $show, $field_type ) {
-				if ( 'captcha' === $field_type ) {
-					$show = false;
-				}
-				return $show;
+				return 'captcha' === $field_type ? false : $show;
 			},
 			10,
 			2

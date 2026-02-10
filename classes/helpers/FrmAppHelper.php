@@ -805,7 +805,7 @@ class FrmAppHelper {
 	 * @param string $sanitize
 	 * @param string $default
 	 *
-	 * @return array|string
+	 * @return array|int|string
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::get_simple_request(
@@ -873,11 +873,7 @@ class FrmAppHelper {
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
-		if ( ! str_contains( $value, '\\\\' ) ) {
-			$value = addslashes( $value );
-		}
-
-		return $value;
+		return str_contains( $value, '\\\\' ) ? $value : addslashes( $value );
 	}
 
 	/**
@@ -1103,7 +1099,7 @@ class FrmAppHelper {
 		}
 
 		if ( $included_draft_hook ) {
-			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
+			return str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
 
 		return $html;
@@ -1351,11 +1347,7 @@ class FrmAppHelper {
 
 		global $wp_query;
 
-		if ( isset( $wp_query->query_vars[ $param ] ) ) {
-			$value = $wp_query->query_vars[ $param ];
-		}
-
-		return $value;
+		return $wp_query->query_vars[ $param ] ?? $value;
 	}
 
 	/**
@@ -1829,7 +1821,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param int|string $value The value to compare.
+	 * @param bool|int|string $value The value to compare.
 	 *
 	 * @return bool
 	 */
@@ -2385,13 +2377,15 @@ class FrmAppHelper {
 	public static function permission_check( $permission, $show_message = 'show' ) {
 		$permission_error = self::permission_nonce_error( $permission );
 
-		if ( $permission_error !== false ) {
-			if ( 'hide' === $show_message ) {
-				$permission_error = '';
-			}
-
-			wp_die( esc_html( $permission_error ) );
+		if ( $permission_error === false ) {
+			return;
 		}
+
+		if ( 'hide' === $show_message ) {
+			$permission_error = '';
+		}
+
+		wp_die( esc_html( $permission_error ) );
 	}
 
 	/**
@@ -2494,7 +2488,7 @@ class FrmAppHelper {
 	 */
 	private static function maybe_update_value_if_null( $value, $function ) {
 		if ( null === $value && in_array( $function, array( 'trim', 'strlen' ), true ) ) {
-			$value = '';
+			return '';
 		}
 
 		return $value;
@@ -2581,7 +2575,7 @@ class FrmAppHelper {
 	 */
 	public static function use_wpautop( $content ) {
 		if ( apply_filters( 'frm_use_wpautop', true ) && is_string( $content ) ) {
-			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
+			return wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 
 		return $content;
@@ -2624,7 +2618,7 @@ class FrmAppHelper {
 		$query = $wp_scripts->registered[ $handle ];
 
 		if ( is_object( $query ) && ! empty( $query->ver ) ) {
-			$ver = $query->ver;
+			return $query->ver;
 		}
 
 		return $ver;
@@ -2781,7 +2775,7 @@ class FrmAppHelper {
 	 */
 	private static function maybe_clear_long_key( $key, $column ) {
 		if ( 'field_key' === $column && strlen( $key ) >= 70 ) {
-			$key = '';
+			return '';
 		}
 		return $key;
 	}
@@ -2884,15 +2878,18 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
-		if ( $fields ) {
-			foreach ( (array) $fields as $field ) {
-				if ( ! self::is_admin_page() ) {
-					// Don't prep default values on the form settings page.
-					$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
-				}
-				$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
-				self::fill_field_defaults( $field, $record, $values, $args );
+		if ( ! $fields ) {
+			return;
+		}
+
+		foreach ( (array) $fields as $field ) {
+			if ( ! self::is_admin_page() ) {
+				// Don't prep default values on the form settings page.
+				$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
 			}
+
+			$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
+			self::fill_field_defaults( $field, $record, $values, $args );
 		}
 	}
 
@@ -3418,7 +3415,7 @@ class FrmAppHelper {
 	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
-		return ( $r_count < $current_p * $p_size ? $r_count : $current_p * $p_size );
+		return $r_count < $current_p * $p_size ? $r_count : $current_p * $p_size;
 	}
 
 	/**
@@ -3674,11 +3671,7 @@ class FrmAppHelper {
 
 		$parsed = FrmSerializedStringParserHelper::get()->parse( $value );
 
-		if ( is_array( $parsed ) ) {
-			$value = $parsed;
-		}
-
-		return $value;
+		return is_array( $parsed ) ? $parsed : $value;
 	}
 
 	/**
@@ -3703,7 +3696,7 @@ class FrmAppHelper {
 		}
 
 		if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
-			$string = $new_string;
+			return $new_string;
 		}
 
 		return $string;
@@ -3782,10 +3775,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function maybe_json_encode( $value ) {
-		if ( is_array( $value ) ) {
-			$value = wp_json_encode( $value );
-		}
-		return $value;
+		return is_array( $value ) ? wp_json_encode( $value ) : $value;
 	}
 
 	/**
@@ -4519,7 +4509,7 @@ class FrmAppHelper {
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {
 		if ( self::should_never_allow_unfiltered_html() ) {
-			$value = self::kses( $value, $allowed );
+			return self::kses( $value, $allowed );
 		}
 		return $value;
 	}

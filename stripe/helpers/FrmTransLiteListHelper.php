@@ -662,8 +662,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			return;
 		}
 
-		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
-			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
-		}
+		include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
 	}
 }

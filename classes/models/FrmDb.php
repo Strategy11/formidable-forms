@@ -122,10 +122,10 @@ class FrmDb {
 	}
 
 	/**
-	 * @param string       $key
-	 * @param array|string $value
-	 * @param string       $where
-	 * @param array        $values
+	 * @param string            $key
+	 * @param array|string|null $value
+	 * @param string            $where
+	 * @param array             $values
 	 *
 	 * @return void
 	 */
@@ -445,11 +445,13 @@ class FrmDb {
 		}
 
 		// Make sure LIMIT is the last argument
-		if ( isset( $args['order_by'] ) && isset( $args['limit'] ) ) {
-			$temp_limit = $args['limit'];
-			unset( $args['limit'] );
-			$args['limit'] = $temp_limit;
+		if ( ! isset( $args['order_by'] ) || ! isset( $args['limit'] ) ) {
+			return;
 		}
+
+		$temp_limit = $args['limit'];
+		unset( $args['limit'] );
+		$args['limit'] = $temp_limit;
 	}
 
 	/**
@@ -805,7 +807,7 @@ class FrmDb {
 		$cached = wp_cache_get( 'cached_keys', $group );
 
 		if ( ! $cached || ! is_array( $cached ) ) {
-			$cached = array();
+			return array();
 		}
 
 		return $cached;
@@ -836,13 +838,15 @@ class FrmDb {
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );
 
-		if ( $cached_keys ) {
-			foreach ( $cached_keys as $key ) {
-				wp_cache_delete( $key, $group );
-			}
-
-			wp_cache_delete( 'cached_keys', $group );
+		if ( ! $cached_keys ) {
+			return;
 		}
+
+		foreach ( $cached_keys as $key ) {
+			wp_cache_delete( $key, $group );
+		}
+
+		wp_cache_delete( 'cached_keys', $group );
 	}
 
 	/**
