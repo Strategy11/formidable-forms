@@ -286,9 +286,15 @@ class FrmFormsListHelper extends FrmListHelper {
 				$class .= ' column-primary';
 			}
 
-			$class        = 'class="' . esc_attr( $class ) . '"';
-			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
-			$attributes   = $class . $style . $data_colname;
+			$class = 'class="' . esc_attr( $class ) . '"';
+
+			if ( 'settings' === $column_name ) {
+				$data_colname = ' data-colname="' . esc_attr( trim( strip_tags( $column_display_name ) ) ) . '"';
+			} else {
+				$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
+			}
+
+			$attributes = $class . $style . $data_colname;
 
 			switch ( $column_name ) {
 				case 'cb':
@@ -299,7 +305,12 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = $item->{$column_name};
 					break;
 				case 'name':
-					$val  = $this->get_form_name( $item, $actions, $edit_link, $mode );
+					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
+
+					if ( get_user_option( 'frm_forms_show_desc' ) && ! empty( $item->description ) ) {
+						$val .= '<p class="frm_form_desc">' . nl2br( $item->description ) . '</p>';
+					}
+
 					$val .= $action_links;
 					break;
 				case 'created_at':
@@ -409,6 +420,17 @@ class FrmFormsListHelper extends FrmListHelper {
 					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
 				'</a>';
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Get the HTML for the Settings column in the form list.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function column_settings() {
+		return '&nbsp;';
 	}
 
 	/**
