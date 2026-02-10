@@ -53,13 +53,19 @@
 	function handleClickCollapsibleBtn( event ) {
 		event.preventDefault();
 		const container = event.target.closest( '.frm-collapsible-box' );
-		container.querySelector( '.frm-collapsible-box__content' ).classList.toggle( 'frm-collapsible-box__content--collapsed' );
+		if ( ! container ) {
+			return;
+		}
+		const content = container.querySelector( '.frm-collapsible-box__content' );
+		if ( content ) {
+			content.classList.toggle( 'frm-collapsible-box__content--collapsed' );
+		}
 		const svgUse = container.querySelector( '.frm-collapsible-box__btn use' );
 		if ( ! svgUse ) {
 			return;
 		}
 
-		if ( svgUse.href.baseVal.includes( 'down' ) ) {
+		if ( svgUse.href.baseVal.indexOf( 'down' ) > -1 ) {
 			svgUse.href.baseVal = svgUse.href.baseVal.replace( 'down', 'up' );
 		} else {
 			svgUse.href.baseVal = svgUse.href.baseVal.replace( 'up', 'down' );
