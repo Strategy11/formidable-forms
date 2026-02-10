@@ -6,6 +6,9 @@
 	function handleClickFormsListSettings( event ) {
 		event.preventDefault();
 		const btn = 'A' === event.target.tagName ? event.target : event.target.closest( 'a' );
+		if ( ! btn ) {
+			return;
+		}
 
 		// If the dropdown is already moved here, toggle it.
 		if ( btn.nextElementSibling && 'frm-forms-list-settings' === btn.nextElementSibling.id ) {
