@@ -330,9 +330,6 @@ class FrmFormsListHelper extends FrmListHelper {
 						unset( $text );
 					}
 					break;
-				case 'settings':
-					$val = '&nbsp;';
-					break;
 				default:
 					if ( method_exists( $this, 'column_' . $column_name ) ) {
 						$val = call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -421,6 +418,17 @@ class FrmFormsListHelper extends FrmListHelper {
 					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
 				'</a>';
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Get the HTML for the Settings column in the form list.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function column_settings() {
+		return '&nbsp;';
 	}
 
 	/**
