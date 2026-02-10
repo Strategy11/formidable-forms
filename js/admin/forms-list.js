@@ -1,6 +1,6 @@
-( function() {
-	'use strict';
+'use strict';
 
+( function() {
 	const { documentOn } = frmDom.util;
 
 	function handleClickFormsListSettings( event ) {
