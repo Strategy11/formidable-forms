@@ -28,7 +28,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	initOptions() {
 		super.initOptions();
 		if ( null === this.componentId ) {
-			this.componentId = 'frm-range-slider-web-component-' + ( ++frmRangeSliderComponent.#instanceCount );
+			this.componentId = `frm-range-slider-web-component-${ ++frmRangeSliderComponent.#instanceCount }`;
 		}
 	}
 

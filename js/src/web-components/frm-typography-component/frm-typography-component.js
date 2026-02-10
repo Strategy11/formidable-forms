@@ -48,7 +48,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	initOptions() {
 		super.initOptions();
 		if ( null === this.componentId ) {
-			this.componentId = 'frm-typography-web-component-' + ( ++frmTypographyComponent.#instanceCount );
+			this.componentId = `frm-typography-web-component-${ ++frmTypographyComponent.#instanceCount }`;
 		}
 	}
 

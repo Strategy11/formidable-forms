@@ -18,7 +18,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	initOptions() {
 		super.initOptions();
 		if ( null === this.componentId ) {
-			this.componentId = 'frm-border-radius-web-component-' + ( ++frmBorderRadiusComponent.#instanceCount );
+			this.componentId = `frm-border-radius-web-component-${ ++frmBorderRadiusComponent.#instanceCount }`;
 		}
 	}
 
