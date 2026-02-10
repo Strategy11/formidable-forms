@@ -11,11 +11,11 @@ Critical principles for enterprise-level plugin development.
 
 ## Core Principles
 
-1. **NEVER guess** — Always search and verify before making changes
-2. **Minimal scope** — Fix at the most specific location, closest to the problem
-3. **Backward compatibility** — Maintain 100% compatibility with existing callers
-4. **No custom solutions** — Never invent new patterns; use existing ones
-5. **User changes are final** — If user makes manual changes, treat as authoritative
+1. **NEVER guess**: Always search and verify before making changes
+2. **Minimal scope**: Fix at the most specific location, closest to the problem
+3. **Backward compatibility**: Maintain 100% compatibility with existing callers
+4. **No custom solutions**: Never invent new patterns, use existing ones
+5. **User changes are final**: If user makes manual changes, treat as authoritative
 
 ---
 
@@ -25,8 +25,8 @@ Before proposing solutions:
 
 1. **Read and understand** the complete issue
 2. **Identify ALL affected locations** in the codebase
-3. **Map dependencies** — What calls this code? What does this code call?
-4. **Check plugin requirements** — Must code work standalone or require dependencies?
+3. **Map dependencies**: What calls this code? What does this code call?
+4. **Check plugin requirements**: Must code work standalone or require dependencies?
 
 ---
 
@@ -36,7 +36,7 @@ Before proposing solutions:
 - Choose solution with minimal scope and lowest risk
 - Fix at the most specific location
 - Prefer adding safety checks over refactoring
-- **Verify changes are not overkill** — If affecting several areas, analyze all to ensure fix is not excessive
+- **Verify changes are not overkill**: If affecting several areas, analyze all to ensure fix is not excessive
 
 ---
 
@@ -53,10 +53,10 @@ Before proposing solutions:
 
 Before ANY code change involving platform functions:
 
-1. **Search codebase first** — Understand existing patterns
-2. **Search official docs** — Function parameters, return types, deprecated alternatives
-3. **Search platform-specific docs** — Performance and security best practices
-4. **Verify alignment** — Ensure approach matches existing patterns
+1. **Search codebase first**: Understand existing patterns
+2. **Search official docs**: Function parameters, return types, deprecated alternatives
+3. **Search platform-specific docs**: Performance and security best practices
+4. **Verify alignment**: Ensure approach matches existing patterns
 
 ---
 

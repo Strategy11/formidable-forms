@@ -62,10 +62,10 @@ $this->assertTrue( $condition, 'Condition should be true.' );
 
 Every fix/feature must be tested with:
 
-1. **Pro active** — With formidable-pro plugin enabled
-2. **Pro inactive** — Lite-only scenario
-3. **Empty data** — Empty arrays, null values, missing keys
-4. **Edge cases** — Boundary conditions, special characters
+1. **Pro active**: With formidable-pro plugin enabled
+2. **Pro inactive**: Lite-only scenario
+3. **Empty data**: Empty arrays, null values, missing keys
+4. **Edge cases**: Boundary conditions, special characters
 
 ---
 

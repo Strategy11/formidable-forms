@@ -13,10 +13,10 @@ Formidable-specific patterns, naming conventions, and architectural decisions.
 
 Before making ANY change:
 
-1. **Find existing patterns** — Search models, controllers, helpers for similar functionality
-2. **Study pattern usage** — Search ALL places using the pattern
-3. **Trace parent hierarchy** — Search parent files up to plugin root
-4. **Iterate if needed** — If better pattern found, repeat from step 1
+1. **Find existing patterns**: Search models, controllers, helpers for similar functionality
+2. **Study pattern usage**: Search ALL places using the pattern
+3. **Trace parent hierarchy**: Search parent files up to plugin root
+4. **Iterate if needed**: If better pattern found, repeat from step 1
 
 **Never invent custom solutions if existing patterns exist.**
 
