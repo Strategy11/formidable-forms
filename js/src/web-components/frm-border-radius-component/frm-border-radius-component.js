@@ -8,9 +8,18 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	#value = '0px';
 	#defaultValue = '0px';
 	#usesMultipleValues = false;
+	static #instanceCount = 0;
+
 	constructor() {
 		super();
 		this.componentStyle = style;
+	}
+
+	initOptions() {
+		super.initOptions();
+		if ( null === this.componentId ) {
+			this.componentId = 'frm-border-radius-web-component-' + ( ++frmBorderRadiusComponent.#instanceCount );
+		}
 	}
 
 	initView() {
@@ -88,6 +97,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	getInputValue() {
 		this.inputValue = document.createElement( 'input' );
 		this.inputValue.type = 'text';
+		this.inputValue.id = `${ this.componentId }-value`;
+		this.inputValue.setAttribute( 'aria-label', __( 'Border radius value', 'formidable' ) );
 		this.inputValue.classList.add( 'frm-input-value' );
 
 		if ( ! this.#usesMultipleValues ) {
@@ -108,6 +119,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 
 	getInputUnit() {
 		this.inputUnit = document.createElement( 'select' );
+		this.inputUnit.id = `${ this.componentId }-unit`;
+		this.inputUnit.setAttribute( 'aria-label', __( 'Border radius unit', 'formidable' ) );
 		this.inputUnit.classList.add( 'frm-input-unit' );
 		this.#unitTypeOptions.forEach( option => {
 			const opt = document.createElement( 'option' );
@@ -148,6 +161,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 
 		this.borderInputTop = document.createElement( 'input' );
 		this.borderInputTop.type = 'text';
+		this.borderInputTop.id = `${ this.componentId }-top`;
+		this.borderInputTop.setAttribute( 'aria-label', __( 'Top border radius', 'formidable' ) );
 		this.borderInputTop.value = parseInt( defaultValues.top.value );
 		span.append( this.borderInputTop );
 
@@ -161,6 +176,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		span.classList.add( 'frm-border-input-bottom' );
 		this.borderInputBottom = document.createElement( 'input' );
 		this.borderInputBottom.type = 'text';
+		this.borderInputBottom.id = `${ this.componentId }-bottom`;
+		this.borderInputBottom.setAttribute( 'aria-label', __( 'Bottom border radius', 'formidable' ) );
 		this.borderInputBottom.value = parseInt( defaultValues.bottom.value );
 		span.append( this.borderInputBottom );
 
@@ -174,6 +191,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		span.classList.add( 'frm-border-input-left' );
 		this.borderInputLeft = document.createElement( 'input' );
 		this.borderInputLeft.type = 'text';
+		this.borderInputLeft.id = `${ this.componentId }-left`;
+		this.borderInputLeft.setAttribute( 'aria-label', __( 'Left border radius', 'formidable' ) );
 		this.borderInputLeft.value = parseInt( defaultValues.left.value );
 		span.append( this.borderInputLeft );
 
@@ -188,6 +207,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		span.classList.add( 'frm-border-input-right' );
 		this.borderInputRight = document.createElement( 'input' );
 		this.borderInputRight.type = 'text';
+		this.borderInputRight.id = `${ this.componentId }-right`;
+		this.borderInputRight.setAttribute( 'aria-label', __( 'Right border radius', 'formidable' ) );
 		this.borderInputRight.value = parseInt( defaultValues.right.value );
 		span.append( this.borderInputRight );
 

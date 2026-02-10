@@ -5,9 +5,12 @@ export class frmDropdownComponent extends frmWebComponent {
 	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
 	#select = document.createElement( 'select' );
 
+	static formAssociated = true;
+
 	constructor() {
 		super();
 		this.componentStyle = style;
+		this.attachInternals();
 	}
 
 	/**

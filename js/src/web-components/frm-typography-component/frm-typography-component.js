@@ -12,6 +12,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	];
 	#unitTypeOptions = [ 'px', 'em', '%' ];
 	#defaultValue = '21px';
+	static #instanceCount = 0;
 
 	constructor() {
 		super();
@@ -44,6 +45,13 @@ export class frmTypographyComponent extends frmWebComponent {
 		];
 	}
 
+	initOptions() {
+		super.initOptions();
+		if ( null === this.componentId ) {
+			this.componentId = 'frm-typography-web-component-' + ( ++frmTypographyComponent.#instanceCount );
+		}
+	}
+
 	initView() {
 		this.wrapper = document.createElement( 'div' );
 		this.container = document.createElement( 'div' );
@@ -68,6 +76,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 */
 	getSelect() {
 		this.select = document.createElement( 'select' );
+		this.select.setAttribute( 'aria-label', __( 'Font size', 'formidable' ) );
 		if ( null !== this.componentId ) {
 			this.select.id = this.componentId;
 		}
@@ -137,6 +146,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 */
 	getUnitValueInput() {
 		this.unitValueInput = document.createElement( 'input' );
+		this.unitValueInput.setAttribute( 'aria-label', __( 'Font size value', 'formidable' ) );
 		if ( null !== this.componentId ) {
 			this.unitValueInput.id = `${ this.componentId }-unit`;
 		}
@@ -163,6 +173,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 */
 	getUnitTypeSelect() {
 		this.unitTypeSelect = document.createElement( 'select' );
+		this.unitTypeSelect.setAttribute( 'aria-label', __( 'Font size unit', 'formidable' ) );
 
 		if ( null !== this.componentId ) {
 			this.unitTypeSelect.id = `${ this.componentId }-unit-type`;

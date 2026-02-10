@@ -1,7 +1,7 @@
 @import '../frm-web-component.scss';
 // This component is always initialized using attachShadow({ mode: 'open' }).
 .frm-colorpicker-component {
-	.wp-picker-container button {
+	.wp-picker-container button[type="button"] {
 		position: relative;
 		height: 36px !important;
 		background-image: none !important;
@@ -20,6 +20,9 @@
 			background: url('--frm-plugin-url/images/style/small-arrow.svg') no-repeat;
 			background-position: center;
 			z-index: 10;
+		}
+		&:focus{
+			border-color: var(--primary-500) !important;
 		}
 	}
 

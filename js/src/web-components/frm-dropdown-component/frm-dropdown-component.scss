@@ -19,4 +19,8 @@
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
+	&:focus {
+		border-color: var(--primary-500);
+    	box-shadow: none;
+	}
 }

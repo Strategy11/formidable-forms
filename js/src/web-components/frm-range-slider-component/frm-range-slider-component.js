@@ -18,10 +18,18 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	#sliderAvailableUnits = [ 'px', 'em', '%' ];
 	#sliderMaxValue = 100;
 	#sliderSteps = null;
+	static #instanceCount = 0;
 
 	constructor() {
 		super();
 		this.componentStyle = style;
+	}
+
+	initOptions() {
+		super.initOptions();
+		if ( null === this.componentId ) {
+			this.componentId = 'frm-range-slider-web-component-' + ( ++frmRangeSliderComponent.#instanceCount );
+		}
 	}
 
 	/**
@@ -339,9 +347,10 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Object} value     - The value of the slider.
 	 * @param {string} ariaLabel - The aria label of the slider.
 	 * @param {Array}  units     - The units of the slider.
+	 * @param {string} baseId    - The base ID for the form elements.
 	 * @return {Element} - The value and unit selection element.
 	 */
-	static createSliderValueAndUnitSelection( value, ariaLabel, units ) {
+	static createSliderValueAndUnitSelection( value, ariaLabel, units, baseId ) {
 		const valueContainer = document.createElement( 'div' );
 		valueContainer.classList.add( 'frm-slider-value' );
 
@@ -355,6 +364,11 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 		const unitSelect = document.createElement( 'select' );
 		unitSelect.setAttribute( 'aria-label', __( 'Value unit', 'formidable' ) );
+
+		if ( baseId ) {
+			valueInput.id = `${ baseId }-value`;
+			unitSelect.id = `${ baseId }-unit`;
+		}
 
 		units.forEach( unit => unitSelect.append( frmRangeSliderComponent.createDropdownOption( unit, unit, value.unit === unit ) ) );
 
@@ -434,7 +448,8 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
-		const valueContainer = frmRangeSliderComponent.createSliderValueAndUnitSelection( value, ariaLabel, units );
+		const baseId = this.componentId + ( type ? '-' + type : '' );
+		const valueContainer = frmRangeSliderComponent.createSliderValueAndUnitSelection( value, ariaLabel, units, baseId );
 
 		if ( addHiddenInputValue ) {
 			valueContainer.append( this.createSliderHiddenInputValue( options ) );

@@ -5,10 +5,13 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
 	#defaultValue = '#ffffff';
 
+	static formAssociated = true;
+
 	constructor() {
 		super();
 		this.input = document.createElement( 'input' );
 		this.componentStyle = style;
+		this.attachInternals();
 	}
 
 	initView() {
