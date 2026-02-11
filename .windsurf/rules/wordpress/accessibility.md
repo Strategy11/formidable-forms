@@ -13,6 +13,8 @@ Based on WordPress Core Official Standards (WCAG 2.2 Level AA).
 
 ## Conformance Levels
 
+Code integrated into the WordPress ecosystem is expected to conform to the **Web Content Accessibility Guidelines (WCAG), version 2.2, at level AA**. This is mandatory for all new and updated code.
+
 | Level     | Priority   | Description                        |
 | --------- | ---------- | ---------------------------------- |
 | Level A   | Critical   | Minimum accessibility requirements |
@@ -213,27 +215,19 @@ Provide ways to help users navigate and find content.
 
 **Skip Links**
 
+Skip links allow keyboard and screen reader users to bypass repetitive navigation. WordPress Core uses the `.screen-reader-text` class for skip links that become visible on focus.
+
 ```html
-<a href="#main-content" class="skip-link screen-reader-text">
-  Skip to main content
-</a>
+<!-- Add at the beginning of the body, before navigation -->
+<a class="screen-reader-text" href="#main-content"> Skip to main content </a>
+
+<!-- Target element -->
+<main id="main-content">
+  <!-- Main content -->
+</main>
 ```
 
-```css
-.skip-link {
-  position: absolute;
-  top: -100px;
-  left: 0;
-  z-index: 100000;
-}
-
-.skip-link:focus {
-  top: 7px;
-  left: 6px;
-  background: #f1f1f1;
-  padding: 15px 23px 14px;
-}
-```
+The `.screen-reader-text` class (defined in WordPress Specific Practices section) handles both the visually hidden state and the visible-on-focus behavior. No additional CSS is required when using this class.
 
 **Page Titles**
 
