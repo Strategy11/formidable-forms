@@ -24,10 +24,17 @@ Critical principles for enterprise-level plugin development.
 Before proposing solutions:
 
 1. **Read and understand** the complete issue
-2. **Use Fast Context for codebase awareness**: Use the code_search tool to understand all relevant code locations, dependencies, and related functionality before making changes
-3. **Identify ALL affected locations** in the codebase
-4. **Map dependencies**: What calls this code? What does this code call?
-5. **Check plugin requirements**: Must code work standalone or require dependencies?
+2. **Find existing patterns**: Search models, controllers, helpers, views for similar functionality
+3. **Study pattern usage**: Search ALL places using the pattern
+4. **Trace parent hierarchy**: Search parent files up to plugin root
+5. **Use Fast Context for codebase awareness**: Use the code_search tool to understand all relevant code locations, dependencies, and related functionality before making changes
+6. **Analyze complete context**: Completely analyze the class or file being changed to understand all context around features, logic, and flows for complete understanding
+7. **Identify ALL affected locations** in the codebase
+8. **Map dependencies**: What calls this code? What does this code call?
+9. **Check plugin requirements**: Must code work standalone or require dependencies?
+10. **Iterate if needed**: If a better pattern is found, repeat from step 2
+
+**Never invent custom solutions if existing patterns exist.**
 
 ---
 
