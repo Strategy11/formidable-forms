@@ -1,9 +1,6 @@
 ---
 trigger: "glob"
-globs:
-  - "**/*.css"
-  - "**/*.scss"
-  - "**/*.less"
+globs: ["**/*.css", "**/*.scss", "**/*.less"]
 description: "WordPress CSS coding standards with Formidable Forms patterns. Auto-applies when working with CSS files."
 ---
 
