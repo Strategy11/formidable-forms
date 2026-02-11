@@ -14,7 +14,7 @@ Critical principles for enterprise-level plugin development.
 1. **NEVER guess**: Always search and verify before making changes
 2. **Minimal scope**: Fix at the most specific location, closest to the problem
 3. **Backward compatibility**: Maintain 100% compatibility with existing callers
-4. **No custom solutions**: Never invent new patterns, use existing ones
+4. **No custom solutions**: Never invent new patterns. Use existing ones or search the web to review best practices, then follow the official WordPress standards or VIP guidelines.
 5. **User changes are final**: If user makes manual changes, treat as authoritative
 
 ---
