@@ -9,7 +9,7 @@ All commit messages MUST follow the Conventional Commits 1.0.0 specification.
 
 ## Format
 
-```
+```text
 <type>(<scope>): <description>
 
 [optional body]
@@ -56,7 +56,7 @@ Indicate breaking changes with:
 
 ## Examples
 
-```
+```text
 fix(fields): resolve date field validation error
 
 The date field was incorrectly validating dates in non-US formats.
@@ -65,25 +65,48 @@ Added locale-aware date parsing.
 Fixes #1234
 ```
 
-```
+```text
 feat(builder): add drag-and-drop field reordering
 
 Implements smooth drag-and-drop functionality for reordering fields
 in the form builder interface.
 ```
 
-```
+```text
 fix: prevent XSS in field labels
 
 Escape HTML entities in field labels before output.
 ```
 
-```
-refactor(entries)!: change entry meta storage format
+```text
+refactor(entries)!: change entry meta storage
 
 BREAKING CHANGE: Entry meta now uses JSON encoding instead of
 serialized PHP arrays. Run migration script before updating.
 ```
+
+## Character Limits (50/72 Rule)
+
+The 50/72 rule is a Git convention for readable commit messages:
+
+| Element      | Limit         | Reason                                                  |
+| ------------ | ------------- | ------------------------------------------------------- |
+| Subject line | 50 characters | GitHub truncates at 72, but 50 is ideal for readability |
+| Body lines   | 72 characters | Matches terminal width and Git log formatting           |
+
+**Subject Line (50 chars):**
+
+- Forces concise, scannable summaries
+- Displays fully in `git log --oneline`
+- GitHub shows full title without truncation
+
+**Body Lines (72 chars):**
+
+- Readable in terminals and Git interfaces
+- Prevents awkward line breaks
+- Matches email format conventions
+
+---
 
 ## Rules
 
@@ -93,7 +116,8 @@ serialized PHP arrays. Run migration script before updating.
 4. Description MUST be imperative mood ("add" not "added" or "adds").
 5. Body MUST be separated from description by a blank line.
 6. Breaking changes MUST be indicated with `!` or `BREAKING CHANGE:` footer.
-7. Keep description under 72 characters.
+7. Subject line MUST be 50 characters or fewer.
+8. Body lines MUST wrap at 72 characters.
 
 ## AI Commit Message Generation
 
