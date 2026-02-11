@@ -19,18 +19,18 @@ All commit messages MUST follow the Conventional Commits 1.0.0 specification.
 
 ## Types
 
-| Type       | Description                                          | SemVer |
-| ---------- | ---------------------------------------------------- | ------ |
-| `fix`      | Bug fix (patches a bug in the codebase)              | PATCH  |
-| `feat`     | New feature (adds functionality to the codebase)     | MINOR  |
-| `docs`     | Documentation only changes                           | -      |
-| `style`    | Code style changes (formatting, whitespace, etc.)    | -      |
-| `refactor` | Code change that neither fixes a bug nor adds feature| -      |
-| `perf`     | Performance improvement                              | -      |
-| `test`     | Adding or correcting tests                           | -      |
-| `build`    | Changes to build system or external dependencies     | -      |
-| `ci`       | CI configuration changes                             | -      |
-| `chore`    | Other changes that don't modify src or test files    | -      |
+| Type       | Description                                           | SemVer |
+| ---------- | ----------------------------------------------------- | ------ |
+| `fix`      | Bug fix (patches a bug in the codebase)               | PATCH  |
+| `feat`     | New feature (adds functionality to the codebase)      | MINOR  |
+| `docs`     | Documentation only changes                            | -      |
+| `style`    | Code style changes (formatting, whitespace, etc.)     | -      |
+| `refactor` | Code change that neither fixes a bug nor adds feature | -      |
+| `perf`     | Performance improvement                               | -      |
+| `test`     | Adding or correcting tests                            | -      |
+| `build`    | Changes to build system or external dependencies      | -      |
+| `ci`       | CI configuration changes                              | -      |
+| `chore`    | Other changes that don't modify src or test files     | -      |
 
 ## Scope (Optional)
 
