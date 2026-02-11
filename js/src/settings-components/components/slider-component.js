@@ -403,14 +403,11 @@ export default class frmSliderComponent {
 		}
 		let deltaX = event.clientX - this.options[ index ].startX;
 		const element = this.sliderElements[ index ];
-		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth;
+		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
 
-		// Ensure deltaX does not go below 0
+		// Clamp deltaX within valid range
 		deltaX = Math.max( deltaX, 0 );
-
-		if ( deltaX + ( this.sliderBulletWidth / 2 ) + this.sliderMarginRight >= sliderWidth ) {
-			return;
-		}
+		deltaX = Math.min( deltaX, sliderWidth );
 		const unit = element.querySelector( 'select' ).value;
 		const value = frmSliderComponent.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
 
