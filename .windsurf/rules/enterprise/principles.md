@@ -24,9 +24,10 @@ Critical principles for enterprise-level plugin development.
 Before proposing solutions:
 
 1. **Read and understand** the complete issue
-2. **Identify ALL affected locations** in the codebase
-3. **Map dependencies**: What calls this code? What does this code call?
-4. **Check plugin requirements**: Must code work standalone or require dependencies?
+2. **Use Fast Context for codebase awareness**: Use the code_search tool to understand all relevant code locations, dependencies, and related functionality before making changes
+3. **Identify ALL affected locations** in the codebase
+4. **Map dependencies**: What calls this code? What does this code call?
+5. **Check plugin requirements**: Must code work standalone or require dependencies?
 
 ---
 
