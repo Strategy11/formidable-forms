@@ -214,7 +214,7 @@ class FrmUsage {
 			}
 
 			// If key ends with `_email`, or value contains `@`, this might contain an email address.
-			if ( str_ends_with( $key, '_email' ) || str_contains( $value, '@' ) ) {
+			if ( str_ends_with( $key, '_email' ) || is_string( $value ) && str_contains( $value, '@' ) ) {
 				// Replace it with a placeholder.
 				$value = '{{contain_email}}';
 			}
