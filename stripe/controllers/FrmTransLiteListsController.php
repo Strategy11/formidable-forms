@@ -117,8 +117,6 @@ class FrmTransLiteListsController {
 		if ( 'coupons' === $action ) {
 			FrmAppHelper::permission_check( 'frm_change_settings' );
 
-			FrmUsageController::update_flows_data( 'coupons', 'view_tab' );
-
 			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/coupons.php';
 			return;
 		}
