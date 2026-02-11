@@ -2,12 +2,12 @@
 trigger: glob
 globs:
   [
+    "**/*block.js",
+    "**/block.json",
     "**/blocks/**/*.js",
     "**/blocks/**/*.jsx",
     "**/block-editor/**/*.js",
     "**/gutenberg/**/*.js",
-    "**/*.block.js",
-    "**/block.json",
   ]
 description: WordPress Block Editor (Gutenberg) development standards. Auto-applies when working with block-related files.
 ---
@@ -821,6 +821,12 @@ function useBlockContext() {
   return useContext(BlockContext);
 }
 ```
+
+---
+
+## VIP Standards
+
+For WordPress VIP-specific block editor standards including dynamic blocks, block bindings, Script Modules API, and enterprise performance patterns, see `wordpress-vip/wpvip-block-editor.md`.
 
 ---
 
