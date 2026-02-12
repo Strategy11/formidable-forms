@@ -14,26 +14,93 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 - Investigating error logs
 - Resolving compatibility issues
 
-## Workflow Phases
+## Core Principles
 
-1. **Understand** - Clarify issue, expected vs actual behavior, reproduction steps
-2. **Locate** - Find root cause using code_search, trace execution flow
-3. **Pattern** - Find existing patterns, research WordPress best practices
-4. **Design** - Propose 2-3 solutions with trade-offs
-5. **Implement** - Apply minimal fix following coding standards
-6. **Clean** - Remove debug code, verify code style
-7. **Test** - Verify fix, check Pro active/inactive scenarios
-8. **Report** - Summarize root cause, solution, and files changed
+1. **NEVER guess**: Always search and verify before making changes
+2. **Minimal scope**: Fix at the most specific location, closest to the problem
+3. **Backward compatibility**: Maintain 100% compatibility with existing callers
+4. **No custom solutions**: Use existing patterns or follow official WordPress/VIP standards
+5. **User changes are final**: If user makes manual changes, treat as authoritative
+
+---
+
+## Workflow
+
+### Phase 1: Understand
+
+- Read and understand the complete issue
+- Clarify expected vs actual behavior
+- Identify reproduction steps
+- Determine scope: which plugin(s), which feature(s)
+
+### Phase 2: Locate
+
+- Use code_search to find the root cause (not just symptoms)
+- Trace execution flow from entry point to failure
+- **Analyze complete context** of the class or file being changed — all features, logic, and flows
+- **Trace parent hierarchy**: search parent classes and files up to plugin root
+- Identify ALL affected locations in the codebase
+- Map dependencies: what calls this code, what does this code call
+- Check plugin requirements: must code work standalone or require Pro/addons
+
+### Phase 3: Research
+
+- Find existing patterns: search models, controllers, helpers, views for similar functionality
+- Study pattern usage: search ALL places using the pattern
+- Search official WordPress/VIP docs: function parameters, return types, deprecated alternatives
+- Search platform-specific docs: performance and security best practices
+- Verify alignment: ensure approach matches existing codebase patterns
+- **Never invent custom solutions if existing patterns exist**
+- **Iterate**: if a better pattern is found, repeat from Phase 2
+
+### Phase 4: Design
+
+- Propose 2-3 solutions with trade-offs clearly stated
+- Select the solution with minimal scope and lowest risk
+- Fix at the most specific location, closest to root cause
+- Prefer adding safety checks over refactoring
+- Verify the fix is not overkill: if affecting multiple areas, analyze all to ensure it is not excessive
+- Document with [solution-template.md](solution-template.md)
+
+### Phase 5: Implement
+
+- Make the smallest change that completely solves the problem
+- Never change method signatures, return types, or data structures
+- Never refactor unrelated code in the same commit
+- Add defensive checks where data comes in, not where it is used everywhere
+- Follow WordPress PHP/JS coding standards and Formidable naming patterns
+
+### Phase 6: Verify
+
+- Confirm fix resolves the reported issue
+- Test with Pro plugin active AND inactive
+- Test with empty data and missing keys
+- Confirm no PHP warnings, notices, or errors in any scenario
+- Confirm backward compatibility with existing callers
+- Confirm fix is testable without touching other code
+- Remove any debug code and verify code style
+- Run through [checklist.md](checklist.md)
+
+### Phase 7: Report
+
+- Summarize root cause, solution, and files changed using [report-template.md](report-template.md)
+- Provide branch name, PR title, and PR body using [pr-template.md](pr-template.md)
+
+---
 
 ## Supporting Resources
 
-- [checklist.md](checklist.md) - Verification checklist
-- [solution-template.md](solution-template.md) - Solution comparison template
-- [report-template.md](report-template.md) - Completion report template
+- [checklist.md](checklist.md): Verification checklist
+- [solution-template.md](solution-template.md): Solution comparison template
+- [report-template.md](report-template.md): Completion report template
+- [pr-template.md](pr-template.md): Branch name, PR title, and PR body template
 
 ## Invocation
 
+Cascade automatically invokes this skill when your request matches bug-fixing tasks.
+
+To manually invoke:
+
 ```text
 @fix-bug
-/fix-bug
 ```
