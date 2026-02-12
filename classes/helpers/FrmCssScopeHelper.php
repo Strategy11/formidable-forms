@@ -153,6 +153,7 @@ class FrmCssScopeHelper {
 			$buffer .= $char;
 			++$i;
 		}//end while
+
 		return implode( '', $output );
 	}
 
@@ -244,12 +245,7 @@ class FrmCssScopeHelper {
 			if ( str_starts_with( $single_selector, $prefix ) ) {
 				$unprefixed_selectors[] = trim( substr( $single_selector, $prefix_length ) );
 			} else {
-				$direct_removed = $this->remove_direct_scope( $single_selector, $class_name );
-				if ( null !== $direct_removed ) {
-					$unprefixed_selectors[] = $direct_removed;
-				} else {
-					$unprefixed_selectors[] = $single_selector;
-				}
+				$unprefixed_selectors[] = $this->remove_direct_scope( $single_selector, $class_name ) ?? $single_selector;
 			}
 		}
 
@@ -295,7 +291,7 @@ class FrmCssScopeHelper {
 		$scope_pattern = '/\.' . preg_quote( $class_name, '/' ) . '(?![a-zA-Z0-9_-])/';
 		$parts         = preg_split( '/(\s+)/', $selector, 2, PREG_SPLIT_DELIM_CAPTURE );
 
-		if ( ! preg_match( $scope_pattern, $parts[0] ) ) {
+		if ( false === $parts || ! preg_match( $scope_pattern, $parts[0] ) ) {
 			return null;
 		}
 
