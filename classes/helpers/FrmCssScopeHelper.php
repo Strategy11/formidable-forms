@@ -218,6 +218,7 @@ class FrmCssScopeHelper {
 
 			$prefixed_selectors[] = '.' . $class_name . ' ' . $single_selector;
 			$direct               = $this->add_direct_scope( $single_selector, $class_name );
+
 			if ( null !== $direct ) {
 				$prefixed_selectors[] = $direct;
 			}
@@ -276,6 +277,7 @@ class FrmCssScopeHelper {
 		}
 
 		$rest = '';
+
 		if ( count( $parts ) > 1 ) {
 			$rest = $parts[1] . $parts[2];
 		}
