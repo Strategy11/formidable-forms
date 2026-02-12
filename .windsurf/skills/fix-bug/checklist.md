@@ -4,10 +4,15 @@
 
 - [ ] Understood the complete issue
 - [ ] Identified root cause (not just symptoms)
+- [ ] Analyzed complete context of changed class/file
+- [ ] Traced parent hierarchy to plugin root
 - [ ] Mapped all affected locations
+- [ ] Mapped dependencies (what calls this code, what it calls)
+- [ ] Studied ALL places using the affected pattern
 - [ ] Checked Pro plugin requirement
 - [ ] Found existing patterns for the fix
-- [ ] Searched WordPress docs for best practices
+- [ ] Searched WordPress/VIP docs for best practices
+- [ ] Searched platform-specific docs (performance, security)
 
 ## Solution Selection
 
@@ -15,10 +20,17 @@
 - [ ] Documented trade-offs for each
 - [ ] Selected minimal scope solution
 - [ ] Verified fix is at most specific location
+- [ ] Preferred safety checks over refactoring
 - [ ] Confirmed not overkill if affecting multiple areas
+- [ ] Verified approach matches existing codebase patterns
+- [ ] Fix is testable without touching other code
 
 ## Implementation
 
+- [ ] Makes the smallest change that solves the problem
+- [ ] Method signatures, return types, and data structures unchanged
+- [ ] No unrelated code refactored in the same commit
+- [ ] Defensive checks added where data comes in
 - [ ] Follows WordPress PHP coding standards
 - [ ] Follows Formidable naming patterns
 - [ ] Uses existing helper methods
