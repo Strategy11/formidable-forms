@@ -370,6 +370,77 @@ class FrmFieldsController {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
 
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
+
+		$unique_values_label_atts = array(
+			'for'          => 'frm_uniq_field_' . $field['id'],
+			'class'        => 'frm_help frm-mb-0',
+			'title'        => __(
+				'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.',
+				'formidable'
+			),
+			'data-trigger' => 'hover',
+		);
+
+		$read_only_label_atts = array(
+			'for'          => 'frm_read_only_field_' . $field['id'],
+			'class'        => 'frm_help frm-mb-0',
+			'title'        => __( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ),
+			'data-trigger' => 'hover',
+		);
+
+		if ( ! $pro_is_installed ) {
+			$visibility_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array(
+					'id'       => 'field_options_admin_only_' . $field['id'],
+					'readonly' => '1',
+				),
+				'field_visibility',
+				__( 'Visibility options', 'formidable' ),
+				'/field-options/#kb-visibility'
+			);
+
+			$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
+				'autocomplete',
+				__( 'Autocomplete options', 'formidable' ),
+				'/email-address/#kb-autocomplete-attribute'
+			);
+
+			$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array(
+					'type'     => 'text',
+					'readonly' => '1',
+				),
+				'before_after_contents',
+				__( 'Before and after field contents', 'formidable' ),
+				'/field-options/#kb-before-after-input'
+			);
+
+			$show_upsell_for_unique_value          = in_array(
+				$field['type'],
+				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
+				true
+			);
+			$show_upsell_for_read_only             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
+			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
+			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
+
+			$unique_values_label_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				$unique_values_label_atts,
+				'unique_values',
+				__( 'Unique Values', 'formidable' ),
+				'/field-options/#kb-unique'
+			);
+			$read_only_label_atts     = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				$read_only_label_atts,
+				'read_only',
+				__( 'Read Only Values', 'formidable' ),
+				'/field-options/#kb-read-only'
+			);
+		}//end if
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
