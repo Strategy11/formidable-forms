@@ -102,8 +102,15 @@ Report
 **Critical rules**: see [pr-template.md](pr-template.md) for details:
 
 - **PR title** = plain English summary (e.g. `Fix dropdown hidden behind panel`)
-- **PR body** = where `Fixes #ISSUE` goes + description + test steps
+- **PR body** = where `Fixes {full_github_issue_url}` goes + description + test steps (no hard-wrapping)
 - **Commit message** = conventional commit format, body explains *what/why*, NO issue ref
+
+**Writing style** (applies to PR titles, PR body, and commit messages):
+
+- **No em dashes** (`—` or `–`): use commas, periods, or rewrite the sentence
+- **No semicolons** (`;`): split into separate sentences instead
+- **No hard-wrapping** in PR body text: let GitHub handle line wrapping (72-char wrap is for commit bodies only)
+- **Full GitHub URL** for issue references (e.g., `https://github.com/Strategy11/formidable-pro/issues/3030`), not `#number`
 
 ---
 

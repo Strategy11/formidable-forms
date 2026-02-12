@@ -1,7 +1,7 @@
 # PR Template
 
 > Three things to output: **branch**, **PR title + body**, **commit message**.
-> PR title ≠ commit message. They follow different rules.
+> PR title is not the same as commit message. They follow different rules.
 
 ---
 
@@ -45,16 +45,20 @@ fix/{issue-number}-{short-slug}
 
 The PR body **must** contain the issue reference and a testing section.
 
-```markdown
-Fixes #{issue_number}
+**Do NOT hard-wrap PR body text.** Write natural paragraphs and let GitHub handle line wrapping. The 72-char wrap rule only applies to **commit message bodies**, not PR bodies.
 
-[1-2 sentence description of the fix.]
+```markdown
+Fixes {full_github_issue_url}
+
+[1-2 sentence description of the fix. Do NOT hard-wrap lines.]
 
 ## Testing
 
 1. [Reproduction / verification step]
 2. [Expected result after fix]
 ```
+
+**Issue reference format:** Always use the full GitHub issue URL (e.g., `https://github.com/Strategy11/formidable-pro/issues/3030`) instead of `#number`, because the PR may target a different repo than the issue.
 
 ---
 

@@ -61,8 +61,6 @@ fix(fields): resolve date field validation error
 
 The date field was incorrectly validating dates in non-US formats.
 Added locale-aware date parsing.
-
-Fixes #1234
 ```
 
 ```text
@@ -127,4 +125,4 @@ When generating commit messages:
 2. Identify the scope from the files/directories changed.
 3. Write a concise description in imperative mood.
 4. Add body with details if the change is complex.
-5. Include issue references if mentioned in the conversation.
+5. Do NOT include issue references in commit messages. Issue references (`Fixes URL`) go in the **PR body** only.

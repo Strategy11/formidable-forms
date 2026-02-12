@@ -14,18 +14,18 @@
 
 ## Files Changed
 
-- `path/to/file` — [what changed]
+- `path/to/file` - [what changed]
 
 ## PR Info
 
 - **Branch:** `fix/{issue-number}-{short-slug}`
-- **PR Title:** [Human-readable summary — plain English, no conventional commit prefix]
+- **PR Title:** [Human-readable summary, plain English, no conventional commit prefix]
 - **PR Body:**
 
 ```markdown
-Fixes #{issue_number}
+Fixes {full_github_issue_url}
 
-[1-2 sentence description of the fix]
+[1-2 sentence description of the fix. Do NOT hard-wrap lines.]
 
 ## Testing
 
