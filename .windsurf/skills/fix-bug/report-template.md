@@ -1,66 +1,49 @@
-# Bug Fix Report
+# Bug Fix Report Template
 
-## Summary
-
-**Issue:** [Brief description]
-
-**Status:** Fixed / Partially Fixed / Needs More Info
+> Fill each placeholder. Keep every section short.
 
 ---
 
 ## Root Cause
 
-[One paragraph explaining why the bug occurred]
+[1-2 sentences: what is broken and why]
 
----
+## Fix
 
-## Solution
-
-[One paragraph explaining the fix]
-
----
+[1-2 sentences: what you changed to fix it]
 
 ## Files Changed
 
-| File                 | Change              |
-|----------------------|---------------------|
-| `path/to/file1.php`  | [Brief description] |
-| `path/to/file2.php`  | [Brief description] |
+- `path/to/file` — [what changed]
 
----
+## PR Info
 
-## Testing Done
+- **Branch:** `fix/{issue-number}-{short-slug}`
+- **PR Title:** [Human-readable summary — plain English, no conventional commit prefix]
+- **PR Body:**
 
-- [ ] Bug is fixed in reported scenario
-- [ ] Works when Pro is ACTIVE
-- [ ] Works when Pro is INACTIVE
-- [ ] No PHP warnings or notices
-- [ ] Backward compatible
+```markdown
+Fixes #{issue_number}
 
----
+[1-2 sentence description of the fix]
 
-## Remaining Concerns
+## Testing
 
-[Any edge cases, follow-up items, or things to monitor]
+1. [Step to reproduce / verify]
+2. [Expected result after fix]
+```
 
----
-
-## Branch & PR
-
-**Branch:** `fix/{issue-number}-{short-description}`
-
-**PR Title:** `fix(scope): brief description`
-
-See [pr-template.md](pr-template.md) for full PR body format.
-
----
-
-## Commit Message
+- **Commit Message:**
 
 ```text
-fix(scope): brief description
+type(scope): subject line (imperative, ≤50 chars)
 
-Detailed explanation of what was fixed and why.
-
-Fixes #ISSUE_NUMBER
+[Optional body: what changed and why. Wrap at 72 chars.
+Do NOT put issue references here — they go in the PR body.]
 ```
+
+## Manual Test Steps
+
+1. [Step]
+2. [Step]
+3. [Expected result]

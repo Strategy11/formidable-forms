@@ -83,8 +83,27 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 
 ### Phase 7: Report
 
-- Summarize root cause, solution, and files changed using [report-template.md](report-template.md)
-- Provide branch name, PR title, and PR body using [pr-template.md](pr-template.md)
+Output a single concise report following [report-template.md](report-template.md).
+
+The report contains **all** deliverables in one place:
+
+```markdown
+Report
+├── Root Cause → Fix  (1 sentence each)
+├── Files Changed     (file path + what changed)
+├── PR Info
+│   ├── Branch        (fix/{issue}-{slug})
+│   ├── PR Title      (human-readable, NOT conventional commit format)
+│   ├── PR Body       (Fixes #N + description + test steps)
+│   └── Commit Msg    (conventional commit, NO issue number)
+└── Manual Test Steps (numbered reproduction/verification)
+```
+
+**Critical rules**: see [pr-template.md](pr-template.md) for details:
+
+- **PR title** = plain English summary (e.g. `Fix dropdown hidden behind panel`)
+- **PR body** = where `Fixes #ISSUE` goes + description + test steps
+- **Commit message** = conventional commit format, body explains *what/why*, NO issue ref
 
 ---
 

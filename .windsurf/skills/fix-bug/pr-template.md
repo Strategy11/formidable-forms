@@ -1,53 +1,95 @@
 # PR Template
 
-## Branch Name
+> Three things to output: **branch**, **PR title + body**, **commit message**.
+> PR title ≠ commit message. They follow different rules.
 
-**Format:** `fix/{issue-number}-{short-description}`
+---
 
-Use 2-4 word kebab-case description specific to the issue.
+## Branch
 
-**Examples:**
+```text
+fix/{issue-number}-{short-slug}
+```
 
-- `fix/1234-date-validation-error`
-- `fix/5678-entry-export-timeout`
-- `fix/910-field-label-xss`
+- 2-4 word kebab-case slug
+- Examples: `fix/1234-date-validation`, `fix/5678-export-timeout`
 
 ---
 
 ## PR Title
 
-Follow Conventional Commits format:
+**Plain English. NOT conventional commit format.**
 
-```text
-fix(scope): brief description
-```
-
-**Rules:**
-
-- 50 characters or fewer
-- Imperative mood ("fix", not "fixed")
-- Lowercase after type/scope
-- No period at end
-
-**Scopes:** builder, entries, fields, api, admin, frontend, db, i18n, security, deps
+| Rule           | Detail                                      |
+|----------------|---------------------------------------------|
+| Format         | Human-readable sentence fragment            |
+| Capitalization | Sentence case (first word capitalized)      |
+| Length         | ≤ 72 characters                             |
+| Mood           | Imperative ("Fix", not "Fixed" or "Fixes")  |
+| No period      | Do not end with `.`                         |
 
 **Examples:**
 
-- `fix(fields): resolve date validation error`
-- `fix(entries): prevent export timeout on large data`
-- `fix(security): escape HTML in field labels`
+- `Fix dropdown hidden behind panel in form builder`
+- `Prevent date field validation error for non-US formats`
+- `Escape HTML entities in field labels`
+
+**Wrong** (do NOT use conventional commit format for PR titles):
+
+- ~~`fix(builder): prevent dropdown clipping at edge`~~
+- ~~`fix(fields): resolve date validation error`~~
 
 ---
 
 ## PR Body
 
+The PR body **must** contain the issue reference and a testing section.
+
 ```markdown
 Fixes #{issue_number}
 
-Brief description of what this PR fixes.
+[1-2 sentence description of the fix.]
 
-### Testing
+## Testing
 
-- Clarify the steps to reproduce the issue
-- Verify that the fix fully resolves the issue
+1. [Reproduction / verification step]
+2. [Expected result after fix]
+```
+
+---
+
+## Commit Message
+
+Follows **Conventional Commits**: separate from PR title.
+
+```text
+type(scope): subject (imperative mood, ≤ 50 chars)
+
+[Optional body: what changed and why. Wrap at 72 chars.]
+```
+
+| Rule               | Detail                                       |
+|--------------------|----------------------------------------------|
+| Subject ≤ 50 chars | Lowercase after `type(scope):`               |
+| Body wraps at 72   | Explains *what* and *why*, not *how*         |
+| No issue ref       | `Fixes #N` goes in the **PR body**, not here |
+| No period          | Subject line does not end with `.`           |
+
+**Scopes:** builder, entries, fields, api, admin, frontend, db, i18n, security, deps
+
+**Examples:**
+
+```text
+fix(builder): prevent dropdown clipping at edge
+
+When a row has many fields, the field action dropdown
+extends beyond the container boundary and gets clipped.
+Add a left-edge overflow check to reposition it.
+```
+
+```text
+fix(fields): handle non-US date format validation
+
+Date field was rejecting valid dates in dd/mm/yyyy
+format. Use locale-aware parsing instead.
 ```
