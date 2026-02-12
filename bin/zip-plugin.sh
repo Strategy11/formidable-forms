@@ -43,6 +43,7 @@ zip -r $zipname $destination \
 	-x "*/.gitattributes" \
 	-x "*/.github/*" \
 	-x "*/.gitignore" \
+	-x "*/.windsurf/*" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
