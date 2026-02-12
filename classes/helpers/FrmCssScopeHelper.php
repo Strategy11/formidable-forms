@@ -33,6 +33,7 @@ class FrmCssScopeHelper {
 				if ( false === $brace_pos ) {
 					$buffer .= $char;
 					++$i;
+
 					continue;
 				}
 
@@ -51,6 +52,7 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
@@ -72,6 +74,7 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
@@ -126,6 +129,7 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
@@ -147,6 +151,7 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
@@ -326,6 +331,7 @@ class FrmCssScopeHelper {
 				} elseif ( $char === $string_char ) {
 					$in_string = false;
 				}
+
 				continue;
 			}
 
