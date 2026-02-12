@@ -24,14 +24,14 @@ New code must NOT use jQuery. Use native DOM APIs and modern JavaScript.
 
 ```javascript
 // INCORRECT - jQuery
-$(".my-element").addClass("active");
-$(".my-element").on("click", handler);
-$.ajax({ url: "/api" });
+$( '.my-element' ).addClass( 'active' );
+$( '.my-element' ).on( 'click', handler );
+$.ajax( { url: '/api' } );
 
 // CORRECT - Native
-document.querySelector(".my-element").classList.add("active");
-document.querySelector(".my-element").addEventListener("click", handler);
-fetch("/api");
+document.querySelector( '.my-element' ).classList.add( 'active' );
+document.querySelector( '.my-element' ).addEventListener( 'click', handler );
+fetch( '/api' );
 ```
 
 ### Functional Over Class-Based
@@ -41,26 +41,26 @@ Prefer functional and modular implementations over classes.
 ```javascript
 // INCORRECT - Class-based
 class TemplateManager {
-  constructor() {
-    this.templates = [];
-  }
+	constructor() {
+		this.templates = [];
+	}
 
-  addTemplate(template) {
-    this.templates.push(template);
-  }
+	addTemplate( template ) {
+		this.templates.push( template );
+	}
 }
 
 // CORRECT - Functional/Modular
 const createTemplateManager = () => {
-  const templates = [];
+	const templates = [];
 
-  const addTemplate = (template) => {
-    templates.push(template);
-  };
+	const addTemplate = ( template ) => {
+		templates.push( template );
+	};
 
-  const getTemplates = () => [...templates];
+	const getTemplates = () => [ ...templates ];
 
-  return { addTemplate, getTemplates };
+	return { addTemplate, getTemplates };
 };
 ```
 
@@ -98,9 +98,9 @@ let c = 3;
 
 // INCORRECT
 const a = 1,
-  b = 2;
+	b = 2;
 let c = 3,
-  d = 4;
+	d = 4;
 ```
 
 ### Declare Close to First Use
@@ -109,17 +109,17 @@ Declare variables close to where they are first used, not at the top of function
 
 ```javascript
 // CORRECT
-function processItems(items) {
-  if (!items.length) {
-    return [];
-  }
+function processItems( items ) {
+	if ( ! items.length ) {
+		return [];
+	}
 
-  const processed = [];
-  for (const item of items) {
-    const result = transform(item);
-    processed.push(result);
-  }
-  return processed;
+	const processed = [];
+	for ( const item of items ) {
+		const result = transform( item );
+		processed.push( result );
+	}
+	return processed;
 }
 ```
 
@@ -144,13 +144,13 @@ Use clear, descriptive names. Avoid abbreviations except well-known ones.
 ```javascript
 // CORRECT
 const userAuthenticationToken = getToken();
-const isFormValid = validateForm(formData);
-const handleFormSubmit = (event) => {};
+const isFormValid = validateForm( formData );
+const handleFormSubmit = ( event ) => {};
 
 // INCORRECT
 const uat = getToken();
-const valid = validateForm(formData);
-const submit = (e) => {};
+const valid = validateForm( formData );
+const submit = ( e ) => {};
 ```
 
 ---
@@ -163,16 +163,16 @@ Use arrow functions for callbacks and short functions.
 
 ```javascript
 // CORRECT
-const numbers = [1, 2, 3];
-const doubled = numbers.map((n) => n * 2);
+const numbers = [ 1, 2, 3 ];
+const doubled = numbers.map( ( n ) => n * 2 );
 
-elements.forEach((element) => {
-  element.classList.add("active");
-});
+elements.forEach( ( element ) => {
+	element.classList.add( 'active' );
+} );
 
 // Named function for complex logic
-function processComplexData(data) {
-  // Multiple statements
+function processComplexData( data ) {
+	// Multiple statements
 }
 ```
 
@@ -182,16 +182,16 @@ Prefer pure functions without side effects.
 
 ```javascript
 // CORRECT - Pure function
-const calculateTotal = (items) => {
-  return items.reduce((sum, item) => sum + item.price, 0);
+const calculateTotal = ( items ) => {
+	return items.reduce( ( sum, item ) => sum + item.price, 0 );
 };
 
 // INCORRECT - Impure function with side effects
 let total = 0;
-const calculateTotal = (items) => {
-  items.forEach((item) => {
-    total += item.price; // Mutates external state
-  });
+const calculateTotal = ( items ) => {
+	items.forEach( ( item ) => {
+		total += item.price; // Mutates external state
+	} );
 };
 ```
 
@@ -201,14 +201,14 @@ Use default parameters instead of conditional logic.
 
 ```javascript
 // CORRECT
-function createUser(name, role = "subscriber") {
-  return { name, role };
+function createUser( name, role = 'subscriber' ) {
+	return { name, role };
 }
 
 // INCORRECT
-function createUser(name, role) {
-  role = role || "subscriber";
-  return { name, role };
+function createUser( name, role ) {
+	role = role || 'subscriber';
+	return { name, role };
 }
 ```
 
@@ -218,13 +218,13 @@ Use rest parameters instead of `arguments` object.
 
 ```javascript
 // CORRECT
-function sum(...numbers) {
-  return numbers.reduce((total, n) => total + n, 0);
+function sum( ...numbers ) {
+	return numbers.reduce( ( total, n ) => total + n, 0 );
 }
 
 // INCORRECT
 function sum() {
-  return Array.prototype.slice.call(arguments).reduce((t, n) => t + n, 0);
+	return Array.prototype.slice.call( arguments ).reduce( ( t, n ) => t + n, 0 );
 }
 ```
 
@@ -234,29 +234,29 @@ Use early returns to avoid deep nesting.
 
 ```javascript
 // CORRECT
-function processUser(user) {
-  if (!user) {
-    return null;
-  }
+function processUser( user ) {
+	if ( ! user ) {
+		return null;
+	}
 
-  if (!user.isActive) {
-    return { error: "User inactive" };
-  }
+	if ( ! user.isActive ) {
+		return { error: 'User inactive' };
+	}
 
-  return { data: user.profile };
+	return { data: user.profile };
 }
 
 // INCORRECT
-function processUser(user) {
-  if (user) {
-    if (user.isActive) {
-      return { data: user.profile };
-    } else {
-      return { error: "User inactive" };
-    }
-  } else {
-    return null;
-  }
+function processUser( user ) {
+	if ( user ) {
+		if ( user.isActive ) {
+			return { data: user.profile };
+		} else {
+			return { error: 'User inactive' };
+		}
+	} else {
+		return null;
+	}
 }
 ```
 
@@ -270,23 +270,23 @@ Use shorthand property and method syntax.
 
 ```javascript
 // CORRECT
-const name = "John";
+const name = 'John';
 const age = 30;
 const user = {
-  name,
-  age,
-  greet() {
-    return `Hello, ${this.name}`;
-  },
+	name,
+	age,
+	greet() {
+		return `Hello, ${ this.name }`;
+	},
 };
 
 // INCORRECT
 const user = {
-  name: name,
-  age: age,
-  greet: function () {
-    return "Hello, " + this.name;
-  },
+	name: name,
+	age: age,
+	greet: function () {
+		return 'Hello, ' + this.name;
+	},
 };
 ```
 
@@ -297,17 +297,17 @@ Use destructuring for objects and arrays.
 ```javascript
 // CORRECT
 const { name, email } = user;
-const [first, second] = items;
+const [ first, second ] = items;
 const { data: userData } = response;
 
-function processUser({ name, email, role = "user" }) {
-  // Use destructured values
+function processUser( { name, email, role = 'user' } ) {
+	// Use destructured values
 }
 
 // INCORRECT
 const name = user.name;
 const email = user.email;
-const first = items[0];
+const first = items[ 0 ];
 ```
 
 ### Spread Operator
@@ -316,13 +316,13 @@ Use spread for copying and merging.
 
 ```javascript
 // CORRECT
-const newArray = [...oldArray, newItem];
+const newArray = [ ...oldArray, newItem ];
 const newObject = { ...oldObject, newProperty: value };
 const merged = { ...defaults, ...options };
 
 // INCORRECT
-const newArray = oldArray.concat([newItem]);
-const newObject = Object.assign({}, oldObject, { newProperty: value });
+const newArray = oldArray.concat( [ newItem ] );
+const newObject = Object.assign( {}, oldObject, { newProperty: value } );
 ```
 
 ### Computed Property Names
@@ -331,10 +331,10 @@ Use computed property names when needed.
 
 ```javascript
 // CORRECT
-const key = "dynamicKey";
+const key = 'dynamicKey';
 const obj = {
-  [key]: value,
-  [`prefix_${key}`]: otherValue,
+	[ key ]: value,
+	[ `prefix_${ key }` ]: otherValue,
 };
 ```
 
@@ -348,13 +348,13 @@ Use ES modules (import/export) for all new code.
 
 ```javascript
 // CORRECT
-import { getState, setState } from "./shared";
-import defaultExport from "./module";
+import { getState, setState } from './shared';
+import defaultExport from './module';
 export const myFunction = () => {};
 export default mainFunction;
 
 // INCORRECT
-const module = require("./module");
+const module = require( './module' );
 module.exports = myFunction;
 ```
 
@@ -364,11 +364,11 @@ Prefer named exports over default exports for better refactoring.
 
 ```javascript
 // CORRECT
-export const processData = (data) => {};
-export const validateData = (data) => {};
+export const processData = ( data ) => {};
+export const validateData = ( data ) => {};
 
 // Use
-import { processData, validateData } from "./utils";
+import { processData, validateData } from './utils';
 ```
 
 ### Single Import Per Module
@@ -377,11 +377,11 @@ Import from a module only once per file.
 
 ```javascript
 // CORRECT
-import { foo, bar, baz } from "./utils";
+import { foo, bar, baz } from './utils';
 
 // INCORRECT
-import { foo } from "./utils";
-import { bar } from "./utils";
+import { foo } from './utils';
+import { bar } from './utils';
 ```
 
 ### No Wildcard Imports
@@ -390,10 +390,10 @@ Avoid wildcard imports in production code.
 
 ```javascript
 // CORRECT
-import { specificFunction } from "./utils";
+import { specificFunction } from './utils';
 
 // INCORRECT
-import * as utils from "./utils";
+import * as utils from './utils';
 ```
 
 ---
@@ -406,60 +406,60 @@ Use native query selectors.
 
 ```javascript
 // Single element
-const element = document.querySelector(".my-class");
-const byId = document.getElementById("my-id");
+const element = document.querySelector( '.my-class' );
+const byId = document.getElementById( 'my-id' );
 
 // Multiple elements
-const elements = document.querySelectorAll(".my-class");
+const elements = document.querySelectorAll( '.my-class' );
 
 // Scoped query
-const child = parent.querySelector(".child");
+const child = parent.querySelector( '.child' );
 ```
 
 ### Element Creation
 
 ```javascript
 // Create element
-const div = document.createElement("div");
-div.className = "my-class";
-div.textContent = "Hello";
-div.dataset.id = "123";
+const div = document.createElement( 'div' );
+div.className = 'my-class';
+div.textContent = 'Hello';
+div.dataset.id = '123';
 
 // Append
-container.appendChild(div);
+container.appendChild( div );
 
 // Insert HTML (use with caution, escape user input)
-container.insertAdjacentHTML("beforeend", '<div class="item"></div>');
+container.insertAdjacentHTML( 'beforeend', '<div class="item"></div>' );
 ```
 
 ### Event Handling
 
 ```javascript
 // Add listener
-element.addEventListener("click", handleClick);
+element.addEventListener( 'click', handleClick );
 
 // Remove listener
-element.removeEventListener("click", handleClick);
+element.removeEventListener( 'click', handleClick );
 
 // Event delegation
-container.addEventListener("click", (event) => {
-  if (event.target.matches(".button")) {
-    handleButtonClick(event);
-  }
-});
+container.addEventListener( 'click', ( event ) => {
+	if ( event.target.matches( '.button' ) ) {
+		handleButtonClick( event );
+	}
+} );
 
 // Custom events
-element.dispatchEvent(new CustomEvent("custom-event", { detail: data }));
+element.dispatchEvent( new CustomEvent( 'custom-event', { detail: data } ) );
 ```
 
 ### Class Manipulation
 
 ```javascript
-element.classList.add("active");
-element.classList.remove("active");
-element.classList.toggle("active");
-element.classList.contains("active");
-element.classList.replace("old", "new");
+element.classList.add( 'active' );
+element.classList.remove( 'active' );
+element.classList.toggle( 'active' );
+element.classList.contains( 'active' );
+element.classList.replace( 'old', 'new' );
 ```
 
 ---
@@ -472,17 +472,17 @@ Use Fetch API instead of XMLHttpRequest or jQuery.ajax.
 
 ```javascript
 // GET request
-const response = await fetch("/api/data");
+const response = await fetch( '/api/data' );
 const data = await response.json();
 
 // POST request
-const response = await fetch("/api/submit", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(payload),
-});
+const response = await fetch( '/api/submit', {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify( payload ),
+} );
 ```
 
 ### Async/Await
@@ -492,25 +492,25 @@ Prefer async/await over Promise chains.
 ```javascript
 // CORRECT
 async function loadData() {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Network error");
-    }
-    const data = await response.json();
-    return processData(data);
-  } catch (error) {
-    handleError(error);
-    return null;
-  }
+	try {
+		const response = await fetch( url );
+		if ( ! response.ok ) {
+			throw new Error( 'Network error' );
+		}
+		const data = await response.json();
+		return processData( data );
+	} catch ( error ) {
+		handleError( error );
+		return null;
+	}
 }
 
 // INCORRECT - Promise chain for simple operations
 function loadData() {
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => processData(data))
-    .catch((error) => handleError(error));
+	return fetch( url )
+		.then( ( response ) => response.json() )
+		.then( ( data ) => processData( data ) )
+		.catch( ( error ) => handleError( error ) );
 }
 ```
 
@@ -520,11 +520,11 @@ Use Promise.all for independent parallel operations.
 
 ```javascript
 // CORRECT - Parallel execution
-const [users, posts, comments] = await Promise.all([
-  fetchUsers(),
-  fetchPosts(),
-  fetchComments(),
-]);
+const [ users, posts, comments ] = await Promise.all( [
+	fetchUsers(),
+	fetchPosts(),
+	fetchComments(),
+] );
 
 // INCORRECT - Sequential when parallel is possible
 const users = await fetchUsers();
@@ -542,13 +542,13 @@ Always wrap async operations in try-catch.
 
 ```javascript
 async function fetchData() {
-  try {
-    const response = await fetch(url);
-    return await response.json();
-  } catch (error) {
-    console.error("Fetch failed:", error.message);
-    return null;
-  }
+	try {
+		const response = await fetch( url );
+		return await response.json();
+	} catch ( error ) {
+		console.error( 'Fetch failed:', error.message );
+		return null;
+	}
 }
 ```
 
@@ -558,10 +558,10 @@ Provide context in error messages.
 
 ```javascript
 // CORRECT
-throw new Error(`Failed to load template: ${templateId}`);
+throw new Error( `Failed to load template: ${ templateId }` );
 
 // INCORRECT
-throw new Error("Error");
+throw new Error( 'Error' );
 ```
 
 ---
@@ -575,21 +575,21 @@ Use closures or modules for state management.
 ```javascript
 // CORRECT - Module pattern from codebase
 import {
-  getState,
-  getSingleState,
-  setState,
-  setSingleState,
-} from "core/page-skeleton";
+	getState,
+	getSingleState,
+	setState,
+	setSingleState,
+} from 'core/page-skeleton';
 
 // Initialize state
-setState({
-  currentView: "list",
-  selectedItem: null,
-  isLoading: false,
-});
+setState( {
+	currentView: 'list',
+	selectedItem: null,
+	isLoading: false,
+} );
 
 // Update state
-setSingleState("isLoading", true);
+setSingleState( 'isLoading', true );
 
 // Read state
 const { currentView, selectedItem } = getState();
@@ -602,12 +602,12 @@ Never mutate state directly.
 ```javascript
 // CORRECT
 const newState = {
-  ...state,
-  items: [...state.items, newItem],
+	...state,
+	items: [ ...state.items, newItem ],
 };
 
 // INCORRECT
-state.items.push(newItem);
+state.items.push( newItem );
 ```
 
 ---
@@ -618,29 +618,29 @@ state.items.push(newItem);
 
 ```javascript
 // INCORRECT
-myGlobalVar = "value";
+myGlobalVar = 'value';
 window.myApp = {};
 
 // CORRECT - Use modules
-export const myValue = "value";
+export const myValue = 'value';
 ```
 
 ### Callback Hell
 
 ```javascript
 // INCORRECT
-getData((data) => {
-  processData(data, (result) => {
-    saveData(result, (response) => {
-      // Deeply nested
-    });
-  });
-});
+getData( ( data ) => {
+	processData( data, ( result ) => {
+		saveData( result, ( response ) => {
+			// Deeply nested
+		} );
+	} );
+} );
 
 // CORRECT
 const data = await getData();
-const result = await processData(data);
-const response = await saveData(result);
+const result = await processData( data );
+const response = await saveData( result );
 ```
 
 ### Modifying Built-in Prototypes
@@ -663,15 +663,15 @@ new Function(userInput)();
 
 ```javascript
 // INCORRECT
-if (status === 3) {
+if ( status === 3 ) {
 }
-element.style.width = "768px";
+element.style.width = '768px';
 
 // CORRECT
 const STATUS_COMPLETE = 3;
-const TABLET_BREAKPOINT = "768px";
+const TABLET_BREAKPOINT = '768px';
 
-if (status === STATUS_COMPLETE) {
+if ( status === STATUS_COMPLETE ) {
 }
 element.style.width = TABLET_BREAKPOINT;
 ```
@@ -680,31 +680,31 @@ element.style.width = TABLET_BREAKPOINT;
 
 ```javascript
 // INCORRECT
-document.querySelector(".item").classList.add("active");
-document.querySelector(".item").textContent = "Updated";
-document.querySelector(".item").dataset.id = "123";
+document.querySelector( '.item' ).classList.add( 'active' );
+document.querySelector( '.item' ).textContent = 'Updated';
+document.querySelector( '.item' ).dataset.id = '123';
 
 // CORRECT - Cache the reference
-const item = document.querySelector(".item");
-item.classList.add("active");
-item.textContent = "Updated";
-item.dataset.id = "123";
+const item = document.querySelector( '.item' );
+item.classList.add( 'active' );
+item.textContent = 'Updated';
+item.dataset.id = '123';
 ```
 
 ### DOM Manipulation in Loops
 
 ```javascript
 // INCORRECT - Causes reflow on each iteration
-items.forEach((item) => {
-  container.appendChild(createItem(item));
-});
+items.forEach( ( item ) => {
+	container.appendChild( createItem( item ) );
+} );
 
 // CORRECT - Use DocumentFragment
 const fragment = document.createDocumentFragment();
-items.forEach((item) => {
-  fragment.appendChild(createItem(item));
-});
-container.appendChild(fragment);
+items.forEach( ( item ) => {
+	fragment.appendChild( createItem( item ) );
+} );
+container.appendChild( fragment );
 ```
 
 ---
@@ -713,7 +713,7 @@ container.appendChild(fragment);
 
 Follow modular folder structure as in form-templates and onboarding-wizard.
 
-```
+```text
 module-name/
 ├── index.js              # Entry point, exports public API
 ├── initializeModule.js   # Initialization logic
@@ -743,24 +743,24 @@ module-name/
 
 ```javascript
 // Actions
-wp.hooks.doAction("myPlugin.beforeInit", { getState, setState });
-wp.hooks.addAction("myPlugin.afterSave", "myPlugin", handleAfterSave);
+wp.hooks.doAction( 'myPlugin.beforeInit', { getState, setState } );
+wp.hooks.addAction( 'myPlugin.afterSave', 'myPlugin', handleAfterSave );
 
 // Filters
-const value = wp.hooks.applyFilters("myPlugin.filterValue", defaultValue);
-wp.hooks.addFilter("myPlugin.filterValue", "myPlugin", modifyValue);
+const value = wp.hooks.applyFilters( 'myPlugin.filterValue', defaultValue );
+wp.hooks.addFilter( 'myPlugin.filterValue', 'myPlugin', modifyValue );
 ```
 
 ### Using @wordpress packages
 
 ```javascript
-import domReady from "@wordpress/dom-ready";
-import { __ } from "@wordpress/i18n";
-import apiFetch from "@wordpress/api-fetch";
+import domReady from '@wordpress/dom-ready';
+import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 
-domReady(() => {
-  initializeModule();
-});
+domReady( () => {
+	initializeModule();
+} );
 ```
 
 ---
@@ -775,11 +775,11 @@ domReady(() => {
 - Spaces around operators
 
 ```javascript
-if (condition) {
-  doSomething(arg1, arg2);
+if ( condition ) {
+	doSomething( arg1, arg2 );
 }
 
-const isValid = !isEmpty && hasValue;
+const isValid = ! isEmpty && hasValue;
 const total = a + b * c;
 ```
 
@@ -789,7 +789,7 @@ Keep lines under 100 characters. Break after operators.
 
 ```javascript
 const result =
-  veryLongVariableName + anotherLongVariableName + yetAnotherVariable;
+	veryLongVariableName + anotherLongVariableName + yetAnotherVariable;
 ```
 
 ### Trailing Commas
@@ -798,11 +798,11 @@ Use trailing commas in multiline structures.
 
 ```javascript
 const obj = {
-  property1: "value1",
-  property2: "value2",
+	property1: 'value1',
+	property2: 'value2',
 };
 
-const arr = ["item1", "item2"];
+const arr = [ 'item1', 'item2' ];
 ```
 
 ---
@@ -817,17 +817,17 @@ Never use class components. Use functional components with hooks.
 
 ```jsx
 // CORRECT
-function MyComponent({ title, onSave }) {
-  const [isLoading, setIsLoading] = useState(false);
+function MyComponent( { title, onSave } ) {
+	const [ isLoading, setIsLoading ] = useState( false );
 
-  return <div>{title}</div>;
+	return <div>{ title }</div>;
 }
 
 // INCORRECT
 class MyComponent extends Component {
-  render() {
-    return <div>{this.props.title}</div>;
-  }
+	render() {
+		return <div>{ this.props.title }</div>;
+	}
 }
 ```
 
@@ -838,16 +838,16 @@ class MyComponent extends Component {
 3. Use `@wordpress/element` for React hooks in WordPress
 
 ```jsx
-import { useState, useEffect, useCallback, useMemo } from "@wordpress/element";
+import { useState, useEffect, useCallback, useMemo } from '@wordpress/element';
 
-function MyComponent({ items }) {
-  // CORRECT - Hooks at top level
-  const [selected, setSelected] = useState(null);
+function MyComponent( { items } ) {
+	// CORRECT - Hooks at top level
+	const [ selected, setSelected ] = useState( null );
 
-  // INCORRECT - Conditional hook
-  if (items.length) {
-    const [count, setCount] = useState(0); // Error!
-  }
+	// INCORRECT - Conditional hook
+	if ( items.length ) {
+		const [ count, setCount ] = useState( 0 ); // Error!
+	}
 }
 ```
 
@@ -856,31 +856,31 @@ function MyComponent({ items }) {
 Use `useMemo` for expensive computations and `useCallback` for stable function references.
 
 ```jsx
-import { useMemo, useCallback } from "@wordpress/element";
+import { useMemo, useCallback } from '@wordpress/element';
 
-function ItemList({ items, onSelect }) {
-  // Memoize expensive computation
-  const processedItems = useMemo(() => {
-    return items.map((item) => expensiveProcess(item));
-  }, [items]);
+function ItemList( { items, onSelect } ) {
+	// Memoize expensive computation
+	const processedItems = useMemo( () => {
+		return items.map( ( item ) => expensiveProcess( item ) );
+	}, [ items ] );
 
-  // Stable callback reference
-  const handleSelect = useCallback(
-    (id) => {
-      onSelect(id);
-    },
-    [onSelect],
-  );
+	// Stable callback reference
+	const handleSelect = useCallback(
+		( id ) => {
+			onSelect( id );
+		},
+		[ onSelect ],
+	);
 
-  return (
-    <ul>
-      {processedItems.map((item) => (
-        <li key={item.id} onClick={() => handleSelect(item.id)}>
-          {item.name}
-        </li>
-      ))}
-    </ul>
-  );
+	return (
+		<ul>
+			{ processedItems.map( ( item ) => (
+				<li key={ item.id } onClick={ () => handleSelect( item.id ) }>
+					{ item.name }
+				</li>
+			) ) }
+		</ul>
+	);
 }
 ```
 
@@ -908,21 +908,21 @@ Derive values during render instead of syncing with effects.
 
 ```jsx
 // CORRECT - Derived during render
-function FilteredList({ items, filter }) {
-  const filteredItems = items.filter((item) => item.type === filter);
+function FilteredList( { items, filter } ) {
+	const filteredItems = items.filter( ( item ) => item.type === filter );
 
-  return <List items={filteredItems} />;
+	return <List items={ filteredItems } />;
 }
 
 // INCORRECT - Unnecessary state and effect
-function FilteredList({ items, filter }) {
-  const [filteredItems, setFilteredItems] = useState([]);
+function FilteredList( { items, filter } ) {
+	const [ filteredItems, setFilteredItems ] = useState( [] );
 
-  useEffect(() => {
-    setFilteredItems(items.filter((item) => item.type === filter));
-  }, [items, filter]);
+	useEffect( () => {
+		setFilteredItems( items.filter( ( item ) => item.type === filter ) );
+	}, [ items, filter ] );
 
-  return <List items={filteredItems} />;
+	return <List items={ filteredItems } />;
 }
 ```
 
@@ -932,10 +932,10 @@ Use lazy initialization for expensive values.
 
 ```jsx
 // CORRECT - Lazy initialization (function only called once)
-const [state, setState] = useState(() => computeExpensiveValue(props));
+const [ state, setState ] = useState( () => computeExpensiveValue( props ) );
 
 // INCORRECT - Runs on every render
-const [state, setState] = useState(computeExpensiveValue(props));
+const [ state, setState ] = useState( computeExpensiveValue( props ) );
 ```
 
 ### Functional setState
@@ -944,11 +944,11 @@ Use functional updates when new state depends on previous state.
 
 ```jsx
 // CORRECT - Functional update
-setCount((prevCount) => prevCount + 1);
-setItems((prevItems) => [...prevItems, newItem]);
+setCount( ( prevCount ) => prevCount + 1 );
+setItems( ( prevItems ) => [ ...prevItems, newItem ] );
 
 // INCORRECT - May use stale state
-setCount(count + 1);
+setCount( count + 1 );
 ```
 
 ### useRef for Transient Values
@@ -957,35 +957,35 @@ Use refs for values that change frequently but do not need re-renders.
 
 ```jsx
 function Draggable() {
-  const positionRef = useRef({ x: 0, y: 0 });
+	const positionRef = useRef( { x: 0, y: 0 } );
 
-  const handleMouseMove = (event) => {
-    // Update ref without re-render
-    positionRef.current = { x: event.clientX, y: event.clientY };
-  };
+	const handleMouseMove = ( event ) => {
+		// Update ref without re-render
+		positionRef.current = { x: event.clientX, y: event.clientY };
+	};
 
-  return <div onMouseMove={handleMouseMove} />;
+	return <div onMouseMove={ handleMouseMove } />;
 }
 ```
 
 ### Early Returns in Components
 
 ```jsx
-function UserProfile({ user, isLoading }) {
-  if (isLoading) {
-    return <Spinner />;
-  }
+function UserProfile( { user, isLoading } ) {
+	if ( isLoading ) {
+		return <Spinner />;
+	}
 
-  if (!user) {
-    return <EmptyState message="No user found" />;
-  }
+	if ( ! user ) {
+		return <EmptyState message="No user found" />;
+	}
 
-  return (
-    <div>
-      <h1>{user.name}</h1>
-      {/* Rest of component */}
-    </div>
-  );
+	return (
+		<div>
+			<h1>{ user.name }</h1>
+			{ /* Rest of component */ }
+		</div>
+	);
 }
 ```
 
@@ -997,7 +997,7 @@ function UserProfile({ user, isLoading }) {
 
 ```jsx
 // CORRECT - Parallel execution
-const [users, posts] = await Promise.all([fetchUsers(), fetchPosts()]);
+const [ users, posts ] = await Promise.all( [ fetchUsers(), fetchPosts() ] );
 
 // INCORRECT - Sequential when parallel is possible
 const users = await fetchUsers();
@@ -1011,13 +1011,13 @@ const posts = await fetchPosts();
 const cache = new Map();
 
 function expensiveOperation( key ) {
-    if ( cache.has( key ) ) {
-        return cache.get( key );
-    }
+	if ( cache.has( key ) ) {
+		return cache.get( key );
+	}
 
-    const result = /* expensive computation */;
-    cache.set( key, result );
-    return result;
+	const result = /* expensive computation */;
+	cache.set( key, result );
+	return result;
 }
 ```
 
@@ -1025,11 +1025,11 @@ function expensiveOperation( key ) {
 
 ```jsx
 // CORRECT - O(1) lookup
-const selectedIds = new Set(selectedItems.map((item) => item.id));
-const isSelected = (id) => selectedIds.has(id);
+const selectedIds = new Set( selectedItems.map( ( item ) => item.id ) );
+const isSelected = ( id ) => selectedIds.has( id );
 
 // INCORRECT - O(n) lookup
-const isSelected = (id) => selectedItems.some((item) => item.id === id);
+const isSelected = ( id ) => selectedItems.some( ( item ) => item.id === id );
 ```
 
 ### Batch DOM Operations
@@ -1037,27 +1037,27 @@ const isSelected = (id) => selectedItems.some((item) => item.id === id);
 ```jsx
 // CORRECT - Single reflow
 const fragment = document.createDocumentFragment();
-items.forEach((item) => {
-  const li = document.createElement("li");
-  li.textContent = item.name;
-  fragment.appendChild(li);
-});
-container.appendChild(fragment);
+items.forEach( ( item ) => {
+	const li = document.createElement( 'li' );
+	li.textContent = item.name;
+	fragment.appendChild( li );
+} );
+container.appendChild( fragment );
 
 // INCORRECT - Multiple reflows
-items.forEach((item) => {
-  const li = document.createElement("li");
-  li.textContent = item.name;
-  container.appendChild(li); // Reflow on each iteration
-});
+items.forEach( ( item ) => {
+	const li = document.createElement( 'li' );
+	li.textContent = item.name;
+	container.appendChild( li ); // Reflow on each iteration
+} );
 ```
 
 ### Content Visibility for Long Lists
 
 ```css
 .long-list-item {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 50px;
+	content-visibility: auto;
+	contain-intrinsic-size: 0 50px;
 }
 ```
 
@@ -1072,21 +1072,21 @@ Instead of boolean props, use composition.
 ```jsx
 // INCORRECT - Boolean prop proliferation
 <Card
-    showHeader
-    showFooter
-    showImage
-    headerTitle="Title"
-    footerAction={ handleAction }
+	showHeader
+	showFooter
+	showImage
+	headerTitle="Title"
+	footerAction={ handleAction }
 />
 
 // CORRECT - Compound components
 <Card>
-    <Card.Header>Title</Card.Header>
-    <Card.Image src={ imageUrl } />
-    <Card.Body>Content</Card.Body>
-    <Card.Footer>
-        <Button onClick={ handleAction }>Action</Button>
-    </Card.Footer>
+	<Card.Header>Title</Card.Header>
+	<Card.Image src={ imageUrl } />
+	<Card.Body>Content</Card.Body>
+	<Card.Footer>
+		<Button onClick={ handleAction }>Action</Button>
+	</Card.Footer>
 </Card>
 ```
 
@@ -1095,45 +1095,45 @@ Instead of boolean props, use composition.
 ```jsx
 // CORRECT - Children for composition
 <Modal>
-    <Modal.Header>Title</Modal.Header>
-    <Modal.Content>{ content }</Modal.Content>
+	<Modal.Header>Title</Modal.Header>
+	<Modal.Content>{ content }</Modal.Content>
 </Modal>
 
 // AVOID - Render props when children work
 <Modal
-    renderHeader={ () => <div>Title</div> }
-    renderContent={ () => content }
+	renderHeader={ () => <div>Title</div> }
+	renderContent={ () => content }
 />
 ```
 
 ### Context for Shared State
 
 ```jsx
-import { createContext, useContext, useState } from "@wordpress/element";
+import { createContext, useContext, useState } from '@wordpress/element';
 
 const FormContext = createContext();
 
-function FormProvider({ children }) {
-  const [values, setValues] = useState({});
-  const [errors, setErrors] = useState({});
+function FormProvider( { children } ) {
+	const [ values, setValues ] = useState( {} );
+	const [ errors, setErrors ] = useState( {} );
 
-  const setValue = (name, value) => {
-    setValues((prev) => ({ ...prev, [name]: value }));
-  };
+	const setValue = ( name, value ) => {
+		setValues( ( prev ) => ( { ...prev, [ name ]: value } ) );
+	};
 
-  return (
-    <FormContext.Provider value={{ values, errors, setValue }}>
-      {children}
-    </FormContext.Provider>
-  );
+	return (
+		<FormContext.Provider value={ { values, errors, setValue } }>
+			{ children }
+		</FormContext.Provider>
+	);
 }
 
 function useForm() {
-  const context = useContext(FormContext);
-  if (!context) {
-    throw new Error("useForm must be used within FormProvider");
-  }
-  return context;
+	const context = useContext( FormContext );
+	if ( ! context ) {
+		throw new Error( 'useForm must be used within FormProvider' );
+	}
+	return context;
 }
 ```
 

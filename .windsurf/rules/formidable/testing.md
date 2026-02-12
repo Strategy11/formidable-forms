@@ -45,17 +45,16 @@ Every fix/feature **MUST** be tested with these scenarios before completion:
 
 ```php
 class Test_FrmField extends FrmUnitTest {
+	public function test_method_does_expected_behavior() {
+		// Arrange
+		$form = $this->factory->form->create_and_get();
 
-    public function test_method_does_expected_behavior() {
-        // Arrange
-        $form = $this->factory->form->create_and_get();
+		// Act
+		$result = FrmField::get_all_for_form( $form->id );
 
-        // Act
-        $result = FrmField::get_all_for_form( $form->id );
-
-        // Assert
-        $this->assertIsArray( $result, 'Result should be an array.' );
-    }
+		// Assert
+		$this->assertIsArray( $result, 'Result should be an array.' );
+	}
 }
 ```
 
@@ -81,24 +80,24 @@ Follow **Arrange-Act-Assert** pattern:
 
 ```php
 public function test_entry_creation_with_valid_data() {
-    // Arrange - Set up test data and conditions
-    $form  = $this->factory->form->create_and_get();
-    $field = $this->factory->field->create_and_get( array(
-        'form_id' => $form->id,
-        'type'    => 'text',
-    ) );
+	// Arrange - Set up test data and conditions
+	$form  = $this->factory->form->create_and_get();
+	$field = $this->factory->field->create_and_get( array(
+		'form_id' => $form->id,
+		'type'    => 'text',
+	) );
 
-    // Act - Execute the code being tested
-    $entry_id = FrmEntry::create( array(
-        'form_id' => $form->id,
-        'item_meta' => array(
-            $field->id => 'Test Value',
-        ),
-    ) );
+	// Act - Execute the code being tested
+	$entry_id = FrmEntry::create( array(
+		'form_id' => $form->id,
+		'item_meta' => array(
+			$field->id => 'Test Value',
+		),
+	) );
 
-    // Assert - Verify the results
-    $this->assertIsNumeric( $entry_id, 'Entry ID should be numeric.' );
-    $this->assertGreaterThan( 0, $entry_id, 'Entry ID should be positive.' );
+	// Assert - Verify the results
+	$this->assertIsNumeric( $entry_id, 'Entry ID should be numeric.' );
+	$this->assertGreaterThan( 0, $entry_id, 'Entry ID should be positive.' );
 }
 ```
 
@@ -114,24 +113,24 @@ $form = $this->factory->form->create_and_get();
 
 // Create field with options
 $field = $this->factory->field->create_and_get( array(
-    'form_id' => $form->id,
-    'type'    => 'text',
-    'name'    => 'Test Field',
+	'form_id' => $form->id,
+	'type'    => 'text',
+	'name'    => 'Test Field',
 ) );
 
 // Create entry
 $entry = $this->factory->entry->create_and_get( array(
-    'form_id' => $form->id,
+	'form_id' => $form->id,
 ) );
 
 // Create multiple items
 $entries = $this->factory->entry->create_many( 5, array(
-    'form_id' => $form->id,
+	'form_id' => $form->id,
 ) );
 
 // Create user with role
 $user_id = $this->factory->user->create( array(
-    'role' => 'editor',
+	'role' => 'editor',
 ) );
 ```
 
@@ -142,8 +141,8 @@ $user_id = $this->factory->user->create( array(
 ```php
 // For private methods
 $result = $this->run_private_method(
-    array( $object, 'private_method_name' ),
-    array( $arg1, $arg2 )
+	array( $object, 'private_method_name' ),
+	array( $arg1, $arg2 )
 );
 
 // For private properties
@@ -157,22 +156,22 @@ $this->set_private_property( $object, 'property_name', $new_value );
 
 ```php
 public function test_admin_can_delete_form() {
-    // Set user role
-    $this->set_user_by_role( 'administrator' );
+	// Set user role
+	$this->set_user_by_role( 'administrator' );
 
-    $form = $this->factory->form->create_and_get();
-    $result = FrmForm::destroy( $form->id );
+	$form = $this->factory->form->create_and_get();
+	$result = FrmForm::destroy( $form->id );
 
-    $this->assertTrue( $result, 'Admin should be able to delete form.' );
+	$this->assertTrue( $result, 'Admin should be able to delete form.' );
 }
 
 public function test_subscriber_cannot_delete_form() {
-    $this->set_user_by_role( 'subscriber' );
+	$this->set_user_by_role( 'subscriber' );
 
-    $form = $this->factory->form->create_and_get();
-    $result = FrmForm::destroy( $form->id );
+	$form = $this->factory->form->create_and_get();
+	$result = FrmForm::destroy( $form->id );
 
-    $this->assertFalse( $result, 'Subscriber should not delete form.' );
+	$this->assertFalse( $result, 'Subscriber should not delete form.' );
 }
 ```
 
@@ -215,24 +214,24 @@ Use data providers for testing multiple scenarios:
  * @dataProvider field_type_provider
  */
 public function test_field_validation( $field_type, $value, $expected_valid ) {
-    $field = $this->factory->field->create_and_get( array(
-        'type' => $field_type,
-    ) );
+	$field = $this->factory->field->create_and_get( array(
+		'type' => $field_type,
+	) );
 
-    $is_valid = FrmEntryValidate::validate_field( $field, $value );
+	$is_valid = FrmEntryValidate::validate_field( $field, $value );
 
-    $this->assertSame( $expected_valid, $is_valid );
+	$this->assertSame( $expected_valid, $is_valid );
 }
 
 public function field_type_provider() {
-    return array(
-        'text with value'     => array( 'text', 'hello', true ),
-        'text empty'          => array( 'text', '', true ),
-        'email valid'         => array( 'email', 'test@example.com', true ),
-        'email invalid'       => array( 'email', 'invalid', false ),
-        'number valid'        => array( 'number', '123', true ),
-        'number with letters' => array( 'number', 'abc', false ),
-    );
+	return array(
+		'text with value'     => array( 'text', 'hello', true ),
+		'text empty'          => array( 'text', '', true ),
+		'email valid'         => array( 'email', 'test@example.com', true ),
+		'email invalid'       => array( 'email', 'invalid', false ),
+		'number valid'        => array( 'number', '123', true ),
+		'number with letters' => array( 'number', 'abc', false ),
+	);
 }
 ```
 
@@ -242,14 +241,14 @@ public function field_type_provider() {
 
 ```php
 public function test_api_request_handles_error() {
-    // Mock HTTP response
-    add_filter( 'pre_http_request', function() {
-        return new WP_Error( 'http_error', 'Connection failed' );
-    } );
+	// Mock HTTP response
+	add_filter( 'pre_http_request', function() {
+		return new WP_Error( 'http_error', 'Connection failed' );
+	} );
 
-    $result = FrmAPI::make_request( '/endpoint' );
+	$result = FrmAPI::make_request( '/endpoint' );
 
-    $this->assertInstanceOf( WP_Error::class, $result );
+	$this->assertInstanceOf( WP_Error::class, $result );
 }
 ```
 
@@ -259,19 +258,19 @@ public function test_api_request_handles_error() {
 
 ```php
 public function test_shortcode_output_on_frontend() {
-    // Switch to front-end context
-    $this->set_front_end();
+	// Switch to front-end context
+	$this->set_front_end();
 
-    $output = do_shortcode( '[formidable id="1"]' );
+	$output = do_shortcode( '[formidable id="1"]' );
 
-    $this->assertStringContainsString( '<form', $output );
+	$this->assertStringContainsString( '<form', $output );
 }
 
 public function test_admin_page_loads() {
-    // Switch to admin context
-    $this->set_admin_screen( 'admin.php?page=formidable' );
+	// Switch to admin context
+	$this->set_admin_screen( 'admin.php?page=formidable' );
 
-    $this->assertTrue( is_admin(), 'Should be in admin context.' );
+	$this->assertTrue( is_admin(), 'Should be in admin context.' );
 }
 ```
 

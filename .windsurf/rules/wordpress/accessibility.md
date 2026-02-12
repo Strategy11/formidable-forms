@@ -42,14 +42,14 @@ Provide text alternatives for non-text content.
 
 <!-- Complex image with extended description -->
 <figure>
-  <img
-    src="complex-diagram.png"
-    alt="System architecture diagram"
-    aria-describedby="diagram-desc"
-  />
-  <figcaption id="diagram-desc">
-    Detailed description of the system architecture...
-  </figcaption>
+	<img
+		src="complex-diagram.png"
+		alt="System architecture diagram"
+		aria-describedby="diagram-desc"
+	/>
+	<figcaption id="diagram-desc">
+		Detailed description of the system architecture...
+	</figcaption>
 </figure>
 ```
 
@@ -61,7 +61,7 @@ Provide text alternatives for non-text content.
 
 <!-- Icon button -->
 <button type="submit" aria-label="Submit search">
-  <span class="dashicons dashicons-search" aria-hidden="true"></span>
+	<span class="dashicons dashicons-search" aria-hidden="true"></span>
 </button>
 ```
 
@@ -90,8 +90,8 @@ Create content that can be presented in different ways.
 
 <!-- Use lists for list content -->
 <ul>
-  <li>Item one</li>
-  <li>Item two</li>
+	<li>Item one</li>
+	<li>Item two</li>
 </ul>
 ```
 
@@ -122,17 +122,18 @@ Never use color alone to convey information.
 ```css
 /* Incorrect - color only */
 .error {
-  color: #d00;
+	color: #d00;
 }
 
 /* Correct - multiple indicators */
 .error {
-  color: #d00;
-  border-left: 4px solid #d00;
+	color: #d00;
+	border-left: 4px solid #d00;
 }
+
 .error::before {
-  content: "Error: ";
-  font-weight: bold;
+	content: "Error: ";
+	font-weight: 700;
 }
 ```
 
@@ -168,21 +169,21 @@ All functionality must be available via keyboard.
 
 <!-- If custom element needed, add keyboard support -->
 <div
-  role="button"
-  tabindex="0"
-  onclick="handleClick()"
-  onkeydown="handleKeydown(event)"
+	role="button"
+	tabindex="0"
+	onclick="handleClick()"
+	onkeydown="handleKeydown(event)"
 >
-  Custom Button
+	Custom Button
 </div>
 ```
 
 ```javascript
-function handleKeydown(event) {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    handleClick();
-  }
+function handleKeydown( event ) {
+	if ( event.key === 'Enter' || event.key === ' ' ) {
+		event.preventDefault();
+		handleClick();
+	}
 }
 ```
 
@@ -223,7 +224,7 @@ Skip links allow keyboard and screen reader users to bypass repetitive navigatio
 
 <!-- Target element -->
 <main id="main-content">
-  <!-- Main content -->
+	<!-- Main content -->
 </main>
 ```
 
@@ -265,13 +266,13 @@ Focus indicator must be visible.
 
 ```css
 *:focus {
-  outline: 2px solid #0073aa;
-  outline-offset: 2px;
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
 }
 
 /* Never remove focus outline without replacement */
 *:focus {
-  outline: none; /* INCORRECT */
+	outline: none; /* INCORRECT */
 }
 ```
 
@@ -286,8 +287,8 @@ Minimum target size of 24x24 CSS pixels. Recommended 44x44 pixels.
 ```css
 .button,
 .nav-link {
-  min-width: 44px;
-  min-height: 44px;
+	min-width: 44px;
+	min-height: 44px;
 }
 ```
 
@@ -319,7 +320,7 @@ Make text content readable and understandable.
 
 ```html
 <p>
-  The French phrase <span lang="fr">c'est la vie</span> means "that's life".
+	The French phrase <span lang="fr">c'est la vie</span> means "that's life".
 </p>
 ```
 
@@ -333,9 +334,9 @@ No change of context on focus.
 
 ```javascript
 // Incorrect - auto-submit on focus
-input.addEventListener("focus", function () {
-  form.submit();
-});
+input.addEventListener( 'focus', function () {
+	form.submit();
+} );
 ```
 
 **On Input**
@@ -344,14 +345,14 @@ No unexpected context change on input.
 
 ```javascript
 // Incorrect - auto-navigate on select change
-select.addEventListener("change", function () {
-  window.location = this.value;
-});
+select.addEventListener( 'change', function () {
+	window.location = this.value;
+} );
 
 // Correct - require button press
-button.addEventListener("click", function () {
-  window.location = select.value;
-});
+button.addEventListener( 'click', function () {
+	window.location = select.value;
+} );
 ```
 
 **Consistent Navigation**
@@ -371,15 +372,15 @@ Help users avoid and correct mistakes.
 ```html
 <label for="email">Email (required)</label>
 <input
-  type="email"
-  id="email"
-  name="email"
-  required="required"
-  aria-invalid="true"
-  aria-describedby="email-error"
+	type="email"
+	id="email"
+	name="email"
+	required="required"
+	aria-invalid="true"
+	aria-describedby="email-error"
 />
 <span id="email-error" class="error-message">
-  Please enter a valid email address
+	Please enter a valid email address
 </span>
 ```
 
@@ -396,7 +397,7 @@ Provide specific error messages with suggestions.
 
 ```html
 <span class="error-message">
-  Password must be at least 8 characters and include a number
+	Password must be at least 8 characters and include a number
 </span>
 ```
 
@@ -432,12 +433,12 @@ Ensure all UI components have accessible names and roles.
 
 <!-- Custom widgets need ARIA -->
 <div role="tablist" aria-label="Product tabs">
-  <button role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1">
-    Description
-  </button>
-  <button role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2">
-    Reviews
-  </button>
+	<button role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1">
+		Description
+	</button>
+	<button role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2">
+		Reviews
+	</button>
 </div>
 <div role="tabpanel" id="panel-1" aria-labelledby="tab-1">Panel content...</div>
 ```
@@ -460,36 +461,36 @@ Announce status messages to screen readers.
 
 ```css
 .screen-reader-text {
-  border: 0;
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-  word-wrap: normal !important;
+	border: 0;
+	clip: rect( 1px, 1px, 1px, 1px );
+	clip-path: inset( 50% );
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
 }
 
 .screen-reader-text:focus {
-  background-color: #f1f1f1;
-  border-radius: 3px;
-  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
-  clip: auto !important;
-  clip-path: none;
-  color: #21759b;
-  display: block;
-  font-size: 14px;
-  font-weight: 700;
-  height: auto;
-  left: 5px;
-  line-height: normal;
-  padding: 15px 23px 14px;
-  text-decoration: none;
-  top: 5px;
-  width: auto;
-  z-index: 100000;
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	clip-path: none;
+	color: #21759b;
+	display: block;
+	font-size: 14px;
+	font-weight: 700;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000;
 }
 ```
 
@@ -497,7 +498,7 @@ Announce status messages to screen readers.
 
 ```php
 <div class="notice notice-success is-dismissible">
-    <p><?php esc_html_e( 'Settings saved.', 'textdomain' ); ?></p>
+	<p><?php esc_html_e( 'Settings saved.', 'textdomain' ); ?></p>
 </div>
 ```
 
@@ -505,35 +506,35 @@ Announce status messages to screen readers.
 
 ```php
 <div
-    id="ajax-response"
-    aria-live="polite"
-    aria-atomic="true"
+	id="ajax-response"
+	aria-live="polite"
+	aria-atomic="true"
 >
-    <?php // Dynamic content updated via JavaScript ?>
+	<?php // Dynamic content updated via JavaScript ?>
 </div>
 ```
 
 ```javascript
 // Update live region content
-document.getElementById("ajax-response").textContent =
-  "Loading complete. 5 items loaded.";
+document.getElementById( 'ajax-response' ).textContent =
+	'Loading complete. 5 items loaded.';
 ```
 
 ### Toggles and Expandables
 
 ```html
 <button type="button" aria-expanded="false" aria-controls="menu-content">
-  Menu
+	Menu
 </button>
 <div id="menu-content" hidden="hidden">Menu content here</div>
 ```
 
 ```javascript
-button.addEventListener("click", function () {
-  var expanded = this.getAttribute("aria-expanded") === "true";
-  this.setAttribute("aria-expanded", !expanded);
-  content.hidden = expanded;
-});
+button.addEventListener( 'click', function () {
+	const expanded = this.getAttribute( 'aria-expanded' ) === 'true';
+	this.setAttribute( 'aria-expanded', ! expanded );
+	content.hidden = expanded;
+} );
 ```
 
 ---
@@ -559,8 +560,8 @@ button.addEventListener("click", function () {
 
 <!-- Correct -->
 <a href="page.html">
-  <img src="icon.png" alt="" />
-  <span class="screen-reader-text">Go to page</span>
+	<img src="icon.png" alt="" />
+	<span class="screen-reader-text">Go to page</span>
 </a>
 ```
 

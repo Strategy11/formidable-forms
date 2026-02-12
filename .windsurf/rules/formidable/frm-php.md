@@ -65,11 +65,11 @@ When using newer WordPress functions or features:
 ```php
 // Example: Using a newer function with fallback
 if ( version_compare( get_bloginfo( 'version' ), '5.9', '>=' ) ) {
-    // Use WordPress 5.9+ feature
-    $result = wp_new_function();
+	// Use WordPress 5.9+ feature
+	$result = wp_new_function();
 } else {
-    // Fallback for older versions
-    $result = frm_legacy_fallback();
+	// Fallback for older versions
+	$result = frm_legacy_fallback();
 }
 ```
 

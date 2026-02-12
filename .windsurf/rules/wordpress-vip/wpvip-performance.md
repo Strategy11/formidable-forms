@@ -28,15 +28,15 @@ Each SQL query adds overhead and latency. Reduce the number of queries.
 ```php
 // CORRECT - Efficient query with proper limits
 $posts = $wpdb->get_results(
-    $wpdb->prepare(
-        "SELECT ID, post_title FROM $wpdb->posts 
-         WHERE post_status = %s 
-         AND post_type = %s 
-         LIMIT %d",
-        'publish',
-        'post',
-        100
-    )
+	$wpdb->prepare(
+		"SELECT ID, post_title FROM $wpdb->posts
+			WHERE post_status = %s
+			AND post_type = %s
+			LIMIT %d",
+		'publish',
+		'post',
+		100
+	)
 );
 
 // INCORRECT - Unbounded query
@@ -47,12 +47,12 @@ $posts = $wpdb->get_results( "SELECT * FROM $wpdb->posts" );
 
 ```php
 $args = array(
-    'post_type'              => 'post',
-    'posts_per_page'         => 10,
-    'no_found_rows'          => true,  // Skip pagination count
-    'update_post_meta_cache' => false, // Skip meta cache if not needed
-    'update_post_term_cache' => false, // Skip term cache if not needed
-    'fields'                 => 'ids', // Only get IDs if that is all you need
+	'post_type'              => 'post',
+	'posts_per_page'         => 10,
+	'no_found_rows'          => true,  // Skip pagination count
+	'update_post_meta_cache' => false, // Skip meta cache if not needed
+	'update_post_term_cache' => false, // Skip term cache if not needed
+	'fields'                 => 'ids', // Only get IDs if that is all you need
 );
 
 $query = new WP_Query( $args );
@@ -87,8 +87,8 @@ Pages can be cached and served directly without regenerating content.
 $data = wp_cache_get( 'my_cache_key', 'my_group' );
 
 if ( false === $data ) {
-    $data = expensive_operation();
-    wp_cache_set( 'my_cache_key', $data, 'my_group', HOUR_IN_SECONDS );
+	$data = expensive_operation();
+	wp_cache_set( 'my_cache_key', $data, 'my_group', HOUR_IN_SECONDS );
 }
 
 return $data;
@@ -100,8 +100,8 @@ return $data;
 $data = get_transient( 'my_transient_key' );
 
 if ( false === $data ) {
-    $data = expensive_operation();
-    set_transient( 'my_transient_key', $data, HOUR_IN_SECONDS );
+	$data = expensive_operation();
+	set_transient( 'my_transient_key', $data, HOUR_IN_SECONDS );
 }
 
 return $data;
@@ -116,10 +116,10 @@ $cache_key = sprintf( 'footer_output_%s', get_locale() );
 $output    = wp_cache_get( $cache_key, 'partials' );
 
 if ( false === $output ) {
-    ob_start();
-    get_template_part( 'template-parts/footer' );
-    $output = ob_get_clean();
-    wp_cache_set( $cache_key, $output, 'partials', DAY_IN_SECONDS );
+	ob_start();
+	get_template_part( 'template-parts/footer' );
+	$output = ob_get_clean();
+	wp_cache_set( $cache_key, $output, 'partials', DAY_IN_SECONDS );
 }
 
 echo $output;
@@ -129,8 +129,8 @@ echo $output;
 
 ```php
 add_action( 'save_post', function( $post_id ) {
-    delete_transient( 'posts_cache' );
-    wp_cache_delete( 'posts_list', 'my_plugin' );
+	delete_transient( 'posts_cache' );
+	wp_cache_delete( 'posts_list', 'my_plugin' );
 } );
 ```
 
@@ -153,10 +153,10 @@ get_template_part( 'footer' );
 // BETTER - Cache reusable partials
 $nav = wp_cache_get( 'main_nav', 'partials' );
 if ( false === $nav ) {
-    ob_start();
-    get_template_part( 'nav' );
-    $nav = ob_get_clean();
-    wp_cache_set( 'main_nav', $nav, 'partials', HOUR_IN_SECONDS );
+	ob_start();
+	get_template_part( 'nav' );
+	$nav = ob_get_clean();
+	wp_cache_set( 'main_nav', $nav, 'partials', HOUR_IN_SECONDS );
 }
 echo $nav;
 ```
@@ -175,10 +175,10 @@ add_action( 'admin_init', 'expensive_operation' );
 
 // CORRECT - Conditional execution
 add_action( 'admin_init', function() {
-    if ( ! isset( $_GET['my_action'] ) ) {
-        return;
-    }
-    expensive_operation();
+	if ( ! isset( $_GET['my_action'] ) ) {
+		return;
+	}
+	expensive_operation();
 } );
 ```
 
@@ -188,17 +188,17 @@ Filters are not cached by default.
 
 ```php
 add_filter( 'expensive_filter', function( $value ) {
-    $cache_key = 'filter_result_' . md5( serialize( $value ) );
-    $cached    = wp_cache_get( $cache_key );
+	$cache_key = 'filter_result_' . md5( serialize( $value ) );
+	$cached    = wp_cache_get( $cache_key );
 
-    if ( false !== $cached ) {
-        return $cached;
-    }
+	if ( false !== $cached ) {
+		return $cached;
+	}
 
-    $result = process_value( $value );
-    wp_cache_set( $cache_key, $result, '', HOUR_IN_SECONDS );
+	$result = process_value( $value );
+	wp_cache_set( $cache_key, $result, '', HOUR_IN_SECONDS );
 
-    return $result;
+	return $result;
 } );
 ```
 
@@ -234,22 +234,22 @@ On WordPress VIP, cron is handled by Automattic Cron Control plugin automaticall
 // INCORRECT - Loads all posts into memory
 $posts = get_posts( array( 'numberposts' => -1 ) );
 foreach ( $posts as $post ) {
-    process( $post );
+	process( $post );
 }
 
 // CORRECT - Batch processing
 $paged = 1;
 do {
-    $posts = get_posts( array(
-        'numberposts' => 100,
-        'paged'       => $paged,
-    ) );
+	$posts = get_posts( array(
+		'numberposts' => 100,
+		'paged'       => $paged,
+	) );
 
-    foreach ( $posts as $post ) {
-        process( $post );
-    }
+	foreach ( $posts as $post ) {
+		process( $post );
+	}
 
-    $paged++;
+	$paged++;
 } while ( count( $posts ) === 100 );
 ```
 
@@ -258,7 +258,7 @@ do {
 ```php
 // INCORRECT - Multiple requests
 foreach ( $items as $item ) {
-    $data = wp_remote_get( $item['url'] );
+	$data = wp_remote_get( $item['url'] );
 }
 
 // CORRECT - Batch or background process
@@ -273,16 +273,16 @@ wp_schedule_single_event( time(), 'process_items_batch', array( $items ) );
 
 ```php
 add_action( 'wp_enqueue_scripts', function() {
-    // Only load on specific pages
-    if ( is_singular( 'product' ) ) {
-        wp_enqueue_script( 'product-gallery' );
-    }
+	// Only load on specific pages
+	if ( is_singular( 'product' ) ) {
+		wp_enqueue_script( 'product-gallery' );
+	}
 
-    // Only load when shortcode is present
-    global $post;
-    if ( has_shortcode( $post->post_content, 'my_shortcode' ) ) {
-        wp_enqueue_script( 'my-shortcode-script' );
-    }
+	// Only load when shortcode is present
+	global $post;
+	if ( has_shortcode( $post->post_content, 'my_shortcode' ) ) {
+		wp_enqueue_script( 'my-shortcode-script' );
+	}
 } );
 ```
 
@@ -290,13 +290,13 @@ add_action( 'wp_enqueue_scripts', function() {
 
 ```php
 add_filter( 'script_loader_tag', function( $tag, $handle ) {
-    $defer_scripts = array( 'analytics', 'tracking' );
-    
-    if ( in_array( $handle, $defer_scripts, true ) ) {
-        return str_replace( ' src', ' defer src', $tag );
-    }
-    
-    return $tag;
+	$defer_scripts = array( 'analytics', 'tracking' );
+
+	if ( in_array( $handle, $defer_scripts, true ) ) {
+		return str_replace( ' src', ' defer src', $tag );
+	}
+
+	return $tag;
 }, 10, 2 );
 ```
 

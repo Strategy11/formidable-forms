@@ -55,7 +55,7 @@ Declare UTF-8 encoding early in the head.
 
 ```html
 <head>
-    <meta charset="UTF-8" />
+	<meta charset="UTF-8" />
 </head>
 ```
 
@@ -195,12 +195,12 @@ All tag names must be lowercase.
 ```html
 <!-- Correct -->
 <div>
-    <p>Content</p>
+	<p>Content</p>
 </div>
 
 <!-- Incorrect -->
 <DIV>
-    <P>Content</P>
+	<P>Content</P>
 </DIV>
 ```
 
@@ -222,29 +222,29 @@ Use semantic HTML5 elements where appropriate.
 
 ```html
 <header>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-        </ul>
-    </nav>
+	<nav>
+		<ul>
+			<li><a href="/">Home</a></li>
+		</ul>
+	</nav>
 </header>
 
 <main>
-    <article>
-        <header>
-            <h1>Article Title</h1>
-        </header>
-        <section>
-            <p>Content here.</p>
-        </section>
-    </article>
-    <aside>
-        <h2>Related Content</h2>
-    </aside>
+	<article>
+		<header>
+			<h1>Article Title</h1>
+		</header>
+		<section>
+			<p>Content here.</p>
+		</section>
+	</article>
+	<aside>
+		<h2>Related Content</h2>
+	</aside>
 </main>
 
 <footer>
-    <p>Copyright information</p>
+	<p>Copyright information</p>
 </footer>
 ```
 
@@ -258,14 +258,14 @@ HTML indentation should reflect the logical structure using tabs.
 
 ```html
 <div class="wrapper">
-    <header>
-        <h1>Title</h1>
-    </header>
-    <main>
-        <article>
-            <p>Content</p>
-        </article>
-    </main>
+	<header>
+		<h1>Title</h1>
+	</header>
+	<main>
+		<article>
+			<p>Content</p>
+		</article>
+	</main>
 </div>
 ```
 
@@ -275,13 +275,13 @@ Indent PHP blocks to match surrounding HTML structure.
 
 ```php
 <?php if ( ! have_posts() ) : ?>
-    <div id="post-1" class="post">
-        <h1 class="entry-title">Not Found</h1>
-        <div class="entry-content">
-            <p>Apologies, but no results were found.</p>
-            <?php get_search_form(); ?>
-        </div>
-    </div>
+	<div id="post-1" class="post">
+		<h1 class="entry-title">Not Found</h1>
+		<div class="entry-content">
+			<p>Apologies, but no results were found.</p>
+			<?php get_search_form(); ?>
+		</div>
+	</div>
 <?php endif; ?>
 ```
 
@@ -299,8 +299,8 @@ Put block elements on their own lines.
 
 ```html
 <div>
-    <p>First paragraph.</p>
-    <p>Second paragraph.</p>
+	<p>First paragraph.</p>
+	<p>Second paragraph.</p>
 </div>
 ```
 
@@ -312,21 +312,21 @@ Put block elements on their own lines.
 
 ```html
 <form action="/submit" method="post">
-    <fieldset>
-        <legend>Personal Information</legend>
+	<fieldset>
+		<legend>Personal Information</legend>
 
-        <div class="form-field">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required="required" />
-        </div>
+		<div class="form-field">
+			<label for="name">Name</label>
+			<input type="text" id="name" name="name" required="required" />
+		</div>
 
-        <div class="form-field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required="required" />
-        </div>
-    </fieldset>
+		<div class="form-field">
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email" required="required" />
+		</div>
+	</fieldset>
 
-    <button type="submit">Submit</button>
+	<button type="submit">Submit</button>
 </form>
 ```
 
@@ -341,7 +341,7 @@ Always associate labels with form controls.
 
 <!-- Wrapping the input -->
 <label>
-    <input type="checkbox" name="agree" /> I agree to the terms
+	<input type="checkbox" name="agree" /> I agree to the terms
 </label>
 ```
 
@@ -367,29 +367,29 @@ Use appropriate input types for better UX and validation.
 
 ```html
 <table>
-    <caption>Monthly Sales</caption>
-    <thead>
-        <tr>
-            <th scope="col">Month</th>
-            <th scope="col">Sales</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>January</td>
-            <td>$10,000</td>
-        </tr>
-        <tr>
-            <td>February</td>
-            <td>$12,000</td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <th scope="row">Total</th>
-            <td>$22,000</td>
-        </tr>
-    </tfoot>
+	<caption>Monthly Sales</caption>
+	<thead>
+		<tr>
+			<th scope="col">Month</th>
+			<th scope="col">Sales</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>January</td>
+			<td>$10,000</td>
+		</tr>
+		<tr>
+			<td>February</td>
+			<td>$12,000</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th scope="row">Total</th>
+			<td>$22,000</td>
+		</tr>
+	</tfoot>
 </table>
 ```
 
@@ -411,7 +411,7 @@ Use scope attribute on header cells.
 ```html
 <!-- External link -->
 <a href="https://example.com/" rel="noopener noreferrer" target="_blank">
-    External Site
+	External Site
 </a>
 
 <!-- Internal link -->
@@ -435,16 +435,16 @@ Use scope attribute on header cells.
 
 <!-- Figure with caption -->
 <figure>
-    <img src="photo.jpg" alt="Mountain landscape at sunset" />
-    <figcaption>Rocky Mountains, Colorado</figcaption>
+	<img src="photo.jpg" alt="Mountain landscape at sunset" />
+	<figcaption>Rocky Mountains, Colorado</figcaption>
 </figure>
 
 <!-- Responsive image -->
 <img
-    src="small.jpg"
-    srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
-    sizes="(max-width: 600px) 480px, (max-width: 1000px) 800px, 1200px"
-    alt="Responsive image example"
+	src="small.jpg"
+	srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
+	sizes="(max-width: 600px) 480px, (max-width: 1000px) 800px, 1200px"
+	alt="Responsive image example"
 />
 ```
 
@@ -458,9 +458,9 @@ Place scripts at the end of body or use defer attribute.
 
 ```html
 <body>
-    <!-- Content -->
+	<!-- Content -->
 
-    <script src="script.js"></script>
+	<script src="script.js"></script>
 </body>
 ```
 
@@ -468,7 +468,7 @@ Or with defer:
 
 ```html
 <head>
-    <script src="script.js" defer="defer"></script>
+	<script src="script.js" defer="defer"></script>
 </head>
 ```
 
@@ -494,8 +494,8 @@ Avoid inline scripts and styles. Use external files.
 <!-- Single line comment -->
 
 <!--
-    Multi-line comment
-    spanning several lines
+	Multi-line comment
+	spanning several lines
 -->
 
 <!-- Start: Navigation -->

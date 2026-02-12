@@ -33,30 +33,30 @@ Always register blocks using `block.json` metadata file. This is the canonical m
 
 ```json
 {
-  "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 3,
-  "name": "my-plugin/my-block",
-  "title": "My Block",
-  "category": "widgets",
-  "icon": "star",
-  "description": "A custom block.",
-  "keywords": ["custom", "block"],
-  "textdomain": "my-plugin",
-  "attributes": {
-    "content": {
-      "type": "string",
-      "source": "html",
-      "selector": ".content"
-    }
-  },
-  "supports": {
-    "align": true,
-    "html": false
-  },
-  "editorScript": "file:./index.js",
-  "editorStyle": "file:./index.css",
-  "style": "file:./style.css",
-  "render": "file:./render.php"
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "my-plugin/my-block",
+	"title": "My Block",
+	"category": "widgets",
+	"icon": "star",
+	"description": "A custom block.",
+	"keywords": ["custom", "block"],
+	"textdomain": "my-plugin",
+	"attributes": {
+		"content": {
+			"type": "string",
+			"source": "html",
+			"selector": ".content"
+		}
+	},
+	"supports": {
+		"align": true,
+		"html": false
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
 }
 ```
 
@@ -73,7 +73,7 @@ Always use `apiVersion: 3` (introduced in WordPress 6.3) for new blocks.
 
 ```json
 {
-  "apiVersion": 3
+	"apiVersion": 3
 }
 ```
 
@@ -82,22 +82,22 @@ Always use `apiVersion: 3` (introduced in WordPress 6.3) for new blocks.
 Every block wrapper must use `useBlockProps` for proper editor integration.
 
 ```jsx
-import { useBlockProps } from "@wordpress/block-editor";
+import { useBlockProps } from '@wordpress/block-editor';
 
-export default function Edit({ attributes, setAttributes }) {
-  const blockProps = useBlockProps();
+export default function Edit( { attributes, setAttributes } ) {
+	const blockProps = useBlockProps();
 
-  return <div {...blockProps}>{/* Block content */}</div>;
+	return <div { ...blockProps }>{ /* Block content */ }</div>;
 }
 ```
 
 For custom classes or attributes:
 
 ```jsx
-const blockProps = useBlockProps({
-  className: "my-custom-class",
-  "data-custom": "value",
-});
+const blockProps = useBlockProps( {
+	className: 'my-custom-class',
+	'data-custom': 'value',
+} );
 ```
 
 ---
@@ -123,15 +123,15 @@ blocks/
 
 ```jsx
 // index.js
-import { registerBlockType } from "@wordpress/blocks";
-import Edit from "./edit";
-import save from "./save";
-import metadata from "./block.json";
+import { registerBlockType } from '@wordpress/blocks';
+import Edit from './edit';
+import save from './save';
+import metadata from './block.json';
 
-registerBlockType(metadata.name, {
-  edit: Edit,
-  save,
-});
+registerBlockType( metadata.name, {
+	edit: Edit,
+	save,
+} );
 ```
 
 ---
@@ -144,19 +144,19 @@ Use functional components with hooks. Never use class components.
 
 ```jsx
 // CORRECT
-import { useBlockProps } from "@wordpress/block-editor";
+import { useBlockProps } from '@wordpress/block-editor';
 
-export default function Edit({ attributes, setAttributes, isSelected }) {
-  const blockProps = useBlockProps();
+export default function Edit( { attributes, setAttributes, isSelected } ) {
+	const blockProps = useBlockProps();
 
-  return <div {...blockProps}>{/* Content */}</div>;
+	return <div { ...blockProps }>{ /* Content */ }</div>;
 }
 
 // INCORRECT - Class component
 class Edit extends Component {
-  render() {
-    return <div>{/* Content */}</div>;
-  }
+	render() {
+		return <div>{ /* Content */ }</div>;
+	}
 }
 ```
 
@@ -165,15 +165,15 @@ class Edit extends Component {
 Always destructure props at the function signature level.
 
 ```jsx
-export default function Edit({
-  attributes,
-  setAttributes,
-  isSelected,
-  clientId,
-  context,
-}) {
-  const { content, alignment } = attributes;
-  // ...
+export default function Edit( {
+	attributes,
+	setAttributes,
+	isSelected,
+	clientId,
+	context,
+} ) {
+	const { content, alignment } = attributes;
+	// ...
 }
 ```
 
@@ -183,8 +183,8 @@ Use `setAttributes` with object spread for updates.
 
 ```jsx
 // CORRECT
-setAttributes({ content: newContent });
-setAttributes({ ...attributes, items: [...items, newItem] });
+setAttributes( { content: newContent } );
+setAttributes( { ...attributes, items: [ ...items, newItem ] } );
 
 // INCORRECT - Direct mutation
 attributes.content = newContent;
@@ -200,16 +200,16 @@ attributes.content = newContent;
 
 ```jsx
 // save.js
-import { useBlockProps } from "@wordpress/block-editor";
+import { useBlockProps } from '@wordpress/block-editor';
 
-export default function save({ attributes }) {
-  const blockProps = useBlockProps.save();
+export default function save( { attributes } ) {
+	const blockProps = useBlockProps.save();
 
-  return (
-    <div {...blockProps}>
-      <p>{attributes.content}</p>
-    </div>
-  );
+	return (
+		<div { ...blockProps }>
+			<p>{ attributes.content }</p>
+		</div>
+	);
 }
 ```
 
@@ -218,14 +218,14 @@ export default function save({ attributes }) {
 ```jsx
 // save.js - Return null for dynamic blocks
 export default function save() {
-  return null;
+	return null;
 }
 ```
 
 ```php
 // render.php
 <div <?php echo get_block_wrapper_attributes(); ?>>
-    <?php echo esc_html( $attributes['content'] ); ?>
+	<?php echo esc_html( $attributes['content'] ); ?>
 </div>
 ```
 
@@ -234,14 +234,14 @@ export default function save() {
 Always use `useBlockProps.save()` in the save function.
 
 ```jsx
-import { useBlockProps } from "@wordpress/block-editor";
+import { useBlockProps } from '@wordpress/block-editor';
 
-export default function save({ attributes }) {
-  const blockProps = useBlockProps.save({
-    className: `align-${attributes.alignment}`,
-  });
+export default function save( { attributes } ) {
+	const blockProps = useBlockProps.save( {
+		className: `align-${ attributes.alignment }`,
+	} );
 
-  return <div {...blockProps}>{attributes.content}</div>;
+	return <div { ...blockProps }>{ attributes.content }</div>;
 }
 ```
 
@@ -254,33 +254,33 @@ export default function save({ attributes }) {
 ```jsx
 // Block Editor
 import {
-  useBlockProps,
-  RichText,
-  InspectorControls,
-  BlockControls,
-  InnerBlocks,
-  MediaUpload,
-  MediaUploadCheck,
-} from "@wordpress/block-editor";
+	useBlockProps,
+	RichText,
+	InspectorControls,
+	BlockControls,
+	InnerBlocks,
+	MediaUpload,
+	MediaUploadCheck,
+} from '@wordpress/block-editor';
 
 // Components
 import {
-  PanelBody,
-  TextControl,
-  ToggleControl,
-  SelectControl,
-  Button,
-  Spinner,
-  Placeholder,
-} from "@wordpress/components";
+	PanelBody,
+	TextControl,
+	ToggleControl,
+	SelectControl,
+	Button,
+	Spinner,
+	Placeholder,
+} from '@wordpress/components';
 
 // Data
-import { useSelect, useDispatch } from "@wordpress/data";
+import { useSelect, useDispatch } from '@wordpress/data';
 
 // Core utilities
-import { __ } from "@wordpress/i18n";
-import { useEffect, useState, useCallback } from "@wordpress/element";
-import domReady from "@wordpress/dom-ready";
+import { __ } from '@wordpress/i18n';
+import { useEffect, useState, useCallback } from '@wordpress/element';
+import domReady from '@wordpress/dom-ready';
 ```
 
 ### Importing via WordPress Global
@@ -299,10 +299,10 @@ In PHP, declare script dependencies correctly:
 
 ```php
 wp_enqueue_script(
-    'my-block-editor',
-    plugins_url( 'build/index.js', __FILE__ ),
-    array( 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-element' ),
-    filemtime( plugin_dir_path( __FILE__ ) . 'build/index.js' )
+	'my-block-editor',
+	plugins_url( 'build/index.js', __FILE__ ),
+	array( 'wp-blocks', 'wp-block-editor', 'wp-components', 'wp-i18n', 'wp-element' ),
+	filemtime( plugin_dir_path( __FILE__ ) . 'build/index.js' )
 );
 ```
 
@@ -313,45 +313,45 @@ wp_enqueue_script(
 ### useSelect for Reading Data
 
 ```jsx
-import { useSelect } from "@wordpress/data";
-import { store as coreStore } from "@wordpress/core-data";
+import { useSelect } from '@wordpress/data';
+import { store as coreStore } from '@wordpress/core-data';
 
 function MyComponent() {
-  const posts = useSelect((select) => {
-    return select(coreStore).getEntityRecords("postType", "post", {
-      per_page: 10,
-    });
-  }, []);
+	const posts = useSelect( ( select ) => {
+		return select( coreStore ).getEntityRecords( 'postType', 'post', {
+			per_page: 10,
+		} );
+	}, [] );
 
-  if (!posts) {
-    return <Spinner />;
-  }
+	if ( ! posts ) {
+		return <Spinner />;
+	}
 
-  return (
-    <ul>
-      {posts.map((post) => (
-        <li key={post.id}>{post.title.rendered}</li>
-      ))}
-    </ul>
-  );
+	return (
+		<ul>
+			{ posts.map( ( post ) => (
+				<li key={ post.id }>{ post.title.rendered }</li>
+			) ) }
+		</ul>
+	);
 }
 ```
 
 ### useDispatch for Writing Data
 
 ```jsx
-import { useDispatch } from "@wordpress/data";
-import { store as noticesStore } from "@wordpress/notices";
+import { useDispatch } from '@wordpress/data';
+import { store as noticesStore } from '@wordpress/notices';
 
 function MyComponent() {
-  const { createSuccessNotice } = useDispatch(noticesStore);
+	const { createSuccessNotice } = useDispatch( noticesStore );
 
-  const handleSave = () => {
-    // Save logic
-    createSuccessNotice("Saved successfully!");
-  };
+	const handleSave = () => {
+		// Save logic
+		createSuccessNotice( 'Saved successfully!' );
+	};
 
-  return <Button onClick={handleSave}>Save</Button>;
+	return <Button onClick={ handleSave }>Save</Button>;
 }
 ```
 
@@ -373,55 +373,55 @@ function MyComponent() {
 ### Inspector Controls (Sidebar)
 
 ```jsx
-import { InspectorControls } from "@wordpress/block-editor";
-import { PanelBody, ToggleControl, RangeControl } from "@wordpress/components";
+import { InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, ToggleControl, RangeControl } from '@wordpress/components';
 
-export default function Edit({ attributes, setAttributes }) {
-  const { showTitle, columns } = attributes;
+export default function Edit( { attributes, setAttributes } ) {
+	const { showTitle, columns } = attributes;
 
-  return (
-    <>
-      <InspectorControls>
-        <PanelBody title={__("Settings", "my-plugin")}>
-          <ToggleControl
-            label={__("Show Title", "my-plugin")}
-            checked={showTitle}
-            onChange={(value) => setAttributes({ showTitle: value })}
-          />
-          <RangeControl
-            label={__("Columns", "my-plugin")}
-            value={columns}
-            onChange={(value) => setAttributes({ columns: value })}
-            min={1}
-            max={4}
-          />
-        </PanelBody>
-      </InspectorControls>
-      {/* Block content */}
-    </>
-  );
+	return (
+		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Settings', 'my-plugin' ) }>
+					<ToggleControl
+						label={ __( 'Show Title', 'my-plugin' ) }
+						checked={ showTitle }
+						onChange={ ( value ) => setAttributes( { showTitle: value } ) }
+					/>
+					<RangeControl
+						label={ __( 'Columns', 'my-plugin' ) }
+						value={ columns }
+						onChange={ ( value ) => setAttributes( { columns: value } ) }
+						min={ 1 }
+						max={ 4 }
+					/>
+				</PanelBody>
+			</InspectorControls>
+			{ /* Block content */ }
+		</>
+	);
 }
 ```
 
 ### Block Controls (Toolbar)
 
 ```jsx
-import { BlockControls, AlignmentToolbar } from "@wordpress/block-editor";
+import { BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 
-export default function Edit({ attributes, setAttributes }) {
-  const { alignment } = attributes;
+export default function Edit( { attributes, setAttributes } ) {
+	const { alignment } = attributes;
 
-  return (
-    <>
-      <BlockControls>
-        <AlignmentToolbar
-          value={alignment}
-          onChange={(value) => setAttributes({ alignment: value })}
-        />
-      </BlockControls>
-      {/* Block content */}
-    </>
-  );
+	return (
+		<>
+			<BlockControls>
+				<AlignmentToolbar
+					value={ alignment }
+					onChange={ ( value ) => setAttributes( { alignment: value } ) }
+				/>
+			</BlockControls>
+			{ /* Block content */ }
+		</>
+	);
 }
 ```
 
@@ -432,33 +432,33 @@ export default function Edit({ attributes, setAttributes }) {
 ### Basic Usage
 
 ```jsx
-import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
+import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 export default function Edit() {
-  const blockProps = useBlockProps();
+	const blockProps = useBlockProps();
 
-  return (
-    <div {...blockProps}>
-      <InnerBlocks
-        allowedBlocks={["core/paragraph", "core/heading"]}
-        template={[
-          ["core/heading", { level: 2 }],
-          ["core/paragraph", { placeholder: "Add content..." }],
-        ]}
-        templateLock={false}
-      />
-    </div>
-  );
+	return (
+		<div { ...blockProps }>
+			<InnerBlocks
+				allowedBlocks={ [ 'core/paragraph', 'core/heading' ] }
+				template={ [
+					[ 'core/heading', { level: 2 } ],
+					[ 'core/paragraph', { placeholder: 'Add content...' } ],
+				] }
+				templateLock={ false }
+			/>
+		</div>
+	);
 }
 
 export function save() {
-  const blockProps = useBlockProps.save();
+	const blockProps = useBlockProps.save();
 
-  return (
-    <div {...blockProps}>
-      <InnerBlocks.Content />
-    </div>
-  );
+	return (
+		<div { ...blockProps }>
+			<InnerBlocks.Content />
+		</div>
+	);
 }
 ```
 
@@ -476,29 +476,29 @@ export function save() {
 ## 8. Rich Text
 
 ```jsx
-import { RichText, useBlockProps } from "@wordpress/block-editor";
+import { RichText, useBlockProps } from '@wordpress/block-editor';
 
-export default function Edit({ attributes, setAttributes }) {
-  const blockProps = useBlockProps();
+export default function Edit( { attributes, setAttributes } ) {
+	const blockProps = useBlockProps();
 
-  return (
-    <RichText
-      {...blockProps}
-      tagName="p"
-      value={attributes.content}
-      onChange={(content) => setAttributes({ content })}
-      placeholder={__("Enter text...", "my-plugin")}
-      allowedFormats={["core/bold", "core/italic", "core/link"]}
-    />
-  );
+	return (
+		<RichText
+			{ ...blockProps }
+			tagName="p"
+			value={ attributes.content }
+			onChange={ ( content ) => setAttributes( { content } ) }
+			placeholder={ __( 'Enter text...', 'my-plugin' ) }
+			allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+		/>
+	);
 }
 
-export function save({ attributes }) {
-  const blockProps = useBlockProps.save();
+export function save( { attributes } ) {
+	const blockProps = useBlockProps.save();
 
-  return (
-    <RichText.Content {...blockProps} tagName="p" value={attributes.content} />
-  );
+	return (
+		<RichText.Content { ...blockProps } tagName="p" value={ attributes.content } />
+	);
 }
 ```
 
@@ -510,26 +510,26 @@ Define in `block.json` for automatic features:
 
 ```json
 {
-  "supports": {
-    "align": ["wide", "full"],
-    "anchor": true,
-    "className": true,
-    "color": {
-      "background": true,
-      "text": true,
-      "gradients": true
-    },
-    "spacing": {
-      "margin": true,
-      "padding": true
-    },
-    "typography": {
-      "fontSize": true,
-      "lineHeight": true
-    },
-    "html": false,
-    "reusable": true
-  }
+	"supports": {
+		"align": ["wide", "full"],
+		"anchor": true,
+		"className": true,
+		"color": {
+			"background": true,
+			"text": true,
+			"gradients": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true
+		},
+		"html": false,
+		"reusable": true
+	}
 }
 ```
 
@@ -540,55 +540,55 @@ Define in `block.json` for automatic features:
 ### Modify Block Registration
 
 ```jsx
-import { addFilter } from "@wordpress/hooks";
+import { addFilter } from '@wordpress/hooks';
 
 addFilter(
-  "blocks.registerBlockType",
-  "my-plugin/modify-paragraph",
-  (settings, name) => {
-    if (name !== "core/paragraph") {
-      return settings;
-    }
+	'blocks.registerBlockType',
+	'my-plugin/modify-paragraph',
+	( settings, name ) => {
+		if ( name !== 'core/paragraph' ) {
+			return settings;
+		}
 
-    return {
-      ...settings,
-      supports: {
-        ...settings.supports,
-        customClassName: false,
-      },
-    };
-  },
+		return {
+			...settings,
+			supports: {
+				...settings.supports,
+				customClassName: false,
+			},
+		};
+	},
 );
 ```
 
 ### Extend Block Edit
 
 ```jsx
-import { addFilter } from "@wordpress/hooks";
-import { createHigherOrderComponent } from "@wordpress/compose";
-import { InspectorControls } from "@wordpress/block-editor";
-import { PanelBody } from "@wordpress/components";
+import { addFilter } from '@wordpress/hooks';
+import { createHigherOrderComponent } from '@wordpress/compose';
+import { InspectorControls } from '@wordpress/block-editor';
+import { PanelBody } from '@wordpress/components';
 
-const withCustomControls = createHigherOrderComponent((BlockEdit) => {
-  return (props) => {
-    if (props.name !== "core/paragraph") {
-      return <BlockEdit {...props} />;
-    }
+const withCustomControls = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		if ( props.name !== 'core/paragraph' ) {
+			return <BlockEdit { ...props } />;
+		}
 
-    return (
-      <>
-        <BlockEdit {...props} />
-        <InspectorControls>
-          <PanelBody title={__("Custom Settings", "my-plugin")}>
-            {/* Custom controls */}
-          </PanelBody>
-        </InspectorControls>
-      </>
-    );
-  };
-}, "withCustomControls");
+		return (
+			<>
+				<BlockEdit { ...props } />
+				<InspectorControls>
+					<PanelBody title={ __( 'Custom Settings', 'my-plugin' ) }>
+						{ /* Custom controls */ }
+					</PanelBody>
+				</InspectorControls>
+			</>
+		);
+	};
+}, 'withCustomControls' );
 
-addFilter("editor.BlockEdit", "my-plugin/custom-controls", withCustomControls);
+addFilter( 'editor.BlockEdit', 'my-plugin/custom-controls', withCustomControls );
 ```
 
 ---
@@ -598,16 +598,16 @@ addFilter("editor.BlockEdit", "my-plugin/custom-controls", withCustomControls);
 ### Translating Strings
 
 ```jsx
-import { __, _n, sprintf } from "@wordpress/i18n";
+import { __, _n, sprintf } from '@wordpress/i18n';
 
 // Simple string
-const label = __("My Label", "my-plugin");
+const label = __( 'My Label', 'my-plugin' );
 
 // Pluralization
-const message = sprintf(_n("%d item", "%d items", count, "my-plugin"), count);
+const message = sprintf( _n( '%d item', '%d items', count, 'my-plugin' ), count );
 
 // With variables
-const greeting = sprintf(__("Hello, %s!", "my-plugin"), userName);
+const greeting = sprintf( __( 'Hello, %s!', 'my-plugin' ), userName );
 ```
 
 ### In block.json
@@ -616,10 +616,10 @@ Translatable fields are automatically handled when `textdomain` is set.
 
 ```json
 {
-  "textdomain": "my-plugin",
-  "title": "My Block",
-  "description": "A custom block.",
-  "keywords": ["custom"]
+	"textdomain": "my-plugin",
+	"title": "My Block",
+	"description": "A custom block.",
+	"keywords": ["custom"]
 }
 ```
 
@@ -650,14 +650,14 @@ For custom config, extend `@wordpress/scripts`:
 
 ```javascript
 // webpack.config.js
-const defaultConfig = require("@wordpress/scripts/config/webpack.config");
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
 module.exports = {
-  ...defaultConfig,
-  entry: {
-    ...defaultConfig.entry,
-    "custom-entry": "./src/custom-entry.js",
-  },
+	...defaultConfig,
+	entry: {
+		...defaultConfig.entry,
+		'custom-entry': './src/custom-entry.js',
+	},
 };
 ```
 
@@ -668,23 +668,23 @@ module.exports = {
 ### Memoization
 
 ```jsx
-import { useMemo, useCallback } from "@wordpress/element";
+import { useMemo, useCallback } from '@wordpress/element';
 
-function MyComponent({ items, onSelect }) {
-  // Memoize expensive computations
-  const processedItems = useMemo(() => {
-    return items.map((item) => expensiveProcess(item));
-  }, [items]);
+function MyComponent( { items, onSelect } ) {
+	// Memoize expensive computations
+	const processedItems = useMemo( () => {
+		return items.map( ( item ) => expensiveProcess( item ) );
+	}, [ items ] );
 
-  // Memoize callbacks passed to children
-  const handleSelect = useCallback(
-    (id) => {
-      onSelect(id);
-    },
-    [onSelect],
-  );
+	// Memoize callbacks passed to children
+	const handleSelect = useCallback(
+		( id ) => {
+			onSelect( id );
+		},
+		[ onSelect ],
+	);
 
-  return <ItemList items={processedItems} onSelect={handleSelect} />;
+	return <ItemList items={ processedItems } onSelect={ handleSelect } />;
 }
 ```
 
@@ -692,39 +692,39 @@ function MyComponent({ items, onSelect }) {
 
 ```jsx
 // INCORRECT - Creates new object every render
-<MyComponent style={{ color: "red" }} />;
+<MyComponent style={ { color: 'red' } } />;
 
 // CORRECT - Stable reference
-const style = useMemo(() => ({ color: "red" }), []);
-<MyComponent style={style} />;
+const style = useMemo( () => ( { color: 'red' } ), [] );
+<MyComponent style={ style } />;
 ```
 
 ### State Initialization
 
 ```jsx
 // CORRECT - Lazy initialization for expensive values
-const [state, setState] = useState(() => computeExpensiveValue());
+const [ state, setState ] = useState( () => computeExpensiveValue() );
 
 // INCORRECT - Runs on every render
-const [state, setState] = useState(computeExpensiveValue());
+const [ state, setState ] = useState( computeExpensiveValue() );
 ```
 
 ### Derived State
 
 ```jsx
 // CORRECT - Derive during render
-function MyComponent({ items }) {
-  const filteredItems = items.filter((item) => item.active);
-  // ...
+function MyComponent( { items } ) {
+	const filteredItems = items.filter( ( item ) => item.active );
+	// ...
 }
 
 // INCORRECT - Unnecessary state and effect
-function MyComponent({ items }) {
-  const [filteredItems, setFilteredItems] = useState([]);
+function MyComponent( { items } ) {
+	const [ filteredItems, setFilteredItems ] = useState( [] );
 
-  useEffect(() => {
-    setFilteredItems(items.filter((item) => item.active));
-  }, [items]);
+	useEffect( () => {
+		setFilteredItems( items.filter( ( item ) => item.active ) );
+	}, [ items ] );
 }
 ```
 
@@ -737,11 +737,11 @@ function MyComponent({ items }) {
 ```jsx
 // CORRECT - Parallel fetching
 const { posts, categories } = useSelect( ( select ) => {
-    const { getEntityRecords } = select( coreStore );
-    return {
-        posts: getEntityRecords( 'postType', 'post' ),
-        categories: getEntityRecords( 'taxonomy', 'category' ),
-    };
+	const { getEntityRecords } = select( coreStore );
+	return {
+		posts: getEntityRecords( 'postType', 'post' ),
+		categories: getEntityRecords( 'taxonomy', 'category' ),
+	};
 }, [] );
 
 // INCORRECT - Sequential in separate hooks
@@ -754,34 +754,34 @@ const categories = useSelect( ( select ) => /* ... */ );
 ```jsx
 // CORRECT - Minimal dependencies
 const postTitle = useSelect(
-  (select) => {
-    return select(coreStore).getEntityRecord("postType", "post", postId)?.title;
-  },
-  [postId],
+	( select ) => {
+		return select( coreStore ).getEntityRecord( 'postType', 'post', postId )?.title;
+	},
+	[ postId ],
 );
 
 // INCORRECT - Returns entire object, causes re-renders
 const post = useSelect(
-  (select) => {
-    return select(coreStore).getEntityRecord("postType", "post", postId);
-  },
-  [postId],
+	( select ) => {
+		return select( coreStore ).getEntityRecord( 'postType', 'post', postId );
+	},
+	[ postId ],
 );
 ```
 
 ### Dynamic Imports
 
 ```jsx
-import { lazy, Suspense } from "@wordpress/element";
+import { lazy, Suspense } from '@wordpress/element';
 
-const HeavyComponent = lazy(() => import("./HeavyComponent"));
+const HeavyComponent = lazy( () => import( './HeavyComponent' ) );
 
 function MyBlock() {
-  return (
-    <Suspense fallback={<Spinner />}>
-      <HeavyComponent />
-    </Suspense>
-  );
+	return (
+		<Suspense fallback={ <Spinner /> }>
+			<HeavyComponent />
+		</Suspense>
+	);
 }
 ```
 
@@ -797,28 +797,28 @@ function MyBlock() {
 
 // Use composition
 <Card>
-    <Card.Header />
-    <Card.Image />
-    <Card.Body />
-    <Card.Footer />
+	<Card.Header />
+	<Card.Image />
+	<Card.Body />
+	<Card.Footer />
 </Card>
 ```
 
 ### Context for Shared State
 
 ```jsx
-import { createContext, useContext } from "@wordpress/element";
+import { createContext, useContext } from '@wordpress/element';
 
 const BlockContext = createContext();
 
-function BlockProvider({ children, value }) {
-  return (
-    <BlockContext.Provider value={value}>{children}</BlockContext.Provider>
-  );
+function BlockProvider( { children, value } ) {
+	return (
+		<BlockContext.Provider value={ value }>{ children }</BlockContext.Provider>
+	);
 }
 
 function useBlockContext() {
-  return useContext(BlockContext);
+	return useContext( BlockContext );
 }
 ```
 

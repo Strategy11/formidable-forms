@@ -57,14 +57,14 @@ All new code must be compatible with PHP 7.0. Use modern PHP 7.0 syntax but do n
  * @return bool Whether the operation succeeded.
  */
 function process_user_data( int $user_id, string $action, array $options = array() ): bool {
-    $timeout = $options['timeout'] ?? 30;
-    $result  = $options['result'] ?? 'default';
+	$timeout = $options['timeout'] ?? 30;
+	$result  = $options['result'] ?? 'default';
 
-    if ( empty( $user_id ) ) {
-        return false;
-    }
+	if ( empty( $user_id ) ) {
+		return false;
+	}
 
-    return true;
+	return true;
 }
 ```
 
@@ -78,11 +78,11 @@ Always use `$wpdb->prepare()` for queries with variables.
 
 ```php
 $wpdb->query(
-    $wpdb->prepare(
-        "UPDATE $wpdb->posts SET post_title = %s WHERE ID = %d",
-        $var,
-        $id
-    )
+	$wpdb->prepare(
+		"UPDATE $wpdb->posts SET post_title = %s WHERE ID = %d",
+		$var,
+		$id
+	)
 );
 ```
 
@@ -103,19 +103,19 @@ $wpdb->query(
 
 ```php
 $wpdb->query(
-    $wpdb->prepare(
-        "
-        SELECT post_title, post_content
-        FROM $wpdb->posts
-        WHERE post_status = %s
-            AND post_type = %s
-        ORDER BY post_date DESC
-        LIMIT %d
-        ",
-        'publish',
-        'post',
-        10
-    )
+	$wpdb->prepare(
+		"
+		SELECT post_title, post_content
+		FROM $wpdb->posts
+		WHERE post_status = %s
+			AND post_type = %s
+		ORDER BY post_date DESC
+		LIMIT %d
+		",
+		'publish',
+		'post',
+		10
+	)
 );
 ```
 
@@ -129,7 +129,7 @@ Use lowercase with underscores. Never use camelCase.
 
 ```php
 function some_function( $some_variable ) {
-    $local_variable = '';
+	$local_variable = '';
 }
 ```
 
@@ -176,11 +176,11 @@ Always use braces even for single-line blocks. Opening brace on same line.
 
 ```php
 if ( condition ) {
-    action();
+	action();
 } elseif ( condition2 ) {
-    action2();
+	action2();
 } else {
-    default_action();
+	default_action();
 }
 ```
 
@@ -190,8 +190,8 @@ Use long array syntax `array()`, not short syntax `[]`.
 
 ```php
 $args = array(
-    'post_type'   => 'page',
-    'post_status' => 'publish',
+	'post_type'   => 'page',
+	'post_status' => 'publish',
 );
 ```
 
@@ -199,12 +199,12 @@ $args = array(
 
 ```php
 $result = some_function(
-    $arg1,
-    $arg2,
-    array(
-        'key1' => 'value1',
-        'key2' => 'value2',
-    )
+	$arg1,
+	$arg2,
+	array(
+		'key1' => 'value1',
+		'key2' => 'value2',
+	)
 );
 ```
 
@@ -214,7 +214,7 @@ One space before and after type declarations.
 
 ```php
 function foo( Class_Name $parameter, callable $callable, int $count = 0 ): bool {
-    return true;
+	return true;
 }
 ```
 
@@ -224,7 +224,7 @@ No space between spread operator and variable.
 
 ```php
 function foo( &...$spread ) {
-    bar( ...$spread );
+	bar( ...$spread );
 }
 ```
 
@@ -275,12 +275,12 @@ Put the constant or literal value on the left side of comparisons.
 ```php
 // Correct
 if ( true === $the_force ) {
-    $victorious = you_will( $be );
+	$victorious = you_will( $be );
 }
 
 // Incorrect
 if ( $the_force === true ) {
-    $victorious = you_will( $be );
+	$victorious = you_will( $be );
 }
 ```
 
@@ -291,16 +291,16 @@ Always use `elseif`, not `else if`.
 ```php
 // Correct
 if ( condition ) {
-    action();
+	action();
 } elseif ( condition2 ) {
-    action2();
+	action2();
 }
 
 // Incorrect
 if ( condition ) {
-    action();
+	action();
 } else if ( condition2 ) {
-    action2();
+	action2();
 }
 ```
 
@@ -310,11 +310,11 @@ Use alternative syntax with explicit ending statements in templates.
 
 ```php
 <?php if ( have_posts() ) : ?>
-    <?php while ( have_posts() ) : the_post(); ?>
-        <article>
-            <?php the_content(); ?>
-        </article>
-    <?php endwhile; ?>
+	<?php while ( have_posts() ) : the_post(); ?>
+		<article>
+			<?php the_content(); ?>
+		</article>
+	<?php endwhile; ?>
 <?php endif; ?>
 ```
 
@@ -357,7 +357,7 @@ $value = @file_get_contents( $file );
 
 // Correct
 if ( file_exists( $file ) && is_readable( $file ) ) {
-    $value = file_get_contents( $file );
+	$value = file_get_contents( $file );
 }
 ```
 
@@ -385,7 +385,7 @@ Use descriptive string values instead of boolean flags.
 ```php
 // Correct
 function some_function( $args ) {
-    $type = $args['type'] ?? 'default';
+	$type = $args['type'] ?? 'default';
 }
 some_function( array( 'type' => 'hierarchical' ) );
 
@@ -422,13 +422,13 @@ Do not use closures (anonymous functions) as callbacks for actions and filters.
 ```php
 // Incorrect
 add_action( 'init', function() {
-    // code
+	// code
 } );
 
 // Correct
 add_action( 'init', 'my_init_function' );
 function my_init_function() {
-    // code
+	// code
 }
 ```
 
@@ -516,13 +516,13 @@ Always declare visibility for properties and methods.
 
 ```php
 class My_Class {
-    public $public_property;
-    protected $protected_property;
-    private $private_property;
+	public $public_property;
+	protected $protected_property;
+	private $private_property;
 
-    public function public_method() {}
-    protected function protected_method() {}
-    private function private_method() {}
+	public function public_method() {}
+	protected function protected_method() {}
+	private function private_method() {}
 }
 ```
 
@@ -617,7 +617,7 @@ Use magic methods appropriately and document them.
  * @return mixed Property value.
  */
 public function __get( $name ) {
-    return $this->data[ $name ] ?? null;
+	return $this->data[ $name ] ?? null;
 }
 ```
 
@@ -631,7 +631,7 @@ Space after `function` keyword. Space before and after `use`.
 
 ```php
 $closure = function ( $arg ) use ( $var ) {
-    return $arg . $var;
+	return $arg . $var;
 };
 ```
 

@@ -33,7 +33,7 @@ Formidable uses `@wordpress/stylelint-config/scss`. See `.stylelintrc.json`:
 
 ```json
 {
-  "extends": "@wordpress/stylelint-config/scss"
+	"extends": "@wordpress/stylelint-config/scss"
 }
 ```
 
@@ -65,12 +65,14 @@ Selectors should use lowercase with hyphens:
 /* Correct */
 .frm-button-primary {
 }
+
 .frm-field-container {
 }
 
 /* Incorrect */
 .frmButtonPrimary {
 }
+
 .frm_field_container {
 }
 ```
@@ -98,8 +100,8 @@ Each selector on its own line. Opening brace on same line as last selector.
 .frm-selector-1,
 .frm-selector-2,
 .frm-selector-3 {
-  background: #fff;
-  color: #000;
+	background: #fff;
+	color: #000;
 }
 ```
 
@@ -114,10 +116,13 @@ Formidable uses the `frm-` prefix for classes:
 ```css
 .frm-button {
 }
+
 .frm-field-container {
 }
+
 .frm-dashboard-widget {
 }
+
 .frm-counter-card {
 }
 ```
@@ -143,6 +148,7 @@ Always use quotes around attribute values.
 ```css
 input[type="text"] {
 }
+
 input[name="item_meta"] {
 }
 ```
@@ -174,9 +180,9 @@ Maximum 3-4 levels deep.
 
 ```css
 .frm-button {
-  background-color: #fff;
-  font-size: 16px;
-  text-align: center;
+	background-color: #fff;
+	font-size: 16px;
+	text-align: center;
 }
 ```
 
@@ -211,25 +217,25 @@ Formidable uses CSS custom properties extensively. See `resources/scss/admin/bas
 
 ```css
 :root {
-  --grey-700: #344054;
-  --grey-500: #667085;
-  --grey-300: #d0d5dd;
-  --primary-500: #4199fd;
-  --primary-700: #2b66a9;
-  --error-500: #f04438;
-  --success-500: #12b76a;
-  --small-radius: 8px;
-  --gap-xs: 8px;
-  --gap-sm: 16px;
-  --gap-md: 24px;
-  --text-sm: 14px;
-  --text-md: 16px;
+	--grey-700: #344054;
+	--grey-500: #667085;
+	--grey-300: #d0d5dd;
+	--primary-500: #4199fd;
+	--primary-700: #2b66a9;
+	--error-500: #f04438;
+	--success-500: #12b76a;
+	--small-radius: 8px;
+	--gap-xs: 8px;
+	--gap-sm: 16px;
+	--gap-md: 24px;
+	--text-sm: 14px;
+	--text-md: 16px;
 }
 
 .frm-button {
-  background: var(--primary-500);
-  padding: var(--gap-sm);
-  border-radius: var(--small-radius);
+	background: var(--primary-500);
+	padding: var(--gap-sm);
+	border-radius: var(--small-radius);
 }
 ```
 
@@ -320,9 +326,9 @@ Indent rule sets one level inside media query:
 
 ```css
 @media all and (max-width: 699px) and (min-width: 520px) {
-  .frm-selector {
-    display: block;
-  }
+	.frm-selector {
+		display: block;
+	}
 }
 ```
 
@@ -330,19 +336,19 @@ Indent rule sets one level inside media query:
 
 ```css
 .frm-widget {
-  width: 100%;
+	width: 100%;
 }
 
 @media screen and (min-width: 600px) {
-  .frm-widget {
-    width: 50%;
-  }
+	.frm-widget {
+		width: 50%;
+	}
 }
 
 @media screen and (min-width: 1024px) {
-  .frm-widget {
-    width: 33.333%;
-  }
+	.frm-widget {
+		width: 33.333%;
+	}
 }
 ```
 
@@ -365,7 +371,7 @@ Indent rule sets one level inside media query:
 ```css
 /* Comment before rule */
 .frm-button {
-  color: var(--grey-700); /* Inline comment */
+	color: var(--grey-700); /* Inline comment */
 }
 ```
 
@@ -380,14 +386,14 @@ Prefer CSS custom properties over hardcoded values:
 ```css
 /* Incorrect */
 .frm-button {
-  padding: 16px;
-  color: #344054;
+	padding: 16px;
+	color: #344054;
 }
 
 /* Correct */
 .frm-button {
-  padding: var(--gap-sm);
-  color: var(--grey-700);
+	padding: var(--gap-sm);
+	color: var(--grey-700);
 }
 ```
 
@@ -397,8 +403,8 @@ Document or calculate values:
 
 ```css
 .frm-overlay {
-  /* Offset = header height (50px) - element height (13px) */
-  top: 37px;
+	/* Offset = header height (50px) - element height (13px) */
+	top: 37px;
 }
 ```
 
@@ -409,7 +415,7 @@ If used, document why:
 ```css
 /* Override third-party plugin styles */
 .frm-override {
-  color: var(--grey-700) !important;
+	color: var(--grey-700) !important;
 }
 ```
 
@@ -421,7 +427,7 @@ Formidable uses `border-box` globally:
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 ```
 
@@ -445,11 +451,11 @@ Maximum 3 levels deep:
 
 ```scss
 .frm-block {
-  .frm-element {
-    .frm-modifier {
-      // Stop here
-    }
-  }
+	.frm-element {
+		.frm-modifier {
+			// Stop here
+		}
+	}
 }
 ```
 
@@ -458,16 +464,16 @@ Maximum 3 levels deep:
 ```scss
 /* Incorrect */
 .frm-button {
-  & .frm-icon {
-    color: #fff;
-  }
+	& .frm-icon {
+		color: #fff;
+	}
 }
 
 /* Correct */
 .frm-button {
-  .frm-icon {
-    color: #fff;
-  }
+	.frm-icon {
+		color: #fff;
+	}
 }
 ```
 
@@ -475,9 +481,9 @@ Maximum 3 levels deep:
 
 ```scss
 @if $condition {
-  color: #fff;
+	color: #fff;
 } @else {
-  color: #000;
+	color: #000;
 }
 ```
 

@@ -44,13 +44,13 @@ echo $title; // May be double-escaped or bypassed
 
 ```php
 <div class="<?php echo esc_attr( $class ); ?>">
-    <h2><?php echo esc_html( $title ); ?></h2>
-    <a href="<?php echo esc_url( $url ); ?>">
-        <?php echo esc_html( $link_text ); ?>
-    </a>
-    <div class="content">
-        <?php echo wp_kses_post( $content ); ?>
-    </div>
+	<h2><?php echo esc_html( $title ); ?></h2>
+	<a href="<?php echo esc_url( $url ); ?>">
+		<?php echo esc_html( $link_text ); ?>
+	</a>
+	<div class="content">
+		<?php echo wp_kses_post( $content ); ?>
+	</div>
 </div>
 ```
 
@@ -59,8 +59,8 @@ echo $title; // May be double-escaped or bypassed
 ```php
 // Pass data to JavaScript safely
 wp_localize_script( 'my-script', 'myData', array(
-    'title' => esc_js( $title ),
-    'data'  => wp_json_encode( $data ),
+	'title' => esc_js( $title ),
+	'data'  => wp_json_encode( $data ),
 ) );
 ```
 
@@ -87,11 +87,11 @@ element.innerHTML = DOMPurify.sanitize( userData );
 
 ```php
 $wpdb->query(
-    $wpdb->prepare(
-        "UPDATE $wpdb->posts SET post_title = %s WHERE ID = %d",
-        $title,
-        $id
-    )
+	$wpdb->prepare(
+		"UPDATE $wpdb->posts SET post_title = %s WHERE ID = %d",
+		$title,
+		$id
+	)
 );
 ```
 
@@ -109,8 +109,8 @@ $wpdb->query(
 ```php
 // PREFERRED - WordPress functions
 $posts = get_posts( array(
-    'post_type'      => 'post',
-    'posts_per_page' => 10,
+	'post_type'      => 'post',
+	'posts_per_page' => 10,
 ) );
 
 // AVOID - Direct queries when possible
@@ -155,12 +155,12 @@ $ids   = array_map( 'absint', $_POST['ids'] );
 // CORRECT - Validate against allowed list
 $allowed = array( 'draft', 'publish', 'pending' );
 if ( ! in_array( $status, $allowed, true ) ) {
-    wp_die( 'Invalid status' );
+	wp_die( 'Invalid status' );
 }
 
 // Use strict comparison
 if ( $value === 'expected' ) {
-    // Process
+	// Process
 }
 ```
 
@@ -176,8 +176,8 @@ wp_nonce_field( 'my_action', 'my_nonce' );
 
 // On submission
 if ( ! isset( $_POST['my_nonce'] ) ||
-     ! wp_verify_nonce( $_POST['my_nonce'], 'my_action' ) ) {
-    wp_die( 'Security check failed' );
+		! wp_verify_nonce( $_POST['my_nonce'], 'my_action' ) ) {
+	wp_die( 'Security check failed' );
 }
 ```
 
@@ -186,14 +186,14 @@ if ( ! isset( $_POST['my_nonce'] ) ||
 ```php
 // Enqueue with nonce
 wp_localize_script( 'my-script', 'myAjax', array(
-    'ajaxurl' => admin_url( 'admin-ajax.php' ),
-    'nonce'   => wp_create_nonce( 'my_ajax_action' ),
+	'ajaxurl' => admin_url( 'admin-ajax.php' ),
+	'nonce'   => wp_create_nonce( 'my_ajax_action' ),
 ) );
 
 // Verify in handler
 add_action( 'wp_ajax_my_action', function() {
-    check_ajax_referer( 'my_ajax_action', 'nonce' );
-    // Process request
+	check_ajax_referer( 'my_ajax_action', 'nonce' );
+	// Process request
 } );
 ```
 
@@ -201,12 +201,12 @@ add_action( 'wp_ajax_my_action', function() {
 
 ```php
 if ( ! current_user_can( 'edit_posts' ) ) {
-    wp_die( 'Unauthorized access' );
+	wp_die( 'Unauthorized access' );
 }
 
 // Check specific post
 if ( ! current_user_can( 'edit_post', $post_id ) ) {
-    wp_die( 'You cannot edit this post' );
+	wp_die( 'You cannot edit this post' );
 }
 ```
 
@@ -220,7 +220,7 @@ if ( ! current_user_can( 'edit_post', $post_id ) ) {
 global $wp_filesystem;
 
 if ( ! function_exists( 'WP_Filesystem' ) ) {
-    require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/file.php';
 }
 
 WP_Filesystem();
@@ -236,19 +236,19 @@ $wp_filesystem->put_contents( $file_path, $content, FS_CHMOD_FILE );
 
 ```php
 $upload = wp_handle_upload(
-    $_FILES['file'],
-    array(
-        'test_form' => false,
-        'mimes'     => array(
-            'jpg|jpeg' => 'image/jpeg',
-            'png'      => 'image/png',
-            'pdf'      => 'application/pdf',
-        ),
-    )
+	$_FILES['file'],
+	array(
+		'test_form' => false,
+		'mimes'     => array(
+			'jpg|jpeg' => 'image/jpeg',
+			'png'      => 'image/png',
+			'pdf'      => 'application/pdf',
+		),
+	)
 );
 
 if ( isset( $upload['error'] ) ) {
-    wp_die( $upload['error'] );
+	wp_die( $upload['error'] );
 }
 ```
 
@@ -260,12 +260,12 @@ if ( isset( $upload['error'] ) ) {
 
 ```php
 $response = wp_remote_get( 'https://api.example.com/data', array(
-    'timeout' => 15,
+	'timeout' => 15,
 ) );
 
 if ( is_wp_error( $response ) ) {
-    error_log( 'API Error: ' . $response->get_error_message() );
-    return false;
+	error_log( 'API Error: ' . $response->get_error_message() );
+	return false;
 }
 
 $body = wp_remote_retrieve_body( $response );
@@ -277,7 +277,7 @@ $data = json_decode( $body, true );
 ```php
 // NEVER do this in production
 $response = wp_remote_get( $url, array(
-    'sslverify' => false, // DANGEROUS
+	'sslverify' => false, // DANGEROUS
 ) );
 ```
 
@@ -306,9 +306,9 @@ $value = @file_get_contents( $file );
 
 // CORRECT
 if ( file_exists( $file ) && is_readable( $file ) ) {
-    $value = file_get_contents( $file );
+	$value = file_get_contents( $file );
 } else {
-    $value = false;
+	$value = false;
 }
 ```
 
@@ -318,8 +318,8 @@ if ( file_exists( $file ) && is_readable( $file ) ) {
 $result = some_operation();
 
 if ( is_wp_error( $result ) ) {
-    error_log( 'Operation failed: ' . $result->get_error_message() );
-    return false;
+	error_log( 'Operation failed: ' . $result->get_error_message() );
+	return false;
 }
 
 return $result;

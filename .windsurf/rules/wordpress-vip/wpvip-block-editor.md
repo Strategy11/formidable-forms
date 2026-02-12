@@ -28,9 +28,9 @@ Dynamic blocks generate content server-side using PHP, ideal for frequently upda
 
 ```json
 {
-    "apiVersion": 3,
-    "name": "my-plugin/dynamic-block",
-    "render": "file:./render.php"
+	"apiVersion": 3,
+	"name": "my-plugin/dynamic-block",
+	"render": "file:./render.php"
 }
 ```
 
@@ -40,7 +40,7 @@ Dynamic blocks generate content server-side using PHP, ideal for frequently upda
 $wrapper_attributes = get_block_wrapper_attributes();
 ?>
 <div <?php echo $wrapper_attributes; ?>>
-    <?php echo esc_html( $attributes['title'] ); ?>
+	<?php echo esc_html( $attributes['title'] ); ?>
 </div>
 ```
 
@@ -48,14 +48,14 @@ $wrapper_attributes = get_block_wrapper_attributes();
 
 ```php
 register_block_type( __DIR__ . '/build', array(
-    'render_callback' => function( $attributes, $content, $block ) {
-        $wrapper_attributes = get_block_wrapper_attributes();
-        return sprintf(
-            '<div %1$s>%2$s</div>',
-            $wrapper_attributes,
-            esc_html( $attributes['title'] )
-        );
-    },
+	'render_callback' => function( $attributes, $content, $block ) {
+		$wrapper_attributes = get_block_wrapper_attributes();
+		return sprintf(
+			'<div %1$s>%2$s</div>',
+			$wrapper_attributes,
+			esc_html( $attributes['title'] )
+		);
+	},
 ) );
 ```
 
@@ -79,9 +79,9 @@ Block bindings dynamically populate content from data sources (WordPress 6.5+).
 ```php
 // Register meta field
 register_meta( 'post', 'custom_subtitle', array(
-    'show_in_rest' => true,
-    'single'       => true,
-    'type'         => 'string',
+	'show_in_rest' => true,
+	'single'       => true,
+	'type'         => 'string',
 ) );
 ```
 
@@ -95,11 +95,11 @@ register_meta( 'post', 'custom_subtitle', array(
 
 ```php
 register_block_bindings_source( 'my-plugin/custom-source', array(
-    'label'              => __( 'Custom Source', 'my-plugin' ),
-    'get_value_callback' => function( $source_args, $block_instance, $attribute_name ) {
-        return get_option( $source_args['key'], '' );
-    },
-    'uses_context'       => array( 'postId' ),
+	'label'              => __( 'Custom Source', 'my-plugin' ),
+	'get_value_callback' => function( $source_args, $block_instance, $attribute_name ) {
+		return get_option( $source_args['key'], '' );
+	},
+	'uses_context'       => array( 'postId' ),
 ) );
 ```
 
@@ -113,9 +113,9 @@ Native ESM support in WordPress 6.5+ for optimized loading.
 
 ```json
 {
-    "apiVersion": 3,
-    "name": "my-plugin/interactive-block",
-    "viewScriptModule": "file:./view.js"
+	"apiVersion": 3,
+	"name": "my-plugin/interactive-block",
+	"viewScriptModule": "file:./view.js"
 }
 ```
 
@@ -123,14 +123,14 @@ Native ESM support in WordPress 6.5+ for optimized loading.
 
 ```php
 wp_register_script_module(
-    '@my-plugin/feature',
-    plugin_dir_url( __FILE__ ) . 'build/feature.js'
+	'@my-plugin/feature',
+	plugin_dir_url( __FILE__ ) . 'build/feature.js'
 );
 
 wp_enqueue_script_module(
-    '@my-plugin/main',
-    plugin_dir_url( __FILE__ ) . 'build/main.js',
-    array( '@my-plugin/feature' )
+	'@my-plugin/main',
+	plugin_dir_url( __FILE__ ) . 'build/main.js',
+	array( '@my-plugin/feature' )
 );
 ```
 
@@ -139,8 +139,8 @@ wp_enqueue_script_module(
 ```javascript
 // Load on demand
 document.getElementById( 'trigger' ).addEventListener( 'click', async () => {
-    const { initialize } = await import( '@my-plugin/heavy-feature' );
-    initialize();
+	const { initialize } = await import( '@my-plugin/heavy-feature' );
+	initialize();
 } );
 ```
 
@@ -152,16 +152,16 @@ document.getElementById( 'trigger' ).addEventListener( 'click', async () => {
 
 ```php
 add_filter( 'block_categories_all', function( $categories, $post ) {
-    return array_merge(
-        array(
-            array(
-                'slug'  => 'my-plugin',
-                'title' => __( 'My Plugin', 'my-plugin' ),
-                'icon'  => 'star-filled',
-            ),
-        ),
-        $categories
-    );
+	return array_merge(
+		array(
+			array(
+				'slug'  => 'my-plugin',
+				'title' => __( 'My Plugin', 'my-plugin' ),
+				'icon'  => 'star-filled',
+			),
+		),
+		$categories
+	);
 }, 10, 2 );
 ```
 
@@ -169,8 +169,8 @@ add_filter( 'block_categories_all', function( $categories, $post ) {
 
 ```json
 {
-    "name": "my-plugin/custom-block",
-    "category": "my-plugin"
+	"name": "my-plugin/custom-block",
+	"category": "my-plugin"
 }
 ```
 
@@ -182,10 +182,10 @@ add_filter( 'block_categories_all', function( $categories, $post ) {
 
 ```jsx
 const updateTitle = ( newTitle ) => {
-    if ( newTitle.length > 100 ) {
-        return; // Reject invalid input
-    }
-    setAttributes( { title: newTitle } );
+	if ( newTitle.length > 100 ) {
+		return; // Reject invalid input
+	}
+	setAttributes( { title: newTitle } );
 };
 ```
 
@@ -195,11 +195,11 @@ const updateTitle = ( newTitle ) => {
 import { escapeHTML, escapeAttribute } from '@wordpress/escape-html';
 
 export default function save( { attributes } ) {
-    return (
-        <div { ...useBlockProps.save() }>
-            <h2>{ escapeHTML( attributes.title ) }</h2>
-        </div>
-    );
+	return (
+		<div { ...useBlockProps.save() }>
+			<h2>{ escapeHTML( attributes.title ) }</h2>
+		</div>
+	);
 }
 ```
 
@@ -207,10 +207,10 @@ export default function save( { attributes } ) {
 
 ```php
 <div <?php echo get_block_wrapper_attributes(); ?>>
-    <h2><?php echo esc_html( $attributes['title'] ); ?></h2>
-    <a href="<?php echo esc_url( $attributes['link'] ); ?>">
-        <?php echo esc_html( $attributes['linkText'] ); ?>
-    </a>
+	<h2><?php echo esc_html( $attributes['title'] ); ?></h2>
+	<a href="<?php echo esc_url( $attributes['link'] ); ?>">
+		<?php echo esc_html( $attributes['linkText'] ); ?>
+	</a>
 </div>
 ```
 
@@ -221,15 +221,15 @@ import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
 function RestrictedControl() {
-    const canEdit = useSelect( ( select ) => {
-        return select( coreStore ).canUser( 'update', 'settings' );
-    }, [] );
+	const canEdit = useSelect( ( select ) => {
+		return select( coreStore ).canUser( 'update', 'settings' );
+	}, [] );
 
-    if ( ! canEdit ) {
-        return null;
-    }
+	if ( ! canEdit ) {
+		return null;
+	}
 
-    return <AdminOnlyControl />;
+	return <AdminOnlyControl />;
 }
 ```
 
@@ -242,11 +242,11 @@ function RestrictedControl() {
 ```jsx
 // Use semantic elements
 <nav aria-label={ __( 'Main Navigation', 'my-plugin' ) }>
-    { /* Navigation content */ }
+	{ /* Navigation content */ }
 </nav>
 
 <main role="main">
-    { /* Main content */ }
+	{ /* Main content */ }
 </main>
 ```
 
@@ -254,18 +254,18 @@ function RestrictedControl() {
 
 ```jsx
 function CustomButton( { onClick, children } ) {
-    return (
-        <button
-            onClick={ onClick }
-            onKeyDown={ ( event ) => {
-                if ( event.key === 'Enter' || event.key === ' ' ) {
-                    onClick();
-                }
-            } }
-        >
-            { children }
-        </button>
-    );
+	return (
+		<button
+			onClick={ onClick }
+			onKeyDown={ ( event ) => {
+				if ( event.key === 'Enter' || event.key === ' ' ) {
+					onClick();
+				}
+			} }
+		>
+			{ children }
+		</button>
+	);
 }
 ```
 
@@ -275,13 +275,13 @@ function CustomButton( { onClick, children } ) {
 import { useState } from '@wordpress/element';
 
 function DynamicContent() {
-    const [ status, setStatus ] = useState( '' );
+	const [ status, setStatus ] = useState( '' );
 
-    return (
-        <div aria-live="polite" aria-atomic="true">
-            { status }
-        </div>
-    );
+	return (
+		<div aria-live="polite" aria-atomic="true">
+			{ status }
+		</div>
+	);
 }
 ```
 
@@ -297,11 +297,11 @@ const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 const path = require( 'path' );
 
 module.exports = {
-    ...defaultConfig,
-    entry: {
-        main: path.resolve( process.cwd(), 'resources/js/module.js' ),
-        editor: path.resolve( process.cwd(), 'resources/js/editor.js' ),
-    },
+	...defaultConfig,
+	entry: {
+		main: path.resolve( process.cwd(), 'resources/js/module.js' ),
+		editor: path.resolve( process.cwd(), 'resources/js/editor.js' ),
+	},
 };
 ```
 
@@ -313,11 +313,11 @@ import { lazy, Suspense } from '@wordpress/element';
 const HeavyComponent = lazy( () => import( './HeavyComponent' ) );
 
 function MyBlock() {
-    return (
-        <Suspense fallback={ <Spinner /> }>
-            <HeavyComponent />
-        </Suspense>
-    );
+	return (
+		<Suspense fallback={ <Spinner /> }>
+			<HeavyComponent />
+		</Suspense>
+	);
 }
 ```
 
@@ -329,10 +329,10 @@ import { store as coreStore } from '@wordpress/core-data';
 
 // CORRECT - Minimal dependencies, automatic caching
 const postTitle = useSelect(
-    ( select ) => {
-        return select( coreStore ).getEntityRecord( 'postType', 'post', postId )?.title;
-    },
-    [ postId ]
+	( select ) => {
+		return select( coreStore ).getEntityRecord( 'postType', 'post', postId )?.title;
+	},
+	[ postId ]
 );
 ```
 
