@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 6.3
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 6.27
+Stable tag: 6.28
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,10 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.28 =
+* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
+* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
+
 = 6.27 =
 * New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
 * New: A new coupons tab is available on the payments page.
@@ -409,18 +413,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Breaking: The minimum required WordPress version is now 6.3. This is because older versions do not support Gutenberg's API version 3.
 * Breaking: The deprecated FrmEDD_SL_Plugin_Updater class has been removed.
 * Breaking: The deprecated frmFrontForm.visible and frmFrontForm.invisible functions have been removed.
-
-= 6.25.1 =
-* New: The frm_email_message filter now includes email_key in the passed attribute data.
-* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
-* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
-* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
-* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
-* Fix: Large email header images used in emails would extend beyond the image container boundaries.
-* Fix: The payments list would not properly sort in descending order.
-* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
-* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
-* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

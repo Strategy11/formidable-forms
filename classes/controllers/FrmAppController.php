@@ -1692,7 +1692,7 @@ class FrmAppController {
 	/**
 	 * Enqueue the components scripts.
 	 *
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @return void
 	 */
