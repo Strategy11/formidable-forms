@@ -219,13 +219,12 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 
 	buildBorderRadiusIndividualValue() {
 		const unit = this.inputUnit.value;
-		const value = `${ this.borderInputTop.value }${ unit } ${ this.borderInputRight.value }${ unit } ${ this.borderInputBottom.value }${ unit } ${ this.borderInputLeft.value }${ unit }`;
+		const value = `${ parseInt( this.borderInputTop.value, 10 ) }${ unit } ${ parseInt( this.borderInputRight.value, 10 ) }${ unit } ${ parseInt( this.borderInputBottom.value, 10 ) }${ unit } ${ parseInt( this.borderInputLeft.value, 10 ) }${ unit }`;
 		this.updateValue( value );
 	}
 
 	updateValue( value ) {
 		this.hiddenInput.value = value;
-
 		this.#onChange( value );
 	}
 
