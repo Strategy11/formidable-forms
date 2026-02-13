@@ -3,7 +3,6 @@
 	"ignoreFiles": [
 		"**/vendor/**",
 		"**/node_modules/**",
-		"font_icons.css",
 		"**/web-components/**",
 		"**/frm_admin.css",
 		"**/frm-settings-components.css",

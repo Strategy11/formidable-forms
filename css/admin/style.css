@@ -50,7 +50,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	width: 100%;
 	padding: 14px;
 	box-shadow: var(--box-shadow-sm);
-	position:relative;
+	position: relative;
 	background-color: var(--preview-background-color);
 }
 
