@@ -1,4 +1,8 @@
 == Changelog ==
+= 6.28 =
+* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
+* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
+
 = 6.27 =
 * New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
 * New: A new coupons tab is available on the payments page.

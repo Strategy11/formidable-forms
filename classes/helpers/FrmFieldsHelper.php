@@ -475,7 +475,7 @@ class FrmFieldsHelper {
 		);
 
 		/**
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param array        $defaults
 		 * @param array|object $field
@@ -2815,7 +2815,7 @@ class FrmFieldsHelper {
 	/**
 	 * Checks if the field choice should be hidden due to choice limit being reached.
 	 *
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param string $choice_key
 	 * @param array  $field
@@ -2824,7 +2824,7 @@ class FrmFieldsHelper {
 	 */
 	public static function should_hide_field_choice( $choice_key, $field ) {
 		/**
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param bool   $hide_field_choice
 		 * @param string $choice_key
@@ -2834,7 +2834,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param array $field
 	 *
@@ -2842,7 +2842,7 @@ class FrmFieldsHelper {
 	 */
 	public static function should_skip_rendering_choices_for_field( $field ) {
 		/**
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param bool  $skip_rendering_options_for_field
 		 * @param array $field
@@ -2853,7 +2853,7 @@ class FrmFieldsHelper {
 	/**
 	 * Determine if 'disabled' attribute should be echoed in a field choice's HTML.
 	 *
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param string $choice_key
 	 * @param bool   $is_selected_choice
@@ -2863,7 +2863,7 @@ class FrmFieldsHelper {
 	 */
 	public static function should_disable_choice( $choice_key, $is_selected_choice, $field ) {
 		/**
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param bool   $echo_disabled_attribute
 		 * @param string $choice_key
@@ -2874,7 +2874,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param array  $field
 	 * @param string $choice_key
@@ -2885,7 +2885,7 @@ class FrmFieldsHelper {
 		/**
 		 * Allows adding content after checkbox, radio button, or dropdown fields.
 		 *
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param array  $field The field data.
 		 * @param string $choice_key The option key.
