@@ -24,6 +24,49 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 
 ---
 
+## Mandatory: Coding Standards
+
+Before writing or modifying ANY code, you MUST read and follow the applicable coding standards rules from `.windsurf/rules/`. These rules are the authoritative source for code style, syntax, and patterns.
+
+**Rules location:** `.windsurf/rules/` (relative to the formidable-master plugin root)
+
+**Rules by file type:**
+
+| File type                | Rules to read                                                                  |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| `*.php`                  | `wordpress/php.md`, `formidable/frm-php.md`, `wordpress-vip/wpvip-security.md` |
+| `*.js`, `*.jsx`, `*.mjs` | `wordpress/javascript.md`, `wordpress-vip/wpvip-security.md`                   |
+| `*.css`, `*.scss`        | `formidable/frm-css.md`                                                        |
+| `*.html`                 | `wordpress/html.md`                                                            |
+| Block editor code        | `wordpress/block-editor.md`                                                    |
+| UI/forms/user-facing     | `wordpress/accessibility.md`                                                   |
+| Tests                    | `formidable/testing.md`                                                        |
+| Commit messages          | `enterprise/conventional-commits.md`                                           |
+| General principles       | `enterprise/principles.md`                                                     |
+
+**How to apply:**
+
+1. Before Phase 5 (Implement), read ALL rules that match the file types you will modify
+2. Follow every rule in those files when writing new code or modifying existing code
+3. If a rule conflicts with existing code in the file being modified, follow the rule for new code but do not refactor unrelated existing code
+4. Use `@since x.x` as the version placeholder in docblocks (never guess the version number)
+
+---
+
+## Cross-Plugin Research
+
+Formidable Forms is a multi-plugin ecosystem. When working on any plugin in this ecosystem, you MUST also research the related plugins to understand the full context.
+
+**Rules:**
+
+- **Working on an addon** (e.g., formidable-woocommerce, formidable-views, formidable-dates): Research must include formidable (Lite) AND formidable-pro. The feature, setting, or code path being fixed almost always has counterparts or dependencies in Lite and Pro.
+- **Working on formidable-pro**: Research must include formidable (Lite). Pro extends Lite, so every Pro feature builds on Lite infrastructure.
+- **Working on formidable (Lite)**: Check if the change affects Pro or any active addon.
+
+**Apply this in Phases 1, 2, and 3.** When tracing execution flow, mapping dependencies, or finding existing patterns, always search across the relevant plugins, not just the plugin being modified.
+
+---
+
 ## Workflow
 
 ### Phase 1: Understand
@@ -32,6 +75,7 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 - Clarify expected vs actual behavior
 - Identify reproduction steps
 - Determine scope: which plugin(s), which feature(s)
+- **Cross-plugin**: Identify if the feature or setting exists in Lite, Pro, or both. Understand the full feature context across all relevant plugins
 
 ### Phase 2: Locate
 
@@ -42,6 +86,7 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 - Identify ALL affected locations in the codebase
 - Map dependencies: what calls this code, what does this code call
 - Check plugin requirements: must code work standalone or require Pro/addons
+- **Cross-plugin**: Search for the same feature, helper, or code path in Lite and Pro (and addons if relevant). Understand how data flows between plugins
 
 ### Phase 3: Research
 
@@ -50,6 +95,7 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 - Search official WordPress/VIP docs: function parameters, return types, deprecated alternatives
 - Search platform-specific docs: performance and security best practices
 - Verify alignment: ensure approach matches existing codebase patterns
+- **Cross-plugin**: Search for existing patterns and helpers in Lite and Pro that already solve the problem. Reuse them instead of inventing new solutions
 - **Never invent custom solutions if existing patterns exist**
 - **Iterate**: if a better pattern is found, repeat from Phase 2
 
@@ -64,11 +110,12 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 
 ### Phase 5: Implement
 
+- **Read all applicable coding standards rules** from `.windsurf/rules/` before writing any code (see Mandatory: Coding Standards section above)
 - Make the smallest change that completely solves the problem
 - Never change method signatures, return types, or data structures
 - Never refactor unrelated code in the same commit
 - Add defensive checks where data comes in, not where it is used everywhere
-- Follow WordPress PHP/JS coding standards and Formidable naming patterns
+- Follow the coding standards rules strictly: correct syntax, naming, formatting, and patterns for each file type
 
 ### Phase 6: Verify
 
@@ -79,6 +126,7 @@ Enterprise bug-fixing workflow for Formidable Forms following WordPress VIP stan
 - Confirm backward compatibility with existing callers
 - Confirm fix is testable without touching other code
 - Remove any debug code and verify code style
+- **Verify code follows all applicable `.windsurf/rules/`**: correct variable declarations, naming conventions, formatting, and patterns
 - Run through [checklist.md](checklist.md)
 
 ### Phase 7: Report
@@ -89,13 +137,13 @@ The report contains **all** deliverables in one place:
 
 ```markdown
 Report
-├── Root Cause → Fix  (1 sentence each)
-├── Files Changed     (file path + what changed)
+├── Root Cause → Fix (1 sentence each)
+├── Files Changed (file path + what changed)
 ├── PR Info
-│   ├── Branch        (fix/{issue}-{slug})
-│   ├── PR Title      (human-readable, NOT conventional commit format)
-│   ├── PR Body       (Fixes #N + description + test steps)
-│   └── Commit Msg    (conventional commit, NO issue number)
+│ ├── Branch (fix/{issue}-{slug})
+│ ├── PR Title (human-readable, NOT conventional commit format)
+│ ├── PR Body (Fixes #N + description + test steps)
+│ └── Commit Msg (conventional commit, NO issue number)
 └── Manual Test Steps (numbered reproduction/verification)
 ```
 
@@ -103,7 +151,7 @@ Report
 
 - **PR title** = plain English summary (e.g. `Fix dropdown hidden behind panel`)
 - **PR body** = where `Fixes {full_github_issue_url}` goes + description + test steps (no hard-wrapping)
-- **Commit message** = conventional commit format, body explains *what/why*, NO issue ref
+- **Commit message** = conventional commit format, body explains _what/why_, NO issue ref
 
 **Writing style** (applies to PR titles, PR body, and commit messages):
 

@@ -13,6 +13,8 @@
 - [ ] Found existing patterns for the fix
 - [ ] Searched WordPress/VIP docs for best practices
 - [ ] Searched platform-specific docs (performance, security)
+- [ ] **Cross-plugin**: Researched related code in Lite and Pro (and addons if relevant)
+- [ ] **Cross-plugin**: Understood how data flows between plugins for this feature
 
 ## Solution Selection
 
@@ -27,12 +29,16 @@
 
 ## Implementation
 
+- [ ] Read all applicable `.windsurf/rules/` for the file types being modified
 - [ ] Makes the smallest change that solves the problem
 - [ ] Method signatures, return types, and data structures unchanged
 - [ ] No unrelated code refactored in the same commit
 - [ ] Defensive checks added where data comes in
-- [ ] Follows WordPress PHP coding standards
-- [ ] Follows Formidable naming patterns
+- [ ] Follows `.windsurf/rules/wordpress/php.md` (PHP files)
+- [ ] Follows `.windsurf/rules/wordpress/javascript.md` (JS files)
+- [ ] Follows `.windsurf/rules/formidable/frm-php.md` (PHP files)
+- [ ] Follows `.windsurf/rules/wordpress-vip/wpvip-security.md` (PHP/JS files)
+- [ ] Uses `@since x.x` in docblocks (never guess version numbers)
 - [ ] Uses existing helper methods
 - [ ] All input sanitized
 - [ ] All output escaped
