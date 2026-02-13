@@ -13,7 +13,7 @@
 		gap: var(--gap-xs);
 		justify-content: space-between;
 		align-items: center;
-		background: rgba( 242, 244, 247, 1 );
+		background: rgba(242, 244, 247, 1);
 		border-radius: var(--small-radius);
 		box-sizing: border-box;
 		height: 44px;
@@ -53,7 +53,7 @@
 
 			li,
 			li a {
-				color: var( --grey-500 );
+				color: var(--grey-500);
 				font-weight: 500;
 				font-size: var(--text-sm);
 				line-height: 28px;
@@ -110,7 +110,7 @@
 			}
 
 			&.frm-last {
-				left: calc( -1 * var(--gap-xs) );
+				left: calc(-1 * var(--gap-xs));
 			}
 		}
 	}
@@ -126,14 +126,14 @@
 .frm-style-tabs-wrapper {
 
 	.frm-tabs-container .frm-tabs-slide-track {
-	   transition: 0.32s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		transition: 0.32s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
 
 	.frm-tabs-slide-track {
 
 		> div {
 			flex: 0 0 100%;
-			opacity: 0.0;
+			opacity: 0;
 			transition: 0.25s opacity linear;
 			position: relative;
 			height: auto;
@@ -145,7 +145,7 @@
 		> div > div {
 			overflow: auto;
 			position: relative;
-			width:100%;
+			width: 100%;
 			padding: 0;
 			box-sizing: border-box;
 		}
@@ -159,7 +159,7 @@
 	}
 
 	> div.frm-active {
-		opacity: 1.0;
+		opacity: 1;
 		transition: 0.35s opacity linear;
 	}
 }

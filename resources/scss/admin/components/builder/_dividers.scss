@@ -38,7 +38,7 @@ ul.start_divider {
 .frm-page-collapsed .frm_delete_field,
 .frm-page-collapsed .frm_clone_field,
 .frm-section-collapsed .frm_clone_icon {
-	opacity: .5;
+	opacity: 0.5;
 	cursor: not-allowed;
 }
 
@@ -77,7 +77,7 @@ ul.start_divider {
 
 .frm-section-collapsed .divider_section_only::after,
 .divider_section_only::before {
-	content: '';
+	content: "";
 	display: block;
 	padding: 2px 0;
 	line-height: 1px;
@@ -85,7 +85,7 @@ ul.start_divider {
 	top: -2px;
 	position: absolute;
 	width: 100%;
-	transition: .5s border-color ease-in-out;
+	transition: 0.5s border-color ease-in-out;
 }
 
 .frm-section-collapsed .divider_section_only::after {

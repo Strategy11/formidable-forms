@@ -1,5 +1,16 @@
 {
 	"extends": "@wordpress/stylelint-config/scss",
+	"ignoreFiles": [
+		"**/vendor/**",
+		"**/node_modules/**",
+		"**/web-components/**",
+		"**/frm_admin.css",
+		"**/frm-settings-components.css",
+		"**/font_icons.css",
+		"**/frm_testing_mode.css",
+		"**/welcome-tour.css",
+		"**/css/formidableforms.css"
+	],
 	"rules": {
 		"no-descending-specificity": null,
 		"selector-class-pattern": null,
@@ -13,6 +24,12 @@
 				"camelCaseSvgKeywords": true,
 				"ignoreFunctions": ["currentColor"]
 			}
-		]
+		],
+		"max-line-length": null,
+		"color-named": null,
+		"declaration-property-unit-allowed-list": null,
+		"no-invalid-position-at-import-rule": null,
+		"font-family-no-missing-generic-family-keyword": null,
+		"scss/at-import-no-partial-leading-underscore": null
 	}
 }
