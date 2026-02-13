@@ -2638,7 +2638,7 @@ window.frmAdminBuildJS = function() {
 	function onFieldActionDropdownShow( isFieldGroup ) {
 		unselectFieldGroups();
 
-		// maybe offset the dropdown if it goes off of the right of the screen.
+		// maybe offset the dropdown if it goes off the edge of the screen or container.
 		setTimeout(
 			function() {
 				let ul, $ul;
@@ -2657,6 +2657,9 @@ window.frmAdminBuildJS = function() {
 				$ul = jQuery( ul );
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
 					ul.style.left = ( -$ul.outerWidth() ) + 'px';
+				} else if ( postBodyContent && $ul.offset().left < postBodyContent.getBoundingClientRect().left ) {
+					ul.style.right = 'auto';
+					ul.style.left = '0';
 				}
 				const firstAnchor = ul.firstElementChild.querySelector( 'a' );
 				if ( firstAnchor ) {
