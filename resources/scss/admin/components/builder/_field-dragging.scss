@@ -24,7 +24,7 @@
 
 .frm_sorting li.ui-state-default.ui-sortable-helper,
 .frmbutton.ui-sortable-helper {
-	transition: opacity .2s;
+	transition: opacity 0.2s;
 	opacity: 1;
 	position: fixed;
 	z-index: 99999;
@@ -46,7 +46,7 @@
 
 li.frm_noallow.button,
 .frm_noallow {
-	opacity: .5;
+	opacity: 0.5;
 }
 
 .frm_actions_list a.frm_show_upgrade.frm_inactive_action::before,

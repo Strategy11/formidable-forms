@@ -9,7 +9,7 @@
 
 .frm-page-break .frm-collapse-page.button {
 	margin-left: 46%;
-	margin-top: calc( -32px / 2 );
+	margin-top: calc(-32px / 2);
 	padding: 6px 12px !important;
 }
 
@@ -44,7 +44,7 @@
 
 .frm-collapsed i::before,
 .frm-page-collapsed .frm_arrowdown6_icon::before {
-	content: '\e913';
+	content: "\e913";
 }
 
 .frm-collapse-section svg {
