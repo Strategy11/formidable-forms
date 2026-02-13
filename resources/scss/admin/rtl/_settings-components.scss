@@ -22,7 +22,7 @@
 		}
 
 		&.frm-last {
-			right: calc( -1 * var(--gap-xs) );
+			right: calc(-1 * var(--gap-xs));
 		}
 	}
 }

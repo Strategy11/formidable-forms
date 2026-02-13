@@ -4,7 +4,7 @@
 
 #frm_form_editor_container #frm_form_key_box {
 	width: 13em;
-	max-width: 30%
+	max-width: 30%;
 }
 
 #frm_form_editor_container #frm_form_desc {
@@ -38,14 +38,18 @@
 	color: var(--green) !important;
 }
 
-#frm_form_editor_container .ui-state-default a.frm_orange, .frm-right-panel a.frm_orange, #postbox-container-1 a.frm_orange {
-	color: #D54E21;
+#frm_form_editor_container .ui-state-default a.frm_orange,
+.frm-right-panel a.frm_orange,
+#postbox-container-1 a.frm_orange {
+	color: #d54e21;
 }
 
-#styling_settings input[type="checkbox"], #styling_settings input[type="radio"] {
+#styling_settings input[type="checkbox"],
+#styling_settings input[type="radio"] {
 	border: solid 1px #bbb;
 }
 
-#styling_settings .widget .widget-top, #frm_form_editor_container .widget .widget-top {
+#styling_settings .widget .widget-top,
+#frm_form_editor_container .widget .widget-top {
 	cursor: pointer;
 }

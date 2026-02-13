@@ -5,14 +5,14 @@
 .frm-style-component {
 
 	.frm-radio-container {
-	   max-width: 216px;
-	   height: 36px;
-	   background: rgba( 242, 244, 247, 1 );
-	   gap: var(--small-gap);
-	   padding: var(--gap-2xs);
-	   box-sizing: border-box;
-	   border-radius: var(--small-radius);
-	   position: relative;
+		max-width: 216px;
+		height: 36px;
+		background: rgba(242, 244, 247, 1);
+		gap: var(--small-gap);
+		padding: var(--gap-2xs);
+		box-sizing: border-box;
+		border-radius: var(--small-radius);
+		position: relative;
 	}
 
 	&.frm-field-shape .frm-radio-container {
@@ -30,7 +30,7 @@
 	.frm-radio-container .frm-radio-active-tracker {
 		display: block;
 		width: 28%;
-		height: calc( 100% - 8px );
+		height: calc(100% - 8px);
 		background: white;
 		border-radius: var(--small-radius);
 		box-shadow: var(--button-shadow);
@@ -49,7 +49,7 @@
 	&.frm-align-component.frm-2-options .frm-radio-container .frm-radio-active-tracker,
 	&.frm-direction-component .frm-radio-container .frm-radio-active-tracker,
 	&.frm-text-toggle-component .frm-radio-container .frm-radio-active-tracker {
-		width: calc( 50% - var(--gap-xs) );
+		width: calc(50% - var(--gap-xs));
 	}
 
 	.frm-radio-container > label {
@@ -79,7 +79,7 @@
 		padding: var(--gap-xs);
 
 		.frm-radio-active-tracker {
-			height: calc( 100% - var(--gap-sm) );
+			height: calc(100% - var(--gap-sm));
 			top: var(--gap-xs);
 		}
 	}
@@ -87,7 +87,7 @@
 
 .frm-style-tabs-wrapper .frm-tabs-navs ul > li:not(.frm-active):hover,
 .frm-style-component .frm-radio-container input:not(:checked) + label:hover {
-	background: rgba( 234, 236, 240, 1 );
+	background: rgba(234, 236, 240, 1);
 	border-radius: var(--small-radius);
 	box-shadow: var(--button-shadow);
 }

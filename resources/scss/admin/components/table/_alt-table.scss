@@ -12,7 +12,7 @@
 
 /* Before `applyZebraStriping` is executed, an empty space is displayed */
 #form_show_entry_page .frm-alt-table:not(.frm-zebra-striping)::before {
-	content: '';
+	content: "";
 	position: absolute;
 	top: 0;
 	right: 0;
