@@ -11,8 +11,11 @@ import frmDependentUpdaterComponent from '../../admin/components/dependent-updat
  * @class frmSliderComponent
  */
 export default class frmSliderComponent {
-	constructor() {
-		this.sliderElements = document.querySelectorAll( '.frm-slider-component' );
+	constructor( sliderElements = [], settings = {} ) {
+		this.loadedByWebComponent = sliderElements.length > 0;
+		this.sliderElements = sliderElements.length > 0 ? sliderElements : document.querySelectorAll( '.frm-slider-component' );
+		this.settings = settings;
+
 		if ( 0 === this.sliderElements.length ) {
 			return;
 		}
@@ -36,6 +39,7 @@ export default class frmSliderComponent {
 		this.options = [];
 		this.sliderElements.forEach( ( element, index ) => {
 			const parentWrapper = element.classList.contains( 'frm-has-multiple-values' ) ? element.closest( '.frm-style-component' ) : element;
+			const steps = this.settings.steps || ( element.dataset.steps ? JSON.parse( element.dataset.steps ) : null );
 			this.options.push( {
 				dragging: false,
 				startX: 0,
@@ -44,6 +48,7 @@ export default class frmSliderComponent {
 				element: element,
 				index: index,
 				value: 0,
+				steps: steps,
 				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
 			} );
 		} );
@@ -53,8 +58,14 @@ export default class frmSliderComponent {
 	 * Initializes the slider component.
 	 */
 	init() {
-		this.initSlidersPosition();
 		this.initDraggable();
+
+		if ( this.loadedByWebComponent ) {
+			this.initSlidersPositionInsideWebComponent();
+			return;
+		}
+
+		this.initSlidersPosition();
 	}
 
 	/**
@@ -84,6 +95,7 @@ export default class frmSliderComponent {
 			this.expandSliderGroup( element );
 			this.updateOnUnitChange( element, valueInput, index );
 			this.changeSliderPositionOnClick( element, valueInput, index );
+			frmSliderComponent.maybeDisableUnitDropdown( element );
 
 			draggableBullet.addEventListener( 'mousedown', event => {
 				event.preventDefault();
@@ -92,27 +104,17 @@ export default class frmSliderComponent {
 					return;
 				}
 				this.enableDragging( event, index );
-			} );
 
-			draggableBullet.addEventListener( 'mousemove', event => {
-				if ( element.classList.contains( 'frm-disabled' ) ) {
-					return;
-				}
-				this.moveTracker( event, index );
-			} );
+				const onMouseMove = moveEvent => this.moveTracker( moveEvent, index );
 
-			draggableBullet.addEventListener( 'mouseup', event => {
-				if ( element.classList.contains( 'frm-disabled' ) ) {
-					return;
-				}
-				this.disableDragging( index, event );
-			} );
+				const onMouseUp = () => {
+					this.disableDragging( index );
+					document.removeEventListener( 'mousemove', onMouseMove );
+					document.removeEventListener( 'mouseup', onMouseUp );
+				};
 
-			draggableBullet.addEventListener( 'mouseleave', event => {
-				if ( element.classList.contains( 'frm-disabled' ) ) {
-					return;
-				}
-				this.disableDragging( index, event );
+				document.addEventListener( 'mousemove', onMouseMove );
+				document.addEventListener( 'mouseup', onMouseUp );
 			} );
 		} );
 	}
@@ -179,7 +181,7 @@ export default class frmSliderComponent {
 			const sliderRect = frmSlider.getBoundingClientRect();
 			const deltaX = event.clientX - sliderRect.left - this.sliderBulletWidth;
 			const unit = element.querySelector( 'select' ).value;
-			const value = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ) );
+			const value = frmSliderComponent.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
 
 			if ( value < 0 ) {
 				return;
@@ -191,6 +193,24 @@ export default class frmSliderComponent {
 			valueInput.value = value;
 			valueInput.dispatchEvent( customEvent );
 		} );
+	}
+
+	/**
+	 * Disables the unit dropdown if there is only a single unit option.
+	 *
+	 * @param {HTMLElement} element - The slider element.
+	 */
+	static maybeDisableUnitDropdown( element ) {
+		const select = element.querySelector( 'select' );
+		if ( ! select ) {
+			return;
+		}
+
+		const options = Array.from( select.options ).filter( option => '' !== option.value );
+		if ( 1 >= options.length ) {
+			select.classList.add( 'frm-single-unit' );
+			select.addEventListener( 'mousedown', event => event.preventDefault() );
+		}
 	}
 
 	/**
@@ -209,6 +229,12 @@ export default class frmSliderComponent {
 		} ).join( ', ' );
 
 		return element.closest( '.frm-style-component' ).querySelectorAll( query );
+	}
+
+	initSlidersPositionInsideWebComponent() {
+		this.sliderElements.forEach( ( element, index ) => {
+			this.initSliderWidth( element, index );
+		} );
 	}
 
 	/**
@@ -286,22 +312,49 @@ export default class frmSliderComponent {
 	/**
 	 * Initializes the width of a slider.
 	 *
-	 * @param {HTMLElement} slider - The slider element.
+	 * @param {HTMLElement} slider      - The slider element.
+	 * @param {number}      sliderIndex - The index of the slider.
 	 * @return {void}
 	 */
-	initSliderWidth( slider ) {
+	initSliderWidth( slider, sliderIndex = null ) {
 		if ( slider.classList.contains( 'frm-disabled' ) ) {
 			return;
 		}
-		const index = this.getSliderIndex( slider );
+		const index = sliderIndex !== null ? sliderIndex : this.getSliderIndex( slider );
 		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
 		const value = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
 		const unit = slider.querySelector( 'select' ).value;
-		const deltaX = '%' === unit ? Math.round( sliderWidth * value / 100 ) : Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
+		const steps = this.options[ index ].steps;
+		let deltaX = Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
+
+		if ( '%' === unit ) {
+			deltaX = Math.round( sliderWidth * value / 100 );
+		} else if ( steps && steps.length > 0 ) {
+			deltaX = frmSliderComponent.calculateDeltaXFromSteps( value, steps, sliderWidth );
+		}
 
 		slider.querySelector( '.frm-slider-active-track' ).style.width = `${ deltaX }px`;
 		this.options[ index ].translateX = deltaX;
 		this.options[ index ].value = value + unit;
+	}
+
+	/**
+	 * Calculates the deltaX position based on a value and steps array.
+	 *
+	 * @param {number} value       - The current value.
+	 * @param {Array}  steps       - Array of step values.
+	 * @param {number} sliderWidth - The width of the slider.
+	 * @return {number} - The calculated deltaX position.
+	 */
+	static calculateDeltaXFromSteps( value, steps, sliderWidth ) {
+		const stepIndex = steps.indexOf( value );
+		if ( -1 === stepIndex ) {
+			// If value not in steps, find closest and use its position
+			const closestValue = frmSliderComponent.snapToStep( value, steps );
+			const closestIndex = steps.indexOf( closestValue );
+			return Math.round( ( closestIndex / ( steps.length - 1 ) ) * sliderWidth );
+		}
+		return Math.round( ( stepIndex / ( steps.length - 1 ) ) * sliderWidth );
 	}
 
 	/**
@@ -350,16 +403,13 @@ export default class frmSliderComponent {
 		}
 		let deltaX = event.clientX - this.options[ index ].startX;
 		const element = this.sliderElements[ index ];
-		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth;
+		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
 
-		// Ensure deltaX does not go below 0
+		// Clamp deltaX within valid range
 		deltaX = Math.max( deltaX, 0 );
-
-		if ( deltaX + ( this.sliderBulletWidth / 2 ) + this.sliderMarginRight >= sliderWidth ) {
-			return;
-		}
+		deltaX = Math.min( deltaX, sliderWidth );
 		const unit = element.querySelector( 'select' ).value;
-		const value = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ) );
+		const value = frmSliderComponent.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
 
 		element.querySelector( '.frm-slider-value input[type="text"]' ).value = value;
 		element.querySelector( '.frm-slider-bullet .frm-slider-value-label' ).innerText = value;
@@ -399,13 +449,13 @@ export default class frmSliderComponent {
 	 * Disables dragging for a specific index.
 	 *
 	 * @param {number} index - The index of the option to disable dragging for.
-	 * @param {Event}  event - The event object triggered by the dragging action.
 	 */
-	disableDragging( index, event ) {
+	disableDragging( index ) {
 		if ( false === this.options[ index ].dragging ) {
 			return;
 		}
-		event.target.classList.remove( 'frm-dragging' );
+		const draggableBullet = this.sliderElements[ index ].querySelector( '.frm-slider-bullet' );
+		draggableBullet.classList.remove( 'frm-dragging' );
 		this.options[ index ].dragging = false;
 		this.triggerValueChange( index );
 	}
@@ -434,19 +484,47 @@ export default class frmSliderComponent {
 	/**
 	 * Calculates the value based on the width, deltaX, and maxValue.
 	 *
-	 * @param {number} width    - The width of the slider.
-	 * @param {number} deltaX   - The change in x-coordinate.
-	 * @param {number} maxValue - The maximum value.
+	 * @param {number}     width    - The width of the slider.
+	 * @param {number}     deltaX   - The change in x-coordinate.
+	 * @param {number}     maxValue - The maximum value.
+	 * @param {Array|null} steps    - Optional array of step values to snap to.
 	 * @return {number} - The calculated value.
 	 */
-	calculateValue( width, deltaX, maxValue ) {
-		// Indicates the additional value generated by the slider's drag progress (up to 100%) and the width of the slider bullet.
-		// Generates a more accurate value for the slider's start (0) and end (maximum value) positions, taking into account the slider's position and bullet width.
-		const delta = Math.ceil( this.sliderBulletWidth * ( deltaX / width ) );
+	static calculateValue( width, deltaX, maxValue, steps = null ) {
+		if ( steps && steps.length > 0 ) {
+			// For stepped sliders, map position directly to step index
+			const position = deltaX / width;
+			const stepIndex = Math.round( position * ( steps.length - 1 ) );
+			const clampedIndex = Math.max( 0, Math.min( stepIndex, steps.length - 1 ) );
+			return steps[ clampedIndex ];
+		}
 
-		const value = Math.ceil( ( ( deltaX + delta ) / width ) * maxValue );
+		// Calculate value as a simple proportion of the slider position
+		const value = Math.round( ( deltaX / width ) * maxValue );
 
 		return Math.min( value, maxValue );
+	}
+
+	/**
+	 * Snaps a value to the nearest step in the steps array.
+	 *
+	 * @param {number} value - The value to snap.
+	 * @param {Array}  steps - Array of step values to snap to.
+	 * @return {number} - The nearest step value.
+	 */
+	static snapToStep( value, steps ) {
+		let nearest = steps[ 0 ];
+		let minDiff = Math.abs( value - nearest );
+
+		for ( let i = 1; i < steps.length; i++ ) {
+			const diff = Math.abs( value - steps[ i ] );
+			if ( diff < minDiff ) {
+				minDiff = diff;
+				nearest = steps[ i ];
+			}
+		}
+
+		return nearest;
 	}
 
 	/**

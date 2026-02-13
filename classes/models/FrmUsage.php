@@ -180,7 +180,7 @@ class FrmUsage {
 		/**
 		 * Filter the keys to skip when cleaning the snapshot data before sending.
 		 *
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param array $skip_keys Data keys.
 		 */
@@ -191,7 +191,7 @@ class FrmUsage {
 		/**
 		 * Filter the keys to replace with a long text placeholder before sending.
 		 *
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @paramm array $long_text_keys Data keys.
 		 */

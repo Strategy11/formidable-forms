@@ -148,4 +148,8 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	getTabUnderline() {
 		return this.shadowRoot.querySelector( '.frm-tabs-active-underline' );
 	}
+
+	getLabelText() { // eslint-disable-line class-methods-use-this
+		return null;
+	}
 }

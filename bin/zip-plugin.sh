@@ -121,7 +121,10 @@ zip -r $zipname $destination \
 	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
-	-x "*/phpcs-sniffs/*"
+	-x "*/phpcs-sniffs/*" \
+	-x "$source/venv/*" \
+	-x "formidable/resources/*" \
+	-x "formidable/paypal/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
