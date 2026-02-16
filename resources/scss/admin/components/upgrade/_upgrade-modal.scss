@@ -57,14 +57,14 @@
 			margin: 0;
 
 			.frm-save-and-reload-options {
-					display: flex;
-					gap: var(--gap-xs);
-					flex-direction: row-reverse;
-					margin: 0;
+				display: flex;
+				gap: var(--gap-xs);
+				flex-direction: row-reverse;
+				margin: 0;
 
-					.frm-save-and-reload {
-						margin: 0;
-					}
+				.frm-save-and-reload {
+					margin: 0;
+				}
 			}
 		}
 	}

@@ -27,7 +27,7 @@
 	outline: 0;
 }
 
-#frm_notification_settings .widget-top .widget-action{
+#frm_notification_settings .widget-top .widget-action {
 	padding-top: 13.5px;
 }
 
@@ -129,7 +129,7 @@
 .frm_actions_list li {
 	float: left;
 	width: 15.6%;
-	margin: 10px .5% 15px;
+	margin: 10px 0.5% 15px;
 	height: 100px;
 	text-align: center;
 }
@@ -151,7 +151,8 @@ label.frm_action_events {
 	float: right;
 }
 
-.frm_actions_list a:active, .frm_actions_list a:focus {
+.frm_actions_list a:active,
+.frm_actions_list a:focus {
 	outline: none;
 }
 
@@ -290,7 +291,7 @@ span.frm-inner-circle.frm-inverse {
 	margin-left: 8px;
 	color: var(--grey);
 	opacity: 0;
-	transition: all .2s ease;
+	transition: all 0.2s ease;
 }
 
 .frm_email_icons a .frmsvg {
@@ -308,7 +309,7 @@ span.frm-inner-circle.frm-inverse {
 
 .frm_inactive_action .frm-inner-circle,
 .frm_actions_list .frm_inactive_action i {
-	opacity: .4;
+	opacity: 0.4;
 }
 
 .frm_square_action .frm_square_icon {
