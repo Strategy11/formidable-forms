@@ -153,21 +153,39 @@ class FrmPayPalLiteConnectHelper {
 		if ( $can_process_card_fields ) {
 			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
 		}
+		echo '</ul>';
 
 		self::render_acdc_vetting_status( $product );
 	//	echo implode( '<br>', $product->capabilities );
 
-		echo '</ul>';
 		echo '</div>';
 
 		return true;
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param bool|object $product
+	 *
+	 * @return void
+	 */
 	private static function render_acdc_vetting_status( $product ) {
 		$vetting_status = $product && ! empty( $product->vetting_status ) ? $product->vetting_status : 'NOT_SET';
-		echo '<li>' . esc_html__( 'ACDC Application Vetting Status: %s', 'formidable' ) . ': ' . esc_html( self::get_acdc_vetting_status_message( $vetting_status ) ) . '</li>';
+
+		echo '<br>';
+		echo '<b>' . esc_html__( 'ACDC Application Vetting Status:', 'formidable' ) . '</b>';
+		echo '&nbsp;';
+		echo esc_html( self::get_acdc_vetting_status_message( $vetting_status ) );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param string $vetting_status
+	 *
+	 * @return string
+	 */
 	private static function get_acdc_vetting_status_message( $vetting_status ) {
 		switch ( $vetting_status ) {
 			case 'NOT_SET':
