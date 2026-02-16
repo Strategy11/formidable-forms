@@ -74,6 +74,12 @@ class FrmPayPalLiteAppController {
 			wp_send_json_error( __( 'Invalid form ID', 'formidable' ) );
 		}
 
+		$payment_source = FrmAppHelper::get_post_param( 'payment_source', '', 'sanitize_text_field' );
+
+		if ( ! in_array( $payment_source, array( 'card', 'paypal' ), true ) ) {
+			wp_send_json_error( __( 'Invalid payment source', 'formidable' ) );
+		}
+
 		$actions = FrmPayPalLiteActionsController::get_actions_before_submit( $form_id );
 
 		if ( ! $actions ) {
@@ -86,7 +92,7 @@ class FrmPayPalLiteAppController {
 		// PayPal expects the amount in a format like 10.00, so format it.
 		$amount         = number_format( floatval( $amount ), 2, '.', '' );
 		$currency       = strtoupper( $action->post_content['currency'] );
-		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency );
+		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source );
 
 		if ( class_exists( 'FrmLog' ) ) {
 			$log = new FrmLog();

@@ -169,12 +169,13 @@
 	 *
 	 * @return {Promise<string>} The order ID.
 	 */
-	async function createOrder() {
+	async function createOrder( data ) {
 		thisForm.classList.add( 'frm_loading_form' );
 
 		const formData = new FormData( thisForm );
 		formData.append( 'action', 'frm_paypal_create_order' );
 		formData.append( 'nonce', frmPayPalVars.nonce );
+		formData.append( 'payment_source', data.paymentSource );
 
 		// Remove a few fields so form validation does not incorrectly trigger.
 		formData.delete( 'frm_action' );
