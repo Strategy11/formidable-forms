@@ -198,7 +198,12 @@ class FrmUsage {
 		$long_text_keys = apply_filters( 'frm_usage_long_text_keys', $long_text_keys );
 
 		foreach ( $data as $key => &$value ) {
-			if ( ! $value || in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
+			if ( ! $value ) {
+				continue;
+			}
+
+			if ( in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
+				unset( $data[ $key ] );
 				continue;
 			}
 
