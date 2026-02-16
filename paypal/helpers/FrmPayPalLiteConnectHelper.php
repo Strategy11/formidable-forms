@@ -157,8 +157,6 @@ class FrmPayPalLiteConnectHelper {
 		self::render_acdc_vetting_status( $product );
 	//	echo implode( '<br>', $product->capabilities );
 
-		echo 'Vetting Status: ' . $vetting_status;
-
 		echo '</ul>';
 		echo '</div>';
 
@@ -167,27 +165,26 @@ class FrmPayPalLiteConnectHelper {
 
 	private static function render_acdc_vetting_status( $product ) {
 		$vetting_status = $product && ! empty( $product->vetting_status ) ? $product->vetting_status : 'NOT_SET';
-		echo '<li>' . esc_html__( 'ACDC Application Vetting Status:', 'formidable' ) . '</li>';
-		echo '<li>' . esc_html__( $vetting_status, 'formidable' ) . '</li>';
+		echo '<li>' . esc_html__( 'ACDC Application Vetting Status: %s', 'formidable' ) . ': ' . esc_html( self::get_acdc_vetting_status_message( $vetting_status ) ) . '</li>';
 	}
 
 	private static function get_acdc_vetting_status_message( $vetting_status ) {
 		switch ( $vetting_status ) {
 			case 'NOT_SET':
-				return '';
+				return 'Unavailable';
 			case 'APPROVED':
 			case 'SUBSCRIBED':
-				return '';
+				return 'Approved';
 			case 'PENDING':
-				return '';
+				return 'Pending';
 			case 'IN_REVIEW':
-				return '';
+				return 'In Review';
 			case 'DECLINED':
-				return '';
+				return 'Declined';
 			case 'NEED_MORE_DATA':
-				return '';
+				return 'Needs More Data';
 			case 'DENIED':
-				return '';
+				return 'Denied';
 			default:
 				return '';
 		}
