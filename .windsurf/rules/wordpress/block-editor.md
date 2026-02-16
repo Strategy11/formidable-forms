@@ -663,74 +663,7 @@ module.exports = {
 
 ---
 
-## 13. React Best Practices (Aligned with WP)
-
-### Memoization
-
-```jsx
-import { useMemo, useCallback } from '@wordpress/element';
-
-function MyComponent( { items, onSelect } ) {
-	// Memoize expensive computations
-	const processedItems = useMemo( () => {
-		return items.map( ( item ) => expensiveProcess( item ) );
-	}, [ items ] );
-
-	// Memoize callbacks passed to children
-	const handleSelect = useCallback(
-		( id ) => {
-			onSelect( id );
-		},
-		[ onSelect ],
-	);
-
-	return <ItemList items={ processedItems } onSelect={ handleSelect } />;
-}
-```
-
-### Avoid Re-renders
-
-```jsx
-// INCORRECT - Creates new object every render
-<MyComponent style={ { color: 'red' } } />;
-
-// CORRECT - Stable reference
-const style = useMemo( () => ( { color: 'red' } ), [] );
-<MyComponent style={ style } />;
-```
-
-### State Initialization
-
-```jsx
-// CORRECT - Lazy initialization for expensive values
-const [ state, setState ] = useState( () => computeExpensiveValue() );
-
-// INCORRECT - Runs on every render
-const [ state, setState ] = useState( computeExpensiveValue() );
-```
-
-### Derived State
-
-```jsx
-// CORRECT - Derive during render
-function MyComponent( { items } ) {
-	const filteredItems = items.filter( ( item ) => item.active );
-	// ...
-}
-
-// INCORRECT - Unnecessary state and effect
-function MyComponent( { items } ) {
-	const [ filteredItems, setFilteredItems ] = useState( [] );
-
-	useEffect( () => {
-		setFilteredItems( items.filter( ( item ) => item.active ) );
-	}, [ items ] );
-}
-```
-
----
-
-## 14. Performance
+## 13. Performance
 
 ### Parallel Data Fetching
 
@@ -782,43 +715,6 @@ function MyBlock() {
 			<HeavyComponent />
 		</Suspense>
 	);
-}
-```
-
----
-
-## 15. Composition Patterns
-
-### Compound Components
-
-```jsx
-// Instead of boolean props
-<Card showHeader showFooter showImage />
-
-// Use composition
-<Card>
-	<Card.Header />
-	<Card.Image />
-	<Card.Body />
-	<Card.Footer />
-</Card>
-```
-
-### Context for Shared State
-
-```jsx
-import { createContext, useContext } from '@wordpress/element';
-
-const BlockContext = createContext();
-
-function BlockProvider( { children, value } ) {
-	return (
-		<BlockContext.Provider value={ value }>{ children }</BlockContext.Provider>
-	);
-}
-
-function useBlockContext() {
-	return useContext( BlockContext );
 }
 ```
 

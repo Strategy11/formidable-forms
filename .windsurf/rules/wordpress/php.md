@@ -12,88 +12,7 @@ Based on WordPress Core Official Standards. Apply when maintaining, generating, 
 
 ---
 
-## PHP Version Requirement
-
-**Target Version: PHP 7.0**
-
-All new code must be compatible with PHP 7.0. Use modern PHP 7.0 syntax but do not use features from PHP 7.1 or higher.
-
-### PHP 7.0 Features (Use These)
-
-- Scalar type declarations: `function foo(int $id, string $name)`
-- Return type declarations: `function foo(): bool`
-- Null coalescing operator: `$value = $array['key'] ?? 'default'`
-- Spaceship operator: `$result = $a <=> $b`
-- Anonymous classes: `new class { ... }`
-- Group use declarations: `use Some\Namespace\{ClassA, ClassB}`
-- `define()` with arrays: `define('ITEMS', ['a', 'b'])`
-
-### PHP 7.1+ Features (Do NOT Use)
-
-- Nullable types: `?string` (PHP 7.1)
-- Void return type: `: void` (PHP 7.1)
-- Class constant visibility: `private const` (PHP 7.1)
-- Iterable pseudo-type: `iterable` (PHP 7.1)
-- Multi-catch exceptions: `catch (A | B $e)` (PHP 7.1)
-- Negative string offsets: `$str[-1]` (PHP 7.1)
-- Object type hint: `object` (PHP 7.2)
-- Trailing commas in function calls (PHP 7.3)
-- Arrow functions: `fn($x) => $x * 2` (PHP 7.4)
-- Typed properties: `public int $id` (PHP 7.4)
-- Null safe operator: `?->` (PHP 8.0)
-- Named arguments (PHP 8.0)
-- Match expression (PHP 8.0)
-- Constructor property promotion (PHP 8.0)
-
-### Example PHP 7.0 Compatible Code
-
-```php
-/**
- * Process user data.
- *
- * @param int    $user_id User ID.
- * @param string $action  Action to perform.
- * @param array  $options Optional settings.
- * @return bool Whether the operation succeeded.
- */
-function process_user_data( int $user_id, string $action, array $options = array() ): bool {
-	$timeout = $options['timeout'] ?? 30;
-	$result  = $options['result'] ?? 'default';
-
-	if ( empty( $user_id ) ) {
-		return false;
-	}
-
-	return true;
-}
-```
-
----
-
 ## 1. Security and Database
-
-### Prepared Statements
-
-Always use `$wpdb->prepare()` for queries with variables.
-
-```php
-$wpdb->query(
-	$wpdb->prepare(
-		"UPDATE $wpdb->posts SET post_title = %s WHERE ID = %d",
-		$var,
-		$id
-	)
-);
-```
-
-### Placeholders
-
-| Placeholder | Type                           |
-| ----------- | ------------------------------ |
-| `%d`        | Integer (whole number)         |
-| `%f`        | Float (decimal number)         |
-| `%s`        | String                         |
-| `%i`        | Identifier (table/field names) |
 
 ### SQL Formatting
 
@@ -347,20 +266,6 @@ Use `??` for null checks.
 $value = $array['key'] ?? 'default';
 ```
 
-### Error Control Operator
-
-Never use `@` to suppress errors.
-
-```php
-// Incorrect
-$value = @file_get_contents( $file );
-
-// Correct
-if ( file_exists( $file ) && is_readable( $file ) ) {
-	$value = file_get_contents( $file );
-}
-```
-
 ### Increment/Decrement
 
 Do not use pre-increment/decrement in standalone statements.
@@ -431,15 +336,6 @@ function my_init_function() {
 	// code
 }
 ```
-
-### Forbidden Functions
-
-| Function            | Reason                   |
-| ------------------- | ------------------------ |
-| `extract()`         | Makes code unpredictable |
-| `eval()`            | Security vulnerability   |
-| `create_function()` | Deprecated and insecure  |
-| `compact()`         | Reduces readability      |
 
 ### Regular Expressions
 
