@@ -3,6 +3,8 @@
 		return;
 	}
 
+	let renderedButtons = [];
+
 	// Track the state of the PayPal card fields
 	let cardFieldsValid = false;
 	let thisForm = null;
@@ -51,10 +53,13 @@
 			paypal.FUNDING.SEPA,
 			paypal.FUNDING.MYBANK,
 			paypal.FUNDING.IDEAL,
+			paypal.FUNDING.PAYLATER
 		];
 		fundingSources.forEach( renderPayPalButton );
 
-		renderMessages( cardElement );
+		if ( renderedButtons.includes( paypal.FUNDING.PAYLATER ) ) {
+			renderMessages( cardElement );
+		}
 
 		thisForm = cardElement.closest( 'form' );
 
@@ -87,6 +92,7 @@
 			onError: onError,
 			onCancel: onCancel,
 			style: frmPayPalVars.buttonStyle,
+			fundingSource: paypal.FUNDING.PAYPAL,
 		} ).render( '#paypal-button-container' );
 
 		const cardFields = window.paypal.CardFields( cardFieldsConfig );
@@ -162,6 +168,8 @@
 			cardElement.prepend( container );
 
 			button.render( '#' + containerId );
+
+			renderedButtons.push( fundingSource );
 		};
 	}
 
