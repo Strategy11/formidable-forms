@@ -47,15 +47,17 @@ $wrapper_attributes = get_block_wrapper_attributes();
 ### render_callback Method
 
 ```php
+function render_my_block( $attributes, $content, $block ) {
+	$wrapper_attributes = get_block_wrapper_attributes();
+	return sprintf(
+		'<div %1$s>%2$s</div>',
+		$wrapper_attributes,
+		esc_html( $attributes['title'] )
+	);
+}
+
 register_block_type( __DIR__ . '/build', array(
-	'render_callback' => function( $attributes, $content, $block ) {
-		$wrapper_attributes = get_block_wrapper_attributes();
-		return sprintf(
-			'<div %1$s>%2$s</div>',
-			$wrapper_attributes,
-			esc_html( $attributes['title'] )
-		);
-	},
+	'render_callback' => 'render_my_block',
 ) );
 ```
 

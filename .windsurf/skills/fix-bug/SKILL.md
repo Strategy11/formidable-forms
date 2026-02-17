@@ -25,7 +25,7 @@ Before writing or modifying ANY code, read and follow the applicable rules from 
 | File type                | Rules to read                                                                                                        |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `*.php`                  | `formidable/frm-php.md`, `wordpress/php.md`, `wordpress-vip/wpvip-security.md`, `wordpress-vip/wpvip-performance.md` |
-| `*.js`, `*.jsx`, `*.mjs` | `wordpress/javascript.md`, `wordpress-vip/wpvip-security.md`                                                         |
+| `*.js`, `*.jsx`, `*.mjs` | `formidable/frm-javascript.md`, `wordpress/javascript.md`, `wordpress-vip/wpvip-security.md`                         |
 | `*.css`, `*.scss`        | `formidable/frm-css.md`                                                                                              |
 | `*.html`                 | `wordpress/html.md`                                                                                                  |
 | Block editor code        | `wordpress/block-editor.md`, `wordpress-vip/wpvip-block-editor.md`                                                   |
