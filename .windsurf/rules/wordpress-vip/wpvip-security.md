@@ -1,6 +1,6 @@
 ---
 trigger: glob
-globs: ['**/*.php', '**/*.js']
+globs: ["**/*.php", "**/*.js"]
 description: WordPress VIP security standards based on OWASP guidelines. Auto-applies to PHP and JS files.
 ---
 
@@ -19,10 +19,10 @@ Enterprise-level security for WordPress VIP platform based on OWASP Top 10.
 Escape data immediately before output, not at assignment.
 
 ```php
-// CORRECT - Escape at output
+// CORRECT: Escape at output
 echo esc_html( $title );
 
-// INCORRECT - Escape at assignment
+// INCORRECT: Escape at assignment
 $title = esc_html( $raw_title );
 // ... later
 echo $title; // May be double-escaped or bypassed
@@ -30,15 +30,15 @@ echo $title; // May be double-escaped or bypassed
 
 ### Escaping Functions
 
-| Function | Use Case |
-| -------- | -------- |
-| `esc_html()` | HTML element content |
-| `esc_attr()` | HTML attributes |
-| `esc_url()` | URLs and links |
-| `esc_js()` | Inline JavaScript |
-| `esc_textarea()` | Textarea content |
-| `wp_kses_post()` | Allow safe HTML |
-| `wp_kses()` | Custom allowed HTML |
+| Function         | Use Case             |
+| ---------------- | -------------------- |
+| `esc_html()`     | HTML element content |
+| `esc_attr()`     | HTML attributes      |
+| `esc_url()`      | URLs and links       |
+| `esc_js()`       | Inline JavaScript    |
+| `esc_textarea()` | Textarea content     |
+| `wp_kses_post()` | Allow safe HTML      |
+| `wp_kses()`      | Custom allowed HTML  |
 
 ### Output Examples
 
@@ -65,18 +65,17 @@ wp_localize_script( 'my-script', 'myData', array(
 ```
 
 ```javascript
-// UNSAFE - Never use
+// UNSAFE: Never use
 element.innerHTML = userData;
-$( element ).html( userData );
-eval( userInput );
+$(element).html(userData);
+eval(userInput);
 
-// SAFE - Programmatic DOM manipulation
-const text = document.createTextNode( userData );
-element.appendChild( text );
+// SAFE: Programmatic DOM manipulation
+const text = document.createTextNode(userData);
+element.appendChild(text);
 
-// SAFE - Use DOMPurify for HTML
-import DOMPurify from 'dompurify';
-element.innerHTML = DOMPurify.sanitize( userData );
+// SAFE: Use textContent for text
+element.textContent = userData;
 ```
 
 ---
@@ -97,23 +96,23 @@ $wpdb->query(
 
 ### Prepare Placeholders
 
-| Placeholder | Type |
-| ----------- | ---- |
-| `%d` | Integer |
-| `%f` | Float |
-| `%s` | String |
-| `%i` | Identifier (table/field names) |
+| Placeholder | Type                           |
+| ----------- | ------------------------------ |
+| `%d`        | Integer                        |
+| `%f`        | Float                          |
+| `%s`        | String                         |
+| `%i`        | Identifier (table/field names) |
 
 ### Use WordPress APIs
 
 ```php
-// PREFERRED - WordPress functions
+// PREFERRED: WordPress functions
 $posts = get_posts( array(
 	'post_type'      => 'post',
 	'posts_per_page' => 10,
 ) );
 
-// AVOID - Direct queries when possible
+// AVOID: Direct queries when possible
 $posts = $wpdb->get_results( "SELECT * FROM $wpdb->posts LIMIT 10" );
 ```
 
@@ -123,27 +122,24 @@ $posts = $wpdb->get_results( "SELECT * FROM $wpdb->posts LIMIT 10" );
 
 ### Sanitize Early
 
-```php
-$title = sanitize_text_field( wp_unslash( $_POST['title'] ) );
-$email = sanitize_email( $_POST['email'] );
-$url   = esc_url_raw( $_POST['url'] );
-$key   = sanitize_key( $_POST['key'] );
-$ids   = array_map( 'absint', $_POST['ids'] );
-```
+Sanitize all input immediately when reading from superglobals.
+
+**For Formidable:** Use `FrmAppHelper::get_post_param()`, `FrmAppHelper::simple_get()`, or `FrmAppHelper::get_param()` instead of direct `$_POST`/`$_GET` access. See `formidable/frm-security.md` for details.
 
 ### Sanitization Functions
 
-| Function | Use Case |
-| -------- | -------- |
-| `sanitize_text_field()` | Single line text |
-| `sanitize_textarea_field()` | Multi-line text |
-| `sanitize_email()` | Email addresses |
-| `sanitize_file_name()` | File names |
-| `sanitize_key()` | Keys and slugs |
-| `sanitize_title()` | Titles and slugs |
-| `absint()` | Positive integers |
-| `intval()` | Integers |
-| `wp_kses()` | HTML with allowed tags |
+| Function                    | Use Case               |
+| --------------------------- | ---------------------- |
+| `sanitize_text_field()`     | Single line text       |
+| `sanitize_textarea_field()` | Multi-line text        |
+| `sanitize_email()`          | Email addresses        |
+| `sanitize_file_name()`      | File names             |
+| `sanitize_key()`            | Keys and slugs         |
+| `sanitize_title()`          | Titles and slugs       |
+| `sanitize_url()`            | URLs                   |
+| `absint()`                  | Positive integers      |
+| `intval()`                  | Integers               |
+| `wp_kses()`                 | HTML with allowed tags |
 
 ---
 
@@ -152,7 +148,7 @@ $ids   = array_map( 'absint', $_POST['ids'] );
 ### Validate Against Trusted Values
 
 ```php
-// CORRECT - Validate against allowed list
+// CORRECT: Validate against allowed list
 $allowed = array( 'draft', 'publish', 'pending' );
 if ( ! in_array( $status, $allowed, true ) ) {
 	wp_die( 'Invalid status' );
@@ -161,52 +157,6 @@ if ( ! in_array( $status, $allowed, true ) ) {
 // Use strict comparison
 if ( $value === 'expected' ) {
 	// Process
-}
-```
-
----
-
-## Authentication & Authorization
-
-### Nonce Verification
-
-```php
-// In form
-wp_nonce_field( 'my_action', 'my_nonce' );
-
-// On submission
-if ( ! isset( $_POST['my_nonce'] ) ||
-		! wp_verify_nonce( $_POST['my_nonce'], 'my_action' ) ) {
-	wp_die( 'Security check failed' );
-}
-```
-
-### AJAX Nonce
-
-```php
-// Enqueue with nonce
-wp_localize_script( 'my-script', 'myAjax', array(
-	'ajaxurl' => admin_url( 'admin-ajax.php' ),
-	'nonce'   => wp_create_nonce( 'my_ajax_action' ),
-) );
-
-// Verify in handler
-add_action( 'wp_ajax_my_action', function() {
-	check_ajax_referer( 'my_ajax_action', 'nonce' );
-	// Process request
-} );
-```
-
-### Capability Checks
-
-```php
-if ( ! current_user_can( 'edit_posts' ) ) {
-	wp_die( 'Unauthorized access' );
-}
-
-// Check specific post
-if ( ! current_user_can( 'edit_post', $post_id ) ) {
-	wp_die( 'You cannot edit this post' );
 }
 ```
 
@@ -259,7 +209,7 @@ if ( isset( $upload['error'] ) ) {
 ### Use WordPress HTTP API
 
 ```php
-$response = wp_remote_get( 'https://api.example.com/data', array(
+$response = wp_safe_remote_get( 'https://api.example.com/data', array(
 	'timeout' => 15,
 ) );
 
@@ -285,14 +235,16 @@ $response = wp_remote_get( $url, array(
 
 ## Forbidden Functions
 
-| Function | Reason | Alternative |
-| -------- | ------ | ----------- |
-| `extract()` | Unpredictable | Access array keys directly |
-| `eval()` | Security vulnerability | Refactor code logic |
-| `create_function()` | Deprecated, insecure | Anonymous functions |
-| `serialize()` for user data | Security risk | `json_encode()` |
-| `file_get_contents()` for URLs | Unreliable | `wp_remote_get()` |
-| `curl_*` functions | Inconsistent | WP HTTP API |
+| Function                       | Reason                 | Alternative                            |
+| ------------------------------ | ---------------------- | -------------------------------------- |
+| `extract()`                    | Unpredictable          | Access array keys directly             |
+| `eval()`                       | Security vulnerability | Refactor code logic                    |
+| `create_function()`            | Deprecated, insecure   | Anonymous functions                    |
+| `unserialize()`                | Object injection risk  | `json_decode()` or validate input type |
+| `file_get_contents()` for URLs | Unreliable             | `wp_safe_remote_get()`                 |
+| `curl_*` functions             | Inconsistent           | WP HTTP API                            |
+
+**For Formidable:** Use `FrmAppHelper::maybe_unserialize_array()` instead of `unserialize()`. Note that `serialize()` is safe to use.
 
 ---
 
@@ -333,19 +285,4 @@ error_log( 'Login: ' . $username . ' / ' . $password );
 
 // CORRECT
 error_log( 'Login attempt: ' . $username );
-```
-
----
-
-## Tooling
-
-```bash
-# VIP PHPCS
-composer require automattic/vipwpcs
-
-# Run check
-./vendor/bin/phpcs --standard=WordPress-VIP-Go path/to/file.php
-
-# Snyk for vulnerability scanning
-snyk test
 ```
