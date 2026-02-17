@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Extract button settings with defaults
-$button_layout        = $form_action->post_content['button_layout'] ?? 'vertical';
 $button_color         = $form_action->post_content['button_color'] ?? 'default';
 $button_label         = $form_action->post_content['button_label'] ?? 'paypal';
 $button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
@@ -22,17 +21,7 @@ $button_border_radius = $form_action->post_content['button_border_radius'] ?? 10
 	<div class="frm_grid_container">
 		<h3><?php esc_html_e( 'PayPal Button Settings', 'formidable' ); ?></h3>
 
-		<p class="frm6">
-			<label>
-				<?php esc_html_e( 'Layout', 'formidable' ); ?>
-			</label>
-			<select name="<?php echo esc_attr( $action_control->get_field_name( 'button_layout' ) ); ?>">
-				<option value="vertical" <?php selected( $button_layout, 'vertical' ); ?>><?php esc_html_e( 'Vertical', 'formidable' ); ?></option>
-				<option value="horizontal" <?php selected( $button_layout, 'horizontal' ); ?>><?php esc_html_e( 'Horizontal', 'formidable' ); ?></option>
-			</select>
-		</p>
-		
-		<p class="frm6">
+		<p class="frm4">
 			<label>
 				<?php esc_html_e( 'Color', 'formidable' ); ?>
 			</label>
@@ -45,8 +34,8 @@ $button_border_radius = $form_action->post_content['button_border_radius'] ?? 10
 				<option value="black" <?php selected( $button_color, 'black' ); ?>><?php esc_html_e( 'Black', 'formidable' ); ?></option>
 			</select>
 		</p>
-		
-		<p class="frm6">
+
+		<p class="frm4">
 			<label>
 				<?php esc_html_e( 'Label', 'formidable' ); ?>
 			</label>
@@ -58,7 +47,7 @@ $button_border_radius = $form_action->post_content['button_border_radius'] ?? 10
 			</select>
 		</p>
 
-		<p class="frm6">
+		<p class="frm4">
 			<label>
 				<?php esc_html_e( 'Border Radius', 'formidable' ); ?>
 			</label>

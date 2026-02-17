@@ -76,7 +76,11 @@ class FrmPayPalLiteAppController {
 
 		$payment_source = FrmAppHelper::get_post_param( 'payment_source', '', 'sanitize_text_field' );
 
-		if ( ! in_array( $payment_source, array( 'card', 'paypal' ), true ) ) {
+		if ( ! $payment_source ) {
+			wp_send_json_error( __( 'No payment source provided', 'formidable' ) );
+		}
+
+		if ( ! in_array( $payment_source, self::get_valid_payment_sources(), true ) ) {
 			wp_send_json_error( __( 'Invalid payment source', 'formidable' ) );
 		}
 
@@ -113,6 +117,34 @@ class FrmPayPalLiteAppController {
 		}
 
 		wp_send_json_success( array( 'orderID' => $order_response->order_id ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array<string>	
+	 */
+	private static function get_valid_payment_sources() {
+		$sources = array(
+			'card',
+			'paypal',
+			'mybank',
+			'bancontact',
+			'blik',
+			'eps',
+			'p24',
+			'trustly',
+			'satispay',
+			'sepa',
+			'ideal',
+		);
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array<string> $sources
+		 */
+		return apply_filters( 'frm_paypal_valid_payment_sources', $sources );
 	}
 
 	/**

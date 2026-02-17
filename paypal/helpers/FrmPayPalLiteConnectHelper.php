@@ -249,7 +249,11 @@ class FrmPayPalLiteConnectHelper {
 		echo '<br>';
 		echo '<b>' . esc_html__( 'Merchant ID:', 'formidable' ) . '</b>';
 		echo '&nbsp;';
-		echo esc_html( $merchant_id );
+		if ( $merchant_id ) {
+			echo esc_html( $merchant_id );
+		} else {
+			esc_html_e( 'N/A', 'formidable' );
+		}
 	}
 
 	/**

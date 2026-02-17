@@ -50,6 +50,7 @@
 			paypal.FUNDING.SATISPAY,
 			paypal.FUNDING.SEPA,
 			paypal.FUNDING.MYBANK,
+			paypal.FUNDING.IDEAL,
 		];
 		fundingSources.forEach( renderPayPalButton );
 
@@ -170,6 +171,8 @@
 	 * @return {Promise<string>} The order ID.
 	 */
 	async function createOrder( data ) {
+		console.log( 'createOrder', data );
+
 		thisForm.classList.add( 'frm_loading_form' );
 
 		const formData = new FormData( thisForm );

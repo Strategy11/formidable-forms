@@ -803,10 +803,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array The style configuration array for PayPal button.
 	 */
 	private static function get_button_style_for_js( $form_action ) {
-		$button_layout        = $form_action->post_content['button_layout'] ?? 'vertical';
 		$button_color         = $form_action->post_content['button_color'] ?? 'default';
 		$button_label         = $form_action->post_content['button_label'] ?? 'paypal';
 		$button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
+
+		/**
+		 * Allow people to change the layout to 'horizontal' through a hook.
+		 *
+		 * @since x.x
+		 *
+		 * @param string  $button_layout
+		 * @param WP_Post $form_action
+		 */
+		$button_layout = apply_filters( 'frm_paypal_button_layout', 'vertical', $form_action );
 
 		$style_for_js = array(
 			'layout'       => $button_layout,
@@ -1024,6 +1033,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	private static function get_client_id() {
 		// TODO: This will need logic for a production client ID as well.
 		// This is currently just for testing.
-		return 'AZUUCRP30tCfLbgayJAwEMaVoeWhtdu9agSgl8W0kX17-tVHqxqFAhWeoriqo61yAAwRzB2PoJSG-8wo';
+		return 'AYTiIIchQiekyGhJouWoLapPfjijirOtKHSN255SLhcP0TIaWBID-zxsYDaNmP4fXL6YcQxiSIMS0Lwu';
 	}
 }
