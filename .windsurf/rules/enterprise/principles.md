@@ -9,7 +9,7 @@ Baseline rules that apply across the Formidable Forms plugin ecosystem.
 
 ## Writing Style for Generated Text
 
-Applies to all generated text: PR titles, PR body, commit messages, branch names, and etc.
+Applies to all generated text: PR titles, PR body, commit messages, comments, and etc.
 
 - **No em dashes** (`—` or `–`): use commas, periods, or rewrite the sentence
 - **No semicolons** (`;`): split into separate sentences instead
