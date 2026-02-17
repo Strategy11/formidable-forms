@@ -23,7 +23,7 @@
 	display: none;
 	margin: 0;
 	padding: 20px 0 0;
-	width: calc( 100% - 20px );
+	width: calc(100% - 20px);
 	height: 121px;
 	transition: all 0.4s linear;
 }
@@ -82,9 +82,9 @@
 	}
 }
 
- .frm_no_fields {
+.frm_no_fields {
 	top: 0;
-	width: calc( 100% - 24px );
+	width: calc(100% - 24px);
 	min-height: 320px;
 	display: flex;
 	flex-direction: column;
@@ -98,7 +98,7 @@
 	margin: var(--gap-sm) 12px;
 
 	img {
-		margin-left: calc( -1 * var(--gap-lg) );
+		margin-left: calc(-1 * var(--gap-lg));
 	}
 
 	.frm_drag_inst {
