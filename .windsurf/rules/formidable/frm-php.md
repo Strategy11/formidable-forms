@@ -17,7 +17,6 @@ Target **PHP 7.0** as the minimum version. Write code using PHP 7.0 features and
 ### PHP 7.0 Features (Allowed)
 
 - **Scalar type declarations**: `string`, `int`, `float`, `bool` for parameters
-- **Return type declarations**: Specify return types after `)`
 - **Null coalescing operator**: `$value = $input ?? 'default';`
 - **Spaceship operator**: `$a <=> $b` returns -1, 0, or 1
 - **Constant arrays with define()**: `define( 'ITEMS', array( 'a', 'b' ) );`
@@ -31,7 +30,7 @@ Target **PHP 7.0** as the minimum version. Write code using PHP 7.0 features and
 | Feature                            | Version | Why Avoid              |
 | ---------------------------------- | ------- | ---------------------- |
 | Nullable types (`?string`)         | 7.1     | Syntax not available   |
-| `void` return type                 | 7.1     | Type not available     |
+| Return type declarations           | 7.1     | Type not available     |
 | `iterable` pseudo-type             | 7.1     | Type not available     |
 | Class constant visibility          | 7.1     | Syntax not available   |
 | Multi-catch exceptions (`\|`)      | 7.1     | Syntax not available   |
@@ -48,11 +47,33 @@ Target **PHP 7.0** as the minimum version. Write code using PHP 7.0 features and
 | Union types                        | 8.0     | Syntax not available   |
 | Attributes                         | 8.0     | Syntax not available   |
 
+### WordPress-Polyfilled Functions
+
+WordPress polyfills some newer PHP functions. The following are safe to use with **WordPress 6.3+** (our minimum version):
+
+| Function            | PHP Version | WP Since | Safe to Use |
+| ------------------- | ----------- | -------- | ----------- |
+| `str_contains()`    | 8.0         | 5.9      | ✓           |
+| `str_starts_with()` | 8.0         | 5.9      | ✓           |
+| `str_ends_with()`   | 8.0         | 5.9      | ✓           |
+
+The following are polyfilled in **newer WordPress versions only** (do NOT use without version checks):
+
+| Function           | PHP Version | WP Since | Notes         |
+| ------------------ | ----------- | -------- | ------------- |
+| `array_is_list()`  | 8.1         | 6.5      | Not in WP 6.3 |
+| `array_find()`     | 8.4         | 6.8      | Not in WP 6.3 |
+| `array_find_key()` | 8.4         | 6.8      | Not in WP 6.3 |
+| `array_any()`      | 8.4         | 6.8      | Not in WP 6.3 |
+| `array_all()`      | 8.4         | 6.8      | Not in WP 6.3 |
+
+**Note:** `array_key_first()` and `array_key_last()` (PHP 7.3) are NOT polyfilled by WordPress. Do not use them without a manual fallback.
+
 ---
 
 ## WordPress Version Requirement
 
-Target **WordPress 5.5** as the minimum version.
+Target **WordPress 6.3** as the minimum version.
 
 ### Version Compatibility
 
@@ -64,8 +85,8 @@ When using newer WordPress functions or features:
 
 ```php
 // Example: Using a newer function with fallback
-if ( version_compare( get_bloginfo( 'version' ), '5.9', '>=' ) ) {
-	// Use WordPress 5.9+ feature
+if ( version_compare( get_bloginfo( 'version' ), '6.3', '>=' ) ) {
+	// Use WordPress 6.3+ feature
 	$result = wp_new_function();
 } else {
 	// Fallback for older versions
@@ -78,6 +99,7 @@ if ( version_compare( get_bloginfo( 'version' ), '5.9', '>=' ) ) {
 ## Class Naming
 
 - **Lite plugin:** `FrmClassName` (e.g., `FrmAppHelper`, `FrmDb`, `FrmField`)
+- **Lite subfolders:** Classes in `/stripe/`, `/square/`, and similar subfolders also use the `Frm` prefix (e.g., `FrmStrpLiteConnectHelper`, `FrmSquareLiteAppHelper`)
 - **Pro plugin:** `FrmProClassName` (e.g., `FrmProAppHelper`, `FrmProField`)
 
 ---
@@ -85,8 +107,13 @@ if ( version_compare( get_bloginfo( 'version' ), '5.9', '>=' ) ) {
 ## Hook Naming
 
 - **Lite hooks:** `frm_hook_name`
-- **Pro hooks:** `frm_pro_hook_name`
+- **Pro hooks:** Use `frm_hook_name` when the hook exists only in Pro (no need for a `pro` prefix). Use `frm_pro_hook_name` only if a Lite equivalent exists.
 - **Addons hooks:** `frm_addon_hook_name`
+
+### Naming Rules
+
+- Names should be **descriptive enough** that there is no ambiguity
+- Names should be **short**, removing anything redundant
 
 ---
 
