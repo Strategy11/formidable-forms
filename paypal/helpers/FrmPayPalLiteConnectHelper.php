@@ -84,7 +84,7 @@ class FrmPayPalLiteConnectHelper {
 
 		$email = $status->primary_email ?? '';
 
-		if ( ! $status->primary_email_confirmed ) {
+		if ( ! isset( $status->primary_email_confirmed ) || ! $status->primary_email_confirmed ) {
 			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email );
 			return false;
 		}

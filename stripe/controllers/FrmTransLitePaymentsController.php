@@ -220,6 +220,12 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				break;
 			case 'paypal':
 				$refunded = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
+
+				if ( false === $refunded ) {
+					$message = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+					wp_die( esc_html( $message ) );
+				}
+
 				break;
 			default:
 				$refunded = false;

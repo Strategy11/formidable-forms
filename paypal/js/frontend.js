@@ -32,35 +32,6 @@
 
 		cardElement.classList.add( 'frm_grid_container' );
 
-		// Create the card fields container structure
-		// TODO: Make these IDs unique.
-		cardElement.innerHTML = `
-			<div id="paypal-button-container"></div>
-			<div class="separator">OR</div>
-			<div class="frm-paypal-card-number frm6" id="frm-paypal-card-number"></div>
-			<div class="frm-paypal-card-expiry frm3" id="frm-paypal-card-expiry"></div>
-			<div class="frm-paypal-card-cvv frm3" id="frm-paypal-card-cvv"></div>
-		`;
-
-		const renderPayPalButton = makeRenderPayPalButton( cardElement );
-		const fundingSources = [
-			paypal.FUNDING.BANCONTACT,
-			paypal.FUNDING.BLIK,
-			paypal.FUNDING.EPS,
-			paypal.FUNDING.P24,
-			paypal.FUNDING.TRUSTLY,
-			paypal.FUNDING.SATISPAY,
-			paypal.FUNDING.SEPA,
-			paypal.FUNDING.MYBANK,
-			paypal.FUNDING.IDEAL,
-			paypal.FUNDING.PAYLATER
-		];
-		fundingSources.forEach( renderPayPalButton );
-
-		if ( renderedButtons.includes( paypal.FUNDING.PAYLATER ) ) {
-			renderMessages( cardElement );
-		}
-
 		thisForm = cardElement.closest( 'form' );
 
 		const cardFieldsConfig = {
@@ -82,24 +53,79 @@
 				}
 			}
 		};
+		const cardFields = window.paypal.CardFields( cardFieldsConfig );
+
+		// Create the card fields container structure
+		// TODO: Make these IDs unique.
+		cardElement.innerHTML = '';
+
+		const cardFieldsEligible = cardFields.isEligible();
+
+		const buttonIsEnabled = true; // TODO: Put this behind a setting.
+		if ( buttonIsEnabled ) {
+			const buttonContainer = document.createElement( 'div' );
+			buttonContainer.id = 'paypal-button-container';
+			cardElement.prepend( buttonContainer );
+
+			const renderPayPalButton = makeRenderPayPalButton( cardElement );
+			const fundingSources = [
+				paypal.FUNDING.BANCONTACT,
+				paypal.FUNDING.BLIK,
+				paypal.FUNDING.EPS,
+				paypal.FUNDING.P24,
+				paypal.FUNDING.TRUSTLY,
+				paypal.FUNDING.SATISPAY,
+				paypal.FUNDING.SEPA,
+				paypal.FUNDING.MYBANK,
+				paypal.FUNDING.IDEAL,
+				paypal.FUNDING.PAYLATER
+			];
+			fundingSources.forEach( renderPayPalButton );
+
+			if ( renderedButtons.includes( paypal.FUNDING.PAYLATER ) ) {
+				renderMessages( cardElement );
+			}
+
+			paypal.Buttons( {
+				createOrder: createOrder,
+			//	createSubscription: createSubscription,
+				onApprove: onApprove,
+				onError: onError,
+				onCancel: onCancel,
+				style: frmPayPalVars.buttonStyle,
+				fundingSource: paypal.FUNDING.PAYPAL,
+			} ).render( '#paypal-button-container' );
+		}
+
+		if ( cardFieldsEligible ) {
+			if ( buttonIsEnabled ) {
+				const separator = document.createElement( 'div' );
+				separator.classList.add( 'separator' );
+				separator.textContent = 'OR'; // TODO: Make this customizable.
+				cardElement.append( separator );
+			}
+
+			const cardNumberWrapper = document.createElement( 'div' );
+			cardNumberWrapper.id = 'frm-paypal-card-number';
+			cardNumberWrapper.classList.add( 'frm6', 'frm-payment-card-number' );
+
+			const expiryWrapper = document.createElement( 'div' );
+			expiryWrapper.id = 'frm-paypal-card-expiry';
+			expiryWrapper.classList.add( 'frm3', 'frm-payment-card-expiry' );
+
+			const cvvWrapper = document.createElement( 'div' );
+			cvvWrapper.id = 'frm-paypal-card-cvv';
+			cvvWrapper.classList.add( 'frm3', 'frm-payment-card-cvv' );
+
+			cardElement.append( cardNumberWrapper );
+			cardElement.append( expiryWrapper );
+			cardElement.append( cvvWrapper );
+		}
 
 		disableSubmit( thisForm );
 
-		paypal.Buttons( {
-			createOrder: createOrder,
-		//	createSubscription: createSubscription,
-			onApprove: onApprove,
-			onError: onError,
-			onCancel: onCancel,
-			style: frmPayPalVars.buttonStyle,
-			fundingSource: paypal.FUNDING.PAYPAL,
-		} ).render( '#paypal-button-container' );
-
-		const cardFields = window.paypal.CardFields( cardFieldsConfig );
-
 		// Check eligibility for card fields
 		if ( ! cardFields.isEligible() ) {
-			console.warn( 'PayPal Card Fields not eligible for this configuration' );
 			return null;
 		}
 
