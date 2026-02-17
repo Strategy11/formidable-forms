@@ -305,22 +305,6 @@ module.exports = {
 };
 ```
 
-### Lazy Loading Components
-
-```jsx
-import { lazy, Suspense } from '@wordpress/element';
-
-const HeavyComponent = lazy( () => import( './HeavyComponent' ) );
-
-function MyBlock() {
-	return (
-		<Suspense fallback={ <Spinner /> }>
-			<HeavyComponent />
-		</Suspense>
-	);
-}
-```
-
 ### Caching in Data Layer
 
 ```jsx

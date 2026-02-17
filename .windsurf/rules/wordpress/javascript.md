@@ -993,17 +993,6 @@ function UserProfile( { user, isLoading } ) {
 
 ## 14. Performance Patterns
 
-### Promise.all for Parallel Fetching
-
-```jsx
-// CORRECT - Parallel execution
-const [ users, posts ] = await Promise.all( [ fetchUsers(), fetchPosts() ] );
-
-// INCORRECT - Sequential when parallel is possible
-const users = await fetchUsers();
-const posts = await fetchPosts();
-```
-
 ### Cache Function Results
 
 ```jsx
@@ -1030,26 +1019,6 @@ const isSelected = ( id ) => selectedIds.has( id );
 
 // INCORRECT - O(n) lookup
 const isSelected = ( id ) => selectedItems.some( ( item ) => item.id === id );
-```
-
-### Batch DOM Operations
-
-```jsx
-// CORRECT - Single reflow
-const fragment = document.createDocumentFragment();
-items.forEach( ( item ) => {
-	const li = document.createElement( 'li' );
-	li.textContent = item.name;
-	fragment.appendChild( li );
-} );
-container.appendChild( fragment );
-
-// INCORRECT - Multiple reflows
-items.forEach( ( item ) => {
-	const li = document.createElement( 'li' );
-	li.textContent = item.name;
-	container.appendChild( li ); // Reflow on each iteration
-} );
 ```
 
 ### Content Visibility for Long Lists
