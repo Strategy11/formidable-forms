@@ -80,14 +80,14 @@ Follow **Arrange-Act-Assert** pattern:
 
 ```php
 public function test_entry_creation_with_valid_data() {
-	// Arrange - Set up test data and conditions
+	// Arrange: Set up test data and conditions
 	$form  = $this->factory->form->create_and_get();
 	$field = $this->factory->field->create_and_get( array(
 		'form_id' => $form->id,
 		'type'    => 'text',
 	) );
 
-	// Act - Execute the code being tested
+	// Act: Execute the code being tested
 	$entry_id = FrmEntry::create( array(
 		'form_id' => $form->id,
 		'item_meta' => array(
@@ -95,7 +95,7 @@ public function test_entry_creation_with_valid_data() {
 		),
 	) );
 
-	// Assert - Verify the results
+	// Assert: Verify the results
 	$this->assertIsNumeric( $entry_id, 'Entry ID should be numeric.' );
 	$this->assertGreaterThan( 0, $entry_id, 'Entry ID should be positive.' );
 }
@@ -182,13 +182,13 @@ public function test_subscriber_cannot_delete_form() {
 ### Use Specific Assertions
 
 ```php
-// CORRECT - Specific assertions
+// CORRECT: Specific assertions
 $this->assertSame( $expected, $actual, 'Values should be identical.' );
 $this->assertIsArray( $result, 'Result should be an array.' );
 $this->assertArrayHasKey( 'id', $data, 'Data should have id key.' );
 $this->assertStringContainsString( 'error', $message, 'Message should contain error.' );
 
-// INCORRECT - Generic assertions
+// INCORRECT: Generic assertions
 $this->assertTrue( $expected === $actual );
 $this->assertTrue( is_array( $result ) );
 ```
