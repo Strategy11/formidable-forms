@@ -190,12 +190,12 @@ Maximum 3-4 levels deep.
 
 Group related properties:
 
-1. **Display and Box Model** - display, box-sizing, width, height, padding, margin, border
-2. **Positioning** - position, top, right, bottom, left, z-index
-3. **Typography** - font-family, font-size, font-weight, line-height, text-align, color
-4. **Visual** - background, box-shadow, opacity, border-radius
-5. **Animation** - transition, transform, animation
-6. **Miscellaneous** - cursor, overflow
+1. **Display and Box Model**: display, box-sizing, width, height, padding, margin, border
+2. **Positioning**: position, top, right, bottom, left, z-index
+3. **Typography**: font-family, font-size, font-weight, line-height, text-align, color
+4. **Visual**: background, box-shadow, opacity, border-radius
+5. **Animation**: transition, transform, animation
+6. **Miscellaneous**: cursor, overflow
 
 ### Shorthand Properties
 
