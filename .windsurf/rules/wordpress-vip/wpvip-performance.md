@@ -26,7 +26,7 @@ Each SQL query adds overhead and latency. Reduce the number of queries.
 ### Query Design
 
 ```php
-// CORRECT - Efficient query with proper limits
+// CORRECT: Efficient query with proper limits
 $posts = $wpdb->get_results(
 	$wpdb->prepare(
 		"SELECT ID, post_title FROM $wpdb->posts
@@ -39,7 +39,7 @@ $posts = $wpdb->get_results(
 	)
 );
 
-// INCORRECT - Unbounded query
+// INCORRECT: Unbounded query
 $posts = $wpdb->get_results( "SELECT * FROM $wpdb->posts" );
 ```
 
@@ -143,14 +143,14 @@ add_action( 'save_post', function( $post_id ) {
 Each template requires additional processing and database queries.
 
 ```php
-// CAUTION - Too many template parts
+// CAUTION: Too many template parts
 get_template_part( 'header' );
 get_template_part( 'nav' );
 get_template_part( 'sidebar' );
 get_template_part( 'content' );
 get_template_part( 'footer' );
 
-// BETTER - Cache reusable partials
+// BETTER: Cache reusable partials
 $nav = wp_cache_get( 'main_nav', 'partials' );
 if ( false === $nav ) {
 	ob_start();
@@ -170,10 +170,10 @@ echo $nav;
 Only use necessary hooks and avoid excessive callbacks.
 
 ```php
-// INCORRECT - Running on every admin request
+// INCORRECT: Running on every admin request
 add_action( 'admin_init', 'expensive_operation' );
 
-// CORRECT - Conditional execution
+// CORRECT: Conditional execution
 add_action( 'admin_init', function() {
 	if ( ! isset( $_GET['my_action'] ) ) {
 		return;
@@ -216,7 +216,7 @@ define( 'DISABLE_WP_CRON', true );
 ### Use Server Cron
 
 ```bash
-# Crontab entry - run every minute
+# Crontab entry: run every minute
 * * * * * cd /path/to/wordpress && wp cron event run --due-now
 ```
 
@@ -231,19 +231,21 @@ On WordPress VIP, cron is handled by Automattic Cron Control plugin automaticall
 ### Avoid Loading All Posts
 
 ```php
-// INCORRECT - Loads all posts into memory
+// INCORRECT: Loads all posts into memory
 $posts = get_posts( array( 'numberposts' => -1 ) );
 foreach ( $posts as $post ) {
 	process( $post );
 }
 
-// CORRECT - Batch processing
+// CORRECT: Batch processing
 $paged = 1;
 do {
-	$posts = get_posts( array(
-		'numberposts' => 100,
-		'paged'       => $paged,
-	) );
+	$posts = get_posts(
+		array(
+			'numberposts' => 100,
+			'paged'       => $paged,
+		)
+	);
 
 	foreach ( $posts as $post ) {
 		process( $post );
@@ -256,12 +258,12 @@ do {
 ### Avoid Remote Requests in Loops
 
 ```php
-// INCORRECT - Multiple requests
+// INCORRECT: Multiple requests
 foreach ( $items as $item ) {
 	$data = wp_remote_get( $item['url'] );
 }
 
-// CORRECT - Batch or background process
+// CORRECT: Batch or background process
 wp_schedule_single_event( time(), 'process_items_batch', array( $items ) );
 ```
 
@@ -298,19 +300,4 @@ add_filter( 'script_loader_tag', function( $tag, $handle ) {
 
 	return $tag;
 }, 10, 2 );
-```
-
----
-
-## Tooling
-
-```bash
-# Query Monitor - Identify slow queries
-# Install Query Monitor plugin
-
-# New Relic - Performance monitoring
-# Available on VIP platform
-
-# VIP Code Analysis
-vip @mysite.production -- wp vip migration analyze
 ```
