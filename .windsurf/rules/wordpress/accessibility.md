@@ -167,24 +167,27 @@ All functionality must be available via keyboard.
 <button type="button">Click me</button>
 <a href="/page/">Link</a>
 
-<!-- If custom element needed, add keyboard support -->
+<!-- If custom element needed, add keyboard support via JS (no inline handlers) -->
 <div
 	role="button"
 	tabindex="0"
-	onclick="handleClick()"
-	onkeydown="handleKeydown(event)"
+	class="js-custom-button"
 >
 	Custom Button
 </div>
 ```
 
+Do **not** use inline event handlers (`onclick`, `onkeydown`). Attach all events in JavaScript files.
+
 ```javascript
-function handleKeydown( event ) {
+const button = document.querySelector( '.js-custom-button' );
+button.addEventListener( 'click', handleClick );
+button.addEventListener( 'keydown', function( event ) {
 	if ( event.key === 'Enter' || event.key === ' ' ) {
 		event.preventDefault();
 		handleClick();
 	}
-}
+} );
 ```
 
 **Focus Trap Prevention**
