@@ -17,6 +17,7 @@
 .php-cs-fixer.cache export-ignore
 .wp-env.json export-ignore
 .coderabbit.yaml export-ignore
+.windsurf export-ignore
 cypress.config.js export-ignore
 /bin/ export-ignore
 changelog.txt export-ignore
