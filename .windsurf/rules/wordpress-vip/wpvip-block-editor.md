@@ -36,7 +36,7 @@ Dynamic blocks generate content server-side using PHP, ideal for frequently upda
 
 ```php
 <?php
-// render.php - receives $attributes, $content, $block
+// render.php: receives $attributes, $content, $block
 $wrapper_attributes = get_block_wrapper_attributes();
 ?>
 <div <?php echo $wrapper_attributes; ?>>
@@ -313,26 +313,11 @@ module.exports = {
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
-// CORRECT - Minimal dependencies, automatic caching
+// CORRECT: Minimal dependencies, automatic caching
 const postTitle = useSelect(
 	( select ) => {
 		return select( coreStore ).getEntityRecord( 'postType', 'post', postId )?.title;
 	},
 	[ postId ]
 );
-```
-
----
-
-## Tooling
-
-```bash
-# Create new block
-npx @wordpress/create-block my-block
-
-# Build with modules support
-npm run build -- --experimental-modules
-
-# Install VIP-compatible packages
-npm install @wordpress/scripts --save-dev
 ```
