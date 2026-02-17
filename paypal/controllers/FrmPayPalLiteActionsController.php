@@ -807,18 +807,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$button_label         = $form_action->post_content['button_label'] ?? 'paypal';
 		$button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
 
-		/**
-		 * Allow people to change the layout to 'horizontal' through a hook.
-		 *
-		 * @since x.x
-		 *
-		 * @param string  $button_layout
-		 * @param WP_Post $form_action
-		 */
-		$button_layout = apply_filters( 'frm_paypal_button_layout', 'vertical', $form_action );
-
 		$style_for_js = array(
-			'layout'       => $button_layout,
+			'layout'       => 'vertical',
 			'color'        => $button_color,
 			'label'        => $button_label,
 			'borderRadius' => (int) $button_border_radius,
