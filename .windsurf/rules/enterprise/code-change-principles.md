@@ -78,6 +78,7 @@ Before proposing solutions:
 - Never refactor unrelated code in the same commit
 - If a rule conflicts with existing code in the file being modified, follow the rule for new code but do not refactor unrelated existing code
 - Make the smallest change that completely solves the problem
+- Use Big-O to compare algorithms and choose the most efficient one for large inputs and iterations
 - Never change method signatures, return types, or data structures
 - Add defensive checks where data comes in, not where used everywhere
 - Add PHPDoc/JSDoc for new methods/properties/functions and comments for complex logic
