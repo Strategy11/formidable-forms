@@ -916,7 +916,7 @@ function frmFrontFormJS() {
 				}
 
 				removeSubmitLoading( jQuery( object ) );
-				if ( frm_js.offset != -1 ) {  
+				if ( frm_js.offset != -1 ) {
 					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
 
@@ -1411,7 +1411,7 @@ function frmFrontFormJS() {
 	function checkForErrorsAndMaybeSetFocus() {
 		let errors, element, timeoutCallback;
 
-		if ( ! frm_js.focus_first_error ) {  
+		if ( ! frm_js.focus_first_error ) {
 			return;
 		}
 
@@ -2021,7 +2021,7 @@ function frmFrontFormJS() {
 
 			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
-			if ( ! newPos || frm_js.offset === '-1' ) {  
+			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;
 			}
 			newPos = newPos - frm_js.offset;

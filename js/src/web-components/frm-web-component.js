@@ -119,7 +119,7 @@ export class frmWebComponent extends HTMLElement {
 		} );
 	}
 
-	set frmLabel( text ) {  
+	set frmLabel( text ) {
 		this._labelText = text;
 	}
 

@@ -245,7 +245,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		return this.button;
 	}
 
-	set onChange( callback ) {  
+	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -253,7 +253,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.#onChange = callback;
 	}
 
-	set borderRadiusDefaultValue( value ) {  
+	set borderRadiusDefaultValue( value ) {
 		this.#defaultValue = value;
 		this.#usesMultipleValues = ! /^(\d+)(px|em|%)?$/.test( value ) && '' !== value;
 	}

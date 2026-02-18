@@ -38,7 +38,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the slider component is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) {  
+	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -52,7 +52,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {boolean} value - The value to set.
 	 * @return {void}
 	 */
-	set hasMultipleValues( value ) {  
+	set hasMultipleValues( value ) {
 		this.#hasMultipleValues = value;
 	}
 
@@ -62,7 +62,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Object} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderDefaultMultipleValues( value ) {  
+	set sliderDefaultMultipleValues( value ) {
 		this.#sliderDefaultMultipleValues = value;
 	}
 
@@ -72,7 +72,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string|number} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderDefaultValue( value ) {  
+	set sliderDefaultValue( value ) {
 		this.#sliderDefaultValue = String( value );
 	}
 
@@ -82,7 +82,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Array} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderAvailableUnits( value ) {  
+	set sliderAvailableUnits( value ) {
 		this.#sliderAvailableUnits = value;
 	}
 
@@ -92,15 +92,15 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string|number} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderMaxValue( value ) {  
+	set sliderMaxValue( value ) {
 		this.#sliderMaxValue = value.toString();
 	}
 
-	set steps( value ) {  
+	set steps( value ) {
 		this.#sliderSteps = value;
 	}
 
-	useShadowDom() {  
+	useShadowDom() {
 		return false;
 	}
 

@@ -250,7 +250,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the select element is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) {  
+	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -264,7 +264,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {string} value - The value to set dynamically the default value for.
 	 * @return {void}
 	 */
-	set typographyDefaultValue( value ) {  
+	set typographyDefaultValue( value ) {
 		this.#defaultValue = value;
 	}
 }

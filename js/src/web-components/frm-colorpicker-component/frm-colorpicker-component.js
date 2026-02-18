@@ -40,7 +40,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 		return this.input;
 	}
 
-	useShadowDom() {  
+	useShadowDom() {
 		return false;
 	}
 
@@ -82,7 +82,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the color picker component is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) {  
+	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
