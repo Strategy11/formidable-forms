@@ -230,7 +230,6 @@ export default [
 			'no-jquery/no-parse-xml': 'error',
 			'no-jquery/no-proxy': 'error',
 			'no-jquery/no-selector-prop': 'error',
-			'no-jquery/no-sizzle': 'error',
 			'no-jquery/no-sub': 'error',
 			'no-jquery/no-trim': 'error',
 			'no-jquery/no-type': 'error',
@@ -292,7 +291,7 @@ export default [
 			'no-trailing-spaces': 'error',
 			'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
 
-			// TODO: New rules to look into.
+			// TODO: New breaking changes after updating to look into.
 			'no-jquery/no-sizzle': 'off',
 			'sonarjs/anchor-precedence': 'off',
 			'sonarjs/class-name': 'off',
