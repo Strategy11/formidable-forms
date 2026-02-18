@@ -1,5 +1,4 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
-/* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -237,7 +236,7 @@ window.frmAdminBuildJS = function() {
 
 	const MAX_FIELD_GROUP_SIZE = 12;
 
-	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
+	const frmAdminJs = frm_admin_js;  
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonPost } = frmDom.ajax;
@@ -4864,7 +4863,7 @@ window.frmAdminBuildJS = function() {
 		text.classList.add( 'frm-field-group-message-text', 'frm-flex-center' );
 		text.innerHTML = sprintf(
 			/* translators: %1$s: Start span HTML, %2$s: end span HTML */
-			frm_admin_js.holdShiftMsg, // eslint-disable-line camelcase
+			frm_admin_js.holdShiftMsg,  
 			'<span class="frm-meta-tag frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',
 			'</span>'
 		);
@@ -6371,7 +6370,7 @@ window.frmAdminBuildJS = function() {
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
 
 				if ( showValueAsLabel && '' === label ) {
-					label = '' !== saved ? saved : frm_admin_js.no_label; // eslint-disable-line camelcase
+					label = '' !== saved ? saved : frm_admin_js.no_label;  
 				}
 			}
 
@@ -7099,7 +7098,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' )?.textContent.trim() === frm_admin_js.noTitleText; // eslint-disable-line camelcase
+		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' )?.textContent.trim() === frm_admin_js.noTitleText;  
 	}
 
 	/**
@@ -11237,7 +11236,7 @@ jQuery( document ).ready(
 	}
 );
 
-window.frm_show_div = ( div, value, showIf, classId ) => { // eslint-disable-line camelcase
+window.frm_show_div = ( div, value, showIf, classId ) => {  
 	if ( value == showIf ) {
 		jQuery( classId + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
 	} else {
@@ -11291,7 +11290,7 @@ window.frmImportCsv = formID => {
 				jQuery( '.frm_csv_remaining' ).html( count );
 				frmImportCsv( formID );
 			} else {
-				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete ); // eslint-disable-line camelcase
+				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete );  
 				setTimeout( function() {
 					location.href = '?page=formidable-entries&frm_action=list&form=' + formID + '&import-message=1';
 				}, 2000 );

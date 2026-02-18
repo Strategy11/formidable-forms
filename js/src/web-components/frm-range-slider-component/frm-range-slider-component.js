@@ -4,7 +4,7 @@ import style from './frm-range-slider-component.css';
 import { __ } from '@wordpress/i18n';
 
 export class frmRangeSliderComponent extends frmWebComponent {
-	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
+	#onChange = () => {};  
 	#sliderDefaultValue = '0px';
 	#sliderDefaultMultipleValues = {
 		vertical: { value: 0, unit: 'px' },
@@ -38,7 +38,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the slider component is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) { // eslint-disable-line accessor-pairs
+	set onChange( callback ) {  
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -52,7 +52,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {boolean} value - The value to set.
 	 * @return {void}
 	 */
-	set hasMultipleValues( value ) { // eslint-disable-line accessor-pairs
+	set hasMultipleValues( value ) {  
 		this.#hasMultipleValues = value;
 	}
 
@@ -62,7 +62,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Object} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderDefaultMultipleValues( value ) { // eslint-disable-line accessor-pairs
+	set sliderDefaultMultipleValues( value ) {  
 		this.#sliderDefaultMultipleValues = value;
 	}
 
@@ -72,7 +72,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string|number} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderDefaultValue( value ) { // eslint-disable-line accessor-pairs
+	set sliderDefaultValue( value ) {  
 		this.#sliderDefaultValue = String( value );
 	}
 
@@ -82,7 +82,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {Array} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderAvailableUnits( value ) { // eslint-disable-line accessor-pairs
+	set sliderAvailableUnits( value ) {  
 		this.#sliderAvailableUnits = value;
 	}
 
@@ -92,15 +92,15 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string|number} value - The value to set.
 	 * @return {void}
 	 */
-	set sliderMaxValue( value ) { // eslint-disable-line accessor-pairs
+	set sliderMaxValue( value ) {  
 		this.#sliderMaxValue = value.toString();
 	}
 
-	set steps( value ) { // eslint-disable-line accessor-pairs
+	set steps( value ) {  
 		this.#sliderSteps = value;
 	}
 
-	useShadowDom() { // eslint-disable-line class-methods-use-this
+	useShadowDom() {  
 		return false;
 	}
 
@@ -464,6 +464,6 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	afterViewInit() {
 		const defaultValues = this.hasMultipleSliderValues() ? this.parseDefaultMultipleValues() : frmRangeSliderComponent.parseValueUnit( this.defaultValue );
 		const options = Object.assign( { defaultValues }, { steps: this.#sliderSteps } );
-		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), options ); // eslint-disable-line no-new
+		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), options );  
 	}
 }

@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import style from './frm-typography-component.css';
 
 export class frmTypographyComponent extends frmWebComponent {
-	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
+	#onChange = () => {};  
 	#defaultOptions = [
 		{
 			value: '21px',
@@ -250,7 +250,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {Function} callback - The callback function to call when the select element is changed.
 	 * @return {void}
 	 */
-	set onChange( callback ) { // eslint-disable-line accessor-pairs
+	set onChange( callback ) {  
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
@@ -264,7 +264,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @param {string} value - The value to set dynamically the default value for.
 	 * @return {void}
 	 */
-	set typographyDefaultValue( value ) { // eslint-disable-line accessor-pairs
+	set typographyDefaultValue( value ) {  
 		this.#defaultValue = value;
 	}
 }

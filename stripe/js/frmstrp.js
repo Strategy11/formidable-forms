@@ -142,7 +142,7 @@
 		}
 
 		function getReturnUrl() {
-			const url = new URL( frm_stripe_vars.ajax ); // eslint-disable-line compat/compat
+			const url = new URL( frm_stripe_vars.ajax );
 
 			url.searchParams.append( 'action', 'frmstrplinkreturn' );
 			return url.toString();
@@ -549,7 +549,7 @@
 		}
 
 		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
-		/* eslint-disable no-bitwise */
+		 
 		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
 			.toString( 16 )
 			.slice( 1 ) }`;

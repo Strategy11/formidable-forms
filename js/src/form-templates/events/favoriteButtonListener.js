@@ -90,14 +90,14 @@ const onFavoriteButtonClick = event => {
 	if ( OPERATION.ADD === currentOperation ) {
 		// Increment favorite counts
 		++favoritesCount.total;
-		isTemplateCustom ? ++favoritesCount.custom : ++favoritesCount.default; // eslint-disable-line no-unused-expressions
+		isTemplateCustom ? ++favoritesCount.custom : ++favoritesCount.default;  
 		// Set heart icon to filled
 		heartIcon.setAttribute( 'href', FILLED_HEART_ICON );
 		twinTemplateHeartIcon?.setAttribute( 'href', FILLED_HEART_ICON );
 	} else {
 		// Decrement favorite counts
 		--favoritesCount.total;
-		isTemplateCustom ? --favoritesCount.custom : --favoritesCount.default; // eslint-disable-line no-unused-expressions
+		isTemplateCustom ? --favoritesCount.custom : --favoritesCount.default;  
 		// Set heart icon to outline
 		heartIcon.setAttribute( 'href', LINEAR_HEART_ICON );
 		twinTemplateHeartIcon?.setAttribute( 'href', LINEAR_HEART_ICON );

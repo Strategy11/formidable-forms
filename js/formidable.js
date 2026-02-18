@@ -1,5 +1,5 @@
 /* exported frmRecaptcha, frmAfterRecaptcha */
-/* eslint-disable prefer-const */
+ 
 
 function frmFrontFormJS() {
 	'use strict';
@@ -851,7 +851,7 @@ function frmFrontFormJS() {
 		const fieldsets = object.querySelectorAll( '.frm_form_field' );
 		fieldsets.forEach( field => field.classList.add( 'frm_doing_ajax' ) );
 
-		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line no-jquery/no-serialize, camelcase
+		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line no-jquery/no-serialize
 		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		const doRedirect = response => {
@@ -916,7 +916,7 @@ function frmFrontFormJS() {
 				}
 
 				removeSubmitLoading( jQuery( object ) );
-				if ( frm_js.offset != -1 ) { // eslint-disable-line camelcase
+				if ( frm_js.offset != -1 ) {  
 					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
 
@@ -1038,7 +1038,7 @@ function frmFrontFormJS() {
 	function postToAjaxUrl( form, data, success, error ) {
 		let ajaxUrl, action, ajaxParams;
 
-		ajaxUrl = frm_js.ajax_url; // eslint-disable-line camelcase
+		ajaxUrl = frm_js.ajax_url;  
 		action = form.getAttribute( 'action' );
 
 		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
@@ -1165,7 +1165,7 @@ function frmFrontFormJS() {
 			if ( -1 !== jsErrors[ key ].indexOf( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				roleString = frm_js.include_alert_role ? 'role="alert"' : ''; // eslint-disable-line camelcase
+				roleString = frm_js.include_alert_role ? 'role="alert"' : '';  
 				errorHtml = '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[ key ] + '</div>';
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
@@ -1411,7 +1411,7 @@ function frmFrontFormJS() {
 	function checkForErrorsAndMaybeSetFocus() {
 		let errors, element, timeoutCallback;
 
-		if ( ! frm_js.focus_first_error ) { // eslint-disable-line camelcase
+		if ( ! frm_js.focus_first_error ) {  
 			return;
 		}
 
@@ -1718,7 +1718,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		/* eslint-disable compat/compat */
+		 
 		const startTime = performance.now();
 		const step = currentTime => {
 			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
@@ -1728,7 +1728,7 @@ function frmFrontFormJS() {
 			}
 		};
 		requestAnimationFrame( step );
-		/* eslint-enable compat/compat */
+		 
 	}
 
 	/**
@@ -2021,10 +2021,10 @@ function frmFrontFormJS() {
 
 			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
-			if ( ! newPos || frm_js.offset === '-1' ) { // eslint-disable-line camelcase
+			if ( ! newPos || frm_js.offset === '-1' ) {  
 				return;
 			}
-			newPos = newPos - frm_js.offset; // eslint-disable-line camelcase
+			newPos = newPos - frm_js.offset;  
 
 			m = getComputedStyle( document.documentElement ).marginTop;
 			b = getComputedStyle( document.body ).marginTop;
