@@ -10924,7 +10924,7 @@ window.frmAdminBuildJS = function() {
 							() => {
 								if ( null !== dismissedMessagesWrapper ) {
 									dismissedMessage.classList.remove( 'frm-fade' );
-									dismissedMessage.querySelector( '.frm-inbox-message-heading' )?.removeChild( dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' ) );
+									dismissedMessage.querySelector( '.frm-inbox-message-heading .frm_inbox_dismiss' )?.remove();
 									dismissedMessagesWrapper.append( dismissedMessage );
 								}
 								if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
