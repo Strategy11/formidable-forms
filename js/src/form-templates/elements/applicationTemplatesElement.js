@@ -60,7 +60,7 @@ export function createApplicationTemplates( applications ) {
  */
 function createTemplateItem( template ) {
 	const { name, key, hasLiteThumbnail, isWebp } = template;
-	 
+
 	const thumbnailURL = hasLiteThumbnail
 		? ( isWebp ? `${ thumbnailBaseURL }/${ key }.webp` : `${ thumbnailBaseURL }/${ key }.png` )
 		: `${ thumbnailBaseURL }/placeholder.svg`;

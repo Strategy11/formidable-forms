@@ -288,6 +288,10 @@ export default [
 			'unicorn/prefer-string-replace-all': 'off',
 			'unicorn/no-useless-promise-resolve-reject': 'off',
 
+			// Whitespace cleanup
+			'no-trailing-spaces': 'error',
+			'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
+
 			// TODO: New rules to look into.
 			'jsdoc/check-tag-names': 'off',
 			'no-jquery/no-sizzle': 'off',

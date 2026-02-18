@@ -92,15 +92,14 @@ export class frmWebComponent extends HTMLElement {
 	 * @return {Promise} - A promise that resolves when the element is visible.
 	 */
 	whenElementBecomesVisible() {
-		 
+
 		return new Promise( resolve => {
-			 
+
 			if ( 'undefined' === typeof window.IntersectionObserver ) {
 				requestAnimationFrame( () => resolve() );
 				return;
 			}
 
-			 
 			const observer = new IntersectionObserver( entries => {
 				entries.forEach( entry => {
 					// The element is in viewport and its visibility is greater than 0.
@@ -153,5 +152,5 @@ export class frmWebComponent extends HTMLElement {
 	* Called by browser when the component is removed from the DOM.
 	* @return void
 	*/
-	disconnectedCallback() {}  
+	disconnectedCallback() {}
 }

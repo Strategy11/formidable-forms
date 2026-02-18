@@ -1,5 +1,4 @@
 /* exported frmRecaptcha, frmAfterRecaptcha */
- 
 
 function frmFrontFormJS() {
 	'use strict';
@@ -1718,7 +1717,6 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		 
 		const startTime = performance.now();
 		const step = currentTime => {
 			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
@@ -1728,7 +1726,7 @@ function frmFrontFormJS() {
 			}
 		};
 		requestAnimationFrame( step );
-		 
+
 	}
 
 	/**
