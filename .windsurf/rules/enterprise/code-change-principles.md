@@ -40,6 +40,7 @@ Before proposing solutions:
 - Trace execution flow from entry point to failure
 - **Analyze complete context** of the class or file being changed — all features, logic, and flows
 - **Trace parent hierarchy**: search parent classes and files up to plugin root
+- **CSS-Specific Rules - Trace complete style cascade**: When debugging CSS on an element, identify ALL classes on the element and its ancestors, then search for ALL CSS rules affecting it (not just the obvious class). Understand the complete cascade before proposing changes
 - Identify ALL affected locations in the codebase
 - Map dependencies: what calls this code, what does this code call
 - Check plugin requirements: must code work standalone or require Pro/addons
@@ -78,6 +79,7 @@ Before proposing solutions:
 - Never refactor unrelated code in the same commit
 - If a rule conflicts with existing code in the file being modified, follow the rule for new code but do not refactor unrelated existing code
 - Make the smallest change that completely solves the problem
+- **CSS-Specific Rules - Never modify shared CSS classes**: If a CSS class is already used elsewhere in the plugin, do not change its behavior. Instead, add a new specific class for the feature and define new styles for it
 - Use Big-O to compare algorithms and choose the most efficient one for large inputs and iterations
 - Never change method signatures, return types, or data structures
 - Add defensive checks where data comes in, not where used everywhere
