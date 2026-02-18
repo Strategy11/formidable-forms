@@ -9,7 +9,7 @@ const { div, svg } = frmDom;
  * @param {string}  action
  */
 export function toggleAddonState( clicked, action ) {
-	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url;  
+	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url;
 
 	// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 	jQuery( '.frm-addon-error' ).remove();
@@ -86,7 +86,7 @@ export function extractErrorFromAddOnResponse( response ) {
 }
 
 export function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
-	const frmAdminJs = frm_admin_js;  
+	const frmAdminJs = frm_admin_js;
 
 	const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
 	addonStatuses.forEach(

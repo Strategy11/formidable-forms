@@ -4,7 +4,7 @@ import style from './frm-range-slider-component.css';
 import { __ } from '@wordpress/i18n';
 
 export class frmRangeSliderComponent extends frmWebComponent {
-	#onChange = () => {};  
+	#onChange = () => {};
 	#sliderDefaultValue = '0px';
 	#sliderDefaultMultipleValues = {
 		vertical: { value: 0, unit: 'px' },
@@ -464,6 +464,6 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	afterViewInit() {
 		const defaultValues = this.hasMultipleSliderValues() ? this.parseDefaultMultipleValues() : frmRangeSliderComponent.parseValueUnit( this.defaultValue );
 		const options = Object.assign( { defaultValues }, { steps: this.#sliderSteps } );
-		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), options );  
+		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), options );
 	}
 }

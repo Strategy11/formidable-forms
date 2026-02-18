@@ -1038,7 +1038,7 @@ function frmFrontFormJS() {
 	function postToAjaxUrl( form, data, success, error ) {
 		let ajaxUrl, action, ajaxParams;
 
-		ajaxUrl = frm_js.ajax_url;  
+		ajaxUrl = frm_js.ajax_url;
 		action = form.getAttribute( 'action' );
 
 		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
@@ -1165,7 +1165,7 @@ function frmFrontFormJS() {
 			if ( -1 !== jsErrors[ key ].indexOf( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				roleString = frm_js.include_alert_role ? 'role="alert"' : '';  
+				roleString = frm_js.include_alert_role ? 'role="alert"' : '';
 				errorHtml = '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[ key ] + '</div>';
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
@@ -2024,7 +2024,7 @@ function frmFrontFormJS() {
 			if ( ! newPos || frm_js.offset === '-1' ) {  
 				return;
 			}
-			newPos = newPos - frm_js.offset;  
+			newPos = newPos - frm_js.offset;
 
 			m = getComputedStyle( document.documentElement ).marginTop;
 			b = getComputedStyle( document.body ).marginTop;

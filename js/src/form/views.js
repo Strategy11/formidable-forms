@@ -10,7 +10,7 @@ const { Notice } = wp.components;
 const { useState } = wp.element;
 const { useBlockProps } = wp.blockEditor;
 
-const blockData = formidable_form_selector;  
+const blockData = formidable_form_selector;
 const upgradeLink = blockData.viewsAddon.hasAccess ? blockData.viewsAddon.link : blockData.link;
 
 function Edit() {

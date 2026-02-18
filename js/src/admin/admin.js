@@ -236,7 +236,7 @@ window.frmAdminBuildJS = function() {
 
 	const MAX_FIELD_GROUP_SIZE = 12;
 
-	const frmAdminJs = frm_admin_js;  
+	const frmAdminJs = frm_admin_js;
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonPost } = frmDom.ajax;
@@ -6370,7 +6370,7 @@ window.frmAdminBuildJS = function() {
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
 
 				if ( showValueAsLabel && '' === label ) {
-					label = '' !== saved ? saved : frm_admin_js.no_label;  
+					label = '' !== saved ? saved : frm_admin_js.no_label;
 				}
 			}
 
@@ -7098,7 +7098,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' )?.textContent.trim() === frm_admin_js.noTitleText;  
+		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' )?.textContent.trim() === frm_admin_js.noTitleText;
 	}
 
 	/**
@@ -11290,7 +11290,7 @@ window.frmImportCsv = formID => {
 				jQuery( '.frm_csv_remaining' ).html( count );
 				frmImportCsv( formID );
 			} else {
-				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete );  
+				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete );
 				setTimeout( function() {
 					location.href = '?page=formidable-entries&frm_action=list&form=' + formID + '&import-message=1';
 				}, 2000 );

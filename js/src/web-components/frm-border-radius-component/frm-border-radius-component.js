@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import style from './frm-border-radius-component.css';
 
 export class frmBorderRadiusComponent extends frmWebComponent {
-	#onChange = () => {};  
+	#onChange = () => {};
 	#unitTypeOptions = [ 'px', 'em', '%' ];
 	#value = '0px';
 	#defaultValue = '0px';

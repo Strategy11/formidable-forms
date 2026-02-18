@@ -2,7 +2,7 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-colorpicker-component.css';
 
 class frmColorpickerLiteComponent extends frmWebComponent {
-	#onChange = () => {};  
+	#onChange = () => {};
 	#defaultValue = '#ffffff';
 
 	static formAssociated = true;
