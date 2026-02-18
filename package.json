@@ -62,7 +62,7 @@
 		"@wordpress/browserslist-config": "^5.30.0",
 		"@wordpress/env": "^9.0.0",
 		"@wordpress/eslint-plugin": "^24.1.0",
-		"@wordpress/stylelint-config": "^21.30.0",
+		"@wordpress/stylelint-config": "^23.31.0",
 		"axe-core": "^4.9.1",
 		"babel-loader": "9.2.1",
 		"babel-plugin-styled-components": "^2.1.4",
