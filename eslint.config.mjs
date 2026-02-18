@@ -315,8 +315,6 @@ export default [
 			'unicorn/consistent-existence-index-check': 'off',
 			'unicorn/no-negated-condition': 'off',
 			'unicorn/no-typeof-undefined': 'off',
-			'unicorn/prefer-dom-node-append': 'off',
-			'unicorn/prefer-dom-node-remove': 'off',
 			'unicorn/prefer-global-this': 'off',
 			'unicorn/prefer-string-raw': 'off',
 			'unicorn/switch-case-braces': 'off',
