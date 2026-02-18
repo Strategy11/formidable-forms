@@ -9,7 +9,7 @@ let targetButton;
 /**
  * Manages event handling for addons toggle.
  *
- * @return {void}
+ * @returns {void}
  */
 function addAddonToggleEvents() {
 	const { addonsToggle } = getElements();
@@ -28,7 +28,7 @@ function addAddonToggleEvents() {
  *
  * @private
  * @param {Event} event The click event object.
- * @return {void}
+ * @returns {void}
  */
 const onAddonToggleClick = event => {
 	if ( targetButton?.classList.contains( 'frm_loading_button' ) ) {

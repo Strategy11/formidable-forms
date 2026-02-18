@@ -13,7 +13,7 @@ import { getSingleState } from '../shared';
  * Sets the page title based on a given string or the currently selected category.
  *
  * @param {string} [title] Optional title to display.
- * @return {void}
+ * @returns {void}
  */
 export function updatePageTitle( title ) {
 	const { pageTitleText } = getElements();

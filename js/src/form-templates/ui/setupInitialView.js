@@ -17,7 +17,7 @@ import { showHeaderCancelButton } from './';
  * Sets up the initial view, performing any required
  * DOM manipulations for proper element presentation.
  *
- * @return {void}
+ * @returns {void}
  */
 function setupInitialView() {
 	const {
@@ -56,7 +56,7 @@ function setupInitialView() {
  * Sets up the 'Available Templates' category with proper count display
  *
  * @param {Element} availableTemplatesCategory The Available Templates category element
- * @return {void}
+ * @returns {void}
  */
 function setupAvailableTemplatesCategory( availableTemplatesCategory ) {
 	if ( ! availableTemplatesCategory ) {
@@ -79,7 +79,7 @@ function setupAvailableTemplatesCategory( availableTemplatesCategory ) {
  *
  * @param {Element} element The Available Templates category element
  * @param {number}  count   The count of available templates
- * @return {void}
+ * @returns {void}
  */
 function runAvailableTemplatesEffects( element, count ) {
 	setTimeout( () => {

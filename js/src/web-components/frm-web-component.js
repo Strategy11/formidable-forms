@@ -89,18 +89,17 @@ export class frmWebComponent extends HTMLElement {
 	/**
 	 * Waits for the element to become visible in the viewport.
 	 *
-	 * @return {Promise} - A promise that resolves when the element is visible.
+	 * @returns {Promise} - A promise that resolves when the element is visible.
 	 */
 	whenElementBecomesVisible() {
-		// eslint-disable-next-line compat/compat
+
 		return new Promise( resolve => {
-			// eslint-disable-next-line compat/compat
+
 			if ( 'undefined' === typeof window.IntersectionObserver ) {
 				requestAnimationFrame( () => resolve() );
 				return;
 			}
 
-			// eslint-disable-next-line compat/compat
 			const observer = new IntersectionObserver( entries => {
 				entries.forEach( entry => {
 					// The element is in viewport and its visibility is greater than 0.
@@ -119,7 +118,7 @@ export class frmWebComponent extends HTMLElement {
 		} );
 	}
 
-	set frmLabel( text ) { // eslint-disable-line accessor-pairs
+	set frmLabel( text ) {
 		this._labelText = text;
 	}
 
@@ -153,5 +152,5 @@ export class frmWebComponent extends HTMLElement {
 	* Called by browser when the component is removed from the DOM.
 	* @return void
 	*/
-	disconnectedCallback() {} // eslint-disable-line class-methods-use-this, no-empty-function
+	disconnectedCallback() {}
 }

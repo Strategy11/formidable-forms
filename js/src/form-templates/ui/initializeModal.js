@@ -15,7 +15,7 @@ let modalWidget = null;
 /**
  * Initialize the modal widget.
  *
- * @return {void}
+ * @returns {void}
  */
 export async function initializeModal() {
 	const { initModal, offsetModalY } = window.frmAdminBuild;
@@ -47,7 +47,7 @@ export async function initializeModal() {
 /**
  * Retrieve the modal widget.
  *
- * @return {Object|false} The modal widget or false.
+ * @returns {Object|false} The modal widget or false.
  */
 export function getModalWidget() {
 	return modalWidget;

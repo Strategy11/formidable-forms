@@ -12,7 +12,7 @@ import { navigateToNextStep } from '../utils';
 /**
  * Manages event handling for the "Skip" step button.
  *
- * @return {void}
+ * @returns {void}
  */
 function addSkipStepButtonEvents() {
 	const { skipStepButtons } = getElements();
@@ -27,7 +27,7 @@ function addSkipStepButtonEvents() {
  * Handles the click event on a "Skip" step button.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onSkipStepButtonClick = () => {
 	navigateToNextStep();

@@ -25,11 +25,11 @@
 				"ignoreFunctions": ["currentColor"]
 			}
 		],
-		"max-line-length": null,
 		"color-named": null,
 		"declaration-property-unit-allowed-list": null,
 		"no-invalid-position-at-import-rule": null,
 		"font-family-no-missing-generic-family-keyword": null,
-		"scss/at-import-no-partial-leading-underscore": null
+		"scss/at-import-no-partial-leading-underscore": null,
+		"scss/load-no-partial-leading-underscore": null
 	}
 }
