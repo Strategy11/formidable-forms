@@ -5,7 +5,7 @@ export class frmAddonAPI {
 	 * @param {'frm_install_addon'|'frm_activate_addon'|'frm_multiple_addons'} action The addon state action type.
 	 * @param {string}                                                         addon  The addon path. Ex: formidable-views/formidable-views.php
 	 *
-	 * @return {Promise<object>} The response from the server.
+	 * @returns {Promise<object>} The response from the server.
 	 */
 	static toggleAddonState( action, addon ) {
 		return fetch( ajaxurl, {

@@ -18,7 +18,7 @@ const COMPLETED_STEP_CLASS = 'frm-completed-step';
  * - Applies CURRENT_CLASS to the current step, unless it is the success step.
  *
  * @param {string} currentStep The current step in the process.
- * @return {void}
+ * @returns {void}
  */
 export function updateRootline( currentStep ) {
 	if ( currentStep === STEPS.UNSUCCESSFUL ) {

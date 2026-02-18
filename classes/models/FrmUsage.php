@@ -202,6 +202,11 @@ class FrmUsage {
 				continue;
 			}
 
+			if ( is_object( $value ) ) {
+				$value = '{{object}}';
+				continue;
+			}
+
 			if ( is_array( $value ) ) {
 				$this->clean_before_send( $value );
 				continue;
