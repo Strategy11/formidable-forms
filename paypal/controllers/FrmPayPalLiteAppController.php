@@ -63,6 +63,35 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
+	 * Get the current amount for a PayPal action via AJAX.
+	 * Used to update the Pay Later messaging when price fields change.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function get_amount() {
+		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+
+		if ( ! $form_id ) {
+			wp_send_json_error( __( 'Invalid form ID', 'formidable' ) );
+		}
+
+		$actions = FrmPayPalLiteActionsController::get_actions_before_submit( $form_id );
+
+		if ( ! $actions ) {
+			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
+		}
+
+		$action = reset( $actions );
+		$amount = self::get_amount_value_for_verification( $action );
+
+		wp_send_json_success( array( 'amount' => $amount ) );
+	}
+
+	/**
 	 * Create a PayPal order via AJAX.
 	 */
 	public static function create_order() {
@@ -258,7 +287,7 @@ class FrmPayPalLiteAppController {
 		// Update amount based on field shortcodes.
 		$entry = self::generate_false_entry();
 
-		return FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+		return number_format( floatval( FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) ) ) / 100, 2 );
 	}
 
 	/**

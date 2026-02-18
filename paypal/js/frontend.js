@@ -85,6 +85,8 @@
 
 			if ( renderedButtons.includes( paypal.FUNDING.PAYLATER ) ) {
 				renderMessages( cardElement );
+				jQuery( document ).on( 'frmFieldChanged', priceChanged );
+				checkPriceFieldsOnLoad();
 			}
 
 			paypal.Buttons( {
@@ -147,24 +149,20 @@
 		payLaterBanner.id = 'my-pay-later-banner';
 		cardElement.prepend( payLaterBanner );
 
-		let action = false;
-		frmPayPalVars.settings.forEach( function( setting ) {
-			if ( -1 !== setting.gateways.indexOf( 'paypal' ) ) {
-				action = setting;
-			}
-		} );
-
 		// TODO We can use a value here if the amount is not dynamic.
 		// Otherwise we might need to wait until we know an amount
 		// and we might need to try refreshing this message when the amount
 		// changes.
+
+		getPrice( function( result ) {
+			payLaterBanner.setAttribute( 'data-pp-amount', result.data.amount );
+		} );
 
 		paypal.Messages( buildMessagesArgs() ).render( '#my-pay-later-banner' );
 	}
 
 	function buildMessagesArgs() {
 		return {
-			amount: 100.00,
 			style: {
 				layout: 'text',
 				logo: {
@@ -172,6 +170,131 @@
 				},
 			}
 		};
+	}
+
+	/**
+	 * Get PayPal settings from frmPayPalVars.settings.
+	 *
+	 * @return {Array} Array of PayPal settings.
+	 */
+	function getPayPalSettings() {
+		const paypalSettings = [];
+		frmPayPalVars.settings.forEach( function( setting ) {
+			if ( -1 !== setting.gateways.indexOf( 'paypal' ) ) {
+				paypalSettings.push( setting );
+			}
+		} );
+		return paypalSettings;
+	}
+
+	/**
+	 * Get the field IDs that affect the price.
+	 *
+	 * @return {Array} Array of field IDs.
+	 */
+	function getPriceFields() {
+		const priceFields = [];
+		getPayPalSettings().forEach( function( setting ) {
+			if ( -1 !== setting.fields ) {
+				setting.fields.forEach( function( field ) {
+					if ( isNaN( field ) ) {
+						priceFields.push( 'field_' + field );
+					} else {
+						priceFields.push( field );
+					}
+				} );
+			}
+		} );
+		return priceFields;
+	}
+
+	/**
+	 * Handle price field changes. Calls AJAX to get the updated amount
+	 * and refreshes the Pay Later message.
+	 *
+	 * @param {Event}       _       The event object (unused).
+	 * @param {HTMLElement} field   The changed field element.
+	 * @param {string}      fieldId The changed field ID.
+	 */
+	function priceChanged( _, field, fieldId ) {
+		const price = getPriceFields();
+		let run = price.includes( fieldId ) || price.includes( field.id );
+
+		if ( ! run ) {
+			for ( let i = 0; i < price.length; i++ ) {
+				if ( field.id.indexOf( price[ i ] ) === 0 ) {
+					run = true;
+					break;
+				}
+			}
+		}
+
+		if ( ! run ) {
+			return;
+		}
+
+		const form = field.closest ? field.closest( 'form' ) : jQuery( field ).closest( 'form' )[0];
+		if ( ! form ) {
+			return;
+		}
+
+		getPrice(
+			function( result ) {
+				updatePayLaterMessage( result.data.amount );
+			}
+		);
+	}
+
+	function getPrice( callback ) {
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_get_amount' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+
+		// Remove a few fields so form validation does not incorrectly trigger.
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} )
+			.then( response => response.json() )
+			.then( function( result ) {
+				if ( result.success && result.data && result.data.amount ) {
+					callback( result );
+				}
+			} )
+			.catch( function( err ) {
+				console.error( 'Failed to get PayPal amount', err );
+			} );
+	}
+
+	/**
+	 * Re-render the Pay Later message with the current amount.
+	 */
+	function updatePayLaterMessage( amount ) {
+		const banner = document.getElementById( 'my-pay-later-banner' );
+		if ( banner ) {
+			banner.setAttribute( 'data-pp-amount', amount );
+		}
+	}
+
+	/**
+	 * Check for price fields on load and trigger an initial price update.
+	 */
+	function checkPriceFieldsOnLoad() {
+		getPriceFields().forEach( function( fieldId ) {
+			const fieldContainer = document.getElementById( 'frm_field_' + fieldId + '_container' );
+			if ( ! fieldContainer ) {
+				return;
+			}
+
+			const input = fieldContainer.querySelector( 'input[name^=item_meta]' );
+			if ( input && '' !== input.value ) {
+				priceChanged( null, input, fieldId );
+			}
+		} );
 	}
 
 	function makeRenderPayPalButton( cardElement ) {

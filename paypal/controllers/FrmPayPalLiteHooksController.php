@@ -48,6 +48,9 @@ class FrmPayPalLiteHooksController {
 		// Verify PayPal Lite sites.
 		add_action( 'wp_ajax_nopriv_frm_paypal_lite_verify', 'FrmPayPalLiteConnectHelper::verify' );
 
+		add_action( 'wp_ajax_frm_paypal_get_amount', 'FrmPayPalLiteAppController::get_amount' );
+		add_action( 'wp_ajax_nopriv_frm_paypal_get_amount', 'FrmPayPalLiteAppController::get_amount' );
+
 		add_action( 'wp_ajax_frm_paypal_create_order', 'FrmPayPalLiteAppController::create_order' );
 		add_action( 'wp_ajax_nopriv_frm_paypal_create_order', 'FrmPayPalLiteAppController::create_order' );
 
