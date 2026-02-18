@@ -222,8 +222,10 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				$refunded = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
 
 				if ( false === $refunded ) {
-					$message = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
-					wp_die( esc_html( $message ) );
+					$reason = self::convert_uppercase_underscores_to_ucwords(
+						FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api(),
+						array( 'REFUND_FAILED_', 'REFUND_' )
+					);
 				}
 
 				break;
@@ -236,10 +238,36 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			self::change_payment_status( $payment, 'refunded' );
 			$message = __( 'Refunded', 'formidable' );
 		} else {
-			$message = __( 'Failed', 'formidable' );
+			$message = __( 'Refund Failed', 'formidable' );
 		}
 
-		wp_die( esc_html( $message ) );
+		if ( ! empty( $reason ) ) {
+			$message .= ' (' . $reason . ')';
+		}
+
+		wp_die(
+			sprintf(
+				'<div class="%1$s">%2$s</div>',
+				$refunded ? 'frm_updated_message' : 'frm_error_style',
+				esc_html( $message )
+			)
+		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $error
+	 *
+	 * @return string
+	 */
+	private static function convert_uppercase_underscores_to_ucwords( $error, $prefixes_to_strip = array() ) {
+		if ( ! preg_match( '/^[A-Z_]+$/', $error ) ) {
+			return '';
+		}
+
+		$reason = str_replace( $prefixes_to_strip, '', $error );
+		return ucwords( strtolower( str_replace( '_', ' ', $reason ) ) );
 	}
 
 	/**
