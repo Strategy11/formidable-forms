@@ -258,6 +258,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @since x.x
 	 *
 	 * @param string $error
+	 * @param array  $prefixes_to_strip
 	 *
 	 * @return string
 	 */

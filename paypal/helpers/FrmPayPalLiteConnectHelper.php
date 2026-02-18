@@ -839,10 +839,11 @@ class FrmPayPalLiteConnectHelper {
 	 * @param string $amount
 	 * @param string $currency
 	 * @param string $payment_source Valid values are 'card', 'paypal'.
+	 * @param array  $payer
 	 *
 	 * @return false|object
 	 */
-	public static function create_order( $amount, $currency, $payment_source ) {
+	public static function create_order( $amount, $currency, $payment_source, $payer ) {
 		/**
 		 * Allow people to modify the brand name used in the PayPal order.
 		 *
@@ -852,7 +853,7 @@ class FrmPayPalLiteConnectHelper {
 		 */
 		$brand_name = apply_filters( 'frm_paypal_brand_name', get_bloginfo( 'name' ) );
 
-		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name' ) );
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer' ) );
 	}
 
 	/**

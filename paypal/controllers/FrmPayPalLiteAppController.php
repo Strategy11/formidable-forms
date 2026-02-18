@@ -92,11 +92,12 @@ class FrmPayPalLiteAppController {
 
 		$action = reset( $actions );
 		$amount = self::get_amount_value_for_verification( $action );
+		$payer  = self::get_payer_data_from_posted_values( $action );
 
 		// PayPal expects the amount in a format like 10.00, so format it.
 		$amount         = number_format( floatval( $amount ), 2, '.', '' );
 		$currency       = strtoupper( $action->post_content['currency'] );
-		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source );
+		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer );
 
 		if ( class_exists( 'FrmLog' ) ) {
 			$log = new FrmLog();
@@ -117,6 +118,93 @@ class FrmPayPalLiteAppController {
 		}
 
 		wp_send_json_success( array( 'orderID' => $order_response->order_id ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_payer_data_from_posted_values( $action ) {
+		$email_setting      = $action->post_content['email'];
+		$first_name_setting = $action->post_content['billing_first_name'];
+		$last_name_setting  = $action->post_content['billing_last_name'];
+		$address_setting    = $action->post_content['billing_address'];
+
+		$entry      = self::generate_false_entry();
+		$first_name = $first_name_setting && isset( $entry->metas[ $first_name_setting ] ) ? $entry->metas[ $first_name_setting ] : '';
+		$last_name  = $last_name_setting && isset( $entry->metas[ $last_name_setting ] ) ? $entry->metas[ $last_name_setting ] : '';
+		$address    = $address_setting && isset( $entry->metas[ $address_setting ] ) ? $entry->metas[ $address_setting ] : '';
+
+		if ( is_array( $first_name ) && isset( $first_name['first'] ) ) {
+			$first_name = $first_name['first'];
+		}
+
+		if ( is_array( $last_name ) && isset( $last_name['last'] ) ) {
+			$last_name = $last_name['last'];
+		}
+
+		$payer = array();
+
+		if ( $fist_name && $last_name ) {
+			$payer['name'] = array(
+				'given_name' => $first_name,
+				'surname'    => $last_name,
+			);
+		}
+
+		if ( $email_setting ) {
+			$shortcode_atts   = array(
+				'entry' => $entry,
+				'form'  => $action->menu_order,
+				'value' => $email_setting,
+			);
+			$payer['email_address'] = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
+		}
+
+		self::maybe_add_address_data( $payer, $address, (int) $address_setting );
+
+		return $payer;
+	}
+
+	/**
+	 * @since 6.25
+	 *
+	 * @param array $details
+	 * @param array $address
+	 * @param int   $address_field_id
+	 *
+	 * @return void
+	 */
+	private static function maybe_add_address_data( &$payer, $address, $address_field_id ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+			return;
+		}
+
+		$address_field = FrmField::getOne( $address_field_id );
+
+		if ( ! $address_field ) {
+			return;
+		}
+
+		if ( 'us' === $address_field->field_options['address_type'] ) {
+			$country_code = 'US';
+		} else {
+			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+		}
+
+		if ( ! $address['line1'] && ! $address['line2'] && ! $address['city'] && ! $address['state'] && ! $address['zip'] && ! $country_code ) {
+			return;
+		}
+
+		$payer['address'] = array(
+			'address_line_1' => $address['line1'],
+			'address_line_2' => $address['line2'],
+			'admin_area_2'   => $address['city'],
+			'admin_area_1'   => $address['state'],
+			'postal_code'    => $address['zip'],
+			'country_code'   => $country_code,
+		);
 	}
 
 	/**

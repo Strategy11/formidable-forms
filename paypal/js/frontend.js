@@ -3,6 +3,7 @@
 		return;
 	}
 
+	// Track the eligible funding sources
 	let renderedButtons = [];
 
 	// Track the state of the PayPal card fields
