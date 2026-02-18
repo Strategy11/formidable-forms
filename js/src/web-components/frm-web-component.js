@@ -89,7 +89,7 @@ export class frmWebComponent extends HTMLElement {
 	/**
 	 * Waits for the element to become visible in the viewport.
 	 *
-	 * @return {Promise} - A promise that resolves when the element is visible.
+	 * @returns {Promise} - A promise that resolves when the element is visible.
 	 */
 	whenElementBecomesVisible() {
 

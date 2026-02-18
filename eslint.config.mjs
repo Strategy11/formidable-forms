@@ -293,7 +293,6 @@ export default [
 			'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
 
 			// TODO: New rules to look into.
-			'jsdoc/check-tag-names': 'off',
 			'no-jquery/no-sizzle': 'off',
 			'sonarjs/anchor-precedence': 'off',
 			'sonarjs/class-name': 'off',

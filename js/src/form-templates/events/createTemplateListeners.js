@@ -19,7 +19,7 @@ import { isCustomCategory } from '../utils';
 /**
  * Manages event handling for the 'Create New Template' modal.
  *
- * @return {void}
+ * @returns {void}
  */
 function addCreateTemplateEvents() {
 	const {
@@ -44,7 +44,7 @@ function addCreateTemplateEvents() {
  * Handles the click event on the 'Create Template' button, showing the 'Create New Template' modal.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onShowCreateTemplateModalButtonClick = () => {
 	const { selectedCategory } = getState();
@@ -59,7 +59,7 @@ const onShowCreateTemplateModalButtonClick = () => {
  * Handles changes in the forms selection dropdown for creating a new template.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onFormsSelectChange = () => {
 	const { createTemplateFormsDropdown: formsSelect } = getElements();
@@ -91,7 +91,7 @@ const onFormsSelectChange = () => {
  *
  * @private
  * @param {boolean} shouldDisable True to disable, false to enable.
- * @return {void}
+ * @returns {void}
  */
 const toggleDisableModalElements = shouldDisable => {
 	const { createTemplateName, createTemplateDescription, createTemplateButton } = getElements();
@@ -112,7 +112,7 @@ const toggleDisableModalElements = shouldDisable => {
  * Handles the click event on the 'Create Template' button to create a new template.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onCreateTemplateButtonClick = () => {
 	const { installNewForm } = window.frmAdminBuild;

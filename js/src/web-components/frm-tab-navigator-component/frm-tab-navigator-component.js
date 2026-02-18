@@ -11,7 +11,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	/**
 	 * Initializes the view.
 	 *
-	 * @return {Element} - The wrapper element.
+	 * @returns {Element} - The wrapper element.
 	 */
 	initView() {
 		this.tabs = this.querySelectorAll( '.frm-tab' );
@@ -52,7 +52,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	/**
 	 * Gets the tab delimiter.
 	 *
-	 * @return {string} - The tab delimiter.
+	 * @returns {string} - The tab delimiter.
 	 */
 	getTabDelimiter() {
 		const delimiter = document.createElement( 'div' );
@@ -69,7 +69,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	/**
 	 * Gets the tab headings.
 	 *
-	 * @return {string} - The tab headings.
+	 * @returns {string} - The tab headings.
 	 */
 	getTabs() {
 		const tabHeadings = document.createElement( 'div' );
@@ -88,7 +88,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	/**
 	 * Gets the tab container.
 	 *
-	 * @return {string} - The tab container.
+	 * @returns {string} - The tab container.
 	 */
 	getTabContainer() {
 		const tabContainer = document.createElement( 'div' );
@@ -110,7 +110,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 *
 	 * @param {Element} tab   - The tab element.
 	 * @param {number}  index - The index of the tab.
-	 * @return {string} - The tab heading.
+	 * @returns {string} - The tab heading.
 	 */
 	createTabHeading( tab, index ) {
 		const className = index === 0 ? 'frm-active' : '';
@@ -125,7 +125,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 *
 	 * @param {Element} tab   - The tab element.
 	 * @param {number}  index - The index of the tab.
-	 * @return {string} - The tab container.
+	 * @returns {string} - The tab container.
 	 */
 	createTabContainer( tab, index ) {
 		const className = index === 0 ? 'frm-active' : '';
@@ -143,7 +143,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	/**
 	 * Gets the tab underline.
 	 *
-	 * @return {Element} - The tab underline.
+	 * @returns {Element} - The tab underline.
 	 */
 	getTabUnderline() {
 		return this.shadowRoot.querySelector( '.frm-tabs-active-underline' );

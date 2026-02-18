@@ -16,7 +16,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	/**
 	 * Initializes the view. Called when the component is rendered.
 	 *
-	 * @return {Element} - The wrapper element.
+	 * @returns {Element} - The wrapper element.
 	 */
 	initView() {
 		this.wrapper = document.createElement( 'div' );
@@ -28,7 +28,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	/**
 	 * Gets the select element.
 	 *
-	 * @return {Element} - The select element.
+	 * @returns {Element} - The select element.
 	 */
 	getSelect() {
 		if ( this.componentId ) {
@@ -45,7 +45,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	/**
 	 * Determines if the component should use shadow DOM. The dropdown component can utilize shadow DOM as it does not require external functional dependencies.
 	 *
-	 * @return {boolean} - True if the component should use shadow DOM, false otherwise.
+	 * @returns {boolean} - True if the component should use shadow DOM, false otherwise.
 	 */
 	useShadowDom() {
 		return true;
@@ -54,7 +54,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	/**
 	 * Initializes the select options. It will retrieve the all the options from the component and create new option elements.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	initSelectOptions() {
 		const optionsNodes = this.querySelectorAll( 'option' );
@@ -70,7 +70,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	/**
 	 * Called when the component is visible in the viewport.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	afterViewInit() {
 		this.initSelectOptions();
@@ -83,7 +83,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * A method to add options dynamically to the select element.
 	 *
 	 * @param {Array} options - The options to add.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	set addOptions( options ) {
 		options.forEach( option => {
@@ -99,7 +99,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * A method to set the disabled state of the select element.
 	 *
 	 * @param {boolean} value - The value to set.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	set disabled( value ) {
 		this.#select.disabled = value;
@@ -109,7 +109,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * A method to set the change event listener for the select element.
 	 *
 	 * @param {Function} callback - The callback function to call when the select element is changed.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
@@ -123,7 +123,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * A method to set the selected value of the select element.
 	 *
 	 * @param {string} value - The value to set.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	set selectedValue( value ) {
 		const option = Array.from( this.#select.options ).find( option => option.value === value );

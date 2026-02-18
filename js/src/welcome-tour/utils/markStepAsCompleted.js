@@ -10,7 +10,7 @@ const STEP_PREFIX = 'frm-checklist__step';
  * Marks a step as completed.
  *
  * @param {string} stepKey The step key.
- * @return {Promise<void>}
+ * @returns {Promise<void>}
  */
 export async function markStepAsCompleted( stepKey ) {
 	const { checklist } = getElements();
@@ -56,7 +56,7 @@ export async function markStepAsCompleted( stepKey ) {
  *
  * @private
  * @param {HTMLElement} stepElement The step element to wrap.
- * @return {void}
+ * @returns {void}
  */
 function wrapStepTitleWithLink( stepElement ) {
 	const stepTitle = stepElement.querySelector( '.frm-checklist__step-title' );

@@ -11,7 +11,7 @@ import { getElements } from '../elements';
 /**
  * Display the "Cancel" button in the header.
  *
- * @return {void}
+ * @returns {void}
  */
 export function showHeaderCancelButton() {
 	const { headerCancelButton } = getElements();

@@ -214,7 +214,7 @@ function saveAndReloadFormBuilder() {
  * Updates the upgrade modal to show successful addon installation state.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function showUpgradeModalSuccess() {
 	const upgradeModal = document.getElementById( 'frm_upgrade_modal' );

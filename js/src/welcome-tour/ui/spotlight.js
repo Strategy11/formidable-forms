@@ -1,7 +1,7 @@
 /**
  * Initialize the spotlight widget.
  *
- * @return {void}
+ * @returns {void}
  */
 function initializeSpotlight() {
 	document.querySelectorAll( '.frm-spotlight' ).forEach( spotlightElement => {
@@ -16,7 +16,7 @@ function initializeSpotlight() {
  *
  * @private
  * @param {HTMLElement} spotlightElement The spotlight container.
- * @return {void}
+ * @returns {void}
  */
 function setupSpotlight( spotlightElement ) {
 	const targetElement = document.querySelector( spotlightElement.dataset.target );
@@ -50,7 +50,7 @@ function setupSpotlight( spotlightElement ) {
  * @private
  * @param {HTMLElement} spotlightElement The spotlight container.
  * @param {HTMLElement} targetElement    The target element.
- * @return {void}
+ * @returns {void}
  */
 function updateSpotlightPosition( spotlightElement, targetElement ) {
 	if ( ! targetElement.offsetParent ) {
@@ -89,7 +89,7 @@ function updateSpotlightPosition( spotlightElement, targetElement ) {
  *
  * @private
  * @param {HTMLElement} spotlightElement The spotlight container.
- * @return {void}
+ * @returns {void}
  */
 function handleSpotlightFadeAnimation( spotlightElement ) {
 	const topBar = document.getElementById( 'frm_top_bar' );
@@ -113,7 +113,7 @@ function handleSpotlightFadeAnimation( spotlightElement ) {
  *
  * @private
  * @param {HTMLElement} element The target element.
- * @return {HTMLElement[]} Array of scrollable elements.
+ * @returns {HTMLElement[]} Array of scrollable elements.
  */
 function getScrollableAncestors( element ) {
 	const scrollables = [ window ];

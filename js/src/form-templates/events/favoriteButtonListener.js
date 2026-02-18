@@ -23,7 +23,7 @@ const OPERATION = {
 /**
  * Manages event handling for favorite buttons.
  *
- * @return {void}
+ * @returns {void}
  */
 function addFavoriteButtonEvents() {
 	const favoriteButtons = document.querySelectorAll( FAVORITE_BUTTON_CLASS );
@@ -39,7 +39,7 @@ function addFavoriteButtonEvents() {
  *
  * @private
  * @param {Event} event The click event object.
- * @return {void}
+ * @returns {void}
  */
 const onFavoriteButtonClick = event => {
 	const favoriteButton = event.currentTarget;
@@ -136,7 +136,7 @@ const onFavoriteButtonClick = event => {
  * @param {string}  id        The template ID.
  * @param {string}  operation The operation to perform ('add' or 'remove').
  * @param {boolean} isCustom  Flag indicating whether the template is custom.
- * @return {Promise<any>} The result of the server-side update.
+ * @returns {Promise<any>} The result of the server-side update.
  */
 function updateFavoriteTemplate( id, operation, isCustom ) {
 	const formData = new FormData();

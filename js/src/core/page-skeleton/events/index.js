@@ -6,7 +6,7 @@ import { getElements } from '../elements';
 /**
  * Resets the value of the search input and triggers an input event.
  *
- * @return {void}
+ * @returns {void}
  */
 export function resetSearchInput() {
 	const { searchInput } = getElements();

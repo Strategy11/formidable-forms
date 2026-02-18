@@ -17,7 +17,7 @@ import { adjustProxyInputStyle } from './proxy-input-style';
  * @param {HTMLElement} field         The original hidden input field
  * @param {HTMLElement} proxyInput    The proxy input field for interaction
  * @param {HTMLElement} tokensWrapper The wrapper for token display
- * @return {void}
+ * @returns {void}
  */
 export function addEventListeners( field, proxyInput, tokensWrapper ) {
 	// The jQuery change event is required to catch programmatic updates, as "Add Layout Classes" modifies the field value via jQuery
@@ -38,7 +38,7 @@ export function addEventListeners( field, proxyInput, tokensWrapper ) {
  * @param {HTMLElement} field         The original hidden input field
  * @param {HTMLElement} proxyInput    The proxy input field for interaction
  * @param {HTMLElement} tokensWrapper The wrapper for token display
- * @return {void}
+ * @returns {void}
  */
 function onProxyInputKeydown( event, field, proxyInput, tokensWrapper ) {
 	const { key } = event;
@@ -74,7 +74,7 @@ function onProxyInputKeydown( event, field, proxyInput, tokensWrapper ) {
  * @param {Event}       event      Click event
  * @param {HTMLElement} field      The original hidden input field
  * @param {HTMLElement} proxyInput The proxy input field for interaction
- * @return {void}
+ * @returns {void}
  */
 function handleTokenRemoval( event, field, proxyInput ) {
 	const removeButton = event.target.closest( `.${ CLASS_NAMES.TOKEN_REMOVE }` );
