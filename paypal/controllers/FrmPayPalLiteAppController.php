@@ -175,7 +175,7 @@ class FrmPayPalLiteAppController {
 
 		$payer = array();
 
-		if ( $fist_name && $last_name ) {
+		if ( $first_name && $last_name ) {
 			$payer['name'] = array(
 				'given_name' => $first_name,
 				'surname'    => $last_name,

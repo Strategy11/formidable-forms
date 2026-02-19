@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
+	private static $active_order_id = null;
+
 	/**
 	 * @since x.x
 	 *
@@ -135,6 +137,102 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$response['error'] = $charge;
 		}
 
+		$paypal_message = '';
+		$email          = false;
+		$address        = false;
+
+		if ( ! empty( self::$active_order_id ) ) {
+			$order = FrmPayPalLiteConnectHelper::get_order( self::$active_order_id );
+
+			if ( is_object( $order ) && isset( $order->payer ) && is_object( $order->payer ) ) {
+				$payer = $order->payer;
+
+				if ( ! empty( $payer->email_address ) ) {
+					$email = $payer->email_address;
+				}
+
+				if ( ! empty( $payer->address ) && is_object( $payer->address ) ) {
+					$address = $payer->address;
+				}
+			}
+
+			$paypal_message = '';
+
+			if ( isset( $order->payment_source ) && is_object( $order->payment_source ) ) {
+				$source_array = (array) $order->payment_source;
+				$source_type  = array_key_first( $source_array );
+
+				switch ( $source_type ) {
+					case 'paypal':
+						$display_type = __( 'PayPal', 'formidable' );
+						break;
+					case 'credit_card':
+						$display_type = __( 'Credit Card', 'formidable' );
+						break;
+					default:
+						$display_type = ucwords( $source_type );
+						break;
+				}
+
+				$paypal_message .= '<strong>' . __( 'Payment source: ', 'formidable' ) . '</strong>' . $display_type . '<br>';
+			}
+
+			if ( $email ) {
+				$paypal_message .= '<strong>' . __( 'Payment made by: ', 'formidable' ) . '</strong>' . $email . '<br>';
+			}
+
+			if ( $address ) {
+				$formatted = '<strong>' . __( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
+
+				if ( ! empty( $address->address_line_1 ) ) {
+					$formatted .= $address->address_line_1 . '<br>';
+				}
+
+				// City, State Zip
+				$city_line = '';
+				if ( ! empty( $address->admin_area_2 ) ) {
+					$city_line .= $address->admin_area_2;
+				}
+				if ( ! empty( $address->admin_area_1 ) ) {
+					$city_line .= $city_line ? ', ' . $address->admin_area_1 : $address->admin_area_1;
+				}
+				if ( ! empty( $address->postal_code ) ) {
+					$city_line .= $city_line ? ' ' . $address->postal_code : $address->postal_code;
+				}
+				if ( $city_line ) {
+					$formatted .= $city_line . '<br>';
+				}
+
+				if ( ! empty( $address->country_code ) ) {
+					$formatted .= $address->country_code . '<br>';
+				}
+
+				$paypal_message .= $formatted;
+			}
+
+			/**
+			 * Filters the message to show in the main feedback area.
+			 *
+			 * @since x.x
+			 *
+			 * @param string   $paypal_message The message to show.
+			 * @param stdClass $order          The order object.
+			 */
+			$paypal_message = apply_filters( 'frm_paypal_message', $paypal_message, $order );
+
+			add_filter(
+				'frm_main_feedback',
+				function ( $message ) use ( $paypal_message ) {
+					if ( $paypal_message ) {
+						$details = '<div class="frm_paypal_payment_details" style="margin-top: 10px;">' . $paypal_message . '</div>';
+						$message = preg_replace( '/(<div\b[^>]*\bfrm_message\b[^>]*>)(.*?)(<\/div>)/s', '$1$2' . $details . '$3', $message );
+					}
+
+					return $message;
+				}
+			);
+		}
+
 		return $response;
 	}
 
@@ -183,6 +281,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		echo '</pre>';
 		die();
 		*/
+
+		self::$active_order_id = $paypal_order_id;
 
 		return true;
 	}

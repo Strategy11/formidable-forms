@@ -906,4 +906,12 @@ class FrmPayPalLiteConnectHelper {
 
 		return self::post_with_authenticated_body( 'get_seller_status' );
 	}
+
+	public static function get_capture( $capture_id ) {
+		return self::post_with_authenticated_body( 'get_capture', compact( 'capture_id' ) );
+	}
+
+	public static function get_order( $order_id ) {
+		return self::post_with_authenticated_body( 'get_order', compact( 'order_id' ) );
+	}
 }
