@@ -128,7 +128,9 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		echo '<div class="frm_message">';
-		esc_html_e( 'Your seller status is valid', 'formidable' );
+		esc_html_e( 'Your seller status is valid.', 'formidable' );
+		echo '<br>';
+
 		self::echo_email( $email );
 		self::echo_merchant_id( $merchant_id );
 
@@ -155,7 +157,10 @@ class FrmPayPalLiteConnectHelper {
 		}
 		echo '</ul>';
 
-		self::render_acdc_vetting_status( $product );
+		if ( $can_process_card_fields ) {
+			self::render_acdc_vetting_status( $product );
+		}
+
 	//	echo implode( '<br>', $product->capabilities );
 
 		echo '</div>';
@@ -913,5 +918,20 @@ class FrmPayPalLiteConnectHelper {
 
 	public static function get_order( $order_id ) {
 		return self::post_with_authenticated_body( 'get_order', compact( 'order_id' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $mode
+	 *
+	 * @return string
+	 */
+	public static function get_bn_code( $mode = 'auto' ) {
+		if ( 'auto' === $mode ) {
+			$mode = self::get_mode_value();
+		}
+
+		return 'test' === $mode ? 'FLAVORsb-wkozr49468583_MP' : 'Strategy11LLCPPCP_SP';
 	}
 }

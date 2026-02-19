@@ -643,7 +643,6 @@
 			cardFieldsInstance = await initializeCardFields();
 
 			if ( ! cardFieldsInstance ) {
-				displayPaymentFailure( 'PayPal Card Fields could not be initialized.' );
 				return;
 			}
 

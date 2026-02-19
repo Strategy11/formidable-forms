@@ -181,12 +181,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				$paypal_message .= '<strong>' . __( 'Payment made by: ', 'formidable' ) . '</strong>' . $email . '<br>';
 			}
 
-			if ( $address ) {
+			if ( $address && ! empty( $address->address_line_1 ) ) {
 				$formatted = '<strong>' . __( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
 
-				if ( ! empty( $address->address_line_1 ) ) {
-					$formatted .= $address->address_line_1 . '<br>';
-				}
+				$formatted .= $address->address_line_1 . '<br>';
 
 				// City, State Zip
 				$city_line = '';
@@ -548,6 +546,24 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
 
 		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
+
+		add_filter(
+			'script_loader_tag',
+			/**
+			 * @param string $tag
+			 * @param string $handle
+			 *
+			 * @return string
+			 */
+			function ( $tag, $handle ) {
+				if ( 'paypal-sdk' === $handle ) {
+					$tag = str_replace( ' src=', ' data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '" src=', $tag );
+				}
+				return $tag;
+			},
+			10,
+			2
+		);
 
 		$dependencies = array( 'paypal-sdk', 'formidable' );
 		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
