@@ -435,6 +435,12 @@
 	 */
 	async function onApprove( data ) {
 		console.log( 'onApprove', data );
+
+		if ( 'NO' === data.liabilityShift || 'UNKNOWN' === data.liabilityShift ) {
+			onError( new Error( 'This payment was flagged as possible fraud and has been rejected.' ) );
+			return;
+		}
+
 		// Add the order ID to the form
 		const orderInput = document.createElement( 'input' );
 		orderInput.type = 'hidden';
@@ -593,6 +599,10 @@
 		if ( meta.name ) {
 			submitArgs.cardholderName = meta.name;
 		}
+
+//		submitArgs.verification = {
+//			method: 'SCA', // Standard for PSD2 compliance
+//		};
 
 		/*
 		TODO Add the billing address here as well.
