@@ -13,13 +13,6 @@
 	let cardFieldsInstance = null;
 	let submitEvent = null;
 
-	// Track the state of each field in the card form
-	const cardFields = {
-		number: false,
-		expiry: false,
-		cvv: false
-	};
-
 	/**
 	 * Initialize PayPal Card Fields (Advanced Card Payments).
 	 *
@@ -30,8 +23,6 @@
 		if ( ! cardElement ) {
 			return null;
 		}
-
-		cardElement.classList.add( 'frm_grid_container' );
 
 		thisForm = cardElement.closest( 'form' );
 
@@ -45,6 +36,19 @@
 			inputEvents: {
 				onChange: data => {
 					cardFieldsValid = data.isFormValid;
+					console.log( 'onChange', data );
+
+					const allEmpty = Object.values( data.fields ).every( field => field.isEmpty );
+					const buttonContainer = document.getElementById( 'paypal-button-container' );
+					const separator = buttonContainer.parentNode.querySelector( '.separator' );
+
+					if ( allEmpty ) {
+						buttonContainer.style.display = 'block';
+						separator.style.display = 'block';
+					} else {
+						buttonContainer.style.display = 'none';
+						separator.style.display = 'none';
+					}
 
 					if ( cardFieldsValid ) {
 						enableSubmit();
@@ -100,37 +104,36 @@
 			} ).render( '#paypal-button-container' );
 		}
 
-		if ( cardFieldsEligible ) {
-			if ( buttonIsEnabled ) {
-				const separator = document.createElement( 'div' );
-				separator.classList.add( 'separator' );
-				separator.textContent = 'OR'; // TODO: Make this customizable.
-				cardElement.append( separator );
-			}
-
-			const cardNumberWrapper = document.createElement( 'div' );
-			cardNumberWrapper.id = 'frm-paypal-card-number';
-			cardNumberWrapper.classList.add( 'frm6', 'frm-payment-card-number' );
-
-			const expiryWrapper = document.createElement( 'div' );
-			expiryWrapper.id = 'frm-paypal-card-expiry';
-			expiryWrapper.classList.add( 'frm3', 'frm-payment-card-expiry' );
-
-			const cvvWrapper = document.createElement( 'div' );
-			cvvWrapper.id = 'frm-paypal-card-cvv';
-			cvvWrapper.classList.add( 'frm3', 'frm-payment-card-cvv' );
-
-			cardElement.append( cardNumberWrapper );
-			cardElement.append( expiryWrapper );
-			cardElement.append( cvvWrapper );
-		}
-
-		disableSubmit( thisForm );
-
-		// Check eligibility for card fields
-		if ( ! cardFields.isEligible() ) {
+		if ( ! cardFieldsEligible ) {
 			return null;
 		}
+
+		cardElement.classList.add( 'frm_grid_container' );
+
+		if ( buttonIsEnabled ) {
+			const separator = document.createElement( 'div' );
+			separator.classList.add( 'separator' );
+			separator.textContent = 'OR'; // TODO: Make this customizable.
+			cardElement.append( separator );
+		}
+
+		const cardNumberWrapper = document.createElement( 'div' );
+		cardNumberWrapper.id = 'frm-paypal-card-number';
+		cardNumberWrapper.classList.add( 'frm6', 'frm-payment-card-number' );
+
+		const expiryWrapper = document.createElement( 'div' );
+		expiryWrapper.id = 'frm-paypal-card-expiry';
+		expiryWrapper.classList.add( 'frm3', 'frm-payment-card-expiry' );
+
+		const cvvWrapper = document.createElement( 'div' );
+		cvvWrapper.id = 'frm-paypal-card-cvv';
+		cvvWrapper.classList.add( 'frm3', 'frm-payment-card-cvv' );
+
+		cardElement.append( cardNumberWrapper );
+		cardElement.append( expiryWrapper );
+		cardElement.append( cvvWrapper );
+
+		disableSubmit( thisForm );
 
 		// Render individual card fields
 		cardFields.NumberField().render( '#frm-paypal-card-number' );
@@ -514,6 +517,10 @@
 		document.dispatchEvent( event );
 	}
 
+	function hideSubmit( form ) {
+		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).hide();
+	}
+
 	/**
 	 * Display an error message in the payment form.
 	 *
@@ -646,13 +653,13 @@
 			return;
 		}
 
-		// Initially disable the submit button until PayPal is ready
-		disableSubmit( thisForm );
-
 		try {
 			cardFieldsInstance = await initializeCardFields();
 
 			if ( ! cardFieldsInstance ) {
+				// TOOD: We would need to not hide the button if PayPal may be used conditionally.
+				disableSubmit( thisForm );
+				hideSubmit( thisForm );
 				return;
 			}
 
@@ -662,6 +669,9 @@
 			console.error( 'Initializing PayPal Card Fields failed', e );
 			displayPaymentFailure( 'Failed to initialize payment form.' );
 		}
+		
+		// Initially disable the submit button until PayPal is ready
+		disableSubmit( thisForm );
 	}
 
 	function addName( $form ) {
