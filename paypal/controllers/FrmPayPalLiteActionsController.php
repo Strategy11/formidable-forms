@@ -245,6 +245,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'No PayPal order ID found.';
 		}
 
+		$order = FrmPayPalLiteConnectHelper::get_order( $paypal_order_id );
+
+		if ( false === $order ) {
+			return 'Failed to get order.';
+		}
+
+		if ( isset( $order->payment_source->card->authentication_result->liability_shift ) ) {
+			$liability_shift = $order->payment_source->card->authentication_result->liability_shift;
+			if ( 'NO' === $liability_shift  || 'UNKNOWN' === $liability_shift ) {
+				return 'This payment was flagged as possible fraud and has been rejected.';
+			}
+		}
+
 		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
 
 		if ( false === $response ) {
