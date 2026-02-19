@@ -64,9 +64,11 @@
 		// TODO: Make these IDs unique.
 		cardElement.innerHTML = '';
 
-		const cardFieldsEligible = cardFields.isEligible();
+		const layout = getPayPalSettings()[0].layout;
 
-		const buttonIsEnabled = true; // TODO: Put this behind a setting.
+		const cardFieldsEligible = cardFields.isEligible() && layout !== 'checkout_only';
+
+		const buttonIsEnabled = getPayPalSettings()[0].layout !== 'card_only'; // TODO: Put this behind a setting.
 		if ( buttonIsEnabled ) {
 			const buttonContainer = document.createElement( 'div' );
 			buttonContainer.id = 'paypal-button-container';

@@ -474,6 +474,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 */
 			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
+				$settings_for_action['layout']               = $payment_action->post_content['layout'] ?? 'card_and_checkout';
 				return $settings_for_action;
 			},
 			10,
