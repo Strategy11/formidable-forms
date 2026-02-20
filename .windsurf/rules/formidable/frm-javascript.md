@@ -930,19 +930,27 @@ form.submit(); // Errors if form doesn't exist (which is a bug to fix)
 
 ---
 
-## Tooling
+## ESLint
+
+ESLint is the linting tool used for this project. It statically analyzes code to catch errors and enforce coding standards.
+
+### ESLint Plugins
+
+The following ESLint plugins are active:
+
+- **`sonarjs`**: detects bugs and code smells (e.g., duplicated code, cognitive complexity)
+- **`no-jquery`**: flags jQuery usage to enforce native DOM APIs
+- **`jsdoc`**: enforces JSDoc comment format and completeness
+- **`unicorn`**: enforces modern JavaScript best practices and consistent style
+
+### Running ESLint
 
 ```bash
-# Install ESLint with WordPress config
-npm install --save-dev @wordpress/eslint-plugin
+npm run lint
+```
 
-# .eslintrc.json
-{
-    "extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
-    "rules": {
-        "no-var": "error",
-        "prefer-const": "error",
-        "no-unused-vars": "error"
-    }
-}
+To auto-fix fixable issues:
+
+```bash
+npm run lint:fix
 ```
