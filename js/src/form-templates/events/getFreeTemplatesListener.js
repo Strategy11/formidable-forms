@@ -19,7 +19,7 @@ import { showEmailAddressError, showLeaveEmailModal } from '../ui';
 /**
  * Manages event handling for the "Get Templates" button.
  *
- * @return {void}
+ * @returns {void}
  */
 function addGetFreeTemplatesEvents() {
 	const { leaveEmailModalButton, getFreeTemplatesBannerButton } = getElements();
@@ -32,7 +32,7 @@ function addGetFreeTemplatesEvents() {
  * Handles the click event on the "Get Templates" button.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onGetTemplatesButtonClick = async () => {
 	const { leaveEmailModalInput } = getElements();
@@ -87,7 +87,7 @@ const onGetTemplatesButtonClick = async () => {
  * Shows a message indicating that templates could not be retrieved.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function showFailedToGetTemplates() {
 	const { leaveEmailModal } = getElements();

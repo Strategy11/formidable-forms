@@ -36,16 +36,16 @@ All commit messages MUST follow the Conventional Commits 1.0.0 specification.
 
 The scope provides additional context about what part of the codebase the commit affects:
 
-- `builder` - Form builder related changes
-- `entries` - Entry management changes
-- `fields` - Field types or field handling
-- `api` - API endpoints or integrations
-- `admin` - Admin UI changes
-- `frontend` - Front-end form display
-- `db` - Database operations
-- `i18n` - Internationalization
-- `security` - Security fixes or improvements
-- `deps` - Dependencies
+- `builder`: Form builder related changes
+- `entries`: Entry management changes
+- `fields`: Field types or field handling
+- `api`: API endpoints or integrations
+- `admin`: Admin UI changes
+- `frontend`: Front-end form display
+- `db`: Database operations
+- `i18n`: Internationalization
+- `security`: Security fixes or improvements
+- `deps`: Dependencies
 
 ## Breaking Changes
 
@@ -125,4 +125,3 @@ When generating commit messages:
 2. Identify the scope from the files/directories changed.
 3. Write a concise description in imperative mood.
 4. Add body with details if the change is complex.
-5. Do NOT include issue references in commit messages. Issue references (`Fixes URL`) go in the **PR body** only.

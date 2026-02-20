@@ -717,28 +717,3 @@ function MyBlock() {
 	);
 }
 ```
-
----
-
-## VIP Standards
-
-For WordPress VIP-specific block editor standards including dynamic blocks, block bindings, Script Modules API, and enterprise performance patterns, see `wordpress-vip/wpvip-block-editor.md`.
-
----
-
-## Tooling
-
-```bash
-# Create new block
-npx @wordpress/create-block my-block
-
-# Create block in existing plugin
-npx @wordpress/create-block my-block --no-plugin
-
-# With interactive mode
-npx @wordpress/create-block
-
-# Install packages
-npm install @wordpress/scripts --save-dev
-npm install @wordpress/block-editor @wordpress/blocks @wordpress/components @wordpress/i18n
-```

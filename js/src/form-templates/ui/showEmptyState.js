@@ -17,7 +17,7 @@ import { VIEW_SLUGS, getState } from '../shared';
 /**
  * Display the search-empty state.
  *
- * @return {void}
+ * @returns {void}
  */
 export function showSearchEmptyState() {
 	const { notEmptySearchText } = getState();
@@ -56,7 +56,7 @@ export function showSearchEmptyState() {
 /**
  * Display the favorites-empty state.
  *
- * @return {void}
+ * @returns {void}
  */
 export function showFavoritesEmptyState() {
 	const { pageTitle, emptyState, emptyStateButton } = getElements();
@@ -80,7 +80,7 @@ export function showFavoritesEmptyState() {
 /**
  * Display the custom-empty state.
  *
- * @return {void}
+ * @returns {void}
  */
 export function showCustomTemplatesEmptyState() {
 	const { pageTitle, emptyState, emptyStateButton } = getElements();
@@ -105,7 +105,7 @@ export function showCustomTemplatesEmptyState() {
 /**
  * Display the available-templates-empty state.
  *
- * @return {void}
+ * @returns {void}
  */
 export function showAvailableTemplatesEmptyState() {
 	const { pageTitle, emptyState, emptyStateButton } = getElements();

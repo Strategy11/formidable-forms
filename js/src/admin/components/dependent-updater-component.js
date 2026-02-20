@@ -28,7 +28,7 @@ export default class frmStyleDependentUpdaterComponent {
 	 * The selection is made by provided input's names list in "will-change" attribute.
 	 *
 	 * @param {string[]} inputNames - The names of the inputs to propagate changes to.
-	 * @return {HTMLElement[]} - The list of inputs to propagate changes to.
+	 * @returns {HTMLElement[]} - The list of inputs to propagate changes to.
 	 */
 	initPropagationList( inputNames ) {
 		const list = [];

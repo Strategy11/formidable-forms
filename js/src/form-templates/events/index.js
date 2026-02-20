@@ -17,7 +17,7 @@ import { showSelectedCategory } from '../ui';
 /**
  * Attaches event listeners for handling user interactions.
  *
- * @return {void}
+ * @returns {void}
  */
 export function addEventListeners() {
 	addCategoryEvents();

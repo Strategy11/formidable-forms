@@ -6,7 +6,7 @@ import { documentOn } from 'core/utils';
 /**
  * Setup unit input handlers
  *
- * @return {void}
+ * @returns {void}
  */
 export function setupUnitInputHandlers() {
 	documentOn( 'change', '.frm-unit-input .frm-unit-input-control', onUnitInputChange );
@@ -18,7 +18,7 @@ export function setupUnitInputHandlers() {
  *
  * @private
  * @param {Event} event The event object.
- * @return {void}
+ * @returns {void}
  */
 function onUnitInputChange( event ) {
 	const unitInput = event.target.closest( '.frm-unit-input' );

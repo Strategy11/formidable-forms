@@ -7,7 +7,7 @@ import { markStepAsCompleted } from '../utils';
 /**
  * Initializes the checklist.
  *
- * @return {void}
+ * @returns {void}
  */
 function initializeChecklist() {
 	setProgressBarPercent();
@@ -19,7 +19,7 @@ function initializeChecklist() {
  * Sets the progress bar percent.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function setProgressBarPercent() {
 	const progressFill = document.querySelector( '.frm-welcome-tour .frm-checklist__progress-fill' );

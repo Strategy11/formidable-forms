@@ -17,7 +17,7 @@ import { addEventListeners } from './event-handlers';
 /**
  * Initialize all token input fields on the page
  *
- * @return {void}
+ * @returns {void}
  */
 function initTokenInputFields() {
 	findAndInitializeTokenFields();
@@ -51,7 +51,7 @@ function initTokenInputFields() {
  *
  * @private
  * @param {string|number} fieldId The ID of the field to initialize
- * @return {void}
+ * @returns {void}
  */
 function findAndInitializeTokenFields( fieldId ) {
 	const container = fieldId ? document.getElementById( `frm-single-settings-${ fieldId }` ) : document.body;

@@ -3,8 +3,8 @@
  */
 
 .post-type-frm_display #frm_adv_info {
-	width: calc( var(--big-sidebar) - 40px );
-	height: calc( 100vh - 32px );
+	width: calc(var(--big-sidebar) - 40px);
+	height: calc(100vh - 32px);
 	overflow: hidden;
 }
 
@@ -19,5 +19,5 @@
 }
 
 .post-type-frm_display #frm_adv_info ul.frm_code_list.frm-full-hover {
-	max-height: calc( 100vh - 180px );
+	max-height: calc(100vh - 180px);
 }

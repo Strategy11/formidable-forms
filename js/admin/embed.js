@@ -261,7 +261,7 @@
 							url: ajaxurl,
 							data,
 							dataType: 'json',
-							success: function( response ) {
+							success( response ) {
 								if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
 									window.location.href = response.redirect;
 								}
@@ -423,7 +423,7 @@
 		exampleElement.readOnly = true;
 		exampleElement.setAttribute( 'tabindex', -1 );
 
-		if ( 'undefined' !== typeof link && 'undefined' !== typeof linkLabel ) {
+		if ( link !== undefined && linkLabel !== undefined ) {
 			const linkElement = tag( 'a' );
 			linkElement.href = link;
 			linkElement.textContent = linkLabel;
@@ -503,7 +503,7 @@
 	 * Can be used for any UI that requires a unique id.
 	 * Not to be used in data.
 	 *
-	 * @return {number} The unique id.
+	 * @returns {number} The unique id.
 	 */
 	function getAutoId() {
 		return ++autoId;

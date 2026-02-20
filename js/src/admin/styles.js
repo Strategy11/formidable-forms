@@ -33,14 +33,14 @@ class frmStyleOptions {
 	/**
 	 * Initialize the custom CSS editor instance.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	initCustomCSSEditorInstance() {
 		if ( null !== this.cssEditorInstance || this.cssEditorOptions.retryCount >= this.cssEditorOptions.retryLimit ) {
 			return;
 		}
 
-		if ( 'undefined' === typeof window.frm_single_style_custom_css_wp_editor || 'undefined' === typeof window.frm_single_style_custom_css_wp_editor.codemirror ) {
+		if ( window.frm_single_style_custom_css_wp_editor === undefined || window.frm_single_style_custom_css_wp_editor.codemirror === undefined ) {
 			setTimeout( () => {
 				this.cssEditorOptions.retryCount++;
 				this.initCustomCSSEditorInstance();
@@ -55,7 +55,7 @@ class frmStyleOptions {
 	/**
 	 * Get the inline style element.
 	 *
-	 * @return {HTMLElement} The inline style element.
+	 * @returns {HTMLElement} The inline style element.
 	 */
 	getInlineStyleElement() {
 		if ( null !== this.cssInlineStyleElement ) {
@@ -70,7 +70,7 @@ class frmStyleOptions {
 	/**
 	 * On the CSS editor ready, add an event listener to the editor to update the inline style element.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	onCssEditorReady() {
 		const cssScope = document.getElementById( 'frm_style_class_custom_css' )?.dataset?.cssScope;
@@ -96,11 +96,11 @@ class frmStyleOptions {
 
 		components.forEach( component => {
 			const element = component.querySelector( 'input.hex' );
-			const id = 'undefined' !== typeof element ? element.getAttribute( 'id' ) : null;
+			const id = element !== undefined ? element.getAttribute( 'id' ) : null;
 
 			if ( null !== id ) {
 				elements.push( {
-					id: id,
+					id,
 					dependentUpdaterClass: new frmStyleDependentUpdaterComponent( component, 'colorpicker' )
 				} );
 			}
@@ -162,7 +162,7 @@ class frmStyleOptions {
 	 * Copies the class name to the clipboard and displays a success message.
 	 *
 	 * @param {string} successMessage The success message to display.
-	 * @return {void} Initializes the copy to clipboard functionality for style classes.
+	 * @returns {void} Initializes the copy to clipboard functionality for style classes.
 	 */
 	initStyleClassCopyToClipboard( successMessage ) {
 		const labels = document.querySelectorAll( '.frm-copy-text' );
@@ -187,7 +187,7 @@ class frmStyleOptions {
 	/**
 	 * Toggle the visibility of the custom CSS editor.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	toggleVisibilityOfCustomCSSEditor() {
 		const toggle = document.getElementById( 'frm_enable_single_style_custom_css' );
@@ -205,7 +205,7 @@ class frmStyleOptions {
 	 *
 	 * @param {string}      couponCode The string being copied to the clipboard.
 	 * @param {HTMLElement} copyButton Used to position the temporary input element.
-	 * @return {boolean} True if the copy was successful, false otherwise.
+	 * @returns {boolean} True if the copy was successful, false otherwise.
 	 */
 	fallbackCopyToClipboard( couponCode, copyButton ) {
 		if ( 'function' !== typeof document.execCommand ) {

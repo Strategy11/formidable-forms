@@ -6,7 +6,7 @@ import { getElements } from '../elements';
 /**
  * Manages event handling for an application template.
  *
- * @return {void}
+ * @returns {void}
  */
 export function addApplicationTemplateEvents() {
 	const { applicationTemplateItems } = getElements();
@@ -26,7 +26,7 @@ export function addApplicationTemplateEvents() {
  *
  * @private
  * @param {Event} event The click event object.
- * @return {void}
+ * @returns {void}
  */
 const onApplicationTemplateClick = event => {
 	// Check if the clicked element is an anchor tag

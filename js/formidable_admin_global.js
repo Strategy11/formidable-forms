@@ -1,6 +1,5 @@
 /* global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
-/* eslint-disable prefer-const, compat/compat */
 
 jQuery( document ).ready( function() {
 	let deauthLink, submenuItem, li,
@@ -37,7 +36,7 @@ function frm_install_now() { // eslint-disable-line camelcase
 			action: 'frm_install',
 			nonce: frmGlobal.nonce
 		},
-		success: function() {
+		success() {
 			$msg.fadeOut( 'slow' );
 		}
 	} );
@@ -66,13 +65,13 @@ function frmInstallPro( e ) {
 		data: {
 			action: 'frm_install_addon',
 			nonce: frmGlobal.nonce,
-			plugin: plugin
+			plugin
 		},
-		success: function() {
+		success() {
 			$msg.fadeOut( 'slow' );
 			$msg.parent().fadeOut( 'slow' );
 		},
-		error: function() {
+		error() {
 			$msg.fadeOut( 'slow' );
 		}
 	} );
@@ -91,7 +90,7 @@ function frmDeauthorizeNow() {
 			action: 'frm_deauthorize',
 			nonce: frmGlobal.nonce
 		},
-		success: function() {
+		success() {
 			jQuery( '.error' ).fadeOut( 'slow' );
 		}
 	} );
@@ -111,11 +110,11 @@ function frmCreatePostEntry( id, postId ) {
 		url: ajaxurl,
 		data: {
 			action: 'frm_create_post_entry',
-			id: id,
+			id,
 			post_id: postId,
 			nonce: frmGlobal.nonce
 		},
-		success: function() {
+		success() {
 			jQuery( document.getElementById( 'frm_create_entry' ) ).fadeOut( 'slow' );
 		}
 	} );
@@ -157,7 +156,7 @@ function frmAdminPopupJS() {
 					shortcode: val,
 					nonce: frmGlobal.nonce
 				},
-				success: function( html ) {
+				success( html ) {
 					$spinner.hide();
 					$scOpts.append( html );
 					jQuery( document.getElementById( 'sc-' + val ) ).trigger( 'click' );
@@ -206,7 +205,7 @@ function frmAdminPopupJS() {
 					form_id: formId,
 					nonce: frmGlobal.nonce
 				},
-				success: function( msg ) {
+				success( msg ) {
 					const baseId = thisId.replace( '_form', '' );
 					msg = msg.replace( 'name="field_options[form_select_0]"', 'id="frmsc_' + baseId + '_fields"' );
 					jQuery( document.getElementById( baseId + '_fields_container' ) ).html( msg );
@@ -220,7 +219,7 @@ function frmAdminPopupJS() {
 	}
 
 	return {
-		init: function() {
+		init() {
 			let $scOptsDiv;
 
 			jQuery( '.frm_switch_sc' ).on( 'click', switchSc );
@@ -266,7 +265,7 @@ function frmWidgetsJS() {
 					display_id: displayId,
 					nonce: frmGlobal.nonce
 				},
-				success: function( opts ) {
+				success( opts ) {
 					let titleField,
 						catField = widget.find( '.frm_list_items_cat_id' );
 					catField.find( 'option' ).remove().end();
@@ -287,7 +286,7 @@ function frmWidgetsJS() {
 	}
 
 	return {
-		init: function() {
+		init() {
 			jQuery( document ).on( 'click', '.frm_list_items_cat_list', toggleCatOpt );
 			jQuery( document ).on( 'change', '.frm_list_items_display_id', getFields );
 		}

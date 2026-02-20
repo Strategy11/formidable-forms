@@ -2,7 +2,7 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-colorpicker-component.css';
 
 class frmColorpickerLiteComponent extends frmWebComponent {
-	#onChange = () => {}; // eslint-disable-line class-methods-use-this, no-empty-function
+	#onChange = () => {};
 	#defaultValue = '#ffffff';
 
 	static formAssociated = true;
@@ -40,7 +40,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 		return this.input;
 	}
 
-	useShadowDom() { // eslint-disable-line class-methods-use-this
+	useShadowDom() {
 		return false;
 	}
 
@@ -59,7 +59,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	/**
 	 * A method to get the color value.
 	 *
-	 * @return {string} - The color value.
+	 * @returns {string} - The color value.
 	 */
 	get color() {
 		return jQuery( this.input ).wpColorPicker( 'color' );
@@ -69,7 +69,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * A method to set the color value.
 	 *
 	 * @param {string} value - The value to set the color value for.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	set color( value ) {
 		this.#defaultValue = value;
@@ -80,9 +80,9 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * A method to set the change event listener for the color picker component.
 	 *
 	 * @param {Function} callback - The callback function to call when the color picker component is changed.
-	 * @return {void}
+	 * @returns {void}
 	 */
-	set onChange( callback ) { // eslint-disable-line accessor-pairs
+	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}

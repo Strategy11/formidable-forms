@@ -2,7 +2,7 @@
  * Component: Banner Notification
  */
 
- #frm_banner {
+#frm_banner {
 	width: 100%;
 	color: #fff;
 	background: var(--primary-500);
@@ -35,7 +35,7 @@
 	position: absolute;
 	right: 10px;
 	top: 50%;
-	transform: translateY( -50% );
+	transform: translateY(-50%);
 }
 
 .frm-banner-dismiss .frmsvg {

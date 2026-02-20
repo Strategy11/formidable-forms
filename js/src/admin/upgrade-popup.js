@@ -4,7 +4,7 @@ const { svg } = frmDom;
 
 function getShowLinkHrefValue( link, showLink ) {
 	let customLink = link.getAttribute( 'data-link' );
-	if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
+	if ( customLink === null || customLink === undefined || customLink === '' ) {
 		customLink = showLink.getAttribute( 'data-default' );
 	}
 	return customLink;
@@ -51,7 +51,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	}
 
 	// If one click upgrade, hide other content.
-	if ( oneclickMessage !== null && button !== null && typeof oneclick !== 'undefined' && oneclick ) {
+	if ( oneclickMessage !== null && button !== null && oneclick !== undefined && oneclick ) {
 		if ( newMessage === null ) {
 			showMsg = 'none';
 		}
@@ -121,7 +121,7 @@ export function initModal( id, width ) {
 		return false;
 	}
 
-	if ( typeof width === 'undefined' ) {
+	if ( width === undefined ) {
 		width = '552px';
 	}
 
@@ -130,17 +130,17 @@ export function initModal( id, width ) {
 		modal: true,
 		autoOpen: false,
 		closeOnEscape: true,
-		width: width,
+		width,
 		resizable: false,
 		draggable: false,
-		open: function() {
+		open() {
 			jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 			jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 			jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 			$info.removeClass( 'ui-dialog-content ui-widget-content' );
 			bindClickForDialogClose( $info );
 		},
-		close: function() {
+		close() {
 			jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 			jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
