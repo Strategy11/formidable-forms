@@ -1,4 +1,4 @@
-name: Inspections
+name: Stylelint
 
 on:
   push:
@@ -8,9 +8,9 @@ on:
     types: [opened, labeled, synchronize]
 
 jobs:
-  runESLintInspection:
+  runStylelintInspection:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
-    name: Run ESLint
+    name: Run Stylelint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,5 +36,5 @@ jobs:
         if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --include=dev --legacy-peer-deps
 
-      - name: Run ESLint
-        run: ./node_modules/.bin/eslint .
+      - name: Run Stylelint
+        run: npx stylelint "**/*.{css,scss}"

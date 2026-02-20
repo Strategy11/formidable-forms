@@ -14,7 +14,7 @@ import { navigateToStep } from '../utils';
  * Initializes the onboarding wizard's UI, sets up the initial step based on certain conditions,
  * and applies necessary UI enhancements for a smoother user experience.
  *
- * @return {void}
+ * @returns {void}
  */
 export default function setupInitialView() {
 	navigateToInitialStep();
@@ -26,7 +26,7 @@ export default function setupInitialView() {
  * status of Formidable Pro and specific query parameters.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function navigateToInitialStep() {
 	const initialStepName = determineInitialStep();
@@ -40,7 +40,7 @@ function navigateToInitialStep() {
  * and the presence of specific query parameters. Also handles the removal of unnecessary steps.
  *
  * @private
- * @return {string} The name of the initial step to navigate to.
+ * @returns {string} The name of the initial step to navigate to.
  */
 function determineInitialStep() {
 	const isConnectedAccount = getQueryParam( 'success' );
@@ -62,7 +62,7 @@ function determineInitialStep() {
  * Clears specific query parameters related to the onboarding process.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function clearOnboardingQueryParams() {
 	removeQueryParam( 'key' );
@@ -73,7 +73,7 @@ function clearOnboardingQueryParams() {
  * Smoothly fades in the background and container elements of the page for a more pleasant user experience.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function fadeInPageElements() {
 	const { container } = getElements();

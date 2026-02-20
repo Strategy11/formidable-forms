@@ -8,7 +8,7 @@ const OPTION_BOX_CLASS = '.frm-option-box';
 /**
  * Manages event handling for an option-box.
  *
- * @return {void}
+ * @returns {void}
  */
 export function addOptionBoxEvents() {
 	const optionBoxes = document.querySelectorAll( OPTION_BOX_CLASS );

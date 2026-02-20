@@ -4,7 +4,7 @@
 
 .frm-admin-page-styles .frm_page_container,
 .frm_wrap .frm_page_container { /* Use .frm_wrap to avoid messing up Views editor layout */
-	height: calc( 100vh - 32px );
+	height: calc(100vh - 32px);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -16,7 +16,8 @@
 	right: 0;
 }
 
-.frm-admin-page-translate .frm_wrap .frm_page_container, .frm-admin-page-update_translations .frm_wrap .frm_page_container {
+.frm-admin-page-translate .frm_wrap .frm_page_container,
+.frm-admin-page-update_translations .frm_wrap .frm_page_container {
 	position: static;
 }
 

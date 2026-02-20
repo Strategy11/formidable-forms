@@ -17,7 +17,7 @@ const { init: initSearch } = window.frmDom.search;
  * Adds search-related event listeners by calling the 'initSearch' function.
  *
  * @see frmDom.search method
- * @return {void}
+ * @returns {void}
  */
 function addSearchEvents() {
 	const { searchInput, emptyStateButton } = getElements();
@@ -34,7 +34,7 @@ function addSearchEvents() {
  * @param {boolean} args.foundSomething     True if search yielded results.
  * @param {boolean} args.notEmptySearchText True if search input is not empty.
  * @param {Event}   event                   The event object (input, search, or change event).
- * @return {void}
+ * @returns {void}
  */
 function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 	// Prevent double calls as window.frmDom.search.init attaches both 'input' and 'search' events,
@@ -74,7 +74,7 @@ function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
  * Handles the click event on the empty state button.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onEmptyStateButtonClick = () => {
 	const { emptyState } = getElements();

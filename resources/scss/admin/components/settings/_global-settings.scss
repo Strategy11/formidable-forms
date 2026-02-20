@@ -40,7 +40,7 @@ label.frm-example-icon {
 	gap: var(--gap-sm);
 	justify-content: center;
 	align-items: center;
-	width: calc( 33% - var(--gap-sm) );
+	width: calc(33% - var(--gap-sm));
 	box-sizing: border-box;
 }
 
@@ -87,7 +87,7 @@ label.frm-example-icon {
 }
 
 .edd_frm_license_row .frm_action_error .frmsvg {
-	color: #D54E21;
+	color: #d54e21;
 }
 
 /* Hide the install steps for solutions */

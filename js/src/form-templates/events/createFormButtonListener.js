@@ -16,7 +16,7 @@ import { getElements } from '../elements';
 /**
  * Manages event handling for the "Create a blank form" button.
  *
- * @return {void}
+ * @returns {void}
  */
 function addCreateFormButtonEvents() {
 	const { createFormButton } = getElements();
@@ -29,7 +29,7 @@ function addCreateFormButtonEvents() {
  * Handles the click event on the "Create a blank form" button.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onCreateFormButtonClick = () => {
 	const { createFormButton, newTemplateForm, newTemplateNameInput, newTemplateActionInput } = getElements();
