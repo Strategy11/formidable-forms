@@ -12,7 +12,7 @@ import { navigateToPrevStep } from '../utils';
 /**
  * Manages event handling for the "Back" button.
  *
- * @return {void}
+ * @returns {void}
  */
 function addBackButtonEvents() {
 	const { backButtons } = getElements();
@@ -27,7 +27,7 @@ function addBackButtonEvents() {
  * Handles the click event on a "Back" button.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 const onBackButtonClick = () => {
 	navigateToPrevStep();

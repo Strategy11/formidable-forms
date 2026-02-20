@@ -16,7 +16,7 @@ const { span, svg, tag } = window.frmDom;
  * Create token container and input elements
  *
  * @param {HTMLElement} field Input field for tokenization
- * @return {HTMLElement|null} The container element or null if already initialized
+ * @returns {HTMLElement|null} The container element or null if already initialized
  */
 export function createTokenContainerElement( field ) {
 	// Get the main container (.frm-with-right-icon) to work with Formidable's modal system
@@ -53,7 +53,7 @@ export function createTokenContainerElement( field ) {
  *
  * @param {string}      value         Token value
  * @param {HTMLElement} tokensWrapper Wrapper element for tokens
- * @return {void}
+ * @returns {void}
  */
 export function createTokenElement( value, tokensWrapper ) {
 	const tokenElement = span( {

@@ -17,7 +17,7 @@ const sidebar = document.getElementById( `${ PREFIX }-sidebar` );
 
 // Append empty state elements to body content
 const emptyState = createEmptyStateElement();
-bodyContent?.appendChild( emptyState );
+bodyContent?.append( emptyState );
 const emptyStateElements = getEmptyStateElements();
 
 export const { getElements, addElements } = createPageElements( {

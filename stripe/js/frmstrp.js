@@ -33,7 +33,7 @@
 	}
 
 	/**
-	 * @return {boolean} True if form should be processed by Stripe.
+	 * @returns {boolean} True if form should be processed by Stripe.
 	 */
 	function shouldProcessForm() {
 		if ( formID != frm_stripe_vars.form_id ) {
@@ -53,7 +53,7 @@
 	}
 
 	/**
-	 * @return {boolean} True if current action type should be processed.
+	 * @returns {boolean} True if current action type should be processed.
 	 */
 	function currentActionTypeShouldBeProcessed() {
 		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
@@ -104,7 +104,7 @@
 	 *
 	 * @param {Element} object
 	 * @param {Object}  meta
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function stripeLinkSubmit( object, meta ) {
 		object.classList.add( 'frm_trigger_event_on_submit', 'frm_ajax_submit' );
@@ -142,7 +142,7 @@
 		}
 
 		function getReturnUrl() {
-			const url = new URL( frm_stripe_vars.ajax ); // eslint-disable-line compat/compat
+			const url = new URL( frm_stripe_vars.ajax );
 
 			url.searchParams.append( 'action', 'frmstrplinkreturn' );
 			return url.toString();
@@ -179,7 +179,7 @@
 		 * @since 6.10
 		 *
 		 * @param {CustomEvent} event
-		 * @return {boolean} True if no errors found in event data.
+		 * @returns {boolean} True if no errors found in event data.
 		 */
 		function checkEventDataForError( event ) {
 			if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
@@ -207,7 +207,7 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @return {boolean} True if payment is recurring.
+	 * @returns {boolean} True if payment is recurring.
 	 */
 	function isRecurring() {
 		let isRecurring = false;
@@ -227,7 +227,7 @@
 
 	/**
 	 * @param {Object} $form
-	 * @return {boolean} false if there are errors.
+	 * @returns {boolean} false if there are errors.
 	 */
 	function validateFormSubmit( $form ) {
 		const errors = frmFrontForm.validateFormSubmit( $form );
@@ -259,7 +259,7 @@
 		 *
 		 * @param {number|HTMLElement} field        Field ID or Field element.
 		 * @param {string}             subFieldName Subfield name.
-		 * @return {string} Name field value.
+		 * @returns {string} Name field value.
 		 */
 		const getNameFieldValue = function( field, subFieldName ) {
 			if ( 'object' !== typeof field ) {
@@ -289,7 +289,7 @@
 		 * @param {number}      fieldID
 		 * @param {string}      type    Either 'container' or 'field'
 		 * @param {object|null} $form
-		 * @return {HTMLElement|null} Name field container or element.
+		 * @returns {HTMLElement|null} Name field container or element.
 		 */
 		function getNameFieldItem( fieldID, type, $form = null ) {
 			const queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
@@ -377,7 +377,7 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @return {Array} Array of Stripe settings.
+	 * @returns {Array} Array of Stripe settings.
 	 */
 	function getStripeSettings() {
 		const stripeSettings = [];
@@ -455,7 +455,7 @@
 	/**
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @return {boolean} True if stripe link loads successfully.
+	 * @returns {boolean} True if stripe link loads successfully.
 	 */
 	function maybeLoadStripeLink() {
 		const stripeLinkForm = document.querySelector( 'form.frm_stripe_link_form' );
@@ -490,7 +490,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} form
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
@@ -503,7 +503,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {string} clientSecret
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function loadStripeLinkElements( clientSecret ) {
 		const cardElement = document.querySelector( '.frm-card-element' );
@@ -541,7 +541,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {string} color
-	 * @return {string} Converted color value.
+	 * @returns {string} Converted color value.
 	 */
 	function maybeAdjustColorForStripe( color ) {
 		if ( 0 !== color.indexOf( 'rgba' ) ) {
@@ -549,7 +549,7 @@
 		}
 
 		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
-		/* eslint-disable no-bitwise */
+
 		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
 			.toString( 16 )
 			.slice( 1 ) }`;
@@ -562,7 +562,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function insertAuthenticationElement( cardElement ) {
 		let emailInput, cardFieldContainer;
@@ -621,7 +621,7 @@
 	 *
 	 * @param {Element} cardElement
 	 * @param {Element} emailInput
-	 * @return {Function} Authentication change handler function.
+	 * @returns {Function} Authentication change handler function.
 	 */
 	function getAuthenticationChangeHandler( cardElement, emailInput ) {
 		function syncEmailInput( emailValue ) {
@@ -666,7 +666,7 @@
 	 * @param {Element} emailField
 	 * @param {Element} emailInput
 	 * @param {Element} authenticationMountTarget
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function replaceEmailField( emailField, emailInput, authenticationMountTarget ) {
 		emailInput.before( authenticationMountTarget );
@@ -684,7 +684,7 @@
 	 *
 	 * @since 6.21
 	 *
-	 * @return {string} Layout type for Stripe elements.
+	 * @returns {string} Layout type for Stripe elements.
 	 */
 	function getLayout() {
 		const settings = getStripeSettings()[ 0 ];
@@ -698,7 +698,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function insertPaymentElement( cardElement ) {
 		// Add the payment element above the credit card field.
@@ -739,7 +739,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function toggleButtonsOnPaymentElementChange( cardElement ) {
 		const form = cardElement.closest( '.frm-show-form' );
@@ -769,7 +769,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} form
-	 * @return {boolean} True if ready to submit Stripe link.
+	 * @returns {boolean} True if ready to submit Stripe link.
 	 */
 	function readyToSubmitStripeLink( form ) {
 		if ( ! linkAuthenticationElementIsComplete || ! stripeLinkElementIsComplete ) {
@@ -788,7 +788,7 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @return {string} Full name value for Stripe.
+	 * @returns {string} Full name value for Stripe.
 	 */
 	function getFullNameValueDefault() {
 		const nameValues = [];
@@ -809,7 +809,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} field
-	 * @return {string} Field value.
+	 * @returns {string} Field value.
 	 */
 	function getSettingFieldValue( field ) {
 		let value;
@@ -826,7 +826,7 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @return {Element|false} Email field element or false.
+	 * @returns {Element|false} Email field element or false.
 	 */
 	function checkForEmailField() {
 		return checkForStripeSettingField( 'email' );
@@ -834,7 +834,7 @@
 
 	/**
 	 * @param {string} settingKey supports 'first_name', 'last_name', and 'email'.
-	 * @return {Element|false} Setting field element or false.
+	 * @returns {Element|false} Setting field element or false.
 	 */
 	function checkForStripeSettingField( settingKey ) {
 		let settingField = false;
@@ -902,7 +902,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {string} className
-	 * @return {Element} New mount target element.
+	 * @returns {Element} New mount target element.
 	 */
 	function createMountTarget( className ) {
 		const newElement = document.createElement( 'div' );
@@ -915,7 +915,7 @@
 	 *
 	 * @param {Array|NodeList} items
 	 * @param {Function}       callback
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function each( items, callback ) {
 		let index;
@@ -932,7 +932,7 @@
 	 * This is required when a Stripe action uses a shortcode amount when
 	 * the amount never changes after load.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function checkPriceFieldsOnLoad() {
 		each(

@@ -19,7 +19,7 @@ import { getModalWidget } from './';
  * Display the locked template modal.
  *
  * @param {HTMLElement} template The template element.
- * @return {void}
+ * @returns {void}
  */
 export function showLockedTemplateModal( template ) {
 	const plan = template.dataset.requiredPlan;
@@ -44,7 +44,7 @@ export function showLockedTemplateModal( template ) {
  * Base function to show a modal dialog with a customizable pre-open execution step.
  *
  * @param {Function} executePreOpen The function to be executed before opening the modal dialog.
- * @return {Function} A higher-order function that can be invoked to display the modal dialog.
+ * @returns {Function} A higher-order function that can be invoked to display the modal dialog.
  */
 const showModal = executePreOpen => async ( ...params ) => {
 	const dialogWidget = getModalWidget();
@@ -73,7 +73,7 @@ const upgradablePlans = {
  *
  * @param {string}      plan     Current plan name
  * @param {HTMLElement} template The template element
- * @return {void}
+ * @returns {void}
  */
 export const showUpgradeModal = showModal( ( plan, template ) => {
 	const templateName = template.querySelector( '.frm-form-template-name' ).textContent.trim();
@@ -105,7 +105,7 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 /**
  * Display the modal dialog to prompt the user to renew their account.
  *
- * @return {void}
+ * @returns {void}
  */
 export const showRenewAccountModal = showModal( () => {
 	const { renewAccountModal } = getElements();
@@ -115,7 +115,7 @@ export const showRenewAccountModal = showModal( () => {
 /**
  * Display the modal dialog to prompt the user to leave an email.
  *
- * @return {void}
+ * @returns {void}
  */
 export const showLeaveEmailModal = showModal( () => {
 	const { leaveEmailModal } = getElements();
@@ -125,7 +125,7 @@ export const showLeaveEmailModal = showModal( () => {
 /**
  * Displays a modal dialog prompting the user to create a new template.
  *
- * @return {void}
+ * @returns {void}
  */
 export const showCreateTemplateModal = showModal( () => {
 	const dialogWidget = getModalWidget();

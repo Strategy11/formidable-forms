@@ -15,7 +15,7 @@ import { showEmptyState } from '.';
  * Show addons based on selected category.
  *
  * @param {string} selectedCategory The selected category to display addons for.
- * @return {void}
+ * @returns {void}
  */
 export function showSelectedCategory( selectedCategory ) {
 	const { bodyContent, addons, emptyState, upgradeBanner } = getElements();
