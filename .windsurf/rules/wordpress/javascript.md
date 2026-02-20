@@ -201,9 +201,22 @@ elements
 
 ### Declaring Variables with const and let
 
-For code written using ES2015 or newer, `const` and `let` should always be used in place of `var`. A declaration should use `const` unless its value will be reassigned, in which case `let` is appropriate.
+`const` and `let` should always be used in place of `var`. A declaration should use `const` unless its value will be reassigned, in which case `let` is appropriate.
 
 Unlike `var`, it is not necessary to declare all variables at the top of a function. Instead, they are to be declared at the point at which they are first used.
+
+**Global scope difference:** `var` declarations at the top level become implicit properties of the `window` object, but `let` and `const` do not. In legacy files like `js/src/admin/admin.js`, some top-level variables are intentionally exposed as globals and accessed elsewhere as `window.varName`. When refactoring those, do not replace `var` with `const` or `let` that silently removes the global. Use an explicit `window` assignment instead:
+
+```javascript
+// Legacy: top-level var is implicitly window.frmAdminBuild
+var frmAdminBuild = frmAdminBuildJS();
+
+// WRONG: removes it from window, other scripts lose access
+const frmAdminBuild = frmAdminBuildJS();
+
+// CORRECT: make the window assignment explicit
+window.frmAdminBuild = frmAdminBuildJS();
+```
 
 ### Globals
 
@@ -459,24 +472,3 @@ domReady( () => {
 } );
 ```
 
----
-
-## JSHint
-
-JSHint is an automated code quality tool, designed to catch errors in your JavaScript code.
-
-### JSHint Settings
-
-The configuration options used for JSHint are stored within a `.jshintrc` file.
-
-### JSHint Overrides: Ignore Blocks
-
-To exclude a specific file region from being processed by JSHint, enclose it in JSHint directive comments:
-
-```javascript
-/* jshint ignore:start */
-if ( typeof thirdPartyLibrary === 'undefined' ) {
-	// Third-party code
-}
-/* jshint ignore:end */
-```
