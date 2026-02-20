@@ -423,7 +423,7 @@
 		exampleElement.readOnly = true;
 		exampleElement.setAttribute( 'tabindex', -1 );
 
-		if ( 'undefined' !== typeof link && 'undefined' !== typeof linkLabel ) {
+		if ( link !== undefined && linkLabel !== undefined ) {
 			const linkElement = tag( 'a' );
 			linkElement.href = link;
 			linkElement.textContent = linkLabel;

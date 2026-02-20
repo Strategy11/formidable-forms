@@ -182,7 +182,7 @@
 		 * @returns {boolean} True if no errors found in event data.
 		 */
 		function checkEventDataForError( event ) {
-			if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
+			if ( ! event.frmData || ! event.frmData.content.length || ! event.frmData.content.includes( '<div class="frm_error_style' ) ) {
 				return true;
 			}
 
@@ -384,7 +384,7 @@
 		each(
 			frm_stripe_vars.settings,
 			function( setting ) {
-				if ( -1 !== setting.gateways.indexOf( 'stripe' ) ) {
+				if ( setting.gateways.includes( 'stripe' ) ) {
 					stripeSettings.push( setting );
 				}
 			}
@@ -419,7 +419,7 @@
 
 	function postAjax( data, success ) {
 		const xmlHttp = new XMLHttpRequest();
-		const params = typeof data == 'string' ? data : Object.keys( data ).map(
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
 				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
 			}
@@ -633,7 +633,7 @@
 		return function( event ) {
 			linkAuthenticationElementIsComplete = event.complete;
 
-			if ( linkAuthenticationElementIsComplete && 'undefined' !== typeof emailInput ) {
+			if ( linkAuthenticationElementIsComplete && emailInput !== undefined ) {
 				syncEmailInput( event.value.email );
 			}
 

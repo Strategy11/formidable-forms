@@ -3,7 +3,7 @@
 
 	let __;
 
-	if ( 'undefined' === typeof wp || 'undefined' === typeof wp.i18n || 'function' !== typeof wp.i18n.__ ) {
+	if ( 'undefined' === typeof wp || wp.i18n === undefined || 'function' !== typeof wp.i18n.__ ) {
 		__ = text => text;
 	} else {
 		__ = wp.i18n.__;
@@ -82,7 +82,7 @@
 			if ( args.buttonType ) {
 				output.classList.add( 'button' );
 
-				if ( ! args.noDismiss && -1 !== [ 'red', 'primary' ].indexOf( args.buttonType ) ) {
+				if ( ! args.noDismiss && [ 'red', 'primary' ].includes( args.buttonType ) ) {
 					// Primary and red buttons close modals by default on click.
 					// To disable this default behaviour you can use the noDismiss: 1 arg.
 					output.classList.add( 'dismiss' );
@@ -111,7 +111,7 @@
 	const ajax = {
 		async doJsonFetch( action ) {
 			let targetUrl = ajaxurl + '?action=frm_' + action;
-			if ( -1 === targetUrl.indexOf( 'nonce=' ) ) {
+			if ( ! targetUrl.includes( 'nonce=' ) ) {
 				targetUrl += '&nonce=' + frmGlobal.nonce;
 			}
 			const response = await fetch( targetUrl );
@@ -135,7 +135,7 @@
 			if ( ! json.success ) {
 				return Promise.reject( json.data || 'JSON result is not successful' );
 			}
-			return Promise.resolve( 'undefined' !== typeof json.data ? json.data : json );
+			return Promise.resolve( json.data !== undefined ? json.data : json );
 		}
 	};
 
@@ -391,7 +391,7 @@
 						item.setAttribute( 'frm-search-text', itemText );
 					}
 
-					const hide = notEmptySearchText && -1 === itemText.indexOf( searchText );
+					const hide = notEmptySearchText && ! itemText.includes( searchText );
 					item.classList.toggle( 'frm_hidden', hide );
 
 					const isSearchResult = ! hide && notEmptySearchText;
@@ -434,7 +434,7 @@
 		 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 		 */
 		documentOn: ( event, selector, handler, options ) => {
-			if ( 'undefined' === typeof options ) {
+			if ( options === undefined ) {
 				options = false;
 			}
 
@@ -828,7 +828,7 @@
 	};
 
 	function cleanNode( node ) {
-		if ( 'undefined' === typeof node.tagName ) {
+		if ( node.tagName === undefined ) {
 			if ( '#text' === node.nodeName ) {
 				return document.createTextNode( node.textContent );
 			}
@@ -848,7 +848,7 @@
 			return svg( svgArgs );
 		}
 
-		if ( 'undefined' === typeof allowedHtml[ tagType ] ) {
+		if ( allowedHtml[ tagType ] === undefined ) {
 			// Tag type is not allowed.
 			return document.createTextNode( '' );
 		}

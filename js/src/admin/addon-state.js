@@ -38,7 +38,7 @@ export function toggleAddonState( clicked, action ) {
 			let saveAndReload;
 
 			if ( 'string' !== typeof response && 'string' === typeof response.message ) {
-				if ( 'undefined' !== typeof response.saveAndReload ) {
+				if ( response.saveAndReload !== undefined ) {
 					saveAndReload = response.saveAndReload;
 				}
 				response = response.message;
@@ -67,7 +67,7 @@ export function toggleAddonState( clicked, action ) {
 
 export function extractErrorFromAddOnResponse( response ) {
 	if ( typeof response !== 'string' ) {
-		if ( response.success !== undefined && response.success ) {
+		if ( response.success ) {
 			return false;
 		}
 

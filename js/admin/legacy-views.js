@@ -352,7 +352,7 @@
 
 	function getNewRowId( rows, replace, defaultValue ) {
 		if ( ! rows.length ) {
-			return 'undefined' !== typeof defaultValue ? defaultValue : 0;
+			return defaultValue !== undefined ? defaultValue : 0;
 		}
 		return parseInt( rows[ rows.length - 1 ].id.replace( replace, '' ), 10 ) + 1;
 	}
