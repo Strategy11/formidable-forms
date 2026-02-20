@@ -110,7 +110,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @returns {boolean} - True if the value is a custom font size, false otherwise.
 	 */
 	static isCustomFonSize( value ) {
-		return -1 === [ '', '18px', '21px', '26px', '32px' ].indexOf( value );
+		return ! [ '', '18px', '21px', '26px', '32px' ].includes( value );
 	}
 
 	/**

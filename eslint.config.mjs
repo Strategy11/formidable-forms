@@ -9,6 +9,7 @@ import compatPlugin from 'eslint-plugin-compat';
 import jsdocPlugin from 'eslint-plugin-jsdoc';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import importPlugin from 'eslint-plugin-import';
+import formidablePlugin from './eslint-rules/index.js';
 import globals from 'globals';
 
 export default [
@@ -36,6 +37,7 @@ export default [
 			'**/node_modules/**',
 			'**/vendor/**',
 			'**/venv/**',
+			'eslint-rules/**',
 			'build/**',
 			'coverage/**',
 		],
@@ -86,6 +88,7 @@ export default [
 			jsdoc: jsdocPlugin,
 			unicorn: unicornPlugin,
 			import: importPlugin,
+			formidable: formidablePlugin,
 		},
 		settings: {
 			'import/resolver': {
@@ -318,6 +321,12 @@ export default [
 			'unicorn/prefer-global-this': 'off',
 			'unicorn/prefer-string-raw': 'off',
 			'unicorn/switch-case-braces': 'off',
+
+			// Custom Formidable rules
+			'formidable/prefer-strict-comparison': 'error',
+			'formidable/no-redundant-undefined-check': 'error',
+			'formidable/prefer-includes': 'error',
+			'formidable/no-typeof-undefined': 'error',
 		},
 	},
 

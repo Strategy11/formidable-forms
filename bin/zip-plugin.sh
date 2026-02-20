@@ -121,6 +121,7 @@ zip -r $zipname $destination \
 	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
+	-x "*/eslint-rules/*" \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
