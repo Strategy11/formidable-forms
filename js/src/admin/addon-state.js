@@ -67,7 +67,7 @@ export function toggleAddonState( clicked, action ) {
 
 export function extractErrorFromAddOnResponse( response ) {
 	if ( typeof response !== 'string' ) {
-		if ( typeof response.success !== 'undefined' && response.success ) {
+		if ( response.success !== undefined && response.success ) {
 			return false;
 		}
 

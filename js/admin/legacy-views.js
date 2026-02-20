@@ -113,7 +113,7 @@
 		}
 
 		DOM = tinymce.DOM;
-		if ( typeof DOM.events !== 'undefined' && typeof DOM.events.add !== 'undefined' ) {
+		if ( DOM.events !== undefined && DOM.events.add !== undefined ) {
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseover', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
@@ -271,7 +271,7 @@
 		/*jshint validthis:true */
 		const link = jQuery( this );
 		const t = link.attr( 'href' );
-		if ( typeof t === 'undefined' ) {
+		if ( t === undefined ) {
 			return false;
 		}
 
@@ -359,7 +359,7 @@
 
 	function toggleAllowedShortcodes( id ) {
 		let c, clickedID;
-		if ( typeof id === 'undefined' ) {
+		if ( id === undefined ) {
 			id = '';
 		}
 		c = id;
@@ -372,7 +372,7 @@
 			const $ele = jQuery( document.getElementById( id ) );
 			if ( $ele.attr( 'class' ) && id !== 'wpbody-content' && id !== 'content' && id !== 'dyncontent' && id !== 'success_msg' ) {
 				let d = $ele.attr( 'class' ).split( ' ' )[ 0 ];
-				if ( d === 'frm_long_input' || d === 'frm_98_width' || typeof d === 'undefined' ) {
+				if ( d === 'frm_long_input' || d === 'frm_98_width' || d === undefined ) {
 					d = '';
 				} else {
 					id = d.trim();

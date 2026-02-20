@@ -492,7 +492,7 @@
 			setUpTinyMceHtmlButtonListener();
 
 			function initQuickTagsButtons() {
-				if ( 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+				if ( 'function' !== typeof window.quicktags || window.QTags.instances[ editor.id ] !== undefined ) {
 					return;
 				}
 

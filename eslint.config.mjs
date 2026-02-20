@@ -314,7 +314,7 @@ export default [
 			'sonarjs/unused-import': 'off',
 			'unicorn/consistent-existence-index-check': 'off',
 			'unicorn/no-negated-condition': 'off',
-			'unicorn/no-typeof-undefined': 'off',
+//			'unicorn/no-typeof-undefined': 'error',
 			'unicorn/prefer-global-this': 'off',
 			'unicorn/prefer-string-raw': 'off',
 			'unicorn/switch-case-braces': 'off',

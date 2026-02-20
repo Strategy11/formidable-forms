@@ -46,14 +46,14 @@ function frmFrontFormJS() {
 
 		fieldName = field.name;
 
-		if ( typeof fieldName === 'undefined' ) {
+		if ( fieldName === undefined ) {
 			fieldName = '';
 		}
 
 		if ( fieldName === '' ) {
 			fieldName = field.getAttribute( 'data-name' );
 
-			if ( typeof fieldName === 'undefined' ) {
+			if ( fieldName === undefined ) {
 				fieldName = '';
 			}
 
@@ -401,12 +401,12 @@ function frmFrontFormJS() {
 				} );
 			} );
 		} else if ( field.type === 'file' || fileID ) {
-			if ( typeof fileID === 'undefined' ) {
+			if ( fileID === undefined ) {
 				fileID = getFieldId( field, true );
 				fileID = fileID.replace( 'file', '' );
 			}
 
-			if ( typeof errors[ fileID ] === 'undefined' ) {
+			if ( errors[ fileID ] === undefined ) {
 				val = getFileVals( fileID );
 			}
 			fieldID = fileID;
@@ -607,7 +607,7 @@ function frmFrontFormJS() {
 			strippedFieldID = fieldID.replace( 'conf_', '' ),
 			confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
-		if ( confirmField === null || typeof errors[ 'conf_' + strippedFieldID ] !== 'undefined' ) {
+		if ( confirmField === null || errors[ 'conf_' + strippedFieldID ] !== undefined ) {
 			return;
 		}
 
@@ -891,7 +891,7 @@ function frmFrontFormJS() {
 				}
 			}
 
-			if ( typeof response.redirect !== 'undefined' ) {
+			if ( response.redirect !== undefined ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
 					return;
@@ -1112,7 +1112,7 @@ function frmFrontFormJS() {
 
 	function addUrlParam( response ) {
 		let url;
-		if ( history.pushState && typeof response.page !== 'undefined' ) {
+		if ( history.pushState && response.page !== undefined ) {
 			url = addQueryVar( 'frm_page', response.page );
 			window.history.pushState( { html: response.html }, '', '?' + url );
 		}
@@ -2004,7 +2004,7 @@ function frmFrontFormJS() {
 		scrollMsg: function( id, object, animate ) {
 			let newPos, m, b, screenTop, screenBottom,
 				scrollObj = '';
-			if ( typeof object === 'undefined' ) {
+			if ( object === undefined ) {
 				scrollObj = jQuery( document.getElementById( 'frm_form_' + id + '_container' ) );
 				if ( scrollObj.length < 1 ) {
 					return;
@@ -2036,7 +2036,7 @@ function frmFrontFormJS() {
 
 				if ( newPos > screenBottom || newPos < screenTop ) {
 					// Not in view
-					if ( typeof animate === 'undefined' ) {
+					if ( animate === undefined ) {
 						document.documentElement.scrollTop = newPos;
 					} else {
 						animateScroll( screenTop, newPos, 500 );
