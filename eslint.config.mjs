@@ -145,7 +145,7 @@ export default [
 			'vars-on-top': 'warn',
 			'yoda': 'off',
 			'linebreak-style': 'off',
-			'object-shorthand': 'off',
+			'object-shorthand': 'error',
 			'no-unused-vars': 'off',
 			'no-console': 'off',
 			'eqeqeq': 'off',

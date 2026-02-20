@@ -244,7 +244,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 				value: group.defaultValues,
 				iconSvgId: group.iconSvgId,
 				ariaLabel: group.ariaLabel,
-				defaultValues: defaultValues,
+				defaultValues,
 				addHiddenInputValue: false
 			} ) );
 		} );

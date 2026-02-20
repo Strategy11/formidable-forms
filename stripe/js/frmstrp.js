@@ -65,7 +65,7 @@
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
 			action,
 			{
-				thisForm: thisForm
+				thisForm
 			}
 		);
 	}
@@ -126,7 +126,7 @@
 			};
 
 			let params = {
-				elements: elements,
+				elements,
 				confirmParams: {
 					return_url: getReturnUrl()
 				}
@@ -494,7 +494,7 @@
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
-		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form: form } );
+		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form } );
 	}
 
 	/**
@@ -522,7 +522,7 @@
 			},
 			rules: frm_stripe_vars.appearanceRules
 		};
-		elements = frmstripe.elements( { clientSecret: clientSecret, appearance: appearance } );
+		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
 
 		insertAuthenticationElement( cardElement );
@@ -531,7 +531,7 @@
 		triggerCustomEvent(
 			document,
 			'frmStripeLiteLoadElements',
-			{ cardElement: cardElement }
+			{ cardElement }
 		);
 	}
 
@@ -590,9 +590,9 @@
 				document,
 				'frmStripeLiteAddAuthElementAboveCardElement',
 				{
-					cardElement: cardElement,
-					cardFieldContainer: cardFieldContainer,
-					authenticationMountTarget: authenticationMountTarget
+					cardElement,
+					cardFieldContainer,
+					authenticationMountTarget
 				}
 			);
 		}
@@ -969,8 +969,8 @@
 	);
 
 	window.frmStripeLiteForm = {
-		readyToSubmitStripeLink: readyToSubmitStripeLink,
-		processForm: function( _, e, form ) {
+		readyToSubmitStripeLink,
+		processForm( _, e, form ) {
 			event = e;
 			thisForm = form;
 			processForm();

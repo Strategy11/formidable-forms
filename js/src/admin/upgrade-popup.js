@@ -130,17 +130,17 @@ export function initModal( id, width ) {
 		modal: true,
 		autoOpen: false,
 		closeOnEscape: true,
-		width: width,
+		width,
 		resizable: false,
 		draggable: false,
-		open: function() {
+		open() {
 			jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 			jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 			jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 			$info.removeClass( 'ui-dialog-content ui-widget-content' );
 			bindClickForDialogClose( $info );
 		},
-		close: function() {
+		close() {
 			jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 			jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 

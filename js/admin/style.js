@@ -1169,7 +1169,7 @@
 		} );
 
 		jQuery( 'input.hex' ).wpColorPicker( {
-			change: function( event, ui ) {
+			change( event, ui ) {
 				let color = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
 				if ( ui.color._alpha < 1 ) {

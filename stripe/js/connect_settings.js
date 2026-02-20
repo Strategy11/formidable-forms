@@ -74,8 +74,8 @@
 
 	function strpSettingsAjaxRequest( action, success, testMode ) {
 		const data = {
-			action: action,
-			testMode: testMode,
+			action,
+			testMode,
 			nonce: frmGlobal.nonce
 		};
 		postAjax( data, success );
