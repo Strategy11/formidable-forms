@@ -16,6 +16,7 @@ Critical principles for enterprise-level plugin development.
 3. **Backward compatibility**: Maintain 100% compatibility with existing callers
 4. **No custom solutions**: Never invent new patterns. Use existing ones or search the web to review best practices, then follow the official WordPress standards or VIP guidelines.
 5. **User changes are final**: If user makes manual changes, treat as authoritative
+6. **Multi-issue fixes**: When fixing multiple issues in one request, run all 6 phases independently for each issue. Findings from one issue's phases may inform the next, but every phase is mandatory for every issue, even when issues share a root cause.
 
 ---
 
