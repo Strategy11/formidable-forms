@@ -14,7 +14,7 @@
 				return false;
 			}
 
-			if ( typeof width === 'undefined' ) {
+			if ( width === undefined ) {
 				width = '550px';
 			}
 

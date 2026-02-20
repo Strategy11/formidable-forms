@@ -569,12 +569,12 @@ window.frmAdminBuildJS = function() {
 		const id = deleteButton.attr( 'data-removeid' );
 
 		show = deleteButton.attr( 'data-showlast' );
-		if ( typeof show === 'undefined' ) {
+		if ( show === undefined ) {
 			show = '';
 		}
 
 		hide = deleteButton.attr( 'data-hidelast' );
-		if ( typeof hide === 'undefined' ) {
+		if ( hide === undefined ) {
 			hide = '';
 		}
 
@@ -618,7 +618,7 @@ window.frmAdminBuildJS = function() {
 			document.querySelector( '.tooltip' )?.remove();
 		} );
 
-		if ( typeof removeMore !== 'undefined' ) {
+		if ( removeMore !== undefined ) {
 			removeMore = jQuery( removeMore );
 			removeMore.fadeOut( 400, function() {
 				removeMore.remove();
@@ -650,7 +650,7 @@ window.frmAdminBuildJS = function() {
 
 	function clickWidget( event, b ) {
 		/*jshint validthis:true */
-		if ( typeof b === 'undefined' ) {
+		if ( b === undefined ) {
 			b = this;
 		}
 
@@ -659,7 +659,7 @@ window.frmAdminBuildJS = function() {
 		const cont = jQuery( b ).closest( '.frm_form_action_settings' );
 		const target = event.target;
 
-		if ( cont.length && typeof target !== 'undefined' ) {
+		if ( cont.length && target !== undefined ) {
 			const className = target.parentElement.className;
 			if ( 'string' === typeof className ) {
 				if ( className.includes( 'frm_email_icons' ) || className.includes( 'frm_toggle' ) ) {
@@ -708,7 +708,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		jQuery( b ).closest( '.frm_field_box' ).siblings().find( '.widget-inside' ).slideUp( 'fast' );
-		if ( ( typeof b.className !== 'undefined' && b.className.includes( 'widget-action' ) ) || jQuery( b ).closest( '.start_divider' ).length < 1 ) {
+		if ( ( b.className !== undefined && b.className.includes( 'widget-action' ) ) || jQuery( b ).closest( '.start_divider' ).length < 1 ) {
 			return;
 		}
 
@@ -723,7 +723,7 @@ window.frmAdminBuildJS = function() {
 	function clickNewTab() {
 		/*jshint validthis:true */
 		const t = this.getAttribute( 'href' );
-		if ( typeof t === 'undefined' ) {
+		if ( t === undefined ) {
 			return false;
 		}
 
@@ -748,7 +748,7 @@ window.frmAdminBuildJS = function() {
 	function clickTab( link, auto ) {
 		link = jQuery( link );
 		const t = link.attr( 'href' );
-		if ( typeof t === 'undefined' ) {
+		if ( t === undefined ) {
 			return;
 		}
 
@@ -761,7 +761,7 @@ window.frmAdminBuildJS = function() {
 			/* global settings */
 			const ajax = link.data( 'frmajax' );
 			link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
-			if ( typeof ajax !== 'undefined' && ajax == '1' ) {
+			if ( ajax !== undefined && ajax == '1' ) {
 				loadSettingsTab( t );
 			}
 		} else {
@@ -1556,7 +1556,7 @@ window.frmAdminBuildJS = function() {
 	// Get the section where a field is dropped
 	function getSectionForFieldPlacement( currentItem ) {
 		let section = '';
-		if ( typeof currentItem !== 'undefined' && ! currentItem.hasClass( 'edit_field_type_divider' ) ) {
+		if ( currentItem !== undefined && ! currentItem.hasClass( 'edit_field_type_divider' ) ) {
 			section = currentItem.closest( '.edit_field_type_divider' );
 		}
 		return section;
@@ -1566,16 +1566,16 @@ window.frmAdminBuildJS = function() {
 	function getFormIdForFieldPlacement( section ) {
 		let formId = '';
 
-		if ( typeof section[ 0 ] !== 'undefined' ) {
+		if ( section[ 0 ] !== undefined ) {
 			const sDivide = section.children( '.start_divider' );
 			sDivide.children( '.edit_field_type_end_divider' ).appendTo( sDivide );
-			if ( typeof section.attr( 'data-formid' ) !== 'undefined' ) {
+			if ( section.attr( 'data-formid' ) !== undefined ) {
 				const fieldId = section.attr( 'data-fid' );
 				formId = jQuery( 'input[name="field_options[form_select_' + fieldId + ']"]' ).val();
 			}
 		}
 
-		if ( typeof formId === 'undefined' || formId === '' ) {
+		if ( formId === undefined || formId === '' ) {
 			formId = thisFormId;
 		}
 
@@ -1585,7 +1585,7 @@ window.frmAdminBuildJS = function() {
 	// Get the section ID where a field is dropped
 	function getSectionIdForFieldPlacement( section ) {
 		let sectionId = 0;
-		if ( typeof section[ 0 ] !== 'undefined' ) {
+		if ( section[ 0 ] !== undefined ) {
 			sectionId = section.attr( 'id' ).replace( 'frm_field_id_', '' );
 		}
 
@@ -3220,7 +3220,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			const fieldId = allFields[ i ].getAttribute( 'data-fid' );
-			if ( typeof fieldId !== 'undefined' && fieldId ) {
+			if ( fieldId !== undefined && fieldId ) {
 				fields.push( {
 					fieldId: fieldId,
 					fieldName: getPossibleValue( 'frm_name_' + fieldId ),
@@ -3563,7 +3563,7 @@ window.frmAdminBuildJS = function() {
 				key = opts[ i ].getAttribute( 'data-optkey' );
 				if ( key !== '000' ) {
 					label = document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][label]' )[ 0 ];
-					if ( typeof label !== 'undefined' ) {
+					if ( label !== undefined ) {
 						content += label.value;
 						if ( separate ) {
 							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][value]' )[ 0 ].value;
@@ -5368,7 +5368,7 @@ window.frmAdminBuildJS = function() {
 			input.setAttribute( 'name', 'optionmap[' + fieldId + '][' + this.value + ']' );
 			this.parentNode.append( input );
 
-			if ( typeof optionMap[ fieldId ] === 'undefined' ) {
+			if ( optionMap[ fieldId ] === undefined ) {
 				optionMap[ fieldId ] = {};
 			}
 
@@ -5483,7 +5483,7 @@ window.frmAdminBuildJS = function() {
 		if ( optionTextAlreadyExists( this ) ) {
 			this.setAttribute( 'data-duplicate', 'true' );
 
-			if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+			if ( optionMap[ fieldId ] !== undefined && optionMap[ fieldId ][ originalValue ] !== undefined ) {
 				// unmap any other change that may have happened before instead of changing it to something unused
 				optionMap[ fieldId ][ originalValue ].value = originalValue;
 			}
@@ -5491,7 +5491,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+		if ( optionMap[ fieldId ] !== undefined && optionMap[ fieldId ][ originalValue ] !== undefined ) {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
@@ -5784,7 +5784,7 @@ window.frmAdminBuildJS = function() {
 			fieldType = document.getElementById( 'field_options_type_' + fieldId ),
 			fieldTypeName = fieldType.value;
 
-		if ( typeof setting !== 'undefined' ) {
+		if ( setting !== undefined ) {
 			if ( fieldType.tagName === 'SELECT' ) {
 				fieldTypeName = fieldType.options[ fieldType.selectedIndex ].text.toLowerCase();
 			} else {
@@ -5806,7 +5806,7 @@ window.frmAdminBuildJS = function() {
 	function clickDescription() {
 		/*jshint validthis:true */
 		const setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[ 0 ];
-		if ( typeof setting !== 'undefined' ) {
+		if ( setting !== undefined ) {
 			setTimeout( function() {
 				setting.focus();
 				autoExpandSettings( setting );
@@ -6079,7 +6079,7 @@ window.frmAdminBuildJS = function() {
 		const fields = document.getElementsByName( 'field_options[image_options_' + fieldId + ']' );
 		const result = Array.from( fields ).find( field => field.checked && ( 'buttons' === field.value ) );
 
-		return typeof result !== 'undefined';
+		return result !== undefined;
 	}
 
 	/**
@@ -6297,7 +6297,7 @@ window.frmAdminBuildJS = function() {
 
 		removeDropdownOpts( field );
 		let opts = getMultipleOpts( sourceID, field.id.includes( 'frm_field_logic_opt' ) );
-		let hasPlaceholder = ( typeof placeholder !== 'undefined' );
+		let hasPlaceholder = ( placeholder !== undefined );
 
 		for ( let i = 0; i < opts.length; i++ ) {
 			let label = opts[ i ].label,
@@ -6495,7 +6495,7 @@ window.frmAdminBuildJS = function() {
 
 	function removeDropdownOpts( field ) {
 		let i;
-		if ( typeof field.options === 'undefined' ) {
+		if ( field.options === undefined ) {
 			return;
 		}
 
@@ -6834,7 +6834,7 @@ window.frmAdminBuildJS = function() {
 			fieldId = field.getAttribute( 'data-fid' );
 
 		// Include classes from multiple settings.
-		if ( typeof fieldId !== 'undefined' ) {
+		if ( fieldId !== undefined ) {
 			if ( setting.classList.contains( 'field_options_align' ) ) {
 				replaceWith += ' ' + document.getElementById( 'frm_classes_' + fieldId ).value;
 			} else if ( setting.classList.contains( 'frm_classes' ) ) {
@@ -6875,7 +6875,7 @@ window.frmAdminBuildJS = function() {
 	function showInlineModal( icon, input, event ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) ),
 			container = jQuery( icon ).closest( 'p,ul' ),
-			inputTrigger = ( typeof input !== 'undefined' );
+			inputTrigger = ( input !== undefined );
 
 		if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
@@ -7362,7 +7362,7 @@ window.frmAdminBuildJS = function() {
 	/* Form settings */
 
 	function showInputIcon( parentClass ) {
-		if ( typeof parentClass === 'undefined' ) {
+		if ( parentClass === undefined ) {
 			parentClass = '';
 		}
 		maybeAddFieldSelection( parentClass );
@@ -7610,7 +7610,7 @@ window.frmAdminBuildJS = function() {
 	function getNewActionId() {
 		let actionSettings = document.querySelectorAll( '.frm_form_action_settings' ),
 			len = getNewRowId( actionSettings, 'frm_form_action_' );
-		if ( typeof document.getElementById( 'frm_form_action_' + len ) !== 'undefined' ) {
+		if ( document.getElementById( 'frm_form_action_' + len ) !== undefined ) {
 			len = len + 100;
 		}
 		if ( lastNewActionIdReturned >= len ) {
@@ -8243,15 +8243,15 @@ window.frmAdminBuildJS = function() {
 			}
 
 			elementId = jQuery( element ).closest( '[data-fills]' ).attr( 'data-fills' );
-			if ( typeof elementId === 'undefined' ) {
+			if ( elementId === undefined ) {
 				elementId = element.closest( 'div' ).attr( 'class' );
-				if ( typeof elementId !== 'undefined' ) {
+				if ( elementId !== undefined ) {
 					elementId = elementId.split( ' ' )[ 1 ];
 				}
 			}
 		}
 
-		if ( typeof elementId === 'undefined' ) {
+		if ( elementId === undefined ) {
 			let active = document.activeElement;
 			if ( active.type === 'search' ) {
 				// If the search field has focus, find the correct field.
@@ -8270,7 +8270,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const contentBox = jQuery( document.getElementById( elementId ) );
-		if ( typeof element.attr( 'data-shortcode' ) === 'undefined' && ( ! contentBox.length || typeof contentBox.attr( 'data-shortcode' ) === 'undefined' ) ) {
+		if ( element.attr( 'data-shortcode' ) === undefined && ( ! contentBox.length || contentBox.attr( 'data-shortcode' ) === undefined ) ) {
 			// this helps to exclude those that don't want shortcode-like inserted content e.g. frm-pro's summary field
 			const doShortcode = element.parents( 'ul.frm_code_list' ).attr( 'data-shortcode' );
 			if ( doShortcode === 'undefined' || doShortcode !== 'no' ) {
@@ -8861,7 +8861,7 @@ window.frmAdminBuildJS = function() {
 
 	function hideShortcodes( box ) {
 		let i, u, closeIcons, closeSvg;
-		if ( typeof box === 'undefined' ) {
+		if ( box === undefined ) {
 			box = document.getElementById( 'frm_adv_info' );
 			if ( box === null ) {
 				return;
@@ -8896,7 +8896,7 @@ window.frmAdminBuildJS = function() {
 	function toggleAllowedHTML( input ) {
 		let b,
 			id = input.id;
-		if ( typeof id === 'undefined' || id.includes( '-search-input' ) ) {
+		if ( id === undefined || id.includes( '-search-input' ) ) {
 			return;
 		}
 
@@ -9133,7 +9133,7 @@ window.frmAdminBuildJS = function() {
 	function removeExportError() {
 		/*jshint validthis:true */
 		const t = jQuery( this ).closest( '.frm_blank_field' );
-		if ( typeof t === 'undefined' ) {
+		if ( t === undefined ) {
 			return;
 		}
 
@@ -9296,7 +9296,7 @@ window.frmAdminBuildJS = function() {
 		const $error = jQuery( errorId );
 		$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
 
-		if ( typeof message !== 'undefined' ) {
+		if ( message !== undefined ) {
 			$error.find( 'span[frm-error="' + type + '"]' ).text( message );
 		}
 
@@ -9370,13 +9370,13 @@ window.frmAdminBuildJS = function() {
 		data = wp.hooks.applyFilters( hookName, data, filterArgs );
 
 		postAjax( data, function( response ) {
-			if ( typeof response.redirect !== 'undefined' ) {
+			if ( response.redirect !== undefined ) {
 				const redirect = response.redirect;
-				if ( typeof form.elements.redirect === 'undefined' ) {
+				if ( form.elements.redirect === undefined ) {
 					window.location = redirect;
 				} else {
 					const href = document.getElementById( 'frm-redirect-link' );
-					if ( typeof link !== 'undefined' && href !== null ) {
+					if ( link !== undefined && href !== null ) {
 						// Show the next installation step.
 						href.setAttribute( 'href', redirect );
 						href.classList.remove( 'frm_grey', 'disabled' );
@@ -10178,7 +10178,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		if ( sidebar.dataset.fills === e.target.id && typeof e.target.id !== 'undefined' ) {
+		if ( sidebar.dataset.fills === e.target.id && e.target.id !== undefined ) {
 			return;
 		}
 
@@ -10274,7 +10274,7 @@ window.frmAdminBuildJS = function() {
 			} );
 			jQuery( '#frm_bs_dropdown:not(.open) a' ).on( 'click', focusSearchBox );
 
-			if ( typeof thisFormId === 'undefined' ) {
+			if ( thisFormId === undefined ) {
 				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
 
@@ -11129,7 +11129,7 @@ window.frmAdminBuildJS = function() {
 					wp.hooks.doAction( 'frm_after_bulk_edit_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 
-					if ( typeof modal !== 'undefined' ) {
+					if ( modal !== undefined ) {
 						modal.dialog( 'close' );
 						document.getElementById( 'frm-update-bulk-opts' ).classList.remove( 'frm_loading_button' );
 					}
