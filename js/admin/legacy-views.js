@@ -240,7 +240,7 @@
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_adv_info .categorydiv' ).html( html );
 			}
 		} );
@@ -253,7 +253,7 @@
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( document.getElementById( 'date_select_container' ) ).html( html );
 			}
 		} );
@@ -295,7 +295,7 @@
 				order_key: getNewRowId( logicRows, 'frm_order_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_order_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_order_row' ).hide();
 			}
 		} );
@@ -312,7 +312,7 @@
 				where_key: getNewRowId( rowDivs, 'frm_where_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_where_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_where_row' ).hide();
 			}
 		} );
@@ -332,7 +332,7 @@
 				field_id: value,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( document.getElementById( 'where_field_options_' + whereKey ) ).html( html );
 			}
 		} );

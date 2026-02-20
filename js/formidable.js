@@ -367,9 +367,9 @@ function frmFrontFormJS() {
 		 * @since 6.15 Added `onSubmit` to the data.
 		 */
 		triggerCustomEvent( document, 'frm_validate_field_value', {
-			field: field,
-			errors: errors,
-			onSubmit: onSubmit
+			field,
+			errors,
+			onSubmit
 		} );
 	}
 
@@ -1047,8 +1047,8 @@ function frmFrontFormJS() {
 		ajaxParams = {
 			type: 'POST',
 			url: ajaxUrl,
-			data: data,
-			success: success
+			data,
+			success
 		};
 
 		if ( 'function' === typeof error ) {
@@ -1754,7 +1754,7 @@ function frmFrontFormJS() {
 	}
 
 	return {
-		init: function() {
+		init() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
@@ -1797,7 +1797,7 @@ function frmFrontFormJS() {
 		 * @param {string}      captchaSelector
 		 * @returns {void}
 		 */
-		renderCaptcha: function( captcha, captchaSelector ) {
+		renderCaptcha( captcha, captchaSelector ) {
 			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
@@ -1806,7 +1806,7 @@ function frmFrontFormJS() {
 			const size = captcha.getAttribute( 'data-size' );
 			const params = {
 				sitekey: captcha.getAttribute( 'data-sitekey' ),
-				size: size,
+				size,
 				theme: captcha.getAttribute( 'data-theme' )
 			};
 
@@ -1832,18 +1832,18 @@ function frmFrontFormJS() {
 			maybeFixCaptchaLabel( captcha );
 		},
 
-		afterSingleRecaptcha: function() {
+		afterSingleRecaptcha() {
 			const recaptcha = document.querySelector( '.frm-show-form .g-recaptcha' );
 			const object = recaptcha ? recaptcha.closest( 'form' ) : null;
 			frmFrontForm.submitFormNow( object );
 		},
 
-		afterRecaptcha: function( _, formID ) {
+		afterRecaptcha( _, formID ) {
 			const object = document.querySelector( '#frm_form_' + formID + '_container form' );
 			frmFrontForm.submitFormNow( object );
 		},
 
-		submitForm: function( e ) {
+		submitForm( e ) {
 			frmFrontForm.submitFormManual( e, this );
 		},
 
@@ -1852,7 +1852,7 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement} object The form object that is being submitted.
 		 * @returns {void}
 		 */
-		submitFormManual: function( e, object ) {
+		submitFormManual( e, object ) {
 			if ( document.body.classList.contains( 'wp-admin' ) && ! object.closest( '.frmapi-form' ) ) {
 				return;
 			}
@@ -1880,7 +1880,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		submitFormNow: function( object ) {
+		submitFormNow( object ) {
 			let hasFileFields, antispamInput,
 				classList = object.className.trim().split( /\s+/gi );
 
@@ -1920,7 +1920,7 @@ function frmFrontFormJS() {
 		 *
 		 * @returns {Array} List of errors.
 		 */
-		validateFormSubmit: function( object ) {
+		validateFormSubmit( object ) {
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 			if ( typeof tinyMCE !== 'undefined' && form && form.querySelector( '.wp-editor-wrap' ) ) {
 				tinyMCE.triggerSave();
@@ -1943,7 +1943,7 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 * @returns {Array} List of errors.
 		 */
-		getAjaxFormErrors: function( object ) {
+		getAjaxFormErrors( object ) {
 			let customErrors, key;
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 
@@ -1971,7 +1971,7 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 * @returns {void}
 		 */
-		addAjaxFormErrors: function( object ) {
+		addAjaxFormErrors( object ) {
 			let key;
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 			removeAllErrors();
@@ -1996,12 +1996,12 @@ function frmFrontFormJS() {
 		showSubmitLoading,
 		removeSubmitLoading,
 
-		scrollToID: function( id ) {
+		scrollToID( id ) {
 			const object = jQuery( document.getElementById( id ) );
 			frmFrontForm.scrollMsg( object, false );
 		},
 
-		scrollMsg: function( id, object, animate ) {
+		scrollMsg( id, object, animate ) {
 			let newPos, m, b, screenTop, screenBottom,
 				scrollObj = '';
 			if ( object === undefined ) {
@@ -2046,7 +2046,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		fieldValueChanged: function( e ) {
+		fieldValueChanged( e ) {
 			/*jshint validthis:true */
 
 			const fieldId = frmFrontForm.getFieldId( this, false );
@@ -2065,7 +2065,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		escapeHtml: function( text ) {
+		escapeHtml( text ) {
 			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
@@ -2075,7 +2075,7 @@ function frmFrontFormJS() {
 				.replace( /'/g, '&#039;' );
 		},
 
-		triggerCustomEvent: triggerCustomEvent,
+		triggerCustomEvent,
 		documentOn
 	};
 }

@@ -261,7 +261,7 @@
 							url: ajaxurl,
 							data,
 							dataType: 'json',
-							success: function( response ) {
+							success( response ) {
 								if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
 									window.location.href = response.redirect;
 								}

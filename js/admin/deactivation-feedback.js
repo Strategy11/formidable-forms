@@ -6,7 +6,7 @@
 	let deactivationModal, deactivationUrl;
 
 	const Modal = {
-		init: function( id, width ) {
+		init( id, width ) {
 			const $info = jQuery( id );
 			const self = this;
 
@@ -23,17 +23,17 @@
 				modal: true,
 				autoOpen: false,
 				closeOnEscape: true,
-				width: width,
+				width,
 				resizable: false,
 				draggable: false,
-				open: function() {
+				open() {
 					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 					$info.removeClass( 'ui-dialog-content ui-widget-content' );
 					self.bindClickForDialogClose( $info );
 				},
-				close: function() {
+				close() {
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
@@ -50,7 +50,7 @@
 			return $info;
 		},
 
-		bindClickForDialogClose: function( $modal ) {
+		bindClickForDialogClose( $modal ) {
 			const closeModal = function() {
 				$modal.dialog( 'close' );
 			};

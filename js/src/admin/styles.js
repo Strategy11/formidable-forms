@@ -100,7 +100,7 @@ class frmStyleOptions {
 
 			if ( null !== id ) {
 				elements.push( {
-					id: id,
+					id,
 					dependentUpdaterClass: new frmStyleDependentUpdaterComponent( component, 'colorpicker' )
 				} );
 			}
