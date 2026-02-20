@@ -103,7 +103,7 @@
 
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', {
-			detail: { form: form }
+			detail: { form }
 		} );
 		document.dispatchEvent( event );
 	}

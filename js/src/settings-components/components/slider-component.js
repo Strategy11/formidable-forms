@@ -44,10 +44,10 @@ export default class frmSliderComponent {
 				startX: 0,
 				translateX: 0,
 				maxValue: parseInt( element.dataset.maxValue, 10 ),
-				element: element,
-				index: index,
+				element,
+				index,
 				value: 0,
-				steps: steps,
+				steps,
 				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
 			} );
 		} );

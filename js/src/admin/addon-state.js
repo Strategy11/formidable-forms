@@ -28,11 +28,11 @@ export function toggleAddonState( clicked, action ) {
 		cache: false,
 		dataType: 'json',
 		data: {
-			action: action,
+			action,
 			nonce: frmGlobal.nonce,
-			plugin: plugin
+			plugin
 		},
-		success: function( response ) {
+		success( response ) {
 			response = response?.data ?? response;
 
 			let saveAndReload;
@@ -59,7 +59,7 @@ export function toggleAddonState( clicked, action ) {
 			 */
 			wp.hooks.doAction( 'frm_update_addon_state', response );
 		},
-		error: function() {
+		error() {
 			button.removeClass( 'frm_loading_button' );
 		}
 	} );
@@ -67,7 +67,7 @@ export function toggleAddonState( clicked, action ) {
 
 export function extractErrorFromAddOnResponse( response ) {
 	if ( typeof response !== 'string' ) {
-		if ( typeof response.success !== 'undefined' && response.success ) {
+		if ( response.success !== undefined && response.success ) {
 			return false;
 		}
 
@@ -269,12 +269,12 @@ function installAddonWithCreds( e ) {
 		data: {
 			action: 'frm_install_addon',
 			nonce: frmAdminJs.nonce,
-			plugin: plugin,
+			plugin,
 			hostname: el.find( '#hostname' ).val(),
 			username: el.find( '#username' ).val(),
 			password: el.find( '#password' ).val()
 		},
-		success: function( response ) {
+		success( response ) {
 			response = response?.data ?? response;
 
 			const error = extractErrorFromAddOnResponse( response );
@@ -285,7 +285,7 @@ function installAddonWithCreds( e ) {
 
 			afterAddonInstall( response, proceed, message, el );
 		},
-		error: function() {
+		error() {
 			proceed.removeClass( 'frm_loading_button' );
 		}
 	} );
