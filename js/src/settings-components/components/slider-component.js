@@ -121,7 +121,7 @@ export default class frmSliderComponent {
 	expandSliderGroup( element ) {
 		const svgIcon = element.querySelector( '.frmsvg' );
 
-		if ( 'undefined' === typeof element.dataset.displaySliders || null === svgIcon ) {
+		if ( element.dataset.displaySliders === undefined || null === svgIcon ) {
 			return;
 		}
 
@@ -219,7 +219,7 @@ export default class frmSliderComponent {
 	 * @returns {NodeList} - An array-like object containing the slider group items.
 	 */
 	getSliderGroupItems( element ) {
-		if ( 'undefined' === typeof element.dataset.displaySliders ) {
+		if ( element.dataset.displaySliders === undefined ) {
 			return [];
 		}
 		const slidersGroup = element.dataset.displaySliders.split( ',' );

@@ -40,7 +40,7 @@ class frmStyleOptions {
 			return;
 		}
 
-		if ( 'undefined' === typeof window.frm_single_style_custom_css_wp_editor || 'undefined' === typeof window.frm_single_style_custom_css_wp_editor.codemirror ) {
+		if ( window.frm_single_style_custom_css_wp_editor === undefined || window.frm_single_style_custom_css_wp_editor.codemirror === undefined ) {
 			setTimeout( () => {
 				this.cssEditorOptions.retryCount++;
 				this.initCustomCSSEditorInstance();
@@ -96,7 +96,7 @@ class frmStyleOptions {
 
 		components.forEach( component => {
 			const element = component.querySelector( 'input.hex' );
-			const id = 'undefined' !== typeof element ? element.getAttribute( 'id' ) : null;
+			const id = element !== undefined ? element.getAttribute( 'id' ) : null;
 
 			if ( null !== id ) {
 				elements.push( {

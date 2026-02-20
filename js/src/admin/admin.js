@@ -1253,7 +1253,7 @@ window.frmAdminBuildJS = function() {
 			list => {
 				list.childNodes.forEach(
 					child => {
-						if ( 'undefined' === typeof child.classList ) {
+						if ( child.classList === undefined ) {
 							return;
 						}
 
@@ -1262,7 +1262,7 @@ window.frmAdminBuildJS = function() {
 							return;
 						}
 
-						if ( 'undefined' !== typeof child.classList && child.classList.contains( 'form-field' ) ) {
+						if ( child.classList !== undefined && child.classList.contains( 'form-field' ) ) {
 							wrapFieldLiInPlace( child );
 						}
 					}
@@ -1341,7 +1341,7 @@ window.frmAdminBuildJS = function() {
 	function syncLayoutClasses( $item, type ) {
 		let $fields, size, layoutClasses, classToAddFunction;
 
-		if ( 'undefined' === typeof type ) {
+		if ( type === undefined ) {
 			type = 'even';
 		}
 
@@ -1354,7 +1354,7 @@ window.frmAdminBuildJS = function() {
 		} else if ( 'clear' === type ) {
 			$fields.each( getSyncLayoutClass( layoutClasses, '' ) );
 		} else {
-			if ( -1 !== [ 'left', 'right', 'middle', 'even' ].indexOf( type ) ) {
+			if ( [ 'left', 'right', 'middle', 'even' ].includes( type ) ) {
 				classToAddFunction = function( index ) {
 					return getClassForBlock( size, type, index );
 				};
@@ -1376,7 +1376,7 @@ window.frmAdminBuildJS = function() {
 
 		rowOffset = $row.offset();
 
-		if ( 'undefined' === typeof rowOffset ) {
+		if ( rowOffset === undefined ) {
 			return;
 		}
 
@@ -1490,7 +1490,7 @@ window.frmAdminBuildJS = function() {
 
 			fieldId = this.dataset.fid;
 
-			if ( 'undefined' === typeof fieldId ) {
+			if ( fieldId === undefined ) {
 				// we are syncing the drag/drop placeholder before the actual field has loaded.
 				// this will get called again afterward and the input will exist then.
 				this.classList.add( currentClassToAdd );
@@ -2481,7 +2481,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
-		if ( 'undefined' === typeof newFieldId ) {
+		if ( newFieldId === undefined ) {
 			return;
 		}
 
@@ -2505,7 +2505,7 @@ window.frmAdminBuildJS = function() {
 					return;
 				}
 
-				if ( -1 === fieldOptionKeys.indexOf( key ) ) {
+				if ( ! fieldOptionKeys.includes( key ) ) {
 					return;
 				}
 
@@ -3211,7 +3211,7 @@ window.frmAdminBuildJS = function() {
 		let i,
 			fields = [],
 			allFields = document.querySelectorAll( 'li.frm_field_box' ),
-			checkType = 'undefined' !== typeof fieldType;
+			checkType = fieldType !== undefined;
 
 		for ( i = 0; i < allFields.length; i++ ) {
 			// data-ftype is better (than data-type) cos of fields loaded by AJAX - which might not be ready yet
@@ -3220,7 +3220,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			const fieldId = allFields[ i ].getAttribute( 'data-fid' );
-			if ( fieldId !== undefined && fieldId ) {
+			if ( fieldId ) {
 				fields.push( {
 					fieldId,
 					fieldName: getPossibleValue( 'frm_name_' + fieldId ),
@@ -3252,7 +3252,7 @@ window.frmAdminBuildJS = function() {
 		for ( i = 0; i < products.length; i++ ) {
 			// let's be double sure it's string, else indexOf will fail
 			id = products[ i ].fieldId.toString();
-			checked = auto || -1 !== current.indexOf( id );
+			checked = auto || current.includes( id );
 			if ( isSelect ) {
 				// This fallback can be removed after 4.05.
 				checked = checked ? ' selected' : '';
@@ -3373,7 +3373,7 @@ window.frmAdminBuildJS = function() {
 			field.setAttribute( att, newValue );
 		}
 
-		if ( -1 === [ 'value', 'min', 'max' ].indexOf( att ) ) {
+		if ( ! [ 'value', 'min', 'max' ].includes( att ) ) {
 			return;
 		}
 
@@ -4225,7 +4225,7 @@ window.frmAdminBuildJS = function() {
 	function makeTabbable( element, ariaLabel ) {
 		element.setAttribute( 'tabindex', 0 );
 		element.setAttribute( 'role', 'button' );
-		if ( 'undefined' !== typeof ariaLabel ) {
+		if ( ariaLabel !== undefined ) {
 			element.setAttribute( 'aria-label', ariaLabel );
 		}
 	}
@@ -4381,10 +4381,10 @@ window.frmAdminBuildJS = function() {
 		if ( size > 6 ) {
 			return 'frm1';
 		}
-		if ( -1 !== [ 2, 3, 4, 6 ].indexOf( size ) ) {
+		if ( [ 2, 3, 4, 6 ].includes( size ) ) {
 			return getLayoutClassForSize( 12 / size );
 		}
-		if ( 5 === size && 'undefined' !== typeof index ) {
+		if ( 5 === size && index !== undefined ) {
 			return 0 === index ? 'frm4' : 'frm2';
 		}
 		return 'frm12';
@@ -4924,7 +4924,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function unselectFieldGroups( event ) {
-		if ( 'undefined' !== typeof event ) {
+		if ( event !== undefined ) {
 			if ( null !== event.originalEvent.target.closest( '#frm-show-fields' ) ) {
 				return;
 			}
@@ -5300,7 +5300,7 @@ window.frmAdminBuildJS = function() {
 
 	function getNewRowId( rows, replace, defaultValue ) {
 		if ( ! rows.length ) {
-			return 'undefined' !== typeof defaultValue ? defaultValue : 0;
+			return defaultValue !== undefined ? defaultValue : 0;
 		}
 		return parseInt( rows[ rows.length - 1 ].id.replace( replace, '' ), 10 ) + 1;
 	}
@@ -6663,7 +6663,7 @@ window.frmAdminBuildJS = function() {
 		let self = this;
 
 		this.initOnceInAllInstances = function() {
-			if ( 'undefined' !== typeof updateFieldOrder.prototype.orderFieldsObject ) {
+			if ( updateFieldOrder.prototype.orderFieldsObject !== undefined ) {
 				return;
 			}
 
@@ -6682,7 +6682,7 @@ window.frmAdminBuildJS = function() {
 			const orderFieldsObject = updateFieldOrder.prototype.orderFieldsObject;
 			const fieldSettingsForm = updateFieldOrder.prototype.fieldSettingsForm;
 
-			if ( 'undefined' === typeof orderFieldsObject[ fieldId ] ) {
+			if ( orderFieldsObject[ fieldId ] === undefined ) {
 				field = fieldSettingsForm.querySelector( 'input[name="field_options[field_order_' + fieldId + ']"]' );
 				if ( null === field ) {
 					field = parent.querySelector( 'input[name="field_options[field_order_' + fieldId + ']"]' );
@@ -6854,7 +6854,7 @@ window.frmAdminBuildJS = function() {
 
 		if ( classes.trim() === '' ) {
 			replace = ' frmstart  frmend ';
-			if ( -1 === field.className.indexOf( replace ) ) {
+			if ( ! field.className.includes( replace ) ) {
 				replace = ' frmstart frmend ';
 			}
 			replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
@@ -7752,7 +7752,7 @@ window.frmAdminBuildJS = function() {
 		this.fragment = document.createDocumentFragment();
 
 		this.initOnceInAllInstances = function() {
-			if ( 'undefined' !== typeof moveFieldSettings.prototype.endMarker ) {
+			if ( moveFieldSettings.prototype.endMarker !== undefined ) {
 				return;
 			}
 			// perform a single search in the DOM and use it across all moveFieldSettings instances
@@ -7776,7 +7776,7 @@ window.frmAdminBuildJS = function() {
 		// Move the field if function is called as function with a singleField passed as arg.
 		// In this particular case only 1 field is needed to be moved so the field will get instantly moved.
 		// "singleField" may be undefined when it's called as a constructor instead of a function. Use the constructor to add multiple fields which are passed through "append" and move these all at once via "moveFields".
-		if ( 'undefined' !== typeof singleField ) {
+		if ( singleField !== undefined ) {
 			this.append( singleField );
 			this.moveFields();
 			return;
@@ -7884,7 +7884,7 @@ window.frmAdminBuildJS = function() {
 		let message = frmAdminJs.only_one_action;
 		let limit = this.dataset.limit;
 
-		if ( 'undefined' !== typeof limit ) {
+		if ( limit !== undefined ) {
 			limit = parseInt( limit );
 			if ( limit > 1 ) {
 				message = message.replace( 1, limit ).trim();
@@ -8552,7 +8552,7 @@ window.frmAdminBuildJS = function() {
 	 * @returns {void}
 	 */
 	function showSaveAndReloadModal( message ) {
-		if ( 'undefined' === typeof message ) {
+		if ( message === undefined ) {
 			message = __( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' );
 		}
 		frmDom.modal.maybeCreateModal(
@@ -8597,7 +8597,7 @@ window.frmAdminBuildJS = function() {
 		if ( target instanceof Event ) {
 			const useElements = document.querySelectorAll( '.frm-single-settings .frm-show-box.frmsvg use' );
 			const openTrigger = Array.from( useElements ).find( use => use.getAttribute( 'href' ) === '#frm_close_icon' );
-			if ( 'undefined' === typeof openTrigger ) {
+			if ( openTrigger === undefined ) {
 				return;
 			}
 			moreIcon = openTrigger.parentElement;

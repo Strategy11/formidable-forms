@@ -95,7 +95,7 @@ export class frmWebComponent extends HTMLElement {
 
 		return new Promise( resolve => {
 
-			if ( 'undefined' === typeof window.IntersectionObserver ) {
+			if ( window.IntersectionObserver === undefined ) {
 				requestAnimationFrame( () => resolve() );
 				return;
 			}

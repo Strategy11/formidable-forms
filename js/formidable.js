@@ -256,7 +256,7 @@ function frmFrontFormJS() {
 		}
 
 		fieldID = getFieldId( field, true );
-		if ( 'undefined' === typeof errors[ fieldID ] ) {
+		if ( errors[ fieldID ] === undefined ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
@@ -1040,7 +1040,7 @@ function frmFrontFormJS() {
 		ajaxUrl = frm_js.ajax_url;
 		action = form.getAttribute( 'action' );
 
-		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
+		if ( 'string' === typeof action && action.includes( '?action=frm_forms_preview' ) ) {
 			ajaxUrl = action.split( '?action=frm_forms_preview' )[ 0 ];
 		}
 
@@ -1161,7 +1161,7 @@ function frmFrontFormJS() {
 			frmThemeOverride_frmPlaceError( key, jsErrors );
 		} else {
 			let errorHtml;
-			if ( -1 !== jsErrors[ key ].indexOf( '<div' ) ) {
+			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
 				roleString = frm_js.include_alert_role ? 'role="alert"' : '';
@@ -1422,7 +1422,7 @@ function frmFrontFormJS() {
 		element = errors[ 0 ];
 		do {
 			element = element.previousSibling;
-			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
+			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
 				break;
 			}
@@ -1431,7 +1431,7 @@ function frmFrontFormJS() {
 				break;
 			}
 
-			if ( 'undefined' !== typeof element.classList ) {
+			if ( element.classList !== undefined ) {
 				if ( element.classList.contains( 'html-active' ) ) {
 					timeoutCallback = function() {
 						const textarea = element.querySelector( 'textarea' );
@@ -1486,7 +1486,7 @@ function frmFrontFormJS() {
 	 * @param {boolean | Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 	 */
 	function documentOn( event, selector, handler, options ) {
-		if ( 'undefined' === typeof options ) {
+		if ( options === undefined ) {
 			options = false;
 		}
 
@@ -1559,7 +1559,7 @@ function frmFrontFormJS() {
 		} );
 
 		runOnLoad = function( firstLoad ) {
-			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
+			if ( firstLoad && document.activeElement && [ 'INPUT', 'SELECT', 'TEXTAREA' ].includes( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
 			} else if ( firstLoad ) {
 				document.querySelectorAll( '.frm_inside_container' ).forEach(
