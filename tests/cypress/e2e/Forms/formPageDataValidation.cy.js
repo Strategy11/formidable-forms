@@ -173,12 +173,12 @@ describe( 'Forms page', () => {
 							expect( datePart ).to.equal( formattedDate );
 
 							cy.log( 'Check that time exists in the <br> element' );
-							/* eslint-disable no-unused-expressions */
+
 							cy.get( '.created_at > abbr' )
 								.invoke( 'html' )
 								.then( html => {
 									expect( html.split( '<br>' )[ 1 ] ).to.exist.and.not.be.empty;
-									/* eslint-enable no-unused-expressions */
+
 								} );
 						} );
 				} );

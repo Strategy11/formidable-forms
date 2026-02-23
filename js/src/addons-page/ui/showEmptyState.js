@@ -18,7 +18,7 @@ import { addonRequestURL } from '../constants';
 /**
  * Display the search-empty state.
  *
- * @return {void}
+ * @returns {void}
  */
 export function showEmptyState() {
 	const { selectedCategory } = getState();

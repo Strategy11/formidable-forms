@@ -7,7 +7,7 @@ import { getElements } from '../elements';
 /**
  * Adds events to the dismiss button.
  *
- * @return {void}
+ * @returns {void}
  */
 function addDismissEvents() {
 	const { dismiss } = getElements();
@@ -22,7 +22,7 @@ function addDismissEvents() {
  * Handles the dismiss button click event.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function onDismissClick() {
 	const { welcomeTour, spotlight } = getElements();

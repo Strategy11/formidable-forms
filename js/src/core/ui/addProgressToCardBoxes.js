@@ -7,7 +7,7 @@ const { span } = window.frmDom;
  * Adds a progress bar to each card box element to visually indicate its position in the sequence.
  *
  * @param {Element[]} cardBoxes Collection of card box elements to enhance with progress bars.
- * @return {void}
+ * @returns {void}
  */
 function addProgressToCardBoxes( cardBoxes ) {
 	if ( ! Array.isArray( cardBoxes ) || ! cardBoxes.length ) {

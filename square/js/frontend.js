@@ -96,14 +96,14 @@
 	 * Disable submit button for a target form.
 	 *
 	 * @param {Element} form
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
 
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', {
-			detail: { form: form }
+			detail: { form }
 		} );
 		document.dispatchEvent( event );
 	}
@@ -190,7 +190,7 @@
 	 * Display an error message in the payment form.
 	 *
 	 * @param {string} errorMessage
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function displayPaymentFailure( errorMessage ) {
 		if ( ! thisForm ) {
@@ -255,7 +255,7 @@
 
 		/**
 		 * @param {Object} $form
-		 * @return {boolean} false if there are errors.
+		 * @returns {boolean} false if there are errors.
 		 */
 		function validateFormSubmit( $form ) {
 			const errors = frmFrontForm.validateFormSubmit( $form );

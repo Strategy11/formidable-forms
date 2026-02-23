@@ -1,0 +1,143 @@
+import { frmWebComponent } from '../frm-web-component';
+import style from './frm-dropdown-component.css';
+
+export class frmDropdownComponent extends frmWebComponent {
+	#onChange = () => {};
+	#select = document.createElement( 'select' );
+
+	static formAssociated = true;
+
+	constructor() {
+		super();
+		this.componentStyle = style;
+		this.attachInternals();
+	}
+
+	/**
+	 * Initializes the view. Called when the component is rendered.
+	 *
+	 * @returns {Element} - The wrapper element.
+	 */
+	initView() {
+		this.wrapper = document.createElement( 'div' );
+		this.wrapper.classList.add( 'frm-dropdown-component' );
+		this.wrapper.append( this.getSelect() );
+		return this.wrapper;
+	}
+
+	/**
+	 * Gets the select element.
+	 *
+	 * @returns {Element} - The select element.
+	 */
+	getSelect() {
+		if ( this.componentId ) {
+			this.#select.id = this.componentId;
+		}
+
+		if ( this.fieldName ) {
+			this.#select.name = this.fieldName;
+		}
+
+		return this.#select;
+	}
+
+	/**
+	 * Determines if the component should use shadow DOM. The dropdown component can utilize shadow DOM as it does not require external functional dependencies.
+	 *
+	 * @returns {boolean} - True if the component should use shadow DOM, false otherwise.
+	 */
+	useShadowDom() {
+		return true;
+	}
+
+	/**
+	 * Initializes the select options. It will retrieve the all the options from the component and create new option elements.
+	 *
+	 * @returns {void}
+	 */
+	initSelectOptions() {
+		const optionsNodes = this.querySelectorAll( 'option' );
+		optionsNodes.forEach( option => {
+			const opt = document.createElement( 'option' );
+			opt.value = option.value;
+			opt.textContent = option.textContent;
+			option.remove();
+			this.#select.append( opt );
+		} );
+	}
+
+	/**
+	 * Called when the component is visible in the viewport.
+	 *
+	 * @returns {void}
+	 */
+	afterViewInit() {
+		this.initSelectOptions();
+		this.#select.addEventListener( 'change', () => {
+			this.#onChange( this.#select.value );
+		} );
+	}
+
+	/**
+	 * A method to add options dynamically to the select element.
+	 *
+	 * @param {Array} options - The options to add.
+	 * @returns {void}
+	 */
+	set addOptions( options ) {
+		options.forEach( option => {
+			const opt = document.createElement( 'option' );
+			opt.value = option.value;
+			opt.textContent = option.label;
+			opt.selected = option.selected;
+			this.#select.append( opt );
+		} );
+	}
+
+	/**
+	 * A method to set the disabled state of the select element.
+	 *
+	 * @param {boolean} value - The value to set.
+	 * @returns {void}
+	 */
+	set disabled( value ) {
+		this.#select.disabled = value;
+	}
+
+	/**
+	 * A method to set the change event listener for the select element.
+	 *
+	 * @param {Function} callback - The callback function to call when the select element is changed.
+	 * @returns {void}
+	 */
+	set onChange( callback ) {
+		if ( 'function' !== typeof callback ) {
+			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
+		}
+
+		this.#onChange = callback;
+	}
+
+	/**
+	 * A method to set the selected value of the select element.
+	 *
+	 * @param {string} value - The value to set.
+	 * @returns {void}
+	 */
+	set selectedValue( value ) {
+		const option = Array.from( this.#select.options ).find( option => option.value === value );
+		if ( option ) {
+			option.selected = true;
+		}
+	}
+}
+
+// A shorthand function to create a dropdown component.
+window.frmDropdownComponent = ( id, options, onChangeCallback ) => {
+	const dropdown = document.createElement( 'frm-dropdown-component' );
+	dropdown.id = id;
+	dropdown.addOptions = options;
+	dropdown.onChange = onChangeCallback;
+	return dropdown;
+};

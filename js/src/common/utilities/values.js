@@ -16,7 +16,7 @@ export function updateAttribute( attributeName, attributeValue, setAttributes ) 
  *
  * @param {*}      value         Value of text attribute to be set
  * @param {string} attributeName Name of text attribute to be set
- * @return {string} String of the text attribute in the format " id=10"
+ * @returns {string} String of the text attribute in the format " id=10"
  */
 export function setTextAttribute( value, attributeName ) {
 	if ( value ) {
@@ -28,7 +28,7 @@ export function setTextAttribute( value, attributeName ) {
 /**
  * Gets subdirectory of current site, if the site isn't on the top level of the domain
  *
- * @return {string} The subdirectory of the current site
+ * @returns {string} The subdirectory of the current site
  */
 export function getSubDir() {
 	const page = window.location.pathname;

@@ -96,7 +96,7 @@ class FrmFormApi {
 	 * Flag the force property as true, so the next API request bypasses cache.
 	 * This is used to pull API data for change logs, which are excluded from the cached data.
 	 *
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @return void
 	 */
@@ -390,7 +390,7 @@ class FrmFormApi {
 	 * Remove certain add-on API data that we don't need to cache.
 	 * This is to help keep the option data (which is auto-loaded) small.
 	 *
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param array $addons
 	 *
@@ -425,7 +425,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param array $addon
 	 *

@@ -3,7 +3,7 @@
  *
  * @param {Object} [initialState={}] An object containing the initial state.
  * @throws {Error} Throws an error if the `initialState` is not a plain object.
- * @return {Object} An object with methods to initialize, get, and set the page state.
+ * @returns {Object} An object with methods to initialize, get, and set the page state.
  */
 export function createPageState( initialState = {} ) {
 	if ( typeof initialState !== 'object' || initialState === null ) {
@@ -17,7 +17,7 @@ export function createPageState( initialState = {} ) {
 	/**
 	 * Returns the current page state.
 	 *
-	 * @return {Object|null} The current state of the page or null if not initialized.
+	 * @returns {Object|null} The current state of the page or null if not initialized.
 	 */
 	const getState = () => state;
 
@@ -25,7 +25,7 @@ export function createPageState( initialState = {} ) {
 	 * Returns a specific property from the current page state.
 	 *
 	 * @param {string} propertyName The name of the property to retrieve.
-	 * @return {*} The value of the specified property, or null if it doesn't exist.
+	 * @returns {*} The value of the specified property, or null if it doesn't exist.
 	 */
 	const getSingleState = propertyName => {
 		const value = Reflect.get( state, propertyName );
@@ -40,7 +40,7 @@ export function createPageState( initialState = {} ) {
 	 *
 	 * @param {Object} newState The new values to update the state with.
 	 * @throws {Error} Throws an error if `newState` is not a plain object.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	const setState = newState => {
 		if ( typeof newState !== 'object' || newState === null ) {
@@ -55,7 +55,7 @@ export function createPageState( initialState = {} ) {
 	 *
 	 * @param {string} propertyName The name of the property to update.
 	 * @param {*}      value        The new value to set for the property.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	const setSingleState = ( propertyName, value ) => {
 		if ( Reflect.has( state, propertyName ) ) {

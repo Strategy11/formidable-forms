@@ -8,7 +8,7 @@ const urlParams = url.searchParams;
  * Gets the value of a specified query parameter from the current URL.
  *
  * @param {string} paramName The name of the query parameter to retrieve.
- * @return {string|null} The value associated with the specified query parameter name, or null if not found.
+ * @returns {string|null} The value associated with the specified query parameter name, or null if not found.
  */
 export const getQueryParam = paramName => urlParams.get( paramName );
 
@@ -16,7 +16,7 @@ export const getQueryParam = paramName => urlParams.get( paramName );
  * Removes a query parameter from the current URL and returns the updated URL string.
  *
  * @param {string} paramName The name of the query parameter to remove.
- * @return {string} The updated URL string.
+ * @returns {string} The updated URL string.
  */
 export const removeQueryParam = paramName => {
 	urlParams.delete( paramName );
@@ -30,7 +30,7 @@ export const removeQueryParam = paramName => {
  * @param {string} paramName                  The name of the query parameter to set.
  * @param {string} paramValue                 The value to set for the query parameter.
  * @param {string} [updateMethod='pushState'] The method to use for updating the history state. Accepts 'pushState' or 'replaceState'.
- * @return {string} The updated URL string.
+ * @returns {string} The updated URL string.
  */
 export const setQueryParam = ( paramName, paramValue, updateMethod = 'pushState' ) => {
 	urlParams.set( paramName, paramValue );
@@ -48,7 +48,7 @@ export const setQueryParam = ( paramName, paramValue, updateMethod = 'pushState'
  * Checks if a query parameter exists in the current URL.
  *
  * @param {string} paramName The name of the query parameter to check.
- * @return {boolean} True if the query parameter exists, otherwise false.
+ * @returns {boolean} True if the query parameter exists, otherwise false.
  */
 export const hasQueryParam = paramName => urlParams.has( paramName );
 
@@ -56,7 +56,7 @@ export const hasQueryParam = paramName => urlParams.has( paramName );
  * Removes a query parameter and updates history with replaceState.
  *
  * @param {string} paramName The query parameter to remove.
- * @return {void}
+ * @returns {void}
  */
 export const removeParamFromHistory = paramName =>
 	history.replaceState( {}, '', removeQueryParam( paramName ) );

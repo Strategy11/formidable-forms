@@ -43,7 +43,7 @@
 
 .frm-with-line::before,
 .accordion-section-content h4::before {
-	content: '';
+	content: "";
 	display: block;
 	position: absolute;
 	border-bottom: 1px solid var(--grey-300);

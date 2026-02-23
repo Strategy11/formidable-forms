@@ -9,7 +9,7 @@ const { div, svg } = frmDom;
  * @param {string}  action
  */
 export function toggleAddonState( clicked, action ) {
-	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url; // eslint-disable-line camelcase
+	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url;
 
 	// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 	jQuery( '.frm-addon-error' ).remove();
@@ -28,17 +28,17 @@ export function toggleAddonState( clicked, action ) {
 		cache: false,
 		dataType: 'json',
 		data: {
-			action: action,
+			action,
 			nonce: frmGlobal.nonce,
-			plugin: plugin
+			plugin
 		},
-		success: function( response ) {
+		success( response ) {
 			response = response?.data ?? response;
 
 			let saveAndReload;
 
 			if ( 'string' !== typeof response && 'string' === typeof response.message ) {
-				if ( 'undefined' !== typeof response.saveAndReload ) {
+				if ( response.saveAndReload !== undefined ) {
 					saveAndReload = response.saveAndReload;
 				}
 				response = response.message;
@@ -59,7 +59,7 @@ export function toggleAddonState( clicked, action ) {
 			 */
 			wp.hooks.doAction( 'frm_update_addon_state', response );
 		},
-		error: function() {
+		error() {
 			button.removeClass( 'frm_loading_button' );
 		}
 	} );
@@ -67,7 +67,7 @@ export function toggleAddonState( clicked, action ) {
 
 export function extractErrorFromAddOnResponse( response ) {
 	if ( typeof response !== 'string' ) {
-		if ( typeof response.success !== 'undefined' && response.success ) {
+		if ( response.success ) {
 			return false;
 		}
 
@@ -86,7 +86,7 @@ export function extractErrorFromAddOnResponse( response ) {
 }
 
 export function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
-	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
+	const frmAdminJs = frm_admin_js;
 
 	const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
 	addonStatuses.forEach(
@@ -214,7 +214,7 @@ function saveAndReloadFormBuilder() {
  * Updates the upgrade modal to show successful addon installation state.
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function showUpgradeModalSuccess() {
 	const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
@@ -269,12 +269,12 @@ function installAddonWithCreds( e ) {
 		data: {
 			action: 'frm_install_addon',
 			nonce: frmAdminJs.nonce,
-			plugin: plugin,
+			plugin,
 			hostname: el.find( '#hostname' ).val(),
 			username: el.find( '#username' ).val(),
 			password: el.find( '#password' ).val()
 		},
-		success: function( response ) {
+		success( response ) {
 			response = response?.data ?? response;
 
 			const error = extractErrorFromAddOnResponse( response );
@@ -285,7 +285,7 @@ function installAddonWithCreds( e ) {
 
 			afterAddonInstall( response, proceed, message, el );
 		},
-		error: function() {
+		error() {
 			proceed.removeClass( 'frm_loading_button' );
 		}
 	} );

@@ -35,7 +35,7 @@ const DATA_ATTRIBUTES = {
 /**
  * Initialize all group toggle components on the page
  *
- * @return {void}
+ * @returns {void}
  */
 function initToggleGroupComponents() {
 	applyInitialState();
@@ -46,7 +46,7 @@ function initToggleGroupComponents() {
  * Apply the initial state for all toggle buttons on the page
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function applyInitialState() {
 	const toggleGroups = document.querySelectorAll( `.${ CLASS_NAMES.GROUP_TOGGLE }` );
@@ -69,7 +69,7 @@ function applyInitialState() {
  * Add event listeners to toggle buttons in a group toggle component
  *
  * @private
- * @return {void}
+ * @returns {void}
  */
 function addEventListeners() {
 	documentOn( 'change', `.${ CLASS_NAMES.GROUP_TOGGLE } [${ DATA_ATTRIBUTES.GROUP_NAME }]`, handleToggleClick );
@@ -80,7 +80,7 @@ function addEventListeners() {
  *
  * @private
  * @param {Event} event The click event
- * @return {void}
+ * @returns {void}
  */
 function handleToggleClick( event ) {
 	const toggleButton = event.target;
@@ -100,7 +100,7 @@ function handleToggleClick( event ) {
  * @private
  * @param {HTMLElement} toggleButton The toggle button element
  * @param {HTMLElement} toggleGroup  The toggle group container element
- * @return {void}
+ * @returns {void}
  */
 function applyToggleState( toggleButton, toggleGroup ) {
 	const fieldId = toggleGroup.closest( `.${ SINGLE_SETTINGS_CLASS }` )?.dataset.fid ||
@@ -157,7 +157,7 @@ function applyToggleState( toggleButton, toggleGroup ) {
  * @private
  * @param {string} selector The selector string with potential {id} placeholders
  * @param {string} fieldId  The field ID to replace placeholders with
- * @return {string} The normalized selector
+ * @returns {string} The normalized selector
  */
 function normalizeSelector( selector, fieldId ) {
 	return selector.replace( /{id}/g, fieldId );
