@@ -390,7 +390,7 @@ class FrmStrpLiteLinkController {
 
 		if ( ! $is_setup_intent ) {
 			// Update the amount and set the customer before confirming the payment.
-			FrmStrpLiteAppHelper::call_stripe_helper_class(
+			$updated = FrmStrpLiteAppHelper::call_stripe_helper_class(
 				'update_intent',
 				$intent_id,
 				array(
@@ -398,6 +398,9 @@ class FrmStrpLiteLinkController {
 					'customer' => $customer->id,
 				)
 			);
+			if ( ! $updated ) {
+				return false;
+			}
 		}
 
 		self::add_temporary_referer_meta( (int) $entry->id );
