@@ -376,7 +376,8 @@ class FrmStrpLiteLinkController {
 		}
 
 		$form      = $atts['form'];
-		$intent_id = self::verify_intent( $form->id );
+		$action    = $atts['action'];
+		$intent_id = self::verify_intent( $form->id, $action );
 
 		if ( ! $intent_id ) {
 			return;
@@ -384,7 +385,6 @@ class FrmStrpLiteLinkController {
 
 		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 		$entry           = $atts['entry'];
-		$action          = $atts['action'];
 		$amount          = $atts['amount'];
 		$customer        = $atts['customer'];
 
@@ -423,10 +423,11 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 * @param WP_Post    $action
 	 *
 	 * @return false|string String intent id on success, False if intent is missing or cannot be verified.
 	 */
-	private static function verify_intent( $form_id ) {
+	private static function verify_intent( $form_id, $action ) {
 		$client_secrets = FrmAppHelper::get_post_param( 'frmintent' . $form_id, array(), 'sanitize_text_field' );
 
 		if ( ! $client_secrets ) {
@@ -440,11 +441,36 @@ class FrmStrpLiteLinkController {
 		$function_name              = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
 		$intent                     = FrmStrpLiteAppHelper::call_stripe_helper_class( $function_name, $intent_id );
 
-		if ( ! $intent || $intent->client_secret !== $client_secret ) {
+		if ( ! $intent || $intent->client_secret !== $client_secret || ! self::intent_matches_form_action( $intent, $action ) ) {
+			return false;
+		}
+
+		if ( isset( $intent->charges ) && is_object( $intent->charges ) && ! empty( $intent->charges->data ) ) {
+			// The intent should not have any charges yet.
+			// If it is, the intent is invalid.
 			return false;
 		}
 
 		return $intent_id;
+	}
+
+	/**
+	 * Check if an intent matches a form action.
+	 *
+	 * @since x.x
+	 *
+	 * @param object  $intent
+	 * @param WP_Post $action
+	 *
+	 * @return bool
+	 */
+	private static function intent_matches_form_action( $intent, $action ) {
+		if ( ! isset( $intent->metadata ) || ! is_object( $intent->metadata ) || empty( $intent->metadata->action ) ) {
+			// Avoid false positive if the intent is missing metadata.
+			return true;
+		}
+
+		return (int) $intent->metadata->action === $action->ID;
 	}
 
 	/**
