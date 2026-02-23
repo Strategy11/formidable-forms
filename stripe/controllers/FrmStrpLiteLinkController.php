@@ -456,6 +456,14 @@ class FrmStrpLiteLinkController {
 			return false;
 		}
 
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
+
+		if ( $payment ) {
+			// A duplicate payment should not exist.
+			return false;
+		}
+
 		return $intent_id;
 	}
 
