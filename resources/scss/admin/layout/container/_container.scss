@@ -40,6 +40,12 @@
 	left: 0;
 }
 
+/* Adjust container position when min version notice is displayed */
+body:has(#wpbody-content > .frm-banner-alert) .frm_wrap .frm_page_container {
+	top: 40px; /* 40px banner height */
+	height: calc(100vh - 40px);
+}
+
 .frm-full-screen.frm-admin-page-entries .frm_page_container,
 .frm-new-entry .frm_page_container,
 .frm-admin-page-reports .frm_page_container,
