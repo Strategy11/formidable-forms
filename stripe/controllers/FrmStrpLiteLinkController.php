@@ -368,11 +368,11 @@ class FrmStrpLiteLinkController {
 	 *     @type object   $customer
 	 * }
 	 *
-	 * @return void
+	 * @return bool True on success, false on failure.
 	 */
 	public static function create_pending_stripe_link_payment( $atts ) {
 		if ( empty( $atts['form'] ) || empty( $atts['entry'] ) || empty( $atts['action'] ) || ! isset( $atts['amount'] ) || empty( $atts['customer'] ) ) {
-			return;
+			return false;
 		}
 
 		$form      = $atts['form'];
@@ -380,7 +380,7 @@ class FrmStrpLiteLinkController {
 		$intent_id = self::verify_intent( $form->id, $action );
 
 		if ( ! $intent_id ) {
-			return;
+			return false;
 		}
 
 		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
@@ -403,7 +403,7 @@ class FrmStrpLiteLinkController {
 		self::add_temporary_referer_meta( (int) $entry->id );
 
 		$frm_payment = new FrmTransLitePayment();
-		$frm_payment->create(
+		$payment_id  = $frm_payment->create(
 			array(
 				'paysys'     => 'stripe',
 				'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $amount, $action ),
@@ -415,6 +415,8 @@ class FrmStrpLiteLinkController {
 				'test'       => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 			)
 		);
+
+		return (bool) $payment_id;
 	}
 
 	/**
