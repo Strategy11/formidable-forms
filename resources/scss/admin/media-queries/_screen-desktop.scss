@@ -29,4 +29,9 @@
 		/* There isn't enough room for the title on a screen this size so just hide it. */
 		display: none !important;
 	}
+
+	/* Adjust container position when min version notice is displayed */
+	body:has(#wpbody-content > .frm_previous_install) .frm_wrap .frm_page_container {
+		--min-version-banner-height: 62px;
+	}
 }
