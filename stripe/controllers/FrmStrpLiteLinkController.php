@@ -102,6 +102,14 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		$expected_amount = intval( round( $payment->amount * 100 ) );
+		$actual_amount   = intval( $intent->amount );
+
+		if ( $expected_amount !== $actual_amount ) {
+			$redirect_helper->handle_error( 'amount_mismatch' );
+			die();
+		}
+
 		if ( 'succeeded' !== $intent->status ) {
 			if ( 'processing' === $intent->status ) {
 				FrmTransLitePaymentsController::change_payment_status( $payment, 'processing' );

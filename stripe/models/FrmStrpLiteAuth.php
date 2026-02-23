@@ -152,6 +152,8 @@ class FrmStrpLiteAuth {
 				return __( 'Something went wrong when trying to create a subscription.', 'formidable' );
 			case 'payment_failed':
 				return __( 'Payment was not successfully processed.', 'formidable' );
+			case 'amount_mismatch':
+				return __( 'The payment amount does not match the expected amount.', 'formidable' );
 		}
 		return '';
 	}
