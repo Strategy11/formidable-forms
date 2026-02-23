@@ -1142,11 +1142,11 @@ BEFORE_HTML;
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
 
-		if ( ! $invalid_msg ) {
-			$show_img = false;
-		} else {
+		if ( $invalid_msg ) {
 			echo wp_kses_post( $invalid_msg );
 			$show_img = true;
+		} else {
+			$show_img = false;
 		}
 
 		self::show_error(

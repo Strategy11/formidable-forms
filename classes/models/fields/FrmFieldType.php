@@ -1560,10 +1560,10 @@ DEFAULT_HTML;
 		}
 
 		if ( $this->get_field_column( 'description' ) !== '' && ! in_array( 'frm_desc_' . $args['html_id'], $describedby, true ) ) {
-			if ( ! $error_comes_first ) {
-				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
-			} else {
+			if ( $error_comes_first ) {
 				array_push( $describedby, 'frm_desc_' . $args['html_id'] );
+			} else {
+				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
 			}
 		}
 
