@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-tabs-navs">
 				<ul class="frm-flex-box">
 					<li class="frm-active">
-						<a href="#frm-insert-fields">
+						<a href="#frm-insert-fields" id="frm_add_fields_tab">
 							<?php esc_html_e( 'Add Fields', 'formidable' ); ?>
 						</a>
 					</li>
