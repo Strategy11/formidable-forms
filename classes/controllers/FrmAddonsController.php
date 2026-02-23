@@ -287,12 +287,12 @@ class FrmAddonsController {
 		$addons = $api->get_api_info();
 
 		if ( ! $addons ) {
-			$addons = self::fallback_plugin_list();
-		} else {
-			foreach ( $addons as $k => $addon ) {
-				if ( empty( $addon['excerpt'] ) && $k !== 'error' ) {
-					unset( $addons[ $k ] );
-				}
+			return self::fallback_plugin_list();
+		}
+
+		foreach ( $addons as $k => $addon ) {
+			if ( empty( $addon['excerpt'] ) && $k !== 'error' ) {
+				unset( $addons[ $k ] );
 			}
 		}
 

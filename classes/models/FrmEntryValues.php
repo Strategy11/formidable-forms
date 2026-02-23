@@ -117,9 +117,7 @@ class FrmEntryValues {
 	protected function init_include_fields( $atts ) {
 		// For reverse compatibility with the fields parameter.
 		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
-			if ( ! is_array( $atts['fields'] ) ) {
-				$atts['include_fields'] = $atts['fields'];
-			} else {
+			if ( is_array( $atts['fields'] ) ) {
 				$atts['include_fields'] = '';
 
 				foreach ( $atts['fields'] as $included_field ) {
@@ -127,6 +125,8 @@ class FrmEntryValues {
 				}
 
 				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+			} else {
+				$atts['include_fields'] = $atts['fields'];
 			}
 		}
 

@@ -2761,14 +2761,14 @@ class FrmFieldsHelper {
 
 		if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
 			// Backwards compatibility "@since 6.24".
-			if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+			if ( method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
+				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
+			} else {
 				$data = array(
 					'modal-title'   => __( 'Generate options with AI', 'formidable' ),
 					'modal-content' => __( 'Update the Formidable AI add-on to the last version to use this feature.', 'formidable' ),
 				);
-			} else {
-				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
-				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
 			}
 		}
 

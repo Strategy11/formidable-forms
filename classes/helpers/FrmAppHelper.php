@@ -2459,14 +2459,14 @@ class FrmAppHelper {
 			$original_function = $function;
 			$function          = count( $value ) ? explode( ', ', FrmDb::prepare_array_values( $value, $function ) ) : array( $function );
 
-			if ( ! self::is_assoc( $value ) ) {
-				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
-			} else {
+			if ( self::is_assoc( $value ) ) {
 				foreach ( $value as $k => $v ) {
 					if ( ! is_array( $v ) ) {
 						$value[ $k ] = call_user_func( $original_function, $v );
 					}
 				}
+			} else {
+				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
 			}
 		} else {
 			$value = self::maybe_update_value_if_null( $value, $function );

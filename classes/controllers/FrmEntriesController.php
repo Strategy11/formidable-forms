@@ -15,11 +15,11 @@ class FrmEntriesController {
 
 		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 
-		if ( ! $views_installed ) {
+		if ( $views_installed ) {
+			self::maybe_redirect_to_views_index();
+		} else {
 			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			self::maybe_redirect_to_views_upsell();
-		} else {
-			self::maybe_redirect_to_views_index();
 		}
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
@@ -100,16 +100,17 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
-			$menu_name = FrmAppHelper::get_menu_name();
-			$base      = self::base_column_key( $menu_name );
-
-			add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
-			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
-			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
-		} else {
+		if ( in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
 			add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
+			return;
 		}
+
+		$menu_name = FrmAppHelper::get_menu_name();
+		$base      = self::base_column_key( $menu_name );
+
+		add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
+		add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
+		add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
 	}
 
 	/**

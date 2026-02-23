@@ -528,10 +528,10 @@ class FrmEntryValidate {
 			$pattern = '';
 
 			foreach ( $parts as $part ) {
-				if ( ! $pattern ) {
-					$pattern .= $part;
-				} else {
+				if ( $pattern ) {
 					$pattern .= '(' . $part . ')?';
+				} else {
+					$pattern .= $part;
 				}
 			}
 		}

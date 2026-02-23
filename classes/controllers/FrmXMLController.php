@@ -742,10 +742,10 @@ class FrmXMLController {
 		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
 		unset( $query );
 
-		if ( ! $entry_ids ) {
-			esc_html_e( 'There are no entries for that form.', 'formidable' );
-		} else {
+		if ( $entry_ids ) {
 			FrmCSVExportHelper::generate_csv( compact( 'form', 'entry_ids', 'form_cols' ) );
+		} else {
+			esc_html_e( 'There are no entries for that form.', 'formidable' );
 		}
 
 		wp_die();

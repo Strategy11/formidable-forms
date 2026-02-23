@@ -322,11 +322,11 @@ class FrmFormActionsController {
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 
-		if ( ! $temp_actions ) {
+		if ( $temp_actions ) {
+			$temp_actions = $temp_actions->actions;
+		} else {
 			self::actions_init();
 			$temp_actions = self::$registered_actions->actions;
-		} else {
-			$temp_actions = $temp_actions->actions;
 		}
 
 		$actions = array();
