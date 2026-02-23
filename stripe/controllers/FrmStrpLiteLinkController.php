@@ -102,11 +102,9 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
-
-		$actual_amount   = intval( $intent->amount );
-
 		$currency        = FrmTransLiteAppHelper::get_action_setting( 'currency', array( 'payment' => $payment ) );
 		$currency        = FrmCurrencyHelper::get_currency( $currency );
+		$actual_amount   = intval( $intent->amount );
 		$expected_amount = intval( $payment->amount );
 
 		if ( 0 !== $currency['decimals'] ) {
