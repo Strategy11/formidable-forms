@@ -1000,12 +1000,10 @@ class FrmForm {
 		foreach ( $results as $row ) {
 			if ( 'trash' === $row->status ) {
 				++$counts['trash'];
+			} elseif ( $row->is_template ) {
+				++$counts['template'];
 			} else {
-				if ( $row->is_template ) {
-					++$counts['template'];
-				} else {
-					++$counts['published'];
-				}
+				++$counts['published'];
 			}
 
 			if ( 'draft' === $row->status ) {

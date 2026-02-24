@@ -29,7 +29,6 @@
 		<!-- These rules are new. Work on fixing these. -->
 		<exclude name="WordPress.WP.Capabilities.RoleFound" />
 		<exclude name="Generic.Files.OneObjectStructurePerFile.MultipleFound" />
-		<exclude name="Universal.ControlStructures.DisallowLonelyIf.Found" />
 		<exclude name="Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses" />
 	</rule>
 	<rule ref="WordPress.WP.I18n">
