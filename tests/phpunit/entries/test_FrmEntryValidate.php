@@ -56,8 +56,8 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		wp_set_current_user( null );
 		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
 		$check = $this->get_spam_check_user_info( $values );
-		$this->assertTrue( empty( $check['user_ID'] ) );
-		$this->assertTrue( empty( $check['user_id'] ) );
+		$this->assertEmpty( $check['user_ID'] );
+		$this->assertEmpty( $check['user_id'] );
 		$this->assertSame( 'Some Guy', $check['comment_author'] );
 		$this->assertSame( $test_email, $check['comment_author_email'] );
 		$this->assertSame( $test_url, $check['comment_author_url'] );
@@ -189,8 +189,8 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		);
 
 		$this->assertSame( array( 1, 17, 11 ), $form_ids );
-		$this->assertFalse( isset( $test_values['item_meta'][163] ) );
-		$this->assertFalse( isset( $test_values['item_meta'][165] ) );
+		$this->assertArrayNotHasKey(163, $test_values['item_meta']);
+		$this->assertArrayNotHasKey(165, $test_values['item_meta']);
 		$this->assertSame( array( 'Option 2', 'Option 1' ), $test_values['item_meta'][162] );
 		$this->assertSame( array( 'John Doe' ), $test_values['item_meta'][118] );
 		$this->assertSame( 'John Doe', $test_values['item_meta'][1] );
@@ -273,9 +273,9 @@ class test_FrmEntryValidate extends FrmUnitTest {
 
 		// Checkbox field shouldn't be skipped.
 		foreach ( array( 'radio', 'radio_2', 'radio_3', 'radio_4', 'checkbox', 'select', 'scale', 'star', 'range', 'toggle' ) as $key ) {
-			$this->assertFalse( isset( $values['item_meta'][ $fields[ $key ]->id ] ) );
+			$this->assertArrayNotHasKey($fields[ $key ]->id, $values['item_meta']);
 		}
 
-		$this->assertTrue( isset( $values['item_meta'][ $fields['radio_5']->id ] ) );
+		$this->assertArrayHasKey($fields['radio_5']->id, $values['item_meta']);
 	}
 }

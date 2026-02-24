@@ -168,10 +168,10 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$csv_content = file_get_contents( $csv_path );
 		unlink( $csv_path );
 
-		$this->assertStringContainsString( ',"Text Field Name",', $csv_content );
-		$this->assertStringContainsString( ',"Timestamp",', $csv_content );
-		$this->assertStringContainsString( ',"ID",', $csv_content );
-		$this->assertStringContainsString( ',"Test Value",', $csv_content );
-		$this->assertStringContainsString( ',"' . $entry->id . '",', $csv_content );
+		$this->assertStringContainsString( ',"Text Field Name",', (string) $csv_content );
+		$this->assertStringContainsString( ',"Timestamp",', (string) $csv_content );
+		$this->assertStringContainsString( ',"ID",', (string) $csv_content );
+		$this->assertStringContainsString( ',"Test Value",', (string) $csv_content );
+		$this->assertStringContainsString( ',"' . $entry->id . '",', (string) $csv_content );
 	}
 }

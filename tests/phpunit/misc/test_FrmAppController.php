@@ -68,14 +68,14 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->set_admin_screen();
 		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
-		$this->assertStringContainsString( $class, $filtered_class, '"' . $class . '" is missing from admin classes' );
-		$this->assertStringNotContainsString( 'frm-white-body', $filtered_class, '"frm-white-body" was added to admin classes' );
+		$this->assertStringContainsString( $class, (string) $filtered_class, '"' . $class . '" is missing from admin classes' );
+		$this->assertStringNotContainsString( 'frm-white-body', (string) $filtered_class, '"frm-white-body" was added to admin classes' );
 
 		$this->set_admin_screen( 'admin.php?page=formidable' );
 		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
-		$this->assertStringContainsString( $class, $filtered_class, '"' . $class . '" is missing from admin classes' );
-		$this->assertStringContainsString( ' frm-white-body', $filtered_class, '"frm-white-body" is missing from admin classes' );
+		$this->assertStringContainsString( $class, (string) $filtered_class, '"' . $class . '" is missing from admin classes' );
+		$this->assertStringContainsString( ' frm-white-body', (string) $filtered_class, '"frm-white-body" is missing from admin classes' );
 	}
 
 	/**

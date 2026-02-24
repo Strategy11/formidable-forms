@@ -44,7 +44,7 @@ class test_FrmStylesController extends FrmUnitTest {
 		global $frm_vars;
 		$frm_vars['css_loaded'] = false;
 		$stylesheet_urls        = FrmStylesController::custom_stylesheet();
-		$this->assertTrue( isset( $stylesheet_urls['formidable'] ), 'The stylesheet array is empty' );
+		$this->assertArrayHasKey( 'formidable', $stylesheet_urls, 'The stylesheet array is empty' );
 		return $stylesheet_urls;
 	}
 
@@ -73,7 +73,7 @@ class test_FrmStylesController extends FrmUnitTest {
 		FrmStylesController::save();
 		$returned = ob_get_clean();
 
-		$this->assertStringContainsString( 'Your styling settings have been saved.', $returned );
+		$this->assertStringContainsString( 'Your styling settings have been saved.', (string) $returned );
 		$frm_style     = new FrmStyle( $style->ID );
 		$updated_style = $frm_style->get_one();
 		$this->assertSame( $style->post_title . ' Updated', $updated_style->post_title );

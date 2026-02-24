@@ -23,7 +23,7 @@ class test_FrmField extends FrmUnitTest {
 				)
 			);
 			$this->assertIsNumeric( $field_id );
-			$this->assertTrue( $field_id > 0 );
+			$this->assertGreaterThan(0, $field_id);
 		}
 	}
 

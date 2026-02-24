@@ -2,8 +2,6 @@
 
 class test_FrmSpamCheckDenylist extends FrmUnitTest {
 
-	private $form_id;
-
 	private $text_field_id;
 
 	private $email_field_id;
@@ -21,38 +19,38 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->form_id = $this->factory->form->create(
+		$form_id = $this->factory->form->create(
 			array(
 				'form_key' => 'test_form_spam',
 			)
 		);
 
-		$fields              = FrmField::getAll( array( 'form_id' => $this->form_id ) );
+		$fields              = FrmField::getAll( array( 'form_id' => $form_id ) );
 		$this->text_field_id = $fields[0]->id;
 
 		$this->email_field_id = $this->factory->field->create(
 			array(
 				'type'    => 'email',
-				'form_id' => $this->form_id,
+				'form_id' => $form_id,
 			)
 		);
 
 		$this->name_field_id = $this->factory->field->create(
 			array(
 				'type'    => 'name',
-				'form_id' => $this->form_id,
+				'form_id' => $form_id,
 			)
 		);
 
 		$this->email_field_id2 = $this->factory->field->create(
 			array(
 				'type'    => 'email',
-				'form_id' => $this->form_id,
+				'form_id' => $form_id,
 			)
 		);
 
 		$this->default_values = array(
-			'form_id'   => $this->form_id,
+			'form_id'   => $form_id,
 			'item_meta' => array(
 				$this->email_field_id  => 'test@gmail.com',
 				$this->text_field_id   => 'this text contains test@domain.com',

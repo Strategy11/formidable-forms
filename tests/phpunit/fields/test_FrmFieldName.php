@@ -19,8 +19,8 @@ class test_FrmFieldName extends FrmUnitTest {
 		$processed_sub_fields = $this->run_private_method( array( $name_field, 'get_processed_sub_fields' ) );
 
 		$this->assertSame( array( 'first', 'middle', 'last' ), array_keys( $processed_sub_fields ) );
-		$this->assertStringContainsString( 'frm4', $processed_sub_fields['first']['wrapper_classes'] );
-		$this->assertStringContainsString( 'frm4', $processed_sub_fields['middle']['wrapper_classes'] );
-		$this->assertStringContainsString( 'frm4', $processed_sub_fields['last']['wrapper_classes'] );
+		$this->assertStringContainsString( 'frm4', (string) $processed_sub_fields['first']['wrapper_classes'] );
+		$this->assertStringContainsString( 'frm4', (string) $processed_sub_fields['middle']['wrapper_classes'] );
+		$this->assertStringContainsString( 'frm4', (string) $processed_sub_fields['last']['wrapper_classes'] );
 	}
 }

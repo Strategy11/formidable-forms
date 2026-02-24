@@ -10,8 +10,7 @@ class test_FrmAddon extends FrmUnitTest {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )
-							->setMethods( null )
+		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )->setMethods()
 							->getMock();
 	}
 
@@ -30,7 +29,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 */
 	public function test_insert_installed_addon() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-		$this->assertTrue( isset( $plugins['signature'] ) );
+		$this->assertArrayHasKey('signature', $plugins);
 	}
 
 	/**

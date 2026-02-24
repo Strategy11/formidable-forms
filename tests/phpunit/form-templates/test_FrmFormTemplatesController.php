@@ -52,10 +52,10 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$output = ob_get_clean();
 
 		// Assertions for verifying specific elements in the rendered output.
-		$this->assertStringContainsString( 'id="frm-form-templates-page"', $output, 'The output does not contain the page ID.' );
-		$this->assertStringContainsString( 'id="frm-new-template"', $output, 'The hidden form (frm-new-template) is missing from the output.' );
-		$this->assertStringContainsString( 'id="frm-page-skeleton-sidebar"', $output, 'The sidebar (frm-page-skeleton-sidebar) is missing from the output.' );
-		$this->assertStringContainsString( 'id="post-body-content"', $output, 'The post body content (post-body-content) is missing from the output.' );
+		$this->assertStringContainsString( 'id="frm-form-templates-page"', (string) $output, 'The output does not contain the page ID.' );
+		$this->assertStringContainsString( 'id="frm-new-template"', (string) $output, 'The hidden form (frm-new-template) is missing from the output.' );
+		$this->assertStringContainsString( 'id="frm-page-skeleton-sidebar"', (string) $output, 'The sidebar (frm-page-skeleton-sidebar) is missing from the output.' );
+		$this->assertStringContainsString( 'id="post-body-content"', (string) $output, 'The post body content (post-body-content) is missing from the output.' );
 	}
 
 	/**
@@ -74,14 +74,14 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$this->controller::render_modal();
 		$output = ob_get_clean();
 
-		$this->assertStringContainsString( 'id="frm-create-template-modal"', $output );
+		$this->assertStringContainsString( 'id="frm-create-template-modal"', (string) $output );
 
 		// Case: Free license, not expired.
 		$this->set_private_property( $this->controller, 'is_expired', false );
 
 		// Assertions for free license.
-		$this->assertStringContainsString( 'id="frm-form-upgrade-modal"', $output );
-		$this->assertStringNotContainsString( 'id="frm-renew-modal"', $output );
+		$this->assertStringContainsString( 'id="frm-form-upgrade-modal"', (string) $output );
+		$this->assertStringNotContainsString( 'id="frm-renew-modal"', (string) $output );
 
 		// Case: Expired account.
 		$this->set_private_property( $this->controller, 'is_expired', true );
@@ -91,7 +91,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$output = ob_get_clean();
 
 		// Assertions for expired account.
-		$this->assertStringContainsString( 'id="frm-renew-modal"', $output );
+		$this->assertStringContainsString( 'id="frm-renew-modal"', (string) $output );
 
 		// Case: Not on form templates page.
 		$_GET['page'] = 'other-page';
@@ -133,7 +133,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 			// Verify the favorite templates are correctly initialized.
 			$this->assertIsArray( $favorites, 'Favorite templates should be an array.' );
-			$this->assertTrue( isset( $favorites['default'] ), 'Missing default in favorites.' );
+			$this->assertArrayHasKey( 'default', $favorites, 'Missing default in favorites.' );
 
 			$expected = array_merge( $test_favorite, $default );
 			$this->assertEquals( $expected, $favorites, 'Favorite templates should match the example data.' );

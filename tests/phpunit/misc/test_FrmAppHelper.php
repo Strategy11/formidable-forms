@@ -531,11 +531,11 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$column     = 'field_key';
 		$name       = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
 		$key        = FrmAppHelper::get_unique_key( $name, $table_name, $column );
-		$this->assertTrue( strlen( $key ) < 100, 'field key length should never be over 100' );
+		$this->assertLessThan( 100, strlen( $key ), 'field key length should never be over 100' );
 
 		$name = 'key';
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
-		$this->assertTrue( 'key' !== $key, 'key is a reserved key so get_unique_key should never return it.' );
+		$this->assertNotSame( 'key', $key, 'key is a reserved key so get_unique_key should never return it.' );
 
 		$name = 123;
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
@@ -563,7 +563,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertNotSame( $name, $key, 'Field key should be unique' );
-		$this->assertStringContainsString( '___', $key, 'Field key should contain custom separator' );
+		$this->assertStringContainsString( '___', (string) $key, 'Field key should contain custom separator' );
 		$this->assertSame( strlen( $name ) + 4, strlen( $key ), 'Field key should be the previous key + 3 character separator + "2" incremented counter value' );
 		$this->assertSame( $name . '___2', $key );
 
@@ -573,7 +573,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$table_name = 'frm_forms';
 		$column     = 'form_key';
 		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, $table_name, $column );
-		$this->assertTrue( strlen( $unique_key ) <= 70 );
+		$this->assertLessThanOrEqual(70, strlen( $unique_key ));
 		$this->assertNotSame( $super_long_form_key, $unique_key );
 	}
 

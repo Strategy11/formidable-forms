@@ -12,7 +12,7 @@ class test_FrmApplicationsController extends FrmUnitTest {
 		ob_start();
 		FrmApplicationsController::landing_page();
 		$html = ob_get_clean();
-		$this->assertStringContainsString( 'id="frm_applications_container"', $html );
+		$this->assertStringContainsString( 'id="frm_applications_container"', (string) $html );
 	}
 
 	/**
@@ -48,6 +48,6 @@ class test_FrmApplicationsController extends FrmUnitTest {
 		$title = 'Applications';
 		FrmApplicationsController::render_applications_header( $title, 'index' );
 		$html = ob_get_clean();
-		$this->assertStringContainsString( $title, $html );
+		$this->assertStringContainsString( $title, (string) $html );
 	}
 }
