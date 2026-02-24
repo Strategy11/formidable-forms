@@ -271,7 +271,7 @@ class FrmDashboardController {
 		$copy = sprintf(
 			/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
 			__( 'See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you\'ll see it here.', 'formidable' ),
-			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '">',
+			'<a target="_blank" href="' . esc_url( FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) ) . '">',
 			'</a>'
 		);
 		return array(
