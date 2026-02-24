@@ -62,7 +62,7 @@ class test_FrmEntry extends FrmUnitTest {
 		$first_item = reset( $items );
 
 		$this->assertIsObject( $first_item );
-		$this->assertEmpty( $first_item->metas, 'Entries should not include metas unless $meta = true is set.' );
+		$this->assertObjectNotHasProperty( 'metas', $first_item, 'Entries should not include metas unless $meta = true is set.' );
 
 		// Test with $meta = true.
 		$items      = FrmEntry::getAll( array( 'it.form_id' => $form->id ), '', '', true, false );

@@ -56,8 +56,8 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		wp_set_current_user( null );
 		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
 		$check = $this->get_spam_check_user_info( $values );
-		$this->assertEmpty( $check['user_ID'] );
-		$this->assertEmpty( $check['user_id'] );
+		$this->assertArrayNotHasKey( 'user_ID', $check );
+		$this->assertArrayNotHasKey( 'user_id', $check );
 		$this->assertSame( 'Some Guy', $check['comment_author'] );
 		$this->assertSame( $test_email, $check['comment_author_email'] );
 		$this->assertSame( $test_url, $check['comment_author_url'] );
