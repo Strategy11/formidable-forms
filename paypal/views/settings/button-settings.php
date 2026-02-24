@@ -2,6 +2,8 @@
 /**
  * PayPal button settings view
  *
+ * @package Formidable
+ *
  * @since x.x
  *
  * @var array $settings PayPal button settings array

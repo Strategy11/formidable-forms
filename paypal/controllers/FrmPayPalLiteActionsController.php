@@ -289,13 +289,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 
-		/*
-		echo '<pre>';
-		var_dump( $response );
-		echo '</pre>';
-		die();
-		*/
-
 		self::$active_order_id = $paypal_order_id;
 
 		return true;
@@ -610,7 +603,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return string
 	 */
-	private static function get_paypal_locale() {
+	private static function get_paypal_locale() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
 		$locale  = str_replace( '_', '-', get_locale() );
 		$parts   = explode( '_', $locale );
 		$lang    = strtolower( $parts[0] );
@@ -1586,7 +1579,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param array    $errors
 	 * @param stdClass $field
-	 * @param array    $values
 	 *
 	 * @return array
 	 */
