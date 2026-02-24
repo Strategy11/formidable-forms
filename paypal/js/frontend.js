@@ -16,7 +16,7 @@
 	/**
 	 * Initialize PayPal Card Fields (Advanced Card Payments).
 	 *
-	 * @return {Promise<Object>} The card fields instance.
+	 * @returns {Promise<Object>} The card fields instance.
 	 */
 	async function initializeCardFields() {
 		const cardElement = document.querySelector( '.frm-card-element' );
@@ -27,11 +27,11 @@
 		thisForm = cardElement.closest( 'form' );
 
 		const cardFieldsConfig = {
-			createOrder: createOrder,
+			createOrder,
 		//	createSubscription: createSubscription,
 		//	createVaultSetupToken: createVaultSetupToken,
-			onApprove: onApprove,
-			onError: onError,
+			onApprove,
+			onError,
 			style: frmPayPalVars.style,
 			inputEvents: {
 				onChange: data => {
@@ -96,11 +96,11 @@
 			}
 
 			paypal.Buttons( {
-				createOrder: createOrder,
+				createOrder,
 			//	createSubscription: createSubscription,
-				onApprove: onApprove,
-				onError: onError,
-				onCancel: onCancel,
+				onApprove,
+				onError,
+				onCancel,
 				style: frmPayPalVars.buttonStyle,
 				fundingSource: paypal.FUNDING.PAYPAL,
 			} ).render( '#paypal-button-container' );
@@ -180,12 +180,12 @@
 	/**
 	 * Get PayPal settings from frmPayPalVars.settings.
 	 *
-	 * @return {Array} Array of PayPal settings.
+	 * @returns {Array} Array of PayPal settings.
 	 */
 	function getPayPalSettings() {
 		const paypalSettings = [];
 		frmPayPalVars.settings.forEach( function( setting ) {
-			if ( -1 !== setting.gateways.indexOf( 'paypal' ) ) {
+			if ( setting.gateways.includes( 'paypal' ) ) {
 				paypalSettings.push( setting );
 			}
 		} );
@@ -195,7 +195,7 @@
 	/**
 	 * Get the field IDs that affect the price.
 	 *
-	 * @return {Array} Array of field IDs.
+	 * @returns {Array} Array of field IDs.
 	 */
 	function getPriceFields() {
 		const priceFields = [];
@@ -331,7 +331,7 @@
 	/**
 	 * Create a PayPal order via AJAX.
 	 *
-	 * @return {Promise<string>} The order ID.
+	 * @returns {Promise<string>} The order ID.
 	 */
 	async function createOrder( data ) {
 		console.log( 'createOrder', data );
@@ -507,14 +507,14 @@
 	 * Disable submit button for a target form.
 	 *
 	 * @param {Element} form
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
 
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent( 'frmPayPalLiteDisableSubmit', {
-			detail: { form: form }
+			detail: { form }
 		} );
 		document.dispatchEvent( event );
 	}
@@ -527,7 +527,7 @@
 	 * Display an error message in the payment form.
 	 *
 	 * @param {string} errorMessage
-	 * @return {void}
+	 * @returns {void}
 	 */
 	function displayPaymentFailure( errorMessage ) {
 		if ( ! thisForm ) {
@@ -560,7 +560,7 @@
 	 * Validate the form before submission.
 	 *
 	 * @param {Element} form
-	 * @return {boolean} True if valid.
+	 * @returns {boolean} True if valid.
 	 */
 	function validateFormSubmit( form ) {
 		if ( typeof frmFrontForm.validateFormSubmit !== 'function' ) {
@@ -671,7 +671,7 @@
 			console.error( 'Initializing PayPal Card Fields failed', e );
 			displayPaymentFailure( 'Failed to initialize payment form.' );
 		}
-		
+
 		// Initially disable the submit button until PayPal is ready
 		disableSubmit( thisForm );
 	}
@@ -694,7 +694,7 @@
 		 *
 		 * @param {number|HTMLElement} field        Field ID or Field element.
 		 * @param {string}             subFieldName Subfield name.
-		 * @return {string} Name field value.
+		 * @returns {string} Name field value.
 		 */
 		const getNameFieldValue = function( field, subFieldName ) {
 			if ( 'object' !== typeof field ) {
@@ -724,7 +724,7 @@
 		 * @param {number}      fieldID
 		 * @param {string}      type    Either 'container' or 'field'
 		 * @param {object|null} $form
-		 * @return {HTMLElement|null} Name field container or element.
+		 * @returns {HTMLElement|null} Name field container or element.
 		 */
 		function getNameFieldItem( fieldID, type, $form = null ) {
 			const queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;

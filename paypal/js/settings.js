@@ -9,7 +9,7 @@
 			formData.append( 'mode', mode );
 			frmDom.ajax.doJsonPost( 'paypal_oauth', formData ).then(
 				function( response ) {
-					if ( 'undefined' !== typeof response.redirect_url ) {
+					if ( response.redirect_url !== undefined ) {
 						window.location = response.redirect_url;
 					}
 				}
@@ -29,7 +29,7 @@
 			formData.append( 'testMode', 'test' === event.target.id.replace( 'frm_disconnect_paypal_', '' ) ? 1 : 0 );
 			frmDom.ajax.doJsonPost( 'paypal_disconnect', formData ).then(
 				function( response ) {
-					if ( 'undefined' !== typeof response.success && response.success ) {
+					if ( response.success ) {
 						window.location.reload();
 					}
 				}
