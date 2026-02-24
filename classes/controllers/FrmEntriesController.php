@@ -182,8 +182,8 @@ class FrmEntriesController {
 		}
 
 		$columns[ $form_id . '_is_draft' ]   = esc_html__( 'Entry Status', 'formidable' );
-		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
-		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
+		$columns[ $form_id . '_created_at' ] = esc_html__( 'Entry creation date', 'formidable' );
+		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
 
 		$frm_vars['cols'] = $columns;
