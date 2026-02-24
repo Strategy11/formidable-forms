@@ -345,7 +345,7 @@ class FrmPluginSearch {
 		// Dismiss link.
 		$dismiss = add_query_arg( array( 'frm-dismiss' => $plugin['id'] ) );
 		$links[] = '<a
-			href="' . $dismiss . '"
+			href="' . esc_url( $dismiss ) . '"
 			class="frm-plugin-search__dismiss"
 			data-addon="' . esc_attr( $plugin['addon'] ) . '"
 			>' . esc_html__( 'Hide this suggestion', 'formidable' ) . '</a>';

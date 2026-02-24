@@ -466,7 +466,7 @@ class FrmInbox extends FrmFormApi {
 
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
-				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';
+				return 'href="' . esc_url( $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] ) . '"';
 			},
 			$cta
 		);

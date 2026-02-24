@@ -15,11 +15,11 @@ class FrmEntriesController {
 
 		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 
-		if ( ! $views_installed ) {
+		if ( $views_installed ) {
+			self::maybe_redirect_to_views_index();
+		} else {
 			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			self::maybe_redirect_to_views_upsell();
-		} else {
-			self::maybe_redirect_to_views_index();
 		}
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
@@ -100,16 +100,17 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
-			$menu_name = FrmAppHelper::get_menu_name();
-			$base      = self::base_column_key( $menu_name );
-
-			add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
-			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
-			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
-		} else {
+		if ( in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
 			add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
+			return;
 		}
+
+		$menu_name = FrmAppHelper::get_menu_name();
+		$base      = self::base_column_key( $menu_name );
+
+		add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
+		add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
+		add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
 	}
 
 	/**
@@ -181,8 +182,8 @@ class FrmEntriesController {
 		}
 
 		$columns[ $form_id . '_is_draft' ]   = esc_html__( 'Entry Status', 'formidable' );
-		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
-		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
+		$columns[ $form_id . '_created_at' ] = esc_html__( 'Entry creation date', 'formidable' );
+		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
 
 		$frm_vars['cols'] = $columns;
@@ -799,13 +800,11 @@ class FrmEntriesController {
 		$_POST['frm_skip_cookie'] = 1;
 		$do_success               = false;
 
-		if ( $params['action'] === 'create' ) {
-			if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
-				$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( $params['action'] === 'create' && apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
+			$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-				$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
-				$do_success   = true;
-			}
+			$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
+			$do_success   = true;
 		}
 
 		do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );

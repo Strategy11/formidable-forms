@@ -108,7 +108,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 
 		$this->sync_current_field_once( 0 );
 		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
-		$this->assertTrue( $this->section_helper instanceof FrmFieldGridHelper );
+		$this->assertInstanceOf( \FrmFieldGridHelper::class, $this->section_helper );
 		$this->assert_section_helper_size( 0 );
 
 		$this->helper->set_field( $half_width_field );
@@ -122,12 +122,12 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$this->sync_current_field_once( 6 );
 
 		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
-		$this->assertTrue( empty( $this->section_helper ) );
+		$this->assertEmpty( $this->section_helper );
 
 		$this->helper->set_field( $quarter_width_section );
 		$this->sync_current_field_once( 6 );
 		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
-		$this->assertTrue( $this->section_helper instanceof FrmFieldGridHelper );
+		$this->assertInstanceOf( \FrmFieldGridHelper::class, $this->section_helper );
 		$this->assert_section_helper_size( 0 );
 
 		$this->helper->set_field( $half_width_field );

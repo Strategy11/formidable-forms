@@ -998,14 +998,12 @@ class FrmForm {
 		$counts   = array_fill_keys( $statuses, 0 );
 
 		foreach ( $results as $row ) {
-			if ( 'trash' !== $row->status ) {
-				if ( $row->is_template ) {
-					++$counts['template'];
-				} else {
-					++$counts['published'];
-				}
-			} else {
+			if ( 'trash' === $row->status ) {
 				++$counts['trash'];
+			} elseif ( $row->is_template ) {
+				++$counts['template'];
+			} else {
+				++$counts['published'];
 			}
 
 			if ( 'draft' === $row->status ) {
@@ -1052,10 +1050,10 @@ class FrmForm {
 	public static function get_params( $form = null ) {
 		global $frm_vars;
 
-		if ( ! $form ) {
-			$form = self::getAll( array(), 'name', 1 );
-		} else {
+		if ( $form ) {
 			self::maybe_get_form( $form );
+		} else {
+			$form = self::getAll( array(), 'name', 1 );
 		}
 
 		if ( isset( $frm_vars['form_params'] ) && is_array( $frm_vars['form_params'] ) && isset( $frm_vars['form_params'][ $form->id ] ) ) {

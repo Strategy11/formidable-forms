@@ -634,7 +634,7 @@
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
-		const isTemplate = 'undefined' !== typeof data.templateKey;
+		const isTemplate = data.templateKey !== undefined;
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
@@ -1169,7 +1169,7 @@
 		} );
 
 		jQuery( 'input.hex' ).wpColorPicker( {
-			change: function( event, ui ) {
+			change( event, ui ) {
 				let color = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
 				if ( ui.color._alpha < 1 ) {
@@ -1188,7 +1188,7 @@
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 			const container = jQuery( this ).closest( '.wp-picker-container' );
-			if ( 'undefined' !== typeof container && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+			if ( container !== undefined && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
 				return container[ 0 ].querySelector( '.wp-color-picker' ).value;
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
@@ -1239,7 +1239,7 @@
 		 */
 		function handleChangeStylingSuccess( css ) {
 			// Validate the string response. A valid output will include rules with .with_frm_style
-			if ( -1 === css.indexOf( '.with_frm_style' ) ) {
+			if ( ! css.includes( '.with_frm_style' ) ) {
 				// Handle error (possibly a permission error, or an outdated nonce).
 				alert( css );
 				return;
@@ -1417,7 +1417,7 @@
 	 * @returns {void}
 	 */
 	function fillMissingSignatureValidationFunction() {
-		if ( 'undefined' === typeof window.__FRMSIG || 'undefined' !== typeof window.frmFrontForm ) {
+		if ( window.__FRMSIG === undefined || window.frmFrontForm !== undefined ) {
 			return;
 		}
 

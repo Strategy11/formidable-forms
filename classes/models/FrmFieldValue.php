@@ -277,7 +277,7 @@ class FrmFieldValue {
 			FrmFieldsHelper::prepare_field_value( $this->saved_value, $field_type );
 		}
 
-		if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {
+		if ( is_array( $this->saved_value ) && ! $this->saved_value ) {
 			$this->saved_value = '';
 		}
 	}

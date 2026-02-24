@@ -942,9 +942,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 
 		if ( $include ) {
-			if ( ! empty( $this->include_fields ) ) {
+			if ( $this->include_fields ) {
 				$include = $this->is_self_or_parent_in_array( $field->field_key, $this->include_fields );
-			} elseif ( ! empty( $this->exclude_fields ) ) {
+			} elseif ( $this->exclude_fields ) {
 				$include = ! $this->is_self_or_parent_in_array( $field->field_key, $this->exclude_fields );
 			}
 		}

@@ -3,7 +3,7 @@
 
 	let __;
 
-	if ( 'undefined' === typeof wp || 'undefined' === typeof wp.i18n || 'function' !== typeof wp.i18n.__ ) {
+	if ( 'undefined' === typeof wp || wp.i18n === undefined || 'function' !== typeof wp.i18n.__ ) {
 		__ = text => text;
 	} else {
 		__ = wp.i18n.__;
@@ -82,7 +82,7 @@
 			if ( args.buttonType ) {
 				output.classList.add( 'button' );
 
-				if ( ! args.noDismiss && -1 !== [ 'red', 'primary' ].indexOf( args.buttonType ) ) {
+				if ( ! args.noDismiss && [ 'red', 'primary' ].includes( args.buttonType ) ) {
 					// Primary and red buttons close modals by default on click.
 					// To disable this default behaviour you can use the noDismiss: 1 arg.
 					output.classList.add( 'dismiss' );
@@ -109,9 +109,9 @@
 	};
 
 	const ajax = {
-		doJsonFetch: async function( action ) {
+		async doJsonFetch( action ) {
 			let targetUrl = ajaxurl + '?action=frm_' + action;
-			if ( -1 === targetUrl.indexOf( 'nonce=' ) ) {
+			if ( ! targetUrl.includes( 'nonce=' ) ) {
 				targetUrl += '&nonce=' + frmGlobal.nonce;
 			}
 			const response = await fetch( targetUrl );
@@ -121,7 +121,7 @@
 			}
 			return Promise.resolve( json.data );
 		},
-		doJsonPost: async function( action, formData, { signal } = {} ) {
+		async doJsonPost( action, formData, { signal } = {} ) {
 			formData.append( 'nonce', frmGlobal.nonce );
 			const init = {
 				method: 'POST',
@@ -135,12 +135,12 @@
 			if ( ! json.success ) {
 				return Promise.reject( json.data || 'JSON result is not successful' );
 			}
-			return Promise.resolve( 'undefined' !== typeof json.data ? json.data : json );
+			return Promise.resolve( json.data !== undefined ? json.data : json );
 		}
 	};
 
 	const multiselect = {
-		init: function() {
+		init() {
 			const $select = jQuery( this );
 			const id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false;
 
@@ -161,10 +161,10 @@
 				allSelectedText: '',
 				// This is 3 by default. We want to show more options before it starts showing a count.
 				numberDisplayed: 8,
-				onInitialized: function( _, $container ) {
+				onInitialized( _, $container ) {
 					$container.find( '.multiselect.dropdown-toggle' ).removeAttr( 'title' );
 				},
-				onDropdownShown: function( event ) {
+				onDropdownShown( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 					if ( action.length ) {
 						jQuery( '#wpcontent' ).on( 'click', function() {
@@ -186,7 +186,7 @@
 						}
 					);
 				},
-				onChange: function( $option, checked ) {
+				onChange( $option, checked ) {
 					$select.trigger( 'frm-multiselect-changed', $option, checked );
 
 					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
@@ -205,7 +205,7 @@
 	};
 
 	const bootstrap = {
-		setupBootstrapDropdowns: function() {
+		setupBootstrapDropdowns() {
 			// This function is no longer necessary.
 			// It's call in Pro though, so keep it to avoid any errors for now.
 		},
@@ -213,7 +213,7 @@
 	};
 
 	const autocomplete = {
-		initSelectionAutocomplete: function( container ) {
+		initSelectionAutocomplete( container ) {
 			if ( jQuery.fn.autocomplete ) {
 				autocomplete.initAutocomplete( 'page', container );
 				autocomplete.initAutocomplete( 'user', container );
@@ -228,7 +228,7 @@
 		 * @param {string}        type      Type of data. Accepts `page` or `user`.
 		 * @param {string|Object} container Container class or element. Default is null.
 		 */
-		initAutocomplete: function( type, container ) {
+		initAutocomplete( type, container ) {
 			const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
 			const elements = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
 
@@ -255,7 +255,7 @@
 				element.autocomplete( {
 					delay: 100,
 					minLength: 0,
-					source: source,
+					source,
 					change: autocomplete.selectBlank,
 					select: autocomplete.completeSelectFromResults,
 					focus: () => false,
@@ -264,7 +264,7 @@
 						at: 'left bottom',
 						collision: 'flip'
 					},
-					response: function( event, ui ) {
+					response( event, ui ) {
 						if ( ! ui.content.length ) {
 							const noResult = {
 								value: '',
@@ -273,7 +273,7 @@
 							ui.content.push( noResult );
 						}
 					},
-					create: function() {
+					create() {
 						let $container = jQuery( this ).parent();
 
 						if ( $container.length === 0 ) {
@@ -298,7 +298,7 @@
 			}
 		},
 
-		selectBlank: function( e, ui ) {
+		selectBlank( e, ui ) {
 			if ( ui.item === null ) {
 				this.nextElementSibling.value = '';
 
@@ -311,7 +311,7 @@
 			}
 		},
 
-		completeSelectFromResults: function( e, ui ) {
+		completeSelectFromResults( e, ui ) {
 			e.preventDefault();
 			this.value = ui.item.value === '' ? '' : ui.item.label;
 			this.nextElementSibling.value = ui.item.value;
@@ -391,7 +391,7 @@
 						item.setAttribute( 'frm-search-text', itemText );
 					}
 
-					const hide = notEmptySearchText && -1 === itemText.indexOf( searchText );
+					const hide = notEmptySearchText && ! itemText.includes( searchText );
 					item.classList.toggle( 'frm_hidden', hide );
 
 					const isSearchResult = ! hide && notEmptySearchText;
@@ -434,7 +434,7 @@
 		 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 		 */
 		documentOn: ( event, selector, handler, options ) => {
-			if ( 'undefined' === typeof options ) {
+			if ( options === undefined ) {
 				options = false;
 			}
 
@@ -492,14 +492,14 @@
 			setUpTinyMceHtmlButtonListener();
 
 			function initQuickTagsButtons() {
-				if ( 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+				if ( 'function' !== typeof window.quicktags || window.QTags.instances[ editor.id ] !== undefined ) {
 					return;
 				}
 
 				const id = editor.id;
 				window.quicktags( {
 					name: 'qt_' + id,
-					id: id,
+					id,
 					canvas: editor,
 					settings: { id },
 					toolbar: document.getElementById( 'qt_' + id + '_toolbar' ),
@@ -593,7 +593,7 @@
 			let element = modal.querySelector( '.' + uniqueClassName );
 			if ( null === element ) {
 				element = div( {
-					child: child,
+					child,
 					className: uniqueClassName
 				} );
 				appendTo.append( element );
@@ -625,7 +625,7 @@
 				width: width || '550px',
 				resizable: false,
 				draggable: false,
-				open: function() {
+				open() {
 					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
@@ -648,7 +648,7 @@
 						);
 					}
 				},
-				close: function() {
+				close() {
 					document.body.classList.remove( bodyWithModalClassName );
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
@@ -828,7 +828,7 @@
 	};
 
 	function cleanNode( node ) {
-		if ( 'undefined' === typeof node.tagName ) {
+		if ( node.tagName === undefined ) {
 			if ( '#text' === node.nodeName ) {
 				return document.createTextNode( node.textContent );
 			}
@@ -848,7 +848,7 @@
 			return svg( svgArgs );
 		}
 
-		if ( 'undefined' === typeof allowedHtml[ tagType ] ) {
+		if ( allowedHtml[ tagType ] === undefined ) {
 			// Tag type is not allowed.
 			return document.createTextNode( '' );
 		}

@@ -2102,7 +2102,13 @@ class FrmFormsController {
 			$json_vars = htmlspecialchars_decode( nl2br( str_replace( '&quot;', '"', wp_unslash( $_POST['frm_compact_fields'] ) ) ) );
 			$json_vars = json_decode( $json_vars, true );
 
-			if ( ! $json_vars ) {
+			if ( $json_vars ) {
+				$vars   = FrmAppHelper::json_to_array( $json_vars );
+				$action = $vars[ $action ];
+				unset( $_REQUEST['frm_compact_fields'], $_POST['frm_compact_fields'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$_REQUEST = array_merge( $_REQUEST, $vars ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$_POST    = array_merge( $_POST, $_REQUEST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			} else {
 				// Json decoding failed so we should return an error message.
 				$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 
@@ -2111,12 +2117,6 @@ class FrmFormsController {
 				}
 
 				add_filter( 'frm_validate_form', 'FrmFormsController::json_error' );
-			} else {
-				$vars   = FrmAppHelper::json_to_array( $json_vars );
-				$action = $vars[ $action ];
-				unset( $_REQUEST['frm_compact_fields'], $_POST['frm_compact_fields'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				$_REQUEST = array_merge( $_REQUEST, $vars ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				$_POST    = array_merge( $_POST, $_REQUEST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 		} else {
 			$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
@@ -2220,12 +2220,12 @@ class FrmFormsController {
 			'name' => $name,
 		);
 
-		if ( '' !== $name ) {
+		if ( '' === $name ) {
+			$form_key = $form->form_key;
+		} else {
 			// Only update form_key if name is not empty.
 			$form_key              = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
 			$to_update['form_key'] = $form_key;
-		} else {
-			$form_key = $form->form_key;
 		}
 
 		FrmForm::update( $form_id, $to_update );
@@ -2697,12 +2697,10 @@ class FrmFormsController {
 	 * @param array        $args        See {@see FrmFormsController::maybe_trigger_redirect()}.
 	 */
 	public static function maybe_trigger_redirect_with_action( $conf_method, $form, $params, $args ) {
-		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
-			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) && empty( $conf_method[0]->post_content['redirect_delay'] ) ) {
-				$event = FrmOnSubmitHelper::current_event( $params );
-				FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0], $event );
-				$conf_method = 'redirect';
-			}
+		if ( is_array( $conf_method ) && 1 === count( $conf_method ) && 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) && empty( $conf_method[0]->post_content['redirect_delay'] ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$event = FrmOnSubmitHelper::current_event( $params );
+			FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0], $event );
+			$conf_method = 'redirect';
 		}
 
 		if ( 'redirect' === $conf_method ) {
@@ -2806,11 +2804,9 @@ class FrmFormsController {
 
 			$action_type = FrmOnSubmitHelper::get_action_type( $action );
 
-			if ( 'redirect' === $action_type ) {
-				if ( $has_redirect ) {
-					// Do not process because we run the first redirect action only.
-					continue;
-				}
+			if ( 'redirect' === $action_type && $has_redirect ) {
+				// Do not process because we run the first redirect action only.
+				continue;
 			}
 
 			if ( ! self::is_valid_on_submit_action( $action, $args, $event ) ) {

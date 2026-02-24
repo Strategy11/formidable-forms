@@ -44,10 +44,10 @@ export default class frmSliderComponent {
 				startX: 0,
 				translateX: 0,
 				maxValue: parseInt( element.dataset.maxValue, 10 ),
-				element: element,
-				index: index,
+				element,
+				index,
 				value: 0,
-				steps: steps,
+				steps,
 				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
 			} );
 		} );
@@ -121,7 +121,7 @@ export default class frmSliderComponent {
 	expandSliderGroup( element ) {
 		const svgIcon = element.querySelector( '.frmsvg' );
 
-		if ( 'undefined' === typeof element.dataset.displaySliders || null === svgIcon ) {
+		if ( element.dataset.displaySliders === undefined || null === svgIcon ) {
 			return;
 		}
 
@@ -219,7 +219,7 @@ export default class frmSliderComponent {
 	 * @returns {NodeList} - An array-like object containing the slider group items.
 	 */
 	getSliderGroupItems( element ) {
-		if ( 'undefined' === typeof element.dataset.displaySliders ) {
+		if ( element.dataset.displaySliders === undefined ) {
 			return [];
 		}
 		const slidersGroup = element.dataset.displaySliders.split( ',' );

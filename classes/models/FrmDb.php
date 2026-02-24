@@ -6,47 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDb {
 
 	/**
-	 * The table name for Formidable Fields.
-	 *
-	 * @var string
-	 */
-	public $fields;
-
-	/**
-	 * The table name for Formidable Forms.
-	 *
-	 * @var string
-	 */
-	public $forms;
-
-	/**
-	 * The table name for Formidable Entries.
-	 *
-	 * @var string
-	 */
-	public $entries;
-
-	/**
-	 * The table name for Formidable Entry Metas.
-	 *
-	 * @var string
-	 */
-	public $entry_metas;
-
-	public function __construct() {
-		if ( ! defined( 'ABSPATH' ) ) {
-			die( 'You are not allowed to call this page directly.' );
-		}
-
-		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate' );
-		global $wpdb;
-		$this->fields      = $wpdb->prefix . 'frm_fields';
-		$this->forms       = $wpdb->prefix . 'frm_forms';
-		$this->entries     = $wpdb->prefix . 'frm_items';
-		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
-	}
-
-	/**
 	 * Change array into format $wpdb->prepare can use
 	 *
 	 * @param array  $args

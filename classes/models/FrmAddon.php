@@ -109,11 +109,11 @@ class FrmAddon {
 	protected $should_clear_cache = true;
 
 	public function __construct() {
-		if ( empty( $this->plugin_slug ) ) {
+		if ( ! $this->plugin_slug ) {
 			$this->plugin_slug = preg_replace( '/[^a-zA-Z0-9_\s]/', '', str_replace( ' ', '_', strtolower( $this->plugin_name ) ) );
 		}
 
-		if ( empty( $this->option_name ) ) {
+		if ( ! $this->option_name ) {
 			$this->option_name = 'edd_' . $this->plugin_slug . '_license_';
 		}
 
@@ -480,16 +480,16 @@ class FrmAddon {
 	public function show_license_message( $file, $plugin ) {
 		$message = '';
 
-		if ( empty( $this->license ) ) {
-			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
-			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">', '</a>' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-		} else {
+		if ( $this->license ) {
 			$api    = new FrmFormApi( $this->license );
 			$errors = $api->error_for_license();
 
 			if ( $errors ) {
 				$message = reset( $errors );
 			}
+		} else {
+			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
+			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">', '</a>' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		if ( ! $message ) {
@@ -680,7 +680,7 @@ class FrmAddon {
 	 * @return void
 	 */
 	private function is_license_revoked() {
-		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! $this->license || ! $this->plugin_slug || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -876,7 +876,7 @@ class FrmAddon {
 			'error'  => true,
 		);
 
-		if ( empty( $this->license ) ) {
+		if ( ! $this->license ) {
 			$response['error'] = false;
 			return $response;
 		}

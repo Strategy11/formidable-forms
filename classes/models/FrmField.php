@@ -503,11 +503,7 @@ class FrmField {
 				$safe_atts = array();
 
 				foreach ( $attr as $attr_key => $att ) {
-					if ( ! is_numeric( $attr_key ) ) {
-						// opt=1 without parentheses for example is mapped like 'opt' => 1.
-						$key   = $attr_key;
-						$value = $att;
-					} else {
+					if ( is_numeric( $attr_key ) ) {
 						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
 						$split = explode( '=', $att, 2 );
 
@@ -517,6 +513,10 @@ class FrmField {
 
 						$key   = trim( $split[0] );
 						$value = trim( $split[1], '"' );
+					} else {
+						// opt=1 without parentheses for example is mapped like 'opt' => 1.
+						$key   = $attr_key;
+						$value = $att;
 					}
 
 					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {

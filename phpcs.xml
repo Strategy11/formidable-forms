@@ -29,7 +29,6 @@
 		<!-- These rules are new. Work on fixing these. -->
 		<exclude name="WordPress.WP.Capabilities.RoleFound" />
 		<exclude name="Generic.Files.OneObjectStructurePerFile.MultipleFound" />
-		<exclude name="Universal.ControlStructures.DisallowLonelyIf.Found" />
 		<exclude name="Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses" />
 	</rule>
 	<rule ref="WordPress.WP.I18n">
@@ -231,6 +230,10 @@
 		<type>error</type>
 	</rule>
 	<rule ref="Universal.Operators.StrictComparisons">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
 		<severity>8</severity>
 		<type>error</type>
 	</rule>

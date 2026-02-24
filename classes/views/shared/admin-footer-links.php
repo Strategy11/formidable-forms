@@ -14,12 +14,10 @@ $utm          = array(
 
 if ( $upgrade_link ) {
 	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
+} elseif ( FrmAppHelper::pro_is_installed() ) {
+	$upgrade_link = 'https://formidableforms.com/account/downloads/';
 } else {
-	if ( FrmAppHelper::pro_is_installed() ) {
-		$upgrade_link = 'https://formidableforms.com/account/downloads/';
-	} else {
-		$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
-	}
+	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
 }
 ?>
 

@@ -62,14 +62,14 @@ class test_FrmEntry extends FrmUnitTest {
 		$first_item = reset( $items );
 
 		$this->assertIsObject( $first_item );
-		$this->assertTrue( empty( $first_item->metas ), 'Entries should not include metas unless $meta = true is set.' );
+		$this->assertObjectNotHasProperty( 'metas', $first_item, 'Entries should not include metas unless $meta = true is set.' );
 
 		// Test with $meta = true.
 		$items      = FrmEntry::getAll( array( 'it.form_id' => $form->id ), '', '', true, false );
 		$first_item = reset( $items );
 
 		$this->assertIsObject( $first_item );
-		$this->assertTrue( ! empty( $first_item->metas ) );
+		$this->assertNotEmpty( $first_item->metas );
 		$this->assertIsArray( $first_item->metas );
 
 		$email_field = FrmField::getOne( 'contact-email' );
@@ -97,7 +97,7 @@ class test_FrmEntry extends FrmUnitTest {
 		$item  = reset( $items );
 
 		$this->assertIsObject( $item );
-		$this->assertTrue( ! empty( $item->metas ) );
+		$this->assertNotEmpty( $item->metas );
 		$this->assertIsArray( $item->metas );
 		$this->assertArrayHasKey( $checkbox_field_id, $item->metas );
 

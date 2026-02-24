@@ -46,14 +46,14 @@ function frmFrontFormJS() {
 
 		fieldName = field.name;
 
-		if ( typeof fieldName === 'undefined' ) {
+		if ( fieldName === undefined ) {
 			fieldName = '';
 		}
 
 		if ( fieldName === '' ) {
 			fieldName = field.getAttribute( 'data-name' );
 
-			if ( typeof fieldName === 'undefined' ) {
+			if ( fieldName === undefined ) {
 				fieldName = '';
 			}
 
@@ -256,7 +256,7 @@ function frmFrontFormJS() {
 		}
 
 		fieldID = getFieldId( field, true );
-		if ( 'undefined' === typeof errors[ fieldID ] ) {
+		if ( errors[ fieldID ] === undefined ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
@@ -367,9 +367,9 @@ function frmFrontFormJS() {
 		 * @since 6.15 Added `onSubmit` to the data.
 		 */
 		triggerCustomEvent( document, 'frm_validate_field_value', {
-			field: field,
-			errors: errors,
-			onSubmit: onSubmit
+			field,
+			errors,
+			onSubmit
 		} );
 	}
 
@@ -401,12 +401,12 @@ function frmFrontFormJS() {
 				} );
 			} );
 		} else if ( field.type === 'file' || fileID ) {
-			if ( typeof fileID === 'undefined' ) {
+			if ( fileID === undefined ) {
 				fileID = getFieldId( field, true );
 				fileID = fileID.replace( 'file', '' );
 			}
 
-			if ( typeof errors[ fileID ] === 'undefined' ) {
+			if ( errors[ fileID ] === undefined ) {
 				val = getFileVals( fileID );
 			}
 			fieldID = fileID;
@@ -607,7 +607,7 @@ function frmFrontFormJS() {
 			strippedFieldID = fieldID.replace( 'conf_', '' ),
 			confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
-		if ( confirmField === null || typeof errors[ 'conf_' + strippedFieldID ] !== 'undefined' ) {
+		if ( confirmField === null || errors[ 'conf_' + strippedFieldID ] !== undefined ) {
 			return;
 		}
 
@@ -891,7 +891,7 @@ function frmFrontFormJS() {
 				}
 			}
 
-			if ( typeof response.redirect !== 'undefined' ) {
+			if ( response.redirect !== undefined ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
 					return;
@@ -1040,15 +1040,15 @@ function frmFrontFormJS() {
 		ajaxUrl = frm_js.ajax_url;
 		action = form.getAttribute( 'action' );
 
-		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
+		if ( 'string' === typeof action && action.includes( '?action=frm_forms_preview' ) ) {
 			ajaxUrl = action.split( '?action=frm_forms_preview' )[ 0 ];
 		}
 
 		ajaxParams = {
 			type: 'POST',
 			url: ajaxUrl,
-			data: data,
-			success: success
+			data,
+			success
 		};
 
 		if ( 'function' === typeof error ) {
@@ -1112,7 +1112,7 @@ function frmFrontFormJS() {
 
 	function addUrlParam( response ) {
 		let url;
-		if ( history.pushState && typeof response.page !== 'undefined' ) {
+		if ( history.pushState && response.page !== undefined ) {
 			url = addQueryVar( 'frm_page', response.page );
 			window.history.pushState( { html: response.html }, '', '?' + url );
 		}
@@ -1161,7 +1161,7 @@ function frmFrontFormJS() {
 			frmThemeOverride_frmPlaceError( key, jsErrors );
 		} else {
 			let errorHtml;
-			if ( -1 !== jsErrors[ key ].indexOf( '<div' ) ) {
+			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
 				roleString = frm_js.include_alert_role ? 'role="alert"' : '';
@@ -1422,7 +1422,7 @@ function frmFrontFormJS() {
 		element = errors[ 0 ];
 		do {
 			element = element.previousSibling;
-			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
+			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
 				break;
 			}
@@ -1431,7 +1431,7 @@ function frmFrontFormJS() {
 				break;
 			}
 
-			if ( 'undefined' !== typeof element.classList ) {
+			if ( element.classList !== undefined ) {
 				if ( element.classList.contains( 'html-active' ) ) {
 					timeoutCallback = function() {
 						const textarea = element.querySelector( 'textarea' );
@@ -1486,7 +1486,7 @@ function frmFrontFormJS() {
 	 * @param {boolean | Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 	 */
 	function documentOn( event, selector, handler, options ) {
-		if ( 'undefined' === typeof options ) {
+		if ( options === undefined ) {
 			options = false;
 		}
 
@@ -1559,7 +1559,7 @@ function frmFrontFormJS() {
 		} );
 
 		runOnLoad = function( firstLoad ) {
-			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
+			if ( firstLoad && document.activeElement && [ 'INPUT', 'SELECT', 'TEXTAREA' ].includes( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
 			} else if ( firstLoad ) {
 				document.querySelectorAll( '.frm_inside_container' ).forEach(
@@ -1754,7 +1754,7 @@ function frmFrontFormJS() {
 	}
 
 	return {
-		init: function() {
+		init() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
@@ -1797,7 +1797,7 @@ function frmFrontFormJS() {
 		 * @param {string}      captchaSelector
 		 * @returns {void}
 		 */
-		renderCaptcha: function( captcha, captchaSelector ) {
+		renderCaptcha( captcha, captchaSelector ) {
 			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
@@ -1806,7 +1806,7 @@ function frmFrontFormJS() {
 			const size = captcha.getAttribute( 'data-size' );
 			const params = {
 				sitekey: captcha.getAttribute( 'data-sitekey' ),
-				size: size,
+				size,
 				theme: captcha.getAttribute( 'data-theme' )
 			};
 
@@ -1832,18 +1832,18 @@ function frmFrontFormJS() {
 			maybeFixCaptchaLabel( captcha );
 		},
 
-		afterSingleRecaptcha: function() {
+		afterSingleRecaptcha() {
 			const recaptcha = document.querySelector( '.frm-show-form .g-recaptcha' );
 			const object = recaptcha ? recaptcha.closest( 'form' ) : null;
 			frmFrontForm.submitFormNow( object );
 		},
 
-		afterRecaptcha: function( _, formID ) {
+		afterRecaptcha( _, formID ) {
 			const object = document.querySelector( '#frm_form_' + formID + '_container form' );
 			frmFrontForm.submitFormNow( object );
 		},
 
-		submitForm: function( e ) {
+		submitForm( e ) {
 			frmFrontForm.submitFormManual( e, this );
 		},
 
@@ -1852,7 +1852,7 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement} object The form object that is being submitted.
 		 * @returns {void}
 		 */
-		submitFormManual: function( e, object ) {
+		submitFormManual( e, object ) {
 			if ( document.body.classList.contains( 'wp-admin' ) && ! object.closest( '.frmapi-form' ) ) {
 				return;
 			}
@@ -1880,7 +1880,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		submitFormNow: function( object ) {
+		submitFormNow( object ) {
 			let hasFileFields, antispamInput,
 				classList = object.className.trim().split( /\s+/gi );
 
@@ -1920,7 +1920,7 @@ function frmFrontFormJS() {
 		 *
 		 * @returns {Array} List of errors.
 		 */
-		validateFormSubmit: function( object ) {
+		validateFormSubmit( object ) {
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 			if ( typeof tinyMCE !== 'undefined' && form && form.querySelector( '.wp-editor-wrap' ) ) {
 				tinyMCE.triggerSave();
@@ -1943,7 +1943,7 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 * @returns {Array} List of errors.
 		 */
-		getAjaxFormErrors: function( object ) {
+		getAjaxFormErrors( object ) {
 			let customErrors, key;
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 
@@ -1971,7 +1971,7 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 * @returns {void}
 		 */
-		addAjaxFormErrors: function( object ) {
+		addAjaxFormErrors( object ) {
 			let key;
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 			removeAllErrors();
@@ -1996,15 +1996,15 @@ function frmFrontFormJS() {
 		showSubmitLoading,
 		removeSubmitLoading,
 
-		scrollToID: function( id ) {
+		scrollToID( id ) {
 			const object = jQuery( document.getElementById( id ) );
 			frmFrontForm.scrollMsg( object, false );
 		},
 
-		scrollMsg: function( id, object, animate ) {
+		scrollMsg( id, object, animate ) {
 			let newPos, m, b, screenTop, screenBottom,
 				scrollObj = '';
-			if ( typeof object === 'undefined' ) {
+			if ( object === undefined ) {
 				scrollObj = jQuery( document.getElementById( 'frm_form_' + id + '_container' ) );
 				if ( scrollObj.length < 1 ) {
 					return;
@@ -2036,7 +2036,7 @@ function frmFrontFormJS() {
 
 				if ( newPos > screenBottom || newPos < screenTop ) {
 					// Not in view
-					if ( typeof animate === 'undefined' ) {
+					if ( animate === undefined ) {
 						document.documentElement.scrollTop = newPos;
 					} else {
 						animateScroll( screenTop, newPos, 500 );
@@ -2046,7 +2046,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		fieldValueChanged: function( e ) {
+		fieldValueChanged( e ) {
 			/*jshint validthis:true */
 
 			const fieldId = frmFrontForm.getFieldId( this, false );
@@ -2065,7 +2065,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		escapeHtml: function( text ) {
+		escapeHtml( text ) {
 			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
@@ -2075,7 +2075,7 @@ function frmFrontFormJS() {
 				.replace( /'/g, '&#039;' );
 		},
 
-		triggerCustomEvent: triggerCustomEvent,
+		triggerCustomEvent,
 		documentOn
 	};
 }

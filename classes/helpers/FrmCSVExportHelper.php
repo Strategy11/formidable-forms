@@ -522,10 +522,10 @@ class FrmCSVExportHelper {
 			self::$entry = $entry;
 			unset( $entry );
 
-			if ( self::$entry->form_id !== self::$form_id ) {
-				self::add_repeat_field_values_to_csv( $entries );
-			} else {
+			if ( self::$entry->form_id === self::$form_id ) {
 				self::prepare_csv_row();
+			} else {
+				self::add_repeat_field_values_to_csv( $entries );
 			}
 		}
 	}

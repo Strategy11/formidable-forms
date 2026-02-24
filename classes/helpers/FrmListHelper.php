@@ -400,7 +400,7 @@ class FrmListHelper {
 			$two = '2';
 		}//end if
 
-		if ( empty( $this->_actions ) ) {
+		if ( ! $this->_actions ) {
 			return;
 		}
 
@@ -617,7 +617,7 @@ class FrmListHelper {
 	 * @param string $which
 	 */
 	protected function pagination( $which ) {
-		if ( empty( $this->_pagination_args ) ) {
+		if ( ! $this->_pagination_args ) {
 			return;
 		}
 

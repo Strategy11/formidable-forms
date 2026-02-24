@@ -191,7 +191,7 @@ class FrmTableHTMLGenerator {
 			$this->table_style .= ' class="' . esc_attr( $this->style_settings['class'] ) . '"';
 		}
 
-		if ( ! empty( $this->width ) ) {
+		if ( $this->width ) {
 			$this->table_style .= ' width="' . esc_attr( $this->width ) . '"';
 		}
 	}

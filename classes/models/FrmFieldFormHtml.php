@@ -361,7 +361,7 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	private function replace_form_shortcodes() {
-		if ( ! empty( $this->form ) ) {
+		if ( $this->form ) {
 			$form = (array) $this->form;
 
 			// Replace [form_key].

@@ -213,7 +213,7 @@ class FrmStyle {
 				} else {
 					$new_value = absint( $value );
 				}
-			} else {
+			} else { // phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				// Insert a value for alpha.
 				if ( $value_is_empty_string ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;

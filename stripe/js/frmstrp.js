@@ -65,7 +65,7 @@
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
 			action,
 			{
-				thisForm: thisForm
+				thisForm
 			}
 		);
 	}
@@ -126,7 +126,7 @@
 			};
 
 			let params = {
-				elements: elements,
+				elements,
 				confirmParams: {
 					return_url: getReturnUrl()
 				}
@@ -182,7 +182,7 @@
 		 * @returns {boolean} True if no errors found in event data.
 		 */
 		function checkEventDataForError( event ) {
-			if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
+			if ( ! event.frmData || ! event.frmData.content.length || ! event.frmData.content.includes( '<div class="frm_error_style' ) ) {
 				return true;
 			}
 
@@ -384,7 +384,7 @@
 		each(
 			frm_stripe_vars.settings,
 			function( setting ) {
-				if ( -1 !== setting.gateways.indexOf( 'stripe' ) ) {
+				if ( setting.gateways.includes( 'stripe' ) ) {
 					stripeSettings.push( setting );
 				}
 			}
@@ -419,7 +419,7 @@
 
 	function postAjax( data, success ) {
 		const xmlHttp = new XMLHttpRequest();
-		const params = typeof data == 'string' ? data : Object.keys( data ).map(
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
 				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
 			}
@@ -494,7 +494,7 @@
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
-		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form: form } );
+		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form } );
 	}
 
 	/**
@@ -522,7 +522,7 @@
 			},
 			rules: frm_stripe_vars.appearanceRules
 		};
-		elements = frmstripe.elements( { clientSecret: clientSecret, appearance: appearance } );
+		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
 
 		insertAuthenticationElement( cardElement );
@@ -531,7 +531,7 @@
 		triggerCustomEvent(
 			document,
 			'frmStripeLiteLoadElements',
-			{ cardElement: cardElement }
+			{ cardElement }
 		);
 	}
 
@@ -590,9 +590,9 @@
 				document,
 				'frmStripeLiteAddAuthElementAboveCardElement',
 				{
-					cardElement: cardElement,
-					cardFieldContainer: cardFieldContainer,
-					authenticationMountTarget: authenticationMountTarget
+					cardElement,
+					cardFieldContainer,
+					authenticationMountTarget
 				}
 			);
 		}
@@ -633,7 +633,7 @@
 		return function( event ) {
 			linkAuthenticationElementIsComplete = event.complete;
 
-			if ( linkAuthenticationElementIsComplete && 'undefined' !== typeof emailInput ) {
+			if ( linkAuthenticationElementIsComplete && emailInput !== undefined ) {
 				syncEmailInput( event.value.email );
 			}
 
@@ -969,8 +969,8 @@
 	);
 
 	window.frmStripeLiteForm = {
-		readyToSubmitStripeLink: readyToSubmitStripeLink,
-		processForm: function( _, e, form ) {
+		readyToSubmitStripeLink,
+		processForm( _, e, form ) {
 			event = e;
 			thisForm = form;
 			processForm();
