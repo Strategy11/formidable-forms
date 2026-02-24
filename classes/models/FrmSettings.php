@@ -463,7 +463,7 @@ class FrmSettings {
 			$re_lang       = $recaptcha_opt['re_lang'] ?? $re_lang;
 		}
 
-		if ( empty( $this->re_msg ) ) {
+		if ( ! $this->re_msg ) {
 			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
