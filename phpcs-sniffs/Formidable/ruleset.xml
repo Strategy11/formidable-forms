@@ -25,6 +25,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
+	<rule ref="Formidable.CodeAnalysis.MergeNestedIf" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
