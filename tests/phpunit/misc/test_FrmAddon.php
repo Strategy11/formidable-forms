@@ -29,7 +29,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 */
 	public function test_insert_installed_addon() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-		$this->assertArrayHasKey('signature', $plugins);
+		$this->assertArrayHasKey( 'signature', $plugins );
 	}
 
 	/**

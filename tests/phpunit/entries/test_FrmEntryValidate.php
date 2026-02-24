@@ -189,8 +189,8 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		);
 
 		$this->assertSame( array( 1, 17, 11 ), $form_ids );
-		$this->assertArrayNotHasKey(163, $test_values['item_meta']);
-		$this->assertArrayNotHasKey(165, $test_values['item_meta']);
+		$this->assertArrayNotHasKey( 163, $test_values['item_meta'] );
+		$this->assertArrayNotHasKey( 165, $test_values['item_meta'] );
 		$this->assertSame( array( 'Option 2', 'Option 1' ), $test_values['item_meta'][162] );
 		$this->assertSame( array( 'John Doe' ), $test_values['item_meta'][118] );
 		$this->assertSame( 'John Doe', $test_values['item_meta'][1] );
@@ -273,9 +273,9 @@ class test_FrmEntryValidate extends FrmUnitTest {
 
 		// Checkbox field shouldn't be skipped.
 		foreach ( array( 'radio', 'radio_2', 'radio_3', 'radio_4', 'checkbox', 'select', 'scale', 'star', 'range', 'toggle' ) as $key ) {
-			$this->assertArrayNotHasKey($fields[ $key ]->id, $values['item_meta']);
+			$this->assertArrayNotHasKey( $fields[ $key ]->id, $values['item_meta'] );
 		}
 
-		$this->assertArrayHasKey($fields['radio_5']->id, $values['item_meta']);
+		$this->assertArrayHasKey( $fields['radio_5']->id, $values['item_meta'] );
 	}
 }

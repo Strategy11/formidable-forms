@@ -10,7 +10,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	 */
 	public function test_get_upload_base() {
 		$base = FrmStylesHelper::get_upload_base();
-		$this->assertArrayHasKey('baseurl', $base);
+		$this->assertArrayHasKey( 'baseurl', $base );
 		$this->assertStringContainsString( 'http://', $base['baseurl'] );
 
 		$_SERVER['HTTPS'] = 'on';

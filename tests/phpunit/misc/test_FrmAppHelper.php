@@ -573,7 +573,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$table_name = 'frm_forms';
 		$column     = 'form_key';
 		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, $table_name, $column );
-		$this->assertLessThanOrEqual(70, strlen( $unique_key ));
+		$this->assertLessThanOrEqual( 70, strlen( $unique_key ) );
 		$this->assertNotSame( $super_long_form_key, $unique_key );
 	}
 

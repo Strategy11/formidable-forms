@@ -8,7 +8,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	public function test_register_widgets() {
 		global $wp_widget_factory;
-		$this->assertArrayHasKey('FrmShowForm', $wp_widget_factory->widgets);
+		$this->assertArrayHasKey( 'FrmShowForm', $wp_widget_factory->widgets );
 	}
 
 	public function test_head() {
