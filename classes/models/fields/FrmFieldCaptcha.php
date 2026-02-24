@@ -304,16 +304,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
-				$threshold = floatval( $frm_settings->re_threshold );
-				$score     = floatval( $response['score'] );
+		if ( $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
+			$threshold = floatval( $frm_settings->re_threshold );
+			$score     = floatval( $response['score'] );
 
-				$this->set_score( $score );
+			$this->set_score( $score );
 
-				if ( $score < $threshold ) {
-					$response['success'] = false;
-				}
+			if ( $score < $threshold ) {
+				$response['success'] = false;
 			}
 		}
 

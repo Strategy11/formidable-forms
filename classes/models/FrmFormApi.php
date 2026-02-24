@@ -490,10 +490,7 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function error_for_license() {
-		if ( $this->license ) {
-			return $this->get_error_from_response();
-		}
-		return array();
+		return $this->license ? $this->get_error_from_response() : array();
 	}
 
 	/**

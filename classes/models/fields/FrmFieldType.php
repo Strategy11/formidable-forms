@@ -427,10 +427,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		if ( ! $this->has_input ) {
-			return $this->no_input_settings();
-		}
-		return array();
+		return $this->has_input ? array() : $this->no_input_settings();
 	}
 
 	/**
@@ -1545,10 +1542,8 @@ DEFAULT_HTML;
 		$custom_error_fields     = preg_grep( '/frm_error_field_*/', $describedby );
 		$custom_desc_fields      = preg_grep( '/frm_desc_field_*/', $describedby );
 
-		if ( $custom_desc_fields && $custom_error_fields ) {
-			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
-				$error_comes_first = false;
-			}
+		if ( $custom_desc_fields && $custom_error_fields && array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
+			$error_comes_first = false;
 		}
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {

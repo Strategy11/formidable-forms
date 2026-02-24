@@ -24,11 +24,7 @@ class FrmShortcodeHelper {
 			$atts = shortcode_parse_atts( $text );
 		}
 
-		if ( ! is_array( $atts ) ) {
-			return array();
-		}
-
-		return $atts;
+		return is_array( $atts ) ? $atts : array();
 	}
 
 	/**
