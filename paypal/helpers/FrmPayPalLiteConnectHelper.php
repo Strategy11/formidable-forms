@@ -442,12 +442,7 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
-
-		if ( 2 === count( $split_on_language ) ) {
-			$url = $split_on_language[0];
-		}
-
-		return $url;
+		return 2 === count( $split_on_language ) ? $split_on_language[0] : $url;
 	}
 
 	/**

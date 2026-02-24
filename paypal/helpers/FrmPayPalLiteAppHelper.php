@@ -66,12 +66,14 @@ class FrmPayPalLiteAppHelper {
 
 		return array(
 			'style' => array(
-				'layout'       => $button_layout,
-				'color'        => $button_color,
-				'shape'        => 'rect', // Default shape, could be made configurable
-				'label'        => $button_label,
-				'messaging'    => true, // Show messaging under button
-				'borderRadius' => (int) $button_border_radius,	
+				'layout'                       => $button_layout,
+				'color'                        => $button_color,
+				'shape'                        => 'rect',
+				// Default shape, could be made configurable
+				'label'     => $button_label,
+				'messaging' => true,
+				// Show messaging under button
+				'borderRadius' => (int) $button_border_radius,
 			),
 		);
 	}

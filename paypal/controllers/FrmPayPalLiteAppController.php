@@ -152,6 +152,8 @@ class FrmPayPalLiteAppController {
 	/**
 	 * @since x.x
 	 *
+	 * @param WP_Post $action
+	 *
 	 * @return array
 	 */
 	private static function get_payer_data_from_posted_values( $action ) {

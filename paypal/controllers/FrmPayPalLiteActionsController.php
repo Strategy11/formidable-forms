@@ -137,7 +137,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$response['error'] = $charge;
 		}
 
-
 		if ( empty( self::$active_order_id ) ) {
 			return $response;
 		}
@@ -575,7 +574,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 */
 			function ( $tag, $handle ) {
 				if ( 'paypal-sdk' === $handle ) {
-					$tag = str_replace( ' src=', ' data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '" src=', $tag );
+					return str_replace( ' src=', ' data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '" src=', $tag );
 				}
 				return $tag;
 			},
@@ -1654,6 +1653,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * Set the gateway to PayPal as the default.
 	 *
 	 * @param WP_Post $action_settings
+	 * @param string  $action_type
 	 *
 	 * @return WP_Post
 	 */
