@@ -511,7 +511,7 @@ class FrmEmail {
 	 * @return bool
 	 */
 	private function has_recipients() {
-		return ! ( ! $this->to && ! $this->cc && ! $this->bcc );
+		return $this->to || $this->cc || $this->bcc;
 	}
 
 	/**
