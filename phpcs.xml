@@ -233,6 +233,10 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
 
 	<rule ref="Generic.WhiteSpace.ScopeIndent">
 		<properties>
