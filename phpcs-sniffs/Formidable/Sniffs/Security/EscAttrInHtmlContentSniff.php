@@ -19,15 +19,8 @@ use PHP_CodeSniffer\Files\File;
  * In PHP template files, esc_attr() is for attribute values and esc_html() is
  * for text content between HTML tags.
  *
- * Bad:
- * <option value="<?php echo esc_attr( $id ); ?>">
- *     <?php echo esc_attr( $name ); ?>
- * </option>
- *
- * Good:
- * <option value="<?php echo esc_attr( $id ); ?>">
- *     <?php echo esc_html( $name ); ?>
- * </option>
+ * Bad:  echo esc_attr( $name ) in HTML text content between tags.
+ * Good: echo esc_html( $name ) in HTML text content between tags.
  */
 class EscAttrInHtmlContentSniff implements Sniff {
 
@@ -57,6 +50,7 @@ class EscAttrInHtmlContentSniff implements Sniff {
 
 		// Confirm this is a function call (followed by open parenthesis).
 		$nextNonWs = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
 		if ( false === $nextNonWs || $tokens[ $nextNonWs ]['code'] !== T_OPEN_PARENTHESIS ) {
 			return;
 		}
@@ -87,7 +81,7 @@ class EscAttrInHtmlContentSniff implements Sniff {
 	/**
 	 * Check if the esc_attr call is in a direct template echo context.
 	 *
-	 * This must be a simple inline PHP echo: <?php echo esc_attr(...); ?>
+	 * This must be a simple inline PHP echo, e.g. open-tag echo esc_attr(); close-tag.
 	 * The echo must be the first statement after the open tag, and
 	 * there must be inline HTML directly before the open tag.
 	 *
@@ -106,7 +100,7 @@ class EscAttrInHtmlContentSniff implements Sniff {
 			return false;
 		}
 
-		// The echo must be the first statement after a <?php open tag.
+		// The echo must be the first statement after a T_OPEN_TAG.
 		$openTagPtr = $phpcsFile->findPrevious( T_WHITESPACE, $echoPtr - 1, null, true );
 
 		if ( false === $openTagPtr || $tokens[ $openTagPtr ]['code'] !== T_OPEN_TAG ) {
@@ -120,7 +114,7 @@ class EscAttrInHtmlContentSniff implements Sniff {
 	 * Determine the HTML context by collecting preceding inline HTML fragments.
 	 *
 	 * Since inline HTML between PHP blocks can be split across multiple
-	 * T_INLINE_HTML tokens (e.g., `<select name="<?php ... ?>" id="<?php ...`),
+	 * T_INLINE_HTML tokens (e.g., name="[php]" id="[php]"),
 	 * we must collect all preceding fragments back to the last complete tag
 	 * boundary to correctly determine if we are in an attribute or text content.
 	 *
@@ -133,14 +127,14 @@ class EscAttrInHtmlContentSniff implements Sniff {
 		$tokens    = $phpcsFile->getTokens();
 		$fragments = array();
 
-		// Since isEchoContext guarantees: <?php echo esc_attr(
+		// Since isEchoContext guarantees: T_OPEN_TAG echo esc_attr(
 		// Find the open tag, then collect inline HTML fragments backwards.
 		$echoPtr    = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
 		$openTagPtr = $phpcsFile->findPrevious( T_WHITESPACE, $echoPtr - 1, null, true );
 
 		// Collect inline HTML fragments walking backwards from the open tag.
 		// Between inline HTML fragments there may be full PHP blocks.
-		// For example: name="<?php echo esc_attr( $x ); ?>" id="<?php
+		// For example: name="[php block]" id="[php block]
 		// We skip over those PHP blocks to join the HTML fragments.
 		// Stop when we have enough context (found a '<' tag boundary).
 		for ( $i = $openTagPtr - 1; $i >= 0; $i-- ) {
@@ -161,6 +155,7 @@ class EscAttrInHtmlContentSniff implements Sniff {
 			if ( $code === T_CLOSE_TAG ) {
 				// Walk backwards through the PHP block to find the open tag.
 				$matchingOpen = $this->findMatchingOpenTag( $phpcsFile, $i );
+
 				if ( false === $matchingOpen ) {
 					break;
 				}
