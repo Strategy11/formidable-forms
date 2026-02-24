@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
-	private static $active_order_id = null;
+	private static $active_order_id;
 
 	/**
 	 * @since x.x
@@ -185,15 +185,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 				// City, State Zip
 				$city_line = '';
+
 				if ( ! empty( $address->admin_area_2 ) ) {
 					$city_line .= $address->admin_area_2;
 				}
+
 				if ( ! empty( $address->admin_area_1 ) ) {
 					$city_line .= $city_line ? ', ' . $address->admin_area_1 : $address->admin_area_1;
 				}
+
 				if ( ! empty( $address->postal_code ) ) {
 					$city_line .= $city_line ? ' ' . $address->postal_code : $address->postal_code;
 				}
+
 				if ( $city_line ) {
 					$formatted .= $city_line . '<br>';
 				}
@@ -253,6 +257,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		if ( isset( $order->payment_source->card->authentication_result->liability_shift ) ) {
 			$liability_shift = $order->payment_source->card->authentication_result->liability_shift;
+
 			if ( 'NO' === $liability_shift  || 'UNKNOWN' === $liability_shift ) {
 				return 'This payment was flagged as possible fraud and has been rejected.';
 			}
@@ -540,6 +545,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$query_args['components'] = implode( ',', $components );
 
 		$locale = self::get_paypal_locale();
+
 		if ( $locale ) {
 			$query_args['locale'] = str_replace( '-', '_', $locale );
 		}

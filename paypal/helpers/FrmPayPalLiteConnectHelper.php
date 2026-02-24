@@ -60,6 +60,7 @@ class FrmPayPalLiteConnectHelper {
 
 		$mode        = self::get_mode_value_from_post();
 		$merchant_id = self::get_merchant_id( $mode );
+
 		if ( ! $merchant_id ) {
 			// Do not render any message when not connected.
 			// And return true so it does not try to handle it as an error.
@@ -152,6 +153,7 @@ class FrmPayPalLiteConnectHelper {
 		echo '<li>' . esc_html__( 'PayPal Checkout', 'formidable' ) . '</li>';
 
 		$can_process_card_fields = ! $only_supports_checkout_button && in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities );
+
 		if ( $can_process_card_fields ) {
 			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
 		}
@@ -254,6 +256,7 @@ class FrmPayPalLiteConnectHelper {
 		echo '<br>';
 		echo '<b>' . esc_html__( 'Merchant ID:', 'formidable' ) . '</b>';
 		echo '&nbsp;';
+
 		if ( $merchant_id ) {
 			echo esc_html( $merchant_id );
 		} else {
