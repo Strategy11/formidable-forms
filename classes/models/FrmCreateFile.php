@@ -305,7 +305,7 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	private function show_error_message() {
-		if ( ! empty( $this->error_message ) ) {
+		if ( $this->error_message ) {
 			echo '<div class="message">' . esc_html( $this->error_message ) . '</div>';
 		}
 	}

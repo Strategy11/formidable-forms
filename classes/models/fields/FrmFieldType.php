@@ -129,10 +129,10 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_type( $type ) {
-		if ( empty( $this->type ) ) {
+		if ( ! $this->type ) {
 			$this->type = $this->get_field_column( 'type' );
 
-			if ( empty( $this->type ) && $type ) {
+			if ( ! $this->type && $type ) {
 				$this->type = $type;
 			}
 		}
@@ -144,7 +144,7 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_field_id() {
-		if ( empty( $this->field ) ) {
+		if ( ! $this->field ) {
 			return;
 		}
 

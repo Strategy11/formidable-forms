@@ -80,7 +80,7 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cache_key() {
-		$this->cache_key = 'frm_addons_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
+		$this->cache_key = 'frm_addons_l' . ( $this->license ? md5( $this->license ) : '' );
 	}
 
 	/**
@@ -112,7 +112,7 @@ class FrmFormApi {
 	public function get_api_info() {
 		$url = $this->api_url();
 
-		if ( ! empty( $this->license ) ) {
+		if ( $this->license ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
@@ -235,7 +235,7 @@ class FrmFormApi {
 	 * @return bool
 	 */
 	protected function run_as_multisite() {
-		return is_multisite() && empty( $this->license );
+		return is_multisite() && ! $this->license;
 	}
 
 	/**
@@ -253,7 +253,7 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		if ( empty( $this->license ) ) {
+		if ( ! $this->license ) {
 			// Direct traffic to Cloudflare worker when there is no license.
 			return 'https://plapi.formidableforms.com/list/';
 		}
@@ -490,7 +490,7 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function error_for_license() {
-		if ( ! empty( $this->license ) ) {
+		if ( $this->license ) {
 			return $this->get_error_from_response();
 		}
 		return array();
