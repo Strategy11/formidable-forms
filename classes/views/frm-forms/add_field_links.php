@@ -132,6 +132,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php foreach ( $field_sections as $section_fields ) { ?>
 								<h3 class="frm-with-line">
 									<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
+									<span style="padding-left: 0;">
+										<?php FrmAppHelper::show_pill_text(); ?>
+									</span>
 								</h3>
 								<ul class="field_type_list frm_grid_container">
 									<?php
