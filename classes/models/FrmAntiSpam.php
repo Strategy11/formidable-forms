@@ -108,7 +108,7 @@ class FrmAntiSpam extends FrmValidate {
 				// Two days ago.
 				2 * DAY_IN_SECONDS,
 				// One day ago.
-				1 * DAY_IN_SECONDS,
+				DAY_IN_SECONDS,
 			)
 		);
 

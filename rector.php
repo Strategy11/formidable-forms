@@ -67,9 +67,24 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFrom
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
 
-define( 'ABSPATH', '' );
+// PHP Unit
+use Rector\PHPUnit\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTestsRector;
+use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
+use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\StringCastAssertStringContainsStringRector;
 
 return RectorConfig::configure()
+	->withBootstrapFiles(
+		array(
+			__DIR__ . '/stubs.php',
+		)
+	)
+	->withAutoloadPaths(
+		array(
+			__DIR__ . '/tests/phpunit/base',
+		)
+	)
 	->withPaths(
 		array(
 			__DIR__ . '/classes',
@@ -215,5 +230,12 @@ return RectorConfig::configure()
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
 			AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
+
+			// PHP Unit
+			DeclareStrictTypesTestsRector::class,
+			FinalizeTestCaseClassRector::class,
+			PrivatizeFinalClassPropertyRector::class,
+			StringClassNameToClassConstantRector::class,
+			StringCastAssertStringContainsStringRector::class,
 		)
 	);
