@@ -53,7 +53,8 @@
 		<UndefinedGlobalVariable>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
-				<directory name="stripe" />
+				<directory name="stripe/views" />
+				<directory name="paypal/views" />
 			</errorLevel>
 		</UndefinedGlobalVariable>
 		<UndefinedVariable>
@@ -65,6 +66,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
 				<directory name="stripe/views" />
+				<directory name="paypal/views" />
 			</errorLevel>
 		</InvalidScope>
 		<InaccessibleMethod>
