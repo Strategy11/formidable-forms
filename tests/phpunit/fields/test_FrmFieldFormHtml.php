@@ -73,13 +73,13 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 
 			// Assert html has the correct attributes
 			if ( 'checkbox' !== $field_type['type'] && ( ! isset( $field_type['data_type'] ) || 'checkbox' !== $field_type['data_type'] ) ) {
-				$this->assertStringContainsString( 'aria-required="true"', (string) $html );
+				$this->assertStringContainsString( 'aria-required="true"', $html );
 			}
 
 			$expect_radio_group = 'radio' === $field_type['type'] || 'scale' === $field_type['type'] || ( isset( $data_type ) && 'radio' === $data_type );
 
 			if ( $expect_radio_group ) {
-				$this->assertStringContainsString( 'role="radiogroup"', (string) $html );
+				$this->assertStringContainsString( 'role="radiogroup"', $html );
 			}
 		}
 	}

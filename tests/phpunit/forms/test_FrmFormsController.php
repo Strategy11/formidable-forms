@@ -281,7 +281,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertTrue( headers_sent() );
 
 		// Since headers are sent by phpunit, we will get the js redirect.
-		$this->assertStringContainsString( 'window.location="' . $expected_url . '"', (string) $response );
+		$this->assertStringContainsString( 'window.location="' . $expected_url . '"', $response );
 	}
 
 	/**
@@ -400,7 +400,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertTrue( headers_sent() );
 
 		// Since headers are sent by phpunit, we will get the js redirect.
-		$this->assertStringContainsString( 'window.open("http://example.com"', (string) $response );
-		$this->assertStringContainsString( 'target="_blank">Click here</a>', (string) $response );
+		$this->assertStringContainsString( 'window.open("http://example.com"', $response );
+		$this->assertStringContainsString( 'target="_blank">Click here</a>', $response );
 	}
 }

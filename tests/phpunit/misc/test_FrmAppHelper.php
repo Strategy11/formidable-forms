@@ -563,7 +563,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertNotSame( $name, $key, 'Field key should be unique' );
-		$this->assertStringContainsString( '___', (string) $key, 'Field key should contain custom separator' );
+		$this->assertStringContainsString( '___', $key, 'Field key should contain custom separator' );
 		$this->assertSame( strlen( $name ) + 4, strlen( $key ), 'Field key should be the previous key + 3 character separator + "2" incremented counter value' );
 		$this->assertSame( $name . '___2', $key );
 

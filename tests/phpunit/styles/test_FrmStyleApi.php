@@ -29,7 +29,7 @@ class test_FrmStyleApi extends FrmUnitTest {
 		$this->assertIsArray( $first_style_template['icon'] );
 		$image = reset( $first_style_template['icon'] );
 		$this->assertStringStartsWith( 'https://', $image );
-		$this->assertStringContainsString( '.png', (string) $image );
+		$this->assertStringContainsString( '.png', $image );
 
 		// Question: Do we ever allow people to download a style template for free? Does WordPress allow this?
 		$this->assertArrayNotHasKey( 'url', $first_style_template, 'In lite we always expect the style template to be ' );

@@ -366,7 +366,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->assertCount( 1, $form_actions, 'Old form settings are not converted to email action.' );
 
 		foreach ( $form_actions as $action ) {
-			$this->assertStringContainsString( 'emailto@test.com', (string) $action->post_content['email_to'] );
+			$this->assertStringContainsString( 'emailto@test.com', $action->post_content['email_to'] );
 		}
 	}
 

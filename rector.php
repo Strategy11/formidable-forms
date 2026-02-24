@@ -72,6 +72,7 @@ use Rector\PHPUnit\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTest
 use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\StringCastAssertStringContainsStringRector;
 
 return RectorConfig::configure()
 	->withBootstrapFiles(
@@ -235,5 +236,6 @@ return RectorConfig::configure()
 			FinalizeTestCaseClassRector::class,
 			PrivatizeFinalClassPropertyRector::class,
 			StringClassNameToClassConstantRector::class,
+			StringCastAssertStringContainsStringRector::class,
 		)
 	);
