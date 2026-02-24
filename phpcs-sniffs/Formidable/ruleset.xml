@@ -91,6 +91,7 @@
 	<!-- Security -->
 	<rule ref="Formidable.Security.AddDirectFileAccessCheck" />
 	<rule ref="Formidable.Security.BreakEchoConcatenation" />
+	<rule ref="Formidable.Security.EscAttrInHtmlContent" />
 	<rule ref="Formidable.Security.EscapeInHtml" />
 	<rule ref="Formidable.Security.PreferWpSafeRedirect" />
 	<rule ref="Formidable.Security.UnescapedUrlInHtml" />
