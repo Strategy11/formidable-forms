@@ -175,11 +175,7 @@ class FrmTransLiteAppHelper {
 
 		$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
 
-		if ( ! $form_action ) {
-			return array();
-		}
-
-		return $form_action->post_content;
+		return $form_action ? $form_action->post_content : array();
 	}
 
 	/**
