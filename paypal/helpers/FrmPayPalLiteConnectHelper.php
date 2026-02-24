@@ -85,7 +85,7 @@ class FrmPayPalLiteConnectHelper {
 
 		$email = $status->primary_email ?? '';
 
-		if ( ! isset( $status->primary_email_confirmed ) || ! $status->primary_email_confirmed ) {
+		if ( empty( $status->primary_email_confirmed ) ) {
 			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email );
 			return false;
 		}
@@ -99,11 +99,6 @@ class FrmPayPalLiteConnectHelper {
 			self::render_error( __( 'OAuth integrations are not enabled.', 'formidable' ), $email );
 			return false;
 		}
-
-//		echo '<pre>';
-//		var_dump( $status );
-//		echo '</pre>';
-//		return false;
 
 		$product                       = self::check_for_product( $status->products, 'PPCP_CUSTOM' );
 		$only_supports_checkout_button = false;
@@ -143,9 +138,7 @@ class FrmPayPalLiteConnectHelper {
 		echo implode( '</li><li>', $status->oauth_integrations[0]->oauth_third_party[0]->scopes );
 		echo '</li>';
 		echo '</ul>';
-//		echo '</div>'; // Test line.
 
-//		echo '<br>';
 		echo '<br>';
 		echo '<b>' . esc_html__( 'Enabled capabilities:', 'formidable' ) . '</b>';
 		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
@@ -162,8 +155,6 @@ class FrmPayPalLiteConnectHelper {
 		if ( $can_process_card_fields ) {
 			self::render_acdc_vetting_status( $product );
 		}
-
-	//	echo implode( '<br>', $product->capabilities );
 
 		echo '</div>';
 
@@ -286,7 +277,6 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	public static function render_settings_for_mode( $mode ) {
 		$connected = (bool) self::get_merchant_id( $mode );
-
 		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-box.php';
 	}
 

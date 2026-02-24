@@ -232,7 +232,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			default:
 				$refunded = false;
 				break;
-		}
+		}//end switch
 
 		if ( $refunded ) {
 			self::change_payment_status( $payment, 'refunded' );

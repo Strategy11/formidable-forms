@@ -289,7 +289,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		// PayPal action options.
 		$defaults['product_name'] = '';
-		$defaults['pay_later'] = '';
+		$defaults['pay_later']    = '';
 
 		return $defaults;
 	}

@@ -137,100 +137,102 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$response['error'] = $charge;
 		}
 
+
+		if ( empty( self::$active_order_id ) ) {
+			return $response;
+		}
+
 		$paypal_message = '';
 		$email          = false;
 		$address        = false;
+		$order          = FrmPayPalLiteConnectHelper::get_order( self::$active_order_id );
 
-		if ( ! empty( self::$active_order_id ) ) {
-			$order = FrmPayPalLiteConnectHelper::get_order( self::$active_order_id );
+		if ( is_object( $order ) && isset( $order->payer ) && is_object( $order->payer ) ) {
+			$payer = $order->payer;
 
-			if ( is_object( $order ) && isset( $order->payer ) && is_object( $order->payer ) ) {
-				$payer = $order->payer;
-
-				if ( ! empty( $payer->email_address ) ) {
-					$email = $payer->email_address;
-				}
-
-				if ( ! empty( $payer->address ) && is_object( $payer->address ) ) {
-					$address = $payer->address;
-				}
+			if ( ! empty( $payer->email_address ) ) {
+				$email = $payer->email_address;
 			}
 
-			$paypal_message = '';
-
-			if ( isset( $order->payment_source ) && is_object( $order->payment_source ) ) {
-				$source_array = (array) $order->payment_source;
-				$source_type  = array_key_first( $source_array );
-
-				switch ( $source_type ) {
-					case 'paypal':
-						$display_type = __( 'PayPal', 'formidable' );
-						break;
-					default:
-						$display_type = ucwords( $source_type );
-						break;
-				}
-
-				$paypal_message .= '<strong>' . __( 'Payment source: ', 'formidable' ) . '</strong>' . $display_type . '<br>';
+			if ( ! empty( $payer->address ) && is_object( $payer->address ) ) {
+				$address = $payer->address;
 			}
-
-			if ( $email ) {
-				$paypal_message .= '<strong>' . __( 'Payment made by: ', 'formidable' ) . '</strong>' . $email . '<br>';
-			}
-
-			if ( $address && ! empty( $address->address_line_1 ) ) {
-				$formatted = '<strong>' . __( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
-
-				$formatted .= $address->address_line_1 . '<br>';
-
-				// City, State Zip
-				$city_line = '';
-
-				if ( ! empty( $address->admin_area_2 ) ) {
-					$city_line .= $address->admin_area_2;
-				}
-
-				if ( ! empty( $address->admin_area_1 ) ) {
-					$city_line .= $city_line ? ', ' . $address->admin_area_1 : $address->admin_area_1;
-				}
-
-				if ( ! empty( $address->postal_code ) ) {
-					$city_line .= $city_line ? ' ' . $address->postal_code : $address->postal_code;
-				}
-
-				if ( $city_line ) {
-					$formatted .= $city_line . '<br>';
-				}
-
-				if ( ! empty( $address->country_code ) ) {
-					$formatted .= $address->country_code . '<br>';
-				}
-
-				$paypal_message .= $formatted;
-			}
-
-			/**
-			 * Filters the message to show in the main feedback area.
-			 *
-			 * @since x.x
-			 *
-			 * @param string   $paypal_message The message to show.
-			 * @param stdClass $order          The order object.
-			 */
-			$paypal_message = apply_filters( 'frm_paypal_message', $paypal_message, $order );
-
-			add_filter(
-				'frm_main_feedback',
-				function ( $message ) use ( $paypal_message ) {
-					if ( $paypal_message ) {
-						$details = '<div class="frm_paypal_payment_details" style="margin-top: 10px;">' . $paypal_message . '</div>';
-						$message = preg_replace( '/(<div\b[^>]*\bfrm_message\b[^>]*>)(.*?)(<\/div>)/s', '$1$2' . $details . '$3', $message );
-					}
-
-					return $message;
-				}
-			);
 		}
+
+		$paypal_message = '';
+
+		if ( isset( $order->payment_source ) && is_object( $order->payment_source ) ) {
+			$source_array = (array) $order->payment_source;
+			$source_type  = array_key_first( $source_array );
+
+			switch ( $source_type ) {
+				case 'paypal':
+					$display_type = __( 'PayPal', 'formidable' );
+					break;
+				default:
+					$display_type = ucwords( $source_type );
+					break;
+			}
+
+			$paypal_message .= '<strong>' . esc_html__( 'Payment source: ', 'formidable' ) . '</strong>' . $display_type . '<br>';
+		}
+
+		if ( $email ) {
+			$paypal_message .= '<strong>' . esc_html__( 'Payment made by: ', 'formidable' ) . '</strong>' . $email . '<br>';
+		}
+
+		if ( $address && ! empty( $address->address_line_1 ) ) {
+			$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
+
+			$formatted .= $address->address_line_1 . '<br>';
+
+			// City, State Zip
+			$city_line = '';
+
+			if ( ! empty( $address->admin_area_2 ) ) {
+				$city_line .= $address->admin_area_2;
+			}
+
+			if ( ! empty( $address->admin_area_1 ) ) {
+				$city_line .= $city_line ? ', ' . $address->admin_area_1 : $address->admin_area_1;
+			}
+
+			if ( ! empty( $address->postal_code ) ) {
+				$city_line .= $city_line ? ' ' . $address->postal_code : $address->postal_code;
+			}
+
+			if ( $city_line ) {
+				$formatted .= $city_line . '<br>';
+			}
+
+			if ( ! empty( $address->country_code ) ) {
+				$formatted .= $address->country_code . '<br>';
+			}
+
+			$paypal_message .= $formatted;
+		}//end if
+
+		/**
+		 * Filters the message to show in the main feedback area.
+		 *
+		 * @since x.x
+		 *
+		 * @param string   $paypal_message The message to show.
+		 * @param stdClass $order          The order object.
+		 */
+		$paypal_message = apply_filters( 'frm_paypal_message', $paypal_message, $order );
+
+		add_filter(
+			'frm_main_feedback',
+			function ( $message ) use ( $paypal_message ) {
+				if ( $paypal_message ) {
+					$details = '<div class="frm_paypal_payment_details" style="margin-top: 10px;">' . $paypal_message . '</div>';
+					$message = preg_replace( '/(<div\b[^>]*\bfrm_message\b[^>]*>)(.*?)(<\/div>)/s', '$1$2' . $details . '$3', $message );
+				}
+
+				return $message;
+			}
+		);
 
 		return $response;
 	}
@@ -258,7 +260,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		if ( isset( $order->payment_source->card->authentication_result->liability_shift ) ) {
 			$liability_shift = $order->payment_source->card->authentication_result->liability_shift;
 
-			if ( 'NO' === $liability_shift  || 'UNKNOWN' === $liability_shift ) {
+			if ( 'NO' === $liability_shift || 'UNKNOWN' === $liability_shift ) {
 				return 'This payment was flagged as possible fraud and has been rejected.';
 			}
 		}
@@ -531,7 +533,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			// 'marks',
 		);
 
-		switch( $action->post_content['pay_later'] ?? 'auto' ) {
+		switch ( $action->post_content['pay_later'] ?? 'auto' ) {
 			case 'off':
 				$query_args['disable-funding'] = 'paylater';
 				break;
@@ -543,8 +545,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$query_args['components'] = implode( ',', $components );
-
-		$locale = self::get_paypal_locale();
+		$locale                   = self::get_paypal_locale();
 
 		if ( $locale ) {
 			$query_args['locale'] = str_replace( '-', '_', $locale );
@@ -617,249 +618,786 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$country = isset( $parts[1] ) ? strtoupper( $parts[1] ) : '';
 
 		switch ( $lang ) {
-			case 'ar': // Arabic
+			case 'ar':
+				// Arabic
 				$countries = array( 'DZ', 'BH', 'EG', 'JO', 'KW', 'MA', 'OM', 'QA', 'SA', 'TN', 'AE', 'YE' );
 				break;
 
-			case 'bg': // Bulgarian
+			case 'bg':
+				// Bulgarian
 				$countries = array( 'BG' );
 				break;
 
-			case 'cs': // Czech
+			case 'cs':
+				// Czech
 				$countries = array( 'CZ' );
 				break;
 
-			case 'da': // Danish
+			case 'da':
+				// Danish
 				$countries = array( 'DK', 'FO', 'GL' );
 				break;
 
-			case 'de': // German
+			case 'de':
+				// German
 				$countries = array( 'AT', 'DE', 'LU', 'CH' );
 				break;
 
-			case 'el': // Greek
+			case 'el':
+				// Greek
 				$countries = array( 'GR' );
 				break;
 
-			case 'en': // English
+			case 'en':
+				// English
 				$countries = array(
-					'AL', 'DZ', 'AD', 'AO', 'AI', 'AG', 'AR', 'AM', 'AW', 'AU', 'AT', 'AZ',
-					'BS', 'BH', 'BB', 'BY', 'BE', 'BZ', 'BJ', 'BM', 'BT', 'BO', 'BA', 'BW', 'BR', 'VG', 'BN', 'BG', 'BF', 'BI',
-					'KH', 'CM', 'CA', 'CV', 'KY', 'TD', 'CL', 'C2', 'CN', 'CO', 'KM', 'CG', 'CD', 'CK', 'CR', 'CI', 'HR', 'CY', 'CZ',
-					'DK', 'DJ', 'DM', 'DO',
-					'EC', 'EG', 'SV', 'ER', 'EE', 'SZ', 'ET',
-					'FK', 'FO', 'FJ', 'FI', 'FR', 'GF', 'PF',
-					'GA', 'GM', 'GE', 'DE', 'GI', 'GR', 'GL', 'GD', 'GP', 'GT', 'GN', 'GW', 'GY',
-					'HN', 'HK', 'HU',
-					'IS', 'IN', 'ID', 'IE', 'IL', 'IT',
-					'JM', 'JP', 'JO',
-					'KZ', 'KE', 'KI', 'KW', 'KG',
-					'LA', 'LV', 'LS', 'LI', 'LT', 'LU',
-					'MG', 'MW', 'MY', 'MV', 'ML', 'MT', 'MH', 'MQ', 'MR', 'MU', 'MX', 'FM', 'MD', 'MC', 'MN', 'ME', 'MS', 'MA', 'MZ',
-					'NA', 'NR', 'NP', 'NL', 'AN', 'NC', 'NZ', 'NI', 'NE', 'NG', 'NU', 'NF', 'MK', 'NO',
+					'AL',
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AR',
+					'AM',
+					'AW',
+					'AU',
+					'AT',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BY',
+					'BE',
+					'BZ',
+					'BJ',
+					'BM',
+					'BT',
+					'BO',
+					'BA',
+					'BW',
+					'BR',
+					'VG',
+					'BN',
+					'BG',
+					'BF',
+					'BI',
+					'KH',
+					'CM',
+					'CA',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'C2',
+					'CN',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'CI',
+					'HR',
+					'CY',
+					'CZ',
+					'DK',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'EE',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'FI',
+					'FR',
+					'GF',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'DE',
+					'GI',
+					'GR',
+					'GL',
+					'GD',
+					'GP',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
+					'HN',
+					'HK',
+					'HU',
+					'IS',
+					'IN',
+					'ID',
+					'IE',
+					'IL',
+					'IT',
+					'JM',
+					'JP',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LA',
+					'LV',
+					'LS',
+					'LI',
+					'LT',
+					'LU',
+					'MG',
+					'MW',
+					'MY',
+					'MV',
+					'ML',
+					'MT',
+					'MH',
+					'MQ',
+					'MR',
+					'MU',
+					'MX',
+					'FM',
+					'MD',
+					'MC',
+					'MN',
+					'ME',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'NP',
+					'NL',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NG',
+					'NU',
+					'NF',
+					'MK',
+					'NO',
 					'OM',
-					'PW', 'PA', 'PG', 'PY', 'PE', 'PH', 'PN', 'PL', 'PT',
+					'PW',
+					'PA',
+					'PG',
+					'PY',
+					'PE',
+					'PH',
+					'PN',
+					'PL',
+					'PT',
 					'QA',
-					'RE', 'RO', 'RU', 'RW',
-					'WS', 'SM', 'ST', 'SA', 'SN', 'RS', 'SC', 'SL', 'SG', 'SK', 'SI', 'SB', 'SO', 'ZA', 'KR', 'ES', 'LK', 'SH', 'KN', 'LC', 'PM', 'VC', 'SR', 'SJ', 'SE', 'CH',
-					'TW', 'TJ', 'TZ', 'TH', 'TG', 'TO', 'TT', 'TN', 'TR', 'TM', 'TC', 'TV',
-					'UG', 'UA', 'AE', 'GB', 'US', 'UY',
-					'VU', 'VA', 'VE', 'VN',
+					'RE',
+					'RO',
+					'RU',
+					'RW',
+					'WS',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SC',
+					'SL',
+					'SG',
+					'SK',
+					'SI',
+					'SB',
+					'SO',
+					'ZA',
+					'KR',
+					'ES',
+					'LK',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'SE',
+					'CH',
+					'TW',
+					'TJ',
+					'TZ',
+					'TH',
+					'TG',
+					'TO',
+					'TT',
+					'TN',
+					'TR',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'GB',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
+					'VN',
 					'WF',
 					'YE',
-					'ZM', 'ZW',
+					'ZM',
+					'ZW',
 				);
 				break;
 
-			case 'es': // Spanish
+			case 'es':
+// Spanish
 				$countries = array(
-					'DZ', 'AD', 'AO', 'AI', 'AG', 'AR', 'AM', 'AW', 'AZ',
-					'BS', 'BH', 'BB', 'BZ', 'BJ', 'BM', 'BO', 'BW', 'VG', 'BF', 'BI',
-					'CV', 'KY', 'TD', 'CL', 'CO', 'KM', 'CG', 'CD', 'CK', 'CR',
-					'DJ', 'DM', 'DO',
-					'EC', 'EG', 'SV', 'ER', 'SZ', 'ET',
-					'FK', 'FO', 'FJ', 'PF',
-					'GA', 'GM', 'GE', 'GI', 'GL', 'GD', 'GT', 'GN', 'GW', 'GY',
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AR',
+					'AM',
+					'AW',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BZ',
+					'BJ',
+					'BM',
+					'BO',
+					'BW',
+					'VG',
+					'BF',
+					'BI',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'GI',
+					'GL',
+					'GD',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
 					'HN',
 					'IE',
-					'JM', 'JO',
-					'KZ', 'KE', 'KI', 'KW', 'KG',
-					'LS', 'LI', 'LU',
-					'MG', 'MW', 'ML', 'MH', 'MR', 'MU', 'MX', 'MS', 'MA', 'MZ',
-					'NA', 'NR', 'AN', 'NC', 'NZ', 'NI', 'NE', 'NU', 'NF',
+					'JM',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LS',
+					'LI',
+					'LU',
+					'MG',
+					'MW',
+					'ML',
+					'MH',
+					'MR',
+					'MU',
+					'MX',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NU',
+					'NF',
 					'OM',
-					'PW', 'PA', 'PG', 'PY', 'PE', 'PN',
+					'PW',
+					'PA',
+					'PG',
+					'PY',
+					'PE',
+					'PN',
 					'QA',
 					'RW',
-					'SM', 'ST', 'SA', 'SN', 'RS', 'SC', 'SL', 'SB', 'SO', 'ZA', 'ES', 'SH', 'KN', 'LC', 'PM', 'VC', 'SR', 'SJ',
-					'TJ', 'TZ', 'TG', 'TT', 'TN', 'TM', 'TC', 'TV',
-					'UG', 'UA', 'AE', 'US', 'UY',
-					'VU', 'VA', 'VE',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SC',
+					'SL',
+					'SB',
+					'SO',
+					'ZA',
+					'ES',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'TJ',
+					'TZ',
+					'TG',
+					'TT',
+					'TN',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
 					'WF',
 					'YE',
 					'ZM',
 				);
 				break;
 
-			case 'et': // Estonian
+			case 'et':
+				// Estonian
 				$countries = array( 'EE' );
 				break;
 
-			case 'fi': // Finnish
+			case 'fi':
+				// Finnish
 				$countries = array( 'FI' );
 				break;
 
-			case 'fr': // French
+			case 'fr':
+				// French
 				$countries = array(
-					'DZ', 'AD', 'AO', 'AI', 'AG', 'AM', 'AW', 'AZ',
-					'BS', 'BH', 'BB', 'BE', 'BZ', 'BJ', 'BM', 'BO', 'BW', 'VG', 'BF', 'BI',
-					'CM', 'CA', 'CV', 'KY', 'TD', 'CL', 'CO', 'KM', 'CG', 'CD', 'CK', 'CR', 'CI',
-					'DJ', 'DM', 'DO',
-					'EC', 'EG', 'SV', 'ER', 'SZ', 'ET',
-					'FK', 'FO', 'FJ', 'FR', 'GF', 'PF',
-					'GA', 'GM', 'GE', 'GI', 'GL', 'GD', 'GP', 'GT', 'GN', 'GW', 'GY',
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AM',
+					'AW',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BE',
+					'BZ',
+					'BJ',
+					'BM',
+					'BO',
+					'BW',
+					'VG',
+					'BF',
+					'BI',
+					'CM',
+					'CA',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'CI',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'FR',
+					'GF',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'GI',
+					'GL',
+					'GD',
+					'GP',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
 					'HN',
 					'IE',
-					'JM', 'JO',
-					'KZ', 'KE', 'KI', 'KW', 'KG',
-					'LS', 'LI', 'LU',
-					'MG', 'MW', 'ML', 'MH', 'MQ', 'MR', 'MU', 'YT', 'MC', 'MS', 'MA', 'MZ',
-					'NA', 'NR', 'AN', 'NC', 'NZ', 'NI', 'NE', 'NU', 'NF',
+					'JM',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LS',
+					'LI',
+					'LU',
+					'MG',
+					'MW',
+					'ML',
+					'MH',
+					'MQ',
+					'MR',
+					'MU',
+					'YT',
+					'MC',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NU',
+					'NF',
 					'OM',
-					'PW', 'PA', 'PG', 'PE', 'PN',
+					'PW',
+					'PA',
+					'PG',
+					'PE',
+					'PN',
 					'QA',
-					'RE', 'RW',
-					'SC', 'SM', 'ST', 'SA', 'SN', 'RS', 'SL', 'SB', 'SO', 'ZA', 'SH', 'KN', 'LC', 'PM', 'VC', 'SR', 'SJ', 'CH',
-					'TJ', 'TZ', 'TG', 'TT', 'TN', 'TM', 'TC', 'TV',
-					'UG', 'UA', 'AE', 'US', 'UY',
-					'VU', 'VA', 'VE',
+					'RE',
+					'RW',
+					'SC',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SL',
+					'SB',
+					'SO',
+					'ZA',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'CH',
+					'TJ',
+					'TZ',
+					'TG',
+					'TT',
+					'TN',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
 					'WF',
 					'YE',
 					'ZM',
 				);
 				break;
 
-			case 'he': // Hebrew
+			case 'he':
+				// Hebrew
 				$countries = array( 'IL' );
 				break;
 
-			case 'hu': // Hungarian
+			case 'hu':
+				// Hungarian
 				$countries = array( 'HU' );
 				break;
 
-			case 'id': // Indonesian
+			case 'id':
+				// Indonesian
 				$countries = array( 'ID' );
 				break;
 
-			case 'it': // Italian
+			case 'it':
+				// Italian
 				$countries = array( 'IT' );
 				break;
 
-			case 'ja': // Japanese
+			case 'ja':
+				// Japanese
 				$countries = array( 'JP' );
 				break;
 
-			case 'ko': // Korean
+			case 'ko':
+				// Korean
 				$countries = array( 'KR' );
 				break;
 
-			case 'lt': // Lithuanian
+			case 'lt':
+				// Lithuanian
 				$countries = array( 'LT' );
 				break;
 
-			case 'lv': // Latvian
+			case 'lv':
+				// Latvian
 				$countries = array( 'LV' );
 				break;
 
-			case 'ms': // Malay
+			case 'ms':
+				// Malay
 				$countries = array( 'BN', 'MY' );
 				break;
 
-			case 'nl': // Dutch
+			case 'nl':
+				// Dutch
 				$countries = array( 'BE', 'NL' );
 				break;
 
-			case 'no': // Norwegian
+			case 'no':
+				// Norwegian
 				$countries = array( 'NO' );
 				break;
 
-			case 'pl': // Polish
+			case 'pl':
+				// Polish
 				$countries = array( 'PL' );
 				break;
 
-			case 'pt': // Portuguese
+			case 'pt':
+				// Portuguese
 				$countries = array( 'BR', 'PT' );
 				break;
 
-			case 'ro': // Romanian
+			case 'ro':
+				// Romanian
 				$countries = array( 'RO' );
 				break;
 
-			case 'ru': // Russian
+			case 'ru':
+				// Russian
 				$countries = array( 'EE', 'LV', 'LT', 'RU', 'UA' );
 				break;
 
-			case 'si': // Sinhala
+			case 'si':
+				// Sinhala
 				$countries = array( 'LK' );
 				break;
 
-			case 'sk': // Slovak
+			case 'sk':
+				// Slovak
 				$countries = array( 'SK' );
 				break;
 
-			case 'sl': // Slovenian
+			case 'sl':
+				// Slovenian
 				$countries = array( 'SI' );
 				break;
 
-			case 'sq': // Albanian
+			case 'sq':
+				// Albanian
 				$countries = array( 'AL' );
 				break;
 
-			case 'sv': // Swedish
+			case 'sv':
+				// Swedish
 				$countries = array( 'SE' );
 				break;
 
-			case 'th': // Thai
+			case 'th':
+				// Thai
 				$countries = array( 'TH' );
 				break;
 
-			case 'tl': // Tagalog
+			case 'tl':
+				// Tagalog
 				$countries = array( 'PH' );
 				break;
 
-			case 'tr': // Turkish
+			case 'tr':
+				// Turkish
 				$countries = array( 'TR' );
 				break;
 
-			case 'vi': // Vietnamese
+			case 'vi':
+				// Vietnamese
 				$countries = array( 'VN' );
 				break;
 
-			case 'zh': // Chinese
+			case 'zh':
+				// Chinese
 				$countries = array(
-					'C2', 'CN', 'HK', 'TW',
-					'DZ', 'AD', 'AO', 'AI', 'AG', 'AM', 'AW', 'AZ',
-					'BS', 'BH', 'BB', 'BZ', 'BJ', 'BM', 'BO', 'BW', 'VG', 'BF', 'BI',
-					'CV', 'KY', 'TD', 'CL', 'CO', 'KM', 'CG', 'CD', 'CK', 'CR',
-					'DJ', 'DM', 'DO',
-					'EC', 'EG', 'SV', 'ER', 'SZ', 'ET',
-					'FK', 'FO', 'FJ', 'PF',
-					'GA', 'GM', 'GE', 'GI', 'GL', 'GD', 'GT', 'GN', 'GW', 'GY',
+					'C2',
+					'CN',
+					'HK',
+					'TW',
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AM',
+					'AW',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BZ',
+					'BJ',
+					'BM',
+					'BO',
+					'BW',
+					'VG',
+					'BF',
+					'BI',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'GI',
+					'GL',
+					'GD',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
 					'HN',
 					'IE',
-					'JM', 'JO',
-					'KZ', 'KE', 'KI', 'KW', 'KG',
-					'LS', 'LI', 'LT', 'LU',
-					'MG', 'MW', 'ML', 'MH', 'MR', 'MU', 'MS', 'MA', 'MZ',
-					'NA', 'NR', 'AN', 'NC', 'NZ', 'NI', 'NE', 'NU', 'NF',
+					'JM',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LS',
+					'LI',
+					'LT',
+					'LU',
+					'MG',
+					'MW',
+					'ML',
+					'MH',
+					'MR',
+					'MU',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NU',
+					'NF',
 					'OM',
-					'PW', 'PA', 'PG', 'PE', 'PN',
+					'PW',
+					'PA',
+					'PG',
+					'PE',
+					'PN',
 					'QA',
 					'RW',
-					'SM', 'ST', 'SA', 'SN', 'RS', 'SC', 'SL', 'SB', 'SO', 'ZA', 'SH', 'KN', 'LC', 'PM', 'VC', 'SR', 'SJ',
-					'TJ', 'TZ', 'TG', 'TT', 'TN', 'TM', 'TC', 'TV',
-					'UG', 'UA', 'AE', 'US', 'UY',
-					'VU', 'VA', 'VE',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SC',
+					'SL',
+					'SB',
+					'SO',
+					'ZA',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'TJ',
+					'TZ',
+					'TG',
+					'TT',
+					'TN',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
 					'WF',
 					'YE',
 					'ZM',
@@ -869,7 +1407,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			default:
 				$countries = array();
 				break;
-		}
+		}//end switch
 
 		if ( $country && in_array( $country, $countries, true ) ) {
 			return $lang . '-' . $country;

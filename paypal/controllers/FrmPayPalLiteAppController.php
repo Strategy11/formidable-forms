@@ -183,7 +183,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		if ( $email_setting ) {
-			$shortcode_atts   = array(
+			$shortcode_atts         = array(
 				'entry' => $entry,
 				'form'  => $action->menu_order,
 				'value' => $email_setting,
@@ -199,7 +199,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * @since 6.25
 	 *
-	 * @param array $details
+	 * @param array $payer
 	 * @param array $address
 	 * @param int   $address_field_id
 	 *
@@ -239,7 +239,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * @since x.x
 	 *
-	 * @return array<string>	
+	 * @return array<string>
 	 */
 	private static function get_valid_payment_sources() {
 		$sources = array(
@@ -315,11 +315,13 @@ class FrmPayPalLiteAppController {
 				continue;
 			}
 
-			if ( is_array( $v ) ) {
-				foreach ( $v as $f => $value ) {
-					FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-					$entry->metas[ absint( $f ) ] = $value;
-				}
+			if ( ! is_array( $v ) ) {
+				continue;
+			}
+
+			foreach ( $v as $f => $value ) {
+				FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+				$entry->metas[ absint( $f ) ] = $value;
 			}
 		}
 

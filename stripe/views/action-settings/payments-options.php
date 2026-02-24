@@ -27,9 +27,9 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 <div class="frm-long-icon-buttons" role="tablist">
 <?php
 foreach ( $gateways as $gateway_name => $gateway ) {
-	$is_active        = in_array( $gateway_name, (array) $form_action->post_content['gateway'], true );
-	$name             = $gateway['label'] ?? ucfirst( $gateway_name );
-	$gateway_classes  = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
+	$is_active       = in_array( $gateway_name, (array) $form_action->post_content['gateway'], true );
+	$name            = $gateway['label'] ?? ucfirst( $gateway_name );
+	$gateway_classes = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
 
 	if ( $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ) {
 		$gateway_classes .= ' frm_hidden';

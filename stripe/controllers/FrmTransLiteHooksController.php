@@ -56,7 +56,7 @@ class FrmTransLiteHooksController {
 
 			// Exit early, let the Payments submodule handle everything else.
 			return;
-		}
+		}//end if
 
 		if ( self::on_form_settings_page() ) {
 			self::hide_collect_payment_action();
