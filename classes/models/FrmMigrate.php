@@ -382,7 +382,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105 );
 
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
@@ -474,6 +474,17 @@ class FrmMigrate {
 		if ( FrmSquareLiteConnectHelper::get_merchant_id( 'live' ) ) {
 			FrmSquareLiteConnectHelper::get_location_id( true, 'live' );
 		}
+	}
+
+	/**
+	 * Add new wp_options row for custom setting.
+	 *
+	 * @since 6.26
+	 *
+	 * @return void
+	 */
+	private function migrate_to_105() {
+		update_option( 'frm_show_pricing_fields_modal', 1 );
 	}
 
 	/**

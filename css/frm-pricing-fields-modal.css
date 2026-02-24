@@ -1,0 +1,44 @@
+/**
+ * Pricing Fields Modal Styles.
+ *
+ * @package Formidable
+ */
+
+.frm-pricing-features {
+	margin: 20px 0;
+}
+
+.frm-feature-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: 12px;
+	font-size: 14px;
+}
+
+.frm-feature-item .frmsvg {
+	margin-right: 10px;
+	flex-shrink: 0;
+}
+
+.frm-green {
+	color: #46b450;
+}
+
+.frm-modal-actions {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.frm-cancel-modal {
+	background: #f0f0f1;
+	border: 1px solid #dcdcde;
+	color: #50575e;
+}
+
+.frm-cancel-modal:hover {
+	background: #f6f7f7;
+	border-color: #c5c5c7;
+	color: #3c434a;
+}

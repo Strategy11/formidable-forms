@@ -864,6 +864,21 @@ class FrmAppController {
 
 		wp_enqueue_style( 'formidable-settings-components' );
 		wp_enqueue_script( 'formidable-settings-components' );
+
+		// Enqueue pricing fields modal script if the option is set
+		if ( get_option( 'frm_show_pricing_fields_modal' ) ) {
+			wp_register_style( 'frm-pricing-fields-modal', $plugin_url . '/css/frm-pricing-fields-modal.css', array( 'formidable-admin' ), $version );
+			wp_enqueue_style( 'frm-pricing-fields-modal' );
+
+			wp_register_script( 'frm-pricing-fields-modal', $plugin_url . '/js/frm-pricing-fields-modal.js', array( 'jquery', 'jquery-ui-dialog' ), $version, true );
+			wp_enqueue_script( 'frm-pricing-fields-modal' );
+
+			// Add modal to admin footer
+			add_action( 'admin_footer', array( __CLASS__, 'include_pricing_fields_modal' ) );
+
+			// Delete the option so modal only shows once
+			delete_option( 'frm_show_pricing_fields_modal' );
+		}
 	}
 
 	/**
@@ -1702,5 +1717,16 @@ class FrmAppController {
 		}
 
 		wp_enqueue_script( 'formidable-web-components' );
+	}
+
+	/**
+	 * Include pricing fields modal in footer.
+	 *
+	 * @since 6.26
+	 *
+	 * @return void
+	 */
+	public static function include_pricing_fields_modal() {
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/modals/pricing-fields-modal.php';
 	}
 }
