@@ -1687,16 +1687,10 @@ function frmFrontFormJS() {
 		submitButtons.forEach( button => {
 			const submitContainer = button.closest( '.frm_form_field' );
 			const previousSibling = submitContainer.previousElementSibling;
-			if ( getTopPositionOfElement( submitContainer ) !== getTopPositionOfElement( previousSibling ) ) {
-				// If the submit button is not inline with other fields, do not update the layout.
-				return;
+			if ( getTopPositionOfElement( submitContainer ) === getTopPositionOfElement( previousSibling ) ) {
+				// If the submit button is inline with other fields, vertically align it with other fields in the same row.
+				submitContainer.classList.add( 'frm_inline_submit_button' );
 			}
-
-			submitContainer.style.position = 'relative';
-			const submitWrapper = button.closest( 'div' );
-			submitWrapper.style.position = 'absolute';
-			submitWrapper.style.bottom = '0';
-			button.style.marginBottom = '0';
 		} );
 	}
 
