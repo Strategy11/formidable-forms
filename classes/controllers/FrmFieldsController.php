@@ -216,13 +216,13 @@ class FrmFieldsController {
 	 * @return int
 	 */
 	private static function get_form_id_from_field_or_form( $field_object, $values ) {
-		$form_id = $field_object->form_id;
+		$form_id = absint( $field_object->form_id );
 
 		if ( isset( $values['form_key'] ) ) {
 			return $values['id'] ?? $form_id;
 		}
 
-		$parent_form_id = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
+		$parent_form_id = absint( FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' ) );
 
 		return $parent_form_id ? $parent_form_id : $form_id;
 	}
