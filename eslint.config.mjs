@@ -369,6 +369,7 @@ export default [
 			'no-jquery/no-ajax': 'error',
 			'no-jquery/no-fade': 'error',
 			'no-jquery/no-is': 'error',
+			'prefer-const': 'off',
 		},
 	},
 
