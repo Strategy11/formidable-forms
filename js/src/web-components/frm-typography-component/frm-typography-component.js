@@ -72,7 +72,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	/**
 	 * A method to get the select element.
 	 *
-	 * @returns {Element} - The select element.
+	 * @return {Element} - The select element.
 	 */
 	getSelect() {
 		this.select = document.createElement( 'select' );
@@ -91,7 +91,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * A method to get the default options for the select element.
 	 *
 	 * @param {Element} select - The select element.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	getDefaultOptions( select ) {
 		this.#defaultOptions.forEach( option => {
@@ -107,7 +107,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * A method to check if the value is a custom font size.
 	 *
 	 * @param {string} value - The value to check if it is a custom font size.
-	 * @returns {boolean} - True if the value is a custom font size, false otherwise.
+	 * @return {boolean} - True if the value is a custom font size, false otherwise.
 	 */
 	static isCustomFonSize( value ) {
 		return ! [ '', '18px', '21px', '26px', '32px' ].includes( value );
@@ -117,7 +117,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * A method to change the select value.
 	 *
 	 * @param {string} value - The value to change the select value for.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	changeSelectValue( value ) {
 		const isCustomFonSize = frmTypographyComponent.isCustomFonSize( value );
@@ -129,7 +129,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	/**
 	 * A method to get the unit value wrapper element.
 	 *
-	 * @returns {Element} - The unit value wrapper element.
+	 * @return {Element} - The unit value wrapper element.
 	 */
 	getUnitValueWrapper() {
 		this.unitValueWrapper = document.createElement( 'div' );
@@ -142,7 +142,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	/**
 	 * A method to get the unit value input element.
 	 *
-	 * @returns {Element} - The unit value input element.
+	 * @return {Element} - The unit value input element.
 	 */
 	getUnitValueInput() {
 		this.unitValueInput = document.createElement( 'input' );
@@ -169,7 +169,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	/**
 	 * A method to get the unit type select element.
 	 *
-	 * @returns {Element} - The unit type select element.
+	 * @return {Element} - The unit type select element.
 	 */
 	getUnitTypeSelect() {
 		this.unitTypeSelect = document.createElement( 'select' );
@@ -194,7 +194,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	/**
 	 * A method to get the hidden input element.
 	 *
-	 * @returns {Element} - The hidden input element.
+	 * @return {Element} - The hidden input element.
 	 */
 	getHiddenInput() {
 		this.hiddenInput = document.createElement( 'input' );
@@ -209,7 +209,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	/**
 	 * A method to set the change event listener for the select element.
 	 *
-	 * @returns {void} - The unit value.
+	 * @return {void} - The unit value.
 	 */
 	afterViewInit() {
 		this.select.addEventListener( 'change', () => {
@@ -225,7 +225,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * A method to get the unit value.
 	 *
 	 * @param {string} value - The value to get the unit value for.
-	 * @returns {Object} - The unit value.
+	 * @return {Object} - The unit value.
 	 */
 	static getUnitValue( value ) {
 		const defaultValue = { value: '', unit: '' };
@@ -248,7 +248,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * A method to set the change event listener for the select element.
 	 *
 	 * @param {Function} callback - The callback function to call when the select element is changed.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
@@ -262,7 +262,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * A method to set dynamically the default value for the typography component.
 	 *
 	 * @param {string} value - The value to set dynamically the default value for.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set typographyDefaultValue( value ) {
 		this.#defaultValue = value;

@@ -18,7 +18,7 @@ import { updateRootline } from '../ui';
  *
  * @param {string} stepName                   The name of the step to navigate to.
  * @param {string} [updateMethod='pushState'] Specifies the method to update the browser's history and URL. Accepts 'pushState' or 'replaceState'. If omitted, defaults to 'pushState'.
- * @returns {void}
+ * @return {void}
  */
 export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
 	// Find the target step element
@@ -54,7 +54,7 @@ export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
  *
  * The function assumes steps are sequentially ordered in the DOM.
  *
- * @returns {void}
+ * @return {void}
  */
 export const navigateToNextStep = () => {
 	const currentStep = document.querySelector( `.${ PREFIX }-step.${ CURRENT_CLASS }` );
@@ -83,7 +83,7 @@ export const navigateToNextStep = () => {
  *
  * The function assumes steps are sequentially ordered in the DOM.
  *
- * @returns {void}
+ * @return {void}
  */
 export const navigateToPrevStep = () => {
 	const currentStep = document.querySelector( `.${ PREFIX }-step.${ CURRENT_CLASS }` );

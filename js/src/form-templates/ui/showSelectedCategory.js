@@ -17,7 +17,7 @@ import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState
  * Show templates based on selected category.
  *
  * @param {string} selectedCategory The selected category to display templates for.
- * @returns {void}
+ * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
 	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems, upsellBanner } = getElements();
@@ -53,7 +53,7 @@ export function showSelectedCategory( selectedCategory ) {
 /**
  * Shows all templates when 'All Templates' is the selected category.
  *
- * @returns {void}
+ * @return {void}
  */
 export function showAllTemplates() {
 	const {
@@ -73,7 +73,7 @@ export function showAllTemplates() {
 /**
  * Shows favorite templates.
  *
- * @returns {void}
+ * @return {void}
  */
 export function showFavoriteTemplates() {
 	const { favoritesCount } = getState();
@@ -131,7 +131,7 @@ export function showFavoriteTemplates() {
 /**
  * Shows custom templates.
  *
- * @returns {void}
+ * @return {void}
  */
 export function showCustomTemplates() {
 	const { customCount } = getState();
@@ -157,7 +157,7 @@ export function showCustomTemplates() {
 /**
  * Shows available templates.
  *
- * @returns {void}
+ * @return {void}
  */
 export function showAvailableTemplates() {
 	const { availableTemplatesCount } = getState();
