@@ -87,6 +87,11 @@
 		if ( buttonIsEnabled ) {
 			const buttonContainer = document.createElement( 'div' );
 			buttonContainer.id = 'paypal-button-container';
+
+			// Enforce max width of 750 on the paypal button container so that
+			// Google Pay button matches the size of the PayPal button.
+			buttonContainer.style.maxWidth = '750px';
+
 			cardElement.prepend( buttonContainer );
 
 			const renderPayPalButton = makeRenderPayPalButton( cardElement );
@@ -200,6 +205,47 @@
 	}
 
 	/**
+	 * Map frmPayPalVars.buttonStyle to Google Pay ButtonOptions.
+	 *
+	 * @return {Object} Google Pay button style options.
+	 */
+	function getGooglePayButtonStyle() {
+		const style = frmPayPalVars.buttonStyle || {};
+		const options = {
+			buttonSizeMode: 'fill'
+		};
+
+		// Map PayPal color to Google Pay buttonColor (default, black, white).
+		const colorMap = {
+			black: 'black',
+			white: 'white',
+			silver: 'white'
+		};
+		if ( style.color && colorMap[ style.color ] ) {
+			options.buttonColor = colorMap[ style.color ];
+		}
+
+		// Map PayPal label to Google Pay buttonType.
+		const typeMap = {
+			pay: 'pay',
+			checkout: 'checkout',
+			buynow: 'buy',
+			donate: 'donate',
+			subscribe: 'subscribe'
+		};
+		if ( style.label && typeMap[ style.label ] ) {
+			options.buttonType = typeMap[ style.label ];
+		}
+
+		// Pass through border radius.
+		if ( 'undefined' !== typeof style.borderRadius ) {
+			options.buttonRadius = style.borderRadius;
+		}
+
+		return options;
+	}
+
+	/**
 	 * Initialize Google Pay via the PayPal SDK googlepay component.
 	 * Checks eligibility and renders the Google Pay button if supported.
 	 *
@@ -230,15 +276,23 @@
 				return;
 			}
 
+			const paypalButtonContainer = document.getElementById( 'paypal-button-container' );
+			if ( ! paypalButtonContainer ) {
+				return;
+			}
+
 			const googlePayContainer = document.createElement( 'div' );
 			googlePayContainer.id = 'frm-google-pay-container';
-			cardElement.prepend( googlePayContainer );
+			paypalButtonContainer.prepend( googlePayContainer );
 
-			const button = paymentsClient.createButton( {
-				onClick: () => onGooglePayButtonClicked( googlePayConfig ),
-				allowedPaymentMethods: googlePayConfig.allowedPaymentMethods,
-				buttonSizeMode: 'fill'
-			} );
+			const buttonOptions = Object.assign(
+				getGooglePayButtonStyle(),
+				{
+					onClick: () => onGooglePayButtonClicked( googlePayConfig ),
+					allowedPaymentMethods: googlePayConfig.allowedPaymentMethods
+				}
+			);
+			const button = paymentsClient.createButton( buttonOptions );
 
 			googlePayContainer.append( button );
 		} catch ( err ) {
