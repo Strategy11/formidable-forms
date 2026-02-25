@@ -313,7 +313,24 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 ?>
 
 .<?php echo esc_html( $style_class ); ?>.frm_inline_top .frm_submit::before,
-.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit::before {
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit[class*="frm_half"]::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit[class*="_third"]::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit[class*="_fourth"]::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit[class*="_fifth"]::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit[class*="_sixth"]::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm1::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm2::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm3::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm4::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm5::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm6::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm7::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm8::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm9::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm10::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm11::before {
 	content:"before";
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
