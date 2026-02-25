@@ -129,6 +129,11 @@
 			}
 
 			paypal.Buttons( buttonConfig ).render( '#paypal-button-container' );
+
+			// Initialize Google Pay if available.
+			if ( ! isRecurring ) {
+				await initializeGooglePay( cardElement );
+			}
 		}
 
 		if ( ! cardFieldsEligible ) {
@@ -169,6 +174,210 @@
 
 		return cardFields;
 	}
+
+	// ---- Google Pay Integration ----
+
+	/**
+	 * Base request object shared by isReadyToPay and PaymentDataRequest.
+	 */
+	const googlePayBaseRequest = {
+		apiVersion: 2,
+		apiVersionMinor: 0
+	};
+
+	/**
+	 * Get a Google PaymentsClient configured for the current environment.
+	 *
+	 * @return {google.payments.api.PaymentsClient} The payments client instance.
+	 */
+	function getGooglePaymentsClient() {
+		return new google.payments.api.PaymentsClient( {
+			environment: 'TEST',
+			paymentDataCallbacks: {
+				onPaymentAuthorized
+			}
+		} );
+	}
+
+	/**
+	 * Initialize Google Pay via the PayPal SDK googlepay component.
+	 * Checks eligibility and renders the Google Pay button if supported.
+	 *
+	 * @param {HTMLElement} cardElement The card element container.
+	 *
+	 * @return {Promise<void>}
+	 */
+	async function initializeGooglePay( cardElement ) {
+		if ( 'function' !== typeof paypal.Googlepay ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof google || 'undefined' === typeof google.payments ) {
+			return;
+		}
+
+		try {
+			const googlePayConfig = await paypal.Googlepay().config();
+			const paymentsClient = getGooglePaymentsClient();
+
+			const readyToPayRequest = Object.assign( {}, googlePayBaseRequest, {
+				allowedPaymentMethods: googlePayConfig.allowedPaymentMethods
+			} );
+
+			const response = await paymentsClient.isReadyToPay( readyToPayRequest );
+
+			if ( ! response.result ) {
+				return;
+			}
+
+			const googlePayContainer = document.createElement( 'div' );
+			googlePayContainer.id = 'frm-google-pay-container';
+			cardElement.prepend( googlePayContainer );
+
+			const button = paymentsClient.createButton( {
+				onClick: () => onGooglePayButtonClicked( googlePayConfig ),
+				allowedPaymentMethods: googlePayConfig.allowedPaymentMethods,
+				buttonSizeMode: 'fill'
+			} );
+
+			googlePayContainer.append( button );
+		} catch ( err ) {
+			console.error( 'Google Pay initialization failed', err );
+		}
+	}
+
+	/**
+	 * Handle Google Pay button click. Builds the PaymentDataRequest and opens the Google Pay sheet.
+	 *
+	 * @param {Object} googlePayConfig The config from paypal.Googlepay().config().
+	 *
+	 * @return {Promise<void>}
+	 */
+	async function onGooglePayButtonClicked( googlePayConfig ) {
+		const settings = getPayPalSettings()[ 0 ];
+		const currency = ( settings.currency || 'USD' ).toUpperCase();
+
+		const paymentDataRequest = Object.assign( {}, googlePayBaseRequest );
+		paymentDataRequest.allowedPaymentMethods = googlePayConfig.allowedPaymentMethods;
+		paymentDataRequest.merchantInfo = googlePayConfig.merchantInfo;
+		paymentDataRequest.callbackIntents = [ 'PAYMENT_AUTHORIZATION' ];
+
+		paymentDataRequest.transactionInfo = {
+			currencyCode: currency,
+			totalPriceStatus: 'ESTIMATED',
+			totalPrice: '0.00'
+		};
+
+		// Try to get the real amount for the transaction info.
+		try {
+			const amount = await new Promise( ( resolve, reject ) => {
+				getPrice( result => {
+					if ( result && result.data && result.data.amount ) {
+						resolve( result.data.amount );
+					} else {
+						reject( new Error( 'No amount' ) );
+					}
+				} );
+			} );
+
+			paymentDataRequest.transactionInfo.totalPrice = String( amount );
+			paymentDataRequest.transactionInfo.totalPriceStatus = 'FINAL';
+		} catch ( e ) {
+			// Fall back to ESTIMATED with 0.00 if we can't get the price.
+		}
+
+		const paymentsClient = getGooglePaymentsClient();
+		paymentsClient.loadPaymentData( paymentDataRequest );
+	}
+
+	/**
+	 * Callback invoked by the Google Pay PaymentsClient when the buyer authorizes the payment.
+	 * Creates a PayPal order, confirms it via the PayPal Googlepay SDK, handles SCA if needed,
+	 * then submits the form.
+	 *
+	 * @param {Object} paymentData The Google Pay PaymentData response object.
+	 *
+	 * @return {Promise<Object>} Transaction state result for the Google Pay sheet.
+	 */
+	async function onPaymentAuthorized( paymentData ) {
+		try {
+			// Create the PayPal order via the existing AJAX endpoint.
+			const orderId = await createOrderForGooglePay();
+
+			// Confirm the order with PayPal using the Google Pay payment data.
+			const confirmOrderResponse = await paypal.Googlepay().confirmOrder( {
+				orderId,
+				paymentMethodData: paymentData.paymentMethodData
+			} );
+
+			if ( confirmOrderResponse.status === 'PAYER_ACTION_REQUIRED' ) {
+				await paypal.Googlepay().initiatePayerAction( { orderId } );
+			}
+
+			if ( confirmOrderResponse.status === 'APPROVED' || confirmOrderResponse.status === 'PAYER_ACTION_REQUIRED' ) {
+				// Hand off to the existing onApprove flow which adds hidden inputs and submits the form.
+				await onApprove( {
+					orderID: orderId,
+					paymentSource: 'google_pay'
+				} );
+
+				return { transactionState: 'SUCCESS' };
+			}
+
+			return {
+				transactionState: 'ERROR',
+				error: {
+					intent: 'PAYMENT_AUTHORIZATION',
+					message: 'Payment could not be authorized'
+				}
+			};
+		} catch ( err ) {
+			return {
+				transactionState: 'ERROR',
+				error: {
+					intent: 'PAYMENT_AUTHORIZATION',
+					message: err.message || 'Payment failed'
+				}
+			};
+		}
+	}
+
+	/**
+	 * Create a PayPal order specifically for Google Pay.
+	 * Uses the same AJAX endpoint as other payment sources.
+	 *
+	 * @return {Promise<string>} The PayPal order ID.
+	 */
+	async function createOrderForGooglePay() {
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_order' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+		formData.append( 'payment_source', 'google_pay' );
+
+		// Remove a few fields so form validation does not incorrectly trigger.
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			throw new Error( 'Failed to create PayPal order for Google Pay' );
+		}
+
+		const orderData = await response.json();
+
+		if ( ! orderData.success || ! orderData.data.orderID ) {
+			throw new Error( orderData.data || 'Failed to create PayPal order for Google Pay' );
+		}
+
+		return orderData.data.orderID;
+	}
+
+	// ---- End Google Pay Integration ----
 
 	function renderMessages( cardElement ) {
 		if ( 'function' !== typeof paypal.Messages ) {

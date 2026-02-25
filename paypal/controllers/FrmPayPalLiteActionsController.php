@@ -169,7 +169,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 					$display_type = __( 'PayPal', 'formidable' );
 					break;
 				default:
-					$display_type = ucwords( $source_type );
+					$display_type = ucwords( str_replace( '_', ' ', $source_type ) );
 					break;
 			}
 
@@ -539,6 +539,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				break;
 		}
 
+		$components[] = 'googlepay';
+
 		$query_args['components'] = implode( ',', $components );
 		$locale                   = self::get_paypal_locale();
 
@@ -586,6 +588,14 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$script_url,
 			$dependencies,
 			FrmAppHelper::plugin_version(),
+			false
+		);
+
+		wp_enqueue_script(
+			'google-pay',
+			'https://pay.google.com/gp/p/js/pay.js',
+			array(),
+			'1.0',
 			false
 		);
 

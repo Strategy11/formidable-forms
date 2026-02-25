@@ -258,6 +258,7 @@ class FrmPayPalLiteAppController {
 			'ideal',
 			'paylater',
 			'venmo',
+			'google_pay',
 		);
 
 		/**
