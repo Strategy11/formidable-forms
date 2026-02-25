@@ -55,7 +55,7 @@ function Edit( { setAttributes, attributes } ) {
 						) }
 
 						<div style={ imageWrapperStyles }>
-							<img src={ formidable_form_selector.url + '/images/modal.png' } alt={ blockName } style={ imageStyles } />
+							<img src={ `${ formidable_form_selector.url }/images/modal.png` } alt={ blockName } style={ imageStyles } />
 						</div>
 					</div>
 				</div>
@@ -66,7 +66,7 @@ function Edit( { setAttributes, attributes } ) {
 
 registerBlockType( 'frm-modal/modal', {
 	apiVersion: 3,
-	title: formidable_form_selector.name + ' ' + __( 'Modal', 'formidable' ),
+	title: `${ formidable_form_selector.name } ${ __( 'Modal', 'formidable' ) }`,
 	description: __( 'Display a modal', 'formidable' ),
 	icon: FormidableIcon,
 	category: 'widgets',

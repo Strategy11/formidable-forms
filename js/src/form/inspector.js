@@ -53,7 +53,7 @@ export default class Inspector extends Component {
 					{ formId &&
 					<PanelRow>
 						<ExternalLink
-							href={ getSubDir() + `wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ formId }` }>
+							href={ `${ getSubDir() }wp-admin\/admin.php?page=formidable&frm_action=edit&id=${ formId }` }>
 							{ __( 'Go to form', 'formidable' ) }
 						</ExternalLink>
 					</PanelRow> }

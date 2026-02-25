@@ -31,7 +31,7 @@
 	}
 
 	function setupBootstrapDropdowns() {
-		const frmDom = window.frmDom;
+		const { frmDom } = window;
 
 		frmDom.bootstrap.setupBootstrapDropdowns( function() {
 			const toggle = document.querySelector( '#frm_testmode_enabled_form_actions .dropdown-toggle' );

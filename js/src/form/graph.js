@@ -57,7 +57,7 @@ import FormidableIcon from '../common/components/icon';
 							) }
 
 							<div style={ imageWrapperStyles }>
-								<img src={ formidable_form_selector.url + '/images/demo-graph.svg' } alt={ blockName } />
+								<img src={ `${ formidable_form_selector.url }/images/demo-graph.svg` } alt={ blockName } />
 							</div>
 						</div>
 					</div>

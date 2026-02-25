@@ -1,13 +1,13 @@
 ( function() {
-	let thisForm = false,
-		formID = 0,
-		event = false,
-		frmstripe,
-		running = 100,
-		elements,
-		isStripeLink = false,
-		linkAuthenticationElementIsComplete = false,
-		stripeLinkElementIsComplete = false;
+	let thisForm = false;
+	let formID = 0;
+	let event = false;
+	let frmstripe;
+	let running = 100;
+	let elements;
+	let isStripeLink = false;
+	let linkAuthenticationElementIsComplete = false;
+	let stripeLinkElementIsComplete = false;
 
 	const triggerCustomEvent = function( el, eventName, data ) {
 		frmFrontForm.triggerCustomEvent( el, eventName, data );
@@ -242,17 +242,17 @@
 	}
 
 	function addName( $form ) {
-		let i,
-			firstField,
-			lastField,
-			firstFieldContainer,
-			lastFieldContainer,
-			firstNameID = '',
-			lastNameID = '',
-			subFieldEl;
+		let i;
+		let firstField;
+		let lastField;
+		let firstFieldContainer;
+		let lastFieldContainer;
+		let firstNameID = '';
+		let lastNameID = '';
+		let subFieldEl;
 
 		const cardObject = {};
-		const settings = frm_stripe_vars.settings;
+		const { settings } = frm_stripe_vars;
 
 		/**
 		 * Gets first, middle or last name from the given field.
@@ -263,14 +263,14 @@
 		 */
 		const getNameFieldValue = function( field, subFieldName ) {
 			if ( 'object' !== typeof field ) {
-				field = document.getElementById( 'frm_field_' + field + '_container' );
+				field = document.getElementById( `frm_field_${ field }_container` );
 			}
 
 			if ( ! field || 'object' !== typeof field || 'function' !== typeof field.querySelector ) {
 				return '';
 			}
 
-			subFieldEl = field.querySelector( '.frm_combo_inputs_container .frm_form_subfield-' + subFieldName + ' input' );
+			subFieldEl = field.querySelector( `.frm_combo_inputs_container .frm_form_subfield-${ subFieldName } input` );
 			if ( ! subFieldEl ) {
 				return '';
 			}
@@ -297,12 +297,12 @@
 			if ( type === 'container' ) {
 				return queryForNameFieldIsFound
 					? window.frmProForm.queryForNameField( fieldID, 'container' )
-					: document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
+					: document.querySelector( `#frm_field_${ fieldID }_container, .frm_field_${ fieldID }_container` );
 			}
 
 			return queryForNameFieldIsFound
 				? window.frmProForm.queryForNameField( fieldID, 'field', $form[ 0 ] )
-				: $form[ 0 ].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
+				: $form[ 0 ].querySelector( `#frm_field_${ fieldID }_container input, input[name="item_meta[${ fieldID }]"], .frm_field_${ fieldID }_container input` );
 		}
 
 		if ( firstNameID !== '' ) {
@@ -320,11 +320,11 @@
 		if ( lastNameID !== '' ) {
 			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
 			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
-				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
+				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
 				lastField = getNameFieldItem( lastNameID, 'field', $form );
 				if ( lastField && lastField.value ) {
-					cardObject.name = cardObject.name + ' ' + lastField.value;
+					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
 			}
 		}
@@ -361,7 +361,7 @@
 
 		function addFieldDataToPriceFieldsArray( field ) {
 			if ( isNaN( field ) ) {
-				priceFields.push( 'field_' + field );
+				priceFields.push( `field_${ field }` );
 			} else {
 				priceFields.push( field );
 			}
@@ -421,7 +421,7 @@
 		const xmlHttp = new XMLHttpRequest();
 		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
-				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
+				return `${ encodeURIComponent( k ) }=${ encodeURIComponent( data[ k ] ) }`;
 			}
 		).join( '&' );
 
@@ -464,7 +464,7 @@
 		}
 
 		const formId = parseInt( stripeLinkForm.querySelector( 'input[name="form_id"]' ).value );
-		const intentField = stripeLinkForm.querySelector( 'input[name="frmintent' + formId + '[]"]' );
+		const intentField = stripeLinkForm.querySelector( `input[name="frmintent${ formId }[]"]` );
 
 		if ( ! intentField ) {
 			return false;
@@ -565,7 +565,8 @@
 	 * @return {void}
 	 */
 	function insertAuthenticationElement( cardElement ) {
-		let emailInput, cardFieldContainer;
+		let emailInput;
+		let cardFieldContainer;
 
 		let addAboveCardElement = true;
 		const emailField = checkForEmailField();
@@ -842,7 +843,10 @@
 		each( getStripeSettings(), checkStripeSettingForField );
 
 		function checkStripeSettingForField( currentSetting ) {
-			let currentFieldId, fieldMatchByKey, fieldContainer, hiddenInput;
+			let currentFieldId;
+			let fieldMatchByKey;
+			let fieldContainer;
+			let hiddenInput;
 
 			if ( 'string' !== typeof currentSetting[ settingKey ] || ! currentSetting[ settingKey ].length ) {
 				return;
@@ -857,7 +861,7 @@
 
 				if ( isNaN( currentFieldId ) ) {
 					// If it is not a number, try as a field key.
-					fieldMatchByKey = document.getElementById( 'field_' + currentFieldId );
+					fieldMatchByKey = document.getElementById( `field_${ currentFieldId }` );
 				}
 			} else {
 				// First name and last name are not wrapped as shortcodes.
@@ -867,17 +871,17 @@
 			if ( fieldMatchByKey ) {
 				fieldContainer = fieldMatchByKey.closest( '.frm_form_field' );
 			} else {
-				fieldContainer = document.getElementById( 'frm_field_' + currentFieldId + '_container' );
+				fieldContainer = document.getElementById( `frm_field_${ currentFieldId }_container` );
 			}
 
 			if ( ! fieldContainer ) {
-				hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + ']"]' );
+				hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }]"]` );
 
 				if ( ! hiddenInput ) {
 					if ( 'first_name' === settingKey ) {
-						hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + '][first]"]' );
+						hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }][first]"]` );
 					} else if ( 'last_name' === settingKey ) {
-						hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + '][last]"]' );
+						hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }][last]"]` );
 					}
 				}
 
@@ -906,7 +910,7 @@
 	 */
 	function createMountTarget( className ) {
 		const newElement = document.createElement( 'div' );
-		newElement.className = className + ' frm_form_field form-field';
+		newElement.className = `${ className } frm_form_field form-field`;
 		return newElement;
 	}
 
@@ -919,7 +923,7 @@
 	 */
 	function each( items, callback ) {
 		let index;
-		const length = items.length;
+		const { length } = items;
 		for ( index = 0; index < length; index++ ) {
 			if ( false === callback( items[ index ], index ) ) {
 				break;
@@ -938,7 +942,7 @@
 		each(
 			getPriceFields(),
 			function( fieldId ) {
-				const fieldContainer = document.getElementById( 'frm_field_' + fieldId + '_container' );
+				const fieldContainer = document.getElementById( `frm_field_${ fieldId }_container` );
 				if ( ! fieldContainer ) {
 					return;
 				}
