@@ -525,6 +525,7 @@
 			enableSubmit();
 		}
 		displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
+		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 	}
 
 	function onCancel() {
