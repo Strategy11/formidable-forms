@@ -604,27 +604,24 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function confirmField( field, errors ) {
-		let value;
-		let confirmValue;
-		let firstField;
 		const fieldID = getFieldId( field, true );
 		const strippedId = field.id.replace( 'conf_', '' );
 		const strippedFieldID = fieldID.replace( 'conf_', '' );
-		const confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
+		const confirmFieldEl = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
-		if ( confirmField === null || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
+		if ( confirmFieldEl === null || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
 			return;
 		}
 
 		if ( fieldID !== strippedFieldID ) {
-			firstField = document.getElementById( strippedId );
-			value = firstField.value;
-			confirmValue = confirmField.value;
+			const firstField = document.getElementById( strippedId );
+			const { value } = firstField;
+			const confirmValue = confirmFieldEl.value;
 			if ( value !== confirmValue ) {
-				errors[ `conf_${ strippedFieldID }` ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
+				errors[ `conf_${ strippedFieldID }` ] = getFieldValidationMessage( confirmFieldEl, 'data-confmsg' );
 			}
 		} else {
-			validateField( confirmField );
+			validateField( confirmFieldEl );
 		}
 	}
 
@@ -871,17 +868,6 @@ function frmFrontFormJS() {
 		};
 
 		const success = function( response ) {
-			let formID;
-			let replaceContent;
-			let pageOrder;
-			let formReturned;
-			let contSubmit;
-			let delay;
-			let $fieldCont;
-			let key;
-			let inCollapsedSection;
-			let frmTrigger;
-
 			const defaultResponse = {
 				content: '',
 				errors: {},
@@ -929,11 +915,11 @@ function frmFrontFormJS() {
 				}
 
 				const formIdInput = object.querySelector( 'input[name="form_id"]' );
-				formID = formIdInput ? formIdInput.value : '';
+				const formID = formIdInput ? formIdInput.value : '';
 				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
-				replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
+				const replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
 				removeAddedScripts( replaceContent, formID );
-				delay = maybeSlideOut( replaceContent, response.content );
+				const delay = maybeSlideOut( replaceContent, response.content );
 
 				setTimeout(
 					function() {
@@ -945,11 +931,11 @@ function frmFrontFormJS() {
 
 						if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
 							const pageOrderInput = document.querySelector( `input[name="frm_page_order_${ formID }"]` );
-							pageOrder = pageOrderInput ? pageOrderInput.value : '';
+							const pageOrder = pageOrderInput ? pageOrderInput.value : '';
 							const tempDiv = document.createElement( 'div' );
 							tempDiv.innerHTML = response.content;
 							const formReturnedInput = tempDiv.querySelector( 'input[name="form_id"]' );
-							formReturned = formReturnedInput ? formReturnedInput.value : '';
+							const formReturned = formReturnedInput ? formReturnedInput.value : '';
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
 
@@ -962,20 +948,20 @@ function frmFrontFormJS() {
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
 				//show errors
-				contSubmit = true;
+				let contSubmit = true;
 				removeAllErrors();
 
-				$fieldCont = null;
+				let $fieldCont = null;
 
-				for ( key in response.errors ) {
+				for ( const key in response.errors ) {
 					const fieldContEl = object.querySelector( `#frm_field_${ key }_container` );
 					$fieldCont = fieldContEl ? jQuery( fieldContEl ) : jQuery();
 
 					if ( $fieldCont.length ) {
 						if ( ! $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
-							inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
+							const inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
 							if ( inCollapsedSection.length ) {
-								frmTrigger = inCollapsedSection.prev();
+								let frmTrigger = inCollapsedSection.prev();
 								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
 									// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 									frmTrigger = frmTrigger.prev( '.frm_trigger' );
@@ -1643,7 +1629,7 @@ function frmFrontFormJS() {
 
 	function setCustomValidityMessage() {
 		const forms = document.getElementsByClassName( 'frm-show-form' );
-		const length = forms.length;
+		const { length } = forms;
 
 		for ( let index = 0; index < length; ++index ) {
 			forms[ index ].addEventListener(

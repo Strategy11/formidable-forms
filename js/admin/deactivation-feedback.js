@@ -4,7 +4,7 @@
 	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-pro"] .deactivate a, tr[data-slug="formidable-forms-pro"] .deactivate a';
 
 	let deactivationModal;
-	let deactivationUrl;
+	let deactivationUrl = '';
 
 	const Modal = {
 		init( id, width ) {

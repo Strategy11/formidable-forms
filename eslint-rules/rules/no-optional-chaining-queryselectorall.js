@@ -52,7 +52,7 @@ module.exports = {
 					return;
 				}
 
-				let reason;
+				let reason = '';
 				if ( methodName === 'querySelectorAll' ) {
 					reason = 'querySelectorAll always returns a NodeList. Use .querySelectorAll() without ?.';
 				} else if ( methodName === 'children' ) {
