@@ -1,16 +1,24 @@
+import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import babelParser from '@babel/eslint-parser';
-import wordpressPlugin from '@wordpress/eslint-plugin';
 import reactPlugin from 'eslint-plugin-react';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import cypressPlugin from 'eslint-plugin-cypress';
 import noJqueryPlugin from 'eslint-plugin-no-jquery';
 import compatPlugin from 'eslint-plugin-compat';
-import jsdocPlugin from 'eslint-plugin-jsdoc';
 import unicornPlugin from 'eslint-plugin-unicorn';
-import importPlugin from 'eslint-plugin-import';
 import formidablePlugin from './eslint-rules/index.js';
 import globals from 'globals';
+
+const __filename = fileURLToPath( import.meta.url );
+const __dirname = dirname( __filename );
+
+const compat = new FlatCompat( {
+	baseDirectory: __dirname,
+	resolvePluginsRelativeTo: __dirname,
+} );
 
 export default [
 	// Global ignores (replaces .eslintignore)
@@ -44,7 +52,10 @@ export default [
 	},
 
 	// WordPress recommended-with-formatting preset
-	...( wordpressPlugin.configs?.['flat/recommended-with-formatting'] ?? [] ),
+	// @wordpress/eslint-plugin uses legacy config format (no flat/ exports exist).
+	// FlatCompat is the official ESLint bridge to use legacy configs in ESLint 9 flat config.
+	// See: https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config
+	...compat.extends( 'plugin:@wordpress/eslint-plugin/recommended-with-formatting' ),
 
 	// Base config for all JS files
 	{
@@ -79,15 +90,14 @@ export default [
 			},
 		},
 		plugins: {
-			react: reactPlugin,
-			'jsx-a11y': jsxA11yPlugin,
+			// NOTE: react, jsx-a11y, jsdoc, import, react-hooks are registered by FlatCompat
+			// via the WordPress preset chain, do not register them here (would cause
+			// ESLint 9 "Cannot redefine plugin" error due to different require() instances).
 			sonarjs: sonarjsPlugin,
 			cypress: cypressPlugin,
 			'no-jquery': noJqueryPlugin,
 			compat: compatPlugin,
-			jsdoc: jsdocPlugin,
 			unicorn: unicornPlugin,
-			import: importPlugin,
 			formidable: formidablePlugin,
 		},
 		settings: {
@@ -160,6 +170,13 @@ export default [
 
 			// WordPress overrides
 			'@wordpress/no-global-active-element': 'off',
+			// Disabled: use context.* APIs removed in ESLint 9 flat config (getScope, getAncestors,
+			// getDeclaredVariables, getCommentsBefore). Re-enable when @wordpress/eslint-plugin
+			// migrates to sourceCode.* APIs for ESLint 9 support.
+			'@wordpress/no-unused-vars-before-return': 'off',
+			'@wordpress/data-no-store-string-literals': 'off',
+			'@wordpress/react-no-unsafe-timeout': 'off',
+			'@wordpress/i18n-translator-comments': 'off',
 
 			// Prettier
 			'prettier/prettier': 'off',
