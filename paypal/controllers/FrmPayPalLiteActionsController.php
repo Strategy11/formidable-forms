@@ -509,10 +509,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 * - Subscriptions also require vault=true.
 		 */
 		$query_args = array(
-			'client-id'   => self::get_client_id(),
-			'intent'      => $intent,
-			'currency'    => strtoupper( $action->post_content['currency'] ?? 'USD' ),
-			'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
+			'client-id'      => self::get_client_id(),
+			'intent'         => $intent,
+			'currency'       => strtoupper( $action->post_content['currency'] ?? 'USD' ),
+			'merchant-id'    => FrmPayPalLiteConnectHelper::get_merchant_id(),
+			'enable-funding' => 'venmo',
 		);
 
 		if ( 'subscription' === $intent ) {

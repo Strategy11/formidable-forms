@@ -100,7 +100,8 @@
 				paypal.FUNDING.SEPA,
 				paypal.FUNDING.MYBANK,
 				paypal.FUNDING.IDEAL,
-				paypal.FUNDING.PAYLATER
+				paypal.FUNDING.PAYLATER,
+				paypal.FUNDING.VENMO,
 			];
 			fundingSources.forEach( renderPayPalButton );
 

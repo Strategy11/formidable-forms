@@ -257,6 +257,7 @@ class FrmPayPalLiteAppController {
 			'sepa',
 			'ideal',
 			'paylater',
+			'venmo',
 		);
 
 		/**
