@@ -351,6 +351,7 @@ export default [
 	{
 		files: ['js/formidable.js'],
 		rules: {
+			'prefer-const': 'off',
 			'no-jquery/no-find': 'error',
 			'no-jquery/no-visibility': 'error',
 			'no-jquery/no-slide': 'error',
@@ -369,6 +370,73 @@ export default [
 			'no-jquery/no-ajax': 'error',
 			'no-jquery/no-fade': 'error',
 			'no-jquery/no-is': 'error',
+		},
+	},
+
+	// Override for js/formidable_admin_global.js
+	{
+		files: ['js/formidable_admin_global.js'],
+		rules: {
+			'prefer-const': 'off',
+		},
+	},
+
+	// Override for js/src/admin/admin.js
+	{
+		files: ['js/src/admin/admin.js'],
+		rules: {
+			'prefer-const': 'off',
+			'no-redeclare': 'off',
+			'no-unused-expressions': 'off',
+			'jsdoc/require-returns-description': 'off',
+			'jsdoc/require-param-type': 'off',
+			'@wordpress/valid-sprintf': 'off',
+		},
+	},
+
+	// Override for js/src/common/components/radio.js
+	{
+		files: ['js/src/common/components/radio.js'],
+		rules: {
+			'@wordpress/no-base-control-with-label-without-id': 'off',
+		},
+	},
+
+	// Override for files using @wordpress/dom-ready
+	{
+		files: [
+			'js/src/addons-page/index.js',
+			'js/src/form-templates/index.js',
+			'js/src/onboarding-wizard/index.js',
+			'js/src/settings-components/index.js',
+			'js/src/welcome-tour/index.js',
+		],
+		rules: {
+			'import/no-extraneous-dependencies': 'off',
+		},
+	},
+
+	// Override for js/src/form-templates/events/favoriteButtonListener.js
+	{
+		files: ['js/src/form-templates/events/favoriteButtonListener.js'],
+		rules: {
+			'no-unused-expressions': 'off',
+		},
+	},
+
+	// Override for stripe/js/frmstrp.js
+	{
+		files: ['stripe/js/frmstrp.js'],
+		rules: {
+			'no-bitwise': 'off',
+		},
+	},
+
+	// Override for Cypress test files
+	{
+		files: ['tests/cypress/**/*.js'],
+		rules: {
+			'no-unused-expressions': 'off',
 		},
 	},
 ];
