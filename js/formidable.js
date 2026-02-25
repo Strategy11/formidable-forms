@@ -251,12 +251,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkValidity( field, errors ) {
-		let fieldID;
 		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
 			return;
 		}
 
-		fieldID = getFieldId( field, true );
+		const fieldID = getFieldId( field, true );
 		if ( errors[ fieldID ] === undefined ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
@@ -682,15 +681,13 @@ function frmFrontFormJS() {
 		const selects = document.querySelectorAll( '.form-field select' );
 		const styleElement = document.querySelector( '.with_frm_style' );
 		const textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '';
-		let changeSelectColor;
-
 		// Exit if there are no select elements or the textColorDisabled property is missing
 		if ( ! selects.length || ! textColorDisabled ) {
 			return;
 		}
 
 		// Function to change the color of a select element
-		changeSelectColor = function( select ) {
+		const changeSelectColor = function( select ) {
 			if ( select.options[ select.selectedIndex ] && hasClass( select.options[ select.selectedIndex ], 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
@@ -851,16 +848,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
-		let data;
-		let success;
-		let error;
-		let shouldTriggerEvent;
-
 		const fieldsets = object.querySelectorAll( '.frm_form_field' );
 		fieldsets.forEach( field => field.classList.add( 'frm_doing_ajax' ) );
 
-		data = `${ jQuery( object ).serialize() }&action=frm_entries_${ action }&nonce=${ frm_js.nonce }`; // eslint-disable-line no-jquery/no-serialize
-		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
+		const data = `${ jQuery( object ).serialize() }&action=frm_entries_${ action }&nonce=${ frm_js.nonce }`; // eslint-disable-line no-jquery/no-serialize
+		const shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		const doRedirect = response => {
 			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ] );
@@ -878,8 +870,7 @@ function frmFrontFormJS() {
 			}
 		};
 
-		success = function( response ) {
-			let defaultResponse;
+		const success = function( response ) {
 			let formID;
 			let replaceContent;
 			let pageOrder;
@@ -891,7 +882,7 @@ function frmFrontFormJS() {
 			let inCollapsedSection;
 			let frmTrigger;
 
-			defaultResponse = {
+			const defaultResponse = {
 				content: '',
 				errors: {},
 				pass: false
@@ -1042,7 +1033,7 @@ function frmFrontFormJS() {
 			}
 		};
 
-		error = function() {
+		const error = function() {
 			object.querySelectorAll( 'input[type="submit"], input[type="button"]' ).forEach(
 				button => button.disabled = false
 			);
@@ -1053,18 +1044,14 @@ function frmFrontFormJS() {
 	}
 
 	function postToAjaxUrl( form, data, success, error ) {
-		let ajaxUrl;
-		let action;
-		let ajaxParams;
-
-		ajaxUrl = frm_js.ajax_url;
-		action = form.getAttribute( 'action' );
+		let ajaxUrl = frm_js.ajax_url;
+		const action = form.getAttribute( 'action' );
 
 		if ( 'string' === typeof action && action.includes( '?action=frm_forms_preview' ) ) {
 			ajaxUrl = action.split( '?action=frm_forms_preview' )[ 0 ];
 		}
 
-		ajaxParams = {
+		const ajaxParams = {
 			type: 'POST',
 			url: ajaxUrl,
 			data,
@@ -1139,18 +1126,14 @@ function frmFrontFormJS() {
 	}
 
 	function addQueryVar( key, value ) {
-		let kvp;
-		let i;
-		let x;
-
 		key = encodeURI( key );
 		value = encodeURI( value );
 
-		kvp = document.location.search.substr( 1 ).split( '&' );
+		const kvp = document.location.search.substr( 1 ).split( '&' );
 
-		i = kvp.length;
+		let i = kvp.length;
 		while ( i-- ) {
-			x = kvp[ i ].split( '=' );
+			const x = kvp[ i ].split( '=' );
 
 			if ( x[ 0 ] == key ) {
 				x[ 1 ] = value;
@@ -1167,9 +1150,6 @@ function frmFrontFormJS() {
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
-		let id;
-		let describedBy;
-		let roleString;
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
 		if ( ! container || container.offsetParent === null ) {
@@ -1178,9 +1158,9 @@ function frmFrontFormJS() {
 
 		container.classList.add( 'frm_blank_field' );
 		const input = container.querySelector( 'input, select, textarea' );
-		id = getErrorElementId( key, input );
+		const id = getErrorElementId( key, input );
 
-		describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1189,7 +1169,7 @@ function frmFrontFormJS() {
 			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
@@ -1433,20 +1413,16 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		let errors;
-		let element;
-		let timeoutCallback;
-
 		if ( ! frm_js.focus_first_error ) {
 			return;
 		}
 
-		errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
 		if ( ! errors.length ) {
 			return;
 		}
 
-		element = errors[ 0 ];
+		let element = errors[ 0 ];
 		do {
 			element = element.previousSibling;
 			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
@@ -1531,31 +1507,21 @@ function frmFrontFormJS() {
 	}
 
 	function initFloatingLabels() {
-		let checkFloatLabel;
-		let checkDropdownLabel;
-		let runOnLoad;
-		let selector;
-		let floatClass;
+		const selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		const floatClass = 'frm_label_float_top';
 
-		selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
-		floatClass = 'frm_label_float_top';
-
-		checkFloatLabel = function( input ) {
-			let container;
-			let shouldFloatTop;
-			let firstOpt;
-
-			container = input.closest( '.frm_inside_container' );
+		const checkFloatLabel = function( input ) {
+			const container = input.closest( '.frm_inside_container' );
 			if ( ! container ) {
 				return;
 			}
 
-			shouldFloatTop = input.value || document.activeElement === input;
+			const shouldFloatTop = input.value || document.activeElement === input;
 
 			container.classList.toggle( floatClass, shouldFloatTop );
 
 			if ( 'SELECT' === input.tagName ) {
-				firstOpt = input.querySelector( 'option:first-child' );
+				const firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( shouldFloatTop ) {
 					if ( firstOpt.hasAttribute( 'data-label' ) ) {
@@ -1569,7 +1535,7 @@ function frmFrontFormJS() {
 			}
 		};
 
-		checkDropdownLabel = function() {
+		const checkDropdownLabel = function() {
 			document.querySelectorAll( `.frm-show-form .frm_inside_container:not(.${ floatClass }) select` ).forEach( function( input ) {
 				const firstOpt = input.querySelector( 'option:first-child' );
 
@@ -1591,7 +1557,7 @@ function frmFrontFormJS() {
 			);
 		} );
 
-		runOnLoad = function( firstLoad ) {
+		const runOnLoad = function( firstLoad ) {
 			if ( firstLoad && document.activeElement && [ 'INPUT', 'SELECT', 'TEXTAREA' ].includes( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
 			} else if ( firstLoad ) {
@@ -1663,13 +1629,11 @@ function frmFrontFormJS() {
 	}
 
 	function maybeShowNewTabFallbackMessage() {
-		let messageEl;
-
 		if ( ! window.frmShowNewTabFallback ) {
 			return;
 		}
 
-		messageEl = document.querySelector( `#frm_form_${ frmShowNewTabFallback.formId }_container .frm_message` );
+		const messageEl = document.querySelector( `#frm_form_${ frmShowNewTabFallback.formId }_container .frm_message` );
 		if ( ! messageEl ) {
 			return;
 		}
@@ -1678,14 +1642,10 @@ function frmFrontFormJS() {
 	}
 
 	function setCustomValidityMessage() {
-		let forms;
-		let length;
-		let index;
+		const forms = document.getElementsByClassName( 'frm-show-form' );
+		const length = forms.length;
 
-		forms = document.getElementsByClassName( 'frm-show-form' );
-		length = forms.length;
-
-		for ( index = 0; index < length; ++index ) {
+		for ( let index = 0; index < length; ++index ) {
 			forms[ index ].addEventListener(
 				'invalid',
 				function( event ) {
@@ -2039,8 +1999,6 @@ function frmFrontFormJS() {
 
 		scrollMsg( id, object, animate ) {
 			let newPos;
-			let m;
-			let b;
 			let screenTop;
 			let screenBottom;
 			let scrollObj = '';
@@ -2065,8 +2023,8 @@ function frmFrontFormJS() {
 			}
 			newPos = newPos - frm_js.offset;
 
-			m = getComputedStyle( document.documentElement ).marginTop;
-			b = getComputedStyle( document.body ).marginTop;
+			const m = getComputedStyle( document.documentElement ).marginTop;
+			const b = getComputedStyle( document.body ).marginTop;
 			if ( m || b ) {
 				newPos = newPos - parseInt( m ) - parseInt( b );
 			}

@@ -2,16 +2,13 @@
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
 
 jQuery( document ).ready( function() {
-	let deauthLink;
-	let submenuItem;
-	let li;
 	const installLink = document.getElementById( 'frm_install_link' );
 
 	if ( installLink !== null ) {
 		jQuery( installLink ).on( 'click', frmInstallPro );
 	}
 
-	deauthLink = jQuery( '.frm_deauthorize_link' );
+	const deauthLink = jQuery( '.frm_deauthorize_link' );
 	if ( deauthLink.length ) {
 		deauthLink.on( 'click', frmDeauthorizeNow );
 	}
@@ -20,9 +17,9 @@ jQuery( document ).ready( function() {
 		frmAdminPopup.init();
 	}
 
-	submenuItem = document.querySelector( '.frm-upgrade-submenu' );
+	const submenuItem = document.querySelector( '.frm-upgrade-submenu' );
 	if ( null !== submenuItem ) {
-		li = submenuItem.parentNode.parentNode;
+		const li = submenuItem.parentNode.parentNode;
 		if ( li ) {
 			li.classList.add( 'frm-submenu-highlight' );
 		}
@@ -47,7 +44,6 @@ function frm_install_now() { // eslint-disable-line camelcase
 }
 
 function frmInstallPro( e ) {
-	let $msg;
 	const plugin = this.getAttribute( 'data-prourl' );
 	if ( plugin === '' ) {
 		return true;
@@ -55,7 +51,7 @@ function frmInstallPro( e ) {
 
 	e.preventDefault();
 
-	$msg = jQuery( document.getElementById( 'frm_install_message' ) );
+	const $msg = jQuery( document.getElementById( 'frm_install_message' ) );
 	$msg.html( `<div class="frm_plugin_updating">${ frmGlobal.updating_msg }<div class="spinner frm_spinner"></div></div>` );
 	$msg.fadeIn( 'slow' );
 
@@ -125,20 +121,16 @@ function frmCreatePostEntry( id, postId ) {
 
 function frmAdminPopupJS() {
 	function switchSc() {
-		let val;
 		jQuery( '.frm_switch_sc' ).removeClass( 'active' );
 		jQuery( this ).addClass( 'active' );
 		toggleMenu();
 		jQuery( '#frm_popup_content .media-frame-title h1' ).html( `${ jQuery( this ).children( '.howto' ).text() } <span class="spinner" style="float:left;"></span>` );
-		val = this.id.replace( 'sc-link-', '' );
+		const val = this.id.replace( 'sc-link-', '' );
 		populateOpts( val );
 		return false;
 	}
 
 	function populateOpts( val ) {
-		let $settings;
-		let $scOpts;
-		let $spinner;
 		const sc = document.getElementById( 'frm_complete_shortcode' );
 
 		if ( sc !== null ) {
@@ -146,13 +138,13 @@ function frmAdminPopupJS() {
 		}
 		jQuery( '.frm_shortcode_option' ).hide();
 
-		$settings = document.getElementById( `sc-opts-${ val }` );
+		const $settings = document.getElementById( `sc-opts-${ val }` );
 		if ( $settings !== null ) {
 			$settings.style.display = '';
 			jQuery( document.getElementById( `sc-${ val }` ) ).trigger( 'click' );
 		} else {
-			$scOpts = jQuery( document.getElementById( 'frm_shortcode_options' ) );
-			$spinner = jQuery( '.media-frame-title .spinner' );
+			const $scOpts = jQuery( document.getElementById( 'frm_shortcode_options' ) );
+			const $spinner = jQuery( '.media-frame-title .spinner' );
 			$spinner.show();
 			jQuery.ajax( {
 				type: 'POST',
@@ -229,15 +221,13 @@ function frmAdminPopupJS() {
 
 	return {
 		init() {
-			let $scOptsDiv;
-
 			jQuery( '.frm_switch_sc' ).on( 'click', switchSc );
 			jQuery( '.button.frm_insert_form' ).on( 'click', function() {
 				populateOpts( 'formidable' );
 			} );
 			jQuery( document.getElementById( 'frm_insert_shortcode' ) ).on( 'click', insertShortcode );
 
-			$scOptsDiv = jQuery( document.getElementById( 'frm_shortcode_options' ) );
+			const $scOptsDiv = jQuery( document.getElementById( 'frm_shortcode_options' ) );
 			$scOptsDiv.on( 'change', 'select, input', addToShortcode );
 			$scOptsDiv.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
@@ -275,7 +265,6 @@ function frmWidgetsJS() {
 					nonce: frmGlobal.nonce
 				},
 				success( opts ) {
-					let titleField;
 					const catField = widget.find( '.frm_list_items_cat_id' );
 					catField.find( 'option' ).remove().end();
 					catField.append( jQuery( '<option></option>' ) );
@@ -283,7 +272,7 @@ function frmWidgetsJS() {
 						catField.append( jQuery( '<option></option>' ).attr( 'value', key ).text( value ) );
 					} );
 
-					titleField = widget.find( '.frm_list_items_title_id' );
+					const titleField = widget.find( '.frm_list_items_title_id' );
 					titleField.find( 'option' ).remove().end();
 					titleField.append( jQuery( '<option></option>' ) );
 					jQuery.each( opts.titleValues, function( key, value ) {
