@@ -13,7 +13,7 @@ import addSearchEvents from './searchListener';
 /**
  * Attaches event listeners for handling user interactions.
  *
- * @returns {void}
+ * @return {void}
  */
 export function addEventListeners() {
 	addCategoryEvents();

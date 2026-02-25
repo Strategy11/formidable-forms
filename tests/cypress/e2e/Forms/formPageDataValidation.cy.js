@@ -178,7 +178,6 @@ describe( 'Forms page', () => {
 								.invoke( 'html' )
 								.then( html => {
 									expect( html.split( '<br>' )[ 1 ] ).to.exist.and.not.be.empty;
-
 								} );
 						} );
 				} );

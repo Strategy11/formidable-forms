@@ -8,7 +8,7 @@ export const categorizedTemplates = {};
 /**
  * Builds a categorized list of templates.
  *
- * @returns {void}
+ * @return {void}
  */
 export function buildCategorizedTemplates() {
 	const { templateItems } = getElements();

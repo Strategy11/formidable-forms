@@ -9,7 +9,7 @@ import { CLASS_NAMES, PROXY_INPUT_HEIGHT, TOKEN_GAP } from './constants';
 /**
  * Adjust styling for all proxy inputs on the current settings
  *
- * @returns {void}
+ * @return {void}
  */
 export function adjustAllProxyInputStyles() {
 	document.querySelectorAll( `.${ CLASS_NAMES.CONTAINER }` ).forEach( container =>
@@ -25,7 +25,7 @@ export function adjustAllProxyInputStyles() {
  *
  * @param {HTMLElement} proxyInput    The proxy input field
  * @param {HTMLElement} tokensWrapper The wrapper for token display
- * @returns {void}
+ * @return {void}
  */
 export function adjustProxyInputStyle( proxyInput, tokensWrapper ) {
 	if ( ! proxyInput || ! tokensWrapper ) {
@@ -67,7 +67,7 @@ export function adjustProxyInputStyle( proxyInput, tokensWrapper ) {
  * Identify tokens in the last row of a multi-row token layout
  *
  * @param {NodeList} tokens All token elements
- * @returns {Array} Array of tokens in the last row
+ * @return {Array} Array of tokens in the last row
  */
 function getLastRowTokens( tokens ) {
 	if ( ! tokens.length ) {
@@ -97,7 +97,7 @@ function getLastRowTokens( tokens ) {
  * Calculate the total width of tokens in the last row
  *
  * @param {Array} lastRowTokens Array of token elements in the last row
- * @returns {number} Total width of tokens in the last row
+ * @return {number} Total width of tokens in the last row
  */
 function calculateLastRowWidth( lastRowTokens ) {
 	if ( ! lastRowTokens.length ) {

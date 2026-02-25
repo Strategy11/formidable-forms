@@ -9,7 +9,7 @@ import { isCustomTemplate, isLockedTemplate } from '../utils';
 /**
  * Manages event handling for use template buttons.
  *
- * @returns {void}
+ * @return {void}
  */
 function addUseTemplateButtonEvents() {
 	const useTemplateButtons = document.querySelectorAll( `.${ PREFIX }-use-template-button` );
@@ -25,7 +25,7 @@ function addUseTemplateButtonEvents() {
  *
  * @private
  * @param {Event} event The click event object.
- * @returns {void}
+ * @return {void}
  */
 const onUseTemplateButtonClick = event => {
 	const useTemplateButton = event.currentTarget;

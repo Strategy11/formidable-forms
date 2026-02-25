@@ -10,7 +10,7 @@ import { hide, show } from '.';
  * @param {string} errorId   The ID selector for the error message display element.
  * @param {string} type      The categorization of the error (e.g., "invalid", "empty").
  * @param {string} [message] Optional. The specific error message to display.
- * @returns {void}
+ * @return {void}
  */
 export const showFormError = ( inputId, errorId, type, message ) => {
 	const inputElement = document.querySelector( inputId );

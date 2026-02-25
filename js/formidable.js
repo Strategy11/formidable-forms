@@ -33,7 +33,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement|jQuery} field
 	 * @param {boolean}            fullID
-	 * @returns {string|number} Field ID.
+	 * @return {string|number} Field ID.
 	 */
 	function getFieldId( field, fullID ) {
 		let nameParts, fieldId,
@@ -136,7 +136,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} form
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function enableSubmitButton( form ) {
 		form.querySelectorAll( 'input[type="submit"], input[type="button"], button[type="submit"]' ).forEach(
@@ -183,7 +183,7 @@ function frmFrontFormJS() {
 	 * Validate form with JS.
 	 *
 	 * @param {HTMLElement|jQuery} object
-	 * @returns {Array} Errors.
+	 * @return {Array} Errors.
 	 */
 	function validateForm( object ) {
 		let errors = [];
@@ -247,7 +247,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkValidity( field, errors ) {
 		let fieldID;
@@ -271,7 +271,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {Object} element
 	 * @param {string} targetClass
-	 * @returns {boolean} True if the element has the target class.
+	 * @return {boolean} True if the element has the target class.
 	 */
 	function hasClass( element, targetClass ) {
 		return element.classList && element.classList.contains( targetClass );
@@ -306,7 +306,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function validateField( field ) {
 		let errors, key;
@@ -376,7 +376,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @returns {Array} Errors
+	 * @return {Array} Errors
 	 */
 	function checkRequiredField( field, errors ) {
 		let tempVal, i, placeholder,
@@ -478,7 +478,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @returns {boolean} True if the input is a typed signature input.
+	 * @return {boolean} True if the input is a typed signature input.
 	 */
 	function isSignatureField( field ) {
 		const name = field.getAttribute( 'name' );
@@ -487,7 +487,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @returns {boolean} True if the field is a SSA appointment field.
+	 * @return {boolean} True if the field is a SSA appointment field.
 	 */
 	function isAppointmentField( field ) {
 		return hasClass( field, 'ssa_appointment_form_field_appointment_id' );
@@ -495,7 +495,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @returns {boolean} True if the field is inline datepicker field.
+	 * @return {boolean} True if the field is inline datepicker field.
 	 */
 	function isInlineDatepickerField( field ) {
 		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
@@ -503,7 +503,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {string|number} fileID
-	 * @returns {string} File input value.
+	 * @return {string} File input value.
 	 */
 	function getFileVals( fileID ) {
 		let val = '';
@@ -520,7 +520,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkUrlField( field, errors ) {
 		let fieldID,
@@ -541,7 +541,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} field    Field input.
 	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
-	 * @returns {boolean} True if we should confirm the field.
+	 * @return {boolean} True if we should confirm the field.
 	 */
 	function shouldCheckConfirmField( field, onSubmit ) {
 		if ( onSubmit ) {
@@ -598,7 +598,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function confirmField( field, errors ) {
 		let value, confirmValue, firstField,
@@ -626,7 +626,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkNumberField( field, errors ) {
 		let fieldID,
@@ -643,7 +643,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {Array}       errors
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkPatternField( field, errors ) {
 		let fieldID,
@@ -707,7 +707,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement|jQuery} object
 	 *
-	 * @returns {HTMLElement|false} Captcha element if there is an invisible recaptcha.
+	 * @return {HTMLElement|false} Captcha element if there is an invisible recaptcha.
 	 */
 	function hasInvisibleRecaptcha( object ) {
 		if ( isGoingToPrevPage( object ) ) {
@@ -734,7 +734,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} invisibleRecaptcha
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
 		const recaptchaID = invisibleRecaptcha.dataset.rid;
@@ -779,7 +779,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 * @param {string}      messageType
-	 * @returns {string} The error message to display.
+	 * @return {string} The error message to display.
 	 */
 	function getFieldValidationMessage( field, messageType ) {
 		let msg = field.getAttribute( messageType );
@@ -797,7 +797,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {string}      msg
 	 * @param {HTMLElement} field
-	 * @returns {string} The error HTML to use.
+	 * @return {string} The error HTML to use.
 	 */
 	function wrapErrorHtml( msg, field ) {
 		let errorHtml = field.getAttribute( 'data-error-html' );
@@ -824,7 +824,7 @@ function frmFrontFormJS() {
 	 * Check if JS validation should happen.
 	 *
 	 * @param {HTMLElement|Object} object Form object.
-	 * @returns {boolean} True if validation is enabled and we are not saving a draft or going to a previous page.
+	 * @return {boolean} True if validation is enabled and we are not saving a draft or going to a previous page.
 	 */
 	function shouldJSValidate( object ) {
 		if ( 'function' === typeof object.get ) {
@@ -842,7 +842,7 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} object
 	 * @param {string}      action
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
 		let data, success, error, shouldTriggerEvent;
@@ -1076,7 +1076,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} object   The form.
 	 * @param {Object}      response The response from submitting the form with AJAX.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function afterFormSubmittedBeforeReplace( object, response ) {
 		const tempDiv = document.createElement( 'div' );
@@ -1203,7 +1203,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {string}      key
 	 * @param {HTMLElement} input
-	 * @returns {string} The ID to use for the error element.
+	 * @return {string} The ID to use for the error element.
 	 */
 	function getErrorElementId( key, input ) {
 		if ( isNaN( key ) || ! input || ! input.id ) {
@@ -1218,7 +1218,7 @@ function frmFrontFormJS() {
 	 * This prevents issues with stale errors that has since been fixed.
 	 *
 	 * @param {HTMLElement|jQuery} fieldCont Field container element.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function removeFieldError( fieldCont ) {
 		const container = fieldCont instanceof jQuery ? fieldCont.get( 0 ) : fieldCont;
@@ -1269,7 +1269,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement|Object} object Form object.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function scrollToFirstField( object ) {
 		if ( 'function' === typeof object.get ) {
@@ -1390,7 +1390,7 @@ function frmFrontFormJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} element
-	 * @returns {boolean} True if the focus was set on a combo field.
+	 * @return {boolean} True if the focus was set on a combo field.
 	 */
 	function maybeFocusOnComboSubField( element ) {
 		if ( 'FIELDSET' !== element.nodeName ) {
@@ -1465,7 +1465,7 @@ function frmFrontFormJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} input
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function focusInput( input ) {
 		if ( input.offsetParent !== null ) {
@@ -1691,7 +1691,7 @@ function frmFrontFormJS() {
 	/**
 	 * @since 6.16.3
 	 *
-	 * @returns {string} Unique key, used for duplicate checks.
+	 * @return {string} Unique key, used for duplicate checks.
 	 */
 	function getUniqueKey() {
 		const uniqueKey = Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
@@ -1709,7 +1709,7 @@ function frmFrontFormJS() {
 	 * @param {number} start
 	 * @param {number} end
 	 * @param {number} duration
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function animateScroll( start, end, duration ) {
 		if ( ! window.hasOwnProperty( 'performance' ) || ! window.hasOwnProperty( 'requestAnimationFrame' ) ) {
@@ -1726,7 +1726,6 @@ function frmFrontFormJS() {
 			}
 		};
 		requestAnimationFrame( step );
-
 	}
 
 	/**
@@ -1737,7 +1736,7 @@ function frmFrontFormJS() {
 	 * @since 6.25.1
 	 *
 	 * @param {HTMLElement} captcha
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeFixCaptchaLabel( captcha ) {
 		const form = captcha.closest( 'form' );
@@ -1795,7 +1794,7 @@ function frmFrontFormJS() {
 		 *
 		 * @param {HTMLElement} captcha
 		 * @param {string}      captchaSelector
-		 * @returns {void}
+		 * @return {void}
 		 */
 		renderCaptcha( captcha, captchaSelector ) {
 			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
@@ -1850,7 +1849,7 @@ function frmFrontFormJS() {
 		/**
 		 * @param {Event}       e
 		 * @param {HTMLElement} object The form object that is being submitted.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		submitFormManual( e, object ) {
 			if ( document.body.classList.contains( 'wp-admin' ) && ! object.closest( '.frmapi-form' ) ) {
@@ -1918,7 +1917,7 @@ function frmFrontFormJS() {
 		/**
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 *
-		 * @returns {Array} List of errors.
+		 * @return {Array} List of errors.
 		 */
 		validateFormSubmit( object ) {
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
@@ -1941,7 +1940,7 @@ function frmFrontFormJS() {
 
 		/**
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
-		 * @returns {Array} List of errors.
+		 * @return {Array} List of errors.
 		 */
 		getAjaxFormErrors( object ) {
 			let customErrors, key;
@@ -1969,7 +1968,7 @@ function frmFrontFormJS() {
 
 		/**
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		addAjaxFormErrors( object ) {
 			let key;

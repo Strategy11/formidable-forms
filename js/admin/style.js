@@ -38,7 +38,7 @@
 	 * These are shared events for both the edit/list views like the sample form toggle.
 	 * This includes preview events, but also the update button click event handling for both views.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initCommonEventListeners() {
 		document.addEventListener( 'click', handleCommonClickEvents );
@@ -49,7 +49,7 @@
 	/**
 	 * Initialize common functions required for the preview in both the edit and list views.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initPreview() {
 		initFloatingLabels();
@@ -68,7 +68,7 @@
 	 * Initialize the slider functionality in the style preview.
 	 *
 	 * @param {HTMLElement} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initSliderPreview( event ) {
 		const wrapper = event.target.closest( '.frm_range_container' );
@@ -82,7 +82,7 @@
 	 * Add the wp-core-ui class to the #wp-auth-check-wrap element.
 	 * As this style isn't included on the body for the styler, the close button on the auth modal wasn't getting styled properly.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function fixWpAuthModal() {
 		const authWrap = document.getElementById( 'wp-auth-check-wrap' );
@@ -92,7 +92,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
@@ -125,7 +125,7 @@
 	/**
 	 * Handle pagination click events.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initStyleCardPagination() {
 		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
@@ -161,7 +161,7 @@
 
 	/**
 	 * @param {string} labelPosition
-	 * @returns {void} Changes the label position in the preview.
+	 * @return {void} Changes the label position in the preview.
 	 */
 	function changeLabelPositionsInPreview( labelPosition ) {
 		const input = tag( 'input' );
@@ -170,7 +170,7 @@
 	}
 
 	/**
-	 * @returns {HTMLElement} The active style card.
+	 * @return {HTMLElement} The active style card.
 	 */
 	function getActiveCard() {
 		return document.querySelector( '.frm-active-style-card' );
@@ -182,7 +182,7 @@
 	 * This is because disabling styles is linked to the custom_style option as well.
 	 *
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
 		const stylesEnabled = event.target.checked;
@@ -216,7 +216,7 @@
 	 * We track the value on load with state.initialSelectedStyleValue.
 	 * Only consider unsaved changes on the page when this variable is no longer set to the original value.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function trackListPageChange() {
 		const styleIdInput = getStyleIdInput();
@@ -225,7 +225,7 @@
 
 	/**
 	 * @param {boolean} on
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function toggleFormidableStylingInPreviewForms( on ) {
 		const preview = document.getElementById( 'frm_style_preview' );
@@ -245,7 +245,7 @@
 	}
 
 	/**
-	 * @returns {HTMLElement} The style ID input element.
+	 * @return {HTMLElement} The style ID input element.
 	 */
 	function getStyleIdInput() {
 		return document.getElementById( 'frm_style_list_form' ).querySelector( '[name="style_id"]' );
@@ -253,7 +253,7 @@
 
 	/**
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleCommonClickEvents( event ) {
 		const target = event.target;
@@ -278,7 +278,7 @@
 	 * This function is used to update the form action when switching from the advanced settings and quick-settings.
 	 *
 	 * @param {Object} target The submit button event target
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
@@ -295,7 +295,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disablePreviewSubmitButtons() {
 		const preview = document.getElementById( 'frm_style_preview' );
@@ -306,7 +306,7 @@
 				 * Prevent form submit event.
 				 *
 				 * @param {Event} event
-				 * @returns {false} Prevents the default action and stops the event from bubbling.
+				 * @return {false} Prevents the default action and stops the event from bubbling.
 				 */
 				event => {
 					event.preventDefault();
@@ -319,7 +319,7 @@
 
 	/**
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleClickEventsForListPage( event ) {
 		const target = event.target;
@@ -334,7 +334,7 @@
 	 * If the Update button is clicked after selecting a style card, the active card will be saved as the target form's style.
 	 *
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleStyleCardClick( event ) {
 		const target = event.target;
@@ -393,7 +393,7 @@
 
 	/**
 	 * @param {HTMLElement} card
-	 * @returns {HTMLElement} The modal element.
+	 * @return {HTMLElement} The modal element.
 	 */
 	function maybeCreateStyleTemplateModal( card ) {
 		const titleElement = card.querySelector( '.frm-style-card-title' );
@@ -411,7 +411,7 @@
 
 	/**
 	 * @param {HTMLElement} card
-	 * @returns {HTMLElement} The modal content element.
+	 * @return {HTMLElement} The modal content element.
 	 */
 	function getStyleTemplateModalContent( card ) {
 		const children = [];
@@ -438,7 +438,7 @@
 
 	/**
 	 * @param {HTMLElement} card
-	 * @returns {HTMLElement} The modal footer element.
+	 * @return {HTMLElement} The modal footer element.
 	 */
 	function getStyleTemplateModalFooter( card ) {
 		const viewDemoSiteButton = footerButton( {
@@ -463,7 +463,7 @@
 	}
 
 	/**
-	 * @returns {string} The upgrade now text.
+	 * @return {string} The upgrade now text.
 	 */
 	function getUpgradeNowText() {
 		return __( 'Upgrade Now', 'formidable' );
@@ -473,7 +473,7 @@
 	 * Track an unsaved change on the edit page.
 	 * This is included in the frmStylerFunctions global so unsaved changes can be tracked in Pro as well.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function trackUnsavedChange() {
 		state.unsavedChanges = true;
@@ -483,7 +483,7 @@
 	 * Possibly prevent leaving the page if there are unsaved changes.
 	 *
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeConfirmExit( event ) {
 		if ( ! state.unsavedChanges ) {
@@ -497,14 +497,14 @@
 	/**
 	 * Floating labels have a transition style. Turn it off temporarily when switching between cards to avoid a transition between two different style classes.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disableLabelTransitions() {
 		setLabelTransitionStyle( 'none' );
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function enableLabelTransitions() {
 		setLabelTransitionStyle( '' );
@@ -512,7 +512,7 @@
 
 	/**
 	 * @param {string} value
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function setLabelTransitionStyle( value ) {
 		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_inside_container' ).forEach(
@@ -521,7 +521,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function toggleSampleForm() {
 		state.showingSampleForm = ! state.showingSampleForm;
@@ -530,7 +530,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleUpdateClick() {
 		state.unsavedChanges = false; // Prevent the saved changes pop up from triggering when submitting the form.
@@ -553,7 +553,7 @@
 	 * If the sample form toggle is active, we want to pass that as a query parameter so we know to default to the sample form on load.
 	 *
 	 * @param {HTMLElement} clickTarget
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function modifyStylerUrl( clickTarget ) {
 		if ( ! state.showingSampleForm ) {
@@ -568,7 +568,7 @@
 	/**
 	 * Add menu dropdowns to style cards dynamically on load.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function addHamburgerMenusToCards() {
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
@@ -577,7 +577,7 @@
 
 	/**
 	 * @param {HTMLElement} card
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeAddMenuToCard( card ) {
 		if ( ! shouldAddMenuToCard( card ) ) {
@@ -591,14 +591,14 @@
 	 * Avoid adding a menu to an upsell card or a template card.
 	 *
 	 * @param {HTMLElement} card
-	 * @returns {boolean} Whether to add a menu to the card.
+	 * @return {boolean} Whether to add a menu to the card.
 	 */
 	function shouldAddMenuToCard( card ) {
 		return 'frm_template_style_cards_wrapper' !== card.parentNode.id || ! card.classList.contains( 'frm-locked-style' );
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function addHamburgerMenuForEditPage() {
 		const styleName = document.getElementById( 'frm_style_name' );
@@ -622,7 +622,7 @@
 	 *     @type {string} labelPosition
 	 *     @type {string} classname
 	 * }
-	 * @returns {HTMLElement} The hamburger menu element.
+	 * @return {HTMLElement} The hamburger menu element.
 	 */
 	function getHamburgerMenu( data ) {
 		const hamburgerMenu = a( {
@@ -696,7 +696,7 @@
 
 	/**
 	 * @param {Array} dropdownMenuOptions
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeAddDuplicateUpsell( dropdownMenuOptions ) {
 		let duplicateOptionExists = false;
@@ -723,7 +723,7 @@
 
 	/**
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleApplyOptionClick( event ) {
 		const option = event.target;
@@ -738,7 +738,7 @@
 
 	/**
 	 * @param {string} styleId
-	 * @returns {HTMLElement} The rename option element.
+	 * @return {HTMLElement} The rename option element.
 	 */
 	function getRenameOption( styleId ) {
 		const renameOption = a( __( 'Rename', 'formidable' ) );
@@ -774,7 +774,7 @@
 	/**
 	 * @param {string} id
 	 * @param {Object} args
-	 * @returns {HTMLElement} The modal element.
+	 * @return {HTMLElement} The modal element.
 	 */
 	function stylerModal( id, args ) {
 		const modal = maybeCreateModal( id, args );
@@ -791,7 +791,7 @@
 	 *
 	 * @param {string}           context
 	 * @param {string|undefined} value
-	 * @returns {HTMLElement} The modal content element.
+	 * @return {HTMLElement} The modal content element.
 	 */
 	function getStyleInputNameModalContent( context, value ) {
 		// Create a form so we can listen to Enter key presses that trigger a form submit event.
@@ -805,7 +805,7 @@
 			'submit',
 			/**
 			 * @param {Event} event
-			 * @returns {false} Prevents the default action and stops the event from bubbling.
+			 * @return {false} Prevents the default action and stops the event from bubbling.
 			 */
 			event => {
 				// Prevent the form in the modal from submitting and trigger the click button in the modal footer instead.
@@ -845,7 +845,7 @@
 
 	/**
 	 * @param {string} styleId
-	 * @returns {HTMLElement} The modal footer element.
+	 * @return {HTMLElement} The modal footer element.
 	 */
 	function getRenameStyleModalFooter( styleId ) {
 		const cancelButton = footerButton( { text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' } );
@@ -863,7 +863,7 @@
 	 * Call frm_rename_style action when the rename style button is clicked in rename modal.
 	 *
 	 * @param {string} styleId
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function renameStyle( styleId ) {
 		const styleNameInput = document.getElementById( 'frm_rename_style_name_input' );
@@ -885,7 +885,7 @@
 			 * If on the list page, update the style card after renaming a style.
 			 * On the edit page, update the style name element instead.
 			 *
-			 * @returns {void}
+			 * @return {void}
 			 */
 			() => {
 				success( __( 'Style has been renamed successfully', 'formidable' ) );
@@ -904,7 +904,7 @@
 	/**
 	 * @param {string} styleId
 	 * @param {string} newStyleName
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function updateStyleNameInCard( styleId, newStyleName ) {
 		const card = getCardByStyleId( styleId );
@@ -914,7 +914,7 @@
 
 	/**
 	 * @param {string} styleId
-	 * @returns {HTMLElement} The card element.
+	 * @return {HTMLElement} The card element.
 	 */
 	function getCardByStyleId( styleId ) {
 		const defaultCard = document.querySelector( '#frm_default_style_cards_wrapper > div[data-style-id="' + styleId + '"]' );
@@ -927,7 +927,7 @@
 	/**
 	 * @param {HTMLElement} option
 	 * @param {string}      iconId
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function addIconToOption( option, iconId ) {
 		const icon = frmDom.svg( { href: '#' + iconId } );
@@ -936,7 +936,7 @@
 
 	/**
 	 * @param {string} styleId
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function confirmResetStyle( styleId ) {
 		stylerModal(
@@ -950,7 +950,7 @@
 	}
 
 	/**
-	 * @returns {HTMLElement} The modal content element.
+	 * @return {HTMLElement} The modal content element.
 	 */
 	function getResetStyleModalContent() {
 		const content = div( __( 'Reset this style back to the default?', 'formidable' ) );
@@ -960,7 +960,7 @@
 
 	/**
 	 * @param {string} styleId
-	 * @returns {HTMLElement} The modal footer element.
+	 * @return {HTMLElement} The modal footer element.
 	 */
 	function getResetStyleModalFooter( styleId ) {
 		const cancelButton = footerButton( {
@@ -981,7 +981,7 @@
 	 * This function handles the front end routing for the reset action as reset works differently for edit and list views.
 	 *
 	 * @param {string} styleId
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function resetStyle( styleId ) {
 		if ( isListPage ) {
@@ -995,7 +995,7 @@
 	 * Make a POST request to reset the style then reload the CSS and reset the card styles.
 	 *
 	 * @param {string} styleId
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function resetStyleOnListPage( styleId ) {
 		const formData = new FormData();
@@ -1020,7 +1020,7 @@
 	/**
 	 * Reset the style in-page (without actually updating it).
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function resetStyleOnEditPage() {
 		jQuery.ajax( {
@@ -1041,7 +1041,7 @@
 	 * @todo Stop triggering change events with jQuery. And remove the other jQuery as well.
 	 *
 	 * @param {Object} response
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function syncEditPageAfterResetAction( response ) {
 		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
@@ -1082,7 +1082,7 @@
 	/**
 	 * Reset the custom CSS editor.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function resetCustomCSSEditor() {
 		const checkbox = document.getElementById( 'frm_enable_single_style_custom_css' );
@@ -1097,7 +1097,7 @@
 	/**
 	 * Reload Formidable CSS after a style is reset so the preview updates immediately without needing to reload the page.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function reloadCSSAfterStyleReset() {
 		const style = document.getElementById( 'frm-custom-theme-css' );
@@ -1124,7 +1124,7 @@
 	}
 
 	/**
-	 * @returns {number} The auto ID.
+	 * @return {number} The auto ID.
 	 */
 	function getAutoId() {
 		return ++state.autoId;
@@ -1134,7 +1134,7 @@
 	 * @param {Object}      data
 	 * @param {HTMLElement} data.anchor
 	 * @param {string}      data.type
-	 * @returns {HTMLElement} The dropdown item element.
+	 * @return {HTMLElement} The dropdown item element.
 	 */
 	function wrapDropdownItem( { anchor, type } ) {
 		return div( {
@@ -1146,7 +1146,7 @@
 	/**
 	 * This gets triggered through a hook called in frmAdminBuild.styleInit() from formidable_admin.js.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initEditPage() {
 		const { debounce } = frmDom.util;
@@ -1208,7 +1208,7 @@
 		 * Sends an AJAX POST request for new CSS to use for the preview.
 		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		function changeStyling() {
 			const styleInputs = Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
@@ -1235,7 +1235,7 @@
 		 * Update the CSS used for the preview on the edit page when a styling input has been updated.
 		 *
 		 * @param {string} css The response from the frm_change_styling request.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		function handleChangeStylingSuccess( css ) {
 			// Validate the string response. A valid output will include rules with .with_frm_style
@@ -1251,7 +1251,7 @@
 		 * Possibly pop up with a warning that "text will not display correctly if the field height is too small relative to the field padding and text size".
 		 * This can be triggered when modifying font size, height, and padding.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		function textSquishCheck() {
 			if ( null !== frmDom.util.getCookie( 'frm-style-text-squish-check' ) ) {
@@ -1287,7 +1287,7 @@
 		 * When the Collapse icons are updated, sync the dropdown.
 		 * Otherwise the previously selected value will still appear as the selected value.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
 			trackUnsavedChange();
@@ -1325,7 +1325,7 @@
 	/**
 	 * @param {HTMLElement} input
 	 * @param {HTMLElement} container
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkFloatingLabelsForStyles( input, container ) {
 		if ( ! container ) {
@@ -1354,7 +1354,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initPosClass() {
 		const positionSetting = document.getElementById( 'frm_position' );
@@ -1370,7 +1370,7 @@
 	/**
 	 * Update label container classes when the label "Position" setting is changed.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function setPosClass() {
 		/*jshint validthis:true */
@@ -1396,7 +1396,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initFloatingLabels() {
 		[ 'focus', 'blur', 'change' ].forEach(
@@ -1414,7 +1414,7 @@
 	 * Without this, drawing in a signature field triggers a "Uncaught ReferenceError: frmFrontForm is not defined" error.
 	 * We don't want the validation to actually triggr, so just fill in an empty function.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function fillMissingSignatureValidationFunction() {
 		if ( window.__FRMSIG === undefined || window.frmFrontForm !== undefined ) {
@@ -1427,7 +1427,7 @@
 	/**
 	 * Enable the datepicker in the sample form preview.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initDatepickerSample() {
 		// If flatpickr is defined, then is a recent version of Pro which handles the datepicker preview as it's a PRO feature.

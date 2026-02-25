@@ -89,12 +89,10 @@ export class frmWebComponent extends HTMLElement {
 	/**
 	 * Waits for the element to become visible in the viewport.
 	 *
-	 * @returns {Promise} - A promise that resolves when the element is visible.
+	 * @return {Promise} - A promise that resolves when the element is visible.
 	 */
 	whenElementBecomesVisible() {
-
 		return new Promise( resolve => {
-
 			if ( window.IntersectionObserver === undefined ) {
 				requestAnimationFrame( () => resolve() );
 				return;
