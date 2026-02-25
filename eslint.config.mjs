@@ -351,7 +351,6 @@ export default [
 	{
 		files: ['js/formidable.js'],
 		rules: {
-			'prefer-const': 'off',
 			'no-jquery/no-find': 'error',
 			'no-jquery/no-visibility': 'error',
 			'no-jquery/no-slide': 'error',
