@@ -18,8 +18,6 @@ module.exports = {
 	},
 
 	create( context ) {
-		const sourceCode = context.sourceCode;
-
 		// Track selectors per function scope
 		const scopeStack = [];
 
