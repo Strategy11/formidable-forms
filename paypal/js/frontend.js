@@ -375,6 +375,8 @@
 	async function createOrder( data ) {
 		console.log( 'createOrder', data );
 
+		++running;
+
 		thisForm.classList.add( 'frm_loading_form' );
 
 		const formData = new FormData( thisForm );
@@ -522,10 +524,13 @@
 	function onError( err ) {
 		running--;
 		if ( running === 0 && thisForm ) {
-			enableSubmit();
+			if ( cardFieldsValid ) {
+				enableSubmit();
+			} else {
+				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
+			}
 		}
 		displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
-		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 	}
 
 	function onCancel() {
@@ -646,7 +651,6 @@
 		}
 
 		// Increment running counter and disable the submit button
-		running++;
 		disableSubmit( thisForm );
 
 		const meta = addName( jQuery( thisForm ) );
