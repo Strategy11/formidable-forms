@@ -26,7 +26,7 @@ const thumbnailBaseURL = `${ PLUGIN_URL }/images/applications/thumbnails`;
  * Create and return the application templates HTML element.
  *
  * @param {Object[]} applications Array of application objects.
- * @returns {void}
+ * @return {void}
  */
 export function createApplicationTemplates( applications ) {
 	if ( ! applications || ! applications.length ) {
@@ -56,7 +56,7 @@ export function createApplicationTemplates( applications ) {
  *
  * @private
  * @param {Object} template The application object.
- * @returns {HTMLElement} Element representing a single application template.
+ * @return {HTMLElement} Element representing a single application template.
  */
 function createTemplateItem( template ) {
 	const { name, key, hasLiteThumbnail, isWebp } = template;
@@ -101,7 +101,7 @@ function createTemplateItem( template ) {
 /**
  * Inject application Templates elements into the DOM and the elements object.
  *
- * @returns {void}
+ * @return {void}
  */
 export function addApplicationTemplatesElement() {
 	const elements = getElements();

@@ -12,7 +12,7 @@ categorizedAddons[ VIEWS.ACTIVE ] = [];
 /**
  * Builds a categorized list of addons.
  *
- * @returns {void}
+ * @return {void}
  */
 export function buildCategorizedAddons() {
 	const { addons } = getElements();

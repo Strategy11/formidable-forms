@@ -14,7 +14,7 @@ function frmPS() {
 		/**
 		 * Get parent search hint element.
 		 *
-		 * @returns {Element|null} The parent search hint element.
+		 * @return {Element|null} The parent search hint element.
 		 */
 		getCard() {
 			return document.querySelector( '.plugin-card-frm-plugin-search' );

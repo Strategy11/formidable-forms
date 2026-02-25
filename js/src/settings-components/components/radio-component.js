@@ -155,7 +155,7 @@ export default class frmRadioComponent {
 	/**
 	 * Throttled update of all radio trackers on window resize.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	throttledUpdateAllTrackers() {
 		if ( this.resizeTimeout ) {
@@ -176,7 +176,7 @@ export default class frmRadioComponent {
 	 * Initializes visibility observer for the radio component. This handles cases when components are conditionally shown.
 	 *
 	 * @param {HTMLElement} element The radio component element
-	 * @returns {void}
+	 * @return {void}
 	 */
 	initVisibilityObserver( element ) {
 		if ( this.observers.has( element ) ) {

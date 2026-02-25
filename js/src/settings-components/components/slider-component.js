@@ -126,7 +126,7 @@ export default class frmSliderComponent {
 		}
 
 		const sliderGroupItems = this.getSliderGroupItems( element );
-		svgIcon.addEventListener( 'click', ( ) => {
+		svgIcon.addEventListener( 'click', () => {
 			sliderGroupItems.forEach( item => {
 				item.classList.toggle( HIDDEN_CLASS );
 			} );
@@ -216,7 +216,7 @@ export default class frmSliderComponent {
 	 * Retrieves an array of slider group items based on the provided element.
 	 *
 	 * @param {HTMLElement} element - The element to retrieve slider group items from.
-	 * @returns {NodeList} - An array-like object containing the slider group items.
+	 * @return {NodeList} - An array-like object containing the slider group items.
 	 */
 	getSliderGroupItems( element ) {
 		if ( element.dataset.displaySliders === undefined ) {
@@ -273,7 +273,7 @@ export default class frmSliderComponent {
 	/**
 	 * Initializes the width of "Corner Radius" slider that is dynamically is displayed on "Field Shape" option change from "Quick Settings".
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	initSliderPositionOnFieldShapeChange() {
 		const fieldShapeType = document.querySelector( '.frm-style-component.frm-field-shape' );
@@ -297,7 +297,7 @@ export default class frmSliderComponent {
 	 * Initializes the width of sliders within a given section.
 	 *
 	 * @param {HTMLElement} section - The section containing the sliders.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	initSlidersWidth( section ) {
 		const sliders = section.querySelectorAll( '.frm-slider-component' );
@@ -313,7 +313,7 @@ export default class frmSliderComponent {
 	 *
 	 * @param {HTMLElement} slider      - The slider element.
 	 * @param {number}      sliderIndex - The index of the slider.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	initSliderWidth( slider, sliderIndex = null ) {
 		if ( slider.classList.contains( 'frm-disabled' ) ) {
@@ -343,7 +343,7 @@ export default class frmSliderComponent {
 	 * @param {number} value       - The current value.
 	 * @param {Array}  steps       - Array of step values.
 	 * @param {number} sliderWidth - The width of the slider.
-	 * @returns {number} - The calculated deltaX position.
+	 * @return {number} - The calculated deltaX position.
 	 */
 	static calculateDeltaXFromSteps( value, steps, sliderWidth ) {
 		const stepIndex = steps.indexOf( value );
@@ -381,7 +381,7 @@ export default class frmSliderComponent {
 	 * Returns the index of the specified slider element.
 	 *
 	 * @param {HTMLElement} slider - The slider element.
-	 * @returns {number} The index of the slider element.
+	 * @return {number} The index of the slider element.
 	 */
 	getSliderIndex( slider ) {
 		return this.options.filter( option => {
@@ -394,7 +394,7 @@ export default class frmSliderComponent {
 	 *
 	 * @param {Event}  event - The event object representing the mouse movement.
 	 * @param {number} index - The index of the slider element.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	moveTracker( event, index ) {
 		if ( ! this.options[ index ].dragging ) {
@@ -426,7 +426,7 @@ export default class frmSliderComponent {
 	 *
 	 * @param {string} unit  - The unit of measurement.
 	 * @param {number} index - The index of the option.
-	 * @returns {number} The maximum value.
+	 * @return {number} The maximum value.
 	 */
 	getMaxValue( unit, index ) {
 		return '%' === unit ? 100 : this.options[ index ].maxValue;
@@ -487,7 +487,7 @@ export default class frmSliderComponent {
 	 * @param {number}     deltaX   - The change in x-coordinate.
 	 * @param {number}     maxValue - The maximum value.
 	 * @param {Array|null} steps    - Optional array of step values to snap to.
-	 * @returns {number} - The calculated value.
+	 * @return {number} - The calculated value.
 	 */
 	static calculateValue( width, deltaX, maxValue, steps = null ) {
 		if ( steps && steps.length > 0 ) {
@@ -509,7 +509,7 @@ export default class frmSliderComponent {
 	 *
 	 * @param {number} value - The value to snap.
 	 * @param {Array}  steps - Array of step values to snap to.
-	 * @returns {number} - The nearest step value.
+	 * @return {number} - The nearest step value.
 	 */
 	static snapToStep( value, steps ) {
 		let nearest = steps[ 0 ];
@@ -531,7 +531,7 @@ export default class frmSliderComponent {
 	 *
 	 * @param {HTMLElement} element - The slider component element.
 	 * @param {string}      value   - The new value to be set.
-	 * @returns {string} - The updated value.
+	 * @return {string} - The updated value.
 	 */
 	updateValue( element, value ) {
 		// When the slider component is used for "Base Font Size", we need to update a hidden input field when change happens to indicate that the "Base Font Size" has been adjusted.
@@ -615,7 +615,7 @@ export default class frmSliderComponent {
 	 * Returns the unit of measurement used in the given value.
 	 *
 	 * @param {string} value - The value to check for the unit of measurement.
-	 * @returns {string} The unit of measurement ('%', 'px', 'em') found in the value, or an empty string if none is found.
+	 * @return {string} The unit of measurement ('%', 'px', 'em') found in the value, or an empty string if none is found.
 	 */
 	getUnitMeasureFromValue( value ) {
 		return [ '%', 'px', 'em' ].find( unit => value.includes( unit ) ) || '';

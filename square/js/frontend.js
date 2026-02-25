@@ -96,7 +96,7 @@
 	 * Disable submit button for a target form.
 	 *
 	 * @param {Element} form
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
@@ -190,7 +190,7 @@
 	 * Display an error message in the payment form.
 	 *
 	 * @param {string} errorMessage
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function displayPaymentFailure( errorMessage ) {
 		if ( ! thisForm ) {
@@ -255,7 +255,7 @@
 
 		/**
 		 * @param {Object} $form
-		 * @returns {boolean} false if there are errors.
+		 * @return {boolean} false if there are errors.
 		 */
 		function validateFormSubmit( $form ) {
 			const errors = frmFrontForm.validateFormSubmit( $form );

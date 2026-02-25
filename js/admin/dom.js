@@ -455,7 +455,7 @@
 		 * Retrieves the value of a cookie by its name.
 		 *
 		 * @param {string} name - The name of the cookie.
-		 * @returns {string|null} The value of the cookie, or undefined if the cookie does not exist.
+		 * @return {string|null} The value of the cookie, or undefined if the cookie does not exist.
 		 */
 		getCookie: name => {
 			const cookie = document.cookie.split( '; ' ).find( cookie => cookie.startsWith( `${ name }=` ) );
@@ -698,7 +698,7 @@
 	 * @param {string} inputId
 	 * @param {string} labelText
 	 * @param {string} inputName
-	 * @returns {Element} The div element containing the label and input.
+	 * @return {Element} The div element containing the label and input.
 	 */
 	function labelledTextInput( inputId, labelText, inputName ) {
 		const label = tag( 'label', labelText );
@@ -724,7 +724,7 @@
 	 *
 	 * @param {string} type Element tag name.
 	 * @param {Object} args The args.
-	 * @returns {Object} The created DOM element.
+	 * @return {Object} The created DOM element.
 	 */
 	function tag( type, args = {} ) {
 		const output = document.createElement( type );
@@ -785,7 +785,7 @@
 	 * It then fades out and gets deleted automatically.
 	 *
 	 * @param {HTMLElement|string} content
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function success( content ) {
 		const container = document.getElementById( 'wpbody' );

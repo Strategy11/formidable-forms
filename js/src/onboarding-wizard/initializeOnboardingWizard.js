@@ -7,7 +7,7 @@ import { addEventListeners } from './events';
 /**
  * Initializes Onboarding Wizard.
  *
- * @returns {void}
+ * @return {void}
  */
 function initializeOnboardingWizard() {
 	setupInitialView();

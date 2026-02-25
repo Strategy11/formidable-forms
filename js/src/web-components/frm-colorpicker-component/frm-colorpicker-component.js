@@ -59,7 +59,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	/**
 	 * A method to get the color value.
 	 *
-	 * @returns {string} - The color value.
+	 * @return {string} - The color value.
 	 */
 	get color() {
 		return jQuery( this.input ).wpColorPicker( 'color' );
@@ -69,7 +69,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * A method to set the color value.
 	 *
 	 * @param {string} value - The value to set the color value for.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set color( value ) {
 		this.#defaultValue = value;
@@ -80,7 +80,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * A method to set the change event listener for the color picker component.
 	 *
 	 * @param {Function} callback - The callback function to call when the color picker component is changed.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {

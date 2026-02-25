@@ -36,7 +36,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to set the change event listener for the slider component.
 	 *
 	 * @param {Function} callback - The callback function to call when the slider component is changed.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
@@ -50,7 +50,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to set the has multiple values flag. This flag is used to determine if the slider component should display multiple values.
 	 *
 	 * @param {boolean} value - The value to set.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set hasMultipleValues( value ) {
 		this.#hasMultipleValues = value;
@@ -60,7 +60,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to set the default multiple values. This values are used to determine the default values for the slider component.
 	 *
 	 * @param {Object} value - The value to set.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set sliderDefaultMultipleValues( value ) {
 		this.#sliderDefaultMultipleValues = value;
@@ -70,7 +70,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to set the default value for the single slider component. This value is used to determine the default value for the single slider component.
 	 *
 	 * @param {string|number} value - The value to set.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set sliderDefaultValue( value ) {
 		this.#sliderDefaultValue = String( value );
@@ -80,7 +80,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to set the available units for the slider component. This units are used to determine the available units for the slider component.
 	 *
 	 * @param {Array} value - The value to set.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set sliderAvailableUnits( value ) {
 		this.#sliderAvailableUnits = value;
@@ -90,7 +90,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to set the max value that the slider can take.
 	 *
 	 * @param {string|number} value - The value to set.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	set sliderMaxValue( value ) {
 		this.#sliderMaxValue = value.toString();
@@ -140,7 +140,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to get the available units for the slider component. It will checke the data-units attribute first and if it is not set, it will return the default available units.
 	 *
-	 * @returns {Array} - The available units.
+	 * @return {Array} - The available units.
 	 */
 	getAvailableUnits() {
 		const attr = this.getAttribute( 'data-units' );
@@ -155,7 +155,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to parse the default values for the multiple values slider component. It will check the data-values attribute first and if it is not set, it will return the default values.
 	 * If the values haven't been set via data-values attribute or dynamically via this._sliderDefaultMultipleValues it will return the default values.
 	 *
-	 * @returns {Object} - The default values.
+	 * @return {Object} - The default values.
 	 */
 	parseDefaultMultipleValues() {
 		const valuesAttr = this.getAttribute( 'data-values' ) || this.#sliderDefaultMultipleValues;
@@ -177,7 +177,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to parse the value and unit for the slider component.
 	 *
 	 * @param {string} valueStr - The value string to parse.
-	 * @returns {Object} - The value and unit object.
+	 * @return {Object} - The value and unit object.
 	 */
 	static parseValueUnit( valueStr ) {
 		const defaultValue = { value: 0, unit: 'px' };
@@ -199,7 +199,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to check if the slider component has multiple values. It will check the data-has-multiple-values attribute first and if it is not set, it will return the default value.
 	 *
-	 * @returns {boolean} - The has multiple values flag.
+	 * @return {boolean} - The has multiple values flag.
 	 */
 	hasMultipleSliderValues() {
 		return this.getAttribute( 'data-has-multiple-values' ) === 'true' || this.#hasMultipleValues;
@@ -210,7 +210,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 *
 	 * @param {Element} wrapper - The wrapper element.
 	 * @param {Object}  options - The options for the slider.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	createMultipleValuesSlider( wrapper, options ) {
 		const { maxValue, units, componentClass, fieldValue, defaultValues } = options;
@@ -258,7 +258,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to create the hidden input value for the slider component. This hidden input value is used to store the value of the slider component.
 	 *
 	 * @param {string} fieldValue - The field value to set.
-	 * @returns {Element} - The hidden input value element.
+	 * @return {Element} - The hidden input value element.
 	 */
 	createSliderHiddenInputValue( fieldValue ) {
 		if ( ! fieldValue ) {
@@ -289,7 +289,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to create the slider group. This method is used to create the slider group.
 	 *
 	 * @param {Object} options - The options for the slider.
-	 * @returns {Element} - The slider group element.
+	 * @return {Element} - The slider group element.
 	 */
 	createSliderGroup( options ) {
 		const slider = this.createSlider( options );
@@ -317,7 +317,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to create the slider track. This method is used to create the slider track.
 	 *
 	 * @param {Object} value - The value of the slider.
-	 * @returns {Element} - The slider track element.
+	 * @return {Element} - The slider track element.
 	 */
 	static createSliderTrack( value ) {
 		const slider = document.createElement( 'span' );
@@ -348,7 +348,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string} ariaLabel - The aria label of the slider.
 	 * @param {Array}  units     - The units of the slider.
 	 * @param {string} baseId    - The base ID for the form elements.
-	 * @returns {Element} - The value and unit selection element.
+	 * @return {Element} - The value and unit selection element.
 	 */
 	static createSliderValueAndUnitSelection( value, ariaLabel, units, baseId ) {
 		const valueContainer = document.createElement( 'div' );
@@ -383,7 +383,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @param {string}  value    - The value of the option.
 	 * @param {string}  label    - The label of the option.
 	 * @param {boolean} selected - Whether the option is selected.
-	 * @returns {Element} - The dropdown option element.
+	 * @return {Element} - The dropdown option element.
 	 */
 	static createDropdownOption( value, label, selected = false ) {
 		const option = document.createElement( 'option' );
@@ -397,7 +397,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to create the SVG icon. This method is used to create the SVG icon.
 	 *
 	 * @param {string} iconSvgId - The ID of the SVG icon.
-	 * @returns {Element} - The SVG icon element.
+	 * @return {Element} - The SVG icon element.
 	 */
 	static createSvgIcon( iconSvgId ) {
 		const svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
@@ -414,7 +414,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to create the slider. This method is used to create the slider.
 	 *
 	 * @param {Object} options - The options for the slider.
-	 * @returns {Element} - The slider element.
+	 * @return {Element} - The slider element.
 	 */
 	createSlider( options ) {
 		const { type, maxValue, units, value, iconSvgId, ariaLabel, hidden, addHiddenInputValue } = options;
