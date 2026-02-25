@@ -654,7 +654,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @param {string} deletedType
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeEnableOtherPaymentActions( deletedType ) {
 		if ( 'payment' !== deletedType ) {
@@ -7616,7 +7616,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @param {string} excludedType
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeDisableOtherPaymentActions( excludedType ) {
 		const paymentActions = [ 'stripe', 'square', 'paypal' ];
@@ -7933,7 +7933,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * @param {string} type
 	 *
-	 * @returns number
+	 * @return {number}
 	 */
 	function getNumberOfActionsForType( type ) {
 		if ( [ 'paypal', 'stripe', 'square' ].includes( type ) ) {

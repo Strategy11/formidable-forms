@@ -4,7 +4,7 @@
 	}
 
 	// Track the eligible funding sources
-	let renderedButtons = [];
+	const renderedButtons = [];
 
 	// Track the state of the PayPal card fields
 	let cardFieldsValid = false;
@@ -16,7 +16,7 @@
 	/**
 	 * Initialize PayPal Card Fields (Advanced Card Payments).
 	 *
-	 * @returns {Promise<Object>} The card fields instance.
+	 * @return {Promise<Object>} The card fields instance.
 	 */
 	async function initializeCardFields() {
 		const cardElement = document.querySelector( '.frm-card-element' );
@@ -28,8 +28,8 @@
 
 		const cardFieldsConfig = {
 			createOrder,
-		//	createSubscription: createSubscription,
-		//	createVaultSetupToken: createVaultSetupToken,
+			//	createSubscription: createSubscription,
+			//	createVaultSetupToken: createVaultSetupToken,
 			onApprove,
 			onError,
 			style: frmPayPalVars.style,
@@ -64,11 +64,11 @@
 		// TODO: Make these IDs unique.
 		cardElement.innerHTML = '';
 
-		const layout = getPayPalSettings()[0].layout;
+		const layout = getPayPalSettings()[ 0 ].layout;
 
 		const cardFieldsEligible = cardFields.isEligible() && layout !== 'checkout_only';
 
-		const buttonIsEnabled = getPayPalSettings()[0].layout !== 'card_only'; // TODO: Put this behind a setting.
+		const buttonIsEnabled = getPayPalSettings()[ 0 ].layout !== 'card_only'; // TODO: Put this behind a setting.
 		if ( buttonIsEnabled ) {
 			const buttonContainer = document.createElement( 'div' );
 			buttonContainer.id = 'paypal-button-container';
@@ -97,7 +97,7 @@
 
 			paypal.Buttons( {
 				createOrder,
-			//	createSubscription: createSubscription,
+				//	createSubscription: createSubscription,
 				onApprove,
 				onError,
 				onCancel,
@@ -180,7 +180,7 @@
 	/**
 	 * Get PayPal settings from frmPayPalVars.settings.
 	 *
-	 * @returns {Array} Array of PayPal settings.
+	 * @return {Array} Array of PayPal settings.
 	 */
 	function getPayPalSettings() {
 		const paypalSettings = [];
@@ -195,7 +195,7 @@
 	/**
 	 * Get the field IDs that affect the price.
 	 *
-	 * @returns {Array} Array of field IDs.
+	 * @return {Array} Array of field IDs.
 	 */
 	function getPriceFields() {
 		const priceFields = [];
@@ -238,7 +238,7 @@
 			return;
 		}
 
-		const form = field.closest ? field.closest( 'form' ) : jQuery( field ).closest( 'form' )[0];
+		const form = field.closest ? field.closest( 'form' ) : jQuery( field ).closest( 'form' )[ 0 ];
 		if ( ! form ) {
 			return;
 		}
@@ -277,6 +277,10 @@
 
 	/**
 	 * Re-render the Pay Later message with the current amount.
+	 *
+	 * @param {number|string} amount
+	 *
+	 * @return {void}
 	 */
 	function updatePayLaterMessage( amount ) {
 		const banner = document.getElementById( 'my-pay-later-banner' );
@@ -304,14 +308,14 @@
 
 	function makeRenderPayPalButton( cardElement ) {
 		return function( fundingSource ) {
-				const button = paypal.Buttons({
+			const button = paypal.Buttons( {
 				fundingSource,
 				createOrder,
 				onApprove,
 				onError,
 				onCancel,
 				style: frmPayPalVars.buttonStyle,
-			});
+			} );
 
 			if ( ! button.isEligible() ) {
 				return;
@@ -331,7 +335,8 @@
 	/**
 	 * Create a PayPal order via AJAX.
 	 *
-	 * @returns {Promise<string>} The order ID.
+	 * @param  data
+	 * @return {Promise<string>} The order ID.
 	 */
 	async function createOrder( data ) {
 		console.log( 'createOrder', data );
@@ -507,7 +512,7 @@
 	 * Disable submit button for a target form.
 	 *
 	 * @param {Element} form
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
@@ -527,7 +532,7 @@
 	 * Display an error message in the payment form.
 	 *
 	 * @param {string} errorMessage
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function displayPaymentFailure( errorMessage ) {
 		if ( ! thisForm ) {
@@ -560,7 +565,7 @@
 	 * Validate the form before submission.
 	 *
 	 * @param {Element} form
-	 * @returns {boolean} True if valid.
+	 * @return {boolean} True if valid.
 	 */
 	function validateFormSubmit( form ) {
 		if ( typeof frmFrontForm.validateFormSubmit !== 'function' ) {
@@ -609,9 +614,9 @@
 			submitArgs.cardholderName = meta.name;
 		}
 
-//		submitArgs.verification = {
-//			method: 'SCA', // Standard for PSD2 compliance
-//		};
+		//		submitArgs.verification = {
+		//			method: 'SCA', // Standard for PSD2 compliance
+		//		};
 
 		/*
 		TODO Add the billing address here as well.
@@ -694,7 +699,7 @@
 		 *
 		 * @param {number|HTMLElement} field        Field ID or Field element.
 		 * @param {string}             subFieldName Subfield name.
-		 * @returns {string} Name field value.
+		 * @return {string} Name field value.
 		 */
 		const getNameFieldValue = function( field, subFieldName ) {
 			if ( 'object' !== typeof field ) {
@@ -724,7 +729,7 @@
 		 * @param {number}      fieldID
 		 * @param {string}      type    Either 'container' or 'field'
 		 * @param {object|null} $form
-		 * @returns {HTMLElement|null} Name field container or element.
+		 * @return {HTMLElement|null} Name field container or element.
 		 */
 		function getNameFieldItem( fieldID, type, $form = null ) {
 			const queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
