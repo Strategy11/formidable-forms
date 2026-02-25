@@ -26,39 +26,54 @@
 
 		thisForm = cardElement.closest( 'form' );
 
-		const cardFieldsConfig = {
-			createOrder,
-			//	createSubscription: createSubscription,
-			//	createVaultSetupToken: createVaultSetupToken,
-			onApprove,
-			onError,
-			style: frmPayPalVars.style,
-			inputEvents: {
-				onChange: data => {
-					cardFieldsValid = data.isFormValid;
-					console.log( 'onChange', data );
+		const settings = getPayPalSettings()[ 0 ];
+		const isRecurring = 'single' !== settings.one;
 
-					const allEmpty = Object.values( data.fields ).every( field => field.isEmpty );
-					const buttonContainer = document.getElementById( 'paypal-button-container' );
-					const separator = buttonContainer.parentNode.querySelector( '.separator' );
+		let cardFields = {};
 
-					if ( allEmpty ) {
-						buttonContainer.style.display = 'block';
-						separator.style.display = 'block';
-					} else {
-						buttonContainer.style.display = 'none';
-						separator.style.display = 'none';
-					}
+		if ( ! isRecurring ) {
+			cardFields = window.paypal.CardFields(
+				{
+					onApprove,
+					onError,
+					createOrder,
+					style: frmPayPalVars.style,
+					inputEvents: {
+						onChange: data => {
+							cardFieldsValid = data.isFormValid;
+							console.log( 'onChange', data );
 
-					if ( cardFieldsValid ) {
-						enableSubmit();
-					} else {
-						disableSubmit( thisForm );
+							const allEmpty = Object.values( data.fields ).every( field => field.isEmpty );
+							const buttonContainer = document.getElementById( 'paypal-button-container' );
+							const separator = buttonContainer.parentNode.querySelector( '.separator' );
+
+							if ( allEmpty ) {
+								buttonContainer.style.display = 'block';
+								separator.style.display = 'block';
+							} else {
+								buttonContainer.style.display = 'none';
+								separator.style.display = 'none';
+							}
+
+							if ( cardFieldsValid ) {
+								enableSubmit();
+							} else {
+								disableSubmit( thisForm );
+							}
+						}
 					}
 				}
-			}
-		};
-		const cardFields = window.paypal.CardFields( cardFieldsConfig );
+			);
+		} else {
+			// Card fields require a Vault setup token.
+			// For now, we will just disable the card fields
+			// as we do not support vaulting yet.
+			cardFields = {
+				isEligible() {
+					return false;
+				}
+			};
+		}
 
 		// Create the card fields container structure
 		// TODO: Make these IDs unique.
@@ -95,15 +110,24 @@
 				checkPriceFieldsOnLoad();
 			}
 
-			paypal.Buttons( {
-				createOrder,
-				//	createSubscription: createSubscription,
+			const buttonConfig = {
 				onApprove,
 				onError,
 				onCancel,
 				style: frmPayPalVars.buttonStyle,
 				fundingSource: paypal.FUNDING.PAYPAL,
-			} ).render( '#paypal-button-container' );
+			};
+
+			const setting = getPayPalSettings()[ 0 ];
+			const isRecurring = 'single' !== setting.one;
+
+			if ( isRecurring ) {
+				buttonConfig.createSubscription = createSubscription;
+			} else {
+				buttonConfig.createOrder = createOrder;
+			}
+
+			paypal.Buttons( buttonConfig ).render( '#paypal-button-container' );
 		}
 
 		if ( ! cardFieldsEligible ) {
@@ -308,14 +332,24 @@
 
 	function makeRenderPayPalButton( cardElement ) {
 		return function( fundingSource ) {
-			const button = paypal.Buttons( {
+			const buttonConfig = {
 				fundingSource,
-				createOrder,
 				onApprove,
 				onError,
 				onCancel,
 				style: frmPayPalVars.buttonStyle,
-			} );
+			};
+
+			const setting = getPayPalSettings()[ 0 ];
+			const isRecurring = 'single' !== setting.one;
+
+			if ( isRecurring ) {
+				buttonConfig.createSubscription = createSubscription;
+			} else {
+				buttonConfig.createOrder = createOrder;
+			}
+
+			const button = paypal.Buttons( buttonConfig );
 
 			if ( ! button.isEligible() ) {
 				return;
@@ -335,7 +369,7 @@
 	/**
 	 * Create a PayPal order via AJAX.
 	 *
-	 * @param  data
+	 * @param {Object} data
 	 * @return {Promise<string>} The order ID.
 	 */
 	async function createOrder( data ) {
@@ -373,7 +407,9 @@
 		return orderData.data.orderID;
 	}
 
-	async function createSubscription() {
+	async function createSubscription( data ) {
+		console.log( 'createSubscription', data );
+
 		thisForm.classList.add( 'frm_loading_form' );
 
 		const formData = new FormData( thisForm );

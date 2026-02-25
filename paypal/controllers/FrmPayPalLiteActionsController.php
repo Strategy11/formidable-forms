@@ -505,10 +505,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 * Build the PayPal SDK URL with required parameters.
 		 *
 		 * - Subscriptions require intent=subscription.
-		 * - Subscriptions maybe also require vault=true.
-		 * - To enable paylater, include enable-funding=paylater.
-		 * - To enable Pay Now, include commit=true. This is the default, and what we support in this plugin.
-		 * - To use Continue instead, use commit=false
+		 * - Subscriptions also require vault=true.
 		 */
 		$query_args = array(
 			'client-id'   => self::get_client_id(),
@@ -516,6 +513,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'currency'    => strtoupper( $action->post_content['currency'] ?? 'USD' ),
 			'merchant-id' => FrmPayPalLiteConnectHelper::get_merchant_id(),
 		);
+
+		if ( 'subscription' === $intent ) {
+			$query_args['vault'] = 'true';
+		}
 
 		$components = array(
 			'buttons',
