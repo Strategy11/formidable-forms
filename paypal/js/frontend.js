@@ -499,7 +499,10 @@
 		const paymentSourceInput = document.createElement( 'input' );
 		paymentSourceInput.type = 'hidden';
 		paymentSourceInput.name = 'paypal_payment_source';
-		paymentSourceInput.value = data.paymentSource;
+
+		// When onApprove is called for card fields, there is no paymentSource specified.
+		paymentSourceInput.value = data.paymentSource || 'card';
+
 		thisForm.append( paymentSourceInput );
 
 		// If someone uses the PayPal checkout button, the form submit event doesn't actually get triggered.
