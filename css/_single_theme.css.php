@@ -313,7 +313,8 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 ?>
 
 .<?php echo esc_html( $style_class ); ?>.frm_inline_top .frm_submit::before,
-.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit::before {
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit::before,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_aligned_submit::before {
 	content:"before";
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
@@ -331,7 +332,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?>.frm_inline_form .frm_submit input,
 .<?php echo esc_html( $style_class ); ?>.frm_inline_form .frm_submit button,
 .<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit input,
-.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit button {
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit button,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_aligned_submit input,
+.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_aligned_submit button {
 	margin: 0 !important;
 }
 
