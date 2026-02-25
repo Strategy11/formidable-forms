@@ -7,6 +7,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 	private static $active_order_id;
 
+	private static $active_payment_source;
+
 	/**
 	 * @since x.x
 	 *
@@ -159,11 +161,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$paypal_message = '';
+		$source_type    = self::$active_payment_source;
 
-		if ( isset( $order->payment_source ) && is_object( $order->payment_source ) ) {
-			$source_array = (array) $order->payment_source;
-			$source_type  = array_key_first( $source_array );
-
+		if ( $source_type ) {
 			switch ( $source_type ) {
 				case 'paypal':
 					$display_type = __( 'PayPal', 'formidable' );
@@ -289,7 +289,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 
-		self::$active_order_id = $paypal_order_id;
+		self::$active_order_id       = $paypal_order_id;
+		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
 
 		return true;
 	}

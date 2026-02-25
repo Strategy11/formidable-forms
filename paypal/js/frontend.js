@@ -331,6 +331,9 @@
 	}
 
 	function makeRenderPayPalButton( cardElement ) {
+		const setting = getPayPalSettings()[ 0 ];
+		const isRecurring = 'single' !== setting.one;
+
 		return function( fundingSource ) {
 			const buttonConfig = {
 				fundingSource,
@@ -339,9 +342,6 @@
 				onCancel,
 				style: frmPayPalVars.buttonStyle,
 			};
-
-			const setting = getPayPalSettings()[ 0 ];
-			const isRecurring = 'single' !== setting.one;
 
 			if ( isRecurring ) {
 				buttonConfig.createSubscription = createSubscription;
@@ -493,6 +493,12 @@
 		orderInput.name = 'paypal_order_id';
 		orderInput.value = data.orderID;
 		thisForm.append( orderInput );
+
+		const paymentSourceInput = document.createElement( 'input' );
+		paymentSourceInput.type = 'hidden';
+		paymentSourceInput.name = 'paypal_payment_source';
+		paymentSourceInput.value = data.paymentSource;
+		thisForm.append( paymentSourceInput );
 
 		// If someone uses the PayPal checkout button, the form submit event doesn't actually get triggered.
 		if ( ! submitEvent ) {

@@ -256,6 +256,7 @@ class FrmPayPalLiteAppController {
 			'satispay',
 			'sepa',
 			'ideal',
+			'paylater',
 		);
 
 		/**
