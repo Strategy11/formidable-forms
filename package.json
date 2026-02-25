@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@babel/runtime": "^7.23.0",
 		"@wordpress/api-fetch": "^2.2.8",
+		"@wordpress/dom-ready": "^3.6.0",
 		"@wordpress/api-request": "^1.0.0",
 		"@wordpress/components": "^6.0.1",
 		"@wordpress/data": "^3.1.2",
