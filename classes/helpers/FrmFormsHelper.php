@@ -2079,7 +2079,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 Checks if the form is rendered inside a block editor or page builder preview.
+	 * Checks if the form is rendered inside a block editor or page builder preview.
 	 *
 	 * @since x.x
 	 *
