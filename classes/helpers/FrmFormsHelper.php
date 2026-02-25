@@ -2079,6 +2079,17 @@ BEFORE_HTML;
 	}
 
 	/**
+	 Checks if the form is rendered inside a block editor or page builder preview.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_block_or_page_builder_preview() {
+		return self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
+	}
+
+	/**
 	 * @since 6.21
 	 *
 	 * @return bool
