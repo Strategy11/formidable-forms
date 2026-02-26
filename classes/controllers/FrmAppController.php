@@ -874,10 +874,12 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function enqueue_global_settings_scripts( $page ) {
-		if ( 'formidable-settings' === $page ) {
-			wp_enqueue_style( 'wp-color-picker' );
-			wp_enqueue_script( 'formidable_settings' );
+		if ( 'formidable-settings' !== $page ) {
+			return;
 		}
+
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'formidable_settings' );
 	}
 
 	/**
@@ -1182,12 +1184,14 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function maybe_add_wp_site_health() {
-		if ( ! class_exists( 'WP_Site_Health' ) ) {
-			$wp_site_health_path = ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+		if ( class_exists( 'WP_Site_Health' ) ) {
+			return;
+		}
 
-			if ( file_exists( $wp_site_health_path ) ) {
-				require_once $wp_site_health_path;
-			}
+		$wp_site_health_path = ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+
+		if ( file_exists( $wp_site_health_path ) ) {
+			require_once $wp_site_health_path;
 		}
 	}
 

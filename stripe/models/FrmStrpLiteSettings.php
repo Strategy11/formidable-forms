@@ -89,17 +89,19 @@ class FrmStrpLiteSettings {
 		$settings = $this->default_options();
 
 		foreach ( $settings as $setting => $default ) {
-			if ( isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
-				$value = $params[ 'frm_' . $this->param() . '_' . $setting ];
-
-				// Clean up any accumulated backslashes from previous bug.
-				// @see https://github.com/Strategy11/formidable-pro/issues/6294
-				if ( 'processing_message' === $setting ) {
-					$value = str_replace( '\\', '', $value );
-				}
-
-				$this->settings->{$setting} = sanitize_text_field( $value );
+			if ( ! isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
+				continue;
 			}
+
+			$value = $params[ 'frm_' . $this->param() . '_' . $setting ];
+
+			// Clean up any accumulated backslashes from previous bug.
+			// @see https://github.com/Strategy11/formidable-pro/issues/6294
+			if ( 'processing_message' === $setting ) {
+				$value = str_replace( '\\', '', $value );
+			}
+
+			$this->settings->{$setting} = sanitize_text_field( $value );
 		}
 
 		$this->settings->test_mode = isset( $params['frm_strp_test_mode'] ) ? absint( $params['frm_strp_test_mode'] ) : 0;

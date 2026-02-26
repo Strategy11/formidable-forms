@@ -444,10 +444,12 @@ class FrmFieldCombo extends FrmFieldType {
 
 		// Validate not empty.
 		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( empty( $sub_field['optional'] ) && empty( $args['value'][ $name ] ) ) {
-				$errors[ 'field' . $args['id'] . '-' . $name ] = '';
-				$errors[ 'field' . $args['id'] ]               = $blank_msg;
+			if ( ! empty( $sub_field['optional'] ) || ! empty( $args['value'][ $name ] ) ) {
+				continue;
 			}
+
+			$errors[ 'field' . $args['id'] . '-' . $name ] = '';
+			$errors[ 'field' . $args['id'] ]               = $blank_msg;
 		}
 
 		return $errors;

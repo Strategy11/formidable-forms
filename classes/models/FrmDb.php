@@ -732,10 +732,12 @@ class FrmDb {
 	 * @return void
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		if ( ! FrmAppHelper::prevent_caching() ) {
-			self::add_key_to_group_cache( $cache_key, $group );
-			wp_cache_set( $cache_key, $results, $group, $time );
+		if ( FrmAppHelper::prevent_caching() ) {
+			return;
 		}
+
+		self::add_key_to_group_cache( $cache_key, $group );
+		wp_cache_set( $cache_key, $results, $group, $time );
 	}
 
 	/**

@@ -194,10 +194,12 @@ class FrmAddonsController {
 
 		// Extract the elements to move
 		foreach ( $plans as $plan ) {
-			if ( isset( self::$categories[ $plan ] ) ) {
-				$bottom_categories[ $plan ] = self::$categories[ $plan ];
-				unset( self::$categories[ $plan ] );
+			if ( ! isset( self::$categories[ $plan ] ) ) {
+				continue;
 			}
+
+			$bottom_categories[ $plan ] = self::$categories[ $plan ];
+			unset( self::$categories[ $plan ] );
 		}
 
 		$special_categories = array();
