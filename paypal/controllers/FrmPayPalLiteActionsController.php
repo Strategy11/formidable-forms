@@ -168,6 +168,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				case 'paypal':
 					$display_type = __( 'PayPal', 'formidable' );
 					break;
+				case 'paylater':
+					$display_type = __( 'Pay Later', 'formidable' );
+					break;
 				default:
 					$display_type = ucwords( str_replace( '_', ' ', $source_type ) );
 					break;
