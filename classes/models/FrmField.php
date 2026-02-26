@@ -302,6 +302,13 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'appointment-field-preview.webp',
 				'learn-more'   => 'simply-schedule-appointments-forms',
 			),
+			'virtual'         => array(
+				'name'         => __( 'Virtual', 'formidable' ),
+				'icon'         => 'frmfont frm-virtual-field-icon',
+				'message'      => esc_html__( 'Protect sensitive data by storing field values server-side only, preventing users from viewing or manipulating them in their browser.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				'upsell_image' => $upsell_images_url . 'virtual-field-preview.webp',
+				'learn-more'   => '/virtual',
+			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
 				'icon'         => 'frmfont frm_product2_icon',
