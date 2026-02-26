@@ -41,26 +41,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 							<ul class="field_type_list frm_grid_container">
 								<?php
+								$field_sections = array();
 								foreach ( $frm_field_selection as $field_key => $field_type ) {
-									$field_label = FrmFormsHelper::get_field_link_name( $field_type );
-									$classes     = 'frmbutton frm6 frm_t' . $field_key;
+									// Skip showing field if it's in a section.
+									if ( isset( $field_type['section'] ) ) {
+										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
+											$field_sections[ $field_type['section'] ] = array();
+										}
 
-									if ( ! empty( $field_type['hide'] ) ) {
-										$classes .= ' frm_hidden';
+										// Mark this field as available when showing in later sections.
+										$field_type['is_available'] = true;
+
+										$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
+										continue;
 									}
-									?>
-									<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
-										<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
-											<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
-											<span><?php echo esc_html( $field_label ); ?></span>
-											<?php
-											if ( 'credit_card' === $field_key && ! FrmTransLiteAppHelper::payments_table_exists() ) {
-												FrmAppHelper::show_pill_text();
-											}
-											?>
-										</a>
-									</li>
-									<?php
+
+									$field_type['key'] = $field_key;
+									FrmFieldsHelper::show_add_field_link( $field_type );
 									unset( $field_key, $field_type );
 								}//end foreach
 								?>
@@ -79,10 +76,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								}
 
 								$pro_fields = FrmField::pro_field_selection();
-								// This is a Lite field. It's kept in pro_field_selection for backward compatibility.
+								// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
 								unset( $pro_fields['credit_card'] );
-
-								$field_sections = array();
+								unset( $pro_fields['product'] );
 
 								foreach ( $pro_fields as $field_key => $field_type ) {
 									if ( isset( $field_type['section'] ) ) {
@@ -129,9 +125,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</ul>
 							<div class="clear"></div>
 
-							<?php foreach ( $field_sections as $section_fields ) { ?>
+							<?php
+							$section_labels = FrmField::field_section_labels();
+							foreach ( $field_sections as $section => $section_fields ) { ?>
 								<h3 class="frm-with-line">
-									<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
+									<span><?php echo esc_html( isset( $section_labels[ $section ] ) ? $section_labels[ $section ] : ucwords( $section ) ); ?></span>
 									<span style="padding-left: 0;">
 										<?php FrmAppHelper::show_pill_text(); ?>
 									</span>
@@ -139,7 +137,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<ul class="field_type_list frm_grid_container">
 									<?php
 									foreach ( $section_fields as $field_key => $field_type ) {
-										FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
+										if ( ! empty( $field_type['is_available'] ) ) {
+											$field_type['key'] = $field_key;
+											FrmFieldsHelper::show_add_field_link( $field_type );
+										} else {
+											FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
+										}
 										unset( $field_key, $field_type );
 									}
 									?>

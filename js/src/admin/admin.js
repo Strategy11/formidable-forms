@@ -9676,6 +9676,36 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	function handleModalDismiss( input ) {
+		const modalDismissers = document.querySelectorAll( '#frm_info_modal .dismiss, #frm_info_modal #frm-info-click, .ui-widget-overlay.ui-front' );
+		function onModalClose() {
+			input.classList.add( 'frm_invalid_field' );
+			setTimeout( () => input.focus(), 0 );
+			modalDismissers.forEach( el => {
+				el.removeEventListener( 'click', onModalClose );
+			});
+		}
+
+		modalDismissers.forEach( el => {
+			el.addEventListener( 'click', onModalClose );
+		});
+	}
+
+	function validateProductPriceValue( target ) {
+		const price = target.value.trim();
+		if ( price.includes( '[' ) && price.includes( ']' ) ) {
+			// This is a shortcode and should be assumed a valid price.
+			return;
+		}
+		if ( isNaN( price.replace( /,/, '' ) ) ) {
+			const validationFailMessage = __( 'Please enter a valid number.', 'formidable-pro' );
+			frmAdminBuild.infoModal( validationFailMessage );
+			handleModalDismiss( target );
+			return;
+		}
+		target.classList.remove( 'frm_invalid_field' );
+	}
+
 	function toggleProductType() {
 		const settings = jQuery( this ).closest( '.frm-single-settings' ),
 			container = settings.find( '.frmjs_product_choices' ),
@@ -10618,6 +10648,7 @@ window.frmAdminBuildJS = function() {
 
 			popAllProductFields();
 
+			frmDom.util.documentOn( 'change', '.frm_product_price', validateProductPriceValue );
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
 			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );

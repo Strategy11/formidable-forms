@@ -89,6 +89,11 @@ class FrmField {
 				'icon' => 'frmfont frm-gdpr-icon',
 				'hide' => FrmFieldGdprHelper::hide_gdpr_field(),
 			),
+			'product'                      => array(
+				'name'    => __( 'Product', 'formidable' ),
+				'icon'    => 'frmfont frm_product2_icon',
+				'section' => 'pricing',
+			),
 		);
 
 		/**
@@ -344,6 +349,22 @@ class FrmField {
 		}
 
 		return apply_filters( 'frm_pro_available_fields', $fields );
+	}
+
+	/**
+	 * Gets field section labels in the form builder.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function field_section_labels() {
+		return apply_filters(
+			'frm_available_field_sections',
+			array(
+				'pricing' => __( 'Pricing Fields', 'formidable' ),
+			)
+		);
 	}
 
 	/**

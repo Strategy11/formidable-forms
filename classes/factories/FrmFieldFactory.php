@@ -105,6 +105,7 @@ class FrmFieldFactory {
 			// Submit button field.
 			FrmSubmitHelper::FIELD_TYPE    => 'FrmFieldSubmit',
 			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
+			'product'                      => 'FrmFieldProduct',
 		);
 
 		$class = $type_classes[ $field_type ] ?? '';
