@@ -94,7 +94,7 @@
 
 			cardElement.prepend( buttonContainer );
 
-			const renderPayPalButton = makeRenderPayPalButton( cardElement );
+			const renderPayPalButton = makeRenderPayPalButton( buttonContainer );
 			const fundingSources = [
 				paypal.FUNDING.BANCONTACT,
 				paypal.FUNDING.BLIK,
@@ -594,7 +594,7 @@
 		} );
 	}
 
-	function makeRenderPayPalButton( cardElement ) {
+	function makeRenderPayPalButton( buttonContainer ) {
 		const setting = getPayPalSettings()[ 0 ];
 		const isRecurring = 'single' !== setting.one;
 
@@ -622,7 +622,7 @@
 			const containerId = 'frm-paypal-button-' + fundingSource + '-container';
 			const container = document.createElement( 'div' );
 			container.id = containerId;
-			cardElement.prepend( container );
+			buttonContainer.prepend( container );
 
 			button.render( '#' + containerId );
 
