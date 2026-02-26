@@ -107,14 +107,16 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function append_file( $file_content ) {
-		if ( $this->has_permission ) {
-			if ( file_exists( $this->new_file_path ) ) {
-				$existing_content = $this->get_contents();
-				$file_content     = $existing_content . $file_content;
-			}
-
-			$this->create_file( $file_content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		if ( file_exists( $this->new_file_path ) ) {
+			$existing_content = $this->get_contents();
+			$file_content     = $existing_content . $file_content;
+		}
+
+		$this->create_file( $file_content );
 	}
 
 	/**
@@ -127,14 +129,16 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function combine_files( $file_names ) {
-		if ( $this->has_permission ) {
-			$content = '';
-
-			foreach ( $file_names as $file_name ) {
-				$content .= $this->get_contents( $file_name ) . "\n";
-			}
-			$this->create_file( $content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		$content = '';
+
+		foreach ( $file_names as $file_name ) {
+			$content .= $this->get_contents( $file_name ) . "\n";
+		}
+		$this->create_file( $content );
 	}
 
 	/**

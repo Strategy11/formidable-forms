@@ -168,7 +168,6 @@
 
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
 		<properties>
-			<property name="ignoreStandaloneIfInScope" value="true" />
 			<property name="ignoreOneLineTrailingIf" value="true" />
 			<property name="ignoreTrailingIfWithOneInstruction" value="true" />
 		</properties>

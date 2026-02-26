@@ -592,10 +592,12 @@ class FrmFormTemplatesController {
 	 */
 	private static function assign_featured_templates() {
 		foreach ( self::FEATURED_TEMPLATES_IDS as $key ) {
-			if ( isset( self::$templates[ $key ] ) ) {
-				self::$templates[ $key ]['is_featured'] = true;
-				self::$featured_templates[]             = self::$templates[ $key ];
+			if ( ! isset( self::$templates[ $key ] ) ) {
+				continue;
 			}
+
+			self::$templates[ $key ]['is_featured'] = true;
+			self::$featured_templates[]             = self::$templates[ $key ];
 		}
 	}
 

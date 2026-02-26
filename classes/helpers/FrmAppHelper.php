@@ -1514,10 +1514,12 @@ class FrmAppHelper {
 	 */
 	public static function array_to_html_params( $atts, $echo = false ) {
 		$callback = function () use ( $atts ) {
-			if ( $atts ) {
-				foreach ( $atts as $key => $value ) {
-					echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
-				}
+			if ( ! $atts ) {
+				return;
+			}
+
+			foreach ( $atts as $key => $value ) {
+				echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 			}
 		};
 		return self::clip( $callback, $echo );
@@ -2355,13 +2357,15 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function force_capability( $cap = 'frm_change_settings' ) {
-		if ( current_user_can( 'administrator' ) && ! current_user_can( $cap ) ) {
-			$role      = get_role( 'administrator' );
-			$frm_roles = self::frm_capabilities();
+		if ( ! current_user_can( 'administrator' ) || current_user_can( $cap ) ) {
+			return;
+		}
 
-			foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-				$role->add_cap( $frm_role );
-			}
+		$role      = get_role( 'administrator' );
+		$frm_roles = self::frm_capabilities();
+
+		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+			$role->add_cap( $frm_role );
 		}
 	}
 
