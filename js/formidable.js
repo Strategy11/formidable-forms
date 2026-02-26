@@ -1752,6 +1752,27 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Detects inline submit buttons by comparing vertical position with the previous sibling field.
+	 * Adds 'frm_aligned_submit' class when the submit button shares the same row as its sibling.
+	 *
+	 * @since 6.26
+	 *
+	 * @returns {void}
+	 */
+	function maybeMarkInlineSubmit() {
+		document.querySelectorAll( '.frm-show-form .frm_submit' ).forEach( function( submitContainer ) {
+			const previousSibling = submitContainer.previousElementSibling;
+			if ( ! previousSibling ) {
+				return;
+			}
+
+			if ( submitContainer.offsetTop === previousSibling.offsetTop ) {
+				submitContainer.classList.add( 'frm_aligned_submit' );
+			}
+		});
+	}
+
 	return {
 		init() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1785,6 +1806,8 @@ function frmFrontFormJS() {
 				'frmPageChanged',
 				destroyhCaptcha
 			);
+
+			maybeMarkInlineSubmit();
 		},
 
 		getFieldId,
