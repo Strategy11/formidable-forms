@@ -143,8 +143,16 @@ class FrmStrpLiteAppHelper {
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 			<span>
 				<?php
-				/* translators: %1$s: Link HTML, %2$s: End link */
-				printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s or %3$sconnecting Square%4$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>', '<a href="?page=formidable-settings&t=square_settings" target="_blank">', '</a>' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				printf(
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					esc_html__( 'Credit Cards will not work without sconnecting %1$sStripe%2$s, %3$sSquare%4$s, or %5$sPayPal%6$s first.', 'formidable' ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) ) . '" target="_blank">', // %1$s
+					'</a>', // %2$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=square_settings' ) ) . '" target="_blank">', // %3$s
+					'</a>', // %4$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=paypal_settings' ) ) . '" target="_blank">', // %5$s
+					'</a>' // %6$s
+				);
 				?>
 			</span>
 		</div>
