@@ -283,6 +283,8 @@
 
 			const googlePayContainer = document.createElement( 'div' );
 			googlePayContainer.id = 'frm-google-pay-container';
+			googlePayContainer.style.height = '55px'; // Make the button the same height as other PayPal buttons.
+			googlePayContainer.style.marginBottom = '6px'; // Make sure the button has some extra space below it.
 			paypalButtonContainer.prepend( googlePayContainer );
 
 			const buttonOptions = Object.assign(
