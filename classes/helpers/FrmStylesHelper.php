@@ -481,6 +481,19 @@ class FrmStylesHelper {
 
 		$vars = array_diff( $vars, self::get_style_keys_to_remove_from_output_vars() );
 
+		/**
+		 * Filters the CSS settings to output for a style.
+		 *
+		 * Allows add-ons and external plugins to add or modify the list
+		 * of CSS custom property keys before they are rendered.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $settings The current style settings.
+		 * @param array $defaults The default style settings.
+		 */
+		$settings = apply_filters( 'frm_style_settings_output_css_vars', $settings, $defaults );
+
 		foreach ( $vars as $var ) {
 			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
 				continue;
