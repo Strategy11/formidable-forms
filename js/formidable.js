@@ -1678,6 +1678,27 @@ function frmFrontFormJS() {
 		} );
 	}
 
+	function maybeUpdateInlineSubmitButtonLayout() {
+		const submitButtons = document.querySelectorAll( '.frm-show-form .frm_button_submit' );
+		if ( submitButtons.length === 0 ) {
+			return;
+		}
+
+		submitButtons.forEach( button => {
+			const submitContainer = button.closest( '.frm_form_field' );
+			const previousSibling = submitContainer.previousElementSibling;
+			if ( getTopPositionOfElement( submitContainer ) === getTopPositionOfElement( previousSibling ) ) {
+				// If the submit button is inline with other fields, vertically align it with other fields in the same row.
+				submitContainer.classList.add( 'frm_inline_submit_button' );
+			}
+		} );
+	}
+
+	function getTopPositionOfElement( element ) {
+		const rect = element.getBoundingClientRect();
+		return rect.top;
+	}
+
 	/**
 	 * Destroys the formidable generated global hcaptcha object since it wouldn't otherwise render.
 	 */
@@ -1785,6 +1806,7 @@ function frmFrontFormJS() {
 				'frmPageChanged',
 				destroyhCaptcha
 			);
+			maybeUpdateInlineSubmitButtonLayout();
 		},
 
 		getFieldId,
