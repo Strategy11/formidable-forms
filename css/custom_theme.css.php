@@ -146,6 +146,7 @@ legend.frm_hidden{
 <?php if ( ! empty( $defaults['form_desc_size'] ) ) { ?>
 .with_frm_style .frm_form_field.frm_html_container{
 	font-size: var(--form-desc-size)<?php echo esc_html( $important ); ?>;
+	overflow-wrap: break-word<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
 
