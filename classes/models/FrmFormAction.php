@@ -142,6 +142,14 @@ class FrmFormAction {
 		}
 
 		$this->id_base     = strtolower( $id_base );
+
+		/**
+		 * @since x.x
+		 *
+		 * @param string $name
+		 */
+		$name = apply_filters( 'frm_' . $id_base . '_action_name', $name );
+
 		$this->name        = $name;
 		$this->option_name = 'frm_' . $this->id_base . '_action';
 

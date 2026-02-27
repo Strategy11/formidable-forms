@@ -29,6 +29,10 @@ class FrmPayPalLiteHooksController {
 		add_filter( 'frm_add_settings_section', 'FrmPayPalLiteSettingsController::add_settings_section', 99 );
 		add_action( 'frm_update_settings', 'FrmPayPalLiteSettingsController::process_form' );
 
+		add_filter( 'frm_paypal_action_name', function () {
+			return 'PayPal Commerce';
+		} );
+
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}

@@ -57,6 +57,7 @@ class FrmFormActionsController {
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'paypal'            => 'FrmDefPayPalAction',
+			'paypal-legacy'     => 'FrmDefPayPalLegacyAction',
 			'stripe'            => 'FrmDefStripeAction',
 			'square'            => 'FrmDefSquareAction',
 			'payment'           => 'FrmTransLiteAction',
@@ -78,6 +79,10 @@ class FrmFormActionsController {
 			'convertkit'        => 'FrmDefConvertKitAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
+
+		if ( ! class_exists( 'FrmPaymentsController' ) ) {
+			unset( $action_classes['paypal-legacy'] );
+		}
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 		$action_classes = self::maybe_unset_highrise( $action_classes );
@@ -185,6 +190,7 @@ class FrmFormActionsController {
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
 				'actions' => array(
 					'paypal',
+					'paypal-legacy',
 					'stripe',
 					'square',
 					'payment',

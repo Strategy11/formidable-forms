@@ -1846,12 +1846,12 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	public static function maybe_modify_new_action_post_data() {
 		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 
-		if ( ! in_array( $action_type, array( 'paypal', 'stripe', 'square' ), true ) ) {
+		if ( 'paypal-legacy' === $action_type ) {
+			$_POST['type'] = 'paypal';
 			return;
 		}
 
-		if ( 'paypal' === $action_type && class_exists( 'FrmPaymentsController' ) ) {
-			// Do not override the action if the PayPal plugin is active.
+		if ( ! in_array( $action_type, array( 'paypal', 'stripe', 'square' ), true ) ) {
 			return;
 		}
 

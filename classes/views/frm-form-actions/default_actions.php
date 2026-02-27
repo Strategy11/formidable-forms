@@ -41,6 +41,20 @@ class FrmDefPayPalAction extends FrmFormAction {
 	}
 }
 
+/**
+ * Add paypal legacy action.
+ */
+class FrmDefPayPalLegacyAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = array(
+			'classes' => 'frmfont frm_paypal_icon frm-inverse',
+			'color'   => 'var(--primary-700)',
+		);
+
+		parent::__construct( 'paypal-legacy', 'PayPal (Legacy)', $action_ops );
+	}
+}
+
 class FrmDefStripeAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = array(
