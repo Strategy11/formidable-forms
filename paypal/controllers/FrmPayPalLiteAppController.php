@@ -208,7 +208,7 @@ class FrmPayPalLiteAppController {
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$payer, $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
 			return;
 		}
 
@@ -224,13 +224,13 @@ class FrmPayPalLiteAppController {
 			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
 		}
 
-		if ( ! $address['line1'] && ! $address['line2'] && ! $address['city'] && ! $address['state'] && ! $address['zip'] && ! $country_code ) {
+		if ( ! $address['line1'] || ! $address['city'] || ! $address['state'] || ! $address['zip'] || ! $country_code ) {
 			return;
 		}
 
 		$payer['address'] = array(
 			'address_line_1' => $address['line1'],
-			'address_line_2' => $address['line2'],
+			'address_line_2' => $address['line2'] ?? '',
 			'admin_area_2'   => $address['city'],
 			'admin_area_1'   => $address['state'],
 			'postal_code'    => $address['zip'],
