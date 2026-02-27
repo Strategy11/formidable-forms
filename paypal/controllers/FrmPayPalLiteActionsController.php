@@ -263,8 +263,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'This payment was flagged as possible fraud and has been rejected.';
 		}
 
-		// TODO: Verify the order status here.
-		// TODO: Verify the order amount here.
+		if ( ! self::validate_order_status( $order ) ) {
+			return 'This order status is not valid for capture.';
+		}
+
+		if ( ! self::validate_order_amount( $order, $atts['amount'] ) ) {
+			return 'This order amount appears to be tampered with.';
+		}
 
 		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
 
@@ -329,6 +334,34 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$liability_shift,
 			$order
 		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $order
+	 *
+	 * @return bool
+	 */
+	private static function validate_order_status( $order ) {
+		return isset( $order->status ) && 'APPROVED' === $order->status;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $order
+	 * @param string   $expected_amount This is as a whole number (in cents for currencies that include decimals).
+	 *
+	 * @return bool
+	 */
+	private static function validate_order_amount( $order, $expected_amount ) {		
+		$order_amount = isset( $order->purchase_units[0]->amount->value ) ? $order->purchase_units[0]->amount->value : '';
+
+		// The order amount is in dollars, but the expected amount is in cents, so we need to convert.
+		$order_amount = str_replace( '.', '', $order_amount );
+
+		return $order_amount === $expected_amount;
 	}
 
 	/**
