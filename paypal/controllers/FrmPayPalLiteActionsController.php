@@ -259,29 +259,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'Failed to get order.';
 		}
 
-		if ( isset( $order->payment_source->card->authentication_result->liability_shift ) ) {
-			$liability_shift    = $order->payment_source->card->authentication_result->liability_shift;
-			$is_liability_error = 'NO' === $liability_shift || 'UNKNOWN' === $liability_shift;
-
-			/**
-			 * Filters whether the liability shift is an error.
-			 *
-			 * @since x.x
-			 *
-			 * @param bool   $is_liability_error Whether the liability shift is an error.
-			 * @param string $liability_shift    The liability shift value. By default 'NO' and 'UNKNOWN' are errors.
-			 * @param object $order              The order object.
-			 */
-			$is_liability_error = apply_filters(
-				'frm_paypal_is_liability_error',
-				$is_liability_error,
-				$liability_shift,
-				$order
-			);
-
-			if ( $is_liability_error ) {
-				return 'This payment was flagged as possible fraud and has been rejected.';
-			}
+		if ( self::is_liability_error( $order ) ) {
+			return 'This payment was flagged as possible fraud and has been rejected.';
 		}
 
 		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
@@ -313,6 +292,38 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
 
 		return true;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $order The order object.
+	 *
+	 * @return bool
+	 */
+	private static function is_liability_error( $order ) {
+		if ( ! isset( $order->payment_source->card->authentication_result->liability_shift ) ) {
+			return false;
+		}
+
+		$liability_shift    = $order->payment_source->card->authentication_result->liability_shift;
+		$is_liability_error = 'NO' === $liability_shift || 'UNKNOWN' === $liability_shift;
+
+		/**
+		 * Filters whether the liability shift is an error.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $is_liability_error Whether the liability shift is an error.
+		 * @param string $liability_shift    The liability shift value. By default 'NO' and 'UNKNOWN' are errors.
+		 * @param object $order              The order object.
+		 */
+		return (bool) apply_filters(
+			'frm_paypal_is_liability_error',
+			$is_liability_error,
+			$liability_shift,
+			$order
+		);
 	}
 
 	/**
