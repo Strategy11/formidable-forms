@@ -154,10 +154,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			if ( ! empty( $payer->email_address ) ) {
 				$email = $payer->email_address;
 			}
+		}
 
-			if ( ! empty( $payer->address ) && is_object( $payer->address ) ) {
-				$address = $payer->address;
-			}
+		if ( is_object( $order ) && ! empty( $order->purchase_units[0]->shipping->address ) && is_object( $order->purchase_units[0]->shipping->address ) ) {
+			$address = $order->purchase_units[0]->shipping->address;
 		}
 
 		$paypal_message = '';
@@ -263,6 +263,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'This payment was flagged as possible fraud and has been rejected.';
 		}
 
+		// TODO: Verify the order status here.
+		// TODO: Verify the order amount here.
+
 		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
 
 		if ( false === $response ) {
@@ -274,6 +277,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$capture_id = self::get_capture_id_from_response( $response );
+
+		self::sync_entry_data_with_capture_response( $response, $atts );
 
 		// Create a payment record.
 		$atts['status']         = 'complete';
@@ -355,6 +360,154 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Sync the entry data with the capture response.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $response The response object.
+	 * @param array  $atts     The arguments for the payment.
+	 *
+	 * @return void
+	 */
+	private static function sync_entry_data_with_capture_response( $response, $atts ) {
+		$entry  = $atts['entry'];
+		$action = $atts['action'];
+
+		if ( ! isset( $response->payer ) || ! is_object( $response->payer ) ) {
+			return;
+		}
+
+		$payer   = $response->payer;
+		$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
+
+		foreach ( $updates as $field_id => $new_value ) {
+			FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value );
+		}
+
+		if ( class_exists( 'FrmLog' ) ) {
+			$log = new FrmLog();
+			$log->add(
+				array(
+					'title'   => 'PayPal Lite: Sync Entry Data with Capture Response',
+					'content' => print_r( $updates, true ),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Build an array of field updates by comparing payer response data against current entry metas.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $payer    The payer object from the PayPal response.
+	 * @param stdClass $response The full capture response.
+	 * @param WP_Post  $action   The payment action.
+	 * @param stdClass $entry    The entry object.
+	 *
+	 * @return array<int,mixed> Field ID => new value pairs that differ from the current entry data.
+	 */
+	private static function get_payer_field_updates( $payer, $response, $action, $entry ) {
+		$updates  = array();
+		$settings = $action->post_content;
+
+		// Email: setting is a shortcode like [25], extract the field ID.
+		if ( ! empty( $settings['email'] ) && preg_match( '/\[(\d+)\]/', $settings['email'], $matches ) ) {
+			$email_field_id = (int) $matches[1];
+			if ( ! empty( $payer->email_address ) ) {
+				$current = $entry->metas[ $email_field_id ] ?? '';
+				if ( $current !== $payer->email_address ) {
+					$updates[ $email_field_id ] = $payer->email_address;
+				}
+			}
+		}
+
+		// Name fields.
+		if ( isset( $payer->name ) ) {
+			$first_name_field_id = ! empty( $settings['billing_first_name'] ) ? (int) $settings['billing_first_name'] : 0;
+			$last_name_field_id  = ! empty( $settings['billing_last_name'] ) ? (int) $settings['billing_last_name'] : 0;
+
+			if ( $first_name_field_id && $first_name_field_id === $last_name_field_id ) {
+				// Both settings point to the same Name field. Store as a serialized array.
+				$new_value = array(
+					'first' => ! empty( $payer->name->given_name ) ? $payer->name->given_name : '',
+					'last'  => ! empty( $payer->name->surname ) ? $payer->name->surname : '',
+				);
+				$current   = $entry->metas[ $first_name_field_id ] ?? array();
+				if ( $current !== $new_value ) {
+					$updates[ $first_name_field_id ] = $new_value;
+				}
+			} else {
+				// Separate text fields for first and last name.
+				if ( $first_name_field_id && ! empty( $payer->name->given_name ) ) {
+					$current = $entry->metas[ $first_name_field_id ] ?? '';
+					if ( $current !== $payer->name->given_name ) {
+						$updates[ $first_name_field_id ] = $payer->name->given_name;
+					}
+				}
+
+				if ( $last_name_field_id && ! empty( $payer->name->surname ) ) {
+					$current = $entry->metas[ $last_name_field_id ] ?? '';
+					if ( $current !== $payer->name->surname ) {
+						$updates[ $last_name_field_id ] = $payer->name->surname;
+					}
+				}
+			}
+		}
+
+		// Address: pull from the first purchase unit's shipping address.
+		if ( ! empty( $settings['billing_address'] ) ) {
+			$field_id = (int) $settings['billing_address'];
+			$shipping = self::get_shipping_address_from_response( $response );
+
+			if ( $shipping ) {
+				$new_value = array(
+					'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
+					'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
+					'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
+					'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
+					'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
+					'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
+				);
+
+				if ( ! array_filter( $new_value ) ) {
+					return $updates;
+				}
+
+				$current = $entry->metas[ $field_id ] ?? array();
+				if ( $current !== $new_value ) {
+					$updates[ $field_id ] = $new_value;
+				}
+			}
+		}
+
+		return $updates;
+	}
+
+	/**
+	 * Get the shipping address object from the first purchase unit in the response.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $response The capture response.
+	 *
+	 * @return object|false The address object, or false if not available.
+	 */
+	private static function get_shipping_address_from_response( $response ) {
+		if ( empty( $response->purchase_units ) || ! is_array( $response->purchase_units ) ) {
+			return false;
+		}
+
+		$purchase_unit = reset( $response->purchase_units );
+
+		if ( empty( $purchase_unit->shipping ) || ! is_object( $purchase_unit->shipping ) || empty( $purchase_unit->shipping->address ) ) {
+			return false;
+		}
+
+		return $purchase_unit->shipping->address;
 	}
 
 	/**
