@@ -260,9 +260,26 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( isset( $order->payment_source->card->authentication_result->liability_shift ) ) {
-			$liability_shift = $order->payment_source->card->authentication_result->liability_shift;
+			$liability_shift    = $order->payment_source->card->authentication_result->liability_shift;
+			$is_liability_error = 'NO' === $liability_shift || 'UNKNOWN' === $liability_shift;
 
-			if ( 'NO' === $liability_shift || 'UNKNOWN' === $liability_shift ) {
+			/**
+			 * Filters whether the liability shift is an error.
+			 *
+			 * @since x.x
+			 *
+			 * @param bool   $is_liability_error Whether the liability shift is an error.
+			 * @param string $liability_shift    The liability shift value. By default 'NO' and 'UNKNOWN' are errors.
+			 * @param object $order              The order object.
+			 */
+			$is_liability_error = apply_filters(
+				'frm_paypal_is_liability_error',
+				$is_liability_error,
+				$liability_shift,
+				$order
+			);
+
+			if ( $is_liability_error ) {
 				return 'This payment was flagged as possible fraud and has been rejected.';
 			}
 		}
