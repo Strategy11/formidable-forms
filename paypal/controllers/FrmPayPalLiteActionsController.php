@@ -542,8 +542,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				break;
 		}
 
-		$components[] = 'googlepay';
-
+		$components[]             = 'googlepay';
 		$query_args['components'] = implode( ',', $components );
 		$locale                   = self::get_paypal_locale();
 

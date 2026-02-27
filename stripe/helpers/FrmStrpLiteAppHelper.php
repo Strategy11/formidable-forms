@@ -146,12 +146,18 @@ class FrmStrpLiteAppHelper {
 				printf(
 					/* translators: %1$s: Link HTML, %2$s: End link */
 					esc_html__( 'Credit Cards will not work without sconnecting %1$sStripe%2$s, %3$sSquare%4$s, or %5$sPayPal%6$s first.', 'formidable' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) ) . '" target="_blank">', // %1$s
-					'</a>', // %2$s
-					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=square_settings' ) ) . '" target="_blank">', // %3$s
-					'</a>', // %4$s
-					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=paypal_settings' ) ) . '" target="_blank">', // %5$s
-					'</a>' // %6$s
+					// %1$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) ) . '" target="_blank">',
+					// %2$s
+					'</a>',
+					// %3$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=square_settings' ) ) . '" target="_blank">',
+					// %4$s
+					'</a>',
+					// %5$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=paypal_settings' ) ) . '" target="_blank">',
+					// %6$s
+					'</a>'
 				);
 				?>
 			</span>
