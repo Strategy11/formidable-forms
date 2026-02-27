@@ -311,3 +311,10 @@ span.frm-inner-circle.frm-inverse {
 .frm_actions_list .frm_inactive_action i {
 	opacity: 0.4;
 }
+
+.frm_square_action .frm_square_icon {
+	position: relative;
+	top: 2px;
+	left: 1px;
+	zoom: 1.2;
+}
