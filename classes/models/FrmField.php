@@ -690,13 +690,15 @@ class FrmField {
 
 		// Serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
-			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
-				if ( 'field_options' === $opt ) {
-					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
-				}
-
-				$values[ $opt ] = serialize( $values[ $opt ] );
+			if ( ! isset( $values[ $opt ] ) || ! is_array( $values[ $opt ] ) ) {
+				continue;
 			}
+
+			if ( 'field_options' === $opt ) {
+				$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
+			}
+
+			$values[ $opt ] = serialize( $values[ $opt ] );
 		}
 
 		if ( isset( $values['default_value'] ) && is_array( $values['default_value'] ) ) {
@@ -1001,15 +1003,17 @@ class FrmField {
 	 * @return void
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
-		if ( $inc_repeat === 'include' ) {
-			$form_id = $where['fi.form_id'];
-			$where[] = array(
-				'or'                => 1,
-				'fi.form_id'        => $form_id,
-				'fr.parent_form_id' => $form_id,
-			);
-			unset( $where['fi.form_id'] );
+		if ( $inc_repeat !== 'include' ) {
+			return;
 		}
+
+		$form_id = $where['fi.form_id'];
+		$where[] = array(
+			'or'                => 1,
+			'fi.form_id'        => $form_id,
+			'fr.parent_form_id' => $form_id,
+		);
+		unset( $where['fi.form_id'] );
 	}
 
 	/**

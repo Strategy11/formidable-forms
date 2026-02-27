@@ -765,14 +765,16 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function maybe_block_preview( $form_key ) {
-		if ( FrmFormsHelper::should_block_preview( $form_key ) ) {
-			$error = __( 'You do not have permission to view this form', 'formidable' );
-			wp_die(
-				'<h1>' . esc_html( $error ) . '</h1>',
-				'<p>' . esc_html( $error ) . '</p>',
-				403
-			);
+		if ( ! FrmFormsHelper::should_block_preview( $form_key ) ) {
+			return;
 		}
+
+		$error = __( 'You do not have permission to view this form', 'formidable' );
+		wp_die(
+			'<h1>' . esc_html( $error ) . '</h1>',
+			'<p>' . esc_html( $error ) . '</p>',
+			403
+		);
 	}
 
 	/**
@@ -1996,13 +1998,15 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function get_entry_by_param( &$entry ) {
-		if ( ! $entry || ! is_object( $entry ) ) {
-			if ( ! $entry || ! is_numeric( $entry ) ) {
-				$entry = FrmAppHelper::get_post_param( 'id', false, 'sanitize_title' );
-			}
-
-			FrmEntry::maybe_get_entry( $entry );
+		if ( $entry && is_object( $entry ) ) {
+			return;
 		}
+
+		if ( ! $entry || ! is_numeric( $entry ) ) {
+			$entry = FrmAppHelper::get_post_param( 'id', false, 'sanitize_title' );
+		}
+
+		FrmEntry::maybe_get_entry( $entry );
 	}
 
 	/**

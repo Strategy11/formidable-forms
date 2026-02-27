@@ -801,12 +801,14 @@ class FrmFormAction {
 		$action->post_content += $default_values;
 
 		foreach ( $default_values as $k => $vals ) {
-			if ( is_array( $vals ) && $vals ) {
-				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
-					continue;
-				}
-				$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );
+			if ( ! is_array( $vals ) || ! $vals ) {
+				continue;
 			}
+
+			if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
+				continue;
+			}
+			$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );
 		}
 
 		if ( ! is_array( $action->post_content['event'] ) ) {
@@ -907,10 +909,12 @@ class FrmFormAction {
 
 		// Fill with existing options
 		foreach ( $action->post_content as $name => $val ) {
-			if ( isset( $form->options[ $name ] ) ) {
-				$action->post_content[ $name ] = $form->options[ $name ];
-				unset( $form->options[ $name ] );
+			if ( ! isset( $form->options[ $name ] ) ) {
+				continue;
 			}
+
+			$action->post_content[ $name ] = $form->options[ $name ];
+			unset( $form->options[ $name ] );
 		}
 
 		$action = $this->migrate_values( $action, $form );
