@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @since 4.04
  */
-class FrmProFieldQuantity extends FrmProFieldNumber {
+class FrmFieldQuantity extends FrmFieldNumber {
 
 	protected $type = 'quantity';
 
@@ -42,7 +42,7 @@ class FrmProFieldQuantity extends FrmProFieldNumber {
 		$field = $args['field'];
 		// Cast to array cos of existing fields that are already using single product fields in production
 		$field['product_field'] = $field['product_field'] ? (array) $field['product_field'] : array();
-		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/quantity-options.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/quantity-options.php';
 
 		parent::show_primary_options( $args );
 	}

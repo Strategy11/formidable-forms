@@ -79,6 +79,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 								// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
 								unset( $pro_fields['credit_card'] );
 								unset( $pro_fields['product'] );
+								unset( $pro_fields['quantity'] );
+								unset( $pro_fields['total'] );
 
 								foreach ( $pro_fields as $field_key => $field_type ) {
 									if ( isset( $field_type['section'] ) ) {

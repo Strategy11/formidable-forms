@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since 4.04
+ * @since x.x
  */
-class FrmProFieldTotal extends FrmProFieldText {
+class FrmFieldTotal extends FrmFieldText {
 
 	protected $type = 'total';
 
@@ -42,7 +42,6 @@ DEFAULT_HTML;
 		$settings['autopopulate']   = false;
 		$settings['max']            = false;
 
-		FrmProFieldsHelper::fill_default_field_display( $settings );
 		return $settings;
 	}
 
@@ -51,7 +50,7 @@ DEFAULT_HTML;
 	}
 
 	protected function include_form_builder_file() {
-		return FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/field-total.php';
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-total.php';
 	}
 
 	public function validate( $args ) {
@@ -78,14 +77,6 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function validate_total( $errors, $form ) {
-		$form_id            = is_array( $form ) ? $form['id'] : $form->id;
-		$is_repeating_total = $form_id != $this->get_field_column( 'form_id' );
-		$going_backwards    = FrmProFormsHelper::going_to_prev( $form_id );
-
-		if ( $going_backwards ) {
-			return array();
-		}
-
 		$value = $this->posted_value_args['value'];
 
 		// Check for conditional logic.
@@ -98,7 +89,7 @@ DEFAULT_HTML;
 		global $frm_products;
 
 		$sum      = 0.0;
-		$currency = FrmProCurrencyHelper::get_currency( $form );
+		$currency = FrmCurrencyHelper::get_currency();
 
 		// Set a decimal separator for currency if no default for it.
 		// first remove unnecessary space(s).
@@ -117,15 +108,10 @@ DEFAULT_HTML;
 				continue;
 			}
 
-			// Total fields inside repeaters are for their corresponding rows only.
-			if ( $is_repeating_total && ! $this->is_repeating_with_total( $price_quantity ) ) {
-				continue;
-			}
-
 			$quantity = $this->get_quantity_for_validation( $price_quantity );
 
 			if ( ! is_array( $price_quantity['price'] ) ) {
-				$price = FrmProCurrencyHelper::prepare_price( $price_quantity['price'], $currency );
+				$price = FrmCurrencyHelper::prepare_price( $price_quantity['price'], $currency );
 				$sum  += (float) $price * (float) $quantity;
 				continue;
 			}
@@ -133,7 +119,7 @@ DEFAULT_HTML;
 			// checkboxes
 
 			foreach ( $price_quantity['price'] as $price ) {
-				$price = FrmProCurrencyHelper::prepare_price( $price, $currency );
+				$price = FrmCurrencyHelper::prepare_price( $price, $currency );
 				$sum  += (float) $price * (float) $quantity;
 			}
 		}
@@ -141,28 +127,20 @@ DEFAULT_HTML;
 		$sum = $currency['decimals'] > 0 ? round( $sum, $currency['decimals'] ) : ceil( $sum );
 
 		/**
-		 * @since 6.25.1
+		 * @since x.x
 		 *
 		 * @param float          $sum
 		 * @param array|object   $field
 		 * @param array|stdClass $form
 		 */
 		$sum    = apply_filters( 'frm_field_total_expected_sum', $sum, $this->field, $form );
-		$posted = (float) FrmProCurrencyHelper::prepare_price( $value, $currency );
+		$posted = (float) FrmCurrencyHelper::prepare_price( $value, $currency );
 
 		if ( $posted === $sum ) {
 			return $errors;
 		}
 
 		$error_key = 'field' . $this->get_field_column( 'id' );
-
-		if ( $is_repeating_total ) {
-			$error_key .= sprintf(
-				'-%s-%s',
-				$this->posted_value_args['parent_field_id'],
-				$this->posted_value_args['key_pointer']
-			);
-		}
 
 		$errors[ $error_key ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 
@@ -190,16 +168,6 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @return bool
-	 */
-	private function is_repeating_with_total( $price_quantity ) {
-		return isset( $price_quantity['parent_field_id'] ) &&
-				$price_quantity['parent_field_id'] == $this->posted_value_args['parent_field_id'] &&
-				isset( $price_quantity['key_pointer'] ) &&
-				$price_quantity['key_pointer'] == $this->posted_value_args['key_pointer'];
-	}
-
-	/**
 	 * {@inheritdoc}
 	 */
 	protected function prepare_display_value( $value, $atts ) {
@@ -208,10 +176,10 @@ DEFAULT_HTML;
 		}
 
 		$form_id  = $this->get_field_column( 'form_id' );
-		$currency = FrmProCurrencyHelper::get_currency( $form_id );
-		$currency = FrmProCurrencyHelper::apply_shortcode_atts( $currency, $atts );
+		$currency = FrmCurrencyHelper::get_currency();
+		// $currency = FrmProCurrencyHelper::apply_shortcode_atts( $currency, $atts );
 
-		return FrmProCurrencyHelper::format_amount_for_currency( $form_id, $value, $currency );
+		return FrmCurrencyHelper::format_price( $value, $currency );
 	}
 
 	public function get_builder_display_value() {

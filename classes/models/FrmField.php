@@ -94,6 +94,16 @@ class FrmField {
 				'icon'    => 'frmfont frm_product2_icon',
 				'section' => 'pricing',
 			),
+			'quantity'                     => array(
+				'name'    => __( 'Quantity', 'formidable' ),
+				'icon'    => 'frmfont frm_quantity_icon',
+				'section' => 'pricing',
+			),
+			'total'                        => array(
+				'name'    => __( 'Total', 'formidable' ),
+				'icon'    => 'frmfont frm_total2_icon',
+				'section' => 'pricing',
+			),
 		);
 
 		/**

@@ -10,11 +10,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmCurrencyHelper {
 
 	/**
-	 * @param string $currency
+	 * Gets the currency data from the currency code.
+	 *
+	 * @since x.x The first parameter is optional.
+	 *
+	 * @param string|null $currency Currency code. Default is `null`, which use the currency in the global settings.
 	 *
 	 * @return array
 	 */
-	public static function get_currency( $currency ) {
+	public static function get_currency( $currency = null ) {
+		if ( ! $currency ) {
+			$settings = FrmAppHelper::get_settings();
+			$currency = trim( $settings->currency );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'USD';
+		}
+
 		$currency   = strtoupper( $currency );
 		$currencies = self::get_currencies();
 
@@ -40,6 +53,69 @@ class FrmCurrencyHelper {
 	 */
 	public static function is_currency_format( $format_value ) {
 		return in_array( $format_value, array( 'currency', 'number' ), true );
+	}
+
+	public static function format_price( $amount, $currency ) {
+		if ( is_string( $amount ) ) {
+			$amount = floatval( self::prepare_price( $amount, $currency ) );
+		}
+
+		$amount = number_format( $amount, $currency['decimals'], $currency['decimal_separator'], $currency['thousand_separator'] );
+
+		if ( '' !== $currency['symbol_left'] ) {
+			$amount = $currency['symbol_left'] . $currency['symbol_padding'] . $amount;
+		}
+
+		if ( '' !== $currency['symbol_right'] ) {
+			$amount .= $currency['symbol_padding'] . $currency['symbol_right'];
+		}
+
+		return $amount;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $price
+	 * @param array  $currency
+	 */
+	public static function prepare_price( $price, $currency ) {
+		$price = trim( $price );
+
+		if ( ! $price ) {
+			return 0;
+		}
+
+		preg_match_all( '/[\-]*[0-9,.]*\.?\,?[0-9]+/', $price, $matches );
+		$price = $matches ? end( $matches[0] ) : 0;
+
+		if ( $price ) {
+			$price = self::maybe_use_decimal( $price, $currency );
+			$price = str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
+		}
+
+		return $price;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $amount
+	 * @param array  $currency
+	 */
+	private static function maybe_use_decimal( $amount, $currency ) {
+		if ( $currency['thousand_separator'] !== '.' ) {
+			return $amount;
+		}
+
+		$amount_parts     = explode( '.', $amount );
+		$used_for_decimal = count( $amount_parts ) === 2 && in_array( strlen( $amount_parts[1] ), array( 1, 2 ), true );
+
+		if ( $used_for_decimal ) {
+			return str_replace( '.', $currency['decimal_separator'], $amount );
+		}
+
+		return $amount;
 	}
 
 	/**
