@@ -2332,11 +2332,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		for ( let i = 0; i < opts.length; i++ ) {
-			if ( hide ) {
-				opts[ i ].classList.add( 'frm_hidden' );
-			} else {
-				opts[ i ].classList.remove( 'frm_hidden' );
-			}
+			opts[ i ].classList.toggle( 'frm_hidden', hide );
 		}
 	}
 

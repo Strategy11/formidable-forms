@@ -312,6 +312,8 @@ export default [
 			'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
 
 			// TODO: New breaking changes after updating to look into.
+			'jsdoc/reject-any-type': 'off',
+			'jsdoc/reject-function-type': 'off',
 			'no-jquery/no-sizzle': 'off',
 			'sonarjs/anchor-precedence': 'off',
 			'sonarjs/class-name': 'off',
@@ -338,6 +340,8 @@ export default [
 			'unicorn/prefer-global-this': 'off',
 			'unicorn/prefer-string-raw': 'off',
 			'unicorn/switch-case-braces': 'off',
+			'unicorn/prefer-single-call': 'off',
+			'unicorn/no-immediate-mutation': 'off',
 
 			// Custom Formidable rules
 			'formidable/prefer-strict-comparison': 'error',
