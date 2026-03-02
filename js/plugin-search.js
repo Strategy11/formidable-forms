@@ -27,11 +27,11 @@ function frmPS() {
 			const hint = FormidablePSH.getCard();
 			if ( 'object' === typeof hint && null !== hint ) {
 				hint.querySelector( '.plugin-card-bottom' ).outerHTML =
-					'<div class="plugin-card-bottom frm-plugin-search__bottom">' +
-					'<p class="frm-plugin-search__text">' +
-					frmPlugSearch.legend +
-					'</p>' +
-					'</div>';
+					`<div class="plugin-card-bottom frm-plugin-search__bottom">` +
+					`<p class="frm-plugin-search__text">${
+						frmPlugSearch.legend
+					}</p>` +
+					`</div>`;
 
 				// Remove link and parent li from action links and move it to bottom row
 				const dismissLink = document.querySelector( '.frm-plugin-search__dismiss' );

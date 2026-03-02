@@ -120,7 +120,7 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 		messageElement.textContent = actionMap[ action ].message;
 	}
 
-	const parentElement = el[ 0 ].parentElement;
+	const { parentElement } = el[ 0 ];
 	parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
 	parentElement.classList.add( actionMap[ action ].class );
 
@@ -154,7 +154,7 @@ export function addonError( response, el, button ) {
 			.attr( 'rel', button.attr( 'rel' ) )
 			.on( 'click', installAddonWithCreds );
 	} else {
-		el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.message + '</strong></p></div>' );
+		el.append( `<div class="frm-addon-error frm_error_style"><p><strong>${ response.message }</strong></p></div>` );
 		button.removeClass( 'frm_loading_button' );
 		jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
 	}

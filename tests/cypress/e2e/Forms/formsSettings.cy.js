@@ -124,7 +124,7 @@ describe( 'Updating form settings', () => {
 		} );
 
 		cy.log( 'Navigate back to the formidable form page' );
-		cy.visit( Origin + '/wp-admin/admin.php?page=formidable' );
+		cy.visit( `${ Origin }/wp-admin/admin.php?page=formidable` );
 		cy.openForm();
 
 		cy.log( 'Click on Preview - In Theme' );
@@ -145,7 +145,7 @@ describe( 'Updating form settings', () => {
 		} );
 
 		cy.log( 'Navigate back to the formidable form page' );
-		cy.visit( Origin + '/wp-admin/admin.php?page=formidable' );
+		cy.visit( `${ Origin }/wp-admin/admin.php?page=formidable` );
 
 		cy.log( 'Teardown - Delete form' );
 		cy.deleteForm();

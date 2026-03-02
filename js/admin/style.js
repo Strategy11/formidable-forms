@@ -256,7 +256,7 @@
 	 * @return {void}
 	 */
 	function handleCommonClickEvents( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( 'frm_toggle_sample_form' === target.id || target.closest( '#frm_toggle_sample_form' ) ) {
 			toggleSampleForm();
@@ -322,7 +322,7 @@
 	 * @return {void}
 	 */
 	function handleClickEventsForListPage( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
@@ -337,7 +337,7 @@
 	 * @return {void}
 	 */
 	function handleStyleCardClick( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.closest( '.dropdown' ) ) {
 			// Ignore the hamburger menu inside of the card.
@@ -562,7 +562,7 @@
 		}
 
 		const anchor = clickTarget.hasAttribute( 'href' ) ? clickTarget : clickTarget.querySelector( 'a[href]' );
-		anchor.setAttribute( 'href', anchor.getAttribute( 'href' ) + '&sample=1' );
+		anchor.setAttribute( 'href', `${ anchor.getAttribute( 'href' ) }&sample=1` );
 	}
 
 	/**
@@ -684,7 +684,7 @@
 		} );
 
 		const isRtl = document.body.classList.contains( 'rtl' );
-		dropdownMenu.classList.add( 'dropdown-menu-' + ( isRtl ? 'left' : 'right' ) );
+		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
@@ -798,7 +798,7 @@
 		const form = tag(
 			'form',
 			{
-				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable' ), 'style_name' )
+				child: labelledTextInput( `frm_${ context }_style_name_input`, __( 'Style name', 'formidable' ), 'style_name' )
 			}
 		);
 		form.addEventListener(
@@ -917,7 +917,7 @@
 	 * @return {HTMLElement} The card element.
 	 */
 	function getCardByStyleId( styleId ) {
-		const defaultCard = document.querySelector( '#frm_default_style_cards_wrapper > div[data-style-id="' + styleId + '"]' );
+		const defaultCard = document.querySelector( `#frm_default_style_cards_wrapper > div[data-style-id="${ styleId }"]` );
 		if ( defaultCard ) {
 			return defaultCard;
 		}
@@ -930,7 +930,7 @@
 	 * @return {void}
 	 */
 	function addIconToOption( option, iconId ) {
-		const icon = frmDom.svg( { href: '#' + iconId } );
+		const icon = frmDom.svg( { href: `#${ iconId }` } );
 		option.insertBefore( icon, option.firstChild );
 	}
 
@@ -1050,14 +1050,14 @@
 		}
 
 		for ( const key in defaultValues ) {
-			let targetInput = document.querySelector( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' );
+			let targetInput = document.querySelector( `input[name$="[${ key }]"], select[name$="[${ key }]"]` );
 			if ( ! targetInput ) {
 				continue;
 			}
 
 			if ( 'radio' === targetInput.getAttribute( 'type' ) ) {
 				// Reset the repeater icon dropdown.
-				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + defaultValues[ key ] + '"]' );
+				targetInput = document.querySelector( `input[name$="[${ key }]"][value="${ defaultValues[ key ] }"]` );
 				if ( targetInput ) {
 					targetInput.checked = true;
 					jQuery( targetInput ).trigger( 'change' );
@@ -1108,7 +1108,7 @@
 		const newStyle = document.createElement( 'link' );
 		newStyle.rel = 'stylesheet';
 		newStyle.type = 'text/css';
-		newStyle.href = style.href + '&key=' + getAutoId(); // Make the URL unique so the old stylesheet doesn't get picked up by cache.
+		newStyle.href = `${ style.href }&key=${ getAutoId() }`; // Make the URL unique so the old stylesheet doesn't get picked up by cache.
 
 		// Listen for the new style to load before removing the old style to avoid having no styles while the new style is loading.
 		newStyle.addEventListener(
@@ -1138,7 +1138,7 @@
 	 */
 	function wrapDropdownItem( { anchor, type } ) {
 		return div( {
-			className: 'dropdown-item frm-' + type + '-style',
+			className: `dropdown-item frm-${ type }-style`,
 			child: anchor
 		} );
 	}
@@ -1301,7 +1301,7 @@
 				select.value = radio.value;
 			}
 
-			jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+			jQuery( btnGrp ).children( 'button' ).html( `${ radio.nextElementSibling.innerHTML } <b class="caret"></b>` );
 
 			const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
 			if ( activeItem ) {
@@ -1374,7 +1374,7 @@
 	 */
 	function setPosClass() {
 		/*jshint validthis:true */
-		let value = this.value;
+		let { value } = this;
 		if ( value === 'none' ) {
 			value = 'top';
 		} else if ( value === 'no_label' ) {
@@ -1387,7 +1387,7 @@
 			const currentValue = shouldForceTopStyling ? 'top' : value;
 
 			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
-			container.classList.add( 'frm_' + currentValue + '_container' );
+			container.classList.add( `frm_${ currentValue }_container` );
 
 			if ( 'inside' === currentValue ) {
 				checkFloatingLabelsForStyles( input, container );

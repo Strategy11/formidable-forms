@@ -4,7 +4,7 @@
 		button.addEventListener( 'click', function( e ) {
 			e.preventDefault();
 
-			const mode = button.dataset.mode;
+			const { mode } = button.dataset;
 			if ( 'test' === mode ) {
 				frmDom.modal.maybeCreateModal(
 					'frm_square_test_setup_modal',

@@ -3,8 +3,8 @@
 		return;
 	}
 
-	const appId = frmSquareVars.appId;
-	const locationId = frmSquareVars.locationId;
+	const { appId } = frmSquareVars;
+	const { locationId } = frmSquareVars;
 
 	// Track the state of the Square card element
 	let squareCardElementIsComplete = false;
@@ -37,7 +37,7 @@
 
 		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', event => {
-			const field = event.detail.field;
+			const { field } = event.detail;
 			const value = event.detail.currentState.isCompletelyValid;
 			cardFields[ field ] = value;
 
@@ -178,7 +178,7 @@
 			return buyerTokens[ verificationData.data.hash ];
 		}
 
-		const verificationDetails = verificationData.data.verificationDetails;
+		const { verificationDetails } = verificationData.data;
 		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
 
 		buyerTokens[ verificationData.data.hash ] = verificationResults.token;

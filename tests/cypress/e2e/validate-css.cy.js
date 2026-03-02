@@ -35,7 +35,7 @@ describe( 'Run some CSS validation', () => {
 				validationErrors.forEach(
 					validationError => {
 						if ( ! exceptions.includes( validationError.type ) ) {
-							errors.push( validationError.message + ' on line ' + validationError.line + ' (' + validationError.type + ')' );
+							errors.push( `${ validationError.message } on line ${ validationError.line } (${ validationError.type })` );
 						}
 					}
 				);
@@ -51,10 +51,10 @@ describe( 'Run some CSS validation', () => {
 	const formidableFolder = Cypress.env( 'FORMIDABLE_FOLDER' ) || 'formidable';
 
 	it( 'Check frm_admin.css for valid CSS', () => {
-		validateCSS( '/wp-content/plugins/' + formidableFolder + '/css/frm_admin.css' );
+		validateCSS( `/wp-content/plugins/${ formidableFolder }/css/frm_admin.css` );
 	} );
 
 	it( 'Check generated CSS for valid CSS', () => {
-		validateCSS( '/wp-content/plugins/' + formidableFolder + '/css/formidableforms.css' );
+		validateCSS( `/wp-content/plugins/${ formidableFolder }/css/formidableforms.css` );
 	} );
 } );

@@ -36,9 +36,10 @@ function frmFrontFormJS() {
 	 * @return {string|number} Field ID.
 	 */
 	function getFieldId( field, fullID ) {
-		let nameParts, fieldId,
-			isRepeating = false,
-			fieldName = '';
+		let nameParts;
+		let fieldId;
+		let isRepeating = false;
+		let fieldName = '';
 
 		if ( field instanceof jQuery ) {
 			field = field.get( 0 );
@@ -83,7 +84,7 @@ function frmFrontFormJS() {
 		}
 
 		// Check if 'this' is in a repeating section
-		if ( document.querySelector( 'input[name="item_meta[' + fieldId + '][form]"]' ) ) {
+		if ( document.querySelector( `input[name="item_meta[${ fieldId }][form]"]` ) ) {
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
 			fieldId = nameParts[ 2 ].replace( '[', '' );
 			isRepeating = true;
@@ -103,9 +104,9 @@ function frmFrontFormJS() {
 		if ( fullID === true ) {
 			// For use in the container div id
 			if ( fieldId === nameParts[ 0 ] ) {
-				fieldId = fieldId + '-' + nameParts[ 1 ].replace( '[', '' );
+				fieldId = `${ fieldId }-${ nameParts[ 1 ].replace( '[', '' ) }`;
 			} else {
-				fieldId = fieldId + '-' + nameParts[ 0 ] + '-' + nameParts[ 1 ].replace( '[', '' );
+				fieldId = `${ fieldId }-${ nameParts[ 0 ] }-${ nameParts[ 1 ].replace( '[', '' ) }`;
 			}
 		}
 
@@ -250,12 +251,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkValidity( field, errors ) {
-		let fieldID;
 		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
 			return;
 		}
 
-		fieldID = getFieldId( field, true );
+		const fieldID = getFieldId( field, true );
 		if ( errors[ fieldID ] === undefined ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
@@ -297,7 +297,7 @@ function frmFrontFormJS() {
 		const url = field.value;
 		const matches = url.match( /^(https?|ftps?|mailto|news|feed|telnet):/ );
 		if ( field.value !== '' && matches === null ) {
-			field.value = 'https://' + url;
+			field.value = `https://${ url }`;
 		}
 	}
 
@@ -309,7 +309,8 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function validateField( field ) {
-		let errors, key;
+		let errors;
+		let key;
 
 		errors = [];
 		const fieldContainer = field.closest( '.frm_form_field' );
@@ -379,17 +380,19 @@ function frmFrontFormJS() {
 	 * @return {Array} Errors
 	 */
 	function checkRequiredField( field, errors ) {
-		let tempVal, i, placeholder,
-			val = '',
-			fieldID = '',
-			fileID = field.getAttribute( 'data-frmfile' );
+		let tempVal;
+		let i;
+		let placeholder;
+		let val = '';
+		let fieldID = '';
+		let fileID = field.getAttribute( 'data-frmfile' );
 
 		if ( field.type === 'hidden' && fileID === null && ! isAppointmentField( field ) && ! isInlineDatepickerField( field ) ) {
 			return errors;
 		}
 
 		if ( field.type === 'checkbox' || field.type === 'radio' ) {
-			document.querySelectorAll( 'input[name="' + field.name + '"]' ).forEach( function( input ) {
+			document.querySelectorAll( `input[name="${ field.name }"]` ).forEach( function( input ) {
 				const requiredField = input.closest( '.frm_required_field' );
 				if ( ! requiredField ) {
 					return;
@@ -452,7 +455,7 @@ function frmFrontFormJS() {
 			} else if ( isSignatureField( field ) ) {
 				if ( val === '' ) {
 					const fieldContainer = field.closest( '.frm_form_field' );
-					const outputField = fieldContainer ? fieldContainer.querySelector( '[name="' + field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) + '"]' ) : null;
+					const outputField = fieldContainer ? fieldContainer.querySelector( `[name="${ field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) }"]` ) : null;
 					val = outputField ? outputField.value : '';
 				}
 				fieldID = fieldID.replace( '-typed', '' );
@@ -507,7 +510,7 @@ function frmFrontFormJS() {
 	 */
 	function getFileVals( fileID ) {
 		let val = '';
-		const fileFields = document.querySelectorAll( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
+		const fileFields = document.querySelectorAll( `input[name="file${ fileID }"], input[name="file${ fileID }[]"], input[name^="item_meta[${ fileID }]"]` );
 
 		fileFields.forEach( function( field ) {
 			if ( val === '' ) {
@@ -523,8 +526,8 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkUrlField( field, errors ) {
-		let fieldID,
-			url = field.value;
+		let fieldID;
+		const url = field.value;
 
 		if ( url !== '' && ! /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i.test( url ) ) {
 			fieldID = getFieldId( field, true );
@@ -567,8 +570,8 @@ function frmFrontFormJS() {
 	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
 	 */
 	function checkEmailField( field, errors, onSubmit ) {
-		const fieldID = getFieldId( field, true ),
-			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+		const fieldID = getFieldId( field, true );
+		const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
 
 		// validate the current field we're editing first
 		if ( '' !== field.value && pattern.test( field.value ) === false ) {
@@ -601,25 +604,24 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function confirmField( field, errors ) {
-		let value, confirmValue, firstField,
-			fieldID = getFieldId( field, true ),
-			strippedId = field.id.replace( 'conf_', '' ),
-			strippedFieldID = fieldID.replace( 'conf_', '' ),
-			confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
+		const fieldID = getFieldId( field, true );
+		const strippedId = field.id.replace( 'conf_', '' );
+		const strippedFieldID = fieldID.replace( 'conf_', '' );
+		const confirmFieldEl = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
-		if ( confirmField === null || errors[ 'conf_' + strippedFieldID ] !== undefined ) {
+		if ( confirmFieldEl === null || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
 			return;
 		}
 
 		if ( fieldID !== strippedFieldID ) {
-			firstField = document.getElementById( strippedId );
-			value = firstField.value;
-			confirmValue = confirmField.value;
+			const firstField = document.getElementById( strippedId );
+			const { value } = firstField;
+			const confirmValue = confirmFieldEl.value;
 			if ( value !== confirmValue ) {
-				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
+				errors[ `conf_${ strippedFieldID }` ] = getFieldValidationMessage( confirmFieldEl, 'data-confmsg' );
 			}
 		} else {
-			validateField( confirmField );
+			validateField( confirmFieldEl );
 		}
 	}
 
@@ -629,8 +631,8 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkNumberField( field, errors ) {
-		let fieldID,
-			number = field.value;
+		let fieldID;
+		const number = field.value;
 
 		if ( number !== '' && isNaN( number / 1 ) !== false ) {
 			fieldID = getFieldId( field, true );
@@ -646,9 +648,9 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkPatternField( field, errors ) {
-		let fieldID,
-			text = field.value,
-			format = getFieldValidationMessage( field, 'pattern' );
+		let fieldID;
+		const text = field.value;
+		let format = getFieldValidationMessage( field, 'pattern' );
 
 		if ( format !== '' && text !== '' ) {
 			fieldID = getFieldId( field, true );
@@ -658,7 +660,7 @@ function frmFrontFormJS() {
 						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 					}
 				} else {
-					format = new RegExp( '^' + format + '$', 'i' );
+					format = new RegExp( `^${ format }$`, 'i' );
 					if ( format.test( text ) === false ) {
 						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 					}
@@ -673,18 +675,16 @@ function frmFrontFormJS() {
 	 * @since 6.5.1
 	 */
 	function setSelectPlaceholderColor() {
-		let selects = document.querySelectorAll( '.form-field select' ),
-			styleElement = document.querySelector( '.with_frm_style' ),
-			textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '',
-			changeSelectColor;
-
+		const selects = document.querySelectorAll( '.form-field select' );
+		const styleElement = document.querySelector( '.with_frm_style' );
+		const textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '';
 		// Exit if there are no select elements or the textColorDisabled property is missing
 		if ( ! selects.length || ! textColorDisabled ) {
 			return;
 		}
 
 		// Function to change the color of a select element
-		changeSelectColor = function( select ) {
+		const changeSelectColor = function( select ) {
 			if ( select.options[ select.selectedIndex ] && hasClass( select.options[ select.selectedIndex ], 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
@@ -845,13 +845,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
-		let data, success, error, shouldTriggerEvent;
-
 		const fieldsets = object.querySelectorAll( '.frm_form_field' );
 		fieldsets.forEach( field => field.classList.add( 'frm_doing_ajax' ) );
 
-		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line no-jquery/no-serialize
-		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
+		const data = `${ jQuery( object ).serialize() }&action=frm_entries_${ action }&nonce=${ frm_js.nonce }`; // eslint-disable-line no-jquery/no-serialize
+		const shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		const doRedirect = response => {
 			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ] );
@@ -865,15 +863,12 @@ function frmFrontFormJS() {
 			// We don't return here because we're opening in a new tab, the old tab will still update.
 			const newTab = window.open( response.redirect, '_blank' );
 			if ( ! newTab && response.fallbackMsg && response.content ) {
-				response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ` ${ response.fallbackMsg }</div></div>` );
 			}
 		};
 
-		success = function( response ) {
-			let defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger;
-
-			defaultResponse = {
+		const success = function( response ) {
+			const defaultResponse = {
 				content: '',
 				errors: {},
 				pass: false
@@ -920,11 +915,11 @@ function frmFrontFormJS() {
 				}
 
 				const formIdInput = object.querySelector( 'input[name="form_id"]' );
-				formID = formIdInput ? formIdInput.value : '';
+				const formID = formIdInput ? formIdInput.value : '';
 				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
-				replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
+				const replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
 				removeAddedScripts( replaceContent, formID );
-				delay = maybeSlideOut( replaceContent, response.content );
+				const delay = maybeSlideOut( replaceContent, response.content );
 
 				setTimeout(
 					function() {
@@ -935,12 +930,12 @@ function frmFrontFormJS() {
 						addUrlParam( response );
 
 						if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
-							const pageOrderInput = document.querySelector( 'input[name="frm_page_order_' + formID + '"]' );
-							pageOrder = pageOrderInput ? pageOrderInput.value : '';
+							const pageOrderInput = document.querySelector( `input[name="frm_page_order_${ formID }"]` );
+							const pageOrder = pageOrderInput ? pageOrderInput.value : '';
 							const tempDiv = document.createElement( 'div' );
 							tempDiv.innerHTML = response.content;
 							const formReturnedInput = tempDiv.querySelector( 'input[name="form_id"]' );
-							formReturned = formReturnedInput ? formReturnedInput.value : '';
+							const formReturned = formReturnedInput ? formReturnedInput.value : '';
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
 
@@ -953,20 +948,20 @@ function frmFrontFormJS() {
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
 				//show errors
-				contSubmit = true;
+				let contSubmit = true;
 				removeAllErrors();
 
-				$fieldCont = null;
+				let $fieldCont = null;
 
-				for ( key in response.errors ) {
-					const fieldContEl = object.querySelector( '#frm_field_' + key + '_container' );
+				for ( const key in response.errors ) {
+					const fieldContEl = object.querySelector( `#frm_field_${ key }_container` );
 					$fieldCont = fieldContEl ? jQuery( fieldContEl ) : jQuery();
 
 					if ( $fieldCont.length ) {
 						if ( ! $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
-							inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
+							const inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
 							if ( inCollapsedSection.length ) {
-								frmTrigger = inCollapsedSection.prev();
+								let frmTrigger = inCollapsedSection.prev();
 								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
 									// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 									frmTrigger = frmTrigger.prev( '.frm_trigger' );
@@ -1024,7 +1019,7 @@ function frmFrontFormJS() {
 			}
 		};
 
-		error = function() {
+		const error = function() {
 			object.querySelectorAll( 'input[type="submit"], input[type="button"]' ).forEach(
 				button => button.disabled = false
 			);
@@ -1035,16 +1030,14 @@ function frmFrontFormJS() {
 	}
 
 	function postToAjaxUrl( form, data, success, error ) {
-		let ajaxUrl, action, ajaxParams;
-
-		ajaxUrl = frm_js.ajax_url;
-		action = form.getAttribute( 'action' );
+		let ajaxUrl = frm_js.ajax_url;
+		const action = form.getAttribute( 'action' );
 
 		if ( 'string' === typeof action && action.includes( '?action=frm_forms_preview' ) ) {
 			ajaxUrl = action.split( '?action=frm_forms_preview' )[ 0 ];
 		}
 
-		ajaxParams = {
+		const ajaxParams = {
 			type: 'POST',
 			url: ajaxUrl,
 			data,
@@ -1088,16 +1081,16 @@ function frmFrontFormJS() {
 	}
 
 	function removeAddedScripts( formContainer, formID ) {
-		const endReplace = document.querySelectorAll( '.frm_end_ajax_' + formID );
+		const endReplace = document.querySelectorAll( `.frm_end_ajax_${ formID }` );
 		if ( endReplace.length ) {
-			formContainer.nextUntil( '.frm_end_ajax_' + formID ).remove();
+			formContainer.nextUntil( `.frm_end_ajax_${ formID }` ).remove();
 			endReplace.forEach( el => el.remove() );
 		}
 	}
 
 	function maybeSlideOut( oldContent, newContent ) {
-		let c,
-			newClass = 'frm_slideout';
+		let c;
+		let newClass = 'frm_slideout';
 		if ( newContent.includes( ' frm_slide' ) ) {
 			c = oldContent.children();
 			if ( newContent.includes( ' frm_going_back' ) ) {
@@ -1114,21 +1107,19 @@ function frmFrontFormJS() {
 		let url;
 		if ( history.pushState && response.page !== undefined ) {
 			url = addQueryVar( 'frm_page', response.page );
-			window.history.pushState( { html: response.html }, '', '?' + url );
+			window.history.pushState( { html: response.html }, '', `?${ url }` );
 		}
 	}
 
 	function addQueryVar( key, value ) {
-		let kvp, i, x;
-
 		key = encodeURI( key );
 		value = encodeURI( value );
 
-		kvp = document.location.search.substr( 1 ).split( '&' );
+		const kvp = document.location.search.substr( 1 ).split( '&' );
 
-		i = kvp.length;
+		let i = kvp.length;
 		while ( i-- ) {
-			x = kvp[ i ].split( '=' );
+			const x = kvp[ i ].split( '=' );
 
 			if ( x[ 0 ] == key ) {
 				x[ 1 ] = value;
@@ -1145,17 +1136,17 @@ function frmFrontFormJS() {
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
-		let id, describedBy, roleString;
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
+
 		if ( ! container || container.offsetParent === null ) {
 			return;
 		}
 
 		container.classList.add( 'frm_blank_field' );
 		const input = container.querySelector( 'input, select, textarea' );
-		id = getErrorElementId( key, input );
+		const id = getErrorElementId( key, input );
 
-		describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1164,8 +1155,8 @@ function frmFrontFormJS() {
 			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				roleString = frm_js.include_alert_role ? 'role="alert"' : '';
-				errorHtml = '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[ key ] + '</div>';
+				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
 
@@ -1173,11 +1164,11 @@ function frmFrontFormJS() {
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
-					const errorFirst = input.dataset.errorFirst;
+					const { errorFirst } = input.dataset;
 					if ( errorFirst === '0' ) {
-						describedBy = describedBy + ' ' + id;
+						describedBy = `${ describedBy } ${ id }`;
 					} else {
-						describedBy = id + ' ' + describedBy;
+						describedBy = `${ id } ${ describedBy }`;
 					}
 				}
 				input.setAttribute( 'aria-describedby', describedBy );
@@ -1208,9 +1199,9 @@ function frmFrontFormJS() {
 	function getErrorElementId( key, input ) {
 		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
-			return 'frm_error_field_' + key;
+			return `frm_error_field_${ key }`;
 		}
-		return 'frm_error_' + input.id;
+		return `frm_error_${ input.id }`;
 	}
 
 	/**
@@ -1408,18 +1399,16 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		let errors, element, timeoutCallback;
-
 		if ( ! frm_js.focus_first_error ) {
 			return;
 		}
 
-		errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
 		if ( ! errors.length ) {
 			return;
 		}
 
-		element = errors[ 0 ];
+		let element = errors[ 0 ];
 		do {
 			element = element.previousSibling;
 			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
@@ -1504,25 +1493,21 @@ function frmFrontFormJS() {
 	}
 
 	function initFloatingLabels() {
-		let checkFloatLabel, checkDropdownLabel, runOnLoad, selector, floatClass;
+		const selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		const floatClass = 'frm_label_float_top';
 
-		selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
-		floatClass = 'frm_label_float_top';
-
-		checkFloatLabel = function( input ) {
-			let container, shouldFloatTop, firstOpt;
-
-			container = input.closest( '.frm_inside_container' );
+		const checkFloatLabel = function( input ) {
+			const container = input.closest( '.frm_inside_container' );
 			if ( ! container ) {
 				return;
 			}
 
-			shouldFloatTop = input.value || document.activeElement === input;
+			const shouldFloatTop = input.value || document.activeElement === input;
 
 			container.classList.toggle( floatClass, shouldFloatTop );
 
 			if ( 'SELECT' === input.tagName ) {
-				firstOpt = input.querySelector( 'option:first-child' );
+				const firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( shouldFloatTop ) {
 					if ( firstOpt.hasAttribute( 'data-label' ) ) {
@@ -1536,8 +1521,8 @@ function frmFrontFormJS() {
 			}
 		};
 
-		checkDropdownLabel = function() {
-			document.querySelectorAll( '.frm-show-form .frm_inside_container:not(.' + floatClass + ') select' ).forEach( function( input ) {
+		const checkDropdownLabel = function() {
+			document.querySelectorAll( `.frm-show-form .frm_inside_container:not(.${ floatClass }) select` ).forEach( function( input ) {
 				const firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( firstOpt.textContent ) {
@@ -1558,7 +1543,7 @@ function frmFrontFormJS() {
 			);
 		} );
 
-		runOnLoad = function( firstLoad ) {
+		const runOnLoad = function( firstLoad ) {
 			if ( firstLoad && document.activeElement && [ 'INPUT', 'SELECT', 'TEXTAREA' ].includes( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
 			} else if ( firstLoad ) {
@@ -1607,8 +1592,8 @@ function frmFrontFormJS() {
 	}
 
 	function maybeClearCustomValidityMessage( event, field ) {
-		let key,
-			isInvalid = false;
+		let key;
+		let isInvalid = false;
 
 		if ( ! shouldUpdateValidityMessage( field ) ) {
 			return;
@@ -1630,31 +1615,27 @@ function frmFrontFormJS() {
 	}
 
 	function maybeShowNewTabFallbackMessage() {
-		let messageEl;
-
 		if ( ! window.frmShowNewTabFallback ) {
 			return;
 		}
 
-		messageEl = document.querySelector( '#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message' );
+		const messageEl = document.querySelector( `#frm_form_${ frmShowNewTabFallback.formId }_container .frm_message` );
 		if ( ! messageEl ) {
 			return;
 		}
 
-		messageEl.insertAdjacentHTML( 'beforeend', ' ' + frmShowNewTabFallback.message );
+		messageEl.insertAdjacentHTML( 'beforeend', ` ${ frmShowNewTabFallback.message }` );
 	}
 
 	function setCustomValidityMessage() {
-		let forms, length, index;
+		const forms = document.getElementsByClassName( 'frm-show-form' );
+		const { length } = forms;
 
-		forms = document.getElementsByClassName( 'frm-show-form' );
-		length = forms.length;
-
-		for ( index = 0; index < length; ++index ) {
+		for ( let index = 0; index < length; ++index ) {
 			forms[ index ].addEventListener(
 				'invalid',
 				function( event ) {
-					const target = event.target;
+					const { target } = event;
 
 					if ( shouldUpdateValidityMessage( target ) ) {
 						target.setCustomValidity( target.dataset.invmsg );
@@ -1698,7 +1679,7 @@ function frmFrontFormJS() {
 			.map( b => b.toString( 16 ).padStart( 2, '0' ) )
 			.join( '' );
 		const timestamp = Date.now().toString( 16 );
-		return uniqueKey + '-' + timestamp;
+		return `${ uniqueKey }-${ timestamp }`;
 	}
 
 	/**
@@ -1823,7 +1804,7 @@ function frmFrontFormJS() {
 			}
 
 			const activeCaptcha = getSelectedCaptcha( captchaSelector );
-			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
+			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? `#${ captcha.id }` : captcha.id;
 			const captchaID = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
@@ -1838,7 +1819,7 @@ function frmFrontFormJS() {
 		},
 
 		afterRecaptcha( _, formID ) {
-			const object = document.querySelector( '#frm_form_' + formID + '_container form' );
+			const object = document.querySelector( `#frm_form_${ formID }_container form` );
 			frmFrontForm.submitFormNow( object );
 		},
 
@@ -1880,8 +1861,9 @@ function frmFrontFormJS() {
 		},
 
 		submitFormNow( object ) {
-			let hasFileFields, antispamInput,
-				classList = object.className.trim().split( /\s+/gi );
+			let hasFileFields;
+			let antispamInput;
+			const classList = object.className.trim().split( /\s+/gi );
 
 			if ( object.hasAttribute( 'data-token' ) && null === object.querySelector( '[name="antispam_token"]' ) ) {
 				// include the antispam token on form submit.
@@ -1943,7 +1925,8 @@ function frmFrontFormJS() {
 		 * @return {Array} List of errors.
 		 */
 		getAjaxFormErrors( object ) {
-			let customErrors, key;
+			let customErrors;
+			let key;
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 
 			jsErrors = validateForm( object );
@@ -1976,7 +1959,7 @@ function frmFrontFormJS() {
 			removeAllErrors();
 
 			for ( key in jsErrors ) {
-				const fieldCont = form ? form.querySelector( '#frm_field_' + key + '_container' ) : null;
+				const fieldCont = form ? form.querySelector( `#frm_field_${ key }_container` ) : null;
 
 				if ( fieldCont ) {
 					addFieldError( fieldCont, key, jsErrors );
@@ -2001,16 +1984,19 @@ function frmFrontFormJS() {
 		},
 
 		scrollMsg( id, object, animate ) {
-			let newPos, m, b, screenTop, screenBottom,
-				scrollObj = '';
+			let newPos;
+			let screenTop;
+			let screenBottom;
+			let scrollObj = '';
+
 			if ( object === undefined ) {
-				scrollObj = jQuery( document.getElementById( 'frm_form_' + id + '_container' ) );
+				scrollObj = jQuery( document.getElementById( `frm_form_${ id }_container` ) );
 				if ( scrollObj.length < 1 ) {
 					return;
 				}
 			} else if ( typeof id === 'string' ) {
 				const formEl = object instanceof jQuery ? object.get( 0 ) : object;
-				const fieldEl = formEl ? formEl.querySelector( '#frm_field_' + id + '_container' ) : null;
+				const fieldEl = formEl ? formEl.querySelector( `#frm_field_${ id }_container` ) : null;
 				scrollObj = fieldEl ? jQuery( fieldEl ) : jQuery();
 			} else {
 				scrollObj = id;
@@ -2023,8 +2009,8 @@ function frmFrontFormJS() {
 			}
 			newPos = newPos - frm_js.offset;
 
-			m = getComputedStyle( document.documentElement ).marginTop;
-			b = getComputedStyle( document.body ).marginTop;
+			const m = getComputedStyle( document.documentElement ).marginTop;
+			const b = getComputedStyle( document.body ).marginTop;
 			if ( m || b ) {
 				newPos = newPos - parseInt( m ) - parseInt( b );
 			}

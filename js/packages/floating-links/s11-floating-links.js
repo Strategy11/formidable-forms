@@ -119,7 +119,7 @@ class S11FloatingLinks {
 		slideIn.append( frmDom.span( { child: dismissIcon } ) );
 		slideIn.querySelector( 'a[href].frm-button-primary' )?.setAttribute(
 			'aria-description',
-			( frmGlobal.inboxSlideIn.subject + ' ' + frmGlobal.inboxSlideIn.slidein ).replace( '&amp;', '&' )
+			( `${ frmGlobal.inboxSlideIn.subject } ${ frmGlobal.inboxSlideIn.slidein }` ).replace( '&amp;', '&' )
 		);
 		this.slideIn = slideIn;
 		return slideIn;
