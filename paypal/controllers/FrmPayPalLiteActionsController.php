@@ -2040,6 +2040,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$field_id = self::add_a_field( $form_id, $field_type, $field_name );
 
 		if ( $field_id ) {
+			$field                                         = FrmField::getOne( $field_id );
+			$field->field_options['is_paypal_order_field'] = 1;
+
+			FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
+
 			$settings[ $setting_key ] = $field_id;
 		}
 

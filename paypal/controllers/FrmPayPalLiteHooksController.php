@@ -18,6 +18,36 @@ class FrmPayPalLiteHooksController {
 
 		// Use 20 so this happens after the Stripe add-on.
 		add_filter( 'frm_pro_show_card_callback', 'FrmPayPalLiteActionsController::maybe_show_card', 20, 2 );
+
+		add_filter(
+			'frm_show_normal_field_type',
+			/**
+			 * Hide the email, name, and address fields if they are marked as PayPal order fields.
+			 *
+			 * @since x.x
+			 *
+			 * @param bool   $show_normal_field_type Whether to show the field.
+			 * @param string $type                   The field type.
+			 * @param object $field                  The field object.
+			 *
+			 * @return bool
+			 */
+			function ( $show_normal_field_type, $type, $field ) {
+				if ( ! in_array( $type, array( 'email', 'name', 'address' ), true ) ) {
+					return $show_normal_field_type;
+				}
+
+				$is_paypal_order_field = FrmField::get_option( $field, 'is_paypal_order_field' );
+
+				if ( $is_paypal_order_field ) {
+					return false;
+				}
+
+				return $show_normal_field_type;
+			},
+			10,
+			3
+		);
 	}
 
 	/**
