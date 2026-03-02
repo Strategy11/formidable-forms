@@ -823,6 +823,11 @@ class FrmAddonsController {
 
 			$addon['installed'] = self::is_installed( $file_name );
 
+			if ( 'highrise' === $slug && ! $addon['installed'] ) {
+				unset( $addons[ $id ] );
+				continue;
+			}
+
 			if ( $addon['installed'] && 'formidable-views/formidable-views.php' === $file_name ) {
 				$active_views_version = self::get_active_views_version();
 
