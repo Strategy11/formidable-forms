@@ -355,8 +355,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return bool
 	 */
-	private static function validate_order_amount( $order, $expected_amount ) {		
-		$order_amount = isset( $order->purchase_units[0]->amount->value ) ? $order->purchase_units[0]->amount->value : '';
+	private static function validate_order_amount( $order, $expected_amount ) {
+		$order_amount = $order->purchase_units[0]->amount->value ?? '';
 
 		// The order amount is in dollars, but the expected amount is in cents, so we need to convert.
 		$order_amount = str_replace( '.', '', $order_amount );
@@ -450,8 +450,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// Email: setting is a shortcode like [25], extract the field ID.
 		if ( ! empty( $settings['email'] ) && preg_match( '/\[(\d+)\]/', $settings['email'], $matches ) ) {
 			$email_field_id = (int) $matches[1];
+
 			if ( ! empty( $payer->email_address ) ) {
 				$current = $entry->metas[ $email_field_id ] ?? '';
+
 				if ( $current !== $payer->email_address ) {
 					$updates[ $email_field_id ] = $payer->email_address;
 				}
@@ -470,6 +472,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 					'last'  => ! empty( $payer->name->surname ) ? $payer->name->surname : '',
 				);
 				$current   = $entry->metas[ $first_name_field_id ] ?? array();
+
 				if ( $current !== $new_value ) {
 					$updates[ $first_name_field_id ] = $new_value;
 				}
@@ -477,6 +480,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				// Separate text fields for first and last name.
 				if ( $first_name_field_id && ! empty( $payer->name->given_name ) ) {
 					$current = $entry->metas[ $first_name_field_id ] ?? '';
+
 					if ( $current !== $payer->name->given_name ) {
 						$updates[ $first_name_field_id ] = $payer->name->given_name;
 					}
@@ -484,6 +488,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 				if ( $last_name_field_id && ! empty( $payer->name->surname ) ) {
 					$current = $entry->metas[ $last_name_field_id ] ?? '';
+
 					if ( $current !== $payer->name->surname ) {
 						$updates[ $last_name_field_id ] = $payer->name->surname;
 					}
@@ -511,6 +516,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				}
 
 				$current = $entry->metas[ $field_id ] ?? array();
+
 				if ( $current !== $new_value ) {
 					$updates[ $field_id ] = $new_value;
 				}
@@ -527,7 +533,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param object $response The capture response.
 	 *
-	 * @return object|false The address object, or false if not available.
+	 * @return false|object The address object, or false if not available.
 	 */
 	private static function get_shipping_address_from_response( $response ) {
 		if ( empty( $response->purchase_units ) || ! is_array( $response->purchase_units ) ) {
