@@ -50,3 +50,4 @@ webpack.dev.js export-ignore
 /phpcs-sniffs/ export-ignore
 .deepsource.toml export-ignore
 .semgrepignore export-ignore
+.oxlintrc.json export-ignore
