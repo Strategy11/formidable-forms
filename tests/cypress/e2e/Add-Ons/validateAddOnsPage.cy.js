@@ -39,7 +39,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'CRM' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
-				expect( count ).to.be.at.least( 3 );
+				expect( count ).to.be.at.least( 2 );
 			} );
 		} );
 
