@@ -2,12 +2,12 @@
 	"$schema": "./node_modules/oxlint/configuration_schema.json",
 	"plugins": ["react", "unicorn", "import", "jsx-a11y", "oxc"],
 	"categories": {
-		"correctness": "warn",
-		"suspicious": "warn",
-		"pedantic": "warn",
-		"perf": "warn",
-		"style": "warn",
-		"restriction": "warn"
+		"correctness": "error",
+		"suspicious": "error",
+		"pedantic": "error",
+		"perf": "error",
+		"style": "error",
+		"restriction": "error"
 	},
 	"env": {
 		"browser": true,
