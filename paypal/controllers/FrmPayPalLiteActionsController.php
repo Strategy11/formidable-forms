@@ -406,18 +406,30 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	private static function sync_entry_data_with_capture_response( $response, $atts ) {
-		$entry  = $atts['entry'];
-		$action = $atts['action'];
+		$entry    = $atts['entry'];
+		$action   = $atts['action'];
+		$settings = $action->post_content;
+		$mode     = $settings['entry_data_sync'] ?? 'overwrite';
 
 		if ( ! isset( $response->payer ) || ! is_object( $response->payer ) ) {
 			return;
 		}
 
-		$payer   = $response->payer;
-		$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
+		$payer = $response->payer;
 
-		foreach ( $updates as $field_id => $new_value ) {
-			FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value );
+		if ( 'new_fields' === $mode ) {
+			$updates = self::get_order_data_field_updates( $payer, $response, $settings );
+
+			// TODO: Make sure we're not adding the metas twice.
+			foreach ( $updates as $field_id => $new_value ) {
+				FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
+			}
+		} else {
+			$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
+
+			foreach ( $updates as $field_id => $new_value ) {
+				FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value );
+			}
 		}
 
 		if ( class_exists( 'FrmLog' ) ) {
@@ -429,6 +441,57 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Build field updates for the dedicated PayPal order data fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $payer    The payer object from the PayPal response.
+	 * @param stdClass $response The full capture response.
+	 * @param array    $settings The action settings.
+	 *
+	 * @return array<int,mixed> Field ID => value pairs.
+	 */
+	private static function get_order_data_field_updates( $payer, $response, $settings ) {
+		$updates = array();
+
+		// Email (hidden field, single string value).
+		if ( ! empty( $settings['paypal_order_email'] ) && ! empty( $payer->email_address ) ) {
+			$updates[ (int) $settings['paypal_order_email'] ] = $payer->email_address;
+		}
+
+		// Name (name field with first/last sub-keys).
+		if ( ! empty( $settings['paypal_order_name'] ) && isset( $payer->name ) ) {
+			$new_value = array(
+				'first' => ! empty( $payer->name->given_name ) ? $payer->name->given_name : '',
+				'last'  => ! empty( $payer->name->surname ) ? $payer->name->surname : '',
+			);
+			if ( array_filter( $new_value ) ) {
+				$updates[ (int) $settings['paypal_order_name'] ] = $new_value;
+			}
+		}
+
+		// Address (address field with line1/line2/city/state/zip/country sub-keys).
+		if ( ! empty( $settings['paypal_order_address'] ) ) {
+			$shipping = self::get_shipping_address_from_response( $response );
+			if ( $shipping ) {
+				$new_value = array(
+					'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
+					'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
+					'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
+					'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
+					'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
+					'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
+				);
+				if ( array_filter( $new_value ) ) {
+					$updates[ (int) $settings['paypal_order_address'] ] = $new_value;
+				}
+			}
+		}
+
+		return $updates;
 	}
 
 	/**
@@ -1913,6 +1976,73 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function add_button_settings_section( $action_control, $form_action ) {
 		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/button-settings.php';
+	}
+
+	/**
+	 * Filter PayPal payment action settings on save.
+	 * When entry_data_sync is set to 'new_fields', auto-create fields
+	 * for storing PayPal order data (email, name, address).
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings The action settings being saved.
+	 * @param array $action   The full action data including menu_order (form_id).
+	 *
+	 * @return array
+	 */
+	public static function before_save_settings( $settings, $action ) {
+		$gateway   = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array();
+		$is_paypal = in_array( 'paypal', $gateway, true );
+
+		if ( ! $is_paypal ) {
+			return $settings;
+		}
+
+		if ( empty( $settings['entry_data_sync'] ) || 'new_fields' !== $settings['entry_data_sync'] ) {
+			return $settings;
+		}
+
+		$form_id = absint( $action['menu_order'] );
+
+		$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_email', __( 'PayPal Email', 'formidable' ), 'email' );
+		$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_name', __( 'PayPal Name', 'formidable' ), 'name' );
+
+		if ( is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+			$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_address', __( 'PayPal Address', 'formidable' ), 'address' );
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Create a field for PayPal order data if it does not already exist.
+	 * The field ID is stored in the action settings under the given key.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $settings    The action settings.
+	 * @param int    $form_id     The form ID.
+	 * @param string $setting_key The settings key to store the field ID in (e.g. 'paypal_order_email').
+	 * @param string $field_name  The human-readable field name.
+	 * @param string $field_type  The field type to create (e.g. 'hidden', 'name', 'address').
+	 *
+	 * @return array
+	 */
+	private static function maybe_create_order_data_field( $settings, $form_id, $setting_key, $field_name, $field_type ) {
+		if ( ! empty( $settings[ $setting_key ] ) ) {
+			$existing = FrmField::getOne( (int) $settings[ $setting_key ] );
+			if ( $existing ) {
+				return $settings;
+			}
+		}
+
+		$field_id = self::add_a_field( $form_id, $field_type, $field_name );
+
+		if ( $field_id ) {
+			$settings[ $setting_key ] = $field_id;
+		}
+
+		return $settings;
 	}
 
 	/**

@@ -33,6 +33,8 @@ class FrmPayPalLiteHooksController {
 			return 'PayPal Commerce';
 		} );
 
+		add_filter( 'frm_before_save_payment_action', 'FrmPayPalLiteActionsController::before_save_settings', 20, 2 );
+
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
