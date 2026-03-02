@@ -1,13 +1,13 @@
 {
 	"$schema": "./node_modules/oxlint/configuration_schema.json",
-	"plugins": ["react", "unicorn", "import", "jsx-a11y"],
+	"plugins": ["react", "unicorn", "import", "jsx-a11y", "oxc", "jsdoc"],
 	"categories": {
-		"correctness": "warn",
-		"suspicious": "warn",
-		"pedantic": "warn",
-		"perf": "warn",
-		"style": "warn",
-		"restriction": "warn"
+		"correctness": "error",
+		"suspicious": "error",
+		"pedantic": "error",
+		"perf": "error",
+		"style": "error",
+		"restriction": "error"
 	},
 	"env": {
 		"browser": true,
@@ -164,7 +164,21 @@
 		"import/no-relative-parent-imports": "off",
 		"import/no-unassigned-import": "off",
 		"import/prefer-default-export": "off",
-		"import/unambiguous": "off"
+		"import/unambiguous": "off",
+
+		// Oxc rules turned off for existing code.
+		"oxc/no-optional-chaining": "off",
+		"oxc/no-async-await": "off",
+		"oxc/no-barrel-file": "off",
+		"oxc/no-rest-spread-properties": "off",
+
+		// JS Doc rules
+		"jsdoc/require-returns": "off",
+		"jsdoc/require-param-type": "off",
+		"jsdoc/require-param-description": "off",
+		"jsdoc/require-param": "off",
+		"jsdoc/check-tag-names": "off",
+		"jsdoc/no-defaults": "off"
 	},
 	"ignorePatterns": [
 		"**/*.min.js",
