@@ -164,7 +164,13 @@
 		"import/no-relative-parent-imports": "off",
 		"import/no-unassigned-import": "off",
 		"import/prefer-default-export": "off",
-		"import/unambiguous": "off"
+		"import/unambiguous": "off",
+
+		// Oxc rules turned off for existing code.
+		"oxc/no-optional-chaining": "off",
+		"oxc/no-async-await": "off",
+		"oxc/no-barrel-file": "off",
+		"oxc/no-rest-spread-properties": "off"
 	},
 	"ignorePatterns": [
 		"**/*.min.js",
