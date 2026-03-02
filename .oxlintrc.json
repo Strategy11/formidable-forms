@@ -18,7 +18,6 @@
 		"wp": "readonly",
 		"wpApiSettings": "readonly",
 		"jQuery": "readonly",
-		"$": "readonly",
 		"cy": "readonly",
 		"Cypress": "readonly",
 		"expect": "readonly",
