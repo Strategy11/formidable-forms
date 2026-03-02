@@ -152,6 +152,8 @@
 		"unicorn/prefer-regexp-test": "off",
 
 		// Import rules turned off for existing code.
+		"import/max-dependencies": "off",
+		"import/extensions": "off",
 		"import/exports-last": "off",
 		"import/first": "off",
 		"import/group-exports": "off",
