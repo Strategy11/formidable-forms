@@ -238,7 +238,7 @@
 		}
 
 		// Pass through border radius.
-		if ( 'undefined' !== typeof style.borderRadius ) {
+		if ( style.borderRadius !== undefined ) {
 			options.buttonRadius = style.borderRadius;
 		}
 
@@ -258,7 +258,7 @@
 			return;
 		}
 
-		if ( 'undefined' === typeof google || 'undefined' === typeof google.payments ) {
+		if ( 'undefined' === typeof google || google.payments === undefined ) {
 			return;
 		}
 
