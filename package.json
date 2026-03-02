@@ -56,7 +56,6 @@
 		"@babel/plugin-transform-react-jsx": "^7.22.15",
 		"@babel/preset-env": "^7.22.15",
 		"@babel/preset-react": "^7.22.15",
-		"@oxlint/binding-darwin-arm64": "^1.51.0",
 		"@svgr/webpack": "^8.1.0",
 		"@wordpress/babel-plugin-makepot": "^5.25.0",
 		"@wordpress/babel-preset-default": "^7.25.0",
