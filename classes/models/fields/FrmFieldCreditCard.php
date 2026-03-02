@@ -54,9 +54,8 @@ class FrmFieldCreditCard extends FrmFieldType {
 
 		ob_start();
 
-		if ( FrmAppHelper::is_style_editor_page() ) {
-			// The styler preview doesn't load the Stripe scripts.
-			// We need to use the form builder view instead.
+		if ( FrmAppHelper::is_style_editor_page() || FrmFormsHelper::is_block_or_page_builder_preview() ) {
+			// Payment gateway scripts are unavailable in preview contexts, use the builder placeholder.
 			$field = $this->field;
 			include $this->include_form_builder_file();
 		} else {
