@@ -417,6 +417,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$payer = $response->payer;
 
+		// TODO: Figuer out how to hide these fields from the form.
 		if ( 'new_fields' === $mode ) {
 			$updates = self::get_order_data_field_updates( $payer, $response, $settings );
 
