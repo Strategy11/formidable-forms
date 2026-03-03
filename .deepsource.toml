@@ -1,24 +1,39 @@
 version = 1
 
 # 1. Global Exclude Patterns
-# Tell DeepSource which files to completely ignore (e.g., external libraries).
 exclude_patterns = [
   "**/node_modules/**",
   "**/vendor/**",
   "**/venv/**",
   "**/dist/**",
-  "**/build/**"
+  "**/build/**",
+  "**/coverage/**",
+  "**/*.min.js",
+  "**/*.js.map",
+  "js/formidable_blocks.js",
+  "js/formidable_overlay.js",
+  "js/form-templates.js",
+  "js/formidable_dashboard.js",
+  "js/onboarding-wizard.js",
+  "js/addons-page.js",
+  "js/formidable_styles.js",
+  "js/formidable_admin.js",
+  "js/bootstrap-multiselect.js",
+  "js/formidable-settings-components.js",
+  "js/formidable-web-components.js",
+  "js/frm_testing_mode.js",
+  "js/welcome-tour.js",
+  "eslint-rules/**"
 ]
 
 # 2. Test Patterns
-# Tell DeepSource which files are tests. This prevents false positives
-# (e.g., allowing "assert" statements in test files).
 test_patterns = [
-  "**/tests/**"
+  "**/tests/**",
+  "**/phpunit/**",
+  "**/cypress/**"
 ]
 
 # 3. Analyzers
-# Add a block like this for every language you use.
 [[analyzers]]
 name = "php"
 enabled = true
@@ -26,3 +41,71 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
+
+  [analyzers.meta]
+  environment = [
+    "browser",
+    "jquery",
+    "cypress",
+    "mocha"
+  ]
+  module_system = "es-modules"
+  globals = [
+    # WordPress core globals
+    "ajaxurl",
+    "wp",
+    "wpApiSettings",
+    "tinyMCE",
+    "tb_remove",
+    "adminpage",
+    "pagenow",
+    # Google reCAPTCHA / hCaptcha / Turnstile
+    "grecaptcha",
+    "hcaptcha",
+    "turnstile",
+    # Formidable globals (via wp_localize_script)
+    "frmGlobal",
+    "frm_js",
+    "frm_admin_js",
+    "frmDom",
+    "frmFormTemplatesVars",
+    "FrmDeactivationFeedbackI18n",
+    "formidable_form_selector",
+    "frmSettings",
+    "s11FloatingLinksData",
+    "frmPlugSearch",
+    "frmAddonsVars",
+    "frmOnboardingWizardVars",
+    "frmApplicationsVars",
+    "frmWelcomeTourVars",
+    "frm_stripe_vars",
+    "frm_trans_vars",
+    "frmSquareVars",
+    # Formidable window globals
+    "frmFrontForm",
+    "frmAdminBuild",
+    "frmAdminBuildJS",
+    "FrmFormsConnect",
+    "frmAdminPopup",
+    "frmOverlay",
+    "frmDropdownComponent",
+    "frmStylerFunctions",
+    "frmProForm",
+    "frmThemeOverride_jsErrors",
+    "frmThemeOverride_frmPlaceError",
+    "frmThemeOverride_frmAfterSubmit",
+    "frm_add_logic_row",
+    "frm_remove_tag",
+    "frm_show_div",
+    "frmCheckAll",
+    "frmCheckAllLevel",
+    "frmGetFieldValues",
+    "frmImportCsv",
+    "FormidablePSH",
+    "__FRMURLVARS",
+    "frm_password_checks",
+    "formidable_block_calculator",
+    "formidable_view_selector",
+    "frmdates_admin_js",
+    "frm_abdn"
+  ]
