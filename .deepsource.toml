@@ -111,8 +111,3 @@ enabled = true
     "frmdates_admin_js",
     "frm_abdn"
   ]
-
-  # Disable specific DeepSource rules that conflict with project conventions
-  [analyzers.rules]
-  "javascript/short-variable-name" = "off"
-  "javascript/insufficient-variable-length" = "off"

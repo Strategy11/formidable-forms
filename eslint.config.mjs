@@ -103,9 +103,6 @@ export default [
 		},
 		settings: {
 			'import/resolver': {
-				webpack: {
-					config: './webpack.config.js',
-				},
 				node: {
 					extensions: [ '.js', '.jsx' ],
 				},
@@ -179,6 +176,8 @@ export default [
 			'no-return-assign': 'off',
 			'no-useless-escape': 'off',
 			'import/no-unresolved': 'off',
+			'import/named': 'off',
+			'import/default': 'off',
 			'comma-dangle': 'off',
 			'arrow-parens': ['error', 'as-needed'],
 
