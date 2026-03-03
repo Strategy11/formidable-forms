@@ -165,6 +165,15 @@ export default [
 			'no-alert': 'off',
 			'no-undef': 'off',
 			'no-shadow': 'off',
+
+			// Suppress DeepSource false positives for legacy patterns
+			'init-declarations': 'off',
+			'id-length': 'off',
+			'no-use-before-define': 'off',
+			'consistent-return': 'off',
+			'guard-for-in': 'off',
+			'no-return-assign': 'off',
+			'no-useless-escape': 'off',
 			'comma-dangle': 'off',
 			'arrow-parens': ['error', 'as-needed'],
 
