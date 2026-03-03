@@ -16,13 +16,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Remove package files for faster install
+        run: rm -f package.json package-lock.json
+
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
           node-version: "22"
 
       - name: Install Oxlint
-        run: npm install oxlint@^1.51.0
+        run: npm install oxlint@^1.51.0 --no-package-lock
 
       - name: Run Oxlint
         run: ./node_modules/.bin/oxlint .
