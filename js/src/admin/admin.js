@@ -1481,7 +1481,7 @@ window.frmAdminBuildJS = function() {
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
 		return function( itemIndex ) {
 			const currentClassToAdd = 'function' === typeof classToAdd ? classToAdd( itemIndex ) : classToAdd;
-			const length = layoutClasses.length;
+			const { length } = layoutClasses;
 			let activeLayoutClass = false;
 			for ( let layoutClassIndex = 0; layoutClassIndex < length; ++layoutClassIndex ) {
 				const currentClass = layoutClasses[ layoutClassIndex ];
@@ -3138,7 +3138,7 @@ window.frmAdminBuildJS = function() {
 		list.innerHTML = '';
 
 		for ( let i = 0; i < fields.length; i++ ) {
-			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
+			if ( ( exclude?.includes( fields[ i ].fieldType ) ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
@@ -4178,7 +4178,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeMarkRowLayoutAsActive( activeRow, options ) {
-		const length = options.children.length;
+		const { length } = options.children;
 		for ( let index = 0; index < length; ++index ) {
 			const currentRow = options.children[ index ];
 			if ( rowLayoutsMatch( currentRow, activeRow ) ) {
@@ -4374,8 +4374,9 @@ window.frmAdminBuildJS = function() {
 				return 'frm2';
 			case 6:
 				return 'frm1';
+			default:
+				return 'frm12';
 		}
-		return 'frm12';
 	}
 
 	function getLargeClassForSize( size ) {
@@ -4388,8 +4389,9 @@ window.frmAdminBuildJS = function() {
 				return 'frm4';
 			case 6:
 				return 'frm7';
+			default:
+				return 'frm12';
 		}
-		return 'frm12';
 	}
 
 	function getEmptyGridContainer() {
@@ -4571,14 +4573,14 @@ window.frmAdminBuildJS = function() {
 				return 9;
 			case 'frm_sixth':
 				return 2;
-		}
+			default:
+				if ( 0 === className.indexOf( 'frm' ) ) {
+					return parseInt( className.substr( 3 ) );
+				}
 
-		if ( 0 === className.indexOf( 'frm' ) ) {
-			return parseInt( className.substr( 3 ) );
+				// Anything missing a layout class should be a full width row.
+				return 12;
 		}
-
-		// Anything missing a layout class should be a full width row.
-		return 12;
 	}
 
 	function getLayoutClassName( classList ) {
@@ -4967,7 +4969,7 @@ window.frmAdminBuildJS = function() {
 
 	function selectedFieldsAreMergeable() {
 		const selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
-		const length = selectedFieldGroups.length;
+		const { length } = selectedFieldGroups;
 		if ( 1 === length ) {
 			return false;
 		}
@@ -6183,7 +6185,7 @@ window.frmAdminBuildJS = function() {
 			return options;
 		}
 		const listItems = optsContainer.querySelectorAll( '.frm_single_option' );
-		const length = listItems.length;
+		const { length } = listItems;
 
 		for ( let index = 0; index < length; index++ ) {
 			const li = listItems[ index ];
@@ -6381,7 +6383,7 @@ window.frmAdminBuildJS = function() {
 				const cleanNode = frmDom.cleanNode( currentNode );
 
 				if ( '#text' === cleanNode.nodeName ) {
-					return total += cleanNode.textContent;
+					return total + cleanNode.textContent;
 				}
 
 				return total + cleanNode.outerHTML;
@@ -6694,7 +6696,7 @@ window.frmAdminBuildJS = function() {
 
 		const $rows = $section.find( 'ul.frm_sorting' );
 		let sectionHasFields = false;
-		const length = $rows.length;
+		const { length } = $rows;
 		for ( let index = 0; index < length; ++index ) {
 			if ( 0 !== getFieldsInRow( jQuery( $rows.get( index ) ) ).length ) {
 				sectionHasFields = true;
@@ -7256,7 +7258,7 @@ window.frmAdminBuildJS = function() {
 			container.append( upgradeActions || upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
-			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
+			if ( upgradeModalLink.nextElementSibling?.querySelector( '.frm-link-secondary' ) ) {
 				container.append( upgradeModalLink.nextElementSibling.cloneNode( true ) );
 			}
 
@@ -8948,8 +8950,8 @@ window.frmAdminBuildJS = function() {
 				thisRow.find( '.edd_frm_license' ).html( license );
 				const eddWrapper = button.get( 0 ).closest( '.frm_form_field' );
 				const actionIsSuccess = msg.success === true;
-				eddWrapper.querySelector( `.frm_icon_font.frm_action_success` ).classList.toggle( 'frm_hidden', ! actionIsSuccess || action === 'deactivate' );
-				eddWrapper.querySelector( `.frm_icon_font.frm_action_error` ).classList.toggle( 'frm_hidden', actionIsSuccess );
+				eddWrapper.querySelector( '.frm_icon_font.frm_action_success' ).classList.toggle( 'frm_hidden', ! actionIsSuccess || action === 'deactivate' );
+				eddWrapper.querySelector( '.frm_icon_font.frm_action_error' ).classList.toggle( 'frm_hidden', actionIsSuccess );
 
 				const messageBox = thisRow.find( '.frm_license_msg' );
 				messageBox.html( msg.message );
@@ -9497,7 +9499,7 @@ window.frmAdminBuildJS = function() {
 	function selectedOptions( select ) {
 		let opt;
 		const result = [];
-		const options = select && select.options;
+		const options = select?.options;
 
 		for ( let i = 0, iLen = options.length; i < iLen; i++ ) {
 			opt = options[ i ];
@@ -10131,7 +10133,7 @@ window.frmAdminBuildJS = function() {
 			e.stopPropagation();
 		}
 
-		if ( e.target.classList.contains( 'frm-show-box' ) || ( e.target.parentElement && e.target.parentElement.classList.contains( 'frm-show-box' ) ) ) {
+		if ( e.target.classList.contains( 'frm-show-box' ) || e.target.parentElement?.classList.contains( 'frm-show-box' ) ) {
 			return;
 		}
 
@@ -10957,7 +10959,9 @@ window.frmAdminBuildJS = function() {
 			} );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
-			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => fieldsUpdated = 0 );
+			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
+				fieldsUpdated = 0;
+			} );
 
 			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
 			if ( manageStyleSettings ) {
@@ -11030,7 +11034,9 @@ window.frmAdminBuildJS = function() {
 			showOrHideRepeaters( getExportOption() );
 
 			document.querySelector( '#frm-export-select-all' ).addEventListener( 'change', event => {
-				document.querySelectorAll( '[name="frm_export_forms[]"]' ).forEach( cb => cb.checked = event.target.checked );
+				document.querySelectorAll( '[name="frm_export_forms[]"]' ).forEach( cb => {
+					cb.checked = event.target.checked;
+				} );
 			} );
 		},
 
@@ -11202,12 +11208,12 @@ window.frm_show_div = ( div, value, showIf, classId ) => {
 };
 
 window.frmCheckAll = ( checked, n ) => {
-	jQuery( `input[name^="${ n }"]` ).prop( 'checked', ! ! checked );
+	jQuery( `input[name^="${ n }"]` ).prop( 'checked', Boolean( checked ) );
 };
 
 window.frmCheckAllLevel = ( checked, n, level ) => {
 	const $kids = jQuery( `.frm_catlevel_${ level }` ).children( '.frm_checkbox' ).children( 'label' );
-	$kids.children( `input[name^="${ n }"]` ).prop( 'checked', ! ! checked );
+	$kids.children( `input[name^="${ n }"]` ).prop( 'checked', Boolean( checked ) );
 };
 
 window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callback ) => {
