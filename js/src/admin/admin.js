@@ -5302,9 +5302,11 @@ window.frmAdminBuildJS = function() {
 		let optionInput;
 
 		for ( index in optionInputs ) {
-			optionInput = optionInputs[ index ];
-			if ( optionInput.id !== input.id && optionInput.value === input.value && optionInput.getAttribute( 'data-duplicate' ) !== 'true' ) {
-				return true;
+			if ( Object.prototype.hasOwnProperty.call( optionInputs, index ) ) {
+				optionInput = optionInputs[ index ];
+				if ( optionInput.id !== input.id && optionInput.value === input.value && optionInput.getAttribute( 'data-duplicate' ) !== 'true' ) {
+					return true;
+				}
 			}
 		}
 
@@ -5493,9 +5495,11 @@ window.frmAdminBuildJS = function() {
 		}
 
 		for ( fieldIndex in fieldIds ) {
-			settingId = fieldIds[ fieldIndex ];
-			setting = document.getElementById( `frm-single-settings-${ settingId }` );
-			moveFieldSettings( setting );
+			if ( Object.prototype.hasOwnProperty.call( fieldIds, fieldIndex ) ) {
+				settingId = fieldIds[ fieldIndex ];
+				setting = document.getElementById( `frm-single-settings-${ settingId }` );
+				moveFieldSettings( setting );
+			}
 		}
 	}
 
@@ -9497,7 +9501,7 @@ window.frmAdminBuildJS = function() {
 		const result = [];
 		const options = select?.options;
 
-		for ( let i = 0, iLen = options.length; i < iLen; i++ ) {
+		for ( let i = 0, iLen = options?.length; i < iLen; i++ ) {
 			opt = options[ i ];
 
 			if ( opt.selected ) {
