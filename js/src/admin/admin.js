@@ -9889,7 +9889,7 @@ window.frmAdminBuildJS = function() {
 
 		const liIcons = li.querySelectorAll( 'svg' );
 
-		liIcons.forEach( ( svg, key ) => {
+		liIcons.forEach( ( svg ) => {
 			useTag = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[ 0 ];
 			if ( ! useTag ) {
 				return;
