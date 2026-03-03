@@ -242,8 +242,14 @@
 	}
 
 	function addName( $form ) {
+		let i;
+		let firstField;
+		let lastField;
+		let firstFieldContainer;
+		let lastFieldContainer;
 		let firstNameID = '';
 		let lastNameID = '';
+		let subFieldEl;
 
 		const cardObject = {};
 		const { settings } = frm_stripe_vars;
@@ -264,7 +270,7 @@
 				return '';
 			}
 
-			const subFieldEl = field.querySelector( `.frm_combo_inputs_container .frm_form_subfield-${ subFieldName } input` );
+			subFieldEl = field.querySelector( `.frm_combo_inputs_container .frm_form_subfield-${ subFieldName } input` );
 			if ( ! subFieldEl ) {
 				return '';
 			}
@@ -272,7 +278,7 @@
 			return subFieldEl.value;
 		};
 
-		for ( let i = 0; i < settings.length; i++ ) {
+		for ( i = 0; i < settings.length; i++ ) {
 			firstNameID = settings[ i ].first_name;
 			lastNameID = settings[ i ].last_name;
 		}
@@ -300,11 +306,11 @@
 		}
 
 		if ( firstNameID !== '' ) {
-			const firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
+			firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
 			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
-				const firstField = getNameFieldItem( firstNameID, 'field', $form );
+				firstField = getNameFieldItem( firstNameID, 'field', $form );
 				if ( firstField && firstField.value ) {
 					cardObject.name = firstField.value;
 				}
@@ -312,11 +318,11 @@
 		}
 
 		if ( lastNameID !== '' ) {
-			const lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
+			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
 			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
-				const lastField = getNameFieldItem( lastNameID, 'field', $form );
+				lastField = getNameFieldItem( lastNameID, 'field', $form );
 				if ( lastField && lastField.value ) {
 					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
@@ -388,17 +394,19 @@
 
 	// Update price intent on change.
 	function priceChanged( _, field, fieldId ) {
+		let i;
+		let data;
 		const price = getPriceFields();
 		let run = price.includes( fieldId ) || price.includes( field.id );
 		if ( ! run ) {
-			for ( let i = 0; i < price.length; i++ ) {
+			for ( i = 0; i < price.length; i++ ) {
 				if ( field.id.indexOf( price[ i ] ) === 0 ) {
 					run = true;
 				}
 			}
 		}
 		if ( run ) {
-			const data = {
+			data = {
 				action: 'frm_strp_amount',
 				form: JSON.stringify( jQuery( field ).closest( 'form' ).serializeArray() ),
 				nonce: frm_stripe_vars.nonce
@@ -559,6 +567,7 @@
 	 */
 	function insertAuthenticationElement( cardElement ) {
 		let emailInput;
+		let cardFieldContainer;
 
 		let addAboveCardElement = true;
 		const emailField = checkForEmailField();
@@ -576,7 +585,7 @@
 
 		if ( addAboveCardElement ) {
 			// If no email field is found, add the email field above the credit card.
-			const cardFieldContainer = cardElement.closest( '.frm_form_field' );
+			cardFieldContainer = cardElement.closest( '.frm_form_field' );
 			cardFieldContainer.parentNode.insertBefore( authenticationMountTarget, cardFieldContainer );
 
 			triggerCustomEvent(
@@ -805,9 +814,12 @@
 	 * @return {string} Field value.
 	 */
 	function getSettingFieldValue( field ) {
-		const value = 'hidden' === field.getAttribute( 'type' )
-			? field.value
-			: field.querySelector( 'input' ).value;
+		let value;
+		if ( 'hidden' === field.getAttribute( 'type' ) ) {
+			value = field.value;
+		} else {
+			value = field.querySelector( 'input' ).value;
+		}
 		return value;
 	}
 
@@ -832,15 +844,17 @@
 		each( getStripeSettings(), checkStripeSettingForField );
 
 		function checkStripeSettingForField( currentSetting ) {
+			let currentFieldId;
+			let fieldMatchByKey;
+			let fieldContainer;
+			let hiddenInput;
+
 			if ( 'string' !== typeof currentSetting[ settingKey ] || ! currentSetting[ settingKey ].length ) {
 				return;
 			}
 
 			const currentSettingValue = currentSetting[ settingKey ];
 			const settingIsWrappedAsShortcode = '[' === currentSettingValue[ 0 ] && ']' === currentSettingValue[ currentSettingValue.length - 1 ];
-
-			let currentFieldId;
-			let fieldMatchByKey = null;
 
 			if ( settingIsWrappedAsShortcode ) {
 				// Email is wrapped as a shortcode.
@@ -855,12 +869,14 @@
 				currentFieldId = currentSettingValue;
 			}
 
-			const fieldContainer = fieldMatchByKey
-				? fieldMatchByKey.closest( '.frm_form_field' )
-				: document.getElementById( `frm_field_${ currentFieldId }_container` );
+			if ( fieldMatchByKey ) {
+				fieldContainer = fieldMatchByKey.closest( '.frm_form_field' );
+			} else {
+				fieldContainer = document.getElementById( `frm_field_${ currentFieldId }_container` );
+			}
 
 			if ( ! fieldContainer ) {
-				let hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }]"]` );
+				hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }]"]` );
 
 				if ( ! hiddenInput ) {
 					if ( 'first_name' === settingKey ) {
@@ -907,8 +923,9 @@
 	 * @return {void}
 	 */
 	function each( items, callback ) {
+		let index;
 		const { length } = items;
-		for ( let index = 0; index < length; index++ ) {
+		for ( index = 0; index < length; index++ ) {
 			if ( false === callback( items[ index ], index ) ) {
 				break;
 			}
