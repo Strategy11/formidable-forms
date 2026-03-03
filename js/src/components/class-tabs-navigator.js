@@ -1,6 +1,6 @@
 export class frmTabsNavigator {
 	constructor( wrapper ) {
-		if ( 'undefined' === typeof wrapper ) {
+		if ( wrapper === undefined ) {
 			return;
 		}
 
@@ -61,7 +61,7 @@ export class frmTabsNavigator {
 	}
 	initSlideTrackUnderline( nav, index ) {
 		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
-		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
+		const activeNav = nav !== undefined ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
 		this.positionUnderlineIndicator( activeNav );
 	}
 

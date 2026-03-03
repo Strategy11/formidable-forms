@@ -80,7 +80,7 @@ registerBlockType( 'formidable/simple-form', {
 
 	edit: Edit,
 
-	save: function( props ) {
+	save( props ) {
 		const {
 			attributes,
 		} = props;

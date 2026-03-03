@@ -18,7 +18,7 @@ const { tag, div, a, img } = window.frmDom;
 /**
  * Create and return the Empty State HTML element.
  *
- * @returns {HTMLElement} The Empty State element.
+ * @return {HTMLElement} The Empty State element.
  */
 export function createEmptyStateElement() {
 	const button = a( {
@@ -53,7 +53,7 @@ export function createEmptyStateElement() {
 /**
  * Return the elements related to the Empty State.
  *
- * @returns {Object} Object containing Empty State related DOM elements.
+ * @return {Object} Object containing Empty State related DOM elements.
  */
 export function getEmptyStateElements() {
 	const emptyState = document.querySelector( `#${ PREFIX }-empty-state` );

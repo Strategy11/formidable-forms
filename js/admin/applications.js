@@ -231,7 +231,7 @@
 
 		addTemplatesToGrid(
 			state.templates.filter(
-				template => -1 !== template.categories.indexOf( category )
+				template => template.categories.includes( category )
 			)
 		);
 	}
@@ -339,9 +339,9 @@
 	}
 
 	function filterItemCount( counter, { data } ) {
-		const hasForms = 'undefined' !== typeof data.formCount && '0' !== data.formCount;
-		const hasViews = 'undefined' !== typeof data.viewCount && '0' !== data.viewCount;
-		const hasPages = 'undefined' !== typeof data.pageCount && '0' !== data.pageCount;
+		const hasForms = data.formCount !== undefined && '0' !== data.formCount;
+		const hasViews = data.viewCount !== undefined && '0' !== data.viewCount;
+		const hasPages = data.pageCount !== undefined && '0' !== data.pageCount;
 
 		if ( ! hasForms && ! hasViews && ! hasPages ) {
 			return counter;

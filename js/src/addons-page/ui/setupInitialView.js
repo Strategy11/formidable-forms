@@ -18,7 +18,7 @@ const CAT_COUNT_CLASS = `.${ SKELETON_PREFIX }-cat-count`;
  * Sets up the initial view, performing any required
  * DOM manipulations for proper element presentation.
  *
- * @returns {void}
+ * @return {void}
  */
 export function setupInitialView() {
 	const { sidebar, searchInput, bodyContent } = getElements();
@@ -43,7 +43,7 @@ export function setupInitialView() {
  * Sets up the "Active" category, updating the
  * categorizedAddons object and the category count.
  *
- * @returns {void}
+ * @return {void}
  */
 export function setupActiveCategory() {
 	const { activeCategory, availableCategory, categoriesTopDivider } =
@@ -72,7 +72,7 @@ export function setupActiveCategory() {
  * categorizedAddons object and the category count.
  *
  * @private
- * @returns {void}
+ * @return {void}
  */
 function setupAvailableCategory() {
 	const { bodyContent, availableCategory, availableAddons } = getElements();
@@ -97,7 +97,7 @@ function setupAvailableCategory() {
  * category count.
  *
  * @private
- * @returns {void}
+ * @return {void}
  */
 function setupAllAddonsCategory() {
 	const { allItemsCategory, addons } = getElements();
@@ -111,7 +111,7 @@ function setupAllAddonsCategory() {
  * category count.
  *
  * @private
- * @returns {void}
+ * @return {void}
  */
 function setupPlansCategory() {
 	const {

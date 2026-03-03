@@ -8,7 +8,7 @@ import { canAccessApplicationDashboard } from '../shared';
 /**
  * Adds application templates if the user has dashboard access.
  *
- * @returns {void}
+ * @return {void}
  */
 export function maybeAddApplicationTemplates() {
 	// Exit if the user doesn't have permission to see application dashboard
@@ -27,7 +27,7 @@ export function maybeAddApplicationTemplates() {
  *
  * @private
  * @param {Object} data The data object containing information for application templates.
- * @returns {void}
+ * @return {void}
  */
 function setupApplicationTemplates( data ) {
 	// Create application templates

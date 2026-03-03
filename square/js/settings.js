@@ -20,7 +20,7 @@
 			formData.append( 'mode', mode );
 			frmDom.ajax.doJsonPost( 'square_oauth', formData ).then(
 				function( response ) {
-					if ( 'undefined' !== typeof response.redirect_url ) {
+					if ( response.redirect_url !== undefined ) {
 						window.location = response.redirect_url;
 					}
 				}
@@ -40,7 +40,7 @@
 			formData.append( 'testMode', 'test' === event.target.id.replace( 'frm_disconnect_square_', '' ) ? 1 : 0 );
 			frmDom.ajax.doJsonPost( 'square_disconnect', formData ).then(
 				function( response ) {
-					if ( 'undefined' !== typeof response.success && response.success ) {
+					if ( response.success ) {
 						window.location.reload();
 					}
 				}
@@ -59,7 +59,7 @@
 			formData.append( 'mode', 'test' );
 			frmDom.ajax.doJsonPost( 'square_oauth', formData ).then(
 				function( response ) {
-					if ( 'undefined' !== typeof response.redirect_url ) {
+					if ( response.redirect_url !== undefined ) {
 						window.location = response.redirect_url;
 						jQuery( modal ).dialog( 'close' );
 					}

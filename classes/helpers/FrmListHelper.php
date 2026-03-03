@@ -305,10 +305,12 @@ class FrmListHelper {
 	 * @return void
 	 */
 	private function hidden_search_inputs( $param_name ) {
-		if ( ! empty( $_REQUEST[ $param_name ] ) ) {
-			$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
-			echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
+		if ( empty( $_REQUEST[ $param_name ] ) ) {
+			return;
 		}
+
+		$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
+		echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
 	}
 
 	/**
@@ -400,7 +402,7 @@ class FrmListHelper {
 			$two = '2';
 		}//end if
 
-		if ( empty( $this->_actions ) ) {
+		if ( ! $this->_actions ) {
 			return;
 		}
 
@@ -617,7 +619,7 @@ class FrmListHelper {
 	 * @param string $which
 	 */
 	protected function pagination( $which ) {
-		if ( empty( $this->_pagination_args ) ) {
+		if ( ! $this->_pagination_args ) {
 			return;
 		}
 

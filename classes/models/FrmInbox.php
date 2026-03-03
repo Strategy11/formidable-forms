@@ -400,10 +400,12 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function remove( $key ) {
-		if ( isset( self::$messages[ $key ] ) ) {
-			unset( self::$messages[ $key ] );
-			$this->update_list();
+		if ( ! isset( self::$messages[ $key ] ) ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ] );
+		$this->update_list();
 	}
 
 	/**
@@ -466,7 +468,7 @@ class FrmInbox extends FrmFormApi {
 
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
-				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';
+				return 'href="' . esc_url( $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] ) . '"';
 			},
 			$cta
 		);

@@ -510,11 +510,7 @@ class FrmField {
 				$safe_atts = array();
 
 				foreach ( $attr as $attr_key => $att ) {
-					if ( ! is_numeric( $attr_key ) ) {
-						// opt=1 without parentheses for example is mapped like 'opt' => 1.
-						$key   = $attr_key;
-						$value = $att;
-					} else {
+					if ( is_numeric( $attr_key ) ) {
 						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
 						$split = explode( '=', $att, 2 );
 
@@ -524,6 +520,10 @@ class FrmField {
 
 						$key   = trim( $split[0] );
 						$value = trim( $split[1], '"' );
+					} else {
+						// opt=1 without parentheses for example is mapped like 'opt' => 1.
+						$key   = $attr_key;
+						$value = $att;
 					}
 
 					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
@@ -697,13 +697,15 @@ class FrmField {
 
 		// Serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
-			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
-				if ( 'field_options' === $opt ) {
-					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
-				}
-
-				$values[ $opt ] = serialize( $values[ $opt ] );
+			if ( ! isset( $values[ $opt ] ) || ! is_array( $values[ $opt ] ) ) {
+				continue;
 			}
+
+			if ( 'field_options' === $opt ) {
+				$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
+			}
+
+			$values[ $opt ] = serialize( $values[ $opt ] );
 		}
 
 		if ( isset( $values['default_value'] ) && is_array( $values['default_value'] ) ) {
@@ -1008,15 +1010,17 @@ class FrmField {
 	 * @return void
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
-		if ( $inc_repeat === 'include' ) {
-			$form_id = $where['fi.form_id'];
-			$where[] = array(
-				'or'                => 1,
-				'fi.form_id'        => $form_id,
-				'fr.parent_form_id' => $form_id,
-			);
-			unset( $where['fi.form_id'] );
+		if ( $inc_repeat !== 'include' ) {
+			return;
 		}
+
+		$form_id = $where['fi.form_id'];
+		$where[] = array(
+			'or'                => 1,
+			'fi.form_id'        => $form_id,
+			'fr.parent_form_id' => $form_id,
+		);
+		unset( $where['fi.form_id'] );
 	}
 
 	/**

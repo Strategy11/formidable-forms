@@ -91,11 +91,13 @@ class FrmEntryValidate {
 	 */
 	private static function set_item_key( &$values ) {
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
-			global $wpdb;
-			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
-			$_POST['item_key']  = $values['item_key'];
+		if ( isset( $values['item_key'] ) && $values['item_key'] != '' ) {
+			return;
 		}
+
+		global $wpdb;
+		$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
+		$_POST['item_key']  = $values['item_key'];
 	}
 
 	/**
@@ -528,10 +530,10 @@ class FrmEntryValidate {
 			$pattern = '';
 
 			foreach ( $parts as $part ) {
-				if ( ! $pattern ) {
-					$pattern .= $part;
-				} else {
+				if ( $pattern ) {
 					$pattern .= '(' . $part . ')?';
+				} else {
+					$pattern .= $part;
 				}
 			}
 		}

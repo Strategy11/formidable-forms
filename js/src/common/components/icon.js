@@ -5,7 +5,7 @@ const { Component } = wp.element;
 const { Dashicon } = wp.components;
 
 export default class FormidableIcon extends Component {
-	loadCustomSvgIcon( ) {
+	loadCustomSvgIcon() {
 		const icon = formidable_form_selector.icon;
 		if ( icon.match( /frm_white_label_icon/ ) ) {
 			return (

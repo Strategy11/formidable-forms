@@ -5,7 +5,7 @@ import addStylerUpdateEvents from './stylerUpdateButtonEvents';
 /**
  * Attaches event listeners for handling user interactions.
  *
- * @returns {void}
+ * @return {void}
  */
 export function addEventListeners() {
 	addChecklistEvents();

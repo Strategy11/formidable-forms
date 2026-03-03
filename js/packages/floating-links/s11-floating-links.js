@@ -84,7 +84,7 @@ class S11FloatingLinks {
 	}
 
 	/**
-	 * @returns {HTMLElement} The inbox slide-in element.
+	 * @return {HTMLElement} The inbox slide-in element.
 	 */
 	getInboxSlideIn() {
 		const h3 = frmDom.tag(

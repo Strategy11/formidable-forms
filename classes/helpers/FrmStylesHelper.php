@@ -684,14 +684,14 @@ class FrmStylesHelper {
 				//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$posted = wp_unslash( $_POST['frm_style_setting'] );
 
-				if ( ! is_array( $posted ) ) {
+				if ( is_array( $posted ) ) {
+					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
+					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
+				} else {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
 					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
-				} else {
-					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
-					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
 				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );

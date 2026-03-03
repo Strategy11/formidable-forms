@@ -42,14 +42,14 @@ class FrmSolution {
 	 * @param array $atts
 	 */
 	public function __construct( $atts = array() ) {
-		if ( empty( $this->plugin_slug ) ) {
+		if ( ! $this->plugin_slug ) {
 			return;
 		}
 
 		add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
 		add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
 
-		if ( empty( $this->plugin_file ) ) {
+		if ( ! $this->plugin_file ) {
 			$this->plugin_file = $this->plugin_slug . '.php';
 		}
 	}

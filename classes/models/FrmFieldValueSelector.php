@@ -282,7 +282,7 @@ class FrmFieldValueSelector {
 		echo '<select name="' . esc_attr( $this->html_name ) . '">';
 		echo '<option value="">' . esc_html( $this->blank_option_label ) . '</option>';
 
-		if ( ! empty( $this->options ) ) {
+		if ( $this->options ) {
 			$truncate = $this->truncate ?? 25;
 
 			foreach ( $this->options as $key => $value ) {

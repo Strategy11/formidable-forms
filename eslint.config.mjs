@@ -1,15 +1,24 @@
+import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import babelParser from '@babel/eslint-parser';
-import wordpressPlugin from '@wordpress/eslint-plugin';
 import reactPlugin from 'eslint-plugin-react';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import cypressPlugin from 'eslint-plugin-cypress';
 import noJqueryPlugin from 'eslint-plugin-no-jquery';
 import compatPlugin from 'eslint-plugin-compat';
-import jsdocPlugin from 'eslint-plugin-jsdoc';
 import unicornPlugin from 'eslint-plugin-unicorn';
-import importPlugin from 'eslint-plugin-import';
+import formidablePlugin from './eslint-rules/index.js';
 import globals from 'globals';
+
+const __filename = fileURLToPath( import.meta.url );
+const __dirname = dirname( __filename );
+
+const compat = new FlatCompat( {
+	baseDirectory: __dirname,
+	resolvePluginsRelativeTo: __dirname,
+} );
 
 export default [
 	// Global ignores (replaces .eslintignore)
@@ -36,13 +45,17 @@ export default [
 			'**/node_modules/**',
 			'**/vendor/**',
 			'**/venv/**',
+			'eslint-rules/**',
 			'build/**',
 			'coverage/**',
 		],
 	},
 
 	// WordPress recommended-with-formatting preset
-	...( wordpressPlugin.configs?.['flat/recommended-with-formatting'] ?? [] ),
+	// @wordpress/eslint-plugin uses legacy config format (no flat/ exports exist).
+	// FlatCompat is the official ESLint bridge to use legacy configs in ESLint 9 flat config.
+	// See: https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config
+	...compat.extends( 'plugin:@wordpress/eslint-plugin/recommended-with-formatting' ),
 
 	// Base config for all JS files
 	{
@@ -77,15 +90,15 @@ export default [
 			},
 		},
 		plugins: {
-			react: reactPlugin,
-			'jsx-a11y': jsxA11yPlugin,
+			// NOTE: react, jsx-a11y, jsdoc, import, react-hooks are registered by FlatCompat
+			// via the WordPress preset chain, do not register them here (would cause
+			// ESLint 9 "Cannot redefine plugin" error due to different require() instances).
 			sonarjs: sonarjsPlugin,
 			cypress: cypressPlugin,
 			'no-jquery': noJqueryPlugin,
 			compat: compatPlugin,
-			jsdoc: jsdocPlugin,
 			unicorn: unicornPlugin,
-			import: importPlugin,
+			formidable: formidablePlugin,
 		},
 		settings: {
 			'import/resolver': {
@@ -145,7 +158,7 @@ export default [
 			'vars-on-top': 'warn',
 			'yoda': 'off',
 			'linebreak-style': 'off',
-			'object-shorthand': 'off',
+			'object-shorthand': 'error',
 			'no-unused-vars': 'off',
 			'no-console': 'off',
 			'eqeqeq': 'off',
@@ -157,6 +170,13 @@ export default [
 
 			// WordPress overrides
 			'@wordpress/no-global-active-element': 'off',
+			// Disabled: use context.* APIs removed in ESLint 9 flat config (getScope, getAncestors,
+			// getDeclaredVariables, getCommentsBefore). Re-enable when @wordpress/eslint-plugin
+			// migrates to sourceCode.* APIs for ESLint 9 support.
+			'@wordpress/no-unused-vars-before-return': 'off',
+			'@wordpress/data-no-store-string-literals': 'off',
+			'@wordpress/react-no-unsafe-timeout': 'off',
+			'@wordpress/i18n-translator-comments': 'off',
 
 			// Prettier
 			'prettier/prettier': 'off',
@@ -292,6 +312,8 @@ export default [
 			'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
 
 			// TODO: New breaking changes after updating to look into.
+			'jsdoc/reject-any-type': 'off',
+			'jsdoc/reject-function-type': 'off',
 			'no-jquery/no-sizzle': 'off',
 			'sonarjs/anchor-precedence': 'off',
 			'sonarjs/class-name': 'off',
@@ -314,10 +336,18 @@ export default [
 			'sonarjs/unused-import': 'off',
 			'unicorn/consistent-existence-index-check': 'off',
 			'unicorn/no-negated-condition': 'off',
-			'unicorn/no-typeof-undefined': 'off',
+//			'unicorn/no-typeof-undefined': 'error',
 			'unicorn/prefer-global-this': 'off',
 			'unicorn/prefer-string-raw': 'off',
 			'unicorn/switch-case-braces': 'off',
+			'unicorn/prefer-single-call': 'off',
+			'unicorn/no-immediate-mutation': 'off',
+
+			// Custom Formidable rules
+			'formidable/prefer-strict-comparison': 'error',
+			'formidable/no-redundant-undefined-check': 'error',
+			'formidable/prefer-includes': 'error',
+			'formidable/no-typeof-undefined': 'error',
 		},
 	},
 
@@ -343,6 +373,74 @@ export default [
 			'no-jquery/no-ajax': 'error',
 			'no-jquery/no-fade': 'error',
 			'no-jquery/no-is': 'error',
+			'prefer-const': 'off',
+		},
+	},
+
+	// Override for js/formidable_admin_global.js
+	{
+		files: ['js/formidable_admin_global.js'],
+		rules: {
+			'prefer-const': 'off',
+		},
+	},
+
+	// Override for js/src/admin/admin.js
+	{
+		files: ['js/src/admin/admin.js'],
+		rules: {
+			'prefer-const': 'off',
+			'no-redeclare': 'off',
+			'no-unused-expressions': 'off',
+			'jsdoc/require-returns-description': 'off',
+			'jsdoc/require-param-type': 'off',
+			'@wordpress/valid-sprintf': 'off',
+		},
+	},
+
+	// Override for js/src/common/components/radio.js
+	{
+		files: ['js/src/common/components/radio.js'],
+		rules: {
+			'@wordpress/no-base-control-with-label-without-id': 'off',
+		},
+	},
+
+	// Override for files using @wordpress/dom-ready
+	{
+		files: [
+			'js/src/addons-page/index.js',
+			'js/src/form-templates/index.js',
+			'js/src/onboarding-wizard/index.js',
+			'js/src/settings-components/index.js',
+			'js/src/welcome-tour/index.js',
+		],
+		rules: {
+			'import/no-extraneous-dependencies': 'off',
+		},
+	},
+
+	// Override for js/src/form-templates/events/favoriteButtonListener.js
+	{
+		files: ['js/src/form-templates/events/favoriteButtonListener.js'],
+		rules: {
+			'no-unused-expressions': 'off',
+		},
+	},
+
+	// Override for stripe/js/frmstrp.js
+	{
+		files: ['stripe/js/frmstrp.js'],
+		rules: {
+			'no-bitwise': 'off',
+		},
+	},
+
+	// Override for Cypress test files
+	{
+		files: ['tests/cypress/**/*.js'],
+		rules: {
+			'no-unused-expressions': 'off',
 		},
 	},
 ];

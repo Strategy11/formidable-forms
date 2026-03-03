@@ -43,6 +43,7 @@ zip -r $zipname $destination \
 	-x "*/.gitattributes" \
 	-x "*/.github/*" \
 	-x "*/.gitignore" \
+	-x "*/.windsurf/*" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
@@ -58,6 +59,7 @@ zip -r $zipname $destination \
 	-x "*/.coderabbit.yaml" \
 	-x "*/.deepsource.toml" \
 	-x "*/.semgrepignore" \
+	-x "*/.oxlintrc.json" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -120,6 +122,7 @@ zip -r $zipname $destination \
 	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
+	-x "*/eslint-rules/*" \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \

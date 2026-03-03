@@ -789,16 +789,18 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function add_user_info_to_html_table( &$content ) {
-		if ( $this->include_user_info ) {
-			foreach ( $this->entry_values->get_user_info() as $user_info ) {
-				$value_args = array(
-					'label'      => $user_info['label'],
-					'value'      => $user_info['value'],
-					'field_type' => 'none',
-				);
+		if ( ! $this->include_user_info ) {
+			return;
+		}
 
-				$this->add_html_row( $value_args, $content );
-			}
+		foreach ( $this->entry_values->get_user_info() as $user_info ) {
+			$value_args = array(
+				'label'      => $user_info['label'],
+				'value'      => $user_info['value'],
+				'field_type' => 'none',
+			);
+
+			$this->add_html_row( $value_args, $content );
 		}
 	}
 
@@ -812,10 +814,12 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function add_user_info_to_plain_text_content( &$content ) {
-		if ( $this->include_user_info ) {
-			foreach ( $this->entry_values->get_user_info() as $user_info ) {
-				$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
-			}
+		if ( ! $this->include_user_info ) {
+			return;
+		}
+
+		foreach ( $this->entry_values->get_user_info() as $user_info ) {
+			$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
 		}
 	}
 

@@ -52,7 +52,7 @@
 
 	function frmTransLiteAdminJS() {
 		return {
-			init: function() {
+			init() {
 				const actions = document.getElementById( 'frm_notification_settings' );
 				if ( actions !== null ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
@@ -89,7 +89,7 @@
 				data: {
 					nonce: frm_trans_vars.nonce
 				},
-				success: function( html ) {
+				success( html ) {
 					jQuery( loadingImage ).replaceWith( html );
 				}
 			} );

@@ -407,10 +407,12 @@ class FrmForm {
 
 			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
-					if ( is_array( $option ) ) {
-						foreach ( $option as $key => $item ) {
-							$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
-						}
+					if ( ! is_array( $option ) ) {
+						continue;
+					}
+
+					foreach ( $option as $key => $item ) {
+						$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
 					}
 				}
 			}
@@ -439,17 +441,19 @@ class FrmForm {
 	 * @return void
 	 */
 	private static function maybe_update_max_option( $field, $values, &$new_field ) {
-		if ( $field->type === 'textarea' &&
-			! empty( $values['field_options'][ 'type_' . $field->id ] ) &&
-			in_array( $values['field_options'][ 'type_' . $field->id ], array( 'text', 'email', 'url', 'password', 'phone' ), true ) ) {
-			$new_field['field_options']['max'] = '';
-
-			/**
-			 * Update posted field setting so that new 'max' option is displayed after form is saved and page reloads.
-			 * FrmFieldsHelper::fill_default_field_opts populates field options by calling self::get_posted_field_setting.
-			 */
-			$_POST['field_options'][ 'max_' . $field->id ] = '';
+		if ( $field->type !== 'textarea' ||
+			empty( $values['field_options'][ 'type_' . $field->id ] ) ||
+			! in_array( $values['field_options'][ 'type_' . $field->id ], array( 'text', 'email', 'url', 'password', 'phone' ), true ) ) {
+			return;
 		}
+
+		$new_field['field_options']['max'] = '';
+
+		/**
+		 * Update posted field setting so that new 'max' option is displayed after form is saved and page reloads.
+		 * FrmFieldsHelper::fill_default_field_opts populates field options by calling self::get_posted_field_setting.
+		 */
+		$_POST['field_options'][ 'max_' . $field->id ] = '';
 	}
 
 	/**
@@ -998,14 +1002,12 @@ class FrmForm {
 		$counts   = array_fill_keys( $statuses, 0 );
 
 		foreach ( $results as $row ) {
-			if ( 'trash' !== $row->status ) {
-				if ( $row->is_template ) {
-					++$counts['template'];
-				} else {
-					++$counts['published'];
-				}
-			} else {
+			if ( 'trash' === $row->status ) {
 				++$counts['trash'];
+			} elseif ( $row->is_template ) {
+				++$counts['template'];
+			} else {
+				++$counts['published'];
 			}
 
 			if ( 'draft' === $row->status ) {
@@ -1052,10 +1054,10 @@ class FrmForm {
 	public static function get_params( $form = null ) {
 		global $frm_vars;
 
-		if ( ! $form ) {
-			$form = self::getAll( array(), 'name', 1 );
-		} else {
+		if ( $form ) {
 			self::maybe_get_form( $form );
+		} else {
+			$form = self::getAll( array(), 'name', 1 );
 		}
 
 		if ( isset( $frm_vars['form_params'] ) && is_array( $frm_vars['form_params'] ) && isset( $frm_vars['form_params'][ $form->id ] ) ) {

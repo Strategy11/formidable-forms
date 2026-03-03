@@ -28,11 +28,12 @@ class FrmFormMigratorsHelper {
 		foreach ( $forms as $form ) {
 			if ( ! self::is_dismissed( $form ) ) {
 				self::install_banner( $form );
-			} else {
-				echo '<span>';
-				self::install_button( $form, 'auto' );
-				echo '</span>';
+				continue;
 			}
+
+			echo '<span>';
+			self::install_button( $form, 'auto' );
+			echo '</span>';
 		}
 	}
 

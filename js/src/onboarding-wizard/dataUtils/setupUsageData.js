@@ -8,7 +8,7 @@ import { getState, STEPS } from '../shared';
  *
  * @param {string} processedStep The name of the step that has just been processed.
  * @param {string} nextStepName  The name of the next step in the onboarding process.
- * @returns {void}
+ * @return {void}
  */
 function setupUsageData( processedStep, nextStepName ) {
 	const formData = processDataForStep( processedStep, nextStepName );
@@ -27,7 +27,7 @@ function setupUsageData( processedStep, nextStepName ) {
  * @private
  * @param {string} processedStep The name of the step that has just been processed.
  * @param {string} nextStepName  The name of the next step in the onboarding process.
- * @returns {FormData|null} The FormData to be submitted for the step, or null if there's no data.
+ * @return {FormData|null} The FormData to be submitted for the step, or null if there's no data.
  */
 function processDataForStep( processedStep, nextStepName ) {
 	let formData;

@@ -309,14 +309,14 @@ class FrmStrpLiteAuth {
 			wp_die();
 		}
 
-		if ( ! is_array( $intents ) ) {
-			$intents = array( $intents );
-		} else {
+		if ( is_array( $intents ) ) {
 			foreach ( $intents as $k => $intent ) {
 				if ( is_array( $intent ) && isset( $intent[ $k ] ) ) {
 					$intents[ $k ] = $intent[ $k ];
 				}
 			}
+		} else {
+			$intents = array( $intents );
 		}
 
 		$_POST = $form;

@@ -14,7 +14,7 @@ import { navigateToNextStep } from '../utils';
 /**
  * Manages event handling for the "Install & Finish Setup" button in the "Install Formidable Add-ons" step.
  *
- * @returns {void}
+ * @return {void}
  */
 function addInstallAddonsButtonEvents() {
 	const { installAddonsButton } = getElements();
@@ -28,7 +28,7 @@ function addInstallAddonsButtonEvents() {
  *
  * @private
  * @param {Event} event The click event object.
- * @returns {void}
+ * @return {void}
  */
 const onInstallAddonsButtonClick = async event => {
 	const addons = document.querySelectorAll( '.frm-option-box.frm-checked:not(.frm-disabled)' );
@@ -65,7 +65,7 @@ const onInstallAddonsButtonClick = async event => {
  * @param {Object}  options             An object containing additional options for the installation.
  * @param {boolean} options.isInstalled Indicates whether the plugin is already installed.
  * @param {boolean} options.isVendor    Indicates whether the plugin is a vendor plugin (true) or a regular add-on (false).
- * @returns {Promise<any>} A promise that resolves with the JSON response from the server after the installation request is completed.
+ * @return {Promise<any>} A promise that resolves with the JSON response from the server after the installation request is completed.
  */
 async function installAddon( plugin, { isVendor, isInstalled } ) {
 	// Prepare FormData for the POST request

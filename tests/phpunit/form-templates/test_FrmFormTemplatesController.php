@@ -133,7 +133,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 			// Verify the favorite templates are correctly initialized.
 			$this->assertIsArray( $favorites, 'Favorite templates should be an array.' );
-			$this->assertTrue( isset( $favorites['default'] ), 'Missing default in favorites.' );
+			$this->assertArrayHasKey( 'default', $favorites, 'Missing default in favorites.' );
 
 			$expected = array_merge( $test_favorite, $default );
 			$this->assertEquals( $expected, $favorites, 'Favorite templates should match the example data.' );

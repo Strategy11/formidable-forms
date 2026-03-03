@@ -377,17 +377,17 @@ class FrmFormTemplatesController {
 		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
 		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
 
-		if ( ! $new_form_id ) {
-			// Send an error response if form duplication fails.
-			$response = array(
-				'message' => __( 'There was an error creating a template.', 'formidable' ),
-			);
-		} else {
+		if ( $new_form_id ) {
 			FrmForm::update( $new_form_id, FrmFormsController::get_modal_values() );
 
 			// Send a success response with redirect URL.
 			$response = array(
 				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ) . '&_wpnonce=' . wp_create_nonce(),
+			);
+		} else {
+			// Send an error response if form duplication fails.
+			$response = array(
+				'message' => __( 'There was an error creating a template.', 'formidable' ),
 			);
 		}
 
@@ -592,10 +592,12 @@ class FrmFormTemplatesController {
 	 */
 	private static function assign_featured_templates() {
 		foreach ( self::FEATURED_TEMPLATES_IDS as $key ) {
-			if ( isset( self::$templates[ $key ] ) ) {
-				self::$templates[ $key ]['is_featured'] = true;
-				self::$featured_templates[]             = self::$templates[ $key ];
+			if ( ! isset( self::$templates[ $key ] ) ) {
+				continue;
 			}
+
+			self::$templates[ $key ]['is_featured'] = true;
+			self::$featured_templates[]             = self::$templates[ $key ];
 		}
 	}
 

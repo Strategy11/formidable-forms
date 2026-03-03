@@ -47,7 +47,8 @@ describe( 'Forms page', () => {
 								'don\'t miss the best deals for cyber monday!',
 								'don\'t miss the giving tuesday flash sale!',
 								'don\'t miss 65% off on the best wordpress form builder!',
-								'upgrading for 60% off before our Anniversary Sale ends!'
+								'upgrading for 60% off before our Anniversary Sale ends!',
+								'stop patching together plugins. start building what you actually need.'
 							] ).to.include( headingText );
 						} );
 					} );
@@ -178,7 +179,6 @@ describe( 'Forms page', () => {
 								.invoke( 'html' )
 								.then( html => {
 									expect( html.split( '<br>' )[ 1 ] ).to.exist.and.not.be.empty;
-
 								} );
 						} );
 				} );
