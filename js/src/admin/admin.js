@@ -3729,7 +3729,7 @@ window.frmAdminBuildJS = function() {
 		if ( hasImageOptions ) {
 			setAlignment( fieldId, 'inline' );
 			removeImageSizeClasses( displayField );
-			imageSize = getImageOptionSize( fieldId );
+			const imageSize = getImageOptionSize( fieldId );
 			displayField.classList.add( 'frm_image_options' );
 			displayField.classList.add( `frm_image_size_${ imageSize }` );
 			$field.find( '.frm-bulk-edit-link' ).hide();
@@ -6220,12 +6220,13 @@ window.frmAdminBuildJS = function() {
 				return single;
 			}
 
-			return `<div class="frm_${ type } ${ type } ${ classes }" id="frm_${ type }_${ fieldId }-${ opt.key }"><label for="${ id
-			}"><input type="${ inputType
-			}" name="item_meta[${ fieldId }]${ type === 'checkbox' ? '[]' : ''
-			}" value="${ purifyHtml( opt.saved ) }" id="${ id }"${ isProduct ? ` data-price="${ opt.price }"` : '' }${ opt.checked ? ' checked="checked"' : '' }> ${ purifyHtml( opt.label ) }</label>${
-				isOther ? other : ''
-			}</div>`;
+			return `<div class="frm_${ type } ${ type } ${ classes }" id="frm_${ type }_${ fieldId }-${ opt.key }">
+					<label for="${ id }">
+						<input type="${ inputType }" name="item_meta[${ fieldId }]${ type === 'checkbox' ? '[]' : '' }" value="${ purifyHtml( opt.saved ) }" id="${ id }"${ isProduct ? ` data-price="${ opt.price }"` : '' }${ opt.checked ? ' checked="checked"' : '' }>
+						${ purifyHtml( opt.label ) }
+					</label>
+					${ isOther ? other : '' }
+				</div>`;
 		};
 
 		return this.getSingle();
