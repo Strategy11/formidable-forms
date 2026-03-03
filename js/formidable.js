@@ -248,11 +248,12 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkValidity( field, errors ) {
+		let fieldID;
 		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
 			return;
 		}
 
-		const fieldID = getFieldId( field, true );
+		fieldID = getFieldId( field, true );
 		if ( errors[ fieldID ] === undefined ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
@@ -1640,7 +1641,7 @@ function frmFrontFormJS() {
 
 	function setCustomValidityMessage() {
 		const forms = document.getElementsByClassName( 'frm-show-form' );
-		const length = forms.length;
+		const { length } = forms;
 
 		for ( let index = 0; index < length; ++index ) {
 			forms[ index ].addEventListener(
