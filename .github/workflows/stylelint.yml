@@ -25,7 +25,7 @@ jobs:
           node-version: "22"
 
       - name: Install Stylelint
-        run: npm install stylelint --no-save
+        run: npm install stylelint @wordpress/stylelint-config --no-package-lock
 
       - name: Run Stylelint
         run: npx stylelint "**/*.{css,scss}"
