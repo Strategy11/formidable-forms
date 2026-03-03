@@ -1,5 +1,3 @@
-/* global formidable_form_selector */
-
 import FormidableIcon from '../common/components/icon';
 
 ( function() {

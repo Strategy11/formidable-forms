@@ -1,4 +1,3 @@
-/* global formidable_form_selector */
 import FormidableIcon from '../common/components/icon';
 import { frmAddonAPI } from '../api/index';
 
