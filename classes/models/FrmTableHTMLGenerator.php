@@ -204,13 +204,15 @@ class FrmTableHTMLGenerator {
 	 * @return void
 	 */
 	private function init_td_style() {
-		if ( $this->use_inline_style === true ) {
-			$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
-			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
-			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
-
-			$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
+		if ( $this->use_inline_style !== true ) {
+			return;
 		}
+
+		$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
+		$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
+		$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
+
+		$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
 	}
 
 	/**

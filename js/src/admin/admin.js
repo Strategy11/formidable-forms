@@ -2333,11 +2333,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		for ( let i = 0; i < opts.length; i++ ) {
-			if ( hide ) {
-				opts[ i ].classList.add( 'frm_hidden' );
-			} else {
-				opts[ i ].classList.remove( 'frm_hidden' );
-			}
+			opts[ i ].classList.toggle( 'frm_hidden', hide );
 		}
 	}
 
@@ -9840,7 +9836,7 @@ window.frmAdminBuildJS = function() {
 
 		const liIcons = li.querySelectorAll( 'svg' );
 
-		liIcons.forEach( ( svg, key ) => {
+		liIcons.forEach( svg => {
 			useTag = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[ 0 ];
 			if ( ! useTag ) {
 				return;

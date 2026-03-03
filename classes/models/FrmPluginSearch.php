@@ -34,13 +34,15 @@ class FrmPluginSearch {
 	 */
 	public function start( $screen ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'plugin-install' === $screen->base && ( ! isset( $_GET['paged'] ) || 1 === intval( $_GET['paged'] ) ) ) {
-			add_filter( 'plugins_api_result', array( $this, 'inject_suggestion' ), 10, 3 );
-			add_filter( 'self_admin_url', array( $this, 'plugin_details' ) );
-			add_filter( 'plugin_install_action_links', array( $this, 'insert_related_links' ), 10, 2 );
-			add_action( 'admin_enqueue_scripts', array( $this, 'load_plugins_search_script' ) );
-			$this->maybe_dismiss();
+		if ( 'plugin-install' !== $screen->base || ( isset( $_GET['paged'] ) && 1 !== intval( $_GET['paged'] ) ) ) {
+			return;
 		}
+
+		add_filter( 'plugins_api_result', array( $this, 'inject_suggestion' ), 10, 3 );
+		add_filter( 'self_admin_url', array( $this, 'plugin_details' ) );
+		add_filter( 'plugin_install_action_links', array( $this, 'insert_related_links' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'load_plugins_search_script' ) );
+		$this->maybe_dismiss();
 	}
 
 	/**

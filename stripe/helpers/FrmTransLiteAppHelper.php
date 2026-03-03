@@ -389,18 +389,20 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
-		if ( $value ) {
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<tr>
-				<th scope="row"><?php echo esc_html( $label ); ?>:</th>
-				<td>
-					<?php echo esc_html( $value ); ?>
-				</td>
-			</tr>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		if ( ! $value ) {
+			return;
 		}
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<tr>
+			<th scope="row"><?php echo esc_html( $label ); ?>:</th>
+			<td>
+				<?php echo esc_html( $value ); ?>
+			</td>
+		</tr>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

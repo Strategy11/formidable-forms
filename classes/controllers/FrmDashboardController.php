@@ -428,12 +428,15 @@ class FrmDashboardController {
 	 */
 	private static function inbox_prepare_messages( $data ) {
 		foreach ( $data as $key => $messages ) {
-			if ( in_array( $key, array( 'unread', 'dismissed' ), true ) ) {
-				foreach ( $messages as $key_msg => $message ) {
-					$data[ $key ][ $key_msg ]['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
-				}
+			if ( ! in_array( $key, array( 'unread', 'dismissed' ), true ) ) {
+				continue;
+			}
+
+			foreach ( $messages as $key_msg => $message ) {
+				$data[ $key ][ $key_msg ]['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
 			}
 		}
+
 		return $data;
 	}
 

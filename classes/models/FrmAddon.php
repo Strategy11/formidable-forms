@@ -632,13 +632,15 @@ class FrmAddon {
 	 * @return void
 	 */
 	private function maybe_use_beta_url( &$version_info ) {
-		if ( $this->get_beta && ! empty( $version_info->beta ) ) {
-			$version_info->new_version = $version_info->beta['version'];
-			$version_info->package     = $version_info->beta['package'];
+		if ( ! $this->get_beta || empty( $version_info->beta ) ) {
+			return;
+		}
 
-			if ( ! empty( $version_info->plugin ) ) {
-				$version_info->plugin = $version_info->beta['plugin'];
-			}
+		$version_info->new_version = $version_info->beta['version'];
+		$version_info->package     = $version_info->beta['package'];
+
+		if ( ! empty( $version_info->plugin ) ) {
+			$version_info->plugin = $version_info->beta['plugin'];
 		}
 	}
 

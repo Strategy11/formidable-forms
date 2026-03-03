@@ -400,10 +400,12 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function remove( $key ) {
-		if ( isset( self::$messages[ $key ] ) ) {
-			unset( self::$messages[ $key ] );
-			$this->update_list();
+		if ( ! isset( self::$messages[ $key ] ) ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ] );
+		$this->update_list();
 	}
 
 	/**

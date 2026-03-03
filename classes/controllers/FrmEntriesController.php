@@ -553,15 +553,17 @@ class FrmEntriesController {
 		$hidden = array();
 
 		foreach ( (array) $result as $r ) {
-			if ( $r ) {
-				list( $form_prefix, $field_key ) = explode( '_', $r );
-
-				if ( (int) $form_prefix === (int) $form_id ) {
-					$hidden[] = $r;
-				}
-
-				unset( $form_prefix );
+			if ( ! $r ) {
+				continue;
 			}
+
+			list( $form_prefix, $field_key ) = explode( '_', $r );
+
+			if ( (int) $form_prefix === (int) $form_id ) {
+				$hidden[] = $r;
+			}
+
+			unset( $form_prefix );
 		}
 
 		return $hidden;
@@ -654,13 +656,15 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	private static function get_delete_form_time( $form, &$errors ) {
-		if ( 'trash' === $form->status ) {
-			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, $form->options['trash_time'] ?? time() );
-
-			/* translators: %1$s: Time string */
-			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
+		if ( 'trash' !== $form->status ) {
+			return;
 		}
+
+		$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
+		$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, $form->options['trash_time'] ?? time() );
+
+		/* translators: %1$s: Time string */
+		$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
 	}
 
 	/**

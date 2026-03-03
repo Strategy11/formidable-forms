@@ -361,15 +361,17 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	private function replace_form_shortcodes() {
-		if ( $this->form ) {
-			$form = (array) $this->form;
-
-			// Replace [form_key].
-			$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
-
-			// Replace [form_name].
-			$this->html = str_replace( '[form_name]', $form['name'], $this->html );
+		if ( ! $this->form ) {
+			return;
 		}
+
+		$form = (array) $this->form;
+
+		// Replace [form_key].
+		$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
+
+		// Replace [form_name].
+		$this->html = str_replace( '[form_name]', $form['name'], $this->html );
 	}
 
 	/**

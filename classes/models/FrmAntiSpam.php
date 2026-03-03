@@ -315,10 +315,12 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return void
 	 */
 	private static function clear_wp_super_cache() {
-		if ( function_exists( 'wp_cache_clean_cache' ) ) {
-			global $file_prefix;
-			wp_cache_clean_cache( $file_prefix, true );
+		if ( ! function_exists( 'wp_cache_clean_cache' ) ) {
+			return;
 		}
+
+		global $file_prefix;
+		wp_cache_clean_cache( $file_prefix, true );
 	}
 
 	/**

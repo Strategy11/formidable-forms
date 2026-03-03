@@ -129,12 +129,14 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_type( $type ) {
-		if ( ! $this->type ) {
-			$this->type = $this->get_field_column( 'type' );
+		if ( $this->type ) {
+			return;
+		}
 
-			if ( ! $this->type && $type ) {
-				$this->type = $type;
-			}
+		$this->type = $this->get_field_column( 'type' );
+
+		if ( ! $this->type && $type ) {
+			$this->type = $type;
 		}
 	}
 
@@ -1875,10 +1877,12 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
-					$csv_values_checked[] = $option['value'];
-					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
+				if ( ! isset( $option['value'] ) || ! str_contains( $filtered_checked, $option['value'] ) ) {
+					continue;
 				}
+
+				$csv_values_checked[] = $option['value'];
+				$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 			}
 
 			$csv_values_checked = array_reverse( $csv_values_checked );

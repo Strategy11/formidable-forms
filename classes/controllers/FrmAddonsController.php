@@ -194,10 +194,12 @@ class FrmAddonsController {
 
 		// Extract the elements to move
 		foreach ( $plans as $plan ) {
-			if ( isset( self::$categories[ $plan ] ) ) {
-				$bottom_categories[ $plan ] = self::$categories[ $plan ];
-				unset( self::$categories[ $plan ] );
+			if ( ! isset( self::$categories[ $plan ] ) ) {
+				continue;
 			}
+
+			$bottom_categories[ $plan ] = self::$categories[ $plan ];
+			unset( self::$categories[ $plan ] );
 		}
 
 		$special_categories = array();
@@ -820,6 +822,11 @@ class FrmAddonsController {
 			}
 
 			$addon['installed'] = self::is_installed( $file_name );
+
+			if ( 'highrise' === $slug && ! $addon['installed'] ) {
+				unset( $addons[ $id ] );
+				continue;
+			}
 
 			if ( $addon['installed'] && 'formidable-views/formidable-views.php' === $file_name ) {
 				$active_views_version = self::get_active_views_version();

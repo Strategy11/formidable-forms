@@ -600,12 +600,15 @@ class FrmFormActionsController {
 	 * @return void
 	 */
 	public static function delete_missing_actions( $old_actions ) {
-		if ( $old_actions ) {
-			foreach ( $old_actions as $old_id ) {
-				wp_delete_post( $old_id );
-			}
-			FrmDb::cache_delete_group( 'frm_actions' );
+		if ( ! $old_actions ) {
+			return;
 		}
+
+		foreach ( $old_actions as $old_id ) {
+			wp_delete_post( $old_id );
+		}
+
+		FrmDb::cache_delete_group( 'frm_actions' );
 	}
 
 	/**
