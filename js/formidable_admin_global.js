@@ -1,4 +1,3 @@
-/* global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
 
 jQuery( document ).ready( function() {

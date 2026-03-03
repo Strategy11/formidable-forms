@@ -78,6 +78,7 @@ export default [
 				...globals.es2021,
 				...globals.node,
 				...globals.mocha,
+				...globals.jquery,
 				wp: 'readonly',
 				wpApiSettings: 'readonly',
 				window: 'readonly',
@@ -104,6 +105,9 @@ export default [
 			'import/resolver': {
 				webpack: {
 					config: './webpack.config.js',
+				},
+				node: {
+					extensions: [ '.js', '.jsx' ],
 				},
 			},
 			react: {
@@ -174,6 +178,7 @@ export default [
 			'guard-for-in': 'off',
 			'no-return-assign': 'off',
 			'no-useless-escape': 'off',
+			'import/no-unresolved': 'off',
 			'comma-dangle': 'off',
 			'arrow-parens': ['error', 'as-needed'],
 

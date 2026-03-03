@@ -3,7 +3,6 @@
  * Pro-specific features are in the style-settings.js file in Pro.
  */
 ( function() {
-	/* globals frmDom, frmAdminBuild */
 	'use strict';
 
 	if ( ! document.getElementById( 'frm_active_style_form' ) ) {

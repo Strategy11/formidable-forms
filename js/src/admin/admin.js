@@ -1,8 +1,6 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
-	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
-
 	const el = {
 		messageBox: null,
 		reset: null,
@@ -231,8 +229,6 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 
 window.frmAdminBuildJS = function() {
 	//'use strict';
-
-	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */ // eslint-disable-line no-redeclare
 
 	const MAX_FIELD_GROUP_SIZE = 12;
 
@@ -2373,7 +2369,7 @@ window.frmAdminBuildJS = function() {
 		const $field = jQuery( this ).closest( 'li.form-field' );
 		const newRowId = this.getAttribute( 'frm-target-row-id' );
 
-		if ( ! ( newRowId && newRowId.startsWith( 'frm_field_group_' ) ) && ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
+		if ( ! newRowId?.startsWith( 'frm_field_group_' ) && ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
 			/* translators: %1$d: Maximum number of fields allowed in a field group. */
 			infoModal( sprintf( __( 'You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ), maxFieldsInGroup ) );
 			return;
@@ -2572,7 +2568,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function checkForMultiselectKeysOnMouseMove( event ) {
-		const keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
+		const keyIsDown = Boolean( event.ctrlKey || event.metaKey || event.shiftKey );
 		jQuery( builderPage ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
 		checkForActiveHoverTarget( event );
 	}
@@ -2867,7 +2863,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function maybeDisableFieldButtonAtLimit( type ) {
 		const button = document.getElementById( type );
-		if ( button && button.dataset.limit && countFieldTypeInForm( type ) >= button.dataset.limit ) {
+		if ( button?.dataset.limit && countFieldTypeInForm( type ) >= button.dataset.limit ) {
 			button.classList.add( 'frm_at_limit' );
 		}
 	}
@@ -2971,7 +2967,7 @@ window.frmAdminBuildJS = function() {
 				stack.push( formulaArray[ i ] );
 				continue;
 			}
-			if ( closing.hasOwnProperty( formulaArray[ i ] ) ) {
+			if ( Object.prototype.hasOwnProperty.call( closing, formulaArray[ i ] ) ) {
 				top = stack.pop();
 				if ( top !== closing[ formulaArray[ i ] ] ) {
 					hasUnmatchedClosing = true;

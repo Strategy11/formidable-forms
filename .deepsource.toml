@@ -43,6 +43,8 @@ name = "javascript"
 enabled = true
 
   [analyzers.meta]
+  plugins = ["react"]
+  dependency_file_paths = ["package.json"]
   environment = [
     "browser",
     "jquery",
