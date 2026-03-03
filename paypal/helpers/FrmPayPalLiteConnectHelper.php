@@ -911,6 +911,17 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * @since x.x
 	 *
+	 * @param string $subscription_id The PayPal subscription ID.
+	 *
+	 * @return false|object
+	 */
+	public static function get_subscription( $subscription_id ) {
+		return self::post_with_authenticated_body( 'get_subscription', compact( 'subscription_id' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
 	 * @param string $mode
 	 *
 	 * @return string

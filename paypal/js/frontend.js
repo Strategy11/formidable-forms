@@ -755,12 +755,21 @@
 			return;
 		}
 
-		// Add the order ID to the form
-		const orderInput = document.createElement( 'input' );
-		orderInput.type = 'hidden';
-		orderInput.name = 'paypal_order_id';
-		orderInput.value = data.orderID;
-		thisForm.append( orderInput );
+		if ( data.orderID ) {
+			const orderInput = document.createElement( 'input' );
+			orderInput.type = 'hidden';
+			orderInput.name = 'paypal_order_id';
+			orderInput.value = data.orderID;
+			thisForm.append( orderInput );
+		}
+
+		if ( data.subscriptionID ) {
+			const subscriptionInput = document.createElement( 'input' );
+			subscriptionInput.type = 'hidden';
+			subscriptionInput.name = 'paypal_subscription_id';
+			subscriptionInput.value = data.subscriptionID;
+			thisForm.append( subscriptionInput );
+		}
 
 		const paymentSourceInput = document.createElement( 'input' );
 		paymentSourceInput.type = 'hidden';

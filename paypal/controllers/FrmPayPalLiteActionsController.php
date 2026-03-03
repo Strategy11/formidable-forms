@@ -365,6 +365,49 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Validate that the subscription status indicates it was approved by the payer.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $subscription The PayPal subscription object.
+	 *
+	 * @return bool
+	 */
+	private static function validate_subscription_status( $subscription ) {
+		if ( ! isset( $subscription->status ) ) {
+			return false;
+		}
+
+		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED' ), true );
+	}
+
+	/**
+	 * Validate that the subscription amount matches the expected amount.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $subscription    The PayPal subscription object.
+	 * @param string   $expected_amount The expected amount as a whole number (in cents for currencies that include decimals).
+	 *
+	 * @return bool
+	 */
+	private static function validate_subscription_amount( $subscription, $expected_amount ) {
+		$subscription_amount = $subscription->billing_info->last_payment->amount->value
+			?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value
+			?? '';
+
+		if ( ! $subscription_amount ) {
+			echo 'No subscription amount';
+			return false;
+		}
+
+		$subscription_amount = number_format( (float) $subscription_amount, 2, '.', '' );
+		$expected_amount     = number_format( ( (float) $expected_amount ) / 100, 2, '.', '' );
+
+		return $subscription_amount === $expected_amount;
+	}
+
+	/**
 	 * @param object $response
 	 *
 	 * @return string
@@ -646,8 +689,57 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool|string True on success, error message on failure
 	 */
 	private static function trigger_recurring_payment( $atts ) {
-		// TODO
-		return 'Recurring payments are not yet implemented for PayPal Lite.';
+		$subscription_id = FrmAppHelper::get_post_param( 'paypal_subscription_id', '', 'sanitize_text_field' );
+
+		if ( ! $subscription_id ) {
+			return __( 'No PayPal subscription ID found. ' . print_r( $_POST, true ), 'formidable' );
+		}
+
+		$subscription = FrmPayPalLiteConnectHelper::get_subscription( $subscription_id );
+
+		if ( false === $subscription ) {
+			return 'Failed to get subscription.';
+		}
+
+		if ( ! self::validate_subscription_status( $subscription ) ) {
+			return 'This subscription status is not valid.';
+		}
+
+		if ( ! self::validate_subscription_amount( $subscription, $atts['amount'] ) ) {
+			return 'This subscription amount appears to be tampered with.';
+		}
+
+		self::create_new_subscription( $subscription_id, $atts );
+
+		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
+
+		return true;
+	}
+
+	/**
+	 * Create a new subscription record in the payments tables.
+	 *
+	 * @param string $subscription_id The PayPal subscription ID.
+	 * @param array  $atts            Includes 'entry', 'action', 'amount'.
+	 *
+	 * @return int
+	 */
+	private static function create_new_subscription( $subscription_id, $atts ) {
+		$new_values = array(
+			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['amount'], $atts['action'] ),
+			'paysys'         => 'paypal',
+			'item_id'        => $atts['entry']->id,
+			'action_id'      => $atts['action']->ID,
+			'sub_id'         => $subscription_id,
+			'interval_count' => $atts['action']->post_content['interval_count'],
+			'time_interval'  => $atts['action']->post_content['interval'],
+			'status'         => 'active',
+			'next_bill_date' => gmdate( 'Y-m-d' ),
+			'test'           => 'test' === FrmPayPalLiteAppHelper::active_mode() ? 1 : 0,
+		);
+
+		$frm_sub = new FrmTransLiteSubscription();
+		return $frm_sub->create( $new_values );
 	}
 
 	/**
