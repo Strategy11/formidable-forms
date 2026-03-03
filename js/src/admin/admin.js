@@ -3933,7 +3933,7 @@ window.frmAdminBuildJS = function() {
 					$self.prop( 'checked', false );
 				}, 0 );
 			};
-			let up;
+			let up; // eslint-disable-line prefer-const
 			const unbind = function() {
 				$self.off( 'mouseup', up );
 			};
