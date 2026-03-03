@@ -11,7 +11,9 @@ jobs:
   runStylelintInspection:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run Stylelint
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
