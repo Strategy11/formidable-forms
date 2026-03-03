@@ -2963,7 +2963,7 @@ window.frmAdminBuildJS = function() {
 				stack.push( formulaArray[ i ] );
 				continue;
 			}
-			if ( Object.prototype.hasOwnProperty.call( closing, formulaArray[ i ] ) ) {
+			if ( Object.hasOwn( closing, formulaArray[ i ] ) ) {
 				top = stack.pop();
 				if ( top !== closing[ formulaArray[ i ] ] ) {
 					hasUnmatchedClosing = true;
@@ -3103,21 +3103,21 @@ window.frmAdminBuildJS = function() {
 		return `field_options${ opt.substring( 0, at ) }_${ fieldId }${ opt.substring( at ) }`;
 	}
 
-	function popCalcFields( v, force ) {
-		const p = jQuery( v ).closest( '.frm-single-settings' );
-		const calc = p.find( '.frm-calc-field' );
+	function popCalcFields( element, force ) {
+		const settingsBox = jQuery( element ).closest( '.frm-single-settings' );
+		const calc = settingsBox.find( '.frm-calc-field' );
 
 		if ( ! force && ( ! calc.length || calc.val() === '' || calc.is( ':hidden' ) ) ) {
 			return;
 		}
 
-		const isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
+		const isSummary = isCalcBoxType( element, 'frm_js_summary_list' );
 
-		const fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
+		const fieldId = settingsBox.find( 'input[name="frm_fields_submitted[]"]' ).val();
 
 		let box;
 		if ( force ) {
-			box = v;
+			box = element;
 		} else {
 			box = document.getElementById( `frm-calc-box-${ fieldId }` );
 		}
@@ -3433,9 +3433,9 @@ window.frmAdminBuildJS = function() {
 		} else {
 			// Fade out validation options
 			const $validationBox = $msg.fadeOut( 'fast' ).closest( '.frm_validation_box' );
-			const v = $validationBox.css( 'display', 'block' ).children( `:not(${ messageClass }):visible` ).length;
+			const visibleCount = $validationBox.css( 'display', 'block' ).children( `:not(${ messageClass }):visible` ).length;
 			$validationBox.css( 'display', '' );
-			if ( v === 0 ) {
+			if ( visibleCount === 0 ) {
 				$msg.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
 		}
@@ -3453,9 +3453,9 @@ window.frmAdminBuildJS = function() {
 			}
 		} else {
 			const $validationBox = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' );
-			const v = $validationBox.css( 'display', 'block' ).children( `:not(.frm_unique_details${ fieldId }):visible` ).length;
+			const visibleCount = $validationBox.css( 'display', 'block' ).children( `:not(.frm_unique_details${ fieldId }):visible` ).length;
 			$validationBox.css( 'display', '' );
-			if ( v === 0 ) {
+			if ( visibleCount === 0 ) {
 				$thisField.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
 		}
@@ -5298,7 +5298,7 @@ window.frmAdminBuildJS = function() {
 		let optionInput;
 
 		for ( index in optionInputs ) {
-			if ( Object.prototype.hasOwnProperty.call( optionInputs, index ) ) {
+			if ( Object.hasOwn( optionInputs, index ) ) {
 				optionInput = optionInputs[ index ];
 				if ( optionInput.id !== input.id && optionInput.value === input.value && optionInput.getAttribute( 'data-duplicate' ) !== 'true' ) {
 					return true;
@@ -5491,7 +5491,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		for ( fieldIndex in fieldIds ) {
-			if ( Object.prototype.hasOwnProperty.call( fieldIds, fieldIndex ) ) {
+			if ( Object.hasOwn( fieldIds, fieldIndex ) ) {
 				settingId = fieldIds[ fieldIndex ];
 				setting = document.getElementById( `frm-single-settings-${ settingId }` );
 				moveFieldSettings( setting );
@@ -8813,8 +8813,6 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function hideShortcodes( box ) {
-		let i;
-		let u;
 		if ( box === undefined ) {
 			box = document.getElementById( 'frm_adv_info' );
 			if ( box === null ) {
@@ -8830,19 +8828,19 @@ window.frmAdminBuildJS = function() {
 		box.style.display = 'none';
 
 		const closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
-		for ( i = 0; i < closeIcons.length; i++ ) {
-			closeIcons[ i ].classList.remove( 'frm_close_icon' );
-			closeIcons[ i ].classList.add( 'frm_more_horiz_solid_icon' );
+		for ( let iconIndex = 0; iconIndex < closeIcons.length; iconIndex++ ) {
+			closeIcons[ iconIndex ].classList.remove( 'frm_close_icon' );
+			closeIcons[ iconIndex ].classList.add( 'frm_more_horiz_solid_icon' );
 		}
 
 		const closeSvg = document.querySelectorAll( '.frm_has_shortcodes use' );
-		for ( u = 0; u < closeSvg.length; u++ ) {
-			if ( getSVGHref( closeSvg[ u ] ) === '#frm_close_icon' ) {
-				if ( closeSvg[ u ].closest( '.frm_remove_field' ) ) {
+		for ( let svgIndex = 0; svgIndex < closeSvg.length; svgIndex++ ) {
+			if ( getSVGHref( closeSvg[ svgIndex ] ) === '#frm_close_icon' ) {
+				if ( closeSvg[ svgIndex ].closest( '.frm_remove_field' ) ) {
 					// Don't change the icon for the email fields remove button.
 					continue;
 				}
-				closeSvg[ u ].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
+				closeSvg[ svgIndex ].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
 			}
 		}
 	}
@@ -8858,8 +8856,8 @@ window.frmAdminBuildJS = function() {
 			id = 'field_custom_html';
 		}
 
-		const b = [ 'after_html', 'before_html', 'submit_html', 'field_custom_html' ];
-		if ( jQuery.inArray( id, b ) >= 0 ) {
+		const htmlFieldIds = [ 'after_html', 'before_html', 'submit_html', 'field_custom_html' ];
+		if ( jQuery.inArray( id, htmlFieldIds ) >= 0 ) {
 			jQuery( `.frm_code_list li:not(.show_${ id })` ).addClass( 'frm_hidden' );
 			jQuery( `.frm_code_list li.show_${ id }` ).removeClass( 'frm_hidden' );
 		}
