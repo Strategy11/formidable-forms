@@ -2021,10 +2021,10 @@ function frmFrontFormJS() {
 			}
 			newPos = newPos - frm_js.offset;
 
-			const m = getComputedStyle( document.documentElement ).marginTop;
-			const b = getComputedStyle( document.body ).marginTop;
-			if ( m || b ) {
-				newPos = newPos - parseInt( m ) - parseInt( b );
+			const docMarginTop = getComputedStyle( document.documentElement ).marginTop;
+			const bodyMarginTop = getComputedStyle( document.body ).marginTop;
+			if ( docMarginTop || bodyMarginTop ) {
+				newPos = newPos - parseInt( docMarginTop ) - parseInt( bodyMarginTop );
 			}
 
 			if ( newPos && window.innerHeight ) {
