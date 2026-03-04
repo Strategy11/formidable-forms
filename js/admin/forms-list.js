@@ -10,19 +10,51 @@
 			return;
 		}
 
-		// If the dropdown is already moved here, toggle it.
-		if ( btn.nextElementSibling && 'frm-forms-list-settings' === btn.nextElementSibling.id ) {
-			btn.nextElementSibling.classList.toggle( 'frm_hidden' );
+		// If dropdown is already moved here, toggle it.
+		if ( btn.nextElementSibling && 'frm-forms-list-settings' === btn.nextElementSibling.id && ! btn.nextElementSibling.classList.contains( 'frm_hidden' ) ) {
+			btn.nextElementSibling.classList.add( 'frm_hidden' );
 			return;
 		}
 
-		// Move the dropdown to after the button.
+		// Move the dropdown to after the button (HTML structure) and use CSS for positioning.
 		const dropdownWrapper = document.getElementById( 'frm-forms-list-settings' );
 		if ( ! dropdownWrapper ) {
 			return;
 		}
 
+		// Get the button's position relative to the viewport.
+		const btnRect = btn.getBoundingClientRect();
+		const viewportHeight = window.innerHeight;
+		const spaceAbove = btnRect.top;
+		const spaceBelow = viewportHeight - btnRect.bottom;
+
+		// Always insert after the button, but use CSS classes for positioning.
 		btn.after( dropdownWrapper );
+
+		// Remove existing position classes.
+		dropdownWrapper.classList.remove( 'frm-dropdown-above', 'frm-dropdown-below' );
+
+		// Add position class based on available space.
+		if ( spaceAbove > spaceBelow ) {
+			// Position above the button (more space above).
+			dropdownWrapper.classList.add( 'frm-dropdown-above' );
+		} else {
+			// Position below the button (more space below).
+			dropdownWrapper.classList.add( 'frm-dropdown-below' );
+		}
+
+		// Hide dropdown when clicking outside.
+		const handleOutsideClick = ( event ) => {
+			const dropdown = document.getElementById( 'frm-forms-list-settings' );
+			if ( dropdown && ! dropdown.contains( event.target ) && ! btn.contains( event.target ) ) {
+				dropdown.classList.add( 'frm_hidden' );
+				document.removeEventListener( 'click', handleOutsideClick );
+			}
+		};
+
+		// Add outside click listener.
+		document.addEventListener( 'click', handleOutsideClick );
+
 		dropdownWrapper.classList.remove( 'frm_hidden' );
 	}
 

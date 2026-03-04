@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</div>
 
-		<div class="frm-flex frm-items-center frm-justify-between">
+		<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm">
 			<label for="frm-forms-list-per-page"><?php esc_html_e( 'Items per page', 'formidable' ); ?></label>
 			<input
 				type="number"
@@ -80,9 +80,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				data-wp-screen-option-id="formidable_page_formidable_per_page"
 			/>
 		</div>
-	</div>
 
-	<div style="text-align: right;">
-		<button type="button" class="frm-button-primary button-primary" id="frm-save-forms-list-settings-btn"><?php esc_html_e( 'Apply', 'formidable' ); ?></button>
+		<div style="text-align: right;">
+			<button type="button" class="frm-button-primary button-primary" id="frm-save-forms-list-settings-btn"><?php esc_html_e( 'Apply', 'formidable' ); ?></button>
+		</div>
 	</div>
 </div>

@@ -4,16 +4,30 @@
 
 #frm-forms-list-settings {
 	font-size: var(--text-sm);
-	position: absolute;
-	top: 100%;
-	right: 0;
-	z-index: 999;
 	width: 225px;
 	background-color: #fff;
 	border-radius: 8px;
 	border: 1px solid #F2F4F7;
 	box-shadow: 0 1.88px 4px -1px rgba(16, 24, 40, 0.03);
 	padding: 4px;
+
+	// Default positioning (below button)
+	position: absolute;
+	top: 100%;
+	right: 0;
+	z-index: 1000;
+
+	// Position above button when needed
+	&.frm-dropdown-above {
+		bottom: 100%;
+		top: auto;
+	}
+
+	// Position below button (default)
+	&.frm-dropdown-below {
+		top: 100%;
+		bottom: auto;
+	}
 
 	tfoot & {
 		top: auto;
