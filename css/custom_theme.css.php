@@ -599,6 +599,19 @@ legend.frm_hidden{
 }
 <?php } ?>
 
+.with_frm_style .frm_inline_submit_button{
+	position: relative;
+}
+
+.with_frm_style .frm_inline_submit_button .frm_submit{
+	position: absolute;
+	bottom: 0;
+}
+
+.with_frm_style .frm_inline_submit_button .frm_submit .frm_button_submit{
+	margin-bottom: 0;
+}
+
 .with_frm_style .frm_submit{
 	clear:both;
 }
