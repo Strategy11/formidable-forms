@@ -713,6 +713,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
 
+		self::$active_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+
 		return true;
 	}
 

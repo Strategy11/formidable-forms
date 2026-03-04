@@ -55,5 +55,17 @@ $pay_later_value = $form_action->post_content['pay_later'] ?? 'auto';
 				<input type="hidden" value="<?php echo esc_attr( $form_action->post_content['paypal_order_address'] ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'paypal_order_address' ) ); ?>">
 			<?php endif; ?>
 		</p>
+		<p class="frm6">
+			<label for="<?php echo esc_attr( $action_control->get_field_id( 'shipping_preference' ) ); ?>">
+				<?php esc_html_e( 'Shipping Preference', 'formidable' ); ?>
+			</label>
+			<?php $shipping_preference_value = $form_action->post_content['shipping_preference'] ?? 'use_paypal_account_data'; ?>
+			<select id="<?php echo esc_attr( $action_control->get_field_id( 'shipping_preference' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'shipping_preference' ) ); ?>">
+				<option value="use_address_field_data" <?php selected( $shipping_preference_value, 'use_address_field_data' ); ?>><?php esc_html_e( 'Use Address Field Data', 'formidable' ); ?></option>
+				<option value="use_paypal_account_data" <?php selected( $shipping_preference_value, 'use_paypal_account_data' ); ?>><?php esc_html_e( 'Use PayPal Account Data', 'formidable' ); ?></option>
+				<option value="no_shipping" <?php selected( $shipping_preference_value, 'no_shipping' ); ?>><?php esc_html_e( 'No Shipping', 'formidable' ); ?></option>
+			</select>
+		</p>
 	</div>
+
 </div>
