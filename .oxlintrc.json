@@ -45,7 +45,6 @@
 		"eslint/sort-keys": "off",
 		"eslint/no-magic-numbers": "off",
 		"eslint/radix": "off",
-		"eslint/prefer-template": "off",
 		"eslint/prefer-const": "off",
 		"eslint/prefer-object-spread": "off",
 		"eslint/prefer-destructuring": "off",
