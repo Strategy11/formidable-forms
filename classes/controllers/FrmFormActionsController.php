@@ -172,6 +172,18 @@ class FrmFormActionsController {
 	 * @return array
 	 */
 	public static function form_action_groups() {
+		$payment_actions = array(
+			'paypal',
+			'paypal-legacy',
+			'stripe',
+			'square',
+			'payment',
+		);
+
+		if ( ! class_exists( 'FrmPaymentsController' ) ) {
+			$payment_actions = array_diff( $payment_actions, array( 'paypal-legacy' ) );
+		}
+
 		$groups = array(
 			'misc'      => array(
 				'name'    => '',
@@ -188,13 +200,7 @@ class FrmFormActionsController {
 			'payment'   => array(
 				'name'    => __( 'eCommerce', 'formidable' ),
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
-				'actions' => array(
-					'paypal',
-					'paypal-legacy',
-					'stripe',
-					'square',
-					'payment',
-				),
+				'actions' => $payment_actions,
 			),
 			'marketing' => array(
 				'name'    => __( 'Email Marketing', 'formidable' ),
