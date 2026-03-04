@@ -39,6 +39,21 @@ class FrmTransLiteHooksController {
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
+			add_action( 'frm_pay_show_paypal_options', 'FrmPayPalLiteActionsController::add_action_options' );
+			add_action( 'frm_pay_show_paypal_options', function ( $atts ) {
+				$form_action    = $atts['form_action'];
+				$action_control = $atts['action_control'];
+
+				echo '</div>'; // End of the payment settings section.
+
+				FrmPayPalLiteActionsController::add_button_settings_section( $action_control, $form_action );
+
+				// Open up a div tag since the payment section is closed after this and we already ended the section.
+				// This results in an empty div tag but it allows us to inject these options without requiring
+				// any updates in the payments submodule.
+				echo '<div>';
+			}, 99 );
+
 			remove_action( 'admin_head', 'FrmTransListsController::add_list_hooks' );
 			add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 

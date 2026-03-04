@@ -400,14 +400,15 @@ class FrmPayPalLiteAppController {
 		$email = $action->post_content['email'] ?? '';
 
 		$data = array(
-			'amount'         => $amount,
-			'currency'       => $currency,
-			'product_name'   => $product_name,
-			'interval'       => $interval,
-			'interval_count' => $interval_count,
-			'trial_period'   => $trial_period,
-			'payment_limit'  => $payment_limit,
-			'email'          => $email,
+			'amount'              => $amount,
+			'currency'            => $currency,
+			'product_name'        => $product_name,
+			'interval'            => $interval,
+			'interval_count'      => $interval_count,
+			'trial_period'        => $trial_period,
+			'payment_limit'       => $payment_limit,
+			'email'               => $email,
+			'shipping_preference' => self::get_shipping_preference( $action ),
 		);
 
 		$response = FrmPayPalLiteConnectHelper::create_subscription( $data );
