@@ -44,14 +44,14 @@ class FrmDefPayPalAction extends FrmFormAction {
 /**
  * Add paypal legacy action.
  */
-class FrmDefPayPalLegacyAction extends FrmFormAction {
-	public function __construct() {
-		$action_ops = array(
-			'classes' => 'frmfont frm_paypal_icon frm-inverse',
-			'color'   => 'var(--primary-700)',
-		);
+if ( class_exists( 'FrmPaymentAction' ) ) {
+	class FrmDefPayPalLegacyAction extends FrmPaymentAction {
+		public function __construct() {
+			parent::__construct();
 
-		parent::__construct( 'paypal-legacy', 'PayPal (Legacy)', $action_ops );
+			$this->id_base = 'paypal-legacy';
+			$this->name    = 'PayPal (Legacy)';
+		}
 	}
 }
 

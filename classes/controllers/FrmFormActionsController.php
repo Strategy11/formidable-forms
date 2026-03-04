@@ -80,15 +80,16 @@ class FrmFormActionsController {
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
 
-		if ( ! class_exists( 'FrmPaymentsController' ) ) {
-			unset( $action_classes['paypal-legacy'] );
-		}
-
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 		$action_classes = self::maybe_unset_highrise( $action_classes );
 
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
+
+		// This needs to be called after we include default_actions.php or FrmDefPayPalLegacyAction will never exist.
+		if ( 'FrmDefPayPalAction' === $action_classes['paypal'] || ! class_exists( 'FrmPaymentAction' ) || ! class_exists( 'FrmDefPayPalLegacyAction' ) ) {
+			unset( $action_classes['paypal-legacy'] );
+		}
 
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
