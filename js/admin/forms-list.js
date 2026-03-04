@@ -26,7 +26,21 @@
 		dropdownWrapper.classList.remove( 'frm_hidden' );
 	}
 
-	function handleClickFormsListSettingsApplyBtn( event ) {
+	function handleChangeColumns( event ) {
+		if ( ! event.target.dataset.wpColumnInputId ) {
+			return;
+		}
+
+		const wpInput = document.getElementById( event.target.dataset.wpColumnInputId );
+		if ( ! wpInput ) {
+			return;
+		}
+
+		wpInput.checked = event.target.checked;
+		wpInput.dispatchEvent( new Event( 'click' ) );
+	}
+
+	function handleClickApplyBtn( event ) {
 		// Update the screen options form inputs.
 		const screenOptionsForm = document.getElementById( 'adv-settings' );
 		if ( ! screenOptionsForm ) {
@@ -34,8 +48,8 @@
 			return;
 		}
 
-		document.querySelectorAll( '#frm-forms-list-settings [data-screen-option-id]' ).forEach( input => {
-			const screenOptionInput = document.getElementById( input.dataset.screenOptionId );
+		document.querySelectorAll( '#frm-forms-list-settings [data-wp-screen-option-id]' ).forEach( input => {
+			const screenOptionInput = document.getElementById( input.dataset.wpScreenOptionId );
 			if ( ! screenOptionInput ) {
 				return;
 			}
@@ -75,7 +89,8 @@
 	// Click the gear icon.
 	documentOn( 'click', '.frm-forms-list-settings-btn', handleClickFormsListSettings );
 
-	documentOn( 'click', '#frm-save-forms-list-settings-btn', handleClickFormsListSettingsApplyBtn );
+	documentOn( 'change', 'input[data-wp-column-input-id]', handleChangeColumns );
+	documentOn( 'click', '#frm-save-forms-list-settings-btn', handleClickApplyBtn );
 
 	documentOn( 'click', '.frm-collapsible-box__btn', handleClickCollapsibleBtn );
 }() );

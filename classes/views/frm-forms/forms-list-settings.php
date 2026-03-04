@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<input
 							type="checkbox"
 							value="1"
-							data-screen-option-id="<?php echo esc_attr( $key ); ?>-hide"
+							data-wp-column-input-id="<?php echo esc_attr( $key ); ?>-hide"
 							<?php checked( ! $is_hidden ); ?>
 						/>
 						<?php echo esc_html( $label ); ?>
@@ -63,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'echo'       => true,
 					'checked'    => intval( get_user_option( 'frm_forms_show_desc' ) ) === 1,
 					'input_html' => array(
-						'data-screen-option-id' => 'frm-forms-show-desc',
+						'data-wp-screen-option-id' => 'frm-forms-show-desc',
 					),
 				)
 			);
@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				id="frm-forms-list-per-page"
 				value="<?php echo intval( $per_page ); ?>"
 				min="1"
-				data-screen-option-id="formidable_page_formidable_per_page"
+				data-wp-screen-option-id="formidable_page_formidable_per_page"
 			/>
 		</div>
 	</div>
