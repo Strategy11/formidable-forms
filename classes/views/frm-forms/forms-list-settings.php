@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 			FrmHtmlHelper::toggle(
 				'frm-forms-list-show-desc',
-				'show_desc',
+				'frm_forms_show_desc',
 				array(
 					'echo'       => true,
 					'checked'    => intval( get_user_option( 'frm_forms_show_desc' ) ) === 1,
