@@ -59,17 +59,23 @@ class FrmPayPalLiteHooksController {
 		add_filter( 'frm_add_settings_section', 'FrmPayPalLiteSettingsController::add_settings_section', 99 );
 		add_action( 'frm_update_settings', 'FrmPayPalLiteSettingsController::process_form' );
 
-		add_filter( 'frm_paypal_action_name', function () {
-			return 'PayPal Commerce';
-		} );
+		add_filter(
+			'frm_paypal_action_name',
+			function () {
+				return 'PayPal Commerce';
+			}
+		);
 
 		add_filter( 'frm_before_save_payment_action', 'FrmPayPalLiteActionsController::before_save_settings', 20, 2 );
 
-		add_filter( 'frm_paypal_action_options', function ( $options ) {
-			// Make actions using the PayPal add-on use the same icon we use in Lite.
-			$options['classes'] = 'frmfont frm_paypal_icon frm-inverse';
-			return $options;
-		} );
+		add_filter(
+			'frm_paypal_action_options',
+			function ( $options ) {
+				// Make actions using the PayPal add-on use the same icon we use in Lite.
+				$options['classes'] = 'frmfont frm_paypal_icon frm-inverse';
+				return $options;
+			}
+		);
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();

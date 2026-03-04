@@ -40,6 +40,8 @@ class FrmTransLiteHooksController {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
 			add_action( 'frm_pay_show_paypal_options', 'FrmPayPalLiteActionsController::add_action_options' );
+
+			// Use 99 so this happens after all of the other payment options.
 			add_action( 'frm_pay_show_paypal_options', function ( $atts ) {
 				$form_action    = $atts['form_action'];
 				$action_control = $atts['action_control'];
