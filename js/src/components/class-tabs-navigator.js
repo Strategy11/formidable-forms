@@ -108,7 +108,7 @@ export class frmTabsNavigator {
 				: activeNav.offsetLeft;
 
 			this.slideTrackLine.style.transform = `translateX(${ position }px)`;
-			this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+			this.slideTrackLine.style.width = `${ activeNav.clientWidth }px`;
 		} );
 	}
 

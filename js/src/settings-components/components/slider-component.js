@@ -323,7 +323,7 @@ export default class frmSliderComponent {
 		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
 		const value = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
 		const unit = slider.querySelector( 'select' ).value;
-		const steps = this.options[ index ].steps;
+		const { steps } = this.options[ index ];
 		let deltaX = Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
 
 		if ( '%' === unit ) {
@@ -545,7 +545,7 @@ export default class frmSliderComponent {
 		if ( element.classList.contains( 'frm-has-multiple-values' ) ) {
 			const input = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
 			const inputValue = input.value.split( ' ' );
-			const type = element.dataset.type;
+			const { type } = element.dataset;
 
 			if ( ! inputValue[ 2 ] ) {
 				inputValue[ 2 ] = '0px';
