@@ -248,12 +248,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkValidity( field, errors ) {
-		let fieldID;
 		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
 			return;
 		}
 
-		fieldID = getFieldId( field, true );
+		const fieldID = getFieldId( field, true );
 		if ( errors[ fieldID ] === undefined ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
