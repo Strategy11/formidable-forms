@@ -56,10 +56,10 @@ class FrmFormActionsController {
 			'email'             => 'FrmEmailAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
-			'paypal'            => 'FrmDefPayPalAction',
+			'paypal'            => 'FrmPayPalLiteAction',
 			'paypal-legacy'     => 'FrmDefPayPalLegacyAction',
-			'stripe'            => 'FrmDefStripeAction',
-			'square'            => 'FrmDefSquareAction',
+			'stripe'            => 'FrmStripeLiteAction',
+			'square'            => 'FrmSquareAction',
 			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
@@ -87,7 +87,7 @@ class FrmFormActionsController {
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
 
 		// This needs to be called after we include default_actions.php or FrmDefPayPalLegacyAction will never exist.
-		if ( 'FrmDefPayPalAction' === $action_classes['paypal'] || ! class_exists( 'FrmPaymentAction' ) || ! class_exists( 'FrmDefPayPalLegacyAction' ) ) {
+		if ( 'FrmPayPalLiteAction' === $action_classes['paypal'] || ! class_exists( 'FrmPaymentAction' ) || ! class_exists( 'FrmDefPayPalLegacyAction' ) ) {
 			unset( $action_classes['paypal-legacy'] );
 		}
 
