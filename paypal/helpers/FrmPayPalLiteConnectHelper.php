@@ -836,7 +836,7 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return false|object
 	 */
-	public static function create_order( $amount, $currency, $payment_source, $payer ) {
+	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference ) {
 		/**
 		 * Allow people to modify the brand name used in the PayPal order.
 		 *
@@ -846,7 +846,7 @@ class FrmPayPalLiteConnectHelper {
 		 */
 		$brand_name = apply_filters( 'frm_paypal_brand_name', get_bloginfo( 'name' ) );
 
-		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer' ) );
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference' ) );
 	}
 
 	/**

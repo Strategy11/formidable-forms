@@ -119,14 +119,16 @@ class FrmPayPalLiteAppController {
 			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
 		}
 
-		$action = reset( $actions );
-		$amount = self::get_amount_value_for_verification( $action );
-		$payer  = self::get_payer_data_from_posted_values( $action );
+		$action              = reset( $actions );
+		$amount              = self::get_amount_value_for_verification( $action );
+		$payer               = self::get_payer_data_from_posted_values( $action );
+		$shipping_preference = self::get_shipping_preference( $action );
 
 		// PayPal expects the amount in a format like 10.00, so format it.
 		$amount         = number_format( floatval( $amount ), 2, '.', '' );
 		$currency       = strtoupper( $action->post_content['currency'] );
-		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer );
+
+		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference );
 
 		if ( class_exists( 'FrmLog' ) ) {
 			$log = new FrmLog();
@@ -199,7 +201,30 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
-	 * @since 6.25
+	 * @since x.x
+	 *
+	 * @param WP_Post $action
+	 *
+	 * @return string
+	 */
+	private static function get_shipping_preference( $action ) {
+		$setting = ! empty( $action->post_content['shipping_preference'] ) ? $action->post_content['shipping_preference'] : 'use_paypal_account_data';
+
+		switch ( $setting ) {
+			case 'use_address_field_data':
+				return 'SET_PROVIDED_ADDRESS';
+
+			case 'no_shipping':
+				return 'NO_SHIPPING';
+
+			case 'use_paypal_account_data': 
+			default:
+				return 'GET_FROM_FILE';
+		}
+	}
+
+	/**
+	 * @since x.x
 	 *
 	 * @param array $payer
 	 * @param array $address
