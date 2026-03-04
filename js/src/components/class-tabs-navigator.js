@@ -48,7 +48,7 @@ export class frmTabsNavigator {
 
 		// Handle special case for frm_insert_fields_tab
 		const navLink = navItem.querySelector( 'a' );
-		if ( navLink && navLink.id === 'frm_insert_fields_tab' && ! navLink.closest( '#frm_adv_info' ) ) {
+		if ( navLink && navLink.id === 'frm_add_fields_tab' && ! navLink.closest( '#frm_adv_info' ) ) {
 			window.frmAdminBuild?.clearSettingsBox?.();
 		}
 	}
