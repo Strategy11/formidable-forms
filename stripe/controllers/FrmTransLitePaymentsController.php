@@ -218,19 +218,57 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			case 'square':
 				$refunded = FrmSquareLiteConnectHelper::refund_payment( $payment->receipt_id );
 				break;
+			case 'paypal':
+				$refunded = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
+
+				if ( false === $refunded ) {
+					$reason = self::convert_uppercase_underscores_to_ucwords(
+						FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api(),
+						array( 'REFUND_FAILED_', 'REFUND_' )
+					);
+				}
+
+				break;
 			default:
 				$refunded = false;
 				break;
-		}
+		}//end switch
 
 		if ( $refunded ) {
 			self::change_payment_status( $payment, 'refunded' );
 			$message = __( 'Refunded', 'formidable' );
 		} else {
-			$message = __( 'Failed', 'formidable' );
+			$message = __( 'Refund Failed', 'formidable' );
 		}
 
-		wp_die( esc_html( $message ) );
+		if ( ! empty( $reason ) ) {
+			$message .= ' (' . $reason . ')';
+		}
+
+		wp_die(
+			sprintf(
+				'<div class="%1$s">%2$s</div>',
+				$refunded ? 'frm_updated_message' : 'frm_error_style',
+				esc_html( $message )
+			)
+		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $error
+	 * @param array  $prefixes_to_strip
+	 *
+	 * @return string
+	 */
+	private static function convert_uppercase_underscores_to_ucwords( $error, $prefixes_to_strip = array() ) {
+		if ( ! preg_match( '/^[A-Z_]+$/', $error ) ) {
+			return '';
+		}
+
+		$reason = str_replace( $prefixes_to_strip, '', $error );
+		return ucwords( strtolower( str_replace( '_', ' ', $reason ) ) );
 	}
 
 	/**
@@ -250,5 +288,19 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->update( $payment->id, array( 'status' => $status ) );
 		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array|string $expected_gateways
+	 * @param array|string $selected_gateways
+	 *
+	 * @return void
+	 */
+	public static function maybe_hide_payment_setting( $expected_gateways, $selected_gateways ) {
+		if ( ! array_intersect( (array) $expected_gateways, (array) $selected_gateways ) ) {
+			echo ' frm_hidden';
+		}
 	}
 }

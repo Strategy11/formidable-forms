@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
 $square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+$paypal_connected = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
 
 if ( $stripe_connected ) {
 	FrmStrpLiteAppHelper::fee_education( 'stripe-action-tip', $form_action->post_content['gateway'] );
@@ -14,12 +15,60 @@ if ( $square_connected ) {
 	FrmSquareLiteAppHelper::fee_education( 'square-action-tip', $form_action->post_content['gateway'] );
 }
 
-if ( ! $stripe_connected && ! $square_connected ) {
+if ( $paypal_connected ) {
+	FrmPayPalLiteAppHelper::fee_education( 'paypal-action-tip', $form_action->post_content['gateway'] );
+}
+
+if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 	FrmStrpLiteAppHelper::not_connected_warning();
 }
 ?>
 
+<div class="frm-long-icon-buttons" role="tablist">
+<?php
+foreach ( $gateways as $gateway_name => $gateway ) {
+	$is_active       = in_array( $gateway_name, (array) $form_action->post_content['gateway'], true );
+	$name            = $gateway['label'] ?? ucfirst( $gateway_name );
+	$gateway_classes = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
+
+	if ( $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ) {
+		$gateway_classes .= ' frm_hidden';
+	}
+
+	$toggle_id = "frm_toggle_{$gateway_name}_settings";
+
+	$input_params = array(
+		'id'    => $toggle_id,
+		'type'  => 'radio',
+		'name'  => $this->get_field_name( 'gateway' ),
+		'value' => $gateway_name,
+	);
+
+	if ( $is_active ) {
+		$input_params['checked'] = 'checked';
+	}
+
+	$label_params = array(
+		'for'           => $toggle_id,
+		'class'         => trim( 'frm_payment_settings_tab frm_gateway_opt ' . $gateway_classes ),
+		'tabindex'      => '0',
+		'role'          => 'tab',
+		'aria-selected' => $is_active ? 'true' : 'false',
+	);
+	?>
+	<input <?php FrmAppHelper::array_to_html_params( $input_params, true ); ?> />
+	<label <?php FrmAppHelper::array_to_html_params( $label_params, true ); ?>>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_' . $gateway_name . '_full_icon' ); ?>
+		<span class="screen-reader-text"><?php echo esc_html( $name ); ?></span>
+	</label>
+<?php
+}//end foreach
+?>
+</div>
+
 <div class="frm_grid_container">
+	<?php include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/product-name-action-setting.php'; ?>
+
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
 			<?php esc_html_e( 'Description', 'formidable' ); ?>
@@ -96,37 +145,6 @@ if ( ! $stripe_connected && ! $square_connected ) {
 		<?php FrmTransLiteAppHelper::show_currency_dropdown( $this->get_field_id( 'currency' ), $this->get_field_name( 'currency' ), $form_action->post_content ); ?>
 	</p>
 
-	<p>
-		<?php
-		esc_html_e( 'Gateway(s)', 'formidable' );
-
-		foreach ( $gateways as $gateway_name => $gateway ) {
-			$gateway_classes  = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
-			$gateway_classes .= $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ? ' frm_hidden' : '';
-			$gateway_id       = $this->get_field_id( 'gateways' ) . '_' . $gateway_name;
-
-			$radio_atts = array(
-				'type'  => 'radio',
-				'value' => $gateway_name,
-				'name'  => $this->get_field_name( 'gateway' ),
-				'id'    => $gateway_id,
-			);
-			?>
-				<label for="<?php echo esc_attr( $gateway_id ); ?>" class="frm_gateway_opt <?php echo esc_attr( $gateway_classes ); ?>">
-					<input
-						<?php
-						FrmAppHelper::array_to_html_params( $radio_atts, true );
-						echo ' ';
-						FrmAppHelper::checked( $form_action->post_content['gateway'], $gateway_name );
-						?>
-					/>
-					<?php echo esc_html( $gateway['label'] ); ?> &nbsp;
-				</label>
-			<?php
-		}//end foreach
-		?>
-	</p>
-
 	<?php
 	FrmStrpLiteActionsController::add_action_options(
 		array(
@@ -134,8 +152,16 @@ if ( ! $stripe_connected && ! $square_connected ) {
 			'action_control' => $this,
 		)
 	);
+
+	FrmPayPalLiteActionsController::add_action_options(
+		array(
+			'form_action'    => $form_action,
+			'action_control' => $this,
+		)
+	);
 	?>
 </div>
+<?php FrmPayPalLiteActionsController::add_button_settings_section( $action_control, $form_action ); ?>
 <div class="frm_grid_container">
 	<h3>
 		<?php esc_html_e( 'Customer Information', 'formidable' ); ?>

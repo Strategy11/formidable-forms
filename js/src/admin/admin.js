@@ -641,10 +641,26 @@ window.frmAdminBuildJS = function() {
 
 	function afterActionRemoved( type ) {
 		checkActiveAction( type );
+		maybeEnableOtherPaymentActions( type );
 
 		const hookName = 'frm_after_action_removed';
 		const hookArgs = { type };
 		wp.hooks.doAction( hookName, hookArgs );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {string} deletedType
+	 *
+	 * @return {void}
+	 */
+	function maybeEnableOtherPaymentActions( deletedType ) {
+		if ( 'payment' !== deletedType ) {
+			return;
+		}
+
+		[ 'stripe', 'square', 'paypal' ].forEach( action => checkActiveAction( action ) );
 	}
 
 	function clickWidget( event, b ) {
@@ -7516,6 +7532,8 @@ window.frmAdminBuildJS = function() {
 
 			// Check if icon should be active
 			checkActiveAction( type );
+			maybeDisableOtherPaymentActions( type );
+
 			showInputIcon( `#frm_form_action_${ actionId }` );
 
 			initiateMultiselect();
@@ -7534,6 +7552,30 @@ window.frmAdminBuildJS = function() {
 			 */
 			frmAdminBuild.hooks.doAction( 'frm_added_form_action', newAction );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {string} excludedType
+	 *
+	 * @return {void}
+	 */
+	function maybeDisableOtherPaymentActions( excludedType ) {
+		const paymentActions = [ 'stripe', 'square', 'paypal' ];
+
+		if ( ! paymentActions.includes( excludedType ) ) {
+			// Not a payment action so exit early.
+			return;
+		}
+
+		paymentActions.forEach(
+			action => {
+				if ( action !== excludedType ) {
+					checkActiveAction( action );
+				}
+			}
+		);
 	}
 
 	function closeOpenActions() {
@@ -7829,7 +7871,15 @@ window.frmAdminBuildJS = function() {
 		return parseInt( jQuery( `.frm_${ type }_action` ).data( 'limit' ), 10 );
 	}
 
+	/**
+	 * @param {string} type
+	 *
+	 * @return {number} The number of actions for the specified type.
+	 */
 	function getNumberOfActionsForType( type ) {
+		if ( [ 'paypal', 'stripe', 'square' ].includes( type ) ) {
+			type = 'payment';
+		}
 		return jQuery( `.frm_single_${ type }_settings` ).length;
 	}
 

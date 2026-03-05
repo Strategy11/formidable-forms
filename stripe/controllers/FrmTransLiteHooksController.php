@@ -39,13 +39,44 @@ class FrmTransLiteHooksController {
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
+			add_action( 'frm_pay_show_paypal_options', 'FrmPayPalLiteActionsController::add_action_options' );
+
+			// Use 99 so this happens after all of the other payment options.
+			add_action( 'frm_pay_show_paypal_options', function ( $atts ) {
+				$form_action    = $atts['form_action'];
+				$action_control = $atts['action_control'];
+
+				echo '</div>'; // End of the payment settings section.
+
+				FrmPayPalLiteActionsController::add_button_settings_section( $action_control, $form_action );
+
+				// Open up a div tag since the payment section is closed after this and we already ended the section.
+				// This results in an empty div tag but it allows us to inject these options without requiring
+				// any updates in the payments submodule.
+				echo '<div>';
+			}, 99 );
+
 			remove_action( 'admin_head', 'FrmTransListsController::add_list_hooks' );
 			add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 
 			self::maybe_set_admin_menu();
 
+			if ( self::on_form_settings_page() ) {
+				$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+
+				// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
+				// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
+				if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
+					self::hide_collect_payment_action();
+				}
+			}
+
 			// Exit early, let the Payments submodule handle everything else.
 			return;
+		}//end if
+
+		if ( self::on_form_settings_page() ) {
+			self::hide_collect_payment_action();
 		}
 
 		// Actions.
@@ -63,6 +94,30 @@ class FrmTransLiteHooksController {
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function on_form_settings_page() {
+		return 'formidable' === FrmAppHelper::simple_get( 'page' ) && 'settings' === FrmAppHelper::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * Hide the Collect Payment action if there are no additional gateways enabled (like Authorize.Net).
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function hide_collect_payment_action() {
+		echo '
+		<style>
+			li.frm-action:has(.frm_payment_action) { display: none; }
+		</style>
+		';
 	}
 
 	/**

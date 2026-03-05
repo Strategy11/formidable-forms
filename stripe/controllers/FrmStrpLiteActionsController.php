@@ -124,7 +124,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! self::stripe_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Stripe. Please try again.', 'formidable' );
+			$response['error'] = __( 'Stripe still needs to be configured.', 'formidable' );
 			return $response;
 		}
 
@@ -282,9 +282,15 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function add_action_defaults( $defaults ) {
+		// Stripe action options.
 		$defaults['plan_id']     = '';
 		$defaults['capture']     = '';
 		$defaults['stripe_link'] = '';
+
+		// PayPal action options.
+		$defaults['product_name'] = '';
+		$defaults['pay_later']    = '';
+
 		return $defaults;
 	}
 
@@ -313,7 +319,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$settings['currency'] = strtolower( $settings['currency'] );
 
 		// Gateway is a radio button but it should always be an array in the database for
-		// compatibility with the payments submodule where it is a checkbox.
+		// compatibility with the payments submodule where it is a checkbox (when Authorize.Net is active).
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
@@ -654,16 +660,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = $field->temp_id ?? $field->id;
-
-		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
-			unset( $errors[ 'field' . $field_id . '-cc' ] );
-		}
-
-		if ( isset( $errors[ 'field' . $field_id ] ) ) {
-			unset( $errors[ 'field' . $field_id ] );
-		}
-
-		return $errors;
+		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
 	}
 }

@@ -39,6 +39,12 @@ Ags = "Ags"
 unmergable = "unmergable"
 # This is detected in our Stripe publishable key.
 iz = "iz"
+# `BA` is the ISO country code for Bosnia and Herzegovina in PayPal country lists.
+BA = "BA"
+# `PN` is the ISO country code for Pitcairn Islands in PayPal country lists.
+PN = "PN"
+# `Ot` is a substring in a PayPal sandbox token.
+Ot = "Ot"
 
 [default.extend-identifiers]
 66afe9 = "66afe9"

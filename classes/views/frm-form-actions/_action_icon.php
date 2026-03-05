@@ -2,10 +2,16 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$limit = $action_control->action_options['limit'];
+if ( 'paypal' === $action_control->id_base ) {
+	// The PayPal add-on may overwrite this so change it back.
+	$limit = 1;
+}
 ?>
 <li class="frm-action <?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>">
 	<a href="javascript:void(0)" class="<?php echo esc_attr( $classes ); ?>"
-		data-limit="<?php echo esc_attr( $action_control->action_options['limit'] ); ?>"
+		data-limit="<?php echo esc_attr( $limit ); ?>"
 		data-actiontype="<?php echo esc_attr( $action_control->id_base ); ?>"
 		<?php FrmAppHelper::array_to_html_params( $data, true ); ?>
 		>
