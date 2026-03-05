@@ -2103,8 +2103,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_name', __( 'PayPal Name', 'formidable' ), 'name' );
 
 		if ( is_callable( 'FrmProAddressesController::get_country_code' ) ) {
-			$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_address', __( 'PayPal Address', 'formidable' ), 'address' );
-		}
+            return self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_address', __( 'PayPal Address', 'formidable' ), 'address' );
+        }
 
 		return $settings;
 	}
