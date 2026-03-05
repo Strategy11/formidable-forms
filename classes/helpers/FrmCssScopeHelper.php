@@ -285,6 +285,7 @@ class FrmCssScopeHelper {
 		// Capture all trailing pseudo-classes/pseudo-elements ( :before, :hover, etc. )
 		// Capture the chained pseudos wraps (.form_field:nth-child(2):focus )
 		$pseudo = '';
+
 		if ( preg_match( '/^(.*?)((?::{1,2}[a-zA-Z-]+(?:\([^)]*\))?)+)$/', $first, $pseudo_parts ) ) {
 			$first  = $pseudo_parts[1];
 			$pseudo = $pseudo_parts[2];
