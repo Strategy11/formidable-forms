@@ -17,8 +17,8 @@ if ( $component['has-multiple-values'] ) : ?>
 					</span>
 				</div>
 				<div class="frm-slider-value">
-					<input aria-label="<?php echo esc_attr__( 'Vertical value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['vertical']['value'] ); ?>" />
-					<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+					<input aria-label="<?php esc_attr_e( 'Vertical value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['vertical']['value'] ); ?>" />
+					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
 							<option <?php selected( $component['vertical']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
@@ -39,8 +39,8 @@ if ( $component['has-multiple-values'] ) : ?>
 					</span>
 				</div>
 				<div class="frm-slider-value">
-					<input aria-label="<?php echo esc_attr__( 'Top value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['top']['value'] ); ?>" />
-					<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+					<input aria-label="<?php esc_attr_e( 'Top value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['top']['value'] ); ?>" />
+					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
 							<option <?php selected( $component['top']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
@@ -61,8 +61,8 @@ if ( $component['has-multiple-values'] ) : ?>
 					</span>
 				</div>
 				<div class="frm-slider-value">
-					<input aria-label="<?php echo esc_attr__( 'Bottom value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['bottom']['value'] ); ?>" />
-					<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+					<input aria-label="<?php esc_attr_e( 'Bottom value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['bottom']['value'] ); ?>" />
+					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
 							<option <?php selected( $component['bottom']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
@@ -83,8 +83,8 @@ if ( $component['has-multiple-values'] ) : ?>
 					</span>
 				</div>
 				<div class="frm-slider-value">
-					<input aria-label="<?php echo esc_attr__( 'Horizontal value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['horizontal']['value'] ); ?>" />
-					<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+					<input aria-label="<?php esc_attr_e( 'Horizontal value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['horizontal']['value'] ); ?>" />
+					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
 							<option <?php selected( $component['horizontal']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
@@ -105,8 +105,8 @@ if ( $component['has-multiple-values'] ) : ?>
 					</span>
 				</div>
 				<div class="frm-slider-value">
-					<input aria-label="<?php echo esc_attr__( 'Left value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['left']['value'] ); ?>" />
-					<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+					<input aria-label="<?php esc_attr_e( 'Left value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['left']['value'] ); ?>" />
+					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
 							<option <?php selected( $component['left']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
@@ -127,8 +127,8 @@ if ( $component['has-multiple-values'] ) : ?>
 					</span>
 				</div>
 				<div class="frm-slider-value">
-					<input aria-label="<?php echo esc_attr__( 'Right value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['right']['value'] ); ?>" />
-					<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+					<input aria-label="<?php esc_attr_e( 'Right value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['right']['value'] ); ?>" />
+					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
 							<option <?php selected( $component['right']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
@@ -156,9 +156,9 @@ if ( $component['has-multiple-values'] ) : ?>
 						</span>
 					</div>
 					<div class="frm-slider-value">
-						<input aria-label="<?php echo esc_attr__( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
+						<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
 						<input type="hidden" <?php echo esc_attr( $field_name ); ?> value="<?php echo esc_attr( $field_value ); ?>" id="<?php echo esc_attr( $component['id'] ); ?>" />
-						<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+						<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 							<?php foreach ( $component['units'] as $unit ) : ?>
 								<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 							<?php endforeach; ?>
@@ -181,8 +181,8 @@ if ( $component['has-multiple-values'] ) : ?>
 							</span>
 						</div>
 						<div class="frm-slider-value">
-							<input aria-label="<?php echo esc_attr__( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
-							<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+							<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
+							<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 								<?php foreach ( $component['units'] as $unit ) : ?>
 									<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 								<?php endforeach; ?>
@@ -208,9 +208,9 @@ if ( $component['has-multiple-values'] ) : ?>
 									</span>
 								</div>
 								<div class="frm-slider-value">
-									<input aria-label="<?php echo esc_attr__( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo empty( $component['unit_measurement'] ) ? esc_attr( $field['value'] ) : (int) $field['value']; ?>" />
+									<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo empty( $component['unit_measurement'] ) ? esc_attr( $field['value'] ) : (int) $field['value']; ?>" />
 									<input type="hidden" name="<?php echo esc_attr( $field['name'] ); ?>" value="<?php echo esc_attr( $field['value'] ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" />
-									<select aria-label="<?php echo esc_attr__( 'Value unit', 'formidable' ); ?>">
+									<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 										<?php foreach ( $component['units'] as $unit ) : ?>
 											<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
 										<?php endforeach; ?>

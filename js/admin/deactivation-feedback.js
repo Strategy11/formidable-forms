@@ -3,10 +3,11 @@
 
 	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-pro"] .deactivate a, tr[data-slug="formidable-forms-pro"] .deactivate a';
 
-	let deactivationModal, deactivationUrl;
+	let deactivationModal;
+	let deactivationUrl;
 
 	const Modal = {
-		init: function( id, width ) {
+		init( id, width ) {
 			const $info = jQuery( id );
 			const self = this;
 
@@ -14,7 +15,7 @@
 				return false;
 			}
 
-			if ( typeof width === 'undefined' ) {
+			if ( width === undefined ) {
 				width = '550px';
 			}
 
@@ -23,17 +24,17 @@
 				modal: true,
 				autoOpen: false,
 				closeOnEscape: true,
-				width: width,
+				width,
 				resizable: false,
 				draggable: false,
-				open: function() {
+				open() {
 					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 					$info.removeClass( 'ui-dialog-content ui-widget-content' );
 					self.bindClickForDialogClose( $info );
 				},
-				close: function() {
+				close() {
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
@@ -50,7 +51,7 @@
 			return $info;
 		},
 
-		bindClickForDialogClose: function( $modal ) {
+		bindClickForDialogClose( $modal ) {
 			const closeModal = function() {
 				$modal.dialog( 'close' );
 			};
@@ -79,11 +80,11 @@
 			);
 		}
 
-		deactivationUrl = event.target.href + '&frm_feedback_submitted=1';
+		deactivationUrl = `${ event.target.href }&frm_feedback_submitted=1`;
 
 		const pluginSlug = event.target.closest( 'tr' ).dataset.slug;
 
-		const url = 'https://feedback.strategy11.com/wp-json/frm/v2/forms/deactivation-feedback?plugin_slug=' + pluginSlug + '&site=' + window.location.host + '&return=html&exclude_script=jquery&exclude_style=formidable-css';
+		const url = `https://feedback.strategy11.com/wp-json/frm/v2/forms/deactivation-feedback?plugin_slug=${ pluginSlug }&site=${ window.location.host }&return=html&exclude_script=jquery&exclude_style=formidable-css`;
 
 		const response = fetch( url, {
 			method: 'GET'

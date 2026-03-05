@@ -68,7 +68,7 @@ class FrmTransLiteCRUDController {
 		$table_name = self::table_name();
 
 		// @codingStandardsIgnoreStart
-		$payment = $wpdb->get_row(
+		return $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT
 					p.*, e.user_id
@@ -79,8 +79,6 @@ class FrmTransLiteCRUDController {
 			)
 		);
 		// @codingStandardsIgnoreEnd
-
-		return $payment;
 	}
 
 	/**
@@ -117,11 +115,7 @@ class FrmTransLiteCRUDController {
 		$default = reset( $allowed );
 		$name    = FrmAppHelper::get_param( 'type', $default, 'get', 'sanitize_text_field' );
 
-		if ( ! in_array( $name, $allowed, true ) ) {
-			$name = $default;
-		}
-
-		return $name;
+		return in_array( $name, $allowed, true ) ? $name : $default;
 	}
 
 	/**

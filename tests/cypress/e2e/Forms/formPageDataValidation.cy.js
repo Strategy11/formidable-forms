@@ -25,6 +25,7 @@ describe( 'Forms page', () => {
 					'upgrading for 60% off during our No Brainer Sale!',
 					'Black Friday Deals',
 					'Cyber Monday Deals',
+					'Anniversary Sale'
 				];
 
 				if ( href && substrings.some( substring => text.includes( substring ) ) ) {
@@ -46,6 +47,8 @@ describe( 'Forms page', () => {
 								'don\'t miss the best deals for cyber monday!',
 								'don\'t miss the giving tuesday flash sale!',
 								'don\'t miss 65% off on the best wordpress form builder!',
+								'upgrading for 60% off before our Anniversary Sale ends!',
+								'stop patching together plugins. start building what you actually need.'
 							] ).to.include( headingText );
 						} );
 					} );
@@ -59,11 +62,11 @@ describe( 'Forms page', () => {
 
 		cy.log( 'Validate the header logo link' );
 		cy.get( 'a.frm-header-logo' )
-			.should( 'have.attr', 'href', origin + '/wp-admin/admin.php?page=formidable' )
+			.should( 'have.attr', 'href', `${ origin }/wp-admin/admin.php?page=formidable` )
 			.click();
 
 		cy.log( 'Validate the URL after clicking the header logo' );
-		cy.url().should( 'eq', origin + '/wp-admin/admin.php?page=formidable' );
+		cy.url().should( 'eq', `${ origin }/wp-admin/admin.php?page=formidable` );
 
 		cy.log( 'Validate other header elements' );
 		cy.get( 'h1' ).should( 'contain', 'Forms' );
@@ -171,12 +174,11 @@ describe( 'Forms page', () => {
 							expect( datePart ).to.equal( formattedDate );
 
 							cy.log( 'Check that time exists in the <br> element' );
-							/* eslint-disable no-unused-expressions */
+
 							cy.get( '.created_at > abbr' )
 								.invoke( 'html' )
 								.then( html => {
-									expect( html.split( '<br>' )[ 1 ] ).to.exist.and.not.be.empty;
-									/* eslint-enable no-unused-expressions */
+									expect( html.split( '<br>' )[ 1 ] ).to.exist.and.not.be.empty; // eslint-disable-line no-unused-expressions
 								} );
 						} );
 				} );

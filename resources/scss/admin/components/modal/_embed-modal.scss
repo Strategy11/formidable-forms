@@ -44,7 +44,7 @@
 
 .frm-embed-modal-content svg[id^="frm_copy_embed_"] {
 	position: absolute;
-	bottom: calc( ( 38px - 18px ) / 2 ); /* Input height - SVG height */
+	bottom: calc(( 38px - 18px ) / 2); /* Input height - SVG height */
 	right: 10px;
 	cursor: pointer;
 	opacity: 0.5;

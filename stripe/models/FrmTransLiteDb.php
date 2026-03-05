@@ -149,15 +149,8 @@ class FrmTransLiteDb {
 		do_action( 'frm_before_destroy_' . $this->singular, $id );
 
 		// @codingStandardsIgnoreStart
-		$result = $wpdb->query(
-			$wpdb->prepare(
-				'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d',
-				$id
-			)
-		);
+		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d', $id ) );
 		// @codingStandardsIgnoreEnd
-
-		return $result;
 	}
 
 	/**
@@ -167,6 +160,7 @@ class FrmTransLiteDb {
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
+
 		// @codingStandardsIgnoreStart
 		return $wpdb->get_row(
 			$wpdb->prepare(
@@ -319,10 +313,12 @@ class FrmTransLiteDb {
 		$migrations = array( 4 );
 
 		foreach ( $migrations as $migration ) {
-			if ( $this->db_version >= $migration && $old_db_version < $migration ) {
-				$function_name = 'migrate_to_' . $migration;
-				$this->$function_name();
+			if ( $this->db_version < $migration || $old_db_version >= $migration ) {
+				continue;
 			}
+
+			$function_name = 'migrate_to_' . $migration;
+			$this->$function_name();
 		}
 	}
 

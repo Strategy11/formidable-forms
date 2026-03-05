@@ -34,7 +34,7 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 	if ( ! FrmAppHelper::is_admin() ) {
 		$img = apply_filters( 'frm_error_icon', $img );
 
-		if ( $img && ! empty( $img ) ) {
+		if ( $img ) {
 			echo '<img src="' . esc_url( $img ) . '" alt="" />';
 		}
 	}

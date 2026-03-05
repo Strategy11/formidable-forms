@@ -38,7 +38,7 @@
 
 		&.frm_show_upgrade {
 			cursor: pointer;
-			opacity: .5;
+			opacity: 0.5;
 		}
 
 		span:not(.frm-new-pill) {
@@ -72,7 +72,7 @@
 			align-items: center;
 			border-radius: var(--small-radius) !important;
 			padding: 11px var(--gap-md) 11px var(--gap-xs) !important;
-			color: var(--grey-900) !important
+			color: var(--grey-900) !important;
 		}
 
 		a {
@@ -233,5 +233,5 @@ input[disabled] {
 }
 
 .frmbutton.frm_at_limit {
-	opacity: .5;
+	opacity: 0.5;
 }

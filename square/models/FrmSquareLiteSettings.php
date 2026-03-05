@@ -88,7 +88,7 @@ class FrmSquareLiteSettings {
 
 		foreach ( $settings as $setting => $default ) {
 			if ( isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
-				$this->settings->{$setting} = trim( sanitize_text_field( $params[ 'frm_' . $this->param() . '_' . $setting ] ) );
+				$this->settings->{$setting} = sanitize_text_field( $params[ 'frm_' . $this->param() . '_' . $setting ] );
 			}
 		}
 

@@ -61,7 +61,7 @@ class FrmUsage {
 			// Definitely not cryptographically secure but
 			// close enough to provide a unique id
 			$uuid = md5( uniqid() . site_url() );
-			update_option( $uuid_key, $uuid, 'no' );
+			update_option( $uuid_key, $uuid, false );
 		}
 
 		return $uuid;
@@ -180,7 +180,7 @@ class FrmUsage {
 		/**
 		 * Filter the keys to skip when cleaning the snapshot data before sending.
 		 *
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param array $skip_keys Data keys.
 		 */
@@ -191,7 +191,7 @@ class FrmUsage {
 		/**
 		 * Filter the keys to replace with a long text placeholder before sending.
 		 *
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @paramm array $long_text_keys Data keys.
 		 */
@@ -199,6 +199,11 @@ class FrmUsage {
 
 		foreach ( $data as $key => &$value ) {
 			if ( ! $value || in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
+				continue;
+			}
+
+			if ( is_object( $value ) ) {
+				$value = '{{object}}';
 				continue;
 			}
 
@@ -477,25 +482,28 @@ class FrmUsage {
 			);
 
 			foreach ( $settings as $setting ) {
-				if ( isset( $form->options[ $setting ] ) ) {
-					if ( 'custom_style' === $setting ) {
-						$style->id = $form->options[ $setting ];
-
-						if ( ! $style->id ) {
-							$style_name = 0;
-						} elseif ( 1 === intval( $style->id ) ) {
-							$style_name = 'formidable-style';
-						} else {
-							$style_post = $style->get_one();
-							$style_name = $style_post ? $style_post->post_name : 'formidable-style';
-						}
-
-						$new_form[ $setting ] = $style_name;
-					} else {
-						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
-					}
+				if ( ! isset( $form->options[ $setting ] ) ) {
+					continue;
 				}
-			}
+
+				if ( 'custom_style' !== $setting ) {
+					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					continue;
+				}
+
+				$style->id = $form->options[ $setting ];
+
+				if ( ! $style->id ) {
+					$style_name = 0;
+				} elseif ( 1 === intval( $style->id ) ) {
+					$style_name = 'formidable-style';
+				} else {
+					$style_post = $style->get_one();
+					$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+				}
+
+				$new_form[ $setting ] = $style_name;
+			}//end foreach
 
 			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
 		}//end foreach

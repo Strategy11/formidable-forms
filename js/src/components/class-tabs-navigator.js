@@ -1,6 +1,6 @@
 export class frmTabsNavigator {
 	constructor( wrapper ) {
-		if ( 'undefined' === typeof wrapper ) {
+		if ( wrapper === undefined ) {
 			return;
 		}
 
@@ -57,7 +57,7 @@ export class frmTabsNavigator {
 	}
 
 	initSlideTrackUnderline( nav ) {
-		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
+		const activeNav = nav !== undefined ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
 		this.positionUnderlineIndicator( activeNav );
 	}
 
@@ -102,7 +102,7 @@ export class frmTabsNavigator {
 				: activeNav.offsetLeft;
 
 			this.slideTrackLine.style.transform = `translateX(${ position }px)`;
-			this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+			this.slideTrackLine.style.width = `${ activeNav.clientWidth }px`;
 		} );
 	}
 

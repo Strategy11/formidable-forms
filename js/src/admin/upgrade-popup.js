@@ -4,7 +4,7 @@ const { svg } = frmDom;
 
 function getShowLinkHrefValue( link, showLink ) {
 	let customLink = link.getAttribute( 'data-link' );
-	if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
+	if ( customLink === null || customLink === undefined || customLink === '' ) {
 		customLink = showLink.getAttribute( 'data-default' );
 	}
 	return customLink;
@@ -51,7 +51,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	}
 
 	// If one click upgrade, hide other content.
-	if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
+	if ( oneclickMessage !== null && button !== null && oneclick !== undefined && oneclick ) {
 		if ( newMessage === null ) {
 			showMsg = 'none';
 		}
@@ -60,7 +60,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 		oneclick = JSON.parse( oneclick );
 
 		button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-		button.className = button.className + ' ' + oneclick.class;
+		button.className = `${ button.className } ${ oneclick.class }`;
 		button.rel = oneclick.url;
 
 		oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
@@ -100,8 +100,12 @@ export function addOneClick( link, context, upgradeLabel ) {
 
 	addonStatus.style.display = 'none';
 
-	oneclickMessage.style.display = hideIt;
-	button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
+	if ( oneclickMessage ) {
+		oneclickMessage.style.display = hideIt;
+	}
+	if ( button ) {
+		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
+	}
 	upgradeMessage.style.display = showMsg;
 	showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
 
@@ -117,7 +121,7 @@ export function initModal( id, width ) {
 		return false;
 	}
 
-	if ( typeof width === 'undefined' ) {
+	if ( width === undefined ) {
 		width = '552px';
 	}
 
@@ -126,17 +130,17 @@ export function initModal( id, width ) {
 		modal: true,
 		autoOpen: false,
 		closeOnEscape: true,
-		width: width,
+		width,
 		resizable: false,
 		draggable: false,
-		open: function() {
+		open() {
 			jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 			jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 			jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 			$info.removeClass( 'ui-dialog-content ui-widget-content' );
 			bindClickForDialogClose( $info );
 		},
-		close: function() {
+		close() {
 			jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 			jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
@@ -171,7 +175,9 @@ export function initUpgradeModal() {
 	frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', handleUpgradeClick );
 
 	function handleUpgradeClick( event ) {
-		let element, link, content;
+		let element;
+		let link;
+		let content;
 
 		element = event.target;
 
@@ -230,11 +236,9 @@ export function initUpgradeModal() {
 			oldImage.remove();
 		}
 
-		if ( element.dataset.image ) {
-			if ( lockIcon ) {
-				lockIcon.style.display = 'none';
-			}
-			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image } ), lockIcon );
+		if ( element.dataset.image && lockIcon ) {
+			lockIcon.style.display = 'none';
+			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: `${ frmGlobal.url }/images/${ element.dataset.image }` } ), lockIcon );
 		}
 
 		const level = modal.querySelector( '.license-level' );
@@ -255,12 +259,12 @@ export function initUpgradeModal() {
 
 		// set the utm medium
 		const button = modal.querySelector( '.button-primary:not(.frm-oneclick-button)' );
-		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + element.getAttribute( 'data-medium' ) );
+		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, `$1${ element.getAttribute( 'data-medium' ) }` );
 		content = element.getAttribute( 'data-content' );
 		if ( content === null ) {
 			content = '';
 		}
-		link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
+		link = link.replace( /(content=)[a-z_-]+/ig, `$1${ content }` );
 		button.setAttribute( 'href', link );
 	}
 }

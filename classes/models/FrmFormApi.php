@@ -80,7 +80,7 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cache_key() {
-		$this->cache_key = 'frm_addons_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
+		$this->cache_key = 'frm_addons_l' . ( $this->license ? md5( $this->license ) : '' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ class FrmFormApi {
 	 * Flag the force property as true, so the next API request bypasses cache.
 	 * This is used to pull API data for change logs, which are excluded from the cached data.
 	 *
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @return void
 	 */
@@ -112,7 +112,7 @@ class FrmFormApi {
 	public function get_api_info() {
 		$url = $this->api_url();
 
-		if ( ! empty( $this->license ) ) {
+		if ( $this->license ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
@@ -235,7 +235,7 @@ class FrmFormApi {
 	 * @return bool
 	 */
 	protected function run_as_multisite() {
-		return is_multisite() && empty( $this->license );
+		return is_multisite() && ! $this->license;
 	}
 
 	/**
@@ -253,7 +253,7 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		if ( empty( $this->license ) ) {
+		if ( ! $this->license ) {
 			// Direct traffic to Cloudflare worker when there is no license.
 			return 'https://plapi.formidableforms.com/list/';
 		}
@@ -287,7 +287,7 @@ class FrmFormApi {
 
 		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
-				if ( is_array( $addon ) && ! empty( $addon['title'] ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
+				if ( is_array( $addon ) && ! empty( $addon['title'] ) && 0 === strcasecmp( $license_plugin->plugin_name, $addon['title'] ) ) {
 					return $addon;
 				}
 			}
@@ -390,7 +390,7 @@ class FrmFormApi {
 	 * Remove certain add-on API data that we don't need to cache.
 	 * This is to help keep the option data (which is auto-loaded) small.
 	 *
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param array $addons
 	 *
@@ -425,7 +425,7 @@ class FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.28
 	 *
 	 * @param array $addon
 	 *
@@ -438,7 +438,7 @@ class FrmFormApi {
 		}
 
 		if ( isset( $addon['categories'] ) ) {
-			if ( 'views' === $addon['slug'] ) {
+			if ( isset( $addon['slug'] ) && 'views' === $addon['slug'] ) {
 				// Legacy views has no categories set, but we should still
 				// Include it in cache since it is a valid add-on.
 				return true;
@@ -490,10 +490,7 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function error_for_license() {
-		if ( ! empty( $this->license ) ) {
-			return $this->get_error_from_response();
-		}
-		return array();
+		return $this->license ? $this->get_error_from_response() : array();
 	}
 
 	/**

@@ -23,7 +23,7 @@ class test_FrmApplicationApi extends FrmUnitTest {
 
 		$business_hours = $applications[ $business_hours_id ];
 		$this->assertIsArray( $business_hours );
-		$this->assertEquals( 'business-hours-template', $business_hours['slug'] );
+		$this->assertSame( 'business-hours-template', $business_hours['slug'] );
 		$this->assertArrayHasKey( 'name', $business_hours );
 		$this->assertNotEmpty( $business_hours['name'] );
 	}

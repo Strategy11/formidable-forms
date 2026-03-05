@@ -32,7 +32,7 @@ class test_FrmForm extends FrmUnitTest {
 		// Check the number of form actions
 		$original_actions = FrmFormAction::get_action_for_form( $form->id );
 		$new_actions      = FrmFormAction::get_action_for_form( $id );
-		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
+		$this->assertCount( count( $original_actions ), $new_actions );
 	}
 
 	protected function _check_if_child_fields_duplicate( $old_child_forms, $new_child_forms ) {
@@ -45,7 +45,7 @@ class test_FrmForm extends FrmUnitTest {
 		$new_child_form_fields = FrmField::get_all_for_form( $new_child_form->id );
 
 		// Check if there are the same number of child form fields in the duplicated child form
-		$this->assertEquals( count( $old_child_form_fields ), count( $new_child_form_fields ), 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$this->assertCount( count( $old_child_form_fields ), $new_child_form_fields, 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -62,7 +62,7 @@ class test_FrmForm extends FrmUnitTest {
 
 			FrmForm::destroy( $form->id );
 			$form_exists = FrmForm::getOne( $form->id );
-			$this->assertEmpty( $form_exists, 'Failed to delete form ' . $form->form_key );
+			$this->assertNotInstanceOf( \stdClass::class, $form_exists, 'Failed to delete form ' . $form->form_key );
 
 			$subforms_exist = FrmForm::getAll( array( 'parent_form_id' => $form->id ) );
 			$this->assertEmpty( $subforms_exist, 'Failed to delete child forms for parent form ' . $form->form_key );
@@ -169,12 +169,20 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
 	}
 
+	/**
+	 * @param string $expected
+	 * @param string $original_value
+	 * @param string $message
+	 */
 	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {
 		$value = $original_value;
 		$this->sanitize_field_opt( 'calc', $value );
-		$this->assertEquals( $expected, $value, $message );
+		$this->assertSame( $expected, $value, $message );
 	}
 
+	/**
+	 * @param string $opt
+	 */
 	private function sanitize_field_opt( $opt, &$value ) {
 		return $this->run_private_method(
 			array( 'FrmForm', 'sanitize_field_opt' ),
@@ -186,16 +194,19 @@ class test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::normalize_calc_spaces
 	 */
 	public function test_normalize_calc_spaces() {
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
-		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
-		$this->assertEquals( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
-		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
-		$this->assertEquals( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
+		$this->assertSame( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
+		$this->assertSame( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
 	}
 
+	/**
+	 * @param string $calc
+	 */
 	private function normalize_calc_spaces( $calc ) {
 		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
 	}
@@ -207,7 +218,7 @@ class test_FrmForm extends FrmUnitTest {
 		$form_name = 'Test form';
 		$form_id   = $this->factory->form->create( array( 'name' => $form_name ) );
 		$name      = FrmForm::getName( (string) $form_id );
-		$this->assertEquals( $form_name, $name );
+		$this->assertSame( $form_name, $name );
 	}
 
 	/**

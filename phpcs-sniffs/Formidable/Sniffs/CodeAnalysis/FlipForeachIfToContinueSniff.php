@@ -68,9 +68,10 @@ class FlipForeachIfToContinueSniff implements Sniff {
 		$scopeOpener = $tokens[ $stackPtr ]['scope_opener'];
 		$scopeCloser = $tokens[ $stackPtr ]['scope_closer'];
 
-		// Find the first non-whitespace token inside the foreach.
+		// Find the first non-whitespace, non-comment token inside the foreach.
+		$skipTokens     = array( T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_DOC_COMMENT_STAR, T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STRING, T_DOC_COMMENT_CLOSE_TAG );
 		$firstStatement = $phpcsFile->findNext(
-			T_WHITESPACE,
+			$skipTokens,
 			$scopeOpener + 1,
 			$scopeCloser,
 			true
@@ -103,9 +104,9 @@ class FlipForeachIfToContinueSniff implements Sniff {
 
 		$ifScopeCloser = $tokens[ $ifToken ]['scope_closer'];
 
-		// Check if the if statement is the only thing in the foreach body.
+		// Check if the if statement is the only thing in the foreach body (skip comments).
 		$afterIf = $phpcsFile->findNext(
-			T_WHITESPACE,
+			$skipTokens,
 			$ifScopeCloser + 1,
 			null,
 			true
@@ -398,6 +399,9 @@ class FlipForeachIfToContinueSniff implements Sniff {
 	/**
 	 * Count the number of statements inside a scope.
 	 *
+	 * If the scope contains only a single loop, count the statements inside that loop instead.
+	 * This handles cases like: if ($condition) { foreach ($items as $item) { ...many statements... } }
+	 *
 	 * @param File $phpcsFile  The file being scanned.
 	 * @param int  $scopeToken The token with the scope to count.
 	 *
@@ -416,18 +420,32 @@ class FlipForeachIfToContinueSniff implements Sniff {
 		// The target level is the level inside the scope (opener level + 1).
 		$targetLevel = $tokens[ $scopeOpener ]['level'] + 1;
 
-		$count = 0;
+		$count              = 0;
+		$singleLoopToken    = null;
+		$topLevelStatements = 0;
 
 		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
 			// Only count semicolons at the immediate scope level (not nested).
 			if ( $tokens[ $i ]['code'] === T_SEMICOLON && $tokens[ $i ]['level'] === $targetLevel ) {
 				++$count;
+				++$topLevelStatements;
 			}
 
 			// Also count control structures as statements.
 			if ( in_array( $tokens[ $i ]['code'], array( T_IF, T_FOREACH, T_FOR, T_WHILE, T_SWITCH, T_TRY ), true ) ) {
 				if ( $tokens[ $i ]['level'] === $targetLevel ) {
 					++$count;
+					++$topLevelStatements;
+
+					// Track if this is a single loop.
+					if ( in_array( $tokens[ $i ]['code'], array( T_FOREACH, T_FOR, T_WHILE ), true ) ) {
+						if ( null === $singleLoopToken ) {
+							$singleLoopToken = $i;
+						} else {
+							// More than one loop, don't use this optimization.
+							$singleLoopToken = false;
+						}
+					}
 
 					// Skip to the end of this control structure.
 					if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
@@ -435,6 +453,12 @@ class FlipForeachIfToContinueSniff implements Sniff {
 					}
 				}
 			}
+		}
+
+		// If the if body contains only a single loop, count the statements inside that loop.
+		// This handles: if ($condition) { foreach ($items as $item) { /* many statements */ } }
+		if ( 1 === $topLevelStatements && null !== $singleLoopToken && false !== $singleLoopToken ) {
+			return $this->countStatementsInScope( $phpcsFile, $singleLoopToken );
 		}
 
 		return $count;

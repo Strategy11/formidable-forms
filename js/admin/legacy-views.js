@@ -60,14 +60,14 @@
 	 * Checks the Detail Page slug to see if it's a reserved word and displays a message if it is.
 	 */
 	function checkDetailPageSlug() {
-		let slug = jQuery( '#param' ).val(),
-			msg;
+		let slug = jQuery( '#param' ).val();
+		let msg;
 		slug = slug.trim().toLowerCase();
 		if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( slug ) ) {
 			msg = frmAdminJs.slug_is_reserved;
 			msg = msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
-			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>', 'div' );
+			msg += addHtmlTags( `<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">${ frmAdminJs.reserved_words }</a>`, 'div' );
 			infoModal( msg );
 		}
 	}
@@ -84,7 +84,7 @@
 		while ( match !== null ) {
 			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[ 1 ] ) ) {
 				if ( unsafeParams !== '' ) {
-					unsafeParams += '", "' + match[ 1 ];
+					unsafeParams += `", "${ match[ 1 ] }`;
 				} else {
 					unsafeParams = match[ 1 ];
 				}
@@ -96,7 +96,7 @@
 			let msg = frmAdminJs.param_is_reserved;
 			msg = msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
-			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>';
+			msg += ` <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">${ frmAdminJs.reserved_words }</a>`;
 
 			infoModal( msg );
 		}
@@ -104,7 +104,7 @@
 
 	function addHtmlTags( text, tag ) {
 		tag = tag ? tag : 'p';
-		return '<' + tag + '>' + text + '</' + tag + '>';
+		return `<${ tag }>${ text }</${ tag }>`;
 	}
 
 	function initToggleShortcodes() {
@@ -113,7 +113,7 @@
 		}
 
 		DOM = tinymce.DOM;
-		if ( typeof DOM.events !== 'undefined' && typeof DOM.events.add !== 'undefined' ) {
+		if ( DOM.events !== undefined && DOM.events.add !== undefined ) {
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseover', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
@@ -192,7 +192,7 @@
 		} else {
 			fields.classList.add( 'frm_fixed' );
 			if ( desiredOffset !== 32 ) {
-				fields.style.top = desiredOffset + 'px';
+				fields.style.top = `${ desiredOffset }px`;
 			}
 		}
 	}
@@ -240,7 +240,7 @@
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_adv_info .categorydiv' ).html( html );
 			}
 		} );
@@ -253,7 +253,7 @@
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( document.getElementById( 'date_select_container' ) ).html( html );
 			}
 		} );
@@ -271,7 +271,7 @@
 		/*jshint validthis:true */
 		const link = jQuery( this );
 		const t = link.attr( 'href' );
-		if ( typeof t === 'undefined' ) {
+		if ( t === undefined ) {
 			return false;
 		}
 
@@ -279,7 +279,7 @@
 		link.closest( '.nav-tab-wrapper' ).find( 'a' ).removeClass( 'nav-tab-active' );
 		link.addClass( 'nav-tab-active' );
 		jQuery( '.nav-menu-content' ).not( t ).not( c ).hide();
-		jQuery( t + ',' + c ).show();
+		jQuery( `${ t },${ c }` ).show();
 
 		return false;
 	}
@@ -295,7 +295,7 @@
 				order_key: getNewRowId( logicRows, 'frm_order_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_order_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_order_row' ).hide();
 			}
 		} );
@@ -312,7 +312,7 @@
 				where_key: getNewRowId( rowDivs, 'frm_where_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_where_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_where_row' ).hide();
 			}
 		} );
@@ -320,8 +320,8 @@
 
 	function insertWhereOptions() {
 		/*jshint validthis:true */
-		const value = this.value,
-			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
+		const { value } = this;
+		const whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 
 		jQuery.ajax( {
 			type: 'POST',
@@ -332,34 +332,36 @@
 				field_id: value,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
-				jQuery( document.getElementById( 'where_field_options_' + whereKey ) ).html( html );
+			success( html ) {
+				jQuery( document.getElementById( `where_field_options_${ whereKey }` ) ).html( html );
 			}
 		} );
 	}
 
 	function hideWhereOptions() {
 		/*jshint validthis:true */
-		const value = this.value,
-			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
+		const { value } = this;
+		const whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 
 		if ( value === 'group_by' || value === 'group_by_newest' ) {
-			document.getElementById( 'where_field_options_' + whereKey ).style.display = 'none';
+			document.getElementById( `where_field_options_${ whereKey }` ).style.display = 'none';
 		} else {
-			document.getElementById( 'where_field_options_' + whereKey ).style.display = 'inline-block';
+			document.getElementById( `where_field_options_${ whereKey }` ).style.display = 'inline-block';
 		}
 	}
 
 	function getNewRowId( rows, replace, defaultValue ) {
 		if ( ! rows.length ) {
-			return 'undefined' !== typeof defaultValue ? defaultValue : 0;
+			return defaultValue !== undefined ? defaultValue : 0;
 		}
 		return parseInt( rows[ rows.length - 1 ].id.replace( replace, '' ), 10 ) + 1;
 	}
 
 	function toggleAllowedShortcodes( id ) {
-		let c, clickedID;
-		if ( typeof id === 'undefined' ) {
+		let c;
+		let clickedID;
+
+		if ( id === undefined ) {
 			id = '';
 		}
 		c = id;
@@ -372,12 +374,12 @@
 			const $ele = jQuery( document.getElementById( id ) );
 			if ( $ele.attr( 'class' ) && id !== 'wpbody-content' && id !== 'content' && id !== 'dyncontent' && id !== 'success_msg' ) {
 				let d = $ele.attr( 'class' ).split( ' ' )[ 0 ];
-				if ( d === 'frm_long_input' || d === 'frm_98_width' || typeof d === 'undefined' ) {
+				if ( d === 'frm_long_input' || d === 'frm_98_width' || d === undefined ) {
 					d = '';
 				} else {
 					id = d.trim();
 				}
-				c = c + ' ' + d;
+				c = `${ c } ${ d }`;
 				c = c.replace( 'widefat', '' ).replace( 'frm_with_left_label', '' );
 			}
 		}
@@ -395,10 +397,10 @@
 
 		if ( jQuery.inArray( id, a ) >= 0 ) {
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
-			jQuery( '.frm_code_list a.hide_' + id ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( `.frm_code_list a.hide_${ id }` ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		} else if ( jQuery.inArray( id, b ) >= 0 ) {
-			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
-			jQuery( '.frm_code_list a.show_' + id ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
+			jQuery( `.frm_code_list:not(.frm-dropdown-menu) a:not(.show_${ id })` ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( `.frm_code_list a.show_${ id }` ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 		} else {
 			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		}
@@ -406,9 +408,9 @@
 		// Automatically select a tab.
 		if ( id === 'dyn_default_value' ) {
 			clickedID = 'frm_dynamic_values';
-			document.getElementById( clickedID + '_tab' ).click();
-			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_inactive' ).addClass( 'frm_hidden' );
-			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_active' ).removeClass( 'frm_hidden' );
+			document.getElementById( `${ clickedID }_tab` ).click();
+			jQuery( `#${ clickedID.replace( /_/g, '-' ) } .frm_show_inactive` ).addClass( 'frm_hidden' );
+			jQuery( `#${ clickedID.replace( /_/g, '-' ) } .frm_show_active` ).removeClass( 'frm_hidden' );
 		}
 	}
 }() );

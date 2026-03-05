@@ -36,12 +36,12 @@ class FrmFieldGridHelper {
 	private $is_frm_first;
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
 	private $field;
 
 	/**
-	 * @var FrmFieldGridHelper
+	 * @var FrmFieldGridHelper|null
 	 */
 	private $section_helper;
 
@@ -78,7 +78,7 @@ class FrmFieldGridHelper {
 	public function set_field( $field ) {
 		$this->field = $field;
 
-		if ( ! empty( $this->section_helper ) && 'end_divider' !== $field->type ) {
+		if ( $this->section_helper && 'end_divider' !== $field->type ) {
 			$this->section_helper->set_field( $field );
 			return;
 		}
@@ -93,18 +93,20 @@ class FrmFieldGridHelper {
 			$this->active_field_size  = self::get_size_of_class( $this->field_layout_class );
 		}
 
-		if ( 'divider' === $field->type && empty( $this->nested ) ) {
-			$this->section_size      = $this->active_field_size;
-			$this->active_field_size = 0;
-			$this->section_helper    = new self( true );
+		if ( 'divider' !== $field->type || $this->nested ) {
+			return;
 		}
+
+		$this->section_size      = $this->active_field_size;
+		$this->active_field_size = 0;
+		$this->section_helper    = new self( true );
 	}
 
 	/**
 	 * @return void
 	 */
 	private function maybe_close_section_helper() {
-		if ( empty( $this->section_helper ) ) {
+		if ( ! $this->section_helper ) {
 			return;
 		}
 		$this->section_helper->force_close_field_wrapper();
@@ -146,7 +148,7 @@ class FrmFieldGridHelper {
 			$this->begin_field_wrapper();
 		}
 
-		if ( ! empty( $this->section_helper ) && $this->section_is_open ) {
+		if ( $this->section_helper && $this->section_is_open ) {
 			$this->section_helper->maybe_begin_field_wrapper();
 		}
 	}
@@ -155,7 +157,7 @@ class FrmFieldGridHelper {
 	 * @return bool
 	 */
 	private function should_first_close_the_active_field_wrapper() {
-		if ( false === $this->parent_li || ! empty( $this->section_helper ) ) {
+		if ( false === $this->parent_li || $this->section_helper ) {
 			return false;
 		}
 
@@ -213,7 +215,7 @@ class FrmFieldGridHelper {
 	 * @return void
 	 */
 	public function sync_list_size() {
-		if ( empty( $this->field ) ) {
+		if ( ! $this->field ) {
 			return;
 		}
 
@@ -221,7 +223,7 @@ class FrmFieldGridHelper {
 			$this->section_is_open = true;
 		}
 
-		if ( ! empty( $this->section_helper ) ) {
+		if ( $this->section_helper ) {
 			$this->section_helper->sync_list_size();
 
 			if ( 'end_divider' === $this->field->type ) {
@@ -231,13 +233,15 @@ class FrmFieldGridHelper {
 			return;
 		}
 
-		if ( false !== $this->parent_li ) {
-			++$this->current_field_count;
-			$this->current_list_size += $this->active_field_size;
+		if ( false === $this->parent_li ) {
+			return;
+		}
 
-			if ( 12 === $this->current_list_size ) {
-				$this->close_field_wrapper();
-			}
+		++$this->current_field_count;
+		$this->current_list_size += $this->active_field_size;
+
+		if ( 12 === $this->current_list_size ) {
+			$this->close_field_wrapper();
 		}
 	}
 

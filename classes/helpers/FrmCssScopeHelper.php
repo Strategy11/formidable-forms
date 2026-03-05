@@ -33,6 +33,7 @@ class FrmCssScopeHelper {
 				if ( false === $brace_pos ) {
 					$buffer .= $char;
 					++$i;
+
 					continue;
 				}
 
@@ -51,6 +52,7 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
@@ -63,15 +65,7 @@ class FrmCssScopeHelper {
 				$declarations = $this->preserve_declaration_formatting( $declarations );
 
 				if ( '' !== $selector && '' !== trim( $declarations ) ) {
-					// Handle multiple selectors
-					$selectors          = array_map( 'trim', explode( ',', $selector ) );
-					$prefixed_selectors = array();
-
-					foreach ( $selectors as $single_selector ) {
-						if ( '' !== $single_selector ) {
-							$prefixed_selectors[] = '.' . $class_name . ' ' . $single_selector;
-						}
-					}
+					$prefixed_selectors = $this->prefix_selectors( $selector, $class_name );
 
 					if ( $prefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $prefixed_selectors ) . ' {' . $declarations . '}' . "\n";
@@ -80,6 +74,7 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
@@ -134,6 +129,7 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
@@ -146,20 +142,7 @@ class FrmCssScopeHelper {
 				$declarations = $this->preserve_declaration_formatting( $declarations );
 
 				if ( '' !== $selector && '' !== trim( $declarations ) ) {
-					// Handle multiple selectors
-					$selectors            = array_filter(
-						array_map( 'trim', explode( ',', $selector ) ),
-						function ( $s ) {
-							return '' !== $s;
-						}
-					);
-					$unprefixed_selectors = array();
-
-					foreach ( $selectors as $single_selector ) {
-						$unprefixed_selectors[] = str_starts_with( $single_selector, $prefix )
-							? trim( substr( $single_selector, $prefix_length ) )
-							: $single_selector;
-					}
+					$unprefixed_selectors = $this->unprefix_selectors( $selector, $class_name, $prefix, $prefix_length );
 
 					if ( $unprefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $unprefixed_selectors ) . ' {' . $declarations . '}' . "\n";
@@ -168,12 +151,14 @@ class FrmCssScopeHelper {
 
 				$i      = $closing_brace + 1;
 				$buffer = '';
+
 				continue;
 			}//end if
 
 			$buffer .= $char;
 			++$i;
 		}//end while
+
 		return implode( '', $output );
 	}
 
@@ -214,6 +199,116 @@ class FrmCssScopeHelper {
 	}
 
 	/**
+	 * Build the list of prefixed selectors for a given selector string.
+	 * Generates both descendant (.scope selector) and direct (selector.scope) forms.
+	 *
+	 * @param string $selector   The comma-separated selector string.
+	 * @param string $class_name The scope class name.
+	 *
+	 * @return array The list of prefixed selectors.
+	 */
+	private function prefix_selectors( $selector, $class_name ) {
+		$selectors          = array_map( 'trim', explode( ',', $selector ) );
+		$prefixed_selectors = array();
+
+		foreach ( $selectors as $single_selector ) {
+			if ( '' === $single_selector ) {
+				continue;
+			}
+
+			$prefixed_selectors[] = '.' . $class_name . ' ' . $single_selector;
+			$direct               = $this->add_direct_scope( $single_selector, $class_name );
+
+			if ( null !== $direct ) {
+				$prefixed_selectors[] = $direct;
+			}
+		}
+
+		return $prefixed_selectors;
+	}
+
+	/**
+	 * Build the list of unprefixed selectors for a given selector string.
+	 * Handles both descendant (.scope selector) and direct (selector.scope) forms.
+	 *
+	 * @param string $selector      The comma-separated selector string.
+	 * @param string $class_name    The scope class name.
+	 * @param string $prefix        The descendant prefix string (.class_name followed by space).
+	 * @param int    $prefix_length The length of the descendant prefix.
+	 *
+	 * @return array The list of unprefixed selectors (deduplicated).
+	 */
+	private function unprefix_selectors( $selector, $class_name, $prefix, $prefix_length ) {
+		$selectors            = array_filter(
+			array_map( 'trim', explode( ',', $selector ) ),
+			function ( $s ) {
+				return '' !== $s;
+			}
+		);
+		$unprefixed_selectors = array();
+
+		foreach ( $selectors as $single_selector ) {
+			if ( str_starts_with( $single_selector, $prefix ) ) {
+				$unprefixed_selectors[] = trim( substr( $single_selector, $prefix_length ) );
+			} else {
+				$unprefixed_selectors[] = $this->remove_direct_scope( $single_selector, $class_name ) ?? $single_selector;
+			}
+		}
+
+		return array_values( array_unique( $unprefixed_selectors ) );
+	}
+
+	/**
+	 * Add the scope class directly to the first segment of a selector.
+	 * For example, "h2" becomes "h2.scope" and ".foo .bar" becomes ".foo.scope .bar".
+	 *
+	 * @param string $selector   The CSS selector.
+	 * @param string $class_name The scope class name.
+	 *
+	 * @return string|null The direct-scoped selector, or null if not applicable.
+	 */
+	private function add_direct_scope( $selector, $class_name ) {
+		$parts = preg_split( '/(\s+)/', $selector, 2, PREG_SPLIT_DELIM_CAPTURE );
+		$first = $parts[0];
+
+		// Don't add direct scope to selectors starting with combinators or universal selector.
+		if ( preg_match( '/^[>+~*]/', $first ) ) {
+			return null;
+		}
+
+		$rest = '';
+
+		if ( count( $parts ) > 1 ) {
+			$rest = $parts[1] . $parts[2];
+		}
+
+		return $first . '.' . $class_name . $rest;
+	}
+
+	/**
+	 * Remove the scope class from the first segment of a direct-scoped selector.
+	 * For example, "h2.scope" becomes "h2" and ".foo.scope .bar" becomes ".foo .bar".
+	 *
+	 * @param string $selector   The CSS selector.
+	 * @param string $class_name The scope class name.
+	 *
+	 * @return string|null The unscoped selector, or null if the scope was not found.
+	 */
+	private function remove_direct_scope( $selector, $class_name ) {
+		$scope_pattern = '/\.' . preg_quote( $class_name, '/' ) . '(?![a-zA-Z0-9_-])/';
+		$parts         = preg_split( '/(\s+)/', $selector, 2, PREG_SPLIT_DELIM_CAPTURE );
+
+		if ( false === $parts || ! preg_match( $scope_pattern, $parts[0] ) ) {
+			return null;
+		}
+
+		$parts[0] = preg_replace( $scope_pattern, '', $parts[0], 1 );
+		$result   = trim( implode( '', $parts ) );
+
+		return '' !== $result ? $result : null;
+	}
+
+	/**
 	 * Find the matching brace in the CSS.
 	 *
 	 * @param string $css
@@ -238,6 +333,7 @@ class FrmCssScopeHelper {
 				} elseif ( $char === $string_char ) {
 					$in_string = false;
 				}
+
 				continue;
 			}
 

@@ -8,7 +8,7 @@
 .post-type-frm_display .curtime #timestamp::before,
 .post-type-frm_display #post-body .misc-pub-revisions::before,
 .post-type-frm_display span.wp-media-buttons-icon::before {
-	color: var( --grey);
+	color: var(--grey);
 }
 
 .post-type-frm_display #frm_top_bar + #poststuff #submitdiv #publishing-action, /* Hide only if top bar is present */

@@ -9,14 +9,14 @@
 }
 
 .frm-right-panel a.frm_add_logic_link,
-#frm-options-panel h3, 
+#frm-options-panel h3,
 .frm-collapsible {
 	font-size: var(--text-md);
 	font-weight: 500;
 	background-color: #fff;
 	border-radius: var(--small-radius);
 	padding: 18px var(--gap-sm);
-	margin: 2px calc( -1 * var(--gap-sm) );
+	margin: 2px calc(-1 * var(--gap-sm));
 	transition: background-color 200ms ease-out, box-shadow 200ms ease-out, color 200ms ease-out;
 
 	.frmsvg {

@@ -47,7 +47,7 @@
 		strpSettingsAjaxRequest(
 			'frm_stripe_connect_reauth',
 			function( data ) {
-				if ( 'undefined' !== typeof data.connect_url ) {
+				if ( data.connect_url !== undefined ) {
 					window.location = data.connect_url;
 				} else {
 					renderStripeConnectSettingsButton();
@@ -62,7 +62,7 @@
 		strpSettingsAjaxRequest(
 			'frm_stripe_connect_oauth',
 			function( data ) {
-				if ( 'undefined' !== typeof data.redirect_url ) {
+				if ( data.redirect_url !== undefined ) {
 					window.location = data.redirect_url;
 				} else {
 					renderStripeConnectSettingsButton();
@@ -74,8 +74,8 @@
 
 	function strpSettingsAjaxRequest( action, success, testMode ) {
 		const data = {
-			action: action,
-			testMode: testMode,
+			action,
+			testMode,
 			nonce: frmGlobal.nonce
 		};
 		postAjax( data, success );
@@ -85,7 +85,7 @@
 		const xmlHttp = new XMLHttpRequest();
 		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
-				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
+				return `${ encodeURIComponent( k ) }=${ encodeURIComponent( data[ k ] ) }`;
 			}
 		).join( '&' );
 
@@ -97,7 +97,7 @@
 				if ( response !== '' ) {
 					response = JSON.parse( response );
 					if ( response.success ) {
-						if ( 'undefined' === typeof response.data ) {
+						if ( response.data === undefined ) {
 							response.data = {};
 						}
 						success( response.data );

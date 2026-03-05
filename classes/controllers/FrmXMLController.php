@@ -97,7 +97,7 @@ class FrmXMLController {
 				$pages = $imported['posts'];
 			}
 
-			if ( ! empty( $form ) ) {
+			if ( $form ) {
 				// Create selected pages with the correct shortcodes.
 				$pages = self::create_pages_for_import( $form );
 			}
@@ -427,7 +427,7 @@ class FrmXMLController {
 		$format = FrmAppHelper::get_post_param( 'format', 'xml', 'sanitize_title' );
 
 		if ( ! headers_sent() && ! $type ) {
-			wp_redirect( esc_url_raw( admin_url( 'admin.php?page=formidable-import' ) ) );
+			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=formidable-import' ) ) );
 			die();
 		}
 
@@ -691,7 +691,7 @@ class FrmXMLController {
 
 		if ( ! $form_id ) {
 			$form_id = FrmAppHelper::get_param( 'form', '', 'get', 'sanitize_text_field' );
-			$search  = FrmAppHelper::get_param( ( isset( $_REQUEST['s'] ) ? 's' : 'search' ), '', 'get', 'sanitize_text_field' );
+			$search  = FrmAppHelper::get_param( isset( $_REQUEST['s'] ) ? 's' : 'search', '', 'get', 'sanitize_text_field' );
 			$fid     = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
 		}
 
@@ -742,10 +742,10 @@ class FrmXMLController {
 		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
 		unset( $query );
 
-		if ( ! $entry_ids ) {
-			esc_html_e( 'There are no entries for that form.', 'formidable' );
-		} else {
+		if ( $entry_ids ) {
 			FrmCSVExportHelper::generate_csv( compact( 'form', 'entry_ids', 'form_cols' ) );
+		} else {
+			esc_html_e( 'There are no entries for that form.', 'formidable' );
 		}
 
 		wp_die();

@@ -157,7 +157,7 @@ class PreferAssertStringContainsSniff implements Sniff {
 		// assertFalse(str_contains()) -> assertStringNotContainsString
 		// assertNotFalse(strpos()) -> assertStringContainsString
 		// assertFalse(strpos()) -> assertStringNotContainsString
-		$wantsContains = ( 'asserttrue' === $methodName || 'assertnotfalse' === $methodName );
+		$wantsContains = 'asserttrue' === $methodName || 'assertnotfalse' === $methodName;
 
 		// Negation flips the result.
 		if ( $isNegated ) {

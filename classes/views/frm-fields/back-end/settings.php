@@ -529,6 +529,14 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					</p>
 					<?php
 				}
+
+				/**
+				 * @since 6.28
+				 *
+				 * @param array $display
+				 * @param array $field
+				 */
+				do_action( 'frm_field_validation_messages', $display, $field );
 				?>
 			</div>
 		</div>

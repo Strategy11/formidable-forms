@@ -234,7 +234,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin:<?php echo esc_html( $submit_margin ); ?>;
 	<?php
 	// For reverse compatibility... But allow "10px 10px".
-	if ( strpos( trim( $submit_margin ), ' ' ) === false ) {
+	if ( ! str_contains( trim( $submit_margin ), ' ' ) ) {
 		?>
 		margin-left:0;
 		margin-right:0;

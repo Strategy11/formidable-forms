@@ -19,7 +19,7 @@ if ( ! isset( $show_messages ) ) {
 
 $show_messages = apply_filters( 'frm_message_list', $show_messages );
 
-if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
+if ( is_array( $show_messages ) && $show_messages !== array() ) {
 	// Define a callback function to add 'data-action' attribute to allowed HTML tags
 	$add_data_action_callback = function ( $allowed_html ) {
 		$allowed_html['span']['data-action'] = true;
@@ -33,7 +33,9 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 			add_filter( 'frm_striphtml_allowed_tags', $add_data_action_callback );
 
 			foreach ( $show_messages as $m ) {
-				echo '<li>' . FrmAppHelper::kses( $m, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<li>';
+				FrmAppHelper::kses_echo( $m, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) );
+				echo '</li>';
 			}
 			// Remove the callback function from the 'frm_striphtml_allowed_tags' filter
 			remove_filter( 'frm_striphtml_allowed_tags', $add_data_action_callback );
@@ -46,11 +48,13 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 if ( ! empty( $warnings ) && is_array( $warnings ) ) {
 	?>
 	<div class="frm_warning_style inline" role="alert">
-		<div class="frm_warning_heading"> <?php echo esc_html__( 'Warning:', 'formidable' ); ?></div>
+		<div class="frm_warning_heading"> <?php esc_html_e( 'Warning:', 'formidable' ); ?></div>
 		<ul id="frm_warnings">
 			<?php
 			foreach ( $warnings as $warning ) {
-				echo '<li>' . FrmAppHelper::kses( $warning, array( 'a', 'br' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<li>';
+				FrmAppHelper::kses_echo( $warning, array( 'a', 'br' ) );
+				echo '</li>';
 			}
 			?>
 		</ul>
@@ -64,7 +68,9 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 		<ul id="frm_errors">
 			<?php
 			foreach ( $errors as $error ) {
-				echo '<li>' . FrmAppHelper::kses( $error, array( 'a', 'br' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<li>';
+				FrmAppHelper::kses_echo( $error, array( 'a', 'br' ) );
+				echo '</li>';
 			}
 			?>
 		</ul>

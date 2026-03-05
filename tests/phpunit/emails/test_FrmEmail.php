@@ -315,7 +315,7 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertSame( $expected['to']['first'], $previous_mock_email['to'], 'To address is not set correctly when using User ID field.' );
 		$this->assertSame( $expected['to']['second'], $mock_email['to'], 'To address is not set correctly when using User ID field.' );
 		$this->assertSame( $expected['cc'], $mock_email['cc'], 'CC not set correctly when using User ID field' );
-		$this->assertEquals( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly when conditional statement with quotes' );
+		$this->assertSame( $expected['bcc'], $mock_email['bcc'], 'BCC not set correctly when conditional statement with quotes' );
 
 		$this->check_senders( $expected, $mock_email );
 		$this->check_subject( $expected, $mock_email );
@@ -428,6 +428,9 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_senders( $expected, $mock_email );
 	}
 
+	/**
+	 * @param string $subject
+	 */
 	protected function prepare_subject( $subject ) {
 		return wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
 	}
@@ -451,6 +454,8 @@ class test_FrmEmail extends FrmUnitTest {
 	/**
 	 * @param array $expected
 	 * @param array $mock_email
+	 * @param string $cc_status
+	 * @param string $bcc_status
 	 */
 	protected function check_recipients( $expected, $mock_email, $cc_status = 'yes_cc', $bcc_status = 'yes_bcc' ) {
 		$this->assertSame( $expected['to'], $mock_email['to'], 'To does not match expected.' );
@@ -590,7 +595,7 @@ class test_FrmEmail extends FrmUnitTest {
 		$action->post_content['reply_to']            = '[' . $email_field_key . ']';
 		$email                                       = new FrmEmail( $action, $entry, $this->contact_form );
 		$actual                                      = $this->get_private_property( $email, 'reply_to' );
-		$this->assertEquals( 'fromemail@example.com', $actual );
+		$this->assertSame( 'fromemail@example.com', $actual );
 	}
 
 	/**
@@ -609,8 +614,8 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_set_include_user_info() {
 		$settings = array(
-			'0' => false,
-			'1' => true,
+			'0' => 0,
+			'1' => 1,
 		);
 		$this->check_private_properties( $settings, 'inc_user_info', 'include_user_info' );
 	}
@@ -686,7 +691,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			$action->post_content['email_message'] = $message;
 			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                                = $this->get_private_property( $email, 'message' );
-			$this->assertEquals( $expected, $actual );
+			$this->assertSame( $expected, $actual );
 		}
 	}
 
@@ -741,10 +746,14 @@ LINE 1<br>LINE 2<br></body></html>'
 			$action->post_content['plain_text'] = $setting;
 			$email                              = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                             = $this->get_private_property( $email, 'message' );
-			$this->assertEquals( $actual, $expected );
+			$this->assertSame( $expected, $actual );
 		}
 	}
 
+	/**
+	 * @param string $setting_name
+	 * @param string $property
+	 */
 	private function check_private_properties( $settings, $setting_name, $property = '' ) {
 		if ( ! $property ) {
 			$property = $setting_name;
@@ -756,7 +765,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			$action->post_content[ $setting_name ] = $setting;
 			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                                = $this->get_private_property( $email, $property );
-			$this->assertEquals( $expected, $actual );
+			$this->assertSame( $expected, $actual );
 		}
 	}
 }

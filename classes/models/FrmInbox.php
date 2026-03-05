@@ -54,7 +54,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 *
-	 * @param array|false $filter
+	 * @param false|string $filter
 	 *
 	 * @return array
 	 */
@@ -173,10 +173,12 @@ class FrmInbox extends FrmFormApi {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			if ( $read || $dismissed || ! $this->within_valid_timeframe( $message ) ) {
-				unset( self::$messages[ $t ] );
-				$removed = true;
+			if ( ! $read && ! $dismissed && $this->within_valid_timeframe( $message ) ) {
+				continue;
 			}
+
+			unset( self::$messages[ $t ] );
+			$removed = true;
 		}
 
 		if ( $removed ) {
@@ -295,10 +297,12 @@ class FrmInbox extends FrmFormApi {
 	public function mark_unread( $key ) {
 		$is_read = isset( self::$messages[ $key ] ) && isset( self::$messages[ $key ]['read'] ) && isset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
 
-		if ( $is_read ) {
-			unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
-			$this->update_list();
+		if ( ! $is_read ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
+		$this->update_list();
 	}
 
 	/**
@@ -396,17 +400,19 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function remove( $key ) {
-		if ( isset( self::$messages[ $key ] ) ) {
-			unset( self::$messages[ $key ] );
-			$this->update_list();
+		if ( ! isset( self::$messages[ $key ] ) ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ] );
+		$this->update_list();
 	}
 
 	/**
 	 * @return void
 	 */
 	private function update_list() {
-		update_option( $this->option, self::$messages, 'no' );
+		update_option( $this->option, self::$messages, false );
 	}
 
 	/**
@@ -462,7 +468,7 @@ class FrmInbox extends FrmFormApi {
 
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
-				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';
+				return 'href="' . esc_url( $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] ) . '"';
 			},
 			$cta
 		);

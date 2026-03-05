@@ -93,7 +93,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			// Check default value
 			$posted_val = $_POST[ 'default_value_' . $field->id ];
 			$actual_val = $field->default_value;
-			$this->assertEquals( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
+			$this->assertSame( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
 		}
 	}
 }

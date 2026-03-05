@@ -68,6 +68,7 @@ class FrmFormsHelper {
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
@@ -82,6 +83,7 @@ class FrmFormsHelper {
 			<?php } ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -95,7 +97,7 @@ class FrmFormsHelper {
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( $class ) {
-			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
+			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( sanitize_text_field( $class ) ) . '"';
 		}
 	}
 
@@ -154,6 +156,7 @@ class FrmFormsHelper {
 		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( count( $forms ) < 2 ) {
 			?>
 			<div id="frm_bs_dropdown">
@@ -232,6 +235,7 @@ class FrmFormsHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -701,6 +705,7 @@ BEFORE_HTML;
 
 		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
@@ -711,7 +716,7 @@ BEFORE_HTML;
 
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( $args['id_label'] ?? $args['id'] ); ?>]</span>
+				<span>[<?php echo esc_html( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
@@ -721,10 +726,11 @@ BEFORE_HTML;
 
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -760,18 +766,20 @@ BEFORE_HTML;
 		$args        = array_merge( $defaults, $args );
 		$has_tooltip = ! empty( $args['title'] );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $args['class'] ); ?>">
 			<a href="javascript:void(0)" class="frm_insert_code <?php echo $has_tooltip ? 'frm_help' : ''; ?>"
 				<?php echo $has_tooltip ? 'title="' . esc_attr( $args['title'] ) . '"' : ''; ?>
 				data-code="<?php echo esc_attr( $args['code'] ); ?>">
-				<?php echo esc_attr( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
+				<?php echo esc_html( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
 				<span>
-					[<?php echo esc_attr( FrmAppHelper::truncate( $args['code'], 10 ) ); ?>]
+					[<?php echo esc_html( FrmAppHelper::truncate( $args['code'], 10 ) ); ?>]
 				</span>
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -915,7 +923,7 @@ BEFORE_HTML;
 				$replace_with = '';
 			}
 
-			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			FrmShortcodeHelper::remove_inline_conditions( FrmAppHelper::is_true( $show ) && $replace_with != '', $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		// Replace [form_key].
@@ -946,7 +954,7 @@ BEFORE_HTML;
 		}
 
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
-			$html = do_shortcode( $html );
+			return do_shortcode( $html );
 		}
 
 		return $html;
@@ -1097,7 +1105,7 @@ BEFORE_HTML;
 	/**
 	 * @param array|bool|int|object|string $form
 	 *
-	 * @return string
+	 * @return int|string
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;
@@ -1134,11 +1142,11 @@ BEFORE_HTML;
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
 
-		if ( ! $invalid_msg ) {
-			$show_img = false;
-		} else {
+		if ( $invalid_msg ) {
 			echo wp_kses_post( $invalid_msg );
 			$show_img = true;
+		} else {
+			$show_img = false;
 		}
 
 		self::show_error(
@@ -1604,8 +1612,9 @@ BEFORE_HTML;
 		if ( $bg_color && $atts['bg'] ) {
 			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
 		}
+
 		echo '>';
-			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
 	}
 
@@ -1694,6 +1703,7 @@ BEFORE_HTML;
 			return;
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p class="frm_plan_required">
 			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
@@ -1702,6 +1712,7 @@ BEFORE_HTML;
 			</a>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1739,7 +1750,7 @@ BEFORE_HTML;
 	 */
 	public static function convert_legacy_package_names( $package_name ) {
 		if ( in_array( $package_name, array( 'Creator', 'Personal' ), true ) ) {
-			$package_name = 'Plus';
+			return 'Plus';
 		}
 
 		return $package_name;
@@ -1767,7 +1778,7 @@ BEFORE_HTML;
 		}
 
 		if ( $args['case_lower'] ) {
-			$license_types = array_map( 'strtolower', $license_types );
+			return array_map( 'strtolower', $license_types );
 		}
 
 		return $license_types;
@@ -2064,7 +2075,18 @@ BEFORE_HTML;
 			return true;
 		}
 
-		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
+		return self::is_formidable_api_form() || self::is_block_or_page_builder_preview();
+	}
+
+	/**
+	 * Checks if the form is rendered inside a block editor or page builder preview.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_block_or_page_builder_preview() {
+		return self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 
 	/**

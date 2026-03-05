@@ -79,7 +79,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @return void
 	 */
 	public static function set_free_license_code( $code ) {
-		update_option( self::$code_option_name, $code, 'no' );
+		update_option( self::$code_option_name, $code, false );
 	}
 
 	/**

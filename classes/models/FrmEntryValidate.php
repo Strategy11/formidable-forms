@@ -91,11 +91,13 @@ class FrmEntryValidate {
 	 */
 	private static function set_item_key( &$values ) {
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
-			global $wpdb;
-			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
-			$_POST['item_key']  = $values['item_key'];
+		if ( isset( $values['item_key'] ) && $values['item_key'] != '' ) {
+			return;
 		}
+
+		global $wpdb;
+		$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
+		$_POST['item_key']  = $values['item_key'];
 	}
 
 	/**
@@ -278,6 +280,9 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
+				/**
+				 * @var string $current_value
+				 */
 				$match = trim( $current_value ) === trim( $option_value );
 
 				if ( $match ) {
@@ -296,12 +301,14 @@ class FrmEntryValidate {
 					break;
 				}
 
-				if ( is_numeric( $current_value ) ) {
-					$match = (int) $current_value === (int) $option_value;
+				if ( ! is_numeric( $current_value ) ) {
+					continue;
+				}
 
-					if ( $match ) {
-						break;
-					}
+				$match = (int) $current_value === (int) $option_value;
+
+				if ( $match ) {
+					break;
 				}
 			}//end foreach
 
@@ -451,12 +458,14 @@ class FrmEntryValidate {
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		$format_value = FrmField::get_option( $field, 'format' );
 
-		if ( $field->type === 'phone' || ( $field->type === 'text' && $format_value && ! FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
-			$pattern = self::phone_format( $field );
+		if ( $field->type !== 'phone' && ( $field->type !== 'text' || ! $format_value || FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
+			return;
+		}
 
-			if ( ! preg_match( $pattern, $value ) ) {
-				$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
-			}
+		$pattern = self::phone_format( $field );
+
+		if ( ! preg_match( $pattern, $value ) ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		}
 	}
 
@@ -521,10 +530,10 @@ class FrmEntryValidate {
 			$pattern = '';
 
 			foreach ( $parts as $part ) {
-				if ( ! $pattern ) {
-					$pattern .= $part;
-				} else {
+				if ( $pattern ) {
 					$pattern .= '(' . $part . ')?';
+				} else {
+					$pattern .= $part;
 				}
 			}
 		}
@@ -586,9 +595,11 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return FrmAppHelper::pro_is_installed() &&
 			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || FrmAppHelper::get_post_param( 'frm_next_page' ) ) &&
 			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -820,11 +831,13 @@ class FrmEntryValidate {
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
 
-				if ( $found ) {
-					$datas[ $key ]             = $value;
-					$datas['frm_duplicated'][] = $field_id;
-					unset( $datas['missing_keys'][ $key_index ] );
+				if ( ! $found ) {
+					continue;
 				}
+
+				$datas[ $key ]             = $value;
+				$datas['frm_duplicated'][] = $field_id;
+				unset( $datas['missing_keys'][ $key_index ] );
 			}
 		}//end foreach
 	}
@@ -974,12 +987,14 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			if ( self::should_really_skip_field( $skipped_field, $values ) ) {
-				unset( $values['item_meta'][ $skipped_field->id ] );
+			if ( ! self::should_really_skip_field( $skipped_field, $values ) ) {
+				continue;
+			}
 
-				if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
-					unset( $values['item_meta']['other'][ $skipped_field->id ] );
-				}
+			unset( $values['item_meta'][ $skipped_field->id ] );
+
+			if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
+				unset( $values['item_meta']['other'][ $skipped_field->id ] );
 			}
 		}
 	}
