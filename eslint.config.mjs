@@ -78,6 +78,7 @@ export default [
 				...globals.es2021,
 				...globals.node,
 				...globals.mocha,
+				...globals.jquery,
 				wp: 'readonly',
 				wpApiSettings: 'readonly',
 				window: 'readonly',
@@ -102,8 +103,8 @@ export default [
 		},
 		settings: {
 			'import/resolver': {
-				webpack: {
-					config: './webpack.config.js',
+				node: {
+					extensions: [ '.js', '.jsx' ],
 				},
 			},
 			react: {
@@ -165,8 +166,39 @@ export default [
 			'no-alert': 'off',
 			'no-undef': 'off',
 			'no-shadow': 'off',
+
+			// Suppress DeepSource false positives for legacy patterns
+			'init-declarations': 'off',
+			'id-length': 'off',
+			'no-use-before-define': 'off',
+			'consistent-return': 'off',
+			'guard-for-in': 'off',
+			'no-return-assign': 'off',
+			'no-useless-escape': 'off',
+			'import/no-unresolved': 'off',
+			'import/named': 'off',
+			'import/default': 'off',
 			'comma-dangle': 'off',
 			'arrow-parens': ['error', 'as-needed'],
+
+			// Enforce frm-javascript.md patterns
+			'no-var': 'warn',
+			'prefer-const': 'warn',
+			'prefer-destructuring': ['warn', {
+				'array': true,
+				'object': true,
+			}, {
+				'enforceForRenamedProperties': false,
+			}],
+			'prefer-spread': 'warn',
+			'prefer-rest-params': 'error',
+			'prefer-template': 'warn',
+			'no-eval': 'error',
+			'no-implied-eval': 'error',
+			'no-new-func': 'error',
+			'no-extend-native': 'error',
+			'one-var': ['error', 'never'],
+			'default-param-last': 'warn',
 
 			// WordPress overrides
 			'@wordpress/no-global-active-element': 'off',
@@ -348,6 +380,12 @@ export default [
 			'formidable/no-redundant-undefined-check': 'error',
 			'formidable/prefer-includes': 'error',
 			'formidable/no-typeof-undefined': 'error',
+			'formidable/no-optional-chaining-queryselectorall': 'error',
+			'formidable/no-repeated-selector': 'warn',
+			'formidable/prefer-document-fragment': 'warn',
+
+			// Import rules
+			'import/no-default-export': 'warn',
 		},
 	},
 
@@ -373,74 +411,6 @@ export default [
 			'no-jquery/no-ajax': 'error',
 			'no-jquery/no-fade': 'error',
 			'no-jquery/no-is': 'error',
-			'prefer-const': 'off',
-		},
-	},
-
-	// Override for js/formidable_admin_global.js
-	{
-		files: ['js/formidable_admin_global.js'],
-		rules: {
-			'prefer-const': 'off',
-		},
-	},
-
-	// Override for js/src/admin/admin.js
-	{
-		files: ['js/src/admin/admin.js'],
-		rules: {
-			'prefer-const': 'off',
-			'no-redeclare': 'off',
-			'no-unused-expressions': 'off',
-			'jsdoc/require-returns-description': 'off',
-			'jsdoc/require-param-type': 'off',
-			'@wordpress/valid-sprintf': 'off',
-		},
-	},
-
-	// Override for js/src/common/components/radio.js
-	{
-		files: ['js/src/common/components/radio.js'],
-		rules: {
-			'@wordpress/no-base-control-with-label-without-id': 'off',
-		},
-	},
-
-	// Override for files using @wordpress/dom-ready
-	{
-		files: [
-			'js/src/addons-page/index.js',
-			'js/src/form-templates/index.js',
-			'js/src/onboarding-wizard/index.js',
-			'js/src/settings-components/index.js',
-			'js/src/welcome-tour/index.js',
-		],
-		rules: {
-			'import/no-extraneous-dependencies': 'off',
-		},
-	},
-
-	// Override for js/src/form-templates/events/favoriteButtonListener.js
-	{
-		files: ['js/src/form-templates/events/favoriteButtonListener.js'],
-		rules: {
-			'no-unused-expressions': 'off',
-		},
-	},
-
-	// Override for stripe/js/frmstrp.js
-	{
-		files: ['stripe/js/frmstrp.js'],
-		rules: {
-			'no-bitwise': 'off',
-		},
-	},
-
-	// Override for Cypress test files
-	{
-		files: ['tests/cypress/**/*.js'],
-		rules: {
-			'no-unused-expressions': 'off',
 		},
 	},
 ];

@@ -78,7 +78,7 @@ export class frmOverlay {
 			const options = {
 				href: button.url,
 				text: button.label,
-				className: 'button frm_animate_bg ' + buttonTypeClassname
+				className: `button frm_animate_bg ${ buttonTypeClassname }`
 			};
 			if ( button.target ) {
 				options.target = button.target;

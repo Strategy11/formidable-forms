@@ -110,9 +110,9 @@
 
 	const ajax = {
 		async doJsonFetch( action ) {
-			let targetUrl = ajaxurl + '?action=frm_' + action;
+			let targetUrl = `${ ajaxurl }?action=frm_${ action }`;
 			if ( ! targetUrl.includes( 'nonce=' ) ) {
-				targetUrl += '&nonce=' + frmGlobal.nonce;
+				targetUrl += `&nonce=${ frmGlobal.nonce }`;
 			}
 			const response = await fetch( targetUrl );
 			const json = await response.json();
@@ -130,7 +130,7 @@
 			if ( signal ) {
 				init.signal = signal;
 			}
-			const response = await fetch( ajaxurl + '?action=frm_' + action, init );
+			const response = await fetch( `${ ajaxurl }?action=frm_${ action }`, init );
 			const json = await response.json();
 			if ( ! json.success ) {
 				return Promise.reject( json.data || 'JSON result is not successful' );
@@ -144,8 +144,8 @@
 			const $select = jQuery( this );
 			const id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false;
 
-			let labelledBy = id ? jQuery( '#for_' + id ) : false;
-			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+			let labelledBy = id ? jQuery( `#for_${ id }` ) : false;
+			labelledBy = id && labelledBy.length ? `aria-labelledby="${ labelledBy.attr( 'id' ) }"` : '';
 
 			// Set empty title attributes so that none of the dropdown options include title attributes.
 			$select.find( 'option' ).attr( 'title', ' ' );
@@ -153,7 +153,7 @@
 				templates: {
 					popupContainer: '<div class="multiselect-container frm-dropdown-menu dropdown-menu"></div>',
 					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
-					button: '<button type="button" class="multiselect dropdown-toggle btn" data-bs-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+					button: `<button type="button" class="multiselect dropdown-toggle btn" data-bs-toggle="dropdown" ${ labelledBy }><span class="multiselect-selected-text"></span> <b class="caret"></b></button>`
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 				nonSelectedText: __( '— Select —', 'formidable' ),
@@ -191,7 +191,7 @@
 
 					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
 					const optionValue = $option.val();
-					const $dropdownItem = $dropdown.find( 'input[value="' + optionValue + '"]' ).closest( 'button.dropdown-item' );
+					const $dropdownItem = $dropdown.find( `input[value="${ optionValue }"]` ).closest( 'button.dropdown-item' );
 					if ( $dropdownItem.length ) {
 						$dropdownItem.attr( 'aria-checked', checked ? 'true' : 'false' );
 
@@ -229,8 +229,8 @@
 		 * @param {string|Object} container Container class or element. Default is null.
 		 */
 		initAutocomplete( type, container ) {
-			const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
-			const elements = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
+			const basedUrlParams = `?action=frm_${ type }_search&nonce=${ frmGlobal.nonce }`;
+			const elements = ! container ? jQuery( `.frm-${ type }-search` ) : jQuery( container ).find( `.frm-${ type }-search` );
 
 			elements.each( initAutocompleteForElement );
 
@@ -240,7 +240,7 @@
 
 				// Check if a custom post type is specific.
 				if ( element.attr( 'data-post-type' ) ) {
-					urlParams += '&post_type=' + element.attr( 'data-post-type' );
+					urlParams += `&post_type=${ element.attr( 'data-post-type' ) }`;
 				}
 
 				let source = ajaxurl + urlParams;
@@ -496,13 +496,13 @@
 					return;
 				}
 
-				const id = editor.id;
+				const { id } = editor;
 				window.quicktags( {
-					name: 'qt_' + id,
+					name: `qt_${ id }`,
 					id,
 					canvas: editor,
 					settings: { id },
-					toolbar: document.getElementById( 'qt_' + id + '_toolbar' ),
+					toolbar: document.getElementById( `qt_${ id }_toolbar` ),
 					theButtons: {}
 				} );
 			}
@@ -515,7 +515,7 @@
 					{},
 					orgSettings,
 					{
-						selector: '#' + editor.id,
+						selector: `#${ editor.id }`,
 						body_class: orgSettings.body_class.replace( key, editor.id )
 					}
 				);
@@ -555,14 +555,14 @@
 			}
 
 			function isTinyMceActive() {
-				const id = editor.id;
-				const wrapper = document.getElementById( 'wp-' + id + '-wrap' );
+				const { id } = editor;
+				const wrapper = document.getElementById( `wp-${ id }-wrap` );
 				return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
 			}
 
 			function setUpTinyMceVisualButtonListener() {
 				jQuery( document ).on(
-					'click', '#' + editor.id + '-html',
+					'click', `#${ editor.id }-html`,
 					function() {
 						editor.style.visibility = 'visible';
 						initQuickTagsButtons();
@@ -571,7 +571,7 @@
 			}
 
 			function setUpTinyMceHtmlButtonListener() {
-				jQuery( '#' + editor.id + '-tmce' ).on( 'click', handleTinyMceHtmlButtonClick );
+				jQuery( `#${ editor.id }-tmce` ).on( 'click', handleTinyMceHtmlButtonClick );
 			}
 
 			function handleTinyMceHtmlButtonClick() {
@@ -581,7 +581,7 @@
 					initRichText();
 				}
 
-				const wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
+				const wrap = document.getElementById( `wp-${ editor.id }-wrap` );
 				wrap.classList.add( 'tmce-active' );
 				wrap.classList.remove( 'html-active' );
 			}
@@ -590,7 +590,7 @@
 
 	function getModalHelper( modal, appendTo ) {
 		return function( child, uniqueClassName ) {
-			let element = modal.querySelector( '.' + uniqueClassName );
+			let element = modal.querySelector( `.${ uniqueClassName }` );
 			if ( null === element ) {
 				element = div( {
 					child,
@@ -618,7 +618,7 @@
 		const $modal = jQuery( modal );
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
 			$modal.dialog( {
-				dialogClass: 'frm-dialog ' + dialogClass,
+				dialogClass: `frm-dialog ${ dialogClass }`,
 				modal: true,
 				autoOpen: false,
 				closeOnEscape: true,
@@ -758,7 +758,7 @@
 		}
 		if ( data ) {
 			Object.keys( data ).forEach( function( dataKey ) {
-				output.setAttribute( 'data-' + dataKey, data[ dataKey ] );
+				output.setAttribute( `data-${ dataKey }`, data[ dataKey ] );
 			} );
 		}
 		return output;

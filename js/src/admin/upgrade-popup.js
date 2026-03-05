@@ -60,7 +60,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 		oneclick = JSON.parse( oneclick );
 
 		button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-		button.className = button.className + ' ' + oneclick.class;
+		button.className = `${ button.className } ${ oneclick.class }`;
 		button.rel = oneclick.url;
 
 		oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
@@ -175,7 +175,9 @@ export function initUpgradeModal() {
 	frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', handleUpgradeClick );
 
 	function handleUpgradeClick( event ) {
-		let element, link, content;
+		let element;
+		let link;
+		let content;
 
 		element = event.target;
 
@@ -236,7 +238,7 @@ export function initUpgradeModal() {
 
 		if ( element.dataset.image && lockIcon ) {
 			lockIcon.style.display = 'none';
-			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image } ), lockIcon );
+			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: `${ frmGlobal.url }/images/${ element.dataset.image }` } ), lockIcon );
 		}
 
 		const level = modal.querySelector( '.license-level' );
@@ -257,12 +259,12 @@ export function initUpgradeModal() {
 
 		// set the utm medium
 		const button = modal.querySelector( '.button-primary:not(.frm-oneclick-button)' );
-		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + element.getAttribute( 'data-medium' ) );
+		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, `$1${ element.getAttribute( 'data-medium' ) }` );
 		content = element.getAttribute( 'data-content' );
 		if ( content === null ) {
 			content = '';
 		}
-		link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
+		link = link.replace( /(content=)[a-z_-]+/ig, `$1${ content }` );
 		button.setAttribute( 'href', link );
 	}
 }
