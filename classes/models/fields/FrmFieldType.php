@@ -642,7 +642,7 @@ DEFAULT_HTML;
 		return $this->should_continue_to_field_options(
 			array(
 				'field' => array(
-					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type'],
+					'type' => FrmField::get_field_type( $this->field ),
 				),
 			)
 		);
