@@ -249,8 +249,6 @@
 	 * Initialize Google Pay via the PayPal SDK googlepay component.
 	 * Checks eligibility and renders the Google Pay button if supported.
 	 *
-	 * @param {HTMLElement} cardElement The card element container.
-	 *
 	 * @return {Promise<void>}
 	 */
 	async function initializeGooglePay() {
