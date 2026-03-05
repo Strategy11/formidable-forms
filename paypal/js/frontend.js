@@ -137,7 +137,7 @@
 
 			// Initialize Google Pay if available.
 			if ( ! isRecurring ) {
-				await initializeGooglePay( cardElement );
+				await initializeGooglePay();
 			}
 		}
 
@@ -253,7 +253,7 @@
 	 *
 	 * @return {Promise<void>}
 	 */
-	async function initializeGooglePay( cardElement ) {
+	async function initializeGooglePay() {
 		if ( 'function' !== typeof paypal.Googlepay ) {
 			return;
 		}
