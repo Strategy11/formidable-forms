@@ -29,7 +29,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	}
 
 	afterViewInit( wrapper ) {
-		new frmTabsNavigator( wrapper );
+		this.tabsNavigator = new frmTabsNavigator( wrapper );
 	}
 
 	/**
