@@ -8,15 +8,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <div id="frm_email_addon_menu" class="frm-limited-actions">
-	<?php
-	FrmAppHelper::show_search_box(
-		array(
-			'input_id'    => 'actions',
-			'placeholder' => __( 'Search Form Actions', 'formidable' ),
-			'tosearch'    => 'frm-action',
-		)
-	);
-	?>
+	<div class="frm-h-stack">
+		<div class="frm-style-tabs-wrapper frm-actions-filter-tabs">
+			<div class="frm-tabs-delimiter">
+				<span class="frm-tabs-active-underline"></span>
+			</div>
+			<div class="frm-tabs-navs">
+				<ul class="frm-flex-box">
+					<li class="frm-active" data-group=""><?php esc_html_e( 'All', 'formidable' ); ?></li>
+					<?php
+					foreach ( $groups as $group_key => $group_data ) {
+						$tab_label = ! empty( $group_data['name'] ) ? $group_data['name'] : __( 'Featured', 'formidable' );
+						?>
+						<li data-group="<?php echo esc_attr( $group_key ); ?>"><?php echo esc_html( $tab_label ); ?></li>
+						<?php
+					}
+					?>
+				</ul>
+			</div>
+		</div>
+		<div class="frm-ml-auto">
+			<?php
+			FrmAppHelper::show_search_box(
+				array(
+					'input_id'    => 'actions',
+					'placeholder' => __( 'Search Form Actions', 'formidable' ),
+					'tosearch'    => 'frm-action',
+				)
+			);
+			?>
+		</div>
+	</div>
 	<h3 class="frm-no-border">
 		<?php esc_html_e( 'Form Actions', 'formidable' ); ?>
 		<span class="frm-sub-label">
@@ -26,10 +48,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	$displayed_actions = array();
 
-	foreach ( $groups as $group ) {
+	foreach ( $groups as $group_key => $group ) {
 		if ( ! empty( $group['name'] ) ) {
 			?>
-			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
+			<h3 class="frm-group-heading" data-group="<?php echo esc_attr( $group_key ); ?>"><?php echo esc_html( $group['name'] ); ?></h3>
 			<?php
 		}
 
@@ -37,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$group['actions'] = array();
 		}
 		?>
-		<ul class="frm_actions_list">
+		<ul class="frm_actions_list" data-group="<?php echo esc_attr( $group_key ); ?>">
 			<?php
 			foreach ( $action_controls as $action_control ) {
 				if ( in_array( $action_control->id_base, $displayed_actions, true ) || ! in_array( $action_control->id_base, $group['actions'], true ) ) {
