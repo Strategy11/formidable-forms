@@ -472,7 +472,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
 
 			foreach ( $updates as $field_id => $new_value ) {
-				FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value );
+				if ( ! FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value ) ) {
+					FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
+				}
 			}
 		}
 
@@ -481,6 +483,81 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$log->add(
 				array(
 					'title'   => 'PayPal Lite: Sync Entry Data with Capture Response',
+					'content' => print_r( $updates, true ),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Sync the entry data with the subscription response.
+	 *
+	 * Normalizes the subscriber data from the subscription response into the
+	 * same shape used by the capture response so the existing field-update
+	 * helpers can be reused.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $subscription The subscription object from PayPal.
+	 * @param array  $atts         Includes 'entry', 'action', 'amount'.
+	 *
+	 * @return void
+	 */
+	private static function sync_entry_data_with_subscription_response( $subscription, $atts ) {
+		if ( ! isset( $subscription->subscriber ) || ! is_object( $subscription->subscriber ) ) {
+			return;
+		}
+
+		$subscriber = $subscription->subscriber;
+
+		// Normalize subscriber into the payer shape expected by existing helpers.
+		$payer = (object) array(
+			'email_address' => $subscriber->email_address ?? '',
+			'name'          => $subscriber->name ?? null,
+		);
+
+		// Normalize shipping address into the purchase_units shape expected by get_shipping_address_from_response.
+		$response = (object) array(
+			'payer'          => $payer,
+			'purchase_units' => array(),
+		);
+
+		if ( isset( $subscriber->shipping_address->address ) ) {
+			$response->purchase_units = array(
+				(object) array(
+					'shipping' => (object) array(
+						'address' => $subscriber->shipping_address->address,
+					),
+				),
+			);
+		}
+
+		$entry    = $atts['entry'];
+		$action   = $atts['action'];
+		$settings = $action->post_content;
+		$mode     = $settings['entry_data_sync'] ?? 'overwrite';
+
+		if ( 'new_fields' === $mode ) {
+			$updates = self::get_order_data_field_updates( $payer, $response, $settings );
+
+			foreach ( $updates as $field_id => $new_value ) {
+				FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
+			}
+		} else {
+			$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
+
+			foreach ( $updates as $field_id => $new_value ) {
+				if ( ! FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value ) ) {
+					FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
+				}
+			}
+		}
+
+		if ( class_exists( 'FrmLog' ) ) {
+			$log = new FrmLog();
+			$log->add(
+				array(
+					'title'   => 'PayPal Lite: Sync Entry Data with Subscription Response',
 					'content' => print_r( $updates, true ),
 				)
 			);
@@ -714,6 +791,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
 
 		self::$active_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+
+		self::sync_entry_data_with_subscription_response( $subscription, $atts );
 
 		return true;
 	}
