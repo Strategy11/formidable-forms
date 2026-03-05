@@ -395,9 +395,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 4.01
 	 *
-	 * @param object $field Field object.
-	 * @param mixed  $value Value to set.
-	 * @param array  $args  Additional arguments.
+	 * @param object|array $field Field object.
+	 * @param mixed        $value Value to set.
+	 * @param array        $args  Additional arguments.
 	 *
 	 * @return void
 	 */
