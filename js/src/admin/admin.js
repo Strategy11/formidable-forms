@@ -7874,7 +7874,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * @param {string} type
 	 *
-	 * @return {number}
+	 * @return {number} The number of actions for the specified type.
 	 */
 	function getNumberOfActionsForType( type ) {
 		if ( [ 'paypal', 'stripe', 'square' ].includes( type ) ) {

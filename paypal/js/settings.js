@@ -4,7 +4,7 @@
 		button.addEventListener( 'click', function( e ) {
 			e.preventDefault();
 
-			const mode = button.dataset.mode;
+			const { mode } = button.dataset;
 			const formData = new FormData();
 			formData.append( 'mode', mode );
 			frmDom.ajax.doJsonPost( 'paypal_oauth', formData ).then(
@@ -39,7 +39,7 @@
 
 	document.querySelectorAll( '.frm_paypal_seller_status_placeholder' ).forEach(
 		function( placeholder ) {
-			const mode = placeholder.dataset.mode;
+			const { mode } = placeholder.dataset;
 			const interval = setInterval(
 				function() {
 					if ( placeholder.offsetParent === null ) {

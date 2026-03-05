@@ -79,7 +79,7 @@
 		// TODO: Make these IDs unique.
 		cardElement.innerHTML = '';
 
-		const layout = getPayPalSettings()[ 0 ].layout;
+		const { layout } = getPayPalSettings()[ 0 ];
 
 		const cardFieldsEligible = cardFields.isEligible() && layout !== 'checkout_only';
 
@@ -493,7 +493,7 @@
 			if ( -1 !== setting.fields ) {
 				setting.fields.forEach( function( field ) {
 					if ( isNaN( field ) ) {
-						priceFields.push( 'field_' + field );
+						priceFields.push( `field_${ field }` );
 					} else {
 						priceFields.push( field );
 					}
@@ -584,7 +584,7 @@
 	 */
 	function checkPriceFieldsOnLoad() {
 		getPriceFields().forEach( function( fieldId ) {
-			const fieldContainer = document.getElementById( 'frm_field_' + fieldId + '_container' );
+			const fieldContainer = document.getElementById( `frm_field_${ fieldId }_container` );
 			if ( ! fieldContainer ) {
 				return;
 			}
@@ -621,12 +621,12 @@
 				return;
 			}
 
-			const containerId = 'frm-paypal-button-' + fundingSource + '-container';
+			const containerId = `frm-paypal-button-${ fundingSource }-container`;
 			const container = document.createElement( 'div' );
 			container.id = containerId;
 			buttonContainer.prepend( container );
 
-			button.render( '#' + containerId );
+			button.render( `#${ containerId }` );
 
 			renderedButtons.push( fundingSource );
 		};
@@ -1007,17 +1007,17 @@
 	}
 
 	function addName( $form ) {
-		let i,
-			firstField,
-			lastField,
-			firstFieldContainer,
-			lastFieldContainer,
-			firstNameID = '',
-			lastNameID = '',
-			subFieldEl;
+		let i;
+		let firstField;
+		let lastField;
+		let firstFieldContainer;
+		let lastFieldContainer;
+		let firstNameID = '';
+		let lastNameID = '';
+		let subFieldEl;
 
 		const cardObject = {};
-		const settings = frmPayPalVars.settings;
+		const { settings } = frmPayPalVars;
 
 		/**
 		 * Gets first, middle or last name from the given field.
@@ -1028,14 +1028,14 @@
 		 */
 		const getNameFieldValue = function( field, subFieldName ) {
 			if ( 'object' !== typeof field ) {
-				field = document.getElementById( 'frm_field_' + field + '_container' );
+				field = document.getElementById( `frm_field_${ field }_container` );
 			}
 
 			if ( ! field || 'object' !== typeof field || 'function' !== typeof field.querySelector ) {
 				return '';
 			}
 
-			subFieldEl = field.querySelector( '.frm_combo_inputs_container .frm_form_subfield-' + subFieldName + ' input' );
+			subFieldEl = field.querySelector( `.frm_combo_inputs_container .frm_form_subfield-${ subFieldName } input` );
 			if ( ! subFieldEl ) {
 				return '';
 			}
@@ -1062,12 +1062,12 @@
 			if ( type === 'container' ) {
 				return queryForNameFieldIsFound
 					? window.frmProForm.queryForNameField( fieldID, 'container' )
-					: document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
+					: document.querySelector( `#frm_field_${ fieldID }_container, .frm_field_${ fieldID }_container` );
 			}
 
 			return queryForNameFieldIsFound
 				? window.frmProForm.queryForNameField( fieldID, 'field', $form[ 0 ] )
-				: $form[ 0 ].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
+				: $form[ 0 ].querySelector( `#frm_field_${ fieldID }_container input, input[name="item_meta[${ fieldID }]"], .frm_field_${ fieldID }_container input` );
 		}
 
 		if ( firstNameID !== '' ) {
@@ -1085,11 +1085,11 @@
 		if ( lastNameID !== '' ) {
 			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
 			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
-				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
+				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
 				lastField = getNameFieldItem( lastNameID, 'field', $form );
 				if ( lastField && lastField.value ) {
-					cardObject.name = cardObject.name + ' ' + lastField.value;
+					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
 			}
 		}

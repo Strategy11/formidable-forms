@@ -88,6 +88,8 @@ export default [
 				expect: 'readonly',
 				assert: 'readonly',
 				chai: 'readonly',
+				// Used for Google Pay payments in PayPal Commerce frontend JS.
+				google: 'readonly'
 			},
 		},
 		plugins: {
