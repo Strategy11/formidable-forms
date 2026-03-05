@@ -33,6 +33,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
+	<rule ref="Formidable.CodeAnalysis.PreferFrmFieldGetFieldType" />
 	<rule ref="Formidable.CodeAnalysis.PreferGuardClauseForReturnElse" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
