@@ -653,9 +653,11 @@ class FrmTransLiteActionsController {
 	 */
 	private static function get_field_order_before_submit( $form_id, $field_order ) {
 		$submit_field = FrmSubmitHelper::get_submit_field( $form_id );
+
 		if ( ! $submit_field || $field_order < (int) $submit_field->field_order ) {
 			return $field_order;
 		}
+
 		$submit_order = (int) $submit_field->field_order;
 		FrmField::update( $submit_field->id, array( 'field_order' => $submit_order + 1 ) );
 		return $submit_order;
