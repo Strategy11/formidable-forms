@@ -408,6 +408,7 @@ class FrmPayPalLiteAppController {
 			'trial_period'        => $trial_period,
 			'payment_limit'       => $payment_limit,
 			'email'               => $email,
+			'payer'               => self::get_payer_data_from_posted_values( $action ),
 			'shipping_preference' => self::get_shipping_preference( $action ),
 		);
 
