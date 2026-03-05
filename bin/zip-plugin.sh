@@ -39,6 +39,7 @@ zip -r $zipname $destination \
 	-x "*/.editorconfig" \
 	-x "*/.eslintignore" \
 	-x "*/.eslintrc.json" \
+	-x "*/.git" \
 	-x "*/.git/*" \
 	-x "*/.gitattributes" \
 	-x "*/.github/*" \
@@ -59,6 +60,7 @@ zip -r $zipname $destination \
 	-x "*/.coderabbit.yaml" \
 	-x "*/.deepsource.toml" \
 	-x "*/.semgrepignore" \
+	-x "*/.gitmodules" \
 	-x "*/.oxlintrc.json" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \

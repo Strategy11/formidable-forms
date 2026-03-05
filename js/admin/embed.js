@@ -118,7 +118,7 @@
 	function offsetModalY( $modal, amount ) {
 		const position = {
 			my: 'top',
-			at: 'top+' + amount,
+			at: `top+${ amount }`,
 			of: window
 		};
 		$modal.dialog( 'option', 'position', position );
@@ -197,7 +197,7 @@
 						content.append( dropdownWrapper );
 
 						if ( 'form' === state.type ) {
-							editPageUrl = response.edit_page_url + '&frmForm=' + state.objectId;
+							editPageUrl = `${ response.edit_page_url }&frmForm=${ state.objectId }`;
 						} else {
 							const hookName = 'frm_embed_edit_page_url';
 							const hookArgs = {
@@ -229,7 +229,7 @@
 								return;
 							}
 
-							window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
+							window.location.href = editPageUrl.replace( 'post=0', `post=${ pageId }` );
 						}
 					}
 				}
@@ -384,13 +384,13 @@
 		let examples = [
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
-				example: '[formidable id=' + formId + ']',
+				example: `[formidable id=${ formId }]`,
 				link: 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually',
 				linkLabel: __( 'How to use shortcodes in WordPress', 'formidable' )
 			},
 			{
 				label: __( 'Use PHP code', 'formidable' ),
-				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ' ) ); ?>'
+				example: `<?php echo FrmFormsController::get_form_shortcode( array( 'id' => ${ formId } ) ); ?>`
 			}
 		];
 
@@ -404,7 +404,7 @@
 		const unique = getAutoId();
 
 		const labelElement = getLabel( label );
-		labelElement.id = 'frm_embed_example_label_' + unique;
+		labelElement.id = `frm_embed_example_label_${ unique }`;
 
 		const element = div();
 		element.append( labelElement );
@@ -417,7 +417,7 @@
 			exampleElement.type = 'text';
 		}
 
-		exampleElement.id = 'frm_embed_example_' + unique;
+		exampleElement.id = `frm_embed_example_${ unique }`;
 		exampleElement.className = 'frm_embed_example';
 		exampleElement.value = example;
 		exampleElement.readOnly = true;
@@ -444,7 +444,7 @@
 
 	function getCopyIcon( label ) {
 		const icon = svg( { href: '#frm_clone_icon' } );
-		icon.id = 'frm_copy_embed_' + getAutoId();
+		icon.id = `frm_copy_embed_${ getAutoId() }`;
 		icon.setAttribute( 'tabindex', 0 );
 		icon.setAttribute( 'role', 'button' );
 		/* translators: %s: Example type (ie. WordPress shortcode, API Form script) */
@@ -487,7 +487,7 @@
 
 	function speak( message ) {
 		const element = document.createElement( 'div' );
-		const id = 'speak-' + getAutoId();
+		const id = `speak-${ getAutoId() }`;
 
 		element.setAttribute( 'aria-live', 'assertive' );
 		element.setAttribute( 'id', id );

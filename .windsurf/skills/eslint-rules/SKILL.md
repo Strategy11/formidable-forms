@@ -20,14 +20,17 @@ Workflow for creating and maintaining custom ESLint rules in the Formidable Form
 
 Custom ESLint rules live in `/eslint-rules/` at the project root.
 
-```
+```text
 eslint-rules/
 ├── index.js          # Plugin entry point, exports all rules
 └── rules/            # Individual rule files
     ├── prefer-strict-comparison.js
     ├── no-redundant-undefined-check.js
     ├── prefer-includes.js
-    └── no-typeof-undefined.js
+    ├── no-typeof-undefined.js
+    ├── no-optional-chaining-queryselectorall.js
+    ├── no-repeated-selector.js
+    └── prefer-document-fragment.js
 ```
 
 The plugin is imported in `eslint.config.mjs` as `formidable` and rules are referenced as `formidable/<rule-name>`.
@@ -35,6 +38,7 @@ The plugin is imported in `eslint.config.mjs` as `formidable` and rules are refe
 ### Release Exclusions
 
 The `/eslint-rules/` directory is excluded from releases via:
+
 - `.gitattributes`: `export-ignore`
 - `bin/zip-plugin.sh`: `-x "*/eslint-rules/*"`
 
@@ -65,10 +69,10 @@ Detects `.indexOf()` comparisons with `-1` and suggests `.includes()` instead. C
 
 - **Fixable:** Yes
 - **Patterns caught:**
-  - `arr.indexOf(x) !== -1` and yoda `-1 !== arr.indexOf(x)`
-  - `arr.indexOf(x) === -1` and yoda `-1 === arr.indexOf(x)`
-  - `arr.indexOf(x) > -1` and yoda `-1 < arr.indexOf(x)`
-  - `arr.indexOf(x) >= 0`
+    - `arr.indexOf(x) !== -1` and yoda `-1 !== arr.indexOf(x)`
+    - `arr.indexOf(x) === -1` and yoda `-1 === arr.indexOf(x)`
+    - `arr.indexOf(x) > -1` and yoda `-1 < arr.indexOf(x)`
+    - `arr.indexOf(x) >= 0`
 
 ### formidable/no-typeof-undefined
 
@@ -76,9 +80,36 @@ Detects `typeof x === 'undefined'` and yoda `'undefined' === typeof x` patterns.
 
 - **Fixable:** Yes
 - **Patterns caught:**
-  - `typeof x === 'undefined'` / `typeof x == 'undefined'`
-  - `'undefined' === typeof x` / `'undefined' == typeof x` (yoda)
-  - Both `===`/`!==` and `==`/`!=` variants
+    - `typeof x === 'undefined'` / `typeof x == 'undefined'`
+    - `'undefined' === typeof x` / `'undefined' == typeof x` (yoda)
+    - Both `===`/`!==` and `==`/`!=` variants
+
+### formidable/no-optional-chaining-queryselectorall
+
+Prevents unnecessary optional chaining (`?.`) on DOM methods that always return a value (never null/undefined). Methods like `querySelectorAll`, `getElementsByClassName`, and `children` always return a collection, so optional chaining is redundant.
+
+- **Fixable:** Yes
+- **Severity:** Error
+- **Patterns caught:**
+    - `document.querySelectorAll(...)?.forEach`
+    - `element.getElementsByClassName(...)?.[0]`
+    - `element.children?.length`
+
+### formidable/no-repeated-selector
+
+Detects repeated calls to `querySelector` or `querySelectorAll` with the same selector string in the same function scope. Suggests caching the result in a variable.
+
+- **Fixable:** No (requires developer judgment)
+- **Severity:** Warning
+- **Example:** Multiple `document.querySelector('.item')` calls should be cached
+
+### formidable/prefer-document-fragment
+
+Detects `appendChild`, `append`, or `prepend` calls inside loops. Suggests using `DocumentFragment` to batch DOM operations and prevent multiple reflows.
+
+- **Fixable:** No (requires restructuring code)
+- **Severity:** Warning
+- **Loop types detected:** `for`, `for...of`, `for...in`, `while`, `forEach`, `map`
 
 ---
 
@@ -180,7 +211,7 @@ npm run lint:fix
 
 ## AST Explorer
 
-Use https://astexplorer.net/ with the `espree` parser to inspect AST node types when developing rules. This helps identify the correct node visitors and property names.
+Use <https://astexplorer.net/> with the `espree` parser to inspect AST node types when developing rules. This helps identify the correct node visitors and property names.
 
 ## Invocation
 

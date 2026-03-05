@@ -28,20 +28,19 @@
 
 	function toggleGateway() {
 		const gateway = this.value;
-		const checked = this.checked;
+		const { checked } = this;
 
-		toggleOpts( this, checked, '.show_' + gateway );
-		console.log( 'Toggle opts', gateway, checked );
+		toggleOpts( this, checked, `.show_${ gateway }` );
 
 		const gateways = [ 'stripe', 'square', 'paypal' ];
 		const toggleOff = gateways.filter( g => g !== gateway );
 
 		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
-		const showClass = 'show_' + settings.find( '.frm_gateway_opt + input:checked' ).attr( 'value' );
+		const showClass = `show_${ settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' ) }`;
 
 		toggleOff.forEach(
 			function( gateway ) {
-				const gatewaySettings = settings.get( 0 ).querySelectorAll( '.show_' + gateway );
+				const gatewaySettings = settings.get( 0 ).querySelectorAll( `.show_${ gateway }` );
 				gatewaySettings.forEach(
 					setting => {
 						if ( ! setting.classList.contains( showClass ) ) {
