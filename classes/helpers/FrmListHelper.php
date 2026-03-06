@@ -543,8 +543,7 @@ class FrmListHelper {
 			foreach ( $this->modes as $mode => $title ) {
 				$classes = array( 'view-' . $mode );
 
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $current_mode == $mode ) {
+				if ( $current_mode === $mode ) {
 					$classes[] = 'current';
 				}
 
