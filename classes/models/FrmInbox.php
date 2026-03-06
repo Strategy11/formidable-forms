@@ -231,7 +231,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function has_started( $message ) {
-		return empty( $message['starts'] ) ? true : $message['starts'] <= time();
+		return ! empty( $message['starts'] ) ? $message['starts'] <= time() : true;
 	}
 
 	/**

@@ -462,7 +462,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_top( $step ) {
-		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
+		$section_class = ! empty( $step['current'] ) ? '' : 'frm_grey';
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
