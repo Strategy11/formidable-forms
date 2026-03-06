@@ -186,7 +186,7 @@ class RedundantEmptyOnStaticPropertySniff implements Sniff {
 	 * @param int  $openParen  The opening parenthesis position.
 	 * @param int  $closeParen The closing parenthesis position.
 	 *
-	 * @return false|array{accessor: string, property: string} The static access info, or false.
+	 * @return array{accessor: string, property: string}|false The static access info, or false.
 	 */
 	private function getStaticPropertyAccess( File $phpcsFile, $openParen, $closeParen ) {
 		$tokens = $phpcsFile->getTokens();
