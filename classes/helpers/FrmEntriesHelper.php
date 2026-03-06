@@ -223,7 +223,7 @@ class FrmEntriesHelper {
 		$field_value = $entry->metas[ $field->id ] ?? false;
 
 		if ( FrmAppHelper::pro_is_installed() ) {
-			$empty = empty( $field_value );
+			$empty = ! $field_value;
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
 
 			if ( $empty && $field_value ) {

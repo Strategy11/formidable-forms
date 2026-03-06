@@ -34,7 +34,7 @@ class FrmStyleApi extends FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cache_key() {
-		$this->cache_key = 'frm_style_templates_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
+		$this->cache_key = 'frm_style_templates_l' . ( ! empty( $this->license ) ? md5( $this->license ) : '' );
 	}
 
 	public function get_api_info() {

@@ -782,7 +782,7 @@ class FrmFormTemplatesController {
 	 * @return int
 	 */
 	public static function get_template_count() {
-		if ( empty( self::$templates ) ) {
+		if ( ! self::$templates ) {
 			self::$form_template_api = new FrmFormTemplateApi();
 			self::retrieve_and_set_templates();
 		}
