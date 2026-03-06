@@ -60,7 +60,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
 </p>
 
-<p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>">
+<p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo ! empty( $form_action->post_content['cc'] ) ? '' : ' frm_hidden'; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>">
 		<?php esc_html_e( 'CC', 'formidable' ); ?>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'cc' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
@@ -69,7 +69,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="cc"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon frm_svg14' ); ?></a>
 </p>
 
-<p class="frm_has_shortcodes frm_bcc_row frm_email_row<?php echo empty( $form_action->post_content['bcc'] ) ? ' frm_hidden' : ''; ?>">
+<p class="frm_has_shortcodes frm_bcc_row frm_email_row<?php echo ! empty( $form_action->post_content['bcc'] ) ? '' : ' frm_hidden'; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>">
 		<?php esc_html_e( 'BCC', 'formidable' ); ?>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'bcc' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
@@ -98,7 +98,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	<?php esc_html_e( 'Warning: If you are sending an email to the user, the To and From fields should not match.', 'formidable' ); ?>
 </p>
 
-<p class="frm_has_shortcodes frm_reply_to_row frm_email_row<?php echo empty( $form_action->post_content['reply_to'] ) ? ' frm_hidden' : ''; ?>">
+<p class="frm_has_shortcodes frm_reply_to_row frm_email_row<?php echo ! empty( $form_action->post_content['reply_to'] ) ? '' : ' frm_hidden'; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'reply_to' ) ); ?>">
 		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'reply_to' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
