@@ -40,7 +40,6 @@ Every fix/feature **MUST** be tested with these scenarios before completion:
 ## Test Classes
 
 - **Lite tests:** Extend `FrmUnitTest`
-- **Pro tests:** Extend `FrmProUnitTest`
 - **AJAX tests:** Extend `FrmAjaxUnitTest`
 
 ```php
