@@ -2,6 +2,12 @@
  * Form Settings Tab styles
  */
 
+#form_settings_page .frm-inner-content {
+	position: relative;
+	padding-left: var(--gap-xl);
+	padding-bottom: 150px;
+}
+
 h2.frm-h2,
 .frm_form_settings h2 {
 	border-bottom: 1px solid var(--grey-300);
@@ -9,6 +15,11 @@ h2.frm-h2,
 	font-weight: 400 !important;
 	padding: 9px 0 5px;
 	margin: 0;
+}
+
+.frm_form_settings h2 {
+	border-bottom: 0;
+	padding: 0;
 }
 
 .frm_settings_form h3,
