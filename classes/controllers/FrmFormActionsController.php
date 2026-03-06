@@ -187,7 +187,7 @@ class FrmFormActionsController {
 				),
 			),
 			'marketing' => array(
-				'name'    => __( 'Email Marketing', 'formidable' ),
+				'name'    => __( 'Marketing', 'formidable' ),
 				'icon'    => 'frmfont frm_mail_bulk_icon',
 				'actions' => array(
 					'mailchimp',
