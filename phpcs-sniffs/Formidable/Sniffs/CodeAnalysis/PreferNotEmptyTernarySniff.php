@@ -2,8 +2,8 @@
 /**
  * Formidable_Sniffs_CodeAnalysis_PreferNotEmptyTernarySniff
  *
- * Detects ternary expressions using `empty( A ) ? B : A` and converts them
- * to the preferred form `! empty( A ) ? A : B`.
+ * Detects ternary expressions using `empty( A ) ? B : C` and converts them
+ * to the preferred form `! empty( A ) ? C : B`.
  *
  * @package Formidable\Sniffs
  */
