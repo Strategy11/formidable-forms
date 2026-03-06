@@ -421,7 +421,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool True if a banner is available and shown.
 	 */
 	public static function maybe_show_banner() {
-		if ( empty( self::$banner_messages ) ) {
+		if ( ! self::$banner_messages ) {
 			return false;
 		}
 

@@ -1005,7 +1005,7 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	protected static function get_current_plugin() {
-		if ( empty( self::$plugin ) ) {
+		if ( ! self::$plugin ) {
 			self::$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'esc_url_raw' );
 		}
 		return self::$plugin;
