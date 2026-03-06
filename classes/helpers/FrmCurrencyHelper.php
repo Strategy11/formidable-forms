@@ -119,6 +119,26 @@ class FrmCurrencyHelper {
 	}
 
 	/**
+	 * If the currency is needed for this form, add it to the global.
+	 * This is later included in the footer.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $form_id Form ID. This is used for Pro compatibility.
+	 */
+	public static function add_currency_to_global( $form_id ) {
+		global $frm_vars;
+
+		if ( ! isset( $frm_vars['currency'] ) ) {
+			$frm_vars['currency'] = array();
+		}
+
+		if ( ! isset( $frm_vars['currency'][ $form_id ] ) ) {
+			$frm_vars['currency'][ $form_id ] = self::get_currency();
+		}
+	}
+
+	/**
 	 * Get a list of all supported currencies.
 	 *
 	 * @since 6.5.

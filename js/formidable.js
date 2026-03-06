@@ -1573,6 +1573,7 @@ function frmFrontFormJS() {
 			}
 
 			checkDropdownLabel();
+			calcProductsTotal();
 		};
 
 		runOnLoad( true );
@@ -1753,6 +1754,476 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Check to make sure sure the quantity field value is within the min and max values.
+	 *
+	 * @param {HTMLElement} input
+	 * @return {number}
+	 */
+	function checkQuantityFieldMinMax( input ) {
+		if ( '' === input.value ) {
+			// Leave the value if it is empty.
+			return 0;
+		}
+
+		const val = parseFloat( input.value ? input.value.trim() : 0 );
+		if ( isNaN( val ) ) {
+			return 0;
+		}
+
+		let max = input.hasAttribute( 'max' ) ? parseFloat( input.getAttribute( 'max' ) ) : 0;
+		let min = input.hasAttribute( 'min' ) ? parseFloat( input.getAttribute( 'min' ) ) : 0;
+
+		max = isNaN( max ) ? 0 : max;
+		min = isNaN( min ) ? 0 : ( min < 0 ? 0 : min );
+
+		if ( val < min ) {
+			input.value = min;
+			return min;
+		}
+
+		if ( 0 !== max && val > max ) {
+			input.value = max;
+			return max;
+		}
+
+		return val;
+	}
+
+	/**
+	 * @since 4.04.01
+	 */
+	function setHiddenProduct( input ) {
+		input.setAttribute( 'data-frmhidden', '1' );
+		triggerChange( jQuery( input ) );
+	}
+
+	/**
+	 * @since 4.04.01
+	 */
+	function setHiddenProductContainer( container ) {
+		if ( container.innerHTML.indexOf( 'data-frmprice' ) !== -1 ) {
+			jQuery( container ).find( 'input[data-frmprice], select:has([data-frmprice])' ).attr( 'data-frmhidden', '1' );
+		}
+	}
+
+	/**
+	 * @since 4.04.01
+	 */
+	function setShownProduct( input ) {
+		var wasHidden = input.getAttribute( 'data-frmhidden' );
+
+		if ( wasHidden !== null ) {
+			input.removeAttribute( 'data-frmhidden' );
+			triggerChange( jQuery( input ) );
+		}
+	}
+
+	function triggerChange( input, fieldKey ) {
+		if ( typeof fieldKey === 'undefined' ) {
+			fieldKey = 'dependent';
+		}
+
+		if ( input.length > 1 ) {
+			input = input.eq( 0 );
+		}
+
+		input.trigger({ type: 'change', selfTriggered: true, frmTriggered: fieldKey });
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	function calcProductsTotal( e ) {
+		var formTotals = [],
+			totalFields;
+
+		if ( typeof __FRMCURR  === 'undefined' ) {
+			return;
+		}
+
+		if ( undefined !== e && 'undefined' !== typeof e.target && ( 'keyup' === e.type || 'change' === e.type ) ) {
+			// an event has been fired
+			var el = e.target;
+			if ( el.hasAttribute( 'data-frmprice' ) && el instanceof HTMLInputElement && 'text' === el.type ) {
+				// user-defined product
+				el.setAttribute( 'data-frmprice', el.value.trim() );
+			}
+		}
+
+		totalFields = jQuery( '[data-frmtotal]' );
+		if ( ! totalFields.length ) {
+			return;
+		}
+
+		totalFields.each( function() {
+			var currency, formId, formatted,
+				total = 0,
+				totalField = jQuery( this ),
+				$form = totalField.closest( 'form' );
+
+			if ( ! $form.length ) {
+				return;
+			}
+
+			formId = $form.find( 'input[name="form_id"]' ).val();
+			currency = getCurrency( formId );
+
+			console.log( formTotals );
+			if ( typeof formTotals[ formId ] !== 'undefined' ) {
+				total = formTotals[ formId ];
+			} else {
+
+				$form.find( 'input[data-frmprice],select:has([data-frmprice])' ).each( function() {
+					var quantity, $this,
+						price = 0,
+						isUserDef = false,
+						isSingle = false;
+
+					if ( this.tagName === 'SELECT' ) {
+						if ( this.selectedIndex !== -1 ) {
+							price = this.options[ this.selectedIndex ].getAttribute( 'data-frmprice' );
+						}
+					} else {
+						isUserDef = 'text' === this.type;
+						isSingle = 'hidden' === this.type;
+						$this = jQuery( this );
+						if ( ( ! isUserDef && ! isSingle ) && ! $this.is( ':checked' ) ) {
+							return;
+						}
+						price = this.getAttribute( 'data-frmprice' );
+					}
+
+					if ( ! price ) {
+						price = 0;
+					} else {
+						price = preparePrice( price, currency );
+						quantity = getQuantity( isUserDef, this );
+						price = parseFloat( quantity ) * parseFloat( price );
+					}
+
+					if ( 'true' === this.getAttribute( 'data-frmdiscount' ) ) {
+						price = price * -1;
+					}
+
+					total += price;
+					console.log( total );
+				});
+
+				formTotals[ formId ] = total;
+			}
+
+			total = isNaN( total ) ? 0 : total;
+
+			// Set a decimal separator for currency if no default for it
+			currency.decimal_separator = currency.decimal_separator.trim(); // first remove unnecessary space(s)
+			if ( ! currency.decimal_separator.length ) {
+				currency.decimal_separator = '.';
+			}
+
+			total = normalizeTotal( total, currency );
+			totalField.val( total );
+
+			// because of e.g. fields that might be using this field for calculations
+			triggerChange( totalField );
+
+			total = formatCurrency( total, currency );
+			formatted = totalField.prev( '.frm_total_formatted' );
+			if ( formatted.length < 1 ) {
+				// In case paragraphs have been added to the form.
+				formatted = totalField.closest( '.frm_form_field' ).find( '.frm_total_formatted' );
+			}
+			if ( formatted.length ) {
+				formatted.html( total );
+			}
+		});
+	}
+
+	/**
+	 * Round total and maybe add trailing zeros so formatCurrency has a proper format to work with.
+	 *
+	 * @param {number} total The total amount to normalize.
+	 * @param {Object} currency The currency object containing decimal information.
+	 * @returns {number}
+	 */
+	function normalizeTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
+		if ( ! isLargeTotal ) {
+			const { decimals } = currency;
+			total = decimals > 0 ? Math.round10( total, decimals ) : Math.ceil( total );
+		}
+
+		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+	}
+
+	/**
+	 * Format a numeric value according to the specified currency format settings.
+	 *
+	 * @since 4.05.01
+	 *
+	 * @param {string} total The numeric value to format.
+	 * @param {Object} currency The currency formatting configuration.
+	 * @returns {string} The formatted currency string.
+	 */
+	function formatCurrency( total, currency ) {
+		total = maybeAddTrailingZeroToPrice( total, currency );
+		if ( total.length && ( total[ total.length - 1 ] === '.' || total[ total.length - 1 ] === currency.decimal_separator ) ) {
+			total = total.substr( 0, total.length - 1 );
+		}
+
+		total = maybeRemoveTrailingZerosFromPrice( total, currency );
+		total = addThousands( total, currency );
+
+		const leftSymbol = currency.symbol_left ? ( currency.symbol_left + currency.symbol_padding ) : '';
+		const rightSymbol = currency.symbol_right ? ( currency.symbol_padding + currency.symbol_right ) : '';
+
+		return leftSymbol + total + rightSymbol;
+	}
+
+	/**
+	 * @since 4.04.01
+	 *
+	 * This function is most suited for (product) fields that are
+	 * on their own page i.e. not hidden (in a multi-paged form).
+	 *
+	 * As for fields that are conditionally hidden - themselves or
+	 * their parent - and are not on their own page, the PHP side
+	 * handles them well; either their HTML is not included on the
+	 * page at all (e.g. fields in a conditionally hidden section)
+	 * or their value is empty & price is thus 0, so no worries here.
+	 */
+	function isProductFieldHidden( input ) {
+		return input.getAttribute( 'data-frmhidden' ) !== null;
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	function getCurrency( formId ) {
+		if ( typeof __FRMCURR  !== 'undefined' && typeof __FRMCURR[ formId ] !== 'undefined' ) {
+			return __FRMCURR[ formId ];
+		}
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	function getQuantity( isUserDef, field ) {
+		var quantity, quantityFields, fieldID,
+			$this = jQuery( field );
+
+		fieldID = frmFrontForm.getFieldId( field, false );
+		if ( ! fieldID ) {
+			return 0;
+		}
+
+		quantity = getQuantityField( $this, fieldID );
+
+		if ( quantity ) {
+			quantity = checkQuantityFieldMinMax( quantity );
+		} else {
+			quantityFields = getQuantityFields( $this );
+			if ( 1 === quantityFields.length && '' === quantityFields[0].getAttribute( 'data-frmproduct' ).trim() ) {
+				quantity = checkQuantityFieldMinMax( quantityFields[0]);
+			} else {
+				// If there is no quantity field, assume 1.
+				quantity = 1;
+			}
+		}
+
+		if ( 0 === quantity && isUserDef ) {
+			// only user-defined fields may not have attached quantity fields
+			quantity = 1;
+		}
+
+		return quantity;
+	}
+
+	function getQuantityField( elementObj, fieldID ) {
+		var quantity,
+			quantityFields = elementObj.closest( 'form' ).find( '[data-frmproduct]' );
+
+		fieldID = fieldID.toString();
+
+		quantityFields.each( function() {
+			var ids;
+
+			ids = JSON.parse( this.getAttribute( 'data-frmproduct' ).trim() );
+			if ( '' === ids ) {
+				return true;
+			}
+
+			// convert to array if necessary cos of existing fields that are already using single product fields
+			ids = 'string' === typeof ids ? [ ids.toString() ] : ids;
+			if ( ids.indexOf( fieldID ) > -1 ) {
+				quantity = this;
+				return false;
+			}
+		});
+
+		return quantity;
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	function getQuantityFields( elementObj ) {
+		var quantityFields;
+		// make sure the search is form-based (i.e. per form) cos there could be more than 1 form on the page
+		// not([id*="-"]) means : not inside a repeater
+		quantityFields = elementObj.closest( 'form' ).find( '[data-frmproduct]:not([id*="-"])' );
+
+		return quantityFields;
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	function preparePrice( price, currency ) {
+		var matches;
+
+		if ( ! price ) {
+			return 0;
+		}
+		price = price + ''; // convert to string just to be sure
+
+		const regex = getRegexForPrice( currency );
+
+		matches = price.match( regex );
+		if ( null === matches ) {
+			return 0;
+		}
+
+		price = matches.length ? matches[ matches.length - 1 ] : 0;
+		price = price.trim();
+
+		// Fix issues with parsing Fr.15.00. The regex catches .15.00.
+		// This checks for the leading decimal and removes it.
+		if ( currency.decimal_separator === '.' && 3 === price.split( '.' ).length && price[0] === '.' ) {
+			price = price.substr( 1 );
+		}
+
+		if ( price ) {
+			price = maybeUseDecimal( price, currency );
+			price = price.split( currency.thousand_separator ).join( '' ).replace( currency.decimal_separator, '.' );
+		}
+
+		return price;
+	}
+
+	/**
+	 * @param {Object} currency The currency object.
+	 * @return {RegExp}
+	 */
+	function getRegexForPrice( currency ) {
+		let regexString = '[0-9,.';
+
+		if ( currency.thousand_separator !== '.' && currency.thousand_separator !== ',' ) {
+			regexString += currency.thousand_separator;
+		}
+		if ( currency.decimal_separator !== '.' && currency.decimal_separator !== ',' ) {
+			regexString += currency.decimal_separator;
+		}
+
+		regexString += ']*\\.?\\,?[0-9]+';
+
+		return new RegExp( regexString, 'g' );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	function maybeUseDecimal( amount, currency ) {
+		var usedForDecimal, amountParts;
+		if ( currency.thousand_separator == '.' ) {
+			amountParts = amount.split( '.' );
+			usedForDecimal = ( 2 == amountParts.length && 2 == amountParts[1].length );
+			if ( usedForDecimal ) {
+				amount = amount.replace( '.', currency.decimal_separator );
+			}
+		}
+		return amount;
+	}
+
+	/**
+	 * Add trailing zeros to a price if necessary and replace the decimal separator.
+	 *
+	 * @since 4.04
+	 *
+	 * @param {number|string} price The price to format.
+	 * @param {Object} currency The currency object containing the decimal separator.
+	 * @param {boolean} [force=false] Whether to force processing even if the price is not a number.
+	 * @returns {string}
+	 */
+	function maybeAddTrailingZeroToPrice( price, currency, force = false ) {
+		if ( 'number' !== typeof price && ! force ) {
+			return price;
+		}
+
+		price += ''; // first convert to string
+		var pos = price.indexOf( '.' );
+
+		if ( pos === -1 ) {
+			price = price + '.';
+
+			for ( let n = 0; n < currency.decimals; ++n ) {
+				price += '0';
+			}
+		} else {
+			const decimalsString = price.substring( pos + 1 );
+			if ( decimalsString.length < currency.decimals ) {
+				if ( decimalsString.length < 2 ) {
+					price += '0';
+				}
+
+				for ( let n = 2; n < currency.decimals; ++n ) {
+					price += '0';
+				}
+			}
+		}
+
+		return price.replace( '.', currency.decimal_separator );
+	}
+
+	/**
+	 * Format a numeric string by adding thousand separators.
+	 *
+	 * @since 4.04.04
+	 *
+	 * @param {string|number} total The numeric value to format.
+	 * @param {Object} options Formatting options.
+	 * @param {string} options.decimal_separator Character used as decimal separator.
+	 * @param {string} options.thousand_separator Character used as thousand separator.
+	 *
+	 * @returns {string}
+	 */
+	function addThousands( total, { decimal_separator, thousand_separator } ) {
+		const split = decimal_separator === ''
+			? [ total.toString() ]
+			: total.split( decimal_separator );
+
+		if ( thousand_separator ) {
+			split[0] = split[0].replace( /\B(?=(\d{3})+(?!\d))/g, thousand_separator );
+		}
+
+		return split.join( decimal_separator );
+	}
+
+	/**
+	 * @since 5.0.15
+	 */
+	function maybeRemoveTrailingZerosFromPrice( total, currency ) {
+		var split = total.split( currency.decimal_separator );
+		if ( 2 !== split.length || split[1].length <= currency.decimals ) {
+			return total;
+		}
+		if ( 0 === currency.decimals ) {
+			return split[0];
+		}
+		return split[0] + currency.decimal_separator + split[1].substr( 0, currency.decimals );
+	}
+
 	return {
 		init() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1786,6 +2257,11 @@ function frmFrontFormJS() {
 				'frmPageChanged',
 				destroyhCaptcha
 			);
+
+			jQuery( document ).on( 'frmAfterAddRow frmAfterRemoveRow', calcProductsTotal );
+			jQuery( document ).on( 'change', '[type="checkbox"][data-frmprice],[type="radio"][data-frmprice],[type="hidden"][data-frmprice],select:has([data-frmprice])', calcProductsTotal );
+			jQuery( document ).on( 'keyup change', '[data-frmproduct],[type="text"][data-frmprice]', calcProductsTotal );
+			calcProductsTotal();
 		},
 
 		getFieldId,
@@ -2085,6 +2561,15 @@ window.frmFrontForm = frmFrontFormJS();
 jQuery( document ).ready( function() {
 	frmFrontForm.init();
 } );
+
+( function() {
+	if ( ! Math.round10 ) {
+		// https://www.jacklmoore.com/notes/rounding-in-javascript/
+		Math.round10 = function( value, decimals ) {
+			return Number( Math.round( value + 'e' + decimals ) + 'e-' + decimals );
+		};
+	}
+}() );
 
 function frmRecaptcha() {
 	frmCaptcha( '.frm-g-recaptcha' );

@@ -469,7 +469,7 @@ class FrmFieldsController {
 		$pro_fields = FrmField::pro_field_selection();
 		// We want to keep credit_card types as credit card types for Stripe Lite.
 		// The credit_card key is set for backward compatibility.
-		unset( $pro_fields['credit_card'] );
+		FrmField::remove_moved_field_types_from_pro( $pro_fields );
 
 		return array_key_exists( $type, $pro_fields ) ? 'text' : $type;
 	}
@@ -536,6 +536,7 @@ class FrmFieldsController {
 
 		self::add_shortcodes_to_html( $field, $add_html );
 		self::add_pattern_attribute( $field, $add_html );
+		self::add_currency_field_attributes( $field, $add_html );
 
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
@@ -1048,6 +1049,52 @@ class FrmFieldsController {
 		$format = substr( $format, 2, - 1 );
 
 		$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
+	}
+
+	/**
+	 * Add product attributes to fields in multi-paged forms.
+	 *
+	 * @param array $field
+	 * @param array $add_html
+	 *
+	 * @return void
+	 */
+	private static function add_currency_field_attributes( $field, &$add_html ) {
+		$type             = $field['original_type'] ?? $field['type'];
+		$is_product_field = in_array( $type, array( 'total', 'quantity', 'product' ), true );
+
+		if ( ! $is_product_field ) {
+			return;
+		}
+
+		if ( $type === 'total' ) {
+			$add_html['data-frmtotal'] = 'data-frmtotal';
+		} elseif ( $type === 'quantity' ) {
+			$product_field = FrmField::get_option( $field, 'product_field' );
+			$add_html['data-frmproduct'] = 'data-frmproduct="' . esc_attr( json_encode( $product_field ) ) . '"';
+		} elseif ( $type === 'product' && 'hidden' === $field['type'] ) {
+			// We want to do this only for fields that are hidden because it's
+			// not their page, hence the check : 'hidden' === $field['type'].
+			$price = empty( $field['value'] ) ? 0 : self::get_product_price( $field );
+
+			$add_html['data-frmprice'] = 'data-frmprice="' . esc_attr( $price ) . '"';
+		}
+	}
+
+	/**
+	 * @param array $field
+	 */
+	private static function get_product_price( $field ) {
+		if ( is_array( $field['value'] ) ) {
+			// '' is unlikely though, let's just do it to prevent warnings
+			$value = isset( $field['opt_key'] ) && isset( $field['value'][ $field['opt_key'] ] ) ?
+						$field['value'][ $field['opt_key'] ] : '';
+		} else {
+			$value = $field['value'];
+		}
+
+		$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
+		return $field_obj->get_posted_price( $value );
 	}
 
 	/**

@@ -77,10 +77,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 								$pro_fields = FrmField::pro_field_selection();
 								// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
-								unset( $pro_fields['credit_card'] );
-								unset( $pro_fields['product'] );
-								unset( $pro_fields['quantity'] );
-								unset( $pro_fields['total'] );
+
+								FrmField::remove_moved_field_types_from_pro( $pro_fields );
 
 								foreach ( $pro_fields as $field_key => $field_type ) {
 									if ( isset( $field_type['section'] ) ) {

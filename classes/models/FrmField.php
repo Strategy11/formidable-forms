@@ -368,7 +368,7 @@ class FrmField {
 	 *
 	 * @return array
 	 */
-	public static function field_section_labels() {
+	private static function field_section_labels() {
 		return apply_filters(
 			'frm_available_field_sections',
 			array(
@@ -398,6 +398,20 @@ class FrmField {
 		$release_date               = $release_dates[ $type ];
 		$three_months_after_release = gmdate( 'Y-m-d', strtotime( $release_date . ' + 90 days' ) );
 		return gmdate( 'Y-m-d' ) < $three_months_after_release;
+	}
+
+	/**
+	 * Remove field types that are moved from Pro to Lite.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function remove_moved_field_types_from_pro( &$pro_fields ) {
+		unset( $pro_fields['credit_card'] );
+		unset( $pro_fields['product'] );
+		unset( $pro_fields['quantity'] );
+		unset( $pro_fields['total'] );
 	}
 
 	/**

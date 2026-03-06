@@ -119,6 +119,8 @@ class FrmFieldProduct extends FrmFieldType {
 			$form_id = $this->get_field_column( 'form_id' );
 		}
 
+		FrmCurrencyHelper::add_currency_to_global( $form_id );
+
 		return $html;
 	}
 
