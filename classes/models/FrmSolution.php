@@ -347,7 +347,7 @@ class FrmSolution {
 				'label'        => __( 'Connect to FormidableForms.com', 'formidable' ),
 				'description'  => __( 'Create a connection to get plugin downloads.', 'formidable' ),
 				'button_label' => __( 'Connect an Account', 'formidable' ),
-				'current'      => empty( $pro_installed ),
+				'current'      => ! $pro_installed,
 				'complete'     => $pro_installed,
 				'num'          => 1,
 			),

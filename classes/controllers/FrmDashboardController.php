@@ -97,7 +97,7 @@ class FrmDashboardController {
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
 				'payments'           => array(
-					'show-placeholder' => empty( $total_payments ),
+					'show-placeholder' => ! $total_payments,
 					'placeholder'      => array(
 						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(

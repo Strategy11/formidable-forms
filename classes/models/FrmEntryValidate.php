@@ -626,8 +626,7 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function is_spam_bot() {
-		$ip = FrmAppHelper::get_ip_address();
-		return empty( $ip );
+		return ! FrmAppHelper::get_ip_address();
 	}
 
 	/**
