@@ -964,7 +964,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @param array $atts
 	 */
 	protected function user_info_rows( $atts ) {
-		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! empty( $atts['user_info'] ) ) {
 			$html  = '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>IP Address</th><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
 			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>User-Agent (Browser/OS)</th><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n"; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -980,7 +979,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @param array $atts
 	 */
 	protected function user_info_plain_text_rows( $atts ) {
-		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! empty( $atts['user_info'] ) ) {
 			$content  = "IP Address: 127.0.0.1\r\n";
 			$content .= "User-Agent (Browser/OS): Mozilla Firefox 37.0 / OS X\r\n";
@@ -1219,10 +1217,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'free-user-id-field'      => '',
 		);
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( empty( $atts['include_blank'] ) ) {
 			foreach ( $expected as $field_key => $value ) {
-				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( ! $value ) {
 					unset( $expected[ $field_key ] );
 				}
