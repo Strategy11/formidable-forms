@@ -450,13 +450,14 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 4.02.04
+	 * @since x.x This is public.
 	 *
 	 * @param int|string $field_id Field ID.
 	 * @param array      $args     Additional arguments.
 	 *
 	 * @return mixed
 	 */
-	private static function get_posted_meta( $field_id, $args ) {
+	public static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
 			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
