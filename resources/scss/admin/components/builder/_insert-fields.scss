@@ -41,6 +41,10 @@
 			opacity: 0.5;
 		}
 
+		&.frm_show_update {
+			cursor: pointer;
+		}
+
 		span:not(.frm-new-pill) {
 			white-space: nowrap;
 			overflow: hidden;
