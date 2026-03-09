@@ -32,15 +32,12 @@
 }
 
 #frm_email_addon_menu {
-	border: 1px solid var(--grey-300);
-	padding: var(--gap-sm);
-	border-radius: 4px;
 	margin: var(--gap-md) 0 var(--gap-sm);
 }
 
 #frm_email_addon_menu .frm-search {
-	float: right;
-	margin: 0;
+	float: unset;
+	clear: unset;
 }
 
 #frm_email_addon_menu h3.frm-no-border {
