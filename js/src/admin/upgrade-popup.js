@@ -222,6 +222,7 @@ export function initUpgradeModal() {
 		event.preventDefault();
 
 		const modal = $info.get( 0 );
+		modal.classList.remove( 'frm-success' );
 		const lockIcon = modal.querySelector( '.frm_lock_icon' );
 
 		if ( lockIcon ) {
@@ -249,7 +250,9 @@ export function initUpgradeModal() {
 		// If one click upgrade, hide other content
 		addOneClick( element, 'modal', upgradeLabel );
 
-		modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+		notInstalled.style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		notInstalled.textContent = notInstalled.dataset.default;
 		modal.querySelector( '.frm-upgrade-modal-title-prefix' ).style.display = element.dataset.oneclick ? 'inline' : 'none';
 		modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
 		modal.querySelector( '.frm-upgrade-modal-title-suffix' ).style.display = 'none';
@@ -284,6 +287,12 @@ function applyUpdateModalOverrides( modal ) {
 	const titlePrefix = modal.querySelector( '.frm-upgrade-modal-title-prefix' );
 	if ( titlePrefix ) {
 		titlePrefix.style.display = 'none';
+	}
+
+	const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+	if ( notInstalled ) {
+		notInstalled.textContent = __( 'require an update', 'formidable' );
+		notInstalled.style.display = ''; // Clear inline style, span defaults to display:inline.
 	}
 
 	const oneclickMsg = modal.querySelector( '.frm-oneclick' );
