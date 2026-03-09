@@ -1145,7 +1145,7 @@ class FrmAddonsController {
 
 		// Create the plugin upgrader with our custom skin.
 		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );
-		$installer->install( $download_url );
+		$installer->install( $download_url, array( 'overwrite_package' => true ) );
 
 		// Flush the cache and return the newly installed plugin basename.
 		wp_cache_flush();
