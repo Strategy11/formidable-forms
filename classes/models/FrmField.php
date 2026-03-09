@@ -362,7 +362,7 @@ class FrmField {
 	 * @return array
 	 */
 	public static function show_update_for_pro_fields( $fields ) {
-		if ( FrmAppHelper::pro_is_installed() && ! class_exists( 'FrmProFieldVirtual', false ) ) {
+		if ( FrmAppHelper::pro_is_installed() && ! class_exists( 'FrmProVirtualFieldController', false ) ) {
 			$fields['virtual']['icon'] .= ' frm_show_update';
 		}
 
