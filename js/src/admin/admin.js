@@ -375,6 +375,11 @@ window.frmAdminBuildJS = function() {
 		return false;
 	}
 
+	/**
+	 * @since x.x The first param can be an array of args.
+	 *
+	 * @param {Array|String} The message or the modal data (title, msg, actionUrl, actionText, closeText).
+	 */
 	function infoModal( msg ) {
 		const $info = initModal( '#frm_info_modal', '400px' );
 
@@ -382,7 +387,52 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		jQuery( '.frm-info-msg' ).html( msg );
+		if ( 'string' === msg ) {
+			msg = { msg };
+		}
+
+		msg = Object.assign( {
+			title: '',
+			msg: __( 'Are you sure?', 'formidable' ),
+			closeText: __( 'Got it!', 'formidable' ),
+			actionUrl: '',
+			actionText: '',
+		}, msg );
+
+		const titleEl = $info[0].querySelector( '.info-modal-title' );
+		titleEl.textContent = msg.title || '';
+		titleEl.classList.toggle( 'frm_hidden', ! msg.title );
+
+		if ( msg.msg ) {
+			$info.find( '.frm-info-msg' ).html( msg.msg );
+		}
+
+		const closeBtn = document.getElementById( 'frm-info-click' );
+		if ( msg.closeText ) {
+			closeBtn.textContent = msg.closeText;
+		}
+
+		if ( msg.actionUrl ) {
+			// Change the default btn to secondary.
+			closeBtn.classList.remove( 'button-primary' );
+			closeBtn.classList.remove( 'frm-button-primary' );
+			closeBtn.classList.add( 'button-secondary' );
+			closeBtn.classList.add( 'frm-button-secondary' );
+
+			// Change the buttons alignment.
+			const buttonsWrapper = $info[0].querySelector( '.info-modal-buttons' );
+			buttonsWrapper.classList.add( 'frmright' );
+
+			// Show the action btn.
+			const actionBtn = $info[0].querySelector( '.info-modal-action-link' );
+			actionBtn.href = msg.actionUrl;
+
+			if ( msg.actionText ) {
+				actionBtn.textContent = msg.actionText;
+			}
+
+			actionBtn.classList.remove( 'frm_hidden' );
+		}
 
 		$info.dialog( 'open' );
 		return false;
@@ -2189,6 +2239,18 @@ window.frmAdminBuildJS = function() {
 
 		if ( $button.hasClass( 'frm_at_limit' ) ) {
 			showLimitModal();
+			return false;
+		}
+
+		if ( [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
+			// These fields require payment gateway installed.
+			infoModal( {
+				title: __( 'Setup a Payment Gateway first', 'formidable' ),
+				msg: __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
+				closeText: __( 'Close', 'formidable' ),
+				actionUrl: 'http://truongwp.com',
+				actionText: __( 'Go to Payment Settings', 'formidable' ),
+			} );
 			return false;
 		}
 
