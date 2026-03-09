@@ -281,27 +281,19 @@ export function initUpgradeModal() {
  * @param {Element} modal The upgrade modal element.
  */
 function applyUpdateModalOverrides( modal ) {
-	const notInstalled = modal.querySelector( '.frm_are_not_installed' );
-	if ( notInstalled ) {
-		notInstalled.textContent = __( 'require a plugin update', 'formidable' );
+	const titlePrefix = modal.querySelector( '.frm-upgrade-modal-title-prefix' );
+	if ( titlePrefix ) {
+		titlePrefix.style.display = 'none';
 	}
 
-	const oneclickMessage = modal.querySelector( '.frm-oneclick' );
-	if ( oneclickMessage ) {
-		oneclickMessage.textContent = __( 'An update is available. Would you like to update now?', 'formidable' );
+	const oneclickMsg = modal.querySelector( '.frm-oneclick' );
+	if ( oneclickMsg ) {
+		oneclickMsg.style.display = 'none';
 	}
 
-	const updateButtonText = __( 'Update Now', 'formidable' );
-
-	const oneclickButton = modal.querySelector( '.frm-oneclick-button' );
-	if ( oneclickButton ) {
-		oneclickButton.textContent = updateButtonText;
-	}
-
-	const upgradeLink = modal.querySelector( '.frm-upgrade-link' );
-	if ( upgradeLink ) {
-		upgradeLink.href = ajaxurl.replace( 'admin-ajax.php', 'update-core.php' );
-		upgradeLink.textContent = updateButtonText;
+	const button = modal.querySelector( '.frm-oneclick-button' );
+	if ( button ) {
+		button.textContent = __( 'Update Now', 'formidable' );
 	}
 }
 
