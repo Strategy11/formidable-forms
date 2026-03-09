@@ -354,6 +354,22 @@ class FrmField {
 	}
 
 	/**
+	 * Flag Pro field types that require a newer Pro version with frm_show_update.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $fields Available Pro field types.
+	 * @return array
+	 */
+	public static function show_update_for_pro_fields( $fields ) {
+		if ( FrmAppHelper::pro_is_installed() && ! class_exists( 'FrmProFieldVirtual', false ) ) {
+			$fields['virtual']['icon'] .= ' frm_show_update';
+		}
+
+		return $fields;
+	}
+
+	/**
 	 * Consider a field new for 90 days after the release date.
 	 *
 	 * @since 6.8.3
