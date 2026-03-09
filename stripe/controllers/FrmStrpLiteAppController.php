@@ -58,6 +58,17 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
+	 * Checks if any payment gateway is configured.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_payment_gateway_configured() {
+		return FrmTransLiteAppHelper::payments_table_exists();
+	}
+
+	/**
 	 * Redirect to Stripe settings when payments are not yet installed
 	 * and the payments page is accessed by its URL.
 	 *
@@ -73,7 +84,7 @@ class FrmStrpLiteAppController {
 			return;
 		}
 
-		if ( FrmTransLiteAppHelper::payments_table_exists() ) {
+		if ( self::is_payment_gateway_configured() ) {
 			return;
 		}
 

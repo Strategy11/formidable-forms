@@ -368,7 +368,7 @@ class FrmField {
 	 *
 	 * @return array
 	 */
-	private static function field_section_labels() {
+	public static function field_section_labels() {
 		return apply_filters(
 			'frm_available_field_sections',
 			array(
