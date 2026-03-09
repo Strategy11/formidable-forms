@@ -266,6 +266,42 @@ export function initUpgradeModal() {
 		}
 		link = link.replace( /(content=)[a-z_-]+/ig, `$1${ content }` );
 		button.setAttribute( 'href', link );
+
+		if ( element.classList.contains( 'frm_show_update' ) ) {
+			applyUpdateModalOverrides( modal );
+		}
+	}
+}
+
+/**
+ * Override upgrade modal content for update prompts.
+ *
+ * @since x.x
+ *
+ * @param {Element} modal The upgrade modal element.
+ */
+function applyUpdateModalOverrides( modal ) {
+	const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+	if ( notInstalled ) {
+		notInstalled.textContent = __( 'require a plugin update', 'formidable' );
+	}
+
+	const oneclickMessage = modal.querySelector( '.frm-oneclick' );
+	if ( oneclickMessage ) {
+		oneclickMessage.textContent = __( 'An update is available. Would you like to update now?', 'formidable' );
+	}
+
+	const updateButtonText = __( 'Update Now', 'formidable' );
+
+	const oneclickButton = modal.querySelector( '.frm-oneclick-button' );
+	if ( oneclickButton ) {
+		oneclickButton.textContent = updateButtonText;
+	}
+
+	const upgradeLink = modal.querySelector( '.frm-upgrade-link' );
+	if ( upgradeLink ) {
+		upgradeLink.href = ajaxurl.replace( 'admin-ajax.php', 'update-core.php' );
+		upgradeLink.textContent = updateButtonText;
 	}
 }
 
