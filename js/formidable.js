@@ -1768,35 +1768,6 @@ function frmFrontFormJS() {
 		return val;
 	}
 
-	/**
-	 * @since 4.04.01
-	 */
-	function setHiddenProduct( input ) {
-		input.setAttribute( 'data-frmhidden', '1' );
-		triggerChange( jQuery( input ) );
-	}
-
-	/**
-	 * @since 4.04.01
-	 */
-	function setHiddenProductContainer( container ) {
-		if ( container.innerHTML.indexOf( 'data-frmprice' ) !== -1 ) {
-			jQuery( container ).find( 'input[data-frmprice], select:has([data-frmprice])' ).attr( 'data-frmhidden', '1' );
-		}
-	}
-
-	/**
-	 * @since 4.04.01
-	 */
-	function setShownProduct( input ) {
-		var wasHidden = input.getAttribute( 'data-frmhidden' );
-
-		if ( wasHidden !== null ) {
-			input.removeAttribute( 'data-frmhidden' );
-			triggerChange( jQuery( input ) );
-		}
-	}
-
 	function triggerChange( input, fieldKey ) {
 		if ( typeof fieldKey === 'undefined' ) {
 			fieldKey = 'dependent';
@@ -1957,22 +1928,6 @@ function frmFrontFormJS() {
 		const rightSymbol = currency.symbol_right ? ( currency.symbol_padding + currency.symbol_right ) : '';
 
 		return leftSymbol + total + rightSymbol;
-	}
-
-	/**
-	 * @since 4.04.01
-	 *
-	 * This function is most suited for (product) fields that are
-	 * on their own page i.e. not hidden (in a multi-paged form).
-	 *
-	 * As for fields that are conditionally hidden - themselves or
-	 * their parent - and are not on their own page, the PHP side
-	 * handles them well; either their HTML is not included on the
-	 * page at all (e.g. fields in a conditionally hidden section)
-	 * or their value is empty & price is thus 0, so no worries here.
-	 */
-	function isProductFieldHidden( input ) {
-		return input.getAttribute( 'data-frmhidden' ) !== null;
 	}
 
 	/**
