@@ -2386,12 +2386,12 @@ class FrmFieldsHelper {
 		$link = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
 
 		list(
-			$single_no_allow,
 			$run_filter,
-			$has_show_upgrade_class,
-			$has_show_update_class,
+			$single_no_allow,
 			$install_data,
 			$requires,
+			$has_show_upgrade_class,
+			$has_show_update_class,
 			$upgrading,
 			$update_addon_name
 		) = self::get_field_upgrade_state( $field_type );
@@ -2477,6 +2477,7 @@ class FrmFieldsHelper {
 	 * @since x.x
 	 *
 	 * @param array $field_type Field type configuration, modified in place to strip icon flag classes.
+	 *
 	 * @return array Upgrade and update state values for the field button, in positional order.
 	 */
 	private static function get_field_upgrade_state( &$field_type ) {
@@ -2516,7 +2517,7 @@ class FrmFieldsHelper {
 			$single_no_allow   .= ' frm_show_update';
 			$field_type['icon'] = str_replace( ' frm_show_update', '', $field_type['icon'] );
 			$run_filter         = false;
-			$addon_slug         = isset( $field_type['addon'] ) ? $field_type['addon'] : 'pro';
+			$addon_slug         = $field_type['addon'] ?? 'pro';
 
 			if ( 'pro' === $addon_slug ) {
 				$update_addon_name = __( 'Formidable Pro', 'formidable' );
@@ -2529,12 +2530,12 @@ class FrmFieldsHelper {
 		}
 
 		return array(
-			$single_no_allow,
 			$run_filter,
-			$has_show_upgrade_class,
-			$has_show_update_class,
+			$single_no_allow,
 			$install_data,
 			$requires,
+			$has_show_upgrade_class,
+			$has_show_update_class,
 			$upgrading,
 			$update_addon_name,
 		);

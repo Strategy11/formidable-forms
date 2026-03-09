@@ -359,6 +359,7 @@ class FrmField {
 	 * @since x.x
 	 *
 	 * @param array $fields Available Pro field types.
+	 *
 	 * @return array
 	 */
 	public static function show_update_for_pro_fields( $fields ) {

@@ -733,6 +733,7 @@ class FrmAddonsController {
 	 * @since x.x
 	 *
 	 * @param string $addon_slug The addon slug (e.g. 'pro', 'dates').
+	 *
 	 * @return string JSON-encoded install data, or empty string if no URL is available.
 	 */
 	public static function get_update_install_data( $addon_slug ) {
@@ -753,7 +754,7 @@ class FrmAddonsController {
 
 		if ( ! $download_url ) {
 			$update_plugins = get_site_transient( 'update_plugins' );
-			$plugin_update  = isset( $update_plugins->response[ $plugin_file ] ) ? $update_plugins->response[ $plugin_file ] : null;
+			$plugin_update  = $update_plugins->response[ $plugin_file ] ?? null;
 			$download_url   = $plugin_update && ! empty( $plugin_update->package ) ? $plugin_update->package : '';
 		}
 
