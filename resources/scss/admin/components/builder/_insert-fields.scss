@@ -69,6 +69,7 @@
 		}
 
 		&.frm_show_upgrade,
+		&.frm_show_update,
 		a {
 			text-decoration: none;
 			display: inline-flex !important;
@@ -94,7 +95,8 @@
 		}
 
 		/* Prevents advanced fields from always appearing in search results */
-		&.frm_show_upgrade.frm_hidden {
+		&.frm_show_upgrade.frm_hidden,
+		&.frm_show_update.frm_hidden {
 			display: none !important;
 		}
 	}
