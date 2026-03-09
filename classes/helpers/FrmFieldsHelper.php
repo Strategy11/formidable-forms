@@ -2388,8 +2388,13 @@ class FrmFieldsHelper {
 		$install_data           = '';
 		$requires               = '';
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
-		$has_show_upgrade_class = isset( $field_type['icon'] ) && str_contains( $field_type['icon'], ' frm_show_upgrade' );
-		$show_upgrade           = $has_show_upgrade_class || str_contains( $args['no_allow_class'], 'frm_show_upgrade' );
+		$has_show_upgrade_class = false;
+		$has_show_update_class  = false;
+
+		if ( isset( $field_type['icon'] ) ) {
+			$has_show_upgrade_class = str_contains( $field_type['icon'], ' frm_show_upgrade' );
+			$has_show_update_class  = str_contains( $field_type['icon'], ' frm_show_update' );
+		}
 
 		if ( $has_show_upgrade_class ) {
 			$single_no_allow   .= 'frm_show_upgrade';
@@ -2409,6 +2414,18 @@ class FrmFieldsHelper {
 			}
 		}
 
+		if ( $has_show_update_class ) {
+			$single_no_allow   .= ' frm_show_update';
+			$field_type['icon'] = str_replace( ' frm_show_update', '', $field_type['icon'] );
+			$run_filter         = false;
+			$upgrading          = FrmAddonsController::install_link( 'pro' );
+
+			if ( isset( $upgrading['url'] ) ) {
+				$install_data = json_encode( $upgrading );
+			}
+		}
+
+		$show_upgrade    = $has_show_upgrade_class || $has_show_update_class || str_contains( $args['no_allow_class'], 'frm_show_upgrade' );
 		$upgrade_label   = '';
 		$upgrade_message = '';
 
