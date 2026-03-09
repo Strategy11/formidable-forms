@@ -457,11 +457,7 @@ class FrmTransLiteActionsController {
 		);
 		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
 
-		if ( ! $payment_actions ) {
-			return array();
-		}
-
-		return $payment_actions;
+		return $payment_actions ? $payment_actions : array();
 	}
 
 	/**
@@ -639,8 +635,31 @@ class FrmTransLiteActionsController {
 	 * @return false|int
 	 */
 	protected static function add_a_field( $form_id, $field_type, $field_name ) {
-		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$new_values['name'] = $field_name;
+		$new_values                = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+		$new_values['name']        = $field_name;
+		$new_values['field_order'] = self::get_field_order_before_submit( $form_id, $new_values['field_order'] );
 		return FrmField::create( $new_values );
+	}
+
+	/**
+	 * When auto-injecting a field, ensure it is placed before the submit button.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @param int $field_order
+	 *
+	 * @return int
+	 */
+	private static function get_field_order_before_submit( $form_id, $field_order ) {
+		$submit_field = FrmSubmitHelper::get_submit_field( $form_id );
+
+		if ( ! $submit_field || $field_order < (int) $submit_field->field_order ) {
+			return $field_order;
+		}
+
+		$submit_order = (int) $submit_field->field_order;
+		FrmField::update( $submit_field->id, array( 'field_order' => $submit_order + 1 ) );
+		return $submit_order;
 	}
 }

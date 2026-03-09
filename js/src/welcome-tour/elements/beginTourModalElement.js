@@ -13,7 +13,7 @@ import { MODAL_SIZE, TOUR_URL } from '../shared';
 /**
  * Build the begin tour modal element.
  *
- * @returns {void}
+ * @return {void}
  */
 export function buildBeginTourModalElement() {
 	addBeginTourModalToElements( createBeginTourModalElement() );
@@ -23,7 +23,7 @@ export function buildBeginTourModalElement() {
  * Create and return the begin tour modal HTML element.
  *
  * @private
- * @returns {HTMLElement} The begin tour modal element.
+ * @return {HTMLElement} The begin tour modal element.
  */
 function createBeginTourModalElement() {
 	const beginTourModal = maybeCreateModal(
@@ -57,7 +57,7 @@ function createBeginTourModalElement() {
  *
  * @private
  * @param {HTMLElement} beginTourModal The begin tour modal element.
- * @returns {void}
+ * @return {void}
  */
 function addBeginTourModalToElements( beginTourModal ) {
 	if ( ! getElements().beginTourModal ) {

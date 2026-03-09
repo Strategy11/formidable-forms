@@ -294,7 +294,6 @@ class FrmFieldsController {
 		}
 
 		// Keep other options after bulk update.
-		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! empty( $field['field_options']['other'] ) ) {
 			$other_array = array();
 

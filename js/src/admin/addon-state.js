@@ -115,16 +115,16 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 	};
 	actionMap.frm_install_addon = actionMap.frm_activate_addon;
 
-	const messageElement = message[ 0 ];
+	const [ messageElement ] = message;
 	if ( messageElement ) {
 		messageElement.textContent = actionMap[ action ].message;
 	}
 
-	const parentElement = el[ 0 ].parentElement;
+	const [ { parentElement } ] = el;
 	parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
 	parentElement.classList.add( actionMap[ action ].class );
 
-	const buttonElement = button[ 0 ];
+	const [ buttonElement ] = button;
 	buttonElement.classList.remove( 'frm_loading_button' );
 
 	// Maybe refresh import and SMTP pages
@@ -154,7 +154,7 @@ export function addonError( response, el, button ) {
 			.attr( 'rel', button.attr( 'rel' ) )
 			.on( 'click', installAddonWithCreds );
 	} else {
-		el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.message + '</strong></p></div>' );
+		el.append( `<div class="frm-addon-error frm_error_style"><p><strong>${ response.message }</strong></p></div>` );
 		button.removeClass( 'frm_loading_button' );
 		jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
 	}
@@ -214,7 +214,7 @@ function saveAndReloadFormBuilder() {
  * Updates the upgrade modal to show successful addon installation state.
  *
  * @private
- * @returns {void}
+ * @return {void}
  */
 function showUpgradeModalSuccess() {
 	const upgradeModal = document.getElementById( 'frm_upgrade_modal' );

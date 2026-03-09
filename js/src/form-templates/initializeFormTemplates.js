@@ -8,7 +8,7 @@ import { addEventListeners } from './events';
 /**
  * Initializes form templates.
  *
- * @returns {void}
+ * @return {void}
  */
 function initializeFormTemplates() {
 	maybeAddApplicationTemplates();

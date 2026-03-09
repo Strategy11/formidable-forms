@@ -97,7 +97,7 @@ class FrmDashboardController {
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
 				'payments'           => array(
-					'show-placeholder' => empty( $total_payments ),
+					'show-placeholder' => ! $total_payments,
 					'placeholder'      => array(
 						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
@@ -271,7 +271,7 @@ class FrmDashboardController {
 		$copy = sprintf(
 			/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
 			__( 'See the %1$sform documentation%2$s for instructions on publishing a form. Once vou have at least one entry you\'ll see it here.', 'formidable' ),
-			'<a target="_blank" href="' . FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) . '">',
+			'<a target="_blank" href="' . esc_url( FrmAppHelper::admin_upgrade_link( '', 'knowledgebase/publish-a-form/' ) ) . '">',
 			'</a>'
 		);
 		return array(
@@ -428,12 +428,15 @@ class FrmDashboardController {
 	 */
 	private static function inbox_prepare_messages( $data ) {
 		foreach ( $data as $key => $messages ) {
-			if ( in_array( $key, array( 'unread', 'dismissed' ), true ) ) {
-				foreach ( $messages as $key_msg => $message ) {
-					$data[ $key ][ $key_msg ]['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
-				}
+			if ( ! in_array( $key, array( 'unread', 'dismissed' ), true ) ) {
+				continue;
+			}
+
+			foreach ( $messages as $key_msg => $message ) {
+				$data[ $key ][ $key_msg ]['cta'] = self::inbox_clean_messages_cta( $message['cta'] );
 			}
 		}
+
 		return $data;
 	}
 

@@ -702,7 +702,7 @@ class FrmStrpLiteConnectHelper {
 		$success = false !== $data;
 
 		if ( ! $success ) {
-			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
+			return self::$latest_error_from_stripe_connect ? self::$latest_error_from_stripe_connect : false;
 		}
 
 		return ! empty( $data->customer_id ) ? $data->customer_id : false;

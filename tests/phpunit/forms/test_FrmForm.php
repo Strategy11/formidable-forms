@@ -62,7 +62,7 @@ class test_FrmForm extends FrmUnitTest {
 
 			FrmForm::destroy( $form->id );
 			$form_exists = FrmForm::getOne( $form->id );
-			$this->assertEmpty( $form_exists, 'Failed to delete form ' . $form->form_key );
+			$this->assertNotInstanceOf( \stdClass::class, $form_exists, 'Failed to delete form ' . $form->form_key );
 
 			$subforms_exist = FrmForm::getAll( array( 'parent_form_id' => $form->id ) );
 			$this->assertEmpty( $subforms_exist, 'Failed to delete child forms for parent form ' . $form->form_key );

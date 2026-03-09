@@ -1825,16 +1825,18 @@ class FrmFieldsHelper {
 		}
 
 		foreach ( $val as $k => $v ) {
-			if ( is_string( $v ) ) {
-				if ( 'custom_html' === $k ) {
-					$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
-					unset( $k, $v );
-					continue;
-				}
-
-				$val[ $k ] = str_replace( $replace, $replace_with, $v );
-				unset( $k, $v );
+			if ( ! is_string( $v ) ) {
+				continue;
 			}
+
+			if ( 'custom_html' === $k ) {
+				$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
+				unset( $k, $v );
+				continue;
+			}
+
+			$val[ $k ] = str_replace( $replace, $replace_with, $v );
+			unset( $k, $v );
 		}
 
 		return $val;
@@ -2792,14 +2794,14 @@ class FrmFieldsHelper {
 
 		if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
 			// Backwards compatibility "@since 6.24".
-			if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+			if ( method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
+				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
+			} else {
 				$data = array(
 					'modal-title'   => __( 'Generate options with AI', 'formidable' ),
 					'modal-content' => __( 'Update the Formidable AI add-on to the last version to use this feature.', 'formidable' ),
 				);
-			} else {
-				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
-				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
 			}
 		}
 

@@ -17,7 +17,7 @@ import { createTokenElement } from './token-elements';
  * @param {string}      value         The field value
  * @param {HTMLElement} proxyInput    The proxy input field
  * @param {HTMLElement} tokensWrapper Wrapper element for tokens
- * @returns {void}
+ * @return {void}
  */
 export function synchronizeTokensDisplay( value, proxyInput, tokensWrapper ) {
 	if ( ! value || ! tokensWrapper || ! proxyInput ) {
@@ -39,7 +39,7 @@ export function synchronizeTokensDisplay( value, proxyInput, tokensWrapper ) {
  * @param {string}      tokenValue The token value to add
  * @param {HTMLElement} field      The original field
  * @param {HTMLElement} proxyInput The proxy input
- * @returns {boolean} Whether a token was added
+ * @return {boolean} Whether a token was added
  */
 export function addToken( tokenValue, field, proxyInput ) {
 	if ( ! tokenValue || ! field || ! proxyInput ) {
@@ -68,7 +68,7 @@ export function addToken( tokenValue, field, proxyInput ) {
  * @param {HTMLElement} token      The token element to remove
  * @param {HTMLElement} field      The original field
  * @param {HTMLElement} proxyInput The proxy input
- * @returns {void}
+ * @return {void}
  */
 export function removeToken( token, field, proxyInput ) {
 	if ( ! token || ! field || ! proxyInput ) {
@@ -91,7 +91,7 @@ export function removeToken( token, field, proxyInput ) {
  * Parse string input into an array of tokens
  *
  * @param {string} value Space-separated string
- * @returns {string[]} Array of tokens
+ * @return {string[]} Array of tokens
  */
 export function parseTokens( value = '' ) {
 	value = value.trim();
@@ -108,7 +108,7 @@ export function parseTokens( value = '' ) {
  *
  * @param {HTMLElement} field  The field to update
  * @param {string[]}    tokens Array of token values
- * @returns {void}
+ * @return {void}
  */
 export function updateFieldValue( field, tokens = [] ) {
 	if ( ! field ) {
@@ -123,7 +123,7 @@ export function updateFieldValue( field, tokens = [] ) {
  * Clear proxy input and maintain focus
  *
  * @param {HTMLElement} proxyInput The proxy input field
- * @returns {void}
+ * @return {void}
  */
 export function clearProxyInput( proxyInput ) {
 	if ( ! proxyInput ) {

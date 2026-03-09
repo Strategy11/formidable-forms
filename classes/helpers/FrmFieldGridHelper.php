@@ -78,7 +78,7 @@ class FrmFieldGridHelper {
 	public function set_field( $field ) {
 		$this->field = $field;
 
-		if ( ! empty( $this->section_helper ) && 'end_divider' !== $field->type ) {
+		if ( $this->section_helper && 'end_divider' !== $field->type ) {
 			$this->section_helper->set_field( $field );
 			return;
 		}
@@ -93,7 +93,7 @@ class FrmFieldGridHelper {
 			$this->active_field_size  = self::get_size_of_class( $this->field_layout_class );
 		}
 
-		if ( 'divider' !== $field->type || ! empty( $this->nested ) ) {
+		if ( 'divider' !== $field->type || $this->nested ) {
 			return;
 		}
 
@@ -106,7 +106,7 @@ class FrmFieldGridHelper {
 	 * @return void
 	 */
 	private function maybe_close_section_helper() {
-		if ( empty( $this->section_helper ) ) {
+		if ( ! $this->section_helper ) {
 			return;
 		}
 		$this->section_helper->force_close_field_wrapper();
@@ -148,7 +148,7 @@ class FrmFieldGridHelper {
 			$this->begin_field_wrapper();
 		}
 
-		if ( ! empty( $this->section_helper ) && $this->section_is_open ) {
+		if ( $this->section_helper && $this->section_is_open ) {
 			$this->section_helper->maybe_begin_field_wrapper();
 		}
 	}
@@ -157,7 +157,7 @@ class FrmFieldGridHelper {
 	 * @return bool
 	 */
 	private function should_first_close_the_active_field_wrapper() {
-		if ( false === $this->parent_li || ! empty( $this->section_helper ) ) {
+		if ( false === $this->parent_li || $this->section_helper ) {
 			return false;
 		}
 
@@ -215,7 +215,7 @@ class FrmFieldGridHelper {
 	 * @return void
 	 */
 	public function sync_list_size() {
-		if ( empty( $this->field ) ) {
+		if ( ! $this->field ) {
 			return;
 		}
 
@@ -223,7 +223,7 @@ class FrmFieldGridHelper {
 			$this->section_is_open = true;
 		}
 
-		if ( ! empty( $this->section_helper ) ) {
+		if ( $this->section_helper ) {
 			$this->section_helper->sync_list_size();
 
 			if ( 'end_divider' === $this->field->type ) {
