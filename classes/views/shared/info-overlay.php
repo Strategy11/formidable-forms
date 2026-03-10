@@ -12,10 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="inside">
 				<h3 class="info-modal-title frm_hidden"></h3>
 				<div class="info-modal-inside frmcenter">
-					<p class="frm-info-msg">
+					<p class="frm-info-msg frm-mb-md">
 						<?php esc_html_e( 'Are you sure?', 'formidable' ); ?>
 					</p>
-					<br/>
+
+					<div class="info-modal-img-wrapper frmcenter frm_hidden frm-mb-md">
+						<img src="" alt="" class="info-modal-img" />
+					</div>
+
 					<div class="info-modal-buttons">
 						<a href="#" id="frm-info-click" class="button button-primary frm-button-primary dismiss">
 							<?php esc_html_e( 'Got it!', 'formidable' ); ?>

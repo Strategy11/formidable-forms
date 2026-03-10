@@ -377,8 +377,8 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @param {Array|String} The message or the modal data (title, msg, actionUrl, actionText, closeText).
 	 */
-	function infoModal( msg ) {
-		const $info = initModal( '#frm_info_modal', '400px' );
+	function infoModal( msg, width ) {
+		const $info = initModal( '#frm_info_modal', width || '400px' );
 
 		if ( $info === false ) {
 			return false;
@@ -391,9 +391,11 @@ window.frmAdminBuildJS = function() {
 		msg = Object.assign( {
 			title: '',
 			msg: __( 'Are you sure?', 'formidable' ),
+			img: '',
 			closeText: __( 'Got it!', 'formidable' ),
 			actionUrl: '',
 			actionText: '',
+			noCenter: false,
 		}, msg );
 
 		const titleEl = $info[0].querySelector( '.info-modal-title' );
@@ -404,32 +406,37 @@ window.frmAdminBuildJS = function() {
 			$info.find( '.frm-info-msg' ).html( msg.msg );
 		}
 
+		$info[0].querySelector( '.info-modal-img' ).src = msg.img;
+		$info[0].querySelector( '.info-modal-img-wrapper' ).classList.toggle( 'frm_hidden', ! msg.img );
+
 		const closeBtn = document.getElementById( 'frm-info-click' );
 		if ( msg.closeText ) {
 			closeBtn.textContent = msg.closeText;
 		}
 
+		// Change the close button to primary or secondary.
+		closeBtn.classList.toggle( 'button-primary', ! msg.actionUrl );
+		closeBtn.classList.toggle( 'frm-button-primary', ! msg.actionUrl );
+		closeBtn.classList.toggle( 'button-secondary', msg.actionUrl );
+		closeBtn.classList.toggle( 'frm-button-secondary', msg.actionUrl );
+
+		const actionBtn = $info[0].querySelector( '.info-modal-action-link' );
+
+
 		if ( msg.actionUrl ) {
-			// Change the default btn to secondary.
-			closeBtn.classList.remove( 'button-primary' );
-			closeBtn.classList.remove( 'frm-button-primary' );
-			closeBtn.classList.add( 'button-secondary' );
-			closeBtn.classList.add( 'frm-button-secondary' );
-
-			// Change the buttons alignment.
-			const buttonsWrapper = $info[0].querySelector( '.info-modal-buttons' );
-			buttonsWrapper.classList.add( 'frmright' );
-
-			// Show the action btn.
-			const actionBtn = $info[0].querySelector( '.info-modal-action-link' );
 			actionBtn.href = msg.actionUrl;
-
 			if ( msg.actionText ) {
 				actionBtn.textContent = msg.actionText;
 			}
-
-			actionBtn.classList.remove( 'frm_hidden' );
 		}
+
+		// Show or hide the action btn.
+		actionBtn.classList.toggle( 'frm_hidden', ! msg.actionUrl );
+
+		// Handle alignment.
+		$info[0].querySelector( '.info-modal-inside' ).classList.toggle( 'frmcenter', ! msg.noCenter );
+		const buttonsWrapper = $info[0].querySelector( '.info-modal-buttons' );
+		buttonsWrapper.classList.toggle( 'frmright', msg.noCenter );
 
 		$info.dialog( 'open' );
 		return false;
@@ -2243,14 +2250,15 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		if ( [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
+		if ( frm_admin_js.shouldShowPaymentsSettingsModal && [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
 			// These fields require payment gateway installed.
 			infoModal( {
 				title: __( 'Setup a Payment Gateway first', 'formidable' ),
 				msg: __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
 				closeText: __( 'Close', 'formidable' ),
-				actionUrl: 'http://truongwp.com',
+				actionUrl: frm_admin_js.paymentsSettingsUrl,
 				actionText: __( 'Go to Payment Settings', 'formidable' ),
+				noCenter: true,
 			} );
 			return false;
 		}
@@ -10703,6 +10711,18 @@ window.frmAdminBuildJS = function() {
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
 			}, 9999 );
+
+			if ( frm_admin_js.shouldShowPricingFieldsModal ) {
+				infoModal({
+					title: __( 'Start Accepting Payments Today!', 'formidable' ),
+					msg: __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, PayPal, or Square) in your settings.', 'formidable' ),
+					img: frm_admin_js.pricingFieldsImg,
+					closeText: __( 'I\'ll do it later!', 'formidable' ),
+					actionText: __( 'Setup Payments Now', 'formidable' ),
+					actionUrl: frm_admin_js.paymentsSettingsUrl,
+					noCenter: true,
+				}, '550px' );
+			}
 		},
 
 		settingsInit() {
