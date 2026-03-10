@@ -53,13 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					continue;
 				}
 
-				if ( isset( $group['color'] ) ) {
-					$icon_atts = array(
-						'style' => '--primary-700:' . $group['color'],
-					);
-				} else {
-					$icon_atts = array();
-				}
+				$icon_atts = isset( $group['color'] ) ? array( 'style' => '--primary-700:' . $group['color'] ) : array();
 				?>
 					<li class="frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
