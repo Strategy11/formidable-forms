@@ -468,7 +468,7 @@ class FrmStrpLiteLinkController {
 
 		if ( isset( $intent->charges ) && is_object( $intent->charges ) && ! empty( $intent->charges->data ) ) {
 			// The intent should not have any charges yet.
-			// If it is, the intent is invalid.
+			// If it does, the intent is invalid.
 			return false;
 		}
 
