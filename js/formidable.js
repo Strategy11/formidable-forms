@@ -1784,8 +1784,7 @@ function frmFrontFormJS() {
 	 * @since 4.04
 	 */
 	function calcProductsTotal( e ) {
-		var formTotals = [],
-			totalFields;
+		const formTotals = [];
 
 		if ( typeof __FRMCURR  === 'undefined' ) {
 			return;
@@ -1793,23 +1792,22 @@ function frmFrontFormJS() {
 
 		if ( undefined !== e && 'undefined' !== typeof e.target && ( 'keyup' === e.type || 'change' === e.type ) ) {
 			// an event has been fired
-			var el = e.target;
+			const el = e.target;
 			if ( el.hasAttribute( 'data-frmprice' ) && el instanceof HTMLInputElement && 'text' === el.type ) {
 				// user-defined product
 				el.setAttribute( 'data-frmprice', el.value.trim() );
 			}
 		}
 
-		totalFields = jQuery( '[data-frmtotal]' );
+		const totalFields = jQuery( '[data-frmtotal]' );
 		if ( ! totalFields.length ) {
 			return;
 		}
 
 		totalFields.each( function() {
-			var currency, formId, formatted,
-				total = 0,
-				totalField = jQuery( this ),
-				$form = totalField.closest( 'form' );
+			let currency, formId, formatted, total = 0;
+			const totalField = jQuery( this );
+			const $form = totalField.closest( 'form' );
 
 			if ( ! $form.length ) {
 				return;
@@ -1818,16 +1816,15 @@ function frmFrontFormJS() {
 			formId = $form.find( 'input[name="form_id"]' ).val();
 			currency = getCurrency( formId );
 
-			console.log( formTotals );
 			if ( typeof formTotals[ formId ] !== 'undefined' ) {
 				total = formTotals[ formId ];
 			} else {
 
 				$form.find( 'input[data-frmprice],select:has([data-frmprice])' ).each( function() {
-					var quantity, $this,
-						price = 0,
-						isUserDef = false,
-						isSingle = false;
+					let quantity = 0, price = 0;
+					const $this = jQuery( this );
+					let isUserDef = 'text' === this.type;
+					let isSingle = 'hidden' === this.type;
 
 					if ( this.tagName === 'SELECT' ) {
 						if ( this.selectedIndex !== -1 ) {
@@ -1856,8 +1853,7 @@ function frmFrontFormJS() {
 					}
 
 					total += price;
-					console.log( total );
-				});
+			});
 
 				formTotals[ formId ] = total;
 			}
@@ -1927,7 +1923,7 @@ function frmFrontFormJS() {
 		const leftSymbol = currency.symbol_left ? ( currency.symbol_left + currency.symbol_padding ) : '';
 		const rightSymbol = currency.symbol_right ? ( currency.symbol_padding + currency.symbol_right ) : '';
 
-		return leftSymbol + total + rightSymbol;
+		return `${ leftSymbol }${ total }${ rightSymbol }`;
 	}
 
 	/**
@@ -1943,20 +1939,19 @@ function frmFrontFormJS() {
 	 * @since 4.04
 	 */
 	function getQuantity( isUserDef, field ) {
-		var quantity, quantityFields, fieldID,
-			$this = jQuery( field );
+		const $this = jQuery( field );
 
-		fieldID = frmFrontForm.getFieldId( field, false );
+		const fieldID = frmFrontForm.getFieldId( field, false );
 		if ( ! fieldID ) {
 			return 0;
 		}
 
-		quantity = getQuantityField( $this, fieldID );
+		let quantity = getQuantityField( $this, fieldID );
 
 		if ( quantity ) {
 			quantity = checkQuantityFieldMinMax( quantity );
 		} else {
-			quantityFields = getQuantityFields( $this );
+			const quantityFields = getQuantityFields( $this );
 			if ( 1 === quantityFields.length && '' === quantityFields[0].getAttribute( 'data-frmproduct' ).trim() ) {
 				quantity = checkQuantityFieldMinMax( quantityFields[0]);
 			} else {
@@ -1974,13 +1969,14 @@ function frmFrontFormJS() {
 	}
 
 	function getQuantityField( elementObj, fieldID ) {
-		var quantity,
-			quantityFields = elementObj.closest( 'form' ).find( '[data-frmproduct]' );
+		let quantity;
+
+		const quantityFields = elementObj.closest( 'form' ).find( '[data-frmproduct]' );
 
 		fieldID = fieldID.toString();
 
 		quantityFields.each( function() {
-			var ids;
+			let ids;
 
 			ids = JSON.parse( this.getAttribute( 'data-frmproduct' ).trim() );
 			if ( '' === ids ) {
@@ -2002,20 +1998,15 @@ function frmFrontFormJS() {
 	 * @since 4.04
 	 */
 	function getQuantityFields( elementObj ) {
-		var quantityFields;
 		// make sure the search is form-based (i.e. per form) cos there could be more than 1 form on the page
 		// not([id*="-"]) means : not inside a repeater
-		quantityFields = elementObj.closest( 'form' ).find( '[data-frmproduct]:not([id*="-"])' );
-
-		return quantityFields;
+		return elementObj.closest( 'form' ).find( '[data-frmproduct]:not([id*="-"])' );
 	}
 
 	/**
 	 * @since 4.04
 	 */
 	function preparePrice( price, currency ) {
-		var matches;
-
 		if ( ! price ) {
 			return 0;
 		}
@@ -2023,7 +2014,7 @@ function frmFrontFormJS() {
 
 		const regex = getRegexForPrice( currency );
 
-		matches = price.match( regex );
+		const matches = price.match( regex );
 		if ( null === matches ) {
 			return 0;
 		}
@@ -2068,7 +2059,7 @@ function frmFrontFormJS() {
 	 * @since 4.04
 	 */
 	function maybeUseDecimal( amount, currency ) {
-		var usedForDecimal, amountParts;
+		let usedForDecimal, amountParts;
 		if ( currency.thousand_separator == '.' ) {
 			amountParts = amount.split( '.' );
 			usedForDecimal = ( 2 == amountParts.length && 2 == amountParts[1].length );
@@ -2095,7 +2086,7 @@ function frmFrontFormJS() {
 		}
 
 		price += ''; // first convert to string
-		var pos = price.indexOf( '.' );
+		const pos = price.indexOf( '.' );
 
 		if ( pos === -1 ) {
 			price = price + '.';
@@ -2147,14 +2138,14 @@ function frmFrontFormJS() {
 	 * @since 5.0.15
 	 */
 	function maybeRemoveTrailingZerosFromPrice( total, currency ) {
-		var split = total.split( currency.decimal_separator );
+		const split = total.split( currency.decimal_separator );
 		if ( 2 !== split.length || split[1].length <= currency.decimals ) {
 			return total;
 		}
 		if ( 0 === currency.decimals ) {
 			return split[0];
 		}
-		return split[0] + currency.decimal_separator + split[1].substr( 0, currency.decimals );
+		return `${ split[0] }${ currency.decimal_separator }${ split[1].substr( 0, currency.decimals ) }`;
 	}
 
 	return {
@@ -2504,7 +2495,7 @@ jQuery( document ).ready( function() {
 	if ( ! Math.round10 ) {
 		// https://www.jacklmoore.com/notes/rounding-in-javascript/
 		Math.round10 = function( value, decimals ) {
-			return Number( Math.round( value + 'e' + decimals ) + 'e-' + decimals );
+			return Number( Math.round( `${ value }e${ decimals }` ) + `e-${ decimals }` );
 		};
 	}
 }() );
@@ -2547,7 +2538,7 @@ function frmCaptcha( captchaSelector ) {
 		if ( ! formIsVisible ) {
 			// If the form is not visible, try again later in 400ms.
 			// This fixes issues where the form fades visible on page load.
-			// Or whne the form is inside of a modal.
+			// Or when the form is inside of a modal.
 			const interval = setInterval(
 				function() {
 					if ( closestForm && closestForm.offsetParent !== null ) {

@@ -11,6 +11,9 @@ class FrmFieldTotal extends FrmFieldText {
 
 	protected $type = 'total';
 
+	/**
+	 * @var array
+	 */
 	private $posted_value_args = array();
 
 	protected $has_input = false;
@@ -79,13 +82,6 @@ DEFAULT_HTML;
 	public function validate_total( $errors, $form ) {
 		$value = $this->posted_value_args['value'];
 
-		// Check for conditional logic.
-		if ( ! $value && FrmProFieldsHelper::is_field_hidden( $this->field, wp_unslash( $_POST ) ) ) {
-			$error_key = 'field' . $this->get_field_column( 'id' );
-			unset( $errors[ $error_key ] );
-			return $errors;
-		}
-
 		global $frm_products;
 
 		$sum      = 0.0;
@@ -147,6 +143,11 @@ DEFAULT_HTML;
 		return $errors;
 	}
 
+	/**
+	 * @param array $price_quantity
+	 *
+	 * @return int
+	 */
 	private function get_quantity_for_validation( $price_quantity ) {
 		global $frm_products;
 
@@ -175,13 +176,14 @@ DEFAULT_HTML;
 			return $value;
 		}
 
-		$form_id  = $this->get_field_column( 'form_id' );
 		$currency = FrmCurrencyHelper::get_currency();
-		// $currency = FrmProCurrencyHelper::apply_shortcode_atts( $currency, $atts );
 
 		return FrmCurrencyHelper::format_price( $value, $currency );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_builder_display_value() {
 		return $this->prepare_display_value( '0', array() );
 	}

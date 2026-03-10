@@ -68,6 +68,13 @@ class FrmStrpLiteAppController {
 		return FrmTransLiteAppHelper::payments_table_exists();
 	}
 
+	/**
+	 * Gets payments settings URL.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
 	public static function get_payments_settings_url() {
 		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' );
 	}

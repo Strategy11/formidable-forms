@@ -17,14 +17,23 @@ class FrmFieldProduct extends FrmFieldType {
 	 */
 	protected $has_for_label = false;
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function include_form_builder_file() {
 		return $this->include_front_form_file();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function new_field_settings() {
 		return array(
 			'options' => serialize(
@@ -36,6 +45,9 @@ class FrmFieldProduct extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function field_settings_for_type() {
 		$settings = parent::field_settings_for_type();
 
@@ -62,6 +74,9 @@ class FrmFieldProduct extends FrmFieldType {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/separate-values.php';
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function show_primary_options( $args ) {
 		$field      = $args['field'];
 		$data_types = $this->get_data_type_settings();
@@ -69,6 +84,9 @@ class FrmFieldProduct extends FrmFieldType {
 		parent::show_primary_options( $args );
 	}
 
+	/**
+	 * @return array
+	 */
 	private function get_data_type_settings() {
 		return array(
 			'select'   => __( 'Dropdown', 'formidable' ),
@@ -79,6 +97,9 @@ class FrmFieldProduct extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function extra_field_opts() {
 		$form_id = $this->get_field_column( 'form_id' );
 
@@ -92,6 +113,9 @@ class FrmFieldProduct extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function displayed_field_type( $field ) {
 		return array(
 			$this->type => true,
@@ -124,6 +148,9 @@ class FrmFieldProduct extends FrmFieldType {
 		return $html;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function include_front_form_file() {
 		if ( is_array( $this->field ) && ! is_array( $this->field['options'] ) ) {
 			$this->field['options'] = array();
@@ -152,14 +179,23 @@ class FrmFieldProduct extends FrmFieldType {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function get_bulk_edit_string() {
 		return __( 'Bulk Edit Products', 'formidable-pro' );
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function show_single_option( $args ) {
 		self::single_option( $args['field'] );
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function extra_field_choices_class() {
 		$data_type  = FrmField::get_option( $this->field, 'data_type' );
 		$type_class = '';
@@ -171,10 +207,18 @@ class FrmFieldProduct extends FrmFieldType {
 		return ' frmjs_product_choices' . $type_class;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	protected function field_choices_heading_attrs( $args ) {
 		echo ' class="frm_prod_options_heading"';
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 */
 	public function validate( $args ) {
 		$parent_errors = parent::validate( $args );
 
@@ -200,6 +244,11 @@ class FrmFieldProduct extends FrmFieldType {
 		return array();
 	}
 
+	/**
+	 * @param array|string $posted_value
+	 *
+	 * @return array|float
+	 */
 	public function get_posted_price( $posted_value ) {
 		$price   = 0;
 		$options = $this->get_field_column( 'options' );
@@ -248,6 +297,11 @@ class FrmFieldProduct extends FrmFieldType {
 		}
 	}
 
+	/**
+	 * @param array $field
+	 *
+	 * @return void
+	 */
 	public static function single_option( $field ) {
 		self::hidden_field_option( $field );
 
@@ -273,6 +327,11 @@ class FrmFieldProduct extends FrmFieldType {
 		}
 	}
 
+	/**
+	 * @param array $field
+	 *
+	 * @return void
+	 */
 	private static function hidden_field_option( $field ) {
 		$opt_key    = '000';
 		$field_val  = __( 'New Product', 'formidable-pro' );
@@ -288,11 +347,23 @@ class FrmFieldProduct extends FrmFieldType {
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/product-single-option.php';
 	}
 
+	/**
+	 * @param array $field
+	 *
+	 * @return string
+	 */
 	private static function get_default_value_type( $field ) {
 		$data_type = FrmField::get_option_in_array( $field, 'data_type' );
 		return 'checkbox' === $data_type ? $data_type : 'radio';
 	}
 
+	/**
+	 * @param array  $opt
+	 * @param string $opt_key
+	 * @param array  $field
+	 *
+	 * @return string
+	 */
 	public static function get_price_from_array( $opt, $opt_key, $field ) {
 		$opt = apply_filters( 'frm_field_price_saved', $opt, $opt_key, $field );
 		return is_array( $opt ) ? ( $opt['price'] ?? '' ) : '';

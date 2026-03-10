@@ -55,6 +55,12 @@ class FrmCurrencyHelper {
 		return in_array( $format_value, array( 'currency', 'number' ), true );
 	}
 
+	/**
+	 * @param float $amount
+	 * @param array $currency
+	 *
+	 * @return string
+	 */
 	public static function format_price( $amount, $currency ) {
 		if ( is_string( $amount ) ) {
 			$amount = floatval( self::prepare_price( $amount, $currency ) );
@@ -78,6 +84,8 @@ class FrmCurrencyHelper {
 	 *
 	 * @param string $price
 	 * @param array  $currency
+	 *
+	 * @return float
 	 */
 	public static function prepare_price( $price, $currency ) {
 		$price = trim( $price );
@@ -102,6 +110,8 @@ class FrmCurrencyHelper {
 	 *
 	 * @param string $amount
 	 * @param array  $currency
+	 *
+	 * @return float
 	 */
 	private static function maybe_use_decimal( $amount, $currency ) {
 		if ( $currency['thousand_separator'] !== '.' ) {
@@ -125,6 +135,8 @@ class FrmCurrencyHelper {
 	 * @since x.x
 	 *
 	 * @param int|string $form_id Form ID. This is used for Pro compatibility.
+	 *
+	 * @return void
 	 */
 	public static function add_currency_to_global( $form_id ) {
 		global $frm_vars;

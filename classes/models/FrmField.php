@@ -405,6 +405,8 @@ class FrmField {
 	 *
 	 * @since x.x
 	 *
+	 * @param array $pro_fields
+	 *
 	 * @return void
 	 */
 	public static function remove_moved_field_types_from_pro( &$pro_fields ) {
