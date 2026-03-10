@@ -59,10 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span class="frm-outer-circle">
 								<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
-								<?php
-
-								FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', $icon_atts );
-								?>
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', $icon_atts ); ?>
 								</span>
 							</span>
 							<?php echo esc_html( $action ); ?>
