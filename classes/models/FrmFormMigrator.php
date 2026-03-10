@@ -301,7 +301,7 @@ abstract class FrmFormMigrator {
 
 			$this->prepare_field( $field, $new_field );
 
-			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end(), true ) && $new_type !== 'break';
+			$in_section = $this->current_section && ! in_array( $new_type, $this->fields_with_end(), true ) && $new_type !== 'break';
 
 			if ( $in_section ) {
 				$new_field['field_options']['in_section'] = $this->current_section['id'];

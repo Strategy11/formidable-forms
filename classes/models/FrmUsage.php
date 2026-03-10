@@ -482,25 +482,28 @@ class FrmUsage {
 			);
 
 			foreach ( $settings as $setting ) {
-				if ( isset( $form->options[ $setting ] ) ) {
-					if ( 'custom_style' === $setting ) {
-						$style->id = $form->options[ $setting ];
-
-						if ( ! $style->id ) {
-							$style_name = 0;
-						} elseif ( 1 === intval( $style->id ) ) {
-							$style_name = 'formidable-style';
-						} else {
-							$style_post = $style->get_one();
-							$style_name = $style_post ? $style_post->post_name : 'formidable-style';
-						}
-
-						$new_form[ $setting ] = $style_name;
-					} else {
-						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
-					}
+				if ( ! isset( $form->options[ $setting ] ) ) {
+					continue;
 				}
-			}
+
+				if ( 'custom_style' !== $setting ) {
+					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					continue;
+				}
+
+				$style->id = $form->options[ $setting ];
+
+				if ( ! $style->id ) {
+					$style_name = 0;
+				} elseif ( 1 === intval( $style->id ) ) {
+					$style_name = 'formidable-style';
+				} else {
+					$style_post = $style->get_one();
+					$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+				}
+
+				$new_form[ $setting ] = $style_name;
+			}//end foreach
 
 			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
 		}//end foreach

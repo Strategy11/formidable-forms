@@ -19,9 +19,9 @@ $classname = 'frm-counter-card-wrapper frm-flex-box';
 						<div class="frm-flex-box frm-gap-md">
 							<?php foreach ( $counter['items'] as $item ) : ?>
 								<b>
-									<?php echo esc_attr( $item['counter_label']['symbol_left'] ); ?>
+									<?php echo esc_html( $item['counter_label']['symbol_left'] ); ?>
 									<span class="frm-counter" data-type="<?php echo esc_attr( $counter['type'] ); ?>" data-locale="<?php echo esc_attr( get_locale() ); ?>" data-counter="<?php echo (int) $item['counter']; ?>"><?php echo (int) $item['counter']; ?></span>
-									<?php echo esc_attr( $item['counter_label']['symbol_right'] ); ?>
+									<?php echo esc_html( $item['counter_label']['symbol_right'] ); ?>
 								</b>
 							<?php endforeach; ?>
 						</div>

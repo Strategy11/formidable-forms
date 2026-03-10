@@ -3,7 +3,8 @@
 
 	const selectors = 'tr[data-slug="formidable"] .deactivate a, tr[data-slug="formidable-pro"] .deactivate a, tr[data-slug="formidable-forms-pro"] .deactivate a';
 
-	let deactivationModal, deactivationUrl;
+	let deactivationModal;
+	let deactivationUrl;
 
 	const Modal = {
 		init( id, width ) {
@@ -79,11 +80,11 @@
 			);
 		}
 
-		deactivationUrl = event.target.href + '&frm_feedback_submitted=1';
+		deactivationUrl = `${ event.target.href }&frm_feedback_submitted=1`;
 
 		const pluginSlug = event.target.closest( 'tr' ).dataset.slug;
 
-		const url = 'https://feedback.strategy11.com/wp-json/frm/v2/forms/deactivation-feedback?plugin_slug=' + pluginSlug + '&site=' + window.location.host + '&return=html&exclude_script=jquery&exclude_style=formidable-css';
+		const url = `https://feedback.strategy11.com/wp-json/frm/v2/forms/deactivation-feedback?plugin_slug=${ pluginSlug }&site=${ window.location.host }&return=html&exclude_script=jquery&exclude_style=formidable-css`;
 
 		const response = fetch( url, {
 			method: 'GET'

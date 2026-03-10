@@ -109,7 +109,7 @@
 					div( {
 						className: 'frm10 frm_clearfix',
 						children: [
-							img( { src: getUrlToApplicationsImages() + 'folder.svg' } ),
+							img( { src: `${ getUrlToApplicationsImages() }folder.svg` } ),
 							tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
 							div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
 						]
@@ -129,7 +129,7 @@
 	}
 
 	function getUrlToApplicationsImages() {
-		return frmGlobal.url + '/images/applications/';
+		return `${ frmGlobal.url }/images/applications/`;
 	}
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
@@ -327,7 +327,7 @@
 		}
 
 		function getCardContent() {
-			const thumbnailFolderUrl = getUrlToApplicationsImages() + 'thumbnails/';
+			const thumbnailFolderUrl = `${ getUrlToApplicationsImages() }thumbnails/`;
 			const filenameToUse = data.hasLiteThumbnail ? data.key + ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
 			return div( {
 				className: 'frm-application-card-image-wrapper',
@@ -368,7 +368,7 @@
 
 			const descriptor = '1' === countValue ? singularDescriptor : pluralDescriptor;
 			counter.append(
-				span( countValue + ' ' + descriptor )
+				span( `${ countValue } ${ descriptor }` )
 			);
 		}
 
@@ -439,7 +439,7 @@
 			);
 		}
 
-		const placeholderImage = img( { src: getUrlToApplicationsImages() + 'placeholder.png' } );
+		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png` } );
 		if ( placeholderImage.complete ) {
 			setTimeout( maybeCenterViewApplicationModal, 0 );
 		} else {

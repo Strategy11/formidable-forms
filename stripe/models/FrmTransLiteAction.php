@@ -201,7 +201,7 @@ class FrmTransLiteAction extends FrmFormAction {
 				<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<option value="<?php echo esc_attr( $field->id ); ?>" <?php selected( $key_exists ? $form_atts['form_action']->post_content[ $field_atts['name'] ] : 0, $field->id ); ?>>
 					<?php
-					echo esc_attr( FrmAppHelper::truncate( $field->name, 50, 1 ) );
+					echo esc_html( FrmAppHelper::truncate( $field->name, 50, 1 ) );
 
 					if ( 'name' === $field->type && isset( $field_atts['name'] ) ) {
 						switch ( $field_atts['name'] ) {

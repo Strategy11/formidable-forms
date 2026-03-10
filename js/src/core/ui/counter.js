@@ -7,7 +7,7 @@
  * @param {number}             options.duration Duration in milliseconds (default: 3000)
  * @param {Function}           options.easing   Easing function (default: easeOutQuart)
  * @throws {Error} When element is not found or invalid
- * @returns {HTMLElement} The updated element for method chaining
+ * @return {HTMLElement} The updated element for method chaining
  */
 const counter = ( element, value, options = {} ) => {
 	const targetElement = typeof element === 'string'
@@ -58,7 +58,7 @@ const counter = ( element, value, options = {} ) => {
  *
  * @param {HTMLElement}   element Target element
  * @param {string|number} value   Value to set
- * @returns {HTMLElement} The element for method chaining
+ * @return {HTMLElement} The element for method chaining
  */
 const setElementValueAndReturn = ( element, value ) => {
 	element.textContent = String( value );
@@ -75,7 +75,7 @@ const setElementValueAndReturn = ( element, value ) => {
  * @param {number}      duration    Animation duration in milliseconds
  * @param {number}      change      Total change amount (targetValue - startValue)
  * @param {Function}    easing      Easing function
- * @returns {void}
+ * @return {void}
  */
 const animateCounter = ( timestamp, element, startValue, targetValue, duration, change, easing ) => {
 	if ( ! element._counterStartTime ) {
@@ -138,7 +138,7 @@ const animateCounter = ( timestamp, element, startValue, targetValue, duration, 
  * Easing function for smooth animation
  *
  * @param {number} t Progress from 0 to 1
- * @returns {number} Eased value
+ * @return {number} Eased value
  */
 const easeOutQuart = t => 1 - Math.pow( 1 - t, 4 );
 

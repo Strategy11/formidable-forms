@@ -6,7 +6,7 @@ import { getElements } from '../elements';
 /**
  * Adds events to the checklist.
  *
- * @returns {void}
+ * @return {void}
  */
 function addChecklistEvents() {
 	const { checklist } = getElements();
@@ -22,7 +22,7 @@ function addChecklistEvents() {
  *
  * @private
  * @param {HTMLElement} checklist The checklist element.
- * @returns {void}
+ * @return {void}
  */
 function onChecklistHeaderClick( checklist ) {
 	checklist.classList.toggle( 'frm-checklist--collapsed' );

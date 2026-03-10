@@ -47,7 +47,7 @@ class FrmFormState {
 	 * @return bool true if just initialized.
 	 */
 	private static function maybe_initialize() {
-		if ( empty( self::$instance ) ) {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 			return true;
 		}
@@ -103,7 +103,7 @@ class FrmFormState {
 			return;
 		}
 
-		if ( empty( self::$instance ) && ! self::get_state_from_request() ) {
+		if ( ! self::$instance && ! self::get_state_from_request() ) {
 			return;
 		}
 

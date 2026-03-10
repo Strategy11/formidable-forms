@@ -1,16 +1,24 @@
+import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import babelParser from '@babel/eslint-parser';
-import wordpressPlugin from '@wordpress/eslint-plugin';
 import reactPlugin from 'eslint-plugin-react';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import sonarjsPlugin from 'eslint-plugin-sonarjs';
 import cypressPlugin from 'eslint-plugin-cypress';
 import noJqueryPlugin from 'eslint-plugin-no-jquery';
 import compatPlugin from 'eslint-plugin-compat';
-import jsdocPlugin from 'eslint-plugin-jsdoc';
 import unicornPlugin from 'eslint-plugin-unicorn';
-import importPlugin from 'eslint-plugin-import';
 import formidablePlugin from './eslint-rules/index.js';
 import globals from 'globals';
+
+const __filename = fileURLToPath( import.meta.url );
+const __dirname = dirname( __filename );
+
+const compat = new FlatCompat( {
+	baseDirectory: __dirname,
+	resolvePluginsRelativeTo: __dirname,
+} );
 
 export default [
 	// Global ignores (replaces .eslintignore)
@@ -44,7 +52,10 @@ export default [
 	},
 
 	// WordPress recommended-with-formatting preset
-	...( wordpressPlugin.configs?.['flat/recommended-with-formatting'] ?? [] ),
+	// @wordpress/eslint-plugin uses legacy config format (no flat/ exports exist).
+	// FlatCompat is the official ESLint bridge to use legacy configs in ESLint 9 flat config.
+	// See: https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config
+	...compat.extends( 'plugin:@wordpress/eslint-plugin/recommended-with-formatting' ),
 
 	// Base config for all JS files
 	{
@@ -67,6 +78,7 @@ export default [
 				...globals.es2021,
 				...globals.node,
 				...globals.mocha,
+				...globals.jquery,
 				wp: 'readonly',
 				wpApiSettings: 'readonly',
 				window: 'readonly',
@@ -79,21 +91,20 @@ export default [
 			},
 		},
 		plugins: {
-			react: reactPlugin,
-			'jsx-a11y': jsxA11yPlugin,
+			// NOTE: react, jsx-a11y, jsdoc, import, react-hooks are registered by FlatCompat
+			// via the WordPress preset chain, do not register them here (would cause
+			// ESLint 9 "Cannot redefine plugin" error due to different require() instances).
 			sonarjs: sonarjsPlugin,
 			cypress: cypressPlugin,
 			'no-jquery': noJqueryPlugin,
 			compat: compatPlugin,
-			jsdoc: jsdocPlugin,
 			unicorn: unicornPlugin,
-			import: importPlugin,
 			formidable: formidablePlugin,
 		},
 		settings: {
 			'import/resolver': {
-				webpack: {
-					config: './webpack.config.js',
+				node: {
+					extensions: [ '.js', '.jsx' ],
 				},
 			},
 			react: {
@@ -155,11 +166,49 @@ export default [
 			'no-alert': 'off',
 			'no-undef': 'off',
 			'no-shadow': 'off',
+
+			// Suppress DeepSource false positives for legacy patterns
+			'init-declarations': 'off',
+			'id-length': 'off',
+			'no-use-before-define': 'off',
+			'consistent-return': 'off',
+			'guard-for-in': 'off',
+			'no-return-assign': 'off',
+			'no-useless-escape': 'off',
+			'import/no-unresolved': 'off',
+			'import/named': 'off',
+			'import/default': 'off',
 			'comma-dangle': 'off',
 			'arrow-parens': ['error', 'as-needed'],
 
+			// Enforce frm-javascript.md patterns
+			'no-var': 'warn',
+			'prefer-const': 'warn',
+			'prefer-destructuring': ['warn', {
+				'array': true,
+				'object': true,
+			}, {
+				'enforceForRenamedProperties': false,
+			}],
+			'prefer-spread': 'warn',
+			'prefer-rest-params': 'error',
+			'prefer-template': 'warn',
+			'no-eval': 'error',
+			'no-implied-eval': 'error',
+			'no-new-func': 'error',
+			'no-extend-native': 'error',
+			'one-var': ['error', 'never'],
+			'default-param-last': 'warn',
+
 			// WordPress overrides
 			'@wordpress/no-global-active-element': 'off',
+			// Disabled: use context.* APIs removed in ESLint 9 flat config (getScope, getAncestors,
+			// getDeclaredVariables, getCommentsBefore). Re-enable when @wordpress/eslint-plugin
+			// migrates to sourceCode.* APIs for ESLint 9 support.
+			'@wordpress/no-unused-vars-before-return': 'off',
+			'@wordpress/data-no-store-string-literals': 'off',
+			'@wordpress/react-no-unsafe-timeout': 'off',
+			'@wordpress/i18n-translator-comments': 'off',
 
 			// Prettier
 			'prettier/prettier': 'off',
@@ -295,6 +344,8 @@ export default [
 			'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 0 }],
 
 			// TODO: New breaking changes after updating to look into.
+			'jsdoc/reject-any-type': 'off',
+			'jsdoc/reject-function-type': 'off',
 			'no-jquery/no-sizzle': 'off',
 			'sonarjs/anchor-precedence': 'off',
 			'sonarjs/class-name': 'off',
@@ -321,12 +372,20 @@ export default [
 			'unicorn/prefer-global-this': 'off',
 			'unicorn/prefer-string-raw': 'off',
 			'unicorn/switch-case-braces': 'off',
+			'unicorn/prefer-single-call': 'off',
+			'unicorn/no-immediate-mutation': 'off',
 
 			// Custom Formidable rules
 			'formidable/prefer-strict-comparison': 'error',
 			'formidable/no-redundant-undefined-check': 'error',
 			'formidable/prefer-includes': 'error',
 			'formidable/no-typeof-undefined': 'error',
+			'formidable/no-optional-chaining-queryselectorall': 'error',
+			'formidable/no-repeated-selector': 'warn',
+			'formidable/prefer-document-fragment': 'warn',
+
+			// Import rules
+			'import/no-default-export': 'warn',
 		},
 	},
 
