@@ -302,15 +302,6 @@ class FrmFormActionsController {
 			}
 		}//end if
 
-		// HTML to include on the icon.
-		$icon_atts = array();
-
-		if ( $action_control->action_options['color'] !== 'var(--primary-700)' ) {
-			$icon_atts = array(
-				'style' => '--primary-700:' . $action_control->action_options['color'],
-			);
-		}
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
 	}
 
