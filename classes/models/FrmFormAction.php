@@ -158,6 +158,7 @@ class FrmFormAction {
 			'group'       => $id_base,
 			'color'       => '',
 			'keywords'    => '',
+			'description' => '',
 		);
 
 		$action_options          = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
@@ -968,9 +969,10 @@ class FrmFormAction {
 	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(
-			'classes' => 'frmfont ' . $class,
-			'active'  => false,
-			'limit'   => 0,
+			'classes'     => 'frmfont ' . $class,
+			'active'      => false,
+			'limit'       => 0,
+			'description' => '',
 		);
 	}
 
