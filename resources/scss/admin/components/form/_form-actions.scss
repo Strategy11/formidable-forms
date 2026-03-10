@@ -118,17 +118,7 @@
 	margin-right: 5px;
 }
 
-.frm_actions_list {
-	margin: 0;
-	display: inline;
-}
-
 .frm_actions_list li {
-	float: left;
-	width: 15.6%;
-	margin: 10px 0.5% 15px;
-	height: 100px;
-	text-align: center;
 }
 
 .frm-limited-actions .frm-group-heading,
@@ -148,46 +138,12 @@ label.frm_action_events {
 	float: right;
 }
 
-.frm_actions_list a:active,
-.frm_actions_list a:focus {
-	outline: none;
-}
-
-.frm_actions_list a {
-	font-size: var(--text-sm);
-	color: var(--grey-700);
-	word-break: break-word;
-}
-
-.frm_actions_list span.frm-outer-circle {
-
-	/* 50px total with 30px content */
-	background-color: var(--grey-100);
-	padding: 10px;
-	text-align: center;
-	border-radius: 50%;
-	display: block;
-	width: 30px;
-	height: 30px;
-	margin: 0 auto 15px;
-	line-height: 1;
-}
-
 .frm_email_settings .widget-title h4 {
 	color: var(--grey-700);
 }
 
 .frm_disabled_action .widget-title h4 {
 	color: var(--grey);
-}
-
-.frm_actions_list a .frmsvg,
-.frm_actions_list a i {
-	height: 18px;
-	width: 18px;
-	font-size: 18px;
-	padding: 2px;
-	color: var(--lightest-grey);
 }
 
 span.frm-inner-circle,
@@ -298,10 +254,6 @@ span.frm-inner-circle.frm-inverse {
 .frm_email_icons a:hover,
 .widget-top:hover .frm_email_icons a {
 	opacity: 1;
-}
-
-.frm_actions_list a.frm_inactive_action {
-	color: var(--grey);
 }
 
 .frm_inactive_action .frm-inner-circle,
