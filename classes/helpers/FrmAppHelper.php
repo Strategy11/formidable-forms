@@ -949,6 +949,10 @@ class FrmAppHelper {
 	 * @param string $value
 	 */
 	public static function strip_most_html( $value ) {
+		if ( '' === $value ) {
+			return $value;
+		}
+
 		$allowed_html = array(
 			'b'      => array(),
 			'br'     => array(),

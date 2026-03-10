@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						/* translators: %$1s: Feature name, %$2s: open span tag, %$3s: close span tag, %$4s: open prefix span tag, %$5s: close prefix span tag, %$6s: open suffix span tag, %$7s: close suffix span tag. */
 						esc_html__( '%4$sActivate the %5$s%1$s %2$sare not available%3$s%6$s are now activated%7$s', 'formidable' ),
 						'<span class="frm_feature_label"></span>',
-						'<span class="frm_are_not_installed">',
+						'<span class="frm_are_not_installed" data-default="' . esc_attr_x( 'are not available', 'upgrade modal', 'formidable' ) . '">',
 						'</span>',
 						'<span class="frm-upgrade-modal-title-prefix">',
 						'</span>',

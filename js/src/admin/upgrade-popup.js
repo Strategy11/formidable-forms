@@ -222,6 +222,7 @@ export function initUpgradeModal() {
 		event.preventDefault();
 
 		const modal = $info.get( 0 );
+		modal.classList.remove( 'frm-success' );
 		const lockIcon = modal.querySelector( '.frm_lock_icon' );
 
 		if ( lockIcon ) {
@@ -249,7 +250,9 @@ export function initUpgradeModal() {
 		// If one click upgrade, hide other content
 		addOneClick( element, 'modal', upgradeLabel );
 
-		modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+		notInstalled.style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		notInstalled.textContent = notInstalled.dataset.default;
 		modal.querySelector( '.frm-upgrade-modal-title-prefix' ).style.display = element.dataset.oneclick ? 'inline' : 'none';
 		modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
 		modal.querySelector( '.frm-upgrade-modal-title-suffix' ).style.display = 'none';
@@ -266,6 +269,40 @@ export function initUpgradeModal() {
 		}
 		link = link.replace( /(content=)[a-z_-]+/ig, `$1${ content }` );
 		button.setAttribute( 'href', link );
+
+		if ( element.classList.contains( 'frm_show_update' ) ) {
+			applyUpdateModalOverrides( modal );
+		}
+	}
+}
+
+/**
+ * Override upgrade modal content for update prompts.
+ *
+ * @since x.x
+ *
+ * @param {Element} modal The upgrade modal element.
+ */
+function applyUpdateModalOverrides( modal ) {
+	const titlePrefix = modal.querySelector( '.frm-upgrade-modal-title-prefix' );
+	if ( titlePrefix ) {
+		titlePrefix.style.display = 'none';
+	}
+
+	const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+	if ( notInstalled ) {
+		notInstalled.textContent = __( 'require an update', 'formidable' );
+		notInstalled.style.display = ''; // Clear inline style, span defaults to display:inline.
+	}
+
+	const oneclickMsg = modal.querySelector( '.frm-oneclick' );
+	if ( oneclickMsg ) {
+		oneclickMsg.style.display = 'none';
+	}
+
+	const button = modal.querySelector( '.frm-oneclick-button' );
+	if ( button ) {
+		button.textContent = __( 'Update Now', 'formidable' );
 	}
 }
 
