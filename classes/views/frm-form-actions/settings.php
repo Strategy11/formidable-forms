@@ -9,49 +9,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="frm_email_addon_menu" class="frm-limited-actions">
 	<div class="frm-h-stack">
-		<div class="frm-style-tabs-wrapper frm-actions-filter-tabs">
-			<div class="frm-tabs-delimiter">
-				<span class="frm-tabs-active-underline"></span>
-			</div>
+		<div class="frm-style-tabs-wrapper">
+			<div class="frm-tabs-delimiter"><span class="frm-tabs-active-underline"></span></div>
 			<div class="frm-tabs-navs">
 				<ul class="frm-flex-box">
-					<li class="frm-active" data-group=""><?php esc_html_e( 'All', 'formidable' ); ?></li>
-					<?php
-					foreach ( $groups as $group_key => $group_data ) {
-						$tab_label = ! empty( $group_data['name'] ) ? $group_data['name'] : __( 'Featured', 'formidable' );
-						?>
-						<li data-group="<?php echo esc_attr( $group_key ); ?>"><?php echo esc_html( $tab_label ); ?></li>
-						<?php
-					}
-					?>
+					<li class="frm-active"><?php esc_html_e( 'All', 'formidable' ); ?></li>
+					<li><?php esc_html_e( 'Featured', 'formidable' ); ?></li>
+					<?php foreach ( $groups as $group ) { ?>
+						<li><?php echo esc_html( $group['name'] ); ?></li>
+					<?php } ?>
 				</ul>
 			</div>
 		</div>
-		<div class="frm-ml-auto">
-			<?php
-			FrmAppHelper::show_search_box(
-				array(
-					'input_id'    => 'actions',
-					'placeholder' => __( 'Search Form Actions', 'formidable' ),
-					'tosearch'    => 'frm-action',
-				)
-			);
-			?>
-		</div>
+
+		<?php
+		FrmAppHelper::show_search_box(
+			array(
+				'input_id'    => 'actions',
+				'placeholder' => __( 'Search Form Actions', 'formidable' ),
+				'tosearch'    => 'frm-action',
+				'class'       => 'frm-ml-auto-force',
+			)
+		);
+		?>
 	</div>
-	<h3 class="frm-no-border">
-		<?php esc_html_e( 'Form Actions', 'formidable' ); ?>
-		<span class="frm-sub-label">
-			<?php esc_html_e( '(click an action to add it to your form)', 'formidable' ); ?>
-		</span>
-	</h3>
+
 	<?php
 	$displayed_actions = array();
 
-	foreach ( $groups as $group_key => $group ) {
+	foreach ( $groups as $group ) {
 		if ( ! empty( $group['name'] ) ) {
 			?>
-			<h3 class="frm-group-heading" data-group="<?php echo esc_attr( $group_key ); ?>"><?php echo esc_html( $group['name'] ); ?></h3>
+			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
 			<?php
 		}
 
@@ -59,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$group['actions'] = array();
 		}
 		?>
-		<ul class="frm_actions_list" data-group="<?php echo esc_attr( $group_key ); ?>">
+		<ul class="frm_actions_list frm-list-grid-layout">
 			<?php
 			foreach ( $action_controls as $action_control ) {
 				if ( in_array( $action_control->id_base, $displayed_actions, true ) || ! in_array( $action_control->id_base, $group['actions'], true ) ) {
@@ -75,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					continue;
 				}
 				?>
-					<li class="frm-action frm-not-installed">
+					<li class="frm-card-item frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span class="frm-outer-circle">
 								<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
