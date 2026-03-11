@@ -416,6 +416,7 @@ class FrmStrpLiteLinkController {
 					'customer' => $customer->id,
 				)
 			);
+
 			if ( ! $updated ) {
 				return false;
 			}
