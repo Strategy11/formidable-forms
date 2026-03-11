@@ -105,13 +105,15 @@ class FrmStrpLiteLinkController {
 		$currency        = FrmTransLiteAppHelper::get_action_setting( 'currency', array( 'payment' => $payment ) );
 		$currency        = FrmCurrencyHelper::get_currency( $currency );
 		$actual_amount   = intval( $intent->amount );
-		$expected_amount = intval( $payment->amount );
+		$expected_amount = round( floatval( $payment->amount ), 2 );
 
 		if ( 0 !== $currency['decimals'] ) {
 			// Convert 10 to 1000 for example for Stripe.
 			// But avoid for this a 0-decimal currency like JPY.
 			$expected_amount *= 100;
 		}
+
+		$expected_amount = intval( round( $expected_amount ) );
 
 		if ( $expected_amount !== $actual_amount ) {
 			$redirect_helper->handle_error( 'amount_mismatch' );
