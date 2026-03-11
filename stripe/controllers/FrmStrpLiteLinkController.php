@@ -102,6 +102,22 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		$currency        = FrmTransLiteAppHelper::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		$currency        = FrmCurrencyHelper::get_currency( $currency );
+		$actual_amount   = intval( $intent->amount );
+		$expected_amount = intval( $payment->amount );
+
+		if ( 0 !== $currency['decimals'] ) {
+			// Convert 10 to 1000 for example for Stripe.
+			// But avoid for this a 0-decimal currency like JPY.
+			$expected_amount *= 100;
+		}
+
+		if ( $expected_amount !== $actual_amount ) {
+			$redirect_helper->handle_error( 'amount_mismatch' );
+			die();
+		}
+
 		if ( 'succeeded' !== $intent->status ) {
 			if ( 'processing' === $intent->status ) {
 				FrmTransLitePaymentsController::change_payment_status( $payment, 'processing' );
@@ -368,29 +384,29 @@ class FrmStrpLiteLinkController {
 	 *     @type object   $customer
 	 * }
 	 *
-	 * @return void
+	 * @return bool True on success, false on failure.
 	 */
 	public static function create_pending_stripe_link_payment( $atts ) {
 		if ( empty( $atts['form'] ) || empty( $atts['entry'] ) || empty( $atts['action'] ) || ! isset( $atts['amount'] ) || empty( $atts['customer'] ) ) {
-			return;
+			return false;
 		}
 
 		$form      = $atts['form'];
-		$intent_id = self::verify_intent( $form->id );
+		$action    = $atts['action'];
+		$intent_id = self::verify_intent( $form->id, $action );
 
 		if ( ! $intent_id ) {
-			return;
+			return false;
 		}
 
 		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 		$entry           = $atts['entry'];
-		$action          = $atts['action'];
 		$amount          = $atts['amount'];
 		$customer        = $atts['customer'];
 
 		if ( ! $is_setup_intent ) {
 			// Update the amount and set the customer before confirming the payment.
-			FrmStrpLiteAppHelper::call_stripe_helper_class(
+			$updated = FrmStrpLiteAppHelper::call_stripe_helper_class(
 				'update_intent',
 				$intent_id,
 				array(
@@ -398,12 +414,15 @@ class FrmStrpLiteLinkController {
 					'customer' => $customer->id,
 				)
 			);
+			if ( ! $updated ) {
+				return false;
+			}
 		}
 
 		self::add_temporary_referer_meta( (int) $entry->id );
 
 		$frm_payment = new FrmTransLitePayment();
-		$frm_payment->create(
+		$payment_id  = $frm_payment->create(
 			array(
 				'paysys'     => 'stripe',
 				'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $amount, $action ),
@@ -415,6 +434,8 @@ class FrmStrpLiteLinkController {
 				'test'       => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 			)
 		);
+
+		return (bool) $payment_id;
 	}
 
 	/**
@@ -423,10 +444,11 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 * @param WP_Post    $action
 	 *
 	 * @return false|string String intent id on success, False if intent is missing or cannot be verified.
 	 */
-	private static function verify_intent( $form_id ) {
+	private static function verify_intent( $form_id, $action ) {
 		$client_secrets = FrmAppHelper::get_post_param( 'frmintent' . $form_id, array(), 'sanitize_text_field' );
 
 		if ( ! $client_secrets ) {
@@ -440,11 +462,44 @@ class FrmStrpLiteLinkController {
 		$function_name              = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
 		$intent                     = FrmStrpLiteAppHelper::call_stripe_helper_class( $function_name, $intent_id );
 
-		if ( ! $intent || $intent->client_secret !== $client_secret ) {
+		if ( ! $intent || $intent->client_secret !== $client_secret || ! self::intent_matches_form_action( $intent, $action ) ) {
+			return false;
+		}
+
+		if ( isset( $intent->charges ) && is_object( $intent->charges ) && ! empty( $intent->charges->data ) ) {
+			// The intent should not have any charges yet.
+			// If it does, the intent is invalid.
+			return false;
+		}
+
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
+
+		if ( $payment ) {
+			// A duplicate payment should not exist.
 			return false;
 		}
 
 		return $intent_id;
+	}
+
+	/**
+	 * Check if an intent matches a form action.
+	 *
+	 * @since x.x
+	 *
+	 * @param object  $intent
+	 * @param WP_Post $action
+	 *
+	 * @return bool
+	 */
+	private static function intent_matches_form_action( $intent, $action ) {
+		if ( ! isset( $intent->metadata ) || ! is_object( $intent->metadata ) || empty( $intent->metadata->action ) ) {
+			// Avoid false positive if the intent is missing metadata.
+			return true;
+		}
+
+		return (int) $intent->metadata->action === $action->ID;
 	}
 
 	/**
