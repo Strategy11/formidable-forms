@@ -373,6 +373,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 == Changelog ==
 = 6.29 =
+* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
 * Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
 * Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
 * Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
@@ -412,5 +413,5 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.20 =
-This version fixes a security-related bug. Upgrade immediately.
+= 6.29 =
+This version improves Stripe payment validation. Upgrade immediately if you are using Stripe payments.
