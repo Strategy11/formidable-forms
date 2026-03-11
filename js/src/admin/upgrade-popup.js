@@ -279,7 +279,7 @@ export function initUpgradeModal() {
 /**
  * Override upgrade modal content for update prompts.
  *
- * @since x.x
+ * @since 6.29
  *
  * @param {Element} modal The upgrade modal element.
  */

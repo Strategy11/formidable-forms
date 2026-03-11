@@ -644,7 +644,7 @@ class FrmTransLiteActionsController {
 	/**
 	 * When auto-injecting a field, ensure it is placed before the submit button.
 	 *
-	 * @since x.x
+	 * @since 6.29
 	 *
 	 * @param int $form_id
 	 * @param int $field_order

@@ -356,7 +356,7 @@ class FrmField {
 	/**
 	 * Flag Pro field types that require a newer Pro version with frm_show_update.
 	 *
-	 * @since x.x
+	 * @since 6.29
 	 *
 	 * @param array $fields Available Pro field types.
 	 *

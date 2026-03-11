@@ -486,7 +486,7 @@ class FrmStrpLiteLinkController {
 	/**
 	 * Check if an intent matches a form action.
 	 *
-	 * @since x.x
+	 * @since 6.29
 	 *
 	 * @param object  $intent
 	 * @param WP_Post $action

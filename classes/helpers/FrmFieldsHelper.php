@@ -2474,7 +2474,7 @@ class FrmFieldsHelper {
 	/**
 	 * Parse the upgrade and update flags from a field type's icon class.
 	 *
-	 * @since x.x
+	 * @since 6.29
 	 *
 	 * @param array $field_type Field type configuration, modified in place to strip icon flag classes.
 	 *
