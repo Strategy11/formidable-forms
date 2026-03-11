@@ -31,7 +31,13 @@
 	}
 
 	/* Adjust container position when min version notice is displayed */
-	body:has(#wpbody-content > .frm_previous_install) .frm_wrap .frm_page_container {
-		--min-version-banner-height: 62px;
-	}
+	// body:has(#wpbody-content > .frm_previous_install) {
+
+	// 	.frm_wrap .frm_page_container,
+	// 	&.frm-admin-page-styles .frm_page_container {
+	// 		--min-version-banner-height: 62px;
+	// 		top: var(--min-version-banner-height);
+	// 		height: calc(100vh - var(--min-version-banner-height));
+	// 	}
+	// }
 }
