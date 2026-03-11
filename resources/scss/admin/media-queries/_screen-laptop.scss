@@ -150,4 +150,8 @@
 	#frm_bs_dropdown .frm_bstooltip {
 		display: block !important;
 	}
+
+	html.wp-toolbar:has( body.frm-full-screen #wpbody-content > .frm_previous_install ) {
+		padding-top: 0;
+	}
 }
