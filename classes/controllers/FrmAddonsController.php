@@ -730,7 +730,7 @@ class FrmAddonsController {
 	/**
 	 * Get the JSON-encoded install data for a plugin update.
 	 *
-	 * @since x.x
+	 * @since 6.29
 	 *
 	 * @param string $addon_slug The addon slug (e.g. 'pro', 'dates').
 	 *

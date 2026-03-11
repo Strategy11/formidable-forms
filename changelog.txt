@@ -1,5 +1,6 @@
 == Changelog ==
 = 6.29 =
+* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
 * Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
 * Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
 * Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.

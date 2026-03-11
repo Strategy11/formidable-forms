@@ -450,7 +450,7 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 4.02.04
-	 * @since x.x This is public.
+	 * @since 6.29 This is public.
 	 *
 	 * @param int|string $field_id Field ID.
 	 * @param array      $args     Additional arguments.

@@ -710,6 +710,8 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function save_style() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
 		$frm_style   = new FrmStyle();
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
