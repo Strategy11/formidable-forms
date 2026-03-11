@@ -21,7 +21,10 @@ export function initBannerAdjustment() {
 	 */
 	const applyBannerOffset = () => {
 		containers.forEach( container => {
-			container.style.setProperty( '--min-version-banner-height', `${ Math.ceil( banner.offsetHeight ) }px` );
+			container.style.setProperty(
+				'--min-version-banner-height',
+				`${ Math.ceil( banner.offsetHeight + ( document.getElementById( 'wpadminbar' )?.offsetHeight || 0 ) ) }px`
+			);
 		} );
 	};
 
