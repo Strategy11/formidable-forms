@@ -14,7 +14,7 @@ import { resetSearchInput } from '.';
 /**
  * Manages event handling for sidebar category links.
  *
- * @returns {void}
+ * @return {void}
  */
 export function addCategoryEvents() {
 	const { categoryItems } = getElements();
@@ -80,7 +80,7 @@ const onCategoryClick = event => {
  * Handles the keyboard event on a category item.
  *
  * @param {KeyboardEvent} event The keyboard event object.
- * @returns {void}
+ * @return {void}
  */
 function onCategoryKeydown( event ) {
 	// Only respond to 'Enter' or 'Space' key presses

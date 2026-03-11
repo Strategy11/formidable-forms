@@ -7,7 +7,7 @@ import { markStepAsCompleted } from '../utils';
 /**
  * Adds events to the styler update button.
  *
- * @returns {void}
+ * @return {void}
  */
 function addStylerUpdateEvents() {
 	if ( 'formidable-styles' !== getQueryParam( 'page' ) ) {
@@ -21,7 +21,7 @@ function addStylerUpdateEvents() {
  * Handles the styler update button click event.
  *
  * @private
- * @returns {void}
+ * @return {void}
  */
 async function onStylerUpdateClick() {
 	await markStepAsCompleted( 'style-form' );

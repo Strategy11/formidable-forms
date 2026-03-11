@@ -23,7 +23,7 @@ const OPERATION = {
 /**
  * Manages event handling for favorite buttons.
  *
- * @returns {void}
+ * @return {void}
  */
 function addFavoriteButtonEvents() {
 	const favoriteButtons = document.querySelectorAll( FAVORITE_BUTTON_CLASS );
@@ -39,7 +39,7 @@ function addFavoriteButtonEvents() {
  *
  * @private
  * @param {Event} event The click event object.
- * @returns {void}
+ * @return {void}
  */
 const onFavoriteButtonClick = event => {
 	const favoriteButton = event.currentTarget;
@@ -90,14 +90,22 @@ const onFavoriteButtonClick = event => {
 	if ( OPERATION.ADD === currentOperation ) {
 		// Increment favorite counts
 		++favoritesCount.total;
-		isTemplateCustom ? ++favoritesCount.custom : ++favoritesCount.default;
+		if ( isTemplateCustom ) {
+			++favoritesCount.custom;
+		} else {
+			++favoritesCount.default;
+		}
 		// Set heart icon to filled
 		heartIcon.setAttribute( 'href', FILLED_HEART_ICON );
 		twinTemplateHeartIcon?.setAttribute( 'href', FILLED_HEART_ICON );
 	} else {
 		// Decrement favorite counts
 		--favoritesCount.total;
-		isTemplateCustom ? --favoritesCount.custom : --favoritesCount.default;
+		if ( isTemplateCustom ) {
+			--favoritesCount.custom;
+		} else {
+			--favoritesCount.default;
+		}
 		// Set heart icon to outline
 		heartIcon.setAttribute( 'href', LINEAR_HEART_ICON );
 		twinTemplateHeartIcon?.setAttribute( 'href', LINEAR_HEART_ICON );
@@ -136,7 +144,7 @@ const onFavoriteButtonClick = event => {
  * @param {string}  id        The template ID.
  * @param {string}  operation The operation to perform ('add' or 'remove').
  * @param {boolean} isCustom  Flag indicating whether the template is custom.
- * @returns {Promise<any>} The result of the server-side update.
+ * @return {Promise<any>} The result of the server-side update.
  */
 function updateFavoriteTemplate( id, operation, isCustom ) {
 	const formData = new FormData();

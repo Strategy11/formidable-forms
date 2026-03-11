@@ -129,12 +129,14 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_type( $type ) {
-		if ( empty( $this->type ) ) {
-			$this->type = $this->get_field_column( 'type' );
+		if ( $this->type ) {
+			return;
+		}
 
-			if ( empty( $this->type ) && $type ) {
-				$this->type = $type;
-			}
+		$this->type = $this->get_field_column( 'type' );
+
+		if ( ! $this->type && $type ) {
+			$this->type = $type;
 		}
 	}
 
@@ -144,7 +146,7 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_field_id() {
-		if ( empty( $this->field ) ) {
+		if ( ! $this->field ) {
 			return;
 		}
 
@@ -427,10 +429,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		if ( ! $this->has_input ) {
-			return $this->no_input_settings();
-		}
-		return array();
+		return $this->has_input ? array() : $this->no_input_settings();
 	}
 
 	/**
@@ -643,7 +642,7 @@ DEFAULT_HTML;
 		return $this->should_continue_to_field_options(
 			array(
 				'field' => array(
-					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type'],
+					'type' => FrmField::get_field_type( $this->field ),
 				),
 			)
 		);
@@ -1545,10 +1544,8 @@ DEFAULT_HTML;
 		$custom_error_fields     = preg_grep( '/frm_error_field_*/', $describedby );
 		$custom_desc_fields      = preg_grep( '/frm_desc_field_*/', $describedby );
 
-		if ( $custom_desc_fields && $custom_error_fields ) {
-			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
-				$error_comes_first = false;
-			}
+		if ( $custom_desc_fields && $custom_error_fields && array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
+			$error_comes_first = false;
 		}
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
@@ -1560,10 +1557,10 @@ DEFAULT_HTML;
 		}
 
 		if ( $this->get_field_column( 'description' ) !== '' && ! in_array( 'frm_desc_' . $args['html_id'], $describedby, true ) ) {
-			if ( ! $error_comes_first ) {
-				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
-			} else {
+			if ( $error_comes_first ) {
 				array_push( $describedby, 'frm_desc_' . $args['html_id'] );
+			} else {
+				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
 			}
 		}
 
@@ -1880,10 +1877,12 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
-					$csv_values_checked[] = $option['value'];
-					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
+				if ( ! isset( $option['value'] ) || ! str_contains( $filtered_checked, $option['value'] ) ) {
+					continue;
 				}
+
+				$csv_values_checked[] = $option['value'];
+				$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 			}
 
 			$csv_values_checked = array_reverse( $csv_values_checked );

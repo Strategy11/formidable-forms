@@ -13,9 +13,9 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 			array( 'FrmEmailSummaryHelper', 'get_options' )
 		);
 
-		$this->assertTrue( isset( $options['last_monthly'] ) );
-		$this->assertTrue( isset( $options['last_yearly'] ) );
-		$this->assertTrue( isset( $options['renewal_date'] ) );
+		$this->assertArrayHasKey( 'last_monthly', $options );
+		$this->assertArrayHasKey( 'last_yearly', $options );
+		$this->assertArrayHasKey( 'renewal_date', $options );
 	}
 
 	public function test_get_date_obj() {
@@ -24,7 +24,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 			array( '2023-08-13' )
 		);
 
-		$this->assertTrue( $date instanceof DateTime );
+		$this->assertInstanceOf( \DateTime::class, $date );
 		$this->assertSame( '2023-08-13', $date->format( 'Y-m-d' ) );
 
 		$this->assertFalse(

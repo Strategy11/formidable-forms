@@ -12,7 +12,7 @@ import { navigateToNextStep } from '../utils';
 /**
  * Manages event handling for the "Allow & Continue" button in the "Never miss an important update" step.
  *
- * @returns {void}
+ * @return {void}
  */
 function addConsentTrackingButtonEvents() {
 	const { consentTrackingButton } = getElements();
@@ -25,7 +25,7 @@ function addConsentTrackingButtonEvents() {
  * Handles the click event on the "Allow & Continue" button in the "Never miss an important update" step.
  *
  * @private
- * @returns {void}
+ * @return {void}
  */
 const onConsentTrackingButtonClick = async () => {
 	const { doJsonPost } = frmDom.ajax;

@@ -1,4 +1,3 @@
-/* global formidable_form_selector */
 import FormidableIcon from '../common/components/icon';
 import { frmAddonAPI } from '../api/index';
 
@@ -26,7 +25,7 @@ function Edit() {
 		if ( true === addonActivateButton.isLoading ) {
 			return;
 		}
-		updateAddonActivateButton( { ...addonActivateButton, isLoading: true, classnames: addonActivateButton.defaultClassname + ' ' + addonActivateButton.loadingClassname } );
+		updateAddonActivateButton( { ...addonActivateButton, isLoading: true, classnames: `${ addonActivateButton.defaultClassname } ${ addonActivateButton.loadingClassname }` } );
 		if ( ! blockData.viewsAddon.installed && blockData.viewsAddon.hasAccess ) {
 			frmAddonAPI.toggleAddonState( 'frm_install_addon', blockData.viewsAddon.url ).then( () => {
 				window.location.reload();
@@ -82,7 +81,7 @@ function Edit() {
 							</Notice>
 						}
 						<div style={ imageWrapperStyles }>
-							<img src={ blockData.url + '/images/blocks/views-block-placeholder.jpg' } alt={ blockName } style={ imageStyles } />
+							<img src={ `${ blockData.url }/images/blocks/views-block-placeholder.jpg` } alt={ blockName } style={ imageStyles } />
 						</div>
 					</div>
 				</div>

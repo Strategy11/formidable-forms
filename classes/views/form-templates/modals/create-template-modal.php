@@ -33,10 +33,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 
 				foreach ( $published_forms as $form ) {
-					if ( ! is_null( $form->description ) ) {
-						$form_description = FrmAppHelper::kses( $form->description, array( 'a', 'i', 'span', 'use', 'svg' ) );
-					} else {
+					if ( is_null( $form->description ) ) {
 						$form_description = '';
+					} else {
+						$form_description = FrmAppHelper::kses( $form->description, array( 'a', 'i', 'span', 'use', 'svg' ) );
 					}
 					?>
 					<option value="<?php echo esc_attr( $form->id ); ?>" data-name="<?php echo esc_attr( $form->name ); ?>" data-description="<?php echo esc_attr( $form_description ); ?>">
