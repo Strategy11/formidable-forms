@@ -1,5 +1,10 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 
+/**
+ * Internal dependencies
+ */
+const pageLayout = require( './ui/pageLayout' );
+
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
 		messageBox: null,
@@ -11153,46 +11158,46 @@ window.frmAdminBuildJS = function() {
 
 window.frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready(
-	() => {
-		frmAdminBuild.init();
+jQuery( document ).ready( () => {
+	frmAdminBuild.init();
 
-		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
-		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
+	document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
+	document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
 
-		// Bootstrap 5 uses data-bs-toggle instead of data-toggle.
-		document.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+	// Bootstrap 5 uses data-bs-toggle instead of data-toggle.
+	document.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 
-		function convertOldBootstrapDropdownsToBootstrap5( frmDropdownMenu ) {
-			frmDropdownMenu.classList.add( 'dropdown-menu' );
+	function convertOldBootstrapDropdownsToBootstrap5( frmDropdownMenu ) {
+		frmDropdownMenu.classList.add( 'dropdown-menu' );
 
-			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
-			if ( toggle ) {
-				if ( ! toggle.hasAttribute( 'role' ) ) {
-					toggle.setAttribute( 'role', 'button' );
-				}
-				if ( ! toggle.hasAttribute( 'tabindex' ) ) {
-					toggle.setAttribute( 'tabindex', 0 );
-				}
+		const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
+		if ( toggle ) {
+			if ( ! toggle.hasAttribute( 'role' ) ) {
+				toggle.setAttribute( 'role', 'button' );
 			}
-
-			// Convert <li> and <ul> tags.
-			if ( 'UL' === frmDropdownMenu.tagName ) {
-				convertBootstrapUl( frmDropdownMenu );
+			if ( ! toggle.hasAttribute( 'tabindex' ) ) {
+				toggle.setAttribute( 'tabindex', 0 );
 			}
 		}
 
-		function convertBootstrapUl( ul ) {
-			let html = ul.outerHTML;
-			html = html.replace( '<ul ', '<div ' );
-			html = html.replace( '</ul>', '</div>' );
-			html = html.replaceAll( '<li>', '<div class="dropdown-item">' );
-			html = html.replaceAll( '<li class="', '<div class="dropdown-item ' );
-			html = html.replaceAll( '</li>', '</div>' );
-			ul.outerHTML = html;
+		// Convert <li> and <ul> tags.
+		if ( 'UL' === frmDropdownMenu.tagName ) {
+			convertBootstrapUl( frmDropdownMenu );
 		}
 	}
-);
+
+	function convertBootstrapUl( ul ) {
+		let html = ul.outerHTML;
+		html = html.replace( '<ul ', '<div ' );
+		html = html.replace( '</ul>', '</div>' );
+		html = html.replaceAll( '<li>', '<div class="dropdown-item">' );
+		html = html.replaceAll( '<li class="', '<div class="dropdown-item ' );
+		html = html.replaceAll( '</li>', '</div>' );
+		ul.outerHTML = html;
+	}
+
+	pageLayout.initBannerAdjustment();
+} );
 
 window.frm_show_div = ( div, value, showIf, classId ) => {
 	if ( value == showIf ) {
