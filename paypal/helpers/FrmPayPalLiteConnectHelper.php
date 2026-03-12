@@ -843,6 +843,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @param string $currency
 	 * @param string $payment_source Valid values are 'card', 'paypal'.
 	 * @param array  $payer
+	 * @param string $shipping_preference
 	 *
 	 * @return false|object
 	 */
