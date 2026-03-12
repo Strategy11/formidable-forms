@@ -31,7 +31,11 @@
 
 		let cardFields = {};
 
-		if ( ! isRecurring ) {
+		const { layout } = getPayPalSettings()[ 0 ];
+		const cardFieldsAreSupported = layout !== 'checkout_only' && 'function' === typeof window.paypal.CardFields && ! isRecurring;
+		const buttonIsEnabled = layout !== 'card_only' && 'function' === typeof window.paypal.Buttons;
+
+		if ( cardFieldsAreSupported ) {
 			cardFields = window.paypal.CardFields(
 				{
 					onApprove,
@@ -79,11 +83,8 @@
 		// TODO: Make these IDs unique.
 		cardElement.innerHTML = '';
 
-		const { layout } = getPayPalSettings()[ 0 ];
+		const cardFieldsEligible = cardFieldsAreSupported && cardFields.isEligible();
 
-		const cardFieldsEligible = cardFields.isEligible() && layout !== 'checkout_only';
-
-		const buttonIsEnabled = getPayPalSettings()[ 0 ].layout !== 'card_only'; // TODO: Put this behind a setting.
 		if ( buttonIsEnabled ) {
 			const buttonContainer = document.createElement( 'div' );
 			buttonContainer.id = 'paypal-button-container';

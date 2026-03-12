@@ -990,13 +990,26 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$query_args['vault'] = 'true';
 		}
 
-		$components = array(
-			'buttons',
-			'card-fields',
-			'messages',
-			// 'payment-fields',
-			// 'marks',
-		);
+		$include_buttons     = false;
+		$include_card_fields = false;
+		$include_messages    = true;
+
+		foreach ( $action_settings as $action ) {
+			if ( 'card_and_checkout' === $action['layout'] ) {
+				$include_buttons     = true;
+				$include_card_fields = true;
+				break;
+			}
+
+			if ( 'card_only' === $action['layout'] ) {
+				$include_card_fields = true;
+				continue;
+			}
+
+			if ( 'checkout_only' === $action['layout'] ) {
+				$include_buttons = true;
+			}
+		}
 
 		switch ( $action->post_content['pay_later'] ?? 'auto' ) {
 			case 'off':
@@ -1005,11 +1018,25 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			case 'no-messaging':
 				// PayPal throws a  TypeError: can't access property "PAGE_TYPE", trackingDetails is undefined error
 				// a lot of the time if you include messages. If you see this error, try using this 'no-messaging' option.
-				$components = array_diff( $components, array( 'messages' ) );
+				$include_messages = false;
 				break;
 		}
 
-		$components[]             = 'googlepay';
+		$components = array();
+
+		if ( $include_buttons ) {
+			$components[] = 'buttons';
+			$components[] = 'googlepay';
+		}
+
+		if ( $include_card_fields ) {
+			$components[] = 'card-fields';
+		}
+
+		if ( $include_messages ) {
+			$components[] = 'messages';
+		}
+
 		$query_args['components'] = implode( ',', $components );
 		$locale                   = self::get_paypal_locale();
 
@@ -1069,13 +1096,15 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		wp_enqueue_script(
-			'google-pay',
-			'https://pay.google.com/gp/p/js/pay.js',
-			array(),
-			'1.0',
-			false
-		);
+		if ( $include_buttons ) {
+			wp_enqueue_script(
+				'google-pay',
+				'https://pay.google.com/gp/p/js/pay.js',
+				array(),
+				'1.0',
+				false
+			);
+		}
 
 		$paypal_vars = array(
 			'formId'      => $form_id,
