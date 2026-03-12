@@ -9,14 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="frm_email_addon_menu" class="frm-limited-actions">
 	<div class="frm-h-stack">
-		<div class="frm-style-tabs-wrapper">
+		<div class="frm-style-tabs-wrapper" data-filter-target="#frm-actions-filter-content">
 			<div class="frm-tabs-delimiter"><span class="frm-tabs-active-underline"></span></div>
 			<div class="frm-tabs-navs">
-				<ul class="frm-flex-box">
-					<li class="frm-active"><?php esc_html_e( 'All', 'formidable' ); ?></li>
-					<li><?php esc_html_e( 'Featured', 'formidable' ); ?></li>
-					<?php foreach ( $groups as $group ) { ?>
-						<li><?php echo esc_html( $group['name'] ); ?></li>
+				<ul class="frm-h-stack-xs frm-children-px-sm">
+					<li class="frm-active" data-filter="all"><?php esc_html_e( 'All', 'formidable' ); ?></li>
+					<li data-filter="misc"><?php esc_html_e( 'Featured', 'formidable' ); ?></li>
+					<?php foreach ( $groups as $group_key => $group ) { ?>
+						<?php if ( ! empty( $group['name'] ) ) { ?>
+							<li data-filter="<?php echo esc_attr( $group_key ); ?>"><?php echo esc_html( $group['name'] ); ?></li>
+						<?php } ?>
 					<?php } ?>
 				</ul>
 			</div>
