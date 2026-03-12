@@ -217,7 +217,7 @@ class FrmPayPalLiteAppController {
 			case 'no_shipping':
 				return 'NO_SHIPPING';
 
-			case 'use_paypal_account_data': 
+			case 'use_paypal_account_data':
 			default:
 				return 'GET_FROM_FILE';
 		}

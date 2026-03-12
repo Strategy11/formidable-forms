@@ -589,6 +589,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				'first' => ! empty( $payer->name->given_name ) ? $payer->name->given_name : '',
 				'last'  => ! empty( $payer->name->surname ) ? $payer->name->surname : '',
 			);
+
 			if ( array_filter( $new_value ) ) {
 				$updates[ (int) $settings['paypal_order_name'] ] = $new_value;
 			}
@@ -597,6 +598,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// Address (address field with line1/line2/city/state/zip/country sub-keys).
 		if ( ! empty( $settings['paypal_order_address'] ) ) {
 			$shipping = self::get_shipping_address_from_response( $response );
+
 			if ( $shipping ) {
 				$new_value = array(
 					'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
@@ -606,6 +608,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 					'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
 					'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
 				);
+
 				if ( array_filter( $new_value ) ) {
 					$updates[ (int) $settings['paypal_order_address'] ] = $new_value;
 				}
@@ -2205,6 +2208,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	private static function maybe_create_order_data_field( $settings, $form_id, $setting_key, $field_name, $field_type ) {
 		if ( ! empty( $settings[ $setting_key ] ) ) {
 			$existing = FrmField::getOne( (int) $settings[ $setting_key ] );
+
 			if ( $existing ) {
 				return $settings;
 			}

@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $limit = $action_control->action_options['limit'];
+
 if ( 'paypal' === $action_control->id_base ) {
 	// The PayPal add-on may overwrite this so change it back.
 	$limit = 1;
