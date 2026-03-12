@@ -2170,7 +2170,7 @@ BEFORE_HTML;
 		$form_name = is_object( $form ) ? $form->name : $form['name'];
 
 		if ( ! $form_name ) {
-			return FrmFormsHelper::get_no_title_text();
+			return self::get_no_title_text();
 		}
 
 		if ( ! $length ) {
