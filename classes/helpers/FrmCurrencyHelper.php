@@ -111,7 +111,7 @@ class FrmCurrencyHelper {
 	 * @param string $amount
 	 * @param array  $currency
 	 *
-	 * @return float
+	 * @return string
 	 */
 	private static function maybe_use_decimal( $amount, $currency ) {
 		if ( $currency['thousand_separator'] !== '.' ) {

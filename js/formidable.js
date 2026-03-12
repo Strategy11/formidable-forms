@@ -1733,7 +1733,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Check to make sure sure the quantity field value is within the min and max values.
+	 * Check to make sure the quantity field value is within the min and max values.
 	 *
 	 * @param {HTMLElement} input
 	 * @return {number}
@@ -1753,7 +1753,7 @@ function frmFrontFormJS() {
 		let min = input.hasAttribute( 'min' ) ? parseFloat( input.getAttribute( 'min' ) ) : 0;
 
 		max = isNaN( max ) ? 0 : max;
-		min = isNaN( min ) ? 0 : ( min < 0 ? 0 : min );
+		min = isNaN( min ) ? 0 : Math.max( 0, min );
 
 		if ( val < min ) {
 			input.value = min;
@@ -1769,7 +1769,7 @@ function frmFrontFormJS() {
 	}
 
 	function triggerChange( input, fieldKey ) {
-		if ( typeof fieldKey === 'undefined' ) {
+		if ( fieldKey === undefined ) {
 			fieldKey = 'dependent';
 		}
 
@@ -1786,11 +1786,11 @@ function frmFrontFormJS() {
 	function calcProductsTotal( e ) {
 		const formTotals = [];
 
-		if ( typeof __FRMCURR  === 'undefined' ) {
+		if ( typeof __FRMCURR === 'undefined' ) {
 			return;
 		}
 
-		if ( undefined !== e && 'undefined' !== typeof e.target && ( 'keyup' === e.type || 'change' === e.type ) ) {
+		if ( undefined !== e && e.target !== undefined && ( 'keyup' === e.type || 'change' === e.type ) ) {
 			// an event has been fired
 			const el = e.target;
 			if ( el.hasAttribute( 'data-frmprice' ) && el instanceof HTMLInputElement && 'text' === el.type ) {
@@ -1805,7 +1805,10 @@ function frmFrontFormJS() {
 		}
 
 		totalFields.each( function() {
-			let currency, formId, formatted, total = 0;
+			let currency;
+			let formId;
+			let formatted;
+			let total = 0;
 			const totalField = jQuery( this );
 			let $form = totalField.closest( 'form' );
 
@@ -1823,14 +1826,14 @@ function frmFrontFormJS() {
 				$form.find( 'input[data-frmprice],select:has([data-frmprice])' ).each( function() {
 					let quantity = 0, price = 0;
 					const $this = jQuery( this );
+					const isUserDef = 'text' === this.type;
+					const isSingle = 'hidden' === this.type;
 
 					if ( this.tagName === 'SELECT' ) {
 						if ( this.selectedIndex !== -1 ) {
 							price = this.options[ this.selectedIndex ].getAttribute( 'data-frmprice' );
 						}
 					} else {
-						const isUserDef = 'text' === this.type;
-						const isSingle = 'hidden' === this.type;
 						if ( ( ! isUserDef && ! isSingle ) && ! $this.is( ':checked' ) ) {
 							return;
 						}
@@ -1927,7 +1930,7 @@ function frmFrontFormJS() {
 	 * @since 4.04
 	 */
 	function getCurrency( formId ) {
-		if ( typeof __FRMCURR  !== 'undefined' && typeof __FRMCURR[ formId ] !== 'undefined' ) {
+		if ( typeof __FRMCURR !== 'undefined' && typeof __FRMCURR[ formId ] !== 'undefined' ) {
 			return __FRMCURR[ formId ];
 		}
 	}
@@ -1982,7 +1985,7 @@ function frmFrontFormJS() {
 
 			// convert to array if necessary cos of existing fields that are already using single product fields
 			ids = 'string' === typeof ids ? [ ids.toString() ] : ids;
-			if ( ids.indexOf( fieldID ) > -1 ) {
+			if ( ids.includes( fieldID ) ) {
 				quantity = this;
 				return false;
 			}
@@ -2007,7 +2010,7 @@ function frmFrontFormJS() {
 		if ( ! price ) {
 			return 0;
 		}
-		price = price + ''; // convert to string just to be sure
+		price = `${price}`; // convert to string just to be sure
 
 		const regex = getRegexForPrice( currency );
 
@@ -2056,10 +2059,11 @@ function frmFrontFormJS() {
 	 * @since 4.04
 	 */
 	function maybeUseDecimal( amount, currency ) {
-		let usedForDecimal, amountParts;
-		if ( currency.thousand_separator == '.' ) {
+		let usedForDecimal;
+		let amountParts;
+		if ( '.' === currency.thousand_separator ) {
 			amountParts = amount.split( '.' );
-			usedForDecimal = ( 2 == amountParts.length && 2 == amountParts[1].length );
+			usedForDecimal = ( 2 === amountParts.length && 2 === amountParts[1].length );
 			if ( usedForDecimal ) {
 				amount = amount.replace( '.', currency.decimal_separator );
 			}
@@ -2086,20 +2090,20 @@ function frmFrontFormJS() {
 		const pos = price.indexOf( '.' );
 
 		if ( pos === -1 ) {
-			price = price + '.';
+			price = `${price}.`;
 
 			for ( let n = 0; n < currency.decimals; ++n ) {
-				price += '0';
+				price += `0`;
 			}
 		} else {
 			const decimalsString = price.substring( pos + 1 );
 			if ( decimalsString.length < currency.decimals ) {
 				if ( decimalsString.length < 2 ) {
-					price += '0';
+					price += `0`;
 				}
 
 				for ( let n = 2; n < currency.decimals; ++n ) {
-					price += '0';
+					price += `0`;
 				}
 			}
 		}
