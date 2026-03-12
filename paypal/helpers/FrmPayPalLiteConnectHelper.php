@@ -135,7 +135,7 @@ class FrmPayPalLiteConnectHelper {
 		echo '<b>' . esc_html__( 'Enabled scopes:', 'formidable' ) . '</b>';
 		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
 		echo '<li>';
-		echo implode( '</li><li>', $status->oauth_integrations[0]->oauth_third_party[0]->scopes );
+		echo implode( '</li><li>', array_map( 'esc_html', $status->oauth_integrations[0]->oauth_third_party[0]->scopes ) );
 		echo '</li>';
 		echo '</ul>';
 
@@ -233,7 +233,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @param string
+	 * @param string $email
 	 *
 	 * @return void
 	 */
