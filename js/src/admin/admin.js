@@ -9404,9 +9404,12 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( toSearch === 'frm-action' && searchText !== '' ) {
-			const addons = document.getElementById( 'frm_email_addon_menu' ).classList;
-			addons.remove( 'frm-all-actions' );
-			addons.add( 'frm-limited-actions' );
+			const addonMenu = document.getElementById( 'frm_email_addon_menu' );
+			// Skip class switch when filter tabs handle visibility.
+			if ( ! addonMenu.querySelector( '[data-filter-target]' ) ) {
+				addonMenu.classList.remove( 'frm-all-actions' );
+				addonMenu.classList.add( 'frm-limited-actions' );
+			}
 		}
 
 		for ( i = 0; i < items.length; i++ ) {
