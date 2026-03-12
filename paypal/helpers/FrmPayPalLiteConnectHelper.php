@@ -135,7 +135,11 @@ class FrmPayPalLiteConnectHelper {
 		echo '<b>' . esc_html__( 'Enabled scopes:', 'formidable' ) . '</b>';
 		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
 		echo '<li>';
-		echo implode( '</li><li>', array_map( 'esc_html', $status->oauth_integrations[0]->oauth_third_party[0]->scopes ) );
+		/**
+		 * @var string[] $scopes
+		 */
+		$scopes = $status->oauth_integrations[0]->oauth_third_party[0]->scopes;
+		echo implode( '</li><li>', array_map( 'esc_html', $scopes ) );
 		echo '</li>';
 		echo '</ul>';
 
@@ -248,6 +252,11 @@ class FrmPayPalLiteConnectHelper {
 		echo esc_html( $email );
 	}
 
+	/**
+	 * @param string $merchant_id
+	 *
+	 * @return void
+	 */
 	private static function echo_merchant_id( $merchant_id ) {
 		echo '<br>';
 		echo '<b>' . esc_html__( 'Merchant ID:', 'formidable' ) . '</b>';
@@ -737,6 +746,9 @@ class FrmPayPalLiteConnectHelper {
 			return array();
 		}
 
+		/**
+		 * @var array $data->event_ids
+		 */
 		return $data->event_ids;
 	}
 
@@ -909,6 +921,9 @@ class FrmPayPalLiteConnectHelper {
 		return self::post_with_authenticated_body( 'create_vault_setup_token' );
 	}
 
+	/**
+	 * @return false|object
+	 */
 	public static function get_seller_status() {
 		$mode   = self::get_mode_value_from_post();
 		$status = get_option( self::get_paypal_seller_status_option_name( $mode ) );
@@ -920,10 +935,24 @@ class FrmPayPalLiteConnectHelper {
 		return self::post_with_authenticated_body( 'get_seller_status' );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param string $capture_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_capture( $capture_id ) {
 		return self::post_with_authenticated_body( 'get_capture', compact( 'capture_id' ) );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param string $order_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_order( $order_id ) {
 		return self::post_with_authenticated_body( 'get_order', compact( 'order_id' ) );
 	}
