@@ -2155,4 +2155,28 @@ BEFORE_HTML;
 
 		return false;
 	}
+
+	/**
+	 * Returns the form name or the no title text if the form name is empty.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|stdClass $form
+	 * @param int            $length
+	 *
+	 * @return string
+	 */
+	public static function get_form_name( $form, $length = 0 ) {
+		$form_name = is_object( $form ) ? $form->name : $form['name'];
+
+		if ( ! $form_name ) {
+			return FrmFormsHelper::get_no_title_text();
+		}
+
+		if ( ! $length ) {
+			return $form_name;
+		}
+
+		return FrmAppHelper::truncate( $form_name, $length );
+	}
 }
