@@ -779,7 +779,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$subscription_id = FrmAppHelper::get_post_param( 'paypal_subscription_id', '', 'sanitize_text_field' );
 
 		if ( ! $subscription_id ) {
-			return __( 'No PayPal subscription ID found. ' . print_r( $_POST, true ), 'formidable' );
+			return __( 'No PayPal subscription ID found.', 'formidable' );
 		}
 
 		$subscription = FrmPayPalLiteConnectHelper::get_subscription( $subscription_id );
@@ -2258,7 +2258,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// End the payment settings section.
 		echo '</div>';
 
-		FrmPayPalLiteActionsController::add_button_settings_section( $action_control, $form_action );
+		self::add_button_settings_section( $action_control, $form_action );
 
 		// Open up a div tag since the payment section is closed after this and we already ended the section.
 		// This results in an empty div tag but it allows us to inject these options without requiring
