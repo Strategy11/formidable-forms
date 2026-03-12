@@ -308,6 +308,7 @@ class FrmField {
 				'message'      => esc_html__( 'Protect sensitive data by storing field values server-side only, preventing users from viewing or manipulating them in their browser.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'virtual-field-preview.webp',
 				'learn-more'   => '/virtual',
+				'is_new'       => self::field_is_new( 'virtual' ),
 			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
@@ -381,7 +382,8 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			'coupon' => '2026-01-13',
+			'coupon'  => '2026-01-13',
+			'virtual' => '2026-03-10',
 		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
