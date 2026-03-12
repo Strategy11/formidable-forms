@@ -128,8 +128,7 @@ zip -r $zipname $destination \
 	-x "*/eslint-rules/*" \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
-	-x "formidable/resources/*" \
-	-x "formidable/paypal/*"
+	-x "formidable/resources/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
