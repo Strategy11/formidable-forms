@@ -150,7 +150,7 @@ class FrmEntryValidate {
 
 		);
 		$args  = wp_parse_args( $args, $defaults );
-		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
+		$value = ! empty( $args['parent_field_id'] ) ? $values : ( $values['item_meta'][ $args['id'] ] ?? '' );
 
 		// Check for values in "Other" fields
 		FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );
@@ -626,8 +626,7 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function is_spam_bot() {
-		$ip = FrmAppHelper::get_ip_address();
-		return empty( $ip );
+		return ! FrmAppHelper::get_ip_address();
 	}
 
 	/**

@@ -20,7 +20,7 @@ if ( ! isset( $frm_style ) ) {
 $styles           = $frm_style->get_all();
 $default_style    = $frm_style->get_default_style( $styles );
 $defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
-$important        = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important        = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
 $use_chosen_js    = FrmStylesHelper::use_chosen_js();
 
@@ -735,7 +735,7 @@ foreach ( $styles as $style ) {
 }
 
 // Set it again since it may have been overridden.
-$important = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 ?>
 
 .frm_ajax_loading{
