@@ -17,12 +17,18 @@ export class frmTabsNavigator {
 		this.slides = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
 		this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
 		this.resizeObserver = null;
+		this.filterTarget = this.wrapper.dataset.filterTarget
+			? document.querySelector( this.wrapper.dataset.filterTarget )
+			: null;
 
 		this.init();
 	}
 
 	init() {
-		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || null === this.slideTrack || ! this.slides.length ) {
+		const isFilterMode = null !== this.filterTarget;
+		const hasSlideTrack = null !== this.slideTrack && this.slides.length;
+
+		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || ( ! isFilterMode && ! hasSlideTrack ) ) {
 			return;
 		}
 
@@ -39,6 +45,19 @@ export class frmTabsNavigator {
 		window.addEventListener( 'beforeunload', this.cleanupObservers );
 	}
 
+	/**
+	 * Filters content groups by matching data-filter value against data-group attributes.
+	 * Sets data-active-filter on the container for CSS-driven visual changes.
+	 *
+	 * @param {string} filterValue The filter key matching data-group on content groups, or 'all'.
+	 */
+	applyFilter( filterValue ) {
+		this.filterTarget.dataset.activeFilter = filterValue;
+		this.filterTarget.querySelectorAll( '[data-group]' ).forEach( group => {
+			group.classList.toggle( 'frm-filter-hidden', 'all' !== filterValue && group.dataset.group !== filterValue );
+		} );
+	}
+
 	onNavClick( event, index ) {
 		const navItem = event.currentTarget;
 
@@ -47,6 +66,12 @@ export class frmTabsNavigator {
 		this.removeActiveClassnameFromNavs();
 		navItem.classList.add( 'frm-active' );
 		this.initSlideTrackUnderline( navItem );
+
+		if ( this.filterTarget ) {
+			this.applyFilter( navItem.dataset.filter || 'all' );
+			return;
+		}
+
 		this.changeSlide( index );
 
 		// Handle special case for frm_insert_fields_tab
