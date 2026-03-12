@@ -1807,7 +1807,7 @@ function frmFrontFormJS() {
 		totalFields.each( function() {
 			let currency, formId, formatted, total = 0;
 			const totalField = jQuery( this );
-			const $form = totalField.closest( 'form' );
+			let $form = totalField.closest( 'form' );
 
 			if ( ! $form.length ) {
 				return;
@@ -1833,7 +1833,6 @@ function frmFrontFormJS() {
 					} else {
 						isUserDef = 'text' === this.type;
 						isSingle = 'hidden' === this.type;
-						$this = jQuery( this );
 						if ( ( ! isUserDef && ! isSingle ) && ! $this.is( ':checked' ) ) {
 							return;
 						}
@@ -1853,7 +1852,7 @@ function frmFrontFormJS() {
 					}
 
 					total += price;
-			});
+				});
 
 				formTotals[ formId ] = total;
 			}
