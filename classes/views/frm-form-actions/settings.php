@@ -36,70 +36,65 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 
-	<?php
-	$displayed_actions = array();
+	<div id="frm-actions-filter-content">
+		<?php
+		$displayed_actions = array();
 
-	foreach ( $groups as $group ) {
-		if ( ! empty( $group['name'] ) ) {
+		foreach ( $groups as $group_key => $group ) {
 			?>
-			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
-			<?php
-		}
+			<div data-group="<?php echo esc_attr( $group_key ); ?>">
+				<?php if ( ! empty( $group['name'] ) ) { ?>
+					<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
+				<?php } ?>
 
-		if ( ! isset( $group['actions'] ) ) {
-			$group['actions'] = array();
-		}
-		?>
-		<ul class="frm_actions_list frm-list-grid-layout">
-			<?php
-			foreach ( $action_controls as $action_control ) {
-				if ( in_array( $action_control->id_base, $displayed_actions, true ) || ! in_array( $action_control->id_base, $group['actions'], true ) ) {
-					continue;
-				}
-
-				$displayed_actions[] = $action_control->id_base;
-				FrmFormActionsController::show_action_icon_link( $action_control, $allowed );
-			}
-
-			foreach ( $group['actions'] as $action ) {
-				if ( in_array( $action, $displayed_actions, true ) ) {
-					continue;
+				<?php
+				if ( ! isset( $group['actions'] ) ) {
+					$group['actions'] = array();
 				}
 				?>
-					<li class="frm-card-item frm-action frm-not-installed">
-						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
-							<span class="frm-outer-circle">
-								<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
-								<?php
-								$icon_atts = array();
+				<ul class="frm_actions_list frm-list-grid-layout">
+					<?php
+					foreach ( $action_controls as $action_control ) {
+						if ( in_array( $action_control->id_base, $displayed_actions, true ) || ! in_array( $action_control->id_base, $group['actions'], true ) ) {
+							continue;
+						}
 
-								if ( isset( $group['color'] ) ) {
-									$icon_atts = array(
-										'style' => '--primary-700:' . $group['color'],
-									);
-								}
-								FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', $icon_atts );
-								?>
-								</span>
-							</span>
-							<?php echo esc_html( $action ); ?>
-						</a>
-					</li>
-				<?php
-			}//end foreach
-			?>
-		</ul>
+						$displayed_actions[] = $action_control->id_base;
+						FrmFormActionsController::show_action_icon_link( $action_control, $allowed );
+					}
+
+					foreach ( $group['actions'] as $action ) {
+						if ( in_array( $action, $displayed_actions, true ) ) {
+							continue;
+						}
+						?>
+							<li class="frm-card-item frm-action frm-not-installed">
+								<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
+									<span class="frm-outer-circle">
+										<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
+										<?php
+										$icon_atts = array();
+
+										if ( isset( $group['color'] ) ) {
+											$icon_atts = array(
+												'style' => '--primary-700:' . $group['color'],
+											);
+										}
+										FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', $icon_atts );
+										?>
+										</span>
+									</span>
+									<?php echo esc_html( $action ); ?>
+								</a>
+							</li>
+						<?php
+					}//end foreach
+					?>
+				</ul>
+			</div>
 		<?php
-	}//end foreach
-	?>
-	<div class="clear"></div>
-	<a href="#" id="frm-show-groups">
-		<?php esc_html_e( 'Show all form actions', 'formidable' ); ?>
-	</a>
-	<a href="#" id="frm-hide-groups">
-		<?php esc_html_e( 'Hide extra form actions', 'formidable' ); ?>
-	</a>
-	<div class="clear"></div>
+		}//end foreach
+		?>
 </div>
 
 <?php
