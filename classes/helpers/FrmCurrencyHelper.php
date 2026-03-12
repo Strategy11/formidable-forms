@@ -85,7 +85,7 @@ class FrmCurrencyHelper {
 	 * @param string $price
 	 * @param array  $currency
 	 *
-	 * @return float
+	 * @return string
 	 */
 	public static function prepare_price( $price, $currency ) {
 		$price = trim( $price );

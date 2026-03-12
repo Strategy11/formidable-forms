@@ -1810,7 +1810,7 @@ function frmFrontFormJS() {
 			let formatted;
 			let total = 0;
 			const totalField = jQuery( this );
-			let $form = totalField.closest( 'form' );
+			const $form = totalField.closest( 'form' );
 
 			if ( ! $form.length ) {
 				return;
