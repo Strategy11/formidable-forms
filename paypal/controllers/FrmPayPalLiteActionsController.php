@@ -139,7 +139,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$response['error'] = $charge;
 		}
 
-		if ( empty( self::$active_order_id ) ) {
+		if ( ! self::$active_order_id ) {
 			return $response;
 		}
 
@@ -324,9 +324,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 *
 		 * @since x.x
 		 *
-		 * @param bool   $is_liability_error Whether the liability shift is an error.
-		 * @param string $liability_shift    The liability shift value. By default 'NO' and 'UNKNOWN' are errors.
-		 * @param object $order              The order object.
+		 * @param bool     $is_liability_error Whether the liability shift is an error.
+		 * @param string   $liability_shift    The liability shift value. By default 'NO' and 'UNKNOWN' are errors.
+		 * @param stdClass $order              The order object.
 		 */
 		return (bool) apply_filters(
 			'frm_paypal_is_liability_error',
@@ -392,9 +392,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool
 	 */
 	private static function validate_subscription_amount( $subscription, $expected_amount ) {
-		$subscription_amount = $subscription->billing_info->last_payment->amount->value
-			?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value
-			?? '';
+		$subscription_amount = $subscription->billing_info->last_payment->amount->value ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value ?? '';
 
 		if ( ! $subscription_amount ) {
 			echo 'No subscription amount';
@@ -449,16 +447,15 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	private static function sync_entry_data_with_capture_response( $response, $atts ) {
-		$entry    = $atts['entry'];
-		$action   = $atts['action'];
-		$settings = $action->post_content;
-		$mode     = $settings['entry_data_sync'] ?? 'overwrite';
-
 		if ( ! isset( $response->payer ) || ! is_object( $response->payer ) ) {
 			return;
 		}
 
-		$payer = $response->payer;
+		$entry    = $atts['entry'];
+		$action   = $atts['action'];
+		$settings = $action->post_content;
+		$mode     = $settings['entry_data_sync'] ?? 'overwrite';
+		$payer    = $response->payer;
 
 		// TODO: Figuer out how to hide these fields from the form.
 		if ( 'new_fields' === $mode ) {
@@ -478,15 +475,17 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			}
 		}
 
-		if ( class_exists( 'FrmLog' ) ) {
-			$log = new FrmLog();
-			$log->add(
-				array(
-					'title'   => 'PayPal Lite: Sync Entry Data with Capture Response',
-					'content' => print_r( $updates, true ),
-				)
-			);
+		if ( ! class_exists( 'FrmLog' ) ) {
+			return;
 		}
+
+		$log = new FrmLog();
+		$log->add(
+			array(
+				'title'   => 'PayPal Lite: Sync Entry Data with Capture Response',
+				'content' => print_r( $updates, true ),
+			)
+		);
 	}
 
 	/**
@@ -553,15 +552,17 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			}
 		}
 
-		if ( class_exists( 'FrmLog' ) ) {
-			$log = new FrmLog();
-			$log->add(
-				array(
-					'title'   => 'PayPal Lite: Sync Entry Data with Subscription Response',
-					'content' => print_r( $updates, true ),
-				)
-			);
+		if ( ! class_exists( 'FrmLog' ) ) {
+			return;
 		}
+
+		$log = new FrmLog();
+		$log->add(
+			array(
+				'title'   => 'PayPal Lite: Sync Entry Data with Subscription Response',
+				'content' => print_r( $updates, true ),
+			)
+		);
 	}
 
 	/**
@@ -596,22 +597,24 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		// Address (address field with line1/line2/city/state/zip/country sub-keys).
-		if ( ! empty( $settings['paypal_order_address'] ) ) {
-			$shipping = self::get_shipping_address_from_response( $response );
+		if ( empty( $settings['paypal_order_address'] ) ) {
+			return $updates;
+		}
 
-			if ( $shipping ) {
-				$new_value = array(
-					'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
-					'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
-					'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
-					'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
-					'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
-					'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
-				);
+		$shipping = self::get_shipping_address_from_response( $response );
 
-				if ( array_filter( $new_value ) ) {
-					$updates[ (int) $settings['paypal_order_address'] ] = $new_value;
-				}
+		if ( $shipping ) {
+			$new_value = array(
+				'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
+				'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
+				'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
+				'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
+				'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
+				'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
+			);
+
+			if ( array_filter( $new_value ) ) {
+				$updates[ (int) $settings['paypal_order_address'] ] = $new_value;
 			}
 		}
 
@@ -680,34 +683,38 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 						$updates[ $last_name_field_id ] = $payer->name->surname;
 					}
 				}
-			}
-		}
+			}//end if
+		}//end if
 
 		// Address: pull from the first purchase unit's shipping address.
-		if ( ! empty( $settings['billing_address'] ) ) {
-			$field_id = (int) $settings['billing_address'];
-			$shipping = self::get_shipping_address_from_response( $response );
+		if ( empty( $settings['billing_address'] ) ) {
+			return $updates;
+		}
 
-			if ( $shipping ) {
-				$new_value = array(
-					'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
-					'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
-					'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
-					'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
-					'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
-					'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
-				);
+		$field_id = (int) $settings['billing_address'];
+		$shipping = self::get_shipping_address_from_response( $response );
 
-				if ( ! array_filter( $new_value ) ) {
-					return $updates;
-				}
+		if ( ! $shipping ) {
+			return $updates;
+		}
 
-				$current = $entry->metas[ $field_id ] ?? array();
+		$new_value = array(
+			'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
+			'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
+			'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
+			'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
+			'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
+			'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
+		);
 
-				if ( $current !== $new_value ) {
-					$updates[ $field_id ] = $new_value;
-				}
-			}
+		if ( ! array_filter( $new_value ) ) {
+			return $updates;
+		}
+
+		$current = $entry->metas[ $field_id ] ?? array();
+
+		if ( $current !== $new_value ) {
+			$updates[ $field_id ] = $new_value;
 		}
 
 		return $updates;
@@ -2185,8 +2192,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_name', __( 'PayPal Name', 'formidable' ), 'name' );
 
 		if ( is_callable( 'FrmProAddressesController::get_country_code' ) ) {
-            return self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_address', __( 'PayPal Address', 'formidable' ), 'address' );
-        }
+			return self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_address', __( 'PayPal Address', 'formidable' ), 'address' );
+		}
 
 		return $settings;
 	}
@@ -2216,14 +2223,16 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$field_id = self::add_a_field( $form_id, $field_type, $field_name );
 
-		if ( $field_id ) {
-			$field                                         = FrmField::getOne( $field_id );
-			$field->field_options['is_paypal_order_field'] = 1;
-
-			FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
-
-			$settings[ $setting_key ] = $field_id;
+		if ( ! $field_id ) {
+			return $settings;
 		}
+
+		$field = FrmField::getOne( $field_id );
+		$field->field_options['is_paypal_order_field'] = 1;
+
+		FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
+
+		$settings[ $setting_key ] = $field_id;
 
 		return $settings;
 	}
@@ -2235,5 +2244,25 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// TODO: This will need logic for a production client ID as well.
 		// This is currently just for testing.
 		return 'AYTiIIchQiekyGhJouWoLapPfjijirOtKHSN255SLhcP0TIaWBID-zxsYDaNmP4fXL6YcQxiSIMS0Lwu';
+	}
+
+	/**
+	 * @param array $atts
+	 *
+	 * @return void
+	 */
+	public static function show_paypal_button_settings( $atts ) {
+		$form_action    = $atts['form_action'];
+		$action_control = $atts['action_control'];
+
+		// End the payment settings section.
+		echo '</div>';
+
+		FrmPayPalLiteActionsController::add_button_settings_section( $action_control, $form_action );
+
+		// Open up a div tag since the payment section is closed after this and we already ended the section.
+		// This results in an empty div tag but it allows us to inject these options without requiring
+		// any updates in the payments submodule.
+		echo '<div>';
 	}
 }

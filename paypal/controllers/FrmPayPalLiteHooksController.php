@@ -39,11 +39,7 @@ class FrmPayPalLiteHooksController {
 
 				$is_paypal_order_field = FrmField::get_option( $field, 'is_paypal_order_field' );
 
-				if ( $is_paypal_order_field ) {
-					return false;
-				}
-
-				return $show_normal_field_type;
+				return $is_paypal_order_field ? false : $show_normal_field_type;
 			},
 			10,
 			3

@@ -125,8 +125,8 @@ class FrmPayPalLiteAppController {
 		$shipping_preference = self::get_shipping_preference( $action );
 
 		// PayPal expects the amount in a format like 10.00, so format it.
-		$amount         = number_format( floatval( $amount ), 2, '.', '' );
-		$currency       = strtoupper( $action->post_content['currency'] );
+		$amount   = number_format( floatval( $amount ), 2, '.', '' );
+		$currency = strtoupper( $action->post_content['currency'] );
 
 		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference );
 

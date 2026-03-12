@@ -141,7 +141,7 @@ class FrmFormAction {
 			die( 'You are not allowed to call this page directly.' );
 		}
 
-		$this->id_base     = strtolower( $id_base );
+		$this->id_base = strtolower( $id_base );
 
 		/**
 		 * @since x.x

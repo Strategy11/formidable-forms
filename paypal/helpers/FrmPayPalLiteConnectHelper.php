@@ -232,6 +232,11 @@ class FrmPayPalLiteConnectHelper {
 		return false;
 	}
 
+	/**
+	 * @param string
+	 *
+	 * @return void
+	 */
 	private static function echo_email( $email ) {
 		if ( ! $email ) {
 			return;
@@ -523,6 +528,11 @@ class FrmPayPalLiteConnectHelper {
 		return self::get_paypal_connect_option_name( 'client_password', $mode );
 	}
 
+	/**
+	 * @param string $mode
+	 *
+	 * @return string
+	 */
 	private static function get_paypal_seller_status_option_name( $mode = 'auto' ) {
 		return self::get_paypal_connect_option_name( 'seller_status', $mode );
 	}
@@ -838,7 +848,6 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference ) {
 		$brand_name = self::get_brand_name();
-
 		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference' ) );
 	}
 
@@ -892,7 +901,6 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	public static function create_subscription( $data ) {
 		$data['brand_name'] = self::get_brand_name();
-
 		return self::post_with_authenticated_body( 'create_subscription', compact( 'data' ) );
 	}
 
