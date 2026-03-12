@@ -410,7 +410,8 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	private static function get_url_to_connect_server() {
 		// Return 'https://api.strategy11.com/';
-		return 'https://dev-site.local/';
+		// return 'https://dev-site.local/';
+		return 'https://qa.formidableforms.com/paypal/';
 	}
 
 	/**
