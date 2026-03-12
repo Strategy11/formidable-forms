@@ -1031,6 +1031,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
 
+		$has_break = FrmAppHelper::pro_is_installed() && (bool) FrmField::get_all_types_in_form( $form_id, 'break' );
+
 		add_filter(
 			'script_loader_tag',
 			/**
@@ -1039,9 +1041,16 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 *
 			 * @return string
 			 */
-			function ( $tag, $handle ) {
+			function ( $tag, $handle ) use ( $has_break ) {
 				if ( 'paypal-sdk' === $handle ) {
-					return str_replace( ' src=', ' data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '" src=', $tag );
+					$attributes = ' data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '"';
+					if ( $has_break ) {
+						$attributes .= ' async';
+					}
+					return str_replace( ' src=', $attributes . ' src=', $tag );
+				}
+				if ( $has_break && 'formidable-paypal' === $handle ) {
+					return str_replace( ' src=', ' async src=', $tag );
 				}
 				return $tag;
 			},

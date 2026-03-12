@@ -908,11 +908,36 @@
 	}
 
 	/**
+	 * Check if the current form action type should trigger payment processing.
+	 * Prevents payment processing when navigating backward on multi-page forms.
+	 *
+	 * @return {boolean} True if current action type should be processed.
+	 */
+	function currentActionTypeShouldBeProcessed() {
+		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
+
+		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
+			return 'create' === action;
+		}
+
+		return window.frmProForm.currentActionTypeShouldBeProcessed(
+			action,
+			{
+				thisForm
+			}
+		);
+	}
+
+	/**
 	 * Handle form submission with card fields.
 	 *
 	 * @param {Event} event
 	 */
 	async function handleCardSubmission( event ) {
+		if ( ! currentActionTypeShouldBeProcessed() ) {
+			return;
+		}
+
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -1096,16 +1121,24 @@
 	}
 
 	document.addEventListener( 'DOMContentLoaded', async function() {
-		if ( ! window.paypal ) {
-			console.error( 'PayPal JS SDK failed to load properly' );
+		if ( window.paypal ) {
+			paypalInit();
 			return;
 		}
 
-		paypalInit();
+		const interval = setInterval(
+			function() {
+				if ( window.paypal ) {
+					paypalInit();
+					clearInterval( interval );
+				}
+			},
+			50
+		);
+	} );
 
-		jQuery( document ).on( 'frmPageChanged', function() {
-			paypalInit();
-		} );
+	jQuery( document ).on( 'frmPageChanged', function() {
+		paypalInit();
 	} );
 }() );
 
