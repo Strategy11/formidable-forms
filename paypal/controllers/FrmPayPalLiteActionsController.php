@@ -994,21 +994,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$include_card_fields = false;
 		$include_messages    = true;
 
-		foreach ( $action_settings as $action ) {
-			if ( 'card_and_checkout' === $action['layout'] ) {
+		switch ( $action->post_content['layout'] ) {
+			case 'card_and_checkout':
 				$include_buttons     = true;
 				$include_card_fields = true;
 				break;
-			}
 
-			if ( 'card_only' === $action['layout'] ) {
+			case 'card_only':
 				$include_card_fields = true;
-				continue;
-			}
+				break;
 
-			if ( 'checkout_only' === $action['layout'] ) {
+			case 'checkout_only':
 				$include_buttons = true;
-			}
+				break;
 		}
 
 		switch ( $action->post_content['pay_later'] ?? 'auto' ) {
