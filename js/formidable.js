@@ -1823,16 +1823,14 @@ function frmFrontFormJS() {
 				$form.find( 'input[data-frmprice],select:has([data-frmprice])' ).each( function() {
 					let quantity = 0, price = 0;
 					const $this = jQuery( this );
-					let isUserDef = 'text' === this.type;
-					let isSingle = 'hidden' === this.type;
 
 					if ( this.tagName === 'SELECT' ) {
 						if ( this.selectedIndex !== -1 ) {
 							price = this.options[ this.selectedIndex ].getAttribute( 'data-frmprice' );
 						}
 					} else {
-						isUserDef = 'text' === this.type;
-						isSingle = 'hidden' === this.type;
+						const isUserDef = 'text' === this.type;
+						const isSingle = 'hidden' === this.type;
 						if ( ( ! isUserDef && ! isSingle ) && ! $this.is( ':checked' ) ) {
 							return;
 						}
