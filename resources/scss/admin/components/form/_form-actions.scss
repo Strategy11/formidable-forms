@@ -128,6 +128,22 @@
 	display: none;
 }
 
+#frm-actions-filter-content {
+	margin-top: var(--gap-md);
+}
+
+#frm-actions-filter-content[data-active-filter="all"] .frm-group-heading {
+	display: block;
+}
+
+#frm-actions-filter-content[data-active-filter] .frm-not-installed {
+	display: list-item;
+}
+
+.frm-filter-hidden {
+	display: none;
+}
+
 label.frm_action_events {
 	padding-left: 15px;
 }
