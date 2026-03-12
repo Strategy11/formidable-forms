@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.28';
+	public static $plug_version = '6.29';
 
 	/**
 	 * @var bool
@@ -949,6 +949,10 @@ class FrmAppHelper {
 	 * @param string $value
 	 */
 	public static function strip_most_html( $value ) {
+		if ( '' === $value ) {
+			return $value;
+		}
+
 		$allowed_html = array(
 			'b'      => array(),
 			'br'     => array(),

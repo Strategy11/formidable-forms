@@ -728,6 +728,45 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Get the JSON-encoded install data for a plugin update.
+	 *
+	 * @since 6.29
+	 *
+	 * @param string $addon_slug The addon slug (e.g. 'pro', 'dates').
+	 *
+	 * @return string JSON-encoded install data, or empty string if no URL is available.
+	 */
+	public static function get_update_install_data( $addon_slug ) {
+		$upgrading = self::install_link( $addon_slug );
+
+		if ( isset( $upgrading['class'] ) && 'frm-install-addon' === $upgrading['class'] ) {
+			return (string) json_encode( $upgrading );
+		}
+
+		if ( 'pro' === $addon_slug ) {
+			$download_url = self::get_pro_download_url();
+			$plugin_file  = 'formidable-pro/formidable-pro.php';
+		} else {
+			$addon_data   = self::get_addon( $addon_slug );
+			$download_url = $addon_data && ! empty( $addon_data['url'] ) ? $addon_data['url'] : '';
+			$plugin_file  = $addon_data && ! empty( $addon_data['plugin'] ) ? $addon_data['plugin'] : 'formidable-' . $addon_slug . '/formidable-' . $addon_slug . '.php';
+		}
+
+		if ( ! $download_url ) {
+			$update_plugins = get_site_transient( 'update_plugins' );
+			$plugin_update  = $update_plugins->response[ $plugin_file ] ?? null;
+			$download_url   = $plugin_update && ! empty( $plugin_update->package ) ? $plugin_update->package : '';
+		}
+
+		return $download_url ? (string) json_encode(
+			array(
+				'url'   => $download_url,
+				'class' => 'frm-install-addon',
+			)
+		) : '';
+	}
+
+	/**
 	 * @since 4.09
 	 *
 	 * @param string $plugin The plugin slug.
@@ -1107,7 +1146,7 @@ class FrmAddonsController {
 
 		// Create the plugin upgrader with our custom skin.
 		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );
-		$installer->install( $download_url );
+		$installer->install( $download_url, array( 'overwrite_package' => true ) );
 
 		// Flush the cache and return the newly installed plugin basename.
 		wp_cache_flush();
