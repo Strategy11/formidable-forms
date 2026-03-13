@@ -47,16 +47,9 @@
 							cardFieldsValid = data.isFormValid;
 							console.log( 'onChange', data );
 
-							const allEmpty = Object.values( data.fields ).every( field => field.isEmpty );
-							const buttonContainer = document.getElementById( 'paypal-button-container' );
-							const separator = buttonContainer.parentNode.querySelector( '.separator' );
-
-							if ( allEmpty ) {
-								buttonContainer.style.display = 'block';
-								separator.style.display = 'block';
-							} else {
-								buttonContainer.style.display = 'none';
-								separator.style.display = 'none';
+							const payWithCardButton = document.querySelector( '.frm-pay-with-card-toggle' );
+							if ( payWithCardButton && ! payWithCardButton.classList.contains( 'frm-pay-with-card-active' ) ) {
+								return;
 							}
 
 							if ( cardFieldsValid ) {
@@ -88,11 +81,11 @@
 		if ( buttonIsEnabled ) {
 			const buttonContainer = document.createElement( 'div' );
 			buttonContainer.id = 'paypal-button-container';
-
-			// The default max width for non-Google Pay buttons is 750px.
-			// Without setting a max width the Google Pay button will use 100%.
-			// We want smaller buttons than the default, so use 500px instead.
 			buttonContainer.style.maxWidth = '500px';
+
+			// Enforce max width of 750 on the paypal button container so that
+			// Google Pay button matches the size of the PayPal button.
+		//	buttonContainer.style.maxWidth = '750px';
 
 			cardElement.prepend( buttonContainer );
 
@@ -150,12 +143,33 @@
 		cardElement.classList.add( 'frm_grid_container' );
 
 		if ( buttonIsEnabled ) {
-			const separator = document.createElement( 'div' );
-			separator.classList.add( 'separator' );
-			separator.textContent = 'OR'; // TODO: Make this customizable.
-			separator.style.fontSize = '16px';
- 			separator.style.marginBottom = '6px';
-			cardElement.append( separator );
+			const payWithCardButton = document.createElement( 'button' );
+			payWithCardButton.type = 'button';
+			payWithCardButton.textContent = 'Pay with Card';
+			payWithCardButton.classList.add( 'frm-pay-with-card-toggle' );
+
+			const btnStyle = frmPayPalVars.buttonStyle || {};
+			const colorMap = { gold: '#ffc439', blue: '#0070ba', silver: '#eee', white: '#fff', black: '#2C2E2F' };
+			const textColorMap = { gold: '#111', blue: '#fff', silver: '#111', white: '#111', black: '#fff' };
+			const bgColor = colorMap[ btnStyle.color ] || '#fff';
+			const textColor = textColorMap[ btnStyle.color ] || '#111';
+
+			Object.assign( payWithCardButton.style, {
+				display: 'block',
+				width: '100%',
+				maxWidth: '500px',
+				height: ( btnStyle.height || 40 ) + 'px',
+				borderRadius: ( btnStyle.borderRadius !== undefined ? btnStyle.borderRadius : 10 ) + 'px',
+				backgroundColor: bgColor,
+				color: textColor,
+				border: '1px solid #555',
+				fontSize: '14px',
+				fontWeight: '600',
+				cursor: 'pointer',
+				marginBottom: '6px'
+			} );
+
+			cardElement.append( payWithCardButton );
 		}
 
 		const cardNumberWrapper = document.createElement( 'div' );
@@ -174,6 +188,48 @@
 		cardElement.append( expiryWrapper );
 		cardElement.append( cvvWrapper );
 
+		if ( buttonIsEnabled ) {
+			// Hide card fields and submit button initially when PayPal buttons are also shown.
+			cardNumberWrapper.style.display = 'none';
+			expiryWrapper.style.display = 'none';
+			cvvWrapper.style.display = 'none';
+
+			const payWithCardButton = cardElement.querySelector( '.frm-pay-with-card-toggle' );
+			if ( payWithCardButton ) {
+				payWithCardButton.addEventListener( 'click', function() {
+					const isActive = payWithCardButton.classList.toggle( 'frm-pay-with-card-active' );
+
+					if ( isActive ) {
+						payWithCardButton.style.backgroundColor = 'rgb(65, 153, 253)';
+						payWithCardButton.style.color = '#fff';
+						payWithCardButton.style.borderColor = 'rgb(65, 153, 253)';
+					} else {
+						payWithCardButton.style.backgroundColor = bgColor;
+						payWithCardButton.style.color = textColor;
+						payWithCardButton.style.borderColor = '#555';
+					}
+
+					const displayValue = isActive ? '' : 'none';
+					cardNumberWrapper.style.display = displayValue;
+					expiryWrapper.style.display = displayValue;
+					cvvWrapper.style.display = displayValue;
+
+					if ( isActive ) {
+						showSubmit( thisForm );
+
+						if ( cardFieldsValid ) {
+							enableSubmit();
+						} else {
+							disableSubmit( thisForm );
+						}
+					} else {
+						disableSubmit( thisForm );
+						hideSubmit( thisForm );
+					}
+				} );
+			}
+		}
+
 		disableSubmit( thisForm );
 
 		// Render individual card fields
@@ -181,72 +237,7 @@
 		cardFields.ExpiryField().render( '#frm-paypal-card-expiry' );
 		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
 
-		const cardNumberIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-number' );
-		const expiryIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-expiry' );
-		const cvvIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-cvv' );
-
-		const observerOptions = {
-			attributes: true,
-			attributeFilter: ['style']
-		};
-
-		const observerCallback = ( mutationsList, observer ) => {
-			observer.disconnect();
-
-			for ( const mutation of mutationsList ) {
-				if ( mutation.type !== 'attributes' || mutation.attributeName !== 'style' ) {
-					continue;
-				}
-
-				const currentHeight = mutation.target.offsetHeight;
-				if ( currentHeight > 0 ) {
-					mutation.target.style.height = ( currentHeight + 1 ) + 'px';
-				}
-			}
-
-			observeWrappers( observer );
-		};
-
-		const observer = new MutationObserver( observerCallback );
-
-		function observeWrappers( obs ) {
-			if ( cardNumberIframeWrapper ) {
-				obs.observe( cardNumberIframeWrapper, observerOptions );
-			}
-			if ( expiryIframeWrapper ) {
-				obs.observe( expiryIframeWrapper, observerOptions );
-			}
-			if ( cvvIframeWrapper ) {
-				obs.observe( cvvIframeWrapper, observerOptions );
-			}
-		}
-
-		observeWrappers( observer );
-
 		return cardFields;
-	}
-
-	/**
-	 * @param {string} cardFieldContainerId
-	 *
-	 * @return {HTMLElement|null}
-	 */
-	function getPayPalIframeWrapper( cardFieldContainerId ) {
-		return document.getElementById( cardFieldContainerId )?.querySelector( 'iframe' )?.parentNode;
-	}
-
-	/**
-	 * Add an extra pixel to the PayPal iframe wrappers to prevent issues where the borders are cut off.
-	 *
-	 * @param {HTMLElement|null} element
-	 *
-	 * @return {void}
-	 */
-	function add1pxToHeight( element ) {
-		if ( element ) {
-			const currentHeightInPixels = parseInt( element.style.height.replace( 'px', '' ) );
-			element.style.height = `${ currentHeightInPixels + 1 }px`;
-		}
 	}
 
 	// ---- Google Pay Integration ----
@@ -352,8 +343,20 @@
 			googlePayContainer.id = 'frm-google-pay-container';
 			googlePayContainer.style.marginBottom = '6px'; // Make sure the button has some extra space below it.
 
-			// Make the button the same height as other PayPal buttons.
-			googlePayContainer.style.height = `${ getHeightToUseForNewGooglePayButton( paypalButtonContainer ) }px`;
+			const iframeReference = paypalButtonContainer.querySelector( 'iframe' );
+			if ( iframeReference ) {
+				let iframeHeight = iframeReference.offsetHeight || iframeReference.style.height;
+				if ( ! iframeHeight ) {
+					iframeHeight = 40;
+				} else if ( iframeHeight < 25 ) {
+					iframeHeight = 25;
+				} else if ( iframeHeight > 55 ) {
+					iframeHeight = 55;
+				}
+
+				// Make the button the same height as other PayPal buttons.
+				googlePayContainer.style.height = `${ iframeHeight }px`;
+			}
 
 			paypalButtonContainer.prepend( googlePayContainer );
 
@@ -370,33 +373,6 @@
 		} catch ( err ) {
 			console.error( 'Google Pay initialization failed', err );
 		}
-	}
-
-	/**
-	 * @param {HTMLElement} paypalButtonContainer
-	 *
-	 * @return {number}
-	 */
-	function getHeightToUseForNewGooglePayButton( paypalButtonContainer ) {
-		const iframeReference = paypalButtonContainer.querySelector( 'iframe' );
-		if ( ! iframeReference ) {
-			return 40;
-		}
-
-		const iframeHeight = iframeReference.offsetHeight || iframeReference.style.height;
-		if ( ! iframeHeight ) {
-			return 40;
-		}
-
-		if ( iframeHeight < 25 ) {
-			return 25;
-		}
-
-		if ( iframeHeight > 55 ) {
-			return 55;
-		}
-
-		return iframeHeight;
 	}
 
 	/**
@@ -951,6 +927,10 @@
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).hide();
 	}
 
+	function showSubmit( form ) {
+		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).show();
+	}
+
 	/**
 	 * Display an error message in the payment form.
 	 *
@@ -1124,8 +1104,13 @@
 			displayPaymentFailure( 'Failed to initialize payment form.' );
 		}
 
-		// Initially disable the submit button until PayPal is ready
+		// Initially disable the submit button until PayPal is ready.
 		disableSubmit( thisForm );
+
+		// In combined layout, hide the submit button until "Pay with Card" is clicked.
+		if ( document.querySelector( '.frm-pay-with-card-toggle' ) ) {
+			hideSubmit( thisForm );
+		}
 	}
 
 	function addName( $form ) {
