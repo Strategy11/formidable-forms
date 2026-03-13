@@ -181,7 +181,72 @@
 		cardFields.ExpiryField().render( '#frm-paypal-card-expiry' );
 		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
 
+		const cardNumberIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-number' );
+		const expiryIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-expiry' );
+		const cvvIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-cvv' );
+
+		const observerOptions = {
+			attributes: true,
+			attributeFilter: ['style']
+		};
+
+		const observerCallback = ( mutationsList, observer ) => {
+			observer.disconnect();
+
+			for ( const mutation of mutationsList ) {
+				if ( mutation.type !== 'attributes' || mutation.attributeName !== 'style' ) {
+					continue;
+				}
+
+				const currentHeight = mutation.target.offsetHeight;
+				if ( currentHeight > 0 ) {
+					mutation.target.style.height = ( currentHeight + 1 ) + 'px';
+				}
+			}
+
+			observeWrappers( observer );
+		};
+
+		const observer = new MutationObserver( observerCallback );
+
+		function observeWrappers( obs ) {
+			if ( cardNumberIframeWrapper ) {
+				obs.observe( cardNumberIframeWrapper, observerOptions );
+			}
+			if ( expiryIframeWrapper ) {
+				obs.observe( expiryIframeWrapper, observerOptions );
+			}
+			if ( cvvIframeWrapper ) {
+				obs.observe( cvvIframeWrapper, observerOptions );
+			}
+		}
+
+		observeWrappers( observer );
+
 		return cardFields;
+	}
+
+	/**
+	 * @param {string} cardFieldContainerId
+	 *
+	 * @return {HTMLElement|null}
+	 */
+	function getPayPalIframeWrapper( cardFieldContainerId ) {
+		return document.getElementById( cardFieldContainerId )?.querySelector( 'iframe' )?.parentNode;
+	}
+
+	/**
+	 * Add an extra pixel to the PayPal iframe wrappers to prevent issues where the borders are cut off.
+	 *
+	 * @param {HTMLElement|null} element
+	 *
+	 * @return {void}
+	 */
+	function add1pxToHeight( element ) {
+		if ( element ) {
+			const currentHeightInPixels = parseInt( element.style.height.replace( 'px', '' ) );
+			element.style.height = `${ currentHeightInPixels + 1 }px`;
+		}
 	}
 
 	// ---- Google Pay Integration ----
