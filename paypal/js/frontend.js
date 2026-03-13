@@ -287,8 +287,17 @@
 
 			const iframeReference = paypalButtonContainer.querySelector( 'iframe' );
 			if ( iframeReference ) {
+				let iframeHeight = iframeReference.offsetHeight || iframeReference.style.height;
+				if ( ! iframeHeight ) {
+					iframeHeight = 40;
+				} else if ( iframeHeight < 25 ) {
+					iframeHeight = 25;
+				} else if ( iframeHeight > 55 ) {
+					iframeHeight = 55;
+				}
+
 				// Make the button the same height as other PayPal buttons.
-				googlePayContainer.style.height = jQuery( iframeReference ).outerHeight() + 'px';
+				googlePayContainer.style.height = iframeHeight + 'px';
 			}
 
 			paypalButtonContainer.prepend( googlePayContainer );
