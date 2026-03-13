@@ -164,9 +164,9 @@
 				color: textColor,
 				border: '1px solid #555',
 				fontSize: '14px',
-				fontWeight: '600',
 				cursor: 'pointer',
-				marginBottom: '6px'
+				marginBottom: '6px',
+				fontWeight: '500'
 			} );
 
 			cardElement.append( payWithCardButton );
