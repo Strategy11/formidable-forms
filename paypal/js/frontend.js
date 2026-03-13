@@ -153,6 +153,8 @@
 			const separator = document.createElement( 'div' );
 			separator.classList.add( 'separator' );
 			separator.textContent = 'OR'; // TODO: Make this customizable.
+			separator.style.fontSize = '16px';
+ 			separator.style.marginBottom = '6px';
 			cardElement.append( separator );
 		}
 
@@ -285,20 +287,8 @@
 			googlePayContainer.id = 'frm-google-pay-container';
 			googlePayContainer.style.marginBottom = '6px'; // Make sure the button has some extra space below it.
 
-			const iframeReference = paypalButtonContainer.querySelector( 'iframe' );
-			if ( iframeReference ) {
-				let iframeHeight = iframeReference.offsetHeight || iframeReference.style.height;
-				if ( ! iframeHeight ) {
-					iframeHeight = 40;
-				} else if ( iframeHeight < 25 ) {
-					iframeHeight = 25;
-				} else if ( iframeHeight > 55 ) {
-					iframeHeight = 55;
-				}
-
-				// Make the button the same height as other PayPal buttons.
-				googlePayContainer.style.height = iframeHeight + 'px';
-			}
+			// Make the button the same height as other PayPal buttons.
+			googlePayContainer.style.height = `${ getHeightToUseForNewGooglePayButton( paypalButtonContainer ) }px`;
 
 			paypalButtonContainer.prepend( googlePayContainer );
 
@@ -315,6 +305,33 @@
 		} catch ( err ) {
 			console.error( 'Google Pay initialization failed', err );
 		}
+	}
+
+	/**
+	 * @param {HTMLElement} paypalButtonContainer
+	 *
+	 * @return {number}
+	 */
+	function getHeightToUseForNewGooglePayButton( paypalButtonContainer ) {
+		const iframeReference = paypalButtonContainer.querySelector( 'iframe' );
+		if ( ! iframeReference ) {
+			return 40;
+		}
+
+		const iframeHeight = iframeReference.offsetHeight || iframeReference.style.height;
+		if ( ! iframeHeight ) {
+			return 40;
+		}
+
+		if ( iframeHeight < 25 ) {
+			return 25;
+		}
+
+		if ( iframeHeight > 55 ) {
+			return 55;
+		}
+
+		return iframeHeight;
 	}
 
 	/**
