@@ -70,10 +70,10 @@ class FrmFieldQuantity extends FrmFieldNumber {
 
 		if ( $product_fields ) {
 			// Cast to array cos of existing fields that are already using single product fields in production
-			$product_fields = array_map( 'trim', (array) $product_fields );
+			$product_fields = (array) $product_fields;
 
 			foreach ( $product_fields as $product_field ) {
-				$product_field_key = $product_field . '_' . $args['parent_field_id'] . '_' . $args['key_pointer'];
+				$product_field_key = trim( $product_field ) . '_' . $args['parent_field_id'] . '_' . $args['key_pointer'];
 
 				if ( ! isset( $frm_products[ $product_field_key ] ) || ! is_array( $frm_products[ $product_field_key ] ) ) {
 					$frm_products[ $product_field_key ] = array();

@@ -56,12 +56,18 @@ class FrmCurrencyHelper {
 	}
 
 	/**
+	 * @since x.x The second param is optional.
+	 *
 	 * @param float $amount
 	 * @param array $currency
 	 *
 	 * @return string
 	 */
-	public static function format_price( $amount, $currency ) {
+	public static function format_price( $amount, $currency = null ) {
+		if ( ! $currency ) {
+			$currency = self::get_currency();
+		}
+
 		if ( is_string( $amount ) ) {
 			$amount = floatval( self::prepare_price( $amount, $currency ) );
 		}
