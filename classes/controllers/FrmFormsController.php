@@ -3543,6 +3543,10 @@ class FrmFormsController {
 		wp_enqueue_script( 'formidable' );
 
 		FrmHoneypot::maybe_print_honeypot_js();
+		if ( ! method_exists( 'FrmProFormsHelper', 'load_currency_js' ) ) {
+			// Load currency JS if Pro is not installed.
+			FrmFormsHelper::load_currency_js();
+		}
 	}
 
 	/**

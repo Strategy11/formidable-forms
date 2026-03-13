@@ -372,14 +372,71 @@ window.frmAdminBuildJS = function() {
 		return false;
 	}
 
-	function infoModal( msg ) {
-		const $info = initModal( '#frm_info_modal', '400px' );
+	/**
+	 * @since x.x The first param can be an array of args.
+	 *
+	 * @param {Array|String} The message or the modal data (title, msg, actionUrl, actionText, closeText).
+	 */
+	function infoModal( msg, width ) {
+		const $info = initModal( '#frm_info_modal', width || '400px' );
 
 		if ( $info === false ) {
 			return false;
 		}
 
-		jQuery( '.frm-info-msg' ).html( msg );
+		if ( 'string' === msg ) {
+			msg = { msg };
+		}
+
+		msg = Object.assign( {
+			title: '',
+			msg: __( 'Are you sure?', 'formidable' ),
+			img: '',
+			closeText: __( 'Got it!', 'formidable' ),
+			actionUrl: '',
+			actionText: '',
+			noCenter: false,
+		}, msg );
+
+		const titleEl = $info[0].querySelector( '.info-modal-title' );
+		titleEl.textContent = msg.title || '';
+		titleEl.classList.toggle( 'frm_hidden', ! msg.title );
+
+		if ( msg.msg ) {
+			$info.find( '.frm-info-msg' ).html( msg.msg );
+		}
+
+		$info[0].querySelector( '.info-modal-img' ).src = msg.img;
+		$info[0].querySelector( '.info-modal-img-wrapper' ).classList.toggle( 'frm_hidden', ! msg.img );
+
+		const closeBtn = document.getElementById( 'frm-info-click' );
+		if ( msg.closeText ) {
+			closeBtn.textContent = msg.closeText;
+		}
+
+		// Change the close button to primary or secondary.
+		closeBtn.classList.toggle( 'button-primary', ! msg.actionUrl );
+		closeBtn.classList.toggle( 'frm-button-primary', ! msg.actionUrl );
+		closeBtn.classList.toggle( 'button-secondary', msg.actionUrl );
+		closeBtn.classList.toggle( 'frm-button-secondary', msg.actionUrl );
+
+		const actionBtn = $info[0].querySelector( '.info-modal-action-link' );
+
+
+		if ( msg.actionUrl ) {
+			actionBtn.href = msg.actionUrl;
+			if ( msg.actionText ) {
+				actionBtn.textContent = msg.actionText;
+			}
+		}
+
+		// Show or hide the action btn.
+		actionBtn.classList.toggle( 'frm_hidden', ! msg.actionUrl );
+
+		// Handle alignment.
+		$info[0].querySelector( '.info-modal-inside' ).classList.toggle( 'frmcenter', ! msg.noCenter );
+		const buttonsWrapper = $info[0].querySelector( '.info-modal-buttons' );
+		buttonsWrapper.classList.toggle( 'frmright', msg.noCenter );
 
 		$info.dialog( 'open' );
 		return false;
@@ -2190,6 +2247,19 @@ window.frmAdminBuildJS = function() {
 
 		if ( $button.hasClass( 'frm_at_limit' ) ) {
 			showLimitModal();
+			return false;
+		}
+
+		if ( frm_admin_js.shouldShowPaymentsSettingsModal && [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
+			// These fields require payment gateway installed.
+			infoModal( {
+				title: __( 'Setup a Payment Gateway first', 'formidable' ),
+				msg: __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
+				closeText: __( 'Close', 'formidable' ),
+				actionUrl: frm_admin_js.paymentsSettingsUrl,
+				actionText: __( 'Go to Payment Settings', 'formidable' ),
+				noCenter: true,
+			} );
 			return false;
 		}
 
@@ -9631,6 +9701,36 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	function handleModalDismiss( input ) {
+		const modalDismissers = document.querySelectorAll( '#frm_info_modal .dismiss, #frm_info_modal #frm-info-click, .ui-widget-overlay.ui-front' );
+		function onModalClose() {
+			input.classList.add( 'frm_invalid_field' );
+			setTimeout( () => input.focus(), 0 );
+			modalDismissers.forEach( el => {
+				el.removeEventListener( 'click', onModalClose );
+			});
+		}
+
+		modalDismissers.forEach( el => {
+			el.addEventListener( 'click', onModalClose );
+		});
+	}
+
+	function validateProductPriceValue( target ) {
+		const price = target.value.trim();
+		if ( price.includes( '[' ) && price.includes( ']' ) ) {
+			// This is a shortcode and should be assumed a valid price.
+			return;
+		}
+		if ( isNaN( price.replace( /,/, '' ) ) ) {
+			const validationFailMessage = __( 'Please enter a valid number.', 'formidable-pro' );
+			frmAdminBuild.infoModal( validationFailMessage );
+			handleModalDismiss( target );
+			return;
+		}
+		target.classList.remove( 'frm_invalid_field' );
+	}
+
 	function toggleProductType() {
 		const settings = jQuery( this ).closest( '.frm-single-settings' );
 		const container = settings.find( '.frmjs_product_choices' );
@@ -10578,6 +10678,7 @@ window.frmAdminBuildJS = function() {
 
 			popAllProductFields();
 
+			frmDom.util.documentOn( 'change', '.frm_product_price', validateProductPriceValue );
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
 			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
@@ -10610,6 +10711,18 @@ window.frmAdminBuildJS = function() {
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
 			}, 9999 );
+
+			if ( frm_admin_js.shouldShowPricingFieldsModal ) {
+				infoModal({
+					title: __( 'Start Accepting Payments Today!', 'formidable' ),
+					msg: __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, PayPal, or Square) in your settings.', 'formidable' ),
+					img: frm_admin_js.pricingFieldsImg,
+					closeText: __( 'I\'ll do it later!', 'formidable' ),
+					actionText: __( 'Setup Payments Now', 'formidable' ),
+					actionUrl: frm_admin_js.paymentsSettingsUrl,
+					noCenter: true,
+				}, '550px' );
+			}
 		},
 
 		settingsInit() {

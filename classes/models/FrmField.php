@@ -89,6 +89,21 @@ class FrmField {
 				'icon' => 'frmfont frm-gdpr-icon',
 				'hide' => FrmFieldGdprHelper::hide_gdpr_field(),
 			),
+			'product'                      => array(
+				'name'    => __( 'Product', 'formidable' ),
+				'icon'    => 'frmfont frm_product2_icon',
+				'section' => 'pricing',
+			),
+			'quantity'                     => array(
+				'name'    => __( 'Quantity', 'formidable' ),
+				'icon'    => 'frmfont frm_quantity_icon',
+				'section' => 'pricing',
+			),
+			'total'                        => array(
+				'name'    => __( 'Total', 'formidable' ),
+				'icon'    => 'frmfont frm_total2_icon',
+				'section' => 'pricing',
+			),
 		);
 
 		/**
@@ -372,6 +387,22 @@ class FrmField {
 	}
 
 	/**
+	 * Gets field section labels in the form builder.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function field_section_labels() {
+		return apply_filters(
+			'frm_available_field_sections',
+			array(
+				'pricing' => __( 'Pricing Fields', 'formidable' ),
+			)
+		);
+	}
+
+	/**
 	 * Consider a field new for 90 days after the release date.
 	 *
 	 * @since 6.8.3
@@ -393,6 +424,22 @@ class FrmField {
 		$release_date               = $release_dates[ $type ];
 		$three_months_after_release = gmdate( 'Y-m-d', strtotime( $release_date . ' + 90 days' ) );
 		return gmdate( 'Y-m-d' ) < $three_months_after_release;
+	}
+
+	/**
+	 * Remove field types that are moved from Pro to Lite.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $pro_fields
+	 *
+	 * @return void
+	 */
+	public static function remove_moved_field_types_from_pro( &$pro_fields ) {
+		unset( $pro_fields['credit_card'] );
+		unset( $pro_fields['product'] );
+		unset( $pro_fields['quantity'] );
+		unset( $pro_fields['total'] );
 	}
 
 	/**

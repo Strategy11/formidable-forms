@@ -58,6 +58,28 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
+	 * Checks if any payment gateway is configured.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_payment_gateway_configured() {
+		return FrmTransLiteAppHelper::payments_table_exists();
+	}
+
+	/**
+	 * Gets payments settings URL.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function get_payments_settings_url() {
+		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' );
+	}
+
+	/**
 	 * Redirect to Stripe settings when payments are not yet installed
 	 * and the payments page is accessed by its URL.
 	 *
@@ -73,11 +95,11 @@ class FrmStrpLiteAppController {
 			return;
 		}
 
-		if ( FrmTransLiteAppHelper::payments_table_exists() ) {
+		if ( self::is_payment_gateway_configured() ) {
 			return;
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) );
+		wp_safe_redirect( self::get_payments_settings_url() );
 		die();
 	}
 
