@@ -1,0 +1,986 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+class FrmPayPalLiteConnectHelper {
+
+	/**
+	 * Track the latest error when calling the PayPal API.
+	 *
+	 * @since x.x
+	 *
+	 * @var string|null
+	 */
+	public static $latest_error_from_paypal_api;
+
+	/**
+	 * @return void
+	 */
+	public static function render_settings_container() {
+		$settings = FrmPayPalLiteAppHelper::get_settings();
+
+		self::register_settings_scripts();
+
+		FrmPayPalLiteAppHelper::fee_education( 'paypal-global-settings-tip' );
+
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-container.php';
+	}
+
+	public static function handle_render_seller_status() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
+		if ( ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
+			wp_send_json_error();
+		}
+
+		ob_start();
+		$success  = self::render_seller_status();
+		$response = ob_get_clean();
+
+		if ( ! $success ) {
+			wp_send_json_error( $response );
+		}
+
+		wp_send_json_success( $response );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function render_seller_status() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
+		if ( ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
+			self::render_error( __( 'Invalid nonce.', 'formidable' ) );
+			return false;
+		}
+
+		$mode        = self::get_mode_value_from_post();
+		$merchant_id = self::get_merchant_id( $mode );
+
+		if ( ! $merchant_id ) {
+			// Do not render any message when not connected.
+			// And return true so it does not try to handle it as an error.
+			return true;
+		}
+
+		// TODO: Only render when we visit the PayPal tab.
+		$status = self::get_seller_status();
+
+		/*
+		$status = new stdClass();
+		$status->payments_receivable = true;
+		$status->primary_email_confirmed = true;
+		$status->oauth_integrations = true;
+		$status->primary_email = 'test@example.com';
+		*/
+
+		if ( ! is_object( $status ) ) {
+			self::render_error( __( 'Unable to retrieve seller status.', 'formidable' ) );
+			return false;
+		}
+
+		$email = $status->primary_email ?? '';
+
+		if ( empty( $status->primary_email_confirmed ) ) {
+			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email );
+			return false;
+		}
+
+		if ( ! $status->payments_receivable ) {
+			self::render_error( __( 'Payments are not receivable.', 'formidable' ), $email );
+			return false;
+		}
+
+		if ( ! $status->oauth_integrations ) {
+			self::render_error( __( 'OAuth integrations are not enabled.', 'formidable' ), $email );
+			return false;
+		}
+
+		$product                       = self::check_for_product( $status->products, 'PPCP_CUSTOM' );
+		$only_supports_checkout_button = false;
+
+		if ( ! $product || empty( $product->capabilities ) ) {
+			$product = self::check_for_product( $status->products, 'EXPRESS_CHECKOUT' );
+
+			if ( ! $product ) {
+				self::render_error( __( 'No data was found for expected PayPal product.', 'formidable' ), $email, $merchant_id );
+				return false;
+			}
+
+			if ( 'ACTIVE' !== $product->status ) {
+				self::render_error( __( 'PayPal Checkout is not available.', 'formidable' ), $email, $merchant_id );
+				return false;
+			}
+
+			$only_supports_checkout_button = true;
+		}
+
+		if ( $email ) {
+			update_option( self::get_paypal_seller_status_option_name( $mode ), $status, false );
+		}
+
+		echo '<div class="frm_message">';
+		esc_html_e( 'Your seller status is valid.', 'formidable' );
+		echo '<br>';
+
+		self::echo_email( $email );
+		self::echo_merchant_id( $merchant_id );
+
+		echo '<br>';
+		echo '<br>';
+		echo '<b>' . esc_html__( 'Enabled scopes:', 'formidable' ) . '</b>';
+		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
+		echo '<li>';
+		/**
+		 * @var string[] $scopes
+		 */
+		$scopes = $status->oauth_integrations[0]->oauth_third_party[0]->scopes;
+		echo implode( '</li><li>', array_map( 'esc_html', $scopes ) );
+		echo '</li>';
+		echo '</ul>';
+
+		echo '<br>';
+		echo '<b>' . esc_html__( 'Enabled capabilities:', 'formidable' ) . '</b>';
+		echo '<ul style="list-style: unset; padding-left: 15px; margin-top: 0; margin-bottom: 0;">';
+
+		echo '<li>' . esc_html__( 'PayPal Checkout', 'formidable' ) . '</li>';
+
+		$can_process_card_fields = ! $only_supports_checkout_button && in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities );
+
+		if ( $can_process_card_fields ) {
+			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';
+		}
+		echo '</ul>';
+
+		if ( $can_process_card_fields ) {
+			self::render_acdc_vetting_status( $product );
+		}
+
+		echo '</div>';
+
+		return true;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param bool|object $product
+	 *
+	 * @return void
+	 */
+	private static function render_acdc_vetting_status( $product ) {
+		$vetting_status = $product && ! empty( $product->vetting_status ) ? $product->vetting_status : 'NOT_SET';
+
+		echo '<br>';
+		echo '<b>' . esc_html__( 'ACDC Application Vetting Status:', 'formidable' ) . '</b>';
+		echo '&nbsp;';
+		echo esc_html( self::get_acdc_vetting_status_message( $vetting_status ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $vetting_status
+	 *
+	 * @return string
+	 */
+	private static function get_acdc_vetting_status_message( $vetting_status ) {
+		switch ( $vetting_status ) {
+			case 'NOT_SET':
+				return 'Unavailable';
+			case 'APPROVED':
+			case 'SUBSCRIBED':
+				return 'Approved';
+			case 'PENDING':
+				return 'Pending';
+			case 'IN_REVIEW':
+				return 'In Review';
+			case 'DECLINED':
+				return 'Declined';
+			case 'NEED_MORE_DATA':
+				return 'Needs More Data';
+			case 'DENIED':
+				return 'Denied';
+			default:
+				return '';
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $mode
+	 *
+	 * @return void
+	 */
+	public static function render_seller_status_placeholder( $mode ) {
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/seller-status-placeholder.php';
+	}
+
+	/**
+	 * @param array  $products
+	 * @param string $name
+	 *
+	 * @return bool|object
+	 */
+	private static function check_for_product( $products, $name = 'PPCP_CUSTOM' ) {
+		foreach ( $products as $current_product ) {
+			if ( $name === $current_product->name ) {
+				return $current_product;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param string $email
+	 *
+	 * @return void
+	 */
+	private static function echo_email( $email ) {
+		if ( ! $email ) {
+			return;
+		}
+
+		echo '<br>';
+		echo '<b>' . esc_html__( 'Connected account:', 'formidable' ) . '</b>';
+		echo '<br>';
+		echo esc_html( $email );
+	}
+
+	/**
+	 * @param string $merchant_id
+	 *
+	 * @return void
+	 */
+	private static function echo_merchant_id( $merchant_id ) {
+		echo '<br>';
+		echo '<b>' . esc_html__( 'Merchant ID:', 'formidable' ) . '</b>';
+		echo '&nbsp;';
+
+		if ( $merchant_id ) {
+			echo esc_html( $merchant_id );
+		} else {
+			esc_html_e( 'N/A', 'formidable' );
+		}
+	}
+
+	/**
+	 * @param string $message
+	 * @param string $email
+	 * @param string $merchant_id
+	 *
+	 * @return void
+	 */
+	private static function render_error( $message, $email = '', $merchant_id = '' ) {
+		echo '<div class="frm_error_style">';
+		echo wp_kses_post( $message );
+		self::echo_email( $email );
+		self::echo_merchant_id( $merchant_id );
+		echo '</div>';
+	}
+
+	/**
+	 * @param string $mode
+	 *
+	 * @return void
+	 */
+	public static function render_settings_for_mode( $mode ) {
+		$connected = (bool) self::get_merchant_id( $mode );
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-box.php';
+	}
+
+	/**
+	 * @return void
+	 */
+	private static function register_settings_scripts() {
+		$script_url     = FrmPayPalLiteAppHelper::plugin_url() . '/js/settings.js';
+		$dependencies   = array( 'formidable_dom' );
+		$plugin_version = FrmAppHelper::plugin_version();
+		wp_register_script( 'formidable_paypal_settings', $script_url, $dependencies, $plugin_version, true );
+		wp_enqueue_script( 'formidable_paypal_settings' );
+	}
+
+	/**
+	 * @return false|string
+	 */
+	public static function get_oauth_redirect_url() {
+		$mode = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
+
+		if ( self::get_merchant_id( $mode ) ) {
+			// Do not allow for initialize if there is already a configured account id.
+			return false;
+		}
+
+		$additional_body = array(
+			'password'            => self::generate_client_password( $mode ),
+			'user_id'             => get_current_user_id(),
+			'frm_paypal_api_mode' => $mode,
+		);
+
+		// Clear the transient so it doesn't fail.
+		delete_option( 'frm_paypal_lite_last_verify_attempt' );
+		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
+
+		if ( is_string( $data ) ) {
+			return false;
+		}
+
+		if ( ! empty( $data->password ) ) {
+			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
+		}
+
+		if ( ! is_object( $data ) || empty( $data->redirect_url ) ) {
+			return false;
+		}
+
+		return $data->redirect_url;
+	}
+
+	/**
+	 * @param string $action
+	 * @param array  $additional_body
+	 *
+	 * @return object|string
+	 */
+	private static function post_to_connect_server( $action, $additional_body = array() ) {
+		$body    = array(
+			'frm_paypal_api_action' => $action,
+			'frm_paypal_api_mode'   => FrmPayPalLiteAppHelper::active_mode(),
+		);
+		$body    = array_merge( $body, $additional_body );
+		$url     = self::get_url_to_connect_server();
+		$headers = self::build_headers_for_post();
+
+		if ( ! $headers ) {
+			return 'Unable to build headers for post. Is your pro license configured properly?';
+		}
+
+		// (Seconds) default timeout is 5. we want a bit more time to work with.
+		$timeout = 45;
+
+		self::try_to_extend_server_timeout( $timeout );
+
+		$args     = compact( 'body', 'headers', 'timeout' );
+		$response = wp_remote_post( $url, $args );
+
+		if ( ! self::validate_response( $response ) ) {
+			return 'Response from server is invalid';
+		}
+
+		$body = self::pull_response_body( $response );
+
+		if ( empty( $body->success ) ) {
+			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
+				return $body->data;
+			}
+
+			return 'Response from server was not successful';
+		}
+
+		return $body->data ?? array();
+	}
+
+	/**
+	 * @param array $response
+	 *
+	 * @return mixed
+	 */
+	private static function pull_response_body( $response ) {
+		$http_response   = $response['http_response'];
+		$response_object = $http_response->get_response_object();
+		return json_decode( $response_object->body );
+	}
+
+	/**
+	 * @param mixed $response
+	 *
+	 * @return bool
+	 */
+	private static function validate_response( $response ) {
+		return ! is_wp_error( $response ) && is_array( $response ) && isset( $response['http_response'] );
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function get_url_to_connect_server() {
+		// Return 'https://api.strategy11.com/';
+		// return 'https://dev-site.local/';
+		return 'https://qa.formidableforms.com/paypal/';
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function build_headers_for_post() {
+		$password = self::maybe_get_pro_license();
+
+		if ( false === $password ) {
+			$password = 'lite_' . self::get_uuid();
+		}
+
+		$site_url = home_url();
+		$site_url = self::maybe_fix_wpml_url( $site_url );
+		// Remove protocol from url (our url cannot include the colon).
+		$site_url = preg_replace( '#^https?://#', '', $site_url );
+		// Remove port from url (mostly helpful in development).
+		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );
+		$site_url = self::strip_lang_from_url( $site_url );
+
+		// $password is either a Pro license or a uuid (See FrmUsage::uuid).
+		return array(
+			'Authorization' => 'Basic ' . base64_encode( $site_url . ':' . $password ),
+		);
+	}
+
+	/**
+	 * Get a unique ID to use for connecting Lite users.
+	 *
+	 * @return string
+	 */
+	private static function get_uuid() {
+		$usage = new FrmUsage();
+		return $usage->uuid();
+	}
+
+	/**
+	 * WPML might add a language to the url. Don't send that to the server.
+	 *
+	 * @param string $url URL to strip language from.
+	 *
+	 * @return string
+	 */
+	private static function strip_lang_from_url( $url ) {
+		$split_on_language = explode( '/?lang=', $url );
+		return 2 === count( $split_on_language ) ? $split_on_language[0] : $url;
+	}
+
+	/**
+	 * WPML alters the output of home_url.
+	 * If it is active, use the WPML "absolute home" URL which is not modified.
+	 *
+	 * @param string $url URL to maybe fix.
+	 *
+	 * @return string
+	 */
+	private static function maybe_fix_wpml_url( $url ) {
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) && ! ICL_PLUGIN_INACTIVE && class_exists( 'SitePress' ) ) {
+			global $wpml_url_converter;
+			$url = $wpml_url_converter->get_abs_home();
+		}
+		return $url;
+	}
+
+	/**
+	 * Get a Pro license when Pro is active.
+	 * Otherwise we'll use a uuid to support Lite.
+	 *
+	 * @return false|string
+	 */
+	private static function maybe_get_pro_license() {
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$pro_license = FrmAddonsController::get_pro_license();
+
+			if ( $pro_license ) {
+				$password = $pro_license;
+			}
+		}
+
+		return ! empty( $password ) ? $password : false;
+	}
+
+	/**
+	 * Try to make sure the server time limit exceeds the request time limit.
+	 *
+	 * @param int $timeout seconds.
+	 *
+	 * @return void
+	 */
+	private static function try_to_extend_server_timeout( $timeout ) {
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( $timeout + 10 );
+		}
+	}
+
+	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string
+	 */
+	private static function get_server_side_token_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'server_password', $mode );
+	}
+
+	/**
+	 * Generate a new client password for authenticating with Connect Service and save it locally as an option.
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return string the client password.
+	 */
+	private static function generate_client_password( $mode ) {
+		$client_password = wp_generate_password();
+		update_option( self::get_client_side_token_option_name( $mode ), $client_password, false );
+		return $client_password;
+	}
+
+	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string
+	 */
+	private static function get_client_side_token_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'client_password', $mode );
+	}
+
+	/**
+	 * @param string $mode
+	 *
+	 * @return string
+	 */
+	private static function get_paypal_seller_status_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'seller_status', $mode );
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function get_mode_value() {
+		$settings = FrmPayPalLiteAppHelper::get_settings();
+		return $settings->settings->test_mode ? 'test' : 'live';
+	}
+
+	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return bool|string
+	 */
+	public static function get_merchant_id( $mode = 'auto' ) {
+		if ( 'auto' === $mode ) {
+			$mode = self::get_mode_value();
+		}
+		return get_option( self::get_merchant_id_option_name( $mode ) );
+	}
+
+	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string
+	 */
+	private static function get_merchant_id_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'merchant_id', $mode );
+	}
+
+	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string
+	 */
+	private static function get_location_id_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'merchant_location_id', $mode );
+	}
+
+	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string
+	 */
+	private static function get_merchant_currency_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'merchant_currency', $mode );
+	}
+
+	/**
+	 * @param string $key  'merchant_id', 'client_password', 'server_password'.
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string
+	 */
+	private static function get_paypal_connect_option_name( $key, $mode = 'auto' ) {
+		return 'frm_paypal_connect_' . $key . self::get_active_mode_option_name_suffix( $mode );
+	}
+
+	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string either _test or _live.
+	 */
+	private static function get_active_mode_option_name_suffix( $mode = 'auto' ) {
+		if ( 'auto' !== $mode ) {
+			return '_' . $mode;
+		}
+		return '_' . FrmPayPalLiteAppHelper::active_mode();
+	}
+
+	public static function check_for_redirects() {
+		if ( self::user_landed_on_the_oauth_return_url() ) {
+			self::redirect_oauth();
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function user_landed_on_the_oauth_return_url() {
+		return isset( $_GET['frm_paypal_api_return_oauth'] );
+	}
+
+	private static function redirect_oauth() {
+		$connected = self::check_server_for_oauth_merchant_id();
+		wp_safe_redirect( self::get_url_for_paypal_settings( $connected ) );
+		exit;
+	}
+
+	/**
+	 * @param bool $connected
+	 *
+	 * @return string
+	 */
+	private static function get_url_for_paypal_settings( $connected ) {
+		return admin_url( 'admin.php?page=formidable-settings&t=paypal_settings&connected=' . intval( $connected ) );
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function check_server_for_oauth_merchant_id() {
+		$mode = 'test' === FrmAppHelper::simple_get( 'mode' ) ? 'test' : 'live';
+
+		if ( self::get_merchant_id( $mode ) ) {
+			// Do not allow for initialize if there is already a configured merchant id.
+			return false;
+		}
+
+		$body = array(
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_paypal_api_mode' => $mode,
+		);
+		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
+
+		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
+			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, false );
+
+			FrmTransLiteAppController::install();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param string $action
+	 * @param array  $additional_body
+	 *
+	 * @return false|object
+	 */
+	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
+		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$response = self::post_to_connect_server( $action, $body );
+
+		if ( is_object( $response ) ) {
+			return $response;
+		}
+
+		if ( is_array( $response ) ) {
+			// Reformat empty arrays as empty objects
+			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			return new stdClass();
+		}
+
+		if ( is_string( $response ) ) {
+			self::$latest_error_from_paypal_api = $response;
+			FrmTransLiteLog::log_message( 'PayPal API Error', $response );
+		} else {
+			self::$latest_error_from_paypal_api = '';
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function get_standard_authenticated_body() {
+		$mode = self::get_mode_value_from_post();
+		return array(
+			'merchant_id'     => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
+		);
+	}
+
+	/**
+	 * Check $_POST for live or test mode value as it can be updated in real time from PayPal Settings and can be configured before the update is saved.
+	 *
+	 * @return string 'test' or 'live'
+	 */
+	private static function get_mode_value_from_post() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
+			return FrmPayPalLiteAppHelper::active_mode();
+		}
+
+		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
+		return $test_mode ? 'test' : 'live';
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public static function get_latest_error_from_paypal_api() {
+		return self::$latest_error_from_paypal_api;
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function get_unprocessed_event_ids() {
+		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+
+		if ( false === $data || empty( $data->event_ids ) ) {
+			return array();
+		}
+
+		/**
+		 * @var array $data->event_ids
+		 */
+		return $data->event_ids;
+	}
+
+	/**
+	 * @param string $event_id
+	 *
+	 * @return false|object
+	 */
+	public static function get_event( $event_id ) {
+		$event = wp_cache_get( $event_id, 'frm_paypal' );
+
+		if ( is_object( $event ) ) {
+			return $event;
+		}
+
+		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ) );
+
+		if ( false === $event || empty( $event->event ) ) {
+			return false;
+		}
+
+		wp_cache_set( $event_id, $event->event, 'frm_paypal' );
+
+		return $event->event;
+	}
+
+	/**
+	 * @param string $event_id
+	 *
+	 * @return false|object
+	 */
+	public static function process_event( $event_id ) {
+		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
+	}
+
+	public static function handle_disconnect() {
+		self::disconnect();
+		self::reset_paypal_api_integration();
+		wp_send_json_success();
+	}
+
+	/**
+	 * @return false|object
+	 */
+	private static function disconnect() {
+		$additional_body = array(
+			'frm_paypal_api_mode' => self::get_mode_value_from_post(),
+		);
+		return self::post_with_authenticated_body( 'disconnect', $additional_body );
+	}
+
+	/**
+	 * Delete every PayPal API option, calling when disconnecting.
+	 *
+	 * @return void
+	 */
+	public static function reset_paypal_api_integration() {
+		$mode = self::get_mode_value_from_post();
+		delete_option( self::get_merchant_id_option_name( $mode ) );
+		delete_option( self::get_server_side_token_option_name( $mode ) );
+		delete_option( self::get_client_side_token_option_name( $mode ) );
+		delete_option( self::get_merchant_currency_option_name( $mode ) );
+		delete_option( self::get_location_id_option_name( $mode ) );
+		delete_option( self::get_paypal_seller_status_option_name( $mode ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function at_least_one_mode_is_setup() {
+		return self::get_merchant_id( 'test' ) || self::get_merchant_id( 'live' );
+	}
+
+	/**
+	 * Verify a site identifier is a match.
+	 */
+	public static function verify() {
+		$option_name  = 'frm_paypal_lite_last_verify_attempt';
+		$last_request = get_option( $option_name );
+
+		if ( $last_request && $last_request > strtotime( '-1 day' ) ) {
+			wp_send_json_error( 'Too many requests' );
+		}
+
+		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
+		$usage           = new FrmUsage();
+		$uuid            = $usage->uuid();
+
+		update_option( $option_name, time() );
+
+		if ( $site_identifier === $uuid ) {
+			wp_send_json_success();
+		}
+
+		wp_send_json_error();
+	}
+
+	/**
+	 * Create a PayPal order.
+	 *
+	 * @param string $amount
+	 * @param string $currency
+	 * @param string $payment_source Valid values are 'card', 'paypal'.
+	 * @param array  $payer
+	 * @param string $shipping_preference
+	 *
+	 * @return false|object
+	 */
+	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference ) {
+		$brand_name = self::get_brand_name();
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_brand_name() {
+		/**
+		 * Allow people to modify the brand name used in the PayPal order.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $brand_name
+		 */
+		return apply_filters( 'frm_paypal_brand_name', get_bloginfo( 'name' ) );
+	}
+
+	/**
+	 * @param string $order_id
+	 *
+	 * @return false|object
+	 */
+	public static function capture_order( $order_id ) {
+		return self::post_with_authenticated_body( 'capture_order', compact( 'order_id' ) );
+	}
+
+	/**
+	 * @param string $capture_id
+	 *
+	 * @return false|object
+	 */
+	public static function refund_payment( $capture_id ) {
+		return self::post_with_authenticated_body( 'refund_capture', array( 'capture_id' => $capture_id ) );
+	}
+
+	/**
+	 * @param string $subscription_id
+	 *
+	 * @return false|object
+	 */
+	public static function cancel_subscription( $subscription_id ) {
+		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+	}
+
+	/**
+	 * @param array $data Subscription data.
+	 *
+	 * @return false|object
+	 */
+	public static function create_subscription( $data ) {
+		$data['brand_name'] = self::get_brand_name();
+		return self::post_with_authenticated_body( 'create_subscription', compact( 'data' ) );
+	}
+
+	public static function create_vault_setup_token() {
+		return self::post_with_authenticated_body( 'create_vault_setup_token' );
+	}
+
+	/**
+	 * @return false|object
+	 */
+	public static function get_seller_status() {
+		$mode   = self::get_mode_value_from_post();
+		$status = get_option( self::get_paypal_seller_status_option_name( $mode ) );
+
+		if ( is_object( $status ) ) {
+			return $status;
+		}
+
+		return self::post_with_authenticated_body( 'get_seller_status' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $capture_id
+	 *
+	 * @return false|object
+	 */
+	public static function get_capture( $capture_id ) {
+		return self::post_with_authenticated_body( 'get_capture', compact( 'capture_id' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $order_id
+	 *
+	 * @return false|object
+	 */
+	public static function get_order( $order_id ) {
+		return self::post_with_authenticated_body( 'get_order', compact( 'order_id' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $subscription_id The PayPal subscription ID.
+	 *
+	 * @return false|object
+	 */
+	public static function get_subscription( $subscription_id ) {
+		return self::post_with_authenticated_body( 'get_subscription', compact( 'subscription_id' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $mode
+	 *
+	 * @return string
+	 */
+	public static function get_bn_code( $mode = 'auto' ) {
+		if ( 'auto' === $mode ) {
+			$mode = self::get_mode_value();
+		}
+
+		return 'test' === $mode ? 'FLAVORsb-wkozr49468583_MP' : 'Strategy11LLCPPCP_SP';
+	}
+}

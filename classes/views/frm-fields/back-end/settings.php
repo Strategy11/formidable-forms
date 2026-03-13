@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
-			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
-						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Collect Payment action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
+						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Stripe, Square, or PayPal action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
 						?>
 					</span>
 				</div>
