@@ -5696,6 +5696,12 @@ window.frmAdminBuildJS = function() {
 
 	function maybeCollapseSettings() {
 		/*jshint validthis:true */
+
+		// Restore animation that may have been disabled by showFieldOptions.
+		if ( this.nextElementSibling ) {
+			this.nextElementSibling.style.animation = '';
+		}
+
 		this.classList.toggle( 'frm-collapsed' );
 
 		// Toggles the "aria-expanded" attribute
@@ -7616,6 +7622,13 @@ window.frmAdminBuildJS = function() {
 		} );
 
 		singleField.classList.remove( 'frm_hidden' );
+
+		// Cancel slide animation on expanded sections so screen readers
+		// can immediately access inputs after DOM re-insertion.
+		singleField.querySelectorAll( 'h3:not(.frm-collapsed) + .frm-collapse-me' ).forEach(
+			section => section.style.animation = 'none'
+		);
+
 		document.getElementById( 'frm-options-panel-tab' ).click();
 
 		const editor = singleField.querySelector( '.wp-editor-area' );
