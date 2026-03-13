@@ -557,7 +557,7 @@
 			function isTinyMceActive() {
 				const { id } = editor;
 				const wrapper = document.getElementById( `wp-${ id }-wrap` );
-				return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
+				return wrapper && wrapper.classList.contains( 'tmce-active' );
 			}
 
 			function setUpTinyMceVisualButtonListener() {
