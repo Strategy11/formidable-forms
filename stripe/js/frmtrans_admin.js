@@ -54,7 +54,7 @@
 		return {
 			init() {
 				const actions = document.getElementById( 'frm_notification_settings' );
-				if ( actions !== null ) {
+				if ( actions ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
 					jQuery( '.frm_form_settings' ).on( 'change', '.frm_gateway_opt input', toggleGateway );
 				}
