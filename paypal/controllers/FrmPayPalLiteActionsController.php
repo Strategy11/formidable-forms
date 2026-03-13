@@ -1993,6 +1993,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'color'        => $button_color,
 			'label'        => $button_label,
 			'borderRadius' => (int) $button_border_radius,
+			'height'       => 40,
 		);
 
 		// Unset the color so PayPal can use its defaults.
@@ -2000,6 +2001,14 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		if ( 'default' === $button_color ) {
 			unset( $style_for_js['color'] );
 		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array   $style_for_js
+		 * @param WP_Post $form_action
+		 */
+		$style_for_js = apply_filters( 'frm_paypal_button_style', $style_for_js, $form_action );
 
 		return $style_for_js;
 	}

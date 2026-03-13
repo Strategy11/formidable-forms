@@ -89,9 +89,10 @@
 			const buttonContainer = document.createElement( 'div' );
 			buttonContainer.id = 'paypal-button-container';
 
-			// Enforce max width of 750 on the paypal button container so that
-			// Google Pay button matches the size of the PayPal button.
-			buttonContainer.style.maxWidth = '750px';
+			// The default max width for non-Google Pay buttons is 750px.
+			// Without setting a max width the Google Pay button will use 100%.
+			// We want smaller buttons than the default, so use 500px instead.
+			buttonContainer.style.maxWidth = '500px';
 
 			cardElement.prepend( buttonContainer );
 
@@ -282,8 +283,14 @@
 
 			const googlePayContainer = document.createElement( 'div' );
 			googlePayContainer.id = 'frm-google-pay-container';
-			googlePayContainer.style.height = '55px'; // Make the button the same height as other PayPal buttons.
 			googlePayContainer.style.marginBottom = '6px'; // Make sure the button has some extra space below it.
+
+			const iframeReference = paypalButtonContainer.querySelector( 'iframe' );
+			if ( iframeReference ) {
+				// Make the button the same height as other PayPal buttons.
+				googlePayContainer.style.height = jQuery( iframeReference ).outerHeight() + 'px';
+			}
+
 			paypalButtonContainer.prepend( googlePayContainer );
 
 			const buttonOptions = Object.assign(
