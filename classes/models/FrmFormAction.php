@@ -402,6 +402,8 @@ class FrmFormAction {
 				foreach ( $switch[ $key ] as $subkey ) {
 					$action->post_content[ $key ] = $this->duplicate_array_walk( $action->post_content[ $key ], $subkey, $val );
 				}
+			} elseif ( is_array( $val ) ) {
+				$action->post_content[ $key ] = FrmFieldsHelper::switch_field_ids( $val );
 			}
 
 			unset( $key, $val );

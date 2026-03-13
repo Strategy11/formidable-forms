@@ -1826,11 +1826,21 @@ class FrmFieldsHelper {
 
 		foreach ( $val as $k => $v ) {
 			if ( ! is_string( $v ) ) {
+				if ( is_array( $v ) ) {
+					$val[ $k ] = self::switch_field_ids( $v );
+					unset( $k, $v );
+				}
 				continue;
 			}
 
 			if ( 'custom_html' === $k ) {
 				$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
+				unset( $k, $v );
+				continue;
+			}
+
+			if ( isset( $frm_duplicate_ids[ $v ] ) ) {
+				$val[ $k ] = $frm_duplicate_ids[ $v ];
 				unset( $k, $v );
 				continue;
 			}
