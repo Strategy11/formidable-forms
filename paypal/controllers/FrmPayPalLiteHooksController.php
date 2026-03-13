@@ -73,6 +73,23 @@ class FrmPayPalLiteHooksController {
 			}
 		);
 
+		add_action(
+			'frm_field_options_before_label',
+			/**
+			 * @param array $field The field settings.
+			 * @param array $display The display settings for the field.
+			 * @param array $values The values associated with the field.
+			 */
+			function ( $field, $display, $values ) {
+				// Add a note about PayPal order fields here.
+				if ( FrmField::get_option( $field, 'is_paypal_order_field' ) ) {
+					echo '<div class="frm_note_style">This is a PayPal order field. It is automatically populated when a payment is processed, and is automatically excluded from the form HTML.</div>';
+				}
+			},
+			10,
+			3
+		);
+
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
