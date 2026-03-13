@@ -19,31 +19,7 @@ class FrmPayPalLiteHooksController {
 		// Use 20 so this happens after the Stripe add-on.
 		add_filter( 'frm_pro_show_card_callback', 'FrmPayPalLiteActionsController::maybe_show_card', 20, 2 );
 
-		add_filter(
-			'frm_show_normal_field_type',
-			/**
-			 * Hide the email, name, and address fields if they are marked as PayPal order fields.
-			 *
-			 * @since x.x
-			 *
-			 * @param bool   $show_normal_field_type Whether to show the field.
-			 * @param string $type                   The field type.
-			 * @param object $field                  The field object.
-			 *
-			 * @return bool
-			 */
-			function ( $show_normal_field_type, $type, $field ) {
-				if ( ! in_array( $type, array( 'email', 'name', 'address' ), true ) ) {
-					return $show_normal_field_type;
-				}
-
-				$is_paypal_order_field = FrmField::get_option( $field, 'is_paypal_order_field' );
-
-				return $is_paypal_order_field ? false : $show_normal_field_type;
-			},
-			10,
-			3
-		);
+		add_filter( 'frm_show_normal_field_type', 'FrmPayPalLiteFieldsController::hide_paypal_order_fields', 10, 3 );
 	}
 
 	/**
@@ -73,22 +49,7 @@ class FrmPayPalLiteHooksController {
 			}
 		);
 
-		add_action(
-			'frm_field_options_before_label',
-			/**
-			 * @param array $field The field settings.
-			 * @param array $display The display settings for the field.
-			 * @param array $values The values associated with the field.
-			 */
-			function ( $field, $display, $values ) {
-				// Add a note about PayPal order fields here.
-				if ( FrmField::get_option( $field, 'is_paypal_order_field' ) ) {
-					echo '<div class="frm_note_style">This is a PayPal order field. It is automatically populated when a payment is processed, and is automatically excluded from the form HTML.</div>';
-				}
-			},
-			10,
-			3
-		);
+		add_action( 'frm_field_options_before_label', 'FrmPayPalLiteFieldsController::add_paypal_order_field_note', 10, 3 );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
