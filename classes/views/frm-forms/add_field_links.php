@@ -198,6 +198,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</div>
 					</div>
 				</div>
+				<?php
+				/**
+				 * @since x.x
+				 *
+				 * @param stdClass $form The form object.
+				 */
+				do_action( 'frm_extra_form_builder_tabs', $form );
+				?>
 			</div>
 		</div>
 	</div>
