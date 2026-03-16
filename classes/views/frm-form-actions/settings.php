@@ -7,14 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php esc_html_e( 'Add form actions to your form to perform tasks when an entry is created, updated, imported, and more.', 'formidable' ); ?>
 </p>
 
-<div id="frm_email_addon_menu" class="frm-limited-actions">
+<div id="frm_email_addon_menu">
 	<div class="frm-h-stack">
 		<div class="frm-style-tabs-wrapper" data-filter-target="#frm-actions-filter-content">
 			<div class="frm-tabs-delimiter"><span class="frm-tabs-active-underline"></span></div>
 			<div class="frm-tabs-navs">
 				<ul class="frm-h-stack-xs frm-children-px-sm">
-					<li class="frm-active" data-filter="all"><?php esc_html_e( 'All', 'formidable' ); ?></li>
-					<li data-filter="misc"><?php esc_html_e( 'Featured', 'formidable' ); ?></li>
+					<li data-filter="all"><?php esc_html_e( 'All', 'formidable' ); ?></li>
+					<li class="frm-active" data-filter="misc"><?php esc_html_e( 'Featured', 'formidable' ); ?></li>
 					<?php foreach ( $groups as $group_key => $group ) { ?>
 						<?php if ( ! empty( $group['name'] ) ) { ?>
 							<li data-filter="<?php echo esc_attr( $group_key ); ?>"><?php echo esc_html( $group['name'] ); ?></li>
@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 							<li class="frm-card-item frm-action frm-not-installed">
 								<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
-									<span class="frm-outer-circle">
+									<span class="frm-form-templates-item-icon">
 										<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
 										<?php
 										$icon_atts = array();
@@ -84,7 +84,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 										?>
 										</span>
 									</span>
-									<?php echo esc_html( $action ); ?>
+									<span class="frm-form-templates-item-body">
+										<span class="frm-form-templates-item-title frm-font-medium">
+											<span class="frm-form-templates-item-title-text">
+												<span class="frm-form-template-name frm-truncate">
+													<?php echo esc_html( $action ); ?>
+												</span>
+											</span>
+										</span>
+									</span>
 								</a>
 							</li>
 						<?php
@@ -95,6 +103,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		}//end foreach
 		?>
+	</div>
 </div>
 
 <?php
