@@ -3,7 +3,7 @@
 jQuery( document ).ready( function() {
 	const installLink = document.getElementById( 'frm_install_link' );
 
-	if ( installLink !== null ) {
+	if ( installLink ) {
 		jQuery( installLink ).on( 'click', frmInstallPro );
 	}
 
@@ -17,7 +17,7 @@ jQuery( document ).ready( function() {
 	}
 
 	const submenuItem = document.querySelector( '.frm-upgrade-submenu' );
-	if ( null !== submenuItem ) {
+	if ( submenuItem ) {
 		const li = submenuItem.parentNode.parentNode;
 		if ( li ) {
 			li.classList.add( 'frm-submenu-highlight' );
@@ -132,13 +132,13 @@ function frmAdminPopupJS() {
 	function populateOpts( val ) {
 		const sc = document.getElementById( 'frm_complete_shortcode' );
 
-		if ( sc !== null ) {
+		if ( sc ) {
 			sc.value = `[${ val }]`;
 		}
 		jQuery( '.frm_shortcode_option' ).hide();
 
 		const $settings = document.getElementById( `sc-opts-${ val }` );
-		if ( $settings !== null ) {
+		if ( $settings ) {
 			$settings.style.display = '';
 			jQuery( document.getElementById( `sc-${ val }` ) ).trigger( 'click' );
 		} else {

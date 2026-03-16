@@ -281,7 +281,7 @@
 	 */
 	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
-		if ( null === form ) {
+		if ( ! form ) {
 			return;
 		}
 		if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {

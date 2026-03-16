@@ -332,8 +332,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param object $item
-	 * @param string $style
+	 * @param stdClass $item
+	 * @param string   $style
 	 *
 	 * @return string
 	 */

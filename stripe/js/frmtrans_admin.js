@@ -58,7 +58,7 @@
 		return {
 			init() {
 				const actions = document.getElementById( 'frm_notification_settings' );
-				if ( actions !== null ) {
+				if ( actions ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
 
 					document.addEventListener(

@@ -139,7 +139,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		foreach ( $statuses as $status => $name ) {
 			$class = $status === $type ? ' class="current"' : '';
 
-			if ( $counts[ $status ] || 'published' === $status ) {
+			if ( $counts[ $status ] || 'payments' === $status ) {
 				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
 					// translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %4$s: Span close tag.
