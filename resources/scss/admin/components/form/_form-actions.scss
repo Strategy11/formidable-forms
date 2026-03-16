@@ -108,6 +108,11 @@
 #frm_email_addon_menu h3 {
 	margin: 0 0 var(--gap-sm);
 	clear: both;
+	border: 0;
+	padding: 0;
+	font-size: var(--text-lg);
+	font-weight: 600;
+	color: var(--grey-700);
 }
 
 .frm_single_api_settings p > label {
@@ -118,18 +123,12 @@
 	margin-right: 5px;
 }
 
-.frm_actions_list li {
-}
-
-.frm-limited-actions .frm-group-heading,
-.frm-limited-actions #frm-hide-groups,
-.frm-all-actions #frm-show-groups,
-.frm-limited-actions .frm-not-installed:not(.frm-search-result):not(.frm-default-show) {
-	display: none;
-}
-
 #frm-actions-filter-content {
 	margin-top: var(--gap-md);
+}
+
+#frm-actions-filter-content .frm-group-heading {
+	display: none;
 }
 
 #frm-actions-filter-content[data-active-filter="all"] .frm-group-heading {
@@ -144,14 +143,72 @@
 	display: none;
 }
 
-label.frm_action_events {
-	padding-left: 15px;
+.frm_actions_list .frm-card-item {
+	border-color: var(--grey-300);
+	box-shadow: var(--box-shadow-sm);
 }
 
-#frm-hide-groups,
-#frm-show-groups {
+.frm_actions_list .frm-card-item > a {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	color: inherit;
+	text-decoration: none;
+}
+
+.frm_actions_list .frm-form-templates-item-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+	box-shadow: var(--box-shadow-sm);
+}
+
+.frm_actions_list .frm-form-templates-item-icon .frm-category-icon,
+.frm_actions_list .frm-form-templates-item-icon .frm-inner-circle {
+	width: auto;
+	height: auto;
+	min-width: auto;
+	background: transparent;
+	padding: 0;
+	border-radius: 0;
+}
+
+.frm_actions_list .frm-form-templates-item-icon .frmsvg {
+	height: 20px;
+	width: 20px;
+}
+
+.frm_actions_list .frm-form-templates-item-body {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+}
+
+.frm_actions_list .frm-form-templates-item-title {
+	display: flex;
+	align-items: center;
 	font-size: var(--text-md);
-	float: right;
+}
+
+.frm_actions_list .frm-form-templates-item-title-text {
+	min-width: 0;
+}
+
+.frm_actions_list .frm-form-templates-item-content {
+	font-size: var(--text-sm);
+	color: var(--grey-500);
+	line-height: var(--leading);
+}
+
+label.frm_action_events {
+	padding-left: 15px;
 }
 
 .frm_email_settings .widget-title h4 {
