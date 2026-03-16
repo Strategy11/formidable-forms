@@ -3,7 +3,7 @@
 
 	jQuery( document ).ready( function() {
 		const thisForm = document.getElementById( 'form_id' );
-		if ( thisForm !== null ) {
+		if ( thisForm ) {
 			thisFormId = thisForm.value;
 		}
 
@@ -158,7 +158,7 @@
 
 	function setMenuOffset() {
 		const fields = document.getElementById( 'frm_adv_info' );
-		if ( fields === null ) {
+		if ( ! fields ) {
 			return;
 		}
 
@@ -169,7 +169,7 @@
 		}
 
 		const posEle = document.getElementById( 'frm_position_ele' );
-		if ( posEle === null ) {
+		if ( ! posEle ) {
 			return;
 		}
 
@@ -179,7 +179,7 @@
 		let menuHeight = 0;
 
 		const menu = document.getElementById( 'wpadminbar' );
-		if ( menu !== null ) {
+		if ( menu ) {
 			menuHeight = menu.offsetHeight;
 		}
 

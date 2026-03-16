@@ -383,6 +383,7 @@ export default [
 			'formidable/no-optional-chaining-queryselectorall': 'error',
 			'formidable/no-repeated-selector': 'warn',
 			'formidable/prefer-document-fragment': 'warn',
+			'formidable/prefer-truthy-dom-query': 'error',
 
 			// Import rules
 			'import/no-default-export': 'warn',

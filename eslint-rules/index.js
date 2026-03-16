@@ -7,6 +7,7 @@ const noTypeofUndefined = require( './rules/no-typeof-undefined' );
 const noOptionalChainingQueryselectorall = require( './rules/no-optional-chaining-queryselectorall' );
 const noRepeatedSelector = require( './rules/no-repeated-selector' );
 const preferDocumentFragment = require( './rules/prefer-document-fragment' );
+const preferTruthyDomQuery = require( './rules/prefer-truthy-dom-query' );
 
 module.exports = {
 	rules: {
@@ -17,5 +18,6 @@ module.exports = {
 		'no-optional-chaining-queryselectorall': noOptionalChainingQueryselectorall,
 		'no-repeated-selector': noRepeatedSelector,
 		'prefer-document-fragment': preferDocumentFragment,
+ 		'prefer-truthy-dom-query': preferTruthyDomQuery,
 	},
 };
