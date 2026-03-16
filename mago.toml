@@ -105,7 +105,6 @@ ignore = [
     "impossible-nonnull-entry-check",
     "impossible-type-comparison",
     "incompatible-parameter-name",
-    "incompatible-parameter-type",
     "invalid-argument",
     "invalid-array-access",
     "invalid-array-element-key",

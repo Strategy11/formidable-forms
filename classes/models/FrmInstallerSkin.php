@@ -38,7 +38,7 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 *
 	 * @since 3.04.02
 	 *
-	 * @param object $result The result of the install process.
+	 * @param string|bool|WP_Error $result The result of the install process.
 	 *
 	 * @return void
 	 */
