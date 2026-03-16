@@ -450,11 +450,12 @@ class FrmFormActionsController {
 		$action_control = self::get_form_actions( $action_type );
 		$action_control->_set( $action_key );
 
-		$form_id     = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
-		$form_action = $action_control->prepare_new( $form_id );
-		$use_logging = self::should_show_log_message( $action_type );
-		$values      = array();
-		$form        = self::fields_to_values( $form_id, $values );
+		$form_id                 = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
+		$form_action             = $action_control->prepare_new( $form_id );
+		$form_action->post_title = self::get_new_action_title( $form_id, $action_type, $form_action->post_title );
+		$use_logging             = self::should_show_log_message( $action_type );
+		$values                  = array();
+		$form                    = self::fields_to_values( $form_id, $values );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 		wp_die();
@@ -491,6 +492,30 @@ class FrmFormActionsController {
 	private static function should_show_log_message( $action_type ) {
 		$logging = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
+	}
+
+	/**
+	 * Generate a unique action title with an auto-incrementing suffix.
+	 *
+	 * If actions of the same type already exist on the form, appends " (N)" to the base title.
+	 *
+	 * @since x.x
+	 *
+	 * @param int    $form_id     Form ID.
+	 * @param string $action_type Action type slug.
+	 * @param string $base_title  Default action title.
+	 *
+	 * @return string
+	 */
+	private static function get_new_action_title( $form_id, $action_type, $base_title ) {
+		$existing = FrmFormAction::get_action_for_form( $form_id, $action_type );
+		$count    = count( $existing );
+
+		if ( $count < 1 ) {
+			return $base_title;
+		}
+
+		return $base_title . ' (' . ( $count + 1 ) . ')';
 	}
 
 	/**
