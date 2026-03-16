@@ -703,14 +703,22 @@
 				onApprove,
 				onError,
 				onCancel,
-				style: frmPayPalVars.buttonStyle,
+				style: { ...frmPayPalVars.buttonStyle },
 			};
 
-			if ( 'venmo' === fundingSource ) {
-				const venmoSupportedColors = [ 'blue', 'silver', 'black', 'white' ];
-				if ( ! venmoSupportedColors.includes( buttonConfig.style.color ) ) {
-					delete buttonConfig.style.color;
-				}
+			const supportedColors = [ 'silver', 'black', 'white' ];
+			
+			// These mapped payment sources support extra colors.
+			// Most sources only support silver, black, and white.
+			const supportedColorsMap = {
+				venmo: [ 'blue' ],
+				paylater: [ 'gold', 'blue' ]
+			};
+
+			supportedColorsMap[ fundingSource ]?.forEach( color => supportedColors.push( color ) );
+
+			if ( ! supportedColors.includes( buttonConfig.style.color ) ) {
+				delete buttonConfig.style.color;
 			}
 
 			if ( isRecurring ) {
