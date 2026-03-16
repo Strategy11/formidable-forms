@@ -64,6 +64,10 @@ tagged-todo = { enabled = false }
 too-many-methods = { enabled = false }
 too-many-properties = { enabled = false }
 use-compound-assignment = { enabled = false } # Consider enabling this soon.
+no-isset = { enabled = false }
+file-name = { enabled = false }
+readable-literal = { enabled = false }
+single-class-per-file = { enabled = false }
 # PHPUnit Rules
 assertion-style = { enabled = false }
 # WordPress Rules
@@ -184,4 +188,5 @@ ignore = [
     "unsafe-instantiation",
     "unused-method",
     "unused-property",
+    "template-constraint-violation"
 ]
