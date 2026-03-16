@@ -1847,7 +1847,7 @@ class FrmFieldsHelper {
 
 			$val[ $k ] = str_replace( $replace, $replace_with, $v );
 			unset( $k, $v );
-		}
+		}//end foreach
 
 		return $val;
 	}
