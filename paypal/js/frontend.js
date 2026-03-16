@@ -706,6 +706,13 @@
 				style: frmPayPalVars.buttonStyle,
 			};
 
+			if ( 'venmo' === fundingSource ) {
+				const venmoSupportedColors = [ 'blue', 'silver', 'black', 'white' ];
+				if ( ! venmoSupportedColors.includes( buttonConfig.style.color ) ) {
+					delete buttonConfig.style.color;
+				}
+			}
+
 			if ( isRecurring ) {
 				buttonConfig.createSubscription = createSubscription;
 			} else {
