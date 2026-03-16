@@ -93,7 +93,6 @@ no-boolean-literal-comparison = true
 check-missing-type-hints = false
 register-super-globals = true
 ignore = [
-    "ambiguous-instantiation-target",
     "ambiguous-object-method-access",
     "ambiguous-object-property-access",
     "array-to-string-conversion",
