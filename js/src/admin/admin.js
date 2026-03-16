@@ -7542,24 +7542,6 @@ window.frmAdminBuildJS = function() {
 		);
 	}
 
-	function toggleActionGroups() {
-		/*jshint validthis:true */
-		const actions = document.getElementById( 'frm_email_addon_menu' ).classList;
-		const search = document.getElementById( 'actions-search-input' );
-
-		if ( actions.contains( 'frm-all-actions' ) ) {
-			actions.remove( 'frm-all-actions' );
-			actions.add( 'frm-limited-actions' );
-		} else {
-			actions.add( 'frm-all-actions' );
-			actions.remove( 'frm-limited-actions' );
-		}
-
-		// Reset search.
-		search.value = '';
-		triggerEvent( search, 'input' );
-	}
-
 	function getNewActionId() {
 		const actionSettings = document.querySelectorAll( '.frm_form_action_settings' );
 		let len = getNewRowId( actionSettings, 'frm_form_action_' );
@@ -10632,7 +10614,6 @@ window.frmAdminBuildJS = function() {
 			$formActions.on( 'click', '.frm_toggle_cf_opts', toggleCfOpts );
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
-			jQuery( '#frm-show-groups, #frm-hide-groups' ).on( 'click', toggleActionGroups );
 			initiateMultiselect();
 
 			//set actions icons to inactive
