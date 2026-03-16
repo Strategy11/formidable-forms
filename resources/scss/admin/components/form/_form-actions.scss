@@ -28,7 +28,7 @@
 }
 
 #frm_notification_settings .widget-top .widget-action {
-	padding-top: 13.5px;
+	padding: 0;
 }
 
 #frm_email_addon_menu {
@@ -55,7 +55,7 @@
 }
 
 .frm_email_settings .widget {
-	margin-bottom: var(--gap-sm);
+	margin-bottom: var(--gap-xs);
 }
 
 .frm_form_action_settings .widget-top {
@@ -64,6 +64,10 @@
 	border-radius: var(--small-radius);
 	background: var(--lightest-grey);
 	color: var(--grey-700);
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
+	padding: 10px var(--gap-sm);
 }
 
 .frm_form_action_settings:hover .widget-top {
@@ -96,13 +100,25 @@
 	border-bottom-right-radius: 4px;
 }
 
+.frm_form_action_settings .widget-title {
+	flex: 1;
+	min-width: 0;
+}
+
 .frm_form_action_settings .widget-title h4,
 .frm_form_action_settings .widget-title h3 {
-	display: inline-block;
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
 	border-bottom: none;
-	padding: 10px 10px 5px;
+	padding: 0;
+	margin: 0;
 	font-size: var(--text-md);
 	font-weight: 500;
+	color: var(--grey-900);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #frm_email_addon_menu h3 {
@@ -119,8 +135,38 @@
 	display: inline;
 }
 
-.frm_form_action_icon {
-	margin-right: 5px;
+.frm_form_action_settings .frm_form_action_icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	min-width: 24px;
+	border: 1px solid var(--grey-300);
+	border-radius: 4px;
+	background: #fff;
+	color: var(--grey-500);
+	line-height: 1;
+}
+
+.frm_form_action_settings .frm_form_action_icon .frmsvg,
+.frm_form_action_settings .frm_form_action_icon i::before {
+	height: 14px;
+	width: 14px;
+	font-size: 14px;
+}
+
+.frm-action-drag-handle {
+	display: flex;
+	align-items: center;
+	cursor: grab;
+	color: var(--grey-400);
+	line-height: 1;
+}
+
+.frm-action-drag-handle .frmsvg {
+	height: 16px;
+	width: 16px;
 }
 
 #frm-actions-filter-content {
@@ -240,12 +286,8 @@ span.frm-inner-circle {
 	fill: currentColor;
 }
 
-.frm_email_settings .widget-title .frm_form_action_icon {
-	height: 15px;
-	width: 15px;
-	padding: 5px;
-	color: #fff;
-	vertical-align: middle;
+.frm_email_settings .widget-title .frm_form_action_icon:not(.frm-inverse) .frmsvg {
+	color: currentColor;
 }
 
 .frm_actions_list .frmsvg,
@@ -288,45 +330,59 @@ span.frm-inner-circle.frm-inverse {
 	font-size: 30px;
 }
 
-.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse {
+.frm_form_action_settings .frm_form_action_icon.frm-inverse {
 	background: #fff;
-	padding: 0;
-	height: 24px;
-	width: 24px;
 }
 
-.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse .frmsvg,
-.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse i::before {
+.frm_form_action_settings .frm_form_action_icon.frm-inverse .frmsvg,
+.frm_form_action_settings .frm_form_action_icon.frm-inverse i::before {
 	color: var(--grey-400);
-	height: 24px;
-	width: 24px;
-	font-size: 24px;
 }
 
-.frm_email_settings .widget-title:hover .frm_form_action_icon.frm-inverse .frmsvg,
-.frm_email_settings .widget-title:hover .frm_form_action_icon.frm-inverse i::before {
-	color: var(--grey-500);
+.frm_form_action_settings .widget-title-action {
+	display: flex;
+	align-items: center;
+}
+
+.frm_form_action_settings .widget-action .frmsvg {
+	height: 16px;
+	width: 16px;
+	transform: rotate(90deg);
+	transition: transform 0.2s ease;
+	color: var(--grey-400);
+}
+
+.frm_form_action_settings.open .widget-action .frmsvg {
+	transform: rotate(270deg);
 }
 
 .frm_email_icons {
-	padding: 10px 0 5px 6px;
-	font-size: 20px;
+	display: flex;
+	align-items: center;
+	gap: var(--gap-sm);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.frm_form_action_settings:hover .frm_email_icons,
+.frm_form_action_settings.open .frm_email_icons {
+	opacity: 1;
 }
 
 .frm_email_icons a {
-	margin-left: 8px;
-	color: var(--grey);
-	opacity: 0;
-	transition: all 0.2s ease;
+	color: var(--grey-400);
+	display: flex;
+	align-items: center;
 }
 
 .frm_email_icons a .frmsvg {
-	color: var(--grey);
+	height: 16px;
+	width: 16px;
+	color: var(--grey-400);
 }
 
-.frm_email_icons a:hover,
-.widget-top:hover .frm_email_icons a {
-	opacity: 1;
+.frm_email_icons a:hover .frmsvg {
+	color: var(--grey-700);
 }
 
 .frm_inactive_action .frm-inner-circle,
