@@ -44,7 +44,7 @@
 		}
 
 		// Hide dropdown when clicking outside.
-		const handleOutsideClick = ( event ) => {
+		const handleOutsideClick = event => {
 			const dropdown = document.getElementById( 'frm-forms-list-settings' );
 			if ( dropdown && ! dropdown.contains( event.target ) && ! btn.contains( event.target ) ) {
 				dropdown.classList.add( 'frm_hidden' );
