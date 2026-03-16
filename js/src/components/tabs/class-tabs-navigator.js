@@ -1,3 +1,6 @@
+import { applyContentFilter, hasFilterableGroups } from './filter.js';
+import { observeVisibility, disconnectVisibilityObserver } from './visibilityObserver.js';
+
 export class frmTabsNavigator {
 	constructor( wrapper ) {
 		if ( wrapper === undefined ) {
@@ -25,7 +28,7 @@ export class frmTabsNavigator {
 	}
 
 	init() {
-		const isFilterMode = null !== this.filterTarget;
+		const isFilterMode = null !== this.filterTarget && hasFilterableGroups( this.filterTarget );
 		const hasSlideTrack = null !== this.slideTrack && this.slides.length;
 
 		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || ( ! isFilterMode && ! hasSlideTrack ) ) {
@@ -36,26 +39,17 @@ export class frmTabsNavigator {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
 			if ( nav.classList.contains( 'frm-active' ) ) {
 				this.initSlideTrackUnderline( nav );
+				if ( this.filterTarget ) {
+					applyContentFilter( this.filterTarget, nav.dataset.filter || 'all' );
+				}
 			}
 		} );
 		this.slideTrackLine.style.display = 'block';
 
 		this.setupScrollbarObserver();
+		this.setupVisibilityObserver();
 		// Cleanup observers when page unloads to prevent memory leaks
 		window.addEventListener( 'beforeunload', this.cleanupObservers );
-	}
-
-	/**
-	 * Filters content groups by matching data-filter value against data-group attributes.
-	 * Sets data-active-filter on the container for CSS-driven visual changes.
-	 *
-	 * @param {string} filterValue The filter key matching data-group on content groups, or 'all'.
-	 */
-	applyFilter( filterValue ) {
-		this.filterTarget.dataset.activeFilter = filterValue;
-		this.filterTarget.querySelectorAll( '[data-group]' ).forEach( group => {
-			group.classList.toggle( 'frm-filter-hidden', 'all' !== filterValue && group.dataset.group !== filterValue );
-		} );
 	}
 
 	onNavClick( event, index ) {
@@ -68,7 +62,7 @@ export class frmTabsNavigator {
 		this.initSlideTrackUnderline( navItem );
 
 		if ( this.filterTarget ) {
-			this.applyFilter( navItem.dataset.filter || 'all' );
+			applyContentFilter( this.filterTarget, navItem.dataset.filter || 'all' );
 			return;
 		}
 
@@ -86,10 +80,17 @@ export class frmTabsNavigator {
 		this.positionUnderlineIndicator( activeNav );
 	}
 
-	/**
-	 * Sets up a ResizeObserver to watch for scrollbar changes in the parent container.
-	 * Automatically repositions the underline indicator when layout changes occur.
-	 */
+	/** Repositions underline when wrapper becomes visible (handles hidden panels). */
+	setupVisibilityObserver() {
+		observeVisibility( this.wrapper, () => {
+			const activeNav = this.wrapper.querySelector( '.frm-tabs-navs ul > li.frm-active' );
+			if ( activeNav ) {
+				this.positionUnderlineIndicator( activeNav );
+			}
+		} );
+	}
+
+	/** Repositions underline when parent container resizes (scrollbar changes). */
 	setupScrollbarObserver() {
 		const resizeObserverTarget = document.querySelector( '.frm-scrollbar-wrapper, .styling_settings' ) || document.body;
 		if ( ! resizeObserverTarget || ! ( 'ResizeObserver' in window ) ) {
@@ -105,21 +106,16 @@ export class frmTabsNavigator {
 		this.resizeObserver.observe( resizeObserverTarget );
 	}
 
-	/**
-	 * Cleans up observers to prevent memory leaks.
-	 */
+	/** Cleans up observers to prevent memory leaks. */
 	cleanupObservers() {
 		if ( this.resizeObserver ) {
 			this.resizeObserver.disconnect();
 			this.resizeObserver = null;
 		}
+		disconnectVisibilityObserver();
 	}
 
-	/**
-	 * Positions the underline indicator based on the active navigation element.
-	 *
-	 * @param {HTMLElement} activeNav The active navigation element to position the underline under
-	 */
+	/** @param {HTMLElement} activeNav The active nav element to position underline under. */
 	positionUnderlineIndicator( activeNav ) {
 		requestAnimationFrame( () => {
 			const position = this.isRTL
