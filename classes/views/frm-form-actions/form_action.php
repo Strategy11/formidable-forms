@@ -21,9 +21,6 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	<?php FrmAppHelper::array_to_html_params( $data_attrs, true ); ?>
 >
 	<div class="widget-top">
-		<span class="frm-action-drag-handle">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_drag_icon' ); ?>
-		</span>
 		<div class="widget-title">
 			<h4>
 				<span class="frm_form_action_icon <?php echo esc_attr( str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? 'frm-inverse' : '' ); ?>">

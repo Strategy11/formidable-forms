@@ -106,6 +106,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 
+<h3><?php esc_html_e( 'Your Actions', 'formidable' ); ?></h3>
+
 <?php
 FrmFormActionsController::list_actions( $form, $values );
 FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' );

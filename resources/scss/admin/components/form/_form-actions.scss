@@ -156,19 +156,6 @@
 	font-size: 14px;
 }
 
-.frm-action-drag-handle {
-	display: flex;
-	align-items: center;
-	cursor: grab;
-	color: var(--grey-400);
-	line-height: 1;
-}
-
-.frm-action-drag-handle .frmsvg {
-	height: 16px;
-	width: 16px;
-}
-
 #frm-actions-filter-content {
 	margin-top: var(--gap-md);
 }
