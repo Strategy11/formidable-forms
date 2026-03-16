@@ -1,5 +1,5 @@
 import { applyContentFilter, hasFilterableGroups } from './filter.js';
-import { observeVisibility, disconnectVisibilityObserver } from './visibilityObserver.js';
+import { observeVisibility, disconnectVisibilityObserver } from 'core/utils/visibilityObserver';
 
 export class frmTabsNavigator {
 	constructor( wrapper ) {
