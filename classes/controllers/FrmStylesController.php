@@ -710,6 +710,8 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function save_style() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
 		$frm_style   = new FrmStyle();
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
@@ -1196,10 +1198,12 @@ class FrmStylesController {
 
 		$frm_settings = FrmAppHelper::get_settings();
 
-		if ( $frm_settings->load_style !== 'none' ) {
-			wp_enqueue_style( 'formidable' );
-			$frm_vars['css_loaded'] = true;
+		if ( $frm_settings->load_style === 'none' ) {
+			return;
 		}
+
+		wp_enqueue_style( 'formidable' );
+		$frm_vars['css_loaded'] = true;
 	}
 
 	/**

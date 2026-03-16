@@ -55,6 +55,7 @@ describe( 'Entries submitted from a form', () => {
 				'Get 60% Off Pro!',
 				'Black Friday Deals',
 				'Cyber Monday Deals',
+				'Get 60% Off Pro'
 			] );
 		} );
 

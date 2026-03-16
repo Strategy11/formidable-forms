@@ -294,7 +294,6 @@ class FrmFieldsController {
 		}
 
 		// Keep other options after bulk update.
-		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! empty( $field['field_options']['other'] ) ) {
 			$other_array = array();
 
@@ -868,10 +867,12 @@ class FrmFieldsController {
 
 		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
 
-		if ( false !== $error_body ) {
-			$error_body                  = urlencode( $error_body );
-			$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
+		if ( false === $error_body ) {
+			return;
 		}
+
+		$error_body                  = urlencode( $error_body );
+		$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
 	}
 
 	/**
@@ -1038,12 +1039,14 @@ class FrmFieldsController {
 		$has_format   = $format_value && ! FrmCurrencyHelper::is_currency_format( $format_value );
 		$format_field = FrmField::is_field_type( $field, 'text' );
 
-		if ( $field['type'] === 'phone' || ( $has_format && $format_field ) ) {
-			$format = FrmEntryValidate::phone_format( $field );
-			$format = substr( $format, 2, - 1 );
-
-			$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
+		if ( $field['type'] !== 'phone' && ( ! $has_format || ! $format_field ) ) {
+			return;
 		}
+
+		$format = FrmEntryValidate::phone_format( $field );
+		$format = substr( $format, 2, - 1 );
+
+		$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
 	}
 
 	/**

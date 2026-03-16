@@ -10,8 +10,7 @@ class test_FrmAddon extends FrmUnitTest {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )
-							->setMethods( null )
+		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )->setMethods()
 							->getMock();
 	}
 
@@ -30,7 +29,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 */
 	public function test_insert_installed_addon() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-		$this->assertTrue( isset( $plugins['signature'] ) );
+		$this->assertArrayHasKey( 'signature', $plugins );
 	}
 
 	/**
@@ -43,7 +42,7 @@ class test_FrmAddon extends FrmUnitTest {
 		$license_key = 'testlicense-232';
 		define( 'FRM_SIGNATURE_LICENSE', $license_key );
 		$license = $this->addon->get_defined_license();
-		$this->assertEquals( $license_key, $license );
+		$this->assertSame( $license_key, $license );
 	}
 
 	/**
@@ -88,7 +87,7 @@ class test_FrmAddon extends FrmUnitTest {
 			}
 
 			$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
-			$this->assertEquals( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
+			$this->assertSame( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
 		}
 	}
 

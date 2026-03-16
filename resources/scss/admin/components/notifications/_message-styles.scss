@@ -15,8 +15,8 @@
 #post-body-content .frm_updated_message,
 div.frm_updated_message {
 	border-radius: var(--small-radius);
-	background-color: #D5F2DC;
-	color: #1E561F;
+	background-color: #d5f2dc;
+	color: #1e561f;
 	padding: var(--gap-sm) var(--gap-md);
 	font-size: var(--text-sm);
 	margin: var(--gap-sm) 0;
@@ -24,12 +24,14 @@ div.frm_updated_message {
 }
 
 .frm_note_style2 {
-	background: linear-gradient(90deg, #e9effa, #fcf6fe) padding-box,
-				linear-gradient(90deg, #1961D5, #E8ABEF) border-box;
+	background:
+		linear-gradient(90deg, #e9effa, #fcf6fe) padding-box,
+		linear-gradient(90deg, #1961d5, #e8abef) border-box;
 	border: 1px solid transparent;
 }
 
-#frm_top_bar + .wrap > .frm_updated_message, #frm_top_bar + .wrap > .frm_warning_style {
+#frm_top_bar + .wrap > .frm_updated_message,
+#frm_top_bar + .wrap > .frm_warning_style {
 	display: inline-block;
 	width: 100%;
 	box-sizing: border-box;
@@ -46,7 +48,7 @@ div.frm_updated_message {
 
 .frm_error_style {
 	color: #973937;
-	background-color: #EBCCCC;
+	background-color: #ebcccc;
 	clear: both;
 }
 
@@ -56,17 +58,17 @@ div.frm_updated_message {
 }
 
 .frm_error_style svg {
-	opacity: .7;
+	opacity: 0.7;
 }
 
 .frm_warning_style {
-	color: #7A4D05;
-	background-color: #FFF2D2;
+	color: #7a4d05;
+	background-color: #fff2d2;
 }
 
-.frm_warning_heading{
+.frm_warning_heading {
 	font-weight: 700;
-	margin-bottom:4px;
+	margin-bottom: 4px;
 }
 
 /* Warning message dismiss */

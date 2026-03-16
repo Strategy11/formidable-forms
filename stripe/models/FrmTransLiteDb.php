@@ -313,10 +313,12 @@ class FrmTransLiteDb {
 		$migrations = array( 4 );
 
 		foreach ( $migrations as $migration ) {
-			if ( $this->db_version >= $migration && $old_db_version < $migration ) {
-				$function_name = 'migrate_to_' . $migration;
-				$this->$function_name();
+			if ( $this->db_version < $migration || $old_db_version >= $migration ) {
+				continue;
 			}
+
+			$function_name = 'migrate_to_' . $migration;
+			$this->$function_name();
 		}
 	}
 

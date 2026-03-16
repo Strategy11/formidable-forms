@@ -161,7 +161,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 		}
 
 		$afterConcat = $phpcsFile->findNext( T_STRING_CONCAT, $closeParen + 1, $semicolon );
-		return ( false !== $afterConcat );
+		return false !== $afterConcat;
 	}
 
 	/**
@@ -259,7 +259,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 			$leadingWhitespace = '';
 		}
 
-		$hasLeadingWhitespace = ( '' !== $leadingWhitespace );
+		$hasLeadingWhitespace = '' !== $leadingWhitespace;
 		$lineIndent = $indentation;
 
 		$newLines = array();

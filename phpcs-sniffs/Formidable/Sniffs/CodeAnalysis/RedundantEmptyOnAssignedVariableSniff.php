@@ -100,7 +100,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 
 		// Check if there's a boolean NOT before empty.
 		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
-		$isNegated = ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT );
+		$isNegated = false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT;
 
 		// Determine the suggested replacement.
 		if ( $isNegated ) {
@@ -203,7 +203,14 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 		}
 
 		// Check if in a boolean expression (with && or ||).
-		return $this->isInBooleanExpression( $phpcsFile, $stackPtr );
+		$booleanContext = $this->isInBooleanExpression( $phpcsFile, $stackPtr );
+
+		if ( false !== $booleanContext ) {
+			return $booleanContext;
+		}
+
+		// Check if used as a value expression (array value, assignment, return, argument).
+		return $this->isInValueExpression( $phpcsFile, $stackPtr );
 	}
 
 	/**
@@ -318,6 +325,60 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 		}
 
 		if ( false !== $prevToken && in_array( $tokens[ $prevToken ]['code'], array( T_BOOLEAN_AND, T_BOOLEAN_OR ), true ) ) {
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the empty() call is used as a value expression.
+	 *
+	 * Only flags plain `empty( $var )` in value contexts (replaceable with
+	 * `! $var`). Skips `! empty( $var )` since that reads clearly as a truthy
+	 * check and is not redundant.
+	 *
+	 * Covers array values (=> empty()), assignments (= empty()),
+	 * return statements (return empty()), and function arguments.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the empty token.
+	 *
+	 * @return false|int The statement start position, or false if not in a value expression.
+	 */
+	private function isInValueExpression( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Skip the negated form (! empty) — it reads clearly and is not redundant.
+		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+
+		if ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT ) {
+			return false;
+		}
+
+		if ( false === $prevToken ) {
+			return false;
+		}
+
+		$prevCode = $tokens[ $prevToken ]['code'];
+
+		// Array value: 'key' => empty( $var ).
+		if ( $prevCode === T_DOUBLE_ARROW ) {
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		// Assignment: $var = empty( $var ).
+		if ( $prevCode === T_EQUAL ) {
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		// Return statement: return empty( $var ).
+		if ( $prevCode === T_RETURN ) {
+			return $prevToken;
+		}
+
+		// Function argument: func( empty( $var ) ) or func( ..., empty( $var ) ).
+		if ( $prevCode === T_OPEN_PARENTHESIS || $prevCode === T_COMMA ) {
 			return $this->findStatementStart( $phpcsFile, $stackPtr );
 		}
 
