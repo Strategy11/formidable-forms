@@ -72,12 +72,12 @@
 		wpInput.dispatchEvent( new Event( 'click' ) );
 	}
 
-	function handleClickApplyBtn( event ) {
+	function handleClickApplyBtn() {
 		// Update the screen options form inputs.
 		const screenOptionsForm = document.querySelector( 'form#adv-settings' );
 		if ( ! screenOptionsForm ) {
 			// This page may not support screen options.
-			applySettingsWithoutScreenOptions( event );
+			applySettingsWithoutScreenOptions();
 			return;
 		}
 
@@ -97,7 +97,7 @@
 		screenOptionsForm.submit();
 	}
 
-	function applySettingsWithoutScreenOptions( event ) {
+	function applySettingsWithoutScreenOptions() {
 		const perPageInput = frmDom.tag( 'input' );
 		perPageInput.type = 'hidden';
 		perPageInput.name = 'wp_screen_options[value]';
