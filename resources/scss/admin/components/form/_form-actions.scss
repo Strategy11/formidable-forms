@@ -40,11 +40,6 @@
 	clear: unset;
 }
 
-#frm_email_addon_menu h3.frm-no-border {
-	clear: none;
-	padding-top: 7px;
-}
-
 .frm_email_settings .widget .widget-top {
 	background-color: var(--sidebar-color);
 }
@@ -121,16 +116,6 @@
 	text-overflow: ellipsis;
 }
 
-#frm_email_addon_menu h3 {
-	margin: 0 0 var(--gap-sm);
-	clear: both;
-	border: 0;
-	padding: 0;
-	font-size: var(--text-lg);
-	font-weight: 600;
-	color: var(--grey-700);
-}
-
 .frm_single_api_settings p > label {
 	display: inline;
 }
@@ -174,20 +159,6 @@
 
 .frm-filter-hidden {
 	display: none;
-}
-
-.frm_actions_list .frm-card-item {
-	border-color: var(--grey-300);
-	box-shadow: var(--box-shadow-sm);
-}
-
-.frm_actions_list .frm-card-item > a {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	width: 100%;
-	color: inherit;
-	text-decoration: none;
 }
 
 .frm_actions_list .frm-form-templates-item-icon {
