@@ -74,9 +74,10 @@
 
 	function handleClickApplyBtn( event ) {
 		// Update the screen options form inputs.
-		const screenOptionsForm = document.getElementById( 'adv-settings' );
+		const screenOptionsForm = document.querySelector( 'form#adv-settings' );
 		if ( ! screenOptionsForm ) {
 			// This page may not support screen options.
+			applySettingsWithoutScreenOptions( event );
 			return;
 		}
 
@@ -94,6 +95,37 @@
 		} );
 
 		screenOptionsForm.submit();
+	}
+
+	function applySettingsWithoutScreenOptions( event ) {
+		const perPageInput = frmDom.tag( 'input' );
+		perPageInput.type = 'hidden';
+		perPageInput.name = 'wp_screen_options[value]';
+		perPageInput.value = document.getElementById( 'frm-forms-list-per-page' ).value;
+
+		const perPageOptionNameInput = frmDom.tag( 'input' );
+		perPageOptionNameInput.type = 'hidden';
+		perPageOptionNameInput.name = 'wp_screen_options[option]';
+		perPageOptionNameInput.value = 'formidable_page_formidable_per_page';
+
+		const showDescInput = frmDom.tag( 'input' );
+		showDescInput.type = 'checkbox';
+		showDescInput.name = 'frm_forms_show_desc';
+		showDescInput.value = '1';
+		showDescInput.checked = document.getElementById( 'frm-forms-list-show-desc' ).checked;
+
+		const nonceInput = frmDom.tag( 'input' );
+		nonceInput.type = 'hidden';
+		nonceInput.name = 'screenoptionnonce';
+		nonceInput.value = document.getElementById( 'screenoptionnonce' ).value;
+
+		const form = frmDom.tag( 'form', {
+			className: 'frm_hidden',
+			children: [ perPageInput, perPageOptionNameInput, showDescInput, nonceInput ],
+		});
+		form.method = 'post';
+		document.body.append( form );
+		form.submit();
 	}
 
 	function handleClickCollapsibleBtn( event ) {
