@@ -7,45 +7,34 @@ $single_action_attrs = array_merge(
 	$data,
 	array(
 		'href'            => 'javascript:void(0)',
-		'class'           => $classes,
+		'class'           => $classes . ' button frm-button-secondary frm-button-sm frm-with-icon frm-ml-auto-force',
 		'data-limit'      => $action_control->action_options['limit'],
 		'data-actiontype' => $action_control->id_base,
 	)
 );
 ?>
-<li class="frm-card-item frm-action<?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>">
-	<a <?php FrmAppHelper::array_to_html_params( $single_action_attrs, true ); ?>>
-		<span class="frm-form-templates-item-icon">
-			<span class="frm-category-icon frm-icon-wrapper">
-				<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'] ); ?>
-			</span>
+<li class="frm-card-item frm-card-item--outlined frm-action<?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>">
+	<div class="frm-h-stack-xs frm-w-full frm-mb-2xs">
+		<span class="frm-border-icon">
+			<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], $icon_atts ); ?>
 		</span>
 
-		<span class="frm-form-templates-item-body">
-			<span class="frm-form-templates-item-title frm-font-medium">
-				<span class="frm-form-templates-item-title-text">
-					<span class="frm-form-template-name frm-truncate">
-						<?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?>
-					</span>
-				</span>
-				<span class="frm-flex-box frm-gap-xs frm-items-center frm-ml-auto">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_plus_icon' ); ?>
-					<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
-				</span>
-			</span>
+		<div class="frm-flex-col">
+			<h3>
+				<span class="frm-font-medium frm-truncate"><?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?></span>
+			</h3>
+			<?php if ( ! empty( $action_control->action_options['description'] ) ) { ?>
+				<p class="frm-line-clamp-2"><?php echo esc_html( $action_control->action_options['description'] ); ?></p>
+			<?php } ?>
+		</div>
 
-			<span class="frm-form-templates-item-content">
-				<?php echo esc_html( $action_control->action_options['description'] ?? '' ); ?>
-			</span>
-		</span>
+		<a <?php FrmAppHelper::array_to_html_params( $single_action_attrs, true ); ?>>
+			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_plus_icon' ); ?>
+			<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
+		</a>
 
 		<?php if ( ! empty( $action_control->action_options['keywords'] ) ) { ?>
-			<span class="frm_hidden">
-				<?php
-				// Include keywords for the action search.
-				echo esc_html( $action_control->action_options['keywords'] );
-				?>
-			</span>
+			<span class="frm_hidden"><?php echo esc_html( $action_control->action_options['keywords'] ); ?></span>
 		<?php } ?>
-	</a>
+	</div>
 </li>
