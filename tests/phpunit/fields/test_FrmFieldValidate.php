@@ -180,7 +180,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->set_required_field( $field );
 
 		$errors = $this->check_single_value( array( $field->id => 'http://' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'http:// passed required validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'http:// passed required validation ' . print_r( $errors, 1 ) );
 	}
 
 	/**
@@ -192,13 +192,13 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->set_required_field( $field );
 
 		$errors = $this->check_single_value( array( $field->id => 'notemail@' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Poorly formatted email passed validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Poorly formatted email passed validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => '' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Email email passed required validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Email email passed required validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => 'email@example.com' ) );
-		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Properly formatted email did not pass validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'Properly formatted email did not pass validation ' . print_r( $errors, 1 ) );
 	}
 
 	/**
@@ -207,7 +207,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	public function test_number_validation() {
 		$field  = $this->factory->field->get_object_by_id( $this->get_field_key( 'number' ) );
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
-		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'Number failed validation ' . print_r( $errors, 1 ) );
 
 		$field = $this->factory->field->create_and_get(
 			array(
@@ -222,16 +222,16 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertSame( 20, $field->field_options['maxnum'] );
 
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
-		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed range validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'Number failed range validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => 'not numeric' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed numeric validation' );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Number failed numeric validation' );
 
 		$errors = $this->check_single_value( array( $field->id => '25' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed max range validation' );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Number failed max range validation' );
 
 		$errors = $this->check_single_value( array( $field->id => '-25' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed min range validation' );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Number failed min range validation' );
 	}
 
 	protected function set_required_fields( $fields ) {
@@ -244,13 +244,15 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		global $wpdb;
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', array( 'required' => 1 ), array( 'id' => $field->id ) );
 
-		if ( $query_results ) {
-			wp_cache_delete( $field->id, 'frm_field' );
-			FrmField::delete_form_transient( $this->form->id );
-
-			$field = FrmField::getOne( $field->id );
-			$this->assertNotEmpty( $field->required );
+		if ( ! $query_results ) {
+			return;
 		}
+
+		wp_cache_delete( $field->id, 'frm_field' );
+		FrmField::delete_form_transient( $this->form->id );
+
+		$field = FrmField::getOne( $field->id );
+		$this->assertNotEmpty( $field->required );
 	}
 
 	/**
@@ -306,10 +308,10 @@ class test_FrmFieldValidate extends FrmUnitTest {
 					),
 				)
 			);
-			$this->assertEquals( $check_it['format'], $field->field_options['format'] );
+			$this->assertSame( $check_it['format'], $field->field_options['format'] );
 
 			$format = FrmEntryValidate::phone_format( $field );
-			$this->assertEquals( '/' . $check_it['expected'] . '/', $format );
+			$this->assertSame( '/' . $check_it['expected'] . '/', $format );
 		}
 	}
 
@@ -327,7 +329,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		foreach ( $formats as $start => $expected ) {
 			$new_format = $this->run_private_method( array( 'FrmEntryValidate', 'create_regular_expression_from_format' ), array( $start ) );
-			$this->assertEquals( $expected, $new_format );
+			$this->assertSame( $expected, $new_format );
 		}
 	}
 

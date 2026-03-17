@@ -42,14 +42,14 @@ class FrmSolution {
 	 * @param array $atts
 	 */
 	public function __construct( $atts = array() ) {
-		if ( empty( $this->plugin_slug ) ) {
+		if ( ! $this->plugin_slug ) {
 			return;
 		}
 
 		add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
 		add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
 
-		if ( empty( $this->plugin_file ) ) {
+		if ( ! $this->plugin_file ) {
 			$this->plugin_file = $this->plugin_slug . '.php';
 		}
 	}
@@ -247,14 +247,18 @@ class FrmSolution {
 		if ( $all_imported ) {
 			$step['description'] = __( 'The following form(s) have been created.', 'formidable' );
 		}
+
 		$this->show_app_install( $step );
 
-		if ( ! $all_imported ) {
-			$step                  = $steps['complete'];
-			$step['current']       = false;
-			$step['button_class'] .= ' frm_grey disabled';
-			$this->show_page_links( $step );
+		if ( $all_imported ) {
+			return;
 		}
+
+		$step                  = $steps['complete'];
+		$step['current']       = false;
+		$step['button_class'] .= ' frm_grey disabled';
+
+		$this->show_page_links( $step );
 	}
 
 	/**
@@ -343,7 +347,7 @@ class FrmSolution {
 				'label'        => __( 'Connect to FormidableForms.com', 'formidable' ),
 				'description'  => __( 'Create a connection to get plugin downloads.', 'formidable' ),
 				'button_label' => __( 'Connect an Account', 'formidable' ),
-				'current'      => empty( $pro_installed ),
+				'current'      => ! $pro_installed,
 				'complete'     => $pro_installed,
 				'num'          => 1,
 			),
@@ -458,7 +462,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_top( $step ) {
-		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
+		$section_class = ! empty( $step['current'] ) ? '' : 'frm_grey';
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>

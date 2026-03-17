@@ -87,11 +87,11 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 			)
 		);
 
-		if ( wp_doing_ajax() ) {
-			wp_die();
-		} else {
+		if ( ! wp_doing_ajax() ) {
 			die();
 		}
+
+		wp_die();
 	}
 
 	/**

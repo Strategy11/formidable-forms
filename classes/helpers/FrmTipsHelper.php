@@ -59,7 +59,7 @@ class FrmTipsHelper {
 		$link = self::get_tip_link( $tip );
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm_pro_tip frm-gradient">
+		<a href="<?php echo esc_url( $link ); ?>" <?php echo ! empty( $tip['link'] ) ? 'target="_blank"' : ''; ?> class="frm_pro_tip frm-gradient">
 			<span class="frm-tip-badge"><?php esc_html_e( 'PRO TIP', 'formidable' ); ?></span>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>

@@ -190,7 +190,7 @@ class FrmStyleComponent {
 	 * @return string
 	 */
 	private function get_field_name() {
-		return ! empty( $this->field_name ) ? 'name=' . $this->field_name : '';
+		return $this->field_name ? 'name=' . $this->field_name : '';
 	}
 
 	/**
@@ -212,7 +212,7 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	protected function load_view() {
-		if ( empty( $this->view_name ) ) {
+		if ( ! $this->view_name ) {
 			return;
 		}
 

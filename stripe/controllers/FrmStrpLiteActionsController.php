@@ -137,7 +137,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$one_time_payment_args = compact( 'customer', 'form', 'entry', 'action', 'amount' );
 
-		FrmStrpLiteLinkController::create_pending_stripe_link_payment( $one_time_payment_args );
+		if ( ! FrmStrpLiteLinkController::create_pending_stripe_link_payment( $one_time_payment_args ) ) {
+			$response['error'] = __( 'There was something wrong with the payment data.', 'formidable' );
+			return $response;
+		}
+
 		$response['show_errors'] = false;
 		return $response;
 	}

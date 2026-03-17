@@ -221,13 +221,15 @@ class FrmFieldName extends FrmFieldCombo {
 		parent::process_args_for_field_output( $args );
 
 		// Show all subfields in form builder then use JS to show or hide them.
-		if ( $this->should_print_hidden_sub_fields() && count( $args['sub_fields'] ) !== count( $this->sub_fields ) ) {
-			$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
-			$args['sub_fields'] = $this->sub_fields;
+		if ( ! $this->should_print_hidden_sub_fields() || count( $args['sub_fields'] ) === count( $this->sub_fields ) ) {
+			return;
+		}
 
-			foreach ( $hidden_fields as $name => $hidden_field ) {
-				$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
-			}
+		$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
+		$args['sub_fields'] = $this->sub_fields;
+
+		foreach ( $hidden_fields as $name => $hidden_field ) {
+			$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
 		}
 	}
 

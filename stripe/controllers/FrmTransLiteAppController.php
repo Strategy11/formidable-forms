@@ -208,4 +208,22 @@ class FrmTransLiteAppController {
 		FrmAppHelper::array_to_html_params( $params, true );
 		echo ' />';
 	}
+
+	/**
+	 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
+	 * They do however need to be visible when the payments submodule is active.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function hide_gateway_fields_in_builder() {
+		wp_add_inline_style(
+			'formidable-admin',
+			'
+			#frm_builder_page li[data-ftype="gateway"] { display: none; }
+			.frm_field_box:has(li[data-ftype="gateway"]:only-child) { display: none; }
+			'
+		);
+	}
 }

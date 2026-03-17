@@ -8,7 +8,7 @@
 	border-radius: var(--small-radius);
 	padding: var(--gap-sm);
 	box-shadow: var(--box-shadow-xs);
-	background: #FFF;
+	background: #fff;
 }
 
 .frm-card-item:not(.frm-counter-card) {
@@ -21,9 +21,9 @@
 
 .frm-card-bottom {
 	background-color: var(--grey-50);
-	margin-left: calc( var(--gap-sm) * -1 );
-	margin-bottom: calc( var(--gap-sm) * -1 );
-	margin-right: calc( var(--gap-sm) * -1 );
+	margin-left: calc(var(--gap-sm) * -1);
+	margin-bottom: calc(var(--gap-sm) * -1);
+	margin-right: calc(var(--gap-sm) * -1);
 	padding: var(--gap-sm);
 	border-radius: 0 0 var(--small-radius) var(--small-radius);
 }

@@ -79,8 +79,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 
 		?><input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $other_opt ? $opt_key : '' ); ?>]" id="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php
 
-		do_action( 'frm_field_input_html', $field );
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		do_action( 'frm_field_input_html', $field );
 
 		if ( $should_echo_disabled_att ) {
 			echo 'disabled="disabled" data-max-reached="1" ';
