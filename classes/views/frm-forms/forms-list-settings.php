@@ -10,6 +10,7 @@
  * @var array     $columns
  * @var array     $hidden
  * @var array     $skip_cols
+ * @var bool      $show_screen_options
  * @var WP_Screen $screen
  */
 
@@ -26,7 +27,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</a>
 
-		<div class="frm-collapsible-box__content">
+		<?php
+		$attrs = array(
+			'class' => 'frm-collapsible-box__content',
+		);
+
+		if ( ! $show_screen_options ) {
+			$attrs['id'] = 'adv-settings';
+			wp_nonce_field( 'screen-options-nonce', 'screenoptionnonce', false );
+		}
+		?>
+		<div <?php FrmAppHelper::array_to_html_params( $attrs, true ); ?>>
 			<div class="frm-forms-list-column-checkboxes">
 				<?php
 				foreach ( $columns as $key => $label ) {
@@ -39,7 +50,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<label>
 						<input
 							type="checkbox"
-							value="1"
+							class="hide-column-tog"
+							value="<?php echo esc_attr( $key ); ?>"
 							data-wp-column-input-id="<?php echo esc_attr( $key ); ?>-hide"
 							<?php checked( ! $is_hidden ); ?>
 						/>

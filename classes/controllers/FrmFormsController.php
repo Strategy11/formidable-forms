@@ -3713,11 +3713,12 @@ class FrmFormsController {
 			return;
 		}
 
-		$screen    = get_current_screen();
-		$columns   = get_column_headers( $screen );
-		$hidden    = get_hidden_columns( $screen );
-		$skip_cols = array( 'cb', 'settings' );
-		$per_page  = get_user_option( 'formidable_page_formidable_per_page' );
+		$screen              = get_current_screen();
+		$columns             = get_column_headers( $screen );
+		$hidden              = get_hidden_columns( $screen );
+		$skip_cols           = array( 'cb', 'name', 'settings' );
+		$per_page            = get_user_option( 'formidable_page_formidable_per_page' );
+		$show_screen_options = $screen->show_screen_options();
 
 		if ( $per_page < 1 ) {
 			$per_page = 20;
