@@ -7,7 +7,7 @@
 export function applyContentFilter( target, filterValue ) {
 	target.dataset.activeFilter = filterValue;
 	target.querySelectorAll( '[data-group]' ).forEach( group => {
-		group.classList.toggle( 'frm-filter-hidden', 'all' !== filterValue && group.dataset.group !== filterValue );
+		group.classList.toggle( 'frm_hidden', 'all' !== filterValue && group.dataset.group !== filterValue );
 	} );
 }
 
