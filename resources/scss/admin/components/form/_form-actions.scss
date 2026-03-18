@@ -1,68 +1,18 @@
-/**
- * Form Actions Tab styles
- */
+// Filter
+#frm-actions-filter-content {
+	margin-top: var(--gap-md);
 
-.frm_email_reply_container select,
-.frm_email_reply_container input,
-.form-table td.frm_150_width {
-	width: 170px;
-}
+	.frm-group-heading {
+		display: none;
+	}
 
-#frm_notification_settings .frm_no_top_padding {
-	padding-top: 0;
-}
+	&[data-active-filter="all"] .frm-group-heading {
+		display: block;
+	}
 
-.frm_email_settings.frm_email_settings.widgets-holder-wrap {
-	overflow: auto;
-	box-shadow: none;
-}
-
-#frm_notification_settings .widget-top .widget-action,
-#frm_form_editor_container .widget-top .widget-action {
-	border: 0;
-	margin: 0;
-	padding: 8px;
-	background: 0 0;
-	cursor: pointer;
-	outline: 0;
-}
-
-#frm_notification_settings .widget-top .widget-action {
-	padding: 0;
-}
-
-#frm_email_addon_menu {
-	margin: var(--gap-md) 0 var(--gap-sm);
-}
-
-#frm_email_addon_menu .frm-search {
-	float: unset;
-	clear: unset;
-}
-
-.frm_email_settings .widget .widget-top {
-	background-color: var(--sidebar-color);
-}
-
-.frm_email_settings .widget .widget-top,
-.frm_email_settings .widget .widget-top h3 {
-	cursor: pointer !important;
-}
-
-.frm_email_settings .widget {
-	margin-bottom: var(--gap-xs);
-}
-
-.frm_form_action_settings .widget-top {
-	box-shadow: none;
-	border-color: var(--grey-300);
-	border-radius: var(--small-radius);
-	background: var(--lightest-grey);
-	color: var(--grey-700);
-	display: flex;
-	align-items: center;
-	gap: var(--gap-xs);
-	padding: 10px var(--gap-sm);
+	&[data-active-filter] .frm-not-installed {
+		display: list-item;
+	}
 }
 
 .frm_form_action_settings:hover .widget-top {
