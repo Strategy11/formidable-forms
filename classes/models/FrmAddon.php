@@ -378,7 +378,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @param bool $is_active
+	 * @param bool|string $is_active Value may include 'valid'.
 	 *
 	 * @return void
 	 */
