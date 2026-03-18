@@ -720,9 +720,8 @@ class FrmAddon {
 		$is_429       = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
 
 		if ( $is_429 ) {
-			// If the last check was a a rate limit, we'll need to check again sooner.
-			$time            = '5 minutes';
-			$required_status = '';
+			// If the last check was a a rate limit, adjust the check time.
+			$time = '7 days' === $time ? '30 minutes' : '5 minutes';
 		}
 
 		if ( empty( $last_checked['time'] ) ) {
