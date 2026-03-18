@@ -1022,14 +1022,14 @@ class FrmAddon {
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 
-		$resp              = wp_remote_post(
+		$resp                                 = wp_remote_post(
 			$this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ),
 			$arg_array
 		);
-		$body              = wp_remote_retrieve_body( $resp );
-		$this->save_status = array();
-
-		$this->save_response['response_code'] = wp_remote_retrieve_response_code( $resp );
+		$response_code                        = wp_remote_retrieve_response_code( $resp );
+		$body                                 = wp_remote_retrieve_body( $resp );
+		$this->save_status                    = array( 'response_code' => $response_code );
+		$this->save_response['response_code'] = $response_code;
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
 
