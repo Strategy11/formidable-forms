@@ -358,7 +358,7 @@ class FrmAddon {
 	 *
 	 * @since 6.8.3
 	 *
-	 * @param bool $is_valid If license activation was successful.
+	 * @param bool|string $is_valid If license activation was successful.
 	 *
 	 * @return void
 	 */
