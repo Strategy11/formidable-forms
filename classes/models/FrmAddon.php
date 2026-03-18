@@ -721,7 +721,16 @@ class FrmAddon {
 
 		// If the last check was a a rate limit error, adjust the check time.
 		if ( $is_429 ) {
-			$time = '7 days' === $time ? '30 minutes' : '5 minutes';
+			// If the time is 2 minutes, do not adjust it so people
+			// can still try to activate again in 2 minutes (and not 5).
+			switch ( $time ) {
+				case '7 days':
+					$time = '30 minutes';
+					break;
+				case '1 day':
+					$time = '10 minutes';
+					break;
+			}
 		}
 
 		if ( empty( $last_checked['time'] ) ) {
