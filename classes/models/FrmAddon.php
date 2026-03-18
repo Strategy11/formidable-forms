@@ -851,7 +851,7 @@ class FrmAddon {
 			$this->maybe_set_active( $is_valid );
 		}
 
-		$this->update_last_checked( $is_valid );
+		$this->update_last_checked( (bool) $is_valid );
 
 		return $response;
 	}
