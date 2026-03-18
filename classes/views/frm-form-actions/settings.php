@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <div id="frm_email_addon_menu">
-	<div class="frm-h-stack">
+	<div class="frm-h-stack frm-mb-lg">
 		<div class="frm-style-tabs-wrapper" data-filter-target="#frm-actions-filter-content">
 			<div class="frm-tabs-delimiter"><span class="frm-tabs-active-underline"></span></div>
 			<div class="frm-tabs-navs">
@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$group['actions'] = array();
 				}
 				?>
-				<ul class="frm_actions_list frm-list-grid-layout">
+				<ul class="frm_actions_list frm-list-grid-layout frm-m-0">
 					<?php
 					foreach ( $action_controls as $action_control ) {
 						if ( in_array( $action_control->id_base, $displayed_actions, true ) || ! in_array( $action_control->id_base, $group['actions'], true ) ) {
