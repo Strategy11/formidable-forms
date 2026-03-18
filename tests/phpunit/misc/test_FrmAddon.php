@@ -70,7 +70,7 @@ class test_FrmAddon extends FrmUnitTest {
 			),
 		);
 
-		$this->run_private_method( array( $this->addon, 'update_last_checked' ) );
+		$this->run_private_method( array( $this->addon, 'update_last_checked' ), array( true ) );
 		$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 hour' ) );
 		$this->assertTrue( $should_run, 'Time was set via update_last_checked' );
 		$option_name = $this->run_private_method( array( $this->addon, 'transient_key' ) );
