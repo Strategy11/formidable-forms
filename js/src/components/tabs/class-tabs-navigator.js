@@ -1,4 +1,4 @@
-import { applyContentFilter, hasFilterableGroups } from './filter.js';
+import { applyContentFilter, getFilterTarget } from './filter.js';
 import { observeVisibility, disconnectVisibilityObserver } from 'core/utils/visibilityObserver';
 
 export class frmTabsNavigator {
@@ -20,18 +20,15 @@ export class frmTabsNavigator {
 		this.slides = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
 		this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
 		this.resizeObserver = null;
-		this.filterTarget = this.wrapper.dataset.filterTarget
-			? document.querySelector( this.wrapper.dataset.filterTarget )
-			: null;
+		this.filterTarget = getFilterTarget( this.wrapper );
 
 		this.init();
 	}
 
 	init() {
-		const isFilterMode = null !== this.filterTarget && hasFilterableGroups( this.filterTarget );
-		const hasSlideTrack = null !== this.slideTrack && this.slides.length;
+		const isMissingTrackAndFilter = ! this.filterTarget && ( null === this.slideTrack || 0 === this.slides.length );
 
-		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || ( ! isFilterMode && ! hasSlideTrack ) ) {
+		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || isMissingTrackAndFilter ) {
 			return;
 		}
 
@@ -40,7 +37,7 @@ export class frmTabsNavigator {
 			if ( nav.classList.contains( 'frm-active' ) ) {
 				this.initSlideTrackUnderline( nav );
 				if ( this.filterTarget ) {
-					applyContentFilter( this.filterTarget, nav.dataset.filter || 'all' );
+					applyContentFilter( nav.dataset.filter || 'all' );
 				}
 			}
 		} );
@@ -62,7 +59,7 @@ export class frmTabsNavigator {
 		this.initSlideTrackUnderline( navItem );
 
 		if ( this.filterTarget ) {
-			applyContentFilter( this.filterTarget, navItem.dataset.filter || 'all' );
+			applyContentFilter( navItem.dataset.filter || 'all' );
 			return;
 		}
 
