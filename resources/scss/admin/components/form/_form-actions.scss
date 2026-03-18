@@ -1,37 +1,10 @@
 // Filter
-#frm-actions-filter-content {
-	margin-top: var(--gap-md);
-
-	.frm-group-heading {
-		display: none;
-	}
-
-	&[data-active-filter="all"] .frm-group-heading {
-		display: block;
-	}
-
-	&[data-active-filter] .frm-not-installed {
-		display: list-item;
-	}
+#frm-actions-filter-content:not([data-active-filter="all"]) .frm-group-heading {
+	display: none;
 }
 
 // Action Cards
 .frm_actions_list {
-
-	.frmsvg,
-	i::before {
-		height: 15px;
-		width: 15px;
-		vertical-align: text-top;
-	}
-
-	i::before {
-		vertical-align: middle;
-	}
-
-	.frm_inactive_action i {
-		opacity: 0.4;
-	}
 }
 
 // Action Settings
