@@ -725,10 +725,13 @@ class FrmAddon {
 			// can still try to activate again in 2 minutes (and not 5).
 			switch ( $time ) {
 				case '7 days':
+					// 7 days is used to check for license revocation.
 					$time = '30 minutes';
 					break;
 				case '1 day':
-					$time = '10 minutes';
+					// 1 day is used for defined license constants.
+					// The response won't change often, so we can check less frequently.
+					$time = '2 hours';
 					break;
 			}
 		}
@@ -909,9 +912,9 @@ class FrmAddon {
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
 				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
-					$response['status']          = $license_data['license'];
-					$this->save_status['status'] = $license_data['license'];
-					$is_valid                    = 'valid' === $license_data['license'];
+					$response['status']            = $license_data['license'];
+					$this->save_status['status']   = $license_data['license'];
+					$is_valid                      = 'valid' === $license_data['license'];
 				}
 			} else {
 				$response['status'] = $license_data;
