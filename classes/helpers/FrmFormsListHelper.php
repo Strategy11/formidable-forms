@@ -308,7 +308,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
 
 					if ( get_user_option( 'frm_forms_show_desc' ) && ! empty( $item->description ) ) {
-						$val .= '<p class="frm_form_desc">' . nl2br( wp_kses( $item->description ) ) . '</p>';
+						$val .= '<p class="frm_form_desc">' . nl2br( FrmAppHelper::kses( $item->description ) ) . '</p>';
 					}
 
 					$val .= $action_links;
