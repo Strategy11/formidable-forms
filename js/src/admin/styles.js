@@ -127,7 +127,7 @@ class frmStyleOptions {
 	 */
 	initHover() {
 		const settingsWrapper = document.querySelector( '.frm-right-panel .styling_settings .accordion-container' );
-		if ( null === settingsWrapper ) {
+		if ( ! settingsWrapper ) {
 			return;
 		}
 		const hoverElement = document.createElement( 'div' );
