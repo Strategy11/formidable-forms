@@ -7747,12 +7747,13 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Move the settings to the sidebar the first time they are changed or selected.
 	 * Keep the end marker at the end of the form.
-	 * @param {HTMLElement} singleField The field settings element to move.
+	 *
+	 * @param {HTMLElement|null|undefined} singleField The field settings element to move. Undefined when this is called like new moveFieldSettings().
 	 */
 	function moveFieldSettings( singleField ) {
 		const self = this;
 
-		if ( ! singleField ) {
+		if ( singleField === null ) {
 			// The field may have not been loaded yet via ajax.
 			return;
 		}
