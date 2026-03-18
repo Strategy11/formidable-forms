@@ -2496,7 +2496,7 @@ jQuery( document ).ready( function() {
 	if ( ! Math.round10 ) {
 		// https://www.jacklmoore.com/notes/rounding-in-javascript/
 		Math.round10 = function( value, decimals ) {
-			return Number( Math.round( `${ value }e${ decimals }` ) + `e-${ decimals }` );
+			return Number( Math.round( value + 'e' + decimals ) + 'e-' + decimals );
 		};
 	}
 }() );
