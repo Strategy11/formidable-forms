@@ -54,15 +54,15 @@ class PreferFrmFieldGetTypeSniff implements Sniff {
 			return;
 		}
 
-		// Skip if getOne() is inside a conditional block (e.g. if ( ! is_object( $field ) ) { $field = FrmField::getOne(...); }).
-		if ( $this->is_inside_conditional( $tokens, $stackPtr ) ) {
-			return;
-		}
-
 		// Find the variable this is assigned to: $var = FrmField::getOne(...).
 		$variable_name = $this->get_assigned_variable( $phpcsFile, $tokens, $stackPtr );
 
 		if ( false === $variable_name ) {
+			return;
+		}
+
+		// Skip conditional reassignment (e.g. if ( ! is_object( $field ) ) { $field = FrmField::getOne( $field ); }).
+		if ( $this->is_conditional_reassignment( $phpcsFile, $tokens, $stackPtr, $variable_name ) ) {
 			return;
 		}
 
@@ -114,32 +114,51 @@ class PreferFrmFieldGetTypeSniff implements Sniff {
 	}
 
 	/**
-	 * Check if the getOne() call is inside a conditional block (if/elseif body).
+	 * Check if this is a conditional reassignment pattern.
 	 *
-	 * This catches patterns like:
+	 * Detects patterns like:
 	 *   if ( ! is_object( $field ) ) {
 	 *       $field = FrmField::getOne( $field );
 	 *   }
 	 *
-	 * Where the variable is conditionally populated and used beyond just ->type.
+	 * Where the assigned variable is also the argument to getOne(), indicating
+	 * a conditional type-coercion that should not be replaced with get_type().
 	 *
-	 * @param array $tokens   The token stack.
-	 * @param int   $stackPtr The position of the current token.
+	 * @param File   $phpcsFile     The file being scanned.
+	 * @param array  $tokens        The token stack.
+	 * @param int    $stackPtr      The position of 'getOne'.
+	 * @param string $variable_name The variable being assigned.
 	 *
 	 * @return bool
 	 */
-	private function is_inside_conditional( array $tokens, $stackPtr ) {
+	private function is_conditional_reassignment( File $phpcsFile, array $tokens, $stackPtr, $variable_name ) {
 		if ( empty( $tokens[ $stackPtr ]['conditions'] ) ) {
 			return false;
 		}
 
-		foreach ( $tokens[ $stackPtr ]['conditions'] as $type ) {
-			if ( in_array( $type, array( T_IF, T_ELSEIF, T_ELSE ), true ) ) {
-				return true;
-			}
+		// Check if the immediate enclosing scope is a conditional block.
+		$conditions = $tokens[ $stackPtr ]['conditions'];
+		$last_type  = end( $conditions );
+
+		if ( ! in_array( $last_type, array( T_IF, T_ELSEIF, T_ELSE ), true ) ) {
+			return false;
 		}
 
-		return false;
+		// Check if the getOne argument is the same variable being assigned to.
+		$open_paren = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		if ( false === $open_paren || T_OPEN_PARENTHESIS !== $tokens[ $open_paren ]['code'] ) {
+			return false;
+		}
+
+		$close_paren = $tokens[ $open_paren ]['parenthesis_closer'];
+		$first_arg   = $phpcsFile->findNext( T_WHITESPACE, $open_paren + 1, $close_paren, true );
+
+		if ( false === $first_arg || T_VARIABLE !== $tokens[ $first_arg ]['code'] ) {
+			return false;
+		}
+
+		return $tokens[ $first_arg ]['content'] === $variable_name;
 	}
 
 	/**
