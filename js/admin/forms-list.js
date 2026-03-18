@@ -122,7 +122,7 @@
 		const form = frmDom.tag( 'form', {
 			className: 'frm_hidden',
 			children: [ perPageInput, perPageOptionNameInput, showDescInput, nonceInput ],
-		});
+		} );
 		form.method = 'post';
 		document.body.append( form );
 		form.submit();

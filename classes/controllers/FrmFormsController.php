@@ -3725,7 +3725,11 @@ class FrmFormsController {
 			return;
 		}
 
-		$screen              = get_current_screen();
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
 		$columns             = get_column_headers( $screen );
 		$hidden              = get_hidden_columns( $screen );
 		$skip_cols           = array( 'cb', 'name', 'settings' );
