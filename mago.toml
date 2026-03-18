@@ -84,15 +84,15 @@ find-unused-expressions = false
 analyze-dead-code = true
 memoize-properties = true
 allow-possibly-undefined-array-keys = true
+trust-existence-checks = false
 check-throws = false
 check-missing-override = false
 find-unused-parameters = false
-strict-list-index-checks = false
-no-boolean-literal-comparison = false
+strict-list-index-checks = true
+no-boolean-literal-comparison = true
 check-missing-type-hints = false
 register-super-globals = true
 ignore = [
-    "ambiguous-instantiation-target",
     "ambiguous-object-method-access",
     "ambiguous-object-property-access",
     "array-to-string-conversion",
@@ -105,7 +105,6 @@ ignore = [
     "impossible-nonnull-entry-check",
     "impossible-type-comparison",
     "incompatible-parameter-name",
-    "incompatible-parameter-type",
     "invalid-argument",
     "invalid-array-access",
     "invalid-array-element-key",
