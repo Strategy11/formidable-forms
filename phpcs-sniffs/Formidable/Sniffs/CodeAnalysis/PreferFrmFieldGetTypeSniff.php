@@ -338,12 +338,14 @@ class PreferFrmFieldGetTypeSniff implements Sniff {
 
 					// Track whitespace after && for removal.
 					$after_and = $next + 1;
+
 					if ( $after_and < $end && T_WHITESPACE === $tokens[ $after_and ]['code'] ) {
 						$usage['whitespace_after_and'] = $after_and;
 					}
 
 					// Track whitespace before $var for removal.
 					$before_var = $i - 1;
+
 					if ( $before_var >= $start && T_WHITESPACE === $tokens[ $before_var ]['code'] ) {
 						$usage['whitespace_before_var'] = $before_var;
 					}
