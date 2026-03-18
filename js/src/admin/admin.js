@@ -10616,17 +10616,6 @@ window.frmAdminBuildJS = function() {
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
 			initiateMultiselect();
 
-			//set actions icons to inactive
-			jQuery( 'ul.frm_actions_list li' ).each( function() {
-				checkActiveAction( jQuery( this ).children( 'a' ).data( 'actiontype' ) );
-
-				// If the icon is a background image, don't add BG color.
-				const icon = jQuery( this ).find( 'i' );
-				if ( icon.css( 'background-image' ) !== 'none' ) {
-					icon.addClass( 'frm-inverse' );
-				}
-			} );
-
 			jQuery( '.frm_submit_settings_btn' ).on( 'click', submitSettings );
 
 			addFormNameModalEvents();
