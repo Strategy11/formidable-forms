@@ -698,6 +698,11 @@ class FrmAddon {
 
 		$response = $this->get_license_status();
 
+		if ( ! empty( $this->save_response['response_code'] ) && 429 === $this->save_response['response_code'] ) {
+			// If we got a rate limit response, don't clear the license.
+			return;
+		}
+
 		if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] || 'missing' === $response['status'] ) {
 			$this->clear_license();
 		}
