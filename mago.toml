@@ -40,7 +40,6 @@ halstead = { enabled = false } # Consider enabling this soon.
 identity-comparison = { enabled = false }
 kan-defect = { enabled = false }
 literal-named-argument = { enabled = false }
-loop-does-not-iterate = { enabled = false }
 no-assign-in-condition = { enabled = false }
 no-closing-tag = { enabled = false }
 no-else-clause = { enabled = false }
@@ -50,7 +49,6 @@ no-global = { enabled = false }
 no-insecure-comparison = { enabled = false } # Consider enabling this soon.
 no-nested-ternary = { enabled = false }
 no-redundant-math = { enabled = false }
-no-redundant-method-override = { enabled = false } # Fix this first.
 no-request-variable = { enabled = false }
 no-sprintf-concat = { enabled = false }
 prefer-arrow-function = { enabled = false }
