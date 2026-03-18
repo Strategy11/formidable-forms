@@ -15,8 +15,23 @@
 	}
 }
 
-.frm_form_action_settings:hover .widget-top {
-	border-color: var(--grey);
+// Action Cards
+.frm_actions_list {
+
+	.frmsvg,
+	i::before {
+		height: 15px;
+		width: 15px;
+		vertical-align: text-top;
+	}
+
+	i::before {
+		vertical-align: middle;
+	}
+
+	.frm_inactive_action i {
+		opacity: 0.4;
+	}
 }
 
 .frm_form_action_settings.open .widget-top {
