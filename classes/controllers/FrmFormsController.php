@@ -3726,6 +3726,7 @@ class FrmFormsController {
 		}
 
 		$screen = get_current_screen();
+
 		if ( ! $screen ) {
 			return;
 		}
