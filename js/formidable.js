@@ -1819,7 +1819,7 @@ function frmFrontFormJS() {
 			formId = $form.find( 'input[name="form_id"]' ).val();
 			currency = getCurrency( formId );
 
-			if ( typeof formTotals[ formId ] !== 'undefined' ) {
+			if ( undefined !== formTotals[ formId ] ) {
 				total = formTotals[ formId ];
 			} else {
 
@@ -1889,7 +1889,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {number} total The total amount to normalize.
 	 * @param {Object} currency The currency object containing decimal information.
-	 * @returns {number}
+	 * @returns {number} The normalized total amount.
 	 */
 	function normalizeTotal( total, currency ) {
 		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
@@ -1930,7 +1930,7 @@ function frmFrontFormJS() {
 	 * @since 4.04
 	 */
 	function getCurrency( formId ) {
-		if ( typeof __FRMCURR !== 'undefined' && typeof __FRMCURR[ formId ] !== 'undefined' ) {
+		if ( undefined !== __FRMCURR && undefined !== __FRMCURR[ formId ] ) {
 			return __FRMCURR[ formId ];
 		}
 	}
@@ -2079,7 +2079,7 @@ function frmFrontFormJS() {
 	 * @param {number|string} price The price to format.
 	 * @param {Object} currency The currency object containing the decimal separator.
 	 * @param {boolean} [force=false] Whether to force processing even if the price is not a number.
-	 * @returns {string}
+	 * @returns {string} The formatted price string.
 	 */
 	function maybeAddTrailingZeroToPrice( price, currency, force = false ) {
 		if ( 'number' !== typeof price && ! force ) {
@@ -2093,17 +2093,17 @@ function frmFrontFormJS() {
 			price = `${price}.`;
 
 			for ( let n = 0; n < currency.decimals; ++n ) {
-				price += `0`;
+				price += '0';
 			}
 		} else {
 			const decimalsString = price.substring( pos + 1 );
 			if ( decimalsString.length < currency.decimals ) {
 				if ( decimalsString.length < 2 ) {
-					price += `0`;
+					price += '0';
 				}
 
 				for ( let n = 2; n < currency.decimals; ++n ) {
-					price += `0`;
+					price += '0';
 				}
 			}
 		}
@@ -2121,7 +2121,7 @@ function frmFrontFormJS() {
 	 * @param {string} options.decimal_separator Character used as decimal separator.
 	 * @param {string} options.thousand_separator Character used as thousand separator.
 	 *
-	 * @returns {string}
+	 * @returns {string} The price string with thousand separators.
 	 */
 	function addThousands( total, { decimal_separator, thousand_separator } ) {
 		const split = decimal_separator === ''
