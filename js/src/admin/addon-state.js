@@ -185,7 +185,7 @@ function saveAndReloadSettingsButton( saveAndReload ) {
 
 function saveAndReloadSettings() {
 	const page = document.getElementById( 'form_settings_page' );
-	if ( null !== page ) {
+	if ( page ) {
 		const form = page.querySelector( 'form.frm_form_settings' );
 		if ( null !== form ) {
 			wp.hooks.doAction( 'frm_reset_fields_updated' );

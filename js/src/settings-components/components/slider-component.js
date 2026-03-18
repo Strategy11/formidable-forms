@@ -251,12 +251,12 @@ export default class frmSliderComponent {
 		} );
 
 		// init the sliders width from "Quick Settings" page.
-		if ( null !== quickSettings ) {
+		if ( quickSettings ) {
 			this.initSlidersWidth( quickSettings );
 		}
 
 		// Init the sliders width in opened accordion section from "Advanced Settings" page.
-		if ( null !== openedAccordion ) {
+		if ( openedAccordion ) {
 			this.initSlidersWidth( openedAccordion );
 		}
 
@@ -278,7 +278,7 @@ export default class frmSliderComponent {
 	initSliderPositionOnFieldShapeChange() {
 		const fieldShapeType = document.querySelector( '.frm-style-component.frm-field-shape' );
 
-		if ( null === fieldShapeType ) {
+		if ( ! fieldShapeType ) {
 			return;
 		}
 
@@ -538,7 +538,7 @@ export default class frmSliderComponent {
 		// Used to avoid conflicts with other possible font sizes adjustemnts in "Advanced Settings" when moving from "Quick Settings" when "Base Font Size" is not changed.
 		if ( element.classList.contains( 'frm-base-font-size' ) ) {
 			const userBaseFontSizeInput = document.querySelector( 'input[name="frm_style_setting[post_content][use_base_font_size]"]' );
-			if ( null !== userBaseFontSizeInput ) {
+			if ( userBaseFontSizeInput ) {
 				userBaseFontSizeInput.value = 'true';
 			}
 		}

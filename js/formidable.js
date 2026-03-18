@@ -606,7 +606,7 @@ function frmFrontFormJS() {
 		const strippedFieldID = fieldID.replace( 'conf_', '' );
 		const confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
-		if ( confirmField === null || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
+		if ( ! confirmField || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
 			return;
 		}
 
@@ -1311,7 +1311,7 @@ function frmFrontFormJS() {
 
 	function showFileLoading( object ) {
 		const loading = document.getElementById( 'frm_loading' );
-		if ( loading === null ) {
+		if ( ! loading ) {
 			return;
 		}
 
