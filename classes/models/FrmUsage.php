@@ -90,6 +90,7 @@ class FrmUsage {
 			'form_count'        => $form_counts->published,
 			'entry_count'       => FrmEntry::getRecordCount(),
 			'timestamp'         => gmdate( 'c' ),
+			'misc'              => array(),
 
 			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
 			'plugins'           => $this->plugins(),
