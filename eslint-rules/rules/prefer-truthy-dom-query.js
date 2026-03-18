@@ -28,6 +28,25 @@ function isDocumentDomQueryCall( node ) {
 	return property.name === 'getElementById' || property.name === 'querySelector';
 }
 
+/**
+ * Walk up the scope chain to find the Variable object for a given name.
+ *
+ * @param {Object} scope ESLint scope object.
+ * @param {string} name  Variable name to resolve.
+ * @return {Object|null} The Variable object, or null if not found.
+ */
+function findVariable( scope, name ) {
+	let current = scope;
+	while ( current ) {
+		const variable = current.set.get( name );
+		if ( variable ) {
+			return variable;
+		}
+		current = current.upper;
+	}
+	return null;
+}
+
 module.exports = {
 	meta: {
 		type: 'suggestion',
@@ -43,11 +62,15 @@ module.exports = {
 
 	create( context ) {
 		const { sourceCode } = context;
-		const trackedVariables = new Set();
+		const trackedNodes = new WeakSet();
 
 		function trackIfDomQueryResult( targetNode, valueNode ) {
 			if ( targetNode && targetNode.type === 'Identifier' && isDocumentDomQueryCall( valueNode ) ) {
-				trackedVariables.add( targetNode.name );
+				const scope = sourceCode.getScope( targetNode );
+				const variable = findVariable( scope, targetNode.name );
+				if ( variable ) {
+					trackedNodes.add( variable );
+				}
 			}
 		}
 
@@ -82,7 +105,9 @@ module.exports = {
 					return;
 				}
 
-				if ( ! trackedVariables.has( identifierNode.name ) ) {
+				const scope = sourceCode.getScope( identifierNode );
+				const variable = findVariable( scope, identifierNode.name );
+				if ( ! variable || ! trackedNodes.has( variable ) ) {
 					return;
 				}
 
