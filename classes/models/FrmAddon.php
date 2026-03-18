@@ -717,6 +717,7 @@ class FrmAddon {
 	 */
 	private function checked_recently( $time ) {
 		$last_checked = $this->last_checked();
+
 		if ( ! $last_checked ) {
 			return false;
 		}
@@ -916,9 +917,9 @@ class FrmAddon {
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
 				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
-					$response['status']            = $license_data['license'];
-					$this->save_status['status']   = $license_data['license'];
-					$is_valid                      = 'valid' === $license_data['license'];
+					$response['status']          = $license_data['license'];
+					$this->save_status['status'] = $license_data['license'];
+					$is_valid                    = 'valid' === $license_data['license'];
 				}
 			} else {
 				$response['status'] = $license_data;
