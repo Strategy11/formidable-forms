@@ -143,62 +143,29 @@
 	}
 }
 
-.frm_email_settings .widget-title h4 {
-	color: var(--grey-700);
-}
+.frm_email_settings .widget-title {
+	h4 {
+		color: var(--grey-700);
+	}
 
-.frm_disabled_action .widget-title h4 {
-	color: var(--grey);
-}
+	.frm_form_action_icon {
+		background-color: var(--grey-400);
+		border-radius: 50%;
+		display: inline-block;
+		text-align: center;
+		line-height: 1;
 
-span.frm-inner-circle,
-.frm_email_settings .widget-title .frm_form_action_icon {
-	background-color: var(--grey-400);
-	border-radius: 50%;
-	display: inline-block;
-	text-align: center;
-	line-height: 1;
-}
+		i,
+		.frmsvg {
+			height: 15px;
+			width: 15px;
+			vertical-align: text-top;
+		}
+	}
 
-span.frm-inner-circle {
-	background-color: var(--primary-700);
-	height: 22px;
-	width: 22px;
-	padding: 4px;
-	color: #fff;
-}
-
-.frm-inner-circle svg {
-	fill: currentColor;
-}
-
-.frm_email_settings .widget-title .frm_form_action_icon:not(.frm-inverse) .frmsvg {
-	color: currentColor;
-}
-
-.frm_actions_list .frmsvg,
-.frm_actions_list i::before,
-.frm_email_settings .widget-title .frm_form_action_icon i,
-.frm_email_settings .widget-title .frm_form_action_icon .frmsvg {
-	height: 15px;
-	width: 15px;
-	vertical-align: text-top;
-}
-
-.frm_actions_list i::before {
-	vertical-align: middle;
-}
-
-.frm_email_settings .widget-title:hover .frm_form_action_icon {
-	background-color: var(--grey);
-}
-
-span.frm-inner-circle.frm-inverse {
-	background-color: transparent;
-	color: var(--primary-700);
-	padding: 0;
-	height: 30px;
-	width: 100%;
+	&:hover .frm_form_action_icon {
+		background-color: var(--grey);
+	}
 }
 
 .frm_actions_list span.frm-inverse i,
