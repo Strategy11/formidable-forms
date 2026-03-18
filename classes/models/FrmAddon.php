@@ -831,6 +831,8 @@ class FrmAddon {
 		$response['message'] = '';
 		$response['success'] = false;
 
+		$is_valid = false;
+
 		if ( $response['error'] ) {
 			$response['message'] = $response['status'];
 		} else {
@@ -841,8 +843,6 @@ class FrmAddon {
 			} else {
 				$response['message'] = FrmAppHelper::kses( $response['status'], array( 'a' ) );
 			}
-
-			$is_valid = false;
 
 			if ( 'valid' === $response['status'] ) {
 				$is_valid            = 'valid';
