@@ -71,8 +71,8 @@ class test_FrmAddon extends FrmUnitTest {
 		);
 
 		$this->run_private_method( array( $this->addon, 'update_last_checked' ), array( true ) );
-		$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 hour' ) );
-		$this->assertTrue( $should_run, 'Time was set via update_last_checked' );
+		$checked_recently = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 hour' ) );
+		$this->assertTrue( $checked_recently, 'Time was set via update_last_checked' );
 		$option_name = $this->run_private_method( array( $this->addon, 'transient_key' ) );
 
 		foreach ( $times as $time ) {
@@ -86,8 +86,8 @@ class test_FrmAddon extends FrmUnitTest {
 				update_option( $option_name, $save );
 			}
 
-			$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
-			$this->assertSame( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
+			$checked_recently = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
+			$this->assertSame( $time['expected'], $checked_recently, $time['time'] . 'not properly checking' );
 		}
 	}
 
