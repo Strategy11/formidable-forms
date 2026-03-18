@@ -58,8 +58,8 @@ class FrmCurrencyHelper {
 	/**
 	 * @since x.x The second param is optional.
 	 *
-	 * @param float $amount
-	 * @param array $currency
+	 * @param float|string $amount
+	 * @param array        $currency
 	 *
 	 * @return string
 	 */
