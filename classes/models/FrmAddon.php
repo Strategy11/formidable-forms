@@ -692,7 +692,7 @@ class FrmAddon {
 		}
 
 		// Only check weekly.
-		if ( $this->checked_recently( '7 days', 'valid' ) || $this->is_running() ) {
+		if ( $this->checked_recently( '7 days' ) || $this->is_running() ) {
 			return;
 		}
 
@@ -706,12 +706,11 @@ class FrmAddon {
 	/**
 	 * Has this been checked too recently?
 	 *
-	 * @param string $time            ie. '1 day'.
-	 * @param string $required_status Return false if the last check does not match. ie 'valid'.
+	 * @param string $time ie. '1 day'.
 	 *
-	 * @return bool
+	 * @return bool True if the last check time was recent.
 	 */
-	private function checked_recently( $time, $required_status = '' ) {
+	private function checked_recently( $time ) {
 		$last_checked = $this->last_checked();
 		$is_429       = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
 
@@ -721,14 +720,13 @@ class FrmAddon {
 			$required_status = '';
 		}
 
-		if ( $required_status && ( ! isset( $last_checked['status'] ) || $last_checked['status'] !== $required_status ) ) {
-			// If the last check was invalid, we don't need to check again.
-			return true;
+		if ( empty( $last_checked['time'] ) ) {
+			// If we do not have time, data is really old.
+			return false;
 		}
 
-		$checked_time = $last_checked['time'] ?? false;
-		$time_ago     = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
-		return $checked_time && $checked_time > $time_ago;
+		$time_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
+		return $last_checked['time'] > $time_ago;
 	}
 
 	/**
@@ -748,10 +746,15 @@ class FrmAddon {
 	}
 
 	/**
+	 * @since x.x Added the $is_valid param.
+	 *
+	 * @param bool $is_valid
+	 *
 	 * @return void
 	 */
-	private function update_last_checked() {
-		$this->save_response['time'] = gmdate( 'Y-m-d H:i:s' );
+	private function update_last_checked( $is_valid ) {
+		$this->save_response['time']     = gmdate( 'Y-m-d H:i:s' );
+		$this->save_response['is_valid'] = $is_valid;
 
 		if ( is_multisite() ) {
 			update_site_option( $this->transient_key(), $this->save_response );
@@ -840,10 +843,11 @@ class FrmAddon {
 				$is_valid            = 'valid';
 				$response['success'] = true;
 			}
+
 			$this->maybe_set_active( $is_valid );
 		}
 
-		$this->update_last_checked();
+		$this->update_last_checked( $is_valid );
 
 		return $response;
 	}
@@ -883,6 +887,8 @@ class FrmAddon {
 			return $response;
 		}
 
+		$is_valid = false;
+
 		try {
 			$response['error'] = false;
 			$license_data      = $this->send_mothership_request( 'activate_license' );
@@ -892,6 +898,7 @@ class FrmAddon {
 				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
 					$response['status']          = $license_data['license'];
 					$this->save_status['status'] = $license_data['license'];
+					$is_valid                    = 'valid' === $license_data['license'];
 				}
 			} else {
 				$response['status'] = $license_data;
@@ -900,7 +907,7 @@ class FrmAddon {
 			$response['status'] = $e->getMessage();
 		}
 
-		$this->update_last_checked();
+		$this->update_last_checked( $is_valid );
 		$this->done_running();
 		return $response;
 	}
@@ -1016,7 +1023,9 @@ class FrmAddon {
 			$arg_array
 		);
 		$body              = wp_remote_retrieve_body( $resp );
-		$this->save_status = array( 'response_code' => wp_remote_retrieve_response_code( $resp ) );
+		$this->save_status = array();
+
+		$this->save_response['response_code'] = wp_remote_retrieve_response_code( $resp );
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
 
