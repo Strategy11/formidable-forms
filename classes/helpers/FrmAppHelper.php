@@ -3884,8 +3884,6 @@ class FrmAppHelper {
 		}
 
 		if ( $location === 'admin' ) {
-			$show_pricing_modal = get_option( 'frm_show_pricing_fields_modal' );
-
 			$admin_script_strings = array(
 				'desc'                               => __( '(Click to add description)', 'formidable' ),
 				'blank'                              => __( '(Blank)', 'formidable' ),
@@ -3952,11 +3950,17 @@ class FrmAppHelper {
 				// In older versions this event listener causes the section to immediately close again
 				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
-				'shouldShowPricingFieldsModal'       => $show_pricing_modal,
 				'shouldShowPaymentsSettingsModal'    => ! FrmStrpLiteAppController::is_payment_gateway_configured(),
 				'pricingFieldsImg'                   => esc_url( FrmAppHelper::plugin_url() . '/images/upsell/pricing-fields.png' ),
 				'paymentsSettingsUrl'                => FrmStrpLiteAppController::get_payments_settings_url(),
 			);
+
+			if ( self::is_form_builder_page() ) {
+				$admin_script_strings['shouldShowPricingFieldsModal'] = get_option( 'frm_show_pricing_fields_modal' );
+				if ( $admin_script_strings['shouldShowPricingFieldsModal'] ) {
+					delete_option( 'frm_show_pricing_fields_modal' );
+				}
+			}
 
 			/**
 			 * @param array $admin_script_strings
@@ -3967,10 +3971,6 @@ class FrmAppHelper {
 
 			if ( ! $data ) {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
-			}
-
-			if ( $show_pricing_modal ) {
-				delete_option( 'frm_show_pricing_fields_modal' );
 			}
 		}//end if
 	}
