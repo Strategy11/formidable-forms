@@ -717,7 +717,11 @@ class FrmAddon {
 	 */
 	private function checked_recently( $time ) {
 		$last_checked = $this->last_checked();
-		$is_429       = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
+		if ( ! $last_checked ) {
+			return false;
+		}
+
+		$is_429 = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
 
 		// If the last check was a a rate limit error, adjust the check time.
 		if ( $is_429 ) {
