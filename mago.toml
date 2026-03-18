@@ -28,7 +28,6 @@ use-tabs = true
 integrations = [ "wordpress", "phpunit" ]
 
 [linter.rules]
-ambiguous-function-call = { enabled = false }
 array-style = { enabled = false }
 braced-string-interpolation = { enabled = false }
 class-name = { enabled = false }
