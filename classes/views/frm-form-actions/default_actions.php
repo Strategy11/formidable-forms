@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmDefPostAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops                = FrmFormAction::default_action_opts( 'frm_wordpress_icon frm-inverse frm_show_upgrade' );
+		$action_ops                = FrmFormAction::default_action_opts( 'frm_wordpress_icon frm_show_upgrade' );
 		$action_ops['color']       = 'rgb(0,160,210)';
 		$action_ops['description'] = __( 'Content publishing', 'formidable' );
 
@@ -34,7 +34,7 @@ class FrmDefRegAction extends FrmFormAction {
  */
 class FrmDefPayPalAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops                = FrmFormAction::default_action_opts( 'frm_paypal_icon frm-inverse frm_show_upgrade' );
+		$action_ops                = FrmFormAction::default_action_opts( 'frm_paypal_icon frm_show_upgrade' );
 		$action_ops['color']       = 'var(--primary-700)';
 		$action_ops['description'] = __( 'Payment gateway', 'formidable' );
 
@@ -83,7 +83,7 @@ class FrmDefAweberAction extends FrmFormAction {
  */
 class FrmDefMlcmpAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops                = FrmFormAction::default_action_opts( 'frm_mailchimp_icon frm_show_upgrade frm-inverse' );
+		$action_ops                = FrmFormAction::default_action_opts( 'frm_mailchimp_icon frm_show_upgrade' );
 		$action_ops['color']       = 'var(--grey-700)';
 		$action_ops['description'] = __( 'Subscription confirmation', 'formidable' );
 
@@ -137,7 +137,7 @@ class FrmDefActiveCampaignAction extends FrmFormAction {
 
 class FrmDefSalesforceAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops                = FrmFormAction::default_action_opts( 'frm_salesforce_icon frm-inverse frm_show_upgrade' );
+		$action_ops                = FrmFormAction::default_action_opts( 'frm_salesforce_icon frm_show_upgrade' );
 		$action_ops['color']       = 'var(--primary-500)';
 		$action_ops['description'] = __( 'Lead automation', 'formidable' );
 		parent::__construct( 'salesforce', 'Salesforce', $action_ops );
@@ -223,7 +223,7 @@ class FrmDefHrsAction extends FrmFormAction {
 
 class FrmDefConvertKitAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops                = FrmFormAction::default_action_opts( 'frm_convertkit_icon frm-inverse frm_show_upgrade' );
+		$action_ops                = FrmFormAction::default_action_opts( 'frm_convertkit_icon frm_show_upgrade' );
 		$action_ops['color']       = 'rgb(68 177 255)';
 		$action_ops['description'] = __( 'Broadcast publishing', 'formidable' );
 		parent::__construct( 'convertkit', 'Kit', $action_ops );

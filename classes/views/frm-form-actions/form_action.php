@@ -23,7 +23,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	<div class="widget-top">
 		<div class="widget-title">
 			<h4>
-				<span class="frm_form_action_icon <?php echo esc_attr( str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? 'frm-inverse' : '' ); ?>">
+				<span class="frm_form_action_icon">
 					<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'] ); ?>
 				</span>
 				<?php echo esc_html( $form_action->post_title ); ?>
