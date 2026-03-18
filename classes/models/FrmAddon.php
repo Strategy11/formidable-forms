@@ -698,7 +698,7 @@ class FrmAddon {
 
 		$response = $this->get_license_status();
 
-		if ( ! empty( $this->save_response['response_code'] ) && 429 === $this->save_response['response_code'] ) {
+		if ( ! empty( $this->save_status['response_code'] ) && 429 === $this->save_status['response_code'] ) {
 			// If we got a rate limit response, don't clear the license.
 			return;
 		}
@@ -719,8 +719,8 @@ class FrmAddon {
 		$last_checked = $this->last_checked();
 		$is_429       = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
 
+		// If the last check was a a rate limit error, adjust the check time.
 		if ( $is_429 ) {
-			// If the last check was a a rate limit, adjust the check time.
 			$time = '7 days' === $time ? '30 minutes' : '5 minutes';
 		}
 
