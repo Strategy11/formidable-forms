@@ -179,7 +179,7 @@ class FrmFormActionsController {
 				),
 			),
 			'payment'   => array(
-				'name'    => __( 'eCommerce', 'formidable' ),
+				'name'    => __( 'E-Commerce', 'formidable' ),
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
 				'actions' => array(
 					'paypal',
