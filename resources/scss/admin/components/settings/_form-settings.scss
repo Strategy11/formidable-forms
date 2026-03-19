@@ -17,20 +17,17 @@ h2.frm-h2,
 	margin: 0;
 }
 
-.frm_form_settings h2 {
-	border-bottom: 0;
-	padding: 0;
-}
-
 .frm_settings_form h3,
 .frm_form_settings h3,
 .frm_form_settings span.frm_add_logic_link {
-	display: block;
-	font-size: var(--text-sm);
-	font-weight: 500;
+	font-size: var(--text-md);
+	border-top: 1px solid var(--grey-300);
+	padding-top: var(--gap-sm);
+	margin: var(--gap-sm) 0;
+	font-weight: 400;
 	text-transform: uppercase;
-	color: var(--grey-600);
-	margin: var(--gap-md) 0;
+	color: var(--medium-grey);
+	display: block;
 }
 
 .frm_form_settings .howto {
