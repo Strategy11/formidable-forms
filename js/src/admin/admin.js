@@ -9385,15 +9385,6 @@ window.frmAdminBuildJS = function() {
 			regEx = true;
 		}
 
-		if ( toSearch === 'frm-action' && searchText !== '' ) {
-			const addonMenu = document.getElementById( 'frm_email_addon_menu' );
-			// Skip class switch when filter tabs handle visibility.
-			if ( ! addonMenu.querySelector( '[data-filter-target]' ) ) {
-				addonMenu.classList.remove( 'frm-all-actions' );
-				addonMenu.classList.add( 'frm-limited-actions' );
-			}
-		}
-
 		for ( i = 0; i < items.length; i++ ) {
 			const innerText = items[ i ].innerText.toLowerCase();
 
