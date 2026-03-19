@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php esc_html_e( 'Add form actions to your form to perform tasks when an entry is created, updated, imported, and more.', 'formidable' ); ?>
 </p>
 
-<div id="frm_email_addon_menu">
+<div id="frm_email_addon_menu" class="frm-mt-md">
 	<div class="frm-h-stack frm-mb-lg">
 		<div class="frm-style-tabs-wrapper" data-filter-target="#frm-actions-filter-content">
 			<div class="frm-tabs-delimiter"><span class="frm-tabs-active-underline"></span></div>
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		FrmAppHelper::show_search_box(
 			array(
 				'input_id'    => 'actions',
-				'placeholder' => __( 'Search Form Actions', 'formidable' ),
+				'placeholder' => __( 'Search Actions', 'formidable' ),
 				'tosearch'    => 'frm-action',
 				'class'       => 'frm-ml-auto-force',
 			)
