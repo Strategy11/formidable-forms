@@ -21,6 +21,14 @@
 
 // Action Cards
 .frm_actions_list {
+	.frm-card-item.frm-card-item--outlined {
+		padding-left: var(--gap-sm);
+		padding-right: var(--gap-sm);
+
+		.frmsvg {
+			color: var(--primary-700);
+		}
+	}
 }
 
 // Action Settings
