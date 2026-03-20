@@ -207,7 +207,7 @@
 				registerMethod( 'paypal', {
 					eligible: true,
 					buttonInstance: paypalBtn,
-					render: function() {
+					render() {
 						this.buttonInstance.render( `#${ this.containerEl.id }` );
 					}
 				} );
@@ -236,7 +236,7 @@
 					registerMethod( key, {
 						eligible: true,
 						buttonInstance: btn,
-						render: function() {
+						render() {
 							this.buttonInstance.render( `#${ this.containerEl.id }` );
 						}
 					} );
@@ -342,7 +342,7 @@
 				markWrap.classList.add( 'frm-payment-method-google-pay-icon' );
 				const img = document.createElement( 'img' );
 				const baseUrl = frmPayPalVars.imagesUrl || '';
-				img.src = baseUrl + 'gpay.svg';
+				img.src = `${ baseUrl }gpay.svg`;
 				img.alt = 'Google Pay';
 				img.height = 24;
 				markWrap.append( img );
@@ -608,7 +608,7 @@
 
 				const currentHeight = mutation.target.offsetHeight;
 				if ( currentHeight > 0 ) {
-					mutation.target.style.height = ( currentHeight + 1 ) + 'px';
+					mutation.target.style.height = `${ currentHeight + 1 }px`;
 				}
 			}
 
