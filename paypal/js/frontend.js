@@ -1,162 +1,726 @@
+/**
+ * PayPal Payment Integration - Radio-Based Payment Method Selector.
+ *
+ * Architecture:
+ * - A radio group lets the user pick their payment method (Card, PayPal, Venmo, etc.).
+ * - Only the selected method's UI is visible at a time.
+ * - Card + PayPal are pre-rendered on init (hybrid approach).
+ * - Other methods (Venmo, Google Pay, etc.) are lazy-rendered on first selection, then cached.
+ * - When Card is selected: card fields + native submit button are shown.
+ * - When any button method is selected: the submit button is hidden and only that button is shown.
+ */
 ( function() {
 	if ( ! window.frmPayPalVars ) {
 		return;
 	}
 
-	// Track the eligible funding sources
-	const renderedButtons = [];
+	// ---- State ----
 
-	// Track the state of the PayPal card fields
-	let cardFieldsValid = false;
 	let thisForm = null;
 	let running = 0;
 	let cardFieldsInstance = null;
+	let cardFieldsValid = false;
 	let submitEvent = null;
 
 	/**
-	 * Initialize PayPal Card Fields (Advanced Card Payments).
+	 * Registry of available payment methods.
+	 * Populated during init based on SDK eligibility checks.
 	 *
-	 * @return {Promise<Object>} The card fields instance.
+	 * @type {Map<string, Object>}
 	 */
-	async function initializeCardFields() {
+	const paymentMethods = new Map();
+
+	/** Currently selected payment method key. */
+	let selectedMethod = null;
+
+	/** Cached Google Pay config from paypal.Googlepay().config(). */
+	let googlePayConfig = null;
+
+	// ---- Constants ----
+
+	/**
+	 * Human-readable labels for funding sources.
+	 */
+	const METHOD_LABELS = {
+		card: 'Credit Card',
+		paypal: 'PayPal',
+		venmo: 'Venmo',
+		paylater: 'Pay Later',
+		google_pay: 'Google Pay',
+		bancontact: 'Bancontact',
+		blik: 'BLIK',
+		eps: 'EPS',
+		p24: 'Przelewy24',
+		trustly: 'Trustly',
+		satispay: 'Satispay',
+		sepa: 'SEPA',
+		mybank: 'MyBank',
+		ideal: 'iDEAL',
+	};
+
+	/**
+	 * Short descriptions shown below the label in each radio option.
+	 */
+	const METHOD_DESCRIPTIONS = {
+		card: 'Visa, Mastercard, Amex, Discover',
+		paypal: 'Pay with your PayPal account',
+		venmo: 'Pay with your Venmo account',
+		paylater: 'Pay over time with PayPal',
+		google_pay: 'Fast checkout with Google Pay',
+		bancontact: 'Pay with Bancontact',
+		blik: 'Pay with BLIK code',
+		eps: 'Austrian online bank transfer',
+		p24: 'Polish online bank transfer',
+		trustly: 'Pay via online banking',
+		satispay: 'Pay with Satispay',
+		sepa: 'SEPA direct debit',
+		mybank: 'Italian online bank transfer',
+		ideal: 'Dutch online bank transfer',
+	};
+
+	/**
+	 * Maps internal method keys to PayPal FUNDING constants for the Marks API.
+	 * Card and Google Pay use local images instead of PayPal Marks.
+	 */
+	const METHOD_FUNDING_SOURCE = {
+		paypal: 'paypal',
+		venmo: 'venmo',
+		paylater: 'paylater',
+		bancontact: 'bancontact',
+		blik: 'blik',
+		eps: 'eps',
+		p24: 'p24',
+		trustly: 'trustly',
+		satispay: 'satispay',
+		sepa: 'sepa',
+		mybank: 'mybank',
+		ideal: 'ideal',
+	};
+
+	/**
+	 * Methods that should be pre-rendered on init (hybrid approach).
+	 * Everything else is lazy-rendered on first selection.
+	 */
+	const PRE_RENDER_METHODS = new Set( [ 'card', 'paypal' ] );
+
+	/**
+	 * Base request object shared by isReadyToPay and PaymentDataRequest.
+	 */
+	const googlePayBaseRequest = {
+		apiVersion: 2,
+		apiVersionMinor: 0
+	};
+
+	// ---- Initialization ----
+
+	/**
+	 * Main entry point.
+	 */
+	async function paypalInit() {
 		const cardElement = document.querySelector( '.frm-card-element' );
 		if ( ! cardElement ) {
-			return null;
+			return;
 		}
 
 		thisForm = cardElement.closest( 'form' );
+		if ( ! thisForm ) {
+			return;
+		}
 
 		const settings = getPayPalSettings()[ 0 ];
-		const isRecurring = 'single' !== settings.one;
-
-		let cardFields = {};
-
-		const { layout } = getPayPalSettings()[ 0 ];
-		const cardFieldsAreSupported = layout !== 'checkout_only' && 'function' === typeof window.paypal.CardFields && ! isRecurring;
-		const buttonIsEnabled = layout !== 'card_only' && 'function' === typeof window.paypal.Buttons;
-
-		if ( cardFieldsAreSupported ) {
-			cardFields = window.paypal.CardFields(
-				{
-					onApprove,
-					onError,
-					createOrder,
-					style: frmPayPalVars.style,
-					inputEvents: {
-						onChange: data => {
-							cardFieldsValid = data.isFormValid;
-							console.log( 'onChange', data );
-
-							const allEmpty = Object.values( data.fields ).every( field => field.isEmpty );
-							const buttonContainer = document.getElementById( 'paypal-button-container' );
-							const separator = buttonContainer.parentNode.querySelector( '.separator' );
-
-							if ( allEmpty ) {
-								buttonContainer.style.display = 'block';
-								separator.style.display = 'block';
-							} else {
-								buttonContainer.style.display = 'none';
-								separator.style.display = 'none';
-							}
-
-							if ( cardFieldsValid ) {
-								enableSubmit();
-							} else {
-								disableSubmit( thisForm );
-							}
-						}
-					}
-				}
-			);
-		} else {
-			// Card fields require a Vault setup token.
-			// For now, we will just disable the card fields
-			// as we do not support vaulting yet.
-			cardFields = {
-				isEligible() {
-					return false;
-				}
-			};
+		if ( ! settings ) {
+			return;
 		}
 
-		// Create the card fields container structure
-		// TODO: Make these IDs unique.
+		const isRecurring = 'single' !== settings.one;
+		const { layout } = settings;
+		const cardFieldsAreSupported = layout !== 'checkout_only' && 'function' === typeof window.paypal.CardFields && ! isRecurring;
+		const buttonsAreEnabled = layout !== 'card_only' && 'function' === typeof window.paypal.Buttons;
+
+		// Clear the card element. We rebuild it entirely.
 		cardElement.innerHTML = '';
 
-		const cardFieldsEligible = cardFieldsAreSupported && cardFields.isEligible();
+		// 1. Discover eligible methods and register them.
+		await discoverPaymentMethods( {
+			cardFieldsAreSupported,
+			buttonsAreEnabled,
+			isRecurring
+		} );
 
-		if ( buttonIsEnabled ) {
-			const buttonContainer = document.createElement( 'div' );
-			buttonContainer.id = 'paypal-button-container';
+		if ( paymentMethods.size === 0 ) {
+			displayPaymentFailure( 'No payment methods available.' );
+			return;
+		}
 
-			// The default max width for non-Google Pay buttons is 750px.
-			// Without setting a max width the Google Pay button will use 100%.
-			// We want smaller buttons than the default, so use 500px instead.
-			buttonContainer.style.maxWidth = '500px';
+		// 2. Build the radio selector UI, then render marks after it's in the DOM.
+		const radioGroup = buildRadioGroup();
+		cardElement.append( radioGroup );
+		renderMarks();
 
-			cardElement.prepend( buttonContainer );
+		// 3. Build a container area for each method's UI (buttons / card fields).
+		const methodArea = document.createElement( 'div' );
+		methodArea.classList.add( 'frm-payment-method-area' );
+		cardElement.append( methodArea );
 
-			const renderPayPalButton = makeRenderPayPalButton( buttonContainer );
+		for ( const [ key, method ] of paymentMethods ) {
+			const container = document.createElement( 'div' );
+			container.id = `frm-payment-method-${ key }`;
+			container.classList.add( 'frm-payment-method-container' );
+			container.style.display = 'none';
+			container.style.maxWidth = '500px';
+			methodArea.append( container );
+			method.containerEl = container;
+		}
+
+		// 4. Pre-render Card + PayPal (hybrid approach).
+		for ( const key of PRE_RENDER_METHODS ) {
+			const method = paymentMethods.get( key );
+			if ( method && method.eligible ) {
+				try {
+					await method.render.call( method );
+					method.rendered = true;
+				} catch ( err ) {
+					console.error( `Failed to pre-render payment method: ${ key }`, err );
+				}
+			}
+		}
+
+		// 5. Auto-select the first eligible method.
+		const firstKey = paymentMethods.keys().next().value;
+		await selectPaymentMethod( firstKey );
+
+		// 6. Attach form submit handler (for card method).
+		thisForm.addEventListener( 'submit', handleFormSubmission );
+
+		// 7. Pay Later messages.
+		if ( paymentMethods.has( 'paylater' ) ) {
+			renderMessages();
+			jQuery( document ).on( 'frmFieldChanged', priceChanged );
+			checkPriceFieldsOnLoad();
+		}
+	}
+
+	// ---- Discovery ----
+
+	/**
+	 * Discover which payment methods are eligible and register them.
+	 *
+	 * @param {Object} opts Config flags.
+	 */
+	async function discoverPaymentMethods( opts ) {
+		const { cardFieldsAreSupported, buttonsAreEnabled, isRecurring } = opts;
+
+		// --- Card Fields ---
+		if ( cardFieldsAreSupported ) {
+			const cardFields = createCardFieldsSDKInstance();
+			if ( cardFields && cardFields.isEligible() ) {
+				cardFieldsInstance = cardFields;
+				registerMethod( 'card', {
+					eligible: true,
+					render: renderCardFields
+				} );
+			}
+		}
+
+		// --- PayPal button ---
+		if ( buttonsAreEnabled ) {
+			const paypalBtn = createPayPalButton( paypal.FUNDING.PAYPAL, isRecurring );
+			if ( paypalBtn.isEligible() ) {
+				registerMethod( 'paypal', {
+					eligible: true,
+					buttonInstance: paypalBtn,
+					render: function() {
+						this.buttonInstance.render( `#${ this.containerEl.id }` );
+					}
+				} );
+			}
+		}
+
+		// --- Alternative funding sources ---
+		if ( buttonsAreEnabled ) {
 			const fundingSources = [
-				paypal.FUNDING.BANCONTACT,
-				paypal.FUNDING.BLIK,
-				paypal.FUNDING.EPS,
-				paypal.FUNDING.P24,
-				paypal.FUNDING.TRUSTLY,
-				paypal.FUNDING.SATISPAY,
-				paypal.FUNDING.SEPA,
-				paypal.FUNDING.MYBANK,
-				paypal.FUNDING.IDEAL,
-				paypal.FUNDING.PAYLATER,
-				paypal.FUNDING.VENMO,
+				{ key: 'venmo', funding: paypal.FUNDING.VENMO },
+				{ key: 'paylater', funding: paypal.FUNDING.PAYLATER },
+				{ key: 'bancontact', funding: paypal.FUNDING.BANCONTACT },
+				{ key: 'blik', funding: paypal.FUNDING.BLIK },
+				{ key: 'eps', funding: paypal.FUNDING.EPS },
+				{ key: 'p24', funding: paypal.FUNDING.P24 },
+				{ key: 'trustly', funding: paypal.FUNDING.TRUSTLY },
+				{ key: 'satispay', funding: paypal.FUNDING.SATISPAY },
+				{ key: 'sepa', funding: paypal.FUNDING.SEPA },
+				{ key: 'mybank', funding: paypal.FUNDING.MYBANK },
+				{ key: 'ideal', funding: paypal.FUNDING.IDEAL },
 			];
-			fundingSources.forEach( renderPayPalButton );
 
-			if ( renderedButtons.includes( paypal.FUNDING.PAYLATER ) ) {
-				renderMessages( cardElement );
-				jQuery( document ).on( 'frmFieldChanged', priceChanged );
-				checkPriceFieldsOnLoad();
+			for ( const { key, funding } of fundingSources ) {
+				const btn = createPayPalButton( funding, isRecurring );
+				if ( btn.isEligible() ) {
+					registerMethod( key, {
+						eligible: true,
+						buttonInstance: btn,
+						render: function() {
+							this.buttonInstance.render( `#${ this.containerEl.id }` );
+						}
+					} );
+				}
+			}
+		}
+
+		// --- Google Pay ---
+		if ( buttonsAreEnabled && ! isRecurring ) {
+			const googlePayEligible = await checkGooglePayEligibility();
+			if ( googlePayEligible ) {
+				registerMethod( 'google_pay', {
+					eligible: true,
+					render: renderGooglePayButton
+				} );
+			}
+		}
+	}
+
+	/**
+	 * Register a payment method in the registry.
+	 *
+	 * @param {string} key    Unique identifier.
+	 * @param {Object} config Method configuration.
+	 */
+	function registerMethod( key, config ) {
+		paymentMethods.set( key, {
+			key,
+			label: METHOD_LABELS[ key ] || key,
+			eligible: config.eligible || false,
+			rendered: false,
+			containerEl: null,
+			buttonInstance: config.buttonInstance || null,
+			render: config.render || ( () => {} ),
+		} );
+	}
+
+	// ---- Radio Group UI ----
+
+	/**
+	 * Inject the payment method selector CSS into the page (once).
+	 */
+	function injectStyles() {
+		if ( document.getElementById( 'frm-payment-method-styles' ) ) {
+			return;
+		}
+
+		const style = document.createElement( 'style' );
+		style.id = 'frm-payment-method-styles';
+		style.textContent = `
+			.frm-payment-method-selector {
+				display: flex;
+				flex-direction: column;
+				gap: 0;
+				margin-bottom: 16px;
+				border: 1px solid #e0e0e0;
+				border-radius: 8px;
+				overflow: hidden;
+				max-width: 500px;
+			}
+			.frm-payment-method-option {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				padding: 16px;
+				cursor: pointer;
+				border-bottom: 1px solid #e0e0e0;
+				background: #fff;
+				transition: background-color 0.15s ease;
+				position: relative;
+				margin: 0;
+			}
+			.frm-payment-method-option:last-child {
+				border-bottom: none;
+			}
+			.frm-payment-method-option:hover {
+				background-color: #f9f9fb;
+			}
+			.frm-payment-method-active {
+				background-color: #f0f4ff;
+			}
+			.frm-payment-method-active:hover {
+				background-color: #f0f4ff;
+			}
+			.frm-payment-method-option input[type="radio"] {
+				appearance: none !important;
+				-webkit-appearance: none !important;
+				width: 20px !important;
+				height: 20px !important;
+				min-width: 20px !important;
+				min-height: 20px !important;
+				border: 2px solid #c0c0c0 !important;
+				border-radius: 50% !important;
+				flex-shrink: 0;
+				margin: 0 !important;
+				padding: 0 !important;
+				cursor: pointer;
+				transition: border-color 0.15s ease, background 0.15s ease;
+				background: #fff !important;
+				box-shadow: none !important;
+				outline: none !important;
+			}
+			.frm-payment-method-option input[type="radio"]:checked {
+				border-color: #0070ba !important;
+				background: radial-gradient(circle, #0070ba 40%, #fff 40%, #fff 100%) !important;
+			}
+			.frm-payment-method-option input[type="radio"]:focus {
+				outline: 2px solid rgba(0, 112, 186, 0.3) !important;
+				outline-offset: 2px !important;
+			}
+			.frm-payment-method-text {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+				flex: 1;
+				min-width: 0;
+			}
+			.frm-payment-method-label-text {
+				font-size: 15px;
+				font-weight: 500;
+				color: #1a1a2e;
+				line-height: 1.3;
+			}
+			.frm-payment-method-desc {
+				font-size: 13px;
+				color: #6b7280;
+				line-height: 1.3;
+			}
+			.frm-payment-method-mark {
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				gap: 4px;
+			}
+			.frm-payment-method-mark img,
+			.frm-payment-method-mark svg {
+				height: 24px;
+				width: auto;
+			}
+			.frm-payment-method-google-pay-icon {
+				height: 24px;
+			}
+			.frm-payment-method-google-pay-icon svg {
+				height: 24px;
+				width: auto;
+			}
+			.frm-payment-method-paylater-wrap {
+				border-bottom: 1px solid #e0e0e0;
+				background: #fff;
+				transition: background-color 0.15s ease;
+			}
+			.frm-payment-method-paylater-wrap:hover {
+				background-color: #f9f9fb;
+			}
+			.frm-payment-method-paylater-wrap.frm-payment-method-active-wrap {
+				background-color: #f0f4ff;
+			}
+			.frm-payment-method-paylater-wrap.frm-payment-method-active-wrap:hover {
+				background-color: #f0f4ff;
+			}
+			.frm-payment-method-paylater-wrap.frm-payment-method-active-wrap .frm-payment-method-paylater-msg {
+				background-color: #f0f4ff;
+			}
+			.frm-payment-method-paylater-wrap:last-child {
+				border-bottom: none;
+			}
+			.frm-payment-method-paylater-wrap .frm-payment-method-option {
+				border-bottom: none;
+				background: transparent;
+			}
+			.frm-payment-method-paylater-wrap .frm-payment-method-option:hover {
+				background: transparent;
+			}
+			.frm-payment-method-paylater-msg {
+				padding: 0 16px 12px 48px;
+				font-size: 13px;
+				color: #6b7280;
+				background: transparent;
+			}
+			.frm-payment-method-area {
+				margin-top: 16px;
+			}
+		`;
+		document.head.append( style );
+	}
+
+	/**
+	 * Build the radio button group for payment method selection.
+	 * Each option is a card-like row with a radio, label, description, and PayPal Mark logo.
+	 *
+	 * @return {HTMLElement} The radio group container.
+	 */
+	function buildRadioGroup() {
+		injectStyles();
+
+		const group = document.createElement( 'div' );
+		group.classList.add( 'frm-payment-method-selector' );
+		group.setAttribute( 'role', 'radiogroup' );
+		group.setAttribute( 'aria-label', 'Select payment method' );
+
+		for ( const [ key, method ] of paymentMethods ) {
+			const label = document.createElement( 'label' );
+			label.classList.add( 'frm-payment-method-option' );
+			label.setAttribute( 'for', `frm-payment-method-radio-${ key }` );
+
+			const radio = document.createElement( 'input' );
+			radio.type = 'radio';
+			radio.name = 'frm_payment_method';
+			radio.id = `frm-payment-method-radio-${ key }`;
+			radio.value = key;
+
+			radio.addEventListener( 'change', () => selectPaymentMethod( key ) );
+
+			// Text column: label + description.
+			const textWrap = document.createElement( 'div' );
+			textWrap.classList.add( 'frm-payment-method-text' );
+
+			const labelText = document.createElement( 'span' );
+			labelText.classList.add( 'frm-payment-method-label-text' );
+			labelText.textContent = method.label;
+			textWrap.append( labelText );
+
+			// Mark column: will be populated by renderMarks() after the group is in the DOM.
+			const markWrap = document.createElement( 'div' );
+			markWrap.classList.add( 'frm-payment-method-mark' );
+			markWrap.id = `frm-payment-mark-${ key }`;
+
+			if ( key === 'card' ) {
+				const baseUrl = frmPayPalVars.imagesUrl || '';
+				const cardBrands = [
+					{ file: 'visa.svg', alt: 'Visa' },
+					{ file: 'mastercard.svg', alt: 'Mastercard' },
+					{ file: 'amex.svg', alt: 'American Express' },
+					{ file: 'discover.svg', alt: 'Discover' },
+				];
+				cardBrands.forEach( function( brand ) {
+					const img = document.createElement( 'img' );
+					img.src = baseUrl + brand.file;
+					img.alt = brand.alt;
+					img.height = 24;
+					markWrap.append( img );
+				} );
+			} else if ( key === 'google_pay' ) {
+				markWrap.classList.add( 'frm-payment-method-google-pay-icon' );
+				const img = document.createElement( 'img' );
+				img.src = 'https://www.gstatic.com/instantbuy/svg/light_gpay.svg';
+				img.alt = 'Google Pay';
+				img.height = 24;
+				markWrap.append( img );
 			}
 
-			const buttonConfig = {
+			label.append( radio );
+			label.append( textWrap );
+			label.append( markWrap );
+
+			if ( key === 'paylater' ) {
+				// Wrap the label and a message container in a div.
+				const wrapper = document.createElement( 'div' );
+				wrapper.classList.add( 'frm-payment-method-paylater-wrap' );
+				wrapper.append( label );
+
+				const msgContainer = document.createElement( 'div' );
+				msgContainer.id = 'frm-paylater-message';
+				msgContainer.classList.add( 'frm-payment-method-paylater-msg' );
+				wrapper.append( msgContainer );
+
+				group.append( wrapper );
+			} else {
+				group.append( label );
+			}
+		}
+
+		return group;
+	}
+
+	/**
+	 * Render PayPal Marks into the radio group containers.
+	 * Must be called AFTER the radio group is appended to the DOM,
+	 * because the Marks API needs the containers to be in the document.
+	 */
+	function renderMarks() {
+		if ( 'function' !== typeof paypal.Marks ) {
+			return;
+		}
+
+		for ( const [ key ] of paymentMethods ) {
+			const fundingSource = METHOD_FUNDING_SOURCE[ key ];
+			if ( ! fundingSource ) {
+				continue;
+			}
+
+			const markContainerId = `frm-payment-mark-${ key }`;
+			const container = document.getElementById( markContainerId );
+			if ( ! container ) {
+				continue;
+			}
+
+			try {
+				const mark = paypal.Marks( { fundingSource } );
+				if ( mark.isEligible() ) {
+					mark.render( `#${ markContainerId }` );
+				}
+			} catch ( err ) {
+				// Mark not available for this source, that's fine.
+			}
+		}
+	}
+
+	// ---- Method Selection ----
+
+	/**
+	 * Handle switching to a new payment method.
+	 *
+	 * 1. Lazy-render if this method hasn't been rendered yet.
+	 * 2. Hide all method containers.
+	 * 3. Show the selected method's container.
+	 * 4. Toggle submit button visibility.
+	 *
+	 * @param {string} key The payment method key to select.
+	 */
+	async function selectPaymentMethod( key ) {
+		const method = paymentMethods.get( key );
+		if ( ! method ) {
+			return;
+		}
+
+		selectedMethod = key;
+
+		// Update radio checked state.
+		const radio = document.getElementById( `frm-payment-method-radio-${ key }` );
+		if ( radio && ! radio.checked ) {
+			radio.checked = true;
+		}
+
+		// Lazy-render if this is the first time selecting a non-pre-rendered method.
+		if ( ! method.rendered ) {
+			method.containerEl.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible"></span>';
+			try {
+				await method.render.call( method );
+				method.rendered = true;
+			} catch ( err ) {
+				console.error( `Failed to render payment method: ${ key }`, err );
+				method.containerEl.innerHTML = '';
+			}
+		}
+
+		// Hide all method containers.
+		for ( const [ , m ] of paymentMethods ) {
+			if ( m.containerEl ) {
+				m.containerEl.style.display = 'none';
+			}
+		}
+
+		// Show the selected one.
+		if ( method.containerEl ) {
+			method.containerEl.style.display = 'block';
+		}
+
+		// Toggle submit button + card fields visibility.
+		updateSubmitButtonVisibility( key );
+
+		// Update active class on radio labels.
+		document.querySelectorAll( '.frm-payment-method-option' ).forEach( el => {
+			el.classList.remove( 'frm-payment-method-active' );
+		} );
+		document.querySelectorAll( '.frm-payment-method-paylater-wrap' ).forEach( el => {
+			el.classList.remove( 'frm-payment-method-active-wrap' );
+		} );
+		const activeLabel = radio?.closest( '.frm-payment-method-option' );
+		if ( activeLabel ) {
+			activeLabel.classList.add( 'frm-payment-method-active' );
+			const wrapper = activeLabel.closest( '.frm-payment-method-paylater-wrap' );
+			if ( wrapper ) {
+				wrapper.classList.add( 'frm-payment-method-active-wrap' );
+			}
+		}
+	}
+
+	/**
+	 * Show/hide the native submit button based on the selected method.
+	 *
+	 * - Card: submit button visible (user fills card fields, clicks submit).
+	 * - Everything else: submit button hidden (PayPal SDK button handles submission).
+	 *
+	 * @param {string} key The selected payment method key.
+	 */
+	function updateSubmitButtonVisibility( key ) {
+		const submitButtons = thisForm.querySelectorAll(
+			'input[type="submit"], input[type="button"], button[type="submit"]'
+		);
+		const isCardMethod = key === 'card';
+
+		submitButtons.forEach( btn => {
+			if ( btn.classList.contains( 'frm_prev_page' ) ) {
+				return;
+			}
+
+			if ( isCardMethod ) {
+				btn.style.display = '';
+				if ( cardFieldsValid ) {
+					btn.removeAttribute( 'disabled' );
+				} else {
+					btn.setAttribute( 'disabled', 'disabled' );
+				}
+			} else {
+				btn.style.display = 'none';
+			}
+		} );
+	}
+
+	// ---- Card Fields ----
+
+	/**
+	 * Create the PayPal CardFields SDK instance (without rendering).
+	 *
+	 * @return {Object|null} The card fields instance.
+	 */
+	function createCardFieldsSDKInstance() {
+		try {
+			return window.paypal.CardFields( {
 				onApprove,
 				onError,
-				onCancel,
-				style: frmPayPalVars.buttonStyle,
-				fundingSource: paypal.FUNDING.PAYPAL,
-			};
-
-			const setting = getPayPalSettings()[ 0 ];
-			const isRecurring = 'single' !== setting.one;
-
-			if ( isRecurring ) {
-				buttonConfig.createSubscription = createSubscription;
-			} else {
-				buttonConfig.createOrder = createOrder;
-			}
-
-			paypal.Buttons( buttonConfig ).render( '#paypal-button-container' );
-
-			// Initialize Google Pay if available.
-			if ( ! isRecurring ) {
-				await initializeGooglePay();
-			}
-		}
-
-		if ( ! cardFieldsEligible ) {
+				createOrder,
+				style: frmPayPalVars.style,
+				inputEvents: {
+					onChange: onCardFieldsChange
+				}
+			} );
+		} catch ( err ) {
+			console.error( 'Failed to create CardFields instance', err );
 			return null;
 		}
+	}
 
-		cardElement.classList.add( 'frm_grid_container' );
+	/**
+	 * Handle card field value changes.
+	 *
+	 * @param {Object} data The onChange event data.
+	 */
+	function onCardFieldsChange( data ) {
+		cardFieldsValid = data.isFormValid;
 
-		if ( buttonIsEnabled ) {
-			const separator = document.createElement( 'div' );
-			separator.classList.add( 'separator' );
-			separator.textContent = 'OR'; // TODO: Make this customizable.
-			separator.style.fontSize = '16px';
- 			separator.style.marginBottom = '6px';
-			cardElement.append( separator );
+		if ( selectedMethod === 'card' ) {
+			if ( cardFieldsValid ) {
+				enableSubmit();
+			} else {
+				disableSubmit( thisForm );
+			}
 		}
+	}
+
+	/**
+	 * Render the card number / expiry / CVV fields into the method container.
+	 */
+	function renderCardFields() {
+		const method = paymentMethods.get( 'card' );
+		if ( ! method || ! cardFieldsInstance ) {
+			return;
+		}
+
+		const wrapper = document.createElement( 'div' );
+		wrapper.classList.add( 'frm-card-fields-wrapper', 'frm_grid_container' );
 
 		const cardNumberWrapper = document.createElement( 'div' );
 		cardNumberWrapper.id = 'frm-paypal-card-number';
@@ -170,25 +734,31 @@
 		cvvWrapper.id = 'frm-paypal-card-cvv';
 		cvvWrapper.classList.add( 'frm3', 'frm-payment-card-cvv' );
 
-		cardElement.append( cardNumberWrapper );
-		cardElement.append( expiryWrapper );
-		cardElement.append( cvvWrapper );
+		wrapper.append( cardNumberWrapper, expiryWrapper, cvvWrapper );
+		method.containerEl.innerHTML = '';
+		method.containerEl.append( wrapper );
 
-		disableSubmit( thisForm );
+		cardFieldsInstance.NumberField().render( '#frm-paypal-card-number' );
+		cardFieldsInstance.ExpiryField().render( '#frm-paypal-card-expiry' );
+		cardFieldsInstance.CVVField().render( '#frm-paypal-card-cvv' );
 
-		// Render individual card fields
-		cardFields.NumberField().render( '#frm-paypal-card-number' );
-		cardFields.ExpiryField().render( '#frm-paypal-card-expiry' );
-		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
+		setupCardFieldIframeObservers();
+	}
 
-		const cardNumberIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-number' );
-		const expiryIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-expiry' );
-		const cvvIframeWrapper = getPayPalIframeWrapper( 'frm-paypal-card-cvv' );
+	/**
+	 * Watch for PayPal iframe height changes and add 1px to prevent border clipping.
+	 */
+	function setupCardFieldIframeObservers() {
+		const ids = [ 'frm-paypal-card-number', 'frm-paypal-card-expiry', 'frm-paypal-card-cvv' ];
+		const wrappers = ids
+			.map( id => document.getElementById( id )?.querySelector( 'iframe' )?.parentNode )
+			.filter( Boolean );
 
-		const observerOptions = {
-			attributes: true,
-			attributeFilter: ['style']
-		};
+		if ( ! wrappers.length ) {
+			return;
+		}
+
+		const observerOptions = { attributes: true, attributeFilter: [ 'style' ] };
 
 		const observerCallback = ( mutationsList, observer ) => {
 			observer.disconnect();
@@ -204,60 +774,108 @@
 				}
 			}
 
-			observeWrappers( observer );
+			wrappers.forEach( w => observer.observe( w, observerOptions ) );
 		};
 
 		const observer = new MutationObserver( observerCallback );
+		wrappers.forEach( w => observer.observe( w, observerOptions ) );
+	}
 
-		function observeWrappers( obs ) {
-			if ( cardNumberIframeWrapper ) {
-				obs.observe( cardNumberIframeWrapper, observerOptions );
-			}
-			if ( expiryIframeWrapper ) {
-				obs.observe( expiryIframeWrapper, observerOptions );
-			}
-			if ( cvvIframeWrapper ) {
-				obs.observe( cvvIframeWrapper, observerOptions );
-			}
+	// ---- PayPal Button Creation ----
+
+	/**
+	 * Create a PayPal Buttons instance for a given funding source (without rendering).
+	 *
+	 * @param {string}  fundingSource The PayPal FUNDING constant.
+	 * @param {boolean} isRecurring   Whether this is a recurring payment.
+	 *
+	 * @return {Object} The PayPal Buttons instance.
+	 */
+	function createPayPalButton( fundingSource, isRecurring ) {
+		const buttonConfig = {
+			fundingSource,
+			onApprove,
+			onError,
+			onCancel,
+			style: { ...frmPayPalVars.buttonStyle },
+		};
+
+		const supportedColors = [ 'silver', 'black', 'white' ];
+		const supportedColorsMap = {
+			venmo: [ 'blue' ],
+			paylater: [ 'gold', 'blue' ]
+		};
+
+		supportedColorsMap[ fundingSource ]?.forEach( color => supportedColors.push( color ) );
+
+		if ( ! supportedColors.includes( buttonConfig.style.color ) ) {
+			delete buttonConfig.style.color;
 		}
 
-		observeWrappers( observer );
+		if ( isRecurring ) {
+			buttonConfig.createSubscription = createSubscription;
+		} else {
+			buttonConfig.createOrder = createOrder;
+		}
 
-		return cardFields;
+		return paypal.Buttons( buttonConfig );
 	}
 
-	/**
-	 * @param {string} cardFieldContainerId
-	 *
-	 * @return {HTMLElement|null}
-	 */
-	function getPayPalIframeWrapper( cardFieldContainerId ) {
-		return document.getElementById( cardFieldContainerId )?.querySelector( 'iframe' )?.parentNode;
-	}
+	// ---- Google Pay ----
 
 	/**
-	 * Add an extra pixel to the PayPal iframe wrappers to prevent issues where the borders are cut off.
+	 * Check if Google Pay is eligible (without rendering).
 	 *
-	 * @param {HTMLElement|null} element
-	 *
-	 * @return {void}
+	 * @return {Promise<boolean>}
 	 */
-	function add1pxToHeight( element ) {
-		if ( element ) {
-			const currentHeightInPixels = parseInt( element.style.height.replace( 'px', '' ) );
-			element.style.height = `${ currentHeightInPixels + 1 }px`;
+	async function checkGooglePayEligibility() {
+		if ( 'function' !== typeof paypal.Googlepay ) {
+			return false;
+		}
+
+		if ( 'undefined' === typeof google || google.payments === undefined ) {
+			return false;
+		}
+
+		try {
+			googlePayConfig = await paypal.Googlepay().config();
+			const paymentsClient = getGooglePaymentsClient();
+
+			const readyToPayRequest = Object.assign( {}, googlePayBaseRequest, {
+				allowedPaymentMethods: googlePayConfig.allowedPaymentMethods
+			} );
+
+			const response = await paymentsClient.isReadyToPay( readyToPayRequest );
+			return response.result;
+		} catch ( err ) {
+			console.error( 'Google Pay eligibility check failed', err );
+			return false;
 		}
 	}
 
-	// ---- Google Pay Integration ----
-
 	/**
-	 * Base request object shared by isReadyToPay and PaymentDataRequest.
+	 * Render the Google Pay button into its method container.
 	 */
-	const googlePayBaseRequest = {
-		apiVersion: 2,
-		apiVersionMinor: 0
-	};
+	async function renderGooglePayButton() {
+		const method = paymentMethods.get( 'google_pay' );
+		if ( ! method || ! googlePayConfig ) {
+			return;
+		}
+
+		const paymentsClient = getGooglePaymentsClient();
+		const buttonOptions = Object.assign(
+			getGooglePayButtonStyle(),
+			{
+				onClick: () => onGooglePayButtonClicked( googlePayConfig ),
+				allowedPaymentMethods: googlePayConfig.allowedPaymentMethods
+			}
+		);
+		const button = paymentsClient.createButton( buttonOptions );
+
+		const container = method.containerEl;
+		container.innerHTML = '';
+		container.append( button );
+	}
 
 	/**
 	 * Get a Google PaymentsClient configured for the current environment.
@@ -280,33 +898,18 @@
 	 */
 	function getGooglePayButtonStyle() {
 		const style = frmPayPalVars.buttonStyle || {};
-		const options = {
-			buttonSizeMode: 'fill'
-		};
+		const options = { buttonSizeMode: 'fill' };
 
-		// Map PayPal color to Google Pay buttonColor (default, black, white).
-		const colorMap = {
-			black: 'black',
-			white: 'white',
-			silver: 'white'
-		};
+		const colorMap = { black: 'black', white: 'white', silver: 'white' };
 		if ( style.color && colorMap[ style.color ] ) {
 			options.buttonColor = colorMap[ style.color ];
 		}
 
-		// Map PayPal label to Google Pay buttonType.
-		const typeMap = {
-			pay: 'pay',
-			checkout: 'checkout',
-			buynow: 'buy',
-			donate: 'donate',
-			subscribe: 'subscribe'
-		};
+		const typeMap = { pay: 'pay', checkout: 'checkout', buynow: 'buy', donate: 'donate', subscribe: 'subscribe' };
 		if ( style.label && typeMap[ style.label ] ) {
 			options.buttonType = typeMap[ style.label ];
 		}
 
-		// Pass through border radius.
 		if ( style.borderRadius !== undefined ) {
 			options.buttonRadius = style.borderRadius;
 		}
@@ -315,104 +918,19 @@
 	}
 
 	/**
-	 * Initialize Google Pay via the PayPal SDK googlepay component.
-	 * Checks eligibility and renders the Google Pay button if supported.
+	 * Handle Google Pay button click.
+	 *
+	 * @param {Object} config The config from paypal.Googlepay().config().
 	 *
 	 * @return {Promise<void>}
 	 */
-	async function initializeGooglePay() {
-		if ( 'function' !== typeof paypal.Googlepay ) {
-			return;
-		}
-
-		if ( 'undefined' === typeof google || google.payments === undefined ) {
-			return;
-		}
-
-		try {
-			const googlePayConfig = await paypal.Googlepay().config();
-			const paymentsClient = getGooglePaymentsClient();
-
-			const readyToPayRequest = Object.assign( {}, googlePayBaseRequest, {
-				allowedPaymentMethods: googlePayConfig.allowedPaymentMethods
-			} );
-
-			const response = await paymentsClient.isReadyToPay( readyToPayRequest );
-
-			if ( ! response.result ) {
-				return;
-			}
-
-			const paypalButtonContainer = document.getElementById( 'paypal-button-container' );
-			if ( ! paypalButtonContainer ) {
-				return;
-			}
-
-			const googlePayContainer = document.createElement( 'div' );
-			googlePayContainer.id = 'frm-google-pay-container';
-			googlePayContainer.style.marginBottom = '6px'; // Make sure the button has some extra space below it.
-
-			// Make the button the same height as other PayPal buttons.
-			googlePayContainer.style.height = `${ getHeightToUseForNewGooglePayButton( paypalButtonContainer ) }px`;
-
-			paypalButtonContainer.prepend( googlePayContainer );
-
-			const buttonOptions = Object.assign(
-				getGooglePayButtonStyle(),
-				{
-					onClick: () => onGooglePayButtonClicked( googlePayConfig ),
-					allowedPaymentMethods: googlePayConfig.allowedPaymentMethods
-				}
-			);
-			const button = paymentsClient.createButton( buttonOptions );
-
-			googlePayContainer.append( button );
-		} catch ( err ) {
-			console.error( 'Google Pay initialization failed', err );
-		}
-	}
-
-	/**
-	 * @param {HTMLElement} paypalButtonContainer
-	 *
-	 * @return {number}
-	 */
-	function getHeightToUseForNewGooglePayButton( paypalButtonContainer ) {
-		const iframeReference = paypalButtonContainer.querySelector( 'iframe' );
-		if ( ! iframeReference ) {
-			return 40;
-		}
-
-		const iframeHeight = iframeReference.offsetHeight || iframeReference.style.height;
-		if ( ! iframeHeight ) {
-			return 40;
-		}
-
-		if ( iframeHeight < 25 ) {
-			return 25;
-		}
-
-		if ( iframeHeight > 55 ) {
-			return 55;
-		}
-
-		return iframeHeight;
-	}
-
-	/**
-	 * Handle Google Pay button click. Builds the PaymentDataRequest and opens the Google Pay sheet.
-	 *
-	 * @param {Object} googlePayConfig The config from paypal.Googlepay().config().
-	 *
-	 * @return {Promise<void>}
-	 */
-	async function onGooglePayButtonClicked( googlePayConfig ) {
+	async function onGooglePayButtonClicked( config ) {
 		const settings = getPayPalSettings()[ 0 ];
 		const currency = ( settings.currency || 'USD' ).toUpperCase();
 
 		const paymentDataRequest = Object.assign( {}, googlePayBaseRequest );
-		paymentDataRequest.allowedPaymentMethods = googlePayConfig.allowedPaymentMethods;
-		paymentDataRequest.merchantInfo = googlePayConfig.merchantInfo;
+		paymentDataRequest.allowedPaymentMethods = config.allowedPaymentMethods;
+		paymentDataRequest.merchantInfo = config.merchantInfo;
 		paymentDataRequest.callbackIntents = [ 'PAYMENT_AUTHORIZATION' ];
 
 		paymentDataRequest.transactionInfo = {
@@ -421,7 +939,6 @@
 			totalPrice: '0.00'
 		};
 
-		// Try to get the real amount for the transaction info.
 		try {
 			const amount = await new Promise( ( resolve, reject ) => {
 				getPrice( result => {
@@ -444,9 +961,7 @@
 	}
 
 	/**
-	 * Callback invoked by the Google Pay PaymentsClient when the buyer authorizes the payment.
-	 * Creates a PayPal order, confirms it via the PayPal Googlepay SDK, handles SCA if needed,
-	 * then submits the form.
+	 * Callback invoked by Google Pay when the buyer authorizes the payment.
 	 *
 	 * @param {Object} paymentData The Google Pay PaymentData response object.
 	 *
@@ -454,10 +969,8 @@
 	 */
 	async function onPaymentAuthorized( paymentData ) {
 		try {
-			// Create the PayPal order via the existing AJAX endpoint.
 			const orderId = await createOrderForGooglePay();
 
-			// Confirm the order with PayPal using the Google Pay payment data.
 			const confirmOrderResponse = await paypal.Googlepay().confirmOrder( {
 				orderId,
 				paymentMethodData: paymentData.paymentMethodData
@@ -468,7 +981,6 @@
 			}
 
 			if ( confirmOrderResponse.status === 'APPROVED' || confirmOrderResponse.status === 'PAYER_ACTION_REQUIRED' ) {
-				// Hand off to the existing onApprove flow which adds hidden inputs and submits the form.
 				await onApprove( {
 					orderID: orderId,
 					paymentSource: 'google_pay'
@@ -495,9 +1007,85 @@
 		}
 	}
 
+	// ---- AJAX / Order Creation ----
+
+	/**
+	 * Create a PayPal order via AJAX.
+	 *
+	 * @param {Object} data
+	 * @return {Promise<string>} The order ID.
+	 */
+	async function createOrder( data ) {
+		++running;
+		thisForm.classList.add( 'frm_loading_form' );
+
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_order' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+		formData.append( 'payment_source', data.paymentSource );
+
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			thisForm.classList.remove( 'frm_loading_form' );
+			throw new Error( 'Failed to create PayPal order' );
+		}
+
+		const orderData = await response.json();
+
+		if ( ! orderData.success || ! orderData.data.orderID ) {
+			thisForm.classList.remove( 'frm_loading_form' );
+			throw new Error( orderData.data || 'Failed to create PayPal order' );
+		}
+
+		return orderData.data.orderID;
+	}
+
+	async function createSubscription( data ) {
+		thisForm.classList.add( 'frm_loading_form' );
+
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_subscription' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			thisForm.classList.remove( 'frm_loading_form' );
+			throw new Error( 'Failed to create PayPal subscription' );
+		}
+
+		const orderData = await response.json();
+
+		if ( ! orderData.success || ! orderData.data.subscriptionID ) {
+			thisForm.classList.remove( 'frm_loading_form' );
+
+			if ( 'string' === typeof orderData.data ) {
+				throw new TypeError( orderData.data );
+			}
+
+			throw new Error( 'Failed to create PayPal subscription' );
+		}
+
+		return orderData.data.subscriptionID;
+	}
+
 	/**
 	 * Create a PayPal order specifically for Google Pay.
-	 * Uses the same AJAX endpoint as other payment sources.
 	 *
 	 * @return {Promise<string>} The PayPal order ID.
 	 */
@@ -507,7 +1095,6 @@
 		formData.append( 'nonce', frmPayPalVars.nonce );
 		formData.append( 'payment_source', 'google_pay' );
 
-		// Remove a few fields so form validation does not incorrectly trigger.
 		formData.delete( 'frm_action' );
 		formData.delete( 'form_key' );
 		formData.delete( 'item_key' );
@@ -530,39 +1117,283 @@
 		return orderData.data.orderID;
 	}
 
-	// ---- End Google Pay Integration ----
+	async function createVaultSetupToken() {
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_vault_setup_token' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
 
-	function renderMessages( cardElement ) {
-		if ( 'function' !== typeof paypal.Messages ) {
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			throw new Error( 'Failed to create PayPal vault setup token' );
+		}
+
+		const tokenData = await response.json();
+
+		if ( ! tokenData.success || ! tokenData.data.token ) {
+			throw new Error( tokenData.data || 'Failed to create PayPal vault setup token' );
+		}
+
+		return tokenData.data.token;
+	}
+
+	// ---- Payment Callbacks ----
+
+	/**
+	 * Handle approved payment.
+	 *
+	 * @param {Object} data The approval data containing orderID.
+	 */
+	async function onApprove( data ) {
+		if ( 'NO' === data.liabilityShift || 'UNKNOWN' === data.liabilityShift ) {
+			onError( new Error( 'This payment was flagged as possible fraud and has been rejected.' ) );
 			return;
 		}
 
-		const payLaterBanner = document.createElement( 'div' );
-		payLaterBanner.id = 'my-pay-later-banner';
-		cardElement.prepend( payLaterBanner );
+		if ( data.orderID ) {
+			const orderInput = document.createElement( 'input' );
+			orderInput.type = 'hidden';
+			orderInput.name = 'paypal_order_id';
+			orderInput.value = data.orderID;
+			thisForm.append( orderInput );
+		}
 
-		// TODO We can use a value here if the amount is not dynamic.
-		// Otherwise we might need to wait until we know an amount
-		// and we might need to try refreshing this message when the amount
-		// changes.
+		if ( data.subscriptionID ) {
+			const subscriptionInput = document.createElement( 'input' );
+			subscriptionInput.type = 'hidden';
+			subscriptionInput.name = 'paypal_subscription_id';
+			subscriptionInput.value = data.subscriptionID;
+			thisForm.append( subscriptionInput );
+		}
 
-		getPrice( function( result ) {
-			payLaterBanner.setAttribute( 'data-pp-amount', result.data.amount );
-		} );
+		const paymentSourceInput = document.createElement( 'input' );
+		paymentSourceInput.type = 'hidden';
+		paymentSourceInput.name = 'paypal_payment_source';
 
-		paypal.Messages( buildMessagesArgs() ).render( '#my-pay-later-banner' );
+		// When onApprove is called for card fields, there is no paymentSource specified.
+		paymentSourceInput.value = data.paymentSource || 'card';
+
+		thisForm.append( paymentSourceInput );
+
+		if ( ! submitEvent ) {
+			submitEvent = new Event( 'submit', { cancelable: true, bubbles: true } );
+			submitEvent.target = thisForm;
+		}
+
+		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
+			frmFrontForm.submitFormManual( submitEvent, thisForm );
+		} else {
+			thisForm.submit();
+		}
 	}
 
-	function buildMessagesArgs() {
-		return {
-			style: {
-				layout: 'text',
-				logo: {
-					type: 'primary'
-				},
+	/**
+	 * Handle payment errors.
+	 *
+	 * @param {Error} err The error object.
+	 */
+	function onError( err ) {
+		running--;
+		if ( running === 0 && thisForm ) {
+			if ( selectedMethod === 'card' && cardFieldsValid ) {
+				enableSubmit();
+			} else {
+				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 			}
-		};
+		}
+		displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
 	}
+
+	function onCancel() {
+		thisForm.classList.add( 'frm_loading_form' );
+		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
+	}
+
+	// ---- Submit Button Helpers ----
+
+	/**
+	 * Enable the submit button for the form.
+	 */
+	function enableSubmit() {
+		if ( running > 0 ) {
+			return;
+		}
+
+		thisForm.classList.add( 'frm_loading_form' );
+		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
+
+		const event = new CustomEvent( 'frmPayPalLiteEnableSubmit', {
+			detail: { form: thisForm }
+		} );
+		document.dispatchEvent( event );
+	}
+
+	/**
+	 * Disable submit button for a target form.
+	 *
+	 * @param {Element} form
+	 * @return {void}
+	 */
+	function disableSubmit( form ) {
+		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
+
+		const event = new CustomEvent( 'frmPayPalLiteDisableSubmit', {
+			detail: { form }
+		} );
+		document.dispatchEvent( event );
+	}
+
+	function hideSubmit( form ) {
+		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).hide();
+	}
+
+	// ---- Error Display ----
+
+	/**
+	 * Display an error message in the payment form.
+	 *
+	 * @param {string} errorMessage
+	 * @return {void}
+	 */
+	function displayPaymentFailure( errorMessage ) {
+		if ( ! thisForm ) {
+			return;
+		}
+
+		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
+		if ( statusContainer ) {
+			statusContainer.textContent = errorMessage;
+			statusContainer.style.display = 'block';
+		}
+	}
+
+	/**
+	 * Clear error messages.
+	 */
+	function clearErrors() {
+		if ( ! thisForm ) {
+			return;
+		}
+
+		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
+		if ( statusContainer ) {
+			statusContainer.textContent = '';
+			statusContainer.style.display = 'none';
+		}
+	}
+
+	// ---- Form Submission ----
+
+	/**
+	 * Validate the form before submission.
+	 *
+	 * @param {Element} form
+	 * @return {boolean} True if valid.
+	 */
+	function validateFormSubmit( form ) {
+		if ( typeof frmFrontForm.validateFormSubmit !== 'function' ) {
+			return true;
+		}
+
+		const errors = frmFrontForm.validateFormSubmit( form );
+		const keys = Object.keys( errors );
+
+		if ( 1 === keys.length && errors[ keys[ 0 ] ] === '' ) {
+			keys.pop();
+		}
+
+		return 0 === keys.length;
+	}
+
+	/**
+	 * Check if the current form action type should trigger payment processing.
+	 *
+	 * @return {boolean} True if current action type should be processed.
+	 */
+	function currentActionTypeShouldBeProcessed() {
+		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
+
+		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
+			return 'create' === action;
+		}
+
+		return window.frmProForm.currentActionTypeShouldBeProcessed(
+			action,
+			{ thisForm }
+		);
+	}
+
+	/**
+	 * Handle form submission. Routes to card submission when card is selected.
+	 * For button-based methods (PayPal, Venmo, etc.) the SDK handles submission via onApprove.
+	 *
+	 * @param {Event} event
+	 */
+	async function handleFormSubmission( event ) {
+		if ( ! currentActionTypeShouldBeProcessed() ) {
+			return;
+		}
+
+		// Only intercept submission when card is the selected method.
+		if ( selectedMethod !== 'card' ) {
+			return;
+		}
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		submitEvent = event;
+
+		clearErrors();
+
+		thisForm.classList.add( 'frm_js_validate' );
+		if ( ! validateFormSubmit( thisForm ) ) {
+			return;
+		}
+
+		disableSubmit( thisForm );
+
+		const meta = addName( jQuery( thisForm ) );
+
+		const submitArgs = {};
+
+		if ( meta.name ) {
+			submitArgs.cardholderName = meta.name;
+		}
+
+		/*
+		TODO Add the billing address here as well.
+		Stripe calls a window.frmProForm.addAddressMeta function.
+		That's included in frmstrp.js though, so we need to add a script in Pro for PayPal as well.
+
+		billingAddress: {
+			addressLine1: '555 Billing Ave',
+			adminArea1: 'NY',
+			adminArea2: 'New York',
+			postalCode: '10001',
+			countryCode: 'US'
+		}
+		*/
+
+		try {
+			await cardFieldsInstance.submit( submitArgs );
+		} catch ( err ) {
+			running--;
+			if ( running === 0 && thisForm ) {
+				enableSubmit();
+			}
+			displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
+		}
+	}
+
+	// ---- Price / Pay Later ----
 
 	/**
 	 * Get PayPal settings from frmPayPalVars.settings.
@@ -601,10 +1432,9 @@
 	}
 
 	/**
-	 * Handle price field changes. Calls AJAX to get the updated amount
-	 * and refreshes the Pay Later message.
+	 * Handle price field changes.
 	 *
-	 * @param {Event}       _       The event object (unused).
+	 * @param {Event}       _       The event object.
 	 * @param {HTMLElement} field   The changed field element.
 	 * @param {string}      fieldId The changed field ID.
 	 */
@@ -642,7 +1472,6 @@
 		formData.append( 'action', 'frm_paypal_get_amount' );
 		formData.append( 'nonce', frmPayPalVars.nonce );
 
-		// Remove a few fields so form validation does not incorrectly trigger.
 		formData.delete( 'frm_action' );
 		formData.delete( 'form_key' );
 		formData.delete( 'item_key' );
@@ -670,10 +1499,32 @@
 	 * @return {void}
 	 */
 	function updatePayLaterMessage( amount ) {
-		const banner = document.getElementById( 'my-pay-later-banner' );
+		const banner = document.getElementById( 'frm-paylater-message' );
 		if ( banner ) {
 			banner.setAttribute( 'data-pp-amount', amount );
 		}
+	}
+
+	function renderMessages() {
+		if ( 'function' !== typeof paypal.Messages ) {
+			return;
+		}
+
+		const container = document.getElementById( 'frm-paylater-message' );
+		if ( ! container ) {
+			return;
+		}
+
+		getPrice( function( result ) {
+			container.setAttribute( 'data-pp-amount', result.data.amount );
+		} );
+
+		paypal.Messages( {
+			style: {
+				layout: 'text',
+				logo: { type: 'primary' },
+			}
+		} ).render( '#frm-paylater-message' );
 	}
 
 	/**
@@ -693,455 +1544,7 @@
 		} );
 	}
 
-	function makeRenderPayPalButton( buttonContainer ) {
-		const setting = getPayPalSettings()[ 0 ];
-		const isRecurring = 'single' !== setting.one;
-
-		return function( fundingSource ) {
-			const buttonConfig = {
-				fundingSource,
-				onApprove,
-				onError,
-				onCancel,
-				style: { ...frmPayPalVars.buttonStyle },
-			};
-
-			const supportedColors = [ 'silver', 'black', 'white' ];
-			
-			// These mapped payment sources support extra colors.
-			// Most sources only support silver, black, and white.
-			const supportedColorsMap = {
-				venmo: [ 'blue' ],
-				paylater: [ 'gold', 'blue' ]
-			};
-
-			supportedColorsMap[ fundingSource ]?.forEach( color => supportedColors.push( color ) );
-
-			if ( ! supportedColors.includes( buttonConfig.style.color ) ) {
-				delete buttonConfig.style.color;
-			}
-
-			if ( isRecurring ) {
-				buttonConfig.createSubscription = createSubscription;
-			} else {
-				buttonConfig.createOrder = createOrder;
-			}
-
-			const button = paypal.Buttons( buttonConfig );
-
-			if ( ! button.isEligible() ) {
-				return;
-			}
-
-			const containerId = `frm-paypal-button-${ fundingSource }-container`;
-			const container = document.createElement( 'div' );
-			container.id = containerId;
-			buttonContainer.prepend( container );
-
-			button.render( `#${ containerId }` );
-
-			renderedButtons.push( fundingSource );
-		};
-	}
-
-	/**
-	 * Create a PayPal order via AJAX.
-	 *
-	 * @param {Object} data
-	 * @return {Promise<string>} The order ID.
-	 */
-	async function createOrder( data ) {
-		console.log( 'createOrder', data );
-
-		++running;
-
-		thisForm.classList.add( 'frm_loading_form' );
-
-		const formData = new FormData( thisForm );
-		formData.append( 'action', 'frm_paypal_create_order' );
-		formData.append( 'nonce', frmPayPalVars.nonce );
-		formData.append( 'payment_source', data.paymentSource );
-
-		// Remove a few fields so form validation does not incorrectly trigger.
-		formData.delete( 'frm_action' );
-		formData.delete( 'form_key' );
-		formData.delete( 'item_key' );
-
-		const response = await fetch( frmPayPalVars.ajax, {
-			method: 'POST',
-			body: formData
-		} );
-
-		if ( ! response.ok ) {
-			thisForm.classList.remove( 'frm_loading_form' );
-			throw new Error( 'Failed to create PayPal order' );
-		}
-
-		const orderData = await response.json();
-
-		if ( ! orderData.success || ! orderData.data.orderID ) {
-			thisForm.classList.remove( 'frm_loading_form' );
-			throw new Error( orderData.data || 'Failed to create PayPal order' );
-		}
-
-		return orderData.data.orderID;
-	}
-
-	async function createSubscription( data ) {
-		console.log( 'createSubscription', data );
-
-		thisForm.classList.add( 'frm_loading_form' );
-
-		const formData = new FormData( thisForm );
-		formData.append( 'action', 'frm_paypal_create_subscription' );
-		formData.append( 'nonce', frmPayPalVars.nonce );
-
-		// Remove a few fields so form validation does not incorrectly trigger.
-		formData.delete( 'frm_action' );
-		formData.delete( 'form_key' );
-		formData.delete( 'item_key' );
-
-		const response = await fetch( frmPayPalVars.ajax, {
-			method: 'POST',
-			body: formData
-		} );
-
-		if ( ! response.ok ) {
-			thisForm.classList.remove( 'frm_loading_form' );
-			throw new Error( 'Failed to create PayPal order' );
-		}
-
-		const orderData = await response.json();
-
-		if ( ! orderData.success || ! orderData.data.subscriptionID ) {
-			thisForm.classList.remove( 'frm_loading_form' );
-
-			if ( 'string' === typeof orderData.data ) {
-				throw new TypeError( orderData.data );
-			}
-
-			throw new Error( 'Failed to create PayPal subscription' );
-		}
-
-		return orderData.data.subscriptionID;
-	}
-
-	async function createVaultSetupToken() {
-		const formData = new FormData( thisForm );
-		formData.append( 'action', 'frm_paypal_create_vault_setup_token' );
-		formData.append( 'nonce', frmPayPalVars.nonce );
-
-		// Remove a few fields so form validation does not incorrectly trigger.
-		formData.delete( 'frm_action' );
-		formData.delete( 'form_key' );
-		formData.delete( 'item_key' );
-
-		const response = await fetch( frmPayPalVars.ajax, {
-			method: 'POST',
-			body: formData
-		} );
-
-		if ( ! response.ok ) {
-			throw new Error( 'Failed to create PayPal vault setup token' );
-		}
-
-		const tokenData = await response.json();
-
-		if ( ! tokenData.success || ! tokenData.data.token ) {
-			throw new Error( tokenData.data || 'Failed to create PayPal vault setup token' );
-		}
-
-		return tokenData.data.token;
-	}
-
-	/**
-	 * Handle approved payment.
-	 *
-	 * @param {Object} data The approval data containing orderID.
-	 */
-	async function onApprove( data ) {
-		console.log( 'onApprove', data );
-
-		if ( 'NO' === data.liabilityShift || 'UNKNOWN' === data.liabilityShift ) {
-			onError( new Error( 'This payment was flagged as possible fraud and has been rejected.' ) );
-			return;
-		}
-
-		if ( data.orderID ) {
-			const orderInput = document.createElement( 'input' );
-			orderInput.type = 'hidden';
-			orderInput.name = 'paypal_order_id';
-			orderInput.value = data.orderID;
-			thisForm.append( orderInput );
-		}
-
-		if ( data.subscriptionID ) {
-			const subscriptionInput = document.createElement( 'input' );
-			subscriptionInput.type = 'hidden';
-			subscriptionInput.name = 'paypal_subscription_id';
-			subscriptionInput.value = data.subscriptionID;
-			thisForm.append( subscriptionInput );
-		}
-
-		const paymentSourceInput = document.createElement( 'input' );
-		paymentSourceInput.type = 'hidden';
-		paymentSourceInput.name = 'paypal_payment_source';
-
-		// When onApprove is called for card fields, there is no paymentSource specified.
-		paymentSourceInput.value = data.paymentSource || 'card';
-
-		thisForm.append( paymentSourceInput );
-
-		// If someone uses the PayPal checkout button, the form submit event doesn't actually get triggered.
-		if ( ! submitEvent ) {
-			submitEvent = new Event( 'submit', { cancelable: true, bubbles: true } );
-			submitEvent.target = thisForm;
-		}
-
-		// Submit the form
-		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			frmFrontForm.submitFormManual( submitEvent, thisForm );
-		} else {
-			thisForm.submit();
-		}
-	}
-
-	/**
-	 * Handle payment errors.
-	 *
-	 * @param {Error} err The error object.
-	 */
-	function onError( err ) {
-		running--;
-		if ( running === 0 && thisForm ) {
-			if ( cardFieldsValid ) {
-				enableSubmit();
-			} else {
-				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
-			}
-		}
-		displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
-	}
-
-	function onCancel() {
-		thisForm.classList.add( 'frm_loading_form' );
-		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
-	}
-
-	/**
-	 * Enable the submit button for the form.
-	 */
-	function enableSubmit() {
-		if ( running > 0 ) {
-			return;
-		}
-
-		thisForm.classList.add( 'frm_loading_form' );
-		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
-
-		// Trigger custom event for other scripts to hook into
-		const event = new CustomEvent( 'frmPayPalLiteEnableSubmit', {
-			detail: { form: thisForm }
-		} );
-		document.dispatchEvent( event );
-	}
-
-	/**
-	 * Disable submit button for a target form.
-	 *
-	 * @param {Element} form
-	 * @return {void}
-	 */
-	function disableSubmit( form ) {
-		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
-
-		// Trigger custom event for other scripts to hook into
-		const event = new CustomEvent( 'frmPayPalLiteDisableSubmit', {
-			detail: { form }
-		} );
-		document.dispatchEvent( event );
-	}
-
-	function hideSubmit( form ) {
-		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).hide();
-	}
-
-	/**
-	 * Display an error message in the payment form.
-	 *
-	 * @param {string} errorMessage
-	 * @return {void}
-	 */
-	function displayPaymentFailure( errorMessage ) {
-		if ( ! thisForm ) {
-			return;
-		}
-
-		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
-		if ( statusContainer ) {
-			statusContainer.textContent = errorMessage;
-			statusContainer.style.display = 'block';
-		}
-	}
-
-	/**
-	 * Clear error messages.
-	 */
-	function clearErrors() {
-		if ( ! thisForm ) {
-			return;
-		}
-
-		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
-		if ( statusContainer ) {
-			statusContainer.textContent = '';
-			statusContainer.style.display = 'none';
-		}
-	}
-
-	/**
-	 * Validate the form before submission.
-	 *
-	 * @param {Element} form
-	 * @return {boolean} True if valid.
-	 */
-	function validateFormSubmit( form ) {
-		if ( typeof frmFrontForm.validateFormSubmit !== 'function' ) {
-			return true;
-		}
-
-		const errors = frmFrontForm.validateFormSubmit( form );
-		const keys = Object.keys( errors );
-
-		if ( 1 === keys.length && errors[ keys[ 0 ] ] === '' ) {
-			// Pop the empty error that gets added by invisible recaptcha.
-			keys.pop();
-		}
-
-		return 0 === keys.length;
-	}
-
-	/**
-	 * Check if the current form action type should trigger payment processing.
-	 * Prevents payment processing when navigating backward on multi-page forms.
-	 *
-	 * @return {boolean} True if current action type should be processed.
-	 */
-	function currentActionTypeShouldBeProcessed() {
-		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
-
-		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
-			return 'create' === action;
-		}
-
-		return window.frmProForm.currentActionTypeShouldBeProcessed(
-			action,
-			{
-				thisForm
-			}
-		);
-	}
-
-	/**
-	 * Handle form submission with card fields.
-	 *
-	 * @param {Event} event
-	 */
-	async function handleCardSubmission( event ) {
-		if ( ! currentActionTypeShouldBeProcessed() ) {
-			return;
-		}
-
-		event.preventDefault();
-		event.stopPropagation();
-
-		submitEvent = event;
-
-		clearErrors();
-
-		// Validate the form first
-		thisForm.classList.add( 'frm_js_validate' );
-		if ( ! validateFormSubmit( thisForm ) ) {
-			return;
-		}
-
-		// Increment running counter and disable the submit button
-		disableSubmit( thisForm );
-
-		const meta = addName( jQuery( thisForm ) );
-
-		const submitArgs = {};
-
-		if ( meta.name ) {
-			submitArgs.cardholderName = meta.name;
-		}
-
-		//		submitArgs.verification = {
-		//			method: 'SCA', // Standard for PSD2 compliance
-		//		};
-
-		/*
-		TODO Add the billing address here as well.
-		Stripe calls a window.frmProForm.addAddressMeta function.
-		That's included in frmstrp.js though, so we need to add a script in Pro for PayPal as well.
-
-		billingAddress: {
-			addressLine1: '555 Billing Ave',
-			adminArea1: 'NY',
-			adminArea2: 'New York',
-			postalCode: '10001',
-			countryCode: 'US'
-		}
-		*/
-
-		try {
-			// Submit the card fields - this triggers createOrder and onApprove
-			// TODO: Stop hard coding the billing address and use actual form data.
-			await cardFieldsInstance.submit( submitArgs );
-		} catch ( err ) {
-			running--;
-			if ( running === 0 && thisForm ) {
-				enableSubmit();
-			}
-			displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
-		}
-	}
-
-	/**
-	 * Initialize PayPal integration.
-	 */
-	async function paypalInit() {
-		// Find the form containing the PayPal payment element
-		const cardContainer = document.querySelector( '.frm-card-element' );
-		if ( ! cardContainer ) {
-			return;
-		}
-
-		thisForm = cardContainer.closest( 'form' );
-		if ( ! thisForm ) {
-			return;
-		}
-
-		try {
-			cardFieldsInstance = await initializeCardFields();
-
-			if ( ! cardFieldsInstance ) {
-				// TOOD: We would need to not hide the button if PayPal may be used conditionally.
-				disableSubmit( thisForm );
-				hideSubmit( thisForm );
-				return;
-			}
-
-			// Add event listener for form submission
-			thisForm.addEventListener( 'submit', handleCardSubmission );
-		} catch ( e ) {
-			console.error( 'Initializing PayPal Card Fields failed', e );
-			displayPaymentFailure( 'Failed to initialize payment form.' );
-		}
-
-		// Initially disable the submit button until PayPal is ready
-		disableSubmit( thisForm );
-	}
+	// ---- Name Fields ----
 
 	function addName( $form ) {
 		let i;
@@ -1209,7 +1612,7 @@
 
 		if ( firstNameID !== '' ) {
 			firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
-			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) {
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
 				firstField = getNameFieldItem( firstNameID, 'field', $form );
@@ -1221,7 +1624,7 @@
 
 		if ( lastNameID !== '' ) {
 			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
-			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) {
 				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
 				lastField = getNameFieldItem( lastNameID, 'field', $form );
@@ -1233,6 +1636,8 @@
 
 		return cardObject;
 	}
+
+	// ---- Bootstrap ----
 
 	document.addEventListener( 'DOMContentLoaded', async function() {
 		if ( window.paypal ) {
@@ -1255,4 +1660,3 @@
 		paypalInit();
 	} );
 }() );
-
