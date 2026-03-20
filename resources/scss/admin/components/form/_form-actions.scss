@@ -33,18 +33,56 @@
 
 // Action Cards
 .frm_actions_list {
+
 	.frm-card-item.frm-card-item--outlined {
 		padding-left: var(--gap-sm);
 		padding-right: var(--gap-sm);
+		transition: box-shadow 200ms ease-in-out, background-color 200ms ease-out;
 
 		.frmsvg {
 			color: var(--primary-700);
 		}
+
+		&:hover {
+			background-color: var(--grey-25);
+		}
+
+		.frm_single_action {
+			display: none;
+		}
+
+		&:hover .frm_single_action {
+			display: inline-flex;
+			animation: fadeIn 400ms ease-in-out forwards;
+		}
+
+		.frm_single_action.frm_inactive_action {
+			opacity: 0.5;
+		}
+	}
+
+	.frm-action h3 {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.frm-action-lock-icon .frmsvg {
+		display: flex;
+		width: 11px;
+		height: 13px;
+		flex-shrink: 0;
+		color: var(--grey-500);
+	}
+
+	.frm-action h3 .frm-new-pill {
+		flex-shrink: 0;
 	}
 }
 
 // Action Settings
 .frm_form_action_settings {
+
 	.widget-top {
 		box-shadow: none;
 		border-color: var(--grey-300);
@@ -153,6 +191,7 @@
 }
 
 .frm_email_settings .widget-title {
+
 	h4 {
 		color: var(--grey-700);
 	}
