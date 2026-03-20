@@ -370,7 +370,7 @@ class FrmFieldProduct extends FrmFieldType {
 	 */
 	public static function get_price_from_array( $opt, $opt_key, $field ) {
 		$opt = apply_filters( 'frm_field_price_saved', $opt, $opt_key, $field );
-		return is_array( $opt ) ? ( $opt['price'] ?? '' ) : '';
+		return is_array( $opt ) ? ( (string) ( $opt['price'] ?? '' ) ) : '';
 	}
 
 	/**
@@ -395,7 +395,7 @@ class FrmFieldProduct extends FrmFieldType {
 
 		// Temporary turn value into array.
 		if ( ! $is_array ) {
-			$value = ! empty( $atts['sep'] ) ? explode( $atts['sep'], $value ) : (array) $value;
+			$value = ( ! empty( $atts['sep'] ) && is_string( $atts['sep'] ) ) ? explode( $atts['sep'], $value ) : (array) $value;
 		}
 
 		foreach ( $value as $k => $v ) {
