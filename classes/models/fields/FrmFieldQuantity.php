@@ -36,7 +36,7 @@ class FrmFieldQuantity extends FrmFieldNumber {
 	}
 
 	/**
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args - Includes 'field', 'display', and 'values'.
 	 */
 	public function show_primary_options( $args ) {
 		$field = $args['field'];
@@ -92,7 +92,7 @@ class FrmFieldQuantity extends FrmFieldNumber {
 				$frm_products['quantity_fields'] = array();
 			}
 			$frm_products['quantity_fields'][] = $value;
-		}
+		}//end if
 
 		return array();
 	}

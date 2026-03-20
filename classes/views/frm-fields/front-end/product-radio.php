@@ -55,4 +55,4 @@ foreach ( $field['options'] as $opt_key => $opt ) {
 	?></div>
 <?php
 	++$option_index;
-}
+}//end foreach

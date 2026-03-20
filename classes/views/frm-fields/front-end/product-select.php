@@ -14,7 +14,7 @@ foreach ( $field['options'] as $opt_key => $opt ) {
 	$price     = FrmFieldProduct::get_price_from_array( $opt, $opt_key, $field );
 	$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
-	if ( ! empty( $placeholder ) && $opt == '' && ! $skipped ) {
+	if ( ! empty( $placeholder ) && '' === $opt && ! $skipped ) {
 		$skipped = true;
 		continue;
 	}

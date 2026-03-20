@@ -1948,7 +1948,7 @@ function frmFrontFormJS() {
 	/**
 	 * Gets quantity.
 	 *
-	 * @param {Boolean}     isUserDef Is user defined product.
+	 * @param {boolean}     isUserDef Is user defined product.
 	 * @param {HTMLElement} field     The field element.
 	 * @return {number} The quantity.
 	 */

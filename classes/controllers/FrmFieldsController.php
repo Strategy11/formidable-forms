@@ -1087,8 +1087,8 @@ class FrmFieldsController {
 		if ( is_array( $field['value'] ) ) {
 			// '' is unlikely though, let's just do it to prevent warnings
 			$value = isset( $field['opt_key'] ) && isset( $field['value'][ $field['opt_key'] ] )
-				? $field['value'][ $field['opt_key'] ]
-				: '';
+			? $field['value'][ $field['opt_key'] ]
+			: '';
 		} else {
 			$value = $field['value'];
 		}

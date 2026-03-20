@@ -127,7 +127,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 							<?php
 							$section_labels = FrmField::field_section_labels();
-							foreach ( $field_sections as $section => $section_fields ) { ?>
+							foreach ( $field_sections as $section => $section_fields ) {
+								?>
 								<h3 class="frm-with-line">
 									<span><?php echo esc_html( $section_labels[ $section ] ?? ucwords( $section ) ); ?></span>
 									<span style="padding-left: 0;">
@@ -148,7 +149,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 									?>
 								</ul>
 								<div class="clear"></div>
-							<?php } ?>
+								<?php
+							}//end foreach
+							?>
 						</div>
 						<?php do_action( 'frm_extra_form_instructions' ); ?>
 					</div>

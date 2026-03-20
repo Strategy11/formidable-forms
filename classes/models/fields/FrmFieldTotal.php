@@ -136,8 +136,7 @@ DEFAULT_HTML;
 			return $errors;
 		}
 
-		$error_key = 'field' . $this->get_field_column( 'id' );
-
+		$error_key            = 'field' . $this->get_field_column( 'id' );
 		$errors[ $error_key ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 
 		return $errors;
@@ -169,7 +168,10 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param array|string $value
+	 * @param array $atts
+	 *
+	 * @return array|string
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		if ( ! empty( $atts['format'] ) && 'number' === $atts['format'] ) {

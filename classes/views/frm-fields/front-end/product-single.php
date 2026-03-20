@@ -10,11 +10,16 @@ foreach ( $field['options'] as $opt_key => $opt ) {
 	$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 	?>
 	<p class="frm_single_product_label">
-		<?php // TODO: should show currency
-		echo esc_html( $opt ); ?>: <?php echo esc_html( $price ); ?>
+		<?php
+		// TODO: should show currency
+		echo esc_html( $opt );
+		echo ': ';
+		echo esc_html( $price );
+		?>
 	</p>
 
 	<input type="hidden" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id ); ?>" value="<?php echo esc_attr( $field_val ); ?>" data-frmprice="<?php echo esc_attr( $price ); ?>" <?php do_action( 'frm_field_input_html', $field ); ?> />
 	<?php
-	break; // We want just the first
+	// We want just the first.
+	break;
 }

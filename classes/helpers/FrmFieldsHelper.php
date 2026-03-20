@@ -2379,18 +2379,18 @@ class FrmFieldsHelper {
 			$classes .= ' frm_hidden';
 		}
 		?>
-		<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_type['key'] ); ?>">
-			<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
-				<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
-				<span><?php echo esc_html( $field_label ); ?></span>
-				<?php
-				if ( 'credit_card' === $field_type['key'] && ! FrmTransLiteAppHelper::payments_table_exists() ) {
-					FrmAppHelper::show_pill_text();
-				}
-				?>
-			</a>
-		</li>
+<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_type['key'] ); ?>">
+	<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
+		<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
+		<span><?php echo esc_html( $field_label ); ?></span>
 		<?php
+		if ( 'credit_card' === $field_type['key'] && ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			FrmAppHelper::show_pill_text();
+		}
+		?>
+	</a>
+</li>
+<?php
 	}
 
 	/**

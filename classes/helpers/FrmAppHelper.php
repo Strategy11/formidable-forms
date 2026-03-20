@@ -3951,7 +3951,7 @@ class FrmAppHelper {
 				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
 				'shouldShowPaymentsSettingsModal'    => ! FrmStrpLiteAppController::is_payment_gateway_configured(),
-				'pricingFieldsImg'                   => esc_url( FrmAppHelper::plugin_url() . '/images/upsell/pricing-fields.png' ),
+				'pricingFieldsImg'                   => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
 				'paymentsSettingsUrl'                => FrmStrpLiteAppController::get_payments_settings_url(),
 			);
 
