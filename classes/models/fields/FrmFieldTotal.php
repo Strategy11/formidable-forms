@@ -164,14 +164,14 @@ DEFAULT_HTML;
 			$quantity = $frm_products['quantity_fields'][0];
 		}
 
-		return $quantity;
+		return (int) $quantity;
 	}
 
 	/**
-	 * @param array|string $value
+	 * @param string $value
 	 * @param array        $atts
 	 *
-	 * @return array|string
+	 * @return string
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		if ( ! empty( $atts['format'] ) && 'number' === $atts['format'] ) {
