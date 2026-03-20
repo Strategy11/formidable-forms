@@ -466,8 +466,9 @@
 			markWrap.classList.add( 'frm-payment-method-mark' );
 			markWrap.id = `frm-payment-mark-${ key }`;
 
+			const baseUrl = frmPayPalVars.imagesUrl || '';
+
 			if ( key === 'card' ) {
-				const baseUrl = frmPayPalVars.imagesUrl || '';
 				const cardBrands = [
 					{ file: 'visa.svg', alt: 'Visa' },
 					{ file: 'mastercard.svg', alt: 'Mastercard' },
@@ -484,7 +485,8 @@
 			} else if ( key === 'google_pay' ) {
 				markWrap.classList.add( 'frm-payment-method-google-pay-icon' );
 				const img = document.createElement( 'img' );
-				img.src = 'https://www.gstatic.com/instantbuy/svg/light_gpay.svg';
+				const baseUrl = frmPayPalVars.imagesUrl || '';
+				img.src = baseUrl + 'gpay.svg';
 				img.alt = 'Google Pay';
 				img.height = 24;
 				markWrap.append( img );
