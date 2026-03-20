@@ -188,6 +188,7 @@ DEFAULT_HTML;
 	 */
 	public function get_builder_display_value() {
 		$display_value = $this->prepare_display_value( '0', array() );
+
 		if ( ! is_array( $display_value ) ) {
 			return $display_value;
 		}

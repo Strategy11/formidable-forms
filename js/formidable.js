@@ -1787,6 +1787,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function calcProductsTotal( e ) {
+		if ( 'object' === typeof frmProForm ) {
+			// Pro is installed, use the Pro JS.
+			return;
+		}
+
 		const formTotals = [];
 
 		if ( typeof __FRMCURR === 'undefined' ) {
