@@ -377,8 +377,8 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x The first param can be an array of args.
 	 *
-	 * @param {Array|String} msg   The message or the modal data (title, msg, actionUrl, actionText, closeText).
-	 * @param {String}       width The width (include the unit) of the modal.
+	 * @param {Array|string} msg   The message or the modal data (title, msg, actionUrl, actionText, closeText).
+	 * @param {string}       width The width (include the unit) of the modal.
 	 */
 	function infoModal( msg, width ) {
 		const $info = initModal( '#frm_info_modal', width || '400px' );

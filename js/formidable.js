@@ -1736,7 +1736,7 @@ function frmFrontFormJS() {
 	 * Check to make sure the quantity field value is within the min and max values.
 	 *
 	 * @param {HTMLElement} input
-	 * @return {number}
+	 * @return {number} The quantity value.
 	 */
 	function checkQuantityFieldMinMax( input ) {
 		if ( '' === input.value ) {
@@ -1934,14 +1934,23 @@ function frmFrontFormJS() {
 		if ( undefined !== __FRMCURR && undefined !== __FRMCURR[ formId ] ) {
 			return __FRMCURR[ formId ];
 		}
+
+		return {
+			symbol_left: '$',
+			symbol_right: '',
+			symbol_padding: '',
+			thousand_separator: ',',
+			decimal_separator: '.',
+			decimals: 2,
+		};
 	}
 
 	/**
 	 * Gets quantity.
 	 *
 	 * @param {Boolean}     isUserDef Is user defined product.
-	 * @param {HTMLElement} input     The input element.
-	 * @return {number}
+	 * @param {HTMLElement} field     The field element.
+	 * @return {number} The quantity.
 	 */
 	function getQuantity( isUserDef, field ) {
 		const $this = jQuery( field );
@@ -2050,7 +2059,7 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {Object} currency The currency object.
-	 * @return {RegExp}
+	 * @return {RegExp} The regular expression object.
 	 */
 	function getRegexForPrice( currency ) {
 		let regexString = '[0-9,.';
@@ -2150,10 +2159,10 @@ function frmFrontFormJS() {
 	/**
 	 * Maybe remove trailing zeros from a price string.
 	 *
-	 * @param {String} price    The price string.
+	 * @param {string} price    The price string.
 	 * @param {Object} currency The currency data.
 	 *
-	 * @return {String} The price string with trailing zeros removed.
+	 * @return {string} The price string with trailing zeros removed.
 	 */
 	function maybeRemoveTrailingZerosFromPrice( price, currency ) {
 		const split = price.split( currency.decimal_separator );
