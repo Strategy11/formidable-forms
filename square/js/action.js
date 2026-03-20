@@ -127,14 +127,14 @@
 		settingWrapper.parentNode.insertBefore( clone, settingWrapper.nextSibling );
 
 		const label = newDropdown.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
-		if ( label && label.textContent.includes( 'Repeat Every' ) ) {
+		if ( label?.textContent.includes( 'Repeat Every' ) ) {
 			label.textContent = 'Repeat';
 		}
 
 		newDropdown.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_square' );
 
 		const stripeLabel = intervalCount.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
-		if ( stripeLabel && stripeLabel.textContent.includes( 'Repeat Every' ) ) {
+		if ( stripeLabel?.textContent.includes( 'Repeat Every' ) ) {
 			stripeLabel.textContent = 'Repeat';
 		}
 

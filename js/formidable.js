@@ -764,7 +764,7 @@ function frmFrontFormJS() {
 
 		if ( response.length === 0 ) {
 			const fieldContainer = recaptcha.closest( '.frm_form_field' );
-			if ( fieldContainer && fieldContainer.id ) {
+			if ( fieldContainer?.id ) {
 				const fieldID = fieldContainer.id.replace( 'frm_field_', '' ).replace( '_container', '' );
 				errors[ fieldID ] = '';
 			}
@@ -1342,7 +1342,7 @@ function frmFrontFormJS() {
 	function onHoneypotFieldChange() {
 		/*jshint validthis:true */
 		const css = window.getComputedStyle( this ).boxShadow;
-		if ( css && css.match( /inset/ ) ) {
+		if ( css?.match( /inset/ ) ) {
 			this.remove();
 		}
 	}
@@ -1901,7 +1901,7 @@ function frmFrontFormJS() {
 		 */
 		validateFormSubmit( object ) {
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
-			if ( typeof tinyMCE !== 'undefined' && form && form.querySelector( '.wp-editor-wrap' ) ) {
+			if ( typeof tinyMCE !== 'undefined' && form?.querySelector( '.wp-editor-wrap' ) ) {
 				tinyMCE.triggerSave();
 			}
 
