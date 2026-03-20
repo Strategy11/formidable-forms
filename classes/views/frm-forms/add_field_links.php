@@ -129,7 +129,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$section_labels = FrmField::field_section_labels();
 							foreach ( $field_sections as $section => $section_fields ) { ?>
 								<h3 class="frm-with-line">
-									<span><?php echo esc_html( isset( $section_labels[ $section ] ) ? $section_labels[ $section ] : ucwords( $section ) ); ?></span>
+									<span><?php echo esc_html( $section_labels[ $section ] ?? ucwords( $section ) ); ?></span>
 									<span style="padding-left: 0;">
 										<?php FrmAppHelper::show_pill_text(); ?>
 									</span>

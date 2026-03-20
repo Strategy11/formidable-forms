@@ -395,10 +395,8 @@ class FrmFieldProduct extends FrmFieldType {
 			}
 		}
 
-		if ( is_array( $value ) ) {
-			foreach ( $value as $k => $v ) {
-				$value[ $k ] = FrmCurrencyHelper::format_price( $v );
-			}
+		foreach ( $value as $k => $v ) {
+			$value[ $k ] = FrmCurrencyHelper::format_price( $v );
 		}
 
 		return $is_array ? $value : implode( $atts['sep'], $value );

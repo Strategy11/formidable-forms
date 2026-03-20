@@ -1805,8 +1805,6 @@ function frmFrontFormJS() {
 		}
 
 		totalFields.each( function() {
-			let currency;
-			let formId;
 			let formatted;
 			let total = 0;
 			const totalField = jQuery( this );
@@ -1816,8 +1814,8 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			formId = $form.find( 'input[name="form_id"]' ).val();
-			currency = getCurrency( formId );
+			const formId = $form.find( 'input[name="form_id"]' ).val();
+			const currency = getCurrency( formId );
 
 			if ( undefined !== formTotals[ formId ] ) {
 				total = formTotals[ formId ];
@@ -2086,7 +2084,7 @@ function frmFrontFormJS() {
 			return price;
 		}
 
-		price += ''; // first convert to string
+		price = String( price ); // first convert to string
 		const pos = price.indexOf( '.' );
 
 		if ( pos === -1 ) {
@@ -2496,7 +2494,9 @@ jQuery( document ).ready( function() {
 	if ( ! Math.round10 ) {
 		// https://www.jacklmoore.com/notes/rounding-in-javascript/
 		Math.round10 = function( value, decimals ) {
-			return Number( Math.round( value + 'e' + decimals ) + 'e-' + decimals );
+			return Number(
+				`${ Math.round( `${ value }e${ decimals }` ) }e-${ decimals }`
+			);
 		};
 	}
 }() );
