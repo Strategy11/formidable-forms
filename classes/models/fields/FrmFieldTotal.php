@@ -169,7 +169,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array|string $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return array|string
 	 */

@@ -2390,7 +2390,7 @@ class FrmFieldsHelper {
 		?>
 	</a>
 </li>
-<?php
+		<?php
 	}
 
 	/**
