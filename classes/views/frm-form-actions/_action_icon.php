@@ -21,6 +21,11 @@ $single_action_attrs = array_merge(
 
 		<div class="frm-flex-col">
 			<h3>
+				<?php if ( isset( $data['data-upgrade'] ) && ! isset( $data['data-oneclick'] ) ) { ?>
+					<span class="frm-action-lock-icon">
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
+					</span>
+				<?php } ?>
 				<span class="frm-font-medium frm-truncate"><?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?></span>
 				<?php if ( ! empty( $action_control->action_options['is_new'] ) ) { ?>
 					<?php FrmAppHelper::show_pill_text(); ?>
