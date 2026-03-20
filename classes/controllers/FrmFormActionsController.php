@@ -56,25 +56,25 @@ class FrmFormActionsController {
 			'email'             => 'FrmEmailAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
-			'paypal'            => 'FrmDefPayPalAction',
-			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
-			'mailchimp'         => 'FrmDefMlcmpAction',
+			'paypal'            => 'FrmDefPayPalAction',
+			'payment'           => 'FrmTransLiteAction',
 			'api'               => 'FrmDefApiAction',
-			'salesforce'        => 'FrmDefSalesforceAction',
+			'mailchimp'         => 'FrmDefMlcmpAction',
 			'activecampaign'    => 'FrmDefActiveCampaignAction',
 			'constantcontact'   => 'FrmDefConstContactAction',
 			'getresponse'       => 'FrmDefGetResponseAction',
-			'hubspot'           => 'FrmDefHubspotAction',
-			'zapier'            => 'FrmDefZapierAction',
-			'n8n'               => 'FrmDefN8NAction',
-			'twilio'            => 'FrmDefTwilioAction',
-			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
-			'aweber'            => 'FrmDefAweberAction',
 			'convertkit'        => 'FrmDefConvertKitAction',
+			'aweber'            => 'FrmDefAweberAction',
+			'twilio'            => 'FrmDefTwilioAction',
+			'salesforce'        => 'FrmDefSalesforceAction',
+			'hubspot'           => 'FrmDefHubspotAction',
+			'highrise'          => 'FrmDefHighriseAction',
+			'zapier'            => 'FrmDefZapierAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
+			'n8n'               => 'FrmDefN8NAction',
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
@@ -170,12 +170,15 @@ class FrmFormActionsController {
 				'name'    => '',
 				'icon'    => 'frmfont frm_shuffle_icon',
 				'actions' => array(
+					'on_submit',
 					'email',
 					'wppost',
 					'register',
 					'quiz',
 					'quiz_outcome',
-					'twilio',
+					'api',
+					'googlespreadsheet',
+					'n8n',
 				),
 			),
 			'payment'   => array(
@@ -197,6 +200,7 @@ class FrmFormActionsController {
 					'aweber',
 					'mailpoet',
 					'convertkit',
+					'twilio',
 				),
 			),
 			'crm'       => array(
@@ -220,6 +224,7 @@ class FrmFormActionsController {
 		$crm_actions = array(
 			'salesforce',
 			'hubspot',
+			'zapier',
 		);
 
 		// Only include Highrise when the add-on is active.
