@@ -153,7 +153,7 @@
 		// 4. Pre-render Card + PayPal (hybrid approach).
 		for ( const key of PRE_RENDER_METHODS ) {
 			const method = paymentMethods.get( key );
-			if ( method && method.eligible ) {
+			if ( method?.eligible ) {
 				try {
 					await method.render.call( method );
 					method.rendered = true;
@@ -191,7 +191,7 @@
 		// --- Card Fields ---
 		if ( cardFieldsAreSupported ) {
 			const cardFields = createCardFieldsSDKInstance();
-			if ( cardFields && cardFields.isEligible() ) {
+			if ( cardFields?.isEligible() ) {
 				cardFieldsInstance = cardFields;
 				registerMethod( 'card', {
 					eligible: true,
@@ -780,7 +780,7 @@
 		try {
 			const amount = await new Promise( ( resolve, reject ) => {
 				getPrice( result => {
-					if ( result && result.data && result.data.amount ) {
+					if ( result?.data?.amount ) {
 						resolve( result.data.amount );
 					} else {
 						reject( new Error( 'No amount' ) );
@@ -1320,7 +1320,7 @@
 		} )
 			.then( response => response.json() )
 			.then( function( result ) {
-				if ( result.success && result.data && result.data.amount ) {
+				if ( result.success && result.data?.amount ) {
 					callback( result );
 				}
 			} )
@@ -1450,11 +1450,11 @@
 
 		if ( firstNameID !== '' ) {
 			firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
-			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) {
+			if ( firstFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) {
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
 				firstField = getNameFieldItem( firstNameID, 'field', $form );
-				if ( firstField && firstField.value ) {
+				if ( firstField?.value ) {
 					cardObject.name = firstField.value;
 				}
 			}
@@ -1462,11 +1462,11 @@
 
 		if ( lastNameID !== '' ) {
 			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
-			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) {
+			if ( lastFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) {
 				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
 				lastField = getNameFieldItem( lastNameID, 'field', $form );
-				if ( lastField && lastField.value ) {
+				if ( lastField?.value ) {
 					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
 			}
