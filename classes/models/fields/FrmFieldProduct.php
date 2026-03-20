@@ -360,7 +360,9 @@ class FrmFieldProduct extends FrmFieldType {
 	}
 
 	/**
-	 * @param array  $opt
+	 * @param array  $opt {
+	 *     @type string $price
+	 * }
 	 * @param string $opt_key
 	 * @param array  $field
 	 *
@@ -377,7 +379,10 @@ class FrmFieldProduct extends FrmFieldType {
 	 * @since 4.05
 	 *
 	 * @param array|string $value
-	 * @param array        $atts
+	 * @param array        $atts {
+	 *     @type string $show
+	 *     @type string $sep
+	 * }
 	 *
 	 * @return array|string
 	 */

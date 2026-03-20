@@ -168,10 +168,10 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param string $value
+	 * @param array|string $value
 	 * @param array        $atts
 	 *
-	 * @return string
+	 * @return array|string
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		if ( ! empty( $atts['format'] ) && 'number' === $atts['format'] ) {
@@ -187,6 +187,11 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function get_builder_display_value() {
-		return $this->prepare_display_value( '0', array() );
+		$display_value = $this->prepare_display_value( '0', array() );
+		if ( is_array( $display_value ) ) {
+			// This is to fix the PHPStan error.
+			$display_value = implode( ', ', $display_value );
+		}
+		return $display_value;
 	}
 }

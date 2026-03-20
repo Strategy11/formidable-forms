@@ -91,7 +91,7 @@ class FrmCurrencyHelper {
 	 * @param string $price
 	 * @param array  $currency
 	 *
-	 * @return string
+	 * @return float|string
 	 */
 	public static function prepare_price( $price, $currency ) {
 		$price = trim( $price );
@@ -103,10 +103,12 @@ class FrmCurrencyHelper {
 		preg_match_all( '/[\-]*[0-9,.]*\.?\,?[0-9]+/', $price, $matches );
 		$price = $matches ? end( $matches[0] ) : 0;
 
-		if ( $price ) {
-			$price = self::maybe_use_decimal( $price, $currency );
-			$price = str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
+		if ( ! $price ) {
+			return 0;
 		}
+
+		$price = self::maybe_use_decimal( $price, $currency );
+		$price = str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
 
 		return $price;
 	}
