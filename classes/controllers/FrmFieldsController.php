@@ -1069,7 +1069,7 @@ class FrmFieldsController {
 		if ( $type === 'total' ) {
 			$add_html['data-frmtotal'] = 'data-frmtotal';
 		} elseif ( $type === 'quantity' ) {
-			$product_field = FrmField::get_option( $field, 'product_field' );
+			$product_field               = FrmField::get_option( $field, 'product_field' );
 			$add_html['data-frmproduct'] = 'data-frmproduct="' . esc_attr( json_encode( $product_field ) ) . '"';
 		} elseif ( $type === 'product' && 'hidden' === $field['type'] ) {
 			// We want to do this only for fields that are hidden because it's
@@ -1086,8 +1086,9 @@ class FrmFieldsController {
 	private static function get_product_price( $field ) {
 		if ( is_array( $field['value'] ) ) {
 			// '' is unlikely though, let's just do it to prevent warnings
-			$value = isset( $field['opt_key'] ) && isset( $field['value'][ $field['opt_key'] ] ) ?
-						$field['value'][ $field['opt_key'] ] : '';
+			$value = isset( $field['opt_key'] ) && isset( $field['value'][ $field['opt_key'] ] )
+				? $field['value'][ $field['opt_key'] ]
+				: '';
 		} else {
 			$value = $field['value'];
 		}

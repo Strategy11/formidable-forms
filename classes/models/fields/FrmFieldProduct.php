@@ -14,6 +14,8 @@ class FrmFieldProduct extends FrmFieldType {
 	/**
 	 * We use this because of the display cases of checkbox and radio. Dropdown can
 	 * still manage with the aria-labelledby="field_[key]_label" in the custom html.
+	 *
+	 * @var bool
 	 */
 	protected $has_for_label = false;
 
@@ -39,7 +41,7 @@ class FrmFieldProduct extends FrmFieldType {
 			'options' => serialize(
 				array(
 					'',
-					__( 'Product 1', 'formidable-pro' ),
+					__( 'Product 1', 'formidable' ),
 				)
 			),
 		);
@@ -65,9 +67,7 @@ class FrmFieldProduct extends FrmFieldType {
 	}
 
 	/**
-	 * @since 6.24
-	 *
-	 * {@inheritdoc}
+	 * @param array $args
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
 		$field = $args['field'];
@@ -75,7 +75,7 @@ class FrmFieldProduct extends FrmFieldType {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param array $args
 	 */
 	public function show_primary_options( $args ) {
 		$field      = $args['field'];
@@ -114,7 +114,7 @@ class FrmFieldProduct extends FrmFieldType {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param array|object $field
 	 */
 	public function displayed_field_type( $field ) {
 		return array(
@@ -183,11 +183,11 @@ class FrmFieldProduct extends FrmFieldType {
 	 * @inheritDoc
 	 */
 	protected function get_bulk_edit_string() {
-		return __( 'Bulk Edit Products', 'formidable-pro' );
+		return __( 'Bulk Edit Products', 'formidable' );
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param array $args
 	 */
 	protected function show_single_option( $args ) {
 		self::single_option( $args['field'] );
@@ -208,7 +208,7 @@ class FrmFieldProduct extends FrmFieldType {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param array $args
 	 */
 	protected function field_choices_heading_attrs( $args ) {
 		echo ' class="frm_prod_options_heading"';
@@ -319,7 +319,9 @@ class FrmFieldProduct extends FrmFieldType {
 			$price      = self::get_price_from_array( $opt, $opt_key, $field );
 			$opt        = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
-			$checked    = isset( $field['default_value'] ) && ( is_array( $field['default_value'] ) ? in_array( $field_val, $field['default_value'] ) : $field['default_value'] == $field_val );
+			$checked    = isset( $field['default_value'] ) && ( is_array( $field['default_value'] )
+					? in_array( $field_val, $field['default_value'], true )
+					: $field['default_value'] === $field_val );
 
 			require FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/product-single-option.php';
 
@@ -334,7 +336,7 @@ class FrmFieldProduct extends FrmFieldType {
 	 */
 	private static function hidden_field_option( $field ) {
 		$opt_key    = '000';
-		$field_val  = __( 'New Product', 'formidable-pro' );
+		$field_val  = __( 'New Product', 'formidable' );
 		$opt        = $field_val;
 		$price      = '';
 		$checked    = false;
