@@ -111,6 +111,7 @@ class FrmDefN8NAction extends FrmFormAction {
 		$action_ops                = FrmFormAction::default_action_opts( 'frm_n8n_icon frm_show_upgrade' );
 		$action_ops['color']       = '#EA4B71';
 		$action_ops['description'] = __( 'Workflow automation', 'formidable' );
+		$action_ops['is_new']      = true;
 		parent::__construct( 'n8n', 'n8n', $action_ops );
 	}
 }
