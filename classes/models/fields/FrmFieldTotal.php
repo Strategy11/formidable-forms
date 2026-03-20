@@ -188,11 +188,11 @@ DEFAULT_HTML;
 	 */
 	public function get_builder_display_value() {
 		$display_value = $this->prepare_display_value( '0', array() );
-
-		if ( is_array( $display_value ) ) {
-			// This is to fix the PHPStan error.
-			$display_value = implode( ', ', $display_value );
+		if ( ! is_array( $display_value ) ) {
+			return $display_value;
 		}
-		return $display_value;
+
+		// This is to fix the PHPStan error.
+		return implode( ', ', $display_value );
 	}
 }
