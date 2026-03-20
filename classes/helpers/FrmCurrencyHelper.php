@@ -108,9 +108,7 @@ class FrmCurrencyHelper {
 		}
 
 		$price = self::maybe_use_decimal( $price, $currency );
-		$price = str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
-
-		return $price;
+		return str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
 	}
 
 	/**

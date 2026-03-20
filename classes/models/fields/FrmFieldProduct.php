@@ -365,6 +365,7 @@ class FrmFieldProduct extends FrmFieldType {
 	 *
 	 *     @type string $price
 	 * }
+	 *
 	 * @param string $opt_key
 	 * @param array  $field
 	 *

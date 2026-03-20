@@ -2163,6 +2163,7 @@ BEFORE_HTML;
 	 */
 	public static function load_currency_js() {
 		global $frm_vars;
+
 		if ( empty( $frm_vars['currency'] ) ) {
 			return;
 		}

@@ -42,6 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<ul class="field_type_list frm_grid_container">
 								<?php
 								$field_sections = array();
+
 								foreach ( $frm_field_selection as $field_key => $field_type ) {
 									// Skip showing field if it's in a section.
 									if ( isset( $field_type['section'] ) ) {
@@ -127,6 +128,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 							<?php
 							$section_labels = FrmField::field_section_labels();
+
 							foreach ( $field_sections as $section => $section_fields ) {
 								?>
 								<h3 class="frm-with-line">

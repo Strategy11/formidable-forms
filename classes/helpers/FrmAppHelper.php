@@ -3957,6 +3957,7 @@ class FrmAppHelper {
 
 			if ( self::is_form_builder_page() ) {
 				$admin_script_strings['shouldShowPricingFieldsModal'] = get_option( 'frm_show_pricing_fields_modal' );
+
 				if ( $admin_script_strings['shouldShowPricingFieldsModal'] ) {
 					delete_option( 'frm_show_pricing_fields_modal' );
 				}

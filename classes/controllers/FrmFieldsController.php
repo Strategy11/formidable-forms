@@ -1094,6 +1094,7 @@ class FrmFieldsController {
 		}
 
 		$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
+
 		if ( method_exists( $field_obj, 'get_posted_price' ) ) {
 			return $field_obj->get_posted_price( $value );
 		}
