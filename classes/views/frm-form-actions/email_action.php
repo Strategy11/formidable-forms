@@ -12,7 +12,7 @@ class FrmEmailAction extends FrmFormAction {
 			'event'       => array( 'create' ),
 			'limit'       => 99,
 			'priority'    => 10,
-			'color'       => 'rgb(49, 119, 199)',
+			'color'       => '#3177C7',
 			'description' => __( 'Autoresponder alerts', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_email_control_settings', $action_ops );
