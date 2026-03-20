@@ -1035,6 +1035,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$components[] = 'messages';
 		}
 
+		$components[] = 'funding-eligibility';
+		$components[] = 'marks'; // Required for radio button option logos.
+
 		$query_args['components'] = implode( ',', $components );
 		$locale                   = self::get_paypal_locale();
 
@@ -1083,6 +1086,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			2
 		);
 
+		wp_enqueue_style(
+			'formidable-paypal',
+			FrmPayPalLiteAppHelper::plugin_url() . 'css/frontend.css',
+			array(),
+			FrmAppHelper::plugin_version()
+		);
+
 		$dependencies = array( 'paypal-sdk', 'formidable' );
 		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
 
@@ -1111,6 +1121,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'settings'    => $action_settings,
 			'style'       => self::get_style_for_js( $form_id ),
 			'buttonStyle' => self::get_button_style_for_js( $action ),
+			'imagesUrl'   => FrmPayPalLiteAppHelper::plugin_url() . 'images/',
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
