@@ -384,6 +384,7 @@ export default [
 			'formidable/no-repeated-selector': 'warn',
 			'formidable/prefer-document-fragment': 'warn',
 			'formidable/prefer-truthy-dom-query': 'error',
+			'formidable/prefer-optional-chaining': 'error',
 
 			// Import rules
 			'import/no-default-export': 'warn',

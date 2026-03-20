@@ -305,7 +305,7 @@
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
 				const firstField = getNameFieldItem( firstNameID, 'field', $form );
-				if ( firstField && firstField.value ) {
+				if ( firstField?.value ) {
 					cardObject.name = firstField.value;
 				}
 			}
@@ -317,7 +317,7 @@
 				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
 				const lastField = getNameFieldItem( lastNameID, 'field', $form );
-				if ( lastField && lastField.value ) {
+				if ( lastField?.value ) {
 					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
 			}
