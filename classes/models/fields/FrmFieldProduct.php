@@ -390,11 +390,7 @@ class FrmFieldProduct extends FrmFieldType {
 
 		// Temporary turn value into array.
 		if ( ! $is_array ) {
-			if ( $atts['sep'] ) {
-				$value = explode( $atts['sep'], $value );
-			} else {
-				$value = (array) $value;
-			}
+			$value = ! empty( $atts['sep'] ) ? explode( $atts['sep'], $value ) : (array) $value;
 		}
 
 		foreach ( $value as $k => $v ) {
