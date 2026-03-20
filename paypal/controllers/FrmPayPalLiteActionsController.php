@@ -1086,6 +1086,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			2
 		);
 
+		wp_enqueue_style(
+			'formidable-paypal',
+			FrmPayPalLiteAppHelper::plugin_url() . 'css/frontend.css',
+			array(),
+			FrmAppHelper::plugin_version()
+		);
+
 		$dependencies = array( 'paypal-sdk', 'formidable' );
 		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
 
