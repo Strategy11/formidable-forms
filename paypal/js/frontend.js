@@ -59,26 +59,6 @@
 	};
 
 	/**
-	 * Short descriptions shown below the label in each radio option.
-	 */
-	const METHOD_DESCRIPTIONS = {
-		card: 'Visa, Mastercard, Amex, Discover',
-		paypal: 'Pay with your PayPal account',
-		venmo: 'Pay with your Venmo account',
-		paylater: 'Pay over time with PayPal',
-		google_pay: 'Fast checkout with Google Pay',
-		bancontact: 'Pay with Bancontact',
-		blik: 'Pay with BLIK code',
-		eps: 'Austrian online bank transfer',
-		p24: 'Polish online bank transfer',
-		trustly: 'Pay via online banking',
-		satispay: 'Pay with Satispay',
-		sepa: 'SEPA direct debit',
-		mybank: 'Italian online bank transfer',
-		ideal: 'Dutch online bank transfer',
-	};
-
-	/**
 	 * Maps internal method keys to PayPal FUNDING constants for the Marks API.
 	 * Card and Google Pay use local images instead of PayPal Marks.
 	 */
