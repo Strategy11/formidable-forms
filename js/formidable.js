@@ -1777,11 +1777,14 @@ function frmFrontFormJS() {
 			input = input.eq( 0 );
 		}
 
-		input.trigger({ type: 'change', selfTriggered: true, frmTriggered: fieldKey });
+		input.trigger( { type: 'change', selfTriggered: true, frmTriggered: fieldKey } );
 	}
 
 	/**
-	 * @since 4.04
+	 * Calculates the total price.
+	 *
+	 * @param {Event} e The event object.
+	 * @return {void}
 	 */
 	function calcProductsTotal( e ) {
 		const formTotals = [];
@@ -1814,44 +1817,43 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			const formId = $form.find( 'input[name="form_id"]' ).val();
+			const formId = $form[ 0 ].querySelector( 'input[name="form_id"]' ).value;
 			const currency = getCurrency( formId );
 
 			if ( undefined !== formTotals[ formId ] ) {
 				total = formTotals[ formId ];
 			} else {
+				$form[ 0 ].querySelectorAll( 'input[data-frmprice],select:has([data-frmprice])' ).forEach( function( input ) {
+					let quantity = 0;
+					let price = 0;
+					const isUserDef = 'text' === input.type;
+					const isSingle = 'hidden' === input.type;
 
-				$form.find( 'input[data-frmprice],select:has([data-frmprice])' ).each( function() {
-					let quantity = 0, price = 0;
-					const $this = jQuery( this );
-					const isUserDef = 'text' === this.type;
-					const isSingle = 'hidden' === this.type;
-
-					if ( this.tagName === 'SELECT' ) {
-						if ( this.selectedIndex !== -1 ) {
-							price = this.options[ this.selectedIndex ].getAttribute( 'data-frmprice' );
+					if ( input.tagName === 'SELECT' ) {
+						if ( input.selectedIndex !== -1 ) {
+							price = input.options[ input.selectedIndex ].getAttribute( 'data-frmprice' );
 						}
 					} else {
-						if ( ( ! isUserDef && ! isSingle ) && ! $this.is( ':checked' ) ) {
+						if ( ( ! isUserDef && ! isSingle ) && ! input.matches( ':checked' ) ) {
 							return;
 						}
-						price = this.getAttribute( 'data-frmprice' );
+						price = input.getAttribute( 'data-frmprice' );
 					}
 
 					if ( ! price ) {
 						price = 0;
 					} else {
 						price = preparePrice( price, currency );
-						quantity = getQuantity( isUserDef, this );
+						quantity = getQuantity( isUserDef, input );
 						price = parseFloat( quantity ) * parseFloat( price );
 					}
 
-					if ( 'true' === this.getAttribute( 'data-frmdiscount' ) ) {
+					if ( 'true' === input.getAttribute( 'data-frmdiscount' ) ) {
 						price = price * -1;
 					}
 
 					total += price;
-				});
+				} );
 
 				formTotals[ formId ] = total;
 			}
@@ -1879,15 +1881,15 @@ function frmFrontFormJS() {
 			if ( formatted.length ) {
 				formatted.html( total );
 			}
-		});
+		} );
 	}
 
 	/**
 	 * Round total and maybe add trailing zeros so formatCurrency has a proper format to work with.
 	 *
-	 * @param {number} total The total amount to normalize.
+	 * @param {number} total    The total amount to normalize.
 	 * @param {Object} currency The currency object containing decimal information.
-	 * @returns {number} The normalized total amount.
+	 * @return {number}         The normalized total amount.
 	 */
 	function normalizeTotal( total, currency ) {
 		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
@@ -1903,11 +1905,9 @@ function frmFrontFormJS() {
 	/**
 	 * Format a numeric value according to the specified currency format settings.
 	 *
-	 * @since 4.05.01
-	 *
-	 * @param {string} total The numeric value to format.
+	 * @param {string} total    The numeric value to format.
 	 * @param {Object} currency The currency formatting configuration.
-	 * @returns {string} The formatted currency string.
+	 * @return {string}         The formatted currency string.
 	 */
 	function formatCurrency( total, currency ) {
 		total = maybeAddTrailingZeroToPrice( total, currency );
@@ -1925,7 +1925,10 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since 4.04
+	 * Gets currency from form id.
+	 *
+	 * @param {number} formId Form ID.
+	 * @return {Object}       Currency object.
 	 */
 	function getCurrency( formId ) {
 		if ( undefined !== __FRMCURR && undefined !== __FRMCURR[ formId ] ) {
@@ -1934,7 +1937,11 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since 4.04
+	 * Gets quantity.
+	 *
+	 * @param {Boolean}     isUserDef Is user defined product.
+	 * @param {HTMLElement} input     The input element.
+	 * @return {number}
 	 */
 	function getQuantity( isUserDef, field ) {
 		const $this = jQuery( field );
@@ -1950,8 +1957,8 @@ function frmFrontFormJS() {
 			quantity = checkQuantityFieldMinMax( quantity );
 		} else {
 			const quantityFields = getQuantityFields( $this );
-			if ( 1 === quantityFields.length && '' === quantityFields[0].getAttribute( 'data-frmproduct' ).trim() ) {
-				quantity = checkQuantityFieldMinMax( quantityFields[0]);
+			if ( 1 === quantityFields.length && '' === quantityFields[ 0 ].getAttribute( 'data-frmproduct' ).trim() ) {
+				quantity = checkQuantityFieldMinMax( quantityFields[ 0 ] );
 			} else {
 				// If there is no quantity field, assume 1.
 				quantity = 1;
@@ -1987,13 +1994,16 @@ function frmFrontFormJS() {
 				quantity = this;
 				return false;
 			}
-		});
+		} );
 
 		return quantity;
 	}
 
 	/**
-	 * @since 4.04
+	 * Gets quantity field elements.
+	 *
+	 * @param {jQuery} elementObj The jQuery object representing the element.
+	 * @return {jQuery} A jQuery object containing the quantity field elements.
 	 */
 	function getQuantityFields( elementObj ) {
 		// make sure the search is form-based (i.e. per form) cos there could be more than 1 form on the page
@@ -2002,13 +2012,17 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since 4.04
+	 * Prepare a price for calculation.
+	 *
+	 * @param {string} price    The price to prepare.
+	 * @param {Object} currency The currency object containing decimal information.
+	 * @return {string}         The prepared price.
 	 */
 	function preparePrice( price, currency ) {
 		if ( ! price ) {
 			return 0;
 		}
-		price = `${price}`; // convert to string just to be sure
+		price = `${ price }`; // convert to string just to be sure
 
 		const regex = getRegexForPrice( currency );
 
@@ -2022,7 +2036,7 @@ function frmFrontFormJS() {
 
 		// Fix issues with parsing Fr.15.00. The regex catches .15.00.
 		// This checks for the leading decimal and removes it.
-		if ( currency.decimal_separator === '.' && 3 === price.split( '.' ).length && price[0] === '.' ) {
+		if ( currency.decimal_separator === '.' && 3 === price.split( '.' ).length && price[ 0 ] === '.' ) {
 			price = price.substr( 1 );
 		}
 
@@ -2054,30 +2068,32 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since 4.04
+	 * Maybe replace the decimal separator with the currency's decimal separator.
+	 *
+	 * @param {string} price    The price string.
+	 * @param {Object} currency The currency object.
+	 * @return {string}         The modified price string.
 	 */
-	function maybeUseDecimal( amount, currency ) {
+	function maybeUseDecimal( price, currency ) {
 		let usedForDecimal;
-		let amountParts;
+		let priceParts;
 		if ( '.' === currency.thousand_separator ) {
-			amountParts = amount.split( '.' );
-			usedForDecimal = ( 2 === amountParts.length && 2 === amountParts[1].length );
+			priceParts = price.split( '.' );
+			usedForDecimal = ( 2 === priceParts.length && 2 === priceParts[ 1 ].length );
 			if ( usedForDecimal ) {
-				amount = amount.replace( '.', currency.decimal_separator );
+				price = price.replace( '.', currency.decimal_separator );
 			}
 		}
-		return amount;
+		return price;
 	}
 
 	/**
 	 * Add trailing zeros to a price if necessary and replace the decimal separator.
 	 *
-	 * @since 4.04
-	 *
-	 * @param {number|string} price The price to format.
-	 * @param {Object} currency The currency object containing the decimal separator.
-	 * @param {boolean} [force=false] Whether to force processing even if the price is not a number.
-	 * @returns {string} The formatted price string.
+	 * @param {number|string} price         The price to format.
+	 * @param {Object}        currency      The currency object containing the decimal separator.
+	 * @param {boolean}       [force=false] Whether to force processing even if the price is not a number.
+	 * @return {string}                     The formatted price string.
 	 */
 	function maybeAddTrailingZeroToPrice( price, currency, force = false ) {
 		if ( 'number' !== typeof price && ! force ) {
@@ -2088,7 +2104,7 @@ function frmFrontFormJS() {
 		const pos = price.indexOf( '.' );
 
 		if ( pos === -1 ) {
-			price = `${price}.`;
+			price = `${ price }.`;
 
 			for ( let n = 0; n < currency.decimals; ++n ) {
 				price += '0';
@@ -2112,39 +2128,42 @@ function frmFrontFormJS() {
 	/**
 	 * Format a numeric string by adding thousand separators.
 	 *
-	 * @since 4.04.04
+	 * @param {string|number} price                      The numeric value to format.
+	 * @param {Object}        options                    Formatting options.
+	 * @param {string}        options.decimal_separator  Character used as decimal separator.
+	 * @param {string}        options.thousand_separator Character used as thousand separator.
 	 *
-	 * @param {string|number} total The numeric value to format.
-	 * @param {Object} options Formatting options.
-	 * @param {string} options.decimal_separator Character used as decimal separator.
-	 * @param {string} options.thousand_separator Character used as thousand separator.
-	 *
-	 * @returns {string} The price string with thousand separators.
+	 * @return {string} The price string with thousand separators.
 	 */
-	function addThousands( total, { decimal_separator, thousand_separator } ) {
-		const split = decimal_separator === ''
-			? [ total.toString() ]
-			: total.split( decimal_separator );
+	function addThousands( price, options ) {
+		const split = options.decimal_separator === ''
+			? [ price.toString() ]
+			: price.split( options.decimal_separator );
 
-		if ( thousand_separator ) {
-			split[0] = split[0].replace( /\B(?=(\d{3})+(?!\d))/g, thousand_separator );
+		if ( options.thousand_separator ) {
+			split[ 0 ] = split[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, options.thousand_separator );
 		}
 
-		return split.join( decimal_separator );
+		return split.join( options.decimal_separator );
 	}
 
 	/**
-	 * @since 5.0.15
+	 * Maybe remove trailing zeros from a price string.
+	 *
+	 * @param {String} price    The price string.
+	 * @param {Object} currency The currency data.
+	 *
+	 * @return {String} The price string with trailing zeros removed.
 	 */
-	function maybeRemoveTrailingZerosFromPrice( total, currency ) {
-		const split = total.split( currency.decimal_separator );
-		if ( 2 !== split.length || split[1].length <= currency.decimals ) {
-			return total;
+	function maybeRemoveTrailingZerosFromPrice( price, currency ) {
+		const split = price.split( currency.decimal_separator );
+		if ( 2 !== split.length || split[ 1 ].length <= currency.decimals ) {
+			return price;
 		}
 		if ( 0 === currency.decimals ) {
-			return split[0];
+			return split[ 0 ];
 		}
-		return `${ split[0] }${ currency.decimal_separator }${ split[1].substr( 0, currency.decimals ) }`;
+		return `${ split[ 0 ] }${ currency.decimal_separator }${ split[ 1 ].substr( 0, currency.decimals ) }`;
 	}
 
 	return {

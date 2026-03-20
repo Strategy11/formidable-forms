@@ -373,9 +373,12 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Initializes an info modal.
+	 *
 	 * @since x.x The first param can be an array of args.
 	 *
-	 * @param {Array|String} The message or the modal data (title, msg, actionUrl, actionText, closeText).
+	 * @param {Array|String} msg   The message or the modal data (title, msg, actionUrl, actionText, closeText).
+	 * @param {String}       width The width (include the unit) of the modal.
 	 */
 	function infoModal( msg, width ) {
 		const $info = initModal( '#frm_info_modal', width || '400px' );
@@ -398,7 +401,7 @@ window.frmAdminBuildJS = function() {
 			noCenter: false,
 		}, msg );
 
-		const titleEl = $info[0].querySelector( '.info-modal-title' );
+		const titleEl = $info[ 0 ].querySelector( '.info-modal-title' );
 		titleEl.textContent = msg.title || '';
 		titleEl.classList.toggle( 'frm_hidden', ! msg.title );
 
@@ -406,8 +409,8 @@ window.frmAdminBuildJS = function() {
 			$info.find( '.frm-info-msg' ).html( msg.msg );
 		}
 
-		$info[0].querySelector( '.info-modal-img' ).src = msg.img;
-		$info[0].querySelector( '.info-modal-img-wrapper' ).classList.toggle( 'frm_hidden', ! msg.img );
+		$info[ 0 ].querySelector( '.info-modal-img' ).src = msg.img;
+		$info[ 0 ].querySelector( '.info-modal-img-wrapper' ).classList.toggle( 'frm_hidden', ! msg.img );
 
 		const closeBtn = document.getElementById( 'frm-info-click' );
 		if ( msg.closeText ) {
@@ -420,8 +423,7 @@ window.frmAdminBuildJS = function() {
 		closeBtn.classList.toggle( 'button-secondary', msg.actionUrl );
 		closeBtn.classList.toggle( 'frm-button-secondary', msg.actionUrl );
 
-		const actionBtn = $info[0].querySelector( '.info-modal-action-link' );
-
+		const actionBtn = $info[ 0 ].querySelector( '.info-modal-action-link' );
 
 		if ( msg.actionUrl ) {
 			actionBtn.href = msg.actionUrl;
@@ -434,8 +436,8 @@ window.frmAdminBuildJS = function() {
 		actionBtn.classList.toggle( 'frm_hidden', ! msg.actionUrl );
 
 		// Handle alignment.
-		$info[0].querySelector( '.info-modal-inside' ).classList.toggle( 'frmcenter', ! msg.noCenter );
-		const buttonsWrapper = $info[0].querySelector( '.info-modal-buttons' );
+		$info[ 0 ].querySelector( '.info-modal-inside' ).classList.toggle( 'frmcenter', ! msg.noCenter );
+		const buttonsWrapper = $info[ 0 ].querySelector( '.info-modal-buttons' );
 		buttonsWrapper.classList.toggle( 'frmright', msg.noCenter );
 
 		$info.dialog( 'open' );
@@ -9722,12 +9724,12 @@ window.frmAdminBuildJS = function() {
 			setTimeout( () => input.focus(), 0 );
 			modalDismissers.forEach( el => {
 				el.removeEventListener( 'click', onModalClose );
-			});
+			} );
 		}
 
 		modalDismissers.forEach( el => {
 			el.addEventListener( 'click', onModalClose );
-		});
+		} );
 	}
 
 	function validateProductPriceValue( target ) {
@@ -10727,7 +10729,7 @@ window.frmAdminBuildJS = function() {
 			}, 9999 );
 
 			if ( frm_admin_js.shouldShowPricingFieldsModal ) {
-				infoModal({
+				infoModal( {
 					title: __( 'Start Accepting Payments Today!', 'formidable' ),
 					msg: __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, PayPal, or Square) in your settings.', 'formidable' ),
 					img: frm_admin_js.pricingFieldsImg,
