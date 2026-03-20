@@ -764,7 +764,7 @@ function frmFrontFormJS() {
 
 		if ( response.length === 0 ) {
 			const fieldContainer = recaptcha.closest( '.frm_form_field' );
-			if ( fieldContainer && fieldContainer.id ) {
+			if ( fieldContainer?.id ) {
 				const fieldID = fieldContainer.id.replace( 'frm_field_', '' ).replace( '_container', '' );
 				errors[ fieldID ] = '';
 			}
