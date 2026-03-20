@@ -374,7 +374,7 @@ class FrmMigrate {
 
 		if ( str_contains( $old_db_version, '-' ) ) {
 			$last_upgrade   = explode( '-', $old_db_version );
-			$old_db_version = (int) $last_upgrade[1];
+			$old_db_version = intval( end( $last_upgrade ) );
 		}
 
 		if ( ! is_numeric( $old_db_version ) ) {
