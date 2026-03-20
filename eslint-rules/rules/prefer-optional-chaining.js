@@ -33,16 +33,17 @@ function isStrictPrefix( chainA, chainB ) {
 
 /**
  * Builds an optional chaining expression string from a chain.
- * The first `prefixLength` segments use `.`, the rest use `?.`.
+ * Inserts `?.` only at the specific boundary positions where each guard operand ends.
+ * All other positions use regular `.` access.
  *
- * @param {string[]} chain        The full chain segments.
- * @param {number}   prefixLength Number of segments that are the base (use `.`).
+ * @param {string[]} chain             The full chain segments.
+ * @param {Set}      optionalPositions Set of 1-based indices in the chain where `?.` should be used.
  * @return {string} The optional chaining expression.
  */
-function buildOptionalChain( chain, prefixLength ) {
+function buildOptionalChain( chain, optionalPositions ) {
 	let result = chain[ 0 ];
 	for ( let i = 1; i < chain.length; i++ ) {
-		result += i < prefixLength ? '.' + chain[ i ] : '?.' + chain[ i ];
+		result += optionalPositions.has( i ) ? '?.' + chain[ i ] : '.' + chain[ i ];
 	}
 	return result;
 }
@@ -75,6 +76,90 @@ function isPureAccess( node ) {
 	if ( node.type === 'MemberExpression' ) {
 		return isPureAccess( node.object );
 	}
+	return false;
+}
+
+/**
+ * Checks if a node is a call expression whose callee is a pure member-access chain.
+ * Matches patterns like `a.method()` or `a.b.method()`.
+ *
+ * @param {Object} node The AST node.
+ * @return {boolean} Whether the node is a method call on a pure access chain.
+ */
+function isMethodCall( node ) {
+	if ( node.type !== 'CallExpression' ) {
+		return false;
+	}
+	const callee = node.callee;
+	return callee.type === 'MemberExpression' && ! callee.computed && isPureAccess( callee.object );
+}
+
+/**
+ * Gets the access chain for chain-comparison purposes.
+ * For pure access nodes, returns the chain directly.
+ * For call expressions, returns the chain of the callee (the method access, not the call itself).
+ *
+ * @param {Object} node       The AST node.
+ * @param {Object} sourceCode The source code object.
+ * @return {string[]|null} The chain segments, or null if not applicable.
+ */
+function getAccessChain( node, sourceCode ) {
+	if ( isPureAccess( node ) ) {
+		return getChain( node, sourceCode );
+	}
+	if ( isMethodCall( node ) ) {
+		return getChain( node.callee, sourceCode );
+	}
+	return null;
+}
+
+/**
+ * Checks if a node is used in a boolean context where only truthiness matters.
+ * This includes if/while/for/do-while conditions and ternary test expressions.
+ * Walks up through parent LogicalExpressions and UnaryExpressions (!) to find the consuming context.
+ *
+ * @param {Object} node The AST node.
+ * @return {boolean} Whether the node's value is only used for truthiness.
+ */
+function isBooleanContext( node ) {
+	let current = node;
+
+	// Walk up through wrapping logical expressions and negations.
+	while ( current.parent ) {
+		const { parent } = current;
+
+		if ( parent.type === 'LogicalExpression' && ( parent.operator === '&&' || parent.operator === '||' ) ) {
+			// If we're the right operand, the parent's context determines ours.
+			// If we're the left operand, we're already skipping via the left-child check.
+			current = parent;
+			continue;
+		}
+
+		if ( parent.type === 'UnaryExpression' && parent.operator === '!' ) {
+			current = parent;
+			continue;
+		}
+
+		// Check if the consuming parent uses us as a boolean test.
+		if ( parent.type === 'IfStatement' && parent.test === current ) {
+			return true;
+		}
+		if ( parent.type === 'WhileStatement' && parent.test === current ) {
+			return true;
+		}
+		if ( parent.type === 'DoWhileStatement' && parent.test === current ) {
+			return true;
+		}
+		if ( parent.type === 'ForStatement' && parent.test === current ) {
+			return true;
+		}
+		if ( parent.type === 'ConditionalExpression' && parent.test === current ) {
+			return true;
+		}
+
+		return false;
+	}
+
 	return false;
 }
 
@@ -119,13 +204,20 @@ module.exports = {
 					return;
 				}
 
+				// Only flag when the result is used in a boolean context (if, while, for, ternary test).
+				// In other contexts (return, assignment, variable init) the conversion changes the
+				// return type from `false` to `undefined`, which alters semantics.
+				if ( ! isBooleanContext( node ) ) {
+					return;
+				}
+
 				const operands = flattenLogical( node, '&&' );
 				if ( operands.length < 2 ) {
 					return;
 				}
 
-				// Find the longest consecutive sequence of operands where each is a strict prefix of the next,
-				// and all are pure access chains.
+				// Find the longest consecutive sequence of operands where each is a strict prefix of the next.
+				// All operands must be pure access chains, except the last one which may be a method call.
 				let bestStart = -1;
 				let bestLength = 0;
 
@@ -134,20 +226,21 @@ module.exports = {
 						continue;
 					}
 
-					const startChain = getChain( operands[ start ], sourceCode );
 					let length = 1;
 
 					for ( let j = start + 1; j < operands.length; j++ ) {
-						if ( ! isPureAccess( operands[ j ] ) ) {
+						const prevChain = getAccessChain( operands[ j - 1 ], sourceCode );
+						const currChain = getAccessChain( operands[ j ], sourceCode );
+
+						if ( ! prevChain || ! currChain || ! isStrictPrefix( prevChain, currChain ) ) {
 							break;
 						}
 
-						const prevChain = getChain( operands[ j - 1 ], sourceCode );
-						const currChain = getChain( operands[ j ], sourceCode );
-
-						if ( ! isStrictPrefix( prevChain, currChain ) ) {
+						// Non-last operands must be pure access (not calls).
+						if ( ! isPureAccess( operands[ j - 1 ] ) ) {
 							break;
 						}
+
 						length++;
 					}
 
@@ -162,9 +255,28 @@ module.exports = {
 				}
 
 				// Build the optional chaining replacement for the matched subsequence.
-				const firstChain = getChain( operands[ bestStart ], sourceCode );
-				const lastChain = getChain( operands[ bestStart + bestLength - 1 ], sourceCode );
-				const replacement = buildOptionalChain( lastChain, firstChain.length );
+				// Collect the boundary positions: each guard operand's chain length marks where `?.` goes.
+				const optionalPositions = new Set();
+				for ( let i = bestStart; i < bestStart + bestLength - 1; i++ ) {
+					const guardChain = getAccessChain( operands[ i ], sourceCode );
+					optionalPositions.add( guardChain.length );
+				}
+
+				const lastOperand = operands[ bestStart + bestLength - 1 ];
+				const lastIsCall = isMethodCall( lastOperand );
+				const lastChain = lastIsCall
+					? getChain( lastOperand.callee, sourceCode )
+					: getChain( lastOperand, sourceCode );
+
+				let replacement = buildOptionalChain( lastChain, optionalPositions );
+
+				// Append the call arguments if the last operand is a method call.
+				if ( lastIsCall ) {
+					const argsText = lastOperand.arguments
+						.map( arg => sourceCode.getText( arg ) )
+						.join( ', ' );
+					replacement += '( ' + argsText + ' )';
+				}
 
 				// Build the full replacement expression including non-matching operands.
 				const parts = [];
