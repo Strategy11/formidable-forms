@@ -173,35 +173,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( $address && ! empty( $address->address_line_1 ) ) {
-			$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
-
-			$formatted .= $address->address_line_1 . '<br>';
-
-			// City, State Zip
-			$city_line = '';
-
-			if ( ! empty( $address->admin_area_2 ) ) {
-				$city_line .= $address->admin_area_2;
-			}
-
-			if ( ! empty( $address->admin_area_1 ) ) {
-				$city_line .= $city_line ? ', ' . $address->admin_area_1 : $address->admin_area_1;
-			}
-
-			if ( ! empty( $address->postal_code ) ) {
-				$city_line .= $city_line ? ' ' . $address->postal_code : $address->postal_code;
-			}
-
-			if ( $city_line ) {
-				$formatted .= $city_line . '<br>';
-			}
-
-			if ( ! empty( $address->country_code ) ) {
-				$formatted .= $address->country_code . '<br>';
-			}
-
-			$paypal_message .= $formatted;
-		}//end if
+			$paypal_message .= self::format_address( $address );
+		}
 
 		/**
 		 * Filters the message to show in the main feedback area.
@@ -246,6 +219,46 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			default:
 				return ucwords( str_replace( '_', ' ', $source_type ) );
 		}
+	}
+
+	/**
+	 * Format a PayPal shipping address object into an HTML string.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $address The PayPal shipping address object.
+	 *
+	 * @return string The formatted address HTML.
+	 */
+	private static function format_address( $address ) {
+		$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
+
+		$formatted .= $address->address_line_1 . '<br>';
+
+		// City, State Zip
+		$city_line = '';
+
+		if ( ! empty( $address->admin_area_2 ) ) {
+			$city_line .= $address->admin_area_2;
+		}
+
+		if ( ! empty( $address->admin_area_1 ) ) {
+			$city_line .= $city_line ? ', ' . $address->admin_area_1 : $address->admin_area_1;
+		}
+
+		if ( ! empty( $address->postal_code ) ) {
+			$city_line .= $city_line ? ' ' . $address->postal_code : $address->postal_code;
+		}
+
+		if ( $city_line ) {
+			$formatted .= $city_line . '<br>';
+		}
+
+		if ( ! empty( $address->country_code ) ) {
+			$formatted .= $address->country_code . '<br>';
+		}
+
+		return $formatted;
 	}
 
 	/**
