@@ -160,7 +160,7 @@
 				// This is 3 by default. We want to show more options before it starts showing a count.
 				numberDisplayed: 8,
 				onInitialized( _, $container ) {
-					$container.find( '.multiselect.dropdown-toggle' ).removeAttr( 'title' );
+					$container.find( '.multiselect.dropdown-toggle,.multiselect-option.dropdown-item' ).removeAttr( 'title' );
 				},
 				onDropdownShown( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
