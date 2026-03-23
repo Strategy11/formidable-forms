@@ -1072,11 +1072,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			function ( $tag, $handle ) use ( $has_break ) {
 				if ( 'paypal-sdk' === $handle ) {
 					$attributes = ' data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '"';
+
 					if ( $has_break ) {
 						$attributes .= ' async';
 					}
 					return str_replace( ' src=', $attributes . ' src=', $tag );
 				}
+
 				if ( $has_break && 'formidable-paypal' === $handle ) {
 					return str_replace( ' src=', ' async src=', $tag );
 				}
@@ -2019,9 +2021,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 * @param array   $style_for_js
 		 * @param WP_Post $form_action
 		 */
-		$style_for_js = apply_filters( 'frm_paypal_button_style', $style_for_js, $form_action );
-
-		return $style_for_js;
+		return apply_filters( 'frm_paypal_button_style', $style_for_js, $form_action );
 	}
 
 	/**
