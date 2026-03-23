@@ -279,7 +279,7 @@ class FrmUsage {
 		global $wpdb;
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT amount, status, paysys, created_at FROM %1$s',
+				'SELECT amount, status, paysys, created_at FROM %1$s WHERE test IS NULL OR test != 1',
 				$wpdb->prefix . $table
 			)
 		);
