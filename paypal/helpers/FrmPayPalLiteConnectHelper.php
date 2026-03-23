@@ -149,7 +149,7 @@ class FrmPayPalLiteConnectHelper {
 
 		echo '<li>' . esc_html__( 'PayPal Checkout', 'formidable' ) . '</li>';
 
-		$can_process_card_fields = ! $only_supports_checkout_button && in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities );
+		$can_process_card_fields = ! $only_supports_checkout_button && in_array( 'CUSTOM_CARD_PROCESSING', $product->capabilities, true );
 
 		if ( $can_process_card_fields ) {
 			echo '<li>' . esc_html__( 'Card Processing', 'formidable' ) . '</li>';

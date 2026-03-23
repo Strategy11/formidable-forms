@@ -164,18 +164,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$source_type    = self::$active_payment_source;
 
 		if ( $source_type ) {
-			switch ( $source_type ) {
-				case 'paypal':
-					$display_type = __( 'PayPal', 'formidable' );
-					break;
-				case 'paylater':
-					$display_type = __( 'Pay Later', 'formidable' );
-					break;
-				default:
-					$display_type = ucwords( str_replace( '_', ' ', $source_type ) );
-					break;
-			}
-
+			$display_type    = self::get_source_display_type( $source_type );
 			$paypal_message .= '<strong>' . esc_html__( 'Payment source: ', 'formidable' ) . '</strong>' . $display_type . '<br>';
 		}
 
@@ -237,6 +226,26 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		return $response;
+	}
+
+	/**
+	 * Get the display label for a payment source type.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $source_type The payment source identifier (e.g. 'paypal', 'paylater', 'google_pay').
+	 *
+	 * @return string The human-readable display label.
+	 */
+	private static function get_source_display_type( $source_type ) {
+		switch ( $source_type ) {
+			case 'paypal':
+				return __( 'PayPal', 'formidable' );
+			case 'paylater':
+				return __( 'Pay Later', 'formidable' );
+			default:
+				return ucwords( str_replace( '_', ' ', $source_type ) );
+		}
 	}
 
 	/**

@@ -54,7 +54,7 @@ class FrmPayPalLiteAppHelper {
 	/**
 	 * Get PayPal button style configuration from form action settings
 	 *
-	 * @param object $form_action The form action object containing post_content
+	 * @param object $form_action The form action object containing post_content.
 	 *
 	 * @return array PayPal button style configuration
 	 */
