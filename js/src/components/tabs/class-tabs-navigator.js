@@ -77,7 +77,9 @@ export class frmTabsNavigator {
 		this.positionUnderlineIndicator( activeNav );
 	}
 
-	/** Repositions underline when wrapper becomes visible (handles hidden panels). */
+	/**
+	 * Automatically repositions the underline indicator when the wrapper becomes visible.
+	 */
 	setupVisibilityObserver() {
 		observeVisibility( this.wrapper, () => {
 			const activeNav = this.wrapper.querySelector( '.frm-tabs-navs ul > li.frm-active' );
@@ -87,7 +89,9 @@ export class frmTabsNavigator {
 		} );
 	}
 
-	/** Repositions underline when parent container resizes (scrollbar changes). */
+	/**
+	 * Uses ResizeObserver to reposition the underline indicator when the parent container layout changes.
+	 */
 	setupScrollbarObserver() {
 		const resizeObserverTarget = document.querySelector( '.frm-scrollbar-wrapper, .styling_settings' ) || document.body;
 		if ( ! resizeObserverTarget || ! ( 'ResizeObserver' in window ) ) {
@@ -103,7 +107,9 @@ export class frmTabsNavigator {
 		this.resizeObserver.observe( resizeObserverTarget );
 	}
 
-	/** Cleans up observers to prevent memory leaks. */
+	/**
+	 * Cleans up observers to prevent memory leaks.
+	 */
 	cleanupObservers() {
 		if ( this.resizeObserver ) {
 			this.resizeObserver.disconnect();
@@ -112,7 +118,11 @@ export class frmTabsNavigator {
 		disconnectVisibilityObserver();
 	}
 
-	/** @param {HTMLElement} activeNav The active nav element to position underline under. */
+	/**
+	 * Positions the underline indicator based on the active navigation element.
+	 *
+	 * @param {HTMLElement} activeNav The active navigation element to position the underline under
+	 */
 	positionUnderlineIndicator( activeNav ) {
 		requestAnimationFrame( () => {
 			const position = this.isRTL
