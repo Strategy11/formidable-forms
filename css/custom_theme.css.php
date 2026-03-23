@@ -228,6 +228,10 @@ legend.frm_hidden{
 	font-weight: var(--field-weight);
 }
 
+.with_frm_style input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 30px var(--bg-color) inset <?php echo esc_html( $important ); ?>;
+}
+
 <?php if ( ! empty( $important ) ) : ?>
 	<?php if ( $use_chosen_js ) { ?>
 	.with_frm_style .chosen-container-multi .chosen-choices,
