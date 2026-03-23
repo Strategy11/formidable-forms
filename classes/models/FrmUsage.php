@@ -300,7 +300,7 @@ class FrmUsage {
 		if ( FrmDb::db_column_exists( $table, 'test' ) ) {
 			return $wpdb->get_results(
 				$wpdb->prepare(
-					'SELECT amount, status, paysys, created_at FROM %1$s WHERE test IS NULL OR test != 1',
+					'SELECT amount, status, paysys, created_at FROM %i WHERE test IS NULL OR test != 1',
 					$wpdb->prefix . $table
 				)
 			);
@@ -309,7 +309,7 @@ class FrmUsage {
 		// Fallback for PayPal add-on where this column does not exist.
 		return $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT amount, status, paysys, created_at FROM %1$s',
+				'SELECT amount, status, paysys, created_at FROM %i',
 				$wpdb->prefix . $table
 			)
 		);
