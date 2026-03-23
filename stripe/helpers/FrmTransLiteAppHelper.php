@@ -604,4 +604,17 @@ class FrmTransLiteAppHelper {
 		_deprecated_function( __METHOD__, '6.27' );
 		return false;
 	}
+
+	/**
+	 * Render the gateway icon buttons for the payment action settings.
+	 *
+	 * @param array         $gateways
+	 * @param WP_Post       $form_action
+	 * @param FrmFormAction $action_control
+	 *
+	 * @return void
+	 */
+	public static function show_gateway_buttons( $gateways, $form_action, $action_control ) {
+		include self::plugin_path() . '/views/action-settings/gateway-buttons.php';
+	}
 }
