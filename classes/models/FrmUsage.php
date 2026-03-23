@@ -298,17 +298,21 @@ class FrmUsage {
 		global $wpdb;
 
 		if ( FrmDb::db_column_exists( $table, 'test' ) ) {
-			return $wpdb->get_results( $wpdb->prepare(
-				'SELECT amount, status, paysys, created_at FROM %1$s WHERE test IS NULL OR test != 1',
-				$wpdb->prefix . $table
-			) );
+			return $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT amount, status, paysys, created_at FROM %1$s WHERE test IS NULL OR test != 1',
+					$wpdb->prefix . $table
+				)
+			);
 		}
 
 		// Fallback for PayPal add-on where this column does not exist.
-		return $wpdb->get_results( $wpdb->prepare(
-			'SELECT amount, status, paysys, created_at FROM %1$s',
-			$wpdb->prefix . $table
-		) );
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT amount, status, paysys, created_at FROM %1$s',
+				$wpdb->prefix . $table
+			)
+		);
 	}
 
 	/**
