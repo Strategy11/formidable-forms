@@ -415,6 +415,21 @@ export default [
 			'no-jquery/no-ajax': 'error',
 			'no-jquery/no-fade': 'error',
 			'no-jquery/no-is': 'error',
+
+			// Catch jQuery methods on variables (complements no-jquery plugin which only catches direct jQuery() chains).
+			'formidable/no-jquery-variable-methods': [ 'error', {
+				methods: [
+					'find', 'show', 'hide', 'toggle',
+					'slideDown', 'slideUp', 'slideToggle',
+					'css', 'each', 'append', 'html',
+					'animate', 'prop', 'filter',
+					'data', 'parents', 'parent',
+					'val', 'serialize', 'serializeArray',
+					'addClass', 'removeClass', 'toggleClass', 'hasClass',
+					'closest', 'ajax',
+					'fadeIn', 'fadeOut', 'fadeTo', 'fadeToggle',
+				],
+			} ],
 		},
 	},
 ];
