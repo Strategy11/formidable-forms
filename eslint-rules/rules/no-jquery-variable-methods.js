@@ -79,6 +79,56 @@ function isjQueryChainedCollectionCall( node ) {
 }
 
 /**
+ * Extracts parameter names annotated with `@param {jQuery}` from a JSDoc block comment.
+ *
+ * @param {Object} sourceCode The ESLint source code object.
+ * @param {Object} node       The function AST node.
+ * @return {Array} Parameter names typed as jQuery.
+ */
+function getjQueryParamNames( sourceCode, node ) {
+	const jsdocPattern = /@param\s+\{jQuery\}\s+(\w+)/g;
+	const names = [];
+
+	for ( const comment of sourceCode.getCommentsBefore( node ) ) {
+		if ( comment.type !== 'Block' ) {
+			continue;
+		}
+
+		let match;
+		while ( ( match = jsdocPattern.exec( comment.value ) ) !== null ) {
+			names.push( match[ 1 ] );
+		}
+	}
+
+	return names;
+}
+
+/**
+ * Walks a chain of MemberExpression/CallExpression nodes to find the root Identifier.
+ *
+ * @param {Object} node The AST node.
+ * @return {string|null} The root identifier name, or null if not found.
+ */
+function getRootIdentifier( node ) {
+	if ( node.type === 'Identifier' ) {
+		return node.name;
+	}
+
+	if ( node.type === 'CallExpression' ) {
+		if ( node.callee.type === 'MemberExpression' ) {
+			return getRootIdentifier( node.callee.object );
+		}
+		return null;
+	}
+
+	if ( node.type === 'MemberExpression' ) {
+		return getRootIdentifier( node.object );
+	}
+
+	return null;
+}
+
+/**
  * Checks if a variable name follows the $ prefix convention for jQuery objects.
  *
  * @param {string} name The variable name.
@@ -206,10 +256,16 @@ module.exports = {
 				}
 			},
 
-			// Track function parameters with $ prefix.
+			// Track function parameters with $ prefix or @param {jQuery} annotation.
 			'FunctionDeclaration, FunctionExpression, ArrowFunctionExpression'( node ) {
+				const jsdocParams = new Set( getjQueryParamNames( context.sourceCode, node ) );
+
 				for ( const param of node.params ) {
-					if ( param.type === 'Identifier' && is$Prefixed( param.name ) ) {
+					if ( param.type !== 'Identifier' ) {
+						continue;
+					}
+
+					if ( is$Prefixed( param.name ) || jsdocParams.has( param.name ) ) {
 						currentjQueryVars().add( param.name );
 					}
 				}
@@ -222,26 +278,37 @@ module.exports = {
 				}
 
 				const { object, property } = node.callee;
-				if ( object.type !== 'Identifier' || property.type !== 'Identifier' ) {
+				if ( property.type !== 'Identifier' || ! bannedMethods.has( property.name ) ) {
 					return;
 				}
 
-				if ( ! bannedMethods.has( property.name ) ) {
+				const jQueryVars = currentjQueryVars();
+
+				// Direct call on a tracked variable: trackedVar.method().
+				if ( object.type === 'Identifier' && jQueryVars.has( object.name ) ) {
+					context.report( {
+						node,
+						messageId: 'noMethod',
+						data: {
+							method: property.name,
+							variable: object.name,
+						},
+					} );
 					return;
 				}
 
-				if ( ! currentjQueryVars().has( object.name ) ) {
-					return;
+				// Chained call: trackedVar.closest(...).method().
+				if ( isjQueryMethodReturningCollection( object, jQueryVars ) || isjQueryChainedCollectionCall( object ) ) {
+					const rootName = getRootIdentifier( object );
+					context.report( {
+						node,
+						messageId: 'noMethod',
+						data: {
+							method: property.name,
+							variable: rootName || 'jQuery chain',
+						},
+					} );
 				}
-
-				context.report( {
-					node,
-					messageId: 'noMethod',
-					data: {
-						method: property.name,
-						variable: object.name,
-					},
-				} );
 			},
 		};
 	},
