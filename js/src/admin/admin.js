@@ -7471,6 +7471,7 @@ window.frmAdminBuildJS = function() {
 
 		const actionId = getNewActionId();
 		const formId = thisFormId;
+		const existingCount = document.querySelectorAll( `.frm_single_${ type }_settings` ).length;
 
 		const placeholderSetting = document.createElement( 'div' );
 		placeholderSetting.classList.add( `frm_single_${ type }_settings` );
@@ -7486,7 +7487,8 @@ window.frmAdminBuildJS = function() {
 				type,
 				list_id: actionId,
 				form_id: formId,
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				existing_count: existingCount
 			},
 			success: handleAddFormActionSuccess
 		} );
