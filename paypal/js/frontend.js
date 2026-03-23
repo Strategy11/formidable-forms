@@ -155,7 +155,7 @@
 			const method = paymentMethods.get( key );
 			if ( method?.eligible ) {
 				try {
-					await method.render.call( method );
+					await method.render();
 					method.rendered = true;
 				} catch ( err ) {
 					console.error( `Failed to pre-render payment method: ${ key }`, err );
@@ -435,7 +435,7 @@
 		if ( ! method.rendered ) {
 			method.containerEl.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible"></span>';
 			try {
-				await method.render.call( method );
+				await method.render();
 				method.rendered = true;
 			} catch ( err ) {
 				console.error( `Failed to render payment method: ${ key }`, err );
