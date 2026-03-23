@@ -1088,10 +1088,6 @@
 		document.dispatchEvent( event );
 	}
 
-	function hideSubmit( form ) {
-		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).hide();
-	}
-
 	// ---- Error Display ----
 
 	/**
