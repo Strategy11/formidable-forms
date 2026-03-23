@@ -48,15 +48,34 @@ function isjQueryMethodReturningCollection( node, jQueryVarNames ) {
 	}
 
 	const { object, property } = node.callee;
-	if ( object.type !== 'Identifier' || property.type !== 'Identifier' ) {
+	if ( property.type !== 'Identifier' || ! COLLECTION_RETURNING_METHODS.has( property.name ) ) {
 		return false;
 	}
 
-	if ( ! jQueryVarNames.has( object.name ) ) {
+	if ( object.type === 'Identifier' ) {
+		return jQueryVarNames.has( object.name );
+	}
+
+	return isjQueryConstructor( object ) || isjQueryChainedCollectionCall( object );
+}
+
+/**
+ * Checks if a node is a chain of jQuery collection-returning method calls.
+ *
+ * Recognizes patterns like `obj.closest( 'form' ).find( 'sel' )` where
+ * at least two chained methods are collection-returning, treating the
+ * chain itself as a strong jQuery signal regardless of the root object.
+ *
+ * @param {Object} node The AST node.
+ * @return {boolean} Whether this is a chained jQuery collection call.
+ */
+function isjQueryChainedCollectionCall( node ) {
+	if ( node.type !== 'CallExpression' || node.callee.type !== 'MemberExpression' ) {
 		return false;
 	}
 
-	return COLLECTION_RETURNING_METHODS.has( property.name );
+	const { property } = node.callee;
+	return property.type === 'Identifier' && COLLECTION_RETURNING_METHODS.has( property.name );
 }
 
 /**
