@@ -1,4 +1,5 @@
-@import '../frm-web-component.scss';
+@import '../frm-web-component';
+
 .frm-tabs-wrapper {
 	position: relative;
 	overflow: hidden;
@@ -38,6 +39,7 @@
 .frm-tabs-navs {
 	padding: 0;
 	min-height: 44px;
+
     ul {
         margin: 0;
         height: var(--h-md);
@@ -45,7 +47,7 @@
         display: flex;
         justify-content: space-between;
         list-style-type: none;
-        padding: 0px;
+        padding: 0;
 
         li,
         li a {
@@ -66,15 +68,19 @@
         }
     }
 }
+
 .frm-tabs-navs ul li.frm-active, .frm-style-tabs-wrapper .frm-tabs-navs ul li.frm-active a {
 	color: var(--grey-900);
 }
+
 .frm-tabs-navs ul li:first-child {
 	margin-left: var(--gap-xs);
 }
+
 .frm-tabs-navs ul li:last-child {
 	margin-right: var(--gap-xs);
 }
+
 .frm-tabs-delimiter {
 	position: absolute;
 	top: 0;
@@ -97,16 +103,19 @@
 		display: none;
     }
 }
+
 .frm-tabs-container {
 	position: relative;
 	overflow: hidden;
 	margin-top: var(--gap-md);
 	height: 100%;
 }
+
 .frm-tabs-container .frm-tabs-slide-track {
 	display: flex;
 	transition: 0.32s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
+
 .frm-tabs-slide-track > div {
 	flex: 0 0 100%;
 	opacity: 0;
@@ -117,6 +126,7 @@
 	overflow: hidden;
 	box-sizing: border-box;
 }
+
 .frm-tabs-slide-track > div > div {
 	overflow: auto;
 	position: relative;
@@ -124,9 +134,11 @@
 	padding: 0;
 	box-sizing: border-box;
 }
+
 .frm-tabs-slide-track > div > div:first-child {
 	height: 100%;
 }
+
 .frm-tabs-slide-track > div.frm-active {
 	opacity: 1;
 	transition: 0.35s opacity linear;
