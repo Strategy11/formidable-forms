@@ -396,6 +396,10 @@ class FrmFieldProduct extends FrmFieldType {
 			return $value;
 		}
 
+		if ( isset( $atts['format'] ) && 'number' === $atts['format'] ) {
+			return $value;
+		}
+
 		$is_array = is_array( $value );
 
 		// Temporary turn value into array.
