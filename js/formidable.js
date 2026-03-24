@@ -1773,11 +1773,7 @@ function frmFrontFormJS() {
 			fieldKey = 'dependent';
 		}
 
-		if ( input.length > 1 ) {
-			input = input.eq( 0 );
-		}
-
-		input.trigger( { type: 'change', selfTriggered: true, frmTriggered: fieldKey } );
+		jQuery( input ).trigger( { type: 'change', selfTriggered: true, frmTriggered: fieldKey } );
 	}
 
 	/**
@@ -1796,33 +1792,30 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const totalFields = jQuery( '[data-frmtotal]' );
+		const totalFields = document.querySelectorAll( '[data-frmtotal]' );
 		if ( ! totalFields.length ) {
 			return;
 		}
 
 		const formTotals = [];
 
-		totalFields.each( function() {
-			let formatted;
+		totalFields.forEach( totalField => {
 			let total = 0;
-			const totalField = jQuery( this );
-			const $form = totalField.closest( 'form' );
+			const form = totalField.closest( 'form' );
 
-			if ( ! $form.length ) {
+			if ( ! form ) {
 				return;
 			}
 
-			const formId = $form[ 0 ].querySelector( 'input[name="form_id"]' ).value;
+			const formId = form.querySelector( 'input[name="form_id"]' ).value;
 			const currency = getCurrency( formId );
 
 			if ( undefined !== formTotals[ formId ] ) {
 				total = formTotals[ formId ];
 			} else {
-				$form[ 0 ].querySelectorAll( 'input[data-frmprice],select:has([data-frmprice])' ).forEach( function( input ) {
+				form.querySelectorAll( 'input[data-frmprice],select:has([data-frmprice])' ).forEach( function( input ) {
 					let quantity = 0;
 					let price = 0;
-					const isUserDef = false;
 					const isSingle = 'hidden' === input.type;
 
 					if ( input.tagName === 'SELECT' ) {
@@ -1830,7 +1823,7 @@ function frmFrontFormJS() {
 							price = input.options[ input.selectedIndex ].getAttribute( 'data-frmprice' );
 						}
 					} else {
-						if ( ( ! isUserDef && ! isSingle ) && ! input.matches( ':checked' ) ) {
+						if ( ! isSingle && ! input.matches( ':checked' ) ) {
 							return;
 						}
 						price = input.getAttribute( 'data-frmprice' );
@@ -1840,7 +1833,7 @@ function frmFrontFormJS() {
 						price = 0;
 					} else {
 						price = preparePrice( price, currency );
-						quantity = getQuantity( isUserDef, input );
+						quantity = getQuantity( input );
 						price = parseFloat( quantity ) * parseFloat( price );
 					}
 
@@ -1863,20 +1856,22 @@ function frmFrontFormJS() {
 			}
 
 			total = normalizeTotal( total, currency );
-			totalField.val( total );
+			totalField.value = total;
 
 			// because of e.g. fields that might be using this field for calculations
 			triggerChange( totalField );
 
 			total = formatCurrency( total, currency );
-			formatted = totalField.prev( '.frm_total_formatted' );
-			if ( formatted.length < 1 ) {
-				// In case paragraphs have been added to the form.
-				formatted = totalField.closest( '.frm_form_field' ).find( '.frm_total_formatted' );
+			const formatted = totalField.previousElementSibling;
+			if ( formatted?.matches( '.frm_total_formatted' ) ) {
+				formatted.textContent = total;
+				return;
 			}
-			if ( formatted.length ) {
-				formatted.html( total );
-			}
+
+			const formattedEls = totalField.closest( '.frm_form_field' ).querySelectorAll( '.frm_total_formatted' );
+			formattedEls.forEach( formattedEl => {
+				formattedEl.textContent = total;
+			} );
 		} );
 	}
 
@@ -1948,76 +1943,51 @@ function frmFrontFormJS() {
 	/**
 	 * Gets quantity.
 	 *
-	 * @param {boolean}     isUserDef Is user defined product.
-	 * @param {HTMLElement} field     The field element.
+	 * @param {HTMLElement} field The field element.
 	 * @return {number} The quantity.
 	 */
-	function getQuantity( isUserDef, field ) {
-		const $this = jQuery( field );
-
+	function getQuantity( field ) {
 		const fieldID = frmFrontForm.getFieldId( field, false );
 		if ( ! fieldID ) {
 			return 0;
 		}
 
-		let quantity = getQuantityField( $this, fieldID );
-
-		if ( quantity ) {
-			quantity = checkQuantityFieldMinMax( quantity );
-		} else {
-			const quantityFields = getQuantityFields( $this );
-			if ( 1 === quantityFields.length && '' === quantityFields[ 0 ].getAttribute( 'data-frmproduct' ).trim() ) {
-				quantity = checkQuantityFieldMinMax( quantityFields[ 0 ] );
-			} else {
-				// If there is no quantity field, assume 1.
-				quantity = 1;
-			}
+		const quantityField = getQuantityField( field, fieldID );
+		if ( ! quantityField ) {
+			// If there is no quantity field, assume 1.
+			return 1;
 		}
 
-		if ( 0 === quantity && isUserDef ) {
-			// only user-defined fields may not have attached quantity fields
-			quantity = 1;
-		}
-
-		return quantity;
+		return checkQuantityFieldMinMax( quantityField );
 	}
 
-	function getQuantityField( elementObj, fieldID ) {
-		let quantity;
-
-		const quantityFields = elementObj.closest( 'form' ).find( '[data-frmproduct]' );
+	/**
+	 * Gets quantity field.
+	 *
+	 * @param {HTMLElement} element The element.
+	 * @param {number}      fieldID The field ID.
+	 * @return {HTMLElement|null} The quantity field.
+	 */
+	function getQuantityField( element, fieldID ) {
+		const quantityFields = element.closest( 'form' ).querySelectorAll( '[data-frmproduct]' );
+		if ( ! quantityFields.length ) {
+			return null;
+		}
 
 		fieldID = fieldID.toString();
 
-		quantityFields.each( function() {
+		return Array.from( quantityFields ).find( element => {
 			let ids;
 
-			ids = JSON.parse( this.getAttribute('data-frmproduct').trim() );
-			if ('' === ids) {
-				return true;
+			ids = JSON.parse( element.getAttribute( 'data-frmproduct' ).trim() );
+			if ( '' === ids ) {
+				return false;
 			}
 
 			// Convert to array if necessary because of existing fields that are already using single product fields.
 			ids = 'string' === typeof ids ? [ ids ] : ids;
-			if ( ids.includes( fieldID ) ) {
-				quantity = this;
-				return false;
-			}
+			return ids.includes( fieldID );
 		} );
-
-		return quantity;
-	}
-
-	/**
-	 * Gets quantity field elements.
-	 *
-	 * @param {jQuery} elementObj The jQuery object representing the element.
-	 * @return {jQuery} A jQuery object containing the quantity field elements.
-	 */
-	function getQuantityFields( elementObj ) {
-		// make sure the search is form-based (i.e. per form) cos there could be more than 1 form on the page
-		// not([id*="-"]) means : not inside a repeater
-		return elementObj.closest( 'form' ).find( '[data-frmproduct]:not([id*="-"])' );
 	}
 
 	/**
