@@ -1893,9 +1893,9 @@ function frmFrontFormJS() {
 		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
 	}
 
-	function round10(value, decimals) {
+	function round10( value, decimals ) {
 		return Number( `${ Math.round( `${ value }e${ decimals }` ) }e-${ decimals }` );
-	};
+	}
 
 	/**
 	 * Format a numeric value according to the specified currency format settings.
