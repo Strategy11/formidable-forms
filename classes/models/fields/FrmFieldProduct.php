@@ -416,8 +416,6 @@ class FrmFieldProduct extends FrmFieldType {
 			$value = ! empty( $atts['sep'] ) && is_string( $atts['sep'] ) ? explode( $atts['sep'], $value ) : (array) $value;
 		}
 
-		// Fix psalm error.
-		$value = (array) $value;
 		foreach ( $value as $k => $v ) {
 			$value[ $k ] = FrmCurrencyHelper::format_price( $v );
 		}
