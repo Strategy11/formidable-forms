@@ -3950,7 +3950,7 @@ class FrmAppHelper {
 				// In older versions this event listener causes the section to immediately close again
 				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
-				'shouldShowPaymentsSettingsModal'    => ! FrmStrpLiteAppController::is_payment_gateway_configured(),
+				'shouldShowPaymentsSettingsModal'    => ! self::at_least_one_payment_gateway_is_setup(),
 				'pricingFieldsImg'                   => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
 				'paymentsSettingsUrl'                => FrmStrpLiteAppController::get_payments_settings_url(),
 			);
@@ -3974,6 +3974,15 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+	}
+
+	/**
+	 * Checks if at least one payment gateway is configured.
+	 *
+	 * @return bool
+	 */
+	private static function at_least_one_payment_gateway_is_setup() {
+		return FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() || FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
 	}
 
 	/**
