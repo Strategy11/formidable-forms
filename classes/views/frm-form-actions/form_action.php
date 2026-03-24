@@ -22,28 +22,22 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 >
 	<div class="widget-top frm-h-stack-xs">
 		<div class="widget-title frm-flex-full">
-			<h4 class="frm-h-stack-xs">
+			<h4 class="frm-h-stack-xs frm-text-md frm-p-sm">
 				<span class="frm-border-icon frm-border-icon--small"><?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?></span>
 				<span><?php echo esc_html( $form_action->post_title ); ?></span>
 			</h4>
 		</div>
 
-		<div class="frm-ml-auto">
-			<div class="widget-title-action">
-				<button type="button" class="widget-action hide-if-no-js" aria-expanded="false">
-					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
-				</button>
-			</div>
-
-			<span class="frm_email_icons">
+		<div class="frm-ml-auto frm-h-stack-sm frm-p-sm">
+			<span class="frm_email_icons frm-h-stack-sm">
 				<?php if ( $action_control->action_options['limit'] > 2 ) { ?>
 					<a href="javascript:void(0)" class="frm_duplicate_form_action" title="<?php esc_attr_e( 'Duplicate', 'formidable' ); ?>">
-						<?php FrmAppHelper::icon_by_class( 'frmfont frm_clone_icon' ); ?>
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon frm_svg24' ); ?>
 					</a>
 				<?php } ?>
 
 				<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php esc_attr_e( 'Delete this form action?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
-					<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon frm_svg24' ); ?>
 				</a>
 
 				<?php
@@ -56,10 +50,17 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 						'off_label'   => 'OFF',
 						'show_labels' => false,
 						'echo'        => true,
+						'div_class'   => 'frm-ml-xs',
 					)
 				);
 				?>
 			</span>
+
+			<div class="widget-title-action">
+				<button type="button" class="widget-action frm-flex frm-p-2xs-force hide-if-no-js" aria-expanded="false">
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg14' ); ?>
+				</button>
+			</div>
 		</div>
 	</div>
 
