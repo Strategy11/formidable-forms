@@ -14,7 +14,7 @@ class FrmFieldTotal extends FrmFieldText {
 	/**
 	 * @var array
 	 */
-	private $posted_value = null;
+	private $posted_value;
 
 	protected $has_input = false;
 
