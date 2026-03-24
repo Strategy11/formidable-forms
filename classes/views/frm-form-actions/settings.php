@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</span>
 
 									<div class="frm-flex-col">
-										<h3>
+										<h3 class="frm-text-md frm-capitalize">
 											<span class="frm-action-lock-icon">
 												<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
 											</span>
