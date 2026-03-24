@@ -615,6 +615,30 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function show_gateway_buttons( $gateways, $form_action, $action_control ) {
+		$gateway_order = array( 'stripe', 'square', 'paypal' );
+		$gateways      = self::sort_gateways( $gateways, $gateway_order );
+
 		include self::plugin_path() . '/views/action-settings/gateway-buttons.php';
+	}
+
+	/**
+	 * Sort gateways by a predefined order.
+	 * Unlisted gateways are appended at the end.
+	 *
+	 * @param array $gateways
+	 * @param array $order Gateway keys in desired order.
+	 *
+	 * @return array
+	 */
+	private static function sort_gateways( $gateways, $order ) {
+		$sorted = array();
+
+		foreach ( $order as $key ) {
+			if ( isset( $gateways[ $key ] ) ) {
+				$sorted[ $key ] = $gateways[ $key ];
+			}
+		}
+
+		return $sorted + $gateways;
 	}
 }
