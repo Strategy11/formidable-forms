@@ -410,8 +410,8 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	private static function get_url_to_connect_server() {
 		// Return 'https://api.strategy11.com/';
-		// return 'https://dev-site.local/';
-		return 'https://qa.formidableforms.com/paypal/';
+		return 'https://dev-site.local/';
+		// return 'https://qa.formidableforms.com/paypal/';
 	}
 
 	/**
@@ -918,8 +918,15 @@ class FrmPayPalLiteConnectHelper {
 		return self::post_with_authenticated_body( 'create_subscription', compact( 'data' ) );
 	}
 
-	public static function create_vault_setup_token() {
-		return self::post_with_authenticated_body( 'create_vault_setup_token' );
+	/**
+	 * @since x.x
+	 *
+	 * @param array $data Setup token data including payment_source.
+	 *
+	 * @return false|object
+	 */
+	public static function create_vault_setup_token( $data = array() ) {
+		return self::post_with_authenticated_body( 'create_vault_setup_token', compact( 'data' ) );
 	}
 
 	/**

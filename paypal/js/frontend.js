@@ -21,6 +21,7 @@
 	let cardFieldsInstance = null;
 	let cardFieldsValid = false;
 	let submitEvent = null;
+	let isRecurring = false;
 
 	/**
 	 * Registry of available payment methods.
@@ -112,9 +113,9 @@
 			return;
 		}
 
-		const isRecurring = 'single' !== settings.one;
+		isRecurring = 'single' !== settings.one;
 		const { layout } = settings;
-		const cardFieldsAreSupported = layout !== 'checkout_only' && 'function' === typeof window.paypal.CardFields && ! isRecurring;
+		const cardFieldsAreSupported = layout !== 'checkout_only' && 'function' === typeof window.paypal.CardFields;
 		const buttonsAreEnabled = layout !== 'card_only' && 'function' === typeof window.paypal.Buttons;
 
 		// Clear the card element. We rebuild it entirely.
@@ -516,15 +517,23 @@
 	 */
 	function createCardFieldsSDKInstance() {
 		try {
-			return window.paypal.CardFields( {
-				onApprove,
+			const config = {
 				onError,
-				createOrder,
 				style: frmPayPalVars.style,
 				inputEvents: {
 					onChange: onCardFieldsChange
 				}
-			} );
+			};
+
+			if ( isRecurring ) {
+				config.createVaultSetupToken = createVaultSetupToken;
+				config.onApprove = onVaultApprove;
+			} else {
+				config.createOrder = createOrder;
+				config.onApprove = onApprove;
+			}
+
+			return window.paypal.CardFields( config );
 		} catch ( err ) {
 			console.error( 'Failed to create CardFields instance', err );
 			return null;
@@ -959,6 +968,7 @@
 		const formData = new FormData( thisForm );
 		formData.append( 'action', 'frm_paypal_create_vault_setup_token' );
 		formData.append( 'nonce', frmPayPalVars.nonce );
+		formData.append( 'payment_source', 'card' );
 
 		formData.delete( 'frm_action' );
 		formData.delete( 'form_key' );
@@ -976,13 +986,48 @@
 		const tokenData = await response.json();
 
 		if ( ! tokenData.success || ! tokenData.data.token ) {
-			throw new Error( tokenData.data || 'Failed to create PayPal vault setup token' );
+			console.error( 'Vault setup token response:', tokenData );
+			const errorMessage = 'string' === typeof tokenData.data ? tokenData.data : 'Failed to create PayPal vault setup token';
+			throw new Error( errorMessage );
 		}
 
 		return tokenData.data.token;
 	}
 
 	// ---- Payment Callbacks ----
+
+	/**
+	 * Handle vault approval for card field subscriptions.
+	 * Receives the vaultSetupToken, sends it to the server to create
+	 * a payment token and subscription, then submits the form.
+	 *
+	 * @param {Object} data The approval data containing vaultSetupToken.
+	 */
+	async function onVaultApprove( data ) {
+		if ( 'NO' === data.liabilityShift || 'UNKNOWN' === data.liabilityShift ) {
+			onError( new Error( 'This payment was flagged as possible fraud and has been rejected.' ) );
+			return;
+		}
+
+		try {
+			let vaultInput = thisForm.querySelector( 'input[name="vault_setup_token"]' );
+			if ( ! vaultInput ) {
+				vaultInput = document.createElement( 'input' );
+				vaultInput.type = 'hidden';
+				vaultInput.name = 'vault_setup_token';
+				thisForm.append( vaultInput );
+			}
+			vaultInput.value = data.vaultSetupToken;
+
+			const subscriptionID = await createSubscription( data );
+			await onApprove( {
+				subscriptionID,
+				paymentSource: 'card'
+			} );
+		} catch ( err ) {
+			onError( err );
+		}
+	}
 
 	/**
 	 * Handle approved payment.
@@ -1038,6 +1083,7 @@
 	 * @param {Error} err The error object.
 	 */
 	function onError( err ) {
+		console.error( 'PayPal onError:', err );
 		running--;
 		if ( running === 0 && thisForm ) {
 			if ( selectedMethod === 'card' && cardFieldsValid ) {
@@ -1046,7 +1092,10 @@
 				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 			}
 		}
-		displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
+		const message = 'string' === typeof err
+			? err
+			: ( err && err.message ? err.message : 'Payment failed. Please try again.' );
+		displayPaymentFailure( message );
 	}
 
 	function onCancel() {
@@ -1219,11 +1268,15 @@
 		try {
 			await cardFieldsInstance.submit( submitArgs );
 		} catch ( err ) {
+			console.error( 'Card fields submit error:', err );
 			running--;
 			if ( running === 0 && thisForm ) {
 				enableSubmit();
 			}
-			displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
+			const message = 'string' === typeof err
+				? err
+				: ( err && err.message ? err.message : 'Payment failed. Please try again.' );
+			displayPaymentFailure( message );
 		}
 	}
 

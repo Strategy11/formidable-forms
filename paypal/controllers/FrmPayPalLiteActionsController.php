@@ -400,7 +400,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return false;
 		}
 
-		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED' ), true );
+		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED', 'APPROVAL_PENDING' ), true );
 	}
 
 	/**
@@ -414,10 +414,14 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool
 	 */
 	private static function validate_subscription_amount( $subscription, $expected_amount ) {
+		// Vault-created subscriptions in APPROVAL_PENDING have no billing details yet.
+		if ( isset( $subscription->status ) && 'APPROVAL_PENDING' === $subscription->status ) {
+			return true;
+		}
+
 		$subscription_amount = $subscription->billing_info->last_payment->amount->value ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value ?? '';
 
 		if ( ! $subscription_amount ) {
-			echo 'No subscription amount';
 			return false;
 		}
 
@@ -2143,9 +2147,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function remove_cc_validation( $errors, $field ) {
-		$paypal_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+		$paypal_order_id       = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+		$paypal_subscription_id = FrmAppHelper::get_post_param( 'paypal_subscription_id', '', 'sanitize_text_field' );
 
-		if ( ! $paypal_order_id ) {
+		if ( ! $paypal_order_id && ! $paypal_subscription_id ) {
 			return $errors;
 		}
 

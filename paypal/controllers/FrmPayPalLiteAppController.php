@@ -412,6 +412,11 @@ class FrmPayPalLiteAppController {
 			'shipping_preference' => self::get_shipping_preference( $action ),
 		);
 
+		$vault_setup_token = FrmAppHelper::get_post_param( 'vault_setup_token', '', 'sanitize_text_field' );
+		if ( $vault_setup_token ) {
+			$data['vault_setup_token'] = $vault_setup_token;
+		}
+
 		$response = FrmPayPalLiteConnectHelper::create_subscription( $data );
 
 		if ( false === $response ) {
@@ -428,7 +433,13 @@ class FrmPayPalLiteAppController {
 	public static function create_vault_setup_token() {
 		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
 
-		$response = FrmPayPalLiteConnectHelper::create_vault_setup_token();
+		$payment_source = FrmAppHelper::get_post_param( 'payment_source', 'card', 'sanitize_text_field' );
+
+		$data = array(
+			'payment_source' => $payment_source,
+		);
+
+		$response = FrmPayPalLiteConnectHelper::create_vault_setup_token( $data );
 
 		if ( false === $response ) {
 			wp_send_json_error( 'Failed to create PayPal vault setup token' );
@@ -440,4 +451,5 @@ class FrmPayPalLiteAppController {
 
 		wp_send_json_success( array( 'token' => $response->token ) );
 	}
+
 }
