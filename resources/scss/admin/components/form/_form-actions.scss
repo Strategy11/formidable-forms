@@ -93,8 +93,25 @@
 		transition: background-color 200ms ease-out;
 	}
 
-	&:hover .widget-top {
-		background: var(--grey-25);
+	.frm_email_icons {
+		--frm-fadein-time: 240ms;
+		display: none;
+	}
+
+	.widget-action {
+		color: var(--grey-800);
+		transition: transform 200ms ease-out;
+	}
+
+	&:hover {
+
+		.widget-top {
+			background: var(--grey-25);
+		}
+
+		.frm_email_icons {
+			display: flex;
+		}
 	}
 
 	&.open {
@@ -105,8 +122,8 @@
 			border-bottom: none;
 		}
 
-		&:hover .widget-top {
-			border-color: var(--grey-300);
+		.widget-action {
+			transform: rotate(-180deg);
 		}
 	}
 
