@@ -642,6 +642,10 @@ window.frmAdminBuildJS = function() {
 	function afterActionRemoved( type ) {
 		checkActiveAction( type );
 
+		if ( ! document.querySelector( '.frm_form_action_settings' ) ) {
+			document.querySelector( '.frm-no-actions-message' )?.classList.remove( 'frm_hidden' );
+		}
+
 		const hookName = 'frm_after_action_removed';
 		const hookArgs = { type };
 		wp.hooks.doAction( hookName, hookArgs );
@@ -7499,6 +7503,8 @@ window.frmAdminBuildJS = function() {
 		function handleAddFormActionSuccess( html ) {
 			fieldUpdated();
 			placeholderSetting.remove();
+
+			document.querySelector( '.frm-no-actions-message' )?.classList.add( 'frm_hidden' );
 
 			closeOpenActions();
 
