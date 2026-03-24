@@ -589,10 +589,11 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $receipt_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function refund_payment( $receipt_id ) {
-		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		$data = self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		return is_object( $data );
 	}
 
 	/**
