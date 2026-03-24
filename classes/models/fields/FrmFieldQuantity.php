@@ -40,7 +40,7 @@ class FrmFieldQuantity extends FrmFieldNumber {
 	 */
 	public function show_primary_options( $args ) {
 		$field = $args['field'];
-		// Cast to array cos of existing fields that are already using single product fields in production
+		// Cast to array because of existing fields that are already using single product fields in production
 		$field['product_field'] = $field['product_field'] ? (array) $field['product_field'] : array();
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/quantity-options.php';
 

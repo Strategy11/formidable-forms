@@ -1822,7 +1822,7 @@ function frmFrontFormJS() {
 				$form[ 0 ].querySelectorAll( 'input[data-frmprice],select:has([data-frmprice])' ).forEach( function( input ) {
 					let quantity = 0;
 					let price = 0;
-					const isUserDef = 'text' === input.type;
+					const isUserDef = false;
 					const isSingle = 'hidden' === input.type;
 
 					if ( input.tagName === 'SELECT' ) {
@@ -1892,11 +1892,15 @@ function frmFrontFormJS() {
 
 		if ( ! isLargeTotal ) {
 			const { decimals } = currency;
-			total = decimals > 0 ? Math.round10( total, decimals ) : Math.ceil( total );
+			total = decimals > 0 ? round10( total, decimals ) : Math.ceil( total );
 		}
 
 		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
 	}
+
+	function round10(value, decimals) {
+		return Number( `${ Math.round( `${ value }e${ decimals }` ) }e-${ decimals }` );
+	};
 
 	/**
 	 * Format a numeric value according to the specified currency format settings.
@@ -1988,13 +1992,13 @@ function frmFrontFormJS() {
 		quantityFields.each( function() {
 			let ids;
 
-			ids = JSON.parse( this.getAttribute( 'data-frmproduct' ).trim() );
-			if ( '' === ids ) {
+			ids = JSON.parse( this.getAttribute('data-frmproduct').trim() );
+			if ('' === ids) {
 				return true;
 			}
 
-			// convert to array if necessary cos of existing fields that are already using single product fields
-			ids = 'string' === typeof ids ? [ ids.toString() ] : ids;
+			// Convert to array if necessary because of existing fields that are already using single product fields.
+			ids = 'string' === typeof ids ? [ ids ] : ids;
 			if ( ids.includes( fieldID ) ) {
 				quantity = this;
 				return false;
@@ -2019,9 +2023,9 @@ function frmFrontFormJS() {
 	/**
 	 * Prepare a price for calculation.
 	 *
-	 * @param {string} price    The price to prepare.
-	 * @param {Object} currency The currency object containing decimal information.
-	 * @return {string}         The prepared price.
+	 * @param {number|string} price    The price to prepare.
+	 * @param {Object}        currency The currency object containing decimal information.
+	 * @return {string}                The prepared price.
 	 */
 	function preparePrice( price, currency ) {
 		if ( ! price ) {
@@ -2513,17 +2517,6 @@ window.frmFrontForm = frmFrontFormJS();
 jQuery( document ).ready( function() {
 	frmFrontForm.init();
 } );
-
-( function() {
-	if ( ! Math.round10 ) {
-		// https://www.jacklmoore.com/notes/rounding-in-javascript/
-		Math.round10 = function( value, decimals ) {
-			return Number(
-				`${ Math.round( `${ value }e${ decimals }` ) }e-${ decimals }`
-			);
-		};
-	}
-}() );
 
 function frmRecaptcha() {
 	frmCaptcha( '.frm-g-recaptcha' );

@@ -486,7 +486,7 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function migrate_to_105() {
-		update_option( 'frm_show_pricing_fields_modal', 1 );
+		update_option( 'frm_show_pricing_fields_modal', 1, false );
 	}
 
 	/**

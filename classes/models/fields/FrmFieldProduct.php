@@ -372,6 +372,15 @@ class FrmFieldProduct extends FrmFieldType {
 	 * @return string
 	 */
 	public static function get_price_from_array( $opt, $opt_key, $field ) {
+		/**
+		 * Filter the product option before getting the price.
+		 *
+		 * @since x.x
+		 *
+		 * @param array|string $opt
+		 * @param string       $opt_key
+		 * @param array        $field
+		 */
 		$opt = apply_filters( 'frm_field_price_saved', $opt, $opt_key, $field );
 		return is_array( $opt ) ? (string) ( $opt['price'] ?? '' ) : '';
 	}

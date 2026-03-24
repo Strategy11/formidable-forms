@@ -14,7 +14,7 @@ class FrmFieldTotal extends FrmFieldText {
 	/**
 	 * @var array
 	 */
-	private $posted_value_args = array();
+	private $posted_value = null;
 
 	protected $has_input = false;
 
@@ -65,7 +65,7 @@ DEFAULT_HTML;
 
 		// In order to be sure that the total is only validated after all
 		// product prices and quantities have been gathered, we use a hook.
-		$this->posted_value_args = $args;
+		$this->posted_value = $args['value'] ?? '';
 		add_filter( 'frm_entries_before_create', array( $this, 'validate_total' ), 10, 2 );
 
 		return array();
@@ -80,8 +80,6 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function validate_total( $errors, $form ) {
-		$value = $this->posted_value_args['value'];
-
 		global $frm_products;
 
 		$sum      = 0.0;
@@ -130,14 +128,14 @@ DEFAULT_HTML;
 		 * @param array|stdClass $form
 		 */
 		$sum    = apply_filters( 'frm_field_total_expected_sum', $sum, $this->field, $form );
-		$posted = (float) FrmCurrencyHelper::prepare_price( $value, $currency );
+		$posted = (float) FrmCurrencyHelper::prepare_price( $this->posted_value, $currency );
 
 		if ( $posted === $sum ) {
 			return $errors;
 		}
 
 		$error_key            = 'field' . $this->get_field_column( 'id' );
-		$errors[ $error_key ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
+		$errors[ $error_key ] = FrmFieldsHelper::get_error_msg( $this->posted_value, 'invalid' );
 
 		return $errors;
 	}
@@ -178,9 +176,7 @@ DEFAULT_HTML;
 			return $value;
 		}
 
-		$currency = FrmCurrencyHelper::get_currency();
-
-		return FrmCurrencyHelper::format_price( $value, $currency );
+		return FrmCurrencyHelper::format_price( $value );
 	}
 
 	/**
