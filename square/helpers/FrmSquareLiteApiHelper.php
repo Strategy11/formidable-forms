@@ -11,7 +11,7 @@ class FrmSquareLiteApiHelper {
 
 	/**
 	 * The payments submodule calls this function.
-	 * This function exists so payments can be refunded when Authorize.Net is active.
+	 * This function exists so payments can be refunded when the Stripe add-on or Authorize.Net is active.
 	 *
 	 * @param int $payment_id
 	 *
@@ -23,7 +23,7 @@ class FrmSquareLiteApiHelper {
 
 	/**
 	 * The payments submodule calls this function.
-	 * This function exists so subscriptions can be cancelled when Authorize.Net is active.
+	 * This function exists so subscriptions can be cancelled when the Stripe add-on or Authorize.Net is active.
 	 *
 	 * @param string $sub_id
 	 *
