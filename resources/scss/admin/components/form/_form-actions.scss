@@ -84,11 +84,6 @@
 .frm_form_action_settings {
 	margin-bottom: 12px;
 
-	.widget-top,
-	.widget-top h3 {
-		cursor: pointer !important;
-	}
-
 	.widget-top {
 		color: var(--grey-700);
 		background: #fff;
@@ -112,13 +107,6 @@
 
 		&:hover .widget-top {
 			border-color: var(--grey-300);
-		}
-	}
-
-	.widget-title {
-
-		h4,
-		h3 {
 		}
 	}
 
