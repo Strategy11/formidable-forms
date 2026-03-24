@@ -95,6 +95,7 @@
 		border-radius: var(--small-radius);
 		border-color: var(--grey-300);
 		box-shadow: none;
+		transition: background-color 200ms ease-out;
 	}
 
 	&:hover .widget-top {

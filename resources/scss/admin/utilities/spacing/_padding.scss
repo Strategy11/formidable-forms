@@ -11,6 +11,10 @@
 	padding: var(--gap-2xs);
 }
 
+.frm-p-2xs-force {
+	padding: var(--gap-2xs) !important;
+}
+
 .frm-p-sm,
 .frm-p-4 {
 	padding: var(--gap-sm) !important;
