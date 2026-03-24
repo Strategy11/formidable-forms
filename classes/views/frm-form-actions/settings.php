@@ -109,6 +109,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		}//end foreach
 		?>
+
+		<p id="frm-actions-no-results" class="frm_hidden frm-mt-0">
+			<?php esc_html_e( 'No actions found. Try a different search term.', 'formidable' ); ?>
+		</p>
 	</div>
 </div>
 

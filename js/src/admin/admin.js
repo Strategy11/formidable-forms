@@ -639,6 +639,18 @@ window.frmAdminBuildJS = function() {
 		return false;
 	}
 
+	/**
+	 * Updates the empty state of the actions search results.
+	 *
+	 * @since x.x
+	 */
+	function updateActionsSearchEmptyState() {
+		document.getElementById( 'frm-actions-no-results' )?.classList.toggle(
+			'frm_hidden',
+			document.querySelector( '#frm-actions-filter-content .frm-action:not(.frm_hidden)' )
+		);
+	}
+
 	function afterActionRemoved( type ) {
 		checkActiveAction( type );
 
@@ -10616,6 +10628,7 @@ window.frmAdminBuildJS = function() {
 			$formActions.on( 'click', '.frm_toggle_cf_opts', toggleCfOpts );
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
+			jQuery( document ).on( 'frmAfterSearch', '#actions-search-input', updateActionsSearchEmptyState );
 			initiateMultiselect();
 
 			jQuery( '.frm_submit_settings_btn' ).on( 'click', submitSettings );
