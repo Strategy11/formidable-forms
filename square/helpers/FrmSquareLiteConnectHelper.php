@@ -703,10 +703,10 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $subscription_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function cancel_subscription( $subscription_id ) {
-		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+		return false !== self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
 
 	public static function handle_disconnect() {
