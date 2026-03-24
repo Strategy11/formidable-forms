@@ -1783,7 +1783,7 @@ function frmFrontFormJS() {
 	/**
 	 * Calculates the total price.
 	 *
-	 * @param {Event} e The event object.
+	 * @param {Event|undefined} e The event object.
 	 * @return {void}
 	 */
 	function calcProductsTotal( e ) {
@@ -1792,25 +1792,16 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const formTotals = [];
-
 		if ( typeof __FRMCURR === 'undefined' ) {
 			return;
-		}
-
-		if ( undefined !== e && e.target !== undefined && ( 'keyup' === e.type || 'change' === e.type ) ) {
-			// an event has been fired
-			const el = e.target;
-			if ( el.hasAttribute( 'data-frmprice' ) && el instanceof HTMLInputElement && 'text' === el.type ) {
-				// user-defined product
-				el.setAttribute( 'data-frmprice', el.value.trim() );
-			}
 		}
 
 		const totalFields = jQuery( '[data-frmtotal]' );
 		if ( ! totalFields.length ) {
 			return;
 		}
+
+		const formTotals = [];
 
 		totalFields.each( function() {
 			let formatted;
