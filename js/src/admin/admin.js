@@ -7471,7 +7471,10 @@ window.frmAdminBuildJS = function() {
 
 		const actionId = getNewActionId();
 		const formId = thisFormId;
-		const existingCount = document.querySelectorAll( `.frm_single_${ type }_settings` ).length;
+		const existingTitles = Array.from(
+			document.querySelectorAll( `.frm_single_${ type }_settings .widget-title h4 span` ),
+			el => el.textContent.trim()
+		);
 
 		const placeholderSetting = document.createElement( 'div' );
 		placeholderSetting.classList.add( `frm_single_${ type }_settings` );
@@ -7488,7 +7491,7 @@ window.frmAdminBuildJS = function() {
 				list_id: actionId,
 				form_id: formId,
 				nonce: frmGlobal.nonce,
-				existing_count: existingCount
+				existing_titles: existingTitles
 			},
 			success: handleAddFormActionSuccess
 		} );
