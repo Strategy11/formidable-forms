@@ -12,6 +12,10 @@
 		color: var(--grey-600);
 		margin: var(--gap-md) 0;
 	}
+
+	.frm-border-icon .frmsvg {
+		color: var(--primary-700);
+	}
 }
 
 // Search
@@ -37,13 +41,7 @@
 	.frm-card-item.frm-card-item--outlined {
 		padding-left: var(--gap-sm);
 		padding-right: var(--gap-sm);
-		transition:
-			box-shadow 200ms ease-in-out,
-			background-color 200ms ease-out;
-
-		.frmsvg {
-			color: var(--primary-700);
-		}
+		transition: box-shadow 200ms ease-in-out, background-color 200ms ease-out;
 
 		&:hover {
 			background-color: var(--grey-25);
