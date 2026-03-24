@@ -589,10 +589,11 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $receipt_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function refund_payment( $receipt_id ) {
-		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		$data = self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		return is_object( $data );
 	}
 
 	/**
@@ -702,10 +703,10 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $subscription_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function cancel_subscription( $subscription_id ) {
-		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+		return false !== self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
 
 	public static function handle_disconnect() {
