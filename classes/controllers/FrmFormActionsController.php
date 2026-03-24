@@ -464,12 +464,12 @@ class FrmFormActionsController {
 		$action_control = self::get_form_actions( $action_type );
 		$action_control->_set( $action_key );
 
-		$form_id        = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
-		$form_action    = $action_control->prepare_new( $form_id );
-		$existing_count = FrmAppHelper::get_post_param( 'existing_count', 0, 'absint' );
+		$form_id         = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
+		$form_action     = $action_control->prepare_new( $form_id );
+		$existing_titles = (array) FrmAppHelper::get_post_param( 'existing_titles', array(), 'sanitize_text_field' );
 
-		if ( $existing_count > 0 ) {
-			$form_action->post_title .= ' (' . ( $existing_count + 1 ) . ')';
+		if ( $existing_titles ) {
+			$form_action->post_title = self::get_unique_action_title( $form_action->post_title, $existing_titles );
 		}
 
 		$use_logging = self::should_show_log_message( $action_type );
@@ -478,6 +478,27 @@ class FrmFormActionsController {
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 		wp_die();
+	}
+
+	/**
+	 * Returns the first available title not in $existing_titles, appending " (2)", " (3)", etc. if needed.
+	 *
+	 * @since x.x
+	 *
+	 * @param string   $base_title      Default action title from the action type.
+	 * @param string[] $existing_titles Titles currently visible in the form editor.
+	 *
+	 * @return string
+	 */
+	private static function get_unique_action_title( $base_title, array $existing_titles ) {
+		$taken = array_flip( $existing_titles );
+		$title = $base_title;
+
+		for ( $n = 2; isset( $taken[ $title ] ); $n++ ) {
+			$title = $base_title . ' (' . $n . ')';
+		}
+
+		return $title;
 	}
 
 	public static function fill_action() {
