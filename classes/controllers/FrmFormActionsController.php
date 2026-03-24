@@ -307,16 +307,26 @@ class FrmFormActionsController {
 			}
 		}//end if
 
-		// HTML to include on the icon.
-		$icon_atts = array();
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
+	}
 
-		if ( $action_control->action_options['color'] !== 'var(--primary-700)' ) {
-			$icon_atts = array(
+	/**
+	 * Get the HTML attributes for the action icon.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $action_control
+	 *
+	 * @return array
+	 */
+	public static function get_action_icon_atts( $action_control ) {
+		if ( 'var(--primary-700)' !== $action_control->action_options['color'] ) {
+			return array(
 				'style' => '--primary-700:' . $action_control->action_options['color'],
 			);
 		}
 
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
+		return array();
 	}
 
 	/**
