@@ -16,7 +16,7 @@ $single_action_attrs = array_merge(
 <li class="frm-card-item frm-card-item--outlined frm-action<?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>">
 	<div class="frm-h-stack-xs frm-w-full frm-mb-2xs">
 		<span class="frm-border-icon">
-			<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], $icon_atts ); ?>
+			<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?>
 		</span>
 
 		<div class="frm-flex-col">

@@ -23,7 +23,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	<div class="widget-top frm-h-stack-xs">
 		<div class="widget-title frm-flex-full">
 			<h4 class="frm-h-stack-xs">
-				<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'] ); ?>
+				<span class="frm-border-icon frm-border-icon--small"><?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?></span>
 				<span><?php echo esc_html( $form_action->post_title ); ?></span>
 			</h4>
 		</div>
