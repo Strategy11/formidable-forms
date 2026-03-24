@@ -26,6 +26,8 @@ class FrmPayPalLiteHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		add_action( 'frm_add_form_option_section', 'FrmPayPalLiteActionsController::actions_js' );
+
 		// Use 99 so we overwrite the PayPal add-on settings.
 		// These are called explicitly below the Lite PayPal settings.
 		add_filter( 'frm_add_settings_section', 'FrmPayPalLiteSettingsController::add_settings_section', 99 );

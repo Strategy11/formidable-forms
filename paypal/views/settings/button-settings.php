@@ -19,7 +19,8 @@ $button_color         = $form_action->post_content['button_color'] ?? 'default';
 $button_label         = $form_action->post_content['button_label'] ?? 'paypal';
 $button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
 ?>
-<div class="show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
+<?php $layout_value = $form_action->post_content['layout'] ?? 'card_and_checkout'; ?>
+<div class="show_paypal frm_paypal_button_settings<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?><?php echo 'card_only' === $layout_value ? ' frm_hidden' : ''; ?>">
 	<div class="frm_grid_container">
 		<h3><?php esc_html_e( 'PayPal Button Settings', 'formidable' ); ?></h3>
 
