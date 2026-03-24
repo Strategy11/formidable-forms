@@ -385,6 +385,10 @@ class FrmFormActionsController {
 
 		self::maybe_show_limit_warning( $form->id, $form_actions );
 
+		echo '<p class="frm-mb-lg frm-no-actions-message' . ( $form_actions ? ' frm_hidden' : '' ) . '"> '
+		. esc_html__( 'No actions have been added yet. Select an action above to get started.', 'formidable' )
+		. '</p>';
+
 		foreach ( $form_actions as $action ) {
 			if ( ! isset( $action_map[ $action->post_excerpt ] ) ) {
 				// Don't try and show settings if action no longer exists
