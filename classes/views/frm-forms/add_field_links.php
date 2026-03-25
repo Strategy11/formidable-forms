@@ -79,12 +79,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 							FrmField::remove_moved_field_types_from_pro( $pro_fields );
 
 							foreach ( $pro_fields as $field_key => $field_type ) {
-								if ( isset( $field_type['section'] ) ) {
-									if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
-										$field_sections[ $field_type['section'] ] = array();
-									}
-									$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
+								if ( ! isset( $field_type['section'] ) ) {
+									continue;
 								}
+
+								if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
+									$field_sections[ $field_type['section'] ] = array();
+								}
+								$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
 							}
 
 							$section_labels = FrmField::field_section_labels();
