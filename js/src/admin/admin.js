@@ -2532,7 +2532,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function copyOption( originalSetting, copySettings, originalFieldId, newFieldId ) {
-		const remainingKeyDetails = originalSetting.name.substr( 23 + ( `${ originalFieldId }` ).length );
+		const remainingKeyDetails = originalSetting.name.substr( 23 + `${ originalFieldId }`.length );
 		const copyKey = `field_options[options_${ newFieldId }]${ remainingKeyDetails }`;
 		const copySetting = copySettings.querySelector( `input[name="${ copyKey }"]` );
 		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
@@ -2813,11 +2813,11 @@ window.frmAdminBuildJS = function() {
 		if ( addFocus ) {
 			const bounding = field.getBoundingClientRect();
 			const container = document.getElementById( 'post-body-content' );
-			const inView = ( bounding.top >= 0 &&
+			const inView = bounding.top >= 0 &&
 					bounding.left >= 0 &&
 					bounding.right <= ( window.innerWidth || document.documentElement.clientWidth ) &&
 					bounding.bottom <= ( window.innerHeight || document.documentElement.clientHeight )
-			);
+			;
 
 			if ( ! inView ) {
 				container.scroll( {
@@ -3130,7 +3130,7 @@ window.frmAdminBuildJS = function() {
 		list.innerHTML = '';
 
 		for ( let i = 0; i < fields.length; i++ ) {
-			if ( ( exclude?.includes( fields[ i ].fieldType ) ) ||
+			if ( exclude?.includes( fields[ i ].fieldType ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
@@ -5593,7 +5593,7 @@ window.frmAdminBuildJS = function() {
 				} else {
 					containerClass.remove( 'frm-first-page' );
 				}
-				pages[ i ].textContent = ( i + 1 );
+				pages[ i ].textContent = i + 1;
 			}
 		} else {
 			document.getElementById( 'frm-fake-page' ).style.display = 'none';
@@ -6091,10 +6091,10 @@ window.frmAdminBuildJS = function() {
 			const container = jQuery( `#field_${ fieldId }_inner_container > .frm_form_fields` );
 			const hasImageOptions = imagesAsOptions( fieldId );
 			const imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '';
-			const imageOptionClass = hasImageOptions ? ( `frm_image_option frm_image_${ imageSize } ` ) : '';
+			const imageOptionClass = hasImageOptions ? `frm_image_option frm_image_${ imageSize } ` : '';
 			const isProduct = isProductField( fieldId );
 
-			const type = ( 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' ) );
+			const type = 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' );
 			for ( let i = 0; i < opts.length; i++ ) {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
@@ -6249,7 +6249,7 @@ window.frmAdminBuildJS = function() {
 
 		removeDropdownOpts( field );
 		const opts = getMultipleOpts( sourceID, field.id.includes( 'frm_field_logic_opt' ) );
-		let hasPlaceholder = ( placeholder !== undefined );
+		let hasPlaceholder = placeholder !== undefined;
 
 		for ( let i = 0; i < opts.length; i++ ) {
 			let { label } = opts[ i ];
@@ -6539,8 +6539,8 @@ window.frmAdminBuildJS = function() {
 			const optionName = `field_options[hide_opt_${ fieldID }][]`;
 			const optionID = `frm_field_logic_opt_${ fieldID }`;
 			let input = false;
-			let showSelect = ( valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio' );
-			const showText = ( valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number' );
+			let showSelect = valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio';
+			const showText = valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number';
 
 			if ( showSelect ) {
 				isTaxonomy = document.getElementById( `frm_has_hidden_options_${ val }` );
@@ -6834,7 +6834,7 @@ window.frmAdminBuildJS = function() {
 	function showInlineModal( icon, input, event ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) );
 		const container = jQuery( icon ).closest( 'p,ul' );
-		const inputTrigger = ( input !== undefined );
+		const inputTrigger = input !== undefined;
 
 		if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
@@ -9469,7 +9469,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		return ( `${ text }s` ).includes( searchText );
+		return `${ text }s`.includes( searchText );
 	}
 
 	/**
