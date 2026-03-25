@@ -68,7 +68,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 		$taxonomies = get_object_taxonomies( $post->post_type );
 
-		if ( ! empty( $taxonomies ) ) {
+		if ( $taxonomies ) {
 			$terms = wp_get_object_terms( $post->ID, $taxonomies );
 
 			foreach ( (array) $terms as $term ) {

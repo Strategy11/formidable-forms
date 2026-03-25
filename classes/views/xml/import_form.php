@@ -189,10 +189,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<?php
 									$style = $form->options['custom_style'] ?? 1;
 
-									if ( empty( $style ) ) {
-										echo '0';
-									} else {
+									if ( $style ) {
 										echo '1';
+									} else {
+										echo '0';
 									}
 									?>
 								</td>

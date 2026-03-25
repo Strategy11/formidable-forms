@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php
 					echo esc_attr( $disabled );
 
-					if ( ! $selected && empty( $disabled ) ) {
+					if ( ! $selected && ! $disabled ) {
 						echo ' checked="checked"';
 						$selected = $info['form'];
 					}
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php FrmAppHelper::kses_echo( $info['img'], array( 'svg', 'rect', 'path' ) ); ?>
 						<span class="frm_text_label_for_image">
 							<?php
-							if ( ! empty( $disabled ) ) {
+							if ( $disabled ) {
 								FrmAppHelper::icon_by_class(
 									'frmfont frm_step_complete_icon',
 									array(
