@@ -6,10 +6,9 @@
 	font-size: var(--text-sm);
 	width: 225px;
 	background-color: #fff;
-	border-radius: 8px;
-	border: 1px solid #F2F4F7;
-	box-shadow: 0 1.88px 4px -1px rgba(16, 24, 40, 0.03);
-	padding: 4px;
+	border: 1px solid var(--grey-100);
+	border-radius: var(--small-radius);
+	box-shadow: var(--box-shadow-lg);
 
 	// Default positioning (below button)
 	position: absolute;
@@ -35,12 +34,21 @@
 	}
 
 	> div {
-		border-bottom: 1px solid var(--grey-200);
-		padding: 8px 10px;
+		padding: 0 10px;
 	}
 
-	> div:last-child {
-		border-bottom: 0;
+	input[type="number"] {
+		height: var(--h-sm);
+		padding-top: 0;
+		padding-bottom: 0;
+		min-height: auto;
+	}
+
+	hr {
+		height: 0;
+		margin: var(--gap-xs) 0;
+		overflow: hidden;
+		border-top: 1px solid var(--grey-200);
 	}
 }
 
@@ -69,6 +77,7 @@
 	&__btn {
 		display: flex;
 		justify-content: space-between;
+		padding-top: 10px;
 		padding-bottom: 10px;
 		font-weight: 600;
 		color: var(--grey-900);
@@ -89,6 +98,7 @@
 }
 
 .frm-forms-list-column-checkboxes {
+	padding-left: var(--gap-2xs);
 
 	label {
 		display: block;

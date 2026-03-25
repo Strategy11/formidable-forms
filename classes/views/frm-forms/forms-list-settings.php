@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-forms-list-settings" class="frm_hidden">
+<div id="frm-forms-list-settings" class="frm_hidden frm-p-2xs">
 	<div class="frm-collapsible-box">
 		<a href="#" class="frm-collapsible-box__btn">
 			<?php
@@ -64,37 +64,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div>
-		<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm">
-			<label for="frm-forms-list-show-desc"><?php esc_html_e( 'Form description', 'formidable' ); ?></label>
-			<?php
-			FrmHtmlHelper::toggle(
-				'frm-forms-list-show-desc',
-				'frm_forms_show_desc',
-				array(
-					'echo'       => true,
-					'checked'    => intval( get_user_option( 'frm_forms_show_desc' ) ) === 1,
-					'input_html' => array(
-						'data-wp-screen-option-id' => 'frm-forms-show-desc',
-					),
-				)
-			);
-			?>
-		</div>
+	<hr />
 
-		<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm">
-			<label for="frm-forms-list-per-page"><?php esc_html_e( 'Items per page', 'formidable' ); ?></label>
-			<input
-				type="number"
-				id="frm-forms-list-per-page"
-				value="<?php echo intval( $per_page ); ?>"
-				min="1"
-				data-wp-screen-option-id="formidable_page_formidable_per_page"
-			/>
-		</div>
+	<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm frm-pt-2xs">
+		<label for="frm-forms-list-show-desc"><?php esc_html_e( 'Form description', 'formidable' ); ?></label>
+		<?php
+		FrmHtmlHelper::toggle(
+			'frm-forms-list-show-desc',
+			'frm_forms_show_desc',
+			array(
+				'echo'       => true,
+				'checked'    => intval( get_user_option( 'frm_forms_show_desc' ) ) === 1,
+				'input_html' => array(
+					'data-wp-screen-option-id' => 'frm-forms-show-desc',
+				),
+			)
+		);
+		?>
+	</div>
 
-		<div style="text-align: right;">
-			<button type="button" class="frm-button-primary button-primary" id="frm-save-forms-list-settings-btn"><?php esc_html_e( 'Apply', 'formidable' ); ?></button>
-		</div>
+	<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm">
+		<label for="frm-forms-list-per-page"><?php esc_html_e( 'Items per page', 'formidable' ); ?></label>
+		<input
+			type="number"
+			id="frm-forms-list-per-page"
+			value="<?php echo intval( $per_page ); ?>"
+			min="1"
+			data-wp-screen-option-id="formidable_page_formidable_per_page"
+		/>
+	</div>
+
+	<hr />
+
+	<div style="text-align: right;" class="frm-pt-2xs frm-pb-xs">
+		<button type="button" class="frm-button-primary button-primary" id="frm-save-forms-list-settings-btn"><?php esc_html_e( 'Apply', 'formidable' ); ?></button>
 	</div>
 </div>
