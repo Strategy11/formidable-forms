@@ -92,12 +92,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected function get_name_layout() {
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
-
-		if ( ! $name_layout ) {
-			$name_layout = 'first_last';
-		}
-
-		return $name_layout;
+		return $name_layout ? $name_layout : 'first_last';
 	}
 
 	/**
@@ -226,13 +221,15 @@ class FrmFieldName extends FrmFieldCombo {
 		parent::process_args_for_field_output( $args );
 
 		// Show all subfields in form builder then use JS to show or hide them.
-		if ( $this->should_print_hidden_sub_fields() && count( $args['sub_fields'] ) !== count( $this->sub_fields ) ) {
-			$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
-			$args['sub_fields'] = $this->sub_fields;
+		if ( ! $this->should_print_hidden_sub_fields() || count( $args['sub_fields'] ) === count( $this->sub_fields ) ) {
+			return;
+		}
 
-			foreach ( $hidden_fields as $name => $hidden_field ) {
-				$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
-			}
+		$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
+		$args['sub_fields'] = $this->sub_fields;
+
+		foreach ( $hidden_fields as $name => $hidden_field ) {
+			$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
 		}
 	}
 
@@ -293,6 +290,7 @@ class FrmFieldName extends FrmFieldCombo {
 		if ( ! $show_warning ) {
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_warning_style">
 			<?php
@@ -302,6 +300,7 @@ class FrmFieldName extends FrmFieldCombo {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

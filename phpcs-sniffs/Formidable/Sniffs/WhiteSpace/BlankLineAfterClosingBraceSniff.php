@@ -97,8 +97,22 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 				return;
 			}
 		} elseif ( $tokens[ $stackPtr ]['code'] === T_STRING ) {
-			// For function calls, check if followed by an opening parenthesis.
-			if ( $tokens[ $nextToken ]['code'] !== T_OPEN_PARENTHESIS ) {
+			// For function or static method calls, ensure the syntax matches.
+			if ( $tokens[ $nextToken ]['code'] === T_OPEN_PARENTHESIS ) {
+				// Simple function call, nothing else to validate.
+			} elseif ( $tokens[ $nextToken ]['code'] === T_DOUBLE_COLON ) {
+				$methodPtr = $phpcsFile->findNext( T_WHITESPACE, $nextToken + 1, null, true );
+
+				if ( false === $methodPtr || $tokens[ $methodPtr ]['code'] !== T_STRING ) {
+					return;
+				}
+
+				$methodCallParen = $phpcsFile->findNext( T_WHITESPACE, $methodPtr + 1, null, true );
+
+				if ( false === $methodCallParen || $tokens[ $methodCallParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+					return;
+				}
+			} else {
 				return;
 			}
 		} elseif ( in_array( $tokens[ $stackPtr ]['code'], array( T_INCLUDE, T_INCLUDE_ONCE, T_REQUIRE, T_REQUIRE_ONCE ), true ) ) {
@@ -188,21 +202,24 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 		$functionStart = $tokens[ $functionPtr ]['scope_opener'];
 		$functionEnd   = $tokens[ $functionPtr ]['scope_closer'];
 
-		// Check if the function has any other blank lines.
-		// PHPCS splits whitespace into separate tokens, so look for consecutive newline tokens.
-		$hasOtherBlankLines = false;
-		$lastWasNewline     = false;
+		// Check if the function has any other blank lines by finding gaps of >1 line
+		// between consecutive non-whitespace tokens.
+		$hasOtherBlankLines   = false;
+		$previousCodeLine     = null;
 
 		for ( $i = $functionStart + 1; $i < $functionEnd; $i++ ) {
-			if ( $tokens[ $i ]['code'] === T_WHITESPACE && $tokens[ $i ]['content'] === "\n" ) {
-				if ( $lastWasNewline ) {
-					$hasOtherBlankLines = true;
-					break;
-				}
-				$lastWasNewline = true;
-			} else {
-				$lastWasNewline = false;
+			if ( $tokens[ $i ]['code'] === T_WHITESPACE ) {
+				continue;
 			}
+
+			$lineNumber = $tokens[ $i ]['line'];
+
+			if ( null !== $previousCodeLine && $lineNumber - $previousCodeLine > 1 ) {
+				$hasOtherBlankLines = true;
+				break;
+			}
+
+			$previousCodeLine = $lineNumber;
 		}
 
 		if ( ! $hasOtherBlankLines ) {

@@ -449,12 +449,7 @@ class FrmEntry {
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
 		$name = $values['item_name'] ?? $values['name'] ?? $default;
-
-		if ( is_array( $name ) ) {
-			$name = reset( $name );
-		}
-
-		return $name;
+		return is_array( $name ) ? reset( $name ) : $name;
 	}
 
 	/**
@@ -758,17 +753,16 @@ class FrmEntry {
 	 */
 	public static function getPageCount( $p_size, $where = '' ) {
 		$p_size = (int) $p_size;
-		$count  = 1;
 
 		if ( $p_size ) {
 			if ( ! is_numeric( $where ) ) {
 				$where = self::getRecordCount( $where );
 			}
 
-			$count = ceil( (int) $where / $p_size );
+			return ceil( (int) $where / $p_size );
 		}
 
-		return $count;
+		return 1;
 	}
 
 	/**
@@ -905,7 +899,7 @@ class FrmEntry {
 		$ip = FrmAppHelper::get_ip_address();
 
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
-			$ip = self::get_entry_value( $values, 'ip', $ip );
+			return self::get_entry_value( $values, 'ip', $ip );
 		}
 
 		return $ip;
@@ -1065,10 +1059,12 @@ class FrmEntry {
 		// It is used to check for duplicate entries.
 		$unique_id = sanitize_key( $values['unique_id'] );
 
-		if ( $unique_id ) {
-			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
-			self::flag_new_unique_key( $unique_id );
+		if ( ! $unique_id ) {
+			return;
 		}
+
+		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
+		self::flag_new_unique_key( $unique_id );
 	}
 
 	/**
@@ -1082,10 +1078,12 @@ class FrmEntry {
 	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {
 		global $frm_vars;
 
-		if ( array_key_exists( 'captcha_scores', $frm_vars ) && array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
-			$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
-			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
+		if ( ! array_key_exists( 'captcha_scores', $frm_vars ) || ! array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
+			return;
 		}
+
+		$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
+		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
 	}
 
 	/**

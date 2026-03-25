@@ -100,7 +100,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 
 		// Check if there's a boolean NOT before empty.
 		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
-		$isNegated = ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT );
+		$isNegated = false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT;
 
 		// Determine the suggested replacement.
 		if ( $isNegated ) {
@@ -203,7 +203,14 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 		}
 
 		// Check if in a boolean expression (with && or ||).
-		return $this->isInBooleanExpression( $phpcsFile, $stackPtr );
+		$booleanContext = $this->isInBooleanExpression( $phpcsFile, $stackPtr );
+
+		if ( false !== $booleanContext ) {
+			return $booleanContext;
+		}
+
+		// Check if used as a value expression (array value, assignment, return, argument).
+		return $this->isInValueExpression( $phpcsFile, $stackPtr );
 	}
 
 	/**
@@ -325,6 +332,60 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	}
 
 	/**
+	 * Check if the empty() call is used as a value expression.
+	 *
+	 * Only flags plain `empty( $var )` in value contexts (replaceable with
+	 * `! $var`). Skips `! empty( $var )` since that reads clearly as a truthy
+	 * check and is not redundant.
+	 *
+	 * Covers array values (=> empty()), assignments (= empty()),
+	 * return statements (return empty()), and function arguments.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the empty token.
+	 *
+	 * @return false|int The statement start position, or false if not in a value expression.
+	 */
+	private function isInValueExpression( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Skip the negated form (! empty) — it reads clearly and is not redundant.
+		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+
+		if ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT ) {
+			return false;
+		}
+
+		if ( false === $prevToken ) {
+			return false;
+		}
+
+		$prevCode = $tokens[ $prevToken ]['code'];
+
+		// Array value: 'key' => empty( $var ).
+		if ( $prevCode === T_DOUBLE_ARROW ) {
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		// Assignment: $var = empty( $var ).
+		if ( $prevCode === T_EQUAL ) {
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		// Return statement: return empty( $var ).
+		if ( $prevCode === T_RETURN ) {
+			return $prevToken;
+		}
+
+		// Function argument: func( empty( $var ) ) or func( ..., empty( $var ) ).
+		if ( $prevCode === T_OPEN_PARENTHESIS || $prevCode === T_COMMA ) {
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		return false;
+	}
+
+	/**
 	 * Find the start of the statement containing the given token.
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -423,11 +484,11 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 
 			$hasAnyAssignment = true;
 
-			// Check if the assignment is at the same scope level as the statement.
-			// This ensures the variable was assigned unconditionally before the statement.
+			// Check if the assignment executes before (or at the same level as) the statement.
+			// Assignments inside deeper nested scopes might not always run, so skip those.
 			$assignmentLevel = $tokens[ $i ]['level'];
 
-			if ( $assignmentLevel !== $statementLevel ) {
+			if ( $assignmentLevel > $statementLevel ) {
 				continue;
 			}
 
@@ -528,33 +589,6 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 		// Check for closing parenthesis (if, elseif, while, for, foreach, switch, catch).
 		if ( $code === T_CLOSE_PARENTHESIS && isset( $tokens[ $prevToken ]['parenthesis_owner'] ) ) {
 			return $tokens[ $prevToken ]['parenthesis_owner'];
-		}
-
-		return false;
-	}
-
-	/**
-	 * Find the if/elseif statement that contains the given token.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $stackPtr  The position of the current token.
-	 *
-	 * @return false|int The position of the if/elseif token, or false if not found.
-	 */
-	private function findContainingIf( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
-
-		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
-			$code = $tokens[ $i ]['code'];
-
-			if ( $code === T_IF || $code === T_ELSEIF ) {
-				return $i;
-			}
-
-			// Stop if we hit a function or class boundary.
-			if ( $code === T_FUNCTION || $code === T_CLOSURE || $code === T_CLASS ) {
-				return false;
-			}
 		}
 
 		return false;

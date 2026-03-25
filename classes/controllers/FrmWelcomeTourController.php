@@ -335,11 +335,13 @@ class FrmWelcomeTourController {
 
 		foreach ( $links as $key => $link ) {
 			$attrs = $button_attrs + array( 'data-tracking-value' => $key );
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="<?php echo esc_url( $link['url'] ); ?>" <?php FrmAppHelper::array_to_html_params( $attrs, true ); ?>>
 				<?php echo esc_html( $link['text'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 

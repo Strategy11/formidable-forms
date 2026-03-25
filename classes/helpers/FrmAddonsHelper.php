@@ -132,6 +132,7 @@ class FrmAddonsHelper {
 		if ( ! FrmAppHelper::pro_is_connected() ) {
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p class="frm-py-2xs">
 			<span class="frm-font-medium frm-text-grey-700"><?php esc_html_e( 'Missing add-ons?', 'formidable' ); ?></span>
@@ -140,6 +141,7 @@ class FrmAddonsHelper {
 			</a>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -288,16 +290,17 @@ class FrmAddonsHelper {
 	 * @return void
 	 */
 	public static function show_five_star_rating( $color = 'black' ) {
-		$icon = file_get_contents( FrmAppHelper::plugin_path() . '/images/star.svg' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span style="color: <?php echo esc_attr( $color ); ?>;">
 			<?php
 			for ( $i = 0; $i < 5; $i++ ) {
-				echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				readfile( FrmAppHelper::plugin_path() . '/images/star.svg' );
 			}
 			?>
 		</span>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -308,9 +311,11 @@ class FrmAddonsHelper {
 	 * @return void
 	 */
 	public static function guarantee_icon() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="" />
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

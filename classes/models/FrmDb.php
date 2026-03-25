@@ -6,47 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDb {
 
 	/**
-	 * The table name for Formidable Fields.
-	 *
-	 * @var string
-	 */
-	public $fields;
-
-	/**
-	 * The table name for Formidable Forms.
-	 *
-	 * @var string
-	 */
-	public $forms;
-
-	/**
-	 * The table name for Formidable Entries.
-	 *
-	 * @var string
-	 */
-	public $entries;
-
-	/**
-	 * The table name for Formidable Entry Metas.
-	 *
-	 * @var string
-	 */
-	public $entry_metas;
-
-	public function __construct() {
-		if ( ! defined( 'ABSPATH' ) ) {
-			die( 'You are not allowed to call this page directly.' );
-		}
-
-		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate' );
-		global $wpdb;
-		$this->fields      = $wpdb->prefix . 'frm_fields';
-		$this->forms       = $wpdb->prefix . 'frm_forms';
-		$this->entries     = $wpdb->prefix . 'frm_items';
-		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
-	}
-
-	/**
 	 * Change array into format $wpdb->prepare can use
 	 *
 	 * @param array  $args
@@ -93,7 +52,7 @@ class FrmDb {
 		}
 
 		foreach ( $args as $key => $value ) {
-			$where .= empty( $where ) ? $base_where : $condition;
+			$where .= $where ? $condition : $base_where;
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$array_inc_null = ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value );
 
@@ -122,10 +81,10 @@ class FrmDb {
 	}
 
 	/**
-	 * @param string       $key
-	 * @param array|string $value
-	 * @param string       $where
-	 * @param array        $values
+	 * @param string            $key
+	 * @param array|string|null $value
+	 * @param string            $where
+	 * @param array             $values
 	 *
 	 * @return void
 	 */
@@ -445,11 +404,13 @@ class FrmDb {
 		}
 
 		// Make sure LIMIT is the last argument
-		if ( isset( $args['order_by'] ) && isset( $args['limit'] ) ) {
-			$temp_limit = $args['limit'];
-			unset( $args['limit'] );
-			$args['limit'] = $temp_limit;
+		if ( ! isset( $args['order_by'] ) || ! isset( $args['limit'] ) ) {
+			return;
 		}
+
+		$temp_limit = $args['limit'];
+		unset( $args['limit'] );
+		$args['limit'] = $temp_limit;
 	}
 
 	/**
@@ -649,9 +610,9 @@ class FrmDb {
 		if ( ! $where ) {
 			$where = '';
 		} elseif ( is_array( $where ) ) {
-				global $wpdb;
-				self::get_where_clause_and_values( $where, $starts_with );
-				$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			global $wpdb;
+			self::get_where_clause_and_values( $where, $starts_with );
+			$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$where = $starts_with . $where;
 		}
@@ -771,10 +732,12 @@ class FrmDb {
 	 * @return void
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		if ( ! FrmAppHelper::prevent_caching() ) {
-			self::add_key_to_group_cache( $cache_key, $group );
-			wp_cache_set( $cache_key, $results, $group, $time );
+		if ( FrmAppHelper::prevent_caching() ) {
+			return;
 		}
+
+		self::add_key_to_group_cache( $cache_key, $group );
+		wp_cache_set( $cache_key, $results, $group, $time );
 	}
 
 	/**
@@ -805,7 +768,7 @@ class FrmDb {
 		$cached = wp_cache_get( 'cached_keys', $group );
 
 		if ( ! $cached || ! is_array( $cached ) ) {
-			$cached = array();
+			return array();
 		}
 
 		return $cached;
@@ -836,13 +799,15 @@ class FrmDb {
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );
 
-		if ( $cached_keys ) {
-			foreach ( $cached_keys as $key ) {
-				wp_cache_delete( $key, $group );
-			}
-
-			wp_cache_delete( 'cached_keys', $group );
+		if ( ! $cached_keys ) {
+			return;
 		}
+
+		foreach ( $cached_keys as $key ) {
+			wp_cache_delete( $key, $group );
+		}
+
+		wp_cache_delete( 'cached_keys', $group );
 	}
 
 	/**

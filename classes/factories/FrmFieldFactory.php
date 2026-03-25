@@ -26,7 +26,7 @@ class FrmFieldFactory {
 		}
 
 		if ( ! is_object( $selector ) ) {
-			$selector = new FrmFieldValueSelector( $field_id, $args );
+			return new FrmFieldValueSelector( $field_id, $args );
 		}
 
 		return $selector;

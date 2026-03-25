@@ -12,6 +12,7 @@ namespace Formidable\Sniffs\CodeAnalysis;
 
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Detects redundant parentheses around simple expressions in assignments.
@@ -34,6 +35,52 @@ class RedundantParenthesesSniff implements Sniff {
 	}
 
 	/**
+	 * Detect parentheses that only wrap a simple comparison within a logical expression.
+	 *
+	 * Example: ( $start_year <= $year ) where the surrounding tokens are ||/&& or parentheses.
+	 *
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $openParen  Opening parenthesis token.
+	 * @param int  $closeParen Closing parenthesis token.
+	 * @param int  $prevToken  Token before the opening parenthesis.
+	 * @param int  $afterClose Token after the closing parenthesis.
+	 *
+	 * @return bool
+	 */
+	private function isRedundantComparisonInLogicalExpression( File $phpcsFile, $openParen, $closeParen, $prevToken, $afterClose ) {
+		$tokens = $phpcsFile->getTokens();
+
+		$validPreceding = array(
+			T_BOOLEAN_AND,
+			T_BOOLEAN_OR,
+			T_LOGICAL_AND,
+			T_LOGICAL_OR,
+			T_OPEN_PARENTHESIS,
+		);
+
+		if ( ! in_array( $tokens[ $prevToken ]['code'], $validPreceding, true ) ) {
+			return false;
+		}
+
+		$validFollowing = array(
+			T_BOOLEAN_AND,
+			T_BOOLEAN_OR,
+			T_LOGICAL_AND,
+			T_LOGICAL_OR,
+			T_CLOSE_PARENTHESIS,
+			T_SEMICOLON,
+			T_COMMA,
+			T_INLINE_THEN,
+		);
+
+		if ( ! in_array( $tokens[ $afterClose ]['code'], $validFollowing, true ) ) {
+			return false;
+		}
+
+		return $this->isSimpleComparisonExpression( $phpcsFile, $openParen, $closeParen );
+	}
+
+	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -52,14 +99,14 @@ class RedundantParenthesesSniff implements Sniff {
 		$closeParen = $tokens[ $stackPtr ]['parenthesis_closer'];
 
 		// Check what's before the opening parenthesis.
-		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+		$prevToken = $phpcsFile->findPrevious( Tokens::$emptyTokens, $stackPtr - 1, null, true );
 
 		if ( false === $prevToken ) {
 			return;
 		}
 
 		// Check what's after the closing parenthesis.
-		$afterClose = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, null, true );
+		$afterClose = $phpcsFile->findNext( Tokens::$emptyTokens, $closeParen + 1, null, true );
 
 		if ( false === $afterClose ) {
 			return;
@@ -68,6 +115,18 @@ class RedundantParenthesesSniff implements Sniff {
 		// Check for redundant parentheses around negated function calls in conditions.
 		// Pattern: ( ! empty( $x ) ) or ( ! isset( $x ) ) within a larger condition.
 		if ( $this->isRedundantNegatedFunctionCall( $phpcsFile, $stackPtr, $closeParen, $prevToken, $afterClose ) ) {
+			$this->reportAndFix( $phpcsFile, $stackPtr, $closeParen );
+			return;
+		}
+
+		// Check for redundant parentheses wrapping a standalone function call inside a logical expression.
+		if ( $this->isRedundantFunctionCallInLogicalExpression( $phpcsFile, $stackPtr, $closeParen, $prevToken, $afterClose ) ) {
+			$this->reportAndFix( $phpcsFile, $stackPtr, $closeParen );
+			return;
+		}
+
+		// Check for redundant parentheses around a simple comparison inside a logical expression.
+		if ( $this->isRedundantComparisonInLogicalExpression( $phpcsFile, $stackPtr, $closeParen, $prevToken, $afterClose ) ) {
 			$this->reportAndFix( $phpcsFile, $stackPtr, $closeParen );
 			return;
 		}
@@ -128,21 +187,21 @@ class RedundantParenthesesSniff implements Sniff {
 		$tokens = $phpcsFile->getTokens();
 
 		// Must be preceded by a logical operator (&&, ||) or another open parenthesis.
-		$validPreceding = array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_OPEN_PARENTHESIS );
+		$validPreceding = array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR, T_OPEN_PARENTHESIS );
 
 		if ( ! in_array( $tokens[ $prevToken ]['code'], $validPreceding, true ) ) {
 			return false;
 		}
 
 		// Must be followed by a logical operator (&&, ||) or a close parenthesis.
-		$validFollowing = array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_CLOSE_PARENTHESIS );
+		$validFollowing = array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR, T_CLOSE_PARENTHESIS );
 
 		if ( ! in_array( $tokens[ $afterClose ]['code'], $validFollowing, true ) ) {
 			return false;
 		}
 
 		// Check the content inside: should be ! followed by a function call with no other operators.
-		$firstInside = $phpcsFile->findNext( T_WHITESPACE, $openParen + 1, $closeParen, true );
+		$firstInside = $phpcsFile->findNext( Tokens::$emptyTokens, $openParen + 1, $closeParen, true );
 
 		if ( false === $firstInside ) {
 			return false;
@@ -159,7 +218,7 @@ class RedundantParenthesesSniff implements Sniff {
 		}
 
 		// Next should be a function call (empty, isset, or a T_STRING function).
-		$funcToken = $phpcsFile->findNext( T_WHITESPACE, $firstInside + 1, $closeParen, true );
+		$funcToken = $phpcsFile->findNext( Tokens::$emptyTokens, $firstInside + 1, $closeParen, true );
 
 		if ( false === $funcToken ) {
 			return false;
@@ -172,7 +231,7 @@ class RedundantParenthesesSniff implements Sniff {
 		}
 
 		// Find the function's opening parenthesis.
-		$funcOpenParen = $phpcsFile->findNext( T_WHITESPACE, $funcToken + 1, $closeParen, true );
+		$funcOpenParen = $phpcsFile->findNext( Tokens::$emptyTokens, $funcToken + 1, $closeParen, true );
 
 		if ( false === $funcOpenParen || $tokens[ $funcOpenParen ]['code'] !== T_OPEN_PARENTHESIS ) {
 			return false;
@@ -185,7 +244,7 @@ class RedundantParenthesesSniff implements Sniff {
 		$funcCloseParen = $tokens[ $funcOpenParen ]['parenthesis_closer'];
 
 		// The function's closing paren should be followed only by whitespace until our outer closing paren.
-		$afterFuncClose = $phpcsFile->findNext( T_WHITESPACE, $funcCloseParen + 1, $closeParen, true );
+		$afterFuncClose = $phpcsFile->findNext( Tokens::$emptyTokens, $funcCloseParen + 1, $closeParen, true );
 
 		// If there's anything else between the function close and our close, it's not a simple pattern.
 		if ( false !== $afterFuncClose ) {
@@ -193,6 +252,52 @@ class RedundantParenthesesSniff implements Sniff {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check for redundant parentheses around a simple function (or static/object) call.
+	 *
+	 * Example: ( empty( $var ) ) when surrounded by logical operators.
+	 *
+	 * @param File $phpcsFile  File reference.
+	 * @param int  $openParen  Position of opening parenthesis.
+	 * @param int  $closeParen Closing parenthesis.
+	 * @param int  $prevToken  Previous meaningful token.
+	 * @param int  $afterClose Next meaningful token.
+	 *
+	 * @return bool
+	 */
+	private function isRedundantFunctionCallInLogicalExpression( File $phpcsFile, $openParen, $closeParen, $prevToken, $afterClose ) {
+		$tokens = $phpcsFile->getTokens();
+
+		$validPreceding = array(
+			T_BOOLEAN_AND,
+			T_BOOLEAN_OR,
+			T_LOGICAL_AND,
+			T_LOGICAL_OR,
+			T_OPEN_PARENTHESIS,
+		);
+
+		if ( ! in_array( $tokens[ $prevToken ]['code'], $validPreceding, true ) ) {
+			return false;
+		}
+
+		$validFollowing = array(
+			T_BOOLEAN_AND,
+			T_BOOLEAN_OR,
+			T_LOGICAL_AND,
+			T_LOGICAL_OR,
+			T_CLOSE_PARENTHESIS,
+			T_SEMICOLON,
+			T_COMMA,
+			T_INLINE_THEN,
+		);
+
+		if ( ! in_array( $tokens[ $afterClose ]['code'], $validFollowing, true ) ) {
+			return false;
+		}
+
+		return $this->isSimpleFunctionCall( $phpcsFile, $openParen, $closeParen );
 	}
 
 	/**
@@ -213,6 +318,25 @@ class RedundantParenthesesSniff implements Sniff {
 		$comparisonCount  = 0;
 		$logicalCount     = 0;
 		$nestedParenDepth = 0;
+		$arithmeticCount  = 0;
+		$hasTernary       = false;
+
+		$comparisonTokens = array(
+			T_IS_EQUAL,
+			T_IS_NOT_EQUAL,
+			T_IS_IDENTICAL,
+			T_IS_NOT_IDENTICAL,
+			T_IS_SMALLER_OR_EQUAL,
+			T_IS_GREATER_OR_EQUAL,
+		);
+
+		$arithmeticTokens = array(
+			T_PLUS,
+			T_MINUS,
+			T_MULTIPLY,
+			T_DIVIDE,
+			T_MODULUS,
+		);
 
 		for ( $i = $openParen + 1; $i < $closeParen; $i++ ) {
 			$code = $tokens[ $i ]['code'];
@@ -233,7 +357,7 @@ class RedundantParenthesesSniff implements Sniff {
 			}
 
 			// Count comparison operators.
-			if ( in_array( $code, array( T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL ), true ) ) {
+			if ( in_array( $code, $comparisonTokens, true ) ) {
 				++$comparisonCount;
 			}
 
@@ -241,10 +365,90 @@ class RedundantParenthesesSniff implements Sniff {
 			if ( in_array( $code, array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR ), true ) ) {
 				++$logicalCount;
 			}
+
+			// Arithmetic on either side means the grouping might be required.
+			if ( in_array( $code, $arithmeticTokens, true ) ) {
+				++$arithmeticCount;
+			}
+
+			// Presence of a ternary operator means parentheses are required.
+			if ( T_INLINE_THEN === $code || T_INLINE_ELSE === $code ) {
+				$hasTernary = true;
+			}
 		}
 
-		// Simple comparison: exactly one comparison operator and no logical operators.
-		return 1 === $comparisonCount && 0 === $logicalCount;
+		// Simple comparison: exactly one comparison operator and no logical operators/arithmetic/ternary.
+		return 1 === $comparisonCount && 0 === $logicalCount && 0 === $arithmeticCount && false === $hasTernary;
+	}
+
+	/**
+	 * Determine if the contents are exactly a function (or method/static) call.
+	 *
+	 * @param File $phpcsFile File reference.
+	 * @param int  $openParen Opening parenthesis token.
+	 * @param int  $closeParen Closing parenthesis token.
+	 *
+	 * @return bool
+	 */
+	private function isSimpleFunctionCall( File $phpcsFile, $openParen, $closeParen ) {
+		$tokens = $phpcsFile->getTokens();
+
+		$first = $phpcsFile->findNext( Tokens::$emptyTokens, $openParen + 1, $closeParen, true );
+
+		if ( false === $first ) {
+			return false;
+		}
+
+		$allowedCallableTokens = array(
+			T_STRING,
+			T_NS_SEPARATOR,
+			T_DOUBLE_COLON,
+			T_OBJECT_OPERATOR,
+			T_VARIABLE,
+			T_SELF,
+			T_STATIC,
+			T_PARENT,
+			T_EMPTY,
+			T_ISSET,
+		);
+
+		$callOpenParen = null;
+
+		for ( $i = $first; $i < $closeParen; $i++ ) {
+			$code = $tokens[ $i ]['code'];
+
+			if ( isset( Tokens::$emptyTokens[ $code ] ) ) {
+				continue;
+			}
+
+			if ( T_OPEN_PARENTHESIS === $code ) {
+				$callOpenParen = $i;
+				break;
+			}
+
+			if ( ! in_array( $code, $allowedCallableTokens, true ) ) {
+				return false;
+			}
+		}
+
+		if ( null === $callOpenParen ) {
+			return false;
+		}
+
+		if ( ! isset( $tokens[ $callOpenParen ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$callCloseParen = $tokens[ $callOpenParen ]['parenthesis_closer'];
+
+		if ( $callCloseParen >= $closeParen ) {
+			return false;
+		}
+
+		// Ensure nothing but whitespace remains between the function close and our close.
+		$afterCall = $phpcsFile->findNext( Tokens::$emptyTokens, $callCloseParen + 1, $closeParen, true );
+
+		return false === $afterCall;
 	}
 
 	/**

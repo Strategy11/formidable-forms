@@ -248,7 +248,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 </div>
 
-<div id="frm_single_style_custom_css_editor" class="frm12 frm_form_field frm-style-component <?php echo empty( $style->post_content['enable_style_custom_css'] ) ? 'frm_hidden' : ''; ?>">
+<div id="frm_single_style_custom_css_editor" class="frm12 frm_form_field frm-style-component <?php echo ! empty( $style->post_content['enable_style_custom_css'] ) ? '' : 'frm_hidden'; ?>">
 	<?php
 	$css_scope_helper = new FrmCssScopeHelper();
 	$custom_css       = $style->post_content['single_style_custom_css'] ?? '';

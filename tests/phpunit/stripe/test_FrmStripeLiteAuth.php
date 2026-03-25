@@ -9,7 +9,7 @@ class test_FrmStrpLiteAuth extends FrmUnitTest {
 	 * @covers FrmStrpLiteAuth::get_statement_descriptor
 	 */
 	public function test_get_statement_descriptor() {
-		$this->assertEquals( get_bloginfo( 'name' ), $this->get_statement_descriptor() );
+		$this->assertSame( get_bloginfo( 'name' ), $this->get_statement_descriptor() );
 
 		$callback = function () {
 			return 'My Company';
@@ -17,7 +17,7 @@ class test_FrmStrpLiteAuth extends FrmUnitTest {
 
 		add_filter( 'frm_stripe_statement_descriptor', $callback );
 
-		$this->assertEquals( 'My Company', $this->get_statement_descriptor() );
+		$this->assertSame( 'My Company', $this->get_statement_descriptor() );
 
 		remove_filter( 'frm_stripe_statement_descriptor', $callback );
 	}
@@ -30,7 +30,7 @@ class test_FrmStrpLiteAuth extends FrmUnitTest {
 	 * @covers FrmStrpLiteAuth::maybe_add_statement_descriptor
 	 */
 	public function test_maybe_add_statement_descriptor() {
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'statement_descriptor' => get_bloginfo( 'name' ),
 			),

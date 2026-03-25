@@ -29,7 +29,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 		$meta = FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id );
 
-		$this->assertEquals( 'Updated value by field ID', $meta );
+		$this->assertSame( 'Updated value by field ID', $meta );
 
 		// Test field key.
 		$field_key = FrmField::get_key_by_id( $field_id );
@@ -40,7 +40,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 		$meta = FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id );
 
-		$this->assertEquals( 'Updated value by field key', $meta );
+		$this->assertSame( 'Updated value by field key', $meta );
 
 		// Test with an empty value. It should be null because the row should be deleted from the db.
 		$values = array(
@@ -59,18 +59,18 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	public function test_should_join_fields_table() {
 		$where = 'fi.form_id=123';
 		$this->assertFalse( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
-		$this->assertEquals( 'e.form_id=123', $where );
+		$this->assertSame( 'e.form_id=123', $where );
 
 		$where = 'fi.id=123 AND fi.form_id=456';
 		$this->assertTrue( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
-		$this->assertEquals( 'fi.id=123 AND fi.form_id=456', $where );
+		$this->assertSame( 'fi.id=123 AND fi.form_id=456', $where );
 
 		$where = array(
 			'fi.id'      => 123,
 			'fi.form_id' => 456,
 		);
 		$this->assertTrue( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'fi.id'      => 123,
 				'fi.form_id' => 456,
@@ -82,6 +82,6 @@ class test_FrmEntryMeta extends FrmUnitTest {
 			'fi.form_id' => 456,
 		);
 		$this->assertFalse( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
-		$this->assertEquals( array( 'e.form_id' => 456 ), $where );
+		$this->assertSame( array( 'e.form_id' => 456 ), $where );
 	}
 }

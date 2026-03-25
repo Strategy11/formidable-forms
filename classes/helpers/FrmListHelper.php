@@ -226,8 +226,15 @@ class FrmListHelper {
 		}
 
 		// Redirect if page number is invalid and headers are not already sent.
-		if ( ! headers_sent() && ! wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
-			wp_redirect( add_query_arg( 'paged', $args['total_pages'] ) );
+		if ( ! wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
+			$url = add_query_arg( 'paged', $args['total_pages'] );
+
+			if ( headers_sent() ) {
+				FrmAppHelper::js_redirect( $url, true );
+				exit;
+			}
+
+			wp_safe_redirect( $url );
 			exit;
 		}
 
@@ -298,10 +305,12 @@ class FrmListHelper {
 	 * @return void
 	 */
 	private function hidden_search_inputs( $param_name ) {
-		if ( ! empty( $_REQUEST[ $param_name ] ) ) {
-			$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
-			echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
+		if ( empty( $_REQUEST[ $param_name ] ) ) {
+			return;
 		}
+
+		$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
+		echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
 	}
 
 	/**
@@ -393,7 +402,7 @@ class FrmListHelper {
 			$two = '2';
 		}//end if
 
-		if ( empty( $this->_actions ) ) {
+		if ( ! $this->_actions ) {
 			return;
 		}
 
@@ -462,11 +471,7 @@ class FrmListHelper {
 
 		$action = $this->get_bulk_action( 'action' );
 
-		if ( $action === false ) {
-			$action = $this->get_bulk_action( 'action2' );
-		}
-
-		return $action;
+		return $action === false ? $this->get_bulk_action( 'action2' ) : $action;
 	}
 
 	/**
@@ -485,7 +490,7 @@ class FrmListHelper {
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $action_param && - 1 != $action_param ) {
-			$action = $action_param;
+			return $action_param;
 		}
 
 		return $action;
@@ -530,6 +535,7 @@ class FrmListHelper {
 	 * @param string $current_mode
 	 */
 	protected function view_switcher( $current_mode ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="hidden" name="mode" value="<?php echo esc_attr( $current_mode ); ?>"/>
 		<div class="view-switch">
@@ -537,8 +543,7 @@ class FrmListHelper {
 			foreach ( $this->modes as $mode => $title ) {
 				$classes = array( 'view-' . $mode );
 
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $current_mode == $mode ) {
+				if ( $current_mode === $mode ) {
 					$classes[] = 'current';
 				}
 
@@ -552,6 +557,7 @@ class FrmListHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -612,7 +618,7 @@ class FrmListHelper {
 	 * @param string $which
 	 */
 	protected function pagination( $which ) {
-		if ( empty( $this->_pagination_args ) ) {
+		if ( ! $this->_pagination_args ) {
 			return;
 		}
 
@@ -653,11 +659,11 @@ class FrmListHelper {
 
 		if ( 'bottom' === $which ) {
 			$html_current_page  = $current;
-			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'formidable' ) . '</span><span id="table-paging" class="paging-input">';
+			$total_pages_before = '<span class="screen-reader-text">' . esc_html__( 'Current Page', 'formidable' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
 			$html_current_page = sprintf(
 				"%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
-				'<label for="current-page-selector" class="screen-reader-text">' . __( 'Current Page', 'formidable' ) . '</label>',
+				'<label for="current-page-selector" class="screen-reader-text">' . esc_html__( 'Current Page', 'formidable' ) . '</label>',
 				$current,
 				strlen( $total_pages )
 			);
@@ -863,7 +869,7 @@ class FrmListHelper {
 		$column = apply_filters( 'list_table_primary_column', $default, $this->screen->id );
 
 		if ( ! $column || ! isset( $columns[ $column ] ) ) {
-			$column = $default;
+			return $default;
 		}
 
 		return $column;
@@ -965,7 +971,7 @@ class FrmListHelper {
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
-			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'formidable' ) . '</label>';
+			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', 'formidable' ) . '</label>';
 			$columns['cb']    .= '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" />';
 			++$cb_counter;
 		}
@@ -1075,6 +1081,7 @@ class FrmListHelper {
 		}
 		$this->screen->render_screen_reader_content( 'heading_list' );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
 			<?php if ( $this->has_min_items( 1 ) ) { ?>
@@ -1098,6 +1105,8 @@ class FrmListHelper {
 			<?php } ?>
 		</table>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+
 		if ( $this->should_display( $args, 'display-bottom-nav' ) ) {
 			$this->display_tablenav( 'bottom' );
 		}
@@ -1145,6 +1154,7 @@ class FrmListHelper {
 			// Don't show the bulk actions when there aren't many rows.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
@@ -1159,6 +1169,7 @@ class FrmListHelper {
 			<br class="clear"/>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1205,7 +1216,7 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @param object $item The current item.
+	 * @param stdClass $item The current item.
 	 */
 	public function single_row( $item ) {
 		echo '<tr>';

@@ -7,7 +7,7 @@ if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
 	if ( ! empty( $css ) ) {
-		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo strip_tags( $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
@@ -20,7 +20,7 @@ if ( ! isset( $frm_style ) ) {
 $styles           = $frm_style->get_all();
 $default_style    = $frm_style->get_default_style( $styles );
 $defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
-$important        = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important        = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
 $use_chosen_js    = FrmStylesHelper::use_chosen_js();
 
@@ -735,7 +735,7 @@ foreach ( $styles as $style ) {
 }
 
 // Set it again since it may have been overridden.
-$important = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 ?>
 
 .frm_ajax_loading{

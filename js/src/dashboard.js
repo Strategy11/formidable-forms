@@ -69,7 +69,7 @@ class frmDashboard {
 			body: new URLSearchParams( {
 				action: this.options.ajax.action,
 				dashboard_action: this.options.ajax.dashboardActions.saveSubscribedEmail,
-				email: email
+				email
 			} )
 		} ).then( result => result.json() );
 	}

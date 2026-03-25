@@ -10,15 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' && FrmAppHelper::pro_is_installed() ) {
-	echo FrmProPost::get_category_dropdown( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		$field,
-		array(
-			'location' => 'front',
-			'name'     => $field_name, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			'id'       => $html_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		)
+	$category_dropdown_args = array(
+		'location' => 'front',
+		'name'     => $field_name,
+		'id'       => $html_id,
 	);
+	echo FrmProPost::get_category_dropdown( $field, $category_dropdown_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } else {
+	if ( FrmFieldsHelper::should_skip_rendering_choices_for_field( $field ) ) {
+		return;
+	}
+
 	if ( $read_only ) {
 		?>
 		<select <?php do_action( 'frm_field_input_html', $field ); ?>>
@@ -46,6 +48,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	}
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
+		if ( FrmFieldsHelper::should_hide_field_choice( $opt_key, $field ) ) {
+			continue;
+		}
+
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		$selected  = FrmAppHelper::check_selected( $field['value'], $field_val );
@@ -72,7 +78,19 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 			$option_params['class'] = 'frm_other_trigger';
 		}
 
-		FrmHtmlHelper::echo_dropdown_option( $opt, (bool) $selected, $option_params );
+		if ( FrmFieldsHelper::should_disable_choice( $opt_key, $selected, $field ) ) {
+			$option_params['disabled'] = 'disabled';
+		}
+
+		echo '<option ';
+		FrmAppHelper::array_to_html_params( $option_params, true );
+		selected( $selected );
+		echo '>';
+		echo esc_html( $opt === '' ? ' ' : $opt );
+		FrmFieldsHelper::after_choice_input( $field, $opt_key );
+
+		echo '</option>';
+
 		unset( $option_params );
 	}//end foreach
 	?>

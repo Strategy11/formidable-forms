@@ -2,7 +2,8 @@
  * Widget Sorting
  */
 
-.frm_sorting .widget, .frm_settings_page .widget {
+.frm_sorting .widget,
+.frm_settings_page .widget {
 	background: #fff;
 }
 
@@ -10,7 +11,10 @@
 	font-weight: 400;
 }
 
-.frm_sorting .widget, #postbox-container-1 .widget, .frm-right-panel .widget, .frm_settings_page .widget {
+.frm_sorting .widget,
+#postbox-container-1 .widget,
+.frm-right-panel .widget,
+.frm_settings_page .widget {
 	margin-bottom: 0;
 }
 
@@ -43,7 +47,7 @@ body.frm-admin-page-styles .frm-lite-credit-card-element {
 #frm_builder_page .frm-lite-credit-card-element > div,
 body.frm-admin-page-styles .frm-lite-credit-card-element > div {
 	position: absolute;
-	top: calc( 50% - 1px);
+	top: calc(50% - 1px);
 	transform: translateY(-50%);
 	right: 10px;
 	color: #d0d4dd;

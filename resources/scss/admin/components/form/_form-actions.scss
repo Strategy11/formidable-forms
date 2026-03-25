@@ -27,7 +27,7 @@
 	outline: 0;
 }
 
-#frm_notification_settings .widget-top .widget-action{
+#frm_notification_settings .widget-top .widget-action {
 	padding-top: 13.5px;
 }
 
@@ -129,7 +129,7 @@
 .frm_actions_list li {
 	float: left;
 	width: 15.6%;
-	margin: 10px .5% 15px;
+	margin: 10px 0.5% 15px;
 	height: 100px;
 	text-align: center;
 }
@@ -151,7 +151,8 @@ label.frm_action_events {
 	float: right;
 }
 
-.frm_actions_list a:active, .frm_actions_list a:focus {
+.frm_actions_list a:active,
+.frm_actions_list a:focus {
 	outline: none;
 }
 
@@ -173,6 +174,7 @@ label.frm_action_events {
 	height: 30px;
 	margin: 0 auto 15px;
 	line-height: 1;
+	box-sizing: content-box;
 }
 
 .frm_email_settings .widget-title h4 {
@@ -190,6 +192,7 @@ label.frm_action_events {
 	font-size: 18px;
 	padding: 2px;
 	color: var(--lightest-grey);
+	box-sizing: content-box;
 }
 
 span.frm-inner-circle,
@@ -207,6 +210,7 @@ span.frm-inner-circle {
 	width: 22px;
 	padding: 4px;
 	color: #fff;
+	box-sizing: content-box;
 }
 
 .frm-inner-circle svg {
@@ -290,7 +294,7 @@ span.frm-inner-circle.frm-inverse {
 	margin-left: 8px;
 	color: var(--grey);
 	opacity: 0;
-	transition: all .2s ease;
+	transition: all 0.2s ease;
 }
 
 .frm_email_icons a .frmsvg {
@@ -308,5 +312,5 @@ span.frm-inner-circle.frm-inverse {
 
 .frm_inactive_action .frm-inner-circle,
 .frm_actions_list .frm_inactive_action i {
-	opacity: .4;
+	opacity: 0.4;
 }

@@ -100,7 +100,7 @@ class FrmTransLiteListsController {
 		}
 
 		if ( $screen->id === $menu_name . '_page_formidable-payments' ) {
-			$show_screen = false;
+			return false;
 		}
 
 		return $show_screen;
@@ -201,7 +201,7 @@ class FrmTransLiteListsController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {
-			$save = absint( $value );
+			return absint( $value );
 		}
 		return $save;
 	}

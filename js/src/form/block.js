@@ -18,7 +18,7 @@ const { serverSideRender: ServerSideRender } = wp;
 
 function Edit( { setAttributes, attributes, isSelected } ) {
 	const { formId } = attributes;
-	const forms = formidable_form_selector.forms;
+	const { forms } = formidable_form_selector;
 	const blockProps = useBlockProps();
 
 	if ( forms.length === 0 ) {
@@ -80,7 +80,7 @@ registerBlockType( 'formidable/simple-form', {
 
 	edit: Edit,
 
-	save: function( props ) {
+	save( props ) {
 		const {
 			attributes,
 		} = props;

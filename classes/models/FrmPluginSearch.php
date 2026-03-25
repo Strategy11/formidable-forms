@@ -34,13 +34,15 @@ class FrmPluginSearch {
 	 */
 	public function start( $screen ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'plugin-install' === $screen->base && ( ! isset( $_GET['paged'] ) || 1 === intval( $_GET['paged'] ) ) ) {
-			add_filter( 'plugins_api_result', array( $this, 'inject_suggestion' ), 10, 3 );
-			add_filter( 'self_admin_url', array( $this, 'plugin_details' ) );
-			add_filter( 'plugin_install_action_links', array( $this, 'insert_related_links' ), 10, 2 );
-			add_action( 'admin_enqueue_scripts', array( $this, 'load_plugins_search_script' ) );
-			$this->maybe_dismiss();
+		if ( 'plugin-install' !== $screen->base || ( isset( $_GET['paged'] ) && 1 !== intval( $_GET['paged'] ) ) ) {
+			return;
 		}
+
+		add_filter( 'plugins_api_result', array( $this, 'inject_suggestion' ), 10, 3 );
+		add_filter( 'self_admin_url', array( $this, 'plugin_details' ) );
+		add_filter( 'plugin_install_action_links', array( $this, 'insert_related_links' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'load_plugins_search_script' ) );
+		$this->maybe_dismiss();
 	}
 
 	/**
@@ -195,9 +197,11 @@ class FrmPluginSearch {
 	 * @return string The URL with 'formidable' instead of 'frm-plugin-search'.
 	 */
 	public function plugin_details( $url ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return false !== stripos( $url, 'tab=plugin-information&amp;plugin=' . self::$slug )
 			? 'plugin-install.php?tab=plugin-information&amp;plugin=formidable&amp;TB_iframe=true&amp;width=600&amp;height=550'
 			: $url;
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -236,7 +240,7 @@ class FrmPluginSearch {
 	 */
 	protected function add_to_dismissed_hints( $hint ) {
 		$hints = array_merge( $this->get_dismissed_hints(), array( $hint ) );
-		return update_option( self::$dismissed_opt, $hints, 'no' );
+		return update_option( self::$dismissed_opt, $hints, false );
 	}
 
 	/**
@@ -322,14 +326,14 @@ class FrmPluginSearch {
 					),
 					admin_url( 'plugins.php' )
 				);
-				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . __( 'Activate', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . esc_html__( 'Activate', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 		} elseif ( ! $is_active && isset( $plugin['url'] ) ) {
 			// Go to the add-ons page to install.
 			$links[] = '<a
 				class="button-secondary"
 				href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '"
-				>' . __( 'Install Now', 'formidable' ) . '</a>';
+				>' . esc_html__( 'Install Now', 'formidable' ) . '</a>';
 		} elseif ( ! empty( $plugin['link'] ) ) {
 			// Add link pointing to a relevant doc page in formidable.com.
 			$links[] = '<a
@@ -343,7 +347,7 @@ class FrmPluginSearch {
 		// Dismiss link.
 		$dismiss = add_query_arg( array( 'frm-dismiss' => $plugin['id'] ) );
 		$links[] = '<a
-			href="' . $dismiss . '"
+			href="' . esc_url( $dismiss ) . '"
 			class="frm-plugin-search__dismiss"
 			data-addon="' . esc_attr( $plugin['addon'] ) . '"
 			>' . esc_html__( 'Hide this suggestion', 'formidable' ) . '</a>';
