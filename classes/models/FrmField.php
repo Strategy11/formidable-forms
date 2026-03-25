@@ -413,7 +413,6 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			'coupon'  => '2026-01-13',
 			'virtual' => '2026-03-10',
 		);
 
