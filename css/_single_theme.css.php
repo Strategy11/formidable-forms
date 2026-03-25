@@ -210,7 +210,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	<?php
 	echo esc_html( $submit_bg_color );
 
-	if ( ! empty( $submit_bg_img ) ) {
+	if ( $submit_bg_img ) {
 		echo esc_html( ' url(' . $submit_bg_img . ')' );
 	}
 	echo esc_html( $important );
@@ -248,7 +248,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 	<?php } ?>
 
-	<?php if ( empty( $submit_bg_img ) ) { ?>
+	<?php if ( ! $submit_bg_img ) { ?>
 		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
 		<?php } ?>
