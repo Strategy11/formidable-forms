@@ -420,8 +420,8 @@ window.frmAdminBuildJS = function() {
 		// Change the close button to primary or secondary.
 		closeBtn.classList.toggle( 'button-primary', ! msg.actionUrl );
 		closeBtn.classList.toggle( 'frm-button-primary', ! msg.actionUrl );
-		closeBtn.classList.toggle( 'button-secondary', msg.actionUrl );
-		closeBtn.classList.toggle( 'frm-button-secondary', msg.actionUrl );
+		closeBtn.classList.toggle( 'button-secondary', Boolean( msg.actionUrl ) );
+		closeBtn.classList.toggle( 'frm-button-secondary', Boolean( msg.actionUrl ) );
 
 		const actionBtn = $info[ 0 ].querySelector( '.info-modal-action-link' );
 
