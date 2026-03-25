@@ -9,7 +9,7 @@ const { div, svg } = frmDom;
  * @param {string}  action
  */
 export function toggleAddonState( clicked, action ) {
-	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url; // eslint-disable-line camelcase
+	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url;
 
 	// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 	jQuery( '.frm-addon-error' ).remove();
@@ -28,17 +28,17 @@ export function toggleAddonState( clicked, action ) {
 		cache: false,
 		dataType: 'json',
 		data: {
-			action: action,
+			action,
 			nonce: frmGlobal.nonce,
-			plugin: plugin
+			plugin
 		},
-		success: function( response ) {
+		success( response ) {
 			response = response?.data ?? response;
 
 			let saveAndReload;
 
 			if ( 'string' !== typeof response && 'string' === typeof response.message ) {
-				if ( 'undefined' !== typeof response.saveAndReload ) {
+				if ( response.saveAndReload !== undefined ) {
 					saveAndReload = response.saveAndReload;
 				}
 				response = response.message;
@@ -59,7 +59,7 @@ export function toggleAddonState( clicked, action ) {
 			 */
 			wp.hooks.doAction( 'frm_update_addon_state', response );
 		},
-		error: function() {
+		error() {
 			button.removeClass( 'frm_loading_button' );
 		}
 	} );
@@ -67,7 +67,7 @@ export function toggleAddonState( clicked, action ) {
 
 export function extractErrorFromAddOnResponse( response ) {
 	if ( typeof response !== 'string' ) {
-		if ( typeof response.success !== 'undefined' && response.success ) {
+		if ( response.success ) {
 			return false;
 		}
 
@@ -86,7 +86,7 @@ export function extractErrorFromAddOnResponse( response ) {
 }
 
 export function afterAddonInstall( response, button, message, el, saveAndReload, action = 'frm_activate_addon' ) {
-	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
+	const frmAdminJs = frm_admin_js;
 
 	const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
 	addonStatuses.forEach(
@@ -115,16 +115,16 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 	};
 	actionMap.frm_install_addon = actionMap.frm_activate_addon;
 
-	const messageElement = message[ 0 ];
+	const [ messageElement ] = message;
 	if ( messageElement ) {
 		messageElement.textContent = actionMap[ action ].message;
 	}
 
-	const parentElement = el[ 0 ].parentElement;
+	const [ { parentElement } ] = el;
 	parentElement.classList.remove( 'frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active' );
 	parentElement.classList.add( actionMap[ action ].class );
 
-	const buttonElement = button[ 0 ];
+	const [ buttonElement ] = button;
 	buttonElement.classList.remove( 'frm_loading_button' );
 
 	// Maybe refresh import and SMTP pages
@@ -154,7 +154,7 @@ export function addonError( response, el, button ) {
 			.attr( 'rel', button.attr( 'rel' ) )
 			.on( 'click', installAddonWithCreds );
 	} else {
-		el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.message + '</strong></p></div>' );
+		el.append( `<div class="frm-addon-error frm_error_style"><p><strong>${ response.message }</strong></p></div>` );
 		button.removeClass( 'frm_loading_button' );
 		jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
 	}
@@ -185,7 +185,7 @@ function saveAndReloadSettingsButton( saveAndReload ) {
 
 function saveAndReloadSettings() {
 	const page = document.getElementById( 'form_settings_page' );
-	if ( null !== page ) {
+	if ( page ) {
 		const form = page.querySelector( 'form.frm_form_settings' );
 		if ( null !== form ) {
 			wp.hooks.doAction( 'frm_reset_fields_updated' );
@@ -247,4 +247,46 @@ function showUpgradeModalSuccess() {
 		circledIcon.classList.add( 'frm-circled-icon-green' );
 		circledIcon.querySelector( 'svg' )?.replaceWith( svg( { href: '#frm_checkmark_icon' } ) );
 	}
+}
+
+function installAddonWithCreds( e ) {
+	// Prevent the default action, let the user know we are attempting to install again and go with it.
+	e.preventDefault();
+
+	// Now let's make another Ajax request once the user has submitted their credentials.
+	const proceed = jQuery( this );
+	const el = proceed.parent().parent();
+	const plugin = proceed.attr( 'rel' );
+
+	proceed.addClass( 'frm_loading_button' );
+
+	jQuery.ajax( {
+		url: ajaxurl,
+		type: 'POST',
+		async: true,
+		cache: false,
+		dataType: 'json',
+		data: {
+			action: 'frm_install_addon',
+			nonce: frmAdminJs.nonce,
+			plugin,
+			hostname: el.find( '#hostname' ).val(),
+			username: el.find( '#username' ).val(),
+			password: el.find( '#password' ).val()
+		},
+		success( response ) {
+			response = response?.data ?? response;
+
+			const error = extractErrorFromAddOnResponse( response );
+			if ( error ) {
+				addonError( error, el, proceed );
+				return;
+			}
+
+			afterAddonInstall( response, proceed, message, el );
+		},
+		error() {
+			proceed.removeClass( 'frm_loading_button' );
+		}
+	} );
 }

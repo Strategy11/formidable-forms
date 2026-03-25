@@ -77,10 +77,6 @@ class FrmFormActionsController {
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
 
-		if ( ! FrmAppHelper::show_new_feature( 'n8n' ) ) {
-			unset( $action_classes['n8n'] );
-		}
-
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 		$action_classes = self::maybe_unset_highrise( $action_classes );
 
@@ -326,11 +322,11 @@ class FrmFormActionsController {
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 
-		if ( ! $temp_actions ) {
+		if ( $temp_actions ) {
+			$temp_actions = $temp_actions->actions;
+		} else {
 			self::actions_init();
 			$temp_actions = self::$registered_actions->actions;
-		} else {
-			$temp_actions = $temp_actions->actions;
 		}
 
 		$actions = array();
@@ -604,12 +600,15 @@ class FrmFormActionsController {
 	 * @return void
 	 */
 	public static function delete_missing_actions( $old_actions ) {
-		if ( $old_actions ) {
-			foreach ( $old_actions as $old_id ) {
-				wp_delete_post( $old_id );
-			}
-			FrmDb::cache_delete_group( 'frm_actions' );
+		if ( ! $old_actions ) {
+			return;
 		}
+
+		foreach ( $old_actions as $old_id ) {
+			wp_delete_post( $old_id );
+		}
+
+		FrmDb::cache_delete_group( 'frm_actions' );
 	}
 
 	/**
@@ -649,7 +648,7 @@ class FrmFormActionsController {
 		$action_status = array(
 			'post_status' => 'publish',
 		);
-		$form_actions  = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
+		$form_actions  = FrmFormAction::get_action_for_form( is_object( $form ) ? $form->id : $form, $type, $action_status );
 
 		if ( ! $form_actions ) {
 			return;

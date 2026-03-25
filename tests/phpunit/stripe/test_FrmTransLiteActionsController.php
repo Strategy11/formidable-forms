@@ -55,18 +55,18 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		// Test with two decimal places.
 		$amount = '111.50';
 		$this->maybe_use_decimal( $amount, $currency );
-		$this->assertEquals( '111,50', $amount );
+		$this->assertSame( '111,50', $amount );
 
 		// Test with a single decimal place.
 		$amount = '111.5';
 		$this->maybe_use_decimal( $amount, $currency );
-		$this->assertEquals( '111,5', $amount );
+		$this->assertSame( '111,5', $amount );
 
 		// Test to make sure that three decimal places does not convert.
 		// It should be interpreted as thousands.
 		$amount = '111.500';
 		$this->maybe_use_decimal( $amount, $currency );
-		$this->assertEquals( '111.500', $amount );
+		$this->assertSame( '111.500', $amount );
 	}
 
 	/**

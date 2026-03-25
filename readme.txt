@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 6.3
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 6.27
+Stable tag: 6.29
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,20 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.29 =
+* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
+* Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
+* Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
+* Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
+* Fix: The field options dropdown for the far left field would render underneath the field settings sidebar in rows with a lot of fields.
+* Fix: An Undefined array key "slug" PHP Warning has been fixed.
+* Fix: When a missing payment field is automatically added to a form with a payment action, the new field would incorrectly appear below the submit button.
+* Breaking: The deprecated FrmDb constructor method has been removed.
+
+= 6.28 =
+* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
+* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
+
 = 6.27 =
 * New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
 * New: A new coupons tab is available on the payments page.
@@ -396,34 +410,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Bootstrap dropdowns would not properly initialize for fields loaded with AJAX in long forms, preventing access to the more options dropdown, hiding the option to delete a field.
 * Breaking: Old logic that would trigger blur events for inputs with no value set with the onblur attribute has been removed.
 
-= 6.26 =
-* New: Gutenberg blocks now use API version 3. As of WordPress 6.9, a deprecated message would appear for older block API versions.
-* New: Styles now include a Custom CSS setting in Quick Settings that can be exported and imported to other sites. The custom CSS is automatically prefixed with the style's class name to prevent conflicts.
-* New: Admin pages now use Bootstrap 5 and Popper 2, updated from Bootstrap 4 and Popper 1.
-* New: 12 Fields can now be added to a row in the form builder, up from the previous limit of 6.
-* New: An htaccess file is now included that prevents access to text files included in this plugin on Apache servers.
-* New: The first name field in a form will now automatically include the given-name and family-name autocomplete attributes to improve accessibility and user experience.
-* Fix: Field errors were using the input text error color setting incorrectly. This has been reverted to use the error border color setting like it did in older versions.
-* Fix: Square would throw a styling error when using a style with comma separated font family options. To prevent this error, the first font is used only.
-* Fix: The mobile responsiveness of email styles has been improved.
-* Breaking: The minimum required WordPress version is now 6.3. This is because older versions do not support Gutenberg's API version 3.
-* Breaking: The deprecated FrmEDD_SL_Plugin_Updater class has been removed.
-* Breaking: The deprecated frmFrontForm.visible and frmFrontForm.invisible functions have been removed.
-
-= 6.25.1 =
-* New: The frm_email_message filter now includes email_key in the passed attribute data.
-* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
-* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
-* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
-* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
-* Fix: Large email header images used in emails would extend beyond the image container boundaries.
-* Fix: The payments list would not properly sort in descending order.
-* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
-* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
-* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.20 =
-This version fixes a security-related bug. Upgrade immediately.
+= 6.29 =
+This version improves Stripe payment validation. Upgrade immediately if you are using Stripe payments.

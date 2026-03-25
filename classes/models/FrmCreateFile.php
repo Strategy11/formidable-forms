@@ -81,18 +81,22 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function create_file( $file_content ) {
-		if ( $this->has_permission ) {
-			$dirs_exist = true;
-
-			// Create the directories if need be.
-			$this->create_directories( $dirs_exist );
-
-			// Only write the file if the folders exist.
-			if ( $dirs_exist ) {
-				global $wp_filesystem;
-				$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
-			}
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		$dirs_exist = true;
+
+		// Create the directories if need be.
+		$this->create_directories( $dirs_exist );
+
+		// Only write the file if the folders exist.
+		if ( ! $dirs_exist ) {
+			return;
+		}
+
+		global $wp_filesystem;
+		$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
 	}
 
 	/**
@@ -103,14 +107,16 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function append_file( $file_content ) {
-		if ( $this->has_permission ) {
-			if ( file_exists( $this->new_file_path ) ) {
-				$existing_content = $this->get_contents();
-				$file_content     = $existing_content . $file_content;
-			}
-
-			$this->create_file( $file_content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		if ( file_exists( $this->new_file_path ) ) {
+			$existing_content = $this->get_contents();
+			$file_content     = $existing_content . $file_content;
+		}
+
+		$this->create_file( $file_content );
 	}
 
 	/**
@@ -123,14 +129,16 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function combine_files( $file_names ) {
-		if ( $this->has_permission ) {
-			$content = '';
-
-			foreach ( $file_names as $file_name ) {
-				$content .= $this->get_contents( $file_name ) . "\n";
-			}
-			$this->create_file( $content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		$content = '';
+
+		foreach ( $file_names as $file_name ) {
+			$content .= $this->get_contents( $file_name ) . "\n";
+		}
+		$this->create_file( $content );
 	}
 
 	/**
@@ -169,11 +177,13 @@ class FrmCreateFile {
 
 		$this->has_permission = true;
 
-		if ( ! $creds || ! WP_Filesystem( $creds ) ) {
-			// Initialize the API - any problems and we exit
-			$this->show_error_message();
-			$this->has_permission = false;
+		if ( $creds && WP_Filesystem( $creds ) ) {
+			return;
 		}
+
+		// Initialize the API - any problems and we exit
+		$this->show_error_message();
+		$this->has_permission = false;
 	}
 
 	/**
@@ -299,7 +309,7 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	private function show_error_message() {
-		if ( ! empty( $this->error_message ) ) {
+		if ( $this->error_message ) {
 			echo '<div class="message">' . esc_html( $this->error_message ) . '</div>';
 		}
 	}

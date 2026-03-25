@@ -9,7 +9,7 @@ extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 $is_loaded_via_ajax = $is_loaded_via_ajax ?? false;
 FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
 
-$important        = empty( $important_style ) ? '' : ' !important';
+$important        = ! empty( $important_style ) ? ' !important' : '';
 $submit_bg_img    = FrmStylesHelper::get_submit_image_bg_url( $settings );
 $use_chosen_js    = $use_chosen_js ?? FrmStylesHelper::use_chosen_js();
 $pro_is_installed = $pro_is_installed ?? FrmAppHelper::pro_is_installed();
@@ -234,7 +234,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin:<?php echo esc_html( $submit_margin ); ?>;
 	<?php
 	// For reverse compatibility... But allow "10px 10px".
-	if ( strpos( trim( $submit_margin ), ' ' ) === false ) {
+	if ( ! str_contains( trim( $submit_margin ), ' ' ) ) {
 		?>
 		margin-left:0;
 		margin-right:0;

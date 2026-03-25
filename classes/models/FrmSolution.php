@@ -42,14 +42,14 @@ class FrmSolution {
 	 * @param array $atts
 	 */
 	public function __construct( $atts = array() ) {
-		if ( empty( $this->plugin_slug ) ) {
+		if ( ! $this->plugin_slug ) {
 			return;
 		}
 
 		add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
 		add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
 
-		if ( empty( $this->plugin_file ) ) {
+		if ( ! $this->plugin_file ) {
 			$this->plugin_file = $this->plugin_slug . '.php';
 		}
 	}
@@ -90,7 +90,7 @@ class FrmSolution {
 	 */
 	public function plugin_links( $links ) {
 		if ( ! $this->is_complete() ) {
-			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . __( 'Setup', 'formidable' ) . '</a>';
+			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . esc_html__( 'Setup', 'formidable' ) . '</a>';
 			array_unshift( $links, $settings );
 		}
 
@@ -247,14 +247,18 @@ class FrmSolution {
 		if ( $all_imported ) {
 			$step['description'] = __( 'The following form(s) have been created.', 'formidable' );
 		}
+
 		$this->show_app_install( $step );
 
-		if ( ! $all_imported ) {
-			$step                  = $steps['complete'];
-			$step['current']       = false;
-			$step['button_class'] .= ' frm_grey disabled';
-			$this->show_page_links( $step );
+		if ( $all_imported ) {
+			return;
 		}
+
+		$step                  = $steps['complete'];
+		$step['current']       = false;
+		$step['button_class'] .= ' frm_grey disabled';
+
+		$this->show_page_links( $step );
 	}
 
 	/**
@@ -286,6 +290,7 @@ class FrmSolution {
 			'width'  => 90,
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<section class="top">
 			<div class="frm-smtp-logos">
@@ -311,6 +316,7 @@ class FrmSolution {
 			<p><?php echo esc_html( $this->page_description() ); ?></p>
 		</section>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -341,7 +347,7 @@ class FrmSolution {
 				'label'        => __( 'Connect to FormidableForms.com', 'formidable' ),
 				'description'  => __( 'Create a connection to get plugin downloads.', 'formidable' ),
 				'button_label' => __( 'Connect an Account', 'formidable' ),
-				'current'      => empty( $pro_installed ),
+				'current'      => ! $pro_installed,
 				'complete'     => $pro_installed,
 				'num'          => 1,
 			),
@@ -456,8 +462,9 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_top( $step ) {
-		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
+		$section_class = ! empty( $step['current'] ) ? '' : 'frm_grey';
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 			<aside class="num">
@@ -488,6 +495,7 @@ class FrmSolution {
 					<p class="frm_error"><?php echo esc_html( $step['error'] ); ?></p>
 				<?php } ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -496,10 +504,12 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_bottom( $step ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			</div>
 		</section>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -513,11 +523,13 @@ class FrmSolution {
 		$this->step_top( $step );
 
 		if ( $step['complete'] ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		} else {
 			FrmSettingsController::license_box();
 		}
@@ -536,11 +548,13 @@ class FrmSolution {
 		if ( ! isset( $step['error'] ) ) {
 			$rel = $step['links'] ?? array();
 
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a rel="<?php echo esc_attr( implode( ',', $rel ) ); ?>" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 
 		$this->step_bottom( $step );
@@ -554,7 +568,7 @@ class FrmSolution {
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
 
-		if ( ! empty( $this->form_options() ) && ! $is_complete ) {
+		if ( $this->form_options() && ! $is_complete ) {
 			$step['description'] = __( 'Select the form or view you would like to create.', 'formidable' );
 		}
 
@@ -565,6 +579,7 @@ class FrmSolution {
 		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( ! $step['current'] ) {
 			?>
 			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
@@ -622,6 +637,7 @@ class FrmSolution {
 				echo '</form>';
 			}
 		}//end if
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$this->step_bottom( $step );
 	}
@@ -687,6 +703,7 @@ class FrmSolution {
 		echo '<h3>Choose New Page Title</h3>';
 
 		foreach ( $pages as $page ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<p>
 				<label for="pages_<?php echo esc_html( $page['type'] ); ?>">
@@ -695,6 +712,7 @@ class FrmSolution {
 				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			</p>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
@@ -710,11 +728,13 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a href="#" target="_blank" rel="noopener" id="frm-redirect-link" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 			<?php echo esc_html( $step['button_label'] ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$this->step_bottom( $step );
 	}

@@ -55,10 +55,6 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		if ( '' === $response ) {
-			$response = $this->_last_response;
-		}
-
-		return $response;
+		return '' === $response ? $this->_last_response : $response;
 	}
 }

@@ -302,6 +302,14 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'appointment-field-preview.webp',
 				'learn-more'   => 'simply-schedule-appointments-forms',
 			),
+			'virtual'         => array(
+				'name'         => __( 'Virtual', 'formidable' ),
+				'icon'         => 'frmfont frm-virtual-field-icon',
+				'message'      => esc_html__( 'Protect sensitive data by storing field values server-side only, preventing users from viewing or manipulating them in their browser.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				'upsell_image' => $upsell_images_url . 'virtual-field-preview.webp',
+				'learn-more'   => '/virtual',
+				'is_new'       => self::field_is_new( 'virtual' ),
+			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
 				'icon'         => 'frmfont frm_product2_icon',
@@ -326,18 +334,15 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
-		);
-
-		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
-			$fields['coupon'] = array(
+			'coupon'          => array(
 				'name'    => __( 'Coupon', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
 				'addon'   => 'coupons',
 				'section' => 'pricing',
 				'limit'   => 1,
 				'is_new'  => self::field_is_new( 'coupon' ),
-			);
-		}
+			),
+		);
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
@@ -347,6 +352,23 @@ class FrmField {
 		}
 
 		return apply_filters( 'frm_pro_available_fields', $fields );
+	}
+
+	/**
+	 * Flag Pro field types that require a newer Pro version with frm_show_update.
+	 *
+	 * @since 6.29
+	 *
+	 * @param array $fields Available Pro field types.
+	 *
+	 * @return array
+	 */
+	public static function show_update_for_pro_fields( $fields ) {
+		if ( FrmAppHelper::pro_is_installed() && ! class_exists( 'FrmProVirtualFieldController', false ) ) {
+			$fields['virtual']['icon'] .= ' frm_show_update';
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -360,7 +382,8 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			'coupon' => '2026-01-13',
+			'coupon'  => '2026-01-13',
+			'virtual' => '2026-03-10',
 		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
@@ -506,11 +529,7 @@ class FrmField {
 				$safe_atts = array();
 
 				foreach ( $attr as $attr_key => $att ) {
-					if ( ! is_numeric( $attr_key ) ) {
-						// opt=1 without parentheses for example is mapped like 'opt' => 1.
-						$key   = $attr_key;
-						$value = $att;
-					} else {
+					if ( is_numeric( $attr_key ) ) {
 						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
 						$split = explode( '=', $att, 2 );
 
@@ -520,6 +539,10 @@ class FrmField {
 
 						$key   = trim( $split[0] );
 						$value = trim( $split[1], '"' );
+					} else {
+						// opt=1 without parentheses for example is mapped like 'opt' => 1.
+						$key   = $attr_key;
+						$value = $att;
 					}
 
 					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
@@ -693,13 +716,15 @@ class FrmField {
 
 		// Serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
-			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
-				if ( 'field_options' === $opt ) {
-					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
-				}
-
-				$values[ $opt ] = serialize( $values[ $opt ] );
+			if ( ! isset( $values[ $opt ] ) || ! is_array( $values[ $opt ] ) ) {
+				continue;
 			}
+
+			if ( 'field_options' === $opt ) {
+				$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
+			}
+
+			$values[ $opt ] = serialize( $values[ $opt ] );
 		}
 
 		if ( isset( $values['default_value'] ) && is_array( $values['default_value'] ) ) {
@@ -1004,15 +1029,17 @@ class FrmField {
 	 * @return void
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
-		if ( $inc_repeat === 'include' ) {
-			$form_id = $where['fi.form_id'];
-			$where[] = array(
-				'or'                => 1,
-				'fi.form_id'        => $form_id,
-				'fr.parent_form_id' => $form_id,
-			);
-			unset( $where['fi.form_id'] );
+		if ( $inc_repeat !== 'include' ) {
+			return;
 		}
+
+		$form_id = $where['fi.form_id'];
+		$where[] = array(
+			'or'                => 1,
+			'fi.form_id'        => $form_id,
+			'fr.parent_form_id' => $form_id,
+		);
+		unset( $where['fi.form_id'] );
 	}
 
 	/**
@@ -1187,12 +1214,14 @@ class FrmField {
 
 		$field_object = FrmFieldFactory::get_field_type( $results->type );
 
-		if ( $field_object->should_unserialize_value() ) {
-			FrmAppHelper::unserialize_or_decode( $results->default_value );
+		if ( ! $field_object->should_unserialize_value() ) {
+			return;
+		}
 
-			if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
-				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
-			}
+		FrmAppHelper::unserialize_or_decode( $results->default_value );
+
+		if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
+			$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 		}
 	}
 
@@ -1229,15 +1258,19 @@ class FrmField {
 		$name        = $next ? $base_name . $next : $base_name;
 		$next_fields = get_transient( $name );
 
-		if ( $next_fields ) {
-			$fields = array_merge( $fields, $next_fields );
-
-			if ( count( $next_fields ) >= self::$transient_size ) {
-				// If this transient is full, check for another
-				++$next;
-				self::get_next_transient( $fields, $base_name, $next );
-			}
+		if ( ! $next_fields ) {
+			return;
 		}
+
+		$fields = array_merge( $fields, $next_fields );
+
+		if ( count( $next_fields ) < self::$transient_size ) {
+			return;
+		}
+
+		// If this transient is full, check for another
+		++$next;
+		self::get_next_transient( $fields, $base_name, $next );
 	}
 
 	/**
@@ -1306,9 +1339,7 @@ class FrmField {
 
 		$field_type = self::get_original_field_type( $field );
 
-		return self::is_checkbox( $field ) ||
-			$field_type === 'address' ||
-			self::is_multiple_select( $field );
+		return self::is_checkbox( $field ) || $field_type === 'address' || self::is_multiple_select( $field );
 	}
 
 	/**
@@ -1335,7 +1366,7 @@ class FrmField {
 
 		if ( $original_type && $original_type !== $field_type ) {
 			// Check the original type for arrays.
-			$field_type = $original_type;
+			return $original_type;
 		}
 
 		return $field_type;
@@ -1587,13 +1618,9 @@ class FrmField {
 	 * @return bool true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_field_type( $field, $is_type ) {
-		$field_type = self::get_original_field_type( $field );
-		$data_type  = self::get_option( $field, 'data_type' );
-
-		$is_field_type = $is_type === $field_type ||
-			( 'data' === $field_type && $is_type === $data_type ) ||
-			( 'lookup' === $field_type && $is_type === $data_type ) ||
-			( 'product' === $field_type && $is_type === $data_type );
+		$field_type    = self::get_original_field_type( $field );
+		$data_type     = self::get_option( $field, 'data_type' );
+		$is_field_type = $is_type === $field_type || ( 'data' === $field_type && $is_type === $data_type ) || ( 'lookup' === $field_type && $is_type === $data_type ) || ( 'product' === $field_type && $is_type === $data_type ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		/**
 		 * When a field type is checked, allow individual fields

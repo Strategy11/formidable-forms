@@ -3,8 +3,8 @@
  */
 
 @font-face {
-	font-family: 's11-fp';
-	src: url('../fonts/s11-fp.woff?v=7') format('woff');
+	font-family: "s11-fp";
+	src: url("../fonts/s11-fp.woff?v=7") format("woff");
 	font-weight: 400;
 	font-style: normal;
 }
@@ -19,22 +19,22 @@
 }
 
 .frmfont,
-.frm_icon_font{
-	text-decoration:none;
+.frm_icon_font {
+	text-decoration: none;
 	text-shadow: none;
-	font-weight:400;
-	display:inline-block;
+	font-weight: 400;
+	display: inline-block;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: auto;
 	line-height: 1.5;
-	transition: color .1s ease-in-out, opacity .1s ease-in-out;
+	transition: color 0.1s ease-in-out, opacity 0.1s ease-in-out;
 	font-size: 18px;
 }
 
 i.frmfont,
-i.frm_icon_font{
-	font-style:normal;
+i.frm_icon_font {
+	font-style: normal;
 	font-variant: normal;
 	speak: none;
 }
@@ -42,9 +42,9 @@ i.frm_icon_font{
 .frmfont::before,
 select.frmfont,
 .frm_icon_font::before,
-select.frm_icon_font{
-	font-family: 's11-fp' !important;
-	text-align:center;
+select.frm_icon_font {
+	font-family: "s11-fp" !important;
+	text-align: center;
 }
 
 .frmfont,
@@ -54,23 +54,23 @@ a.frmfont:hover
 .frm_icon_font,
 a.frm_icon_font,
 .frm_icon_font:hover,
-a.frm_icon_font:hover{
-	text-decoration:none !important;
-	box-shadow:none;
+a.frm_icon_font:hover {
+	text-decoration: none !important;
+	box-shadow: none;
 }
 
 .frmfont:focus,
-.frm_icon_font:focus{
-	box-shadow:none;
+.frm_icon_font:focus {
+	box-shadow: none;
 }
 
 .frmfont:active,
-.frm_icon_font:active{
-	outline:none;
+.frm_icon_font:active {
+	outline: none;
 }
 
-.frm_trigger .frm_icon_font{
-	padding:0 5px;
+.frm_trigger .frm_icon_font {
+	padding: 0 5px;
 }
 
 .frm_tooltip_icon::before {

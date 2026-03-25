@@ -34,6 +34,6 @@ class FrmApplicationApi extends FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cache_key() {
-		$this->cache_key = 'frm_applications_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
+		$this->cache_key = 'frm_applications_l' . ( ! empty( $this->license ) ? md5( $this->license ) : '' );
 	}
 }

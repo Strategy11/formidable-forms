@@ -213,7 +213,7 @@ class FrmStyle {
 				} else {
 					$new_value = absint( $value );
 				}
-			} else {
+			} else { // phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				// Insert a value for alpha.
 				if ( $value_is_empty_string ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
@@ -422,7 +422,7 @@ class FrmStyle {
 		);
 		$create_file->create_file( $css );
 
-		update_option( 'frmpro_css', $css, 'no' );
+		update_option( 'frmpro_css', $css, false );
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
 	}
 
@@ -788,7 +788,7 @@ class FrmStyle {
 	 * @return string
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
-		return 'frm_style_setting' . ( empty( $post_field ) ? '' : '[' . $post_field . ']' ) . '[' . $field_name . ']';
+		return 'frm_style_setting' . ( $post_field ? '[' . $post_field . ']' : '' ) . '[' . $field_name . ']';
 	}
 
 	/**

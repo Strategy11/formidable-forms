@@ -195,15 +195,35 @@ class FrmTransLiteAppController {
 	public static function add_repeat_cadence_value( $args ) {
 		$action = $args['form_action'];
 
-		if ( ! empty( $action->post_content['repeat_cadence'] ) ) {
-			$params = array(
-				'type'  => 'hidden',
-				'class' => 'frm-repeat-cadence-value',
-				'value' => $action->post_content['repeat_cadence'],
-			);
-			echo '<input ';
-			FrmAppHelper::array_to_html_params( $params, true );
-			echo ' />';
+		if ( empty( $action->post_content['repeat_cadence'] ) ) {
+			return;
 		}
+
+		$params = array(
+			'type'  => 'hidden',
+			'class' => 'frm-repeat-cadence-value',
+			'value' => $action->post_content['repeat_cadence'],
+		);
+		echo '<input ';
+		FrmAppHelper::array_to_html_params( $params, true );
+		echo ' />';
+	}
+
+	/**
+	 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
+	 * They do however need to be visible when the payments submodule is active.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function hide_gateway_fields_in_builder() {
+		wp_add_inline_style(
+			'formidable-admin',
+			'
+			#frm_builder_page li[data-ftype="gateway"] { display: none; }
+			.frm_field_box:has(li[data-ftype="gateway"]:only-child) { display: none; }
+			'
+		);
 	}
 }

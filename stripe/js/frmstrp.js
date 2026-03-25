@@ -1,13 +1,13 @@
 ( function() {
-	let thisForm = false,
-		formID = 0,
-		event = false,
-		frmstripe,
-		running = 100,
-		elements,
-		isStripeLink = false,
-		linkAuthenticationElementIsComplete = false,
-		stripeLinkElementIsComplete = false;
+	let thisForm = false;
+	let formID = 0;
+	let event = false;
+	let frmstripe;
+	let running = 100;
+	let elements;
+	let isStripeLink = false;
+	let linkAuthenticationElementIsComplete = false;
+	let stripeLinkElementIsComplete = false;
 
 	const triggerCustomEvent = function( el, eventName, data ) {
 		frmFrontForm.triggerCustomEvent( el, eventName, data );
@@ -65,7 +65,7 @@
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
 			action,
 			{
-				thisForm: thisForm
+				thisForm
 			}
 		);
 	}
@@ -126,7 +126,7 @@
 			};
 
 			let params = {
-				elements: elements,
+				elements,
 				confirmParams: {
 					return_url: getReturnUrl()
 				}
@@ -142,7 +142,7 @@
 		}
 
 		function getReturnUrl() {
-			const url = new URL( frm_stripe_vars.ajax ); // eslint-disable-line compat/compat
+			const url = new URL( frm_stripe_vars.ajax );
 
 			url.searchParams.append( 'action', 'frmstrplinkreturn' );
 			return url.toString();
@@ -182,7 +182,7 @@
 		 * @return {boolean} True if no errors found in event data.
 		 */
 		function checkEventDataForError( event ) {
-			if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
+			if ( ! event.frmData || ! event.frmData.content.length || ! event.frmData.content.includes( '<div class="frm_error_style' ) ) {
 				return true;
 			}
 
@@ -242,17 +242,11 @@
 	}
 
 	function addName( $form ) {
-		let i,
-			firstField,
-			lastField,
-			firstFieldContainer,
-			lastFieldContainer,
-			firstNameID = '',
-			lastNameID = '',
-			subFieldEl;
+		let firstNameID = '';
+		let lastNameID = '';
 
 		const cardObject = {};
-		const settings = frm_stripe_vars.settings;
+		const { settings } = frm_stripe_vars;
 
 		/**
 		 * Gets first, middle or last name from the given field.
@@ -263,14 +257,14 @@
 		 */
 		const getNameFieldValue = function( field, subFieldName ) {
 			if ( 'object' !== typeof field ) {
-				field = document.getElementById( 'frm_field_' + field + '_container' );
+				field = document.getElementById( `frm_field_${ field }_container` );
 			}
 
 			if ( ! field || 'object' !== typeof field || 'function' !== typeof field.querySelector ) {
 				return '';
 			}
 
-			subFieldEl = field.querySelector( '.frm_combo_inputs_container .frm_form_subfield-' + subFieldName + ' input' );
+			const subFieldEl = field.querySelector( `.frm_combo_inputs_container .frm_form_subfield-${ subFieldName } input` );
 			if ( ! subFieldEl ) {
 				return '';
 			}
@@ -278,7 +272,7 @@
 			return subFieldEl.value;
 		};
 
-		for ( i = 0; i < settings.length; i++ ) {
+		for ( let i = 0; i < settings.length; i++ ) {
 			firstNameID = settings[ i ].first_name;
 			lastNameID = settings[ i ].last_name;
 		}
@@ -297,34 +291,34 @@
 			if ( type === 'container' ) {
 				return queryForNameFieldIsFound
 					? window.frmProForm.queryForNameField( fieldID, 'container' )
-					: document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
+					: document.querySelector( `#frm_field_${ fieldID }_container, .frm_field_${ fieldID }_container` );
 			}
 
 			return queryForNameFieldIsFound
 				? window.frmProForm.queryForNameField( fieldID, 'field', $form[ 0 ] )
-				: $form[ 0 ].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
+				: $form[ 0 ].querySelector( `#frm_field_${ fieldID }_container input, input[name="item_meta[${ fieldID }]"], .frm_field_${ fieldID }_container input` );
 		}
 
 		if ( firstNameID !== '' ) {
-			firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
-			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+			const firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
+			if ( firstFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
-				firstField = getNameFieldItem( firstNameID, 'field', $form );
-				if ( firstField && firstField.value ) {
+				const firstField = getNameFieldItem( firstNameID, 'field', $form );
+				if ( firstField?.value ) {
 					cardObject.name = firstField.value;
 				}
 			}
 		}
 
 		if ( lastNameID !== '' ) {
-			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
-			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
-				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
+			const lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
+			if ( lastFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
-				lastField = getNameFieldItem( lastNameID, 'field', $form );
-				if ( lastField && lastField.value ) {
-					cardObject.name = cardObject.name + ' ' + lastField.value;
+				const lastField = getNameFieldItem( lastNameID, 'field', $form );
+				if ( lastField?.value ) {
+					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
 			}
 		}
@@ -361,7 +355,7 @@
 
 		function addFieldDataToPriceFieldsArray( field ) {
 			if ( isNaN( field ) ) {
-				priceFields.push( 'field_' + field );
+				priceFields.push( `field_${ field }` );
 			} else {
 				priceFields.push( field );
 			}
@@ -384,7 +378,7 @@
 		each(
 			frm_stripe_vars.settings,
 			function( setting ) {
-				if ( -1 !== setting.gateways.indexOf( 'stripe' ) ) {
+				if ( setting.gateways.includes( 'stripe' ) ) {
 					stripeSettings.push( setting );
 				}
 			}
@@ -394,19 +388,17 @@
 
 	// Update price intent on change.
 	function priceChanged( _, field, fieldId ) {
-		let i;
-		let data;
 		const price = getPriceFields();
 		let run = price.includes( fieldId ) || price.includes( field.id );
 		if ( ! run ) {
-			for ( i = 0; i < price.length; i++ ) {
+			for ( let i = 0; i < price.length; i++ ) {
 				if ( field.id.indexOf( price[ i ] ) === 0 ) {
 					run = true;
 				}
 			}
 		}
 		if ( run ) {
-			data = {
+			const data = {
 				action: 'frm_strp_amount',
 				form: JSON.stringify( jQuery( field ).closest( 'form' ).serializeArray() ),
 				nonce: frm_stripe_vars.nonce
@@ -419,9 +411,9 @@
 
 	function postAjax( data, success ) {
 		const xmlHttp = new XMLHttpRequest();
-		const params = typeof data == 'string' ? data : Object.keys( data ).map(
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
-				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
+				return `${ encodeURIComponent( k ) }=${ encodeURIComponent( data[ k ] ) }`;
 			}
 		).join( '&' );
 
@@ -464,7 +456,7 @@
 		}
 
 		const formId = parseInt( stripeLinkForm.querySelector( 'input[name="form_id"]' ).value );
-		const intentField = stripeLinkForm.querySelector( 'input[name="frmintent' + formId + '[]"]' );
+		const intentField = stripeLinkForm.querySelector( `input[name="frmintent${ formId }[]"]` );
 
 		if ( ! intentField ) {
 			return false;
@@ -494,7 +486,7 @@
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
-		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form: form } );
+		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form } );
 	}
 
 	/**
@@ -522,7 +514,7 @@
 			},
 			rules: frm_stripe_vars.appearanceRules
 		};
-		elements = frmstripe.elements( { clientSecret: clientSecret, appearance: appearance } );
+		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
 
 		insertAuthenticationElement( cardElement );
@@ -531,7 +523,7 @@
 		triggerCustomEvent(
 			document,
 			'frmStripeLiteLoadElements',
-			{ cardElement: cardElement }
+			{ cardElement }
 		);
 	}
 
@@ -549,7 +541,8 @@
 		}
 
 		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
-		/* eslint-disable no-bitwise */
+
+		// eslint-disable-next-line no-bitwise -- Bitwise shifts are intentional for RGBA to hex conversion
 		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
 			.toString( 16 )
 			.slice( 1 ) }`;
@@ -565,7 +558,7 @@
 	 * @return {void}
 	 */
 	function insertAuthenticationElement( cardElement ) {
-		let emailInput, cardFieldContainer;
+		let emailInput;
 
 		let addAboveCardElement = true;
 		const emailField = checkForEmailField();
@@ -583,16 +576,16 @@
 
 		if ( addAboveCardElement ) {
 			// If no email field is found, add the email field above the credit card.
-			cardFieldContainer = cardElement.closest( '.frm_form_field' );
+			const cardFieldContainer = cardElement.closest( '.frm_form_field' );
 			cardFieldContainer.parentNode.insertBefore( authenticationMountTarget, cardFieldContainer );
 
 			triggerCustomEvent(
 				document,
 				'frmStripeLiteAddAuthElementAboveCardElement',
 				{
-					cardElement: cardElement,
-					cardFieldContainer: cardFieldContainer,
-					authenticationMountTarget: authenticationMountTarget
+					cardElement,
+					cardFieldContainer,
+					authenticationMountTarget
 				}
 			);
 		}
@@ -633,7 +626,7 @@
 		return function( event ) {
 			linkAuthenticationElementIsComplete = event.complete;
 
-			if ( linkAuthenticationElementIsComplete && 'undefined' !== typeof emailInput ) {
+			if ( linkAuthenticationElementIsComplete && emailInput !== undefined ) {
 				syncEmailInput( event.value.email );
 			}
 
@@ -812,13 +805,9 @@
 	 * @return {string} Field value.
 	 */
 	function getSettingFieldValue( field ) {
-		let value;
-		if ( 'hidden' === field.getAttribute( 'type' ) ) {
-			value = field.value;
-		} else {
-			value = field.querySelector( 'input' ).value;
-		}
-		return value;
+		return 'hidden' === field.getAttribute( 'type' )
+			? field.value
+			: field.querySelector( 'input' ).value;
 	}
 
 	/**
@@ -842,8 +831,6 @@
 		each( getStripeSettings(), checkStripeSettingForField );
 
 		function checkStripeSettingForField( currentSetting ) {
-			let currentFieldId, fieldMatchByKey, fieldContainer, hiddenInput;
-
 			if ( 'string' !== typeof currentSetting[ settingKey ] || ! currentSetting[ settingKey ].length ) {
 				return;
 			}
@@ -851,33 +838,34 @@
 			const currentSettingValue = currentSetting[ settingKey ];
 			const settingIsWrappedAsShortcode = '[' === currentSettingValue[ 0 ] && ']' === currentSettingValue[ currentSettingValue.length - 1 ];
 
+			let currentFieldId;
+			let fieldMatchByKey;
+
 			if ( settingIsWrappedAsShortcode ) {
 				// Email is wrapped as a shortcode.
 				currentFieldId = currentSettingValue.substr( 1, currentSettingValue.length - 2 );
 
 				if ( isNaN( currentFieldId ) ) {
 					// If it is not a number, try as a field key.
-					fieldMatchByKey = fieldContainer = document.getElementById( 'field_' + currentFieldId );
+					fieldMatchByKey = document.getElementById( `field_${ currentFieldId }` );
 				}
 			} else {
 				// First name and last name are not wrapped as shortcodes.
 				currentFieldId = currentSettingValue;
 			}
 
-			if ( fieldMatchByKey ) {
-				fieldContainer = fieldMatchByKey.closest( '.frm_form_field' );
-			} else {
-				fieldContainer = document.getElementById( 'frm_field_' + currentFieldId + '_container' );
-			}
+			const fieldContainer = fieldMatchByKey
+				? fieldMatchByKey.closest( '.frm_form_field' )
+				: document.getElementById( `frm_field_${ currentFieldId }_container` );
 
 			if ( ! fieldContainer ) {
-				hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + ']"]' );
+				let hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }]"]` );
 
 				if ( ! hiddenInput ) {
 					if ( 'first_name' === settingKey ) {
-						hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + '][first]"]' );
+						hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }][first]"]` );
 					} else if ( 'last_name' === settingKey ) {
-						hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + '][last]"]' );
+						hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }][last]"]` );
 					}
 				}
 
@@ -906,7 +894,7 @@
 	 */
 	function createMountTarget( className ) {
 		const newElement = document.createElement( 'div' );
-		newElement.className = className + ' frm_form_field form-field';
+		newElement.className = `${ className } frm_form_field form-field`;
 		return newElement;
 	}
 
@@ -918,9 +906,8 @@
 	 * @return {void}
 	 */
 	function each( items, callback ) {
-		let index;
-		const length = items.length;
-		for ( index = 0; index < length; index++ ) {
+		const { length } = items;
+		for ( let index = 0; index < length; index++ ) {
 			if ( false === callback( items[ index ], index ) ) {
 				break;
 			}
@@ -938,7 +925,7 @@
 		each(
 			getPriceFields(),
 			function( fieldId ) {
-				const fieldContainer = document.getElementById( 'frm_field_' + fieldId + '_container' );
+				const fieldContainer = document.getElementById( `frm_field_${ fieldId }_container` );
 				if ( ! fieldContainer ) {
 					return;
 				}
@@ -969,8 +956,8 @@
 	);
 
 	window.frmStripeLiteForm = {
-		readyToSubmitStripeLink: readyToSubmitStripeLink,
-		processForm: function( _, e, form ) {
+		readyToSubmitStripeLink,
+		processForm( _, e, form ) {
 			event = e;
 			thisForm = form;
 			processForm();

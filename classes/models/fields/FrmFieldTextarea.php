@@ -101,9 +101,11 @@ class FrmFieldTextarea extends FrmFieldType {
 		$this->add_aria_description( $args, $input_html );
 		$rows = $this->field['max'] ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
 			$rows . $input_html . '>' .
 			FrmAppHelper::esc_textarea( $this->field['value'] ) .
 			'</textarea>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 }

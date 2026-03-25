@@ -403,26 +403,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Replace an [email] shortcode with the current user email.
-	 *
-	 * @param string $email
-	 *
-	 * @return string
-	 */
-	private static function replace_email_shortcode( $email ) {
-		if ( ! str_contains( $email, '[email]' ) ) {
-			return $email;
-		}
-
-		global $current_user;
-		return str_replace(
-			'[email]',
-			! empty( $current_user->user_email ) ? $current_user->user_email : '',
-			$email
-		);
-	}
-
-	/**
 	 * Convert the amount from 10.00 to 1000.
 	 *
 	 * @param mixed $amount

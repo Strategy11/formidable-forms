@@ -23,7 +23,7 @@
 
 .frm_reverse_button {
 	font-size: 1em;
-	transition: all .2s ease;
+	transition: all 0.2s ease;
 }
 
 .frm-button-primary,
@@ -51,7 +51,7 @@
 	border-radius: 30px;
 	border: 1px solid var(--primary-500);
 	font-size: var(--text-sm);
-	transition: all .2s ease;
+	transition: all 0.2s ease;
 	padding: 7px 16px;
 	height: auto;
 	min-height: 28px;
@@ -76,7 +76,7 @@
 		background-clip: padding-box !important;
 
 		&::before {
-			content: '';
+			content: "";
 			position: absolute;
 			top: 0;
 			right: 0;
@@ -85,7 +85,7 @@
 			z-index: -1;
 			margin: -1px;
 			border-radius: inherit;
-			background: linear-gradient(90deg, #129EFD 0%, #A334FD 100%);
+			background: linear-gradient(90deg, #129efd 0%, #a334fd 100%);
 			transition: opacity 150ms ease-out;
 		}
 	}
@@ -151,7 +151,7 @@
 }
 
 .frm-with-icon svg {
-	opacity: .65; /* Get close to grey-500 without overriding hover colors */
+	opacity: 0.65; /* Get close to grey-500 without overriding hover colors */
 }
 
 .frm-with-icon.button svg {
@@ -316,7 +316,7 @@
 input.frm_insert_in_template {
 	font-size: 10px;
 	width: 98%;
-	font-weight: 400
+	font-weight: 400;
 }
 
 .frm-dismissible a.dismiss:focus {

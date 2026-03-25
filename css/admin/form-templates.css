@@ -193,6 +193,7 @@ p.frm-form-templates-item-description {
  *
  * Customizes the look of modals on the Form Templates page.
  */
+
 /* Upgrade Modal */
 #frm-form-upgrade-modal .frm-upgrade-modal-plan-icon {
 	color: var(--error-500);

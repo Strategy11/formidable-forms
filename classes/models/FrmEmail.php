@@ -176,7 +176,7 @@ class FrmEmail {
 
 		$this->to = array_unique( (array) $to );
 
-		if ( empty( $this->to ) ) {
+		if ( ! $this->to ) {
 			return;
 		}
 
@@ -511,7 +511,7 @@ class FrmEmail {
 	 * @return bool
 	 */
 	private function has_recipients() {
-		return ! ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) );
+		return $this->to || $this->cc || $this->bcc;
 	}
 
 	/**
@@ -586,11 +586,11 @@ class FrmEmail {
 	private function package_header() {
 		$header = array();
 
-		if ( ! empty( $this->cc ) ) {
+		if ( $this->cc ) {
 			$header[] = 'CC: ' . implode( ',', $this->cc );
 		}
 
-		if ( ! empty( $this->bcc ) ) {
+		if ( $this->bcc ) {
 			$header[] = 'BCC: ' . implode( ',', $this->bcc );
 		}
 
@@ -661,7 +661,7 @@ class FrmEmail {
 	 * @return array|string Emails.
 	 */
 	private function explode_emails( $emails ) {
-		$emails = ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '';
+		$emails = $emails ? preg_split( '/(,|;)/', $emails ) : '';
 		return is_array( $emails ) ? array_map( 'trim', $emails ) : trim( $emails );
 	}
 
@@ -688,14 +688,14 @@ class FrmEmail {
 			$parts = explode( ' ', $val );
 			$email = end( $parts );
 
-			if ( is_email( $email ) ) {
-				// If user enters a name and email
-				$name = trim( str_replace( $email, '', $val ) );
-			} else {
+			if ( ! is_email( $email ) ) {
 				// If user enters a name without an email
 				unset( $recipients[ $key ] );
 				continue;
 			}
+
+			// If user enters a name and email
+			$name = trim( str_replace( $email, '', $val ) );
 
 			$recipients[ $key ] = $this->format_from_email( $name, $email );
 		}//end foreach
@@ -809,11 +809,7 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function format_from_email( $name, $email ) {
-		if ( '' !== $name ) {
-			$email = $name . ' <' . $email . '>';
-		}
-
-		return $email;
+		return '' !== $name ? $name . ' <' . $email . '>' : $email;
 	}
 
 	/**
@@ -826,31 +822,34 @@ class FrmEmail {
 	 */
 	private function handle_phone_numbers() {
 		foreach ( $this->to as $key => $recipient ) {
-			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
-				$recipient = explode( ' ', $recipient );
+			if ( '[admin_email]' === $recipient || is_email( $recipient ) ) {
+				continue;
+			}
 
-				if ( is_email( end( $recipient ) ) ) {
-					continue;
-				}
+			$recipient = explode( ' ', $recipient );
 
-				do_action(
-					'frm_send_to_not_email',
-					array(
-						'e'           => $recipient,
-						'subject'     => $this->subject,
-						'mail_body'   => $this->message,
-						'reply_to'    => $this->reply_to,
-						'from'        => $this->from,
-						'plain_text'  => $this->is_plain_text,
-						'attachments' => $this->attachments,
-						'form'        => $this->form,
-						'email_key'   => $key,
-					)
-				);
+			if ( is_email( end( $recipient ) ) ) {
+				continue;
+			}
 
-				// Remove phone number from to addresses
-				unset( $this->to[ $key ] );
-			}//end if
+			do_action(
+				'frm_send_to_not_email',
+				array(
+					'e'           => $recipient,
+					'subject'     => $this->subject,
+					'mail_body'   => $this->message,
+					'reply_to'    => $this->reply_to,
+					'from'        => $this->from,
+					'plain_text'  => $this->is_plain_text,
+					'attachments' => $this->attachments,
+					'form'        => $this->form,
+					'email_key'   => $key,
+				)
+			);
+
+			// Remove phone number from to addresses
+			unset( $this->to[ $key ] );
+		// end if
 		}//end foreach
 	}
 
@@ -925,7 +924,7 @@ class FrmEmail {
 	 */
 	private function encode_subject( $subject ) {
 		if ( apply_filters( 'frm_encode_subject', false, $subject ) ) {
-			$subject = '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
+			return '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
 		}
 
 		return $subject;

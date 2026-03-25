@@ -64,6 +64,7 @@ class FrmShowForm extends WP_Widget {
 			'description' => false,
 		);
 		$instance = wp_parse_args( $instance, $defaults );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
@@ -101,6 +102,7 @@ class FrmShowForm extends WP_Widget {
 			</label>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		return '';
 	}
 }

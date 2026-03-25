@@ -191,6 +191,7 @@ class FrmDashboardHelper {
 
 		foreach ( $buttons as $button ) {
 			$add_classes = ! empty( $button['classes'] ) ? ' ' . $button['classes'] : ' frm-button-secondary';
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="<?php echo esc_url( $button['link'] ); ?>" target="_blank"
 				class="<?php echo esc_attr( $button_classes . $add_classes ); ?>"
@@ -198,6 +199,7 @@ class FrmDashboardHelper {
 				<?php echo esc_html( $button['label'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 

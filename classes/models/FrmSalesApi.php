@@ -437,6 +437,7 @@ class FrmSalesApi extends FrmFormApi {
 			$dismiss_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
 			<div>
@@ -458,6 +459,7 @@ class FrmSalesApi extends FrmFormApi {
 			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?></a>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		return true;
 	}
@@ -533,7 +535,7 @@ class FrmSalesApi extends FrmFormApi {
 					return;
 				}
 
-				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && ! empty( self::$cross_sell_link ) ) {
+				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && self::$cross_sell_link ) {
 					wp_redirect( self::$cross_sell_link );
 					exit;
 				}

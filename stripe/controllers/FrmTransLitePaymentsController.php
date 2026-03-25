@@ -140,11 +140,13 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			return;
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a href="?page=formidable-entries&amp;action=show&amp;frm_action=show&amp;id=<?php echo absint( $payment->item_id ); ?>">
 			<?php echo absint( $payment->item_id ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -175,7 +177,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			 * @param string $link
 			 * @param object $payment
 			 */
-			$link = apply_filters( 'frm_pay_' . $paysys . '_refund_link', $link, $payment );
+			return apply_filters( 'frm_pay_' . $paysys . '_refund_link', $link, $payment );
 		}
 
 		return $link;

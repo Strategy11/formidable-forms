@@ -1,3 +1,4 @@
+@import '../frm-web-component.scss';
 .frm-tabs-wrapper {
 	position: relative;
 	overflow: hidden;
@@ -89,17 +90,10 @@
         position: absolute;
         left: 0;
         bottom: 8px;
-        width: 45px;
         transition: 0.4s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
         border-radius: var(--small-radius);
         box-shadow: var(--button-shadow);
-    }
-
-    .frm-tabs-active-underline.frm-first {
-        left: var(--gap-xs);
-    }
-    .frm-tabs-active-underline.frm-last {
-        left: calc(-1 * var(--gap-xs));
+		display: none;
     }
 }
 .frm-tabs-container {

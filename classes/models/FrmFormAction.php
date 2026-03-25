@@ -210,7 +210,7 @@ class FrmFormAction {
 		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
 
 		if ( $updated_action === $action ) {
-			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
+			return FrmFieldsHelper::switch_field_ids( $action );
 		}
 
 		return $updated_action;
@@ -256,7 +256,7 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
+		$name .= $post_field ? '[' . $post_field . ']' : '';
 
 		return $name . ( '[' . $field_name . ']' );
 	}
@@ -466,13 +466,13 @@ class FrmFormAction {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( isset( $_POST[ $this->option_name ] ) && is_array( $_POST[ $this->option_name ] ) ) {
-			// Sanitizing removes scripts and <email> type of values.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-			$settings = wp_unslash( $_POST[ $this->option_name ] );
-		} else {
+		if ( ! isset( $_POST[ $this->option_name ] ) || ! is_array( $_POST[ $this->option_name ] ) ) {
 			return null;
 		}
+
+		// Sanitizing removes scripts and <email> type of values.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		$settings = wp_unslash( $_POST[ $this->option_name ] );
 
 		$action_ids = array();
 
@@ -640,11 +640,7 @@ class FrmFormAction {
 			}
 		}
 
-		if ( 1 === $limit ) {
-			$settings = reset( $settings );
-		}
-
-		return $settings;
+		return 1 === $limit ? reset( $settings ) : $settings;
 	}
 
 	/**
@@ -765,16 +761,12 @@ class FrmFormAction {
 			$settings[ $action->ID ] = $action;
 		}
 
-		if ( 1 === $limit ) {
-			$settings = reset( $settings );
-		}
-
-		return $settings;
+		return 1 === $limit ? reset( $settings ) : $settings;
 	}
 
 	/**
-	 * @param int $form_id
-	 * @param int $limit
+	 * @param int|string $form_id
+	 * @param int        $limit
 	 *
 	 * @return array
 	 */
@@ -809,12 +801,14 @@ class FrmFormAction {
 		$action->post_content += $default_values;
 
 		foreach ( $default_values as $k => $vals ) {
-			if ( is_array( $vals ) && $vals ) {
-				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
-					continue;
-				}
-				$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );
+			if ( ! is_array( $vals ) || ! $vals ) {
+				continue;
 			}
+
+			if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
+				continue;
+			}
+			$action->post_content[ $k ] = wp_parse_args( $action->post_content[ $k ], $vals );
 		}
 
 		if ( ! is_array( $action->post_content['event'] ) ) {
@@ -915,10 +909,12 @@ class FrmFormAction {
 
 		// Fill with existing options
 		foreach ( $action->post_content as $name => $val ) {
-			if ( isset( $form->options[ $name ] ) ) {
-				$action->post_content[ $name ] = $form->options[ $name ];
-				unset( $form->options[ $name ] );
+			if ( ! isset( $form->options[ $name ] ) ) {
+				continue;
 			}
+
+			$action->post_content[ $name ] = $form->options[ $name ];
+			unset( $form->options[ $name ] );
 		}
 
 		$action = $this->migrate_values( $action, $form );
@@ -997,6 +993,7 @@ class FrmFormAction {
 	 * @return void
 	 */
 	public function render_conditional_logic_call_to_action() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			<h3>
 				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
@@ -1004,6 +1001,7 @@ class FrmFormAction {
 				</a>
 			</h3>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

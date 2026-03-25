@@ -4,7 +4,7 @@
 
 .frm-gradient,
 .frm-upgrade-bar {
-	background: linear-gradient(90deg, #388CF3, #1961D5, #8C7FD8) !important;
+	background: linear-gradient(90deg, #388cf3, #1961d5, #8c7fd8) !important;
 	color: #fff !important;
 	border: 0 !important;
 }
@@ -12,7 +12,7 @@
 .frm-gradient.frm-button-primary:not([disabled]),
 .frm-gradient.frm-button-primary:not([disabled]):hover,
 .frm-gradient.frm-button-primary:not([disabled]):focus {
-	background: linear-gradient(90deg, #1961D5, #816CFA) !important;
+	background: linear-gradient(90deg, #1961d5, #816cfa) !important;
 }
 
 .frm-upgrade-bar,
@@ -22,7 +22,7 @@
 
 .frm-upgrade-bar::before,
 .frm-gradient::before {
-	content: '';
+	content: "";
 	display: none;
 	position: absolute;
 	top: 0;
@@ -62,5 +62,5 @@
 }
 
 .frm-upgrade-bar span {
-	opacity: .9;
+	opacity: 0.9;
 }

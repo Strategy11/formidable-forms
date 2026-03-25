@@ -474,6 +474,14 @@ class FrmFieldsHelper {
 			),
 		);
 
+		/**
+		 * @since 6.28
+		 *
+		 * @param array        $defaults
+		 * @param array|object $field
+		 */
+		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults, $field );
+
 		$msg = FrmField::get_option( $field, $error );
 		$msg = $msg ? $msg : $defaults[ $error ]['part'];
 		$msg = do_shortcode( $msg );
@@ -598,13 +606,15 @@ class FrmFieldsHelper {
 	public static function run_wpautop( $atts, &$value ) {
 		$autop = $atts['wpautop'] ?? true;
 
-		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
-			if ( is_array( $value ) ) {
-				$value = implode( "\n", $value );
-			}
-
-			$value = wpautop( $value );
+		if ( ! apply_filters( 'frm_use_wpautop', $autop ) ) {
+			return;
 		}
+
+		if ( is_array( $value ) ) {
+			$value = implode( "\n", $value );
+		}
+
+		$value = wpautop( $value );
 	}
 
 	/**
@@ -621,7 +631,7 @@ class FrmFieldsHelper {
 	public static function label_position( $position, $field, $form ) {
 		if ( $position ) {
 			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
-				$position = 'top';
+				return 'top';
 			}
 
 			return $position;
@@ -810,13 +820,15 @@ class FrmFieldsHelper {
 	public static function smart_values() {
 		$continue = apply_filters( 'frm_smart_values_box', true );
 
-		if ( $continue === true ) {
-			$upgrade_link = array(
-				'medium'  => 'builder',
-				'content' => 'smart-tags',
-			);
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php';
+		if ( $continue !== true ) {
+			return;
 		}
+
+		$upgrade_link = array(
+			'medium'  => 'builder',
+			'content' => 'smart-tags',
+		);
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php';
 	}
 
 	/**
@@ -1344,7 +1356,7 @@ class FrmFieldsHelper {
 		}
 
 		if ( is_array( $new_value ) && ! $return_array ) {
-			$new_value = implode( ', ', $new_value );
+			return implode( ', ', $new_value );
 		}
 
 		return $new_value;
@@ -1415,13 +1427,13 @@ class FrmFieldsHelper {
 				$info = $user->$user_info ?? '';
 			}
 
-			if ( 'display_name' === $user_info && empty( $info ) && ! $args['blank'] ) {
+			if ( 'display_name' === $user_info && ! $info && ! $args['blank'] ) {
 				$info = $user->user_login;
 			}
 		}
 
 		if ( $args['link'] ) {
-			$info = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
+			return '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . $info . '</a>';
 		}
 
 		return $info;
@@ -1732,12 +1744,14 @@ class FrmFieldsHelper {
 
 		$label = $args['opt_label'] ?? $args['field']['name'];
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		echo '<label for="' . esc_attr( $other_id ) . '" class="frm_screen_reader frm_hidden">' .
 			esc_html( $label ) .
 			'</label>' .
 			'<input type="text" id="' . esc_attr( $other_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" ' .
 			( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' ) .
 			' name="' . esc_attr( $args['name'] ) . '" value="' . esc_attr( $args['value'] ) . '" />';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1811,16 +1825,18 @@ class FrmFieldsHelper {
 		}
 
 		foreach ( $val as $k => $v ) {
-			if ( is_string( $v ) ) {
-				if ( 'custom_html' === $k ) {
-					$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
-					unset( $k, $v );
-					continue;
-				}
-
-				$val[ $k ] = str_replace( $replace, $replace_with, $v );
-				unset( $k, $v );
+			if ( ! is_string( $v ) ) {
+				continue;
 			}
+
+			if ( 'custom_html' === $k ) {
+				$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
+				unset( $k, $v );
+				continue;
+			}
+
+			$val[ $k ] = str_replace( $replace, $replace_with, $v );
+			unset( $k, $v );
 		}
 
 		return $val;
@@ -2367,32 +2383,20 @@ class FrmFieldsHelper {
 		}
 
 		// If the individual field isn't allowed, disable it.
-		$run_filter             = true;
-		$single_no_allow        = ' ';
-		$install_data           = '';
-		$requires               = '';
-		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
-		$has_show_upgrade_class = isset( $field_type['icon'] ) && str_contains( $field_type['icon'], ' frm_show_upgrade' );
-		$show_upgrade           = $has_show_upgrade_class || str_contains( $args['no_allow_class'], 'frm_show_upgrade' );
+		$link = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
 
-		if ( $has_show_upgrade_class ) {
-			$single_no_allow   .= 'frm_show_upgrade';
-			$field_type['icon'] = str_replace( ' frm_show_upgrade', '', $field_type['icon'] );
-			$run_filter         = false;
+		list(
+			$run_filter,
+			$single_no_allow,
+			$install_data,
+			$requires,
+			$has_show_upgrade_class,
+			$has_show_update_class,
+			$upgrading,
+			$update_addon_name
+		) = self::get_field_upgrade_state( $field_type );
 
-			if ( isset( $field_type['addon'] ) ) {
-				$upgrading = FrmAddonsController::install_link( $field_type['addon'] );
-
-				if ( isset( $upgrading['url'] ) ) {
-					$install_data = json_encode( $upgrading );
-				}
-
-				$requires = FrmFormsHelper::get_plan_required( $upgrading );
-			} elseif ( isset( $field_type['require'] ) ) {
-				$requires = $field_type['require'];
-			}
-		}
-
+		$show_upgrade    = $has_show_upgrade_class || $has_show_update_class || str_contains( $args['no_allow_class'], 'frm_show_upgrade' );
 		$upgrade_label   = '';
 		$upgrade_message = '';
 
@@ -2436,7 +2440,14 @@ class FrmFieldsHelper {
 			);
 		}
 
-		if ( isset( $upgrading['url'] ) ) {
+		if ( $has_show_update_class ) {
+			$li_params['data-message'] = sprintf(
+				// translators: %1$s: Add-on name, %2$s: Field type name.
+				esc_html__( 'You need a newer version of %1$s for %2$s fields.', 'formidable' ),
+				$update_addon_name,
+				$field_name
+			);
+		} elseif ( isset( $upgrading['url'] ) ) {
 			$li_params['data-message'] = sprintf(
 				// translators: %s: Field name
 				esc_html__( 'You already have access to %s fields, you\'ll just need to activate to start using them.', 'formidable' ),
@@ -2445,16 +2456,89 @@ class FrmFieldsHelper {
 		} elseif ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li <?php FrmAppHelper::array_to_html_params( $li_params, true ); ?>>
 		<?php
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
 		}
+
 		FrmAppHelper::kses_echo( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) );
 		?>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Parse the upgrade and update flags from a field type's icon class.
+	 *
+	 * @since 6.29
+	 *
+	 * @param array $field_type Field type configuration, modified in place to strip icon flag classes.
+	 *
+	 * @return array Upgrade and update state values for the field button, in positional order.
+	 */
+	private static function get_field_upgrade_state( &$field_type ) {
+		$single_no_allow        = ' ';
+		$run_filter             = true;
+		$has_show_upgrade_class = false;
+		$has_show_update_class  = false;
+		$install_data           = '';
+		$requires               = '';
+		$upgrading              = array();
+		$update_addon_name      = '';
+
+		if ( isset( $field_type['icon'] ) ) {
+			$has_show_upgrade_class = str_contains( $field_type['icon'], ' frm_show_upgrade' );
+			$has_show_update_class  = str_contains( $field_type['icon'], ' frm_show_update' );
+		}
+
+		if ( $has_show_upgrade_class ) {
+			$single_no_allow   .= 'frm_show_upgrade';
+			$field_type['icon'] = str_replace( ' frm_show_upgrade', '', $field_type['icon'] );
+			$run_filter         = false;
+
+			if ( isset( $field_type['addon'] ) ) {
+				$upgrading = FrmAddonsController::install_link( $field_type['addon'] );
+
+				if ( isset( $upgrading['url'] ) ) {
+					$install_data = json_encode( $upgrading );
+				}
+
+				$requires = FrmFormsHelper::get_plan_required( $upgrading );
+			} elseif ( isset( $field_type['require'] ) ) {
+				$requires = $field_type['require'];
+			}
+		}
+
+		if ( $has_show_update_class ) {
+			$single_no_allow   .= ' frm_show_update';
+			$field_type['icon'] = str_replace( ' frm_show_update', '', $field_type['icon'] );
+			$run_filter         = false;
+			$addon_slug         = $field_type['addon'] ?? 'pro';
+
+			if ( 'pro' === $addon_slug ) {
+				$update_addon_name = __( 'Formidable Pro', 'formidable' );
+			} else {
+				$addon_data        = FrmAddonsController::get_addon( $addon_slug );
+				$update_addon_name = $addon_data && ! empty( $addon_data['title'] ) ? $addon_data['title'] : ucfirst( $addon_slug );
+			}
+
+			$install_data = FrmAddonsController::get_update_install_data( $addon_slug );
+		}
+
+		return array(
+			$run_filter,
+			$single_no_allow,
+			$install_data,
+			$requires,
+			$has_show_upgrade_class,
+			$has_show_update_class,
+			$upgrading,
+			$update_addon_name,
+		);
 	}
 
 	/**
@@ -2745,14 +2829,14 @@ class FrmFieldsHelper {
 
 		if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
 			// Backwards compatibility "@since 6.24".
-			if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+			if ( method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
+				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
+			} else {
 				$data = array(
 					'modal-title'   => __( 'Generate options with AI', 'formidable' ),
 					'modal-content' => __( 'Update the Formidable AI add-on to the last version to use this feature.', 'formidable' ),
 				);
-			} else {
-				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
-				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
 			}
 		}
 
@@ -2794,5 +2878,86 @@ class FrmFieldsHelper {
 				'frm-mb-12',
 			)
 		);
+	}
+
+	/**
+	 * Checks if the field choice should be hidden due to choice limit being reached.
+	 *
+	 * @since 6.28
+	 *
+	 * @param string $choice_key
+	 * @param array  $field
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_key, $field ) {
+		/**
+		 * @since 6.28
+		 *
+		 * @param bool   $hide_field_choice
+		 * @param string $choice_key
+		 * @param array  $field
+		 */
+		return (bool) apply_filters( 'frm_hide_field_choice', false, $choice_key, $field );
+	}
+
+	/**
+	 * @since 6.28
+	 *
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	public static function should_skip_rendering_choices_for_field( $field ) {
+		/**
+		 * @since 6.28
+		 *
+		 * @param bool  $skip_rendering_options_for_field
+		 * @param array $field
+		 */
+		return (bool) apply_filters( 'frm_should_skip_rendering_choices_for_field', false, $field );
+	}
+
+	/**
+	 * Determine if 'disabled' attribute should be echoed in a field choice's HTML.
+	 *
+	 * @since 6.28
+	 *
+	 * @param string $choice_key
+	 * @param bool   $is_selected_choice
+	 * @param array  $field
+	 *
+	 * @return bool
+	 */
+	public static function should_disable_choice( $choice_key, $is_selected_choice, $field ) {
+		/**
+		 * @since 6.28
+		 *
+		 * @param bool   $echo_disabled_attribute
+		 * @param string $choice_key
+		 * @param bool   $is_selected_choice
+		 * @param array  $field
+		 */
+		return (bool) apply_filters( 'frm_disable_choice', false, $choice_key, $is_selected_choice, $field );
+	}
+
+	/**
+	 * @since 6.28
+	 *
+	 * @param array  $field
+	 * @param string $choice_key
+	 *
+	 * @return void
+	 */
+	public static function after_choice_input( $field, $choice_key ) {
+		/**
+		 * Allows adding content after checkbox, radio button, or dropdown fields.
+		 *
+		 * @since 6.28
+		 *
+		 * @param array  $field The field data.
+		 * @param string $choice_key The option key.
+		 */
+		do_action( 'frm_after_choice_input', $field, $choice_key );
 	}
 }
