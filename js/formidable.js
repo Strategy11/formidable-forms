@@ -764,7 +764,7 @@ function frmFrontFormJS() {
 
 		if ( response.length === 0 ) {
 			const fieldContainer = recaptcha.closest( '.frm_form_field' );
-			if ( fieldContainer && fieldContainer.id ) {
+			if ( fieldContainer?.id ) {
 				const fieldID = fieldContainer.id.replace( 'frm_field_', '' ).replace( '_container', '' );
 				errors[ fieldID ] = '';
 			}
@@ -956,10 +956,10 @@ function frmFrontFormJS() {
 
 					if ( $fieldCont.length ) {
 						if ( ! $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
-							const inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
+							const inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest, formidable/no-jquery-variable-methods
 							if ( inCollapsedSection.length ) {
 								let frmTrigger = inCollapsedSection.prev();
-								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
+								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) { // eslint-disable-line formidable/no-jquery-variable-methods
 									// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 									frmTrigger = frmTrigger.prev( '.frm_trigger' );
 								}
@@ -1277,7 +1277,7 @@ function frmFrontFormJS() {
 	}
 
 	function showLoadingIndicator( $object ) {
-		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) { // eslint-disable-line no-jquery/no-class
+		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) { // eslint-disable-line no-jquery/no-class, formidable/no-jquery-variable-methods
 			addLoadingClass( $object );
 			$object.trigger( 'frmStartFormLoading' );
 		}
@@ -1286,7 +1286,7 @@ function frmFrontFormJS() {
 	function addLoadingClass( $object ) {
 		const loadingClass = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
 
-		$object.addClass( loadingClass ); // eslint-disable-line no-jquery/no-class
+		$object.addClass( loadingClass ); // eslint-disable-line no-jquery/no-class, formidable/no-jquery-variable-methods
 	}
 
 	function isGoingToPrevPage( $object ) {
@@ -1342,7 +1342,7 @@ function frmFrontFormJS() {
 	function onHoneypotFieldChange() {
 		/*jshint validthis:true */
 		const css = window.getComputedStyle( this ).boxShadow;
-		if ( css && css.match( /inset/ ) ) {
+		if ( css?.match( /inset/ ) ) {
 			this.remove();
 		}
 	}
@@ -1901,7 +1901,7 @@ function frmFrontFormJS() {
 		 */
 		validateFormSubmit( object ) {
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
-			if ( typeof tinyMCE !== 'undefined' && form && form.querySelector( '.wp-editor-wrap' ) ) {
+			if ( typeof tinyMCE !== 'undefined' && form?.querySelector( '.wp-editor-wrap' ) ) {
 				tinyMCE.triggerSave();
 			}
 

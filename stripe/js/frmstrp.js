@@ -301,11 +301,11 @@
 
 		if ( firstNameID !== '' ) {
 			const firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
-			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+			if ( firstFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
 				const firstField = getNameFieldItem( firstNameID, 'field', $form );
-				if ( firstField && firstField.value ) {
+				if ( firstField?.value ) {
 					cardObject.name = firstField.value;
 				}
 			}
@@ -313,11 +313,11 @@
 
 		if ( lastNameID !== '' ) {
 			const lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
-			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+			if ( lastFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
 				const lastField = getNameFieldItem( lastNameID, 'field', $form );
-				if ( lastField && lastField.value ) {
+				if ( lastField?.value ) {
 					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
 			}
