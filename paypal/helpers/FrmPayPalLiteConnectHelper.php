@@ -85,13 +85,15 @@ class FrmPayPalLiteConnectHelper {
 
 		$email = $status->primary_email ?? '';
 
+		$paypal_settings_url = self::get_paypal_account_settings_url( $mode );
+
 		if ( empty( $status->primary_email_confirmed ) ) {
-			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email );
+			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email, '', $paypal_settings_url );
 			return false;
 		}
 
 		if ( ! $status->payments_receivable ) {
-			self::render_error( __( 'Payments are not receivable.', 'formidable' ), $email );
+			self::render_error( __( 'Payments are not receivable.', 'formidable' ), $email, '', $paypal_settings_url );
 			return false;
 		}
 
@@ -179,6 +181,13 @@ class FrmPayPalLiteConnectHelper {
 		echo '<b>' . esc_html__( 'ACDC Application Vetting Status:', 'formidable' ) . '</b>';
 		echo '&nbsp;';
 		echo esc_html( self::get_acdc_vetting_status_message( $vetting_status ) );
+
+		if ( in_array( $vetting_status, array( 'DECLINED', 'DENIED', 'NEED_MORE_DATA' ), true ) ) {
+			echo '&nbsp;';
+			echo '<a href="https://www.paypal.com/bizsignup/entry/product/ppcp" target="_blank" rel="noopener noreferrer">';
+			esc_html_e( 'Reapply for Advanced Card Processing', 'formidable' );
+			echo '</a>';
+		}
 	}
 
 	/**
@@ -219,6 +228,22 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	public static function render_seller_status_placeholder( $mode ) {
 		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/seller-status-placeholder.php';
+	}
+
+	/**
+	 * Get the PayPal account settings URL for the given mode.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 *
+	 * @return string
+	 */
+	private static function get_paypal_account_settings_url( $mode ) {
+		if ( 'test' === $mode ) {
+			return 'https://www.sandbox.paypal.com/businessprofile/settings';
+		}
+		return 'https://www.paypal.com/businessprofile/settings';
 	}
 
 	/**
@@ -273,14 +298,23 @@ class FrmPayPalLiteConnectHelper {
 	 * @param string $message
 	 * @param string $email
 	 * @param string $merchant_id
+	 * @param string $link URL to help the user resolve the issue.
 	 *
 	 * @return void
 	 */
-	private static function render_error( $message, $email = '', $merchant_id = '' ) {
+	private static function render_error( $message, $email = '', $merchant_id = '', $link = '' ) {
 		echo '<div class="frm_error_style">';
 		echo wp_kses_post( $message );
 		self::echo_email( $email );
 		self::echo_merchant_id( $merchant_id );
+
+		if ( $link ) {
+			echo '<br><br>';
+			echo '<a href="' . esc_url( $link ) . '" target="_blank" rel="noopener noreferrer">';
+			esc_html_e( 'Resolve this issue', 'formidable' );
+			echo '</a>';
+		}
+
 		echo '</div>';
 	}
 
@@ -409,7 +443,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		// Return 'https://api.strategy11.com/';
+		// return 'https://api.strategy11.com/';
 		return 'https://dev-site.local/';
 		// return 'https://qa.formidableforms.com/paypal/';
 	}
