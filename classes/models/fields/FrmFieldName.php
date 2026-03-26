@@ -61,10 +61,9 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_processed_sub_fields() {
-		$name_layout = $this->get_name_layout();
-		$names       = explode( '_', $name_layout );
-		$col_class   = 'frm' . intval( 12 / count( $names ) );
-		$result      = array();
+		$names     = explode( '_', $this->get_name_layout() );
+		$col_class = 'frm' . intval( 12 / count( $names ) );
+		$result    = array();
 
 		foreach ( $names as $name ) {
 			if ( empty( $this->sub_fields[ $name ] ) ) {
@@ -147,7 +146,6 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value[ $atts['show'] ] ?? '';
 		}
 
-		$name_layout = $this->get_name_layout();
 
 		$value = wp_parse_args(
 			$value,
@@ -158,7 +156,7 @@ class FrmFieldName extends FrmFieldCombo {
 			)
 		);
 
-		switch ( $name_layout ) {
+		switch ( $this->get_name_layout() ) {
 			case 'last_first':
 				$value = $value['last'] . ' ' . $value['first'];
 				break;

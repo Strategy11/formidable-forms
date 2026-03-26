@@ -194,9 +194,8 @@ class FrmCreateFile {
 	private function create_directories( &$dirs_exist ) {
 		global $wp_filesystem;
 
-		$needed_dirs = $this->get_needed_dirs();
 
-		foreach ( $needed_dirs as $_dir ) {
+		foreach ( $this->get_needed_dirs() as $_dir ) {
 			// Only check to see if the Dir exists upon creation failure. Less I/O this way.
 			if ( $wp_filesystem->mkdir( $_dir, $this->chmod_dir ) ) {
 				$index_path = $_dir . '/index.php';

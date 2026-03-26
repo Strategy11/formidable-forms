@@ -392,9 +392,7 @@ class FrmStyle {
 	 * @return array
 	 */
 	public function get_color_settings() {
-		$defaults = $this->get_defaults();
-		$settings = array_keys( $defaults );
-
+		$settings = array_keys( $this->get_defaults() );
 		return array_filter( $settings, array( $this, 'is_color' ) );
 	}
 

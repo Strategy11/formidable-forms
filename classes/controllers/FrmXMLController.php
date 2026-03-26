@@ -763,11 +763,10 @@ class FrmXMLController {
 	 * @return array CSV fields.
 	 */
 	public static function get_fields_for_csv_export( $form_id, $form ) {
-		$csv_fields       = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
-		$no_export_fields = FrmField::no_save_fields();
+		$csv_fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
 
 		foreach ( $csv_fields as $k => $f ) {
-			if ( in_array( $f->type, $no_export_fields, true ) ) {
+			if ( in_array( $f->type, FrmField::no_save_fields(), true ) ) {
 				unset( $csv_fields[ $k ] );
 			}
 		}

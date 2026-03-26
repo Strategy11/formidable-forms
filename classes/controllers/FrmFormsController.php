@@ -267,13 +267,12 @@ class FrmFormsController {
 
 		do_action( 'frm_before_update_form_settings', $id );
 
-		$antispam_was_on = self::antispam_was_on( $id );
 
 		FrmForm::update( $id, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$antispam_is_on = ! empty( $_POST['options']['antispam'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		if ( $antispam_is_on !== $antispam_was_on ) {
+		if ( $antispam_is_on !== self::antispam_was_on( $id ) ) {
 			FrmAntiSpam::clear_caches();
 		}
 
@@ -1073,9 +1072,8 @@ class FrmFormsController {
 		// In a form with 66 HTML fields, this saves 0.5 seconds on page load time, tested locally.
 		if ( ! isset( self::$formidable_tinymce_button ) ) {
 			FrmAppHelper::load_admin_wide_js();
-			$menu_name                       = FrmAppHelper::get_menu_name();
 			$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-			self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( FrmAppHelper::get_menu_name() ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 		echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -2298,9 +2296,7 @@ class FrmFormsController {
 	 * @since 4.05.02
 	 */
 	private static function move_menu_to_footer() {
-		$settings = FrmAppHelper::get_settings();
-
-		if ( empty( $settings->admin_bar ) ) {
+		if ( empty( FrmAppHelper::get_settings()->admin_bar ) ) {
 			remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
 		}
 	}
@@ -3047,9 +3043,8 @@ class FrmFormsController {
 
 		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
 		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
-		$doing_ajax  = FrmAppHelper::doing_ajax();
 
-		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
+		if ( ! empty( $args['ajax'] ) && FrmAppHelper::doing_ajax() && empty( $args['force_delay_redirect'] ) ) {
 			// Is AJAX submit and there is just one Redirect action runs.
 			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 			wp_die();
@@ -3430,9 +3425,8 @@ class FrmFormsController {
 	 */
 	public static function front_head() {
 		$version = FrmAppHelper::plugin_version();
-		$suffix  = FrmAppHelper::js_suffix();
 
-		if ( $suffix && self::has_combo_js_file() ) {
+		if ( FrmAppHelper::js_suffix() && self::has_combo_js_file() ) {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/frm.min.js', array( 'jquery' ), $version, true );
 		} else {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . "/js/formidable{$suffix}.js", array( 'jquery' ), $version, true );
@@ -3674,7 +3668,7 @@ class FrmFormsController {
 
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$html             = FrmAppHelper::clip(
+		$html = FrmAppHelper::clip(
 			function () {
 				FrmAppHelper::maybe_autocomplete_pages_options(
 					array(
@@ -3685,11 +3679,10 @@ class FrmFormsController {
 				);
 			}
 		);
-		$post_type_object = get_post_type_object( 'page' );
 		wp_send_json(
 			array(
 				'html'          => $html,
-				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
+				'edit_page_url' => admin_url( sprintf( get_post_type_object( 'page' )->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
 	}

@@ -612,7 +612,6 @@ class FrmSettings {
 		global $wp_roles;
 
 		$frm_roles = FrmAppHelper::frm_capabilities();
-		$roles     = get_editable_roles();
 
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			$this->$frm_role = (array) ( $params[ $frm_role ] ?? 'administrator' );
@@ -622,7 +621,7 @@ class FrmSettings {
 				array_push( $this->$frm_role, 'administrator' );
 			}
 
-			foreach ( $roles as $role => $details ) {
+			foreach ( get_editable_roles() as $role => $details ) {
 				if ( in_array( $role, $this->$frm_role, true ) ) {
 					$wp_roles->add_cap( $role, $frm_role );
 				} else {

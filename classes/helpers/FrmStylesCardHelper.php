@@ -95,8 +95,7 @@ class FrmStylesCardHelper {
 			$label_position = $style->post_content['position'];
 		} else {
 			$frm_style      = new FrmStyle();
-			$defaults       = $frm_style->get_defaults();
-			$label_position = $defaults['position'];
+			$label_position = $frm_style->get_defaults()['position'];
 		}
 
 		$class_name = 'frm_style_' . $style->post_name;
@@ -283,7 +282,6 @@ class FrmStylesCardHelper {
 		// Apply additional styles from the style.
 		$rules_to_apply = self::get_style_keys_for_card();
 		$frm_style      = new FrmStyle();
-		$color_settings = $frm_style->get_color_settings();
 
 		foreach ( $rules_to_apply as $key ) {
 			if ( ! array_key_exists( $key, $style->post_content ) ) {
@@ -292,7 +290,7 @@ class FrmStylesCardHelper {
 			}
 
 			$value  = $style->post_content[ $key ];
-			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && ! str_contains( $value, 'rgb' ) && $value !== 'transparent';
+			$is_hex = in_array( $key, $frm_style->get_color_settings(), true ) && $value && '#' !== $value[0] && ! str_contains( $value, 'rgb' ) && $value !== 'transparent';
 
 			if ( $is_hex ) {
 				$value = '#' . $value;
