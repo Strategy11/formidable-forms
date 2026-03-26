@@ -387,7 +387,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		if ( 'string' === msg ) {
+		if ( 'string' === typeof msg ) {
 			msg = { msg };
 		}
 
