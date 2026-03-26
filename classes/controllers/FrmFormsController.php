@@ -3426,8 +3426,9 @@ class FrmFormsController {
 	 */
 	public static function front_head() {
 		$version = FrmAppHelper::plugin_version();
+		$suffix  = FrmAppHelper::js_suffix();
 
-		if ( FrmAppHelper::js_suffix() && self::has_combo_js_file() ) {
+		if ( $suffix && self::has_combo_js_file() ) {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/frm.min.js', array( 'jquery' ), $version, true );
 		} else {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . "/js/formidable{$suffix}.js", array( 'jquery' ), $version, true );
