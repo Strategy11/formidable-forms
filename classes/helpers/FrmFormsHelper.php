@@ -419,9 +419,8 @@ class FrmFormsHelper {
 	 */
 	public static function fill_default_opts( $values, $record, $post_values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
-		$defaults = self::get_default_opts();
 
-		foreach ( $defaults as $var => $default ) {
+		foreach ( self::get_default_opts() as $var => $default ) {
 			if ( is_array( $default ) ) {
 				if ( ! isset( $values[ $var ] ) ) {
 					$values[ $var ] = $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : array();
@@ -486,9 +485,8 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
-		$defaults = self::get_default_opts();
 
-		foreach ( $defaults as $var => $default ) {
+		foreach ( self::get_default_opts() as $var => $default ) {
 			$options[ $var ] = $values['options'][ $var ] ?? $default;
 			unset( $var, $default );
 		}
@@ -1848,8 +1846,7 @@ BEFORE_HTML;
 
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
-		$reserved_words            = self::reserved_words();
-		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, $reserved_words );
+		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, self::reserved_words() );
 
 		return array_values( $unsafe_params_in_redirect );
 	}
