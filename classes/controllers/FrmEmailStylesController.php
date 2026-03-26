@@ -272,7 +272,6 @@ class FrmEmailStylesController {
 			die( esc_html( $not_exist_msg ) );
 		}
 
-
 		if ( ! isset( self::get_email_styles()[ $style_key ] ) ) {
 			die( esc_html( $not_exist_msg ) );
 		}

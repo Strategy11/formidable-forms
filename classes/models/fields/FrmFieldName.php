@@ -146,7 +146,6 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value[ $atts['show'] ] ?? '';
 		}
 
-
 		$value = wp_parse_args(
 			$value,
 			array(

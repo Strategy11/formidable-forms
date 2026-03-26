@@ -267,7 +267,6 @@ class FrmFormsController {
 
 		do_action( 'frm_before_update_form_settings', $id );
 
-
 		FrmForm::update( $id, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$antispam_is_on = ! empty( $_POST['options']['antispam'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing

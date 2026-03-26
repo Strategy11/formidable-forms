@@ -54,7 +54,6 @@ class FrmEntriesAJAXSubmitController {
 			wp_die();
 		}
 
-
 		if ( ! FrmForm::is_ajax_on( $form ) ) {
 			// This continues in the Pro version as it is required for other features including in-place edit.
 			// In Lite, if AJAX submit is not on, just exit early as this function is getting called incorrectly.
