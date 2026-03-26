@@ -6,6 +6,8 @@
  *
  * @since x.x This is copied from the Formidable Pro plugin.
  *
+ * @package Formidable
+ *
  * @var bool $hide_label
  */
 
