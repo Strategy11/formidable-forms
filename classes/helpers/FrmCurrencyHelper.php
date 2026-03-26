@@ -56,7 +56,7 @@ class FrmCurrencyHelper {
 	}
 
 	/**
-	 * @since x.x The second param is optional.
+	 * Adds the currency symbol to the given amount.
 	 *
 	 * @param float|string $amount
 	 * @param array|null   $currency
