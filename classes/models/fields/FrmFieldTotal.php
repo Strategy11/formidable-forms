@@ -12,7 +12,7 @@ class FrmFieldTotal extends FrmFieldText {
 	protected $type = 'total';
 
 	/**
-	 * @var array
+	 * @var array|string
 	 */
 	private $posted_value;
 

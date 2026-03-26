@@ -406,7 +406,7 @@ window.frmAdminBuildJS = function() {
 		titleEl.classList.toggle( 'frm_hidden', ! msg.title );
 
 		if ( msg.msg ) {
-			$info.find( '.frm-info-msg' ).html( msg.msg );
+			$info[ 0 ].querySelector( '.frm-info-msg' ).innerHTML = purifyHtml( msg.msg );
 		}
 
 		$info[ 0 ].querySelector( '.info-modal-img' ).src = msg.img;
