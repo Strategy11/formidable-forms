@@ -960,11 +960,9 @@ class FrmFieldsHelper {
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$m = ! in_array( $hide_opt, $observed_value );
 		} elseif ( $cond === '>' ) {
-			$min = min( $observed_value );
-			$m   = $min > $hide_opt;
+			$m = min( $observed_value ) > $hide_opt;
 		} elseif ( $cond === '<' ) {
-			$max = max( $observed_value );
-			$m   = $max < $hide_opt;
+			$m = max( $observed_value ) < $hide_opt;
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			foreach ( $observed_value as $ob ) {
 				$m = strpos( $ob, $hide_opt );

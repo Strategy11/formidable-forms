@@ -309,8 +309,7 @@ class FrmAddonsController {
 	 * @return int Count of addons.
 	 */
 	public static function get_addons_count() {
-		$addons = self::get_api_addons();
-		return count( $addons );
+		return count( self::get_api_addons() );
 	}
 
 	/**
@@ -421,8 +420,7 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	public static function get_pro_download_url() {
-		$license   = self::get_pro_license();
-		$api       = new FrmFormApi( $license );
+		$api       = new FrmFormApi( self::get_pro_license() );
 		$downloads = $api->get_api_info();
 		$pro       = self::get_pro_from_addons( $downloads );
 

@@ -20,8 +20,7 @@ class FrmCurrencyHelper {
 	 */
 	public static function get_currency( $currency = null ) {
 		if ( ! $currency ) {
-			$settings = FrmAppHelper::get_settings();
-			$currency = trim( $settings->currency );
+			$currency = trim( FrmAppHelper::get_settings()->currency );
 		}
 
 		if ( ! $currency ) {

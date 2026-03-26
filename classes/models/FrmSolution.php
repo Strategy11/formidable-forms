@@ -775,9 +775,8 @@ class FrmSolution {
 	 */
 	protected function previously_imported_forms() {
 		$imported = array();
-		$forms    = $this->form_options();
 
-		foreach ( $forms as $form ) {
+		foreach ( $this->form_options() as $form ) {
 			$was_imported = isset( $form['form'] ) ? FrmForm::get_id_by_key( $form['form'] ) : false;
 
 			if ( $was_imported ) {
