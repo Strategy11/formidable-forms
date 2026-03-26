@@ -419,7 +419,6 @@ class FrmFormsHelper {
 	 */
 	public static function fill_default_opts( $values, $record, $post_values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
-
 		foreach ( self::get_default_opts() as $var => $default ) {
 			if ( is_array( $default ) ) {
 				if ( ! isset( $values[ $var ] ) ) {
