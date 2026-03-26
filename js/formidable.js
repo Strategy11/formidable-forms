@@ -1290,7 +1290,7 @@ function frmFrontFormJS() {
 	}
 
 	function isGoingToPrevPage( $object ) {
-		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
+		return typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object );
 	}
 
 	function removeSubmitLoading( _, enable, processesRunning ) {
@@ -2058,7 +2058,7 @@ function frmFrontFormJS() {
 		let priceParts;
 		if ( '.' === currency.thousand_separator ) {
 			priceParts = price.split( '.' );
-			usedForDecimal = ( 2 === priceParts.length && 2 === priceParts[ 1 ].length );
+			usedForDecimal = 2 === priceParts.length && 2 === priceParts[ 1 ].length;
 			if ( usedForDecimal ) {
 				price = price.replace( '.', currency.decimal_separator );
 			}

@@ -44,6 +44,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$field_sections = array();
 
 								foreach ( $frm_field_selection as $field_key => $field_type ) {
+									if ( ! is_array( $field_type ) ) {
+										continue;
+									}
+
 									// Skip showing field if it's in a section.
 									if ( isset( $field_type['section'] ) ) {
 										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
@@ -64,29 +68,66 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</ul>
 							<div class="clear"></div>
-							<?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?>
+							<?php
+							FrmTipsHelper::pro_tip( 'get_builder_tip' );
+
+							$no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
+
+							if ( $no_allow_class === 'frm_noallow' ) {
+								$no_allow_class .= ' frm_show_upgrade';
+							}
+
+							$pro_fields = FrmField::pro_field_selection();
+							// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
+
+							FrmField::remove_moved_field_types_from_pro( $pro_fields );
+
+							foreach ( $pro_fields as $field_key => $field_type ) {
+								if ( ! is_array( $field_type ) || ! isset( $field_type['section'] ) ) {
+									continue;
+								}
+
+								if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
+									$field_sections[ $field_type['section'] ] = array();
+								}
+								$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
+							}
+
+							$section_labels = FrmField::field_section_labels();
+
+							foreach ( $field_sections as $section => $section_fields ) {
+								?>
+								<h3 class="frm-with-line">
+									<span><?php echo esc_html( $section_labels[ $section ] ?? ucwords( $section ) ); ?></span>
+									<span style="padding-left: 0;">
+										<?php FrmAppHelper::show_pill_text(); ?>
+									</span>
+								</h3>
+								<ul class="field_type_list frm_grid_container">
+									<?php
+									foreach ( $section_fields as $field_key => $field_type ) {
+										if ( ! empty( $field_type['is_available'] ) ) {
+											$field_type['key'] = $field_key;
+											FrmFieldsHelper::show_add_field_link( $field_type );
+										} else {
+											FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
+										}
+										unset( $field_key, $field_type );
+									}
+									?>
+								</ul>
+								<div class="clear"></div>
+								<?php
+							}//end foreach
+							?>
+
 							<h3 class="frm-with-line">
 								<span><?php esc_html_e( 'Advanced Fields', 'formidable' ); ?></span>
 							</h3>
 							<ul class="field_type_list frm_grid_container">
 								<?php
-								$no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
-
-								if ( $no_allow_class === 'frm_noallow' ) {
-									$no_allow_class .= ' frm_show_upgrade';
-								}
-
-								$pro_fields = FrmField::pro_field_selection();
-								// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
-
-								FrmField::remove_moved_field_types_from_pro( $pro_fields );
-
 								foreach ( $pro_fields as $field_key => $field_type ) {
 									if ( isset( $field_type['section'] ) ) {
-										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
-											$field_sections[ $field_type['section'] ] = array();
-										}
-										$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
 										continue;
 									}
 
@@ -125,35 +166,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</ul>
 							<div class="clear"></div>
-
-							<?php
-							$section_labels = FrmField::field_section_labels();
-
-							foreach ( $field_sections as $section => $section_fields ) {
-								?>
-								<h3 class="frm-with-line">
-									<span><?php echo esc_html( $section_labels[ $section ] ?? ucwords( $section ) ); ?></span>
-									<span style="padding-left: 0;">
-										<?php FrmAppHelper::show_pill_text(); ?>
-									</span>
-								</h3>
-								<ul class="field_type_list frm_grid_container">
-									<?php
-									foreach ( $section_fields as $field_key => $field_type ) {
-										if ( ! empty( $field_type['is_available'] ) ) {
-											$field_type['key'] = $field_key;
-											FrmFieldsHelper::show_add_field_link( $field_type );
-										} else {
-											FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
-										}
-										unset( $field_key, $field_type );
-									}
-									?>
-								</ul>
-								<div class="clear"></div>
-								<?php
-							}//end foreach
-							?>
 						</div>
 						<?php do_action( 'frm_extra_form_instructions' ); ?>
 					</div>
