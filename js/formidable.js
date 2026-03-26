@@ -1926,8 +1926,8 @@ function frmFrontFormJS() {
 	 * @return {Object}       Currency object.
 	 */
 	function getCurrency( formId ) {
-		if ( undefined !== __FRMCURR && undefined !== __FRMCURR[ formId ] ) {
-			return __FRMCURR[ formId ];
+		if ( undefined !== window.__FRMCURR && undefined !== window.__FRMCURR[ formId ] ) {
+			return window.__FRMCURR[ formId ];
 		}
 
 		return {
