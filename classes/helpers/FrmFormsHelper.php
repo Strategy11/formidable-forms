@@ -484,7 +484,6 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
-
 		foreach ( self::get_default_opts() as $var => $default ) {
 			$options[ $var ] = $values['options'][ $var ] ?? $default;
 			unset( $var, $default );

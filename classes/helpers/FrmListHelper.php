@@ -824,7 +824,7 @@ class FrmListHelper {
 	 * @return string Name of the default primary column, in this case, an empty string.
 	 */
 	protected function get_default_primary_column_name() {
-		$column  = '';
+		$column = '';
 
 		// We need a primary defined so responsive views show something,
 		// So let's fall back to the first non-checkbox column.
@@ -895,8 +895,8 @@ class FrmListHelper {
 			return $column_headers;
 		}
 
-		$columns          = get_column_headers( $this->screen );
-		$hidden           = get_hidden_columns( $this->screen );
+		$columns = get_column_headers( $this->screen );
+		$hidden  = get_hidden_columns( $this->screen );
 		/**
 		 * Filter the list table sortable columns for a specific screen.
 		 *
