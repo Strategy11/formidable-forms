@@ -1102,12 +1102,14 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 					if ( $has_break ) {
 						$attributes .= ' async';
 					}
+
 					return str_replace( ' src=', $attributes . ' src=', $tag );
 				}
 
 				if ( $has_break && 'formidable-paypal' === $handle ) {
 					return str_replace( ' src=', ' async src=', $tag );
 				}
+
 				return $tag;
 			},
 			10,
@@ -2147,7 +2149,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function remove_cc_validation( $errors, $field ) {
-		$paypal_order_id       = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+		$paypal_order_id        = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
 		$paypal_subscription_id = FrmAppHelper::get_post_param( 'paypal_subscription_id', '', 'sanitize_text_field' );
 
 		if ( ! $paypal_order_id && ! $paypal_subscription_id ) {

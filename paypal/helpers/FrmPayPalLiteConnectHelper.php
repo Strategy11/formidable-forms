@@ -83,8 +83,7 @@ class FrmPayPalLiteConnectHelper {
 			return false;
 		}
 
-		$email = $status->primary_email ?? '';
-
+		$email               = $status->primary_email ?? '';
 		$paypal_settings_url = self::get_paypal_account_settings_url( $mode );
 
 		if ( empty( $status->primary_email_confirmed ) ) {
@@ -182,12 +181,14 @@ class FrmPayPalLiteConnectHelper {
 		echo '&nbsp;';
 		echo esc_html( self::get_acdc_vetting_status_message( $vetting_status ) );
 
-		if ( in_array( $vetting_status, array( 'DECLINED', 'DENIED', 'NEED_MORE_DATA' ), true ) ) {
-			echo '&nbsp;';
-			echo '<a href="https://www.paypal.com/bizsignup/entry/product/ppcp" target="_blank" rel="noopener noreferrer">';
-			esc_html_e( 'Reapply for Advanced Card Processing', 'formidable' );
-			echo '</a>';
+		if ( ! in_array( $vetting_status, array( 'DECLINED', 'DENIED', 'NEED_MORE_DATA' ), true ) ) {
+			return;
 		}
+
+		echo '&nbsp;';
+		echo '<a href="https://www.paypal.com/bizsignup/entry/product/ppcp" target="_blank" rel="noopener noreferrer">';
+		esc_html_e( 'Reapply for Advanced Card Processing', 'formidable' );
+		echo '</a>';
 	}
 
 	/**
@@ -332,10 +333,9 @@ class FrmPayPalLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$script_url     = FrmPayPalLiteAppHelper::plugin_url() . '/js/settings.js';
-		$dependencies   = array( 'formidable_dom' );
-		$plugin_version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_paypal_settings', $script_url, $dependencies, $plugin_version, true );
+		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . '/js/settings.js';
+		$dependencies = array( 'formidable_dom' );
+		wp_register_script( 'formidable_paypal_settings', $script_url, $dependencies, FrmAppHelper::plugin_version(), true );
 		wp_enqueue_script( 'formidable_paypal_settings' );
 	}
 
@@ -872,11 +872,10 @@ class FrmPayPalLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
 

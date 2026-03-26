@@ -413,6 +413,7 @@ class FrmPayPalLiteAppController {
 		);
 
 		$vault_setup_token = FrmAppHelper::get_post_param( 'vault_setup_token', '', 'sanitize_text_field' );
+
 		if ( $vault_setup_token ) {
 			$data['vault_setup_token'] = $vault_setup_token;
 		}
@@ -451,5 +452,4 @@ class FrmPayPalLiteAppController {
 
 		wp_send_json_success( array( 'token' => $response->token ) );
 	}
-
 }
