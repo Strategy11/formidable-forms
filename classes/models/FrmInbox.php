@@ -193,8 +193,10 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function filter_messages( &$messages, $type = 'unread' ) {
+		$user_id = get_current_user_id();
+
 		foreach ( $messages as $k => $message ) {
-			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] );
+			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
 
 			if ( ! $k || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
@@ -351,9 +353,10 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function unread() {
 		$messages = $this->get_messages( 'filter' );
+		$user_id  = get_current_user_id();
 
 		foreach ( $messages as $t => $message ) {
-			if ( isset( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) ) {
+			if ( isset( $message['read'] ) && isset( $message['read'][ $user_id ] ) ) {
 				unset( $messages[ $t ] );
 			}
 		}

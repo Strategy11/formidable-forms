@@ -118,10 +118,15 @@ class InlineSingleUseVariableSniff implements Sniff {
 			return;
 		}
 
-		// Skip if the variable is referenced by name in a compact() call.
 		$varNameClean = ltrim( $variableName, '$' );
 
+		// Skip if the variable is referenced by name in a compact() call.
 		if ( $this->isReferencedInCompact( $phpcsFile, $tokens, $functionOpener, $functionCloser, $varNameClean ) ) {
+			return;
+		}
+
+		// Skip if the variable is used inside a double-quoted string (cannot inline a function call into interpolation).
+		if ( $this->isUsedInDoubleQuotedString( $tokens, $functionOpener, $functionCloser, $variableName ) ) {
 			return;
 		}
 
@@ -142,6 +147,12 @@ class InlineSingleUseVariableSniff implements Sniff {
 
 		// The usage must be after the assignment ends.
 		if ( $usagePtr <= $assignmentEnd ) {
+			return;
+		}
+
+		// Skip if the variable is assigned before a loop but used inside it.
+		// Inlining would move the function call into the loop body, executing it on every iteration.
+		if ( $this->isUsedInsideLoop( $tokens, $stackPtr, $usagePtr ) ) {
 			return;
 		}
 
@@ -391,6 +402,67 @@ class InlineSingleUseVariableSniff implements Sniff {
 				if ( $stringContent === $varNameClean ) {
 					return true;
 				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a variable is referenced inside a double-quoted string via interpolation.
+	 *
+	 * PHPCS merges interpolated double-quoted strings into a single T_DOUBLE_QUOTED_STRING token,
+	 * so T_VARIABLE scanning misses these references. A function call cannot be inlined into
+	 * string interpolation, so we must skip these variables.
+	 *
+	 * @param array  $tokens         The token stack.
+	 * @param int    $functionOpener Function opener position.
+	 * @param int    $functionCloser Function closer position.
+	 * @param string $variableName   Variable name including the leading $.
+	 *
+	 * @return bool
+	 */
+	private function isUsedInDoubleQuotedString( array $tokens, $functionOpener, $functionCloser, $variableName ) {
+		for ( $i = $functionOpener + 1; $i < $functionCloser; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_DOUBLE_QUOTED_STRING ) {
+				continue;
+			}
+
+			if ( strpos( $tokens[ $i ]['content'], $variableName ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the variable is assigned outside a loop but used inside one.
+	 *
+	 * @param array $tokens      The token stack.
+	 * @param int   $assignPtr   The assignment token position.
+	 * @param int   $usagePtr    The usage token position.
+	 *
+	 * @return bool
+	 */
+	private function isUsedInsideLoop( array $tokens, $assignPtr, $usagePtr ) {
+		$loopTokens = array( T_FOR, T_FOREACH, T_WHILE, T_DO );
+
+		for ( $i = $assignPtr + 1; $i < $usagePtr; $i++ ) {
+			if ( ! in_array( $tokens[ $i ]['code'], $loopTokens, true ) ) {
+				continue;
+			}
+
+			if ( ! isset( $tokens[ $i ]['scope_opener'], $tokens[ $i ]['scope_closer'] ) ) {
+				continue;
+			}
+
+			$loopOpener = $tokens[ $i ]['scope_opener'];
+			$loopCloser = $tokens[ $i ]['scope_closer'];
+
+			// The usage is inside this loop's body.
+			if ( $usagePtr > $loopOpener && $usagePtr < $loopCloser ) {
+				return true;
 			}
 		}
 
