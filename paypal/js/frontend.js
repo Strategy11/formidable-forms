@@ -673,7 +673,7 @@
 	/**
 	 * Check if Google Pay is eligible (without rendering).
 	 *
-	 * @return {Promise<boolean>}
+	 * @return {Promise<boolean>} Whether Google Pay is supported and ready to accept payments in the current environment.
 	 */
 	async function checkGooglePayEligibility() {
 		if ( 'function' !== typeof paypal.Googlepay ) {
