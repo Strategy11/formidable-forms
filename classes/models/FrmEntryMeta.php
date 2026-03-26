@@ -517,11 +517,9 @@ class FrmEntryMeta {
 			$query[] = 'it.item_id';
 		}
 
-		$from                               = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
-		$should_join_fields_table__where    = self::should_join_fields_table( $where );
-		$should_join_fields_table__order_by = self::should_join_fields_table( $order_by );
+		$from = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
 
-		if ( $should_join_fields_table__where || $should_join_fields_table__order_by ) {
+		if ( self::should_join_fields_table( $where ) || self::should_join_fields_table( $order_by ) ) {
 			$from .= ' LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 		}
 

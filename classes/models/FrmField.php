@@ -401,8 +401,7 @@ class FrmField {
 	 * @return array
 	 */
 	public static function all_field_selection() {
-		$pro_field_selection = self::pro_field_selection();
-		return array_merge( $pro_field_selection, self::field_selection() );
+		return array_merge( self::pro_field_selection(), self::field_selection() );
 	}
 
 	/**
@@ -1382,9 +1381,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_multiple_select( $field ) {
-		$field_type  = self::get_field_type( $field );
-		$is_multiple = self::is_option_true( $field, 'multiple' ) && self::is_field_type( $field, 'select' ) && $field_type !== 'hidden';
-
+		$is_multiple = self::is_option_true( $field, 'multiple' ) && self::is_field_type( $field, 'select' ) && self::get_field_type( $field ) !== 'hidden';
 		return apply_filters( 'frm_is_multiple_select', $is_multiple, $field );
 	}
 

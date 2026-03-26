@@ -125,10 +125,9 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$script_url     = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
-		$dependencies   = array( 'formidable_dom' );
-		$plugin_version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, $plugin_version, true );
+		$script_url   = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
+		$dependencies = array( 'formidable_dom' );
+		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, FrmAppHelper::plugin_version(), true );
 		wp_enqueue_script( 'formidable_square_settings' );
 	}
 
@@ -793,11 +792,10 @@ class FrmSquareLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
 

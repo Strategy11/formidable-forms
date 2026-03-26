@@ -10,6 +10,7 @@ import noJqueryPlugin from 'eslint-plugin-no-jquery';
 import compatPlugin from 'eslint-plugin-compat';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import formidablePlugin from './eslint-rules/index.js';
+import stylisticPlugin from '@stylistic/eslint-plugin';
 import globals from 'globals';
 
 const __filename = fileURLToPath( import.meta.url );
@@ -102,6 +103,7 @@ export default [
 			compat: compatPlugin,
 			unicorn: unicornPlugin,
 			formidable: formidablePlugin,
+			'@stylistic': stylisticPlugin,
 		},
 		settings: {
 			'import/resolver': {
@@ -182,6 +184,15 @@ export default [
 			'import/default': 'off',
 			'comma-dangle': 'off',
 			'arrow-parens': ['error', 'as-needed'],
+			'no-extra-parens': 'off',
+			'@stylistic/no-extra-parens': ['error', 'all', {
+				conditionalAssign: false,
+				returnAssign: false,
+				nestedBinaryExpressions: false,
+				ternaryOperandBinaryExpressions: false,
+				nestedConditionalExpressions: false,
+				ignoreJSX: 'all',
+			}],
 
 			// Enforce frm-javascript.md patterns
 			'no-var': 'warn',

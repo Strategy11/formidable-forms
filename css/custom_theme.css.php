@@ -228,7 +228,7 @@ legend.frm_hidden{
 	font-weight: var(--field-weight);
 }
 
-<?php if ( ! empty( $important ) ) : ?>
+<?php if ( $important ) : ?>
 	<?php if ( $use_chosen_js ) { ?>
 	.with_frm_style .chosen-container-multi .chosen-choices,
 	.with_frm_style .chosen-container-single .chosen-single,

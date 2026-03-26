@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$title = $d && is_array( $d ) && isset( $d['title'] ) ? $d['title'] : '';
 				?>
 				<li>
-					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" tabindex="0" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
+					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes<?php echo esc_attr( $title ? ' frm_help' : '' ); ?>" tabindex="0" <?php echo ( $title ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
 						<span><?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?></span>
 						<span class="frm-text-grey-500"><?php echo esc_html( $c ); ?></span>
 					</a>

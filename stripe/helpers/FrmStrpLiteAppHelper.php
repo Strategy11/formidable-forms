@@ -92,8 +92,7 @@ class FrmStrpLiteAppHelper {
 	 * @psalm-return 'live'|'test'
 	 */
 	public static function active_mode() {
-		$settings = self::get_settings();
-		return $settings->settings->test_mode ? 'test' : 'live';
+		return self::get_settings()->settings->test_mode ? 'test' : 'live';
 	}
 
 	/**
