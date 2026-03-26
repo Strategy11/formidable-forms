@@ -1,4 +1,13 @@
 <?php
+/**
+ * Show the product field as radio button or checkbox on the front-end.
+ * Extra line breaks show as space on the front-end when
+ * the form is double filtered and not minimized.
+ *
+ * @since x.x This is copied from the Formidable Pro plugin.
+ *
+ * @var bool $hide_label
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );

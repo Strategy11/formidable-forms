@@ -8,6 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Show the product field as radio button or checkbox on the front-end.
  * Extra line breaks show as space on the front-end when
  * the form is double filtered and not minimized.
+ *
+ * @since x.x This is copied from the Formidable Pro plugin.
+ *
+ * @var bool $hide_label
  */
 
 $display_type = $field['data_type'];
@@ -33,7 +37,7 @@ foreach ( $field['options'] as $opt_key => $opt ) {
 	?>
 	<div class="<?php echo esc_attr( apply_filters( 'frm_' . $display_type . '_class', 'frm_' . $display_type, $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, $display_type ) ); ?>"><?php
 
-	if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
+	if ( empty( $hide_label ) ) {
 		?><label for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"><?php
 	}
 	?>
@@ -47,7 +51,7 @@ foreach ( $field['options'] as $opt_key => $opt ) {
 
 	?> data-frmprice="<?php echo esc_attr( $price ); ?>" <?php do_action( 'frm_field_input_html', $field ); ?> /><?php
 
-	if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
+	if ( empty( $hide_label ) ) {
 		echo ' ';
 		FrmAppHelper::kses_echo( $opt, 'all' );
 		echo '</label>';
