@@ -1,5 +1,4 @@
 ( function() {
-	alert( 'here' );
 	const actions = document.getElementById( 'frm_notification_settings' );
 	if ( ! actions ) {
 		return;

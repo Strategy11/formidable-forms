@@ -13,7 +13,7 @@ $pay_later_value = $form_action->post_content['pay_later'] ?? 'auto';
 			<label for="<?php echo esc_attr( $action_control->get_field_id( 'layout' ) ); ?>">
 				<?php esc_html_e( 'Layout', 'formidable' ); ?>
 			</label>
-			<?php $layout_value = $form_action->post_content['layout'] ?? 'card_and_checkout'; ?>
+			<?php $layout_value = ! empty( $form_action->post_content['layout'] ) ? $form_action->post_content['layout'] : 'card_and_checkout'; ?>
 			<select id="<?php echo esc_attr( $action_control->get_field_id( 'layout' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'layout' ) ); ?>">
 				<option value="card_and_checkout" <?php selected( $layout_value, 'card_and_checkout' ); ?>><?php esc_html_e( 'Card and checkout buttons', 'formidable' ); ?></option>
 				<option value="checkout_only" <?php selected( $layout_value, 'checkout_only' ); ?>><?php esc_html_e( 'Checkout buttons only', 'formidable' ); ?></option>
