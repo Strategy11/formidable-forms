@@ -405,8 +405,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_query_var
 	 */
 	public function test_get_query_var() {
+		$new_post_id = $this->go_to_new_post(); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 		$get_post_id = FrmAppHelper::get_query_var( '', 'p' );
-		$this->assertSame( $this->go_to_new_post(), $get_post_id );
+		$this->assertSame( $new_post_id, $get_post_id );
 	}
 
 	/**
