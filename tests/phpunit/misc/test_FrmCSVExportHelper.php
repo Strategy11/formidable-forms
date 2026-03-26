@@ -24,9 +24,10 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			'id'         => 'ID',
 			'item_key'   => 'Key',
 		);
+		$keys     = array_keys( $headings );
 
 		foreach ( $expected as $key => $label ) {
-			$this->assertContains( $key, array_keys( $headings ), "{$label} is not present in CSV Headings" );
+			$this->assertContains( $key, $keys, "{$label} is not present in CSV Headings" );
 		}
 
 		// Expected for all_field_types form
