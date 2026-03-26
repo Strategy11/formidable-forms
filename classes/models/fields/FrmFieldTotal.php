@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since x.x This is copied from FrmProFieldTotal.php in Formidable Pro.
  */
 class FrmFieldTotal extends FrmFieldText {
 
