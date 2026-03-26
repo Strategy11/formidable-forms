@@ -3044,8 +3044,9 @@ class FrmFormsController {
 
 		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
 		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
+		$doing_ajax  = FrmAppHelper::doing_ajax();
 
-		if ( ! empty( $args['ajax'] ) && FrmAppHelper::doing_ajax() && empty( $args['force_delay_redirect'] ) ) {
+		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
 			// Is AJAX submit and there is just one Redirect action runs.
 			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 			wp_die();
