@@ -69,7 +69,7 @@ class FrmFieldQuantity extends FrmFieldNumber {
 		$product_fields = FrmField::get_option( $this->field, 'product_field' );
 
 		if ( $product_fields ) {
-			// Cast to array cos of existing fields that are already using single product fields in production
+			// Cast to array because of existing fields that are already using single product fields in production
 			$product_fields = (array) $product_fields;
 
 			foreach ( $product_fields as $product_field ) {

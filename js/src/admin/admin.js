@@ -2853,7 +2853,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( 'product' === type || 'quantity' === type ) {
-			// quantity too needs to be a part of the if stmt especially cos of the very
+			// quantity too needs to be a part of the if something especially because of the very
 			// 1st quantity field (or even if it's just one quantity field in the form).
 			maybeHideQuantityProductFieldOption();
 		}
@@ -3269,7 +3269,7 @@ window.frmAdminBuildJS = function() {
 		const checkType = fieldType !== undefined;
 
 		for ( i = 0; i < allFields.length; i++ ) {
-			// data-ftype is better (than data-type) cos of fields loaded by AJAX - which might not be ready yet
+			// data-ftype is better (than data-type) because of fields loaded by AJAX - which might not be ready yet
 			if ( checkType && allFields[ i ].getAttribute( 'data-ftype' ) !== fieldType ) {
 				continue;
 			}
