@@ -118,6 +118,13 @@ class InlineSingleUseVariableSniff implements Sniff {
 			return;
 		}
 
+		// Skip if the variable is referenced by name in a compact() call.
+		$varNameClean = ltrim( $variableName, '$' );
+
+		if ( $this->isReferencedInCompact( $phpcsFile, $tokens, $functionOpener, $functionCloser, $varNameClean ) ) {
+			return;
+		}
+
 		// Count all occurrences of this variable in the function scope.
 		$occurrences = $this->findVariableOccurrences( $tokens, $functionOpener, $functionCloser, $variableName );
 
@@ -145,7 +152,6 @@ class InlineSingleUseVariableSniff implements Sniff {
 
 		// Check condition 2: function name descriptiveness vs variable name.
 		$functionName = $callInfo['function_name'];
-		$varNameClean = ltrim( $variableName, '$' );
 
 		if ( $this->variableAddsContext( $varNameClean, $functionName ) ) {
 			return;
@@ -338,6 +344,53 @@ class InlineSingleUseVariableSniff implements Sniff {
 		for ( $i = $functionOpener + 1; $i < $functionCloser; $i++ ) {
 			if ( in_array( $tokens[ $i ]['code'], $includeTokens, true ) ) {
 				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a variable name is referenced inside a compact() call as a string argument.
+	 *
+	 * compact( 'form_ids' ) references $form_ids by name, so the variable cannot be inlined.
+	 *
+	 * @param File   $phpcsFile      The file being scanned.
+	 * @param array  $tokens         The token stack.
+	 * @param int    $functionOpener Function opener position.
+	 * @param int    $functionCloser Function closer position.
+	 * @param string $varNameClean   Variable name without the leading $.
+	 *
+	 * @return bool
+	 */
+	private function isReferencedInCompact( File $phpcsFile, array $tokens, $functionOpener, $functionCloser, $varNameClean ) {
+		for ( $i = $functionOpener + 1; $i < $functionCloser; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_STRING || 'compact' !== strtolower( $tokens[ $i ]['content'] ) ) {
+				continue;
+			}
+
+			$openParen = $phpcsFile->findNext( T_WHITESPACE, $i + 1, null, true );
+
+			if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+				continue;
+			}
+
+			if ( ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+				continue;
+			}
+
+			$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+
+			for ( $j = $openParen + 1; $j < $closeParen; $j++ ) {
+				if ( $tokens[ $j ]['code'] !== T_CONSTANT_ENCAPSED_STRING ) {
+					continue;
+				}
+
+				$stringContent = trim( $tokens[ $j ]['content'], "\"'" );
+
+				if ( $stringContent === $varNameClean ) {
+					return true;
+				}
 			}
 		}
 

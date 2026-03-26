@@ -267,11 +267,13 @@ class FrmFormsController {
 
 		do_action( 'frm_before_update_form_settings', $id );
 
+		$antispam_was_on = self::antispam_was_on( $id ); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
+
 		FrmForm::update( $id, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$antispam_is_on = ! empty( $_POST['options']['antispam'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		if ( $antispam_is_on !== self::antispam_was_on( $id ) ) {
+		if ( $antispam_is_on !== $antispam_was_on ) {
 			FrmAntiSpam::clear_caches();
 		}
 

@@ -231,9 +231,10 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$date_format = FrmTransLiteAppHelper::get_date_format();
 		$gateways    = FrmTransLiteAppHelper::get_gateways();
 		$alt         = 0;
+		$form_ids    = $this->get_form_ids();
 		$args        = compact( 'form_ids', 'date_format', 'gateways' );
 		// $form_ids is indexed by entry ID.
-		$this->valid_entry_ids = array_keys( $this->get_form_ids() );
+		$this->valid_entry_ids = array_keys( $form_ids );
 
 		foreach ( $this->items as $item ) {
 			echo '<tr id="payment-' . esc_attr( $item->id ) . '" ';
