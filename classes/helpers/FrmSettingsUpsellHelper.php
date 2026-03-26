@@ -17,7 +17,6 @@ class FrmSettingsUpsellHelper {
 	 * @return array
 	 */
 	public static function get_unique_element_atts( $field ) {
-		$pro_is_installed    = FrmAppHelper::pro_is_installed();
 		$unique_element_atts = array(
 			'type'  => 'checkbox',
 			'name'  => 'field_options[unique_' . $field['id'] . ']',
@@ -30,7 +29,7 @@ class FrmSettingsUpsellHelper {
 			$unique_element_atts['checked'] = 'checked';
 		}
 
-		if ( ! $pro_is_installed ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
 			$unique_element_atts['disabled']     = '1';
 		}
@@ -46,7 +45,6 @@ class FrmSettingsUpsellHelper {
 	 * @return array
 	 */
 	public static function get_read_only_element_atts( $field ) {
-		$pro_is_installed       = FrmAppHelper::pro_is_installed();
 		$read_only_element_atts = array(
 			'type'  => 'checkbox',
 			'name'  => 'field_options[read_only_' . $field['id'] . ']',
@@ -58,7 +56,7 @@ class FrmSettingsUpsellHelper {
 			$read_only_element_atts['checked'] = 'checked';
 		}
 
-		if ( ! $pro_is_installed ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$read_only_element_atts['data-upgrade'] = __( 'Read only fields', 'formidable' );
 			$read_only_element_atts['disabled']     = '1';
 		}
