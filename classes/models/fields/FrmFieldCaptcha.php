@@ -141,9 +141,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {
-		$api_js_url = $this->api_url();
-
-		wp_register_script( 'captcha-api', $api_js_url, array( 'formidable' ), '3', true );
+		wp_register_script( 'captcha-api', $this->api_url(), array( 'formidable' ), '3', true );
 		wp_enqueue_script( 'captcha-api' );
 	}
 
