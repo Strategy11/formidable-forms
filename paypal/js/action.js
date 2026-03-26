@@ -18,10 +18,6 @@
 			return;
 		}
 
-		if ( 'card_only' === this.value ) {
-			buttonSettings.classList.add( 'frm_hidden' );
-		} else {
-			buttonSettings.classList.remove( 'frm_hidden' );
-		}
+		buttonSettings.classList.toggle( 'frm_hidden', 'card_only' === this.value );
 	}
 }() );

@@ -1094,7 +1094,7 @@
 		}
 		const message = 'string' === typeof err
 			? err
-			: ( err && err.message ? err.message : 'Payment failed. Please try again.' );
+			: ( err?.message ? err.message : 'Payment failed. Please try again.' );
 		displayPaymentFailure( message );
 	}
 
@@ -1275,7 +1275,7 @@
 			}
 			const message = 'string' === typeof err
 				? err
-				: ( err && err.message ? err.message : 'Payment failed. Please try again.' );
+				: ( err?.message ? err.message : 'Payment failed. Please try again.' );
 			displayPaymentFailure( message );
 		}
 	}
