@@ -286,9 +286,7 @@ class FrmTransLiteDb {
 	 * @return void
 	 */
 	private function fill_values( $values, &$new_values ) {
-		$defaults = $this->get_defaults();
-
-		foreach ( $defaults as $val => $default ) {
+		foreach ( $this->get_defaults() as $val => $default ) {
 			if ( isset( $values[ $val ] ) ) {
 				if ( $default['sanitize'] === 'float' ) {
 					$new_values[ $val ] = (float) $values[ $val ];

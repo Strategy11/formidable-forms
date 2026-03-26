@@ -388,10 +388,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function display_field_settings() {
-		$default_settings    = $this->default_field_settings();
-		$field_type_settings = $this->field_settings_for_type();
-
-		return array_merge( $default_settings, $field_type_settings );
+		return array_merge( $this->default_field_settings(), $this->field_settings_for_type() );
 	}
 
 	/**
@@ -718,7 +715,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
-		$all_field_types = self::get_all_field_types();
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
@@ -726,7 +722,7 @@ DEFAULT_HTML;
 			printf(
 				/* translators: %s: Field type */
 				esc_html__( '%s Options', 'formidable' ),
-				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
+				esc_html( self::get_all_field_types()[ $args['display']['type'] ]['name'] )
 			);
 			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) );
 			?>
@@ -907,8 +903,7 @@ DEFAULT_HTML;
 			'placeholder'        => '',
 			'draft'              => 0,
 		);
-		$field_opts  = $this->extra_field_opts();
-		$opts        = array_merge( $opts, $field_opts );
+		$opts        = array_merge( $opts, $this->extra_field_opts() );
 		$filter_args = array(
 			'field' => $this->field,
 			'type'  => $this->type,
@@ -1155,9 +1150,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function include_front_field_input( $args, $shortcode_atts ) {
-		$include_file = $this->include_front_form_file();
-
-		if ( $include_file ) {
+		if ( $this->include_front_form_file() ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
 			$input = $this->front_field_input( $args, $shortcode_atts );

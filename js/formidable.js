@@ -1290,7 +1290,7 @@ function frmFrontFormJS() {
 	}
 
 	function isGoingToPrevPage( $object ) {
-		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
+		return typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object );
 	}
 
 	function removeSubmitLoading( _, enable, processesRunning ) {
