@@ -9739,7 +9739,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 		if ( isNaN( price.replace( /,/, '' ) ) ) {
-			const validationFailMessage = __( 'Please enter a valid number.', 'formidable-pro' );
+			const validationFailMessage = __( 'Please enter a valid number.', 'formidable' );
 			frmAdminBuild.infoModal( validationFailMessage );
 			handleModalDismiss( target );
 			return;
