@@ -1200,7 +1200,7 @@ DEFAULT_HTML;
 		$html_id    = $args['html_id'];
 		$field_name = $args['field_name'];
 		$read_only  = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
-		$hide_label = isset( $shortcode_atts ) && isset( $shortcode_atts['label'] ) && ! $shortcode_atts['label'];
+		$hide_label = isset( $shortcode_atts['label'] ) && ! $shortcode_atts['label'];
 
 		// Lighten up on memory usage.
 		unset( $args['form'] );
