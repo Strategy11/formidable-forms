@@ -415,8 +415,7 @@ class FrmEntriesController {
 			return;
 		}
 
-		$user_id = get_current_user_id();
-		update_user_option( $user_id, $this_page_name, $meta_value, true );
+		update_user_option( get_current_user_id(), $this_page_name, $meta_value, true );
 	}
 
 	/**

@@ -1565,10 +1565,9 @@ class FrmXMLHelper {
 
 			// Remove the SimpleXML_parse_error from the WP_Error object to avoid
 			// displaying duplicate error messages from $result->get_error_message()
-			$error_codes   = $result->get_error_codes();
 			$error_details = array();
 
-			foreach ( $error_codes as $error_code ) {
+			foreach ( $result->get_error_codes() as $error_code ) {
 				// Clone WP_Error data because WP_Error removes all error messages and data
 				// Associated with the specified error code when an item is removed.
 				// Source: https://developer.wordpress.org/reference/classes/wp_error/remove/#source

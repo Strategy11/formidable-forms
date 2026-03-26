@@ -95,8 +95,7 @@ class FrmStylesCardHelper {
 			$label_position = $style->post_content['position'];
 		} else {
 			$frm_style      = new FrmStyle();
-			$defaults       = $frm_style->get_defaults();
-			$label_position = $defaults['position'];
+			$label_position = $frm_style->get_defaults()['position'];
 		}
 
 		$class_name = 'frm_style_' . $style->post_name;
