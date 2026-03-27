@@ -1149,14 +1149,25 @@ function frmFrontFormJS() {
 			frmThemeOverride_frmPlaceError( key, jsErrors );
 		} else {
 			let errorHtml;
-			if ( jsErrors[ key ].includes( '<div' ) ) {
-				errorHtml = jsErrors[ key ];
-			} else {
-				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
-				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
-			}
-			container.insertAdjacentHTML( 'beforeend', errorHtml );
+			const errorMessage = jsErrors[ key ];
 
+			const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+			const wrapInErrorClass = html => `<div class="frm_error" ${ roleString } id="${ id }">${ html }</div>`;
+
+			if ( jsErrors[ key ].includes( '<div' ) ) {
+				if ( errorMessage.startsWith( '<div' ) ) {
+					const tempDiv = document.createElement( 'div' );
+					tempDiv.innerHTML = errorMessage;
+					tempDiv.classList.add( 'frm_error' );
+					errorHtml = tempDiv.innerHTML;
+				} else {
+					errorHtml = wrapInErrorClass( errorMessage );
+				}
+			} else {
+				errorHtml = wrapInErrorClass( errorMessage );
+			}
+	
+			container.insertAdjacentHTML( 'beforeend', errorHtml );
 			if ( input ) {
 				if ( ! describedBy ) {
 					describedBy = id;
