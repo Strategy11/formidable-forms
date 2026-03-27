@@ -1138,8 +1138,9 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {string} errorMessage The error message to wrap.
-	 * @param {string} id The ID to use for the error element.
-	 * @returns {string} The error HTML.
+	 * @param {string} id           The ID to use for the error element.
+	 *
+	 * @return {string} The error HTML.
 	 */
 	function getErrorHtml( errorMessage, id ) {
 		const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
@@ -1171,7 +1172,7 @@ function frmFrontFormJS() {
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
 		} else {
-			container.insertAdjacentHTML( 'beforeend', getErrorHtml( jsErrors[ key ], id ));
+			container.insertAdjacentHTML( 'beforeend', getErrorHtml( jsErrors[ key ], id ) );
 			if ( input ) {
 				if ( ! describedBy ) {
 					describedBy = id;
