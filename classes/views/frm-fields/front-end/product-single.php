@@ -22,10 +22,9 @@ foreach ( $field['options'] as $opt_key => $opt ) {
 	?>
 	<p class="frm_single_product_label">
 		<?php
-		// TODO: should show currency
 		echo esc_html( $opt );
 		echo ': ';
-		echo esc_html( $price );
+		echo esc_html( FrmCurrencyHelper::format_price( $price ) );
 		?>
 	</p>
 

@@ -2853,7 +2853,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( 'product' === type || 'quantity' === type ) {
-			// quantity too needs to be a part of the if something especially because of the very
+			// quantity too needs to be a part of the if statement especially because of the very
 			// 1st quantity field (or even if it's just one quantity field in the form).
 			maybeHideQuantityProductFieldOption();
 		}
