@@ -1158,7 +1158,7 @@ function frmFrontFormJS() {
 				if ( errorMessage.startsWith( '<div' ) ) {
 					const tempDiv = document.createElement( 'div' );
 					tempDiv.innerHTML = errorMessage;
-					tempDiv.classList.add( 'frm_error' );
+					tempDiv.classList.add( 'frm_error' ); // Add the frm_error class so that removeAllErrors() removes the error correctly.
 					errorHtml = tempDiv.innerHTML;
 				} else {
 					errorHtml = wrapInErrorClass( errorMessage );
