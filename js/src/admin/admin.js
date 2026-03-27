@@ -3111,6 +3111,9 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		// Clear search cache when opening calc modal to ensure fresh data
+		clearSearchCache();
+
 		const isSummary = isCalcBoxType( element, 'frm_js_summary_list' );
 
 		const fieldId = settingsBox.find( 'input[name="frm_fields_submitted[]"]' ).val();
@@ -8661,7 +8664,8 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const shortcode = anchor.dataset.code;
-		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
+		const { contextualShortcodes } = frmAdminJs;
+		return contextualShortcodes.address.includes( shortcode ) || contextualShortcodes.body.includes( shortcode );
 	}
 
 	/**
@@ -8671,10 +8675,22 @@ window.frmAdminBuildJS = function() {
 	 * @return {boolean} True if the contextual shortcode can be shown.
 	 */
 	function canShowContextualShortcode( item ) {
-		const shortcode = item.querySelector( 'a' ).dataset.code;
-		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
-		const input = document.getElementById( inputId );
+		const anchor = item.querySelector( 'a' );
+		const shortcode = anchor.dataset.code;
 		const { contextualShortcodes } = frmAdminJs;
+		
+		// Cache DOM queries
+		const advInfo = document.getElementById( 'frm_adv_info' );
+		if ( ! advInfo ) {
+			return false;
+		}
+		
+		const inputId = advInfo.dataset.fills;
+		const input = document.getElementById( inputId );
+		if ( ! input ) {
+			return false;
+		}
+		
 		if ( contextualShortcodes.address.includes( shortcode ) ) {
 			return input.matches( contextualShortcodes.addressSelector );
 		}
@@ -9403,13 +9419,43 @@ window.frmAdminBuildJS = function() {
 		} );
 	}
 
+	// Cache for search items to avoid repeated DOM queries
+	const searchCache = new Map();
+
+	/**
+	 * Get cached search items or create them if they don't exist
+	 */
+	function getSearchItems( toSearch ) {
+		if ( searchCache.has( toSearch ) ) {
+			return searchCache.get( toSearch );
+		}
+
+		const items = document.getElementsByClassName( toSearch );
+		const cachedItems = Array.from( items ).map( item => ( {
+			element: item,
+			innerText: item.innerText.toLowerCase(),
+			isRepeater: item.classList.contains( 'frm-is-repeater' ),
+			anchor: item.querySelector( 'a' ),
+			isContextual: frmAdminJs.contextualShortcodes.length > 0 ? isContextualShortcode( item ) : false
+		} ) );
+
+		searchCache.set( toSearch, cachedItems );
+		return cachedItems;
+	}
+
+	/**
+	 * Clear search cache when DOM changes
+	 */
+	function clearSearchCache() {
+		searchCache.clear();
+	}
+
 	function searchContent() {
 		/*jshint validthis:true */
 		let i;
 		let regEx = false;
 		let searchText = this.value.toLowerCase();
 		const toSearch = this.getAttribute( 'data-tosearch' );
-		const items = document.getElementsByClassName( toSearch );
 
 		if ( this.tagName === 'SELECT' ) {
 			searchText = selectedOptions( this );
@@ -9423,23 +9469,33 @@ window.frmAdminBuildJS = function() {
 			addons.add( 'frm-limited-actions' );
 		}
 
-		for ( i = 0; i < items.length; i++ ) {
-			const innerText = items[ i ].innerText.toLowerCase();
+		// Get cached items to avoid repeated DOM queries
+		const items = getSearchItems( toSearch );
+		
+		// Cache export option to avoid repeated DOM queries
+		const exportOption = getExportOption();
+		const hasContextualShortcodes = frmAdminJs.contextualShortcodes.length > 0;
 
-			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[ i ].classList.contains( 'frm-is-repeater' ) );
+		for ( i = 0; i < items.length; i++ ) {
+			const itemData = items[ i ];
+			const innerText = itemData.innerText;
+
+			const itemCanBeShown = ! ( exportOption === 'xml' && itemData.isRepeater );
+			const canShowItem = itemCanBeShown && ( ! hasContextualShortcodes || ! itemData.isContextual || canShowContextualShortcode( itemData.element ) );
+			
 			if ( searchText === '' ) {
-				if ( itemCanBeShown && checkContextualShortcode( items[ i ] ) ) {
-					items[ i ].classList.remove( 'frm_hidden' );
+				if ( canShowItem ) {
+					itemData.element.classList.remove( 'frm_hidden' );
 				}
-				items[ i ].classList.remove( 'frm-search-result' );
+				itemData.element.classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.includes( searchText ) || textMatchesPlural( innerText, searchText ) ) {
-				if ( itemCanBeShown && checkContextualShortcode( items[ i ] ) ) {
-					items[ i ].classList.remove( 'frm_hidden' );
+				if ( canShowItem ) {
+					itemData.element.classList.remove( 'frm_hidden' );
 				}
-				items[ i ].classList.add( 'frm-search-result' );
+				itemData.element.classList.add( 'frm-search-result' );
 			} else {
-				items[ i ].classList.add( 'frm_hidden' );
-				items[ i ].classList.remove( 'frm-search-result' );
+				itemData.element.classList.add( 'frm_hidden' );
+				itemData.element.classList.remove( 'frm-search-result' );
 			}
 		}
 
@@ -9448,6 +9504,12 @@ window.frmAdminBuildJS = function() {
 
 		jQuery( this ).trigger( 'frmAfterSearch' );
 	}
+
+	/**
+	 * Debounced version of searchContent to improve performance.
+	 * Prevents excessive search calls during rapid typing.
+	 */
+	const debouncedSearchContent = debounce( searchContent, 50 );
 
 	/**
 	 * Allow a search for "signatures" to still match "signature" for example when searching fields.
@@ -9485,17 +9547,28 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		// Cache querySelectorAll results
 		const headingElements = insertFieldsElement.querySelectorAll( ':scope > .frm-with-line' );
+		
 		headingElements.forEach( heading => {
 			const fieldsListElement = heading.nextElementSibling;
 			if ( ! fieldsListElement ) {
 				return;
 			}
+			
 			const listItemElements = fieldsListElement.querySelectorAll( ':scope > li.frmbutton' );
-			const allHidden = Array.from( listItemElements ).every( li => li.classList.contains( 'frm_hidden' ) );
-
-			// Add or remove class based on `allHidden` condition
-			heading.classList.toggle( 'frm_hidden', allHidden );
+			
+			// Optimize by checking first visible item instead of checking all items
+			let hasVisibleItem = false;
+			for ( let i = 0; i < listItemElements.length; i++ ) {
+				if ( ! listItemElements[i].classList.contains( 'frm_hidden' ) ) {
+					hasVisibleItem = true;
+					break;
+				}
+			}
+			
+			// Add or remove class based on visibility
+			heading.classList.toggle( 'frm_hidden', ! hasVisibleItem );
 		} );
 	}
 
@@ -10350,7 +10423,7 @@ window.frmAdminBuildJS = function() {
 				this.select();
 			} );
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm-form-templates-page #template-search-input)', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm-form-templates-page #template-search-input)', debouncedSearchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			const autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
