@@ -10731,7 +10731,7 @@ window.frmAdminBuildJS = function() {
 			if ( frm_admin_js.shouldShowPricingFieldsModal ) {
 				infoModal( {
 					title: __( 'Start Accepting Payments Today!', 'formidable' ),
-					msg: __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, PayPal, or Square) in your settings.', 'formidable' ),
+					msg: __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' ),
 					img: frm_admin_js.pricingFieldsImg,
 					closeText: __( 'I\'ll do it later!', 'formidable' ),
 					actionText: __( 'Setup Payments Now', 'formidable' ),
