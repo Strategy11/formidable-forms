@@ -1133,7 +1133,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Ensures the error message is wrapped in a div with the frm_error class.
+	 * Returns HTML that is wrapped in the error class so that it can be removed with removeAllErrors().
 	 *
 	 * @since x.x
 	 *
