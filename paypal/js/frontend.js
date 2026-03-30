@@ -911,14 +911,11 @@
 		// Use paypal.Applepay().config() as the definitive eligibility check (per PayPal multiparty docs).
 		try {
 			applePayConfig = await paypal.Applepay().config();
-			console.log( '[FrmApplePay] config() response:', JSON.stringify( applePayConfig, null, 2 ) );
 
 			if ( ! applePayConfig || ! applePayConfig.isEligible ) {
-				console.warn( '[FrmApplePay] Not eligible. isEligible:', applePayConfig?.isEligible, 'Full config:', applePayConfig );
 				return 'PayPal reports Apple Pay is not eligible for this merchant/domain';
 			}
 		} catch ( err ) {
-			console.error( '[FrmApplePay] config() threw error:', err );
 			return 'Apple Pay config check failed: ' + err.message;
 		}
 
