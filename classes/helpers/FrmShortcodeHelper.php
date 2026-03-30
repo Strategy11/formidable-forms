@@ -69,10 +69,9 @@ class FrmShortcodeHelper {
 	 * @return array
 	 */
 	public static function get_contextual_codes() {
-		$contextual_shortcodes = self::get_contextual_shortcodes();
-		$result                = array();
+		$result = array();
 
-		foreach ( $contextual_shortcodes as $type => $shortcodes ) {
+		foreach ( self::get_contextual_shortcodes() as $type => $shortcodes ) {
 			$result[ $type ] = array_keys( $shortcodes );
 		}
 

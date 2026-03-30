@@ -960,11 +960,9 @@ class FrmFieldsHelper {
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$m = ! in_array( $hide_opt, $observed_value );
 		} elseif ( $cond === '>' ) {
-			$min = min( $observed_value );
-			$m   = $min > $hide_opt;
+			$m = min( $observed_value ) > $hide_opt;
 		} elseif ( $cond === '<' ) {
-			$max = max( $observed_value );
-			$m   = $max < $hide_opt;
+			$m = max( $observed_value ) < $hide_opt;
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			foreach ( $observed_value as $ob ) {
 				$m = strpos( $ob, $hide_opt );
@@ -2360,6 +2358,37 @@ class FrmFieldsHelper {
 		unset( $field_array['field_options'] );
 
 		return $field_array + $field_options;
+	}
+
+	/**
+	 * Shows add field link.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field_type See file `classes/views/frm-forms/add_field_links.php`.
+	 *
+	 * @return void
+	 */
+	public static function show_add_field_link( $field_type ) {
+		$field_label = FrmFormsHelper::get_field_link_name( $field_type );
+		$classes     = 'frmbutton frm6 frm_t' . $field_type['key'];
+
+		if ( ! empty( $field_type['hide'] ) ) {
+			$classes .= ' frm_hidden';
+		}
+		?>
+<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_type['key'] ); ?>">
+	<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
+		<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
+		<span><?php echo esc_html( $field_label ); ?></span>
+		<?php
+		if ( 'credit_card' === $field_type['key'] && ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			FrmAppHelper::show_pill_text();
+		}
+		?>
+	</a>
+</li>
+		<?php
 	}
 
 	/**

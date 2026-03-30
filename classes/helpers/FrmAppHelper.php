@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 104;
+	public static $db_version = 105;
 
 	/**
 	 * Used by the API add-on.
@@ -310,8 +310,7 @@ class FrmAppHelper {
 			return true;
 		}
 
-		$menu_icon = self::get_menu_icon_class();
-		return str_contains( $menu_icon, 'frm_logo_icon' );
+		return str_contains( self::get_menu_icon_class(), 'frm_logo_icon' );
 	}
 
 	/**
@@ -1051,8 +1050,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
-		$allowed_html = self::allowed_html( $allowed );
-		return wp_kses( $value, $allowed_html );
+		return wp_kses( $value, self::allowed_html( $allowed ) );
 	}
 
 	/**
@@ -2341,8 +2339,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$user_id   = get_current_user_id();
-		$user      = new WP_User( $user_id );
+		$user      = new WP_User( get_current_user_id() );
 		$frm_roles = self::frm_capabilities();
 
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
@@ -3820,8 +3817,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function load_admin_wide_js( $load = true ) {
-		$version = self::plugin_version();
-		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
+		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), self::plugin_version() );
 
 		$global_strings = array(
 			'updating_msg'                  => __( 'Please wait while your site updates.', 'formidable' ),
@@ -3950,7 +3946,19 @@ class FrmAppHelper {
 				// In older versions this event listener causes the section to immediately close again
 				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
+				'shouldShowPaymentsSettingsModal'    => ! self::at_least_one_payment_gateway_is_setup(),
+				'pricingFieldsImg'                   => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
+				'paymentsSettingsUrl'                => FrmStrpLiteAppController::get_payments_settings_url(),
 			);
+
+			if ( self::is_form_builder_page() ) {
+				$admin_script_strings['shouldShowPricingFieldsModal'] = get_option( 'frm_show_pricing_fields_modal' );
+
+				if ( $admin_script_strings['shouldShowPricingFieldsModal'] ) {
+					delete_option( 'frm_show_pricing_fields_modal' );
+				}
+			}
+
 			/**
 			 * @param array $admin_script_strings
 			 */
@@ -3962,6 +3970,15 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+	}
+
+	/**
+	 * Checks if at least one payment gateway is configured.
+	 *
+	 * @return bool
+	 */
+	private static function at_least_one_payment_gateway_is_setup() {
+		return FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() || FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
 	}
 
 	/**
@@ -4489,9 +4506,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function maybe_filter_array( $values, $keys ) {
-		$allow_unfiltered_html = self::allow_unfiltered_html();
-
-		if ( $allow_unfiltered_html ) {
+		if ( self::allow_unfiltered_html() ) {
 			return $values;
 		}
 

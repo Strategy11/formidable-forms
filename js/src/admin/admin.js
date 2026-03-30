@@ -372,14 +372,73 @@ window.frmAdminBuildJS = function() {
 		return false;
 	}
 
-	function infoModal( msg ) {
-		const $info = initModal( '#frm_info_modal', '400px' );
+	/**
+	 * Initializes an info modal.
+	 *
+	 * @since x.x The first param can be an array of args.
+	 *
+	 * @param {Array|string}     msg   The message or the modal data (title, msg, actionUrl, actionText, closeText).
+	 * @param {string|undefined} width The width (include the unit) of the modal. This is optional. Default is `400px`.
+	 */
+	function infoModal( msg, width ) {
+		const $info = initModal( '#frm_info_modal', width || '400px' );
 
 		if ( $info === false ) {
 			return false;
 		}
 
-		jQuery( '.frm-info-msg' ).html( msg );
+		if ( 'string' === typeof msg ) {
+			msg = { msg };
+		}
+
+		msg = Object.assign( {
+			title: '',
+			msg: __( 'Are you sure?', 'formidable' ),
+			img: '',
+			closeText: __( 'Got it!', 'formidable' ),
+			actionUrl: '',
+			actionText: '',
+			noCenter: false,
+		}, msg );
+
+		const titleEl = $info[ 0 ].querySelector( '.info-modal-title' );
+		titleEl.textContent = msg.title || '';
+		titleEl.classList.toggle( 'frm_hidden', ! msg.title );
+
+		if ( msg.msg ) {
+			$info[ 0 ].querySelector( '.frm-info-msg' ).innerHTML = purifyHtml( msg.msg );
+		}
+
+		$info[ 0 ].querySelector( '.info-modal-img' ).src = msg.img;
+		$info[ 0 ].querySelector( '.info-modal-img-wrapper' ).classList.toggle( 'frm_hidden', ! msg.img );
+
+		const closeBtn = document.getElementById( 'frm-info-click' );
+		if ( msg.closeText ) {
+			closeBtn.textContent = msg.closeText;
+		}
+
+		// Change the close button to primary or secondary.
+		closeBtn.classList.toggle( 'button-primary', ! msg.actionUrl );
+		closeBtn.classList.toggle( 'frm-button-primary', ! msg.actionUrl );
+		closeBtn.classList.toggle( 'button-secondary', Boolean( msg.actionUrl ) );
+		closeBtn.classList.toggle( 'frm-button-secondary', Boolean( msg.actionUrl ) );
+
+		const actionBtn = $info[ 0 ].querySelector( '.info-modal-action-link' );
+
+		if ( msg.actionUrl ) {
+			actionBtn.href = msg.actionUrl;
+			if ( msg.actionText ) {
+				actionBtn.textContent = msg.actionText;
+			}
+		}
+
+		// Show or hide the action btn.
+		actionBtn.classList.toggle( 'frm_hidden', ! msg.actionUrl );
+
+		// Handle alignment.
+		$info[ 0 ].querySelector( '.info-modal-inside' ).classList.toggle( 'frmcenter', ! msg.noCenter );
+		const buttonsWrapper = $info[ 0 ].querySelector( '.info-modal-buttons' );
+		buttonsWrapper.classList.toggle( 'frmright', msg.noCenter );
 
 		$info.dialog( 'open' );
 		return false;
@@ -2193,6 +2252,19 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		if ( frm_admin_js.shouldShowPaymentsSettingsModal && [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
+			// These fields require payment gateway installed.
+			infoModal( {
+				title: __( 'Setup a Payment Gateway first', 'formidable' ),
+				msg: __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
+				closeText: __( 'Close', 'formidable' ),
+				actionUrl: frm_admin_js.paymentsSettingsUrl,
+				actionText: __( 'Go to Payment Settings', 'formidable' ),
+				noCenter: true,
+			} );
+			return false;
+		}
+
 		if ( shouldStopInsertingField( fieldType ) ) {
 			// We do not want to return false here.
 			// Otherwise it causes issues with trying to add a new slider field
@@ -2532,7 +2604,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function copyOption( originalSetting, copySettings, originalFieldId, newFieldId ) {
-		const remainingKeyDetails = originalSetting.name.substr( 23 + ( `${ originalFieldId }` ).length );
+		const remainingKeyDetails = originalSetting.name.substr( 23 + `${ originalFieldId }`.length );
 		const copyKey = `field_options[options_${ newFieldId }]${ remainingKeyDetails }`;
 		const copySetting = copySettings.querySelector( `input[name="${ copyKey }"]` );
 		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
@@ -2781,7 +2853,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( 'product' === type || 'quantity' === type ) {
-			// quantity too needs to be a part of the if stmt especially cos of the very
+			// quantity too needs to be a part of the if statement especially because of the very
 			// 1st quantity field (or even if it's just one quantity field in the form).
 			maybeHideQuantityProductFieldOption();
 		}
@@ -2813,11 +2885,11 @@ window.frmAdminBuildJS = function() {
 		if ( addFocus ) {
 			const bounding = field.getBoundingClientRect();
 			const container = document.getElementById( 'post-body-content' );
-			const inView = ( bounding.top >= 0 &&
+			const inView = bounding.top >= 0 &&
 					bounding.left >= 0 &&
 					bounding.right <= ( window.innerWidth || document.documentElement.clientWidth ) &&
 					bounding.bottom <= ( window.innerHeight || document.documentElement.clientHeight )
-			);
+			;
 
 			if ( ! inView ) {
 				container.scroll( {
@@ -3130,7 +3202,7 @@ window.frmAdminBuildJS = function() {
 		list.innerHTML = '';
 
 		for ( let i = 0; i < fields.length; i++ ) {
-			if ( ( exclude?.includes( fields[ i ].fieldType ) ) ||
+			if ( exclude?.includes( fields[ i ].fieldType ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
@@ -3197,7 +3269,7 @@ window.frmAdminBuildJS = function() {
 		const checkType = fieldType !== undefined;
 
 		for ( i = 0; i < allFields.length; i++ ) {
-			// data-ftype is better (than data-type) cos of fields loaded by AJAX - which might not be ready yet
+			// data-ftype is better (than data-type) because of fields loaded by AJAX - which might not be ready yet
 			if ( checkType && allFields[ i ].getAttribute( 'data-ftype' ) !== fieldType ) {
 				continue;
 			}
@@ -5593,7 +5665,7 @@ window.frmAdminBuildJS = function() {
 				} else {
 					containerClass.remove( 'frm-first-page' );
 				}
-				pages[ i ].textContent = ( i + 1 );
+				pages[ i ].textContent = i + 1;
 			}
 		} else {
 			document.getElementById( 'frm-fake-page' ).style.display = 'none';
@@ -6091,10 +6163,10 @@ window.frmAdminBuildJS = function() {
 			const container = jQuery( `#field_${ fieldId }_inner_container > .frm_form_fields` );
 			const hasImageOptions = imagesAsOptions( fieldId );
 			const imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '';
-			const imageOptionClass = hasImageOptions ? ( `frm_image_option frm_image_${ imageSize } ` ) : '';
+			const imageOptionClass = hasImageOptions ? `frm_image_option frm_image_${ imageSize } ` : '';
 			const isProduct = isProductField( fieldId );
 
-			const type = ( 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' ) );
+			const type = 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' );
 			for ( let i = 0; i < opts.length; i++ ) {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
@@ -6249,7 +6321,7 @@ window.frmAdminBuildJS = function() {
 
 		removeDropdownOpts( field );
 		const opts = getMultipleOpts( sourceID, field.id.includes( 'frm_field_logic_opt' ) );
-		let hasPlaceholder = ( placeholder !== undefined );
+		let hasPlaceholder = placeholder !== undefined;
 
 		for ( let i = 0; i < opts.length; i++ ) {
 			let { label } = opts[ i ];
@@ -6539,8 +6611,8 @@ window.frmAdminBuildJS = function() {
 			const optionName = `field_options[hide_opt_${ fieldID }][]`;
 			const optionID = `frm_field_logic_opt_${ fieldID }`;
 			let input = false;
-			let showSelect = ( valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio' );
-			const showText = ( valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number' );
+			let showSelect = valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio';
+			const showText = valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number';
 
 			if ( showSelect ) {
 				isTaxonomy = document.getElementById( `frm_has_hidden_options_${ val }` );
@@ -6834,7 +6906,7 @@ window.frmAdminBuildJS = function() {
 	function showInlineModal( icon, input, event ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) );
 		const container = jQuery( icon ).closest( 'p,ul' );
-		const inputTrigger = ( input !== undefined );
+		const inputTrigger = input !== undefined;
 
 		if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
@@ -9469,7 +9541,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		return ( `${ text }s` ).includes( searchText );
+		return `${ text }s`.includes( searchText );
 	}
 
 	/**
@@ -9643,6 +9715,36 @@ window.frmAdminBuildJS = function() {
 			fieldItem.find( '.frm-not-set' )[ 0 ].classList.remove( 'frm_hidden' );
 			fieldItem.find( '.frm-embed-field-placeholder' )[ 0 ].classList.add( 'frm_hidden' );
 		}
+	}
+
+	function handleModalDismiss( input ) {
+		const modalDismissers = document.querySelectorAll( '#frm_info_modal .dismiss, #frm_info_modal #frm-info-click, .ui-widget-overlay.ui-front' );
+		function onModalClose() {
+			input.classList.add( 'frm_invalid_field' );
+			setTimeout( () => input.focus(), 0 );
+			modalDismissers.forEach( el => {
+				el.removeEventListener( 'click', onModalClose );
+			} );
+		}
+
+		modalDismissers.forEach( el => {
+			el.addEventListener( 'click', onModalClose );
+		} );
+	}
+
+	function validateProductPriceValue( target ) {
+		const price = target.value.trim();
+		if ( price.includes( '[' ) && price.includes( ']' ) ) {
+			// This is a shortcode and should be assumed a valid price.
+			return;
+		}
+		if ( isNaN( price.replace( /,/, '' ) ) ) {
+			const validationFailMessage = __( 'Please enter a valid number.', 'formidable' );
+			frmAdminBuild.infoModal( validationFailMessage );
+			handleModalDismiss( target );
+			return;
+		}
+		target.classList.remove( 'frm_invalid_field' );
 	}
 
 	function toggleProductType() {
@@ -10592,6 +10694,7 @@ window.frmAdminBuildJS = function() {
 
 			popAllProductFields();
 
+			frmDom.util.documentOn( 'change', '.frm_product_price', validateProductPriceValue );
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
 			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
@@ -10624,6 +10727,18 @@ window.frmAdminBuildJS = function() {
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
 			}, 9999 );
+
+			if ( frm_admin_js.shouldShowPricingFieldsModal ) {
+				infoModal( {
+					title: __( 'Start Accepting Payments Today!', 'formidable' ),
+					msg: __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' ),
+					img: frm_admin_js.pricingFieldsImg,
+					closeText: __( 'I\'ll do it later!', 'formidable' ),
+					actionText: __( 'Setup Payments Now', 'formidable' ),
+					actionUrl: frm_admin_js.paymentsSettingsUrl,
+					noCenter: true,
+				}, '550px' );
+			}
 		},
 
 		settingsInit() {
