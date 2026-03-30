@@ -1051,6 +1051,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		if ( $include_buttons ) {
 			$components[] = 'buttons';
 			$components[] = 'googlepay';
+			$components[] = 'applepay';
 		}
 
 		if ( $include_card_fields ) {

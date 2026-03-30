@@ -37,6 +37,9 @@
 	/** Cached Google Pay config from paypal.Googlepay().config(). */
 	let googlePayConfig = null;
 
+	/** Cached Apple Pay config from paypal.Applepay().config(). */
+	let applePayConfig = null;
+
 	// ---- Constants ----
 
 	/**
@@ -48,6 +51,7 @@
 		venmo: 'Venmo',
 		paylater: 'Pay Later',
 		google_pay: 'Google Pay',
+		apple_pay: 'Apple Pay',
 		bancontact: 'Bancontact',
 		blik: 'BLIK',
 		eps: 'EPS',
@@ -90,6 +94,16 @@
 	const googlePayBaseRequest = {
 		apiVersion: 2,
 		apiVersionMinor: 0
+	};
+
+	/**
+	 * Base request object for Apple Pay payment requests.
+	 */
+	const applePayBaseRequest = {
+		countryCode: 'US',
+		currencyCode: 'USD',
+		merchantCapabilities: ['supports3DS'],
+		supportedNetworks: ['visa', 'masterCard', 'amex', 'discover']
 	};
 
 	// ---- Initialization ----
@@ -255,6 +269,19 @@
 				} );
 			}
 		}
+
+		// --- Apple Pay ---
+		if ( buttonsAreEnabled && ! isRecurring ) {
+			const applePayEligibilityResult = await checkApplePayEligibility();
+			if ( applePayEligibilityResult === '' ) {
+				registerMethod( 'apple_pay', {
+					eligible: true,
+					render: renderApplePayButton
+				} );
+			} else {
+				console.log( 'Apple Pay not available:', applePayEligibilityResult );
+			}
+		}
 	}
 
 	/**
@@ -342,10 +369,17 @@
 			} else if ( key === 'google_pay' ) {
 				markWrap.classList.add( 'frm-payment-method-google-pay-icon' );
 				const img = document.createElement( 'img' );
-				const baseUrl = frmPayPalVars.imagesUrl || '';
 				img.src = `${ baseUrl }gpay.svg`;
 				img.alt = 'Google Pay';
 				img.height = 24;
+				markWrap.append( img );
+			} else if ( key === 'apple_pay' ) {
+				markWrap.classList.add( 'frm-payment-method-apple-pay-icon' );
+				const img = document.createElement( 'img' );
+				img.src = `${ baseUrl }apple-pay.svg`;
+				img.alt = 'Apple Pay';
+				img.height = 24;
+				img.style.width = 'auto';
 				markWrap.append( img );
 			}
 
@@ -854,6 +888,115 @@
 		}
 	}
 
+	// ---- Apple Pay ----
+
+	/**
+	 * Check if Apple Pay is eligible (without rendering).
+	 *
+	 * @return {Promise<string>} An empty string if Apple Pay is supported and ready to accept payments in the current environment, or a string with the reason for ineligibility.
+	 */
+	async function checkApplePayEligibility() {
+		if ( 'function' !== typeof paypal.Applepay ) {
+			return 'PayPal Apple Pay SDK not loaded';
+		}
+
+		if ( ! window.ApplePaySession ) {
+			return 'Not on Apple device';
+		}
+
+		if ( ! ApplePaySession.canMakePayments() ) {
+			return 'Apple Pay not configured on device';
+		}
+
+		if ( ! paypal.FUNDING || ! paypal.FUNDING.APPLEPAY ) {
+			return 'Apple Pay funding source not available in PayPal SDK';
+		}
+
+		// The definitive eligibility check: ask PayPal if an Apple Pay button is eligible.
+		try {
+			const testButton = paypal.Buttons( {
+				fundingSource: paypal.FUNDING.APPLEPAY
+			} );
+
+			if ( typeof testButton.isEligible === 'function' && ! testButton.isEligible() ) {
+				return 'Apple Pay button not eligible';
+			}
+		} catch ( err ) {
+			return 'Apple Pay eligibility check failed: ' + err.message;
+		}
+
+		// Load Apple Pay config for later use during rendering.
+		try {
+			applePayConfig = await paypal.Applepay().config();
+		} catch ( err ) {
+			return 'Apple Pay config failed: ' + err.message;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Render the Apple Pay button into its method container.
+	 */
+	async function renderApplePayButton() {
+		const method = paymentMethods.get( 'apple_pay' );
+		if ( ! method ) {
+			return;
+		}
+
+		const container = method.containerEl;
+		container.innerHTML = '';
+
+		try {
+			const applePayButton = createApplePayButton();
+
+			if ( typeof applePayButton.render !== 'function' ) {
+				throw new Error( 'Apple Pay button does not have render method' );
+			}
+
+			applePayButton.render( `#${ container.id }` );
+		} catch ( err ) {
+			console.error( 'Failed to render Apple Pay button', err );
+			container.innerHTML = '';
+		}
+	}
+
+	/**
+	 * Create an Apple Pay button instance.
+	 *
+	 * @return {Object} The Apple Pay button instance.
+	 */
+	function createApplePayButton() {
+		const buttonConfig = {
+			fundingSource: paypal.FUNDING.APPLEPAY,
+			onApprove: onApplePayApprove,
+			onError,
+			onCancel,
+			style: { ...frmPayPalVars.buttonStyle },
+		};
+
+		// Apple Pay only supports black or white button colors.
+		if ( buttonConfig.style.color && ! ['black', 'white'].includes( buttonConfig.style.color ) ) {
+			delete buttonConfig.style.color;
+		}
+
+		buttonConfig.createOrder = createOrderForApplePay;
+
+		return paypal.Buttons( buttonConfig );
+	}
+
+	/**
+	 * Handle Apple Pay payment approval.
+	 *
+	 * @param {Object} data The approval data containing orderID.
+	 */
+	async function onApplePayApprove( data ) {
+		await onApprove( {
+			...data,
+			paymentSource: 'apple_pay'
+		} );
+	}
+
 	// ---- AJAX / Order Creation ----
 
 	/**
@@ -959,6 +1102,39 @@
 
 		if ( ! orderData.success || ! orderData.data.orderID ) {
 			throw new Error( orderData.data || 'Failed to create PayPal order for Google Pay' );
+		}
+
+		return orderData.data.orderID;
+	}
+
+	/**
+	 * Create a PayPal order specifically for Apple Pay.
+	 *
+	 * @return {Promise<string>} The PayPal order ID.
+	 */
+	async function createOrderForApplePay() {
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_order' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+		formData.append( 'payment_source', 'apple_pay' );
+
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			throw new Error( 'Failed to create PayPal order for Apple Pay' );
+		}
+
+		const orderData = await response.json();
+
+		if ( ! orderData.success || ! orderData.data.orderID ) {
+			throw new Error( orderData.data || 'Failed to create PayPal order for Apple Pay' );
 		}
 
 		return orderData.data.orderID;
