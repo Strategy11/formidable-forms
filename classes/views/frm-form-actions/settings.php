@@ -2,6 +2,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$single_action_attrs = array(
+	'href'  => 'javascript:void(0)',
+	'class' => 'frm_single_action frm_inactive_action frm_show_upgrade button frm-button-secondary frm-button-sm frm-with-icon frm-ml-auto-force frm-fadein-down-short',
+);
 ?>
 <p class="howto">
 	<?php esc_html_e( 'Add form actions to your form to perform tasks when an entry is created, updated, imported, and more.', 'formidable' ); ?>
@@ -76,18 +81,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 						}
 
 						$action_icon = isset( $group['icon'] ) ? $group['icon'] : 'frmfont frm_plus_icon';
+
+						$single_action_attrs['data-upgrade'] = sprintf(
+							/* translators: %s: Name of form action */
+							__( '%s form actions', 'formidable' ),
+							$action
+						);
+						$single_action_attrs['data-medium'] = 'settings-' . $action;
 						?>
 							<li class="frm-card-item frm-card-item--outlined frm-action frm-not-installed frm-group-<?php echo esc_attr( $group_key ); ?>">
-								<div class="frm-h-stack-xs frm-w-full frm-mb-2xs">
+								<div class="frm-h-stack-xs frm-w-full">
 									<span class="frm-border-icon">
 										<?php FrmAppHelper::icon_by_class( $action_icon, $icon_atts ); ?>
 									</span>
 
 									<div class="frm-flex-col">
-										<h3 class="frm-text-md frm-capitalize">
-											<span class="frm-action-lock-icon">
-												<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
-											</span>
+										<h3 class="frm-h-stack-xs frm-text-md frm-capitalize">
+											<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_svg15', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
 											<span class="frm-font-medium frm-truncate"><?php echo esc_html( $action ); ?></span>
 											<?php if ( ! empty( $group['new_actions'] ) && in_array( $action, $group['new_actions'], true ) ) { ?>
 												<?php FrmAppHelper::show_pill_text(); ?>
@@ -95,8 +105,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 										</h3>
 									</div>
 
-									<a href="javascript:void(0)" class="frm_single_action frm_inactive_action frm_show_upgrade button frm-button-secondary frm-button-sm frm-with-icon frm-ml-auto-force" data-upgrade="<?php echo esc_attr( sprintf( /* translators: %s: Name of form action */ __( '%s form actions', 'formidable' ), $action ) ); ?>" data-medium="<?php echo esc_attr( 'settings-' . $action ); ?>">
-										<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_plus_icon' ); ?>
+									<a <?php FrmAppHelper::array_to_html_params( $single_action_attrs, true ); ?>>
+										<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
 										<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
 									</a>
 								</div>
