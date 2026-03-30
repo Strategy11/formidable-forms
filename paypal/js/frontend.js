@@ -268,8 +268,6 @@
 					eligible: true,
 					render: renderApplePayButton
 				} );
-			} else {
-				console.log( 'Apple Pay not available:', applePayEligibilityResult );
 			}
 		}
 	}
@@ -295,19 +293,12 @@
 	// ---- Radio Group UI ----
 
 	/**
-	 * Inject the payment method selector CSS into the page (once).
-	 */
-	function injectStyles() {}
-
-	/**
 	 * Build the radio button group for payment method selection.
 	 * Each option is a card-like row with a radio, label, description, and PayPal Mark logo.
 	 *
 	 * @return {HTMLElement} The radio group container.
 	 */
 	function buildRadioGroup() {
-		injectStyles();
-
 		const group = document.createElement( 'div' );
 		group.classList.add( 'frm-payment-method-selector' );
 		group.setAttribute( 'role', 'radiogroup' );
