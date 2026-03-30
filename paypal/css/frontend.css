@@ -110,6 +110,15 @@
 	width: auto;
 }
 
+.frm-payment-method-apple-pay-icon {
+	height: 24px;
+}
+
+.frm-payment-method-apple-pay-icon svg {
+	height: 24px;
+	width: auto;
+}
+
 .frm-payment-method-paylater-wrap {
 	border-bottom: 1px solid #e0e0e0;
 	background: #fff;

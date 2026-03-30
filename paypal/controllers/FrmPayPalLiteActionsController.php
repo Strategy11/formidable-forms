@@ -1009,7 +1009,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'intent'         => $intent,
 			'currency'       => strtoupper( $action->post_content['currency'] ?? 'USD' ),
 			'merchant-id'    => FrmPayPalLiteConnectHelper::get_merchant_id(),
-			'enable-funding' => 'venmo',
+			'enable-funding' => 'venmo,applepay',
 		);
 
 		if ( 'subscription' === $intent ) {
@@ -1051,6 +1051,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		if ( $include_buttons ) {
 			$components[] = 'buttons';
 			$components[] = 'googlepay';
+			$components[] = 'applepay';
 		}
 
 		if ( $include_card_fields ) {
@@ -1084,6 +1085,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
 
 		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
+		wp_register_script( 'apple-pay-sdk', 'https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js', array(), null, false );
 
 		$has_break = FrmAppHelper::pro_is_installed() && (bool) FrmField::get_all_types_in_form( $form_id, 'break' );
 
@@ -1097,13 +1099,12 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 */
 			function ( $tag, $handle ) use ( $has_break ) {
 				if ( 'paypal-sdk' === $handle ) {
-					$attributes = ' data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '"';
-
-					if ( $has_break ) {
-						$attributes .= ' async';
-					}
-
+					$attributes = ' async data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '"';
 					return str_replace( ' src=', $attributes . ' src=', $tag );
+				}
+
+				if ( in_array( $handle, array( 'apple-pay-sdk', 'google-pay' ), true ) ) {
+					return str_replace( ' src=', ' async src=', $tag );
 				}
 
 				if ( $has_break && 'formidable-paypal' === $handle ) {
@@ -1123,7 +1124,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			FrmAppHelper::plugin_version()
 		);
 
-		$dependencies = array( 'paypal-sdk', 'formidable' );
+		$dependencies = array( 'paypal-sdk', 'apple-pay-sdk', 'formidable' );
 		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
 
 		wp_enqueue_script(
