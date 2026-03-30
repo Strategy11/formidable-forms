@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * the form is double filtered and not minimized.
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
+ *
+ * @since x.x Added `$hide_label`.
+ *
+ * @var bool $hide_label
  */
 
 if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
@@ -61,9 +65,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
-		$include_label = ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'];
-
-		if ( $include_label ) {
+		if ( empty( $hide_label ) ) {
 			$label_attributes = array(
 				'for' => $html_id . '-' . $opt_key,
 			);
@@ -92,7 +94,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 
 		?> /><?php
 
-		if ( $include_label ) {
+		if ( empty( $hide_label ) ) {
 			echo ' ';
 			FrmAppHelper::kses_echo( $label, 'all' );
 			FrmFieldsHelper::after_choice_input( $field, $opt_key );
