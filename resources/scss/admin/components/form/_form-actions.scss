@@ -36,47 +36,44 @@
 }
 
 // Action Cards
-.frm_actions_list {
+.frm_actions_list .frm-card-item.frm-card-item--outlined {
+	padding-left: var(--gap-sm);
+	padding-right: var(--gap-sm);
+	margin: 0;
+	transition: box-shadow 200ms ease-in-out, background-color 200ms ease-out;
 
-	.frm-card-item.frm-card-item--outlined {
-		padding-left: var(--gap-sm);
-		padding-right: var(--gap-sm);
-		transition: box-shadow 200ms ease-in-out, background-color 200ms ease-out;
+	&:hover {
+		background-color: var(--grey-25);
+	}
 
-		&:hover {
-			background-color: var(--grey-25);
-		}
+	h3 {
+		color: var(--grey-800);
 
-		.frm_single_action {
-			display: none;
-		}
-
-		&:hover .frm_single_action {
-			display: inline-flex;
-			animation: fadeIn 400ms ease-in-out forwards;
-		}
-
-		.frm_single_action.frm_inactive_action {
-			opacity: 0.5;
+		.frm-new-pill {
+			margin-left: 0;
 		}
 	}
 
-	.frm-action h3 {
-		display: flex;
+	.frm_single_action {
+		display: none;
 		align-items: center;
-		gap: 4px;
+		gap: var(--gap-2xs);
+		font-size: var(--text-sm) !important;
+		padding: 7px var(--gap-sm) !important;
+
+		.frmsvg {
+			width: 20px;
+			height: 20px;
+			opacity: 1;
+		}
+
+		&.frm_inactive_action {
+			opacity: 0.55 !important;
+		}
 	}
 
-	.frm-action-lock-icon .frmsvg {
+	&:hover .frm_single_action {
 		display: flex;
-		width: 11px;
-		height: 13px;
-		flex-shrink: 0;
-		color: var(--grey-500);
-	}
-
-	.frm-action h3 .frm-new-pill {
-		flex-shrink: 0;
 	}
 }
 
@@ -94,7 +91,6 @@
 	}
 
 	.frm_email_icons {
-		--frm-fadein-time: 240ms;
 		display: none;
 	}
 
