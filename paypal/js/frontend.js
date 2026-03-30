@@ -96,16 +96,6 @@
 		apiVersionMinor: 0
 	};
 
-	/**
-	 * Base request object for Apple Pay payment requests.
-	 */
-	const applePayBaseRequest = {
-		countryCode: 'US',
-		currencyCode: 'USD',
-		merchantCapabilities: ['supports3DS'],
-		supportedNetworks: ['visa', 'masterCard', 'amex', 'discover']
-	};
-
 	// ---- Initialization ----
 
 	/**
