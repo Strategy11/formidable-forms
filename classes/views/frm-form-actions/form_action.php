@@ -29,7 +29,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 		</div>
 
 		<div class="frm-ml-auto frm-h-stack-sm frm-p-sm">
-			<span class="frm_email_icons frm-flex frm-items-center frm-gap-sm frm-fadein">
+			<span class="frm_email_icons frm-flex frm-items-center frm-gap-sm frm-fadein-down-short">
 				<?php if ( $action_control->action_options['limit'] > 2 ) { ?>
 					<a href="javascript:void(0)" class="frm_duplicate_form_action" title="<?php esc_attr_e( 'Duplicate', 'formidable' ); ?>">
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon frm_svg24 frm-text-grey-800' ); ?>
