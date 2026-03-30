@@ -908,28 +908,18 @@
 			return 'Apple Pay not configured on device';
 		}
 
-		if ( ! paypal.FUNDING || ! paypal.FUNDING.APPLEPAY ) {
-			return 'Apple Pay funding source not available in PayPal SDK';
-		}
-
-		// The definitive eligibility check: ask PayPal if an Apple Pay button is eligible.
-		try {
-			const testButton = paypal.Buttons( {
-				fundingSource: paypal.FUNDING.APPLEPAY
-			} );
-
-			if ( typeof testButton.isEligible === 'function' && ! testButton.isEligible() ) {
-				return 'Apple Pay button not eligible';
-			}
-		} catch ( err ) {
-			return 'Apple Pay eligibility check failed: ' + err.message;
-		}
-
-		// Load Apple Pay config for later use during rendering.
+		// Use paypal.Applepay().config() as the definitive eligibility check (per PayPal multiparty docs).
 		try {
 			applePayConfig = await paypal.Applepay().config();
+			console.log( '[FrmApplePay] config() response:', JSON.stringify( applePayConfig, null, 2 ) );
+
+			if ( ! applePayConfig || ! applePayConfig.isEligible ) {
+				console.warn( '[FrmApplePay] Not eligible. isEligible:', applePayConfig?.isEligible, 'Full config:', applePayConfig );
+				return 'PayPal reports Apple Pay is not eligible for this merchant/domain';
+			}
 		} catch ( err ) {
-			return 'Apple Pay config failed: ' + err.message;
+			console.error( '[FrmApplePay] config() threw error:', err );
+			return 'Apple Pay config check failed: ' + err.message;
 		}
 
 		return '';
@@ -947,54 +937,97 @@
 		const container = method.containerEl;
 		container.innerHTML = '';
 
-		try {
-			const applePayButton = createApplePayButton();
+		const btn = document.createElement( 'apple-pay-button' );
+		btn.setAttribute( 'buttonstyle', 'black' );
+		btn.setAttribute( 'type', 'buy' );
+		btn.setAttribute( 'locale', 'en' );
+		btn.style.width = '100%';
+		btn.style.height = '40px';
 
-			if ( typeof applePayButton.render !== 'function' ) {
-				throw new Error( 'Apple Pay button does not have render method' );
-			}
-
-			applePayButton.render( `#${ container.id }` );
-		} catch ( err ) {
-			console.error( 'Failed to render Apple Pay button', err );
-			container.innerHTML = '';
-		}
+		btn.addEventListener( 'click', onApplePayButtonClick );
+		container.appendChild( btn );
 	}
 
 	/**
-	 * Create an Apple Pay button instance.
-	 *
-	 * @return {Object} The Apple Pay button instance.
+	 * Handle click on the Apple Pay button.
+	 * Creates an ApplePaySession synchronously (required by Apple) and processes the payment via PayPal.
 	 */
-	function createApplePayButton() {
-		const buttonConfig = {
-			fundingSource: paypal.FUNDING.APPLEPAY,
-			onApprove: onApplePayApprove,
-			onError,
-			onCancel,
-			style: { ...frmPayPalVars.buttonStyle },
+	function onApplePayButtonClick() {
+		if ( ! applePayConfig ) {
+			console.error( 'Apple Pay config not available' );
+			return;
+		}
+
+		const paymentRequest = {
+			countryCode: applePayConfig.countryCode,
+			merchantCapabilities: applePayConfig.merchantCapabilities,
+			supportedNetworks: applePayConfig.supportedNetworks,
+			currencyCode: applePayConfig.currencyCode || 'USD',
+			total: {
+				label: document.title || 'Payment',
+				type: 'final',
+				amount: getFormTotal(),
+			},
 		};
 
-		// Apple Pay only supports black or white button colors.
-		if ( buttonConfig.style.color && ! ['black', 'white'].includes( buttonConfig.style.color ) ) {
-			delete buttonConfig.style.color;
-		}
+		// ApplePaySession MUST be created synchronously inside the click handler.
+		const session = new ApplePaySession( 4, paymentRequest );
+		const applepay = paypal.Applepay();
 
-		buttonConfig.createOrder = createOrderForApplePay;
+		session.onvalidatemerchant = ( event ) => {
+			applepay.validateMerchant( {
+				validationUrl: event.validationURL,
+				displayName: document.title || 'Payment'
+			} )
+			.then( ( validateResult ) => {
+				session.completeMerchantValidation( validateResult.merchantSession );
+			} )
+			.catch( ( validateError ) => {
+				console.error( 'Apple Pay merchant validation failed', validateError );
+				session.abort();
+			} );
+		};
 
-		return paypal.Buttons( buttonConfig );
+		session.onpaymentauthorized = ( event ) => {
+			createOrderForApplePay()
+				.then( ( orderId ) => {
+					return applepay.confirmOrder( {
+						orderId: orderId,
+						token: event.payment.token,
+						billingContact: event.payment.billingContact
+					} )
+					.then( () => {
+						session.completePayment( ApplePaySession.STATUS_SUCCESS );
+						onApprove( {
+							orderID: orderId,
+							paymentSource: 'apple_pay'
+						} );
+					} );
+				} )
+				.catch( ( err ) => {
+					console.error( 'Apple Pay payment failed', err );
+					session.completePayment( ApplePaySession.STATUS_FAILURE );
+				} );
+		};
+
+		session.oncancel = () => {
+			onCancel();
+		};
+
+		session.begin();
 	}
 
 	/**
-	 * Handle Apple Pay payment approval.
+	 * Get the form total amount as a string.
 	 *
-	 * @param {Object} data The approval data containing orderID.
+	 * @return {string} The total amount.
 	 */
-	async function onApplePayApprove( data ) {
-		await onApprove( {
-			...data,
-			paymentSource: 'apple_pay'
-		} );
+	function getFormTotal() {
+		const totalField = thisForm.querySelector( '[data-frmtotal]' );
+		if ( totalField && totalField.value ) {
+			return parseFloat( totalField.value ).toFixed( 2 );
+		}
+		return '0.00';
 	}
 
 	// ---- AJAX / Order Creation ----
