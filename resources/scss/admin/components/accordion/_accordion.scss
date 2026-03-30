@@ -19,7 +19,7 @@
 	border: none !important;
 }
 
-.frm-with-line span,
+.frm-with-line > span,
 .accordion-section-content h4 span {
 	background: #fff;
 	padding: 0 var(--gap-xs);
@@ -32,13 +32,18 @@
 	background: var(--sidebar-color);
 }
 
-.frm-right-panel .frm-with-line span {
+.frm-right-panel .frm-with-line > span {
 	background: var(--sidebar-color) !important;
 	margin-left: -4px;
 }
 
-.frm-right-panel .frm-inline-modal .frm-with-line span {
+.frm-right-panel .frm-inline-modal .frm-with-line > span {
 	background: #fff !important;
+}
+
+.frm-with-line .frm-new-pill {
+	margin-left: 0;
+	vertical-align: bottom;
 }
 
 .frm-with-line::before,

@@ -2152,6 +2152,25 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function load_currency_js() {
+		global $frm_vars;
+
+		if ( empty( $frm_vars['currency'] ) ) {
+			return;
+		}
+
+		echo '<script>';
+		echo 'var frmcurrency=' . json_encode( $frm_vars['currency'] ) . ";\n";
+		echo 'if(typeof __FRMCURR == "undefined"){__FRMCURR=frmcurrency;}';
+		echo 'else{__FRMCURR=jQuery.extend(true,{},__FRMCURR,frmcurrency);}';
+		echo '</script>';
+	}
+
+	/**
 	 * Returns the form name or the no title text if the form name is empty.
 	 *
 	 * @since x.x
