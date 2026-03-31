@@ -147,15 +147,18 @@
 		border-bottom-left-radius: var(--small-radius);
 		border-bottom-right-radius: var(--small-radius);
 
-		p > label {
-			display: flex;
-			align-items: center;
-			gap: var(--gap-xs);
+		p {
+			margin-bottom: var(--gap-sm);
 
-			.frmsvg {
+			> label {
 				display: flex;
+				align-items: center;
+				gap: var(--gap-xs);
+
+				.frmsvg {
+					display: flex;
+				}
 			}
 		}
 	}
 }
-
