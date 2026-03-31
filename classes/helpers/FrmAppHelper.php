@@ -3991,6 +3991,7 @@ class FrmAppHelper {
 
 		// This modal shows on load once after upgrading the plugin.
 		$show_pricing_fields_modal = get_option( 'frm_show_pricing_fields_modal' );
+
 		if ( ! $show_pricing_fields_modal ) {
 			return;
 		}
@@ -4008,9 +4009,11 @@ class FrmAppHelper {
 			$admin_script_strings['pricingFieldsModal']['msg']        = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
 		} else {
 			$gateway_texts = array();
+
 			if ( $stripe_connected ) {
 				$gateway_texts['stripe'] = esc_html__( 'Stripe', 'formidable' );
 			}
+
 			if ( $square_connected ) {
 				$gateway_texts['square'] = esc_html__( 'Square', 'formidable' );
 			}
