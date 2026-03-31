@@ -980,7 +980,7 @@
 		}
 
 		btn.addEventListener( 'click', onApplePayButtonClick );
-		container.appendChild( btn );
+		container.append( btn );
 	}
 
 	/**
