@@ -142,6 +142,16 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	 * @return mixed
 	 */
 	public function set_field_value( $field ) {
+		if ( in_array( $field->type, array( 'checkbox', 'select', 'radio' ), true ) ) {
+			// If checkbox, dropdown or radio field, return a random choice from the options.
+			$random_option = $field->options[ array_rand( $field->options ) ];
+			if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
+				return $random_option['value'];
+			}
+
+			return $random_option;
+		}
+
 		$value        = rand_str();
 		$field_values = array(
 			'email'    => 'admin@example.org',
