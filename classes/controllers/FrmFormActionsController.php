@@ -86,6 +86,47 @@ class FrmFormActionsController {
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
 		}
+
+		self::apply_default_action_descriptions();
+	}
+
+	/**
+	 * Sets default descriptions on registered actions from a central list.
+	 *
+	 * Keeps the description when an add-on replaces a base action class without its own.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function apply_default_action_descriptions() {
+		$descriptions = array(
+			'wppost'            => __( 'Content publishing', 'formidable' ),
+			'register'          => __( 'Account creation', 'formidable' ),
+			'paypal'            => __( 'Payment gateway', 'formidable' ),
+			'quiz'              => __( 'Automated grading', 'formidable' ),
+			'quiz_outcome'      => __( 'Result logic', 'formidable' ),
+			'aweber'            => __( 'List triggers', 'formidable' ),
+			'mailchimp'         => __( 'Subscription confirmation', 'formidable' ),
+			'zapier'            => __( 'App automation', 'formidable' ),
+			'n8n'               => __( 'Workflow automation', 'formidable' ),
+			'twilio'            => __( 'Text notifications', 'formidable' ),
+			'activecampaign'    => __( 'Contact automation', 'formidable' ),
+			'salesforce'        => __( 'Lead automation', 'formidable' ),
+			'constantcontact'   => __( 'Content distribution', 'formidable' ),
+			'getresponse'       => __( 'Success notifications', 'formidable' ),
+			'hubspot'           => __( 'CRM alerts', 'formidable' ),
+			'mailpoet'          => __( 'Plugin automation', 'formidable' ),
+			'api'               => __( 'System integration', 'formidable' ),
+			'googlespreadsheet' => __( 'Spreadsheet sync', 'formidable' ),
+			'convertkit'        => __( 'Broadcast publishing', 'formidable' ),
+		);
+
+		foreach ( self::$registered_actions->actions as $action ) {
+			if ( $action->action_options['description'] === '' && isset( $descriptions[ $action->id_base ] ) ) {
+				$action->action_options['description'] = $descriptions[ $action->id_base ];
+			}
+		}
 	}
 
 	/**
