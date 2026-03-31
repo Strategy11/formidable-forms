@@ -4026,15 +4026,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Checks if at least one payment gateway is configured.
-	 *
-	 * @return bool
-	 */
-	private static function at_least_one_payment_gateway_is_setup() {
-		return FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() || FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
-	}
-
-	/**
 	 * Get the no label text.
 	 *
 	 * @since 6.25.1

@@ -10722,7 +10722,7 @@ window.frmAdminBuildJS = function() {
 			}, 9999 );
 
 			if ( 'object' === typeof frm_admin_js.pricingFieldsModal ) {
-				infoModal(frm_admin_js.pricingFieldsModal, '550px');
+				infoModal( frm_admin_js.pricingFieldsModal, '550px' );
 			}
 		},
 
