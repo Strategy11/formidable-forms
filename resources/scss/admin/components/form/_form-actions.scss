@@ -147,6 +147,11 @@
 		border-bottom-left-radius: var(--small-radius);
 		border-bottom-right-radius: var(--small-radius);
 
+		.frm_add_remove[style*="display: block"] + p {
+			margin-top: 0;
+			margin-bottom: var(--gap-xs);
+		}
+
 		p {
 			margin-bottom: var(--gap-sm);
 
