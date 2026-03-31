@@ -2252,16 +2252,9 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		if ( frm_admin_js.shouldShowPaymentsSettingsModal && [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
+		if ( frm_admin_js.paymentsSettingsModal && 'object' === typeof frm_admin_js.paymentsSettingsModal && [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
 			// These fields require payment gateway installed.
-			infoModal( {
-				title: __( 'Setup a Payment Gateway first', 'formidable' ),
-				msg: __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
-				closeText: __( 'Close', 'formidable' ),
-				actionUrl: frm_admin_js.paymentsSettingsUrl,
-				actionText: __( 'Go to Payment Settings', 'formidable' ),
-				noCenter: true,
-			} );
+			infoModal( frm_admin_js.paymentsSettingsModal );
 			return false;
 		}
 
@@ -10728,16 +10721,8 @@ window.frmAdminBuildJS = function() {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
 			}, 9999 );
 
-			if ( frm_admin_js.shouldShowPricingFieldsModal ) {
-				infoModal( {
-					title: __( 'Start Accepting Payments Today!', 'formidable' ),
-					msg: __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' ),
-					img: frm_admin_js.pricingFieldsImg,
-					closeText: __( 'I\'ll do it later!', 'formidable' ),
-					actionText: __( 'Setup Payments Now', 'formidable' ),
-					actionUrl: frm_admin_js.paymentsSettingsUrl,
-					noCenter: true,
-				}, '550px' );
+			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
+				infoModal( frm_admin_js.pricingFieldsModal, '550px' );
 			}
 		},
 

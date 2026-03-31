@@ -3946,18 +3946,9 @@ class FrmAppHelper {
 				// In older versions this event listener causes the section to immediately close again
 				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
-				'shouldShowPaymentsSettingsModal'    => ! self::at_least_one_payment_gateway_is_setup(),
-				'pricingFieldsImg'                   => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
-				'paymentsSettingsUrl'                => FrmStrpLiteAppController::get_payments_settings_url(),
 			);
 
-			if ( self::is_form_builder_page() ) {
-				$admin_script_strings['shouldShowPricingFieldsModal'] = get_option( 'frm_show_pricing_fields_modal' );
-
-				if ( $admin_script_strings['shouldShowPricingFieldsModal'] ) {
-					delete_option( 'frm_show_pricing_fields_modal' );
-				}
-			}
+			self::add_form_builder_modal_data( $admin_script_strings );
 
 			/**
 			 * @param array $admin_script_strings
@@ -3973,12 +3964,70 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Checks if at least one payment gateway is configured.
+	 * @param array $admin_script_strings
 	 *
-	 * @return bool
+	 * @return void
 	 */
-	private static function at_least_one_payment_gateway_is_setup() {
-		return FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() || FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+	private static function add_form_builder_modal_data( &$admin_script_strings ) {
+		if ( ! self::is_form_builder_page() || self::pro_is_installed() ) {
+			return;
+		}
+
+		$stripe_connected      = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+		$square_connected      = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$gateway_connected     = $stripe_connected || $square_connected;
+		$payments_settings_url = FrmStrpLiteAppController::get_payments_settings_url();
+
+		if ( ! $gateway_connected ) {
+			// This modal shows when user clicks on one of the pricing fields and no payment gateways configured.
+			$admin_script_strings['paymentsSettingsModal'] = array(
+				'title'      => __( 'Setup a Payment Gateway first', 'formidable' ),
+				'msg'        => __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
+				'closeText'  => __( 'Close', 'formidable' ),
+				'actionUrl'  => $payments_settings_url,
+				'actionText' => __( 'Go to Payment Settings', 'formidable' ),
+				'noCenter'   => true,
+			);
+		}
+
+		// This modal shows on load once after upgrading the plugin.
+		$show_pricing_fields_modal = get_option( 'frm_show_pricing_fields_modal' );
+
+		if ( ! $show_pricing_fields_modal ) {
+			return;
+		}
+
+		$admin_script_strings['pricingFieldsModal'] = array(
+			'title'    => esc_html__( 'Start Accepting Payments Today!', 'formidable' ),
+			'img'      => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
+			'noCenter' => true,
+		);
+
+		if ( $gateway_connected ) {
+			$gateway_texts = array();
+
+			if ( $stripe_connected ) {
+				$gateway_texts['stripe'] = esc_html__( 'Stripe', 'formidable' );
+			}
+
+			if ( $square_connected ) {
+				$gateway_texts['square'] = esc_html__( 'Square', 'formidable' );
+			}
+
+			$admin_script_strings['pricingFieldsModal']['msg'] = sprintf(
+				// translators: %s: Stripe or Square.
+				esc_html__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
+				esc_html( implode( ' ' . esc_html__( 'and', 'formidable' ) . ' ', $gateway_texts ) )
+			);
+		} else {
+			$admin_script_strings['pricingFieldsModal']['closeText']  = __( 'I\'ll do it later!', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
+			// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
+		}//end if
+
+		delete_option( 'frm_show_pricing_fields_modal' );
 	}
 
 	/**
