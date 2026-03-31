@@ -3951,7 +3951,7 @@ class FrmAppHelper {
 				'paymentsSettingsUrl'                => FrmStrpLiteAppController::get_payments_settings_url(),
 			);
 
-			if ( self::is_form_builder_page() ) {
+			if ( self::is_form_builder_page() && ! self::pro_is_installed() ) {
 				$admin_script_strings['shouldShowPricingFieldsModal'] = get_option( 'frm_show_pricing_fields_modal' );
 
 				if ( $admin_script_strings['shouldShowPricingFieldsModal'] ) {
