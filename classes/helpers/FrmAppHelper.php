@@ -3975,9 +3975,10 @@ class FrmAppHelper {
 
 		$stripe_connected      = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
 		$square_connected      = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$gateway_connected     = $stripe_connected || $square_connected;
 		$payments_settings_url = FrmStrpLiteAppController::get_payments_settings_url();
 
-		if ( ! $stripe_connected && ! $square_connected ) {
+		if ( ! $gateway_connected ) {
 			// This modal shows when user clicks on one of the pricing fields and no payment gateways configured.
 			$admin_script_strings['paymentsSettingsModal'] = array(
 				'title'      => __( 'Setup a Payment Gateway first', 'formidable' ),
@@ -4002,7 +4003,7 @@ class FrmAppHelper {
 			'noCenter' => true,
 		);
 
-		if ( ! $stripe_connected && ! $square_connected ) {
+		if ( ! $gateway_connected ) {
 			$admin_script_strings['pricingFieldsModal']['closeText']  = __( 'I\'ll do it later!', 'formidable' );
 			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
 			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
@@ -4021,7 +4022,7 @@ class FrmAppHelper {
 
 			$admin_script_strings['pricingFieldsModal']['msg'] = sprintf(
 				// translators: %s: Stripe or Square.
-				__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
+				esc_html__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
 				esc_html( implode( ' ' . esc_html__( 'and', 'formidable' ) . ' ', $gateway_texts ) )
 			);
 		}//end if
