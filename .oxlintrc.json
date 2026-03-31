@@ -114,7 +114,6 @@
 		"unicorn/prefer-module": "off",
 		"unicorn/explicit-length-check": "off",
 		"unicorn/no-array-for-each": "off",
-		"unicorn/prevent-abbreviations": "off",
 		"unicorn/no-this-assignment": "off",
 		"unicorn/prefer-number-properties": "off",
 		"unicorn/consistent-function-scoping": "off",
