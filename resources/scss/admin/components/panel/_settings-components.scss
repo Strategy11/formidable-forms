@@ -97,9 +97,9 @@ input.frm_enternew {
 
 .frm_posttax_opt_list {
 	border: 1px solid var(--grey-300);
-	padding: var(--gap-md);
+	padding: var(--gap-md) var(--gap-sm);
 	border-radius: var(--small-radius);
-	margin: 5px 0 5px var(--gap-md);
+	margin: var(--gap-sm) 0;
 }
 
 /* Color picker CSS */
