@@ -81,6 +81,14 @@
 .frm_form_action_settings {
 	margin-bottom: 12px;
 
+	h2,
+	h3 {
+		border-top: 1px solid var(--grey-200);
+		padding-top: var(--gap-md);
+		margin-bottom: var(--gap-sm);
+		margin-top: var(--gap-xs);
+	}
+
 	.widget-top {
 		color: var(--grey-700);
 		background: #fff;
