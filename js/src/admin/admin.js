@@ -2252,7 +2252,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		if ( 'object' === typeof frm_admin_js.paymentsSettingsModal && [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
+		if ( frm_admin_js.paymentsSettingsModal && 'object' === typeof frm_admin_js.paymentsSettingsModal && [ 'product', 'quantity', 'total' ].includes( fieldType ) ) {
 			// These fields require payment gateway installed.
 			infoModal( frm_admin_js.paymentsSettingsModal );
 			return false;
@@ -10721,7 +10721,7 @@ window.frmAdminBuildJS = function() {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
 			}, 9999 );
 
-			if ( 'object' === typeof frm_admin_js.pricingFieldsModal ) {
+			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
 				infoModal( frm_admin_js.pricingFieldsModal, '550px' );
 			}
 		},

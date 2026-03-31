@@ -3997,15 +3997,16 @@ class FrmAppHelper {
 		}
 
 		$admin_script_strings['pricingFieldsModal'] = array(
-			'title'      => esc_html__( 'Start Accepting Payments Today!', 'formidable' ),
-			'img'        => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
-			'noCenter'   => true,
+			'title'    => esc_html__( 'Start Accepting Payments Today!', 'formidable' ),
+			'img'      => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
+			'noCenter' => true,
 		);
 
 		if ( ! $stripe_connected && ! $square_connected ) {
 			$admin_script_strings['pricingFieldsModal']['closeText']  = __( 'I\'ll do it later!', 'formidable' );
 			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
 			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
+			// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$admin_script_strings['pricingFieldsModal']['msg']        = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
 		} else {
 			$gateway_texts = array();
