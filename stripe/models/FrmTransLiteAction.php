@@ -7,15 +7,14 @@ class FrmTransLiteAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'     => 'frm_stripe_icon frm_credit_card_alt_icon frmfont',
+			'classes'  => 'frm_stripe_icon frm_credit_card_alt_icon frmfont',
 			// This is 99 in the Payments submodule but Stripe Lite only supports a single action.
-			'limit'       => 1,
-			'active'      => true,
+			'limit'    => 1,
+			'active'   => true,
 			// After user registration.
-			'priority'    => 45,
-			'event'       => array( 'create' ),
-			'color'       => '#3fac25',
-			'description' => __( 'Transaction alerts', 'formidable' ),
+			'priority' => 45,
+			'event'    => array( 'create' ),
+			'color'    => '#3fac25',
 		);
 
 		$this->FrmFormAction( 'payment', __( 'Collect a Payment', 'formidable' ), $action_ops );

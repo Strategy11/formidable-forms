@@ -105,6 +105,7 @@ class FrmFormActionsController {
 			'email'             => __( 'Autoresponder alerts', 'formidable' ),
 			'wppost'            => __( 'Content publishing', 'formidable' ),
 			'register'          => __( 'Account creation', 'formidable' ),
+			'payment'           => __( 'Transaction alerts', 'formidable' ),
 			'paypal'            => __( 'Payment gateway', 'formidable' ),
 			'quiz'              => __( 'Automated grading', 'formidable' ),
 			'quiz_outcome'      => __( 'Result logic', 'formidable' ),
