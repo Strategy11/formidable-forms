@@ -3963,6 +3963,11 @@ class FrmAppHelper {
 		}//end if
 	}
 
+	/**
+	 * @param array $admin_script_strings
+	 *
+	 * @return void
+	 */
 	private static function add_form_builder_modal_data( &$admin_script_strings ) {
 		if ( ! self::is_form_builder_page() || self::pro_is_installed() ) {
 			return;
