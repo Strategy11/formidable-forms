@@ -890,12 +890,25 @@ class FrmPayPalLiteConnectHelper {
 	 * @param string $payment_source Valid values are 'card', 'paypal'.
 	 * @param array  $payer
 	 * @param string $shipping_preference
+	 * @param array  $pricing_data Optional. Array of products with prices and quantities.
 	 *
 	 * @return false|object
 	 */
-	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference ) {
+	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data = array() ) {
 		$brand_name = self::get_brand_name();
-		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference' ) );
+
+		// Log pricing data for debugging if FrmLog is available
+		if ( class_exists( 'FrmLog' ) && $pricing_data ) {
+			$log = new FrmLog();
+			$log->add(
+				array(
+					'title'   => 'PayPal Order: Pricing Data',
+					'content' => print_r( $pricing_data, true ),
+				)
+			);
+		}
+
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data' ) );
 	}
 
 	/**

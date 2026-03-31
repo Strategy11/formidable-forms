@@ -92,6 +92,96 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
+	 * Extract pricing data from posted form values.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id The form ID.
+	 *
+	 * @return array Array of products with prices and quantities.
+	 */
+	private static function get_pricing_data_from_posted_values( $form_id ) {
+		$products = array();
+		$fields   = FrmField::get_all_for_form( $form_id );
+
+		if ( ! $fields ) {
+			return $products;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$posted_data = $_POST['item_meta'] ?? array();
+
+		foreach ( $fields as $field ) {
+			if ( ! in_array( $field->type, array( 'product', 'quantity', 'total' ), true ) ) {
+				continue;
+			}
+
+			$field_id = $field->id;
+			$value    = $posted_data[ $field_id ] ?? '';
+
+			if ( empty( $value ) ) {
+				continue;
+			}
+
+			if ( 'product' === $field->type ) {
+				$product_field = FrmFieldFactory::get_field_object( $field );
+				if ( method_exists( $product_field, 'get_posted_price' ) ) {
+					$price = $product_field->get_posted_price( $value );
+					if ( $price ) {
+						$products[] = array(
+							'name'     => $field->name,
+							'price'    => is_array( $price ) ? array_sum( $price ) : $price,
+							'quantity' => 1,
+							'type'     => 'product',
+							'field_id' => $field_id,
+						);
+					}
+				}
+			} elseif ( 'quantity' === $field->type ) {
+				$quantity = is_numeric( $value ) ? (int) $value : 1;
+				// Quantity fields are linked to product fields via product_field setting
+				$product_field_ids = FrmField::get_option( $field, 'product_field' );
+				if ( $product_field_ids ) {
+					// This quantity will be associated with its product field
+					// We'll handle the association in the product processing
+					$products[] = array(
+						'name'     => $field->name,
+						'price'    => 0, // Quantity fields don't have price
+						'quantity' => $quantity,
+						'type'     => 'quantity',
+						'product_field_ids' => (array) $product_field_ids,
+					);
+				}
+			}
+		}
+
+		// Associate quantity fields with their products
+		$final_products = array();
+		$product_quantities = array();
+
+		foreach ( $products as $item ) {
+			if ( 'quantity' === $item['type'] ) {
+				foreach ( $item['product_field_ids'] as $product_field_id ) {
+					$product_quantities[ $product_field_id ] = $item['quantity'];
+				}
+			}
+		}
+
+		foreach ( $products as $item ) {
+			if ( 'product' === $item['type'] ) {
+				$quantity = $product_quantities[ $item['field_id'] ] ?? 1;
+				$final_products[] = array(
+					'name'     => $item['name'],
+					'price'    => $item['price'],
+					'quantity' => $quantity,
+				);
+			}
+		}
+
+		return $final_products;
+	}
+
+	/**
 	 * Create a PayPal order via AJAX.
 	 */
 	public static function create_order() {
@@ -123,12 +213,13 @@ class FrmPayPalLiteAppController {
 		$amount              = self::get_amount_value_for_verification( $action );
 		$payer               = self::get_payer_data_from_posted_values( $action );
 		$shipping_preference = self::get_shipping_preference( $action );
+		$pricing_data        = self::get_pricing_data_from_posted_values( $form_id );
 
 		// PayPal expects the amount in a format like 10.00, so format it.
 		$amount   = number_format( floatval( $amount ), 2, '.', '' );
 		$currency = strtoupper( $action->post_content['currency'] );
 
-		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference );
+		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data );
 
 		if ( class_exists( 'FrmLog' ) ) {
 			$log = new FrmLog();
