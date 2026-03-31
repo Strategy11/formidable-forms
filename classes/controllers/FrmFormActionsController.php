@@ -101,6 +101,8 @@ class FrmFormActionsController {
 	 */
 	private static function apply_default_action_descriptions() {
 		$descriptions = array(
+			'on_submit'         => __( 'Success messages', 'formidable' ),
+			'email'             => __( 'Autoresponder alerts', 'formidable' ),
 			'wppost'            => __( 'Content publishing', 'formidable' ),
 			'register'          => __( 'Account creation', 'formidable' ),
 			'paypal'            => __( 'Payment gateway', 'formidable' ),

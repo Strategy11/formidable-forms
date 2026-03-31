@@ -27,7 +27,6 @@ class FrmOnSubmitAction extends FrmFormAction {
 			'priority'    => 9,
 			'color'       => '#42C1B2',
 			'keywords'    => __( 'redirect, success, confirmation, submit', 'formidable' ),
-			'description' => __( 'Success messages', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
 
