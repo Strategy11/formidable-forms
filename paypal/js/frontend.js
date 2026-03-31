@@ -872,6 +872,50 @@
 	// ---- Apple Pay ----
 
 	/**
+	 * Map frmPayPalVars.buttonStyle to Apple Pay button attributes and CSS custom properties.
+	 *
+	 * The <apple-pay-button> web component uses CSS custom properties for sizing:
+	 * --apple-pay-button-width, --apple-pay-button-height, --apple-pay-button-border-radius,
+	 * --apple-pay-button-padding, --apple-pay-button-box-sizing.
+	 *
+	 * @return {Object} Apple Pay button style options.
+	 */
+	function getApplePayButtonStyle() {
+		const style = frmPayPalVars.buttonStyle || {};
+		const options = {
+			buttonStyle: 'black',
+			buttonType: 'buy'
+		};
+
+		const colorMap = {
+			black: 'black',
+			white: 'white',
+			silver: 'white-outline'
+		};
+		if ( style.color && colorMap[ style.color ] ) {
+			options.buttonStyle = colorMap[ style.color ];
+		}
+
+		const typeMap = {
+			pay: 'pay',
+			checkout: 'check-out',
+			buynow: 'buy',
+			donate: 'donate',
+			subscribe: 'subscribe',
+			buy: 'buy'
+		};
+		if ( style.label && typeMap[ style.label ] ) {
+			options.buttonType = typeMap[ style.label ];
+		}
+
+		if ( style.borderRadius !== undefined ) {
+			options.borderRadius = style.borderRadius;
+		}
+
+		return options;
+	}
+
+	/**
 	 * Check if Apple Pay is eligible (without rendering).
 	 *
 	 * @return {Promise<string>} An empty string if Apple Pay is supported and ready to accept payments in the current environment, or a string with the reason for ineligibility.
@@ -905,6 +949,9 @@
 
 	/**
 	 * Render the Apple Pay button into its method container.
+	 *
+	 * The <apple-pay-button> web component uses CSS custom properties for sizing,
+	 * not standard CSS properties or inline styles.
 	 */
 	async function renderApplePayButton() {
 		const method = paymentMethods.get( 'apple_pay' );
@@ -915,12 +962,22 @@
 		const container = method.containerEl;
 		container.innerHTML = '';
 
+		const applePayStyle = getApplePayButtonStyle();
+
 		const btn = document.createElement( 'apple-pay-button' );
-		btn.setAttribute( 'buttonstyle', 'black' );
-		btn.setAttribute( 'type', 'buy' );
+		btn.setAttribute( 'buttonstyle', applePayStyle.buttonStyle );
+		btn.setAttribute( 'type', applePayStyle.buttonType );
 		btn.setAttribute( 'locale', 'en' );
-		btn.style.width = '100%';
-		btn.style.height = '40px';
+
+		// Use CSS custom properties (the only way to style the <apple-pay-button> web component).
+		btn.style.setProperty( '--apple-pay-button-width', '100%' );
+		btn.style.setProperty( '--apple-pay-button-height', '40px' );
+		btn.style.setProperty( '--apple-pay-button-padding', '6px 0' );
+		btn.style.setProperty( '--apple-pay-button-box-sizing', 'border-box' );
+
+		if ( applePayStyle.borderRadius !== undefined ) {
+			btn.style.setProperty( '--apple-pay-button-border-radius', `${ applePayStyle.borderRadius }px` );
+		}
 
 		btn.addEventListener( 'click', onApplePayButtonClick );
 		container.appendChild( btn );
