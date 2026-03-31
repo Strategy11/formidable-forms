@@ -4007,7 +4007,7 @@ class FrmAppHelper {
 			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
 			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
 			// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$admin_script_strings['pricingFieldsModal']['msg']        = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
 		} else {
 			$gateway_texts = array();
 
@@ -4024,7 +4024,7 @@ class FrmAppHelper {
 				__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
 				esc_html( implode( ' ' . esc_html__( 'and', 'formidable' ) . ' ', $gateway_texts ) )
 			);
-		}
+		}//end if
 
 		delete_option( 'frm_show_pricing_fields_modal' );
 	}
