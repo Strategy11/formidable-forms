@@ -125,8 +125,10 @@ class FrmPayPalLiteAppController {
 
 			if ( 'product' === $field->type ) {
 				$product_field = FrmFieldFactory::get_field_object( $field );
+
 				if ( method_exists( $product_field, 'get_posted_price' ) ) {
 					$price = $product_field->get_posted_price( $value );
+
 					if ( $price ) {
 						$products[] = array(
 							'name'     => $field->name,
@@ -141,6 +143,7 @@ class FrmPayPalLiteAppController {
 				$quantity = is_numeric( $value ) ? (int) $value : 1;
 				// Quantity fields are linked to product fields via product_field setting
 				$product_field_ids = FrmField::get_option( $field, 'product_field' );
+
 				if ( $product_field_ids ) {
 					// This quantity will be associated with its product field
 					// We'll handle the association in the product processing

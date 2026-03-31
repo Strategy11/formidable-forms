@@ -347,7 +347,7 @@ class FrmPayPalLiteEventsController {
 	 *
 	 * @since x.x
 	 *
-	 * @return object|false The new payment object or false if not a subscription payment.
+	 * @return false|object The new payment object or false if not a subscription payment.
 	 */
 	private function maybe_create_subscription_payment() {
 		$subscription_id = $this->get_subscription_id_from_resource();
@@ -385,6 +385,7 @@ class FrmPayPalLiteEventsController {
 		$frm_payment = new FrmTransLitePayment();
 
 		$existing_payment = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
+
 		if ( $existing_payment ) {
 			$this->log( 'PayPal Webhook: Duplicate Payment Skipped', 'Payment already exists for receipt ' . $receipt_id );
 			return false;
