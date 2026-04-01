@@ -70,10 +70,6 @@ class FrmPayPalLiteEventsController {
 
 		$unprocessed_event_ids = FrmPayPalLiteConnectHelper::get_unprocessed_event_ids();
 
-		$debug_msg = 'PayPal Debug: process_events - Unprocessed IDs: ' . ( $unprocessed_event_ids ? implode( ', ', $unprocessed_event_ids ) : 'none' );
-		error_log( $debug_msg );
-		FrmTransLiteLog::log_message( 'PayPal Debug: process_events', $debug_msg );
-
 		if ( $unprocessed_event_ids ) {
 			$this->process_event_ids( $unprocessed_event_ids );
 		}
@@ -91,8 +87,6 @@ class FrmPayPalLiteEventsController {
 	private function process_event_ids( $event_ids ) {
 		foreach ( $event_ids as $event_id ) {
 			if ( $this->should_skip_event( $event_id ) ) {
-				error_log( 'PayPal Debug: Skipping Event - ' . $event_id );
-				FrmTransLiteLog::log_message( 'PayPal Debug: Skipping Event', $event_id );
 				continue;
 			}
 
@@ -101,14 +95,10 @@ class FrmPayPalLiteEventsController {
 			$this->event = FrmPayPalLiteConnectHelper::get_event( $event_id );
 
 			if ( ! is_object( $this->event ) ) {
-				error_log( 'PayPal Debug: Event Not Object - ' . $event_id );
-				FrmTransLiteLog::log_message( 'PayPal Debug: Event Not Object', $event_id );
 				$this->count_failed_event( $event_id );
 				continue;
 			}
 
-			error_log( 'PayPal Debug: Calling handle_event - Event ID: ' . $event_id . ', Type: ' . ( $this->event->event_type ?? 'unknown' ) );
-			FrmTransLiteLog::log_message( 'PayPal Debug: Calling handle_event', 'Event ID: ' . $event_id . ', Type: ' . ( $this->event->event_type ?? 'unknown' ) );
 			$this->handle_event();
 			$this->track_handled_event( $event_id );
 			FrmPayPalLiteConnectHelper::process_event( $event_id );
@@ -189,24 +179,6 @@ class FrmPayPalLiteEventsController {
 	}
 
 	/**
-	 * Log a PayPal webhook message using FrmLog when available.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $title   The log entry title.
-	 * @param mixed  $content The log entry content.
-	 *
-	 * @return void
-	 */
-	private function log( $title, $content = '' ) {
-		if ( ! is_string( $content ) ) {
-			$content = print_r( $content, true );
-		}
-
-		FrmTransLiteLog::log_message( $title, $content, false );
-	}
-
-	/**
 	 * @return void
 	 */
 	private function handle_event() {
@@ -216,11 +188,6 @@ class FrmPayPalLiteEventsController {
 			FrmTransLiteLog::log_message( 'PayPal Webhook Message', 'No resource object found in event' );
 			return;
 		}
-
-		$this->log( 'PayPal Webhook: Received Event', array(
-			'event_type'  => $this->event->event_type ?? 'unknown',
-			'resource_id' => $this->resource->id ?? 'unknown',
-		) );
 
 		$payment_events = array(
 			'PAYMENT.CAPTURE.COMPLETED' => 'complete',
@@ -236,18 +203,6 @@ class FrmPayPalLiteEventsController {
 
 		if ( isset( $payment_events[ $this->event->event_type ] ) ) {
 			$this->status = $payment_events[ $this->event->event_type ];
-			$log_data = array(
-				'event_type'    => $this->event->event_type,
-				'mapped_status' => $this->status,
-				'resource_id'   => $this->resource->id ?? '',
-				'amount'        => $this->get_amount_from_resource(),
-			);
-
-			if ( $this->status === 'refunded' ) {
-				$log_data['resource_dump'] = $this->resource;
-			}
-
-			$this->log( 'PayPal Webhook: Payment Event', $log_data );
 			$this->handle_payment_event();
 			return;
 		}
@@ -293,7 +248,6 @@ class FrmPayPalLiteEventsController {
 		$payment     = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
 
 		if ( ! $payment && $this->status === 'refunded' ) {
-			$this->log( 'PayPal Webhook: Refund Skipped', 'No matching payment found for receipt ' . $receipt_id );
 			FrmTransLiteLog::log_message( 'PayPal Webhook Message', 'No action taken. The refunded payment does not exist for ' . $receipt_id );
 			return;
 		}
@@ -301,7 +255,6 @@ class FrmPayPalLiteEventsController {
 		$run_triggers = false;
 
 		if ( ! $payment ) {
-			$this->log( 'PayPal Webhook: No Existing Payment', 'No payment found for receipt ' . $receipt_id . '. Checking for subscription payment.' );
 			$payment = $this->maybe_create_subscription_payment();
 
 			if ( $payment ) {
@@ -327,14 +280,6 @@ class FrmPayPalLiteEventsController {
 			FrmTransLiteAppHelper::add_note_to_payment( $payment_values, $note );
 
 			$frm_payment->update( $payment->id, $payment_values );
-
-			$this->log( 'PayPal Webhook: Payment Updated', array(
-				'payment_id'       => $payment->id,
-				'old_status'       => $payment->status,
-				'new_status'       => $this->status,
-				'is_partial_refund' => $is_partial_refund,
-				'note'             => $note,
-			) );
 
 			if ( ! $is_partial_refund ) {
 				$run_triggers = true;
@@ -397,19 +342,10 @@ class FrmPayPalLiteEventsController {
 		$existing_payment = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
 
 		if ( $existing_payment ) {
-			$this->log( 'PayPal Webhook: Duplicate Payment Skipped', 'Payment already exists for receipt ' . $receipt_id );
 			return false;
 		}
 
 		$payment_id = $frm_payment->create( $payment_values );
-
-		$this->log( 'PayPal Webhook: Subscription Payment Created', array(
-			'payment_id'      => $payment_id,
-			'subscription_id' => $subscription_id,
-			'receipt_id'      => $receipt_id,
-			'amount'          => $amount,
-			'status'          => $this->status,
-		) );
 
 		$this->update_next_bill_date( $sub );
 		$this->maybe_cancel_subscription_at_limit( $sub );
@@ -539,11 +475,6 @@ class FrmPayPalLiteEventsController {
 
 		// For sale refunds, the sale_id property references the original sale.
 		if ( ! empty( $this->resource->sale_id ) ) {
-			$this->log( 'PayPal Webhook: Resolved Receipt ID', array(
-				'refund_id'  => $refund_id,
-				'receipt_id' => $this->resource->sale_id,
-				'source'     => 'sale_id',
-			) );
 			return $this->resource->sale_id;
 		}
 
@@ -565,22 +496,11 @@ class FrmPayPalLiteEventsController {
 					$segments = explode( '/', rtrim( $path, '/' ) );
 					$last_segment = end( $segments );
 					if ( $last_segment ) {
-						$this->log( 'PayPal Webhook: Resolved Receipt ID', array(
-							'refund_id'  => $refund_id,
-							'receipt_id' => $last_segment,
-							'source'     => 'HATEOAS up link',
-							'href'       => $link->href,
-						) );
 						return $last_segment;
 					}
 				}
 			}
 		}
-
-		$this->log( 'PayPal Webhook: Could Not Resolve Original Receipt ID', array(
-			'refund_id' => $refund_id,
-			'links'     => $this->resource->links ?? 'none',
-		) );
 
 		// Fallback to the resource ID (the refund ID itself).
 		return $refund_id;
@@ -619,7 +539,6 @@ class FrmPayPalLiteEventsController {
 		$subscription = FrmPayPalLiteConnectHelper::get_subscription( $sub->sub_id );
 
 		if ( ! is_object( $subscription ) ) {
-			$this->log( 'PayPal Webhook: Next Bill Date Update Failed', 'Could not retrieve subscription ' . $sub->sub_id . ' from PayPal API' );
 			return;
 		}
 
@@ -632,10 +551,6 @@ class FrmPayPalLiteEventsController {
 		if ( $next_bill_date ) {
 			$frm_sub = new FrmTransLiteSubscription();
 			$frm_sub->update( $sub->id, array( 'next_bill_date' => $next_bill_date ) );
-			$this->log( 'PayPal Webhook: Next Bill Date Updated', array(
-				'subscription_id' => $sub->sub_id,
-				'next_bill_date'  => $next_bill_date,
-			) );
 		}
 	}
 
@@ -667,12 +582,6 @@ class FrmPayPalLiteEventsController {
 		$cancelled = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
 
 		if ( $cancelled ) {
-			$this->log( 'PayPal Webhook: Subscription Cancelled at Limit', array(
-				'subscription_id' => $sub->sub_id,
-				'payment_count'   => $count,
-				'payment_limit'   => $action->post_content['payment_limit'],
-			) );
-
 			FrmTransLiteSubscriptionsController::change_subscription_status(
 				array(
 					'status' => 'future_cancel',
@@ -703,16 +612,8 @@ class FrmPayPalLiteEventsController {
 		}
 
 		if ( $sub->status === 'active' ) {
-			$this->log( 'PayPal Webhook: Subscription Already Active', 'Subscription ' . $subscription_id . ' is already active. No action taken.' );
-			FrmTransLiteLog::log_message( 'PayPal Webhook Message', 'No action taken since the subscription is already active.' );
 			return;
 		}
-
-		$this->log( 'PayPal Webhook: Subscription Activated', array(
-			'subscription_id' => $subscription_id,
-			'event_type'      => $this->event->event_type,
-			'old_status'      => $sub->status,
-		) );
 
 		FrmTransLiteSubscriptionsController::change_subscription_status(
 			array(
@@ -745,16 +646,8 @@ class FrmPayPalLiteEventsController {
 		}
 
 		if ( $sub->status === 'canceled' ) {
-			$this->log( 'PayPal Webhook: Subscription Already Canceled', 'Subscription ' . $subscription_id . ' is already canceled. No action taken.' );
-			FrmTransLiteLog::log_message( 'PayPal Webhook Message', 'No action taken since the subscription is already canceled.' );
 			return;
 		}
-
-		$this->log( 'PayPal Webhook: Subscription Canceled', array(
-			'subscription_id' => $subscription_id,
-			'event_type'      => $this->event->event_type,
-			'old_status'      => $sub->status,
-		) );
 
 		FrmTransLiteSubscriptionsController::change_subscription_status(
 			array(
@@ -792,12 +685,6 @@ class FrmPayPalLiteEventsController {
 			$sub->id,
 			array( 'fail_count' => $fail_count )
 		);
-
-		$this->log( 'PayPal Webhook: Subscription Payment Failed', array(
-			'subscription_id' => $subscription_id,
-			'fail_count'      => $fail_count,
-			'will_cancel'     => $fail_count > 3,
-		) );
 
 		if ( $fail_count > 3 ) {
 			FrmTransLiteSubscriptionsController::change_subscription_status(
@@ -842,13 +729,6 @@ class FrmPayPalLiteEventsController {
 		);
 
 		if ( $paypal_status && isset( $status_map[ $paypal_status ] ) && $sub->status !== $status_map[ $paypal_status ] ) {
-			$this->log( 'PayPal Webhook: Subscription Status Synced', array(
-				'subscription_id' => $subscription_id,
-				'old_status'      => $sub->status,
-				'new_status'      => $status_map[ $paypal_status ],
-				'paypal_status'   => $paypal_status,
-			) );
-
 			FrmTransLiteSubscriptionsController::change_subscription_status(
 				array(
 					'status' => $status_map[ $paypal_status ],
@@ -875,11 +755,6 @@ class FrmPayPalLiteEventsController {
 		if ( $new_values ) {
 			$frm_sub = new FrmTransLiteSubscription();
 			$frm_sub->update( $sub->id, $new_values );
-
-			$this->log( 'PayPal Webhook: Subscription Data Synced', array_merge(
-				array( 'subscription_id' => $subscription_id ),
-				$new_values
-			) );
 		}
 	}
 }
