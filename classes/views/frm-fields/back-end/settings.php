@@ -332,12 +332,12 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
 
-		if ( ! empty( $show_upsell_for_autocomplete ) ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/autocomplete.php';
-		}
-
 		if ( ! empty( $show_upsell_for_before_after_contents ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/before-after-contents.php';
+		}
+
+		if ( ! empty( $show_upsell_for_autocomplete ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/autocomplete.php';
 		}
 
 		if ( ! empty( $show_upsell_for_visibility ) ) {
