@@ -143,7 +143,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	 */
 	public function set_field_value( $field ) {
 		if ( in_array( $field->type, array( 'checkbox', 'select', 'radio' ), true ) ) {
-			if ( empty( $field->options ) ) {
+			if ( ! $field->options ) {
 				return '';
 			}
 
