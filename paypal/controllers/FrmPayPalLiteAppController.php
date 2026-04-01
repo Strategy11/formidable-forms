@@ -484,9 +484,7 @@ class FrmPayPalLiteAppController {
 		// Pass $product_name, $interval and $interval_count to the helper
 		// As well as trial period and the maximum number of payments.
 		// Also send subscriber email.
-		// TODO Process the description.
-		// TODO Do we want a new Product Name setting?
-		$product_name   = $action->post_content['description'] ?? '';
+		$product_name   = $action->post_content['product_name'] ?? '';
 		$interval       = $action->post_content['interval'] ?? '';
 		$interval_count = $action->post_content['interval_count'] ?? 1;
 		$trial_period   = $action->post_content['trial_period'] ?? '';
