@@ -3776,6 +3776,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function toggleImageOptions() {
+		console.log( this );
 		/*jshint validthis:true */
 		const $field = jQuery( this ).closest( '.frm-single-settings' );
 		const fieldId = $field.data( 'fid' );
@@ -9745,6 +9746,11 @@ window.frmAdminBuildJS = function() {
 		const container = settings.find( '.frmjs_product_choices' );
 		const heading = settings.find( '.frm_prod_options_heading' );
 		const currentVal = this.options[ this.selectedIndex ].value;
+
+		const displayFormatOptions = settings[0].querySelector( '.frm_display_format_options' );
+		if ( displayFormatOptions ) {
+			displayFormatOptions.setAttribute( 'data-product-type', currentVal );
+		}
 
 		container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
 		heading.removeClass( 'frm_prod_user_def' );
