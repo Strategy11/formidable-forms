@@ -554,6 +554,28 @@ window.frmAdminBuildJS = function() {
 		);
 	}
 
+	/**
+	 * Resets the checked state of a toggle associated with a removed element.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} hideSelector CSS selector for the element being removed.
+	 * @return {void}
+	 */
+	function uncheckToggleForHiddenElement( hideSelector ) {
+		const hiddenEl = document.querySelector( hideSelector );
+		if ( ! hiddenEl ) {
+			return;
+		}
+		for ( const cls of hiddenEl.classList ) {
+			const toggle = document.querySelector( `input[data-toggleclass="${ cls }"]` );
+			if ( toggle?.checked ) {
+				toggle.checked = false;
+				return;
+			}
+		}
+	}
+
 	function removeThisTag() {
 		/*jshint validthis:true */
 		let show;
@@ -604,6 +626,7 @@ window.frmAdminBuildJS = function() {
 
 			if ( hide !== '' ) {
 				jQuery( hide ).hide();
+				uncheckToggleForHiddenElement( hide );
 			}
 
 			if ( show !== '' ) {
