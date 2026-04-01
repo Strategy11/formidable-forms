@@ -103,8 +103,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->post_excerpt, apply_filters( 'frm_autoresponder_allowed_actions', array( 'email', 'twilio', 'api', 'register' ) ), true ) ) {
 	$upgrading = FrmAddonsController::install_link( 'autoresponder' );
 	$params    = array(
-		'href'         => 'javascript:void(0)',
-		'class'        => 'frm_show_upgrade',
+		'class'        => 'frm-h-stack-xs frm-bt-200 frm-pt-md frm-my-xs frm_show_upgrade',
 		'data-upgrade' => __( 'Form action automations', 'formidable' ),
 		'data-medium'  => 'action-automation',
 	);
@@ -116,11 +115,23 @@ if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->po
 		$params['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
 	}
 	?>
-	<h3>
-		<a <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
+	<div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
+		<?php
+		FrmHtmlHelper::toggle(
+			'frm_autoresponder_cta_' . $action_key,
+			'frm_autoresponder_cta_' . $action_key,
+			array(
+				'div_class' => 'with_frm_style frm_toggle',
+				'checked'   => false,
+				'echo'      => true,
+				'disabled'  => true,
+			)
+		);
+		?>
+		<label for="frm_autoresponder_cta_<?php echo esc_attr( $action_key ); ?>" class="frm_noallow">
 			<?php esc_html_e( 'Setup Automation', 'formidable' ); ?>
-		</a>
-	</h3>
+		</label>
+	</div>
 	<?php
 	unset( $params );
 }//end if
@@ -141,7 +152,7 @@ if ( $use_logging ) {
 	}
 }
 ?>
-<span class="alignright frm_action_id frm-sub-label <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
+<span class="alignright frm_action_id frm-sub-label <?php echo esc_attr( ! empty( $form_action->ID ) ? '' : 'frm_hidden' ); ?>">
 	<?php
 	/* translators: %1$s: The ID of the form action. */
 	printf( esc_html__( 'Action ID: %1$s', 'formidable' ), esc_attr( $form_action->ID ) );
