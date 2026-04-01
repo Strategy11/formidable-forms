@@ -70,6 +70,10 @@ class FrmPayPalLiteEventsController {
 
 		$unprocessed_event_ids = FrmPayPalLiteConnectHelper::get_unprocessed_event_ids();
 
+		$debug_msg = 'PayPal Debug: process_events - Unprocessed IDs: ' . ( $unprocessed_event_ids ? implode( ', ', $unprocessed_event_ids ) : 'none' );
+		error_log( $debug_msg );
+		FrmTransLiteLog::log_message( 'PayPal Debug: process_events', $debug_msg );
+
 		if ( $unprocessed_event_ids ) {
 			$this->process_event_ids( $unprocessed_event_ids );
 		}
@@ -87,6 +91,8 @@ class FrmPayPalLiteEventsController {
 	private function process_event_ids( $event_ids ) {
 		foreach ( $event_ids as $event_id ) {
 			if ( $this->should_skip_event( $event_id ) ) {
+				error_log( 'PayPal Debug: Skipping Event - ' . $event_id );
+				FrmTransLiteLog::log_message( 'PayPal Debug: Skipping Event', $event_id );
 				continue;
 			}
 
@@ -95,10 +101,14 @@ class FrmPayPalLiteEventsController {
 			$this->event = FrmPayPalLiteConnectHelper::get_event( $event_id );
 
 			if ( ! is_object( $this->event ) ) {
+				error_log( 'PayPal Debug: Event Not Object - ' . $event_id );
+				FrmTransLiteLog::log_message( 'PayPal Debug: Event Not Object', $event_id );
 				$this->count_failed_event( $event_id );
 				continue;
 			}
 
+			error_log( 'PayPal Debug: Calling handle_event - Event ID: ' . $event_id . ', Type: ' . ( $this->event->event_type ?? 'unknown' ) );
+			FrmTransLiteLog::log_message( 'PayPal Debug: Calling handle_event', 'Event ID: ' . $event_id . ', Type: ' . ( $this->event->event_type ?? 'unknown' ) );
 			$this->handle_event();
 			$this->track_handled_event( $event_id );
 			FrmPayPalLiteConnectHelper::process_event( $event_id );
@@ -189,17 +199,11 @@ class FrmPayPalLiteEventsController {
 	 * @return void
 	 */
 	private function log( $title, $content = '' ) {
-		if ( ! class_exists( 'FrmLog' ) ) {
-			return;
+		if ( ! is_string( $content ) ) {
+			$content = print_r( $content, true );
 		}
 
-		$log = new FrmLog();
-		$log->add(
-			array(
-				'title'   => $title,
-				'content' => is_string( $content ) ? $content : print_r( $content, true ),
-			)
-		);
+		FrmTransLiteLog::log_message( $title, $content, false );
 	}
 
 	/**
@@ -232,12 +236,18 @@ class FrmPayPalLiteEventsController {
 
 		if ( isset( $payment_events[ $this->event->event_type ] ) ) {
 			$this->status = $payment_events[ $this->event->event_type ];
-			$this->log( 'PayPal Webhook: Payment Event', array(
+			$log_data = array(
 				'event_type'    => $this->event->event_type,
 				'mapped_status' => $this->status,
 				'resource_id'   => $this->resource->id ?? '',
 				'amount'        => $this->get_amount_from_resource(),
-			) );
+			);
+
+			if ( $this->status === 'refunded' ) {
+				$log_data['resource_dump'] = $this->resource;
+			}
+
+			$this->log( 'PayPal Webhook: Payment Event', $log_data );
 			$this->handle_payment_event();
 			return;
 		}
@@ -272,7 +282,7 @@ class FrmPayPalLiteEventsController {
 	 * @return void
 	 */
 	private function handle_payment_event() {
-		$receipt_id = $this->resource->id ?? '';
+		$receipt_id = $this->get_receipt_id_for_event();
 
 		if ( ! $receipt_id ) {
 			FrmTransLiteLog::log_message( 'PayPal Webhook Message', 'No resource ID found in payment event' );
@@ -476,22 +486,15 @@ class FrmPayPalLiteEventsController {
 			return false;
 		}
 
-		$receipt_id = $this->resource->id ?? '';
+		$receipt_id = $this->get_receipt_id_for_event();
 
 		if ( ! $receipt_id ) {
 			return false;
 		}
 
-		// For refund events, look up the original payment to compare amounts.
-		$sale_id = $this->resource->sale_id ?? ( $this->resource->links[0]->href ?? '' );
-
-		if ( ! $sale_id ) {
-			return false;
-		}
-
-		$frm_payment      = new FrmTransLitePayment();
-		$original_payment  = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
-		$refunded_amount   = (float) $this->get_refunded_amount();
+		$frm_payment     = new FrmTransLitePayment();
+		$original_payment = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
+		$refunded_amount  = (float) $this->get_refunded_amount();
 
 		if ( $original_payment ) {
 			return $refunded_amount < (float) $original_payment->amount;
@@ -514,6 +517,73 @@ class FrmPayPalLiteEventsController {
 		$original = (float) $payment_values['amount'];
 
 		$payment_values['amount'] = number_format( $original - $refunded, 2, '.', '' );
+	}
+
+	/**
+	 * Get the receipt ID to use for looking up a payment record.
+	 *
+	 * For most events, this is the resource ID. For refund/reversal events,
+	 * the resource is the refund object, so we need to extract the original
+	 * capture or sale ID from the resource's sale_id property or HATEOAS links.
+	 *
+	 * @since x.x
+	 *
+	 * @return string The receipt ID of the original payment.
+	 */
+	private function get_receipt_id_for_event() {
+		if ( $this->status !== 'refunded' ) {
+			return $this->resource->id ?? '';
+		}
+
+		$refund_id = $this->resource->id ?? '';
+
+		// For sale refunds, the sale_id property references the original sale.
+		if ( ! empty( $this->resource->sale_id ) ) {
+			$this->log( 'PayPal Webhook: Resolved Receipt ID', array(
+				'refund_id'  => $refund_id,
+				'receipt_id' => $this->resource->sale_id,
+				'source'     => 'sale_id',
+			) );
+			return $this->resource->sale_id;
+		}
+
+		// For capture refunds, extract the capture ID from the HATEOAS 'up' link.
+		// The 'up' link points to the original capture: /v2/payments/captures/{capture_id}
+		if ( ! empty( $this->resource->links ) && is_array( $this->resource->links ) ) {
+			foreach ( $this->resource->links as $link ) {
+				if ( ! isset( $link->rel ) || 'up' !== $link->rel ) {
+					continue;
+				}
+
+				if ( empty( $link->href ) ) {
+					continue;
+				}
+
+				// Extract the ID from the URL path: .../captures/{id} or .../sale/{id}
+				$path = wp_parse_url( $link->href, PHP_URL_PATH );
+				if ( $path ) {
+					$segments = explode( '/', rtrim( $path, '/' ) );
+					$last_segment = end( $segments );
+					if ( $last_segment ) {
+						$this->log( 'PayPal Webhook: Resolved Receipt ID', array(
+							'refund_id'  => $refund_id,
+							'receipt_id' => $last_segment,
+							'source'     => 'HATEOAS up link',
+							'href'       => $link->href,
+						) );
+						return $last_segment;
+					}
+				}
+			}
+		}
+
+		$this->log( 'PayPal Webhook: Could Not Resolve Original Receipt ID', array(
+			'refund_id' => $refund_id,
+			'links'     => $this->resource->links ?? 'none',
+		) );
+
+		// Fallback to the resource ID (the refund ID itself).
+		return $refund_id;
 	}
 
 	/**
