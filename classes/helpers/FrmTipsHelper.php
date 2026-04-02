@@ -158,15 +158,7 @@ class FrmTipsHelper {
 				'tip'  => __( 'Skip the follow-ups. Let users upload files.', 'formidable' ),
 				'call' => self::cta_label(),
 			),
-			array(
-				'link' => array(
-					'content' => 'calculations',
-					'param'   => 'field-calculations-wordpress-form',
-				),
-				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
-				'call' => self::cta_label(),
-			),
-			array(
+						array(
 				'link' => array(
 					'content' => 'prefill-fields',
 					'param'   => 'auto-fill-forms',
