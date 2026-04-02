@@ -27,7 +27,22 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 <?php FrmTransLiteAppHelper::show_gateway_buttons( $gateways, $form_action, $this ); ?>
 
 <div class="frm_grid_container">
-	<?php include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/product-name-action-setting.php'; ?>
+	<?php
+	/**
+	 * Allow hooking into the payments options before the description field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args
+	 */
+	do_action(
+		'frm_payments_settings_before_description',
+		array(
+			'form_action'    => $form_action,
+			'action_control' => $action_control,
+		)
+	);
+	?>
 
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
