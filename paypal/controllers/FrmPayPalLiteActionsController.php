@@ -888,7 +888,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$atts['charge']->amount = $atts['amount'];
 		$atts['charge']->sub_id = $sub_id;
 
-		$payment_id = self::create_new_payment( $atts );
+		$payment_id  = self::create_new_payment( $atts );
 		$frm_payment = new FrmTransLitePayment();
 		$payment     = $frm_payment->get_one( $payment_id );
 		$status      = $atts['status'];
@@ -1099,8 +1099,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$components[] = 'messages';
 		}
 
+		// Enables .isEligible checks.
 		$components[] = 'funding-eligibility';
-		$components[] = 'marks'; // Required for radio button option logos.
+
+		// Required for radio button option logos.
+		$components[] = 'marks';
 
 		$query_args['components'] = implode( ',', $components );
 		$locale                   = self::get_paypal_locale();
@@ -1161,7 +1164,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			FrmAppHelper::plugin_version()
 		);
 
-		$dependencies = array( 'paypal-sdk', 'apple-pay-sdk', 'formidable' );
+		$dependencies = array( 'paypal-sdk', 'formidable' );
+		if ( $include_buttons ) {
+			$dependencies[] = 'apple-pay-sdk';
+		}
+
 		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
 
 		wp_enqueue_script(

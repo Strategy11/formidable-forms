@@ -261,15 +261,13 @@ class FrmPayPalLiteEventsController {
 				$run_triggers = true;
 			}
 		} elseif ( $payment->status !== $this->status ) {
-			$payment_values = (array) $payment;
-
+			$payment_values    = (array) $payment;
 			$is_partial_refund = $this->is_partial_refund();
 
 			if ( $is_partial_refund ) {
 				$this->set_partial_refund( $payment_values );
-				$amount_refunded = $this->get_refunded_amount();
 				// translators: %s: The amount of money that was refunded.
-				$note = sprintf( __( 'Payment partially refunded %s', 'formidable' ), $amount_refunded );
+				$note = sprintf( __( 'Payment partially refunded %s', 'formidable' ), $this->get_refunded_amount() );
 			} else {
 				$payment_values['status'] = $this->status;
 				$payment->status          = $this->status;
@@ -284,7 +282,7 @@ class FrmPayPalLiteEventsController {
 			if ( ! $is_partial_refund ) {
 				$run_triggers = true;
 			}
-		}
+		}//end if
 
 		if ( $run_triggers && $payment && $payment->action_id ) {
 			FrmTransLiteActionsController::trigger_payment_status_change(
@@ -337,8 +335,7 @@ class FrmPayPalLiteEventsController {
 
 		FrmTransLiteAppHelper::add_note_to_payment( $payment_values );
 
-		$frm_payment = new FrmTransLitePayment();
-
+		$frm_payment      = new FrmTransLitePayment();
 		$existing_payment = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
 
 		if ( $existing_payment ) {
@@ -439,7 +436,7 @@ class FrmPayPalLiteEventsController {
 			return false;
 		}
 
-		$frm_payment     = new FrmTransLitePayment();
+		$frm_payment      = new FrmTransLitePayment();
 		$original_payment = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
 		$refunded_amount  = (float) $this->get_refunded_amount();
 
@@ -460,9 +457,8 @@ class FrmPayPalLiteEventsController {
 	 * @return void
 	 */
 	private function set_partial_refund( &$payment_values ) {
-		$refunded = (float) $this->get_refunded_amount();
-		$original = (float) $payment_values['amount'];
-
+		$refunded                 = (float) $this->get_refunded_amount();
+		$original                 = (float) $payment_values['amount'];
 		$payment_values['amount'] = number_format( $original - $refunded, 2, '.', '' );
 	}
 
@@ -491,29 +487,33 @@ class FrmPayPalLiteEventsController {
 
 		// For capture refunds, extract the capture ID from the HATEOAS 'up' link.
 		// The 'up' link points to the original capture: /v2/payments/captures/{capture_id}
-		if ( ! empty( $this->resource->links ) && is_array( $this->resource->links ) ) {
-			foreach ( $this->resource->links as $link ) {
-				if ( ! isset( $link->rel ) || 'up' !== $link->rel ) {
-					continue;
-				}
-
-				if ( empty( $link->href ) ) {
-					continue;
-				}
-
-				// Extract the ID from the URL path: .../captures/{id} or .../sale/{id}
-				$path = wp_parse_url( $link->href, PHP_URL_PATH );
-
-				if ( $path ) {
-					$segments = explode( '/', rtrim( $path, '/' ) );
-					$last_segment = end( $segments );
-
-					if ( $last_segment ) {
-						return $last_segment;
-					}
-				}
-			}
+		if ( empty( $this->resource->links ) || ! is_array( $this->resource->links ) ) {
+			return $refund_id;
 		}
+
+		foreach ( $this->resource->links as $link ) {
+			if ( ! isset( $link->rel ) || 'up' !== $link->rel ) {
+				continue;
+			}
+
+			if ( empty( $link->href ) ) {
+				continue;
+			}
+
+			// Extract the ID from the URL path: .../captures/{id} or .../sale/{id}
+			$path = wp_parse_url( $link->href, PHP_URL_PATH );
+
+			if ( ! $path ) {
+				continue;
+			}
+
+			$segments     = explode( '/', rtrim( $path, '/' ) );
+			$last_segment = end( $segments );
+
+			if ( $last_segment ) {
+				return $last_segment;
+			}
+		}//end foreach
 
 		// Fallback to the resource ID (the refund ID itself).
 		return $refund_id;
@@ -561,10 +561,12 @@ class FrmPayPalLiteEventsController {
 			$next_bill_date = gmdate( 'Y-m-d', strtotime( $subscription->billing_info->next_billing_time ) );
 		}
 
-		if ( $next_bill_date ) {
-			$frm_sub = new FrmTransLiteSubscription();
-			$frm_sub->update( $sub->id, array( 'next_bill_date' => $next_bill_date ) );
+		if ( ! $next_bill_date ) {
+			return;
 		}
+
+		$frm_sub = new FrmTransLiteSubscription();
+		$frm_sub->update( $sub->id, array( 'next_bill_date' => $next_bill_date ) );
 	}
 
 	/**
@@ -775,6 +777,7 @@ class FrmPayPalLiteEventsController {
 					)
 				);
 			}
+
 			return;
 		}
 
@@ -786,9 +789,11 @@ class FrmPayPalLiteEventsController {
 			$new_values['amount'] = $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value;
 		}
 
-		if ( $new_values ) {
-			$frm_sub = new FrmTransLiteSubscription();
-			$frm_sub->update( $sub->id, $new_values );
+		if ( ! $new_values ) {
+			return;
 		}
+
+		$frm_sub = new FrmTransLiteSubscription();
+		$frm_sub->update( $sub->id, $new_values );
 	}
 }

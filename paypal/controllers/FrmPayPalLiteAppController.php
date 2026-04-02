@@ -119,7 +119,7 @@ class FrmPayPalLiteAppController {
 			$field_id = $field->id;
 			$value    = $posted_data[ $field_id ] ?? '';
 
-			if ( empty( $value ) ) {
+			if ( ! $value ) {
 				continue;
 			}
 
@@ -148,37 +148,42 @@ class FrmPayPalLiteAppController {
 					// This quantity will be associated with its product field
 					// We'll handle the association in the product processing
 					$products[] = array(
-						'name'     => $field->name,
-						'price'    => 0, // Quantity fields don't have price
-						'quantity' => $quantity,
-						'type'     => 'quantity',
-						'product_field_ids' => (array) $product_field_ids,
+						'name'                             => $field->name,
+						'price'                            => 0,
+						// Quantity fields don't have price
+												'quantity' => $quantity,
+						'type'                             => 'quantity',
+						'product_field_ids'                => (array) $product_field_ids,
 					);
 				}
-			}
-		}
+			}//end if
+		}//end foreach
 
 		// Associate quantity fields with their products
-		$final_products = array();
+		$final_products     = array();
 		$product_quantities = array();
 
 		foreach ( $products as $item ) {
-			if ( 'quantity' === $item['type'] ) {
-				foreach ( $item['product_field_ids'] as $product_field_id ) {
-					$product_quantities[ $product_field_id ] = $item['quantity'];
-				}
+			if ( 'quantity' !== $item['type'] ) {
+				continue;
+			}
+
+			foreach ( $item['product_field_ids'] as $product_field_id ) {
+				$product_quantities[ $product_field_id ] = $item['quantity'];
 			}
 		}
 
 		foreach ( $products as $item ) {
-			if ( 'product' === $item['type'] ) {
-				$quantity = $product_quantities[ $item['field_id'] ] ?? 1;
-				$final_products[] = array(
-					'name'     => $item['name'],
-					'price'    => $item['price'],
-					'quantity' => $quantity,
-				);
+			if ( 'product' !== $item['type'] ) {
+				continue;
 			}
+
+			$quantity         = $product_quantities[ $item['field_id'] ] ?? 1;
+			$final_products[] = array(
+				'name'     => $item['name'],
+				'price'    => $item['price'],
+				'quantity' => $quantity,
+			);
 		}
 
 		return $final_products;
