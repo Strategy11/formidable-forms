@@ -45,6 +45,8 @@ BA = "BA"
 PN = "PN"
 # `Ot` is a substring in a PayPal sandbox token.
 Ot = "Ot"
+# This is used in a Sniff to reference a PHP function that does exist.
+writeable = "writeable"
 
 [default.extend-identifiers]
 66afe9 = "66afe9"
