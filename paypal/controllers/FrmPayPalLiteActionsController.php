@@ -483,7 +483,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$mode     = $settings['entry_data_sync'] ?? 'overwrite';
 		$payer    = $response->payer;
 
-		// TODO: Figuer out how to hide these fields from the form.
 		if ( 'new_fields' === $mode ) {
 			$updates = self::get_order_data_field_updates( $payer, $response, $settings );
 
