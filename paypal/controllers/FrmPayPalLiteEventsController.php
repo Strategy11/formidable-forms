@@ -345,6 +345,17 @@ class FrmPayPalLiteEventsController {
 			return false;
 		}
 
+		$existing_sub_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
+
+		if ( $existing_sub_payment && 0 === strpos( $existing_sub_payment->receipt_id, 'I-' ) ) {
+			$frm_payment->update( $existing_sub_payment->id, array( 'receipt_id' => $receipt_id ) );
+
+			$this->update_next_bill_date( $sub );
+			$this->maybe_cancel_subscription_at_limit( $sub );
+
+			return $frm_payment->get_one( $existing_sub_payment->id );
+		}
+
 		$payment_id = $frm_payment->create( $payment_values );
 
 		$this->update_next_bill_date( $sub );

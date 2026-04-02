@@ -822,13 +822,15 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'This subscription amount appears to be tampered with.';
 		}
 
-		self::create_new_subscription( $subscription_id, $atts );
+		$sub_id = self::create_new_subscription( $subscription_id, $atts, $subscription );
 
 		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
 
 		self::$active_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
 
 		self::sync_entry_data_with_subscription_response( $subscription, $atts );
+
+		self::maybe_create_initial_subscription_payment( $subscription_id, $sub_id, $atts );
 
 		return true;
 	}
@@ -838,10 +840,16 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string $subscription_id The PayPal subscription ID.
 	 * @param array  $atts            Includes 'entry', 'action', 'amount'.
+	 * @param object $subscription    The PayPal subscription API response.
 	 *
 	 * @return int
 	 */
-	private static function create_new_subscription( $subscription_id, $atts ) {
+	private static function create_new_subscription( $subscription_id, $atts, $subscription ) {
+		$next_bill_date = gmdate( 'Y-m-d' );
+		if ( ! empty( $subscription->billing_info->next_billing_time ) ) {
+			$next_bill_date = gmdate( 'Y-m-d', strtotime( $subscription->billing_info->next_billing_time ) );
+		}
+
 		$new_values = array(
 			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['amount'], $atts['action'] ),
 			'paysys'         => 'paypal',
@@ -851,12 +859,41 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'interval_count' => $atts['action']->post_content['interval_count'],
 			'time_interval'  => $atts['action']->post_content['interval'],
 			'status'         => 'active',
-			'next_bill_date' => gmdate( 'Y-m-d' ),
+			'next_bill_date' => $next_bill_date,
 			'test'           => 'test' === FrmPayPalLiteAppHelper::active_mode() ? 1 : 0,
 		);
 
 		$frm_sub = new FrmTransLiteSubscription();
 		return $frm_sub->create( $new_values );
+	}
+
+	/**
+	 * Create the initial payment record for a new subscription.
+	 *
+	 * Uses the PayPal subscription ID as a temporary receipt_id. When the PAYMENT.SALE.COMPLETED
+	 * webhook arrives later, the receipt_id is updated to the real capture/sale ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $subscription_id The PayPal subscription ID.
+	 * @param int    $sub_id          The local subscription record ID.
+	 * @param array  $atts            Includes 'entry', 'action', 'amount'.
+	 *
+	 * @return void
+	 */
+	private static function maybe_create_initial_subscription_payment( $subscription_id, $sub_id, $atts ) {
+		$atts['status']         = 'complete';
+		$atts['charge']         = new stdClass();
+		$atts['charge']->id     = $subscription_id;
+		$atts['charge']->amount = $atts['amount'];
+		$atts['charge']->sub_id = $sub_id;
+
+		$payment_id = self::create_new_payment( $atts );
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+		$status      = $atts['status'];
+
+		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 	}
 
 	/**
