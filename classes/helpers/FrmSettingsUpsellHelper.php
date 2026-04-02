@@ -32,6 +32,7 @@ class FrmSettingsUpsellHelper {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
 			$unique_element_atts['disabled']     = '1';
+			$unique_element_atts['readonly']     = '1';
 		}
 
 		return $unique_element_atts;
