@@ -555,7 +555,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Resets the checked state of a toggle associated with a removed element.
+	 * Uncheck any data-toggleclass toggle that controls the given hidden element.
 	 *
 	 * @since x.x
 	 *
@@ -7877,10 +7877,14 @@ window.frmAdminBuildJS = function() {
 		infoModal( message );
 	}
 
-	function addFormLogicRow() {
-		/*jshint validthis:true */
-		const id = jQuery( this ).data( 'emailkey' );
-		const type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
+	/**
+	 * Insert a new conditional logic row into a form action via AJAX.
+	 *
+	 * @param id             The ID of the form action.
+	 * @param contextElement The context element that triggered the insertion.
+	 */
+	function insertFormLogicRow( id, contextElement ) {
+		const type = jQuery( contextElement ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
 		const formId = document.getElementById( 'form_id' ).value;
 		const logicRowsContainer = document.getElementById( `frm_logic_row_${ id }` );
 		const logicRows = logicRowsContainer.querySelectorAll( '.frm_logic_row' );
@@ -7902,16 +7906,47 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success( html ) {
-				jQuery( document.getElementById( `logic_link_${ id }` ) ).fadeOut( 'slow', () => {
-					placeholder.insertAdjacentHTML( 'beforebegin', html );
-					placeholder.remove();
-
-					// Show conditional logic options after "Add Conditional Logic" is clicked.
-					jQuery( logicRowsContainer ).parent( '.frm_logic_rows' ).fadeIn( 'slow' );
-				} );
+				placeholder.insertAdjacentHTML( 'beforebegin', html );
+				placeholder.remove();
 			}
 		} );
+	}
+
+	/**
+	 * Handle click on the "+" button to add another logic row to a form action.
+	 *
+	 * @since x.x
+	 *
+	 * @return {boolean} Returns false to prevent default behavior.
+	 */
+	function addFormLogicRow() {
+		/*jshint validthis:true */
+		insertFormLogicRow( jQuery( this ).data( 'emailkey' ), this );
 		return false;
+	}
+
+	/**
+	 * Create the first logic row when the conditional logic toggle is turned on.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function onLogicToggleChange() {
+		/*jshint validthis:true */
+		if ( ! this.checked ) {
+			return;
+		}
+
+		const id = this.getAttribute( 'data-emailkey' );
+		if ( ! id ) {
+			return;
+		}
+
+		const logicRowsContainer = document.getElementById( `frm_logic_row_${ id }` );
+		if ( logicRowsContainer && ! logicRowsContainer.querySelector( '.frm_logic_row' ) ) {
+			insertFormLogicRow( id, this );
+		}
 	}
 
 	function checkDupPost() {
@@ -10660,6 +10695,7 @@ window.frmAdminBuildJS = function() {
 
 			const formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
+			formSettings.on( 'change', 'input[data-emailkey][data-toggleclass]', onLogicToggleChange );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			document.addEventListener(
