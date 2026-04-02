@@ -845,6 +845,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function create_new_subscription( $subscription_id, $atts, $subscription ) {
 		$next_bill_date = gmdate( 'Y-m-d' );
+
 		if ( ! empty( $subscription->billing_info->next_billing_time ) ) {
 			$next_bill_date = gmdate( 'Y-m-d', strtotime( $subscription->billing_info->next_billing_time ) );
 		}

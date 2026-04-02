@@ -347,7 +347,7 @@ class FrmPayPalLiteEventsController {
 
 		$existing_sub_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
 
-		if ( $existing_sub_payment && 0 === strpos( $existing_sub_payment->receipt_id, 'I-' ) ) {
+		if ( $existing_sub_payment && str_starts_with( $existing_sub_payment->receipt_id, 'I-' ) ) {
 			$frm_payment->update( $existing_sub_payment->id, array( 'receipt_id' => $receipt_id ) );
 
 			$this->update_next_bill_date( $sub );
@@ -503,9 +503,11 @@ class FrmPayPalLiteEventsController {
 
 				// Extract the ID from the URL path: .../captures/{id} or .../sale/{id}
 				$path = wp_parse_url( $link->href, PHP_URL_PATH );
+
 				if ( $path ) {
 					$segments = explode( '/', rtrim( $path, '/' ) );
 					$last_segment = end( $segments );
+
 					if ( $last_segment ) {
 						return $last_segment;
 					}
