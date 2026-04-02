@@ -6139,6 +6139,16 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		const hookArgs = {
+			fieldId,
+			metaInput: input,
+		};
+
+		if ( false !== wp.hooks.applyFilters( 'frm_custom_reset_displayed_opts', false, hookArgs ) ) {
+			// Return early if there is a custom reset displayed opts handler.
+			return;
+		}
+
 		if ( input.is( 'select' ) ) {
 			const placeholder = document.getElementById( `frm_placeholder_${ fieldId }` );
 			if ( ! placeholder || placeholder.value === '' ) {
@@ -6151,19 +6161,30 @@ window.frmAdminBuildJS = function() {
 			}
 		} else {
 			const opts = getMultipleOpts( fieldId );
-			jQuery( `#field_${ fieldId }_inner_container > .frm_form_fields` ).html( '' );
-			const fieldInfo = getFieldKeyFromOpt( jQuery( `#frm_delete_field_${ fieldId }-000_container` ) );
-
 			const container = jQuery( `#field_${ fieldId }_inner_container > .frm_form_fields` );
 			const hasImageOptions = imagesAsOptions( fieldId );
 			const imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '';
 			const imageOptionClass = hasImageOptions ? `frm_image_option frm_image_${ imageSize } ` : '';
+
+			container.html( '' );
+			const fieldInfo = getFieldKeyFromOpt( jQuery( `#frm_delete_field_${ fieldId }-000_container` ) );
 			const isProduct = isProductField( fieldId );
 
 			const type = 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' );
 			for ( let i = 0; i < opts.length; i++ ) {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
+
+			/*if ( isSingleProduct( fieldId ) ) {
+				console.log( opts[0] );
+				console.log( container );
+				const singleProductEl = container[ 0 ].querySelector( '.frm_single_product_wrap' );
+
+
+				singleProductEl.classList.add( imageOptionClass );
+			} else {
+
+			}*/
 		}
 
 		adjustConditionalLogicOptionOrders( fieldId );
