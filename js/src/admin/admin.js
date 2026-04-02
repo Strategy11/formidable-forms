@@ -6144,6 +6144,7 @@ window.frmAdminBuildJS = function() {
 		};
 
 		if ( false !== wp.hooks.applyFilters( 'frm_custom_reset_displayed_opts', false, hookArgs ) ) {
+			adjustConditionalLogicOptionOrders( fieldId );
 			// Return early if there is a custom reset displayed opts handler.
 			return;
 		}
