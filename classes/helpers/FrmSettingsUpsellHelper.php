@@ -25,15 +25,18 @@ class FrmSettingsUpsellHelper {
 			'class' => 'frm_mark_unique',
 		);
 
-		if ( ! empty( $field['unique'] ) ) {
-			$unique_element_atts['checked'] = 'checked';
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
+
+		if ( $pro_is_installed ) {
+			if ( ! empty( $field['unique'] ) ) {
+				$unique_element_atts['checked'] = 'checked';
+			}
+			return $unique_element_atts;
 		}
 
-		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
-			$unique_element_atts['disabled']     = '1';
-			$unique_element_atts['readonly']     = '1';
-		}
+		$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
+		$unique_element_atts['disabled']     = '1';
+		$unique_element_atts['readonly']     = '1';
 
 		return $unique_element_atts;
 	}
