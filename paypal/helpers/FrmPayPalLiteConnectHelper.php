@@ -615,15 +615,6 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_location_id_option_name( $mode = 'auto' ) {
-		return self::get_paypal_connect_option_name( 'merchant_location_id', $mode );
-	}
-
-	/**
-	 * @param string $mode either 'auto', 'live', or 'test'.
-	 *
-	 * @return string
-	 */
 	private static function get_merchant_currency_option_name( $mode = 'auto' ) {
 		return self::get_paypal_connect_option_name( 'merchant_currency', $mode );
 	}
@@ -846,7 +837,6 @@ class FrmPayPalLiteConnectHelper {
 		delete_option( self::get_server_side_token_option_name( $mode ) );
 		delete_option( self::get_client_side_token_option_name( $mode ) );
 		delete_option( self::get_merchant_currency_option_name( $mode ) );
-		delete_option( self::get_location_id_option_name( $mode ) );
 		delete_option( self::get_paypal_seller_status_option_name( $mode ) );
 	}
 
