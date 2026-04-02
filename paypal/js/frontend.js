@@ -941,7 +941,7 @@
 				return 'PayPal reports Apple Pay is not eligible for this merchant/domain';
 			}
 		} catch ( err ) {
-			return 'Apple Pay config check failed: ' + err.message;
+			return `Apple Pay config check failed: ${ err.message }`;
 		}
 
 		return '';
@@ -1009,37 +1009,37 @@
 		const session = new ApplePaySession( 4, paymentRequest );
 		const applepay = paypal.Applepay();
 
-		session.onvalidatemerchant = ( event ) => {
+		session.onvalidatemerchant = event => {
 			applepay.validateMerchant( {
 				validationUrl: event.validationURL,
 				displayName: document.title || 'Payment'
 			} )
-			.then( ( validateResult ) => {
-				session.completeMerchantValidation( validateResult.merchantSession );
-			} )
-			.catch( ( validateError ) => {
-				console.error( 'Apple Pay merchant validation failed', validateError );
-				session.abort();
-			} );
+				.then( validateResult => {
+					session.completeMerchantValidation( validateResult.merchantSession );
+				} )
+				.catch( validateError => {
+					console.error( 'Apple Pay merchant validation failed', validateError );
+					session.abort();
+				} );
 		};
 
-		session.onpaymentauthorized = ( event ) => {
+		session.onpaymentauthorized = event => {
 			createOrderForApplePay()
-				.then( ( orderId ) => {
+				.then( orderId => {
 					return applepay.confirmOrder( {
-						orderId: orderId,
+						orderId,
 						token: event.payment.token,
 						billingContact: event.payment.billingContact
 					} )
-					.then( () => {
-						session.completePayment( ApplePaySession.STATUS_SUCCESS );
-						onApprove( {
-							orderID: orderId,
-							paymentSource: 'apple_pay'
+						.then( () => {
+							session.completePayment( ApplePaySession.STATUS_SUCCESS );
+							onApprove( {
+								orderID: orderId,
+								paymentSource: 'apple_pay'
+							} );
 						} );
-					} );
 				} )
-				.catch( ( err ) => {
+				.catch( err => {
 					console.error( 'Apple Pay payment failed', err );
 					session.completePayment( ApplePaySession.STATUS_FAILURE );
 				} );
@@ -1059,7 +1059,7 @@
 	 */
 	function getFormTotal() {
 		const totalField = thisForm.querySelector( '[data-frmtotal]' );
-		if ( totalField && totalField.value ) {
+		if ( totalField?.value ) {
 			return parseFloat( totalField.value ).toFixed( 2 );
 		}
 		return '0.00';
