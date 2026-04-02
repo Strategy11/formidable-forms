@@ -25,9 +25,7 @@ class FrmSettingsUpsellHelper {
 			'class' => 'frm_mark_unique',
 		);
 
-		$pro_is_installed = FrmAppHelper::pro_is_installed();
-
-		if ( $pro_is_installed ) {
+		if ( FrmAppHelper::pro_is_installed() ) {
 			if ( ! empty( $field['unique'] ) ) {
 				$unique_element_atts['checked'] = 'checked';
 			}
