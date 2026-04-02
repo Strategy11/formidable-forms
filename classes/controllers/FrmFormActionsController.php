@@ -38,6 +38,7 @@ class FrmFormActionsController {
 			)
 		);
 
+		self::maybe_setup_unlicensed_action_gate();
 		self::actions_init();
 	}
 
@@ -349,6 +350,18 @@ class FrmFormActionsController {
 			if ( $requires && 'free' !== $requires ) {
 				$data['data-requires'] = $requires;
 			}
+
+			$learn_more_slug = ! empty( $action_control->action_options['learn-more'] )
+				? $action_control->action_options['learn-more']
+				: self::get_learn_more_slug( $action_control->id_base );
+
+			if ( $learn_more_slug ) {
+				$data['data-learn-more'] = FrmAppHelper::get_doc_url(
+					$learn_more_slug,
+					'settings-' . $action_control->id_base,
+					str_contains( $learn_more_slug, '/' )
+				);
+			}
 		}//end if
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
@@ -511,10 +524,15 @@ class FrmFormActionsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
+		$action_type  = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
+		$lite_actions = array_fill_keys( self::get_lite_actions(), true );
+		if ( ! FrmAppHelper::pro_is_connected() && ! isset( $lite_actions[ $action_type ] ) ) {
+			wp_die();
+		}
+
 		global $frm_vars;
 
-		$action_key  = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
-		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
+		$action_key = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
 
 		/**
 		 * @var FrmFormAction
@@ -890,6 +908,115 @@ class FrmFormActionsController {
 	 */
 	public static function prevent_wpml_translations( $null, $post_type ) {
 		return self::$action_post_type === $post_type ? false : $null;
+	}
+
+	/**
+	 * If Pro is not connected, hook a filter that will force all non-Lite
+	 * actions to inactive so the upgrade popup is shown instead.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_setup_unlicensed_action_gate() {
+		if ( FrmAppHelper::pro_is_connected() ) {
+			return;
+		}
+
+		add_filter( 'frm_registered_form_actions', array( __CLASS__, 'disable_unlicensed_actions' ), 100 );
+	}
+
+	/**
+	 * For every registered action that is not a Lite action, add a per-action
+	 * options filter that forces it to inactive with the upgrade class.
+	 *
+	 * Runs inside apply_filters('frm_registered_form_actions') at priority 100,
+	 * so the per-key option filters are in place before the class constructors
+	 * run in the foreach loop that follows.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $actions Map of action_key => class_name.
+	 *
+	 * @return array
+	 */
+	public static function disable_unlicensed_actions( $actions ) {
+		$lite_actions = array_fill_keys( self::get_lite_actions(), true );
+
+		foreach ( array_keys( $actions ) as $key ) {
+			if ( isset( $lite_actions[ $key ] ) ) {
+				continue;
+			}
+
+			add_filter(
+				'frm_' . $key . '_action_options',
+				function ( $options ) {
+					$options['active'] = false;
+					if ( ! str_contains( $options['classes'], 'frm_show_upgrade' ) ) {
+						$options['classes'] .= ' frm_show_upgrade';
+					}
+					return $options;
+				}
+			);
+		}//end foreach
+
+		return $actions;
+	}
+
+	/**
+	 * Get action keys that are available in Lite without a Pro license.
+	 *
+	 * @since x.x
+	 *
+	 * @return string[]
+	 */
+	public static function get_lite_actions() {
+		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment' ) );
+	}
+
+	/**
+	 * Single source of truth for learn-more doc slugs used in
+	 * upgrade modals for non-Lite form actions.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,string> Map of action_key => doc slug.
+	 */
+	public static function get_action_learn_more_links() {
+		return array(
+			'wppost'            => 'using-add-form-actions#kb-create-a-post',
+			'register'          => 'user-registration',
+			'paypal'            => 'formidable-paypal',
+			'quiz'              => 'quiz-maker-forms',
+			'quiz_outcome'      => 'quiz-maker-forms',
+			'aweber'            => 'formidable-aweber',
+			'mailchimp'         => 'formidable-mailchimp',
+			'zapier'            => 'formidable-zapier',
+			'twilio'            => 'twilio-add-on',
+			'activecampaign'    => 'activecampaign-forms',
+			'salesforce'        => 'salesforce-forms',
+			'constantcontact'   => 'constant-contact-forms',
+			'getresponse'       => 'getresponse-forms',
+			'hubspot'           => 'hubspot-forms',
+			'mailpoet'          => 'mailpoet-newsletter-signup-forms',
+			'api'               => 'formidable-api',
+			'googlespreadsheet' => 'google-spreadsheet-forms',
+			'n8n'               => 'n8n',
+			'convertkit'        => 'convertkit-forms',
+		);
+	}
+
+	/**
+	 * Look up the learn-more doc slug for a given action key.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $action_key Action identifier (e.g. 'register').
+	 * @return string Doc slug or empty string.
+	 */
+	private static function get_learn_more_slug( $action_key ) {
+		$links = self::get_action_learn_more_links();
+		return isset( $links[ $action_key ] ) ? $links[ $action_key ] : '';
 	}
 }
 
