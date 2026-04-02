@@ -92,7 +92,6 @@
 
 		// React rules that are too noisy for existing code.
 		"react/display-name": "off",
-		"react/prop-types": "off",
 		"react/jsx-no-target-blank": "off",
 		"react/no-children-prop": "off",
 		"react/button-has-type": "off",
@@ -114,13 +113,11 @@
 		"unicorn/prefer-module": "off",
 		"unicorn/explicit-length-check": "off",
 		"unicorn/no-array-for-each": "off",
-		"unicorn/prevent-abbreviations": "off",
 		"unicorn/no-this-assignment": "off",
 		"unicorn/prefer-number-properties": "off",
 		"unicorn/consistent-function-scoping": "off",
 		"unicorn/no-array-callback-reference": "off",
 		"unicorn/prefer-ternary": "off",
-		"unicorn/no-for-loop": "off",
 		"unicorn/no-array-reduce": "off",
 		"unicorn/prefer-at": "off",
 		"unicorn/prefer-string-slice": "off",
