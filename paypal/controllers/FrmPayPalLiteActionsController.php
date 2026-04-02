@@ -1165,6 +1165,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$dependencies = array( 'paypal-sdk', 'formidable' );
+
 		if ( $include_buttons ) {
 			$dependencies[] = 'apple-pay-sdk';
 		}

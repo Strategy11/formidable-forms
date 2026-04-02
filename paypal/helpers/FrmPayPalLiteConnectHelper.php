@@ -917,14 +917,26 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_brand_name() {
+		$brand_name = get_bloginfo( 'name' );
+
 		/**
 		 * Allow people to modify the brand name used in the PayPal order.
 		 *
 		 * @since x.x
 		 *
 		 * @param string $brand_name
+		 *
+		 * @return string
 		 */
-		return apply_filters( 'frm_paypal_brand_name', get_bloginfo( 'name' ) );
+		$filtered_brand_name = apply_filters( 'frm_paypal_brand_name', $brand_name );
+
+		if ( is_string( $filtered_brand_name ) ) {
+			return $filtered_brand_name;
+		}
+
+		_doing_it_wrong( 'FrmPayPalLiteConnectHelper::get_brand_name', 'The frm_paypal_brand_name filter must return a string.', 'x.x' );
+
+		return $brand_name;
 	}
 
 	/**
