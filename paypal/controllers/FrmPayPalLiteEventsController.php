@@ -636,18 +636,27 @@ class FrmPayPalLiteEventsController {
 		$subscription_id = $this->resource->id ?? '';
 
 		if ( ! $subscription_id ) {
+			FrmTransLiteLog::log_message( 'PayPal Webhook Debug', 'BILLING.SUBSCRIPTION.CANCELLED: No subscription ID found in resource' );
 			return;
 		}
+
+		FrmTransLiteLog::log_message( 'PayPal Webhook Debug', 'BILLING.SUBSCRIPTION.CANCELLED: Looking for subscription ID: ' . $subscription_id );
 
 		$sub = $this->get_subscription( $subscription_id );
 
 		if ( ! $sub ) {
+			FrmTransLiteLog::log_message( 'PayPal Webhook Debug', 'BILLING.SUBSCRIPTION.CANCELLED: Subscription not found in database for ID: ' . $subscription_id );
 			return;
 		}
 
+		FrmTransLiteLog::log_message( 'PayPal Webhook Debug', 'BILLING.SUBSCRIPTION.CANCELLED: Found subscription, current status: ' . $sub->status );
+
 		if ( $sub->status === 'canceled' ) {
+			FrmTransLiteLog::log_message( 'PayPal Webhook Debug', 'BILLING.SUBSCRIPTION.CANCELLED: Subscription already canceled, no action needed' );
 			return;
 		}
+
+		FrmTransLiteLog::log_message( 'PayPal Webhook Debug', 'BILLING.SUBSCRIPTION.CANCELLED: Updating subscription status to canceled' );
 
 		FrmTransLiteSubscriptionsController::change_subscription_status(
 			array(
@@ -655,6 +664,8 @@ class FrmPayPalLiteEventsController {
 				'sub'    => $sub,
 			)
 		);
+
+		FrmTransLiteLog::log_message( 'PayPal Webhook Debug', 'BILLING.SUBSCRIPTION.CANCELLED: Status update completed' );
 	}
 
 	/**
@@ -741,6 +752,16 @@ class FrmPayPalLiteEventsController {
 		$subscription = FrmPayPalLiteConnectHelper::get_subscription( $subscription_id );
 
 		if ( ! is_object( $subscription ) ) {
+			// If the subscription doesn't exist in PayPal's API (404 error), it's likely cancelled.
+			// Update the local status to canceled if it's not already.
+			if ( $sub->status !== 'canceled' ) {
+				FrmTransLiteSubscriptionsController::change_subscription_status(
+					array(
+						'status' => 'canceled',
+						'sub'    => $sub,
+					)
+				);
+			}
 			return;
 		}
 
