@@ -484,7 +484,7 @@ class FrmPayPalLiteAppController {
 		// Pass $product_name, $interval and $interval_count to the helper
 		// As well as trial period and the maximum number of payments.
 		// Also send subscriber email.
-		$product_name   = $action->post_content['product_name'] ?? '';
+		$product_name   = self::process_shortcodes_for_action( $action->post_content['product_name'] ?? '', $action );
 		$interval       = $action->post_content['interval'] ?? '';
 		$interval_count = $action->post_content['interval_count'] ?? 1;
 		$trial_period   = $action->post_content['trial_period'] ?? '';
@@ -545,5 +545,37 @@ class FrmPayPalLiteAppController {
 		}
 
 		wp_send_json_success( array( 'token' => $response->token ) );
+	}
+
+	/**
+	 * Process shortcodes in an action setting value using posted form data.
+	 *
+	 * @since x.x
+	 *
+	 * @param string  $value  The value that may contain shortcodes.
+	 * @param WP_Post $action The payment action.
+	 *
+	 * @return string
+	 */
+	private static function process_shortcodes_for_action( $value, $action ) {
+		if ( ! str_contains( $value, '[' ) ) {
+			return $value;
+		}
+
+		$form = FrmForm::getOne( $action->menu_order );
+
+		if ( ! $form ) {
+			return $value;
+		}
+
+		$entry = self::generate_false_entry();
+
+		return FrmTransLiteAppHelper::process_shortcodes(
+			array(
+				'value' => $value,
+				'form'  => $form,
+				'entry' => $entry,
+			)
+		);
 	}
 }
