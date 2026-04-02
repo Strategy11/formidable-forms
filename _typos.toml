@@ -39,6 +39,8 @@ Ags = "Ags"
 unmergable = "unmergable"
 # This is detected in our Stripe publishable key.
 iz = "iz"
+# This is used in a Sniff to reference a PHP function that does exist.
+writeable = "writeable"
 
 [default.extend-identifiers]
 66afe9 = "66afe9"
