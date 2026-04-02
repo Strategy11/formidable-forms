@@ -1454,7 +1454,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				break;
 
 			case 'es':
-// Spanish
+				// Spanish
 				$countries = array(
 					'DZ',
 					'AD',
