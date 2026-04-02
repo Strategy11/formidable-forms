@@ -96,7 +96,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 		<?php
 	}
 
-	$action_control->render_conditional_logic_call_to_action();
+	$action_control->render_conditional_logic_call_to_action( $action_key );
 }
 
 // Show Form Action Automation indicator.
