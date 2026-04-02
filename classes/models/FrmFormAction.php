@@ -993,16 +993,34 @@ class FrmFormAction {
 	}
 
 	/**
+	 * @param string $action_key The unique key for this action instance.
 	 * @return void
 	 */
-	public function render_conditional_logic_call_to_action() {
+	public function render_conditional_logic_call_to_action( $action_key = '' ) {
+		$params = array(
+			'class'        => 'frm-h-stack-xs frm-bt-200 frm-pt-md frm-my-xs frm_show_upgrade',
+			'data-upgrade' => $this->get_upgrade_text(),
+			'data-medium'  => 'conditional-' . $this->id_base,
+		);
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-			<h3>
-				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-					<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
-				</a>
-			</h3>
+		<div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
+			<?php
+			FrmHtmlHelper::toggle(
+				'frm_logic_cta_' . $action_key,
+				'frm_logic_cta_' . $action_key,
+				array(
+					'div_class' => 'with_frm_style frm_toggle',
+					'checked'   => false,
+					'echo'      => true,
+					'disabled'  => true,
+				)
+			);
+			?>
+			<label for="frm_logic_cta_<?php echo esc_attr( $action_key ); ?>" class="frm_noallow">
+				<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
+			</label>
+		</div>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
