@@ -415,9 +415,14 @@ class FrmFormsListHelper extends FrmListHelper {
 			'target' => '_blank',
 		);
 
+		$view_ids = FrmViewsDisplay::get_display_ids_by_form( $form->id );
+		if ( empty( $view_ids ) ) {
+			return '0';
+		}
+
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
-					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
+					' . intval( count( $view_ids ) ) .
 				'</a>';
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
