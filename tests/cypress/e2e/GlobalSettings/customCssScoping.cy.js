@@ -23,17 +23,21 @@ describe( 'Custom CSS scoping', () => {
 
 		cy.log( 'Save test CSS to Formidable global settings' );
 		cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
-
-		// Navigate to the Custom CSS tab
 		cy.get( '.frm-category-tabs' ).contains( 'a', 'Custom CSS' ).click();
-
-		cy.get( '#frm_custom_css_box' ).clear().type( TEST_CSS, { delay: 0 } );
+		cy.get( '#frm_custom_css_box' )
+			.clear()
+			.type( TEST_CSS, { delay: 0, parseSpecialCharSequences: false } );
 		cy.get( '#frm-publishing .button-primary' ).click();
 		cy.get( '.frm_updated_message, .notice-success' ).should( 'exist' );
 	} );
 
+	// Re-login before each test: Cypress 13 testIsolation:true clears
+	// cookies/storage between tests, so a single before() login is not enough.
+	beforeEach( () => {
+		cy.login();
+	} );
+
 	after( () => {
-		cy.log( 'Teardown - clear the custom CSS' );
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
 		cy.get( '.frm-category-tabs' ).contains( 'a', 'Custom CSS' ).click();
@@ -77,31 +81,19 @@ describe( 'Custom CSS scoping', () => {
 			cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
 
 			cy.get( '#frm_form_key' ).invoke( 'val' ).then( ( formKey ) => {
-				// The blank-page preview renders the form on a plain page
 				cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
 
-				cy.log( 'Verify the page has an h1 outside .frm_forms and the custom CSS affects it' );
-				cy.get( 'body' ).then( ( $body ) => {
-					// The preview page title h1 exists outside .frm_forms
-					const $h1OutsideForm = $body.find( 'h1' ).not( '.frm_forms h1' );
-					if ( $h1OutsideForm.length ) {
-						cy.wrap( $h1OutsideForm.first() )
-							.invoke( 'css', 'font-size' )
-							.should( 'eq', '100px' );
-					} else {
-						cy.log( 'No h1 outside .frm_forms on this page — skipping outer-scope check' );
-					}
+				// Inject a stable h1 outside .frm_forms so the assertion always has a target.
+				cy.document().then( ( doc ) => {
+					const h1 = doc.createElement( 'h1' );
+					h1.id = 'frm-css-scope-test';
+					doc.body.insertBefore( h1, doc.body.firstChild );
 				} );
 
-				cy.log( 'Verify the h1 inside .frm_forms is also affected on the frontend' );
-				cy.get( 'body' ).then( ( $body ) => {
-					const $h1InsideForm = $body.find( '.frm_forms h1' );
-					if ( $h1InsideForm.length ) {
-						cy.wrap( $h1InsideForm.first() )
-							.invoke( 'css', 'font-size' )
-							.should( 'eq', '100px' );
-					}
-				} );
+				cy.log( 'Unscoped CSS must affect an h1 outside .frm_forms' );
+				cy.get( '#frm-css-scope-test' )
+					.invoke( 'css', 'font-size' )
+					.should( 'eq', '100px' );
 			} );
 
 			cy.log( 'Teardown - delete the test form' );
@@ -111,27 +103,27 @@ describe( 'Custom CSS scoping', () => {
 
 		it( 'does not apply custom CSS to h1 elements outside .frm_forms in the admin style editor', () => {
 			cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
-
-			cy.log( 'Wait for the style editor CSS (loaded with frm_admin=1) to apply' );
-			// The style editor stylesheet is loaded with frm_admin=1 so custom CSS is @scope'd
 			cy.get( '#frm-styles-container, .frm_style_preview', { timeout: 5000 } ).should( 'exist' );
 
-			cy.log( 'h1 elements in the WordPress admin UI (outside .frm_forms) should not be affected' );
-			cy.get( 'h1' ).not( '.frm_forms h1' ).first()
+			cy.log( 'h1 in the WordPress admin UI (outside .frm_forms) must not be affected' );
+			// WP admin always renders a page-title h1 with .wp-heading-inline.
+			cy.get( '.wp-heading-inline' ).first()
+				.should( 'exist' )
 				.invoke( 'css', 'font-size' )
 				.should( 'not.eq', '100px' );
 
-			cy.log( 'h1 elements inside .frm_forms (the style preview) should be affected' );
-			cy.get( 'body' ).then( ( $body ) => {
-				const $h1InsideForm = $body.find( '.frm_forms h1' );
-				if ( $h1InsideForm.length ) {
-					cy.wrap( $h1InsideForm.first() )
-						.invoke( 'css', 'font-size' )
-						.should( 'eq', '100px' );
-				} else {
-					cy.log( 'No h1 inside .frm_forms on this page — skipping inner-scope check' );
-				}
+			cy.log( 'h1 inside .frm_forms must be affected by the scoped rule' );
+			// Inject a stable h1 into the form preview container so the assertion
+			// always has a target regardless of the sample form's content.
+			cy.get( '.frm_forms' ).first().should( 'exist' ).then( ( $form ) => {
+				const h1 = $form[ 0 ].ownerDocument.createElement( 'h1' );
+				h1.id = 'frm-css-scope-inner-test';
+				$form[ 0 ].prepend( h1 );
 			} );
+
+			cy.get( '#frm-css-scope-inner-test' )
+				.invoke( 'css', 'font-size' )
+				.should( 'eq', '100px' );
 		} );
 	} );
 } );
