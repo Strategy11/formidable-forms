@@ -1674,7 +1674,7 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 $frm_custom_css = strip_tags( FrmStylesController::get_custom_css() );
 if ( $frm_custom_css ) {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
-	if ( isset( $_GET['frm_admin'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	if ( isset( $_GET['frm_admin'] ) ) {
 		echo '@scope (.frm_forms) {' . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $frm_custom_css . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '}' . PHP_EOL;
