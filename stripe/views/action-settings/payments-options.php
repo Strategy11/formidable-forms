@@ -37,23 +37,6 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 </p>
 
 <div class="frm_grid_container">
-	<?php
-	/**
-	 * Allow hooking into the payments options before the description field.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $args
-	 */
-	do_action(
-		'frm_payments_settings_before_description',
-		array(
-			'form_action'    => $form_action,
-			'action_control' => $action_control,
-		)
-	);
-	?>
-
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
 			<?php esc_html_e( 'Description', 'formidable' ); ?>
@@ -83,6 +66,37 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 	<div class="frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<div class="frm_grid_container">
 			<h3><?php esc_html_e( 'Recurring Payment Settings', 'formidable' ); ?></h3>
+
+			<?php
+			/**
+			 * Include PayPal-specific subscription settings (Product Name and Product Type).
+			 * These are only shown when PayPal is the selected gateway.
+			 */
+			if ( FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup() ) {
+				?>
+				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
+					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
+						<?php esc_html_e( 'Product Name', 'formidable' ); ?>
+					</label>
+					<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
+				</p>
+
+				<?php
+				$product_type_value = $form_action->post_content['product_type'] ?? '';
+				?>
+				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
+					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>">
+						<?php esc_html_e( 'Product Type', 'formidable' ); ?>
+					</label>
+					<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
+						<option value="SERVICE" <?php selected( $product_type_value, 'SERVICE' ); ?>><?php esc_html_e( 'Service', 'formidable' ); ?></option>
+						<option value="DIGITAL" <?php selected( $product_type_value, 'DIGITAL' ); ?>><?php esc_html_e( 'Digital', 'formidable' ); ?></option>
+						<option value="PHYSICAL" <?php selected( $product_type_value, 'PHYSICAL' ); ?>><?php esc_html_e( 'Physical', 'formidable' ); ?></option>
+					</select>
+				</p>
+				<?php
+			}
+			?>
 
 			<p class="frm6">
 				<label>

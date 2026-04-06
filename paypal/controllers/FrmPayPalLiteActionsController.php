@@ -2294,26 +2294,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Add PayPal subscription settings (product name and product type).
-	 *
-	 * @since x.x
-	 *
-	 * @param array $args Arguments containing form_action and action_control.
-	 *
-	 * @return void
-	 */
-	public static function add_paypal_subscription_settings_from_hook( $args ) {
-		$form_action    = $args['form_action'];
-		$action_control = $args['action_control'];
-
-		// Include the product name setting
-		include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/product-name-action-setting.php';
-
-		// Include the product type setting
-		include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/product-type-action-setting.php';
-	}
-
-	/**
 	 * Filter PayPal payment action settings on save.
 	 * When entry_data_sync is set to 'new_fields', auto-create fields
 	 * for storing PayPal order data (email, name, address).
