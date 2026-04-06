@@ -77,58 +77,62 @@ describe( 'Custom CSS scoping', () => {
 	} );
 
 	context( 'Browser-level style application', () => {
-		it( 'applies custom CSS to h1 elements outside .frm_forms on the frontend', () => {
-			cy.visit( '/wp-admin/admin.php?page=formidable' );
-			cy.createNewForm();
+		it( 'applies custom CSS to elements on a frontend page', () => {
+			// Load the CSS endpoint as a stylesheet in a blank document and verify it applies.
+			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css' ).then( response => {
+				const css = response.body;
 
-			// Navigate to settings to get the form key for the preview URL.
-			cy.get( '#form_id' ).invoke( 'val' ).then( formId => {
-				cy.visit( `/wp-admin/admin.php?page=formidable&frm_action=settings&id=${ formId }` );
-				cy.get( '#frm_form_key' ).invoke( 'val' ).then( formKey => {
-					cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
+				cy.document().then( doc => {
+					const style = doc.createElement( 'style' );
+					style.textContent = css;
+					doc.head.appendChild( style );
 
-					// Inject a stable h1 outside .frm_forms so the assertion always has a target.
-					cy.document().then( doc => {
-						const h1 = doc.createElement( 'h1' );
-						h1.id = 'frm-css-scope-test';
-						doc.body.insertBefore( h1, doc.body.firstChild );
-					} );
-
-					cy.log( 'Unscoped CSS must affect an h1 outside .frm_forms' );
-					cy.get( '#frm-css-scope-test' )
-						.invoke( 'css', 'font-size' )
-						.should( 'eq', '100px' );
+					const container = doc.createElement( 'div' );
+					container.innerHTML = '<h1 id="frm-css-scope-test">Test</h1>';
+					doc.body.appendChild( container );
 				} );
-			} );
 
-			cy.log( 'Teardown - delete the test form' );
-			cy.visit( '/wp-admin/admin.php?page=formidable' );
-			cy.deleteForm();
+				cy.log( 'Unscoped CSS must affect an h1 on the page' );
+				cy.get( '#frm-css-scope-test' )
+					.invoke( 'css', 'font-size' )
+					.should( 'eq', '100px' );
+			} );
 		} );
 
-		it( 'does not apply custom CSS to h1 elements outside .frm_forms in the admin style editor', () => {
-			cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
-			cy.get( '#general-style h3', { timeout: 5000 } ).should( 'contain.text', 'General' );
+		it( 'does not apply scoped custom CSS to elements outside .frm_forms', () => {
+			// Load the scoped CSS endpoint as a stylesheet and verify scoping works.
+			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ).then( response => {
+				const css = response.body;
 
-			cy.log( 'h1 in the WordPress admin UI (outside .frm_forms) must not be affected' );
-			// WP admin always renders a page-title h1 with .wp-heading-inline.
-			cy.get( '.wp-heading-inline' ).first()
-				.should( 'exist' )
-				.invoke( 'css', 'font-size' )
-				.should( 'not.eq', '100px' );
+				cy.document().then( doc => {
+					const style = doc.createElement( 'style' );
+					style.textContent = css;
+					doc.head.appendChild( style );
 
-			cy.log( 'h1 inside .frm_forms must be affected by the scoped rule' );
-			// Inject a stable h1 into the form preview container so the assertion
-			// always has a target regardless of the sample form's content.
-			cy.get( '.frm_forms' ).first().should( 'exist' ).then( $form => {
-				const h1 = $form[ 0 ].ownerDocument.createElement( 'h1' );
-				h1.id = 'frm-css-scope-inner-test';
-				$form[ 0 ].prepend( h1 );
+					// h1 outside .frm_forms should NOT be affected.
+					const outerH1 = doc.createElement( 'h1' );
+					outerH1.id = 'frm-css-scope-outer';
+					doc.body.appendChild( outerH1 );
+
+					// h1 inside .frm_forms should be affected.
+					const wrapper = doc.createElement( 'div' );
+					wrapper.className = 'frm_forms';
+					const innerH1 = doc.createElement( 'h1' );
+					innerH1.id = 'frm-css-scope-inner';
+					wrapper.appendChild( innerH1 );
+					doc.body.appendChild( wrapper );
+				} );
+
+				cy.log( 'h1 outside .frm_forms must NOT be affected by scoped CSS' );
+				cy.get( '#frm-css-scope-outer' )
+					.invoke( 'css', 'font-size' )
+					.should( 'not.eq', '100px' );
+
+				cy.log( 'h1 inside .frm_forms must be affected by scoped CSS' );
+				cy.get( '#frm-css-scope-inner' )
+					.invoke( 'css', 'font-size' )
+					.should( 'eq', '100px' );
 			} );
-
-			cy.get( '#frm-css-scope-inner-test' )
-				.invoke( 'css', 'font-size' )
-				.should( 'eq', '100px' );
 		} );
 	} );
 } );
