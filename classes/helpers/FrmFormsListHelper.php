@@ -354,12 +354,14 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
 	 * @since 6.0
+	 * @deprecated x.x We moved these actions to other places. This column will show if there is a filter aded to the hook.
 	 *
 	 * @param stdClass $form
 	 *
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
+		_deprecated_function( __METHOD__, 'x.x' );
 		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$val .= $this->column_style( $form );
 		$val .= $this->column_views( $form );
@@ -462,8 +464,9 @@ class FrmFormsListHelper extends FrmListHelper {
 			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . esc_html__( 'Settings', 'formidable' ) . '</a>';
 		}
 
-		$actions         = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$actions          = array_merge( $actions, $new_actions );
+		$actions['embed'] = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . esc_html__( 'Embed', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$actions['view']  = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**

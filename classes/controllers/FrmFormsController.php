@@ -1241,10 +1241,12 @@ class FrmFormsController {
 		$columns['cb']       = '<input type="checkbox" />';
 		$columns['name']     = esc_html__( 'Form Title', 'formidable' );
 		$columns['entries']  = esc_html__( 'Entries', 'formidable' );
+		$columns['views']    = esc_html__( 'Views', 'formidable' );
 		$columns['id']       = 'ID';
 		$columns['form_key'] = esc_html__( 'Key', 'formidable' );
 
-		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) && has_filter( 'frm_form_list_actions' ) ) {
+			// If there is any filters added, keep this column.
 			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
 		}
 
