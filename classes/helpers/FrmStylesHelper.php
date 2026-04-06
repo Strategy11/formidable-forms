@@ -1178,8 +1178,7 @@ class FrmStylesHelper {
 			return $css;
 		}
 
-		$scope_helper = new FrmCssScopeHelper();
-		return $scope_helper->nest( $css, 'frm_forms' );
+		return '@scope (.frm_forms) { ' . $css . '}';
 	}
 
 	/**
