@@ -3065,14 +3065,21 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Truncate a string.
+	 * 
+	 * Note: By default, this function will allow for a few additional characters more than $length.
+	 * If a string has no spaces, it allows up to 50 additional characters. To force a true length limit,
+	 * use $force_length_limit = true.
+	 *
 	 * @param mixed      $original_string
 	 * @param int|string $length
 	 * @param int        $minword
 	 * @param string     $continue
+	 * @param bool       $force_length_limit Force the final string to never exceed the length limit.
 	 *
 	 * @return string
 	 */
-	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
+	public static function truncate( $original_string, $length, $minword = 3, $continue = '...', $force_length_limit = false ) {
 		if ( ! is_string( $original_string ) && ! is_int( $original_string ) ) {
 			return '';
 		}
@@ -3088,6 +3095,9 @@ class FrmAppHelper {
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
+			if ( $force_length_limit ) {
+				return $sub;
+			}
 			return $sub . ( $length < $original_len ? $continue : '' );
 		}
 
@@ -3117,7 +3127,16 @@ class FrmAppHelper {
 			unset( $total_len, $word );
 		}
 
-		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length );
+		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length, $force_length_limit );
+
+		if ( $force_length_limit ) {
+			// Ensure the final string doesn't exceed the length limit.
+			$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
+			if ( $final_len > $length ) {
+				$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
+			}
+			return $sub;
+		}
 
 		return $sub . ( $len < $original_len ? $continue : '' );
 	}
@@ -3127,25 +3146,36 @@ class FrmAppHelper {
 	 *
 	 * @since 6.5.4
 	 *
-	 * @param string $sub    Current substring.
-	 * @param int    $length The length limit.
+	 * @param string $sub                Current substring.
+	 * @param int    $length             The length limit.
+	 * @param bool   $force_length_limit Force the string to not exceed the length limit.
 	 *
 	 * @return string
 	 */
-	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length ) {
-		if ( strlen( $sub ) < $length + 50 ) {
-			// If the string isn't way over the limit, leave it.
-			return $sub;
+	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length, $force_length_limit = false ) {
+		if ( ! $force_length_limit ) {
+			if ( strlen( $sub ) < $length + 50 ) {
+				// If the string isn't way over the limit, leave it.
+				return $sub;
+			}
+
+			$first_space = strpos( $sub, ' ', $length );
+
+			if ( false !== $first_space ) {
+				// Ignore anything with spaces.
+				return $sub;
+			}
+
+			return substr( $sub, 0, $length + 10 );
 		}
 
-		$first_space = strpos( $sub, ' ', $length );
-
-		if ( false !== $first_space ) {
-			// Ignore anything with spaces.
-			return $sub;
+		// When force_length_limit is true, ensure the string doesn't exceed the length.
+		$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
+		if ( $final_len > $length ) {
+			return self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
 		}
 
-		return substr( $sub, 0, $length + 10 );
+		return $sub;
 	}
 
 	/**
