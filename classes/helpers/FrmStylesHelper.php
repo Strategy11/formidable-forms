@@ -1178,7 +1178,7 @@ class FrmStylesHelper {
 			return $css;
 		}
 
-		return '@scope (.frm_forms) { ' . $css . '}';
+		return '@scope (.frm_forms) {' . $css . '}';
 	}
 
 	/**
