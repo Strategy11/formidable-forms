@@ -1147,12 +1147,8 @@ class FrmEntry {
 			$update = false;
 		}
 
-		if ( $update ) {
-			self::sanitize_entry_post( $values );
-
-			if ( $update_type !== 'xml' ) {
-				$values = apply_filters( 'frm_pre_update_entry', $values, $id );
-			}
+		if ( $update && $update_type !== 'xml' ) {
+			$values = apply_filters( 'frm_pre_update_entry', $values, $id );
 		}
 
 		return $update;
