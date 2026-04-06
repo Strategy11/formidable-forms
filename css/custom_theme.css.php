@@ -1669,7 +1669,6 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 .frm-card-errors:empty {
 	margin: 0;
 }
-
 <?php
 
 $frm_custom_css = strip_tags( FrmStylesController::get_custom_css() );
