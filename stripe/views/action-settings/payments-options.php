@@ -26,6 +26,16 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 
 <?php FrmTransLiteAppHelper::show_gateway_buttons( $gateways, $form_action, $action_control ); ?>
 
+<p class="frm6">
+	<label>
+		<?php esc_html_e( 'Payment Type', 'formidable' ); ?>
+	</label>
+	<select name="<?php echo esc_attr( $action_control->get_field_name( 'type' ) ); ?>" class="frm_trans_type">
+		<option value="single" <?php selected( $form_action->post_content['type'], 'one_time' ); ?>><?php esc_html_e( 'One-time Payment', 'formidable' ); ?></option>
+		<option value="recurring" <?php selected( $form_action->post_content['type'], 'recurring' ); ?>><?php esc_html_e( 'Recurring', 'formidable' ); ?></option>
+	</select>
+</p>
+
 <div class="frm_grid_container">
 	<?php
 	/**
@@ -58,18 +68,15 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 		<input type="text" value="<?php echo esc_attr( $form_action->post_content['amount'] ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'amount' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'amount' ) ); ?>" class="frm_not_email_subject large-text" />
 	</p>
 
+	<p class="frm6">
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'currency' ) ); ?>">
+			<?php esc_html_e( 'Currency', 'formidable' ); ?>
+		</label>
+		<?php FrmTransLiteAppHelper::show_currency_dropdown( $action_control->get_field_id( 'currency' ), $action_control->get_field_name( 'currency' ), $form_action->post_content ); ?>
+	</p>
+
 	<?php $cc_field_id = $action_control->get_credit_card_field_id( $field_dropdown_atts ); ?>
 	<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'credit_card' ) ); ?>" value="<?php echo esc_attr( $cc_field_id ); ?>" />
-
-	<p class="frm6">
-		<label>
-			<?php esc_html_e( 'Payment Type', 'formidable' ); ?>
-		</label>
-		<select name="<?php echo esc_attr( $action_control->get_field_name( 'type' ) ); ?>" class="frm_trans_type">
-			<option value="single" <?php selected( $form_action->post_content['type'], 'one_time' ); ?>><?php esc_html_e( 'One-time Payment', 'formidable' ); ?></option>
-			<option value="recurring" <?php selected( $form_action->post_content['type'], 'recurring' ); ?>><?php esc_html_e( 'Recurring', 'formidable' ); ?></option>
-		</select>
-	</p>
 
 	<?php $action_control->echo_capture_payment_upsell( $form_action->post_content['gateway'] ); ?>
 
@@ -111,13 +118,6 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 		</label>
 		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'trial_interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['trial_interval_count'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'trial_interval_count' ) ); ?>" class="frm_not_email_subject" />
 		<?php esc_html_e( 'day(s)', 'formidable' ); ?>
-	</p>
-
-	<p class="frm6">
-		<label for="<?php echo esc_attr( $action_control->get_field_id( 'currency' ) ); ?>">
-			<?php esc_html_e( 'Currency', 'formidable' ); ?>
-		</label>
-		<?php FrmTransLiteAppHelper::show_currency_dropdown( $action_control->get_field_id( 'currency' ), $action_control->get_field_name( 'currency' ), $form_action->post_content ); ?>
 	</p>
 
 	<?php

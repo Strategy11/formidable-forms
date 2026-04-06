@@ -2294,8 +2294,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Add product name setting when formidable-payments plugin is active.
-	 * This ensures the product name field appears when Stripe add-on is active.
+	 * Add PayPal subscription settings (product name and product type).
 	 *
 	 * @since x.x
 	 *
@@ -2303,12 +2302,15 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return void
 	 */
-	public static function add_product_name_setting_from_hook( $args ) {
+	public static function add_paypal_subscription_settings_from_hook( $args ) {
 		$form_action    = $args['form_action'];
 		$action_control = $args['action_control'];
 
 		// Include the product name setting
 		include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/product-name-action-setting.php';
+
+		// Include the product type setting
+		include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/product-type-action-setting.php';
 	}
 
 	/**

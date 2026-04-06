@@ -494,11 +494,13 @@ class FrmPayPalLiteAppController {
 		$interval_count = $action->post_content['interval_count'] ?? 1;
 		$trial_period   = $action->post_content['trial_period'] ?? '';
 		$payment_limit  = $action->post_content['payment_limit'] ?? '';
+		$product_type   = $action->post_content['product_type'] ?? 'SERVICE';
 
 		$data = array(
 			'amount'              => $amount,
 			'currency'            => $currency,
 			'product_name'        => $product_name,
+			'product_type'        => $product_type,
 			'interval'            => $interval,
 			'interval_count'      => $interval_count,
 			'trial_period'        => $trial_period,
