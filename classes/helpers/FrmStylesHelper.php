@@ -1174,12 +1174,70 @@ class FrmStylesHelper {
 	 * @return string
 	 */
 	public static function maybe_scope_css_for_admin( $css ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
-		if ( ! isset( $_GET['frm_scope_custom_css'] ) ) {
+		if ( ! self::should_scope_custom_css() ) {
 			return $css;
 		}
 
 		$scope_helper = new FrmCssScopeHelper();
 		return $scope_helper->nest( $css, 'frm_forms' );
+	}
+
+	/**
+	 * Scope only the custom CSS portion of the full cached stylesheet for admin pages.
+	 * Extracts the global custom CSS from the cached CSS, outputs the theme CSS unchanged,
+	 * and returns only the custom CSS portion scoped.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $css The full cached CSS containing both theme and custom CSS.
+	 *
+	 * @return string The theme CSS with only the custom CSS portion scoped.
+	 */
+	public static function maybe_scope_custom_css_in_cached_output( $css ) {
+		if ( ! self::should_scope_custom_css() ) {
+			return $css;
+		}
+
+		$custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
+		if ( ! $custom_css ) {
+			return $css;
+		}
+
+		// The cached CSS is minified. Minify the custom CSS the same way to find it.
+		$minified_custom_css = self::minify_css( $custom_css );
+		$custom_css_pos      = strrpos( $css, $minified_custom_css );
+
+		if ( false !== $custom_css_pos ) {
+			$css = substr( $css, 0, $custom_css_pos );
+		}
+
+		return $css . self::maybe_scope_css_for_admin( $custom_css );
+	}
+
+	/**
+	 * Minify CSS by stripping comments and whitespace.
+	 * Matches the minification used when saving the cached CSS file.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $css The CSS to minify.
+	 *
+	 * @return string
+	 */
+	private static function minify_css( $css ) {
+		return preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $css ) );
+	}
+
+	/**
+	 * Check if custom CSS should be scoped for admin context.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_scope_custom_css() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
+		return isset( $_GET['frm_scope_custom_css'] );
 	}
 }

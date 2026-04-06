@@ -7,8 +7,7 @@ if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
 	if ( ! empty( $css ) ) {
-		$css = strip_tags( $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo FrmStylesHelper::maybe_scope_css_for_admin( $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo strip_tags( FrmStylesHelper::maybe_scope_custom_css_in_cached_output( $css ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
