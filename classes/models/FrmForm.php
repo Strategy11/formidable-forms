@@ -94,7 +94,7 @@ class FrmForm {
 
 		$new_values = array(
 			'form_key'    => FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_forms', 'form_key' ),
-			'name'        => FrmAppHelper::truncate( $values->name, 255, 1, '', true ),
+			'name'        => $values->name,
 			'description' => $values->description,
 			'status'      => $values->status ? $values->status : 'published',
 			'logged_in'   => $values->logged_in ? $values->logged_in : 0,
