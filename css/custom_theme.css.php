@@ -7,7 +7,7 @@ if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
 	if ( ! empty( $css ) ) {
-		echo strip_tags( $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo strip_tags( FrmStylesHelper::maybe_scope_custom_css_in_cached_output( $css ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
@@ -1672,13 +1672,7 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 <?php
 
 $frm_custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
 if ( $frm_custom_css ) {
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
-	if ( isset( $_GET['frm_admin'] ) ) {
-		echo '@scope (.frm_forms) {' . PHP_EOL;
-		echo $frm_custom_css . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '}' . PHP_EOL;
-	} else {
-		echo $frm_custom_css . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
+	echo FrmStylesHelper::maybe_scope_css_for_admin( $frm_custom_css ) . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
