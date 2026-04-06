@@ -3,9 +3,10 @@
  *   - Applied unscoped on the frontend (affects the whole page as authored)
  *   - Scoped to .frm_forms in the admin area (does not bleed into WordPress UI)
  *
- * The mechanism: the admin style editor loads the CSS endpoint with ?frm_admin=1,
- * which wraps the custom CSS in @scope (.frm_forms) { ... }.  The frontend loads
- * the same endpoint without that parameter and receives the CSS unscoped.
+ * The mechanism: the admin style editor loads the CSS endpoint with
+ * ?frm_scope_custom_css=1, which uses FrmCssScopeHelper::nest() to prefix every
+ * selector with .frm_forms (e.g. "h1" becomes ".frm_forms h1"). The frontend
+ * loads the same endpoint without that parameter and receives the CSS unscoped.
  */
 
 const TEST_CSS = [
@@ -51,20 +52,20 @@ describe( 'Custom CSS scoping', () => {
 				expect( response.status ).to.eq( 200 );
 				expect( response.headers[ 'content-type' ] ).to.include( 'text/css' );
 
-				// The CSS rules should be present verbatim — not wrapped in @scope
+				// The CSS rules should be present verbatim, not prefixed with .frm_forms
 				expect( response.body ).to.include( 'h1 { font-size: 100px !important; }' );
-				expect( response.body ).not.to.include( '@scope' );
+				expect( response.body ).not.to.include( '.frm_forms h1' );
 			} );
 		} );
 
-		it( 'serves custom CSS scoped to .frm_forms in the admin area (frm_admin=1)', () => {
-			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css&frm_admin=1' ).then( ( response ) => {
+		it( 'serves custom CSS scoped to .frm_forms in the admin area (frm_scope_custom_css=1)', () => {
+			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ).then( ( response ) => {
 				expect( response.status ).to.eq( 200 );
 				expect( response.headers[ 'content-type' ] ).to.include( 'text/css' );
 
-				// The CSS should be wrapped in @scope (.frm_forms) { ... }
-				expect( response.body ).to.match( /@scope\s*\(\.frm_forms\)\s*\{/ );
-				expect( response.body ).to.include( 'h1 { font-size: 100px !important; }' );
+				// Selectors should be prefixed with .frm_forms
+				expect( response.body ).to.include( '.frm_forms h1' );
+				expect( response.body ).to.include( 'font-size: 100px !important' );
 			} );
 		} );
 	} );

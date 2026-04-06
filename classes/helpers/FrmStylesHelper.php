@@ -1162,4 +1162,24 @@ class FrmStylesHelper {
 
 		return count( $parts ) < 3 ? $parts[0] : $parts[2];
 	}
+
+	/**
+	 * Scope CSS to .frm_forms on admin pages to prevent style conflicts.
+	 * On front-end pages, the CSS is returned unchanged.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $css The CSS to scope.
+	 *
+	 * @return string
+	 */
+	public static function maybe_scope_css_for_admin( $css ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
+		if ( ! isset( $_GET['frm_scope_custom_css'] ) ) {
+			return $css;
+		}
+
+		$scope_helper = new FrmCssScopeHelper();
+		return $scope_helper->nest( $css, 'frm_forms' );
+	}
 }
