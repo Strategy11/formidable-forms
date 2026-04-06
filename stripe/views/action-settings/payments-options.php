@@ -80,45 +80,51 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 
 	<?php $action_control->echo_capture_payment_upsell( $form_action->post_content['gateway'] ); ?>
 
-	<p class="frm6 frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
-		<label>
-			<?php esc_html_e( 'Repeat', 'formidable' ); ?>
-		</label>
-		<span>
-			<span class="frm_grid_container">
-				<input class="frm6" type="number" name="<?php echo esc_attr( $action_control->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
-				<select class="frm6" name="<?php echo esc_attr( $action_control->get_field_name( 'interval' ) ); ?>" class="auto_width">
-					<?php foreach ( $repeat_times as $k => $v ) { ?>
-						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
-					<?php } ?>
-				</select>
-				<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
-			</span>
-		</span>
-	</p>
+	<div class="frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
+		<div class="frm_grid_container">
+			<h3><?php esc_html_e( 'Recurring Payment Settings', 'formidable' ); ?></h3>
 
-	<?php
-	/*
-	Note: The Repeat Cadence setting is added with JavaScript.
-	This hidden input is added so the JS knows what value is set.
-	*/
-	?>
-	<input type="hidden" class="frm-repeat-cadence-value" value="<?php echo esc_attr( $form_action->post_content['repeat_cadence'] ?? 'DAILY' ); ?>" />
+			<p class="frm6">
+				<label>
+					<?php esc_html_e( 'Repeat', 'formidable' ); ?>
+				</label>
+				<span>
+					<span class="frm_grid_container">
+						<input class="frm6" type="number" name="<?php echo esc_attr( $action_control->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
+						<select class="frm6" name="<?php echo esc_attr( $action_control->get_field_name( 'interval' ) ); ?>" class="auto_width">
+							<?php foreach ( $repeat_times as $k => $v ) { ?>
+								<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
+							<?php } ?>
+						</select>
+						<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
+					</span>
+				</span>
+			</p>
 
-	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
-		<label>
-			<?php esc_html_e( 'Recurring Payment Limit', 'formidable' ); ?>
-		</label>
-		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'payment_limit' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_limit'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'payment_limit' ) ); ?>" class="frm_not_email_subject" />
-	</p>
+			<?php
+			/*
+			Note: The Repeat Cadence setting is added with JavaScript.
+			This hidden input is added so the JS knows what value is set.
+			*/
+			?>
+			<input type="hidden" class="frm-repeat-cadence-value" value="<?php echo esc_attr( $form_action->post_content['repeat_cadence'] ?? 'DAILY' ); ?>" />
 
-	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
-		<label>
-			<?php esc_html_e( 'Trial Period', 'formidable' ); ?>
-		</label>
-		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'trial_interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['trial_interval_count'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'trial_interval_count' ) ); ?>" class="frm_not_email_subject" />
-		<?php esc_html_e( 'day(s)', 'formidable' ); ?>
-	</p>
+			<p class="frm6">
+				<label>
+					<?php esc_html_e( 'Recurring Payment Limit', 'formidable' ); ?>
+				</label>
+				<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'payment_limit' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_limit'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'payment_limit' ) ); ?>" class="frm_not_email_subject" />
+			</p>
+
+			<p class="frm6">
+				<label>
+					<?php esc_html_e( 'Trial Period', 'formidable' ); ?>
+				</label>
+				<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'trial_interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['trial_interval_count'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'trial_interval_count' ) ); ?>" class="frm_not_email_subject" />
+				<?php esc_html_e( 'day(s)', 'formidable' ); ?>
+			</p>
+		</div>
+	</div>
 
 	<?php
 	FrmStrpLiteActionsController::add_action_options(
