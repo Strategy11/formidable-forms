@@ -29,6 +29,7 @@ class FrmSettingsUpsellHelper {
 			if ( ! empty( $field['unique'] ) ) {
 				$unique_element_atts['checked'] = 'checked';
 			}
+
 			return $unique_element_atts;
 		}
 
