@@ -3066,7 +3066,7 @@ class FrmAppHelper {
 
 	/**
 	 * Truncate a string.
-	 * 
+	 *
 	 * Note: By default, this function will allow for a few additional characters more than $length.
 	 * If a string has no spaces, it allows up to 50 additional characters. To force a true length limit,
 	 * use $force_length_limit = true.
@@ -3095,9 +3095,11 @@ class FrmAppHelper {
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
+
 			if ( $force_length_limit ) {
 				return $sub;
 			}
+
 			return $sub . ( $length < $original_len ? $continue : '' );
 		}
 
@@ -3132,9 +3134,11 @@ class FrmAppHelper {
 		if ( $force_length_limit ) {
 			// Ensure the final string doesn't exceed the length limit.
 			$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
+
 			if ( $final_len > $length ) {
-				$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
+				return self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
 			}
+
 			return $sub;
 		}
 
@@ -3171,6 +3175,7 @@ class FrmAppHelper {
 
 		// When force_length_limit is true, ensure the string doesn't exceed the length.
 		$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
+
 		if ( $final_len > $length ) {
 			return self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
 		}

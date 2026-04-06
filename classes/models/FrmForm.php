@@ -268,11 +268,7 @@ class FrmForm {
 
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
-				if ( 'name' === $value_key ) {
-					$new_values[ $value_key ] = FrmAppHelper::truncate( $value, 255, 1, '', true );
-				} else {
-					$new_values[ $value_key ] = $value;
-				}
+				$new_values[ $value_key ] = 'name' === $value_key ? FrmAppHelper::truncate( $value, 255, 1, '', true ) : $value;
 			}
 		}
 
