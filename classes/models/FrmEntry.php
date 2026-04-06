@@ -853,7 +853,7 @@ class FrmEntry {
 		$item_name  = self::get_new_entry_name( $values, $values['item_key'] );
 		$new_values = array(
 			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
-			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '' ),
+			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '', true ),
 			'ip'             => self::get_ip( $values ),
 			'is_draft'       => self::get_is_draft_value( $values ),
 			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
@@ -1168,7 +1168,7 @@ class FrmEntry {
 		global $wpdb;
 
 		$new_values = array(
-			'name'       => self::get_new_entry_name( $values ),
+			'name'       => FrmAppHelper::truncate( self::get_new_entry_name( $values ), 255, 1, '', true ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
 			'is_draft'   => self::get_is_draft_value( $values ),
 			'updated_at' => current_time( 'mysql', 1 ),

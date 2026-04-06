@@ -71,7 +71,7 @@ class FrmFieldProduct extends FrmFieldType {
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
 		$field = $args['field'];
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/separate-values.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/separate-values.php';
 	}
 
 	/**

@@ -13,4 +13,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 FrmFieldsHelper::show_radio_display_format( $args['field'] );
 
-include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/separate-values.php';
+include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/separate-values.php';
