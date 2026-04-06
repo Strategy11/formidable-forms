@@ -590,6 +590,10 @@ class FrmFieldsHelper {
 	 */
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
 		foreach ( $fields as $field ) {
+			if ( ! is_array( $field ) ) {
+				continue;
+			}
+
 			$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
 			$field_obj->show_field( compact( 'errors', 'form', 'form_action' ) );
 		}
