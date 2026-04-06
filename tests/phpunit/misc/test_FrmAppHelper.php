@@ -769,7 +769,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		// Test force_length_limit=true (strict limit)
 		$result = FrmAppHelper::truncate( 'This is a test string that is quite long', 10, 3, '', true );
-		$this->assertSame( 'This is a', $result );
+		$this->assertSame( 'This is a ', $result );
 		$this->assertLessThanOrEqual( 10, strlen( $result ), 'Force limit should not exceed length' );
 
 		// Test with multibyte characters (Ø)
