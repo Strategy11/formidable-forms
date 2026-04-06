@@ -41,7 +41,6 @@ class FrmPayPalLiteHooksController {
 		);
 
 		add_filter( 'frm_before_save_payment_action', 'FrmPayPalLiteActionsController::before_save_settings', 20, 2 );
-		add_action( 'frm_payments_settings_before_description', 'FrmPayPalLiteActionsController::add_paypal_subscription_settings_from_hook' );
 
 		add_filter(
 			'frm_paypal_action_options',
