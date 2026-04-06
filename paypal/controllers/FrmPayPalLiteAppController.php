@@ -495,9 +495,6 @@ class FrmPayPalLiteAppController {
 		$trial_period   = $action->post_content['trial_period'] ?? '';
 		$payment_limit  = $action->post_content['payment_limit'] ?? '';
 
-		// TODO Process email properly.
-		$email = $action->post_content['email'] ?? '';
-
 		$data = array(
 			'amount'              => $amount,
 			'currency'            => $currency,
@@ -506,7 +503,6 @@ class FrmPayPalLiteAppController {
 			'interval_count'      => $interval_count,
 			'trial_period'        => $trial_period,
 			'payment_limit'       => $payment_limit,
-			'email'               => $email,
 			'payer'               => self::get_payer_data_from_posted_values( $action ),
 			'shipping_preference' => self::get_shipping_preference( $action ),
 		);
