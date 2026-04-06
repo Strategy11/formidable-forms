@@ -25,9 +25,11 @@ describe( 'Custom CSS scoping', () => {
 		cy.log( 'Save test CSS to Formidable global settings' );
 		cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
 		cy.get( '.frm-category-tabs' ).contains( 'a', 'Custom CSS' ).click();
-		cy.get( '#frm_custom_css_box' )
-			.clear()
-			.type( TEST_CSS, { delay: 0, parseSpecialCharSequences: false } );
+		cy.window().then( win => {
+			const editor = win.frm_codemirror_box_wp_editor.codemirror;
+			editor.setValue( TEST_CSS );
+			editor.save();
+		} );
 		cy.get( '#frm-publishing .button-primary' ).click();
 		cy.get( '.frm_updated_message, .notice-success' ).should( 'exist' );
 	} );
@@ -42,7 +44,11 @@ describe( 'Custom CSS scoping', () => {
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
 		cy.get( '.frm-category-tabs' ).contains( 'a', 'Custom CSS' ).click();
-		cy.get( '#frm_custom_css_box' ).clear();
+		cy.window().then( win => {
+			const editor = win.frm_codemirror_box_wp_editor.codemirror;
+			editor.setValue( '' );
+			editor.save();
+		} );
 		cy.get( '#frm-publishing .button-primary' ).click();
 	} );
 
