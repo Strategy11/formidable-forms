@@ -7908,6 +7908,12 @@ window.frmAdminBuildJS = function() {
 			success( html ) {
 				placeholder.insertAdjacentHTML( 'beforebegin', html );
 				placeholder.remove();
+
+				const newRow = logicRowsContainer.querySelector( '.frm_logic_row:last-child' );
+				const ruleTextEl = newRow ? newRow.querySelector( '.frm-logic-rule-text' ) : null;
+				if ( ruleTextEl ) {
+					ruleTextEl.textContent = logicRowsContainer.dataset.ruleText || '';
+				}
 			}
 		} );
 	}
