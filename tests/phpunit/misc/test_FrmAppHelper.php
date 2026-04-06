@@ -779,12 +779,12 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		// Test strict limit for 255 characters (database column limit)
 		$long_string = str_repeat( 'a', 300 );
-		$result = FrmAppHelper::truncate( $long_string, 255, 1, '', true );
+		$result      = FrmAppHelper::truncate( $long_string, 255, 1, '', true );
 		$this->assertSame( 255, strlen( $result ), 'Should be exactly 255 characters' );
 
 		// Test with multibyte string at 255 limit
 		$mb_string = str_repeat( 'Ø', 300 );
-		$result = FrmAppHelper::truncate( $mb_string, 255, 1, '', true );
+		$result    = FrmAppHelper::truncate( $mb_string, 255, 1, '', true );
 		$this->assertLessThanOrEqual( 255, mb_strlen( $result ), 'Multibyte string should not exceed 255 characters' );
 
 		// Test short string with force_length_limit
