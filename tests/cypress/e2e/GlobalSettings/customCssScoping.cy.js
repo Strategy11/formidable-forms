@@ -85,11 +85,11 @@ describe( 'Custom CSS scoping', () => {
 				cy.document().then( doc => {
 					const style = doc.createElement( 'style' );
 					style.textContent = css;
-					doc.head.appendChild( style );
+					doc.head.append( style );
 
 					const container = doc.createElement( 'div' );
 					container.innerHTML = '<h1 id="frm-css-scope-test">Test</h1>';
-					doc.body.appendChild( container );
+					doc.body.append( container );
 				} );
 
 				cy.log( 'Unscoped CSS must affect an h1 on the page' );
@@ -107,20 +107,20 @@ describe( 'Custom CSS scoping', () => {
 				cy.document().then( doc => {
 					const style = doc.createElement( 'style' );
 					style.textContent = css;
-					doc.head.appendChild( style );
+					doc.head.append( style );
 
 					// h1 outside .frm_forms should NOT be affected.
 					const outerH1 = doc.createElement( 'h1' );
 					outerH1.id = 'frm-css-scope-outer';
-					doc.body.appendChild( outerH1 );
+					doc.body.append( outerH1 );
 
 					// h1 inside .frm_forms should be affected.
 					const wrapper = doc.createElement( 'div' );
 					wrapper.className = 'frm_forms';
 					const innerH1 = doc.createElement( 'h1' );
 					innerH1.id = 'frm-css-scope-inner';
-					wrapper.appendChild( innerH1 );
-					doc.body.appendChild( wrapper );
+					wrapper.append( innerH1 );
+					doc.body.append( wrapper );
 				} );
 
 				cy.log( 'h1 outside .frm_forms must NOT be affected by scoped CSS' );
