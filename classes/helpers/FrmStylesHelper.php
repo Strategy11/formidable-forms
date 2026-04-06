@@ -1178,7 +1178,16 @@ class FrmStylesHelper {
 			return $css;
 		}
 
-		return '@scope (.frm_forms) {' . $css . '}';
+		/**
+		 * Filter the CSS selector used for @scope when scoping custom CSS on admin pages.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $selector The CSS selector to scope to. Default '.frm_forms'.
+		 */
+		$selector = apply_filters( 'frm_scope_custom_css_selector', '.frm_forms' );
+
+		return '@scope (' . $selector . ') {' . $css . '}';
 	}
 
 	/**

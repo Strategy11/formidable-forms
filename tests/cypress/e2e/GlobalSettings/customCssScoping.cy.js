@@ -78,29 +78,27 @@ describe( 'Custom CSS scoping', () => {
 
 	context( 'Browser-level style application', () => {
 		it( 'applies custom CSS to h1 elements outside .frm_forms on the frontend', () => {
-			cy.log( 'Create a form and visit its preview page' );
-			cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
-			cy.get( '#frm-form-templates-create-form' ).click();
+			cy.visit( '/wp-admin/admin.php?page=formidable' );
+			cy.createNewForm();
 
-			cy.get( '#frm_submit_side_top', { timeout: 5000 } ).click();
-			cy.get( '#frm_new_form_name_input' ).type( 'CSS Scoping Test Form' );
-			cy.get( '#frm-save-form-name-button' ).click();
-			cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
+			// Navigate to settings to get the form key for the preview URL.
+			cy.get( '#form_id' ).invoke( 'val' ).then( formId => {
+				cy.visit( `/wp-admin/admin.php?page=formidable&frm_action=settings&id=${ formId }` );
+				cy.get( '#frm_form_key' ).invoke( 'val' ).then( formKey => {
+					cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
 
-			cy.get( '#frm_form_key' ).invoke( 'val' ).then( formKey => {
-				cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
+					// Inject a stable h1 outside .frm_forms so the assertion always has a target.
+					cy.document().then( doc => {
+						const h1 = doc.createElement( 'h1' );
+						h1.id = 'frm-css-scope-test';
+						doc.body.insertBefore( h1, doc.body.firstChild );
+					} );
 
-				// Inject a stable h1 outside .frm_forms so the assertion always has a target.
-				cy.document().then( doc => {
-					const h1 = doc.createElement( 'h1' );
-					h1.id = 'frm-css-scope-test';
-					doc.body.insertBefore( h1, doc.body.firstChild );
+					cy.log( 'Unscoped CSS must affect an h1 outside .frm_forms' );
+					cy.get( '#frm-css-scope-test' )
+						.invoke( 'css', 'font-size' )
+						.should( 'eq', '100px' );
 				} );
-
-				cy.log( 'Unscoped CSS must affect an h1 outside .frm_forms' );
-				cy.get( '#frm-css-scope-test' )
-					.invoke( 'css', 'font-size' )
-					.should( 'eq', '100px' );
 			} );
 
 			cy.log( 'Teardown - delete the test form' );
@@ -110,7 +108,7 @@ describe( 'Custom CSS scoping', () => {
 
 		it( 'does not apply custom CSS to h1 elements outside .frm_forms in the admin style editor', () => {
 			cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
-			cy.get( '#frm-styles-container, .frm_style_preview', { timeout: 5000 } ).should( 'exist' );
+			cy.get( '#general-style h3', { timeout: 5000 } ).should( 'contain.text', 'General' );
 
 			cy.log( 'h1 in the WordPress admin UI (outside .frm_forms) must not be affected' );
 			// WP admin always renders a page-title h1 with .wp-heading-inline.
