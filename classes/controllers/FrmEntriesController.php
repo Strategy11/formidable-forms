@@ -643,6 +643,10 @@ class FrmEntriesController {
 
 		if ( ! $message && isset( $_GET['import-message'] ) ) {
 			$message = __( 'Your import is complete', 'formidable' );
+			$skipped = isset( $_GET['skipped'] ) ? intval( $_GET['skipped'] ) : 0;
+			if ( $skipped > 0 ) {
+				$message .= ' ' . sprintf( __( '(%d rows skipped)', 'formidable' ), $skipped );
+			}
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php';

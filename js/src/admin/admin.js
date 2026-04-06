@@ -11352,19 +11352,21 @@ window.frmImportCsv = formID => {
 	jQuery.ajax( {
 		type: 'POST', url: ajaxurl,
 		data: `action=frm_import_csv&nonce=${ frmGlobal.nonce }&frm_skip_cookie=1${ urlVars }`,
-		success( count ) {
+		success( importData ) {
+			const importProgress = importData.startsWith('{') ? JSON.parse( importData ) : importData;
+			const count = typeof importProgress === 'object' ? importProgress.remaining : importProgress;
 			const max = jQuery( '.frm_admin_progress_bar' ).attr( 'aria-valuemax' );
 			const imported = max - count;
 			const percent = ( imported / max ) * 100;
 			jQuery( '.frm_admin_progress_bar' ).css( 'width', `${ percent }%` ).attr( 'aria-valuenow', imported );
-
+	
 			if ( parseInt( count, 10 ) > 0 ) {
 				jQuery( '.frm_csv_remaining' ).html( count );
 				frmImportCsv( formID );
 			} else {
 				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete );
 				setTimeout( function() {
-					location.href = `?page=formidable-entries&frm_action=list&form=${ formID }&import-message=1`;
+					location.href = `?page=formidable-entries&frm_action=list&form=${ formID }&import-message=1&skipped=${ importProgress.skipped }`;
 				}, 2000 );
 			}
 		}
