@@ -1673,6 +1673,7 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 <?php
 
 $frm_custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
 if ( $frm_custom_css ) {
 	echo FrmStylesHelper::maybe_scope_css_for_admin( $frm_custom_css ) . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }

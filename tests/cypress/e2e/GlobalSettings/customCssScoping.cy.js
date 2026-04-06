@@ -48,7 +48,7 @@ describe( 'Custom CSS scoping', () => {
 
 	context( 'CSS endpoint output', () => {
 		it( 'serves custom CSS unscoped on the frontend (no frm_admin param)', () => {
-			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css' ).then( ( response ) => {
+			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css' ).then( response => {
 				expect( response.status ).to.eq( 200 );
 				expect( response.headers[ 'content-type' ] ).to.include( 'text/css' );
 
@@ -59,7 +59,7 @@ describe( 'Custom CSS scoping', () => {
 		} );
 
 		it( 'serves custom CSS scoped to .frm_forms in the admin area (frm_scope_custom_css=1)', () => {
-			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ).then( ( response ) => {
+			cy.request( '/wp-admin/admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ).then( response => {
 				expect( response.status ).to.eq( 200 );
 				expect( response.headers[ 'content-type' ] ).to.include( 'text/css' );
 
@@ -81,11 +81,11 @@ describe( 'Custom CSS scoping', () => {
 			cy.get( '#frm-save-form-name-button' ).click();
 			cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
 
-			cy.get( '#frm_form_key' ).invoke( 'val' ).then( ( formKey ) => {
+			cy.get( '#frm_form_key' ).invoke( 'val' ).then( formKey => {
 				cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
 
 				// Inject a stable h1 outside .frm_forms so the assertion always has a target.
-				cy.document().then( ( doc ) => {
+				cy.document().then( doc => {
 					const h1 = doc.createElement( 'h1' );
 					h1.id = 'frm-css-scope-test';
 					doc.body.insertBefore( h1, doc.body.firstChild );
@@ -116,7 +116,7 @@ describe( 'Custom CSS scoping', () => {
 			cy.log( 'h1 inside .frm_forms must be affected by the scoped rule' );
 			// Inject a stable h1 into the form preview container so the assertion
 			// always has a target regardless of the sample form's content.
-			cy.get( '.frm_forms' ).first().should( 'exist' ).then( ( $form ) => {
+			cy.get( '.frm_forms' ).first().should( 'exist' ).then( $form => {
 				const h1 = $form[ 0 ].ownerDocument.createElement( 'h1' );
 				h1.id = 'frm-css-scope-inner-test';
 				$form[ 0 ].prepend( h1 );
