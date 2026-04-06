@@ -276,8 +276,12 @@ class FrmPayPalLiteConnectHelper {
 	 * @return void
 	 */
 	public static function render_settings_for_mode( $mode ) {
-		$connected = (bool) self::get_merchant_id( $mode );
-		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-box.php';
+		$connected              = (bool) self::get_merchant_id( $mode );
+		$column_class           = 'frm6';
+		$gateway_slug           = 'paypal';
+		$icon_font_class        = 'frm_icon_font';
+		$extra_content_callback = array( 'FrmPayPalLiteConnectHelper', 'render_seller_status_placeholder' );
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/payment-connect-mode-box.php';
 	}
 
 	/**
