@@ -244,7 +244,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @return string
 	 */
-	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	public function single_row( $item, $style = '' ) {
 		global $mode;
 
@@ -256,16 +255,8 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$action_links = $this->row_actions( $actions );
 
-		// Set up the checkbox ( because the user is editable, otherwise its empty )
-		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
-		$checkbox_label_text = sprintf(
-			// translators: Form title
-			__( 'Select %s', 'formidable' ),
-			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
-		);
-
-		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
-		$r         = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
+		$checkbox = $this->get_row_checkbox( $item );
+		$r        = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -348,6 +339,24 @@ class FrmFormsListHelper extends FrmListHelper {
 			unset( $val );
 		}//end foreach
 		return $r . '</tr>';
+	}
+
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_row_checkbox( $item ) {
+		// Set up the checkbox (because the user is editable, otherwise it's empty).
+		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
+		$checkbox_label_text = sprintf(
+			// translators: Form title
+			__( 'Select %s', 'formidable' ),
+			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
+		);
+
+		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
+		return $checkbox;
 	}
 
 	/**
