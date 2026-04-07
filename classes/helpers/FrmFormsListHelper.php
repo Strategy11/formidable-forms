@@ -244,8 +244,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @return string
 	 */
-	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
-	// skipcq: PHP-R1006
+	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh skipcq: PHP-R1006
 	public function single_row( $item, $style = '' ) {
 		global $mode;
 
