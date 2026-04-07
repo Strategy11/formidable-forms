@@ -364,7 +364,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
 	 * @since 6.0
-	 * @deprecated x.x We moved these actions to other places. This column will show if there is a filter aded to the hook.
+	 * @deprecated x.x We moved these actions to other places. This column will show if there is a filter added to the hook.
 	 *
 	 * @param stdClass $form
 	 *
