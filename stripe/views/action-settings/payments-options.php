@@ -71,10 +71,11 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 			/**
 			 * Show warning if PayPal is selected and product name is empty.
 			 * Only show for existing actions (has ID), not new actions.
+			 * Only show when payment type is recurring.
 			 *
 			 * @since x.x
 			 */
-			if ( ! empty( $form_action->ID ) && in_array( 'paypal', (array) $form_action->post_content['gateway'], true ) && empty( $form_action->post_content['product_name'] ) ) :
+			if ( ! empty( $form_action->ID ) && 'recurring' === $form_action->post_content['type'] && in_array( 'paypal', (array) $form_action->post_content['gateway'], true ) && empty( $form_action->post_content['product_name'] ) ) :
 				?>
 				<p class="frm_warning_style"><?php esc_html_e( 'Product Name is required for PayPal recurring payments.', 'formidable' ); ?></p>
 			<?php endif; ?>
