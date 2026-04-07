@@ -244,6 +244,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @return string
 	 */
+	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	public function single_row( $item, $style = '' ) {
 		global $mode;
 
@@ -418,7 +419,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		if ( class_exists( 'FrmViewsDisplay' ) ) {
-			$view_ids = FrmViewsDisplay::get_display_ids_by_form( $form->id );
+			$view_ids   = FrmViewsDisplay::get_display_ids_by_form( $form->id );
 			$view_count = empty( $view_ids ) ? 0 : count( $view_ids );
 		} else {
 			$view_count = 0;
