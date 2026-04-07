@@ -244,6 +244,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @return string
 	 */
+	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	public function single_row( $item, $style = '' ) {
 		global $mode;
 
@@ -254,9 +255,8 @@ class FrmFormsListHelper extends FrmListHelper {
 		$this->get_actions( $actions, $item, $edit_link );
 
 		$action_links = $this->row_actions( $actions );
-
-		$checkbox = $this->get_row_checkbox( $item );
-		$r        = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
+		$checkbox     = $this->get_row_checkbox( $item );
+		$r            = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -355,8 +355,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
 		);
 
-		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
-		return $checkbox;
+		return $checkbox . '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
 	}
 
 	/**
