@@ -69,33 +69,17 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 
 			<?php
 			/**
-			 * Include PayPal-specific subscription settings (Product Name and Product Type).
-			 * These are only shown when PayPal is the selected gateway.
+			 * @since x.x
+			 *
+			 * @param array $args
 			 */
-			if ( FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup() ) {
-				?>
-				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
-					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
-						<?php esc_html_e( 'Product Name', 'formidable' ); ?>
-					</label>
-					<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
-				</p>
-
-				<?php
-				$product_type_value = $form_action->post_content['product_type'] ?? '';
-				?>
-				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
-					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>">
-						<?php esc_html_e( 'Product Type', 'formidable' ); ?>
-					</label>
-					<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
-						<option value="SERVICE" <?php selected( $product_type_value, 'SERVICE' ); ?>><?php esc_html_e( 'Service', 'formidable' ); ?></option>
-						<option value="DIGITAL" <?php selected( $product_type_value, 'DIGITAL' ); ?>><?php esc_html_e( 'Digital', 'formidable' ); ?></option>
-						<option value="PHYSICAL" <?php selected( $product_type_value, 'PHYSICAL' ); ?>><?php esc_html_e( 'Physical', 'formidable' ); ?></option>
-					</select>
-				</p>
-				<?php
-			}
+			do_action(
+				'frm_payments_settings_recurring_product_info',
+				array(
+					'form_action'    => $form_action,
+					'action_control' => $action_control,
+				)
+			);
 			?>
 
 			<p class="frm6">
@@ -141,14 +125,18 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 	</div>
 
 	<?php
-	FrmStrpLiteActionsController::add_action_options(
-		array(
-			'form_action'    => $form_action,
-			'action_control' => $action_control,
-		)
-	);
-
-	FrmPayPalLiteActionsController::add_action_options(
+	/**
+	 * Allow add-ons to inject settings after the Recurring Payment Settings section.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args {
+	 *     @type object $form_action    The form action post object.
+	 *     @type object $action_control The action controller object.
+	 * }
+	 */
+	do_action(
+		'frm_payments_settings_after_recurring',
 		array(
 			'form_action'    => $form_action,
 			'action_control' => $action_control,
@@ -156,7 +144,6 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 	);
 	?>
 </div>
-<?php FrmPayPalLiteActionsController::add_button_settings_section( $action_control, $form_action ); ?>
 <div class="frm_grid_container">
 	<h3>
 		<?php esc_html_e( 'Customer Information', 'formidable' ); ?>

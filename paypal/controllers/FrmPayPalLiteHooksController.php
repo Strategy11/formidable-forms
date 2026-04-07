@@ -42,6 +42,13 @@ class FrmPayPalLiteHooksController {
 
 		add_filter( 'frm_before_save_payment_action', 'FrmPayPalLiteActionsController::before_save_settings', 20, 2 );
 
+		// Hook into after payment type to render Product Name and Product Type fields.
+		add_action( 'frm_payments_settings_recurring_product_info', 'FrmPayPalLiteActionsController::add_paypal_subscription_settings_from_hook' );
+
+		// Hook into after recurring to render PayPal Settings and PayPal Button Settings sections.
+		add_action( 'frm_payments_settings_after_recurring', 'FrmPayPalLiteActionsController::add_action_options' );
+		add_action( 'frm_payments_settings_after_recurring', 'FrmPayPalLiteActionsController::add_button_settings_section', 99 );
+
 		add_filter(
 			'frm_paypal_action_options',
 			function ( $options ) {

@@ -2284,13 +2284,61 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Print additional options for button settings.
 	 *
-	 * @param FrmFormAction $action_control
-	 * @param WP_Post       $form_action
+	 * @since x.x
+	 *
+	 * @param array|FrmFormAction $args_or_action_control Either the args array with form_action and action_control, or the action_control object.
+	 * @param WP_Post            $form_action            The form action object (when called directly).
 	 *
 	 * @return void
 	 */
-	public static function add_button_settings_section( $action_control, $form_action ) {
+	public static function add_button_settings_section( $args_or_action_control, $form_action = null ) {
+		if ( is_array( $args_or_action_control ) ) {
+			$form_action    = $args_or_action_control['form_action'];
+			$action_control = $args_or_action_control['action_control'];
+		} else {
+			$action_control = $args_or_action_control;
+		}
+
 		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/button-settings.php';
+	}
+
+	/**
+	 * Add PayPal subscription settings (product name and product type) after payment type.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args Arguments containing form_action and action_control.
+	 *
+	 * @return void
+	 */
+	public static function add_paypal_subscription_settings_from_hook( $args ) {
+		$form_action    = $args['form_action'];
+		$action_control = $args['action_control'];
+
+		$product_type_value = $form_action->post_content['product_type'] ?? '';
+		?>
+		<div class="frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
+			<div class="frm_grid_container">
+				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
+					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
+						<?php esc_html_e( 'Product Name', 'formidable' ); ?>
+					</label>
+					<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
+				</p>
+
+				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
+					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>">
+						<?php esc_html_e( 'Product Type', 'formidable' ); ?>
+					</label>
+					<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
+						<option value="SERVICE" <?php selected( $product_type_value, 'SERVICE' ); ?>><?php esc_html_e( 'Service', 'formidable' ); ?></option>
+						<option value="DIGITAL" <?php selected( $product_type_value, 'DIGITAL' ); ?>><?php esc_html_e( 'Digital', 'formidable' ); ?></option>
+						<option value="PHYSICAL" <?php selected( $product_type_value, 'PHYSICAL' ); ?>><?php esc_html_e( 'Physical', 'formidable' ); ?></option>
+					</select>
+				</p>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**

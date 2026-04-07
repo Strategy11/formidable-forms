@@ -39,10 +39,7 @@ class FrmTransLiteHooksController {
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
-			add_action( 'frm_pay_show_paypal_options', 'FrmPayPalLiteActionsController::add_action_options' );
-
-			// Use 99 so this happens after all of the other payment options.
-			add_action( 'frm_pay_show_paypal_options', 'FrmPayPalLiteActionsController::show_paypal_button_settings', 99 );
+			add_action( 'frm_pay_show_stripe_options', 'FrmStrpLiteActionsController::add_action_options' );
 
 			remove_action( 'admin_head', 'FrmTransListsController::add_list_hooks' );
 			add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
