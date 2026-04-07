@@ -562,11 +562,12 @@ window.frmAdminBuildJS = function() {
 	 * @param {string} hideSelector CSS selector for the element being removed.
 	 * @return {void}
 	 */
-	function uncheckToggleForHiddenElement( hideSelector ) {
+	function uncheckToggleOnElementRemoval( hideSelector ) {
 		const hiddenEl = document.querySelector( hideSelector );
 		if ( ! hiddenEl ) {
 			return;
 		}
+
 		for ( const cls of hiddenEl.classList ) {
 			const toggle = document.querySelector( `input[data-toggleclass="${ cls }"]` );
 			if ( toggle?.checked ) {
@@ -626,7 +627,7 @@ window.frmAdminBuildJS = function() {
 
 			if ( hide !== '' ) {
 				jQuery( hide ).hide();
-				uncheckToggleForHiddenElement( hide );
+				uncheckToggleOnElementRemoval( hide );
 			}
 
 			if ( show !== '' ) {
@@ -663,11 +664,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Updates the empty state of the actions search results.
+	 * Toggle the visibility of the form actions search no results message.
 	 *
 	 * @since x.x
 	 */
-	function updateActionsSearchEmptyState() {
+	function toggleFormActionsNoResultsVisibility() {
 		const hasVisibleActions = document.querySelector( '#frm-actions-filter-content .frm-action:not(.frm_hidden)' );
 		document.getElementById( 'frm-actions-no-results' )?.classList.toggle( 'frm_hidden', hasVisibleActions );
 	}
@@ -7936,7 +7937,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @return {void}
 	 */
-	function onLogicToggleChange() {
+	function addInitialLogicRowOnEnable() {
 		/*jshint validthis:true */
 		if ( ! this.checked ) {
 			return;
@@ -10690,7 +10691,7 @@ window.frmAdminBuildJS = function() {
 			$formActions.on( 'click', '.frm_toggle_cf_opts', toggleCfOpts );
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
-			jQuery( document ).on( 'frmAfterSearch', '#actions-search-input', updateActionsSearchEmptyState );
+			jQuery( document ).on( 'frmAfterSearch', '#actions-search-input', toggleFormActionsNoResultsVisibility );
 			initiateMultiselect();
 
 			jQuery( '.frm_submit_settings_btn' ).on( 'click', submitSettings );
@@ -10699,7 +10700,7 @@ window.frmAdminBuildJS = function() {
 
 			const formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
-			formSettings.on( 'change', 'input[data-emailkey][data-toggleclass]', onLogicToggleChange );
+			formSettings.on( 'change', 'input[data-emailkey][data-toggleclass]', addInitialLogicRowOnEnable );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			document.addEventListener(
