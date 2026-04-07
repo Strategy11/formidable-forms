@@ -279,7 +279,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			$style = '';
 
 			if ( in_array( $column_name, $hidden, true ) ) {
-				$class .= ' frm_hidden';
+				$class .= ' hidden';
 			}
 
 			if ( $column_name === 'name' ) {
