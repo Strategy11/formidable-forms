@@ -26,6 +26,21 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 
 <?php FrmTransLiteAppHelper::show_gateway_buttons( $gateways, $form_action, $action_control ); ?>
 
+<?php
+/**
+ * Show warning if amount is empty.
+ * Only show for existing actions (has ID), not new actions.
+ *
+ * @since x.x
+ */
+if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] ) ) :
+	?>
+	<div class="frm_warning_style frm-with-icon">
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+		<span><?php esc_html_e( 'Amount is required or payments will not work.', 'formidable' ); ?></span>
+	</div>
+<?php endif; ?>
+
 <p class="frm6">
 	<label>
 		<?php esc_html_e( 'Payment Type', 'formidable' ); ?>
@@ -46,7 +61,7 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 
 	<p class="frm6">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'amount' ) ); ?>">
-			<?php esc_html_e( 'Amount', 'formidable' ); ?>
+			<?php esc_html_e( 'Amount', 'formidable' ); ?> <span class="frm_required">*</span>
 		</label>
 		<input type="text" value="<?php echo esc_attr( $form_action->post_content['amount'] ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'amount' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'amount' ) ); ?>" class="frm_not_email_subject large-text" />
 	</p>
@@ -66,7 +81,6 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 	<div class="frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<div class="frm_grid_container">
 			<h3><?php esc_html_e( 'Recurring Payment Settings', 'formidable' ); ?></h3>
-
 			<?php
 			/**
 			 * Show warning if PayPal is selected and product name is empty.
@@ -77,7 +91,10 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 			 */
 			if ( ! empty( $form_action->ID ) && 'recurring' === $form_action->post_content['type'] && in_array( 'paypal', (array) $form_action->post_content['gateway'], true ) && empty( $form_action->post_content['product_name'] ) ) :
 				?>
-				<p class="frm_warning_style"><?php esc_html_e( 'Product Name is required for PayPal recurring payments.', 'formidable' ); ?></p>
+				<div class="frm_warning_style frm-with-icon frm-mt-0">
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<span><?php esc_html_e( 'Product Name is required for PayPal recurring payments.', 'formidable' ); ?></span>
+				</div>
 			<?php endif; ?>
 
 			<?php
