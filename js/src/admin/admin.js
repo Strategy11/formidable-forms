@@ -668,10 +668,8 @@ window.frmAdminBuildJS = function() {
 	 * @since x.x
 	 */
 	function updateActionsSearchEmptyState() {
-		document.getElementById( 'frm-actions-no-results' )?.classList.toggle(
-			'frm_hidden',
-			document.querySelector( '#frm-actions-filter-content .frm-action:not(.frm_hidden)' )
-		);
+		const hasVisibleActions = document.querySelector( '#frm-actions-filter-content .frm-action:not(.frm_hidden)' );
+		document.getElementById( 'frm-actions-no-results' )?.classList.toggle( 'frm_hidden', hasVisibleActions );
 	}
 
 	function afterActionRemoved( type ) {
