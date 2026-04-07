@@ -98,13 +98,15 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 			$where['created_at <'] = $to_date . ' 23:59:59';
 		}
 
+		$db_version = get_option( $this->db_opt_name );
+
 		// Do not collect test payment, this is a new feature of Stripe lite.
-		if ( 6 <= get_option( $this->db_opt_name ) ) {
+		if ( 6 <= $db_version ) {
 			$where['test'] = array( null, 0 );
 		}
 
 		// If only Paypal is used, and the DB isn't migrated (to version 4), use `completed` column instead of `status`.
-		if ( 4 > get_option( $this->db_opt_name ) && FrmDb::db_column_exists( $this->table_name, 'completed' ) ) {
+		if ( 4 > $db_version && FrmDb::db_column_exists( $this->table_name, 'completed' ) ) {
 			$where['completed'] = 1;
 		} else {
 			$where['status'] = 'complete';

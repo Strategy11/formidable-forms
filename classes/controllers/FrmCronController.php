@@ -60,9 +60,7 @@ class FrmCronController {
 	 * @return void
 	 */
 	public static function remove_crons() {
-		$events = self::get_events();
-
-		foreach ( $events as $event => $recurrence ) {
+		foreach ( self::get_events() as $event => $recurrence ) {
 			$timestamp = wp_next_scheduled( $event );
 
 			if ( false !== $timestamp ) {

@@ -86,14 +86,10 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 			return;
 		}
 
-		// Find the containing function.
+		// Find the containing function, or use file scope if not inside a function.
 		$functionToken = $this->findContainingFunction( $phpcsFile, $stackPtr );
 
-		if ( false === $functionToken ) {
-			return;
-		}
-
-		// Check if the variable was unconditionally assigned earlier in this function.
+		// Check if the variable was unconditionally assigned earlier in the scope.
 		if ( ! $this->wasVariableUnconditionallyAssigned( $phpcsFile, $functionToken, $context, $variableName ) ) {
 			return;
 		}
@@ -457,7 +453,9 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 */
 	private function wasVariableUnconditionallyAssigned( File $phpcsFile, $functionToken, $statementToken, $variableName ) {
 		$tokens      = $phpcsFile->getTokens();
-		$scopeOpener = $tokens[ $functionToken ]['scope_opener'];
+		$scopeOpener = false !== $functionToken && isset( $tokens[ $functionToken ]['scope_opener'] )
+			? $tokens[ $functionToken ]['scope_opener']
+			: 0;
 
 		// The statement's level is what we compare against.
 		$statementLevel = $tokens[ $statementToken ]['level'];
@@ -517,7 +515,9 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 */
 	private function isInsideConditionalBlock( File $phpcsFile, $functionToken, $tokenPtr ) {
 		$tokens      = $phpcsFile->getTokens();
-		$scopeOpener = $tokens[ $functionToken ]['scope_opener'];
+		$scopeOpener = false !== $functionToken && isset( $tokens[ $functionToken ]['scope_opener'] )
+			? $tokens[ $functionToken ]['scope_opener']
+			: 0;
 
 		// Walk backwards from the token to find if it's inside an if/else/elseif block.
 		for ( $i = $tokenPtr - 1; $i > $scopeOpener; $i-- ) {

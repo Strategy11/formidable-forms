@@ -90,6 +90,7 @@ class FrmUsage {
 			'form_count'        => $form_counts->published,
 			'entry_count'       => FrmEntry::getRecordCount(),
 			'timestamp'         => gmdate( 'c' ),
+			'misc'              => array(),
 
 			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
 			'plugins'           => $this->plugins(),
@@ -267,22 +268,11 @@ class FrmUsage {
 	private function payments( $table = 'frm_payments' ) {
 		$allowed_tables = array( 'frm_payments', 'frm_subscriptions' );
 
-		if ( ! in_array( $table, $allowed_tables, true ) ) {
+		if ( ! in_array( $table, $allowed_tables, true ) || ! FrmTransLiteAppHelper::payments_table_exists() ) {
 			return array();
 		}
 
-		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
-			return array();
-		}
-
-		global $wpdb;
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
-				'SELECT amount, status, paysys, created_at FROM %1$s',
-				$wpdb->prefix . $table
-			)
-		);
-
+		$rows     = $this->get_payment_db_rows( $table );
 		$payments = array();
 
 		foreach ( $rows as $row ) {
@@ -295,6 +285,34 @@ class FrmUsage {
 		}
 
 		return $payments;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $table
+	 *
+	 * @return array
+	 */
+	private function get_payment_db_rows( $table ) {
+		global $wpdb;
+
+		if ( FrmDb::db_column_exists( $table, 'test' ) ) {
+			return $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT amount, status, paysys, created_at FROM %i WHERE test IS NULL OR test != 1',
+					$wpdb->prefix . $table
+				)
+			);
+		}
+
+		// Fallback for PayPal add-on where this column does not exist.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT amount, status, paysys, created_at FROM %i',
+				$wpdb->prefix . $table
+			)
+		);
 	}
 
 	/**

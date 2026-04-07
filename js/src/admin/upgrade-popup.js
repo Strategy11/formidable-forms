@@ -190,7 +190,7 @@ export function initUpgradeModal() {
 		// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
 		if ( event.type === 'change' && element.classList.contains( 'frm_select_with_upgrade' ) ) {
 			const selectedOption = element.options[ element.selectedIndex ];
-			if ( selectedOption && selectedOption.dataset.upgrade ) {
+			if ( selectedOption?.dataset?.upgrade ) {
 				element = selectedOption;
 			}
 		}

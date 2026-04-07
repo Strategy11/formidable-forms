@@ -274,7 +274,7 @@ class FrmFormsController {
 
 		do_action( 'frm_before_update_form_settings', $id );
 
-		$antispam_was_on = self::antispam_was_on( $id );
+		$antispam_was_on = self::antispam_was_on( $id ); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 
 		FrmForm::update( $id, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
@@ -1080,9 +1080,8 @@ class FrmFormsController {
 		// In a form with 66 HTML fields, this saves 0.5 seconds on page load time, tested locally.
 		if ( ! isset( self::$formidable_tinymce_button ) ) {
 			FrmAppHelper::load_admin_wide_js();
-			$menu_name                       = FrmAppHelper::get_menu_name();
 			$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-			self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( FrmAppHelper::get_menu_name() ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 		echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -2317,9 +2316,7 @@ class FrmFormsController {
 	 * @since 4.05.02
 	 */
 	private static function move_menu_to_footer() {
-		$settings = FrmAppHelper::get_settings();
-
-		if ( empty( $settings->admin_bar ) ) {
+		if ( empty( FrmAppHelper::get_settings()->admin_bar ) ) {
 			remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
 		}
 	}
@@ -3562,6 +3559,11 @@ class FrmFormsController {
 		wp_enqueue_script( 'formidable' );
 
 		FrmHoneypot::maybe_print_honeypot_js();
+
+		if ( ! method_exists( 'FrmProFormsHelper', 'load_currency_js' ) ) {
+			// Load currency JS if Pro is not installed.
+			FrmFormsHelper::load_currency_js();
+		}
 	}
 
 	/**
@@ -3693,7 +3695,7 @@ class FrmFormsController {
 
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$html             = FrmAppHelper::clip(
+		$html = FrmAppHelper::clip(
 			function () {
 				FrmAppHelper::maybe_autocomplete_pages_options(
 					array(
@@ -3704,11 +3706,10 @@ class FrmFormsController {
 				);
 			}
 		);
-		$post_type_object = get_post_type_object( 'page' );
 		wp_send_json(
 			array(
 				'html'          => $html,
-				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
+				'edit_page_url' => admin_url( sprintf( get_post_type_object( 'page' )->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
 	}
