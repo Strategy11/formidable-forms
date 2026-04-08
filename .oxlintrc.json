@@ -103,6 +103,8 @@
 		"react/jsx-props-no-spreading": "off",
 		"react/no-array-index-key": "off",
 		"react/no-multi-comp": "off",
+		"react/no-class-component": "off",
+		"react/naming-convention-use-state": "off",
 		"react/react-in-jsx-scope": "off",
 		"react/self-closing-comp": "off",
 
