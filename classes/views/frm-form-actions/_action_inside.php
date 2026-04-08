@@ -142,8 +142,8 @@ if ( $use_logging ) {
 	if ( isset( $upgrading['url'] ) ) {
 		?>
 		<p>
-			<a href="javascript:void(0)" class="frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_solid_icon frm_svg15', array( 'aria-hidden' => 'true' ) ); ?>
+			<a href="javascript:void(0)" class="frm_show_upgrade frm-h-stack-xs" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_solid_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
 			</a>
 		</p>
