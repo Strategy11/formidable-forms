@@ -998,7 +998,7 @@ class FrmFormAction {
 	 */
 	public function render_conditional_logic_call_to_action( $action_key = '' ) {
 		$params = array(
-			'class'        => 'frm-h-stack-xs frm-bt-200 frm-pt-md frm-my-xs frm_show_upgrade',
+			'class'        => 'frm-h-stack-xs frm-bt-200 frm-py-md frm_show_upgrade',
 			'data-upgrade' => $this->get_upgrade_text(),
 			'data-medium'  => 'conditional-' . $this->id_base,
 		);
