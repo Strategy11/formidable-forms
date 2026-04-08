@@ -28,4 +28,4 @@ jobs:
         run: npm install oxlint@^1.51.0 --no-package-lock
 
       - name: Run Oxlint
-        run: ./node_modules/.bin/oxlint .
+        run: ./node_modules/.bin/oxlint . --format unix --max-diagnostics 1000
