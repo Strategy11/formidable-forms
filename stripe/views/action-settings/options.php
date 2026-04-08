@@ -12,7 +12,7 @@ if ( ! $show_layout_setting ) {
 ?>
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'plan_id' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['plan_id'] ); ?>" />
 <div <?php FrmAppHelper::array_to_html_params( $layout_setting_wrapper_atts, true ); ?>>
-	<p class="frm6">
+	<p class="frm6 frm-mt-0">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'layout' ) ); ?>">
 			<?php esc_html_e( 'Layout', 'formidable' ); ?>
 		</label>

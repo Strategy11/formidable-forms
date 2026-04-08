@@ -97,9 +97,8 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	</p>
 
 	<p>
+		<span class="frm-block frm-mb-6"><?php esc_html_e( 'Gateway(s)', 'formidable' ); ?></span>
 		<?php
-		esc_html_e( 'Gateway(s)', 'formidable' );
-
 		foreach ( $gateways as $gateway_name => $gateway ) {
 			$gateway_classes  = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
 			$gateway_classes .= $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ? ' frm_hidden' : '';
