@@ -12,7 +12,7 @@ if ( ! empty( $form_action->post_content['plain_text'] ) ) {
 
 $default_style = FrmEmailStylesController::get_default_email_style();
 ?>
-<p class="frm-email-style-container">
+<p class="frm-email-style-container frm-mb-md">
 	<label for="frm-email-style-value">
 		<?php esc_html_e( 'Email Style', 'formidable' ); ?>
 	</label>
@@ -43,7 +43,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	</select>
 </p>
 
-<p class="frm_bcc_cc_container">
+<p class="frm_bcc_cc_container frm-mb-0">
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php echo esc_attr( ! empty( $form_action->post_content['cc'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="cc">
 		<?php esc_html_e( 'CC', 'formidable' ); ?>
 	</a>
@@ -52,26 +52,26 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	</a>
 </p>
 
-<p class="frm_has_shortcodes frm_to_row frm_email_row">
-	<label for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>">
-		<?php esc_html_e( 'To', 'formidable' ); ?>
+<p class="frm_has_shortcodes frm_to_row frm_email_row frm-mb-md">
+	<label class="frm-h-stack-xs" for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>">
+		<span><?php esc_html_e( 'To', 'formidable' ); ?></span>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
 </p>
 
-<p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>">
-	<label for="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>">
-		<?php esc_html_e( 'CC', 'formidable' ); ?>
+<p class="frm_has_shortcodes frm_cc_row frm_email_row frm-mb-md<?php echo ! empty( $form_action->post_content['cc'] ) ? '' : ' frm_hidden'; ?>">
+	<label class="frm-h-stack-xs" for="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>">
+		<span><?php esc_html_e( 'CC', 'formidable' ); ?></span>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'cc' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'cc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['cc'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>" />
 	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="cc"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon frm_svg14' ); ?></a>
 </p>
 
-<p class="frm_has_shortcodes frm_bcc_row frm_email_row<?php echo empty( $form_action->post_content['bcc'] ) ? ' frm_hidden' : ''; ?>">
-	<label for="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>">
-		<?php esc_html_e( 'BCC', 'formidable' ); ?>
+<p class="frm_has_shortcodes frm_bcc_row frm_email_row frm-mb-md<?php echo ! empty( $form_action->post_content['bcc'] ) ? '' : ' frm_hidden'; ?>">
+	<label class="frm-h-stack-xs" for="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>">
+		<span><?php esc_html_e( 'BCC', 'formidable' ); ?></span>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'bcc' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 
@@ -79,13 +79,13 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="bcc"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon frm_svg14' ); ?></a>
 </p>
 
-<p class="frm_reply_to_container">
+<p class="frm_reply_to_container frm-mb-0">
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_reply_to_button <?php echo ( ! empty( $form_action->post_content['reply_to'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="reply_to">
 		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
 	</a>
 </p>
 
-<p class="frm_has_shortcodes frm_from_row frm_email_row">
+<p class="frm_has_shortcodes frm_from_row frm_email_row frm-mb-md">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>">
 		<?php esc_html_e( 'From', 'formidable' ); ?>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'from' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
@@ -94,11 +94,11 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'from' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" />
 </p>
 
-<p class="frm_error_style frm_from_to_match_row <?php echo ( $form_action->post_content['from'] === $form_action->post_content['email_to'] ? '' : 'frm_hidden' ); ?>" data-emailrow="from_to_warning">
+<p class="frm_error_style frm_from_to_match_row frm-my-md <?php echo ( $form_action->post_content['from'] === $form_action->post_content['email_to'] ? '' : 'frm_hidden' ); ?>" data-emailrow="from_to_warning">
 	<?php esc_html_e( 'Warning: If you are sending an email to the user, the To and From fields should not match.', 'formidable' ); ?>
 </p>
 
-<p class="frm_has_shortcodes frm_reply_to_row frm_email_row<?php echo empty( $form_action->post_content['reply_to'] ) ? ' frm_hidden' : ''; ?>">
+<p class="frm_has_shortcodes frm_reply_to_row frm_email_row frm-mb-md<?php echo ! empty( $form_action->post_content['reply_to'] ) ? '' : ' frm_hidden'; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'reply_to' ) ); ?>">
 		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'reply_to' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
@@ -108,7 +108,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="reply_to"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon frm_svg14' ); ?></a>
 </p>
 
-<p class="frm_has_shortcodes frm_email_row">
+<p class="frm_has_shortcodes frm_email_row frm-mb-md">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_subject' ) ); ?>">
 		<?php esc_html_e( 'Subject', 'formidable' ); ?>
 		<span <?php FrmAppHelper::maybe_add_tooltip( 'email_subject', '', $form->name ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
@@ -116,7 +116,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_subject' ) ); ?>" class="frm_not_email_subject large-text" id="<?php echo esc_attr( $this->get_field_id( 'email_subject' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_subject'] ); ?>" />
 </p>
 
-<p class="frm_has_shortcodes">
+<p class="frm_has_shortcodes frm-mb-md">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>">
 		<?php esc_html_e( 'Message', 'formidable' ); ?>
 	</label>
@@ -154,7 +154,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	?>
 </p>
 
-<label for="<?php echo esc_attr( $this->get_field_id( 'inc_user_info' ) ); ?>">
+<label class="frm-h-stack-xs frm-my-md" for="<?php echo esc_attr( $this->get_field_id( 'inc_user_info' ) ); ?>">
 	<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'inc_user_info' ) ); ?>" class="frm_not_inc_user_info" id="<?php echo esc_attr( $this->get_field_id( 'inc_user_info' ) ); ?>" value="1" <?php checked( $form_action->post_content['inc_user_info'], 1 ); ?> />
 	<?php if ( FrmAppHelper::ips_saved() ) { ?>
 		<?php esc_html_e( 'Append IP Address, Browser, and Referring URL to message', 'formidable' ); ?>
