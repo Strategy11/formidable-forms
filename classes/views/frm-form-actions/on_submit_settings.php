@@ -59,7 +59,7 @@ if ( $col_count <= 4 ) {
 				/>
 				<label class="frm-cursor-pointer" for="<?php echo esc_attr( $input_id ); ?>">
 					<?php FrmAppHelper::icon_by_class( $type_data['icon'] ); ?>
-					<?php echo esc_html( $type_data['label'] ); ?>
+					<span><?php echo esc_html( $type_data['label'] ); ?></span>
 				</label>
 			</div>
 		<?php endforeach; ?>
