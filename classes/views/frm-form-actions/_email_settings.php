@@ -12,7 +12,7 @@ if ( ! empty( $form_action->post_content['plain_text'] ) ) {
 
 $default_style = FrmEmailStylesController::get_default_email_style();
 ?>
-<p class="frm-email-style-container frm-mb-md">
+<p class="frm-email-style-container frm-mt-xs frm-mb-md">
 	<label for="frm-email-style-value">
 		<?php esc_html_e( 'Email Style', 'formidable' ); ?>
 	</label>

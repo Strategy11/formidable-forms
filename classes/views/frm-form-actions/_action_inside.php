@@ -17,7 +17,7 @@ do_action( 'frm_action_settings_before_action_name', $form_action );
 ?>
 
 <div class="frm_grid_container">
-	<p class="frm6 frm_form_field frm-mb-xs">
+	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>">
 			<?php esc_html_e( 'Action Name', 'formidable' ); ?>
 			<span <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
@@ -42,7 +42,7 @@ if ( count( $action_control->action_options['event'] ) === 1 || $action_control-
 	}
 } else {
 	?>
-	<p class="frm6 frm_form_field frm-mb-xs">
+	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 			<?php esc_html_e( 'Trigger this action when', 'formidable' ); ?>
 		</label>
@@ -141,7 +141,7 @@ if ( $use_logging ) {
 
 	if ( isset( $upgrading['url'] ) ) {
 		?>
-		<p class="frm-mb-xs">
+		<p>
 			<a href="javascript:void(0)" class="frm_show_upgrade frm-h-stack-xs" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_solid_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
