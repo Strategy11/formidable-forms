@@ -26,7 +26,7 @@ $single_action_attrs = array_merge(
 					FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_svg15', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) );
 				}
 				?>
-				<span class="frm-font-medium"><?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?></span>
+				<span class="frm-font-medium frm-white-space-nowrap"><?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?></span>
 				<?php if ( ! empty( $action_control->action_options['is_new'] ) ) { ?>
 					<?php FrmAppHelper::show_pill_text(); ?>
 				<?php } ?>

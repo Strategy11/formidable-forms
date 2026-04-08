@@ -103,7 +103,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->post_excerpt, apply_filters( 'frm_autoresponder_allowed_actions', array( 'email', 'twilio', 'api', 'register' ) ), true ) ) {
 	$upgrading = FrmAddonsController::install_link( 'autoresponder' );
 	$params    = array(
-		'class'        => 'frm-h-stack-xs frm-bt-200 frm-pt-md frm-my-xs frm_show_upgrade',
+		'class'        => 'frm-h-stack-xs frm-bt-200 frm-py-md frm-mb-xs frm_show_upgrade',
 		'data-upgrade' => __( 'Form action automations', 'formidable' ),
 		'data-medium'  => 'action-automation',
 	);
@@ -111,7 +111,6 @@ if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->po
 	if ( isset( $upgrading['url'] ) ) {
 		$params['data-oneclick'] = json_encode( $upgrading );
 	} else {
-		$params['class']        .= ' frm_noallow';
 		$params['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
 	}
 	?>

@@ -49,7 +49,7 @@ if ( $col_count <= 4 ) {
 		foreach ( $types as $type => $type_data ) :
 			$input_id = $this->get_field_id( 'success_action_' . $type );
 			?>
-			<div class="frm_on_submit_type frm_form_field <?php echo esc_attr( $col_class ); ?>">
+			<div class="frm_on_submit_type frm_form_field frm-m-0 <?php echo esc_attr( $col_class ); ?>">
 				<input
 					type="radio"
 					id="<?php echo esc_attr( $input_id ); ?>"
@@ -57,7 +57,7 @@ if ( $col_count <= 4 ) {
 					value="<?php echo esc_attr( $type ); ?>"
 					<?php checked( $type, $success_action ); ?>
 				/>
-				<label for="<?php echo esc_attr( $input_id ); ?>">
+				<label class="frm-cursor-pointer" for="<?php echo esc_attr( $input_id ); ?>">
 					<?php FrmAppHelper::icon_by_class( $type_data['icon'] ); ?>
 					<?php echo esc_html( $type_data['label'] ); ?>
 				</label>

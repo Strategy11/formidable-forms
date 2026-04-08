@@ -98,7 +98,7 @@ $single_action_attrs = array(
 									<div class="frm-flex-col">
 										<h3 class="frm-h-stack-xs frm-text-md frm-capitalize">
 											<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_svg15', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
-											<span class="frm-font-medium"><?php echo esc_html( $action ); ?></span>
+											<span class="frm-font-medium frm-white-space-nowrap"><?php echo esc_html( $action ); ?></span>
 											<?php
 											if ( ! empty( $group['new_actions'] ) && in_array( $action, $group['new_actions'], true ) ) {
 												FrmAppHelper::show_pill_text();
