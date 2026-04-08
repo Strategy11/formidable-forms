@@ -19,7 +19,7 @@
 		&[style*="display: none"] {
 
 			~ .frm-addon-status,
-			~ .frm-activate-addon {
+			~ a.button {
 				margin-top: var(--gap-sm);
 			}
 		}
