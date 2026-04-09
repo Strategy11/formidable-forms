@@ -9,7 +9,7 @@ extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 $is_loaded_via_ajax = $is_loaded_via_ajax ?? false;
 FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
 
-$important        = empty( $important_style ) ? '' : ' !important';
+$important        = ! empty( $important_style ) ? ' !important' : '';
 $submit_bg_img    = FrmStylesHelper::get_submit_image_bg_url( $settings );
 $use_chosen_js    = $use_chosen_js ?? FrmStylesHelper::use_chosen_js();
 $pro_is_installed = $pro_is_installed ?? FrmAppHelper::pro_is_installed();
@@ -210,7 +210,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	<?php
 	echo esc_html( $submit_bg_color );
 
-	if ( ! empty( $submit_bg_img ) ) {
+	if ( $submit_bg_img ) {
 		echo esc_html( ' url(' . $submit_bg_img . ')' );
 	}
 	echo esc_html( $important );
@@ -248,7 +248,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 	<?php } ?>
 
-	<?php if ( empty( $submit_bg_img ) ) { ?>
+	<?php if ( ! $submit_bg_img ) { ?>
 		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
 		<?php } ?>

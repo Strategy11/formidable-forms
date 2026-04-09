@@ -157,7 +157,7 @@ class FrmFormMigratorsHelper {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( $install['installed'] ) {
 			?>
-			<a rel="<?php echo esc_attr( $install['importer'] ); ?>" class="button frm-activate-addon <?php echo esc_attr( $primary . ( empty( $install['link'] ) ? 'frm_hidden' : '' ) ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+			<a rel="<?php echo esc_attr( $install['importer'] ); ?>" class="button frm-activate-addon <?php echo esc_attr( $primary . ( ! empty( $install['link'] ) ? '' : 'frm_hidden' ) ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php
 			if ( $label === 'auto' ) {
 				/* translators: %s: Name of the plugin */

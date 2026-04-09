@@ -71,9 +71,8 @@ class FrmDashboardController {
 	 * @return FrmDashboardHelper
 	 */
 	public static function get_dashboard_helper() {
-		$latest_available_form = FrmForm::get_latest_form();
-		$total_payments        = self::view_args_payments();
-		$counters_value        = array(
+		$total_payments = self::view_args_payments();
+		$counters_value = array(
 			'forms'   => FrmForm::get_forms_count(),
 			'entries' => FrmEntry::get_entries_count(),
 		);
@@ -81,7 +80,7 @@ class FrmDashboardController {
 		return new FrmDashboardHelper(
 			array(
 				'counters'           => array(
-					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
+					'counters' => self::view_args_counters( FrmForm::get_latest_form(), $counters_value ),
 				),
 				'license'            => array(),
 				'get_free_templates' => array(),
@@ -97,7 +96,7 @@ class FrmDashboardController {
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
 				'payments'           => array(
-					'show-placeholder' => empty( $total_payments ),
+					'show-placeholder' => ! $total_payments,
 					'placeholder'      => array(
 						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
 						'cta'  => array(
@@ -359,9 +358,8 @@ class FrmDashboardController {
 	 * @return bool
 	 */
 	public static function welcome_banner_has_closed() {
-		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
-		return $banner_closed_by_users && in_array( $user_id, $banner_closed_by_users, true );
+		return $banner_closed_by_users && in_array( get_current_user_id(), $banner_closed_by_users, true );
 	}
 
 	/**
@@ -381,8 +379,7 @@ class FrmDashboardController {
 	 * @return bool
 	 */
 	public static function email_is_subscribed( $email ) {
-		$subscribed_emails = self::get_subscribed_emails();
-		return in_array( $email, $subscribed_emails, true );
+		return in_array( $email, self::get_subscribed_emails(), true );
 	}
 
 	/**

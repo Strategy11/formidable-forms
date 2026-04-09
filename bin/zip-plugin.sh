@@ -39,6 +39,8 @@ zip -r $zipname $destination \
 	-x "*/.editorconfig" \
 	-x "*/.eslintignore" \
 	-x "*/.eslintrc.json" \
+	-x "*/eslint.config.mjs" \
+	-x "*/.eslintrc" \
 	-x "*/.git" \
 	-x "*/.git/*" \
 	-x "*/.gitattributes" \

@@ -84,7 +84,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 		echo '<option ';
 		FrmAppHelper::array_to_html_params( $option_params, true );
-		selected( $selected );
+		selected( (bool) $selected );
 		echo '>';
 		echo esc_html( $opt === '' ? ' ' : $opt );
 		FrmFieldsHelper::after_choice_input( $field, $opt_key );

@@ -358,7 +358,7 @@ class FrmAddon {
 	 *
 	 * @since 6.8.3
 	 *
-	 * @param bool $is_valid If license activation was successful.
+	 * @param bool|string $is_valid If license activation was successful. May be a string 'valid'.
 	 *
 	 * @return void
 	 */
@@ -378,7 +378,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @param bool $is_active
+	 * @param bool|string $is_active Value may include 'valid'.
 	 *
 	 * @return void
 	 */
@@ -692,11 +692,16 @@ class FrmAddon {
 		}
 
 		// Only check weekly.
-		if ( $this->checked_recently( '7 days', 'valid' ) || $this->is_running() ) {
+		if ( $this->checked_recently( '7 days' ) || $this->is_running() ) {
 			return;
 		}
 
 		$response = $this->get_license_status();
+
+		if ( ! empty( $this->save_status['response_code'] ) && 429 === $this->save_status['response_code'] ) {
+			// If we got a rate limit response, don't clear the license.
+			return;
+		}
 
 		if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] || 'missing' === $response['status'] ) {
 			$this->clear_license();
@@ -706,29 +711,43 @@ class FrmAddon {
 	/**
 	 * Has this been checked too recently?
 	 *
-	 * @param string $time            ie. '1 day'.
-	 * @param string $required_status Return false if the last check does not match. ie 'valid'.
+	 * @param string $time ie. '1 day'.
 	 *
-	 * @return bool
+	 * @return bool True if the last check time was recent.
 	 */
-	private function checked_recently( $time, $required_status = '' ) {
+	private function checked_recently( $time ) {
 		$last_checked = $this->last_checked();
-		$is_429       = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
 
+		if ( ! $last_checked ) {
+			return false;
+		}
+
+		$is_429 = isset( $last_checked['response_code'] ) && 429 === $last_checked['response_code'];
+
+		// If the last check was a a rate limit error, adjust the check time.
 		if ( $is_429 ) {
-			// If the last check was a a rate limit, we'll need to check again sooner.
-			$time            = '5 minutes';
-			$required_status = '';
+			// If the time is 2 minutes, do not adjust it so people
+			// can still try to activate again in 2 minutes (and not 5).
+			switch ( $time ) {
+				case '7 days':
+					// 7 days is used to check for license revocation.
+					$time = '30 minutes';
+					break;
+				case '1 day':
+					// 1 day is used for defined license constants.
+					// The response won't change often, so we can check less frequently.
+					$time = '2 hours';
+					break;
+			}
 		}
 
-		if ( $required_status && ( ! isset( $last_checked['status'] ) || $last_checked['status'] !== $required_status ) ) {
-			// If the last check was invalid, we don't need to check again.
-			return true;
+		if ( empty( $last_checked['time'] ) ) {
+			// If we do not have time, data is really old.
+			return false;
 		}
 
-		$checked_time = $last_checked['time'] ?? false;
-		$time_ago     = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
-		return $checked_time && $checked_time > $time_ago;
+		$time_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
+		return $last_checked['time'] > $time_ago;
 	}
 
 	/**
@@ -748,10 +767,15 @@ class FrmAddon {
 	}
 
 	/**
+	 * @since x.x Added the $is_valid param.
+	 *
+	 * @param bool $is_valid
+	 *
 	 * @return void
 	 */
-	private function update_last_checked() {
-		$this->save_response['time'] = gmdate( 'Y-m-d H:i:s' );
+	private function update_last_checked( $is_valid ) {
+		$this->save_response['time']     = gmdate( 'Y-m-d H:i:s' );
+		$this->save_response['is_valid'] = $is_valid;
 
 		if ( is_multisite() ) {
 			update_site_option( $this->transient_key(), $this->save_response );
@@ -823,6 +847,8 @@ class FrmAddon {
 		$response['message'] = '';
 		$response['success'] = false;
 
+		$is_valid = false;
+
 		if ( $response['error'] ) {
 			$response['message'] = $response['status'];
 		} else {
@@ -834,16 +860,15 @@ class FrmAddon {
 				$response['message'] = FrmAppHelper::kses( $response['status'], array( 'a' ) );
 			}
 
-			$is_valid = false;
-
 			if ( 'valid' === $response['status'] ) {
 				$is_valid            = 'valid';
 				$response['success'] = true;
 			}
+
 			$this->maybe_set_active( $is_valid );
 		}
 
-		$this->update_last_checked();
+		$this->update_last_checked( (bool) $is_valid );
 
 		return $response;
 	}
@@ -883,6 +908,8 @@ class FrmAddon {
 			return $response;
 		}
 
+		$is_valid = false;
+
 		try {
 			$response['error'] = false;
 			$license_data      = $this->send_mothership_request( 'activate_license' );
@@ -892,6 +919,7 @@ class FrmAddon {
 				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
 					$response['status']          = $license_data['license'];
 					$this->save_status['status'] = $license_data['license'];
+					$is_valid                    = 'valid' === $license_data['license'];
 				}
 			} else {
 				$response['status'] = $license_data;
@@ -900,7 +928,7 @@ class FrmAddon {
 			$response['status'] = $e->getMessage();
 		}
 
-		$this->update_last_checked();
+		$this->update_last_checked( $is_valid );
 		$this->done_running();
 		return $response;
 	}
@@ -982,8 +1010,7 @@ class FrmAddon {
 	private static function set_license_from_post() {
 		$plugin_slug          = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$this_plugin          = self::get_addon( $plugin_slug );
-		$license              = $this_plugin->get_license();
-		$this_plugin->license = $license;
+		$this_plugin->license = $this_plugin->get_license();
 		return $this_plugin;
 	}
 
@@ -1011,12 +1038,14 @@ class FrmAddon {
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 
-		$resp              = wp_remote_post(
+		$resp                                 = wp_remote_post(
 			$this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ),
 			$arg_array
 		);
-		$body              = wp_remote_retrieve_body( $resp );
-		$this->save_status = array( 'response_code' => wp_remote_retrieve_response_code( $resp ) );
+		$response_code                        = wp_remote_retrieve_response_code( $resp );
+		$body                                 = wp_remote_retrieve_body( $resp );
+		$this->save_status                    = array( 'response_code' => $response_code );
+		$this->save_response['response_code'] = $response_code;
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
 

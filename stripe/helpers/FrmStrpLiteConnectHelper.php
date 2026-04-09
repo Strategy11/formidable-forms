@@ -702,7 +702,7 @@ class FrmStrpLiteConnectHelper {
 		$success = false !== $data;
 
 		if ( ! $success ) {
-			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
+			return self::$latest_error_from_stripe_connect ? self::$latest_error_from_stripe_connect : false;
 		}
 
 		return ! empty( $data->customer_id ) ? $data->customer_id : false;
@@ -814,9 +814,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|object
 	 */
 	public static function get_customer_subscriptions() {
-		$user_id     = get_current_user_id();
 		$meta_name   = FrmStrpLiteAppHelper::get_customer_id_meta_name();
-		$customer_id = get_user_meta( $user_id, $meta_name, true );
+		$customer_id = get_user_meta( get_current_user_id(), $meta_name, true );
 		$data        = self::post_with_authenticated_body( 'get_customer_subscriptions', compact( 'customer_id' ) );
 
 		return false === $data ? false : $data->subscriptions;
@@ -952,11 +951,10 @@ class FrmStrpLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
 

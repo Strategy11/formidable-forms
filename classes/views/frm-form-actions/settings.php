@@ -56,6 +56,8 @@ $single_action_attrs = array(
 				if ( ! isset( $group['actions'] ) ) {
 					$group['actions'] = array();
 				}
+
+				$icon_atts = isset( $group['color'] ) ? array( 'style' => '--primary-700:' . $group['color'] ) : array();
 				?>
 				<ul class="frm_actions_list frm-list-grid-layout frm-m-0">
 					<?php

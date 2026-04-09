@@ -49,11 +49,13 @@ li.frm_noallow.button,
 	opacity: 0.5;
 }
 
-li.frm_noallow.button.frm_show_upgrade {
+li.frm_noallow.button.frm_show_upgrade,
+li.frm_noallow.button.frm_show_update {
 	cursor: pointer;
 }
 
-.field_type_list li.frm_noallow.button.frm_show_upgrade:hover {
+.field_type_list li.frm_noallow.button.frm_show_upgrade:hover,
+.field_type_list li.frm_noallow.button.frm_show_update:hover {
 	border-color: inherit;
 }
 

@@ -150,7 +150,7 @@ class FrmEntryValidate {
 
 		);
 		$args  = wp_parse_args( $args, $defaults );
-		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
+		$value = ! empty( $args['parent_field_id'] ) ? $values : ( $values['item_meta'][ $args['id'] ] ?? '' );
 
 		// Check for values in "Other" fields
 		FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );
@@ -403,7 +403,7 @@ class FrmEntryValidate {
 
 		if ( false !== $item_name ) {
 			// Item name has a max length of 255 characters so truncate it so it doesn't fail to save in the database.
-			$_POST['item_name'] = substr( $item_name, 0, 255 );
+			$_POST['item_name'] = FrmAppHelper::truncate( $item_name, 255, 1, '', true );
 		}
 	}
 
@@ -626,8 +626,7 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function is_spam_bot() {
-		$ip = FrmAppHelper::get_ip_address();
-		return empty( $ip );
+		return ! FrmAppHelper::get_ip_address();
 	}
 
 	/**

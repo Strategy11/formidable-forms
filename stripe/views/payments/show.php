@@ -160,7 +160,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="misc-pub-section">
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-payments&action=edit&id=' . $payment->id ) ); ?>" title="<?php esc_attr_e( 'Edit', 'formidable' ); ?>">
 								<?php
-								FrmAppHelper::icon_by_class( 'frm_icon_font frm_pencil_icon' );
+								FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon' );
 								echo ' ';
 								esc_html_e( 'Edit Payment', 'formidable' );
 								?>

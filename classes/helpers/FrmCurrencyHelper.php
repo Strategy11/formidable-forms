@@ -10,11 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmCurrencyHelper {
 
 	/**
-	 * @param string $currency
+	 * Gets the currency data from the currency code.
+	 *
+	 * @since x.x The first parameter is optional.
+	 *
+	 * @param string|null $currency Currency code. Default is `null`, which use the currency in the global settings.
 	 *
 	 * @return array
 	 */
-	public static function get_currency( $currency ) {
+	public static function get_currency( $currency = null ) {
+		if ( ! $currency ) {
+			$currency = trim( FrmAppHelper::get_settings()->currency );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'USD';
+		}
+
 		$currency   = strtoupper( $currency );
 		$currencies = self::get_currencies();
 
@@ -40,6 +52,107 @@ class FrmCurrencyHelper {
 	 */
 	public static function is_currency_format( $format_value ) {
 		return in_array( $format_value, array( 'currency', 'number' ), true );
+	}
+
+	/**
+	 * Adds the currency symbol to the given amount.
+	 *
+	 * @param float|string $amount
+	 * @param array|null   $currency
+	 *
+	 * @return string
+	 */
+	public static function format_price( $amount, $currency = null ) {
+		if ( ! $currency ) {
+			$currency = self::get_currency();
+		}
+
+		if ( is_string( $amount ) ) {
+			$amount = floatval( self::prepare_price( $amount, $currency ) );
+		}
+
+		$amount = number_format( $amount, $currency['decimals'], $currency['decimal_separator'], $currency['thousand_separator'] );
+
+		if ( '' !== $currency['symbol_left'] ) {
+			$amount = $currency['symbol_left'] . $currency['symbol_padding'] . $amount;
+		}
+
+		if ( '' !== $currency['symbol_right'] ) {
+			$amount .= $currency['symbol_padding'] . $currency['symbol_right'];
+		}
+
+		return $amount;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $price
+	 * @param array  $currency
+	 *
+	 * @return float|string
+	 */
+	public static function prepare_price( $price, $currency ) {
+		$price = trim( $price );
+
+		if ( ! $price ) {
+			return 0;
+		}
+
+		preg_match_all( '/[\-]*[0-9,.]*\.?\,?[0-9]+/', $price, $matches );
+		$price = $matches ? end( $matches[0] ) : 0;
+
+		if ( ! $price ) {
+			return 0;
+		}
+
+		$price = self::maybe_use_decimal( $price, $currency );
+		return str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $amount
+	 * @param array  $currency
+	 *
+	 * @return string
+	 */
+	private static function maybe_use_decimal( $amount, $currency ) {
+		if ( $currency['thousand_separator'] !== '.' ) {
+			return $amount;
+		}
+
+		$amount_parts     = explode( '.', $amount );
+		$used_for_decimal = count( $amount_parts ) === 2 && in_array( strlen( $amount_parts[1] ), array( 1, 2 ), true );
+
+		if ( $used_for_decimal ) {
+			return str_replace( '.', $currency['decimal_separator'], $amount );
+		}
+
+		return $amount;
+	}
+
+	/**
+	 * If the currency is needed for this form, add it to the global.
+	 * This is later included in the footer.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $form_id Form ID. This is used for Pro compatibility.
+	 *
+	 * @return void
+	 */
+	public static function add_currency_to_global( $form_id ) {
+		global $frm_vars;
+
+		if ( ! isset( $frm_vars['currency'] ) ) {
+			$frm_vars['currency'] = array();
+		}
+
+		if ( ! isset( $frm_vars['currency'][ $form_id ] ) ) {
+			$frm_vars['currency'][ $form_id ] = self::get_currency();
+		}
 	}
 
 	/**

@@ -7,7 +7,7 @@ if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
 	if ( ! empty( $css ) ) {
-		echo strip_tags( $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo strip_tags( FrmStylesHelper::maybe_scope_custom_css_in_cached_output( $css ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
@@ -20,7 +20,7 @@ if ( ! isset( $frm_style ) ) {
 $styles           = $frm_style->get_all();
 $default_style    = $frm_style->get_default_style( $styles );
 $defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
-$important        = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important        = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
 $use_chosen_js    = FrmStylesHelper::use_chosen_js();
 
@@ -228,7 +228,7 @@ legend.frm_hidden{
 	font-weight: var(--field-weight);
 }
 
-<?php if ( ! empty( $important ) ) : ?>
+<?php if ( $important ) : ?>
 	<?php if ( $use_chosen_js ) { ?>
 	.with_frm_style .chosen-container-multi .chosen-choices,
 	.with_frm_style .chosen-container-single .chosen-single,
@@ -735,7 +735,7 @@ foreach ( $styles as $style ) {
 }
 
 // Set it again since it may have been overridden.
-$important = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 ?>
 
 .frm_ajax_loading{
@@ -1671,4 +1671,8 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 }
 <?php
 
-echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+$frm_custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
+if ( $frm_custom_css ) {
+	echo FrmStylesHelper::maybe_scope_css_for_admin( $frm_custom_css ) . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
