@@ -7958,7 +7958,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Insert a new conditional logic row into a form action via AJAX.
 	 *
-	 * @param {number} id                  The ID of the form action.
+	 * @param {number}      id             The ID of the form action.
 	 * @param {HTMLElement} contextElement The context element that triggered the insertion.
 	 */
 	function insertFormLogicRow( id, contextElement ) {

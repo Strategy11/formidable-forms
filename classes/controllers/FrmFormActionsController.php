@@ -953,9 +953,11 @@ class FrmFormActionsController {
 				'frm_' . $key . '_action_options',
 				function ( $options ) {
 					$options['active'] = false;
+
 					if ( ! str_contains( $options['classes'], 'frm_show_upgrade' ) ) {
 						$options['classes'] .= ' frm_show_upgrade';
 					}
+
 					return $options;
 				}
 			);

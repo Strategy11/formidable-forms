@@ -164,6 +164,7 @@
 		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
 		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntryFormatter.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
