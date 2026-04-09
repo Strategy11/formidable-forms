@@ -136,9 +136,7 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	?>
 </div>
 <div class="frm_grid_container">
-	<h3>
-		<?php esc_html_e( 'Customer Information', 'formidable' ); ?>
-	</h3>
+	<h3 class="frm-mt-0"><?php esc_html_e( 'Customer Information', 'formidable' ); ?></h3>
 
 	<p class="frm6">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>">
