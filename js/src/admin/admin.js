@@ -9645,13 +9645,16 @@ window.frmAdminBuildJS = function() {
 				const hidden = cont.style.display;
 				cont.style.display = hidden === 'none' ? 'block' : 'none';
 			}
-		} else {
-			if ( show !== undefined ) {
-				show ? cname.show() : cname.hide();
+		} else if ( show !== undefined ) {
+			if ( show ) {
+				cname.show();
 			} else {
-				const vis = cname.is( ':visible' );
-				vis ? cname.hide() : cname.show();
+				cname.hide();
 			}
+		} else if ( cname.is( ':visible' ) ) {
+			cname.hide();
+		} else {
+			cname.show();
 		}
 	}
 
