@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $show_layout_setting         = in_array( 'stripe', (array) $form_action->post_content['gateway'], true );
-$layout_setting_wrapper_atts = array( 'class' => 'frm_grid_container show_stripe' );
+$layout_setting_wrapper_atts = array( 'class' => 'frm_grid_container show_stripe frm-mb-xs' );
 
 if ( ! $show_layout_setting ) {
 	$layout_setting_wrapper_atts['class'] .= ' frm_hidden';

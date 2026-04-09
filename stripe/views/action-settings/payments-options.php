@@ -135,7 +135,7 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	);
 	?>
 </div>
-<div class="frm_grid_container">
+<div class="frm_grid_container frm-mb-xs">
 	<h3 class="frm-mt-0"><?php esc_html_e( 'Customer Information', 'formidable' ); ?></h3>
 
 	<p class="frm6">
