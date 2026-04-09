@@ -76,13 +76,14 @@ $single_action_attrs = array(
 						}
 
 						$icon_atts = array();
+
 						if ( isset( $group['color'] ) ) {
 							$icon_atts = array(
 								'style' => '--primary-700:' . $group['color'],
 							);
 						}
 
-						$action_icon = isset( $group['icon'] ) ? $group['icon'] : 'frmfont frm_plus_icon';
+						$action_icon = $group['icon'] ?? 'frmfont frm_plus_icon';
 
 						$single_action_attrs['data-upgrade'] = sprintf(
 							/* translators: %s: Name of form action */

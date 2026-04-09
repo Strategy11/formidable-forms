@@ -994,6 +994,7 @@ class FrmFormAction {
 
 	/**
 	 * @param string $action_key The unique key for this action instance.
+	 *
 	 * @return void
 	 */
 	public function render_conditional_logic_call_to_action( $action_key = '' ) {

@@ -20,13 +20,13 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'     => 'frmfont frm_checkmark_circle_icon',
-			'active'      => true,
-			'event'       => array( 'create' ),
-			'limit'       => 99,
-			'priority'    => 9,
-			'color'       => '#42C1B2',
-			'keywords'    => __( 'redirect, success, confirmation, submit', 'formidable' ),
+			'classes'  => 'frmfont frm_checkmark_circle_icon',
+			'active'   => true,
+			'event'    => array( 'create' ),
+			'limit'    => 99,
+			'priority' => 9,
+			'color'    => '#42C1B2',
+			'keywords' => __( 'redirect, success, confirmation, submit', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
 

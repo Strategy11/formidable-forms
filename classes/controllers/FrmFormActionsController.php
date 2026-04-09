@@ -352,8 +352,8 @@ class FrmFormActionsController {
 			}
 
 			$learn_more_slug = ! empty( $action_control->action_options['learn-more'] )
-				? $action_control->action_options['learn-more']
-				: self::get_learn_more_slug( $action_control->id_base );
+			? $action_control->action_options['learn-more']
+			: self::get_learn_more_slug( $action_control->id_base );
 
 			if ( $learn_more_slug ) {
 				$data['data-learn-more'] = FrmAppHelper::get_doc_url(
@@ -526,6 +526,7 @@ class FrmFormActionsController {
 
 		$action_type  = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 		$lite_actions = array_fill_keys( self::get_lite_actions(), true );
+
 		if ( ! FrmAppHelper::pro_is_connected() && ! isset( $lite_actions[ $action_type ] ) ) {
 			wp_die();
 		}
@@ -923,7 +924,7 @@ class FrmFormActionsController {
 			return;
 		}
 
-		add_filter( 'frm_registered_form_actions', array( __CLASS__, 'disable_unlicensed_actions' ), 100 );
+		add_filter( 'frm_registered_form_actions', array( self::class, 'disable_unlicensed_actions' ), 100 );
 	}
 
 	/**
@@ -1012,11 +1013,12 @@ class FrmFormActionsController {
 	 * @since x.x
 	 *
 	 * @param string $action_key Action identifier (e.g. 'register').
+	 *
 	 * @return string Doc slug or empty string.
 	 */
 	private static function get_learn_more_slug( $action_key ) {
 		$links = self::get_action_learn_more_links();
-		return isset( $links[ $action_key ] ) ? $links[ $action_key ] : '';
+		return $links[ $action_key ] ?? '';
 	}
 }
 
