@@ -175,6 +175,10 @@
 			}
 		}
 
+		td p  {
+			margin-bottom: var(--gap-md);
+		}
+
 		> .frm_warning_style,
 		> .frm_note_style {
 			margin-top: var(--gap-xs);
