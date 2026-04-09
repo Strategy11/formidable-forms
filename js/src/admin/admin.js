@@ -9765,20 +9765,14 @@ window.frmAdminBuildJS = function() {
 		container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
 		heading.removeClass( 'frm_prod_user_def' );
 
-		// Fix the styling of selected display options not initialized.
-		if ( [ 'single', 'radio', 'checkbox' ].includes( currentVal ) ) {
-			const checkedDisplayFormat = settings[ 0 ].querySelector( '.frm_toggle_image_options:checked' );
-			if ( checkedDisplayFormat ) {
-				checkedDisplayFormat.dispatchEvent( new Event( 'change' ) );
-			}
-		}
-
 		if ( 'single' === currentVal ) {
 			container.addClass( 'frm_prod_type_single' );
 		} else if ( 'user_def' === currentVal ) {
 			container.addClass( 'frm_prod_type_user_def' );
 			heading.addClass( 'frm_prod_user_def' );
 		}
+
+		wp.hooks.doAction( 'frm_product_type_toggled', currentVal, settings[ 0 ] );
 	}
 
 	/**
