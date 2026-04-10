@@ -6492,17 +6492,19 @@ window.frmAdminBuildJS = function() {
 
 		const imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
-		const imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' } );
+		const children = [ labelImage ];
 
-		imageLabel.innerHTML = originalLabel;
+		if ( showLabelWithImage ) {
+			const imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' } );
+			imageLabel.innerHTML = originalLabel;
+			children.push( tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel } ) );
+		}
+
 		const labelNode = tag(
 			'span',
 			{
 				className: `frm_image_option_container${ imageLabelClass }`,
-				children: [
-					labelImage,
-					tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel } )
-				]
+				children
 			}
 		);
 
