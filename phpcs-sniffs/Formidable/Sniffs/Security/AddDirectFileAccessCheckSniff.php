@@ -22,7 +22,7 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 	 *
 	 * @var string
 	 */
-	private $accessCheck = "if ( ! defined( 'ABSPATH' ) ) { die( 'You are not allowed to call this page directly.' ); }";
+	private $accessCheck = "if ( ! defined( 'ABSPATH' ) ) { die( 'You are not allowed to call this page directly.' );\n}";
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
