@@ -2,10 +2,7 @@
 /**
  * Sniff to add missing direct file access check.
  *
- * Ensures PHP files have the ABSPATH check to prevent direct file access:
- * if ( ! defined( 'ABSPATH' ) ) {
- *     die( 'You are not allowed to call this page directly.' );
- * }
+ * Ensures PHP files have the ABSPATH check to prevent direct file access.
  *
  * @package Formidable\Sniffs\Security
  */
@@ -25,9 +22,7 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 	 *
 	 * @var string
 	 */
-	private $accessCheck = "if ( ! defined( 'ABSPATH' ) ) {
-	die( 'You are not allowed to call this page directly.' );
-}";
+	private $accessCheck = "if ( ! defined( 'ABSPATH' ) ) { die( 'You are not allowed to call this page directly.' ); }";
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -35,7 +30,7 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array( T_OPEN_TAG );
+		return array( T_OPEN_TAG, T_INLINE_HTML );
 	}
 
 	/**
@@ -60,10 +55,8 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 			return $phpcsFile->numTokens;
 		}
 
-		// Only process the first T_OPEN_TAG in the file.
-		$firstOpenTag = $phpcsFile->findNext( T_OPEN_TAG, 0 );
-
-		if ( $stackPtr !== $firstOpenTag ) {
+		// Only process the first token in the file (whether T_OPEN_TAG or T_INLINE_HTML).
+		if ( $stackPtr !== 0 ) {
 			return;
 		}
 
@@ -82,7 +75,7 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 			$this->addAbspathCheck( $phpcsFile, $stackPtr );
 		}
 
-		// Return the end of the file to prevent processing other T_OPEN_TAG tokens.
+		// Return the end of the file to prevent processing other tokens.
 		return $phpcsFile->numTokens;
 	}
 
@@ -96,7 +89,7 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 	private function hasAbspathCheck( File $phpcsFile ) {
 		$tokens = $phpcsFile->getTokens();
 
-		// Look for "defined( 'ABSPATH' )" or "defined('ABSPATH')" pattern.
+		// Look for defined( ABSPATH ) pattern.
 		for ( $i = 0; $i < $phpcsFile->numTokens; $i++ ) {
 			if ( $tokens[ $i ]['code'] !== T_STRING || strtolower( $tokens[ $i ]['content'] ) !== 'defined' ) {
 				continue;
@@ -132,11 +125,57 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 	 * Add the ABSPATH check to the file.
 	 *
 	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $stackPtr  The position of the T_OPEN_TAG token.
+	 * @param int  $stackPtr  The position of the first token (T_OPEN_TAG or T_INLINE_HTML).
 	 *
 	 * @return void
 	 */
 	private function addAbspathCheck( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Check if the file starts with HTML or PHP.
+		if ( $tokens[ $stackPtr ]['code'] === T_INLINE_HTML ) {
+			// File starts with HTML - add <?php tags at the top.
+			$this->addAbspathCheckToHtmlFile( $phpcsFile, $stackPtr );
+		} else {
+			// File starts with PHP - add ABSPATH check after the opening tag.
+			$this->addAbspathCheckToPhpFile( $phpcsFile, $stackPtr );
+		}
+	}
+
+	/**
+	 * Add the ABSPATH check to a file that starts with HTML.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the first T_INLINE_HTML token.
+	 *
+	 * @return void
+	 */
+	private function addAbspathCheckToHtmlFile( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		$phpcsFile->fixer->beginChangeset();
+
+		// Insert PHP block with ABSPATH check at the very top of the file.
+		// Replace the first token with the PHP block followed by the original content.
+		$phpStart = '<?php';
+		$newline = chr( 10 );
+		$phpEnd = '?>';
+		$htmlContent = $tokens[ $stackPtr ]['content'];
+		$newContent = $phpStart . $newline . $this->accessCheck . $newline . $newline . $phpEnd . $newline . $htmlContent;
+		$phpcsFile->fixer->replaceToken( $stackPtr, $newContent );
+
+		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * Add the ABSPATH check to a file that starts with PHP.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the T_OPEN_TAG token.
+	 *
+	 * @return void
+	 */
+	private function addAbspathCheckToPhpFile( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
 		// Find where to insert the check.
@@ -144,10 +183,9 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 
 		$phpcsFile->fixer->beginChangeset();
 
-		// Replace the <?php tag with <?php + newline + ABSPATH check + blank line.
-		$phpcsFile->fixer->replaceToken( $stackPtr, "<?php\n" . $this->accessCheck . "\n\n" );
+		$content = '<?php' . chr( 10 ) . $this->accessCheck . chr( 10 ) . chr( 10 );
+		$phpcsFile->fixer->replaceToken( $stackPtr, $content );
 
-		// Remove all whitespace tokens between <?php and the next non-whitespace.
 		$nextNonWhitespace = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
 
 		if ( false !== $nextNonWhitespace ) {
