@@ -6139,7 +6139,7 @@ window.frmAdminBuildJS = function() {
 
 		const hookArgs = {
 			fieldId,
-			metaInput: input,
+			metaInput: input[ 0 ],
 		};
 
 		if ( false !== wp.hooks.applyFilters( 'frm_custom_reset_displayed_opts', false, hookArgs ) ) {
