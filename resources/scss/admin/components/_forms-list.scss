@@ -16,6 +16,20 @@
 	right: 0;
 	z-index: 1000;
 
+	// Close animation (default state when visible but not yet open)
+	opacity: 0;
+	transform: scale(0.95);
+	transition: opacity 100ms ease-in,
+	            transform 100ms ease-in;
+
+	// Open animation
+	&.frm-forms-list-settings--visible {
+		opacity: 1;
+		transform: scale(1);
+		transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1),
+		            transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
 	// Position above button when needed
 	&.frm-dropdown-above {
 		bottom: 100%;

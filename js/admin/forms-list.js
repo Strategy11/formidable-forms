@@ -3,6 +3,13 @@
 ( function() {
 	const { documentOn } = frmDom.util;
 
+	function closeSettingsPanel( panel ) {
+		panel.classList.remove( 'frm-forms-list-settings--visible' );
+		panel.addEventListener( 'transitionend', () => {
+			panel.classList.add( 'frm_hidden' );
+		}, { once: true } );
+	}
+
 	function handleClickFormsListSettings( event ) {
 		event.preventDefault();
 		const btn = 'A' === event.target.tagName ? event.target : event.target.closest( 'a' );
@@ -12,7 +19,7 @@
 
 		// If dropdown is already moved here, toggle it.
 		if ( btn.nextElementSibling && 'frm-forms-list-settings' === btn.nextElementSibling.id && ! btn.nextElementSibling.classList.contains( 'frm_hidden' ) ) {
-			btn.nextElementSibling.classList.add( 'frm_hidden' );
+			closeSettingsPanel( btn.nextElementSibling );
 			return;
 		}
 
@@ -47,7 +54,7 @@
 		const handleOutsideClick = event => {
 			const dropdown = document.getElementById( 'frm-forms-list-settings' );
 			if ( dropdown && ! dropdown.contains( event.target ) && ! btn.contains( event.target ) ) {
-				dropdown.classList.add( 'frm_hidden' );
+				closeSettingsPanel( dropdown );
 				document.removeEventListener( 'click', handleOutsideClick );
 			}
 		};
@@ -56,6 +63,9 @@
 		document.addEventListener( 'click', handleOutsideClick );
 
 		dropdownWrapper.classList.remove( 'frm_hidden' );
+		// Force reflow so the browser registers the element before adding the transition class.
+		dropdownWrapper.getBoundingClientRect();
+		dropdownWrapper.classList.add( 'frm-forms-list-settings--visible' );
 	}
 
 	function handleChangeColumns( event ) {
