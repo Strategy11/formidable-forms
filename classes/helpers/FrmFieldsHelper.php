@@ -2654,6 +2654,10 @@ class FrmFieldsHelper {
 			),
 		);
 
+		if ( 'product' === FrmField::get_field_type( $field ) ) {
+			unset( $options['buttons'] );
+		}
+
 		/**
 		 * Allows modifying the options of Display format setting of Radio field.
 		 *
