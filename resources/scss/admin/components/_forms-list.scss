@@ -108,10 +108,16 @@
 	}
 
 	&__content {
-		overflow: hidden;
+		display: grid;
+		grid-template-rows: 1fr;
+		transition: grid-template-rows 200ms ease;
+
+		> div {
+			overflow: hidden;
+		}
 
 		&.frm-collapsible-box__content--collapsed {
-			height: 0;
+			grid-template-rows: 0fr;
 		}
 	}
 }
