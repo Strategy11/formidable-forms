@@ -3821,24 +3821,23 @@ window.frmAdminBuildJS = function() {
 
 		refreshOptionDisplayNow( jQuery( this ) );
 
-		toggle( jQuery( `.field_${ fieldId }_image_id` ) );
-		toggle( jQuery( `.frm_toggle_image_options_${ fieldId }` ) );
-		toggle( jQuery( `.frm_image_size_${ fieldId }` ) );
-		toggle( jQuery( `.frm_alignment_${ fieldId }` ) );
-		toggle( jQuery( `.frm-add-other#frm_add_field_${ fieldId }` ) );
-
 		const hasImageOptions = imagesAsOptions( fieldId );
+		toggle( jQuery( `.field_${ fieldId }_image_id` ), '', hasImageOptions );
+		toggle( jQuery( `.frm_toggle_image_options_${ fieldId }` ), '', hasImageOptions );
+		toggle( jQuery( `.frm_image_size_${ fieldId }` ), '', hasImageOptions );
+		toggle( jQuery( `.frm_alignment_${ fieldId }` ), '', hasImageOptions );
+		toggle( jQuery( `.frm-add-other#frm_add_field_${ fieldId }` ), '', hasImageOptions );
+
+		removeImageSizeClasses( displayField );
 
 		if ( hasImageOptions ) {
 			setAlignment( fieldId, 'inline' );
-			removeImageSizeClasses( displayField );
 			const imageSize = getImageOptionSize( fieldId );
 			displayField.classList.add( 'frm_image_options' );
 			displayField.classList.add( `frm_image_size_${ imageSize }` );
 			$field.find( '.frm-bulk-edit-link' ).hide();
 		} else {
 			displayField.classList.remove( 'frm_image_options' );
-			removeImageSizeClasses( displayField );
 			setAlignment( fieldId, 'block' );
 			$field.find( '.frm-bulk-edit-link' ).show();
 		}
@@ -9699,22 +9698,25 @@ window.frmAdminBuildJS = function() {
 		return upgradePopup.initModal( id, width );
 	}
 
-	function toggle( cname, id ) {
+	function toggle( cname, id, show ) {
 		if ( id === '#' ) {
 			const cont = document.getElementById( cname );
-			const hidden = cont.style.display;
-			if ( hidden === 'none' ) {
-				cont.style.display = 'block';
+			if ( show !== undefined ) {
+				cont.style.display = show ? 'block' : 'none';
 			} else {
-				cont.style.display = 'none';
+				const hidden = cont.style.display;
+				cont.style.display = hidden === 'none' ? 'block' : 'none';
 			}
-		} else {
-			const vis = cname.is( ':visible' );
-			if ( vis ) {
-				cname.hide();
-			} else {
+		} else if ( show !== undefined ) {
+			if ( show ) {
 				cname.show();
+			} else {
+				cname.hide();
 			}
+		} else if ( cname.is( ':visible' ) ) {
+			cname.hide();
+		} else {
+			cname.show();
 		}
 	}
 
@@ -10678,8 +10680,8 @@ window.frmAdminBuildJS = function() {
 
 			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
 
-			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
-			$builderForm.on( 'click', '.frm_toggle_image_options', toggleImageOptions );
+			$builderForm.on( 'change', '.frm_toggle_sep_values', toggleSepValues );
+			$builderForm.on( 'change', '.frm_toggle_image_options', toggleImageOptions );
 			$builderForm.on( 'click', '.frm_remove_image_option', removeImageFromOption );
 			$builderForm.on( 'click', '.frm_choose_image_box', addImageToOption );
 			$builderForm.on( 'change', '.frm_hide_image_text', refreshOptionDisplay );
