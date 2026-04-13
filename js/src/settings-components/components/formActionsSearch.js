@@ -44,9 +44,8 @@ const handleSearchInput = ( searchInput, actionsListWrapper, filterContent ) => 
 	}
 
 	if ( filterContent ) {
-		// Defer heading update so the generic searchContent handler in admin.js
-		// finishes toggling individual item visibility first.
-		setTimeout( () => updateGroupHeadingVisibility( filterContent ), 0 );
+		// Run after searchContent in admin.js finishes toggling item visibility.
+		requestAnimationFrame( () => updateGroupHeadingVisibility( filterContent ) );
 	}
 };
 

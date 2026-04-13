@@ -9550,7 +9550,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		for ( i = 0; i < items.length; i++ ) {
-			const innerText = items[ i ].innerText.toLowerCase();
+			const innerText = items[ i ].textContent.toLowerCase();
 
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[ i ].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
