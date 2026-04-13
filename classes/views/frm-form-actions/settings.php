@@ -41,13 +41,13 @@ $single_action_attrs = array(
 		?>
 	</div>
 
-	<div id="frm-actions-filter-content">
+	<div id="frm-actions-filter-content" data-active-filter="misc">
 		<?php
 		$displayed_actions = array();
 
 		foreach ( $groups as $group_key => $group ) {
 			?>
-			<div data-group="<?php echo esc_attr( $group_key ); ?>">
+			<div data-group="<?php echo esc_attr( $group_key ); ?>"<?php echo 'misc' === $group_key ? '' : ' class="frm_hidden"'; ?>>
 				<?php if ( ! empty( $group['name'] ) ) { ?>
 					<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
 				<?php } ?>
