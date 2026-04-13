@@ -41,6 +41,11 @@ class FrmFormsListHelper extends FrmListHelper {
 				'default' => 'list',
 			)
 		);
+
+		if ( get_user_option( 'frm_forms_show_desc' ) ) {
+			$mode = 'excerpt';
+		}
+
 		$orderby = self::get_param(
 			array(
 				'param'   => 'orderby',
