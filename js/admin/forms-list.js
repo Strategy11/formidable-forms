@@ -148,16 +148,7 @@
 		if ( content ) {
 			content.classList.toggle( 'frm-collapsible-box__content--collapsed' );
 		}
-		const svgUse = container.querySelector( '.frm-collapsible-box__btn use' );
-		if ( ! svgUse ) {
-			return;
-		}
-
-		if ( svgUse.href.baseVal.includes( 'down' ) ) {
-			svgUse.href.baseVal = svgUse.href.baseVal.replace( 'down', 'up' );
-		} else {
-			svgUse.href.baseVal = svgUse.href.baseVal.replace( 'up', 'down' );
-		}
+		container.classList.toggle( 'frm-collapsible-box--collapsed' );
 	}
 
 	// Click the gear icon.
