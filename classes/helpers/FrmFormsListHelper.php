@@ -229,21 +229,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param string $which
-	 *
-	 * @return void
-	 */
-	public function pagination( $which ) {
-		global $mode;
-
-		parent::pagination( $which );
-
-		if ( 'top' === $which ) {
-			$this->view_switcher( $mode );
-		}
-	}
-
-	/**
 	 * @param stdClass $item
 	 * @param string   $style
 	 *
