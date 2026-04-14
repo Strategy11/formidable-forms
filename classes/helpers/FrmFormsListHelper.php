@@ -331,7 +331,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function get_entries_column_value( $item ) {
 		if ( ! empty( $item->options['no_save'] ) ) {
-			return FrmAppHelper::icon_by_class(
+			return (string) FrmAppHelper::icon_by_class(
 				'frmfont frm_forbid_icon frm_bstooltip',
 				array(
 					'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
@@ -340,7 +340,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			);
 		}
 
-		$text = FrmEntry::getRecordCount( $item->id );
+		$text = (string) FrmEntry::getRecordCount( $item->id );
 		return current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
