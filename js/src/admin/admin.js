@@ -7461,6 +7461,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function copyFormAction( event ) {
+		event.stopPropagation();
 		if ( waitForActionToLoadBeforeCopy( event.target ) ) {
 			return;
 		}
@@ -7478,6 +7479,12 @@ window.frmAdminBuildJS = function() {
 		const currentID = $action.attr( 'id' ).replace( 'frm_form_action_', '' );
 		const newID = newActionId( currentID );
 
+		const actionType = targetSettings.querySelector( '.frm_action_name' )?.value;
+		const sourceTitle = targetSettings.querySelector( '.widget-title h4 span:not(.frm-border-icon)' )?.textContent.trim() ?? '';
+		const uniqueTitle = getUniqueActionTitle( sourceTitle.replace( / \(\d+\)$/, '' ), getExistingActionTitles( actionType ) );
+		$action[0].querySelector( '.widget-title h4 span:not(.frm-border-icon)' ).textContent = uniqueTitle;
+		$action[0].querySelector( `input[name$="[${ currentID }][post_title]"]` ).value = uniqueTitle;
+
 		$action.find( '.frm_action_id, .frm-btn-group' ).remove();
 		$action.find( `input[name$="[${ currentID }][ID]"]` ).val( '' );
 		$action.find( '.widget-inside' ).hide();
@@ -7493,10 +7500,12 @@ window.frmAdminBuildJS = function() {
 
 		const rename = new RegExp( `\\[${ currentID }\\]`, 'g' );
 		const reid = new RegExp( `_${ currentID }"`, 'g' );
+		const reidMid = new RegExp( `_${ currentID } `, 'g' );
 		const reclass = new RegExp( `-${ currentID }"`, 'g' );
 		const revalue = new RegExp( `"${ currentID }"`, 'g' ); // if a field id matches, this could cause trouble
 
 		let html = $action.html().replace( rename, `[${ newID }]` ).replace( reid, `_${ newID }"` );
+		html = html.replace( reidMid, `_${ newID } ` );
 		html = html.replace( reclass, `-${ newID }"` ).replace( revalue, `"${ newID }"` );
 
 		const newAction = div( {
@@ -7550,7 +7559,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const $top = $original.find( '.widget-top' );
-		$top.on( 'frm-action-loaded', function() {
+		$top.one( 'frm-action-loaded', function() {
 			$trigger.trigger( 'click' );
 			$original.removeClass( 'open' );
 			$inside.hide();
@@ -7569,6 +7578,39 @@ window.frmAdminBuildJS = function() {
 		return newID;
 	}
 
+	/**
+	 * Gets the visible titles for a given action type from the DOM.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} actionType The action type slug (e.g. "email").
+	 * @return {string[]} Array of trimmed title strings.
+	 */
+	function getExistingActionTitles( actionType ) {
+		return Array.from(
+			document.querySelectorAll( `.frm_single_${ actionType }_settings .widget-title h4 span:not(.frm-border-icon)` ),
+			( el ) => el.textContent.trim()
+		);
+	}
+
+	/**
+	 * Returns the first available title not already taken, appending " (2)", " (3)", etc. if needed.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string}   baseTitle       The base title without any numeric suffix.
+	 * @param {string[]} existingTitles  Titles currently in use.
+	 * @return {string}
+	 */
+	function getUniqueActionTitle( baseTitle, existingTitles ) {
+		const taken = new Set( existingTitles );
+		let title = baseTitle;
+		for ( let n = 2; taken.has( title ); n++ ) {
+			title = `${ baseTitle } (${ n })`;
+		}
+		return title;
+	}
+
 	function addFormAction() {
 		/*jshint validthis:true */
 		const type = jQuery( this ).data( 'actiontype' );
@@ -7579,10 +7621,7 @@ window.frmAdminBuildJS = function() {
 
 		const actionId = getNewActionId();
 		const formId = thisFormId;
-		const existingTitles = Array.from(
-			document.querySelectorAll( `.frm_single_${ type }_settings .widget-title h4 span` ),
-			el => el.textContent.trim()
-		);
+		const existingTitles = getExistingActionTitles( type );
 
 		const placeholderSetting = document.createElement( 'div' );
 		placeholderSetting.classList.add( `frm_single_${ type }_settings` );
