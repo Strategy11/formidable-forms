@@ -35,7 +35,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
 
-		$mode    = self::get_param(
+		$mode = self::get_param(
 			array(
 				'param'   => 'mode',
 				'default' => 'list',
@@ -234,7 +234,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @return string
 	 */
-	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh skipcq: PHP-R1006
 	public function single_row( $item, $style = '' ) {
 		global $mode;
 
@@ -268,15 +267,8 @@ class FrmFormsListHelper extends FrmListHelper {
 				$class .= ' column-primary';
 			}
 
-			$class = 'class="' . esc_attr( $class ) . '"';
-
-			if ( 'settings' === $column_name ) {
-				$data_colname = ' data-colname="' . esc_attr( trim( strip_tags( $column_display_name ) ) ) . '"';
-			} else {
-				$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
-			}
-
-			$attributes = $class . $style . $data_colname;
+			$class      = 'class="' . esc_attr( $class ) . '"';
+			$attributes = $class . $style . $this->get_column_data_attr( $column_name, $column_display_name );
 
 			switch ( $column_name ) {
 				case 'cb':
@@ -300,19 +292,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'entries':
-					if ( ! empty( $item->options['no_save'] ) ) {
-						$val = FrmAppHelper::icon_by_class(
-							'frmfont frm_forbid_icon frm_bstooltip',
-							array(
-								'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
-								'echo'  => false,
-							)
-						);
-					} else {
-						$text = FrmEntry::getRecordCount( $item->id );
-						$val  = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-						unset( $text );
-					}
+					$val = $this->get_entries_column_value( $item );
 					break;
 				default:
 					if ( method_exists( $this, 'column_' . $column_name ) ) {
@@ -329,6 +309,39 @@ class FrmFormsListHelper extends FrmListHelper {
 			unset( $val );
 		}//end foreach
 		return $r . '</tr>';
+	}
+
+	/**
+	 * @param string $column_name
+	 * @param string $column_display_name
+	 *
+	 * @return string
+	 */
+	private function get_column_data_attr( $column_name, $column_display_name ) {
+		if ( 'settings' === $column_name ) {
+			return ' data-colname="' . esc_attr( trim( strip_tags( $column_display_name ) ) ) . '"';
+		}
+		return ' data-colname="' . esc_attr( $column_display_name ) . '"';
+	}
+
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_entries_column_value( $item ) {
+		if ( ! empty( $item->options['no_save'] ) ) {
+			return FrmAppHelper::icon_by_class(
+				'frmfont frm_forbid_icon frm_bstooltip',
+				array(
+					'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
+					'echo'  => false,
+				)
+			);
+		}
+
+		$text = FrmEntry::getRecordCount( $item->id );
+		return current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
