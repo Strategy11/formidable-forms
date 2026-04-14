@@ -19,7 +19,7 @@ $single_action_attrs = array_merge(
 			<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?>
 		</span>
 
-		<div class="frm-flex-col">
+		<div class="frm-flex-col frm-min-w-0">
 			<h3 class="frm-h-stack-xs frm-text-md frm-capitalize">
 				<?php
 				if ( isset( $data['data-upgrade'] ) && ! isset( $data['data-oneclick'] ) ) {
@@ -32,7 +32,7 @@ $single_action_attrs = array_merge(
 				<?php } ?>
 			</h3>
 			<?php if ( ! empty( $action_control->action_options['description'] ) ) { ?>
-				<p class="frm-white-space-nowrap"><?php echo esc_html( $action_control->action_options['description'] ); ?></p>
+				<p class="frm-truncate"><?php echo esc_html( $action_control->action_options['description'] ); ?></p>
 			<?php } ?>
 		</div>
 

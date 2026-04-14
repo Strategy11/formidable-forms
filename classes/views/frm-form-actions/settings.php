@@ -98,10 +98,10 @@ $single_action_attrs = array(
 										<?php FrmAppHelper::icon_by_class( $action_icon, $icon_atts ); ?>
 									</span>
 
-									<div class="frm-flex-col">
+									<div class="frm-flex-col frm-min-w-0">
 										<h3 class="frm-h-stack-xs frm-text-md frm-capitalize">
 											<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_svg15', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
-											<span class="frm-font-medium frm-white-space-nowrap"><?php echo esc_html( $action ); ?></span>
+											<span class="frm-font-medium frm-truncate"><?php echo esc_html( $action ); ?></span>
 											<?php
 											if ( ! empty( $group['new_actions'] ) && in_array( $action, $group['new_actions'], true ) ) {
 												FrmAppHelper::show_pill_text();
