@@ -353,6 +353,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
 	 * @since 6.0
+	 *
 	 * @deprecated x.x We moved these actions to other places. This column will show if there is a filter added to the hook.
 	 *
 	 * @param stdClass $form
@@ -360,7 +361,10 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		if ( method_exists( 'FrmProFormsListHelper', 'column_embeds' ) ) {
+			_deprecated_function( __METHOD__, 'x.x' );
+		}
+
 		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$val .= $this->column_style( $form );
 		$val .= $this->column_views( $form );
