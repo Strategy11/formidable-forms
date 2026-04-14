@@ -2,6 +2,21 @@
 	position: relative;
 }
 
+.frm-forms-list-settings-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--small-radius);
+
+	&:hover,
+	&:focus {
+		background-color: var(--primary-25);
+		color: var(--primary-500) !important;
+	}
+}
+
 #frm-forms-list-settings {
 	font-size: var(--text-sm);
 	width: 225px;
@@ -102,6 +117,7 @@
 		&:hover,
 		&:focus {
 			background-color: var(--primary-25);
+			color: var(--primary-500) !important;
 		}
 
 		.frmsvg {
@@ -143,6 +159,7 @@
 
 		&:hover {
 			background-color: var(--primary-25);
+			color: var(--primary-500);
 		}
 	}
 
