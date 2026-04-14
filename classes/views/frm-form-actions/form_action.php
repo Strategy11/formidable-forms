@@ -39,22 +39,22 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 				<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php esc_attr_e( 'Delete this form action?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_trash_icon frm_svg24 frm-text-grey-800' ); ?>
 				</a>
-
-				<?php
-				FrmHtmlHelper::toggle(
-					$action_control->get_field_id( 'post_status', '' ),
-					$action_control->get_field_name( 'post_status', '' ),
-					array(
-						'checked'     => $form_action->post_status === 'publish',
-						'on_label'    => 'publish',
-						'off_label'   => 'OFF',
-						'show_labels' => false,
-						'echo'        => true,
-						'div_class'   => 'frm-ml-xs',
-					)
-				);
-				?>
 			</span>
+
+			<?php
+			FrmHtmlHelper::toggle(
+				$action_control->get_field_id( 'post_status', '' ),
+				$action_control->get_field_name( 'post_status', '' ),
+				array(
+					'checked'     => $form_action->post_status === 'publish',
+					'on_label'    => 'publish',
+					'off_label'   => 'OFF',
+					'show_labels' => false,
+					'echo'        => true,
+					'div_class'   => 'frm-ml-xs',
+				)
+			);
+			?>
 
 			<div class="widget-title-action">
 				<button type="button" class="widget-action frm-flex frm-p-2xs-force hide-if-no-js" aria-expanded="false">
