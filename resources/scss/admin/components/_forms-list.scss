@@ -47,7 +47,7 @@
 		bottom: 100%;
 	}
 
-	> div {
+	> div:not(.frm-collapsible-box) {
 		padding: 0 10px;
 	}
 
@@ -91,10 +91,18 @@
 	&__btn {
 		display: flex;
 		justify-content: space-between;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		align-items: center;
+		padding: 6px 10px;
+		margin-bottom: var(--gap-xs);
 		font-weight: 600;
 		color: var(--grey-900);
+		cursor: pointer;
+		border-radius: var(--small-radius);
+
+		&:hover,
+		&:focus {
+			background-color: var(--primary-25);
+		}
 
 		.frmsvg {
 			width: 12px;
@@ -123,11 +131,19 @@
 }
 
 .frm-forms-list-column-checkboxes {
-	padding-left: var(--gap-2xs);
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap-2xs);
 
 	label {
 		display: block;
-		padding: 6px 0;
+		padding: 6px 10px 6px calc(10px + var(--gap-2xs));
+		cursor: pointer;
+		border-radius: var(--small-radius);
+
+		&:hover {
+			background-color: var(--primary-25);
+		}
 	}
 
 	input {
