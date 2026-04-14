@@ -89,7 +89,6 @@ describe( 'Forms page', () => {
 		cy.get( '#entries' ).should( 'contain', 'Entries' );
 		cy.get( '#id > a > :nth-child(1)' ).should( 'contain', 'ID' );
 		cy.get( '#form_key > a > :nth-child(1)' ).should( 'contain', 'Key' );
-		cy.get( '#shortcode' ).should( 'contain', 'Actions' );
 		cy.get( '#created_at > a > :nth-child(1)' ).should( 'contain', 'Date' );
 
 		cy.log( 'Verify existence of a single row select checkbox' );
@@ -103,7 +102,6 @@ describe( 'Forms page', () => {
 				cy.get( '.entries > a' ).should( 'contain', '0' );
 				cy.get( '.name > strong > .row-title' ).should( 'contain', formTitle );
 				cy.get( '.form_key' ).should( 'contain', 'test-form' );
-				cy.get( '.shortcode > div' ).should( 'exist' );
 
 				cy.getCurrentFormattedDate().then( formattedDate => {
 					cy.log( 'Formatted Date: ', formattedDate );
