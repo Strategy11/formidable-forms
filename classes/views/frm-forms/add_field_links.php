@@ -100,7 +100,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<h3 class="frm-with-line">
 									<span><?php echo esc_html( $section_labels[ $section ] ?? ucwords( $section ) ); ?></span>
 									<span style="padding-left: 0;">
-										<?php FrmAppHelper::show_pill_text(); ?>
+										<?php
+										if ( ! FrmAppHelper::pro_is_installed() ) {
+											FrmAppHelper::show_pill_text();
+										}
+										?>
 									</span>
 								</h3>
 								<ul class="field_type_list frm_grid_container">
