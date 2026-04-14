@@ -65,6 +65,10 @@
 		font-size: var(--text-sm) !important;
 		padding: 7px var(--gap-sm) !important;
 
+		&.frm_already_used {
+			opacity: 0.5 !important;
+		}
+
 		.frmsvg {
 			width: 20px;
 			height: 20px;
@@ -102,6 +106,16 @@
 		border-color: var(--grey-300);
 		box-shadow: none;
 		transition: background-color 200ms ease-out;
+	}
+
+	.widget-title {
+		min-width: 0;
+
+		h4 span:last-child {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 	}
 
 	.frm_email_icons {
