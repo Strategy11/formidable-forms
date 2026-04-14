@@ -54,6 +54,10 @@
 		}
 	}
 
+	&:has(.frm_n8n_action) h3 {
+		text-transform: lowercase !important;
+	}
+
 	.frm_single_action {
 		display: none;
 		align-items: center;
