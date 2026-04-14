@@ -3771,7 +3771,7 @@ window.frmAdminBuildJS = function() {
 	function toggleSepValues() {
 		/*jshint validthis:true */
 		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		toggle( jQuery( `.field_${ fieldId }_option_key` ) );
+		toggle( jQuery( `.field_${ fieldId }_option_key` ), '', this.checked );
 		jQuery( `.field_${ fieldId }_option` ).toggleClass( 'frm_with_key' );
 	}
 
