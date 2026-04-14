@@ -9740,7 +9740,8 @@ window.frmAdminBuildJS = function() {
 		} );
 	}
 
-	function validateProductPriceValue( target ) {
+	function validateProductPriceValue( event ) {
+		const { target } = event;
 		const price = target.value.trim();
 		if ( price.includes( '[' ) && price.includes( ']' ) ) {
 			// This is a shortcode and should be assumed a valid price.
