@@ -9,11 +9,15 @@
 	width: 32px;
 	height: 32px;
 	border-radius: var(--small-radius);
+	transition: background-color 120ms ease-out,
+	            color 120ms ease-out;
 
 	&:hover,
 	&:focus {
 		background-color: var(--primary-25);
 		color: var(--primary-500) !important;
+		transition: background-color 80ms ease-out,
+		            color 80ms ease-out;
 	}
 }
 
@@ -113,11 +117,15 @@
 		color: var(--grey-900);
 		cursor: pointer;
 		border-radius: var(--small-radius);
+		transition: background-color 120ms ease-out,
+		            color 120ms ease-out;
 
 		&:hover,
 		&:focus {
 			background-color: var(--primary-25);
 			color: var(--primary-500) !important;
+			transition: background-color 80ms ease-out,
+			            color 80ms ease-out;
 		}
 
 		.frmsvg {
@@ -156,10 +164,14 @@
 		padding: 6px 10px 6px calc(10px + var(--gap-2xs));
 		cursor: pointer;
 		border-radius: var(--small-radius);
+		transition: background-color 120ms ease-out,
+		            color 120ms ease-out;
 
 		&:hover {
 			background-color: var(--primary-25);
 			color: var(--primary-500);
+			transition: background-color 80ms ease-out,
+			            color 80ms ease-out;
 		}
 	}
 
