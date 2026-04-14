@@ -359,7 +359,7 @@ class FrmFormActionsController {
 				$data['data-learn-more'] = FrmAppHelper::get_doc_url(
 					$learn_more_slug,
 					'settings-' . $action_control->id_base,
-					str_contains( $learn_more_slug, '/' )
+					! str_contains( $learn_more_slug, '/' )
 				);
 			}
 		}//end if
@@ -978,34 +978,37 @@ class FrmFormActionsController {
 	}
 
 	/**
-	 * Single source of truth for learn-more doc slugs used in
+	 * Single source of truth for learn-more URL slugs used in
 	 * upgrade modals for non-Lite form actions.
+	 *
+	 * Slugs without '/' are KB doc slugs (knowledgebase/ prefix is added).
+	 * Slugs with '/' are direct paths (e.g. features/) used as-is.
 	 *
 	 * @since x.x
 	 *
-	 * @return array<string,string> Map of action_key => doc slug.
+	 * @return array<string,string> Map of action_key => URL slug.
 	 */
 	public static function get_action_learn_more_links() {
 		return array(
-			'wppost'            => 'using-add-form-actions#kb-create-a-post',
+			'wppost'            => 'features/user-submitted-posts-wordpress-forms',
 			'register'          => 'user-registration',
-			'paypal'            => 'formidable-paypal',
+			'paypal'            => 'features/paypal-wordpress-payments',
 			'quiz'              => 'quiz-maker-forms',
 			'quiz_outcome'      => 'quiz-maker-forms',
-			'aweber'            => 'formidable-aweber',
-			'mailchimp'         => 'formidable-mailchimp',
-			'zapier'            => 'formidable-zapier',
-			'twilio'            => 'twilio-add-on',
-			'activecampaign'    => 'activecampaign-forms',
-			'salesforce'        => 'salesforce-forms',
-			'constantcontact'   => 'constant-contact-forms',
-			'getresponse'       => 'getresponse-forms',
-			'hubspot'           => 'hubspot-forms',
-			'mailpoet'          => 'mailpoet-newsletter-signup-forms',
-			'api'               => 'formidable-api',
-			'googlespreadsheet' => 'google-spreadsheet-forms',
-			'n8n'               => 'n8n',
-			'convertkit'        => 'convertkit-forms',
+			'aweber'            => 'features/aweber-addon',
+			'mailchimp'         => 'features/mailchimp-addon',
+			'zapier'            => 'features/form-entry-routing-with-zapier',
+			'twilio'            => 'features/twilio-sms-form-notifications',
+			'activecampaign'    => 'features/entries-to-activecampaign',
+			'salesforce'        => 'features/form-entries-to-salesforce',
+			'constantcontact'   => 'features/entries-to-constant-contact',
+			'getresponse'       => 'features/form-entries-to-getresponse',
+			'hubspot'           => 'features/form-entries-to-hubspot',
+			'mailpoet'          => 'features/mailpoet-newsletters-addon',
+			'api'               => 'features/wordpress-form-api',
+			'googlespreadsheet' => 'features/google-sheets',
+			'n8n'               => 'features/connect-your-forms-to-any-app-with-n8n',
+			'convertkit'        => 'features/convertkit',
 		);
 	}
 
