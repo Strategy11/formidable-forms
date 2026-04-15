@@ -1864,13 +1864,15 @@ function frmFrontFormJS() {
 			total = formatCurrency( total, currency );
 			const formatted = totalField.previousElementSibling;
 			if ( formatted?.matches( '.frm_total_formatted' ) ) {
-				formatted.textContent = total;
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formatted.innerHTML = total;
 				return;
 			}
 
 			const formattedEls = totalField.closest( '.frm_form_field' ).querySelectorAll( '.frm_total_formatted' );
 			formattedEls.forEach( formattedEl => {
-				formattedEl.textContent = total;
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formattedEl.innerHTML = total;
 			} );
 		} );
 	}
