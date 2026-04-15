@@ -7651,7 +7651,7 @@ window.frmAdminBuildJS = function() {
 		const taken = new Set( existingTitles );
 		let title = baseTitle;
 		// Pigeonhole: with N taken titles, at most N+1 candidates are ever needed.
-		for ( const i of Array( taken.size + 1 ).keys() ) {
+		for ( const i of new Array( taken.size + 1 ).keys() ) {
 			if ( ! taken.has( title ) ) {
 				break;
 			}
