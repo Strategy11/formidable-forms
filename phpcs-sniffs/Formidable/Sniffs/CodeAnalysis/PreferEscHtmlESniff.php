@@ -230,6 +230,7 @@ class PreferEscHtmlESniff implements Sniff {
 
 		// Check if this is preceded by echo - if so, skip (handled by processEcho).
 		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+
 		if ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_ECHO ) {
 			return;
 		}
