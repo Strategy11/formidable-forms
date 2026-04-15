@@ -407,6 +407,12 @@ class FrmFieldProduct extends FrmFieldType {
 			return $value;
 		}
 
+		$options = is_array( $this->field ) ? $this->field['options'] : $this->field->options;
+
+		if ( ! is_array( $options ) ) {
+			return $value;
+		}
+
 		$is_array = is_array( $value );
 
 		if ( ! $is_array ) {
@@ -415,9 +421,9 @@ class FrmFieldProduct extends FrmFieldType {
 
 		$format = $atts['format'] ?? 'currency';
 
-		$option_match = false;
-		$options      = is_array( $this->field ) ? $this->field['options'] : $this->field->options;
-		$check_key    = FrmField::get_option( $this->field, 'separate_value' ) ? 'value' : 'label';
+		// Lite does not support separate values, so always check label.
+		// In Pro, this will check for "value" instead when separate values is enabled.
+		$check_key = 'label';
 
 		if ( 'single' === FrmField::get_option( $this->field, 'data_type' ) ) {
 			foreach ( $options as $option ) {
