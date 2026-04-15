@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-15T14:49:34+00:00\n"
+"POT-Creation-Date: 2026-04-15T15:20:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -6057,11 +6057,6 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/product-single-option.php:25
-#: classes/views/frm-fields/single-option.php:33
-msgid "Saved Value"
-msgstr ""
-
 #: classes/views/frm-fields/back-end/quantity-options.php:8
 msgid "Product Field"
 msgstr ""
@@ -6240,6 +6235,10 @@ msgstr ""
 
 #: classes/views/frm-fields/back-end/value-format.php:7
 msgid "Insert the format you would like to accept. Use a regular expression starting with ^ or an exact format like (999)999-9999."
+msgstr ""
+
+#: classes/views/frm-fields/single-option.php:33
+msgid "Saved Value"
 msgstr ""
 
 #: classes/views/frm-form-actions/default_actions.php:14
