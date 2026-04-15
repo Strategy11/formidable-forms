@@ -1855,8 +1855,8 @@ function frmFrontFormJS() {
 				currency.decimal_separator = '.';
 			}
 
-			total = normalizeTotal( total, currency );
 			totalField.value = total;
+			total = normalizeTotal( total, currency );
 
 			// because of e.g. fields that might be using this field for calculations
 			triggerChange( totalField );
@@ -1880,9 +1880,9 @@ function frmFrontFormJS() {
 	/**
 	 * Round total and maybe add trailing zeros so formatCurrency has a proper format to work with.
 	 *
-	 * @param {number} total    The total amount to normalize.
+	 * @param {float} total     The total amount to normalize.
 	 * @param {Object} currency The currency object containing decimal information.
-	 * @return {number}         The normalized total amount.
+	 * @return {string}         The normalized total amount.
 	 */
 	function normalizeTotal( total, currency ) {
 		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;

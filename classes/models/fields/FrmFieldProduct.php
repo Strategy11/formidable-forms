@@ -279,7 +279,14 @@ class FrmFieldProduct extends FrmFieldType {
 	 */
 	private function get_price( $options, $value, &$price ) {
 		foreach ( $options as $option ) {
-			if ( ! is_array( $option ) || $option['value'] !== $value ) {
+			if ( ! is_array( $option ) ) {
+				continue;
+			}
+
+			// In Lite, since separate values is not available, we can always use label.
+			$check_key = 'label';
+
+			if ( ! isset( $option[ $check_key ] ) || $option[ $check_key ] !== $value ) {
 				continue;
 			}
 
