@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-15T15:20:38+00:00\n"
+"POT-Creation-Date: 2026-04-15T17:11:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -4812,7 +4812,7 @@ msgstr ""
 msgid "Bulk Edit Products"
 msgstr ""
 
-#: classes/models/fields/FrmFieldProduct.php:336
+#: classes/models/fields/FrmFieldProduct.php:343
 msgid "New Product"
 msgstr ""
 
