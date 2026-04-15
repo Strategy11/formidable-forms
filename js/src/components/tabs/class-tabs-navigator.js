@@ -32,7 +32,7 @@ export class frmTabsNavigator {
 			return;
 		}
 
-		const navList = this.navs[0]?.parentElement;
+		const navList = this.navs[ 0 ]?.parentElement;
 		if ( navList ) {
 			navList.setAttribute( 'role', 'tablist' );
 		}

@@ -560,7 +560,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function bindFormActionsKeyboardHandlers( wrapClass ) {
 		// Expand/collapse the widget on Enter or Space when the header itself is focused.
-		wrapClass.on( 'keydown', '.widget-top', ( event ) => {
+		wrapClass.on( 'keydown', '.widget-top', event => {
 			// Ignore keys bubbling up from focusable descendants (toggle, delete, duplicate, arrow button).
 			if ( event.currentTarget !== event.target ) {
 				return;
@@ -578,7 +578,7 @@ window.frmAdminBuildJS = function() {
 		 * @param {string} key The `KeyboardEvent.key` value that should activate the target.
 		 * @return {Function} jQuery event handler.
 		 */
-		const activateOnKey = ( key ) => ( event ) => {
+		const activateOnKey = key => event => {
 			if ( event.key !== key ) {
 				return;
 			}
@@ -7527,8 +7527,8 @@ window.frmAdminBuildJS = function() {
 		const actionType = targetSettings.querySelector( '.frm_action_name' )?.value;
 		const sourceTitle = targetSettings.querySelector( '.widget-title h4 span:not(.frm-border-icon)' )?.textContent.trim() ?? '';
 		const uniqueTitle = getUniqueActionTitle( sourceTitle.replace( / \(\d+\)$/, '' ), getExistingActionTitles( actionType ) );
-		$action[0].querySelector( '.widget-title h4 span:not(.frm-border-icon)' ).textContent = uniqueTitle;
-		$action[0].querySelector( `input[name$="[${ currentID }][post_title]"]` ).value = uniqueTitle;
+		$action[ 0 ].querySelector( '.widget-title h4 span:not(.frm-border-icon)' ).textContent = uniqueTitle;
+		$action[ 0 ].querySelector( `input[name$="[${ currentID }][post_title]"]` ).value = uniqueTitle;
 
 		$action.find( '.frm_action_id, .frm-btn-group' ).remove();
 		$action.find( `input[name$="[${ currentID }][ID]"]` ).val( '' );
@@ -7634,7 +7634,7 @@ window.frmAdminBuildJS = function() {
 	function getExistingActionTitles( actionType ) {
 		return Array.from(
 			document.querySelectorAll( `.frm_single_${ actionType }_settings .widget-title h4 span:not(.frm-border-icon)` ),
-			( el ) => el.textContent.trim()
+			el => el.textContent.trim()
 		);
 	}
 
@@ -7643,15 +7643,19 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {string}   baseTitle       The base title without any numeric suffix.
-	 * @param {string[]} existingTitles  Titles currently in use.
-	 * @return {string}
+	 * @param {string}   baseTitle      The base title without any numeric suffix.
+	 * @param {string[]} existingTitles Titles currently in use.
+	 * @return {string} The first available title, with a numeric suffix if the base is already taken.
 	 */
 	function getUniqueActionTitle( baseTitle, existingTitles ) {
 		const taken = new Set( existingTitles );
 		let title = baseTitle;
-		for ( let n = 2; taken.has( title ); n++ ) {
-			title = `${ baseTitle } (${ n })`;
+		// Pigeonhole: with N taken titles, at most N+1 candidates are ever needed.
+		for ( const i of Array( taken.size + 1 ).keys() ) {
+			if ( ! taken.has( title ) ) {
+				break;
+			}
+			title = `${ baseTitle } (${ i + 2 })`;
 		}
 		return title;
 	}
