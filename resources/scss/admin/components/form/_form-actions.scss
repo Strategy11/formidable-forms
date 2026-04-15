@@ -76,7 +76,8 @@
 		}
 	}
 
-	&:hover .frm_single_action {
+	&:hover .frm_single_action,
+	&:focus-within .frm_single_action {
 		display: flex;
 	}
 }
@@ -127,7 +128,8 @@
 		transition: transform 200ms ease-out;
 	}
 
-	&:hover {
+	&:hover,
+	&:focus-within {
 
 		.widget-top {
 			background: var(--grey-25);

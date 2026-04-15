@@ -92,7 +92,7 @@ $single_action_attrs = array(
 						);
 						$single_action_attrs['data-medium'] = 'settings-' . $action;
 						?>
-							<li class="frm-card-item frm-card-item--outlined frm-action frm-not-installed frm-group-<?php echo esc_attr( $group_key ); ?>">
+							<li class="frm-card-item frm-card-item--outlined frm-action frm-not-installed frm-group-<?php echo esc_attr( $group_key ); ?>" tabindex="0">
 								<div class="frm-h-stack-xs frm-w-full">
 									<span class="frm-border-icon">
 										<?php FrmAppHelper::icon_by_class( $action_icon, $icon_atts ); ?>
