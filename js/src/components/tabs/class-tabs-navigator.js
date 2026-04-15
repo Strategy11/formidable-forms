@@ -32,8 +32,19 @@ export class frmTabsNavigator {
 			return;
 		}
 
+		const navList = this.navs[0]?.parentElement;
+		if ( navList ) {
+			navList.setAttribute( 'role', 'tablist' );
+		}
+
 		this.navs.forEach( ( nav, index ) => {
+			nav.setAttribute( 'tabindex', '0' );
+			nav.setAttribute( 'role', 'tab' );
+			nav.setAttribute( 'aria-selected', String( nav.classList.contains( 'frm-active' ) ) );
+
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
+			nav.addEventListener( 'keydown', event => this.onNavKeydown( event, index ) );
+
 			if ( nav.classList.contains( 'frm-active' ) ) {
 				this.initSlideTrackUnderline( nav );
 				if ( this.filterTarget ) {
@@ -56,6 +67,8 @@ export class frmTabsNavigator {
 
 		this.removeActiveClassnameFromNavs();
 		navItem.classList.add( 'frm-active' );
+		this.navs.forEach( nav => nav.setAttribute( 'aria-selected', 'false' ) );
+		navItem.setAttribute( 'aria-selected', 'true' );
 		this.initSlideTrackUnderline( navItem );
 
 		if ( this.filterTarget ) {
@@ -69,6 +82,20 @@ export class frmTabsNavigator {
 		const navLink = navItem.querySelector( 'a' );
 		if ( navLink && navLink.id === 'frm_insert_fields_tab' && ! navLink.closest( '#frm_adv_info' ) ) {
 			window.frmAdminBuild?.clearSettingsBox?.();
+		}
+	}
+
+	/**
+	 * Handles keyboard activation for tab navigation.
+	 *
+	 * @param {KeyboardEvent} event The keydown event.
+	 * @param {number}        index The index of the focused tab in `this.navs`.
+	 * @return {void}
+	 */
+	onNavKeydown( event, index ) {
+		if ( event.key === 'Enter' || event.key === ' ' ) {
+			event.preventDefault();
+			this.onNavClick( event, index );
 		}
 	}
 
