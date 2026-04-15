@@ -7650,13 +7650,13 @@ window.frmAdminBuildJS = function() {
 	function getUniqueActionTitle( baseTitle, existingTitles ) {
 		const taken = new Set( existingTitles );
 		let title = baseTitle;
-		// Pigeonhole: with N taken titles, at most N+1 candidates are ever needed.
-		for ( const i of new Array( taken.size + 1 ).keys() ) {
-			if ( ! taken.has( title ) ) {
-				break;
-			}
-			title = `${ baseTitle } (${ i + 2 })`;
+
+		let n = 2;
+		while ( taken.has( title ) ) {
+			title = `${ baseTitle } (${ n })`;
+			n++;
 		}
+
 		return title;
 	}
 
