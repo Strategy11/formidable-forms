@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x This is copied from FrmProFieldProduct.php in Formidable Pro.
+ * @since 6.30 This is copied from FrmProFieldProduct.php in Formidable Pro.
  */
 class FrmFieldProduct extends FrmFieldType {
 
@@ -372,7 +372,7 @@ class FrmFieldProduct extends FrmFieldType {
 		/**
 		 * Filter the product option before getting the price.
 		 *
-		 * @since x.x
+		 * @since 6.30
 		 *
 		 * @param array|string $opt
 		 * @param string       $opt_key

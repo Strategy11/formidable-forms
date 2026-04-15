@@ -12,7 +12,7 @@ class FrmCurrencyHelper {
 	/**
 	 * Gets the currency data from the currency code.
 	 *
-	 * @since x.x The first parameter is optional.
+	 * @since 6.30 The first parameter is optional.
 	 *
 	 * @param string|null $currency Currency code. Default is `null`, which use the currency in the global settings.
 	 *
@@ -85,7 +85,7 @@ class FrmCurrencyHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param string $price
 	 * @param array  $currency
@@ -111,7 +111,7 @@ class FrmCurrencyHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param string $amount
 	 * @param array  $currency
@@ -137,7 +137,7 @@ class FrmCurrencyHelper {
 	 * If the currency is needed for this form, add it to the global.
 	 * This is later included in the footer.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param int|string $form_id Form ID. This is used for Pro compatibility.
 	 *

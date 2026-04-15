@@ -2367,7 +2367,7 @@ class FrmFieldsHelper {
 	/**
 	 * Shows add field link.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param array $field_type See file `classes/views/frm-forms/add_field_links.php`.
 	 *

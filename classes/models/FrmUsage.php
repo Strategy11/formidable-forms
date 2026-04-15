@@ -288,7 +288,7 @@ class FrmUsage {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param string $table
 	 *

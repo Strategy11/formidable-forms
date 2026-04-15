@@ -535,7 +535,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Checks if the given IP address matches the IP address with CIDR format.
 	 *
 	 * @param string $ip      IP address.
-	 * @param string $cidr_ip IP address with CIDR format (x.x.x.x/24).
+	 * @param string $cidr_ip IP address with CIDR format (6.30.6.30/24).
 	 *
 	 * @return bool
 	 */
