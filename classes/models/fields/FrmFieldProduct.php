@@ -407,22 +407,45 @@ class FrmFieldProduct extends FrmFieldType {
 			return $value;
 		}
 
-		if ( isset( $atts['format'] ) && 'number' === $atts['format'] ) {
-			return $value;
-		}
-
 		$is_array = is_array( $value );
 
-		// Temporary turn value into array.
 		if ( ! $is_array ) {
-			$value = ! empty( $atts['sep'] ) && is_string( $atts['sep'] ) ? explode( $atts['sep'], $value ) : (array) $value;
+			$value = explode( $atts['sep'], $value );
 		}
 
-		/**
-		 * @var array $value
-		 */
+		$format = $atts['format'] ?? 'currency';
+
+		$option_match = false;
+		$options      = is_array( $this->field ) ? $this->field['options'] : $this->field->options;
+		$check_key    = FrmField::get_option( $this->field, 'separate_value' ) ? 'value' : 'label';
+
+		if ( 'single' === FrmField::get_option( $this->field, 'data_type' ) ) {
+			foreach ( $options as $option ) {
+				if ( is_array( $option ) ) {
+					$options = array( $option );
+					break;
+				}
+			}
+		}
+
 		foreach ( $value as $k => $v ) {
-			$value[ $k ] = FrmCurrencyHelper::format_price( $v );
+			foreach ( $options as $option ) {
+				if ( ! is_array( $option ) || ! isset( $option['price'] ) ) {
+					continue;
+				}
+
+				if ( ! isset( $option[ $check_key ] ) || $option[ $check_key ] !== $v ) {
+					continue;
+				}
+
+				if ( 'number' === $format ) {
+					$value[ $k ] = $option['price'];
+				} else {
+					$value[ $k ] = FrmCurrencyHelper::format_price( $option['price'] );
+				}
+
+				break;
+			}
 		}
 
 		return $is_array ? $value : implode( $atts['sep'], $value );
