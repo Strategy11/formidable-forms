@@ -550,6 +550,50 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Adds keyboard support for form action widgets and their icons.
+	 *
+	 * @since x.x
+	 *
+	 * @param {jQuery} wrapClass Delegated jQuery scope for the current page wrap.
+	 * @return {void}
+	 */
+	function bindFormActionsKeyboardHandlers( wrapClass ) {
+		// Expand/collapse the widget on Enter or Space when the header itself is focused.
+		wrapClass.on( 'keydown', '.widget-top', ( event ) => {
+			// Ignore keys bubbling up from focusable descendants (toggle, delete, duplicate, arrow button).
+			if ( event.currentTarget !== event.target ) {
+				return;
+			}
+
+			if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				clickWidget( event, event.currentTarget );
+			}
+		} );
+
+		/**
+		 * Builds a delegated keydown handler that forwards a specific key to a native click.
+		 *
+		 * @param {string} key The `KeyboardEvent.key` value that should activate the target.
+		 * @return {Function} jQuery event handler.
+		 */
+		const activateOnKey = ( key ) => ( event ) => {
+			if ( event.key !== key ) {
+				return;
+			}
+
+			event.preventDefault();
+			event.currentTarget.click();
+		};
+
+		// `<a>` icons activate on Enter natively, so only Space needs to be wired up.
+		wrapClass.on( 'keydown', '.frm_form_action_settings .frm_duplicate_form_action, .frm_form_action_settings .frm_remove_form_action', activateOnKey( ' ' ) );
+
+		// The post-status toggle's label already handles Space, so only Enter needs to be wired up.
+		wrapClass.on( 'keydown', '.frm_form_action_settings .frm_toggle', activateOnKey( 'Enter' ) );
+	}
+
 	function loadTooltips() {
 		const wrapClass = jQuery( '.wrap, .frm_wrap' );
 		const confirmModal = document.getElementById( 'frm_confirm_modal' );
@@ -566,6 +610,7 @@ window.frmAdminBuildJS = function() {
 		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
 		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
+		bindFormActionsKeyboardHandlers( wrapClass );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
