@@ -2,7 +2,7 @@
 /**
  * Separate Values field setting view
  *
- * @since x.x
+ * @since 6.30
  *
  * @package Formidable
  */
