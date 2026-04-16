@@ -11242,6 +11242,163 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	} );
 };
 
+/**
+ * Gated Content form action — add/remove item rows and type switching.
+ *
+ * Uses document-level event delegation so it works both for actions already on
+ * the page and for actions loaded dynamically via AJAX (frm_form_action_fill /
+ * frm_added_form_action).
+ *
+ * Each item row stores its active type in a <select class="frm-gc-item-type">.
+ * Type-specific settings live in <div class="frm-gc-type-settings" data-type="…">
+ * children. Only the active type's settings div is visible and has its [id]
+ * select named — preventing duplicate field names on form submit.
+ *
+ * @since x.x
+ */
+( function() {
+	/**
+	 * Show the active type's settings panel and assign field names.
+	 * Hide and strip names from all other type panels.
+	 *
+	 * @param {HTMLElement} itemRow - A .frm_gc_item_row element.
+	 */
+	function frmGcActivateType( itemRow ) {
+		const typeSelect = itemRow.querySelector( '.frm-gc-item-type' );
+		const activeType = typeSelect.value;
+
+		// Derive the item base (e.g. "frm_form_action[X][post_content][items][2]")
+		// from the type select's name by stripping the trailing "[type]" segment.
+		const base = typeSelect.name.replace( /\[type\]$/, '' );
+
+		itemRow.querySelectorAll( '.frm-gc-type-settings' ).forEach( typeDiv => {
+			const isActive = typeDiv.dataset.type === activeType;
+			typeDiv.toggleAttribute( 'hidden', ! isActive );
+
+			// Assign or remove the [id] field name so only the active type submits.
+			const idField = typeDiv.querySelector( '[data-frm-gc-field="id"]' );
+			if ( idField ) {
+				if ( isActive ) {
+					idField.name = `${base}[id]`;
+				} else {
+					idField.removeAttribute( 'name' );
+				}
+			}
+		} );
+	}
+
+	/**
+	 * Assign id and for attributes to a cloned template row.
+	 *
+	 * Template labels use data-frm-gc-for="KEY" and selects use data-frm-gc-field="KEY"
+	 * instead of for/id attributes to avoid duplicate IDs before cloning. This function
+	 * assigns real id/for pairs using the wrapper ID and item index as a unique prefix.
+	 *
+	 * @param {HTMLElement} itemRow    - The .frm_gc_item_row element already in the DOM.
+	 * @param {string}      wrapperBaseId - The wrapper element's id attribute value.
+	 * @param {number}      idx        - Zero-based item index used for unique IDs.
+	 */
+	function frmGcAssignItemIds( itemRow, wrapperBaseId, idx ) {
+		// Type select.
+		const typeSelect = itemRow.querySelector( '[data-frm-gc-field="type"]' );
+		if ( typeSelect ) {
+			typeSelect.id = `${wrapperBaseId}_type_${idx}`;
+			const typeLabel = itemRow.querySelector( '[data-frm-gc-for="type"]' );
+			if ( typeLabel ) {
+				typeLabel.htmlFor = typeSelect.id;
+			}
+		}
+
+		// Per-type id selects — each lives inside its own .frm-gc-type-settings div.
+		itemRow.querySelectorAll( '.frm-gc-type-settings' ).forEach( typeDiv => {
+			const type    = typeDiv.dataset.type;
+			const idField = typeDiv.querySelector( '[data-frm-gc-field="id"]' );
+			if ( idField ) {
+				idField.id = `${wrapperBaseId}_id_${type}_${idx}`;
+				const idLabel = typeDiv.querySelector( '[data-frm-gc-for="id"]' );
+				if ( idLabel ) {
+					idLabel.htmlFor = idField.id;
+				}
+			}
+		} );
+	}
+
+	/**
+	 * Temporarily swap the button icon and aria-label to confirm a successful copy.
+	 *
+	 * @param {HTMLElement} btn - The .frm_gc_copy_shortcode button element.
+	 */
+	function frmGcShowCopied( btn ) {
+		const use          = btn.querySelector( 'use' );
+		const originalHref = use.getAttribute( 'href' );
+		const originalLabel = btn.getAttribute( 'aria-label' );
+
+		use.setAttribute( 'href', '#frm_checkmark_icon' );
+		btn.setAttribute( 'aria-label', btn.dataset.copiedLabel || 'Copied!' );
+
+		setTimeout( () => {
+			use.setAttribute( 'href', originalHref );
+			btn.setAttribute( 'aria-label', originalLabel );
+		}, 1500 );
+	}
+
+	document.addEventListener( 'click', function( event ) {
+		const addBtn = event.target.closest( '.frm_gc_add_item' );
+		if ( addBtn ) {
+			const wrapper   = addBtn.closest( '.frm_gated_content_settings' );
+			const list      = wrapper.querySelector( '.frm_gc_items_list' );
+			const template  = wrapper.querySelector( '.frm_gc_item_template' );
+			const fieldBase = addBtn.dataset.fieldNameBase;
+			const idx       = parseInt( wrapper.dataset.itemCount || '0', 10 );
+			const newRow    = template.content.cloneNode( true );
+
+			// Set the type select name before appending — frmGcActivateType
+			// derives the item base from this name to build [id] field names.
+			newRow.querySelector( '.frm-gc-item-type' ).name = `${fieldBase}[${idx}][type]`;
+
+			list.appendChild( newRow );
+
+			const addedRow = list.lastElementChild;
+			frmGcAssignItemIds( addedRow, wrapper.id, idx );
+			frmGcActivateType( addedRow );
+
+			wrapper.dataset.itemCount = idx + 1;
+			return;
+		}
+
+		const removeBtn = event.target.closest( '.frm_gc_remove_item' );
+		if ( removeBtn ) {
+			removeBtn.closest( '.frm_gc_item_row' ).remove();
+			return;
+		}
+
+		const copyBtn = event.target.closest( '.frm_gc_copy_shortcode' );
+		if ( copyBtn ) {
+			const text = copyBtn.dataset.frmCopy;
+			if ( navigator.clipboard && navigator.clipboard.writeText ) {
+				navigator.clipboard.writeText( text ).then( () => frmGcShowCopied( copyBtn ) );
+			} else {
+				// Fallback for browsers without Clipboard API.
+				const textarea = document.createElement( 'textarea' );
+				textarea.value = text;
+				textarea.style.cssText = 'position:fixed;opacity:0;';
+				document.body.appendChild( textarea );
+				textarea.select();
+				document.execCommand( 'copy' );
+				document.body.removeChild( textarea );
+				frmGcShowCopied( copyBtn );
+			}
+		}
+	} );
+
+	document.addEventListener( 'change', function( event ) {
+		const typeSelect = event.target.closest( '.frm-gc-item-type' );
+		if ( typeSelect ) {
+			frmGcActivateType( typeSelect.closest( '.frm_gc_item_row' ) );
+		}
+	} );
+}() );
+
 window.frmImportCsv = formID => {
 	let urlVars = '';
 	if ( typeof __FRMURLVARS !== 'undefined' ) {
