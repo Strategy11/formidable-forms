@@ -1,0 +1,304 @@
+<?php
+/**
+ * Gated Token Helper
+ *
+ * @package Formidable
+ *
+ * @since x.x
+ *
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+class FrmGatedTokenHelper {
+
+	/**
+	 * Raw tokens generated during the current request, keyed by action ID.
+	 *
+	 * Bridges token generation to shortcode rendering within the same request
+	 * without a second database round-trip.
+	 *
+	 * @since x.x
+	 *
+	 * @var array
+	 */
+	public static $tokens = array();
+
+	/**
+	 * Generate a new access token for a gated content action and persist it.
+	 *
+	 * @since x.x
+	 *
+	 * @param int      $action_id ID of the frm_form_actions post.
+	 * @param int      $entry_id  ID of the submitted form entry.
+	 * @param int|null $user_id   Logged-in user ID, or null for guests.
+	 * @return string Raw 48-character token. Only ever stored in URLs or emails — never in the DB.
+	 */
+	public static function generate( $action_id, $entry_id, $user_id = null ) {
+		global $wpdb;
+
+		$raw_token  = wp_generate_password( 48, false );
+		$token_hash = hash( 'sha256', $raw_token );
+		$now        = time();
+
+		// Read expired_hours from action settings to compute expiry timestamp.
+		$expired_at = null;
+		$action     = get_post( (int) $action_id );
+		if ( $action ) {
+			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+			if ( is_array( $settings ) && ! empty( $settings['expired_hours'] ) ) {
+				$expired_at = $now + ( (int) $settings['expired_hours'] * 3600 );
+			}
+		}
+
+		$data   = array(
+			'token_hash' => $token_hash,
+			'action_id'  => (int) $action_id,
+			'entry_id'   => (int) $entry_id,
+			'ip_address' => FrmAppHelper::get_ip_address(),
+			'created_at' => $now,
+		);
+		$format = array( '%s', '%d', '%d', '%s', '%d' );
+
+		// Only include nullable columns when they carry a value — passing null
+		// with a %d format would insert 0 instead of NULL.
+		if ( null !== $user_id ) {
+			$data['user_id'] = (int) $user_id;
+			$format[]        = '%d';
+		}
+
+		if ( null !== $expired_at ) {
+			$data['expired_at'] = $expired_at;
+			$format[]           = '%d';
+		}
+
+		$wpdb->insert( $wpdb->prefix . 'frm_gated_tokens', $data, $format );
+
+		// Cache for same-request shortcode access (avoids a second DB query).
+		self::$tokens[ $action_id ] = $raw_token;
+
+		return $raw_token;
+	}
+
+	/**
+	 * Validate a token against a specific gated content item.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $token     Raw access token.
+	 * @param int    $item_id   ID of the content item to check access for.
+	 * @param string $item_type Type slug of the content item (e.g. 'page', 'frm_file').
+	 * @return bool True if the token grants access to the item.
+	 */
+	public static function validate( $token, $item_id, $item_type ) {
+		$row = self::get_row_by_token( $token );
+
+		if ( null === $row ) {
+			return false;
+		}
+
+		// Token is expired when expired_at is set and in the past.
+		if ( null !== $row->expired_at && time() >= (int) $row->expired_at ) {
+			return false;
+		}
+
+		// Confirm the item is listed in the action's settings.
+		$is_valid = false;
+		$action   = get_post( (int) $row->action_id );
+
+		if ( $action ) {
+			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+			if ( is_array( $settings ) && ! empty( $settings['items'] ) ) {
+				foreach ( $settings['items'] as $item ) {
+					if ( ! is_array( $item ) ) {
+						continue;
+					}
+					if ( (int) $item['id'] === (int) $item_id && $item['type'] === $item_type ) {
+						$is_valid = true;
+						break;
+					}
+				}
+			}
+		}
+
+		/**
+		 * Filter whether a gated content token is valid for an item.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $is_valid  Whether the token grants access.
+		 * @param object $row       Token row from wp_frm_gated_tokens.
+		 * @param int    $item_id   Content item ID being checked.
+		 * @param string $item_type Content item type being checked.
+		 */
+		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, $row, $item_id, $item_type );
+	}
+
+	/**
+	 * Revoke an access token by deleting it from the database.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $token Raw access token to revoke.
+	 * @return void
+	 */
+	public static function revoke( $token ) {
+		global $wpdb;
+
+		$wpdb->delete(
+			$wpdb->prefix . 'frm_gated_tokens',
+			array( 'token_hash' => hash( 'sha256', $token ) ),
+			array( '%s' )
+		);
+	}
+
+	/**
+	 * Extend a token's expiry by a given number of hours from now.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $token Raw access token.
+	 * @param int    $hours Number of hours to add from the current time.
+	 * @return bool True if a matching token was found and updated, false otherwise.
+	 */
+	public static function extend( $token, $hours ) {
+		global $wpdb;
+
+		$updated = $wpdb->update(
+			$wpdb->prefix . 'frm_gated_tokens',
+			array( 'expired_at' => time() + ( (int) $hours * 3600 ) ),
+			array( 'token_hash' => hash( 'sha256', $token ) ),
+			array( '%d' ),
+			array( '%s' )
+		);
+
+		return 0 < $updated;
+	}
+
+	/**
+	 * Renew a token by replacing its hash atomically, optionally updating expiry.
+	 *
+	 * @since x.x
+	 *
+	 * @param string   $old_token  Raw token to replace.
+	 * @param int|null $new_expiry Unix timestamp for the new expiry, or null to keep the existing value.
+	 * @return string New raw token.
+	 */
+	public static function renew( $old_token, $new_expiry = null ) {
+		global $wpdb;
+
+		$new_raw_token  = wp_generate_password( 48, false );
+		$new_token_hash = hash( 'sha256', $new_raw_token );
+
+		$data   = array( 'token_hash' => $new_token_hash );
+		$format = array( '%s' );
+
+		if ( null !== $new_expiry ) {
+			$data['expired_at'] = (int) $new_expiry;
+			$format[]           = '%d';
+		}
+
+		$wpdb->update(
+			$wpdb->prefix . 'frm_gated_tokens',
+			$data,
+			array( 'token_hash' => hash( 'sha256', $old_token ) ),
+			$format,
+			array( '%s' )
+		);
+
+		return $new_raw_token;
+	}
+
+	/**
+	 * Delete all expired tokens from the database.
+	 *
+	 * Intended to be called by WP Cron on a scheduled interval.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function cleanup_expired() {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query(
+			$wpdb->prepare(
+				'DELETE FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE expired_at IS NOT NULL AND expired_at < %d',
+				time()
+			)
+		);
+	}
+
+	/**
+	 * Get a paginated list of tokens for a given action, ordered newest first.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $action_id Action post ID.
+	 * @param int $limit     Maximum number of rows to return.
+	 * @param int $offset    Number of rows to skip (for pagination).
+	 * @return array Array of token row objects.
+	 */
+	public static function get_tokens_for_action( $action_id, $limit = 50, $offset = 0 ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE action_id = %d ORDER BY created_at DESC LIMIT %d OFFSET %d',
+				(int) $action_id,
+				(int) $limit,
+				(int) $offset
+			)
+		);
+	}
+
+	/**
+	 * Get all active (non-expired) tokens for a user, joined with action post data.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $user_id WordPress user ID.
+	 * @return array Array of token row objects, each with an `action_title` property from wp_posts.
+	 */
+	public static function get_tokens_for_user( $user_id ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT t.*, p.post_title AS action_title'
+				. ' FROM ' . $wpdb->prefix . 'frm_gated_tokens t'
+				. ' INNER JOIN ' . $wpdb->posts . ' p ON p.ID = t.action_id'
+				. ' WHERE t.user_id = %d'
+				. ' AND ( t.expired_at IS NULL OR t.expired_at > %d )'
+				. ' ORDER BY t.created_at DESC',
+				(int) $user_id,
+				time()
+			)
+		);
+	}
+
+	/**
+	 * Retrieve a single token row by raw token string.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $token Raw access token.
+	 * @return object|null Token row object, or null if not found or token has no match.
+	 */
+	public static function get_row_by_token( $token ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE token_hash = %s LIMIT 1',
+				hash( 'sha256', $token )
+			)
+		);
+	}
+}
