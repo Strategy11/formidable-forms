@@ -15,6 +15,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmGatedContentController {
 
 	/**
+	 * Post ID unlocked for the current request by maybe_unlock_post().
+	 *
+	 * Stored here so filter_password_required() can reference it without a
+	 * closure (closures are forbidden as action/filter callbacks).
+	 *
+	 * @since x.x
+	 *
+	 * @var int
+	 */
+	private static $unlocked_post_id = 0;
+
+	/**
 	 * Register action hooks.
 	 *
 	 * @since x.x
@@ -23,6 +35,119 @@ class FrmGatedContentController {
 	public function __construct() {
 		add_action( 'frm_trigger_gated_content_action', 'FrmGatedContentController::trigger', 10, 4 );
 		add_shortcode( 'frm_gated_content', 'FrmGatedContentController::shortcode' );
+		// 'wp' fires after WP::query_posts() so get_queried_object_id() is available.
+		add_action( 'wp', 'FrmGatedContentController::maybe_unlock_post' );
+	}
+
+	/**
+	 * Attempt to unlock a password-protected post using a gated content token.
+	 *
+	 * Hooked on 'wp' so get_queried_object_id() is available (query is parsed
+	 * by the time 'wp' fires, unlike 'init').
+	 *
+	 * Resolution order:
+	 *  1. URL query parameter access_code (raw token → hashed via obtain_token).
+	 *  2. Any frm_gc_* cookie whose hash validates against the current post.
+	 *
+	 * Pages must be WordPress password-protected to use this mechanism. The
+	 * gated token replaces the password — visitors never need to know the actual
+	 * WordPress post password.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function maybe_unlock_post() {
+		$post_id = (int) get_queried_object_id();
+		if ( ! $post_id ) {
+			return;
+		}
+
+		// Try URL query parameter first (obtain_token with no action_id uses URL param only).
+		$hash = frm_gated_content_obtain_token();
+
+		// No URL param — scan frm_gc_* cookies to find one that grants access to this page.
+		if ( ! $hash ) {
+			$hash = self::find_valid_cookie_hash_for_post( $post_id );
+		}
+
+		if ( ! $hash ) {
+			return;
+		}
+
+		if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
+			// Unlock this post for the current request only.
+			self::$unlocked_post_id = $post_id;
+			add_filter( 'post_password_required', 'FrmGatedContentController::filter_password_required', 10, 2 );
+
+			// Refresh the frm_gc_ cookie so subsequent visits skip the URL param.
+			$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
+			if ( $row ) {
+				frm_gated_content_set_cookie( (int) $row->action_id, $hash, $row->expired_at );
+			}
+			return;
+		}
+
+		// Token present but invalid (expired or revoked) — redirect if action configured it.
+		$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
+		if ( ! $row ) {
+			return;
+		}
+
+		$action = get_post( (int) $row->action_id );
+		if ( ! $action ) {
+			return;
+		}
+
+		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+		if ( ! empty( $settings['show_form_page'] ) ) {
+			wp_safe_redirect( (string) get_permalink( (int) $settings['show_form_page'] ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Filter callback: return false for the single post unlocked by maybe_unlock_post().
+	 *
+	 * Fires on the 'post_password_required' filter. Only overrides the result for
+	 * the specific post ID stored in self::$unlocked_post_id — all other posts are
+	 * passed through unchanged.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool    $required Whether the password is required.
+	 * @param WP_Post $post     Post being checked.
+	 * @return bool
+	 */
+	public static function filter_password_required( $required, $post ) {
+		if ( (int) $post->ID === self::$unlocked_post_id ) {
+			return false;
+		}
+		return $required;
+	}
+
+	/**
+	 * Scan frm_gc_* cookies and return the first hash that validates against a post.
+	 *
+	 * Used as a fallback when no access_code URL parameter is present, allowing
+	 * return visits to stay unlocked without re-clicking the emailed link.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $post_id Post ID to validate against.
+	 * @return string|null Validated token hash, or null if none found.
+	 */
+	private static function find_valid_cookie_hash_for_post( $post_id ) {
+		foreach ( $_COOKIE as $name => $value ) {
+			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
+				continue;
+			}
+			$hash = sanitize_text_field( $value );
+			if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
+				return $hash;
+			}
+		}
+		return null;
 	}
 
 	/**
