@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x This is copied from FrmProFieldProduct.php in Formidable Pro.
+ * @since 6.30 This is copied from FrmProFieldProduct.php in Formidable Pro.
  */
 class FrmFieldProduct extends FrmFieldType {
 
@@ -70,8 +70,7 @@ class FrmFieldProduct extends FrmFieldType {
 	 * @param array $args
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
-		$field = $args['field'];
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/separate-values.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-images.php';
 	}
 
 	/**
@@ -280,7 +279,14 @@ class FrmFieldProduct extends FrmFieldType {
 	 */
 	private function get_price( $options, $value, &$price ) {
 		foreach ( $options as $option ) {
-			if ( ! is_array( $option ) || $option['value'] !== $value ) {
+			if ( ! is_array( $option ) ) {
+				continue;
+			}
+
+			// In Lite, since separate values is not available, we can always use label.
+			$check_key = 'label';
+
+			if ( ! isset( $option[ $check_key ] ) || $option[ $check_key ] !== $value ) {
 				continue;
 			}
 
@@ -292,7 +298,7 @@ class FrmFieldProduct extends FrmFieldType {
 				}
 			}
 			break;
-		}
+		}//end foreach
 	}
 
 	/**
@@ -373,7 +379,7 @@ class FrmFieldProduct extends FrmFieldType {
 		/**
 		 * Filter the product option before getting the price.
 		 *
-		 * @since x.x
+		 * @since 6.30
 		 *
 		 * @param array|string $opt
 		 * @param string       $opt_key
@@ -401,7 +407,9 @@ class FrmFieldProduct extends FrmFieldType {
 			return $value;
 		}
 
-		if ( isset( $atts['format'] ) && 'number' === $atts['format'] ) {
+		$options = is_array( $this->field ) ? $this->field['options'] : $this->field->options;
+
+		if ( ! is_array( $options ) ) {
 			return $value;
 		}
 
@@ -412,11 +420,39 @@ class FrmFieldProduct extends FrmFieldType {
 			$value = ! empty( $atts['sep'] ) && is_string( $atts['sep'] ) ? explode( $atts['sep'], $value ) : (array) $value;
 		}
 
+		$format = $atts['format'] ?? 'currency';
+
+		// Lite does not support separate values, so always check label.
+		// In Pro, this will check for "value" instead when separate values is enabled.
+		$check_key = 'label';
+
+		if ( 'single' === FrmField::get_option( $this->field, 'data_type' ) ) {
+			foreach ( $options as $option ) {
+				if ( is_array( $option ) ) {
+					$options = array( $option );
+					break;
+				}
+			}
+		}
+
 		/**
 		 * @var array $value
 		 */
+
 		foreach ( $value as $k => $v ) {
-			$value[ $k ] = FrmCurrencyHelper::format_price( $v );
+			foreach ( $options as $option ) {
+				if ( ! is_array( $option ) || ! isset( $option['price'] ) ) {
+					continue;
+				}
+
+				if ( ! isset( $option[ $check_key ] ) || $option[ $check_key ] !== $v ) {
+					continue;
+				}
+
+				$value[ $k ] = 'number' === $format ? $option['price'] : FrmCurrencyHelper::format_price( $option['price'] );
+
+				break;
+			}
 		}
 
 		return $is_array ? $value : implode( $atts['sep'], $value );

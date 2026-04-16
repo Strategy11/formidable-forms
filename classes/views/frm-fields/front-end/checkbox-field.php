@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  *
- * @since x.x Added `$hide_label`.
+ * @since 6.30 Added `$hide_label`.
  *
  * @var bool $hide_label
  */

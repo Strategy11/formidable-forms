@@ -1167,7 +1167,7 @@ class FrmStylesHelper {
 	 * Scope CSS to .frm_forms on admin pages to prevent style conflicts.
 	 * On front-end pages, the CSS is returned unchanged.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param string $css The CSS to scope.
 	 *
@@ -1181,7 +1181,7 @@ class FrmStylesHelper {
 		/**
 		 * Filter the CSS selector used for @scope when scoping custom CSS on admin pages.
 		 *
-		 * @since x.x
+		 * @since 6.30
 		 *
 		 * @param string $selector The CSS selector to scope to. Default '.frm_forms'.
 		 */
@@ -1195,7 +1195,7 @@ class FrmStylesHelper {
 	 * Extracts the global custom CSS from the cached CSS, outputs the theme CSS unchanged,
 	 * and returns only the custom CSS portion scoped.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param string $css The full cached CSS containing both theme and custom CSS.
 	 *
@@ -1227,7 +1227,7 @@ class FrmStylesHelper {
 	 * Minify CSS by stripping comments and whitespace.
 	 * Matches the minification used when saving the cached CSS file.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param string $css The CSS to minify.
 	 *
@@ -1240,7 +1240,7 @@ class FrmStylesHelper {
 	/**
 	 * Check if custom CSS should be scoped for admin context.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @return bool
 	 */

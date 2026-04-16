@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 /**
- * @since x.x
+ * @since 6.30
  *
  * @var array $field
  */
