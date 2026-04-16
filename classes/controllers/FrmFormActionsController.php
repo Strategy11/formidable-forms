@@ -721,6 +721,7 @@ class FrmFormActionsController {
 			asort( $action_priority );
 
 			// Make sure hooks are loaded.
+			new FrmGatedContentController();
 			new FrmNotification();
 
 			foreach ( $action_priority as $action_id => $priority ) {
