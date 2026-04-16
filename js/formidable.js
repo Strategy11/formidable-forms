@@ -1880,7 +1880,7 @@ function frmFrontFormJS() {
 	/**
 	 * Round total and maybe add trailing zeros so formatCurrency has a proper format to work with.
 	 *
-	 * @param {float}  total    The total amount to normalize.
+	 * @param {number}  total   The total amount to normalize.
 	 * @param {Object} currency The currency object containing decimal information.
 	 * @return {string}         The normalized total amount.
 	 */
