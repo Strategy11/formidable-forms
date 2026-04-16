@@ -25,12 +25,18 @@ class FrmMigrate {
 	 */
 	public $entry_metas;
 
+	/**
+	 * @var string
+	 */
+	public $gated_tokens;
+
 	public function __construct() {
 		global $wpdb;
-		$this->fields      = $wpdb->prefix . 'frm_fields';
-		$this->forms       = $wpdb->prefix . 'frm_forms';
-		$this->entries     = $wpdb->prefix . 'frm_items';
-		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
+		$this->fields        = $wpdb->prefix . 'frm_fields';
+		$this->forms         = $wpdb->prefix . 'frm_forms';
+		$this->entries       = $wpdb->prefix . 'frm_items';
+		$this->entry_metas   = $wpdb->prefix . 'frm_item_metas';
+		$this->gated_tokens  = $wpdb->prefix . 'frm_gated_tokens';
 	}
 
 	/**
@@ -250,6 +256,23 @@ class FrmMigrate {
                 KEY item_id (item_id)
         )';
 
+		/* Create/Upgrade Gated Tokens Table */
+		$sql[] = 'CREATE TABLE ' . $this->gated_tokens . ' (
+				id BIGINT UNSIGNED NOT NULL auto_increment,
+				token_hash varchar(64) NOT NULL,
+				action_id BIGINT UNSIGNED NOT NULL,
+				entry_id BIGINT UNSIGNED NOT NULL,
+				user_id BIGINT UNSIGNED default NULL,
+				ip_address varchar(45) default NULL,
+				created_at int UNSIGNED NOT NULL,
+				expired_at int UNSIGNED default NULL,
+				PRIMARY KEY  (id),
+				UNIQUE KEY token_hash (token_hash),
+				KEY action_id (action_id),
+				KEY user_id (user_id),
+				KEY expired_at (expired_at)
+        )';
+
 		foreach ( $sql as $q ) {
 			if ( function_exists( 'dbDelta' ) ) {
 				dbDelta( $q . $charset_collate . ';' );
@@ -409,6 +432,7 @@ class FrmMigrate {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->gated_tokens ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );
