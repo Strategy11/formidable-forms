@@ -8010,6 +8010,10 @@ window.frmAdminBuildJS = function() {
 			className: 'frm_logic_row frm_hidden'
 		} );
 
+		// Backwards compat: older Pro uses `#logic_link_{id}` + hidden `.frm_logic_rows`.
+		const oldLink = document.getElementById( `logic_link_${ id }` );
+		const oldRowsContainer = oldLink ? logicRowsContainer.closest( '.frm_logic_rows' ) : null;
+
 		logicRowsContainer.append( placeholder );
 		jQuery.ajax( {
 			type: 'POST', url: ajaxurl,
@@ -8029,6 +8033,14 @@ window.frmAdminBuildJS = function() {
 				const ruleTextEl = newRow ? newRow.querySelector( '.frm-logic-rule-text' ) : null;
 				if ( ruleTextEl ) {
 					ruleTextEl.textContent = logicRowsContainer.dataset.ruleText || '';
+				}
+
+				if ( oldLink ) {
+					oldLink.classList.add( 'frm_hidden' );
+				}
+				if ( oldRowsContainer ) {
+					oldRowsContainer.classList.remove( 'frm_hidden' );
+					oldRowsContainer.style.display = '';
 				}
 			}
 		} );
