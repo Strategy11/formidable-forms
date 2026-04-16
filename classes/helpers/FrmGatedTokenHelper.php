@@ -452,9 +452,8 @@ function frm_gated_content_obtain_token( $action_id = 0 ) {
 		return hash( 'sha256', FrmGatedTokenHelper::$tokens[ $action_id ] );
 	}
 
-	// 2. URL query parameter: ?access_token=<raw_token>
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$url_token = isset( $_GET['access_token'] ) ? sanitize_text_field( wp_unslash( $_GET['access_token'] ) ) : '';
+	// 2. URL query parameter: ?access_code=<raw_token>
+	$url_token = FrmAppHelper::simple_get( 'access_code' );
 	if ( '' !== $url_token ) {
 		$hash = hash( 'sha256', $url_token );
 		$row  = FrmGatedTokenHelper::get_row_by_hash( $hash );

@@ -22,6 +22,7 @@ class FrmGatedContentController {
 	 */
 	public function __construct() {
 		add_action( 'frm_trigger_gated_content_action', 'FrmGatedContentController::trigger', 10, 4 );
+		add_shortcode( 'frm_gated_content', 'FrmGatedContentController::shortcode' );
 	}
 
 	/**
@@ -42,5 +43,227 @@ class FrmGatedContentController {
 	public static function trigger( $action, $entry, $form, $event ) {
 		$user_id = get_current_user_id() ?: null;
 		FrmGatedTokenHelper::generate( $action->ID, $entry->id, $user_id );
+	}
+
+	/**
+	 * Handle the [frm_gated_content] shortcode.
+	 *
+	 * Attributes:
+	 *  - id   (required) Action post ID.
+	 *  - item (optional) 0-indexed item position. Omit to render the full item list.
+	 *  - show (optional) 'url' (default) | 'access_token' | 'expired_time'.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $atts Shortcode attributes.
+	 * @return string Shortcode output, or empty string when no token is available.
+	 */
+	public static function shortcode( $atts ) {
+		$atts = shortcode_atts(
+			array(
+				'id'   => 0,
+				'item' => false,
+				'show' => 'url',
+			),
+			$atts,
+			'frm_gated_content'
+		);
+
+		$action_id = (int) $atts['id'];
+		if ( ! $action_id ) {
+			return '';
+		}
+
+		// expired_time only needs a hash — try hash-only sources too.
+		if ( 'expired_time' === $atts['show'] ) {
+			$raw_token = self::resolve_raw_token( $action_id );
+			if ( null !== $raw_token ) {
+				return self::get_formatted_expiry( $raw_token );
+			}
+			$hash = frm_gated_content_obtain_token( $action_id );
+			return $hash ? self::get_formatted_expiry_by_hash( $hash ) : '';
+		}
+
+		// All other outputs require the raw token.
+		$raw_token = self::resolve_raw_token( $action_id );
+		if ( null === $raw_token ) {
+			return '';
+		}
+
+		if ( 'access_token' === $atts['show'] ) {
+			return esc_html( $raw_token );
+		}
+
+		// show="url" (default).
+		$action = get_post( $action_id );
+		if ( ! $action ) {
+			return '';
+		}
+
+		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+		$items    = ( is_array( $settings ) && ! empty( $settings['items'] ) ) ? $settings['items'] : array();
+
+		if ( false === $atts['item'] ) {
+			return self::render_item_list( $items, $raw_token );
+		}
+
+		$idx = (int) $atts['item'];
+		if ( ! isset( $items[ $idx ] ) || ! is_array( $items[ $idx ] ) ) {
+			return '';
+		}
+
+		$item = $items[ $idx ];
+		if ( empty( $item['id'] ) || empty( $item['type'] ) ) {
+			return '';
+		}
+
+		return esc_url( self::get_item_url( (int) $item['id'], $item['type'], $raw_token ) );
+	}
+
+	/**
+	 * Resolve the raw token for an action from same-request cache or URL parameter.
+	 *
+	 * Cookie-only sources cannot yield a raw token, so they are excluded here.
+	 * Use frm_gated_content_obtain_token() when only a hash is needed.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $action_id Action post ID.
+	 * @return string|null Raw 48-char token, or null if unavailable.
+	 */
+	private static function resolve_raw_token( $action_id ) {
+		// Same-request static cache populated by FrmGatedTokenHelper::generate().
+		if ( isset( FrmGatedTokenHelper::$tokens[ $action_id ] ) ) {
+			return FrmGatedTokenHelper::$tokens[ $action_id ];
+		}
+
+		// URL query parameter hit (e.g. visitor clicking a gated link from email).
+		$candidate = FrmAppHelper::simple_get( 'access_code' );
+		if ( '' !== $candidate ) {
+			$row = FrmGatedTokenHelper::get_row_by_token( $candidate );
+			if ( $row
+				&& (int) $row->action_id === $action_id
+				&& ( null === $row->expired_at || time() < (int) $row->expired_at )
+			) {
+				return $candidate;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Build the gated access URL for a single content item.
+	 *
+	 * Appends the raw token as the `access_code` query argument. Pro item types
+	 * ('frm_file', 'frm_pdf', …) can provide a base URL via the
+	 * `frm_gated_content_item_url` filter.
+	 *
+	 * @since x.x
+	 *
+	 * @param int    $item_id   Content item ID (e.g. page post ID).
+	 * @param string $type      Item type slug ('page', 'frm_file', 'frm_pdf', …).
+	 * @param string $raw_token Raw access token to append as access_code query arg.
+	 * @return string Full URL with access_code parameter, or empty string on failure.
+	 */
+	public static function get_item_url( $item_id, $type, $raw_token ) {
+		$base_url = '';
+
+		switch ( $type ) {
+			case 'page':
+				$base_url = (string) get_permalink( (int) $item_id );
+				break;
+			default:
+				/**
+				 * Filter the base URL for a gated content item type.
+				 *
+				 * Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
+				 *
+				 * @since x.x
+				 *
+				 * @param string $base_url  Empty string by default.
+				 * @param int    $item_id   Content item ID.
+				 * @param string $type      Item type slug.
+				 * @param string $raw_token Raw access token.
+				 */
+				$base_url = (string) apply_filters( 'frm_gated_content_item_url', '', (int) $item_id, $type, $raw_token );
+		}
+
+		if ( ! $base_url ) {
+			return '';
+		}
+
+		return add_query_arg( 'access_code', $raw_token, $base_url );
+	}
+
+	/**
+	 * Render an unordered list of gated access links for all items in an action.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $items     Array of item arrays from action settings (each with 'id' and 'type' keys).
+	 * @param string $raw_token Raw access token.
+	 * @return string HTML <ul> element, or empty string when no items produce a URL.
+	 */
+	public static function render_item_list( $items, $raw_token ) {
+		if ( empty( $items ) ) {
+			return '';
+		}
+
+		$list_items = '';
+
+		foreach ( $items as $item ) {
+			if ( ! is_array( $item ) || empty( $item['id'] ) || empty( $item['type'] ) ) {
+				continue;
+			}
+
+			$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+			if ( ! $url ) {
+				continue;
+			}
+
+			$label = get_the_title( (int) $item['id'] );
+			if ( ! $label ) {
+				$label = $url;
+			}
+
+			$list_items .= '<li><a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a></li>';
+		}
+
+		if ( ! $list_items ) {
+			return '';
+		}
+
+		return '<ul class="frm-gated-content-list">' . $list_items . '</ul>';
+	}
+
+	/**
+	 * Return the formatted expiry time for a raw token.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $raw_token Raw access token.
+	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
+	 */
+	public static function get_formatted_expiry( $raw_token ) {
+		return self::get_formatted_expiry_by_hash( hash( 'sha256', $raw_token ) );
+	}
+
+	/**
+	 * Return the formatted expiry time for a token hash.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $hash SHA-256 hex hash of the access token.
+	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
+	 */
+	private static function get_formatted_expiry_by_hash( $hash ) {
+		$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
+
+		if ( ! $row || null === $row->expired_at ) {
+			return '';
+		}
+
+		return date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $row->expired_at );
 	}
 }
