@@ -298,7 +298,7 @@ class FrmFieldProduct extends FrmFieldType {
 				}
 			}
 			break;
-		}
+		}//end foreach
 	}
 
 	/**
@@ -435,6 +435,10 @@ class FrmFieldProduct extends FrmFieldType {
 			}
 		}
 
+		/**
+		 * @var array $value
+		 */
+
 		foreach ( $value as $k => $v ) {
 			foreach ( $options as $option ) {
 				if ( ! is_array( $option ) || ! isset( $option['price'] ) ) {
@@ -445,11 +449,7 @@ class FrmFieldProduct extends FrmFieldType {
 					continue;
 				}
 
-				if ( 'number' === $format ) {
-					$value[ $k ] = $option['price'];
-				} else {
-					$value[ $k ] = FrmCurrencyHelper::format_price( $option['price'] );
-				}
+				$value[ $k ] = 'number' === $format ? $option['price'] : FrmCurrencyHelper::format_price( $option['price'] );
 
 				break;
 			}
