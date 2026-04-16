@@ -415,8 +415,9 @@ class FrmFieldProduct extends FrmFieldType {
 
 		$is_array = is_array( $value );
 
+		// Temporary turn value into array.
 		if ( ! $is_array ) {
-			$value = explode( $atts['sep'], $value );
+			$value = ! empty( $atts['sep'] ) && is_string( $atts['sep'] ) ? explode( $atts['sep'], $value ) : (array) $value;
 		}
 
 		$format = $atts['format'] ?? 'currency';
