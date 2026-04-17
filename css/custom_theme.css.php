@@ -232,7 +232,7 @@ legend.frm_hidden{
 	<?php if ( ! empty( $remove_box_shadow_active ) ) { ?>
 	-webkit-box-shadow: none<?php echo esc_html( $important ); ?>;
 	<?php } else { ?>
-	-webkit-box-shadow: 0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
+	-webkit-box-shadow: 0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $defaults['border_color_active'] ) ); ?>, 0.6);
 	<?php } ?>
 }
 
