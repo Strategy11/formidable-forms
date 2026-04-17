@@ -1,7 +1,6 @@
 version = 1
 
 # 1. Global Exclude Patterns
-# Views inherit scope from their including controller, excluded to match phpstan.neon.
 exclude_patterns = [
   "**/node_modules/**",
   "**/vendor/**",
@@ -24,11 +23,7 @@ exclude_patterns = [
   "js/formidable-web-components.js",
   "js/frm_testing_mode.js",
   "js/welcome-tour.js",
-  "eslint-rules/**",
-  "classes/views/**",
-  "stripe/views/**",
-  "square/views/**",
-  "css/*.css.php"
+  "eslint-rules/**"
 ]
 
 # 2. Test Patterns
