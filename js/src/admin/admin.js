@@ -848,11 +848,11 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const c = t.replace( '#', '.' );
+		const classSelector = t.replace( '#', '.' );
 
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
-			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
+			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( classSelector ).hide();
 		} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 			/* global settings */
 			const ajax = link.data( 'frmajax' );
@@ -865,7 +865,7 @@ window.frmAdminBuildJS = function() {
 			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
 		jQuery( t ).show();
-		jQuery( c ).show();
+		jQuery( classSelector ).show();
 
 		hideShortcodes();
 
@@ -1075,18 +1075,18 @@ window.frmAdminBuildJS = function() {
 		$postBodyContent.scrollTop(
 			( _, v ) => {
 				const moved = event.clientY;
-				const h = postBodyContent.offsetHeight;
+				const contentHeight = postBodyContent.offsetHeight;
 				const relativePos = event.clientY - postBodyContent.offsetTop;
-				const y = relativePos - ( h / 2 );
+				const offsetFromCenter = relativePos - ( contentHeight / 2 );
 
-				if ( relativePos > ( h - 50 ) && moved > 5 ) {
+				if ( relativePos > ( contentHeight - 50 ) && moved > 5 ) {
 					// Scrolling down.
-					return v + ( y * 0.1 );
+					return v + ( offsetFromCenter * 0.1 );
 				}
 
 				if ( relativePos < 70 && moved < 130 ) {
 					// Scrolling up.
-					return v - Math.abs( y * 0.1 );
+					return v - Math.abs( offsetFromCenter * 0.1 );
 				}
 
 				return v;
@@ -1974,7 +1974,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const isSubmitBtn = draggable.classList.contains( 'edit_field_type_submit' );
-		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && !! draggable.querySelector( '.edit_field_type_submit' );
+		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && Boolean( draggable.querySelector( '.edit_field_type_submit' ) );
 
 		if ( 'frm-show-fields' === droppable.id ) {
 			const draggableIndex = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
@@ -2058,7 +2058,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {boolean} True if the element is the last row.
 	 */
 	function isLastRow( element ) {
-		return element && element.matches( '#frm-show-fields > li:last-child' );
+		return element?.matches( '#frm-show-fields > li:last-child' );
 	}
 
 	// Don't allow a new page break or hidden field in a field group.
@@ -2142,13 +2142,9 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		// Do not allow a section inside of a section.
 		const draggableIncludesSection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
-		if ( draggableIncludesSection ) {
-			// Do not allow a section inside of a section.
-			return false;
-		}
-
-		return true;
+		return ! draggableIncludesSection;
 	}
 
 	function allowMoveFieldToGroup( draggable, group ) {
@@ -2163,15 +2159,11 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		// Do not allow a section or an embed field inside of a section.
 		const draggableIncludesASection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
 		const draggableIsEmbedField = draggable.classList.contains( 'edit_field_type_form' );
 		const groupIsInASection = null !== group.closest( '.start_divider' );
-		if ( groupIsInASection && ( draggableIncludesASection || draggableIsEmbedField ) ) {
-			// Do not allow a section or an embed field inside of a section.
-			return false;
-		}
-
-		return true;
+		return ! ( groupIsInASection && ( draggableIncludesASection || draggableIsEmbedField ) );
 	}
 
 	function groupIncludesBreakOrHiddenOrUserId( group ) {
@@ -2242,6 +2234,9 @@ window.frmAdminBuildJS = function() {
 
 		html = JSON.parse( html );
 		for ( key in html ) {
+			if ( ! Object.prototype.hasOwnProperty.call( html, key ) ) {
+				continue;
+			}
 			jQuery( `#frm_field_id_${ key }` ).replaceWith( html[ key ] );
 
 			const newReplacedField = document.getElementById( `frm_field_id_${ key }` );
@@ -3238,17 +3233,17 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
-			const a = document.createElement( 'a' );
-			a.setAttribute( 'href', '#' );
-			a.setAttribute( 'data-code', fields[ i ].fieldId );
-			a.classList.add( 'frm_insert_code' );
-			a.append( span( fields[ i ].fieldName ) );
-			a.append( span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ fields[ i ].fieldId }]` } ) );
+			const anchor = document.createElement( 'a' );
+			anchor.setAttribute( 'href', '#' );
+			anchor.setAttribute( 'data-code', fields[ i ].fieldId );
+			anchor.classList.add( 'frm_insert_code' );
+			anchor.append( span( fields[ i ].fieldName ) );
+			anchor.append( span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ fields[ i ].fieldId }]` } ) );
 
 			const li = document.createElement( 'li' );
 			li.classList.add( `frm-field-list-${ fieldId }` );
 			li.classList.add( `frm-field-list-${ fields[ i ].fieldType }` );
-			li.append( a );
+			li.append( anchor );
 			list.append( li );
 		}
 	}
