@@ -7482,8 +7482,8 @@ window.frmAdminBuildJS = function() {
 		const actionType = targetSettings.querySelector( '.frm_action_name' )?.value;
 		const sourceTitle = targetSettings.querySelector( '.widget-title h4 span:not(.frm-border-icon)' )?.textContent.trim() ?? '';
 		const uniqueTitle = getUniqueActionTitle( sourceTitle.replace( / \(\d+\)$/, '' ), getExistingActionTitles( actionType ) );
-		$action[0].querySelector( '.widget-title h4 span:not(.frm-border-icon)' ).textContent = uniqueTitle;
-		$action[0].querySelector( `input[name$="[${ currentID }][post_title]"]` ).value = uniqueTitle;
+		$action[ 0 ].querySelector( '.widget-title h4 span:not(.frm-border-icon)' ).textContent = uniqueTitle;
+		$action[ 0 ].querySelector( `input[name$="[${ currentID }][post_title]"]` ).value = uniqueTitle;
 
 		$action.find( '.frm_action_id, .frm-btn-group' ).remove();
 		$action.find( `input[name$="[${ currentID }][ID]"]` ).val( '' );
@@ -7589,7 +7589,7 @@ window.frmAdminBuildJS = function() {
 	function getExistingActionTitles( actionType ) {
 		return Array.from(
 			document.querySelectorAll( `.frm_single_${ actionType }_settings .widget-title h4 span:not(.frm-border-icon)` ),
-			( el ) => el.textContent.trim()
+			el => el.textContent.trim()
 		);
 	}
 
@@ -7598,15 +7598,17 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {string}   baseTitle       The base title without any numeric suffix.
-	 * @param {string[]} existingTitles  Titles currently in use.
-	 * @return {string}
+	 * @param {string} baseTitle The base title without any numeric suffix.
+	 * @param {string[]} existingTitles Titles currently in use.
+	 * @return {string} The first title not present in existingTitles.
 	 */
 	function getUniqueActionTitle( baseTitle, existingTitles ) {
 		const taken = new Set( existingTitles );
 		let title = baseTitle;
-		for ( let n = 2; taken.has( title ); n++ ) {
+		let n = 2;
+		while ( taken.has( title ) ) {
 			title = `${ baseTitle } (${ n })`;
+			n++;
 		}
 		return title;
 	}
