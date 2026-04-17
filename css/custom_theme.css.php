@@ -228,14 +228,6 @@ legend.frm_hidden{
 	font-weight: var(--field-weight);
 }
 
-.with_frm_style input:-webkit-autofill {
-	<?php if ( ! empty( $remove_box_shadow_active ) ) { ?>
-	-webkit-box-shadow: none<?php echo esc_html( $important ); ?>;
-	<?php } else { ?>
-	-webkit-box-shadow: 0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $defaults['border_color_active'] ) ); ?>, 0.6);
-	<?php } ?>
-}
-
 .with_frm_style input:-webkit-autofill:focus {
 	/* Prevent the user agent autofill background color from taking effect on focus. */
 	transition: background-color 5000s ease-in-out 0s<?php echo esc_html( $important ); ?>;
