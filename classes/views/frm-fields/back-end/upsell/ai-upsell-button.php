@@ -10,6 +10,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 FrmFieldsHelper::render_ai_generate_options_button(
 	array(
 		'show_pill'    => true,

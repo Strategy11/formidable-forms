@@ -31,7 +31,8 @@ if ( ! isset( $entry ) ) {
 	 * @param string   $text
 	 * @param stdClass $entry
 	 */
-	$additional_timestamp_text = apply_filters( 'frm_additional_timestamp_text', '', $entry ); // skipcq: PHP-W1020
+	// Skipcq: PHP-W1020
+	$additional_timestamp_text = apply_filters( 'frm_additional_timestamp_text', '', $entry );
 
 	printf(
 		/* translators: %1$s: Entry status, %2$s: <b> open tag, %3$s: The date, %4$s: Possible additional text, %5$s: </b> close tag */
