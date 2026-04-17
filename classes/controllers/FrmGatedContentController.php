@@ -27,19 +27,6 @@ class FrmGatedContentController {
 	private static $unlocked_post_id = 0;
 
 	/**
-	 * Register action hooks.
-	 *
-	 * @since x.x
-	 *
-	 */
-	public function __construct() {
-		add_action( 'frm_trigger_gated_content_action', 'FrmGatedContentController::trigger', 10, 4 );
-		add_shortcode( 'frm_gated_content', 'FrmGatedContentController::shortcode' );
-		// 'wp' fires after WP::query_posts() so get_queried_object_id() is available.
-		add_action( 'wp', 'FrmGatedContentController::maybe_unlock_post' );
-	}
-
-	/**
 	 * Attempt to unlock a password-protected post using a gated content token.
 	 *
 	 * Hooked on 'wp' so get_queried_object_id() is available (query is parsed
@@ -64,7 +51,7 @@ class FrmGatedContentController {
 		}
 
 		// Try URL query parameter first (obtain_token with no action_id uses URL param only).
-		$hash = frm_gated_content_obtain_token();
+		$hash = FrmGatedTokenHelper::obtain_token();
 
 		// No URL param — scan frm_gc_* cookies to find one that grants access to this page.
 		if ( ! $hash ) {
@@ -83,7 +70,7 @@ class FrmGatedContentController {
 			// Refresh the frm_gc_ cookie so subsequent visits skip the URL param.
 			$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
 			if ( $row ) {
-				frm_gated_content_set_cookie( (int) $row->action_id, $hash, $row->expired_at );
+				FrmGatedTokenHelper::set_cookie( (int) $row->action_id, $hash, $row->expired_at );
 			}
 			return;
 		}
@@ -151,6 +138,25 @@ class FrmGatedContentController {
 	}
 
 	/**
+	 * Delete all gated tokens linked to a gated content action when it is permanently deleted.
+	 *
+	 * Fires on 'before_delete_post'. Only acts on frm_form_actions posts whose
+	 * post_excerpt identifies them as gated_content actions.
+	 *
+	 * @since x.x
+	 *
+	 * @param int     $post_id Post ID being deleted.
+	 * @param WP_Post $post    Post object being deleted.
+	 * @return void
+	 */
+	public static function on_action_deleted( $post_id, $post ) {
+		if ( 'frm_form_actions' !== $post->post_type || FrmGatedContentAction::$slug !== $post->post_excerpt ) {
+			return;
+		}
+		FrmGatedTokenHelper::delete_by_action( $post_id );
+	}
+
+	/**
 	 * Generate a gated content token when a form action fires.
 	 *
 	 * Runs at form action priority 8 — before On Submit (9) and Send Email (10) —
@@ -205,7 +211,7 @@ class FrmGatedContentController {
 			if ( null !== $raw_token ) {
 				return self::get_formatted_expiry( $raw_token );
 			}
-			$hash = frm_gated_content_obtain_token( $action_id );
+			$hash = FrmGatedTokenHelper::obtain_token( $action_id );
 			return $hash ? self::get_formatted_expiry_by_hash( $hash ) : '';
 		}
 
@@ -249,7 +255,7 @@ class FrmGatedContentController {
 	 * Resolve the raw token for an action from same-request cache or URL parameter.
 	 *
 	 * Cookie-only sources cannot yield a raw token, so they are excluded here.
-	 * Use frm_gated_content_obtain_token() when only a hash is needed.
+	 * Use FrmGatedTokenHelper::obtain_token() when only a hash is needed.
 	 *
 	 * @since x.x
 	 *

@@ -137,6 +137,27 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
+	 * Delete all tokens associated with a gated content action.
+	 *
+	 * Called when the action post is permanently deleted so orphaned token rows
+	 * do not accumulate in wp_frm_gated_tokens.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $action_id ID of the frm_form_actions post being deleted.
+	 * @return void
+	 */
+	public static function delete_by_action( $action_id ) {
+		global $wpdb;
+
+		$wpdb->delete(
+			$wpdb->prefix . 'frm_gated_tokens',
+			array( 'action_id' => (int) $action_id ),
+			array( '%d' )
+		);
+	}
+
+	/**
 	 * Revoke an access token by deleting it from the database.
 	 *
 	 * @since x.x
@@ -391,108 +412,108 @@ class FrmGatedTokenHelper {
 			)
 		);
 	}
-}
 
-/**
- * Set an HttpOnly cookie that stores a token hash for a gated content action.
- *
- * Cookie name : frm_gc_{action_id}
- * Cookie value: 64-char hex SHA-256 hash of the raw token
- *
- * @since x.x
- *
- * @param int        $action_id  Action post ID.
- * @param string     $hash       SHA-256 hex hash to store.
- * @param int|null   $expired_at Unix timestamp for cookie expiry, or null for session+1-year.
- * @return void
- */
-function frm_gated_content_set_cookie( $action_id, $hash, $expired_at = null ) {
-	$expiry = null !== $expired_at ? (int) $expired_at : ( time() + YEAR_IN_SECONDS );
+	/**
+	 * Set an HttpOnly cookie that stores a token hash for a gated content action.
+	 *
+	 * Cookie name : frm_gc_{action_id}
+	 * Cookie value: 64-char hex SHA-256 hash of the raw token
+	 *
+	 * @since x.x
+	 *
+	 * @param int      $action_id  Action post ID.
+	 * @param string   $hash       SHA-256 hex hash to store.
+	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for session+1-year.
+	 * @return void
+	 */
+	public static function set_cookie( $action_id, $hash, $expired_at = null ) {
+		$expiry = null !== $expired_at ? (int) $expired_at : ( time() + YEAR_IN_SECONDS );
 
-	$parts = array(
-		'frm_gc_' . (int) $action_id . '=' . rawurlencode( $hash ),
-		'Expires=' . gmdate( 'D, d M Y H:i:s T', $expiry ),
-		'Path=/',
-		'SameSite=Lax',
-		'HttpOnly',
-	);
+		$parts = array(
+			'frm_gc_' . (int) $action_id . '=' . rawurlencode( $hash ),
+			'Expires=' . gmdate( 'D, d M Y H:i:s T', $expiry ),
+			'Path=/',
+			'SameSite=Lax',
+			'HttpOnly',
+		);
 
-	if ( is_ssl() ) {
-		$parts[] = 'Secure';
-	}
-
-	header( 'Set-Cookie: ' . implode( '; ', $parts ), false );
-}
-
-/**
- * Resolve the active token hash for a gated content action.
- *
- * Resolution order:
- *  1. Same-request static cache (FrmGatedTokenHelper::$tokens) — set by generate().
- *  2. `access_token` URL query parameter (raw token → hashed → validated).
- *  3. HttpOnly cookie `frm_gc_{action_id}` (stores hash directly).
- *  4. IP-address fallback when cookie hash is stale (e.g. after token renewal).
- *
- * Returns a SHA-256 hex hash string on success, or null when no valid token is
- * found. Callers should pass the hash to FrmGatedTokenHelper::validate_hash()
- * to confirm it grants access to a specific content item.
- *
- * @since x.x
- *
- * @param int $action_id Optional. Restrict resolution to a specific action post ID.
- *                       When 0 the URL-param path still works (action_id is read
- *                       from the token row); cookie and IP paths are skipped.
- * @return string|null Token hash, or null if no valid token could be resolved.
- */
-function frm_gated_content_obtain_token( $action_id = 0 ) {
-	$action_id = (int) $action_id;
-
-	// 1. Same-request static cache set by FrmGatedTokenHelper::generate().
-	if ( $action_id && isset( FrmGatedTokenHelper::$tokens[ $action_id ] ) ) {
-		return hash( 'sha256', FrmGatedTokenHelper::$tokens[ $action_id ] );
-	}
-
-	// 2. URL query parameter: ?access_code=<raw_token>
-	$url_token = FrmAppHelper::simple_get( 'access_code' );
-	if ( '' !== $url_token ) {
-		$hash = hash( 'sha256', $url_token );
-		$row  = FrmGatedTokenHelper::get_row_by_hash( $hash );
-
-		$row_action_id = $row ? (int) $row->action_id : 0;
-		$row_active    = $row && ( null === $row->expired_at || time() < (int) $row->expired_at );
-
-		if ( $row_active && ( ! $action_id || $row_action_id === $action_id ) ) {
-			frm_gated_content_set_cookie( $row_action_id, $hash, $row->expired_at );
-			return $hash;
+		if ( is_ssl() ) {
+			$parts[] = 'Secure';
 		}
+
+		header( 'Set-Cookie: ' . implode( '; ', $parts ), false );
 	}
 
-	// Cookie and IP paths require a known action_id.
-	if ( ! $action_id ) {
+	/**
+	 * Resolve the active token hash for a gated content action.
+	 *
+	 * Resolution order:
+	 *  1. Same-request static cache (FrmGatedTokenHelper::$tokens) — set by generate().
+	 *  2. `access_code` URL query parameter (raw token → hashed → validated).
+	 *  3. HttpOnly cookie `frm_gc_{action_id}` (stores hash directly).
+	 *  4. IP-address fallback when cookie hash is stale (e.g. after token renewal).
+	 *
+	 * Returns a SHA-256 hex hash string on success, or null when no valid token is
+	 * found. Callers should pass the hash to self::validate_hash() to confirm it
+	 * grants access to a specific content item.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $action_id Optional. Restrict resolution to a specific action post ID.
+	 *                       When 0 the URL-param path still works (action_id is read
+	 *                       from the token row); cookie and IP paths are skipped.
+	 * @return string|null Token hash, or null if no valid token could be resolved.
+	 */
+	public static function obtain_token( $action_id = 0 ) {
+		$action_id = (int) $action_id;
+
+		// 1. Same-request static cache set by self::generate().
+		if ( $action_id && isset( self::$tokens[ $action_id ] ) ) {
+			return hash( 'sha256', self::$tokens[ $action_id ] );
+		}
+
+		// 2. URL query parameter: ?access_code=<raw_token>
+		$url_token = FrmAppHelper::simple_get( 'access_code' );
+		if ( '' !== $url_token ) {
+			$hash = hash( 'sha256', $url_token );
+			$row  = self::get_row_by_hash( $hash );
+
+			$row_action_id = $row ? (int) $row->action_id : 0;
+			$row_active    = $row && ( null === $row->expired_at || time() < (int) $row->expired_at );
+
+			if ( $row_active && ( ! $action_id || $row_action_id === $action_id ) ) {
+				self::set_cookie( $row_action_id, $hash, $row->expired_at );
+				return $hash;
+			}
+		}
+
+		// Cookie and IP paths require a known action_id.
+		if ( ! $action_id ) {
+			return null;
+		}
+
+		// 3. HttpOnly cookie set on a previous URL-param hit.
+		$cookie_name = 'frm_gc_' . $action_id;
+		$cookie_hash = isset( $_COOKIE[ $cookie_name ] ) ? sanitize_text_field( $_COOKIE[ $cookie_name ] ) : '';
+
+		if ( '' !== $cookie_hash ) {
+			$row = self::get_row_by_hash( $cookie_hash );
+
+			if ( $row && ( null === $row->expired_at || time() < (int) $row->expired_at ) ) {
+				return $cookie_hash;
+			}
+
+			// 4. Cookie hash is stale (token was renewed or deleted) — try IP fallback.
+			$ip     = FrmAppHelper::get_ip_address();
+			$ip_row = self::get_active_row_by_action_and_ip( $action_id, $ip );
+
+			if ( $ip_row ) {
+				// Refresh the cookie so the next request hits path 3 again.
+				self::set_cookie( $action_id, $ip_row->token_hash, $ip_row->expired_at );
+				return $ip_row->token_hash;
+			}
+		}
+
 		return null;
 	}
-
-	// 3. HttpOnly cookie set on a previous URL-param hit.
-	$cookie_name = 'frm_gc_' . $action_id;
-	$cookie_hash = isset( $_COOKIE[ $cookie_name ] ) ? sanitize_text_field( $_COOKIE[ $cookie_name ] ) : '';
-
-	if ( '' !== $cookie_hash ) {
-		$row = FrmGatedTokenHelper::get_row_by_hash( $cookie_hash );
-
-		if ( $row && ( null === $row->expired_at || time() < (int) $row->expired_at ) ) {
-			return $cookie_hash;
-		}
-
-		// 4. Cookie hash is stale (token was renewed or deleted) — try IP fallback.
-		$ip      = FrmAppHelper::get_ip_address();
-		$ip_row  = FrmGatedTokenHelper::get_active_row_by_action_and_ip( $action_id, $ip );
-
-		if ( $ip_row ) {
-			// Refresh the cookie so the next request hits path 3 again.
-			frm_gated_content_set_cookie( $action_id, $ip_row->token_hash, $ip_row->expired_at );
-			return $ip_row->token_hash;
-		}
-	}
-
-	return null;
 }
