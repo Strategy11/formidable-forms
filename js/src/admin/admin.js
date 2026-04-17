@@ -818,18 +818,18 @@ window.frmAdminBuildJS = function() {
 
 	function clickNewTab() {
 		/*jshint validthis:true */
-		const t = this.getAttribute( 'href' );
-		if ( t === undefined ) {
+		const href = this.getAttribute( 'href' );
+		if ( href === undefined ) {
 			return false;
 		}
 
-		const c = t.replace( '#', '.' );
+		const classSelector = href.replace( '#', '.' );
 		const $link = jQuery( this );
 
 		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
-		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
+		$link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
 
-		const tabContent = document.getElementById( t.replace( '#', '' ) );
+		const tabContent = document.getElementById( href.replace( '#', '' ) );
 		if ( tabContent ) {
 			tabContent.style.display = 'block';
 		}
@@ -843,28 +843,28 @@ window.frmAdminBuildJS = function() {
 
 	function clickTab( link, auto ) {
 		link = jQuery( link );
-		const t = link.attr( 'href' );
-		if ( t === undefined ) {
+		const href = link.attr( 'href' );
+		if ( href === undefined ) {
 			return;
 		}
 
-		const classSelector = t.replace( '#', '.' );
+		const classSelector = href.replace( '#', '.' );
 
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
-			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( classSelector ).hide();
+			link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
 		} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 			/* global settings */
 			const ajax = link.data( 'frmajax' );
 			link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
 			if ( ajax !== undefined && ajax == '1' ) {
-				loadSettingsTab( t );
+				loadSettingsTab( href );
 			}
 		} else {
 			/* form settings page */
 			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
-		jQuery( t ).show();
+		jQuery( href ).show();
 		jQuery( classSelector ).show();
 
 		hideShortcodes();
@@ -880,9 +880,9 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( jQuery( '.frm_form_settings' ).length ) {
-			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ t.replace( '#', '' ) }` );
+			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ href.replace( '#', '' ) }` );
 		} else {
-			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ t.replace( '#', '' ) }` );
+			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ href.replace( '#', '' ) }` );
 		}
 	}
 
@@ -2234,7 +2234,7 @@ window.frmAdminBuildJS = function() {
 
 		html = JSON.parse( html );
 		for ( key in html ) {
-			if ( ! Object.prototype.hasOwnProperty.call( html, key ) ) {
+			if ( ! Object.hasOwn( html, key ) ) {
 				continue;
 			}
 			jQuery( `#frm_field_id_${ key }` ).replaceWith( html[ key ] );
