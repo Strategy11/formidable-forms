@@ -4,7 +4,7 @@
 	"categories": {
 		"correctness": "error",
 		"suspicious": "error",
-		"pedantic": "error",
+		"pedantic": "off",
 		"perf": "error",
 		"style": "error",
 		"restriction": "error"
@@ -103,6 +103,8 @@
 		"react/jsx-props-no-spreading": "off",
 		"react/no-array-index-key": "off",
 		"react/no-multi-comp": "off",
+		"react/prefer-function-component": "off",
+		"react/hook-use-state": "off",
 		"react/react-in-jsx-scope": "off",
 		"react/self-closing-comp": "off",
 

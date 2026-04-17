@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Helper class for displaying upsell controls.
  *
- * @since x.x
+ * @since 6.30
  */
 class FrmSettingsUpsellHelper {
 	/**
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param array $field
 	 *
@@ -41,7 +41,7 @@ class FrmSettingsUpsellHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param array $field
 	 *
@@ -68,7 +68,7 @@ class FrmSettingsUpsellHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param array  $atts
 	 * @param string $utm_content

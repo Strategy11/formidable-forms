@@ -1103,6 +1103,16 @@ class FrmEntry {
 
 		do_action( 'frm_after_create_entry', $entry_id, $new_values['form_id'], compact( 'is_child' ) );
 		do_action( 'frm_after_create_entry_' . $new_values['form_id'], $entry_id, compact( 'is_child' ) );
+
+		if ( ! empty( $values['form_key'] ) ) {
+			/**
+			 * @since 6.30
+			 *
+			 * @param int   $entry_id
+			 * @param array $is_child
+			 */
+			do_action( 'frm_after_create_entry_' . $values['form_key'], $entry_id, compact( 'is_child' ) );
+		}
 	}
 
 	/**
@@ -1225,6 +1235,15 @@ class FrmEntry {
 
 		do_action( 'frm_after_update_entry', $id, $new_values['form_id'] );
 		do_action( 'frm_after_update_entry_' . $new_values['form_id'], $id );
+
+		if ( ! empty( $values['form_key'] ) ) {
+			/**
+			 * @since 6.30
+			 *
+			 * @param int $entry_id
+			 */
+			do_action( 'frm_after_update_entry_' . $values['form_key'], $id );
+		}
 	}
 
 	/**
