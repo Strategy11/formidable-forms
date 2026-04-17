@@ -31,7 +31,7 @@ if ( ! isset( $entry ) ) {
 	 * @param string   $text
 	 * @param stdClass $entry
 	 */
-	// Skipcq: PHP-W1020
+	// skipcq: PHP-W1020
 	$additional_timestamp_text = apply_filters( 'frm_additional_timestamp_text', '', $entry );
 
 	printf(

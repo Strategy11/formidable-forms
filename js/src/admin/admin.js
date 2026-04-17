@@ -7598,7 +7598,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {string} baseTitle The base title without any numeric suffix.
+	 * @param {string}   baseTitle      The base title without any numeric suffix.
 	 * @param {string[]} existingTitles Titles currently in use.
 	 * @return {string} The first title not present in existingTitles.
 	 */
