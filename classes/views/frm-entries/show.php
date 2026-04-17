@@ -1,4 +1,15 @@
 <?php
+/**
+ * Entry show page.
+ *
+ * @package Formidable
+ *
+ * @var stdClass $form   Form object.
+ * @var stdClass $entry  Entry object.
+ * @var array    $fields Field objects for the entry.
+ * @var int      $id     Entry ID.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

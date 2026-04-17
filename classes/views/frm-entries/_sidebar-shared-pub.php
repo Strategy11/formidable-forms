@@ -1,4 +1,13 @@
 <?php
+/**
+ * Shared entry sidebar publish box.
+ *
+ * @package Formidable
+ *
+ * @var stdClass      $entry  Entry object (falls back to $record).
+ * @var stdClass|null $record Legacy entry object used when $entry is not set.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
