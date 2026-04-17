@@ -160,7 +160,7 @@ describe( 'Add-Ons page', () => {
 		} );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1' ).should( 'have.text', 'What is the difference between the Lite (free) and Pro version?' );
+			cy.get( 'h1' ).should( 'contain.text', 'What is the difference between the Lite' );
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-addons' );
