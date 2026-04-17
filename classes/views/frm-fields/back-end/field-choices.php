@@ -4,7 +4,8 @@
  *
  * @package Formidable
  *
- * @var array $args Arguments including 'field' (with 'post_field', 'id', 'taxonomy' keys).
+ * @var FrmFieldType $this Field type handler that included this template.
+ * @var array        $args Arguments including 'field' (with 'post_field', 'id', 'taxonomy' keys).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

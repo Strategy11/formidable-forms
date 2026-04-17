@@ -4,8 +4,10 @@
  *
  * @package Formidable
  *
- * @var array $args                  Arguments including 'field' and 'field_obj'.
- * @var bool  $should_hide_bulk_edit Whether to hide the bulk edit link.
+ * @var FrmFieldType $this                  Field type handler that included this template.
+ * @var array        $args                  Arguments including 'field' and 'field_obj'.
+ * @var bool         $should_hide_bulk_edit Whether to hide the bulk edit link.
+ * @var string       $option_title          Title attribute for the bulk edit link.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

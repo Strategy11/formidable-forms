@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 * @param array $show_args The arguments.
 					 * @param array $args      Includes `form`.
 					 */
-					$show_args = apply_filters( 'frm_entries_show_args', $show_args, compact( 'form' ) );
+					$show_args = apply_filters( 'frm_entries_show_args', $show_args, compact( 'form' ) ); // skipcq: PHP-W1020
 
 					echo FrmEntriesController::show_entry_shortcode( $show_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>

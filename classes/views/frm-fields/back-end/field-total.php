@@ -4,8 +4,9 @@
  *
  * @package Formidable
  *
- * @var string $html_id    HTML id attribute for the hidden input.
- * @var string $field_name HTML name attribute for the hidden input.
+ * @var FrmFieldTotal $this       Field type handler that included this template.
+ * @var string       $html_id    HTML id attribute for the hidden input.
+ * @var string       $field_name HTML name attribute for the hidden input.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -106,7 +106,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( $display['label'] ) { ?>
 		<p class="frm-mt-xs">
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
-				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); ?>
+				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); // skipcq: PHP-W1020 ?>
 			</label>
 			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_label_<?php echo esc_attr( $field['id'] ); ?>" />
 		</p>
@@ -486,7 +486,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						}
 
 						FrmHtmlHelper::echo_dropdown_option(
-							is_array( $ftype ) ? $ftype['name'] : $ftyp,
+							is_array( $ftype ) ? $ftype['name'] : $ftype,
 							$fkey === $field['type'],
 							$type_option_params
 						);
