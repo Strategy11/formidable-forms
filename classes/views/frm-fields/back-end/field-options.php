@@ -1,4 +1,13 @@
 <?php
+/**
+ * Field options settings in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var array $args                  Arguments including 'field' and 'field_obj'.
+ * @var bool  $should_hide_bulk_edit Whether to hide the bulk edit link.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

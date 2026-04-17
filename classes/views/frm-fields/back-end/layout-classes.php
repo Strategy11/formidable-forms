@@ -1,4 +1,10 @@
 <?php
+/**
+ * CSS layout classes modal content.
+ *
+ * @package Formidable
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

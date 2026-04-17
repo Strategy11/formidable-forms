@@ -1,4 +1,14 @@
 <?php
+/**
+ * Default value setting in the field settings.
+ *
+ * @package Formidable
+ *
+ * @var array        $field     Field data including 'id', 'default_value', 'dyn_default_value'.
+ * @var FrmFieldType $field_obj Field type handler.
+ * @var array        $display   Display options; may include 'default_value'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

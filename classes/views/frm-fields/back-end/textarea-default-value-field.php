@@ -1,4 +1,14 @@
 <?php
+/**
+ * Textarea input for the default value setting.
+ *
+ * @package Formidable
+ *
+ * @var array  $field         Field data including 'id' and 'field_key'.
+ * @var string $default_name  HTML name attribute for the textarea.
+ * @var mixed  $default_value Current default value.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

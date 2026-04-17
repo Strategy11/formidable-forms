@@ -1,4 +1,26 @@
 <?php
+/**
+ * Field settings panel in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var array        $field               Field data.
+ * @var array        $display             Display options for each setting section.
+ * @var array        $values              Form values associated with the field.
+ * @var FrmFieldType $field_obj           Field type handler.
+ * @var string       $type_name           Human-readable field type name.
+ * @var array        $field_types         Available field types this field can switch to.
+ * @var array        $disabled_fields     Field types that are disabled in the type dropdown.
+ * @var array        $default_value_types Default value types available for this field.
+ * @var array        $unique_values_label_atts     Label attributes for the Unique checkbox.
+ * @var array        $read_only_label_atts         Label attributes for the Read Only checkbox.
+ * @var bool         $show_upsell_for_unique_value Whether to show upsell for Unique.
+ * @var bool         $show_upsell_for_read_only    Whether to show upsell for Read Only.
+ * @var bool         $show_upsell_for_before_after_contents Whether to show upsell for before/after contents.
+ * @var bool         $show_upsell_for_autocomplete Whether to show upsell for autocomplete.
+ * @var bool         $show_upsell_for_visibility   Whether to show upsell for visibility.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
