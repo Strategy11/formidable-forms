@@ -25,6 +25,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
+	<rule ref="Formidable.CodeAnalysis.InlineSingleUseVariable" />
 	<rule ref="Formidable.CodeAnalysis.MergeNestedIf" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
@@ -33,6 +34,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
+	<rule ref="Formidable.CodeAnalysis.PreferFrmfontInIconByClass" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmFieldGetFieldType" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmFieldGetType" />
 	<rule ref="Formidable.CodeAnalysis.PreferGuardClauseForReturnElse" />

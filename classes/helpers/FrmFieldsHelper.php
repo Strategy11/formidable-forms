@@ -590,6 +590,10 @@ class FrmFieldsHelper {
 	 */
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
 		foreach ( $fields as $field ) {
+			if ( ! is_array( $field ) ) {
+				continue;
+			}
+
 			$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
 			$field_obj->show_field( compact( 'errors', 'form', 'form_action' ) );
 		}
@@ -960,11 +964,9 @@ class FrmFieldsHelper {
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$m = ! in_array( $hide_opt, $observed_value );
 		} elseif ( $cond === '>' ) {
-			$min = min( $observed_value );
-			$m   = $min > $hide_opt;
+			$m = min( $observed_value ) > $hide_opt;
 		} elseif ( $cond === '<' ) {
-			$max = max( $observed_value );
-			$m   = $max < $hide_opt;
+			$m = max( $observed_value ) < $hide_opt;
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			foreach ( $observed_value as $ob ) {
 				$m = strpos( $ob, $hide_opt );
@@ -2363,6 +2365,37 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Shows add field link.
+	 *
+	 * @since 6.30
+	 *
+	 * @param array $field_type See file `classes/views/frm-forms/add_field_links.php`.
+	 *
+	 * @return void
+	 */
+	public static function show_add_field_link( $field_type ) {
+		$field_label = FrmFormsHelper::get_field_link_name( $field_type );
+		$classes     = 'frmbutton frm6 frm_t' . $field_type['key'];
+
+		if ( ! empty( $field_type['hide'] ) ) {
+			$classes .= ' frm_hidden';
+		}
+		?>
+<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_type['key'] ); ?>">
+	<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
+		<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
+		<span><?php echo esc_html( $field_label ); ?></span>
+		<?php
+		if ( 'credit_card' === $field_type['key'] && ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			FrmAppHelper::show_pill_text();
+		}
+		?>
+	</a>
+</li>
+		<?php
+	}
+
+	/**
 	 * @since 4.04
 	 *
 	 * @param array $args
@@ -2621,6 +2654,10 @@ class FrmFieldsHelper {
 			),
 		);
 
+		if ( 'product' === FrmField::get_field_type( $field ) ) {
+			unset( $options['buttons'] );
+		}
+
 		/**
 		 * Allows modifying the options of Display format setting of Radio field.
 		 *
@@ -2807,9 +2844,10 @@ class FrmFieldsHelper {
 	 */
 	public static function render_ai_generate_options_button( $args, $should_hide_bulk_edit = false ) {
 		$attributes = array(
-			'type'  => 'button',
-			'class' => self::get_ai_generate_options_button_class(),
+			'type' => 'button',
 		);
+
+		$attributes['class'] = ! empty( $args['class'] ) ? $args['class'] : self::get_ai_generate_options_button_class();
 
 		if ( $should_hide_bulk_edit ) {
 			$attributes['class'] .= ' frm-force-hidden';
@@ -2819,7 +2857,7 @@ class FrmFieldsHelper {
 			'ai',
 			array(
 				'requires' => 'Business',
-				'upgrade'  => __( 'Generate options with AI', 'formidable' ),
+				'upgrade'  => $args['upgrade_text'] ?? __( 'Generate options with AI', 'formidable' ),
 				'medium'   => 'builder',
 				'content'  => 'generate-options-with-ai',
 			),

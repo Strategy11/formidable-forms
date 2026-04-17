@@ -767,7 +767,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @since x.x Added the $is_valid param.
+	 * @since 6.30 Added the $is_valid param.
 	 *
 	 * @param bool $is_valid
 	 *
@@ -1010,8 +1010,7 @@ class FrmAddon {
 	private static function set_license_from_post() {
 		$plugin_slug          = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$this_plugin          = self::get_addon( $plugin_slug );
-		$license              = $this_plugin->get_license();
-		$this_plugin->license = $license;
+		$this_plugin->license = $this_plugin->get_license();
 		return $this_plugin;
 	}
 

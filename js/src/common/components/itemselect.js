@@ -42,7 +42,7 @@ export default class ItemSelect extends Component {
 			help,
 		} = this.props;
 
-		if ( ( ! items || items.length === 0 ) ) {
+		if ( ! items || items.length === 0 ) {
 			return (
 				<p className="frm-block-select-no-items">
 					{ sprintf(

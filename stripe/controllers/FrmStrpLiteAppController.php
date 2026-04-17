@@ -58,6 +58,17 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
+	 * Gets payments settings URL.
+	 *
+	 * @since 6.30
+	 *
+	 * @return string
+	 */
+	public static function get_payments_settings_url() {
+		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' );
+	}
+
+	/**
 	 * Redirect to Stripe settings when payments are not yet installed
 	 * and the payments page is accessed by its URL.
 	 *
@@ -77,7 +88,7 @@ class FrmStrpLiteAppController {
 			return;
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) );
+		wp_safe_redirect( self::get_payments_settings_url() );
 		die();
 	}
 

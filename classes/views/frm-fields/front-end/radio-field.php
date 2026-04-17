@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * the form is double filtered and not minimized.
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
+ *
+ * @since 6.30 Added `$hide_label`.
+ *
+ * @var bool $hide_label
  */
 
 if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
@@ -18,7 +22,6 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	if ( FrmFieldsHelper::should_skip_rendering_choices_for_field( $field ) ) {
 		return;
 	}
-	$include_label = ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'];
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
@@ -47,7 +50,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		$checked                  = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 		$should_echo_disabled_att = FrmFieldsHelper::should_disable_choice( $opt_key, trim( $checked ) !== '', $field );
 
-		if ( $include_label ) {
+		if ( empty( $hide_label ) ) {
 			$label_attributes = array(
 				'for' => $html_id . '-' . $opt_key,
 			);
@@ -73,8 +76,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			echo 'disabled="disabled" ';
 		}
 		?>/><?php
-
-		if ( $include_label ) {
+		if ( empty( $hide_label ) ) {
 			echo ' ';
 			FrmAppHelper::kses_echo( $label, 'all' );
 			FrmFieldsHelper::after_choice_input( $field, $opt_key );

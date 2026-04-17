@@ -108,7 +108,7 @@ export class frmTabsNavigator {
 
 	changeSlide( index ) {
 		this.removeActiveClassnameFromSlides();
-		const translate = index == 0 ? '0px' : `calc( ( ${ ( index * 100 ) }% + ${ parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * ${ this.isRTL ? 1 : -1 } )`;
+		const translate = index == 0 ? '0px' : `calc( ( ${ index * 100 }% + ${ parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * ${ this.isRTL ? 1 : -1 } )`;
 		if ( '0px' !== translate ) {
 			this.slideTrack.style.transform = `translateX(${ translate })`;
 		} else {

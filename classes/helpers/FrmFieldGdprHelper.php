@@ -42,8 +42,7 @@ class FrmFieldGdprHelper {
 	 * @return bool
 	 */
 	public static function hide_gdpr_field() {
-		$settings = FrmAppHelper::get_settings();
-		return ! $settings->enable_gdpr;
+		return ! FrmAppHelper::get_settings()->enable_gdpr;
 	}
 
 	/**

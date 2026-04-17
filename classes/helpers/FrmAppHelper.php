@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 104;
+	public static $db_version = 105;
 
 	/**
 	 * Used by the API add-on.
@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.29';
+	public static $plug_version = '6.30';
 
 	/**
 	 * @var bool
@@ -310,8 +310,7 @@ class FrmAppHelper {
 			return true;
 		}
 
-		$menu_icon = self::get_menu_icon_class();
-		return str_contains( $menu_icon, 'frm_logo_icon' );
+		return str_contains( self::get_menu_icon_class(), 'frm_logo_icon' );
 	}
 
 	/**
@@ -1051,8 +1050,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
-		$allowed_html = self::allowed_html( $allowed );
-		return wp_kses( $value, $allowed_html );
+		return wp_kses( $value, self::allowed_html( $allowed ) );
 	}
 
 	/**
@@ -2341,8 +2339,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$user_id   = get_current_user_id();
-		$user      = new WP_User( $user_id );
+		$user      = new WP_User( get_current_user_id() );
 		$frm_roles = self::frm_capabilities();
 
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
@@ -3068,14 +3065,21 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Truncate a string.
+	 *
+	 * Note: By default, this function will allow for a few additional characters more than $length.
+	 * If a string has no spaces, it allows up to 50 additional characters. To force a true length limit,
+	 * use $force_length_limit = true.
+	 *
 	 * @param mixed      $original_string
 	 * @param int|string $length
 	 * @param int        $minword
 	 * @param string     $continue
+	 * @param bool       $force_length_limit Force the final string to never exceed the length limit.
 	 *
 	 * @return string
 	 */
-	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
+	public static function truncate( $original_string, $length, $minword = 3, $continue = '...', $force_length_limit = false ) {
 		if ( ! is_string( $original_string ) && ! is_int( $original_string ) ) {
 			return '';
 		}
@@ -3091,6 +3095,11 @@ class FrmAppHelper {
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
+
+			if ( $force_length_limit ) {
+				return $sub;
+			}
+
 			return $sub . ( $length < $original_len ? $continue : '' );
 		}
 
@@ -3120,7 +3129,18 @@ class FrmAppHelper {
 			unset( $total_len, $word );
 		}
 
-		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length );
+		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length, $force_length_limit );
+
+		if ( $force_length_limit ) {
+			// Ensure the final string doesn't exceed the length limit.
+			$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
+
+			if ( $final_len > $length ) {
+				return self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
+			}
+
+			return $sub;
+		}
 
 		return $sub . ( $len < $original_len ? $continue : '' );
 	}
@@ -3130,25 +3150,37 @@ class FrmAppHelper {
 	 *
 	 * @since 6.5.4
 	 *
-	 * @param string $sub    Current substring.
-	 * @param int    $length The length limit.
+	 * @param string $sub                Current substring.
+	 * @param int    $length             The length limit.
+	 * @param bool   $force_length_limit Force the string to not exceed the length limit.
 	 *
 	 * @return string
 	 */
-	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length ) {
-		if ( strlen( $sub ) < $length + 50 ) {
-			// If the string isn't way over the limit, leave it.
-			return $sub;
+	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length, $force_length_limit = false ) {
+		if ( ! $force_length_limit ) {
+			if ( strlen( $sub ) < $length + 50 ) {
+				// If the string isn't way over the limit, leave it.
+				return $sub;
+			}
+
+			$first_space = strpos( $sub, ' ', $length );
+
+			if ( false !== $first_space ) {
+				// Ignore anything with spaces.
+				return $sub;
+			}
+
+			return substr( $sub, 0, $length + 10 );
 		}
 
-		$first_space = strpos( $sub, ' ', $length );
+		// When force_length_limit is true, ensure the string doesn't exceed the length.
+		$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
 
-		if ( false !== $first_space ) {
-			// Ignore anything with spaces.
-			return $sub;
+		if ( $final_len > $length ) {
+			return self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
 		}
 
-		return substr( $sub, 0, $length + 10 );
+		return $sub;
 	}
 
 	/**
@@ -3820,8 +3852,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function load_admin_wide_js( $load = true ) {
-		$version = self::plugin_version();
-		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
+		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), self::plugin_version() );
 
 		$global_strings = array(
 			'updating_msg'                  => __( 'Please wait while your site updates.', 'formidable' ),
@@ -3951,6 +3982,9 @@ class FrmAppHelper {
 				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
 			);
+
+			self::add_form_builder_modal_data( $admin_script_strings );
+
 			/**
 			 * @param array $admin_script_strings
 			 */
@@ -3962,6 +3996,73 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+	}
+
+	/**
+	 * @param array $admin_script_strings
+	 *
+	 * @return void
+	 */
+	private static function add_form_builder_modal_data( &$admin_script_strings ) {
+		if ( ! self::is_form_builder_page() || self::pro_is_installed() ) {
+			return;
+		}
+
+		$stripe_connected      = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+		$square_connected      = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$gateway_connected     = $stripe_connected || $square_connected;
+		$payments_settings_url = FrmStrpLiteAppController::get_payments_settings_url();
+
+		if ( ! $gateway_connected ) {
+			// This modal shows when user clicks on one of the pricing fields and no payment gateways configured.
+			$admin_script_strings['paymentsSettingsModal'] = array(
+				'title'      => __( 'Setup a Payment Gateway first', 'formidable' ),
+				'msg'        => __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
+				'closeText'  => __( 'Close', 'formidable' ),
+				'actionUrl'  => $payments_settings_url,
+				'actionText' => __( 'Go to Payment Settings', 'formidable' ),
+				'noCenter'   => true,
+			);
+		}
+
+		// This modal shows on load once after upgrading the plugin.
+		$show_pricing_fields_modal = get_option( 'frm_show_pricing_fields_modal' );
+
+		if ( ! $show_pricing_fields_modal ) {
+			return;
+		}
+
+		$admin_script_strings['pricingFieldsModal'] = array(
+			'title'    => esc_html__( 'Start Accepting Payments Today!', 'formidable' ),
+			'img'      => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
+			'noCenter' => true,
+		);
+
+		if ( $gateway_connected ) {
+			$gateway_texts = array();
+
+			if ( $stripe_connected ) {
+				$gateway_texts['stripe'] = esc_html__( 'Stripe', 'formidable' );
+			}
+
+			if ( $square_connected ) {
+				$gateway_texts['square'] = esc_html__( 'Square', 'formidable' );
+			}
+
+			$admin_script_strings['pricingFieldsModal']['msg'] = sprintf(
+				// translators: %s: Stripe or Square.
+				esc_html__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
+				esc_html( implode( ' ' . esc_html__( 'and', 'formidable' ) . ' ', $gateway_texts ) )
+			);
+		} else {
+			$admin_script_strings['pricingFieldsModal']['closeText']  = __( 'I\'ll do it later!', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
+			// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
+		}//end if
+
+		delete_option( 'frm_show_pricing_fields_modal' );
 	}
 
 	/**
@@ -4489,9 +4590,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function maybe_filter_array( $values, $keys ) {
-		$allow_unfiltered_html = self::allow_unfiltered_html();
-
-		if ( $allow_unfiltered_html ) {
+		if ( self::allow_unfiltered_html() ) {
 			return $values;
 		}
 
@@ -4606,12 +4705,7 @@ class FrmAppHelper {
 	 */
 	public static function show_new_feature( $feature ) {
 		$link = FrmAddonsController::install_link( $feature );
-
-		if ( array_key_exists( 'status', $link ) || array_key_exists( 'class', $link ) ) {
-			return true;
-		}
-
-		return 'coupons' === $feature && class_exists( 'FrmCouponsAppController' );
+		return array_key_exists( 'status', $link ) || array_key_exists( 'class', $link );
 	}
 
 	/**
