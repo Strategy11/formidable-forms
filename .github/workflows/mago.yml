@@ -15,12 +15,10 @@ jobs:
         run: composer install --dev --prefer-dist --no-progress
 
       - name: "⚡ Install Mago"
-        run: |
-          mkdir -p bin
-          curl --proto '=https' --tlsv1.2 -sSf https://carthage.software/mago.sh | bash -s -- --install-dir=bin
+        uses: nhedger/setup-mago@v1
 
       - name: "✅ Mago Lint"
-        run: ./bin/mago lint
+        run: mago lint
 
       - name: "🔎 Mago Analyze"
-        run: ./bin/mago analyze
+        run: mago analyze
