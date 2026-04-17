@@ -1,4 +1,13 @@
 <?php
+/**
+ * Dashboard YouTube video widget.
+ *
+ * @package Formidable
+ *
+ * @var string $classes  CSS classes for the outer wrapper.
+ * @var array  $template Widget data with 'id' (YouTube video ID).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

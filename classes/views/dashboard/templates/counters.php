@@ -1,4 +1,12 @@
 <?php
+/**
+ * Dashboard counters widget.
+ *
+ * @package Formidable
+ *
+ * @var array $template Widget data with a 'counters' array. Each counter has: heading, type, counter, cta and optional items.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
