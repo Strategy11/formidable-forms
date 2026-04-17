@@ -3,6 +3,10 @@
  * Add-Ons addon view.
  *
  * @package Formidable
+ *
+ * @var array  $addon        Single add-on data (slug, title, display_name, excerpt, status, docs, docs_label, is_new, etc.).
+ * @var string $license_type Current license type or empty string.
+ * @var string $pricing      Upgrade URL used for CTAs.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
