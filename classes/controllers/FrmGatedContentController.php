@@ -27,18 +27,51 @@ class FrmGatedContentController {
 	private static $unlocked_post_id = 0;
 
 	/**
-	 * Attempt to unlock a password-protected post using a gated content token.
+	 * Allow private pages into the main query when a valid token is present.
 	 *
-	 * Hooked on 'wp' so get_queried_object_id() is available (query is parsed
-	 * by the time 'wp' fires, unlike 'init').
+	 * Hooked on 'pre_get_posts', which fires before WP_Query runs its DB query.
+	 * Private pages are excluded at the query level by WordPress, so the 'wp'
+	 * hook is too late — get_queried_object_id() returns 0 for a 404'd private
+	 * page. This hook resolves the target post ID from the query vars, validates
+	 * the token, and conditionally appends 'private' to the post_status list.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Query $query Current query object.
+	 * @return void
+	 */
+	public static function maybe_include_private_pages( $query ) {
+		if ( ! $query->is_main_query() || is_admin() ) {
+			return;
+		}
+
+		$post_id = self::get_requested_post_id( $query );
+		if ( ! $post_id ) {
+			return;
+		}
+
+		if ( self::has_valid_token_for_post( $post_id ) ) {
+			$statuses = $query->get( 'post_status' );
+			if ( ! is_array( $statuses ) ) {
+				$statuses = $statuses ? array( $statuses ) : array( 'publish' );
+			}
+			if ( ! in_array( 'private', $statuses, true ) ) {
+				$statuses[] = 'private';
+				$query->set( 'post_status', $statuses );
+			}
+		}
+	}
+
+	/**
+	 * Attempt to unlock a gated post (password-protected or private) using a token.
+	 *
+	 * Hooked on 'wp' so get_queried_object_id() is available. Private pages are
+	 * already in the query by this point (via maybe_include_private_pages), so
+	 * only password-protected pages need the post_password_required filter.
 	 *
 	 * Resolution order:
 	 *  1. URL query parameter access_code (raw token → hashed via obtain_token).
 	 *  2. Any frm_gc_* cookie whose hash validates against the current post.
-	 *
-	 * Pages must be WordPress password-protected to use this mechanism. The
-	 * gated token replaces the password — visitors never need to know the actual
-	 * WordPress post password.
 	 *
 	 * @since x.x
 	 *
@@ -63,9 +96,14 @@ class FrmGatedContentController {
 		}
 
 		if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
-			// Unlock this post for the current request only.
-			self::$unlocked_post_id = $post_id;
-			add_filter( 'post_password_required', 'FrmGatedContentController::filter_password_required', 10, 2 );
+			$post = get_post( $post_id );
+
+			// Password-protected pages need an explicit filter; private pages are
+			// already accessible because maybe_include_private_pages widened the query.
+			if ( $post && '' !== $post->post_password ) {
+				self::$unlocked_post_id = $post_id;
+				add_filter( 'post_password_required', 'FrmGatedContentController::filter_password_required', 10, 2 );
+			}
 
 			// Refresh the frm_gc_ cookie so subsequent visits skip the URL param.
 			$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
@@ -111,6 +149,54 @@ class FrmGatedContentController {
 			return false;
 		}
 		return $required;
+	}
+
+	/**
+	 * Resolve the post ID being requested from query vars, including private posts.
+	 *
+	 * Called from maybe_include_private_pages() during pre_get_posts, before the
+	 * DB query runs. get_page_by_path() queries by post_name without a post_status
+	 * restriction, so it returns private pages as well as published ones.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Query $query Current query object.
+	 * @return int Post ID, or 0 if it cannot be determined.
+	 */
+	private static function get_requested_post_id( $query ) {
+		if ( ! empty( $query->query_vars['page_id'] ) ) {
+			return (int) $query->query_vars['page_id'];
+		}
+
+		if ( ! empty( $query->query_vars['pagename'] ) ) {
+			$page = get_page_by_path( $query->query_vars['pagename'] );
+			return $page ? (int) $page->ID : 0;
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Check whether the current request carries any valid token for a given post.
+	 *
+	 * Checks the URL access_code parameter first, then frm_gc_* cookies. Used by
+	 * maybe_include_private_pages() to decide whether to widen the query.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $post_id Post ID to validate against.
+	 * @return bool True if a valid token is found.
+	 */
+	private static function has_valid_token_for_post( $post_id ) {
+		$access_code = FrmAppHelper::simple_get( 'access_code' );
+		if ( '' !== $access_code ) {
+			$hash = hash( 'sha256', $access_code );
+			if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
+				return true;
+			}
+		}
+
+		return null !== self::find_valid_cookie_hash_for_post( $post_id );
 	}
 
 	/**
