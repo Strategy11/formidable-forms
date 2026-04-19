@@ -141,7 +141,9 @@ $frm_gc_pages = get_pages(
 					</div><!-- .frm8 -->
 
 					<?php // ── Col 3: Delete button (1/12) ─────────────── ?>
-					<div class="frm1 frm-gc-item-delete" style="align-self: end;">
+					<div class="frm1 frm-gc-item-delete">
+						<?php // Hidden label spacer aligns the button with the selects in adjacent columns. ?>
+						<label aria-hidden="true" style="visibility: hidden; display: block;">&nbsp;</label>
 						<button
 							type="button"
 							class="frm_gc_remove_item button-link"
@@ -224,7 +226,9 @@ $frm_gc_pages = get_pages(
 				</div><!-- .frm8 -->
 
 				<?php // ── Col 3: Delete button (1/12) ─────────────── ?>
-				<div class="frm1 frm-gc-item-delete" style="align-self: end;">
+				<div class="frm1 frm-gc-item-delete">
+					<?php // Hidden label spacer aligns the button with the selects in adjacent columns. ?>
+					<label aria-hidden="true" style="visibility: hidden; display: block;">&nbsp;</label>
 					<button
 						type="button"
 						class="frm_gc_remove_item button-link"
@@ -245,14 +249,10 @@ $frm_gc_pages = get_pages(
 		>
 			+ <?php esc_html_e( 'Add Item', 'formidable' ); ?>
 		</button>
-
-		<span class="frm_description">
-			<?php esc_html_e( 'One access token unlocks all items in this action.', 'formidable' ); ?>
-		</span>
 	</div><!-- .frm_gc_items_section -->
 
 	<?php // ── Section: Shortcode reference ─────────────────────────────── ?>
-	<div class="frm_form_field frm_gc_shortcodes_section">
+	<div class="frm_form_field frm_gc_shortcodes_section" style="margin-top: 20px;">
 		<label><?php esc_html_e( 'Access Link Shortcodes', 'formidable' ); ?></label>
 		<p class="frm_description">
 			<?php esc_html_e( 'Add these shortcodes to a Confirmation or Send Email action to include the access link.', 'formidable' ); ?>
@@ -261,19 +261,19 @@ $frm_gc_pages = get_pages(
 		$frm_gc_shortcodes = array(
 			array(
 				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '"]',
-				'output' => __( 'List of access URLs for all items', 'formidable' ),
+				'output' => __( 'Access links for all items', 'formidable' ),
 			),
 			array(
 				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '" item="0"]',
-				'output' => __( 'Access URL for the first item (0-indexed)', 'formidable' ),
+				'output' => __( 'Access link for the first item (0-indexed)', 'formidable' ),
+			),
+			array(
+				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '" item="0" show="url"]',
+				'output' => __( 'URL only for the first item (no link tag)', 'formidable' ),
 			),
 			array(
 				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '" show="access_token"]',
 				'output' => __( 'Raw access token string', 'formidable' ),
-			),
-			array(
-				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '" show="expired_time"]',
-				'output' => __( 'Formatted expiry date (empty if token never expires)', 'formidable' ),
 			),
 		);
 		?>
@@ -304,6 +304,19 @@ $frm_gc_pages = get_pages(
 						<td><?php echo esc_html( $frm_gc_shortcode['output'] ); ?></td>
 					</tr>
 				<?php endforeach; ?>
+				<?php
+				/**
+				 * Fires inside the shortcode reference table body for a gated content action.
+				 *
+				 * Pro plugins use this to append additional shortcode rows (e.g. show="expired_time").
+				 * Each callback should output one or more `<tr>` elements.
+				 *
+				 * @since x.x
+				 *
+				 * @param int $frm_gc_action_id ID of the current gated content action post.
+				 */
+				do_action( 'frm_gated_content_shortcodes', $frm_gc_action_id );
+				?>
 			</tbody>
 		</table>
 	</div><!-- .frm_gc_shortcodes_section -->

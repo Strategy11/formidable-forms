@@ -182,7 +182,11 @@ class FrmGatedContentController {
 	 * Attributes:
 	 *  - id   (required) Action post ID.
 	 *  - item (optional) 0-indexed item position. Omit to render the full item list.
-	 *  - show (optional) 'url' (default) | 'access_token' | 'expired_time'.
+	 *  - show (optional) 'link' (default) | 'url' | 'access_token' | 'expired_time'.
+	 *          'link'         — <a> link tag(s). Without item: <ul> of links. With item: single <a>.
+	 *          'url'          — Plain URL string. Without item: <ul> of plain URLs. With item: single URL.
+	 *          'access_token' — Raw access token string.
+	 *          'expired_time' — Formatted expiry date/time (empty if token never expires).
 	 *
 	 * @since x.x
 	 *
@@ -194,7 +198,7 @@ class FrmGatedContentController {
 			array(
 				'id'   => 0,
 				'item' => false,
-				'show' => 'url',
+				'show' => 'link',
 			),
 			$atts,
 			'frm_gated_content'
@@ -215,7 +219,7 @@ class FrmGatedContentController {
 			return $hash ? self::get_formatted_expiry_by_hash( $hash ) : '';
 		}
 
-		// All other outputs require the raw token.
+		// All other show values require the raw token.
 		$raw_token = self::resolve_raw_token( $action_id );
 		if ( null === $raw_token ) {
 			return '';
@@ -225,7 +229,7 @@ class FrmGatedContentController {
 			return esc_html( $raw_token );
 		}
 
-		// show="url" (default).
+		// show="link" (default) or show="url": load action items.
 		$action = get_post( $action_id );
 		if ( ! $action ) {
 			return '';
@@ -234,10 +238,16 @@ class FrmGatedContentController {
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
 		$items    = ( is_array( $settings ) && ! empty( $settings['items'] ) ) ? $settings['items'] : array();
 
+		$show_url = ( 'url' === $atts['show'] );
+
 		if ( false === $atts['item'] ) {
-			return self::render_item_list( $items, $raw_token );
+			// No item specified — render all items.
+			return $show_url
+				? self::render_item_url_list( $items, $raw_token )
+				: self::render_item_list( $items, $raw_token );
 		}
 
+		// Single item by 0-based index.
 		$idx = (int) $atts['item'];
 		if ( ! isset( $items[ $idx ] ) || ! is_array( $items[ $idx ] ) ) {
 			return '';
@@ -248,7 +258,21 @@ class FrmGatedContentController {
 			return '';
 		}
 
-		return esc_url( self::get_item_url( (int) $item['id'], $item['type'], $raw_token ) );
+		$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+		if ( ! $url ) {
+			return '';
+		}
+
+		if ( $show_url ) {
+			return esc_url( $url );
+		}
+
+		$label = get_the_title( (int) $item['id'] );
+		if ( ! $label ) {
+			$label = $url;
+		}
+
+		return '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
 	}
 
 	/**
@@ -359,6 +383,44 @@ class FrmGatedContentController {
 			}
 
 			$list_items .= '<li><a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a></li>';
+		}
+
+		if ( ! $list_items ) {
+			return '';
+		}
+
+		return '<ul class="frm-gated-content-list">' . $list_items . '</ul>';
+	}
+
+	/**
+	 * Render an unordered list of plain URLs (no link tags) for all items in an action.
+	 *
+	 * Used when show="url" is set without an item index.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $items     Array of item arrays from action settings (each with 'id' and 'type' keys).
+	 * @param string $raw_token Raw access token.
+	 * @return string HTML <ul> element of plain-text URLs, or empty string when no items produce a URL.
+	 */
+	public static function render_item_url_list( $items, $raw_token ) {
+		if ( empty( $items ) ) {
+			return '';
+		}
+
+		$list_items = '';
+
+		foreach ( $items as $item ) {
+			if ( ! is_array( $item ) || empty( $item['id'] ) || empty( $item['type'] ) ) {
+				continue;
+			}
+
+			$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+			if ( ! $url ) {
+				continue;
+			}
+
+			$list_items .= '<li>' . esc_url( $url ) . '</li>';
 		}
 
 		if ( ! $list_items ) {
