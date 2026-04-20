@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @var array|object $field Field data including 'form_id'.
+ * @var array $field Field data including 'form_id'.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
