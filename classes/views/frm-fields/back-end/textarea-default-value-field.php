@@ -4,9 +4,9 @@
  *
  * @package Formidable
  *
- * @var array  $field         Field data including 'id' and 'field_key'.
- * @var string $default_name  HTML name attribute for the textarea.
- * @var mixed  $default_value Current default value.
+ * @var array            $field         Field data including 'id' and 'field_key'.
+ * @var string           $default_name  HTML name attribute for the textarea.
+ * @var int|float|string $default_value Current default value.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
