@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @var stdClass      $entry  Entry object (falls back to $record).
+ * @var stdClass|null $entry  Entry object (falls back to $record).
  * @var stdClass|null $record Legacy entry object used when $entry is not set.
  */
 
