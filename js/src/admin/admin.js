@@ -819,7 +819,7 @@ window.frmAdminBuildJS = function() {
 	function clickNewTab() {
 		/*jshint validthis:true */
 		const href = this.getAttribute( 'href' );
-		if ( href === undefined ) {
+		if ( href === null ) {
 			return false;
 		}
 
