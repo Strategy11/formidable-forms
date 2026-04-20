@@ -14,11 +14,11 @@
  * @var array        $default_value_types Default value types available for this field.
  * @var array        $unique_values_label_atts     Label attributes for the Unique checkbox.
  * @var array        $read_only_label_atts         Label attributes for the Read Only checkbox.
- * @var bool         $show_upsell_for_unique_value Whether to show upsell for Unique.
- * @var bool         $show_upsell_for_read_only    Whether to show upsell for Read Only.
- * @var bool         $show_upsell_for_before_after_contents Whether to show upsell for before/after contents.
- * @var bool         $show_upsell_for_autocomplete Whether to show upsell for autocomplete.
- * @var bool         $show_upsell_for_visibility   Whether to show upsell for visibility.
+ * @var bool|null    $show_upsell_for_unique_value Whether to show upsell for Unique.
+ * @var bool|null    $show_upsell_for_read_only    Whether to show upsell for Read Only.
+ * @var bool|null    $show_upsell_for_before_after_contents Whether to show upsell for before/after contents.
+ * @var bool|null    $show_upsell_for_autocomplete Whether to show upsell for autocomplete.
+ * @var bool|null    $show_upsell_for_visibility   Whether to show upsell for visibility.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
