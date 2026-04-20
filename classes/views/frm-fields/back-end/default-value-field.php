@@ -4,10 +4,10 @@
  *
  * @package Formidable
  *
- * @var FrmFieldType $this          Field type handler that included this template.
- * @var array        $field         Field data including 'id' and 'field_key'.
- * @var string       $default_name  HTML name attribute for the input.
- * @var mixed        $default_value Current default value.
+ * @var FrmFieldType     $this          Field type handler that included this template.
+ * @var array            $field         Field data including 'id' and 'field_key'.
+ * @var string           $default_name  HTML name attribute for the input.
+ * @var int|float|string $default_value Current default value.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
