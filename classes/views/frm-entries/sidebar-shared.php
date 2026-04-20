@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @var int          $id      Entry ID.
+ * @var string       $id      Entry ID.
  * @var stdClass     $entry   Entry object.
  * @var string|null  $browser Browser info string if available.
  * @var array|null   $data    Additional entry meta data (referrer, user_journey, etc.).
