@@ -1897,7 +1897,7 @@ function frmFrontFormJS() {
 
 		if ( ! isLargeTotal ) {
 			const { decimals } = currency;
-			total = decimals > 0 ? Math.round10( total, decimals ) : Math.ceil( total );
+			total = decimals > 0 ? round10( total, decimals ) : Math.ceil( total );
 		}
 
 		return total;
