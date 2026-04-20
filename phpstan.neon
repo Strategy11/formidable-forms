@@ -326,7 +326,6 @@ parameters:
 				- classes/helpers/FrmFormsHelper.php
 				- classes/helpers/FrmXMLHelper.php
 				- classes/models/FrmEntryValidate.php
-				- classes/views/frm-entries/_sidebar-shared-pub.php
 		- message: '#Possibly invalid array key#'
 		-
 			message: '#should return array<(string|array)> but returns array#'
