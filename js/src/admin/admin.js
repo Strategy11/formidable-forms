@@ -6148,6 +6148,12 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		if ( isSingleProductField( fieldId ) ) {
+			updateSingleProductLabel( fieldId );
+			adjustConditionalLogicOptionOrders( fieldId );
+			return;
+		}
+
 		if ( input.is( 'select' ) ) {
 			const placeholder = document.getElementById( `frm_placeholder_${ fieldId }` );
 			if ( ! placeholder || placeholder.value === '' ) {
@@ -6176,6 +6182,93 @@ window.frmAdminBuildJS = function() {
 		}
 
 		adjustConditionalLogicOptionOrders( fieldId );
+	}
+
+	/**
+	 * Format a product price value for display in the builder preview using the
+	 * currency settings from frm_admin_js. Mirrors the logic in FrmCurrencyHelper::format_price().
+	 *
+	 * @since x.x
+	 *
+	 * @param {string|number} price Raw price value.
+	 * @return {string} Formatted price string.
+	 */
+	function formatProductPrice( price ) {
+		const currency = frm_admin_js?.currency;
+		if ( ! currency ) {
+			return String( price );
+		}
+
+		const num = Number( price );
+		if ( isNaN( num ) ) {
+			return String( price );
+		}
+
+		const decimals     = Number( currency.decimals ?? 2 );
+		const decimalSep   = currency.decimal_separator ?? '.';
+		const thousandSep  = currency.thousand_separator ?? ',';
+
+		let formatted = num.toFixed( decimals ).replace( '.', decimalSep );
+
+		const parts = decimals > 0 ? formatted.split( decimalSep ) : [ formatted ];
+		if ( thousandSep ) {
+			parts[0] = parts[0].replace( /\B(?=(\d{3})+(?!\d))/g, thousandSep );
+		}
+		formatted = parts.join( decimalSep );
+
+		const leftSymbol  = currency.symbol_left ? ( currency.symbol_left + currency.symbol_padding ) : '';
+		const rightSymbol = currency.symbol_right ? ( currency.symbol_padding + currency.symbol_right ) : '';
+
+		return leftSymbol + formatted + rightSymbol;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {string|number} fieldId
+	 * @return {boolean}
+	 */
+	function isSingleProductField( fieldId ) {
+		const el = document.querySelector( `select[name="field_options[data_type_${ fieldId }]"]` );
+		return Boolean( el ) && el.value === 'single';
+	}
+
+	/**
+	 * Update the .frm_single_product_label text in the builder preview to reflect
+	 * the current name and price values of the first product option.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string|number} fieldId
+	 */
+	function updateSingleProductLabel( fieldId ) {
+		const labelEl = document.querySelector( `#field_${ fieldId }_inner_container .frm_single_product_label` );
+		if ( ! labelEl ) {
+			return;
+		}
+
+		const firstRealOpt = document.querySelector( `#frm_field_${ fieldId }_opts .frm_single_option:not(.frm_option_template)` );
+		if ( ! firstRealOpt ) {
+			return;
+		}
+
+		const firstOptKey = firstRealOpt.dataset.optkey;
+		const optWrapper  = document.getElementById( `frm_delete_field_${ fieldId }-${ firstOptKey }_container` );
+		if ( ! optWrapper ) {
+			return;
+		}
+
+		const label = optWrapper.querySelector( `.field_${ fieldId }_option` )?.value ?? '';
+		const price = optWrapper.querySelector( '.frm_product_price' )?.value ?? '';
+
+		const parts = [];
+		if ( label ) {
+			parts.push( label );
+		}
+		if ( price ) {
+			parts.push( formatProductPrice( price ) );
+		}
+		labelEl.innerHTML = purifyHtml( parts.join( ': ' ) );
 	}
 
 	/**
