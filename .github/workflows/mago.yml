@@ -14,8 +14,13 @@ jobs:
       - name: Install dependencies
         run: composer install --dev --prefer-dist --no-progress
 
+      - name: "⚡ Install Mago"
+        run: |
+          mkdir -p bin
+          curl --proto '=https' --tlsv1.2 -sSf https://carthage.software/mago.sh | bash -s -- --install-dir=bin
+
       - name: "✅ Mago Lint"
-        run: ./vendor/bin/mago lint
+        run: ./bin/mago lint
 
       - name: "🔎 Mago Analyze"
-        run: ./vendor/bin/mago analyze
+        run: ./bin/mago analyze
