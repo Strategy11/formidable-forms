@@ -41,13 +41,15 @@
 		"friendsofphp/php-cs-fixer": "^3.54",
 		"rector/rector": "^2.3.4",
 		"phpstan/phpstan-strict-rules": "^2.0",
-		"kubawerlos/php-cs-fixer-custom-fixers": "^3.36"
+		"kubawerlos/php-cs-fixer-custom-fixers": "^3.36",
+		"carthage-software/mago": "^1.23"
 	},
 	"config": {
 		"allow-plugins": {
 			"composer/installers": true,
 			"phpstan/extension-installer": true,
-			"dealerdirect/phpcodesniffer-composer-installer": true
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"carthage-software/mago": true
 		}
 	}
 }
