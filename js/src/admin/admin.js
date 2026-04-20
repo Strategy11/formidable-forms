@@ -8077,6 +8077,11 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		// Only react to the conditional logic toggle.
+		if ( ! this.dataset.toggleclass?.startsWith( 'frm_logic_rows_' ) ) {
+			return;
+		}
+
 		const logicRowsContainer = document.getElementById( `frm_logic_row_${ id }` );
 		if ( logicRowsContainer && ! logicRowsContainer.querySelector( '.frm_logic_row' ) ) {
 			insertFormLogicRow( id, this );
