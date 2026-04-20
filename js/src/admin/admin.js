@@ -6204,19 +6204,19 @@ window.frmAdminBuildJS = function() {
 			return String( price );
 		}
 
-		const decimals     = Number( currency.decimals ?? 2 );
-		const decimalSep   = currency.decimal_separator ?? '.';
-		const thousandSep  = currency.thousand_separator ?? ',';
+		const decimals = Number( currency.decimals ?? 2 );
+		const decimalSep = currency.decimal_separator ?? '.';
+		const thousandSep = currency.thousand_separator ?? ',';
 
 		let formatted = num.toFixed( decimals ).replace( '.', decimalSep );
 
 		const parts = decimals > 0 ? formatted.split( decimalSep ) : [ formatted ];
 		if ( thousandSep ) {
-			parts[0] = parts[0].replace( /\B(?=(\d{3})+(?!\d))/g, thousandSep );
+			parts[ 0 ] = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, thousandSep );
 		}
 		formatted = parts.join( decimalSep );
 
-		const leftSymbol  = currency.symbol_left ? ( currency.symbol_left + currency.symbol_padding ) : '';
+		const leftSymbol = currency.symbol_left ? ( currency.symbol_left + currency.symbol_padding ) : '';
 		const rightSymbol = currency.symbol_right ? ( currency.symbol_padding + currency.symbol_right ) : '';
 
 		return leftSymbol + formatted + rightSymbol;
@@ -6226,7 +6226,7 @@ window.frmAdminBuildJS = function() {
 	 * @since x.x
 	 *
 	 * @param {string|number} fieldId
-	 * @return {boolean}
+	 * @return {boolean} True if the field data type is 'single' product.
 	 */
 	function isSingleProductField( fieldId ) {
 		const el = document.querySelector( `select[name="field_options[data_type_${ fieldId }]"]` );
@@ -6253,7 +6253,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const firstOptKey = firstRealOpt.dataset.optkey;
-		const optWrapper  = document.getElementById( `frm_delete_field_${ fieldId }-${ firstOptKey }_container` );
+		const optWrapper = document.getElementById( `frm_delete_field_${ fieldId }-${ firstOptKey }_container` );
 		if ( ! optWrapper ) {
 			return;
 		}
