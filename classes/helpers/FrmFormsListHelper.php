@@ -425,7 +425,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		if ( class_exists( 'FrmViewsDisplay' ) ) {
 			$view_ids   = FrmViewsDisplay::get_display_ids_by_form( $form->id );
-			$view_count = empty( $view_ids ) ? 0 : count( $view_ids );
+			$view_count = $view_ids ? count( $view_ids ) : 0;
 		} else {
 			$view_count = 0;
 		}
