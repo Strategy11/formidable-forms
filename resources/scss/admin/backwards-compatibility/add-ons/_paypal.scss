@@ -1,0 +1,46 @@
+// Start @since x.x
+// Temporary PayPal styles for legacy table-based markup, scoped to .frm_single_paypal_settings and removable after view refresh.
+.frm_single_paypal_settings {
+
+	.form-table {
+		margin: 0;
+	}
+
+	h3 {
+		display: flex;
+		align-items: center;
+		gap: var(--gap-xs);
+		margin-top: var(--gap-xs);
+		margin-bottom: var(--gap-md);
+
+		.frm_help {
+			display: inline-flex;
+			align-items: center;
+		}
+	}
+
+	label[for^="paypal_stop_email"] {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--gap-xs);
+	}
+
+	.frm_toggle_pp_opts {
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	p[id^="frmpp_after_pay_"] {
+		margin-bottom: var(--gap-sm);
+	}
+
+	.frmpp_after_pay_row .frm_remove_tag {
+		margin-right: var(--gap-2xs);
+	}
+
+	// Hide "After Payment" table if no rows remain.
+	#postcustomstuff.frmpp_after_pay_rows:not(:has(.frmpp_after_pay_row)) {
+		display: none !important;
+	}
+}
+// End @since x.x
