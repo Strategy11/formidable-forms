@@ -8084,15 +8084,15 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		const postField = jQuery( 'select.frm_single_post_field' );
 		postField.css( 'border-color', '' );
-		const $t = this;
-		const v = jQuery( $t ).val();
-		if ( v === '' || v === 'checkbox' ) {
+		const currentField = this;
+		const selectedValue = jQuery( currentField ).val();
+		if ( selectedValue === '' || selectedValue === 'checkbox' ) {
 			return false;
 		}
 		postField.each( function() {
-			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
+			if ( jQuery( this ).val() === selectedValue && this.name !== currentField.name ) {
 				this.style.borderColor = 'red';
-				jQuery( $t ).val( '' );
+				jQuery( currentField ).val( '' );
 				infoModal( frmAdminJs.field_already_used );
 				return false;
 			}
@@ -8101,11 +8101,11 @@ window.frmAdminBuildJS = function() {
 
 	function togglePostContent() {
 		/*jshint validthis:true */
-		const v = jQuery( this ).val();
-		if ( '' === v ) {
+		const selectedValue = jQuery( this ).val();
+		if ( '' === selectedValue ) {
 			jQuery( '.frm_post_content_opt, select.frm_dyncontent_opt' ).hide().val( '' );
 			jQuery( '.frm_dyncontent_opt' ).hide();
-		} else if ( 'post_content' === v ) {
+		} else if ( 'post_content' === selectedValue ) {
 			jQuery( '.frm_post_content_opt' ).show();
 			jQuery( '.frm_dyncontent_opt' ).hide();
 			jQuery( 'select.frm_dyncontent_opt' ).val( '' );
@@ -8117,15 +8117,15 @@ window.frmAdminBuildJS = function() {
 
 	function fillDyncontent() {
 		/*jshint validthis:true */
-		const v = jQuery( this ).val();
+		const selectedValue = jQuery( this ).val();
 		const $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
-		if ( '' === v || 'new' === v ) {
+		if ( '' === selectedValue || 'new' === selectedValue ) {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
 		} else {
 			jQuery.ajax( {
 				type: 'POST', url: ajaxurl,
-				data: { action: 'frm_display_get_content', id: v, nonce: frmGlobal.nonce },
+				data: { action: 'frm_display_get_content', id: selectedValue, nonce: frmGlobal.nonce },
 				success( val ) {
 					$dyn.val( val );
 					jQuery( '.frm_dyncontent_opt' ).show();
@@ -8436,24 +8436,24 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( variable === '[default-html]' || variable === '[default-plain]' ) {
-			let p = 0;
+			let plainText = 0;
 			if ( variable === '[default-plain]' ) {
-				p = 1;
+				plainText = 1;
 			}
 			jQuery.ajax( {
 				type: 'POST', url: ajaxurl,
 				data: {
 					action: 'frm_get_default_html',
 					form_id: jQuery( 'input[name="id"]' ).val(),
-					plain_text: p,
+					plain_text: plainText,
 					nonce: frmGlobal.nonce
 				},
 				elementId,
 				success( msg ) {
 					if ( rich ) {
-						const p = document.createElement( 'p' );
-						p.innerText = msg;
-						send_to_editor( p.innerHTML );
+						const paragraph = document.createElement( 'p' );
+						paragraph.innerText = msg;
+						send_to_editor( paragraph.innerHTML );
 					} else {
 						insertContent( contentBox, msg );
 					}
@@ -8494,13 +8494,13 @@ window.frmAdminBuildJS = function() {
 			document.selection.createRange().text = variable;
 		} else {
 			const obj = contentBox[ 0 ];
-			const e = obj.selectionEnd;
+			const selectionEnd = obj.selectionEnd;
 
-			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
+			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, selectionEnd );
 
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
 
-			const cursorPos = e + variable.length;
+			const cursorPos = selectionEnd + variable.length;
 
 			maybeRemoveLayoutClasses( obj, variable );
 
