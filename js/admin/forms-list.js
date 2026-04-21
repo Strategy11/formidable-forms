@@ -82,7 +82,32 @@
 		wpInput.dispatchEvent( new Event( 'click' ) );
 	}
 
+	/**
+	 * Update the 'mode' query param in the current URL based on the show description toggle.
+	 * The screen-options redirect uses HTTP_REFERER, so the updated URL is preserved after submit.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function syncModeToUrl() {
+		const showDescCheckbox = document.getElementById( 'frm-forms-list-show-desc' );
+		if ( ! showDescCheckbox ) {
+			return;
+		}
+
+		const url = new URL( window.location.href );
+		if ( showDescCheckbox.checked ) {
+			url.searchParams.set( 'mode', 'excerpt' );
+		} else {
+			url.searchParams.delete( 'mode' );
+		}
+		history.replaceState( null, '', url.toString() );
+	}
+
 	function handleClickApplyBtn() {
+		syncModeToUrl();
+
 		// Update the screen options form inputs.
 		const screenOptionsForm = document.querySelector( 'form#adv-settings' );
 		if ( ! screenOptionsForm ) {
@@ -118,12 +143,6 @@
 		perPageOptionNameInput.name = 'wp_screen_options[option]';
 		perPageOptionNameInput.value = 'formidable_page_formidable_per_page';
 
-		const showDescInput = frmDom.tag( 'input' );
-		showDescInput.type = 'checkbox';
-		showDescInput.name = 'frm_forms_show_desc';
-		showDescInput.value = '1';
-		showDescInput.checked = document.getElementById( 'frm-forms-list-show-desc' ).checked;
-
 		const nonceInput = frmDom.tag( 'input' );
 		nonceInput.type = 'hidden';
 		nonceInput.name = 'screenoptionnonce';
@@ -131,7 +150,7 @@
 
 		const form = frmDom.tag( 'form', {
 			className: 'frm_hidden',
-			children: [ perPageInput, perPageOptionNameInput, showDescInput, nonceInput ],
+			children: [ perPageInput, perPageOptionNameInput, nonceInput ],
 		} );
 		form.method = 'post';
 		document.body.append( form );

@@ -1316,9 +1316,6 @@ class FrmFormsController {
 	 * @return mixed
 	 */
 	public static function save_per_page( $save, $option, $value ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		update_user_option( get_current_user_id(), 'frm_forms_show_desc', ! empty( $_POST['frm_forms_show_desc'] ) );
-
 		if ( $option === 'formidable_page_formidable_per_page' ) {
 			return (int) $value;
 		}
@@ -3759,11 +3756,7 @@ class FrmFormsController {
 			return $settings_html;
 		}
 
-		$show_desc = get_user_option( 'frm_forms_show_desc' );
-		return $settings_html . '<p>
-			<label for="frm-forms-show-desc">' . esc_html__( 'Show form description', 'formidable' ) . '</label>
-			<input type="checkbox" name="frm_forms_show_desc" id="frm-forms-show-desc" value="1" ' . checked( $show_desc, '1', false ) . ' />
-		</p>';
+		return $settings_html;
 	}
 
 	/**

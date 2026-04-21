@@ -67,17 +67,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<hr />
 
 	<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm frm-pt-2xs">
-		<label for="frm-forms-list-show-desc"><?php esc_html_e( 'Form description', 'formidable' ); ?></label>
+		<label for="frm-forms-list-show-desc"><?php esc_html_e( 'Description Excerpt', 'formidable' ); ?></label>
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm-forms-list-show-desc',
 			'frm_forms_show_desc',
 			array(
-				'echo'       => true,
-				'checked'    => intval( get_user_option( 'frm_forms_show_desc' ) ) === 1,
-				'input_html' => array(
-					'data-wp-screen-option-id' => 'frm-forms-show-desc',
-				),
+				'echo'    => true,
+				'checked' => 'excerpt' === FrmAppHelper::simple_get( 'mode', 'sanitize_title' ),
 			)
 		);
 		?>

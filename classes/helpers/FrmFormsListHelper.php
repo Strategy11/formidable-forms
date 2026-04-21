@@ -42,10 +42,6 @@ class FrmFormsListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( get_user_option( 'frm_forms_show_desc' ) ) {
-			$mode = 'excerpt';
-		}
-
 		$orderby = self::get_param(
 			array(
 				'param'   => 'orderby',
@@ -279,12 +275,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val = $item->{$column_name};
 					break;
 				case 'name':
-					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
-
-					if ( get_user_option( 'frm_forms_show_desc' ) && ! empty( $item->description ) ) {
-						$val .= '<p class="frm_form_desc">' . nl2br( FrmAppHelper::kses( $item->description ) ) . '</p>';
-					}
-
+					$val  = $this->get_form_name( $item, $actions, $edit_link, $mode );
 					$val .= $action_links;
 					break;
 				case 'created_at':
