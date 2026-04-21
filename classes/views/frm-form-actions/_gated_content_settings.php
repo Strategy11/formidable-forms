@@ -296,8 +296,8 @@ $frm_gc_pages = get_pages(
 								data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>"
 								aria-label="<?php esc_attr_e( 'Copy shortcode', 'formidable' ); ?>"
 							>
-								<svg class="frmsvg" aria-hidden="true" focusable="false">
-									<use href="#frm_clipboard_icon"></use>
+								<svg class="frmsvg frm_svg14" aria-hidden="true" focusable="false">
+									<use href="#frm_clone_icon"></use>
 								</svg>
 							</button>
 						</td>
