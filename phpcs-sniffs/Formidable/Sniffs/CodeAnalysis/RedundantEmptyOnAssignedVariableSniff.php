@@ -458,7 +458,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 * @param int    $statementToken The position of the statement containing empty().
 	 * @param string $variableName   The variable name to check.
 	 *
-	 * @return false|array Assignment info array or false if not found.
+	 * @return array|false Assignment info array or false if not found.
 	 */
 	private function findVariableAssignment( File $phpcsFile, $functionToken, $statementToken, $variableName ) {
 		$tokens      = $phpcsFile->getTokens();
