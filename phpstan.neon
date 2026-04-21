@@ -99,7 +99,6 @@ parameters:
 			message: '#Call to protected method+#'
 			paths:
 				- classes/views/frm-fields/back-end/combo-field/sub-field-options.php
-				- classes/views/frm-fields/back-end/field-options.php
 				- classes/views/frm-fields/back-end/phone/phone-type.php
 				- classes/views/frm-fields/front-end/combo-field/combo-field.php
 		-
@@ -346,7 +345,7 @@ parameters:
 		-
 			message: '#function array_map expects#'
 			paths:
-				- classes/helpers/FrmAppHelper.php  
+				- classes/helpers/FrmAppHelper.php
 				- classes/helpers/FrmHtmlHelper.php
 				- classes/models/FrmEntry.php
 				- classes/models/fields/FrmFieldType.php
