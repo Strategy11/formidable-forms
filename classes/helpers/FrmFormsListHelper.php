@@ -331,8 +331,8 @@ class FrmFormsListHelper extends FrmListHelper {
 			);
 		}
 
-		$text = FrmEntry::getRecordCount( $item->id );
-		return current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$text = intval( FrmEntry::getRecordCount( $item->id ) );
+		return current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : (string) $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
