@@ -8500,12 +8500,12 @@ window.frmAdminBuildJS = function() {
 
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
 
-			const s = e + variable.length;
+			const cursorPos = e + variable.length;
 
 			maybeRemoveLayoutClasses( obj, variable );
 
 			obj.focus();
-			obj.setSelectionRange( s, s );
+			obj.setSelectionRange( cursorPos, cursorPos );
 		}
 		triggerChange( contentBox );
 	}
@@ -9257,21 +9257,21 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		e.preventDefault();
 
-		let s = false;
+		let status = false;
 		const $exportForms = jQuery( 'input[name="frm_export_forms[]"]' );
 
 		if ( ! jQuery( 'input[name="frm_export_forms[]"]:checked' ).val() ) {
 			$exportForms.closest( '.frm-table-box' ).addClass( 'frm_blank_field' );
-			s = 'stop';
+			status = 'stop';
 		}
 
 		const $exportType = jQuery( 'input[name="type[]"]' );
 		if ( ! jQuery( 'input[name="type[]"]:checked' ).val() && $exportType.attr( 'type' ) === 'checkbox' ) {
 			$exportType.closest( 'p' ).addClass( 'frm_blank_field' );
-			s = 'stop';
+			status = 'stop';
 		}
 
-		if ( s === 'stop' ) {
+		if ( status === 'stop' ) {
 			return false;
 		}
 
@@ -9281,24 +9281,24 @@ window.frmAdminBuildJS = function() {
 
 	function removeExportError() {
 		/*jshint validthis:true */
-		const t = jQuery( this ).closest( '.frm_blank_field' );
-		if ( t === undefined ) {
+		const $blankField = jQuery( this ).closest( '.frm_blank_field' );
+		if ( $blankField === undefined ) {
 			return;
 		}
 
 		const $thisName = this.name;
 		if ( $thisName === 'type[]' && jQuery( 'input[name="type[]"]:checked' ).val() ) {
-			t.removeClass( 'frm_blank_field' );
+			$blankField.removeClass( 'frm_blank_field' );
 		} else if ( $thisName === 'frm_export_forms[]' && jQuery( this ).val() ) {
-			t.removeClass( 'frm_blank_field' );
+			$blankField.removeClass( 'frm_blank_field' );
 		}
 	}
 
 	function checkCSVExtension() {
 		/*jshint validthis:true */
-		const f = jQuery( this ).val();
+		const fileName = jQuery( this ).val();
 		const re = /\.csv$/i;
-		if ( f.match( re ) !== null ) {
+		if ( fileName.match( re ) !== null ) {
 			jQuery( '.show_csv' ).fadeIn();
 		} else {
 			jQuery( '.show_csv' ).fadeOut();
@@ -9334,12 +9334,12 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		const $dropdown = jQuery( this );
 		const $selected = $dropdown.find( ':selected' );
-		const s = $selected.data( 'support' );
+		const support = $selected.data( 'support' );
 
-		const multiple = s.indexOf( '|' );
+		const multiple = support.indexOf( '|' );
 		jQuery( 'input[name="type[]"]' ).each( function() {
 			this.checked = false;
-			if ( s.includes( this.value ) ) {
+			if ( support.includes( this.value ) ) {
 				this.disabled = false;
 				if ( multiple === -1 ) {
 					this.checked = true;
@@ -9357,9 +9357,9 @@ window.frmAdminBuildJS = function() {
 			jQuery( '.xml_opts' ).show();
 		}
 
-		const c = $selected.data( 'count' );
+		const count = $selected.data( 'count' );
 		const exportField = jQuery( 'input[name="frm_export_forms[]"]' );
-		if ( c === 'single' ) {
+		if ( count === 'single' ) {
 			exportField.prop( 'multiple', false );
 			exportField.prop( 'checked', false );
 		} else {
@@ -9770,9 +9770,9 @@ window.frmAdminBuildJS = function() {
 
 	function removeWPUnload() {
 		window.onbeforeunload = null;
-		const w = jQuery( window );
-		w.off( 'beforeunload.widgets' );
-		w.off( 'beforeunload.edit-post' );
+		const $window = jQuery( window );
+		$window.off( 'beforeunload.widgets' );
+		$window.off( 'beforeunload.edit-post' );
 	}
 
 	function addMultiselectLabelListener() {
@@ -10446,9 +10446,9 @@ window.frmAdminBuildJS = function() {
 
 			// Bootstrap dropdown button
 			jQuery( '.wp-admin' ).on( 'click', function( e ) {
-				const t = jQuery( e.target );
+				const $target = jQuery( e.target );
 				const $openDrop = jQuery( '.dropdown.open' );
-				if ( $openDrop.length && ! t.hasClass( 'dropdown' ) && ! t.closest( '.dropdown' ).length ) {
+				if ( $openDrop.length && ! $target.hasClass( 'dropdown' ) && ! $target.closest( '.dropdown' ).length ) {
 					$openDrop.removeClass( 'open' );
 				}
 			} );
