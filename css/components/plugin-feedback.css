@@ -1,0 +1,71 @@
+#frm-plugin-feedback,
+#frm-plugin-feedback * {
+	box-sizing: border-box;
+}
+
+#frm-plugin-feedback {
+	position: fixed;
+	bottom: var(--gap-md);
+	right: var(--gap-md);
+	width: 100%;
+	max-width: 548px;
+	background-color: #fff;
+	border: 1px solid var(--grey-100);
+	border-radius: var(--medium-radius);
+	padding: var(--gap-xl) var(--gap-md) var(--gap-md);
+	box-shadow: var(--box-shadow-xl);
+	z-index: 9999;
+}
+
+#frm-plugin-feedback[data-step="nps"] {
+	max-width: 594px;
+}
+
+#frm-plugin-feedback:not([data-step="thank-you"]) p {
+	color: var(--grey-900) !important;
+	line-height: 1 !important;
+}
+
+#frm-plugin-feedback .dismiss {
+	top: var(--gap-sm);
+	right: var(--gap-sm);
+}
+
+#frm-plugin-feedback .frm-validation-error {
+	margin: 0;
+}
+
+#frm-plugin-feedback .frm-validation-error[frm-error="invalid-nps"] span[frm-error="invalid-nps"],
+#frm-plugin-feedback .frm-validation-error[frm-error="invalid-reasons"] span[frm-error="invalid-reasons"],
+#frm-plugin-feedback .frm-validation-error[frm-error="server-error"] span[frm-error="server-error"] {
+	display: inline-block;
+}
+
+/* Steps */
+#frm-plugin-feedback-reasons-step .frm_grid_container {
+	gap: var(--gap-xs);
+}
+
+#frm-plugin-feedback-reasons-step .frm-option-box {
+	justify-content: flex-start;
+	gap: var(--gap-xs);
+	color: var(--grey-900);
+	padding: var(--gap-sm) 12px;
+	background-color: var(--grey-100);
+	border-color: var(--grey-100);
+}
+
+#frm-plugin-feedback-reasons-step .frm-option-box:hover {
+	background-color: var(--grey-200);
+	border-color: var(--grey-200);
+}
+
+#frm-plugin-feedback-reasons-step .frm-option-box.frm-checked {
+	background-color: var(--primary-50);
+	border-color: var(--primary-500);
+}
+
+#frm-plugin-feedback-details {
+	resize: none;
+	height: 90px;
+}
