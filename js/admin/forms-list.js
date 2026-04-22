@@ -12,7 +12,7 @@
 
 	function handleClickFormsListSettings( event ) {
 		event.preventDefault();
-		const btn = 'A' === event.target.tagName ? event.target : event.target.closest( 'a' );
+		const btn = event.target.closest( 'a' );
 		if ( ! btn ) {
 			return;
 		}
