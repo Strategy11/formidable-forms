@@ -1,4 +1,12 @@
 <?php
+/**
+ * HTML content editor for HTML fields.
+ *
+ * @package Formidable
+ *
+ * @var array $field Field data including 'id' and 'description'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

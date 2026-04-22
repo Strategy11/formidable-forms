@@ -1,4 +1,16 @@
 <?php
+/**
+ * Add-Ons list.
+ *
+ * @package Formidable
+ *
+ * @var array<string, array> $addons            Available add-ons keyed by slug.
+ * @var string               $view_path         Absolute path to the views/addons/ directory, with trailing slash.
+ * @var string               $request_addon_url URL for requesting a new add-on.
+ * @var string               $license_type      Current license type or empty string.
+ * @var string               $pricing           Upgrade URL used for CTAs.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

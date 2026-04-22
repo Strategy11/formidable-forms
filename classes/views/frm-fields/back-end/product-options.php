@@ -1,4 +1,13 @@
 <?php
+/**
+ * Product type setting for product fields.
+ *
+ * @package Formidable
+ *
+ * @var array                $field      Field data including 'id' and 'data_type'.
+ * @var array<string, string> $data_types Product type options keyed by type slug.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
