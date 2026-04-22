@@ -79,7 +79,7 @@ class FrmPayPalLiteConnectHelper {
 		*/
 
 		if ( ! is_object( $status ) ) {
-			self::render_error( __( 'Unable to retrieve seller status.', 'formidable' ) );
+			self::render_error( __( 'Unable to retrieve seller status.', 'formidable' ), '', $merchant_id );
 			return false;
 		}
 
@@ -87,17 +87,17 @@ class FrmPayPalLiteConnectHelper {
 		$paypal_settings_url = self::get_paypal_account_settings_url( $mode );
 
 		if ( empty( $status->primary_email_confirmed ) ) {
-			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email, '', $paypal_settings_url );
+			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email, $merchant_id, $paypal_settings_url );
 			return false;
 		}
 
 		if ( ! $status->payments_receivable ) {
-			self::render_error( __( 'Payments are not receivable.', 'formidable' ), $email, '', $paypal_settings_url );
+			self::render_error( __( 'Payments are not receivable.', 'formidable' ), $email, $merchant_id, $paypal_settings_url );
 			return false;
 		}
 
 		if ( ! $status->oauth_integrations ) {
-			self::render_error( __( 'OAuth integrations are not enabled.', 'formidable' ), $email );
+			self::render_error( __( 'OAuth integrations are not enabled.', 'formidable' ), $email, $merchant_id );
 			return false;
 		}
 

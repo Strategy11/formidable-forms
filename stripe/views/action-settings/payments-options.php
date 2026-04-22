@@ -161,6 +161,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 	 * @since x.x
 	 *
 	 * @param array $args {
+	 *
 	 *     @type object $form_action    The form action post object.
 	 *     @type object $action_control The action controller object.
 	 * }
