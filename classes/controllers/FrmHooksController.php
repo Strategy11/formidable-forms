@@ -222,6 +222,10 @@ class FrmHooksController {
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
+
+		// Plugin feedback (NPS survey).
+		FrmPluginFeedbackController::load_admin_hooks();
+
 		new FrmPluginSearch();
 	}
 
@@ -325,6 +329,10 @@ class FrmHooksController {
 		// Welcome Tour.
 		add_action( 'wp_ajax_frm_mark_checklist_step_as_completed', 'FrmWelcomeTourController::ajax_mark_checklist_step_as_completed' );
 		add_action( 'wp_ajax_frm_dismiss_welcome_tour', 'FrmWelcomeTourController::ajax_dismiss_welcome_tour' );
+
+		// Plugin feedback.
+		add_action( 'wp_ajax_frm_submit_lite_plugin_feedback', 'FrmPluginFeedbackController::ajax_submit_plugin_feedback' );
+		add_action( 'wp_ajax_frm_dismiss_lite_plugin_feedback', 'FrmPluginFeedbackController::ajax_dismiss_plugin_feedback' );
 	}
 
 	/**
