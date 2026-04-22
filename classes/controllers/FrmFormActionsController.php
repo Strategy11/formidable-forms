@@ -11,7 +11,7 @@ class FrmFormActionsController {
 	public static $action_post_type = 'frm_form_actions';
 
 	/**
-	 * @var array|null
+	 * @var Frm_Form_Action_Factory|null
 	 */
 	public static $registered_actions;
 
