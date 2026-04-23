@@ -300,7 +300,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! isset( $response->status ) || $response->status !== 'COMPLETED' ) {
-			return 'Failed to capture order.';
+			return self::get_paypal_error_message( $response, 'Failed to capture order.' );
 		}
 
 		$capture_id = self::get_capture_id_from_response( $response );
@@ -324,6 +324,37 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
 
 		return true;
+	}
+
+	/**
+	 * Extract a human-readable message from a PayPal error response.
+	 *
+	 * PayPal error payloads include a `details` array with per-issue
+	 * `description` strings (e.g. "The instrument presented was either declined
+	 * by the processor or bank..."). Prefer those over the generic top-level
+	 * `message` so the buyer sees the actionable reason.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed  $response The PayPal response object.
+	 * @param string $fallback The fallback message when no details are available.
+	 *
+	 * @return string
+	 */
+	private static function get_paypal_error_message( $response, $fallback ) {
+		if ( is_object( $response ) && isset( $response->details ) && is_array( $response->details ) ) {
+			foreach ( $response->details as $detail ) {
+				if ( is_object( $detail ) && ! empty( $detail->description ) ) {
+					return (string) $detail->description;
+				}
+			}
+		}
+
+		if ( is_object( $response ) && ! empty( $response->message ) ) {
+			return (string) $response->message;
+		}
+
+		return $fallback;
 	}
 
 	/**
