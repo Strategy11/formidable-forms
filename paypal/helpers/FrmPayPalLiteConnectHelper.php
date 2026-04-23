@@ -97,9 +97,18 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		if ( ! $status->oauth_integrations ) {
-			self::render_error( __( 'OAuth integrations are not enabled.', 'formidable' ), $email, $merchant_id );
+			self::render_error(
+				__( 'OAuth integrations are not enabled. Please finish connecting your PayPal account.', 'formidable' ),
+				$email,
+				$merchant_id,
+				'',
+				$mode
+			);
 			return false;
 		}
+
+		// OAuth integrations are valid. Clear any stored tracking_id from a prior incomplete onboarding.
+		delete_option( self::get_tracking_id_option_name( $mode ) );
 
 		$product                       = self::check_for_product( $status->products, 'PPCP_CUSTOM' );
 		$only_supports_checkout_button = false;
@@ -299,11 +308,13 @@ class FrmPayPalLiteConnectHelper {
 	 * @param string $message
 	 * @param string $email
 	 * @param string $merchant_id
-	 * @param string $link URL to help the user resolve the issue.
+	 * @param string $link            URL to help the user resolve the issue.
+	 * @param string $reconnect_mode  When set to 'test' or 'live', renders a Reconnect button
+	 *                                that triggers the OAuth flow again for that mode.
 	 *
 	 * @return void
 	 */
-	private static function render_error( $message, $email = '', $merchant_id = '', $link = '' ) {
+	private static function render_error( $message, $email = '', $merchant_id = '', $link = '', $reconnect_mode = '' ) {
 		echo '<div class="frm_error_style">';
 		echo wp_kses_post( $message );
 		self::echo_email( $email );
@@ -313,6 +324,13 @@ class FrmPayPalLiteConnectHelper {
 			echo '<br><br>';
 			echo '<a href="' . esc_url( $link ) . '" target="_blank" rel="noopener noreferrer">';
 			esc_html_e( 'Resolve this issue', 'formidable' );
+			echo '</a>';
+		}
+
+		if ( in_array( $reconnect_mode, array( 'test', 'live' ), true ) ) {
+			echo '<br><br>';
+			echo '<a class="frm-connect-paypal-with-oauth button-secondary frm-button-secondary" data-mode="' . esc_attr( $reconnect_mode ) . '" data-reconnect="1" href="#">';
+			esc_html_e( 'Reconnect', 'formidable' );
 			echo '</a>';
 		}
 
@@ -343,10 +361,13 @@ class FrmPayPalLiteConnectHelper {
 	 * @return false|string
 	 */
 	public static function get_oauth_redirect_url() {
-		$mode = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
+		$mode        = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
+		$tracking_id = get_option( self::get_tracking_id_option_name( $mode ) );
 
-		if ( self::get_merchant_id( $mode ) ) {
-			// Do not allow for initialize if there is already a configured account id.
+		if ( self::get_merchant_id( $mode ) && ! $tracking_id ) {
+			// Do not allow for initialize if there is already a configured account id,
+			// unless a tracking_id is stored, which indicates the user is re-onboarding
+			// after an incomplete OAuth integration.
 			return false;
 		}
 
@@ -356,16 +377,27 @@ class FrmPayPalLiteConnectHelper {
 			'frm_paypal_api_mode' => $mode,
 		);
 
+		if ( $tracking_id ) {
+			// Reuse the existing tracking_id so the Connect server can resume onboarding.
+			$additional_body['tracking_id'] = $tracking_id;
+		}
+
 		// Clear the transient so it doesn't fail.
 		delete_option( 'frm_paypal_lite_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
+			self::$latest_error_from_paypal_api = $data;
+			FrmTransLiteLog::log_message( 'PayPal OAuth Error', $data );
 			return false;
 		}
 
 		if ( ! empty( $data->password ) ) {
 			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
+		}
+
+		if ( ! empty( $data->tracking_id ) ) {
+			update_option( self::get_tracking_id_option_name( $mode ), $data->tracking_id, false );
 		}
 
 		if ( ! is_object( $data ) || empty( $data->redirect_url ) ) {
@@ -547,6 +579,15 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
+	 * @return string
+	 */
+	private static function get_tracking_id_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'tracking_id', $mode );
+	}
+
+	/**
 	 * Generate a new client password for authenticating with Connect Service and save it locally as an option.
 	 *
 	 * @param string $mode 'live' or 'test'.
@@ -669,10 +710,14 @@ class FrmPayPalLiteConnectHelper {
 	 * @return bool
 	 */
 	private static function check_server_for_oauth_merchant_id() {
-		$mode = 'test' === FrmAppHelper::simple_get( 'mode' ) ? 'test' : 'live';
+		$mode         = 'test' === FrmAppHelper::simple_get( 'mode' ) ? 'test' : 'live';
+		$tracking_id  = get_option( self::get_tracking_id_option_name( $mode ) );
+		$is_reconnect = (bool) $tracking_id;
 
-		if ( self::get_merchant_id( $mode ) ) {
-			// Do not allow for initialize if there is already a configured merchant id.
+		if ( self::get_merchant_id( $mode ) && ! $is_reconnect ) {
+			// Do not allow for initialize if there is already a configured merchant id,
+			// unless a tracking_id is stored, which indicates the user is re-onboarding
+			// after an incomplete OAuth integration and the new credentials must be synced.
 			return false;
 		}
 
@@ -681,10 +726,19 @@ class FrmPayPalLiteConnectHelper {
 			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
 			'frm_paypal_api_mode' => $mode,
 		);
+
+		if ( $tracking_id ) {
+			$body['tracking_id'] = $tracking_id;
+		}
+
 		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
 
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
 			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, false );
+
+			// Invalidate the cached seller status so the next render fetches fresh data
+			// with the newly synced credentials.
+			delete_option( self::get_paypal_seller_status_option_name( $mode ) );
 
 			FrmTransLiteAppController::install();
 
@@ -834,6 +888,7 @@ class FrmPayPalLiteConnectHelper {
 		delete_option( self::get_client_side_token_option_name( $mode ) );
 		delete_option( self::get_merchant_currency_option_name( $mode ) );
 		delete_option( self::get_paypal_seller_status_option_name( $mode ) );
+		delete_option( self::get_tracking_id_option_name( $mode ) );
 	}
 
 	/**

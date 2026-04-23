@@ -1,20 +1,32 @@
 ( function() {
-	const buttons = document.querySelectorAll( '.frm-connect-paypal-with-oauth' );
-	buttons.forEach( function( button ) {
-		button.addEventListener( 'click', function( e ) {
-			e.preventDefault();
+	// Use event delegation so Reconnect buttons rendered after AJAX seller-status
+	// responses also trigger the OAuth flow.
+	document.addEventListener( 'click', function( e ) {
+		const button = e.target.closest( '.frm-connect-paypal-with-oauth' );
+		if ( ! button ) {
+			return;
+		}
 
-			const { mode } = button.dataset;
-			const formData = new FormData();
-			formData.append( 'mode', mode );
-			frmDom.ajax.doJsonPost( 'paypal_oauth', formData ).then(
-				function( response ) {
-					if ( response.redirect_url !== undefined ) {
-						window.location = response.redirect_url;
-					}
+		e.preventDefault();
+
+		const { mode, reconnect } = button.dataset;
+		const formData = new FormData();
+		formData.append( 'mode', mode );
+		if ( reconnect ) {
+			formData.append( 'reconnect', reconnect );
+		}
+		frmDom.ajax.doJsonPost( 'paypal_oauth', formData ).then(
+			function( response ) {
+				if ( response.redirect_url !== undefined ) {
+					window.location = response.redirect_url;
 				}
-			);
-		} );
+			}
+		).catch(
+			function( error ) {
+				/* eslint-disable-next-line no-console */
+				console.error( 'PayPal OAuth request failed:', error );
+			}
+		);
 	} );
 
 	document.addEventListener(
