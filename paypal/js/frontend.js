@@ -1336,10 +1336,7 @@
 				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 			}
 		}
-		const message = 'string' === typeof err
-			? err
-			: ( err?.message ? err.message : 'Payment failed. Please try again.' );
-		displayPaymentFailure( message );
+		displayPaymentFailure( extractErrorMessage( err ) );
 	}
 
 	function onCancel() {
@@ -1382,6 +1379,88 @@
 	}
 
 	// ---- Error Display ----
+
+	/**
+	 * Extract a user-friendly message from a PayPal error.
+	 *
+	 * PayPal CardFields rejections surface a structured payload that includes a
+	 * `details` array with per-field `description` strings (e.g. "Invalid card
+	 * number"). We prefer those over the generic top-level `message` so the
+	 * buyer sees the actionable reason.
+	 *
+	 * @param {*} err The thrown error, string, or PayPal error payload.
+	 * @return {string} A human-readable message.
+	 */
+	function extractErrorMessage( err ) {
+		const fallback = 'Payment failed. Please try again.';
+
+		if ( ! err ) {
+			return fallback;
+		}
+
+		if ( 'string' === typeof err ) {
+			return parsePayPalErrorString( err ) || err;
+		}
+
+		// PayPal SDK sometimes nests the payload under `err.data` or `err.response`.
+		const payloads = [ err, err.data, err.response ].filter( Boolean );
+		for ( const payload of payloads ) {
+			const fromDetails = getDescriptionFromDetails( payload.details );
+			if ( fromDetails ) {
+				return fromDetails;
+			}
+		}
+
+		if ( err.message ) {
+			return parsePayPalErrorString( err.message ) || err.message;
+		}
+
+		return fallback;
+	}
+
+	/**
+	 * Extract the first `description` from a PayPal `details` array.
+	 *
+	 * @param {Array} details The PayPal error details array.
+	 * @return {string} The description, or an empty string if none.
+	 */
+	function getDescriptionFromDetails( details ) {
+		if ( ! Array.isArray( details ) || ! details.length ) {
+			return '';
+		}
+
+		for ( const detail of details ) {
+			if ( detail && detail.description ) {
+				return detail.description;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Parse a PayPal error string that may contain an embedded JSON payload.
+	 *
+	 * The CardFields SDK can throw errors whose message looks like:
+	 * `Error: ... {"name":"UNPROCESSABLE_ENTITY","details":[...], ...}`.
+	 *
+	 * @param {string} str The raw error string.
+	 * @return {string} The extracted description, or an empty string.
+	 */
+	function parsePayPalErrorString( str ) {
+		const start = str.indexOf( '{' );
+		const end = str.lastIndexOf( '}' );
+		if ( start === -1 || end === -1 || end <= start ) {
+			return '';
+		}
+
+		try {
+			const payload = JSON.parse( str.slice( start, end + 1 ) );
+			return getDescriptionFromDetails( payload.details );
+		} catch ( e ) {
+			return '';
+		}
+	}
 
 	/**
 	 * Display an error message in the payment form.
@@ -1517,10 +1596,7 @@
 			if ( running === 0 && thisForm ) {
 				enableSubmit();
 			}
-			const message = 'string' === typeof err
-				? err
-				: ( err?.message ? err.message : 'Payment failed. Please try again.' );
-			displayPaymentFailure( message );
+			displayPaymentFailure( extractErrorMessage( err ) );
 		}
 	}
 
