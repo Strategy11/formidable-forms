@@ -300,7 +300,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! isset( $response->status ) || $response->status !== 'COMPLETED' ) {
-			return self::get_paypal_error_message( $response, 'Failed to capture order.' );
+			return self::get_paypal_error_message( $response, __( 'Failed to capture order.', 'formidable' ) );
 		}
 
 		$capture_id = self::get_capture_id_from_response( $response );
