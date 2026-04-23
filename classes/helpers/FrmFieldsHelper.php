@@ -1828,6 +1828,10 @@ class FrmFieldsHelper {
 
 		foreach ( $val as $k => $v ) {
 			if ( ! is_string( $v ) ) {
+				if ( is_array( $v ) ) {
+					$val[ $k ] = self::switch_field_ids( $v );
+					unset( $k, $v );
+				}
 				continue;
 			}
 
@@ -1837,9 +1841,15 @@ class FrmFieldsHelper {
 				continue;
 			}
 
+			if ( isset( $frm_duplicate_ids[ $v ] ) ) {
+				$val[ $k ] = $frm_duplicate_ids[ $v ];
+				unset( $k, $v );
+				continue;
+			}
+
 			$val[ $k ] = str_replace( $replace, $replace_with, $v );
 			unset( $k, $v );
-		}
+		}//end foreach
 
 		return $val;
 	}
