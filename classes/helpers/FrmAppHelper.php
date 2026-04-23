@@ -3985,6 +3985,10 @@ class FrmAppHelper {
 
 			self::add_form_builder_modal_data( $admin_script_strings );
 
+			if ( self::is_form_builder_page() ) {
+				$admin_script_strings['currency'] = FrmCurrencyHelper::get_currency();
+			}
+
 			/**
 			 * @param array $admin_script_strings
 			 */
