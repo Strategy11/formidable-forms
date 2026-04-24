@@ -11261,6 +11261,9 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 * Show the active type's settings panel and assign field names.
 	 * Hide and strip names from all other type panels.
 	 *
+	 * Handles any number of `data-frm-gc-field` elements per type panel,
+	 * assigning `name="${base}[${fieldKey}]"` when active and removing it when not.
+	 *
 	 * @param {HTMLElement} itemRow - A .frm_gc_item_row element.
 	 */
 	function frmGcActivateType( itemRow ) {
@@ -11275,15 +11278,15 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			const isActive = typeDiv.dataset.type === activeType;
 			typeDiv.toggleAttribute( 'hidden', ! isActive );
 
-			// Assign or remove the [id] field name so only the active type submits.
-			const idField = typeDiv.querySelector( '[data-frm-gc-field="id"]' );
-			if ( idField ) {
+			// Assign or remove names for all fields in this type panel.
+			typeDiv.querySelectorAll( '[data-frm-gc-field]' ).forEach( field => {
+				const fieldKey = field.dataset.frmGcField;
 				if ( isActive ) {
-					idField.name = `${base}[id]`;
+					field.name = `${base}[${fieldKey}]`;
 				} else {
-					idField.removeAttribute( 'name' );
+					field.removeAttribute( 'name' );
 				}
-			}
+			} );
 		} );
 	}
 
@@ -11294,9 +11297,12 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 * instead of for/id attributes to avoid duplicate IDs before cloning. This function
 	 * assigns real id/for pairs using the wrapper ID and item index as a unique prefix.
 	 *
-	 * @param {HTMLElement} itemRow    - The .frm_gc_item_row element already in the DOM.
+	 * Handles any number of `data-frm-gc-field` elements per type panel so that
+	 * Pro types with multiple selects (e.g. form_id + id for frm_file) work correctly.
+	 *
+	 * @param {HTMLElement} itemRow       - The .frm_gc_item_row element already in the DOM.
 	 * @param {string}      wrapperBaseId - The wrapper element's id attribute value.
-	 * @param {number}      idx        - Zero-based item index used for unique IDs.
+	 * @param {number}      idx           - Zero-based item index used for unique IDs.
 	 */
 	function frmGcAssignItemIds( itemRow, wrapperBaseId, idx ) {
 		// Type select.
@@ -11309,18 +11315,53 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			}
 		}
 
-		// Per-type id selects — each lives inside its own .frm-gc-type-settings div.
+		// Per-type fields — each type panel can have multiple data-frm-gc-field elements.
 		itemRow.querySelectorAll( '.frm-gc-type-settings' ).forEach( typeDiv => {
-			const type    = typeDiv.dataset.type;
-			const idField = typeDiv.querySelector( '[data-frm-gc-field="id"]' );
-			if ( idField ) {
-				idField.id = `${wrapperBaseId}_id_${type}_${idx}`;
-				const idLabel = typeDiv.querySelector( '[data-frm-gc-for="id"]' );
-				if ( idLabel ) {
-					idLabel.htmlFor = idField.id;
+			const type = typeDiv.dataset.type;
+			typeDiv.querySelectorAll( '[data-frm-gc-field]' ).forEach( field => {
+				const fieldKey = field.dataset.frmGcField;
+				field.id = `${wrapperBaseId}_${fieldKey}_${type}_${idx}`;
+				const label = typeDiv.querySelector( `[data-frm-gc-for="${fieldKey}"]` );
+				if ( label ) {
+					label.htmlFor = field.id;
 				}
-			}
+			} );
 		} );
+	}
+
+	/**
+	 * Filter the file field select to show only options matching the selected form.
+	 *
+	 * When a .frm-gc-file-form-select changes, all options in the sibling file-field
+	 * select ([data-frm-gc-field="id"]) are shown or hidden based on their data-form-id.
+	 * Options without data-form-id are always shown (e.g. the empty placeholder).
+	 *
+	 * @param {HTMLElement} formSelect - A .frm-gc-file-form-select element.
+	 */
+	function frmGcFilterFileFields( formSelect ) {
+		const typeDiv    = formSelect.closest( '.frm-gc-type-settings' );
+		const fieldSelect = typeDiv && typeDiv.querySelector( '[data-frm-gc-field="id"]' );
+		if ( ! fieldSelect ) {
+			return;
+		}
+
+		const selectedFormId = formSelect.value;
+
+		Array.from( fieldSelect.options ).forEach( option => {
+			const optFormId = option.dataset.formId;
+			if ( ! optFormId ) {
+				// Placeholder option — always visible.
+				option.hidden = false;
+				return;
+			}
+			option.hidden = Boolean( selectedFormId ) && optFormId !== selectedFormId;
+		} );
+
+		// If the currently selected field option is now hidden, reset the select.
+		const selected = fieldSelect.options[ fieldSelect.selectedIndex ];
+		if ( selected && selected.hidden ) {
+			fieldSelect.value = '';
+		}
 	}
 
 	/**
@@ -11395,6 +11436,12 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		const typeSelect = event.target.closest( '.frm-gc-item-type' );
 		if ( typeSelect ) {
 			frmGcActivateType( typeSelect.closest( '.frm_gc_item_row' ) );
+			return;
+		}
+
+		const fileFormSelect = event.target.closest( '.frm-gc-file-form-select' );
+		if ( fileFormSelect ) {
+			frmGcFilterFileFields( fileFormSelect );
 		}
 	} );
 }() );

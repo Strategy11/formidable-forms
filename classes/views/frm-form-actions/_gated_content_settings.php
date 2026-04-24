@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $frm_gc_items           = $instance->post_content['items'] ?? array();
 $frm_gc_action_id       = (int) $instance->ID;
 $frm_gc_field_name_base = $this->get_field_name( 'items' );
-$frm_gc_types           = FrmGatedContentAction::get_types();
+$frm_gc_types           = get_class( $this )::get_types(); // Late-static; Pro class overrides get_types().
 
 // Unique wrapper ID per action instance — prevents JS collisions when multiple
 // gated content actions exist on the same form.
@@ -123,10 +123,10 @@ $frm_gc_pages = get_pages(
 						 * Guidelines for hook callbacks:
 						 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}">`.
 						 * - Add the `hidden` attribute when `$active_type !== '{TYPE}'`.
-						 * - Include a `<label for="{ID}">` and `id="{ID}"` on the select, where
-						 *   `{ID}` follows the pattern `{$frm_gc_item_base}_id_{TYPE}` (replacing `[` and `]`
-						 *   with `_`). JS will regenerate these for template-cloned rows.
-						 * - Add `data-frm-gc-field="id"` to the select so JS can manage its name on type change.
+						 * - Include a `<label for="{ID}">` and `id="{ID}"` on each select, where
+						 *   `{ID}` follows the pattern `{$frm_gc_wrapper_id}_{FIELD}_{TYPE}_{$frm_gc_idx}`
+						 *   (e.g. `frm_gc_settings_0_id_frm_file_2`). JS regenerates these for template-cloned rows.
+						 * - Add `data-frm-gc-field="id"` (or another key) to each select so JS manages its name on type change.
 						 * - Only add a `name` attribute when `$active_type === '{TYPE}'`.
 						 *
 						 * @since x.x
@@ -135,8 +135,9 @@ $frm_gc_pages = get_pages(
 						 * @param int    $frm_gc_idx        Zero-based index of this item in the items array.
 						 * @param array  $frm_gc_item       Saved item data.
 						 * @param string $frm_gc_item_base  Field name prefix for this item, e.g. `frm_form_action[X][post_content][items][0]`.
+						 * @param string $frm_gc_wrapper_id Unique wrapper element ID for building `id`/`for` attribute pairs.
 						 */
-						do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base );
+						do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base, $frm_gc_wrapper_id );
 						?>
 					</div><!-- .frm8 -->
 
