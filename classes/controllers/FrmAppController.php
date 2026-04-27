@@ -949,7 +949,12 @@ class FrmAppController {
 			return;
 		}
 
-		wp_register_style( 'formidable-legacy-paypal', FrmAppHelper::plugin_url() . '/css/admin/frm-legacy-paypal.css', array( 'formidable-admin' ), FrmAppHelper::plugin_version() );
+		wp_register_style(
+			'formidable-legacy-paypal',
+			FrmAppHelper::plugin_url() . '/css/admin/frm-legacy-paypal.css',
+			array( 'formidable-admin' ),
+			FrmAppHelper::plugin_version()
+		);
 		wp_enqueue_style( 'formidable-legacy-paypal' );
 	}
 
