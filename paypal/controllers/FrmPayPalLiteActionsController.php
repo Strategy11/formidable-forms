@@ -1,0 +1,2473 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
+
+	private static $active_order_id;
+
+	private static $active_payment_source;
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string             $callback
+	 * @param array|false|object $field
+	 *
+	 * @return string
+	 */
+	public static function maybe_show_card( $callback, $field = false ) {
+		if ( false === $field ) {
+			// Pro isn't up to date.
+			return $callback;
+		}
+
+		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
+		$actions = self::get_actions_before_submit( $form_id );
+
+		if ( ! $actions ) {
+			return $callback;
+		}
+
+		$field_id = is_object( $field ) ? $field->id : $field['id'];
+
+		foreach ( $actions as $action ) {
+			if ( (int) $action->post_content['credit_card'] === (int) $field_id ) {
+				return self::class . '::show_card';
+			}
+		}
+
+		return $callback;
+	}
+
+	/**
+	 * Override the credit card field HTML if there is a PayPal action.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $field_name
+	 * @param array  $atts
+	 *
+	 * @return void
+	 */
+	public static function show_card( $field, $field_name, $atts ) {
+		$actions = self::get_actions_before_submit( $field['form_id'] );
+
+		if ( $actions ) {
+			self::load_scripts( (int) $field['form_id'] );
+
+			$html_id = $atts['html_id'];
+			include FrmStrpLiteAppHelper::plugin_path() . '/views/payments/card-field.php';
+			return;
+		}
+
+		// Use the Pro function when there are no Stripe actions.
+		// This is required for other gateways like Authorize.Net.
+		if ( is_callable( 'FrmProCreditCardsController::show_in_form' ) ) {
+			FrmProCreditCardsController::show_in_form( $field, $field_name, $atts );
+		}
+	}
+
+	/**
+	 * Get all published payment actions with the PayPal gateway that have an amount set.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
+	public static function get_actions_before_submit( $form_id ) {
+		$payment_actions = self::get_actions_for_form( $form_id );
+
+		foreach ( $payment_actions as $k => $payment_action ) {
+			$gateway   = $payment_action->post_content['gateway'];
+			$is_paypal = $gateway === 'paypal' || ( is_array( $gateway ) && in_array( 'paypal', $gateway, true ) );
+
+			if ( ! $is_paypal || empty( $payment_action->post_content['amount'] ) ) {
+				unset( $payment_actions[ $k ] );
+			}
+		}
+
+		return $payment_actions;
+	}
+
+	/**
+	 * Trigger a PayPal payment after a form is submitted.
+	 * This is called for both one time and recurring payments.
+	 *
+	 * @param WP_Post  $action
+	 * @param stdClass $entry
+	 * @param mixed    $form
+	 *
+	 * @return array
+	 */
+	public static function trigger_gateway( $action, $entry, $form ) {
+		$response = array(
+			'success'      => false,
+			'run_triggers' => false,
+			'show_errors'  => true,
+		);
+		$atts     = compact( 'action', 'entry', 'form' );
+		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
+
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $amount || $amount == 000 ) {
+			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
+			return $response;
+		}
+
+		if ( ! self::paypal_is_configured() ) {
+			$response['error'] = __( 'PayPal still needs to be configured.', 'formidable' );
+			return $response;
+		}
+
+		$payment_args = compact( 'form', 'entry', 'action', 'amount' );
+
+		// Attempt to charge the customer's card.
+		if ( 'recurring' === $action->post_content['type'] ) {
+			$charge = self::trigger_recurring_payment( $payment_args );
+		} else {
+			$charge = self::trigger_one_time_payment( $payment_args );
+		}
+
+		if ( $charge === true ) {
+			$response['success'] = true;
+		} else {
+			$response['error'] = $charge;
+		}
+
+		if ( ! self::$active_order_id ) {
+			return $response;
+		}
+
+		$paypal_message = '';
+		$email          = false;
+		$address        = false;
+		$order          = FrmPayPalLiteConnectHelper::get_order( self::$active_order_id );
+
+		if ( is_object( $order ) && isset( $order->payer ) && is_object( $order->payer ) ) {
+			$payer = $order->payer;
+
+			if ( ! empty( $payer->email_address ) ) {
+				$email = $payer->email_address;
+			}
+		}
+
+		if ( is_object( $order ) && ! empty( $order->purchase_units[0]->shipping->address ) && is_object( $order->purchase_units[0]->shipping->address ) ) {
+			$address = $order->purchase_units[0]->shipping->address;
+		}
+
+		$paypal_message = '';
+		$source_type    = self::$active_payment_source;
+
+		if ( $source_type ) {
+			$display_type    = self::get_source_display_type( $source_type );
+			$paypal_message .= '<strong>' . esc_html__( 'Payment source: ', 'formidable' ) . '</strong>' . $display_type . '<br>';
+		}
+
+		if ( $email ) {
+			$paypal_message .= '<strong>' . esc_html__( 'Payment made by: ', 'formidable' ) . '</strong>' . $email . '<br>';
+		}
+
+		if ( $address && ! empty( $address->address_line_1 ) ) {
+			$paypal_message .= self::format_address( $address );
+		}
+
+		/**
+		 * Filters the message to show in the main feedback area.
+		 *
+		 * @since x.x
+		 *
+		 * @param string   $paypal_message The message to show.
+		 * @param stdClass $order          The order object.
+		 */
+		$paypal_message = apply_filters( 'frm_paypal_message', $paypal_message, $order );
+
+		add_filter(
+			'frm_main_feedback',
+			function ( $message ) use ( $paypal_message ) {
+				if ( $paypal_message ) {
+					$details = '<div class="frm_paypal_payment_details" style="margin-top: 10px;">' . $paypal_message . '</div>';
+					$message = preg_replace( '/(<div\b[^>]*\bfrm_message\b[^>]*>)(.*?)(<\/div>)/s', '$1$2' . $details . '$3', $message );
+				}
+
+				return $message;
+			}
+		);
+
+		return $response;
+	}
+
+	/**
+	 * Get the display label for a payment source type.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $source_type The payment source identifier (e.g. 'paypal', 'paylater', 'google_pay').
+	 *
+	 * @return string The human-readable display label.
+	 */
+	private static function get_source_display_type( $source_type ) {
+		switch ( $source_type ) {
+			case 'paypal':
+				return __( 'PayPal', 'formidable' );
+			case 'paylater':
+				return __( 'Pay Later', 'formidable' );
+			default:
+				return ucwords( str_replace( '_', ' ', $source_type ) );
+		}
+	}
+
+	/**
+	 * Format a PayPal shipping address object into an HTML string.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $address The PayPal shipping address object.
+	 *
+	 * @return string The formatted address HTML.
+	 */
+	private static function format_address( $address ) {
+		$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
+
+		$formatted .= $address->address_line_1 . '<br>';
+
+		// City, State Zip
+		$city_line = '';
+
+		if ( ! empty( $address->admin_area_2 ) ) {
+			$city_line .= $address->admin_area_2;
+		}
+
+		if ( ! empty( $address->admin_area_1 ) ) {
+			$city_line .= $city_line ? ', ' . $address->admin_area_1 : $address->admin_area_1;
+		}
+
+		if ( ! empty( $address->postal_code ) ) {
+			$city_line .= $city_line ? ' ' . $address->postal_code : $address->postal_code;
+		}
+
+		if ( $city_line ) {
+			$formatted .= $city_line . '<br>';
+		}
+
+		if ( ! empty( $address->country_code ) ) {
+			$formatted .= $address->country_code . '<br>';
+		}
+
+		return $formatted;
+	}
+
+	/**
+	 * Trigger a one time payment.
+	 *
+	 * @param array $atts The arguments for the payment.
+	 *
+	 * @return string|true string on error, true on success.
+	 */
+	private static function trigger_one_time_payment( $atts ) {
+		$paypal_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+
+		if ( ! $paypal_order_id ) {
+			return 'No PayPal order ID found.';
+		}
+
+		$order = FrmPayPalLiteConnectHelper::get_order( $paypal_order_id );
+
+		if ( false === $order ) {
+			return 'Failed to get order.';
+		}
+
+		if ( self::is_liability_error( $order ) ) {
+			return 'This payment was flagged as possible fraud and has been rejected.';
+		}
+
+		if ( ! self::validate_order_status( $order ) ) {
+			return 'This order status is not valid for capture.';
+		}
+
+		if ( ! self::validate_order_amount( $order, $atts['amount'] ) ) {
+			return 'This order amount appears to be tampered with.';
+		}
+
+		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
+
+		if ( false === $response ) {
+			return 'Failed to confirm order.';
+		}
+
+		if ( ! isset( $response->status ) || $response->status !== 'COMPLETED' ) {
+			return self::get_paypal_error_message( $response, __( 'Failed to capture order.', 'formidable' ) );
+		}
+
+		$capture_id = self::get_capture_id_from_response( $response );
+
+		self::sync_entry_data_with_capture_response( $response, $atts );
+
+		// Create a payment record.
+		$atts['status']         = 'complete';
+		$atts['charge']         = new stdClass();
+		$atts['charge']->id     = $capture_id ? $capture_id : $paypal_order_id;
+		$atts['charge']->amount = $atts['amount'];
+
+		$payment_id  = self::create_new_payment( $atts );
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+		$status      = $atts['status'];
+
+		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+
+		self::$active_order_id       = $paypal_order_id;
+		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
+
+		return true;
+	}
+
+	/**
+	 * Extract a human-readable message from a PayPal error response.
+	 *
+	 * PayPal error payloads include a `details` array with per-issue
+	 * `description` strings (e.g. "The instrument presented was either declined
+	 * by the processor or bank..."). Prefer those over the generic top-level
+	 * `message` so the buyer sees the actionable reason.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed  $response The PayPal response object.
+	 * @param string $fallback The fallback message when no details are available.
+	 *
+	 * @return string
+	 */
+	private static function get_paypal_error_message( $response, $fallback ) {
+		if ( is_object( $response ) && isset( $response->details ) && is_array( $response->details ) ) {
+			foreach ( $response->details as $detail ) {
+				if ( is_object( $detail ) && ! empty( $detail->description ) ) {
+					return (string) $detail->description;
+				}
+			}
+		}
+
+		if ( is_object( $response ) && ! empty( $response->message ) ) {
+			return (string) $response->message;
+		}
+
+		return $fallback;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $order The order object.
+	 *
+	 * @return bool
+	 */
+	private static function is_liability_error( $order ) {
+		if ( ! isset( $order->payment_source->card->authentication_result->liability_shift ) ) {
+			return false;
+		}
+
+		$liability_shift    = $order->payment_source->card->authentication_result->liability_shift;
+		$is_liability_error = 'NO' === $liability_shift || 'UNKNOWN' === $liability_shift;
+
+		/**
+		 * Filters whether the liability shift is an error.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool     $is_liability_error Whether the liability shift is an error.
+		 * @param string   $liability_shift    The liability shift value. By default 'NO' and 'UNKNOWN' are errors.
+		 * @param stdClass $order              The order object.
+		 */
+		return (bool) apply_filters(
+			'frm_paypal_is_liability_error',
+			$is_liability_error,
+			$liability_shift,
+			$order
+		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $order
+	 *
+	 * @return bool
+	 */
+	private static function validate_order_status( $order ) {
+		return isset( $order->status ) && 'APPROVED' === $order->status;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $order
+	 * @param string   $expected_amount This is as a whole number (in cents for currencies that include decimals).
+	 *
+	 * @return bool
+	 */
+	private static function validate_order_amount( $order, $expected_amount ) {
+		$order_amount = $order->purchase_units[0]->amount->value ?? '';
+
+		// The order amount is in dollars, but the expected amount is in cents, so we need to convert.
+		$order_amount = str_replace( '.', '', $order_amount );
+
+		return $order_amount === $expected_amount;
+	}
+
+	/**
+	 * Validate that the subscription status indicates it was approved by the payer.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $subscription The PayPal subscription object.
+	 *
+	 * @return bool
+	 */
+	private static function validate_subscription_status( $subscription ) {
+		if ( ! isset( $subscription->status ) ) {
+			return false;
+		}
+
+		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED', 'APPROVAL_PENDING' ), true );
+	}
+
+	/**
+	 * Validate that the subscription amount matches the expected amount.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $subscription    The PayPal subscription object.
+	 * @param string   $expected_amount The expected amount as a whole number (in cents for currencies that include decimals).
+	 *
+	 * @return bool
+	 */
+	private static function validate_subscription_amount( $subscription, $expected_amount ) {
+		// Vault-created subscriptions in APPROVAL_PENDING have no billing details yet.
+		if ( isset( $subscription->status ) && 'APPROVAL_PENDING' === $subscription->status ) {
+			return true;
+		}
+
+		$subscription_amount = $subscription->billing_info->last_payment->amount->value ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value ?? '';
+
+		if ( ! $subscription_amount ) {
+			return false;
+		}
+
+		$subscription_amount = number_format( (float) $subscription_amount, 2, '.', '' );
+		$expected_amount     = number_format( ( (float) $expected_amount ) / 100, 2, '.', '' );
+
+		return $subscription_amount === $expected_amount;
+	}
+
+	/**
+	 * @param object $response
+	 *
+	 * @return string
+	 */
+	private static function get_capture_id_from_response( $response ) {
+		if ( ! isset( $response->id ) ) {
+			return '';
+		}
+
+		foreach ( $response->purchase_units as $purchase_unit ) {
+			if ( empty( $purchase_unit->payments ) || ! is_object( $purchase_unit->payments ) ) {
+				continue;
+			}
+
+			$payments = $purchase_unit->payments;
+
+			if ( empty( $payments->captures ) || ! is_array( $payments->captures ) ) {
+				continue;
+			}
+
+			$captures = $payments->captures;
+
+			foreach ( $captures as $capture ) {
+				return $capture->id;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Sync the entry data with the capture response.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $response The response object.
+	 * @param array  $atts     The arguments for the payment.
+	 *
+	 * @return void
+	 */
+	private static function sync_entry_data_with_capture_response( $response, $atts ) {
+		if ( ! isset( $response->payer ) || ! is_object( $response->payer ) ) {
+			return;
+		}
+
+		$entry    = $atts['entry'];
+		$action   = $atts['action'];
+		$settings = $action->post_content;
+		$mode     = $settings['entry_data_sync'] ?? 'overwrite';
+		$payer    = $response->payer;
+
+		if ( 'new_fields' === $mode ) {
+			$updates = self::get_order_data_field_updates( $payer, $response, $settings );
+		} else {
+			$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
+		}
+
+		foreach ( $updates as $field_id => $new_value ) {
+			if ( ! FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value ) ) {
+				FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
+			}
+		}
+
+		if ( ! class_exists( 'FrmLog' ) ) {
+			return;
+		}
+
+		$log = new FrmLog();
+		$log->add(
+			array(
+				'title'   => 'PayPal Lite: Sync Entry Data with Capture Response',
+				'content' => print_r( $updates, true ),
+			)
+		);
+	}
+
+	/**
+	 * Sync the entry data with the subscription response.
+	 *
+	 * Normalizes the subscriber data from the subscription response into the
+	 * same shape used by the capture response so the existing field-update
+	 * helpers can be reused.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $subscription The subscription object from PayPal.
+	 * @param array  $atts         Includes 'entry', 'action', 'amount'.
+	 *
+	 * @return void
+	 */
+	private static function sync_entry_data_with_subscription_response( $subscription, $atts ) {
+		if ( ! isset( $subscription->subscriber ) || ! is_object( $subscription->subscriber ) ) {
+			return;
+		}
+
+		$subscriber = $subscription->subscriber;
+
+		// Normalize subscriber into the payer shape expected by existing helpers.
+		$payer = (object) array(
+			'email_address' => $subscriber->email_address ?? '',
+			'name'          => $subscriber->name ?? null,
+		);
+
+		// Normalize shipping address into the purchase_units shape expected by get_shipping_address_from_response.
+		$response = (object) array(
+			'payer'          => $payer,
+			'purchase_units' => array(),
+		);
+
+		if ( isset( $subscriber->shipping_address->address ) ) {
+			$response->purchase_units = array(
+				(object) array(
+					'shipping' => (object) array(
+						'address' => $subscriber->shipping_address->address,
+					),
+				),
+			);
+		}
+
+		$entry    = $atts['entry'];
+		$action   = $atts['action'];
+		$settings = $action->post_content;
+		$mode     = $settings['entry_data_sync'] ?? 'overwrite';
+
+		if ( 'new_fields' === $mode ) {
+			$updates = self::get_order_data_field_updates( $payer, $response, $settings );
+
+			foreach ( $updates as $field_id => $new_value ) {
+				FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
+			}
+		} else {
+			$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
+
+			foreach ( $updates as $field_id => $new_value ) {
+				if ( ! FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value ) ) {
+					FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
+				}
+			}
+		}
+
+		if ( ! class_exists( 'FrmLog' ) ) {
+			return;
+		}
+
+		$log = new FrmLog();
+		$log->add(
+			array(
+				'title'   => 'PayPal Lite: Sync Entry Data with Subscription Response',
+				'content' => print_r( $updates, true ),
+			)
+		);
+	}
+
+	/**
+	 * Build field updates for the dedicated PayPal order data fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $payer    The payer object from the PayPal response.
+	 * @param stdClass $response The full capture response.
+	 * @param array    $settings The action settings.
+	 *
+	 * @return array<int,mixed> Field ID => value pairs.
+	 */
+	private static function get_order_data_field_updates( $payer, $response, $settings ) {
+		$updates = array();
+
+		// Email (hidden field, single string value).
+		if ( ! empty( $settings['paypal_order_email'] ) && ! empty( $payer->email_address ) ) {
+			$updates[ (int) $settings['paypal_order_email'] ] = $payer->email_address;
+		}
+
+		// Name (name field with first/last sub-keys).
+		if ( ! empty( $settings['paypal_order_name'] ) && isset( $payer->name ) ) {
+			$new_value = array(
+				'first' => ! empty( $payer->name->given_name ) ? $payer->name->given_name : '',
+				'last'  => ! empty( $payer->name->surname ) ? $payer->name->surname : '',
+			);
+
+			if ( array_filter( $new_value ) ) {
+				$updates[ (int) $settings['paypal_order_name'] ] = $new_value;
+			}
+		}
+
+		// Address (address field with line1/line2/city/state/zip/country sub-keys).
+		if ( empty( $settings['paypal_order_address'] ) ) {
+			return $updates;
+		}
+
+		$shipping = self::get_shipping_address_from_response( $response );
+
+		if ( $shipping ) {
+			$new_value = array(
+				'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
+				'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
+				'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
+				'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
+				'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
+				'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
+			);
+
+			if ( array_filter( $new_value ) ) {
+				$updates[ (int) $settings['paypal_order_address'] ] = $new_value;
+			}
+		}
+
+		return $updates;
+	}
+
+	/**
+	 * Build an array of field updates by comparing payer response data against current entry metas.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $payer    The payer object from the PayPal response.
+	 * @param stdClass $response The full capture response.
+	 * @param WP_Post  $action   The payment action.
+	 * @param stdClass $entry    The entry object.
+	 *
+	 * @return array<int,mixed> Field ID => new value pairs that differ from the current entry data.
+	 */
+	private static function get_payer_field_updates( $payer, $response, $action, $entry ) {
+		$updates  = array();
+		$settings = $action->post_content;
+
+		// Email: setting is a shortcode like [25], extract the field ID.
+		if ( ! empty( $settings['email'] ) && preg_match( '/\[(\d+)\]/', $settings['email'], $matches ) ) {
+			$email_field_id = (int) $matches[1];
+
+			if ( ! empty( $payer->email_address ) ) {
+				$current = $entry->metas[ $email_field_id ] ?? '';
+
+				if ( $current !== $payer->email_address ) {
+					$updates[ $email_field_id ] = $payer->email_address;
+				}
+			}
+		}
+
+		// Name fields.
+		if ( isset( $payer->name ) ) {
+			$first_name_field_id = ! empty( $settings['billing_first_name'] ) ? (int) $settings['billing_first_name'] : 0;
+			$last_name_field_id  = ! empty( $settings['billing_last_name'] ) ? (int) $settings['billing_last_name'] : 0;
+
+			if ( $first_name_field_id && $first_name_field_id === $last_name_field_id ) {
+				// Both settings point to the same Name field. Store as a serialized array.
+				$new_value = array(
+					'first' => ! empty( $payer->name->given_name ) ? $payer->name->given_name : '',
+					'last'  => ! empty( $payer->name->surname ) ? $payer->name->surname : '',
+				);
+				$current   = $entry->metas[ $first_name_field_id ] ?? array();
+
+				if ( $current !== $new_value ) {
+					$updates[ $first_name_field_id ] = $new_value;
+				}
+			} else {
+				// Separate text fields for first and last name.
+				if ( $first_name_field_id && ! empty( $payer->name->given_name ) ) {
+					$current = $entry->metas[ $first_name_field_id ] ?? '';
+
+					if ( $current !== $payer->name->given_name ) {
+						$updates[ $first_name_field_id ] = $payer->name->given_name;
+					}
+				}
+
+				if ( $last_name_field_id && ! empty( $payer->name->surname ) ) {
+					$current = $entry->metas[ $last_name_field_id ] ?? '';
+
+					if ( $current !== $payer->name->surname ) {
+						$updates[ $last_name_field_id ] = $payer->name->surname;
+					}
+				}
+			}//end if
+		}//end if
+
+		// Address: pull from the first purchase unit's shipping address.
+		if ( empty( $settings['billing_address'] ) ) {
+			return $updates;
+		}
+
+		$field_id = (int) $settings['billing_address'];
+		$shipping = self::get_shipping_address_from_response( $response );
+
+		if ( ! $shipping ) {
+			return $updates;
+		}
+
+		$new_value = array(
+			'line1'   => ! empty( $shipping->address_line_1 ) ? $shipping->address_line_1 : '',
+			'line2'   => ! empty( $shipping->address_line_2 ) ? $shipping->address_line_2 : '',
+			'city'    => ! empty( $shipping->admin_area_2 ) ? $shipping->admin_area_2 : '',
+			'state'   => ! empty( $shipping->admin_area_1 ) ? $shipping->admin_area_1 : '',
+			'zip'     => ! empty( $shipping->postal_code ) ? $shipping->postal_code : '',
+			'country' => ! empty( $shipping->country_code ) ? $shipping->country_code : '',
+		);
+
+		if ( ! array_filter( $new_value ) ) {
+			return $updates;
+		}
+
+		$current = $entry->metas[ $field_id ] ?? array();
+
+		if ( $current !== $new_value ) {
+			$updates[ $field_id ] = $new_value;
+		}
+
+		return $updates;
+	}
+
+	/**
+	 * Get the shipping address object from the first purchase unit in the response.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $response The capture response.
+	 *
+	 * @return false|object The address object, or false if not available.
+	 */
+	private static function get_shipping_address_from_response( $response ) {
+		if ( empty( $response->purchase_units ) || ! is_array( $response->purchase_units ) ) {
+			return false;
+		}
+
+		$purchase_unit = reset( $response->purchase_units );
+
+		if ( empty( $purchase_unit->shipping ) || ! is_object( $purchase_unit->shipping ) || empty( $purchase_unit->shipping->address ) ) {
+			return false;
+		}
+
+		return $purchase_unit->shipping->address;
+	}
+
+	/**
+	 * Add a payment row for the payments table.
+	 *
+	 * @param array $atts The arguments for the payment.
+	 *
+	 * @return int
+	 */
+	private static function create_new_payment( $atts ) {
+		$atts['charge'] = (object) $atts['charge'];
+
+		$new_values = array(
+			'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['charge']->amount, $atts['action'] ),
+			'status'     => $atts['status'],
+			'paysys'     => 'paypal',
+			'item_id'    => $atts['entry']->id,
+			'action_id'  => $atts['action']->ID,
+			'receipt_id' => $atts['charge']->id,
+			'sub_id'     => $atts['charge']->sub_id ?? '',
+			'test'       => 'test' === FrmPayPalLiteAppHelper::active_mode() ? 1 : 0,
+		);
+
+		$frm_payment = new FrmTransLitePayment();
+		return $frm_payment->create( $new_values );
+	}
+
+	/**
+	 * Create a new PayPal subscription and a subscription and payment for the payments tables.
+	 *
+	 * @param array $atts Includes 'customer', 'entry', 'action', 'amount'.
+	 *
+	 * @return bool|string True on success, error message on failure
+	 */
+	private static function trigger_recurring_payment( $atts ) {
+		$subscription_id = FrmAppHelper::get_post_param( 'paypal_subscription_id', '', 'sanitize_text_field' );
+
+		if ( ! $subscription_id ) {
+			return __( 'No PayPal subscription ID found.', 'formidable' );
+		}
+
+		$subscription = FrmPayPalLiteConnectHelper::get_subscription( $subscription_id );
+
+		if ( false === $subscription ) {
+			return 'Failed to get subscription.';
+		}
+
+		if ( ! self::validate_subscription_status( $subscription ) ) {
+			return 'This subscription status is not valid.';
+		}
+
+		if ( ! self::validate_subscription_amount( $subscription, $atts['amount'] ) ) {
+			return 'This subscription amount appears to be tampered with.';
+		}
+
+		$sub_id = self::create_new_subscription( $subscription_id, $atts, $subscription );
+
+		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
+
+		self::$active_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+
+		self::sync_entry_data_with_subscription_response( $subscription, $atts );
+
+		self::maybe_create_initial_subscription_payment( $subscription_id, $sub_id, $atts );
+
+		return true;
+	}
+
+	/**
+	 * Create a new subscription record in the payments tables.
+	 *
+	 * @param string $subscription_id The PayPal subscription ID.
+	 * @param array  $atts            Includes 'entry', 'action', 'amount'.
+	 * @param object $subscription    The PayPal subscription API response.
+	 *
+	 * @return int
+	 */
+	private static function create_new_subscription( $subscription_id, $atts, $subscription ) {
+		$next_bill_date = gmdate( 'Y-m-d' );
+
+		if ( ! empty( $subscription->billing_info->next_billing_time ) ) {
+			$next_bill_date = gmdate( 'Y-m-d', strtotime( $subscription->billing_info->next_billing_time ) );
+		}
+
+		$new_values = array(
+			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['amount'], $atts['action'] ),
+			'paysys'         => 'paypal',
+			'item_id'        => $atts['entry']->id,
+			'action_id'      => $atts['action']->ID,
+			'sub_id'         => $subscription_id,
+			'interval_count' => $atts['action']->post_content['interval_count'],
+			'time_interval'  => $atts['action']->post_content['interval'],
+			'status'         => 'active',
+			'next_bill_date' => $next_bill_date,
+			'test'           => 'test' === FrmPayPalLiteAppHelper::active_mode() ? 1 : 0,
+		);
+
+		$frm_sub = new FrmTransLiteSubscription();
+		return $frm_sub->create( $new_values );
+	}
+
+	/**
+	 * Create the initial payment record for a new subscription.
+	 *
+	 * Uses the PayPal subscription ID as a temporary receipt_id. When the PAYMENT.SALE.COMPLETED
+	 * webhook arrives later, the receipt_id is updated to the real capture/sale ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $subscription_id The PayPal subscription ID.
+	 * @param int    $sub_id          The local subscription record ID.
+	 * @param array  $atts            Includes 'entry', 'action', 'amount'.
+	 *
+	 * @return void
+	 */
+	private static function maybe_create_initial_subscription_payment( $subscription_id, $sub_id, $atts ) {
+		$atts['status']         = 'complete';
+		$atts['charge']         = new stdClass();
+		$atts['charge']->id     = $subscription_id;
+		$atts['charge']->amount = $atts['amount'];
+		$atts['charge']->sub_id = $sub_id;
+
+		$payment_id  = self::create_new_payment( $atts );
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+		$status      = $atts['status'];
+
+		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+	}
+
+	/**
+	 * Check if PayPal integration is enabled.
+	 *
+	 * @return bool true if PayPal is set up.
+	 */
+	private static function paypal_is_configured() {
+		return (bool) FrmPayPalLiteConnectHelper::get_merchant_id();
+	}
+
+	/**
+	 * Convert the amount from 10.00 to 1000.
+	 *
+	 * @param mixed $amount
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
+	public static function prepare_amount( $amount, $atts = array() ) {
+		$amount   = parent::prepare_amount( $amount, $atts );
+		$currency = self::get_currency_for_action( $atts );
+		return number_format( $amount, $currency['decimals'], '', '' );
+	}
+
+	/**
+	 * If this form submits with ajax, load the scripts on the first page.
+	 *
+	 * @param array $params
+	 *
+	 * @return void
+	 */
+	public static function maybe_load_scripts( $params ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( $params['form_id'] == $params['posted_form_id'] ) {
+			// This form has already been posted, so we aren't on the first page.
+			return;
+		}
+
+		$form = FrmForm::getOne( $params['form_id'] );
+
+		if ( ! $form ) {
+			return;
+		}
+
+		$credit_card_field = FrmField::getAll(
+			array(
+				'fi.form_id' => $form->id,
+				'type'       => 'credit_card',
+			)
+		);
+
+		if ( ! $credit_card_field ) {
+			return;
+		}
+
+		$payment_actions = self::get_actions_before_submit( $form->id );
+
+		if ( ! $payment_actions ) {
+			return;
+		}
+
+		$found_gateway = false;
+
+		foreach ( $payment_actions as $action ) {
+			$gateways = $action->post_content['gateway'];
+
+			if ( in_array( 'paypal', (array) $gateways, true ) ) {
+				$found_gateway = true;
+				break;
+			}
+		}
+
+		if ( ! $found_gateway ) {
+			return;
+		}
+
+		self::load_scripts( (int) $form->id );
+	}
+
+	/**
+	 * Load front end JavaScript for a PayPal form.
+	 *
+	 * @param int $form_id
+	 *
+	 * @return void
+	 */
+	public static function load_scripts( $form_id ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+			return;
+		}
+
+		if ( wp_script_is( 'formidable-paypal', 'enqueued' ) ) {
+			return;
+		}
+
+		if ( ! $form_id || ! is_int( $form_id ) ) {
+			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', 'x.x' );
+			return;
+		}
+
+		$payment_action_by_id = array();
+
+		add_filter(
+			'frm_trans_settings_for_js',
+			/**
+			 * @param array   $settings_for_action
+			 * @param WP_Post $payment_action
+			 *
+			 * @return array
+			 */
+			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
+				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
+				$settings_for_action['layout']               = ! empty( $payment_action->post_content['layout'] ) ? $payment_action->post_content['layout'] : 'card_and_checkout';
+				return $settings_for_action;
+			},
+			10,
+			2
+		);
+
+		$action_settings      = self::prepare_settings_for_js( $form_id );
+		$action_setting_match = false;
+
+		foreach ( $action_settings as $action ) {
+			$gateways = $action['gateways'];
+
+			if ( ! $gateways || in_array( 'paypal', (array) $gateways, true ) ) {
+				$action_setting_match = $action;
+				break;
+			}
+		}
+
+		if ( false === $action_setting_match || ! array_key_exists( $action_setting_match['id'], $payment_action_by_id ) ) {
+			return;
+		}
+
+		$action = $payment_action_by_id[ $action_setting_match['id'] ];
+
+		// Use capture for one-time payments and subscription for recurring payments.
+		$intent = $action->post_content['type'] === 'single' ? 'capture' : 'subscription';
+
+		/**
+		 * Build the PayPal SDK URL with required parameters.
+		 *
+		 * - Subscriptions require intent=subscription.
+		 * - Subscriptions also require vault=true.
+		 */
+		$query_args = array(
+			'client-id'      => self::get_client_id(),
+			'intent'         => $intent,
+			'currency'       => strtoupper( $action->post_content['currency'] ?? 'USD' ),
+			'merchant-id'    => FrmPayPalLiteConnectHelper::get_merchant_id(),
+			'enable-funding' => 'venmo,applepay',
+		);
+
+		if ( 'subscription' === $intent ) {
+			$query_args['vault'] = 'true';
+		}
+
+		$include_buttons     = false;
+		$include_card_fields = false;
+		$include_messages    = true;
+
+		switch ( $action->post_content['layout'] ?? 'card_and_checkout' ) {
+			case 'card_only':
+				$include_card_fields = true;
+				break;
+
+			case 'checkout_only':
+				$include_buttons = true;
+				break;
+
+			default:
+				$include_buttons     = true;
+				$include_card_fields = true;
+				break;
+		}
+
+		switch ( $action->post_content['pay_later'] ?? 'auto' ) {
+			case 'off':
+				$query_args['disable-funding'] = 'paylater';
+				break;
+			case 'no-messaging':
+				// PayPal throws a  TypeError: can't access property "PAGE_TYPE", trackingDetails is undefined error
+				// a lot of the time if you include messages. If you see this error, try using this 'no-messaging' option.
+				$include_messages = false;
+				break;
+		}
+
+		$components = array();
+
+		if ( $include_buttons ) {
+			$components[] = 'buttons';
+			$components[] = 'googlepay';
+			$components[] = 'applepay';
+		}
+
+		if ( $include_card_fields ) {
+			$components[] = 'card-fields';
+		}
+
+		if ( $include_messages ) {
+			$components[] = 'messages';
+		}
+
+		// Enables .isEligible checks.
+		$components[] = 'funding-eligibility';
+
+		// Required for radio button option logos.
+		$components[] = 'marks';
+
+		$query_args['components'] = implode( ',', $components );
+		$locale                   = self::get_paypal_locale();
+
+		if ( $locale ) {
+			$query_args['locale'] = str_replace( '-', '_', $locale );
+		}
+
+		/**
+		 * Allow customization of the PayPal SDK URL query arguments.
+		 *
+		 * @since x.x
+		 *
+		 * @param array   $query_args
+		 * @param WP_Post $action
+		 */
+		$query_args = apply_filters( 'frm_paypal_sdk_url_query_args', $query_args, $action );
+
+		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
+
+		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
+		wp_register_script( 'apple-pay-sdk', 'https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js', array(), null, false );
+
+		$has_break = FrmAppHelper::pro_is_installed() && (bool) FrmField::get_all_types_in_form( $form_id, 'break' );
+
+		add_filter(
+			'script_loader_tag',
+			/**
+			 * @param string $tag
+			 * @param string $handle
+			 *
+			 * @return string
+			 */
+			function ( $tag, $handle ) use ( $has_break ) {
+				if ( 'paypal-sdk' === $handle ) {
+					$attributes = ' async data-partner-attribution-id="' . esc_attr( FrmPayPalLiteConnectHelper::get_bn_code() ) . '"';
+					return str_replace( ' src=', $attributes . ' src=', $tag );
+				}
+
+				if ( in_array( $handle, array( 'apple-pay-sdk', 'google-pay' ), true ) ) {
+					return str_replace( ' src=', ' async src=', $tag );
+				}
+
+				if ( $has_break && 'formidable-paypal' === $handle ) {
+					return str_replace( ' src=', ' async src=', $tag );
+				}
+
+				return $tag;
+			},
+			10,
+			2
+		);
+
+		wp_enqueue_style(
+			'formidable-paypal',
+			FrmPayPalLiteAppHelper::plugin_url() . 'css/frontend.css',
+			array(),
+			FrmAppHelper::plugin_version()
+		);
+
+		$dependencies = array( 'paypal-sdk', 'formidable' );
+
+		if ( $include_buttons ) {
+			$dependencies[] = 'apple-pay-sdk';
+		}
+
+		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
+
+		wp_enqueue_script(
+			'formidable-paypal',
+			$script_url,
+			$dependencies,
+			FrmAppHelper::plugin_version(),
+			false
+		);
+
+		if ( $include_buttons ) {
+			wp_enqueue_script(
+				'google-pay',
+				'https://pay.google.com/gp/p/js/pay.js',
+				array(),
+				'1.0',
+				false
+			);
+		}
+
+		$paypal_vars = array(
+			'formId'      => $form_id,
+			'nonce'       => wp_create_nonce( 'frm_paypal_ajax' ),
+			'ajax'        => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'settings'    => $action_settings,
+			'style'       => self::get_style_for_js( $form_id ),
+			'buttonStyle' => self::get_button_style_for_js( $action ),
+			'imagesUrl'   => FrmPayPalLiteAppHelper::plugin_url() . 'images/',
+		);
+
+		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_paypal_locale() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
+		$locale  = str_replace( '_', '-', get_locale() );
+		$parts   = explode( '_', $locale );
+		$lang    = strtolower( $parts[0] );
+		$country = isset( $parts[1] ) ? strtoupper( $parts[1] ) : '';
+
+		switch ( $lang ) {
+			case 'ar':
+				// Arabic
+				$countries = array( 'DZ', 'BH', 'EG', 'JO', 'KW', 'MA', 'OM', 'QA', 'SA', 'TN', 'AE', 'YE' );
+				break;
+
+			case 'bg':
+				// Bulgarian
+				$countries = array( 'BG' );
+				break;
+
+			case 'cs':
+				// Czech
+				$countries = array( 'CZ' );
+				break;
+
+			case 'da':
+				// Danish
+				$countries = array( 'DK', 'FO', 'GL' );
+				break;
+
+			case 'de':
+				// German
+				$countries = array( 'AT', 'DE', 'LU', 'CH' );
+				break;
+
+			case 'el':
+				// Greek
+				$countries = array( 'GR' );
+				break;
+
+			case 'en':
+				// English
+				$countries = array(
+					'AL',
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AR',
+					'AM',
+					'AW',
+					'AU',
+					'AT',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BY',
+					'BE',
+					'BZ',
+					'BJ',
+					'BM',
+					'BT',
+					'BO',
+					'BA',
+					'BW',
+					'BR',
+					'VG',
+					'BN',
+					'BG',
+					'BF',
+					'BI',
+					'KH',
+					'CM',
+					'CA',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'C2',
+					'CN',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'CI',
+					'HR',
+					'CY',
+					'CZ',
+					'DK',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'EE',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'FI',
+					'FR',
+					'GF',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'DE',
+					'GI',
+					'GR',
+					'GL',
+					'GD',
+					'GP',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
+					'HN',
+					'HK',
+					'HU',
+					'IS',
+					'IN',
+					'ID',
+					'IE',
+					'IL',
+					'IT',
+					'JM',
+					'JP',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LA',
+					'LV',
+					'LS',
+					'LI',
+					'LT',
+					'LU',
+					'MG',
+					'MW',
+					'MY',
+					'MV',
+					'ML',
+					'MT',
+					'MH',
+					'MQ',
+					'MR',
+					'MU',
+					'MX',
+					'FM',
+					'MD',
+					'MC',
+					'MN',
+					'ME',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'NP',
+					'NL',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NG',
+					'NU',
+					'NF',
+					'MK',
+					'NO',
+					'OM',
+					'PW',
+					'PA',
+					'PG',
+					'PY',
+					'PE',
+					'PH',
+					'PN',
+					'PL',
+					'PT',
+					'QA',
+					'RE',
+					'RO',
+					'RU',
+					'RW',
+					'WS',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SC',
+					'SL',
+					'SG',
+					'SK',
+					'SI',
+					'SB',
+					'SO',
+					'ZA',
+					'KR',
+					'ES',
+					'LK',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'SE',
+					'CH',
+					'TW',
+					'TJ',
+					'TZ',
+					'TH',
+					'TG',
+					'TO',
+					'TT',
+					'TN',
+					'TR',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'GB',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
+					'VN',
+					'WF',
+					'YE',
+					'ZM',
+					'ZW',
+				);
+				break;
+
+			case 'es':
+				// Spanish
+				$countries = array(
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AR',
+					'AM',
+					'AW',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BZ',
+					'BJ',
+					'BM',
+					'BO',
+					'BW',
+					'VG',
+					'BF',
+					'BI',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'GI',
+					'GL',
+					'GD',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
+					'HN',
+					'IE',
+					'JM',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LS',
+					'LI',
+					'LU',
+					'MG',
+					'MW',
+					'ML',
+					'MH',
+					'MR',
+					'MU',
+					'MX',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NU',
+					'NF',
+					'OM',
+					'PW',
+					'PA',
+					'PG',
+					'PY',
+					'PE',
+					'PN',
+					'QA',
+					'RW',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SC',
+					'SL',
+					'SB',
+					'SO',
+					'ZA',
+					'ES',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'TJ',
+					'TZ',
+					'TG',
+					'TT',
+					'TN',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
+					'WF',
+					'YE',
+					'ZM',
+				);
+				break;
+
+			case 'et':
+				// Estonian
+				$countries = array( 'EE' );
+				break;
+
+			case 'fi':
+				// Finnish
+				$countries = array( 'FI' );
+				break;
+
+			case 'fr':
+				// French
+				$countries = array(
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AM',
+					'AW',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BE',
+					'BZ',
+					'BJ',
+					'BM',
+					'BO',
+					'BW',
+					'VG',
+					'BF',
+					'BI',
+					'CM',
+					'CA',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'CI',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'FR',
+					'GF',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'GI',
+					'GL',
+					'GD',
+					'GP',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
+					'HN',
+					'IE',
+					'JM',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LS',
+					'LI',
+					'LU',
+					'MG',
+					'MW',
+					'ML',
+					'MH',
+					'MQ',
+					'MR',
+					'MU',
+					'YT',
+					'MC',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NU',
+					'NF',
+					'OM',
+					'PW',
+					'PA',
+					'PG',
+					'PE',
+					'PN',
+					'QA',
+					'RE',
+					'RW',
+					'SC',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SL',
+					'SB',
+					'SO',
+					'ZA',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'CH',
+					'TJ',
+					'TZ',
+					'TG',
+					'TT',
+					'TN',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
+					'WF',
+					'YE',
+					'ZM',
+				);
+				break;
+
+			case 'he':
+				// Hebrew
+				$countries = array( 'IL' );
+				break;
+
+			case 'hu':
+				// Hungarian
+				$countries = array( 'HU' );
+				break;
+
+			case 'id':
+				// Indonesian
+				$countries = array( 'ID' );
+				break;
+
+			case 'it':
+				// Italian
+				$countries = array( 'IT' );
+				break;
+
+			case 'ja':
+				// Japanese
+				$countries = array( 'JP' );
+				break;
+
+			case 'ko':
+				// Korean
+				$countries = array( 'KR' );
+				break;
+
+			case 'lt':
+				// Lithuanian
+				$countries = array( 'LT' );
+				break;
+
+			case 'lv':
+				// Latvian
+				$countries = array( 'LV' );
+				break;
+
+			case 'ms':
+				// Malay
+				$countries = array( 'BN', 'MY' );
+				break;
+
+			case 'nl':
+				// Dutch
+				$countries = array( 'BE', 'NL' );
+				break;
+
+			case 'no':
+				// Norwegian
+				$countries = array( 'NO' );
+				break;
+
+			case 'pl':
+				// Polish
+				$countries = array( 'PL' );
+				break;
+
+			case 'pt':
+				// Portuguese
+				$countries = array( 'BR', 'PT' );
+				break;
+
+			case 'ro':
+				// Romanian
+				$countries = array( 'RO' );
+				break;
+
+			case 'ru':
+				// Russian
+				$countries = array( 'EE', 'LV', 'LT', 'RU', 'UA' );
+				break;
+
+			case 'si':
+				// Sinhala
+				$countries = array( 'LK' );
+				break;
+
+			case 'sk':
+				// Slovak
+				$countries = array( 'SK' );
+				break;
+
+			case 'sl':
+				// Slovenian
+				$countries = array( 'SI' );
+				break;
+
+			case 'sq':
+				// Albanian
+				$countries = array( 'AL' );
+				break;
+
+			case 'sv':
+				// Swedish
+				$countries = array( 'SE' );
+				break;
+
+			case 'th':
+				// Thai
+				$countries = array( 'TH' );
+				break;
+
+			case 'tl':
+				// Tagalog
+				$countries = array( 'PH' );
+				break;
+
+			case 'tr':
+				// Turkish
+				$countries = array( 'TR' );
+				break;
+
+			case 'vi':
+				// Vietnamese
+				$countries = array( 'VN' );
+				break;
+
+			case 'zh':
+				// Chinese
+				$countries = array(
+					'C2',
+					'CN',
+					'HK',
+					'TW',
+					'DZ',
+					'AD',
+					'AO',
+					'AI',
+					'AG',
+					'AM',
+					'AW',
+					'AZ',
+					'BS',
+					'BH',
+					'BB',
+					'BZ',
+					'BJ',
+					'BM',
+					'BO',
+					'BW',
+					'VG',
+					'BF',
+					'BI',
+					'CV',
+					'KY',
+					'TD',
+					'CL',
+					'CO',
+					'KM',
+					'CG',
+					'CD',
+					'CK',
+					'CR',
+					'DJ',
+					'DM',
+					'DO',
+					'EC',
+					'EG',
+					'SV',
+					'ER',
+					'SZ',
+					'ET',
+					'FK',
+					'FO',
+					'FJ',
+					'PF',
+					'GA',
+					'GM',
+					'GE',
+					'GI',
+					'GL',
+					'GD',
+					'GT',
+					'GN',
+					'GW',
+					'GY',
+					'HN',
+					'IE',
+					'JM',
+					'JO',
+					'KZ',
+					'KE',
+					'KI',
+					'KW',
+					'KG',
+					'LS',
+					'LI',
+					'LT',
+					'LU',
+					'MG',
+					'MW',
+					'ML',
+					'MH',
+					'MR',
+					'MU',
+					'MS',
+					'MA',
+					'MZ',
+					'NA',
+					'NR',
+					'AN',
+					'NC',
+					'NZ',
+					'NI',
+					'NE',
+					'NU',
+					'NF',
+					'OM',
+					'PW',
+					'PA',
+					'PG',
+					'PE',
+					'PN',
+					'QA',
+					'RW',
+					'SM',
+					'ST',
+					'SA',
+					'SN',
+					'RS',
+					'SC',
+					'SL',
+					'SB',
+					'SO',
+					'ZA',
+					'SH',
+					'KN',
+					'LC',
+					'PM',
+					'VC',
+					'SR',
+					'SJ',
+					'TJ',
+					'TZ',
+					'TG',
+					'TT',
+					'TN',
+					'TM',
+					'TC',
+					'TV',
+					'UG',
+					'UA',
+					'AE',
+					'US',
+					'UY',
+					'VU',
+					'VA',
+					'VE',
+					'WF',
+					'YE',
+					'ZM',
+				);
+				break;
+
+			default:
+				$countries = array();
+				break;
+		}//end switch
+
+		if ( $country && in_array( $country, $countries, true ) ) {
+			return $lang . '-' . $country;
+		}
+
+		return 'en-US';
+	}
+
+	/**
+	 * Get the style for the PayPal form.
+	 *
+	 * @param int $form_id
+	 *
+	 * @return array
+	 */
+	public static function get_style_for_js( $form_id ) {
+		$settings = self::get_style_settings_for_form( $form_id );
+
+		$style = array(
+			'body'               => array(
+				'padding' => 0,
+			),
+			'input'              => array(
+				'font-size'     => $settings['field_font_size'],
+				'color'         => $settings['text_color'],
+				'font-weight'   => $settings['field_weight'],
+				'padding'       => $settings['field_pad'],
+				'line-height'   => 1.3,
+				'border'        => self::get_border_shorthand( $settings ),
+				'border-radius' => self::get_border_radius( $settings ),
+			),
+			'input::placeholder' => array(
+				'color' => $settings['text_color_disabled'],
+			),
+			'.invalid'           => array(
+				'color' => $settings['border_color_error'],
+			),
+		);
+
+		if ( ! empty( $settings['font'] ) ) {
+			$style['input']['font-family'] = $settings['font'];
+		}
+
+		/**
+		 * Filter the PayPal card field styles.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $style
+		 * @param array $settings
+		 * @param int   $form_id
+		 */
+		return apply_filters( 'frm_paypal_style', $style, $settings, $form_id );
+	}
+
+	/**
+	 * Get PayPal button style configuration from form action settings.
+	 * Documentation at https://developer.paypal.com/sdk/js/reference/#style
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $form_action The form action containing button settings.
+	 *
+	 * @return array The style configuration array for PayPal button.
+	 */
+	private static function get_button_style_for_js( $form_action ) {
+		$button_color         = $form_action->post_content['button_color'] ?? 'default';
+		$button_label         = $form_action->post_content['button_label'] ?? 'paypal';
+		$button_border_radius = $form_action->post_content['button_border_radius'] ?? 10;
+
+		$style_for_js = array(
+			'layout'       => 'vertical',
+			'color'        => $button_color,
+			'label'        => $button_label,
+			'borderRadius' => (int) $button_border_radius,
+			'height'       => 40,
+		);
+
+		// Unset the color so PayPal can use its defaults.
+		// Many buttons have different colors
+		if ( 'default' === $button_color ) {
+			unset( $style_for_js['color'] );
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array   $style_for_js
+		 * @param WP_Post $form_action
+		 */
+		return apply_filters( 'frm_paypal_button_style', $style_for_js, $form_action );
+	}
+
+	/**
+	 * Get and format the style settings for JavaScript to use with the get_style function.
+	 *
+	 * @param int $form_id
+	 *
+	 * @return array
+	 */
+	private static function get_style_settings_for_form( $form_id ) {
+		if ( ! $form_id ) {
+			return array();
+		}
+
+		$style = FrmStylesController::get_form_style( $form_id );
+
+		if ( ! $style ) {
+			return array();
+		}
+
+		$settings   = FrmStylesHelper::get_settings_for_output( $style );
+		$disallowed = array( ';', ':', '!important' );
+
+		foreach ( $settings as $k => $s ) {
+			if ( is_string( $s ) ) {
+				$settings[ $k ] = str_replace( $disallowed, '', $s );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Get the border width for PayPal card fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 *
+	 * @return string
+	 */
+	private static function get_border_width( $settings ) {
+		if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+			return '0 0 ' . $settings['field_border_width'] . ' 0';
+		}
+		return $settings['field_border_width'];
+	}
+
+	/**
+	 * Get the border radius for PayPal card fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 *
+	 * @return string
+	 */
+	private static function get_border_radius( $settings ) {
+		if ( ! empty( $settings['field_shape_type'] ) ) {
+			switch ( $settings['field_shape_type'] ) {
+				case 'underline':
+				case 'regular':
+					return '0px';
+				case 'circle':
+					return '30px';
+			}
+		}
+		return $settings['border_radius'];
+	}
+
+	/**
+	 * Get the border shorthand for PayPal card fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 *
+	 * @return string
+	 */
+	private static function get_border_shorthand( $settings ) {
+		$width = self::get_border_width( $settings );
+		$style = $settings['field_border_style'];
+		$color = $settings['border_color'];
+
+		return "{$width} {$style} {$color}";
+	}
+
+	/**
+	 * If the names are being used on the CC fields,
+	 * make sure it doesn't prevent the submission if PayPal has approved.
+	 *
+	 * @since x.x
+	 *
+	 * @param array    $errors
+	 * @param stdClass $field
+	 *
+	 * @return array
+	 */
+	public static function remove_cc_validation( $errors, $field ) {
+		$paypal_order_id        = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+		$paypal_subscription_id = FrmAppHelper::get_post_param( 'paypal_subscription_id', '', 'sanitize_text_field' );
+
+		if ( ! $paypal_order_id && ! $paypal_subscription_id ) {
+			return $errors;
+		}
+
+		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function actions_js() {
+		wp_enqueue_script(
+			'frm_paypal_admin',
+			FrmPayPalLiteAppHelper::plugin_url() . 'js/action.js',
+			array( 'wp-hooks', 'wp-i18n' ),
+			FrmAppHelper::plugin_version()
+		);
+	}
+
+	/**
+	 * Modify the new action post data to use the payment action type when the PayPal plugin is not active.
+	 * This works better than having it disabled even when PayPal is supported.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function maybe_modify_new_action_post_data() {
+		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
+
+		if ( 'paypal-legacy' === $action_type ) {
+			$_POST['type'] = 'paypal';
+			return;
+		}
+
+		if ( ! in_array( $action_type, array( 'paypal', 'stripe', 'square' ), true ) ) {
+			return;
+		}
+
+		$_POST['type'] = 'payment';
+
+		add_filter(
+			'frm_form_payment_action_settings',
+			/**
+			 * @param WP_Post $action_settings
+			 *
+			 * @return WP_Post
+			 */
+			function ( $action_settings ) use ( $action_type ) {
+				return self::set_gateway_as_default( $action_settings, $action_type );
+			}
+		);
+	}
+
+	/**
+	 * Set the gateway to PayPal as the default.
+	 *
+	 * @param WP_Post $action_settings
+	 * @param string  $action_type
+	 *
+	 * @return WP_Post
+	 */
+	private static function set_gateway_as_default( $action_settings, $action_type ) {
+		$action_settings->post_content['gateway'] = array( $action_type );
+		return $action_settings;
+	}
+
+	/**
+	 * Print additional options for Stripe action settings.
+	 *
+	 * @param array $atts
+	 *
+	 * @return void
+	 */
+	public static function add_action_options( $atts ) {
+		$form_action    = $atts['form_action'];
+		$action_control = $atts['action_control'];
+
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/action-settings-options.php';
+	}
+
+	/**
+	 * Print additional options for button settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|FrmFormAction $args_or_action_control Either the args array with form_action and action_control, or the action_control object.
+	 * @param WP_Post            $form_action            The form action object (when called directly).
+	 *
+	 * @return void
+	 */
+	public static function add_button_settings_section( $args_or_action_control, $form_action = null ) {
+		if ( is_array( $args_or_action_control ) ) {
+			$form_action    = $args_or_action_control['form_action'];
+			$action_control = $args_or_action_control['action_control'];
+		} else {
+			$action_control = $args_or_action_control;
+		}
+
+		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/button-settings.php';
+	}
+
+	/**
+	 * Add PayPal subscription settings (product name and product type) after payment type.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args Arguments containing form_action and action_control.
+	 *
+	 * @return void
+	 */
+	public static function add_paypal_subscription_settings_from_hook( $args ) {
+		$form_action    = $args['form_action'];
+		$action_control = $args['action_control'];
+
+		$product_type_value = $form_action->post_content['product_type'] ?? '';
+		?>
+		<div class="frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
+			<div class="frm_grid_container">
+				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
+					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
+						<?php esc_html_e( 'Product Name', 'formidable' ); ?> <span class="frm_required">*</span>
+					</label>
+					<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
+				</p>
+
+				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
+					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>">
+						<?php esc_html_e( 'Product Type', 'formidable' ); ?>
+					</label>
+					<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
+						<option value="SERVICE" <?php selected( $product_type_value, 'SERVICE' ); ?>><?php esc_html_e( 'Service', 'formidable' ); ?></option>
+						<option value="DIGITAL" <?php selected( $product_type_value, 'DIGITAL' ); ?>><?php esc_html_e( 'Digital', 'formidable' ); ?></option>
+						<option value="PHYSICAL" <?php selected( $product_type_value, 'PHYSICAL' ); ?>><?php esc_html_e( 'Physical', 'formidable' ); ?></option>
+					</select>
+				</p>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Filter PayPal payment action settings on save.
+	 * When entry_data_sync is set to 'new_fields', auto-create fields
+	 * for storing PayPal order data (email, name, address).
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings The action settings being saved.
+	 * @param array $action   The full action data including menu_order (form_id).
+	 *
+	 * @return array
+	 */
+	public static function before_save_settings( $settings, $action ) {
+		$gateway   = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array();
+		$is_paypal = in_array( 'paypal', $gateway, true );
+
+		if ( ! $is_paypal ) {
+			return $settings;
+		}
+
+		if ( empty( $settings['entry_data_sync'] ) || 'new_fields' !== $settings['entry_data_sync'] ) {
+			return $settings;
+		}
+
+		$form_id = absint( $action['menu_order'] );
+
+		$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_email', __( 'PayPal Email', 'formidable' ), 'email' );
+		$settings = self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_name', __( 'PayPal Name', 'formidable' ), 'name' );
+
+		if ( is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+			return self::maybe_create_order_data_field( $settings, $form_id, 'paypal_order_address', __( 'PayPal Address', 'formidable' ), 'address' );
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Create a field for PayPal order data if it does not already exist.
+	 * The field ID is stored in the action settings under the given key.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $settings    The action settings.
+	 * @param int    $form_id     The form ID.
+	 * @param string $setting_key The settings key to store the field ID in (e.g. 'paypal_order_email').
+	 * @param string $field_name  The human-readable field name.
+	 * @param string $field_type  The field type to create (e.g. 'hidden', 'name', 'address').
+	 *
+	 * @return array
+	 */
+	private static function maybe_create_order_data_field( $settings, $form_id, $setting_key, $field_name, $field_type ) {
+		if ( ! empty( $settings[ $setting_key ] ) ) {
+			$existing = FrmField::getOne( (int) $settings[ $setting_key ] );
+
+			if ( $existing ) {
+				return $settings;
+			}
+		}
+
+		$field_id = self::add_a_field( $form_id, $field_type, $field_name );
+
+		if ( ! $field_id ) {
+			return $settings;
+		}
+
+		$field = FrmField::getOne( $field_id );
+		$field->field_options['is_paypal_order_field'] = 1;
+
+		FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
+
+		$settings[ $setting_key ] = $field_id;
+
+		return $settings;
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function get_client_id() {
+		// TODO: This will need logic for a production client ID as well.
+		// This is currently just for testing.
+		return 'AYTiIIchQiekyGhJouWoLapPfjijirOtKHSN255SLhcP0TIaWBID-zxsYDaNmP4fXL6YcQxiSIMS0Lwu';
+	}
+
+	/**
+	 * @param array $atts
+	 *
+	 * @return void
+	 */
+	public static function show_paypal_button_settings( $atts ) {
+		$form_action    = $atts['form_action'];
+		$action_control = $atts['action_control'];
+
+		// End the payment settings section.
+		echo '</div>';
+
+		self::add_button_settings_section( $action_control, $form_action );
+
+		// Open up a div tag since the payment section is closed after this and we already ended the section.
+		// This results in an empty div tag but it allows us to inject these options without requiring
+		// any updates in the payments submodule.
+		echo '<div>';
+	}
+}
