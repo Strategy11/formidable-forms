@@ -44,7 +44,7 @@ class FrmGatedTokenHelper {
 		$data   = array(
 			'token_hash' => $token_hash,
 			'action_id'  => $action_id,
-			'entry_id'   => (int) $entry_id,
+			'entry_id'   => $entry_id,
 			'ip_address' => FrmAppHelper::get_ip_address(),
 			'created_at' => $now,
 		);
@@ -53,7 +53,7 @@ class FrmGatedTokenHelper {
 		// Only include nullable columns when they carry a value — passing null
 		// with a %d format would insert 0 instead of NULL.
 		if ( null !== $user_id ) {
-			$data['user_id'] = (int) $user_id;
+			$data['user_id'] = $user_id;
 			$format[]        = '%d';
 		}
 
@@ -65,7 +65,7 @@ class FrmGatedTokenHelper {
 		$wpdb->insert( $wpdb->prefix . 'frm_gated_tokens', $data, $format );
 
 		// Persist for shortcode rendering in the same or a subsequent redirect request (5-min TTL).
-		set_transient( self::get_token_transient_key( (int) $action_id ), $raw_token, 5 * MINUTE_IN_SECONDS );
+		set_transient( self::get_token_transient_key( $action_id ), $raw_token, 5 * MINUTE_IN_SECONDS );
 
 		return $raw_token;
 	}
@@ -103,7 +103,7 @@ class FrmGatedTokenHelper {
 					if ( ! is_array( $item ) ) {
 						continue;
 					}
-					if ( (int) $item['id'] === (int) $item_id && $item['type'] === $item_type ) {
+					if ( (int) $item['id'] === $item_id && $item['type'] === $item_type ) {
 						$is_valid = true;
 						break;
 					}
@@ -140,7 +140,7 @@ class FrmGatedTokenHelper {
 
 		$wpdb->delete(
 			$wpdb->prefix . 'frm_gated_tokens',
-			array( 'action_id' => (int) $action_id ),
+			array( 'action_id' => $action_id ),
 			array( '%d' )
 		);
 	}

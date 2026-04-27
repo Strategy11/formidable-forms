@@ -145,7 +145,7 @@ class FrmGatedContentController {
 	 * @return bool
 	 */
 	public static function filter_password_required( $required, $post ) {
-		if ( (int) $post->ID === self::$unlocked_post_id ) {
+		if ( $post->ID === self::$unlocked_post_id ) {
 			return false;
 		}
 		return $required;
@@ -170,7 +170,7 @@ class FrmGatedContentController {
 
 		if ( ! empty( $query->query_vars['pagename'] ) ) {
 			$page = get_page_by_path( $query->query_vars['pagename'] );
-			return $page ? (int) $page->ID : 0;
+			return $page ? $page->ID : 0;
 		}
 
 		return 0;
