@@ -86,7 +86,8 @@ class FrmFieldValueSelector {
 	/**
 	 * FrmFieldValueSelector constructor
 	 *
-	 * @param int|string $field_id
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Arguments for configuring the value selector.
 	 */
 	public function __construct( $field_id, $args ) {
 		$this->set_html_name( $args );
@@ -95,17 +96,20 @@ class FrmFieldValueSelector {
 		$this->set_truncate( $args );
 
 		$this->field_id = (int) $field_id;
+
 		if ( $this->field_id === 0 ) {
 			return;
 		}
 
 		$this->set_db_row();
 
-		if ( $this->has_db_row() ) {
-			$this->set_field_key();
-			$this->set_field_settings();
-			$this->set_options();
+		if ( ! $this->has_db_row() ) {
+			return;
 		}
+
+		$this->set_field_key();
+		$this->set_field_settings();
+		$this->set_options();
 	}
 
 	/**
@@ -278,10 +282,11 @@ class FrmFieldValueSelector {
 		echo '<select name="' . esc_attr( $this->html_name ) . '">';
 		echo '<option value="">' . esc_html( $this->blank_option_label ) . '</option>';
 
-		if ( ! empty( $this->options ) ) {
+		if ( $this->options ) {
 			$truncate = $this->truncate ?? 25;
 
 			foreach ( $this->options as $key => $value ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $value == '' ) {
 					continue;
 				}

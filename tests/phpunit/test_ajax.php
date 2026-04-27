@@ -12,7 +12,7 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 	 * Prevent unauthorized user from uninstalling
 	 */
 	public function test_block_uninstall() {
-		// log in as user
+		// Log in as user
 		$role    = 'editor';
 		$user_id = $this->factory->user->create( compact( 'role' ) );
 		wp_set_current_user( $user_id );
@@ -23,8 +23,7 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 			'action' => 'frm_uninstall',
 		);
 
-		$response = $this->trigger_action( 'frm_uninstall' );
-
+		$response     = $this->trigger_action( 'frm_uninstall' );
 		$frm_settings = FrmAppHelper::get_settings();
 		$expected     = $frm_settings->admin_permission;
 

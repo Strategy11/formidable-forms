@@ -33,13 +33,37 @@ fi
 # Generate the plugin zip file.
 status "Creating archive..."
 zip -r $zipname $destination \
-	-x "*/.*" \
+	-x "*/.DS_Store" \
+	-x "*/.babelrc" \
+	-x "*/.browserslistrc" \
+	-x "*/.editorconfig" \
+	-x "*/.eslintignore" \
+	-x "*/.eslintrc.json" \
+	-x "*/eslint.config.mjs" \
+	-x "*/.eslintrc" \
+	-x "*/.git" \
 	-x "*/.git/*" \
+	-x "*/.gitattributes" \
 	-x "*/.github/*" \
-	-x "*/.phpunit.result.cache" \
-	-x "*/.php-cs-fixer.yml" \
+	-x "*/.gitignore" \
+	-x "*/.windsurf/*" \
+	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
+	-x "*/.php-cs-fixer.php" \
+	-x "*/.phpunit.result.cache" \
+	-x "*/.stylelintrc.json" \
+	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
+	-x "*/.prettierrc" \
+	-x "*/.scannerwork" \
+	-x "*/.jscsrc" \
+	-x "*/.jshintrc" \
+	-x "*/.jshintignore" \
+	-x "*/.coderabbit.yaml" \
+	-x "*/.deepsource.toml" \
+	-x "*/.semgrepignore" \
+	-x "*/.gitmodules" \
+	-x "*/.oxlintrc.json" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -49,6 +73,7 @@ zip -r $zipname $destination \
 	-x "*/composer.lock" \
 	-x "*/crowdin.yml" \
 	-x "*/formidableforms.css" \
+	-x "*/formidableforms[0-9]*.css" \
 	-x "*/js/src/*" \
 	-x "*/assets/src/*" \
 	-x "*/blocks-src/*" \
@@ -88,6 +113,8 @@ zip -r $zipname $destination \
 	-x "formidable-api/js/embed.js" \
 	-x "formidable-api/js/iframe-embed.js" \
 	-x "formidable-hubspot/js/admin.js" \
+	-x "formidable-coupons/js/frontend.js" \
+	-x "formidable-coupons/js/admin.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip" \
 	-x "*/rector.php" \
@@ -96,8 +123,14 @@ zip -r $zipname $destination \
 	-x "*/report-task.txt" \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
+	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
-	-x "*/webpack.dev.js"
+	-x "*/webpack.dev.js" \
+	-x "*/eslint-rules/*" \
+	-x "*/phpcs-sniffs/*" \
+	-x "$source/venv/*" \
+	-x "formidable/resources/*" \
+	-x "formidable/paypal/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

@@ -1,8 +1,10 @@
 import { __ } from '@wordpress/i18n';
 
+const { svg } = frmDom;
+
 function getShowLinkHrefValue( link, showLink ) {
 	let customLink = link.getAttribute( 'data-link' );
-	if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
+	if ( customLink === null || customLink === undefined || customLink === '' ) {
 		customLink = showLink.getAttribute( 'data-default' );
 	}
 	return customLink;
@@ -17,7 +19,6 @@ function getShowLinkHrefValue( link, showLink ) {
  */
 export function addOneClick( link, context, upgradeLabel ) {
 	let container;
-
 	if ( 'modal' === context ) {
 		container = document.getElementById( 'frm_upgrade_modal' );
 	} else if ( 'tab' === context ) {
@@ -38,8 +39,19 @@ export function addOneClick( link, context, upgradeLabel ) {
 	let showMsg = 'block';
 	let hideIt = 'none';
 
+	const modalIconWrapper = container.querySelector( '.frm-circled-icon' );
+	if ( modalIconWrapper ) {
+		modalIconWrapper.classList.remove( 'frm-circled-icon-green' );
+		modalIconWrapper.querySelector( 'svg' )?.replaceWith( svg( { href: '#frm_filled_lock_icon' } ) );
+	}
+
+	const learnMoreLink = container.querySelector( '.frm-learn-more' );
+	if ( learnMoreLink ) {
+		learnMoreLink.href = link.dataset.learnMore;
+	}
+
 	// If one click upgrade, hide other content.
-	if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
+	if ( oneclickMessage !== null && button !== null && oneclick !== undefined && oneclick ) {
 		if ( newMessage === null ) {
 			showMsg = 'none';
 		}
@@ -48,15 +60,20 @@ export function addOneClick( link, context, upgradeLabel ) {
 		oneclick = JSON.parse( oneclick );
 
 		button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-		button.className = button.className + ' ' + oneclick.class;
+		button.className = `${ button.className } ${ oneclick.class }`;
 		button.rel = oneclick.url;
 
-		if ( oneclick.class === 'frm-activate-addon' ) {
-			oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
-			button.textContent = __( 'Activate', 'formidable' );
-		} else {
-			oneclickMessage.textContent = __( 'That add-on is not installed. Would you like to install it now?', 'formidable' );
-			button.textContent = __( 'Install', 'formidable' );
+		oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
+		button.textContent = __( 'Activate', 'formidable' );
+
+		const linkIcon = link.querySelector( 'use' );
+		if ( linkIcon ) {
+			modalIconWrapper?.querySelector( 'svg' ).replaceWith(
+				svg( {
+					href: linkIcon.getAttribute( 'href' ) || linkIcon.getAttribute( 'xlink:href' ), // Get the icon from xlink:href if it has not been updated to use href
+					classList: [ 'frm_svg32' ]
+				} )
+			);
 		}
 	}
 
@@ -70,7 +87,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	upgradeMessage.innerHTML = newMessage;
 
 	if ( link.dataset.upsellImage ) {
-		upgradeMessage.appendChild(
+		upgradeMessage.append(
 			frmDom.img( {
 				src: link.dataset.upsellImage,
 				alt: link.dataset.upgrade
@@ -83,10 +100,19 @@ export function addOneClick( link, context, upgradeLabel ) {
 
 	addonStatus.style.display = 'none';
 
-	oneclickMessage.style.display = hideIt;
-	button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
+	if ( oneclickMessage ) {
+		oneclickMessage.style.display = hideIt;
+	}
+	if ( button ) {
+		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
+	}
 	upgradeMessage.style.display = showMsg;
 	showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
+
+	const showLinkParent = showLink.closest( '.frm-upgrade-modal-actions' );
+	if ( showLinkParent ) {
+		showLinkParent.style.display = showIt === 'block' ? 'flex' : showIt;
+	}
 }
 
 export function initModal( id, width ) {
@@ -95,8 +121,8 @@ export function initModal( id, width ) {
 		return false;
 	}
 
-	if ( typeof width === 'undefined' ) {
-		width = '550px';
+	if ( width === undefined ) {
+		width = '552px';
 	}
 
 	const dialogArgs = {
@@ -104,17 +130,17 @@ export function initModal( id, width ) {
 		modal: true,
 		autoOpen: false,
 		closeOnEscape: true,
-		width: width,
+		width,
 		resizable: false,
 		draggable: false,
-		open: function() {
+		open() {
 			jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 			jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 			jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 			$info.removeClass( 'ui-dialog-content ui-widget-content' );
 			bindClickForDialogClose( $info );
 		},
-		close: function() {
+		close() {
 			jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 			jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
@@ -149,7 +175,9 @@ export function initUpgradeModal() {
 	frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', handleUpgradeClick );
 
 	function handleUpgradeClick( event ) {
-		let element, link, content;
+		let element;
+		let link;
+		let content;
 
 		element = event.target;
 
@@ -162,7 +190,7 @@ export function initUpgradeModal() {
 		// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
 		if ( event.type === 'change' && element.classList.contains( 'frm_select_with_upgrade' ) ) {
 			const selectedOption = element.options[ element.selectedIndex ];
-			if ( selectedOption && selectedOption.dataset.upgrade ) {
+			if ( selectedOption?.dataset?.upgrade ) {
 				element = selectedOption;
 			}
 		}
@@ -194,6 +222,7 @@ export function initUpgradeModal() {
 		event.preventDefault();
 
 		const modal = $info.get( 0 );
+		modal.classList.remove( 'frm-success' );
 		const lockIcon = modal.querySelector( '.frm_lock_icon' );
 
 		if ( lockIcon ) {
@@ -208,11 +237,9 @@ export function initUpgradeModal() {
 			oldImage.remove();
 		}
 
-		if ( element.dataset.image ) {
-			if ( lockIcon ) {
-				lockIcon.style.display = 'none';
-			}
-			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image } ), lockIcon );
+		if ( element.dataset.image && lockIcon ) {
+			lockIcon.style.display = 'none';
+			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: `${ frmGlobal.url }/images/${ element.dataset.image }` } ), lockIcon );
 		}
 
 		const level = modal.querySelector( '.license-level' );
@@ -223,21 +250,59 @@ export function initUpgradeModal() {
 		// If one click upgrade, hide other content
 		addOneClick( element, 'modal', upgradeLabel );
 
-		modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'inline-block';
+		const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+		notInstalled.style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		notInstalled.textContent = notInstalled.dataset.default;
+		modal.querySelector( '.frm-upgrade-modal-title-prefix' ).style.display = element.dataset.oneclick ? 'inline' : 'none';
 		modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
+		modal.querySelector( '.frm-upgrade-modal-title-suffix' ).style.display = 'none';
 		modal.querySelector( 'h2' ).style.display = 'block';
 
 		$info.dialog( 'open' );
 
 		// set the utm medium
 		const button = modal.querySelector( '.button-primary:not(.frm-oneclick-button)' );
-		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + element.getAttribute( 'data-medium' ) );
+		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, `$1${ element.getAttribute( 'data-medium' ) }` );
 		content = element.getAttribute( 'data-content' );
 		if ( content === null ) {
 			content = '';
 		}
-		link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
+		link = link.replace( /(content=)[a-z_-]+/ig, `$1${ content }` );
 		button.setAttribute( 'href', link );
+
+		if ( element.classList.contains( 'frm_show_update' ) ) {
+			applyUpdateModalOverrides( modal );
+		}
+	}
+}
+
+/**
+ * Override upgrade modal content for update prompts.
+ *
+ * @since 6.29
+ *
+ * @param {Element} modal The upgrade modal element.
+ */
+function applyUpdateModalOverrides( modal ) {
+	const titlePrefix = modal.querySelector( '.frm-upgrade-modal-title-prefix' );
+	if ( titlePrefix ) {
+		titlePrefix.style.display = 'none';
+	}
+
+	const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+	if ( notInstalled ) {
+		notInstalled.textContent = __( 'require an update', 'formidable' );
+		notInstalled.style.display = ''; // Clear inline style, span defaults to display:inline.
+	}
+
+	const oneclickMsg = modal.querySelector( '.frm-oneclick' );
+	if ( oneclickMsg ) {
+		oneclickMsg.style.display = 'none';
+	}
+
+	const button = modal.querySelector( '.frm-oneclick-button' );
+	if ( button ) {
+		button.textContent = __( 'Update Now', 'formidable' );
 	}
 }
 

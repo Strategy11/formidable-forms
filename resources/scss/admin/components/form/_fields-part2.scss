@@ -48,7 +48,7 @@
 
 .frm-white-body input[type="checkbox"]:checked::before,
 .frm_wrap input[type="checkbox"]:checked::before {
-	content: '';
+	content: "";
 	display: block;
 	width: 100% !important;
 	height: 100% !important;
@@ -89,6 +89,11 @@
 .frm_field_box .divider_section_only:hover > .frm_inner_field_container > label,
 li.ui-state-default.selected > .frm_inner_field_container > label {
 	max-width: calc(100% - 100px);
+}
+
+.frm_wrap input[type="text"].frm_invalid_field,
+.frm_wrap input[type="text"].frm_invalid_field:focus {
+	border-color: #B94A48 !important;
 }
 
 .frm-drag-fade {

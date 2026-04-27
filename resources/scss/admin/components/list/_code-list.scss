@@ -12,7 +12,7 @@
 #frm-navbarDrop + .frm_code_list.frm-full-hover {
 	margin: var(--gap-xs) 0 0;
 	min-width: 300px;
-	max-height: calc( ( 40px * 5 ) + 56px );
+	max-height: calc(( 40px * 5 ) + 56px);
 }
 
 .frm_code_list.frm-full-hover li {
@@ -84,7 +84,7 @@
 
 .frm-select-list-item .frmsvg,
 .frm-dropdown-menu > .dropdown-item > a .frmsvg {
-	opacity: .8;
+	opacity: 0.8;
 }
 
 .frm-select-list-item:hover .frmsvg,

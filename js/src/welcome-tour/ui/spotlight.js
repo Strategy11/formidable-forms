@@ -24,7 +24,7 @@ function setupSpotlight( spotlightElement ) {
 		return;
 	}
 
-	document.body.appendChild( spotlightElement );
+	document.body.append( spotlightElement );
 
 	// Add scroll listeners to all scrollable ancestors
 	const scrollableElements = getScrollableAncestors( targetElement );

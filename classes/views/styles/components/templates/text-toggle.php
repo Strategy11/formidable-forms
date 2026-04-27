@@ -24,7 +24,7 @@ $options = $component['options'] ?? array();
 				<?php
 				echo $component['input_attrs_str'] ?? $field_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				FrmAppHelper::array_to_html_params( $input_attrs, true );
-				checked( ( $is_default_checked && 0 === $index ) || $option['value'] == $field_value, true );
+				checked( ( $is_default_checked && 0 === $index ) || $option['value'] == $field_value, true ); // phpcs:ignore Universal.Operators.StrictComparisons
 				?>
 			/>
 			<label class="frm-force-flex-center <?php echo esc_attr( $option['classes'] ?? '' ); ?>" for="<?php echo esc_attr( $input_attrs['id'] ); ?>" tabindex="0" data-value="<?php echo esc_attr( $input_attrs['value'] ); ?>" <?php echo $option['custom_attrs'] ?? ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>

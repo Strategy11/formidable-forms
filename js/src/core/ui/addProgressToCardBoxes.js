@@ -29,7 +29,7 @@ function addProgressToCardBoxes( cardBoxes ) {
 			className: 'frm-card-box-progress-bar',
 			child: progressBar
 		} );
-		element.insertAdjacentElement( 'afterbegin', progressBarContainer );
+		element.prepend( progressBarContainer );
 	} );
 }
 

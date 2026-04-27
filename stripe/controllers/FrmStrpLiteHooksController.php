@@ -32,6 +32,11 @@ class FrmStrpLiteHooksController {
 			function ( $form_cols ) {
 				return array_filter(
 					$form_cols,
+					/**
+					 * @param stdClass $form_col
+					 *
+					 * @return bool
+					 */
 					function ( $form_col ) {
 						return 'gateway' !== $form_col->type;
 					}

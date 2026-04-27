@@ -7,6 +7,8 @@ if ( isset( $include_extra_container ) ) { ?>
 <div class="<?php echo esc_attr( $include_extra_container ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<?php
 }
+
+// phpcs:ignore Universal.Operators.StrictComparisons
 if ( isset( $message ) && $message != '' ) {
 	if ( FrmAppHelper::is_admin() ) {
 		?>
@@ -15,7 +17,7 @@ if ( isset( $message ) && $message != '' ) {
 	} else {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );
 
-		// we need to allow scripts here for javascript in the success message
+		// We need to allow scripts here for javascript in the success message
 		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
@@ -28,9 +30,11 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 <div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>" role="alert">
 	<?php
 	$img = '';
+
 	if ( ! FrmAppHelper::is_admin() ) {
 		$img = apply_filters( 'frm_error_icon', $img );
-		if ( $img && ! empty( $img ) ) {
+
+		if ( $img ) {
 			echo '<img src="' . esc_url( $img ) . '" alt="" />';
 		}
 	}

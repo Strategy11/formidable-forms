@@ -9,13 +9,13 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	public function setUp(): void {
 		parent::setUp();
-
 		$this->create_validation_form();
 	}
 
 	protected function create_validation_form() {
 		$this->form  = $this->factory->form->create_and_get();
 		$field_types = $this->get_all_fields();
+
 		foreach ( $field_types as $field_type ) {
 			$this->factory->field->create(
 				array(
@@ -46,11 +46,12 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$errors       = FrmEntryValidate::validate( $_POST );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			$error_field_ids = array_keys( $errors );
+
 			foreach ( $error_field_ids as $error_field ) {
-				$field          = FrmField::getOne( str_replace( 'field', '', $error_field ) );
-				$error_fields[] = $field ? $field->type : $error_field;
+				$field_type     = FrmField::get_type( str_replace( 'field', '', $error_field ) );
+				$error_fields[] = $field_type ? $field_type : $error_field;
 			}
 		}
 
@@ -65,11 +66,11 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 */
 	public function test_format_validation() {
 		$test_formats = $this->expected_format_errors();
+
 		foreach ( $test_formats as $test_format ) {
 			$field_key = $this->get_field_key( $test_format['type'] );
 			$field_id  = FrmField::get_id_by_key( $field_key );
-
-			$errors = $this->check_single_value( array( $field_id => $test_format['value'] ) );
+			$errors    = $this->check_single_value( array( $field_id => $test_format['value'] ) );
 
 			if ( $test_format['invalid'] ) {
 				$this->assertNotEmpty( $errors, $test_format['type'] . ' value ' . $test_format['value'] . ' passed validation' );
@@ -79,6 +80,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function expected_format_errors() {
 		return array(
 			array(
@@ -136,8 +140,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertNotEmpty( $errors );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
-			$error_field_ids = array_keys( $errors );
+		if ( $errors ) {
 			foreach ( $fields as $field ) {
 				if ( ! isset( $errors[ 'field' . $field->id ] ) ) {
 					$error_fields[] = $field->type;
@@ -149,17 +152,16 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	public function test_filled_required_fields() {
-		$_POST = $this->factory->field->generate_entry_array( $this->form );
-
-		$errors = FrmEntryValidate::validate( $_POST );
-
+		$_POST        = $this->factory->field->generate_entry_array( $this->form );
+		$errors       = FrmEntryValidate::validate( $_POST );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			$error_field_ids = array_keys( $errors );
+
 			foreach ( $error_field_ids as $error_field ) {
-				$field          = FrmField::getOne( str_replace( 'field', '', $error_field ) );
-				$error_fields[] = $field ? $field->type : $error_field;
+				$field_type     = FrmField::get_type( str_replace( 'field', '', $error_field ) );
+				$error_fields[] = $field_type ? $field_type : $error_field;
 			}
 		}
 
@@ -178,7 +180,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->set_required_field( $field );
 
 		$errors = $this->check_single_value( array( $field->id => 'http://' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'http:// passed required validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'http:// passed required validation ' . print_r( $errors, 1 ) );
 	}
 
 	/**
@@ -190,13 +192,13 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->set_required_field( $field );
 
 		$errors = $this->check_single_value( array( $field->id => 'notemail@' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Poorly formatted email passed validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Poorly formatted email passed validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => '' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Email email passed required validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Email email passed required validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => 'email@example.com' ) );
-		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Properly formatted email did not pass validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'Properly formatted email did not pass validation ' . print_r( $errors, 1 ) );
 	}
 
 	/**
@@ -205,7 +207,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	public function test_number_validation() {
 		$field  = $this->factory->field->get_object_by_id( $this->get_field_key( 'number' ) );
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
-		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'Number failed validation ' . print_r( $errors, 1 ) );
 
 		$field = $this->factory->field->create_and_get(
 			array(
@@ -217,19 +219,19 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 20, $field->field_options['maxnum'] );
+		$this->assertSame( 20, $field->field_options['maxnum'] );
 
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
-		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed range validation ' . print_r( $errors, 1 ) );
+		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'Number failed range validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => 'not numeric' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed numeric validation' );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Number failed numeric validation' );
 
 		$errors = $this->check_single_value( array( $field->id => '25' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed max range validation' );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Number failed max range validation' );
 
 		$errors = $this->check_single_value( array( $field->id => '-25' ) );
-		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed min range validation' );
+		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'Number failed min range validation' );
 	}
 
 	protected function set_required_fields( $fields ) {
@@ -241,19 +243,28 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	protected function set_required_field( $field ) {
 		global $wpdb;
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', array( 'required' => 1 ), array( 'id' => $field->id ) );
-		if ( $query_results ) {
-			wp_cache_delete( $field->id, 'frm_field' );
-			FrmField::delete_form_transient( $this->form->id );
 
-			$field = FrmField::getOne( $field->id );
-			$this->assertNotEmpty( $field->required );
+		if ( ! $query_results ) {
+			return;
 		}
+
+		wp_cache_delete( $field->id, 'frm_field' );
+		FrmField::delete_form_transient( $this->form->id );
+
+		$field = FrmField::getOne( $field->id );
+		$this->assertNotEmpty( $field->required );
 	}
 
+	/**
+	 * @param string $field_type
+	 */
 	protected function get_field_key( $field_type ) {
 		return $field_type . '-form' . $this->form->id;
 	}
 
+	/**
+	 * @param array $item_meta
+	 */
 	protected function check_single_value( $item_meta ) {
 		$_POST = array(
 			'form_id'   => $this->form->id,
@@ -282,7 +293,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			array(
 				'field_key' => 'phone_with_regex',
 				'format'    => '^\d{3}-\d{4}$',
-				'expected'  => '^\d{3}-\d{4}$', // leave it alone
+				'expected'  => '^\d{3}-\d{4}$', // Leave it alone
 			),
 		);
 
@@ -297,10 +308,10 @@ class test_FrmFieldValidate extends FrmUnitTest {
 					),
 				)
 			);
-			$this->assertEquals( $check_it['format'], $field->field_options['format'] );
+			$this->assertSame( $check_it['format'], $field->field_options['format'] );
 
 			$format = FrmEntryValidate::phone_format( $field );
-			$this->assertEquals( '/' . $check_it['expected'] . '/', $format );
+			$this->assertSame( '/' . $check_it['expected'] . '/', $format );
 		}
 	}
 
@@ -318,7 +329,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		foreach ( $formats as $start => $expected ) {
 			$new_format = $this->run_private_method( array( 'FrmEntryValidate', 'create_regular_expression_from_format' ), array( $start ) );
-			$this->assertEquals( $expected, $new_format );
+			$this->assertSame( $expected, $new_format );
 		}
 	}
 
@@ -348,7 +359,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				),
 			)
 		);
-		$this->assertEquals( 'logged', $akismet_logged->options['akismet'] );
+		$this->assertSame( 'logged', $akismet_logged->options['akismet'] );
 
 		wp_set_current_user( 0 );
 		$this->assertFalse( is_user_logged_in() );

@@ -3,6 +3,7 @@
  * Welcome Tour's main view file.
  *
  * @since 6.25.1
+ *
  * @package Formidable
  */
 

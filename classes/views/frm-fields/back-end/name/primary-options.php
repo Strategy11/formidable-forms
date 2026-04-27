@@ -3,6 +3,7 @@
  * Primary options for name field
  *
  * @package Formidable
+ *
  * @since 4.10.02
  *
  * @var array        $field Field array.

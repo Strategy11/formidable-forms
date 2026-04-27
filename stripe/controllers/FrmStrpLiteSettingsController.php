@@ -9,19 +9,21 @@ class FrmStrpLiteSettingsController {
 	 * Add Stripe section to Global Settings.
 	 *
 	 * @param array $sections
+	 *
 	 * @return array
 	 */
 	public static function add_settings_section( $sections ) {
 		$sections['stripe'] = array(
 			'class'    => self::class,
 			'function' => 'route',
-			'icon'     => 'frm_icon_font frm_stripe_icon',
+			'icon'     => 'frmfont frm_stripe_icon',
 		);
 
 		add_action(
 			'frm_messages_settings_form',
 			/**
 			 * @param object $frm_settings
+			 *
 			 * @return void
 			 */
 			function ( $frm_settings ) {
@@ -46,6 +48,7 @@ class FrmStrpLiteSettingsController {
 	 * Print the Stripe section for Global settings.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function global_settings_form( $atts = array() ) {
@@ -77,7 +80,7 @@ class FrmStrpLiteSettingsController {
 	public static function process_form() {
 		$settings = FrmStrpLiteAppHelper::get_settings();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$settings->update( $_POST );
+		$settings->update( wp_unslash( $_POST ) );
 		$settings->store();
 	}
 }

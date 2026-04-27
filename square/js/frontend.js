@@ -3,8 +3,8 @@
 		return;
 	}
 
-	const appId = frmSquareVars.appId;
-	const locationId = frmSquareVars.locationId;
+	const { appId } = frmSquareVars;
+	const { locationId } = frmSquareVars;
 
 	// Track the state of the Square card element
 	let squareCardElementIsComplete = false;
@@ -36,9 +36,9 @@
 		card.configure( { style: cardStyle } );
 
 		// Add event listener to track when the card form is valid
-		card.addEventListener( 'focusClassRemoved', e => {
-			const field = e.detail.field;
-			const value = e.detail.currentState.isCompletelyValid;
+		card.addEventListener( 'focusClassRemoved', event => {
+			const { field } = event.detail;
+			const value = event.detail.currentState.isCompletelyValid;
 			cardFields[ field ] = value;
 
 			// Check if all fields are valid
@@ -57,6 +57,23 @@
 
 					disableSubmit( thisForm );
 				}
+			}
+		} );
+
+		/**
+		 * Enable the submit button when postal code is completed.
+		 * This is the best we can do for now as Square does not provide
+		 * any way of knowing that the credit card was auto-filled.
+		 */
+		card.addEventListener( 'postalCodeChanged', function( event ) {
+			if ( event.detail.currentState.isCompletelyValid ) {
+				cardFields.cardNumber = true;
+				cardFields.expirationDate = true;
+				cardFields.cvv = true;
+				cardFields.postalCode = true;
+				enableSubmit();
+			} else {
+				disableSubmit();
 			}
 		} );
 
@@ -136,7 +153,7 @@
 
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', {
-			detail: { form: form }
+			detail: { form }
 		} );
 		document.dispatchEvent( event );
 	}
@@ -154,8 +171,8 @@
 
 		// Use the thisForm variable that we set earlier
 		if ( thisForm ) {
-			thisForm.appendChild( tokenInput );
-			thisForm.appendChild( verificationInput );
+			thisForm.append( tokenInput );
+			thisForm.append( verificationInput );
 
 			if ( typeof frmFrontForm.submitFormManual === 'function' ) {
 				frmFrontForm.submitFormManual( event, thisForm );
@@ -211,7 +228,7 @@
 			return buyerTokens[ verificationData.data.hash ];
 		}
 
-		const verificationDetails = verificationData.data.verificationDetails;
+		const { verificationDetails } = verificationData.data;
 		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
 
 		buyerTokens[ verificationData.data.hash ] = verificationResults.token;

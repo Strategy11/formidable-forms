@@ -18,8 +18,8 @@ class test_FrmAntiSpam extends FrmUnitTest {
 	 */
 	public function test_get() {
 		$token_string = $this->run_private_method( array( $this->antispam, 'get' ) );
-		$this->assertTrue( is_string( $token_string ) );
-		$this->assertTrue( strlen( $token_string ) >= 32 );
+		$this->assertIsString( $token_string );
+		$this->assertGreaterThanOrEqual( 32, strlen( $token_string ) );
 	}
 
 	/**
@@ -27,8 +27,8 @@ class test_FrmAntiSpam extends FrmUnitTest {
 	 */
 	public function test_get_antispam_secret_key() {
 		$secret_key = $this->run_private_method( array( $this->antispam, 'get_antispam_secret_key' ) );
-		$this->assertTrue( is_string( $secret_key ) );
-		$this->assertTrue( strlen( $secret_key ) >= 32 );
+		$this->assertIsString( $secret_key );
+		$this->assertGreaterThanOrEqual( 32, strlen( $secret_key ) );
 	}
 
 	/**
@@ -36,8 +36,8 @@ class test_FrmAntiSpam extends FrmUnitTest {
 	 */
 	public function test_get_valid_tokens() {
 		$valid_tokens = $this->run_private_method( array( $this->antispam, 'get_valid_tokens' ) );
-		$this->assertTrue( is_array( $valid_tokens ) );
-		$this->assertTrue( count( $valid_tokens ) >= 1 );
+		$this->assertIsArray( $valid_tokens );
+		$this->assertGreaterThanOrEqual( 1, count( $valid_tokens ) );
 	}
 
 	/**

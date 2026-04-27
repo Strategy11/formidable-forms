@@ -33,7 +33,7 @@ class test_FrmStyle extends FrmUnitTest {
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {
 			$this->run_private_method( array( $frm_style, 'maybe_sanitize_rgba_value' ), array( &$color_val ) );
-			$this->assertEquals( $expected_color_val, $color_val );
+			$this->assertSame( $expected_color_val, $color_val );
 		}
 	}
 
@@ -63,21 +63,21 @@ class test_FrmStyle extends FrmUnitTest {
 		$sanitized_post_content = $frm_style->sanitize_post_content( $post_content );
 
 		$this->assertIsArray( $sanitized_post_content );
-		$this->assertEquals( '000', $sanitized_post_content['bg_color'] );
-		$this->assertEquals( '14px', $sanitized_post_content['font_size'] );
-		$this->assertEquals( '60px', $sanitized_post_content['title_margin_bottom'] );
-		$this->assertEquals( '12px', $sanitized_post_content['field_height'] );
-		$this->assertEquals( '10px', $sanitized_post_content['field_width'] );
-		$this->assertEquals( 'calc(100% / 3)', $sanitized_post_content['width'] );
-		$this->assertEquals( 'rgba(255,255,255,1)', $sanitized_post_content['section_color'] );
-		$this->assertEquals( 'ffffff', $sanitized_post_content['submit_border_color'] );
-		$this->assertEquals( 'rgb(255,255,255)', $sanitized_post_content['submit_active_color'] );
-		$this->assertEquals( '000', $sanitized_post_content['progress_bg_color'] );
-		$this->assertEquals( 'fff', $sanitized_post_content['success_bg_color'] );
-		$this->assertEquals( '12px', $sanitized_post_content['section_border_width'] );
-		$this->assertEquals( '16px', $sanitized_post_content['section_font_size'] );
-		$this->assertEquals( '.my-class { color: red; }', $sanitized_post_content['custom_css'] );
-		$this->assertFalse( array_key_exists( 'unsupported_key', $sanitized_post_content ) );
+		$this->assertSame( '000', $sanitized_post_content['bg_color'] );
+		$this->assertSame( '14px', $sanitized_post_content['font_size'] );
+		$this->assertSame( '60px', $sanitized_post_content['title_margin_bottom'] );
+		$this->assertSame( '12px', $sanitized_post_content['field_height'] );
+		$this->assertSame( '10px', $sanitized_post_content['field_width'] );
+		$this->assertSame( 'calc(100% / 3)', $sanitized_post_content['width'] );
+		$this->assertSame( 'rgba(255,255,255,1)', $sanitized_post_content['section_color'] );
+		$this->assertSame( 'ffffff', $sanitized_post_content['submit_border_color'] );
+		$this->assertSame( 'rgb(255,255,255)', $sanitized_post_content['submit_active_color'] );
+		$this->assertSame( '000', $sanitized_post_content['progress_bg_color'] );
+		$this->assertSame( 'fff', $sanitized_post_content['success_bg_color'] );
+		$this->assertSame( '12px', $sanitized_post_content['section_border_width'] );
+		$this->assertSame( '16px', $sanitized_post_content['section_font_size'] );
+		$this->assertSame( '.my-class { color: red; }', $sanitized_post_content['custom_css'] );
+		$this->assertArrayNotHasKey( 'unsupported_key', $sanitized_post_content );
 	}
 
 	/**
@@ -85,28 +85,31 @@ class test_FrmStyle extends FrmUnitTest {
 	 */
 	public function test_strip_invalid_characters() {
 		// Make sure that braces don't get added to sizes but removed instead.
-		$this->assertEquals( '12px', $this->strip_invalid_characters( '12px(' ) );
-		$this->assertEquals( '2rem', $this->strip_invalid_characters( ')2rem' ) );
-		$this->assertEquals( '10pt', $this->strip_invalid_characters( '(10pt' ) );
-		$this->assertEquals( '100%', $this->strip_invalid_characters( '100%)' ) );
-		$this->assertEquals( '14px', $this->strip_invalid_characters( '(14px)' ) );
-		$this->assertEquals( '20PX', $this->strip_invalid_characters( ')20PX' ), 'strip_invalid_characters should be case insensitive' );
+		$this->assertSame( '12px', $this->strip_invalid_characters( '12px(' ) );
+		$this->assertSame( '2rem', $this->strip_invalid_characters( ')2rem' ) );
+		$this->assertSame( '10pt', $this->strip_invalid_characters( '(10pt' ) );
+		$this->assertSame( '100%', $this->strip_invalid_characters( '100%)' ) );
+		$this->assertSame( '14px', $this->strip_invalid_characters( '(14px)' ) );
+		$this->assertSame( '20PX', $this->strip_invalid_characters( ')20PX' ), 'strip_invalid_characters should be case insensitive' );
 
 		// Test CSS vars.
-		$this->assertEquals( 'var(--grey)', $this->strip_invalid_characters( '(var(--grey)' ) );
-		$this->assertEquals( 'var(--white)', $this->strip_invalid_characters( '(var(--white)))' ) );
+		$this->assertSame( 'var(--grey)', $this->strip_invalid_characters( '(var(--grey)' ) );
+		$this->assertSame( 'var(--white)', $this->strip_invalid_characters( '(var(--white)))' ) );
 
 		// Test some calc() rules with extra braces.
-		$this->assertEquals( 'calc(50%/3)', $this->strip_invalid_characters( '(calc(50%/3)' ) );
-		$this->assertEquals( 'calc(10%*5)', $this->strip_invalid_characters( ')calc(10%*5)' ) );
+		$this->assertSame( 'calc(50%/3)', $this->strip_invalid_characters( '(calc(50%/3)' ) );
+		$this->assertSame( 'calc(10%*5)', $this->strip_invalid_characters( ')calc(10%*5)' ) );
 
 		// Test some things that should not change.
-		$this->assertEquals( 'fff', $this->strip_invalid_characters( 'fff' ) );
-		$this->assertEquals( '12px', $this->strip_invalid_characters( '12px' ) );
-		$this->assertEquals( 'rgb(0,0,0)', $this->strip_invalid_characters( 'rgb(0,0,0)' ) );
-		$this->assertEquals( 'calc(100%/6)', $this->strip_invalid_characters( 'calc(100%/6)' ) );
+		$this->assertSame( 'fff', $this->strip_invalid_characters( 'fff' ) );
+		$this->assertSame( '12px', $this->strip_invalid_characters( '12px' ) );
+		$this->assertSame( 'rgb(0,0,0)', $this->strip_invalid_characters( 'rgb(0,0,0)' ) );
+		$this->assertSame( 'calc(100%/6)', $this->strip_invalid_characters( 'calc(100%/6)' ) );
 	}
 
+	/**
+	 * @param string $input
+	 */
 	private function strip_invalid_characters( $input ) {
 		$frm_style = new FrmStyle();
 		return $this->run_private_method( array( $frm_style, 'strip_invalid_characters' ), array( $input ) );
@@ -119,33 +122,34 @@ class test_FrmStyle extends FrmUnitTest {
 		$frm_style = new FrmStyle();
 
 		// Test a case where nothing changes.
-		$this->assertEquals( '"Arial"', $frm_style->force_balanced_quotation( '"Arial"' ) );
+		$this->assertSame( '"Arial"', $frm_style->force_balanced_quotation( '"Arial"' ) );
 
 		// Balance a missing " at the end.
-		$this->assertEquals( '"Verdana"', $frm_style->force_balanced_quotation( '"Verdana' ) );
+		$this->assertSame( '"Verdana"', $frm_style->force_balanced_quotation( '"Verdana' ) );
 
 		// Balance a missing ' at the end.
-		$this->assertEquals( "'Times New Roman'", $frm_style->force_balanced_quotation( "'Times New Roman" ) );
+		$this->assertSame( "'Times New Roman'", $frm_style->force_balanced_quotation( "'Times New Roman" ) );
 
 		// Balance a missing " at the front.
-		$this->assertEquals( '"Helvetica"', $frm_style->force_balanced_quotation( 'Helvetica"' ) );
+		$this->assertSame( '"Helvetica"', $frm_style->force_balanced_quotation( 'Helvetica"' ) );
 
 		// Balance a missing ' at the front.
-		$this->assertEquals( "'Comic Sans'", $frm_style->force_balanced_quotation( "Comic Sans'" ) );
+		$this->assertSame( "'Comic Sans'", $frm_style->force_balanced_quotation( "Comic Sans'" ) );
 	}
 
 	/**
 	 * @gcovers FrmStyle::trim_braces
 	 */
 	public function test_trim_braces() {
-		$this->assertEquals( 'calc(100%)', $this->trim_braces( '(calc(100%)))' ) );
-		$this->assertEquals( 'skewX(5px)', $this->trim_braces( '((skewX(5px)' ) );
-		$this->assertEquals( 'var(--grey)', $this->trim_braces( '(var(--grey))' ) );
-		$this->assertEquals( 'scale(2)', $this->trim_braces( '(scale(2)))' ) );
+		$this->assertSame( 'calc(100%)', $this->trim_braces( '(calc(100%)))' ) );
+		$this->assertSame( 'skewX(5px)', $this->trim_braces( '((skewX(5px)' ) );
+		$this->assertSame( 'var(--grey)', $this->trim_braces( '(var(--grey))' ) );
+		$this->assertSame( 'scale(2)', $this->trim_braces( '(scale(2)))' ) );
 	}
 
 	/**
 	 * @param string $value
+	 *
 	 * @return string
 	 */
 	private function trim_braces( $value ) {

@@ -16,7 +16,7 @@ $preview_link = FrmFormsHelper::get_direct_link( $values['form_key'] );
 </button>
 
 <div id="frm-preview-action">
-	<?php if ( ( ! isset( $hide_preview ) || ! $hide_preview ) && isset( $values['form_key'] ) ) { ?>
+	<?php if ( empty( $hide_preview ) && isset( $values['form_key'] ) ) { ?>
 		<div class="preview dropdown">
 			<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-secondary" role="button">
 				<?php esc_html_e( 'Preview', 'formidable' ); ?>

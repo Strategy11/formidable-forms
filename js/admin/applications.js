@@ -68,11 +68,11 @@
 		container.innerHTML = '';
 
 		const contentWrapper = div( { className: 'frm-applications-index-content' } );
-		container.appendChild( contentWrapper );
+		container.append( contentWrapper );
 
 		const customTemplatesNav = getCustomTemplatesNav();
 
-		contentWrapper.appendChild( customTemplatesNav );
+		contentWrapper.append( customTemplatesNav );
 		renderFormidableTemplates( contentWrapper, data.templates );
 
 		const hookName = 'frm_application_render_templates';
@@ -109,7 +109,7 @@
 					div( {
 						className: 'frm10 frm_clearfix',
 						children: [
-							img( { src: getUrlToApplicationsImages() + 'folder.svg' } ),
+							img( { src: `${ getUrlToApplicationsImages() }folder.svg` } ),
 							tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
 							div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
 						]
@@ -129,7 +129,7 @@
 	}
 
 	function getUrlToApplicationsImages() {
-		return frmGlobal.url + '/images/applications/';
+		return `${ frmGlobal.url }/images/applications/`;
 	}
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
@@ -138,13 +138,13 @@
 			className: 'frm_grid_container frm-application-cards-grid'
 		} );
 		addTemplatesToGrid( templates );
-		contentWrapper.appendChild( getTemplatesNav() );
-		contentWrapper.appendChild( elements.templatesGrid );
+		contentWrapper.append( getTemplatesNav() );
+		contentWrapper.append( elements.templatesGrid );
 	}
 
 	function addTemplatesToGrid( templates ) {
 		templates.forEach(
-			application => elements.templatesGrid.appendChild( createApplicationCard( application ) )
+			application => elements.templatesGrid.append( createApplicationCard( application ) )
 		);
 		maybeTriggerSearch();
 	}
@@ -187,7 +187,7 @@
 		categories.forEach( addCategoryToWrapper );
 		function addCategoryToWrapper( category, index ) {
 			if ( 0 !== index ) {
-				wrapper.appendChild( document.createTextNode( '|' ) );
+				wrapper.append( document.createTextNode( '|' ) );
 			}
 			const anchor = a( category );
 			if ( 0 === index ) {
@@ -206,7 +206,7 @@
 					elements.activeCategoryAnchor = anchor;
 				}
 			);
-			wrapper.appendChild( anchor );
+			wrapper.append( anchor );
 		}
 
 		return wrapper;
@@ -231,7 +231,7 @@
 
 		addTemplatesToGrid(
 			state.templates.filter(
-				template => -1 !== template.categories.indexOf( category )
+				template => template.categories.includes( category )
 			)
 		);
 	}
@@ -247,7 +247,7 @@
 	function handleTemplateSearch( { foundSomething, notEmptySearchText } ) {
 		if ( false === elements.noTemplateSearchResultsPlaceholder ) {
 			elements.noTemplateSearchResultsPlaceholder = getNoResultsPlaceholder();
-			elements.templatesGrid.appendChild( elements.noTemplateSearchResultsPlaceholder );
+			elements.templatesGrid.append( elements.noTemplateSearchResultsPlaceholder );
 		}
 		elements.noTemplateSearchResultsPlaceholder.classList.toggle( 'frm_hidden', ! notEmptySearchText || foundSomething );
 	}
@@ -273,8 +273,8 @@
 		if ( isTemplate ) {
 			card.classList.add( 'frm-application-template-card' );
 			card.classList.add( 'frm-locked-application-template' );
-			card.appendChild( tag( 'hr' ) );
-			card.appendChild( getCardContent() );
+			card.append( tag( 'hr' ) );
+			card.append( getCardContent() );
 
 			card.addEventListener(
 				'click',
@@ -304,17 +304,17 @@
 
 			const templateControl = getUseThisTemplateControl( data );
 			if ( templateControl.classList.contains( 'frm-delete-application-trigger' ) ) {
-				header.appendChild( templateControl );
+				header.append( templateControl );
 			} else {
-				titleWrapper.appendChild( templateControl );
+				titleWrapper.append( templateControl );
 			}
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span( { className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) } ) );
+				titleWrapper.append( span( { className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) } ) );
 			}
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {
-				header.appendChild( counter );
+				header.append( counter );
 			}
 
 			return header;
@@ -327,7 +327,7 @@
 		}
 
 		function getCardContent() {
-			const thumbnailFolderUrl = getUrlToApplicationsImages() + 'thumbnails/';
+			const thumbnailFolderUrl = `${ getUrlToApplicationsImages() }thumbnails/`;
 			const filenameToUse = data.hasLiteThumbnail ? data.key + ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
 			return div( {
 				className: 'frm-application-card-image-wrapper',
@@ -339,9 +339,9 @@
 	}
 
 	function filterItemCount( counter, { data } ) {
-		const hasForms = 'undefined' !== typeof data.formCount && '0' !== data.formCount;
-		const hasViews = 'undefined' !== typeof data.viewCount && '0' !== data.viewCount;
-		const hasPages = 'undefined' !== typeof data.pageCount && '0' !== data.pageCount;
+		const hasForms = data.formCount !== undefined && '0' !== data.formCount;
+		const hasViews = data.viewCount !== undefined && '0' !== data.viewCount;
+		const hasPages = data.pageCount !== undefined && '0' !== data.pageCount;
 
 		if ( ! hasForms && ! hasViews && ! hasPages ) {
 			return counter;
@@ -363,12 +363,12 @@
 
 		function addCount( countValue, pluralDescriptor, singularDescriptor ) {
 			if ( counter.children.length ) {
-				counter.appendChild( document.createTextNode( ' | ' ) );
+				counter.append( document.createTextNode( ' | ' ) );
 			}
 
 			const descriptor = '1' === countValue ? singularDescriptor : pluralDescriptor;
-			counter.appendChild(
-				span( countValue + ' ' + descriptor )
+			counter.append(
+				span( `${ countValue } ${ descriptor }` )
 			);
 		}
 
@@ -439,7 +439,7 @@
 			);
 		}
 
-		const placeholderImage = img( { src: getUrlToApplicationsImages() + 'placeholder.png' } );
+		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png` } );
 		if ( placeholderImage.complete ) {
 			setTimeout( maybeCenterViewApplicationModal, 0 );
 		} else {
@@ -454,7 +454,7 @@
 			div( data.description )
 		];
 
-		if ( data.usedAddons && data.usedAddons.length ) {
+		if ( data.usedAddons?.length ) {
 			detailsChildren.push(
 				div( {
 					className: 'frm-application-modal-label',

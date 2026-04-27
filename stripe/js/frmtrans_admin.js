@@ -30,14 +30,14 @@
 		}
 
 		const gateway = this.value;
-		const checked = this.checked;
+		const { checked } = this;
 
-		toggleOpts( this, checked, '.show_' + gateway );
+		toggleOpts( this, checked, `.show_${ gateway }` );
 
 		const toggleOff = 'stripe' === gateway ? 'square' : 'stripe';
 		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
-		const showClass = 'show_' + settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' );
-		const gatewaySettings = settings.get( 0 ).querySelectorAll( '.show_' + toggleOff );
+		const showClass = `show_${ settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' ) }`;
+		const gatewaySettings = settings.get( 0 ).querySelectorAll( `.show_${ toggleOff }` );
 
 		gatewaySettings.forEach(
 			setting => {
@@ -52,9 +52,9 @@
 
 	function frmTransLiteAdminJS() {
 		return {
-			init: function() {
+			init() {
 				const actions = document.getElementById( 'frm_notification_settings' );
-				if ( actions !== null ) {
+				if ( actions ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
 					jQuery( '.frm_form_settings' ).on( 'change', '.frm_gateway_opt input', toggleGateway );
 				}
@@ -89,11 +89,16 @@
 				data: {
 					nonce: frm_trans_vars.nonce
 				},
-				success: function( html ) {
+				success( html ) {
 					jQuery( loadingImage ).replaceWith( html );
 				}
 			} );
 		};
+
+		if ( ! e.currentTarget.dataset.frmverify ) {
+			handleConfirmedClick( e );
+			return;
+		}
 
 		jQuery( '#frm-confirmed-click' ).one( 'click', handleConfirmedClick );
 

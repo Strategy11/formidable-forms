@@ -34,7 +34,7 @@
 
 .frm_toggle input, /* Reverse compatibility */
 .frm_toggle_block input {
-	display:none !important;
+	display: none !important;
 }
 
 .frm_toggle_slider {
@@ -45,7 +45,7 @@
 	right: 0;
 	bottom: 0;
 	background-color: var(--grey-200);
-	transition: .4s;
+	transition: 0.4s;
 	border-radius: 30px;
 }
 
@@ -85,11 +85,11 @@ input[disabled] + .frm_toggle_slider,
 input[disabled] + .frm_toggle .frm_toggle_slider {
 	pointer-events: none;
 	cursor: text;
-	opacity: .5;
+	opacity: 0.5;
 }
 
 .frm_toggle_opt ~ .frm_toggle:not(#frm_testing_mode .frm_toggle) .frm_toggle_slider::before {
-	content: '' !important; /* Don't show x/check if off label included or on builder page */
+	content: "" !important; /* Don't show x/check if off label included or on builder page */
 }
 
 .rtl .frm_toggle_opt {
@@ -101,7 +101,7 @@ input[disabled] + .frm_toggle .frm_toggle_slider {
 }
 
 .rtl input:checked + .frm_toggle .frm_toggle_slider::before {
-	transform: none!important;
+	transform: none !important;
 	left: 1px;
 }
 
@@ -159,7 +159,7 @@ input[disabled] + .frm_toggle .frm_toggle_slider {
 	height: 100%;
 	background-color: #fff;
 	color: var(--primary-color);
-	content: '' !important;
+	content: "" !important;
 }
 
 .frm_toggle_long input:checked + .frm_toggle_slider::before {

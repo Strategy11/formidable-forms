@@ -11,6 +11,7 @@ class FrmTransLiteLog {
 	 * @param string $title
 	 * @param string $text
 	 * @param bool   $is_error When this is false, the message will not be logged to the error log if the logging add-on is unavailable.
+	 *
 	 * @return void
 	 */
 	public static function log_message( $title, $text, $is_error = true ) {
@@ -18,6 +19,7 @@ class FrmTransLiteLog {
 			if ( $is_error ) {
 				error_log( $title . ': ' . $text );
 			}
+
 			return;
 		}
 

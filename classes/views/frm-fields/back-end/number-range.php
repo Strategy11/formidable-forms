@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="frm_minnum_<?php echo esc_attr( $field['field_key'] ); ?>">
 				<?php esc_html_e( 'Min Value', 'formidable' ); ?>
 			</label>
-			<input type="text" id="frm_minnum_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[minnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['minnum'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="min" />
+			<input type="number" id="frm_minnum_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[minnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['minnum'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="min" />
 		</span>
 		<span class="frm6 frm_last frm_form_field">
 			<label for="frm_maxnum_<?php echo esc_attr( $field['field_key'] ); ?>">
 				<?php esc_html_e( 'Max Value', 'formidable' ); ?>
 			</label>
-			<input type="text" id="frm_maxnum_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[maxnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['maxnum'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="max" />
+			<input type="number" id="frm_maxnum_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[maxnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['maxnum'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="max" />
 		</span>
 	</span>
 </p>
@@ -26,5 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label for="frm_step_<?php echo esc_attr( $field['field_key'] ); ?>">
 		<?php esc_html_e( 'Step', 'formidable' ); ?>
 	</label>
+	<?php
+	// Make sure to use type="text" for step because we also support "any" as a value.
+	?>
 	<input type="text" name="field_options[step_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['step'] ); ?>" id="frm_step_<?php echo esc_attr( $field['field_key'] ); ?>" />
 </p>

@@ -91,7 +91,7 @@ html.wp-toolbar {
 }
 
 .frm-rootline::before {
-	content: '';
+	content: "";
 	position: absolute;
 	width: calc(100% - 32px);
 	border: 1px solid var(--grey-300);

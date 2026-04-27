@@ -14,6 +14,7 @@ class FrmCaptchaFactory {
 	 * @since 6.8.4
 	 *
 	 * @param string $captcha_type Either 'active', 'recaptcha', 'hcaptcha' or 'turnstile'. If active, the global setting will be used.
+	 *
 	 * @return FrmFieldCaptchaSettings
 	 */
 	public static function get_settings_object( $captcha_type = 'active' ) {
@@ -32,6 +33,7 @@ class FrmCaptchaFactory {
 	 * @since 6.8.4
 	 *
 	 * @param string $active_captcha
+	 *
 	 * @return string
 	 */
 	private static function get_settings_class( $active_captcha ) {

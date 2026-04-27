@@ -5,10 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmReviews {
 
+	/**
+	 * @var string
+	 */
 	private $option_name = 'frm_reviewed';
 
+	/**
+	 * @var array
+	 */
 	private $review_status = array();
 
+	/**
+	 * @var string
+	 */
 	private $inbox_key = 'review';
 
 	/**
@@ -19,7 +28,6 @@ class FrmReviews {
 	 * @return void
 	 */
 	public function review_request() {
-
 		// Only show the review request to high-level users on Formidable pages
 		if ( ! current_user_can( 'frm_change_settings' ) || ! FrmAppHelper::is_formidable_admin() ) {
 			return;
@@ -30,13 +38,14 @@ class FrmReviews {
 
 		// Check if it has been dismissed or if we can ask later
 		$dismissed = $this->review_status['dismissed'];
+
 		if ( $dismissed === 'later' && $this->review_status['asked'] < 3 ) {
 			$dismissed = false;
 		}
 
 		$week_ago = $this->review_status['time'] + WEEK_IN_SECONDS <= time();
 
-		if ( empty( $dismissed ) && $week_ago ) {
+		if ( ! $dismissed && $week_ago ) {
 			$this->review();
 		}
 	}
@@ -57,7 +66,7 @@ class FrmReviews {
 			'asked'     => 0,
 		);
 
-		if ( empty( $review ) ) {
+		if ( ! $review ) {
 			// Set the review request to show in a week
 			update_user_meta( $user_id, $this->option_name, $default );
 		}
@@ -75,8 +84,7 @@ class FrmReviews {
 	 * @return void
 	 */
 	private function review() {
-
-		// show the review request 3 times, depending on the number of entries
+		// Show the review request 3 times, depending on the number of entries
 		$show_intervals = array( 50, 200, 500 );
 		$asked          = $this->review_status['asked'];
 
@@ -90,22 +98,17 @@ class FrmReviews {
 
 		// Only show review request if the site has collected enough entries
 		if ( $entries < $count ) {
-			// check the entry count again in a week
+			// Check the entry count again in a week
 			$this->review_status['time'] = time();
 			update_user_meta( $user->ID, $this->option_name, $this->review_status );
 
 			return;
 		}
 
-		if ( $entries <= 100 ) {
-			// round to the nearest 10
-			$entries = floor( $entries / 10 ) * 10;
-		} else {
-			// round to the nearest 50
-			$entries = floor( $entries / 50 ) * 50;
-		}
-		$name = $user->first_name;
-		if ( ! empty( $name ) ) {
+		$entries = $entries <= 100 ? floor( $entries / 10 ) * 10 : floor( $entries / 50 ) * 50;
+		$name    = $user->first_name;
+
+		if ( $name ) {
 			$name = ' ' . $name;
 		}
 
@@ -141,6 +144,7 @@ class FrmReviews {
 		if ( $asked > 0 ) {
 			$message->remove( $this->inbox_key );
 		}
+
 		if ( $asked > 1 ) {
 			$message->remove( $this->inbox_key . '1' );
 		}
@@ -153,11 +157,11 @@ class FrmReviews {
 		$message->add_message(
 			array(
 				'key'     => $key,
-				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' .
+				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' . // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					'- Steph Wells<br/>' .
 					'<span>' . esc_html__( 'Co-Founder and CTO of Formidable Forms', 'formidable' ) . '<span>',
 				'subject' => str_replace( $name, '', $title ),
-				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' .
+				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' . // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
 				'type'    => 'feedback',
 			)
@@ -168,6 +172,9 @@ class FrmReviews {
 	 * If there are already later requests, don't add it to the inbox again.
 	 *
 	 * @since 4.05.02
+	 *
+	 * @param array $requests Array of requests.
+	 * @param int   $asked    Number of times the review has been asked.
 	 *
 	 * @return bool
 	 */
@@ -195,6 +202,7 @@ class FrmReviews {
 	 */
 	private function set_inbox_dismissed() {
 		$message = new FrmInbox();
+
 		foreach ( $this->inbox_keys() as $key ) {
 			$message->dismiss( $key );
 		}
@@ -207,6 +215,7 @@ class FrmReviews {
 	 */
 	private function set_inbox_read() {
 		$message = new FrmInbox();
+
 		foreach ( $this->inbox_keys() as $key ) {
 			$message->mark_read( $key );
 		}
@@ -225,12 +234,13 @@ class FrmReviews {
 
 		$user_id = get_current_user_id();
 		$review  = get_user_meta( $user_id, $this->option_name, true );
-		if ( empty( $review ) ) {
+
+		if ( ! $review ) {
 			$review = array();
 		}
 
 		if ( isset( $review['dismissed'] ) && $review['dismissed'] === 'done' ) {
-			// if feedback was submitted, don't update it again when the review is dismissed
+			// If feedback was submitted, don't update it again when the review is dismissed
 			$this->set_inbox_dismissed();
 			wp_die();
 		}

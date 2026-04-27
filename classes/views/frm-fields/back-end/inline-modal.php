@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! $args['dismiss-icon'] ) {
 	$args['class'] .= ' frm-modal-no-dismiss';
 }
+
 if ( ! $args['show'] ) {
 	$args['class'] .= ' frm_hidden';
 }

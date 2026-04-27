@@ -50,9 +50,11 @@ class FrmEmailHelper {
 	 */
 	public static function get_default_from_email() {
 		$settings = FrmAppHelper::get_settings();
+
 		if ( $settings->from_email && is_email( $settings->from_email ) ) {
 			return $settings->from_email;
 		}
+
 		return get_option( 'admin_email' );
 	}
 }

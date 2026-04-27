@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
 			<div class="frm_warning_style frm-with-icon">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -33,13 +33,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<?php
 		}
+
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
 			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
 				<div class="frm_warning_style frm-with-icon">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
@@ -56,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
 			?>
 			<div class="frm_note_style">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -102,22 +103,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 			}
 
-			if ( $display['unique'] ) {
+			if ( $display['unique'] || ! empty( $show_upsell_for_unique_value ) ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+					<label <?php FrmAppHelper::array_to_html_params( $unique_values_label_atts, true ); ?>>
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_unique_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
 				<?php
 			}
 
-			if ( $display['read_only'] ) {
+			if ( $display['read_only'] || ! empty( $show_upsell_for_read_only ) ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
+					<label <?php FrmAppHelper::array_to_html_params( $read_only_label_atts, true ); ?>>
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_read_only_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
 				</div>
@@ -163,7 +164,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
 					<?php
 					FrmAppHelper::icon_by_class(
-						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+						'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 						array(
 							'data-open' => 'frm-layout-classes-box',
 							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
@@ -218,7 +219,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
 							switch ( $type ) {
 								case 'calc':
-									$default_value_type['data']  = array(
+									$default_value_type['data'] = array(
 										'show'    => '#calc-for-{id}',
 										'disable' => '#default-value-for-{id}',
 									);
@@ -245,7 +246,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						);
 
 						foreach ( $default_value_type['data'] as $data_key => $data_value ) {
-							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' );
+							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( str_ends_with( $data_value, '-' ) ? $field['id'] : '' );
 						}
 
 						?>
@@ -330,9 +331,21 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
-		?>
 
-		<?php if ( $display['show_image'] ) { ?>
+		if ( ! empty( $show_upsell_for_before_after_contents ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/before-after-contents.php';
+		}
+
+		if ( ! empty( $show_upsell_for_autocomplete ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/autocomplete.php';
+		}
+
+		if ( ! empty( $show_upsell_for_visibility ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/visibility.php';
+		}
+
+		if ( $display['show_image'] ) {
+			?>
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
 					<input class="frm-m-0" type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
@@ -409,6 +422,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							)
 						);
 					}
+
 					if ( $field['type'] === 'divider' ) {
 						FrmHtmlHelper::echo_dropdown_option(
 							__( 'Center', 'formidable' ),
@@ -444,6 +458,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
 						$type_option_value  = 'select' === $fkey ? 'dropdown' : $fkey;
 						$type_option_params = array( 'value' => $type_option_value );
+
 						if ( array_key_exists( $fkey, $disabled_fields ) ) {
 							$type_option_params['disabled'] = 'disabled';
 						}
@@ -475,7 +490,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 		<?php
 		$hidden_invalid = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' ) && FrmField::is_option_empty( $field, 'max' );
-		$has_validation = ( ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) );
+		$has_validation = ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' );
 		?>
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Collapsible Validation Messages Settings', 'formidable' ); ?>" aria-controls="collapsible-section">
@@ -526,6 +541,14 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					</p>
 					<?php
 				}
+
+				/**
+				 * @since 6.28
+				 *
+				 * @param array $display
+				 * @param array $field
+				 */
+				do_action( 'frm_field_validation_messages', $display, $field );
 				?>
 			</div>
 		</div>

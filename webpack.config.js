@@ -4,6 +4,17 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+const glob = require( 'glob' );
+
+// Generate web component SCSS entries using glob
+const webComponentScssFiles = glob.sync('./js/src/web-components/*/**.scss')
+  .reduce( ( scssList, file ) => {
+    const match = file.match(/web-components\/(.+)\/(.+)\.scss$/);
+    if (match) {
+      scssList[`../js/src/web-components/${match[1]}/${match[2]}`] = './' + file;
+    }
+    return scssList;
+}, {});
 
 /**
  * Environment configuration
@@ -36,6 +47,7 @@ const entries = {
     formidable_admin: './js/src/admin/admin.js',
     frm_testing_mode: './js/src/frm_testing_mode.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
+    'formidable-web-components': './js/src/web-components/index.js',
     'welcome-tour': './js/src/welcome-tour',
   },
   // SCSS entries
@@ -43,8 +55,10 @@ const entries = {
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
     font_icons: './resources/scss/font_icons.scss',
+    // Dynamically generated web component SCSS files
     frm_testing_mode: './resources/scss/test-mode/frm_testing_mode.scss',
-    'admin/welcome-tour': './resources/scss/admin/welcome-tour.scss'
+    'admin/welcome-tour': './resources/scss/admin/welcome-tour.scss',
+    ...webComponentScssFiles
   }
 };
 
@@ -107,8 +121,13 @@ const jsConfig = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
+        exclude: /-component\.css$/
       },
+	  {
+		test: /-component\.css$/i,
+		use: ['raw-loader']
+	  },
       {
         test: /\.scss$/,
         use: [

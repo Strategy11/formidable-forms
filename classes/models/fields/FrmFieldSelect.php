@@ -10,12 +10,14 @@ class FrmFieldSelect extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'select';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -53,6 +55,9 @@ class FrmFieldSelect extends FrmFieldType {
 	 * Get the type of field being displayed.
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field
+	 *
 	 * @return array
 	 */
 	public function displayed_field_type( $field ) {
@@ -88,7 +93,7 @@ class FrmFieldSelect extends FrmFieldType {
 
 	protected function prepare_import_value( $value, $atts ) {
 		if ( FrmField::is_option_true( $this->field, 'multiple' ) ) {
-			$value = $this->get_multi_opts_for_import( $value );
+			return $this->get_multi_opts_for_import( $value );
 		}
 
 		return $value;

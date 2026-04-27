@@ -37,6 +37,10 @@ fo = "fo"
 Ags = "Ags"
 # This is used as a class name, so changing it could introduce issues with backward compatibility.
 unmergable = "unmergable"
+# This is detected in our Stripe publishable key.
+iz = "iz"
+# This is used in a Sniff to reference a PHP function that does exist.
+writeable = "writeable"
 
 [default.extend-identifiers]
 66afe9 = "66afe9"

@@ -2,6 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 $is_gdpr_enabled = FrmAppHelper::is_gdpr_enabled();
 
 ?>
@@ -33,8 +34,6 @@ $is_gdpr_enabled = FrmAppHelper::is_gdpr_enabled();
 </p>
 
 <?php
-ob_start();
-
 /**
  * Trigger an action so Pro can display additional General settings in the Other section.
  *
@@ -42,11 +41,7 @@ ob_start();
  */
 do_action( 'frm_settings_form', $frm_settings );
 
-$more_html = ob_get_clean();
-echo $more_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-FrmSettingsController::maybe_render_currency_selector( $frm_settings, $more_html );
-unset( $more_html );
+FrmSettingsController::maybe_render_currency_selector( $frm_settings );
 ?>
 
 <div class="clear"></div>
@@ -59,10 +54,13 @@ unset( $more_html );
 <h3><?php esc_html_e( 'GDPR', 'formidable' ); ?></h3>
 <?php
 $gdpr_options_wrapper_params = array( 'class' => 'frm_gdpr_options' );
+
 if ( ! $is_gdpr_enabled ) {
 	$gdpr_options_wrapper_params['class'] .= ' frm_hidden';
 }
+
 $custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont frm_gdpr_options' );
+
 if ( $frm_settings->no_ips || ! $is_gdpr_enabled ) {
 	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
 }

@@ -143,6 +143,8 @@ class FrmFormTemplatesController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.7
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::init_template_resources();
@@ -152,11 +154,13 @@ class FrmFormTemplatesController {
 		add_action( 'admin_footer', self::class . '::render_modal' );
 		add_filter( 'frm_form_nav_list', self::class . '::append_new_template_to_nav', 10, 2 );
 
-		if ( self::is_templates_page() ) {
-			add_action( 'admin_init', self::class . '::set_form_templates_data' );
-			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
-			add_filter( 'frm_show_footer_links', '__return_false' );
+		if ( ! self::is_templates_page() ) {
+			return;
 		}
+
+		add_action( 'admin_init', self::class . '::set_form_templates_data' );
+		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+		add_filter( 'frm_show_footer_links', '__return_false' );
 	}
 
 	/**
@@ -341,6 +345,7 @@ class FrmFormTemplatesController {
 			self::$favorite_templates[ $key ][] = $template_id;
 		} elseif ( 'remove' === $operation ) {
 			$position = array_search( $template_id, self::$favorite_templates[ $key ], true );
+
 			if ( $position !== false ) {
 				unset( self::$favorite_templates[ $key ][ $position ] );
 			}
@@ -372,17 +377,17 @@ class FrmFormTemplatesController {
 		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
 		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
 
-		if ( ! $new_form_id ) {
-			// Send an error response if form duplication fails.
-			$response = array(
-				'message' => __( 'There was an error creating a template.', 'formidable' ),
-			);
-		} else {
+		if ( $new_form_id ) {
 			FrmForm::update( $new_form_id, FrmFormsController::get_modal_values() );
 
 			// Send a success response with redirect URL.
 			$response = array(
 				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ) . '&_wpnonce=' . wp_create_nonce(),
+			);
+		} else {
+			// Send an error response if form duplication fails.
+			$response = array(
+				'message' => __( 'There was an error creating a template.', 'formidable' ),
 			);
 		}
 
@@ -404,7 +409,7 @@ class FrmFormTemplatesController {
 
 		$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
 
-		if ( empty( $email ) || ! is_email( $email ) ) {
+		if ( ! $email || ! is_email( $email ) ) {
 			wp_send_json_error(
 				array( 'message' => __( 'Please enter a valid email address.', 'formidable' ) ),
 				WP_Http::BAD_REQUEST
@@ -534,6 +539,7 @@ class FrmFormTemplatesController {
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
 		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormsHelper::get_license_types() );
+
 		foreach ( $redundant_cats as $redundant_cat ) {
 			$category_slug = sanitize_title( $redundant_cat );
 			unset( self::$categories[ $category_slug ] );
@@ -553,6 +559,7 @@ class FrmFormTemplatesController {
 				'count' => count( self::$custom_templates ),
 			),
 		);
+
 		// Add the 'Available Templates' category for non-elite users.
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$special_categories['available-templates'] = array(
@@ -561,7 +568,8 @@ class FrmFormTemplatesController {
 				'count' => 0,
 			);
 		}
-		$special_categories['all-items']      = array(
+
+		$special_categories['all-items'] = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
 		);
@@ -584,10 +592,12 @@ class FrmFormTemplatesController {
 	 */
 	private static function assign_featured_templates() {
 		foreach ( self::FEATURED_TEMPLATES_IDS as $key ) {
-			if ( isset( self::$templates[ $key ] ) ) {
-				self::$templates[ $key ]['is_featured'] = true;
-				self::$featured_templates[]             = self::$templates[ $key ];
+			if ( ! isset( self::$templates[ $key ] ) ) {
+				continue;
 			}
+
+			self::$templates[ $key ]['is_featured'] = true;
+			self::$featured_templates[]             = self::$templates[ $key ];
 		}
 	}
 
@@ -654,6 +664,7 @@ class FrmFormTemplatesController {
 	 *
 	 * @param array $nav_items Navigation items.
 	 * @param array $nav_args Additional navigation arguments.
+	 *
 	 * @return array Modified navigation items with 'new_template' query parameter.
 	 */
 	public static function append_new_template_to_nav( $nav_items, $nav_args ) {
@@ -771,7 +782,7 @@ class FrmFormTemplatesController {
 	 * @return int
 	 */
 	public static function get_template_count() {
-		if ( empty( self::$templates ) ) {
+		if ( ! self::$templates ) {
 			self::$form_template_api = new FrmFormTemplateApi();
 			self::retrieve_and_set_templates();
 		}

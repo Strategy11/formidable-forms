@@ -3,6 +3,7 @@
  * Welcome Tour's Individual step view.
  *
  * @since 6.25.1
+ *
  * @package Formidable
  */
 
