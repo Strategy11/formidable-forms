@@ -227,11 +227,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<?php
 				/**
+				 * Hook in so people can include additional tab content.
+				 * Used along with frm_extra_form_instruction_tabs
+				 *
 				 * @since x.x
 				 *
 				 * @param stdClass $form The form object.
 				 */
-				do_action( 'frm_extra_form_builder_tabs', $form );
+				do_action( 'frm_extra_form_builder_tabs_content', $form );
 				?>
 			</div>
 		</div>
