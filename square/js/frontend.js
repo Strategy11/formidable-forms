@@ -87,7 +87,7 @@
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} form
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
 	function squareIsConditionallyDisabled( form ) {
 		const fieldContainer = getPaymentElementFieldContainer( form );
@@ -114,7 +114,7 @@
 	 * The field container is checked to determine if the field is conditionally hidden or not.
 	 *
 	 * @param {HTMLElement} form
-	 * @returns {HTMLElement|null}
+	 * @return {HTMLElement|null}
 	 */
 	function getPaymentElementFieldContainer( form ) {
 		const paymentElement = form.querySelector( '.frm-card-element' );
@@ -367,7 +367,7 @@
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} form
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function listenForFieldMutations( form ) {
 		const fieldContainer = getPaymentElementFieldContainer( form );
@@ -389,7 +389,7 @@
 		 * or the field container of its parent section.
 		 *
 		 * @param {MutationRecord} mutation
-		 * @returns {void}
+		 * @return {void}
 		 */
 		function handleMutation( mutation ) {
 			if ( mutation.attributeName !== 'style' ) {
@@ -407,7 +407,7 @@
 			}
 
 			thisForm = form;
-			running  = 0;
+			running = 0;
 			enableSubmit();
 
 			cardGlobal.recalculateSize();
@@ -416,11 +416,12 @@
 
 	/**
 	 * @param {HTMLElement} element
-	 * @returns {void}
+	 * @param               mutationHandler
+	 * @return {void}
 	 */
 	function observeAttributeMutations( element, mutationHandler ) {
 		const observer = new MutationObserver(
-			( mutations ) => {
+			mutations => {
 				mutations.forEach( mutationHandler );
 			}
 		);
@@ -436,11 +437,11 @@
 	 *
 	 * @since x.x
 	 *
-	 * @param {String} formId
-	 * @returns {bool}
+	 * @param {string} formId
+	 * @return {bool}
 	 */
 	function submitButtonIsConditionallyDisabled( formId ) {
-		return submitButtonIsConditionallyNotAvailable( formId ) && 'disable' === __FRMRULES[ 'submit_' + formId ].hideDisable;
+		return submitButtonIsConditionallyNotAvailable( formId ) && 'disable' === __FRMRULES[ `submit_${ formId }` ].hideDisable;
 	}
 
 	/**
@@ -448,19 +449,19 @@
 	 *
 	 * @since x.x
 	 *
-	 * @param {String} formId
-	 * @returns bool
+	 * @param {string} formId
+	 * @return bool
 	 */
 	function submitButtonIsConditionallyNotAvailable( formId ) {
-		var hideFields = document.getElementById( 'frm_hide_fields_' + formId );
-		return hideFields && -1 !== hideFields.value.indexOf( '["frm_form_' + formId + '_container .frm_final_submit"]' );
+		const hideFields = document.getElementById( `frm_hide_fields_${ formId }` );
+		return hideFields && hideFields.value.includes( `["frm_form_${ formId }_container .frm_final_submit"]` );
 	}
 
 	/**
 	 * Check a form's form_id input for a form ID value.
 	 *
 	 * @param {HTMLElement} form
-	 * @returns {number}
+	 * @return {number}
 	 */
 	function getFormIdForForm( form ) {
 		return parseInt( form.querySelector( '[name="form_id"]' ).value );
