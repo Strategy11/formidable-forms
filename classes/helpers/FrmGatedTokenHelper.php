@@ -446,7 +446,7 @@ class FrmGatedTokenHelper {
 	 */
 	private static function get_token_transient_key( $action_id ) {
 		$user_id = get_current_user_id();
-		$scope   = $user_id ? (string) $user_id : md5( FrmAppHelper::get_ip_address() );
+		$scope   = $user_id ? (string) $user_id : hash( 'sha256', FrmAppHelper::get_ip_address() );
 		return 'frm_gc_token_' . (int) $action_id . '_' . $scope;
 	}
 
