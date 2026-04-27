@@ -78,7 +78,7 @@ class FrmGatedContentController {
 	 * @return void
 	 */
 	public static function maybe_unlock_post() {
-		$post_id = (int) get_queried_object_id();
+		$post_id = get_queried_object_id();
 		if ( ! $post_id ) {
 			return;
 		}

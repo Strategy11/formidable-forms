@@ -33,7 +33,7 @@ class FrmGatedTokenHelper {
 
 		// Read expired_hours from action settings to compute expiry timestamp.
 		$expired_at = null;
-		$action     = get_post( (int) $action_id );
+		$action     = get_post( $action_id );
 		if ( $action ) {
 			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
 			if ( is_array( $settings ) && ! empty( $settings['expired_hours'] ) ) {
@@ -43,7 +43,7 @@ class FrmGatedTokenHelper {
 
 		$data   = array(
 			'token_hash' => $token_hash,
-			'action_id'  => (int) $action_id,
+			'action_id'  => $action_id,
 			'entry_id'   => (int) $entry_id,
 			'ip_address' => FrmAppHelper::get_ip_address(),
 			'created_at' => $now,
