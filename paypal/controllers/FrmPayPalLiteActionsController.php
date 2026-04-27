@@ -516,18 +516,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		if ( 'new_fields' === $mode ) {
 			$updates = self::get_order_data_field_updates( $payer, $response, $settings );
-
-			// TODO: Make sure we're not adding the metas twice.
-			foreach ( $updates as $field_id => $new_value ) {
-				FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
-			}
 		} else {
 			$updates = self::get_payer_field_updates( $payer, $response, $action, $entry );
+		}
 
-			foreach ( $updates as $field_id => $new_value ) {
-				if ( ! FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value ) ) {
-					FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
-				}
+		foreach ( $updates as $field_id => $new_value ) {
+			if ( ! FrmEntryMeta::update_entry_meta( $entry->id, $field_id, '', $new_value ) ) {
+				FrmEntryMeta::add_entry_meta( $entry->id, $field_id, '', $new_value );
 			}
 		}
 
