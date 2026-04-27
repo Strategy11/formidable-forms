@@ -235,7 +235,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				 *
 				 * @param stdClass $form The form object.
 				 */
-				do_action( 'frm_extra_form_builder_tabs_content', $form );
+				do_action( 'frm_extra_form_instruction_tabs_content', $form );
 				?>
 			</div>
 		</div>
