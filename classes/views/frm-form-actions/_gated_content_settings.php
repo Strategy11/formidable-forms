@@ -31,6 +31,7 @@ $frm_gc_pages = get_pages(
 		'sort_order'  => 'ASC',
 	)
 );
+$frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 ?>
 
 <div
