@@ -141,7 +141,7 @@ class FrmUsageController {
 	}
 
 	/**
-	 * Updates flows data.
+	 * Updates flows data. This increases the count of flow_data[ $key ][ $value ].
 	 *
 	 * @since 6.16.1
 	 *
