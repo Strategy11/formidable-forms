@@ -7788,11 +7788,11 @@ window.frmAdminBuildJS = function() {
 	function moveFieldSettings( singleField ) {
 		const self = this;
 
-		if ( singleField === null ) {
-			// The field may have not been loaded yet via ajax.
-			return;
-		}
-
+		// Always initialize instance properties first so that `new moveFieldSettings()` (no
+		// argument) always produces an object with .append() and .moveFields() available.
+		// Keeping setup above the null/undefined guard prevents the minifier from collapsing
+		// the two conditions into a single `if (e) return [all setup]`, which would skip
+		// setup entirely for the constructor-call case (singleField === undefined, falsy).
 		this.fragment = document.createDocumentFragment();
 
 		this.initOnceInAllInstances = function() {
@@ -7817,19 +7817,13 @@ window.frmAdminBuildJS = function() {
 
 		this.initOnceInAllInstances();
 
-		// Move the field if function is called as function with a singleField passed as arg.
-		// In this particular case only 1 field is needed to be moved so the field will get instantly moved.
-		// "singleField" may be undefined when it's called as a constructor instead of a function. Use the constructor to add multiple fields which are passed through "append" and move these all at once via "moveFields".
-		if ( singleField !== undefined ) {
+		// Move the field immediately when called as a plain function with a real element.
+		// Skip when singleField is null (field not loaded yet via ajax) or undefined
+		// (called as a constructor to batch-append multiple fields via .append()/.moveFields()).
+		if ( singleField !== null && singleField !== undefined ) {
 			this.append( singleField );
 			this.moveFields();
-			return;
 		}
-
-		return {
-			append: this.append,
-			moveFields: this.moveFields
-		};
 	}
 
 	function showEmailRow() {

@@ -1823,7 +1823,7 @@ class FrmFieldsHelper {
 		}//end foreach
 
 		if ( ! is_array( $val ) ) {
-			return str_replace( $replace, $replace_with, $val );
+			return str_replace( $replace, $replace_with, (string) $val );
 		}
 
 		foreach ( $val as $k => $v ) {
