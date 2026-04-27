@@ -860,6 +860,8 @@ function frmFrontFormJS() {
 				}
 			}
 
+			let willRedirect = false;
+
 			if ( typeof response.redirect !== 'undefined' ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
@@ -873,6 +875,8 @@ function frmFrontFormJS() {
 				} else {
 					doRedirect( response );
 				}
+
+				willRedirect = true;
 			}
 
 			if ( 'string' === typeof response.content && response.content !== '' ) {
@@ -926,7 +930,7 @@ function frmFrontFormJS() {
 					},
 					delay
 				);
-			} else if ( typeof response.errors !== 'undefined' && Object.keys( response.errors ).length ) {
+			} else if ( response.errors !== undefined && Object.keys( response.errors ).length ) {
 				// errors were returned
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
@@ -992,8 +996,8 @@ function frmFrontFormJS() {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
-			} else if ( typeof response.redirect === 'undefined' ) { // Avoid double submission if redirecting to a page.
-				// there may have been a plugin conflict, or the form is not set to submit with ajax
+			} else if ( ! willRedirect) { // Avoid double submission if redirecting to a page.
+				// There may have been a plugin conflict, or the form is not set to submit with ajax.
 
 				showFileLoading( object );
 
