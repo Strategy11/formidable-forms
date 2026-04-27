@@ -87,7 +87,8 @@
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} form
-	 * @return {boolean}
+	 *
+	 * @return {boolean} True if the field is conditionally hidden, false otherwise.
 	 */
 	function squareIsConditionallyDisabled( form ) {
 		const fieldContainer = getPaymentElementFieldContainer( form );
@@ -110,7 +111,8 @@
 	 * The field container is checked to determine if the field is conditionally hidden or not.
 	 *
 	 * @param {HTMLElement} form
-	 * @return {HTMLElement|null}
+	 *
+	 * @return {HTMLElement|null} The field container element or null if not found.
 	 */
 	function getPaymentElementFieldContainer( form ) {
 		const paymentElement = form.querySelector( '.frm-card-element' );
@@ -412,7 +414,8 @@
 
 	/**
 	 * @param {HTMLElement} element
-	 * @param               mutationHandler
+	 * @param {function}    mutationHandler
+	 *
 	 * @return {void}
 	 */
 	function observeAttributeMutations( element, mutationHandler ) {
@@ -434,7 +437,8 @@
 	 * @since x.x
 	 *
 	 * @param {string} formId
-	 * @return {bool}
+	 *
+	 * @return {boolean} True if the submit button is conditionally disabled, false otherwise.
 	 */
 	function submitButtonIsConditionallyDisabled( formId ) {
 		return submitButtonIsConditionallyNotAvailable( formId ) && 'disable' === __FRMRULES[ `submit_${ formId }` ].hideDisable;
@@ -446,7 +450,8 @@
 	 * @since x.x
 	 *
 	 * @param {string} formId
-	 * @return bool
+	 *
+	 * @return {boolean} True if the submit button is conditionally not available, false otherwise.
 	 */
 	function submitButtonIsConditionallyNotAvailable( formId ) {
 		const hideFields = document.getElementById( `frm_hide_fields_${ formId }` );
@@ -457,7 +462,8 @@
 	 * Check a form's form_id input for a form ID value.
 	 *
 	 * @param {HTMLElement} form
-	 * @return {number}
+	 *
+	 * @return {number} The form ID.
 	 */
 	function getFormIdForForm( form ) {
 		return parseInt( form.querySelector( '[name="form_id"]' ).value );
