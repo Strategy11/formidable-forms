@@ -30,6 +30,7 @@
 	display: inline-flex !important;
 	gap: var(--gap-xs);
 	align-items: center;
+	cursor: pointer
 }
 
 .frm_toggle input, /* Reverse compatibility */

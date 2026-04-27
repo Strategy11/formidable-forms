@@ -14,7 +14,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			// After user registration.
 			'priority' => 45,
 			'event'    => array( 'create' ),
-			'color'    => 'var(--green)',
+			'color'    => '#3fac25',
 		);
 
 		$this->FrmFormAction( 'payment', __( 'Collect a Payment', 'formidable' ), $action_ops );

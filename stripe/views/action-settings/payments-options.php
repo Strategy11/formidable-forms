@@ -97,9 +97,8 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	</p>
 
 	<p>
+		<span class="frm-block frm-mb-6"><?php esc_html_e( 'Gateway(s)', 'formidable' ); ?></span>
 		<?php
-		esc_html_e( 'Gateway(s)', 'formidable' );
-
 		foreach ( $gateways as $gateway_name => $gateway ) {
 			$gateway_classes  = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
 			$gateway_classes .= $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ? ' frm_hidden' : '';
@@ -136,10 +135,8 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	);
 	?>
 </div>
-<div class="frm_grid_container">
-	<h3>
-		<?php esc_html_e( 'Customer Information', 'formidable' ); ?>
-	</h3>
+<div class="frm_grid_container frm-mb-xs">
+	<h3 class="frm-mt-0"><?php esc_html_e( 'Customer Information', 'formidable' ); ?></h3>
 
 	<p class="frm6">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>">

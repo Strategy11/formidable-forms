@@ -1,4 +1,12 @@
 <?php
+/**
+ * Add-Ons license settings.
+ *
+ * @package Formidable
+ *
+ * @var array<string, object> $plugins Installed add-on plugin objects keyed by slug. Each has: is_parent_licence, needs_license, license, option_name, plugin_name.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

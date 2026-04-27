@@ -550,6 +550,50 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Adds keyboard support for form action widgets and their icons.
+	 *
+	 * @since x.x
+	 *
+	 * @param {jQuery} wrapClass Delegated jQuery scope for the current page wrap.
+	 * @return {void}
+	 */
+	function bindFormActionsKeyboardHandlers( wrapClass ) {
+		// Expand/collapse the widget on Enter or Space when the header itself is focused.
+		wrapClass.on( 'keydown', '.widget-top', event => {
+			// Ignore keys bubbling up from focusable descendants (toggle, delete, duplicate, arrow button).
+			if ( event.currentTarget !== event.target ) {
+				return;
+			}
+
+			if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				clickWidget( event, event.currentTarget );
+			}
+		} );
+
+		/**
+		 * Builds a delegated keydown handler that forwards a specific key to a native click.
+		 *
+		 * @param {string} key The `KeyboardEvent.key` value that should activate the target.
+		 * @return {Function} jQuery event handler.
+		 */
+		const activateOnKey = key => event => {
+			if ( event.key !== key ) {
+				return;
+			}
+
+			event.preventDefault();
+			event.currentTarget.click();
+		};
+
+		// `<a>` icons activate on Enter natively, so only Space needs to be wired up.
+		wrapClass.on( 'keydown', '.frm_form_action_settings .frm_duplicate_form_action, .frm_form_action_settings .frm_remove_form_action', activateOnKey( ' ' ) );
+
+		// The post-status toggle's label already handles Space, so only Enter needs to be wired up.
+		wrapClass.on( 'keydown', '.frm_form_action_settings .frm_toggle', activateOnKey( 'Enter' ) );
+	}
+
 	function loadTooltips() {
 		const wrapClass = jQuery( '.wrap, .frm_wrap' );
 		const confirmModal = document.getElementById( 'frm_confirm_modal' );
@@ -566,6 +610,7 @@ window.frmAdminBuildJS = function() {
 		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
 		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
+		bindFormActionsKeyboardHandlers( wrapClass );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
@@ -611,6 +656,29 @@ window.frmAdminBuildJS = function() {
 				tooltip.remove();
 			}
 		);
+	}
+
+	/**
+	 * Uncheck any data-toggleclass toggle that controls the given hidden element.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} hideSelector CSS selector for the element being removed.
+	 * @return {void}
+	 */
+	function uncheckToggleOnElementRemoval( hideSelector ) {
+		const hiddenEl = document.querySelector( hideSelector );
+		if ( ! hiddenEl ) {
+			return;
+		}
+
+		for ( const cls of hiddenEl.classList ) {
+			const toggle = document.querySelector( `input[data-toggleclass="${ cls }"]` );
+			if ( toggle?.checked ) {
+				toggle.checked = false;
+				return;
+			}
+		}
 	}
 
 	function removeThisTag() {
@@ -663,6 +731,7 @@ window.frmAdminBuildJS = function() {
 
 			if ( hide !== '' ) {
 				jQuery( hide ).hide();
+				uncheckToggleOnElementRemoval( hide );
 			}
 
 			if ( show !== '' ) {
@@ -698,8 +767,22 @@ window.frmAdminBuildJS = function() {
 		return false;
 	}
 
+	/**
+	 * Toggle the visibility of the form actions search no results message.
+	 *
+	 * @since x.x
+	 */
+	function toggleFormActionsNoResultsVisibility() {
+		const hasVisibleActions = document.querySelector( '#frm-actions-filter-content .frm-action:not(.frm_hidden)' );
+		document.getElementById( 'frm-actions-no-results' )?.classList.toggle( 'frm_hidden', hasVisibleActions );
+	}
+
 	function afterActionRemoved( type ) {
 		checkActiveAction( type );
+
+		if ( ! document.querySelector( '.frm_form_action_settings' ) ) {
+			document.querySelector( '.frm-no-actions-message' )?.classList.remove( 'frm_hidden' );
+		}
 
 		const hookName = 'frm_after_action_removed';
 		const hookArgs = { type };
@@ -780,18 +863,18 @@ window.frmAdminBuildJS = function() {
 
 	function clickNewTab() {
 		/*jshint validthis:true */
-		const t = this.getAttribute( 'href' );
-		if ( t === undefined ) {
+		const href = this.getAttribute( 'href' );
+		if ( href === null ) {
 			return false;
 		}
 
-		const c = t.replace( '#', '.' );
+		const classSelector = href.replace( '#', '.' );
 		const $link = jQuery( this );
 
 		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
-		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
+		$link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
 
-		const tabContent = document.getElementById( t.replace( '#', '' ) );
+		const tabContent = document.getElementById( href.replace( '#', '' ) );
 		if ( tabContent ) {
 			tabContent.style.display = 'block';
 		}
@@ -805,29 +888,29 @@ window.frmAdminBuildJS = function() {
 
 	function clickTab( link, auto ) {
 		link = jQuery( link );
-		const t = link.attr( 'href' );
-		if ( t === undefined ) {
+		const href = link.attr( 'href' );
+		if ( href === undefined ) {
 			return;
 		}
 
-		const c = t.replace( '#', '.' );
+		const classSelector = href.replace( '#', '.' );
 
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
-			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
+			link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
 		} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 			/* global settings */
 			const ajax = link.data( 'frmajax' );
 			link.closest( '.frm_wrap' ).find( '.tabs-panel, .hide_with_tabs' ).hide();
 			if ( ajax !== undefined && ajax == '1' ) {
-				loadSettingsTab( t );
+				loadSettingsTab( href );
 			}
 		} else {
 			/* form settings page */
 			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
-		jQuery( t ).show();
-		jQuery( c ).show();
+		jQuery( href ).show();
+		jQuery( classSelector ).show();
 
 		hideShortcodes();
 
@@ -842,9 +925,9 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( jQuery( '.frm_form_settings' ).length ) {
-			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ t.replace( '#', '' ) }` );
+			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ href.replace( '#', '' ) }` );
 		} else {
-			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ t.replace( '#', '' ) }` );
+			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ href.replace( '#', '' ) }` );
 		}
 	}
 
@@ -1037,18 +1120,18 @@ window.frmAdminBuildJS = function() {
 		$postBodyContent.scrollTop(
 			( _, v ) => {
 				const moved = event.clientY;
-				const h = postBodyContent.offsetHeight;
+				const contentHeight = postBodyContent.offsetHeight;
 				const relativePos = event.clientY - postBodyContent.offsetTop;
-				const y = relativePos - ( h / 2 );
+				const offsetFromCenter = relativePos - ( contentHeight / 2 );
 
-				if ( relativePos > ( h - 50 ) && moved > 5 ) {
+				if ( relativePos > ( contentHeight - 50 ) && moved > 5 ) {
 					// Scrolling down.
-					return v + ( y * 0.1 );
+					return v + ( offsetFromCenter * 0.1 );
 				}
 
 				if ( relativePos < 70 && moved < 130 ) {
 					// Scrolling up.
-					return v - Math.abs( y * 0.1 );
+					return v - Math.abs( offsetFromCenter * 0.1 );
 				}
 
 				return v;
@@ -1936,7 +2019,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const isSubmitBtn = draggable.classList.contains( 'edit_field_type_submit' );
-		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && !! draggable.querySelector( '.edit_field_type_submit' );
+		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && Boolean( draggable.querySelector( '.edit_field_type_submit' ) );
 
 		if ( 'frm-show-fields' === droppable.id ) {
 			const draggableIndex = determineIndexBasedOffOfMousePositionInList( jQuery( droppable ), event.clientY );
@@ -2020,7 +2103,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {boolean} True if the element is the last row.
 	 */
 	function isLastRow( element ) {
-		return element && element.matches( '#frm-show-fields > li:last-child' );
+		return element?.matches( '#frm-show-fields > li:last-child' );
 	}
 
 	// Don't allow a new page break or hidden field in a field group.
@@ -2104,13 +2187,9 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		// Do not allow a section inside of a section.
 		const draggableIncludesSection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
-		if ( draggableIncludesSection ) {
-			// Do not allow a section inside of a section.
-			return false;
-		}
-
-		return true;
+		return ! draggableIncludesSection;
 	}
 
 	function allowMoveFieldToGroup( draggable, group ) {
@@ -2125,15 +2204,11 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		// Do not allow a section or an embed field inside of a section.
 		const draggableIncludesASection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
 		const draggableIsEmbedField = draggable.classList.contains( 'edit_field_type_form' );
 		const groupIsInASection = null !== group.closest( '.start_divider' );
-		if ( groupIsInASection && ( draggableIncludesASection || draggableIsEmbedField ) ) {
-			// Do not allow a section or an embed field inside of a section.
-			return false;
-		}
-
-		return true;
+		return ! ( groupIsInASection && ( draggableIncludesASection || draggableIsEmbedField ) );
 	}
 
 	function groupIncludesBreakOrHiddenOrUserId( group ) {
@@ -2204,6 +2279,9 @@ window.frmAdminBuildJS = function() {
 
 		html = JSON.parse( html );
 		for ( key in html ) {
+			if ( ! Object.hasOwn( html, key ) ) {
+				continue;
+			}
 			jQuery( `#frm_field_id_${ key }` ).replaceWith( html[ key ] );
 
 			const newReplacedField = document.getElementById( `frm_field_id_${ key }` );
@@ -3200,17 +3278,17 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
-			const a = document.createElement( 'a' );
-			a.setAttribute( 'href', '#' );
-			a.setAttribute( 'data-code', fields[ i ].fieldId );
-			a.classList.add( 'frm_insert_code' );
-			a.append( span( fields[ i ].fieldName ) );
-			a.append( span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ fields[ i ].fieldId }]` } ) );
+			const anchor = document.createElement( 'a' );
+			anchor.setAttribute( 'href', '#' );
+			anchor.setAttribute( 'data-code', fields[ i ].fieldId );
+			anchor.classList.add( 'frm_insert_code' );
+			anchor.append( span( fields[ i ].fieldName ) );
+			anchor.append( span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ fields[ i ].fieldId }]` } ) );
 
 			const li = document.createElement( 'li' );
 			li.classList.add( `frm-field-list-${ fieldId }` );
 			li.classList.add( `frm-field-list-${ fields[ i ].fieldType }` );
-			li.append( a );
+			li.append( anchor );
 			list.append( li );
 		}
 	}
@@ -7436,6 +7514,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function copyFormAction( event ) {
+		event.stopPropagation();
 		if ( waitForActionToLoadBeforeCopy( event.target ) ) {
 			return;
 		}
@@ -7453,6 +7532,12 @@ window.frmAdminBuildJS = function() {
 		const currentID = $action.attr( 'id' ).replace( 'frm_form_action_', '' );
 		const newID = newActionId( currentID );
 
+		const actionType = targetSettings.querySelector( '.frm_action_name' )?.value;
+		const sourceTitle = targetSettings.querySelector( '.widget-title h4 span:not(.frm-border-icon)' )?.textContent.trim() ?? '';
+		const uniqueTitle = getUniqueActionTitle( sourceTitle.replace( / \(\d+\)$/, '' ), getExistingActionTitles( actionType ) );
+		$action[ 0 ].querySelector( '.widget-title h4 span:not(.frm-border-icon)' ).textContent = uniqueTitle;
+		$action[ 0 ].querySelector( `input[name$="[${ currentID }][post_title]"]` ).value = uniqueTitle;
+
 		$action.find( '.frm_action_id, .frm-btn-group' ).remove();
 		$action.find( `input[name$="[${ currentID }][ID]"]` ).val( '' );
 		$action.find( '.widget-inside' ).hide();
@@ -7468,10 +7553,12 @@ window.frmAdminBuildJS = function() {
 
 		const rename = new RegExp( `\\[${ currentID }\\]`, 'g' );
 		const reid = new RegExp( `_${ currentID }"`, 'g' );
+		const reidMid = new RegExp( `_${ currentID } `, 'g' );
 		const reclass = new RegExp( `-${ currentID }"`, 'g' );
 		const revalue = new RegExp( `"${ currentID }"`, 'g' ); // if a field id matches, this could cause trouble
 
 		let html = $action.html().replace( rename, `[${ newID }]` ).replace( reid, `_${ newID }"` );
+		html = html.replace( reidMid, `_${ newID } ` );
 		html = html.replace( reclass, `-${ newID }"` ).replace( revalue, `"${ newID }"` );
 
 		const newAction = div( {
@@ -7525,7 +7612,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const $top = $original.find( '.widget-top' );
-		$top.on( 'frm-action-loaded', function() {
+		$top.one( 'frm-action-loaded', function() {
 			$trigger.trigger( 'click' );
 			$original.removeClass( 'open' );
 			$inside.hide();
@@ -7544,6 +7631,42 @@ window.frmAdminBuildJS = function() {
 		return newID;
 	}
 
+	/**
+	 * Gets the visible titles for a given action type from the DOM.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} actionType The action type slug (e.g. "email").
+	 * @return {string[]} Array of trimmed title strings.
+	 */
+	function getExistingActionTitles( actionType ) {
+		return Array.from(
+			document.querySelectorAll( `.frm_single_${ actionType }_settings .widget-title h4 span:not(.frm-border-icon)` ),
+			el => el.textContent.trim()
+		);
+	}
+
+	/**
+	 * Returns the first available title not already taken, appending " (2)", " (3)", etc. if needed.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string}   baseTitle      The base title without any numeric suffix.
+	 * @param {string[]} existingTitles Titles currently in use.
+	 * @return {string} The first title not present in existingTitles.
+	 */
+	function getUniqueActionTitle( baseTitle, existingTitles ) {
+		const taken = new Set( existingTitles );
+		let title = baseTitle;
+		let n = 2;
+		while ( taken.has( title ) ) {
+			title = `${ baseTitle } (${ n })`;
+			n++;
+		}
+
+		return title;
+	}
+
 	function addFormAction() {
 		/*jshint validthis:true */
 		const type = jQuery( this ).data( 'actiontype' );
@@ -7554,6 +7677,7 @@ window.frmAdminBuildJS = function() {
 
 		const actionId = getNewActionId();
 		const formId = thisFormId;
+		const existingTitles = getExistingActionTitles( type );
 
 		const placeholderSetting = document.createElement( 'div' );
 		placeholderSetting.classList.add( `frm_single_${ type }_settings` );
@@ -7569,7 +7693,8 @@ window.frmAdminBuildJS = function() {
 				type,
 				list_id: actionId,
 				form_id: formId,
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				existing_titles: existingTitles
 			},
 			success: handleAddFormActionSuccess
 		} );
@@ -7577,6 +7702,8 @@ window.frmAdminBuildJS = function() {
 		function handleAddFormActionSuccess( html ) {
 			fieldUpdated();
 			placeholderSetting.remove();
+
+			document.querySelector( '.frm-no-actions-message' )?.classList.add( 'frm_hidden' );
 
 			closeOpenActions();
 
@@ -7623,24 +7750,6 @@ window.frmAdminBuildJS = function() {
 		document.querySelectorAll( '.frm_form_action_settings.open' ).forEach(
 			setting => setting.classList.remove( 'open' )
 		);
-	}
-
-	function toggleActionGroups() {
-		/*jshint validthis:true */
-		const actions = document.getElementById( 'frm_email_addon_menu' ).classList;
-		const search = document.getElementById( 'actions-search-input' );
-
-		if ( actions.contains( 'frm-all-actions' ) ) {
-			actions.remove( 'frm-all-actions' );
-			actions.add( 'frm-limited-actions' );
-		} else {
-			actions.add( 'frm-all-actions' );
-			actions.remove( 'frm-limited-actions' );
-		}
-
-		// Reset search.
-		search.value = '';
-		triggerEvent( search, 'input' );
 	}
 
 	function getNewActionId() {
@@ -7940,10 +8049,14 @@ window.frmAdminBuildJS = function() {
 		infoModal( message );
 	}
 
-	function addFormLogicRow() {
-		/*jshint validthis:true */
-		const id = jQuery( this ).data( 'emailkey' );
-		const type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
+	/**
+	 * Insert a new conditional logic row into a form action via AJAX.
+	 *
+	 * @param {number}      id             The ID of the form action.
+	 * @param {HTMLElement} contextElement The context element that triggered the insertion.
+	 */
+	function insertFormLogicRow( id, contextElement ) {
+		const type = jQuery( contextElement ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
 		const formId = document.getElementById( 'form_id' ).value;
 		const logicRowsContainer = document.getElementById( `frm_logic_row_${ id }` );
 		const logicRows = logicRowsContainer.querySelectorAll( '.frm_logic_row' );
@@ -7952,6 +8065,10 @@ window.frmAdminBuildJS = function() {
 			id: `frm_logic_${ id }_${ newRowID }`,
 			className: 'frm_logic_row frm_hidden'
 		} );
+
+		// Backwards compat: older Pro uses `#logic_link_{id}` + hidden `.frm_logic_rows`.
+		const oldLink = document.getElementById( `logic_link_${ id }` );
+		const oldRowsContainer = oldLink ? logicRowsContainer.closest( '.frm_logic_rows' ) : null;
 
 		logicRowsContainer.append( placeholder );
 		jQuery.ajax( {
@@ -7965,31 +8082,81 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success( html ) {
-				jQuery( document.getElementById( `logic_link_${ id }` ) ).fadeOut( 'slow', () => {
-					placeholder.insertAdjacentHTML( 'beforebegin', html );
-					placeholder.remove();
+				placeholder.insertAdjacentHTML( 'beforebegin', html );
+				placeholder.remove();
 
-					// Show conditional logic options after "Add Conditional Logic" is clicked.
-					jQuery( logicRowsContainer ).parent( '.frm_logic_rows' ).fadeIn( 'slow' );
-				} );
+				const newRow = logicRowsContainer.querySelector( '.frm_logic_row:last-child' );
+				const ruleTextEl = newRow ? newRow.querySelector( '.frm-logic-rule-text' ) : null;
+				if ( ruleTextEl ) {
+					ruleTextEl.textContent = logicRowsContainer.dataset.ruleText || '';
+				}
+
+				if ( oldLink ) {
+					oldLink.classList.add( 'frm_hidden' );
+				}
+				if ( oldRowsContainer ) {
+					oldRowsContainer.classList.remove( 'frm_hidden' );
+					oldRowsContainer.style.display = '';
+				}
 			}
 		} );
+	}
+
+	/**
+	 * Handle click on the "+" button to add another logic row to a form action.
+	 *
+	 * @since x.x
+	 *
+	 * @return {boolean} Returns false to prevent default behavior.
+	 */
+	function addFormLogicRow() {
+		/*jshint validthis:true */
+		insertFormLogicRow( jQuery( this ).data( 'emailkey' ), this );
 		return false;
+	}
+
+	/**
+	 * Create the first logic row when the conditional logic toggle is turned on.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function addInitialLogicRowOnEnable() {
+		/*jshint validthis:true */
+		if ( ! this.checked ) {
+			return;
+		}
+
+		const id = this.getAttribute( 'data-emailkey' );
+		if ( ! id ) {
+			return;
+		}
+
+		// Only react to the conditional logic toggle.
+		if ( ! this.dataset.toggleclass?.startsWith( 'frm_logic_rows_' ) ) {
+			return;
+		}
+
+		const logicRowsContainer = document.getElementById( `frm_logic_row_${ id }` );
+		if ( logicRowsContainer && ! logicRowsContainer.querySelector( '.frm_logic_row' ) ) {
+			insertFormLogicRow( id, this );
+		}
 	}
 
 	function checkDupPost() {
 		/*jshint validthis:true */
 		const postField = jQuery( 'select.frm_single_post_field' );
 		postField.css( 'border-color', '' );
-		const $t = this;
-		const v = jQuery( $t ).val();
-		if ( v === '' || v === 'checkbox' ) {
+		const currentField = this;
+		const selectedValue = jQuery( currentField ).val();
+		if ( selectedValue === '' || selectedValue === 'checkbox' ) {
 			return false;
 		}
 		postField.each( function() {
-			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
+			if ( jQuery( this ).val() === selectedValue && this.name !== currentField.name ) {
 				this.style.borderColor = 'red';
-				jQuery( $t ).val( '' );
+				jQuery( currentField ).val( '' );
 				infoModal( frmAdminJs.field_already_used );
 				return false;
 			}
@@ -7998,11 +8165,11 @@ window.frmAdminBuildJS = function() {
 
 	function togglePostContent() {
 		/*jshint validthis:true */
-		const v = jQuery( this ).val();
-		if ( '' === v ) {
+		const selectedValue = jQuery( this ).val();
+		if ( '' === selectedValue ) {
 			jQuery( '.frm_post_content_opt, select.frm_dyncontent_opt' ).hide().val( '' );
 			jQuery( '.frm_dyncontent_opt' ).hide();
-		} else if ( 'post_content' === v ) {
+		} else if ( 'post_content' === selectedValue ) {
 			jQuery( '.frm_post_content_opt' ).show();
 			jQuery( '.frm_dyncontent_opt' ).hide();
 			jQuery( 'select.frm_dyncontent_opt' ).val( '' );
@@ -8014,15 +8181,15 @@ window.frmAdminBuildJS = function() {
 
 	function fillDyncontent() {
 		/*jshint validthis:true */
-		const v = jQuery( this ).val();
+		const selectedValue = jQuery( this ).val();
 		const $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
-		if ( '' === v || 'new' === v ) {
+		if ( '' === selectedValue || 'new' === selectedValue ) {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
 		} else {
 			jQuery.ajax( {
 				type: 'POST', url: ajaxurl,
-				data: { action: 'frm_display_get_content', id: v, nonce: frmGlobal.nonce },
+				data: { action: 'frm_display_get_content', id: selectedValue, nonce: frmGlobal.nonce },
 				success( val ) {
 					$dyn.val( val );
 					jQuery( '.frm_dyncontent_opt' ).show();
@@ -8333,24 +8500,24 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( variable === '[default-html]' || variable === '[default-plain]' ) {
-			let p = 0;
+			let plainText = 0;
 			if ( variable === '[default-plain]' ) {
-				p = 1;
+				plainText = 1;
 			}
 			jQuery.ajax( {
 				type: 'POST', url: ajaxurl,
 				data: {
 					action: 'frm_get_default_html',
 					form_id: jQuery( 'input[name="id"]' ).val(),
-					plain_text: p,
+					plain_text: plainText,
 					nonce: frmGlobal.nonce
 				},
 				elementId,
 				success( msg ) {
 					if ( rich ) {
-						const p = document.createElement( 'p' );
-						p.innerText = msg;
-						send_to_editor( p.innerHTML );
+						const paragraph = document.createElement( 'p' );
+						paragraph.innerText = msg;
+						send_to_editor( paragraph.innerHTML );
 					} else {
 						insertContent( contentBox, msg );
 					}
@@ -8391,18 +8558,18 @@ window.frmAdminBuildJS = function() {
 			document.selection.createRange().text = variable;
 		} else {
 			const obj = contentBox[ 0 ];
-			const e = obj.selectionEnd;
+			const selectionEnd = obj.selectionEnd;
 
-			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
+			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, selectionEnd );
 
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
 
-			const s = e + variable.length;
+			const cursorPos = selectionEnd + variable.length;
 
 			maybeRemoveLayoutClasses( obj, variable );
 
 			obj.focus();
-			obj.setSelectionRange( s, s );
+			obj.setSelectionRange( cursorPos, cursorPos );
 		}
 		triggerChange( contentBox );
 	}
@@ -9154,21 +9321,21 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		e.preventDefault();
 
-		let s = false;
+		let status = false;
 		const $exportForms = jQuery( 'input[name="frm_export_forms[]"]' );
 
 		if ( ! jQuery( 'input[name="frm_export_forms[]"]:checked' ).val() ) {
 			$exportForms.closest( '.frm-table-box' ).addClass( 'frm_blank_field' );
-			s = 'stop';
+			status = 'stop';
 		}
 
 		const $exportType = jQuery( 'input[name="type[]"]' );
 		if ( ! jQuery( 'input[name="type[]"]:checked' ).val() && $exportType.attr( 'type' ) === 'checkbox' ) {
 			$exportType.closest( 'p' ).addClass( 'frm_blank_field' );
-			s = 'stop';
+			status = 'stop';
 		}
 
-		if ( s === 'stop' ) {
+		if ( status === 'stop' ) {
 			return false;
 		}
 
@@ -9178,24 +9345,24 @@ window.frmAdminBuildJS = function() {
 
 	function removeExportError() {
 		/*jshint validthis:true */
-		const t = jQuery( this ).closest( '.frm_blank_field' );
-		if ( t === undefined ) {
+		const $blankField = jQuery( this ).closest( '.frm_blank_field' );
+		if ( $blankField === undefined ) {
 			return;
 		}
 
 		const $thisName = this.name;
 		if ( $thisName === 'type[]' && jQuery( 'input[name="type[]"]:checked' ).val() ) {
-			t.removeClass( 'frm_blank_field' );
+			$blankField.removeClass( 'frm_blank_field' );
 		} else if ( $thisName === 'frm_export_forms[]' && jQuery( this ).val() ) {
-			t.removeClass( 'frm_blank_field' );
+			$blankField.removeClass( 'frm_blank_field' );
 		}
 	}
 
 	function checkCSVExtension() {
 		/*jshint validthis:true */
-		const f = jQuery( this ).val();
+		const fileName = jQuery( this ).val();
 		const re = /\.csv$/i;
-		if ( f.match( re ) !== null ) {
+		if ( fileName.match( re ) !== null ) {
 			jQuery( '.show_csv' ).fadeIn();
 		} else {
 			jQuery( '.show_csv' ).fadeOut();
@@ -9231,12 +9398,12 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		const $dropdown = jQuery( this );
 		const $selected = $dropdown.find( ':selected' );
-		const s = $selected.data( 'support' );
+		const support = $selected.data( 'support' );
 
-		const multiple = s.indexOf( '|' );
+		const multiple = support.indexOf( '|' );
 		jQuery( 'input[name="type[]"]' ).each( function() {
 			this.checked = false;
-			if ( s.includes( this.value ) ) {
+			if ( support.includes( this.value ) ) {
 				this.disabled = false;
 				if ( multiple === -1 ) {
 					this.checked = true;
@@ -9254,9 +9421,9 @@ window.frmAdminBuildJS = function() {
 			jQuery( '.xml_opts' ).show();
 		}
 
-		const c = $selected.data( 'count' );
+		const count = $selected.data( 'count' );
 		const exportField = jQuery( 'input[name="frm_export_forms[]"]' );
-		if ( c === 'single' ) {
+		if ( count === 'single' ) {
 			exportField.prop( 'multiple', false );
 			exportField.prop( 'checked', false );
 		} else {
@@ -9494,14 +9661,8 @@ window.frmAdminBuildJS = function() {
 			regEx = true;
 		}
 
-		if ( toSearch === 'frm-action' && searchText !== '' ) {
-			const addons = document.getElementById( 'frm_email_addon_menu' ).classList;
-			addons.remove( 'frm-all-actions' );
-			addons.add( 'frm-limited-actions' );
-		}
-
 		for ( i = 0; i < items.length; i++ ) {
-			const innerText = items[ i ].innerText.toLowerCase();
+			const innerText = items[ i ].textContent.toLowerCase();
 
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[ i ].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
@@ -9673,9 +9834,9 @@ window.frmAdminBuildJS = function() {
 
 	function removeWPUnload() {
 		window.onbeforeunload = null;
-		const w = jQuery( window );
-		w.off( 'beforeunload.widgets' );
-		w.off( 'beforeunload.edit-post' );
+		const $window = jQuery( window );
+		$window.off( 'beforeunload.widgets' );
+		$window.off( 'beforeunload.edit-post' );
 	}
 
 	function addMultiselectLabelListener() {
@@ -10357,9 +10518,9 @@ window.frmAdminBuildJS = function() {
 
 			// Bootstrap dropdown button
 			jQuery( '.wp-admin' ).on( 'click', function( e ) {
-				const t = jQuery( e.target );
+				const $target = jQuery( e.target );
 				const $openDrop = jQuery( '.dropdown.open' );
-				if ( $openDrop.length && ! t.hasClass( 'dropdown' ) && ! t.closest( '.dropdown' ).length ) {
+				if ( $openDrop.length && ! $target.hasClass( 'dropdown' ) && ! $target.closest( '.dropdown' ).length ) {
 					$openDrop.removeClass( 'open' );
 				}
 			} );
@@ -10766,19 +10927,8 @@ window.frmAdminBuildJS = function() {
 			$formActions.on( 'click', '.frm_toggle_cf_opts', toggleCfOpts );
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
-			jQuery( '#frm-show-groups, #frm-hide-groups' ).on( 'click', toggleActionGroups );
+			jQuery( document ).on( 'frmAfterSearch', '#actions-search-input', toggleFormActionsNoResultsVisibility );
 			initiateMultiselect();
-
-			//set actions icons to inactive
-			jQuery( 'ul.frm_actions_list li' ).each( function() {
-				checkActiveAction( jQuery( this ).children( 'a' ).data( 'actiontype' ) );
-
-				// If the icon is a background image, don't add BG color.
-				const icon = jQuery( this ).find( 'i' );
-				if ( icon.css( 'background-image' ) !== 'none' ) {
-					icon.addClass( 'frm-inverse' );
-				}
-			} );
 
 			jQuery( '.frm_submit_settings_btn' ).on( 'click', submitSettings );
 
@@ -10786,6 +10936,7 @@ window.frmAdminBuildJS = function() {
 
 			const formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
+			formSettings.on( 'change', 'input[data-emailkey][data-toggleclass]', addInitialLogicRowOnEnable );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			document.addEventListener(

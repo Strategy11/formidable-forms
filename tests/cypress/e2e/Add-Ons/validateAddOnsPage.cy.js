@@ -154,13 +154,13 @@ describe( 'Add-Ons page', () => {
 			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Formidable Forms Pro' );
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.' );
-			cy.get( 'a[aria-label="View Docs"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/?utm_source=plugin&utm_medium=lite&utm_campaign=addons' )
+			cy.get( 'a[aria-label="Why Upgrade"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/what-is-the-difference-between-the-lite-free-and-pro-version/?utm_source=plugin&utm_medium=lite&utm_campaign=addons' )
 				.and( 'have.attr', 'target', '_blank' )
 				.invoke( 'removeAttr', 'target' ).click();
 		} );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1' ).should( 'have.text', 'Docs & Support' );
+			cy.get( 'h1' ).should( 'contain.text', 'What is the difference between the Lite' );
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-addons' );

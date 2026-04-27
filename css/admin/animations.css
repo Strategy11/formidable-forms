@@ -1,6 +1,7 @@
 /* fadeIn */
 .frm-fadein {
-	animation: fadeIn 400ms ease-in-out forwards;
+	--frm-fadein-time: 400ms;
+	animation: fadeIn var(--frm-fadein-time, 400ms) ease-in-out forwards;
 }
 
 .frm-fadein-up {
@@ -12,7 +13,8 @@
 }
 
 .frm-fadein-down-short {
-	animation: fadeInDownShort 300ms ease-out forwards;
+	--frm-fadein-down-short-time: 300ms;
+	animation: fadeInDownShort var(--frm-fadein-down-short-time, 300ms) ease-out forwards;
 }
 
 .frm-fadeout {
