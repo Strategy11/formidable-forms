@@ -258,7 +258,8 @@ class FrmGatedContentController {
 	 * @return void
 	 */
 	public static function trigger( $action, $entry, $form, $event ) {
-		$user_id = get_current_user_id() ?: null;
+		$raw_user_id = get_current_user_id();
+		$user_id     = $raw_user_id ? $raw_user_id : null;
 		FrmGatedTokenHelper::generate( $action->ID, $entry->id, $user_id );
 	}
 
@@ -381,7 +382,7 @@ class FrmGatedContentController {
 
 		// URL query parameter hit (e.g. visitor clicking a gated link from email).
 		$candidate = FrmAppHelper::simple_get( 'access_code' );
-		if ( '' !== $candidate ) {
+		if ( is_string( $candidate ) && '' !== $candidate ) {
 			$row = FrmGatedTokenHelper::get_row_by_token( $candidate );
 			if ( $row
 				&& (int) $row->action_id === $action_id
@@ -413,7 +414,7 @@ class FrmGatedContentController {
 
 		switch ( $type ) {
 			case 'page':
-				$base_url = (string) get_permalink( (int) $item_id );
+				$base_url = (string) get_permalink( $item_id );
 				break;
 			default:
 				/**
@@ -428,7 +429,7 @@ class FrmGatedContentController {
 				 * @param string $type      Item type slug.
 				 * @param string $raw_token Raw access token.
 				 */
-				$base_url = (string) apply_filters( 'frm_gated_content_item_url', '', (int) $item_id, $type, $raw_token );
+				$base_url = (string) apply_filters( 'frm_gated_content_item_url', '', $item_id, $type, $raw_token );
 		}
 
 		if ( ! $base_url ) {

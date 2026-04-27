@@ -97,7 +97,9 @@ class FrmGatedContentAction extends FrmFormAction {
 		 *
 		 * @param array<string, array> $types Associative array of type slug => type config.
 		 */
-		return apply_filters( 'frm_gated_content_item_types', $types );
+		/** @var array<string, array> $types */
+		$types = apply_filters( 'frm_gated_content_item_types', $types );
+		return $types;
 	}
 
 	/**

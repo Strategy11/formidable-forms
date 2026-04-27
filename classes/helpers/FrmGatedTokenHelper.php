@@ -177,7 +177,7 @@ class FrmGatedTokenHelper {
 
 		$updated = $wpdb->update(
 			$wpdb->prefix . 'frm_gated_tokens',
-			array( 'expired_at' => time() + ( (int) $hours * 3600 ) ),
+			array( 'expired_at' => time() + ( $hours * 3600 ) ),
 			array( 'token_hash' => hash( 'sha256', $token ) ),
 			array( '%d' ),
 			array( '%s' )
@@ -205,7 +205,7 @@ class FrmGatedTokenHelper {
 		$format = array( '%s' );
 
 		if ( null !== $new_expiry ) {
-			$data['expired_at'] = (int) $new_expiry;
+			$data['expired_at'] = $new_expiry;
 			$format[]           = '%d';
 		}
 
@@ -255,14 +255,15 @@ class FrmGatedTokenHelper {
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-		return $wpdb->get_results(
+		$results = $wpdb->get_results(
 			$wpdb->prepare(
 				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE action_id = %d ORDER BY created_at DESC LIMIT %d OFFSET %d',
-				(int) $action_id,
-				(int) $limit,
-				(int) $offset
+				$action_id,
+				$limit,
+				$offset
 			)
 		);
+		return is_array( $results ) ? $results : array();
 	}
 
 	/**
@@ -277,7 +278,7 @@ class FrmGatedTokenHelper {
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-		return $wpdb->get_results(
+		$results = $wpdb->get_results(
 			$wpdb->prepare(
 				'SELECT t.*, p.post_title AS action_title'
 				. ' FROM ' . $wpdb->prefix . 'frm_gated_tokens t'
@@ -285,10 +286,11 @@ class FrmGatedTokenHelper {
 				. ' WHERE t.user_id = %d'
 				. ' AND ( t.expired_at IS NULL OR t.expired_at > %d )'
 				. ' ORDER BY t.created_at DESC',
-				(int) $user_id,
+				$user_id,
 				time()
 			)
 		);
+		return is_array( $results ) ? $results : array();
 	}
 
 	/**
@@ -318,12 +320,13 @@ class FrmGatedTokenHelper {
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-		return $wpdb->get_row(
+		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE token_hash = %s LIMIT 1',
 				$hash
 			)
 		);
+		return is_object( $row ) ? $row : null;
 	}
 
 	/**
@@ -360,7 +363,7 @@ class FrmGatedTokenHelper {
 					if ( ! is_array( $item ) ) {
 						continue;
 					}
-					if ( (int) $item['id'] === (int) $item_id && $item['type'] === $item_type ) {
+					if ( (int) $item['id'] === $item_id && $item['type'] === $item_type ) {
 						$is_valid = true;
 						break;
 					}
@@ -388,17 +391,18 @@ class FrmGatedTokenHelper {
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-		return $wpdb->get_row(
+		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens'
 				. ' WHERE action_id = %d AND ip_address = %s'
 				. ' AND ( expired_at IS NULL OR expired_at > %d )'
 				. ' ORDER BY created_at DESC LIMIT 1',
-				(int) $action_id,
+				$action_id,
 				$ip,
 				time()
 			)
 		);
+		return is_object( $row ) ? $row : null;
 	}
 
 	/**
@@ -415,10 +419,10 @@ class FrmGatedTokenHelper {
 	 * @return void
 	 */
 	public static function set_cookie( $action_id, $hash, $expired_at = null ) {
-		$expiry = null !== $expired_at ? (int) $expired_at : ( time() + YEAR_IN_SECONDS );
+		$expiry = null !== $expired_at ? $expired_at : ( time() + YEAR_IN_SECONDS );
 
 		$parts = array(
-			'frm_gc_' . (int) $action_id . '=' . rawurlencode( $hash ),
+			'frm_gc_' . $action_id . '=' . rawurlencode( $hash ),
 			'Expires=' . gmdate( 'D, d M Y H:i:s T', $expiry ),
 			'Path=/',
 			'SameSite=Lax',
@@ -447,7 +451,7 @@ class FrmGatedTokenHelper {
 	private static function get_token_transient_key( $action_id ) {
 		$user_id = get_current_user_id();
 		$scope   = $user_id ? (string) $user_id : hash( 'sha256', FrmAppHelper::get_ip_address() );
-		return 'frm_gc_token_' . (int) $action_id . '_' . $scope;
+		return 'frm_gc_token_' . $action_id . '_' . $scope;
 	}
 
 	/**
@@ -463,7 +467,7 @@ class FrmGatedTokenHelper {
 	 * @return string|null Raw 48-char token, or null if unavailable.
 	 */
 	public static function get_raw_token_for_action( $action_id ) {
-		$token = get_transient( self::get_token_transient_key( (int) $action_id ) );
+		$token = get_transient( self::get_token_transient_key( $action_id ) );
 		return false !== $token ? (string) $token : null;
 	}
 
@@ -488,8 +492,6 @@ class FrmGatedTokenHelper {
 	 * @return string|null Token hash, or null if no valid token could be resolved.
 	 */
 	public static function obtain_token( $action_id = 0 ) {
-		$action_id = (int) $action_id;
-
 		// 1. Transient set by self::generate() — persists across payment redirects (5-min TTL).
 		if ( $action_id ) {
 			$raw = self::get_raw_token_for_action( $action_id );
@@ -536,7 +538,7 @@ class FrmGatedTokenHelper {
 			if ( $ip_row ) {
 				// Refresh the cookie so the next request hits path 3 again.
 				self::set_cookie( $action_id, $ip_row->token_hash, $ip_row->expired_at );
-				return $ip_row->token_hash;
+				return (string) $ip_row->token_hash;
 			}
 		}
 
