@@ -110,6 +110,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public function form( $instance, $args = array() ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_gated_content_settings.php';
+		return '';
 	}
 
 	/**

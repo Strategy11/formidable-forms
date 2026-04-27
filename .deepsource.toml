@@ -38,6 +38,9 @@ test_patterns = [
 name = "php"
 enabled = true
 
+  [analyzers.meta]
+  phpstan_config_file = "phpstan.neon"
+
 [[analyzers]]
 name = "javascript"
 enabled = true
