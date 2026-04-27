@@ -76,7 +76,8 @@
 		}
 	}
 
-	&:hover .frm_single_action {
+	&:hover .frm_single_action,
+	&:focus-within .frm_single_action {
 		display: flex;
 	}
 }
@@ -106,6 +107,8 @@
 		border-color: var(--grey-300);
 		box-shadow: none;
 		transition: background-color 200ms ease-out;
+
+		@include focus-outline($offset: -1px);
 	}
 
 	.widget-title {
@@ -120,14 +123,23 @@
 
 	.frm_email_icons {
 		display: none;
+
+		a,
+		.frm_toggle {
+
+			@include focus-outline($radius: var(--small-radius));
+		}
 	}
 
 	.widget-action {
 		color: var(--grey-800);
 		transition: transform 200ms ease-out;
+
+		@include focus-outline($radius: var(--small-radius));
 	}
 
-	&:hover {
+	&:hover,
+	&:focus-within {
 
 		.widget-top {
 			background: var(--grey-25);

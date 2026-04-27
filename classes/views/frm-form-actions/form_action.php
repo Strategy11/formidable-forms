@@ -20,7 +20,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	class="widget frm_form_action_settings frm_single_<?php echo esc_attr( $form_action->post_excerpt ); ?>_settings <?php echo esc_attr( $form_action->post_status === 'publish' ? '' : 'frm_disabled_action' ); ?>"
 	<?php FrmAppHelper::array_to_html_params( $data_attrs, true ); ?>
 >
-	<div class="widget-top frm-h-stack-xs frm-cursor-pointer">
+	<div class="widget-top frm-h-stack-xs frm-cursor-pointer" tabindex="0">
 		<div class="widget-title frm-flex-full">
 			<h4 class="frm-h-stack-xs frm-text-md">
 				<span class="frm-border-icon frm-border-icon--small"><?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?></span>
