@@ -1,4 +1,13 @@
 <?php
+/**
+ * Value format setting.
+ *
+ * @package Formidable
+ *
+ * @var array $field      Field data including 'id' and 'format'.
+ * @var array $attributes HTML attributes for the wrapping paragraph.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
