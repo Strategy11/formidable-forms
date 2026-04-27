@@ -224,19 +224,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</form>
 						</div>
 					</div>
+					<?php
+					if ( isset( $form ) ) {
+						/**
+						 * Hook in so people can include additional tab content.
+						 * Used along with frm_extra_form_instruction_tabs which is used to
+						 * include the tabs.
+						 *
+						 * @since x.x
+						 *
+						 * @param stdClass $form The form object.
+						 */
+						do_action( 'frm_extra_form_instruction_tabs_content', $form );
+					}
+					?>
 				</div>
-				<?php
-				/**
-				 * Hook in so people can include additional tab content.
-				 * Used along with frm_extra_form_instruction_tabs which is used to
-				 * include the tabs.
-				 *
-				 * @since x.x
-				 *
-				 * @param stdClass $form The form object.
-				 */
-				do_action( 'frm_extra_form_instruction_tabs_content', $form );
-				?>
 			</div>
 		</div>
 	</div>
