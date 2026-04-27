@@ -777,6 +777,7 @@ class FrmAppController {
 			}
 
 			do_action( 'frm_enqueue_builder_scripts' );
+			self::maybe_enqueue_legacy_paypal_assets();
 			self::include_upgrade_overlay();
 			self::include_info_overlay();
 		} elseif ( FrmAppHelper::is_view_builder_page() ) {
@@ -934,6 +935,22 @@ class FrmAppController {
 		}
 
 		FrmUsageController::load_scripts();
+	}
+
+	/**
+	 * Enqueue legacy PayPal action settings styles when the PayPal add-on is active.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_enqueue_legacy_paypal_assets() {
+		if ( ! FrmAppHelper::is_form_builder_page() || ! class_exists( 'FrmPaymentsController' ) ) {
+			return;
+		}
+
+		wp_register_style( 'formidable-legacy-paypal', FrmAppHelper::plugin_url() . '/css/admin/frm-legacy-paypal.css', array( 'formidable-admin' ), FrmAppHelper::plugin_version() );
+		wp_enqueue_style( 'formidable-legacy-paypal' );
 	}
 
 	/**
