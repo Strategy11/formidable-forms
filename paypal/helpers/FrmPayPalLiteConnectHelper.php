@@ -1076,19 +1076,6 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * Get the transactions for a PayPal subscription.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $subscription_id The PayPal subscription ID.
-	 *
-	 * @return false|object
-	 */
-	public static function get_subscription_transactions( $subscription_id ) {
-		return self::post_with_authenticated_body( 'get_subscription_transactions', compact( 'subscription_id' ) );
-	}
-
-	/**
 	 * @since x.x
 	 *
 	 * @param string $mode
