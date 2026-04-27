@@ -102,11 +102,7 @@
 
 		// Section parent is conditionally hidden.
 		const parentSection = fieldContainer.closest( '.frm_section_heading' );
-		if ( parentSection && 'none' === parentSection.style.display ) {
-			return true;
-		}
-
-		return false;
+		return parentSection && 'none' === parentSection.style.display;
 	}
 
 	/**
