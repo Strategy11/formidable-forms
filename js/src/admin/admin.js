@@ -3804,7 +3804,7 @@ window.frmAdminBuildJS = function() {
 	function toggleSepValues() {
 		/*jshint validthis:true */
 		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		toggle( jQuery( `.field_${ fieldId }_option_key` ) );
+		toggle( jQuery( `.field_${ fieldId }_option_key` ), '', this.checked );
 		jQuery( `.field_${ fieldId }_option` ).toggleClass( 'frm_with_key' );
 	}
 
@@ -6170,6 +6170,17 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		const hookArgs = {
+			fieldId,
+			metaInput: input[ 0 ],
+		};
+
+		if ( false !== wp.hooks.applyFilters( 'frm_custom_reset_displayed_opts', false, hookArgs ) ) {
+			adjustConditionalLogicOptionOrders( fieldId );
+			// Return early if there is a custom reset displayed opts handler.
+			return;
+		}
+
 		if ( input.is( 'select' ) ) {
 			const placeholder = document.getElementById( `frm_placeholder_${ fieldId }` );
 			if ( ! placeholder || placeholder.value === '' ) {
@@ -6182,13 +6193,13 @@ window.frmAdminBuildJS = function() {
 			}
 		} else {
 			const opts = getMultipleOpts( fieldId );
-			jQuery( `#field_${ fieldId }_inner_container > .frm_form_fields` ).html( '' );
-			const fieldInfo = getFieldKeyFromOpt( jQuery( `#frm_delete_field_${ fieldId }-000_container` ) );
-
 			const container = jQuery( `#field_${ fieldId }_inner_container > .frm_form_fields` );
 			const hasImageOptions = imagesAsOptions( fieldId );
 			const imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '';
 			const imageOptionClass = hasImageOptions ? `frm_image_option frm_image_${ imageSize } ` : '';
+
+			container.html( '' );
+			const fieldInfo = getFieldKeyFromOpt( jQuery( `#frm_delete_field_${ fieldId }-000_container` ) );
 			const isProduct = isProductField( fieldId );
 
 			const type = 'hidden' === input.attr( 'type' ) ? input.data( 'field-type' ) : input.attr( 'type' );
@@ -6514,17 +6525,19 @@ window.frmAdminBuildJS = function() {
 
 		const imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
-		const imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' } );
+		const children = [ labelImage ];
 
-		imageLabel.innerHTML = originalLabel;
+		if ( showLabelWithImage ) {
+			const imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' } );
+			imageLabel.innerHTML = originalLabel;
+			children.push( tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel } ) );
+		}
+
 		const labelNode = tag(
 			'span',
 			{
 				className: `frm_image_option_container${ imageLabelClass }`,
-				children: [
-					labelImage,
-					tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel } )
-				]
+				children
 			}
 		);
 
@@ -9842,7 +9855,8 @@ window.frmAdminBuildJS = function() {
 		} );
 	}
 
-	function validateProductPriceValue( target ) {
+	function validateProductPriceValue( event ) {
+		const { target } = event;
 		const price = target.value.trim();
 		if ( price.includes( '[' ) && price.includes( ']' ) ) {
 			// This is a shortcode and should be assumed a valid price.
@@ -9863,6 +9877,11 @@ window.frmAdminBuildJS = function() {
 		const heading = settings.find( '.frm_prod_options_heading' );
 		const currentVal = this.options[ this.selectedIndex ].value;
 
+		const displayFormatOptions = settings[ 0 ].querySelector( '.frm_display_format_options' );
+		if ( displayFormatOptions ) {
+			displayFormatOptions.setAttribute( 'data-product-type', currentVal );
+		}
+
 		container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
 		heading.removeClass( 'frm_prod_user_def' );
 
@@ -9872,6 +9891,8 @@ window.frmAdminBuildJS = function() {
 			container.addClass( 'frm_prod_type_user_def' );
 			heading.addClass( 'frm_prod_user_def' );
 		}
+
+		wp.hooks.doAction( 'frm_product_type_toggled', currentVal, settings[ 0 ] );
 	}
 
 	/**

@@ -37,6 +37,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferFrmfontInIconByClass" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmFieldGetFieldType" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmFieldGetType" />
+	<rule ref="Formidable.CodeAnalysis.PreferFrmHtmlHelper" />
 	<rule ref="Formidable.CodeAnalysis.PreferGuardClauseForReturnElse" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />

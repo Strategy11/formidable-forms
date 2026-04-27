@@ -228,6 +228,11 @@ legend.frm_hidden{
 	font-weight: var(--field-weight);
 }
 
+.with_frm_style input:-webkit-autofill:focus {
+	/* Prevent the user agent autofill background color from taking effect on focus. */
+	transition: background-color 5000s ease-in-out 0s<?php echo esc_html( $important ); ?>;
+}
+
 <?php if ( $important ) : ?>
 	<?php if ( $use_chosen_js ) { ?>
 	.with_frm_style .chosen-container-multi .chosen-choices,
