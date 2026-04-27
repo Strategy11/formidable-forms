@@ -38,8 +38,7 @@ class FrmStyleApi extends FrmFormApi {
 	}
 
 	public function get_api_info() {
-		$api_info = parent::get_api_info();
-		return $this->fill_missing_style_settings( $api_info );
+		return $this->fill_missing_style_settings( parent::get_api_info() );
 	}
 
 	/**

@@ -369,6 +369,77 @@ class FrmFieldsController {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
 
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
+
+		$unique_values_label_atts = array(
+			'for'          => 'frm_uniq_field_' . $field['id'],
+			'class'        => 'frm_help frm-mb-0',
+			'title'        => __(
+				'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.',
+				'formidable'
+			),
+			'data-trigger' => 'hover',
+		);
+
+		$read_only_label_atts = array(
+			'for'          => 'frm_read_only_field_' . $field['id'],
+			'class'        => 'frm_help frm-mb-0',
+			'title'        => __( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ),
+			'data-trigger' => 'hover',
+		);
+
+		if ( ! $pro_is_installed ) {
+			$visibility_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array(
+					'id'       => 'field_options_admin_only_' . $field['id'],
+					'readonly' => '1',
+				),
+				'field_visibility',
+				__( 'Visibility options', 'formidable' ),
+				'/field-options/#kb-visibility'
+			);
+
+			$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
+				'autocomplete',
+				__( 'Autocomplete options', 'formidable' ),
+				'/email-address/#kb-autocomplete-attribute'
+			);
+
+			$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array(
+					'type'     => 'text',
+					'readonly' => '1',
+				),
+				'before_after_contents',
+				__( 'Before and after field contents', 'formidable' ),
+				'/field-options/#kb-before-after-input'
+			);
+
+			$show_upsell_for_unique_value          = in_array(
+				$field['type'],
+				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
+				true
+			);
+			$show_upsell_for_read_only             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'quantity', 'select', 'tag', 'text', 'total', 'url' ), true );
+			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
+			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
+
+			$unique_values_label_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				$unique_values_label_atts,
+				'unique_values',
+				__( 'Unique Values', 'formidable' ),
+				'/field-options/#kb-unique'
+			);
+			$read_only_label_atts     = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				$read_only_label_atts,
+				'read_only',
+				__( 'Read Only Values', 'formidable' ),
+				'/field-options/#kb-read-only'
+			);
+		}//end if
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
@@ -468,7 +539,7 @@ class FrmFieldsController {
 		$pro_fields = FrmField::pro_field_selection();
 		// We want to keep credit_card types as credit card types for Stripe Lite.
 		// The credit_card key is set for backward compatibility.
-		unset( $pro_fields['credit_card'] );
+		FrmField::remove_moved_field_types_from_pro( $pro_fields );
 
 		return array_key_exists( $type, $pro_fields ) ? 'text' : $type;
 	}
@@ -535,6 +606,7 @@ class FrmFieldsController {
 
 		self::add_shortcodes_to_html( $field, $add_html );
 		self::add_pattern_attribute( $field, $add_html );
+		self::add_currency_field_attributes( $field, $add_html );
 
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
@@ -1047,6 +1119,58 @@ class FrmFieldsController {
 		$format = substr( $format, 2, - 1 );
 
 		$add_html['pattern'] = 'pattern="' . esc_attr( $format ) . '"';
+	}
+
+	/**
+	 * Add product attributes to fields in multi-paged forms.
+	 *
+	 * @param array $field
+	 * @param array $add_html
+	 *
+	 * @return void
+	 */
+	private static function add_currency_field_attributes( $field, &$add_html ) {
+		$type             = $field['original_type'] ?? $field['type'];
+		$is_product_field = in_array( $type, array( 'total', 'quantity', 'product' ), true );
+
+		if ( ! $is_product_field ) {
+			return;
+		}
+
+		if ( $type === 'total' ) {
+			$add_html['data-frmtotal'] = 'data-frmtotal';
+		} elseif ( $type === 'quantity' ) {
+			$product_field               = FrmField::get_option( $field, 'product_field' );
+			$add_html['data-frmproduct'] = 'data-frmproduct="' . esc_attr( json_encode( $product_field ) ) . '"';
+		} elseif ( $type === 'product' && 'hidden' === $field['type'] ) {
+			// We want to do this only for fields that are hidden because it's
+			// not their page, hence the check : 'hidden' === $field['type'].
+			$price = empty( $field['value'] ) ? 0 : self::get_product_price( $field );
+
+			$add_html['data-frmprice'] = 'data-frmprice="' . esc_attr( $price ) . '"';
+		}
+	}
+
+	/**
+	 * @param array $field
+	 */
+	private static function get_product_price( $field ) {
+		if ( is_array( $field['value'] ) ) {
+			// '' is unlikely though, let's just do it to prevent warnings
+			$value = isset( $field['opt_key'] ) && isset( $field['value'][ $field['opt_key'] ] )
+			? $field['value'][ $field['opt_key'] ]
+			: '';
+		} else {
+			$value = $field['value'];
+		}
+
+		$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
+
+		if ( method_exists( $field_obj, 'get_posted_price' ) ) {
+			return $field_obj->get_posted_price( $value );
+		}
+
+		return $value;
 	}
 
 	/**

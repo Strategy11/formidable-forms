@@ -367,11 +367,6 @@ parameters:
 		- message: '#array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics.#'
 		- message: '#Static call to __construct\(\) is only allowed on a parent class in the constructor#'
 		- message: '#Variable static method call on#'
-		-
-			message: '#should be contravariant with#'
-			paths:
-				- classes/helpers/FrmFormsListHelper.php
-				- classes/models/FrmInstallerSkin.php
 		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
 		-
 			message: '#Foreach overwrites \$ip with its value variable.#'

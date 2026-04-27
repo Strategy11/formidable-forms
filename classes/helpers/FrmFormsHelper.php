@@ -419,9 +419,7 @@ class FrmFormsHelper {
 	 */
 	public static function fill_default_opts( $values, $record, $post_values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
-		$defaults = self::get_default_opts();
-
-		foreach ( $defaults as $var => $default ) {
+		foreach ( self::get_default_opts() as $var => $default ) {
 			if ( is_array( $default ) ) {
 				if ( ! isset( $values[ $var ] ) ) {
 					$values[ $var ] = $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : array();
@@ -486,9 +484,7 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
-		$defaults = self::get_default_opts();
-
-		foreach ( $defaults as $var => $default ) {
+		foreach ( self::get_default_opts() as $var => $default ) {
 			$options[ $var ] = $values['options'][ $var ] ?? $default;
 			unset( $var, $default );
 		}
@@ -1848,8 +1844,7 @@ BEFORE_HTML;
 
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
-		$reserved_words            = self::reserved_words();
-		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, $reserved_words );
+		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, self::reserved_words() );
 
 		return array_values( $unsafe_params_in_redirect );
 	}
@@ -2154,5 +2149,48 @@ BEFORE_HTML;
 		}
 
 		return false;
+	}
+
+	/**
+	 * @since 6.30
+	 *
+	 * @return void
+	 */
+	public static function load_currency_js() {
+		global $frm_vars;
+
+		if ( empty( $frm_vars['currency'] ) ) {
+			return;
+		}
+
+		echo '<script>';
+		echo 'var frmcurrency=' . json_encode( $frm_vars['currency'] ) . ";\n";
+		echo 'if(typeof __FRMCURR == "undefined"){__FRMCURR=frmcurrency;}';
+		echo 'else{__FRMCURR=jQuery.extend(true,{},__FRMCURR,frmcurrency);}';
+		echo '</script>';
+	}
+
+	/**
+	 * Returns the form name or the no title text if the form name is empty.
+	 *
+	 * @since 6.30
+	 *
+	 * @param array|stdClass $form   The form data.
+	 * @param int            $length The form name length to truncate to.
+	 *
+	 * @return string
+	 */
+	public static function get_form_name( $form, $length = 0 ) {
+		$form_name = is_object( $form ) ? $form->name : $form['name'];
+
+		if ( '' === $form_name || null === $form_name ) {
+			return self::get_no_title_text();
+		}
+
+		if ( ! $length ) {
+			return $form_name;
+		}
+
+		return FrmAppHelper::truncate( $form_name, $length );
 	}
 }

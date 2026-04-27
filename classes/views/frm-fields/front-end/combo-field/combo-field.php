@@ -73,7 +73,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				}
 
 				// Don't show individual field errors when there is a combo field error.
-				if ( ! empty( $errors ) && isset( $errors[ 'field' . $field_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $field_id ] ) ) {
+				if ( $errors && isset( $errors[ 'field' . $field_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $field_id ] ) ) {
 					?>
 					<div class="frm_error" role="alert"><?php echo esc_html( $errors[ 'field' . $field_id . '-' . $name ] ); ?></div>
 				<?php } ?>
