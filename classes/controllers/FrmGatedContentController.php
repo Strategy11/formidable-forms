@@ -246,8 +246,8 @@ class FrmGatedContentController {
 	 * Generate a gated content token when a form action fires.
 	 *
 	 * Runs at form action priority 8 — before On Submit (9) and Send Email (10) —
-	 * so the raw token is already in FrmGatedTokenHelper::$tokens when those
-	 * actions process [frm_gated_content] shortcodes on the same request.
+	 * so the raw token is already stored when those actions process [frm_gated_content]
+	 * shortcodes on the same request or after a payment redirect.
 	 *
 	 * @since x.x
 	 *
@@ -362,7 +362,7 @@ class FrmGatedContentController {
 	}
 
 	/**
-	 * Resolve the raw token for an action from same-request cache or URL parameter.
+	 * Resolve the raw token for an action from the session transient or URL parameter.
 	 *
 	 * Cookie-only sources cannot yield a raw token, so they are excluded here.
 	 * Use FrmGatedTokenHelper::obtain_token() when only a hash is needed.
@@ -373,9 +373,10 @@ class FrmGatedContentController {
 	 * @return string|null Raw 48-char token, or null if unavailable.
 	 */
 	private static function resolve_raw_token( $action_id ) {
-		// Same-request static cache populated by FrmGatedTokenHelper::generate().
-		if ( isset( FrmGatedTokenHelper::$tokens[ $action_id ] ) ) {
-			return FrmGatedTokenHelper::$tokens[ $action_id ];
+		// Transient set by FrmGatedTokenHelper::generate() — survives payment redirects.
+		$raw = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
+		if ( null !== $raw ) {
+			return $raw;
 		}
 
 		// URL query parameter hit (e.g. visitor clicking a gated link from email).

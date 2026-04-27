@@ -7,14 +7,13 @@ class test_FrmGatedContentController extends FrmUnitTest {
 
 	public function setUp(): void {
 		parent::setUp();
-		FrmGatedTokenHelper::$tokens = array();
 	}
 
 	// ── trigger() ─────────────────────────────────────────────────────────── //
 
 	/**
-	 * trigger() must generate a token and cache it in FrmGatedTokenHelper::$tokens
-	 * so that [frm_gated_content] shortcodes on the same request can use it.
+	 * trigger() must generate a token and store it in a transient so that
+	 * [frm_gated_content] shortcodes on the same or a subsequent redirect request can use it.
 	 *
 	 * @covers FrmGatedContentController::trigger
 	 */
@@ -34,12 +33,12 @@ class test_FrmGatedContentController extends FrmUnitTest {
 
 		FrmGatedContentController::trigger( $action, $entry, $form, 'create' );
 
-		$this->assertArrayHasKey(
-			$action_id,
-			FrmGatedTokenHelper::$tokens,
-			'trigger() must cache the raw token in FrmGatedTokenHelper::$tokens.'
+		$raw_token = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
+		$this->assertNotNull(
+			$raw_token,
+			'trigger() must store the raw token via FrmGatedTokenHelper::get_raw_token_for_action().'
 		);
-		$this->assertSame( 48, strlen( FrmGatedTokenHelper::$tokens[ $action_id ] ) );
+		$this->assertSame( 48, strlen( $raw_token ) );
 	}
 
 	// ── payment-success event ─────────────────────────────────────────────── //
@@ -75,12 +74,12 @@ class test_FrmGatedContentController extends FrmUnitTest {
 
 		FrmFormActionsController::trigger_actions( 'payment-success', $form_id, $entry_id );
 
-		$this->assertArrayHasKey(
-			$action_id,
-			FrmGatedTokenHelper::$tokens,
+		$raw_token = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
+		$this->assertNotNull(
+			$raw_token,
 			'payment-success event must trigger token generation for a gated content action.'
 		);
-		$this->assertSame( 48, strlen( FrmGatedTokenHelper::$tokens[ $action_id ] ) );
+		$this->assertSame( 48, strlen( $raw_token ) );
 	}
 
 	/**
@@ -112,9 +111,8 @@ class test_FrmGatedContentController extends FrmUnitTest {
 
 		FrmFormActionsController::trigger_actions( 'payment-success', $form_id, $entry_id );
 
-		$this->assertArrayNotHasKey(
-			$action_id,
-			FrmGatedTokenHelper::$tokens,
+		$this->assertNull(
+			FrmGatedTokenHelper::get_raw_token_for_action( $action_id ),
 			'Actions without payment-success in their event list must not generate a token.'
 		);
 	}

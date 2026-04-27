@@ -15,18 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmGatedTokenHelper {
 
 	/**
-	 * Raw tokens generated during the current request, keyed by action ID.
-	 *
-	 * Bridges token generation to shortcode rendering within the same request
-	 * without a second database round-trip.
-	 *
-	 * @since x.x
-	 *
-	 * @var array
-	 */
-	public static $tokens = array();
-
-	/**
 	 * Generate a new access token for a gated content action and persist it.
 	 *
 	 * @since x.x
@@ -76,8 +64,8 @@ class FrmGatedTokenHelper {
 
 		$wpdb->insert( $wpdb->prefix . 'frm_gated_tokens', $data, $format );
 
-		// Cache for same-request shortcode access (avoids a second DB query).
-		self::$tokens[ $action_id ] = $raw_token;
+		// Persist for shortcode rendering in the same or a subsequent redirect request (5-min TTL).
+		set_transient( self::get_token_transient_key( (int) $action_id ), $raw_token, 5 * MINUTE_IN_SECONDS );
 
 		return $raw_token;
 	}
@@ -445,10 +433,45 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
+	 * Build the transient key for a generated token, scoped to the current user or IP.
+	 *
+	 * Logged-in users are keyed by user ID; guests are keyed by an MD5 of their IP so
+	 * that two users submitting the same form simultaneously cannot read each other's
+	 * pending token.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $action_id Action post ID.
+	 * @return string Transient key, at most ~52 characters.
+	 */
+	private static function get_token_transient_key( $action_id ) {
+		$user_id = get_current_user_id();
+		$scope   = $user_id ? (string) $user_id : md5( FrmAppHelper::get_ip_address() );
+		return 'frm_gc_token_' . (int) $action_id . '_' . $scope;
+	}
+
+	/**
+	 * Retrieve the raw token most recently generated for a given action in this session.
+	 *
+	 * Reads the 5-minute transient set by generate(). Returns null when no pending
+	 * token exists — e.g. a different user, a different browser/IP, or the TTL has
+	 * expired.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $action_id Action post ID.
+	 * @return string|null Raw 48-char token, or null if unavailable.
+	 */
+	public static function get_raw_token_for_action( $action_id ) {
+		$token = get_transient( self::get_token_transient_key( (int) $action_id ) );
+		return false !== $token ? (string) $token : null;
+	}
+
+	/**
 	 * Resolve the active token hash for a gated content action.
 	 *
 	 * Resolution order:
-	 *  1. Same-request static cache (FrmGatedTokenHelper::$tokens) — set by generate().
+	 *  1. 5-minute transient set by generate() — survives payment redirects.
 	 *  2. `access_code` URL query parameter (raw token → hashed → validated).
 	 *  3. HttpOnly cookie `frm_gc_{action_id}` (stores hash directly).
 	 *  4. IP-address fallback when cookie hash is stale (e.g. after token renewal).
@@ -467,9 +490,12 @@ class FrmGatedTokenHelper {
 	public static function obtain_token( $action_id = 0 ) {
 		$action_id = (int) $action_id;
 
-		// 1. Same-request static cache set by self::generate().
-		if ( $action_id && isset( self::$tokens[ $action_id ] ) ) {
-			return hash( 'sha256', self::$tokens[ $action_id ] );
+		// 1. Transient set by self::generate() — persists across payment redirects (5-min TTL).
+		if ( $action_id ) {
+			$raw = self::get_raw_token_for_action( $action_id );
+			if ( null !== $raw ) {
+				return hash( 'sha256', $raw );
+			}
 		}
 
 		// 2. URL query parameter: ?access_code=<raw_token>
