@@ -1,0 +1,39 @@
+.frm-unit-input {
+	position: relative;
+	display: flex;
+	align-items: center;
+
+	input[type="number"]::-webkit-outer-spin-button,
+	input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		appearance: none;
+	}
+
+	.frm-input-group-suffix {
+		position: absolute;
+		top: 1px;
+		right: 1px;
+		display: flex;
+		align-items: center;
+		height: calc(100% - 2px);
+		padding-right: var(--gap-xs);
+
+		select {
+			width: fit-content;
+			height: 100%;
+			min-height: unset;
+			font-size: var(--text-sm);
+			text-align: right;
+			color: var(--grey-500) !important;
+			background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none'%3E%3Cpath stroke='%23667085' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12.708 8.959 10 11.875 7.292 8.96'/%3E%3C/svg%3E") no-repeat right 0 top 50%;
+			padding-left: var(--gap-2xs);
+			padding-right: 21px !important;
+			border: transparent;
+
+			&:focus-visible {
+				outline: 1px solid var(--primary-500);
+				outline-offset: -2px;
+			}
+		}
+	}
+}

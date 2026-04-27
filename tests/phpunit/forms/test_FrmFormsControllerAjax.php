@@ -36,8 +36,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 	private function _setup_post_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
-
-		$form = FrmForm::getOne( $form_id );
+		$form   = FrmForm::getOne( $form_id );
 		$this->assertNotEmpty( $form, 'Form not found with id ' . $form_id );
 
 		$_POST = array(
@@ -78,8 +77,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			);
 
 			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );
-
-			$_REQUEST = $_POST;
+			$_REQUEST               = $_POST;
 		}
 	}
 
@@ -95,7 +93,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			// Check default value
 			$posted_val = $_POST[ 'default_value_' . $field->id ];
 			$actual_val = $field->default_value;
-			$this->assertEquals( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
+			$this->assertSame( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
 		}
 	}
 }

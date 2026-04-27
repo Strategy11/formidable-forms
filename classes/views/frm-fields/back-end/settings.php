@@ -15,9 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			esc_html( $type_name )
 		);
 		?>
-		<span class="frm-sub-label frm-text-sm">
-			(ID <?php echo esc_html( $field['id'] ); ?>)
-		</span>
+		<span class="frm-sub-label frm-text-sm frm-text-grey-400">(ID <?php echo esc_html( $field['id'] ); ?>)</span>
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me" role="group">
@@ -25,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
 			<div class="frm_warning_style frm-with-icon">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -35,13 +33,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<?php
 		}
+
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
 			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
 				<div class="frm_warning_style frm-with-icon">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
@@ -58,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
 			?>
 			<div class="frm_note_style">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -70,8 +69,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 
+		<?php
+		/**
+		 * Fires before the field label in the field settings.
+		 *
+		 * @since 6.23
+		 *
+		 * @param array $field The field settings.
+		 * @param array $display The display settings for the field.
+		 * @param array $values The values associated with the field.
+		 */
+		do_action( 'frm_field_options_before_label', $field, $display, $values );
+		?>
 		<?php if ( $display['label'] ) { ?>
-		<p>
+		<p class="frm-mt-xs">
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
 				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); ?>
 			</label>
@@ -92,27 +103,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 			}
 
-			if ( $display['unique'] ) {
+			if ( $display['unique'] || ! empty( $show_upsell_for_unique_value ) ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+					<label <?php FrmAppHelper::array_to_html_params( $unique_values_label_atts, true ); ?>>
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_unique_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
 				<?php
 			}
 
-			if ( $display['read_only'] ) {
+			if ( $display['read_only'] || ! empty( $show_upsell_for_read_only ) ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
-						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
+					<label <?php FrmAppHelper::array_to_html_params( $read_only_label_atts, true ); ?>>
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_read_only_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
 				</div>
 				<?php
 			}
-
 			do_action( 'frm_field_options_form_top', $field, $display, $values );
 			?>
 		</div>
@@ -132,23 +143,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php if ( $display['css'] ) { ?>
 			<p class="frm-has-modal">
-				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
-					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
+				<label class="frm-h-stack-xs" for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>">
+					<span><?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?></span>
+					<?php FrmAppHelper::tooltip_icon( __( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 				</label>
-				<span class="frm-with-right-icon">
+				<span class="frm-with-right-icon frm-block">
+					<?php
+					$css_layout_classes_attrs = array(
+						'type'           => 'text',
+						'name'           => 'field_options[classes_' . $field['id'] . ']',
+						'value'          => $field['classes'],
+						'class'          => 'frm_classes frm-token-input-field',
+						'id'             => 'frm_classes_' . $field['id'],
+						'data-changeme'  => 'frm_field_id_' . $field['id'],
+						'data-changeatt' => 'class',
+						'data-sep'       => ' ',
+						'data-shortcode' => '0',
+					);
+					?>
+					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
 					<?php
 					FrmAppHelper::icon_by_class(
-						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+						'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 						array(
 							'data-open' => 'frm-layout-classes-box',
 							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+							'tabindex'  => '0',
 						)
 					);
 					?>
-					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class" data-sep=" " data-shortcode="0" />
 				</span>
 			</p>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 	</div>
 
 <?php
@@ -172,46 +200,100 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 ?>
 	<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Collapsible Advanced Settings', 'formidable' ); ?>" aria-controls="collapsible-section">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
-		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
-	<div class="frm_grid_container frm-collapse-me" role="group">
 
+	<div class="frm_grid_container frm-collapse-me" role="group">
 		<?php if ( $display['default'] ) { ?>
-			<div class="frm-has-modal">
-				<?php if ( count( $default_value_types ) > 1 ) { ?>
-				<span class="frm-default-switcher">
-					<?php foreach ( $default_value_types as $link ) { ?>
-					<a href="#" title="<?php echo esc_attr( $link['title'] ); ?>" class="<?php echo esc_attr( $link['class'] ); ?>" data-toggleclass="frm_hidden frm-open"
-						<?php foreach ( $link['data'] as $data_key => $data_value ) { ?>
-							data-<?php echo esc_attr( $data_key ); ?>="<?php echo esc_attr( $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' ) ); ?>"
-						<?php } ?>
-						<?php if ( isset( $link['data']['frmshow'] ) ) { ?>
-							data-frmhide=".frm-inline-modal,.default-value-section-<?php echo esc_attr( $field['id'] ); ?>"
-						<?php } ?>
-						>
-						<?php FrmAppHelper::icon_by_class( $link['icon'] ); ?>
-					</a>
-					<?php } ?>
-				</span>
-				<?php } ?>
+			<div class="frm-has-modal frm-flex-col">
 				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
-				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
+
+				<div class="frm-hide-empty frm-flex-col frm-gap-sm frm-mb-sm frm-toggle-group">
+					<?php
+					foreach ( $default_value_types as $type => $default_value_type ) {
+						if ( 'default_value' === $type ) {
+							continue;
+						}
+
+						// Backwards compatibility "@since 6.24".
+						if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
+							switch ( $type ) {
+								case 'calc':
+									$default_value_type['data'] = array(
+										'show'    => '#calc-for-{id}',
+										'disable' => '#default-value-for-{id}',
+									);
+									break;
+								case 'get_values_field':
+									$default_value_type['class'] = '';
+									$default_value_type['data']  = array(
+										'show'    => '.frm-lookup-box-{id}',
+										'disable' => '#default-value-for-{id}',
+									);
+									break;
+							}
+						}
+
+						$toggle_args = array(
+							'echo'        => true,
+							'show_labels' => true,
+							'on_label'    => $default_value_type['title'],
+							'checked'     => isset( $default_value_type['current'] ),
+							'input_html'  => array(
+								'data-group-name' => 'default-value',
+								'class'           => $default_value_type['class'],
+							),
+						);
+
+						foreach ( $default_value_type['data'] as $data_key => $data_value ) {
+							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( str_ends_with( $data_value, '-' ) ? $field['id'] : '' );
+						}
+
+						?>
+						<div class="frm-flex frm-gap-xs frm-items-center">
+							<?php
+							FrmHtmlHelper::toggle(
+								'frm-default-type-' . $type . '-' . $field['id'],
+								'default_type_' . $type . '[' . $field['id'] . ']',
+								$toggle_args
+							);
+
+							if ( ! empty( $default_value_type['tooltip'] ) ) {
+								FrmAppHelper::tooltip_icon( $default_value_type['tooltip'], array( 'class' => 'frm-flex' ) );
+							}
+							?>
+						</div>
+						<?php
+					}//end foreach
+					?>
+				</div>
+
+				<?php
+				/**
+				 * Fires after printing the default value setting.
+				 *
+				 * @param array $field
+				 * @param array $display
+				 * @param array $default_value_types
+				 */
+				do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) );
+				?>
 			</div>
 			<?php
 		}//end if
-		?>
 
-		<?php $field_obj->show_after_default( compact( 'field', 'display' ) ); ?>
+		$field_obj->show_after_default( compact( 'field', 'display' ) );
 
-		<?php if ( $display['clear_on_focus'] ) { ?>
-			<p>
+		if ( $display['clear_on_focus'] ) {
+			?>
+			<p class="frm-flex-col">
 				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
+				<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
 				</label>
 				<?php
 				if ( $display['type'] === 'textarea' || $display['type'] === 'rte' ) {
 					?>
-					<textarea name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" rows="3" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder"><?php
+					<textarea name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" rows="2" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder"><?php
 						echo FrmAppHelper::esc_textarea( $field['placeholder'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?></textarea>
 					<?php
@@ -222,9 +304,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				}
 				?>
 			</p>
-		<?php } ?>
+				<?php
+		}//end if
 
-		<?php
 		if ( $display['description'] ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php';
 		}
@@ -249,13 +331,25 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
-		?>
 
-		<?php if ( $display['show_image'] ) { ?>
-			<p>
-				<label for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
-					<input type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
-					<?php esc_html_e( 'If this URL points to an image, show to image on the entries listing page.', 'formidable' ); ?>
+		if ( ! empty( $show_upsell_for_before_after_contents ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/before-after-contents.php';
+		}
+
+		if ( ! empty( $show_upsell_for_autocomplete ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/autocomplete.php';
+		}
+
+		if ( ! empty( $show_upsell_for_visibility ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/visibility.php';
+		}
+
+		if ( $display['show_image'] ) {
+			?>
+			<p class="frm_form_field">
+				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
+					<input class="frm-m-0" type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
+					<span class="-frm-mt-2xs"><?php esc_html_e( 'If this URL points to an image, show to image on the entries listing page.', 'formidable' ); ?></span>
 				</label>
 			</p>
 		<?php } ?>
@@ -328,6 +422,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							)
 						);
 					}
+
 					if ( $field['type'] === 'divider' ) {
 						FrmHtmlHelper::echo_dropdown_option(
 							__( 'Center', 'formidable' ),
@@ -363,6 +458,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
 						$type_option_value  = 'select' === $fkey ? 'dropdown' : $fkey;
 						$type_option_params = array( 'value' => $type_option_value );
+
 						if ( array_key_exists( $fkey, $disabled_fields ) ) {
 							$type_option_params['disabled'] = 'disabled';
 						}
@@ -394,13 +490,13 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 		<?php
 		$hidden_invalid = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' ) && FrmField::is_option_empty( $field, 'max' );
-		$has_validation = ( ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) );
+		$has_validation = ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' );
 		?>
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Collapsible Validation Messages Settings', 'formidable' ); ?>" aria-controls="collapsible-section">
 				<?php
 				esc_html_e( 'Validation Messages', 'formidable' );
-				FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
+				FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) );
 				?>
 			</h3>
 
@@ -445,6 +541,14 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					</p>
 					<?php
 				}
+
+				/**
+				 * @since 6.28
+				 *
+				 * @param array $display
+				 * @param array $field
+				 */
+				do_action( 'frm_field_validation_messages', $display, $field );
 				?>
 			</div>
 		</div>

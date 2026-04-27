@@ -13,3 +13,11 @@
 .frm-w-half {
 	width: 50% !important;
 }
+
+.frm-w-fit {
+	width: fit-content !important;
+}
+
+.frm-max-w-fit {
+	max-width: fit-content;
+}

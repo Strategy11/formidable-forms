@@ -53,7 +53,7 @@
 	function onToggleSub() {
 		const target = this;
 		setTimeout( function() {
-			const settings       = target.closest( '.frm_form_action_settings' );
+			const settings = target.closest( '.frm_form_action_settings' );
 			const squareIsActive = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' ).checked;
 
 			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
@@ -117,7 +117,7 @@
 				option.selected = true;
 			}
 
-			newDropdown.appendChild( option );
+			newDropdown.append( option );
 		}
 
 		intervalCountSetting.parentNode.insertBefore( newDropdown, intervalCountSetting.nextSibling );
@@ -127,14 +127,14 @@
 		settingWrapper.parentNode.insertBefore( clone, settingWrapper.nextSibling );
 
 		const label = newDropdown.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
-		if ( label && label.textContent.includes( 'Repeat Every' ) ) {
+		if ( label?.textContent.includes( 'Repeat Every' ) ) {
 			label.textContent = 'Repeat';
 		}
 
 		newDropdown.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_square' );
 
 		const stripeLabel = intervalCount.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
-		if ( stripeLabel && stripeLabel.textContent.includes( 'Repeat Every' ) ) {
+		if ( stripeLabel?.textContent.includes( 'Repeat Every' ) ) {
 			stripeLabel.textContent = 'Repeat';
 		}
 
@@ -152,7 +152,7 @@
 
 		if ( option ) {
 			if ( 'square' === gateway ) {
-				currencySetting.value    = option.value;
+				currencySetting.value = option.value;
 				currencySetting.disabled = true;
 			} else {
 				currencySetting.disabled = false;
@@ -165,10 +165,10 @@
 		// Option didn't exist yet, so add it.
 		if ( 'square' === gateway ) {
 			option = document.createElement( 'option' );
-			option.value       = 'square';
+			option.value = 'square';
 			option.textContent = 'Use Square Merchant Currency';
 			option.classList.add( 'square-currency' );
-			currencySetting.appendChild( option );
+			currencySetting.append( option );
 
 			currencySetting.value = option.value;
 			currencySetting.disabled = true;

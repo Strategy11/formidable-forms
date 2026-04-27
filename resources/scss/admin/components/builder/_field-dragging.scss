@@ -24,23 +24,39 @@
 
 .frm_sorting li.ui-state-default.ui-sortable-helper,
 .frmbutton.ui-sortable-helper {
-	transition: opacity .2s;
+	transition: opacity 0.2s;
 	opacity: 1;
+	position: fixed;
+	z-index: 99999;
+}
+
+#frm-insert-fields,
+#frm-show-fields {
+
+	.frmbutton.ui-sortable-helper a {
+		min-width: 100px;
+	}
+}
+
+.ui-draggable-dragging .frm-meta-tag.frm-new-pill {
+	display: none;
 }
 
 /* End dragging */
 
 li.frm_noallow.button,
 .frm_noallow {
-	opacity: .5;
+	opacity: 0.5;
 }
 
 .frm_actions_list a.frm_show_upgrade.frm_inactive_action::before,
-li.frm_noallow.button.frm_show_upgrade {
+li.frm_noallow.button.frm_show_upgrade,
+li.frm_noallow.button.frm_show_update {
 	cursor: pointer;
 }
 
-.field_type_list li.frm_noallow.button.frm_show_upgrade:hover {
+.field_type_list li.frm_noallow.button.frm_show_upgrade:hover,
+.field_type_list li.frm_noallow.button.frm_show_update:hover {
 	border-color: inherit;
 }
 

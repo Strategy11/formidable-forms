@@ -30,7 +30,13 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 		</h3>
 
 		<?php
-		if ( ! FrmAddonsHelper::is_locked() ) {
+		if ( FrmAddonsHelper::is_locked() ) {
+			?>
+			<span class="frm-card-lock-icon frm-ml-auto">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
+			</span>
+			<?php
+		} else {
 			FrmAddonsController::show_conditional_action_button(
 				array(
 					'addon'         => $addon,
@@ -50,12 +56,6 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 					'aria-label-attr' => $addon['title'],
 				)
 			);
-		} else {
-			?>
-			<span class="frm-card-lock-icon frm-ml-auto">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
-			</span>
-			<?php
 		}//end if
 		?>
 	</div>
@@ -76,7 +76,7 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 			</a>
 			<?php
 		} else {
-			FrmFormsHelper::show_plan_required( FrmAddonsHelper::get_plan(), $pricing . ' & utm_content = ' . $addon['slug'] );
+			FrmFormsHelper::show_plan_required( FrmAddonsHelper::get_plan(), $pricing . '&utm_content=' . $addon['slug'] );
 			?>
 			<div>
 				<?php FrmAddonsController::addon_upgrade_link( $addon, $pricing ); ?>

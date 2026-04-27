@@ -35,6 +35,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-dashboard-widget frm-card-item frm-license-widget">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
+			<?php if ( FrmFormTemplatesHelper::needs_get_free_templates_banner() ) { ?>
+				<div class="frm-dashboard-widget frm-card-item frm-px-sm">
+					<?php $dashboard_view->get_free_templates_banner(); ?>
+				</div>
+			<?php } ?>
 			<?php
 			if ( $should_display_videos ) {
 				$dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' );

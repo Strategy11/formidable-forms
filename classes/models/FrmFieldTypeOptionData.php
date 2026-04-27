@@ -12,10 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmFieldTypeOptionData {
 
+	/**
+	 * @var array
+	 */
 	private static $data = array();
 
 	/**
 	 * @param string $type
+	 *
 	 * @return array
 	 */
 	public static function get_field_types( $type ) {

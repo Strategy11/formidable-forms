@@ -8,16 +8,16 @@ $support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/supp
 
 $upgrade_link = FrmSalesApi::get_best_sale_value( 'footer_cta_link' );
 $utm          = array(
-	'medium' => 'admin-footer-link',
+	'campaign' => 'admin-footer-link',
+	'content'  => 'footer-link-upgrade',
 );
+
 if ( $upgrade_link ) {
 	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
+} elseif ( FrmAppHelper::pro_is_installed() ) {
+	$upgrade_link = 'https://formidableforms.com/account/downloads/';
 } else {
-	if ( FrmAppHelper::pro_is_installed() ) {
-		$upgrade_link = 'https://formidableforms.com/account/downloads/';
-	} else {
-		$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
-	}
+	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
 }
 ?>
 
@@ -35,10 +35,17 @@ if ( $upgrade_link ) {
 	<div class="frm-admin-footer-links-nav">
 		<a href="<?php echo esc_url( $support_link ); ?>" target="_blank"><?php esc_html_e( 'Support', 'formidable' ); ?></a>
 		<span>/</span>
-		<a href="https://formidableforms.com/knowledgebase/" target="_blank"><?php esc_html_e( 'Docs', 'formidable' ); ?></a>
+		<?php
+		$docs_utm = array(
+			'campaign' => 'admin-footer-link',
+			'content'  => 'footer-link-docs',
+		);
+		?>
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $docs_utm, 'knowledgebase/' ) ); ?>" target="_blank"><?php esc_html_e( 'Docs', 'formidable' ); ?></a>
 		<?php if ( 'elite' !== FrmAddonsController::license_type() ) : ?>
 			<?php
 			$cta_text = FrmSalesApi::get_best_sale_value( 'footer_cta_text' );
+
 			if ( ! $cta_text ) {
 				$cta_text = __( 'Upgrade', 'formidable' );
 			}

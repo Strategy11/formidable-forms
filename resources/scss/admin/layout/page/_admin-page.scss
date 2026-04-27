@@ -2,7 +2,7 @@
  * Layout - Admin Page
  */
 
-.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert),
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert):not(#frm-svg-icons-pack),
 #wpbody-content > .updated,
 #wpbody-content > #update-nag,
 #wpbody-content > .update-nag,
@@ -11,8 +11,7 @@
 .frm-white-body .updated,
 .frm-white-body .notice,
 .frm_wrap > .wrap > .notice,
-.frm-white-body .error:not(.frm_previous_install)
-{
+.frm-white-body .error:not(.frm_previous_install) {
 	display: none;
 }
 

@@ -18,7 +18,7 @@ export function addApplicationTemplateEvents() {
 	// Attach click event listener
 	applicationTemplateItems.forEach( template => {
 		template.addEventListener( 'click', onApplicationTemplateClick );
-	});
+	} );
 }
 
 /**
@@ -28,7 +28,7 @@ export function addApplicationTemplateEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onApplicationTemplateClick = ( event ) => {
+const onApplicationTemplateClick = event => {
 	// Check if the clicked element is an anchor tag
 	if ( event.target.closest( 'a' ) ) {
 		return;

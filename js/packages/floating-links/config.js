@@ -2,11 +2,11 @@
  * Configuration File.
  * Establishes links and options parameters to be utilized by the S11FloatingLinks class.
  *
+ * @param {Object} wp
  * @class S11FloatingLinks
  */
 
-( ( wp ) => {
-
+( wp => {
 	/**
 	 * WordPress dependencies
 	 */
@@ -54,7 +54,7 @@
 		{
 			title: __( 'Upgrade', 'formidable' ),
 			icon: frmFloatingLinksConfig.upgradeIcon,
-			url: 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_campaign=liteplugin&utm_medium=upgrade&utm_content=floating-links',
+			url: s11FloatingLinksData.upgradeUrl,
 			openInNewTab: true
 		},
 		{
@@ -66,7 +66,7 @@
 		{
 			title: __( 'Documentation', 'formidable' ),
 			icon: frmFloatingLinksConfig.documentationIcon,
-			url: 'https://formidableforms.com/knowledgebase/',
+			url: s11FloatingLinksData.documentationUrl,
 			openInNewTab: true
 		}
 	];
@@ -78,7 +78,7 @@
 		{
 			title: __( 'Support & Docs', 'formidable' ),
 			icon: frmFloatingLinksConfig.supportIcon,
-			url: 'https://formidableforms.com/knowledgebase/',
+			url: s11FloatingLinksData.documentationUrl,
 			openInNewTab: true
 		}
 	];
@@ -109,5 +109,4 @@
 
 	// Trigger the 'set_floating_links_config' action, passing the config
 	wp.hooks.doAction( 'set_floating_links_config', frmFloatingLinksConfig );
-
-})( window.wp );
+} )( window.wp );

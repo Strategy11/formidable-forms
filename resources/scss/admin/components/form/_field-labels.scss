@@ -47,3 +47,7 @@ td.frm_left_label + td {
 #html_settings .frm_field_html_box {
 	width: 100%;
 }
+
+.frm-has-required .frm-required {
+	color: var(--error-500);
+}

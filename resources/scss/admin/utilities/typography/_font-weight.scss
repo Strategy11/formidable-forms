@@ -2,10 +2,18 @@
  * Utilities - Font Weight
  */
 
+.frm-font-normal {
+	font-weight: 400 !important;
+}
+
 .frm-font-medium {
 	font-weight: 500 !important;
 }
 
 .frm-font-semibold {
 	font-weight: 600 !important;
+}
+
+.frm-font-bold {
+	font-weight: 700 !important;
 }

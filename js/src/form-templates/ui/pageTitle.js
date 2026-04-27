@@ -20,7 +20,7 @@ export function updatePageTitle( title ) {
 
 	const newTitle =
 		title ||
-		getSingleState( 'selectedCategoryEl' ).querySelector( `.${SKELETON_PREFIX}-cat-text` ).textContent;
+		getSingleState( 'selectedCategoryEl' ).querySelector( `.${ SKELETON_PREFIX }-cat-text` ).textContent;
 
 	pageTitleText.textContent = newTitle;
 }

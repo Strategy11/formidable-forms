@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm_note_style frm-with-icon frm-mb-0 frm_hidden">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon' ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
 	<span><?php esc_html_e( 'Changing the captcha type here will replace it in all any forms where it is used.', 'formidable' ); ?></span>
 </div>
 
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'reCAPTCHA Threshold', 'formidable' ); ?>
 		</label>
 		<input name="frm_re_threshold" id="frm_re_threshold" class="widefat" type="number" step="0.1" max="1" min="0" value="<?php echo esc_attr( $frm_settings->re_threshold ); ?>" />
-		<span style="font-size: var(--text-xs);"><?php esc_html_e( 'reCAPTCHA v3 returns a score (1.0 is very likely a human, 0.0 is very likely a bot). Default threshold is 0.5.' ); ?></span>
+		<span style="font-size: var(--text-xs);"><?php esc_html_e( 'reCAPTCHA v3 returns a score (1.0 is very likely a human, 0.0 is very likely a bot). Default threshold is 0.5.', 'formidable' ); ?></span>
 	</p>
 
 	<p>
@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>
 	<label>
 		<input type="checkbox" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
-		<?php esc_html_e( 'Use Honeypot to check entries for spam', 'formidable' ); ?>
+		<?php esc_html_e( 'Use honeypot to check entries for spam', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Include an invisible field in your form to trick bots.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>
@@ -145,7 +145,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php
 	$transient = get_transient( 'frm_recent_spam_detected' );
-	if ( ! empty( $transient ) ) {
+
+	if ( $transient ) {
 		?>
 		<div class="frm_note_style">
 			<strong><?php esc_html_e( 'Spam keywords detected recently:', 'formidable' ); ?></strong>

@@ -8,6 +8,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 $agreement_text = $field['gdpr_agreement_text'];
 $field_id       = $field['id'];
 $checked        = FrmAppHelper::check_selected( $field['value'], 1 ) ? ' checked="checked"' : '';
@@ -21,7 +22,7 @@ $label_id       = 'frm-gdpr-accept-' . $field_id;
 		<?php echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php do_action( 'frm_field_input_html', $field ); ?>
 		/>
-		<?php FrmAppHelper::kses_echo( $agreement_text, array( 'a' ) ); ?>
+		<?php FrmAppHelper::kses_echo( $agreement_text, array( 'a', 'b', 'br', 'div', 'em', 'i', 'p', 'span', 'strong' ) ); ?>
 	</label>
 </div>
 <?php elseif ( current_user_can( 'frm_edit_forms' ) ) : ?>

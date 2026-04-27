@@ -3,7 +3,7 @@
 
 	jQuery( document ).ready( function() {
 		const thisForm = document.getElementById( 'form_id' );
-		if ( thisForm !== null ) {
+		if ( thisForm ) {
 			thisFormId = thisForm.value;
 		}
 
@@ -15,13 +15,11 @@
 		document.addEventListener( 'frm_legacy_views_handle_field_focus', function( event ) {
 			const { idAttrValue } = event.frmData;
 			toggleAllowedShortcodes( idAttrValue );
-		});
-	});
+		} );
+	} );
 
 	function viewInit() {
-		let $addRemove,
-			$advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
-
+		const $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 		$advInfo.before( '<div id="frm_position_ele"></div>' );
 		setupMenuOffset();
 
@@ -31,7 +29,7 @@
 		// Show loading indicator.
 		jQuery( '#publish' ).on( 'mousedown', function() {
 			this.classList.add( 'frm_loading_button' );
-		});
+		} );
 
 		// move content tabs
 		jQuery( '#frm_dyncontent .handlediv' ).before( jQuery( '#frm_dyncontent .nav-menus-php' ) );
@@ -49,7 +47,7 @@
 
 		jQuery( document.getElementById( 'form_id' ) ).on( 'change', displayFormSelected );
 
-		$addRemove = jQuery( '.frm_repeat_rows' );
+		const $addRemove = jQuery( '.frm_repeat_rows' );
 		$addRemove.on( 'click', '.frm_add_order_row', addOrderRow );
 		$addRemove.on( 'click', '.frm_add_where_row', addWhereRow );
 		$addRemove.on( 'change', '.frm_insert_where_options', insertWhereOptions );
@@ -62,31 +60,31 @@
 	 * Checks the Detail Page slug to see if it's a reserved word and displays a message if it is.
 	 */
 	function checkDetailPageSlug() {
-		let slug = jQuery( '#param' ).val(),
-			msg;
+		let slug = jQuery( '#param' ).val();
+		let msg;
 		slug = slug.trim().toLowerCase();
 		if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( slug ) ) {
 			msg = frmAdminJs.slug_is_reserved;
-			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
+			msg = msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
-			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>', 'div' );
+			msg += addHtmlTags( `<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">${ frmAdminJs.reserved_words }</a>`, 'div' );
 			infoModal( msg );
 		}
 	}
-	
+
 	/**
 	 * Checks View filter value for params named with reserved words and displays a message if any are found.
 	 */
 	function checkFilterParamNames() {
-		let regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig,
-			filterValue = jQuery( this ).val(),
-			match = regEx.exec( filterValue ),
-			unsafeParams = '';
+		const regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig;
+		const filterValue = jQuery( this ).val();
+		let match = regEx.exec( filterValue );
+		let	unsafeParams = '';
 
 		while ( match !== null ) {
-			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[1]) ) {
+			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[ 1 ] ) ) {
 				if ( unsafeParams !== '' ) {
-					unsafeParams += '", "' + match[ 1 ];
+					unsafeParams += `", "${ match[ 1 ] }`;
 				} else {
 					unsafeParams = match[ 1 ];
 				}
@@ -95,10 +93,10 @@
 		}
 
 		if ( unsafeParams !== '' ) {
-			let msg =  frmAdminJs.param_is_reserved;
-			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
+			let msg = frmAdminJs.param_is_reserved;
+			msg = msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
-			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>';
+			msg += ` <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">${ frmAdminJs.reserved_words }</a>`;
 
 			infoModal( msg );
 		}
@@ -106,7 +104,7 @@
 
 	function addHtmlTags( text, tag ) {
 		tag = tag ? tag : 'p';
-		return '<' + tag + '>' + text + '</' + tag + '>';
+		return `<${ tag }>${ text }</${ tag }>`;
 	}
 
 	function initToggleShortcodes() {
@@ -115,7 +113,7 @@
 		}
 
 		DOM = tinymce.DOM;
-		if ( typeof DOM.events !== 'undefined' && typeof DOM.events.add !== 'undefined' ) {
+		if ( DOM.events !== undefined && DOM.events.add !== undefined ) {
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseover', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
@@ -123,7 +121,7 @@
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
-			});
+			} );
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
@@ -131,7 +129,7 @@
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
-			});
+			} );
 		} else {
 			jQuery( '#frm_dyncontent' ).on( 'mouseover mouseout', '.wp-editor-wrap', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
@@ -140,16 +138,16 @@
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
-			});
+			} );
 		}
 	}
 
 	function setDefaultPostStatus() {
 		const urlQuery = window.location.search.substring( 1 );
-		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
+		if ( ! urlQuery.includes( 'action=edit' ) ) {
 			document.getElementById( 'post-visibility-display' ).textContent = frmAdminJs.private_label;
-			document.getElementById( 'hidden-post-visibility' ).value        = 'private';
-			document.getElementById( 'visibility-radio-private' ).checked    = true;
+			document.getElementById( 'hidden-post-visibility' ).value = 'private';
+			document.getElementById( 'visibility-radio-private' ).checked = true;
 		}
 	}
 
@@ -160,7 +158,7 @@
 
 	function setMenuOffset() {
 		const fields = document.getElementById( 'frm_adv_info' );
-		if ( fields === null ) {
+		if ( ! fields ) {
 			return;
 		}
 
@@ -171,7 +169,7 @@
 		}
 
 		const posEle = document.getElementById( 'frm_position_ele' );
-		if ( posEle === null ) {
+		if ( ! posEle ) {
 			return;
 		}
 
@@ -181,7 +179,7 @@
 		let menuHeight = 0;
 
 		const menu = document.getElementById( 'wpadminbar' );
-		if ( menu !== null ) {
+		if ( menu ) {
 			menuHeight = menu.offsetHeight;
 		}
 
@@ -194,7 +192,7 @@
 		} else {
 			fields.classList.add( 'frm_fixed' );
 			if ( desiredOffset !== 32 ) {
-				fields.style.top = desiredOffset + 'px';
+				fields.style.top = `${ desiredOffset }px`;
 			}
 		}
 	}
@@ -234,7 +232,7 @@
 			return;
 		}
 
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -242,12 +240,12 @@
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_adv_info .categorydiv' ).html( html );
 			}
-		});
+		} );
 
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -255,10 +253,10 @@
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( document.getElementById( 'date_select_container' ) ).html( html );
 			}
-		});
+		} );
 	}
 
 	function clickTabsAfterAjax() {
@@ -273,7 +271,7 @@
 		/*jshint validthis:true */
 		const link = jQuery( this );
 		const t = link.attr( 'href' );
-		if ( typeof t === 'undefined' ) {
+		if ( t === undefined ) {
 			return false;
 		}
 
@@ -281,14 +279,14 @@
 		link.closest( '.nav-tab-wrapper' ).find( 'a' ).removeClass( 'nav-tab-active' );
 		link.addClass( 'nav-tab-active' );
 		jQuery( '.nav-menu-content' ).not( t ).not( c ).hide();
-		jQuery( t + ',' + c ).show();
+		jQuery( `${ t },${ c }` ).show();
 
 		return false;
 	}
 
 	function addOrderRow() {
 		const logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' );
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -297,15 +295,15 @@
 				order_key: getNewRowId( logicRows, 'frm_order_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_order_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_order_row' ).hide();
 			}
-		});
+		} );
 	}
 
 	function addWhereRow() {
 		const rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' );
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -314,18 +312,18 @@
 				where_key: getNewRowId( rowDivs, 'frm_where_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
+			success( html ) {
 				jQuery( '#frm_where_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_where_row' ).hide();
 			}
-		});
+		} );
 	}
 
 	function insertWhereOptions() {
 		/*jshint validthis:true */
-		const value = this.value,
-			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
+		const { value } = this;
+		const whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -334,52 +332,54 @@
 				field_id: value,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
-				jQuery( document.getElementById( 'where_field_options_' + whereKey ) ).html( html );
+			success( html ) {
+				jQuery( document.getElementById( `where_field_options_${ whereKey }` ) ).html( html );
 			}
-		});
+		} );
 	}
 
 	function hideWhereOptions() {
 		/*jshint validthis:true */
-		const value = this.value,
-			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
+		const { value } = this;
+		const whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 
 		if ( value === 'group_by' || value === 'group_by_newest' ) {
-			document.getElementById( 'where_field_options_' + whereKey ).style.display = 'none';
+			document.getElementById( `where_field_options_${ whereKey }` ).style.display = 'none';
 		} else {
-			document.getElementById( 'where_field_options_' + whereKey ).style.display = 'inline-block';
+			document.getElementById( `where_field_options_${ whereKey }` ).style.display = 'inline-block';
 		}
 	}
 
 	function getNewRowId( rows, replace, defaultValue ) {
 		if ( ! rows.length ) {
-			return 'undefined' !== typeof defaultValue ? defaultValue : 0;
+			return defaultValue !== undefined ? defaultValue : 0;
 		}
 		return parseInt( rows[ rows.length - 1 ].id.replace( replace, '' ), 10 ) + 1;
 	}
 
 	function toggleAllowedShortcodes( id ) {
-		let c, clickedID;
-		if ( typeof id === 'undefined' ) {
+		let c;
+		let clickedID;
+
+		if ( id === undefined ) {
 			id = '';
 		}
 		c = id;
 
-		if ( id.indexOf( '-search-input' ) !== -1 ) {
+		if ( id.includes( '-search-input' ) ) {
 			return;
 		}
 
 		if ( id !== '' ) {
 			const $ele = jQuery( document.getElementById( id ) );
 			if ( $ele.attr( 'class' ) && id !== 'wpbody-content' && id !== 'content' && id !== 'dyncontent' && id !== 'success_msg' ) {
-				let d = $ele.attr( 'class' ).split( ' ' )[0];
-				if ( d === 'frm_long_input' || d === 'frm_98_width' || typeof d === 'undefined' ) {
+				let d = $ele.attr( 'class' ).split( ' ' )[ 0 ];
+				if ( d === 'frm_long_input' || d === 'frm_98_width' || d === undefined ) {
 					d = '';
 				} else {
 					id = d.trim();
 				}
-				c = c + ' ' + d;
+				c = `${ c } ${ d }`;
 				c = c.replace( 'widefat', '' ).replace( 'frm_with_left_label', '' );
 			}
 		}
@@ -397,10 +397,10 @@
 
 		if ( jQuery.inArray( id, a ) >= 0 ) {
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
-			jQuery( '.frm_code_list a.hide_' + id ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( `.frm_code_list a.hide_${ id }` ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		} else if ( jQuery.inArray( id, b ) >= 0 ) {
-			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
-			jQuery( '.frm_code_list a.show_' + id ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
+			jQuery( `.frm_code_list:not(.frm-dropdown-menu) a:not(.show_${ id })` ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( `.frm_code_list a.show_${ id }` ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 		} else {
 			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		}
@@ -408,9 +408,9 @@
 		// Automatically select a tab.
 		if ( id === 'dyn_default_value' ) {
 			clickedID = 'frm_dynamic_values';
-			document.getElementById( clickedID + '_tab' ).click();
-			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_inactive' ).addClass( 'frm_hidden' );
-			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_active' ).removeClass( 'frm_hidden' );
+			document.getElementById( `${ clickedID }_tab` ).click();
+			jQuery( `#${ clickedID.replace( /_/g, '-' ) } .frm_show_inactive` ).addClass( 'frm_hidden' );
+			jQuery( `#${ clickedID.replace( /_/g, '-' ) } .frm_show_active` ).removeClass( 'frm_hidden' );
 		}
 	}
 }() );

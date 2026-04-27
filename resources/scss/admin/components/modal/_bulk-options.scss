@@ -34,7 +34,14 @@
 }
 
 .frm-bulk-edit-link {
-	text-align: right;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--gap-2xs);
 	font-size: var(--text-sm);
-	padding: 0 5px 10px;
+	margin: 12px 0 12px auto;
+
+	& & {
+		margin: 0;
+	}
 }

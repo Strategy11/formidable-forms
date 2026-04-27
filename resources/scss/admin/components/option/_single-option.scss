@@ -4,15 +4,30 @@
 
 .frm_single_option {
 	clear: both;
-	margin: 0;
+	margin: 0 !important;
 	padding-bottom: 5px;
+
+	input[type="radio"],
+	input[type="checkbox"] {
+		margin-top: 0;
+	}
+
+	.frm-with-right-icon input[type="text"] + .frmsvg {
+		position: relative;
+		right: 27px;
+		width: 14px;
+		height: 14px;
+		padding: 0;
+		margin: var(--gap-2xs) 0 0;
+	}
 }
 
 .frm_product_price_wrapper,
 .frm_image_preview_wrapper,
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type="text"] {
-	width: calc(100% - 73px);
+	width: calc(100% - 106px) !important;
+	flex-grow: 1;
 }
 
 .frm-right-panel .frm_single_option a.frm_remove_tag,
@@ -26,10 +41,11 @@
 
 .frm_single_option .frm-drag {
 	font-size: 23px;
-	width: 22px;
-	height: 19px;
+	width: 24px;
+	height: 24px;
 	margin-left: -6px;
-	color: var(--grey);
+	margin-right: var(--gap-xs);
+	color: var(--grey-500);
 }
 
 .frm_single_option .frm-drag::before {
@@ -41,12 +57,26 @@
 	cursor: move;
 }
 
-.frm_single_option .frm_option_key {
-	margin-left: 19px !important;
+.frm_single_option .frm_option_key.frm_image_preview_wrapper,
+.frm-type-ranking .frm_single_option .frm_option_key {
+	margin-left: 21px !important;
 }
 
-.frm_option_key input[type="text"] {
-	margin-top: 15px !important;
+.frm_option_key {
+
+	input[type="text"] {
+		margin-top: var(--gap-xs) !important;
+		margin-left: 11px !important;
+	}
+
+	input[type="checkbox"] + input[type="text"],
+	input[type="radio"] + input[type="text"] {
+		margin-left: 30px !important;
+	}
+}
+
+.frm-type-ranking .frm_option_key input[id*="field_key_"] {
+	margin-left: 30px !important;
 }
 
 li.ui-state-default.selected .frm-show-click,

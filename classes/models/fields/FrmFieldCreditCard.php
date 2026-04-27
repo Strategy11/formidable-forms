@@ -11,24 +11,28 @@ class FrmFieldCreditCard extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'credit_card';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_for_label = false;
 
+	/**
+	 * @return array
+	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'clear_on_focus' => false,
 			'description'    => false,
 			'default'        => false,
 			'required'       => false,
 		);
-		return $settings;
 	}
 
 	protected function include_form_builder_file() {
@@ -38,6 +42,7 @@ class FrmFieldCreditCard extends FrmFieldType {
 	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -49,18 +54,14 @@ class FrmFieldCreditCard extends FrmFieldType {
 
 		ob_start();
 
-		if ( FrmAppHelper::is_style_editor_page() ) {
-			// The styler preview doesn't load the Stripe scripts.
-			// We need to use the form builder view instead.
+		if ( FrmAppHelper::is_style_editor_page() || FrmFormsHelper::is_block_or_page_builder_preview() ) {
+			// Payment gateway scripts are unavailable in preview contexts, use the builder placeholder.
 			$field = $this->field;
 			include $this->include_form_builder_file();
 		} else {
 			FrmStrpLiteActionsController::show_card( $this->field, $args['field_name'], $pass_args );
 		}
 
-		$input_html = ob_get_contents();
-		ob_end_clean();
-
-		return $input_html;
+		return ob_get_clean();
 	}
 }

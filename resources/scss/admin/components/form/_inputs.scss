@@ -2,6 +2,8 @@
  * Component: Admin Inputs
  */
 
+.frmdates_add_blackout_date_link,
+.frmdates_add_exception_link,
 .frm_form_field.frm_scroll_box .frm_opt_container,
 .frm-white-body .wrap input[type="text"], /* Cover Views pages */
 .frm-white-body .wrap input[type="search"],
@@ -26,7 +28,7 @@ button.frm_choose_image_box,
 .field-group select,
 .frm-fields .frm-input-field {
 	outline: 0;
-	box-shadow: none;
+	box-shadow: var(--box-shadow-xs);
 	border-radius: var(--small-radius);
 	padding: 5px 14px;
 	border-color: var(--grey-300);
@@ -110,6 +112,14 @@ To achieve this, we exclude them above and duplicate these rules specifically fo
 	color: var(--grey-500);
 }
 
+textarea[id^="frm_calc_"]::placeholder {
+	font-size: var(--text-sm);
+	line-height: var(--leading);
+	font-style: italic;
+	color: var(--grey-400);
+	padding-top: 5px;
+}
+
 .frm_wrap .frm-button-primary.frm-disabled {
 	opacity: 0.5;
 	cursor: default;
@@ -136,7 +146,6 @@ To achieve this, we exclude them above and duplicate these rules specifically fo
 .frm_wrap .frm_form_builder select,
 #frm-form-templates-modal select {
 	height: auto;
-	background-position: right 11px top 55%;
 }
 
 .frm-white-body .tablenav select,
@@ -174,48 +183,3 @@ To achieve this, we exclude them above and duplicate these rules specifically fo
 .global-font .field-group input[type="text"] {
 	width: auto;
 }
-
-/* Image Options */
-
-.frm_images_dropdown .frm_image_option {
-	margin: 0 !important;
-}
-
-.frm_images_dropdown .frm_radio input[type="radio"] {
-	opacity: 0;
-	position: absolute;
-	z-index: -1;
-}
-
-.frm_images_dropdown__image .frmsvg {
-	width: 100%;
-	max-width: 102px;
-	fill: none;
-	margin: 0;
-}
-
-.frm_images_dropdown .frm_noallow .frm_image_option_container {
-	opacity: .5;
-}
-
-.frm_images_dropdown .frm_image_option_container {
-	border-radius: var(--small-radius);
-	border: 2px solid transparent;
-	align-items: center;
-}
-
-.frm_images_dropdown .frm_image_option_container:hover {
-	background: #fff !important;
-}
-
-.frm_images_dropdown input[type="radio"]:checked + .frm_image_option_container {
-	background: #fff !important;
-	border-color: var(--primary-500);
-}
-
-.frm_images_dropdown .frm_text_label_for_image {
-	padding: 0;
-	text-align: left;
-}
-
-/* End Image Options */

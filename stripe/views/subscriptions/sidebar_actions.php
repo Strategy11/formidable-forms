@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon' ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon' ); ?>
 	<span id="timestamp" class="frm_link_label">
 		<?php
 		printf(
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php foreach ( $payments as $payment ) { ?>
 	<div class="misc-pub-section">
 		<?php
-		FrmAppHelper::icon_by_class( 'frm_icon_font ' . ( $payment->status === 'complete' ? 'frm_check1_icon' : 'frm_x_icon' ) );
+		FrmAppHelper::icon_by_class( 'frmfont ' . ( $payment->status === 'complete' ? 'frm_check1_icon' : 'frm_x_icon' ) );
 		?>
 		<span class="frm_link_label">
 			<?php echo esc_html( FrmTransLiteAppHelper::formatted_amount( $payment ) ); ?>
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php if ( $subscription->status === 'active' ) { ?>
 	<div class="misc-pub-section">
-		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_x_icon' ); ?>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon' ); ?>
 		<span class="frm_link_label">
 			<?php
 			FrmTransLiteSubscriptionsController::show_cancel_link(

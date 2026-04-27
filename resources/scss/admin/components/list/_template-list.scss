@@ -39,7 +39,7 @@
 
 .frm-templates-list li.frm-selectable:hover h3,
 .frm-templates-list li.frm-selectable:hover p {
-	max-width: calc( 100% - 65px );
+	max-width: calc(100% - 65px);
 }
 
 .frm-templates-list .frm-featured-form {
@@ -109,7 +109,7 @@
 .frm-hover-icons {
 	position: absolute;
 	right: 0;
-	top: calc( ( 58px - 2px - 22px ) / 2 ); /* Template item height - borders - icon height */
+	top: calc(( 58px - 2px - 22px ) / 2); /* Template item height - borders - icon height */
 	max-width: 91px;
 	height: 100%;
 	box-sizing: border-box;
@@ -183,14 +183,12 @@
 .frm-hover-icons .frm-create-form:hover,
 .frm-ready-made-solution .frm-hover-icons a:hover,
 .frm-hover-icons > .frm-unlock-form:hover,
-.frm-hover-icons > .frm-unlock-form:hover .frmsvg
-{
+.frm-hover-icons > .frm-unlock-form:hover .frmsvg {
 	background-color: var(--primary-700) !important;
 }
 
 .frm-hover-icons .frm-preview-form:hover,
-.frm-hover-icons .frm-delete-form:hover
-{
+.frm-hover-icons .frm-delete-form:hover {
 	border: 1px solid var(--primary-700) !important;
 }
 

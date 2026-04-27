@@ -24,7 +24,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		$_POST    = array(
 			'action'             => 'frm_add_or_remove_favorite_template',
 			'nonce'              => wp_create_nonce( 'frm_ajax' ),
-			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_KEYS ),
+			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_IDS ),
 			'operation'          => 'add',
 			'is_custom_template' => 'false',
 		);
@@ -37,7 +37,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		$current_favorites = $this->controller::get_favorite_templates();
 
 		// Assert that the arrays are equal.
-		$this->assertEquals( $current_favorites, $response_favorites, 'The favorite templates from AJAX response should match the current state.' );
+		$this->assertSame( $current_favorites, $response_favorites, 'The favorite templates from AJAX response should match the current state.' );
 	}
 
 	/**

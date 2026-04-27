@@ -7,6 +7,13 @@
 		--gap-2xl: 24px;
 	}
 
+	/* Revert settings panel gap variables to default */
+	.frm-settings-panel {
+		--gap-sm: 16px;
+		--gap-md: 24px;
+		--gap-2xl: 32px;
+	}
+
 	.auto-fold #adminmenuwrap {
 		width: 36px;
 	}
@@ -58,21 +65,6 @@
 		margin: 0 20px;
 	}
 
-	.frmbutton.ui-sortable-helper .frmsvg,
-	.field_type_list li.frmbutton .frmsvg,
-	.frmbutton.ui-sortable-helper i,
-	.field_type_list li.frmbutton i {
-		margin: .15em 0 .15em .1em;
-		width: 25px;
-	}
-
-	.rtl .frmbutton.ui-sortable-helper .frmsvg,
-	.rtl .field_type_list li.frmbutton .frmsvg,
-	.rtl .frmbutton.ui-sortable-helper i,
-	.rtl .field_type_list li.frmbutton i {
-		margin: .15em .1em .15em 0;
-	}
-
 	.frm_wrap .frm-search {
 		float: none !important;
 		width: auto;
@@ -115,7 +107,7 @@
 	}
 
 	#frm_top_bar .frm_form_nav {
-		box-shadow: 0 -0.47px 10px 0 #1018280F;
+		box-shadow: 0 -0.47px 10px 0 #1018280f;
 	}
 
 	#frm_top_bar ul.frm_form_nav {
