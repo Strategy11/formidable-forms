@@ -295,6 +295,21 @@ class FrmXMLHelper {
 
 		self::maybe_update_child_form_parent_id( $imported['forms'], $child_forms );
 
+		/**
+		 * Fires after all forms in the XML have been imported.
+		 *
+		 * Child forms are imported before their parent form, so per-form fix-ups
+		 * cannot resolve conditional logic that references fields in a form
+		 * imported later. Use this action for cross-form fix-ups that require
+		 * the fully populated `$frm_duplicate_ids` map.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $imported Summary of imported items, including
+		 *                        'forms' => array( old_form_id => new_form_id ).
+		 */
+		do_action( 'frm_after_import_forms', $imported );
+
 		return $imported;
 	}
 

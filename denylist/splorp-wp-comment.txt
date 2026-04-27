@@ -1617,6 +1617,7 @@ _москве
 -x-
 -x.site
 -xchang
+-xr.online
 -you-win-
 -you-win.
 -you-win/
@@ -2367,7 +2368,6 @@ _москве
 .in/top
 .in/user
 .in/wiki
-.info.
 .info/,
 .insanity-
 .internet-
@@ -2382,6 +2382,7 @@ _москве
 .it/www
 .izrablog.
 .izrablogs.
+.jai-club.
 .jaiblog.
 .jaiblogs.
 .jclick-
@@ -2510,6 +2511,7 @@ _москве
 .online.pl/
 .online.ws/
 .online/news/
+.onzeblog.
 .openlink-
 .openlink.
 .openlink/
@@ -4528,6 +4530,8 @@ _москве
 /j.mp/
 /jacket-
 /jacket.
+/jai-club.
+/jai-club/
 /jbs-
 /jbs.
 /jclick-
@@ -4905,6 +4909,7 @@ _москве
 /myspace/
 /n.
 /nblo.gs/
+/nesebar.
 /newbalance-
 /newbalance.
 /newbalance/
@@ -5431,6 +5436,7 @@ _москве
 /shop-for-
 /shop-for.
 /shop-for/
+/short-url.org/
 /shortcode-
 /shortcode/
 /shortcodes-
@@ -5595,6 +5601,7 @@ _москве
 /timberland.
 /tiny.cc/
 /tiny.dk/
+/tinyl.io/
 /tinylink.in/
 /tinyls.net/
 /tinyurl.co/
@@ -6402,15 +6409,27 @@ $sixty
 1vari
 1vine
 1win app
+1win azer
+1win bonus
+1win code
 1win game
 1win login
+1win raket
 1win_
 1win-app
+1win-azer
+1win-bonus
+1win-code
 1win-game
 1win-login
+1win-raket
 1winapp
+1winazer
+1winbonus
+1wincode
 1wingame
 1winlogin
+1winraket
 1xbet
 1you
 1zoop
@@ -10548,6 +10567,19 @@ bahaya lemak
 bahaya narkoba
 bahaya-lemak
 bahaya-narkoba
+bahigo casin
+bahigo cazin
+bahigo kasin
+bahigo schwei
+bahigo suisse
+bahigo-casin
+bahigo-cazin
+bahigo-kasin
+bahigo-schwei
+bahigo-suisse
+bahigocasin
+bahigocazin
+bahigokasin
 bahis casino
 bahis giris
 bahis giriş
@@ -10558,6 +10590,9 @@ bahis-giris
 bahis-site
 bahis-slot
 bahisgiris
+baijan bonus
+baijan-bonus
+baijanbonus
 baikal extreme
 baikal rest
 baikal-extreme
@@ -11351,6 +11386,7 @@ best pant
 best paragraph about
 best patio door
 best payment
+best poker play
 best porn
 best priced
 best promo
@@ -11447,6 +11483,7 @@ best-pant
 best-patio-door
 best-payment
 best-phone
+best-poker-play
 best-porn
 best-priced
 best-probiotic
@@ -12748,6 +12785,7 @@ bonus-setia
 bonus-site
 bonus-za-rejestra
 bonus-zu-beginnen
+bonus.online
 bonus.site
 bonuscasino
 bonuscazino
@@ -15158,6 +15196,7 @@ casier-judiciaire
 casino 24
 casino account
 casino affida
+casino app
 casino bet
 casino bonus
 casino buffet
@@ -15217,6 +15256,7 @@ casino-1
 casino-24
 casino-account
 casino-affida
+casino-app
 casino-bet
 casino-bonus
 casino-buffet
@@ -15277,6 +15317,7 @@ casino1
 casino4d
 casino24
 casinoaccount
+casinoapp
 casinobet
 casinobonus
 casinobuiten
@@ -15383,6 +15424,7 @@ cavinklein
 cawsino
 cazino 24
 cazino affida
+cazino app
 cazino depot
 cazino resort
 cazino sont
@@ -15390,12 +15432,14 @@ cazino vip
 cazino vodka
 cazino-24
 cazino-affida
+cazino-app
 cazino-depot
 cazino-resort
 cazino-sont
 cazino-vip
 cazino-vodka
 cazino24
+cazinoapp
 cazinovip
 cɑ
 cbd advert
@@ -17056,6 +17100,7 @@ cliente contento
 cliente maxima
 cliente-contento
 cliente-maxima
+clientfeedback
 clients content
 clients maximal
 clients-content
@@ -17347,6 +17392,7 @@ cocuk-siki
 cocukpazar
 cocukporn
 cocuksex
+code bonus
 code coupon
 code generat
 code http
@@ -17354,11 +17400,13 @@ code message support
 code promo
 code verif
 code xbox
+code-bonus
 code-coupon
 code-generat
 code-promo
 code-verif
 code-xbox
+codebonus
 codecoupon
 codegenerat
 codepromo
@@ -20042,7 +20090,7 @@ deliuveries
 deliuvery
 deliver effic
 deliver flexi
-deliver innovative
+deliver innovat
 deliver noticeable result
 deliver overtly
 deliver premier
@@ -20050,7 +20098,7 @@ deliver relia
 deliver result
 deliver-effic
 deliver-flexi
-deliver-innovative
+deliver-innovat
 deliver-noticeable-result
 deliver-overtly
 deliver-premier
@@ -20058,19 +20106,21 @@ deliver-relia
 deliver-result
 deliver.ifeng.co/
 deliver.ifeng.com/
-delivering innovative
-delivering-innovative
+delivering innovat
+delivering-innovat
 deliverresult
 delivers effic
 delivers flexi
-delivers innovative
+delivers innovat
 delivers premier
+delivers qualit
 delivers relia
 delivers result
 delivers-effic
 delivers-flexi
-delivers-innovative
+delivers-innovat
 delivers-premier
+delivers-qualit
 delivers-relia
 delivers-result
 deliversresult
@@ -21481,6 +21531,7 @@ droneshow1
 drop extra pound
 drop extra weight
 drop me a mail
+drop some cash
 drop this here
 drop your premium
 drop-extra-pound
@@ -22443,6 +22494,8 @@ enjoying your post
 enjoying your site
 enjoying your web
 enjoyment and excite
+enjoyment practice
+enjoyment-practice
 enjoymore
 enleverlescernes
 enlightening looking
@@ -26730,6 +26783,7 @@ getastyle
 getbitcoin
 getcash
 getface
+getfollowerfast
 getgiftcard
 gethermes
 getjoy
@@ -28140,6 +28194,7 @@ growth engine
 growth hormone
 growth market
 growth mindset
+growth new knowledge
 growth solution
 growth-educat
 growth-engine
@@ -28376,6 +28431,8 @@ habitof
 habitos infaliveis
 hábitos infalíveis
 habitos-infaliveis
+hacai-55
+hacai55
 hack $
 hack 123
 hack academy
@@ -28674,6 +28731,7 @@ happiness, productiv
 happy and ready
 happy birthday gift
 happy birthday image
+happy check them
 happy christmas gift
 happy christmas image
 happy fresh year
@@ -29381,6 +29439,7 @@ hi. this page
 hi. this post
 hi. this web
 hi.this
+hi68.info
 hiburan daring
 hiburan digital
 hiburan-daring
@@ -31705,6 +31764,7 @@ invest in bitcoin
 invest in btc
 invest in crypto
 invest in nft
+invest wisely
 invest-binary
 invest-in-bitcoin
 invest-in-btc
@@ -31712,6 +31772,7 @@ invest-in-crypto
 invest-in-nft
 invest-money
 invest-off
+invest-wisely
 invest.pl/
 invest.ro/
 invest.ru/
@@ -31864,7 +31925,9 @@ iphones apple
 iphones-apple
 iphonesuppl
 iphonex
+ipl live
 ipl-202
+ipl-live
 ipl202
 ipldog
 iplnews
@@ -32511,6 +32574,7 @@ jimla.r.d
 jimmy-choo
 jimmychoo
 jjajjaj
+jjkkkl
 jjl
 jo irast
 jó írást
@@ -32974,17 +33038,20 @@ kashpo
 kasino
 kasino 24
 kasino affida
+kasino app
 kasino bonus
 kasino depot
 kasino vip
 kasino vodka
 kasino-24
 kasino-affida
+kasino-app
 kasino-bonus
 kasino-depot
 kasino-vip
 kasino-vodka
 kasino24
+kasinoapp
 kasinovip
 kassino
 kasyday
@@ -34784,7 +34851,9 @@ little thing else
 little thing is simple
 littlegod
 live article
+live bang
 live betting
+live casino
 live crazy time
 live gore
 live hack
@@ -34793,9 +34862,12 @@ live now fox
 live odds
 live pharm
 live roulette
+live very impress
 live video chat
 live-article
+live-bang
 live-betting
+live-casino
 live-gore
 live-hack
 live-jasmin
@@ -34808,9 +34880,11 @@ live-sex
 live-video-chat
 live22
 livearticle
+livebang
 livebox live
 livebox-live
 liveboxlive
+livecasino
 livecrazytime
 livefree
 livegore
@@ -36277,6 +36351,7 @@ markergaul
 market crash
 market exchang
 market forerunner
+market invest
 market online
 market samurai
 market scenario
@@ -36286,6 +36361,7 @@ market обзоры
 market-crash
 market-exchang
 market-forerunner
+market-invest
 market-online
 market-samurai
 market-scenario
@@ -36410,7 +36486,9 @@ marketplace-nft
 marketprices
 marketpricing
 marketresearch
+markets invest
 markets research comp
+markets-invest
 markets.financ
 marketsamurai
 markettakeover
@@ -38111,6 +38189,9 @@ monica-santa
 monitoringu
 monnaies revolution
 monohydrate
+monopoly live
+monopoly-live
+monopolylive
 monroussillon
 monsoon-essential
 monster beat
@@ -38769,6 +38850,11 @@ my profile link
 my pussy get
 my pzge
 my rating:
+my related article
+my related blog
+my related page
+my related post
+my related web
 my shisha
 my short article
 my sikte
@@ -39860,6 +39946,7 @@ nossos-comprador
 nossos-orgaos
 nostro marijuana
 nostro-marijuana
+not acceptable!
 not fake
 not having accident
 not suure
@@ -40424,11 +40511,13 @@ offered on your web
 offered you with quite
 offering comfort
 offering free
+offering inclusive
 offering that price
 offering this price
 offering various premium
 offering-comfort
 offering-free
+offering-inclusive
 offerout
 offers breathtaking
 offers comfort
@@ -49157,11 +49246,13 @@ server coach
 server download
 server german
 server singa
+server vps serve
 server warframe
 server-coach
 server-download
 server-german
 server-singa
+server-vps-serve
 server-warframe
 server.download
 service 24/7
@@ -50427,6 +50518,7 @@ site give pleasant
 site gives pleasant
 site goog
 site however
+site ipl
 site is an in
 site is extreme
 site is fastidious
@@ -50487,6 +50579,7 @@ site-expert-near
 site-experts-near
 site-goog
 site-however
+site-ipl
 site-is-extreme
 site-laman
 site-link
@@ -50814,6 +50907,7 @@ slotgame
 slotjackpot
 slotlapak
 slotmachine
+slotmaschinen
 slotonline
 slotpg
 slotplinko
@@ -51177,6 +51271,9 @@ sokratit-rashody
 sokurce
 sol prednisolone
 sol-prednisolone
+solana price
+solana-price
+solanaprice
 solar install near
 solar panel clean
 solar panel gold
@@ -52205,6 +52302,7 @@ studying a publish
 studying gpcr
 studying-gpcr
 studylook
+stuff , appreciate
 stuff into account
 stuff you post
 stuff-you-post
@@ -53023,6 +53121,7 @@ takako ajasin
 takako-ajasin
 take a appear
 take a in the
+take a look :
 take an expense
 take angry
 take correct drug
@@ -53419,6 +53518,7 @@ tecnicooficial
 teen cam
 teen female
 teen lesb
+teen patti
 teen porn
 teen pussy
 teen sex
@@ -53428,6 +53528,7 @@ teen-cam
 teen-female
 teen-her
 teen-lesb
+teen-patti
 teen-porn
 teen-pussy
 teen-sex
@@ -53444,6 +53545,7 @@ teencam
 teenher
 teeniepant
 teenlesb
+teenpatti
 teenporn
 teenpussy
 teens cam
@@ -53873,6 +53975,7 @@ the fabulous site
 the fabulous web
 the feed back
 the feed-back
+the fitness bet
 the fknest
 the following web
 the go section
@@ -54212,6 +54315,7 @@ this article has
 this article hit
 this article is interest
 this article present
+this article really
 this article together
 this article truly
 this artile
@@ -54235,6 +54339,7 @@ this blog offer
 this blog post
 this blog present
 this blog prov
+this blog really
 this blog truly
 this blog was
 this blog;
@@ -54333,6 +54438,7 @@ this site is one
 this site is some
 this site is useful
 this site is very
+this site really
 this site truly
 this site;
 this submit
@@ -54358,6 +54464,7 @@ this weblog is nice
 this weblog is some
 this weblog offer
 this weblog prov
+this weblog really
 this weblog truly
 this weblog was
 this weblog;
@@ -54802,7 +54909,6 @@ tips-that-can
 tips-to-start
 tips-unlimited
 tips-untuk
-tips.info
 tipsblog
 tipsdaily
 tipsof
@@ -55767,6 +55873,7 @@ trial a bit
 trial software install
 trial-software-install
 trickphoto
+tried hi68
 triệu đồng
 trik mendesain
 trik selalu
@@ -55874,6 +55981,7 @@ truthabout
 trx خیلی
 try fitrx
 try here best
+try hi68
 try iit
 try this blog
 try this site
@@ -56911,6 +57019,7 @@ useful blog
 useful idiom
 useful page overall
 useful pages overall
+useful stuff ,
 useful-idiom
 usefulness of your content
 usefuyl
@@ -57093,6 +57202,7 @@ valuble
 value are king
 value blog
 value comment
+value growth new
 value of data
 value of printing
 value of retaining
@@ -58138,6 +58248,15 @@ vitamins-for
 vitaminsfor
 vitamix
 vitrine
+vivaro casino
+vivaro cazino
+vivaro kasino
+vivaro-casino
+vivaro-cazino
+vivaro-kasino
+vivarocasino
+vivarocazino
+vivarokasino
 vivekkunwar
 vivencia de juego
 vivencia-de-juego
@@ -58228,9 +58347,11 @@ vpn4free
 vpn外网
 vps dedicado
 vps free
+vps server vps
 vps сервер
 vps-dedicado
 vps-free
+vps-server-vps
 vpsdedicado
 vpsfree
 vs seo
@@ -59168,7 +59289,9 @@ weihun-chunan
 weihunchunan
 weitere seo
 weitere-seo
+welcome bonus
 welcome to inquiry
+welcome-bonus
 welcome-to-inquiry
 welcome-to-my-blog
 welcome-to-my-page
@@ -59581,6 +59704,7 @@ wilson-jers
 wilsonjers
 win at blackjack
 win at casino
+win big with
 win biz
 win blackjack
 win casino
@@ -59591,6 +59715,7 @@ win ranks from
 win v buck
 win сайт
 win-a-prize
+win-big-with
 win-biz
 win-blackjack
 win-casino
@@ -61340,6 +61465,15 @@ zakazat diplom
 zakazat-diplom
 zakladie
 zaklady
+zamba casino
+zamba cazino
+zamba kasino
+zamba-casino
+zamba-cazino
+zamba-kasino
+zambacasino
+zambacazino
+zambakasino
 zanaflex
 zanotti online
 zanotti sale
@@ -62006,11 +62140,12 @@ zyvox
 казино рокс
 кайт сафари
 как выбрать
+как выигрыв
 как да изберете
 как играть
 как новос
 как проект
-как работать
+как работа
 каким признакам
 карниз для штор
 карниз моторизованный
@@ -62107,6 +62242,7 @@ zyvox
 лицензия
 личного примера
 личным предпо
+личным ростом
 лишней массы
 ломают машин
 ломаютмашин
@@ -62195,6 +62331,7 @@ zyvox
 мультимедийных систем
 мультимедийных элеме
 мышечной масс
+на 1win
 на любую тему
 набрать подпи
 надежный партнер
@@ -62457,6 +62594,7 @@ zyvox
 р№
 рµ
 работают сайт
+радует меня
 разберитесь в факт
 разведение борзы
 разведение овча
@@ -62563,6 +62701,7 @@ zyvox
 самый превосход
 сварных конструк
 своем сегменте
+своим игривым
 свой сайт
 свою мечту
 сѓс
@@ -62783,9 +62922,13 @@ zyvox
 шапка
 шёлковый палант
 шёлковый платок
+шє
 шкаф в парк
 шкуры животных
 шлюхи
+щ†
+щ€
+щѓ
 щзп
 эвакуатор
 экономичных до премиа
@@ -62810,6 +62953,7 @@ zyvox
 якості link
 яндekc
 яндексе
+яркие впечатления
 ԝa
 ԝe
 ԝi

@@ -1855,8 +1855,8 @@ function frmFrontFormJS() {
 				currency.decimal_separator = '.';
 			}
 
+			totalField.value = roundTotal( total, currency );
 			total = normalizeTotal( total, currency );
-			totalField.value = total;
 
 			// because of e.g. fields that might be using this field for calculations
 			triggerChange( totalField );
@@ -1864,13 +1864,15 @@ function frmFrontFormJS() {
 			total = formatCurrency( total, currency );
 			const formatted = totalField.previousElementSibling;
 			if ( formatted?.matches( '.frm_total_formatted' ) ) {
-				formatted.textContent = total;
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formatted.innerHTML = total;
 				return;
 			}
 
 			const formattedEls = totalField.closest( '.frm_form_field' ).querySelectorAll( '.frm_total_formatted' );
 			formattedEls.forEach( formattedEl => {
-				formattedEl.textContent = total;
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formattedEl.innerHTML = total;
 			} );
 		} );
 	}
@@ -1880,9 +1882,17 @@ function frmFrontFormJS() {
 	 *
 	 * @param {number} total    The total amount to normalize.
 	 * @param {Object} currency The currency object containing decimal information.
-	 * @return {number}         The normalized total amount.
+	 * @return {string}         The normalized total amount.
 	 */
 	function normalizeTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
+		total = roundTotal( total, currency );
+
+		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+	}
+
+	function roundTotal( total, currency ) {
 		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
 
 		if ( ! isLargeTotal ) {
@@ -1890,7 +1900,7 @@ function frmFrontFormJS() {
 			total = decimals > 0 ? round10( total, decimals ) : Math.ceil( total );
 		}
 
-		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+		return total;
 	}
 
 	function round10( value, decimals ) {

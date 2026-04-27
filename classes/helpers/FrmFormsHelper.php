@@ -2152,7 +2152,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @return void
 	 */
@@ -2173,7 +2173,7 @@ BEFORE_HTML;
 	/**
 	 * Returns the form name or the no title text if the form name is empty.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param array|stdClass $form   The form data.
 	 * @param int            $length The form name length to truncate to.
