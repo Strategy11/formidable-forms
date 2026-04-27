@@ -6,6 +6,7 @@
 		"**/web-components/**",
 		"**/frm_admin.css",
 		"**/frm-settings-components.css",
+		"**/frm-legacy-paypal.css",
 		"**/font_icons.css",
 		"**/frm_testing_mode.css",
 		"**/welcome-tour.css",
