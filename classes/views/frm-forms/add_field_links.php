@@ -228,7 +228,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 				/**
 				 * Hook in so people can include additional tab content.
-				 * Used along with frm_extra_form_instruction_tabs
+				 * Used along with frm_extra_form_instruction_tabs which is used to
+				 * include the tabs.
 				 *
 				 * @since x.x
 				 *
