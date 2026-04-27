@@ -1,5 +1,4 @@
-// Start @since x.x
-// Temporary PayPal styles for legacy table-based markup, scoped to .frm_single_paypal_settings and removable after view refresh.
+// Legacy PayPal action settings styles. Removable after the PayPal add-on is officially no longer supported.
 .frm_single_paypal_settings {
 
 	.form-table {
@@ -43,4 +42,3 @@
 		display: none !important;
 	}
 }
-// End @since x.x
