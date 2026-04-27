@@ -1011,7 +1011,7 @@ function frmFrontFormJS() {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
-			} else if ( ! willRedirect) { // Avoid double submission if redirecting to a page.
+			} else if ( ! willRedirect ) { // Avoid double submission if redirecting to a page.
 				// There may have been a plugin conflict, or the form is not set to submit with ajax.
 
 				showFileLoading( object );
