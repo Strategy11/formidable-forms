@@ -17,7 +17,7 @@ categorizedAddons[ VIEWS.ACTIVE ] = [];
 export function buildCategorizedAddons() {
 	const { addons } = getElements();
 
-	addons.forEach( ( addon ) => {
+	addons.forEach( addon => {
 		// Extract and split the categories from data attribute
 		const dataCategories = addon.getAttribute( 'data-categories' );
 		if ( ! dataCategories ) {
@@ -26,7 +26,7 @@ export function buildCategorizedAddons() {
 
 		const categories = dataCategories.split( ',' );
 
-		categories.forEach( ( category ) => {
+		categories.forEach( category => {
 			// Initialize the category array if not already done
 			if ( ! categorizedAddons[ category ] ) {
 				categorizedAddons[ category ] = [];

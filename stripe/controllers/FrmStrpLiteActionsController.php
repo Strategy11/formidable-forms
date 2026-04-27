@@ -15,21 +15,22 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string             $callback
 	 * @param array|false|object $field
+	 *
 	 * @return string
 	 */
 	public static function maybe_show_card( $callback, $field = false ) {
 		if ( false === $field ) {
 			// Pro isn't up to date.
-			return $callback;
+			// Fallback to Stripe Lite if we do not know the form.
+			// This way we do not display the default credit card field
+			// when Pro is not up to version 6.21.
+			return self::class . '::show_card';
 		}
 
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
-		if ( empty( $actions ) ) {
-			return $callback;
-		}
 
-		return self::class . '::show_card';
+		return $actions ? self::class . '::show_card' : $callback;
 	}
 
 	/**
@@ -40,6 +41,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @param array  $field
 	 * @param string $field_name
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function show_card( $field, $field_name, $atts ) {
@@ -61,17 +63,21 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	public static function get_actions_before_submit( $form_id ) {
 		$payment_actions = self::get_actions_for_form( $form_id );
+
 		foreach ( $payment_actions as $k => $payment_action ) {
 			$gateway   = $payment_action->post_content['gateway'];
 			$is_stripe = $gateway === 'stripe' || ( is_array( $gateway ) && in_array( 'stripe', $gateway, true ) );
+
 			if ( ! $is_stripe || empty( $payment_action->post_content['amount'] ) ) {
 				unset( $payment_actions[ $k ] );
 			}
 		}
+
 		return $payment_actions;
 	}
 
@@ -83,6 +89,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return false|WP_Post
 	 */
 	public static function get_stripe_link_action( $form_id ) {
@@ -98,6 +105,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
 	 * @param mixed    $form
+	 *
 	 * @return array
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
@@ -107,9 +115,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			'show_errors'  => true,
 		);
 		$atts     = compact( 'action', 'entry', 'form' );
+		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
-		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
-		if ( empty( $amount ) || $amount == 000 ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $amount || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}
@@ -120,6 +129,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$customer = self::set_customer_with_token( $atts );
+
 		if ( ! is_object( $customer ) ) {
 			$response['error'] = $customer;
 			return $response;
@@ -127,7 +137,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$one_time_payment_args = compact( 'customer', 'form', 'entry', 'action', 'amount' );
 
-		FrmStrpLiteLinkController::create_pending_stripe_link_payment( $one_time_payment_args );
+		if ( ! FrmStrpLiteLinkController::create_pending_stripe_link_payment( $one_time_payment_args ) ) {
+			$response['error'] = __( 'There was something wrong with the payment data.', 'formidable' );
+			return $response;
+		}
+
 		$response['show_errors'] = false;
 		return $response;
 	}
@@ -145,6 +159,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Set a customer object to $_POST['customer'] to use later.
 	 *
 	 * @param array $atts
+	 *
 	 * @return object|string
 	 */
 	private static function set_customer_with_token( $atts ) {
@@ -175,10 +190,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Replace an [email] shortcode with the current user email.
 	 *
 	 * @param string $email
+	 *
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
-		if ( false === strpos( $email, '[email]' ) ) {
+		if ( ! str_contains( $email, '[email]' ) ) {
 			return $email;
 		}
 
@@ -197,6 +213,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param array $atts
 	 * @param array $payment_info
+	 *
 	 * @return void
 	 */
 	private static function add_customer_name( $atts, &$payment_info ) {
@@ -205,6 +222,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$name = '[' . $atts['action']->post_content['billing_first_name'] . ' show="first"]';
+
 		if ( ! empty( $atts['action']->post_content['billing_last_name'] ) ) {
 			$name .= ' [' . $atts['action']->post_content['billing_last_name'] . ' show="last"]';
 		}
@@ -218,15 +236,18 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v1.16 of the Stripe add on.
 	 *
 	 * @param array $atts Includes 'customer', 'entry', 'action', 'amount'.
+	 *
 	 * @return int The timestamp when the trial should end. 0 for no trial
 	 */
 	public static function get_trial_end_time( $atts ) {
 		$settings = $atts['action']->post_content;
+
 		if ( empty( $settings['trial_interval_count'] ) ) {
 			return 0;
 		}
 
 		$trial = $settings['trial_interval_count'];
+
 		if ( ! is_numeric( $trial ) ) {
 			$trial = FrmTransLiteAppHelper::process_shortcodes(
 				array(
@@ -248,6 +269,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param mixed $amount
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	public static function prepare_amount( $amount, $atts = array() ) {
@@ -260,6 +282,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Add defaults for additional Stripe action options.
 	 *
 	 * @param array $defaults
+	 *
 	 * @return array
 	 */
 	public static function add_action_defaults( $defaults ) {
@@ -273,6 +296,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Print additional options for Stripe action settings.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function add_action_options( $atts ) {
@@ -286,6 +310,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param array $settings
 	 * @param array $action
+	 *
 	 * @return array
 	 */
 	public static function before_save_settings( $settings, $action ) {
@@ -293,24 +318,25 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		// Gateway is a radio button but it should always be an array in the database for
 		// compatibility with the payments submodule where it is a checkbox.
-		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
+
 		if ( ! $is_stripe ) {
 			return $settings;
 		}
 
 		// In Lite Stripe link is always used.
 		$settings['stripe_link'] = 1;
-		$settings                = self::create_plans( $settings );
 
-		return $settings;
+		return self::create_plans( $settings );
 	}
 
 	/**
 	 * Create any required Stripe plans, used for subscriptions.
 	 *
 	 * @param array $settings
+	 *
 	 * @return array
 	 */
 	public static function create_plans( $settings ) {
@@ -321,6 +347,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$plan_opts = FrmStrpLiteSubscriptionHelper::prepare_plan_options( $settings );
+
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $plan_opts['id'] != $settings['plan_id'] ) {
 			$settings['plan_id'] = FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan_opts );
 		}
@@ -332,27 +360,30 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Include settings in the plan description in order to make sure the correct plan is used.
 	 *
 	 * @param array $settings
+	 *
 	 * @return string
 	 */
 	public static function create_plan_id( $settings ) {
 		$amount = self::prepare_amount( $settings['amount'], $settings );
-		$id     = sanitize_title_with_dashes( $settings['description'] ) . '_' . $amount . '_' . $settings['interval_count'] . $settings['interval'] . '_' . $settings['currency'];
-		return $id;
+		return sanitize_title_with_dashes( $settings['description'] ) . '_' . $amount . '_' . $settings['interval_count'] . $settings['interval'] . '_' . $settings['currency'];
 	}
 
 	/**
 	 * If this form submits with ajax, load the scripts on the first page.
 	 *
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public static function maybe_load_scripts( $params ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $params['form_id'] == $params['posted_form_id'] ) {
 			// This form has already been posted, so we aren't on the first page.
 			return;
 		}
 
 		$form = FrmForm::getOne( $params['form_id'] );
+
 		if ( ! $form ) {
 			return;
 		}
@@ -363,6 +394,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'type'       => 'credit_card',
 			)
 		);
+
 		if ( ! $credit_card_field ) {
 			return;
 		}
@@ -374,6 +406,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Load front end JavaScript for a Stripe form.
 	 *
 	 * @param int $form_id
+	 *
 	 * @return void
 	 */
 	public static function load_scripts( $form_id ) {
@@ -386,6 +419,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$stripe_connect_is_setup = FrmStrpLiteConnectHelper::stripe_connect_is_setup();
+
 		if ( ! $stripe_connect_is_setup ) {
 			return;
 		}
@@ -417,6 +451,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				// The unminified file is not included in releases so force the minified script.
 				$suffix = '.min';
 			}
+
 			$script_url = FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . $suffix . '.js';
 		}
 
@@ -426,8 +461,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$found_gateway   = false;
+
 		foreach ( $action_settings as $action ) {
 			$gateways = $action['gateways'];
+
 			if ( ! $gateways || in_array( 'stripe', (array) $gateways, true ) ) {
 				$found_gateway = true;
 				break;
@@ -468,6 +505,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param mixed $form_id
+	 *
 	 * @return array
 	 */
 	private static function get_style_settings_for_form( $form_id ) {
@@ -476,12 +514,14 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$style = FrmStylesController::get_form_style( $form_id );
+
 		if ( ! $style ) {
 			return array();
 		}
 
 		$settings   = FrmStylesHelper::get_settings_for_output( $style );
 		$disallowed = array( ';', ':', '!important' );
+
 		foreach ( $settings as $k => $s ) {
 			if ( is_string( $s ) ) {
 				$settings[ $k ] = str_replace( $disallowed, '', $s );
@@ -500,6 +540,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $settings
+	 *
 	 * @return array
 	 */
 	private static function get_appearance_rules( $settings ) {
@@ -542,8 +583,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		 * @param array $rules
 		 * @param array $settings
 		 */
-		$rules = apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
-		return $rules;
+		return apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
 	}
 
 	/**
@@ -552,6 +592,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.21
 	 *
 	 * @param array $settings
+	 *
 	 * @return string
 	 */
 	private static function get_border_width( $settings ) {
@@ -567,6 +608,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.21
 	 *
 	 * @param array $settings
+	 *
 	 * @return string
 	 */
 	private static function get_border_radius( $settings ) {
@@ -586,6 +628,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Get the language to use for Stripe elements.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 *
 	 * @return string
 	 */
 	private static function get_locale() {
@@ -605,19 +648,22 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @param array    $errors
 	 * @param stdClass $field
 	 * @param array    $values
+	 *
 	 * @return array
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {
 		$has_processed = isset( $_POST[ 'frmintent' . $field->form_id ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 		if ( ! $has_processed ) {
 			return $errors;
 		}
 
-		$field_id = isset( $field->temp_id ) ? $field->temp_id : $field->id;
+		$field_id = $field->temp_id ?? $field->id;
 
 		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
 			unset( $errors[ 'field' . $field_id . '-cc' ] );
 		}
+
 		if ( isset( $errors[ 'field' . $field_id ] ) ) {
 			unset( $errors[ 'field' . $field_id ] );
 		}

@@ -27,7 +27,7 @@ export function createPageState( initialState = {} ) {
 	 * @param {string} propertyName The name of the property to retrieve.
 	 * @return {*} The value of the specified property, or null if it doesn't exist.
 	 */
-	const getSingleState = ( propertyName ) => {
+	const getSingleState = propertyName => {
 		const value = Reflect.get( state, propertyName );
 
 		// We convert `undefined` to `null` for a consistent API.
@@ -42,7 +42,7 @@ export function createPageState( initialState = {} ) {
 	 * @throws {Error} Throws an error if `newState` is not a plain object.
 	 * @return {void}
 	 */
-	const setState = ( newState ) => {
+	const setState = newState => {
 		if ( typeof newState !== 'object' || newState === null ) {
 			throw new Error( 'setState: newState must be a non-null object' );
 		}

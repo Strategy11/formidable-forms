@@ -10,8 +10,7 @@ class test_FrmAddon extends FrmUnitTest {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )
-							->setMethods( null )
+		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )->setMethods()
 							->getMock();
 	}
 
@@ -19,8 +18,8 @@ class test_FrmAddon extends FrmUnitTest {
 	 * @covers FrmAddon::__construct
 	 */
 	public function test_construct() {
-		$this->assertEquals( 'signature', $this->addon->plugin_slug );
-		$this->assertEquals( 'edd_signature_license_', $this->addon->option_name );
+		$this->assertSame( 'signature', $this->addon->plugin_slug );
+		$this->assertSame( 'edd_signature_license_', $this->addon->option_name );
 
 		// TODO: Test this line: $this->license = $this->get_license();
 	}
@@ -30,7 +29,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 */
 	public function test_insert_installed_addon() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-		$this->assertTrue( isset( $plugins['signature'] ) );
+		$this->assertArrayHasKey( 'signature', $plugins );
 	}
 
 	/**
@@ -43,7 +42,7 @@ class test_FrmAddon extends FrmUnitTest {
 		$license_key = 'testlicense-232';
 		define( 'FRM_SIGNATURE_LICENSE', $license_key );
 		$license = $this->addon->get_defined_license();
-		$this->assertEquals( $license_key, $license );
+		$this->assertSame( $license_key, $license );
 	}
 
 	/**
@@ -71,9 +70,9 @@ class test_FrmAddon extends FrmUnitTest {
 			),
 		);
 
-		$this->run_private_method( array( $this->addon, 'update_last_checked' ) );
-		$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 hour' ) );
-		$this->assertTrue( $should_run, 'Time was set via update_last_checked' );
+		$this->run_private_method( array( $this->addon, 'update_last_checked' ), array( true ) );
+		$checked_recently = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 hour' ) );
+		$this->assertTrue( $checked_recently, 'Time was set via update_last_checked' );
 		$option_name = $this->run_private_method( array( $this->addon, 'transient_key' ) );
 
 		foreach ( $times as $time ) {
@@ -87,9 +86,8 @@ class test_FrmAddon extends FrmUnitTest {
 				update_option( $option_name, $save );
 			}
 
-			$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
-			$this->assertEquals( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
-
+			$checked_recently = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
+			$this->assertSame( $time['expected'], $checked_recently, $time['time'] . 'not properly checking' );
 		}
 	}
 
@@ -100,6 +98,7 @@ class test_FrmAddon extends FrmUnitTest {
 		// Remove the roles first so we're not getting false positives for data that already exists prior to running FrmAddon::update_pro_capabilities.
 		$caps       = array_keys( FrmAppHelper::frm_capabilities( 'pro_only' ) );
 		$admin_role = get_role( 'administrator' );
+
 		foreach ( $caps as $cap ) {
 			$admin_role->remove_cap( $cap );
 		}
@@ -112,6 +111,7 @@ class test_FrmAddon extends FrmUnitTest {
 		$wp_roles = new WP_Roles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 
 		$admin_role = get_role( 'administrator' );
+
 		foreach ( $caps as $cap ) {
 			$this->assertTrue( $admin_role->has_cap( $cap ) );
 		}

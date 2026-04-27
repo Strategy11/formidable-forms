@@ -46,13 +46,16 @@ class FrmStringReaderHelper {
 	 * By default, discard that final matching character and return the rest.
 	 *
 	 * @param string $char
+	 *
 	 * @return string
 	 */
 	public function read_until( $char ) {
 		$value = '';
+
 		while ( $this->pos <= $this->max && ( $one = $this->string[ $this->pos++ ] ) !== $char ) {
 			$value .= $one;
 		}
+
 		return $value;
 	}
 
@@ -62,6 +65,7 @@ class FrmStringReaderHelper {
 	 * By default, remove enclosing double-quotes from the result.
 	 *
 	 * @param int $count
+	 *
 	 * @return string
 	 */
 	public function read( $count ) {
@@ -81,7 +85,7 @@ class FrmStringReaderHelper {
 		 * "abc" => abc
 		 * ""abc"" => "abc"
 		 */
-		if ( strlen( $value ) < 2 || substr( $value, 0, 1 ) !== '"' || substr( $value, -1, 1 ) !== '"' ) {
+		if ( strlen( $value ) < 2 || ! str_starts_with( $value, '"' ) || ! str_ends_with( $value, '"' ) ) {
 			// Only remove exactly one quote from the start and the end and then only if there is one at each end.
 			// Too short, or does not start or end with a quote.
 			return $value;

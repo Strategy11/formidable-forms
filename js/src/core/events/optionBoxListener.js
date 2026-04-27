@@ -13,9 +13,9 @@ const OPTION_BOX_CLASS = '.frm-option-box';
 export function addOptionBoxEvents() {
 	const optionBoxes = document.querySelectorAll( OPTION_BOX_CLASS );
 
-	optionBoxes.forEach( ( optionBox ) => {
+	optionBoxes.forEach( optionBox => {
 		optionBox.addEventListener( 'click', onOptionBoxClick );
-	});
+	} );
 }
 
 /**

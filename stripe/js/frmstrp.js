@@ -1,16 +1,15 @@
 ( function() {
-	var thisForm = false,
-		formID = 0,
-		event = false,
-		frmstripe,
-		running = 100,
-		elements,
-		isStripeLink = false,
-		linkAuthenticationElementIsComplete = false,
-		stripeLinkElementIsComplete = false,
-		triggerCustomEvent;
+	let thisForm = false;
+	let formID = 0;
+	let event = false;
+	let frmstripe;
+	let running = 100;
+	let elements;
+	let isStripeLink = false;
+	let linkAuthenticationElementIsComplete = false;
+	let stripeLinkElementIsComplete = false;
 
-	triggerCustomEvent = function( el, eventName, data ) {
+	const triggerCustomEvent = function( el, eventName, data ) {
 		frmFrontForm.triggerCustomEvent( el, eventName, data );
 	};
 
@@ -19,7 +18,7 @@
 	 */
 	function validateForm( e ) {
 		thisForm = this;
-		formID   = jQuery( thisForm ).find( 'input[name="form_id"]' ).val();
+		formID = jQuery( thisForm ).find( 'input[name="form_id"]' ).val();
 
 		if ( shouldProcessForm() ) {
 			e.preventDefault();
@@ -34,11 +33,9 @@
 	}
 
 	/**
-	 * @returns {Boolean}
+	 * @return {boolean} True if form should be processed by Stripe.
 	 */
 	function shouldProcessForm() {
-		var ccField;
-
 		if ( formID != frm_stripe_vars.form_id ) {
 			return false;
 		}
@@ -47,7 +44,7 @@
 			return false;
 		}
 
-		ccField = jQuery( thisForm ).find( '.frm-card-element' );
+		const ccField = jQuery( thisForm ).find( '.frm-card-element' );
 		if ( ccField.length && ! ccField.is( ':hidden' ) ) {
 			return true;
 		}
@@ -56,10 +53,10 @@
 	}
 
 	/**
-	 * @returns {Boolean}
+	 * @return {boolean} True if current action type should be processed.
 	 */
 	function currentActionTypeShouldBeProcessed() {
-		var action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
+		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
 
 		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
 			return 'create' === action;
@@ -68,15 +65,13 @@
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
 			action,
 			{
-				thisForm: thisForm
+				thisForm
 			}
 		);
 	}
 
 	function processForm() {
-		var $form, meta;
-
-		$form = jQuery( thisForm );
+		const $form = jQuery( thisForm );
 
 		// Run javascript validation.
 		$form.addClass( 'frm_js_validate' );
@@ -86,7 +81,7 @@
 		}
 
 		frmFrontForm.showSubmitLoading( $form );
-		meta = addName( $form );
+		const meta = addName( $form );
 
 		if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.addAddressMeta ) {
 			window.frmProForm.addAddressMeta( $form, meta );
@@ -108,8 +103,8 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} object
-	 * @param {Object} meta
-	 * @returns {void}
+	 * @param {Object}  meta
+	 * @return {void}
 	 */
 	function stripeLinkSubmit( object, meta ) {
 		object.classList.add( 'frm_trigger_event_on_submit', 'frm_ajax_submit' );
@@ -119,23 +114,19 @@
 		submitForm();
 
 		function confirmPayment( event ) {
-			var params, confirmFunction;
-
 			if ( ! checkEventDataForError( event ) ) {
 				return;
 			}
 
-			var params, confirmFunction;
-
 			window.onpageshow = function( event ) {
 				// Force the form to reload on back button after submitting.
-				if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[0].type === 'back_forward' ) ) {
+				if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[ 0 ].type === 'back_forward' ) ) {
 					window.location.reload();
 				}
 			};
 
-			params = {
-				elements: elements,
+			let params = {
+				elements,
 				confirmParams: {
 					return_url: getReturnUrl()
 				}
@@ -145,13 +136,13 @@
 				params = frmProForm.beforeConfirmPayment( params, meta );
 			}
 
-			confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
+			const confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
 
 			frmstripe[ confirmFunction ]( params ).then( handleConfirmPromise );
 		}
 
 		function getReturnUrl() {
-			var url = new URL( frm_stripe_vars.ajax );
+			const url = new URL( frm_stripe_vars.ajax );
 
 			url.searchParams.append( 'action', 'frmstrplinkreturn' );
 			return url.toString();
@@ -164,19 +155,17 @@
 		}
 
 		function handleConfirmPaymentError( error ) {
-			var fieldset, cardErrors;
-
 			running--;
 			enableSubmit();
 
-			fieldset = jQuery( object ).find( '.frm_form_field' );
+			const fieldset = jQuery( object ).find( '.frm_form_field' );
 			fieldset.removeClass( 'frm_doing_ajax' );
 
 			object.classList.remove( 'frm_loading_form' );
 
 			// Don't show validation_error here as those are added automatically to the email and postal code fields, etc.
 			if ( 'card_error' === error.type || 'invalid_request_error' === error.type || 'form_submit_error' === error.type ) {
-				cardErrors = object.querySelector( '.frm-card-errors' );
+				const cardErrors = object.querySelector( '.frm-card-errors' );
 				if ( cardErrors ) {
 					cardErrors.textContent = error.message;
 				}
@@ -190,40 +179,38 @@
 		 * @since 6.10
 		 *
 		 * @param {CustomEvent} event
-		 * @returns {boolean}
+		 * @return {boolean} True if no errors found in event data.
 		 */
 		function checkEventDataForError( event ) {
-			var element, error;
-
-			if ( ! event.frmData || ! event.frmData.content.length || -1 === event.frmData.content.indexOf( '<div class="frm_error_style' ) ) {
+			if ( ! event.frmData || ! event.frmData.content.length || ! event.frmData.content.includes( '<div class="frm_error_style' ) ) {
 				return true;
 			}
 
-			element = document.createElement( 'div' );
+			const element = document.createElement( 'div' );
 			element.innerHTML = event.frmData.content;
 
-			error = element.querySelector( '.frm_error_style' );
+			const error = element.querySelector( '.frm_error_style' );
 			if ( error ) {
-				handleConfirmPaymentError({
+				handleConfirmPaymentError( {
 					type: 'form_submit_error',
 					message: error.textContent
-				});
+				} );
 				return false;
 			}
 
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Check if the stripe setting is for a recurring payment.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @returns {bool}
+	 * @return {boolean} True if payment is recurring.
 	 */
 	function isRecurring() {
-		var isRecurring	= false;
+		let isRecurring = false;
 
 		each(
 			getStripeSettings(),
@@ -240,15 +227,13 @@
 
 	/**
 	 * @param {Object} $form
-	 * @return {Boolean} false if there are errors.
+	 * @return {boolean} false if there are errors.
 	 */
 	function validateFormSubmit( $form ) {
-		var errors, keys;
+		const errors = frmFrontForm.validateFormSubmit( $form );
+		const keys = Object.keys( errors );
 
-		errors = frmFrontForm.validateFormSubmit( $form );
-		keys   = Object.keys( errors );
-
-		if ( 1 === keys.length && errors[ keys[0] ] === '' ) {
+		if ( 1 === keys.length && errors[ keys[ 0 ] ] === '' ) {
 			// Pop the empty error that gets added by invisible recaptcha.
 			keys.pop();
 		}
@@ -257,35 +242,29 @@
 	}
 
 	function addName( $form ) {
-		var i,
-			firstField,
-			lastField,
-			firstFieldContainer,
-			lastFieldContainer,
-			cardObject = {},
-			settings = frm_stripe_vars.settings,
-			firstNameID = '',
-			lastNameID = '',
-			getNameFieldValue,
-			subFieldEl;
+		let firstNameID = '';
+		let lastNameID = '';
+
+		const cardObject = {};
+		const { settings } = frm_stripe_vars;
 
 		/**
 		 * Gets first, middle or last name from the given field.
 		 *
-		 * @param {Number|HTMLElement} field        Field ID or Field element.
-		 * @param {String}             subFieldName Subfield name.
-		 * @return {String}
+		 * @param {number|HTMLElement} field        Field ID or Field element.
+		 * @param {string}             subFieldName Subfield name.
+		 * @return {string} Name field value.
 		 */
-		getNameFieldValue = function( field, subFieldName ) {
+		const getNameFieldValue = function( field, subFieldName ) {
 			if ( 'object' !== typeof field ) {
-				field = document.getElementById( 'frm_field_' + field + '_container' );
+				field = document.getElementById( `frm_field_${ field }_container` );
 			}
 
 			if ( ! field || 'object' !== typeof field || 'function' !== typeof field.querySelector ) {
 				return '';
 			}
 
-			subFieldEl = field.querySelector( '.frm_combo_inputs_container .frm_form_subfield-' + subFieldName + ' input' );
+			const subFieldEl = field.querySelector( `.frm_combo_inputs_container .frm_form_subfield-${ subFieldName } input` );
 			if ( ! subFieldEl ) {
 				return '';
 			}
@@ -293,53 +272,53 @@
 			return subFieldEl.value;
 		};
 
-		for ( i = 0; i < settings.length; i++ ) {
+		for ( let i = 0; i < settings.length; i++ ) {
 			firstNameID = settings[ i ].first_name;
-			lastNameID  = settings[ i ].last_name;
+			lastNameID = settings[ i ].last_name;
 		}
 
 		/**
 		 * Returns a name field container or element.
 		 *
-		 * @param {Number}           fieldID
-		 * @param {string}           type   Either 'container' or 'field'
-		 * @param {object|null}      $form
-		 * @returns {HTMLElement|null}
+		 * @param {number}      fieldID
+		 * @param {string}      type    Either 'container' or 'field'
+		 * @param {object|null} $form
+		 * @return {HTMLElement|null} Name field container or element.
 		 */
 		function getNameFieldItem( fieldID, type, $form = null ) {
-			var queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
+			const queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
 
 			if ( type === 'container' ) {
-				return queryForNameFieldIsFound ?
-				window.frmProForm.queryForNameField( fieldID, 'container' ) :
-				document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
+				return queryForNameFieldIsFound
+					? window.frmProForm.queryForNameField( fieldID, 'container' )
+					: document.querySelector( `#frm_field_${ fieldID }_container, .frm_field_${ fieldID }_container` );
 			}
 
-			return queryForNameFieldIsFound ?
-			window.frmProForm.queryForNameField( fieldID, 'field', $form[0]) :
-			$form[0].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
+			return queryForNameFieldIsFound
+				? window.frmProForm.queryForNameField( fieldID, 'field', $form[ 0 ] )
+				: $form[ 0 ].querySelector( `#frm_field_${ fieldID }_container input, input[name="item_meta[${ fieldID }]"], .frm_field_${ fieldID }_container input` );
 		}
 
 		if ( firstNameID !== '' ) {
-			firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
-			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+			const firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
+			if ( firstFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
 				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
 			} else {
-				firstField = getNameFieldItem( firstNameID, 'field', $form );
-				if ( firstField && firstField.value ) {
+				const firstField = getNameFieldItem( firstNameID, 'field', $form );
+				if ( firstField?.value ) {
 					cardObject.name = firstField.value;
 				}
 			}
 		}
 
 		if ( lastNameID !== '' ) {
-			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
-			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
-				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
+			const lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
+			if ( lastFieldContainer?.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+				cardObject.name = `${ cardObject.name } ${ getNameFieldValue( lastFieldContainer, 'last' ) }`;
 			} else {
-				lastField = getNameFieldItem( lastNameID, 'field', $form );
-				if ( lastField && lastField.value ) {
-					cardObject.name = cardObject.name + ' ' + lastField.value;
+				const lastField = getNameFieldItem( lastNameID, 'field', $form );
+				if ( lastField?.value ) {
+					cardObject.name = `${ cardObject.name } ${ lastField.value }`;
 				}
 			}
 		}
@@ -366,7 +345,7 @@
 	}
 
 	function getPriceFields() {
-		var priceFields = [];
+		const priceFields = [];
 
 		function checkStripeSettingForPriceFields( setting ) {
 			if ( -1 !== setting.fields ) {
@@ -376,7 +355,7 @@
 
 		function addFieldDataToPriceFieldsArray( field ) {
 			if ( isNaN( field ) ) {
-				priceFields.push( 'field_' + field );
+				priceFields.push( `field_${ field }` );
 			} else {
 				priceFields.push( field );
 			}
@@ -392,14 +371,14 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @returns {array}
+	 * @return {Array} Array of Stripe settings.
 	 */
 	function getStripeSettings() {
-		var stripeSettings = [];
+		const stripeSettings = [];
 		each(
 			frm_stripe_vars.settings,
 			function( setting ) {
-				if ( -1 !== setting.gateways.indexOf( 'stripe' ) ) {
+				if ( setting.gateways.includes( 'stripe' ) ) {
 					stripeSettings.push( setting );
 				}
 			}
@@ -409,39 +388,38 @@
 
 	// Update price intent on change.
 	function priceChanged( _, field, fieldId ) {
-		var i, data,
-			price = getPriceFields(),
-			run = price.indexOf( fieldId ) > -1 || price.indexOf( field.id ) > -1;
+		const price = getPriceFields();
+		let run = price.includes( fieldId ) || price.includes( field.id );
 		if ( ! run ) {
-			for ( i = 0; i < price.length; i++ ) {
-				if ( field.id.indexOf( price[ i ]) === 0 ) {
+			for ( let i = 0; i < price.length; i++ ) {
+				if ( field.id.indexOf( price[ i ] ) === 0 ) {
 					run = true;
 				}
 			}
 		}
 		if ( run ) {
-			data = {
+			const data = {
 				action: 'frm_strp_amount',
 				form: JSON.stringify( jQuery( field ).closest( 'form' ).serializeArray() ),
 				nonce: frm_stripe_vars.nonce
 			};
 			postAjax( data, function() {
 				// Amount has been conditionally updated.
-			});
+			} );
 		}
 	}
 
 	function postAjax( data, success ) {
-		var xmlHttp = new XMLHttpRequest(),
-			params = typeof data == 'string' ? data : Object.keys( data ).map(
-				function( k ) {
-					return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ]);
-				}
-			).join( '&' );
+		const xmlHttp = new XMLHttpRequest();
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
+			function( k ) {
+				return `${ encodeURIComponent( k ) }=${ encodeURIComponent( data[ k ] ) }`;
+			}
+		).join( '&' );
 
 		xmlHttp.open( 'post', frm_stripe_vars.ajax, true );
 		xmlHttp.onreadystatechange = function() {
-			var response;
+			let response;
 			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
 				response = xmlHttp.responseText;
 				if ( response !== '' ) {
@@ -469,18 +447,16 @@
 	/**
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @returns {bool} True if stripe link loads successfully.
+	 * @return {boolean} True if stripe link loads successfully.
 	 */
 	function maybeLoadStripeLink() {
-		var stripeLinkForm, formId, intentField;
-
-		stripeLinkForm = document.querySelector( 'form.frm_stripe_link_form' );
+		const stripeLinkForm = document.querySelector( 'form.frm_stripe_link_form' );
 		if ( ! stripeLinkForm ) {
 			return false;
 		}
 
-		formId      = parseInt( stripeLinkForm.querySelector( 'input[name="form_id"]' ).value );
-		intentField = stripeLinkForm.querySelector( 'input[name="frmintent' + formId + '[]"]' );
+		const formId = parseInt( stripeLinkForm.querySelector( 'input[name="form_id"]' ).value );
+		const intentField = stripeLinkForm.querySelector( `input[name="frmintent${ formId }[]"]` );
 
 		if ( ! intentField ) {
 			return false;
@@ -506,11 +482,11 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} form
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disableSubmit( form ) {
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
-		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form: form } );
+		triggerCustomEvent( document, 'frmStripeLiteDisableSubmit', { form } );
 	}
 
 	/**
@@ -518,29 +494,27 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param {String} clientSecret
-	 * @returns {void}
+	 * @param {string} clientSecret
+	 * @return {void}
 	 */
 	function loadStripeLinkElements( clientSecret ) {
-		var cardElement, appearance;
-
-		cardElement = document.querySelector( '.frm-card-element' );
+		const cardElement = document.querySelector( '.frm-card-element' );
 		if ( ! cardElement ) {
 			return;
 		}
 
 		// Customize the Stripe elements using the Stripe Appearance API.
-		appearance   = {
+		const appearance = {
 			theme: 'stripe',
 			variables: {
 				fontSizeBase: frm_stripe_vars.baseFontSize,
-				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].color ),
-				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].backgroundColor ),
+				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color ),
+				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor ),
 				fontSmooth: 'auto'
 			},
 			rules: frm_stripe_vars.appearanceRules
 		};
-		elements     = frmstripe.elements({ clientSecret: clientSecret, appearance: appearance });
+		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
 
 		insertAuthenticationElement( cardElement );
@@ -549,7 +523,7 @@
 		triggerCustomEvent(
 			document,
 			'frmStripeLiteLoadElements',
-			{ cardElement: cardElement }
+			{ cardElement }
 		);
 	}
 
@@ -558,22 +532,20 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param {String} color
-	 * @returns {String}
+	 * @param {string} color
+	 * @return {string} Converted color value.
 	 */
 	function maybeAdjustColorForStripe( color ) {
-		var rgba, hex;
-
 		if ( 0 !== color.indexOf( 'rgba' ) ) {
 			return color;
 		}
 
-		rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
-		hex  = `#${( ( 1 << 24 ) + ( parseInt( rgba[0], 10 ) << 16 ) + ( parseInt( rgba[1], 10 ) << 8 ) + parseInt( rgba[2], 10 ) )
-			.toString( 16 )
-			.slice( 1 )}`;
+		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
 
-		return hex;
+		// eslint-disable-next-line no-bitwise -- Bitwise shifts are intentional for RGBA to hex conversion
+		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
+			.toString( 16 )
+			.slice( 1 ) }`;
 	}
 
 	/**
@@ -583,43 +555,43 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function insertAuthenticationElement( cardElement ) {
-		var addAboveCardElement, emailField, authenticationMountTarget, emailInput, cardFieldContainer, defaultEmailValue, authenticationElement;
+		let emailInput;
 
-		addAboveCardElement       = true;
-		emailField                = checkForEmailField();
-		authenticationMountTarget = createMountTarget( 'frm-link-authentication-element' );
+		let addAboveCardElement = true;
+		const emailField = checkForEmailField();
+		const authenticationMountTarget = createMountTarget( 'frm-link-authentication-element' );
 
 		if ( false !== emailField ) {
 			if ( 'hidden' === emailField.getAttribute( 'type' ) ) {
 				emailInput = emailField;
 			} else {
 				addAboveCardElement = false;
-				emailInput          = emailField.querySelector( 'input' );
+				emailInput = emailField.querySelector( 'input' );
 				replaceEmailField( emailField, emailInput, authenticationMountTarget );
 			}
 		}
 
 		if ( addAboveCardElement ) {
 			// If no email field is found, add the email field above the credit card.
-			cardFieldContainer = cardElement.closest( '.frm_form_field' );
+			const cardFieldContainer = cardElement.closest( '.frm_form_field' );
 			cardFieldContainer.parentNode.insertBefore( authenticationMountTarget, cardFieldContainer );
 
 			triggerCustomEvent(
 				document,
 				'frmStripeLiteAddAuthElementAboveCardElement',
 				{
-					cardElement: cardElement,
-					cardFieldContainer: cardFieldContainer,
-					authenticationMountTarget: authenticationMountTarget
+					cardElement,
+					cardFieldContainer,
+					authenticationMountTarget
 				}
 			);
 		}
 
-		defaultEmailValue     = false !== emailField ? getSettingFieldValue( emailField ) : '';
-		authenticationElement = elements.create(
+		const defaultEmailValue = false !== emailField ? getSettingFieldValue( emailField ) : '';
+		const authenticationElement = elements.create(
 			'linkAuthentication',
 			{
 				defaultValues: {
@@ -642,25 +614,23 @@
 	 *
 	 * @param {Element} cardElement
 	 * @param {Element} emailInput
-	 * @returns {Function}
+	 * @return {Function} Authentication change handler function.
 	 */
 	function getAuthenticationChangeHandler( cardElement, emailInput ) {
 		function syncEmailInput( emailValue ) {
-			if ( 'string' === typeof emailValue && emailValue.length  ) {
+			if ( 'string' === typeof emailValue && emailValue.length ) {
 				emailInput.value = emailValue;
 			}
 		}
 
 		return function( event ) {
-			var form;
-
 			linkAuthenticationElementIsComplete = event.complete;
 
-			if ( linkAuthenticationElementIsComplete && 'undefined' !== typeof emailInput ) {
+			if ( linkAuthenticationElementIsComplete && emailInput !== undefined ) {
 				syncEmailInput( event.value.email );
 			}
 
-			form = cardElement.closest( 'form' );
+			const form = cardElement.closest( 'form' );
 
 			if (
 				'object' === typeof window.frmChatForm &&
@@ -673,7 +643,7 @@
 
 			if ( readyToSubmitStripeLink( form ) ) {
 				thisForm = form;
-				running  = 0;
+				running = 0;
 				enableSubmit();
 			} else {
 				disableSubmit( form );
@@ -689,14 +659,12 @@
 	 * @param {Element} emailField
 	 * @param {Element} emailInput
 	 * @param {Element} authenticationMountTarget
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function replaceEmailField( emailField, emailInput, authenticationMountTarget ) {
-		var emailLabel;
-
-		emailField.insertBefore( authenticationMountTarget, emailInput );
+		emailInput.before( authenticationMountTarget );
 		emailInput.type = 'hidden';
-		emailLabel      = emailField.querySelector( '.frm_primary_label' );
+		const emailLabel = emailField.querySelector( '.frm_primary_label' );
 
 		if ( emailLabel ) {
 			// Authentication elements include an Email label already, so hide the Formidable label.
@@ -709,11 +677,11 @@
 	 *
 	 * @since 6.21
 	 *
-	 * @returns {string}
+	 * @return {string} Layout type for Stripe elements.
 	 */
 	function getLayout() {
-		const settings = getStripeSettings()[0];
-		return settings.hasOwnProperty( 'layout' ) && settings.layout || 'tabs';
+		const settings = getStripeSettings()[ 0 ];
+		return ( settings.hasOwnProperty( 'layout' ) && settings.layout ) || 'tabs';
 	}
 
 	/**
@@ -723,16 +691,14 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function insertPaymentElement( cardElement ) {
-		var paymentElement;
-
 		// Add the payment element above the credit card field.
 		// With Stripe Link this is used instead of a Credit Card field (it still includes Credit Card fields).
 		cardElement.parentNode.insertBefore( createMountTarget( 'frm-payment-element' ), cardElement );
 
-		paymentElement = elements.create(
+		const paymentElement = elements.create(
 			'payment',
 			{
 				layout: {
@@ -766,10 +732,10 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} cardElement
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function toggleButtonsOnPaymentElementChange( cardElement ) {
-		var form = cardElement.closest( '.frm-show-form' );
+		const form = cardElement.closest( '.frm-show-form' );
 
 		if (
 			'object' === typeof window.frmChatForm &&
@@ -783,7 +749,7 @@
 		// Handle final question or non-conversational form.
 		if ( readyToSubmitStripeLink( form ) ) {
 			thisForm = form;
-			running  = 0;
+			running = 0;
 			enableSubmit();
 		} else {
 			disableSubmit( form );
@@ -796,7 +762,7 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} form
-	 * @returns {bool}
+	 * @return {boolean} True if ready to submit Stripe link.
 	 */
 	function readyToSubmitStripeLink( form ) {
 		if ( ! linkAuthenticationElementIsComplete || ! stripeLinkElementIsComplete ) {
@@ -815,16 +781,15 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @returns {string}
+	 * @return {string} Full name value for Stripe.
 	 */
 	function getFullNameValueDefault() {
-		var nameValues, firstNameField, lastNameField;
-		nameValues      = [];
-		firstNameField  = checkForStripeSettingField( 'first_name' );
+		const nameValues = [];
+		const firstNameField = checkForStripeSettingField( 'first_name' );
 		if ( false !== firstNameField ) {
 			nameValues.push( getSettingFieldValue( firstNameField ) );
 		}
-		lastNameField   = checkForStripeSettingField( 'last_name' );
+		const lastNameField = checkForStripeSettingField( 'last_name' );
 		if ( false !== lastNameField ) {
 			nameValues.push( getSettingFieldValue( lastNameField ) );
 		}
@@ -837,16 +802,12 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Element} field
-	 * @returns {String}
+	 * @return {string} Field value.
 	 */
 	function getSettingFieldValue( field ) {
-		var value;
-		if ( 'hidden' === field.getAttribute( 'type' ) ) {
-			value = field.value;
-		} else {
-			value = field.querySelector( 'input' ).value;
-		}
-		return value;
+		return 'hidden' === field.getAttribute( 'type' )
+			? field.value
+			: field.querySelector( 'input' ).value;
 	}
 
 	/**
@@ -854,7 +815,7 @@
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @returns {Element|false}
+	 * @return {Element|false} Email field element or false.
 	 */
 	function checkForEmailField() {
 		return checkForStripeSettingField( 'email' );
@@ -862,22 +823,23 @@
 
 	/**
 	 * @param {string} settingKey supports 'first_name', 'last_name', and 'email'.
-	 * @returns {Element|false}
+	 * @return {Element|false} Setting field element or false.
 	 */
 	function checkForStripeSettingField( settingKey ) {
-		var settingField = false;
+		let settingField = false;
 
 		each( getStripeSettings(), checkStripeSettingForField );
 
 		function checkStripeSettingForField( currentSetting ) {
-			var currentSettingValue, settingIsWrappedAsShortcode, currentFieldId, fieldMatchByKey, fieldContainer, hiddenInput;
-
 			if ( 'string' !== typeof currentSetting[ settingKey ] || ! currentSetting[ settingKey ].length ) {
 				return;
 			}
 
-			currentSettingValue         = currentSetting[ settingKey ];
-			settingIsWrappedAsShortcode = '[' === currentSettingValue[0] && ']' === currentSettingValue[ currentSettingValue.length - 1 ];
+			const currentSettingValue = currentSetting[ settingKey ];
+			const settingIsWrappedAsShortcode = '[' === currentSettingValue[ 0 ] && ']' === currentSettingValue[ currentSettingValue.length - 1 ];
+
+			let currentFieldId;
+			let fieldMatchByKey;
 
 			if ( settingIsWrappedAsShortcode ) {
 				// Email is wrapped as a shortcode.
@@ -885,27 +847,25 @@
 
 				if ( isNaN( currentFieldId ) ) {
 					// If it is not a number, try as a field key.
-					fieldMatchByKey = fieldContainer = document.getElementById( 'field_' + currentFieldId );
+					fieldMatchByKey = document.getElementById( `field_${ currentFieldId }` );
 				}
 			} else {
 				// First name and last name are not wrapped as shortcodes.
 				currentFieldId = currentSettingValue;
 			}
 
-			if ( fieldMatchByKey ) {
-				fieldContainer = fieldMatchByKey.closest( '.frm_form_field' );
-			} else {
-				fieldContainer = document.getElementById( 'frm_field_' + currentFieldId + '_container' );
-			}
+			const fieldContainer = fieldMatchByKey
+				? fieldMatchByKey.closest( '.frm_form_field' )
+				: document.getElementById( `frm_field_${ currentFieldId }_container` );
 
 			if ( ! fieldContainer ) {
-				hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + ']"]' );
+				let hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }]"]` );
 
 				if ( ! hiddenInput ) {
 					if ( 'first_name' === settingKey ) {
-						hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + '][first]"]' );
+						hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }][first]"]` );
 					} else if ( 'last_name' === settingKey ) {
-						hiddenInput = document.querySelector( 'input[name="item_meta[' + currentFieldId + '][last]"]' );
+						hiddenInput = document.querySelector( `input[name="item_meta[${ currentFieldId }][last]"]` );
 					}
 				}
 
@@ -930,11 +890,11 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {string} className
-	 * @returns {Element}
+	 * @return {Element} New mount target element.
 	 */
 	function createMountTarget( className ) {
-		var newElement = document.createElement( 'div' );
-		newElement.className = className + ' frm_form_field form-field';
+		const newElement = document.createElement( 'div' );
+		newElement.className = `${ className } frm_form_field form-field`;
 		return newElement;
 	}
 
@@ -942,13 +902,12 @@
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param {Array|NodeList} items
-	 * @param {function} callback
+	 * @param {Function}       callback
+	 * @return {void}
 	 */
 	function each( items, callback ) {
-		var index, length;
-
-		length = items.length;
-		for ( index = 0; index < length; index++ ) {
+		const { length } = items;
+		for ( let index = 0; index < length; index++ ) {
 			if ( false === callback( items[ index ], index ) ) {
 				break;
 			}
@@ -960,20 +919,18 @@
 	 * This is required when a Stripe action uses a shortcode amount when
 	 * the amount never changes after load.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkPriceFieldsOnLoad() {
 		each(
 			getPriceFields(),
 			function( fieldId ) {
-				var fieldContainer, input;
-
-				fieldContainer = document.getElementById( 'frm_field_' + fieldId + '_container' );
+				const fieldContainer = document.getElementById( `frm_field_${ fieldId }_container` );
 				if ( ! fieldContainer ) {
 					return;
 				}
 
-				input = fieldContainer.querySelector( 'input[name^=item_meta]' );
+				const input = fieldContainer.querySelector( 'input[name^=item_meta]' );
 				if ( input && '' !== input.value ) {
 					priceChanged( null, input, fieldId );
 				}
@@ -983,7 +940,7 @@
 
 	jQuery( document ).ready(
 		function() {
-			var stripeParams = {
+			const stripeParams = {
 				locale: frm_stripe_vars.locale,
 				stripeAccount: frm_stripe_vars.account_id
 			};
@@ -999,8 +956,8 @@
 	);
 
 	window.frmStripeLiteForm = {
-		readyToSubmitStripeLink: readyToSubmitStripeLink,
-		processForm: function( _, e, form ) {
+		readyToSubmitStripeLink,
+		processForm( _, e, form ) {
 			event = e;
 			thisForm = form;
 			processForm();

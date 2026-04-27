@@ -5,13 +5,12 @@
  */
 
 wp.domReady( () => {
-
 	/**
 	 * Internal dependencies
 	 */
 	const { toggleAddonState } = window.frmAdminBuild;
 
-	document.addEventListener( 'click', ( event ) => {
+	document.addEventListener( 'click', event => {
 		if ( event.target.matches( '.frm-uninstall-addon' ) ) {
 			event.preventDefault();
 			toggleAddonState( event.target, 'frm_uninstall_addon' );
@@ -19,5 +18,5 @@ wp.domReady( () => {
 			event.preventDefault();
 			toggleAddonState( event.target, 'frm_deactivate_addon' );
 		}
-	});
-});
+	} );
+} );

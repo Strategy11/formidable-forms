@@ -9,15 +9,15 @@ const {
 
 function RadioControl( { label, className, selected, help, instanceId, onChange, options = [] } ) {
 	const id = `inspector-radio-control-${ instanceId }`;
-	const onChangeValue = ( event ) => onChange( event.target.value );
-	className = className + ' components-radio-control';
+	const onChangeValue = event => onChange( event.target.value );
+	className = `${ className } components-radio-control`;
 
-	return <BaseControl label={ label } help={ help } className={ className }>
+	return <BaseControl label={ label } id={ id } help={ help } className={ className }>
 		{ options.map( ( option, index ) =>
 			<div
 				key={ `${ id }-${ index }` }
 				className="components-radio-control__option"
-				>
+			>
 				<input
 					id={ `${ id }-${ index }` }
 					className="components-radio-control__input"
@@ -26,16 +26,16 @@ function RadioControl( { label, className, selected, help, instanceId, onChange,
 					value={ option.value }
 					onChange={ onChangeValue }
 					checked={ option.value === selected }
-					aria-describedby={ !! help ? `${ id }__help` : undefined }
-					/>
+					aria-describedby={ help ? `${ id }__help` : undefined }
+				/>
 				<label htmlFor={ `${ id }-${ index }` }>
 					{ option.label }
 				</label>
 				{ option.help &&
 				<p>{ option.help }</p>
-					}
+				}
 			</div>
-			) }
+		) }
 	</BaseControl>;
 }
 

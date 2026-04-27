@@ -27,19 +27,22 @@ class FrmPluginSearch {
 	 * Add actions and filters only if this is the plugin installation screen and it's the first page.
 	 *
 	 * @since 4.12
+	 *
 	 * @param object $screen WP Screen object.
 	 *
 	 * @return void
 	 */
 	public function start( $screen ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'plugin-install' === $screen->base && ( ! isset( $_GET['paged'] ) || 1 === intval( $_GET['paged'] ) ) ) {
-			add_filter( 'plugins_api_result', array( $this, 'inject_suggestion' ), 10, 3 );
-			add_filter( 'self_admin_url', array( $this, 'plugin_details' ) );
-			add_filter( 'plugin_install_action_links', array( $this, 'insert_related_links' ), 10, 2 );
-			add_action( 'admin_enqueue_scripts', array( $this, 'load_plugins_search_script' ) );
-			$this->maybe_dismiss();
+		if ( 'plugin-install' !== $screen->base || ( isset( $_GET['paged'] ) && 1 !== intval( $_GET['paged'] ) ) ) {
+			return;
 		}
+
+		add_filter( 'plugins_api_result', array( $this, 'inject_suggestion' ), 10, 3 );
+		add_filter( 'self_admin_url', array( $this, 'plugin_details' ) );
+		add_filter( 'plugin_install_action_links', array( $this, 'insert_related_links' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'load_plugins_search_script' ) );
+		$this->maybe_dismiss();
 	}
 
 	/**
@@ -66,14 +69,15 @@ class FrmPluginSearch {
 
 		// Lowercase, trim, remove punctuation/special chars, decode url, remove 'formidable'.
 		$normalized_term = $this->search_to_array( $args->search );
-		if ( empty( $normalized_term ) ) {
+
+		if ( ! $normalized_term ) {
 			// Don't add anything extra.
 			return $result;
 		}
 
 		$matching_addon = $this->matching_addon( $addon_list, $normalized_term );
 
-		if ( empty( $matching_addon ) || ! $this->should_display_hint( $matching_addon ) ) {
+		if ( ! $matching_addon || ! $this->should_display_hint( $matching_addon ) ) {
 			return $result;
 		}
 
@@ -128,8 +132,7 @@ class FrmPluginSearch {
 				$addon_opts['search_terms'] = '';
 			}
 
-			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
-
+			$addon_terms   = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 			$matched_terms = array_intersect( $addon_terms, $normalized_term );
 
 			if ( count( $matched_terms ) === count( $normalized_term ) ) {
@@ -188,14 +191,17 @@ class FrmPluginSearch {
 	 * Modify URL used to fetch to plugin information so it pulls Formidable plugin page.
 	 *
 	 * @since 4.12
+	 *
 	 * @param string $url URL to load in dialog pulling the plugin page from wporg.
 	 *
 	 * @return string The URL with 'formidable' instead of 'frm-plugin-search'.
 	 */
 	public function plugin_details( $url ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return false !== stripos( $url, 'tab=plugin-information&amp;plugin=' . self::$slug )
 			? 'plugin-install.php?tab=plugin-information&amp;plugin=formidable&amp;TB_iframe=true&amp;width=600&amp;height=550'
 			: $url;
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -205,7 +211,8 @@ class FrmPluginSearch {
 	 */
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
-		if ( ! empty( $addon ) ) {
+
+		if ( $addon ) {
 			$this->add_to_dismissed_hints( $addon );
 		}
 	}
@@ -219,7 +226,7 @@ class FrmPluginSearch {
 	 */
 	protected function get_dismissed_hints() {
 		$dismissed_hints = get_option( self::$dismissed_opt );
-		return ! empty( $dismissed_hints ) && is_array( $dismissed_hints ) ? $dismissed_hints : array();
+		return $dismissed_hints && is_array( $dismissed_hints ) ? $dismissed_hints : array();
 	}
 
 	/**
@@ -233,7 +240,7 @@ class FrmPluginSearch {
 	 */
 	protected function add_to_dismissed_hints( $hint ) {
 		$hints = array_merge( $this->get_dismissed_hints(), array( $hint ) );
-		return update_option( self::$dismissed_opt, $hints, 'no' );
+		return update_option( self::$dismissed_opt, $hints, false );
 	}
 
 	/**
@@ -263,24 +270,24 @@ class FrmPluginSearch {
 	 * easy to work with.
 	 *
 	 * @param  string $term The raw search term.
+	 *
 	 * @return string A simplified/sanitized version.
 	 */
 	private function sanitize_search_term( $term ) {
 		$term = strtolower( urldecode( $term ) );
 
-		// remove non-alpha/space chars.
+		// Remove non-alpha/space chars.
 		$term = preg_replace( '/[^a-z ]/', '', $term );
 
-		// remove strings that don't help matches.
-		$term = trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
-
-		return $term;
+		// Remove strings that don't help matches.
+		return trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
 	}
 
 	/**
 	 * @since 4.12
 	 *
 	 * @param string $terms
+	 *
 	 * @return array
 	 */
 	private function search_to_array( $terms ) {
@@ -319,15 +326,14 @@ class FrmPluginSearch {
 					),
 					admin_url( 'plugins.php' )
 				);
-				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . __( 'Activate', 'formidable' ) . '</a>';
+				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . esc_html__( 'Activate', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 		} elseif ( ! $is_active && isset( $plugin['url'] ) ) {
 			// Go to the add-ons page to install.
 			$links[] = '<a
 				class="button-secondary"
 				href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '"
-				>' . __( 'Install Now', 'formidable' ) . '</a>';
-
+				>' . esc_html__( 'Install Now', 'formidable' ) . '</a>';
 		} elseif ( ! empty( $plugin['link'] ) ) {
 			// Add link pointing to a relevant doc page in formidable.com.
 			$links[] = '<a
@@ -341,7 +347,7 @@ class FrmPluginSearch {
 		// Dismiss link.
 		$dismiss = add_query_arg( array( 'frm-dismiss' => $plugin['id'] ) );
 		$links[] = '<a
-			href="' . $dismiss . '"
+			href="' . esc_url( $dismiss ) . '"
 			class="frm-plugin-search__dismiss"
 			data-addon="' . esc_attr( $plugin['addon'] ) . '"
 			>' . esc_html__( 'Hide this suggestion', 'formidable' ) . '</a>';
@@ -351,6 +357,7 @@ class FrmPluginSearch {
 
 	/**
 	 * @param string $plugin
+	 *
 	 * @return bool
 	 */
 	protected function is_installed( $plugin ) {

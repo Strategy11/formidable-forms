@@ -2,7 +2,8 @@
  * Components - Fields Part 3
  */
 
-label input[type="checkbox"], label input[type="radio"] {
+label input[type="checkbox"],
+label input[type="radio"] {
 	vertical-align: inherit;
 }
 
@@ -74,6 +75,6 @@ label input[type="checkbox"], label input[type="radio"] {
 }
 
 .frm_field_opts_list {
-	max-height: 190px;
+	max-height: 260px;
 	overflow: auto;
 }

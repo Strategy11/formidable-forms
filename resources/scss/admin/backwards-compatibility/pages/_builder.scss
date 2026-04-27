@@ -1,0 +1,26 @@
+// Start @since 6.24
+
+// Default value setting
+.frm-lookup-box-label {
+	display: none;
+}
+
+.frm-inline-modal[id^="frm-lookup-box"] {
+	background-color: transparent;
+	border: 0;
+	box-shadow: none;
+
+	.frm-nav-tabs,
+	.dismiss {
+		display: none;
+	}
+}
+
+// Options setting
+.frm_single_option a.frm_remove_tag svg,
+.frm_single_option a.frm_add_opt svg {
+	width: 15px;
+	height: 15px;
+}
+
+// End @since 6.24

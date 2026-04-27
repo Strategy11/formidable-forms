@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $max_setting_container_atts = array();
+
 if ( ! empty( $can_fit_label_in_two_columns ) ) {
 	$max_setting_container_atts['class'] = 'frm6 frm_form_field';
 }

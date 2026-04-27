@@ -8,7 +8,7 @@
 	border-radius: var(--small-radius);
 	font-weight: 600;
 	display: inline-flex;
-	background-color: #D9EBFF;
+	background-color: #d9ebff;
 	gap: 2px;
 }
 
@@ -26,7 +26,7 @@
 
 .frm-meta-tag.frm-orange-tag,
 .frm-meta-tag.frm-orange-tag:hover {
-	background-color: #FEF7F4;
+	background-color: #fef7f4;
 	color: var(--orange);
 }
 
@@ -49,5 +49,9 @@
 }
 
 .frm_add_field span + .frm-meta-tag {
+	margin-left: 0;
+}
+
+.dropdown-item .frm-meta-tag {
 	margin-left: 0;
 }

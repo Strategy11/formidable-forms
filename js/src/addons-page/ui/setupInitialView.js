@@ -121,7 +121,7 @@ function setupPlansCategory() {
 		elitePlanCategory,
 	} = getElements();
 
-	const getCount = ( category ) => parseInt( category.querySelector( CAT_COUNT_CLASS ).textContent, 10 ) || 0;
+	const getCount = category => parseInt( category.querySelector( CAT_COUNT_CLASS ).textContent, 10 ) || 0;
 
 	// The "Formidable Pro" add-on is included in all plans, so we just consider that in the basicCount
 	const basicCount = getCount( basicPlanCategory );

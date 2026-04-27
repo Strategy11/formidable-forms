@@ -1,4 +1,4 @@
-export const { INITIAL_STEP } =  window.frmOnboardingWizardVars;
+export const { INITIAL_STEP } = window.frmOnboardingWizardVars;
 
 export const PREFIX = 'frm-onboarding';
 

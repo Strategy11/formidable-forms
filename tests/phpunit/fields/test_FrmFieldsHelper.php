@@ -190,7 +190,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		foreach ( $tests as $test ) {
 			$result         = FrmFieldsHelper::value_meets_condition( $test['observed_value'], $test['condition'], $test['hide_opt'] );
 			$observed_value = is_array( $test['observed_value'] ) ? implode( ',', $test['observed_value'] ) : $test['observed_value'];
-			$this->assertEquals( $test['expected'], $result, $observed_value . ' ' . $test['condition'] . ' ' . $test['hide_opt'] . ' failed' );
+			$this->assertSame( $test['expected'], $result, $observed_value . ' ' . $test['condition'] . ' ' . $test['hide_opt'] . ' failed' );
 		}
 	}
 
@@ -199,7 +199,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 	 */
 	public function test_get_draft_field_results() {
 		$form_id = $this->factory->form->create();
-		$this->assertEquals( array(), FrmFieldsHelper::get_draft_field_results( $form_id ) );
+		$this->assertSame( array(), FrmFieldsHelper::get_draft_field_results( $form_id ) );
 
 		$draft_field_options = array(
 			'form_id'       => $form_id,
@@ -250,18 +250,17 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 			'Option 1',
 			'Option 2',
 		);
-		$entry = $this->factory->entry->create_and_get( $entry_data );
-
+		$entry      = $this->factory->entry->create_and_get( $entry_data );
 		$shortcode  = '[' . $checkbox_field->id . ' sep="</div><div>"]';
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $shortcode, $form->id );
-		$this->assertEquals(
+		$this->assertSame(
 			implode( '</div><div>', array( 'Option 1', 'Option 2' ) ),
 			FrmFieldsHelper::replace_content_shortcodes( $shortcode, $entry, $shortcodes )
 		);
 
 		$shortcode  = '[' . $checkbox_field->id . ' sep=", "]';
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $shortcode, $form->id );
-		$this->assertEquals(
+		$this->assertSame(
 			'Option 1, Option 2',
 			FrmFieldsHelper::replace_content_shortcodes( $shortcode, $entry, $shortcodes )
 		);
@@ -287,28 +286,28 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		);
 
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
-		$this->assertEquals( 'This field cannot be blank', $error_message );
+		$this->assertSame( 'This field cannot be blank', $error_message );
 
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
-		$this->assertEquals( 'This value must be unique', $error_message );
+		$this->assertSame( 'This value must be unique', $error_message );
 
 		// Test with a field name.
 		$field->name = 'My example field';
 
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
-		$this->assertEquals( 'My example field cannot be blank', $error_message );
+		$this->assertSame( 'My example field cannot be blank', $error_message );
 
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
-		$this->assertEquals( 'My example field must be unique', $error_message );
+		$this->assertSame( 'My example field must be unique', $error_message );
 
 		// Test that "This field" and "This value" are automatically replaced.
 		$field->field_options['blank']      = 'This field cannot be blank';
 		$field->field_options['unique_msg'] = 'This value must be unique';
 
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
-		$this->assertEquals( 'My example field cannot be blank', $error_message );
+		$this->assertSame( 'My example field cannot be blank', $error_message );
 
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
-		$this->assertEquals( 'My example field must be unique', $error_message );
+		$this->assertSame( 'My example field must be unique', $error_message );
 	}
 }

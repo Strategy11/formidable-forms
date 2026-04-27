@@ -2,10 +2,10 @@
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for WordPress
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
-Requires at least: 5.2
-Tested up to: 6.8.1
+Requires at least: 6.3
+Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 6.22
+Stable tag: 6.30
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -65,7 +65,7 @@ Introducing sophisticated payment forms, donation forms, and other credit card f
 
 == Data-Driven Web Applications Made Easy ==
 
-With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, and much more.
+With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, timelines, and much more.
 
 == Elevate Your Online Store with WooCommerce Product Order Forms ==
 
@@ -372,61 +372,49 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.22 =
-* New: Support for Square payments has been added.
-* Fix: Option validation would fail in some cases where shortcodes were used in options.
-* Fix: Option validation would fail in cases where option data included unexpected additional whitespace.
-* Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
-* Fix: Option validation would fail in cases where the option data was modified using the_content filter.
-* Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
-* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox field.
-* Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
-* Fix: Honeypot fields would not properly get hidden for forms loaded in the footer.
-* Fix: An extra empty set of columns would appear for comments when exporting as CSV.
-* Fix: A JavaScript error would occur for inline modals in the form builder after deleting a field.
-* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox field.
-* Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
+= 6.30 =
+* New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
+* New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
+* New: New frm_after_create_entry_{form_key} and frm_after_update_entry_{form_key} actions have been added.
+* Fix: When editing an entry, the Other option would not correctly appear selected.
+* Fix: Entries would fail to save in some cases where entry names would exceed 255 characters with special unicode characters.
+* Fix: Custom style CSS would not properly prefix selectors when ::before or ::after were used.
+* Fix: Attempting to refund a Square payment would result in a fatal error when the Stripe or Authorize.Net add-ons were also active.
+* Fix: A check has been added to prevent a possible Cannot access offset of type string on string fatal PHP error issue.
 
-= 6.21.1 =
-* New: A new setting, Check denylist data to validate for spam, has been added to Global spam settings. This new spam check was causing too many false positives, so it is now disabled by default.
-* New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
-* New: Denylist checks will no longer check radio buttons, checkboxes, dropdowns, signature, password, and CAPTCHA fields to help avoid issues with false positive matches. Fields with options will still validate "Other" input values.
-* New: All spam checks are now disabled when importing forms.
-* Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
-* Fix: User defined product fields would fail validation.
+= 6.29 =
+* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
+* Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
+* Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
+* Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
+* Fix: The field options dropdown for the far left field would render underneath the field settings sidebar in rows with a lot of fields.
+* Fix: An Undefined array key "slug" PHP Warning has been fixed.
+* Fix: When a missing payment field is automatically added to a form with a payment action, the new field would incorrectly appear below the submit button.
+* Breaking: The deprecated FrmDb constructor method has been removed.
 
-= 6.21 =
-* New: Honeypot field settings have been moved from form settings to global settings. The new settings can now be found in the Captcha/Spam section. The honeypot implementation has also been updated to make the honeypot more difficult to tell apart from other fields, and the strict option has been removed to help prevent issues with false positives for iOS users.
-* New: A new setting to validate form entries for spam against the stopforumspam API have been added to form settings. When this is enabled, IPs and email addresses will be validated against a spam database.
-* New: Field data is now compared to a comprehensive denylist during field validation. This significantly helps to block form data that looks like spam. New settings for Custom allowed words and Custom disallowed words have also been added.
-* New: The option to compare submitted form entry data to WordPress spam comments has been added to global settings.
-* New: Option values are now validated by default. If this causes issues with custom logic, this can be reverted using add_filter( 'frm_option_is_valid', '__return_true' );.
-* New: Stripe payment fields will now apply border radius styles to match styling better.
-* New: Stripe payment field label styling has been updated to better reflect label padding style settings.
-* New: Stripe payment fields will now use the input weight style setting to look more consistent with other fields.
-* New: Stripe payment fields now support the font family style setting.
-* New: A new layout setting has been added to Stripe settings that adds support for the accordion layout.
-* Fix: Paragraph fields would not properly display placeholders on the builder page.
-* Fix: A fatal error that could happen on form submit when unexpected data was sent when checking for spam has been fixed.
-* Fix: A Cannot set properties of null JavaScript error when duplicating a field has been fixed.
-* Fix: Sorting entries by a number field value would sort as strings instead of numbers.
-* Fix: Stripe payment fields would incorrectly use the wrong style settings in some cases.
-* The small device message can now be dismissed, allowing people to still edit forms while using a phone.
+= 6.28 =
+* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
+* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
 
-= 6.20 =
-* Security: Shortcodes in emails would process more than once.
-* New: Over 30 free form templates are now available automatically for all users that would previously require a code sent through email.
-* New: Admin pages have been modified to work better on smaller screen sizes.
-* New: The GDPR field agreement text now supports links.
-* Fix: Additional checks have been added to ensure that a GDPR field is always required.
-* Fix: A Passing null to parameter deprecated message when viewing GDPR field settings has been fixed.
-* Fix: A conflict with WPML would cause querying issues resulting in empty results when checking for form actions. This would cause the fallback confirmation action to appear even when there were valid confirmation actions in a form.
-* Additional validation has been checked when outputting CSS variables when generating a stylesheet to help make sure the generated CSS is valid.
-* Some additional validation has been added to help prevent issues where invalid serialized data would cause partial serialized strings to appear in setting values.
-* The preview page for the contact form that gets installed automatically on every site is now automatically blocked from anyone without access to view the forms list. In addition, the preview page will no longer display a form when an incorrect key is used. This is to help prevent spam that targets the default form. A new frm_block_preview filter has been added which can be used to unblock the default form, and to block additional forms.
+= 6.27 =
+* New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
+* New: A new coupons tab is available on the payments page.
+* New: Required updates to support a new View-Specific CSS setting in the Visual Views add-on.
+* New: The submit button will now be enabled when a Square postal code is successfully completed. This fixes issues where the submit button would never get enabled when a Square card field was auto-filled.
+* New: Many references to old font icons have been removed, removing about 10KB of data from admin CSS.
+* New: Several styles have been optimized in the generated formidableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
+* Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
+* Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
+* Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.
+* Fix: A PHP warning would get logged when checking data for a ranking field as spam.
+* Fix: Add-on category counts were not always correct.
+* Breaking: Many modern PHP functions are now being used including str_contains, str_starts_with, str_ends_with, array_key_last, and array_key_first. If you are using both a WordPress version older than 5.9, and a PHP version lower than 8.0, this will introduce fatal errors. Note that the minimum required WordPress version is already set to 6.3.
+* Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
+* Breaking: The deprecated FrmFormsHelper::actions_dropdown function and actions-dropdown.php view file have been removed.
+* An unused FrmTransLiteSubscriptionsController::list_subscriptions_shortcode function and its related view file have been deprecated.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.20 =
-This version fixes a security-related bug. Upgrade immediately.
+= 6.29 =
+This version improves Stripe payment validation. Upgrade immediately if you are using Stripe payments.

@@ -21,6 +21,11 @@
 .frm-circled-icon .frmsvg {
 	width: 21px;
 	height: 24px;
+
+	&.frm_svg32 {
+		width: 32px !important;
+		height: 32px !important;
+	}
 }
 
 .frm-circled-icon-large .frmsvg {
@@ -29,7 +34,7 @@
 
 .frm-circled-icon .frmsvg use {
 	color: var(--primary-500);
- }
+}
 
 .frm-circled-icon-green .frmsvg use {
 	color: var(--success-500);

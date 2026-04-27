@@ -20,7 +20,7 @@ function addSkipStepButtonEvents() {
 	// Attach click event listeners to each skip buttons
 	skipStepButtons.forEach( skipButton => {
 		onClickPreventDefault( skipButton, onSkipStepButtonClick );
-	});
+	} );
 }
 
 /**

@@ -23,7 +23,7 @@ export const showFormError = ( inputId, errorId, type, message ) => {
 
 	// If a message is provided, update the span element's text that matches the error type
 	if ( message ) {
-		const span = errorElement.querySelector( `span[frm-error="${type}"]` );
+		const span = errorElement.querySelector( `span[frm-error="${ type }"]` );
 		if ( span ) {
 			span.textContent = message;
 		}
@@ -36,5 +36,5 @@ export const showFormError = ( inputId, errorId, type, message ) => {
 	// Hide the error message when the user starts typing in the faulty input field
 	inputElement.addEventListener( 'keyup', () => {
 		hide( errorElement );
-	}, { once: true });
+	}, { once: true } );
 };
