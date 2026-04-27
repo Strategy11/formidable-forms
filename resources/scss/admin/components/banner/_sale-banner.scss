@@ -6,14 +6,14 @@
 	gap: var(--gap-sm);
 	cursor: pointer;
 	position: relative;
-	
+
 	> div:first-child {
 		align-self: flex-end;
 		width: 150px;
 		height: 100%;
 		display: flex;
 		justify-content: center;
-		
+
 		img {
 			align-self: center;
 		}
@@ -55,20 +55,21 @@
 	}
 
 	&:hover a:not(.dismiss) {
+
 		&[style*="background-color: #fff"] {
-			background-color: #F0F0F0 !important;
+			background-color: #f0f0f0 !important;
 		}
 
 		&[style*="background-color: rgba(241, 90, 36, 1)"] {
-			background-color: #E6470F !important;
+			background-color: #e6470f !important;
 		}
 
 		&[style*="background-color: rgba(239, 58, 78, 1)"] {
-			background-color: #ED1D34 !important;
+			background-color: #ed1d34 !important;
 		}
 
 		&[style*="background-color: rgba(33, 2, 14, 1)"] {
-			background-color: #3E041A !important;
+			background-color: #3e041a !important;
 		}
 
 		&[style*="background-color: rgba(72, 51, 64, 1)"] {

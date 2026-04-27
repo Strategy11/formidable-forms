@@ -1,11 +1,7 @@
 /* exported frmRecaptcha, frmAfterRecaptcha */
-/* eslint-disable prefer-const */
 
 function frmFrontFormJS() {
 	'use strict';
-
-	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, turnstile, frmProForm, tinyMCE */
-	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
 	let jsErrors = [];
 
@@ -37,9 +33,10 @@ function frmFrontFormJS() {
 	 * @return {string|number} Field ID.
 	 */
 	function getFieldId( field, fullID ) {
-		let nameParts, fieldId,
-			isRepeating = false,
-			fieldName = '';
+		let nameParts;
+		let fieldId;
+		let isRepeating = false;
+		let fieldName = '';
 
 		if ( field instanceof jQuery ) {
 			field = field.get( 0 );
@@ -47,14 +44,14 @@ function frmFrontFormJS() {
 
 		fieldName = field.name;
 
-		if ( typeof fieldName === 'undefined' ) {
+		if ( fieldName === undefined ) {
 			fieldName = '';
 		}
 
 		if ( fieldName === '' ) {
 			fieldName = field.getAttribute( 'data-name' );
 
-			if ( typeof fieldName === 'undefined' ) {
+			if ( fieldName === undefined ) {
 				fieldName = '';
 			}
 
@@ -84,7 +81,7 @@ function frmFrontFormJS() {
 		}
 
 		// Check if 'this' is in a repeating section
-		if ( document.querySelector( 'input[name="item_meta[' + fieldId + '][form]"]' ) ) {
+		if ( document.querySelector( `input[name="item_meta[${ fieldId }][form]"]` ) ) {
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
 			fieldId = nameParts[ 2 ].replace( '[', '' );
 			isRepeating = true;
@@ -104,9 +101,9 @@ function frmFrontFormJS() {
 		if ( fullID === true ) {
 			// For use in the container div id
 			if ( fieldId === nameParts[ 0 ] ) {
-				fieldId = fieldId + '-' + nameParts[ 1 ].replace( '[', '' );
+				fieldId = `${ fieldId }-${ nameParts[ 1 ].replace( '[', '' ) }`;
 			} else {
-				fieldId = fieldId + '-' + nameParts[ 0 ] + '-' + nameParts[ 1 ].replace( '[', '' );
+				fieldId = `${ fieldId }-${ nameParts[ 0 ] }-${ nameParts[ 1 ].replace( '[', '' ) }`;
 			}
 		}
 
@@ -251,13 +248,12 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkValidity( field, errors ) {
-		let fieldID;
 		if ( 'object' !== typeof field.validity || false !== field.validity.valid ) {
 			return;
 		}
 
-		fieldID = getFieldId( field, true );
-		if ( 'undefined' === typeof errors[ fieldID ] ) {
+		const fieldID = getFieldId( field, true );
+		if ( errors[ fieldID ] === undefined ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
@@ -298,7 +294,7 @@ function frmFrontFormJS() {
 		const url = field.value;
 		const matches = url.match( /^(https?|ftps?|mailto|news|feed|telnet):/ );
 		if ( field.value !== '' && matches === null ) {
-			field.value = 'https://' + url;
+			field.value = `https://${ url }`;
 		}
 	}
 
@@ -310,7 +306,8 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function validateField( field ) {
-		let errors, key;
+		let errors;
+		let key;
 
 		errors = [];
 		const fieldContainer = field.closest( '.frm_form_field' );
@@ -368,9 +365,9 @@ function frmFrontFormJS() {
 		 * @since 6.15 Added `onSubmit` to the data.
 		 */
 		triggerCustomEvent( document, 'frm_validate_field_value', {
-			field: field,
-			errors: errors,
-			onSubmit: onSubmit
+			field,
+			errors,
+			onSubmit
 		} );
 	}
 
@@ -380,17 +377,19 @@ function frmFrontFormJS() {
 	 * @return {Array} Errors
 	 */
 	function checkRequiredField( field, errors ) {
-		let tempVal, i, placeholder,
-			val = '',
-			fieldID = '',
-			fileID = field.getAttribute( 'data-frmfile' );
+		let tempVal;
+		let i;
+		let placeholder;
+		let val = '';
+		let fieldID = '';
+		let fileID = field.getAttribute( 'data-frmfile' );
 
 		if ( field.type === 'hidden' && fileID === null && ! isAppointmentField( field ) && ! isInlineDatepickerField( field ) ) {
 			return errors;
 		}
 
 		if ( field.type === 'checkbox' || field.type === 'radio' ) {
-			document.querySelectorAll( 'input[name="' + field.name + '"]' ).forEach( function( input ) {
+			document.querySelectorAll( `input[name="${ field.name }"]` ).forEach( function( input ) {
 				const requiredField = input.closest( '.frm_required_field' );
 				if ( ! requiredField ) {
 					return;
@@ -402,12 +401,12 @@ function frmFrontFormJS() {
 				} );
 			} );
 		} else if ( field.type === 'file' || fileID ) {
-			if ( typeof fileID === 'undefined' ) {
+			if ( fileID === undefined ) {
 				fileID = getFieldId( field, true );
 				fileID = fileID.replace( 'file', '' );
 			}
 
-			if ( typeof errors[ fileID ] === 'undefined' ) {
+			if ( errors[ fileID ] === undefined ) {
 				val = getFileVals( fileID );
 			}
 			fieldID = fileID;
@@ -453,7 +452,7 @@ function frmFrontFormJS() {
 			} else if ( isSignatureField( field ) ) {
 				if ( val === '' ) {
 					const fieldContainer = field.closest( '.frm_form_field' );
-					const outputField = fieldContainer ? fieldContainer.querySelector( '[name="' + field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) + '"]' ) : null;
+					const outputField = fieldContainer ? fieldContainer.querySelector( `[name="${ field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) }"]` ) : null;
 					val = outputField ? outputField.value : '';
 				}
 				fieldID = fieldID.replace( '-typed', '' );
@@ -508,7 +507,7 @@ function frmFrontFormJS() {
 	 */
 	function getFileVals( fileID ) {
 		let val = '';
-		const fileFields = document.querySelectorAll( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
+		const fileFields = document.querySelectorAll( `input[name="file${ fileID }"], input[name="file${ fileID }[]"], input[name^="item_meta[${ fileID }]"]` );
 
 		fileFields.forEach( function( field ) {
 			if ( val === '' ) {
@@ -524,8 +523,8 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkUrlField( field, errors ) {
-		let fieldID,
-			url = field.value;
+		let fieldID;
+		const url = field.value;
 
 		if ( url !== '' && ! /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i.test( url ) ) {
 			fieldID = getFieldId( field, true );
@@ -568,8 +567,8 @@ function frmFrontFormJS() {
 	 * @param {boolean}     onSubmit Is `true` if the form is being submitted.
 	 */
 	function checkEmailField( field, errors, onSubmit ) {
-		const fieldID = getFieldId( field, true ),
-			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+		const fieldID = getFieldId( field, true );
+		const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
 
 		// validate the current field we're editing first
 		if ( '' !== field.value && pattern.test( field.value ) === false ) {
@@ -602,22 +601,21 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function confirmField( field, errors ) {
-		let value, confirmValue, firstField,
-			fieldID = getFieldId( field, true ),
-			strippedId = field.id.replace( 'conf_', '' ),
-			strippedFieldID = fieldID.replace( 'conf_', '' ),
-			confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
+		const fieldID = getFieldId( field, true );
+		const strippedId = field.id.replace( 'conf_', '' );
+		const strippedFieldID = fieldID.replace( 'conf_', '' );
+		const confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
-		if ( confirmField === null || typeof errors[ 'conf_' + strippedFieldID ] !== 'undefined' ) {
+		if ( ! confirmField || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
 			return;
 		}
 
 		if ( fieldID !== strippedFieldID ) {
-			firstField = document.getElementById( strippedId );
-			value = firstField.value;
-			confirmValue = confirmField.value;
+			const firstField = document.getElementById( strippedId );
+			const { value } = firstField;
+			const confirmValue = confirmField.value;
 			if ( value !== confirmValue ) {
-				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
+				errors[ `conf_${ strippedFieldID }` ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
 			}
 		} else {
 			validateField( confirmField );
@@ -630,8 +628,8 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkNumberField( field, errors ) {
-		let fieldID,
-			number = field.value;
+		let fieldID;
+		const number = field.value;
 
 		if ( number !== '' && isNaN( number / 1 ) !== false ) {
 			fieldID = getFieldId( field, true );
@@ -647,9 +645,9 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkPatternField( field, errors ) {
-		let fieldID,
-			text = field.value,
-			format = getFieldValidationMessage( field, 'pattern' );
+		let fieldID;
+		const text = field.value;
+		let format = getFieldValidationMessage( field, 'pattern' );
 
 		if ( format !== '' && text !== '' ) {
 			fieldID = getFieldId( field, true );
@@ -659,7 +657,7 @@ function frmFrontFormJS() {
 						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 					}
 				} else {
-					format = new RegExp( '^' + format + '$', 'i' );
+					format = new RegExp( `^${ format }$`, 'i' );
 					if ( format.test( text ) === false ) {
 						errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 					}
@@ -674,18 +672,16 @@ function frmFrontFormJS() {
 	 * @since 6.5.1
 	 */
 	function setSelectPlaceholderColor() {
-		let selects = document.querySelectorAll( '.form-field select' ),
-			styleElement = document.querySelector( '.with_frm_style' ),
-			textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '',
-			changeSelectColor;
-
+		const selects = document.querySelectorAll( '.form-field select' );
+		const styleElement = document.querySelector( '.with_frm_style' );
+		const textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '';
 		// Exit if there are no select elements or the textColorDisabled property is missing
 		if ( ! selects.length || ! textColorDisabled ) {
 			return;
 		}
 
 		// Function to change the color of a select element
-		changeSelectColor = function( select ) {
+		const changeSelectColor = function( select ) {
 			if ( select.options[ select.selectedIndex ] && hasClass( select.options[ select.selectedIndex ], 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
@@ -768,7 +764,7 @@ function frmFrontFormJS() {
 
 		if ( response.length === 0 ) {
 			const fieldContainer = recaptcha.closest( '.frm_form_field' );
-			if ( fieldContainer && fieldContainer.id ) {
+			if ( fieldContainer?.id ) {
 				const fieldID = fieldContainer.id.replace( 'frm_field_', '' ).replace( '_container', '' );
 				errors[ fieldID ] = '';
 			}
@@ -846,13 +842,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
-		let data, success, error, shouldTriggerEvent;
-
 		const fieldsets = object.querySelectorAll( '.frm_form_field' );
 		fieldsets.forEach( field => field.classList.add( 'frm_doing_ajax' ) );
 
-		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line no-jquery/no-serialize, camelcase
-		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
+		const data = `${ jQuery( object ).serialize() }&action=frm_entries_${ action }&nonce=${ frm_js.nonce }`; // eslint-disable-line no-jquery/no-serialize
+		const shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		const doRedirect = response => {
 			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ] );
@@ -866,15 +860,12 @@ function frmFrontFormJS() {
 			// We don't return here because we're opening in a new tab, the old tab will still update.
 			const newTab = window.open( response.redirect, '_blank' );
 			if ( ! newTab && response.fallbackMsg && response.content ) {
-				response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ` ${ response.fallbackMsg }</div></div>` );
 			}
 		};
 
-		success = function( response ) {
-			let defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger;
-
-			defaultResponse = {
+		const success = function( response ) {
+			const defaultResponse = {
 				content: '',
 				errors: {},
 				pass: false
@@ -892,7 +883,7 @@ function frmFrontFormJS() {
 				}
 			}
 
-			if ( typeof response.redirect !== 'undefined' ) {
+			if ( response.redirect !== undefined ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
 					return;
@@ -916,16 +907,16 @@ function frmFrontFormJS() {
 				}
 
 				removeSubmitLoading( jQuery( object ) );
-				if ( frm_js.offset != -1 ) { // eslint-disable-line camelcase
+				if ( frm_js.offset != -1 ) {
 					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
 
 				const formIdInput = object.querySelector( 'input[name="form_id"]' );
-				formID = formIdInput ? formIdInput.value : '';
+				const formID = formIdInput ? formIdInput.value : '';
 				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
-				replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
+				const replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
 				removeAddedScripts( replaceContent, formID );
-				delay = maybeSlideOut( replaceContent, response.content );
+				const delay = maybeSlideOut( replaceContent, response.content );
 
 				setTimeout(
 					function() {
@@ -936,12 +927,12 @@ function frmFrontFormJS() {
 						addUrlParam( response );
 
 						if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
-							const pageOrderInput = document.querySelector( 'input[name="frm_page_order_' + formID + '"]' );
-							pageOrder = pageOrderInput ? pageOrderInput.value : '';
+							const pageOrderInput = document.querySelector( `input[name="frm_page_order_${ formID }"]` );
+							const pageOrder = pageOrderInput ? pageOrderInput.value : '';
 							const tempDiv = document.createElement( 'div' );
 							tempDiv.innerHTML = response.content;
 							const formReturnedInput = tempDiv.querySelector( 'input[name="form_id"]' );
-							formReturned = formReturnedInput ? formReturnedInput.value : '';
+							const formReturned = formReturnedInput ? formReturnedInput.value : '';
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
 
@@ -954,21 +945,21 @@ function frmFrontFormJS() {
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
 				//show errors
-				contSubmit = true;
+				let contSubmit = true;
 				removeAllErrors();
 
-				$fieldCont = null;
+				let $fieldCont = null;
 
-				for ( key in response.errors ) {
-					const fieldContEl = object.querySelector( '#frm_field_' + key + '_container' );
+				for ( const key in response.errors ) {
+					const fieldContEl = object.querySelector( `#frm_field_${ key }_container` );
 					$fieldCont = fieldContEl ? jQuery( fieldContEl ) : jQuery();
 
 					if ( $fieldCont.length ) {
 						if ( ! $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
-							inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
+							const inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest, formidable/no-jquery-variable-methods
 							if ( inCollapsedSection.length ) {
-								frmTrigger = inCollapsedSection.prev();
-								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
+								let frmTrigger = inCollapsedSection.prev();
+								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) { // eslint-disable-line formidable/no-jquery-variable-methods
 									// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 									frmTrigger = frmTrigger.prev( '.frm_trigger' );
 								}
@@ -1025,7 +1016,7 @@ function frmFrontFormJS() {
 			}
 		};
 
-		error = function() {
+		const error = function() {
 			object.querySelectorAll( 'input[type="submit"], input[type="button"]' ).forEach(
 				button => button.disabled = false
 			);
@@ -1036,20 +1027,18 @@ function frmFrontFormJS() {
 	}
 
 	function postToAjaxUrl( form, data, success, error ) {
-		let ajaxUrl, action, ajaxParams;
+		let ajaxUrl = frm_js.ajax_url;
+		const action = form.getAttribute( 'action' );
 
-		ajaxUrl = frm_js.ajax_url; // eslint-disable-line camelcase
-		action = form.getAttribute( 'action' );
-
-		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
+		if ( 'string' === typeof action && action.includes( '?action=frm_forms_preview' ) ) {
 			ajaxUrl = action.split( '?action=frm_forms_preview' )[ 0 ];
 		}
 
-		ajaxParams = {
+		const ajaxParams = {
 			type: 'POST',
 			url: ajaxUrl,
-			data: data,
-			success: success
+			data,
+			success
 		};
 
 		if ( 'function' === typeof error ) {
@@ -1089,16 +1078,16 @@ function frmFrontFormJS() {
 	}
 
 	function removeAddedScripts( formContainer, formID ) {
-		const endReplace = document.querySelectorAll( '.frm_end_ajax_' + formID );
+		const endReplace = document.querySelectorAll( `.frm_end_ajax_${ formID }` );
 		if ( endReplace.length ) {
-			formContainer.nextUntil( '.frm_end_ajax_' + formID ).remove();
+			formContainer.nextUntil( `.frm_end_ajax_${ formID }` ).remove();
 			endReplace.forEach( el => el.remove() );
 		}
 	}
 
 	function maybeSlideOut( oldContent, newContent ) {
-		let c,
-			newClass = 'frm_slideout';
+		let c;
+		let newClass = 'frm_slideout';
 		if ( newContent.includes( ' frm_slide' ) ) {
 			c = oldContent.children();
 			if ( newContent.includes( ' frm_going_back' ) ) {
@@ -1113,23 +1102,21 @@ function frmFrontFormJS() {
 
 	function addUrlParam( response ) {
 		let url;
-		if ( history.pushState && typeof response.page !== 'undefined' ) {
+		if ( history.pushState && response.page !== undefined ) {
 			url = addQueryVar( 'frm_page', response.page );
-			window.history.pushState( { html: response.html }, '', '?' + url );
+			window.history.pushState( { html: response.html }, '', `?${ url }` );
 		}
 	}
 
 	function addQueryVar( key, value ) {
-		let kvp, i, x;
-
 		key = encodeURI( key );
 		value = encodeURI( value );
 
-		kvp = document.location.search.substr( 1 ).split( '&' );
+		const kvp = document.location.search.substr( 1 ).split( '&' );
 
-		i = kvp.length;
+		let i = kvp.length;
 		while ( i-- ) {
-			x = kvp[ i ].split( '=' );
+			const x = kvp[ i ].split( '=' );
 
 			if ( x[ 0 ] == key ) {
 				x[ 1 ] = value;
@@ -1146,27 +1133,27 @@ function frmFrontFormJS() {
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
-		let id, describedBy, roleString;
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
+
 		if ( ! container || container.offsetParent === null ) {
 			return;
 		}
 
 		container.classList.add( 'frm_blank_field' );
 		const input = container.querySelector( 'input, select, textarea' );
-		id = getErrorElementId( key, input );
+		const id = getErrorElementId( key, input );
 
-		describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
 		} else {
 			let errorHtml;
-			if ( -1 !== jsErrors[ key ].indexOf( '<div' ) ) {
+			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				roleString = frm_js.include_alert_role ? 'role="alert"' : ''; // eslint-disable-line camelcase
-				errorHtml = '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[ key ] + '</div>';
+				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
 
@@ -1174,11 +1161,11 @@ function frmFrontFormJS() {
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
-					const errorFirst = input.dataset.errorFirst;
+					const { errorFirst } = input.dataset;
 					if ( errorFirst === '0' ) {
-						describedBy = describedBy + ' ' + id;
+						describedBy = `${ describedBy } ${ id }`;
 					} else {
-						describedBy = id + ' ' + describedBy;
+						describedBy = `${ id } ${ describedBy }`;
 					}
 				}
 				input.setAttribute( 'aria-describedby', describedBy );
@@ -1209,9 +1196,9 @@ function frmFrontFormJS() {
 	function getErrorElementId( key, input ) {
 		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
-			return 'frm_error_field_' + key;
+			return `frm_error_field_${ key }`;
 		}
-		return 'frm_error_' + input.id;
+		return `frm_error_${ input.id }`;
 	}
 
 	/**
@@ -1290,7 +1277,7 @@ function frmFrontFormJS() {
 	}
 
 	function showLoadingIndicator( $object ) {
-		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) { // eslint-disable-line no-jquery/no-class
+		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) { // eslint-disable-line no-jquery/no-class, formidable/no-jquery-variable-methods
 			addLoadingClass( $object );
 			$object.trigger( 'frmStartFormLoading' );
 		}
@@ -1299,11 +1286,11 @@ function frmFrontFormJS() {
 	function addLoadingClass( $object ) {
 		const loadingClass = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
 
-		$object.addClass( loadingClass ); // eslint-disable-line no-jquery/no-class
+		$object.addClass( loadingClass ); // eslint-disable-line no-jquery/no-class, formidable/no-jquery-variable-methods
 	}
 
 	function isGoingToPrevPage( $object ) {
-		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
+		return typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object );
 	}
 
 	function removeSubmitLoading( _, enable, processesRunning ) {
@@ -1324,7 +1311,7 @@ function frmFrontFormJS() {
 
 	function showFileLoading( object ) {
 		const loading = document.getElementById( 'frm_loading' );
-		if ( loading === null ) {
+		if ( ! loading ) {
 			return;
 		}
 
@@ -1355,7 +1342,7 @@ function frmFrontFormJS() {
 	function onHoneypotFieldChange() {
 		/*jshint validthis:true */
 		const css = window.getComputedStyle( this ).boxShadow;
-		if ( css && css.match( /inset/ ) ) {
+		if ( css?.match( /inset/ ) ) {
 			this.remove();
 		}
 	}
@@ -1409,21 +1396,20 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		let errors, element, timeoutCallback;
-
-		if ( ! frm_js.focus_first_error ) { // eslint-disable-line camelcase
+		if ( ! frm_js.focus_first_error ) {
 			return;
 		}
 
-		errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
 		if ( ! errors.length ) {
 			return;
 		}
 
-		element = errors[ 0 ];
+		let element = errors[ 0 ];
+		let timeoutCallback;
 		do {
 			element = element.previousSibling;
-			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
+			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
 				break;
 			}
@@ -1432,7 +1418,7 @@ function frmFrontFormJS() {
 				break;
 			}
 
-			if ( 'undefined' !== typeof element.classList ) {
+			if ( element.classList !== undefined ) {
 				if ( element.classList.contains( 'html-active' ) ) {
 					timeoutCallback = function() {
 						const textarea = element.querySelector( 'textarea' );
@@ -1487,7 +1473,7 @@ function frmFrontFormJS() {
 	 * @param {boolean | Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 	 */
 	function documentOn( event, selector, handler, options ) {
-		if ( 'undefined' === typeof options ) {
+		if ( options === undefined ) {
 			options = false;
 		}
 
@@ -1505,25 +1491,21 @@ function frmFrontFormJS() {
 	}
 
 	function initFloatingLabels() {
-		let checkFloatLabel, checkDropdownLabel, runOnLoad, selector, floatClass;
+		const selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		const floatClass = 'frm_label_float_top';
 
-		selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
-		floatClass = 'frm_label_float_top';
-
-		checkFloatLabel = function( input ) {
-			let container, shouldFloatTop, firstOpt;
-
-			container = input.closest( '.frm_inside_container' );
+		const checkFloatLabel = function( input ) {
+			const container = input.closest( '.frm_inside_container' );
 			if ( ! container ) {
 				return;
 			}
 
-			shouldFloatTop = input.value || document.activeElement === input;
+			const shouldFloatTop = input.value || document.activeElement === input;
 
 			container.classList.toggle( floatClass, shouldFloatTop );
 
 			if ( 'SELECT' === input.tagName ) {
-				firstOpt = input.querySelector( 'option:first-child' );
+				const firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( shouldFloatTop ) {
 					if ( firstOpt.hasAttribute( 'data-label' ) ) {
@@ -1537,8 +1519,8 @@ function frmFrontFormJS() {
 			}
 		};
 
-		checkDropdownLabel = function() {
-			document.querySelectorAll( '.frm-show-form .frm_inside_container:not(.' + floatClass + ') select' ).forEach( function( input ) {
+		const checkDropdownLabel = function() {
+			document.querySelectorAll( `.frm-show-form .frm_inside_container:not(.${ floatClass }) select` ).forEach( function( input ) {
 				const firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( firstOpt.textContent ) {
@@ -1559,8 +1541,8 @@ function frmFrontFormJS() {
 			);
 		} );
 
-		runOnLoad = function( firstLoad ) {
-			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
+		const runOnLoad = function( firstLoad ) {
+			if ( firstLoad && document.activeElement && [ 'INPUT', 'SELECT', 'TEXTAREA' ].includes( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
 			} else if ( firstLoad ) {
 				document.querySelectorAll( '.frm_inside_container' ).forEach(
@@ -1574,6 +1556,7 @@ function frmFrontFormJS() {
 			}
 
 			checkDropdownLabel();
+			calcProductsTotal();
 		};
 
 		runOnLoad( true );
@@ -1608,8 +1591,8 @@ function frmFrontFormJS() {
 	}
 
 	function maybeClearCustomValidityMessage( event, field ) {
-		let key,
-			isInvalid = false;
+		let key;
+		let isInvalid = false;
 
 		if ( ! shouldUpdateValidityMessage( field ) ) {
 			return;
@@ -1631,31 +1614,27 @@ function frmFrontFormJS() {
 	}
 
 	function maybeShowNewTabFallbackMessage() {
-		let messageEl;
-
 		if ( ! window.frmShowNewTabFallback ) {
 			return;
 		}
 
-		messageEl = document.querySelector( '#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message' );
+		const messageEl = document.querySelector( `#frm_form_${ frmShowNewTabFallback.formId }_container .frm_message` );
 		if ( ! messageEl ) {
 			return;
 		}
 
-		messageEl.insertAdjacentHTML( 'beforeend', ' ' + frmShowNewTabFallback.message );
+		messageEl.insertAdjacentHTML( 'beforeend', ` ${ frmShowNewTabFallback.message }` );
 	}
 
 	function setCustomValidityMessage() {
-		let forms, length, index;
+		const forms = document.getElementsByClassName( 'frm-show-form' );
+		const { length } = forms;
 
-		forms = document.getElementsByClassName( 'frm-show-form' );
-		length = forms.length;
-
-		for ( index = 0; index < length; ++index ) {
+		for ( let index = 0; index < length; ++index ) {
 			forms[ index ].addEventListener(
 				'invalid',
 				function( event ) {
-					const target = event.target;
+					const { target } = event;
 
 					if ( shouldUpdateValidityMessage( target ) ) {
 						target.setCustomValidity( target.dataset.invmsg );
@@ -1699,7 +1678,7 @@ function frmFrontFormJS() {
 			.map( b => b.toString( 16 ).padStart( 2, '0' ) )
 			.join( '' );
 		const timestamp = Date.now().toString( 16 );
-		return uniqueKey + '-' + timestamp;
+		return `${ uniqueKey }-${ timestamp }`;
 	}
 
 	/**
@@ -1718,7 +1697,6 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		/* eslint-disable compat/compat */
 		const startTime = performance.now();
 		const step = currentTime => {
 			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
@@ -1728,7 +1706,6 @@ function frmFrontFormJS() {
 			}
 		};
 		requestAnimationFrame( step );
-		/* eslint-enable compat/compat */
 	}
 
 	/**
@@ -1755,8 +1732,431 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Check to make sure the quantity field value is within the min and max values.
+	 *
+	 * @param {HTMLElement} input
+	 * @return {number} The quantity value.
+	 */
+	function checkQuantityFieldMinMax( input ) {
+		if ( '' === input.value ) {
+			// Leave the value if it is empty.
+			return 0;
+		}
+
+		const val = parseFloat( input.value ? input.value.trim() : 0 );
+		if ( isNaN( val ) ) {
+			return 0;
+		}
+
+		let max = input.hasAttribute( 'max' ) ? parseFloat( input.getAttribute( 'max' ) ) : 0;
+		let min = input.hasAttribute( 'min' ) ? parseFloat( input.getAttribute( 'min' ) ) : 0;
+
+		max = isNaN( max ) ? 0 : max;
+		min = isNaN( min ) ? 0 : Math.max( 0, min );
+
+		if ( val < min ) {
+			input.value = min;
+			return min;
+		}
+
+		if ( 0 !== max && val > max ) {
+			input.value = max;
+			return max;
+		}
+
+		return val;
+	}
+
+	function triggerChange( input, fieldKey ) {
+		if ( fieldKey === undefined ) {
+			fieldKey = 'dependent';
+		}
+
+		jQuery( input ).trigger( { type: 'change', selfTriggered: true, frmTriggered: fieldKey } );
+	}
+
+	/**
+	 * Calculates the total price.
+	 *
+	 * @param {Event|undefined} e The event object.
+	 * @return {void}
+	 */
+	function calcProductsTotal( e ) {
+		if ( 'object' === typeof frmProForm ) {
+			// Pro is installed, use the Pro JS.
+			return;
+		}
+
+		if ( typeof __FRMCURR === 'undefined' ) {
+			return;
+		}
+
+		const totalFields = document.querySelectorAll( '[data-frmtotal]' );
+		if ( ! totalFields.length ) {
+			return;
+		}
+
+		const formTotals = [];
+
+		totalFields.forEach( totalField => {
+			let total = 0;
+			const form = totalField.closest( 'form' );
+
+			if ( ! form ) {
+				return;
+			}
+
+			const formId = form.querySelector( 'input[name="form_id"]' ).value;
+			const currency = getCurrency( formId );
+
+			if ( undefined !== formTotals[ formId ] ) {
+				total = formTotals[ formId ];
+			} else {
+				form.querySelectorAll( 'input[data-frmprice],select:has([data-frmprice])' ).forEach( function( input ) {
+					let quantity = 0;
+					let price = 0;
+					const isSingle = 'hidden' === input.type;
+
+					if ( input.tagName === 'SELECT' ) {
+						if ( input.selectedIndex !== -1 ) {
+							price = input.options[ input.selectedIndex ].getAttribute( 'data-frmprice' );
+						}
+					} else {
+						if ( ! isSingle && ! input.matches( ':checked' ) ) {
+							return;
+						}
+						price = input.getAttribute( 'data-frmprice' );
+					}
+
+					if ( ! price ) {
+						price = 0;
+					} else {
+						price = preparePrice( price, currency );
+						quantity = getQuantity( input );
+						price = parseFloat( quantity ) * parseFloat( price );
+					}
+
+					if ( 'true' === input.getAttribute( 'data-frmdiscount' ) ) {
+						price = price * -1;
+					}
+
+					total += price;
+				} );
+
+				formTotals[ formId ] = total;
+			}
+
+			total = isNaN( total ) ? 0 : total;
+
+			// Set a decimal separator for currency if no default for it
+			currency.decimal_separator = currency.decimal_separator.trim(); // first remove unnecessary space(s)
+			if ( ! currency.decimal_separator.length ) {
+				currency.decimal_separator = '.';
+			}
+
+			totalField.value = roundTotal( total, currency );
+			total = normalizeTotal( total, currency );
+
+			// because of e.g. fields that might be using this field for calculations
+			triggerChange( totalField );
+
+			total = formatCurrency( total, currency );
+			const formatted = totalField.previousElementSibling;
+			if ( formatted?.matches( '.frm_total_formatted' ) ) {
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formatted.innerHTML = total;
+				return;
+			}
+
+			const formattedEls = totalField.closest( '.frm_form_field' ).querySelectorAll( '.frm_total_formatted' );
+			formattedEls.forEach( formattedEl => {
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formattedEl.innerHTML = total;
+			} );
+		} );
+	}
+
+	/**
+	 * Round total and maybe add trailing zeros so formatCurrency has a proper format to work with.
+	 *
+	 * @param {number} total    The total amount to normalize.
+	 * @param {Object} currency The currency object containing decimal information.
+	 * @return {string}         The normalized total amount.
+	 */
+	function normalizeTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
+		total = roundTotal( total, currency );
+
+		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+	}
+
+	function roundTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
+		if ( ! isLargeTotal ) {
+			const { decimals } = currency;
+			total = decimals > 0 ? round10( total, decimals ) : Math.ceil( total );
+		}
+
+		return total;
+	}
+
+	function round10( value, decimals ) {
+		return Number( `${ Math.round( `${ value }e${ decimals }` ) }e-${ decimals }` );
+	}
+
+	/**
+	 * Format a numeric value according to the specified currency format settings.
+	 *
+	 * @param {string} total    The numeric value to format.
+	 * @param {Object} currency The currency formatting configuration.
+	 * @return {string}         The formatted currency string.
+	 */
+	function formatCurrency( total, currency ) {
+		total = maybeAddTrailingZeroToPrice( total, currency );
+		if ( total.length && ( total[ total.length - 1 ] === '.' || total[ total.length - 1 ] === currency.decimal_separator ) ) {
+			total = total.substr( 0, total.length - 1 );
+		}
+
+		total = maybeRemoveTrailingZerosFromPrice( total, currency );
+		total = addThousands( total, currency );
+
+		const leftSymbol = currency.symbol_left ? ( currency.symbol_left + currency.symbol_padding ) : '';
+		const rightSymbol = currency.symbol_right ? ( currency.symbol_padding + currency.symbol_right ) : '';
+
+		return `${ leftSymbol }${ total }${ rightSymbol }`;
+	}
+
+	/**
+	 * Gets currency from form id.
+	 *
+	 * @param {number} formId Form ID.
+	 * @return {Object}       Currency object.
+	 */
+	function getCurrency( formId ) {
+		if ( undefined !== window.__FRMCURR && undefined !== window.__FRMCURR[ formId ] ) {
+			return window.__FRMCURR[ formId ];
+		}
+
+		return {
+			symbol_left: '$',
+			symbol_right: '',
+			symbol_padding: '',
+			thousand_separator: ',',
+			decimal_separator: '.',
+			decimals: 2,
+		};
+	}
+
+	/**
+	 * Gets quantity.
+	 *
+	 * @param {HTMLElement} field The field element.
+	 * @return {number} The quantity.
+	 */
+	function getQuantity( field ) {
+		const fieldID = frmFrontForm.getFieldId( field, false );
+		if ( ! fieldID ) {
+			return 0;
+		}
+
+		const quantityField = getQuantityField( field, fieldID );
+		if ( ! quantityField ) {
+			// If there is no quantity field, assume 1.
+			return 1;
+		}
+
+		return checkQuantityFieldMinMax( quantityField );
+	}
+
+	/**
+	 * Gets quantity field.
+	 *
+	 * @param {HTMLElement} element The element.
+	 * @param {number}      fieldID The field ID.
+	 * @return {HTMLElement|null} The quantity field.
+	 */
+	function getQuantityField( element, fieldID ) {
+		const quantityFields = element.closest( 'form' ).querySelectorAll( '[data-frmproduct]' );
+		if ( ! quantityFields.length ) {
+			return null;
+		}
+
+		fieldID = fieldID.toString();
+
+		return Array.from( quantityFields ).find( element => {
+			let ids;
+
+			ids = JSON.parse( element.getAttribute( 'data-frmproduct' ).trim() );
+			if ( '' === ids ) {
+				return false;
+			}
+
+			// Convert to array if necessary because of existing fields that are already using single product fields.
+			ids = 'string' === typeof ids ? [ ids ] : ids;
+			return ids.includes( fieldID );
+		} );
+	}
+
+	/**
+	 * Prepare a price for calculation.
+	 *
+	 * @param {number|string} price    The price to prepare.
+	 * @param {Object}        currency The currency object containing decimal information.
+	 * @return {string}                The prepared price.
+	 */
+	function preparePrice( price, currency ) {
+		if ( ! price ) {
+			return 0;
+		}
+		price = `${ price }`; // convert to string just to be sure
+
+		const regex = getRegexForPrice( currency );
+
+		const matches = price.match( regex );
+		if ( null === matches ) {
+			return 0;
+		}
+
+		price = matches.length ? matches[ matches.length - 1 ] : 0;
+		price = price.trim();
+
+		// Fix issues with parsing Fr.15.00. The regex catches .15.00.
+		// This checks for the leading decimal and removes it.
+		if ( currency.decimal_separator === '.' && 3 === price.split( '.' ).length && price[ 0 ] === '.' ) {
+			price = price.substr( 1 );
+		}
+
+		if ( price ) {
+			price = maybeUseDecimal( price, currency );
+			price = price.split( currency.thousand_separator ).join( '' ).replace( currency.decimal_separator, '.' );
+		}
+
+		return price;
+	}
+
+	/**
+	 * @param {Object} currency The currency object.
+	 * @return {RegExp} The regular expression object.
+	 */
+	function getRegexForPrice( currency ) {
+		let regexString = '[0-9,.';
+
+		if ( currency.thousand_separator !== '.' && currency.thousand_separator !== ',' ) {
+			regexString += currency.thousand_separator;
+		}
+		if ( currency.decimal_separator !== '.' && currency.decimal_separator !== ',' ) {
+			regexString += currency.decimal_separator;
+		}
+
+		regexString += ']*\\.?\\,?[0-9]+';
+
+		return new RegExp( regexString, 'g' );
+	}
+
+	/**
+	 * Maybe replace the decimal separator with the currency's decimal separator.
+	 *
+	 * @param {string} price    The price string.
+	 * @param {Object} currency The currency object.
+	 * @return {string}         The modified price string.
+	 */
+	function maybeUseDecimal( price, currency ) {
+		let usedForDecimal;
+		let priceParts;
+		if ( '.' === currency.thousand_separator ) {
+			priceParts = price.split( '.' );
+			usedForDecimal = 2 === priceParts.length && 2 === priceParts[ 1 ].length;
+			if ( usedForDecimal ) {
+				price = price.replace( '.', currency.decimal_separator );
+			}
+		}
+		return price;
+	}
+
+	/**
+	 * Add trailing zeros to a price if necessary and replace the decimal separator.
+	 *
+	 * @param {number|string} price         The price to format.
+	 * @param {Object}        currency      The currency object containing the decimal separator.
+	 * @param {boolean}       [force=false] Whether to force processing even if the price is not a number.
+	 * @return {string}                     The formatted price string.
+	 */
+	function maybeAddTrailingZeroToPrice( price, currency, force = false ) {
+		if ( 'number' !== typeof price && ! force ) {
+			return price;
+		}
+
+		price = String( price ); // first convert to string
+		const pos = price.indexOf( '.' );
+
+		if ( pos === -1 ) {
+			price = `${ price }.`;
+
+			for ( let n = 0; n < currency.decimals; ++n ) {
+				price += '0';
+			}
+		} else {
+			const decimalsString = price.substring( pos + 1 );
+			if ( decimalsString.length < currency.decimals ) {
+				if ( decimalsString.length < 2 ) {
+					price += '0';
+				}
+
+				for ( let n = 2; n < currency.decimals; ++n ) {
+					price += '0';
+				}
+			}
+		}
+
+		return price.replace( '.', currency.decimal_separator );
+	}
+
+	/**
+	 * Format a numeric string by adding thousand separators.
+	 *
+	 * @param {string|number} price                      The numeric value to format.
+	 * @param {Object}        options                    Formatting options.
+	 * @param {string}        options.decimal_separator  Character used as decimal separator.
+	 * @param {string}        options.thousand_separator Character used as thousand separator.
+	 *
+	 * @return {string} The price string with thousand separators.
+	 */
+	function addThousands( price, options ) {
+		const split = options.decimal_separator === ''
+			? [ price.toString() ]
+			: price.split( options.decimal_separator );
+
+		if ( options.thousand_separator ) {
+			split[ 0 ] = split[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, options.thousand_separator );
+		}
+
+		return split.join( options.decimal_separator );
+	}
+
+	/**
+	 * Maybe remove trailing zeros from a price string.
+	 *
+	 * @param {string} price    The price string.
+	 * @param {Object} currency The currency data.
+	 *
+	 * @return {string} The price string with trailing zeros removed.
+	 */
+	function maybeRemoveTrailingZerosFromPrice( price, currency ) {
+		const split = price.split( currency.decimal_separator );
+		if ( 2 !== split.length || split[ 1 ].length <= currency.decimals ) {
+			return price;
+		}
+		if ( 0 === currency.decimals ) {
+			return split[ 0 ];
+		}
+		return `${ split[ 0 ] }${ currency.decimal_separator }${ split[ 1 ].substr( 0, currency.decimals ) }`;
+	}
+
 	return {
-		init: function() {
+		init() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
@@ -1788,6 +2188,11 @@ function frmFrontFormJS() {
 				'frmPageChanged',
 				destroyhCaptcha
 			);
+
+			jQuery( document ).on( 'frmAfterAddRow frmAfterRemoveRow', calcProductsTotal );
+			jQuery( document ).on( 'change', '[type="checkbox"][data-frmprice],[type="radio"][data-frmprice],[type="hidden"][data-frmprice],select:has([data-frmprice])', calcProductsTotal );
+			jQuery( document ).on( 'keyup change', '[data-frmproduct],[type="text"][data-frmprice]', calcProductsTotal );
+			calcProductsTotal();
 		},
 
 		getFieldId,
@@ -1799,7 +2204,7 @@ function frmFrontFormJS() {
 		 * @param {string}      captchaSelector
 		 * @return {void}
 		 */
-		renderCaptcha: function( captcha, captchaSelector ) {
+		renderCaptcha( captcha, captchaSelector ) {
 			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
@@ -1808,7 +2213,7 @@ function frmFrontFormJS() {
 			const size = captcha.getAttribute( 'data-size' );
 			const params = {
 				sitekey: captcha.getAttribute( 'data-sitekey' ),
-				size: size,
+				size,
 				theme: captcha.getAttribute( 'data-theme' )
 			};
 
@@ -1826,7 +2231,7 @@ function frmFrontFormJS() {
 			}
 
 			const activeCaptcha = getSelectedCaptcha( captchaSelector );
-			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
+			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? `#${ captcha.id }` : captcha.id;
 			const captchaID = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
@@ -1834,18 +2239,18 @@ function frmFrontFormJS() {
 			maybeFixCaptchaLabel( captcha );
 		},
 
-		afterSingleRecaptcha: function() {
+		afterSingleRecaptcha() {
 			const recaptcha = document.querySelector( '.frm-show-form .g-recaptcha' );
 			const object = recaptcha ? recaptcha.closest( 'form' ) : null;
 			frmFrontForm.submitFormNow( object );
 		},
 
-		afterRecaptcha: function( _, formID ) {
-			const object = document.querySelector( '#frm_form_' + formID + '_container form' );
+		afterRecaptcha( _, formID ) {
+			const object = document.querySelector( `#frm_form_${ formID }_container form` );
 			frmFrontForm.submitFormNow( object );
 		},
 
-		submitForm: function( e ) {
+		submitForm( e ) {
 			frmFrontForm.submitFormManual( e, this );
 		},
 
@@ -1854,7 +2259,7 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement} object The form object that is being submitted.
 		 * @return {void}
 		 */
-		submitFormManual: function( e, object ) {
+		submitFormManual( e, object ) {
 			if ( document.body.classList.contains( 'wp-admin' ) && ! object.closest( '.frmapi-form' ) ) {
 				return;
 			}
@@ -1882,9 +2287,10 @@ function frmFrontFormJS() {
 			}
 		},
 
-		submitFormNow: function( object ) {
-			let hasFileFields, antispamInput,
-				classList = object.className.trim().split( /\s+/gi );
+		submitFormNow( object ) {
+			let hasFileFields;
+			let antispamInput;
+			const classList = object.className.trim().split( /\s+/gi );
 
 			if ( object.hasAttribute( 'data-token' ) && null === object.querySelector( '[name="antispam_token"]' ) ) {
 				// include the antispam token on form submit.
@@ -1922,9 +2328,9 @@ function frmFrontFormJS() {
 		 *
 		 * @return {Array} List of errors.
 		 */
-		validateFormSubmit: function( object ) {
+		validateFormSubmit( object ) {
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
-			if ( typeof tinyMCE !== 'undefined' && form && form.querySelector( '.wp-editor-wrap' ) ) {
+			if ( typeof tinyMCE !== 'undefined' && form?.querySelector( '.wp-editor-wrap' ) ) {
 				tinyMCE.triggerSave();
 			}
 
@@ -1945,8 +2351,9 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 * @return {Array} List of errors.
 		 */
-		getAjaxFormErrors: function( object ) {
-			let customErrors, key;
+		getAjaxFormErrors( object ) {
+			let customErrors;
+			let key;
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 
 			jsErrors = validateForm( object );
@@ -1973,13 +2380,13 @@ function frmFrontFormJS() {
 		 * @param {HTMLElement|Object} object Form object. This might be a jQuery object.
 		 * @return {void}
 		 */
-		addAjaxFormErrors: function( object ) {
+		addAjaxFormErrors( object ) {
 			let key;
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
 			removeAllErrors();
 
 			for ( key in jsErrors ) {
-				const fieldCont = form ? form.querySelector( '#frm_field_' + key + '_container' ) : null;
+				const fieldCont = form ? form.querySelector( `#frm_field_${ key }_container` ) : null;
 
 				if ( fieldCont ) {
 					addFieldError( fieldCont, key, jsErrors );
@@ -1998,22 +2405,25 @@ function frmFrontFormJS() {
 		showSubmitLoading,
 		removeSubmitLoading,
 
-		scrollToID: function( id ) {
+		scrollToID( id ) {
 			const object = jQuery( document.getElementById( id ) );
 			frmFrontForm.scrollMsg( object, false );
 		},
 
-		scrollMsg: function( id, object, animate ) {
-			let newPos, m, b, screenTop, screenBottom,
-				scrollObj = '';
-			if ( typeof object === 'undefined' ) {
-				scrollObj = jQuery( document.getElementById( 'frm_form_' + id + '_container' ) );
+		scrollMsg( id, object, animate ) {
+			let newPos;
+			let screenTop;
+			let screenBottom;
+			let scrollObj = '';
+
+			if ( object === undefined ) {
+				scrollObj = jQuery( document.getElementById( `frm_form_${ id }_container` ) );
 				if ( scrollObj.length < 1 ) {
 					return;
 				}
 			} else if ( typeof id === 'string' ) {
 				const formEl = object instanceof jQuery ? object.get( 0 ) : object;
-				const fieldEl = formEl ? formEl.querySelector( '#frm_field_' + id + '_container' ) : null;
+				const fieldEl = formEl ? formEl.querySelector( `#frm_field_${ id }_container` ) : null;
 				scrollObj = fieldEl ? jQuery( fieldEl ) : jQuery();
 			} else {
 				scrollObj = id;
@@ -2021,15 +2431,15 @@ function frmFrontFormJS() {
 
 			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
-			if ( ! newPos || frm_js.offset === '-1' ) { // eslint-disable-line camelcase
+			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;
 			}
-			newPos = newPos - frm_js.offset; // eslint-disable-line camelcase
+			newPos = newPos - frm_js.offset;
 
-			m = getComputedStyle( document.documentElement ).marginTop;
-			b = getComputedStyle( document.body ).marginTop;
-			if ( m || b ) {
-				newPos = newPos - parseInt( m ) - parseInt( b );
+			const docMarginTop = getComputedStyle( document.documentElement ).marginTop;
+			const bodyMarginTop = getComputedStyle( document.body ).marginTop;
+			if ( docMarginTop || bodyMarginTop ) {
+				newPos = newPos - parseInt( docMarginTop ) - parseInt( bodyMarginTop );
 			}
 
 			if ( newPos && window.innerHeight ) {
@@ -2038,7 +2448,7 @@ function frmFrontFormJS() {
 
 				if ( newPos > screenBottom || newPos < screenTop ) {
 					// Not in view
-					if ( typeof animate === 'undefined' ) {
+					if ( animate === undefined ) {
 						document.documentElement.scrollTop = newPos;
 					} else {
 						animateScroll( screenTop, newPos, 500 );
@@ -2048,7 +2458,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		fieldValueChanged: function( e ) {
+		fieldValueChanged( e ) {
 			/*jshint validthis:true */
 
 			const fieldId = frmFrontForm.getFieldId( this, false );
@@ -2067,7 +2477,7 @@ function frmFrontFormJS() {
 			}
 		},
 
-		escapeHtml: function( text ) {
+		escapeHtml( text ) {
 			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
@@ -2077,7 +2487,7 @@ function frmFrontFormJS() {
 				.replace( /'/g, '&#039;' );
 		},
 
-		triggerCustomEvent: triggerCustomEvent,
+		triggerCustomEvent,
 		documentOn
 	};
 }
@@ -2126,7 +2536,7 @@ function frmCaptcha( captchaSelector ) {
 		if ( ! formIsVisible ) {
 			// If the form is not visible, try again later in 400ms.
 			// This fixes issues where the form fades visible on page load.
-			// Or whne the form is inside of a modal.
+			// Or when the form is inside of a modal.
 			const interval = setInterval(
 				function() {
 					if ( closestForm && closestForm.offsetParent !== null ) {

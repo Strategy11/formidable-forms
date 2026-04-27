@@ -129,12 +129,14 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_type( $type ) {
-		if ( empty( $this->type ) ) {
-			$this->type = $this->get_field_column( 'type' );
+		if ( $this->type ) {
+			return;
+		}
 
-			if ( empty( $this->type ) && $type ) {
-				$this->type = $type;
-			}
+		$this->type = $this->get_field_column( 'type' );
+
+		if ( ! $this->type && $type ) {
+			$this->type = $type;
 		}
 	}
 
@@ -144,7 +146,7 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_field_id() {
-		if ( empty( $this->field ) ) {
+		if ( ! $this->field ) {
 			return;
 		}
 
@@ -386,10 +388,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function display_field_settings() {
-		$default_settings    = $this->default_field_settings();
-		$field_type_settings = $this->field_settings_for_type();
-
-		return array_merge( $default_settings, $field_type_settings );
+		return array_merge( $this->default_field_settings(), $this->field_settings_for_type() );
 	}
 
 	/**
@@ -427,10 +426,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		if ( ! $this->has_input ) {
-			return $this->no_input_settings();
-		}
-		return array();
+		return $this->has_input ? array() : $this->no_input_settings();
 	}
 
 	/**
@@ -643,7 +639,7 @@ DEFAULT_HTML;
 		return $this->should_continue_to_field_options(
 			array(
 				'field' => array(
-					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type'],
+					'type' => FrmField::get_field_type( $this->field ),
 				),
 			)
 		);
@@ -719,7 +715,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
-		$all_field_types = self::get_all_field_types();
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
@@ -727,7 +722,7 @@ DEFAULT_HTML;
 			printf(
 				/* translators: %s: Field type */
 				esc_html__( '%s Options', 'formidable' ),
-				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
+				esc_html( self::get_all_field_types()[ $args['display']['type'] ]['name'] )
 			);
 			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) );
 			?>
@@ -908,8 +903,7 @@ DEFAULT_HTML;
 			'placeholder'        => '',
 			'draft'              => 0,
 		);
-		$field_opts  = $this->extra_field_opts();
-		$opts        = array_merge( $opts, $field_opts );
+		$opts        = array_merge( $opts, $this->extra_field_opts() );
 		$filter_args = array(
 			'field' => $this->field,
 			'type'  => $this->type,
@@ -1156,9 +1150,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function include_front_field_input( $args, $shortcode_atts ) {
-		$include_file = $this->include_front_form_file();
-
-		if ( $include_file ) {
+		if ( $this->include_front_form_file() ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
 			$input = $this->front_field_input( $args, $shortcode_atts );
@@ -1201,6 +1193,8 @@ DEFAULT_HTML;
 		$html_id    = $args['html_id'];
 		$field_name = $args['field_name'];
 		$read_only  = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
+		$hide_label = isset( $shortcode_atts['label'] ) && ! $shortcode_atts['label'];
+
 		// Lighten up on memory usage.
 		unset( $args['form'] );
 
@@ -1545,10 +1539,8 @@ DEFAULT_HTML;
 		$custom_error_fields     = preg_grep( '/frm_error_field_*/', $describedby );
 		$custom_desc_fields      = preg_grep( '/frm_desc_field_*/', $describedby );
 
-		if ( $custom_desc_fields && $custom_error_fields ) {
-			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
-				$error_comes_first = false;
-			}
+		if ( $custom_desc_fields && $custom_error_fields && array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
+			$error_comes_first = false;
 		}
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
@@ -1560,10 +1552,10 @@ DEFAULT_HTML;
 		}
 
 		if ( $this->get_field_column( 'description' ) !== '' && ! in_array( 'frm_desc_' . $args['html_id'], $describedby, true ) ) {
-			if ( ! $error_comes_first ) {
-				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
-			} else {
+			if ( $error_comes_first ) {
 				array_push( $describedby, 'frm_desc_' . $args['html_id'] );
+			} else {
+				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
 			}
 		}
 
@@ -1880,10 +1872,12 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
-					$csv_values_checked[] = $option['value'];
-					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
+				if ( ! isset( $option['value'] ) || ! str_contains( $filtered_checked, $option['value'] ) ) {
+					continue;
 				}
+
+				$csv_values_checked[] = $option['value'];
+				$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 			}
 
 			$csv_values_checked = array_reverse( $csv_values_checked );

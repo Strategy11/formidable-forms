@@ -3,11 +3,13 @@
  */
 
 /* Customization Panel */
-#frm-insert-fields-box, #frm-conditionals {
+#frm-insert-fields-box,
+#frm-conditionals {
 	max-height: none;
 }
 
-#frm-conditionals, #frm-adv-info-tab {
+#frm-conditionals,
+#frm-adv-info-tab {
 	display: none;
 	max-height: 355px;
 }

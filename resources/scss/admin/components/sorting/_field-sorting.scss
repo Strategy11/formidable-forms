@@ -2,7 +2,7 @@
  * Field Sorting
  */
 
- .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
+.frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
 	display: none !important;
 }
 
@@ -27,14 +27,6 @@
 
 	/* If a section gets dropped into a section, hide it */
 	display: none;
-}
-
-.divider_drop {
-	text-align: center;
-}
-
-.divider_drop .howto .frm_icon_font {
-	font-style: normal;
 }
 
 .show_repeat_sec {

@@ -4,7 +4,7 @@ const { svg } = frmDom;
 
 function getShowLinkHrefValue( link, showLink ) {
 	let customLink = link.getAttribute( 'data-link' );
-	if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
+	if ( customLink === null || customLink === undefined || customLink === '' ) {
 		customLink = showLink.getAttribute( 'data-default' );
 	}
 	return customLink;
@@ -51,7 +51,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	}
 
 	// If one click upgrade, hide other content.
-	if ( oneclickMessage !== null && button !== null && typeof oneclick !== 'undefined' && oneclick ) {
+	if ( oneclickMessage !== null && button !== null && oneclick !== undefined && oneclick ) {
 		if ( newMessage === null ) {
 			showMsg = 'none';
 		}
@@ -60,7 +60,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 		oneclick = JSON.parse( oneclick );
 
 		button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-		button.className = button.className + ' ' + oneclick.class;
+		button.className = `${ button.className } ${ oneclick.class }`;
 		button.rel = oneclick.url;
 
 		oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
@@ -121,7 +121,7 @@ export function initModal( id, width ) {
 		return false;
 	}
 
-	if ( typeof width === 'undefined' ) {
+	if ( width === undefined ) {
 		width = '552px';
 	}
 
@@ -130,17 +130,17 @@ export function initModal( id, width ) {
 		modal: true,
 		autoOpen: false,
 		closeOnEscape: true,
-		width: width,
+		width,
 		resizable: false,
 		draggable: false,
-		open: function() {
+		open() {
 			jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 			jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 			jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 			$info.removeClass( 'ui-dialog-content ui-widget-content' );
 			bindClickForDialogClose( $info );
 		},
-		close: function() {
+		close() {
 			jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 			jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
@@ -175,7 +175,9 @@ export function initUpgradeModal() {
 	frmDom.util.documentOn( 'change', 'select.frm_select_with_upgrade', handleUpgradeClick );
 
 	function handleUpgradeClick( event ) {
-		let element, link, content;
+		let element;
+		let link;
+		let content;
 
 		element = event.target;
 
@@ -188,7 +190,7 @@ export function initUpgradeModal() {
 		// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
 		if ( event.type === 'change' && element.classList.contains( 'frm_select_with_upgrade' ) ) {
 			const selectedOption = element.options[ element.selectedIndex ];
-			if ( selectedOption && selectedOption.dataset.upgrade ) {
+			if ( selectedOption?.dataset?.upgrade ) {
 				element = selectedOption;
 			}
 		}
@@ -220,6 +222,7 @@ export function initUpgradeModal() {
 		event.preventDefault();
 
 		const modal = $info.get( 0 );
+		modal.classList.remove( 'frm-success' );
 		const lockIcon = modal.querySelector( '.frm_lock_icon' );
 
 		if ( lockIcon ) {
@@ -236,7 +239,7 @@ export function initUpgradeModal() {
 
 		if ( element.dataset.image && lockIcon ) {
 			lockIcon.style.display = 'none';
-			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image } ), lockIcon );
+			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: `${ frmGlobal.url }/images/${ element.dataset.image }` } ), lockIcon );
 		}
 
 		const level = modal.querySelector( '.license-level' );
@@ -247,7 +250,9 @@ export function initUpgradeModal() {
 		// If one click upgrade, hide other content
 		addOneClick( element, 'modal', upgradeLabel );
 
-		modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+		notInstalled.style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		notInstalled.textContent = notInstalled.dataset.default;
 		modal.querySelector( '.frm-upgrade-modal-title-prefix' ).style.display = element.dataset.oneclick ? 'inline' : 'none';
 		modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
 		modal.querySelector( '.frm-upgrade-modal-title-suffix' ).style.display = 'none';
@@ -257,13 +262,47 @@ export function initUpgradeModal() {
 
 		// set the utm medium
 		const button = modal.querySelector( '.button-primary:not(.frm-oneclick-button)' );
-		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + element.getAttribute( 'data-medium' ) );
+		link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, `$1${ element.getAttribute( 'data-medium' ) }` );
 		content = element.getAttribute( 'data-content' );
 		if ( content === null ) {
 			content = '';
 		}
-		link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
+		link = link.replace( /(content=)[a-z_-]+/ig, `$1${ content }` );
 		button.setAttribute( 'href', link );
+
+		if ( element.classList.contains( 'frm_show_update' ) ) {
+			applyUpdateModalOverrides( modal );
+		}
+	}
+}
+
+/**
+ * Override upgrade modal content for update prompts.
+ *
+ * @since 6.29
+ *
+ * @param {Element} modal The upgrade modal element.
+ */
+function applyUpdateModalOverrides( modal ) {
+	const titlePrefix = modal.querySelector( '.frm-upgrade-modal-title-prefix' );
+	if ( titlePrefix ) {
+		titlePrefix.style.display = 'none';
+	}
+
+	const notInstalled = modal.querySelector( '.frm_are_not_installed' );
+	if ( notInstalled ) {
+		notInstalled.textContent = __( 'require an update', 'formidable' );
+		notInstalled.style.display = ''; // Clear inline style, span defaults to display:inline.
+	}
+
+	const oneclickMsg = modal.querySelector( '.frm-oneclick' );
+	if ( oneclickMsg ) {
+		oneclickMsg.style.display = 'none';
+	}
+
+	const button = modal.querySelector( '.frm-oneclick-button' );
+	if ( button ) {
+		button.textContent = __( 'Update Now', 'formidable' );
 	}
 }
 

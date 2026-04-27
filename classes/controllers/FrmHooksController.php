@@ -147,6 +147,9 @@ class FrmHooksController {
 
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
+		// Fields Model.
+		add_filter( 'frm_pro_available_fields', 'FrmField::show_update_for_pro_fields' );
+
 		// Forms Controller.
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );

@@ -507,6 +507,17 @@ namespace {
 		public static function get_counters() {
 		}
 	}
+
+	class FrmProFormsController{
+		public static function enqueue_pro_web_components_script(){
+		}
+	}
+
+	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
+	}
+
+	class WP_UnitTestCase extends WP_UnitTestCase_Base {
+	}
 }
 
 namespace Elementor {

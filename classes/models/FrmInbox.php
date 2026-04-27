@@ -231,7 +231,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function has_started( $message ) {
-		return empty( $message['starts'] ) ? true : $message['starts'] <= time();
+		return ! empty( $message['starts'] ) ? $message['starts'] <= time() : true;
 	}
 
 	/**
@@ -400,10 +400,12 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function remove( $key ) {
-		if ( isset( self::$messages[ $key ] ) ) {
-			unset( self::$messages[ $key ] );
-			$this->update_list();
+		if ( ! isset( self::$messages[ $key ] ) ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ] );
+		$this->update_list();
 	}
 
 	/**
@@ -419,7 +421,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool True if a banner is available and shown.
 	 */
 	public static function maybe_show_banner() {
-		if ( empty( self::$banner_messages ) ) {
+		if ( ! self::$banner_messages ) {
 			return false;
 		}
 
@@ -466,7 +468,7 @@ class FrmInbox extends FrmFormApi {
 
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
-				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';
+				return 'href="' . esc_url( $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] ) . '"';
 			},
 			$cta
 		);

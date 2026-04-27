@@ -853,7 +853,7 @@ class FrmEntry {
 		$item_name  = self::get_new_entry_name( $values, $values['item_key'] );
 		$new_values = array(
 			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
-			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '' ),
+			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '', true ),
 			'ip'             => self::get_ip( $values ),
 			'is_draft'       => self::get_is_draft_value( $values ),
 			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
@@ -1103,6 +1103,16 @@ class FrmEntry {
 
 		do_action( 'frm_after_create_entry', $entry_id, $new_values['form_id'], compact( 'is_child' ) );
 		do_action( 'frm_after_create_entry_' . $new_values['form_id'], $entry_id, compact( 'is_child' ) );
+
+		if ( ! empty( $values['form_key'] ) ) {
+			/**
+			 * @since 6.30
+			 *
+			 * @param int   $entry_id
+			 * @param array $is_child
+			 */
+			do_action( 'frm_after_create_entry_' . $values['form_key'], $entry_id, compact( 'is_child' ) );
+		}
 	}
 
 	/**
@@ -1168,7 +1178,7 @@ class FrmEntry {
 		global $wpdb;
 
 		$new_values = array(
-			'name'       => self::get_new_entry_name( $values ),
+			'name'       => FrmAppHelper::truncate( self::get_new_entry_name( $values ), 255, 1, '', true ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
 			'is_draft'   => self::get_is_draft_value( $values ),
 			'updated_at' => current_time( 'mysql', 1 ),
@@ -1225,6 +1235,15 @@ class FrmEntry {
 
 		do_action( 'frm_after_update_entry', $id, $new_values['form_id'] );
 		do_action( 'frm_after_update_entry_' . $new_values['form_id'], $id );
+
+		if ( ! empty( $values['form_key'] ) ) {
+			/**
+			 * @since 6.30
+			 *
+			 * @param int $entry_id
+			 */
+			do_action( 'frm_after_update_entry_' . $values['form_key'], $id );
+		}
 	}
 
 	/**

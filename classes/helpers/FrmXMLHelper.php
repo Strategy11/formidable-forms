@@ -133,11 +133,13 @@ class FrmXMLHelper {
 
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
 			// Grab cats, tags, and terms, or forms or posts.
-			if ( isset( $xml->{$item_type} ) ) {
-				$function_name = 'import_xml_' . $item_type . 's';
-				$imported      = self::$function_name( $xml->{$item_type}, $imported );
-				unset( $function_name, $xml->{$item_type} );
+			if ( ! isset( $xml->{$item_type} ) ) {
+				continue;
 			}
+
+			$function_name = 'import_xml_' . $item_type . 's';
+			$imported      = self::$function_name( $xml->{$item_type}, $imported );
+			unset( $function_name, $xml->{$item_type} );
 		}
 
 		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
@@ -292,6 +294,21 @@ class FrmXMLHelper {
 		}//end foreach
 
 		self::maybe_update_child_form_parent_id( $imported['forms'], $child_forms );
+
+		/**
+		 * Fires after all forms in the XML have been imported.
+		 *
+		 * Child forms are imported before their parent form, so per-form fix-ups
+		 * cannot resolve conditional logic that references fields in a form
+		 * imported later. Use this action for cross-form fix-ups that require
+		 * the fully populated `$frm_duplicate_ids` map.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $imported Summary of imported items, including
+		 *                        'forms' => array( old_form_id => new_form_id ).
+		 */
+		do_action( 'frm_after_import_forms', $imported );
 
 		return $imported;
 	}
@@ -465,12 +482,14 @@ class FrmXMLHelper {
 	 */
 	private static function maybe_update_child_form_parent_id( $imported_forms, $child_forms ) {
 		foreach ( $child_forms as $child_form_id => $old_parent_form_id ) {
-			if ( isset( $imported_forms[ $old_parent_form_id ] ) && (int) $imported_forms[ $old_parent_form_id ] !== (int) $old_parent_form_id ) {
-				// Update all children with this old parent_form_id
-				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
-				FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
-				do_action( 'frm_update_child_form_parent_id', $child_form_id, $new_parent_form_id );
+			if ( ! isset( $imported_forms[ $old_parent_form_id ] ) || (int) $imported_forms[ $old_parent_form_id ] === (int) $old_parent_form_id ) {
+				continue;
 			}
+
+			// Update all children with this old parent_form_id
+			$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
+			FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
+			do_action( 'frm_update_child_form_parent_id', $child_form_id, $new_parent_form_id );
 		}
 	}
 
@@ -1513,13 +1532,15 @@ class FrmXMLHelper {
 	 * @param int   $post_id
 	 */
 	private static function update_layout( &$post, $post_id ) {
-		if ( is_callable( 'FrmViewsLayout::maybe_create_layouts_for_view' ) ) {
-			$listing_layout = ! empty( $post['layout']['listing'] ) ? json_decode( $post['layout']['listing'], true ) : array();
-			$detail_layout  = ! empty( $post['layout']['detail'] ) ? json_decode( $post['layout']['detail'], true ) : array();
+		if ( ! is_callable( 'FrmViewsLayout::maybe_create_layouts_for_view' ) ) {
+			return;
+		}
 
-			if ( $listing_layout || $detail_layout ) {
-				FrmViewsLayout::maybe_create_layouts_for_view( $post_id, $listing_layout, $detail_layout );
-			}
+		$listing_layout = ! empty( $post['layout']['listing'] ) ? json_decode( $post['layout']['listing'], true ) : array();
+		$detail_layout  = ! empty( $post['layout']['detail'] ) ? json_decode( $post['layout']['detail'], true ) : array();
+
+		if ( $listing_layout || $detail_layout ) {
+			FrmViewsLayout::maybe_create_layouts_for_view( $post_id, $listing_layout, $detail_layout );
 		}
 	}
 
@@ -1559,10 +1580,9 @@ class FrmXMLHelper {
 
 			// Remove the SimpleXML_parse_error from the WP_Error object to avoid
 			// displaying duplicate error messages from $result->get_error_message()
-			$error_codes   = $result->get_error_codes();
 			$error_details = array();
 
-			foreach ( $error_codes as $error_code ) {
+			foreach ( $result->get_error_codes() as $error_code ) {
 				// Clone WP_Error data because WP_Error removes all error messages and data
 				// Associated with the specified error code when an item is removed.
 				// Source: https://developer.wordpress.org/reference/classes/wp_error/remove/#source
@@ -1832,10 +1852,12 @@ class FrmXMLHelper {
 		}
 
 		foreach ( $options as $key => $option ) {
-			if ( is_array( $option ) && ! empty( $option['image'] ) ) {
-				$options[ $key ]['src'] = wp_get_attachment_url( $option['image'] );
-				$updated                = true;
+			if ( ! is_array( $option ) || empty( $option['image'] ) ) {
+				continue;
 			}
+
+			$options[ $key ]['src'] = wp_get_attachment_url( $option['image'] );
+			$updated                = true;
 		}
 
 		if ( $updated ) {

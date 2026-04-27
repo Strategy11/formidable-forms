@@ -16,17 +16,27 @@ jobs:
     name: Cypress
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Composer install
-        run: composer install
+        uses: actions/checkout@v6
 
       - name: Install Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
+
+      - name: Cache dependencies
+        id: cache-npm
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/Cypress
+            node_modules
+          key: ${{ runner.os }}-cypress-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-node-modules-
 
       - name: Install dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps --include=dev
 
       - name: Set up WP environment

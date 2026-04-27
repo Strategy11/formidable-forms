@@ -107,14 +107,16 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function append_file( $file_content ) {
-		if ( $this->has_permission ) {
-			if ( file_exists( $this->new_file_path ) ) {
-				$existing_content = $this->get_contents();
-				$file_content     = $existing_content . $file_content;
-			}
-
-			$this->create_file( $file_content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		if ( file_exists( $this->new_file_path ) ) {
+			$existing_content = $this->get_contents();
+			$file_content     = $existing_content . $file_content;
+		}
+
+		$this->create_file( $file_content );
 	}
 
 	/**
@@ -127,14 +129,16 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function combine_files( $file_names ) {
-		if ( $this->has_permission ) {
-			$content = '';
-
-			foreach ( $file_names as $file_name ) {
-				$content .= $this->get_contents( $file_name ) . "\n";
-			}
-			$this->create_file( $content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		$content = '';
+
+		foreach ( $file_names as $file_name ) {
+			$content .= $this->get_contents( $file_name ) . "\n";
+		}
+		$this->create_file( $content );
 	}
 
 	/**
@@ -190,9 +194,7 @@ class FrmCreateFile {
 	private function create_directories( &$dirs_exist ) {
 		global $wp_filesystem;
 
-		$needed_dirs = $this->get_needed_dirs();
-
-		foreach ( $needed_dirs as $_dir ) {
+		foreach ( $this->get_needed_dirs() as $_dir ) {
 			// Only check to see if the Dir exists upon creation failure. Less I/O this way.
 			if ( $wp_filesystem->mkdir( $_dir, $this->chmod_dir ) ) {
 				$index_path = $_dir . '/index.php';
@@ -305,7 +307,7 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	private function show_error_message() {
-		if ( ! empty( $this->error_message ) ) {
+		if ( $this->error_message ) {
 			echo '<div class="message">' . esc_html( $this->error_message ) . '</div>';
 		}
 	}

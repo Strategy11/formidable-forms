@@ -1,4 +1,28 @@
 == Changelog ==
+= 6.30 =
+* New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
+* New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
+* New: New frm_after_create_entry_{form_key} and frm_after_update_entry_{form_key} actions have been added.
+* Fix: When editing an entry, the Other option would not correctly appear selected.
+* Fix: Entries would fail to save in some cases where entry names would exceed 255 characters with special unicode characters.
+* Fix: Custom style CSS would not properly prefix selectors when ::before or ::after were used.
+* Fix: Attempting to refund a Square payment would result in a fatal error when the Stripe or Authorize.Net add-ons were also active.
+* Fix: A check has been added to prevent a possible Cannot access offset of type string on string fatal PHP error issue.
+
+= 6.29 =
+* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
+* Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
+* Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
+* Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
+* Fix: The field options dropdown for the far left field would render underneath the field settings sidebar in rows with a lot of fields.
+* Fix: An Undefined array key "slug" PHP Warning has been fixed.
+* Fix: When a missing payment field is automatically added to a form with a payment action, the new field would incorrectly appear below the submit button.
+* Breaking: The deprecated FrmDb constructor method has been removed.
+
+= 6.28 =
+* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
+* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
+
 = 6.27 =
 * New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
 * New: A new coupons tab is available on the payments page.

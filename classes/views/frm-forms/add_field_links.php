@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm_field_list">
 		<div class="frm-style-tabs-wrapper">
 			<div class="frm-tabs-delimiter">
-				<span data-initial-width="190" class="frm-tabs-active-underline frm-first"></span>
+				<span class="frm-tabs-active-underline"></span>
 			</div>
 
 			<div class="frm-tabs-navs">
@@ -41,55 +41,97 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 							<ul class="field_type_list frm_grid_container">
 								<?php
-								foreach ( $frm_field_selection as $field_key => $field_type ) {
-									$field_label = FrmFormsHelper::get_field_link_name( $field_type );
-									$classes     = 'frmbutton frm6 frm_t' . $field_key;
+								$field_sections = array();
 
-									if ( ! empty( $field_type['hide'] ) ) {
-										$classes .= ' frm_hidden';
+								foreach ( $frm_field_selection as $field_key => $field_type ) {
+									if ( ! is_array( $field_type ) ) {
+										continue;
 									}
-									?>
-									<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
-										<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
-											<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
-											<span><?php echo esc_html( $field_label ); ?></span>
-											<?php
-											if ( 'credit_card' === $field_key && ! FrmTransLiteAppHelper::payments_table_exists() ) {
-												FrmAppHelper::show_pill_text();
-											}
-											?>
-										</a>
-									</li>
-									<?php
+
+									// Skip showing field if it's in a section.
+									if ( isset( $field_type['section'] ) ) {
+										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
+											$field_sections[ $field_type['section'] ] = array();
+										}
+
+										// Mark this field as available when showing in later sections.
+										$field_type['is_available'] = true;
+
+										$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
+										continue;
+									}
+
+									$field_type['key'] = $field_key;
+									FrmFieldsHelper::show_add_field_link( $field_type );
 									unset( $field_key, $field_type );
 								}//end foreach
 								?>
 							</ul>
 							<div class="clear"></div>
-							<?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?>
+							<?php
+							FrmTipsHelper::pro_tip( 'get_builder_tip' );
+
+							$no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
+
+							if ( $no_allow_class === 'frm_noallow' ) {
+								$no_allow_class .= ' frm_show_upgrade';
+							}
+
+							$pro_fields = FrmField::pro_field_selection();
+							// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
+
+							FrmField::remove_moved_field_types_from_pro( $pro_fields );
+
+							foreach ( $pro_fields as $field_key => $field_type ) {
+								if ( ! is_array( $field_type ) || ! isset( $field_type['section'] ) ) {
+									continue;
+								}
+
+								if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
+									$field_sections[ $field_type['section'] ] = array();
+								}
+								$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
+							}
+
+							$section_labels = FrmField::field_section_labels();
+
+							foreach ( $field_sections as $section => $section_fields ) {
+								?>
+								<h3 class="frm-with-line">
+									<span><?php echo esc_html( $section_labels[ $section ] ?? ucwords( $section ) ); ?></span>
+									<span style="padding-left: 0;">
+										<?php
+										if ( ! FrmAppHelper::pro_is_installed() ) {
+											FrmAppHelper::show_pill_text();
+										}
+										?>
+									</span>
+								</h3>
+								<ul class="field_type_list frm_grid_container">
+									<?php
+									foreach ( $section_fields as $field_key => $field_type ) {
+										if ( ! empty( $field_type['is_available'] ) ) {
+											$field_type['key'] = $field_key;
+											FrmFieldsHelper::show_add_field_link( $field_type );
+										} else {
+											FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
+										}
+										unset( $field_key, $field_type );
+									}
+									?>
+								</ul>
+								<div class="clear"></div>
+								<?php
+							}//end foreach
+							?>
+
 							<h3 class="frm-with-line">
 								<span><?php esc_html_e( 'Advanced Fields', 'formidable' ); ?></span>
 							</h3>
 							<ul class="field_type_list frm_grid_container">
 								<?php
-								$no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
-
-								if ( $no_allow_class === 'frm_noallow' ) {
-									$no_allow_class .= ' frm_show_upgrade';
-								}
-
-								$pro_fields = FrmField::pro_field_selection();
-								// This is a Lite field. It's kept in pro_field_selection for backward compatibility.
-								unset( $pro_fields['credit_card'] );
-
-								$field_sections = array();
-
 								foreach ( $pro_fields as $field_key => $field_type ) {
 									if ( isset( $field_type['section'] ) ) {
-										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
-											$field_sections[ $field_type['section'] ] = array();
-										}
-										$field_sections[ $field_type['section'] ][ $field_key ] = $field_type;
 										continue;
 									}
 
@@ -128,21 +170,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</ul>
 							<div class="clear"></div>
-
-							<?php foreach ( $field_sections as $section_fields ) { ?>
-								<h3 class="frm-with-line">
-									<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
-								</h3>
-								<ul class="field_type_list frm_grid_container">
-									<?php
-									foreach ( $section_fields as $field_key => $field_type ) {
-										FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
-										unset( $field_key, $field_type );
-									}
-									?>
-								</ul>
-								<div class="clear"></div>
-							<?php } ?>
 						</div>
 						<?php do_action( 'frm_extra_form_instructions' ); ?>
 					</div>
