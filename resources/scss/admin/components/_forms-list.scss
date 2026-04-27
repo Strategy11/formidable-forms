@@ -1,0 +1,183 @@
+.frm-forms-list-settings-btn-wrapper {
+	position: relative;
+}
+
+.frm-forms-list-settings-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--small-radius);
+	transition: background-color 120ms ease-out,
+	            color 120ms ease-out;
+
+	&:hover,
+	&:focus {
+		background-color: var(--primary-25);
+		color: var(--primary-500) !important;
+		transition: background-color 80ms ease-out,
+		            color 80ms ease-out;
+	}
+}
+
+#frm-forms-list-settings {
+	font-size: var(--text-sm);
+	width: 225px;
+	background-color: #fff;
+	border: 1px solid var(--grey-100);
+	border-radius: var(--small-radius);
+	box-shadow: var(--box-shadow-lg);
+
+	// Default positioning (below button)
+	position: absolute;
+	top: 100%;
+	right: 0;
+	z-index: 1000;
+
+	// Close animation (default state when visible but not yet open)
+	opacity: 0;
+	transform: scale(0.95);
+	transition: opacity 100ms ease-in,
+	            transform 100ms ease-in;
+
+	// Open animation
+	&.frm-forms-list-settings--visible {
+		opacity: 1;
+		transform: scale(1);
+		transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1),
+		            transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	// Position above button when needed
+	&.frm-dropdown-above {
+		bottom: 100%;
+		top: auto;
+	}
+
+	// Position below button (default)
+	&.frm-dropdown-below {
+		top: 100%;
+		bottom: auto;
+	}
+
+	tfoot & {
+		top: auto;
+		bottom: 100%;
+	}
+
+	> div:not(.frm-collapsible-box) {
+		padding: 0 10px;
+	}
+
+	input[type="number"] {
+		height: var(--h-sm);
+		padding-top: 0;
+		padding-bottom: 0;
+		min-height: auto;
+	}
+
+	hr {
+		height: 0;
+		margin: var(--gap-xs) 0;
+		overflow: hidden;
+		border-top: 1px solid var(--grey-200);
+	}
+}
+
+#frm-forms-list-per-page {
+	width: 65px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: var(--text-sm);
+}
+
+#frm-save-forms-list-settings-btn {
+	font-size: var(--text-xs);
+	line-height: var(--h-xs);
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.wp-list-table.toplevel_page_formidable {
+
+	.column-settings {
+		width: 25px;
+	}
+}
+
+// Collapsible box
+.frm-collapsible-box {
+
+	&__btn {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 6px 10px;
+		margin-bottom: var(--gap-xs);
+		font-weight: 600;
+		color: var(--grey-900);
+		cursor: pointer;
+		border-radius: var(--small-radius);
+		transition: background-color 120ms ease-out,
+		            color 120ms ease-out;
+
+		&:hover,
+		&:focus {
+			background-color: var(--primary-25);
+			color: var(--primary-500) !important;
+			transition: background-color 80ms ease-out,
+			            color 80ms ease-out;
+		}
+
+		.frmsvg {
+			width: 12px;
+			height: 12px;
+			transition: transform 200ms cubic-bezier(0.65, 0, 0.35, 1);
+		}
+	}
+
+	&--collapsed &__btn .frmsvg {
+		transform: rotate(180deg);
+	}
+
+	&__content {
+		display: grid;
+		grid-template-rows: 1fr;
+		transition: grid-template-rows 200ms ease;
+
+		> div {
+			overflow: hidden;
+		}
+
+		&.frm-collapsible-box__content--collapsed {
+			grid-template-rows: 0fr;
+		}
+	}
+}
+
+.frm-forms-list-column-checkboxes {
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap-2xs);
+
+	label {
+		display: block;
+		padding: 6px 10px 6px calc(10px + var(--gap-2xs));
+		cursor: pointer;
+		border-radius: var(--small-radius);
+		transition: background-color 120ms ease-out,
+		            color 120ms ease-out;
+
+		&:hover {
+			background-color: var(--primary-25);
+			color: var(--primary-500);
+			transition: background-color 80ms ease-out,
+			            color 80ms ease-out;
+		}
+	}
+
+	input {
+		margin-left: 0 !important;
+	}
+}

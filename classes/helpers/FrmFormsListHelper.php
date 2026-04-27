@@ -35,12 +35,13 @@ class FrmFormsListHelper extends FrmListHelper {
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
 
-		$mode    = self::get_param(
+		$mode = self::get_param(
 			array(
 				'param'   => 'mode',
 				'default' => 'list',
 			)
 		);
+
 		$orderby = self::get_param(
 			array(
 				'param'   => 'orderby',
@@ -224,21 +225,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param string $which
-	 *
-	 * @return void
-	 */
-	public function pagination( $which ) {
-		global $mode;
-
-		parent::pagination( $which );
-
-		if ( 'top' === $which ) {
-			$this->view_switcher( $mode );
-		}
-	}
-
-	/**
 	 * @param stdClass $item
 	 * @param string   $style
 	 *
@@ -254,17 +240,8 @@ class FrmFormsListHelper extends FrmListHelper {
 		$this->get_actions( $actions, $item, $edit_link );
 
 		$action_links = $this->row_actions( $actions );
-
-		// Set up the checkbox ( because the user is editable, otherwise its empty )
-		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
-		$checkbox_label_text = sprintf(
-			// translators: Form title
-			__( 'Select %s', 'formidable' ),
-			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
-		);
-
-		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
-		$r         = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
+		$checkbox     = $this->get_row_checkbox( $item );
+		$r            = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -279,16 +256,15 @@ class FrmFormsListHelper extends FrmListHelper {
 			$style = '';
 
 			if ( in_array( $column_name, $hidden, true ) ) {
-				$class .= ' frm_hidden';
+				$class .= ' hidden';
 			}
 
 			if ( $column_name === 'name' ) {
 				$class .= ' column-primary';
 			}
 
-			$class        = 'class="' . esc_attr( $class ) . '"';
-			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
-			$attributes   = $class . $style . $data_colname;
+			$class      = 'class="' . esc_attr( $class ) . '"';
+			$attributes = $class . $style . $this->get_column_data_attr( $column_name, $column_display_name );
 
 			switch ( $column_name ) {
 				case 'cb':
@@ -307,19 +283,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'entries':
-					if ( ! empty( $item->options['no_save'] ) ) {
-						$val = FrmAppHelper::icon_by_class(
-							'frmfont frm_forbid_icon frm_bstooltip',
-							array(
-								'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
-								'echo'  => false,
-							)
-						);
-					} else {
-						$text = FrmEntry::getRecordCount( $item->id );
-						$val  = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-						unset( $text );
-					}
+					$val = $this->get_entries_column_value( $item );
 					break;
 				default:
 					if ( method_exists( $this, 'column_' . $column_name ) ) {
@@ -339,16 +303,71 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $column_name
+	 * @param string $column_display_name
+	 *
+	 * @return string
+	 */
+	private function get_column_data_attr( $column_name, $column_display_name ) {
+		if ( 'settings' === $column_name ) {
+			return ' data-colname="' . esc_attr( trim( strip_tags( $column_display_name ) ) ) . '"';
+		}
+		return ' data-colname="' . esc_attr( $column_display_name ) . '"';
+	}
+
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_entries_column_value( $item ) {
+		if ( ! empty( $item->options['no_save'] ) ) {
+			return (string) FrmAppHelper::icon_by_class(
+				'frmfont frm_forbid_icon frm_bstooltip',
+				array(
+					'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
+					'echo'  => false,
+				)
+			);
+		}
+
+		$text = intval( FrmEntry::getRecordCount( $item->id ) );
+		return current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : (string) $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+	}
+
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_row_checkbox( $item ) {
+		// Set up the checkbox (because the user is editable, otherwise it's empty).
+		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
+		$checkbox_label_text = sprintf(
+			// translators: Form title
+			__( 'Select %s', 'formidable' ),
+			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
+		);
+
+		return $checkbox . '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
+	}
+
+	/**
 	 * Get the HTML for the Actions column in the form list.
 	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
 	 * @since 6.0
+	 * @deprecated x.x We moved these actions to other places. This column will show if there is a filter added to the hook.
 	 *
 	 * @param stdClass $form
 	 *
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
+		if ( method_exists( 'FrmProFormsListHelper', 'column_embeds' ) ) {
+			_deprecated_function( __METHOD__, 'x.x' );
+		}
+
 		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$val .= $this->column_style( $form );
 		$val .= $this->column_views( $form );
@@ -404,11 +423,29 @@ class FrmFormsListHelper extends FrmListHelper {
 			'target' => '_blank',
 		);
 
+		if ( class_exists( 'FrmViewsDisplay' ) ) {
+			$view_ids   = FrmViewsDisplay::get_display_ids_by_form( $form->id );
+			$view_count = $view_ids ? count( $view_ids ) : 0;
+		} else {
+			$view_count = 0;
+		}
+
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
-					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
+					' . intval( $view_count ) .
 				'</a>';
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Get the HTML for the Settings column in the form list.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function column_settings() {
+		return '&nbsp;';
 	}
 
 	/**
@@ -435,8 +472,9 @@ class FrmFormsListHelper extends FrmListHelper {
 			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . esc_html__( 'Settings', 'formidable' ) . '</a>';
 		}
 
-		$actions         = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$actions          = array_merge( $actions, $new_actions );
+		$actions['embed'] = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . esc_html__( 'Embed', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$actions['view']  = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**

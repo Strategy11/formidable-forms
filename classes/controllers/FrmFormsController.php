@@ -48,6 +48,13 @@ class FrmFormsController {
 		add_filter( 'manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
 	}
 
+	/**
+	 * Runs on admin head of the formidable forms page.
+	 *
+	 * @since x.x This adds screen options.
+	 *
+	 * @return void
+	 */
 	public static function head() {
 		if ( wp_is_mobile() ) {
 			wp_enqueue_script( 'jquery-touch-punch' );
@@ -1233,14 +1240,23 @@ class FrmFormsController {
 		$columns['cb']       = '<input type="checkbox" />';
 		$columns['name']     = esc_html__( 'Form Title', 'formidable' );
 		$columns['entries']  = esc_html__( 'Entries', 'formidable' );
+		$columns['views']    = esc_html__( 'Views', 'formidable' );
 		$columns['id']       = 'ID';
 		$columns['form_key'] = esc_html__( 'Key', 'formidable' );
 
-		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) && has_filter( 'frm_form_list_actions' ) ) {
+			// If there is any filters added, keep this column.
 			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
 		}
 
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
+
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+			$columns['settings']  = '<div class="frm-forms-list-settings-btn-wrapper"><a href="#" class="frm-forms-list-settings-btn">';
+			$columns['settings'] .= FrmAppHelper::icon_by_class( 'frmfont frm_settings_icon', array( 'echo' => false ) );
+			$columns['settings'] .= '<span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span>';
+			$columns['settings'] .= '</a></div>';
+		}
 
 		add_screen_option(
 			'per_page',
@@ -3693,6 +3709,54 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( get_post_type_object( 'page' )->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
+	}
+
+	/**
+	 * Prints necessary templates for the forms list page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function print_forms_list_templates() {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+
+		if ( ! $screen ) {
+			return;
+		}
+
+		$columns             = get_column_headers( $screen );
+		$hidden              = get_hidden_columns( $screen );
+		$skip_cols           = array( 'cb', 'name', 'settings' );
+		$per_page            = get_user_option( 'formidable_page_formidable_per_page' );
+		$show_screen_options = $screen->show_screen_options();
+
+		if ( $per_page < 1 ) {
+			$per_page = 20;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/forms-list-settings.php';
+	}
+
+	/**
+	 * Adds custom screen options.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $settings_html Settings HTML.
+	 *
+	 * @return string
+	 */
+	public static function add_screen_options( $settings_html ) {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
+			return $settings_html;
+		}
+
+		return $settings_html;
 	}
 
 	/**
