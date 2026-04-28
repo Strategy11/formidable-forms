@@ -318,7 +318,7 @@ class FrmGatedContentController {
 		// expired_time only needs a hash — try hash-only sources too.
 		if ( 'expired_time' === $atts['show'] ) {
 			$raw_token = self::resolve_raw_token( $action_id );
-			if ( null !== $raw_token ) {
+			if ( $raw_token ) {
 				return self::get_formatted_expiry( $raw_token );
 			}
 			$hash = FrmGatedTokenHelper::obtain_token( $action_id );

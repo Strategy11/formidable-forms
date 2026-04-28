@@ -15,6 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmGatedTokenHelper {
 
 	/**
+	 * Per-request cache of raw tokens indexed by action_id.
+	 * Populated by generate() so the same request can resolve the token
+	 * without a transient round-trip.
+	 *
+	 * @var array<int, string>
+	 */
+	private static $generated_tokens = array();
+
+	/**
 	 * Generate a new access token for a gated content action and persist it.
 	 *
 	 * @param int      $action_id ID of the frm_form_actions post.
@@ -62,7 +71,10 @@ class FrmGatedTokenHelper {
 
 		$wpdb->insert( $wpdb->prefix . 'frm_gated_tokens', $data, $format );
 
-		// Persist for shortcode rendering in the same or a subsequent redirect request (5-min TTL).
+		// Cache in static variable for same-request shortcode rendering (no DB/cache round-trip).
+		self::$generated_tokens[ $action_id ] = $raw_token;
+
+		// Persist for shortcode rendering in a subsequent redirect request (5-min TTL).
 		set_transient( self::get_token_transient_key( $action_id ), $raw_token, 5 * MINUTE_IN_SECONDS );
 
 		return $raw_token;
@@ -375,6 +387,10 @@ class FrmGatedTokenHelper {
 	 * @return string|null Raw 48-char token, or null if unavailable.
 	 */
 	public static function get_raw_token_for_action( $action_id ) {
+		if ( isset( self::$generated_tokens[ $action_id ] ) ) {
+			return self::$generated_tokens[ $action_id ];
+		}
+
 		$token = get_transient( self::get_token_transient_key( $action_id ) );
 		return false !== $token ? (string) $token : null;
 	}
