@@ -38,9 +38,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 				),
 			)
 		);
-
-		// Reset the same-request cache before each test.
-		FrmGatedTokenHelper::$tokens = array();
 	}
 
 	// ── generate() ────────────────────────────────────────────────────────── //
@@ -81,8 +78,9 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	public function test_generate_caches_token_for_same_request() {
 		FrmGatedTokenHelper::generate( $this->action_id, 1 );
 
-		$this->assertArrayHasKey( $this->action_id, FrmGatedTokenHelper::$tokens );
-		$this->assertIsString( FrmGatedTokenHelper::$tokens[ $this->action_id ] );
+		$cached = FrmGatedTokenHelper::get_raw_token_for_action( $this->action_id );
+		$this->assertNotNull( $cached, 'Token transient not set after generate().' );
+		$this->assertIsString( $cached );
 	}
 
 	// ── validate_hash() ───────────────────────────────────────────────────── //
