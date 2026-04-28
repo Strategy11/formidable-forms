@@ -83,6 +83,10 @@ class FrmGatedContentController {
 			return;
 		}
 
+		// Detect whether the token arrived via URL param before falling back to cookies.
+		$access_code    = FrmAppHelper::simple_get( 'access_code' );
+		$from_url_param = is_string( $access_code ) && '' !== $access_code;
+
 		// Try URL query parameter first (obtain_token with no action_id uses URL param only).
 		$hash = FrmGatedTokenHelper::obtain_token();
 
@@ -110,6 +114,15 @@ class FrmGatedContentController {
 			if ( $row ) {
 				FrmGatedTokenHelper::set_cookie( (int) $row->action_id, $hash, $row->expired_at );
 			}
+
+			// Strip the raw token from the URL to prevent leakage via browser history,
+			// server logs, and Referer headers. The cookie set above grants access on
+			// the redirected request without the query parameter.
+			if ( $from_url_param ) {
+				wp_safe_redirect( remove_query_arg( 'access_code' ) );
+				exit;
+			}
+
 			return;
 		}
 
