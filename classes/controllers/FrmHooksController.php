@@ -112,6 +112,9 @@ class FrmHooksController {
 		// Summary emails.
 		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
 
+		// Gated Content — daily cleanup of expired tokens.
+		add_action( 'frm_daily_event', 'FrmGatedTokenHelper::cleanup_expired' );
+
 		// Gated Content Controller.
 		add_action( 'frm_trigger_gated_content_action', 'FrmGatedContentController::trigger', 10, 4 );
 		// pre_get_posts: allows private pages into the query when a valid token is present.
