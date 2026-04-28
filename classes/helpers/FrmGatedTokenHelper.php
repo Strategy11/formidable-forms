@@ -507,7 +507,14 @@ class FrmGatedTokenHelper {
 			$row_active    = $row && ( null === $row->expired_at || time() < (int) $row->expired_at );
 
 			if ( $row_active && ( ! $action_id || $row_action_id === $action_id ) ) {
-				self::set_cookie( $row_action_id, $hash, $row->expired_at );
+				// Only set the cookie when headers have not yet been sent. Headers are
+				// already sent when obtain_token() is called during shortcode rendering
+				// (e.g. show="expired_time" on a page that also has the access_code
+				// param but for a different action). maybe_unlock_post() handles cookie
+				// setting on the 'wp' hook where headers are always available.
+				if ( ! headers_sent() ) {
+					self::set_cookie( $row_action_id, $hash, $row->expired_at );
+				}
 				return $hash;
 			}
 		}

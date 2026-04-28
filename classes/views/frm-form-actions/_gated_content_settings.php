@@ -22,7 +22,7 @@ $frm_gc_types           = get_class( $this )::get_types(); // Late-static; Pro c
 
 // Unique wrapper ID per action instance — prevents JS collisions when multiple
 // gated content actions exist on the same form.
-$frm_gc_wrapper_id = 'frm_gc_settings_' . esc_attr( $this->number );
+$frm_gc_wrapper_id = 'frm_gc_settings_' . $this->number;
 
 $frm_gc_pages = get_pages(
 	array(
