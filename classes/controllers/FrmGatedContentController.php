@@ -284,9 +284,8 @@ class FrmGatedContentController {
 	}
 
 	/**
-	 * Handle the [frm_gated_content] shortcode.
+	 * Default attributes for the [frm_gated_content] shortcode.
 	 *
-	 * Attributes:
 	 *  - id   (required) Action post ID.
 	 *  - item (optional) 0-indexed item position. Omit to render the full item list.
 	 *  - show (optional) 'link' (default) | 'url' | 'access_token' | 'expired_time'.
@@ -295,34 +294,34 @@ class FrmGatedContentController {
 	 *          'access_token' — Raw access token string.
 	 *          'expired_time' — Formatted expiry date/time (empty if token never expires).
 	 *
-	 * @param array $atts Shortcode attributes.
+	 * @return array<string, mixed>
+	 */
+	private static function default_shortcode_atts() {
+		return array(
+			'id'   => 0,
+			'item' => false,
+			'show' => 'link',
+		);
+	}
+
+	/**
+	 * Handle the [frm_gated_content] shortcode.
+	 *
+	 * @param array $atts Shortcode attributes. See default_shortcode_atts() for supported keys.
 	 *
 	 * @return string Shortcode output, or empty string when no token is available.
 	 */
 	public static function shortcode( $atts ) {
-		$atts = shortcode_atts(
-			array(
-				'id'   => 0,
-				'item' => false,
-				'show' => 'link',
-			),
-			$atts,
-			'frm_gated_content'
-		);
+		$atts = shortcode_atts( self::default_shortcode_atts(), $atts, 'frm_gated_content' );
 
 		$action_id = (int) $atts['id'];
 		if ( ! $action_id ) {
 			return '';
 		}
 
-		// expired_time only needs a hash — try hash-only sources too.
+		// expired_time only needs a hash — cookie sources are included too.
 		if ( 'expired_time' === $atts['show'] ) {
-			$raw_token = self::resolve_raw_token( $action_id );
-			if ( $raw_token ) {
-				return self::get_formatted_expiry( $raw_token );
-			}
-			$hash = FrmGatedTokenHelper::obtain_token( $action_id );
-			return $hash ? self::get_formatted_expiry_by_hash( $hash ) : '';
+			return self::get_shortcode_expiry( $action_id );
 		}
 
 		// All other show values require the raw token.
@@ -359,7 +358,40 @@ class FrmGatedContentController {
 			return '';
 		}
 
-		$item = $items[ $idx ];
+		return self::render_shortcode_item( $items[ $idx ], $raw_token, $show_url );
+	}
+
+	/**
+	 * Resolve and format the expiry time for the expired_time shortcode attribute.
+	 *
+	 * Tries the raw token first (transient / URL param), then falls back to a
+	 * hash-only source (cookie) so expiry can be displayed even when the raw
+	 * token is no longer available.
+	 *
+	 * @param int $action_id Action post ID.
+	 *
+	 * @return string Localised expiry date/time string, or empty string if unavailable.
+	 */
+	private static function get_shortcode_expiry( $action_id ) {
+		$raw_token = self::resolve_raw_token( $action_id );
+		if ( $raw_token ) {
+			return self::get_formatted_expiry( $raw_token );
+		}
+
+		$hash = FrmGatedTokenHelper::obtain_token( $action_id );
+		return $hash ? self::get_formatted_expiry_by_hash( $hash ) : '';
+	}
+
+	/**
+	 * Render a single gated content item as a URL string or anchor link.
+	 *
+	 * @param array  $item      Item array from action settings (must have 'id' and 'type' keys).
+	 * @param string $raw_token Raw access token.
+	 * @param bool   $show_url  True to return a plain escaped URL; false to return an <a> tag.
+	 *
+	 * @return string Rendered output, or empty string when the item is invalid or has no URL.
+	 */
+	private static function render_shortcode_item( $item, $raw_token, $show_url ) {
 		if ( empty( $item['id'] ) || empty( $item['type'] ) ) {
 			return '';
 		}
@@ -400,17 +432,17 @@ class FrmGatedContentController {
 
 		// URL query parameter hit (e.g. visitor clicking a gated link from email).
 		$candidate = FrmAppHelper::simple_get( 'access_code' );
-		if ( is_string( $candidate ) && '' !== $candidate ) {
-			$row = FrmGatedTokenHelper::get_row_by_token( $candidate );
-			if ( $row
-				&& (int) $row->action_id === $action_id
-				&& ( null === $row->expired_at || time() < (int) $row->expired_at )
-			) {
-				return $candidate;
-			}
+		if ( ! $candidate || ! is_string( $candidate ) ) {
+			return null;
 		}
 
-		return null;
+		$row = FrmGatedTokenHelper::get_row_by_token( $candidate );
+		if ( $row
+		     && (int) $row->action_id === $action_id
+		     && ( null === $row->expired_at || time() < (int) $row->expired_at )
+		) {
+			return $candidate;
+		}
 	}
 
 	/**

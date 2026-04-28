@@ -24,6 +24,15 @@ class FrmGatedTokenHelper {
 	private static $generated_tokens = array();
 
 	/**
+	 * Per-request cache of token rows indexed by SHA-256 hash.
+	 * Populated by get_row_by_hash() so multiple shortcodes for the same
+	 * action on one page do not each issue a separate DB query.
+	 *
+	 * @var array<string, object|null>
+	 */
+	private static $row_cache = array();
+
+	/**
 	 * Generate a new access token for a gated content action and persist it.
 	 *
 	 * @param int      $action_id ID of the frm_form_actions post.
@@ -261,6 +270,10 @@ class FrmGatedTokenHelper {
 	 * @return object|null Token row object, or null if not found.
 	 */
 	public static function get_row_by_hash( $hash ) {
+		if ( array_key_exists( $hash, self::$row_cache ) ) {
+			return self::$row_cache[ $hash ];
+		}
+
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
@@ -270,7 +283,10 @@ class FrmGatedTokenHelper {
 				$hash
 			)
 		);
-		return is_object( $row ) ? $row : null;
+
+		self::$row_cache[ $hash ] = is_object( $row ) ? $row : null;
+
+		return self::$row_cache[ $hash ];
 	}
 
 	/**
