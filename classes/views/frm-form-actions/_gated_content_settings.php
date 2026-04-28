@@ -26,9 +26,11 @@ $frm_gc_wrapper_id = 'frm_gc_settings_' . esc_attr( $this->number );
 
 $frm_gc_pages = get_pages(
 	array(
-		'post_status' => array( 'publish', 'private' ),
-		'sort_column' => 'post_title',
-		'sort_order'  => 'ASC',
+		'post_status'             => array( 'publish', 'private' ),
+		'sort_column'             => 'post_title',
+		'sort_order'              => 'ASC',
+		'update_post_meta_cache'  => false,
+		'update_post_term_cache'  => false,
 	)
 );
 $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();

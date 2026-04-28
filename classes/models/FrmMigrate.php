@@ -263,7 +263,7 @@ class FrmMigrate {
 				action_id BIGINT UNSIGNED NOT NULL,
 				entry_id BIGINT UNSIGNED NOT NULL,
 				user_id BIGINT UNSIGNED default NULL,
-				ip_address varchar(45) default NULL,
+				ip_address varchar(255) default NULL,
 				created_at int UNSIGNED NOT NULL,
 				expired_at int UNSIGNED default NULL,
 				PRIMARY KEY  (id),

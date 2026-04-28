@@ -140,8 +140,11 @@ class FrmGatedContentController {
 
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
 		if ( ! empty( $settings['show_form_page'] ) ) {
-			wp_safe_redirect( (string) get_permalink( (int) $settings['show_form_page'] ) );
-			exit;
+			$redirect_url = get_permalink( (int) $settings['show_form_page'] );
+			if ( $redirect_url ) {
+				wp_safe_redirect( $redirect_url );
+				exit;
+			}
 		}
 	}
 
