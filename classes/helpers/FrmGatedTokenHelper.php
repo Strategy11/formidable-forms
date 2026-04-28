@@ -38,6 +38,7 @@ class FrmGatedTokenHelper {
 	 * @param int      $action_id ID of the frm_form_actions post.
 	 * @param int      $entry_id  ID of the submitted form entry.
 	 * @param int|null $user_id   Logged-in user ID, or null for guests.
+	 *
 	 * @return string Raw 32-character token. Only ever stored in URLs or emails — never in the DB.
 	 */
 	public static function generate( $action_id, $entry_id, $user_id = null ) {
@@ -87,42 +88,6 @@ class FrmGatedTokenHelper {
 		set_transient( self::get_token_transient_key( $action_id ), $raw_token, 5 * MINUTE_IN_SECONDS );
 
 		return $raw_token;
-	}
-
-	/**
-	 * Validate a token against a specific gated content item.
-	 *
-	 * @param string $token     Raw access token.
-	 * @param int    $item_id   ID of the content item to check access for.
-	 * @param string $item_type Type slug of the content item (e.g. 'page', 'frm_file').
-	 * @return bool True if the token grants access to the item.
-	 */
-	public static function validate( $token, $item_id, $item_type ) {
-		$row = self::get_row_by_token( $token );
-
-		if ( null === $row ) {
-			return false;
-		}
-
-		// Token is expired when expired_at is set and in the past.
-		if ( null !== $row->expired_at && time() >= (int) $row->expired_at ) {
-			return false;
-		}
-
-		$action   = get_post( (int) $row->action_id );
-		$is_valid = self::action_contains_item( $action, $item_id, $item_type );
-
-		/**
-		 * Filter whether a gated content token is valid for an item.
-		 *
-		 * @param bool  $is_valid Whether the token grants access.
-		 * @param array $args {
-		 *     @type object $row       Token row from wp_frm_gated_tokens.
-		 *     @type int    $item_id   Content item ID being checked.
-		 *     @type string $item_type Content item type being checked.
-		 * }
-		 */
-		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, compact( 'row', 'item_id', 'item_type' ) );
 	}
 
 	/**
