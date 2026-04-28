@@ -116,12 +116,14 @@ class FrmGatedTokenHelper {
 		 *
 		 * @since x.x
 		 *
-		 * @param bool   $is_valid  Whether the token grants access.
-		 * @param object $row       Token row from wp_frm_gated_tokens.
-		 * @param int    $item_id   Content item ID being checked.
-		 * @param string $item_type Content item type being checked.
+		 * @param bool  $is_valid Whether the token grants access.
+		 * @param array $args {
+		 *     @type object $row       Token row from wp_frm_gated_tokens.
+		 *     @type int    $item_id   Content item ID being checked.
+		 *     @type string $item_type Content item type being checked.
+		 * }
 		 */
-		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, $row, $item_id, $item_type );
+		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, compact( 'row', 'item_id', 'item_type' ) );
 	}
 
 	/**
@@ -372,7 +374,7 @@ class FrmGatedTokenHelper {
 		}
 
 		/** This filter is documented in classes/helpers/FrmGatedTokenHelper.php */
-		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, $row, $item_id, $item_type );
+		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, compact( 'row', 'item_id', 'item_type' ) );
 	}
 
 	/**

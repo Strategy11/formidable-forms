@@ -424,12 +424,14 @@ class FrmGatedContentController {
 				 *
 				 * @since x.x
 				 *
-				 * @param string $base_url  Empty string by default.
-				 * @param int    $item_id   Content item ID.
-				 * @param string $type      Item type slug.
-				 * @param string $raw_token Raw access token.
+				 * @param string $base_url Empty string by default.
+				 * @param array  $args {
+				 *     @type int    $item_id   Content item ID.
+				 *     @type string $type      Item type slug.
+				 *     @type string $raw_token Raw access token.
+				 * }
 				 */
-				$base_url = (string) apply_filters( 'frm_gated_content_item_url', '', $item_id, $type, $raw_token );
+				$base_url = (string) apply_filters( 'frm_gated_content_item_url', '', compact( 'item_id', 'type', 'raw_token' ) );
 		}
 
 		if ( ! $base_url ) {
