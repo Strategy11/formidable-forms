@@ -20,12 +20,12 @@ class FrmGatedTokenHelper {
 	 * @param int      $action_id ID of the frm_form_actions post.
 	 * @param int      $entry_id  ID of the submitted form entry.
 	 * @param int|null $user_id   Logged-in user ID, or null for guests.
-	 * @return string Raw 48-character token. Only ever stored in URLs or emails — never in the DB.
+	 * @return string Raw 32-character token. Only ever stored in URLs or emails — never in the DB.
 	 */
 	public static function generate( $action_id, $entry_id, $user_id = null ) {
 		global $wpdb;
 
-		$raw_token  = wp_generate_password( 48, false );
+		$raw_token  = wp_generate_password( 32, false );
 		$token_hash = hash( 'sha256', $raw_token );
 		$now        = time();
 
@@ -88,24 +88,8 @@ class FrmGatedTokenHelper {
 			return false;
 		}
 
-		// Confirm the item is listed in the action's settings.
-		$is_valid = false;
 		$action   = get_post( (int) $row->action_id );
-
-		if ( $action ) {
-			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-			if ( is_array( $settings ) && ! empty( $settings['items'] ) ) {
-				foreach ( $settings['items'] as $item ) {
-					if ( ! is_array( $item ) ) {
-						continue;
-					}
-					if ( (int) $item['id'] === $item_id && $item['type'] === $item_type ) {
-						$is_valid = true;
-						break;
-					}
-				}
-			}
-		}
+		$is_valid = self::action_contains_item( $action, $item_id, $item_type );
 
 		/**
 		 * Filter whether a gated content token is valid for an item.
@@ -302,26 +286,39 @@ class FrmGatedTokenHelper {
 			return false;
 		}
 
-		$is_valid = false;
 		$action   = get_post( (int) $row->action_id );
-
-		if ( $action ) {
-			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-			if ( is_array( $settings ) && ! empty( $settings['items'] ) ) {
-				foreach ( $settings['items'] as $item ) {
-					if ( ! is_array( $item ) ) {
-						continue;
-					}
-					if ( (int) $item['id'] === $item_id && $item['type'] === $item_type ) {
-						$is_valid = true;
-						break;
-					}
-				}
-			}
-		}
+		$is_valid = self::action_contains_item( $action, $item_id, $item_type );
 
 		/** This filter is documented in classes/helpers/FrmGatedTokenHelper.php */
 		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, compact( 'row', 'item_id', 'item_type' ) );
+	}
+
+	/**
+	 * Check whether an action's settings include a specific content item.
+	 *
+	 * @param WP_Post|null $action    Action post object, or null if not found.
+	 * @param int          $item_id   Content item ID to look for.
+	 * @param string       $item_type Content item type slug to match.
+	 *
+	 * @return bool True if the item is listed in the action's items setting.
+	 */
+	private static function action_contains_item( $action, $item_id, $item_type ) {
+		if ( ! $action ) {
+			return false;
+		}
+
+		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
+			return false;
+		}
+
+		foreach ( $settings['items'] as $item ) {
+			if ( is_array( $item ) && (int) $item['id'] === $item_id && $item['type'] === $item_type ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

@@ -33,6 +33,7 @@ class FrmGatedContentController {
 	 * the token, and conditionally appends 'private' to the post_status list.
 	 *
 	 * @param WP_Query $query Current query object.
+	 *
 	 * @return void
 	 */
 	public static function maybe_include_private_pages( $query ) {
@@ -45,15 +46,17 @@ class FrmGatedContentController {
 			return;
 		}
 
-		if ( self::has_valid_token_for_post( $post_id ) ) {
-			$statuses = $query->get( 'post_status' );
-			if ( ! is_array( $statuses ) ) {
-				$statuses = $statuses ? array( $statuses ) : array( 'publish' );
-			}
-			if ( ! in_array( 'private', $statuses, true ) ) {
-				$statuses[] = 'private';
-				$query->set( 'post_status', $statuses );
-			}
+		if ( ! self::has_valid_token_for_post( $post_id ) ) {
+			return;
+		}
+
+		$statuses = $query->get( 'post_status' );
+		if ( ! is_array( $statuses ) ) {
+			$statuses = $statuses ? array( $statuses ) : array( 'publish' );
+		}
+		if ( ! in_array( 'private', $statuses, true ) ) {
+			$statuses[] = 'private';
+			$query->set( 'post_status', $statuses );
 		}
 	}
 
@@ -150,6 +153,7 @@ class FrmGatedContentController {
 	 *
 	 * @param bool    $required Whether the password is required.
 	 * @param WP_Post $post     Post being checked.
+	 *
 	 * @return bool
 	 */
 	public static function filter_password_required( $required, $post ) {
@@ -167,6 +171,7 @@ class FrmGatedContentController {
 	 * regardless of whether the visitor is logged in.
 	 *
 	 * @param WP_Query $query Current query object.
+	 *
 	 * @return int Post ID, or 0 if it cannot be determined.
 	 */
 	private static function get_requested_post_id( $query ) {
@@ -174,20 +179,21 @@ class FrmGatedContentController {
 			return (int) $query->query_vars['page_id'];
 		}
 
-		if ( ! empty( $query->query_vars['pagename'] ) ) {
-			$pages = get_posts(
-				array(
-					'pagename'       => $query->query_vars['pagename'],
-					'post_type'      => 'page',
-					'post_status'    => 'any',
-					'posts_per_page' => 1,
-					'no_found_rows'  => true,
-				)
-			);
-			return ! empty( $pages ) ? $pages[0]->ID : 0;
+		if ( empty( $query->query_vars['pagename'] ) ) {
+			return 0;
 		}
 
-		return 0;
+		$pages = get_posts(
+			array(
+				'pagename'       => $query->query_vars['pagename'],
+				'post_type'      => 'page',
+				'post_status'    => 'any',
+				'posts_per_page' => 1,
+				'no_found_rows'  => true,
+			)
+		);
+
+		return ! empty( $pages ) ? $pages[0]->ID : 0;
 	}
 
 	/**
@@ -197,6 +203,7 @@ class FrmGatedContentController {
 	 * maybe_include_private_pages() to decide whether to widen the query.
 	 *
 	 * @param int $post_id Post ID to validate against.
+	 *
 	 * @return bool True if a valid token is found.
 	 */
 	private static function has_valid_token_for_post( $post_id ) {
@@ -218,6 +225,7 @@ class FrmGatedContentController {
 	 * return visits to stay unlocked without re-clicking the emailed link.
 	 *
 	 * @param int $post_id Post ID to validate against.
+	 *
 	 * @return string|null Validated token hash, or null if none found.
 	 */
 	private static function find_valid_cookie_hash_for_post( $post_id ) {
@@ -241,6 +249,7 @@ class FrmGatedContentController {
 	 *
 	 * @param int     $post_id Post ID being deleted.
 	 * @param WP_Post $post    Post object being deleted.
+	 *
 	 * @return void
 	 */
 	public static function on_action_deleted( $post_id, $post ) {
@@ -253,14 +262,11 @@ class FrmGatedContentController {
 	/**
 	 * Generate a gated content token when a form action fires.
 	 *
-	 * Runs at form action priority 8 — before On Submit (9) and Send Email (10) —
-	 * so the raw token is already stored when those actions process [frm_gated_content]
-	 * shortcodes on the same request or after a payment redirect.
-	 *
 	 * @param object $action Form action post object (post_excerpt = 'gated_content').
 	 * @param object $entry  Submitted form entry object.
 	 * @param object $form   Form object.
 	 * @param string $event  Trigger event ('create', 'update', or 'import').
+	 *
 	 * @return void
 	 */
 	public static function trigger( $action, $entry, $form, $event ) {
@@ -290,6 +296,7 @@ class FrmGatedContentController {
 	 *          'expired_time' — Formatted expiry date/time (empty if token never expires).
 	 *
 	 * @param array $atts Shortcode attributes.
+	 *
 	 * @return string Shortcode output, or empty string when no token is available.
 	 */
 	public static function shortcode( $atts ) {
@@ -381,6 +388,7 @@ class FrmGatedContentController {
 	 * Use FrmGatedTokenHelper::obtain_token() when only a hash is needed.
 	 *
 	 * @param int $action_id Action post ID.
+	 *
 	 * @return string|null Raw 48-char token, or null if unavailable.
 	 */
 	private static function resolve_raw_token( $action_id ) {
@@ -415,6 +423,7 @@ class FrmGatedContentController {
 	 * @param int    $item_id   Content item ID (e.g. page post ID).
 	 * @param string $type      Item type slug ('page', 'frm_file', 'frm_pdf', …).
 	 * @param string $raw_token Raw access token to append as access_code query arg.
+	 *
 	 * @return string Full URL with access_code parameter, or empty string on failure.
 	 */
 	public static function get_item_url( $item_id, $type, $raw_token ) {
@@ -452,6 +461,7 @@ class FrmGatedContentController {
 	 *
 	 * @param array  $items     Array of item arrays from action settings (each with 'id' and 'type' keys).
 	 * @param string $raw_token Raw access token.
+	 *
 	 * @return string HTML <ul> element, or empty string when no items produce a URL.
 	 */
 	public static function render_item_list( $items, $raw_token ) {
@@ -493,6 +503,7 @@ class FrmGatedContentController {
 	 *
 	 * @param array  $items     Array of item arrays from action settings (each with 'id' and 'type' keys).
 	 * @param string $raw_token Raw access token.
+	 *
 	 * @return string HTML <ul> element of plain-text URLs, or empty string when no items produce a URL.
 	 */
 	public static function render_item_url_list( $items, $raw_token ) {
@@ -526,6 +537,7 @@ class FrmGatedContentController {
 	 * Return the formatted expiry time for a raw token.
 	 *
 	 * @param string $raw_token Raw access token.
+	 *
 	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
 	 */
 	public static function get_formatted_expiry( $raw_token ) {
@@ -536,6 +548,7 @@ class FrmGatedContentController {
 	 * Return the formatted expiry time for a token hash.
 	 *
 	 * @param string $hash SHA-256 hex hash of the access token.
+	 *
 	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
 	 */
 	private static function get_formatted_expiry_by_hash( $hash ) {

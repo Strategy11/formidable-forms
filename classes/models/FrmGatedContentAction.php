@@ -23,6 +23,9 @@ class FrmGatedContentAction extends FrmFormAction {
 	/**
 	 * Set up action options and register with parent constructor.
 	 *
+	 * Runs at form action priority 8 — before On Submit (9) and Send Email (10) —
+	 * so the raw token is already stored when those actions process [frm_gated_content]
+	 * shortcodes on the same request or after a payment redirect.
 	 */
 	public function __construct() {
 		$action_ops = array(
@@ -132,6 +135,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 *
 	 * @param array $new_instance New settings submitted via form().
 	 * @param array $old_instance Previous saved settings.
+	 *
 	 * @return array Sanitized settings to save. Return false to abort save.
 	 */
 	public function update( $new_instance, $old_instance ) {
