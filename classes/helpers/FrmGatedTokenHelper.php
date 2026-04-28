@@ -421,19 +421,17 @@ class FrmGatedTokenHelper {
 	public static function set_cookie( $action_id, $hash, $expired_at = null ) {
 		$expiry = null !== $expired_at ? $expired_at : ( time() + YEAR_IN_SECONDS );
 
-		$parts = array(
-			'frm_gc_' . $action_id . '=' . rawurlencode( $hash ),
-			'Expires=' . gmdate( 'D, d M Y H:i:s T', $expiry ),
-			'Path=/',
-			'SameSite=Lax',
-			'HttpOnly',
+		setcookie(
+			'frm_gc_' . $action_id,
+			$hash,
+			array(
+				'expires'  => $expiry,
+				'path'     => '/',
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
 		);
-
-		if ( is_ssl() ) {
-			$parts[] = 'Secure';
-		}
-
-		header( 'Set-Cookie: ' . implode( '; ', $parts ), false );
 	}
 
 	/**

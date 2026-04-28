@@ -169,8 +169,8 @@ class FrmGatedContentController {
 	 * Resolve the post ID being requested from query vars, including private posts.
 	 *
 	 * Called from maybe_include_private_pages() during pre_get_posts, before the
-	 * DB query runs. get_page_by_path() queries by post_name without a post_status
-	 * restriction, so it returns private pages as well as published ones.
+	 * DB query runs. Uses post_status => 'any' so private pages are returned
+	 * regardless of whether the visitor is logged in.
 	 *
 	 * @since x.x
 	 *
@@ -183,8 +183,16 @@ class FrmGatedContentController {
 		}
 
 		if ( ! empty( $query->query_vars['pagename'] ) ) {
-			$page = get_page_by_path( $query->query_vars['pagename'] );
-			return $page ? $page->ID : 0;
+			$pages = get_posts(
+				array(
+					'pagename'       => $query->query_vars['pagename'],
+					'post_type'      => 'page',
+					'post_status'    => 'any',
+					'posts_per_page' => 1,
+					'no_found_rows'  => true,
+				)
+			);
+			return ! empty( $pages ) ? $pages[0]->ID : 0;
 		}
 
 		return 0;
