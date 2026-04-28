@@ -11580,6 +11580,18 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			frmGcFilterFileFields( fileFormSelect );
 		}
 	} );
+
+	// Show/hide "Keep old token when entry is updated" when the event multi-select changes.
+	jQuery( document ).on( 'frm-multiselect-changed', 'select[id^="event_"]', function() {
+		const section = document.querySelector( '.frm_gc_update_section[data-frm-gc-event-id="' + this.id + '"]' );
+		if ( ! section ) {
+			return;
+		}
+		const hasUpdate = Array.from( this.options ).some( function( o ) {
+			return o.selected && 'update' === o.value;
+		} );
+		section.hidden = ! hasUpdate;
+	} );
 }() );
 
 window.frmImportCsv = formID => {

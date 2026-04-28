@@ -276,7 +276,8 @@ class FrmGatedContentController {
 		// On update, revoke any existing tokens for this action+entry pair before
 		// issuing a fresh one — prevents unbounded row accumulation and ensures the
 		// old token cannot be used once the entry owner receives a new one.
-		if ( 'update' === $event ) {
+		// Skip deletion when the action is configured to keep the old token.
+		if ( 'update' === $event && empty( $action->post_content['keep_token_on_update'] ) ) {
 			FrmGatedTokenHelper::delete_by_action_and_entry( $action->ID, $entry->id );
 		}
 
