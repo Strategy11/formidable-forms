@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-plugin-feedback" class="frm_wrap frm-dismissible" data-step="<?php echo esc_attr( $step ); ?>">
+<div id="frm-plugin-feedback" class="frm_wrap frm-dismissible" data-step="<?php echo esc_attr( $step ); ?>" data-submit-action="<?php echo esc_attr( $config['ajax']['submit'] ); ?>" data-dismiss-action="<?php echo esc_attr( $config['ajax']['dismiss'] ); ?>">
 	<a class="dismiss frm-flex" aria-label="<?php esc_attr_e( 'Dismiss feedback notice', 'formidable' ); ?>" role="button">
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?>
 	</a>
