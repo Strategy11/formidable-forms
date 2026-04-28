@@ -99,7 +99,10 @@ class FrmGatedContentController {
 			return;
 		}
 
-		if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
+		// Fetch the row once and reuse for both validation and cookie/redirect logic.
+		$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
+
+		if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page', $row ) ) {
 			$post = get_post( $post_id );
 
 			// Password-protected pages need an explicit filter; private pages are
@@ -110,7 +113,6 @@ class FrmGatedContentController {
 			}
 
 			// Refresh the frm_gc_ cookie so subsequent visits skip the URL param.
-			$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
 			if ( $row ) {
 				FrmGatedTokenHelper::set_cookie( (int) $row->action_id, $hash, $row->expired_at );
 			}
@@ -127,7 +129,6 @@ class FrmGatedContentController {
 		}
 
 		// Token present but invalid (expired or revoked) — redirect if action configured it.
-		$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
 		if ( ! $row ) {
 			return;
 		}

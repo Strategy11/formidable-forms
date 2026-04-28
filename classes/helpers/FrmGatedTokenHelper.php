@@ -364,13 +364,16 @@ class FrmGatedTokenHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param string $hash      SHA-256 hex hash of the raw access token.
-	 * @param int    $item_id   ID of the content item to check access for.
-	 * @param string $item_type Type slug of the content item (e.g. 'page', 'frm_file').
+	 * @param string      $hash      SHA-256 hex hash of the raw access token.
+	 * @param int         $item_id   ID of the content item to check access for.
+	 * @param string      $item_type Type slug of the content item (e.g. 'page', 'frm_file').
+	 * @param object|null $row       Optional pre-fetched token row. Skips the DB lookup when provided.
 	 * @return bool True if the hash grants access to the item.
 	 */
-	public static function validate_hash( $hash, $item_id, $item_type ) {
-		$row = self::get_row_by_hash( $hash );
+	public static function validate_hash( $hash, $item_id, $item_type, $row = null ) {
+		if ( null === $row ) {
+			$row = self::get_row_by_hash( $hash );
+		}
 
 		if ( null === $row ) {
 			return false;
