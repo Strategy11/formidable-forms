@@ -191,63 +191,6 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Extend a token's expiry by a given number of hours from now.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $token Raw access token.
-	 * @param int    $hours Number of hours to add from the current time.
-	 * @return bool True if a matching token was found and updated, false otherwise.
-	 */
-	public static function extend( $token, $hours ) {
-		global $wpdb;
-
-		$updated = $wpdb->update(
-			$wpdb->prefix . 'frm_gated_tokens',
-			array( 'expired_at' => time() + ( $hours * 3600 ) ),
-			array( 'token_hash' => hash( 'sha256', $token ) ),
-			array( '%d' ),
-			array( '%s' )
-		);
-
-		return 0 < $updated;
-	}
-
-	/**
-	 * Renew a token by replacing its hash atomically, optionally updating expiry.
-	 *
-	 * @since x.x
-	 *
-	 * @param string   $old_token  Raw token to replace.
-	 * @param int|null $new_expiry Unix timestamp for the new expiry, or null to keep the existing value.
-	 * @return string New raw token.
-	 */
-	public static function renew( $old_token, $new_expiry = null ) {
-		global $wpdb;
-
-		$new_raw_token  = wp_generate_password( 48, false );
-		$new_token_hash = hash( 'sha256', $new_raw_token );
-
-		$data   = array( 'token_hash' => $new_token_hash );
-		$format = array( '%s' );
-
-		if ( null !== $new_expiry ) {
-			$data['expired_at'] = $new_expiry;
-			$format[]           = '%d';
-		}
-
-		$wpdb->update(
-			$wpdb->prefix . 'frm_gated_tokens',
-			$data,
-			array( 'token_hash' => hash( 'sha256', $old_token ) ),
-			$format,
-			array( '%s' )
-		);
-
-		return $new_raw_token;
-	}
-
-	/**
 	 * Delete all expired tokens from the database.
 	 *
 	 * Intended to be called by WP Cron on a scheduled interval.
