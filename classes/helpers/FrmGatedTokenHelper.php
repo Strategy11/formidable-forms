@@ -403,36 +403,6 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Find the newest active token row for a given action and IP address.
-	 *
-	 * Used as an IP-based fallback when a visitor's cookie hash no longer matches
-	 * any row (e.g. after a token was renewed) but the same IP has a valid row.
-	 *
-	 * @since x.x
-	 *
-	 * @param int    $action_id Action post ID.
-	 * @param string $ip        Visitor IP address.
-	 * @return object|null Token row object, or null if no active row found.
-	 */
-	public static function get_active_row_by_action_and_ip( $action_id, $ip ) {
-		global $wpdb;
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-		$row = $wpdb->get_row(
-			$wpdb->prepare(
-				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens'
-				. ' WHERE action_id = %d AND ip_address = %s'
-				. ' AND ( expired_at IS NULL OR expired_at > %d )'
-				. ' ORDER BY created_at DESC LIMIT 1',
-				$action_id,
-				$ip,
-				time()
-			)
-		);
-		return is_object( $row ) ? $row : null;
-	}
-
-	/**
 	 * Set an HttpOnly cookie that stores a token hash for a gated content action.
 	 *
 	 * Cookie name : frm_gc_{action_id}
@@ -505,7 +475,6 @@ class FrmGatedTokenHelper {
 	 *  1. 5-minute transient set by generate() — survives payment redirects.
 	 *  2. `access_code` URL query parameter (raw token → hashed → validated).
 	 *  3. HttpOnly cookie `frm_gc_{action_id}` (stores hash directly).
-	 *  4. IP-address fallback when cookie hash is stale (e.g. after token renewal).
 	 *
 	 * Returns a SHA-256 hex hash string on success, or null when no valid token is
 	 * found. Callers should pass the hash to self::validate_hash() to confirm it
@@ -515,7 +484,7 @@ class FrmGatedTokenHelper {
 	 *
 	 * @param int $action_id Optional. Restrict resolution to a specific action post ID.
 	 *                       When 0 the URL-param path still works (action_id is read
-	 *                       from the token row); cookie and IP paths are skipped.
+	 *                       from the token row); cookie path is skipped.
 	 * @return string|null Token hash, or null if no valid token could be resolved.
 	 */
 	public static function obtain_token( $action_id = 0 ) {
@@ -542,12 +511,12 @@ class FrmGatedTokenHelper {
 			}
 		}
 
-		// Cookie and IP paths require a known action_id.
+		// Cookie path requires a known action_id.
 		if ( ! $action_id ) {
 			return null;
 		}
 
-		// 3. HttpOnly cookie set on a previous URL-param hit.
+		// 3. HttpOnly cookie set on a previous URL-param or transient hit.
 		$cookie_name = 'frm_gc_' . $action_id;
 		$cookie_hash = isset( $_COOKIE[ $cookie_name ] ) ? sanitize_text_field( $_COOKIE[ $cookie_name ] ) : '';
 
@@ -556,16 +525,6 @@ class FrmGatedTokenHelper {
 
 			if ( $row && ( null === $row->expired_at || time() < (int) $row->expired_at ) ) {
 				return $cookie_hash;
-			}
-
-			// 4. Cookie hash is stale (token was renewed or deleted) — try IP fallback.
-			$ip     = FrmAppHelper::get_ip_address();
-			$ip_row = self::get_active_row_by_action_and_ip( $action_id, $ip );
-
-			if ( $ip_row ) {
-				// Refresh the cookie so the next request hits path 3 again.
-				self::set_cookie( $action_id, $ip_row->token_hash, $ip_row->expired_at );
-				return (string) $ip_row->token_hash;
 			}
 		}
 
