@@ -17,8 +17,6 @@ class FrmGatedTokenHelper {
 	/**
 	 * Generate a new access token for a gated content action and persist it.
 	 *
-	 * @since x.x
-	 *
 	 * @param int      $action_id ID of the frm_form_actions post.
 	 * @param int      $entry_id  ID of the submitted form entry.
 	 * @param int|null $user_id   Logged-in user ID, or null for guests.
@@ -73,8 +71,6 @@ class FrmGatedTokenHelper {
 	/**
 	 * Validate a token against a specific gated content item.
 	 *
-	 * @since x.x
-	 *
 	 * @param string $token     Raw access token.
 	 * @param int    $item_id   ID of the content item to check access for.
 	 * @param string $item_type Type slug of the content item (e.g. 'page', 'frm_file').
@@ -114,8 +110,6 @@ class FrmGatedTokenHelper {
 		/**
 		 * Filter whether a gated content token is valid for an item.
 		 *
-		 * @since x.x
-		 *
 		 * @param bool  $is_valid Whether the token grants access.
 		 * @param array $args {
 		 *     @type object $row       Token row from wp_frm_gated_tokens.
@@ -131,8 +125,6 @@ class FrmGatedTokenHelper {
 	 *
 	 * Called when the action post is permanently deleted so orphaned token rows
 	 * do not accumulate in wp_frm_gated_tokens.
-	 *
-	 * @since x.x
 	 *
 	 * @param int $action_id ID of the frm_form_actions post being deleted.
 	 * @return void
@@ -152,8 +144,6 @@ class FrmGatedTokenHelper {
 	 *
 	 * Called before re-generating a token on entry update so the previous
 	 * token cannot be used after the entry owner receives a fresh one.
-	 *
-	 * @since x.x
 	 *
 	 * @param int $action_id ID of the frm_form_actions post.
 	 * @param int $entry_id  ID of the form entry.
@@ -175,8 +165,6 @@ class FrmGatedTokenHelper {
 	/**
 	 * Revoke an access token by deleting it from the database.
 	 *
-	 * @since x.x
-	 *
 	 * @param string $token Raw access token to revoke.
 	 * @return void
 	 */
@@ -195,8 +183,6 @@ class FrmGatedTokenHelper {
 	 *
 	 * Intended to be called by WP Cron on a scheduled interval.
 	 *
-	 * @since x.x
-	 *
 	 * @return void
 	 */
 	public static function cleanup_expired() {
@@ -213,8 +199,6 @@ class FrmGatedTokenHelper {
 
 	/**
 	 * Get a paginated list of tokens for a given action, ordered newest first.
-	 *
-	 * @since x.x
 	 *
 	 * @param int $action_id Action post ID.
 	 * @param int $limit     Maximum number of rows to return.
@@ -238,8 +222,6 @@ class FrmGatedTokenHelper {
 
 	/**
 	 * Get all active (non-expired) tokens for a user, joined with action post data.
-	 *
-	 * @since x.x
 	 *
 	 * @param int $user_id WordPress user ID.
 	 * @return array Array of token row objects, each with an `action_title` property from wp_posts.
@@ -266,8 +248,6 @@ class FrmGatedTokenHelper {
 	/**
 	 * Retrieve a single token row by raw token string.
 	 *
-	 * @since x.x
-	 *
 	 * @param string $token Raw access token.
 	 * @return object|null Token row object, or null if not found or token has no match.
 	 */
@@ -280,8 +260,6 @@ class FrmGatedTokenHelper {
 	 *
 	 * Use this when you already hold a hash (e.g. from a cookie) to avoid
 	 * double-hashing.
-	 *
-	 * @since x.x
 	 *
 	 * @param string $hash Hex-encoded SHA-256 hash of the raw token.
 	 * @return object|null Token row object, or null if not found.
@@ -304,8 +282,6 @@ class FrmGatedTokenHelper {
 	 *
 	 * Identical logic to validate() but accepts an already-hashed value,
 	 * avoiding double-hashing when the caller resolved the token from a cookie.
-	 *
-	 * @since x.x
 	 *
 	 * @param string      $hash      SHA-256 hex hash of the raw access token.
 	 * @param int         $item_id   ID of the content item to check access for.
@@ -354,8 +330,6 @@ class FrmGatedTokenHelper {
 	 * Cookie name : frm_gc_{action_id}
 	 * Cookie value: 64-char hex SHA-256 hash of the raw token
 	 *
-	 * @since x.x
-	 *
 	 * @param int      $action_id  Action post ID.
 	 * @param string   $hash       SHA-256 hex hash to store.
 	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for session+1-year.
@@ -384,8 +358,6 @@ class FrmGatedTokenHelper {
 	 * that two users submitting the same form simultaneously cannot read each other's
 	 * pending token.
 	 *
-	 * @since x.x
-	 *
 	 * @param int $action_id Action post ID.
 	 * @return string Transient key, at most ~52 characters.
 	 */
@@ -401,8 +373,6 @@ class FrmGatedTokenHelper {
 	 * Reads the 5-minute transient set by generate(). Returns null when no pending
 	 * token exists — e.g. a different user, a different browser/IP, or the TTL has
 	 * expired.
-	 *
-	 * @since x.x
 	 *
 	 * @param int $action_id Action post ID.
 	 * @return string|null Raw 48-char token, or null if unavailable.
@@ -423,8 +393,6 @@ class FrmGatedTokenHelper {
 	 * Returns a SHA-256 hex hash string on success, or null when no valid token is
 	 * found. Callers should pass the hash to self::validate_hash() to confirm it
 	 * grants access to a specific content item.
-	 *
-	 * @since x.x
 	 *
 	 * @param int $action_id Optional. Restrict resolution to a specific action post ID.
 	 *                       When 0 the URL-param path still works (action_id is read

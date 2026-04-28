@@ -17,15 +17,11 @@ class FrmGatedContentAction extends FrmFormAction {
 	/**
 	 * @var string
 	 *
-	 * @since x.x
-	 *
 	 */
 	public static $slug = 'gated_content';
 
 	/**
 	 * Set up action options and register with parent constructor.
-	 *
-	 * @since x.x
 	 *
 	 */
 	public function __construct() {
@@ -46,8 +42,6 @@ class FrmGatedContentAction extends FrmFormAction {
 	/**
 	 * Get the action display name.
 	 *
-	 * @since x.x
-	 *
 	 * @return string
 	 */
 	public static function get_name() {
@@ -64,8 +58,6 @@ class FrmGatedContentAction extends FrmFormAction {
 	 *
 	 * Pro and PDF plugins remove the `disabled` flag for their types by hooking
 	 * `frm_gated_content_item_types`.
-	 *
-	 * @since x.x
 	 *
 	 * @return array<string, array>
 	 */
@@ -93,8 +85,6 @@ class FrmGatedContentAction extends FrmFormAction {
 		 *
 		 * Use this to register new types or enable Pro types that are greyed out by default.
 		 *
-		 * @since x.x
-		 *
 		 * @param array<string, array> $types Associative array of type slug => type config.
 		 */
 		/** @var array<string, array> $types */
@@ -104,8 +94,6 @@ class FrmGatedContentAction extends FrmFormAction {
 
 	/**
 	 * Render the action settings form.
-	 *
-	 * @since x.x
 	 *
 	 * @param object $instance Form action post object.
 	 * @param array  $args     Contains `form`, `action_key`, `values`.
@@ -127,8 +115,6 @@ class FrmGatedContentAction extends FrmFormAction {
 	 *                   Set via Pro only; stored here for shared validation logic.
 	 * - event:          Form events that trigger token generation.
 	 *
-	 * @since x.x
-	 *
 	 * @return array
 	 */
 	public function get_defaults() {
@@ -143,8 +129,6 @@ class FrmGatedContentAction extends FrmFormAction {
 
 	/**
 	 * Sanitize and validate settings on save.
-	 *
-	 * @since x.x
 	 *
 	 * @param array $new_instance New settings submitted via form().
 	 * @param array $old_instance Previous saved settings.
@@ -172,8 +156,6 @@ class FrmGatedContentAction extends FrmFormAction {
 			 *
 			 * Pro and PDF plugins use this to sanitize their own type-specific fields
 			 * and merge them into the item array.
-			 *
-			 * @since x.x
 			 *
 			 * @param array $item     Sanitized item data (keys: type, id).
 			 * @param array $raw_item Raw submitted item data.

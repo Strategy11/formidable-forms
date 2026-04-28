@@ -5,7 +5,6 @@
  * @package Formidable
  *
  * @since x.x
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,8 +19,6 @@ class FrmGatedContentController {
 	 * Stored here so filter_password_required() can reference it without a
 	 * closure (closures are forbidden as action/filter callbacks).
 	 *
-	 * @since x.x
-	 *
 	 * @var int
 	 */
 	private static $unlocked_post_id = 0;
@@ -34,8 +31,6 @@ class FrmGatedContentController {
 	 * hook is too late — get_queried_object_id() returns 0 for a 404'd private
 	 * page. This hook resolves the target post ID from the query vars, validates
 	 * the token, and conditionally appends 'private' to the post_status list.
-	 *
-	 * @since x.x
 	 *
 	 * @param WP_Query $query Current query object.
 	 * @return void
@@ -72,8 +67,6 @@ class FrmGatedContentController {
 	 * Resolution order:
 	 *  1. URL query parameter access_code (raw token → hashed via obtain_token).
 	 *  2. Any frm_gc_* cookie whose hash validates against the current post.
-	 *
-	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -155,8 +148,6 @@ class FrmGatedContentController {
 	 * the specific post ID stored in self::$unlocked_post_id — all other posts are
 	 * passed through unchanged.
 	 *
-	 * @since x.x
-	 *
 	 * @param bool    $required Whether the password is required.
 	 * @param WP_Post $post     Post being checked.
 	 * @return bool
@@ -174,8 +165,6 @@ class FrmGatedContentController {
 	 * Called from maybe_include_private_pages() during pre_get_posts, before the
 	 * DB query runs. Uses post_status => 'any' so private pages are returned
 	 * regardless of whether the visitor is logged in.
-	 *
-	 * @since x.x
 	 *
 	 * @param WP_Query $query Current query object.
 	 * @return int Post ID, or 0 if it cannot be determined.
@@ -207,8 +196,6 @@ class FrmGatedContentController {
 	 * Checks the URL access_code parameter first, then frm_gc_* cookies. Used by
 	 * maybe_include_private_pages() to decide whether to widen the query.
 	 *
-	 * @since x.x
-	 *
 	 * @param int $post_id Post ID to validate against.
 	 * @return bool True if a valid token is found.
 	 */
@@ -229,8 +216,6 @@ class FrmGatedContentController {
 	 *
 	 * Used as a fallback when no access_code URL parameter is present, allowing
 	 * return visits to stay unlocked without re-clicking the emailed link.
-	 *
-	 * @since x.x
 	 *
 	 * @param int $post_id Post ID to validate against.
 	 * @return string|null Validated token hash, or null if none found.
@@ -254,8 +239,6 @@ class FrmGatedContentController {
 	 * Fires on 'before_delete_post'. Only acts on frm_form_actions posts whose
 	 * post_excerpt identifies them as gated_content actions.
 	 *
-	 * @since x.x
-	 *
 	 * @param int     $post_id Post ID being deleted.
 	 * @param WP_Post $post    Post object being deleted.
 	 * @return void
@@ -273,8 +256,6 @@ class FrmGatedContentController {
 	 * Runs at form action priority 8 — before On Submit (9) and Send Email (10) —
 	 * so the raw token is already stored when those actions process [frm_gated_content]
 	 * shortcodes on the same request or after a payment redirect.
-	 *
-	 * @since x.x
 	 *
 	 * @param object $action Form action post object (post_excerpt = 'gated_content').
 	 * @param object $entry  Submitted form entry object.
@@ -307,8 +288,6 @@ class FrmGatedContentController {
 	 *          'url'          — Plain URL string. Without item: <ul> of plain URLs. With item: single URL.
 	 *          'access_token' — Raw access token string.
 	 *          'expired_time' — Formatted expiry date/time (empty if token never expires).
-	 *
-	 * @since x.x
 	 *
 	 * @param array $atts Shortcode attributes.
 	 * @return string Shortcode output, or empty string when no token is available.
@@ -401,8 +380,6 @@ class FrmGatedContentController {
 	 * Cookie-only sources cannot yield a raw token, so they are excluded here.
 	 * Use FrmGatedTokenHelper::obtain_token() when only a hash is needed.
 	 *
-	 * @since x.x
-	 *
 	 * @param int $action_id Action post ID.
 	 * @return string|null Raw 48-char token, or null if unavailable.
 	 */
@@ -435,8 +412,6 @@ class FrmGatedContentController {
 	 * ('frm_file', 'frm_pdf', …) can provide a base URL via the
 	 * `frm_gated_content_item_url` filter.
 	 *
-	 * @since x.x
-	 *
 	 * @param int    $item_id   Content item ID (e.g. page post ID).
 	 * @param string $type      Item type slug ('page', 'frm_file', 'frm_pdf', …).
 	 * @param string $raw_token Raw access token to append as access_code query arg.
@@ -454,8 +429,6 @@ class FrmGatedContentController {
 				 * Filter the base URL for a gated content item type.
 				 *
 				 * Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
-				 *
-				 * @since x.x
 				 *
 				 * @param string $base_url Empty string by default.
 				 * @param array  $args {
@@ -476,8 +449,6 @@ class FrmGatedContentController {
 
 	/**
 	 * Render an unordered list of gated access links for all items in an action.
-	 *
-	 * @since x.x
 	 *
 	 * @param array  $items     Array of item arrays from action settings (each with 'id' and 'type' keys).
 	 * @param string $raw_token Raw access token.
@@ -520,8 +491,6 @@ class FrmGatedContentController {
 	 *
 	 * Used when show="url" is set without an item index.
 	 *
-	 * @since x.x
-	 *
 	 * @param array  $items     Array of item arrays from action settings (each with 'id' and 'type' keys).
 	 * @param string $raw_token Raw access token.
 	 * @return string HTML <ul> element of plain-text URLs, or empty string when no items produce a URL.
@@ -556,8 +525,6 @@ class FrmGatedContentController {
 	/**
 	 * Return the formatted expiry time for a raw token.
 	 *
-	 * @since x.x
-	 *
 	 * @param string $raw_token Raw access token.
 	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
 	 */
@@ -567,8 +534,6 @@ class FrmGatedContentController {
 
 	/**
 	 * Return the formatted expiry time for a token hash.
-	 *
-	 * @since x.x
 	 *
 	 * @param string $hash SHA-256 hex hash of the access token.
 	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
