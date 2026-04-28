@@ -273,6 +273,14 @@ class FrmGatedContentController {
 	public static function trigger( $action, $entry, $form, $event ) {
 		$raw_user_id = get_current_user_id();
 		$user_id     = $raw_user_id ? $raw_user_id : null;
+
+		// On update, revoke any existing tokens for this action+entry pair before
+		// issuing a fresh one — prevents unbounded row accumulation and ensures the
+		// old token cannot be used once the entry owner receives a new one.
+		if ( 'update' === $event ) {
+			FrmGatedTokenHelper::delete_by_action_and_entry( $action->ID, $entry->id );
+		}
+
 		FrmGatedTokenHelper::generate( $action->ID, $entry->id, $user_id );
 	}
 
