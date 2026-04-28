@@ -405,7 +405,7 @@ class FrmGatedContentController {
 			return esc_url( $url );
 		}
 
-		$label = get_the_title( (int) $item['id'] );
+		$label = self::get_item_title( (int) $item['id'], $item['type'] );
 		if ( ! $label ) {
 			$label = $url;
 		}
@@ -459,33 +459,58 @@ class FrmGatedContentController {
 	 * @return string Full URL with access_code parameter, or empty string on failure.
 	 */
 	public static function get_item_url( $item_id, $type, $raw_token ) {
-		$base_url = '';
+		$base_url = 'page' === $type ? get_permalink( $item_id ) : '';
 
-		switch ( $type ) {
-			case 'page':
-				$base_url = (string) get_permalink( $item_id );
-				break;
-			default:
-				/**
-				 * Filter the base URL for a gated content item type.
-				 *
-				 * Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
-				 *
-				 * @param string $base_url Empty string by default.
-				 * @param array  $args {
-				 *     @type int    $item_id   Content item ID.
-				 *     @type string $type      Item type slug.
-				 *     @type string $raw_token Raw access token.
-				 * }
-				 */
-				$base_url = (string) apply_filters( 'frm_gated_content_item_url', '', compact( 'item_id', 'type', 'raw_token' ) );
-		}
+		/**
+		 * Filter the base URL for a gated content item type.
+		 *
+		 * Fires for all types including 'page', allowing the default permalink to
+		 * be overridden. Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
+		 *
+		 * @param string $base_url Permalink for 'page' items; empty string for others.
+		 * @param array  $args {
+		 *     @type int    $item_id   Content item ID.
+		 *     @type string $type      Item type slug.
+		 *     @type string $raw_token Raw access token.
+		 * }
+		 */
+		$base_url = (string) apply_filters( 'frm_gated_content_item_url', $base_url, compact( 'item_id', 'type', 'raw_token' ) );
 
 		if ( ! $base_url ) {
 			return '';
 		}
 
 		return add_query_arg( 'access_code', $raw_token, $base_url );
+	}
+
+	/**
+	 * Get the display title for a single gated content item.
+	 *
+	 * For 'page' items this is the post title. Pro item types ('frm_file',
+	 * 'frm_pdf', …) can provide a title via the `frm_gated_content_item_title`
+	 * filter.
+	 *
+	 * @param int    $item_id Content item ID (e.g. page post ID or attachment ID).
+	 * @param string $type    Item type slug ('page', 'frm_file', 'frm_pdf', …).
+	 *
+	 * @return string Display title, or empty string when unavailable.
+	 */
+	public static function get_item_title( $item_id, $type ) {
+		$title = 'page' === $type ? get_the_title( $item_id ) : '';
+
+		/**
+		 * Filter the display title for a gated content item type.
+		 *
+		 * Fires for all types including 'page', allowing the default post title to
+		 * be overridden. Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
+		 *
+		 * @param string $title   Post title for 'page' items; empty string for others.
+		 * @param array  $args {
+		 *     @type int    $item_id Content item ID.
+		 *     @type string $type    Item type slug.
+		 * }
+		 */
+		return (string) apply_filters( 'frm_gated_content_item_title', $title, compact( 'item_id', 'type' ) );
 	}
 
 	/**
@@ -513,7 +538,7 @@ class FrmGatedContentController {
 				continue;
 			}
 
-			$label = get_the_title( (int) $item['id'] );
+			$label = self::get_item_title( (int) $item['id'], $item['type'] );
 			if ( ! $label ) {
 				$label = $url;
 			}
