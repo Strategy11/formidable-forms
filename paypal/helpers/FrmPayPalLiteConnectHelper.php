@@ -932,10 +932,11 @@ class FrmPayPalLiteConnectHelper {
 	 * @param array  $payer
 	 * @param string $shipping_preference
 	 * @param array  $pricing_data Optional. Array of products with prices and quantities.
+	 * @param array  $shipping     Optional. Shipping name and address data.
 	 *
 	 * @return false|object
 	 */
-	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data = array() ) {
+	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data = array(), $shipping = array() ) {
 		$brand_name = self::get_brand_name();
 
 		// Log pricing data for debugging if FrmLog is available
@@ -949,7 +950,7 @@ class FrmPayPalLiteConnectHelper {
 			);
 		}
 
-		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data' ) );
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data', 'shipping' ) );
 	}
 
 	/**

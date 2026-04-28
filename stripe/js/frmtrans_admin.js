@@ -18,10 +18,10 @@
 	function toggleOpts( opt, show, c ) {
 		const opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
 		if ( show ) {
-			opts.show();
+			opts.css( 'display', '' );
 			opts.removeClass( 'frm_hidden' );
 		} else {
-			opts.hide();
+			opts.css( 'display', 'none' );
 			opts.addClass( 'frm_hidden' );
 		}
 	}
@@ -52,6 +52,10 @@
 		);
 
 		wp.hooks.doAction( 'frm_trans_toggled_gateway', { gateway, checked, settings } );
+
+		document.querySelectorAll( '.frm-billing-section-heading' ).forEach( function( el ) {
+			el.textContent = gateway === 'paypal' ? el.dataset.billingLabel : el.dataset.customerLabel;
+		} );
 	}
 
 	function frmTransLiteAdminJS() {

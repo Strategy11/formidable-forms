@@ -220,6 +220,7 @@ class FrmPayPalLiteAppController {
 		$action              = reset( $actions );
 		$amount              = self::get_amount_value_for_verification( $action );
 		$payer               = self::get_payer_data_from_posted_values( $action );
+		$shipping            = self::get_shipping_data_from_posted_values( $action );
 		$shipping_preference = self::get_shipping_preference( $action );
 		$pricing_data        = self::get_pricing_data_from_posted_values( $form_id );
 
@@ -227,7 +228,7 @@ class FrmPayPalLiteAppController {
 		$amount   = number_format( floatval( $amount ), 2, '.', '' );
 		$currency = strtoupper( $action->post_content['currency'] );
 
-		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data );
+		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data, $shipping );
 
 		if ( class_exists( 'FrmLog' ) ) {
 			$log = new FrmLog();
@@ -297,6 +298,112 @@ class FrmPayPalLiteAppController {
 		self::maybe_add_address_data( $payer, $address, (int) $address_setting );
 
 		return $payer;
+	}
+
+	/**
+	 * Build shipping data from the action's shipping field settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $action
+	 *
+	 * @return array
+	 */
+	private static function get_shipping_data_from_posted_values( $action ) {
+		$settings = $action->post_content;
+
+		$email_setting      = ! empty( $settings['shipping_email'] ) ? $settings['shipping_email'] : '';
+		$first_name_setting = ! empty( $settings['shipping_first_name'] ) ? $settings['shipping_first_name'] : '';
+		$last_name_setting  = ! empty( $settings['shipping_last_name'] ) ? $settings['shipping_last_name'] : '';
+		$address_setting    = ! empty( $settings['shipping_address'] ) ? $settings['shipping_address'] : '';
+
+		if ( ! $email_setting && ! $first_name_setting && ! $last_name_setting && ! $address_setting ) {
+			return array();
+		}
+
+		$entry      = self::generate_false_entry();
+		$first_name = $first_name_setting && isset( $entry->metas[ $first_name_setting ] ) ? $entry->metas[ $first_name_setting ] : '';
+		$last_name  = $last_name_setting && isset( $entry->metas[ $last_name_setting ] ) ? $entry->metas[ $last_name_setting ] : '';
+
+		if ( is_array( $first_name ) && isset( $first_name['first'] ) ) {
+			$first_name = $first_name['first'];
+		}
+
+		if ( is_array( $last_name ) && isset( $last_name['last'] ) ) {
+			$last_name = $last_name['last'];
+		}
+
+		$shipping = array();
+
+		if ( $email_setting ) {
+			$shortcode_atts = array(
+				'entry' => $entry,
+				'form'  => $action->menu_order,
+				'value' => $email_setting,
+			);
+			$email = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
+			if ( $email ) {
+				$shipping['email_address'] = $email;
+			}
+		}
+
+		if ( $first_name || $last_name ) {
+			$shipping['name'] = array(
+				'full_name' => trim( $first_name . ' ' . $last_name ),
+			);
+		}
+
+		if ( $address_setting ) {
+			$address = isset( $entry->metas[ $address_setting ] ) ? $entry->metas[ $address_setting ] : '';
+			$formatted_address = self::format_address_for_paypal( $address, (int) $address_setting );
+
+			if ( $formatted_address ) {
+				$shipping['address'] = $formatted_address;
+			}
+		}
+
+		return $shipping;
+	}
+
+	/**
+	 * Format a Formidable address field value into a PayPal address array.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $address          The address field value.
+	 * @param int   $address_field_id The field ID.
+	 *
+	 * @return array|false The formatted address array, or false if invalid.
+	 */
+	private static function format_address_for_paypal( $address, $address_field_id ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+			return false;
+		}
+
+		$address_field = FrmField::getOne( $address_field_id );
+
+		if ( ! $address_field ) {
+			return false;
+		}
+
+		if ( 'us' === $address_field->field_options['address_type'] ) {
+			$country_code = 'US';
+		} else {
+			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+		}
+
+		if ( ! $address['line1'] || ! $address['city'] || ! $address['state'] || ! $address['zip'] || ! $country_code ) {
+			return false;
+		}
+
+		return array(
+			'address_line_1' => $address['line1'],
+			'address_line_2' => $address['line2'] ?? '',
+			'admin_area_2'   => $address['city'],
+			'admin_area_1'   => $address['state'],
+			'postal_code'    => $address['zip'],
+			'country_code'   => $country_code,
+		);
 	}
 
 	/**

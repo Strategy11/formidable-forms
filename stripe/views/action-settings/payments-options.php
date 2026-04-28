@@ -176,8 +176,13 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 	?>
 </div>
 <div class="frm_grid_container">
-	<h3>
-		<?php esc_html_e( 'Customer Information', 'formidable' ); ?>
+	<?php
+	$billing_label  = __( 'Billing Information', 'formidable' );
+	$customer_label = __( 'Customer Information', 'formidable' );
+	$is_paypal      = in_array( 'paypal', (array) $form_action->post_content['gateway'], true );
+	?>
+	<h3 class="frm-billing-section-heading" data-billing-label="<?php echo esc_attr( $billing_label ); ?>" data-customer-label="<?php echo esc_attr( $customer_label ); ?>">
+		<?php echo esc_html( $is_paypal ? $billing_label : $customer_label ); ?>
 	</h3>
 
 	<p class="frm6">
@@ -195,13 +200,14 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 	 *
 	 * @param array $args {
 	 *
-	 *     @type FrmFormAction $action_control
-	 *     @type array         $field_dropdown_atts
+	 *     @type WP_Post      $form_action         The form action post object.
+	 *     @type FrmFormAction $action_control      The action controller object.
+	 *     @type array         $field_dropdown_atts Attributes for field dropdown rendering.
 	 * }
 	 */
 	do_action(
 		'frm_stripe_lite_customer_info_after_email',
-		compact( 'action_control', 'field_dropdown_atts' )
+		compact( 'form_action', 'action_control', 'field_dropdown_atts' )
 	);
 	?>
 
@@ -218,3 +224,22 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 		<?php $action_control->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_last_name' ) ); ?>
 	</p>
 </div>
+
+<?php
+/**
+ * Fires after the Customer Information section in payment action settings.
+ * Used by Pro to add gateway-specific Shipping and Billing sections.
+ *
+ * @since x.x
+ *
+ * @param array $args {
+ *     @type WP_Post        $form_action         The form action post object.
+ *     @type FrmFormAction   $action_control      The action controller object.
+ *     @type array           $field_dropdown_atts Attributes for field dropdown rendering.
+ * }
+ */
+do_action(
+	'frm_payment_settings_after_customer_info',
+	compact( 'form_action', 'action_control', 'field_dropdown_atts' )
+);
+?>
