@@ -16,6 +16,9 @@ const npsStep = document.getElementById( `${ CLASS_PREFIX }-nps-step` );
 const reasonsStep = document.getElementById( `${ CLASS_PREFIX }-reasons-step` );
 const thankYouStep = document.getElementById( `${ CLASS_PREFIX }-thank-you-step` );
 
+const submitAction = pluginFeedback?.dataset.submitAction;
+const dismissAction = pluginFeedback?.dataset.dismissAction;
+
 /**
  * Adds event listeners for submitting plugin feedback.
  *
@@ -56,7 +59,7 @@ async function onSubmitFeedback( event ) {
 	}
 
 	try {
-		await doJsonPost( 'submit_lite_plugin_feedback', formData );
+		await doJsonPost( submitAction, formData );
 	} catch ( error ) {
 		showError( error.type );
 		if ( error.message ) {
@@ -111,7 +114,7 @@ async function onDismissFeedback( event ) {
 	formData.append( 'dismissed', true );
 
 	try {
-		await doJsonPost( 'dismiss_lite_plugin_feedback', formData );
+		await doJsonPost( dismissAction, formData );
 	} catch ( error ) {
 		if ( error.message ) {
 			console.error( 'Feedback submission error:', error.message );
