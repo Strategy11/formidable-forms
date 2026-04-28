@@ -10,8 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Collects an NPS score and qualitative feedback from Lite users ~20 days after install,
- * unless Formidable Pro is loaded (in which case Pro's own survey takes over).
+ * Collects an NPS score and feedback from Lite users after install.
  *
  * @since 6.26.1
  */
@@ -34,38 +33,46 @@ class FrmPluginFeedbackController {
 	/**
 	 * @var int
 	 */
-	private static $user_id;
+	protected static $user_id;
 
 	/**
 	 * @var array
 	 */
-	private static $plugin_feedback;
+	protected static $plugin_feedback;
 
 	/**
 	 * @var int
 	 */
-	private static $current_year;
+	protected static $current_year;
 
 	/**
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		self::$user_id = get_current_user_id();
-
-		if ( ! self::should_show_plugin_feedback() ) {
+		if ( ! static::should_show_plugin_feedback() ) {
 			return;
 		}
 
+		$user_id = get_current_user_id();
+		$class   = get_called_class();
+
 		add_filter( 'frm_should_show_floating_links', '__return_false' );
-		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets' );
-		add_action( 'admin_footer', self::class . '::show_plugin_feedback', 1 );
+		add_action( 'admin_enqueue_scripts', array( $class, 'enqueue_assets' ) );
+		add_action( 'admin_footer', array( $class, 'show_plugin_feedback' ), 1 );
 	}
 
 	/**
 	 * @return bool
 	 */
-	private static function should_show_plugin_feedback() {
-		if ( ! self::$user_id ) {
+	protected static function should_show_plugin_feedback() {
+		return static::passes_common_gates() && static::passes_product_specific_gates();
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected static function passes_common_gates() {
+		if ( ! static::$user_id ) {
 			return false;
 		}
 
@@ -73,11 +80,11 @@ class FrmPluginFeedbackController {
 			return false;
 		}
 
-		if ( self::is_local_environment() ) {
+		if ( static::is_local_environment() ) {
 			return false;
 		}
 
-		if ( FrmAppHelper::pro_is_included() ) {
+		if ( static::pro_is_blocking() ) {
 			return false;
 		}
 
@@ -89,55 +96,85 @@ class FrmPluginFeedbackController {
 			return false;
 		}
 
-		if ( ! self::has_reached_install_age_threshold() ) {
-			return false;
-		}
-
-		$current = self::get_current_year_feedback();
-		if ( ! empty( $current['submitted'] ) ) {
-			return false;
-		}
-
-		return true;
+		$current = static::get_current_year_feedback();
+		return ! empty( $current['submitted'] ) ? false : true;
 	}
 
 	/**
 	 * @return bool
 	 */
-	private static function is_local_environment() {
+	protected static function passes_product_specific_gates() {
+		return static::has_reached_install_age_threshold();
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected static function pro_is_blocking() {
+		return FrmAppHelper::pro_is_included();
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected static function is_local_environment() {
 		return in_array( wp_get_environment_type(), array( 'local', 'development' ), true );
 	}
 
 	/**
 	 * @return bool
 	 */
-	private static function has_reached_install_age_threshold() {
+	protected static function has_reached_install_age_threshold() {
 		$install_time = (int) get_option( 'frm_first_activation' );
 		if ( ! $install_time ) {
 			return false;
 		}
 
 		$threshold_days = (int) apply_filters( 'frm_lite_plugin_feedback_threshold_days', 20 );
-		return ( time() - $install_time ) >= ( $threshold_days * DAY_IN_SECONDS );
+		return time() - $install_time >= $threshold_days * DAY_IN_SECONDS;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected static function get_config() {
+		return array(
+			'script'          => array(
+				'handle' => 'formidable-lite-plugin-feedback',
+				'url'    => FrmAppHelper::plugin_url() . '/js/plugin-feedback.js',
+			),
+			'style'           => array(
+				'handle' => 'formidable-lite-plugin-feedback',
+				'url'    => FrmAppHelper::plugin_url() . '/css/components/plugin-feedback.css',
+			),
+			'ajax'            => array(
+				'submit'  => 'submit_lite_plugin_feedback',
+				'dismiss' => 'dismiss_lite_plugin_feedback',
+			),
+			'remote'          => 'https://formidableforms.com/wp-admin/admin-ajax.php?action=frm_forms_preview&form=plugin-feedback-lite',
+			'remote_form_key' => 'plugin-feedback-lite',
+		);
 	}
 
 	/**
 	 * @return void
 	 */
 	public static function enqueue_assets() {
+		$config  = static::get_config();
 		$version = FrmAppHelper::plugin_version();
 
-		wp_enqueue_script( 'formidable-lite-plugin-feedback', FrmAppHelper::plugin_url() . '/js/plugin-feedback.js', array( 'formidable_dom' ), $version, true );
-		wp_enqueue_style( 'formidable-lite-plugin-feedback', FrmAppHelper::plugin_url() . '/css/components/plugin-feedback.css', array(), $version );
+		wp_enqueue_script( $config['script']['handle'], $config['script']['url'], array( 'formidable_dom' ), $version, true );
+		wp_enqueue_style( $config['style']['handle'], $config['style']['url'], array(), $version );
 	}
 
 	/**
 	 * @return void
 	 */
 	public static function show_plugin_feedback() {
-		$current = self::get_current_year_feedback();
+		$current = static::get_current_year_feedback();
 		$step    = isset( $current['nps-score'] ) ? 'reasons' : 'nps';
-		$reasons = self::get_reasons();
+		$reasons = static::get_reasons();
+		$config  = static::get_config();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/plugin-feedback.php';
 	}
@@ -149,14 +186,14 @@ class FrmPluginFeedbackController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		if ( FrmAppHelper::pro_is_included() ) {
+		if ( static::pro_is_blocking() ) {
 			wp_send_json_error( array( 'type' => 'pro-active' ) );
 		}
 
-		self::$user_id = get_current_user_id();
+		static::$user_id = get_current_user_id();
 
-		self::maybe_save_nps_and_send_response();
-		self::submit_feedback_to_remote();
+		static::maybe_save_nps_and_send_response();
+		static::submit_feedback_to_remote();
 	}
 
 	/**
@@ -166,19 +203,19 @@ class FrmPluginFeedbackController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		if ( FrmAppHelper::pro_is_included() ) {
+		if ( static::pro_is_blocking() ) {
 			wp_send_json_error( array( 'type' => 'pro-active' ) );
 		}
 
-		self::$user_id = get_current_user_id();
+		static::$user_id = get_current_user_id();
 
-		self::submit_feedback_to_remote();
+		static::submit_feedback_to_remote();
 	}
 
 	/**
 	 * @return void
 	 */
-	private static function maybe_save_nps_and_send_response() {
+	protected static function maybe_save_nps_and_send_response() {
 		if ( ! isset( $_POST['nps-score'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
@@ -189,26 +226,27 @@ class FrmPluginFeedbackController {
 			wp_send_json_error( array( 'type' => 'invalid-nps' ) );
 		}
 
-		self::set_current_year_feedback( 'nps-score', $nps_score );
+		static::set_current_year_feedback( 'nps-score', $nps_score );
 		wp_send_json_success( array( 'message' => __( 'Feedback score saved successfully.', 'formidable' ) ) );
 	}
 
 	/**
 	 * @return void
 	 */
-	private static function submit_feedback_to_remote() {
-		$current = self::get_current_year_feedback();
+	protected static function submit_feedback_to_remote() {
+		$current = static::get_current_year_feedback();
 
 		if ( ! isset( $current['nps-score'] ) ) {
-			self::set_current_year_feedback( 'submitted', true );
+			static::set_current_year_feedback( 'submitted', true );
+			static::after_submission_commit();
 			wp_send_json_success( array( 'message' => __( 'Feedback dismissed successfully.', 'formidable' ) ) );
 		}
 
 		$remote_response = wp_remote_post(
-			'https://formidableforms.com/wp-admin/admin-ajax.php?action=frm_forms_preview&form=plugin-feedback-lite',
+			static::get_config()['remote'],
 			array(
 				'timeout' => 30,
-				'body'    => http_build_query( self::build_remote_body() ),
+				'body'    => http_build_query( static::build_remote_body() ),
 			)
 		);
 
@@ -232,48 +270,93 @@ class FrmPluginFeedbackController {
 			);
 		}
 
-		self::set_current_year_feedback( 'submitted', true );
+		static::set_current_year_feedback( 'submitted', true );
+		static::after_submission_commit();
 		wp_send_json_success( array( 'message' => __( 'Feedback submitted successfully.', 'formidable' ) ) );
 	}
 
 	/**
-	 * Builds the payload sent to formidableforms.com. form_id and item_meta keys
-	 * are placeholders until Marketing finalizes the destination form; swapping them
-	 * should be a small edit here.
-	 *
 	 * @return array
 	 */
-	private static function build_remote_body() {
-		$feedback = self::get_current_year_feedback();
-		$nps      = isset( $feedback['nps-score'] ) ? $feedback['nps-score'] : '';
-
+	protected static function field_map() {
 		return array(
-			'l'              => base64_encode( (string) get_option( 'frm-usage-uuid' ) ),
-			'form_key'       => 'plugin-feedback-lite',
-			'frm_action'     => 'create',
-			'form_id'        => 0,
-			'item_key'       => '',
-			'item_meta[0]'   => '',
-			'item_meta[NPS]' => $nps,
-			'item_meta[RSN]' => self::format_reasons_list( self::get_posted_reasons() ),
-			'item_meta[DTL]' => FrmAppHelper::get_post_param( 'details', '' ),
-			'item_meta[URL]' => site_url(),
-			'item_meta[SRC]' => self::SOURCE,
-			'item_meta[VER]' => FrmAppHelper::plugin_version(),
+			'nps'     => 'NPS',
+			'reasons' => 'RSN',
+			'details' => 'DTL',
+			'url'     => 'URL',
+			'source'  => 'SRC',
+			'version' => 'VER',
 		);
 	}
 
 	/**
 	 * @return array
 	 */
-	private static function get_posted_reasons() {
+	protected static function build_remote_body() {
+		$map      = static::field_map();
+		$config   = static::get_config();
+		$feedback = static::get_current_year_feedback();
+
+		$body = array(
+			'l'            => base64_encode( (string) static::get_remote_identifier() ),
+			'form_key'     => isset( $config['remote_form_key'] ) ? $config['remote_form_key'] : '',
+			'frm_action'   => 'create',
+			'form_id'      => static::get_remote_form_id(),
+			'item_key'     => '',
+			'item_meta[0]' => '',
+		);
+
+		$values = array(
+			'nps'     => isset( $feedback['nps-score'] ) ? $feedback['nps-score'] : '',
+			'reasons' => static::format_reasons_list( static::get_posted_reasons() ),
+			'details' => FrmAppHelper::get_post_param( 'details', '' ),
+			'url'     => site_url(),
+			'source'  => static::SOURCE,
+			'version' => FrmAppHelper::plugin_version(),
+		);
+
+		foreach ( $values as $key => $value ) {
+			if ( ! isset( $map[ $key ] ) ) {
+				continue;
+			}
+
+			$body[ 'item_meta[' . $map[ $key ] . ']' ] = $value;
+		}
+
+		return $body;
+	}
+
+	/**
+	 * @return string
+	 */
+	protected static function get_remote_identifier() {
+		return (string) get_option( 'frm-usage-uuid' );
+	}
+
+	/**
+	 * @return int
+	 */
+	protected static function get_remote_form_id() {
+		return 0;
+	}
+
+	/**
+	 * @return void
+	 */
+	protected static function after_submission_commit() {
+	}
+
+	/**
+	 * @return array
+	 */
+	protected static function get_posted_reasons() {
 		$reasons = json_decode( FrmAppHelper::get_post_param( 'reasons', '[]' ), true );
 		$reasons = rest_sanitize_value_from_schema(
 			$reasons,
 			array(
 				'type'  => 'array',
 				'items' => array(
-					'enum' => array_keys( self::get_reasons() ),
+					'enum' => array_keys( static::get_reasons() ),
 					'type' => 'string',
 				),
 			)
@@ -290,12 +373,12 @@ class FrmPluginFeedbackController {
 	 * @param array $reason_keys
 	 * @return string
 	 */
-	private static function format_reasons_list( $reason_keys ) {
+	protected static function format_reasons_list( $reason_keys ) {
 		if ( ! $reason_keys ) {
 			return '';
 		}
 
-		$reasons           = self::get_reasons();
+		$reasons           = static::get_reasons();
 		$formatted_reasons = array_map(
 			static function ( $key ) use ( $reasons ) {
 				return '- ' . $reasons[ $key ];
@@ -309,68 +392,67 @@ class FrmPluginFeedbackController {
 	/**
 	 * @return array
 	 */
-	private static function get_plugin_feedback() {
-		if ( self::$plugin_feedback ) {
-			return self::$plugin_feedback;
+	protected static function get_plugin_feedback() {
+		if ( static::$plugin_feedback ) {
+			return static::$plugin_feedback;
 		}
 
-		self::$plugin_feedback = get_user_meta( self::$user_id, self::PLUGIN_FEEDBACK_META_KEY, true );
+		static::$plugin_feedback = get_user_meta( static::$user_id, static::PLUGIN_FEEDBACK_META_KEY, true );
 
-		if ( ! is_array( self::$plugin_feedback ) ) {
-			self::$plugin_feedback = array(
-				self::get_current_year() => array(
+		if ( ! is_array( static::$plugin_feedback ) ) {
+			static::$plugin_feedback = array(
+				static::get_current_year() => array(
 					'submitted' => false,
-					'source'    => self::SOURCE,
+					'source'    => static::SOURCE,
 				),
 			);
-		} elseif ( ! isset( self::$plugin_feedback[ self::get_current_year() ] ) ) {
-			self::$plugin_feedback[ self::get_current_year() ] = array(
+		} elseif ( ! isset( static::$plugin_feedback[ static::get_current_year() ] ) ) {
+			static::$plugin_feedback[ static::get_current_year() ] = array(
 				'submitted' => false,
-				'source'    => self::SOURCE,
+				'source'    => static::SOURCE,
 			);
 		}
 
-		return self::$plugin_feedback;
+		return static::$plugin_feedback;
 	}
 
 	/**
 	 * @return array
 	 */
-	private static function get_current_year_feedback() {
-		return self::get_plugin_feedback()[ self::get_current_year() ];
+	protected static function get_current_year_feedback() {
+		return static::get_plugin_feedback()[ static::get_current_year() ];
 	}
 
 	/**
 	 * @param string $key
 	 * @param mixed  $value
-	 *
 	 * @return void
 	 */
-	private static function set_current_year_feedback( $key, $value ) {
-		self::get_plugin_feedback();
-		self::$plugin_feedback[ self::get_current_year() ][ $key ]      = $value;
-		self::$plugin_feedback[ self::get_current_year() ]['source']    = self::SOURCE;
-		update_user_meta( self::$user_id, self::PLUGIN_FEEDBACK_META_KEY, self::$plugin_feedback );
+	protected static function set_current_year_feedback( $key, $value ) {
+		static::get_plugin_feedback();
+		static::$plugin_feedback[ static::get_current_year() ][ $key ]   = $value;
+		static::$plugin_feedback[ static::get_current_year() ]['source'] = static::SOURCE;
+		update_user_meta( static::$user_id, static::PLUGIN_FEEDBACK_META_KEY, static::$plugin_feedback );
 	}
 
 	/**
 	 * @return int
 	 */
-	private static function get_current_year() {
-		if ( self::$current_year ) {
-			return self::$current_year;
+	protected static function get_current_year() {
+		if ( static::$current_year ) {
+			return static::$current_year;
 		}
 
-		self::$current_year = (int) wp_date( 'Y' );
-		return self::$current_year;
+		static::$current_year = (int) wp_date( 'Y' );
+		return static::$current_year;
 	}
 
 	/**
-	 * English-only — sent to a remote service, so intentionally not translatable.
+	 * Not translatable: sent to a remote service.
 	 *
 	 * @return array
 	 */
-	private static function get_reasons() {
+	protected static function get_reasons() {
 		return array(
 			'pricing'          => 'Pricing and plans',
 			'form-builder'     => 'Form builder flexibility',
