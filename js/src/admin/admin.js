@@ -11409,6 +11409,34 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	}
 
 	/**
+	 * Re-index all item rows after an addition or removal.
+	 *
+	 * Keeps name and id attributes contiguous so the submitted PHP array has no
+	 * gaps and for/id pairs remain unique. Called after every add or remove.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} wrapper - The .frm_gated_content_settings element.
+	 * @return {void}
+	 */
+	function frmGcReindexItems( wrapper ) {
+		const addBtn    = wrapper.querySelector( '.frm_gc_add_item' );
+		const fieldBase = addBtn ? addBtn.dataset.fieldNameBase : '';
+		const rows      = wrapper.querySelectorAll( '.frm_gc_item_row' );
+
+		rows.forEach( ( row, idx ) => {
+			const typeSelect = row.querySelector( '.frm-gc-item-type' );
+			if ( typeSelect && fieldBase ) {
+				typeSelect.name = `${fieldBase}[${idx}][type]`;
+			}
+			frmGcAssignItemIds( row, wrapper.id, idx );
+			frmGcActivateType( row );
+		} );
+
+		wrapper.dataset.itemCount = rows.length;
+	}
+
+	/**
 	 * Assign id and for attributes to a cloned template row.
 	 *
 	 * Template labels use data-frm-gc-for="KEY" and selects use data-frm-gc-field="KEY"
@@ -11504,30 +11532,20 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	document.addEventListener( 'click', function( event ) {
 		const addBtn = event.target.closest( '.frm_gc_add_item' );
 		if ( addBtn ) {
-			const wrapper   = addBtn.closest( '.frm_gated_content_settings' );
-			const list      = wrapper.querySelector( '.frm_gc_items_list' );
-			const template  = wrapper.querySelector( '.frm_gc_item_template' );
-			const fieldBase = addBtn.dataset.fieldNameBase;
-			const idx       = parseInt( wrapper.dataset.itemCount || '0', 10 );
-			const newRow    = template.content.cloneNode( true );
+			const wrapper  = addBtn.closest( '.frm_gated_content_settings' );
+			const list     = wrapper.querySelector( '.frm_gc_items_list' );
+			const template = wrapper.querySelector( '.frm_gc_item_template' );
 
-			// Set the type select name before appending — frmGcActivateType
-			// derives the item base from this name to build [id] field names.
-			newRow.querySelector( '.frm-gc-item-type' ).name = `${fieldBase}[${idx}][type]`;
-
-			list.appendChild( newRow );
-
-			const addedRow = list.lastElementChild;
-			frmGcAssignItemIds( addedRow, wrapper.id, idx );
-			frmGcActivateType( addedRow );
-
-			wrapper.dataset.itemCount = idx + 1;
+			list.appendChild( template.content.cloneNode( true ) );
+			frmGcReindexItems( wrapper );
 			return;
 		}
 
 		const removeBtn = event.target.closest( '.frm_gc_remove_item' );
 		if ( removeBtn ) {
+			const wrapper = removeBtn.closest( '.frm_gated_content_settings' );
 			removeBtn.closest( '.frm_gc_item_row' ).remove();
+			frmGcReindexItems( wrapper );
 			return;
 		}
 
