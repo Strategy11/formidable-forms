@@ -1083,11 +1083,7 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return string
 	 */
-	public static function get_bn_code( $mode = 'auto' ) {
-		if ( 'auto' === $mode ) {
-			$mode = self::get_mode_value();
-		}
-
-		return 'test' === $mode ? 'FLAVORsb-wkozr49468583_MP' : 'Strategy11LLCPPCP_SP';
+	public static function get_bn_code() {
+		return 'Strategy11LLCPPCP_SP';
 	}
 }
