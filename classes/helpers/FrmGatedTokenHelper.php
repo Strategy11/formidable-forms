@@ -255,6 +255,20 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
+	 * Remove a token row from the per-request cache.
+	 *
+	 * Call this after mutating a token row (e.g. extending expiry or renewing
+	 * the hash) so subsequent get_row_by_hash() calls re-fetch from the DB.
+	 *
+	 * @param string $hash SHA-256 hex hash of the token row to evict.
+	 *
+	 * @return void
+	 */
+	public static function forget_cached_row( $hash ) {
+		unset( self::$row_cache[ $hash ] );
+	}
+
+	/**
 	 * Validate a pre-computed token hash against a specific gated content item.
 	 *
 	 * Identical logic to validate() but accepts an already-hashed value,
