@@ -247,6 +247,12 @@ class FrmPayPalLiteEventsController {
 		$frm_payment = new FrmTransLitePayment();
 		$payment     = $frm_payment->get_one_by( $receipt_id, 'receipt_id' );
 
+		// If no payment was found by capture ID, check for a pending payment
+		// stored with the order ID as receipt_id. Update it to the capture ID.
+		if ( ! $payment ) {
+			$payment = $this->maybe_resolve_pending_payment( $frm_payment, $receipt_id );
+		}
+
 		if ( ! $payment && $this->status === 'refunded' ) {
 			FrmTransLiteLog::log_message( 'PayPal Webhook Message', 'No action taken. The refunded payment does not exist for ' . $receipt_id );
 			return;
@@ -460,6 +466,82 @@ class FrmPayPalLiteEventsController {
 		$refunded                 = (float) $this->get_refunded_amount();
 		$original                 = (float) $payment_values['amount'];
 		$payment_values['amount'] = number_format( $original - $refunded, 2, '.', '' );
+	}
+
+	/**
+	 * Try to find a pending payment stored with the order ID as receipt_id.
+	 *
+	 * When a capture is pending, the payment record is created with the order
+	 * ID as receipt_id. When the capture completes, the webhook provides a
+	 * capture ID. This method extracts the order ID from the resource's HATEOAS
+	 * 'up' link, looks up the pending payment, and updates its receipt_id to
+	 * the capture ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param FrmTransLitePayment $frm_payment The payment model instance.
+	 * @param string              $capture_id  The capture ID from the webhook resource.
+	 *
+	 * @return object|null The payment if found and updated, or null.
+	 */
+	private function maybe_resolve_pending_payment( $frm_payment, $capture_id ) {
+		$order_id = $this->get_order_id_from_resource_links();
+
+		if ( ! $order_id ) {
+			return null;
+		}
+
+		$payment = $frm_payment->get_one_by( $order_id, 'receipt_id' );
+
+		if ( ! $payment || 'pending' !== $payment->status ) {
+			return null;
+		}
+
+		$frm_payment->update( $payment->id, array( 'receipt_id' => $capture_id ) );
+		$payment->receipt_id = $capture_id;
+
+		return $payment;
+	}
+
+	/**
+	 * Extract the order ID from the webhook resource's HATEOAS 'up' link.
+	 *
+	 * For PAYMENT.CAPTURE.COMPLETED events, the 'up' link points to the
+	 * order: /v2/checkout/orders/{order_id}.
+	 *
+	 * @since x.x
+	 *
+	 * @return string The order ID, or empty string if not found.
+	 */
+	private function get_order_id_from_resource_links() {
+		if ( empty( $this->resource->links ) || ! is_array( $this->resource->links ) ) {
+			return '';
+		}
+
+		foreach ( $this->resource->links as $link ) {
+			if ( ! isset( $link->rel ) || 'up' !== $link->rel ) {
+				continue;
+			}
+
+			if ( empty( $link->href ) ) {
+				continue;
+			}
+
+			$path = wp_parse_url( $link->href, PHP_URL_PATH );
+
+			if ( ! $path ) {
+				continue;
+			}
+
+			$segments     = explode( '/', rtrim( $path, '/' ) );
+			$last_segment = end( $segments );
+
+			if ( $last_segment ) {
+				return $last_segment;
+			}
+		}
+
+		return '';
 	}
 
 	/**

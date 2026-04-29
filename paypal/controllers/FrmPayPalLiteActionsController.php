@@ -9,6 +9,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 	private static $active_payment_source;
 
+	private static $pending_capture = false;
+
 	/**
 	 * @since x.x
 	 *
@@ -161,6 +163,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$paypal_message = '';
+
+		if ( self::$pending_capture ) {
+			$paypal_message .= '<strong>' . esc_html__( 'Payment status: ', 'formidable' ) . '</strong>' . esc_html__( 'Pending', 'formidable' ) . '<br>';
+		}
+
 		$source_type    = self::$active_payment_source;
 
 		if ( $source_type ) {
@@ -299,6 +306,12 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'Failed to confirm order.';
 		}
 
+		// If PayPal returned an error (e.g. ORDER_IS_PENDING_APPROVAL),
+		// create a pending payment instead of failing outright.
+		if ( ! empty( $response->capture_error ) ) {
+			return self::handle_pending_capture( $response, $atts, $paypal_order_id );
+		}
+
 		if ( ! isset( $response->status ) || $response->status !== 'COMPLETED' ) {
 			return self::get_paypal_error_message( $response, __( 'Failed to capture order.', 'formidable' ) );
 		}
@@ -387,6 +400,74 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$liability_shift,
 			$order
 		);
+	}
+
+	/**
+	 * Handle a capture that returned a PayPal error instead of completing.
+	 *
+	 * For recoverable states like ORDER_IS_PENDING_APPROVAL, a pending
+	 * payment record is created so the webhook can complete it later.
+	 * For unrecoverable errors, the PayPal error description is returned.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $response        The PayPal error response object.
+	 * @param array    $atts            The payment attributes.
+	 * @param string   $paypal_order_id The PayPal order ID.
+	 *
+	 * @return string|true String error message or true on success.
+	 */
+	private static function handle_pending_capture( $response, $atts, $paypal_order_id ) {
+		self::$pending_capture = true;
+
+		$issue = self::get_capture_error_issue( $response );
+
+		// Only block on known non-recoverable errors. For pending states
+		// or unknown issues (empty details from PayPal), create a pending
+		// payment and let the webhook resolve it.
+		$non_recoverable = array( 'INSTRUMENT_DECLINED', 'PAYER_CANNOT_PAY', 'MAX_NUMBER_OF_PAYMENT_ATTEMPTS_EXCEEDED' );
+		if ( in_array( $issue, $non_recoverable, true ) ) {
+			return self::get_paypal_error_message( $response, __( 'Failed to capture order.', 'formidable' ) );
+		}
+
+		$atts['status']         = 'pending';
+		$atts['charge']         = new stdClass();
+		$atts['charge']->id     = $paypal_order_id;
+		$atts['charge']->amount = $atts['amount'];
+
+		$payment_id  = self::create_new_payment( $atts );
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+		$status      = $atts['status'];
+
+		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+
+		self::$active_order_id       = $paypal_order_id;
+		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
+
+		return true;
+	}
+
+	/**
+	 * Extract the issue code from a PayPal capture error response.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $response The PayPal error response.
+	 *
+	 * @return string The issue code, or empty string if not found.
+	 */
+	private static function get_capture_error_issue( $response ) {
+		if ( ! isset( $response->details ) || ! is_array( $response->details ) ) {
+			return '';
+		}
+
+		$first_detail = reset( $response->details );
+		if ( is_object( $first_detail ) && ! empty( $first_detail->issue ) ) {
+			return (string) $first_detail->issue;
+		}
+
+		return '';
 	}
 
 	/**
