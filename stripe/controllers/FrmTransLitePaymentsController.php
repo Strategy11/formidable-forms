@@ -222,10 +222,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				$refunded = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
 
 				if ( false === $refunded ) {
-					$reason = self::convert_uppercase_underscores_to_ucwords(
-						FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api(),
-						array( 'REFUND_FAILED_', 'REFUND_' )
-					);
+					$reason = self::get_paypal_refund_reason();
 				}
 
 				break;
@@ -255,13 +252,32 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @since x.x
+	 * Get a human-friendly reason from the latest PayPal refund error.
 	 *
-	 * @param string $error
-	 * @param array  $prefixes_to_strip
+	 * Handles both uppercase issue codes (e.g. REFUND_FAILED_INSUFFICIENT_FUNDS)
+	 * and human-friendly description strings from the PayPal API.
+	 * Strips the {{debug_id:...}} token if present.
+	 *
+	 * @since x.x
 	 *
 	 * @return string
 	 */
+	private static function get_paypal_refund_reason() {
+		$error = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+		if ( ! $error ) {
+			return '';
+		}
+
+		$error = preg_replace( '/\{\{debug_id:[^}]+\}\}/', '', $error );
+		$error = trim( $error );
+
+		if ( preg_match( '/^[A-Z_]+$/', $error ) ) {
+			return self::convert_uppercase_underscores_to_ucwords( $error, array( 'REFUND_FAILED_', 'REFUND_' ) );
+		}
+
+		return $error;
+	}
+
 	private static function convert_uppercase_underscores_to_ucwords( $error, $prefixes_to_strip = array() ) {
 		if ( ! preg_match( '/^[A-Z_]+$/', $error ) ) {
 			return '';

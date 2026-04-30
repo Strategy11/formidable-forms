@@ -1100,7 +1100,7 @@
 
 		if ( ! orderData.success || ! orderData.data.orderID ) {
 			thisForm.classList.remove( 'frm_loading_form' );
-			throw new Error( orderData.data || 'Failed to create PayPal order' );
+			throwServerError( orderData.data, 'Failed to create PayPal order', 'create_order' );
 		}
 
 		return orderData.data.orderID;
@@ -1131,12 +1131,7 @@
 
 		if ( ! orderData.success || ! orderData.data.subscriptionID ) {
 			thisForm.classList.remove( 'frm_loading_form' );
-
-			if ( 'string' === typeof orderData.data ) {
-				throw new TypeError( orderData.data );
-			}
-
-			throw new Error( 'Failed to create PayPal subscription' );
+			throwServerError( orderData.data, 'Failed to create PayPal subscription', 'create_subscription' );
 		}
 
 		return orderData.data.subscriptionID;
@@ -1169,7 +1164,7 @@
 		const orderData = await response.json();
 
 		if ( ! orderData.success || ! orderData.data.orderID ) {
-			throw new Error( orderData.data || 'Failed to create PayPal order for Google Pay' );
+			throwServerError( orderData.data, 'Failed to create PayPal order for Google Pay', 'create_order' );
 		}
 
 		return orderData.data.orderID;
@@ -1202,7 +1197,7 @@
 		const orderData = await response.json();
 
 		if ( ! orderData.success || ! orderData.data.orderID ) {
-			throw new Error( orderData.data || 'Failed to create PayPal order for Apple Pay' );
+			throwServerError( orderData.data, 'Failed to create PayPal order for Apple Pay', 'create_order' );
 		}
 
 		return orderData.data.orderID;
@@ -1231,8 +1226,7 @@
 
 		if ( ! tokenData.success || ! tokenData.data.token ) {
 			console.error( 'Vault setup token response:', tokenData );
-			const errorMessage = 'string' === typeof tokenData.data ? tokenData.data : 'Failed to create PayPal vault setup token';
-			throw new Error( errorMessage );
+			throwServerError( tokenData.data, 'Failed to create PayPal vault setup token', 'create_vault_token' );
 		}
 
 		return tokenData.data.token;
@@ -1336,7 +1330,77 @@
 				frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'disable', 0 );
 			}
 		}
-		displayPaymentFailure( extractErrorMessage( err ) );
+		reportErrorToServer( err );
+	}
+
+	/**
+	 * Report a PayPal error to the server for logging and permission-aware display.
+	 *
+	 * Posts the error message and debug ID to the server endpoint.
+	 * The server logs the debug ID and returns a display message that
+	 * includes the debug ID only for authorized users.
+	 *
+	 * @param {*}      err     The error object, string, or PayPal error payload.
+	 * @param {string} context A label for where the error occurred (e.g. 'card_submit').
+	 */
+	let lastDebugId = '';
+	let lastContext = '';
+
+	function reportErrorToServer( err, context ) {
+		const errorMessage = extractErrorMessage( err );
+		const debugId = lastDebugId || ( err && err.debugId ? err.debugId : '' );
+		const errorContext = context || lastContext || '';
+		lastDebugId = '';
+		lastContext = '';
+
+		const formData = new FormData();
+		formData.append( 'action', 'frm_paypal_report_error' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+		formData.append( 'error_message', errorMessage );
+		formData.append( 'debug_id', debugId );
+		formData.append( 'context', errorContext );
+
+		fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} )
+			.then( response => response.json() )
+			.then( result => {
+				if ( result.success && result.data?.message ) {
+					displayPaymentFailure( result.data.message );
+				} else {
+					displayPaymentFailure( errorMessage );
+				}
+			} )
+			.catch( () => {
+				displayPaymentFailure( errorMessage );
+			} );
+	}
+
+	/**
+	 * Throw an Error from a server error response.
+	 *
+	 * @param {*}      data     The response data from wp_send_json_error.
+	 * @param {string} fallback Fallback message if data is unusable.
+	 */
+	function throwServerError( data, fallback, context ) {
+		let message = fallback;
+
+		if ( data && 'object' === typeof data && data.message ) {
+			message = data.message;
+			lastDebugId = data.debug_id || '';
+		} else if ( 'string' === typeof data && data ) {
+			const debugMatch = data.match( /\{\{debug_id:([^}]+)\}\}/ );
+			if ( debugMatch ) {
+				lastDebugId = debugMatch[1];
+				message = data.replace( /\{\{debug_id:[^}]+\}\}/, '' ).trim();
+			} else {
+				message = data;
+			}
+		}
+
+		lastContext = context || '';
+		throw new Error( message );
 	}
 
 	function onCancel() {
@@ -1465,7 +1529,8 @@
 	/**
 	 * Display an error message in the payment form.
 	 *
-	 * @param {string} errorMessage
+	 * @param {string} errorMessage The message to display. May contain a newline-separated
+	 *                              debug ID line when the server includes it for authorized users.
 	 * @return {void}
 	 */
 	function displayPaymentFailure( errorMessage ) {
@@ -1475,7 +1540,16 @@
 
 		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
 		if ( statusContainer ) {
-			statusContainer.textContent = errorMessage;
+			statusContainer.textContent = '';
+
+			const lines = errorMessage.split( '\n' );
+			lines.forEach( function( line, index ) {
+				if ( index > 0 ) {
+					statusContainer.appendChild( document.createElement( 'br' ) );
+				}
+				statusContainer.appendChild( document.createTextNode( line ) );
+			} );
+
 			statusContainer.style.display = 'block';
 		}
 	}
@@ -1596,7 +1670,7 @@
 			if ( running === 0 && thisForm ) {
 				enableSubmit();
 			}
-			displayPaymentFailure( extractErrorMessage( err ) );
+			reportErrorToServer( err, 'card_submit' );
 		}
 	}
 

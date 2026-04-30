@@ -437,11 +437,24 @@ class FrmPayPalLiteConnectHelper {
 		$body = self::pull_response_body( $response );
 
 		if ( empty( $body->success ) ) {
+			$error_message = 'Response from server was not successful';
+
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
-				return $body->data;
+				$error_message = $body->data;
 			}
 
-			return 'Response from server was not successful';
+			$debug_id = ! empty( $body->debug_id ) ? $body->debug_id : '';
+
+			if ( ! $debug_id && preg_match( '/\{\{debug_id:([^}]+)\}\}/', $error_message, $matches ) ) {
+				$debug_id = $matches[1];
+			}
+
+			if ( $debug_id ) {
+				$clean_message = trim( preg_replace( '/\{\{debug_id:[^}]+\}\}/', '', $error_message ) );
+				FrmPayPalLiteAppController::log_paypal_debug_id( $debug_id, $clean_message, $action );
+			}
+
+			return $error_message;
 		}
 
 		return $body->data ?? array();

@@ -355,19 +355,45 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function get_paypal_error_message( $response, $fallback ) {
+		$message = $fallback;
+
 		if ( is_object( $response ) && isset( $response->details ) && is_array( $response->details ) ) {
 			foreach ( $response->details as $detail ) {
 				if ( is_object( $detail ) && ! empty( $detail->description ) ) {
-					return (string) $detail->description;
+					$message = (string) $detail->description;
+					break;
 				}
 			}
+		} elseif ( is_object( $response ) && ! empty( $response->message ) ) {
+			$message = (string) $response->message;
 		}
 
-		if ( is_object( $response ) && ! empty( $response->message ) ) {
-			return (string) $response->message;
+		return self::maybe_append_debug_id( $message, $response );
+	}
+
+	/**
+	 * Conditionally append a PayPal debug ID to an error message.
+	 *
+	 * The debug ID is shown only to users who can edit forms, as a
+	 * troubleshooting aid.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $message  The error message.
+	 * @param mixed  $response The PayPal response that may contain a debug_id property.
+	 * @return string
+	 */
+	private static function maybe_append_debug_id( $message, $response ) {
+		if ( ! current_user_can( 'frm_edit_forms' ) ) {
+			return $message;
 		}
 
-		return $fallback;
+		$debug_id = is_object( $response ) && ! empty( $response->debug_id ) ? $response->debug_id : '';
+		if ( ! $debug_id ) {
+			return $message;
+		}
+
+		return $message . '<br>Debug ID: ' . esc_html( $debug_id );
 	}
 
 	/**

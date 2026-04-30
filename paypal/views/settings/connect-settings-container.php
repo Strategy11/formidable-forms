@@ -37,3 +37,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</em>
 	</div>
 <?php } ?>
+
+<?php
+$debug_entries    = get_option( 'frm_paypal_debug_ids', array() );
+$two_days_ago     = gmdate( 'Y-m-d H:i:s', time() - ( 2 * DAY_IN_SECONDS ) );
+$recent_entries   = array_filter(
+	is_array( $debug_entries ) ? $debug_entries : array(),
+	function ( $entry ) use ( $two_days_ago ) {
+		return ! empty( $entry['timestamp'] ) && $entry['timestamp'] >= $two_days_ago;
+	}
+);
+
+if ( $recent_entries ) {
+	?>
+	<div style="margin-top: var(--gap-lg);">
+		<h3><?php esc_html_e( 'Recent PayPal Debug IDs', 'formidable' ); ?></h3>
+		<p class="frm-description">
+			<?php esc_html_e( 'These debug IDs can be provided to PayPal support when troubleshooting payment issues.', 'formidable' ); ?>
+		</p>
+		<table class="widefat striped" style="max-width: 800px;">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Debug ID', 'formidable' ); ?></th>
+					<th><?php esc_html_e( 'Error', 'formidable' ); ?></th>
+					<th><?php esc_html_e( 'Context', 'formidable' ); ?></th>
+					<th><?php esc_html_e( 'Time', 'formidable' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $recent_entries as $entry ) { ?>
+					<tr>
+						<td><code><?php echo esc_html( $entry['debug_id'] ); ?></code></td>
+						<td><?php echo esc_html( $entry['error_message'] ); ?></td>
+						<td><?php echo esc_html( $entry['context'] ); ?></td>
+						<td><?php echo esc_html( $entry['timestamp'] ); ?></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+	</div>
+	<?php
+}
+?>

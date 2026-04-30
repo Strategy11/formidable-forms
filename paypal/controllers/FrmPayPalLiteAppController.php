@@ -241,7 +241,8 @@ class FrmPayPalLiteAppController {
 		}
 
 		if ( false === $order_response ) {
-			wp_send_json_error( 'Failed to create PayPal order' );
+			$error = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+			wp_send_json_error( self::format_paypal_error( $error, 'Failed to create PayPal order' ) );
 		}
 
 		if ( ! isset( $order_response->order_id ) ) {
@@ -603,6 +604,18 @@ class FrmPayPalLiteAppController {
 		$payment_limit  = $action->post_content['payment_limit'] ?? '';
 		$product_type   = $action->post_content['product_type'] ?? 'SERVICE';
 
+		if ( ! $product_name ) {
+			wp_send_json_error( __( 'A product name is required for subscriptions. Please update your PayPal action settings.', 'formidable' ) );
+		}
+
+		if ( ! $interval ) {
+			wp_send_json_error( __( 'A billing interval is required for subscriptions. Please update your PayPal action settings.', 'formidable' ) );
+		}
+
+		if ( ! $amount || '0.00' === $amount ) {
+			wp_send_json_error( __( 'A valid amount is required for subscriptions.', 'formidable' ) );
+		}
+
 		$data = array(
 			'amount'              => $amount,
 			'currency'            => $currency,
@@ -625,7 +638,8 @@ class FrmPayPalLiteAppController {
 		$response = FrmPayPalLiteConnectHelper::create_subscription( $data );
 
 		if ( false === $response ) {
-			wp_send_json_error( 'Failed to create PayPal subscription' );
+			$error = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+			wp_send_json_error( self::format_paypal_error( $error, 'Failed to create PayPal subscription' ) );
 		}
 
 		if ( ! isset( $response->subscription_id ) ) {
@@ -658,6 +672,82 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
+	 * Handle a PayPal error reported by the frontend JavaScript.
+	 *
+	 * Logs the debug ID and error details, then returns a display message
+	 * that includes the debug ID only when the current user has permission.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function report_error() {
+		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
+
+		$error_message = substr( FrmAppHelper::get_post_param( 'error_message', '', 'sanitize_text_field' ), 0, 500 );
+		$debug_id      = substr( FrmAppHelper::get_post_param( 'debug_id', '', 'sanitize_text_field' ), 0, 50 );
+		$context       = substr( FrmAppHelper::get_post_param( 'context', '', 'sanitize_text_field' ), 0, 100 );
+
+		if ( $debug_id ) {
+			self::log_paypal_debug_id( $debug_id, $error_message, $context );
+		}
+
+		$display_message = $error_message ?: __( 'Payment failed. Please try again.', 'formidable' );
+
+		if ( $debug_id && current_user_can( 'frm_change_settings' ) ) {
+			$display_message .= "\n\nDebug ID: " . $debug_id;
+		}
+
+		wp_send_json_success( array( 'message' => $display_message ) );
+	}
+
+	/**
+	 * Log a PayPal debug ID to the recent debug IDs option.
+	 *
+	 * Stores up to 20 entries, newest first.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $debug_id      The PayPal debug ID.
+	 * @param string $error_message The associated error message.
+	 * @param string $context       The context where the error occurred (e.g. 'create_order', 'card_submit').
+	 *
+	 * @return void
+	 */
+	public static function log_paypal_debug_id( $debug_id, $error_message = '', $context = '' ) {
+		$option_name = 'frm_paypal_debug_ids';
+		$max_entries = 20;
+		$entries     = get_option( $option_name, array() );
+
+		if ( ! is_array( $entries ) ) {
+			$entries = array();
+		}
+
+		if ( $error_message && preg_match( '/^[A-Z_]+$/', $error_message ) ) {
+			$prefixes = array( 'REFUND_FAILED_', 'REFUND_' );
+			$reason   = str_replace( $prefixes, '', $error_message );
+
+			if ( $reason !== $error_message ) {
+				$error_message = 'Refund Failed (' . ucwords( strtolower( str_replace( '_', ' ', $reason ) ) ) . ')';
+			} else {
+				$error_message = ucwords( strtolower( str_replace( '_', ' ', $error_message ) ) );
+			}
+		}
+
+		$entry = array(
+			'debug_id'      => $debug_id,
+			'error_message' => $error_message,
+			'context'       => $context,
+			'timestamp'     => gmdate( 'Y-m-d H:i:s' ),
+		);
+
+		array_unshift( $entries, $entry );
+		$entries = array_slice( $entries, 0, $max_entries );
+
+		update_option( $option_name, $entries, false );
+	}
+
+	/**
 	 * Process shortcodes in an action setting value using posted form data.
 	 *
 	 * @since x.x
@@ -687,5 +777,39 @@ class FrmPayPalLiteAppController {
 				'entry' => $entry,
 			)
 		);
+	}
+
+	/**
+	 * Parse a PayPal API error string and conditionally include the debug ID.
+	 *
+	 * The PayPal API addon embeds debug IDs using a {{debug_id:...}} delimiter.
+	 * This method strips that token and appends a human-readable debug ID line
+	 * only for users who can edit forms.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|null $error    The error string from the PayPal API, possibly containing a debug ID token.
+	 * @param string      $fallback The fallback message when no error is available.
+	 * @return string
+	 */
+	private static function format_paypal_error( $error, $fallback ) {
+		if ( ! $error ) {
+			return $fallback;
+		}
+
+		if ( ! preg_match( '/\{\{debug_id:([^}]+)\}\}/', $error, $matches ) ) {
+			return $error;
+		}
+
+		$clean_message = str_replace( $matches[0], '', $error );
+
+		if ( current_user_can( 'frm_edit_forms' ) ) {
+			return array(
+				'message'  => $clean_message,
+				'debug_id' => $matches[1],
+			);
+		}
+
+		return $clean_message;
 	}
 }
