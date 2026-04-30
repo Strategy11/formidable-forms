@@ -30,12 +30,50 @@ class FrmDefRegAction extends FrmFormAction {
 /**
  * Add paypal action.
  */
-class FrmDefPayPalAction extends FrmFormAction {
+class FrmPayPalLiteAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops          = FrmFormAction::default_action_opts( 'frm_paypal_icon frm_show_upgrade' );
-		$action_ops['color'] = '#001c64';
+		$action_ops = array(
+			'classes' => 'frmfont frm_paypal_icon frm-inverse',
+			'color'   => 'var(--primary-700)',
+		);
 
 		parent::__construct( 'paypal', 'PayPal', $action_ops );
+	}
+}
+
+/**
+ * Add paypal legacy action.
+ */
+if ( class_exists( 'FrmPaymentAction' ) ) {
+	class FrmDefPayPalLegacyAction extends FrmPaymentAction {
+		public function __construct() {
+			parent::__construct();
+
+			$this->id_base = 'paypal-legacy';
+			$this->name    = 'PayPal (Legacy)';
+		}
+	}
+}
+
+class FrmStripeLiteAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = array(
+			'classes' => 'frmfont frm_stripe_icon frm-inverse',
+			'color'   => '#635bff',
+		);
+
+		parent::__construct( 'stripe', 'Stripe', $action_ops );
+	}
+}
+
+class FrmSquareAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = array(
+			'classes' => 'frmfont frm_square_icon frm-inverse',
+			'color'   => '#000',
+		);
+
+		parent::__construct( 'square', 'Square', $action_ops );
 	}
 }
 

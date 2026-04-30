@@ -87,6 +87,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
+			'entry_data_sync'      => 'overwrite',
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
@@ -206,12 +207,14 @@ class FrmTransLiteAction extends FrmFormAction {
 					if ( 'name' === $field->type && isset( $field_atts['name'] ) ) {
 						switch ( $field_atts['name'] ) {
 							case 'billing_first_name':
+							case 'shipping_first_name':
 								echo ' (';
 								esc_html_e( 'First', 'formidable' );
 								echo ')';
 								break;
 
 							case 'billing_last_name':
+							case 'shipping_last_name':
 								echo ' (';
 								esc_html_e( 'Last', 'formidable' );
 								echo ')';

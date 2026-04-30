@@ -662,4 +662,26 @@ class FrmTransLiteActionsController {
 		FrmField::update( $submit_field->id, array( 'field_order' => $submit_order + 1 ) );
 		return $submit_order;
 	}
+
+	/**
+	 * Remove credit card validation errors.
+	 *
+	 * @param array    $errors
+	 * @param stdClass $field
+	 *
+	 * @return array
+	 */
+	public static function remove_cc_errors( $errors, $field ) {
+		$field_id = $field->temp_id ?? $field->id;
+
+		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
+			unset( $errors[ 'field' . $field_id . '-cc' ] );
+		}
+
+		if ( isset( $errors[ 'field' . $field_id ] ) ) {
+			unset( $errors[ 'field' . $field_id ] );
+		}
+
+		return $errors;
+	}
 }

@@ -11,7 +11,7 @@ class FrmFormActionsController {
 	public static $action_post_type = 'frm_form_actions';
 
 	/**
-	 * @var array|null
+	 * @var Frm_Form_Action_Factory|null
 	 */
 	public static $registered_actions;
 
@@ -57,10 +57,13 @@ class FrmFormActionsController {
 			'email'             => 'FrmEmailAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
+			'stripe'            => 'FrmStripeLiteAction',
+			'square'            => 'FrmSquareAction',
+			'paypal'            => 'FrmPayPalLiteAction',
+			'paypal-legacy'     => 'FrmDefPayPalLegacyAction',
+			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
-			'paypal'            => 'FrmDefPayPalAction',
-			'payment'           => 'FrmTransLiteAction',
 			'api'               => 'FrmDefApiAction',
 			'mailchimp'         => 'FrmDefMlcmpAction',
 			'activecampaign'    => 'FrmDefActiveCampaignAction',
@@ -83,6 +86,11 @@ class FrmFormActionsController {
 
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
+
+		// This needs to be called after we include default_actions.php or FrmDefPayPalLegacyAction will never exist.
+		if ( 'FrmPayPalLiteAction' === $action_classes['paypal'] || ! class_exists( 'FrmPaymentAction' ) || ! class_exists( 'FrmDefPayPalLegacyAction' ) ) {
+			unset( $action_classes['paypal-legacy'] );
+		}
 
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
@@ -210,6 +218,18 @@ class FrmFormActionsController {
 	 * @return array
 	 */
 	public static function form_action_groups() {
+		$payment_actions = array(
+			'paypal',
+			'paypal-legacy',
+			'stripe',
+			'square',
+			'payment',
+		);
+
+		if ( ! class_exists( 'FrmPaymentsController' ) ) {
+			$payment_actions = array_diff( $payment_actions, array( 'paypal-legacy' ) );
+		}
+
 		$groups = array(
 			'misc'      => array(
 				'name'    => '',
@@ -229,10 +249,7 @@ class FrmFormActionsController {
 			'payment'   => array(
 				'name'    => __( 'E-Commerce', 'formidable' ),
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
-				'actions' => array(
-					'paypal',
-					'payment',
-				),
+				'actions' => $payment_actions,
 			),
 			'marketing' => array(
 				'name'    => __( 'Marketing', 'formidable' ),
@@ -524,6 +541,7 @@ class FrmFormActionsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
+		$action_key   = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
 		$action_type  = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
 		$lite_actions = array_fill_keys( self::get_lite_actions(), true );
 
@@ -532,8 +550,6 @@ class FrmFormActionsController {
 		}
 
 		global $frm_vars;
-
-		$action_key = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
 
 		/**
 		 * @var FrmFormAction

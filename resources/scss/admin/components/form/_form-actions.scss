@@ -220,3 +220,16 @@
 		}
 	}
 }
+
+.frm_square_action .frm_square_icon {
+	position: relative;
+	top: 2px;
+	left: 1px;
+	zoom: 1.2;
+}
+
+.frm-border-icon .frm_square_icon {
+	width: 22px;
+	height: 22px;
+	overflow: visible;
+}

@@ -3,12 +3,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+$limit = $action_control->action_options['limit'];
+
+if ( 'paypal' === $action_control->id_base ) {
+	// The PayPal add-on may overwrite this so change it back.
+	$limit = 1;
+}
+
 $single_action_attrs = array_merge(
 	$data,
 	array(
 		'href'            => 'javascript:void(0)',
 		'class'           => $classes . ' button frm-button-secondary frm-button-sm frm-with-icon frm-ml-auto-force frm-fadein-down-short',
-		'data-limit'      => $action_control->action_options['limit'],
+		'data-limit'      => $limit,
 		'data-actiontype' => $action_control->id_base,
 	)
 );

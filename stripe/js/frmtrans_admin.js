@@ -18,36 +18,44 @@
 	function toggleOpts( opt, show, c ) {
 		const opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
 		if ( show ) {
-			opts.show();
+			opts.css( 'display', '' );
+			opts.removeClass( 'frm_hidden' );
 		} else {
-			opts.hide();
+			opts.css( 'display', 'none' );
+			opts.addClass( 'frm_hidden' );
 		}
 	}
 
 	function toggleGateway() {
-		if ( ! this.checked ) {
-			return;
-		}
-
 		const gateway = this.value;
 		const { checked } = this;
 
 		toggleOpts( this, checked, `.show_${ gateway }` );
 
-		const toggleOff = 'stripe' === gateway ? 'square' : 'stripe';
+		const gateways = [ 'stripe', 'square', 'paypal' ];
+		const toggleOff = gateways.filter( g => g !== gateway );
+
 		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
 		const showClass = `show_${ settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' ) }`;
-		const gatewaySettings = settings.get( 0 ).querySelectorAll( `.show_${ toggleOff }` );
 
-		gatewaySettings.forEach(
-			setting => {
-				if ( ! setting.classList.contains( showClass ) ) {
-					setting.style.display = 'none';
-				}
+		toggleOff.forEach(
+			function( gateway ) {
+				const gatewaySettings = settings.get( 0 ).querySelectorAll( `.show_${ gateway }` );
+				gatewaySettings.forEach(
+					setting => {
+						if ( ! setting.classList.contains( showClass ) ) {
+							setting.style.display = 'none';
+						}
+					}
+				);
 			}
 		);
 
 		wp.hooks.doAction( 'frm_trans_toggled_gateway', { gateway, checked, settings } );
+
+		document.querySelectorAll( '.frm-billing-section-heading' ).forEach( function( el ) {
+			el.textContent = gateway === 'paypal' ? el.dataset.billingLabel : el.dataset.customerLabel;
+		} );
 	}
 
 	function frmTransLiteAdminJS() {
@@ -56,7 +64,19 @@
 				const actions = document.getElementById( 'frm_notification_settings' );
 				if ( actions ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
-					jQuery( '.frm_form_settings' ).on( 'change', '.frm_gateway_opt input', toggleGateway );
+
+					document.addEventListener(
+						'change',
+						function( event ) {
+							if ( ! event.target || ! event.target.checked || 'radio' !== event.target.type ) {
+								return;
+							}
+
+							if ( event.target.closest( '.frm-long-icon-buttons' ) && event.target.closest( '.frm_form_action_settings' ) ) {
+								toggleGateway.call( event.target );
+							}
+						}
+					);
 				}
 
 				document.querySelectorAll( '.frm_trans_ajax_link' ).forEach(

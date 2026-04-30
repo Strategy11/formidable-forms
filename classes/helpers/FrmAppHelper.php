@@ -4010,7 +4010,8 @@ class FrmAppHelper {
 
 		$stripe_connected      = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
 		$square_connected      = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
-		$gateway_connected     = $stripe_connected || $square_connected;
+		$paypal_connected      = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+		$gateway_connected     = $stripe_connected || $square_connected || $paypal_connected;
 		$payments_settings_url = FrmStrpLiteAppController::get_payments_settings_url();
 
 		if ( ! $gateway_connected ) {

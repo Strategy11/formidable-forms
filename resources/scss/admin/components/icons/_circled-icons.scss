@@ -59,6 +59,10 @@
 			height: 14px;
 		}
 	}
+
+	&:has(.frm-inverse) {
+		border-color: transparent;
+	}
 }
 
 .frm-upgrade-message img {

@@ -72,7 +72,7 @@ class FrmSquareLiteConnectHelper {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-card-item frm4">
-			<div class="frm-flex-col">
+			<div class="frm-flex-col" style="width: 100%;">
 				<div>
 					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
 						<?php
@@ -181,10 +181,6 @@ class FrmSquareLiteConnectHelper {
 		$body    = array_merge( $body, $additional_body );
 		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
-
-		if ( ! $headers ) {
-			return 'Unable to build headers for post. Is your pro license configured properly?';
-		}
 
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;
