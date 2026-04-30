@@ -78,10 +78,6 @@
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
-	<rule ref="Formidable.PHPUnit.PreferAssertArrayHasKey" />
-	<rule ref="Formidable.PHPUnit.PreferAssertStringContains" />
-	<rule ref="Formidable.PHPUnit.PreferAssertContains" />
-	<rule ref="Formidable.PHPUnit.PreferAssertFileExists" />
 
 	<!-- Commenting -->
 	<rule ref="Formidable.Commenting.AddBoolReturnTag" />
