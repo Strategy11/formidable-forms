@@ -7788,11 +7788,11 @@ window.frmAdminBuildJS = function() {
 	function moveFieldSettings( singleField ) {
 		const self = this;
 
-		if ( singleField === null ) {
-			// The field may have not been loaded yet via ajax.
-			return;
-		}
-
+		// Always initialize instance properties first so that `new moveFieldSettings()` (no
+		// argument) always produces an object with .append() and .moveFields() available.
+		// Keeping setup above the null/undefined guard prevents the minifier from collapsing
+		// the two conditions into a single `if (e) return [all setup]`, which would skip
+		// setup entirely for the constructor-call case (singleField === undefined, falsy).
 		this.fragment = document.createDocumentFragment();
 
 		this.initOnceInAllInstances = function() {
@@ -7817,19 +7817,13 @@ window.frmAdminBuildJS = function() {
 
 		this.initOnceInAllInstances();
 
-		// Move the field if function is called as function with a singleField passed as arg.
-		// In this particular case only 1 field is needed to be moved so the field will get instantly moved.
-		// "singleField" may be undefined when it's called as a constructor instead of a function. Use the constructor to add multiple fields which are passed through "append" and move these all at once via "moveFields".
-		if ( singleField !== undefined ) {
+		// Move the field immediately when called as a plain function with a real element.
+		// Skip when singleField is null (field not loaded yet via ajax) or undefined
+		// (called as a constructor to batch-append multiple fields via .append()/.moveFields()).
+		if ( singleField !== null && singleField !== undefined ) {
 			this.append( singleField );
 			this.moveFields();
-			return;
 		}
-
-		return {
-			append: this.append,
-			moveFields: this.moveFields
-		};
 	}
 
 	function showEmailRow() {
@@ -11365,6 +11359,240 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		}
 	} );
 };
+
+/**
+ * Gated Content form action — add/remove item rows and type switching.
+ *
+ * Uses document-level event delegation so it works both for actions already on
+ * the page and for actions loaded dynamically via AJAX (frm_form_action_fill /
+ * frm_added_form_action).
+ *
+ * Each item row stores its active type in a <select class="frm-gc-item-type">.
+ * Type-specific settings live in <div class="frm-gc-type-settings" data-type="…">
+ * children. Only the active type's settings div is visible and has its [id]
+ * select named — preventing duplicate field names on form submit.
+ *
+ * @since x.x
+ */
+( function() {
+	/**
+	 * Show the active type's settings panel and assign field names.
+	 * Hide and strip names from all other type panels.
+	 *
+	 * Handles any number of `data-frm-gc-field` elements per type panel,
+	 * assigning `name="${base}[${fieldKey}]"` when active and removing it when not.
+	 *
+	 * @param {HTMLElement} itemRow - A .frm_gc_item_row element.
+	 */
+	function frmGcActivateType( itemRow ) {
+		const typeSelect = itemRow.querySelector( '.frm-gc-item-type' );
+		const activeType = typeSelect.value;
+
+		// Derive the item base (e.g. "frm_form_action[X][post_content][items][2]")
+		// from the type select's name by stripping the trailing "[type]" segment.
+		const base = typeSelect.name.replace( /\[type\]$/, '' );
+
+		itemRow.querySelectorAll( '.frm-gc-type-settings' ).forEach( typeDiv => {
+			const isActive = typeDiv.dataset.type === activeType;
+			typeDiv.toggleAttribute( 'hidden', ! isActive );
+
+			// Assign or remove names for all fields in this type panel.
+			typeDiv.querySelectorAll( '[data-frm-gc-field]' ).forEach( field => {
+				const fieldKey = field.dataset.frmGcField;
+				if ( isActive ) {
+					field.name = `${base}[${fieldKey}]`;
+				} else {
+					field.removeAttribute( 'name' );
+				}
+			} );
+		} );
+	}
+
+	/**
+	 * Re-index all item rows after an addition or removal.
+	 *
+	 * Keeps name and id attributes contiguous so the submitted PHP array has no
+	 * gaps and for/id pairs remain unique. Called after every add or remove.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} wrapper - The .frm_gated_content_settings element.
+	 * @return {void}
+	 */
+	function frmGcReindexItems( wrapper ) {
+		const addBtn    = wrapper.querySelector( '.frm_gc_add_item' );
+		const fieldBase = addBtn ? addBtn.dataset.fieldNameBase : '';
+		const rows      = wrapper.querySelectorAll( '.frm_gc_item_row' );
+
+		rows.forEach( ( row, idx ) => {
+			const typeSelect = row.querySelector( '.frm-gc-item-type' );
+			if ( typeSelect && fieldBase ) {
+				typeSelect.name = `${fieldBase}[${idx}][type]`;
+			}
+			frmGcAssignItemIds( row, wrapper.id, idx );
+			frmGcActivateType( row );
+		} );
+
+		wrapper.dataset.itemCount = rows.length;
+	}
+
+	/**
+	 * Assign id and for attributes to a cloned template row.
+	 *
+	 * Template labels use data-frm-gc-for="KEY" and selects use data-frm-gc-field="KEY"
+	 * instead of for/id attributes to avoid duplicate IDs before cloning. This function
+	 * assigns real id/for pairs using the wrapper ID and item index as a unique prefix.
+	 *
+	 * Handles any number of `data-frm-gc-field` elements per type panel so that
+	 * Pro types with multiple selects (e.g. form_id + id for frm_file) work correctly.
+	 *
+	 * @param {HTMLElement} itemRow       - The .frm_gc_item_row element already in the DOM.
+	 * @param {string}      wrapperBaseId - The wrapper element's id attribute value.
+	 * @param {number}      idx           - Zero-based item index used for unique IDs.
+	 */
+	function frmGcAssignItemIds( itemRow, wrapperBaseId, idx ) {
+		// Type select.
+		const typeSelect = itemRow.querySelector( '[data-frm-gc-field="type"]' );
+		if ( typeSelect ) {
+			typeSelect.id = `${wrapperBaseId}_type_${idx}`;
+			const typeLabel = itemRow.querySelector( '[data-frm-gc-for="type"]' );
+			if ( typeLabel ) {
+				typeLabel.htmlFor = typeSelect.id;
+			}
+		}
+
+		// Per-type fields — each type panel can have multiple data-frm-gc-field elements.
+		itemRow.querySelectorAll( '.frm-gc-type-settings' ).forEach( typeDiv => {
+			const type = typeDiv.dataset.type;
+			typeDiv.querySelectorAll( '[data-frm-gc-field]' ).forEach( field => {
+				const fieldKey = field.dataset.frmGcField;
+				field.id = `${wrapperBaseId}_${fieldKey}_${type}_${idx}`;
+				const label = typeDiv.querySelector( `[data-frm-gc-for="${fieldKey}"]` );
+				if ( label ) {
+					label.htmlFor = field.id;
+				}
+			} );
+		} );
+	}
+
+	/**
+	 * Filter the file field select to show only options matching the selected form.
+	 *
+	 * When a .frm-gc-file-form-select changes, all options in the sibling file-field
+	 * select ([data-frm-gc-field="id"]) are shown or hidden based on their data-form-id.
+	 * Options without data-form-id are always shown (e.g. the empty placeholder).
+	 *
+	 * @param {HTMLElement} formSelect - A .frm-gc-file-form-select element.
+	 */
+	function frmGcFilterFileFields( formSelect ) {
+		const typeDiv    = formSelect.closest( '.frm-gc-type-settings' );
+		const fieldSelect = typeDiv && typeDiv.querySelector( '[data-frm-gc-field="id"]' );
+		if ( ! fieldSelect ) {
+			return;
+		}
+
+		const selectedFormId = formSelect.value;
+
+		Array.from( fieldSelect.options ).forEach( option => {
+			const optFormId = option.dataset.formId;
+			if ( ! optFormId ) {
+				// Placeholder option — always visible.
+				option.hidden = false;
+				return;
+			}
+			option.hidden = Boolean( selectedFormId ) && optFormId !== selectedFormId;
+		} );
+
+		// If the currently selected field option is now hidden, reset the select.
+		const selected = fieldSelect.options[ fieldSelect.selectedIndex ];
+		if ( selected && selected.hidden ) {
+			fieldSelect.value = '';
+		}
+	}
+
+	/**
+	 * Temporarily swap the button icon and aria-label to confirm a successful copy.
+	 *
+	 * @param {HTMLElement} btn - The .frm_gc_copy_shortcode button element.
+	 */
+	function frmGcShowCopied( btn ) {
+		const use          = btn.querySelector( 'use' );
+		const originalHref = use.getAttribute( 'href' );
+		const originalLabel = btn.getAttribute( 'aria-label' );
+
+		use.setAttribute( 'href', '#frm_checkmark_icon' );
+		btn.setAttribute( 'aria-label', btn.dataset.copiedLabel || 'Copied!' );
+
+		setTimeout( () => {
+			use.setAttribute( 'href', originalHref );
+			btn.setAttribute( 'aria-label', originalLabel );
+		}, 1500 );
+	}
+
+	document.addEventListener( 'click', function( event ) {
+		const addBtn = event.target.closest( '.frm_gc_add_item' );
+		if ( addBtn ) {
+			const wrapper  = addBtn.closest( '.frm_gated_content_settings' );
+			const list     = wrapper.querySelector( '.frm_gc_items_list' );
+			const template = wrapper.querySelector( '.frm_gc_item_template' );
+
+			list.appendChild( template.content.cloneNode( true ) );
+			frmGcReindexItems( wrapper );
+			return;
+		}
+
+		const removeBtn = event.target.closest( '.frm_gc_remove_item' );
+		if ( removeBtn ) {
+			const wrapper = removeBtn.closest( '.frm_gated_content_settings' );
+			removeBtn.closest( '.frm_gc_item_row' ).remove();
+			frmGcReindexItems( wrapper );
+			return;
+		}
+
+		const copyBtn = event.target.closest( '.frm_gc_copy_shortcode' );
+		if ( copyBtn ) {
+			const text = copyBtn.dataset.frmCopy;
+			if ( navigator.clipboard && navigator.clipboard.writeText ) {
+				navigator.clipboard.writeText( text ).then( () => frmGcShowCopied( copyBtn ) );
+			} else {
+				// Fallback for browsers without Clipboard API.
+				const textarea = document.createElement( 'textarea' );
+				textarea.value = text;
+				textarea.style.cssText = 'position:fixed;opacity:0;';
+				document.body.appendChild( textarea );
+				textarea.select();
+				document.execCommand( 'copy' );
+				document.body.removeChild( textarea );
+				frmGcShowCopied( copyBtn );
+			}
+		}
+	} );
+
+	document.addEventListener( 'change', function( event ) {
+		const typeSelect = event.target.closest( '.frm-gc-item-type' );
+		if ( typeSelect ) {
+			frmGcActivateType( typeSelect.closest( '.frm_gc_item_row' ) );
+			return;
+		}
+
+		const fileFormSelect = event.target.closest( '.frm-gc-file-form-select' );
+		if ( fileFormSelect ) {
+			frmGcFilterFileFields( fileFormSelect );
+		}
+	} );
+
+	// Show/hide "Keep old token when entry is updated" when the event multi-select changes.
+	jQuery( document ).on( 'frm-multiselect-changed', 'select[id^="event_"]', function() {
+		const section = document.querySelector( '.frm_gc_update_section[data-frm-gc-event-id="' + this.id + '"]' );
+		if ( ! section ) {
+			return;
+		}
+		const hasUpdate = Array.from( this.options ).some( function( o ) {
+			return o.selected && 'update' === o.value;
+		} );
+		section.hidden = ! hasUpdate;
+	} );
+}() );
 
 window.frmImportCsv = formID => {
 	let urlVars = '';

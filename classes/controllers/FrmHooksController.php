@@ -112,6 +112,18 @@ class FrmHooksController {
 		// Summary emails.
 		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
 
+		// Gated Content — daily cleanup of expired tokens.
+		add_action( 'frm_daily_event', 'FrmGatedTokenHelper::cleanup_expired' );
+
+		// Gated Content Controller.
+		add_action( 'frm_trigger_gated_content_action', 'FrmGatedContentController::trigger', 10, 4 );
+		// pre_get_posts: allows private pages into the query when a valid token is present.
+		add_action( 'pre_get_posts', 'FrmGatedContentController::maybe_include_private_pages' );
+		// 'wp' fires after WP::query_posts() so get_queried_object_id() is available.
+		add_action( 'wp', 'FrmGatedContentController::maybe_unlock_post' );
+		add_action( 'before_delete_post', 'FrmGatedContentController::on_action_deleted', 10, 2 );
+		add_shortcode( 'frm_gated_content', 'FrmGatedContentController::shortcode' );
+
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
 		FrmSquareLiteHooksController::load_hooks();
