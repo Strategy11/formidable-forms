@@ -10930,6 +10930,11 @@ window.frmAdminBuildJS = function() {
 			jQuery( document ).on( 'frmAfterSearch', '#actions-search-input', toggleFormActionsNoResultsVisibility );
 			initiateMultiselect();
 
+			// Reflect the at-limit state on action triggers when the page loads (e.g. one-per-form actions like Post or Quiz).
+			document.querySelectorAll( '.frm_actions_list a[data-actiontype]' ).forEach(
+				trigger => checkActiveAction( trigger.dataset.actiontype )
+			);
+
 			jQuery( '.frm_submit_settings_btn' ).on( 'click', submitSettings );
 
 			addFormNameModalEvents();
