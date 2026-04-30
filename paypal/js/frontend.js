@@ -985,12 +985,29 @@
 
 	/**
 	 * Handle click on the Apple Pay button.
-	 * Creates an ApplePaySession synchronously (required by Apple) and processes the payment via PayPal.
+	 * Fetches the price asynchronously, then creates an ApplePaySession and processes the payment via PayPal.
 	 */
-	function onApplePayButtonClick() {
+	async function onApplePayButtonClick() {
 		if ( ! applePayConfig ) {
 			console.error( 'Apple Pay config not available' );
 			return;
+		}
+
+		let amount = '0.00';
+
+		// Try to fetch the actual price from the server.
+		try {
+			amount = await new Promise( ( resolve, reject ) => {
+				getPrice( result => {
+					if ( result?.data?.amount ) {
+						resolve( String( result.data.amount ) );
+					} else {
+						reject( new Error( 'No amount' ) );
+					}
+				} );
+			} );
+		} catch ( e ) {
+			// Fall back to form total if we can't get the price from server.
 		}
 
 		const paymentRequest = {
@@ -1001,7 +1018,7 @@
 			total: {
 				label: document.title || 'Payment',
 				type: 'final',
-				amount: getFormTotal(),
+				amount: amount,
 			},
 		};
 
@@ -1050,19 +1067,6 @@
 		};
 
 		session.begin();
-	}
-
-	/**
-	 * Get the form total amount as a string.
-	 *
-	 * @return {string} The total amount.
-	 */
-	function getFormTotal() {
-		const totalField = thisForm.querySelector( '[data-frmtotal]' );
-		if ( totalField?.value ) {
-			return parseFloat( totalField.value ).toFixed( 2 );
-		}
-		return '0.00';
 	}
 
 	// ---- AJAX / Order Creation ----
