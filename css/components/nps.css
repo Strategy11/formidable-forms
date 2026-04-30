@@ -1,0 +1,33 @@
+.frm-nps__buttons {
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.frm-nps__button {
+	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	font-size: var(--text-sm);
+	color: var(--grey-900);
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+	cursor: pointer;
+	transition: background-color 150ms ease-out,
+		border-color 150ms ease-out,
+		color 150ms ease-out;
+}
+
+.frm-nps__button:hover,
+.frm-nps__button:focus,
+.frm-nps__buttons input[type="radio"]:focus + .frm-nps__button,
+.frm-nps__buttons input[type="radio"]:checked + .frm-nps__button,
+.frm-nps__button.frm-nps__button--active {
+	background-color: var(--primary-500);
+	border-color: var(--primary-500);
+	color: #fff;
+}
+
+.frm-nps__statements {
+	font-size: var(--text-xs);
+	color: var(--grey-500);
+}
