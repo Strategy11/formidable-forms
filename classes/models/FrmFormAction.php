@@ -167,9 +167,10 @@ class FrmFormAction {
 		$action_options['group'] = $group['id'];
 
 		if ( ! isset( $action_options['color'] ) ) {
-			$colors = array( 'green', 'orange', 'purple' );
-			shuffle( $colors );
-			$action_options['color'] = 'var(--' . reset( $colors ) . ')';
+			// Deterministic fallback so all instances of the same action type render with the same color across requests.
+			$colors                  = array( 'green', 'orange', 'purple' );
+			$index                   = abs( crc32( $id_base ) ) % count( $colors );
+			$action_options['color'] = 'var(--' . $colors[ $index ] . ')';
 		}
 
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
