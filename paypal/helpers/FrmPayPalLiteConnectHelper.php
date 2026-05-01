@@ -452,6 +452,11 @@ class FrmPayPalLiteConnectHelper {
 			if ( $debug_id ) {
 				$clean_message = trim( preg_replace( '/\{\{debug_id:[^}]+\}\}/', '', $error_message ) );
 				FrmPayPalLiteAppController::log_paypal_debug_id( $debug_id, $clean_message, $action );
+				// Return structured error with debug_id so it can be passed to JavaScript
+				return array(
+					'message' => $clean_message ?: $error_message,
+					'debug_id' => $debug_id,
+				);
 			}
 
 			return $error_message;

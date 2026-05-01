@@ -252,6 +252,10 @@ class FrmPayPalLiteAppController {
 		}
 
 		if ( ! isset( $order_response->order_id ) ) {
+			// Check if the response is a structured error with debug_id
+			if ( isset( $order_response->message ) && isset( $order_response->debug_id ) ) {
+				wp_send_json_error( self::format_paypal_error( $order_response->message . '{{debug_id:' . $order_response->debug_id . '}}', 'Failed to create PayPal order' ) );
+			}
 			wp_send_json_error( 'Failed to create PayPal order' );
 		}
 
@@ -837,14 +841,12 @@ class FrmPayPalLiteAppController {
 		}
 
 		$clean_message = str_replace( $matches[0], '', $error );
+		$clean_message = trim( $clean_message );
 
-		if ( current_user_can( 'frm_edit_forms' ) ) {
-			return array(
-				'message'  => $clean_message,
-				'debug_id' => $matches[1],
-			);
-		}
-
-		return $clean_message;
+		// Always return structured error with debug_id so JavaScript can extract and send it
+		return array(
+			'message'  => $clean_message ?: $fallback,
+			'debug_id' => $matches[1],
+		);
 	}
 }

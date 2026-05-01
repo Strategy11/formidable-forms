@@ -1352,7 +1352,14 @@
 
 	function reportErrorToServer( err, context ) {
 		const errorMessage = extractErrorMessage( err );
-		const debugId = lastDebugId || ( err && err.debugId ? err.debugId : '' );
+		// Extract debug ID from error message if it's in {{debug_id:...}} format
+		let debugId = lastDebugId || ( err && err.debugId ? err.debugId : '' );
+		const debugIdMatch = errorMessage.match( /\{\{debug_id:([^}]+)\}\}/ );
+		if ( debugIdMatch && debugIdMatch[1] ) {
+			debugId = debugIdMatch[1];
+			// Remove the debug ID from the error message for display
+			errorMessage = errorMessage.replace( /\{\{debug_id:[^}]+\}\}/, '' ).trim();
+		}
 		const errorContext = context || lastContext || '';
 		lastDebugId = '';
 		lastContext = '';
