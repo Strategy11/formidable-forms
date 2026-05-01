@@ -195,6 +195,12 @@ class FrmPayPalLiteAppController {
 	public static function create_order() {
 		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
 
+		// Check if PayPal is connected before attempting to create an order.
+		$connection_check = self::check_paypal_connection();
+		if ( is_wp_error( $connection_check ) ) {
+			wp_send_json_error( $connection_check->get_error_message() );
+		}
+
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
 		if ( ! $form_id ) {
@@ -575,6 +581,12 @@ class FrmPayPalLiteAppController {
 	public static function create_subscription() {
 		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
 
+		// Check if PayPal is connected before attempting to create a subscription.
+		$connection_check = self::check_paypal_connection();
+		if ( is_wp_error( $connection_check ) ) {
+			wp_send_json_error( $connection_check->get_error_message() );
+		}
+
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
 		if ( ! $form_id ) {
@@ -777,6 +789,29 @@ class FrmPayPalLiteAppController {
 				'entry' => $entry,
 			)
 		);
+	}
+
+	/**
+	 * Check if PayPal is connected before attempting to create an order or subscription.
+	 *
+	 * @since x.x
+	 *
+	 * @return true|WP_Error True if connected, WP_Error with message if not connected.
+	 */
+	private static function check_paypal_connection() {
+		$merchant_id = FrmPayPalLiteConnectHelper::get_merchant_id();
+
+		if ( ! $merchant_id ) {
+			$message = __( 'PayPal is not connected. Please connect your PayPal account to process payments.', 'formidable' );
+
+			if ( current_user_can( 'frm_change_settings' ) ) {
+				$message .= ' ' . __( 'You can connect PayPal in Global Settings, under the Payments section.', 'formidable' );
+			}
+
+			return new WP_Error( 'paypal_not_connected', $message );
+		}
+
+		return true;
 	}
 
 	/**
