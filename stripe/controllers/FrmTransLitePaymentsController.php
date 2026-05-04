@@ -219,10 +219,18 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				$refunded = FrmSquareLiteConnectHelper::refund_payment( $payment->receipt_id );
 				break;
 			case 'paypal':
-				$refunded = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
+				$response = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
 
-				if ( false === $refunded ) {
+				// Check for structured error response with message and debug_id
+				if ( is_object( $response ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+					$refunded = false;
+					$reason = $response->message;
+					$debug_id = $response->debug_id;
+				} elseif ( false === $response ) {
+					$refunded = false;
 					$reason = self::get_paypal_refund_reason();
+				} else {
+					$refunded = true;
 				}
 
 				break;
@@ -242,11 +250,15 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$message .= ' (' . $reason . ')';
 		}
 
+		if ( ! empty( $debug_id ) ) {
+			$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
+		}
+
 		wp_die(
 			sprintf(
 				'<div class="%1$s">%2$s</div>',
 				$refunded ? 'frm_updated_message' : 'frm_error_style',
-				esc_html( $message )
+				$message
 			)
 		);
 	}

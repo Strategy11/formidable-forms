@@ -468,14 +468,18 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$found_gateway   = false;
 
-		foreach ( $action_settings as $action ) {
+		foreach ( $action_settings as &$action ) {
 			$gateways = $action['gateways'];
 
 			if ( ! $gateways || in_array( 'stripe', (array) $gateways, true ) ) {
 				$found_gateway = true;
-				break;
+			}
+
+			if ( ! empty( $action['layout'] ) && ! in_array( $action['layout'], array( 'accordion', 'tabs' ), true ) ) {
+				$action['layout'] = '';
 			}
 		}
+		unset( $action );
 
 		if ( ! $found_gateway ) {
 			return;

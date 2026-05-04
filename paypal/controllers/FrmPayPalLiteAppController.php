@@ -658,6 +658,11 @@ class FrmPayPalLiteAppController {
 			wp_send_json_error( self::format_paypal_error( $error, 'Failed to create PayPal subscription' ) );
 		}
 
+		// Check if response is a structured error with message and debug_id (array or object)
+		if ( ( is_array( $response ) || is_object( $response ) ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+			wp_send_json_error( $response );
+		}
+
 		if ( ! isset( $response->subscription_id ) ) {
 			wp_send_json_error( 'Failed to create PayPal subscription' );
 		}
@@ -834,6 +839,11 @@ class FrmPayPalLiteAppController {
 	private static function format_paypal_error( $error, $fallback ) {
 		if ( ! $error ) {
 			return $fallback;
+		}
+
+		// If error is already a structured array with message and debug_id, return it directly
+		if ( is_array( $error ) && isset( $error['message'] ) && isset( $error['debug_id'] ) ) {
+			return $error;
 		}
 
 		if ( ! preg_match( '/\{\{debug_id:([^}]+)\}\}/', $error, $matches ) ) {

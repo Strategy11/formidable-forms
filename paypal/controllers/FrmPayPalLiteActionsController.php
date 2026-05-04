@@ -393,7 +393,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return $message;
 		}
 
-		return $message . '<br>Debug ID: ' . esc_html( $debug_id );
+		return $message . '<br><br>Debug ID: ' . esc_html( $debug_id );
 	}
 
 	/**
@@ -451,9 +451,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// Only block on known non-recoverable errors. For pending states
 		// or unknown issues (empty details from PayPal), create a pending
 		// payment and let the webhook resolve it.
-		$non_recoverable = array( 'INSTRUMENT_DECLINED', 'PAYER_CANNOT_PAY', 'MAX_NUMBER_OF_PAYMENT_ATTEMPTS_EXCEEDED' );
+		$non_recoverable = array( 'INSTRUMENT_DECLINED', 'PAYER_CANNOT_PAY', 'MAX_NUMBER_OF_PAYMENT_ATTEMPTS_EXCEEDED', 'AUTHENTICATION_FAILURE' );
 		if ( in_array( $issue, $non_recoverable, true ) ) {
-			return self::get_paypal_error_message( $response, __( 'Failed to capture order.', 'formidable' ) );
+			// Convert issue code to human-readable message
+			$error_message = self::convert_issue_to_message( $issue );
+			return self::get_paypal_error_message( $response, $error_message );
 		}
 
 		$atts['status']         = 'pending';
@@ -494,6 +496,33 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Convert a PayPal issue code to a human-readable error message.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $issue The issue code (e.g. AUTHENTICATION_FAILURE).
+	 * @return string The human-readable error message.
+	 */
+	private static function convert_issue_to_message( $issue ) {
+		// Map of common PayPal issue codes to human-readable messages
+		$issue_map = array(
+			'AUTHENTICATION_FAILURE' => 'PayPal payment failed: Authentication failure',
+			'INSTRUMENT_DECLINED' => 'PayPal payment failed: Payment instrument declined',
+			'PAYER_CANNOT_PAY' => 'PayPal payment failed: Payer cannot pay',
+			'MAX_NUMBER_OF_PAYMENT_ATTEMPTS_EXCEEDED' => 'PayPal payment failed: Maximum payment attempts exceeded',
+		);
+
+		// Check if the issue is in our map
+		$upper_issue = strtoupper( $issue );
+		if ( isset( $issue_map[ $upper_issue ] ) ) {
+			return $issue_map[ $upper_issue ];
+		}
+
+		// Fallback: convert underscores to spaces and title case
+		return 'PayPal payment failed: ' . ucwords( strtolower( str_replace( '_', ' ', $issue ) ) );
 	}
 
 	/**

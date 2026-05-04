@@ -1128,7 +1128,8 @@
 
 		if ( ! response.ok ) {
 			thisForm.classList.remove( 'frm_loading_form' );
-			throw new Error( 'Failed to create PayPal subscription' );
+			const errorData = await response.json();
+			throwServerError( errorData.data, 'Failed to create PayPal subscription', 'create_subscription' );
 		}
 
 		const orderData = await response.json();
