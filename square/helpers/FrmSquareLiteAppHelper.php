@@ -59,9 +59,7 @@ class FrmSquareLiteAppHelper {
 	 * @return void
 	 */
 	public static function fee_education( $content = 'tip', $gateway = false ) {
-		$license_type = FrmAddonsController::license_type();
-
-		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
 			return;
 		}
 
