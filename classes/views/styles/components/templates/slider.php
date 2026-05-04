@@ -8,13 +8,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-top-bottom' ); ?>
-					<span class="frm-slider" tabindex="0">
-						<span class="frm-slider-active-track">
-							<span class="frm-slider-bullet">
-								<span class="frm-slider-value-label"><?php echo (int) $component['vertical']['value']; ?></span>
-							</span>
-						</span>
-					</span>
+					<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['vertical']['value'] ); ?>" />
 				</div>
 				<div class="frm-slider-value">
 					<input aria-label="<?php esc_attr_e( 'Vertical value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['vertical']['value'] ); ?>" />
@@ -30,13 +24,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-top' ); ?>
-					<span class="frm-slider" tabindex="0">
-						<span class="frm-slider-active-track">
-							<span class="frm-slider-bullet">
-								<span class="frm-slider-value-label"><?php echo (int) $component['top']['value']; ?></span>
-							</span>
-						</span>
-					</span>
+					<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['top']['value'] ); ?>" />
 				</div>
 				<div class="frm-slider-value">
 					<input aria-label="<?php esc_attr_e( 'Top value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['top']['value'] ); ?>" />
@@ -52,13 +40,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-bottom' ); ?>
-					<span class="frm-slider" tabindex="0">
-						<span class="frm-slider-active-track">
-							<span class="frm-slider-bullet">
-								<span class="frm-slider-value-label"><?php echo (int) $component['bottom']['value']; ?></span>
-							</span>
-						</span>
-					</span>
+					<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['bottom']['value'] ); ?>" />
 				</div>
 				<div class="frm-slider-value">
 					<input aria-label="<?php esc_attr_e( 'Bottom value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['bottom']['value'] ); ?>" />
@@ -74,13 +56,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-left-right' ); ?>
-					<span class="frm-slider" tabindex="0">
-						<span class="frm-slider-active-track">
-							<span class="frm-slider-bullet">
-								<span class="frm-slider-value-label"><?php echo (int) $component['horizontal']['value']; ?></span>
-							</span>
-						</span>
-					</span>
+					<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['horizontal']['value'] ); ?>" />
 				</div>
 				<div class="frm-slider-value">
 					<input aria-label="<?php esc_attr_e( 'Horizontal value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['horizontal']['value'] ); ?>" />
@@ -96,13 +72,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-left' ); ?>
-					<span class="frm-slider" tabindex="0">
-						<span class="frm-slider-active-track">
-							<span class="frm-slider-bullet">
-								<span class="frm-slider-value-label"><?php echo (int) $component['left']['value']; ?></span>
-							</span>
-						</span>
-					</span>
+					<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['left']['value'] ); ?>" />
 				</div>
 				<div class="frm-slider-value">
 					<input aria-label="<?php esc_attr_e( 'Left value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['left']['value'] ); ?>" />
@@ -118,13 +88,7 @@ if ( $component['has-multiple-values'] ) : ?>
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-right' ); ?>
-					<span class="frm-slider" tabindex="0">
-						<span class="frm-slider-active-track">
-							<span class="frm-slider-bullet">
-								<span class="frm-slider-value-label"><?php echo (int) $component['right']['value']; ?></span>
-							</span>
-						</span>
-					</span>
+					<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['right']['value'] ); ?>" />
 				</div>
 				<div class="frm-slider-value">
 					<input aria-label="<?php esc_attr_e( 'Right value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['right']['value'] ); ?>" />
@@ -147,13 +111,7 @@ if ( $component['has-multiple-values'] ) : ?>
 						<?php if ( ! empty( $component['icon'] ) ) : ?>
 							<?php FrmAppHelper::icon_by_class( $component['icon'] ); ?>
 						<?php endif; ?>
-						<span class="frm-slider" tabindex="0">
-							<span class="frm-slider-active-track">
-								<span class="frm-slider-bullet">
-									<span class="frm-slider-value-label"><?php echo (int) $field_value; ?></span>
-								</span>
-							</span>
-						</span>
+						<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
 					</div>
 					<div class="frm-slider-value">
 						<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
@@ -172,13 +130,7 @@ if ( $component['has-multiple-values'] ) : ?>
 					<div class="frm-flex-justify">
 						<div class="frm-slider-container">
 							<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-top-bottom' ); ?>
-							<span class="frm-slider" tabindex="0">
-								<span class="frm-slider-active-track">
-									<span class="frm-slider-bullet">
-										<span class="frm-slider-value-label"><?php echo (int) $field_value; ?></span>
-									</span>
-								</span>
-							</span>
+							<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
 						</div>
 						<div class="frm-slider-value">
 							<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" />
@@ -199,13 +151,7 @@ if ( $component['has-multiple-values'] ) : ?>
 									<?php if ( ! empty( $component['icon'] ) ) : ?>
 										<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-' . $field['type'] ); ?>
 									<?php endif; ?>
-									<span class="frm-slider" tabindex="0">
-										<span class="frm-slider-active-track">
-											<span class="frm-slider-bullet">
-												<span class="frm-slider-value-label"><?php echo (int) $field['value']; ?></span>
-											</span>
-										</span>
-									</span>
+									<input type="range" class="frm-slider" min="0" max="<?php echo (int) $component['max_value']; ?>" value="<?php echo ! empty( $component['unit_measurement'] ) ? (int) $field['value'] : esc_attr( $field['value'] ); ?>" />
 								</div>
 								<div class="frm-slider-value">
 									<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo ! empty( $component['unit_measurement'] ) ? (int) $field['value'] : esc_attr( $field['value'] ); ?>" />
