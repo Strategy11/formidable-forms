@@ -1,4 +1,35 @@
-<?php if ( ! defined( 'ABSPATH' ) ) {
+<?php
+/**
+ * Slider style component template.
+ *
+ * @since 6.14
+ *
+ * @package Formidable
+ *
+ * @var string      $component_attr  HTML attribute string for the outer wrapper element.
+ * @var string      $component_class CSS class string for the outer wrapper element.
+ * @var array       $component       {
+ *     Slider configuration data set by FrmSliderStyleComponent.
+ *
+ *     @type bool         $has-multiple-values Whether the slider controls multiple values (top/bottom, left/right).
+ *     @type int          $max_value           Maximum slider value. Default 100.
+ *     @type string       $unit_measurement    Active unit: 'px', 'em', '%', or ''.
+ *     @type string[]     $units               Available unit options.
+ *     @type float|string $value_label         Numeric display value, stripped of unit.
+ *     @type string       $icon                Optional icon CSS class string.
+ *     @type string       $id                  HTML id for the hidden input.
+ *     @type array[]|null $independent_fields  Optional. Each item has keys: name, value, id, type.
+ *     @type array        $vertical            When $has-multiple-values: keys value and unit.
+ *     @type array        $horizontal          When $has-multiple-values: keys value and unit.
+ *     @type array        $top                 When $has-multiple-values: keys value and unit.
+ *     @type array        $bottom              When $has-multiple-values: keys value and unit.
+ *     @type array        $left                When $has-multiple-values: keys value and unit.
+ *     @type array        $right               When $has-multiple-values: keys value and unit.
+ * }
+ * @var string      $field_name  HTML name attribute string (e.g. 'name="frm_style_setting[post_content][font_size]"').
+ * @var string      $field_value Raw field value including unit (e.g. '13px' or '10px 20px 10px 20px').
+ */
+if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
