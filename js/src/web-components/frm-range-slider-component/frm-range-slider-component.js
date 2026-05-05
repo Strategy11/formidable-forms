@@ -316,27 +316,17 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to create the slider track. This method is used to create the slider track.
 	 *
-	 * @param {Object} value - The value of the slider.
+	 * @param {Object} value    - The value of the slider.
+	 * @param {number} maxValue - The maximum value of the slider.
 	 * @return {Element} - The slider track element.
 	 */
-	static createSliderTrack( value ) {
-		const slider = document.createElement( 'span' );
+	static createSliderTrack( value, maxValue ) {
+		const slider = document.createElement( 'input' );
+		slider.type = 'range';
 		slider.classList.add( 'frm-slider' );
-		slider.setAttribute( 'tabindex', '0' );
-
-		const activeTrack = document.createElement( 'span' );
-		activeTrack.classList.add( 'frm-slider-active-track' );
-
-		const bullet = document.createElement( 'span' );
-		bullet.classList.add( 'frm-slider-bullet' );
-
-		const valueLabel = document.createElement( 'span' );
-		valueLabel.classList.add( 'frm-slider-value-label' );
-		valueLabel.textContent = value.value.toString();
-
-		bullet.append( valueLabel );
-		activeTrack.append( bullet );
-		slider.append( activeTrack );
+		slider.min = '0';
+		slider.max = maxValue.toString();
+		slider.value = value.value.toString();
 
 		return slider;
 	}
@@ -444,7 +434,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		}
 
 		// Slider track
-		sliderContainer.append( frmRangeSliderComponent.createSliderTrack( value ) );
+		sliderContainer.append( frmRangeSliderComponent.createSliderTrack( value, maxValue ) );
 		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
