@@ -1150,10 +1150,18 @@ function frmFrontFormJS() {
 		}
 
 		const tempDiv = document.createElement( 'div' );
-		tempDiv.innerHTML = errorMessage;
-		tempDiv.firstChild.classList.add( 'frm_error' );
+		tempDiv.innerHTML = purifyHtml( errorMessage );
+		const errorDiv = tempDiv.querySelector( 'div' );
+		if ( errorDiv ) {
+			errorDiv.classList.add( 'frm_error' );
+			errorDiv.id = id;
+			if ( frm_js.include_alert_role ) {
+				errorDiv.setAttribute( 'role', 'alert' );
+			}
+			return errorDiv.outerHTML;
+		}
 
-		return tempDiv.innerHTML;
+		return `<div class="frm_error" ${ roleString } id="${ id }">${ errorMessage }</div>`;
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
@@ -1694,6 +1702,19 @@ function frmFrontFormJS() {
 			.join( '' );
 		const timestamp = Date.now().toString( 16 );
 		return `${ uniqueKey }-${ timestamp }`;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {string} html
+	 * @return {string}
+	 */
+	function purifyHtml( html ) {
+		const nodes = jQuery.parseHTML( html ) || [];
+		const temp = document.createElement( 'div' );
+		nodes.forEach( node => temp.appendChild( node ) );
+		return temp.innerHTML;
 	}
 
 	/**
