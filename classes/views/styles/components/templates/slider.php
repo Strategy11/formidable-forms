@@ -12,6 +12,7 @@
  * @var string $field_name      HTML name attribute string (e.g. 'name="frm_style_setting[post_content][font_size]"').
  * @var string $field_value     Raw field value including unit (e.g. '13px' or '10px 20px 10px 20px').
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
