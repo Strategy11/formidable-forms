@@ -52,16 +52,24 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * If the units array is empty in the provided data, it returns an array containing the default units: 'px', 'em', and '%'.
 	 * Otherwise, it merges the units array from the provided data with the default units array and returns the result.
+	 * Pass `include_empty_unit => false` in $data to skip the empty option.
 	 *
 	 * @param array $data The data containing the units array.
 	 *
 	 * @return array The list of units for the slider style component.
 	 */
 	private function get_units_list( $data ) {
+		$include_empty = ! isset( $data['include_empty_unit'] ) || (bool) $data['include_empty_unit'];
+
 		if ( empty( $data['units'] ) ) {
-			return array( '', 'px', 'em', '%' );
+			$units = array( 'px', 'em', '%' );
+			return $include_empty ? array_merge( array( '' ), $units ) : $units;
 		}
-		array_unshift( $data['units'], '' );
+
+		if ( $include_empty ) {
+			array_unshift( $data['units'], '' );
+		}
+
 		return $data['units'];
 	}
 
