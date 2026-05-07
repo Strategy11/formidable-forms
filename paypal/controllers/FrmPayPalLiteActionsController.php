@@ -303,6 +303,16 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
 
 		if ( false === $response ) {
+			// Get error message and debug_id from static properties
+			$reason = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+			$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
+			if ( $reason ) {
+				$message = $reason;
+				if ( $debug_id ) {
+					$message .= ' {{debug_id:' . $debug_id . '}}';
+				}
+				return $message;
+			}
 			return 'Failed to confirm order.';
 		}
 
