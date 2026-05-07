@@ -135,7 +135,7 @@ class FrmStylesController {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
+		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
 
@@ -258,8 +258,7 @@ class FrmStylesController {
 	 */
 	public static function get_file_name() {
 		if ( is_multisite() ) {
-			$blog_id = get_current_blog_id();
-			return 'formidableforms' . absint( $blog_id ) . '.css';
+			return 'formidableforms' . absint( get_current_blog_id() ) . '.css';
 		}
 
 		return 'formidableforms.css';
@@ -368,9 +367,8 @@ class FrmStylesController {
 			return;
 		}
 
-		$frm_style     = new FrmStyle( $style_id );
-		$active_style  = $frm_style->get_one();
-		$default_style = self::get_default_style();
+		$frm_style    = new FrmStyle( $style_id );
+		$active_style = $frm_style->get_one();
 
 		self::disable_admin_page_styling_on_submit_buttons();
 
@@ -381,7 +379,7 @@ class FrmStylesController {
 		 */
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
-		self::render_style_page( $active_style, $form, $default_style );
+		self::render_style_page( $active_style, $form, self::get_default_style() );
 	}
 
 	/**
@@ -526,9 +524,8 @@ class FrmStylesController {
 		// If the default style is selected, use the "Always use default" legacy option instead of the default style.
 		// There's also a check here for conversational forms.
 		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
-		$default_style = self::get_default_style();
 
-		if ( $style_id === $default_style->ID && empty( $form->options['chat'] ) ) {
+		if ( $style_id === self::get_default_style()->ID && empty( $form->options['chat'] ) ) {
 			$style_id = 1;
 		}
 
@@ -987,8 +984,7 @@ class FrmStylesController {
 			// A style ID is not sent when resetting on the edit page.
 			// Instead of resetting the style, send the defaults back so the inputs can be updated with JavaScript.
 			$frm_style = new FrmStyle();
-			$defaults  = $frm_style->get_defaults();
-			echo json_encode( $defaults );
+			echo json_encode( $frm_style->get_defaults() );
 			wp_die();
 		}
 

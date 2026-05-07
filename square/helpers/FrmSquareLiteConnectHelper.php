@@ -125,10 +125,9 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$script_url     = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
-		$dependencies   = array( 'formidable_dom' );
-		$plugin_version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, $plugin_version, true );
+		$script_url   = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
+		$dependencies = array( 'formidable_dom' );
+		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, FrmAppHelper::plugin_version(), true );
 		wp_enqueue_script( 'formidable_square_settings' );
 	}
 
@@ -589,10 +588,11 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $receipt_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function refund_payment( $receipt_id ) {
-		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		$data = self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		return is_object( $data );
 	}
 
 	/**
@@ -702,10 +702,10 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $subscription_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function cancel_subscription( $subscription_id ) {
-		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+		return false !== self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
 
 	public static function handle_disconnect() {
@@ -792,11 +792,10 @@ class FrmSquareLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
 

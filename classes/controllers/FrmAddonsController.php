@@ -309,8 +309,7 @@ class FrmAddonsController {
 	 * @return int Count of addons.
 	 */
 	public static function get_addons_count() {
-		$addons = self::get_api_addons();
-		return count( $addons );
+		return count( self::get_api_addons() );
 	}
 
 	/**
@@ -421,8 +420,7 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	public static function get_pro_download_url() {
-		$license   = self::get_pro_license();
-		$api       = new FrmFormApi( $license );
+		$api       = new FrmFormApi( self::get_pro_license() );
 		$downloads = $api->get_api_info();
 		$pro       = self::get_pro_from_addons( $downloads );
 
@@ -475,12 +473,52 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.06
+	 * @since x.x Added the $force_type param.
+	 *
+	 * @param bool $force_type Whether to resolve grandfathered licenses to their real license type.
 	 *
 	 * @return string
 	 */
-	public static function license_type() {
+	public static function license_type( $force_type = false ) {
 		if ( is_callable( 'FrmProAddonsController::license_type' ) ) {
-			return FrmProAddonsController::license_type();
+			return FrmProAddonsController::license_type( $force_type );
+		}
+
+		return 'free';
+	}
+
+	/**
+	 * Determine the license status for payment fee decisions.
+	 *
+	 * Mirrors the API's determine_status_from_license_details logic.
+	 *
+	 * @since x.x
+	 *
+	 * @return string 'active', 'expired', or 'free'.
+	 */
+	public static function get_payment_license_status() {
+		$version_info = self::get_primary_license_info();
+
+		if ( ! $version_info ) {
+			return 'free';
+		}
+
+		$error = $version_info['error'] ?? array();
+
+		if ( is_array( $error ) ) {
+			$code = $error['code'] ?? '';
+
+			if ( 'expired' === $code ) {
+				return 'expired';
+			}
+
+			if ( 'grandfathered' === $code && isset( $error['expires'] ) && gmdate( 'Y-m-d', $error['expires'] ) < '2016-04-26' ) {
+				return 'free';
+			}
+		}
+
+		if ( in_array( self::license_type( true ), array( 'elite', 'business' ), true ) ) {
+			return 'active';
 		}
 
 		return 'free';

@@ -92,8 +92,7 @@ class FrmStrpLiteAppHelper {
 	 * @psalm-return 'live'|'test'
 	 */
 	public static function active_mode() {
-		$settings = self::get_settings();
-		return $settings->settings->test_mode ? 'test' : 'live';
+		return self::get_settings()->settings->test_mode ? 'test' : 'live';
 	}
 
 	/**
@@ -105,9 +104,7 @@ class FrmStrpLiteAppHelper {
 	 * @return void
 	 */
 	public static function fee_education( $content = 'tip', $gateway = false ) {
-		$license_type = FrmAddonsController::license_type();
-
-		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
 			return;
 		}
 

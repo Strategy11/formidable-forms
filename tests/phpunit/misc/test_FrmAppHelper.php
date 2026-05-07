@@ -405,7 +405,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_query_var
 	 */
 	public function test_get_query_var() {
-		$new_post_id = $this->go_to_new_post();
+		$new_post_id = $this->go_to_new_post(); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 		$get_post_id = FrmAppHelper::get_query_var( '', 'p' );
 		$this->assertSame( $new_post_id, $get_post_id );
 	}
@@ -757,6 +757,39 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$result = FrmAppHelper::truncate( $assertion['string'], $assertion['length'] );
 			$this->assertSame( $assertion['expected'], $result );
 		}
+	}
+
+	/**
+	 * @covers FrmAppHelper::truncate
+	 */
+	public function test_truncate_with_force_length_limit() {
+		// Test force_length_limit=false (default - can exceed limit slightly)
+		$result = FrmAppHelper::truncate( 'This is a test string that is quite long', 10, 3, '...', false );
+		$this->assertLessThanOrEqual( 20, strlen( $result ), 'Default behavior allows some overage' );
+
+		// Test force_length_limit=true (strict limit)
+		$result = FrmAppHelper::truncate( 'This is a test string that is quite long', 10, 3, '', true );
+		$this->assertSame( 'This is a ', $result );
+		$this->assertLessThanOrEqual( 10, strlen( $result ), 'Force limit should not exceed length' );
+
+		// Test with multibyte characters (Ø)
+		$result = FrmAppHelper::truncate( 'Test with Ø character and more text here', 20, 1, '', true );
+		$this->assertLessThanOrEqual( 20, mb_strlen( $result ), 'Force limit should handle multibyte characters' );
+		$this->assertStringContainsString( 'Ø', $result, 'Multibyte character should be preserved' );
+
+		// Test strict limit for 255 characters (database column limit)
+		$long_string = str_repeat( 'a', 300 );
+		$result      = FrmAppHelper::truncate( $long_string, 255, 1, '', true );
+		$this->assertSame( 255, strlen( $result ), 'Should be exactly 255 characters' );
+
+		// Test with multibyte string at 255 limit
+		$mb_string = str_repeat( 'Ø', 300 );
+		$result    = FrmAppHelper::truncate( $mb_string, 255, 1, '', true );
+		$this->assertLessThanOrEqual( 255, mb_strlen( $result ), 'Multibyte string should not exceed 255 characters' );
+
+		// Test short string with force_length_limit
+		$result = FrmAppHelper::truncate( 'Short', 10, 3, '', true );
+		$this->assertSame( 'Short', $result, 'Short string should not be modified' );
 	}
 
 	/**

@@ -80,10 +80,8 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	public static function register_assets() {
-		$plugin_url = FrmAppHelper::plugin_url();
-		$version    = FrmAppHelper::plugin_version();
-
-		wp_register_script( self::ASSETS_SLUG, $plugin_url . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
+		$version = FrmAppHelper::plugin_version();
+		wp_register_script( self::ASSETS_SLUG, FrmAppHelper::plugin_url() . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
 	}
 
 	/**

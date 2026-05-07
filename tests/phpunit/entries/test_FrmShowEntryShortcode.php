@@ -799,8 +799,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
-			$defaults     = $this->get_defaults();
-			$atts         = array_merge( $defaults, $atts );
+			$atts         = array_merge( $this->get_defaults(), $atts );
 			$font_size    = $atts['font_size'];
 			$border_width = $atts['border_width'] ?? $atts['field_border_width'];
 			$border_color = $atts['border_color'];

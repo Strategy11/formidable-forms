@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 6.3
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 6.29
+Stable tag: 6.30
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.30 =
+* New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
+* New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
+* New: New frm_after_create_entry_{form_key} and frm_after_update_entry_{form_key} actions have been added.
+* Fix: When editing an entry, the Other option would not correctly appear selected.
+* Fix: Entries would fail to save in some cases where entry names would exceed 255 characters with special unicode characters.
+* Fix: Custom style CSS would not properly prefix selectors when ::before or ::after were used.
+* Fix: Attempting to refund a Square payment would result in a fatal error when the Stripe or Authorize.Net add-ons were also active.
+* Fix: A check has been added to prevent a possible Cannot access offset of type string on string fatal PHP error issue.
+
 = 6.29 =
 * New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
 * Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
@@ -402,13 +412,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
 * Breaking: The deprecated FrmFormsHelper::actions_dropdown function and actions-dropdown.php view file have been removed.
 * An unused FrmTransLiteSubscriptionsController::list_subscriptions_shortcode function and its related view file have been deprecated.
-
-= 6.26.1 =
-* New: The cached data for license checks is now set to autoload to help reduce calls to the database, and an option check for a request lock has been moved so it only happens when the option data has expired. These changes should help with performance.
-* New: SVG icon updates have been made to avoid use of the deprecated xlink:href attribute.
-* Fix: Field step settings were changed to only accept numbers in last release, causing issues with "any" as a value.
-* Fix: Bootstrap dropdowns would not properly initialize for fields loaded with AJAX in long forms, preventing access to the more options dropdown, hiding the option to delete a field.
-* Breaking: Old logic that would trigger blur events for inputs with no value set with the onblur attribute has been removed.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

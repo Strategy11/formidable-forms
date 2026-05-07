@@ -82,10 +82,9 @@ class FrmAppController {
 		}
 
 		if ( FrmAppHelper::is_full_screen() ) {
-			$full_screen_on = self::get_full_screen_setting();
-			$add_class      = '';
+			$add_class = '';
 
-			if ( $full_screen_on ) {
+			if ( self::get_full_screen_setting() ) {
 				$add_class = ' frm-full-screen is-fullscreen-mode';
 
 				// Load the CSS for .is-fullscreen-mode.
@@ -1583,8 +1582,7 @@ class FrmAppController {
 			return;
 		}
 
-		$user_id             = get_current_user_id();
-		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
+		$preferred_list_sort = get_user_meta( get_current_user_id(), $meta_key, true );
 		$form_id             = FrmAppHelper::simple_get( 'form', 'absint' );
 
 		if ( is_array( $preferred_list_sort ) && $form_id && is_int( $form_id ) && isset( $preferred_list_sort[ $form_id ] ) ) {

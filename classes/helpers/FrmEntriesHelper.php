@@ -894,9 +894,7 @@ class FrmEntriesHelper {
 	 * @return int
 	 */
 	public static function get_entry_status( $status ) {
-		$statuses = self::get_entry_statuses();
-
-		if ( array_key_exists( $status, $statuses ) ) {
+		if ( array_key_exists( $status, self::get_entry_statuses() ) ) {
 			return $status;
 		}
 
@@ -919,8 +917,7 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function get_entry_status_label( $status ) {
-		$statuses = self::get_entry_statuses();
-		return $statuses[ self::get_entry_status( $status ) ];
+		return self::get_entry_statuses()[ self::get_entry_status( $status ) ];
 	}
 
 	/**
@@ -963,9 +960,7 @@ class FrmEntriesHelper {
 	 * @return int
 	 */
 	public static function get_visible_unread_inbox_count() {
-		$menu_name = FrmAppHelper::get_menu_name();
-
-		if ( ! in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+		if ( ! in_array( FrmAppHelper::get_menu_name(), array( 'Formidable', 'Forms' ), true ) ) {
 			return 0;
 		}
 
