@@ -208,7 +208,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			wp_die( esc_html__( 'Oops! No payment was selected for refund.', 'formidable' ) );
 		}
 
-		$payment = FrmTransLitePayment::get_one( $payment_id );
+		$payment = ( new FrmTransLitePayment() )->get_one( $payment_id );
 
 		if ( ! $payment ) {
 			wp_die( esc_html__( 'Oops! That payment does not exist.', 'formidable' ) );

@@ -808,13 +808,15 @@ class FrmPayPalLiteConnectHelper {
 			// Only convert empty arrays to empty objects
 			if ( ! empty( $response ) ) {
 				// Check if this is an error response with message and debug_id
-				if ( isset( $response['message'] ) && isset( $response['debug_id'] ) ) {
+				if ( isset( $response['message'] ) && ( isset( $response['debug_id'] ) || isset( $response['debugId'] ) ) ) {
 					self::$latest_error_from_paypal_api = $response['message'];
-					self::$latest_debug_id_from_paypal_api = $response['debug_id'];
+					// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
+					self::$latest_debug_id_from_paypal_api = $response['debug_id'] ?? $response['debugId'] ?? '';
 					if ( class_exists( 'FrmTransLiteLog' ) ) {
 						FrmTransLiteLog::log_message( 'PayPal API Error', $response['message'] );
 					}
-					return false;
+					// Return the array with error details so the caller can extract them
+					return (object) $response;
 				}
 				// Convert array to object for consistency
 				return (object) $response;
@@ -824,6 +826,12 @@ class FrmPayPalLiteConnectHelper {
 
 		if ( is_string( $response ) ) {
 			self::$latest_error_from_paypal_api = $response;
+			// Extract debug_id from formatted error string if present
+			if ( preg_match( '/{{debug_id:([^}]+)}}/', $response, $matches ) ) {
+				self::$latest_debug_id_from_paypal_api = $matches[1];
+				// Remove the debug_id token from the error message for display
+				self::$latest_error_from_paypal_api = preg_replace( '/\s*{{debug_id:[^}]+}}/', '', $response );
+			}
 			FrmTransLiteLog::log_message( 'PayPal API Error', $response );
 		} else {
 			self::$latest_error_from_paypal_api = '';

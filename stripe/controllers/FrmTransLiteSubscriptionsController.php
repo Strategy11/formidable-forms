@@ -122,12 +122,21 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$debug_id = '';
 						$canceled = false !== $response;
 
-						// Extract error details without type checks to avoid Mago type narrowing
-						$response_array = is_array( $response ) ? $response : (array) $response;
-						$reason = $response_array['message'] ?? '';
-						$debug_id = $response_array['debug_id'] ?? '';
+						if ( is_array( $response ) || is_object( $response ) ) {
+							// Extract error details without type checks to avoid Mago type narrowing
+							$response_array = is_array( $response ) ? $response : (array) $response;
+							$reason = $response_array['message'] ?? '';
+							// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
+							$debug_id = $response_array['debug_id'] ?? $response_array['debugId'] ?? '';
 
-						if ( $reason || $debug_id ) {
+							// If there's an error message or debug_id, the cancellation failed
+							if ( $reason || $debug_id ) {
+								$canceled = false;
+							}
+						} elseif ( false === $response ) {
+							// Response is false, get error from static properties
+							$reason = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+							$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
 							$canceled = false;
 						}
 						break;
@@ -146,12 +155,16 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 
 					$message = __( 'Canceled', 'formidable' );
 				} else {
-					$message = __( 'Failed', 'formidable' );
-				}
-
-				// Only include reason if it's not the generic "Failed to cancel subscription"
-				if ( ! empty( $reason ) && 'Failed to cancel subscription' !== $reason ) {
-					$message .= ' (' . $reason . ')';
+					// If the reason is already a complete error message, use it directly
+					// instead of wrapping it redundantly in "Failed (...)"
+					if ( $reason && ! preg_match( '/^[A-Z_]+$/', $reason ) ) {
+						$message = $reason;
+					} else {
+						$message = __( 'Failed', 'formidable' );
+						if ( ! empty( $reason ) ) {
+							$message .= ' (' . $reason . ')';
+						}
+					}
 				}
 
 				if ( ! empty( $debug_id ) ) {
@@ -164,8 +177,13 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$message = __( 'Oops! No subscription was selected for cancelation.', 'formidable' );
 		}//end if
 
-		echo $message;
-		wp_die();
+		wp_die(
+			sprintf(
+				'<div class="%1$s">%2$s</div>',
+				$canceled ? 'frm_updated_message' : 'frm_error_style',
+				$message
+			)
+		);
 	}
 
 	/**
