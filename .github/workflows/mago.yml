@@ -15,13 +15,17 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          tools: composer:v2
+
+      - name: "🔧 Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
 
       - name: Install dependencies
         run: composer install --dev --prefer-dist --no-progress
 
       - name: "✅ Mago Lint"
-        run: vendor/bin/mago lint
+        run: mago lint
 
       - name: "🔎 Mago Analyze"
-        run: vendor/bin/mago analyze
+        run: mago analyze
