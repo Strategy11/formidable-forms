@@ -1713,12 +1713,12 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {string} html
-	 * @return {string}
+	 * @return {string} Sanitized HTML string.
 	 */
 	function purifyHtml( html ) {
 		const nodes = jQuery.parseHTML( html ) || [];
 		const temp = document.createElement( 'div' );
-		nodes.forEach( node => temp.appendChild( node ) );
+		nodes.forEach( node => temp.append( node ) );
 		return temp.innerHTML;
 	}
 
