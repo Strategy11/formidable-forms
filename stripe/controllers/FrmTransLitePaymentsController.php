@@ -208,10 +208,18 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			wp_die( esc_html__( 'Oops! No payment was selected for refund.', 'formidable' ) );
 		}
 
-		$frm_payment = new FrmTransLitePayment();
-		$payment     = $frm_payment->get_one( $payment_id );
+		$payment = FrmTransLitePayment::get_one( $payment_id );
 
-		switch ( $payment->paysys ) {
+		if ( ! $payment ) {
+			wp_die( esc_html__( 'Oops! That payment does not exist.', 'formidable' ) );
+		}
+
+		$refunded = false;
+		$reason   = '';
+		$debug_id = '';
+		$paysys   = $payment->paysys;
+
+		switch ( $paysys ) {
 			case 'stripe':
 				$refunded = FrmStrpLiteAppHelper::call_stripe_helper_class( 'refund_payment', $payment->receipt_id );
 				break;
@@ -229,6 +237,12 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				} elseif ( false === $response ) {
 					$refunded = false;
 					$reason = self::get_paypal_refund_reason();
+					$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
+				} elseif ( is_object( $response ) && isset( $response->refund_error ) ) {
+					// Handle mock error responses from PayPal API
+					$refunded = false;
+					$reason = $response->message ?? '';
+					$debug_id = $response->debug_id ?? '';
 				} else {
 					$refunded = true;
 				}

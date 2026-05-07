@@ -12,7 +12,16 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @var string|null
 	 */
-	public static $latest_error_from_paypal_api;
+	public static $latest_error_from_paypal_api = '';
+
+	/**
+	 * Track the latest debug ID from PayPal API responses.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	private static $latest_debug_id_from_paypal_api = '';
 
 	/**
 	 * @return void
@@ -795,8 +804,21 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		if ( is_array( $response ) ) {
-			// Reformat empty arrays as empty objects
-			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			// Arrays with error data (e.g., from mock responses) should be preserved
+			// Only convert empty arrays to empty objects
+			if ( ! empty( $response ) ) {
+				// Check if this is an error response with message and debug_id
+				if ( isset( $response['message'] ) && isset( $response['debug_id'] ) ) {
+					self::$latest_error_from_paypal_api = $response['message'];
+					self::$latest_debug_id_from_paypal_api = $response['debug_id'];
+					if ( class_exists( 'FrmTransLiteLog' ) ) {
+						FrmTransLiteLog::log_message( 'PayPal API Error', $response['message'] );
+					}
+					return false;
+				}
+				// Convert array to object for consistency
+				return (object) $response;
+			}
 			return new stdClass();
 		}
 
@@ -842,6 +864,13 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	public static function get_latest_error_from_paypal_api() {
 		return self::$latest_error_from_paypal_api;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function get_latest_debug_id_from_paypal_api() {
+		return self::$latest_debug_id_from_paypal_api;
 	}
 
 	/**
