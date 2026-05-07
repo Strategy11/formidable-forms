@@ -243,11 +243,16 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			self::change_payment_status( $payment, 'refunded' );
 			$message = __( 'Refunded', 'formidable' );
 		} else {
-			$message = __( 'Refund Failed', 'formidable' );
-		}
-
-		if ( ! empty( $reason ) ) {
-			$message .= ' (' . $reason . ')';
+			// If the reason is already a complete error message, use it directly
+			// instead of wrapping it redundantly in "Refund Failed (...)"
+			if ( $reason && ! preg_match( '/^[A-Z_]+$/', $reason ) ) {
+				$message = $reason;
+			} else {
+				$message = __( 'Refund Failed', 'formidable' );
+				if ( ! empty( $reason ) ) {
+					$message .= ' (' . $reason . ')';
+				}
+			}
 		}
 
 		if ( ! empty( $debug_id ) ) {
