@@ -29,12 +29,12 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frmfont frm_lock_icon',
+			'classes'  => 'frmfont frm_lock_simple',
 			'active'   => true,
 			'event'    => array( 'create', 'update', 'payment-success' ),
 			'limit'    => 99,
 			'priority' => 8,
-			'color'    => 'rgb(99, 102, 241)',
+			'color'    => '#F59E0B',
 			'keywords' => __( 'gated, content, payment, access, token, restrict, download', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
