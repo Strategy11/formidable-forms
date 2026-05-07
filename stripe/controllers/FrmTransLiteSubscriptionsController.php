@@ -122,21 +122,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$debug_id = '';
 						$canceled = false !== $response;
 
-						if ( is_array( $response ) ) {
-							if ( isset( $response['message'] ) ) {
-								$reason = $response['message'];
-							}
-							if ( isset( $response['debug_id'] ) ) {
-								$debug_id = $response['debug_id'];
-							}
-							$canceled = false;
-						} elseif ( is_object( $response ) ) {
-							if ( isset( $response->message ) ) {
-								$reason = $response->message;
-							}
-							if ( isset( $response->debug_id ) ) {
-								$debug_id = $response->debug_id;
-							}
+						// Extract error details without type checks to avoid Mago type narrowing
+						$response_array = is_array( $response ) ? $response : (array) $response;
+						$reason = $response_array['message'] ?? '';
+						$debug_id = $response_array['debug_id'] ?? '';
+
+						if ( $reason || $debug_id ) {
 							$canceled = false;
 						}
 						break;
@@ -190,6 +181,45 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 		$atts['sub']->status = $atts['status'];
 
 		FrmTransLiteActionsController::trigger_subscription_status_change( $atts['sub'] );
+	}
+
+	/**
+	 * Extract error details from a PayPal response.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $response The response from PayPal.
+	 *
+	 * @return array|false Array with 'reason' and 'debug_id' keys, or false if no error details.
+	 */
+	private static function extract_error_details( $response ) {
+		$reason = '';
+		$debug_id = '';
+
+		if ( is_array( $response ) ) {
+			if ( ! empty( $response['message'] ) ) {
+				$reason = $response['message'];
+			}
+			if ( ! empty( $response['debug_id'] ) ) {
+				$debug_id = $response['debug_id'];
+			}
+		} elseif ( is_object( $response ) ) {
+			if ( ! empty( $response->message ) ) {
+				$reason = $response->message;
+			}
+			if ( ! empty( $response->debug_id ) ) {
+				$debug_id = $response->debug_id;
+			}
+		}
+
+		if ( $reason || $debug_id ) {
+			return array(
+				'reason' => $reason,
+				'debug_id' => $debug_id,
+			);
+		}
+
+		return false;
 	}
 
 	/**
