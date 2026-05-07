@@ -11,16 +11,16 @@ jobs:
       - name: "📥 Fetching Repository Contents"
         uses: actions/checkout@v4.1.1
 
+      - name: "🔧 Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
       - name: Install dependencies
         run: composer install --dev --prefer-dist --no-progress
 
-      - name: "⚡ Install Mago"
-        run: |
-          mkdir -p bin
-          curl --proto '=https' --tlsv1.2 -sSf https://carthage.software/mago.sh | bash -s -- --install-dir=bin --no-verify
-
       - name: "✅ Mago Lint"
-        run: ./bin/mago lint
+        run: vendor/bin/mago lint
 
       - name: "🔎 Mago Analyze"
-        run: ./bin/mago analyze
+        run: vendor/bin/mago analyze
