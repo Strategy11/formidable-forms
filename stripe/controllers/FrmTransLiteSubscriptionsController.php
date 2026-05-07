@@ -123,12 +123,20 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$canceled = false !== $response;
 
 						if ( is_array( $response ) ) {
-							$reason = $response['message'] ?? '';
-							$debug_id = $response['debug_id'] ?? '';
+							if ( isset( $response['message'] ) ) {
+								$reason = $response['message'];
+							}
+							if ( isset( $response['debug_id'] ) ) {
+								$debug_id = $response['debug_id'];
+							}
 							$canceled = false;
 						} elseif ( is_object( $response ) ) {
-							$reason = $response->message ?? '';
-							$debug_id = $response->debug_id ?? '';
+							if ( isset( $response->message ) ) {
+								$reason = $response->message;
+							}
+							if ( isset( $response->debug_id ) ) {
+								$debug_id = $response->debug_id;
+							}
 							$canceled = false;
 						}
 						break;
