@@ -20,7 +20,7 @@ jobs:
         run: composer install --dev --prefer-dist --no-progress
 
       - name: "✅ Mago Lint"
-        run: mago lint
+        run: vendor/bin/mago lint
 
       - name: "🔎 Mago Analyze"
-        run: mago analyze
+        run: vendor/bin/mago analyze
