@@ -57,8 +57,8 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 				?>
 				<li class="frm_gc_item_row frm_grid_container">
 
-					<?php // ── Col 1: Type (3/12) ──────────────────────── ?>
-					<div class="frm3">
+					<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
+					<div class="frm4">
 						<label for="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>">
 							<?php esc_html_e( 'Type', 'formidable' ); ?>
 						</label>
@@ -80,9 +80,9 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 								</option>
 							<?php endforeach; ?>
 						</select>
-					</div><!-- .frm3 -->
+					</div><!-- .frm4 -->
 
-					<?php // ── Col 2: Type-specific settings (8/12) ───── ?>
+					<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
 					<div class="frm8 frm-gc-item-settings">
 
 						<?php
@@ -142,12 +142,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 						 */
 						do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base, $frm_gc_wrapper_id );
 						?>
-					</div><!-- .frm8 -->
-
-					<?php // ── Col 3: Delete button (1/12) ─────────────── ?>
-					<div class="frm1 frm-gc-item-delete">
-						<?php // Hidden label spacer aligns the button with the selects in adjacent columns. ?>
-						<label aria-hidden="true" style="visibility: hidden; display: block;">&nbsp;</label>
+					<div class="frm-gc-item-delete" style="text-align: right;">
 						<button
 							type="button"
 							class="frm_gc_remove_item button-link"
@@ -156,7 +151,8 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 						>
 							<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>
 						</button>
-					</div><!-- .frm1 -->
+					</div><!-- .frm-gc-item-delete -->
+					</div><!-- .frm8 -->
 
 				</li>
 			<?php endforeach; ?>
@@ -171,8 +167,8 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 		<template class="frm_gc_item_template">
 			<li class="frm_gc_item_row frm_grid_container">
 
-				<?php // ── Col 1: Type (3/12) ──────────────────────── ?>
-				<div class="frm3">
+				<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
+				<div class="frm4">
 					<label data-frm-gc-for="type">
 						<?php esc_html_e( 'Type', 'formidable' ); ?>
 					</label>
@@ -189,9 +185,9 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 							</option>
 						<?php endforeach; ?>
 					</select>
-				</div><!-- .frm3 -->
+				</div><!-- .frm4 -->
 
-				<?php // ── Col 2: Type-specific settings (8/12) ───── ?>
+				<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
 				<div class="frm8 frm-gc-item-settings">
 
 					<?php // Default (first) type is visible; all others added by plugins must set hidden. ?>
@@ -227,12 +223,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 					 */
 					do_action( 'frm_gated_content_item_template_settings', $frm_gc_types );
 					?>
-				</div><!-- .frm8 -->
-
-				<?php // ── Col 3: Delete button (1/12) ─────────────── ?>
-				<div class="frm1 frm-gc-item-delete">
-					<?php // Hidden label spacer aligns the button with the selects in adjacent columns. ?>
-					<label aria-hidden="true" style="visibility: hidden; display: block;">&nbsp;</label>
+				<div class="frm-gc-item-delete" style="text-align: right;">
 					<button
 						type="button"
 						class="frm_gc_remove_item button-link"
@@ -241,7 +232,8 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 					>
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>
 					</button>
-				</div><!-- .frm1 -->
+				</div><!-- .frm-gc-item-delete -->
+				</div><!-- .frm8 -->
 
 			</li>
 		</template>
