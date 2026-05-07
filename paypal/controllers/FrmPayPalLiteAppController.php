@@ -195,6 +195,12 @@ class FrmPayPalLiteAppController {
 	public static function create_order() {
 		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
 
+		// Check if PayPal is connected before attempting to create an order.
+		$connection_check = self::check_paypal_connection();
+		if ( is_wp_error( $connection_check ) ) {
+			wp_send_json_error( $connection_check->get_error_message() );
+		}
+
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
 		if ( ! $form_id ) {
@@ -246,6 +252,10 @@ class FrmPayPalLiteAppController {
 		}
 
 		if ( ! isset( $order_response->order_id ) ) {
+			// Check if the response is a structured error with debug_id
+			if ( isset( $order_response->message ) && isset( $order_response->debug_id ) ) {
+				wp_send_json_error( self::format_paypal_error( $order_response->message . '{{debug_id:' . $order_response->debug_id . '}}', 'Failed to create PayPal order' ) );
+			}
 			wp_send_json_error( 'Failed to create PayPal order' );
 		}
 
@@ -575,6 +585,12 @@ class FrmPayPalLiteAppController {
 	public static function create_subscription() {
 		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
 
+		// Check if PayPal is connected before attempting to create a subscription.
+		$connection_check = self::check_paypal_connection();
+		if ( is_wp_error( $connection_check ) ) {
+			wp_send_json_error( $connection_check->get_error_message() );
+		}
+
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
 		if ( ! $form_id ) {
@@ -640,6 +656,11 @@ class FrmPayPalLiteAppController {
 		if ( false === $response ) {
 			$error = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
 			wp_send_json_error( self::format_paypal_error( $error, 'Failed to create PayPal subscription' ) );
+		}
+
+		// Check if response is a structured error with message and debug_id (array or object)
+		if ( ( is_array( $response ) || is_object( $response ) ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+			wp_send_json_error( $response );
 		}
 
 		if ( ! isset( $response->subscription_id ) ) {
@@ -780,6 +801,29 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
+	 * Check if PayPal is connected before attempting to create an order or subscription.
+	 *
+	 * @since x.x
+	 *
+	 * @return true|WP_Error True if connected, WP_Error with message if not connected.
+	 */
+	private static function check_paypal_connection() {
+		$merchant_id = FrmPayPalLiteConnectHelper::get_merchant_id();
+
+		if ( ! $merchant_id ) {
+			$message = __( 'PayPal is not connected. Please connect your PayPal account to process payments.', 'formidable' );
+
+			if ( current_user_can( 'frm_change_settings' ) ) {
+				$message .= ' ' . __( 'You can connect PayPal in Global Settings, under the Payments section.', 'formidable' );
+			}
+
+			return new WP_Error( 'paypal_not_connected', $message );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Parse a PayPal API error string and conditionally include the debug ID.
 	 *
 	 * The PayPal API addon embeds debug IDs using a {{debug_id:...}} delimiter.
@@ -797,19 +841,22 @@ class FrmPayPalLiteAppController {
 			return $fallback;
 		}
 
+		// If error is already a structured array with message and debug_id, return it directly
+		if ( is_array( $error ) && isset( $error['message'] ) && isset( $error['debug_id'] ) ) {
+			return $error;
+		}
+
 		if ( ! preg_match( '/\{\{debug_id:([^}]+)\}\}/', $error, $matches ) ) {
 			return $error;
 		}
 
 		$clean_message = str_replace( $matches[0], '', $error );
+		$clean_message = trim( $clean_message );
 
-		if ( current_user_can( 'frm_edit_forms' ) ) {
-			return array(
-				'message'  => $clean_message,
-				'debug_id' => $matches[1],
-			);
-		}
-
-		return $clean_message;
+		// Always return structured error with debug_id so JavaScript can extract and send it
+		return array(
+			'message'  => $clean_message ?: $fallback,
+			'debug_id' => $matches[1],
+		);
 	}
 }

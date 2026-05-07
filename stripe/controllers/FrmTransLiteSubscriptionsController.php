@@ -104,6 +104,9 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$sub     = $frm_sub->get_one( $sub_id );
 
 			if ( $sub ) {
+				$reason = '';
+				$debug_id = '';
+
 				switch ( $sub->paysys ) {
 					case 'stripe':
 						$canceled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $sub->sub_id );
@@ -112,7 +115,20 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$canceled = FrmSquareLiteConnectHelper::cancel_subscription( $sub->sub_id );
 						break;
 					case 'paypal':
-						$canceled = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
+						$response = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
+
+						// Check for structured error response with message and debug_id (array or object)
+						if ( is_array( $response ) && isset( $response['message'] ) && isset( $response['debug_id'] ) ) {
+							$canceled = false;
+							$reason = $response['message'];
+							$debug_id = $response['debug_id'];
+						} elseif ( is_object( $response ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+							$canceled = false;
+							$reason = $response->message;
+							$debug_id = $response->debug_id;
+						} else {
+							$canceled = false !== $response;
+						}
 						break;
 					default:
 						$canceled = false;
@@ -131,6 +147,15 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 				} else {
 					$message = __( 'Failed', 'formidable' );
 				}
+
+				// Only include reason if it's not the generic "Failed to cancel subscription"
+				if ( ! empty( $reason ) && 'Failed to cancel subscription' !== $reason ) {
+					$message .= ' (' . $reason . ')';
+				}
+
+				if ( ! empty( $debug_id ) ) {
+					$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
+				}
 			} else {
 				$message = __( 'That subscription was not found', 'formidable' );
 			}//end if
@@ -138,7 +163,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$message = __( 'Oops! No subscription was selected for cancelation.', 'formidable' );
 		}//end if
 
-		echo esc_html( $message );
+		echo $message;
 		wp_die();
 	}
 

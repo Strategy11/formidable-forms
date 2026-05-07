@@ -438,13 +438,26 @@ class FrmPayPalLiteConnectHelper {
 
 		if ( empty( $body->success ) ) {
 			$error_message = 'Response from server was not successful';
+			$debug_id = '';
 
-			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
+			// Handle structured error response with message and debug_id
+			if ( ! empty( $body->data ) && is_object( $body->data ) ) {
+				if ( ! empty( $body->data->message ) ) {
+					$error_message = $body->data->message;
+				}
+				if ( ! empty( $body->data->debug_id ) ) {
+					$debug_id = $body->data->debug_id;
+				}
+			} elseif ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				$error_message = $body->data;
 			}
 
-			$debug_id = ! empty( $body->debug_id ) ? $body->debug_id : '';
+			// Check for debug_id at top level as well
+			if ( ! $debug_id && ! empty( $body->debug_id ) ) {
+				$debug_id = $body->debug_id;
+			}
 
+			// Parse debug_id from error message if not found
 			if ( ! $debug_id && preg_match( '/\{\{debug_id:([^}]+)\}\}/', $error_message, $matches ) ) {
 				$debug_id = $matches[1];
 			}
@@ -452,6 +465,11 @@ class FrmPayPalLiteConnectHelper {
 			if ( $debug_id ) {
 				$clean_message = trim( preg_replace( '/\{\{debug_id:[^}]+\}\}/', '', $error_message ) );
 				FrmPayPalLiteAppController::log_paypal_debug_id( $debug_id, $clean_message, $action );
+				// Return structured error with debug_id so it can be passed to JavaScript
+				return array(
+					'message' => $clean_message ?: $error_message,
+					'debug_id' => $debug_id,
+				);
 			}
 
 			return $error_message;
