@@ -11500,7 +11500,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 				option.hidden = false;
 				return;
 			}
-			option.hidden = Boolean( selectedFormId ) && optFormId !== selectedFormId;
+			option.hidden = ! selectedFormId || optFormId !== selectedFormId;
 		} );
 
 		// If the currently selected field option is now hidden, reset the select.

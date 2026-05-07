@@ -37,14 +37,14 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 ?>
 
 <div
-	class="frm_gated_content_settings"
+	class="frm_gated_content_settings frm-mt-sm"
 	id="<?php echo esc_attr( $frm_gc_wrapper_id ); ?>"
 	data-item-count="<?php echo count( $frm_gc_items ); ?>"
 >
 
 	<?php // ── Section: Gated content items ─────────────────────────────── ?>
 	<div class="frm_form_field frm_gc_items_section">
-		<label><?php esc_html_e( 'Gated Content Items', 'formidable' ); ?></label>
+		<h3 class="frm-mb-sm"><?php esc_html_e( 'Gated Content Items', 'formidable' ); ?></h3>
 
 		<ul class="frm_gc_items_list">
 			<?php foreach ( $frm_gc_items as $frm_gc_idx => $frm_gc_item ) : ?>
@@ -59,27 +59,29 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 
 					<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
 					<div class="frm4">
-						<label for="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>">
-							<?php esc_html_e( 'Type', 'formidable' ); ?>
-						</label>
-						<select
-							id="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>"
-							name="<?php echo esc_attr( $frm_gc_item_base . '[type]' ); ?>"
-							class="frm-gc-item-type"
-						>
-							<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
-								<option
-									value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
-									<?php selected( $frm_gc_item_type, $frm_gc_type_key ); ?>
-									<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
-								>
-									<?php echo esc_html( $frm_gc_type['label'] ); ?>
-									<?php if ( ! empty( $frm_gc_type['pro'] ) ) : ?>
-										<?php esc_html_e( '(Pro)', 'formidable' ); ?>
-									<?php endif; ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
+						<div class="frm_form_field frm-mt-xs frm-mb-xs">
+							<label for="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>">
+								<?php esc_html_e( 'Type', 'formidable' ); ?>
+							</label>
+							<select
+								id="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>"
+								name="<?php echo esc_attr( $frm_gc_item_base . '[type]' ); ?>"
+								class="frm-gc-item-type"
+							>
+								<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
+									<option
+										value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
+										<?php selected( $frm_gc_item_type, $frm_gc_type_key ); ?>
+										<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
+									>
+										<?php echo esc_html( $frm_gc_type['label'] ); ?>
+										<?php if ( ! empty( $frm_gc_type['pro'] ) ) : ?>
+											<?php esc_html_e( '(Pro)', 'formidable' ); ?>
+										<?php endif; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</div><!-- .frm_form_field -->
 					</div><!-- .frm4 -->
 
 					<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
@@ -95,26 +97,28 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 							data-type="page"
 							<?php echo 'page' !== $frm_gc_item_type ? 'hidden' : ''; ?>
 						>
-							<label for="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>">
-								<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
-							</label>
-							<select
-								id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
-								data-frm-gc-field="id"
-								<?php if ( 'page' === $frm_gc_item_type ) : ?>
-									name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
-								<?php endif; ?>
-							>
-								<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
-								<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
-									<option
-										value="<?php echo esc_attr( $frm_gc_page->ID ); ?>"
-										<?php selected( $frm_gc_item_id, $frm_gc_page->ID ); ?>
-									>
-										<?php echo esc_html( $frm_gc_page->post_title ); ?>
-									</option>
-								<?php endforeach; ?>
-							</select>
+							<div class="frm_form_field frm-mt-xs frm-mb-xs">
+								<label for="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>">
+									<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
+								</label>
+								<select
+									id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
+									data-frm-gc-field="id"
+									<?php if ( 'page' === $frm_gc_item_type ) : ?>
+										name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
+									<?php endif; ?>
+								>
+									<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
+									<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
+										<option
+											value="<?php echo esc_attr( $frm_gc_page->ID ); ?>"
+											<?php selected( $frm_gc_item_id, $frm_gc_page->ID ); ?>
+										>
+											<?php echo esc_html( $frm_gc_page->post_title ); ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+							</div><!-- .frm_form_field -->
 						</div><!-- [data-type="page"] -->
 
 						<?php
@@ -142,7 +146,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 						 */
 						do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base, $frm_gc_wrapper_id );
 						?>
-					<div class="frm-gc-item-delete" style="text-align: right;">
+					<div class="frm-gc-item-delete">
 						<button
 							type="button"
 							class="frm_gc_remove_item button-link"
@@ -169,22 +173,24 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 
 				<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
 				<div class="frm4">
-					<label data-frm-gc-for="type">
-						<?php esc_html_e( 'Type', 'formidable' ); ?>
-					</label>
-					<select data-frm-gc-field="type" class="frm-gc-item-type">
-						<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
-							<option
-								value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
-								<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
-							>
-								<?php echo esc_html( $frm_gc_type['label'] ); ?>
-								<?php if ( ! empty( $frm_gc_type['pro'] ) ) : ?>
-									<?php esc_html_e( '(Pro)', 'formidable' ); ?>
-								<?php endif; ?>
-							</option>
-						<?php endforeach; ?>
-					</select>
+					<div class="frm_form_field frm-mt-xs frm-mb-xs">
+						<label data-frm-gc-for="type">
+							<?php esc_html_e( 'Type', 'formidable' ); ?>
+						</label>
+						<select data-frm-gc-field="type" class="frm-gc-item-type">
+							<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
+								<option
+									value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
+									<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
+								>
+									<?php echo esc_html( $frm_gc_type['label'] ); ?>
+									<?php if ( ! empty( $frm_gc_type['pro'] ) ) : ?>
+										<?php esc_html_e( '(Pro)', 'formidable' ); ?>
+									<?php endif; ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+					</div><!-- .frm_form_field -->
 				</div><!-- .frm4 -->
 
 				<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
@@ -192,17 +198,19 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 
 					<?php // Default (first) type is visible; all others added by plugins must set hidden. ?>
 					<div class="frm-gc-type-settings" data-type="page">
-						<label data-frm-gc-for="id">
-							<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
-						</label>
-						<select data-frm-gc-field="id">
-							<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
-							<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
-								<option value="<?php echo esc_attr( $frm_gc_page->ID ); ?>">
-									<?php echo esc_html( $frm_gc_page->post_title ); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
+						<div class="frm_form_field frm-mt-xs frm-mb-xs">
+							<label data-frm-gc-for="id">
+								<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
+							</label>
+							<select data-frm-gc-field="id">
+								<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
+								<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
+									<option value="<?php echo esc_attr( $frm_gc_page->ID ); ?>">
+										<?php echo esc_html( $frm_gc_page->post_title ); ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</div><!-- .frm_form_field -->
 					</div><!-- [data-type="page"] -->
 
 					<?php
@@ -223,7 +231,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 					 */
 					do_action( 'frm_gated_content_item_template_settings', $frm_gc_types );
 					?>
-				<div class="frm-gc-item-delete" style="text-align: right;">
+				<div class="frm-gc-item-delete">
 					<button
 						type="button"
 						class="frm_gc_remove_item button-link"
@@ -249,7 +257,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 
 	<?php // ── Section: Shortcode reference ─────────────────────────────── ?>
 	<div class="frm_form_field frm_gc_shortcodes_section" style="margin-top: 20px;">
-		<label><?php esc_html_e( 'Access Link Shortcodes', 'formidable' ); ?></label>
+		<h3 class="frm-mb-xs"><?php esc_html_e( 'Access Link Shortcodes', 'formidable' ); ?></h3>
 		<p class="frm_description">
 			<?php esc_html_e( 'Add these shortcodes to a Confirmation or Send Email action to include the access link.', 'formidable' ); ?>
 		</p>
