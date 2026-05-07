@@ -118,16 +118,18 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$response = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
 
 						// Check for structured error response with message and debug_id (array or object)
-						if ( is_array( $response ) && isset( $response['message'] ) && isset( $response['debug_id'] ) ) {
+						$reason = '';
+						$debug_id = '';
+						$canceled = false !== $response;
+
+						if ( is_array( $response ) ) {
+							$reason = $response['message'] ?? '';
+							$debug_id = $response['debug_id'] ?? '';
 							$canceled = false;
-							$reason = $response['message'];
-							$debug_id = $response['debug_id'];
-						} elseif ( is_object( $response ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+						} elseif ( is_object( $response ) ) {
+							$reason = $response->message ?? '';
+							$debug_id = $response->debug_id ?? '';
 							$canceled = false;
-							$reason = $response->message;
-							$debug_id = $response->debug_id;
-						} else {
-							$canceled = false !== $response;
 						}
 						break;
 					default:

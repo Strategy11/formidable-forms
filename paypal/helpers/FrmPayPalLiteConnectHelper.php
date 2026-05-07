@@ -441,15 +441,16 @@ class FrmPayPalLiteConnectHelper {
 			$debug_id = '';
 
 			// Handle structured error response with message and debug_id
-			if ( ! empty( $body->data ) && is_object( $body->data ) ) {
-				if ( ! empty( $body->data->message ) ) {
-					$error_message = $body->data->message;
+			$data = $body->data ?? null;
+			if ( is_object( $data ) ) {
+				if ( ! empty( $data->message ) ) {
+					$error_message = $data->message;
 				}
-				if ( ! empty( $body->data->debug_id ) ) {
-					$debug_id = $body->data->debug_id;
+				if ( ! empty( $data->debug_id ) ) {
+					$debug_id = $data->debug_id;
 				}
-			} elseif ( ! empty( $body->data ) && is_string( $body->data ) ) {
-				$error_message = $body->data;
+			} elseif ( is_string( $data ) ) {
+				$error_message = $data;
 			}
 
 			// Check for debug_id at top level as well
