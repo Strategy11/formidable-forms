@@ -8,6 +8,56 @@
 
 	const { __ } = wp.i18n;
 
+	function updateGatewaySettingsVisibility( settings ) {
+		const typeDropdown = settings.querySelector( 'select.frm_trans_type' );
+		if ( ! typeDropdown ) {
+			return;
+		}
+
+		if ( 'recurring' === typeDropdown.value ) {
+			const activeGateway = settings.querySelector( '[name*="[post_content][gateway]"]:checked' )?.value;
+
+			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
+				function( subOpts ) {
+					// Check if this setting has a show_* class for the active gateway
+					const hasActiveGatewayClass = subOpts.classList.contains( 'show_' + activeGateway );
+
+					if ( hasActiveGatewayClass ) {
+						subOpts.classList.remove( 'frm_hidden' );
+						if ( subOpts.classList.contains( 'frm_grid_container' ) ) {
+							subOpts.style.display = 'grid';
+						}
+					} else {
+						// Check if it has any show_* class for a different gateway
+						const hasAnyGatewayClass = Array.from( subOpts.classList ).some( function( className ) {
+							return className.startsWith( 'show_' );
+						} );
+
+						if ( hasAnyGatewayClass ) {
+							// Hide if it has a show_* class but not for the active gateway
+							subOpts.classList.add( 'frm_hidden' );
+							subOpts.style.display = 'none';
+						} else {
+							// Show if it has no show_* class (shared setting)
+							subOpts.classList.remove( 'frm_hidden' );
+							if ( subOpts.classList.contains( 'frm_grid_container' ) ) {
+								subOpts.style.display = 'grid';
+							}
+						}
+					}
+				}
+			);
+			return;
+		}
+
+		settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
+			function( subOpts ) {
+				subOpts.classList.add( 'frm_hidden' );
+				subOpts.style.display = 'none';
+			}
+		);
+	}
+
 	function onGatewayToggle( { gateway, settings, checked } ) {
 		if ( 'square' === gateway && checked ) {
 			syncRepeat( settings.get( 0 ) );
@@ -15,14 +65,7 @@
 
 		syncCurrency( gateway, settings.get( 0 ) );
 
-		const typeDropdown = settings.get( 0 ).querySelector( 'select.frm_trans_type' );
-		if ( typeDropdown && 'recurring' !== typeDropdown.value ) {
-			settings.get( 0 ).querySelectorAll( '.frm_trans_sub_opts' ).forEach(
-				function( subOpts ) {
-					subOpts.style.display = 'none';
-				}
-			);
-		}
+		updateGatewaySettingsVisibility( settings.get( 0 ) );
 
 		const captureSetting = settings.get( 0 ).querySelector( '[name*="[post_content][capture]"]' );
 		if ( captureSetting ) {
@@ -30,9 +73,6 @@
 			if ( wrapper ) {
 				if ( 'square' === gateway ) {
 					wrapper.style.display = 'none';
-				} else if ( 'recurring' !== typeDropdown.value ) {
-					// Capture appearing with Stripe selected and recurring selected.
-					wrapper.style.removeProperty( 'display' );
 				}
 			}
 		}
@@ -48,21 +88,15 @@
 		if ( squareGatewayOption?.checked ) {
 			syncRepeat( settings );
 		}
+
+		updateGatewaySettingsVisibility( settings );
 	}
 
 	function onToggleSub() {
 		const target = this;
 		setTimeout( function() {
 			const settings = target.closest( '.frm_form_action_settings' );
-			const squareIsActive = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' ).checked;
-
-			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
-				function( subOpts ) {
-					if ( subOpts.classList.contains( 'show_stripe' ) && ! subOpts.classList.contains( 'show_square' ) && squareIsActive ) {
-						subOpts.style.display = 'none';
-					}
-				}
-			);
+			updateGatewaySettingsVisibility( settings );
 		}, 0 );
 	}
 
@@ -132,6 +166,7 @@
 		}
 
 		newDropdown.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_square' );
+		newDropdown.closest( '.frm_trans_sub_opts' )?.classList.remove( 'frm_hidden' );
 
 		const stripeLabel = intervalCount.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
 		if ( stripeLabel?.textContent.includes( 'Repeat Every' ) ) {
