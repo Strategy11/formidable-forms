@@ -15,12 +15,18 @@
 		}
 
 		if ( 'recurring' === typeDropdown.value ) {
-			const activeGateway = settings.querySelector( '[name*="[post_content][gateway]"]:checked' )?.value;
+			const activeGateways = Array.from( settings.querySelectorAll( '[name*="[post_content][gateway]"]:checked' ) ).map( function( el ) {
+				return el.value;
+			} );
 
 			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
 				function( subOpts ) {
-					// Check if this setting has a show_* class for the active gateway
-					const hasActiveGatewayClass = subOpts.classList.contains( 'show_' + activeGateway );
+					// Check if this setting has a show_* class for any active gateway
+					const hasActiveGatewayClass = Array.from( subOpts.classList ).some( function( className ) {
+						return activeGateways.some( function( gateway ) {
+							return className === 'show_' + gateway;
+						} );
+					} );
 
 					if ( hasActiveGatewayClass ) {
 						subOpts.classList.remove( 'frm_hidden' );
@@ -34,7 +40,7 @@
 						} );
 
 						if ( hasAnyGatewayClass ) {
-							// Hide if it has a show_* class but not for the active gateway
+							// Hide if it has a show_* class but not for any active gateway
 							subOpts.classList.add( 'frm_hidden' );
 							subOpts.style.display = 'none';
 						} else {
