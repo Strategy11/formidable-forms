@@ -33,7 +33,7 @@ class FrmDefRegAction extends FrmFormAction {
 class FrmPayPalLiteAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = array(
-			'classes' => 'frmfont frm_paypal_icon frm-inverse',
+			'classes' => 'frmfont frm_paypal_icon',
 			'color'   => 'var(--primary-700)',
 		);
 
@@ -58,7 +58,7 @@ if ( class_exists( 'FrmPaymentAction' ) ) {
 class FrmStripeLiteAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = array(
-			'classes' => 'frmfont frm_stripe_icon frm-inverse',
+			'classes' => 'frmfont frm_stripe_icon',
 			'color'   => '#635bff',
 		);
 
@@ -69,7 +69,7 @@ class FrmStripeLiteAction extends FrmFormAction {
 class FrmSquareAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = array(
-			'classes' => 'frmfont frm_square_icon frm-inverse',
+			'classes' => 'frmfont frm_square_icon',
 			'color'   => '#000',
 		);
 

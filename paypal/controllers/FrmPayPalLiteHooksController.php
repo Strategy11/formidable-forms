@@ -53,7 +53,7 @@ class FrmPayPalLiteHooksController {
 			'frm_paypal_action_options',
 			function ( $options ) {
 				// Make actions using the PayPal add-on use the same icon we use in Lite.
-				$options['classes'] = 'frmfont frm_paypal_icon frm-inverse';
+				$options['classes'] = 'frmfont frm_paypal_icon';
 				return $options;
 			}
 		);
