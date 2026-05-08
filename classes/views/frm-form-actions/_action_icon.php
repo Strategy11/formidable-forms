@@ -10,6 +10,11 @@ if ( 'paypal' === $action_control->id_base ) {
 	$limit = 1;
 }
 
+// Remove limit for Stripe action when Stripe add-on is active
+if ( 'stripe' === $action_control->id_base && class_exists( 'FrmStrpAppHelper' ) ) {
+	$limit = 99;
+}
+
 $single_action_attrs = array_merge(
 	$data,
 	array(
