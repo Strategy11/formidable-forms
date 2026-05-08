@@ -291,17 +291,7 @@ class FrmFormActionsController {
 			'misc'      => array(
 				'name'    => __( 'Misc', 'formidable' ),
 				'icon'    => 'frmfont frm_shuffle_icon',
-				'actions' => array(
-					'on_submit',
-					'email',
-					'wppost',
-					'register',
-					'api',
-					'n8n',
-					'quiz',
-					'quiz_outcome',
-					'googlespreadsheet',
-				),
+				'actions' => self::get_misc_actions( $action_controls ),
 			),
 		);
 
@@ -326,8 +316,30 @@ class FrmFormActionsController {
 			'paypal',
 		);
 
-		// Check which add-on actions are marked as active (not default classes)
-		$addon_actions = array(
+		// Include all actions that are marked as active, including custom actions.
+		// This ensures custom actions appear in "My Actions" when enabled.
+		foreach ( $action_controls as $action_id => $action_control ) {
+			if ( ! in_array( $action_id, $available, true ) && ! empty( $action_control->action_options['active'] ) ) {
+				$available[] = $action_id;
+			}
+		}
+
+		return $available;
+	}
+
+	/**
+	 * Get the actions to include in the Misc section.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $action_controls The registered action controls.
+	 *
+	 * @return array
+	 */
+	private static function get_misc_actions( $action_controls ) {
+		$misc_actions = array(
+			'on_submit',
+			'email',
 			'wppost',
 			'register',
 			'api',
@@ -337,13 +349,21 @@ class FrmFormActionsController {
 			'googlespreadsheet',
 		);
 
-		foreach ( $addon_actions as $action_id ) {
-			if ( isset( $action_controls[ $action_id ] ) && ! empty( $action_controls[ $action_id ]->action_options['active'] ) ) {
-				$available[] = $action_id;
+		// Include all active actions that aren't in specific groups (payment, marketing, crm).
+		// This ensures custom actions appear in "Misc" when enabled.
+		$payment_actions = array( 'paypal', 'stripe', 'square' );
+		$marketing_actions = array( 'mailchimp', 'activecampaign', 'constantcontact', 'getresponse', 'aweber', 'mailpoet', 'convertkit', 'twilio' );
+		$crm_actions = self::get_crm_actions();
+
+		$excluded_actions = array_merge( $payment_actions, $marketing_actions, $crm_actions );
+
+		foreach ( $action_controls as $action_id => $action_control ) {
+			if ( ! in_array( $action_id, $misc_actions, true ) && ! in_array( $action_id, $excluded_actions, true ) && ! empty( $action_control->action_options['active'] ) ) {
+				$misc_actions[] = $action_id;
 			}
 		}
 
-		return $available;
+		return $misc_actions;
 	}
 
 	/**
