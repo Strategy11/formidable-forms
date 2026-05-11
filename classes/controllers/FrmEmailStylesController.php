@@ -252,6 +252,9 @@ class FrmEmailStylesController {
 			$atts['bg_color']     = $style_settings['container_bg_color'];
 			$atts['alt_bg_color'] = $style_settings['container_bg_color'];
 			$atts['text_color']   = $style_settings['text_color'];
+			if ( ! empty( $style_settings['font_size'] ) ) {
+				$atts['font_size'] = $style_settings['font_size'];
+			}
 		}
 
 		return new FrmTableHTMLGenerator( 'entry', $atts );

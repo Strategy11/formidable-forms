@@ -240,6 +240,12 @@ export default class frmSliderComponent {
 	 * Initializes the position of sliders when a accordion section is opened.
 	 */
 	initSlidersPosition() {
+		const emailSettings = document.querySelector( '.email_settings' );
+		if ( emailSettings ) {
+			this.initSlidersWidth( emailSettings );
+			return;
+		}
+
 		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
 		const quickSettings = document.querySelector( '.frm-quick-settings' );
 		const openedAccordion = document.querySelector( '.accordion-section.open' );
