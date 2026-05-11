@@ -69,17 +69,18 @@ class FrmGatedContentAction extends FrmFormAction {
 			'page'    => array(
 				'label'    => __( 'WordPress page', 'formidable' ),
 				'disabled' => false,
-				'pro'      => false,
 			),
 			'frm_file' => array(
-				'label'    => __( 'Formidable file', 'formidable' ),
+				'label'    => __( 'Formidable file (Pro)', 'formidable' ),
 				'disabled' => true,
-				'pro'      => true,
 			),
 			'frm_pdf'  => array(
-				'label'    => __( 'Formidable PDF file', 'formidable' ),
+				'label'    => __( 'Formidable PDF (PDFs add-on)', 'formidable' ),
 				'disabled' => true,
-				'pro'      => true,
+			),
+			'view'     => array(
+				'label'    => __( 'Formidable View (Views add-on)', 'formidable' ),
+				'disabled' => true,
 			),
 		);
 

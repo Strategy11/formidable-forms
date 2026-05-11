@@ -75,9 +75,6 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 										<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
 									>
 										<?php echo esc_html( $frm_gc_type['label'] ); ?>
-										<?php if ( ! empty( $frm_gc_type['pro'] ) ) : ?>
-											<?php esc_html_e( '(Pro)', 'formidable' ); ?>
-										<?php endif; ?>
 									</option>
 								<?php endforeach; ?>
 							</select>
@@ -184,9 +181,6 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 									<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
 								>
 									<?php echo esc_html( $frm_gc_type['label'] ); ?>
-									<?php if ( ! empty( $frm_gc_type['pro'] ) ) : ?>
-										<?php esc_html_e( '(Pro)', 'formidable' ); ?>
-									<?php endif; ?>
 								</option>
 							<?php endforeach; ?>
 						</select>
