@@ -11497,15 +11497,15 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			const optFormId = option.dataset.formId;
 			if ( ! optFormId ) {
 				// Placeholder option — always visible.
-				option.hidden = false;
+				option.style.display = '';
 				return;
 			}
-			option.hidden = ! selectedFormId || optFormId !== selectedFormId;
+			option.style.display = ( ! selectedFormId || optFormId !== selectedFormId ) ? 'none' : '';
 		} );
 
 		// If the currently selected field option is now hidden, reset the select.
 		const selected = fieldSelect.options[ fieldSelect.selectedIndex ];
-		if ( selected && selected.hidden ) {
+		if ( selected && selected.style.display === 'none' ) {
 			fieldSelect.value = '';
 		}
 	}
