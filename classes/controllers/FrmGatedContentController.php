@@ -83,8 +83,8 @@ class FrmGatedContentController {
 		$access_code    = FrmAppHelper::simple_get( 'access_code' );
 		$from_url_param = is_string( $access_code ) && '' !== $access_code;
 
-		// Try URL query parameter first (obtain_token with no action_id uses URL param only).
-		$hash = FrmGatedTokenHelper::obtain_token();
+		// Try URL query parameter first, then the frm_obtain_gated_token filter.
+		$hash = FrmGatedTokenHelper::obtain_token( 0, array( 'item_id' => $post_id, 'item_type' => 'page' ) );
 
 		// No URL param — scan frm_gc_* cookies to find one that grants access to this page.
 		if ( ! $hash ) {
@@ -199,20 +199,22 @@ class FrmGatedContentController {
 	/**
 	 * Check whether the current request carries any valid token for a given post.
 	 *
-	 * Checks the URL access_code parameter first, then frm_gc_* cookies. Used by
-	 * maybe_include_private_pages() to decide whether to widen the query.
+	 * Resolution order mirrors FrmGatedTokenHelper::obtain_token():
+	 *  1–4. obtain_token() — covers the URL param and the frm_obtain_gated_token
+	 *       filter (steps 1 and 3 require a known action_id and are no-ops here).
+	 *  5.   frm_gc_* cookies — covers browser cookies and hashes injected into
+	 *       $_COOKIE by add-ons (e.g. FrmRegGatedContentController::inject_user_token_cookies).
+	 *
+	 * Used by maybe_include_private_pages() to decide whether to widen the query.
 	 *
 	 * @param int $post_id Post ID to validate against.
 	 *
 	 * @return bool True if a valid token is found.
 	 */
 	private static function has_valid_token_for_post( $post_id ) {
-		$access_code = FrmAppHelper::simple_get( 'access_code' );
-		if ( '' !== $access_code ) {
-			$hash = hash( 'sha256', $access_code );
-			if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
-				return true;
-			}
+		$hash = FrmGatedTokenHelper::obtain_token( 0, array( 'item_id' => $post_id, 'item_type' => 'page' ) );
+		if ( $hash && FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
+			return true;
 		}
 
 		return null !== self::find_valid_cookie_hash_for_post( $post_id );
@@ -272,6 +274,21 @@ class FrmGatedContentController {
 	public static function trigger( $action, $entry, $form, $event ) {
 		$raw_user_id = get_current_user_id();
 		$user_id     = $raw_user_id ? $raw_user_id : null;
+
+		/**
+		 * Filters the user ID stored in the generated gated content token.
+		 *
+		 * Use this to supply the correct user ID when the current user is not yet
+		 * logged in at trigger time — for example, during a user_registration event
+		 * where the new user is created but auto-login has not yet happened.
+		 *
+		 * @since x.x
+		 *
+		 * @param int|null $user_id WordPress user ID, or null for guests.
+		 * @param object   $entry   Submitted form entry object.
+		 * @param string   $event   Trigger event slug.
+		 */
+		$user_id = apply_filters( 'frm_gated_content_token_user_id', $user_id, $entry, $event );
 
 		// On update, revoke any existing tokens for this action+entry pair before
 		// issuing a fresh one — prevents unbounded row accumulation and ensures the
@@ -415,35 +432,37 @@ class FrmGatedContentController {
 	}
 
 	/**
-	 * Resolve the raw token for an action from the session transient or URL parameter.
+	 * Resolve the raw token for an action from the per-request static variable or the
+	 * 5-minute transient set by FrmGatedTokenHelper::generate().
 	 *
-	 * Cookie-only sources cannot yield a raw token, so they are excluded here.
-	 * Use FrmGatedTokenHelper::obtain_token() when only a hash is needed.
+	 * Only these two sources can yield a raw (unhashed) token — cookies and DB rows
+	 * store only the SHA-256 hash, so they cannot be used here. Use
+	 * FrmGatedTokenHelper::obtain_token() when a hash is sufficient.
+	 *
+	 * A filter is provided so add-ons can supply a raw token from other sources
+	 * (e.g. re-generating a single-use token on demand for a registered user).
 	 *
 	 * @param int $action_id Action post ID.
 	 *
-	 * @return string|null Raw 48-char token, or null if unavailable.
+	 * @return string|null Raw token string, or null if unavailable.
 	 */
 	private static function resolve_raw_token( $action_id ) {
-		// Transient set by FrmGatedTokenHelper::generate() — survives payment redirects.
 		$raw = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
-		if ( null !== $raw ) {
-			return $raw;
-		}
 
-		// URL query parameter hit (e.g. visitor clicking a gated link from email).
-		$candidate = FrmAppHelper::simple_get( 'access_code' );
-		if ( ! $candidate || ! is_string( $candidate ) ) {
-			return null;
-		}
-
-		$row = FrmGatedTokenHelper::get_row_by_token( $candidate );
-		if ( $row
-		     && (int) $row->action_id === $action_id
-		     && ( null === $row->expired_at || time() < (int) $row->expired_at )
-		) {
-			return $candidate;
-		}
+		/**
+		 * Filter the raw gated content token resolved for a shortcode.
+		 *
+		 * Fires after the static variable and transient are checked. Return a raw
+		 * token string to supply one from another source, or null to indicate none
+		 * is available. Cookie and hash-only sources cannot be used here — raw
+		 * tokens are required for shortcode output.
+		 *
+		 * @since x.x
+		 *
+		 * @param string|null $raw       Raw token from the static variable / transient, or null.
+		 * @param int         $action_id Gated content action post ID.
+		 */
+		return apply_filters( 'frm_gated_content_raw_token', $raw, $action_id );
 	}
 
 	/**

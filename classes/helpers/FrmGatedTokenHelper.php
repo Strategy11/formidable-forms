@@ -193,11 +193,20 @@ class FrmGatedTokenHelper {
 	/**
 	 * Get all active (non-expired) tokens for a user, joined with action post data.
 	 *
-	 * @param int $user_id WordPress user ID.
+	 * @param int $user_id   WordPress user ID.
+	 * @param int $action_id Optional. When non-zero, restricts results to this action.
 	 * @return array Array of token row objects, each with an `action_title` property from wp_posts.
 	 */
-	public static function get_tokens_for_user( $user_id ) {
+	public static function get_tokens_for_user( $user_id, $action_id = 0 ) {
 		global $wpdb;
+
+		$where  = 'WHERE t.user_id = %d AND ( t.expired_at IS NULL OR t.expired_at > %d )';
+		$params = array( $user_id, time() );
+
+		if ( $action_id ) {
+			$where   .= ' AND t.action_id = %d';
+			$params[] = $action_id;
+		}
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
 		$results = $wpdb->get_results(
@@ -205,11 +214,9 @@ class FrmGatedTokenHelper {
 				'SELECT t.*, p.post_title AS action_title'
 				. ' FROM ' . $wpdb->prefix . 'frm_gated_tokens t'
 				. ' INNER JOIN ' . $wpdb->posts . ' p ON p.ID = t.action_id'
-				. ' WHERE t.user_id = %d'
-				. ' AND ( t.expired_at IS NULL OR t.expired_at > %d )'
+				. ' ' . $where
 				. ' ORDER BY t.created_at DESC',
-				$user_id,
-				time()
+				$params
 			)
 		);
 		return is_array( $results ) ? $results : array();
@@ -309,7 +316,7 @@ class FrmGatedTokenHelper {
 	 *
 	 * @return bool True if the item is listed in the action's items setting.
 	 */
-	private static function action_contains_item( $action, $item_id, $item_type ) {
+	public static function action_contains_item( $action, $item_id, $item_type ) {
 		if ( ! $action ) {
 			return false;
 		}
@@ -394,65 +401,147 @@ class FrmGatedTokenHelper {
 	 * Resolve the active token hash for a gated content action.
 	 *
 	 * Resolution order:
-	 *  1. 5-minute transient set by generate() — survives payment redirects.
+	 *  1. Static variable / 5-minute transient set by generate() — survives payment redirects.
 	 *  2. `access_code` URL query parameter (raw token → hashed → validated).
 	 *  3. HttpOnly cookie `frm_gc_{action_id}` (stores hash directly).
+	 *  4. `frm_obtain_gated_token` filter — add-ons can resolve from other sources
+	 *     (e.g. a DB lookup by the current user's ID).
 	 *
 	 * Returns a SHA-256 hex hash string on success, or null when no valid token is
 	 * found. Callers should pass the hash to self::validate_hash() to confirm it
 	 * grants access to a specific content item.
 	 *
-	 * @param int $action_id Optional. Restrict resolution to a specific action post ID.
-	 *                       When 0 the URL-param path still works (action_id is read
-	 *                       from the token row); cookie path is skipped.
+	 * @param int   $action_id Optional. Restrict resolution to a specific action post ID.
+	 *                         When 0 the URL-param path still works (action_id is read
+	 *                         from the token row); cookie and filter paths are skipped.
+	 * @param array $args      Optional context passed through to the filter. Recognised keys:
+	 *                         'item_id'   (int)    — content item ID being accessed.
+	 *                         'item_type' (string) — content item type slug (e.g. 'page').
 	 * @return string|null Token hash, or null if no valid token could be resolved.
 	 */
-	public static function obtain_token( $action_id = 0 ) {
-		// 1. Transient set by self::generate() — persists across payment redirects (5-min TTL).
-		if ( $action_id ) {
-			$raw = self::get_raw_token_for_action( $action_id );
-			if ( null !== $raw ) {
-				return hash( 'sha256', $raw );
-			}
+	public static function obtain_token( $action_id = 0, $args = array() ) {
+		// 1. Static variable / transient.
+		$hash = self::get_token_hash_from_static_cache( $action_id );
+		if ( null !== $hash ) {
+			return $hash;
 		}
 
-		// 2. URL query parameter: ?access_code=<raw_token>
-		$url_token = FrmAppHelper::simple_get( 'access_code' );
-		if ( '' !== $url_token ) {
-			$hash = hash( 'sha256', $url_token );
-			$row  = self::get_row_by_hash( $hash );
-
-			$row_action_id = $row ? (int) $row->action_id : 0;
-			$row_active    = $row && ( null === $row->expired_at || time() < (int) $row->expired_at );
-
-			if ( $row_active && ( ! $action_id || $row_action_id === $action_id ) ) {
-				// Only set the cookie when headers have not yet been sent. Headers are
-				// already sent when obtain_token() is called during shortcode rendering
-				// (e.g. show="expired_time" on a page that also has the access_code
-				// param but for a different action). maybe_unlock_post() handles cookie
-				// setting on the 'wp' hook where headers are always available.
-				if ( ! headers_sent() ) {
-					self::set_cookie( $row_action_id, $hash, $row->expired_at );
-				}
-				return $hash;
-			}
+		// 2. URL query parameter.
+		$hash = self::get_token_hash_from_url_param( $action_id );
+		if ( null !== $hash ) {
+			return $hash;
 		}
 
-		// Cookie path requires a known action_id.
+		// 3. Cookie.
+		$hash = self::get_token_hash_from_cookie( $action_id );
+		if ( null !== $hash ) {
+			return $hash;
+		}
+
+		/**
+		 * Resolve a token hash when static cache, URL param, and cookie all miss.
+		 *
+		 * Add-ons can use this to supply a hash from other sources — for example,
+		 * the Formidable Registration add-on queries wp_frm_gated_tokens by the
+		 * current user's ID so registered users who have no cookie can still access
+		 * gated content without re-clicking an emailed link.
+		 *
+		 * Return null to pass through to the next handler, or a SHA-256 hex hash
+		 * string to short-circuit.
+		 *
+		 * @since x.x
+		 *
+		 * @param string|null $hash      Currently resolved hash (null at this point).
+		 * @param int         $action_id Gated content action post ID, or 0 if not specified.
+		 * @param array       $args      Context: 'item_id' (int) and 'item_type' (string)
+		 *                               when the caller knows the content item being accessed.
+		 */
+		return apply_filters( 'frm_obtain_gated_token', null, $action_id, $args );
+	}
+
+	/**
+	 * Resolve a token hash from the per-request static variable or the 5-minute transient.
+	 *
+	 * Only runs when a specific action_id is supplied; skipped when action_id is 0
+	 * because the transient key is action-scoped.
+	 *
+	 * @param int $action_id Gated content action post ID, or 0 to skip.
+	 * @return string|null SHA-256 hex hash, or null when not found.
+	 */
+	private static function get_token_hash_from_static_cache( $action_id ) {
 		if ( ! $action_id ) {
 			return null;
 		}
 
-		// 3. HttpOnly cookie set on a previous URL-param or transient hit.
+		$raw = self::get_raw_token_for_action( $action_id );
+		return null !== $raw ? hash( 'sha256', $raw ) : null;
+	}
+
+	/**
+	 * Resolve a token hash from the `access_code` URL query parameter.
+	 *
+	 * When a valid raw token is found the corresponding cookie is set immediately
+	 * (unless headers are already sent) so subsequent requests skip this path.
+	 *
+	 * @param int $action_id Gated content action post ID, or 0 to accept any action.
+	 * @return string|null SHA-256 hex hash, or null when not found or invalid.
+	 */
+	private static function get_token_hash_from_url_param( $action_id ) {
+		$url_token = FrmAppHelper::simple_get( 'access_code' );
+		if ( '' === $url_token ) {
+			return null;
+		}
+
+		$hash = hash( 'sha256', $url_token );
+		$row  = self::get_row_by_hash( $hash );
+
+		if ( ! $row ) {
+			return null;
+		}
+
+		$row_action_id = (int) $row->action_id;
+		$row_active    = null === $row->expired_at || time() < (int) $row->expired_at;
+
+		if ( ! $row_active || ( $action_id && $row_action_id !== $action_id ) ) {
+			return null;
+		}
+
+		// Only set the cookie when headers have not yet been sent. Headers are
+		// already sent when obtain_token() is called during shortcode rendering
+		// (e.g. show="expired_time" on a page that also has the access_code
+		// param but for a different action). maybe_unlock_post() handles cookie
+		// setting on the 'wp' hook where headers are always available.
+		if ( ! headers_sent() ) {
+			self::set_cookie( $row_action_id, $hash, $row->expired_at );
+		}
+
+		return $hash;
+	}
+
+	/**
+	 * Resolve a token hash from the `frm_gc_{action_id}` HttpOnly cookie.
+	 *
+	 * Requires a specific action_id — cookies are keyed by action so there is no
+	 * way to scan for a valid one without knowing which action to look up.
+	 *
+	 * @param int $action_id Gated content action post ID. Skipped when 0.
+	 * @return string|null SHA-256 hex hash, or null when no valid cookie is found.
+	 */
+	private static function get_token_hash_from_cookie( $action_id ) {
+		if ( ! $action_id ) {
+			return null;
+		}
+
 		$cookie_name = 'frm_gc_' . $action_id;
 		$cookie_hash = isset( $_COOKIE[ $cookie_name ] ) ? sanitize_text_field( $_COOKIE[ $cookie_name ] ) : '';
 
-		if ( '' !== $cookie_hash ) {
-			$row = self::get_row_by_hash( $cookie_hash );
+		if ( '' === $cookie_hash ) {
+			return null;
+		}
 
-			if ( $row && ( null === $row->expired_at || time() < (int) $row->expired_at ) ) {
-				return $cookie_hash;
-			}
+		$row = self::get_row_by_hash( $cookie_hash );
+		if ( $row && ( null === $row->expired_at || time() < (int) $row->expired_at ) ) {
+			return $cookie_hash;
 		}
 
 		return null;
