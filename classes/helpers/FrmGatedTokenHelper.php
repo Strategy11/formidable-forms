@@ -338,20 +338,33 @@ class FrmGatedTokenHelper {
 	/**
 	 * Set an HttpOnly cookie that stores a token hash for a gated content action.
 	 *
-	 * Cookie name : frm_gc_{action_id}
-	 * Cookie value: 64-char hex SHA-256 hash of the raw token
+	 * Cookie name  : frm_gc_{action_id}
+	 * Cookie value : {hash} — legacy / URL-param flow (no item context).
+	 *              : {hash}:{item_type}:{item_id} — when item context is known.
+	 *
+	 * Embedding item context lets find_valid_cookie_hash_for_* skip cookies that
+	 * clearly do not cover the requested item without a DB round-trip.
 	 *
 	 * @param int      $action_id  Action post ID.
 	 * @param string   $hash       SHA-256 hex hash to store.
 	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for session+1-year.
+	 * @param string   $item_type  Optional item type slug (e.g. 'page', 'frm_file').
+	 * @param int      $item_id    Optional item post/attachment ID.
 	 * @return void
 	 */
-	public static function set_cookie( $action_id, $hash, $expired_at = null ) {
+	public static function set_cookie( $action_id, $hash, $expired_at = null, $item_type = '', $item_id = 0 ) {
+		if ( $item_type && $item_id ) {
+			$value = $hash . ':' . $item_type . ':' . $item_id;
+		} elseif ( $item_type ) {
+			$value = $hash . ':' . $item_type; // Type-only (e.g. frm_pdf — no fixed item ID).
+		} else {
+			$value = $hash;
+		}
 		$expiry = null !== $expired_at ? $expired_at : ( time() + YEAR_IN_SECONDS );
 
 		setcookie(
 			'frm_gc_' . $action_id,
-			$hash,
+			$value,
 			array(
 				'expires'  => $expiry,
 				'path'     => '/',
@@ -360,6 +373,21 @@ class FrmGatedTokenHelper {
 				'samesite' => 'Lax',
 			)
 		);
+	}
+
+	/**
+	 * Extract the SHA-256 hash from a frm_gc_* cookie value.
+	 *
+	 * Handles both the legacy plain-hash format and the extended
+	 * {hash}:{item_type}:{item_id} format. The hash is always the segment
+	 * before the first colon (or the whole string when no colon is present).
+	 *
+	 * @param string $value Raw cookie value.
+	 * @return string SHA-256 hex hash.
+	 */
+	public static function parse_hash_from_cookie_value( $value ) {
+		$colon = strpos( $value, ':' );
+		return false !== $colon ? substr( $value, 0, $colon ) : $value;
 	}
 
 	/**
@@ -451,12 +479,14 @@ class FrmGatedTokenHelper {
 		 *
 		 * @since x.x
 		 *
-		 * @param string|null $hash      Currently resolved hash (null at this point).
-		 * @param int         $action_id Gated content action post ID, or 0 if not specified.
-		 * @param array       $args      Context: 'item_id' (int) and 'item_type' (string)
-		 *                               when the caller knows the content item being accessed.
+		 * @param string|null $hash Currently resolved hash (null at this point).
+		 * @param array       $args {
+		 *     @type int    $action_id Gated content action post ID, or 0 if not specified.
+		 *     @type int    $item_id   Content item ID being accessed (0 if unknown).
+		 *     @type string $item_type Content item type slug (empty if unknown).
+		 * }
 		 */
-		return apply_filters( 'frm_obtain_gated_token', null, $action_id, $args );
+		return apply_filters( 'frm_obtain_gated_token', null, array( 'action_id' => $action_id ) + $args );
 	}
 
 	/**
@@ -532,16 +562,17 @@ class FrmGatedTokenHelper {
 			return null;
 		}
 
-		$cookie_name = 'frm_gc_' . $action_id;
-		$cookie_hash = isset( $_COOKIE[ $cookie_name ] ) ? sanitize_text_field( $_COOKIE[ $cookie_name ] ) : '';
+		$cookie_name  = 'frm_gc_' . $action_id;
+		$cookie_value = isset( $_COOKIE[ $cookie_name ] ) ? sanitize_text_field( $_COOKIE[ $cookie_name ] ) : '';
 
-		if ( '' === $cookie_hash ) {
+		if ( '' === $cookie_value ) {
 			return null;
 		}
 
-		$row = self::get_row_by_hash( $cookie_hash );
+		$hash = self::parse_hash_from_cookie_value( $cookie_value );
+		$row  = self::get_row_by_hash( $hash );
 		if ( $row && ( null === $row->expired_at || time() < (int) $row->expired_at ) ) {
-			return $cookie_hash;
+			return $hash;
 		}
 
 		return null;

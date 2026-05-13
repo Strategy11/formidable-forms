@@ -109,8 +109,9 @@ class FrmGatedContentController {
 			}
 
 			// Refresh the frm_gc_ cookie so subsequent visits skip the URL param.
+			// Item context is embedded so cookie scans can skip irrelevant cookies.
 			if ( $row ) {
-				FrmGatedTokenHelper::set_cookie( (int) $row->action_id, $hash, $row->expired_at );
+				FrmGatedTokenHelper::set_cookie( (int) $row->action_id, $hash, $row->expired_at, 'page', $post_id );
 			}
 
 			// Strip the raw token from the URL to prevent leakage via browser history,
@@ -235,7 +236,22 @@ class FrmGatedContentController {
 			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
 				continue;
 			}
-			$hash = sanitize_text_field( $value );
+
+			$value       = sanitize_text_field( $value );
+			$parts       = explode( ':', $value, 3 );
+			$hash        = $parts[0];
+			$cookie_type = isset( $parts[1] ) ? $parts[1] : '';
+			$cookie_id   = isset( $parts[2] ) ? (int) $parts[2] : 0;
+
+			// Skip when type is known and doesn't match.
+			if ( $cookie_type && 'page' !== $cookie_type ) {
+				continue;
+			}
+			// Skip when item ID is known and doesn't match.
+			if ( $cookie_id && $cookie_id !== $post_id ) {
+				continue;
+			}
+
 			if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
 				return $hash;
 			}
@@ -285,10 +301,12 @@ class FrmGatedContentController {
 		 * @since x.x
 		 *
 		 * @param int|null $user_id WordPress user ID, or null for guests.
-		 * @param object   $entry   Submitted form entry object.
-		 * @param string   $event   Trigger event slug.
+		 * @param array    $args {
+		 *     @type object $entry Submitted form entry object.
+		 *     @type string $event Trigger event slug.
+		 * }
 		 */
-		$user_id = apply_filters( 'frm_gated_content_token_user_id', $user_id, $entry, $event );
+		$user_id = apply_filters( 'frm_gated_content_token_user_id', $user_id, compact( 'entry', 'event' ) );
 
 		// On update, revoke any existing tokens for this action+entry pair before
 		// issuing a fresh one — prevents unbounded row accumulation and ensures the
@@ -459,10 +477,12 @@ class FrmGatedContentController {
 		 *
 		 * @since x.x
 		 *
-		 * @param string|null $raw       Raw token from the static variable / transient, or null.
-		 * @param int         $action_id Gated content action post ID.
+		 * @param string|null $raw  Raw token from the static variable / transient, or null.
+		 * @param array       $args {
+		 *     @type int $action_id Gated content action post ID.
+		 * }
 		 */
-		return apply_filters( 'frm_gated_content_raw_token', $raw, $action_id );
+		return apply_filters( 'frm_gated_content_raw_token', $raw, compact( 'action_id' ) );
 	}
 
 	/**
