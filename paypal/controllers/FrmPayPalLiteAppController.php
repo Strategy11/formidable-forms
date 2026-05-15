@@ -536,7 +536,7 @@ class FrmPayPalLiteAppController {
 		// Update amount based on field shortcodes.
 		$entry = self::generate_false_entry();
 
-		return number_format( floatval( FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) ) ) / 100, 2 );
+		return number_format( floatval( FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) ) ) / 100, 2, '.', '' );
 	}
 
 	/**
