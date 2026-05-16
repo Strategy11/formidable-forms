@@ -296,6 +296,8 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_rename_style', 'FrmStylesController::rename_style' );
 
 		// XML Controller.
+		add_action( 'wp_ajax_frm_get_template_fields', 'FrmXMLController::get_template_fields' );
+		add_action( 'wp_ajax_frm_install_modified_template', 'FrmXMLController::install_modified_template' );
 		add_action( 'wp_ajax_frm_install_template', 'FrmXMLController::install_template' );
 		add_action( 'wp_ajax_frm_entries_csv', 'FrmXMLController::csv' );
 		add_action( 'wp_ajax_nopriv_frm_entries_csv', 'FrmXMLController::csv' );

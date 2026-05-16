@@ -37,6 +37,74 @@ class FrmXMLController {
 	}
 
 	/**
+	 * Fetch a template XML from its URL and return a summary of its fields.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function get_template_fields() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( ! function_exists( 'simplexml_load_string' ) ) {
+			wp_send_json_error( __( 'Your server is missing the Simple XML extension.', 'formidable' ) );
+		}
+
+		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
+
+		if ( ! self::validate_xml_url( $url ) ) {
+			wp_send_json_error( __( 'The template URL could not be validated.', 'formidable' ) );
+		}
+
+		$response = wp_remote_get( $url );
+		$body     = wp_remote_retrieve_body( $response );
+		$xml      = simplexml_load_string( $body );
+
+		if ( ! $xml || ! isset( $xml->form ) ) {
+			wp_send_json_error( __( 'There was an error reading the form template.', 'formidable' ) );
+		}
+
+		$fields = self::extract_fields_from_xml( $xml );
+
+		wp_send_json_success( array( 'fields' => $fields ) );
+	}
+
+	/**
+	 * Extract a summary of fields from template XML.
+	 *
+	 * @since x.x
+	 *
+	 * @param SimpleXMLElement $xml Template XML data.
+	 * @return array
+	 */
+	private static function extract_fields_from_xml( $xml ) {
+		$fields = array();
+
+		foreach ( $xml->form as $form ) {
+			if ( ! isset( $form->field ) ) {
+				continue;
+			}
+
+			foreach ( $form->field as $field ) {
+				$type = (string) $field->type;
+
+				if ( in_array( $type, array( 'submit', 'end_divider', 'captcha', 'credit_card' ), true ) ) {
+					continue;
+				}
+
+				$fields[] = array(
+					'name'        => (string) $field->name,
+					'type'        => $type,
+					'field_order' => (int) $field->field_order,
+				);
+			}
+		}
+
+		return $fields;
+	}
+
+	/**
 	 * Use the template link to install the XML template
 	 *
 	 * @since 3.06
@@ -120,6 +188,134 @@ class FrmXMLController {
 
 		echo wp_json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * Install a template with field modifications applied to the XML before import.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function install_modified_template() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( ! function_exists( 'simplexml_load_string' ) ) {
+			wp_send_json_error( __( 'Your server is missing the Simple XML extension.', 'formidable' ) );
+		}
+
+		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
+
+		if ( ! self::validate_xml_url( $url ) ) {
+			wp_send_json_error( __( 'The template URL could not be validated.', 'formidable' ) );
+		}
+
+		$modifications = FrmAppHelper::get_param( 'modifications', '', 'post', 'wp_unslash' );
+		$modifications = json_decode( $modifications, true );
+
+		if ( ! is_array( $modifications ) ) {
+			wp_send_json_error( __( 'Invalid modification data.', 'formidable' ) );
+		}
+
+		$response = wp_remote_get( $url );
+		$body     = wp_remote_retrieve_body( $response );
+		$xml      = simplexml_load_string( $body );
+
+		if ( ! $xml ) {
+			wp_send_json_error( __( 'There was an error reading the form template.', 'formidable' ) );
+		}
+
+		self::apply_field_modifications( $xml, $modifications );
+		self::set_new_form_name( $xml );
+
+		$imported = FrmXMLHelper::import_xml_now( $xml, true );
+
+		if ( empty( $imported['form_status'] ) ) {
+			$message = $imported['error'] ?? __( 'There was an error importing form', 'formidable' );
+			wp_send_json_error( $message );
+		}
+
+		$form_id = array_key_last( $imported['form_status'] );
+		wp_send_json_success(
+			array(
+				'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
+			)
+		);
+	}
+
+	/**
+	 * Apply field modifications to template XML before import.
+	 *
+	 * Supports renaming fields, changing field types, and removing fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param SimpleXMLElement $xml           Template XML data.
+	 * @param array            $modifications Array of field modifications. Each item may contain:
+	 *                                        - field_order (int) The field to modify.
+	 *                                        - name (string) New field name.
+	 *                                        - type (string) New field type.
+	 *                                        - remove (bool) Whether to remove the field.
+	 * @return void
+	 */
+	public static function apply_field_modifications( &$xml, $modifications ) {
+		if ( ! isset( $xml->form ) ) {
+			return;
+		}
+
+		$removals = array();
+		$updates  = array();
+
+		foreach ( $modifications as $mod ) {
+			if ( ! isset( $mod['field_order'] ) ) {
+				continue;
+			}
+
+			$order = (int) $mod['field_order'];
+
+			if ( ! empty( $mod['remove'] ) ) {
+				$removals[] = $order;
+			} else {
+				$updates[ $order ] = $mod;
+			}
+		}
+
+		foreach ( $xml->form as $form ) {
+			if ( ! isset( $form->field ) ) {
+				continue;
+			}
+
+			$fields_to_remove = array();
+
+			foreach ( $form->field as $index => $field ) {
+				$order = (int) $field->field_order;
+
+				if ( in_array( $order, $removals, true ) ) {
+					$fields_to_remove[] = $field;
+					continue;
+				}
+
+				if ( isset( $updates[ $order ] ) ) {
+					$mod = $updates[ $order ];
+
+					if ( isset( $mod['name'] ) ) {
+						$field->name = sanitize_text_field( $mod['name'] );
+					}
+
+					if ( isset( $mod['type'] ) ) {
+						$field->type = sanitize_text_field( $mod['type'] );
+					}
+				}
+			}
+
+			foreach ( $fields_to_remove as $field ) {
+				$dom_field = dom_import_simplexml( $field );
+				if ( $dom_field && $dom_field->parentNode ) {
+					$dom_field->parentNode->removeChild( $dom_field );
+				}
+			}
+		}
 	}
 
 	/**

@@ -60,6 +60,27 @@ const onUseTemplateButtonClick = event => {
 	newTemplateActionInput.value = actionName;
 	newTemplateLinkInput.value = useTemplateButton.href;
 
+	/**
+	 * Allow add-ons to intercept the template install flow.
+	 *
+	 * Return true to prevent the default install behavior.
+	 *
+	 * @since x.x
+	 *
+	 * @param {boolean} handled    Whether the template install has been handled.
+	 * @param {Object}  templateData Template data including name, description, url, and button.
+	 */
+	const handled = wp.hooks.applyFilters( 'frm_before_use_template', false, {
+		name: templateName,
+		description: templateDescription,
+		url: useTemplateButton.href,
+		button: useTemplateButton
+	});
+
+	if ( handled ) {
+		return;
+	}
+
 	// Install new form template
 	installNewForm( newTemplateForm, actionName, useTemplateButton );
 };
