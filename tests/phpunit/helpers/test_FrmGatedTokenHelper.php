@@ -18,7 +18,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @var array{type: string, id: int}
 	 */
 	private $item = array(
-		'type' => 'page',
+		'type' => 'post',
 		'id'   => 99,
 	);
 

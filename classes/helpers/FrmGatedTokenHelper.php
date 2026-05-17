@@ -275,15 +275,151 @@ class FrmGatedTokenHelper {
 		unset( self::$row_cache[ $hash ] );
 	}
 
+	// ── Validation transient cache ────────────────────────────────────────── //
+
+	/**
+	 * Build the transient key for a token + item validation result.
+	 *
+	 * Format: frm_gc_v_{hash}_{item_type}_{item_id}
+	 * Max length ≈ 9 + 64 + 1 + 20 + 1 + 10 = 105 chars (well under WP's 172-char limit).
+	 *
+	 * @param string $hash      SHA-256 hex hash of the token.
+	 * @param string $item_type Content item type slug.
+	 * @param int    $item_id   Content item ID.
+	 *
+	 * @return string
+	 */
+	private static function get_validation_transient_key( $hash, $item_type, $item_id ) {
+		return 'frm_gc_v_' . $hash . '_' . $item_type . '_' . (int) $item_id;
+	}
+
+	/**
+	 * Return the cached validation result for a token + item pair.
+	 *
+	 * Only successful validations are cached — a cache hit always means valid.
+	 * Returns null when no cached result exists (full validation required).
+	 *
+	 * @param string $hash      SHA-256 hex hash of the token.
+	 * @param string $item_type Content item type slug.
+	 * @param int    $item_id   Content item ID.
+	 *
+	 * @return array|null Cached value array on hit, null on miss.
+	 */
+	public static function get_cached_validation( $hash, $item_type, $item_id ) {
+		$cached = get_transient( self::get_validation_transient_key( $hash, $item_type, $item_id ) );
+		return false !== $cached ? $cached : null;
+	}
+
+	/**
+	 * Cache a successful token + item validation result.
+	 *
+	 * TTL equals the remaining lifetime of the token (or DAY_IN_SECONDS for
+	 * tokens that never expire). Action-update hooks delete the cache early when
+	 * the action's item list changes.
+	 *
+	 * @param string   $hash      SHA-256 hex hash of the token.
+	 * @param string   $item_type Content item type slug.
+	 * @param int      $item_id   Content item ID.
+	 * @param int|null $expired_at Token expiry timestamp, or null if it never expires.
+	 * @param int      $action_id  Gated content action post ID.
+	 *
+	 * @return void
+	 */
+	public static function set_validation_cache( $hash, $item_type, $item_id, $expired_at, $action_id ) {
+		$ttl = null !== $expired_at ? max( 1, (int) $expired_at - time() ) : DAY_IN_SECONDS;
+		set_transient(
+			self::get_validation_transient_key( $hash, $item_type, $item_id ),
+			array(
+				'item_type'  => $item_type,
+				'item_id'    => $item_id,
+				'expired_at' => $expired_at,
+				'action_id'  => $action_id,
+			),
+			$ttl
+		);
+	}
+
+	/**
+	 * Delete validation cache entries for every token belonging to an action.
+	 *
+	 * Call this when a gated content action's settings are updated so stale
+	 * item-membership results are not served from cache.
+	 *
+	 * @param int $action_id Gated content action post ID.
+	 *
+	 * @return void
+	 */
+	public static function delete_validation_cache_for_action( $action_id ) {
+		$action = get_post( $action_id );
+		if ( ! $action ) {
+			return;
+		}
+
+		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = self::get_tokens_for_action( $action_id, 9999 );
+		foreach ( $rows as $row ) {
+			foreach ( $settings['items'] as $item ) {
+				if ( ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
+					delete_transient( self::get_validation_transient_key( $row->token_hash, $item['type'], (int) $item['id'] ) );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Delete all validation cache entries for a single token.
+	 *
+	 * Looks up the token's action to know which item_type + item_id combinations
+	 * may have been cached, then deletes each transient.
+	 *
+	 * Call this when a token is mutated (expiry extended, hash renewed) or when
+	 * the token is found to be expired during real-time validation.
+	 *
+	 * @param string $hash      SHA-256 hex hash of the token.
+	 * @param int    $action_id Optional. When already known, avoids an extra row lookup.
+	 *
+	 * @return void
+	 */
+	public static function delete_validation_cache_for_token( $hash, $action_id = 0 ) {
+		if ( ! $action_id ) {
+			$row = self::get_row_by_hash( $hash );
+			if ( ! $row ) {
+				return;
+			}
+			$action_id = (int) $row->action_id;
+		}
+
+		$action = get_post( $action_id );
+		if ( ! $action ) {
+			return;
+		}
+
+		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
+			return;
+		}
+
+		foreach ( $settings['items'] as $item ) {
+			if ( ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
+				delete_transient( self::get_validation_transient_key( $hash, $item['type'], (int) $item['id'] ) );
+			}
+		}
+	}
+
 	/**
 	 * Validate a pre-computed token hash against a specific gated content item.
 	 *
-	 * Identical logic to validate() but accepts an already-hashed value,
-	 * avoiding double-hashing when the caller resolved the token from a cookie.
+	 * Convenience wrapper around FrmGatedToken::validate() for callers that
+	 * already hold a hash rather than a token object.
 	 *
 	 * @param string      $hash      SHA-256 hex hash of the raw access token.
 	 * @param int         $item_id   ID of the content item to check access for.
-	 * @param string      $item_type Type slug of the content item (e.g. 'page', 'frm_file').
+	 * @param string      $item_type Type slug of the content item (e.g. 'post', 'frm_file').
 	 * @param object|null $row       Optional pre-fetched token row. Skips the DB lookup when provided.
 	 * @return bool True if the hash grants access to the item.
 	 */
@@ -296,15 +432,7 @@ class FrmGatedTokenHelper {
 			return false;
 		}
 
-		if ( null !== $row->expired_at && time() >= (int) $row->expired_at ) {
-			return false;
-		}
-
-		$action   = get_post( (int) $row->action_id );
-		$is_valid = self::action_contains_item( $action, $item_id, $item_type );
-
-		/** This filter is documented in classes/helpers/FrmGatedTokenHelper.php */
-		return (bool) apply_filters( 'frm_gated_content_validate', $is_valid, compact( 'row', 'item_id', 'item_type' ) );
+		return ( new FrmGatedToken( $row ) )->validate( $item_id, $item_type );
 	}
 
 	/**
@@ -348,7 +476,7 @@ class FrmGatedTokenHelper {
 	 * @param int      $action_id  Action post ID.
 	 * @param string   $hash       SHA-256 hex hash to store.
 	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for session+1-year.
-	 * @param string   $item_type  Optional item type slug (e.g. 'page', 'frm_file').
+	 * @param string   $item_type  Optional item type slug (e.g. 'post', 'frm_file').
 	 * @param int      $item_id    Optional item post/attachment ID.
 	 * @return void
 	 */
@@ -426,85 +554,144 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Resolve the active token hash for a gated content action.
+	 * Find the first valid access token for a gated content item.
 	 *
-	 * Resolution order:
-	 *  1. Static variable / 5-minute transient set by generate() — survives payment redirects.
-	 *  2. `access_code` URL query parameter (raw token → hashed → validated).
-	 *  3. HttpOnly cookie `frm_gc_{action_id}` (stores hash directly).
-	 *  4. `frm_obtain_gated_token` filter — add-ons can resolve from other sources
-	 *     (e.g. a DB lookup by the current user's ID).
+	 * Checks sources in priority order, returning immediately on the first match:
+	 *  1. `access_code` URL query parameter (raw token → hashed → validated).
+	 *  2. All HttpOnly `frm_gc_*` cookies — one cookie per gated content action.
+	 *  3. All active DB tokens for the current logged-in user. Supports registration-
+	 *     gated content where the Registration add-on stores the new user ID on the
+	 *     token so returning visitors are recognised without a URL param or cookie.
+	 *  4. `frm_obtain_gated_token` filter — add-ons can supply a token from other sources.
 	 *
-	 * Returns a SHA-256 hex hash string on success, or null when no valid token is
-	 * found. Callers should pass the hash to self::validate_hash() to confirm it
-	 * grants access to a specific content item.
+	 * Note: the 5-minute static-cache / transient path is intentionally excluded —
+	 * it is action-scoped and only meaningful for shortcode rendering immediately
+	 * after token generation. Use get_raw_token_for_action() for that purpose.
 	 *
-	 * @param int   $action_id Optional. Restrict resolution to a specific action post ID.
-	 *                         When 0 the URL-param path still works (action_id is read
-	 *                         from the token row); cookie and filter paths are skipped.
-	 * @param array $args      Optional context passed through to the filter. Recognised keys:
-	 *                         'item_id'   (int)    — content item ID being accessed.
-	 *                         'item_type' (string) — content item type slug (e.g. 'page').
-	 * @return string|null Token hash, or null if no valid token could be resolved.
+	 * @param int    $item_id   Content item ID (post ID, attachment ID, …).
+	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_file').
+	 *
+	 * @return FrmGatedToken|null First valid token, or null if none found.
 	 */
-	public static function obtain_token( $action_id = 0, $args = array() ) {
-		// 1. Static variable / transient.
-		$hash = self::get_token_hash_from_static_cache( $action_id );
-		if ( null !== $hash ) {
-			return $hash;
+	public static function get_valid_token( $item_id = 0, $item_type = '' ) {
+		// 1. URL query parameter — definitive.
+		$token = self::get_valid_token_from_url_param( $item_id, $item_type );
+		if ( null !== $token ) {
+			return $token;
 		}
 
-		// 2. URL query parameter.
-		$hash = self::get_token_hash_from_url_param( $action_id );
-		if ( null !== $hash ) {
-			return $hash;
+		// 2 & 3. Cookies then user DB (shared dedup).
+		$seen_hashes = array();
+
+		$token = self::get_valid_token_from_cookies( $item_id, $item_type, $seen_hashes );
+		if ( null !== $token ) {
+			return $token;
 		}
 
-		// 3. Cookie.
-		$hash = self::get_token_hash_from_cookie( $action_id );
-		if ( null !== $hash ) {
-			return $hash;
+		$token = self::get_valid_token_from_user( $item_id, $item_type, $seen_hashes );
+		if ( null !== $token ) {
+			return $token;
 		}
 
 		/**
-		 * Resolve a token hash when static cache, URL param, and cookie all miss.
+		 * Filter the resolved valid token for a gated content item.
 		 *
-		 * Add-ons can use this to supply a hash from other sources — for example,
-		 * the Formidable Registration add-on queries wp_frm_gated_tokens by the
-		 * current user's ID so registered users who have no cookie can still access
-		 * gated content without re-clicking an emailed link.
-		 *
-		 * Return null to pass through to the next handler, or a SHA-256 hex hash
-		 * string to short-circuit.
+		 * Fires after URL param, cookies, and user DB have all been checked without finding
+		 * a valid token. Add-ons can return a validated FrmGatedToken to grant access from
+		 * alternative sources, or null to indicate no token is available.
 		 *
 		 * @since x.x
 		 *
-		 * @param string|null $hash Currently resolved hash (null at this point).
-		 * @param array       $args {
-		 *     @type int    $action_id Gated content action post ID, or 0 if not specified.
+		 * @param FrmGatedToken|null $token     Null — no valid token found by core.
+		 * @param array              $args {
 		 *     @type int    $item_id   Content item ID being accessed (0 if unknown).
 		 *     @type string $item_type Content item type slug (empty if unknown).
 		 * }
 		 */
-		return apply_filters( 'frm_obtain_gated_token', null, array( 'action_id' => $action_id ) + $args );
+		return apply_filters( 'frm_obtain_gated_token', null, compact( 'item_id', 'item_type' ) );
 	}
 
 	/**
-	 * Resolve a token hash from the per-request static variable or the 5-minute transient.
+	 * Find a valid token from the `access_code` URL query parameter.
 	 *
-	 * Only runs when a specific action_id is supplied; skipped when action_id is 0
-	 * because the transient key is action-scoped.
+	 * @param int    $item_id   Content item ID.
+	 * @param string $item_type Content item type slug.
 	 *
-	 * @param int $action_id Gated content action post ID, or 0 to skip.
-	 * @return string|null SHA-256 hex hash, or null when not found.
+	 * @return FrmGatedToken|null
 	 */
-	private static function get_token_hash_from_static_cache( $action_id ) {
-		if ( ! $action_id ) {
+	private static function get_valid_token_from_url_param( $item_id, $item_type ) {
+		$hash = self::get_token_hash_from_url_param();
+		if ( null === $hash ) {
 			return null;
 		}
+		$row = self::get_row_by_hash( $hash );
+		if ( ! $row ) {
+			return null;
+		}
+		$token = new FrmGatedToken( $row );
+		return $token->validate( $item_id, $item_type ) ? $token : null;
+	}
 
-		$raw = self::get_raw_token_for_action( $action_id );
-		return null !== $raw ? hash( 'sha256', $raw ) : null;
+	/**
+	 * Find a valid token from all frm_gc_* cookies.
+	 *
+	 * Populates $seen_hashes with every hash examined so the caller can pass it to
+	 * subsequent sources to avoid processing the same row twice.
+	 *
+	 * @param int    $item_id     Content item ID.
+	 * @param string $item_type   Content item type slug.
+	 * @param array  $seen_hashes Dedup map passed by reference.
+	 *
+	 * @return FrmGatedToken|null
+	 */
+	private static function get_valid_token_from_cookies( $item_id, $item_type, &$seen_hashes ) {
+		foreach ( $_COOKIE as $name => $value ) {
+			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
+				continue;
+			}
+			$hash = self::parse_hash_from_cookie_value( sanitize_text_field( $value ) );
+			if ( isset( $seen_hashes[ $hash ] ) ) {
+				continue;
+			}
+			$seen_hashes[ $hash ] = true;
+			$row                  = self::get_row_by_hash( $hash );
+			if ( ! $row ) {
+				continue;
+			}
+			$token = new FrmGatedToken( $row );
+			if ( $token->validate( $item_id, $item_type ) ) {
+				return $token;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Find a valid token from DB rows belonging to the current logged-in user.
+	 *
+	 * Skips hashes already seen in earlier sources via $seen_hashes.
+	 *
+	 * @param int    $item_id     Content item ID.
+	 * @param string $item_type   Content item type slug.
+	 * @param array  $seen_hashes Dedup map passed by reference.
+	 *
+	 * @return FrmGatedToken|null
+	 */
+	private static function get_valid_token_from_user( $item_id, $item_type, &$seen_hashes ) {
+		if ( ! is_user_logged_in() ) {
+			return null;
+		}
+		foreach ( self::get_tokens_for_user( get_current_user_id() ) as $row ) {
+			if ( isset( $seen_hashes[ $row->token_hash ] ) ) {
+				continue;
+			}
+			$seen_hashes[ $row->token_hash ] = true;
+			$token                           = new FrmGatedToken( $row );
+			if ( $token->validate( $item_id, $item_type ) ) {
+				return $token;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -513,10 +700,9 @@ class FrmGatedTokenHelper {
 	 * When a valid raw token is found the corresponding cookie is set immediately
 	 * (unless headers are already sent) so subsequent requests skip this path.
 	 *
-	 * @param int $action_id Gated content action post ID, or 0 to accept any action.
 	 * @return string|null SHA-256 hex hash, or null when not found or invalid.
 	 */
-	private static function get_token_hash_from_url_param( $action_id ) {
+	private static function get_token_hash_from_url_param() {
 		$url_token = FrmAppHelper::simple_get( 'access_code' );
 		if ( '' === $url_token ) {
 			return null;
@@ -529,52 +715,19 @@ class FrmGatedTokenHelper {
 			return null;
 		}
 
-		$row_action_id = (int) $row->action_id;
-		$row_active    = null === $row->expired_at || time() < (int) $row->expired_at;
-
-		if ( ! $row_active || ( $action_id && $row_action_id !== $action_id ) ) {
+		if ( null !== $row->expired_at && time() >= (int) $row->expired_at ) {
 			return null;
 		}
 
 		// Only set the cookie when headers have not yet been sent. Headers are
-		// already sent when obtain_token() is called during shortcode rendering
-		// (e.g. show="expired_time" on a page that also has the access_code
-		// param but for a different action). maybe_unlock_post() handles cookie
-		// setting on the 'wp' hook where headers are always available.
+		// already sent when get_valid_token() is called during shortcode rendering.
+		// maybe_unlock_post() handles cookie setting on the 'wp' hook where
+		// headers are always available.
 		if ( ! headers_sent() ) {
-			self::set_cookie( $row_action_id, $hash, $row->expired_at );
+			self::set_cookie( (int) $row->action_id, $hash, $row->expired_at );
 		}
 
 		return $hash;
 	}
 
-	/**
-	 * Resolve a token hash from the `frm_gc_{action_id}` HttpOnly cookie.
-	 *
-	 * Requires a specific action_id — cookies are keyed by action so there is no
-	 * way to scan for a valid one without knowing which action to look up.
-	 *
-	 * @param int $action_id Gated content action post ID. Skipped when 0.
-	 * @return string|null SHA-256 hex hash, or null when no valid cookie is found.
-	 */
-	private static function get_token_hash_from_cookie( $action_id ) {
-		if ( ! $action_id ) {
-			return null;
-		}
-
-		$cookie_name  = 'frm_gc_' . $action_id;
-		$cookie_value = isset( $_COOKIE[ $cookie_name ] ) ? sanitize_text_field( $_COOKIE[ $cookie_name ] ) : '';
-
-		if ( '' === $cookie_value ) {
-			return null;
-		}
-
-		$hash = self::parse_hash_from_cookie_value( $cookie_value );
-		$row  = self::get_row_by_hash( $hash );
-		if ( $row && ( null === $row->expired_at || time() < (int) $row->expired_at ) ) {
-			return $hash;
-		}
-
-		return null;
-	}
 }

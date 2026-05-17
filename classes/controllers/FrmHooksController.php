@@ -122,6 +122,7 @@ class FrmHooksController {
 		// 'wp' fires after WP::query_posts() so get_queried_object_id() is available.
 		add_action( 'wp', 'FrmGatedContentController::maybe_unlock_post' );
 		add_action( 'before_delete_post', 'FrmGatedContentController::on_action_deleted', 10, 2 );
+		add_action( 'save_post_frm_form_actions', 'FrmGatedContentController::on_action_updated', 10, 3 );
 		add_shortcode( 'frm_gated_content', 'FrmGatedContentController::shortcode' );
 
 		FrmTransLiteHooksController::load_hooks();

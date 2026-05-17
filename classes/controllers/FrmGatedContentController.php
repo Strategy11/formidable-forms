@@ -68,7 +68,7 @@ class FrmGatedContentController {
 	 * only password-protected pages need the post_password_required filter.
 	 *
 	 * Resolution order:
-	 *  1. URL query parameter access_code (raw token → hashed via obtain_token).
+	 *  1. URL query parameter access_code (raw token → hashed via get_valid_token).
 	 *  2. Any frm_gc_* cookie whose hash validates against the current post.
 	 *
 	 * @return void
@@ -83,22 +83,9 @@ class FrmGatedContentController {
 		$access_code    = FrmAppHelper::simple_get( 'access_code' );
 		$from_url_param = is_string( $access_code ) && '' !== $access_code;
 
-		// Try URL query parameter first, then the frm_obtain_gated_token filter.
-		$hash = FrmGatedTokenHelper::obtain_token( 0, array( 'item_id' => $post_id, 'item_type' => 'page' ) );
+		$valid_token = FrmGatedTokenHelper::get_valid_token( $post_id, 'post' );
 
-		// No URL param — scan frm_gc_* cookies to find one that grants access to this page.
-		if ( ! $hash ) {
-			$hash = self::find_valid_cookie_hash_for_post( $post_id );
-		}
-
-		if ( ! $hash ) {
-			return;
-		}
-
-		// Fetch the row once and reuse for both validation and cookie/redirect logic.
-		$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
-
-		if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page', $row ) ) {
+		if ( $valid_token ) {
 			$post = get_post( $post_id );
 
 			// Password-protected pages need an explicit filter; private pages are
@@ -108,11 +95,9 @@ class FrmGatedContentController {
 				add_filter( 'post_password_required', 'FrmGatedContentController::filter_password_required', 10, 2 );
 			}
 
-			// Refresh the frm_gc_ cookie so subsequent visits skip the URL param.
+			// Refresh the frm_gc_{action_id} cookie so subsequent visits skip the URL param.
 			// Item context is embedded so cookie scans can skip irrelevant cookies.
-			if ( $row ) {
-				FrmGatedTokenHelper::set_cookie( (int) $row->action_id, $hash, $row->expired_at, 'page', $post_id );
-			}
+			$valid_token->set_cookie( 'post', $post_id );
 
 			// Strip the raw token from the URL to prevent leakage via browser history,
 			// server logs, and Referer headers. The cookie set above grants access on
@@ -125,22 +110,42 @@ class FrmGatedContentController {
 			return;
 		}
 
-		// Token present but invalid (expired or revoked) — redirect if action configured it.
-		if ( ! $row ) {
-			return;
-		}
+		// No valid token — check cookies for an action with a form page to redirect to.
+		// Scans cookies directly so expired/invalid tokens can still trigger the redirect
+		// (i.e. "your token expired — go fill out the form again").
+		self::maybe_redirect_to_form_page();
+	}
 
-		$action = get_post( (int) $row->action_id );
-		if ( ! $action ) {
-			return;
-		}
-
-		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-		if ( ! empty( $settings['show_form_page'] ) ) {
-			$redirect_url = get_permalink( (int) $settings['show_form_page'] );
-			if ( $redirect_url ) {
-				wp_safe_redirect( $redirect_url );
-				exit;
+	/**
+	 * Scan all frm_gc_* cookies and redirect to the first action's form page found.
+	 *
+	 * Called from maybe_unlock_post() when no valid token grants access. Allows
+	 * expired or otherwise-invalid tokens to still surface the form page redirect,
+	 * so visitors are sent back to re-submit the form and obtain a fresh token.
+	 *
+	 * @return void
+	 */
+	private static function maybe_redirect_to_form_page() {
+		foreach ( $_COOKIE as $name => $value ) {
+			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
+				continue;
+			}
+			$hash   = FrmGatedTokenHelper::parse_hash_from_cookie_value( sanitize_text_field( $value ) );
+			$row    = FrmGatedTokenHelper::get_row_by_hash( $hash );
+			if ( ! $row ) {
+				continue;
+			}
+			$action = get_post( (int) $row->action_id );
+			if ( ! $action ) {
+				continue;
+			}
+			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+			if ( ! empty( $settings['show_form_page'] ) ) {
+				$redirect_url = get_permalink( (int) $settings['show_form_page'] );
+				if ( $redirect_url ) {
+					wp_safe_redirect( $redirect_url );
+					exit;
+				}
 			}
 		}
 	}
@@ -200,11 +205,8 @@ class FrmGatedContentController {
 	/**
 	 * Check whether the current request carries any valid token for a given post.
 	 *
-	 * Resolution order mirrors FrmGatedTokenHelper::obtain_token():
-	 *  1–4. obtain_token() — covers the URL param and the frm_obtain_gated_token
-	 *       filter (steps 1 and 3 require a known action_id and are no-ops here).
-	 *  5.   frm_gc_* cookies — covers browser cookies and hashes injected into
-	 *       $_COOKIE by add-ons (e.g. FrmRegGatedContentController::inject_user_token_cookies).
+	 * Delegates to FrmGatedTokenHelper::get_valid_token(), which checks URL param,
+	 * cookies, and user DB tokens in order and returns on the first valid match.
 	 *
 	 * Used by maybe_include_private_pages() to decide whether to widen the query.
 	 *
@@ -213,50 +215,7 @@ class FrmGatedContentController {
 	 * @return bool True if a valid token is found.
 	 */
 	private static function has_valid_token_for_post( $post_id ) {
-		$hash = FrmGatedTokenHelper::obtain_token( 0, array( 'item_id' => $post_id, 'item_type' => 'page' ) );
-		if ( $hash && FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
-			return true;
-		}
-
-		return null !== self::find_valid_cookie_hash_for_post( $post_id );
-	}
-
-	/**
-	 * Scan frm_gc_* cookies and return the first hash that validates against a post.
-	 *
-	 * Used as a fallback when no access_code URL parameter is present, allowing
-	 * return visits to stay unlocked without re-clicking the emailed link.
-	 *
-	 * @param int $post_id Post ID to validate against.
-	 *
-	 * @return string|null Validated token hash, or null if none found.
-	 */
-	private static function find_valid_cookie_hash_for_post( $post_id ) {
-		foreach ( $_COOKIE as $name => $value ) {
-			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
-				continue;
-			}
-
-			$value       = sanitize_text_field( $value );
-			$parts       = explode( ':', $value, 3 );
-			$hash        = $parts[0];
-			$cookie_type = isset( $parts[1] ) ? $parts[1] : '';
-			$cookie_id   = isset( $parts[2] ) ? (int) $parts[2] : 0;
-
-			// Skip when type is known and doesn't match.
-			if ( $cookie_type && 'page' !== $cookie_type ) {
-				continue;
-			}
-			// Skip when item ID is known and doesn't match.
-			if ( $cookie_id && $cookie_id !== $post_id ) {
-				continue;
-			}
-
-			if ( FrmGatedTokenHelper::validate_hash( $hash, $post_id, 'page' ) ) {
-				return $hash;
-			}
-		}
-		return null;
+		return null !== FrmGatedTokenHelper::get_valid_token( $post_id, 'post' );
 	}
 
 	/**
@@ -275,6 +234,25 @@ class FrmGatedContentController {
 			return;
 		}
 		FrmGatedTokenHelper::delete_by_action( $post_id );
+	}
+
+	/**
+	 * Invalidate cached validation results when a gated content action is updated.
+	 *
+	 * Fires on 'save_post_frm_form_actions'. Clears transients for all tokens
+	 * belonging to the action so stale item-membership results are not served.
+	 *
+	 * @param int     $post_id Post ID of the saved action.
+	 * @param WP_Post $post    Saved post object.
+	 * @param bool    $update  True when updating an existing post, false on create.
+	 *
+	 * @return void
+	 */
+	public static function on_action_updated( $post_id, $post, $update ) {
+		if ( ! $update || FrmGatedContentAction::$slug !== $post->post_excerpt ) {
+			return;
+		}
+		FrmGatedTokenHelper::delete_validation_cache_for_action( $post_id );
 	}
 
 	/**
@@ -410,12 +388,7 @@ class FrmGatedContentController {
 	 */
 	private static function get_shortcode_expiry( $action_id ) {
 		$raw_token = self::resolve_raw_token( $action_id );
-		if ( $raw_token ) {
-			return self::get_formatted_expiry( $raw_token );
-		}
-
-		$hash = FrmGatedTokenHelper::obtain_token( $action_id );
-		return $hash ? self::get_formatted_expiry_by_hash( $hash ) : '';
+		return $raw_token ? self::get_formatted_expiry( $raw_token ) : '';
 	}
 
 	/**
@@ -455,7 +428,7 @@ class FrmGatedContentController {
 	 *
 	 * Only these two sources can yield a raw (unhashed) token — cookies and DB rows
 	 * store only the SHA-256 hash, so they cannot be used here. Use
-	 * FrmGatedTokenHelper::obtain_token() when a hash is sufficient.
+	 * FrmGatedTokenHelper::get_valid_token() when a token object is sufficient.
 	 *
 	 * A filter is provided so add-ons can supply a raw token from other sources
 	 * (e.g. re-generating a single-use token on demand for a registered user).
@@ -493,21 +466,21 @@ class FrmGatedContentController {
 	 * `frm_gated_content_item_url` filter.
 	 *
 	 * @param int    $item_id   Content item ID (e.g. page post ID).
-	 * @param string $type      Item type slug ('page', 'frm_file', 'frm_pdf', …).
+	 * @param string $type      Item type slug ('post', 'frm_file', 'frm_pdf', …).
 	 * @param string $raw_token Raw access token to append as access_code query arg.
 	 *
 	 * @return string Full URL with access_code parameter, or empty string on failure.
 	 */
 	public static function get_item_url( $item_id, $type, $raw_token ) {
-		$base_url = 'page' === $type ? get_permalink( $item_id ) : '';
+		$base_url = 'post' === $type ? get_permalink( $item_id ) : '';
 
 		/**
 		 * Filter the base URL for a gated content item type.
 		 *
-		 * Fires for all types including 'page', allowing the default permalink to
+		 * Fires for all types including 'post', allowing the default permalink to
 		 * be overridden. Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
 		 *
-		 * @param string $base_url Permalink for 'page' items; empty string for others.
+		 * @param string $base_url Permalink for 'post' items; empty string for others.
 		 * @param array  $args {
 		 *     @type int    $item_id   Content item ID.
 		 *     @type string $type      Item type slug.
@@ -526,25 +499,25 @@ class FrmGatedContentController {
 	/**
 	 * Get the display title for a single gated content item.
 	 *
-	 * For 'page' items this is the post title. Pro item types ('frm_file',
+	 * For 'post' items this is the post title. Pro item types ('frm_file',
 	 * 'frm_pdf', …) can provide a title via the `frm_gated_content_item_title`
 	 * filter.
 	 *
 	 * @param int    $item_id Content item ID (e.g. page post ID or attachment ID).
-	 * @param string $type    Item type slug ('page', 'frm_file', 'frm_pdf', …).
+	 * @param string $type    Item type slug ('post', 'frm_file', 'frm_pdf', …).
 	 *
 	 * @return string Display title, or empty string when unavailable.
 	 */
 	public static function get_item_title( $item_id, $type ) {
-		$title = 'page' === $type ? get_the_title( $item_id ) : '';
+		$title = 'post' === $type ? get_the_title( $item_id ) : '';
 
 		/**
 		 * Filter the display title for a gated content item type.
 		 *
-		 * Fires for all types including 'page', allowing the default post title to
+		 * Fires for all types including 'post', allowing the default post title to
 		 * be overridden. Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
 		 *
-		 * @param string $title   Post title for 'page' items; empty string for others.
+		 * @param string $title   Post title for 'post' items; empty string for others.
 		 * @param array  $args {
 		 *     @type int    $item_id Content item ID.
 		 *     @type string $type    Item type slug.

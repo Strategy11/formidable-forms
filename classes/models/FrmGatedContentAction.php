@@ -66,7 +66,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public static function get_types() {
 		$types = array(
-			'page'    => array(
+			'post'    => array(
 				'label'    => __( 'WordPress page', 'formidable' ),
 				'disabled' => false,
 			),
@@ -123,7 +123,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public function get_defaults() {
 		return array(
-			'type'           => 'page',
+			'type'           => 'post',
 			'items'          => array(),
 			'show_form_page' => null,
 			'expired_hours'  => null,
@@ -152,7 +152,7 @@ class FrmGatedContentAction extends FrmFormAction {
 			}
 
 			$item = array(
-				'type' => isset( $raw_item['type'] ) ? sanitize_key( $raw_item['type'] ) : 'page',
+				'type' => isset( $raw_item['type'] ) ? sanitize_key( $raw_item['type'] ) : 'post',
 				'id'   => isset( $raw_item['id'] ) ? absint( $raw_item['id'] ) : 0,
 			);
 

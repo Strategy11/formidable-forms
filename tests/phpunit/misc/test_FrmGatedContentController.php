@@ -65,7 +65,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 					array(
 						'event' => array( 'payment-success' ),
 						'items' => array(
-							array( 'type' => 'page', 'id' => 1 ),
+							array( 'type' => 'post', 'id' => 1 ),
 						),
 					)
 				),
@@ -102,7 +102,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 					array(
 						'event' => array( 'create' ),
 						'items' => array(
-							array( 'type' => 'page', 'id' => 1 ),
+							array( 'type' => 'post', 'id' => 1 ),
 						),
 					)
 				),

@@ -49,7 +49,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 		<ul class="frm_gc_items_list">
 			<?php foreach ( $frm_gc_items as $frm_gc_idx => $frm_gc_item ) : ?>
 				<?php
-				$frm_gc_item_type    = isset( $frm_gc_item['type'] ) ? $frm_gc_item['type'] : 'page';
+				$frm_gc_item_type    = isset( $frm_gc_item['type'] ) ? $frm_gc_item['type'] : 'post';
 				$frm_gc_item_id      = isset( $frm_gc_item['id'] ) ? (int) $frm_gc_item['id'] : 0;
 				$frm_gc_item_base    = $frm_gc_field_name_base . '[' . $frm_gc_idx . ']';
 				$frm_gc_type_sel_id  = $frm_gc_wrapper_id . '_type_' . $frm_gc_idx;
@@ -91,8 +91,8 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 						?>
 						<div
 							class="frm-gc-type-settings"
-							data-type="page"
-							<?php echo 'page' !== $frm_gc_item_type ? 'hidden' : ''; ?>
+							data-type="post"
+							<?php echo 'post' !== $frm_gc_item_type ? 'hidden' : ''; ?>
 						>
 							<div class="frm_form_field frm-mt-xs frm-mb-xs">
 								<label for="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>">
@@ -101,7 +101,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 								<select
 									id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
 									data-frm-gc-field="id"
-									<?php if ( 'page' === $frm_gc_item_type ) : ?>
+									<?php if ( 'post' === $frm_gc_item_type ) : ?>
 										name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
 									<?php endif; ?>
 								>
@@ -116,7 +116,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 									<?php endforeach; ?>
 								</select>
 							</div><!-- .frm_form_field -->
-						</div><!-- [data-type="page"] -->
+						</div><!-- [data-type="post"] -->
 
 						<?php
 						/**
@@ -135,7 +135,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 						 *
 						 * @since x.x
 						 *
-						 * @param string $frm_gc_item_type  Active type key for this item (e.g. 'page', 'frm_file').
+						 * @param string $frm_gc_item_type  Active type key for this item (e.g. 'post', 'frm_file').
 						 * @param int    $frm_gc_idx        Zero-based index of this item in the items array.
 						 * @param array  $frm_gc_item       Saved item data.
 						 * @param string $frm_gc_item_base  Field name prefix for this item, e.g. `frm_form_action[X][post_content][items][0]`.
@@ -191,7 +191,7 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 				<div class="frm8 frm-gc-item-settings">
 
 					<?php // Default (first) type is visible; all others added by plugins must set hidden. ?>
-					<div class="frm-gc-type-settings" data-type="page">
+					<div class="frm-gc-type-settings" data-type="post">
 						<div class="frm_form_field frm-mt-xs frm-mb-xs">
 							<label data-frm-gc-for="id">
 								<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
