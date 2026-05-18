@@ -102,8 +102,7 @@ class FrmGatedContentController {
 			// Strip the raw token from the URL to prevent leakage via browser history,
 			// server logs, and Referer headers. The cookie set above grants access on
 			// the redirected request without the query parameter.
-			if ( $from_url_param ) {
-				wp_safe_redirect( remove_query_arg( 'access_code' ) );
+			if ( $from_url_param && wp_safe_redirect( remove_query_arg( 'access_code' ) ) ) {
 				exit;
 			}
 
@@ -189,10 +188,13 @@ class FrmGatedContentController {
 			return 0;
 		}
 
+		/** This filter is documented in classes/views/frm-form-actions/_gated_content_settings.php */
+		$post_types = (array) apply_filters( 'frm_gated_content_post_types', array( 'page' ) );
+
 		$pages = get_posts(
 			array(
 				'pagename'       => $query->query_vars['pagename'],
-				'post_type'      => 'page',
+				'post_type'      => $post_types,
 				'post_status'    => 'any',
 				'posts_per_page' => 1,
 				'no_found_rows'  => true,
@@ -289,8 +291,7 @@ class FrmGatedContentController {
 		// On update, revoke any existing tokens for this action+entry pair before
 		// issuing a fresh one — prevents unbounded row accumulation and ensures the
 		// old token cannot be used once the entry owner receives a new one.
-		// Skip deletion when the action is configured to keep the old token.
-		if ( 'update' === $event && empty( $action->post_content['keep_token_on_update'] ) ) {
+		if ( 'update' === $event ) {
 			FrmGatedTokenHelper::delete_by_action_and_entry( $action->ID, $entry->id );
 		}
 
@@ -333,7 +334,7 @@ class FrmGatedContentController {
 			return '';
 		}
 
-		// expired_time only needs a hash — cookie sources are included too.
+		// expired_time reads from the static variable / transient; no raw token needed.
 		if ( 'expired_time' === $atts['show'] ) {
 			return self::get_shortcode_expiry( $action_id );
 		}
@@ -378,9 +379,9 @@ class FrmGatedContentController {
 	/**
 	 * Resolve and format the expiry time for the expired_time shortcode attribute.
 	 *
-	 * Tries the raw token first (transient / URL param), then falls back to a
-	 * hash-only source (cookie) so expiry can be displayed even when the raw
-	 * token is no longer available.
+	 * Reads from the per-request static variable or the 5-minute transient set by
+	 * FrmGatedTokenHelper::generate(). Returns an empty string when neither is
+	 * available — e.g. on a page load more than 5 minutes after form submission.
 	 *
 	 * @param int $action_id Action post ID.
 	 *

@@ -24,13 +24,26 @@ $frm_gc_types           = get_class( $this )::get_types(); // Late-static; Pro c
 // gated content actions exist on the same form.
 $frm_gc_wrapper_id = 'frm_gc_settings_' . $this->number;
 
-$frm_gc_pages = get_pages(
+/**
+ * Filter the post types shown in the "post" gated content item selector.
+ *
+ * Add custom post type slugs to this array to make their posts selectable
+ * as gated content items alongside WordPress pages.
+ *
+ * @since x.x
+ *
+ * @param string[] $post_types Post type slugs. Default ['page'].
+ */
+$frm_gc_post_types = (array) apply_filters( 'frm_gated_content_post_types', array( 'page' ) );
+$frm_gc_pages      = get_posts(
 	array(
-		'post_status'             => array( 'publish', 'private' ),
-		'sort_column'             => 'post_title',
-		'sort_order'              => 'ASC',
-		'update_post_meta_cache'  => false,
-		'update_post_term_cache'  => false,
+		'post_type'              => $frm_gc_post_types,
+		'post_status'            => array( 'publish', 'private' ),
+		'orderby'                => 'title',
+		'order'                  => 'ASC',
+		'numberposts'            => -1,
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
 	)
 );
 $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
@@ -322,4 +335,4 @@ $frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
 </div><!-- .frm_gated_content_settings -->
 
 <?php
-unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_pages, $frm_gc_page, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type, $frm_gc_type_key, $frm_gc_type_sel_id, $frm_gc_page_sel_id, $frm_gc_shortcodes, $frm_gc_shortcode );
+unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_post_types, $frm_gc_pages, $frm_gc_page, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type, $frm_gc_type_key, $frm_gc_type_sel_id, $frm_gc_page_sel_id, $frm_gc_shortcodes, $frm_gc_shortcode );

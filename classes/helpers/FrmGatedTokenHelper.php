@@ -526,7 +526,7 @@ class FrmGatedTokenHelper {
 	 * pending token.
 	 *
 	 * @param int $action_id Action post ID.
-	 * @return string Transient key, at most ~52 characters.
+	 * @return string Transient key (~30 chars for logged-in users, ~90 chars for guests).
 	 */
 	private static function get_token_transient_key( $action_id ) {
 		$user_id = get_current_user_id();
