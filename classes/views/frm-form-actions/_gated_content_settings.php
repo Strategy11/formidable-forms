@@ -46,7 +46,17 @@ $frm_gc_pages      = get_posts(
 		'update_post_term_cache' => false,
 	)
 );
-$frm_gc_pages = is_array( $frm_gc_pages ) ? $frm_gc_pages : array();
+// Only show pages that actually need a token to access: private pages and
+// password-protected pages. Plain published pages are publicly accessible
+// and should not appear as gated content targets.
+$frm_gc_pages = array_values(
+	array_filter(
+		is_array( $frm_gc_pages ) ? $frm_gc_pages : array(),
+		static function ( $p ) {
+			return 'private' === $p->post_status || '' !== $p->post_password;
+		}
+	)
+);
 ?>
 
 <div
