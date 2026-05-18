@@ -31,7 +31,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		$action_ops = array(
 			'classes'  => 'frmfont frm_lock_simple',
 			'active'   => true,
-			'event'    => array( 'create', 'update', 'payment-success' ),
+			'event'    => array( 'create', 'payment-success' ),
 			'limit'    => 99,
 			'priority' => 8,
 			'color'    => '#F59E0B',
