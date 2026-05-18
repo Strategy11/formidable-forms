@@ -24,13 +24,17 @@ class FrmGatedContentController {
 	private static $unlocked_post_id = 0;
 
 	/**
-	 * Allow private pages into the main query when a valid token is present.
+	 * Allow private pages into the main query when a gated-content signal is present.
 	 *
 	 * Hooked on 'pre_get_posts', which fires before WP_Query runs its DB query.
 	 * Private pages are excluded at the query level by WordPress, so the 'wp'
 	 * hook is too late — get_queried_object_id() returns 0 for a 404'd private
-	 * page. This hook resolves the target post ID from the query vars, validates
-	 * the token, and conditionally appends 'private' to the post_status list.
+	 * page.
+	 *
+	 * Token validation is intentionally deferred to maybe_unlock_post() (the 'wp'
+	 * hook): by that time get_queried_object_id() is reliable and we can validate
+	 * the token against the exact post that was resolved. If no valid token exists
+	 * for the private page, maybe_unlock_post() forces a 404.
 	 *
 	 * @param WP_Query $query Current query object.
 	 *
@@ -41,12 +45,12 @@ class FrmGatedContentController {
 			return;
 		}
 
-		$post_id = self::get_requested_post_id( $query );
-		if ( ! $post_id ) {
+		// Only widen singular requests — archives/lists must never expose private posts.
+		if ( ! $query->is_singular ) {
 			return;
 		}
 
-		if ( ! self::has_valid_token_for_post( $post_id ) ) {
+		if ( ! self::has_gated_content_signal() ) {
 			return;
 		}
 
@@ -58,6 +62,28 @@ class FrmGatedContentController {
 			$statuses[] = 'private';
 			$query->set( 'post_status', $statuses );
 		}
+	}
+
+	/**
+	 * Whether the current request carries any gated-content signal.
+	 *
+	 * Returns true when an access_code URL parameter or any frm_gc_* cookie is
+	 * present. No DB queries are performed — this is a cheap, early gate used
+	 * solely by maybe_include_private_pages() to decide whether to widen the
+	 * post_status filter.
+	 *
+	 * @return bool
+	 */
+	private static function has_gated_content_signal() {
+		if ( '' !== FrmAppHelper::simple_get( 'access_code' ) ) {
+			return true;
+		}
+		foreach ( array_keys( $_COOKIE ) as $name ) {
+			if ( 0 === strpos( $name, 'frm_gc_' ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -105,9 +131,21 @@ class FrmGatedContentController {
 			return;
 		}
 
-		// No valid token — check cookies for an action with a form page to redirect to.
-		// Scans cookies directly so expired/invalid tokens can still trigger the redirect
-		// (i.e. "your token expired — go fill out the form again").
+		// No valid token. If this is a private page that was made queryable by
+		// maybe_include_private_pages(), the visitor must not see it — force a 404
+		// (after trying the form-page redirect, which may exit if a redirect fires).
+		$post = get_post( $post_id );
+		if ( $post && 'private' === $post->post_status && ! current_user_can( 'read_private_posts', $post_id ) ) {
+			self::maybe_redirect_to_form_page();
+
+			global $wp_query;
+			$wp_query->set_404();
+			status_header( 404 );
+			nocache_headers();
+			return;
+		}
+
+		// Non-private post (e.g. password-protected) with no valid token — try redirect.
 		self::maybe_redirect_to_form_page();
 	}
 
@@ -162,58 +200,6 @@ class FrmGatedContentController {
 			return false;
 		}
 		return $required;
-	}
-
-	/**
-	 * Resolve the post ID being requested from query vars, including private posts.
-	 *
-	 * Called from maybe_include_private_pages() during pre_get_posts, before the
-	 * DB query runs. Uses post_status => 'any' so private pages are returned
-	 * regardless of whether the visitor is logged in.
-	 *
-	 * @param WP_Query $query Current query object.
-	 *
-	 * @return int Post ID, or 0 if it cannot be determined.
-	 */
-	private static function get_requested_post_id( $query ) {
-		if ( ! empty( $query->query_vars['page_id'] ) ) {
-			return (int) $query->query_vars['page_id'];
-		}
-
-		if ( empty( $query->query_vars['pagename'] ) ) {
-			return 0;
-		}
-
-		/** This filter is documented in classes/views/frm-form-actions/_gated_content_settings.php */
-		$post_types = (array) apply_filters( 'frm_gated_content_post_types', array( 'page' ) );
-
-		$pages = get_posts(
-			array(
-				'pagename'       => $query->query_vars['pagename'],
-				'post_type'      => $post_types,
-				'post_status'    => 'any',
-				'posts_per_page' => 1,
-				'no_found_rows'  => true,
-			)
-		);
-
-		return ! empty( $pages ) ? $pages[0]->ID : 0;
-	}
-
-	/**
-	 * Check whether the current request carries any valid token for a given post.
-	 *
-	 * Delegates to FrmGatedTokenHelper::get_valid_token(), which checks URL param,
-	 * cookies, and user DB tokens in order and returns on the first valid match.
-	 *
-	 * Used by maybe_include_private_pages() to decide whether to widen the query.
-	 *
-	 * @param int $post_id Post ID to validate against.
-	 *
-	 * @return bool True if a valid token is found.
-	 */
-	private static function has_valid_token_for_post( $post_id ) {
-		return null !== FrmGatedTokenHelper::get_valid_token( $post_id, 'post' );
 	}
 
 	/**
