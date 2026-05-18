@@ -248,7 +248,7 @@ class FrmGatedContentController {
 	 * @param object $action Form action post object (post_excerpt = 'gated_content').
 	 * @param object $entry  Submitted form entry object.
 	 * @param object $form   Form object.
-	 * @param string $event  Trigger event ('create', 'update', or 'import').
+	 * @param string $event  Trigger event ('create', 'payment-success', 'user_registration', …).
 	 *
 	 * @return void
 	 */
@@ -272,13 +272,6 @@ class FrmGatedContentController {
 		 * }
 		 */
 		$user_id = apply_filters( 'frm_gated_content_token_user_id', $user_id, compact( 'entry', 'event' ) );
-
-		// On update, revoke any existing tokens for this action+entry pair before
-		// issuing a fresh one — prevents unbounded row accumulation and ensures the
-		// old token cannot be used once the entry owner receives a new one.
-		if ( 'update' === $event ) {
-			FrmGatedTokenHelper::delete_by_action_and_entry( $action->ID, $entry->id );
-		}
 
 		FrmGatedTokenHelper::generate( $action->ID, $entry->id, $user_id );
 	}

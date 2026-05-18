@@ -47,59 +47,6 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		$this->assertSame( 32, strlen( $raw_token ) );
 	}
 
-	// ── trigger() — update event ──────────────────────────────────────────── //
-
-	/**
-	 * On update events trigger() must revoke old tokens for the action+entry pair
-	 * before issuing a new one. Only the freshly-generated token should remain in the DB.
-	 *
-	 * @covers FrmGatedContentController::trigger
-	 */
-	public function test_trigger_on_update_revokes_old_token_and_generates_new_one() {
-		global $wpdb;
-
-		$action_id = wp_insert_post(
-			array(
-				'post_type'    => 'frm_form_actions',
-				'post_excerpt' => 'gated_content',
-				'post_status'  => 'publish',
-				'post_content' => wp_json_encode( array( 'items' => array() ) ),
-			)
-		);
-
-		$action  = (object) array( 'ID' => $action_id );
-		$entry   = (object) array( 'id' => 55, 'form_id' => 1 );
-		$form    = (object) array( 'id' => 1 );
-
-		// Create event — inserts first token.
-		FrmGatedContentController::trigger( $action, $entry, $form, 'create' );
-
-		$first_raw  = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
-		$first_hash = hash( 'sha256', $first_raw );
-
-		// Update event — must revoke the first token then insert a new one.
-		FrmGatedContentController::trigger( $action, $entry, $form, 'update' );
-
-		// Old token row must be gone.
-		$old_row = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}frm_gated_tokens WHERE token_hash = %s",
-				$first_hash
-			)
-		);
-		$this->assertNull( $old_row, 'The old token must be revoked after an update event.' );
-
-		// Exactly one token must exist for this action+entry pair.
-		$count = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->prefix}frm_gated_tokens WHERE action_id = %d AND entry_id = %d",
-				$action_id,
-				55
-			)
-		);
-		$this->assertSame( 1, $count, 'Exactly one active token must exist after the update event.' );
-	}
-
 	// ── payment-success event ─────────────────────────────────────────────── //
 
 	/**
