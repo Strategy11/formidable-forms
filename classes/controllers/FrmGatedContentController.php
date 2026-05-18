@@ -95,10 +95,6 @@ class FrmGatedContentController {
 				add_filter( 'post_password_required', 'FrmGatedContentController::filter_password_required', 10, 2 );
 			}
 
-			// Refresh the frm_gc_{action_id} cookie so subsequent visits skip the URL param.
-			// Item context is embedded so cookie scans can skip irrelevant cookies.
-			$valid_token->set_cookie( 'post', $post_id );
-
 			// Strip the raw token from the URL to prevent leakage via browser history,
 			// server logs, and Referer headers. The cookie set above grants access on
 			// the redirected request without the query parameter.

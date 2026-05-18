@@ -169,14 +169,17 @@ class FrmGatedToken {
 	}
 
 	/**
-	 * Persist a frm_gc_{action_id} cookie so subsequent requests skip the URL param.
+	 * Persist a frm_gc_{item_type}_{item_id} cookie so subsequent requests skip the URL param.
 	 *
-	 * @param string $item_type Content item type slug, embedded in the cookie value for
-	 *                          cookie-scan filtering. Empty means no type context stored.
-	 * @param int    $item_id   Content item ID, embedded alongside $item_type. 0 means
-	 *                          no item ID context stored.
+	 * The raw token must be supplied by the caller — the token object only stores
+	 * the hash, so only code that already holds the raw value (e.g. immediately
+	 * after reading the access_code URL parameter) should call this method.
+	 *
+	 * @param string $raw_token Raw access token (same value as the access_code URL param).
+	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_file').
+	 * @param int    $item_id   Content item ID, or 0 when not applicable.
 	 */
-	public function set_cookie( $item_type = '', $item_id = 0 ) {
-		FrmGatedTokenHelper::set_cookie( $this->action_id, $this->token_hash, $this->expired_at, $item_type, $item_id );
+	public function set_cookie( $raw_token, $item_type = '', $item_id = 0 ) {
+		FrmGatedTokenHelper::set_cookie( $raw_token, $this->expired_at, $item_type, $item_id );
 	}
 }

@@ -464,35 +464,38 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Set an HttpOnly cookie that stores a token hash for a gated content action.
+	 * Set an HttpOnly cookie that stores a raw access token for a gated content item.
 	 *
-	 * Cookie name  : frm_gc_{action_id}
-	 * Cookie value : {hash} — legacy / URL-param flow (no item context).
-	 *              : {hash}:{item_type}:{item_id} — when item context is known.
+	 * Cookie name  : frm_gc_{item_type}_{item_id}  — when item ID is known.
+	 *              : frm_gc_{item_type}             — when only type is known (e.g. frm_pdf).
+	 * Cookie value : raw access token (same value passed in the access_code URL parameter).
 	 *
-	 * Embedding item context lets find_valid_cookie_hash_for_* skip cookies that
-	 * clearly do not cover the requested item without a DB round-trip.
+	 * Storing the raw token lets users verify that the cookie matches the link they
+	 * received, and lets get_valid_token_from_cookies() look up the DB by
+	 * hash('sha256', $raw_token) — the same query as the URL-param path.
+	 * The token is always re-validated against the DB on every request; the cookie
+	 * is used only as a transport, never trusted on its own.
 	 *
-	 * @param int      $action_id  Action post ID.
-	 * @param string   $hash       SHA-256 hex hash to store.
-	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for session+1-year.
-	 * @param string   $item_type  Optional item type slug (e.g. 'post', 'frm_file').
-	 * @param int      $item_id    Optional item post/attachment ID.
+	 * @param string   $raw_token  Raw access token to store.
+	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for 1-year TTL.
+	 * @param string   $item_type  Content item type slug (e.g. 'post', 'frm_file').
+	 * @param int      $item_id    Content item ID, or 0 when not applicable.
 	 * @return void
 	 */
-	public static function set_cookie( $action_id, $hash, $expired_at = null, $item_type = '', $item_id = 0 ) {
-		if ( $item_type && $item_id ) {
-			$value = $hash . ':' . $item_type . ':' . $item_id;
-		} elseif ( $item_type ) {
-			$value = $hash . ':' . $item_type; // Type-only (e.g. frm_pdf — no fixed item ID).
-		} else {
-			$value = $hash;
+	public static function set_cookie( $raw_token, $expired_at = null, $item_type = '', $item_id = 0 ) {
+		if ( ! $item_type ) {
+			return; // Cannot build a meaningful cookie name without at least a type.
 		}
+
+		$cookie_name = $item_id
+			? 'frm_gc_' . $item_type . '_' . (int) $item_id
+			: 'frm_gc_' . $item_type;
+
 		$expiry = null !== $expired_at ? $expired_at : ( time() + YEAR_IN_SECONDS );
 
 		setcookie(
-			'frm_gc_' . $action_id,
-			$value,
+			$cookie_name,
+			$raw_token,
 			array(
 				'expires'  => $expiry,
 				'path'     => '/',
@@ -504,18 +507,16 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Extract the SHA-256 hash from a frm_gc_* cookie value.
+	 * Derive a SHA-256 hash from a frm_gc_* cookie value.
 	 *
-	 * Handles both the legacy plain-hash format and the extended
-	 * {hash}:{item_type}:{item_id} format. The hash is always the segment
-	 * before the first colon (or the whole string when no colon is present).
+	 * Cookies now store the raw access token as their value, so hashing it
+	 * yields the token_hash used to look up the DB row.
 	 *
-	 * @param string $value Raw cookie value.
+	 * @param string $value Raw cookie value (the raw access token).
 	 * @return string SHA-256 hex hash.
 	 */
 	public static function parse_hash_from_cookie_value( $value ) {
-		$colon = strpos( $value, ':' );
-		return false !== $colon ? substr( $value, 0, $colon ) : $value;
+		return hash( 'sha256', $value );
 	}
 
 	/**
@@ -558,7 +559,9 @@ class FrmGatedTokenHelper {
 	 *
 	 * Checks sources in priority order, returning immediately on the first match:
 	 *  1. `access_code` URL query parameter (raw token → hashed → validated).
-	 *  2. All HttpOnly `frm_gc_*` cookies — one cookie per gated content action.
+	 *  2. HttpOnly `frm_gc_*` cookies — one cookie per gated content item, keyed by
+	 *     item type and ID. When both are known, a single named lookup is used;
+	 *     otherwise all matching cookies are scanned.
 	 *  3. All active DB tokens for the current logged-in user. Supports registration-
 	 *     gated content where the Registration add-on stores the new user ID on the
 	 *     token so returning visitors are recognised without a URL param or cookie.
@@ -614,26 +617,52 @@ class FrmGatedTokenHelper {
 	/**
 	 * Find a valid token from the `access_code` URL query parameter.
 	 *
+	 * On success, sets an frm_gc_* cookie keyed to the validated item so that
+	 * subsequent requests can skip this path entirely. The raw token is stored
+	 * as the cookie value so users can verify it matches their access link.
+	 *
 	 * @param int    $item_id   Content item ID.
 	 * @param string $item_type Content item type slug.
 	 *
 	 * @return FrmGatedToken|null
 	 */
 	private static function get_valid_token_from_url_param( $item_id, $item_type ) {
-		$hash = self::get_token_hash_from_url_param();
-		if ( null === $hash ) {
+		$url_token = FrmAppHelper::simple_get( 'access_code' );
+		if ( '' === $url_token ) {
 			return null;
 		}
-		$row = self::get_row_by_hash( $hash );
+
+		$hash = hash( 'sha256', $url_token );
+		$row  = self::get_row_by_hash( $hash );
 		if ( ! $row ) {
 			return null;
 		}
+
+		if ( null !== $row->expired_at && time() >= (int) $row->expired_at ) {
+			return null;
+		}
+
 		$token = new FrmGatedToken( $row );
-		return $token->validate( $item_id, $item_type ) ? $token : null;
+		if ( ! $token->validate( $item_id, $item_type ) ) {
+			return null;
+		}
+
+		// Cookie is set after validation so the name is scoped to the exact item
+		// that was just granted access. Store the raw token so it matches the
+		// access_code URL parameter — easier to verify and simpler to look up.
+		if ( ! headers_sent() ) {
+			self::set_cookie( $url_token, $row->expired_at, $item_type, $item_id );
+		}
+
+		return $token;
 	}
 
 	/**
-	 * Find a valid token from all frm_gc_* cookies.
+	 * Find a valid token from frm_gc_* cookies.
+	 *
+	 * When both item_type and item_id are known, performs a direct O(1) cookie name
+	 * lookup (frm_gc_{item_type}_{item_id}) — no iteration required. Otherwise scans
+	 * all cookies whose names start with the appropriate prefix.
 	 *
 	 * Populates $seen_hashes with every hash examined so the caller can pass it to
 	 * subsequent sources to avoid processing the same row twice.
@@ -645,11 +674,32 @@ class FrmGatedTokenHelper {
 	 * @return FrmGatedToken|null
 	 */
 	private static function get_valid_token_from_cookies( $item_id, $item_type, &$seen_hashes ) {
+		if ( $item_type && $item_id ) {
+			// Direct lookup — skip every other cookie without touching the DB.
+			$cookie_name = 'frm_gc_' . $item_type . '_' . (int) $item_id;
+			if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
+				return null;
+			}
+			$raw_token            = sanitize_text_field( $_COOKIE[ $cookie_name ] );
+			$hash                 = hash( 'sha256', $raw_token );
+			$seen_hashes[ $hash ] = true;
+			$row                  = self::get_row_by_hash( $hash );
+			if ( ! $row ) {
+				return null;
+			}
+			$token = new FrmGatedToken( $row );
+			return $token->validate( $item_id, $item_type ) ? $token : null;
+		}
+
+		// Partial or no context — scan cookies whose names share the type prefix.
+		// e.g. item_type='post' matches frm_gc_post and frm_gc_post_*.
+		$prefix = $item_type ? 'frm_gc_' . $item_type : 'frm_gc_';
 		foreach ( $_COOKIE as $name => $value ) {
-			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
+			if ( 0 !== strpos( $name, $prefix ) ) {
 				continue;
 			}
-			$hash = self::parse_hash_from_cookie_value( sanitize_text_field( $value ) );
+			$raw_token = sanitize_text_field( $value );
+			$hash      = hash( 'sha256', $raw_token );
 			if ( isset( $seen_hashes[ $hash ] ) ) {
 				continue;
 			}
@@ -692,42 +742,6 @@ class FrmGatedTokenHelper {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Resolve a token hash from the `access_code` URL query parameter.
-	 *
-	 * When a valid raw token is found the corresponding cookie is set immediately
-	 * (unless headers are already sent) so subsequent requests skip this path.
-	 *
-	 * @return string|null SHA-256 hex hash, or null when not found or invalid.
-	 */
-	private static function get_token_hash_from_url_param() {
-		$url_token = FrmAppHelper::simple_get( 'access_code' );
-		if ( '' === $url_token ) {
-			return null;
-		}
-
-		$hash = hash( 'sha256', $url_token );
-		$row  = self::get_row_by_hash( $hash );
-
-		if ( ! $row ) {
-			return null;
-		}
-
-		if ( null !== $row->expired_at && time() >= (int) $row->expired_at ) {
-			return null;
-		}
-
-		// Only set the cookie when headers have not yet been sent. Headers are
-		// already sent when get_valid_token() is called during shortcode rendering.
-		// maybe_unlock_post() handles cookie setting on the 'wp' hook where
-		// headers are always available.
-		if ( ! headers_sent() ) {
-			self::set_cookie( (int) $row->action_id, $hash, $row->expired_at );
-		}
-
-		return $hash;
 	}
 
 }

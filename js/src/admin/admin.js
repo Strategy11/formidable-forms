@@ -11538,7 +11538,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 
 			list.appendChild( template.content.cloneNode( true ) );
 			frmGcReindexItems( wrapper );
-			initAutocomplete( list.lastElementChild );
+			frmDom.autocomplete.initSelectionAutocomplete( list.lastElementChild );
 			return;
 		}
 
