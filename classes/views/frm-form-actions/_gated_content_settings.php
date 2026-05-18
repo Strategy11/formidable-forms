@@ -57,6 +57,25 @@ $frm_gc_pages = array_values(
 		}
 	)
 );
+
+$frm_gc_use_autocomplete = count( $frm_gc_pages ) > 50;
+
+if ( $frm_gc_use_autocomplete ) {
+	wp_enqueue_script( 'jquery-ui-autocomplete' );
+
+	// Pre-encode the source array once for reuse in all item rows and the template row.
+	$frm_gc_pages_source = wp_json_encode(
+		array_map(
+			static function ( $p ) {
+				return array(
+					'value' => (string) $p->ID,
+					'label' => $p->post_title,
+				);
+			},
+			$frm_gc_pages
+		)
+	);
+}
 ?>
 
 <div
@@ -121,23 +140,49 @@ $frm_gc_pages = array_values(
 								<label for="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>">
 									<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
 								</label>
-								<select
-									id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
-									data-frm-gc-field="id"
-									<?php if ( 'post' === $frm_gc_item_type ) : ?>
-										name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
-									<?php endif; ?>
-								>
-									<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
-									<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
-										<option
-											value="<?php echo esc_attr( $frm_gc_page->ID ); ?>"
-											<?php selected( $frm_gc_item_id, $frm_gc_page->ID ); ?>
-										>
-											<?php echo esc_html( $frm_gc_page->post_title ); ?>
-										</option>
-									<?php endforeach; ?>
-								</select>
+								<?php if ( $frm_gc_use_autocomplete ) : ?>
+									<?php
+									$frm_gc_selected_title = '';
+									foreach ( $frm_gc_pages as $frm_gc_page ) {
+										if ( $frm_gc_item_id === $frm_gc_page->ID ) {
+											$frm_gc_selected_title = $frm_gc_page->post_title;
+											break;
+										}
+									}
+									?>
+									<input type="text" class="frm-custom-search"
+										id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
+										data-source="<?php echo esc_attr( $frm_gc_pages_source ); ?>"
+										placeholder="<?php esc_attr_e( '— Select a page —', 'formidable' ); ?>"
+										value="<?php echo esc_attr( $frm_gc_selected_title ); ?>"
+									/>
+									<input type="hidden"
+										data-frm-gc-field="id"
+										class="frm_autocomplete_value_input"
+										<?php if ( 'post' === $frm_gc_item_type ) : ?>
+											name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
+										<?php endif; ?>
+										value="<?php echo esc_attr( $frm_gc_item_id ?: '' ); ?>"
+									/>
+								<?php else : ?>
+									<select
+										id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
+										data-frm-gc-field="id"
+										<?php if ( 'post' === $frm_gc_item_type ) : ?>
+											name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
+										<?php endif; ?>
+									>
+										<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
+										<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
+											<option
+												value="<?php echo esc_attr( $frm_gc_page->ID ); ?>"
+												<?php selected( $frm_gc_item_id, $frm_gc_page->ID ); ?>
+											>
+												<?php echo esc_html( $frm_gc_page->post_title ); ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+								<?php endif; ?>
 							</div><!-- .frm_form_field -->
 						</div><!-- [data-type="post"] -->
 
@@ -219,14 +264,27 @@ $frm_gc_pages = array_values(
 							<label data-frm-gc-for="id">
 								<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
 							</label>
-							<select data-frm-gc-field="id">
-								<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
-								<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
-									<option value="<?php echo esc_attr( $frm_gc_page->ID ); ?>">
-										<?php echo esc_html( $frm_gc_page->post_title ); ?>
-									</option>
-								<?php endforeach; ?>
-							</select>
+							<?php if ( $frm_gc_use_autocomplete ) : ?>
+								<input type="text" class="frm-custom-search"
+									data-source="<?php echo esc_attr( $frm_gc_pages_source ); ?>"
+									placeholder="<?php esc_attr_e( '— Select a page —', 'formidable' ); ?>"
+									value=""
+								/>
+								<input type="hidden"
+									data-frm-gc-field="id"
+									class="frm_autocomplete_value_input"
+									value=""
+								/>
+							<?php else : ?>
+								<select data-frm-gc-field="id">
+									<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
+									<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
+										<option value="<?php echo esc_attr( $frm_gc_page->ID ); ?>">
+											<?php echo esc_html( $frm_gc_page->post_title ); ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+							<?php endif; ?>
 						</div><!-- .frm_form_field -->
 					</div><!-- [data-type="page"] -->
 
@@ -345,4 +403,4 @@ $frm_gc_pages = array_values(
 </div><!-- .frm_gated_content_settings -->
 
 <?php
-unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_post_types, $frm_gc_pages, $frm_gc_page, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type, $frm_gc_type_key, $frm_gc_type_sel_id, $frm_gc_page_sel_id, $frm_gc_shortcodes, $frm_gc_shortcode );
+unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_post_types, $frm_gc_pages, $frm_gc_page, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type, $frm_gc_type_key, $frm_gc_type_sel_id, $frm_gc_page_sel_id, $frm_gc_use_autocomplete, $frm_gc_pages_source, $frm_gc_selected_title, $frm_gc_shortcodes, $frm_gc_shortcode );
