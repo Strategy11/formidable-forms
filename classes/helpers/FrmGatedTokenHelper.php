@@ -141,9 +141,11 @@ class FrmGatedTokenHelper {
 	public static function revoke( $token ) {
 		global $wpdb;
 
+		$hash = hash( 'sha256', $token );
+
 		$wpdb->delete(
 			$wpdb->prefix . 'frm_gated_tokens',
-			array( 'token_hash' => hash( 'sha256', $token ) ),
+			array( 'token_hash' => $hash ),
 			array( '%s' )
 		);
 	}
@@ -275,142 +277,6 @@ class FrmGatedTokenHelper {
 		unset( self::$row_cache[ $hash ] );
 	}
 
-	// ── Validation transient cache ────────────────────────────────────────── //
-
-	/**
-	 * Build the transient key for a token + item validation result.
-	 *
-	 * Format: frm_gc_v_{hash}_{item_type}_{item_id}
-	 * Max length ≈ 9 + 64 + 1 + 20 + 1 + 10 = 105 chars (well under WP's 172-char limit).
-	 *
-	 * @param string     $hash      SHA-256 hex hash of the token.
-	 * @param string     $item_type Content item type slug.
-	 * @param int|string $item_id   Content item ID.
-	 *
-	 * @return string
-	 */
-	private static function get_validation_transient_key( $hash, $item_type, $item_id ) {
-		return 'frm_gc_v_' . $hash . '_' . $item_type . '_' . $item_id;
-	}
-
-	/**
-	 * Return the cached validation result for a token + item pair.
-	 *
-	 * Only successful validations are cached — a cache hit always means valid.
-	 * Returns null when no cached result exists (full validation required).
-	 *
-	 * @param string $hash      SHA-256 hex hash of the token.
-	 * @param string $item_type Content item type slug.
-	 * @param int|string $item_id   Content item ID.
-	 *
-	 * @return array|null Cached value array on hit, null on miss.
-	 */
-	public static function get_cached_validation( $hash, $item_type, $item_id ) {
-		$cached = get_transient( self::get_validation_transient_key( $hash, $item_type, $item_id ) );
-		return false !== $cached ? $cached : null;
-	}
-
-	/**
-	 * Cache a successful token + item validation result.
-	 *
-	 * TTL equals the remaining lifetime of the token (or DAY_IN_SECONDS for
-	 * tokens that never expire). Action-update hooks delete the cache early when
-	 * the action's item list changes.
-	 *
-	 * @param string   $hash      SHA-256 hex hash of the token.
-	 * @param string   $item_type Content item type slug.
-	 * @param int|string $item_id    Content item ID.
-	 * @param int|null   $expired_at Token expiry timestamp, or null if it never expires.
-	 * @param int        $action_id  Gated content action post ID.
-	 *
-	 * @return void
-	 */
-	public static function set_validation_cache( $hash, $item_type, $item_id, $expired_at, $action_id ) {
-		$ttl = null !== $expired_at ? max( 1, (int) $expired_at - time() ) : DAY_IN_SECONDS;
-		set_transient(
-			self::get_validation_transient_key( $hash, $item_type, $item_id ),
-			array(
-				'item_type'  => $item_type,
-				'item_id'    => $item_id,
-				'expired_at' => $expired_at,
-				'action_id'  => $action_id,
-			),
-			$ttl
-		);
-	}
-
-	/**
-	 * Delete validation cache entries for every token belonging to an action.
-	 *
-	 * Call this when a gated content action's settings are updated so stale
-	 * item-membership results are not served from cache.
-	 *
-	 * @param int $action_id Gated content action post ID.
-	 *
-	 * @return void
-	 */
-	public static function delete_validation_cache_for_action( $action_id ) {
-		$action = get_post( $action_id );
-		if ( ! $action ) {
-			return;
-		}
-
-		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$rows = self::get_tokens_for_action( $action_id, 9999 );
-		foreach ( $rows as $row ) {
-			foreach ( $settings['items'] as $item ) {
-				if ( ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
-					delete_transient( self::get_validation_transient_key( $row->token_hash, $item['type'], (int) $item['id'] ) );
-				}
-			}
-		}
-	}
-
-	/**
-	 * Delete all validation cache entries for a single token.
-	 *
-	 * Looks up the token's action to know which item_type + item_id combinations
-	 * may have been cached, then deletes each transient.
-	 *
-	 * Call this when a token is mutated (expiry extended, hash renewed) or when
-	 * the token is found to be expired during real-time validation.
-	 *
-	 * @param string $hash      SHA-256 hex hash of the token.
-	 * @param int    $action_id Optional. When already known, avoids an extra row lookup.
-	 *
-	 * @return void
-	 */
-	public static function delete_validation_cache_for_token( $hash, $action_id = 0 ) {
-		if ( ! $action_id ) {
-			$row = self::get_row_by_hash( $hash );
-			if ( ! $row ) {
-				return;
-			}
-			$action_id = (int) $row->action_id;
-		}
-
-		$action = get_post( $action_id );
-		if ( ! $action ) {
-			return;
-		}
-
-		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
-			return;
-		}
-
-		foreach ( $settings['items'] as $item ) {
-			if ( ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
-				delete_transient( self::get_validation_transient_key( $hash, $item['type'], (int) $item['id'] ) );
-			}
-		}
-	}
-
 	/**
 	 * Validate a raw access code against a specific gated content item.
 	 *
@@ -434,31 +300,89 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
+	 * Build the transient key for an action + item membership result.
+	 *
+	 * Format: frm_gc_ac_{action_id}_{item_type}_{item_id}
+	 *
+	 * @param int        $action_id ID of the frm_form_actions post.
+	 * @param string     $item_type Content item type slug.
+	 * @param int|string $item_id   Content item ID.
+	 *
+	 * @return string
+	 */
+	private static function get_action_item_transient_key( $action_id, $item_type, $item_id ) {
+		return 'frm_gc_ac_' . $action_id . '_' . $item_type . '_' . $item_id;
+	}
+
+	/**
+	 * Delete the cached membership result for every item listed in an action's settings.
+	 *
+	 * Call this when an action is updated or deleted so stale results are not served.
+	 *
+	 * @param int $action_id ID of the frm_form_actions post.
+	 *
+	 * @return void
+	 */
+	public static function delete_action_item_cache( $action_id ) {
+		$action = get_post( $action_id );
+		if ( ! $action ) {
+			return;
+		}
+
+		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
+			return;
+		}
+
+		foreach ( $settings['items'] as $item ) {
+			if ( ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
+				delete_transient( self::get_action_item_transient_key( $action_id, $item['type'], $item['id'] ) );
+			}
+		}
+	}
+
+	/**
 	 * Check whether an action's settings include a specific content item.
 	 *
-	 * @param WP_Post|null $action    Action post object, or null if not found.
-	 * @param int|string   $item_id   Content item ID to look for.
-	 * @param string       $item_type Content item type slug to match.
+	 * The result is cached in a transient keyed to the action + item pair so
+	 * subsequent requests skip the DB lookup. TTL matches the token's remaining
+	 * lifetime, or DAY_IN_SECONDS when no expiry is provided.
+	 *
+	 * @param int        $action_id  ID of the frm_form_actions post.
+	 * @param string     $item_type  Content item type slug to match.
+	 * @param int|string $item_id    Content item ID to look for.
+	 * @param int|null   $expired_at Token expiry timestamp used to set TTL, or null for no expiry.
 	 *
 	 * @return bool True if the item is listed in the action's items setting.
 	 */
-	public static function action_contains_item( $action, $item_id, $item_type ) {
+	public static function action_contains_item( $action_id, $item_type, $item_id, $expired_at = null ) {
+		$key    = self::get_action_item_transient_key( $action_id, $item_type, $item_id );
+		$cached = get_transient( $key );
+
+		if ( false !== $cached ) {
+			return (bool) $cached;
+		}
+
+		$action = get_post( $action_id );
 		if ( ! $action ) {
 			return false;
 		}
 
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
-			return false;
-		}
-
-		foreach ( $settings['items'] as $item ) {
-			if ( is_array( $item ) && (string) $item['id'] === (string) $item_id && $item['type'] === $item_type ) {
-				return true;
+		$result   = false;
+		if ( is_array( $settings ) && ! empty( $settings['items'] ) ) {
+			foreach ( $settings['items'] as $item ) {
+				if ( is_array( $item ) && (string) $item['id'] === (string) $item_id && $item['type'] === $item_type ) {
+					$result = true;
+					break;
+				}
 			}
 		}
 
-		return false;
+		$ttl = null !== $expired_at ? max( 1, $expired_at - time() ) : DAY_IN_SECONDS;
+		set_transient( $key, $result, $ttl );
+
+		return $result;
 	}
 
 	/**

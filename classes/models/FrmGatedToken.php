@@ -126,23 +126,13 @@ class FrmGatedToken {
 	 */
 	public function validate( $item_id = 0, $item_type = '' ) {
 		if ( $this->is_expired() ) {
-			FrmGatedTokenHelper::delete_validation_cache_for_token( $this->token_hash, $this->action_id );
 			return false;
 		}
 
 		if ( empty( $item_id ) ) {
 			$is_valid = true;
 		} else {
-			// Check the transient cache before hitting the DB for action settings.
-			$cached = FrmGatedTokenHelper::get_cached_validation( $this->token_hash, $item_type, $item_id );
-			if ( null !== $cached ) {
-				$is_valid = true; // Only successful validations are cached.
-			} else {
-				$is_valid = FrmGatedTokenHelper::action_contains_item( $this->get_action(), $item_id, $item_type );
-				if ( $is_valid ) {
-					FrmGatedTokenHelper::set_validation_cache( $this->token_hash, $item_type, $item_id, $this->expired_at, $this->action_id );
-				}
-			}
+			$is_valid = FrmGatedTokenHelper::action_contains_item( $this->action_id, $item_type, $item_id, $this->expired_at );
 		}
 
 		/**
@@ -182,4 +172,5 @@ class FrmGatedToken {
 	public function set_cookie( $raw_token, $item_type = '', $item_id = 0 ) {
 		FrmGatedTokenHelper::set_cookie( $raw_token, $this->expired_at, $item_type, $item_id );
 	}
+
 }

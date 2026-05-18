@@ -213,18 +213,11 @@ class FrmGatedContentController {
 	 *
 	 * @return void
 	 */
-	public static function on_action_deleted( $post_id, $post ) {
-		if ( 'frm_form_actions' !== $post->post_type || FrmGatedContentAction::$slug !== $post->post_excerpt ) {
-			return;
-		}
-		FrmGatedTokenHelper::delete_by_action( $post_id );
-	}
-
 	/**
-	 * Invalidate cached validation results when a gated content action is updated.
+	 * Clear the action-item membership cache when a gated content action is updated.
 	 *
-	 * Fires on 'save_post_frm_form_actions'. Clears transients for all tokens
-	 * belonging to the action so stale item-membership results are not served.
+	 * Fires on 'save_post_frm_form_actions'. Only acts on updates (not creates)
+	 * because the item list cannot change during initial creation.
 	 *
 	 * @param int     $post_id Post ID of the saved action.
 	 * @param WP_Post $post    Saved post object.
@@ -236,7 +229,17 @@ class FrmGatedContentController {
 		if ( ! $update || FrmGatedContentAction::$slug !== $post->post_excerpt ) {
 			return;
 		}
-		FrmGatedTokenHelper::delete_validation_cache_for_action( $post_id );
+		FrmGatedTokenHelper::delete_action_item_cache( $post_id );
+	}
+
+	public static function on_action_deleted( $post_id, $post ) {
+		if ( 'frm_form_actions' !== $post->post_type || FrmGatedContentAction::$slug !== $post->post_excerpt ) {
+			return;
+		}
+		// Clear action-item cache first — the action post still exists at this
+		// point (before_delete_post) so its settings are still readable.
+		FrmGatedTokenHelper::delete_action_item_cache( $post_id );
+		FrmGatedTokenHelper::delete_by_action( $post_id );
 	}
 
 	/**
