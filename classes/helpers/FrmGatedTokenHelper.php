@@ -283,14 +283,14 @@ class FrmGatedTokenHelper {
 	 * Format: frm_gc_v_{hash}_{item_type}_{item_id}
 	 * Max length ≈ 9 + 64 + 1 + 20 + 1 + 10 = 105 chars (well under WP's 172-char limit).
 	 *
-	 * @param string $hash      SHA-256 hex hash of the token.
-	 * @param string $item_type Content item type slug.
-	 * @param int    $item_id   Content item ID.
+	 * @param string     $hash      SHA-256 hex hash of the token.
+	 * @param string     $item_type Content item type slug.
+	 * @param int|string $item_id   Content item ID.
 	 *
 	 * @return string
 	 */
 	private static function get_validation_transient_key( $hash, $item_type, $item_id ) {
-		return 'frm_gc_v_' . $hash . '_' . $item_type . '_' . (int) $item_id;
+		return 'frm_gc_v_' . $hash . '_' . $item_type . '_' . $item_id;
 	}
 
 	/**
@@ -301,7 +301,7 @@ class FrmGatedTokenHelper {
 	 *
 	 * @param string $hash      SHA-256 hex hash of the token.
 	 * @param string $item_type Content item type slug.
-	 * @param int    $item_id   Content item ID.
+	 * @param int|string $item_id   Content item ID.
 	 *
 	 * @return array|null Cached value array on hit, null on miss.
 	 */
@@ -319,9 +319,9 @@ class FrmGatedTokenHelper {
 	 *
 	 * @param string   $hash      SHA-256 hex hash of the token.
 	 * @param string   $item_type Content item type slug.
-	 * @param int      $item_id   Content item ID.
-	 * @param int|null $expired_at Token expiry timestamp, or null if it never expires.
-	 * @param int      $action_id  Gated content action post ID.
+	 * @param int|string $item_id    Content item ID.
+	 * @param int|null   $expired_at Token expiry timestamp, or null if it never expires.
+	 * @param int        $action_id  Gated content action post ID.
 	 *
 	 * @return void
 	 */
@@ -412,34 +412,32 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Validate a pre-computed token hash against a specific gated content item.
+	 * Validate a raw access code against a specific gated content item.
 	 *
-	 * Convenience wrapper around FrmGatedToken::validate() for callers that
-	 * already hold a hash rather than a token object.
+	 * Hashes the code, fetches the matching DB row, then delegates to
+	 * FrmGatedToken::validate() — which enforces expiry, item-membership, and the
+	 * frm_gated_content_validate filter.
 	 *
-	 * @param string      $hash      SHA-256 hex hash of the raw access token.
-	 * @param int         $item_id   ID of the content item to check access for.
-	 * @param string      $item_type Type slug of the content item (e.g. 'post', 'frm_file').
-	 * @param object|null $row       Optional pre-fetched token row. Skips the DB lookup when provided.
-	 * @return bool True if the hash grants access to the item.
+	 * @param string $access_code Raw access token (same value as the access_code URL parameter).
+	 * @param string $item_type   Content item type slug (e.g. 'post', 'frm_file'). Pass empty string to skip item check.
+	 * @param int|string $item_id     Content item ID (post ID, attachment ID, …). Pass 0 to skip item check.
+	 *
+	 * @return FrmGatedToken|null Validated token object, or null if the code is invalid or does not grant access.
 	 */
-	public static function validate_hash( $hash, $item_id, $item_type, $row = null ) {
+	public static function validate_access_code( $access_code, $item_type = '', $item_id = 0 ) {
+		$row = self::get_row_by_hash( hash( 'sha256', $access_code ) );
 		if ( null === $row ) {
-			$row = self::get_row_by_hash( $hash );
+			return null;
 		}
-
-		if ( null === $row ) {
-			return false;
-		}
-
-		return ( new FrmGatedToken( $row ) )->validate( $item_id, $item_type );
+		$token = new FrmGatedToken( $row );
+		return $token->validate( $item_id, $item_type ) ? $token : null;
 	}
 
 	/**
 	 * Check whether an action's settings include a specific content item.
 	 *
 	 * @param WP_Post|null $action    Action post object, or null if not found.
-	 * @param int          $item_id   Content item ID to look for.
+	 * @param int|string   $item_id   Content item ID to look for.
 	 * @param string       $item_type Content item type slug to match.
 	 *
 	 * @return bool True if the item is listed in the action's items setting.
@@ -455,7 +453,7 @@ class FrmGatedTokenHelper {
 		}
 
 		foreach ( $settings['items'] as $item ) {
-			if ( is_array( $item ) && (int) $item['id'] === $item_id && $item['type'] === $item_type ) {
+			if ( is_array( $item ) && (string) $item['id'] === (string) $item_id && $item['type'] === $item_type ) {
 				return true;
 			}
 		}
@@ -479,7 +477,7 @@ class FrmGatedTokenHelper {
 	 * @param string   $raw_token  Raw access token to store.
 	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for 1-year TTL.
 	 * @param string   $item_type  Content item type slug (e.g. 'post', 'frm_file').
-	 * @param int      $item_id    Content item ID, or 0 when not applicable.
+	 * @param int|string $item_id    Content item ID, or 0 when not applicable.
 	 * @return void
 	 */
 	public static function set_cookie( $raw_token, $expired_at = null, $item_type = '', $item_id = 0 ) {
@@ -488,7 +486,7 @@ class FrmGatedTokenHelper {
 		}
 
 		$cookie_name = $item_id
-			? 'frm_gc_' . $item_type . '_' . (int) $item_id
+			? 'frm_gc_' . $item_type . '_' . $item_id
 			: 'frm_gc_' . $item_type;
 
 		$expiry = null !== $expired_at ? $expired_at : ( time() + YEAR_IN_SECONDS );
@@ -504,19 +502,6 @@ class FrmGatedTokenHelper {
 				'samesite' => 'Lax',
 			)
 		);
-	}
-
-	/**
-	 * Derive a SHA-256 hash from a frm_gc_* cookie value.
-	 *
-	 * Cookies now store the raw access token as their value, so hashing it
-	 * yields the token_hash used to look up the DB row.
-	 *
-	 * @param string $value Raw cookie value (the raw access token).
-	 * @return string SHA-256 hex hash.
-	 */
-	public static function parse_hash_from_cookie_value( $value ) {
-		return hash( 'sha256', $value );
 	}
 
 	/**
@@ -571,7 +556,7 @@ class FrmGatedTokenHelper {
 	 * it is action-scoped and only meaningful for shortcode rendering immediately
 	 * after token generation. Use get_raw_token_for_action() for that purpose.
 	 *
-	 * @param int    $item_id   Content item ID (post ID, attachment ID, …).
+	 * @param int|string $item_id   Content item ID (post ID, attachment ID, …).
 	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_file').
 	 *
 	 * @return FrmGatedToken|null First valid token, or null if none found.
@@ -607,7 +592,7 @@ class FrmGatedTokenHelper {
 		 *
 		 * @param FrmGatedToken|null $token     Null — no valid token found by core.
 		 * @param array              $args {
-		 *     @type int    $item_id   Content item ID being accessed (0 if unknown).
+		 *     @type int|string $item_id   Content item ID being accessed (0 if unknown).
 		 *     @type string $item_type Content item type slug (empty if unknown).
 		 * }
 		 */
@@ -621,7 +606,7 @@ class FrmGatedTokenHelper {
 	 * subsequent requests can skip this path entirely. The raw token is stored
 	 * as the cookie value so users can verify it matches their access link.
 	 *
-	 * @param int    $item_id   Content item ID.
+	 * @param int|string $item_id   Content item ID.
 	 * @param string $item_type Content item type slug.
 	 *
 	 * @return FrmGatedToken|null
@@ -632,18 +617,8 @@ class FrmGatedTokenHelper {
 			return null;
 		}
 
-		$hash = hash( 'sha256', $url_token );
-		$row  = self::get_row_by_hash( $hash );
-		if ( ! $row ) {
-			return null;
-		}
-
-		if ( null !== $row->expired_at && time() >= (int) $row->expired_at ) {
-			return null;
-		}
-
-		$token = new FrmGatedToken( $row );
-		if ( ! $token->validate( $item_id, $item_type ) ) {
+		$token = self::validate_access_code( $url_token, $item_type, $item_id );
+		if ( null === $token ) {
 			return null;
 		}
 
@@ -651,7 +626,7 @@ class FrmGatedTokenHelper {
 		// that was just granted access. Store the raw token so it matches the
 		// access_code URL parameter — easier to verify and simpler to look up.
 		if ( ! headers_sent() ) {
-			self::set_cookie( $url_token, $row->expired_at, $item_type, $item_id );
+			self::set_cookie( $url_token, $token->get_expired_at(), $item_type, $item_id );
 		}
 
 		return $token;
@@ -667,7 +642,7 @@ class FrmGatedTokenHelper {
 	 * Populates $seen_hashes with every hash examined so the caller can pass it to
 	 * subsequent sources to avoid processing the same row twice.
 	 *
-	 * @param int    $item_id     Content item ID.
+	 * @param int|string $item_id     Content item ID.
 	 * @param string $item_type   Content item type slug.
 	 * @param array  $seen_hashes Dedup map passed by reference.
 	 *
@@ -676,19 +651,13 @@ class FrmGatedTokenHelper {
 	private static function get_valid_token_from_cookies( $item_id, $item_type, &$seen_hashes ) {
 		if ( $item_type && $item_id ) {
 			// Direct lookup — skip every other cookie without touching the DB.
-			$cookie_name = 'frm_gc_' . $item_type . '_' . (int) $item_id;
+			$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
 			if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
 				return null;
 			}
 			$raw_token            = sanitize_text_field( $_COOKIE[ $cookie_name ] );
-			$hash                 = hash( 'sha256', $raw_token );
-			$seen_hashes[ $hash ] = true;
-			$row                  = self::get_row_by_hash( $hash );
-			if ( ! $row ) {
-				return null;
-			}
-			$token = new FrmGatedToken( $row );
-			return $token->validate( $item_id, $item_type ) ? $token : null;
+			$seen_hashes[ hash( 'sha256', $raw_token ) ] = true;
+			return self::validate_access_code( $raw_token, $item_type, $item_id );
 		}
 
 		// Partial or no context — scan cookies whose names share the type prefix.
@@ -704,12 +673,8 @@ class FrmGatedTokenHelper {
 				continue;
 			}
 			$seen_hashes[ $hash ] = true;
-			$row                  = self::get_row_by_hash( $hash );
-			if ( ! $row ) {
-				continue;
-			}
-			$token = new FrmGatedToken( $row );
-			if ( $token->validate( $item_id, $item_type ) ) {
+			$token                = self::validate_access_code( $raw_token, $item_type, $item_id );
+			if ( null !== $token ) {
 				return $token;
 			}
 		}
@@ -721,7 +686,7 @@ class FrmGatedTokenHelper {
 	 *
 	 * Skips hashes already seen in earlier sources via $seen_hashes.
 	 *
-	 * @param int    $item_id     Content item ID.
+	 * @param int|string $item_id     Content item ID.
 	 * @param string $item_type   Content item type slug.
 	 * @param array  $seen_hashes Dedup map passed by reference.
 	 *

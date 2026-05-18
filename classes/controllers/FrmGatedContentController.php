@@ -163,7 +163,7 @@ class FrmGatedContentController {
 			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
 				continue;
 			}
-			$hash   = FrmGatedTokenHelper::parse_hash_from_cookie_value( sanitize_text_field( $value ) );
+			$hash   = hash( 'sha256', sanitize_text_field( $value ) );
 			$row    = FrmGatedTokenHelper::get_row_by_hash( $hash );
 			if ( ! $row ) {
 				continue;
@@ -448,7 +448,7 @@ class FrmGatedContentController {
 	 * ('frm_file', 'frm_pdf', …) can provide a base URL via the
 	 * `frm_gated_content_item_url` filter.
 	 *
-	 * @param int    $item_id   Content item ID (e.g. page post ID).
+	 * @param int|string $item_id   Content item ID (e.g. page post ID).
 	 * @param string $type      Item type slug ('post', 'frm_file', 'frm_pdf', …).
 	 * @param string $raw_token Raw access token to append as access_code query arg.
 	 *
@@ -465,7 +465,7 @@ class FrmGatedContentController {
 		 *
 		 * @param string $base_url Permalink for 'post' items; empty string for others.
 		 * @param array  $args {
-		 *     @type int    $item_id   Content item ID.
+		 *     @type int|string $item_id   Content item ID.
 		 *     @type string $type      Item type slug.
 		 *     @type string $raw_token Raw access token.
 		 * }
@@ -486,7 +486,7 @@ class FrmGatedContentController {
 	 * 'frm_pdf', …) can provide a title via the `frm_gated_content_item_title`
 	 * filter.
 	 *
-	 * @param int    $item_id Content item ID (e.g. page post ID or attachment ID).
+	 * @param int|string $item_id Content item ID (e.g. page post ID or attachment ID).
 	 * @param string $type    Item type slug ('post', 'frm_file', 'frm_pdf', …).
 	 *
 	 * @return string Display title, or empty string when unavailable.
@@ -502,7 +502,7 @@ class FrmGatedContentController {
 		 *
 		 * @param string $title   Post title for 'post' items; empty string for others.
 		 * @param array  $args {
-		 *     @type int    $item_id Content item ID.
+		 *     @type int|string $item_id Content item ID.
 		 *     @type string $type    Item type slug.
 		 * }
 		 */

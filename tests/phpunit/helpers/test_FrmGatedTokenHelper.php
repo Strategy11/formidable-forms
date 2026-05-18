@@ -106,48 +106,46 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->assertIsString( $cached );
 	}
 
-	// ── validate_hash() ───────────────────────────────────────────────────── //
+	// ── validate_access_code() ───────────────────────────────────────────── //
 
 	/**
-	 * @covers FrmGatedTokenHelper::validate_hash
+	 * @covers FrmGatedTokenHelper::validate_access_code
 	 */
-	public function test_validate_hash_returns_true_for_valid_item() {
+	public function test_validate_access_code_returns_token_for_valid_item() {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash  = hash( 'sha256', $token );
 
-		$this->assertTrue(
-			FrmGatedTokenHelper::validate_hash( $hash, $this->item['id'], $this->item['type'] )
+		$this->assertInstanceOf(
+			FrmGatedToken::class,
+			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
 		);
 	}
 
 	/**
-	 * @covers FrmGatedTokenHelper::validate_hash
+	 * @covers FrmGatedTokenHelper::validate_access_code
 	 */
-	public function test_validate_hash_returns_false_for_wrong_item_id() {
+	public function test_validate_access_code_returns_null_for_wrong_item_id() {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash  = hash( 'sha256', $token );
 
-		$this->assertFalse(
-			FrmGatedTokenHelper::validate_hash( $hash, 999, $this->item['type'] )
+		$this->assertNull(
+			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], 999 )
 		);
 	}
 
 	/**
-	 * @covers FrmGatedTokenHelper::validate_hash
+	 * @covers FrmGatedTokenHelper::validate_access_code
 	 */
-	public function test_validate_hash_returns_false_for_wrong_item_type() {
+	public function test_validate_access_code_returns_null_for_wrong_item_type() {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash  = hash( 'sha256', $token );
 
-		$this->assertFalse(
-			FrmGatedTokenHelper::validate_hash( $hash, $this->item['id'], 'frm_file' )
+		$this->assertNull(
+			FrmGatedTokenHelper::validate_access_code( $token, 'frm_file', $this->item['id'] )
 		);
 	}
 
 	/**
-	 * @covers FrmGatedTokenHelper::validate_hash
+	 * @covers FrmGatedTokenHelper::validate_access_code
 	 */
-	public function test_validate_hash_returns_false_for_expired_token() {
+	public function test_validate_access_code_returns_false_for_expired_token() {
 		global $wpdb;
 
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
@@ -165,17 +163,17 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		// Evict the row cache so validate() reads the updated row.
 		$this->reset_helper_caches();
 
-		$this->assertFalse(
-			FrmGatedTokenHelper::validate_hash( $hash, $this->item['id'], $this->item['type'] )
+		$this->assertNull(
+			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
 		);
 	}
 
 	/**
-	 * @covers FrmGatedTokenHelper::validate_hash
+	 * @covers FrmGatedTokenHelper::validate_access_code
 	 */
-	public function test_validate_hash_returns_false_for_nonexistent_hash() {
-		$this->assertFalse(
-			FrmGatedTokenHelper::validate_hash( 'not-a-real-hash', $this->item['id'], $this->item['type'] )
+	public function test_validate_access_code_returns_null_for_nonexistent_token() {
+		$this->assertNull(
+			FrmGatedTokenHelper::validate_access_code( 'not-a-real-token', $this->item['type'], $this->item['id'] )
 		);
 	}
 

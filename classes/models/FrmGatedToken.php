@@ -95,7 +95,7 @@ class FrmGatedToken {
 	 *
 	 * @return bool
 	 */
-	public function is_expired() {
+	private function is_expired() {
 		return null !== $this->expired_at && time() >= $this->expired_at;
 	}
 
@@ -119,7 +119,7 @@ class FrmGatedToken {
 	 * action settings on subsequent requests. Only the structural item check is
 	 * cached — the `frm_gated_content_validate` filter still fires every time.
 	 *
-	 * @param int    $item_id   Content item ID (post ID, view ID, …). Pass 0 to skip item check.
+	 * @param int|string $item_id   Content item ID (post ID, view ID, …). Pass 0 to skip item check.
 	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_pdf').
 	 *
 	 * @return bool
@@ -153,7 +153,7 @@ class FrmGatedToken {
 		 * @param bool          $is_valid  Whether the token passes structural validation.
 		 * @param array         $args {
 		 *     @type FrmGatedToken $token     The token being validated.
-		 *     @type int           $item_id   Content item ID being checked.
+		 *     @type int|string    $item_id   Content item ID being checked.
 		 *     @type string        $item_type Content item type slug.
 		 * }
 		 */
@@ -177,7 +177,7 @@ class FrmGatedToken {
 	 *
 	 * @param string $raw_token Raw access token (same value as the access_code URL param).
 	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_file').
-	 * @param int    $item_id   Content item ID, or 0 when not applicable.
+	 * @param int|string $item_id   Content item ID, or 0 when not applicable.
 	 */
 	public function set_cookie( $raw_token, $item_type = '', $item_id = 0 ) {
 		FrmGatedTokenHelper::set_cookie( $raw_token, $this->expired_at, $item_type, $item_id );
