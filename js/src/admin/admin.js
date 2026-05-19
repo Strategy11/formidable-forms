@@ -11390,7 +11390,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 *
 	 * @param {HTMLElement} itemRow - A .frm_gc_item_row element.
 	 */
-	function frmGcActivateType( itemRow ) {
+	function activateType( itemRow ) {
 		const typeSelect = itemRow.querySelector( '.frm-gc-item-type' );
 		const activeType = typeSelect.value;
 
@@ -11425,7 +11425,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 * @param {HTMLElement} wrapper - The .frm_gated_content_settings element.
 	 * @return {void}
 	 */
-	function frmGcReindexItems( wrapper ) {
+	function reindexItems( wrapper ) {
 		const addBtn    = wrapper.querySelector( '.frm_gc_add_item' );
 		const fieldBase = addBtn?.dataset.fieldNameBase ?? '';
 		const rows      = wrapper.querySelectorAll( '.frm_gc_item_row' );
@@ -11435,8 +11435,8 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			if ( typeSelect && fieldBase ) {
 				typeSelect.name = `${fieldBase}[${idx}][type]`;
 			}
-			frmGcAssignItemIds( row, wrapper.id, idx );
-			frmGcActivateType( row );
+			assignItemIds( row, wrapper.id, idx );
+			activateType( row );
 		} );
 
 		wrapper.dataset.itemCount = rows.length;
@@ -11456,7 +11456,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 * @param {string}      wrapperBaseId - The wrapper element's id attribute value.
 	 * @param {number}      idx           - Zero-based item index used for unique IDs.
 	 */
-	function frmGcAssignItemIds( itemRow, wrapperBaseId, idx ) {
+	function assignItemIds( itemRow, wrapperBaseId, idx ) {
 		// Type select.
 		const typeSelect = itemRow.querySelector( '[data-frm-gc-field="type"]' );
 		if ( typeSelect ) {
@@ -11490,7 +11490,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 *
 	 * @param {HTMLElement} formSelect - A .frm-gc-file-form-select element.
 	 */
-	function frmGcFilterFileFields( formSelect ) {
+	function filterFileFields( formSelect ) {
 		const typeDiv    = formSelect.closest( '.frm-gc-type-settings' );
 		const fieldSelect = typeDiv?.querySelector( '[data-frm-gc-field="id"]' );
 		if ( ! fieldSelect ) {
@@ -11521,7 +11521,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 *
 	 * @param {HTMLElement} btn - The .frm_gc_copy_shortcode button element.
 	 */
-	function frmGcShowCopied( btn ) {
+	function showCopied( btn ) {
 		const use          = btn.querySelector( 'use' );
 		const originalHref = use.getAttribute( 'href' );
 		const originalLabel = btn.getAttribute( 'aria-label' );
@@ -11542,8 +11542,8 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			const list     = wrapper.querySelector( '.frm_gc_items_list' );
 			const template = wrapper.querySelector( '.frm_gc_item_template' );
 
-			list.appendChild( template.content.cloneNode( true ) );
-			frmGcReindexItems( wrapper );
+			list.append( template.content.cloneNode( true ) );
+			reindexItems( wrapper );
 			frmDom.autocomplete.initSelectionAutocomplete( list.lastElementChild );
 			return;
 		}
@@ -11552,7 +11552,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		if ( removeBtn ) {
 			const wrapper = removeBtn.closest( '.frm_gated_content_settings' );
 			removeBtn.closest( '.frm_gc_item_row' ).remove();
-			frmGcReindexItems( wrapper );
+			reindexItems( wrapper );
 			return;
 		}
 
@@ -11560,17 +11560,17 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		if ( copyBtn ) {
 			const text = copyBtn.dataset.frmCopy;
 			if ( navigator.clipboard?.writeText ) {
-				navigator.clipboard.writeText( text ).then( () => frmGcShowCopied( copyBtn ) );
+				navigator.clipboard.writeText( text ).then( () => showCopied( copyBtn ) );
 			} else {
 				// Fallback for browsers without Clipboard API.
 				const textarea = document.createElement( 'textarea' );
 				textarea.value = text;
 				textarea.style.cssText = 'position:fixed;opacity:0;';
-				document.body.appendChild( textarea );
+				document.body.append( textarea );
 				textarea.select();
 				document.execCommand( 'copy' );
-				document.body.removeChild( textarea );
-				frmGcShowCopied( copyBtn );
+				textarea.remove();
+				showCopied( copyBtn );
 			}
 		}
 	} );
@@ -11578,13 +11578,13 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	document.addEventListener( 'change', function( event ) {
 		const typeSelect = event.target.closest( '.frm-gc-item-type' );
 		if ( typeSelect ) {
-			frmGcActivateType( typeSelect.closest( '.frm_gc_item_row' ) );
+			activateType( typeSelect.closest( '.frm_gc_item_row' ) );
 			return;
 		}
 
 		const fileFormSelect = event.target.closest( '.frm-gc-file-form-select' );
 		if ( fileFormSelect ) {
-			frmGcFilterFileFields( fileFormSelect );
+			filterFileFields( fileFormSelect );
 		}
 	} );
 
