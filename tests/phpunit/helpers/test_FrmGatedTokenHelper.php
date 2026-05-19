@@ -47,7 +47,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		unset( $_GET['access_code'] );
 
 		foreach ( array_keys( $_COOKIE ) as $name ) {
-			if ( str_starts_with($name, 'frm_gc_') ) {
+			if ( str_starts_with( $name, 'frm_gc_' ) ) {
 				unset( $_COOKIE[ $name ] );
 			}
 		}
@@ -83,12 +83,11 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		global $wpdb;
 
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash  = hash( 'sha256', $token );
 
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}frm_gated_tokens WHERE token_hash = %s",
-				$hash
+				hash( 'sha256', $token )
 			)
 		);
 
@@ -128,7 +127,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 
 		$this->assertNotInstanceOf(
-			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], 999 )
+			\FrmGatedToken::class,
+			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], 999 )
 		);
 	}
 
@@ -139,7 +139,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 
 		$this->assertNotInstanceOf(
-			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( $token, 'frm_file', $this->item['id'] )
+			\FrmGatedToken::class,
+			FrmGatedTokenHelper::validate_access_code( $token, 'frm_file', $this->item['id'] )
 		);
 	}
 
@@ -150,13 +151,12 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		global $wpdb;
 
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash  = hash( 'sha256', $token );
 
 		// Back-date the expiry to the past.
 		$wpdb->update(
 			$wpdb->prefix . 'frm_gated_tokens',
 			array( 'expired_at' => time() - 3600 ),
-			array( 'token_hash' => $hash ),
+			array( 'token_hash' => hash( 'sha256', $token ) ),
 			array( '%d' ),
 			array( '%s' )
 		);
@@ -165,7 +165,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->reset_helper_caches();
 
 		$this->assertNotInstanceOf(
-			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
+			\FrmGatedToken::class,
+			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
 		);
 	}
 
@@ -174,7 +175,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 */
 	public function test_validate_access_code_returns_null_for_nonexistent_token() {
 		$this->assertNotInstanceOf(
-			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( 'not-a-real-token', $this->item['type'], $this->item['id'] )
+			\FrmGatedToken::class,
+			FrmGatedTokenHelper::validate_access_code( 'not-a-real-token', $this->item['type'], $this->item['id'] )
 		);
 	}
 
@@ -196,8 +198,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @covers FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_resolves_via_url_param() {
-		$raw_token           = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$_GET['access_code'] = $raw_token;
+		$_GET['access_code'] = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 		$this->reset_helper_caches();
 
 		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
@@ -211,8 +212,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @covers FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_returns_null_for_url_param_with_wrong_item() {
-		$raw_token           = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$_GET['access_code'] = $raw_token;
+		$_GET['access_code'] = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 		$this->reset_helper_caches();
 
 		// Request a different item ID than the one in the action.
@@ -227,9 +227,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @covers FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_resolves_via_cookie() {
-		$raw_token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-
-		$_COOKIE[ 'frm_gc_' . $this->item['type'] . '_' . $this->item['id'] ] = $raw_token;
+		$_COOKIE[ 'frm_gc_' . $this->item['type'] . '_' . $this->item['id'] ] = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 		$this->reset_helper_caches();
 
 		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
@@ -264,10 +262,10 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @covers FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_falls_back_to_filter() {
-		$raw_token   = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash        = hash( 'sha256', $raw_token );
-		$row         = FrmGatedTokenHelper::get_row_by_hash( $hash );
-		$stub_token  = new FrmGatedToken( $row );
+		$raw_token  = FrmGatedTokenHelper::generate( $this->action_id, 1 );
+		$hash       = hash( 'sha256', $raw_token );
+		$row        = FrmGatedTokenHelper::get_row_by_hash( $hash );
+		$stub_token = new FrmGatedToken( $row );
 
 		add_filter(
 			'frm_obtain_gated_token',
@@ -284,5 +282,4 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$this->assertSame( $stub_token, $result );
 	}
-
 }

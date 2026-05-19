@@ -61,7 +61,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public static function get_types() {
 		$types = array(
-			'post'    => array(
+			'post'     => array(
 				'label'    => __( 'Post', 'formidable' ),
 				'disabled' => false,
 			),
@@ -289,14 +289,14 @@ class FrmGatedContentAction extends FrmFormAction {
 			}
 
 			$sanitized_items[] = $item;
-		}
+		}//end foreach
 
 		$post_content['items'] = $sanitized_items;
 
 		// Sanitize expired_hours — positive int or null (Pro may set this).
 		$post_content['expired_hours'] = ! empty( $post_content['expired_hours'] )
-			? absint( $post_content['expired_hours'] )
-			: null;
+		? absint( $post_content['expired_hours'] )
+		: null;
 
 		$new_instance['post_content'] = $post_content;
 

@@ -214,8 +214,8 @@ class FrmGatedTokenHelper {
 	 * FrmGatedToken::validate() — which enforces expiry, item-membership, and the
 	 * frm_gated_content_validate filter.
 	 *
-	 * @param string $access_code Raw access token (same value as the access_code URL parameter).
-	 * @param string $item_type   Content item type slug (e.g. 'post', 'frm_file'). Pass empty string to skip item check.
+	 * @param string     $access_code Raw access token (same value as the access_code URL parameter).
+	 * @param string     $item_type   Content item type slug (e.g. 'post', 'frm_file'). Pass empty string to skip item check.
 	 * @param int|string $item_id     Content item ID (post ID, attachment ID, …). Pass 0 to skip item check.
 	 *
 	 * @return FrmGatedToken|null Validated token object, or null if the code is invalid or does not grant access.
@@ -226,6 +226,7 @@ class FrmGatedTokenHelper {
 		if ( null === $row ) {
 			return null;
 		}
+
 		$token = new FrmGatedToken( $row );
 		return $token->validate( $item_type, $item_id ) ? $token : null;
 	}
@@ -345,8 +346,7 @@ class FrmGatedTokenHelper {
 		}
 
 		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
-
-		$expiry = $expired_at ?? time() + YEAR_IN_SECONDS;
+		$expiry      = $expired_at ?? time() + YEAR_IN_SECONDS;
 
 		setcookie(
 			$cookie_name,
@@ -546,6 +546,7 @@ class FrmGatedTokenHelper {
 			if ( isset( $seen_hashes[ $row->token_hash ] ) ) {
 				continue;
 			}
+
 			$seen_hashes[ $row->token_hash ] = true;
 			$token                           = new FrmGatedToken( $row );
 
@@ -553,6 +554,7 @@ class FrmGatedTokenHelper {
 				return $token;
 			}
 		}
+
 		return null;
 	}
 }

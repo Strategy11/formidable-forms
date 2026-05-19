@@ -44,7 +44,6 @@ class FrmGatedContentShortcodeController {
 	 */
 	public static function shortcode( $atts ) {
 		$atts = shortcode_atts( self::default_shortcode_atts(), $atts, 'frm_gated_content' );
-
 		$action_id = (int) $atts['id'];
 
 		if ( ! $action_id ) {
@@ -103,14 +102,14 @@ class FrmGatedContentShortcodeController {
 		}
 
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-		$items    = ( is_array( $settings ) && ! empty( $settings['items'] ) ) ? $settings['items'] : array();
+		$items    = is_array( $settings ) && ! empty( $settings['items'] ) ? $settings['items'] : array();
 		$show_url = 'url' === $atts['show'];
 
 		if ( false === $atts['item'] ) {
 			// No item specified — render all items.
 			return $show_url
-				? self::render_item_url_list( $items, $raw_token )
-				: self::render_item_list( $items, $raw_token );
+			? self::render_item_url_list( $items, $raw_token )
+			: self::render_item_list( $items, $raw_token );
 		}
 
 		// Single item by 0-based index.
@@ -235,7 +234,7 @@ class FrmGatedContentShortcodeController {
 	 * @return string HTML <ul> element, or empty string when no items produce a URL.
 	 */
 	public static function render_item_list( $items, $raw_token ) {
-		if ( empty( $items ) ) {
+		if ( ! $items ) {
 			return '';
 		}
 
@@ -279,7 +278,7 @@ class FrmGatedContentShortcodeController {
 	 * @return string HTML <ul> element of plain-text URLs, or empty string when no items produce a URL.
 	 */
 	public static function render_item_url_list( $items, $raw_token ) {
-		if ( empty( $items ) ) {
+		if ( ! $items ) {
 			return '';
 		}
 
@@ -305,5 +304,4 @@ class FrmGatedContentShortcodeController {
 
 		return '<ul class="frm-gated-content-list">' . $list_items . '</ul>';
 	}
-
 }

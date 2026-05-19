@@ -159,10 +159,7 @@ class FrmGatedContentController {
 	 * @return bool
 	 */
 	public static function filter_password_required( $required, $post ) {
-		if ( $post->ID === self::$unlocked_post_id ) {
-			return false;
-		}
-		return $required;
+		return $post->ID === self::$unlocked_post_id ? false : $required;
 	}
 
 	/**
@@ -250,5 +247,4 @@ class FrmGatedContentController {
 
 		FrmGatedTokenHelper::generate( $action->ID, $entry->id, $user_id );
 	}
-
 }

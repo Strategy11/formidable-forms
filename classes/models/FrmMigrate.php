@@ -32,11 +32,11 @@ class FrmMigrate {
 
 	public function __construct() {
 		global $wpdb;
-		$this->fields        = $wpdb->prefix . 'frm_fields';
-		$this->forms         = $wpdb->prefix . 'frm_forms';
-		$this->entries       = $wpdb->prefix . 'frm_items';
-		$this->entry_metas   = $wpdb->prefix . 'frm_item_metas';
-		$this->gated_tokens  = $wpdb->prefix . 'frm_gated_tokens';
+		$this->fields       = $wpdb->prefix . 'frm_fields';
+		$this->forms        = $wpdb->prefix . 'frm_forms';
+		$this->entries      = $wpdb->prefix . 'frm_items';
+		$this->entry_metas  = $wpdb->prefix . 'frm_item_metas';
+		$this->gated_tokens = $wpdb->prefix . 'frm_gated_tokens';
 	}
 
 	/**
