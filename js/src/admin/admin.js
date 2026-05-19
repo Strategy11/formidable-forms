@@ -11406,7 +11406,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			typeDiv.querySelectorAll( '[data-frm-gc-field]' ).forEach( field => {
 				const fieldKey = field.dataset.frmGcField;
 				if ( isActive ) {
-					field.name = `${base}[${fieldKey}]`;
+					field.name = `${ base }[${ fieldKey }]`;
 				} else {
 					field.removeAttribute( 'name' );
 				}
@@ -11426,14 +11426,14 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 * @return {void}
 	 */
 	function reindexItems( wrapper ) {
-		const addBtn    = wrapper.querySelector( '.frm_gc_add_item' );
+		const addBtn = wrapper.querySelector( '.frm_gc_add_item' );
 		const fieldBase = addBtn?.dataset.fieldNameBase ?? '';
-		const rows      = wrapper.querySelectorAll( '.frm_gc_item_row' );
+		const rows = wrapper.querySelectorAll( '.frm_gc_item_row' );
 
 		rows.forEach( ( row, idx ) => {
 			const typeSelect = row.querySelector( '.frm-gc-item-type' );
 			if ( typeSelect && fieldBase ) {
-				typeSelect.name = `${fieldBase}[${idx}][type]`;
+				typeSelect.name = `${ fieldBase }[${ idx }][type]`;
 			}
 			assignItemIds( row, wrapper.id, idx );
 			activateType( row );
@@ -11460,7 +11460,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		// Type select.
 		const typeSelect = itemRow.querySelector( '[data-frm-gc-field="type"]' );
 		if ( typeSelect ) {
-			typeSelect.id = `${wrapperBaseId}_type_${idx}`;
+			typeSelect.id = `${ wrapperBaseId }_type_${ idx }`;
 			const typeLabel = itemRow.querySelector( '[data-frm-gc-for="type"]' );
 			if ( typeLabel ) {
 				typeLabel.htmlFor = typeSelect.id;
@@ -11472,8 +11472,8 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 			const type = typeDiv.dataset.type;
 			typeDiv.querySelectorAll( '[data-frm-gc-field]' ).forEach( field => {
 				const fieldKey = field.dataset.frmGcField;
-				field.id = `${wrapperBaseId}_${fieldKey}_${type}_${idx}`;
-				const label = typeDiv.querySelector( `[data-frm-gc-for="${fieldKey}"]` );
+				field.id = `${ wrapperBaseId }_${ fieldKey }_${ type }_${ idx }`;
+				const label = typeDiv.querySelector( `[data-frm-gc-for="${ fieldKey }"]` );
 				if ( label ) {
 					label.htmlFor = field.id;
 				}
@@ -11491,7 +11491,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 * @param {HTMLElement} formSelect - A .frm-gc-file-form-select element.
 	 */
 	function filterFileFields( formSelect ) {
-		const typeDiv    = formSelect.closest( '.frm-gc-type-settings' );
+		const typeDiv = formSelect.closest( '.frm-gc-type-settings' );
 		const fieldSelect = typeDiv?.querySelector( '[data-frm-gc-field="id"]' );
 		if ( ! fieldSelect ) {
 			return;
@@ -11522,7 +11522,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 * @param {HTMLElement} btn - The .frm_gc_copy_shortcode button element.
 	 */
 	function showCopied( btn ) {
-		const use          = btn.querySelector( 'use' );
+		const use = btn.querySelector( 'use' );
 		const originalHref = use.getAttribute( 'href' );
 		const originalLabel = btn.getAttribute( 'aria-label' );
 
@@ -11538,8 +11538,8 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	document.addEventListener( 'click', function( event ) {
 		const addBtn = event.target.closest( '.frm_gc_add_item' );
 		if ( addBtn ) {
-			const wrapper  = addBtn.closest( '.frm_gated_content_settings' );
-			const list     = wrapper.querySelector( '.frm_gc_items_list' );
+			const wrapper = addBtn.closest( '.frm_gated_content_settings' );
+			const list = wrapper.querySelector( '.frm_gc_items_list' );
 			const template = wrapper.querySelector( '.frm_gc_item_template' );
 
 			list.append( template.content.cloneNode( true ) );
