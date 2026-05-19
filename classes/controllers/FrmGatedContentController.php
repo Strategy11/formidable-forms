@@ -338,7 +338,22 @@ class FrmGatedContentController {
 			return esc_html( $raw_token );
 		}
 
-		// show="link" (default) or show="url": load action items.
+		return self::render_items_shortcode_output( $action_id, $raw_token, $atts );
+	}
+
+	/**
+	 * Render the item links or URLs portion of the [frm_gated_content] shortcode.
+	 *
+	 * Called after the raw token is confirmed. Loads the action's items and
+	 * dispatches to the appropriate renderer based on the show= and item= atts.
+	 *
+	 * @param int    $action_id Gated content action post ID.
+	 * @param string $raw_token Raw access token.
+	 * @param array  $atts      Shortcode attributes (show, item).
+	 *
+	 * @return string
+	 */
+	private static function render_items_shortcode_output( $action_id, $raw_token, $atts ) {
 		$action = get_post( $action_id );
 		if ( ! $action ) {
 			return '';
@@ -346,7 +361,6 @@ class FrmGatedContentController {
 
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
 		$items    = ( is_array( $settings ) && ! empty( $settings['items'] ) ) ? $settings['items'] : array();
-
 		$show_url = ( 'url' === $atts['show'] );
 
 		if ( false === $atts['item'] ) {
