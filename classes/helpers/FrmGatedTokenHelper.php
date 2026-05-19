@@ -348,7 +348,7 @@ class FrmGatedTokenHelper {
 		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
 		$expiry      = $expired_at ?? time() + YEAR_IN_SECONDS;
 
-		setcookie(
+		setcookie( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.cookies_setcookie
 			$cookie_name,
 			$raw_token,
 			array(

@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <li class="frm_gc_item_row frm_grid_container">
 
-	<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
+	<?php /* ── Col 1: Type (4/12) ──────────────────────── */ ?>
 	<div class="frm4">
 		<div class="frm_form_field frm-mt-xs frm-mb-xs">
 			<?php if ( $is_template ) : ?>
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div><!-- .frm_form_field -->
 	</div><!-- .frm4 -->
 
-	<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
+	<?php /* ── Col 2: Type-specific settings + delete (8/12) ── */ ?>
 	<div class="frm8 frm-gc-item-settings">
 
 		<?php
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div
 			class="frm-gc-type-settings"
 			data-type="post"
-			<?php echo ( ! $is_template && 'post' !== $frm_gc_item_type ) ? 'hidden' : ''; ?>
+			<?php echo ! $is_template && 'post' !== $frm_gc_item_type ? 'hidden' : ''; ?>
 		>
 			<div class="frm_form_field frm-mt-xs frm-mb-xs">
 				<?php if ( $is_template ) : ?>
@@ -121,7 +121,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php if ( ! $is_template && 'post' === $frm_gc_item_type ) : ?>
 							name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
 						<?php endif; ?>
-						value="<?php echo esc_attr( ( ! $is_template && $frm_gc_item_id ) ? $frm_gc_item_id : '' ); ?>"
+						value="<?php echo esc_attr( ! $is_template && $frm_gc_item_id ? $frm_gc_item_id : '' ); ?>"
 					/>
 				<?php else : ?>
 					<select
@@ -191,7 +191,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 * @param string $frm_gc_wrapper_id Unique wrapper element ID for building `id`/`for` attribute pairs.
 			 */
 			do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base, $frm_gc_wrapper_id );
-		}
+		}//end if
 		?>
 
 		<div class="frm-gc-item-delete">

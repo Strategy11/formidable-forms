@@ -18,7 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 $frm_gc_items           = $instance->post_content['items'] ?? array();
 $frm_gc_action_id       = (int) $instance->ID;
 $frm_gc_field_name_base = $this->get_field_name( 'items' );
-$frm_gc_types           = get_class( $this )::get_types(); // Late-static; Pro class overrides get_types().
+// Late-static; Pro class overrides get_types().
+$frm_gc_types           = get_class( $this )::get_types();
 
 // Unique wrapper ID per action instance — prevents JS collisions when multiple
 // gated content actions exist on the same form.
@@ -42,7 +43,7 @@ if ( $frm_gc_use_autocomplete ) {
 	data-item-count="<?php echo count( $frm_gc_items ); ?>"
 >
 
-	<?php // ── Section: Gated content items ─────────────────────────────── ?>
+	<?php /* ── Section: Gated content items ─────────────────────────────── */ ?>
 	<div class="frm_form_field frm_gc_items_section">
 		<h3 class="frm-mb-sm"><?php esc_html_e( 'Gated Content Items', 'formidable' ); ?></h3>
 
@@ -87,7 +88,7 @@ if ( $frm_gc_use_autocomplete ) {
 		</button>
 	</div><!-- .frm_gc_items_section -->
 
-	<?php // ── Section: Shortcode reference ─────────────────────────────── ?>
+	<?php /* ── Section: Shortcode reference ─────────────────────────────── */ ?>
 	<?php include __DIR__ . '/_gated_content_shortcodes.php'; ?>
 
 </div><!-- .frm_gated_content_settings -->

@@ -5,10 +5,6 @@
  */
 class test_FrmGatedContentController extends FrmUnitTest {
 
-	public function setUp(): void {
-		parent::setUp();
-	}
-
 	public function tearDown(): void {
 		parent::tearDown();
 		// Reset static state so tests don't bleed into one another.
@@ -18,7 +14,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	// ── trigger() — create event ──────────────────────────────────────────── //
 
 	/**
-	 * trigger() must generate a token and store it in a transient so that
+	 * Calling trigger() must generate a token and store it in a transient so that
 	 * [frm_gated_content] shortcodes on the same or a subsequent redirect request can use it.
 	 *
 	 * @covers FrmGatedContentController::trigger
@@ -34,7 +30,10 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		);
 
 		$action = (object) array( 'ID' => $action_id );
-		$entry  = (object) array( 'id' => 1, 'form_id' => 1 );
+		$entry  = (object) array(
+			'id'      => 1,
+			'form_id' => 1,
+		);
 		$form   = (object) array( 'id' => 1 );
 
 		FrmGatedContentController::trigger( $action, $entry, $form, 'create' );
@@ -74,7 +73,10 @@ class test_FrmGatedContentController extends FrmUnitTest {
 					array(
 						'event' => array( 'payment-success' ),
 						'items' => array(
-							array( 'type' => 'post', 'id' => 1 ),
+							array(
+								'type' => 'post',
+								'id'   => 1,
+							),
 						),
 					)
 				),
@@ -113,7 +115,10 @@ class test_FrmGatedContentController extends FrmUnitTest {
 					array(
 						'event' => array( 'create' ),
 						'items' => array(
-							array( 'type' => 'post', 'id' => 1 ),
+							array(
+								'type' => 'post',
+								'id'   => 1,
+							),
 						),
 					)
 				),

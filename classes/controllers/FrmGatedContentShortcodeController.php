@@ -43,7 +43,7 @@ class FrmGatedContentShortcodeController {
 	 * @return string Shortcode output, or empty string when no token is available.
 	 */
 	public static function shortcode( $atts ) {
-		$atts = shortcode_atts( self::default_shortcode_atts(), $atts, 'frm_gated_content' );
+		$atts      = shortcode_atts( self::default_shortcode_atts(), $atts, 'frm_gated_content' );
 		$action_id = (int) $atts['id'];
 
 		if ( ! $action_id ) {
