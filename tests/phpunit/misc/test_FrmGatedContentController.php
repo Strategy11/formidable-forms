@@ -58,9 +58,12 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * @covers FrmGatedContentController::trigger
 	 */
 	public function test_payment_success_event_generates_token() {
-		$form_id  = $this->factory->form->create();
-		$entry_id = $this->factory->entry->create( array( 'form_id' => $form_id ) );
+		$form_id = $this->factory->form->create();
 
+		// Insert the action BEFORE creating the entry so that trigger_create_actions()
+		// (fired by FrmEntry::create) warms the frm_actions cache with the real action.
+		// If the action is inserted after entry creation the cache is primed with an
+		// empty result and the subsequent payment-success trigger never finds it.
 		$action_id = wp_insert_post(
 			array(
 				'post_type'    => 'frm_form_actions',
@@ -77,6 +80,8 @@ class test_FrmGatedContentController extends FrmUnitTest {
 				),
 			)
 		);
+
+		$entry_id = $this->factory->entry->create( array( 'form_id' => $form_id ) );
 
 		FrmFormActionsController::trigger_actions( 'payment-success', $form_id, $entry_id );
 
