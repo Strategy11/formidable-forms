@@ -80,7 +80,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		 *
 		 * @param array<string, array> $types Associative array of type slug => type config.
 		 */
-		/** @var array<string, array> $types */
+		/** @var array<string, array> */
 		return apply_filters( 'frm_gated_content_item_types', $types );
 	}
 
@@ -166,11 +166,12 @@ class FrmGatedContentAction extends FrmFormAction {
 		 * @param array<int, array{code: string, output: string}> $shortcodes Shortcode rows.
 		 * @param int                                             $action_id  Gated content action post ID.
 		 */
+		/** @var array<int, array{code: string, output: string}> */
 		return (array) apply_filters( 'frm_gated_content_shortcodes', $shortcodes, $action_id );
 	}
 
 	/**
-	 * Get gatable posts for the "post" item type selector.
+	 * Get posts for the "post" item type selector.
 	 *
 	 * Applies the `frm_gated_content_posts_query` filter so callers can extend
 	 * the post types or change any other WP_Query argument, then narrows the
@@ -209,6 +210,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		$posts = get_posts( $query_args );
 		$posts = is_array( $posts ) ? $posts : array();
 
+		/** @var WP_Post[] */
 		return array_values(
 			array_filter(
 				$posts,
