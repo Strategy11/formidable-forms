@@ -281,11 +281,10 @@ class FrmGatedContentController {
 	 *
 	 *  - id   (required) Action post ID.
 	 *  - item (optional) 0-indexed item position. Omit to render the full item list.
-	 *  - show (optional) 'link' (default) | 'url' | 'access_token' | 'expired_time'.
+	 *  - show (optional) 'link' (default) | 'url' | 'access_token'.
 	 *          'link'         — <a> link tag(s). Without item: <ul> of links. With item: single <a>.
 	 *          'url'          — Plain URL string. Without item: <ul> of plain URLs. With item: single URL.
 	 *          'access_token' — Raw access token string.
-	 *          'expired_time' — Formatted expiry date/time (empty if token never expires).
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -312,9 +311,21 @@ class FrmGatedContentController {
 			return '';
 		}
 
-		// expired_time reads from the static variable / transient; no raw token needed.
-		if ( 'expired_time' === $atts['show'] ) {
-			return self::get_shortcode_expiry( $action_id );
+		/**
+		 * Handle a Pro or add-on show= value for the [frm_gated_content] shortcode.
+		 *
+		 * Return a non-null string to short-circuit the default rendering. Return null
+		 * to let the shortcode fall through to its built-in show= handlers.
+		 *
+		 * @since x.x
+		 *
+		 * @param string|null $output    Output string, or null to continue default handling.
+		 * @param string      $show      Value of the show= attribute.
+		 * @param int         $action_id Gated content action post ID.
+		 */
+		$custom = apply_filters( 'frm_gated_content_shortcode_show', null, $atts['show'], $action_id );
+		if ( null !== $custom ) {
+			return (string) $custom;
 		}
 
 		// All other show values require the raw token.
@@ -352,22 +363,6 @@ class FrmGatedContentController {
 		}
 
 		return self::render_shortcode_item( $items[ $idx ], $raw_token, $show_url );
-	}
-
-	/**
-	 * Resolve and format the expiry time for the expired_time shortcode attribute.
-	 *
-	 * Reads from the per-request static variable or the 5-minute transient set by
-	 * FrmGatedTokenHelper::generate(). Returns an empty string when neither is
-	 * available — e.g. on a page load more than 5 minutes after form submission.
-	 *
-	 * @param int $action_id Action post ID.
-	 *
-	 * @return string Localised expiry date/time string, or empty string if unavailable.
-	 */
-	private static function get_shortcode_expiry( $action_id ) {
-		$raw_token = self::resolve_raw_token( $action_id );
-		return $raw_token ? self::get_formatted_expiry( $raw_token ) : '';
 	}
 
 	/**
@@ -582,31 +577,4 @@ class FrmGatedContentController {
 		return '<ul class="frm-gated-content-list">' . $list_items . '</ul>';
 	}
 
-	/**
-	 * Return the formatted expiry time for a raw token.
-	 *
-	 * @param string $raw_token Raw access token.
-	 *
-	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
-	 */
-	public static function get_formatted_expiry( $raw_token ) {
-		return self::get_formatted_expiry_by_hash( hash( 'sha256', $raw_token ) );
-	}
-
-	/**
-	 * Return the formatted expiry time for a token hash.
-	 *
-	 * @param string $hash SHA-256 hex hash of the access token.
-	 *
-	 * @return string Localised date/time string, or empty string if the token never expires or is not found.
-	 */
-	private static function get_formatted_expiry_by_hash( $hash ) {
-		$row = FrmGatedTokenHelper::get_row_by_hash( $hash );
-
-		if ( ! $row || null === $row->expired_at ) {
-			return '';
-		}
-
-		return date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $row->expired_at );
-	}
 }
