@@ -59,7 +59,7 @@ class FrmGatedContentController {
 			return;
 		}
 
-		if ( ! FrmGatedTokenHelper::get_valid_token( 0, 'post' ) ) {
+		if ( ! FrmGatedTokenHelper::get_valid_token( 'post', 0 ) ) {
 			return;
 		}
 
@@ -102,7 +102,7 @@ class FrmGatedContentController {
 		// Detect whether the token arrived via URL param before falling back to cookies.
 		$from_url_param = FrmAppHelper::simple_get( 'access_code' );
 
-		$valid_token = FrmGatedTokenHelper::get_valid_token( $post_id, 'post' );
+		$valid_token = FrmGatedTokenHelper::get_valid_token( 'post', $post_id );
 
 		if ( $valid_token ) {
 			// Password-protected posts need an explicit filter; private posts are

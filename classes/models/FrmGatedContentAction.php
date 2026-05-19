@@ -59,9 +59,6 @@ class FrmGatedContentAction extends FrmFormAction {
 	 * - disabled (bool)   Whether the option is selectable. Default false.
 	 * - pro      (bool)   Whether the type requires Pro. Default false.
 	 *
-	 * Pro and PDF plugins remove the `disabled` flag for their types by hooking
-	 * `frm_gated_content_item_types`.
-	 *
 	 * @return array<string, array>
 	 */
 	public static function get_types() {
@@ -74,14 +71,6 @@ class FrmGatedContentAction extends FrmFormAction {
 				'label'    => __( 'Formidable file (Pro)', 'formidable' ),
 				'disabled' => true,
 			),
-			'frm_pdf'  => array(
-				'label'    => __( 'Formidable PDF (PDFs add-on)', 'formidable' ),
-				'disabled' => true,
-			),
-			'view'     => array(
-				'label'    => __( 'Formidable View (Views add-on)', 'formidable' ),
-				'disabled' => true,
-			),
 		);
 
 		/**
@@ -92,8 +81,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		 * @param array<string, array> $types Associative array of type slug => type config.
 		 */
 		/** @var array<string, array> $types */
-		$types = apply_filters( 'frm_gated_content_item_types', $types );
-		return $types;
+		return apply_filters( 'frm_gated_content_item_types', $types );
 	}
 
 	/**
@@ -101,6 +89,8 @@ class FrmGatedContentAction extends FrmFormAction {
 	 *
 	 * @param object $instance Form action post object.
 	 * @param array  $args     Contains `form`, `action_key`, `values`.
+	 *
+	 * @return string
 	 */
 	public function form( $instance, $args = array() ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_gated_content_settings.php';
@@ -112,7 +102,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 *
 	 * - items:          Array of item objects, each with 'type' and 'id' keys.
 	 *                   One token unlocks all items in this action.
-	 *                   Pro adds 'frm_file' and 'frm_pdf' types.
+	 *                   Pro adds the 'frm_file' type.
 	 * - expired_hours:  Hours until access token expires. Null = never expires.
 	 *                   Set via Pro only; stored here for shared validation logic.
 	 * - event:          Form events that trigger token generation.
@@ -121,10 +111,10 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public function get_defaults() {
 		return array(
-			'type'           => 'post',
+			'type'          => 'post',
 			'items'         => array(),
 			'expired_hours' => null,
-			'event'          => array( 'create' ),
+			'event'         => array( 'create' ),
 		);
 	}
 
@@ -159,10 +149,12 @@ class FrmGatedContentAction extends FrmFormAction {
 			 * Pro and PDF plugins use this to sanitize their own type-specific fields
 			 * and merge them into the item array.
 			 *
-			 * @param array $item     Sanitized item data (keys: type, id).
-			 * @param array $raw_item Raw submitted item data.
+			 * @param array $item Sanitized item data (keys: type, id).
+			 * @param array $args {
+			 *     @type array $raw_item Raw submitted item data.
+			 * }
 			 */
-			$item = apply_filters( 'frm_gated_content_sanitize_item', $item, $raw_item );
+			$item = apply_filters( 'frm_gated_content_sanitize_item', $item, compact( 'raw_item' ) );
 
 			// Skip items with no ID selected (user left the select at the empty default).
 			if ( empty( $item['id'] ) ) {

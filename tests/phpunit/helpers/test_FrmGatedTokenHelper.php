@@ -185,7 +185,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @covers FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_returns_null_when_no_token_present() {
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['id'], $this->item['type'] );
+		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
 		$this->assertNull( $result );
 	}
 
@@ -199,7 +199,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$_GET['access_code'] = $raw_token;
 		$this->reset_helper_caches();
 
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['id'], $this->item['type'] );
+		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
 
 		$this->assertInstanceOf( 'FrmGatedToken', $result );
 	}
@@ -215,7 +215,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->reset_helper_caches();
 
 		// Request a different item ID than the one in the action.
-		$result = FrmGatedTokenHelper::get_valid_token( 9999, $this->item['type'] );
+		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], 9999 );
 
 		$this->assertNull( $result );
 	}
@@ -232,7 +232,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$_COOKIE[ 'frm_gc_' . $this->action_id ] = $hash;
 		$this->reset_helper_caches();
 
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['id'], $this->item['type'] );
+		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
 
 		$this->assertInstanceOf( 'FrmGatedToken', $result );
 	}
@@ -252,7 +252,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		wp_set_current_user( $user_id );
 		$this->reset_helper_caches();
 
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['id'], $this->item['type'] );
+		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
 
 		$this->assertInstanceOf( 'FrmGatedToken', $result );
 	}
@@ -278,7 +278,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		);
 
 		$this->reset_helper_caches();
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['id'], $this->item['type'] );
+		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
 
 		remove_all_filters( 'frm_obtain_gated_token' );
 

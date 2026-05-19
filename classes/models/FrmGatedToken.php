@@ -3,7 +3,7 @@
  * Gated Token
  *
  * Value object wrapping a single wp_frm_gated_tokens DB row.
- * Encapsulates expiry checks, item-level validation, and cookie management.
+ * Encapsulates expiry checks and item-level validation.
  *
  * @package Formidable
  *
@@ -15,6 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmGatedToken {
+
+	/**
+	 * Full DB row from wp_frm_gated_tokens.
+	 *
+	 * @var object
+	 */
+	private $row;
 
 	/**
 	 * SHA-256 hash stored in the DB (token_hash column).
@@ -48,6 +55,7 @@ class FrmGatedToken {
 	 * @param object $row DB row from wp_frm_gated_tokens.
 	 */
 	public function __construct( $row ) {
+		$this->row        = $row;
 		$this->token_hash = (string) $row->token_hash;
 		$this->action_id  = (int) $row->action_id;
 		$this->expired_at = null !== $row->expired_at ? (int) $row->expired_at : null;
@@ -91,6 +99,18 @@ class FrmGatedToken {
 	}
 
 	/**
+	 * Full DB row from wp_frm_gated_tokens.
+	 *
+	 * Use this to access columns not exposed by dedicated getters (e.g. entry_id,
+	 * ip_address, created_at).
+	 *
+	 * @return object
+	 */
+	public function get_row() {
+		return $this->row;
+	}
+
+	/**
 	 * Whether this token has passed its expiry timestamp.
 	 *
 	 * @return bool
@@ -119,21 +139,17 @@ class FrmGatedToken {
 	 * action settings on subsequent requests. Only the structural item check is
 	 * cached — the `frm_gated_content_validate` filter still fires every time.
 	 *
-	 * @param int|string $item_id   Content item ID (post ID, view ID, …). Pass 0 to skip item check.
-	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_pdf').
+	 * @param string     $item_type Content item type slug (e.g. 'post', 'frm_pdf').
+	 * @param int|string $item_id   Content item ID (post ID, view ID, …).
 	 *
 	 * @return bool
 	 */
-	public function validate( $item_id = 0, $item_type = '' ) {
+	public function validate( $item_type, $item_id ) {
 		if ( $this->is_expired() ) {
 			return false;
 		}
 
-		if ( empty( $item_id ) ) {
-			$is_valid = true;
-		} else {
-			$is_valid = FrmGatedTokenHelper::action_contains_item( $this->action_id, $item_type, $item_id, $this->expired_at );
-		}
+		$is_valid = FrmGatedTokenHelper::action_contains_item( $this->action_id, $item_type, $item_id, $this->expired_at );
 
 		/**
 		 * Filters whether a resolved token grants access to a content item.
@@ -156,22 +172,5 @@ class FrmGatedToken {
 				'item_type' => $item_type,
 			)
 		);
-	}
-
-	/**
-	 * Persist a frm_gc_{item_type}_{item_id} cookie so subsequent requests skip the URL param.
-	 *
-	 * The raw token must be supplied by the caller — the token object only stores
-	 * the hash, so only code that already holds the raw value (e.g. immediately
-	 * after reading the access_code URL parameter) should call this method.
-	 *
-	 * @param string $raw_token Raw access token (same value as the access_code URL param).
-	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_file').
-	 * @param int|string $item_id   Content item ID, or 0 when not applicable.
-	 *
-	 * @return void
-	 */
-	public function set_cookie( $raw_token, $item_type = '', $item_id = 0 ) {
-		FrmGatedTokenHelper::set_cookie( $raw_token, $this->expired_at, $item_type, $item_id );
 	}
 }

@@ -222,7 +222,7 @@ class FrmGatedTokenHelper {
 			return null;
 		}
 		$token = new FrmGatedToken( $row );
-		return $token->validate( $item_id, $item_type ) ? $token : null;
+		return $token->validate( $item_type, $item_id ) ? $token : null;
 	}
 
 	/**
@@ -314,8 +314,7 @@ class FrmGatedTokenHelper {
 	/**
 	 * Set an HttpOnly cookie that stores a raw access token for a gated content item.
 	 *
-	 * Cookie name  : frm_gc_{item_type}_{item_id}  — when item ID is known.
-	 *              : frm_gc_{item_type}             — when only type is known (e.g. frm_pdf).
+	 * Cookie name  : frm_gc_{item_type}_{item_id}
 	 * Cookie value : raw access token (same value passed in the access_code URL parameter).
 	 *
 	 * Storing the raw token lets users verify that the cookie matches the link they
@@ -324,20 +323,19 @@ class FrmGatedTokenHelper {
 	 * The token is always re-validated against the DB on every request; the cookie
 	 * is used only as a transport, never trusted on its own.
 	 *
-	 * @param string   $raw_token  Raw access token to store.
-	 * @param int|null $expired_at Unix timestamp for cookie expiry, or null for 1-year TTL.
-	 * @param string   $item_type  Content item type slug (e.g. 'post', 'frm_file').
-	 * @param int|string $item_id    Content item ID, or 0 when not applicable.
+	 * @param string     $raw_token  Raw access token to store.
+	 * @param int|null   $expired_at Unix timestamp for cookie expiry, or null for 1-year TTL.
+	 * @param string     $item_type  Content item type slug (e.g. 'post', 'frm_file').
+	 * @param int|string $item_id    Content item ID.
+	 *
 	 * @return void
 	 */
 	public static function set_cookie( $raw_token, $expired_at = null, $item_type = '', $item_id = 0 ) {
-		if ( ! $item_type ) {
-			return; // Cannot build a meaningful cookie name without at least a type.
+		if ( ! $item_type || ! $item_id ) {
+			return;
 		}
 
-		$cookie_name = $item_id
-			? 'frm_gc_' . $item_type . '_' . $item_id
-			: 'frm_gc_' . $item_type;
+		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
 
 		$expiry = null !== $expired_at ? $expired_at : ( time() + YEAR_IN_SECONDS );
 
@@ -406,14 +404,14 @@ class FrmGatedTokenHelper {
 	 * it is action-scoped and only meaningful for shortcode rendering immediately
 	 * after token generation. Use get_raw_token_for_action() for that purpose.
 	 *
+	 * @param string     $item_type Content item type slug (e.g. 'post', 'frm_file').
 	 * @param int|string $item_id   Content item ID (post ID, attachment ID, …).
-	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_file').
 	 *
 	 * @return FrmGatedToken|null First valid token, or null if none found.
 	 */
-	public static function get_valid_token( $item_id = 0, $item_type = '' ) {
+	public static function get_valid_token( $item_type, $item_id ) {
 		// 1. URL query parameter — definitive.
-		$token = self::get_valid_token_from_url_param( $item_id, $item_type );
+		$token = self::get_valid_token_from_url_param( $item_type, $item_id );
 		if ( null !== $token ) {
 			return $token;
 		}
@@ -421,12 +419,12 @@ class FrmGatedTokenHelper {
 		// 2 & 3. Cookies then user DB (shared dedup).
 		$seen_hashes = array();
 
-		$token = self::get_valid_token_from_cookies( $item_id, $item_type, $seen_hashes );
+		$token = self::get_valid_token_from_cookies( $item_type, $item_id, $seen_hashes );
 		if ( null !== $token ) {
 			return $token;
 		}
 
-		$token = self::get_valid_token_from_user( $item_id, $item_type, $seen_hashes );
+		$token = self::get_valid_token_from_user( $item_type, $item_id, $seen_hashes );
 		if ( null !== $token ) {
 			return $token;
 		}
@@ -457,12 +455,12 @@ class FrmGatedTokenHelper {
 	 * subsequent requests can skip this path entirely. The raw token is stored
 	 * as the cookie value so users can verify it matches their access link.
 	 *
+	 * @param string     $item_type Content item type slug.
 	 * @param int|string $item_id   Content item ID.
-	 * @param string $item_type Content item type slug.
 	 *
 	 * @return FrmGatedToken|null
 	 */
-	private static function get_valid_token_from_url_param( $item_id, $item_type ) {
+	private static function get_valid_token_from_url_param( $item_type, $item_id ) {
 		$url_token = FrmAppHelper::simple_get( 'access_code' );
 		if ( '' === $url_token ) {
 			return null;
@@ -486,50 +484,28 @@ class FrmGatedTokenHelper {
 	/**
 	 * Find a valid token from frm_gc_* cookies.
 	 *
-	 * When both item_type and item_id are known, performs a direct O(1) cookie name
-	 * lookup (frm_gc_{item_type}_{item_id}) — no iteration required. Otherwise scans
-	 * all cookies whose names start with the appropriate prefix.
+	 * Cookie names follow the format frm_gc_{item_type}_{item_id}. Both type and ID
+	 * must be known to perform a direct O(1) lookup — no iteration required.
+	 * Returns null immediately when either is missing.
 	 *
 	 * Populates $seen_hashes with every hash examined so the caller can pass it to
 	 * subsequent sources to avoid processing the same row twice.
 	 *
+	 * @param string     $item_type   Content item type slug.
 	 * @param int|string $item_id     Content item ID.
-	 * @param string $item_type   Content item type slug.
-	 * @param array  $seen_hashes Dedup map passed by reference.
+	 * @param array      $seen_hashes Dedup map passed by reference.
 	 *
 	 * @return FrmGatedToken|null
 	 */
-	private static function get_valid_token_from_cookies( $item_id, $item_type, &$seen_hashes ) {
-		if ( $item_type && $item_id ) {
-			// Direct lookup — skip every other cookie without touching the DB.
-			$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
-			if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
-				return null;
-			}
-			$raw_token            = sanitize_text_field( $_COOKIE[ $cookie_name ] );
-			$seen_hashes[ hash( 'sha256', $raw_token ) ] = true;
-			return self::validate_access_code( $raw_token, $item_type, $item_id );
+	private static function get_valid_token_from_cookies( $item_type, $item_id, &$seen_hashes ) {
+		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
+		if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
+			return null;
 		}
 
-		// Partial or no context — scan cookies whose names share the type prefix.
-		// e.g. item_type='post' matches frm_gc_post and frm_gc_post_*.
-		$prefix = $item_type ? 'frm_gc_' . $item_type : 'frm_gc_';
-		foreach ( $_COOKIE as $name => $value ) {
-			if ( 0 !== strpos( $name, $prefix ) ) {
-				continue;
-			}
-			$raw_token = sanitize_text_field( $value );
-			$hash      = hash( 'sha256', $raw_token );
-			if ( isset( $seen_hashes[ $hash ] ) ) {
-				continue;
-			}
-			$seen_hashes[ $hash ] = true;
-			$token                = self::validate_access_code( $raw_token, $item_type, $item_id );
-			if ( null !== $token ) {
-				return $token;
-			}
-		}
-		return null;
+		$raw_token                                   = sanitize_text_field( $_COOKIE[ $cookie_name ] );
+		$seen_hashes[ hash( 'sha256', $raw_token ) ] = true;
+		return self::validate_access_code( $raw_token, $item_type, $item_id );
 	}
 
 	/**
@@ -537,13 +513,13 @@ class FrmGatedTokenHelper {
 	 *
 	 * Skips hashes already seen in earlier sources via $seen_hashes.
 	 *
+	 * @param string     $item_type   Content item type slug.
 	 * @param int|string $item_id     Content item ID.
-	 * @param string $item_type   Content item type slug.
-	 * @param array  $seen_hashes Dedup map passed by reference.
+	 * @param array      $seen_hashes Dedup map passed by reference.
 	 *
 	 * @return FrmGatedToken|null
 	 */
-	private static function get_valid_token_from_user( $item_id, $item_type, &$seen_hashes ) {
+	private static function get_valid_token_from_user( $item_type, $item_id, &$seen_hashes ) {
 		if ( ! is_user_logged_in() ) {
 			return null;
 		}
@@ -554,7 +530,7 @@ class FrmGatedTokenHelper {
 			}
 			$seen_hashes[ $row->token_hash ] = true;
 			$token                           = new FrmGatedToken( $row );
-			if ( $token->validate( $item_id, $item_type ) ) {
+			if ( $token->validate( $item_type, $item_id ) ) {
 				return $token;
 			}
 		}

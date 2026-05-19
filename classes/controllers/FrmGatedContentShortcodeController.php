@@ -146,7 +146,7 @@ class FrmGatedContentShortcodeController {
 			$label = $url;
 		}
 
-		return '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
+		return '<a href="' . esc_url( $url ) . '" title="' . esc_attr( $label ) . '">' . esc_html( $label ) . '</a>';
 	}
 
 	/**
@@ -247,7 +247,7 @@ class FrmGatedContentShortcodeController {
 				$label = $url;
 			}
 
-			$list_items .= '<li><a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a></li>';
+			$list_items .= '<li><a href="' . esc_url( $url ) . '" title="' . esc_attr( $label ) . '">' . esc_html( $label ) . '</a></li>';
 		}
 
 		if ( ! $list_items ) {
