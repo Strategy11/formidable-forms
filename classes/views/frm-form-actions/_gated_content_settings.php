@@ -32,9 +32,9 @@ $frm_gc_wrapper_id = 'frm_gc_settings_' . $this->number;
  *
  * @since x.x
  *
- * @param string[] $post_types Post type slugs. Default ['page'].
+ * @param string[] $post_types Post type slugs. Default ['post', 'page'].
  */
-$frm_gc_post_types = (array) apply_filters( 'frm_gated_content_post_types', array( 'page' ) );
+$frm_gc_post_types = (array) apply_filters( 'frm_gated_content_post_types', array( 'post', 'page' ) );
 $frm_gc_pages      = get_posts(
 	array(
 		'post_type'              => $frm_gc_post_types,

@@ -67,7 +67,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	public static function get_types() {
 		$types = array(
 			'post'    => array(
-				'label'    => __( 'WordPress page', 'formidable' ),
+				'label'    => __( 'Post', 'formidable' ),
 				'disabled' => false,
 			),
 			'frm_file' => array(
