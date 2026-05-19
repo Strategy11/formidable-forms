@@ -11553,7 +11553,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		const copyBtn = event.target.closest( '.frm_gc_copy_shortcode' );
 		if ( copyBtn ) {
 			const text = copyBtn.dataset.frmCopy;
-			if ( navigator.clipboard && navigator.clipboard.writeText ) {
+			if ( navigator.clipboard?.writeText ) {
 				navigator.clipboard.writeText( text ).then( () => frmGcShowCopied( copyBtn ) );
 			} else {
 				// Fallback for browsers without Clipboard API.
