@@ -24,57 +24,15 @@ $frm_gc_types           = get_class( $this )::get_types(); // Late-static; Pro c
 // gated content actions exist on the same form.
 $frm_gc_wrapper_id = 'frm_gc_settings_' . $this->number;
 
-/**
- * Filter the post types shown in the "post" gated content item selector.
- *
- * Add custom post type slugs to this array to make their posts selectable
- * as gated content items alongside WordPress pages.
- *
- * @since x.x
- *
- * @param string[] $post_types Post type slugs. Default ['post', 'page'].
- */
-$frm_gc_post_types = (array) apply_filters( 'frm_gated_content_post_types', array( 'post', 'page' ) );
-$frm_gc_pages      = get_posts(
-	array(
-		'post_type'              => $frm_gc_post_types,
-		'post_status'            => array( 'publish', 'private' ),
-		'orderby'                => 'title',
-		'order'                  => 'ASC',
-		'numberposts'            => -1,
-		'update_post_meta_cache' => false,
-		'update_post_term_cache' => false,
-	)
-);
-// Only show pages that actually need a token to access: private pages and
-// password-protected pages. Plain published pages are publicly accessible
-// and should not appear as gated content targets.
-$frm_gc_pages = array_values(
-	array_filter(
-		is_array( $frm_gc_pages ) ? $frm_gc_pages : array(),
-		static function ( $p ) {
-			return 'private' === $p->post_status || '' !== $p->post_password;
-		}
-	)
-);
+$frm_gc_posts = FrmGatedContentAction::get_posts();
 
-$frm_gc_use_autocomplete = count( $frm_gc_pages ) > 50;
+$frm_gc_use_autocomplete = count( $frm_gc_posts ) > 50;
 
 if ( $frm_gc_use_autocomplete ) {
 	wp_enqueue_script( 'jquery-ui-autocomplete' );
 
 	// Pre-encode the source array once for reuse in all item rows and the template row.
-	$frm_gc_pages_source = wp_json_encode(
-		array_map(
-			static function ( $p ) {
-				return array(
-					'value' => (string) $p->ID,
-					'label' => $p->post_title,
-				);
-			},
-			$frm_gc_pages
-		)
-	);
+	$frm_gc_posts_source = FrmGatedContentAction::get_posts_autocomplete_source( $frm_gc_posts );
 }
 ?>
 
@@ -91,234 +49,33 @@ if ( $frm_gc_use_autocomplete ) {
 		<ul class="frm_gc_items_list">
 			<?php foreach ( $frm_gc_items as $frm_gc_idx => $frm_gc_item ) : ?>
 				<?php
-				$frm_gc_item_type    = isset( $frm_gc_item['type'] ) ? $frm_gc_item['type'] : 'post';
-				$frm_gc_item_id      = isset( $frm_gc_item['id'] ) ? (int) $frm_gc_item['id'] : 0;
-				$frm_gc_item_base    = $frm_gc_field_name_base . '[' . $frm_gc_idx . ']';
-				$frm_gc_type_sel_id  = $frm_gc_wrapper_id . '_type_' . $frm_gc_idx;
-				$frm_gc_page_sel_id  = $frm_gc_wrapper_id . '_id_page_' . $frm_gc_idx;
+				$frm_gc_item_type   = isset( $frm_gc_item['type'] ) ? $frm_gc_item['type'] : 'post';
+				$frm_gc_item_id     = isset( $frm_gc_item['id'] ) ? (int) $frm_gc_item['id'] : 0;
+				$frm_gc_item_base   = $frm_gc_field_name_base . '[' . $frm_gc_idx . ']';
+				$frm_gc_type_sel_id = $frm_gc_wrapper_id . '_type_' . $frm_gc_idx;
+				$frm_gc_post_sel_id = $frm_gc_wrapper_id . '_id_post_' . $frm_gc_idx;
+				$is_template        = false;
+				include __DIR__ . '/_gated_content_item_row.php';
 				?>
-				<li class="frm_gc_item_row frm_grid_container">
-
-					<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
-					<div class="frm4">
-						<div class="frm_form_field frm-mt-xs frm-mb-xs">
-							<label for="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>">
-								<?php esc_html_e( 'Type', 'formidable' ); ?>
-							</label>
-							<select
-								id="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>"
-								name="<?php echo esc_attr( $frm_gc_item_base . '[type]' ); ?>"
-								class="frm-gc-item-type"
-							>
-								<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
-									<option
-										value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
-										<?php selected( $frm_gc_item_type, $frm_gc_type_key ); ?>
-										<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
-									>
-										<?php echo esc_html( $frm_gc_type['label'] ); ?>
-									</option>
-								<?php endforeach; ?>
-							</select>
-						</div><!-- .frm_form_field -->
-					</div><!-- .frm4 -->
-
-					<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
-					<div class="frm8 frm-gc-item-settings">
-
-						<?php
-						// Page type settings.
-						// Only add name when this type is active — prevents duplicate [id] values
-						// from being submitted when the user switches types via JS.
-						?>
-						<div
-							class="frm-gc-type-settings"
-							data-type="post"
-							<?php echo 'post' !== $frm_gc_item_type ? 'hidden' : ''; ?>
-						>
-							<div class="frm_form_field frm-mt-xs frm-mb-xs">
-								<label for="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>">
-									<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
-								</label>
-								<?php if ( $frm_gc_use_autocomplete ) : ?>
-									<?php
-									$frm_gc_selected_title = '';
-									foreach ( $frm_gc_pages as $frm_gc_page ) {
-										if ( $frm_gc_item_id === $frm_gc_page->ID ) {
-											$frm_gc_selected_title = $frm_gc_page->post_title;
-											break;
-										}
-									}
-									?>
-									<input type="text" class="frm-custom-search"
-										id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
-										data-source="<?php echo esc_attr( $frm_gc_pages_source ); ?>"
-										placeholder="<?php esc_attr_e( '— Select a page —', 'formidable' ); ?>"
-										value="<?php echo esc_attr( $frm_gc_selected_title ); ?>"
-									/>
-									<input type="hidden"
-										data-frm-gc-field="id"
-										class="frm_autocomplete_value_input"
-										<?php if ( 'post' === $frm_gc_item_type ) : ?>
-											name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
-										<?php endif; ?>
-										value="<?php echo esc_attr( $frm_gc_item_id ? $frm_gc_item_id : '' ); ?>"
-									/>
-								<?php else : ?>
-									<select
-										id="<?php echo esc_attr( $frm_gc_page_sel_id ); ?>"
-										data-frm-gc-field="id"
-										<?php if ( 'post' === $frm_gc_item_type ) : ?>
-											name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
-										<?php endif; ?>
-									>
-										<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
-										<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
-											<option
-												value="<?php echo esc_attr( $frm_gc_page->ID ); ?>"
-												<?php selected( $frm_gc_item_id, $frm_gc_page->ID ); ?>
-											>
-												<?php echo esc_html( $frm_gc_page->post_title ); ?>
-											</option>
-										<?php endforeach; ?>
-									</select>
-								<?php endif; ?>
-							</div><!-- .frm_form_field -->
-						</div><!-- [data-type="post"] -->
-
-						<?php
-						/**
-						 * Fires after the built-in type settings for an existing gated content item row.
-						 *
-						 * Pro and PDF plugins use this to render their own type-specific settings.
-						 *
-						 * Guidelines for hook callbacks:
-						 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}">`.
-						 * - Add the `hidden` attribute when `$active_type !== '{TYPE}'`.
-						 * - Include a `<label for="{ID}">` and `id="{ID}"` on each select, where
-						 *   `{ID}` follows the pattern `{$frm_gc_wrapper_id}_{FIELD}_{TYPE}_{$frm_gc_idx}`
-						 *   (e.g. `frm_gc_settings_0_id_frm_file_2`). JS regenerates these for template-cloned rows.
-						 * - Add `data-frm-gc-field="id"` (or another key) to each select so JS manages its name on type change.
-						 * - Only add a `name` attribute when `$active_type === '{TYPE}'`.
-						 *
-						 * @since x.x
-						 *
-						 * @param string $frm_gc_item_type  Active type key for this item (e.g. 'post', 'frm_file').
-						 * @param int    $frm_gc_idx        Zero-based index of this item in the items array.
-						 * @param array  $frm_gc_item       Saved item data.
-						 * @param string $frm_gc_item_base  Field name prefix for this item, e.g. `frm_form_action[X][post_content][items][0]`.
-						 * @param string $frm_gc_wrapper_id Unique wrapper element ID for building `id`/`for` attribute pairs.
-						 */
-						do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base, $frm_gc_wrapper_id );
-						?>
-					<div class="frm-gc-item-delete">
-						<button
-							type="button"
-							class="frm_gc_remove_item button-link"
-							style="color: var(--error-500);"
-							aria-label="<?php esc_attr_e( 'Remove item', 'formidable' ); ?>"
-						>
-							<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>
-						</button>
-					</div><!-- .frm-gc-item-delete -->
-					</div><!-- .frm8 -->
-
-				</li>
 			<?php endforeach; ?>
 		</ul><!-- .frm_gc_items_list -->
 
 		<?php
 		// Template row — hidden, cloned by JS when "Add Item" is clicked.
-		// Use data-frm-gc-field="KEY" on all form fields instead of a name attribute.
-		// Use data-frm-gc-for="KEY" on labels instead of a for attribute.
 		// JS assigns id, name, and for attributes after cloning using the item index counter.
 		?>
 		<template class="frm_gc_item_template">
-			<li class="frm_gc_item_row frm_grid_container">
-
-				<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
-				<div class="frm4">
-					<div class="frm_form_field frm-mt-xs frm-mb-xs">
-						<label data-frm-gc-for="type">
-							<?php esc_html_e( 'Type', 'formidable' ); ?>
-						</label>
-						<select data-frm-gc-field="type" class="frm-gc-item-type">
-							<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
-								<option
-									value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
-									<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
-								>
-									<?php echo esc_html( $frm_gc_type['label'] ); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
-					</div><!-- .frm_form_field -->
-				</div><!-- .frm4 -->
-
-				<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
-				<div class="frm8 frm-gc-item-settings">
-
-					<?php // Default (first) type is visible; all others added by plugins must set hidden. ?>
-					<div class="frm-gc-type-settings" data-type="post">
-						<div class="frm_form_field frm-mt-xs frm-mb-xs">
-							<label data-frm-gc-for="id">
-								<?php esc_html_e( 'WordPress page', 'formidable' ); ?>
-							</label>
-							<?php if ( $frm_gc_use_autocomplete ) : ?>
-								<input type="text" class="frm-custom-search"
-									data-source="<?php echo esc_attr( $frm_gc_pages_source ); ?>"
-									placeholder="<?php esc_attr_e( '— Select a page —', 'formidable' ); ?>"
-									value=""
-								/>
-								<input type="hidden"
-									data-frm-gc-field="id"
-									class="frm_autocomplete_value_input"
-									value=""
-								/>
-							<?php else : ?>
-								<select data-frm-gc-field="id">
-									<option value=""><?php esc_html_e( '— Select a page —', 'formidable' ); ?></option>
-									<?php foreach ( $frm_gc_pages as $frm_gc_page ) : ?>
-										<option value="<?php echo esc_attr( $frm_gc_page->ID ); ?>">
-											<?php echo esc_html( $frm_gc_page->post_title ); ?>
-										</option>
-									<?php endforeach; ?>
-								</select>
-							<?php endif; ?>
-						</div><!-- .frm_form_field -->
-					</div><!-- [data-type="page"] -->
-
-					<?php
-					/**
-					 * Fires after the built-in type settings in the template item row.
-					 *
-					 * Pro and PDF plugins add their type-specific template settings here.
-					 *
-					 * Guidelines for hook callbacks:
-					 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}" hidden>`.
-					 * - Always include the `hidden` attribute — JS shows the active type after cloning.
-					 * - Use `<label data-frm-gc-for="id">` (no for attribute) — JS sets it after cloning.
-					 * - Use `data-frm-gc-field="id"` (no id or name attributes) on the select — JS assigns both.
-					 *
-					 * @since x.x
-					 *
-					 * @param array $frm_gc_types All registered type configurations.
-					 */
-					do_action( 'frm_gated_content_item_template_settings', $frm_gc_types );
-					?>
-				<div class="frm-gc-item-delete">
-					<button
-						type="button"
-						class="frm_gc_remove_item button-link"
-						style="color: var(--error-500);"
-						aria-label="<?php esc_attr_e( 'Remove item', 'formidable' ); ?>"
-					>
-						<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>
-					</button>
-				</div><!-- .frm-gc-item-delete -->
-				</div><!-- .frm8 -->
-
-			</li>
+			<?php
+			$frm_gc_item_type   = 'post';
+			$frm_gc_item_id     = 0;
+			$frm_gc_item_base   = '';
+			$frm_gc_type_sel_id = '';
+			$frm_gc_post_sel_id = '';
+			$frm_gc_idx         = 0;
+			$frm_gc_item        = array();
+			$is_template        = true;
+			include __DIR__ . '/_gated_content_item_row.php';
+			?>
 		</template>
 
 		<button
@@ -331,76 +88,9 @@ if ( $frm_gc_use_autocomplete ) {
 	</div><!-- .frm_gc_items_section -->
 
 	<?php // ── Section: Shortcode reference ─────────────────────────────── ?>
-	<div class="frm_form_field frm_gc_shortcodes_section" style="margin-top: 20px;">
-		<h3 class="frm-mb-xs"><?php esc_html_e( 'Access Link Shortcodes', 'formidable' ); ?></h3>
-		<p class="frm_description">
-			<?php esc_html_e( 'Add these shortcodes to a Confirmation or Send Email action to include the access link.', 'formidable' ); ?>
-		</p>
-		<?php
-		$frm_gc_shortcodes = array(
-			array(
-				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '"]',
-				'output' => __( 'Access links for all items', 'formidable' ),
-			),
-			array(
-				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '" item="0"]',
-				'output' => __( 'Access link for the first item (0-indexed)', 'formidable' ),
-			),
-			array(
-				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '" item="0" show="url"]',
-				'output' => __( 'URL only for the first item (no link tag)', 'formidable' ),
-			),
-			array(
-				'code'   => '[frm_gated_content id="' . $frm_gc_action_id . '" show="access_token"]',
-				'output' => __( 'Raw access token string', 'formidable' ),
-			),
-		);
-		?>
-		<table class="frm_gc_shortcode_table widefat striped">
-			<thead>
-				<tr>
-					<th><?php esc_html_e( 'Shortcode', 'formidable' ); ?></th>
-					<th><?php esc_html_e( 'Output', 'formidable' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $frm_gc_shortcodes as $frm_gc_shortcode ) : ?>
-					<tr>
-						<td>
-							<code><?php echo esc_html( $frm_gc_shortcode['code'] ); ?></code>
-							<button
-								type="button"
-								class="frm_gc_copy_shortcode button-link"
-								data-frm-copy="<?php echo esc_attr( $frm_gc_shortcode['code'] ); ?>"
-								data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>"
-								aria-label="<?php esc_attr_e( 'Copy shortcode', 'formidable' ); ?>"
-							>
-								<svg class="frmsvg frm_svg14" aria-hidden="true" focusable="false">
-									<use href="#frm_clone_icon"></use>
-								</svg>
-							</button>
-						</td>
-						<td><?php echo esc_html( $frm_gc_shortcode['output'] ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-				<?php
-				/**
-				 * Fires inside the shortcode reference table body for a gated content action.
-				 *
-				 * Pro plugins use this to append additional shortcode rows (e.g. show="expired_time").
-				 * Each callback should output one or more `<tr>` elements.
-				 *
-				 * @since x.x
-				 *
-				 * @param int $frm_gc_action_id ID of the current gated content action post.
-				 */
-				do_action( 'frm_gated_content_shortcodes', $frm_gc_action_id );
-				?>
-			</tbody>
-		</table>
-	</div><!-- .frm_gc_shortcodes_section -->
+	<?php include __DIR__ . '/_gated_content_shortcodes.php'; ?>
 
 </div><!-- .frm_gated_content_settings -->
 
 <?php
-unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_post_types, $frm_gc_pages, $frm_gc_page, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type, $frm_gc_type_key, $frm_gc_type_sel_id, $frm_gc_page_sel_id, $frm_gc_use_autocomplete, $frm_gc_pages_source, $frm_gc_selected_title, $frm_gc_shortcodes, $frm_gc_shortcode );
+unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_posts, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type_sel_id, $frm_gc_post_sel_id, $frm_gc_use_autocomplete, $frm_gc_posts_source, $frm_gc_is_template );

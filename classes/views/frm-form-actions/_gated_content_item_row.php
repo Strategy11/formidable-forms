@@ -1,0 +1,208 @@
+<?php
+/**
+ * Gated Content item row partial
+ *
+ * Renders a single <li class="frm_gc_item_row"> used both for existing saved
+ * items (PHP foreach loop) and for the hidden <template> element cloned by JS
+ * when "Add Item" is clicked.
+ *
+ * When $is_template is true:
+ * - Labels use data-frm-gc-for instead of for.
+ * - Selects use data-frm-gc-field instead of id/name — JS assigns both after cloning.
+ * - No selected() calls — JS selects the saved value after cloning.
+ * - The post type div is always visible (post is the default type).
+ *
+ * @package Formidable
+ *
+ * @since x.x
+ *
+ * @var bool         $is_template         True when rendering the JS clone template.
+ * @var string       $frm_gc_item_type    Active type key ('post', 'frm_file', …). Always 'post' for template.
+ * @var int          $frm_gc_item_id      Saved item ID. 0 for template rows.
+ * @var string       $frm_gc_item_base    Field name prefix. Empty for template rows.
+ * @var string       $frm_gc_type_sel_id  Unique element ID for the type select. Empty for template rows.
+ * @var string       $frm_gc_post_sel_id  Unique element ID for the post select. Empty for template rows.
+ * @var int          $frm_gc_idx          Zero-based item index. 0 for template rows.
+ * @var array        $frm_gc_item         Saved item data. Empty array for template rows.
+ * @var array        $frm_gc_types        All registered type configurations.
+ * @var WP_Post[]    $frm_gc_posts        Posts available as gated content targets.
+ * @var bool         $frm_gc_use_autocomplete Whether to render autocomplete inputs.
+ * @var string       $frm_gc_posts_source JSON-encoded autocomplete source. Only set when $frm_gc_use_autocomplete.
+ * @var string       $frm_gc_wrapper_id   Unique wrapper element ID.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
+<li class="frm_gc_item_row frm_grid_container">
+
+	<?php // ── Col 1: Type (4/12) ──────────────────────── ?>
+	<div class="frm4">
+		<div class="frm_form_field frm-mt-xs frm-mb-xs">
+			<?php if ( $is_template ) : ?>
+				<label data-frm-gc-for="type">
+			<?php else : ?>
+				<label for="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>">
+			<?php endif; ?>
+				<?php esc_html_e( 'Type', 'formidable' ); ?>
+			</label>
+			<select
+				<?php if ( $is_template ) : ?>
+					data-frm-gc-field="type"
+				<?php else : ?>
+					id="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>"
+					name="<?php echo esc_attr( $frm_gc_item_base . '[type]' ); ?>"
+				<?php endif; ?>
+				class="frm-gc-item-type"
+			>
+				<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
+					<option
+						value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
+						<?php if ( ! $is_template ) : ?>
+							<?php selected( $frm_gc_item_type, $frm_gc_type_key ); ?>
+						<?php endif; ?>
+						<?php disabled( ! empty( $frm_gc_type['disabled'] ) ); ?>
+					>
+						<?php echo esc_html( $frm_gc_type['label'] ); ?>
+					</option>
+				<?php endforeach; ?>
+			</select>
+		</div><!-- .frm_form_field -->
+	</div><!-- .frm4 -->
+
+	<?php // ── Col 2: Type-specific settings + delete (8/12) ── ?>
+	<div class="frm8 frm-gc-item-settings">
+
+		<?php
+		// Post type settings.
+		// Existing rows: only add name when this type is active — prevents duplicate
+		// [id] values being submitted when the user switches types via JS.
+		// Template rows: JS assigns id, name, and for attributes after cloning.
+		// Post is always the default visible type, so no hidden attribute is needed here.
+		?>
+		<div
+			class="frm-gc-type-settings"
+			data-type="post"
+			<?php echo ( ! $is_template && 'post' !== $frm_gc_item_type ) ? 'hidden' : ''; ?>
+		>
+			<div class="frm_form_field frm-mt-xs frm-mb-xs">
+				<?php if ( $is_template ) : ?>
+					<label data-frm-gc-for="id">
+				<?php else : ?>
+					<label for="<?php echo esc_attr( $frm_gc_post_sel_id ); ?>">
+				<?php endif; ?>
+					<?php esc_html_e( 'WordPress post', 'formidable' ); ?>
+				</label>
+				<?php if ( $frm_gc_use_autocomplete ) : ?>
+					<?php
+					$frm_gc_selected_title = '';
+					if ( ! $is_template ) {
+						foreach ( $frm_gc_posts as $frm_gc_post ) {
+							if ( $frm_gc_item_id === $frm_gc_post->ID ) {
+								$frm_gc_selected_title = $frm_gc_post->post_title;
+								break;
+							}
+						}
+					}
+					?>
+					<input type="text" class="frm-custom-search"
+						<?php if ( ! $is_template ) : ?>
+							id="<?php echo esc_attr( $frm_gc_post_sel_id ); ?>"
+						<?php endif; ?>
+						data-source="<?php echo esc_attr( $frm_gc_posts_source ); ?>"
+						placeholder="<?php esc_attr_e( '— Select a post —', 'formidable' ); ?>"
+						value="<?php echo esc_attr( $frm_gc_selected_title ); ?>"
+					/>
+					<input type="hidden"
+						data-frm-gc-field="id"
+						class="frm_autocomplete_value_input"
+						<?php if ( ! $is_template && 'post' === $frm_gc_item_type ) : ?>
+							name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
+						<?php endif; ?>
+						value="<?php echo esc_attr( ( ! $is_template && $frm_gc_item_id ) ? $frm_gc_item_id : '' ); ?>"
+					/>
+				<?php else : ?>
+					<select
+						<?php if ( ! $is_template ) : ?>
+							id="<?php echo esc_attr( $frm_gc_post_sel_id ); ?>"
+							<?php if ( 'post' === $frm_gc_item_type ) : ?>
+								name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
+							<?php endif; ?>
+						<?php endif; ?>
+						data-frm-gc-field="id"
+					>
+						<option value=""><?php esc_html_e( '— Select a post —', 'formidable' ); ?></option>
+						<?php foreach ( $frm_gc_posts as $frm_gc_post ) : ?>
+							<option
+								value="<?php echo esc_attr( $frm_gc_post->ID ); ?>"
+								<?php if ( ! $is_template ) : ?>
+									<?php selected( $frm_gc_item_id, $frm_gc_post->ID ); ?>
+								<?php endif; ?>
+							>
+								<?php echo esc_html( $frm_gc_post->post_title ); ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				<?php endif; ?>
+			</div><!-- .frm_form_field -->
+		</div><!-- [data-type="post"] -->
+
+		<?php
+		if ( $is_template ) {
+			/**
+			 * Fires after the built-in type settings in the template item row.
+			 *
+			 * Pro and PDF plugins add their type-specific template settings here.
+			 *
+			 * Guidelines for hook callbacks:
+			 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}" hidden>`.
+			 * - Always include the `hidden` attribute — JS shows the active type after cloning.
+			 * - Use `<label data-frm-gc-for="id">` (no for attribute) — JS sets it after cloning.
+			 * - Use `data-frm-gc-field="id"` (no id or name attributes) on the select — JS assigns both.
+			 *
+			 * @since x.x
+			 *
+			 * @param array $frm_gc_types All registered type configurations.
+			 */
+			do_action( 'frm_gated_content_item_template_settings', $frm_gc_types );
+		} else {
+			/**
+			 * Fires after the built-in type settings for an existing gated content item row.
+			 *
+			 * Pro and PDF plugins use this to render their own type-specific settings.
+			 *
+			 * Guidelines for hook callbacks:
+			 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}">`.
+			 * - Add the `hidden` attribute when `$active_type !== '{TYPE}'`.
+			 * - Include a `<label for="{ID}">` and `id="{ID}"` on each select, where
+			 *   `{ID}` follows the pattern `{$frm_gc_wrapper_id}_{FIELD}_{TYPE}_{$frm_gc_idx}`
+			 *   (e.g. `frm_gc_settings_0_id_frm_file_2`). JS regenerates these for template-cloned rows.
+			 * - Add `data-frm-gc-field="id"` (or another key) to each select so JS manages its name on type change.
+			 * - Only add a `name` attribute when `$active_type === '{TYPE}'`.
+			 *
+			 * @since x.x
+			 *
+			 * @param string $frm_gc_item_type  Active type key for this item (e.g. 'post', 'frm_file').
+			 * @param int    $frm_gc_idx        Zero-based index of this item in the items array.
+			 * @param array  $frm_gc_item       Saved item data.
+			 * @param string $frm_gc_item_base  Field name prefix for this item, e.g. `frm_form_action[X][post_content][items][0]`.
+			 * @param string $frm_gc_wrapper_id Unique wrapper element ID for building `id`/`for` attribute pairs.
+			 */
+			do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base, $frm_gc_wrapper_id );
+		}
+		?>
+
+		<div class="frm-gc-item-delete">
+			<button
+				type="button"
+				class="frm_gc_remove_item button-link"
+				style="color: var(--error-500);"
+				aria-label="<?php esc_attr_e( 'Remove item', 'formidable' ); ?>"
+			>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>
+			</button>
+		</div><!-- .frm-gc-item-delete -->
+	</div><!-- .frm8 -->
+
+</li>

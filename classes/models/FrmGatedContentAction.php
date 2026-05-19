@@ -119,6 +119,132 @@ class FrmGatedContentAction extends FrmFormAction {
 	}
 
 	/**
+	 * Get the shortcode reference rows for the action settings UI.
+	 *
+	 * Returns an array of shortcode row definitions, each with:
+	 * - code   (string) The shortcode string to display and copy.
+	 * - output (string) Human-readable description of what it outputs.
+	 *
+	 * The `frm_gated_content_shortcodes` filter allows Pro and add-ons to append
+	 * additional rows (e.g. show="expired_time" when expiry is configured).
+	 *
+	 * @since x.x
+	 *
+	 * @param int $action_id Gated content action post ID.
+	 *
+	 * @return array<int, array{code: string, output: string}>
+	 */
+	public static function get_shortcodes( $action_id ) {
+		$shortcodes = array(
+			array(
+				'code'   => '[frm_gated_content id="' . absint( $action_id ) . '"]',
+				'output' => __( 'Access links for all items', 'formidable' ),
+			),
+			array(
+				'code'   => '[frm_gated_content id="' . absint( $action_id ) . '" item="0"]',
+				'output' => __( 'Access link for the first item (0-indexed)', 'formidable' ),
+			),
+			array(
+				'code'   => '[frm_gated_content id="' . absint( $action_id ) . '" item="0" show="url"]',
+				'output' => __( 'URL only for the first item (no link tag)', 'formidable' ),
+			),
+			array(
+				'code'   => '[frm_gated_content id="' . absint( $action_id ) . '" show="access_token"]',
+				'output' => __( 'Raw access token string', 'formidable' ),
+			),
+		);
+
+		/**
+		 * Filter the shortcode reference rows shown in the gated content action settings UI.
+		 *
+		 * Each entry must be an array with:
+		 * - code   (string) The shortcode string to display and copy.
+		 * - output (string) Human-readable description of what it outputs.
+		 *
+		 * @since x.x
+		 *
+		 * @param array<int, array{code: string, output: string}> $shortcodes Shortcode rows.
+		 * @param int                                             $action_id  Gated content action post ID.
+		 */
+		return (array) apply_filters( 'frm_gated_content_shortcodes', $shortcodes, $action_id );
+	}
+
+	/**
+	 * Get gatable posts for the "post" item type selector.
+	 *
+	 * Applies the `frm_gated_content_posts_query` filter so callers can extend
+	 * the post types or change any other WP_Query argument, then narrows the
+	 * result to posts that actually require a token: private posts and
+	 * password-protected posts. Plain published posts are publicly accessible
+	 * and should not appear as selectable gated content items.
+	 *
+	 * @return WP_Post[]
+	 */
+	public static function get_posts() {
+		/**
+		 * Filter the get_posts() arguments used to build the "post" gated content item selector.
+		 *
+		 * Use this to change the post types, statuses, order, or any other WP_Query
+		 * argument. The filtered list is then narrowed to private and password-protected
+		 * posts only, so adding extra statuses here has no effect unless the filter
+		 * callback also adjusts the post-status filtering that follows.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $query_args get_posts() argument array.
+		 */
+		$query_args = (array) apply_filters(
+			'frm_gated_content_posts_query',
+			array(
+				'post_type'              => array( 'post', 'page' ),
+				'post_status'            => array( 'publish', 'private' ),
+				'orderby'                => 'title',
+				'order'                  => 'ASC',
+				'numberposts'            => -1,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
+
+		$posts = get_posts( $query_args );
+		$posts = is_array( $posts ) ? $posts : array();
+
+		return array_values(
+			array_filter(
+				$posts,
+				static function ( $p ) {
+					return 'private' === $p->post_status || '' !== $p->post_password;
+				}
+			)
+		);
+	}
+
+	/**
+	 * Build the JSON-encoded autocomplete source array for the "post" item selector.
+	 *
+	 * Returns a JSON string suitable for passing as a `data-source` attribute to a
+	 * jQuery UI autocomplete widget. Each entry has a `value` (post ID string) and
+	 * a `label` (post title).
+	 *
+	 * @param WP_Post[] $posts Posts returned by get_posts().
+	 *
+	 * @return string JSON-encoded array, or an empty string on encoding failure.
+	 */
+	public static function get_posts_autocomplete_source( $posts ) {
+		return (string) wp_json_encode(
+			array_map(
+				static function ( $p ) {
+					return array(
+						'value' => (string) $p->ID,
+						'label' => $p->post_title,
+					);
+				},
+				$posts
+			)
+		);
+	}
+
+	/**
 	 * Sanitize and validate settings on save.
 	 *
 	 * @param array $new_instance New settings submitted via form().
