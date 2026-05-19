@@ -113,8 +113,6 @@ class FrmGatedContentAction extends FrmFormAction {
 	 * - items:          Array of item objects, each with 'type' and 'id' keys.
 	 *                   One token unlocks all items in this action.
 	 *                   Pro adds 'frm_file' and 'frm_pdf' types.
-	 * - show_form_page: Page ID to redirect visitors who access protected content without a
-	 *                   valid token. Typically a page containing the purchase form. Null = no redirect.
 	 * - expired_hours:  Hours until access token expires. Null = never expires.
 	 *                   Set via Pro only; stored here for shared validation logic.
 	 * - event:          Form events that trigger token generation.
@@ -124,9 +122,8 @@ class FrmGatedContentAction extends FrmFormAction {
 	public function get_defaults() {
 		return array(
 			'type'           => 'post',
-			'items'          => array(),
-			'show_form_page' => null,
-			'expired_hours'  => null,
+			'items'         => array(),
+			'expired_hours' => null,
 			'event'          => array( 'create' ),
 		);
 	}
@@ -176,11 +173,6 @@ class FrmGatedContentAction extends FrmFormAction {
 		}
 
 		$post_content['items'] = $sanitized_items;
-
-		// Sanitize show_form_page — positive int or null.
-		$post_content['show_form_page'] = ! empty( $post_content['show_form_page'] )
-			? absint( $post_content['show_form_page'] )
-			: null;
 
 		// Sanitize expired_hours — positive int or null (Pro may set this).
 		$post_content['expired_hours'] = ! empty( $post_content['expired_hours'] )

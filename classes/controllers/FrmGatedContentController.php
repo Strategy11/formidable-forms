@@ -24,23 +24,22 @@ class FrmGatedContentController {
 	private static $unlocked_post_id = 0;
 
 	/**
-	 * Allow private pages into the main query when a gated-content signal is present.
+	 * Allow private posts into the main query when a valid gated-content token is present.
 	 *
 	 * Hooked on 'pre_get_posts', which fires before WP_Query runs its DB query.
-	 * Private pages are excluded at the query level by WordPress, so the 'wp'
-	 * hook is too late — get_queried_object_id() returns 0 for a 404'd private
-	 * page.
+	 * Private posts are excluded at the query level by WordPress, so the 'wp'
+	 * hook is too late — get_queried_object_id() returns 0 for a 404'd private post.
 	 *
 	 * Token validation is intentionally deferred to maybe_unlock_post() (the 'wp'
 	 * hook): by that time get_queried_object_id() is reliable and we can validate
 	 * the token against the exact post that was resolved. If no valid token exists
-	 * for the private page, maybe_unlock_post() forces a 404.
+	 * for the private post, maybe_unlock_post() forces a 404.
 	 *
 	 * @param WP_Query $query Current query object.
 	 *
 	 * @return void
 	 */
-	public static function maybe_include_private_pages( $query ) {
+	public static function maybe_include_private_posts( $query ) {
 		if ( ! $query->is_main_query() || is_admin() ) {
 			return;
 		}
@@ -50,48 +49,30 @@ class FrmGatedContentController {
 			return;
 		}
 
-		if ( ! self::has_gated_content_signal() ) {
-			return;
-		}
-
 		$statuses = $query->get( 'post_status' );
 		if ( ! is_array( $statuses ) ) {
 			$statuses = $statuses ? array( $statuses ) : array( 'publish' );
 		}
-		if ( ! in_array( 'private', $statuses, true ) ) {
-			$statuses[] = 'private';
-			$query->set( 'post_status', $statuses );
-		}
-	}
 
-	/**
-	 * Whether the current request carries any gated-content signal.
-	 *
-	 * Returns true when an access_code URL parameter or any frm_gc_* cookie is
-	 * present. No DB queries are performed — this is a cheap, early gate used
-	 * solely by maybe_include_private_pages() to decide whether to widen the
-	 * post_status filter.
-	 *
-	 * @return bool
-	 */
-	private static function has_gated_content_signal() {
-		if ( '' !== FrmAppHelper::simple_get( 'access_code' ) ) {
-			return true;
+		// Already includes private — nothing to widen.
+		if ( in_array( 'private', $statuses, true ) ) {
+			return;
 		}
-		foreach ( array_keys( $_COOKIE ) as $name ) {
-			if ( 0 === strpos( $name, 'frm_gc_' ) ) {
-				return true;
-			}
+
+		if ( ! FrmGatedTokenHelper::get_valid_token( 0, 'post' ) ) {
+			return;
 		}
-		return false;
+
+		$statuses[] = 'private';
+		$query->set( 'post_status', $statuses );
 	}
 
 	/**
 	 * Attempt to unlock a gated post (password-protected or private) using a token.
 	 *
-	 * Hooked on 'wp' so get_queried_object_id() is available. Private pages are
-	 * already in the query by this point (via maybe_include_private_pages), so
-	 * only password-protected pages need the post_password_required filter.
+	 * Hooked on 'wp' so get_queried_object_id() is available. Private posts are
+	 * already in the query by this point (via maybe_include_private_posts), so
+	 * only password-protected posts need the post_password_required filter.
 	 *
 	 * Resolution order:
 	 *  1. URL query parameter access_code (raw token → hashed via get_valid_token).
@@ -105,6 +86,19 @@ class FrmGatedContentController {
 			return;
 		}
 
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return;
+		}
+
+		$is_password_protected = '' !== $post->post_password;
+		$is_restricted_private = 'private' === $post->post_status && ! current_user_can( 'read_private_posts', $post_id );
+
+		// Nothing to unlock — post is publicly accessible.
+		if ( ! $is_password_protected && ! $is_restricted_private ) {
+			return;
+		}
+
 		// Detect whether the token arrived via URL param before falling back to cookies.
 		$access_code    = FrmAppHelper::simple_get( 'access_code' );
 		$from_url_param = is_string( $access_code ) && '' !== $access_code;
@@ -112,11 +106,9 @@ class FrmGatedContentController {
 		$valid_token = FrmGatedTokenHelper::get_valid_token( $post_id, 'post' );
 
 		if ( $valid_token ) {
-			$post = get_post( $post_id );
-
-			// Password-protected pages need an explicit filter; private pages are
-			// already accessible because maybe_include_private_pages widened the query.
-			if ( $post && '' !== $post->post_password ) {
+			// Password-protected posts need an explicit filter; private posts are
+			// already accessible because maybe_include_private_posts widened the query.
+			if ( $is_password_protected ) {
 				self::$unlocked_post_id = $post_id;
 				add_filter( 'post_password_required', 'FrmGatedContentController::filter_password_required', 10, 2 );
 			}
@@ -131,56 +123,25 @@ class FrmGatedContentController {
 			return;
 		}
 
-		// No valid token. If this is a private page that was made queryable by
-		// maybe_include_private_pages(), the visitor must not see it — force a 404
-		// (after trying the form-page redirect, which may exit if a redirect fires).
-		$post = get_post( $post_id );
-		if ( $post && 'private' === $post->post_status && ! current_user_can( 'read_private_posts', $post_id ) ) {
-			self::maybe_redirect_to_form_page();
-
-			global $wp_query;
-			$wp_query->set_404();
-			status_header( 404 );
-			nocache_headers();
-			return;
+		// No valid token — force a 404 to prevent private posts from being exposed.
+		if ( $is_restricted_private ) {
+			self::force_404();
 		}
-
-		// Non-private post (e.g. password-protected) with no valid token — try redirect.
-		self::maybe_redirect_to_form_page();
 	}
 
 	/**
-	 * Scan all frm_gc_* cookies and redirect to the first action's form page found.
+	 * Force the current request to a 404 response.
 	 *
-	 * Called from maybe_unlock_post() when no valid token grants access. Allows
-	 * expired or otherwise-invalid tokens to still surface the form page redirect,
-	 * so visitors are sent back to re-submit the form and obtain a fresh token.
+	 * Used when a private post was widened into the main query by
+	 * maybe_include_private_posts() but no valid token was found.
 	 *
 	 * @return void
 	 */
-	private static function maybe_redirect_to_form_page() {
-		foreach ( $_COOKIE as $name => $value ) {
-			if ( 0 !== strpos( $name, 'frm_gc_' ) ) {
-				continue;
-			}
-			$hash   = hash( 'sha256', sanitize_text_field( $value ) );
-			$row    = FrmGatedTokenHelper::get_row_by_hash( $hash );
-			if ( ! $row ) {
-				continue;
-			}
-			$action = get_post( (int) $row->action_id );
-			if ( ! $action ) {
-				continue;
-			}
-			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-			if ( ! empty( $settings['show_form_page'] ) ) {
-				$redirect_url = get_permalink( (int) $settings['show_form_page'] );
-				if ( $redirect_url ) {
-					wp_safe_redirect( $redirect_url );
-					exit;
-				}
-			}
-		}
+	private static function force_404() {
+		global $wp_query;
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
 	}
 
 	/**

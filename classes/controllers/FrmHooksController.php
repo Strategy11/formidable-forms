@@ -117,8 +117,8 @@ class FrmHooksController {
 
 		// Gated Content Controller.
 		add_action( 'frm_trigger_gated_content_action', 'FrmGatedContentController::trigger', 10, 4 );
-		// pre_get_posts: allows private pages into the query when a valid token is present.
-		add_action( 'pre_get_posts', 'FrmGatedContentController::maybe_include_private_pages' );
+		// pre_get_posts: allows private posts into the query when a valid token is present.
+		add_action( 'pre_get_posts', 'FrmGatedContentController::maybe_include_private_posts' );
 		// 'wp' fires after WP::query_posts() so get_queried_object_id() is available.
 		add_action( 'wp', 'FrmGatedContentController::maybe_unlock_post' );
 		add_action( 'save_post_frm_form_actions', 'FrmGatedContentController::on_action_updated', 10, 3 );
