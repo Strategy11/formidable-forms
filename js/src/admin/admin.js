@@ -11421,7 +11421,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 */
 	function frmGcReindexItems( wrapper ) {
 		const addBtn    = wrapper.querySelector( '.frm_gc_add_item' );
-		const fieldBase = addBtn ? addBtn.dataset.fieldNameBase : '';
+		const fieldBase = addBtn?.dataset.fieldNameBase ?? '';
 		const rows      = wrapper.querySelectorAll( '.frm_gc_item_row' );
 
 		rows.forEach( ( row, idx ) => {
@@ -11486,7 +11486,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	 */
 	function frmGcFilterFileFields( formSelect ) {
 		const typeDiv    = formSelect.closest( '.frm-gc-type-settings' );
-		const fieldSelect = typeDiv && typeDiv.querySelector( '[data-frm-gc-field="id"]' );
+		const fieldSelect = typeDiv?.querySelector( '[data-frm-gc-field="id"]' );
 		if ( ! fieldSelect ) {
 			return;
 		}
@@ -11505,7 +11505,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 
 		// If the currently selected field option is now hidden, reset the select.
 		const selected = fieldSelect.options[ fieldSelect.selectedIndex ];
-		if ( selected && selected.style.display === 'none' ) {
+		if ( selected?.style.display === 'none' ) {
 			fieldSelect.value = '';
 		}
 	}
@@ -11584,7 +11584,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 
 	// Show/hide "Keep old token when entry is updated" when the event multi-select changes.
 	jQuery( document ).on( 'frm-multiselect-changed', 'select[id^="event_"]', function() {
-		const section = document.querySelector( '.frm_gc_update_section[data-frm-gc-event-id="' + this.id + '"]' );
+		const section = document.querySelector( `.frm_gc_update_section[data-frm-gc-event-id="${ this.id }"]` );
 		if ( ! section ) {
 			return;
 		}
