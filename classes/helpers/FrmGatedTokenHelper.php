@@ -193,34 +193,23 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Get all active (non-expired) tokens for a user, joined with action post data.
+	 * Get all token rows for a given user.
 	 *
-	 * @param int $user_id   WordPress user ID.
-	 * @param int $action_id Optional. When non-zero, restricts results to this action.
-	 * @return array Array of token row objects, each with an `action_title` property from wp_posts.
+	 * @param int $user_id WordPress user ID.
+	 *
+	 * @return object[]
 	 */
-	public static function get_tokens_for_user( $user_id, $action_id = 0 ) {
+	public static function get_tokens_for_user( $user_id ) {
 		global $wpdb;
 
-		$where  = 'WHERE t.user_id = %d AND ( t.expired_at IS NULL OR t.expired_at > %d )';
-		$params = array( $user_id, time() );
-
-		if ( $action_id ) {
-			$where   .= ' AND t.action_id = %d';
-			$params[] = $action_id;
-		}
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT t.*, p.post_title AS action_title'
-				. ' FROM ' . $wpdb->prefix . 'frm_gated_tokens t'
-				. ' INNER JOIN ' . $wpdb->posts . ' p ON p.ID = t.action_id'
-				. ' ' . $where
-				. ' ORDER BY t.created_at DESC',
-				$params
+				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE user_id = %d',
+				$user_id
 			)
 		);
+
 		return is_array( $results ) ? $results : array();
 	}
 
@@ -620,6 +609,7 @@ class FrmGatedTokenHelper {
 		if ( ! is_user_logged_in() ) {
 			return null;
 		}
+
 		foreach ( self::get_tokens_for_user( get_current_user_id() ) as $row ) {
 			if ( isset( $seen_hashes[ $row->token_hash ] ) ) {
 				continue;
