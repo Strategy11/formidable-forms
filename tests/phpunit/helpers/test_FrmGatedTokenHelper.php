@@ -228,9 +228,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 */
 	public function test_get_valid_token_resolves_via_cookie() {
 		$raw_token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash      = hash( 'sha256', $raw_token );
 
-		$_COOKIE[ 'frm_gc_' . $this->action_id ] = $hash;
+		$_COOKIE[ 'frm_gc_' . $this->item['type'] . '_' . $this->item['id'] ] = $raw_token;
 		$this->reset_helper_caches();
 
 		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );

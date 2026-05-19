@@ -66,7 +66,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 				'post_type'    => 'frm_form_actions',
 				'post_excerpt' => 'gated_content',
 				'post_status'  => 'publish',
-				'post_parent'  => $form_id,
+				'menu_order'   => $form_id,
 				'post_content' => wp_json_encode(
 					array(
 						'event' => array( 'payment-success' ),
@@ -103,7 +103,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 				'post_type'    => 'frm_form_actions',
 				'post_excerpt' => 'gated_content',
 				'post_status'  => 'publish',
-				'post_parent'  => $form_id,
+				'menu_order'   => $form_id,
 				'post_content' => wp_json_encode(
 					array(
 						'event' => array( 'create' ),
