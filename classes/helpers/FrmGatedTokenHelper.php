@@ -210,6 +210,7 @@ class FrmGatedTokenHelper {
 			)
 		);
 
+		/** @var object[] $results */
 		return is_array( $results ) ? $results : array();
 	}
 
@@ -509,6 +510,7 @@ class FrmGatedTokenHelper {
 		 *     @type string $item_type Content item type slug (empty if unknown).
 		 * }
 		 */
+		/** @var FrmGatedToken|null */
 		return apply_filters( 'frm_obtain_gated_token', null, compact( 'item_id', 'item_type' ) );
 	}
 

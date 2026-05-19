@@ -162,7 +162,7 @@ if ( $frm_gc_use_autocomplete ) {
 										<?php if ( 'post' === $frm_gc_item_type ) : ?>
 											name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
 										<?php endif; ?>
-										value="<?php echo esc_attr( $frm_gc_item_id ?: '' ); ?>"
+										value="<?php echo esc_attr( $frm_gc_item_id ? $frm_gc_item_id : '' ); ?>"
 									/>
 								<?php else : ?>
 									<select

@@ -172,5 +172,4 @@ class FrmGatedToken {
 	public function set_cookie( $raw_token, $item_type = '', $item_id = 0 ) {
 		FrmGatedTokenHelper::set_cookie( $raw_token, $this->expired_at, $item_type, $item_id );
 	}
-
 }

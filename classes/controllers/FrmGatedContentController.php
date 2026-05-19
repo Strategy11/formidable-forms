@@ -232,7 +232,18 @@ class FrmGatedContentController {
 		FrmGatedTokenHelper::delete_action_item_cache( $post_id );
 	}
 
-	public static function on_action_deleted( $post_id, $post ) {
+	/**
+	 * Clean up when a gated content action post is permanently deleted.
+	 *
+	 * Hooked to `before_delete_post`. Clears the action-item transient cache
+	 * (while the post is still readable) then removes all associated tokens.
+	 *
+	 * @param int     $post_id Post ID of the action being deleted.
+	 * @param WP_Post $post    The action post object.
+	 *
+	 * @return void
+	 */
+	public static function on_action_deleted( int $post_id, WP_Post $post ) {
 		if ( 'frm_form_actions' !== $post->post_type || FrmGatedContentAction::$slug !== $post->post_excerpt ) {
 			return;
 		}
@@ -443,6 +454,7 @@ class FrmGatedContentController {
 		 *     @type int $action_id Gated content action post ID.
 		 * }
 		 */
+		/** @var string|null */
 		return apply_filters( 'frm_gated_content_raw_token', $raw, compact( 'action_id' ) );
 	}
 
