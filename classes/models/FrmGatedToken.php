@@ -168,6 +168,8 @@ class FrmGatedToken {
 	 * @param string $raw_token Raw access token (same value as the access_code URL param).
 	 * @param string $item_type Content item type slug (e.g. 'post', 'frm_file').
 	 * @param int|string $item_id   Content item ID, or 0 when not applicable.
+	 *
+	 * @return void
 	 */
 	public function set_cookie( $raw_token, $item_type = '', $item_id = 0 ) {
 		FrmGatedTokenHelper::set_cookie( $raw_token, $this->expired_at, $item_type, $item_id );
