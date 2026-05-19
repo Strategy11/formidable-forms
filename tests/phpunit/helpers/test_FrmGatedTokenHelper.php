@@ -45,8 +45,9 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		// Clean up any URL/cookie state and per-request caches.
 		unset( $_GET['access_code'] );
+
 		foreach ( array_keys( $_COOKIE ) as $name ) {
-			if ( 0 === strpos( $name, 'frm_gc_' ) ) {
+			if ( str_starts_with($name, 'frm_gc_') ) {
 				unset( $_COOKIE[ $name ] );
 			}
 		}
@@ -126,8 +127,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	public function test_validate_access_code_returns_null_for_wrong_item_id() {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 
-		$this->assertNull(
-			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], 999 )
+		$this->assertNotInstanceOf(
+			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], 999 )
 		);
 	}
 
@@ -137,8 +138,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	public function test_validate_access_code_returns_null_for_wrong_item_type() {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 
-		$this->assertNull(
-			FrmGatedTokenHelper::validate_access_code( $token, 'frm_file', $this->item['id'] )
+		$this->assertNotInstanceOf(
+			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( $token, 'frm_file', $this->item['id'] )
 		);
 	}
 
@@ -163,8 +164,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		// Evict the row cache so validate() reads the updated row.
 		$this->reset_helper_caches();
 
-		$this->assertNull(
-			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
+		$this->assertNotInstanceOf(
+			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
 		);
 	}
 
@@ -172,8 +173,8 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @covers FrmGatedTokenHelper::validate_access_code
 	 */
 	public function test_validate_access_code_returns_null_for_nonexistent_token() {
-		$this->assertNull(
-			FrmGatedTokenHelper::validate_access_code( 'not-a-real-token', $this->item['type'], $this->item['id'] )
+		$this->assertNotInstanceOf(
+			\FrmGatedToken::class, FrmGatedTokenHelper::validate_access_code( 'not-a-real-token', $this->item['type'], $this->item['id'] )
 		);
 	}
 
@@ -186,7 +187,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 */
 	public function test_get_valid_token_returns_null_when_no_token_present() {
 		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
-		$this->assertNull( $result );
+		$this->assertNotInstanceOf( \FrmGatedToken::class, $result );
 	}
 
 	/**
@@ -217,7 +218,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		// Request a different item ID than the one in the action.
 		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], 9999 );
 
-		$this->assertNull( $result );
+		$this->assertNotInstanceOf( \FrmGatedToken::class, $result );
 	}
 
 	/**

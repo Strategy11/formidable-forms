@@ -50,6 +50,7 @@ class FrmGatedContentController {
 		}
 
 		$statuses = $query->get( 'post_status' );
+
 		if ( ! is_array( $statuses ) ) {
 			$statuses = $statuses ? array( $statuses ) : array( 'publish' );
 		}
@@ -82,11 +83,13 @@ class FrmGatedContentController {
 	 */
 	public static function maybe_unlock_post() {
 		$post_id = get_queried_object_id();
+
 		if ( ! $post_id ) {
 			return;
 		}
 
 		$post = get_post( $post_id );
+
 		if ( ! $post ) {
 			return;
 		}
@@ -238,6 +241,7 @@ class FrmGatedContentController {
 		 *
 		 * @param int|null $user_id WordPress user ID, or null for guests.
 		 * @param array    $args {
+		 *
 		 *     @type object $entry Submitted form entry object.
 		 *     @type string $event Trigger event slug.
 		 * }

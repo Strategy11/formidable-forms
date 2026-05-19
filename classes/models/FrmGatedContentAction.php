@@ -5,7 +5,6 @@
  * @package Formidable
  *
  * @since x.x
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,7 +15,6 @@ class FrmGatedContentAction extends FrmFormAction {
 
 	/**
 	 * @var string
-	 *
 	 */
 	public static $slug = 'gated_content';
 
@@ -279,6 +277,7 @@ class FrmGatedContentAction extends FrmFormAction {
 			 *
 			 * @param array $item Sanitized item data (keys: type, id).
 			 * @param array $args {
+			 *
 			 *     @type array $raw_item Raw submitted item data.
 			 * }
 			 */

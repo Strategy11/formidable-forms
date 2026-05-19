@@ -158,6 +158,7 @@ class FrmGatedToken {
 		 *
 		 * @param bool          $is_valid  Whether the token passes structural validation.
 		 * @param array         $args {
+		 *
 		 *     @type FrmGatedToken $token     The token being validated.
 		 *     @type int|string    $item_id   Content item ID being checked.
 		 *     @type string        $item_type Content item type slug.

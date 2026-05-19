@@ -97,6 +97,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php if ( $frm_gc_use_autocomplete ) : ?>
 					<?php
 					$frm_gc_selected_title = '';
+
 					if ( ! $is_template ) {
 						foreach ( $frm_gc_posts as $frm_gc_post ) {
 							if ( $frm_gc_item_id === $frm_gc_post->ID ) {

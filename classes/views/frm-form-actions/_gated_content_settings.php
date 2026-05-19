@@ -49,7 +49,7 @@ if ( $frm_gc_use_autocomplete ) {
 		<ul class="frm_gc_items_list">
 			<?php foreach ( $frm_gc_items as $frm_gc_idx => $frm_gc_item ) : ?>
 				<?php
-				$frm_gc_item_type   = isset( $frm_gc_item['type'] ) ? $frm_gc_item['type'] : 'post';
+				$frm_gc_item_type   = $frm_gc_item['type'] ?? 'post';
 				$frm_gc_item_id     = isset( $frm_gc_item['id'] ) ? (int) $frm_gc_item['id'] : 0;
 				$frm_gc_item_base   = $frm_gc_field_name_base . '[' . $frm_gc_idx . ']';
 				$frm_gc_type_sel_id = $frm_gc_wrapper_id . '_type_' . $frm_gc_idx;

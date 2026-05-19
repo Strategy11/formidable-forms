@@ -46,6 +46,7 @@ class FrmGatedContentShortcodeController {
 		$atts = shortcode_atts( self::default_shortcode_atts(), $atts, 'frm_gated_content' );
 
 		$action_id = (int) $atts['id'];
+
 		if ( ! $action_id ) {
 			return '';
 		}
@@ -63,12 +64,14 @@ class FrmGatedContentShortcodeController {
 		 * @param int         $action_id Gated content action post ID.
 		 */
 		$custom = apply_filters( 'frm_gated_content_shortcode_show', null, $atts['show'], $action_id );
+
 		if ( null !== $custom ) {
 			return (string) $custom;
 		}
 
 		// All other show values require the raw token.
 		$raw_token = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
+
 		if ( null === $raw_token ) {
 			return '';
 		}
@@ -94,13 +97,14 @@ class FrmGatedContentShortcodeController {
 	 */
 	private static function render_items_shortcode_output( $action_id, $raw_token, $atts ) {
 		$action = get_post( $action_id );
+
 		if ( ! $action ) {
 			return '';
 		}
 
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
 		$items    = ( is_array( $settings ) && ! empty( $settings['items'] ) ) ? $settings['items'] : array();
-		$show_url = ( 'url' === $atts['show'] );
+		$show_url = 'url' === $atts['show'];
 
 		if ( false === $atts['item'] ) {
 			// No item specified — render all items.
@@ -111,6 +115,7 @@ class FrmGatedContentShortcodeController {
 
 		// Single item by 0-based index.
 		$idx = (int) $atts['item'];
+
 		if ( ! isset( $items[ $idx ] ) || ! is_array( $items[ $idx ] ) ) {
 			return '';
 		}
@@ -133,6 +138,7 @@ class FrmGatedContentShortcodeController {
 		}
 
 		$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+
 		if ( ! $url ) {
 			return '';
 		}
@@ -142,6 +148,7 @@ class FrmGatedContentShortcodeController {
 		}
 
 		$label = self::get_item_title( (int) $item['id'], $item['type'] );
+
 		if ( ! $label ) {
 			$label = $url;
 		}
@@ -173,6 +180,7 @@ class FrmGatedContentShortcodeController {
 		 *
 		 * @param string $base_url Permalink for 'post' items; empty string for others.
 		 * @param array  $args {
+		 *
 		 *     @type int|string $item_id   Content item ID.
 		 *     @type string     $type      Item type slug.
 		 *     @type string     $raw_token Raw access token.
@@ -210,6 +218,7 @@ class FrmGatedContentShortcodeController {
 		 *
 		 * @param string $title Post title for 'post' items; empty string for others.
 		 * @param array  $args {
+		 *
 		 *     @type int|string $item_id Content item ID.
 		 *     @type string     $type    Item type slug.
 		 * }
@@ -238,11 +247,13 @@ class FrmGatedContentShortcodeController {
 			}
 
 			$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+
 			if ( ! $url ) {
 				continue;
 			}
 
 			$label = self::get_item_title( (int) $item['id'], $item['type'] );
+
 			if ( ! $label ) {
 				$label = $url;
 			}
@@ -280,6 +291,7 @@ class FrmGatedContentShortcodeController {
 			}
 
 			$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+
 			if ( ! $url ) {
 				continue;
 			}

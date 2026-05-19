@@ -5,7 +5,6 @@
  * @package Formidable
  *
  * @since x.x
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -51,8 +50,10 @@ class FrmGatedTokenHelper {
 		// Read expired_hours from action settings to compute expiry timestamp.
 		$expired_at = null;
 		$action     = get_post( $action_id );
+
 		if ( $action ) {
 			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+
 			if ( is_array( $settings ) && ! empty( $settings['expired_hours'] ) ) {
 				$expired_at = $now + $settings['expired_hours'] * HOUR_IN_SECONDS;
 			}
@@ -97,6 +98,7 @@ class FrmGatedTokenHelper {
 	 * do not accumulate in wp_frm_gated_tokens.
 	 *
 	 * @param int $action_id ID of the frm_form_actions post being deleted.
+	 *
 	 * @return void
 	 */
 	public static function delete_by_action( $action_id ) {
@@ -154,6 +156,7 @@ class FrmGatedTokenHelper {
 	 * Retrieve a single token row by raw token string.
 	 *
 	 * @param string $token Raw access token.
+	 *
 	 * @return object|null Token row object, or null if not found or token has no match.
 	 */
 	public static function get_row_by_token( $token ) {
@@ -167,6 +170,7 @@ class FrmGatedTokenHelper {
 	 * double-hashing.
 	 *
 	 * @param string $hash Hex-encoded SHA-256 hash of the raw token.
+	 *
 	 * @return object|null Token row object, or null if not found.
 	 */
 	public static function get_row_by_hash( $hash ) {
@@ -218,6 +222,7 @@ class FrmGatedTokenHelper {
 	 */
 	public static function validate_access_code( $access_code, $item_type = '', $item_id = 0 ) {
 		$row = self::get_row_by_hash( hash( 'sha256', $access_code ) );
+
 		if ( null === $row ) {
 			return null;
 		}
@@ -251,11 +256,13 @@ class FrmGatedTokenHelper {
 	 */
 	public static function delete_action_item_cache( $action_id ) {
 		$action = get_post( $action_id );
+
 		if ( ! $action ) {
 			return;
 		}
 
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
+
 		if ( ! is_array( $settings ) || empty( $settings['items'] ) ) {
 			return;
 		}
@@ -290,12 +297,14 @@ class FrmGatedTokenHelper {
 		}
 
 		$action = get_post( $action_id );
+
 		if ( ! $action ) {
 			return false;
 		}
 
 		$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
 		$result   = false;
+
 		if ( is_array( $settings ) && ! empty( $settings['items'] ) ) {
 			foreach ( $settings['items'] as $item ) {
 				if ( is_array( $item ) && (string) $item['id'] === (string) $item_id && $item['type'] === $item_type ) {
@@ -337,7 +346,7 @@ class FrmGatedTokenHelper {
 
 		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
 
-		$expiry = null !== $expired_at ? $expired_at : ( time() + YEAR_IN_SECONDS );
+		$expiry = $expired_at ?? time() + YEAR_IN_SECONDS;
 
 		setcookie(
 			$cookie_name,
@@ -360,6 +369,7 @@ class FrmGatedTokenHelper {
 	 * pending token.
 	 *
 	 * @param int $action_id Action post ID.
+	 *
 	 * @return string Transient key (~30 chars for logged-in users, ~90 chars for guests).
 	 */
 	private static function get_token_transient_key( $action_id ) {
@@ -376,6 +386,7 @@ class FrmGatedTokenHelper {
 	 * expired.
 	 *
 	 * @param int $action_id Action post ID.
+	 *
 	 * @return string|null Raw 48-char token, or null if unavailable.
 	 */
 	public static function get_raw_token_for_action( $action_id ) {
@@ -412,6 +423,7 @@ class FrmGatedTokenHelper {
 	public static function get_valid_token( $item_type, $item_id ) {
 		// 1. URL query parameter — definitive.
 		$token = self::get_valid_token_from_url_param( $item_type, $item_id );
+
 		if ( null !== $token ) {
 			return $token;
 		}
@@ -420,11 +432,13 @@ class FrmGatedTokenHelper {
 		$seen_hashes = array();
 
 		$token = self::get_valid_token_from_cookies( $item_type, $item_id, $seen_hashes );
+
 		if ( null !== $token ) {
 			return $token;
 		}
 
 		$token = self::get_valid_token_from_user( $item_type, $item_id, $seen_hashes );
+
 		if ( null !== $token ) {
 			return $token;
 		}
@@ -440,6 +454,7 @@ class FrmGatedTokenHelper {
 		 *
 		 * @param FrmGatedToken|null $token     Null — no valid token found by core.
 		 * @param array              $args {
+		 *
 		 *     @type int|string $item_id   Content item ID being accessed (0 if unknown).
 		 *     @type string $item_type Content item type slug (empty if unknown).
 		 * }
@@ -462,11 +477,13 @@ class FrmGatedTokenHelper {
 	 */
 	private static function get_valid_token_from_url_param( $item_type, $item_id ) {
 		$url_token = FrmAppHelper::simple_get( 'access_code' );
+
 		if ( '' === $url_token ) {
 			return null;
 		}
 
 		$token = self::validate_access_code( $url_token, $item_type, $item_id );
+
 		if ( null === $token ) {
 			return null;
 		}
@@ -499,6 +516,7 @@ class FrmGatedTokenHelper {
 	 */
 	private static function get_valid_token_from_cookies( $item_type, $item_id, &$seen_hashes ) {
 		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
+
 		if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
 			return null;
 		}
@@ -530,6 +548,7 @@ class FrmGatedTokenHelper {
 			}
 			$seen_hashes[ $row->token_hash ] = true;
 			$token                           = new FrmGatedToken( $row );
+
 			if ( $token->validate( $item_type, $item_id ) ) {
 				return $token;
 			}
