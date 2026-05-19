@@ -100,8 +100,7 @@ class FrmGatedContentController {
 		}
 
 		// Detect whether the token arrived via URL param before falling back to cookies.
-		$access_code    = FrmAppHelper::simple_get( 'access_code' );
-		$from_url_param = is_string( $access_code ) && '' !== $access_code;
+		$from_url_param = FrmAppHelper::simple_get( 'access_code' );
 
 		$valid_token = FrmGatedTokenHelper::get_valid_token( $post_id, 'post' );
 
@@ -301,7 +300,7 @@ class FrmGatedContentController {
 		}
 
 		// All other show values require the raw token.
-		$raw_token = self::resolve_raw_token( $action_id );
+		$raw_token = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
 		if ( null === $raw_token ) {
 			return '';
 		}
@@ -380,43 +379,6 @@ class FrmGatedContentController {
 		}
 
 		return '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
-	}
-
-	/**
-	 * Resolve the raw token for an action from the per-request static variable or the
-	 * 5-minute transient set by FrmGatedTokenHelper::generate().
-	 *
-	 * Only these two sources can yield a raw (unhashed) token — cookies and DB rows
-	 * store only the SHA-256 hash, so they cannot be used here. Use
-	 * FrmGatedTokenHelper::get_valid_token() when a token object is sufficient.
-	 *
-	 * A filter is provided so add-ons can supply a raw token from other sources
-	 * (e.g. re-generating a single-use token on demand for a registered user).
-	 *
-	 * @param int $action_id Action post ID.
-	 *
-	 * @return string|null Raw token string, or null if unavailable.
-	 */
-	private static function resolve_raw_token( $action_id ) {
-		$raw = FrmGatedTokenHelper::get_raw_token_for_action( $action_id );
-
-		/**
-		 * Filter the raw gated content token resolved for a shortcode.
-		 *
-		 * Fires after the static variable and transient are checked. Return a raw
-		 * token string to supply one from another source, or null to indicate none
-		 * is available. Cookie and hash-only sources cannot be used here — raw
-		 * tokens are required for shortcode output.
-		 *
-		 * @since x.x
-		 *
-		 * @param string|null $raw  Raw token from the static variable / transient, or null.
-		 * @param array       $args {
-		 *     @type int $action_id Gated content action post ID.
-		 * }
-		 */
-		/** @var string|null */
-		return apply_filters( 'frm_gated_content_raw_token', $raw, compact( 'action_id' ) );
 	}
 
 	/**

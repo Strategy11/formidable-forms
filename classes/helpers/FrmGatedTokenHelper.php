@@ -54,7 +54,7 @@ class FrmGatedTokenHelper {
 		if ( $action ) {
 			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
 			if ( is_array( $settings ) && ! empty( $settings['expired_hours'] ) ) {
-				$expired_at = $now + ( (int) $settings['expired_hours'] * 3600 );
+				$expired_at = $now + $settings['expired_hours'] * HOUR_IN_SECONDS;
 			}
 		}
 
@@ -110,47 +110,6 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
-	 * Revoke all tokens for a specific action + entry pair.
-	 *
-	 * Called before re-generating a token on entry update so the previous
-	 * token cannot be used after the entry owner receives a fresh one.
-	 *
-	 * @param int $action_id ID of the frm_form_actions post.
-	 * @param int $entry_id  ID of the form entry.
-	 * @return void
-	 */
-	public static function delete_by_action_and_entry( $action_id, $entry_id ) {
-		global $wpdb;
-
-		$wpdb->delete(
-			$wpdb->prefix . 'frm_gated_tokens',
-			array(
-				'action_id' => $action_id,
-				'entry_id'  => $entry_id,
-			),
-			array( '%d', '%d' )
-		);
-	}
-
-	/**
-	 * Revoke an access token by deleting it from the database.
-	 *
-	 * @param string $token Raw access token to revoke.
-	 * @return void
-	 */
-	public static function revoke( $token ) {
-		global $wpdb;
-
-		$hash = hash( 'sha256', $token );
-
-		$wpdb->delete(
-			$wpdb->prefix . 'frm_gated_tokens',
-			array( 'token_hash' => $hash ),
-			array( '%s' )
-		);
-	}
-
-	/**
 	 * Delete all expired tokens from the database.
 	 *
 	 * Intended to be called by WP Cron on a scheduled interval.
@@ -167,29 +126,6 @@ class FrmGatedTokenHelper {
 				time()
 			)
 		);
-	}
-
-	/**
-	 * Get a paginated list of tokens for a given action, ordered newest first.
-	 *
-	 * @param int $action_id Action post ID.
-	 * @param int $limit     Maximum number of rows to return.
-	 * @param int $offset    Number of rows to skip (for pagination).
-	 * @return array Array of token row objects.
-	 */
-	public static function get_tokens_for_action( $action_id, $limit = 50, $offset = 0 ) {
-		global $wpdb;
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE action_id = %d ORDER BY created_at DESC LIMIT %d OFFSET %d',
-				$action_id,
-				$limit,
-				$offset
-			)
-		);
-		return is_array( $results ) ? $results : array();
 	}
 
 	/**
@@ -624,5 +560,4 @@ class FrmGatedTokenHelper {
 		}
 		return null;
 	}
-
 }
