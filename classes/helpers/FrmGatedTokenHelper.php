@@ -224,12 +224,12 @@ class FrmGatedTokenHelper {
 	 * FrmGatedToken::validate() — which enforces expiry, item-membership, and the
 	 * frm_gated_content_validate filter.
 	 *
-	 * @param string            $access_code Raw access token (same value as the access_code URL parameter).
-	 * @param FrmGatedItem|null $item        Content item to validate against, or null to skip item check.
+	 * @param string       $access_code Raw access token (same value as the access_code URL parameter).
+	 * @param FrmGatedItem $item        Content item to validate against, or null to skip item check.
 	 *
 	 * @return FrmGatedToken|null Validated token object, or null if the code is invalid or does not grant access.
 	 */
-	public static function validate_access_code( $access_code, FrmGatedItem $item = null ) {
+	public static function validate_access_code( $access_code, FrmGatedItem $item ) {
 		$row = self::get_row_by_hash( self::hash_token( $access_code ) );
 
 		if ( null === $row ) {
