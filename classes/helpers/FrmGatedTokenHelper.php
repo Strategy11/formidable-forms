@@ -34,50 +34,78 @@ class FrmGatedTokenHelper {
 	/**
 	 * Generate a new access token for a gated content action and persist it.
 	 *
-	 * @param int      $action_id ID of the frm_form_actions post.
-	 * @param int      $entry_id  ID of the submitted form entry.
-	 * @param int|null $user_id   Logged-in user ID, or null for guests.
+	 * @param WP_Post  $action Form action post object.
+	 * @param object   $entry  Submitted form entry object (must have ->id).
+	 * @param string   $event  Trigger event slug ('create', 'update', …).
 	 *
 	 * @return string Raw 32-character token. Only ever stored in URLs or emails — never in the DB.
 	 */
-	public static function generate( $action_id, $entry_id, $user_id = null ) {
+	public static function generate( $action, $entry, $event ) {
 		global $wpdb;
 
-		$raw_token = wp_generate_password( 32, false );
-		$now       = time();
+		$action_id = $action->ID;
+		$entry_id  = $entry->id;
 
-		// Read expired_hours from action settings to compute expiry timestamp.
+		$raw_token  = wp_generate_password( 32, false );
+		$now        = time();
 		$expired_at = null;
-		$action     = get_post( $action_id );
+		$settings   = FrmAppHelper::maybe_json_decode( $action->post_content );
 
-		if ( $action ) {
-			$settings = FrmAppHelper::maybe_json_decode( $action->post_content );
-
-			if ( is_array( $settings ) && ! empty( $settings['expired_hours'] ) ) {
-				$expired_at = $now + $settings['expired_hours'] * HOUR_IN_SECONDS;
-			}
+		if ( is_array( $settings ) && ! empty( $settings['expired_hours'] ) ) {
+			$expired_at = $now + $settings['expired_hours'] * HOUR_IN_SECONDS;
 		}
 
-		$data   = array(
+		$raw_user_id = get_current_user_id();
+		$user_id     = $raw_user_id ? $raw_user_id : null;
+
+		$data = array(
 			'token_hash' => self::hash_token( $raw_token ),
 			'action_id'  => $action_id,
 			'entry_id'   => $entry_id,
 			'ip_address' => FrmAppHelper::get_ip_address(),
 			'created_at' => $now,
 		);
-		$format = array( '%s', '%d', '%d', '%s', '%d' );
 
 		// Only include nullable columns when they carry a value — passing null
 		// with a %d format would insert 0 instead of NULL.
 		if ( null !== $user_id ) {
 			$data['user_id'] = $user_id;
-			$format[]        = '%d';
 		}
 
 		if ( null !== $expired_at ) {
 			$data['expired_at'] = $expired_at;
-			$format[]           = '%d';
 		}
+
+		/**
+		 * Filter the token row data before inserting into the database.
+		 *
+		 * Add-ons can use this to override or extend the data inserted for a generated
+		 * token — for example, Formidable Registration hooks here to set the correct
+		 * user_id when the registrant is not yet logged in at trigger time.
+		 *
+		 * @since x.x
+		 *
+		 * @param array  $data Row data to insert into wp_frm_gated_tokens.
+		 * @param array  $args {
+		 *
+		 *     @type WP_Post $action Form action post object.
+		 *     @type object  $entry  Submitted form entry object.
+		 *     @type string  $event  Trigger event slug.
+		 * }
+		 */
+		$data = apply_filters( 'frm_gated_content_token_data', $data, compact( 'action', 'entry', 'event' ) );
+
+		// Derive format from known column types — supports extra keys added by filters.
+		$type_map = array(
+			'token_hash' => '%s',
+			'action_id'  => '%d',
+			'entry_id'   => '%d',
+			'ip_address' => '%s',
+			'created_at' => '%d',
+			'user_id'    => '%d',
+			'expired_at' => '%d',
+		);
+		$format   = array_values( array_intersect_key( $type_map, $data ) );
 
 		$wpdb->insert( $wpdb->prefix . 'frm_gated_tokens', $data, $format );
 

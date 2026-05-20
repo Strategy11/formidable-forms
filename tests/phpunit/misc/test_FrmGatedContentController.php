@@ -29,7 +29,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 			)
 		);
 
-		$action = (object) array( 'ID' => $action_id );
+		$action = get_post( $action_id );
 		$entry  = (object) array(
 			'id'      => 1,
 			'form_id' => 1,

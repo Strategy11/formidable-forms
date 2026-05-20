@@ -237,27 +237,6 @@ class FrmGatedContentController {
 	 * @return void
 	 */
 	public static function trigger( $action, $entry, $form, $event ) {
-		$raw_user_id = get_current_user_id();
-		$user_id     = $raw_user_id ? $raw_user_id : null;
-
-		/**
-		 * Filters the user ID stored in the generated gated content token.
-		 *
-		 * Use this to supply the correct user ID when the current user is not yet
-		 * logged in at trigger time — for example, during a user_registration event
-		 * where the new user is created but auto-login has not yet happened.
-		 *
-		 * @since x.x
-		 *
-		 * @param int|null $user_id WordPress user ID, or null for guests.
-		 * @param array    $args {
-		 *
-		 *     @type object $entry Submitted form entry object.
-		 *     @type string $event Trigger event slug.
-		 * }
-		 */
-		$user_id = apply_filters( 'frm_gated_content_token_user_id', $user_id, compact( 'entry', 'event' ) );
-
-		FrmGatedTokenHelper::generate( $action->ID, $entry->id, $user_id );
+		FrmGatedTokenHelper::generate( $action, $entry, $event );
 	}
 }
