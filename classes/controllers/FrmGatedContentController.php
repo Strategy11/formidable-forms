@@ -66,6 +66,7 @@ class FrmGatedContentController {
 				'id'   => 0,
 			)
 		);
+
 		if ( ! FrmGatedTokenHelper::get_valid_token( $any_post_item ) ) {
 			return;
 		}
