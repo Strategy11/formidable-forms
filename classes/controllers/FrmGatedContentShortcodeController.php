@@ -136,7 +136,7 @@ class FrmGatedContentShortcodeController {
 			return '';
 		}
 
-		$item = FrmGatedItem::make( $raw_item_data['type'], $raw_item_data['id'] );
+		$item = FrmGatedItem::make( $raw_item_data );
 		$url  = $item->get_url( $raw_token );
 
 		if ( ! $url ) {
@@ -176,7 +176,7 @@ class FrmGatedContentShortcodeController {
 				continue;
 			}
 
-			$gated_item = FrmGatedItem::make( $item['type'], $item['id'] );
+			$gated_item = FrmGatedItem::make( $item );
 			$url        = $gated_item->get_url( $raw_token );
 
 			if ( ! $url ) {
@@ -221,7 +221,7 @@ class FrmGatedContentShortcodeController {
 				continue;
 			}
 
-			$gated_item = FrmGatedItem::make( $item['type'], $item['id'] );
+			$gated_item = FrmGatedItem::make( $item );
 			$url        = $gated_item->get_url( $raw_token );
 
 			if ( ! $url ) {

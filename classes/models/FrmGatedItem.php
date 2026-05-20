@@ -32,12 +32,11 @@ class FrmGatedItem {
 	public $id;
 
 	/**
-	 * @param string     $type Item type slug.
-	 * @param int|string $id   Content item ID.
+	 * @param array{type: string, id: int|string} $item Item data array with 'type' and 'id' keys.
 	 */
-	public function __construct( $type, $id ) {
-		$this->type = $type;
-		$this->id   = $id;
+	public function __construct( array $item ) {
+		$this->type = $item['type'];
+		$this->id   = $item['id'];
 	}
 
 	/**
@@ -47,12 +46,11 @@ class FrmGatedItem {
 	 * subclass instance for their own item types without Lite needing to know
 	 * about them.
 	 *
-	 * @param string     $type Item type slug.
-	 * @param int|string $id   Content item ID.
+	 * @param array{type: string, id: int|string} $item Item data array with 'type' and 'id' keys.
 	 *
-	 * @return FrmGatedItem
+	 * @return static
 	 */
-	public static function make( $type, $id ) {
+	public static function make( array $item ) {
 		/**
 		 * Create a subclass instance for a non-core item type.
 		 *
@@ -61,13 +59,12 @@ class FrmGatedItem {
 		 *
 		 * @since x.x
 		 *
-		 * @param FrmGatedItem|null $item Instance, or null to use base class.
-		 * @param string            $type Item type slug.
-		 * @param int|string        $id   Content item ID.
+		 * @param FrmGatedItem|null                   $instance Instance, or null to use base class.
+		 * @param array{type: string, id: int|string} $item     Item data array with 'type' and 'id' keys.
 		 */
-		$item = apply_filters( 'frm_gated_item_make', null, $type, $id );
+		$instance = apply_filters( 'frm_gated_item_make', null, $item );
 
-		return $item instanceof self ? $item : new self( $type, $id );
+		return $instance instanceof self ? $instance : new self( $item );
 	}
 
 	/**
