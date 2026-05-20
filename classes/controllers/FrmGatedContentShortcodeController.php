@@ -51,18 +51,18 @@ class FrmGatedContentShortcodeController {
 		}
 
 		/**
-		 * Handle a Pro or add-on show= value for the [frm_gated_content] shortcode.
+		 * Override or extend [frm_gated_content] shortcode output.
 		 *
 		 * Return a non-null string to short-circuit the default rendering. Return null
 		 * to let the shortcode fall through to its built-in show= handlers.
 		 *
 		 * @since x.x
 		 *
-		 * @param string|null $output    Output string, or null to continue default handling.
-		 * @param string      $show      Value of the show= attribute.
-		 * @param int         $action_id Gated content action post ID.
+		 * @param string|null $output Output string, or null to continue default handling.
+		 * @param array       $atts   Full shortcode attributes array (id, show, item, …).
+		 *                            $atts['id'] is the gated content action post ID.
 		 */
-		$custom = apply_filters( 'frm_gated_content_shortcode_show', null, $atts['show'], $action_id );
+		$custom = apply_filters( 'frm_gated_content_shortcode_custom_output', null, $atts );
 
 		if ( null !== $custom ) {
 			return (string) $custom;
