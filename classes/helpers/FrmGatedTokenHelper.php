@@ -43,9 +43,8 @@ class FrmGatedTokenHelper {
 	public static function generate( $action_id, $entry_id, $user_id = null ) {
 		global $wpdb;
 
-		$raw_token  = wp_generate_password( 32, false );
-		$token_hash = self::hash_token( $raw_token );
-		$now        = time();
+		$raw_token = wp_generate_password( 32, false );
+		$now       = time();
 
 		// Read expired_hours from action settings to compute expiry timestamp.
 		$expired_at = null;
@@ -60,7 +59,7 @@ class FrmGatedTokenHelper {
 		}
 
 		$data   = array(
-			'token_hash' => $token_hash,
+			'token_hash' => self::hash_token( $raw_token ),
 			'action_id'  => $action_id,
 			'entry_id'   => $entry_id,
 			'ip_address' => FrmAppHelper::get_ip_address(),

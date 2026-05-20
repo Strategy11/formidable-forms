@@ -67,11 +67,7 @@ class FrmGatedItem {
 		 */
 		$item = apply_filters( 'frm_gated_item_make', null, $type, $id );
 
-		if ( $item instanceof self ) {
-			return $item;
-		}
-
-		return new self( $type, $id );
+		return $item instanceof self ? $item : new self( $type, $id );
 	}
 
 	/**
@@ -85,9 +81,9 @@ class FrmGatedItem {
 	 */
 	public function matches( $item_data ) {
 		return is_array( $item_data )
-			&& isset( $item_data['type'], $item_data['id'] )
-			&& $item_data['type'] === $this->type
-			&& (string) $item_data['id'] === (string) $this->id;
+		&& isset( $item_data['type'], $item_data['id'] )
+		&& $item_data['type'] === $this->type
+		&& (string) $item_data['id'] === (string) $this->id;
 	}
 
 	/**
@@ -102,12 +98,7 @@ class FrmGatedItem {
 	 */
 	public function get_url( $raw_token ) {
 		$url = (string) get_permalink( $this->id );
-
-		if ( ! $url ) {
-			return '';
-		}
-
-		return add_query_arg( 'access_code', $raw_token, $url );
+		return $url ? add_query_arg( 'access_code', $raw_token, $url ) : '';
 	}
 
 	/**
