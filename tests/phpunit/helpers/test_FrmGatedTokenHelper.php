@@ -87,7 +87,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->prefix}frm_gated_tokens WHERE token_hash = %s",
-				hash( 'sha256', $token )
+				FrmGatedTokenHelper::hash_token( $token )
 			)
 		);
 
@@ -116,7 +116,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$this->assertInstanceOf(
 			FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
+			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( $this->item['type'], $this->item['id'] ) )
 		);
 	}
 
@@ -128,7 +128,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], 999 )
+			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( $this->item['type'], 999 ) )
 		);
 	}
 
@@ -140,7 +140,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, 'frm_file', $this->item['id'] )
+			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( 'frm_file', $this->item['id'] ) )
 		);
 	}
 
@@ -156,7 +156,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$wpdb->update(
 			$wpdb->prefix . 'frm_gated_tokens',
 			array( 'expired_at' => time() - 3600 ),
-			array( 'token_hash' => hash( 'sha256', $token ) ),
+			array( 'token_hash' => FrmGatedTokenHelper::hash_token( $token ) ),
 			array( '%d' ),
 			array( '%s' )
 		);
@@ -166,7 +166,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, $this->item['type'], $this->item['id'] )
+			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( $this->item['type'], $this->item['id'] ) )
 		);
 	}
 
@@ -176,7 +176,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	public function test_validate_access_code_returns_null_for_nonexistent_token() {
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( 'not-a-real-token', $this->item['type'], $this->item['id'] )
+			FrmGatedTokenHelper::validate_access_code( 'not-a-real-token', FrmGatedItem::make( $this->item['type'], $this->item['id'] ) )
 		);
 	}
 
@@ -188,7 +188,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * @covers FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_returns_null_when_no_token_present() {
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
+		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( $this->item['type'], $this->item['id'] ) );
 		$this->assertNotInstanceOf( \FrmGatedToken::class, $result );
 	}
 
@@ -201,7 +201,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$_GET['access_code'] = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 		$this->reset_helper_caches();
 
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
+		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( $this->item['type'], $this->item['id'] ) );
 
 		$this->assertInstanceOf( 'FrmGatedToken', $result );
 	}
@@ -216,7 +216,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->reset_helper_caches();
 
 		// Request a different item ID than the one in the action.
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], 9999 );
+		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( $this->item['type'], 9999 ) );
 
 		$this->assertNotInstanceOf( \FrmGatedToken::class, $result );
 	}
@@ -230,7 +230,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$_COOKIE[ 'frm_gc_' . $this->item['type'] . '_' . $this->item['id'] ] = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 		$this->reset_helper_caches();
 
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
+		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( $this->item['type'], $this->item['id'] ) );
 
 		$this->assertInstanceOf( 'FrmGatedToken', $result );
 	}
@@ -250,7 +250,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		wp_set_current_user( $user_id );
 		$this->reset_helper_caches();
 
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
+		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( $this->item['type'], $this->item['id'] ) );
 
 		$this->assertInstanceOf( 'FrmGatedToken', $result );
 	}
@@ -263,7 +263,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 */
 	public function test_get_valid_token_falls_back_to_filter() {
 		$raw_token  = FrmGatedTokenHelper::generate( $this->action_id, 1 );
-		$hash       = hash( 'sha256', $raw_token );
+		$hash       = FrmGatedTokenHelper::hash_token( $raw_token );
 		$row        = FrmGatedTokenHelper::get_row_by_hash( $hash );
 		$stub_token = new FrmGatedToken( $row );
 
@@ -276,7 +276,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		);
 
 		$this->reset_helper_caches();
-		$result = FrmGatedTokenHelper::get_valid_token( $this->item['type'], $this->item['id'] );
+		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( $this->item['type'], $this->item['id'] ) );
 
 		remove_all_filters( 'frm_obtain_gated_token' );
 
