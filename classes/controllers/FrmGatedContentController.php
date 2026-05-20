@@ -60,19 +60,58 @@ class FrmGatedContentController {
 			return;
 		}
 
-		$any_post_item = FrmGatedItem::make(
+		$post_item = FrmGatedItem::make(
 			array(
 				'type' => 'post',
-				'id'   => 0,
+				'id'   => self::get_queried_post_id( $query ),
 			)
 		);
 
-		if ( ! FrmGatedTokenHelper::get_valid_token( $any_post_item ) ) {
+		if ( ! FrmGatedTokenHelper::get_valid_token( $post_item ) ) {
 			return;
 		}
 
 		$statuses[] = 'private';
 		$query->set( 'post_status', $statuses );
+	}
+
+	/**
+	 * Resolve the requested post ID from the query vars at pre_get_posts time.
+	 *
+	 * get_queried_object_id() is not available at pre_get_posts because the query
+	 * has not run yet. For numeric-ID URLs the ID comes directly from query vars;
+	 * for pretty-permalink slugs, get_page_by_path() resolves the slug including
+	 * private posts (it queries all statuses except trash/auto-draft).
+	 *
+	 * @param WP_Query $query Main query object.
+	 *
+	 * @return int Post ID, or 0 if it cannot be resolved.
+	 */
+	private static function get_queried_post_id( $query ) {
+		$post_id = (int) $query->get( 'p' ) ?: (int) $query->get( 'page_id' );
+		if ( $post_id ) {
+			return $post_id;
+		}
+
+		$slug = $query->get( 'pagename' ) ?: $query->get( 'name' );
+		if ( ! $slug ) {
+			return 0;
+		}
+
+		/**
+		 * Filter the post types searched when resolving a pretty-permalink slug
+		 * to a post ID at pre_get_posts time for gated content.
+		 *
+		 * Add-ons that register their own CPTs (e.g. frm_display for Views) should
+		 * hook here to include those types.
+		 *
+		 * @since x.x
+		 *
+		 * @param string[] $post_types Post type slugs to search. Default ['page', 'post'].
+		 */
+		$post_types = apply_filters( 'frm_gated_content_post_types', array( 'page', 'post' ) );
+		$post       = get_page_by_path( $slug, OBJECT, $post_types );
+		return $post ? $post->ID : 0;
 	}
 
 	/**
