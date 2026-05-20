@@ -195,7 +195,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		$query_args = (array) apply_filters(
 			'frm_gated_content_posts_query',
 			array(
-				'post_type'              => array( 'post', 'page' ),
+				'post_type'              => apply_filters( 'frm_gated_content_post_types', array( 'post', 'page' ) ),
 				'post_status'            => array( 'publish', 'private' ),
 				'orderby'                => 'title',
 				'order'                  => 'ASC',
