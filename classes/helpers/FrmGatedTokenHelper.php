@@ -453,11 +453,11 @@ class FrmGatedTokenHelper {
 		 *
 		 * @since x.x
 		 *
-		 * @param FrmGatedToken|null $token Null — no valid token found by core.
-		 * @param FrmGatedItem       $item  Content item being accessed.
+		 * @param FrmGatedToken|null        $token Null — no valid token found by core.
+		 * @param array{item: FrmGatedItem} $args  Array containing the content item being accessed.
 		 */
 		/** @var FrmGatedToken|null */
-		return apply_filters( 'frm_obtain_gated_token', null, $item );
+		return apply_filters( 'frm_obtain_gated_token', null, array( 'item' => $item ) );
 	}
 
 	/**
