@@ -266,7 +266,7 @@ class FrmGatedContentAction extends FrmFormAction {
 
 			$item = array(
 				'type' => isset( $raw_item['type'] ) ? sanitize_key( $raw_item['type'] ) : 'post',
-				'id'   => isset( $raw_item['id'] ) ? absint( $raw_item['id'] ) : 0,
+				'id'   => isset( $raw_item['id'] ) ? sanitize_text_field( $raw_item['id'] ) : '',
 			);
 
 			/**
