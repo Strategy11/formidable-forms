@@ -133,23 +133,22 @@ class FrmGatedToken {
 	 * Validate this token against a specific content item.
 	 *
 	 * Returns false immediately if the token is expired (and clears its cache).
-	 * When $item_id is empty the item check is skipped — used by types (e.g.
+	 * When $item->id is empty the item check is skipped — used by types (e.g.
 	 * frm_pdf) that are identified by shortcode rather than a fixed item ID.
 	 * Successful item lookups are cached in a transient to avoid re-fetching
 	 * action settings on subsequent requests. Only the structural item check is
 	 * cached — the `frm_gated_content_validate` filter still fires every time.
 	 *
-	 * @param string     $item_type Content item type slug (e.g. 'post', 'frm_pdf').
-	 * @param int|string $item_id   Content item ID (post ID, view ID, …).
+	 * @param FrmGatedItem $item Content item (type slug + ID).
 	 *
 	 * @return bool
 	 */
-	public function validate( $item_type, $item_id ) {
+	public function validate( FrmGatedItem $item ) {
 		if ( $this->is_expired() ) {
 			return false;
 		}
 
-		$is_valid = FrmGatedTokenHelper::action_contains_item( $this->action_id, $item_type, $item_id, $this->expired_at );
+		$is_valid = FrmGatedTokenHelper::action_contains_item( $this->action_id, $item, $this->expired_at );
 
 		/**
 		 * Filters whether a resolved token grants access to a content item.
@@ -159,18 +158,16 @@ class FrmGatedToken {
 		 * @param bool          $is_valid  Whether the token passes structural validation.
 		 * @param array         $args {
 		 *
-		 *     @type FrmGatedToken $token     The token being validated.
-		 *     @type int|string    $item_id   Content item ID being checked.
-		 *     @type string        $item_type Content item type slug.
+		 *     @type FrmGatedToken $token The token being validated.
+		 *     @type FrmGatedItem  $item  Content item being checked.
 		 * }
 		 */
 		return (bool) apply_filters(
 			'frm_gated_content_validate',
 			$is_valid,
 			array(
-				'token'     => $this,
-				'item_id'   => $item_id,
-				'item_type' => $item_type,
+				'token' => $this,
+				'item'  => $item,
 			)
 		);
 	}

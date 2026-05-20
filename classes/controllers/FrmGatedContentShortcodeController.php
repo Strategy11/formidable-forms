@@ -125,18 +125,19 @@ class FrmGatedContentShortcodeController {
 	/**
 	 * Render a single gated content item as a URL string or anchor link.
 	 *
-	 * @param array  $item      Item array from action settings (must have 'id' and 'type' keys).
-	 * @param string $raw_token Raw access token.
-	 * @param bool   $show_url  True to return a plain escaped URL; false to return an <a> tag.
+	 * @param array  $raw_item_data Item array from action settings (must have 'id' and 'type' keys).
+	 * @param string $raw_token     Raw access token.
+	 * @param bool   $show_url      True to return a plain escaped URL; false to return an <a> tag.
 	 *
 	 * @return string Rendered output, or empty string when the item is invalid or has no URL.
 	 */
-	private static function render_shortcode_item( $item, $raw_token, $show_url ) {
-		if ( empty( $item['id'] ) || empty( $item['type'] ) ) {
+	private static function render_shortcode_item( $raw_item_data, $raw_token, $show_url ) {
+		if ( empty( $raw_item_data['id'] ) || empty( $raw_item_data['type'] ) ) {
 			return '';
 		}
 
-		$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+		$item = FrmGatedItem::make( $raw_item_data['type'], $raw_item_data['id'] );
+		$url  = $item->get_url( $raw_token );
 
 		if ( ! $url ) {
 			return '';
@@ -146,83 +147,13 @@ class FrmGatedContentShortcodeController {
 			return esc_url( $url );
 		}
 
-		$label = self::get_item_title( (int) $item['id'], $item['type'] );
+		$label = $item->get_title();
 
 		if ( ! $label ) {
 			$label = $url;
 		}
 
 		return '<a href="' . esc_url( $url ) . '" title="' . esc_attr( $label ) . '">' . esc_html( $label ) . '</a>';
-	}
-
-	/**
-	 * Build the gated access URL for a single content item.
-	 *
-	 * Appends the raw token as the `access_code` query argument. Pro item types
-	 * ('frm_file', 'frm_pdf', …) can provide a base URL via the
-	 * `frm_gated_content_item_url` filter.
-	 *
-	 * @param int|string $item_id   Content item ID (e.g. page post ID).
-	 * @param string     $type      Item type slug ('post', 'frm_file', 'frm_pdf', …).
-	 * @param string     $raw_token Raw access token to append as access_code query arg.
-	 *
-	 * @return string Full URL with access_code parameter, or empty string on failure.
-	 */
-	public static function get_item_url( $item_id, $type, $raw_token ) {
-		$base_url = 'post' === $type ? get_permalink( $item_id ) : '';
-
-		/**
-		 * Filter the base URL for a gated content item type.
-		 *
-		 * Fires for all types including 'post', allowing the default permalink to
-		 * be overridden. Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
-		 *
-		 * @param string $base_url Permalink for 'post' items; empty string for others.
-		 * @param array  $args {
-		 *
-		 *     @type int|string $item_id   Content item ID.
-		 *     @type string     $type      Item type slug.
-		 *     @type string     $raw_token Raw access token.
-		 * }
-		 */
-		$base_url = (string) apply_filters( 'frm_gated_content_item_url', $base_url, compact( 'item_id', 'type', 'raw_token' ) );
-
-		if ( ! $base_url ) {
-			return '';
-		}
-
-		return add_query_arg( 'access_code', $raw_token, $base_url );
-	}
-
-	/**
-	 * Get the display title for a single gated content item.
-	 *
-	 * For 'post' items this is the post title. Pro item types ('frm_file',
-	 * 'frm_pdf', …) can provide a title via the `frm_gated_content_item_title`
-	 * filter.
-	 *
-	 * @param int|string $item_id Content item ID (e.g. page post ID or attachment ID).
-	 * @param string     $type    Item type slug ('post', 'frm_file', 'frm_pdf', …).
-	 *
-	 * @return string Display title, or empty string when unavailable.
-	 */
-	public static function get_item_title( $item_id, $type ) {
-		$title = 'post' === $type ? get_the_title( $item_id ) : '';
-
-		/**
-		 * Filter the display title for a gated content item type.
-		 *
-		 * Fires for all types including 'post', allowing the default post title to
-		 * be overridden. Pro add-ons use this to support 'frm_file', 'frm_pdf', etc.
-		 *
-		 * @param string $title Post title for 'post' items; empty string for others.
-		 * @param array  $args {
-		 *
-		 *     @type int|string $item_id Content item ID.
-		 *     @type string     $type    Item type slug.
-		 * }
-		 */
-		return (string) apply_filters( 'frm_gated_content_item_title', $title, compact( 'item_id', 'type' ) );
 	}
 
 	/**
@@ -245,13 +176,14 @@ class FrmGatedContentShortcodeController {
 				continue;
 			}
 
-			$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+			$gated_item = FrmGatedItem::make( $item['type'], $item['id'] );
+			$url        = $gated_item->get_url( $raw_token );
 
 			if ( ! $url ) {
 				continue;
 			}
 
-			$label = self::get_item_title( (int) $item['id'], $item['type'] );
+			$label = $gated_item->get_title();
 
 			if ( ! $label ) {
 				$label = $url;
@@ -289,7 +221,8 @@ class FrmGatedContentShortcodeController {
 				continue;
 			}
 
-			$url = self::get_item_url( (int) $item['id'], $item['type'], $raw_token );
+			$gated_item = FrmGatedItem::make( $item['type'], $item['id'] );
+			$url        = $gated_item->get_url( $raw_token );
 
 			if ( ! $url ) {
 				continue;

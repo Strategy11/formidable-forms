@@ -44,7 +44,7 @@ class FrmGatedTokenHelper {
 		global $wpdb;
 
 		$raw_token  = wp_generate_password( 32, false );
-		$token_hash = hash( 'sha256', $raw_token );
+		$token_hash = self::hash_token( $raw_token );
 		$now        = time();
 
 		// Read expired_hours from action settings to compute expiry timestamp.
@@ -153,6 +153,17 @@ class FrmGatedTokenHelper {
 	}
 
 	/**
+	 * Hash a raw access token using SHA-256.
+	 *
+	 * @param string $raw_token Raw access token.
+	 *
+	 * @return string Hex-encoded SHA-256 hash.
+	 */
+	public static function hash_token( $raw_token ) {
+		return hash( 'sha256', $raw_token );
+	}
+
+	/**
 	 * Retrieve a single token row by raw token string.
 	 *
 	 * @param string $token Raw access token.
@@ -160,7 +171,7 @@ class FrmGatedTokenHelper {
 	 * @return object|null Token row object, or null if not found or token has no match.
 	 */
 	public static function get_row_by_token( $token ) {
-		return self::get_row_by_hash( hash( 'sha256', $token ) );
+		return self::get_row_by_hash( self::hash_token( $token ) );
 	}
 
 	/**
@@ -214,21 +225,20 @@ class FrmGatedTokenHelper {
 	 * FrmGatedToken::validate() — which enforces expiry, item-membership, and the
 	 * frm_gated_content_validate filter.
 	 *
-	 * @param string     $access_code Raw access token (same value as the access_code URL parameter).
-	 * @param string     $item_type   Content item type slug (e.g. 'post', 'frm_file'). Pass empty string to skip item check.
-	 * @param int|string $item_id     Content item ID (post ID, attachment ID, …). Pass 0 to skip item check.
+	 * @param string            $access_code Raw access token (same value as the access_code URL parameter).
+	 * @param FrmGatedItem|null $item        Content item to validate against, or null to skip item check.
 	 *
 	 * @return FrmGatedToken|null Validated token object, or null if the code is invalid or does not grant access.
 	 */
-	public static function validate_access_code( $access_code, $item_type = '', $item_id = 0 ) {
-		$row = self::get_row_by_hash( hash( 'sha256', $access_code ) );
+	public static function validate_access_code( $access_code, FrmGatedItem $item = null ) {
+		$row = self::get_row_by_hash( self::hash_token( $access_code ) );
 
 		if ( null === $row ) {
 			return null;
 		}
 
 		$token = new FrmGatedToken( $row );
-		return $token->validate( $item_type, $item_id ) ? $token : null;
+		return $token->validate( $item ) ? $token : null;
 	}
 
 	/**
@@ -236,14 +246,13 @@ class FrmGatedTokenHelper {
 	 *
 	 * Format: frm_gc_ac_{action_id}_{item_type}_{item_id}
 	 *
-	 * @param int        $action_id ID of the frm_form_actions post.
-	 * @param string     $item_type Content item type slug.
-	 * @param int|string $item_id   Content item ID.
+	 * @param int          $action_id ID of the frm_form_actions post.
+	 * @param FrmGatedItem $item      Content item (type slug + ID).
 	 *
 	 * @return string
 	 */
-	private static function get_action_item_transient_key( $action_id, $item_type, $item_id ) {
-		return 'frm_gc_ac_' . $action_id . '_' . $item_type . '_' . $item_id;
+	private static function get_action_item_transient_key( $action_id, FrmGatedItem $item ) {
+		return 'frm_gc_ac_' . $action_id . '_' . $item->type . '_' . $item->id;
 	}
 
 	/**
@@ -270,7 +279,7 @@ class FrmGatedTokenHelper {
 
 		foreach ( $settings['items'] as $item ) {
 			if ( ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
-				delete_transient( self::get_action_item_transient_key( $action_id, $item['type'], $item['id'] ) );
+				delete_transient( self::get_action_item_transient_key( $action_id, FrmGatedItem::make( $item['type'], $item['id'] ) ) );
 			}
 		}
 	}
@@ -282,15 +291,14 @@ class FrmGatedTokenHelper {
 	 * subsequent requests skip the DB lookup. TTL matches the token's remaining
 	 * lifetime, or DAY_IN_SECONDS when no expiry is provided.
 	 *
-	 * @param int        $action_id  ID of the frm_form_actions post.
-	 * @param string     $item_type  Content item type slug to match.
-	 * @param int|string $item_id    Content item ID to look for.
-	 * @param int|null   $expired_at Token expiry timestamp used to set TTL, or null for no expiry.
+	 * @param int          $action_id  ID of the frm_form_actions post.
+	 * @param FrmGatedItem $item       Content item to look for.
+	 * @param int|null     $expired_at Token expiry timestamp used to set TTL, or null for no expiry.
 	 *
 	 * @return bool True if the item is listed in the action's items setting.
 	 */
-	public static function action_contains_item( $action_id, $item_type, $item_id, $expired_at = null ) {
-		$key    = self::get_action_item_transient_key( $action_id, $item_type, $item_id );
+	public static function action_contains_item( $action_id, FrmGatedItem $item, $expired_at = null ) {
+		$key    = self::get_action_item_transient_key( $action_id, $item );
 		$cached = get_transient( $key );
 
 		if ( false !== $cached ) {
@@ -307,8 +315,8 @@ class FrmGatedTokenHelper {
 		$result   = false;
 
 		if ( is_array( $settings ) && ! empty( $settings['items'] ) ) {
-			foreach ( $settings['items'] as $item ) {
-				if ( is_array( $item ) && (string) $item['id'] === (string) $item_id && $item['type'] === $item_type ) {
+			foreach ( $settings['items'] as $raw_item ) {
+				if ( $item->matches( $raw_item ) ) {
 					$result = true;
 					break;
 				}
@@ -333,19 +341,14 @@ class FrmGatedTokenHelper {
 	 * The token is always re-validated against the DB on every request; the cookie
 	 * is used only as a transport, never trusted on its own.
 	 *
-	 * @param string     $raw_token  Raw access token to store.
-	 * @param int|null   $expired_at Unix timestamp for cookie expiry, or null for 1-year TTL.
-	 * @param string     $item_type  Content item type slug (e.g. 'post', 'frm_file').
-	 * @param int|string $item_id    Content item ID.
+	 * @param string       $raw_token  Raw access token to store.
+	 * @param FrmGatedItem $item       Content item the cookie is scoped to.
+	 * @param int|null     $expired_at Unix timestamp for cookie expiry, or null for 1-year TTL.
 	 *
 	 * @return void
 	 */
-	public static function set_cookie( $raw_token, $expired_at = null, $item_type = '', $item_id = 0 ) {
-		if ( ! $item_type || ! $item_id ) {
-			return;
-		}
-
-		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
+	public static function set_cookie( $raw_token, FrmGatedItem $item, $expired_at = null ) {
+		$cookie_name = 'frm_gc_' . $item->type . '_' . $item->id;
 		$expiry      = $expired_at ?? time() + YEAR_IN_SECONDS;
 
 		setcookie( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.cookies_setcookie
@@ -415,14 +418,13 @@ class FrmGatedTokenHelper {
 	 * it is action-scoped and only meaningful for shortcode rendering immediately
 	 * after token generation. Use get_raw_token_for_action() for that purpose.
 	 *
-	 * @param string     $item_type Content item type slug (e.g. 'post', 'frm_file').
-	 * @param int|string $item_id   Content item ID (post ID, attachment ID, …).
+	 * @param FrmGatedItem $item Content item to find a valid token for.
 	 *
 	 * @return FrmGatedToken|null First valid token, or null if none found.
 	 */
-	public static function get_valid_token( $item_type, $item_id ) {
+	public static function get_valid_token( FrmGatedItem $item ) {
 		// 1. URL query parameter — definitive.
-		$token = self::get_valid_token_from_url_param( $item_type, $item_id );
+		$token = self::get_valid_token_from_url_param( $item );
 
 		if ( null !== $token ) {
 			return $token;
@@ -431,13 +433,13 @@ class FrmGatedTokenHelper {
 		// 2 & 3. Cookies then user DB (shared dedup).
 		$seen_hashes = array();
 
-		$token = self::get_valid_token_from_cookies( $item_type, $item_id, $seen_hashes );
+		$token = self::get_valid_token_from_cookies( $item, $seen_hashes );
 
 		if ( null !== $token ) {
 			return $token;
 		}
 
-		$token = self::get_valid_token_from_user( $item_type, $item_id, $seen_hashes );
+		$token = self::get_valid_token_from_user( $item, $seen_hashes );
 
 		if ( null !== $token ) {
 			return $token;
@@ -452,15 +454,11 @@ class FrmGatedTokenHelper {
 		 *
 		 * @since x.x
 		 *
-		 * @param FrmGatedToken|null $token     Null — no valid token found by core.
-		 * @param array              $args {
-		 *
-		 *     @type int|string $item_id   Content item ID being accessed (0 if unknown).
-		 *     @type string $item_type Content item type slug (empty if unknown).
-		 * }
+		 * @param FrmGatedToken|null $token Null — no valid token found by core.
+		 * @param FrmGatedItem       $item  Content item being accessed.
 		 */
 		/** @var FrmGatedToken|null */
-		return apply_filters( 'frm_obtain_gated_token', null, compact( 'item_id', 'item_type' ) );
+		return apply_filters( 'frm_obtain_gated_token', null, $item );
 	}
 
 	/**
@@ -470,19 +468,18 @@ class FrmGatedTokenHelper {
 	 * subsequent requests can skip this path entirely. The raw token is stored
 	 * as the cookie value so users can verify it matches their access link.
 	 *
-	 * @param string     $item_type Content item type slug.
-	 * @param int|string $item_id   Content item ID.
+	 * @param FrmGatedItem $item Content item to validate against.
 	 *
 	 * @return FrmGatedToken|null
 	 */
-	private static function get_valid_token_from_url_param( $item_type, $item_id ) {
+	private static function get_valid_token_from_url_param( FrmGatedItem $item ) {
 		$url_token = FrmAppHelper::simple_get( 'access_code' );
 
 		if ( '' === $url_token ) {
 			return null;
 		}
 
-		$token = self::validate_access_code( $url_token, $item_type, $item_id );
+		$token = self::validate_access_code( $url_token, $item );
 
 		if ( null === $token ) {
 			return null;
@@ -492,7 +489,7 @@ class FrmGatedTokenHelper {
 		// that was just granted access. Store the raw token so it matches the
 		// access_code URL parameter — easier to verify and simpler to look up.
 		if ( ! headers_sent() ) {
-			self::set_cookie( $url_token, $token->get_expired_at(), $item_type, $item_id );
+			self::set_cookie( $url_token, $item, $token->get_expired_at() );
 		}
 
 		return $token;
@@ -508,22 +505,21 @@ class FrmGatedTokenHelper {
 	 * Populates $seen_hashes with every hash examined so the caller can pass it to
 	 * subsequent sources to avoid processing the same row twice.
 	 *
-	 * @param string     $item_type   Content item type slug.
-	 * @param int|string $item_id     Content item ID.
-	 * @param array      $seen_hashes Dedup map passed by reference.
+	 * @param FrmGatedItem $item        Content item to validate against.
+	 * @param array        $seen_hashes Dedup map passed by reference.
 	 *
 	 * @return FrmGatedToken|null
 	 */
-	private static function get_valid_token_from_cookies( $item_type, $item_id, &$seen_hashes ) {
-		$cookie_name = 'frm_gc_' . $item_type . '_' . $item_id;
+	private static function get_valid_token_from_cookies( FrmGatedItem $item, &$seen_hashes ) {
+		$cookie_name = 'frm_gc_' . $item->type . '_' . $item->id;
 
 		if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
 			return null;
 		}
 
-		$raw_token                                   = sanitize_text_field( $_COOKIE[ $cookie_name ] );
-		$seen_hashes[ hash( 'sha256', $raw_token ) ] = true;
-		return self::validate_access_code( $raw_token, $item_type, $item_id );
+		$raw_token                                     = sanitize_text_field( $_COOKIE[ $cookie_name ] );
+		$seen_hashes[ self::hash_token( $raw_token ) ] = true;
+		return self::validate_access_code( $raw_token, $item );
 	}
 
 	/**
@@ -531,13 +527,12 @@ class FrmGatedTokenHelper {
 	 *
 	 * Skips hashes already seen in earlier sources via $seen_hashes.
 	 *
-	 * @param string     $item_type   Content item type slug.
-	 * @param int|string $item_id     Content item ID.
-	 * @param array      $seen_hashes Dedup map passed by reference.
+	 * @param FrmGatedItem $item        Content item to validate against.
+	 * @param array        $seen_hashes Dedup map passed by reference.
 	 *
 	 * @return FrmGatedToken|null
 	 */
-	private static function get_valid_token_from_user( $item_type, $item_id, &$seen_hashes ) {
+	private static function get_valid_token_from_user( FrmGatedItem $item, &$seen_hashes ) {
 		if ( ! is_user_logged_in() ) {
 			return null;
 		}
@@ -550,7 +545,7 @@ class FrmGatedTokenHelper {
 			$seen_hashes[ $row->token_hash ] = true;
 			$token                           = new FrmGatedToken( $row );
 
-			if ( $token->validate( $item_type, $item_id ) ) {
+			if ( $token->validate( $item ) ) {
 				return $token;
 			}
 		}
