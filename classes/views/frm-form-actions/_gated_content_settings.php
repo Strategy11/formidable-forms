@@ -19,8 +19,7 @@ $frm_gc_items           = $instance->post_content['items'] ?? array();
 $frm_gc_action_id       = (int) $instance->ID;
 $frm_gc_field_name_base = $this->get_field_name( 'items' );
 
-// Late-static; Pro class overrides get_types().
-$frm_gc_types = get_class( $this )::get_types();
+$frm_gc_types = FrmGatedContentAction::get_types();
 
 // Unique wrapper ID per action instance — prevents JS collisions when multiple
 // gated content actions exist on the same form.

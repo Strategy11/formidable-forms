@@ -150,48 +150,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div><!-- [data-type="post"] -->
 
 		<?php
-		if ( $is_template ) {
-			/**
-			 * Fires after the built-in type settings in the template item row.
-			 *
-			 * Pro and PDF plugins add their type-specific template settings here.
-			 *
-			 * Guidelines for hook callbacks:
-			 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}" hidden>`.
-			 * - Always include the `hidden` attribute — JS shows the active type after cloning.
-			 * - Use `<label data-frm-gc-for="id">` (no for attribute) — JS sets it after cloning.
-			 * - Use `data-frm-gc-field="id"` (no id or name attributes) on the select — JS assigns both.
-			 *
-			 * @since x.x
-			 *
-			 * @param array $frm_gc_types All registered type configurations.
-			 */
-			do_action( 'frm_gated_content_item_template_settings', $frm_gc_types );
-		} else {
-			/**
-			 * Fires after the built-in type settings for an existing gated content item row.
-			 *
-			 * Pro and PDF plugins use this to render their own type-specific settings.
-			 *
-			 * Guidelines for hook callbacks:
-			 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}">`.
-			 * - Add the `hidden` attribute when `$active_type !== '{TYPE}'`.
-			 * - Include a `<label for="{ID}">` and `id="{ID}"` on each select, where
-			 *   `{ID}` follows the pattern `{$frm_gc_wrapper_id}_{FIELD}_{TYPE}_{$frm_gc_idx}`
-			 *   (e.g. `frm_gc_settings_0_id_frm_file_2`). JS regenerates these for template-cloned rows.
-			 * - Add `data-frm-gc-field="id"` (or another key) to each select so JS manages its name on type change.
-			 * - Only add a `name` attribute when `$active_type === '{TYPE}'`.
-			 *
-			 * @since x.x
-			 *
-			 * @param string $frm_gc_item_type  Active type key for this item (e.g. 'post', 'frm_file').
-			 * @param int    $frm_gc_idx        Zero-based index of this item in the items array.
-			 * @param array  $frm_gc_item       Saved item data.
-			 * @param string $frm_gc_item_base  Field name prefix for this item, e.g. `frm_form_action[X][post_content][items][0]`.
-			 * @param string $frm_gc_wrapper_id Unique wrapper element ID for building `id`/`for` attribute pairs.
-			 */
-			do_action( 'frm_gated_content_item_settings', $frm_gc_item_type, $frm_gc_idx, $frm_gc_item, $frm_gc_item_base, $frm_gc_wrapper_id );
-		}//end if
+		$filter_args = array(
+			'is_template' => $is_template,
+			'types'       => $frm_gc_types,
+		);
+
+		if ( ! $is_template ) {
+			$filter_args['active_type'] = $frm_gc_item_type;
+			$filter_args['idx']         = $frm_gc_idx;
+			$filter_args['item']        = $frm_gc_item;
+			$filter_args['item_base']   = $frm_gc_item_base;
+			$filter_args['wrapper_id']  = $frm_gc_wrapper_id;
+		}
+
+		/**
+		 * Fires after the built-in type settings for a gated content item row.
+		 *
+		 * Fires for both existing (PHP-rendered) rows and the JS-cloned <template> row.
+		 * Use $args['is_template'] to distinguish between the two.
+		 *
+		 * Guidelines for hook callbacks:
+		 * - Wrap each type's settings in `<div class="frm-gc-type-settings" data-type="{TYPE}">`.
+		 * - In template mode: always add `hidden`; use `data-frm-gc-for` on labels; omit id/name on inputs.
+		 * - In existing-row mode: add `hidden` when `$args['active_type'] !== '{TYPE}'`; use real for/id/name.
+		 * - Add `data-frm-gc-field="{KEY}"` to each input so JS manages its name on type change.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $args {
+		 *     @type bool   $is_template True when rendering inside the JS <template> element.
+		 *     @type array  $types       All registered type configurations.
+		 *     @type string $active_type Active type key for this item (existing rows only).
+		 *     @type int    $idx         Zero-based item index (existing rows only).
+		 *     @type array  $item        Saved item data (existing rows only).
+		 *     @type string $item_base   Field name prefix for this item (existing rows only).
+		 *     @type string $wrapper_id  Unique wrapper element ID (existing rows only).
+		 * }
+		 */
+		do_action( 'frm_gated_content_item_type_settings', $filter_args );
 		?>
 
 		<div class="frm-gc-item-delete">
