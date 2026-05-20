@@ -128,7 +128,10 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( array( 'type' => $this->item['type'], 'id' => 999 ) ) )
+			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( array(
+					'type' => $this->item['type'],
+					'id'   => 999,
+				) ) )
 		);
 	}
 
@@ -140,7 +143,10 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( array( 'type' => 'frm_file', 'id' => $this->item['id'] ) ) )
+			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( array(
+					'type' => 'frm_file',
+					'id'   => $this->item['id'],
+				) ) )
 		);
 	}
 
@@ -216,7 +222,10 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->reset_helper_caches();
 
 		// Request a different item ID than the one in the action.
-		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( array( 'type' => $this->item['type'], 'id' => 9999 ) ) );
+		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( array(
+				'type' => $this->item['type'],
+				'id'   => 9999,
+			) ) );
 
 		$this->assertNotInstanceOf( \FrmGatedToken::class, $result );
 	}

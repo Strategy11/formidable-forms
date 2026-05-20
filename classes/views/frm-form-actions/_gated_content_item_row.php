@@ -178,6 +178,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @since x.x
 		 *
 		 * @param array $args {
+		 *
 		 *     @type bool   $is_template True when rendering inside the JS <template> element.
 		 *     @type array  $types       All registered type configurations.
 		 *     @type string $active_type Active type key for this item (existing rows only).
