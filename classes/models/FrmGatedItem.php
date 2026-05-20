@@ -50,7 +50,7 @@ class FrmGatedItem {
 	 * @param string     $type Item type slug.
 	 * @param int|string $id   Content item ID.
 	 *
-	 * @return static
+	 * @return FrmGatedItem
 	 */
 	public static function make( $type, $id ) {
 		/**
