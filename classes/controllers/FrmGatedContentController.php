@@ -60,10 +60,13 @@ class FrmGatedContentController {
 			return;
 		}
 
-		if ( ! FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( array(
-			'type' => 'post',
-			'id'   => 0,
-		) ) ) ) {
+		$any_post_item = FrmGatedItem::make(
+			array(
+				'type' => 'post',
+				'id'   => 0,
+			)
+		);
+		if ( ! FrmGatedTokenHelper::get_valid_token( $any_post_item ) ) {
 			return;
 		}
 
@@ -108,10 +111,13 @@ class FrmGatedContentController {
 		// Detect whether the token arrived via URL param before falling back to cookies.
 		$from_url_param = FrmAppHelper::simple_get( 'access_code' );
 
-		$valid_token = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( array(
-			'type' => 'post',
-			'id'   => $post_id,
-		) ) );
+		$post_item   = FrmGatedItem::make(
+			array(
+				'type' => 'post',
+				'id'   => $post_id,
+			)
+		);
+		$valid_token = FrmGatedTokenHelper::get_valid_token( $post_item );
 
 		if ( $valid_token ) {
 			// Password-protected posts need an explicit filter; private posts are

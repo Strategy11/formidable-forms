@@ -277,7 +277,7 @@ class FrmGatedTokenHelper {
 		}
 
 		foreach ( $settings['items'] as $item ) {
-			if ( ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
+			if ( is_array( $item ) && ! empty( $item['type'] ) && ! empty( $item['id'] ) ) {
 				delete_transient( self::get_action_item_transient_key( $action_id, FrmGatedItem::make( $item ) ) );
 			}
 		}

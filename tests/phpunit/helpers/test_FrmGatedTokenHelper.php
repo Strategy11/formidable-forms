@@ -126,12 +126,15 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	public function test_validate_access_code_returns_null_for_wrong_item_id() {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 
+		$wrong_id_item = FrmGatedItem::make(
+			array(
+				'type' => $this->item['type'],
+				'id'   => 999,
+			)
+		);
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( array(
-					'type' => $this->item['type'],
-					'id'   => 999,
-				) ) )
+			FrmGatedTokenHelper::validate_access_code( $token, $wrong_id_item )
 		);
 	}
 
@@ -141,12 +144,15 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	public function test_validate_access_code_returns_null_for_wrong_item_type() {
 		$token = FrmGatedTokenHelper::generate( $this->action_id, 1 );
 
+		$wrong_type_item = FrmGatedItem::make(
+			array(
+				'type' => 'frm_file',
+				'id'   => $this->item['id'],
+			)
+		);
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
-			FrmGatedTokenHelper::validate_access_code( $token, FrmGatedItem::make( array(
-					'type' => 'frm_file',
-					'id'   => $this->item['id'],
-				) ) )
+			FrmGatedTokenHelper::validate_access_code( $token, $wrong_type_item )
 		);
 	}
 
@@ -222,10 +228,13 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->reset_helper_caches();
 
 		// Request a different item ID than the one in the action.
-		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( array(
+		$wrong_item = FrmGatedItem::make(
+			array(
 				'type' => $this->item['type'],
 				'id'   => 9999,
-			) ) );
+			)
+		);
+		$result     = FrmGatedTokenHelper::get_valid_token( $wrong_item );
 
 		$this->assertNotInstanceOf( \FrmGatedToken::class, $result );
 	}

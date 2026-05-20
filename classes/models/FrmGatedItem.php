@@ -48,7 +48,7 @@ class FrmGatedItem {
 	 *
 	 * @param array{type: string, id: int|string} $item Item data array with 'type' and 'id' keys.
 	 *
-	 * @return static(FrmGatedItem)
+	 * @return FrmGatedItem
 	 */
 	public static function make( array $item ) {
 		/**
