@@ -539,7 +539,7 @@ class FrmPayPalLiteEventsController {
 			if ( $last_segment ) {
 				return $last_segment;
 			}
-		}
+		}//end foreach
 
 		return '';
 	}

@@ -107,7 +107,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 				<?php echo esc_html( $gateway['label'] ); ?> &nbsp;
 			</label>
 			<?php
-		}
+		}//end foreach
 		?>
 	</p>
 	<?php endif; ?>

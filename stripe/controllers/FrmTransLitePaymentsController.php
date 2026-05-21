@@ -232,16 +232,16 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				// Check for structured error response with message and debug_id
 				if ( is_object( $response ) && isset( $response->message ) && isset( $response->debug_id ) ) {
 					$refunded = false;
-					$reason = $response->message;
+					$reason   = $response->message;
 					$debug_id = $response->debug_id;
 				} elseif ( false === $response ) {
 					$refunded = false;
-					$reason = self::get_paypal_refund_reason();
+					$reason   = self::get_paypal_refund_reason();
 					$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
 				} elseif ( is_object( $response ) && isset( $response->refund_error ) ) {
 					// Handle mock error responses from PayPal API
 					$refunded = false;
-					$reason = $response->message ?? '';
+					$reason   = $response->message ?? '';
 					$debug_id = $response->debug_id ?? '';
 				} else {
 					$refunded = true;
@@ -264,13 +264,13 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			} else {
 				$message = __( 'Refund Failed', 'formidable' );
 
-				if ( ! empty( $reason ) ) {
+				if ( $reason ) {
 					$message .= ' (' . $reason . ')';
 				}
 			}
 		}
 
-		if ( ! empty( $debug_id ) ) {
+		if ( $debug_id ) {
 			$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
 		}
 
@@ -311,6 +311,9 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		return $error;
 	}
 
+	/**
+	 * @param array $prefixes_to_strip
+	 */
 	private static function convert_uppercase_underscores_to_ucwords( $error, $prefixes_to_strip = array() ) {
 		if ( ! preg_match( '/^[A-Z_]+$/', $error ) ) {
 			return '';

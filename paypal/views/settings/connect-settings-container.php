@@ -39,9 +39,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php } ?>
 
 <?php
-$debug_entries    = get_option( 'frm_paypal_debug_ids', array() );
-$two_days_ago     = gmdate( 'Y-m-d H:i:s', time() - ( 2 * DAY_IN_SECONDS ) );
-$recent_entries   = array_filter(
+$debug_entries  = get_option( 'frm_paypal_debug_ids', array() );
+$two_days_ago   = gmdate( 'Y-m-d H:i:s', time() - ( 2 * DAY_IN_SECONDS ) );
+$recent_entries = array_filter(
 	is_array( $debug_entries ) ? $debug_entries : array(),
 	function ( $entry ) use ( $two_days_ago ) {
 		return ! empty( $entry['timestamp'] ) && $entry['timestamp'] >= $two_days_ago;
@@ -77,5 +77,5 @@ if ( $recent_entries ) {
 		</table>
 	</div>
 	<?php
-}
+}//end if
 ?>

@@ -261,6 +261,7 @@ class FrmPayPalLiteAppController {
 			if ( isset( $order_response->message ) && isset( $order_response->debug_id ) ) {
 				wp_send_json_error( self::format_paypal_error( $order_response->message . '{{debug_id:' . $order_response->debug_id . '}}', 'Failed to create PayPal order' ) );
 			}
+
 			wp_send_json_error( 'Failed to create PayPal order' );
 		}
 
@@ -326,8 +327,7 @@ class FrmPayPalLiteAppController {
 	 * @return array
 	 */
 	private static function get_shipping_data_from_posted_values( $action ) {
-		$settings = $action->post_content;
-
+		$settings           = $action->post_content;
 		$email_setting      = ! empty( $settings['shipping_email'] ) ? $settings['shipping_email'] : '';
 		$first_name_setting = ! empty( $settings['shipping_first_name'] ) ? $settings['shipping_first_name'] : '';
 		$last_name_setting  = ! empty( $settings['shipping_last_name'] ) ? $settings['shipping_last_name'] : '';
@@ -357,7 +357,7 @@ class FrmPayPalLiteAppController {
 				'form'  => $action->menu_order,
 				'value' => $email_setting,
 			);
-			$email = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
+			$email          = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
 
 			if ( $email ) {
 				$shipping['email_address'] = $email;
@@ -370,13 +370,15 @@ class FrmPayPalLiteAppController {
 			);
 		}
 
-		if ( $address_setting ) {
-			$address = $entry->metas[ $address_setting ] ?? '';
-			$formatted_address = self::format_address_for_paypal( $address, (int) $address_setting );
+		if ( ! $address_setting ) {
+			return $shipping;
+		}
 
-			if ( $formatted_address ) {
-				$shipping['address'] = $formatted_address;
-			}
+		$address           = $entry->metas[ $address_setting ] ?? '';
+		$formatted_address = self::format_address_for_paypal( $address, (int) $address_setting );
+
+		if ( $formatted_address ) {
+			$shipping['address'] = $formatted_address;
 		}
 
 		return $shipping;
@@ -755,10 +757,10 @@ class FrmPayPalLiteAppController {
 			$prefixes = array( 'REFUND_FAILED_', 'REFUND_' );
 			$reason   = str_replace( $prefixes, '', $error_message );
 
-			if ( $reason !== $error_message ) {
-				$error_message = 'Refund Failed (' . ucwords( strtolower( str_replace( '_', ' ', $reason ) ) ) . ')';
-			} else {
+			if ( $reason === $error_message ) {
 				$error_message = ucwords( strtolower( str_replace( '_', ' ', $error_message ) ) );
+			} else {
+				$error_message = 'Refund Failed (' . ucwords( strtolower( str_replace( '_', ' ', $reason ) ) ) . ')';
 			}
 		}
 
@@ -839,8 +841,8 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @since x.x
 	 *
-	 * @param string|null $error    The error string from the PayPal API, possibly containing a debug ID token.
-	 * @param string      $fallback The fallback message when no error is available.
+	 * @param string|null|array $error    The error string from the PayPal API, possibly containing a debug ID token.
+	 * @param string            $fallback The fallback message when no error is available.
 	 *
 	 * @return string
 	 */
