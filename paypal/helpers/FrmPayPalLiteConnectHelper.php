@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignore SlevomatCodingStandard.Files.FileLength.FileTooLong
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -479,7 +480,7 @@ class FrmPayPalLiteConnectHelper {
 				FrmPayPalLiteAppController::log_paypal_debug_id( $debug_id, $clean_message, $action );
 				// Return structured error with debug_id so it can be passed to JavaScript
 				return array(
-					'message'  => $clean_message ?: $error_message,
+					'message'  => $clean_message ? $clean_message : $error_message,
 					'debug_id' => $debug_id,
 				);
 			}
@@ -1026,6 +1027,7 @@ class FrmPayPalLiteConnectHelper {
 			);
 		}
 
+		// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data', 'shipping' ) );
 	}
 
@@ -1154,8 +1156,6 @@ class FrmPayPalLiteConnectHelper {
 
 	/**
 	 * @since x.x
-	 *
-	 * @param string $mode
 	 *
 	 * @return string
 	 */

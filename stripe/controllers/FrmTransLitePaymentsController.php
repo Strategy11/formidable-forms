@@ -256,6 +256,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		if ( $refunded ) {
 			self::change_payment_status( $payment, 'refunded' );
 			$message = __( 'Refunded', 'formidable' );
+			// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 		} else {
 			// If the reason is already a complete error message, use it directly
 			// instead of wrapping it redundantly in "Refund Failed (...)"
@@ -278,7 +279,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			sprintf(
 				'<div class="%1$s">%2$s</div>',
 				$refunded ? 'frm_updated_message' : 'frm_error_style',
-				$message
+				wp_kses_post( $message )
 			)
 		);
 	}
@@ -312,7 +313,10 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @param array $prefixes_to_strip
+	 * @param string $error             The uppercase underscored string to convert.
+	 * @param array  $prefixes_to_strip Prefixes to remove before converting.
+	 *
+	 * @return string
 	 */
 	private static function convert_uppercase_underscores_to_ucwords( $error, $prefixes_to_strip = array() ) {
 		if ( ! preg_match( '/^[A-Z_]+$/', $error ) ) {

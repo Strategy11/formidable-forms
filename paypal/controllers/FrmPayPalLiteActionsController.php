@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignore SlevomatCodingStandard.Files.FileLength.FileTooLong
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -238,7 +239,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string The formatted address HTML.
 	 */
 	private static function format_address( $address ) {
-		$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
+		$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong><br>';
 
 		$formatted .= $address->address_line_1 . '<br>';
 
@@ -853,6 +854,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return array<int,mixed> Field ID => new value pairs that differ from the current entry data.
 	 */
+	// phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	private static function get_payer_field_updates( $payer, $response, $action, $entry ) {
 		$updates  = array();
 		$settings = $action->post_content;
@@ -1176,6 +1178,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return void
 	 */
+	// phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
 	public static function load_scripts( $form_id ) {
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			return;
@@ -2517,14 +2520,16 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
 		<?php esc_html_e( 'Product Name', 'formidable' ); ?> <span class="frm_required">*</span>
 					</label>
-					<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
+					<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+				<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
 				</p>
 
 				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
 					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>">
 		<?php esc_html_e( 'Product Type', 'formidable' ); ?>
 					</label>
-					<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
+					<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+				<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
 						<option value="SERVICE" <?php selected( $product_type_value, 'SERVICE' ); ?>><?php esc_html_e( 'Service', 'formidable' ); ?></option>
 						<option value="DIGITAL" <?php selected( $product_type_value, 'DIGITAL' ); ?>><?php esc_html_e( 'Digital', 'formidable' ); ?></option>
 						<option value="PHYSICAL" <?php selected( $product_type_value, 'PHYSICAL' ); ?>><?php esc_html_e( 'Physical', 'formidable' ); ?></option>

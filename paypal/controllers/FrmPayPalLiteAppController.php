@@ -100,6 +100,7 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @return array Array of products with prices and quantities.
 	 */
+	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	private static function get_pricing_data_from_posted_values( $form_id ) {
 		$products = array();
 		$fields   = FrmField::get_all_for_form( $form_id );
@@ -108,7 +109,7 @@ class FrmPayPalLiteAppController {
 			return $products;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$posted_data = $_POST['item_meta'] ?? array();
 
 		foreach ( $fields as $field ) {
@@ -722,7 +723,7 @@ class FrmPayPalLiteAppController {
 			self::log_paypal_debug_id( $debug_id, $error_message, $context );
 		}
 
-		$display_message = $error_message ?: __( 'Payment failed. Please try again.', 'formidable' );
+		$display_message = $error_message ? $error_message : __( 'Payment failed. Please try again.', 'formidable' );
 
 		if ( $debug_id && current_user_can( 'frm_change_settings' ) ) {
 			$display_message .= "\n\nDebug ID: " . $debug_id;
@@ -865,7 +866,7 @@ class FrmPayPalLiteAppController {
 
 		// Always return structured error with debug_id so JavaScript can extract and send it
 		return array(
-			'message'  => $clean_message ?: $fallback,
+			'message'  => $clean_message ? $clean_message : $fallback,
 			'debug_id' => $matches[1],
 		);
 	}

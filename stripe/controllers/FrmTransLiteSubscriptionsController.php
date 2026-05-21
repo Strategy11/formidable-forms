@@ -93,7 +93,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 *
 	 * @return void
 	 */
-	public static function cancel_subscription() {
+	public static function cancel_subscription() { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_edit_entries' );
 
@@ -154,6 +154,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 					);
 
 					$message = __( 'Canceled', 'formidable' );
+					// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				} else {
 					// If the reason is already a complete error message, use it directly
 					// instead of wrapping it redundantly in "Failed (...)"
@@ -182,7 +183,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			sprintf(
 				'<div class="%1$s">%2$s</div>',
 				$canceled ? 'frm_updated_message' : 'frm_error_style',
-				$message
+				wp_kses_post( $message )
 			)
 		);
 	}

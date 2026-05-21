@@ -33,8 +33,12 @@ class FrmPayPalLiteFieldsController {
 	 */
 	public static function add_paypal_order_field_note( $field, $display, $values ) {
 		// Add a note about PayPal order fields here.
-		if ( FrmField::get_option( $field, 'is_paypal_order_field' ) ) {
-			echo '<div class="frm_note_style">This is a PayPal order field. It is automatically populated when a payment is processed, and is automatically excluded from the form HTML.</div>';
+		if ( ! FrmField::get_option( $field, 'is_paypal_order_field' ) ) {
+			return;
 		}
+
+		echo '<div class="frm_note_style">';
+		esc_html_e( 'This is a PayPal order field. It is automatically populated when a payment is processed, and is automatically excluded from the form HTML.', 'formidable' );
+		echo '</div>';
 	}
 }
