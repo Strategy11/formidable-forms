@@ -230,6 +230,10 @@ class FrmPayPalLiteAppController {
 		$shipping_preference = self::get_shipping_preference( $action );
 		$pricing_data        = self::get_pricing_data_from_posted_values( $form_id );
 
+		if ( 0.0 === floatval( $amount ) ) {
+			wp_send_json_error( __( 'Order amount cannot be zero.', 'formidable' ) );
+		}
+
 		// PayPal expects the amount in a format like 10.00, so format it.
 		$amount   = number_format( floatval( $amount ), 2, '.', '' );
 		$currency = strtoupper( $action->post_content['currency'] );
@@ -629,7 +633,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		if ( ! $amount || '0.00' === $amount ) {
-			wp_send_json_error( __( 'A valid amount is required for subscriptions.', 'formidable' ) );
+			wp_send_json_error( __( 'A valid amount is required for subscriptions. Zero amounts are not allowed.', 'formidable' ) );
 		}
 
 		$data = array(
