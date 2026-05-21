@@ -436,6 +436,7 @@
 		<DeprecatedMethod>
 			<errorLevel type="suppress">
 				<file name="classes/controllers/FrmAppController.php" />
+				<file name="classes/views/frm-fields/back-end/field-options.php" />
 			</errorLevel>
 		</DeprecatedMethod>
 		<DeprecatedFunction>

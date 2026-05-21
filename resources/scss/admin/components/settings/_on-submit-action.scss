@@ -3,7 +3,7 @@
  */
 
 .frm_single_on_submit_settings .frm_form_field {
-	margin: 22px 0;
+	margin: var(--gap-md) 0;
 }
 
 .frm_on_submit_type_setting {
@@ -14,8 +14,8 @@
 	display: flex;
 	border: 1px solid var(--grey-border);
 	border-radius: var(--small-radius);
-	gap: 16px;
-	padding: 16px;
+	gap: 12px;
+	padding: var(--gap-sm);
 	align-items: center;
 	justify-content: center;
 }

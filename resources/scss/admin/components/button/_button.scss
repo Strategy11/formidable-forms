@@ -32,6 +32,7 @@
 .frm-button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
+.frm_single_paypal_settings .frm_add_pp_logic.button, /* Backward compat for legacy PayPal add-on markup, @since x.x */
 .frm-white-body .frm-search .button,
 .frm-white-body .search-box .button, /* Views */
 .frm-white-body .tablenav .button,
@@ -230,7 +231,8 @@
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
 .frm-white-body .frm-button-secondary,
-.frm-button-secondary {
+.frm-button-secondary,
+.frm_single_paypal_settings .frm_add_pp_logic.button /* Backward compat for legacy PayPal add-on markup, @since x.x */ {
 	color: var(--grey-800);
 	border-color: var(--grey-300);
 	background-color: #fff;
@@ -255,7 +257,10 @@
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
 .frm_wrap .preview > .button:hover,
-.frm-white-body #search-submit:hover {
+.frm-white-body #search-submit:hover,
+.frm_single_paypal_settings .frm_add_pp_logic.button:hover, /* Backward compat for legacy PayPal add-on markup, @since x.x */
+.frm_single_paypal_settings .frm_add_pp_logic.button:focus,
+.frm_single_paypal_settings .frm_add_pp_logic.button:active {
 	border-color: var(--grey-300) !important;
 	color: var(--grey-800);
 	background: var(--grey-50) !important;

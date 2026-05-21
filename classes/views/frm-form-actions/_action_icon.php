@@ -2,28 +2,47 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$single_action_attrs = array_merge(
+	$data,
+	array(
+		'href'            => 'javascript:void(0)',
+		'class'           => $classes . ' button frm-button-secondary frm-button-sm frm-with-icon frm-ml-auto-force frm-fadein-down-short',
+		'data-limit'      => $action_control->action_options['limit'],
+		'data-actiontype' => $action_control->id_base,
+	)
+);
 ?>
-<li class="frm-action <?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>">
-	<a href="javascript:void(0)" class="<?php echo esc_attr( $classes ); ?>"
-		data-limit="<?php echo esc_attr( $action_control->action_options['limit'] ); ?>"
-		data-actiontype="<?php echo esc_attr( $action_control->id_base ); ?>"
-		<?php FrmAppHelper::array_to_html_params( $data, true ); ?>
-		>
-		<span class="frm-outer-circle">
-			<span class="frm-inner-circle<?php echo esc_attr( str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? ' frm-inverse' : '' ); ?>" <?php
-				FrmAppHelper::array_to_html_params( $icon_atts, true );
-			?>>
-				<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], $icon_atts ); ?>
-			</span>
+<li class="frm-card-item frm-card-item--outlined frm-action<?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>" tabindex="0">
+	<div class="frm-h-stack-xs frm-w-full">
+		<span class="frm-border-icon frm-shrink-0">
+			<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?>
 		</span>
-		<?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?>
-		<?php if ( ! empty( $action_control->action_options['keywords'] ) ) { ?>
-			<span class="frm_hidden">
+
+		<div class="frm-flex-col frm-min-w-0">
+			<h3 class="frm-h-stack-xs frm-text-md frm-capitalize">
 				<?php
-				// Include keywords for the action search.
-				echo esc_html( $action_control->action_options['keywords'] );
+				if ( isset( $data['data-upgrade'] ) && ! isset( $data['data-oneclick'] ) ) {
+					FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_svg15', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) );
+				}
 				?>
-			</span>
+				<span class="frm-font-medium frm-white-space-nowrap"><?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?></span>
+				<?php if ( ! empty( $action_control->action_options['is_new'] ) ) { ?>
+					<?php FrmAppHelper::show_pill_text(); ?>
+				<?php } ?>
+			</h3>
+			<?php if ( ! empty( $action_control->action_options['description'] ) ) { ?>
+				<p class="frm-truncate"><?php echo esc_html( $action_control->action_options['description'] ); ?></p>
+			<?php } ?>
+		</div>
+
+		<a <?php FrmAppHelper::array_to_html_params( $single_action_attrs, true ); ?>>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
+			<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
+		</a>
+
+		<?php if ( ! empty( $action_control->action_options['keywords'] ) ) { ?>
+			<span class="frm_hidden"><?php echo esc_html( $action_control->action_options['keywords'] ); ?></span>
 		<?php } ?>
-	</a>
+	</div>
 </li>

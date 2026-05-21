@@ -48,6 +48,17 @@
 	height: 40px;
 	border: 1px solid var(--grey-300);
 	border-radius: var(--small-radius);
+
+	&--small {
+		width: 24px;
+		height: 24px;
+		border-radius: var(--x-small-radius);
+
+		.frmsvg {
+			width: 14px;
+			height: 14px;
+		}
+	}
 }
 
 .frm-upgrade-message img {

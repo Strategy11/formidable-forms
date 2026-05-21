@@ -60,14 +60,6 @@
 	transform: rotate(-90deg);
 }
 
-.open .widget-top .widget-title-action button .frmsvg {
-	transform: rotate(90deg);
-}
-
-.widget-top .widget-title-action button .frmsvg use {
-	color: var(--grey);
-}
-
 .frm-collapsed + .frm-collapse-me {
 	overflow: hidden !important;
 }
