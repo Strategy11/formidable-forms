@@ -107,7 +107,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 				<?php echo esc_html( $gateway['label'] ); ?> &nbsp;
 			</label>
 			<?php
-		}
+		}//end foreach
 		?>
 	</p>
 	<?php endif; ?>
@@ -281,6 +281,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
  * @since x.x
  *
  * @param array $args {
+ *
  *     @type WP_Post        $form_action         The form action post object.
  *     @type FrmFormAction   $action_control      The action controller object.
  *     @type array           $field_dropdown_atts Attributes for field dropdown rendering.

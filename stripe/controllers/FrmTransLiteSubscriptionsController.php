@@ -93,7 +93,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 *
 	 * @return void
 	 */
-	public static function cancel_subscription() {
+	public static function cancel_subscription() { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_edit_entries' );
 
@@ -104,7 +104,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$sub     = $frm_sub->get_one( $sub_id );
 
 			if ( $sub ) {
-				$reason = '';
+				$reason   = '';
 				$debug_id = '';
 
 				switch ( $sub->paysys ) {
@@ -118,14 +118,14 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$response = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
 
 						// Check for structured error response with message and debug_id (array or object)
-						$reason = '';
+						$reason   = '';
 						$debug_id = '';
 						$canceled = false !== $response;
 
 						if ( is_array( $response ) || is_object( $response ) ) {
 							// Extract error details without type checks to avoid Mago type narrowing
 							$response_array = is_array( $response ) ? $response : (array) $response;
-							$reason = $response_array['message'] ?? '';
+							$reason         = $response_array['message'] ?? '';
 							// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
 							$debug_id = $response_array['debug_id'] ?? $response_array['debugId'] ?? '';
 
@@ -135,7 +135,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 							}
 						} elseif ( false === $response ) {
 							// Response is false, get error from static properties
-							$reason = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+							$reason   = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
 							$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
 							$canceled = false;
 						}
@@ -143,7 +143,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 					default:
 						$canceled = false;
 						break;
-				}
+				}//end switch
 
 				if ( $canceled ) {
 					self::change_subscription_status(
@@ -154,6 +154,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 					);
 
 					$message = __( 'Canceled', 'formidable' );
+					// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				} else {
 					// If the reason is already a complete error message, use it directly
 					// instead of wrapping it redundantly in "Failed (...)"
@@ -161,13 +162,14 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$message = $reason;
 					} else {
 						$message = __( 'Failed', 'formidable' );
+
 						if ( ! empty( $reason ) ) {
 							$message .= ' (' . $reason . ')';
 						}
 					}
-				}
+				}//end if
 
-				if ( ! empty( $debug_id ) ) {
+				if ( $debug_id ) {
 					$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
 				}
 			} else {
@@ -181,7 +183,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			sprintf(
 				'<div class="%1$s">%2$s</div>',
 				$canceled ? 'frm_updated_message' : 'frm_error_style',
-				$message
+				wp_kses_post( $message )
 			)
 		);
 	}
@@ -211,13 +213,14 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @return array|false Array with 'reason' and 'debug_id' keys, or false if no error details.
 	 */
 	private static function extract_error_details( $response ) {
-		$reason = '';
+		$reason   = '';
 		$debug_id = '';
 
 		if ( is_array( $response ) ) {
 			if ( ! empty( $response['message'] ) ) {
 				$reason = $response['message'];
 			}
+
 			if ( ! empty( $response['debug_id'] ) ) {
 				$debug_id = $response['debug_id'];
 			}
@@ -225,6 +228,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			if ( ! empty( $response->message ) ) {
 				$reason = $response->message;
 			}
+
 			if ( ! empty( $response->debug_id ) ) {
 				$debug_id = $response->debug_id;
 			}
@@ -232,7 +236,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 
 		if ( $reason || $debug_id ) {
 			return array(
-				'reason' => $reason,
+				'reason'   => $reason,
 				'debug_id' => $debug_id,
 			);
 		}

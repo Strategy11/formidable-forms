@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignore SlevomatCodingStandard.Files.FileLength.FileTooLong
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -447,14 +448,16 @@ class FrmPayPalLiteConnectHelper {
 
 		if ( empty( $body->success ) ) {
 			$error_message = 'Response from server was not successful';
-			$debug_id = '';
+			$debug_id      = '';
 
 			// Handle structured error response with message and debug_id
 			$data = $body->data ?? null;
+
 			if ( is_object( $data ) ) {
 				if ( ! empty( $data->message ) ) {
 					$error_message = $data->message;
 				}
+
 				if ( ! empty( $data->debug_id ) ) {
 					$debug_id = $data->debug_id;
 				}
@@ -477,13 +480,13 @@ class FrmPayPalLiteConnectHelper {
 				FrmPayPalLiteAppController::log_paypal_debug_id( $debug_id, $clean_message, $action );
 				// Return structured error with debug_id so it can be passed to JavaScript
 				return array(
-					'message' => $clean_message ?: $error_message,
+					'message'  => $clean_message ? $clean_message : $error_message,
 					'debug_id' => $debug_id,
 				);
 			}
 
 			return $error_message;
-		}
+		}//end if
 
 		return $body->data ?? array();
 	}
@@ -512,9 +515,9 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		// return 'https://api.strategy11.com/';
+		// Return 'https://api.strategy11.com/';
 		return 'https://dev-site.local/';
-		// return 'https://qa.formidableforms.com/paypal/';
+		// Return 'https://qa.formidableforms.com/paypal/';
 	}
 
 	/**
@@ -806,12 +809,13 @@ class FrmPayPalLiteConnectHelper {
 		if ( is_array( $response ) ) {
 			// Arrays with error data (e.g., from mock responses) should be preserved
 			// Only convert empty arrays to empty objects
-			if ( ! empty( $response ) ) {
+			if ( $response ) {
 				// Check if this is an error response with message and debug_id
 				if ( isset( $response['message'] ) && ( isset( $response['debug_id'] ) || isset( $response['debugId'] ) ) ) {
 					self::$latest_error_from_paypal_api = $response['message'];
 					// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
 					self::$latest_debug_id_from_paypal_api = $response['debug_id'] ?? $response['debugId'] ?? '';
+
 					if ( class_exists( 'FrmTransLiteLog' ) ) {
 						FrmTransLiteLog::log_message( 'PayPal API Error', $response['message'] );
 					}
@@ -821,21 +825,25 @@ class FrmPayPalLiteConnectHelper {
 				// Convert array to object for consistency
 				return (object) $response;
 			}
+
 			return new stdClass();
+		}//end if
+
+		if ( ! is_string( $response ) ) {
+			self::$latest_error_from_paypal_api = '';
+			return false;
 		}
 
-		if ( is_string( $response ) ) {
-			self::$latest_error_from_paypal_api = $response;
-			// Extract debug_id from formatted error string if present
-			if ( preg_match( '/{{debug_id:([^}]+)}}/', $response, $matches ) ) {
-				self::$latest_debug_id_from_paypal_api = $matches[1];
-				// Remove the debug_id token from the error message for display
-				self::$latest_error_from_paypal_api = preg_replace( '/\s*{{debug_id:[^}]+}}/', '', $response );
-			}
-			FrmTransLiteLog::log_message( 'PayPal API Error', $response );
-		} else {
-			self::$latest_error_from_paypal_api = '';
+		self::$latest_error_from_paypal_api = $response;
+
+		// Extract debug_id from formatted error string if present
+		if ( preg_match( '/{{debug_id:([^}]+)}}/', $response, $matches ) ) {
+			self::$latest_debug_id_from_paypal_api = $matches[1];
+			// Remove the debug_id token from the error message for display
+			self::$latest_error_from_paypal_api = preg_replace( '/\s*{{debug_id:[^}]+}}/', '', $response );
 		}
+
+		FrmTransLiteLog::log_message( 'PayPal API Error', $response );
 
 		return false;
 	}
@@ -1019,6 +1027,7 @@ class FrmPayPalLiteConnectHelper {
 			);
 		}
 
+		// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data', 'shipping' ) );
 	}
 
@@ -1147,8 +1156,6 @@ class FrmPayPalLiteConnectHelper {
 
 	/**
 	 * @since x.x
-	 *
-	 * @param string $mode
 	 *
 	 * @return string
 	 */

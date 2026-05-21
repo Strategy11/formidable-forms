@@ -100,6 +100,7 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @return array Array of products with prices and quantities.
 	 */
+	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	private static function get_pricing_data_from_posted_values( $form_id ) {
 		$products = array();
 		$fields   = FrmField::get_all_for_form( $form_id );
@@ -108,7 +109,7 @@ class FrmPayPalLiteAppController {
 			return $products;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$posted_data = $_POST['item_meta'] ?? array();
 
 		foreach ( $fields as $field ) {
@@ -197,6 +198,7 @@ class FrmPayPalLiteAppController {
 
 		// Check if PayPal is connected before attempting to create an order.
 		$connection_check = self::check_paypal_connection();
+
 		if ( is_wp_error( $connection_check ) ) {
 			wp_send_json_error( $connection_check->get_error_message() );
 		}
@@ -230,6 +232,10 @@ class FrmPayPalLiteAppController {
 		$shipping_preference = self::get_shipping_preference( $action );
 		$pricing_data        = self::get_pricing_data_from_posted_values( $form_id );
 
+		if ( 0.0 === floatval( $amount ) ) {
+			wp_send_json_error( __( 'Order amount cannot be zero.', 'formidable' ) );
+		}
+
 		// PayPal expects the amount in a format like 10.00, so format it.
 		$amount   = number_format( floatval( $amount ), 2, '.', '' );
 		$currency = strtoupper( $action->post_content['currency'] );
@@ -256,6 +262,7 @@ class FrmPayPalLiteAppController {
 			if ( isset( $order_response->message ) && isset( $order_response->debug_id ) ) {
 				wp_send_json_error( self::format_paypal_error( $order_response->message . '{{debug_id:' . $order_response->debug_id . '}}', 'Failed to create PayPal order' ) );
 			}
+
 			wp_send_json_error( 'Failed to create PayPal order' );
 		}
 
@@ -321,8 +328,7 @@ class FrmPayPalLiteAppController {
 	 * @return array
 	 */
 	private static function get_shipping_data_from_posted_values( $action ) {
-		$settings = $action->post_content;
-
+		$settings           = $action->post_content;
 		$email_setting      = ! empty( $settings['shipping_email'] ) ? $settings['shipping_email'] : '';
 		$first_name_setting = ! empty( $settings['shipping_first_name'] ) ? $settings['shipping_first_name'] : '';
 		$last_name_setting  = ! empty( $settings['shipping_last_name'] ) ? $settings['shipping_last_name'] : '';
@@ -352,7 +358,8 @@ class FrmPayPalLiteAppController {
 				'form'  => $action->menu_order,
 				'value' => $email_setting,
 			);
-			$email = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
+			$email          = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
+
 			if ( $email ) {
 				$shipping['email_address'] = $email;
 			}
@@ -364,13 +371,15 @@ class FrmPayPalLiteAppController {
 			);
 		}
 
-		if ( $address_setting ) {
-			$address = isset( $entry->metas[ $address_setting ] ) ? $entry->metas[ $address_setting ] : '';
-			$formatted_address = self::format_address_for_paypal( $address, (int) $address_setting );
+		if ( ! $address_setting ) {
+			return $shipping;
+		}
 
-			if ( $formatted_address ) {
-				$shipping['address'] = $formatted_address;
-			}
+		$address           = $entry->metas[ $address_setting ] ?? '';
+		$formatted_address = self::format_address_for_paypal( $address, (int) $address_setting );
+
+		if ( $formatted_address ) {
+			$shipping['address'] = $formatted_address;
 		}
 
 		return $shipping;
@@ -536,7 +545,7 @@ class FrmPayPalLiteAppController {
 		// Update amount based on field shortcodes.
 		$entry = self::generate_false_entry();
 
-		return number_format( floatval( FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) ) ) / 100, 2 );
+		return number_format( floatval( FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) ) ) / 100, 2, '.', '' );
 	}
 
 	/**
@@ -587,6 +596,7 @@ class FrmPayPalLiteAppController {
 
 		// Check if PayPal is connected before attempting to create a subscription.
 		$connection_check = self::check_paypal_connection();
+
 		if ( is_wp_error( $connection_check ) ) {
 			wp_send_json_error( $connection_check->get_error_message() );
 		}
@@ -629,7 +639,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		if ( ! $amount || '0.00' === $amount ) {
-			wp_send_json_error( __( 'A valid amount is required for subscriptions.', 'formidable' ) );
+			wp_send_json_error( __( 'A valid amount is required for subscriptions. Zero amounts are not allowed.', 'formidable' ) );
 		}
 
 		$data = array(
@@ -713,7 +723,7 @@ class FrmPayPalLiteAppController {
 			self::log_paypal_debug_id( $debug_id, $error_message, $context );
 		}
 
-		$display_message = $error_message ?: __( 'Payment failed. Please try again.', 'formidable' );
+		$display_message = $error_message ? $error_message : __( 'Payment failed. Please try again.', 'formidable' );
 
 		if ( $debug_id && current_user_can( 'frm_change_settings' ) ) {
 			$display_message .= "\n\nDebug ID: " . $debug_id;
@@ -748,10 +758,10 @@ class FrmPayPalLiteAppController {
 			$prefixes = array( 'REFUND_FAILED_', 'REFUND_' );
 			$reason   = str_replace( $prefixes, '', $error_message );
 
-			if ( $reason !== $error_message ) {
-				$error_message = 'Refund Failed (' . ucwords( strtolower( str_replace( '_', ' ', $reason ) ) ) . ')';
-			} else {
+			if ( $reason === $error_message ) {
 				$error_message = ucwords( strtolower( str_replace( '_', ' ', $error_message ) ) );
+			} else {
+				$error_message = 'Refund Failed (' . ucwords( strtolower( str_replace( '_', ' ', $reason ) ) ) . ')';
 			}
 		}
 
@@ -832,8 +842,9 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @since x.x
 	 *
-	 * @param string|null $error    The error string from the PayPal API, possibly containing a debug ID token.
-	 * @param string      $fallback The fallback message when no error is available.
+	 * @param array|string|null $error    The error string from the PayPal API, possibly containing a debug ID token.
+	 * @param string            $fallback The fallback message when no error is available.
+	 *
 	 * @return string
 	 */
 	private static function format_paypal_error( $error, $fallback ) {
@@ -855,7 +866,7 @@ class FrmPayPalLiteAppController {
 
 		// Always return structured error with debug_id so JavaScript can extract and send it
 		return array(
-			'message'  => $clean_message ?: $fallback,
+			'message'  => $clean_message ? $clean_message : $fallback,
 			'debug_id' => $matches[1],
 		);
 	}

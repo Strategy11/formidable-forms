@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignore SlevomatCodingStandard.Files.FileLength.FileTooLong
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -168,7 +169,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$paypal_message .= '<strong>' . esc_html__( 'Payment status: ', 'formidable' ) . '</strong>' . esc_html__( 'Pending', 'formidable' ) . '<br>';
 		}
 
-		$source_type    = self::$active_payment_source;
+		$source_type = self::$active_payment_source;
 
 		if ( $source_type ) {
 			$display_type    = self::get_source_display_type( $source_type );
@@ -238,7 +239,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string The formatted address HTML.
 	 */
 	private static function format_address( $address ) {
-		$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong>' . '<br>';
+		$formatted = '<strong>' . esc_html__( 'Address: ', 'formidable' ) . '</strong><br>';
 
 		$formatted .= $address->address_line_1 . '<br>';
 
@@ -304,15 +305,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		if ( false === $response ) {
 			// Get error message and debug_id from static properties
-			$reason = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+			$reason   = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
 			$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
+
 			if ( $reason ) {
 				$message = $reason;
+
 				if ( $debug_id ) {
 					$message .= ' {{debug_id:' . $debug_id . '}}';
 				}
+
 				return $message;
 			}
+
 			return 'Failed to confirm order.';
 		}
 
@@ -391,6 +396,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string $message  The error message.
 	 * @param mixed  $response The PayPal response that may contain a debug_id property.
+	 *
 	 * @return string
 	 */
 	private static function maybe_append_debug_id( $message, $response ) {
@@ -399,6 +405,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$debug_id = is_object( $response ) && ! empty( $response->debug_id ) ? $response->debug_id : '';
+
 		if ( ! $debug_id ) {
 			return $message;
 		}
@@ -475,6 +482,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'REFUND_FAILED_TRANSACTION_ALREADY_REFUNDED',
 			'REFUND_FAILED_INVALID_ARGUMENT',
 		);
+
 		if ( in_array( $issue, $non_recoverable, true ) ) {
 			// Convert issue code to human-readable message
 			$error_message = self::convert_issue_to_message( $issue );
@@ -512,6 +520,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// Check for details array first (standard PayPal error format)
 		if ( isset( $response->details ) && is_array( $response->details ) ) {
 			$first_detail = reset( $response->details );
+
 			if ( is_object( $first_detail ) && ! empty( $first_detail->issue ) ) {
 				return (string) $first_detail->issue;
 			}
@@ -531,25 +540,23 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @since x.x
 	 *
 	 * @param string $issue The issue code (e.g. AUTHENTICATION_FAILURE).
+	 *
 	 * @return string The human-readable error message.
 	 */
 	private static function convert_issue_to_message( $issue ) {
 		// Map of common PayPal issue codes to human-readable messages
 		$issue_map = array(
-			'AUTHENTICATION_FAILURE' => 'PayPal payment failed: Authentication failure',
-			'INSTRUMENT_DECLINED' => 'PayPal payment failed: Payment instrument declined',
-			'PAYER_CANNOT_PAY' => 'PayPal payment failed: Payer cannot pay',
+			'AUTHENTICATION_FAILURE'                  => 'PayPal payment failed: Authentication failure',
+			'INSTRUMENT_DECLINED'                     => 'PayPal payment failed: Payment instrument declined',
+			'PAYER_CANNOT_PAY'                        => 'PayPal payment failed: Payer cannot pay',
 			'MAX_NUMBER_OF_PAYMENT_ATTEMPTS_EXCEEDED' => 'PayPal payment failed: Maximum payment attempts exceeded',
 		);
 
 		// Check if the issue is in our map
 		$upper_issue = strtoupper( $issue );
-		if ( isset( $issue_map[ $upper_issue ] ) ) {
-			return $issue_map[ $upper_issue ];
-		}
 
 		// Fallback: convert underscores to spaces and title case
-		return 'PayPal payment failed: ' . ucwords( strtolower( str_replace( '_', ' ', $issue ) ) );
+		return $issue_map[ $upper_issue ] ?? 'PayPal payment failed: ' . ucwords( strtolower( str_replace( '_', ' ', $issue ) ) );
 	}
 
 	/**
@@ -847,6 +854,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return array<int,mixed> Field ID => new value pairs that differ from the current entry data.
 	 */
+	// phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	private static function get_payer_field_updates( $payer, $response, $action, $entry ) {
 		$updates  = array();
 		$settings = $action->post_content;
@@ -1170,6 +1178,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return void
 	 */
+	// phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
 	public static function load_scripts( $form_id ) {
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			return;
@@ -1359,7 +1368,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$dependencies[] = 'apple-pay-sdk';
 		}
 
-		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
+		$script_url = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
 
 		wp_enqueue_script(
 			'formidable-paypal',
@@ -2476,7 +2485,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @since x.x
 	 *
 	 * @param array|FrmFormAction $args_or_action_control Either the args array with form_action and action_control, or the action_control object.
-	 * @param WP_Post            $form_action            The form action object (when called directly).
+	 * @param WP_Post|null        $form_action            The form action object (when called directly).
 	 *
 	 * @return void
 	 */
@@ -2501,25 +2510,26 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function add_paypal_subscription_settings_from_hook( $args ) {
-		$form_action    = $args['form_action'];
-		$action_control = $args['action_control'];
-
+		$form_action        = $args['form_action'];
+		$action_control     = $args['action_control'];
 		$product_type_value = $form_action->post_content['product_type'] ?? '';
 		?>
 		<div class="frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 			<div class="frm_grid_container">
 				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
 					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
-						<?php esc_html_e( 'Product Name', 'formidable' ); ?> <span class="frm_required">*</span>
+		<?php esc_html_e( 'Product Name', 'formidable' ); ?> <span class="frm_required">*</span>
 					</label>
-					<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
+					<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+				<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ?? '' ); ?>" class="frm_not_email_subject large-text" />
 				</p>
 
 				<p class="frm6 show_paypal<?php FrmTransLitePaymentsController::maybe_hide_payment_setting( 'paypal', $form_action->post_content['gateway'] ); ?>">
 					<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>">
-						<?php esc_html_e( 'Product Type', 'formidable' ); ?>
+		<?php esc_html_e( 'Product Type', 'formidable' ); ?>
 					</label>
-					<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
+					<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+				<select id="<?php echo esc_attr( $action_control->get_field_id( 'product_type' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'product_type' ) ); ?>">
 						<option value="SERVICE" <?php selected( $product_type_value, 'SERVICE' ); ?>><?php esc_html_e( 'Service', 'formidable' ); ?></option>
 						<option value="DIGITAL" <?php selected( $product_type_value, 'DIGITAL' ); ?>><?php esc_html_e( 'Digital', 'formidable' ); ?></option>
 						<option value="PHYSICAL" <?php selected( $product_type_value, 'PHYSICAL' ); ?>><?php esc_html_e( 'Physical', 'formidable' ); ?></option>

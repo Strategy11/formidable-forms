@@ -1018,7 +1018,7 @@
 			total: {
 				label: document.title || 'Payment',
 				type: 'final',
-				amount: amount,
+				amount,
 			},
 		};
 
@@ -1354,10 +1354,10 @@
 	function reportErrorToServer( err, context ) {
 		const errorMessage = extractErrorMessage( err );
 		// Extract debug ID from error message if it's in {{debug_id:...}} format
-		let debugId = lastDebugId || ( err && err.debugId ? err.debugId : '' );
+		let debugId = lastDebugId || ( err?.debugId ? err.debugId : '' );
 		const debugIdMatch = errorMessage.match( /\{\{debug_id:([^}]+)\}\}/ );
-		if ( debugIdMatch && debugIdMatch[1] ) {
-			debugId = debugIdMatch[1];
+		if ( debugIdMatch && debugIdMatch[ 1 ] ) {
+			debugId = debugIdMatch[ 1 ];
 			// Remove the debug ID from the error message for display
 			errorMessage = errorMessage.replace( /\{\{debug_id:[^}]+\}\}/, '' ).trim();
 		}
@@ -1394,6 +1394,7 @@
 	 *
 	 * @param {*}      data     The response data from wp_send_json_error.
 	 * @param {string} fallback Fallback message if data is unusable.
+	 * @param          context
 	 */
 	function throwServerError( data, fallback, context ) {
 		let message = fallback;
@@ -1404,7 +1405,7 @@
 		} else if ( 'string' === typeof data && data ) {
 			const debugMatch = data.match( /\{\{debug_id:([^}]+)\}\}/ );
 			if ( debugMatch ) {
-				lastDebugId = debugMatch[1];
+				lastDebugId = debugMatch[ 1 ];
 				message = data.replace( /\{\{debug_id:[^}]+\}\}/, '' ).trim();
 			} else {
 				message = data;
@@ -1506,7 +1507,7 @@
 		}
 
 		for ( const detail of details ) {
-			if ( detail && detail.description ) {
+			if ( detail?.description ) {
 				return detail.description;
 			}
 		}
@@ -1557,9 +1558,9 @@
 			const lines = errorMessage.split( '\n' );
 			lines.forEach( function( line, index ) {
 				if ( index > 0 ) {
-					statusContainer.appendChild( document.createElement( 'br' ) );
+					statusContainer.append( document.createElement( 'br' ) );
 				}
-				statusContainer.appendChild( document.createTextNode( line ) );
+				statusContainer.append( document.createTextNode( line ) );
 			} );
 
 			statusContainer.style.display = 'block';
