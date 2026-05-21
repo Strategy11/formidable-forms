@@ -841,7 +841,7 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @since x.x
 	 *
-	 * @param string|null|array $error    The error string from the PayPal API, possibly containing a debug ID token.
+	 * @param array|string|null $error    The error string from the PayPal API, possibly containing a debug ID token.
 	 * @param string            $fallback The fallback message when no error is available.
 	 *
 	 * @return string
