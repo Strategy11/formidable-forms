@@ -552,12 +552,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// Check if the issue is in our map
 		$upper_issue = strtoupper( $issue );
 
-		if ( isset( $issue_map[ $upper_issue ] ) ) {
-			return $issue_map[ $upper_issue ];
-		}
-
 		// Fallback: convert underscores to spaces and title case
-		return 'PayPal payment failed: ' . ucwords( strtolower( str_replace( '_', ' ', $issue ) ) );
+		return $issue_map[ $upper_issue ] ?? 'PayPal payment failed: ' . ucwords( strtolower( str_replace( '_', ' ', $issue ) ) );
 	}
 
 	/**
