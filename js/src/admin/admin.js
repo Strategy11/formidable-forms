@@ -8086,6 +8086,16 @@ window.frmAdminBuildJS = function() {
 	function actionLimitMessage() {
 		let message = frmAdminJs.only_one_action;
 		let { limit } = this.dataset;
+		const type = this.dataset.actiontype;
+
+		// Use payment-specific message for payment actions
+		if ( type && [ 'paypal', 'stripe', 'square', 'payment' ].includes( type ) ) {
+			if ( 'stripe' === type ) {
+				message = frmAdminJs.only_one_stripe_action;
+			} else {
+				message = frmAdminJs.only_one_payment_action;
+			}
+		}
 
 		if ( limit !== undefined ) {
 			limit = parseInt( limit );

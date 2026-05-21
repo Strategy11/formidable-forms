@@ -192,6 +192,15 @@ class FrmFormActionsController {
 			if ( isset( $group['actions'] ) ) {
 				$grouped = array_merge( $grouped, $group['actions'] );
 			}
+
+			// Also collect actions from sections
+			if ( isset( $group['sections'] ) ) {
+				foreach ( $group['sections'] as $section ) {
+					if ( isset( $section['actions'] ) ) {
+						$grouped = array_merge( $grouped, $section['actions'] );
+					}
+				}
+			}
 		}
 
 		foreach ( $action_controls as $action ) {
@@ -220,38 +229,46 @@ class FrmFormActionsController {
 	 * @return array
 	 */
 	public static function form_action_groups() {
-		$payment_actions = array(
-			'paypal',
-			'paypal-legacy',
-			'stripe',
-			'square',
-			'payment',
-		);
+		// Get all action controls to check which are active
+		$action_controls = self::get_form_actions();
 
-		if ( ! class_exists( 'FrmPaymentsController' ) ) {
-			$payment_actions = array_diff( $payment_actions, array( 'paypal-legacy' ) );
-		}
+		// Determine which actions are currently available
+		$available_actions = self::get_available_my_actions( $action_controls );
+
+		// Featured actions are add-ons that are NOT currently available
+		$all_addon_actions = array(
+			'api',
+			'register',
+			'n8n',
+			'quiz',
+			'quiz_outcome',
+			'googlespreadsheet',
+		);
+		$featured_actions = array_diff( $all_addon_actions, $available_actions );
 
 		$groups = array(
-			'misc'      => array(
-				'name'    => '',
+			'my_actions' => array(
+				'name'    => __( 'My Actions', 'formidable' ),
 				'icon'    => 'frmfont frm_shuffle_icon',
-				'actions' => array(
-					'on_submit',
-					'email',
-					'wppost',
-					'register',
-					'quiz',
-					'quiz_outcome',
-					'api',
-					'googlespreadsheet',
-					'n8n',
+				'sections' => array(
+					'active' => array(
+						'name'    => '',
+						'actions' => $available_actions,
+					),
+					'featured' => array(
+						'name'    => __( 'Featured', 'formidable' ),
+						'actions' => array_values( $featured_actions ),
+					),
 				),
 			),
 			'payment'   => array(
 				'name'    => __( 'E-Commerce', 'formidable' ),
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
-				'actions' => $payment_actions,
+				'actions' => array(
+					'paypal',
+					'stripe',
+					'square',
+				),
 			),
 			'marketing' => array(
 				'name'    => __( 'Marketing', 'formidable' ),
@@ -272,9 +289,82 @@ class FrmFormActionsController {
 				'icon'    => 'frmfont frm_address_card_icon',
 				'actions' => self::get_crm_actions(),
 			),
+			'misc'      => array(
+				'name'    => __( 'Misc', 'formidable' ),
+				'icon'    => 'frmfont frm_shuffle_icon',
+				'actions' => self::get_misc_actions( $action_controls ),
+			),
 		);
 
 		return apply_filters( 'frm_action_groups', $groups );
+	}
+
+	/**
+	 * Get the actions that are currently available (active) for My Actions section.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $action_controls The registered action controls.
+	 *
+	 * @return array
+	 */
+	private static function get_available_my_actions( $action_controls ) {
+		$available = array(
+			'on_submit',
+			'email',
+			'stripe',
+			'square',
+			'paypal',
+		);
+
+		// Include all actions that are marked as active, including custom actions.
+		// This ensures custom actions appear in "My Actions" when enabled.
+		foreach ( $action_controls as $action_id => $action_control ) {
+			if ( ! in_array( $action_id, $available, true ) && ! empty( $action_control->action_options['active'] ) ) {
+				$available[] = $action_id;
+			}
+		}
+
+		return $available;
+	}
+
+	/**
+	 * Get the actions to include in the Misc section.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $action_controls The registered action controls.
+	 *
+	 * @return array
+	 */
+	private static function get_misc_actions( $action_controls ) {
+		$misc_actions = array(
+			'on_submit',
+			'email',
+			'wppost',
+			'register',
+			'api',
+			'n8n',
+			'quiz',
+			'quiz_outcome',
+			'googlespreadsheet',
+		);
+
+		// Include all active actions that aren't in specific groups (payment, marketing, crm).
+		// This ensures custom actions appear in "Misc" when enabled.
+		$payment_actions = array( 'paypal', 'stripe', 'square' );
+		$marketing_actions = array( 'mailchimp', 'activecampaign', 'constantcontact', 'getresponse', 'aweber', 'mailpoet', 'convertkit', 'twilio' );
+		$crm_actions = self::get_crm_actions();
+
+		$excluded_actions = array_merge( $payment_actions, $marketing_actions, $crm_actions );
+
+		foreach ( $action_controls as $action_id => $action_control ) {
+			if ( ! in_array( $action_id, $misc_actions, true ) && ! in_array( $action_id, $excluded_actions, true ) && ! empty( $action_control->action_options['active'] ) ) {
+				$misc_actions[] = $action_id;
+			}
+		}
+
+		return $misc_actions;
 	}
 
 	/**
