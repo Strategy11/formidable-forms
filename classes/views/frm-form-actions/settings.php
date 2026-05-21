@@ -79,6 +79,7 @@ $single_action_attrs = array(
 
 								// Build array of installed action IDs to skip in second loop
 								$installed_action_ids = array();
+
 								foreach ( $action_controls as $action_control ) {
 									$installed_action_ids[] = $action_control->id_base;
 								}
@@ -111,6 +112,7 @@ $single_action_attrs = array(
 									if ( in_array( $action, array( 'paypal', 'stripe', 'square' ), true ) ) {
 										// Check if this action is already installed
 										$action_is_installed = false;
+
 										foreach ( $action_controls as $action_control ) {
 											if ( $action_control->id_base === $action ) {
 												$action_is_installed = true;
@@ -187,6 +189,7 @@ $single_action_attrs = array(
 
 					// Build array of installed action IDs to skip in second loop
 					$installed_action_ids = array();
+
 					foreach ( $action_controls as $action_control ) {
 						$installed_action_ids[] = $action_control->id_base;
 					}
@@ -219,6 +222,7 @@ $single_action_attrs = array(
 						if ( in_array( $action, array( 'paypal', 'stripe', 'square' ), true ) ) {
 							// Check if this action is already installed
 							$action_is_installed = false;
+
 							foreach ( $action_controls as $action_control ) {
 								if ( $action_control->id_base === $action ) {
 									$action_is_installed = true;

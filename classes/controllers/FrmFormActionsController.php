@@ -192,6 +192,7 @@ class FrmFormActionsController {
 			if ( isset( $group['actions'] ) ) {
 				$grouped = array_merge( $grouped, $group['actions'] );
 			}
+
 			// Also collect actions from sections
 			if ( isset( $group['sections'] ) ) {
 				foreach ( $group['sections'] as $section ) {
