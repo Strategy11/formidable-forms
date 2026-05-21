@@ -451,10 +451,12 @@ class FrmPayPalLiteConnectHelper {
 
 			// Handle structured error response with message and debug_id
 			$data = $body->data ?? null;
+
 			if ( is_object( $data ) ) {
 				if ( ! empty( $data->message ) ) {
 					$error_message = $data->message;
 				}
+
 				if ( ! empty( $data->debug_id ) ) {
 					$debug_id = $data->debug_id;
 				}
@@ -812,6 +814,7 @@ class FrmPayPalLiteConnectHelper {
 					self::$latest_error_from_paypal_api = $response['message'];
 					// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
 					self::$latest_debug_id_from_paypal_api = $response['debug_id'] ?? $response['debugId'] ?? '';
+
 					if ( class_exists( 'FrmTransLiteLog' ) ) {
 						FrmTransLiteLog::log_message( 'PayPal API Error', $response['message'] );
 					}
@@ -826,6 +829,7 @@ class FrmPayPalLiteConnectHelper {
 
 		if ( is_string( $response ) ) {
 			self::$latest_error_from_paypal_api = $response;
+
 			// Extract debug_id from formatted error string if present
 			if ( preg_match( '/{{debug_id:([^}]+)}}/', $response, $matches ) ) {
 				self::$latest_debug_id_from_paypal_api = $matches[1];

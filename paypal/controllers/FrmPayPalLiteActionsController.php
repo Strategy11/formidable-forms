@@ -306,8 +306,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			// Get error message and debug_id from static properties
 			$reason = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
 			$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
+
 			if ( $reason ) {
 				$message = $reason;
+
 				if ( $debug_id ) {
 					$message .= ' {{debug_id:' . $debug_id . '}}';
 				}
@@ -391,6 +393,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string $message  The error message.
 	 * @param mixed  $response The PayPal response that may contain a debug_id property.
+	 *
 	 * @return string
 	 */
 	private static function maybe_append_debug_id( $message, $response ) {
@@ -399,6 +402,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$debug_id = is_object( $response ) && ! empty( $response->debug_id ) ? $response->debug_id : '';
+
 		if ( ! $debug_id ) {
 			return $message;
 		}
@@ -475,6 +479,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'REFUND_FAILED_TRANSACTION_ALREADY_REFUNDED',
 			'REFUND_FAILED_INVALID_ARGUMENT',
 		);
+
 		if ( in_array( $issue, $non_recoverable, true ) ) {
 			// Convert issue code to human-readable message
 			$error_message = self::convert_issue_to_message( $issue );
@@ -512,6 +517,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		// Check for details array first (standard PayPal error format)
 		if ( isset( $response->details ) && is_array( $response->details ) ) {
 			$first_detail = reset( $response->details );
+
 			if ( is_object( $first_detail ) && ! empty( $first_detail->issue ) ) {
 				return (string) $first_detail->issue;
 			}
@@ -531,6 +537,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @since x.x
 	 *
 	 * @param string $issue The issue code (e.g. AUTHENTICATION_FAILURE).
+	 *
 	 * @return string The human-readable error message.
 	 */
 	private static function convert_issue_to_message( $issue ) {
@@ -544,6 +551,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		// Check if the issue is in our map
 		$upper_issue = strtoupper( $issue );
+
 		if ( isset( $issue_map[ $upper_issue ] ) ) {
 			return $issue_map[ $upper_issue ];
 		}

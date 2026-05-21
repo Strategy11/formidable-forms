@@ -263,6 +263,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				$message = $reason;
 			} else {
 				$message = __( 'Refund Failed', 'formidable' );
+
 				if ( ! empty( $reason ) ) {
 					$message .= ' (' . $reason . ')';
 				}
@@ -295,6 +296,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 */
 	private static function get_paypal_refund_reason() {
 		$error = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+
 		if ( ! $error ) {
 			return '';
 		}

@@ -197,6 +197,7 @@ class FrmPayPalLiteAppController {
 
 		// Check if PayPal is connected before attempting to create an order.
 		$connection_check = self::check_paypal_connection();
+
 		if ( is_wp_error( $connection_check ) ) {
 			wp_send_json_error( $connection_check->get_error_message() );
 		}
@@ -357,6 +358,7 @@ class FrmPayPalLiteAppController {
 				'value' => $email_setting,
 			);
 			$email = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
+
 			if ( $email ) {
 				$shipping['email_address'] = $email;
 			}
@@ -369,7 +371,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		if ( $address_setting ) {
-			$address = isset( $entry->metas[ $address_setting ] ) ? $entry->metas[ $address_setting ] : '';
+			$address = $entry->metas[ $address_setting ] ?? '';
 			$formatted_address = self::format_address_for_paypal( $address, (int) $address_setting );
 
 			if ( $formatted_address ) {
@@ -591,6 +593,7 @@ class FrmPayPalLiteAppController {
 
 		// Check if PayPal is connected before attempting to create a subscription.
 		$connection_check = self::check_paypal_connection();
+
 		if ( is_wp_error( $connection_check ) ) {
 			wp_send_json_error( $connection_check->get_error_message() );
 		}
@@ -838,6 +841,7 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @param string|null $error    The error string from the PayPal API, possibly containing a debug ID token.
 	 * @param string      $fallback The fallback message when no error is available.
+	 *
 	 * @return string
 	 */
 	private static function format_paypal_error( $error, $fallback ) {

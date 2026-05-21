@@ -161,6 +161,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 						$message = $reason;
 					} else {
 						$message = __( 'Failed', 'formidable' );
+
 						if ( ! empty( $reason ) ) {
 							$message .= ' (' . $reason . ')';
 						}
@@ -218,6 +219,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			if ( ! empty( $response['message'] ) ) {
 				$reason = $response['message'];
 			}
+
 			if ( ! empty( $response['debug_id'] ) ) {
 				$debug_id = $response['debug_id'];
 			}
@@ -225,6 +227,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			if ( ! empty( $response->message ) ) {
 				$reason = $response->message;
 			}
+
 			if ( ! empty( $response->debug_id ) ) {
 				$debug_id = $response->debug_id;
 			}
