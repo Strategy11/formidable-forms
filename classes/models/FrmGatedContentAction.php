@@ -61,6 +61,10 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public static function get_types() {
 		$types = array(
+			'page'     => array(
+				'label'    => __( 'Page', 'formidable' ),
+				'disabled' => false,
+			),
 			'post'     => array(
 				'label'    => __( 'Post', 'formidable' ),
 				'disabled' => false,
@@ -179,14 +183,33 @@ class FrmGatedContentAction extends FrmFormAction {
 	 *
 	 * @return WP_Post[]
 	 */
+	/**
+	 * Get posts for all post-type-backed gated content item type selectors.
+	 *
+	 * Runs one query covering all enabled post types derived from get_types(), then
+	 * groups the results by type key. Only private and password-protected posts are
+	 * included — plain published posts are publicly accessible and not selectable.
+	 *
+	 * @return array<string, WP_Post[]> Posts keyed by item type slug (e.g. 'page', 'post').
+	 */
 	public static function get_posts() {
+		$types      = self::get_types();
+		$post_types = array();
+
+		foreach ( $types as $type_key => $type_config ) {
+			if ( empty( $type_config['disabled'] ) && post_type_exists( $type_key ) ) {
+				$post_types[] = $type_key;
+			}
+		}
+
+		if ( ! $post_types ) {
+			return array();
+		}
+
 		/**
-		 * Filter the get_posts() arguments used to build the "post" gated content item selector.
+		 * Filter the get_posts() arguments used to build the gated content item selectors.
 		 *
-		 * Use this to change the post types, statuses, order, or any other WP_Query
-		 * argument. The filtered list is then narrowed to private and password-protected
-		 * posts only, so adding extra statuses here has no effect unless the filter
-		 * callback also adjusts the post-status filtering that follows.
+		 * The filtered list is then narrowed to private and password-protected posts only.
 		 *
 		 * @since x.x
 		 *
@@ -195,7 +218,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		$query_args = (array) apply_filters(
 			'frm_gated_content_posts_query',
 			array(
-				'post_type'              => apply_filters( 'frm_gated_content_post_types', array( 'post', 'page' ) ),
+				'post_type'              => $post_types,
 				'post_status'            => array( 'publish', 'private' ),
 				'orderby'                => 'title',
 				'order'                  => 'ASC',
@@ -205,18 +228,23 @@ class FrmGatedContentAction extends FrmFormAction {
 			)
 		);
 
-		$posts = get_posts( $query_args );
-		$posts = is_array( $posts ) ? $posts : array();
+		$raw_posts = get_posts( $query_args );
+		$raw_posts = is_array( $raw_posts ) ? $raw_posts : array();
 
-		/** @var WP_Post[] */
-		return array_values(
-			array_filter(
-				$posts,
-				static function ( $p ) {
-					return 'private' === $p->post_status || '' !== $p->post_password;
-				}
-			)
-		);
+		// Initialise empty buckets in get_types() order.
+		$grouped = array_fill_keys( $post_types, array() );
+
+		foreach ( $raw_posts as $post ) {
+			if ( 'private' !== $post->post_status && '' === $post->post_password ) {
+				continue; // Skip publicly accessible posts.
+			}
+			if ( isset( $grouped[ $post->post_type ] ) ) {
+				$grouped[ $post->post_type ][] = $post;
+			}
+		}
+
+		/** @var array<string, WP_Post[]> */
+		return $grouped;
 	}
 
 	/**

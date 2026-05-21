@@ -21,13 +21,12 @@
  * @var int          $frm_gc_item_id      Saved item ID. 0 for template rows.
  * @var string       $frm_gc_item_base    Field name prefix. Empty for template rows.
  * @var string       $frm_gc_type_sel_id  Unique element ID for the type select. Empty for template rows.
- * @var string       $frm_gc_post_sel_id  Unique element ID for the post select. Empty for template rows.
  * @var int          $frm_gc_idx          Zero-based item index. 0 for template rows.
  * @var array        $frm_gc_item         Saved item data. Empty array for template rows.
  * @var array        $frm_gc_types        All registered type configurations.
- * @var WP_Post[]    $frm_gc_posts        Posts available as gated content targets.
- * @var bool         $frm_gc_use_autocomplete Whether to render autocomplete inputs.
- * @var string       $frm_gc_posts_source JSON-encoded autocomplete source. Only set when $frm_gc_use_autocomplete.
+ * @var array<string, WP_Post[]> $frm_gc_posts        Posts grouped by item type key.
+ * @var bool                    $frm_gc_use_autocomplete Whether to render autocomplete inputs.
+ * @var array<string, string>   $frm_gc_posts_source JSON-encoded autocomplete source per type. Only set when $frm_gc_use_autocomplete.
  * @var string       $frm_gc_wrapper_id   Unique wrapper element ID.
  */
 
@@ -75,33 +74,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm8 frm-gc-item-settings">
 
 		<?php
-		// Post type settings.
-		// Existing rows: only add name when this type is active — prevents duplicate
-		// [id] values being submitted when the user switches types via JS.
-		// Template rows: JS assigns id, name, and for attributes after cloning.
-		// Post is always the default visible type, so no hidden attribute is needed here.
+		// One settings div per post-type-backed item type.
+		// Existing rows: only the active type's div is visible; only it gets a name attribute.
+		// Template rows: JS shows/hides divs on type change and assigns id/name after cloning.
+		foreach ( $frm_gc_types as $frm_gc_pt_key => $frm_gc_pt_config ) :
+			if ( ! post_type_exists( $frm_gc_pt_key ) ) {
+				continue;
+			}
+			$frm_gc_pt_posts    = $frm_gc_posts[ $frm_gc_pt_key ] ?? array();
+			$frm_gc_pt_sel_id   = $is_template ? '' : $frm_gc_wrapper_id . '_id_' . $frm_gc_pt_key . '_' . $frm_gc_idx;
+			$frm_gc_pt_source   = $frm_gc_use_autocomplete ? ( $frm_gc_posts_source[ $frm_gc_pt_key ] ?? '[]' ) : '';
+			$frm_gc_pt_is_first = ! isset( $frm_gc_first_pt_rendered );
+			if ( $frm_gc_pt_is_first ) {
+				$frm_gc_first_pt_rendered = true;
+			}
+			$frm_gc_pt_hidden = ! $is_template && $frm_gc_item_type !== $frm_gc_pt_key;
 		?>
 		<div
 			class="frm-gc-type-settings"
-			data-type="post"
-			<?php echo ! $is_template && 'post' !== $frm_gc_item_type ? 'hidden' : ''; ?>
+			data-type="<?php echo esc_attr( $frm_gc_pt_key ); ?>"
+			<?php echo $frm_gc_pt_hidden ? 'hidden' : ''; ?>
 		>
 			<div class="frm_form_field frm-mt-xs frm-mb-xs">
 				<?php if ( $is_template ) : ?>
 					<label data-frm-gc-for="id">
 				<?php else : ?>
-					<label for="<?php echo esc_attr( $frm_gc_post_sel_id ); ?>">
+					<label for="<?php echo esc_attr( $frm_gc_pt_sel_id ); ?>">
 				<?php endif; ?>
-					<?php esc_html_e( 'WordPress post', 'formidable' ); ?>
+					<?php echo esc_html( $frm_gc_pt_config['label'] ); ?>
 				</label>
 				<?php if ( $frm_gc_use_autocomplete ) : ?>
 					<?php
-					$frm_gc_selected_title = '';
-
-					if ( ! $is_template ) {
-						foreach ( $frm_gc_posts as $frm_gc_post ) {
+					$frm_gc_pt_selected_title = '';
+					if ( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key ) {
+						foreach ( $frm_gc_pt_posts as $frm_gc_post ) {
 							if ( $frm_gc_item_id === $frm_gc_post->ID ) {
-								$frm_gc_selected_title = $frm_gc_post->post_title;
+								$frm_gc_pt_selected_title = $frm_gc_post->post_title;
 								break;
 							}
 						}
@@ -109,32 +117,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 					<input type="text" class="frm-custom-search"
 						<?php if ( ! $is_template ) : ?>
-							id="<?php echo esc_attr( $frm_gc_post_sel_id ); ?>"
+							id="<?php echo esc_attr( $frm_gc_pt_sel_id ); ?>"
 						<?php endif; ?>
-						data-source="<?php echo esc_attr( $frm_gc_posts_source ); ?>"
-						placeholder="<?php esc_attr_e( '— Select a post —', 'formidable' ); ?>"
-						value="<?php echo esc_attr( $frm_gc_selected_title ); ?>"
+						data-source="<?php echo esc_attr( $frm_gc_pt_source ); ?>"
+						placeholder="<?php esc_attr_e( '— Select —', 'formidable' ); ?>"
+						value="<?php echo esc_attr( $frm_gc_pt_selected_title ); ?>"
 					/>
 					<input type="hidden"
 						data-frm-gc-field="id"
 						class="frm_autocomplete_value_input"
-						<?php if ( ! $is_template && 'post' === $frm_gc_item_type ) : ?>
+						<?php if ( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key ) : ?>
 							name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
 						<?php endif; ?>
-						value="<?php echo esc_attr( ! $is_template && $frm_gc_item_id ? $frm_gc_item_id : '' ); ?>"
+						value="<?php echo esc_attr( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key && $frm_gc_item_id ? $frm_gc_item_id : '' ); ?>"
 					/>
 				<?php else : ?>
 					<select
 						<?php if ( ! $is_template ) : ?>
-							id="<?php echo esc_attr( $frm_gc_post_sel_id ); ?>"
-							<?php if ( 'post' === $frm_gc_item_type ) : ?>
+							id="<?php echo esc_attr( $frm_gc_pt_sel_id ); ?>"
+							<?php if ( $frm_gc_item_type === $frm_gc_pt_key ) : ?>
 								name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
 							<?php endif; ?>
 						<?php endif; ?>
 						data-frm-gc-field="id"
 					>
-						<option value=""><?php esc_html_e( '— Select a post —', 'formidable' ); ?></option>
-						<?php foreach ( $frm_gc_posts as $frm_gc_post ) : ?>
+						<option value=""><?php esc_html_e( '— Select —', 'formidable' ); ?></option>
+						<?php foreach ( $frm_gc_pt_posts as $frm_gc_post ) : ?>
 							<option
 								value="<?php echo esc_attr( $frm_gc_post->ID ); ?>"
 								<?php if ( ! $is_template ) : ?>
@@ -147,7 +155,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</select>
 				<?php endif; ?>
 			</div><!-- .frm_form_field -->
-		</div><!-- [data-type="post"] -->
+		</div><!-- [data-type="<?php echo esc_attr( $frm_gc_pt_key ); ?>"] -->
+		<?php endforeach; ?>
+		<?php unset( $frm_gc_pt_key, $frm_gc_pt_config, $frm_gc_pt_posts, $frm_gc_pt_sel_id, $frm_gc_pt_source, $frm_gc_pt_is_first, $frm_gc_first_pt_rendered, $frm_gc_pt_hidden, $frm_gc_pt_selected_title, $frm_gc_post ); ?>
 
 		<?php
 		$filter_args = array(

@@ -60,10 +60,15 @@ class FrmGatedContentController {
 			return;
 		}
 
+		$queried_post = self::get_queried_post( $query );
+		if ( ! $queried_post ) {
+			return;
+		}
+
 		$post_item = FrmGatedItem::make(
 			array(
-				'type' => 'post',
-				'id'   => self::get_queried_post_id( $query ),
+				'type' => $queried_post->post_type,
+				'id'   => $queried_post->ID,
 			)
 		);
 
@@ -76,42 +81,40 @@ class FrmGatedContentController {
 	}
 
 	/**
-	 * Resolve the requested post ID from the query vars at pre_get_posts time.
+	 * Resolve the requested WP_Post from the query vars at pre_get_posts time.
 	 *
 	 * get_queried_object_id() is not available at pre_get_posts because the query
-	 * has not run yet. For numeric-ID URLs the ID comes directly from query vars;
-	 * for pretty-permalink slugs, get_page_by_path() resolves the slug including
+	 * has not run yet. For numeric-ID URLs the post comes from get_post(); for
+	 * pretty-permalink slugs, get_page_by_path() resolves the slug including
 	 * private posts (it queries all statuses except trash/auto-draft).
+	 *
+	 * Post types searched are derived from the enabled item type configs that have
+	 * a 'post_type' key, so add-ons only need to register their item type once.
 	 *
 	 * @param WP_Query $query Main query object.
 	 *
-	 * @return int Post ID, or 0 if it cannot be resolved.
+	 * @return WP_Post|null Resolved post, or null if it cannot be determined.
 	 */
-	private static function get_queried_post_id( $query ) {
+	private static function get_queried_post( $query ) {
 		$post_id = (int) $query->get( 'p' ) ?: (int) $query->get( 'page_id' );
 		if ( $post_id ) {
-			return $post_id;
+			return get_post( $post_id ) ?: null;
 		}
 
 		$slug = $query->get( 'pagename' ) ?: $query->get( 'name' );
 		if ( ! $slug ) {
-			return 0;
+			return null;
 		}
 
-		/**
-		 * Filter the post types searched when resolving a pretty-permalink slug
-		 * to a post ID at pre_get_posts time for gated content.
-		 *
-		 * Add-ons that register their own CPTs (e.g. frm_display for Views) should
-		 * hook here to include those types.
-		 *
-		 * @since x.x
-		 *
-		 * @param string[] $post_types Post type slugs to search. Default ['page', 'post'].
-		 */
-		$post_types = apply_filters( 'frm_gated_content_post_types', array( 'page', 'post' ) );
-		$post       = get_page_by_path( $slug, OBJECT, $post_types );
-		return $post ? $post->ID : 0;
+		$post_types = array();
+		foreach ( FrmGatedContentAction::get_types() as $type_key => $type_config ) {
+			if ( empty( $type_config['disabled'] ) && post_type_exists( $type_key ) ) {
+				$post_types[] = $type_key;
+			}
+		}
+
+		$post = get_page_by_path( $slug, OBJECT, $post_types );
+		return ( $post instanceof WP_Post ) ? $post : null;
 	}
 
 	/**
@@ -153,7 +156,7 @@ class FrmGatedContentController {
 
 		$post_item   = FrmGatedItem::make(
 			array(
-				'type' => 'post',
+				'type' => $post->post_type,
 				'id'   => $post_id,
 			)
 		);

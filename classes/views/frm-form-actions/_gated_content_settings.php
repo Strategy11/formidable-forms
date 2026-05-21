@@ -24,15 +24,21 @@ $frm_gc_types           = FrmGatedContentAction::get_types();
 // gated content actions exist on the same form.
 $frm_gc_wrapper_id = 'frm_gc_settings_' . $this->number;
 
+// array<string, WP_Post[]> — posts grouped by item type key (e.g. 'page', 'post').
 $frm_gc_posts = FrmGatedContentAction::get_posts();
 
-$frm_gc_use_autocomplete = count( $frm_gc_posts ) > 50;
+$frm_gc_total_posts      = array_sum( array_map( 'count', $frm_gc_posts ) );
+$frm_gc_use_autocomplete = $frm_gc_total_posts > 50;
 
 if ( $frm_gc_use_autocomplete ) {
 	wp_enqueue_script( 'jquery-ui-autocomplete' );
 
-	// Pre-encode the source array once for reuse in all item rows and the template row.
-	$frm_gc_posts_source = FrmGatedContentAction::get_posts_autocomplete_source( $frm_gc_posts );
+	// Pre-encode one autocomplete source per type for reuse in all item rows.
+	$frm_gc_posts_source = array();
+	foreach ( $frm_gc_posts as $frm_gc_type_key => $frm_gc_type_posts ) {
+		$frm_gc_posts_source[ $frm_gc_type_key ] = FrmGatedContentAction::get_posts_autocomplete_source( $frm_gc_type_posts );
+	}
+	unset( $frm_gc_type_key, $frm_gc_type_posts );
 }
 ?>
 
@@ -49,11 +55,10 @@ if ( $frm_gc_use_autocomplete ) {
 		<ul class="frm_gc_items_list">
 			<?php foreach ( $frm_gc_items as $frm_gc_idx => $frm_gc_item ) : ?>
 				<?php
-				$frm_gc_item_type   = $frm_gc_item['type'] ?? 'post';
+				$frm_gc_item_type   = $frm_gc_item['type'] ?? 'page';
 				$frm_gc_item_id     = isset( $frm_gc_item['id'] ) ? (int) $frm_gc_item['id'] : 0;
 				$frm_gc_item_base   = $frm_gc_field_name_base . '[' . $frm_gc_idx . ']';
 				$frm_gc_type_sel_id = $frm_gc_wrapper_id . '_type_' . $frm_gc_idx;
-				$frm_gc_post_sel_id = $frm_gc_wrapper_id . '_id_post_' . $frm_gc_idx;
 				$is_template        = false;
 				include __DIR__ . '/_gated_content_item_row.php';
 				?>
@@ -66,11 +71,10 @@ if ( $frm_gc_use_autocomplete ) {
 		?>
 		<template class="frm_gc_item_template">
 			<?php
-			$frm_gc_item_type   = 'post';
+			$frm_gc_item_type   = 'page';
 			$frm_gc_item_id     = 0;
 			$frm_gc_item_base   = '';
 			$frm_gc_type_sel_id = '';
-			$frm_gc_post_sel_id = '';
 			$frm_gc_idx         = 0;
 			$frm_gc_item        = array();
 			$is_template        = true;
@@ -93,4 +97,4 @@ if ( $frm_gc_use_autocomplete ) {
 </div><!-- .frm_gated_content_settings -->
 
 <?php
-unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_posts, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type_sel_id, $frm_gc_post_sel_id, $frm_gc_use_autocomplete, $frm_gc_posts_source, $frm_gc_is_template );
+unset( $frm_gc_items, $frm_gc_action_id, $frm_gc_field_name_base, $frm_gc_types, $frm_gc_wrapper_id, $frm_gc_posts, $frm_gc_total_posts, $frm_gc_item, $frm_gc_idx, $frm_gc_item_type, $frm_gc_item_id, $frm_gc_item_base, $frm_gc_type_sel_id, $frm_gc_use_autocomplete, $frm_gc_posts_source );
