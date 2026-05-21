@@ -105,7 +105,7 @@ $single_action_attrs = array(
 										__( '%s form actions', 'formidable' ),
 										$action
 									);
-									$single_action_attrs['data-medium'] = 'settings-' . $action;
+									$single_action_attrs['data-medium']     = 'settings-' . $action;
 									$single_action_attrs['data-actiontype'] = $action;
 
 									// Set limit for payment actions only if not installed
@@ -161,7 +161,7 @@ $single_action_attrs = array(
 				</div>
 				<?php
 				continue;
-			}
+			}//end if
 
 			// Handle regular groups
 			?>
@@ -215,7 +215,7 @@ $single_action_attrs = array(
 							__( '%s form actions', 'formidable' ),
 							$action
 						);
-						$single_action_attrs['data-medium'] = 'settings-' . $action;
+						$single_action_attrs['data-medium']     = 'settings-' . $action;
 						$single_action_attrs['data-actiontype'] = $action;
 
 						// Set limit for payment actions only if not installed

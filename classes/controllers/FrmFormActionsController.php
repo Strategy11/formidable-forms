@@ -194,11 +194,13 @@ class FrmFormActionsController {
 			}
 
 			// Also collect actions from sections
-			if ( isset( $group['sections'] ) ) {
-				foreach ( $group['sections'] as $section ) {
-					if ( isset( $section['actions'] ) ) {
-						$grouped = array_merge( $grouped, $section['actions'] );
-					}
+			if ( ! isset( $group['sections'] ) ) {
+				continue;
+			}
+
+			foreach ( $group['sections'] as $section ) {
+				if ( isset( $section['actions'] ) ) {
+					$grouped = array_merge( $grouped, $section['actions'] );
 				}
 			}
 		}
@@ -244,14 +246,14 @@ class FrmFormActionsController {
 			'quiz_outcome',
 			'googlespreadsheet',
 		);
-		$featured_actions = array_diff( $all_addon_actions, $available_actions );
+		$featured_actions  = array_diff( $all_addon_actions, $available_actions );
 
 		$groups = array(
 			'my_actions' => array(
-				'name'    => __( 'My Actions', 'formidable' ),
-				'icon'    => 'frmfont frm_shuffle_icon',
+				'name'     => __( 'My Actions', 'formidable' ),
+				'icon'     => 'frmfont frm_shuffle_icon',
 				'sections' => array(
-					'active' => array(
+					'active'   => array(
 						'name'    => '',
 						'actions' => $available_actions,
 					),
@@ -261,7 +263,7 @@ class FrmFormActionsController {
 					),
 				),
 			),
-			'payment'   => array(
+			'payment'    => array(
 				'name'    => __( 'E-Commerce', 'formidable' ),
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
 				'actions' => array(
@@ -270,7 +272,7 @@ class FrmFormActionsController {
 					'square',
 				),
 			),
-			'marketing' => array(
+			'marketing'  => array(
 				'name'    => __( 'Marketing', 'formidable' ),
 				'icon'    => 'frmfont frm_mail_bulk_icon',
 				'actions' => array(
@@ -284,12 +286,12 @@ class FrmFormActionsController {
 					'twilio',
 				),
 			),
-			'crm'       => array(
+			'crm'        => array(
 				'name'    => __( 'CRM', 'formidable' ),
 				'icon'    => 'frmfont frm_address_card_icon',
 				'actions' => self::get_crm_actions(),
 			),
-			'misc'      => array(
+			'misc'       => array(
 				'name'    => __( 'Misc', 'formidable' ),
 				'icon'    => 'frmfont frm_shuffle_icon',
 				'actions' => self::get_misc_actions( $action_controls ),
@@ -352,11 +354,10 @@ class FrmFormActionsController {
 
 		// Include all active actions that aren't in specific groups (payment, marketing, crm).
 		// This ensures custom actions appear in "Misc" when enabled.
-		$payment_actions = array( 'paypal', 'stripe', 'square' );
+		$payment_actions   = array( 'paypal', 'stripe', 'square' );
 		$marketing_actions = array( 'mailchimp', 'activecampaign', 'constantcontact', 'getresponse', 'aweber', 'mailpoet', 'convertkit', 'twilio' );
-		$crm_actions = self::get_crm_actions();
 
-		$excluded_actions = array_merge( $payment_actions, $marketing_actions, $crm_actions );
+		$excluded_actions = array_merge( $payment_actions, $marketing_actions, self::get_crm_actions() );
 
 		foreach ( $action_controls as $action_id => $action_control ) {
 			if ( ! in_array( $action_id, $misc_actions, true ) && ! in_array( $action_id, $excluded_actions, true ) && ! empty( $action_control->action_options['active'] ) ) {
