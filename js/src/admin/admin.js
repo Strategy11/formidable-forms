@@ -8558,7 +8558,7 @@ window.frmAdminBuildJS = function() {
 			document.selection.createRange().text = variable;
 		} else {
 			const obj = contentBox[ 0 ];
-			const selectionEnd = obj.selectionEnd;
+			const { selectionEnd } = obj;
 
 			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, selectionEnd );
 

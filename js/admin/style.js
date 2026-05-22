@@ -1168,16 +1168,16 @@
 		} );
 
 		function detectColorFormat( value ) {
-			if ( /^rgba/.test( value ) ) {
+			if ( value.startsWith( 'rgba' ) ) {
 				return 'rgba';
 			}
-			if ( /^rgb/.test( value ) ) {
+			if ( value.startsWith( 'rgb' ) ) {
 				return 'rgb';
 			}
-			if ( /^hsla/.test( value ) ) {
+			if ( value.startsWith( 'hsla' ) ) {
 				return 'hsla';
 			}
-			if ( /^hsl/.test( value ) ) {
+			if ( value.startsWith( 'hsl' ) ) {
 				return 'hsl';
 			}
 			return 'hex';
@@ -1190,7 +1190,7 @@
 		} ).wpColorPicker( {
 			change( event, ui ) {
 				const input = event.target;
-				let format = input.dataset.colorFormat || 'hex';
+				const format = input.dataset.colorFormat || 'hex';
 				let color;
 
 				trackUnsavedChange();
