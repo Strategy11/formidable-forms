@@ -1167,22 +1167,35 @@
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
 		} );
 
-		jQuery( 'input.hex' ).wpColorPicker( {
+		jQuery( 'input.hex' ).each( function() {
+			this.dataset.colorFormat = /^#/.test( this.value ) ? 'hex' : 'rgba';
+		} ).on( 'keyup', function() {
+			this.dataset.colorFormat = /^#/.test( this.value ) ? 'hex' : 'rgba';
+		} ).wpColorPicker( {
 			change( event, ui ) {
-				let color = jQuery( this ).wpColorPicker( 'color' );
+				const input = event.target;
+				let format = input.dataset.colorFormat || 'hex';
+				let color;
+
 				trackUnsavedChange();
+
 				if ( ui.color._alpha < 1 ) {
-					// If there's transparency, use RGBA
+					input.dataset.colorFormat = 'rgba';
+					color = ui.color.toCSS( 'rgba' );
+				} else if ( 'hex' === format ) {
+					color = ui.color.toString();
+				} else {
 					color = ui.color.toCSS( 'rgba' );
 				}
+
 				debouncedColorChange( event, color );
 
-				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				jQuery( event.target ).val( color ).trigger( 'change' );
+				jQuery( input ).val( color ).trigger( 'change' );
 			}
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
