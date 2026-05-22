@@ -1168,8 +1168,11 @@
 		} );
 
 		function detectColorFormat( value ) {
-			if ( /^#/.test( value ) ) {
-				return 'hex';
+			if ( /^rgba/.test( value ) ) {
+				return 'rgba';
+			}
+			if ( /^rgb/.test( value ) ) {
+				return 'rgb';
 			}
 			if ( /^hsla/.test( value ) ) {
 				return 'hsla';
@@ -1177,7 +1180,7 @@
 			if ( /^hsl/.test( value ) ) {
 				return 'hsl';
 			}
-			return /^rgba/.test( value ) ? 'rgba' : 'rgb';
+			return 'hex';
 		}
 
 		jQuery( 'input.hex' ).each( function() {
