@@ -1183,8 +1183,26 @@
 			return 'hex';
 		}
 
+		const nativeInputValueDescriptor = Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, 'value' );
+
 		jQuery( 'input.hex' ).each( function() {
 			this.dataset.colorFormat = detectColorFormat( this.value );
+
+			// Prevent iris from overwriting non-hex formats with hex during color picking.
+			const input = this;
+			Object.defineProperty( input, 'value', {
+				get() {
+					return nativeInputValueDescriptor.get.call( this );
+				},
+				set( val ) {
+					const format = input.dataset.colorFormat;
+					if ( format && 'hex' !== format && /^#[0-9a-f]{3,8}$/i.test( val ) ) {
+						return;
+					}
+					nativeInputValueDescriptor.set.call( this, val );
+				},
+				configurable: true
+			} );
 		} ).on( 'keyup', function() {
 			this.dataset.colorFormat = detectColorFormat( this.value );
 		} ).wpColorPicker( {
@@ -1206,12 +1224,14 @@
 
 				debouncedColorChange( event, color );
 
+				input.value = color;
+
 				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				jQuery( input ).val( color ).trigger( 'change' );
+				debouncedPreviewUpdate();
 			}
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
