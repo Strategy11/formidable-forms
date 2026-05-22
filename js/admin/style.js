@@ -1167,10 +1167,23 @@
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
 		} );
 
+		function detectColorFormat( value ) {
+			if ( /^#/.test( value ) ) {
+				return 'hex';
+			}
+			if ( /^hsla/.test( value ) ) {
+				return 'hsla';
+			}
+			if ( /^hsl/.test( value ) ) {
+				return 'hsl';
+			}
+			return /^rgba/.test( value ) ? 'rgba' : 'rgb';
+		}
+
 		jQuery( 'input.hex' ).each( function() {
-			this.dataset.colorFormat = /^#/.test( this.value ) ? 'hex' : 'rgba';
+			this.dataset.colorFormat = detectColorFormat( this.value );
 		} ).on( 'keyup', function() {
-			this.dataset.colorFormat = /^#/.test( this.value ) ? 'hex' : 'rgba';
+			this.dataset.colorFormat = detectColorFormat( this.value );
 		} ).wpColorPicker( {
 			change( event, ui ) {
 				const input = event.target;
@@ -1185,7 +1198,7 @@
 				} else if ( 'hex' === format ) {
 					color = ui.color.toString();
 				} else {
-					color = ui.color.toCSS( 'rgba' );
+					color = ui.color.toCSS( format );
 				}
 
 				debouncedColorChange( event, color );
