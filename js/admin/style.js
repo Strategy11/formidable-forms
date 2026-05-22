@@ -1204,7 +1204,15 @@
 				configurable: true
 			} );
 		} ).on( 'keyup', function() {
-			this.dataset.colorFormat = detectColorFormat( this.value );
+			const newFormat = detectColorFormat( this.value );
+			if ( this.dataset.colorFormat !== newFormat ) {
+				this.dataset.colorFormat = newFormat;
+				const container = this.closest( '.wp-picker-container' );
+				if ( container ) {
+					container.querySelector( '.wp-color-result-text' ).textContent = this.value;
+				}
+				debouncedColorChange( { target: this }, this.value );
+			}
 		} ).wpColorPicker( {
 			change( event, ui ) {
 				const input = event.target;
