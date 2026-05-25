@@ -275,7 +275,7 @@ $single_action_attrs = array(
 	</div>
 </div>
 
-<h3 class="frm-mt-xl"><?php esc_html_e( 'Your Actions', 'formidable' ); ?></h3>
+<h3 class="frm-mt-xl"><?php esc_html_e( 'Current Actions', 'formidable' ); ?></h3>
 
 <?php
 FrmFormActionsController::list_actions( $form, $values );
