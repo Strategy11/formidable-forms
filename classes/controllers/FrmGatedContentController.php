@@ -285,9 +285,9 @@ class FrmGatedContentController {
 	 * Generate a gated content token when a form action fires.
 	 *
 	 * @param WP_Post $action Form action post object (post_excerpt = 'gated_content').
-	 * @param object $entry  Submitted form entry object.
-	 * @param object $form   Form object.
-	 * @param string $event  Trigger event ('create', 'payment-success', 'user_registration', …).
+	 * @param object  $entry  Submitted form entry object.
+	 * @param object  $form   Form object.
+	 * @param string  $event  Trigger event ('create', 'payment-success', 'user_registration', …).
 	 *
 	 * @return void
 	 */
