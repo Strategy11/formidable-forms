@@ -1205,7 +1205,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 */
 			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
-				$settings_for_action['paypalLayout']        = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout';
+				$settings_for_action['paypalLayout']         = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout';
 				return $settings_for_action;
 			},
 			10,
@@ -1281,8 +1281,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				break;
 		}
 
-		$components = array();
-
+		$components               = array();
 		$include_google_apple_pay = $include_buttons && is_ssl() && self::include_google_pay_apple_pay();
 
 		if ( $include_buttons ) {
@@ -1328,6 +1327,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
 
 		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
+
 		if ( $include_google_apple_pay ) {
 			wp_register_script( 'apple-pay-sdk', 'https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js', array(), null, false );
 		}
