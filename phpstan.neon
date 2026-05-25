@@ -131,10 +131,11 @@ parameters:
 				- classes/controllers/FrmSettingsController.php
 				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
 				- classes/models/FrmMigrate.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
 				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 				- stubs.php
 		-
-			message: '#with no type specified#'
+			message: '#no type specified#'
 			paths:
 				- paypal/controllers/FrmPayPalLiteActionsController.php
 				- stubs.php
@@ -160,6 +161,7 @@ parameters:
 			paths:
 				- stripe/controllers/FrmTransLiteActionsController.php
 				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 		-
 			message: '#fwrite expects resource, resource\|null given#'
 			path: classes/helpers/FrmCSVExportHelper.php
@@ -298,6 +300,7 @@ parameters:
 				- css/_single_theme.css.php
 				- css/custom_theme.css.php
 				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
 				- square/controllers/FrmSquareLiteActionsController.php
 				- square/controllers/FrmSquareLiteAppController.php
 				- stripe/controllers/FrmStrpLiteLinkController.php
@@ -339,6 +342,7 @@ parameters:
 				- classes/helpers/FrmXMLHelper.php
 				- classes/models/FrmEntryValidate.php
 				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 		- message: '#Possibly invalid array key#'
 		-
 			message: '#should return array<(string|array)> but returns array#'
@@ -407,7 +411,9 @@ parameters:
 			path: paypal/controllers/FrmPayPalLiteActionsController.php
 		-
 			message: "#Casting to .+ something that's already#"
-			path: paypal/helpers/FrmPayPalLiteConnectHelper.php
+			paths:
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 		-
 			message: '#is not subtype of native type#'
 			path: paypal/helpers/FrmPayPalLiteConnectHelper.php
