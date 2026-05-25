@@ -1392,9 +1392,9 @@
 	/**
 	 * Throw an Error from a server error response.
 	 *
-	 * @param {*}                data      The response data from wp_send_json_error.
-	 * @param {string}           fallback  Fallback message if data is unusable.
-	 * @param {string|undefined} context   Current context. Could be 'create_order', 'create_subscription'.
+	 * @param {*}                data     The response data from wp_send_json_error.
+	 * @param {string}           fallback Fallback message if data is unusable.
+	 * @param {string|undefined} context  Current context. Could be 'create_order', 'create_subscription'.
 	 */
 	function throwServerError( data, fallback, context ) {
 		let message = fallback;

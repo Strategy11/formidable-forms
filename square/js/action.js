@@ -24,7 +24,7 @@
 					// Check if this setting has a show_* class for any active gateway
 					const hasActiveGatewayClass = Array.from( subOpts.classList ).some( function( className ) {
 						return activeGateways.some( function( gateway ) {
-							return className === 'show_' + gateway;
+							return className === `show_${ gateway }`;
 						} );
 					} );
 
