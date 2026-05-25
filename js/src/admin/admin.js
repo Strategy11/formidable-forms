@@ -11744,6 +11744,163 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		}
 	} );
 
+	// ── frm_upload type: direct file upload ─────────────────────────────── //
+
+	/**
+	 * Upload a file directly to the WordPress media library via the REST API,
+	 * then store the returned attachment ID in the hidden input.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} fileInput - The .frm-gc-upload-file input element.
+	 * @return {Promise<void>}
+	 */
+	async function handleUploadFileChange( fileInput ) {
+		const file   = fileInput.files[ 0 ];
+		const picker = fileInput.closest( '.frm-gc-upload-picker' );
+
+		if ( ! file || ! picker ) {
+			return;
+		}
+
+		const hiddenInput = picker.querySelector( '.frm-gc-upload-id' );
+		const nameDisplay = picker.querySelector( '.frm-gc-upload-name' );
+		const copyLinkBtn = picker.querySelector( '.frm-gc-upload-copy-link' );
+		const clearBtn    = picker.querySelector( '.frm-gc-upload-clear' );
+		const statusEl    = picker.querySelector( '.frm-gc-upload-status' );
+		const data        = window.frmGcUploadData || {};
+
+		if ( statusEl ) {
+			statusEl.textContent = data.uploading || 'Uploading…';
+		}
+
+		try {
+			const formData = new FormData();
+			formData.append( 'file', file );
+			formData.append( 'action', data.action || 'frm_gc_upload_file' );
+			formData.append( 'nonce', data.nonce || '' );
+
+			const response = await fetch( data.ajaxUrl || ajaxurl, {
+				method: 'POST',
+				body:   formData,
+			} );
+
+			if ( ! response.ok ) {
+				throw new Error( response.statusText );
+			}
+
+			const result = await response.json();
+
+			if ( ! result.success ) {
+				throw new Error( ( result.data && result.data.message ) || '' );
+			}
+
+			const attachment = result.data;
+
+			if ( hiddenInput ) {
+				hiddenInput.value = attachment.id;
+			}
+			if ( nameDisplay ) {
+				nameDisplay.textContent = attachment.title || file.name;
+			}
+			if ( copyLinkBtn ) {
+				copyLinkBtn.dataset.url = attachment.source_url || '';
+				copyLinkBtn.removeAttribute( 'hidden' );
+			}
+			if ( clearBtn ) {
+				clearBtn.removeAttribute( 'hidden' );
+			}
+			if ( statusEl ) {
+				statusEl.textContent = '';
+			}
+
+			fileInput.setAttribute( 'hidden', '' );
+		} catch ( err ) {
+			if ( statusEl ) {
+				statusEl.textContent = data.uploadError || 'Upload failed.';
+			}
+		}
+
+		// Reset so the same file can be re-selected after clearing.
+		fileInput.value = '';
+	}
+
+	/**
+	 * Clear the upload picker selection.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} clearBtn - The .frm-gc-upload-clear button element.
+	 */
+	function clearUploadPicker( clearBtn ) {
+		const picker      = clearBtn.closest( '.frm-gc-upload-picker' );
+		const hiddenInput = picker?.querySelector( '.frm-gc-upload-id' );
+		const nameDisplay = picker?.querySelector( '.frm-gc-upload-name' );
+		const copyLinkBtn = picker?.querySelector( '.frm-gc-upload-copy-link' );
+		const fileInput   = picker?.querySelector( '.frm-gc-upload-file' );
+
+		if ( hiddenInput ) {
+			hiddenInput.value = '';
+		}
+		if ( nameDisplay ) {
+			nameDisplay.textContent = '';
+		}
+		if ( copyLinkBtn ) {
+			copyLinkBtn.dataset.url = '';
+			copyLinkBtn.setAttribute( 'hidden', '' );
+		}
+		if ( fileInput ) {
+			fileInput.removeAttribute( 'hidden' );
+		}
+		clearBtn.setAttribute( 'hidden', '' );
+	}
+
+	/**
+	 * Copy the file URL to the clipboard for a gated upload item.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} btn - The .frm-gc-upload-copy-link button element.
+	 * @return {Promise<void>}
+	 */
+	async function copyUploadLink( btn ) {
+		const url = btn.dataset.url;
+		if ( ! url ) {
+			return;
+		}
+		try {
+			await navigator.clipboard.writeText( url );
+			const data     = window.frmGcUploadData || {};
+			const original = btn.textContent;
+			btn.textContent = data.copied || 'Copied!';
+			setTimeout( function() {
+				btn.textContent = original;
+			}, 2000 );
+		} catch ( err ) {
+			// Clipboard API unavailable — do nothing.
+		}
+	}
+
+	document.addEventListener( 'change', function( event ) {
+		const fileInput = event.target.closest( '.frm-gc-upload-file' );
+		if ( fileInput ) {
+			handleUploadFileChange( fileInput );
+		}
+	} );
+
+	document.addEventListener( 'click', function( event ) {
+		const copyLinkBtn = event.target.closest( '.frm-gc-upload-copy-link' );
+		if ( copyLinkBtn ) {
+			copyUploadLink( copyLinkBtn );
+			return;
+		}
+
+		const clearBtn = event.target.closest( '.frm-gc-upload-clear' );
+		if ( clearBtn ) {
+			clearUploadPicker( clearBtn );
+		}
+	} );
+
 	// Show/hide "Keep old token when entry is updated" when the event multi-select changes.
 	jQuery( document ).on( 'frm-multiselect-changed', 'select[id^="event_"]', function() {
 		const section = document.querySelector( `.frm_gc_update_section[data-frm-gc-event-id="${ this.id }"]` );
