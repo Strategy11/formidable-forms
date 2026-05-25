@@ -1244,7 +1244,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'intent'         => $intent,
 			'currency'       => strtoupper( $action->post_content['currency'] ?? 'USD' ),
 			'merchant-id'    => FrmPayPalLiteConnectHelper::get_merchant_id(),
-			'enable-funding' => 'venmo,applepay',
+			'enable-funding' => is_ssl() ? 'venmo,applepay' : 'venmo',
 		);
 
 		if ( 'subscription' === $intent ) {
@@ -1283,10 +1283,15 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$components = array();
 
+		$include_google_apple_pay = $include_buttons && is_ssl() && self::include_google_pay_apple_pay();
+
 		if ( $include_buttons ) {
 			$components[] = 'buttons';
-			$components[] = 'googlepay';
-			$components[] = 'applepay';
+
+			if ( $include_google_apple_pay ) {
+				$components[] = 'googlepay';
+				$components[] = 'applepay';
+			}
 		}
 
 		if ( $include_card_fields ) {
@@ -1323,7 +1328,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$sdk_url = add_query_arg( $query_args, 'https://www.paypal.com/sdk/js' );
 
 		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
-		wp_register_script( 'apple-pay-sdk', 'https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js', array(), null, false );
+		if ( $include_google_apple_pay ) {
+			wp_register_script( 'apple-pay-sdk', 'https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js', array(), null, false );
+		}
 
 		$has_break = FrmAppHelper::pro_is_installed() && (bool) FrmField::get_all_types_in_form( $form_id, 'break' );
 
@@ -1364,7 +1371,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$dependencies = array( 'paypal-sdk', 'formidable' );
 
-		if ( $include_buttons ) {
+		if ( $include_google_apple_pay ) {
 			$dependencies[] = 'apple-pay-sdk';
 		}
 
@@ -1378,7 +1385,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		if ( $include_buttons ) {
+		if ( $include_google_apple_pay ) {
 			wp_enqueue_script(
 				'google-pay',
 				'https://pay.google.com/gp/p/js/pay.js',
@@ -1399,6 +1406,15 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function include_google_pay_apple_pay() {
+		return (bool) apply_filters( 'frm_include_google_pay_apple_pay', true );
 	}
 
 	/**
