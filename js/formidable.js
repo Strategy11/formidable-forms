@@ -1154,7 +1154,7 @@ function frmFrontFormJS() {
 		}
 
 		const tempDiv = document.createElement( 'div' );
-		tempDiv.innerHTML = purifyHtml( errorMessage );
+		tempDiv.innerHTML = errorMessage;
 		const errorDiv = tempDiv.querySelector( 'div' );
 		if ( errorDiv ) {
 			errorDiv.classList.add( 'frm_error' );
@@ -1707,19 +1707,6 @@ function frmFrontFormJS() {
 			.join( '' );
 		const timestamp = Date.now().toString( 16 );
 		return `${ uniqueKey }-${ timestamp }`;
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param {string} html
-	 * @return {string} Sanitized HTML string.
-	 */
-	function purifyHtml( html ) {
-		const nodes = jQuery.parseHTML( html ) || [];
-		const temp = document.createElement( 'div' );
-		nodes.forEach( node => temp.append( node ) );
-		return temp.innerHTML;
 	}
 
 	/**
