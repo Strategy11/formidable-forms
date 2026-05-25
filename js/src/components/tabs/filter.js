@@ -42,6 +42,20 @@ export function applyContentFilter( filterValue ) {
 
 	filterTarget.dataset.activeFilter = filterValue;
 	filterTarget.querySelectorAll( '[data-group]' ).forEach( group => {
-		group.classList.toggle( 'frm_hidden', 'all' !== filterValue && group.dataset.group !== filterValue );
+		// Hide my_actions group when "All" is selected
+		if ( 'all' === filterValue && 'my_actions' === group.dataset.group ) {
+			group.classList.add( 'frm_hidden' );
+		} else {
+			group.classList.toggle( 'frm_hidden', 'all' !== filterValue && group.dataset.group !== filterValue );
+		}
 	} );
+
+	// Hide section headings in my_actions group when "All" is selected
+	const myActionsGroup = filterTarget.querySelector( '[data-group="my_actions"]' );
+	if ( myActionsGroup ) {
+		const sectionHeadings = myActionsGroup.querySelectorAll( '[data-section] .frm-group-heading' );
+		sectionHeadings.forEach( heading => {
+			heading.style.display = 'all' === filterValue ? 'none' : '';
+		} );
+	}
 }

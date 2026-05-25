@@ -971,7 +971,14 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_field( $args ) {
-		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
+		/**
+		 * @since x.x Added $field parameter.
+		 *
+		 * @param bool   $show_normal_field_type
+		 * @param string $type
+		 * @param array  $field
+		 */
+		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type, $this->field ) ) {
 			echo $this->prepare_field_html( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			do_action( 'frm_show_other_field_type', $this->field, $args['form'], array( 'action' => $args['form_action'] ) );

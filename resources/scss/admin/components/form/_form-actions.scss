@@ -35,6 +35,20 @@
 	display: none;
 }
 
+// Show section headings in my_actions group
+#frm-actions-filter-content[data-active-filter="my_actions"] [data-section] .frm-group-heading {
+	display: block;
+}
+
+// Add spacing between sections in my_actions group
+#frm-actions-filter-content[data-active-filter="my_actions"] [data-section] {
+	margin-bottom: var(--gap-md);
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
 // Action Cards
 .frm_actions_list .frm-card-item.frm-card-item--outlined {
 	padding-left: var(--gap-sm);
@@ -219,4 +233,17 @@
 			gap: var(--gap-2xs);
 		}
 	}
+}
+
+.frm_square_action .frm_square_icon {
+	position: relative;
+	top: 2px;
+	left: 1px;
+	zoom: 1.2;
+}
+
+.frm-border-icon .frm_square_icon {
+	width: 22px;
+	height: 22px;
+	overflow: visible;
 }
