@@ -205,47 +205,6 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * Extract error details from a PayPal response.
-	 *
-	 * @since x.x
-	 *
-	 * @param mixed $response The response from PayPal.
-	 *
-	 * @return array|false Array with 'reason' and 'debug_id' keys, or false if no error details.
-	 */
-	private static function extract_error_details( $response ) {
-		$reason   = '';
-		$debug_id = '';
-
-		if ( is_array( $response ) ) {
-			if ( ! empty( $response['message'] ) ) {
-				$reason = $response['message'];
-			}
-
-			if ( ! empty( $response['debug_id'] ) ) {
-				$debug_id = $response['debug_id'];
-			}
-		} elseif ( is_object( $response ) ) {
-			if ( ! empty( $response->message ) ) {
-				$reason = $response->message;
-			}
-
-			if ( ! empty( $response->debug_id ) ) {
-				$debug_id = $response->debug_id;
-			}
-		}
-
-		if ( $reason || $debug_id ) {
-			return array(
-				'reason'   => $reason,
-				'debug_id' => $debug_id,
-			);
-		}
-
-		return false;
-	}
-
-	/**
 	 * @deprecated 6.27
 	 *
 	 * @return string|null
