@@ -2644,8 +2644,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function get_client_id() {
-		// TODO: This will need logic for a production client ID as well.
-		// This is currently just for testing.
+		if ( 'live' === FrmPayPalLiteAppHelper::active_mode() ) {
+			return 'AZXLuLRGUnqHlo75Di6zRonnVy7mLBz-sXYIeHTmv9KsDIkNMp7au9rlapegcYKh8zhfPXvGdxal6PHG';
+		}
+
 		return 'AYTiIIchQiekyGhJouWoLapPfjijirOtKHSN255SLhcP0TIaWBID-zxsYDaNmP4fXL6YcQxiSIMS0Lwu';
 	}
 
