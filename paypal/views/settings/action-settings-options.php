@@ -10,11 +10,11 @@ $pay_later_value = $form_action->post_content['pay_later'] ?? 'auto';
 		<h3><?php esc_html_e( 'PayPal Settings', 'formidable' ); ?></h3>
 
 		<p class="frm6">
-			<label for="<?php echo esc_attr( $action_control->get_field_id( 'layout' ) ); ?>">
+			<label for="<?php echo esc_attr( $action_control->get_field_id( 'paypal_layout' ) ); ?>">
 				<?php esc_html_e( 'Layout', 'formidable' ); ?>
 			</label>
-			<?php $layout_value = ! empty( $form_action->post_content['layout'] ) ? $form_action->post_content['layout'] : 'card_and_checkout'; ?>
-			<select id="<?php echo esc_attr( $action_control->get_field_id( 'layout' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'layout' ) ); ?>">
+			<?php $layout_value = ! empty( $form_action->post_content['paypal_layout'] ) ? $form_action->post_content['paypal_layout'] : 'card_and_checkout'; ?>
+			<select id="<?php echo esc_attr( $action_control->get_field_id( 'paypal_layout' ) ); ?>" name="<?php echo esc_attr( $action_control->get_field_name( 'paypal_layout' ) ); ?>">
 				<option value="card_and_checkout" <?php selected( $layout_value, 'card_and_checkout' ); ?>><?php esc_html_e( 'Card and checkout buttons', 'formidable' ); ?></option>
 				<option value="checkout_only" <?php selected( $layout_value, 'checkout_only' ); ?>><?php esc_html_e( 'Checkout buttons only', 'formidable' ); ?></option>
 				<option value="card_only" <?php selected( $layout_value, 'card_only' ); ?>><?php esc_html_e( 'Card only', 'formidable' ); ?></option>

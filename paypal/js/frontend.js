@@ -118,7 +118,7 @@
 		}
 
 		isRecurring = 'single' !== settings.one;
-		const { layout } = settings;
+		const { paypalLayout: layout } = settings;
 		const cardFieldsAreSupported = layout !== 'checkout_only' && 'function' === typeof window.paypal.CardFields;
 		const buttonsAreEnabled = layout !== 'card_only' && 'function' === typeof window.paypal.Buttons;
 

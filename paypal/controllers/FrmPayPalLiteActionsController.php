@@ -1205,7 +1205,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 */
 			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
-				$settings_for_action['layout']               = ! empty( $payment_action->post_content['layout'] ) ? $payment_action->post_content['layout'] : 'card_and_checkout';
+				$settings_for_action['paypalLayout']        = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout';
 				return $settings_for_action;
 			},
 			10,
@@ -1255,7 +1255,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$include_card_fields = false;
 		$include_messages    = true;
 
-		switch ( $action->post_content['layout'] ?? 'card_and_checkout' ) {
+		switch ( $action->post_content['paypal_layout'] ?? 'card_and_checkout' ) {
 			case 'card_only':
 				$include_card_fields = true;
 				break;

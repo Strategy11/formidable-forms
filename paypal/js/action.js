@@ -4,7 +4,7 @@
 		return;
 	}
 
-	jQuery( actions ).on( 'change', 'select[name*="[post_content][layout]"]', onLayoutChange );
+	jQuery( actions ).on( 'change', 'select[name*="[post_content][paypal_layout]"]', onLayoutChange );
 
 	function onLayoutChange() {
 		const settings = this.closest( '.frm_form_action_settings' );
