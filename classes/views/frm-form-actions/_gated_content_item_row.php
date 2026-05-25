@@ -85,6 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$frm_gc_pt_sel_id   = $is_template ? '' : $frm_gc_wrapper_id . '_id_' . $frm_gc_pt_key . '_' . $frm_gc_idx;
 			$frm_gc_pt_source   = $frm_gc_use_autocomplete ? ( $frm_gc_posts_source[ $frm_gc_pt_key ] ?? '[]' ) : '';
 			$frm_gc_pt_is_first = ! isset( $frm_gc_first_pt_rendered );
+
 			if ( $frm_gc_pt_is_first ) {
 				$frm_gc_first_pt_rendered = true;
 			}
@@ -106,6 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php if ( $frm_gc_use_autocomplete ) : ?>
 					<?php
 					$frm_gc_pt_selected_title = '';
+
 					if ( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key ) {
 						foreach ( $frm_gc_pt_posts as $frm_gc_post ) {
 							if ( $frm_gc_item_id === $frm_gc_post->ID ) {

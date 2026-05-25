@@ -193,10 +193,9 @@ class FrmGatedContentAction extends FrmFormAction {
 	 * @return array<string, WP_Post[]> Posts keyed by item type slug (e.g. 'page', 'post').
 	 */
 	public static function get_posts() {
-		$types      = self::get_types();
 		$post_types = array();
 
-		foreach ( $types as $type_key => $type_config ) {
+		foreach ( self::get_types() as $type_key => $type_config ) {
 			if ( empty( $type_config['disabled'] ) && post_type_exists( $type_key ) ) {
 				$post_types[] = $type_key;
 			}
@@ -236,8 +235,10 @@ class FrmGatedContentAction extends FrmFormAction {
 
 		foreach ( $raw_posts as $post ) {
 			if ( 'private' !== $post->post_status && '' === $post->post_password ) {
-				continue; // Skip publicly accessible posts.
+				// Skip publicly accessible posts.
+				continue;
 			}
+
 			if ( isset( $grouped[ $post->post_type ] ) ) {
 				$grouped[ $post->post_type ][] = $post;
 			}

@@ -35,6 +35,7 @@ if ( $frm_gc_use_autocomplete ) {
 
 	// Pre-encode one autocomplete source per type for reuse in all item rows.
 	$frm_gc_posts_source = array();
+
 	foreach ( $frm_gc_posts as $frm_gc_type_key => $frm_gc_type_posts ) {
 		$frm_gc_posts_source[ $frm_gc_type_key ] = FrmGatedContentAction::get_posts_autocomplete_source( $frm_gc_type_posts );
 	}

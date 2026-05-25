@@ -61,6 +61,7 @@ class FrmGatedContentController {
 		}
 
 		$queried_post = self::get_queried_post( $query );
+
 		if ( ! $queried_post ) {
 			return;
 		}
@@ -83,7 +84,7 @@ class FrmGatedContentController {
 	/**
 	 * Resolve the requested WP_Post from the query vars at pre_get_posts time.
 	 *
-	 * get_queried_object_id() is not available at pre_get_posts because the query
+	 * Get_queried_object_id() is not available at pre_get_posts because the query
 	 * has not run yet. For numeric-ID URLs the post comes from get_post(); for
 	 * pretty-permalink slugs, get_page_by_path() resolves the slug including
 	 * private posts (it queries all statuses except trash/auto-draft).
@@ -96,17 +97,29 @@ class FrmGatedContentController {
 	 * @return WP_Post|null Resolved post, or null if it cannot be determined.
 	 */
 	private static function get_queried_post( $query ) {
-		$post_id = (int) $query->get( 'p' ) ?: (int) $query->get( 'page_id' );
-		if ( $post_id ) {
-			return get_post( $post_id ) ?: null;
+		$post_id = (int) $query->get( 'p' );
+
+		if ( ! $post_id ) {
+			$post_id = (int) $query->get( 'page_id' );
 		}
 
-		$slug = $query->get( 'pagename' ) ?: $query->get( 'name' );
+		if ( $post_id ) {
+			$post = get_post( $post_id );
+			return $post ? $post : null;
+		}
+
+		$slug = $query->get( 'pagename' );
+
+		if ( ! $slug ) {
+			$slug = $query->get( 'name' );
+		}
+
 		if ( ! $slug ) {
 			return null;
 		}
 
 		$post_types = array();
+
 		foreach ( FrmGatedContentAction::get_types() as $type_key => $type_config ) {
 			if ( empty( $type_config['disabled'] ) && post_type_exists( $type_key ) ) {
 				$post_types[] = $type_key;
@@ -114,7 +127,7 @@ class FrmGatedContentController {
 		}
 
 		$post = get_page_by_path( $slug, OBJECT, $post_types );
-		return ( $post instanceof WP_Post ) ? $post : null;
+		return $post instanceof WP_Post ? $post : null;
 	}
 
 	/**
@@ -301,6 +314,7 @@ class FrmGatedContentController {
 	 */
 	public static function add_shortcode_helper( $shortcodes, $settings_tab, $form_id ) {
 		$form_id = (int) $form_id;
+
 		if ( ! $form_id ) {
 			return $shortcodes;
 		}

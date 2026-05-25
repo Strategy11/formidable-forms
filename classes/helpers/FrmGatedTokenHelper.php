@@ -34,9 +34,9 @@ class FrmGatedTokenHelper {
 	/**
 	 * Generate a new access token for a gated content action and persist it.
 	 *
-	 * @param WP_Post  $action Form action post object.
-	 * @param object   $entry  Submitted form entry object (must have ->id).
-	 * @param string   $event  Trigger event slug ('create', 'update', …).
+	 * @param WP_Post $action Form action post object.
+	 * @param object  $entry  Submitted form entry object (must have ->id).
+	 * @param string  $event  Trigger event slug ('create', 'update', …).
 	 *
 	 * @return string Raw 32-character token. Only ever stored in URLs or emails — never in the DB.
 	 */

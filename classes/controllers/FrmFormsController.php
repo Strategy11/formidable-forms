@@ -1846,6 +1846,7 @@ class FrmFormsController {
 	 * @since 2.0.6
 	 *
 	 * @param bool $settings_tab
+	 * @param int  $form_id
 	 *
 	 * @return array
 	 */
