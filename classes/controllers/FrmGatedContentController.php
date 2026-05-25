@@ -284,7 +284,7 @@ class FrmGatedContentController {
 	/**
 	 * Generate a gated content token when a form action fires.
 	 *
-	 * @param object $action Form action post object (post_excerpt = 'gated_content').
+	 * @param WP_Post $action Form action post object (post_excerpt = 'gated_content').
 	 * @param object $entry  Submitted form entry object.
 	 * @param object $form   Form object.
 	 * @param string $event  Trigger event ('create', 'payment-success', 'user_registration', …).
@@ -313,8 +313,6 @@ class FrmGatedContentController {
 	 * @return array
 	 */
 	public static function add_shortcode_helper( $shortcodes, $settings_tab, $form_id ) {
-		$form_id = (int) $form_id;
-
 		if ( ! $form_id ) {
 			return $shortcodes;
 		}
