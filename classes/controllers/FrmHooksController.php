@@ -124,6 +124,7 @@ class FrmHooksController {
 		add_action( 'save_post_frm_form_actions', 'FrmGatedContentController::on_action_updated', 10, 3 );
 		add_action( 'before_delete_post', 'FrmGatedContentController::on_action_deleted', 10, 2 );
 		add_shortcode( 'frm_gated_content', 'FrmGatedContentShortcodeController::shortcode' );
+		add_filter( 'frm_helper_shortcodes', 'FrmGatedContentController::add_shortcode_helper', 10, 3 );
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();

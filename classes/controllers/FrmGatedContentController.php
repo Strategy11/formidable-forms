@@ -281,4 +281,40 @@ class FrmGatedContentController {
 	public static function trigger( $action, $entry, $form, $event ) {
 		FrmGatedTokenHelper::generate( $action, $entry, $event );
 	}
+
+	/**
+	 * Add [frm_gated_content id="…"] entries to the Advanced tab shortcode helpers box.
+	 *
+	 * One entry per gated content action attached to the current form. The left
+	 * column shows the action name (post_title) and the right column shows the
+	 * ready-to-paste shortcode.
+	 *
+	 * Hooked to `frm_helper_shortcodes` with 3 accepted args.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $shortcodes   Existing shortcode helpers array (shortcode => label).
+	 * @param string $settings_tab Active settings tab slug.
+	 * @param int    $form_id      Current form ID.
+	 *
+	 * @return array
+	 */
+	public static function add_shortcode_helper( $shortcodes, $settings_tab, $form_id ) {
+		$form_id = (int) $form_id;
+		if ( ! $form_id ) {
+			return $shortcodes;
+		}
+
+		$actions = FrmFormAction::get_action_for_form( $form_id, FrmGatedContentAction::$slug, array( 'post_status' => 'publish' ) );
+
+		if ( ! $actions ) {
+			return $shortcodes;
+		}
+
+		foreach ( $actions as $action ) {
+			$shortcodes[ 'frm_gated_content id="' . $action->ID . '"' ] = $action->post_title;
+		}
+
+		return $shortcodes;
+	}
 }
