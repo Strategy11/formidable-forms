@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $images_folder_url = FrmAppHelper::plugin_url() . '/images/coupons/';
+
+// Track the view of the upsell coupons tab in the usage data.
+FrmUsageController::update_flows_data( 'coupons', 'view_tab' );
 ?>
 <div class="frm-coupons-upsell-wrapper">
 	<h2><?php esc_html_e( 'Coupons', 'formidable' ); ?></h2>
