@@ -1414,6 +1414,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool
 	 */
 	private static function include_google_pay_apple_pay() {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $include_google_pay_apple_pay
+		 */
 		return (bool) apply_filters( 'frm_include_google_pay_apple_pay', true );
 	}
 
