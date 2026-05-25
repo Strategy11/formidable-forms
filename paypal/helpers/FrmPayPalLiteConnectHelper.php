@@ -515,9 +515,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		// Return 'https://api.strategy11.com/';
-		return 'https://dev-site.local/';
-		// Return 'https://qa.formidableforms.com/paypal/';
+		return 'https://api.strategy11.com/';
 	}
 
 	/**
@@ -1118,7 +1116,11 @@ class FrmPayPalLiteConnectHelper {
 			return $status;
 		}
 
-		return self::post_with_authenticated_body( 'get_seller_status' );
+		$additional_body = array(
+			'frm_paypal_api_mode' => $mode,
+		);
+
+		return self::post_with_authenticated_body( 'get_seller_status', $additional_body );
 	}
 
 	/**
