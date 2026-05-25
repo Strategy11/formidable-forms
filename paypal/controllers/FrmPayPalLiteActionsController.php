@@ -1178,7 +1178,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return void
 	 */
-	public static function load_scripts( $form_id ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength, SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+	public static function load_scripts( $form_id ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength, SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			return;
 		}
