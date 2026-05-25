@@ -141,7 +141,7 @@ class FrmStrpLiteAppHelper {
 				<?php
 				printf(
 					/* translators: %1$s: Link HTML, %2$s: End link */
-					esc_html__( 'Credit Cards will not work without sconnecting %1$sStripe%2$s, %3$sSquare%4$s, or %5$sPayPal%6$s first.', 'formidable' ),
+					esc_html__( 'Credit Cards will not work without connecting %1$sStripe%2$s, %3$sSquare%4$s, or %5$sPayPal%6$s first.', 'formidable' ),
 					// %1$s
 					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) ) . '" target="_blank">',
 					// %2$s

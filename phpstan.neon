@@ -132,6 +132,7 @@ parameters:
 				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
 				- classes/models/FrmMigrate.php
 				- paypal/controllers/FrmPayPalLiteAppController.php
+				- paypal/controllers/FrmPayPalLiteFieldsController.php
 				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 				- stubs.php
 		-
@@ -155,6 +156,7 @@ parameters:
 			message: '#is unused.#'
 			paths:
 				- classes/controllers/FrmSimpleBlocksController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
 				- stripe/controllers/FrmTransLiteSubscriptionsController.php
 		-
 			message: '#on left side of \?\?#'
@@ -257,6 +259,9 @@ parameters:
 				- stripe/helpers/FrmTransLiteListHelper.php
 				- stripe/models/FrmStrpLiteSettings.php
 				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
+				- paypal/controllers/FrmPayPalLiteEventsController.php
+				- paypal/helpers/FrmPayPalLiteApiHelper.php
 				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 				- paypal/models/FrmPayPalLiteSettings.php
 		- message: '#results in an error.#'
@@ -278,6 +283,8 @@ parameters:
 				- classes/models/FrmTableHTMLGenerator.php
 				- classes/models/FrmYoutubeFeedApi.php
 				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
+				- paypal/controllers/FrmPayPalLiteEventsController.php
 				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 				- square/controllers/FrmSquareLiteAppController.php
 				- stripe/controllers/FrmStrpLiteLinkController.php
@@ -408,7 +415,9 @@ parameters:
 			path: classes/views/frm-form-actions/default_actions.php
 		-
 			message: '#in empty\(\) does not exist#'
-			path: paypal/controllers/FrmPayPalLiteActionsController.php
+			paths:
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
 		-
 			message: "#Casting to .+ something that's already#"
 			paths:
@@ -417,3 +426,6 @@ parameters:
 		-
 			message: '#is not subtype of native type#'
 			path: paypal/helpers/FrmPayPalLiteConnectHelper.php
+		-
+			message: '#Switch condition type#'
+			path: paypal/controllers/FrmPayPalLiteAppController.php
