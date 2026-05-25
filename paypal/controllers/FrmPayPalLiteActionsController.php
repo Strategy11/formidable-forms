@@ -1178,8 +1178,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return void
 	 */
-	// phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
-	public static function load_scripts( $form_id ) {
+	public static function load_scripts( $form_id ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Functions.FunctionLength.FunctionLength, SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			return;
 		}
@@ -1205,7 +1204,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			 */
 			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
-				$settings_for_action['paypalLayout']         = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout';
+				$settings_for_action['paypalLayout']         = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				return $settings_for_action;
 			},
 			10,
