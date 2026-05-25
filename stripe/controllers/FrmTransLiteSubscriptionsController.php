@@ -97,7 +97,8 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_edit_entries' );
 
-		$sub_id = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
+		$canceled = false;
+		$sub_id   = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
 
 		if ( $sub_id ) {
 			$frm_sub = new FrmTransLiteSubscription();

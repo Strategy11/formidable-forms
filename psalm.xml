@@ -182,6 +182,7 @@
 				<file name="stripe/models/FrmStrpLiteSettings.php" />
 				<file name="square/models/FrmSquareLiteSettings.php" />
 				<file name="classes/helpers/FrmEntriesHelper.php" />
+				<file name="paypal/models/FrmPayPalLiteSettings.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
@@ -218,6 +219,7 @@
 				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 				<file name="stripe/models/FrmStrpLiteAuth.php" />
 				<file name="square/controllers/FrmSquareLiteAppController.php" />
+				<file name="paypal/controllers/FrmPayPalLiteAppController.php" />
 			</errorLevel>
 		</InvalidScalarArgument>
 		<PossiblyInvalidIterator>
@@ -579,6 +581,7 @@
 				<file name="classes/models/FrmPersonalData.php" />
 				<file name="classes/helpers/FrmXMLHelper.php" />
 				<file name="stripe/controllers/FrmStrpLiteEventsController.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</PossiblyNullIterator>
 	</issueHandlers>
