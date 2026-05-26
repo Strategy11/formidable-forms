@@ -179,7 +179,7 @@
 			stripeLabel.textContent = 'Repeat';
 		}
 
-		intervalCount.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_stripe', 'frm_hidden' );
+		intervalCount.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_stripe', 'show_paypal', 'frm_hidden' );
 	}
 
 	function syncCurrency( gateway, settings ) {

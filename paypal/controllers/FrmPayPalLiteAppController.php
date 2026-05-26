@@ -669,7 +669,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		// Check if response is a structured error with message and debug_id (array or object)
-		if ( ( is_array( $response ) || is_object( $response ) ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+		if ( is_object( $response ) && isset( $response->message ) && isset( $response->debug_id ) ) {
 			wp_send_json_error( $response );
 		}
 
