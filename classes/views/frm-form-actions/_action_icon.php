@@ -24,6 +24,7 @@ $single_action_attrs = array_merge(
 		'data-actiontype' => $action_control->id_base,
 	)
 );
+
 if ( 'paypal' === $action_control->id_base ) {
 	$action_control->name = 'PayPal Commerce';
 }
