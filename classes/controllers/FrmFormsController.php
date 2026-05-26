@@ -3423,9 +3423,13 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Register the formidable script so it is available as a dependency for other scripts.
+	 *
+	 * @since x.x
+	 *
 	 * @return void
 	 */
-	public static function front_head() {
+	public static function register_formidable_script() {
 		$version = FrmAppHelper::plugin_version();
 		$suffix  = FrmAppHelper::js_suffix();
 
@@ -3434,6 +3438,13 @@ class FrmFormsController {
 		} else {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . "/js/formidable{$suffix}.js", array( 'jquery' ), $version, true );
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public static function front_head() {
+		self::register_formidable_script();
 
 		add_filter( 'script_loader_tag', 'FrmFormsController::defer_script_loading', 10, 2 );
 

@@ -127,6 +127,8 @@ class FrmStylesController {
 		}
 
 		FrmStyleComponent::register_assets();
+		FrmFormsController::register_formidable_script();
+		self::register_style_script();
 		self::load_pro_hooks();
 
 		$version = FrmAppHelper::plugin_version();
@@ -568,13 +570,14 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Register and enqueue styles and scripts for the style tab page.
+	 * Register the formidable_style script early so it is available as a dependency
+	 * for other scripts enqueued on admin_enqueue_scripts (e.g. formidable-pro).
 	 *
-	 * @since 6.0
+	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function setup_styles_and_scripts_for_styler() {
+	public static function register_style_script() {
 		$plugin_url      = FrmAppHelper::plugin_url();
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
@@ -585,6 +588,17 @@ class FrmStylesController {
 
 		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', $js_dependencies, $version );
 		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
+	}
+
+	/**
+	 * Register and enqueue styles and scripts for the style tab page.
+	 *
+	 * @since 6.0
+	 *
+	 * @return void
+	 */
+	private static function setup_styles_and_scripts_for_styler() {
+		self::register_style_script();
 		wp_print_styles( 'formidable_style' );
 
 		wp_print_styles( 'formidable' );
