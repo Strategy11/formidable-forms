@@ -1017,6 +1017,7 @@
 			merchantCapabilities: applePayConfig.merchantCapabilities,
 			supportedNetworks: applePayConfig.supportedNetworks,
 			currencyCode: applePayConfig.currencyCode || 'USD',
+			requiredBillingContactFields: [ 'postalAddress' ],
 			total: {
 				label: document.title || 'Payment',
 				type: 'final',
@@ -1046,26 +1047,38 @@
 			} );
 		};
 
-		session.onpaymentauthorized = event => {
-			createOrderForApplePay()
-				.then( orderId => {
-					return applePayInstance.confirmOrder( {
-						orderId,
-						token: event.payment.token,
-						billingContact: event.payment.billingContact
-					} )
-						.then( () => {
-							session.completePayment( ApplePaySession.STATUS_SUCCESS );
-							onApprove( {
-								orderID: orderId,
-								paymentSource: 'apple_pay'
-							} );
-						} );
-				} )
-				.catch( err => {
-					console.error( 'Apple Pay payment failed', err );
-					session.completePayment( ApplePaySession.STATUS_FAILURE );
+		session.onpaymentauthorized = async event => {
+			let sessionCompleted = false;
+
+			try {
+				const orderId = await createOrderForApplePay();
+				const confirmOrderResponse = await applePayInstance.confirmOrder( {
+					orderId,
+					token: event.payment.token,
+					billingContact: event.payment.billingContact,
+					shippingContact: event.payment.shippingContact
 				} );
+
+				const approvalStatus = confirmOrderResponse?.approveApplePayPayment?.status;
+
+				if ( approvalStatus === 'PAYER_ACTION_REQUIRED' ) {
+					await applePayInstance.initiatePayerAction( { orderId } );
+				}
+
+				session.completePayment( ApplePaySession.STATUS_SUCCESS );
+				sessionCompleted = true;
+
+				onApprove( {
+					orderID: orderId,
+					paymentSource: 'apple_pay'
+				} );
+			} catch ( err ) {
+				console.error( 'Apple Pay payment failed', err );
+				if ( ! sessionCompleted ) {
+					session.completePayment( ApplePaySession.STATUS_FAILURE );
+				}
+				reportErrorToServer( err, 'apple_pay' );
+			}
 		};
 
 		session.oncancel = () => {
