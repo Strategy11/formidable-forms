@@ -1055,15 +1055,18 @@
 				const confirmOrderResponse = await applePayInstance.confirmOrder( {
 					orderId,
 					token: event.payment.token,
-					billingContact: event.payment.billingContact
+					billingContact: event.payment.billingContact,
+					shippingContact: event.payment.shippingContact
 				} );
+
+				const approvalStatus = confirmOrderResponse?.approveApplePayPayment?.status;
+
+				if ( approvalStatus === 'PAYER_ACTION_REQUIRED' ) {
+					await applePayInstance.initiatePayerAction( { orderId } );
+				}
 
 				session.completePayment( ApplePaySession.STATUS_SUCCESS );
 				sessionCompleted = true;
-
-				if ( confirmOrderResponse.status === 'PAYER_ACTION_REQUIRED' ) {
-					await applePayInstance.initiatePayerAction( { orderId } );
-				}
 
 				onApprove( {
 					orderID: orderId,
