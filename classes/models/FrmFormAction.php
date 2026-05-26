@@ -168,6 +168,7 @@ class FrmFormAction {
 			'keywords'    => '',
 			'description' => '',
 			'is_new'      => false,
+			'is_beta'     => false,
 		);
 
 		$action_options          = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );
