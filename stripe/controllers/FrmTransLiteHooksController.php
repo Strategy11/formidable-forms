@@ -48,15 +48,17 @@ class FrmTransLiteHooksController {
 
 			add_action(
 				'init',
-				function() {
-					if ( self::on_form_settings_page() ) {
-						$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+				function () {
+					if ( ! self::on_form_settings_page() ) {
+						return;
+					}
 
-						// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
-						// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
-						if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
-							self::hide_collect_payment_action();
-						}
+					$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+
+					// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
+					// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
+					if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
+						self::hide_collect_payment_action();
 					}
 				}
 			);
