@@ -49,6 +49,12 @@
 				if ( squareCardElementIsComplete ) {
 					enableSubmit();
 				} else {
+					if ( squareIsConditionallyDisabled( thisForm ) ) {
+						running = 0;
+						enableSubmit();
+						return;
+					}
+
 					disableSubmit( thisForm );
 				}
 			}
@@ -72,6 +78,48 @@
 		} );
 
 		return card;
+	}
+
+	/**
+	 * Check if a Square card element is conditionally hidden.
+	 * If it is, we should not be disabling the submit button.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 *
+	 * @return {boolean} True if the field is conditionally hidden, false otherwise.
+	 */
+	function squareIsConditionallyDisabled( form ) {
+		const fieldContainer = getPaymentElementFieldContainer( form );
+		if ( ! fieldContainer ) {
+			return false;
+		}
+
+		// Field is conditionally hidden.
+		if ( 'none' === fieldContainer.style.display ) {
+			return true;
+		}
+
+		// Section parent is conditionally hidden.
+		const parentSection = fieldContainer.closest( '.frm_section_heading' );
+		return parentSection && 'none' === parentSection.style.display;
+	}
+
+	/**
+	 * Try to get the field container for a Square card payment element.
+	 * The field container is checked to determine if the field is conditionally hidden or not.
+	 *
+	 * @param {HTMLElement} form
+	 *
+	 * @return {HTMLElement|null} The field container element or null if not found.
+	 */
+	function getPaymentElementFieldContainer( form ) {
+		const paymentElement = form.querySelector( '.frm-card-element' );
+		if ( ! paymentElement ) {
+			return null;
+		}
+		return paymentElement.parentElement.closest( '.frm_form_field' );
 	}
 
 	/**
@@ -209,11 +257,19 @@
 		if ( cardContainer ) {
 			thisForm = cardContainer.closest( 'form' );
 			if ( thisForm ) {
-				// Initially disable the submit button until card is valid
-				disableSubmit( thisForm );
+				listenForFieldMutations( thisForm );
+
+				if ( ! squareIsConditionallyDisabled( thisForm ) ) {
+					// Initially disable the submit button until card is valid
+					disableSubmit( thisForm );
+				}
 
 				// Add event listener for form submission
 				thisForm.addEventListener( 'submit', function( event ) {
+					if ( squareIsConditionallyDisabled( thisForm ) ) {
+						return;
+					}
+
 					event.preventDefault();
 					event.stopPropagation();
 
@@ -301,6 +357,116 @@
 				displayPaymentFailure( e.message );
 			}
 		}
+	}
+
+	/**
+	 * Possibly toggle on and off the submit button when a Stripe Link payment field is conditionally shown or hidden.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 * @return {void}
+	 */
+	function listenForFieldMutations( form ) {
+		const fieldContainer = getPaymentElementFieldContainer( form );
+		if ( ! fieldContainer ) {
+			return;
+		}
+
+		observeAttributeMutations( fieldContainer, handleMutation );
+
+		const section = fieldContainer.closest( '.frm_section_heading' );
+		if ( section ) {
+			observeAttributeMutations( section, handleMutation );
+		}
+
+		const formId = getFormIdForForm( form );
+
+		/**
+		 * Handle a style attribute change for either a payment field container
+		 * or the field container of its parent section.
+		 *
+		 * @param {MutationRecord} mutation
+		 * @return {void}
+		 */
+		function handleMutation( mutation ) {
+			if ( mutation.attributeName !== 'style' ) {
+				return;
+			}
+
+			if ( submitButtonIsConditionallyDisabled( formId ) ) {
+				return;
+			}
+
+			const shouldEnable = 'none' === mutation.target.display || ! squareCardElementIsComplete || squareIsConditionallyDisabled( form );
+			if ( ! shouldEnable ) {
+				disableSubmit( form );
+				return;
+			}
+
+			thisForm = form;
+			running = 0;
+			enableSubmit();
+
+			cardGlobal.recalculateSize();
+		}
+	}
+
+	/**
+	 * @param {HTMLElement} element
+	 * @param {function}    mutationHandler
+	 *
+	 * @return {void}
+	 */
+	function observeAttributeMutations( element, mutationHandler ) {
+		const observer = new MutationObserver(
+			mutations => {
+				mutations.forEach( mutationHandler );
+			}
+		);
+		observer.observe(
+			element,
+			{ attributes: true }
+		);
+	}
+
+	/**
+	 * Check if the submit button is conditionally disabled.
+	 * This is required for Stripe link so the button does not get enabled at the wrong time after completing the Stripe elements.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} formId
+	 *
+	 * @return {boolean} True if the submit button is conditionally disabled, false otherwise.
+	 */
+	function submitButtonIsConditionallyDisabled( formId ) {
+		return submitButtonIsConditionallyNotAvailable( formId ) && 'disable' === __FRMRULES[ `submit_${ formId }` ].hideDisable;
+	}
+
+	/**
+	 * Check submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} formId
+	 *
+	 * @return {boolean} True if the submit button is conditionally not available, false otherwise.
+	 */
+	function submitButtonIsConditionallyNotAvailable( formId ) {
+		const hideFields = document.getElementById( `frm_hide_fields_${ formId }` );
+		return hideFields && hideFields.value.includes( `["frm_form_${ formId }_container .frm_final_submit"]` );
+	}
+
+	/**
+	 * Check a form's form_id input for a form ID value.
+	 *
+	 * @param {HTMLElement} form
+	 *
+	 * @return {number} The form ID.
+	 */
+	function getFormIdForForm( form ) {
+		return parseInt( form.querySelector( '[name="form_id"]' ).value );
 	}
 
 	document.addEventListener( 'DOMContentLoaded', async function() {
