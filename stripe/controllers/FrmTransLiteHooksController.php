@@ -46,15 +46,22 @@ class FrmTransLiteHooksController {
 
 			self::maybe_set_admin_menu();
 
-			if ( self::on_form_settings_page() ) {
-				$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+			add_action(
+				'init',
+				function () {
+					if ( ! self::on_form_settings_page() ) {
+						return;
+					}
 
-				// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
-				// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
-				if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
-					self::hide_collect_payment_action();
+					$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+
+					// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
+					// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
+					if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
+						self::hide_collect_payment_action();
+					}
 				}
-			}
+			);
 
 			// Exit early, let the Payments submodule handle everything else.
 			return;

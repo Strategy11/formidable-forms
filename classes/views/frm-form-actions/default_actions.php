@@ -51,6 +51,8 @@ if ( class_exists( 'FrmPaymentAction' ) ) {
 
 			$this->id_base = 'paypal-legacy';
 			$this->name    = 'PayPal (Legacy)';
+
+			$this->action_options['is_beta'] = false;
 		}
 	}
 }
