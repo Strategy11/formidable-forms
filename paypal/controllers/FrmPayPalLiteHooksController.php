@@ -33,13 +33,6 @@ class FrmPayPalLiteHooksController {
 		add_filter( 'frm_add_settings_section', 'FrmPayPalLiteSettingsController::add_settings_section', 99 );
 		add_action( 'frm_update_settings', 'FrmPayPalLiteSettingsController::process_form' );
 
-		add_filter(
-			'frm_paypal_action_name',
-			function () {
-				return 'PayPal Commerce';
-			}
-		);
-
 		add_filter( 'frm_before_save_payment_action', 'FrmPayPalLiteActionsController::before_save_settings', 20, 2 );
 
 		// Hook into after payment type to render Product Name and Product Type fields.

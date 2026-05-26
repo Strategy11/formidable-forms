@@ -24,6 +24,9 @@ $single_action_attrs = array_merge(
 		'data-actiontype' => $action_control->id_base,
 	)
 );
+if ( 'paypal' === $action_control->id_base ) {
+	$action_control->name = 'PayPal Commerce';
+}
 ?>
 <li class="frm-card-item frm-card-item--outlined frm-action<?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>" tabindex="0">
 	<div class="frm-h-stack-xs frm-w-full">
