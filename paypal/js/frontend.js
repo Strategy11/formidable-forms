@@ -40,6 +40,12 @@
 	/** Cached Apple Pay config from paypal.Applepay().config(). */
 	let applePayConfig = null;
 
+	/** Cached Apple Pay SDK instance (reused for validateMerchant and confirmOrder). */
+	let applePayInstance = null;
+
+	/** Cached payment amount for Apple Pay (must be available synchronously in click handler). */
+	let cachedAmount = '0.00';
+
 	// ---- Constants ----
 
 	/**
@@ -180,6 +186,14 @@
 			renderMessages();
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );
 			checkPriceFieldsOnLoad();
+		}
+
+		// 8. Pre-fetch the amount for Apple Pay so it is available synchronously in the click handler.
+		if ( paymentMethods.has( 'apple_pay' ) ) {
+			refreshCachedAmount();
+			if ( ! paymentMethods.has( 'paylater' ) ) {
+				jQuery( document ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
+			}
 		}
 	}
 
@@ -935,7 +949,8 @@
 
 		// Use paypal.Applepay().config() as the definitive eligibility check (per PayPal multiparty docs).
 		try {
-			applePayConfig = await paypal.Applepay().config();
+			applePayInstance = paypal.Applepay();
+			applePayConfig = await applePayInstance.config();
 
 			if ( ! applePayConfig || ! applePayConfig.isEligible ) {
 				return 'PayPal reports Apple Pay is not eligible for this merchant/domain';
@@ -985,29 +1000,16 @@
 
 	/**
 	 * Handle click on the Apple Pay button.
-	 * Fetches the price asynchronously, then creates an ApplePaySession and processes the payment via PayPal.
+	 *
+	 * ApplePaySession MUST be created and begun synchronously inside the click
+	 * handler. Any async work (like fetching the price) before session.begin()
+	 * causes the user-gesture activation to expire, leaving the payment sheet
+	 * visible but non-interactive.
 	 */
-	async function onApplePayButtonClick() {
+	function onApplePayButtonClick() {
 		if ( ! applePayConfig ) {
 			console.error( 'Apple Pay config not available' );
 			return;
-		}
-
-		let amount = '0.00';
-
-		// Try to fetch the actual price from the server.
-		try {
-			amount = await new Promise( ( resolve, reject ) => {
-				getPrice( result => {
-					if ( result?.data?.amount ) {
-						resolve( String( result.data.amount ) );
-					} else {
-						reject( new Error( 'No amount' ) );
-					}
-				} );
-			} );
-		} catch ( e ) {
-			// Fall back to form total if we can't get the price from server.
 		}
 
 		const paymentRequest = {
@@ -1018,16 +1020,14 @@
 			total: {
 				label: document.title || 'Payment',
 				type: 'final',
-				amount,
+				amount: cachedAmount,
 			},
 		};
 
-		// ApplePaySession MUST be created synchronously inside the click handler.
 		const session = new ApplePaySession( 4, paymentRequest );
-		const applepay = paypal.Applepay();
 
 		session.onvalidatemerchant = event => {
-			applepay.validateMerchant( {
+			applePayInstance.validateMerchant( {
 				validationUrl: event.validationURL,
 				displayName: document.title || 'Payment'
 			} )
@@ -1040,10 +1040,16 @@
 				} );
 		};
 
+		session.onpaymentmethodselected = () => {
+			session.completePaymentMethodSelection( {
+				newTotal: paymentRequest.total,
+			} );
+		};
+
 		session.onpaymentauthorized = event => {
 			createOrderForApplePay()
 				.then( orderId => {
-					return applepay.confirmOrder( {
+					return applePayInstance.confirmOrder( {
 						orderId,
 						token: event.payment.token,
 						billingContact: event.payment.billingContact
@@ -1777,12 +1783,45 @@
 			.then( response => response.json() )
 			.then( function( result ) {
 				if ( result.success && result.data?.amount ) {
+					cachedAmount = String( result.data.amount );
 					callback( result );
 				}
 			} )
 			.catch( function( err ) {
 				console.error( 'Failed to get PayPal amount', err );
 			} );
+	}
+
+	/**
+	 * Refresh the cached amount for Apple Pay.
+	 */
+	function refreshCachedAmount() {
+		getPrice( function() {} );
+	}
+
+	/**
+	 * Refresh the cached amount when a price-related field changes.
+	 *
+	 * @param {Event}       _       jQuery event.
+	 * @param {HTMLElement} field   The changed field element.
+	 * @param {string}      fieldId The changed field ID.
+	 */
+	function refreshCachedAmountOnFieldChange( _, field, fieldId ) {
+		const price = getPriceFields();
+		let run = price.includes( fieldId ) || price.includes( field.id );
+
+		if ( ! run ) {
+			for ( let i = 0; i < price.length; i++ ) {
+				if ( field.id.indexOf( price[ i ] ) === 0 ) {
+					run = true;
+					break;
+				}
+			}
+		}
+
+		if ( run ) {
+			refreshCachedAmount();
+		}
 	}
 
 	/**
