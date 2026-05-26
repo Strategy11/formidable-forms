@@ -1017,6 +1017,7 @@
 			merchantCapabilities: applePayConfig.merchantCapabilities,
 			supportedNetworks: applePayConfig.supportedNetworks,
 			currencyCode: applePayConfig.currencyCode || 'USD',
+			requiredBillingContactFields: [ 'postalAddress' ],
 			total: {
 				label: document.title || 'Payment',
 				type: 'final',
@@ -1073,6 +1074,7 @@
 				if ( ! sessionCompleted ) {
 					session.completePayment( ApplePaySession.STATUS_FAILURE );
 				}
+				reportErrorToServer( err, 'apple_pay' );
 			}
 		};
 
