@@ -1046,26 +1046,34 @@
 			} );
 		};
 
-		session.onpaymentauthorized = event => {
-			createOrderForApplePay()
-				.then( orderId => {
-					return applePayInstance.confirmOrder( {
-						orderId,
-						token: event.payment.token,
-						billingContact: event.payment.billingContact
-					} )
-						.then( () => {
-							session.completePayment( ApplePaySession.STATUS_SUCCESS );
-							onApprove( {
-								orderID: orderId,
-								paymentSource: 'apple_pay'
-							} );
-						} );
-				} )
-				.catch( err => {
-					console.error( 'Apple Pay payment failed', err );
-					session.completePayment( ApplePaySession.STATUS_FAILURE );
+		session.onpaymentauthorized = async event => {
+			let sessionCompleted = false;
+
+			try {
+				const orderId = await createOrderForApplePay();
+				const confirmOrderResponse = await applePayInstance.confirmOrder( {
+					orderId,
+					token: event.payment.token,
+					billingContact: event.payment.billingContact
 				} );
+
+				session.completePayment( ApplePaySession.STATUS_SUCCESS );
+				sessionCompleted = true;
+
+				if ( confirmOrderResponse.status === 'PAYER_ACTION_REQUIRED' ) {
+					await applePayInstance.initiatePayerAction( { orderId } );
+				}
+
+				onApprove( {
+					orderID: orderId,
+					paymentSource: 'apple_pay'
+				} );
+			} catch ( err ) {
+				console.error( 'Apple Pay payment failed', err );
+				if ( ! sessionCompleted ) {
+					session.completePayment( ApplePaySession.STATUS_FAILURE );
+				}
+			}
 		};
 
 		session.oncancel = () => {
