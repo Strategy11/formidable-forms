@@ -626,7 +626,7 @@ class FrmPayPalLiteAppController {
 		$product_name   = self::process_shortcodes_for_action( $action->post_content['product_name'] ?? '', $action );
 		$interval       = $action->post_content['interval'] ?? '';
 		$interval_count = $action->post_content['interval_count'] ?? 1;
-		$trial_period   = $action->post_content['trial_period'] ?? '';
+		$trial_period   = $action->post_content['trial_interval_count'] ?? '';
 		$payment_limit  = $action->post_content['payment_limit'] ?? '';
 		$product_type   = $action->post_content['product_type'] ?? 'SERVICE';
 
