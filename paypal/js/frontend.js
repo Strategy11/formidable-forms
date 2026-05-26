@@ -40,6 +40,9 @@
 	/** Cached Apple Pay config from paypal.Applepay().config(). */
 	let applePayConfig = null;
 
+	/** Cached Apple Pay SDK instance (reused for validateMerchant and confirmOrder). */
+	let applePayInstance = null;
+
 	/** Cached payment amount for Apple Pay (must be available synchronously in click handler). */
 	let cachedAmount = '0.00';
 
@@ -946,7 +949,8 @@
 
 		// Use paypal.Applepay().config() as the definitive eligibility check (per PayPal multiparty docs).
 		try {
-			applePayConfig = await paypal.Applepay().config();
+			applePayInstance = paypal.Applepay();
+			applePayConfig = await applePayInstance.config();
 
 			if ( ! applePayConfig || ! applePayConfig.isEligible ) {
 				return 'PayPal reports Apple Pay is not eligible for this merchant/domain';
@@ -1021,10 +1025,9 @@
 		};
 
 		const session = new ApplePaySession( 4, paymentRequest );
-		const applepay = paypal.Applepay();
 
 		session.onvalidatemerchant = event => {
-			applepay.validateMerchant( {
+			applePayInstance.validateMerchant( {
 				validationUrl: event.validationURL,
 				displayName: document.title || 'Payment'
 			} )
@@ -1037,10 +1040,16 @@
 				} );
 		};
 
+		session.onpaymentmethodselected = () => {
+			session.completePaymentMethodSelection( {
+				newTotal: paymentRequest.total,
+			} );
+		};
+
 		session.onpaymentauthorized = event => {
 			createOrderForApplePay()
 				.then( orderId => {
-					return applepay.confirmOrder( {
+					return applePayInstance.confirmOrder( {
 						orderId,
 						token: event.payment.token,
 						billingContact: event.payment.billingContact
