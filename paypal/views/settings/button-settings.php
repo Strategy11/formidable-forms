@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.31
  *
  * @var array $settings PayPal button settings array
  * @var array $args     Additional arguments for the view

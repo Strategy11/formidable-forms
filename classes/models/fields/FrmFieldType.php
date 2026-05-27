@@ -972,7 +972,7 @@ DEFAULT_HTML;
 	 */
 	public function show_field( $args ) {
 		/**
-		 * @since x.x Added $field parameter.
+		 * @since 6.31 Added $field parameter.
 		 *
 		 * @param bool   $show_normal_field_type
 		 * @param string $type

@@ -89,7 +89,7 @@ class FrmTransLiteHooksController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return bool
 	 */
@@ -100,7 +100,7 @@ class FrmTransLiteHooksController {
 	/**
 	 * Hide the Collect Payment action if there are no additional gateways enabled (like Authorize.Net).
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */

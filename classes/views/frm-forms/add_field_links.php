@@ -231,7 +231,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						 * Used along with frm_extra_form_instruction_tabs which is used to
 						 * include the tabs.
 						 *
-						 * @since x.x
+						 * @since 6.31
 						 *
 						 * @param stdClass $form The form object.
 						 */

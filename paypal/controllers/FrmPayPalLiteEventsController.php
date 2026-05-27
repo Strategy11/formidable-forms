@@ -18,7 +18,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * The data object from the event.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @var object|null
 	 */
@@ -27,7 +27,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * The mapped payment status for the current event.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @var string|null
 	 */
@@ -37,7 +37,7 @@ class FrmPayPalLiteEventsController {
 	 * Tell PayPal Connect API that the request came through by flushing early before processing.
 	 * Flushing early allows the API to end the request earlier.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -78,7 +78,7 @@ class FrmPayPalLiteEventsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array<string> $event_ids
 	 *
@@ -106,7 +106,7 @@ class FrmPayPalLiteEventsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $event_id
 	 *
@@ -133,7 +133,7 @@ class FrmPayPalLiteEventsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $event_id
 	 *
@@ -156,7 +156,7 @@ class FrmPayPalLiteEventsController {
 	 * Track an event to no longer process.
 	 * This is called for successful events, and also for failed events after a number of retries.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $event_id
 	 *
@@ -232,7 +232,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Handle a payment capture or sale event by syncing the payment record.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -304,7 +304,7 @@ class FrmPayPalLiteEventsController {
 	 * Try to create a new payment record from a subscription payment event.
 	 * This handles recurring payments after the first one.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return false|object The new payment object or false if not a subscription payment.
 	 */
@@ -370,7 +370,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Get the PayPal subscription ID from the resource object.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string
 	 */
@@ -389,7 +389,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Get the payment amount from the resource object.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string
 	 */
@@ -408,7 +408,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Get the refunded amount from the resource object.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string
 	 */
@@ -427,7 +427,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Check if a refund is partial by comparing the refunded amount to the original payment amount.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return bool
 	 */
@@ -456,7 +456,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Set the partial refund amount on a payment.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $payment_values The payment values to update.
 	 *
@@ -477,7 +477,7 @@ class FrmPayPalLiteEventsController {
 	 * 'up' link, looks up the pending payment, and updates its receipt_id to
 	 * the capture ID.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param FrmTransLitePayment $frm_payment The payment model instance.
 	 * @param string              $capture_id  The capture ID from the webhook resource.
@@ -509,7 +509,7 @@ class FrmPayPalLiteEventsController {
 	 * For PAYMENT.CAPTURE.COMPLETED events, the 'up' link points to the
 	 * order: /v2/checkout/orders/{order_id}.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string The order ID, or empty string if not found.
 	 */
@@ -551,7 +551,7 @@ class FrmPayPalLiteEventsController {
 	 * the resource is the refund object, so we need to extract the original
 	 * capture or sale ID from the resource's sale_id property or HATEOAS links.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string The receipt ID of the original payment.
 	 */
@@ -604,7 +604,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Get a subscription record by its PayPal subscription ID.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $sub_id The PayPal subscription ID.
 	 *
@@ -624,7 +624,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Update the next bill date for a subscription using the PayPal API.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param object $sub The local subscription record.
 	 *
@@ -655,7 +655,7 @@ class FrmPayPalLiteEventsController {
 	 * Check if a subscription has reached its payment limit.
 	 * If it has, cancel the subscription.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param object $sub The local subscription record.
 	 *
@@ -691,7 +691,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Handle a subscription activated or re-activated event.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -725,7 +725,7 @@ class FrmPayPalLiteEventsController {
 	/**
 	 * Handle a subscription cancelled, expired, or suspended event.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -769,7 +769,7 @@ class FrmPayPalLiteEventsController {
 	 * Handle a subscription payment failed event.
 	 * Increments the fail count and cancels after too many failures.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -808,7 +808,7 @@ class FrmPayPalLiteEventsController {
 	 * Handle a subscription updated event.
 	 * Syncs subscription data like amount and next bill date.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */

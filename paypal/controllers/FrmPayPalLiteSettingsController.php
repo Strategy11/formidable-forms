@@ -8,7 +8,7 @@ class FrmPayPalLiteSettingsController {
 	/**
 	 * Add PayPal section to Global Settings.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $sections
 	 *

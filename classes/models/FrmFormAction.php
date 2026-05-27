@@ -144,7 +144,7 @@ class FrmFormAction {
 		$this->id_base = strtolower( $id_base );
 
 		/**
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param string $name
 		 */
