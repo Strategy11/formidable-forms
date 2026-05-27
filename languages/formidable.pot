@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-27T12:56:10+00:00\n"
+"POT-Creation-Date: 2026-05-27T14:12:59+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -422,7 +422,7 @@ msgid "You are trying to view an entry that does not exist"
 msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:723
-#: classes/controllers/FrmFormActionsController.php:766
+#: classes/controllers/FrmFormActionsController.php:789
 #: classes/controllers/FrmFormsController.php:251
 #: classes/controllers/FrmSettingsController.php:391
 msgid "Verification failed"
@@ -598,31 +598,31 @@ msgstr ""
 msgid "E-Commerce"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:276
+#: classes/controllers/FrmFormActionsController.php:272
 msgid "Marketing"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:290
+#: classes/controllers/FrmFormActionsController.php:286
 msgid "CRM"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:295
+#: classes/controllers/FrmFormActionsController.php:291
 msgid "Misc"
 msgstr ""
 
 #. translators: %s: Name of form action
-#: classes/controllers/FrmFormActionsController.php:429
+#: classes/controllers/FrmFormActionsController.php:452
 #: classes/views/frm-form-actions/settings.php:105
 #: classes/views/frm-form-actions/settings.php:215
 msgid "%s form actions"
 msgstr ""
 
-#: classes/controllers/FrmFormActionsController.php:566
+#: classes/controllers/FrmFormActionsController.php:589
 msgid "No actions have been added yet. Select an action above to get started."
 msgstr ""
 
 #. translators: %s: URL to documentation
-#: classes/controllers/FrmFormActionsController.php:610
+#: classes/controllers/FrmFormActionsController.php:633
 msgid "You have reached your form action limit. To increase this limit, you will require additional code. Visit our documentation at %s."
 msgstr ""
 
