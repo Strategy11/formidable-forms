@@ -109,7 +109,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return array
 	 */
-	public static function trigger_gateway( $action, $entry, $form ) {
+	public static function trigger_gateway( $action, $entry, $form ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$response = array(
 			'success'      => false,
 			'run_triggers' => false,
@@ -1035,9 +1035,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$sub_id = self::create_new_subscription( $subscription_id, $atts, $subscription );
 
 		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
-
-		self::$active_order_id      = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
-		self::$active_subscription  = $subscription;
+		self::$active_order_id       = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+		self::$active_subscription   = $subscription;
 
 		self::sync_entry_data_with_subscription_response( $subscription, $atts );
 
