@@ -369,6 +369,8 @@ class FrmFormActionsController {
 	 *
 	 * @since 6.33
 	 *
+	 * @param array $action_controls
+	 *
 	 * @return array
 	 */
 	private static function get_payment_actions( $action_controls ) {
