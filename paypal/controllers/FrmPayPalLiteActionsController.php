@@ -13,7 +13,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	private static $pending_capture = false;
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string             $callback
 	 * @param array|false|object $field
@@ -47,7 +47,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Override the credit card field HTML if there is a PayPal action.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array  $field
 	 * @param string $field_name
@@ -76,7 +76,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get all published payment actions with the PayPal gateway that have an amount set.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param int|string $form_id
 	 *
@@ -187,7 +187,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		/**
 		 * Filters the message to show in the main feedback area.
 		 *
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param string   $paypal_message The message to show.
 		 * @param stdClass $order          The order object.
@@ -212,7 +212,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the display label for a payment source type.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $source_type The payment source identifier (e.g. 'paypal', 'paylater', 'google_pay').
 	 *
@@ -232,7 +232,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Format a PayPal shipping address object into an HTML string.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param object $address The PayPal shipping address object.
 	 *
@@ -362,7 +362,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * by the processor or bank..."). Prefer those over the generic top-level
 	 * `message` so the buyer sees the actionable reason.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param mixed  $response The PayPal response object.
 	 * @param string $fallback The fallback message when no details are available.
@@ -392,7 +392,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * The debug ID is shown only to users who can edit forms, as a
 	 * troubleshooting aid.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $message  The error message.
 	 * @param mixed  $response The PayPal response that may contain a debug_id property.
@@ -414,7 +414,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $order The order object.
 	 *
@@ -431,7 +431,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		/**
 		 * Filters whether the liability shift is an error.
 		 *
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param bool     $is_liability_error Whether the liability shift is an error.
 		 * @param string   $liability_shift    The liability shift value. By default 'NO' and 'UNKNOWN' are errors.
@@ -452,7 +452,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * payment record is created so the webhook can complete it later.
 	 * For unrecoverable errors, the PayPal error description is returned.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $response        The PayPal error response object.
 	 * @param array    $atts            The payment attributes.
@@ -510,7 +510,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Extract the issue code from a PayPal capture error response.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $response The PayPal error response.
 	 *
@@ -537,7 +537,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Convert a PayPal issue code to a human-readable error message.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $issue The issue code (e.g. AUTHENTICATION_FAILURE).
 	 *
@@ -560,7 +560,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $order
 	 *
@@ -571,7 +571,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $order
 	 * @param string   $expected_amount This is as a whole number (in cents for currencies that include decimals).
@@ -590,7 +590,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Validate that the subscription status indicates it was approved by the payer.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $subscription The PayPal subscription object.
 	 *
@@ -607,7 +607,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Validate that the subscription amount matches the expected amount.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $subscription    The PayPal subscription object.
 	 * @param string   $expected_amount The expected amount as a whole number (in cents for currencies that include decimals).
@@ -666,7 +666,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Sync the entry data with the capture response.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param object $response The response object.
 	 * @param array  $atts     The arguments for the payment.
@@ -716,7 +716,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * same shape used by the capture response so the existing field-update
 	 * helpers can be reused.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param object $subscription The subscription object from PayPal.
 	 * @param array  $atts         Includes 'entry', 'action', 'amount'.
@@ -789,7 +789,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Build field updates for the dedicated PayPal order data fields.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $payer    The payer object from the PayPal response.
 	 * @param stdClass $response The full capture response.
@@ -845,7 +845,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Build an array of field updates by comparing payer response data against current entry metas.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param stdClass $payer    The payer object from the PayPal response.
 	 * @param stdClass $response The full capture response.
@@ -945,7 +945,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the shipping address object from the first purchase unit in the response.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param object $response The capture response.
 	 *
@@ -1070,7 +1070,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * Uses the PayPal subscription ID as a temporary receipt_id. When the PAYMENT.SALE.COMPLETED
 	 * webhook arrives later, the receipt_id is updated to the real capture/sale ID.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $subscription_id The PayPal subscription ID.
 	 * @param int    $sub_id          The local subscription record ID.
@@ -1188,7 +1188,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! $form_id || ! is_int( $form_id ) ) {
-			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', 'x.x' );
+			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', '6.31' );
 			return;
 		}
 
@@ -1316,7 +1316,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		/**
 		 * Allow customization of the PayPal SDK URL query arguments.
 		 *
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param array   $query_args
 		 * @param WP_Post $action
@@ -1408,13 +1408,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return bool
 	 */
 	private static function include_google_pay_apple_pay() {
 		/**
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param bool $include_google_pay_apple_pay
 		 */
@@ -1422,7 +1422,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string
 	 */
@@ -2269,7 +2269,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		/**
 		 * Filter the PayPal card field styles.
 		 *
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param array $style
 		 * @param array $settings
@@ -2282,7 +2282,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * Get PayPal button style configuration from form action settings.
 	 * Documentation at https://developer.paypal.com/sdk/js/reference/#style
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param WP_Post $form_action The form action containing button settings.
 	 *
@@ -2308,7 +2308,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param array   $style_for_js
 		 * @param WP_Post $form_action
@@ -2349,7 +2349,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the border width for PayPal card fields.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $settings
 	 *
@@ -2365,7 +2365,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the border radius for PayPal card fields.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $settings
 	 *
@@ -2387,7 +2387,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the border shorthand for PayPal card fields.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $settings
 	 *
@@ -2405,7 +2405,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * If the names are being used on the CC fields,
 	 * make sure it doesn't prevent the submission if PayPal has approved.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array    $errors
 	 * @param stdClass $field
@@ -2424,7 +2424,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -2441,7 +2441,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * Modify the new action post data to use the payment action type when the PayPal plugin is not active.
 	 * This works better than having it disabled even when PayPal is supported.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -2502,7 +2502,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Print additional options for button settings.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array|FrmFormAction $args_or_action_control Either the args array with form_action and action_control, or the action_control object.
 	 * @param WP_Post|null        $form_action            The form action object (when called directly).
@@ -2523,7 +2523,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Add PayPal subscription settings (product name and product type) after payment type.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $args Arguments containing form_action and action_control.
 	 *
@@ -2565,7 +2565,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * When entry_data_sync is set to 'new_fields', auto-create fields
 	 * for storing PayPal order data (email, name, address).
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $settings The action settings being saved.
 	 * @param array $action   The full action data including menu_order (form_id).
@@ -2600,7 +2600,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * Create a field for PayPal order data if it does not already exist.
 	 * The field ID is stored in the action settings under the given key.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array  $settings    The action settings.
 	 * @param int    $form_id     The form ID.

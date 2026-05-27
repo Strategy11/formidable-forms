@@ -9,7 +9,7 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * Track the latest error when calling the PayPal API.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @var string|null
 	 */
@@ -18,7 +18,7 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * Track the latest debug ID from PayPal API responses.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @var string
 	 */
@@ -56,7 +56,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return bool
 	 */
@@ -186,7 +186,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param bool|object $product
 	 *
@@ -211,7 +211,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $vetting_status
 	 *
@@ -240,7 +240,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $mode
 	 *
@@ -253,7 +253,7 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * Get the PayPal account settings URL for the given mode.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $mode 'test' or 'live'.
 	 *
@@ -967,7 +967,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return bool
 	 */
@@ -1030,7 +1030,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string
 	 */
@@ -1040,7 +1040,7 @@ class FrmPayPalLiteConnectHelper {
 		/**
 		 * Allow people to modify the brand name used in the PayPal order.
 		 *
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param string $brand_name
 		 *
@@ -1052,7 +1052,7 @@ class FrmPayPalLiteConnectHelper {
 			return $filtered_brand_name;
 		}
 
-		_doing_it_wrong( 'FrmPayPalLiteConnectHelper::get_brand_name', 'The frm_paypal_brand_name filter must return a string.', 'x.x' );
+		_doing_it_wrong( 'FrmPayPalLiteConnectHelper::get_brand_name', 'The frm_paypal_brand_name filter must return a string.', '6.31' );
 
 		return $brand_name;
 	}
@@ -1095,7 +1095,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $data Setup token data including payment_source.
 	 *
@@ -1124,7 +1124,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $capture_id
 	 *
@@ -1135,7 +1135,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $order_id
 	 *
@@ -1146,7 +1146,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $subscription_id The PayPal subscription ID.
 	 *
@@ -1157,7 +1157,7 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string
 	 */

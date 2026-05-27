@@ -104,7 +104,7 @@ class FrmFormActionsController {
 	 *
 	 * Keeps the description when an add-on replaces a base action class without its own.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -304,7 +304,7 @@ class FrmFormActionsController {
 	/**
 	 * Get the actions that are currently available (active) for My Actions section.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $action_controls The registered action controls.
 	 *
@@ -333,7 +333,7 @@ class FrmFormActionsController {
 	/**
 	 * Get the actions to include in the Misc section.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $action_controls The registered action controls.
 	 *
@@ -480,7 +480,7 @@ class FrmFormActionsController {
 	/**
 	 * Get the HTML attributes for the action icon.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param object $action_control
 	 *
@@ -669,7 +669,7 @@ class FrmFormActionsController {
 	/**
 	 * Returns the first available title not in $existing_titles, appending " (2)", " (3)", etc. if needed.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string   $base_title      Default action title from the action type.
 	 * @param string[] $existing_titles Titles currently visible in the form editor.
@@ -1024,7 +1024,7 @@ class FrmFormActionsController {
 	 * If Pro is not connected, hook a filter that will force all non-Lite
 	 * actions to inactive so the upgrade popup is shown instead.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -1044,7 +1044,7 @@ class FrmFormActionsController {
 	 * so the per-key option filters are in place before the class constructors
 	 * run in the foreach loop that follows.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $actions Map of action_key => class_name.
 	 *
@@ -1078,7 +1078,7 @@ class FrmFormActionsController {
 	/**
 	 * Get action keys that are available in Lite without a Pro license.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string[]
 	 */
@@ -1093,7 +1093,7 @@ class FrmFormActionsController {
 	 * Slugs without '/' are KB doc slugs (knowledgebase/ prefix is added).
 	 * Slugs with '/' are direct paths (e.g. features/) used as-is.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return array<string,string> Map of action_key => URL slug.
 	 */
@@ -1124,7 +1124,7 @@ class FrmFormActionsController {
 	/**
 	 * Look up the learn-more doc slug for a given action key.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $action_key Action identifier (e.g. 'register').
 	 *

@@ -66,7 +66,7 @@ class FrmPayPalLiteAppController {
 	 * Get the current amount for a PayPal action via AJAX.
 	 * Used to update the Pay Later messaging when price fields change.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -94,7 +94,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * Extract pricing data from posted form values.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param int $form_id The form ID.
 	 *
@@ -270,7 +270,7 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param WP_Post $action
 	 *
@@ -321,7 +321,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * Build shipping data from the action's shipping field settings.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param WP_Post $action
 	 *
@@ -388,7 +388,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * Format a Formidable address field value into a PayPal address array.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param mixed $address          The address field value.
 	 * @param int   $address_field_id The field ID.
@@ -427,7 +427,7 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param WP_Post $action
 	 *
@@ -450,7 +450,7 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $payer
 	 * @param array $address
@@ -490,7 +490,7 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return array<string>
 	 */
@@ -515,7 +515,7 @@ class FrmPayPalLiteAppController {
 		);
 
 		/**
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param array<string> $sources
 		 */
@@ -551,7 +551,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * Create an entry object with posted values.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return stdClass
 	 */
@@ -708,7 +708,7 @@ class FrmPayPalLiteAppController {
 	 * Logs the debug ID and error details, then returns a display message
 	 * that includes the debug ID only when the current user has permission.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */
@@ -737,7 +737,7 @@ class FrmPayPalLiteAppController {
 	 *
 	 * Stores up to 20 entries, newest first.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string $debug_id      The PayPal debug ID.
 	 * @param string $error_message The associated error message.
@@ -781,7 +781,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * Process shortcodes in an action setting value using posted form data.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param string  $value  The value that may contain shortcodes.
 	 * @param WP_Post $action The payment action.
@@ -813,7 +813,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * Check if PayPal is connected before attempting to create an order or subscription.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return true|WP_Error True if connected, WP_Error with message if not connected.
 	 */
@@ -840,7 +840,7 @@ class FrmPayPalLiteAppController {
 	 * This method strips that token and appends a human-readable debug ID line
 	 * only for users who can edit forms.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array|string|null $error    The error string from the PayPal API, possibly containing a debug ID token.
 	 * @param string            $fallback The fallback message when no error is available.

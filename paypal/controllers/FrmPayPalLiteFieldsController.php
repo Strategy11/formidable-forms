@@ -8,7 +8,7 @@ class FrmPayPalLiteFieldsController {
 	/**
 	 * Hide the email, name, and address fields if they are marked as PayPal order fields.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param bool   $show_normal_field_type Whether to show the field.
 	 * @param string $type                   The field type.

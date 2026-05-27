@@ -375,7 +375,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Initializes an info modal.
 	 *
-	 * @since x.x The first param can be an array of args.
+	 * @since 6.31 The first param can be an array of args.
 	 *
 	 * @param {Array|string}     msg   The message or the modal data (title, msg, actionUrl, actionText, closeText).
 	 * @param {string|undefined} width The width (include the unit) of the modal. This is optional. Default is `400px`.
@@ -553,7 +553,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Adds keyboard support for form action widgets and their icons.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {jQuery} wrapClass Delegated jQuery scope for the current page wrap.
 	 * @return {void}
@@ -661,7 +661,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Uncheck any data-toggleclass toggle that controls the given hidden element.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string} hideSelector CSS selector for the element being removed.
 	 * @return {void}
@@ -770,7 +770,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Toggle the visibility of the form actions search no results message.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 */
 	function toggleFormActionsNoResultsVisibility() {
 		const hasVisibleActions = document.querySelector( '#frm-actions-filter-content .frm-action:not(.frm_hidden)' );
@@ -791,7 +791,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string} deletedType
 	 *
@@ -7650,7 +7650,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Gets the visible titles for a given action type from the DOM.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string} actionType The action type slug (e.g. "email").
 	 * @return {string[]} Array of trimmed title strings.
@@ -7665,7 +7665,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Returns the first available title not already taken, appending " (2)", " (3)", etc. if needed.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string}   baseTitle      The base title without any numeric suffix.
 	 * @param {string[]} existingTitles Titles currently in use.
@@ -7765,7 +7765,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string} excludedType
 	 *
@@ -8165,7 +8165,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Handle click on the "+" button to add another logic row to a form action.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return {boolean} Returns false to prevent default behavior.
 	 */
@@ -8178,7 +8178,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Create the first logic row when the conditional logic toggle is turned on.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return {void}
 	 */

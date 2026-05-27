@@ -36,7 +36,7 @@ if ( count( $gateways ) > 1 ) {
  * Show warning if amount is empty.
  * Only show for existing actions (has ID), not new actions.
  *
- * @since x.x
+ * @since 6.31
  */
 if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] ) ) :
 	?>
@@ -135,7 +135,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 			 * Only show for existing actions (has ID), not new actions.
 			 * Only show when payment type is recurring.
 			 *
-			 * @since x.x
+			 * @since 6.31
 			 */
 			if ( ! empty( $form_action->ID ) && 'recurring' === $form_action->post_content['type'] && in_array( 'paypal', (array) $form_action->post_content['gateway'], true ) && empty( $form_action->post_content['product_name'] ) ) :
 				?>
@@ -147,7 +147,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 
 			<?php
 			/**
-			 * @since x.x
+			 * @since 6.31
 			 *
 			 * @param array $args
 			 */
@@ -206,7 +206,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 	/**
 	 * Allow add-ons to inject settings after the Recurring Payment Settings section.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array $args {
 	 *
@@ -278,7 +278,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
  * Fires after the Customer Information section in payment action settings.
  * Used by Pro to add gateway-specific Shipping and Billing sections.
  *
- * @since x.x
+ * @since 6.31
  *
  * @param array $args {
  *

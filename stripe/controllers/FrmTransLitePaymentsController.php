@@ -291,7 +291,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * and human-friendly description strings from the PayPal API.
 	 * Strips the {{debug_id:...}} token if present.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string
 	 */
@@ -347,7 +347,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param array|string $expected_gateways
 	 * @param array|string $selected_gateways

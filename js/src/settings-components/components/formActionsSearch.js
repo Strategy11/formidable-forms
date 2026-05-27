@@ -1,7 +1,7 @@
 /**
  * Form actions search behavior for the Actions & Notifications settings page.
  *
- * @since x.x
+ * @since 6.31
  */
 
 const ACTIONS_LIST_WRAPPER_ID = 'frm_email_addon_menu';
@@ -32,7 +32,7 @@ export const initFormActionsSearch = () => {
  * Handles search input for form actions.
  * Switches to "All" tab and defers group heading visibility update.
  *
- * @since x.x
+ * @since 6.31
  *
  * @param {HTMLInputElement} searchInput        The search input element.
  * @param {HTMLElement}      actionsListWrapper The actions wrapper container.
