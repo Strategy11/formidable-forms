@@ -266,11 +266,7 @@ class FrmFormActionsController {
 			'payment'    => array(
 				'name'    => __( 'E-Commerce', 'formidable' ),
 				'icon'    => 'frmfont frm_credit_card_alt_icon',
-				'actions' => array(
-					'paypal',
-					'stripe',
-					'square',
-				),
+				'actions' => self::get_payment_actions( $action_controls ),
 			),
 			'marketing'  => array(
 				'name'    => __( 'Marketing', 'formidable' ),
@@ -354,7 +350,7 @@ class FrmFormActionsController {
 
 		// Include all active actions that aren't in specific groups (payment, marketing, crm).
 		// This ensures custom actions appear in "Misc" when enabled.
-		$payment_actions   = array( 'paypal', 'stripe', 'square' );
+		$payment_actions   = self::get_payment_actions( $action_controls );
 		$marketing_actions = array( 'mailchimp', 'activecampaign', 'constantcontact', 'getresponse', 'aweber', 'mailpoet', 'convertkit', 'twilio' );
 
 		$excluded_actions = array_merge( $payment_actions, $marketing_actions, self::get_crm_actions() );
@@ -366,6 +362,31 @@ class FrmFormActionsController {
 		}
 
 		return $misc_actions;
+	}
+
+	/**
+	 * Get the actions to include in the E-Commerce section.
+	 *
+	 * @since 6.33
+	 *
+	 * @return array
+	 */
+	private static function get_payment_actions( $action_controls ) {
+		$payment_actions = array(
+			'paypal',
+			'stripe',
+			'square',
+		);
+
+		if ( isset( $action_controls['paypal-legacy'] ) ) {
+			$payment_actions[] = 'paypal-legacy';
+		}
+
+		if ( isset( $action_controls['payment'] ) ) {
+			$payment_actions[] = 'payment';
+		}
+
+		return $payment_actions;
 	}
 
 	/**
