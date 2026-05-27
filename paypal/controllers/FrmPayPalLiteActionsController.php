@@ -12,6 +12,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 	private static $pending_capture = false;
 
+	private static $active_subscription;
+
 	/**
 	 * @since 6.31
 	 *
@@ -107,7 +109,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @return array
 	 */
-	public static function trigger_gateway( $action, $entry, $form ) {
+	public static function trigger_gateway( $action, $entry, $form ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$response = array(
 			'success'      => false,
 			'run_triggers' => false,
@@ -142,14 +144,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$response['error'] = $charge;
 		}
 
-		if ( ! self::$active_order_id ) {
+		if ( ! self::$active_order_id && ! self::$active_subscription ) {
 			return $response;
 		}
 
-		$paypal_message = '';
-		$email          = false;
-		$address        = false;
-		$order          = FrmPayPalLiteConnectHelper::get_order( self::$active_order_id );
+		$email   = false;
+		$address = false;
+		$order   = self::$active_order_id ? FrmPayPalLiteConnectHelper::get_order( self::$active_order_id ) : false;
 
 		if ( is_object( $order ) && isset( $order->payer ) && is_object( $order->payer ) ) {
 			$payer = $order->payer;
@@ -161,6 +162,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		if ( is_object( $order ) && ! empty( $order->purchase_units[0]->shipping->address ) && is_object( $order->purchase_units[0]->shipping->address ) ) {
 			$address = $order->purchase_units[0]->shipping->address;
+		}
+
+		// Fallback to subscription subscriber info when order data is not available.
+		if ( self::$active_subscription && isset( self::$active_subscription->subscriber ) && is_object( self::$active_subscription->subscriber ) ) {
+			$subscriber = self::$active_subscription->subscriber;
+
+			if ( ! $email && ! empty( $subscriber->email_address ) ) {
+				$email = $subscriber->email_address;
+			}
+
+			if ( ! $address && isset( $subscriber->shipping_address->address ) ) {
+				$address = $subscriber->shipping_address->address;
+			}
 		}
 
 		$paypal_message = '';
@@ -1021,8 +1035,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$sub_id = self::create_new_subscription( $subscription_id, $atts, $subscription );
 
 		self::$active_payment_source = FrmAppHelper::get_post_param( 'paypal_payment_source', '', 'sanitize_text_field' );
-
-		self::$active_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+		self::$active_order_id       = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
+		self::$active_subscription   = $subscription;
 
 		self::sync_entry_data_with_subscription_response( $subscription, $atts );
 

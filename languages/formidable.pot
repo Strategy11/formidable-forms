@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-27T14:12:59+00:00\n"
+"POT-Creation-Date: 2026-05-27T14:57:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -6148,12 +6148,12 @@ msgid "Field Size"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/product-options.php:16
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2549
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2563
 msgid "Product Type"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/product-single-option.php:28
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2541
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2555
 msgid "Product Name"
 msgstr ""
 
@@ -8357,90 +8357,90 @@ msgstr ""
 msgid "Show Description"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:121
+#: paypal/controllers/FrmPayPalLiteActionsController.php:123
 #: square/controllers/FrmSquareLiteActionsController.php:114
 #: stripe/controllers/FrmStrpLiteActionsController.php:122
 msgid "Please specify an amount for the payment"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:126
+#: paypal/controllers/FrmPayPalLiteActionsController.php:128
 msgid "PayPal still needs to be configured."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:169
+#: paypal/controllers/FrmPayPalLiteActionsController.php:183
 msgid "Payment status: "
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:169
+#: paypal/controllers/FrmPayPalLiteActionsController.php:183
 #: stripe/helpers/FrmTransLiteAppHelper.php:91
 #: stripe/helpers/FrmTransLiteAppHelper.php:105
 msgid "Pending"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:176
+#: paypal/controllers/FrmPayPalLiteActionsController.php:190
 msgid "Payment source: "
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:180
+#: paypal/controllers/FrmPayPalLiteActionsController.php:194
 msgid "Payment made by: "
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:224
+#: paypal/controllers/FrmPayPalLiteActionsController.php:238
 #: paypal/views/settings/button-settings.php:46
 msgid "PayPal"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:226
+#: paypal/controllers/FrmPayPalLiteActionsController.php:240
 #: paypal/views/settings/action-settings-options.php:25
 msgid "Pay Later"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:242
+#: paypal/controllers/FrmPayPalLiteActionsController.php:256
 msgid "Address: "
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:331
+#: paypal/controllers/FrmPayPalLiteActionsController.php:345
 msgid "Failed to capture order."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:1004
+#: paypal/controllers/FrmPayPalLiteActionsController.php:1018
 msgid "No PayPal subscription ID found."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2553
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2567
 msgid "Service"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2554
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2568
 msgid "Digital"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2555
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2569
 msgid "Physical"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2589
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2603
 msgid "PayPal Email"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2590
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2604
 msgid "PayPal Name"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2593
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2607
 msgid "PayPal Address"
 msgstr ""
 
 #: paypal/controllers/FrmPayPalLiteAppController.php:79
 #: paypal/controllers/FrmPayPalLiteAppController.php:209
-#: paypal/controllers/FrmPayPalLiteAppController.php:607
+#: paypal/controllers/FrmPayPalLiteAppController.php:609
 #: square/controllers/FrmSquareLiteAppController.php:78
 msgid "Invalid form ID"
 msgstr ""
 
 #: paypal/controllers/FrmPayPalLiteAppController.php:85
 #: paypal/controllers/FrmPayPalLiteAppController.php:225
-#: paypal/controllers/FrmPayPalLiteAppController.php:613
+#: paypal/controllers/FrmPayPalLiteAppController.php:615
 msgid "No PayPal actions found for this form"
 msgstr ""
 
@@ -8456,27 +8456,27 @@ msgstr ""
 msgid "Order amount cannot be zero."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:634
+#: paypal/controllers/FrmPayPalLiteAppController.php:636
 msgid "A product name is required for subscriptions. Please update your PayPal action settings."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:638
+#: paypal/controllers/FrmPayPalLiteAppController.php:640
 msgid "A billing interval is required for subscriptions. Please update your PayPal action settings."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:642
+#: paypal/controllers/FrmPayPalLiteAppController.php:644
 msgid "A valid amount is required for subscriptions. Zero amounts are not allowed."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:726
+#: paypal/controllers/FrmPayPalLiteAppController.php:728
 msgid "Payment failed. Please try again."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:824
+#: paypal/controllers/FrmPayPalLiteAppController.php:826
 msgid "PayPal is not connected. Please connect your PayPal account to process payments."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:827
+#: paypal/controllers/FrmPayPalLiteAppController.php:829
 msgid "You can connect PayPal in Global Settings, under the Payments section."
 msgstr ""
 
