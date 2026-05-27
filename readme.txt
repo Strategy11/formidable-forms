@@ -375,6 +375,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.31 =
 * New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
 * New: Form action settings have been redesigned.
+* New: Payment actions now use buttons to toggle the selected gateway, and gateway is the top action setting. Note that when custom gateways or Authorize.Net are active, gateways will still revert to the old settings.
 * New: Border styling rules have been added so autofill fields in Chrome and Safari will appear more consistent with other fields.
 * New: A new frm_after_import_forms action has been added for handling an imported XML after all forms have been imported.
 * Fix: A form would incorrectly try to submit a second time when redirecting and submitting with AJAX.
