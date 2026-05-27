@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 6.3
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.30
+Stable tag: 6.31
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,13 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.31 =
+* New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
+* New: Form action settings have been redesigned.
+* New: Border styling rules have been added so autofill fields in Chrome and Safari will appear more consistent with other fields.
+* New: A new frm_after_import_forms action has been added for handling an imported XML after all forms have been imported.
+* Fix: A form would incorrectly try to submit a second time when redirecting and submitting with AJAX.
+
 = 6.30 =
 * New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
 * New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
@@ -395,23 +402,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.28 =
 * New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
 * Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
-
-= 6.27 =
-* New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
-* New: A new coupons tab is available on the payments page.
-* New: Required updates to support a new View-Specific CSS setting in the Visual Views add-on.
-* New: The submit button will now be enabled when a Square postal code is successfully completed. This fixes issues where the submit button would never get enabled when a Square card field was auto-filled.
-* New: Many references to old font icons have been removed, removing about 10KB of data from admin CSS.
-* New: Several styles have been optimized in the generated formidableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
-* Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
-* Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
-* Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.
-* Fix: A PHP warning would get logged when checking data for a ranking field as spam.
-* Fix: Add-on category counts were not always correct.
-* Breaking: Many modern PHP functions are now being used including str_contains, str_starts_with, str_ends_with, array_key_last, and array_key_first. If you are using both a WordPress version older than 5.9, and a PHP version lower than 8.0, this will introduce fatal errors. Note that the minimum required WordPress version is already set to 6.3.
-* Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
-* Breaking: The deprecated FrmFormsHelper::actions_dropdown function and actions-dropdown.php view file have been removed.
-* An unused FrmTransLiteSubscriptionsController::list_subscriptions_shortcode function and its related view file have been deprecated.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

@@ -1,4 +1,11 @@
 == Changelog ==
+= 6.31 =
+* New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
+* New: Form action settings have been redesigned.
+* New: Border styling rules have been added so autofill fields in Chrome and Safari will appear more consistent with other fields.
+* New: A new frm_after_import_forms action has been added for handling an imported XML after all forms have been imported.
+* Fix: A form would incorrectly try to submit a second time when redirecting and submitting with AJAX.
+
 = 6.30 =
 * New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
 * New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
