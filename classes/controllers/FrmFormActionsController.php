@@ -1104,7 +1104,7 @@ class FrmFormActionsController {
 	 * @return string[]
 	 */
 	public static function get_lite_actions() {
-		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment' ) );
+		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment', 'stripe', 'square', 'paypal' ) );
 	}
 
 	/**
