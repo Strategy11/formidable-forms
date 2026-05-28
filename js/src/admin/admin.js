@@ -10668,6 +10668,11 @@ window.frmAdminBuildJS = function() {
 					return;
 				}
 
+				if ( showUpgradeTab && this.classList.contains( 'frm_show_expired_modal' ) ) {
+					wp.hooks.doAction( 'frm_show_expired_modal', this );
+					return false;
+				}
+
 				if ( showUpgradeTab ) {
 					populateUpgradeTab( this );
 				}
