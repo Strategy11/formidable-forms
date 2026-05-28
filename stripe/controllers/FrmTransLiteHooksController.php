@@ -58,7 +58,7 @@ class FrmTransLiteHooksController {
 					// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
 					// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
 					if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
-						self::hide_collect_payment_action();
+						add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
 					}
 				}
 			);
@@ -68,7 +68,7 @@ class FrmTransLiteHooksController {
 		}//end if
 
 		if ( self::on_form_settings_page() ) {
-			self::hide_collect_payment_action();
+			add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
 		}
 
 		// Actions.
@@ -104,7 +104,7 @@ class FrmTransLiteHooksController {
 	 *
 	 * @return void
 	 */
-	private static function hide_collect_payment_action() {
+	public static function hide_collect_payment_action() {
 		echo '
 		<style>
 			li.frm-action:has(.frm_payment_action) { display: none; }
