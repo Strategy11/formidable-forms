@@ -461,6 +461,10 @@ class FrmFormActionsController {
 		} else {
 			$classes .= ' frm_inactive_action';
 
+			if ( str_contains( $action_control->action_options['classes'], 'frm_show_expired_modal' ) ) {
+				$classes .= ' frm_show_expired_modal';
+			}
+
 			if ( $default_position !== false && ( $allowed_count + $default_position ) < 6 ) {
 				$group_class .= ' frm-default-show';
 			}
