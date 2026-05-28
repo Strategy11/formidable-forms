@@ -55,7 +55,7 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 				array(
 					'div_class'       => 'with_frm_style frm_toggle frm-ml-auto',
 					'checked'         => $addon['status']['type'] === 'active',
-					'disabled'        => $addon['slug'] === 'formidable-pro',
+					'disabled'        => $addon['slug'] === 'formidable-pro' || ! empty( $addon['toggle_disabled'] ),
 					'echo'            => true,
 					'aria-label-attr' => $addon['title'],
 				)

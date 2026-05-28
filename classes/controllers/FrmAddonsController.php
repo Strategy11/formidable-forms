@@ -165,6 +165,10 @@ class FrmAddonsController {
 		);
 		$addons = $pro + $addons;
 		self::prepare_addons( $addons );
+		$addons += self::get_mock_active_addons();
+		uasort( $addons, function ( $a, $b ) {
+			return strcasecmp( $a['title'] ?? '', $b['title'] ?? '' );
+		} );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
 
@@ -172,6 +176,60 @@ class FrmAddonsController {
 		$categories = self::$categories;
 
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Returns mock add-ons that always appear as active on the add-ons page.
+	 * Used for development/demo purposes.
+	 *
+	 * @return array
+	 */
+	private static function get_mock_active_addons() {
+		$mock_addons = array(
+			'square'          => array(
+				'title'           => 'Square',
+				'slug'            => 'square',
+				'excerpt'         => 'Accept in-person and online payments with Square. Process credit cards, digital wallets, and more directly through your forms.',
+				'docs'            => 'knowledgebase/square/',
+				'link'            => 'downloads/square/',
+				'url'             => '#',
+				'plugin'          => 'formidable-square/formidable-square.php',
+				'installed'       => true,
+				'activate_url'    => '',
+				'toggle_disabled' => true,
+				'categories'      => array( 'Business', 'Elite' ),
+				'category-slugs'  => array( 'business', 'elite' ),
+				'status'          => array(
+					'type'  => 'active',
+					'label' => __( 'Active', 'formidable' ),
+				),
+			),
+			'paypal-commerce' => array(
+				'title'           => 'PayPal Commerce',
+				'slug'            => 'paypal-commerce',
+				'excerpt'         => 'Accept PayPal, Venmo, and credit card payments directly on your site with PayPal Commerce. No redirect required.',
+				'docs'            => 'knowledgebase/paypal-commerce/',
+				'link'            => 'downloads/paypal-commerce/',
+				'url'             => '#',
+				'plugin'          => 'formidable-paypal-commerce/formidable-paypal-commerce.php',
+				'installed'       => true,
+				'activate_url'    => '',
+				'toggle_disabled' => true,
+				'categories'      => array( 'Business', 'Elite' ),
+				'category-slugs'  => array( 'business', 'elite' ),
+				'status'          => array(
+					'type'  => 'active',
+					'label' => __( 'Active', 'formidable' ),
+				),
+			),
+		);
+
+		foreach ( $mock_addons as &$addon ) {
+			self::prepare_addon_link( $addon['docs'] );
+			self::prepare_addon_link( $addon['link'] );
+		}
+
+		return $mock_addons;
 	}
 
 	/**
