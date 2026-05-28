@@ -1014,17 +1014,6 @@ class FrmPayPalLiteConnectHelper {
 	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data = array(), $shipping = array() ) {
 		$brand_name = self::get_brand_name();
 
-		// Log pricing data for debugging if FrmLog is available
-		if ( class_exists( 'FrmLog' ) && $pricing_data ) {
-			$log = new FrmLog();
-			$log->add(
-				array(
-					'title'   => 'PayPal Order: Pricing Data',
-					'content' => print_r( $pricing_data, true ),
-				)
-			);
-		}
-
 		// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data', 'shipping' ) );
 	}
