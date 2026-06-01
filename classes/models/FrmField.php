@@ -389,7 +389,7 @@ class FrmField {
 	/**
 	 * Gets field section labels in the form builder.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @return array
 	 */
@@ -428,7 +428,7 @@ class FrmField {
 	/**
 	 * Remove field types that are moved from Pro to Lite.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param array $pro_fields
 	 *

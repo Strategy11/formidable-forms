@@ -1,4 +1,15 @@
 <?php
+/**
+ * Field options settings in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var FrmFieldType $this                  Field type handler that included this template.
+ * @var array        $args                  Arguments including 'field' and 'field_obj'.
+ * @var bool         $should_hide_bulk_edit Whether to hide the bulk edit link.
+ * @var string       $option_title          Title attribute for the bulk edit link.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -20,14 +31,22 @@ $field_option_count = is_array( $args['field']['options'] ) ? count( $args['fiel
 			);
 			?>
 		</span>
-		<span><?php echo esc_html( $this->get_bulk_edit_string() ); ?></span>
+		<span>
+			<?php
+			// skipcq: PHP-E1002
+			echo esc_html( $this->get_bulk_edit_string() );
+			?>
+		</span>
 	</a>
 </span>
 
 <?php do_action( 'frm_add_multiple_opts_labels', $args['field'] ); ?>
 
 <ul id="frm_field_<?php echo esc_attr( $args['field']['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo $field_option_count > 10 ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $args['field']['field_key'] ); ?>">
-	<?php $this->show_single_option( $args ); ?>
+	<?php
+	// skipcq: PHP-E1002
+	$this->show_single_option( $args );
+	?>
 </ul>
 
 <?php
@@ -37,7 +56,12 @@ if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper
 	<div class="frm6 frm_form_field frm_add_opt_container">
 		<a href="javascript:void(0);" data-opttype="single" class="frm-h-stack frm_cb_button frm_add_opt frm6 frm_form_field frm-add-option-legacy" id="frm_add_opt_<?php echo esc_attr( $args['field']['id'] ); ?>">
 			<span><?php FrmAppHelper::icon_by_class( 'frmfont frm_plus1_icon frm_add_tag frm_svg13' ); ?></span>
-			<span><?php echo esc_html( $this->get_add_option_string() ); ?></span>
+			<span>
+				<?php
+				// skipcq: PHP-E1002
+				echo esc_html( $this->get_add_option_string() );
+				?>
+			</span>
 		</a>
 	</div>
 <?php } ?>

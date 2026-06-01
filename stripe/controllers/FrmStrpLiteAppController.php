@@ -60,7 +60,7 @@ class FrmStrpLiteAppController {
 	/**
 	 * Gets payments settings URL.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @return string
 	 */

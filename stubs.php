@@ -513,6 +513,18 @@ namespace {
 		}
 	}
 
+	/**
+	 * This class is in the PayPal add-on.
+	 */
+	class FrmPaymentSettingsController {
+		/**
+		 * @return void
+		 */
+		public static function route() {
+
+		}
+	}
+
 	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
 	}
 

@@ -130,7 +130,7 @@ zip -r $zipname $destination \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
-	-x "formidable/paypal/*"
+	-x "formidable-pro/resources/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

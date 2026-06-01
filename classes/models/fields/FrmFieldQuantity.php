@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x This is copied from FrmProFieldQuantity.php in Formidable Pro.
+ * @since 6.30 This is copied from FrmProFieldQuantity.php in Formidable Pro.
  */
 class FrmFieldQuantity extends FrmFieldNumber {
 

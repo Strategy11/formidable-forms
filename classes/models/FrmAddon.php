@@ -767,7 +767,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @since x.x Added the $is_valid param.
+	 * @since 6.30 Added the $is_valid param.
 	 *
 	 * @param bool $is_valid
 	 *

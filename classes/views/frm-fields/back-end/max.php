@@ -1,4 +1,13 @@
 <?php
+/**
+ * Max characters / rows setting in field settings.
+ *
+ * @package Formidable
+ *
+ * @var array $field                        Field data including 'id', 'type', 'max'.
+ * @var bool  $can_fit_label_in_two_columns Whether the label is short enough for a two-column layout.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

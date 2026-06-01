@@ -213,7 +213,7 @@ class FrmTransLiteAppController {
 	 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
 	 * They do however need to be visible when the payments submodule is active.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @return void
 	 */

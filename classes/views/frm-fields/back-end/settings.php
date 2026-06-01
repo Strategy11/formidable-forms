@@ -1,4 +1,26 @@
 <?php
+/**
+ * Field settings panel in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var array        $field               Field data.
+ * @var array        $display             Display options for each setting section.
+ * @var array        $values              Form values associated with the field.
+ * @var FrmFieldType $field_obj           Field type handler.
+ * @var string       $type_name           Human-readable field type name.
+ * @var array        $field_types         Available field types this field can switch to.
+ * @var array        $disabled_fields     Field types that are disabled in the type dropdown.
+ * @var array        $default_value_types Default value types available for this field.
+ * @var array        $unique_values_label_atts     Label attributes for the Unique checkbox.
+ * @var array        $read_only_label_atts         Label attributes for the Read Only checkbox.
+ * @var bool|null    $show_upsell_for_unique_value Whether to show upsell for Unique.
+ * @var bool|null    $show_upsell_for_read_only    Whether to show upsell for Read Only.
+ * @var bool|null    $show_upsell_for_before_after_contents Whether to show upsell for before/after contents.
+ * @var bool|null    $show_upsell_for_autocomplete Whether to show upsell for autocomplete.
+ * @var bool|null    $show_upsell_for_visibility   Whether to show upsell for visibility.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -35,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
-			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
@@ -44,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
-						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Collect Payment action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
+						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Stripe, Square, or PayPal action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
 						?>
 					</span>
 				</div>
@@ -84,7 +106,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( $display['label'] ) { ?>
 		<p class="frm-mt-xs">
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
-				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); ?>
+				<?php
+				// skipcq: PHP-W1020
+				echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) );
+				?>
 			</label>
 			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_label_<?php echo esc_attr( $field['id'] ); ?>" />
 		</p>
@@ -464,7 +489,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						}
 
 						FrmHtmlHelper::echo_dropdown_option(
-							is_array( $ftype ) ? $ftype['name'] : $ftyp,
+							is_array( $ftype ) ? $ftype['name'] : $ftype,
 							$fkey === $field['type'],
 							$type_option_params
 						);

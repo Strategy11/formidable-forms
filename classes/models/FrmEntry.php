@@ -1106,7 +1106,7 @@ class FrmEntry {
 
 		if ( ! empty( $values['form_key'] ) ) {
 			/**
-			 * @since x.x
+			 * @since 6.30
 			 *
 			 * @param int   $entry_id
 			 * @param array $is_child
@@ -1238,7 +1238,7 @@ class FrmEntry {
 
 		if ( ! empty( $values['form_key'] ) ) {
 			/**
-			 * @since x.x
+			 * @since 6.30
 			 *
 			 * @param int $entry_id
 			 */

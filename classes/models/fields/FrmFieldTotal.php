@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x This is copied from FrmProFieldTotal.php in Formidable Pro.
+ * @since 6.30 This is copied from FrmProFieldTotal.php in Formidable Pro.
  */
 class FrmFieldTotal extends FrmFieldText {
 
@@ -121,7 +121,7 @@ DEFAULT_HTML;
 		$sum = $currency['decimals'] > 0 ? round( $sum, $currency['decimals'] ) : ceil( $sum );
 
 		/**
-		 * @since x.x
+		 * @since 6.30
 		 *
 		 * @param float          $sum
 		 * @param array|object   $field

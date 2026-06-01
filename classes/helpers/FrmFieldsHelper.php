@@ -2367,7 +2367,7 @@ class FrmFieldsHelper {
 	/**
 	 * Shows add field link.
 	 *
-	 * @since x.x
+	 * @since 6.30
 	 *
 	 * @param array $field_type See file `classes/views/frm-forms/add_field_links.php`.
 	 *
@@ -2653,6 +2653,10 @@ class FrmFieldsHelper {
 				'content' => 'button-options',
 			),
 		);
+
+		if ( 'product' === FrmField::get_field_type( $field ) ) {
+			unset( $options['buttons'] );
+		}
 
 		/**
 		 * Allows modifying the options of Display format setting of Radio field.

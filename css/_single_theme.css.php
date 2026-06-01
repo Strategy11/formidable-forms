@@ -189,6 +189,14 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	<?php } ?>
 }
 
+.<?php echo esc_html( $style_class ); ?> input:-webkit-autofill {
+	<?php if ( ! empty( $remove_box_shadow_active ) ) { ?>
+	-webkit-box-shadow: none<?php echo esc_html( $important ); ?>;
+	<?php } else { ?>
+	-webkit-box-shadow: 0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
+	<?php } ?>
+}
+
 <?php if ( ! $submit_style ) { ?>
 	<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,

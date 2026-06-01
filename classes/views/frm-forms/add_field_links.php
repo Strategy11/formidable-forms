@@ -100,7 +100,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<h3 class="frm-with-line">
 									<span><?php echo esc_html( $section_labels[ $section ] ?? ucwords( $section ) ); ?></span>
 									<span style="padding-left: 0;">
-										<?php FrmAppHelper::show_pill_text(); ?>
+										<?php
+										if ( ! FrmAppHelper::pro_is_installed() ) {
+											FrmAppHelper::show_pill_text();
+										}
+										?>
 									</span>
 								</h3>
 								<ul class="field_type_list frm_grid_container">
@@ -220,6 +224,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</form>
 						</div>
 					</div>
+					<?php
+					if ( isset( $form ) ) {
+						/**
+						 * Hook in so people can include additional tab content.
+						 * Used along with frm_extra_form_instruction_tabs which is used to
+						 * include the tabs.
+						 *
+						 * @since 6.31
+						 *
+						 * @param stdClass $form The form object.
+						 */
+						do_action( 'frm_extra_form_instruction_tabs_content', $form );
+					}
+					?>
 				</div>
 			</div>
 		</div>
