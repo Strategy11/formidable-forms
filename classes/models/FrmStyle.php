@@ -124,8 +124,10 @@ class FrmStyle {
 
 			if ( ! $id ) {
 				// For a new style (including a duplicate), the post_name is derived from the title.
-				// Sanitize it here so the CSS scope below matches the slug WordPress will store.
-				$new_instance['post_name'] = sanitize_title( $new_instance['post_title'] );
+				// Resolve slug uniqueness up front (WordPress appends -2, -3, etc. to duplicate slugs)
+				// so the CSS scope below matches the slug WordPress will actually store.
+				$slug                      = sanitize_title( $new_instance['post_title'] );
+				$new_instance['post_name'] = wp_unique_post_slug( $slug, 0, $new_instance['post_status'], $new_instance['post_type'], 0 );
 			}
 
 			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
