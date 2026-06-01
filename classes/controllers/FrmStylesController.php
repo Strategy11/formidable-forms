@@ -135,7 +135,7 @@ class FrmStylesController {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
+		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
 
@@ -258,8 +258,7 @@ class FrmStylesController {
 	 */
 	public static function get_file_name() {
 		if ( is_multisite() ) {
-			$blog_id = get_current_blog_id();
-			return 'formidableforms' . absint( $blog_id ) . '.css';
+			return 'formidableforms' . absint( get_current_blog_id() ) . '.css';
 		}
 
 		return 'formidableforms.css';
@@ -278,11 +277,7 @@ class FrmStylesController {
 
 		$this_version = get_option( 'frm_last_style_update' );
 
-		if ( ! $this_version ) {
-			$this_version = $version;
-		}
-
-		return $this_version;
+		return $this_version ? $this_version : $version;
 	}
 
 	/**
@@ -293,7 +288,7 @@ class FrmStylesController {
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
 		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && ! str_contains( $tag, ' property=' ) ) {
-			$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
+			return str_replace( ' type="', ' property="stylesheet" type="', $tag );
 		}
 
 		return $tag;
@@ -372,9 +367,8 @@ class FrmStylesController {
 			return;
 		}
 
-		$frm_style     = new FrmStyle( $style_id );
-		$active_style  = $frm_style->get_one();
-		$default_style = self::get_default_style();
+		$frm_style    = new FrmStyle( $style_id );
+		$active_style = $frm_style->get_one();
 
 		self::disable_admin_page_styling_on_submit_buttons();
 
@@ -385,7 +379,7 @@ class FrmStylesController {
 		 */
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
-		self::render_style_page( $active_style, $form, $default_style );
+		self::render_style_page( $active_style, $form, self::get_default_style() );
 	}
 
 	/**
@@ -530,9 +524,8 @@ class FrmStylesController {
 		// If the default style is selected, use the "Always use default" legacy option instead of the default style.
 		// There's also a check here for conversational forms.
 		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
-		$default_style = self::get_default_style();
 
-		if ( $style_id === $default_style->ID && empty( $form->options['chat'] ) ) {
+		if ( $style_id === self::get_default_style()->ID && empty( $form->options['chat'] ) ) {
 			$style_id = 1;
 		}
 
@@ -714,6 +707,8 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function save_style() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
 		$frm_style   = new FrmStyle();
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
@@ -989,8 +984,7 @@ class FrmStylesController {
 			// A style ID is not sent when resetting on the edit page.
 			// Instead of resetting the style, send the defaults back so the inputs can be updated with JavaScript.
 			$frm_style = new FrmStyle();
-			$defaults  = $frm_style->get_defaults();
-			echo json_encode( $defaults );
+			echo json_encode( $frm_style->get_defaults() );
 			wp_die();
 		}
 
@@ -1045,7 +1039,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function add_meta_boxes() {
-		// setup meta boxes
+		// Setup meta boxes
 		$meta_boxes = array(
 			'general'                => __( 'General', 'formidable' ),
 			'form-title'             => __( 'Form Title', 'formidable' ),
@@ -1200,10 +1194,12 @@ class FrmStylesController {
 
 		$frm_settings = FrmAppHelper::get_settings();
 
-		if ( $frm_settings->load_style !== 'none' ) {
-			wp_enqueue_style( 'formidable' );
-			$frm_vars['css_loaded'] = true;
+		if ( $frm_settings->load_style === 'none' ) {
+			return;
 		}
+
+		wp_enqueue_style( 'formidable' );
+		$frm_vars['css_loaded'] = true;
 	}
 
 	/**
@@ -1343,7 +1339,7 @@ class FrmStylesController {
 	public static function do_accordion_sections( $screen, $context, $data_object ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wp_meta_boxes;
 
-		// the symbol id from icons.svg
+		// The symbol id from icons.svg
 		$icon_ids = array(
 			'ranking-fields-style' => 'frm_chart_bar_icon',
 			'section-fields-style' => 'frm-form-title-style',
@@ -1359,6 +1355,7 @@ class FrmStylesController {
 
 		$page = $screen->id;
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div id="side-sortables" class="accordion-container">
 			<ul class="outer-border">
@@ -1368,48 +1365,51 @@ class FrmStylesController {
 
 		if ( isset( $wp_meta_boxes[ $page ][ $context ] ) ) {
 			foreach ( array( 'high', 'core', 'default', 'low' ) as $priority ) {
-				if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
-					foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
-						if ( false === $box || ! $box['title'] ) {
-							continue;
-						}
+				if ( ! isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
+					continue;
+				}
 
-						++$i;
-						$icon_id    = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
-						$open_class = '';
+				foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
+					if ( false === $box || ! $box['title'] ) {
+						continue;
+					}
 
-						if ( ! $first_open ) {
-							$first_open = true;
-							$open_class = 'open';
-						}
+					++$i;
+					$icon_id    = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
+					$open_class = '';
 
-						$accordion_content_id = 'frm_style_section_' . $box['id'];
-						?>
-						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-							<h3 class="accordion-section-title hndle">
-								<?php
-								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id . ' frm_svg24' );
-								echo esc_html( $box['title'] );
-								?>
-								<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-									<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
-								</button>
-							</h3>
-							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">
-								<div class="inside">
-									<?php call_user_func( $box['callback'], $data_object, $box ); ?>
-								</div><!-- .inside -->
-							</div><!-- .accordion-section-content -->
-						</li><!-- .accordion-section -->
-						<?php
-					}//end foreach
-				}//end if
+					if ( ! $first_open ) {
+						$first_open = true;
+						$open_class = 'open';
+					}
+
+					$accordion_content_id = 'frm_style_section_' . $box['id'];
+					?>
+					<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+						<h3 class="accordion-section-title hndle">
+							<?php
+							FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id . ' frm_svg24' );
+							echo esc_html( $box['title'] );
+							?>
+							<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
+							</button>
+						</h3>
+						<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">
+							<div class="inside">
+								<?php call_user_func( $box['callback'], $data_object, $box ); ?>
+							</div><!-- .inside -->
+						</div><!-- .accordion-section-content -->
+					</li><!-- .accordion-section -->
+					<?php
+				}//end foreach
 			}//end foreach
 		}//end if
 		?>
 			</ul><!-- .outer-border -->
 		</div><!-- .accordion-container -->
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		return $i;
 	}
 

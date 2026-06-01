@@ -14,7 +14,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			// After user registration.
 			'priority' => 45,
 			'event'    => array( 'create' ),
-			'color'    => 'var(--green)',
+			'color'    => '#3fac25',
 		);
 
 		$this->FrmFormAction( 'payment', __( 'Collect a Payment', 'formidable' ), $action_ops );
@@ -87,6 +87,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
+			'entry_data_sync'      => 'overwrite',
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
@@ -178,6 +179,7 @@ class FrmTransLiteAction extends FrmFormAction {
 		}
 
 		$has_field = false;
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		<select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
@@ -200,17 +202,19 @@ class FrmTransLiteAction extends FrmFormAction {
 				<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<option value="<?php echo esc_attr( $field->id ); ?>" <?php selected( $key_exists ? $form_atts['form_action']->post_content[ $field_atts['name'] ] : 0, $field->id ); ?>>
 					<?php
-					echo esc_attr( FrmAppHelper::truncate( $field->name, 50, 1 ) );
+					echo esc_html( FrmAppHelper::truncate( $field->name, 50, 1 ) );
 
 					if ( 'name' === $field->type && isset( $field_atts['name'] ) ) {
 						switch ( $field_atts['name'] ) {
 							case 'billing_first_name':
+							case 'shipping_first_name':
 								echo ' (';
 								esc_html_e( 'First', 'formidable' );
 								echo ')';
 								break;
 
 							case 'billing_last_name':
+							case 'shipping_last_name':
 								echo ' (';
 								esc_html_e( 'Last', 'formidable' );
 								echo ')';
@@ -237,6 +241,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	public static function get_single_action_type( $action_id, $type = '' ) {

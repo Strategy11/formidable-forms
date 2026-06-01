@@ -30,7 +30,6 @@ use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
-use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
@@ -53,7 +52,6 @@ use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 // EarlyReturn
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
-use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 
 // Php53, Php54, Php70
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
@@ -69,18 +67,35 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFrom
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
 
-define( 'ABSPATH', '' );
+// PHP Unit
+use Rector\PHPUnit\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTestsRector;
+use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
+use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\StringCastAssertStringContainsStringRector;
 
 return RectorConfig::configure()
+	->withBootstrapFiles(
+		array(
+			__DIR__ . '/stubs.php',
+		)
+	)
+	->withAutoloadPaths(
+		array(
+			__DIR__ . '/tests/phpunit/base',
+		)
+	)
 	->withPaths(
 		array(
 			__DIR__ . '/classes',
 			__DIR__ . '/stripe',
 			__DIR__ . '/square',
+			__DIR__ . '/paypal',
+			__DIR__ . '/css',
 			__DIR__ . '/tests',
 		)
 	)
-	// here we can define, what prepared sets of rules will be applied
+	// Here we can define, what prepared sets of rules will be applied
 	->withPreparedSets(
 		// deadCode
 		true,
@@ -141,9 +156,12 @@ return RectorConfig::configure()
 			AbsolutizeRequireAndIncludePathRector::class,
 			ChangeArrayPushToArrayAssignRector::class,
 			CombinedAssignRector::class,
+			// This gets rid of comments as well, so the resulting code can be less easy to follow.
 			CombineIfRector::class,
+			// Prefer compact() for now since it uses less code.
 			CompactToVariablesRector::class,
 			CompleteDynamicPropertiesRector::class,
+			// Ignore this rule. Truthy and falsy checks are encouraged.
 			ExplicitBoolCompareRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			IssetOnPropertyObjectToPropertyExistsRector::class,
@@ -151,6 +169,7 @@ return RectorConfig::configure()
 			JoinStringConcatRector::class,
 			LocallyCalledStaticMethodToNonStaticRector::class,
 			ShortenElseIfRector::class,
+			// This change seems unsafe. It replace empty in cases where the variable might never be set.
 			SimplifyEmptyCheckOnEmptyArrayRector::class,
 			SimplifyRegexPatternRector::class,
 			SingleInArrayToCompareRector::class,
@@ -162,7 +181,6 @@ return RectorConfig::configure()
 			// CodingStyle
 			CallUserFuncArrayToVariadicRector::class,
 			CatchExceptionNameMatchingTypeRector::class,
-			CountArrayToEmptyArrayComparisonRector::class,
 			EncapsedStringsToSprintfRector::class,
 			MakeInheritedMethodVisibilitySameAsParentRector::class,
 			// We do not need these many new lines.
@@ -179,7 +197,7 @@ return RectorConfig::configure()
 			RemoveAlwaysTrueIfConditionRector::class,
 			// The FrmFieldType.php file has a few empty functions with only a return; line.
 			// We may want to remove that at some point, but I think it's there to prevent another
-			// static analysis error.
+			// Static analysis error.
 			RemoveDeadReturnRector::class,
 			RemoveParentCallWithoutParentRector::class,
 			RemoveUnusedConstructorParamRector::class,
@@ -197,7 +215,6 @@ return RectorConfig::configure()
 			ChangeOrIfContinueToMultiContinueRector::class,
 			// This breaks a return statement up into multiple return statements. It adds too many lines.
 			ReturnBinaryOrToEarlyReturnRector::class,
-			ReturnEarlyIfVariableRector::class,
 
 			// Php53, Php54, Php70
 			// The WP standard still uses the long array syntax, so ignore this for now.
@@ -214,5 +231,12 @@ return RectorConfig::configure()
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
 			AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
+
+			// PHP Unit
+			DeclareStrictTypesTestsRector::class,
+			FinalizeTestCaseClassRector::class,
+			PrivatizeFinalClassPropertyRector::class,
+			StringClassNameToClassConstantRector::class,
+			StringCastAssertStringContainsStringRector::class,
 		)
 	);

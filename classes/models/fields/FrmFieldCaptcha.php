@@ -141,9 +141,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {
-		$api_js_url = $this->api_url();
-
-		wp_register_script( 'captcha-api', $api_js_url, array( 'formidable' ), '3', true );
+		wp_register_script( 'captcha-api', $this->api_url(), array( 'formidable' ), '3', true );
 		wp_enqueue_script( 'captcha-api' );
 	}
 
@@ -240,7 +238,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$api_js_url = apply_filters( 'frm_turnstile_js_url', $api_js_url );
 
 		// Prevent render=explicit from happening twice in case someone patched
-		// the double rendering issue using the frm_turnstile_js_url hook.
+		// The double rendering issue using the frm_turnstile_js_url hook.
 		return str_replace(
 			'&render=explicit&render=explicit',
 			'&render=explicit',
@@ -304,16 +302,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
-				$threshold = floatval( $frm_settings->re_threshold );
-				$score     = floatval( $response['score'] );
+		if ( $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
+			$threshold = floatval( $frm_settings->re_threshold );
+			$score     = floatval( $response['score'] );
 
-				$this->set_score( $score );
+			$this->set_score( $score );
 
-				if ( $score < $threshold ) {
-					$response['success'] = false;
-				}
+			if ( $score < $threshold ) {
+				$response['success'] = false;
 			}
 		}
 
@@ -404,7 +400,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return false;
 		}
 
-		// don't require the captcha if it shouldn't be shown
+		// Don't require the captcha if it shouldn't be shown
 		return self::should_show_captcha();
 	}
 

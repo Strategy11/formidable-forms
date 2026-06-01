@@ -32,6 +32,6 @@ class test_FrmStyleApi extends FrmUnitTest {
 		$this->assertStringContainsString( '.png', $image );
 
 		// Question: Do we ever allow people to download a style template for free? Does WordPress allow this?
-		$this->assertTrue( ! isset( $first_style_template['url'] ), 'In lite we always expect the style template to be ' );
+		$this->assertArrayNotHasKey( 'url', $first_style_template, 'In lite we always expect the style template to be ' );
 	}
 }

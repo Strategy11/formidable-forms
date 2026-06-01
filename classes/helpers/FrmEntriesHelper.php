@@ -129,7 +129,7 @@ class FrmEntriesHelper {
 		}
 
 		if ( ! is_array( $new_value ) ) {
-			$new_value = str_replace( '"', '&quot;', $new_value );
+			return str_replace( '"', '&quot;', $new_value );
 		}
 
 		return $new_value;
@@ -223,10 +223,10 @@ class FrmEntriesHelper {
 		$field_value = $entry->metas[ $field->id ] ?? false;
 
 		if ( FrmAppHelper::pro_is_installed() ) {
-			$empty = empty( $field_value );
+			$empty = ! $field_value;
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
 
-			if ( $empty && ! empty( $field_value ) ) {
+			if ( $empty && $field_value ) {
 				// We've got an entry id, so switch it to a value.
 				$atts['force_id'] = true;
 			}
@@ -258,11 +258,11 @@ class FrmEntriesHelper {
 			}
 		}
 
-		$field_value = array();
-
 		if ( empty( $child_entries ) ) {
 			return '';
 		}
+
+		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
 			$atts['item_id'] = $child_entry->id;
@@ -272,7 +272,7 @@ class FrmEntriesHelper {
 			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
 
 			if ( $entry_val || '0' === $entry_val ) {
-				// foreach entry get display_value.
+				// For each entry get display_value.
 				$field_value[] = self::display_value( $entry_val, $field, $atts );
 			}
 
@@ -416,9 +416,9 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @param array|int|object $field
-	 * @param mixed            $value
-	 * @param array            $args
+	 * @param array|int|object|string $field
+	 * @param mixed                   $value
+	 * @param array                   $args
 	 *
 	 * @return void
 	 */
@@ -450,13 +450,14 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 4.02.04
+	 * @since 6.29 This is public.
 	 *
 	 * @param int|string $field_id Field ID.
 	 * @param array      $args     Additional arguments.
 	 *
 	 * @return mixed
 	 */
-	private static function get_posted_meta( $field_id, $args ) {
+	public static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
 			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -495,19 +496,20 @@ class FrmEntriesHelper {
 		self::set_other_repeating_vals( $field, $value, $args );
 
 		// Check if there are any posted "Other" values.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-
-			// Save original value.
-			$args['temp_value'] = $value;
-			$args['other']      = true;
-
-			// Sanitizing is done next.
-			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
-
-			// Set the validation value now
-			self::set_other_validation_val( $value, $other_vals, $field, $args );
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
 		}
+
+		// Save original value.
+		$args['temp_value'] = $value;
+		$args['other']      = true;
+
+		// Sanitizing is done next.
+		$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
+
+		// Set the validation value now
+		self::set_other_validation_val( $value, $other_vals, $field, $args );
 	}
 
 	/**
@@ -527,16 +529,18 @@ class FrmEntriesHelper {
 		}
 
 		// Check if there are any other posted "other" values for this field.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			// Save original value
-			$args['temp_value'] = $value;
-			$args['other']      = true;
-			$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
-
-			// Set the validation value now.
-			self::set_other_validation_val( $value, $other_vals, $field, $args );
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			return;
 		}
+
+		// Save original value
+		$args['temp_value'] = $value;
+		$args['other']      = true;
+		$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
+
+		// Set the validation value now.
+		self::set_other_validation_val( $value, $other_vals, $field, $args );
 	}
 
 	/**
@@ -678,18 +682,18 @@ class FrmEntriesHelper {
 			}
 		}
 
-		// finally get the correct version number
+		// Finally get the correct version number
 		$known   = array( 'Version', $ub, 'other' );
 		$pattern = '#(?<browser>' . implode( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
 		// Get the matching numbers.
 		preg_match_all( $pattern, $u_agent, $matches );
 
-		// see how many we have
+		// See how many we have
 		$i = count( $matches['browser'] );
 
 		if ( $i > 1 ) {
 			// We will have two since we are not using 'other' argument yet
-			// see if version is before or after the name.
+			// See if version is before or after the name.
 			$version = strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ? $matches['version'][0] : $matches['version'][1];
 		} elseif ( $i === 1 ) {
 			$version = $matches['version'][0];
@@ -697,7 +701,7 @@ class FrmEntriesHelper {
 			$version = '';
 		}
 
-		// check if we have a number
+		// Check if we have a number
 		if ( $version === '' ) {
 			$version = '?';
 		}
@@ -717,6 +721,7 @@ class FrmEntriesHelper {
 		$links = self::get_action_links( $id, $atts['entry'] );
 
 		foreach ( $links as $link ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 		<div class="misc-pub-section">
 			<a href="<?php echo esc_url( $link['url'] ); ?>"
@@ -741,6 +746,7 @@ class FrmEntriesHelper {
 			</a>
 		</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}//end foreach
 	}
 
@@ -888,9 +894,7 @@ class FrmEntriesHelper {
 	 * @return int
 	 */
 	public static function get_entry_status( $status ) {
-		$statuses = self::get_entry_statuses();
-
-		if ( array_key_exists( $status, $statuses ) ) {
+		if ( array_key_exists( $status, self::get_entry_statuses() ) ) {
 			return $status;
 		}
 
@@ -913,8 +917,7 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function get_entry_status_label( $status ) {
-		$statuses = self::get_entry_statuses();
-		return $statuses[ self::get_entry_status( $status ) ];
+		return self::get_entry_statuses()[ self::get_entry_status( $status ) ];
 	}
 
 	/**
@@ -957,9 +960,7 @@ class FrmEntriesHelper {
 	 * @return int
 	 */
 	public static function get_visible_unread_inbox_count() {
-		$menu_name = FrmAppHelper::get_menu_name();
-
-		if ( ! in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+		if ( ! in_array( FrmAppHelper::get_menu_name(), array( 'Formidable', 'Forms' ), true ) ) {
 			return 0;
 		}
 

@@ -76,7 +76,7 @@ foreach ( $payment_sections as $key => $section ) {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( $section['function'] ?? $section ) );
+			call_user_func( $section['function'] ?? $section );
 		}
 		?>
 	</div>

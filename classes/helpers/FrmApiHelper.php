@@ -100,7 +100,7 @@ class FrmApiHelper {
 
 		if ( false === $activation_timestamp ) {
 			// If the option does not exist, assume that it is
-			// because the user was active before this option was introduced.
+			// Because the user was active before this option was introduced.
 			return false;
 		}
 

@@ -529,7 +529,7 @@ class FrmEmailSummaryHelper {
 
 		// Add inline CSS for specific button types.
 		if ( str_contains( $button_html, 'frm-button-primary' ) ) {
-			$button_html = str_replace( '<a', '<a style="' . self::get_button_style() . '"', $button_html );
+			return str_replace( '<a', '<a style="' . self::get_button_style() . '"', $button_html );
 		}
 
 		return $button_html;

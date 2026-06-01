@@ -65,7 +65,7 @@ abstract class FrmFormMigrator {
 		$this->source_active = is_plugin_active( $this->path );
 
 		if ( ! $this->source_active ) {
-			// if source plugin is not installed, do nothing
+			// If source plugin is not installed, do nothing
 			return;
 		}
 
@@ -90,6 +90,7 @@ abstract class FrmFormMigrator {
 	 */
 	public function import_page() {
 		$forms = $this->get_forms();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="wrap">
 			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
@@ -167,6 +168,7 @@ abstract class FrmFormMigrator {
 			</div>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -263,7 +265,7 @@ abstract class FrmFormMigrator {
 	 * @return void
 	 */
 	protected function prepare_form( $form, &$new_form ) {
-		// customize this function
+		// Customize this function
 	}
 
 	/**
@@ -280,7 +282,7 @@ abstract class FrmFormMigrator {
 			$label = $this->get_field_label( $field );
 			$type  = $this->get_field_type( $field );
 
-			// check if field is unsupported. If unsupported make note and continue
+			// Check if field is unsupported. If unsupported make note and continue
 			if ( $this->is_unsupported_field( $type ) ) {
 				$this->response['unsupported'][] = $label;
 				continue;
@@ -299,7 +301,7 @@ abstract class FrmFormMigrator {
 
 			$this->prepare_field( $field, $new_field );
 
-			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end(), true ) && $new_type !== 'break';
+			$in_section = $this->current_section && ! in_array( $new_type, $this->fields_with_end(), true ) && $new_type !== 'break';
 
 			if ( $in_section ) {
 				$new_field['field_options']['in_section'] = $this->current_section['id'];
@@ -314,16 +316,18 @@ abstract class FrmFormMigrator {
 			}
 
 			// This may occasionally skip one level/order e.g. after adding a
-			// list field, as field_order would already be prepared to be used.
+			// List field, as field_order would already be prepared to be used.
 			++$field_order;
 
-			if ( ! empty( $new_field['fields'] ) && is_array( $new_field['fields'] ) ) {
-				// we have (inner) fields to merge
-
-				$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
-				// set the new field_order as it would have changed
-				$field_order = $new_field['current_order'];
+			if ( empty( $new_field['fields'] ) || ! is_array( $new_field['fields'] ) ) {
+				continue;
 			}
+
+			// we have (inner) fields to merge
+
+			$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
+			// Set the new field_order as it would have changed
+			$field_order = $new_field['current_order'];
 		}//end foreach
 	}
 
@@ -334,7 +338,7 @@ abstract class FrmFormMigrator {
 	 * @return void
 	 */
 	protected function prepare_field( $field, &$new_field ) {
-		// customize this function
+		// Customize this function
 	}
 
 	/**
@@ -611,7 +615,7 @@ abstract class FrmFormMigrator {
 
 		if ( $new_form_id && ! FrmForm::get_key_by_id( $new_form_id ) ) {
 			// Allow reimport if the form was deleted.
-			$new_form_id = 0;
+			return 0;
 		}
 
 		return $new_form_id;

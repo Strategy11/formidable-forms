@@ -214,10 +214,12 @@ class FrmSettingsController {
 		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
 
 		foreach ( $sections as $key => $section ) {
-			if ( in_array( $key, $payment_section_keys, true ) ) {
-				self::$removed_payments_sections[ $key ] = $section;
-				unset( $sections[ $key ] );
+			if ( ! in_array( $key, $payment_section_keys, true ) ) {
+				continue;
 			}
+
+			self::$removed_payments_sections[ $key ] = $section;
+			unset( $sections[ $key ] );
 		}
 
 		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
@@ -261,7 +263,7 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( $section['function'] ?? $section ) );
+			call_user_func( $section['function'] ?? $section );
 		}
 
 		wp_die();
@@ -471,7 +473,7 @@ class FrmSettingsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		update_option( 'frm_lite_settings_upgrade', time(), 'no' );
+		update_option( 'frm_lite_settings_upgrade', time(), false );
 
 		wp_send_json_success();
 	}

@@ -54,9 +54,7 @@ class FrmEntriesAJAXSubmitController {
 			wp_die();
 		}
 
-		$is_ajax_on = FrmForm::is_ajax_on( $form );
-
-		if ( ! $is_ajax_on ) {
+		if ( ! FrmForm::is_ajax_on( $form ) ) {
 			// This continues in the Pro version as it is required for other features including in-place edit.
 			// In Lite, if AJAX submit is not on, just exit early as this function is getting called incorrectly.
 			echo json_encode( $response );
@@ -65,7 +63,26 @@ class FrmEntriesAJAXSubmitController {
 
 		$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		if ( ! $errors ) {
+		if ( $errors ) {
+			$obj = array();
+
+			foreach ( $errors as $field => $error ) {
+				$field_id         = str_replace( 'field', '', $field );
+				$error            = self::maybe_modify_ajax_error( $error, $field_id, $form, $errors );
+				$obj[ $field_id ] = $error;
+			}
+
+			$response['errors']        = $obj;
+			$invalid_msg               = FrmFormsHelper::get_invalid_error_message( array( 'form' => $form ) );
+			$response['error_message'] = FrmFormsHelper::get_success_message(
+				array(
+					'message'  => $invalid_msg,
+					'form'     => $form,
+					'entry_id' => 0,
+					'class'    => FrmFormsHelper::form_error_class(),
+				)
+			);
+		} else {
 			global $frm_vars;
 			$frm_vars['ajax']       = true;
 			$frm_vars['css_loaded'] = true;
@@ -85,25 +102,6 @@ class FrmEntriesAJAXSubmitController {
 				// Mark the end of added footer content.
 				$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';
 			}
-		} else {
-			$obj = array();
-
-			foreach ( $errors as $field => $error ) {
-				$field_id         = str_replace( 'field', '', $field );
-				$error            = self::maybe_modify_ajax_error( $error, $field_id, $form, $errors );
-				$obj[ $field_id ] = $error;
-			}
-
-			$response['errors']        = $obj;
-			$invalid_msg               = FrmFormsHelper::get_invalid_error_message( array( 'form' => $form ) );
-			$response['error_message'] = FrmFormsHelper::get_success_message(
-				array(
-					'message'  => $invalid_msg,
-					'form'     => $form,
-					'entry_id' => 0,
-					'class'    => FrmFormsHelper::form_error_class(),
-				)
-			);
 		}//end if
 
 		$response = self::check_for_failed_form_submission( $response, $form->id );

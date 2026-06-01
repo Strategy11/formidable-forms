@@ -154,6 +154,13 @@ class RedundantEmptyAfterTypeCheckSniff implements Sniff {
 			return;
 		}
 
+		// For isset() with array access, the isset() is necessary to prevent undefined index warnings.
+		// We should NOT simplify isset($arr['key']) && !empty($arr['key']) because the isset() is needed.
+		// Only simplify when using type check functions like is_array(), is_string(), etc.
+		if ( 'isset' === $funcName && $this->hasArrayAccess( $checkArg ) ) {
+			return;
+		}
+
 		$fix = $phpcsFile->addFixableError(
 			'Redundant empty() after %s(). Use "%s( %s ) && %s" instead of "%s( %s ) && ! empty( %s )".',
 			$emptyToken,
@@ -225,5 +232,16 @@ class RedundantEmptyAfterTypeCheckSniff implements Sniff {
 		}
 
 		return $arg;
+	}
+
+	/**
+	 * Check if an argument string contains array access.
+	 *
+	 * @param string $arg The argument string.
+	 *
+	 * @return bool True if the argument contains array access.
+	 */
+	private function hasArrayAccess( $arg ) {
+		return strpos( $arg, '[' ) !== false;
 	}
 }

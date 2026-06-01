@@ -205,7 +205,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 */
 	public static function force_required_field( $required, $field ) {
 		if ( ! $required && 'gdpr' === $field['type'] && ! FrmFieldGdprHelper::hide_gdpr_field() ) {
-			$required = true;
+			return true;
 		}
 
 		return $required;

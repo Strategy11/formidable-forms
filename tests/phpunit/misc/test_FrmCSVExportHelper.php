@@ -14,7 +14,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 
 		$headings = $this->csv_headings();
 		$expected = array(
-			// default expected
+			// Default expected
 			'created_at' => 'Timestamp',
 			'updated_at' => 'Last Updated',
 			'user_id'    => 'Created By',
@@ -30,7 +30,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			$this->assertContains( $key, $keys, "{$label} is not present in CSV Headings" );
 		}
 
-		// expected for all_field_types form
+		// Expected for all_field_types form
 		$expected = array(
 			'Paragraph Text',
 			'Checkboxes - colors',
@@ -106,9 +106,8 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 
 		$this->set_form( $parent_form );
 
-		$headings = $this->csv_headings();
 		$expected = array( $field_in_section->name );
-		$labels   = array_values( $headings );
+		$labels   = array_values( $this->csv_headings() );
 
 		foreach ( $expected as $label ) {
 			$this->assertContains( $label, $labels, "{$label} is not present in CSV Headings" );

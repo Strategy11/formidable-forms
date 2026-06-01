@@ -30,8 +30,9 @@ class FrmOnSubmitHelper {
 	 */
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<div class="frm_form_field frm_has_shortcodes">
+		<div class="frm_form_field frm_has_shortcodes frm-mt-sm">
 			<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
@@ -53,7 +54,7 @@ class FrmOnSubmitHelper {
 		$id_attr   = $args['action_control']->get_field_id( 'show_form' );
 		$name_attr = $args['action_control']->get_field_name( 'show_form' );
 		?>
-		<div class="frm_form_field">
+		<div class="frm_form_field frm-h-stack-xs">
 			<?php
 			FrmHtmlHelper::toggle(
 				$id_attr,
@@ -70,6 +71,7 @@ class FrmOnSubmitHelper {
 			</label>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -108,9 +110,10 @@ class FrmOnSubmitHelper {
 	 */
 	public static function show_page_settings( $args ) {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<div class="frm_form_field">
-			<div class="frm_note_style">
+		<div class="frm_form_field frm-mt-xs">
+			<div class="frm_note_style frm-mt-0 frm-mb-md">
 				<?php esc_html_e( 'NOTE: The selected page content will be displayed, but the full page will not be loaded. Traditional URL tracking in Google Analytics and similar tools won\'t register a page load event. If precise tracking is essential, consider using the \'Redirect to URL\' option.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			</div>
 			<label for="<?php echo esc_attr( $name_attr ); ?>" class="screen-reader-text">
@@ -127,6 +130,7 @@ class FrmOnSubmitHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -237,9 +241,9 @@ class FrmOnSubmitHelper {
 	/**
 	 * Populates the On Submit data to form options.
 	 *
-	 * @param array  $form_options Form options.
-	 * @param object $action       Optional. The On Submit action object.
-	 * @param string $event        Form event. Default is `create`.
+	 * @param array       $form_options Form options.
+	 * @param object|null $action       Optional. The On Submit action object.
+	 * @param string      $event        Form event. Default is `create`.
 	 *
 	 * @return void
 	 */

@@ -26,7 +26,7 @@ class FrmFieldFactory {
 		}
 
 		if ( ! is_object( $selector ) ) {
-			$selector = new FrmFieldValueSelector( $field_id, $args );
+			return new FrmFieldValueSelector( $field_id, $args );
 		}
 
 		return $selector;
@@ -74,7 +74,7 @@ class FrmFieldFactory {
 	 */
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
-		return ! $class ? new FrmFieldDefault( $field, $field_type ) : new $class( $field, $field_type );
+		return $class ? new $class( $field, $field_type ) : new FrmFieldDefault( $field, $field_type );
 	}
 
 	/**
@@ -105,6 +105,9 @@ class FrmFieldFactory {
 			// Submit button field.
 			FrmSubmitHelper::FIELD_TYPE    => 'FrmFieldSubmit',
 			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
+			'product'                      => 'FrmFieldProduct',
+			'quantity'                     => 'FrmFieldQuantity',
+			'total'                        => 'FrmFieldTotal',
 		);
 
 		$class = $type_classes[ $field_type ] ?? '';
@@ -122,7 +125,7 @@ class FrmFieldFactory {
 	public static function field_has_html( $type ) {
 		$has_html = self::field_has_property( $type, 'has_html' );
 
-		// this hook is here for reverse compatibility since 3.0
+		// This hook is here for reverse compatibility since 3.0
 		return apply_filters( 'frm_show_custom_html', $has_html, $type );
 	}
 

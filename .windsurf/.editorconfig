@@ -1,0 +1,7 @@
+# Override parent EditorConfig for .windsurf/ markdown files
+# Code blocks in these rule files must use WP coding standards (tabs, indent_size 4)
+# while all other .md files in the project keep space/2 from the root config.
+
+[*.md]
+indent_style = tab
+indent_size = 4

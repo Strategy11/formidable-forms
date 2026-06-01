@@ -12,6 +12,9 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	public $total_items = 0;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
@@ -124,11 +127,13 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( $this->status === 'trash' ) {
 			echo '<p>';
 			esc_html_e( 'No forms found in the trash.', 'formidable' );
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
 				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 			echo '</p>';
 		} else {
 			$title = __( 'No Forms Found', 'formidable' );
@@ -166,13 +171,17 @@ class FrmFormsListHelper extends FrmListHelper {
 			return;
 		}
 
-		if ( 'trash' === $this->status && current_user_can( 'frm_delete_forms' ) ) {
-			?>
-			<div class="alignleft actions frm_visible_overflow">
-				<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
-			</div>
-			<?php
+		if ( 'trash' !== $this->status || ! current_user_can( 'frm_delete_forms' ) ) {
+			return;
 		}
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<div class="alignleft actions frm_visible_overflow">
+			<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
+		</div>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -395,9 +404,11 @@ class FrmFormsListHelper extends FrmListHelper {
 			'target' => '_blank',
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
 					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
 				'</a>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -420,12 +431,12 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {
-			$actions['frm_edit']     = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
-			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
+			$actions['frm_edit']     = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
+			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . esc_html__( 'Settings', 'formidable' ) . '</a>';
 		}
 
 		$actions         = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview', 'formidable' ) . '</a>';
+		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Number range setting.
+ *
+ * @package Formidable
+ *
+ * @var array $field Field data including 'id', 'field_key', 'minnum', 'maxnum', 'step'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

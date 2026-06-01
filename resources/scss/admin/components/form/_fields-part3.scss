@@ -2,7 +2,8 @@
  * Components - Fields Part 3
  */
 
-label input[type="checkbox"], label input[type="radio"] {
+label input[type="checkbox"],
+label input[type="radio"] {
 	vertical-align: inherit;
 }
 
@@ -27,10 +28,6 @@ label input[type="checkbox"], label input[type="radio"] {
 
 .frm_form_builder .widget-title h4 {
 	padding: 10px 15px;
-}
-
-.frm_form_builder .widget-top a.widget-action::after {
-	margin: 7px 12px 0;
 }
 
 .frmbutton.frm_tgateway {

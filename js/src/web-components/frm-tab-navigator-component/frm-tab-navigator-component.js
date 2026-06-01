@@ -1,4 +1,4 @@
-import { frmTabsNavigator } from '../../components/class-tabs-navigator';
+import { frmTabsNavigator } from '../../components/tabs/class-tabs-navigator';
 import { frmWebComponent } from '../frm-web-component';
 import style from './frm-tab-navigator-component.css';
 
@@ -25,28 +25,11 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 		wrapper.append( this.getTabs() );
 		wrapper.append( this.getTabContainer() );
 
-		new frmTabsNavigator( wrapper );
-
 		return wrapper;
 	}
 
 	afterViewInit( wrapper ) {
-		this.setInitialUnderlineWidth( wrapper );
-	}
-
-	/**
-	 * Sets the initial underline width of active tab nav item.
-	 *
-	 * @param {Element} wrapper - The wrapper element.
-	 */
-	setInitialUnderlineWidth( wrapper ) {
-		const li = wrapper.querySelector( 'li.frm-active' );
-		const tabActiveUnderline = wrapper.querySelector( '.frm-tabs-delimiter .frm-tabs-active-underline' );
-
-		if ( ! li || ! tabActiveUnderline ) {
-			return;
-		}
-		tabActiveUnderline.style.width = `${ li.clientWidth }px`;
+		this.tabsNavigator = new frmTabsNavigator( wrapper );
 	}
 
 	/**
@@ -58,8 +41,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 		const delimiter = document.createElement( 'div' );
 		const underline = document.createElement( 'span' );
 
-		underline.setAttribute( 'data-initial-width', '123' );
-		underline.classList.add( 'frm-tabs-active-underline', 'frm-first' );
+		underline.classList.add( 'frm-tabs-active-underline' );
 		delimiter.className = 'frm-tabs-delimiter';
 		delimiter.append( underline );
 
@@ -147,5 +129,9 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 */
 	getTabUnderline() {
 		return this.shadowRoot.querySelector( '.frm-tabs-active-underline' );
+	}
+
+	getLabelText() {
+		return null;
 	}
 }

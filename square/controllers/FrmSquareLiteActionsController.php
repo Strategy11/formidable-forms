@@ -116,7 +116,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! self::square_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Square. Please try again.', 'formidable' );
+			$response['error'] = __( 'Square still needs to be configured.', 'formidable' );
 			return $response;
 		}
 
@@ -400,26 +400,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function square_is_configured() {
 		return (bool) FrmSquareLiteConnectHelper::get_merchant_id();
-	}
-
-	/**
-	 * Replace an [email] shortcode with the current user email.
-	 *
-	 * @param string $email
-	 *
-	 * @return string
-	 */
-	private static function replace_email_shortcode( $email ) {
-		if ( ! str_contains( $email, '[email]' ) ) {
-			return $email;
-		}
-
-		global $current_user;
-		return str_replace(
-			'[email]',
-			! empty( $current_user->user_email ) ? $current_user->user_email : '',
-			$email
-		);
 	}
 
 	/**
@@ -714,17 +694,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = $field->temp_id ?? $field->id;
-
-		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
-			unset( $errors[ 'field' . $field_id . '-cc' ] );
-		}
-
-		if ( isset( $errors[ 'field' . $field_id ] ) ) {
-			unset( $errors[ 'field' . $field_id ] );
-		}
-
-		return $errors;
+		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
 	}
 
 	/**

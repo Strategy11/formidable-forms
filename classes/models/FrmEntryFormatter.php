@@ -11,7 +11,7 @@ class FrmEntryFormatter {
 	/**
 	 * @since 2.04
 	 *
-	 * @var stdClass|null
+	 * @var false|stdClass|null
 	 */
 	protected $entry;
 
@@ -462,11 +462,7 @@ class FrmEntryFormatter {
 
 		$content .= $this->table_generator->generate_table_footer();
 
-		if ( $this->is_clickable ) {
-			$content = make_clickable( $content );
-		}
-
-		return $content;
+		return $this->is_clickable ? make_clickable( $content ) : $content;
 	}
 
 	/**
@@ -550,14 +546,16 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function push_single_field_to_array( $field_value, &$output ) {
-		if ( $this->include_field_in_content( $field_value ) ) {
-			$displayed_value                                = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
-			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
-			$has_separate_value                             = (bool) $field_value->get_field_option( 'separate_value' );
+		if ( ! $this->include_field_in_content( $field_value ) ) {
+			return;
+		}
 
-			if ( $has_separate_value || $displayed_value !== $field_value->get_saved_value() ) {
-				$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
-			}
+		$displayed_value                                = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
+		$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
+		$has_separate_value                             = (bool) $field_value->get_field_option( 'separate_value' );
+
+		if ( $has_separate_value || $displayed_value !== $field_value->get_saved_value() ) {
+			$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
 		}
 	}
 
@@ -791,16 +789,18 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function add_user_info_to_html_table( &$content ) {
-		if ( $this->include_user_info ) {
-			foreach ( $this->entry_values->get_user_info() as $user_info ) {
-				$value_args = array(
-					'label'      => $user_info['label'],
-					'value'      => $user_info['value'],
-					'field_type' => 'none',
-				);
+		if ( ! $this->include_user_info ) {
+			return;
+		}
 
-				$this->add_html_row( $value_args, $content );
-			}
+		foreach ( $this->entry_values->get_user_info() as $user_info ) {
+			$value_args = array(
+				'label'      => $user_info['label'],
+				'value'      => $user_info['value'],
+				'field_type' => 'none',
+			);
+
+			$this->add_html_row( $value_args, $content );
 		}
 	}
 
@@ -814,10 +814,12 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function add_user_info_to_plain_text_content( &$content ) {
-		if ( $this->include_user_info ) {
-			foreach ( $this->entry_values->get_user_info() as $user_info ) {
-				$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
-			}
+		if ( ! $this->include_user_info ) {
+			return;
+		}
+
+		foreach ( $this->entry_values->get_user_info() as $user_info ) {
+			$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
 		}
 	}
 
@@ -920,7 +922,7 @@ class FrmEntryFormatter {
 		$display_value = $this->flatten_array( $display_value );
 
 		if ( ! isset( $this->atts['line_breaks'] ) || ! empty( $this->atts['line_breaks'] ) ) {
-			$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
+			return str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
 		}
 
 		return $display_value;

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Field description setting in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var array $field Field data including 'id' and 'description'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
