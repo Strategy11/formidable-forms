@@ -16,6 +16,12 @@
 	right: 0;
 }
 
+.frm_previous_install ~ .frm_wrap > .frm_page_container,
+.frm_previous_install ~ .frm_page_container,
+.frm_previous_install ~ .frm_wrap > form > .frm_page_container {
+	margin-top: 41px;
+}
+
 .frm-admin-page-translate .frm_wrap .frm_page_container,
 .frm-admin-page-update_translations .frm_wrap .frm_page_container {
 	position: static;
