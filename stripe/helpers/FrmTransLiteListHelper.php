@@ -623,13 +623,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			return $atts['gateways'][ $item->paysys ]['label'];
 		}
 
-		if ( 'paypal' === $item->paysys ) {
-			// The PayPal add-on does not use a gateway.
-			// This should be safe to remove once we release
-			// PayPal Commerce in Lite.
-			return 'PayPal';
-		}
-
 		return $item->paysys;
 	}
 

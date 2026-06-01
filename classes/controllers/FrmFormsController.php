@@ -2217,7 +2217,8 @@ class FrmFormsController {
 
 		if ( $name === $form->name ) {
 			// Nothing to change so exit early.
-			wp_send_json_success();
+			$form_key = $form->form_key;
+			wp_send_json_success( compact( 'form_key' ) );
 		}
 
 		$to_update = array(

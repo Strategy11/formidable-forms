@@ -141,7 +141,15 @@ class FrmFormAction {
 			die( 'You are not allowed to call this page directly.' );
 		}
 
-		$this->id_base     = strtolower( $id_base );
+		$this->id_base = strtolower( $id_base );
+
+		/**
+		 * @since 6.31
+		 *
+		 * @param string $name
+		 */
+		$name = apply_filters( 'frm_' . $id_base . '_action_name', $name );
+
 		$this->name        = $name;
 		$this->option_name = 'frm_' . $this->id_base . '_action';
 
@@ -160,6 +168,7 @@ class FrmFormAction {
 			'keywords'    => '',
 			'description' => '',
 			'is_new'      => false,
+			'is_beta'     => false,
 		);
 
 		$action_options          = apply_filters( 'frm_' . $id_base . '_action_options', $action_options );

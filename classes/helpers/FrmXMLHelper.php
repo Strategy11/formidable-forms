@@ -303,7 +303,7 @@ class FrmXMLHelper {
 		 * imported later. Use this action for cross-form fix-ups that require
 		 * the fully populated `$frm_duplicate_ids` map.
 		 *
-		 * @since x.x
+		 * @since 6.31
 		 *
 		 * @param array $imported Summary of imported items, including
 		 *                        'forms' => array( old_form_id => new_form_id ).

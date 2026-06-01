@@ -375,7 +375,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Initializes an info modal.
 	 *
-	 * @since x.x The first param can be an array of args.
+	 * @since 6.31 The first param can be an array of args.
 	 *
 	 * @param {Array|string}     msg   The message or the modal data (title, msg, actionUrl, actionText, closeText).
 	 * @param {string|undefined} width The width (include the unit) of the modal. This is optional. Default is `400px`.
@@ -553,7 +553,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Adds keyboard support for form action widgets and their icons.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {jQuery} wrapClass Delegated jQuery scope for the current page wrap.
 	 * @return {void}
@@ -661,7 +661,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Uncheck any data-toggleclass toggle that controls the given hidden element.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string} hideSelector CSS selector for the element being removed.
 	 * @return {void}
@@ -770,7 +770,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Toggle the visibility of the form actions search no results message.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 */
 	function toggleFormActionsNoResultsVisibility() {
 		const hasVisibleActions = document.querySelector( '#frm-actions-filter-content .frm-action:not(.frm_hidden)' );
@@ -779,6 +779,7 @@ window.frmAdminBuildJS = function() {
 
 	function afterActionRemoved( type ) {
 		checkActiveAction( type );
+		maybeEnableOtherPaymentActions( type );
 
 		if ( ! document.querySelector( '.frm_form_action_settings' ) ) {
 			document.querySelector( '.frm-no-actions-message' )?.classList.remove( 'frm_hidden' );
@@ -787,6 +788,21 @@ window.frmAdminBuildJS = function() {
 		const hookName = 'frm_after_action_removed';
 		const hookArgs = { type };
 		wp.hooks.doAction( hookName, hookArgs );
+	}
+
+	/**
+	 * @since 6.31
+	 *
+	 * @param {string} deletedType
+	 *
+	 * @return {void}
+	 */
+	function maybeEnableOtherPaymentActions( deletedType ) {
+		if ( 'payment' !== deletedType ) {
+			return;
+		}
+
+		[ 'stripe', 'square', 'paypal' ].forEach( action => checkActiveAction( action ) );
 	}
 
 	function clickWidget( event, b ) {
@@ -7634,7 +7650,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Gets the visible titles for a given action type from the DOM.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string} actionType The action type slug (e.g. "email").
 	 * @return {string[]} Array of trimmed title strings.
@@ -7649,7 +7665,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Returns the first available title not already taken, appending " (2)", " (3)", etc. if needed.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @param {string}   baseTitle      The base title without any numeric suffix.
 	 * @param {string[]} existingTitles Titles currently in use.
@@ -7726,6 +7742,8 @@ window.frmAdminBuildJS = function() {
 
 			// Check if icon should be active
 			checkActiveAction( type );
+			maybeDisableOtherPaymentActions( type );
+
 			showInputIcon( `#frm_form_action_${ actionId }` );
 
 			initiateMultiselect();
@@ -7744,6 +7762,30 @@ window.frmAdminBuildJS = function() {
 			 */
 			frmAdminBuild.hooks.doAction( 'frm_added_form_action', newAction );
 		}
+	}
+
+	/**
+	 * @since 6.31
+	 *
+	 * @param {string} excludedType
+	 *
+	 * @return {void}
+	 */
+	function maybeDisableOtherPaymentActions( excludedType ) {
+		const paymentActions = [ 'stripe', 'square', 'paypal' ];
+
+		if ( ! paymentActions.includes( excludedType ) ) {
+			// Not a payment action so exit early.
+			return;
+		}
+
+		paymentActions.forEach(
+			action => {
+				if ( action !== excludedType ) {
+					checkActiveAction( action );
+				}
+			}
+		);
 	}
 
 	function closeOpenActions() {
@@ -8029,13 +8071,31 @@ window.frmAdminBuildJS = function() {
 		return parseInt( jQuery( `.frm_${ type }_action` ).data( 'limit' ), 10 );
 	}
 
+	/**
+	 * @param {string} type
+	 *
+	 * @return {number} The number of actions for the specified type.
+	 */
 	function getNumberOfActionsForType( type ) {
+		if ( [ 'paypal', 'stripe', 'square' ].includes( type ) ) {
+			type = 'payment';
+		}
 		return jQuery( `.frm_single_${ type }_settings` ).length;
 	}
 
 	function actionLimitMessage() {
 		let message = frmAdminJs.only_one_action;
 		let { limit } = this.dataset;
+		const type = this.dataset.actiontype;
+
+		// Use payment-specific message for payment actions
+		if ( type && [ 'paypal', 'stripe', 'square', 'payment' ].includes( type ) ) {
+			if ( 'stripe' === type ) {
+				message = frmAdminJs.only_one_stripe_action;
+			} else {
+				message = frmAdminJs.only_one_payment_action;
+			}
+		}
 
 		if ( limit !== undefined ) {
 			limit = parseInt( limit );
@@ -8105,7 +8165,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Handle click on the "+" button to add another logic row to a form action.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return {boolean} Returns false to prevent default behavior.
 	 */
@@ -8118,7 +8178,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Create the first logic row when the conditional logic toggle is turned on.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return {void}
 	 */
@@ -8558,7 +8618,7 @@ window.frmAdminBuildJS = function() {
 			document.selection.createRange().text = variable;
 		} else {
 			const obj = contentBox[ 0 ];
-			const selectionEnd = obj.selectionEnd;
+			const { selectionEnd } = obj;
 
 			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, selectionEnd );
 
@@ -10606,6 +10666,11 @@ window.frmAdminBuildJS = function() {
 				const showUpgradeTab = this.classList.contains( 'frm_show_upgrade_tab' );
 				if ( this.classList.contains( 'frm_noallow' ) && ! showUpgradeTab ) {
 					return;
+				}
+
+				if ( showUpgradeTab && this.classList.contains( 'frm_show_expired_modal' ) ) {
+					wp.hooks.doAction( 'frm_show_expired_modal', this );
+					return false;
 				}
 
 				if ( showUpgradeTab ) {
