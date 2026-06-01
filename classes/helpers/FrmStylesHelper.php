@@ -26,9 +26,11 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function save_button() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -177,9 +179,7 @@ class FrmStylesHelper {
 			$class .= $key;
 		}
 
-		$class .= '_icon';
-
-		return $class;
+		return $class . '_icon';
 	}
 
 	/**
@@ -195,6 +195,7 @@ class FrmStylesHelper {
 		unset( $function_name );
 
 		$name = 'arrow' === $type ? 'collapse_icon' : 'repeat_icon';
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
@@ -204,10 +205,10 @@ class FrmStylesHelper {
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; ?>>
+					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons ?>>
 						<a href="javascript:void(0);">
 							<label>
-								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
+								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 								<span>
 									<?php
 									FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) );
@@ -221,6 +222,7 @@ class FrmStylesHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -233,11 +235,7 @@ class FrmStylesHelper {
 	 * @return string RGB value without the rgb() wrapper.
 	 */
 	public static function hex2rgb( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
-			$rgb = self::get_rgb_array_from_rgb( $color );
-		} else {
-			$rgb = self::get_rgb_array_from_hex( $color );
-		}
+		$rgb = str_starts_with( $color, 'rgb' ) ? self::get_rgb_array_from_rgb( $color ) : self::get_rgb_array_from_hex( $color );
 		return implode( ',', $rgb );
 	}
 
@@ -258,6 +256,7 @@ class FrmStylesHelper {
 			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
 			array_pop( $rgb );
 		}
+
 		return $rgb;
 	}
 
@@ -286,7 +285,6 @@ class FrmStylesHelper {
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
-
 		return 'rgba(' . $rgb . ',' . $a . ')';
 	}
 
@@ -298,7 +296,7 @@ class FrmStylesHelper {
 	 * @return string Hex color value.
 	 */
 	private static function rgb_to_hex( $rgba ) {
-		if ( strpos( $rgba, '#' ) === 0 ) {
+		if ( str_starts_with( $rgba, '#' ) ) {
 			// Color is already hex.
 			return $rgba;
 		}
@@ -364,9 +362,7 @@ class FrmStylesHelper {
 		$b = round( ( $b + $m ) * 255 );
 
 		// Convert RGB to hex
-		$hex = sprintf( '%02x%02x%02x', $r, $g, $b );
-
-		return $hex;
+		return sprintf( '%02x%02x%02x', $r, $g, $b );
 	}
 
 	/**
@@ -380,7 +376,7 @@ class FrmStylesHelper {
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
 
-		if ( 0 === strpos( $hex, 'rgba(' ) ) {
+		if ( str_starts_with( $hex, 'rgba(' ) ) {
 			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
 			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
 			$r                      = max( 0, min( 255, $r + $steps ) );
@@ -418,11 +414,11 @@ class FrmStylesHelper {
 	 * @return int
 	 */
 	public static function get_color_brightness( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
+		if ( str_starts_with( $color, 'rgb' ) ) {
 			$color = self::rgb_to_hex( $color );
 		}
 
-		if ( 0 === strpos( $color, 'hsl' ) ) {
+		if ( str_starts_with( $color, 'hsl' ) ) {
 			$hsl_to_hex = self::hsl_to_hex( $color );
 
 			if ( is_null( $hsl_to_hex ) ) {
@@ -435,12 +431,11 @@ class FrmStylesHelper {
 
 		self::fill_hex( $color );
 
-		$c_r        = hexdec( substr( $color, 0, 2 ) );
-		$c_g        = hexdec( substr( $color, 2, 2 ) );
-		$c_b        = hexdec( substr( $color, 4, 2 ) );
-		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
+		$c_r = hexdec( substr( $color, 0, 2 ) );
+		$c_g = hexdec( substr( $color, 2, 2 ) );
+		$c_b = hexdec( substr( $color, 4, 2 ) );
 
-		return $brightness;
+		return ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
 	}
 
 	/**
@@ -480,12 +475,11 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
-		if ( empty( $vars ) ) {
+		if ( ! $vars ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
 
-		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size', 'field_shape_type' );
-		$vars   = array_diff( $vars, $remove );
+		$vars = array_diff( $vars, self::get_style_keys_to_remove_from_output_vars() );
 
 		foreach ( $vars as $var ) {
 			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
@@ -499,9 +493,41 @@ class FrmStylesHelper {
 			$prepared_value = '';
 
 			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
-				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';';
 			}
 		}
+	}
+
+	/**
+	 * None of these style settings are used as CSS variables, so we want to exclude them to keep the CSS output clean.
+	 *
+	 * @since 6.26.1
+	 *
+	 * @return array<string>
+	 */
+	private static function get_style_keys_to_remove_from_output_vars() {
+		return array(
+			'remove_box_shadow',
+			'remove_box_shadow_active',
+			'theme_css',
+			'theme_name',
+			'theme_selector',
+			'important_style',
+			'submit_style',
+			'collapse_icon',
+			'center_form',
+			'custom_css',
+			'style_class',
+			'submit_bg_img',
+			'change_margin',
+			'repeat_icon',
+			'use_base_font_size',
+			'field_shape_type',
+			'bg_image_id',
+			'single_style_custom_css',
+			'enable_style_custom_css',
+		);
 	}
 
 	/**
@@ -542,7 +568,7 @@ class FrmStylesHelper {
 	private static function css_key_is_valid( $key ) {
 		// Any key that is abnormally large is not valid.
 		// Any key that contains a '{' is not valid.
-		return strlen( $key ) < 100 && false === strpos( $key, '{' );
+		return strlen( $key ) < 100 && ! str_contains( $key, '{' );
 	}
 
 	/**
@@ -572,7 +598,7 @@ class FrmStylesHelper {
 		);
 
 		foreach ( $invalid_substrings as $substring ) {
-			if ( strpos( $var, $substring ) !== false ) {
+			if ( str_contains( $var, $substring ) ) {
 				return false;
 			}
 		}
@@ -655,16 +681,17 @@ class FrmStylesHelper {
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 				// Sanitizing is done later.
-				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+				//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+				$posted = wp_unslash( $_POST['frm_style_setting'] );
 
-				if ( ! is_array( $posted ) ) {
+				if ( is_array( $posted ) ) {
+					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
+					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
+				} else {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
 					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
-				} else {
-					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
-					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
 				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );
@@ -839,12 +866,12 @@ class FrmStylesHelper {
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
 
-		if ( empty( $color ) ) {
+		if ( ! $color ) {
 			$color = $default;
-		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
+		} elseif ( str_contains( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
 			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false && self::is_hex( $color ) ) {
+		} elseif ( ! str_contains( $color, '#' ) && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
 	}
@@ -868,7 +895,7 @@ class FrmStylesHelper {
 		);
 
 		foreach ( $non_hex_substrings as $substring ) {
-			if ( false !== strpos( $color, $substring ) ) {
+			if ( str_contains( $color, $substring ) ) {
 				return false;
 			}
 		}
@@ -907,7 +934,8 @@ class FrmStylesHelper {
 	 * @return bool
 	 */
 	public static function previewing_style() {
-		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}
@@ -1002,9 +1030,8 @@ class FrmStylesHelper {
 		}
 
 		$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
-		$number_of_forms        += self::get_default_style_count( $style_id, $conversational_style_id );
 
-		return $number_of_forms;
+		return $number_of_forms + self::get_default_style_count( $style_id, $conversational_style_id );
 	}
 
 	/**
@@ -1068,12 +1095,11 @@ class FrmStylesHelper {
 	 * @return string The style editor wrapper classname.
 	 */
 	public static function style_editor_get_wrapper_classname( $section_type ) {
-		$is_quick_settings = ( 'quick-settings' === $section_type );
+		$is_quick_settings = 'quick-settings' === $section_type;
 		$classname         = 'frm-style-editor-form';
 		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
-		$classname        .= FrmAppHelper::pro_is_installed() ? ' frm-pro' : '';
 
-		return $classname;
+		return $classname . ( FrmAppHelper::pro_is_installed() ? ' frm-pro' : '' );
 	}
 
 	/**
@@ -1089,11 +1115,13 @@ class FrmStylesHelper {
 	public static function get_submit_image_bg_url( $settings ) {
 		$background_image = $settings['submit_bg_img'];
 
-		if ( empty( $background_image ) ) {
+		if ( ! $background_image ) {
 			return false;
 		}
 
-		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to 6.14, the submit_bg_img will be a full URL string.
+		// Handle the case where the submit_bg_img is a full URL string. If the
+		// Settings were saved with the older styler version prior to 6.14, the
+		// submit_bg_img will be a full URL string.
 		if ( ! is_numeric( $background_image ) ) {
 			return $background_image;
 		}
@@ -1113,9 +1141,7 @@ class FrmStylesHelper {
 			return false;
 		}
 
-		return is_callable( 'FrmProAppHelper::use_chosen_js' )
-			? FrmProAppHelper::use_chosen_js()
-			: true;
+		return is_callable( 'FrmProAppHelper::use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true;
 	}
 
 	/**
@@ -1134,9 +1160,92 @@ class FrmStylesHelper {
 
 		$parts = explode( ' ', $value );
 
-		if ( count( $parts ) < 3 ) {
-			return $parts[0];
+		return count( $parts ) < 3 ? $parts[0] : $parts[2];
+	}
+
+	/**
+	 * Scope CSS to .frm_forms on admin pages to prevent style conflicts.
+	 * On front-end pages, the CSS is returned unchanged.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $css The CSS to scope.
+	 *
+	 * @return string
+	 */
+	public static function maybe_scope_css_for_admin( $css ) {
+		if ( ! self::should_scope_custom_css() ) {
+			return $css;
 		}
-		return $parts[2];
+
+		/**
+		 * Filter the CSS selector used for @scope when scoping custom CSS on admin pages.
+		 *
+		 * @since 6.30
+		 *
+		 * @param string $selector The CSS selector to scope to. Default '.frm_forms'.
+		 */
+		$selector = apply_filters( 'frm_scope_custom_css_selector', '.frm_forms' );
+
+		return '@scope (' . $selector . ') {' . $css . '}';
+	}
+
+	/**
+	 * Scope only the custom CSS portion of the full cached stylesheet for admin pages.
+	 * Extracts the global custom CSS from the cached CSS, outputs the theme CSS unchanged,
+	 * and returns only the custom CSS portion scoped.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $css The full cached CSS containing both theme and custom CSS.
+	 *
+	 * @return string The theme CSS with only the custom CSS portion scoped.
+	 */
+	public static function maybe_scope_custom_css_in_cached_output( $css ) {
+		if ( ! self::should_scope_custom_css() ) {
+			return $css;
+		}
+
+		$custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
+		if ( ! $custom_css ) {
+			return $css;
+		}
+
+		// The cached CSS is minified. Minify the custom CSS the same way to find it.
+		$minified_custom_css = self::minify_css( $custom_css );
+		$custom_css_pos      = strrpos( $css, $minified_custom_css );
+
+		if ( false !== $custom_css_pos ) {
+			$css = substr( $css, 0, $custom_css_pos );
+		}
+
+		return $css . self::maybe_scope_css_for_admin( $custom_css );
+	}
+
+	/**
+	 * Minify CSS by stripping comments and whitespace.
+	 * Matches the minification used when saving the cached CSS file.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $css The CSS to minify.
+	 *
+	 * @return string
+	 */
+	private static function minify_css( $css ) {
+		return preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $css ) );
+	}
+
+	/**
+	 * Check if custom CSS should be scoped for admin context.
+	 *
+	 * @since 6.30
+	 *
+	 * @return bool
+	 */
+	private static function should_scope_custom_css() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
+		return isset( $_GET['frm_scope_custom_css'] );
 	}
 }

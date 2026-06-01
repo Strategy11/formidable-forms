@@ -87,7 +87,7 @@ class FrmFieldCheckbox extends FrmFieldType {
 		$form_id = $this->get_field_column( 'form_id' );
 
 		return array(
-			'align' => FrmStylesController::get_style_val( 'check_align', ( empty( $form_id ) ? 'default' : $form_id ) ),
+			'align' => FrmStylesController::get_style_val( 'check_align', $form_id ? $form_id : 'default' ),
 		);
 	}
 

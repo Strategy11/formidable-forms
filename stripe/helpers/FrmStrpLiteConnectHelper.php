@@ -34,11 +34,12 @@ class FrmStrpLiteConnectHelper {
 		$action = FrmAppHelper::get_param( 'action', '', 'post', 'sanitize_text_field' );
 		$prefix = 'frm_stripe_connect_';
 
-		if ( ! $action || 0 !== strpos( $action, $prefix ) ) {
+		if ( ! $action || ! str_starts_with( $action, $prefix ) ) {
 			if ( 'frm_strp_connect_get_settings_button' === $action ) {
 				FrmAppHelper::permission_check( 'frm_change_settings' );
 				self::render_settings();
 			}
+
 			return;
 		}
 
@@ -115,11 +116,11 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		if ( ! empty( $data->password ) ) {
-			update_option( self::get_server_side_token_option_name( $mode ), $data->password, 'no' );
+			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
 		}
 
 		if ( ! empty( $data->account_id ) ) {
-			update_option( self::get_account_id_option_name( $mode ), $data->account_id, 'no' );
+			update_option( self::get_account_id_option_name( $mode ), $data->account_id, false );
 		}
 
 		return $data;
@@ -134,7 +135,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function generate_client_password( $mode ) {
 		$client_password = wp_generate_password();
-		update_option( self::get_client_side_token_option_name( $mode ), $client_password, 'no' );
+		update_option( self::get_client_side_token_option_name( $mode ), $client_password, false );
 		return $client_password;
 	}
 
@@ -152,10 +153,6 @@ class FrmStrpLiteConnectHelper {
 		$body    = array_merge( $body, $additional_body );
 		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
-
-		if ( ! $headers ) {
-			return 'Unable to build headers for post. Is your pro license configured properly?';
-		}
 
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;
@@ -175,6 +172,7 @@ class FrmStrpLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+
 			return 'Response from server was not successful';
 		}
 
@@ -336,6 +334,7 @@ class FrmStrpLiteConnectHelper {
 			if ( self::check_server_for_connected_account_status() ) {
 				wp_send_json_success();
 			}
+
 			wp_send_json_error();
 		}
 
@@ -392,7 +391,7 @@ class FrmStrpLiteConnectHelper {
 		$data = self::post_to_connect_server( 'oauth_account_status', $body );
 
 		if ( is_object( $data ) && ! empty( $data->account_id ) ) {
-			update_option( self::get_account_id_option_name( $mode ), $data->account_id, 'no' );
+			update_option( self::get_account_id_option_name( $mode ), $data->account_id, false );
 
 			if ( ! empty( $data->details_submitted ) ) {
 				self::set_stripe_details_as_submitted( $mode );
@@ -412,7 +411,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function set_stripe_details_as_submitted( $mode ) {
-		update_option( self::get_stripe_details_submitted_option_name( $mode ), true, 'no' );
+		update_option( self::get_stripe_details_submitted_option_name( $mode ), true, false );
 		FrmTransLiteAppController::install();
 	}
 
@@ -452,7 +451,7 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		if ( ! empty( $data->password ) ) {
-			update_option( self::get_server_side_token_option_name( $mode ), $data->password, 'no' );
+			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
 		}
 
 		if ( ! is_object( $data ) || empty( $data->redirect_url ) ) {
@@ -481,6 +480,7 @@ class FrmStrpLiteConnectHelper {
 		if ( $success ) {
 			self::set_stripe_details_as_submitted( $mode );
 		}
+
 		return $success;
 	}
 
@@ -562,11 +562,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
-
-		if ( 2 === count( $split_on_language ) ) {
-			$url = $split_on_language[0];
-		}
-		return $url;
+		return 2 === count( $split_on_language ) ? $split_on_language[0] : $url;
 	}
 
 	/**
@@ -583,6 +579,7 @@ class FrmStrpLiteConnectHelper {
 				$password = $pro_license;
 			}
 		}
+
 		return ! empty( $password ) ? $password : false;
 	}
 
@@ -610,6 +607,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function render_stripe_connect_settings_container() {
 		self::register_settings_scripts();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			<tr>
 				<td>
@@ -620,6 +618,7 @@ class FrmStrpLiteConnectHelper {
 				</td>
 			</tr>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -637,8 +636,7 @@ class FrmStrpLiteConnectHelper {
 
 			ob_start();
 			require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/connect.php';
-			$html .= ob_get_contents();
-			ob_end_clean();
+			$html .= ob_get_clean();
 		}
 
 		$response_data = array(
@@ -648,14 +646,14 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @todo I can probably remove this.
-	 *
 	 * @return void
 	 */
 	public static function stripe_icon() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<svg height="16" aria-hidden="true" style="vertical-align:text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M155.3 154.6c0-22.3 18.6-30.9 48.4-30.9a320 320 0 01141.9 36.7V26.1A376.2 376.2 0 00203.8 0C88.1 0 11 60.4 11 161.4c0 157.9 216.8 132.3 216.8 200.4 0 26.4-22.9 34.9-54.7 34.9-47.2 0-108.2-19.5-156.1-45.5v128.5a396 396 0 00156 32.4c118.6 0 200.3-51 200.3-153.6 0-170.2-218-139.7-218-203.9z"/></svg>
+		<svg height="16" aria-hidden="true" style="vertical-align:text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M155.3 154.6c0-22.3 18.6-30.9 48.4-30.9a320 320 0 01141.9 36.7V26.1A376.2 376.2 0 00203.8 0C88.1 0 11 60.4 11 161.4c0 157.9 216.8 132.3 216.8 200.4 0 26.4-22.9 34.9-54.7 34.9-47.2 0-108.2-19.5-156.1-45.5v128.5a396 396 0 00156 32.4c118.6 0 200.3-51 200.3-153.6 0-170.2-218-139.7-218-203.9z"/></svg><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -677,7 +675,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		wp_register_script( 'formidable_stripe_settings', FrmStrpLiteAppHelper::plugin_url() . '/js/connect_settings.js', array( 'formidable_dom' ), FrmAppHelper::plugin_version(), true );
+		wp_register_script( 'formidable_stripe_settings', FrmStrpLiteAppHelper::plugin_url() . '/js/connect_settings.js', array( 'formidable_dom' ), FrmAppHelper::plugin_version(), true ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		wp_enqueue_script( 'formidable_stripe_settings' );
 	}
 
@@ -700,13 +698,10 @@ class FrmStrpLiteConnectHelper {
 		$success = false !== $data;
 
 		if ( ! $success ) {
-			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
+			return self::$latest_error_from_stripe_connect ? self::$latest_error_from_stripe_connect : false;
 		}
 
-		if ( empty( $data->customer_id ) ) {
-			return false;
-		}
-		return $data->customer_id;
+		return ! empty( $data->customer_id ) ? $data->customer_id : false;
 	}
 
 	/**
@@ -734,8 +729,8 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		if ( is_array( $response ) ) {
-			// reformat empty arrays as empty objects
-			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			// Reformat empty arrays as empty objects
+			// If the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
 
@@ -745,6 +740,7 @@ class FrmStrpLiteConnectHelper {
 		} else {
 			self::$latest_error_from_stripe_connect = '';
 		}
+
 		return false;
 	}
 
@@ -757,10 +753,7 @@ class FrmStrpLiteConnectHelper {
 		$data    = self::post_with_authenticated_body( 'create_intent', compact( 'new_charge' ) );
 		$success = false !== $data;
 
-		if ( ! $success ) {
-			return false;
-		}
-		return $data;
+		return $success ? $data : false;
 	}
 
 	/**
@@ -769,9 +762,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return bool
 	 */
 	public static function refund_payment( $payment_id ) {
-		$data     = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
-		$refunded = is_object( $data );
-		return $refunded;
+		$data = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
+		return is_object( $data );
 	}
 
 	/**
@@ -786,7 +778,7 @@ class FrmStrpLiteConnectHelper {
 			return $data;
 		}
 
-		if ( isset( self::$latest_error_from_stripe_connect ) && 0 === strpos( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
+		if ( isset( self::$latest_error_from_stripe_connect ) && str_starts_with( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
 			return self::$latest_error_from_stripe_connect;
 		}
 
@@ -802,8 +794,7 @@ class FrmStrpLiteConnectHelper {
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
 		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
 		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
-		$canceled             = false !== $data;
-		return $canceled;
+		return false !== $data;
 	}
 
 	/**
@@ -819,16 +810,11 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|object
 	 */
 	public static function get_customer_subscriptions() {
-		$user_id     = get_current_user_id();
 		$meta_name   = FrmStrpLiteAppHelper::get_customer_id_meta_name();
-		$customer_id = get_user_meta( $user_id, $meta_name, true );
+		$customer_id = get_user_meta( get_current_user_id(), $meta_name, true );
 		$data        = self::post_with_authenticated_body( 'get_customer_subscriptions', compact( 'customer_id' ) );
 
-		if ( false === $data ) {
-			return false;
-		}
-
-		return $data->subscriptions;
+		return false === $data ? false : $data->subscriptions;
 	}
 
 	/**
@@ -873,6 +859,7 @@ class FrmStrpLiteConnectHelper {
 		if ( false === $data || empty( $data->plan_id ) ) {
 			return false;
 		}
+
 		return $data->plan_id;
 	}
 
@@ -892,9 +879,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return bool
 	 */
 	public static function update_intent( $intent_id, $data ) {
-		$data    = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
-		$success = false !== $data;
-		return $success;
+		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
+		return false !== $data;
 	}
 
 	/**
@@ -906,6 +892,7 @@ class FrmStrpLiteConnectHelper {
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
+
 		return $data->event_ids;
 	}
 
@@ -960,13 +947,13 @@ class FrmStrpLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
+
 		wp_send_json_error();
 	}
 }

@@ -18,7 +18,7 @@ class test_FrmFormApi extends FrmUnitTest {
 			),
 		);
 		$error   = $api->get_error_from_response( $addons );
-		$this->assertEquals( array( $message ), $error );
+		$this->assertSame( array( $message ), $error );
 
 		// Test a string error.
 		$message = 'Your site has been blocked!';
@@ -27,6 +27,6 @@ class test_FrmFormApi extends FrmUnitTest {
 		);
 		$error   = $api->get_error_from_response( $addons );
 
-		$this->assertEquals( array( $message ), $error );
+		$this->assertSame( array( $message ), $error );
 	}
 }

@@ -38,7 +38,7 @@
 .frm_loading_button,
 .frm_loading_form.frm_button_submit {
 	position: relative !important;
-	opacity: .8;
+	opacity: 0.8;
 	color: transparent !important;
 	text-shadow: none !important;
 }
@@ -72,7 +72,7 @@
 .frm-wait::before,
 .frm_loading_button::before,
 .frm_loading_form.frm_button_submit::before {
-	content: '';
+	content: "";
 	display: inline-block;
 
 	position: absolute;

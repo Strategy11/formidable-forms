@@ -59,6 +59,9 @@ class FrmFieldNumber extends FrmFieldType {
 		$this->add_min_max( $args, $input_html );
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$errors = array();
 
@@ -163,10 +166,12 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @return void
 	 */
 	private function remove_commas_from_number( &$args ) {
-		if ( strpos( $args['value'], ',' ) ) {
-			$args['value'] = str_replace( ',', '', $args['value'] );
-			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
+		if ( ! str_contains( $args['value'], ',' ) ) {
+			return;
 		}
+
+		$args['value'] = str_replace( ',', '', $args['value'] );
+		FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
 	}
 
 	/**
@@ -177,11 +182,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @return float
 	 */
 	public function set_value_before_save( $value ) {
-		if ( ! is_numeric( $value ) ) {
-			$value = (float) $value;
-		}
-
-		return $value;
+		return is_numeric( $value ) ? $value : (float) $value;
 	}
 
 	/**

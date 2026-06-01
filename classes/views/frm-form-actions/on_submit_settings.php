@@ -20,17 +20,17 @@ $success_action = $instance->post_content['success_action'];
 $types = array(
 	'message'  => array(
 		'label'        => __( 'Show Message', 'formidable' ),
-		'icon'         => 'frm_icon_font frm_chat_forms_icon frm_svg20',
+		'icon'         => 'frmfont frm_chat_forms_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_message_settings' ),
 	),
 	'redirect' => array(
 		'label'        => __( 'Redirect to URL', 'formidable' ),
-		'icon'         => 'frm_icon_font frm_globe_icon frm_svg20',
+		'icon'         => 'frmfont frm_globe_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_redirect_settings' ),
 	),
 	'page'     => array(
 		'label'        => __( 'Show Page Content', 'formidable' ),
-		'icon'         => 'frm_icon_font frm_file_text_icon frm_svg20',
+		'icon'         => 'frmfont frm_file_text_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_page_settings' ),
 	),
 );
@@ -49,7 +49,7 @@ if ( $col_count <= 4 ) {
 		foreach ( $types as $type => $type_data ) :
 			$input_id = $this->get_field_id( 'success_action_' . $type );
 			?>
-			<div class="frm_on_submit_type frm_form_field <?php echo esc_attr( $col_class ); ?>">
+			<div class="frm_on_submit_type frm_form_field frm-m-0 <?php echo esc_attr( $col_class ); ?>">
 				<input
 					type="radio"
 					id="<?php echo esc_attr( $input_id ); ?>"
@@ -57,9 +57,9 @@ if ( $col_count <= 4 ) {
 					value="<?php echo esc_attr( $type ); ?>"
 					<?php checked( $type, $success_action ); ?>
 				/>
-				<label for="<?php echo esc_attr( $input_id ); ?>">
-					<?php FrmAppHelper::icon_by_class( $type_data['icon'], array( 'echo' => true ) ); ?>
-					<?php echo esc_html( $type_data['label'] ); ?>
+				<label class="frm-cursor-pointer" for="<?php echo esc_attr( $input_id ); ?>">
+					<?php FrmAppHelper::icon_by_class( $type_data['icon'] ); ?>
+					<span><?php echo esc_html( $type_data['label'] ); ?></span>
 				</label>
 			</div>
 		<?php endforeach; ?>

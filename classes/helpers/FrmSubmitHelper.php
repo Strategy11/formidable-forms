@@ -89,7 +89,6 @@ class FrmSubmitHelper {
 	 */
 	public static function get_current_action_from_global_var( $form_id ) {
 		global $frm_vars;
-
 		return $frm_vars['form_params'][ $form_id ]['action'] ?? 'create';
 	}
 
@@ -162,8 +161,7 @@ class FrmSubmitHelper {
 			return;
 		}
 
-		$field_data = FrmFieldsHelper::setup_new_vars( self::FIELD_TYPE, $form->id );
-
+		$field_data                  = FrmFieldsHelper::setup_new_vars( self::FIELD_TYPE, $form->id );
 		$submit_settings             = self::get_submit_settings_from_form( $form );
 		$field_data['field_options'] = $submit_settings + $field_data['field_options'];
 		$field_data['name']          = FrmForm::get_option(
@@ -212,6 +210,7 @@ class FrmSubmitHelper {
 
 			$submit_field = $field;
 		}
+
 		return $submit_field;
 	}
 
@@ -227,7 +226,7 @@ class FrmSubmitHelper {
 	public static function update_last_row_fields_order_when_adding_field( $field_count ) {
 		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
 
-		if ( ! is_array( $last_row_field_ids ) || empty( $last_row_field_ids ) ) {
+		if ( ! is_array( $last_row_field_ids ) || ! $last_row_field_ids ) {
 			return;
 		}
 

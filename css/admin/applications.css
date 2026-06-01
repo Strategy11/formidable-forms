@@ -76,7 +76,7 @@
 }
 
 .frm-application-card h3 .frm-inner-text {
-	max-width: calc( 100% - 50px );
+	max-width: calc(100% - 50px);
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -105,7 +105,7 @@
 	align-items: center;
 }
 
-.frm-application-card:hover .frm-new-pill{
+.frm-application-card:hover .frm-new-pill {
 	display: none;
 }
 
@@ -113,6 +113,7 @@
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
 	display: none;
 }
+
 #frm_application_templates_grid .frm-application-card:hover .frm-button-secondary {
 	display: inline-block;
 }
@@ -174,7 +175,7 @@
 }
 
 #frm_view_application_modal .frm-application-image-wrapper {
-	background-color: #F6F7FB;
+	background-color: #f6f7fb;
 	padding: 20px var(--gap-md) 15px;
 }
 
@@ -243,10 +244,10 @@
 	padding: 11px 8px;
 }
 
-#frm_custom_applications_placeholder:before {
-	content: '';
+#frm_custom_applications_placeholder::before {
+	content: "";
 	display: block;
-	background: linear-gradient(90deg, #1961D5 0.76%, #E8ABEF 100%);
+	background: linear-gradient(90deg, #1961d5 0.76%, #e8abef 100%);
 	height: 4px;
 	margin: auto;
 	position: absolute;
@@ -285,12 +286,14 @@ ul.frm-application-item-list {
 }
 
 @media only screen and (max-width: 1200px) {
+
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
 	}
 }
 
 @media only screen and (max-width: 600px) {
+
 	#frm_application_category_filter {
 		display: block;
 		margin-left: 0;

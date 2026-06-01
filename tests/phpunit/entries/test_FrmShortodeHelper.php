@@ -40,15 +40,15 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 
 			$args = array();
 
-			if ( strpos( $shortcode, '[foreach' ) !== false ) {
+			if ( str_contains( $shortcode, '[foreach' ) ) {
 				$args['foreach'] = true;
-			} elseif ( strpos( $shortcode, '[if' ) !== false ) {
+			} elseif ( str_contains( $shortcode, '[if' ) ) {
 				$args['conditional'] = true;
 			}
 
 			$this->assertNotEmpty( $matches[0][0] );
 			$tag = FrmShortcodeHelper::get_shortcode_tag( $matches, 0, $args );
-			$this->assertEquals( '25', $tag );
+			$this->assertSame( '25', $tag );
 		}
 	}
 
@@ -73,11 +73,11 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 		foreach ( $codes as $code ) {
 			$with_title = $code['html'];
 			FrmShortcodeHelper::remove_inline_conditions( true, 'form_name', $title, $with_title );
-			$this->assertEquals( $code['with_title'], $with_title );
+			$this->assertSame( $code['with_title'], $with_title );
 
 			$no_title = $code['html'];
 			FrmShortcodeHelper::remove_inline_conditions( false, 'form_name', '', $no_title );
-			$this->assertEquals( $code['no_title'], $no_title );
+			$this->assertSame( $code['no_title'], $no_title );
 		}
 	}
 }

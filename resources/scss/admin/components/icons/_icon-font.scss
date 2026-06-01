@@ -3,7 +3,7 @@
  */
 
 .frm_icon_font {
-	color: #A0A0A0;
+	color: #a0a0a0;
 	color: var(--grey);
 }
 
@@ -22,11 +22,11 @@
 }
 
 .frm_add_tag::before {
-	content: '\e602';
+	content: "\e602";
 }
 
 .frm_remove_tag::before {
-	content: '\e600';
+	content: "\e600";
 }
 
 .frm_logic_row .frm1 > .frm_remove_tag {
@@ -76,11 +76,11 @@ a.frm_action_icon:hover {
 }
 
 .frm_action_icon.frm_error_icon::before {
-	content: '\e608';
+	content: "\e608";
 }
 
 .frm_inactive_icon.frm_action_icon.frm_error_icon::before {
-	content: '\e606';
+	content: "\e606";
 }
 
 .frm-field-action-icons {
@@ -97,7 +97,7 @@ a.frm_action_icon:hover {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	width: 80px;
-	max-width: calc( 100% - 50px );
+	max-width: calc(100% - 50px);
 	position: relative;
 	top: 2px;
 }

@@ -61,11 +61,9 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_processed_sub_fields() {
-		$name_layout = $this->get_name_layout();
-		$names       = explode( '_', $name_layout );
-		$col_class   = 'frm' . intval( 12 / count( $names ) );
-
-		$result = array();
+		$names     = explode( '_', $this->get_name_layout() );
+		$col_class = 'frm' . intval( 12 / count( $names ) );
+		$result    = array();
 
 		foreach ( $names as $name ) {
 			if ( empty( $this->sub_fields[ $name ] ) ) {
@@ -93,11 +91,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected function get_name_layout() {
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
-
-		if ( ! $name_layout ) {
-			$name_layout = 'first_last';
-		}
-		return $name_layout;
+		return $name_layout ? $name_layout : 'first_last';
 	}
 
 	/**
@@ -148,8 +142,6 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value;
 		}
 
-		$name_layout = $this->get_name_layout();
-
 		if ( ! empty( $atts['show'] ) ) {
 			return $value[ $atts['show'] ] ?? '';
 		}
@@ -163,7 +155,7 @@ class FrmFieldName extends FrmFieldCombo {
 			)
 		);
 
-		switch ( $name_layout ) {
+		switch ( $this->get_name_layout() ) {
 			case 'last_first':
 				$value = $value['last'] . ' ' . $value['first'];
 				break;
@@ -226,13 +218,15 @@ class FrmFieldName extends FrmFieldCombo {
 		parent::process_args_for_field_output( $args );
 
 		// Show all subfields in form builder then use JS to show or hide them.
-		if ( $this->should_print_hidden_sub_fields() && count( $args['sub_fields'] ) !== count( $this->sub_fields ) ) {
-			$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
-			$args['sub_fields'] = $this->sub_fields;
+		if ( ! $this->should_print_hidden_sub_fields() || count( $args['sub_fields'] ) === count( $this->sub_fields ) ) {
+			return;
+		}
 
-			foreach ( $hidden_fields as $name => $hidden_field ) {
-				$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
-			}
+		$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
+		$args['sub_fields'] = $this->sub_fields;
+
+		foreach ( $hidden_fields as $name => $hidden_field ) {
+			$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
 		}
 	}
 
@@ -281,7 +275,7 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$show_warning = false;
 
-		foreach ( $this->sub_fields as $name => $sub_field ) {
+		foreach ( $this->sub_fields as $sub_field ) {
 			$description = FrmField::get_option( $field, $sub_field['name'] . '_desc' );
 
 			if ( in_array( $description, array( 'First', 'Last' ), true ) ) {
@@ -293,21 +287,23 @@ class FrmFieldName extends FrmFieldCombo {
 		if ( ! $show_warning ) {
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_warning_style">
 			<?php
-			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) );
+			FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) );
 			echo ' ';
 			esc_html_e( 'Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like "First Name" instead of "First".', 'formidable' );
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
 	 * Tracks the first name field ID in a form.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param object[] $fields Array of fields in a form.
 	 *
@@ -325,7 +321,7 @@ class FrmFieldName extends FrmFieldCombo {
 	/**
 	 * Gets subfield input attributes.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param array $sub_field Subfield data.
 	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.
@@ -333,8 +329,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_sub_field_input_attrs( $sub_field, $args ) {
-		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
-
+		$attrs   = parent::get_sub_field_input_attrs( $sub_field, $args );
 		$form_id = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
 
 		if ( ! self::$first_name_field_ids || empty( self::$first_name_field_ids[ $form_id ] ) ) {
