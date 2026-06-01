@@ -61,11 +61,11 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public static function get_types() {
 		$types = array(
-			'page'     => array(
+			'page'      => array(
 				'label'    => __( 'Page', 'formidable' ),
 				'disabled' => false,
 			),
-			'post'     => array(
+			'post'      => array(
 				'label'    => __( 'Post', 'formidable' ),
 				'disabled' => false,
 			),

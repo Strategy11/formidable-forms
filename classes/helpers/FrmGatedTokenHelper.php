@@ -377,11 +377,10 @@ class FrmGatedTokenHelper {
 	 * @return void
 	 */
 	public static function set_cookie( $raw_token, FrmGatedItem $item, $expired_at = null ) {
-		$cookie_name = $item->get_cookie_name();
-		$expiry      = $expired_at ?? time() + YEAR_IN_SECONDS;
+		$expiry = $expired_at ?? time() + YEAR_IN_SECONDS;
 
 		setcookie( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.cookies_setcookie
-			$cookie_name,
+			$item->get_cookie_name(),
 			$raw_token,
 			array(
 				'expires'  => $expiry,
@@ -463,6 +462,7 @@ class FrmGatedTokenHelper {
 		$seen_hashes = array();
 
 		$token = self::get_valid_token_from_cookies( $item, $seen_hashes );
+
 		if ( null !== $token ) {
 			return $token;
 		}
