@@ -1,4 +1,12 @@
 <?php
+/**
+ * Add-Ons license settings.
+ *
+ * @package Formidable
+ *
+ * @var array<string, object> $plugins Installed add-on plugin objects keyed by slug. Each has: is_parent_licence, needs_license, license, option_name, plugin_name.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -14,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$license    = $plugin->license;
 		$status     = get_option( $plugin->option_name . 'active' );
 		$activate   = false !== $license && $status === 'valid' ? 'deactivate' : 'activate';
-		$icon_class = ! empty( $license ) ? '' : 'frm_hidden';
+		$icon_class = $license ? '' : 'frm_hidden';
 		?>
 
 		<div class="edd_frm_license_row frm-inline-select frm_grid_container">

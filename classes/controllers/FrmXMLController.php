@@ -178,7 +178,7 @@ class FrmXMLController {
 	 * @param array  $form
 	 * @param string $value
 	 *
-	 * @return string
+	 * @return array|string
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
 		if ( $form && ! empty( $form[ $value ] ) ) {

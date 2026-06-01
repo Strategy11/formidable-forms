@@ -125,9 +125,8 @@ class FrmFieldGridHelper {
 
 		$split              = explode( ' ', $field['classes'] );
 		$this->is_frm_first = in_array( 'frm_first', $split, true );
-		$classes            = self::get_grid_classes();
 
-		foreach ( $classes as $class ) {
+		foreach ( self::get_grid_classes() as $class ) {
 			if ( in_array( $class, $split, true ) ) {
 				return $class;
 			}

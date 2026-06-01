@@ -79,6 +79,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 		$result = $this->helper->nest( $css, $this->scope_name );
 
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button:hover', $result );
+		$this->assertStringContainsString( '.button.' . $this->scope_name . ':hover', $result );
 	}
 
 	/**
@@ -89,6 +90,33 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 		$result = $this->helper->nest( $css, $this->scope_name );
 
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button::before', $result );
+		$this->assertStringContainsString( '.button.' . $this->scope_name . '::before', $result );
+	}
+
+	/**
+	 * Test nesting with single-colon pseudo-elements (legacy syntax).
+	 */
+	public function test_nest_single_colon_pseudo_elements() {
+		$css    = '.frm_form_field:before { content: ""; }';
+		$result = $this->helper->nest( $css, $this->scope_name );
+
+		$this->assertStringContainsString( '.' . $this->scope_name . ' .frm_form_field:before', $result );
+		$this->assertStringContainsString( '.frm_form_field.' . $this->scope_name . ':before', $result );
+		// Scope class must not appear after the pseudo.
+		$this->assertStringNotContainsString( '.frm_form_field:before.' . $this->scope_name, $result );
+	}
+
+	/**
+	 * Test nesting with chained pseudo-classes.
+	 */
+	public function test_nest_chained_pseudo_classes() {
+		$css    = '.field:nth-child(2):focus { border-color: blue; }';
+		$result = $this->helper->nest( $css, $this->scope_name );
+
+		$this->assertStringContainsString( '.' . $this->scope_name . ' .field:nth-child(2):focus', $result );
+		$this->assertStringContainsString( '.field.' . $this->scope_name . ':nth-child(2):focus', $result );
+		// Scope class must not appear between chained pseudos.
+		$this->assertStringNotContainsString( '.field:nth-child(2).' . $this->scope_name . ':focus', $result );
 	}
 
 	/**

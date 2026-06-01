@@ -98,8 +98,7 @@ class test_FrmAppController extends FrmUnitTest {
 	 */
 	public function test_needs_update() {
 		update_option( 'frm_db_version', 1 );
-		$needs_update = FrmAppController::needs_update();
-		$this->assertTrue( $needs_update, 'The DB needs update but is skipping it' );
+		$this->assertTrue( FrmAppController::needs_update(), 'The DB needs update but is skipping it' );
 	}
 
 	/**

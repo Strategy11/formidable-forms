@@ -160,14 +160,6 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => array(
-					'content' => 'calculations',
-					'param'   => 'field-calculations-wordpress-form',
-				),
-				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
-				'call' => self::cta_label(),
-			),
-			array(
-				'link' => array(
 					'content' => 'prefill-fields',
 					'param'   => 'auto-fill-forms',
 				),
@@ -244,22 +236,6 @@ class FrmTipsHelper {
 					'page'    => 'mailchimp-tip',
 				),
 				'tip'  => __( 'Send leads to Mailchimp for instant email follow-up.', 'formidable' ),
-				'call' => self::cta_label(),
-			),
-			array(
-				'link' => array(
-					'content' => 'paypal-revenue',
-					'page'    => 'paypal-increase-revenue-tip',
-				),
-				'tip'  => __( 'Accept PayPal payments and grow your sales.', 'formidable' ),
-				'call' => self::cta_label(),
-			),
-			array(
-				'link' => array(
-					'content' => 'paypal-fast',
-					'page'    => 'paypal-save-time-tip',
-				),
-				'tip'  => __( 'Accept payments now with PayPal integration.', 'formidable' ),
 				'call' => self::cta_label(),
 			),
 			array(

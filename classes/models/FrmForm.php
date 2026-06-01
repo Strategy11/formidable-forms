@@ -17,7 +17,7 @@ class FrmForm {
 
 		$new_values = array(
 			'form_key'       => FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key' ),
-			'name'           => $values['name'],
+			'name'           => FrmAppHelper::truncate( $values['name'], 255, 1, '', true ),
 			'description'    => $values['description'],
 			'status'         => $values['status'] ?? 'published',
 			'logged_in'      => $values['logged_in'] ?? 0,
@@ -268,7 +268,7 @@ class FrmForm {
 
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
-				$new_values[ $value_key ] = $value;
+				$new_values[ $value_key ] = 'name' === $value_key ? FrmAppHelper::truncate( $value, 255, 1, '', true ) : $value;
 			}
 		}
 

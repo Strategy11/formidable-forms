@@ -267,7 +267,7 @@ class FrmFormsController {
 
 		do_action( 'frm_before_update_form_settings', $id );
 
-		$antispam_was_on = self::antispam_was_on( $id );
+		$antispam_was_on = self::antispam_was_on( $id ); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 
 		FrmForm::update( $id, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
@@ -1073,9 +1073,8 @@ class FrmFormsController {
 		// In a form with 66 HTML fields, this saves 0.5 seconds on page load time, tested locally.
 		if ( ! isset( self::$formidable_tinymce_button ) ) {
 			FrmAppHelper::load_admin_wide_js();
-			$menu_name                       = FrmAppHelper::get_menu_name();
 			$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-			self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( FrmAppHelper::get_menu_name() ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 		echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -1522,17 +1521,17 @@ class FrmFormsController {
 				'name'     => __( 'General', 'formidable' ),
 				'title'    => __( 'General Form Settings', 'formidable' ),
 				'function' => array( self::class, 'advanced_settings' ),
-				'icon'     => 'frmfont frm_settings_icon',
+				'icon'     => 'frmfont frm_small_settings_icon',
 			),
 			'email'       => array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
 				'function' => array( 'FrmFormActionsController', 'email_settings' ),
 				'id'       => 'frm_notification_settings',
-				'icon'     => 'frmfont frm_mail_bulk_icon',
+				'icon'     => 'frmfont frm_notification_check_icon',
 			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
-				'icon'       => 'frmfont frm_lock_closed_icon',
+				'icon'       => 'frmfont frm_lock_closed2_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'permissions',
@@ -1544,7 +1543,7 @@ class FrmFormsController {
 			),
 			'scheduling'  => array(
 				'name'       => __( 'Form Scheduling', 'formidable' ),
-				'icon'       => 'frmfont frm_calendar_icon',
+				'icon'       => 'frmfont frm_schedule_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'scheduling',
@@ -1557,17 +1556,17 @@ class FrmFormsController {
 				'name'     => __( 'Buttons', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'buttons_settings',
-				'icon'     => 'frmfont frm_button_icon',
+				'icon'     => 'frmfont frm-buttons-style',
 			),
 			'landing'     => array(
 				'name'       => __( 'Form Landing Page', 'formidable' ),
-				'icon'       => 'frmfont frm_file_text_icon',
+				'icon'       => 'frmfont frm_cross_device_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
 			),
 			'chat'        => array(
 				'name'       => __( 'Conversational Forms', 'formidable' ),
-				'icon'       => 'frmfont frm_chat_forms_icon',
+				'icon'       => 'frmfont frm_chat_bubbles_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'chat',
@@ -1597,7 +1596,7 @@ class FrmFormsController {
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'html_settings',
-				'icon'     => 'frmfont frm_code_icon',
+				'icon'     => 'frmfont frm_code2_icon',
 			),
 		);
 
@@ -2217,7 +2216,8 @@ class FrmFormsController {
 
 		if ( $name === $form->name ) {
 			// Nothing to change so exit early.
-			wp_send_json_success();
+			$form_key = $form->form_key;
+			wp_send_json_success( compact( 'form_key' ) );
 		}
 
 		$to_update = array(
@@ -2298,9 +2298,7 @@ class FrmFormsController {
 	 * @since 4.05.02
 	 */
 	private static function move_menu_to_footer() {
-		$settings = FrmAppHelper::get_settings();
-
-		if ( empty( $settings->admin_bar ) ) {
+		if ( empty( FrmAppHelper::get_settings()->admin_bar ) ) {
 			remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
 		}
 	}
@@ -3543,6 +3541,11 @@ class FrmFormsController {
 		wp_enqueue_script( 'formidable' );
 
 		FrmHoneypot::maybe_print_honeypot_js();
+
+		if ( ! method_exists( 'FrmProFormsHelper', 'load_currency_js' ) ) {
+			// Load currency JS if Pro is not installed.
+			FrmFormsHelper::load_currency_js();
+		}
 	}
 
 	/**
@@ -3674,7 +3677,7 @@ class FrmFormsController {
 
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$html             = FrmAppHelper::clip(
+		$html = FrmAppHelper::clip(
 			function () {
 				FrmAppHelper::maybe_autocomplete_pages_options(
 					array(
@@ -3685,11 +3688,10 @@ class FrmFormsController {
 				);
 			}
 		);
-		$post_type_object = get_post_type_object( 'page' );
 		wp_send_json(
 			array(
 				'html'          => $html,
-				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
+				'edit_page_url' => admin_url( sprintf( get_post_type_object( 'page' )->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
 	}

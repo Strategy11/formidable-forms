@@ -47,7 +47,12 @@ export function addOneClick( link, context, upgradeLabel ) {
 
 	const learnMoreLink = container.querySelector( '.frm-learn-more' );
 	if ( learnMoreLink ) {
-		learnMoreLink.href = link.dataset.learnMore;
+		if ( link.dataset.learnMore ) {
+			learnMoreLink.href = link.dataset.learnMore;
+			learnMoreLink.style.display = '';
+		} else {
+			learnMoreLink.style.display = 'none';
+		}
 	}
 
 	// If one click upgrade, hide other content.
@@ -190,7 +195,7 @@ export function initUpgradeModal() {
 		// If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
 		if ( event.type === 'change' && element.classList.contains( 'frm_select_with_upgrade' ) ) {
 			const selectedOption = element.options[ element.selectedIndex ];
-			if ( selectedOption && selectedOption.dataset.upgrade ) {
+			if ( selectedOption?.dataset?.upgrade ) {
 				element = selectedOption;
 			}
 		}
@@ -279,7 +284,7 @@ export function initUpgradeModal() {
 /**
  * Override upgrade modal content for update prompts.
  *
- * @since x.x
+ * @since 6.29
  *
  * @param {Element} modal The upgrade modal element.
  */

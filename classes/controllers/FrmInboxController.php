@@ -83,9 +83,7 @@ class FrmInboxController {
 	 * @return void
 	 */
 	private static function add_tracking_request() {
-		$settings = FrmAppHelper::get_settings();
-
-		if ( $settings->tracking ) {
+		if ( FrmAppHelper::get_settings()->tracking ) {
 			return;
 		}
 

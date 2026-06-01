@@ -454,7 +454,7 @@
 			div( data.description )
 		];
 
-		if ( data.usedAddons && data.usedAddons.length ) {
+		if ( data.usedAddons?.length ) {
 			detailsChildren.push(
 				div( {
 					className: 'frm-application-modal-label',

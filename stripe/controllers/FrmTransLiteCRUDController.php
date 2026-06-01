@@ -122,7 +122,10 @@ class FrmTransLiteCRUDController {
 	 * @return FrmTransLitePayment|FrmTransLiteSubscription
 	 */
 	private static function the_class() {
-		$class_name = self::table_name() === 'subscriptions' ? 'FrmTransLiteSubscription' : 'FrmTransLitePayment';
-		return new $class_name();
+		if ( self::table_name() === 'subscriptions' ) {
+			return new FrmTransLiteSubscription();
+		}
+
+		return new FrmTransLitePayment();
 	}
 }

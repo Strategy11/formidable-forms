@@ -62,9 +62,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	public static function empty_tables() {
 		global $wpdb;
-		$tables = self::get_table_names();
 
-		foreach ( $tables as $table ) {
+		foreach ( self::get_table_names() as $table ) {
 			$exists = $wpdb->get_var( 'DESCRIBE ' . $table );
 
 			if ( $exists ) {

@@ -34,7 +34,7 @@ export default class frmStyleDependentUpdaterComponent {
 		const list = [];
 		inputNames.forEach( name => {
 			const input = document.querySelector( `input[name="${ name }"]` );
-			if ( null !== input ) {
+			if ( input ) {
 				list.push( input );
 			}
 		} );

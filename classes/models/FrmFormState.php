@@ -169,8 +169,7 @@ class FrmFormState {
 			return;
 		}
 
-		$state_string = $this->get_state_string();
-		echo '<input name="frm_state" type="hidden" value="' . esc_attr( $state_string ) . '" />';
+		echo '<input name="frm_state" type="hidden" value="' . esc_attr( $this->get_state_string() ) . '" />';
 	}
 
 	/**
@@ -181,9 +180,8 @@ class FrmFormState {
 			return '';
 		}
 
-		$secret           = self::get_encryption_secret();
-		$compressed_state = $this->compressed_state();
-		$json_encoded     = json_encode( $compressed_state );
+		$secret       = self::get_encryption_secret();
+		$json_encoded = json_encode( $this->compressed_state() );
 		return openssl_encrypt( $json_encoded, 'AES-128-ECB', $secret );
 	}
 

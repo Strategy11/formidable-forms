@@ -39,6 +39,8 @@ zip -r $zipname $destination \
 	-x "*/.editorconfig" \
 	-x "*/.eslintignore" \
 	-x "*/.eslintrc.json" \
+	-x "*/eslint.config.mjs" \
+	-x "*/.eslintrc" \
 	-x "*/.git" \
 	-x "*/.git/*" \
 	-x "*/.gitattributes" \
@@ -128,7 +130,7 @@ zip -r $zipname $destination \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
-	-x "formidable/paypal/*"
+	-x "formidable-pro/resources/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

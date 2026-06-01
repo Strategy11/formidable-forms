@@ -53,6 +53,8 @@ class test_FrmStylesController extends FrmUnitTest {
 	 * @covers FrmStyle::update
 	 */
 	public function test_save() {
+		$this->set_current_user_to_1();
+
 		$frm_style = new FrmStyle( 'default' );
 		$style     = $frm_style->get_one();
 

@@ -3,7 +3,7 @@
  */
 import { frmAnimate } from 'core/utils';
 
-import { frmTabsNavigator } from './components/class-tabs-navigator';
+import { frmTabsNavigator } from './components/tabs/class-tabs-navigator';
 import { frmCounter } from './components/class-counter';
 class frmDashboard {
 	constructor() {

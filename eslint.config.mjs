@@ -10,6 +10,7 @@ import noJqueryPlugin from 'eslint-plugin-no-jquery';
 import compatPlugin from 'eslint-plugin-compat';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import formidablePlugin from './eslint-rules/index.js';
+import stylisticPlugin from '@stylistic/eslint-plugin';
 import globals from 'globals';
 
 const __filename = fileURLToPath( import.meta.url );
@@ -88,6 +89,8 @@ export default [
 				expect: 'readonly',
 				assert: 'readonly',
 				chai: 'readonly',
+				// Used for Google Pay payments in PayPal Commerce frontend JS.
+				google: 'readonly'
 			},
 		},
 		plugins: {
@@ -100,6 +103,7 @@ export default [
 			compat: compatPlugin,
 			unicorn: unicornPlugin,
 			formidable: formidablePlugin,
+			'@stylistic': stylisticPlugin,
 		},
 		settings: {
 			'import/resolver': {
@@ -180,6 +184,15 @@ export default [
 			'import/default': 'off',
 			'comma-dangle': 'off',
 			'arrow-parens': ['error', 'as-needed'],
+			'no-extra-parens': 'off',
+			'@stylistic/no-extra-parens': ['error', 'all', {
+				conditionalAssign: false,
+				returnAssign: false,
+				nestedBinaryExpressions: false,
+				ternaryOperandBinaryExpressions: false,
+				nestedConditionalExpressions: false,
+				ignoreJSX: 'all',
+			}],
 
 			// Enforce frm-javascript.md patterns
 			'no-var': 'warn',
@@ -383,6 +396,8 @@ export default [
 			'formidable/no-optional-chaining-queryselectorall': 'error',
 			'formidable/no-repeated-selector': 'warn',
 			'formidable/prefer-document-fragment': 'warn',
+			'formidable/prefer-truthy-dom-query': 'error',
+			'formidable/prefer-optional-chaining': 'error',
 
 			// Import rules
 			'import/no-default-export': 'warn',
@@ -411,6 +426,21 @@ export default [
 			'no-jquery/no-ajax': 'error',
 			'no-jquery/no-fade': 'error',
 			'no-jquery/no-is': 'error',
+
+			// Catch jQuery methods on variables (complements no-jquery plugin which only catches direct jQuery() chains).
+			'formidable/no-jquery-variable-methods': [ 'error', {
+				methods: [
+					'find', 'show', 'hide', 'toggle',
+					'slideDown', 'slideUp', 'slideToggle',
+					'css', 'each', 'append', 'html',
+					'animate', 'prop', 'filter',
+					'data', 'parents', 'parent',
+					'val', 'serialize', 'serializeArray',
+					'addClass', 'removeClass', 'toggleClass', 'hasClass',
+					'closest', 'ajax',
+					'fadeIn', 'fadeOut', 'fadeTo', 'fadeToggle',
+				],
+			} ],
 		},
 	},
 ];

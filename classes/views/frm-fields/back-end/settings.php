@@ -1,4 +1,26 @@
 <?php
+/**
+ * Field settings panel in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var array        $field               Field data.
+ * @var array        $display             Display options for each setting section.
+ * @var array        $values              Form values associated with the field.
+ * @var FrmFieldType $field_obj           Field type handler.
+ * @var string       $type_name           Human-readable field type name.
+ * @var array        $field_types         Available field types this field can switch to.
+ * @var array        $disabled_fields     Field types that are disabled in the type dropdown.
+ * @var array        $default_value_types Default value types available for this field.
+ * @var array        $unique_values_label_atts     Label attributes for the Unique checkbox.
+ * @var array        $read_only_label_atts         Label attributes for the Read Only checkbox.
+ * @var bool|null    $show_upsell_for_unique_value Whether to show upsell for Unique.
+ * @var bool|null    $show_upsell_for_read_only    Whether to show upsell for Read Only.
+ * @var bool|null    $show_upsell_for_before_after_contents Whether to show upsell for before/after contents.
+ * @var bool|null    $show_upsell_for_autocomplete Whether to show upsell for autocomplete.
+ * @var bool|null    $show_upsell_for_visibility   Whether to show upsell for visibility.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -35,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
-			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
@@ -44,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
-						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Collect Payment action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
+						printf( esc_html__( 'Credit Cards will not work without %1$sadding a Stripe, Square, or PayPal action%2$s.', 'formidable' ), '<a href="?page=formidable&frm_action=settings&id=' . absint( $field['form_id'] ) . '&t=email_settings" target="_blank">', '</a>' );
 						?>
 					</span>
 				</div>
@@ -84,7 +106,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( $display['label'] ) { ?>
 		<p class="frm-mt-xs">
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
-				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); ?>
+				<?php
+				// skipcq: PHP-W1020
+				echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) );
+				?>
 			</label>
 			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_label_<?php echo esc_attr( $field['id'] ); ?>" />
 		</p>
@@ -103,22 +128,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 			}
 
-			if ( $display['unique'] ) {
+			if ( $display['unique'] || ! empty( $show_upsell_for_unique_value ) ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+					<label <?php FrmAppHelper::array_to_html_params( $unique_values_label_atts, true ); ?>>
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_unique_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
 				<?php
 			}
 
-			if ( $display['read_only'] ) {
+			if ( $display['read_only'] || ! empty( $show_upsell_for_read_only ) ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
+					<label <?php FrmAppHelper::array_to_html_params( $read_only_label_atts, true ); ?>>
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_read_only_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
 				</div>
@@ -331,9 +356,21 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
-		?>
 
-		<?php if ( $display['show_image'] ) { ?>
+		if ( ! empty( $show_upsell_for_before_after_contents ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/before-after-contents.php';
+		}
+
+		if ( ! empty( $show_upsell_for_autocomplete ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/autocomplete.php';
+		}
+
+		if ( ! empty( $show_upsell_for_visibility ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/visibility.php';
+		}
+
+		if ( $display['show_image'] ) {
+			?>
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
 					<input class="frm-m-0" type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
@@ -452,7 +489,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						}
 
 						FrmHtmlHelper::echo_dropdown_option(
-							is_array( $ftype ) ? $ftype['name'] : $ftyp,
+							is_array( $ftype ) ? $ftype['name'] : $ftype,
 							$fkey === $field['type'],
 							$type_option_params
 						);

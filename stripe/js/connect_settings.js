@@ -8,7 +8,7 @@
 
 	function renderStripeConnectSettingsButton() {
 		const container = document.getElementById( 'frm_strp_settings_container' );
-		if ( null !== container ) {
+		if ( container ) {
 			postAjax(
 				{
 					action: 'frm_strp_connect_get_settings_button'

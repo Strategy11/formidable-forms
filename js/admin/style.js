@@ -281,7 +281,7 @@
 	 */
 	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
-		if ( null === form ) {
+		if ( ! form ) {
 			return;
 		}
 		if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
@@ -1457,7 +1457,7 @@
 
 		// Function to change the color of a select element
 		const changeSelectColor = select => {
-			if ( select.options[ select.selectedIndex ] && select.options[ select.selectedIndex ].classList.contains( 'frm-select-placeholder' ) ) {
+			if ( select.options[ select.selectedIndex ]?.classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';

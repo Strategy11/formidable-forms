@@ -4,6 +4,7 @@
 .editorconfig export-ignore
 .eslintignore export-ignore
 .eslintrc.json export-ignore
+eslint.config.mjs export-ignore
 .git export-ignore
 .github export-ignore
 .gitattributes export-ignore

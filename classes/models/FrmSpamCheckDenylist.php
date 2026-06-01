@@ -18,7 +18,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	const COMPARE_EQUALS = 'equals';
 
 	/**
-	 * @var array
+	 * @var array|null
 	 */
 	protected $posted_fields;
 
@@ -402,8 +402,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	/**
 	 * Checks if should check the value of the given field ID.
 	 *
-	 * @param int   $field_id           Field ID.
-	 * @param int[] $field_ids_to_check Field IDs to check.
+	 * @param int         $field_id           Field ID.
+	 * @param false|int[] $field_ids_to_check Field IDs to check.
 	 *
 	 * @return bool
 	 */
