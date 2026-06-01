@@ -69,8 +69,16 @@ class FrmGatedContentAction extends FrmFormAction {
 				'label'    => __( 'Post', 'formidable' ),
 				'disabled' => false,
 			),
-			'frm_file' => array(
+			'frm_file'   => array(
 				'label'    => __( 'Formidable file (Pro)', 'formidable' ),
+				'disabled' => true,
+			),
+			'frm_upload' => array(
+				'label'    => __( 'Upload file (Pro)', 'formidable' ),
+				'disabled' => true,
+			),
+			'frm_pdf'    => array(
+				'label'    => __( 'Formidable PDF (PDFs add-on)', 'formidable' ),
 				'disabled' => true,
 			),
 		);

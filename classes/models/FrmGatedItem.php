@@ -109,4 +109,34 @@ class FrmGatedItem {
 	public function get_title() {
 		return get_the_title( $this->id );
 	}
+
+	/**
+	 * Return the cookie name used to persist the access token for this item.
+	 *
+	 * Subclasses may override to produce a more specific name — e.g. when the
+	 * same post type can have multiple distinct access scopes (view + entry).
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function get_cookie_name() {
+		return 'frm_gc_' . $this->get_transient_key();
+	}
+
+	/**
+	 * Return the item-specific segment used to build cache/transient keys.
+	 *
+	 * Callers prepend their own prefix and any additional scope identifiers
+	 * (e.g. action ID) to form the full key. Subclasses may override to
+	 * include extra scope — e.g. entry ID for view items — so that cache
+	 * entries for different access scopes never collide.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public function get_transient_key() {
+		return $this->type . '_' . $this->id;
+	}
 }

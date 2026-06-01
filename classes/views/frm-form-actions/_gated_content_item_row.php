@@ -74,6 +74,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm8 frm-gc-item-settings">
 
 		<?php
+		// Build args for inner/outer type-settings hooks once (all vars are available here).
+		$filter_args = array(
+			'is_template' => $is_template,
+			'types'       => $frm_gc_types,
+		);
+
+		if ( ! $is_template ) {
+			$filter_args['active_type'] = $frm_gc_item_type;
+			$filter_args['idx']         = $frm_gc_idx;
+			$filter_args['item']        = $frm_gc_item;
+			$filter_args['item_base']   = $frm_gc_item_base;
+			$filter_args['wrapper_id']  = $frm_gc_wrapper_id;
+		}
+
 		// One settings div per post-type-backed item type.
 		// Existing rows: only the active type's div is visible; only it gets a name attribute.
 		// Template rows: JS shows/hides divs on type change and assigns id/name after cloning.
@@ -157,24 +171,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</select>
 				<?php endif; ?>
 			</div><!-- .frm_form_field -->
+			<?php
+			/**
+			 * Fires inside a post-type-backed type settings div, after the primary ID field.
+			 *
+			 * Use this to append extra fields (e.g. an entry selector) inside the same
+			 * wrapper as the primary post selector. Fires for both existing rows and the
+			 * JS <template> row.
+			 *
+			 * @since x.x
+			 *
+			 * @param string $type     Post-type key for this settings div (e.g. 'frm_display').
+			 * @param array  $row_args Same keys as the outer `frm_gated_content_item_type_settings` hook.
+			 */
+			do_action( 'frm_gated_content_type_settings_inner', $frm_gc_pt_key, $filter_args );
+			?>
 		</div><!-- [data-type="<?php echo esc_attr( $frm_gc_pt_key ); ?>"] -->
 		<?php endforeach; ?>
 		<?php unset( $frm_gc_pt_key, $frm_gc_pt_config, $frm_gc_pt_posts, $frm_gc_pt_sel_id, $frm_gc_pt_source, $frm_gc_pt_is_first, $frm_gc_first_pt_rendered, $frm_gc_pt_hidden, $frm_gc_pt_selected_title, $frm_gc_post ); ?>
 
 		<?php
-		$filter_args = array(
-			'is_template' => $is_template,
-			'types'       => $frm_gc_types,
-		);
-
-		if ( ! $is_template ) {
-			$filter_args['active_type'] = $frm_gc_item_type;
-			$filter_args['idx']         = $frm_gc_idx;
-			$filter_args['item']        = $frm_gc_item;
-			$filter_args['item_base']   = $frm_gc_item_base;
-			$filter_args['wrapper_id']  = $frm_gc_wrapper_id;
-		}
-
 		/**
 		 * Fires after the built-in type settings for a gated content item row.
 		 *

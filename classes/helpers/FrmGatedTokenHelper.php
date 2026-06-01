@@ -271,7 +271,9 @@ class FrmGatedTokenHelper {
 	/**
 	 * Build the transient key for an action + item membership result.
 	 *
-	 * Format: frm_gc_ac_{action_id}_{item_type}_{item_id}
+	 * Uses {@see FrmGatedItem::get_transient_key()} for the item-specific segment
+	 * so subclasses can widen the scope (e.g. include entry ID) without touching
+	 * this helper.
 	 *
 	 * @param int          $action_id ID of the frm_form_actions post.
 	 * @param FrmGatedItem $item      Content item (type slug + ID).
@@ -279,7 +281,7 @@ class FrmGatedTokenHelper {
 	 * @return string
 	 */
 	private static function get_action_item_transient_key( $action_id, FrmGatedItem $item ) {
-		return 'frm_gc_ac_' . $action_id . '_' . $item->type . '_' . $item->id;
+		return 'frm_gc_ac_' . $action_id . '_' . $item->get_transient_key();
 	}
 
 	/**
@@ -375,7 +377,7 @@ class FrmGatedTokenHelper {
 	 * @return void
 	 */
 	public static function set_cookie( $raw_token, FrmGatedItem $item, $expired_at = null ) {
-		$cookie_name = 'frm_gc_' . $item->type . '_' . $item->id;
+		$cookie_name = $item->get_cookie_name();
 		$expiry      = $expired_at ?? time() + YEAR_IN_SECONDS;
 
 		setcookie( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.cookies_setcookie
@@ -461,7 +463,6 @@ class FrmGatedTokenHelper {
 		$seen_hashes = array();
 
 		$token = self::get_valid_token_from_cookies( $item, $seen_hashes );
-
 		if ( null !== $token ) {
 			return $token;
 		}
@@ -538,7 +539,7 @@ class FrmGatedTokenHelper {
 	 * @return FrmGatedToken|null
 	 */
 	private static function get_valid_token_from_cookies( FrmGatedItem $item, &$seen_hashes ) {
-		$cookie_name = 'frm_gc_' . $item->type . '_' . $item->id;
+		$cookie_name = $item->get_cookie_name();
 
 		if ( ! isset( $_COOKIE[ $cookie_name ] ) ) {
 			return null;
