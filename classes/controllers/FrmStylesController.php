@@ -631,8 +631,8 @@ class FrmStylesController {
 				// The single style custom CSS is nested under the old style's scope. Re-scope it to the
 				// new style's scope so it unnests correctly for display and re-nests correctly on save.
 				if ( ! empty( $style->post_content['single_style_custom_css'] ) ) {
-					$css_scope_helper = new FrmCssScopeHelper();
-					$unnested_css     = $css_scope_helper->unnest( $style->post_content['single_style_custom_css'], 'frm_style_' . $style->post_name );
+					$css_scope_helper                               = new FrmCssScopeHelper();
+					$unnested_css                                   = $css_scope_helper->unnest( $style->post_content['single_style_custom_css'], 'frm_style_' . $style->post_name );
 					$style->post_content['single_style_custom_css'] = $css_scope_helper->nest( $unnested_css, 'frm_style_' . $new_name );
 				}
 
@@ -645,7 +645,7 @@ class FrmStylesController {
 				$style            = $frm_style->get_new();
 				$style->post_name = self::get_new_style_post_name( $style->post_name );
 				break;
-		}
+		}//end switch
 
 		if ( in_array( $view, array( 'duplicate', 'new_style' ), true ) ) {
 			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
