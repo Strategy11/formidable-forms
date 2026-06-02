@@ -3,6 +3,7 @@
  * Template for plain text stats email
  *
  * @since 6.7
+ *
  * @package Formidable
  *
  * @var array $args Content args.

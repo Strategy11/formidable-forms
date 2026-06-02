@@ -20,23 +20,23 @@ class FrmInstallPlugin {
 	 */
 	protected $plugin_slug;
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts ) {
 		$this->plugin_file   = $atts['plugin_file'];
 		list( $slug, $file ) = explode( '/', $this->plugin_file );
 		$this->plugin_slug   = $slug;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_activate_link() {
 		if ( $this->is_installed() && $this->is_active() ) {
 			return '';
 		}
-
-		if ( $this->is_installed() ) {
-			$url = $this->activate_url();
-		} else {
-			$url = $this->install_url();
-		}
-		return $url;
+		return $this->is_installed() ? $this->activate_url() : $this->install_url();
 	}
 
 	/**
@@ -99,9 +99,11 @@ class FrmInstallPlugin {
 					),
 				)
 			);
+
 			if ( is_wp_error( $api ) ) {
 				wp_send_json_error( $api->get_error_message() );
 			}
+
 			if ( ! FrmAddonsController::url_is_allowed( $api->versions['trunk'] ) ) {
 				wp_send_json_error( 'This download is not allowed' );
 			}
@@ -111,6 +113,7 @@ class FrmInstallPlugin {
 
 			// Install the plugin.
 			$result = $upgrader->install( $api->versions['trunk'] );
+
 			if ( is_wp_error( $result ) ) {
 				wp_send_json_error( $result->get_error_message() );
 			}
@@ -152,17 +155,5 @@ class FrmInstallPlugin {
 		} else {
 			wp_send_json_error();
 		}
-	}
-
-	/**
-	 * Check if a plugin is installed.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $plugin_file
-	 * @return bool
-	 */
-	private static function is_plugin_installed( $plugin_file ) {
-		return isset( get_plugins()[ $plugin_file ] );
 	}
 }

@@ -3,6 +3,7 @@
  * In-plugin summary emails controller
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
@@ -17,9 +18,12 @@ class FrmEmailSummaryController {
 
 	/**
 	 * Maybe send summary emails.
+	 *
+	 * @return void
 	 */
 	public static function maybe_send_emails() {
 		$emails = FrmEmailSummaryHelper::should_send_emails();
+
 		if ( ! $emails ) {
 			return;
 		}

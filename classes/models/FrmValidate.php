@@ -11,12 +11,13 @@ abstract class FrmValidate {
 	protected $form_id;
 
 	/**
-	 * @var object
+	 * @var object|null
 	 */
 	protected $form;
 
 	/**
 	 * @since 6.21
+	 *
 	 * @var string
 	 */
 	protected $option_type = 'form';
@@ -29,10 +30,10 @@ abstract class FrmValidate {
 	}
 
 	/**
-	 * @return object $form
+	 * @return object|null Form.
 	 */
 	protected function get_form() {
-		if ( empty( $this->form ) ) {
+		if ( ! $this->form ) {
 			$this->form = FrmForm::getOne( $this->form_id );
 		}
 		return $this->form;
@@ -43,6 +44,7 @@ abstract class FrmValidate {
 	 */
 	protected function is_option_on() {
 		$key = $this->get_option_key();
+
 		if ( 'global' === $this->option_type ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			return ! empty( $frm_settings->$key );

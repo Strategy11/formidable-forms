@@ -1,6 +1,7 @@
 <?php
 /**
  * @package Formidable
+ *
  * @since 6.18
  *
  * @var array        $field Field data.

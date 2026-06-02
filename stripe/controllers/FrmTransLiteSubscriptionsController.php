@@ -7,6 +7,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 
 	/**
 	 * @param object $subscription
+	 *
 	 * @return void
 	 */
 	public static function load_sidebar_actions( $subscription ) {
@@ -24,10 +25,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @since 6.5
 	 *
 	 * @param object $subscription
+	 *
 	 * @return void
 	 */
 	public static function show_receipt_link( $subscription ) {
 		$link = esc_html( $subscription->sub_id );
+
 		if ( $subscription->sub_id !== 'None' ) {
 			/**
 			 * Filter a receipt link for a specific gateway.
@@ -46,6 +49,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	/**
 	 * @param object $sub
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function show_cancel_link( $sub, $atts = array() ) {
@@ -61,6 +65,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	/**
 	 * @param object $sub
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	public static function cancel_link( $sub, $atts = array() ) {
@@ -88,14 +93,21 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 *
 	 * @return void
 	 */
-	public static function cancel_subscription() {
+	public static function cancel_subscription() { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
+		FrmAppHelper::permission_check( 'frm_edit_entries' );
 
-		$sub_id = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
+		$canceled = false;
+		$sub_id   = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
+
 		if ( $sub_id ) {
 			$frm_sub = new FrmTransLiteSubscription();
 			$sub     = $frm_sub->get_one( $sub_id );
+
 			if ( $sub ) {
+				$reason   = '';
+				$debug_id = '';
+
 				switch ( $sub->paysys ) {
 					case 'stripe':
 						$canceled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $sub->sub_id );
@@ -103,10 +115,36 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 					case 'square':
 						$canceled = FrmSquareLiteConnectHelper::cancel_subscription( $sub->sub_id );
 						break;
+					case 'paypal':
+						$response = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
+
+						// Check for structured error response with message and debug_id (array or object)
+						$reason   = '';
+						$debug_id = '';
+						$canceled = false !== $response;
+
+						if ( is_array( $response ) || is_object( $response ) ) {
+							// Extract error details without type checks to avoid Mago type narrowing
+							$response_array = is_array( $response ) ? $response : (array) $response;
+							$reason         = $response_array['message'] ?? '';
+							// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
+							$debug_id = $response_array['debug_id'] ?? $response_array['debugId'] ?? '';
+
+							// If there's an error message or debug_id, the cancellation failed
+							if ( $reason || $debug_id ) {
+								$canceled = false;
+							}
+						} elseif ( false === $response ) {
+							// Response is false, get error from static properties
+							$reason   = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+							$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
+							$canceled = false;
+						}
+						break;
 					default:
 						$canceled = false;
 						break;
-				}
+				}//end switch
 
 				if ( $canceled ) {
 					self::change_subscription_status(
@@ -117,8 +155,23 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 					);
 
 					$message = __( 'Canceled', 'formidable' );
+					// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				} else {
-					$message = __( 'Failed', 'formidable' );
+					// If the reason is already a complete error message, use it directly
+					// instead of wrapping it redundantly in "Failed (...)"
+					if ( $reason && ! preg_match( '/^[A-Z_]+$/', $reason ) ) {
+						$message = $reason;
+					} else {
+						$message = __( 'Failed', 'formidable' );
+
+						if ( ! empty( $reason ) ) {
+							$message .= ' (' . $reason . ')';
+						}
+					}
+				}//end if
+
+				if ( $debug_id ) {
+					$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
 				}
 			} else {
 				$message = __( 'That subscription was not found', 'formidable' );
@@ -127,14 +180,20 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$message = __( 'Oops! No subscription was selected for cancelation.', 'formidable' );
 		}//end if
 
-		echo esc_html( $message );
-		wp_die();
+		wp_die(
+			sprintf(
+				'<div class="%1$s">%2$s</div>',
+				$canceled ? 'frm_updated_message' : 'frm_error_style',
+				wp_kses_post( $message )
+			)
+		);
 	}
 
 	/**
 	 * @since 6.5, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function change_subscription_status( $atts ) {
@@ -146,26 +205,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
+	 * @deprecated 6.27
+	 *
 	 * @return string|null
 	 */
 	public static function list_subscriptions_shortcode() {
-		if ( ! is_user_logged_in() ) {
-			return;
-		}
-
-		$frm_sub       = new FrmTransLiteSubscription();
-		$subscriptions = $frm_sub->get_all_for_user( get_current_user_id() );
-		if ( empty( $subscriptions ) ) {
-			return;
-		}
-
-		FrmTransLiteActionsController::actions_js();
-
-		ob_start();
-		include FrmTransLiteAppHelper::plugin_path() . '/views/subscriptions/list_shortcode.php';
-		$content = ob_get_contents();
-		ob_end_clean();
-
-		return $content;
+		_deprecated_function( __METHOD__, '6.27' );
+		return null;
 	}
 }

@@ -23,7 +23,7 @@
 
 .frm_reverse_button {
 	font-size: 1em;
-	transition: all .2s ease;
+	transition: all 0.2s ease;
 }
 
 .frm-button-primary,
@@ -32,6 +32,7 @@
 .frm-button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
+.frm_single_paypal_settings .frm_add_pp_logic.button, /* Backward compat for legacy PayPal add-on markup, @since 6.31 */
 .frm-white-body .frm-search .button,
 .frm-white-body .search-box .button, /* Views */
 .frm-white-body .tablenav .button,
@@ -51,7 +52,7 @@
 	border-radius: 30px;
 	border: 1px solid var(--primary-500);
 	font-size: var(--text-sm);
-	transition: all .2s ease;
+	transition: all 0.2s ease;
 	padding: 7px 16px;
 	height: auto;
 	min-height: 28px;
@@ -76,7 +77,7 @@
 		background-clip: padding-box !important;
 
 		&::before {
-			content: '';
+			content: "";
 			position: absolute;
 			top: 0;
 			right: 0;
@@ -85,7 +86,7 @@
 			z-index: -1;
 			margin: -1px;
 			border-radius: inherit;
-			background: linear-gradient(90deg, #129EFD 0%, #A334FD 100%);
+			background: linear-gradient(90deg, #129efd 0%, #a334fd 100%);
 			transition: opacity 150ms ease-out;
 		}
 	}
@@ -151,7 +152,7 @@
 }
 
 .frm-with-icon svg {
-	opacity: .65; /* Get close to grey-500 without overriding hover colors */
+	opacity: 0.65; /* Get close to grey-500 without overriding hover colors */
 }
 
 .frm-with-icon.button svg {
@@ -230,7 +231,8 @@
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
 .frm-white-body .frm-button-secondary,
-.frm-button-secondary {
+.frm-button-secondary,
+.frm_single_paypal_settings .frm_add_pp_logic.button /* Backward compat for legacy PayPal add-on markup, @since 6.31 */ {
 	color: var(--grey-800);
 	border-color: var(--grey-300);
 	background-color: #fff;
@@ -255,7 +257,10 @@
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
 .frm_wrap .preview > .button:hover,
-.frm-white-body #search-submit:hover {
+.frm-white-body #search-submit:hover,
+.frm_single_paypal_settings .frm_add_pp_logic.button:hover, /* Backward compat for legacy PayPal add-on markup, @since 6.31 */
+.frm_single_paypal_settings .frm_add_pp_logic.button:focus,
+.frm_single_paypal_settings .frm_add_pp_logic.button:active {
 	border-color: var(--grey-300) !important;
 	color: var(--grey-800);
 	background: var(--grey-50) !important;
@@ -275,7 +280,7 @@
 .frm-white-body .frm-button-primary:active,
 #frm-addons-page .button-primary:focus,
 #form_global_settings .button-primary:focus,
-#frm_upgrade_modal .button:focus {
+#frm_upgrade_modal .button-primary:focus {
 	border-color: var(--primary-700) !important;
 	background-color: var(--primary-700) !important;
 	box-shadow: none !important;
@@ -316,7 +321,7 @@
 input.frm_insert_in_template {
 	font-size: 10px;
 	width: 98%;
-	font-weight: 400
+	font-weight: 400;
 }
 
 .frm-dismissible a.dismiss:focus {

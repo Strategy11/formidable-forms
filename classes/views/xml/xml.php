@@ -17,7 +17,6 @@ the_generator( 'export' );
 do_action( 'frm_xml_export_before_types_loop' );
 
 foreach ( $type as $tb_type ) {
-
 	if ( ! isset( $tables[ $tb_type ] ) ) {
 		do_action( 'frm_xml_import_' . $tb_type, $args );
 		continue;

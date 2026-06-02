@@ -3,6 +3,7 @@
  * Spam check abstract class
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 
@@ -19,6 +20,9 @@ abstract class FrmSpamCheck {
 	 */
 	protected $values;
 
+	/**
+	 * @param array $values
+	 */
 	public function __construct( $values ) {
 		$this->values = $values;
 	}
@@ -34,10 +38,8 @@ abstract class FrmSpamCheck {
 		}
 
 		$is_spam = $this->check();
-		if ( ! $is_spam ) {
-			return false;
-		}
-		return $this->get_spam_message();
+
+		return $is_spam ? $this->get_spam_message() : false;
 	}
 
 	/**

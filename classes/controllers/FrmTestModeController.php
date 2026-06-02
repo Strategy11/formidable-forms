@@ -14,6 +14,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param string $html
+	 *
 	 * @return string
 	 */
 	public static function maybe_add_test_mode_container( $html ) {
@@ -26,19 +27,17 @@ class FrmTestModeController {
 		 */
 		do_action( 'frm_test_mode_container' );
 
-		if ( false !== strpos( $html, '<div class="frm_form_fields' ) ) {
-			$html = preg_replace(
+		if ( str_contains( $html, '<div class="frm_form_fields' ) ) {
+			return preg_replace(
 				'/<div class="frm_form_fields/',
 				self::get_testing_mode_container() . '<div class="frm_form_fields',
 				$html,
 				1
 			);
-		} else {
-			// If there no form, add before an error message.
-			$html = '<div class="with_frm_style">' . self::get_testing_mode_container() . '</div>' . $html;
 		}
 
-		return $html;
+		// If there no form, add before an error message.
+		return '<div class="with_frm_style">' . self::get_testing_mode_container() . '</div>' . $html;
 	}
 
 	/**
@@ -85,11 +84,13 @@ class FrmTestModeController {
 	 */
 	private static function render_testing_mode_container() {
 		$form_key = self::get_form_key_from_request();
+
 		if ( ! $form_key ) {
 			return;
 		}
 
 		$form = FrmForm::getOne( $form_key );
+
 		if ( ! $form ) {
 			return;
 		}
@@ -129,11 +130,13 @@ class FrmTestModeController {
 		);
 
 		$oneclick_data = FrmAddonsController::install_link( 'ai' );
+
 		if ( isset( $oneclick_data['url'] ) ) {
 			$ai_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
 
 		$oneclick_data = FrmAddonsController::install_link( 'test-mode' );
+
 		if ( isset( $oneclick_data['url'] ) ) {
 			$test_mode_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
@@ -165,16 +168,19 @@ class FrmTestModeController {
 	 */
 	private static function get_form_key_from_request() {
 		$form_key = FrmAppHelper::simple_get( 'form' );
+
 		if ( $form_key ) {
 			return $form_key;
 		}
 
 		$form_key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_text_field' );
+
 		if ( $form_key ) {
 			return $form_key;
 		}
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'sanitize_text_field' );
+
 		if ( $form_id && is_numeric( $form_id ) ) {
 			return FrmForm::get_key_by_id( $form_id );
 		}
@@ -188,6 +194,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param array $form_actions
+	 *
 	 * @return array
 	 */
 	private static function get_enabled_form_action_ids( $form_actions ) {
@@ -216,7 +223,7 @@ class FrmTestModeController {
 			return false;
 		}
 
-		return ! in_array( FrmAddonsController::license_type(), array( 'plus', 'business', 'elite' ) );
+		return ! in_array( FrmAddonsController::license_type(), array( 'plus', 'business', 'elite' ), true );
 	}
 
 	/**

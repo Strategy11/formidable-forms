@@ -11,14 +11,13 @@ $utm          = array(
 	'campaign' => 'admin-footer-link',
 	'content'  => 'footer-link-upgrade',
 );
+
 if ( $upgrade_link ) {
 	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
+} elseif ( FrmAppHelper::pro_is_installed() ) {
+	$upgrade_link = 'https://formidableforms.com/account/downloads/';
 } else {
-	if ( FrmAppHelper::pro_is_installed() ) {
-		$upgrade_link = 'https://formidableforms.com/account/downloads/';
-	} else {
-		$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
-	}
+	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
 }
 ?>
 
@@ -46,6 +45,7 @@ if ( $upgrade_link ) {
 		<?php if ( 'elite' !== FrmAddonsController::license_type() ) : ?>
 			<?php
 			$cta_text = FrmSalesApi::get_best_sale_value( 'footer_cta_text' );
+
 			if ( ! $cta_text ) {
 				$cta_text = __( 'Upgrade', 'formidable' );
 			}

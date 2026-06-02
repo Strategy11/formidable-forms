@@ -34,6 +34,7 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * @param string $function
 	 * @param array  ...$params
+	 *
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {
@@ -67,9 +68,11 @@ class FrmStrpLiteAppHelper {
 	 */
 	public static function get_customer_id_meta_name() {
 		$meta_name = '_frmstrp_customer_id';
+
 		if ( 'test' === self::active_mode() ) {
 			$meta_name .= '_test';
 		}
+
 		return $meta_name;
 	}
 
@@ -89,22 +92,24 @@ class FrmStrpLiteAppHelper {
 	 * @psalm-return 'live'|'test'
 	 */
 	public static function active_mode() {
-		$settings = self::get_settings();
-		return $settings->settings->test_mode ? 'test' : 'live';
+		return self::get_settings()->settings->test_mode ? 'test' : 'live';
 	}
 
 	/**
 	 * Add education about Stripe fees.
 	 *
+	 * @param string             $content UTM Content for the admin upgrade link.
+	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
+	 *
 	 * @return void
 	 */
-	public static function fee_education( $medium = 'tip', $gateway = false ) {
-		$license_type = FrmAddonsController::license_type();
-		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+	public static function fee_education( $content = 'tip', $gateway = false ) {
+		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
 			return;
 		}
 
 		$classes = 'frm-light-tip show_stripe';
+
 		if ( $gateway && ! array_intersect( (array) $gateway, array( 'stripe' ) ) ) {
 			$classes .= ' frm_hidden';
 		}
@@ -112,8 +117,8 @@ class FrmStrpLiteAppHelper {
 		FrmTipsHelper::show_tip(
 			array(
 				'link'  => array(
-					'content' => 'stripe-fee',
-					'medium'  => $medium,
+					'campaign' => 'stripe-fee',
+					'content'  => $content,
 				),
 				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Stripe fees.',
 				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
@@ -129,17 +134,32 @@ class FrmStrpLiteAppHelper {
 	 * @return void
 	 */
 	public static function not_connected_warning() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<div class="frm_warning_style frm-with-icon">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+		<div class="frm_warning_style">
 			<span>
 				<?php
-				/* translators: %1$s: Link HTML, %2$s: End link */
-				printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s or %3$sconnecting Square%4$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>', '<a href="?page=formidable-settings&t=square_settings" target="_blank">', '</a>' );
+				printf(
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					esc_html__( 'Credit Cards will not work without connecting %1$sStripe%2$s, %3$sSquare%4$s, or %5$sPayPal%6$s first.', 'formidable' ),
+					// %1$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) ) . '" target="_blank">',
+					// %2$s
+					'</a>',
+					// %3$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=square_settings' ) ) . '" target="_blank">',
+					// %4$s
+					'</a>',
+					// %5$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=paypal_settings' ) ) . '" target="_blank">',
+					// %6$s
+					'</a>'
+				);
 				?>
 			</span>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

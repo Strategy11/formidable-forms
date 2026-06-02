@@ -3,6 +3,7 @@
  * On Submit form action
  *
  * @package Formidable
+ *
  * @since 6.0
  */
 
@@ -12,16 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmOnSubmitAction extends FrmFormAction {
 
+	/**
+	 * @var string
+	 */
 	public static $slug = 'on_submit';
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_icon_font frm_checkmark_icon',
+			'classes'  => 'frmfont frm_checkmark_circle_icon',
 			'active'   => true,
 			'event'    => array( 'create' ),
 			'limit'    => 99,
 			'priority' => 9,
-			'color'    => 'rgb(66, 193, 178)',
+			'color'    => '#42C1B2',
 			'keywords' => __( 'redirect, success, confirmation, submit', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
@@ -39,12 +43,16 @@ class FrmOnSubmitAction extends FrmFormAction {
 	}
 
 	/**
-	 * @return void
+	 * @param object $instance
+	 * @param array  $args
 	 */
 	public function form( $instance, $args = array() ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_settings.php';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_defaults() {
 		return array(
 			'success_action'      => FrmOnSubmitHelper::get_default_action_type(),

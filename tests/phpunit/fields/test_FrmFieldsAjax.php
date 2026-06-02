@@ -21,7 +21,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$form = $this->factory->form->create_and_get();
 		$this->assertNotEmpty( $form );
 		$this->form_id = $form->id;
-		$this->assertTrue( is_numeric( $this->form_id ) );
+		$this->assertIsNumeric( $this->form_id );
 	}
 
 	/**
@@ -44,12 +44,12 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		global $wpdb;
 		$this->field_id = $wpdb->insert_id;
 
-		$this->assertTrue( is_numeric( $this->field_id ) );
+		$this->assertIsNumeric( $this->field_id );
 		$this->assertNotEmpty( $this->field_id );
 
-		// make sure the field exists
+		// Make sure the field exists
 		$field = FrmField::getOne( $this->field_id );
-		$this->assertTrue( is_object( $field ) );
+		$this->assertIsObject( $field );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			)
 		);
 		$this->assertNotEmpty( $original_field->id );
-		$this->assertEquals( $format, $original_field->field_options['format'] );
+		$this->assertSame( $format, $original_field->field_options['format'] );
 
 		$_POST = array(
 			'action'   => 'frm_duplicate_field',
@@ -83,7 +83,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		);
 
 		$response = $this->trigger_action( 'frm_duplicate_field' );
-		$this->assertNotFalse( strpos( $response, '<input type="hidden" name="frm_fields_submitted[]" ' ), 'Field was not created in form ' . $original_field->form_id . ' duplicated from field ' . $original_field->id );
+		$this->assertStringContainsString( '<input type="hidden" name="frm_fields_submitted[]" ', $response, 'Field was not created in form ' . $original_field->form_id . ' duplicated from field ' . $original_field->id ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		global $frm_duplicate_ids;
 		$this->assertNotEmpty( $frm_duplicate_ids );
@@ -92,14 +92,18 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 		// Make sure the field exists.
 		$field = FrmField::getOne( $newest_field_id );
-		$this->assertTrue( is_object( $field ), 'Field id ' . $newest_field_id . ' does not exist' );
-		$this->assertEquals( $format, $field->field_options['format'] );
+		$this->assertIsObject( $field, 'Field id ' . $newest_field_id . ' does not exist' );
+		$this->assertSame( $format, $field->field_options['format'] );
 
 		self::check_in_section_variable( $field, 0 );
 	}
 
 	/**
 	 * Get a field object by key.
+	 *
+	 * @param string $field_key
+	 *
+	 * @return object
 	 */
 	protected function get_field_by_key( $field_key ) {
 		$divider_field_id = FrmField::get_id_by_key( $field_key );
@@ -111,6 +115,10 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	/**
 	 * Check in_section variable prior to duplication.
+	 *
+	 * @param mixed $field
+	 *
+	 * @return void
 	 */
 	protected function check_field_prior_to_duplication( $field ) {
 		$this->assertTrue( isset( $field->field_options['in_section'] ), 'The in_section variable is not set correctly on import.' );
@@ -118,20 +126,29 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	/**
 	 * Check if a field is created correctly.
+	 *
+	 * @param int|string $newest_field_id
+	 *
+	 * @return void
 	 */
 	protected function check_if_field_id_is_created_correctly( $newest_field_id ) {
-		$this->assertTrue( is_numeric( $newest_field_id ) );
+		$this->assertIsNumeric( $newest_field_id );
 		$this->assertNotEmpty( $newest_field_id );
 	}
 
 	/**
 	 * Check for a specific in section value.
+	 *
+	 * @param mixed $field
+	 * @param mixed $expected
+	 *
+	 * @return void
 	 */
 	protected function check_in_section_variable( $field, $expected ) {
 		$message = 'The in_section variable is not set correctly when a ' . $field->type . ' field is duplicated.';
 		$this->assertTrue( isset( $field->field_options['in_section'] ), $message );
 
 		$message = 'The in_section variable is not set to the correct value when a ' . $field->type . ' field is duplicated.';
-		$this->assertEquals( $expected, $field->field_options['in_section'], $message );
+		$this->assertSame( $expected, $field->field_options['in_section'], $message );
 	}
 }

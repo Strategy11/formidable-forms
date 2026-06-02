@@ -1,9 +1,19 @@
 <?php
+/**
+ * Field size (pixels wide) setting in field settings.
+ *
+ * @package Formidable
+ *
+ * @var array $field       Field data including 'id' and 'size'.
+ * @var bool  $display_max Whether to include the Max Characters input.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
 $field_size_container_atts = array();
+
 if ( $display_max ) {
 	$max_characters_label         = __( 'Max Characters', 'formidable' );
 	$can_fit_label_in_two_columns = FrmAppHelper::mb_function( array( 'mb_strlen', 'strlen' ), array( $max_characters_label ) ) < 20;

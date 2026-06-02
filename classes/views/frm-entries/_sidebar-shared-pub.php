@@ -1,4 +1,13 @@
 <?php
+/**
+ * Shared entry sidebar publish box.
+ *
+ * @package Formidable
+ *
+ * @var stdClass|null $entry  Entry object (falls back to $record).
+ * @var stdClass|null $record Legacy entry object used when $entry is not set.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -9,18 +18,12 @@ if ( ! isset( $entry ) ) {
 ?>
 
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 
 	$date_format = get_option( 'date_format' );
-	if ( $date_format ) {
-		// Use short months since the sidebar space is limited.
-		$date_format = str_replace( 'F', 'M', $date_format );
-	} else {
-		// Fallback if there is no option in the database.
-		$date_format = __( 'M j, Y', 'formidable' );
-	}
+	$date_format = $date_format ? str_replace( 'F', 'M', $date_format ) : __( 'M j, Y', 'formidable' );
 
 	/**
 	 * @since 6.25
@@ -28,6 +31,7 @@ if ( ! isset( $entry ) ) {
 	 * @param string   $text
 	 * @param stdClass $entry
 	 */
+	// skipcq: PHP-W1020
 	$additional_timestamp_text = apply_filters( 'frm_additional_timestamp_text', '', $entry );
 
 	printf(
@@ -43,9 +47,10 @@ if ( ! isset( $entry ) ) {
 	</span>
 </div>
 
+<?php // phpcs:ignore Universal.Operators.StrictComparisons ?>
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 	printf(

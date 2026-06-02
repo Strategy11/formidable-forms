@@ -3,6 +3,7 @@
  * Spam check using WordPress spam comments
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 
@@ -12,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 
+	/**
+	 * @return bool
+	 */
 	protected function check() {
 		$spam_comments = get_comments(
 			array(
@@ -22,6 +26,7 @@ class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 				'order'   => 'DESC',
 			)
 		);
+
 		if ( ! is_array( $spam_comments ) ) {
 			return false;
 		}

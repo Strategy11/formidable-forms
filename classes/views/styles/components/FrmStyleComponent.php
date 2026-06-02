@@ -63,7 +63,7 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @var stdClass|null
+	 * @var FrmStyleComponent|null
 	 */
 	private static $instance;
 
@@ -80,10 +80,8 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	public static function register_assets() {
-		$plugin_url = FrmAppHelper::plugin_url();
-		$version    = FrmAppHelper::plugin_version();
-
-		wp_register_script( self::ASSETS_SLUG, $plugin_url . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
+		$version = FrmAppHelper::plugin_version();
+		wp_register_script( self::ASSETS_SLUG, FrmAppHelper::plugin_url() . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
 	}
 
 	/**
@@ -91,17 +89,24 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return stdClass|void
+	 * @return FrmStyleComponent|null
 	 */
 	protected static function get_instance() {
 		if ( self::$instance ) {
-			return;
+			return null;
 		}
 
 		self::$instance = new FrmStyleComponent();
 		return self::$instance;
 	}
 
+	/**
+	 * @param array  $data
+	 * @param string $field_name
+	 * @param mixed  $field_value
+	 *
+	 * @return void
+	 */
 	protected function init( $data, $field_name, $field_value ) {
 		$this->init_field_data( $data, $field_name, $field_value );
 		self::get_instance();
@@ -112,9 +117,11 @@ class FrmStyleComponent {
 	 * Init the field component data, field name and field value.
 	 *
 	 * @since 6.14
+	 *
 	 * @param array  $data The field extra options.
 	 * @param string $field_name The field input's name.
 	 * @param mixed  $field_value The field value.
+	 *
 	 * @return void
 	 */
 	protected function init_field_data( $data, $field_name, $field_value ) {
@@ -132,12 +139,15 @@ class FrmStyleComponent {
 	 */
 	protected function get_default_wrapper_class_names() {
 		$class = 'frm-style-component';
+
 		if ( ! empty( $this->data['classname'] ) ) {
 			$class .= ' ' . $this->data['classname'];
 		}
+
 		if ( ! empty( $this->data['will_change'] ) ) {
 			return $class . ' frm-style-dependent-updater-component';
 		}
+
 		return $class;
 	}
 
@@ -161,9 +171,11 @@ class FrmStyleComponent {
 	 */
 	private function get_component_attributes() {
 		$attributes = '';
+
 		if ( ! empty( $this->data['will_change'] ) ) {
 			$attributes .= 'data-will-change=' . wp_json_encode( $this->data['will_change'] );
 		}
+
 		return $attributes;
 	}
 
@@ -176,7 +188,7 @@ class FrmStyleComponent {
 	 * @return string
 	 */
 	private function get_field_name() {
-		return ! empty( $this->field_name ) ? 'name=' . $this->field_name : '';
+		return $this->field_name ? 'name=' . $this->field_name : '';
 	}
 
 	/**
@@ -198,7 +210,7 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	protected function load_view() {
-		if ( empty( $this->view_name ) ) {
+		if ( ! $this->view_name ) {
 			return;
 		}
 
@@ -212,16 +224,14 @@ class FrmStyleComponent {
 		include $this->view_folder . $this->view_name . '.php';
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function hide_component() {
 		if ( empty( $this->data['not_show_in'] ) ) {
 			return false;
 		}
-
-		if ( FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'] ) {
-			return true;
-		}
-
-		return false;
+		return FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'];
 	}
 
 	/**

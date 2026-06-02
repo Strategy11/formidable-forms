@@ -23,6 +23,7 @@ class FrmOnboardingWizardHelper {
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
+	 *
 	 * @return void
 	 */
 	public static function add_addon_label_attributes( $addon_key, $addon ) {
@@ -36,15 +37,19 @@ class FrmOnboardingWizardHelper {
 		if ( ! empty( $addon['is-checked'] ) ) {
 			$attributes['class'] .= ' frm-checked';
 		}
+
 		if ( ! empty( $addon['is-disabled'] ) ) {
 			$attributes['class'] .= ' frm-disabled';
 		}
+
 		if ( ! empty( $addon['rel'] ) ) {
 			$attributes['rel'] = $addon['rel'];
 		}
+
 		if ( ! empty( $addon['is-vendor'] ) ) {
 			$attributes['data-is-vendor'] = 'true';
 		}
+
 		if ( ! empty( $addon['is-installed'] ) ) {
 			$attributes['data-is-installed'] = 'true';
 		}
@@ -59,6 +64,7 @@ class FrmOnboardingWizardHelper {
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
+	 *
 	 * @return void
 	 */
 	public static function add_addon_input_attributes( $addon_key, $addon ) {
@@ -72,6 +78,7 @@ class FrmOnboardingWizardHelper {
 		if ( ! empty( $addon['is-checked'] ) ) {
 			$attributes['checked'] = 'checked';
 		}
+
 		if ( ! empty( $addon['is-disabled'] ) ) {
 			$attributes['disabled'] = 'disabled';
 		}
@@ -85,6 +92,7 @@ class FrmOnboardingWizardHelper {
 	 * @since 6.9
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function print_footer( $args = array() ) {
@@ -111,12 +119,15 @@ class FrmOnboardingWizardHelper {
 			'href' => $args['primary-button-href'],
 		);
 		$primary_button_attributes['class'] = trim( 'button button-primary frm-button-primary frm-sharp frm_large ' . $args['primary-button-class'] );
+
 		if ( ! empty( $args['primary-button-id'] ) ) {
 			$primary_button_attributes['id'] = $args['primary-button-id'];
 		}
+
 		if ( ! empty( $args['primary-button-plugin'] ) ) {
 			$primary_button_attributes['data-plugin'] = $args['primary-button-plugin'];
 		}
+
 		if ( ! empty( $args['primary-button-role'] ) ) {
 			$primary_button_attributes['role'] = $args['primary-button-role'];
 		}
@@ -126,12 +137,15 @@ class FrmOnboardingWizardHelper {
 			'href' => $args['secondary-button-href'],
 		);
 		$secondary_button_attributes['class'] = trim( 'button button-secondary frm-button-secondary frm-sharp frm_large ' . $args['secondary-button-class'] );
+
 		if ( $args['secondary-button-skip-step'] ) {
 			$secondary_button_attributes['class'] .= ' frm-onboarding-skip-step';
 		}
+
 		if ( ! empty( $args['secondary-button-id'] ) ) {
 			$secondary_button_attributes['id'] = $args['secondary-button-id'];
 		}
+
 		if ( ! empty( $args['secondary-button-role'] ) ) {
 			$secondary_button_attributes['role'] = $args['secondary-button-role'];
 		}

@@ -1,4 +1,13 @@
 <?php
+/**
+ * Value format setting.
+ *
+ * @package Formidable
+ *
+ * @var array $field      Field data including 'id' and 'format'.
+ * @var array $attributes HTML attributes for the wrapping paragraph.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -11,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" data-fid="<?php echo intval( $field['id'] ); ?>" />
 		<?php
 		FrmAppHelper::icon_by_class(
-			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+			'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 			array(
 				'data-open' => 'frm-input-mask-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
