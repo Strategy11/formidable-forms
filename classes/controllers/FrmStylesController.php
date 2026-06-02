@@ -648,7 +648,17 @@ class FrmStylesController {
 		}//end switch
 
 		if ( in_array( $view, array( 'duplicate', 'new_style' ), true ) ) {
-			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
+			// A new or duplicated style has no ID yet, so the Rename modal updates the post_title input
+			// instead of calling an endpoint. Prefer that posted title over $_GET['style_name'] when present.
+			$posted_title = '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( isset( $_POST['frm_style_setting']['post_title'] ) ) {
+				// The nonce is verified in FrmStylesController::save_style before this renders.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$posted_title = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
+			}
+
+			$style->post_title = '' !== $posted_title ? $posted_title : FrmAppHelper::simple_get( 'style_name' );
 			$style->menu_order = 0;
 		}
 
