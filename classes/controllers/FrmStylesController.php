@@ -651,6 +651,7 @@ class FrmStylesController {
 			// A new or duplicated style has no ID yet, so the Rename modal updates the post_title input
 			// instead of calling an endpoint. Prefer that posted title over $_GET['style_name'] when present.
 			$posted_title = '';
+
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( isset( $_POST['frm_style_setting']['post_title'] ) ) {
 				// The nonce is verified in FrmStylesController::save_style before this renders.
