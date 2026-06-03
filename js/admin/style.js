@@ -1185,22 +1185,79 @@
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
 		} );
 
-		jQuery( 'input.hex' ).wpColorPicker( {
-			change( event, ui ) {
-				let color = jQuery( this ).wpColorPicker( 'color' );
-				trackUnsavedChange();
-				if ( ui.color._alpha < 1 ) {
-					// If there's transparency, use RGBA
-					color = ui.color.toCSS( 'rgba' );
+		function detectColorFormat( value ) {
+			if ( value.startsWith( 'rgba' ) ) {
+				return 'rgba';
+			}
+			if ( value.startsWith( 'rgb' ) ) {
+				return 'rgb';
+			}
+			if ( value.startsWith( 'hsla' ) ) {
+				return 'hsla';
+			}
+			if ( value.startsWith( 'hsl' ) ) {
+				return 'hsl';
+			}
+			return 'hex';
+		}
+
+		const nativeInputValueDescriptor = Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, 'value' );
+
+		jQuery( 'input.hex' ).each( function() {
+			this.dataset.colorFormat = detectColorFormat( this.value );
+
+			// Prevent iris from overwriting non-hex formats with hex during color picking.
+			const input = this;
+			Object.defineProperty( input, 'value', {
+				get() {
+					return nativeInputValueDescriptor.get.call( this );
+				},
+				set( val ) {
+					const format = input.dataset.colorFormat;
+					if ( format && 'hex' !== format && /^#[0-9a-f]{3,8}$/i.test( val ) ) {
+						return;
+					}
+					nativeInputValueDescriptor.set.call( this, val );
+				},
+				configurable: true
+			} );
+		} ).on( 'keyup', function() {
+			const newFormat = detectColorFormat( this.value );
+			if ( this.dataset.colorFormat !== newFormat ) {
+				this.dataset.colorFormat = newFormat;
+				const container = this.closest( '.wp-picker-container' );
+				if ( container ) {
+					container.querySelector( '.wp-color-result-text' ).textContent = this.value;
 				}
+				debouncedColorChange( { target: this }, this.value );
+			}
+		} ).wpColorPicker( {
+			change( event, ui ) {
+				const input = event.target;
+				const format = input.dataset.colorFormat || 'hex';
+				let color;
+
+				trackUnsavedChange();
+
+				if ( ui.color._alpha < 1 ) {
+					input.dataset.colorFormat = 'rgba';
+					color = ui.color.toCSS( 'rgba' );
+				} else if ( 'hex' === format ) {
+					color = ui.color.toString();
+				} else {
+					color = ui.color.toCSS( format );
+				}
+
 				debouncedColorChange( event, color );
 
-				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+				input.value = color;
+
+				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				jQuery( event.target ).val( color ).trigger( 'change' );
+				debouncedPreviewUpdate();
 			}
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
