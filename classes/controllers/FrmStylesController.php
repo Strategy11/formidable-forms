@@ -624,20 +624,42 @@ class FrmStylesController {
 				break;
 
 			case 'duplicate':
-				$style            = clone $active_style;
-				$new_style        = $frm_style->get_new();
+				$style     = clone $active_style;
+				$new_style = $frm_style->get_new();
+				$new_name  = self::get_new_style_post_name( $new_style->post_name );
+
+				// The single style custom CSS is nested under the old style's scope. Re-scope it to the
+				// new style's scope so it unnests correctly for display and re-nests correctly on save.
+				if ( ! empty( $style->post_content['single_style_custom_css'] ) ) {
+					$css_scope_helper                               = new FrmCssScopeHelper();
+					$unnested_css                                   = $css_scope_helper->unnest( $style->post_content['single_style_custom_css'], 'frm_style_' . $style->post_name ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+					$style->post_content['single_style_custom_css'] = $css_scope_helper->nest( $unnested_css, 'frm_style_' . $new_name );
+				}
+
 				$style->ID        = $new_style->ID;
-				$style->post_name = $new_style->post_name;
-				unset( $new_style );
+				$style->post_name = $new_name;
+				unset( $new_style, $new_name );
 				break;
 
 			case 'new_style':
-				$style = $frm_style->get_new();
+				$style            = $frm_style->get_new();
+				$style->post_name = self::get_new_style_post_name( $style->post_name );
 				break;
-		}
+		}//end switch
 
 		if ( in_array( $view, array( 'duplicate', 'new_style' ), true ) ) {
-			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
+			// A new or duplicated style has no ID yet, so the Rename modal updates the post_title input
+			// instead of calling an endpoint. Prefer that posted title over $_GET['style_name'] when present.
+			$posted_title = '';
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( isset( $_POST['frm_style_setting']['post_title'] ) ) {
+				// The nonce is verified in FrmStylesController::save_style before this renders.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$posted_title = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
+			}
+
+			$style->post_title = '' !== $posted_title ? $posted_title : FrmAppHelper::simple_get( 'style_name' );
 			$style->menu_order = 0;
 		}
 
@@ -660,6 +682,25 @@ class FrmStylesController {
 		$notes                    = $preview_helper->get_notes_for_styler_preview();
 
 		include $style_views_path . 'show.php';
+	}
+
+	/**
+	 * Derive the temporary post_name (CSS scope slug) for a new or duplicated style from the chosen
+	 * style name so the displayed scope matches the slug WordPress will store on save.
+	 *
+	 * Falls back to the auto-generated key when no style name was provided so the scope is never empty.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $fallback The auto-generated post_name to use when no style name is chosen.
+	 *
+	 * @return string
+	 */
+	private static function get_new_style_post_name( $fallback ) {
+		$style_name = FrmAppHelper::simple_get( 'style_name' );
+		$slug       = $style_name ? sanitize_title( $style_name ) : '';
+
+		return $slug ? $slug : $fallback;
 	}
 
 	/**

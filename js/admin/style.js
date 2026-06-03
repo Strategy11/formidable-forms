@@ -874,6 +874,24 @@
 			return;
 		}
 
+		if ( ! styleId || '0' === String( styleId ) ) {
+			// A new or duplicated style has no ID yet, so there is nothing to rename on the server.
+			// Update the post_title input (which overrides $_GET['style_name'] on save) and the
+			// visible style name instead of calling the rename_style endpoint.
+			const postTitleInput = document.querySelector( 'input[name="frm_style_setting[post_title]"]' );
+			if ( postTitleInput ) {
+				postTitleInput.value = newStyleName;
+			}
+
+			const styleNameElement = document.getElementById( 'frm_style_name' );
+			if ( styleNameElement ) {
+				styleNameElement.textContent = newStyleName;
+			}
+
+			success( __( 'Style has been renamed successfully', 'formidable' ) );
+			return;
+		}
+
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
 		formData.append( 'style_name', newStyleName );

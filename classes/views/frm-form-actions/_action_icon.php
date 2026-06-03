@@ -3,15 +3,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+$limit = $action_control->action_options['limit'];
+
+if ( 'paypal' === $action_control->id_base ) {
+	// The PayPal add-on may overwrite this so change it back.
+	$limit = 1;
+}
+
+// Remove limit for Stripe action when Stripe add-on is active
+if ( 'stripe' === $action_control->id_base && class_exists( 'FrmStrpAppHelper' ) ) {
+	$limit = 99;
+}
+
 $single_action_attrs = array_merge(
 	$data,
 	array(
 		'href'            => 'javascript:void(0)',
 		'class'           => $classes . ' button frm-button-secondary frm-button-sm frm-with-icon frm-ml-auto-force frm-fadein-down-short',
-		'data-limit'      => $action_control->action_options['limit'],
+		'data-limit'      => $limit,
 		'data-actiontype' => $action_control->id_base,
 	)
 );
+
+if ( 'paypal' === $action_control->id_base ) {
+	$action_control->name = 'PayPal Commerce';
+}
 ?>
 <li class="frm-card-item frm-card-item--outlined frm-action<?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>" tabindex="0">
 	<div class="frm-h-stack-xs frm-w-full">
@@ -29,6 +45,8 @@ $single_action_attrs = array_merge(
 				<span class="frm-font-medium frm-white-space-nowrap"><?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?></span>
 				<?php if ( ! empty( $action_control->action_options['is_new'] ) ) { ?>
 					<?php FrmAppHelper::show_pill_text(); ?>
+				<?php } elseif ( ! empty( $action_control->action_options['is_beta'] ) ) { ?>
+					<?php FrmAppHelper::show_pill_text( __( 'BETA', 'formidable' ) ); ?>
 				<?php } ?>
 			</h3>
 			<?php if ( ! empty( $action_control->action_options['description'] ) ) { ?>

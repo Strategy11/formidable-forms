@@ -14,6 +14,7 @@
 		<directory name="classes" />
 		<directory name="stripe" />
 		<directory name="square" />
+		<directory name="paypal" />
 		<ignoreFiles>
 			<directory name="vendor" />
 		</ignoreFiles>
@@ -33,6 +34,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidGlobal>
 		<UndefinedDocblockClass>
@@ -51,7 +53,8 @@
 		<UndefinedGlobalVariable>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
-				<directory name="stripe" />
+				<directory name="stripe/views" />
+				<directory name="paypal/views" />
 			</errorLevel>
 		</UndefinedGlobalVariable>
 		<UndefinedVariable>
@@ -63,6 +66,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
 				<directory name="stripe/views" />
+				<directory name="paypal/views" />
 			</errorLevel>
 		</InvalidScope>
 		<InaccessibleMethod>
@@ -86,6 +90,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</MissingParamType>
@@ -94,6 +99,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</PropertyNotSetInConstructor>
 		<RiskyTruthyFalsyComparison>
@@ -101,6 +107,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RiskyTruthyFalsyComparison>
@@ -109,6 +116,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</MissingReturnType>
 		<InvalidArgument>
@@ -116,6 +124,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidArgument>
 		<PossiblyUndefinedVariable>
@@ -133,6 +142,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</MissingClosureParamType>
 		<NullableReturnStatement>
@@ -140,6 +150,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</NullableReturnStatement>
 		<TypeDoesNotContainType>
@@ -147,6 +158,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</TypeDoesNotContainType>
 		<InvalidReturnStatement>
@@ -154,6 +166,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidReturnStatement>
 		<InvalidArrayOffset>
@@ -161,6 +174,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidArrayOffset>
 		<PossiblyNullPropertyAssignment>
@@ -168,6 +182,7 @@
 				<file name="stripe/models/FrmStrpLiteSettings.php" />
 				<file name="square/models/FrmSquareLiteSettings.php" />
 				<file name="classes/helpers/FrmEntriesHelper.php" />
+				<file name="paypal/models/FrmPayPalLiteSettings.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
@@ -175,6 +190,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</MissingPropertyType>
 		<TooManyArguments>
@@ -187,6 +203,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</PossiblyNullPropertyFetch>
 		<InvalidScalarArgument>
@@ -202,6 +219,7 @@
 				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 				<file name="stripe/models/FrmStrpLiteAuth.php" />
 				<file name="square/controllers/FrmSquareLiteAppController.php" />
+				<file name="paypal/controllers/FrmPayPalLiteAppController.php" />
 			</errorLevel>
 		</InvalidScalarArgument>
 		<PossiblyInvalidIterator>
@@ -219,6 +237,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</ArgumentTypeCoercion>
 		<PossiblyUndefinedArrayOffset>
@@ -226,6 +245,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</PossiblyUndefinedArrayOffset>
 		<InvalidOperand>
@@ -233,6 +253,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidOperand>
 		<PossiblyInvalidPropertyFetch>
@@ -240,6 +261,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</PossiblyInvalidPropertyFetch>
 		<FalsableReturnStatement>
@@ -247,6 +269,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</FalsableReturnStatement>
 		<DocblockTypeContradiction>
@@ -254,6 +277,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</DocblockTypeContradiction>
 		<RedundantConditionGivenDocblockType>
@@ -261,6 +285,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RedundantConditionGivenDocblockType>
@@ -269,6 +294,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidReturnType>
 		<LessSpecificReturnStatement>
@@ -276,6 +302,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</LessSpecificReturnStatement>
 		<PossiblyInvalidPropertyAssignmentValue>
@@ -283,6 +310,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</PossiblyInvalidPropertyAssignmentValue>
 		<ReferenceConstraintViolation>
@@ -290,6 +318,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</ReferenceConstraintViolation>
 		<InvalidPropertyFetch>
@@ -297,6 +326,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidPropertyFetch>
 		<InvalidStringClass>
@@ -304,6 +334,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidStringClass>
 		<RedundantCondition>
@@ -311,6 +342,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RedundantCondition>
@@ -319,6 +351,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</MoreSpecificImplementedParamType>
 		<MissingClosureReturnType>
@@ -326,6 +359,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</MissingClosureReturnType>
 		<PossiblyInvalidArrayAssignment>
@@ -342,6 +376,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</PossiblyInvalidArrayAccess>
 		<UndefinedPropertyFetch>
@@ -349,6 +384,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</UndefinedPropertyFetch>
 		<RiskyCast>
@@ -356,6 +392,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</RiskyCast>
 		<PossiblyInvalidPropertyAssignment>
@@ -369,6 +406,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidPropertyAssignmentValue>
 		<RedundantCast>
@@ -376,6 +414,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</RedundantCast>
 		<InvalidCast>
@@ -383,6 +422,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</InvalidCast>
 		<PropertyTypeCoercion>
@@ -449,6 +489,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 			</errorLevel>
 		</UndefinedThisPropertyAssignment>
 		<UnresolvableInclude>
@@ -456,6 +497,7 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</UnresolvableInclude>
@@ -500,6 +542,8 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
+				<directory name="paypal" />
 			</errorLevel>
 		</ClassMustBeFinal>
 		<MissingOverrideAttribute>
@@ -507,6 +551,8 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
+				<directory name="paypal" />
+				<directory name="paypal" />
 			</errorLevel>
 		</MissingOverrideAttribute>
 		<InaccessibleProperty>
@@ -535,6 +581,7 @@
 				<file name="classes/models/FrmPersonalData.php" />
 				<file name="classes/helpers/FrmXMLHelper.php" />
 				<file name="stripe/controllers/FrmStrpLiteEventsController.php" />
+				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</PossiblyNullIterator>
 	</issueHandlers>

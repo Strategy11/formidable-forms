@@ -940,7 +940,7 @@ class FrmAppController {
 	/**
 	 * Enqueue legacy PayPal action settings styles when the PayPal add-on is active.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return void
 	 */

@@ -474,7 +474,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.06
-	 * @since x.x Added the $force_type param.
+	 * @since 6.31 Added the $force_type param.
 	 *
 	 * @param bool $force_type Whether to resolve grandfathered licenses to their real license type.
 	 *
@@ -493,7 +493,7 @@ class FrmAddonsController {
 	 *
 	 * Mirrors the API's determine_status_from_license_details logic.
 	 *
-	 * @since x.x
+	 * @since 6.31
 	 *
 	 * @return string 'active', 'expired', or 'free'.
 	 */
