@@ -10,7 +10,7 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_front_head() {
 		$this->set_front_end();
 
-		// reset if the style was loaded in another test
+		// Reset if the style was loaded in another test
 		global $frm_vars, $wp_styles;
 		$frm_vars['css_loaded'] = false;
 
@@ -29,11 +29,11 @@ class test_FrmStylesController extends FrmUnitTest {
 		$css_html        = "<link rel='stylesheet' id='formidable-css'";
 
 		if ( $frm_settings->load_style === 'all' ) {
-			$this->assertNotFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
+			$this->assertStringContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
 			// $this->assertContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is missing' );
 		} else {
-			$this->assertFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
-			$this->assertFalse( strpos( $styles, $stylesheet_urls['formidable'] ), 'The formidablepro stylesheet is included when it should not be' );
+			$this->assertStringNotContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
+			$this->assertStringNotContainsString( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is included when it should not be' );
 		}
 	}
 
@@ -44,7 +44,7 @@ class test_FrmStylesController extends FrmUnitTest {
 		global $frm_vars;
 		$frm_vars['css_loaded'] = false;
 		$stylesheet_urls        = FrmStylesController::custom_stylesheet();
-		$this->assertTrue( isset( $stylesheet_urls['formidable'] ), 'The stylesheet array is empty' );
+		$this->assertArrayHasKey( 'formidable', $stylesheet_urls, 'The stylesheet array is empty' );
 		return $stylesheet_urls;
 	}
 
@@ -53,6 +53,8 @@ class test_FrmStylesController extends FrmUnitTest {
 	 * @covers FrmStyle::update
 	 */
 	public function test_save() {
+		$this->set_current_user_to_1();
+
 		$frm_style = new FrmStyle( 'default' );
 		$style     = $frm_style->get_one();
 
@@ -73,9 +75,9 @@ class test_FrmStylesController extends FrmUnitTest {
 		FrmStylesController::save();
 		$returned = ob_get_clean();
 
-		$this->assertNotFalse( strpos( $returned, 'Your styling settings have been saved.' ) );
+		$this->assertStringContainsString( 'Your styling settings have been saved.', $returned );
 		$frm_style     = new FrmStyle( $style->ID );
 		$updated_style = $frm_style->get_one();
-		$this->assertEquals( $style->post_title . ' Updated', $updated_style->post_title );
+		$this->assertSame( $style->post_title . ' Updated', $updated_style->post_title );
 	}
 }

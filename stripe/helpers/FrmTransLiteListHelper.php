@@ -20,6 +20,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private $valid_entry_ids = array();
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		$this->table = FrmAppHelper::get_simple_request(
 			array(
@@ -88,20 +91,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$table_name = $this->table === 'subscriptions' ? 'frm_subscriptions' : 'frm_payments';
 		$form_id    = FrmAppHelper::get_param( 'form', 0, 'get', 'absint' );
 
-		if ( $form_id ) {
-			// @codingStandardsIgnoreStart
-			$query = $wpdb->prepare(
-				"FROM `{$wpdb->prefix}{$table_name}` p
-				JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
-				WHERE i.form_id = %d",
-				$form_id
-			);
-			// @codingStandardsIgnoreEnd
-		} else {
-			$query = "FROM `{$wpdb->prefix}{$table_name}` p";
+		if ( ! $form_id ) {
+			return "FROM `{$wpdb->prefix}{$table_name}` p";
 		}
 
-		return $query;
+        // @codingStandardsIgnoreStart
+        return $wpdb->prepare(
+            "FROM `{$wpdb->prefix}{$table_name}` p
+            JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
+            WHERE i.form_id = %d",
+            $form_id
+        );
+        // @codingStandardsIgnoreEnd
 	}
 
 	/**
@@ -138,11 +139,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		foreach ( $statuses as $status => $name ) {
 			$class = $status === $type ? ' class="current"' : '';
 
-			if ( $counts[ $status ] || 'published' === $status ) {
+			if ( $counts[ $status ] || 'payments' === $status ) {
+				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
 					// translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %4$s: Span close tag.
 					. sprintf( esc_html__( '%1$s %2$s(%3$s)%4$s', 'formidable' ), esc_html( $name ), '<span class="count">', number_format_i18n( $counts[ $status ] ), '</span>' )
 					. '</a>';
+				// phpcs:enable Generic.WhiteSpace.ScopeIndent
 			}
 
 			unset( $status, $name );
@@ -178,7 +181,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * If the Payments submodule or the PayPal add-on is active, add a bulk delete action.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return array
 	 */
@@ -284,7 +287,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * Check for Payments submodule (Stripe, Authorize.Net add-ons), as well as PayPal.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -373,7 +376,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * Get the checkbox for bulk actions.
 	 * This is only required when the Payments submodule or PayPal is active.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param object $item
 	 *
@@ -404,7 +407,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param object $item
 	 * @param string $field
@@ -462,7 +465,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -620,13 +623,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			return $atts['gateways'][ $item->paysys ]['label'];
 		}
 
-		if ( 'paypal' === $item->paysys ) {
-			// The PayPal add-on does not use a gateway.
-			// This should be safe to remove once we release
-			// PayPal Commerce in Lite.
-			return 'PayPal';
-		}
-
 		return $item->paysys;
 	}
 
@@ -647,7 +643,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * Render the tabs for the payments list, if the user has access to coupons.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param string $active_tab
 	 *
@@ -659,8 +655,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			return;
 		}
 
-		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
-			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
-		}
+		include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
 	}
 }

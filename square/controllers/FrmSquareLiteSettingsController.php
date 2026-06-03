@@ -52,7 +52,7 @@ class FrmSquareLiteSettingsController {
 	public static function process_form() {
 		$settings = FrmSquareLiteAppHelper::get_settings();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$settings->update( $_POST );
+		$settings->update( wp_unslash( $_POST ) );
 		$settings->store();
 	}
 }

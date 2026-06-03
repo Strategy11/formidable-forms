@@ -54,7 +54,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 *
-	 * @param array|false $filter
+	 * @param false|string $filter
 	 *
 	 * @return array
 	 */
@@ -112,8 +112,8 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function add_message( $message ) {
 		if ( ! is_array( $message ) || ! isset( $message['key'] ) ) {
-			// if the API response is invalid, $message may not be an array.
-			// if there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
+			// If the API response is invalid, $message may not be an array.
+			// If there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
@@ -173,10 +173,12 @@ class FrmInbox extends FrmFormApi {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			if ( $read || $dismissed || ! $this->within_valid_timeframe( $message ) ) {
-				unset( self::$messages[ $t ] );
-				$removed = true;
+			if ( ! $read && ! $dismissed && $this->within_valid_timeframe( $message ) ) {
+				continue;
 			}
+
+			unset( self::$messages[ $t ] );
+			$removed = true;
 		}
 
 		if ( $removed ) {
@@ -196,7 +198,7 @@ class FrmInbox extends FrmFormApi {
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
 
-			if ( empty( $k ) || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
+			if ( ! $k || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
@@ -229,7 +231,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function has_started( $message ) {
-		return empty( $message['starts'] ) ? true : $message['starts'] <= time();
+		return ! empty( $message['starts'] ) ? $message['starts'] <= time() : true;
 	}
 
 	/**
@@ -295,10 +297,12 @@ class FrmInbox extends FrmFormApi {
 	public function mark_unread( $key ) {
 		$is_read = isset( self::$messages[ $key ] ) && isset( self::$messages[ $key ]['read'] ) && isset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
 
-		if ( $is_read ) {
-			unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
-			$this->update_list();
+		if ( ! $is_read ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
+		$this->update_list();
 	}
 
 	/**
@@ -396,17 +400,19 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function remove( $key ) {
-		if ( isset( self::$messages[ $key ] ) ) {
-			unset( self::$messages[ $key ] );
-			$this->update_list();
+		if ( ! isset( self::$messages[ $key ] ) ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ] );
+		$this->update_list();
 	}
 
 	/**
 	 * @return void
 	 */
 	private function update_list() {
-		update_option( $this->option, self::$messages, 'no' );
+		update_option( $this->option, self::$messages, false );
 	}
 
 	/**
@@ -415,7 +421,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool True if a banner is available and shown.
 	 */
 	public static function maybe_show_banner() {
-		if ( empty( self::$banner_messages ) ) {
+		if ( ! self::$banner_messages ) {
 			return false;
 		}
 
@@ -447,13 +453,13 @@ class FrmInbox extends FrmFormApi {
 			 * @return string
 			 */
 			function ( $matches ) {
-				$url   = $matches[2];
-				$parts = parse_url( $url );
+				$url = $matches[2];
 
 				if ( '#' === $url ) {
 					return 'href="#"';
 				}
 
+				$parts = parse_url( $url );
 				$query = array();
 
 				if ( isset( $parts['query'] ) ) {
@@ -462,7 +468,7 @@ class FrmInbox extends FrmFormApi {
 
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
-				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';
+				return 'href="' . esc_url( $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] ) . '"';
 			},
 			$cta
 		);
@@ -475,7 +481,7 @@ class FrmInbox extends FrmFormApi {
 		self::$banner_messages = self::get_banner_messages();
 
 		if ( self::$banner_messages ) {
-			// disable screen options tab when displaying banner messages because it gets in the way of the banner.
+			// Disable screen options tab when displaying banner messages because it gets in the way of the banner.
 			add_filter( 'screen_options_show_screen', '__return_false' );
 		}
 	}

@@ -106,6 +106,7 @@ class SimplifyIssetTruthyCheckSniff implements Sniff {
 				T_IS_SMALLER_OR_EQUAL,
 				T_IS_GREATER_OR_EQUAL,
 				T_SPACESHIP,
+				T_INSTANCEOF,
 			);
 
 			if ( in_array( $tokens[ $afterSecondVar ]['code'], $comparisonOperators, true ) ) {

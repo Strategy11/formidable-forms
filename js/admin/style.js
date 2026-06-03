@@ -3,7 +3,6 @@
  * Pro-specific features are in the style-settings.js file in Pro.
  */
 ( function() {
-	/* globals frmDom, frmAdminBuild */
 	'use strict';
 
 	if ( ! document.getElementById( 'frm_active_style_form' ) ) {
@@ -256,7 +255,7 @@
 	 * @return {void}
 	 */
 	function handleCommonClickEvents( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( 'frm_toggle_sample_form' === target.id || target.closest( '#frm_toggle_sample_form' ) ) {
 			toggleSampleForm();
@@ -282,7 +281,7 @@
 	 */
 	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
-		if ( null === form ) {
+		if ( ! form ) {
 			return;
 		}
 		if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
@@ -322,7 +321,7 @@
 	 * @return {void}
 	 */
 	function handleClickEventsForListPage( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
@@ -337,7 +336,7 @@
 	 * @return {void}
 	 */
 	function handleStyleCardClick( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.closest( '.dropdown' ) ) {
 			// Ignore the hamburger menu inside of the card.
@@ -372,11 +371,9 @@
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
 
-		if ( ! cardIsLocked ) {
-			// Don't update the form when a locked card is clicked.
-			styleIdInput.value = card.dataset.styleId;
-			trackListPageChange();
-		}
+		// cardIsLocked is always false here due to early return above.
+		styleIdInput.value = card.dataset.styleId;
+		trackListPageChange();
 
 		setTimeout( enableLabelTransitions, 1 );
 
@@ -564,7 +561,7 @@
 		}
 
 		const anchor = clickTarget.hasAttribute( 'href' ) ? clickTarget : clickTarget.querySelector( 'a[href]' );
-		anchor.setAttribute( 'href', anchor.getAttribute( 'href' ) + '&sample=1' );
+		anchor.setAttribute( 'href', `${ anchor.getAttribute( 'href' ) }&sample=1` );
 	}
 
 	/**
@@ -636,7 +633,7 @@
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
-		const isTemplate = 'undefined' !== typeof data.templateKey;
+		const isTemplate = data.templateKey !== undefined;
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
@@ -686,7 +683,7 @@
 		} );
 
 		const isRtl = document.body.classList.contains( 'rtl' );
-		dropdownMenu.classList.add( 'dropdown-menu-' + ( isRtl ? 'left' : 'right' ) );
+		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
@@ -800,7 +797,7 @@
 		const form = tag(
 			'form',
 			{
-				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable' ), 'style_name' )
+				child: labelledTextInput( `frm_${ context }_style_name_input`, __( 'Style name', 'formidable' ), 'style_name' )
 			}
 		);
 		form.addEventListener(
@@ -915,19 +912,11 @@
 	}
 
 	/**
-	 * @param {string} templateKey
-	 * @return {HTMLElement} The template card element.
-	 */
-	function getTemplateCard( templateKey ) {
-		return document.getElementById( 'frm_template_style_cards_wrapper' ).querySelector( '.frm-style-card[data-template-key="' + templateKey + '"]' );
-	}
-
-	/**
 	 * @param {string} styleId
 	 * @return {HTMLElement} The card element.
 	 */
 	function getCardByStyleId( styleId ) {
-		const defaultCard = document.querySelector( '#frm_default_style_cards_wrapper > div[data-style-id="' + styleId + '"]' );
+		const defaultCard = document.querySelector( `#frm_default_style_cards_wrapper > div[data-style-id="${ styleId }"]` );
 		if ( defaultCard ) {
 			return defaultCard;
 		}
@@ -940,7 +929,7 @@
 	 * @return {void}
 	 */
 	function addIconToOption( option, iconId ) {
-		const icon = frmDom.svg( { href: '#' + iconId } );
+		const icon = frmDom.svg( { href: `#${ iconId }` } );
 		option.insertBefore( icon, option.firstChild );
 	}
 
@@ -1060,14 +1049,14 @@
 		}
 
 		for ( const key in defaultValues ) {
-			let targetInput = document.querySelector( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' );
+			let targetInput = document.querySelector( `input[name$="[${ key }]"], select[name$="[${ key }]"]` );
 			if ( ! targetInput ) {
 				continue;
 			}
 
 			if ( 'radio' === targetInput.getAttribute( 'type' ) ) {
 				// Reset the repeater icon dropdown.
-				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + defaultValues[ key ] + '"]' );
+				targetInput = document.querySelector( `input[name$="[${ key }]"][value="${ defaultValues[ key ] }"]` );
 				if ( targetInput ) {
 					targetInput.checked = true;
 					jQuery( targetInput ).trigger( 'change' );
@@ -1118,7 +1107,7 @@
 		const newStyle = document.createElement( 'link' );
 		newStyle.rel = 'stylesheet';
 		newStyle.type = 'text/css';
-		newStyle.href = style.href + '&key=' + getAutoId(); // Make the URL unique so the old stylesheet doesn't get picked up by cache.
+		newStyle.href = `${ style.href }&key=${ getAutoId() }`; // Make the URL unique so the old stylesheet doesn't get picked up by cache.
 
 		// Listen for the new style to load before removing the old style to avoid having no styles while the new style is loading.
 		newStyle.addEventListener(
@@ -1148,7 +1137,7 @@
 	 */
 	function wrapDropdownItem( { anchor, type } ) {
 		return div( {
-			className: 'dropdown-item frm-' + type + '-style',
+			className: `dropdown-item frm-${ type }-style`,
 			child: anchor
 		} );
 	}
@@ -1179,7 +1168,7 @@
 		} );
 
 		jQuery( 'input.hex' ).wpColorPicker( {
-			change: function( event, ui ) {
+			change( event, ui ) {
 				let color = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
 				if ( ui.color._alpha < 1 ) {
@@ -1198,7 +1187,7 @@
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 			const container = jQuery( this ).closest( '.wp-picker-container' );
-			if ( 'undefined' !== typeof container && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+			if ( container !== undefined && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
 				return container[ 0 ].querySelector( '.wp-color-picker' ).value;
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
@@ -1249,7 +1238,7 @@
 		 */
 		function handleChangeStylingSuccess( css ) {
 			// Validate the string response. A valid output will include rules with .with_frm_style
-			if ( -1 === css.indexOf( '.with_frm_style' ) ) {
+			if ( ! css.includes( '.with_frm_style' ) ) {
 				// Handle error (possibly a permission error, or an outdated nonce).
 				alert( css );
 				return;
@@ -1311,7 +1300,7 @@
 				select.value = radio.value;
 			}
 
-			jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+			jQuery( btnGrp ).children( 'button' ).html( `${ radio.nextElementSibling.innerHTML } <b class="caret"></b>` );
 
 			const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
 			if ( activeItem ) {
@@ -1330,22 +1319,6 @@
 				} );
 			} );
 		}
-	}
-
-	/**
-	 * @param {Event} event
-	 */
-	function maybeCollapseSettings( event ) {
-		let expanded;
-		const sectionParent = event.target.parentElement;
-		if ( event.type === 'keydown' ) {
-			expanded = sectionParent.classList.toggle( 'open' );
-			jQuery( sectionParent.querySelector( '.accordion-section-content' ) ).toggle( ! expanded ).slideToggle( 150 ); // Animate toggle as in click/enter.
-		} else {
-			expanded = sectionParent.classList.contains( 'open' );
-		}
-
-		event.target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**
@@ -1400,7 +1373,7 @@
 	 */
 	function setPosClass() {
 		/*jshint validthis:true */
-		let value = this.value;
+		let { value } = this;
 		if ( value === 'none' ) {
 			value = 'top';
 		} else if ( value === 'no_label' ) {
@@ -1413,7 +1386,7 @@
 			const currentValue = shouldForceTopStyling ? 'top' : value;
 
 			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
-			container.classList.add( 'frm_' + currentValue + '_container' );
+			container.classList.add( `frm_${ currentValue }_container` );
 
 			if ( 'inside' === currentValue ) {
 				checkFloatingLabelsForStyles( input, container );
@@ -1443,7 +1416,7 @@
 	 * @return {void}
 	 */
 	function fillMissingSignatureValidationFunction() {
-		if ( 'undefined' === typeof window.__FRMSIG || 'undefined' !== typeof window.frmFrontForm ) {
+		if ( window.__FRMSIG === undefined || window.frmFrontForm !== undefined ) {
 			return;
 		}
 
@@ -1484,7 +1457,7 @@
 
 		// Function to change the color of a select element
 		const changeSelectColor = select => {
-			if ( select.options[ select.selectedIndex ] && select.options[ select.selectedIndex ].classList.contains( 'frm-select-placeholder' ) ) {
+			if ( select.options[ select.selectedIndex ]?.classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';

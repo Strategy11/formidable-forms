@@ -76,13 +76,14 @@ class FrmSquareLiteEventsController {
 
 			$this->event = FrmSquareLiteConnectHelper::get_event( $event_id );
 
-			if ( is_object( $this->event ) ) {
-				$this->handle_event();
-				$this->track_handled_event( $event_id );
-				FrmSquareLiteConnectHelper::process_event( $event_id );
-			} else {
+			if ( ! is_object( $this->event ) ) {
 				$this->count_failed_event( $event_id );
+				continue;
 			}
+
+			$this->handle_event();
+			$this->track_handled_event( $event_id );
+			FrmSquareLiteConnectHelper::process_event( $event_id );
 		}
 	}
 

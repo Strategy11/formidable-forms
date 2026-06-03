@@ -68,6 +68,7 @@ class FrmFormsHelper {
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
@@ -82,6 +83,7 @@ class FrmFormsHelper {
 			<?php } ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -95,7 +97,7 @@ class FrmFormsHelper {
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( $class ) {
-			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
+			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( sanitize_text_field( $class ) ) . '"';
 		}
 	}
 
@@ -154,6 +156,7 @@ class FrmFormsHelper {
 		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( count( $forms ) < 2 ) {
 			?>
 			<div id="frm_bs_dropdown">
@@ -208,7 +211,7 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? self::get_no_title_text() : $form->name;
+					$form_name = ! empty( $form->name ) ? $form->name : self::get_no_title_text();
 					?>
 					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
@@ -232,6 +235,7 @@ class FrmFormsHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -415,9 +419,7 @@ class FrmFormsHelper {
 	 */
 	public static function fill_default_opts( $values, $record, $post_values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
-		$defaults = self::get_default_opts();
-
-		foreach ( $defaults as $var => $default ) {
+		foreach ( self::get_default_opts() as $var => $default ) {
 			if ( is_array( $default ) ) {
 				if ( ! isset( $values[ $var ] ) ) {
 					$values[ $var ] = $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : array();
@@ -482,9 +484,7 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
-		$defaults = self::get_default_opts();
-
-		foreach ( $defaults as $var => $default ) {
+		foreach ( self::get_default_opts() as $var => $default ) {
 			$options[ $var ] = $values['options'][ $var ] ?? $default;
 			unset( $var, $default );
 		}
@@ -701,35 +701,32 @@ BEFORE_HTML;
 
 		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
 
-		if ( isset( $field['icon'] ) ) {
-			$icon = FrmAppHelper::icon_by_class(
-				$field['icon'],
-				array(
-					'aria-hidden' => 'true',
-					'echo'        => false,
-				)
-			);
-		} else {
-			$icon = '';
-		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
-				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				if ( isset( $field['icon'] ) ) {
+					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
+				}
+
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( $args['id_label'] ?? $args['id'] ); ?>]</span>
+				<span>[<?php echo esc_html( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
-				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				if ( isset( $field['icon'] ) ) {
+					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
+				}
+
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -765,18 +762,20 @@ BEFORE_HTML;
 		$args        = array_merge( $defaults, $args );
 		$has_tooltip = ! empty( $args['title'] );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $args['class'] ); ?>">
 			<a href="javascript:void(0)" class="frm_insert_code <?php echo $has_tooltip ? 'frm_help' : ''; ?>"
 				<?php echo $has_tooltip ? 'title="' . esc_attr( $args['title'] ) . '"' : ''; ?>
 				data-code="<?php echo esc_attr( $args['code'] ); ?>">
-				<?php echo esc_attr( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
+				<?php echo esc_html( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
 				<span>
-					[<?php echo esc_attr( FrmAppHelper::truncate( $args['code'], 10 ) ); ?>]
+					[<?php echo esc_html( FrmAppHelper::truncate( $args['code'], 10 ) ); ?>]
 				</span>
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -884,7 +883,7 @@ BEFORE_HTML;
 		FrmField::create( $end_section_values );
 
 		if ( $move === 'move' ) {
-			// bump the order of current field unless we're at the end of the form
+			// Bump the order of current field unless we're at the end of the form
 			FrmField::update( $field->id, array( 'field_order' => $field->field_order + 2 ) );
 		}
 
@@ -920,7 +919,7 @@ BEFORE_HTML;
 				$replace_with = '';
 			}
 
-			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			FrmShortcodeHelper::remove_inline_conditions( FrmAppHelper::is_true( $show ) && $replace_with != '', $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		// Replace [form_key].
@@ -951,7 +950,7 @@ BEFORE_HTML;
 		}
 
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
-			$html = do_shortcode( $html );
+			return do_shortcode( $html );
 		}
 
 		return $html;
@@ -1036,7 +1035,7 @@ BEFORE_HTML;
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
 		if ( isset( $form['form_class'] ) && str_contains( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
-			// not missing class, avoid adding it twice.
+			// Not missing class, avoid adding it twice.
 			return false;
 		}
 		return ! empty( $form['submit_html'] ) && str_contains( $form['submit_html'], 'frm_inline_submit' );
@@ -1102,7 +1101,7 @@ BEFORE_HTML;
 	/**
 	 * @param array|bool|int|object|string $form
 	 *
-	 * @return string
+	 * @return int|string
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;
@@ -1112,7 +1111,7 @@ BEFORE_HTML;
 		}
 
 		if ( is_object( $form ) && $form->parent_form_id ) {
-			// get the parent form if this is a child
+			// Get the parent form if this is a child
 			$form = $form->parent_form_id;
 		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
@@ -1139,11 +1138,11 @@ BEFORE_HTML;
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
 
-		if ( ! $invalid_msg ) {
-			$show_img = false;
-		} else {
+		if ( $invalid_msg ) {
 			echo wp_kses_post( $invalid_msg );
 			$show_img = true;
+		} else {
+			$show_img = false;
 		}
 
 		self::show_error(
@@ -1167,7 +1166,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function show_error( $args ) {
-		// remove any blank messages
+		// Remove any blank messages
 		$args['errors'] = array_filter( (array) $args['errors'] );
 
 		$line_break_first = $args['show_img'];
@@ -1348,28 +1347,28 @@ BEFORE_HTML;
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
 
-		if ( $link_details ) {
-			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
-
-			if ( isset( $link_details['data'] ) ) {
-				foreach ( $link_details['data'] as $data => $value ) {
-					$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
-				}
-			} elseif ( isset( $link_details['confirm'] ) ) {
-				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
-			}
-
-			$label = $link_details[ $length ] ?? $link_details['label'];
-
-			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
-				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
-				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
-			}
-
-			$link .= '>' . $label . '</a>';
+		if ( ! $link_details ) {
+			return $link;
 		}
 
-		return $link;
+		$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
+
+		if ( isset( $link_details['data'] ) ) {
+			foreach ( $link_details['data'] as $data => $value ) {
+				$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
+			}
+		} elseif ( isset( $link_details['confirm'] ) ) {
+			$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
+		}
+
+		$label = $link_details[ $length ] ?? $link_details['label'];
+
+		if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
+			$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
+			$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
+		}
+
+		return $link . ( '>' . $label . '</a>' );
 	}
 
 	/**
@@ -1525,7 +1524,7 @@ BEFORE_HTML;
 			'publish' => __( 'Published', 'formidable' ),
 		);
 
-		if ( ! in_array( $status, array_keys( $nice_names ), true ) ) {
+		if ( ! array_key_exists( $status, $nice_names ) ) {
 			$status = 'publish';
 		}
 
@@ -1609,8 +1608,9 @@ BEFORE_HTML;
 		if ( $bg_color && $atts['bg'] ) {
 			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
 		}
+
 		echo '>';
-			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
 	}
 
@@ -1699,6 +1699,7 @@ BEFORE_HTML;
 			return;
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p class="frm_plan_required">
 			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
@@ -1707,6 +1708,7 @@ BEFORE_HTML;
 			</a>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1744,7 +1746,7 @@ BEFORE_HTML;
 	 */
 	public static function convert_legacy_package_names( $package_name ) {
 		if ( in_array( $package_name, array( 'Creator', 'Personal' ), true ) ) {
-			$package_name = 'Plus';
+			return 'Plus';
 		}
 
 		return $package_name;
@@ -1772,7 +1774,7 @@ BEFORE_HTML;
 		}
 
 		if ( $args['case_lower'] ) {
-			$license_types = array_map( 'strtolower', $license_types );
+			return array_map( 'strtolower', $license_types );
 		}
 
 		return $license_types;
@@ -1842,8 +1844,7 @@ BEFORE_HTML;
 
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
-		$reserved_words            = self::reserved_words();
-		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, $reserved_words );
+		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, self::reserved_words() );
 
 		return array_values( $unsafe_params_in_redirect );
 	}
@@ -1858,14 +1859,15 @@ BEFORE_HTML;
 	 * @return bool|string A string with an unsafe param message or false.
 	 */
 	private static function create_unsafe_param_warning( $unsafe_params_in_redirect ) {
-		$count                = count( $unsafe_params_in_redirect );
-		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
-		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
-		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
+		$count = count( $unsafe_params_in_redirect );
 
 		if ( $count === 0 ) {
 			return false;
 		}
+
+		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
+		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
 
 		if ( $count === 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */
@@ -2068,7 +2070,18 @@ BEFORE_HTML;
 			return true;
 		}
 
-		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
+		return self::is_formidable_api_form() || self::is_block_or_page_builder_preview();
+	}
+
+	/**
+	 * Checks if the form is rendered inside a block editor or page builder preview.
+	 *
+	 * @since 6.29
+	 *
+	 * @return bool
+	 */
+	public static function is_block_or_page_builder_preview() {
+		return self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 
 	/**
@@ -2136,5 +2149,48 @@ BEFORE_HTML;
 		}
 
 		return false;
+	}
+
+	/**
+	 * @since 6.30
+	 *
+	 * @return void
+	 */
+	public static function load_currency_js() {
+		global $frm_vars;
+
+		if ( empty( $frm_vars['currency'] ) ) {
+			return;
+		}
+
+		echo '<script>';
+		echo 'var frmcurrency=' . json_encode( $frm_vars['currency'] ) . ";\n";
+		echo 'if(typeof __FRMCURR == "undefined"){__FRMCURR=frmcurrency;}';
+		echo 'else{__FRMCURR=jQuery.extend(true,{},__FRMCURR,frmcurrency);}';
+		echo '</script>';
+	}
+
+	/**
+	 * Returns the form name or the no title text if the form name is empty.
+	 *
+	 * @since 6.30
+	 *
+	 * @param array|stdClass $form   The form data.
+	 * @param int            $length The form name length to truncate to.
+	 *
+	 * @return string
+	 */
+	public static function get_form_name( $form, $length = 0 ) {
+		$form_name = is_object( $form ) ? $form->name : $form['name'];
+
+		if ( '' === $form_name || null === $form_name ) {
+			return self::get_no_title_text();
+		}
+
+		if ( ! $length ) {
+			return $form_name;
+		}
+
+		return FrmAppHelper::truncate( $form_name, $length );
 	}
 }

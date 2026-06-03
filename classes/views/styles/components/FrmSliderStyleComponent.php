@@ -37,7 +37,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
-		$this->data['value_label']         = empty( $this->detect_unit_measurement() ) ? $field_value : (float) $field_value;
+		$this->data['value_label']         = $this->detect_unit_measurement() ? (float) $field_value : $field_value;
 
 		$this->init_defaults();
 		$this->init_icon();
@@ -73,7 +73,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * @return void
 	 */
 	private function init_defaults() {
-		$this->data['max_value'] = empty( $this->data['max_value'] ) ? 100 : $this->data['max_value'];
+		$this->data['max_value'] = ! empty( $this->data['max_value'] ) ? $this->data['max_value'] : 100;
 	}
 
 	/**
@@ -82,7 +82,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private function init_multiple_values() {
 		if ( ! $this->data['has-multiple-values'] ) {
@@ -91,38 +91,38 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$values = $this->get_values();
 		$top    = $values[0];
-		$bottom = empty( $values[2] ) ? $values[0] : $values[2];
-		$left   = empty( $values[3] ) ? $values[1] : $values[3];
+		$bottom = ! empty( $values[2] ) ? $values[2] : $values[0];
+		$left   = ! empty( $values[3] ) ? $values[3] : $values[1];
 		$right  = $values[1];
 
 		$this->data['vertical'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (float) $top,
+			'value' => $this->detect_unit_measurement( $top ) ? (float) $top : $top,
 		);
 
 		$this->data['horizontal'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (float) $right,
+			'value' => $this->detect_unit_measurement( $right ) ? (float) $right : $right,
 		);
 
 		$this->data['top'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (float) $top,
+			'value' => $this->detect_unit_measurement( $top ) ? (float) $top : $top,
 		);
 
 		$this->data['bottom'] = array(
 			'unit'  => $this->detect_unit_measurement( $bottom ),
-			'value' => empty( $this->detect_unit_measurement( $bottom ) ) ? $bottom : (float) $bottom,
+			'value' => $this->detect_unit_measurement( $bottom ) ? (float) $bottom : $bottom,
 		);
 
 		$this->data['left'] = array(
 			'unit'  => $this->detect_unit_measurement( $left ),
-			'value' => empty( $this->detect_unit_measurement( $left ) ) ? $left : (float) $left,
+			'value' => $this->detect_unit_measurement( $left ) ? (float) $left : $left,
 		);
 
 		$this->data['right'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (float) $right,
+			'value' => $this->detect_unit_measurement( $right ) ? (float) $right : $right,
 		);
 	}
 
@@ -169,7 +169,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private function init_icon() {
 		if ( ! empty( $this->data['icon'] ) ) {

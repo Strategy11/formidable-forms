@@ -84,7 +84,7 @@ class FrmReviews {
 	 * @return void
 	 */
 	private function review() {
-		// show the review request 3 times, depending on the number of entries
+		// Show the review request 3 times, depending on the number of entries
 		$show_intervals = array( 50, 200, 500 );
 		$asked          = $this->review_status['asked'];
 
@@ -98,7 +98,7 @@ class FrmReviews {
 
 		// Only show review request if the site has collected enough entries
 		if ( $entries < $count ) {
-			// check the entry count again in a week
+			// Check the entry count again in a week
 			$this->review_status['time'] = time();
 			update_user_meta( $user->ID, $this->option_name, $this->review_status );
 
@@ -240,7 +240,7 @@ class FrmReviews {
 		}
 
 		if ( isset( $review['dismissed'] ) && $review['dismissed'] === 'done' ) {
-			// if feedback was submitted, don't update it again when the review is dismissed
+			// If feedback was submitted, don't update it again when the review is dismissed
 			$this->set_inbox_dismissed();
 			wp_die();
 		}

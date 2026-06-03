@@ -91,11 +91,13 @@ class FrmEntryValidate {
 	 */
 	private static function set_item_key( &$values ) {
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
-			global $wpdb;
-			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
-			$_POST['item_key']  = $values['item_key'];
+		if ( isset( $values['item_key'] ) && $values['item_key'] != '' ) {
+			return;
 		}
+
+		global $wpdb;
+		$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
+		$_POST['item_key']  = $values['item_key'];
 	}
 
 	/**
@@ -148,7 +150,7 @@ class FrmEntryValidate {
 
 		);
 		$args  = wp_parse_args( $args, $defaults );
-		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
+		$value = ! empty( $args['parent_field_id'] ) ? $values : ( $values['item_meta'][ $args['id'] ] ?? '' );
 
 		// Check for values in "Other" fields
 		FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );
@@ -278,6 +280,9 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
+				/**
+				 * @var string $current_value
+				 */
 				$match = trim( $current_value ) === trim( $option_value );
 
 				if ( $match ) {
@@ -296,12 +301,14 @@ class FrmEntryValidate {
 					break;
 				}
 
-				if ( is_numeric( $current_value ) ) {
-					$match = (int) $current_value === (int) $option_value;
+				if ( ! is_numeric( $current_value ) ) {
+					continue;
+				}
 
-					if ( $match ) {
-						break;
-					}
+				$match = (int) $current_value === (int) $option_value;
+
+				if ( $match ) {
+					break;
 				}
 			}//end foreach
 
@@ -396,7 +403,7 @@ class FrmEntryValidate {
 
 		if ( false !== $item_name ) {
 			// Item name has a max length of 255 characters so truncate it so it doesn't fail to save in the database.
-			$_POST['item_name'] = substr( $item_name, 0, 255 );
+			$_POST['item_name'] = FrmAppHelper::truncate( $item_name, 255, 1, '', true );
 		}
 	}
 
@@ -451,12 +458,14 @@ class FrmEntryValidate {
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		$format_value = FrmField::get_option( $field, 'format' );
 
-		if ( $field->type === 'phone' || ( $field->type === 'text' && $format_value && ! FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
-			$pattern = self::phone_format( $field );
+		if ( $field->type !== 'phone' && ( $field->type !== 'text' || ! $format_value || FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
+			return;
+		}
 
-			if ( ! preg_match( $pattern, $value ) ) {
-				$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
-			}
+		$pattern = self::phone_format( $field );
+
+		if ( ! preg_match( $pattern, $value ) ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		}
 	}
 
@@ -521,10 +530,10 @@ class FrmEntryValidate {
 			$pattern = '';
 
 			foreach ( $parts as $part ) {
-				if ( ! $pattern ) {
-					$pattern .= $part;
-				} else {
+				if ( $pattern ) {
 					$pattern .= '(' . $part . ')?';
+				} else {
+					$pattern .= $part;
 				}
 			}
 		}
@@ -547,8 +556,8 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( $exclude || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
-			// only check spam if there are no other errors
+		if ( $exclude || empty( $values['item_meta'] ) || $errors ) {
+			// Only check spam if there are no other errors
 			return;
 		}
 
@@ -586,9 +595,11 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return FrmAppHelper::pro_is_installed() &&
 			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || FrmAppHelper::get_post_param( 'frm_next_page' ) ) &&
 			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -615,8 +626,7 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function is_spam_bot() {
-		$ip = FrmAppHelper::get_ip_address();
-		return empty( $ip );
+		return ! FrmAppHelper::get_ip_address();
 	}
 
 	/**
@@ -820,11 +830,13 @@ class FrmEntryValidate {
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
 
-				if ( $found ) {
-					$datas[ $key ]             = $value;
-					$datas['frm_duplicated'][] = $field_id;
-					unset( $datas['missing_keys'][ $key_index ] );
+				if ( ! $found ) {
+					continue;
 				}
+
+				$datas[ $key ]             = $value;
+				$datas['frm_duplicated'][] = $field_id;
+				unset( $datas['missing_keys'][ $key_index ] );
 			}
 		}//end foreach
 	}
@@ -974,12 +986,14 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			if ( self::should_really_skip_field( $skipped_field, $values ) ) {
-				unset( $values['item_meta'][ $skipped_field->id ] );
+			if ( ! self::should_really_skip_field( $skipped_field, $values ) ) {
+				continue;
+			}
 
-				if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
-					unset( $values['item_meta']['other'][ $skipped_field->id ] );
-				}
+			unset( $values['item_meta'][ $skipped_field->id ] );
+
+			if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
+				unset( $values['item_meta']['other'][ $skipped_field->id ] );
 			}
 		}
 	}
@@ -1021,7 +1035,7 @@ class FrmEntryValidate {
 
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
-			$option_value = ! is_array( $option ) ? $option : ( $option['value'] ?? '' );
+			$option_value = is_array( $option ) ? ( $option['value'] ?? '' ) : $option;
 
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
@@ -1071,8 +1085,7 @@ class FrmEntryValidate {
 	 * @return void
 	 */
 	public static function prepare_values_for_spam_check( &$values ) {
-		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
-		$values['form_ids'] = $form_ids;
+		$values['form_ids'] = self::get_all_form_ids_and_flatten_meta( $values );
 	}
 
 	/**

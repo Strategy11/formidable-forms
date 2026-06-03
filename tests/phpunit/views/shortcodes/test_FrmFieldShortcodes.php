@@ -54,6 +54,9 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 		return FrmEntry::getOne( $entry_id, true );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function expected_free_meta() {
 		return array(
 			FrmField::get_id_by_key( 'free-text-field' )   => 'Test Testerson',
@@ -69,6 +72,9 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function get_expected_field_values() {
 		return array(
 			'free-text-field'         => 'Test Testerson',

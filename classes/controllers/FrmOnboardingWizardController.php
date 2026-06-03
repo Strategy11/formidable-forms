@@ -203,19 +203,21 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	public static function maybe_load_page() {
-		if ( self::is_onboarding_wizard_page() ) {
-			// Dismiss the onboarding wizard message so it stops appearing after it is clicked.
-			$message = new FrmInbox();
-			$message->dismiss( 'onboarding_wizard' );
-
-			add_action( 'admin_menu', self::class . '::menu', 99 );
-			add_action( 'admin_init', self::class . '::assign_properties' );
-			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
-			add_action( 'admin_head', self::class . '::remove_menu' );
-
-			add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
-			add_filter( 'frm_show_footer_links', '__return_false' );
+		if ( ! self::is_onboarding_wizard_page() ) {
+			return;
 		}
+
+		// Dismiss the onboarding wizard message so it stops appearing after it is clicked.
+		$message = new FrmInbox();
+		$message->dismiss( 'onboarding_wizard' );
+
+		add_action( 'admin_menu', self::class . '::menu', 99 );
+		add_action( 'admin_init', self::class . '::assign_properties' );
+		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+		add_action( 'admin_head', self::class . '::remove_menu' );
+
+		add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
+		add_filter( 'frm_show_footer_links', '__return_false' );
 	}
 
 	/**
@@ -453,7 +455,7 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	public static function mark_onboarding_as_skipped() {
-		update_option( self::ONBOARDING_SKIPPED_OPTION, true, 'no' );
+		update_option( self::ONBOARDING_SKIPPED_OPTION, true, false );
 	}
 
 	/**
@@ -505,7 +507,7 @@ class FrmOnboardingWizardController {
 			return true;
 		}
 
-		update_option( self::REDIRECT_STATUS_OPTION, FrmAppHelper::plugin_version(), 'no' );
+		update_option( self::REDIRECT_STATUS_OPTION, FrmAppHelper::plugin_version(), false );
 		return false;
 	}
 
@@ -639,35 +641,39 @@ class FrmOnboardingWizardController {
 				$addon       = FrmAddonsController::get_addon( $data['addon_key'] );
 				$plugin_file = $data['plugin_file'];
 
-				if ( ! is_plugin_active( $plugin_file ) && isset( $addon['url'] ) ) {
-					$is_installed = array_key_exists( $plugin_file, $plugins );
-
-					self::$available_addons[ $key ] = array(
-						'title'        => $data['title'],
-						'rel'          => $is_installed ? $plugin_file : $addon['url'],
-						'is-checked'   => false,
-						'is-installed' => $is_installed,
-						'help-text'    => $addon['excerpt'],
-					);
+				if ( is_plugin_active( $plugin_file ) || ! isset( $addon['url'] ) ) {
+					continue;
 				}
+
+				$is_installed = array_key_exists( $plugin_file, $plugins );
+
+				self::$available_addons[ $key ] = array(
+					'title'        => $data['title'],
+					'rel'          => $is_installed ? $plugin_file : $addon['url'],
+					'is-checked'   => false,
+					'is-installed' => $is_installed,
+					'help-text'    => $addon['excerpt'],
+				);
 			}
 		}//end if
 
 		// Gravity Forms Migrator add-on.
 		$gravity_forms_plugin = 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php';
 
-		if ( class_exists( 'GFForms' ) && ! is_plugin_active( $gravity_forms_plugin ) ) {
-			$is_installed_gravity_forms = array_key_exists( $gravity_forms_plugin, $plugins );
-
-			self::$available_addons['formidable-gravity-forms-importer'] = array(
-				'title'        => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
-				'rel'          => $is_installed_gravity_forms ? $gravity_forms_plugin : 'formidable-gravity-forms-importer',
-				'is-checked'   => false,
-				'is-vendor'    => true,
-				'is-installed' => $is_installed_gravity_forms,
-				'help-text'    => esc_html__( 'Easily migrate your forms from Gravity Forms to Formidable.', 'formidable' ),
-			);
+		if ( ! class_exists( 'GFForms' ) || is_plugin_active( $gravity_forms_plugin ) ) {
+			return;
 		}
+
+		$is_installed_gravity_forms = array_key_exists( $gravity_forms_plugin, $plugins );
+
+		self::$available_addons['formidable-gravity-forms-importer'] = array(
+			'title'        => esc_html__( 'Gravity Forms Migrator', 'formidable' ),
+			'rel'          => $is_installed_gravity_forms ? $gravity_forms_plugin : 'formidable-gravity-forms-importer',
+			'is-checked'   => false,
+			'is-vendor'    => true,
+			'is-installed' => $is_installed_gravity_forms,
+			'help-text'    => esc_html__( 'Easily migrate your forms from Gravity Forms to Formidable.', 'formidable' ),
+		);
 	}
 
 	/**

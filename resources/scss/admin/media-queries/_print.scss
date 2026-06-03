@@ -1,18 +1,37 @@
 @media print {
 
-	a, .misc-pub-section a {
+	a,
+	.misc-pub-section a {
 		color: #000 !important;
 	}
 
-	.add-new-h2, #frm_top_bar, .dashicons,
-	#adminmenuwrap, #adminmenuback, #wphead, #button_bar, #submitdiv, .button-secondary,
-	#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav,
-	.frm_flash_graph, .frm_no_print, object, .error {
+	.add-new-h2,
+	#frm_top_bar,
+	.dashicons,
+	#adminmenuwrap,
+	#adminmenuback,
+	#wphead,
+	#button_bar,
+	#submitdiv,
+	.button-secondary,
+	#screen-metas,
+	#screen-meta-links,
+	#footer,
+	#wpfooter,
+	.inner-sidebar,
+	.frm_form_nav,
+	.frm_flash_graph,
+	.frm_no_print,
+	object,
+	.error {
 		visibility: hidden;
 		display: none !important;
 	}
 
-	.widget, .postbox, .stuffbox, .postbox h3 {
+	.widget,
+	.postbox,
+	.stuffbox,
+	.postbox h3 {
 		border-width: 0 !important;
 		border-color: #fff;
 	}
@@ -23,7 +42,8 @@
 		position: static;
 	}
 
-	.postbox h3, .postbox h4 {
+	.postbox h3,
+	.postbox h4 {
 		background: #fff !important;
 	}
 
@@ -31,7 +51,8 @@
 		float: none;
 	}
 
-	#wpcontent, #post-body-content,
+	#wpcontent,
+	#post-body-content,
 	.has-right-sidebar #post-body,
 	#poststuff .columns-2 {
 		margin: 0 !important;
@@ -74,12 +95,14 @@
 		float: none;
 	}
 
-	.pg_odd, .pg_even {
+	.pg_odd,
+	.pg_even {
 		page-break-inside: avoid;
 		max-width: 600px;
 	}
 
-	.form-table td, .form-table th {
+	.form-table td,
+	.form-table th {
 		padding: 0;
 	}
 

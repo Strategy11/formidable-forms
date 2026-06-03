@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<style type="text/css">
 		.frm_inbox_dismiss { display: none; }
 
-		.frm-button-primary { <?php echo esc_attr( FrmEmailSummaryHelper::get_button_style() ); ?> }
+		.frm-button-primary { <?php echo esc_html( FrmEmailSummaryHelper::get_button_style() ); ?> }
 	</style>
 </head>
 

@@ -65,19 +65,19 @@ class FrmEmailSummaryHelper {
 	private static function get_options() {
 		$options = get_option( self::$option_name );
 
-		if ( ! $options ) {
-			$default_options = array(
-				// Do not send email within 15 days after updating.
-				'last_' . self::MONTHLY => self::get_date_from_today( '-' . self::DELAY_AFTER_UPGRADE . ' days' ),
-				'last_' . self::YEARLY  => '',
-				'renewal_date'          => '',
-			);
-
-			self::save_options( $default_options );
-			return $default_options;
+		if ( $options ) {
+			return $options;
 		}
 
-		return $options;
+		$default_options = array(
+			// Do not send email within 15 days after updating.
+			'last_' . self::MONTHLY => self::get_date_from_today( '-' . self::DELAY_AFTER_UPGRADE . ' days' ),
+			'last_' . self::YEARLY  => '',
+			'renewal_date'          => '',
+		);
+
+		self::save_options( $default_options );
+		return $default_options;
 	}
 
 	/**
@@ -529,7 +529,7 @@ class FrmEmailSummaryHelper {
 
 		// Add inline CSS for specific button types.
 		if ( str_contains( $button_html, 'frm-button-primary' ) ) {
-			$button_html = str_replace( '<a', '<a style="' . self::get_button_style() . '"', $button_html );
+			return str_replace( '<a', '<a style="' . self::get_button_style() . '"', $button_html );
 		}
 
 		return $button_html;

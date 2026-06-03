@@ -209,7 +209,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ), true ) ? ' show_before_content show_after_content' : '';
 			$classes .= str_starts_with( $skey, 'default-' ) ? ' hide_frm_not_email_subject' : '';
 
-			if ( in_array( $skey, array_keys( $contextual_codes ), true ) ) {
+			if ( array_key_exists( $skey, $contextual_codes ) ) {
 				$classes .= ' frm_hidden';
 			}
 

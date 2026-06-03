@@ -17,6 +17,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public $total_items = 0;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		parent::__construct( $args );
 		$this->screen->set_screen_reader_content(
@@ -89,10 +92,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	protected function get_entry_items( &$s_query, &$join_form_in_query ) {
 		global $per_page;
 		$s_query = $this->get_search_query( $join_form_in_query );
-		$order   = $this->get_order_by();
 		$limit   = $this->get_limit( $per_page );
 
-		return FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
+		return FrmEntry::getAll( $s_query, $this->get_order_by(), $limit, true, $join_form_in_query );
 	}
 
 	/**
@@ -253,6 +255,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'campaign' => 'spam-protection',
 				'content'  => 'entries-list-spam-protection',
 			);
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<p>
 				<?php esc_html_e( 'Getting spam form submissions?', 'formidable' ); ?>
@@ -261,6 +264,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				</a>
 			</p>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 		parent::display_tablenav( $which );
 	}
@@ -273,18 +277,20 @@ class FrmEntriesListHelper extends FrmListHelper {
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
 
-		if ( $which === 'top' && ! $form_id ) {
-			echo '<div class="alignleft actions">';
-
-			// Override the referrer to prevent it from being used for the screen options.
-			echo '<input type="hidden" name="_wp_http_referer" value="" />';
-
-			echo '<label for="form" class="screen-reader-text">' . esc_html__( 'Filter by form', 'formidable' ) . '</label>';
-
-			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
-			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
-			echo '</div>';
+		if ( $which !== 'top' || $form_id ) {
+			return;
 		}
+
+		echo '<div class="alignleft actions">';
+
+		// Override the referrer to prevent it from being used for the screen options.
+		echo '<input type="hidden" name="_wp_http_referer" value="" />';
+
+		echo '<label for="form" class="screen-reader-text">' . esc_html__( 'Filter by form', 'formidable' ) . '</label>';
+
+		FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
+		submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
+		echo '</div>';
 	}
 
 	/**
@@ -292,7 +298,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 *
 	 * @since 2.0.14
 	 *
-	 * @return string $primary_column
+	 * @return string Primary column.
 	 */
 	protected function get_primary_column_name() {
 		$columns        = get_column_headers( $this->screen );
@@ -325,8 +331,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param object $item
-	 * @param string $style
+	 * @param stdClass $item
+	 * @param string   $style
 	 *
 	 * @return string
 	 */
@@ -482,7 +488,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	private function maybe_fix_column_name( $column_name ) {
 		if ( str_starts_with( $column_name, '0_' ) ) {
-			$column_name = substr( $column_name, 2 );
+			return substr( $column_name, 2 );
 		}
 		return $column_name;
 	}
@@ -495,11 +501,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	private function get_actions( &$actions, $item, $view_link ) {
-		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
+		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$delete_link       = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'];
-			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . __( 'Delete', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );

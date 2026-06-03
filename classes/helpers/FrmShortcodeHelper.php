@@ -24,11 +24,7 @@ class FrmShortcodeHelper {
 			$atts = shortcode_parse_atts( $text );
 		}
 
-		if ( ! is_array( $atts ) ) {
-			$atts = array();
-		}
-
-		return $atts;
+		return is_array( $atts ) ? $atts : array();
 	}
 
 	/**
@@ -73,10 +69,9 @@ class FrmShortcodeHelper {
 	 * @return array
 	 */
 	public static function get_contextual_codes() {
-		$contextual_shortcodes = self::get_contextual_shortcodes();
-		$result                = array();
+		$result = array();
 
-		foreach ( $contextual_shortcodes as $type => $shortcodes ) {
+		foreach ( self::get_contextual_shortcodes() as $type => $shortcodes ) {
 			$result[ $type ] = array_keys( $shortcodes );
 		}
 
@@ -120,20 +115,16 @@ class FrmShortcodeHelper {
 
 		$with_tags = $args['conditional_check'] ? 3 : 2;
 
-		if ( ! empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
-			$tag  = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
-			$tag  = str_replace( ']', '', $tag );
-			$tag  = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
-			$tags = preg_split( '/\s+/', $tag, 2 );
-
-			if ( is_array( $tags ) ) {
-				$tag = $tags[0];
-			}
-		} else {
-			$tag = $shortcodes[ $with_tags - 1 ][ $short_key ];
+		if ( empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
+			return $shortcodes[ $with_tags - 1 ][ $short_key ];
 		}
 
-		return $tag;
+		$tag  = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
+		$tag  = str_replace( ']', '', $tag );
+		$tag  = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
+		$tags = preg_split( '/\s+/', $tag, 2 );
+
+		return is_array( $tags ) ? $tags[0] : $tag;
 	}
 
 	/**

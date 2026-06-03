@@ -78,8 +78,7 @@ class FrmUsageController {
 	 * @return bool
 	 */
 	public static function tracking_allowed() {
-		$settings = FrmAppHelper::get_settings();
-		return $settings->tracking;
+		return (bool) FrmAppHelper::get_settings()->tracking;
 	}
 
 	/**
@@ -119,7 +118,7 @@ class FrmUsageController {
 
 		// Exclude Trash page.
 		$form_type = FrmAppHelper::simple_get( 'form_type' );
-		return $form_type && 'published' === $form_type;
+		return 'published' === $form_type;
 	}
 
 	/**

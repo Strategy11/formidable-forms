@@ -94,7 +94,7 @@ class FrmTransLiteListsController {
 		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
 
 		if ( $screen->id === $menu_name . '_page_formidable-payments' ) {
-			$show_screen = false;
+			return false;
 		}
 
 		return $show_screen;
@@ -116,7 +116,7 @@ class FrmTransLiteListsController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.27
 		 *
 		 * @param bool   $route_handled
 		 * @param string $action
@@ -175,7 +175,7 @@ class FrmTransLiteListsController {
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
 
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
-			// if the current page is higher than the total pages,
+			// If the current page is higher than the total pages,
 			// reset it and prepare again to get the right entries.
 			$_GET['paged']     = $total_pages;
 			$_REQUEST['paged'] = $total_pages;
@@ -195,7 +195,7 @@ class FrmTransLiteListsController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {
-			$save = absint( $value );
+			return absint( $value );
 		}
 		return $save;
 	}

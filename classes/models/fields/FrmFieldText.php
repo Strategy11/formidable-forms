@@ -39,6 +39,9 @@ class FrmFieldText extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$errors     = parent::validate( $args );
 		$max_length = intval( FrmField::get_option( $this->field, 'max' ) );

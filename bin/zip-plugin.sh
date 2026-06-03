@@ -39,10 +39,14 @@ zip -r $zipname $destination \
 	-x "*/.editorconfig" \
 	-x "*/.eslintignore" \
 	-x "*/.eslintrc.json" \
+	-x "*/eslint.config.mjs" \
+	-x "*/.eslintrc" \
+	-x "*/.git" \
 	-x "*/.git/*" \
 	-x "*/.gitattributes" \
 	-x "*/.github/*" \
 	-x "*/.gitignore" \
+	-x "*/.windsurf/*" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
@@ -55,6 +59,11 @@ zip -r $zipname $destination \
 	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
+	-x "*/.coderabbit.yaml" \
+	-x "*/.deepsource.toml" \
+	-x "*/.semgrepignore" \
+	-x "*/.gitmodules" \
+	-x "*/.oxlintrc.json" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -114,9 +123,14 @@ zip -r $zipname $destination \
 	-x "*/report-task.txt" \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
+	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
-	-x "*/phpcs-sniffs/*"
+	-x "*/eslint-rules/*" \
+	-x "*/phpcs-sniffs/*" \
+	-x "$source/venv/*" \
+	-x "formidable/resources/*" \
+	-x "formidable-pro/resources/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
