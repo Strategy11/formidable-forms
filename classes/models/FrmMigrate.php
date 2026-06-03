@@ -86,10 +86,12 @@ class FrmMigrate {
 		FrmAppHelper::save_combined_js();
 
 		// Update the styling settings
-		if ( function_exists( 'get_filesystem_method' ) ) {
-			$frm_style = new FrmStyle();
-			$frm_style->update( 'default' );
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			return;
 		}
+
+		$frm_style = new FrmStyle();
+		$frm_style->update( 'default' );
 	}
 
 	/**
@@ -372,7 +374,7 @@ class FrmMigrate {
 
 		if ( str_contains( $old_db_version, '-' ) ) {
 			$last_upgrade   = explode( '-', $old_db_version );
-			$old_db_version = (int) $last_upgrade[1];
+			$old_db_version = intval( end( $last_upgrade ) );
 		}
 
 		if ( ! is_numeric( $old_db_version ) ) {
@@ -380,13 +382,15 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105 );
 
 		foreach ( $migrations as $migration ) {
-			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
-				$function_name = 'migrate_to_' . $migration;
-				$this->$function_name();
+			if ( FrmAppHelper::$db_version < $migration || $old_db_version >= $migration ) {
+				continue;
 			}
+
+			$function_name = 'migrate_to_' . $migration;
+			$this->$function_name();
 		}
 	}
 
@@ -471,6 +475,19 @@ class FrmMigrate {
 
 		if ( FrmSquareLiteConnectHelper::get_merchant_id( 'live' ) ) {
 			FrmSquareLiteConnectHelper::get_location_id( true, 'live' );
+		}
+	}
+
+	/**
+	 * Add new wp_options row for custom setting.
+	 *
+	 * @since 6.26
+	 *
+	 * @return void
+	 */
+	private function migrate_to_105() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			update_option( 'frm_show_pricing_fields_modal', 1, false );
 		}
 	}
 

@@ -191,7 +191,7 @@ class FrmTableHTMLGenerator {
 			$this->table_style .= ' class="' . esc_attr( $this->style_settings['class'] ) . '"';
 		}
 
-		if ( ! empty( $this->width ) ) {
+		if ( $this->width ) {
 			$this->table_style .= ' width="' . esc_attr( $this->width ) . '"';
 		}
 	}
@@ -204,13 +204,15 @@ class FrmTableHTMLGenerator {
 	 * @return void
 	 */
 	private function init_td_style() {
-		if ( $this->use_inline_style === true ) {
-			$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
-			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
-			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
-
-			$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
+		if ( $this->use_inline_style !== true ) {
+			return;
 		}
+
+		$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
+		$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
+		$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
+
+		$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
 	}
 
 	/**
@@ -261,7 +263,7 @@ class FrmTableHTMLGenerator {
 
 		// Check if each character in string is valid hex digit
 		if ( FrmAppHelper::ctype_xdigit( $color_markup ) ) {
-			$color_markup = '#' . $color_markup;
+			return '#' . $color_markup;
 		}
 
 		return $color_markup;
@@ -447,10 +449,6 @@ class FrmTableHTMLGenerator {
 			$class .= ' frm-child-row';
 		}
 
-		if ( $class ) {
-			$class = ' class="' . trim( $class ) . '"';
-		}
-
-		return $class;
+		return $class ? ' class="' . trim( $class ) . '"' : $class;
 	}
 }

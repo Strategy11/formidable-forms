@@ -171,15 +171,17 @@ class FrmFormsListHelper extends FrmListHelper {
 			return;
 		}
 
-		if ( 'trash' === $this->status && current_user_can( 'frm_delete_forms' ) ) {
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<div class="alignleft actions frm_visible_overflow">
-				<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
-			</div>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		if ( 'trash' !== $this->status || ! current_user_can( 'frm_delete_forms' ) ) {
+			return;
 		}
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<div class="alignleft actions frm_visible_overflow">
+			<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
+		</div>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

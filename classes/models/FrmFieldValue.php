@@ -223,10 +223,12 @@ class FrmFieldValue {
 	 * @return void
 	 */
 	protected function generate_displayed_value_for_field_type( $atts ) {
-		if ( ! FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
-			$field_obj             = FrmFieldFactory::get_field_object( $this->field );
-			$this->displayed_value = $field_obj->get_display_value( $this->displayed_value, $atts );
+		if ( FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
+			return;
 		}
+
+		$field_obj             = FrmFieldFactory::get_field_object( $this->field );
+		$this->displayed_value = $field_obj->get_display_value( $this->displayed_value, $atts );
 	}
 
 	/**
@@ -268,15 +270,17 @@ class FrmFieldValue {
 	 * @return void
 	 */
 	protected function clean_saved_value() {
-		if ( $this->saved_value !== '' ) {
-			if ( ! is_array( $this->saved_value ) && ! is_object( $this->saved_value ) ) {
-				$field_type = FrmField::get_field_type( $this->field );
-				FrmFieldsHelper::prepare_field_value( $this->saved_value, $field_type );
-			}
+		if ( $this->saved_value === '' ) {
+			return;
+		}
 
-			if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {
-				$this->saved_value = '';
-			}
+		if ( ! is_array( $this->saved_value ) && ! is_object( $this->saved_value ) ) {
+			$field_type = FrmField::get_field_type( $this->field );
+			FrmFieldsHelper::prepare_field_value( $this->saved_value, $field_type );
+		}
+
+		if ( is_array( $this->saved_value ) && ! $this->saved_value ) {
+			$this->saved_value = '';
 		}
 	}
 }

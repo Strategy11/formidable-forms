@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 104;
+	public static $db_version = 105;
 
 	/**
 	 * Used by the API add-on.
@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.27';
+	public static $plug_version = '6.31';
 
 	/**
 	 * @var bool
@@ -310,8 +310,7 @@ class FrmAppHelper {
 			return true;
 		}
 
-		$menu_icon = self::get_menu_icon_class();
-		return str_contains( $menu_icon, 'frm_logo_icon' );
+		return str_contains( self::get_menu_icon_class(), 'frm_logo_icon' );
 	}
 
 	/**
@@ -805,7 +804,7 @@ class FrmAppHelper {
 	 * @param string $sanitize
 	 * @param string $default
 	 *
-	 * @return array|string
+	 * @return array|int|string
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
 		return self::get_simple_request(
@@ -873,11 +872,7 @@ class FrmAppHelper {
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
-		if ( ! str_contains( $value, '\\\\' ) ) {
-			$value = addslashes( $value );
-		}
-
-		return $value;
+		return str_contains( $value, '\\\\' ) ? $value : addslashes( $value );
 	}
 
 	/**
@@ -953,6 +948,10 @@ class FrmAppHelper {
 	 * @param string $value
 	 */
 	public static function strip_most_html( $value ) {
+		if ( '' === $value ) {
+			return $value;
+		}
+
 		$allowed_html = array(
 			'b'      => array(),
 			'br'     => array(),
@@ -1051,8 +1050,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
-		$allowed_html = self::allowed_html( $allowed );
-		return wp_kses( $value, $allowed_html );
+		return wp_kses( $value, self::allowed_html( $allowed ) );
 	}
 
 	/**
@@ -1103,7 +1101,7 @@ class FrmAppHelper {
 		}
 
 		if ( $included_draft_hook ) {
-			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
+			return str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
 
 		return $html;
@@ -1351,11 +1349,7 @@ class FrmAppHelper {
 
 		global $wp_query;
 
-		if ( isset( $wp_query->query_vars[ $param ] ) ) {
-			$value = $wp_query->query_vars[ $param ];
-		}
-
-		return $value;
+		return $wp_query->query_vars[ $param ] ?? $value;
 	}
 
 	/**
@@ -1522,10 +1516,12 @@ class FrmAppHelper {
 	 */
 	public static function array_to_html_params( $atts, $echo = false ) {
 		$callback = function () use ( $atts ) {
-			if ( $atts ) {
-				foreach ( $atts as $key => $value ) {
-					echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
-				}
+			if ( ! $atts ) {
+				return;
+			}
+
+			foreach ( $atts as $key => $value ) {
+				echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 			}
 		};
 		return self::clip( $callback, $echo );
@@ -1829,7 +1825,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param int|string $value The value to compare.
+	 * @param bool|int|string $value The value to compare.
 	 *
 	 * @return bool
 	 */
@@ -2343,8 +2339,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$user_id   = get_current_user_id();
-		$user      = new WP_User( $user_id );
+		$user      = new WP_User( get_current_user_id() );
 		$frm_roles = self::frm_capabilities();
 
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
@@ -2363,13 +2358,15 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function force_capability( $cap = 'frm_change_settings' ) {
-		if ( current_user_can( 'administrator' ) && ! current_user_can( $cap ) ) {
-			$role      = get_role( 'administrator' );
-			$frm_roles = self::frm_capabilities();
+		if ( ! current_user_can( 'administrator' ) || current_user_can( $cap ) ) {
+			return;
+		}
 
-			foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-				$role->add_cap( $frm_role );
-			}
+		$role      = get_role( 'administrator' );
+		$frm_roles = self::frm_capabilities();
+
+		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+			$role->add_cap( $frm_role );
 		}
 	}
 
@@ -2385,13 +2382,15 @@ class FrmAppHelper {
 	public static function permission_check( $permission, $show_message = 'show' ) {
 		$permission_error = self::permission_nonce_error( $permission );
 
-		if ( $permission_error !== false ) {
-			if ( 'hide' === $show_message ) {
-				$permission_error = '';
-			}
-
-			wp_die( esc_html( $permission_error ) );
+		if ( $permission_error === false ) {
+			return;
 		}
+
+		if ( 'hide' === $show_message ) {
+			$permission_error = '';
+		}
+
+		wp_die( esc_html( $permission_error ) );
 	}
 
 	/**
@@ -2465,14 +2464,14 @@ class FrmAppHelper {
 			$original_function = $function;
 			$function          = count( $value ) ? explode( ', ', FrmDb::prepare_array_values( $value, $function ) ) : array( $function );
 
-			if ( ! self::is_assoc( $value ) ) {
-				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
-			} else {
+			if ( self::is_assoc( $value ) ) {
 				foreach ( $value as $k => $v ) {
 					if ( ! is_array( $v ) ) {
 						$value[ $k ] = call_user_func( $original_function, $v );
 					}
 				}
+			} else {
+				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
 			}
 		} else {
 			$value = self::maybe_update_value_if_null( $value, $function );
@@ -2494,7 +2493,7 @@ class FrmAppHelper {
 	 */
 	private static function maybe_update_value_if_null( $value, $function ) {
 		if ( null === $value && in_array( $function, array( 'trim', 'strlen' ), true ) ) {
-			$value = '';
+			return '';
 		}
 
 		return $value;
@@ -2581,7 +2580,7 @@ class FrmAppHelper {
 	 */
 	public static function use_wpautop( $content ) {
 		if ( apply_filters( 'frm_use_wpautop', true ) && is_string( $content ) ) {
-			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
+			return wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 
 		return $content;
@@ -2624,7 +2623,7 @@ class FrmAppHelper {
 		$query = $wp_scripts->registered[ $handle ];
 
 		if ( is_object( $query ) && ! empty( $query->ver ) ) {
-			$ver = $query->ver;
+			return $query->ver;
 		}
 
 		return $ver;
@@ -2781,7 +2780,7 @@ class FrmAppHelper {
 	 */
 	private static function maybe_clear_long_key( $key, $column ) {
 		if ( 'field_key' === $column && strlen( $key ) >= 70 ) {
-			$key = '';
+			return '';
 		}
 		return $key;
 	}
@@ -2884,15 +2883,18 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
-		if ( $fields ) {
-			foreach ( (array) $fields as $field ) {
-				if ( ! self::is_admin_page() ) {
-					// Don't prep default values on the form settings page.
-					$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
-				}
-				$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
-				self::fill_field_defaults( $field, $record, $values, $args );
+		if ( ! $fields ) {
+			return;
+		}
+
+		foreach ( (array) $fields as $field ) {
+			if ( ! self::is_admin_page() ) {
+				// Don't prep default values on the form settings page.
+				$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
 			}
+
+			$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
+			self::fill_field_defaults( $field, $record, $values, $args );
 		}
 	}
 
@@ -3063,14 +3065,21 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Truncate a string.
+	 *
+	 * Note: By default, this function will allow for a few additional characters more than $length.
+	 * If a string has no spaces, it allows up to 50 additional characters. To force a true length limit,
+	 * use $force_length_limit = true.
+	 *
 	 * @param mixed      $original_string
 	 * @param int|string $length
 	 * @param int        $minword
 	 * @param string     $continue
+	 * @param bool       $force_length_limit Force the final string to never exceed the length limit.
 	 *
 	 * @return string
 	 */
-	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
+	public static function truncate( $original_string, $length, $minword = 3, $continue = '...', $force_length_limit = false ) {
 		if ( ! is_string( $original_string ) && ! is_int( $original_string ) ) {
 			return '';
 		}
@@ -3086,6 +3095,11 @@ class FrmAppHelper {
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
+
+			if ( $force_length_limit ) {
+				return $sub;
+			}
+
 			return $sub . ( $length < $original_len ? $continue : '' );
 		}
 
@@ -3115,7 +3129,18 @@ class FrmAppHelper {
 			unset( $total_len, $word );
 		}
 
-		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length );
+		$sub = self::maybe_force_truncate_on_string_with_no_spaces( $sub, $length, $force_length_limit );
+
+		if ( $force_length_limit ) {
+			// Ensure the final string doesn't exceed the length limit.
+			$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
+
+			if ( $final_len > $length ) {
+				return self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
+			}
+
+			return $sub;
+		}
 
 		return $sub . ( $len < $original_len ? $continue : '' );
 	}
@@ -3125,25 +3150,37 @@ class FrmAppHelper {
 	 *
 	 * @since 6.5.4
 	 *
-	 * @param string $sub    Current substring.
-	 * @param int    $length The length limit.
+	 * @param string $sub                Current substring.
+	 * @param int    $length             The length limit.
+	 * @param bool   $force_length_limit Force the string to not exceed the length limit.
 	 *
 	 * @return string
 	 */
-	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length ) {
-		if ( strlen( $sub ) < $length + 50 ) {
-			// If the string isn't way over the limit, leave it.
-			return $sub;
+	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length, $force_length_limit = false ) {
+		if ( ! $force_length_limit ) {
+			if ( strlen( $sub ) < $length + 50 ) {
+				// If the string isn't way over the limit, leave it.
+				return $sub;
+			}
+
+			$first_space = strpos( $sub, ' ', $length );
+
+			if ( false !== $first_space ) {
+				// Ignore anything with spaces.
+				return $sub;
+			}
+
+			return substr( $sub, 0, $length + 10 );
 		}
 
-		$first_space = strpos( $sub, ' ', $length );
+		// When force_length_limit is true, ensure the string doesn't exceed the length.
+		$final_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $sub ) );
 
-		if ( false !== $first_space ) {
-			// Ignore anything with spaces.
-			return $sub;
+		if ( $final_len > $length ) {
+			return self::mb_function( array( 'mb_substr', 'substr' ), array( $sub, 0, $length ) );
 		}
 
-		return substr( $sub, 0, $length + 10 );
+		return $sub;
 	}
 
 	/**
@@ -3418,7 +3455,7 @@ class FrmAppHelper {
 	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
-		return ( $r_count < $current_p * $p_size ? $r_count : $current_p * $p_size );
+		return $r_count < $current_p * $p_size ? $r_count : $current_p * $p_size;
 	}
 
 	/**
@@ -3674,11 +3711,7 @@ class FrmAppHelper {
 
 		$parsed = FrmSerializedStringParserHelper::get()->parse( $value );
 
-		if ( is_array( $parsed ) ) {
-			$value = $parsed;
-		}
-
-		return $value;
+		return is_array( $parsed ) ? $parsed : $value;
 	}
 
 	/**
@@ -3703,7 +3736,7 @@ class FrmAppHelper {
 		}
 
 		if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
-			$string = $new_string;
+			return $new_string;
 		}
 
 		return $string;
@@ -3782,10 +3815,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function maybe_json_encode( $value ) {
-		if ( is_array( $value ) ) {
-			$value = wp_json_encode( $value );
-		}
-		return $value;
+		return is_array( $value ) ? wp_json_encode( $value ) : $value;
 	}
 
 	/**
@@ -3822,8 +3852,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function load_admin_wide_js( $load = true ) {
-		$version = self::plugin_version();
-		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
+		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), self::plugin_version() );
 
 		$global_strings = array(
 			'updating_msg'                  => __( 'Please wait while your site updates.', 'formidable' ),
@@ -3923,6 +3952,8 @@ class FrmAppHelper {
 				/* translators: %d is the number of allowed actions per form */
 				'only_one_action'                    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
 				'edit_action_text'                   => __( 'Please edit the existing form action.', 'formidable' ),
+				'only_one_payment_action'            => __( 'This form already has a payment action, and is currently limited to a single payment action.', 'formidable' ),
+				'only_one_stripe_action'             => __( 'This form already has a payment action. Multiple Stripe actions are available when using the Stripe add-on, available for Formidable Business licenses and higher.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'unsafe_params'                      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
 				'slug_is_reserved'                   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -3953,6 +3984,9 @@ class FrmAppHelper {
 				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
 			);
+
+			self::add_form_builder_modal_data( $admin_script_strings );
+
 			/**
 			 * @param array $admin_script_strings
 			 */
@@ -3964,6 +3998,74 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+	}
+
+	/**
+	 * @param array $admin_script_strings
+	 *
+	 * @return void
+	 */
+	private static function add_form_builder_modal_data( &$admin_script_strings ) {
+		if ( ! self::is_form_builder_page() || self::pro_is_installed() ) {
+			return;
+		}
+
+		$stripe_connected      = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+		$square_connected      = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$paypal_connected      = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+		$gateway_connected     = $stripe_connected || $square_connected || $paypal_connected;
+		$payments_settings_url = FrmStrpLiteAppController::get_payments_settings_url();
+
+		if ( ! $gateway_connected ) {
+			// This modal shows when user clicks on one of the pricing fields and no payment gateways configured.
+			$admin_script_strings['paymentsSettingsModal'] = array(
+				'title'      => __( 'Setup a Payment Gateway first', 'formidable' ),
+				'msg'        => __( 'To use the payment fields, please install and configure a payment gateway in your account settings.', 'formidable' ),
+				'closeText'  => __( 'Close', 'formidable' ),
+				'actionUrl'  => $payments_settings_url,
+				'actionText' => __( 'Go to Payment Settings', 'formidable' ),
+				'noCenter'   => true,
+			);
+		}
+
+		// This modal shows on load once after upgrading the plugin.
+		$show_pricing_fields_modal = get_option( 'frm_show_pricing_fields_modal' );
+
+		if ( ! $show_pricing_fields_modal ) {
+			return;
+		}
+
+		$admin_script_strings['pricingFieldsModal'] = array(
+			'title'    => esc_html__( 'Start Accepting Payments Today!', 'formidable' ),
+			'img'      => esc_url( self::plugin_url() . '/images/upsell/pricing-fields.png' ),
+			'noCenter' => true,
+		);
+
+		if ( $gateway_connected ) {
+			$gateway_texts = array();
+
+			if ( $stripe_connected ) {
+				$gateway_texts['stripe'] = esc_html__( 'Stripe', 'formidable' );
+			}
+
+			if ( $square_connected ) {
+				$gateway_texts['square'] = esc_html__( 'Square', 'formidable' );
+			}
+
+			$admin_script_strings['pricingFieldsModal']['msg'] = sprintf(
+				// translators: %s: Stripe or Square.
+				esc_html__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
+				esc_html( implode( ' ' . esc_html__( 'and', 'formidable' ) . ' ', $gateway_texts ) )
+			);
+		} else {
+			$admin_script_strings['pricingFieldsModal']['closeText']  = __( 'I\'ll do it later!', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
+			// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
+		}//end if
+
+		delete_option( 'frm_show_pricing_fields_modal' );
 	}
 
 	/**
@@ -4491,9 +4593,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function maybe_filter_array( $values, $keys ) {
-		$allow_unfiltered_html = self::allow_unfiltered_html();
-
-		if ( $allow_unfiltered_html ) {
+		if ( self::allow_unfiltered_html() ) {
 			return $values;
 		}
 
@@ -4519,7 +4619,7 @@ class FrmAppHelper {
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {
 		if ( self::should_never_allow_unfiltered_html() ) {
-			$value = self::kses( $value, $allowed );
+			return self::kses( $value, $allowed );
 		}
 		return $value;
 	}
@@ -4608,12 +4708,7 @@ class FrmAppHelper {
 	 */
 	public static function show_new_feature( $feature ) {
 		$link = FrmAddonsController::install_link( $feature );
-
-		if ( array_key_exists( 'status', $link ) || array_key_exists( 'class', $link ) ) {
-			return true;
-		}
-
-		return 'coupons' === $feature && class_exists( 'FrmCouponsAppController' );
+		return array_key_exists( 'status', $link ) || array_key_exists( 'class', $link );
 	}
 
 	/**
@@ -5009,11 +5104,16 @@ class FrmAppHelper {
 	 *
 	 * @since 6.24
 	 *
-	 * @param string $string The string to check.
+	 * @param string|null $string The string to check.
 	 *
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {
+		if ( is_null( $string ) ) {
+			// Return true so we do not attempt to change encoding on a null value.
+			return true;
+		}
+
 		// wp_is_valid_utf8 is added in WP 6.9.
 		if ( function_exists( 'wp_is_valid_utf8' ) ) {
 			return wp_is_valid_utf8( $string );

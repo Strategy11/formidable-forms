@@ -535,7 +535,7 @@ class FrmSalesApi extends FrmFormApi {
 					return;
 				}
 
-				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && ! empty( self::$cross_sell_link ) ) {
+				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && self::$cross_sell_link ) {
 					wp_redirect( self::$cross_sell_link );
 					exit;
 				}

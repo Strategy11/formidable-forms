@@ -232,7 +232,7 @@ class FrmAddonsHelper {
 	 * @return string
 	 */
 	private static function prepare_single_addon_classes( $addon ) {
-		$class_names   = array( 'frm-card-item frm-flex-col' );
+		$class_names   = array( 'frm-card-item frm-card-item--outlined frm-flex-col' );
 		$class_names[] = 'plugin-card-' . $addon['slug'];
 		$class_names[] = 'frm-addon-' . $addon['status']['type'];
 
@@ -290,13 +290,12 @@ class FrmAddonsHelper {
 	 * @return void
 	 */
 	public static function show_five_star_rating( $color = 'black' ) {
-		$icon = file_get_contents( FrmAppHelper::plugin_path() . '/images/star.svg' );
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span style="color: <?php echo esc_attr( $color ); ?>;">
 			<?php
 			for ( $i = 0; $i < 5; $i++ ) {
-				echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				readfile( FrmAppHelper::plugin_path() . '/images/star.svg' );
 			}
 			?>
 		</span>

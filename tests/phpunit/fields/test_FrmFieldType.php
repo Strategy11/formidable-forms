@@ -159,7 +159,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
 			$frm_field_type->sanitize_value( $value['value'] );
-			$this->assertEquals( $value['expected'], $value['value'] );
+			$this->assertSame( $value['expected'], $value['value'] );
 		}
 	}
 
@@ -198,9 +198,9 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$checkbox = FrmFieldFactory::get_field_type( 'checkbox', $field );
 
-		$this->assertSame( $checkbox->get_import_value( 'a,b' ), 'a,b' );
-		$this->assertEquals( $checkbox->get_import_value( 'a,c' ), array( 'a', 'c' ) );
-		$this->assertSame( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
+		$this->assertSame( 'a,b', $checkbox->get_import_value( 'a,b' ) );
+		$this->assertSame( array( 'a', 'c' ), $checkbox->get_import_value( 'a,c' ) );
+		$this->assertSame( 'a,b,c', $checkbox->get_import_value( 'a,b,c' ) );
 	}
 
 	/**
@@ -278,7 +278,7 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {
 			$this->run_private_method( array( $field_object, 'add_aria_description' ), array( $args, &$actual ) );
-			$this->assertEquals( $expected, $actual );
+			$this->assertSame( $expected, $actual );
 		}
 	}
 

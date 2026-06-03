@@ -28,7 +28,7 @@ class test_FrmInbox extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_message_count( $count, $message ) {
-		$this->assertEquals( $count, $this->get_message_count(), $message );
+		$this->assertSame( $count, $this->get_message_count(), $message );
 	}
 
 	private function get_message_count() {

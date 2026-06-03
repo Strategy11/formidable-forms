@@ -190,8 +190,6 @@ class SimplifyIfReturnSniff implements Sniff {
 				T_CLOSURE,
 				T_FUNCTION,
 				T_CLASS,
-				T_ARRAY,       // array() syntax - could be long.
-				T_OPEN_SHORT_ARRAY, // [] syntax - could be long.
 				T_INLINE_THEN, // ? - already a ternary, don't nest.
 				T_INLINE_ELSE, // : - part of a ternary.
 			);
@@ -200,10 +198,54 @@ class SimplifyIfReturnSniff implements Sniff {
 				$hasComplex = true;
 				break;
 			}
+
+			// Allow empty arrays but block non-empty ones.
+			if ( $tokens[ $i ]['code'] === T_ARRAY || $tokens[ $i ]['code'] === T_OPEN_SHORT_ARRAY ) {
+				if ( ! $this->isEmptyArray( $phpcsFile, $i ) ) {
+					$hasComplex = true;
+					break;
+				}
+			}
 		}
 
 		// Allow returns with up to ~10 tokens (simple expressions).
 		return ! $hasComplex && $tokenCount <= 10;
+	}
+
+	/**
+	 * Check if an array token represents an empty array.
+	 *
+	 * Handles both array() and [] syntax.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the T_ARRAY or T_OPEN_SHORT_ARRAY token.
+	 *
+	 * @return bool
+	 */
+	private function isEmptyArray( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( $tokens[ $stackPtr ]['code'] === T_ARRAY ) {
+			// array() syntax: find the opening parenthesis and check if the next non-whitespace is the closer.
+			$openParen = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $stackPtr + 1 );
+
+			if ( false === $openParen || ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+				return false;
+			}
+
+			$nextNonWs = $phpcsFile->findNext( T_WHITESPACE, $openParen + 1, null, true );
+
+			return false !== $nextNonWs && $nextNonWs === $tokens[ $openParen ]['parenthesis_closer'];
+		}
+
+		// [] syntax: check if the bracket closer is immediately after (no elements).
+		if ( ! isset( $tokens[ $stackPtr ]['bracket_closer'] ) ) {
+			return false;
+		}
+
+		$nextNonWs = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		return false !== $nextNonWs && $nextNonWs === $tokens[ $stackPtr ]['bracket_closer'];
 	}
 
 	/**

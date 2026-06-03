@@ -145,7 +145,7 @@ class UpdateOptionAutoloadBooleanSniff implements Sniff {
 				$level--;
 			}
 
-			$nextIsSeparator = ( $code === T_COMMA && 0 === $level );
+			$nextIsSeparator = $code === T_COMMA && 0 === $level;
 
 			if ( false === $argStart ) {
 				continue;

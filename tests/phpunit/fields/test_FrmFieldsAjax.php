@@ -73,7 +73,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			)
 		);
 		$this->assertNotEmpty( $original_field->id );
-		$this->assertEquals( $format, $original_field->field_options['format'] );
+		$this->assertSame( $format, $original_field->field_options['format'] );
 
 		$_POST = array(
 			'action'   => 'frm_duplicate_field',
@@ -93,7 +93,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		// Make sure the field exists.
 		$field = FrmField::getOne( $newest_field_id );
 		$this->assertIsObject( $field, 'Field id ' . $newest_field_id . ' does not exist' );
-		$this->assertEquals( $format, $field->field_options['format'] );
+		$this->assertSame( $format, $field->field_options['format'] );
 
 		self::check_in_section_variable( $field, 0 );
 	}
@@ -149,6 +149,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertTrue( isset( $field->field_options['in_section'] ), $message );
 
 		$message = 'The in_section variable is not set to the correct value when a ' . $field->type . ' field is duplicated.';
-		$this->assertEquals( $expected, $field->field_options['in_section'], $message );
+		$this->assertSame( $expected, $field->field_options['in_section'], $message );
 	}
 }

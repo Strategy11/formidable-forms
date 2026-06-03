@@ -26,7 +26,7 @@ class FrmFieldFactory {
 		}
 
 		if ( ! is_object( $selector ) ) {
-			$selector = new FrmFieldValueSelector( $field_id, $args );
+			return new FrmFieldValueSelector( $field_id, $args );
 		}
 
 		return $selector;
@@ -105,6 +105,9 @@ class FrmFieldFactory {
 			// Submit button field.
 			FrmSubmitHelper::FIELD_TYPE    => 'FrmFieldSubmit',
 			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
+			'product'                      => 'FrmFieldProduct',
+			'quantity'                     => 'FrmFieldQuantity',
+			'total'                        => 'FrmFieldTotal',
 		);
 
 		$class = $type_classes[ $field_type ] ?? '';

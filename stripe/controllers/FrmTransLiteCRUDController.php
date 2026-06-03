@@ -115,18 +115,17 @@ class FrmTransLiteCRUDController {
 		$default = reset( $allowed );
 		$name    = FrmAppHelper::get_param( 'type', $default, 'get', 'sanitize_text_field' );
 
-		if ( ! in_array( $name, $allowed, true ) ) {
-			$name = $default;
-		}
-
-		return $name;
+		return in_array( $name, $allowed, true ) ? $name : $default;
 	}
 
 	/**
 	 * @return FrmTransLitePayment|FrmTransLiteSubscription
 	 */
 	private static function the_class() {
-		$class_name = self::table_name() === 'subscriptions' ? 'FrmTransLiteSubscription' : 'FrmTransLitePayment';
-		return new $class_name();
+		if ( self::table_name() === 'subscriptions' ) {
+			return new FrmTransLiteSubscription();
+		}
+
+		return new FrmTransLitePayment();
 	}
 }

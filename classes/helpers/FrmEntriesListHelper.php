@@ -92,10 +92,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	protected function get_entry_items( &$s_query, &$join_form_in_query ) {
 		global $per_page;
 		$s_query = $this->get_search_query( $join_form_in_query );
-		$order   = $this->get_order_by();
 		$limit   = $this->get_limit( $per_page );
 
-		return FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
+		return FrmEntry::getAll( $s_query, $this->get_order_by(), $limit, true, $join_form_in_query );
 	}
 
 	/**
@@ -332,8 +331,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param object $item
-	 * @param string $style
+	 * @param stdClass $item
+	 * @param string   $style
 	 *
 	 * @return string
 	 */
@@ -489,7 +488,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	private function maybe_fix_column_name( $column_name ) {
 		if ( str_starts_with( $column_name, '0_' ) ) {
-			$column_name = substr( $column_name, 2 );
+			return substr( $column_name, 2 );
 		}
 		return $column_name;
 	}

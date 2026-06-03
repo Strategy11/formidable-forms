@@ -2,7 +2,8 @@
  * Components - Settings - Adv Info
  */
 
-#form_settings_page #frm_adv_info, #frm_builder_page #frm_adv_info {
+#form_settings_page #frm_adv_info,
+#frm_builder_page #frm_adv_info {
 	display: none;
 	top: 0;
 	width: 310px;
@@ -44,12 +45,6 @@
 #postbox-container-2 #frm_advanced .inside h3 {
 	margin: 15px -25px;
 	font-weight: 600;
-}
-
-#form_settings_page .frm-inner-content {
-	padding-top: 0;
-	padding-bottom: 150px;
-	position: relative;
 }
 
 .frm_wrap #submitdiv {

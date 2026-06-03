@@ -119,16 +119,20 @@ class FrmStyle {
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
 
-			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
-				$css_scope = 'frm_style_' . $new_instance['post_name'];
-				$new_instance['post_content']['single_style_custom_css'] = $css_scope_helper->nest( $new_instance['post_content']['single_style_custom_css'], $css_scope );
-			}
-
 			$new_instance['post_type']   = FrmStylesController::$post_type;
 			$new_instance['post_status'] = 'publish';
 
 			if ( ! $id ) {
-				$new_instance['post_name'] = $new_instance['post_title'];
+				// For a new style (including a duplicate), the post_name is derived from the title.
+				// Resolve slug uniqueness up front (WordPress appends -2, -3, etc. to duplicate slugs)
+				// so the CSS scope below matches the slug WordPress will actually store.
+				$slug                      = sanitize_title( $new_instance['post_title'] );
+				$new_instance['post_name'] = wp_unique_post_slug( $slug, 0, $new_instance['post_status'], $new_instance['post_type'], 0 );
+			}
+
+			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
+				$css_scope = 'frm_style_' . $new_instance['post_name'];
+				$new_instance['post_content']['single_style_custom_css'] = $css_scope_helper->nest( $new_instance['post_content']['single_style_custom_css'], $css_scope );
 			}
 
 			$default_settings = $this->get_defaults();
@@ -213,7 +217,7 @@ class FrmStyle {
 				} else {
 					$new_value = absint( $value );
 				}
-			} else {
+			} else { // phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				// Insert a value for alpha.
 				if ( $value_is_empty_string ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
@@ -392,9 +396,7 @@ class FrmStyle {
 	 * @return array
 	 */
 	public function get_color_settings() {
-		$defaults = $this->get_defaults();
-		$settings = array_keys( $defaults );
-
+		$settings = array_keys( $this->get_defaults() );
 		return array_filter( $settings, array( $this, 'is_color' ) );
 	}
 

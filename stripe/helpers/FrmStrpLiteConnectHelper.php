@@ -154,10 +154,6 @@ class FrmStrpLiteConnectHelper {
 		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
 
-		if ( ! $headers ) {
-			return 'Unable to build headers for post. Is your pro license configured properly?';
-		}
-
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;
 
@@ -566,12 +562,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
-
-		if ( 2 === count( $split_on_language ) ) {
-			$url = $split_on_language[0];
-		}
-
-		return $url;
+		return 2 === count( $split_on_language ) ? $split_on_language[0] : $url;
 	}
 
 	/**
@@ -707,7 +698,7 @@ class FrmStrpLiteConnectHelper {
 		$success = false !== $data;
 
 		if ( ! $success ) {
-			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
+			return self::$latest_error_from_stripe_connect ? self::$latest_error_from_stripe_connect : false;
 		}
 
 		return ! empty( $data->customer_id ) ? $data->customer_id : false;
@@ -819,9 +810,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|object
 	 */
 	public static function get_customer_subscriptions() {
-		$user_id     = get_current_user_id();
 		$meta_name   = FrmStrpLiteAppHelper::get_customer_id_meta_name();
-		$customer_id = get_user_meta( $user_id, $meta_name, true );
+		$customer_id = get_user_meta( get_current_user_id(), $meta_name, true );
 		$data        = self::post_with_authenticated_body( 'get_customer_subscriptions', compact( 'customer_id' ) );
 
 		return false === $data ? false : $data->subscriptions;
@@ -957,11 +947,10 @@ class FrmStrpLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
 

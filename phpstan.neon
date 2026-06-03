@@ -99,6 +99,7 @@ parameters:
 			message: '#Call to protected method+#'
 			paths:
 				- classes/views/frm-fields/back-end/combo-field/sub-field-options.php
+				- classes/views/frm-fields/back-end/field-options.php
 				- classes/views/frm-fields/back-end/phone/phone-type.php
 				- classes/views/frm-fields/front-end/combo-field/combo-field.php
 		-
@@ -130,10 +131,14 @@ parameters:
 				- classes/controllers/FrmSettingsController.php
 				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
 				- classes/models/FrmMigrate.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
+				- paypal/controllers/FrmPayPalLiteFieldsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 				- stubs.php
 		-
-			message: '#with no type specified#'
+			message: '#no type specified#'
 			paths:
+				- paypal/controllers/FrmPayPalLiteActionsController.php
 				- stubs.php
 		-
 			message: '#in isset\(\) is not nullable#'
@@ -148,18 +153,17 @@ parameters:
 				- classes/views/frm-entries/show.php
 				- classes/views/frm-forms/add_field.php
 		-
-			message: '#is never read, only written#'
-			path: classes/helpers/FrmFieldGridHelper.php
-		-
 			message: '#is unused.#'
 			paths:
-				- classes/models/FrmField.php
 				- classes/controllers/FrmSimpleBlocksController.php
-				- classes/helpers/FrmFieldGridHelper.php
-				- square/controllers/FrmSquareLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
+				- stripe/controllers/FrmTransLiteSubscriptionsController.php
 		-
 			message: '#on left side of \?\?#'
-			path: stripe/controllers/FrmTransLiteActionsController.php
+			paths:
+				- stripe/controllers/FrmTransLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 		-
 			message: '#fwrite expects resource, resource\|null given#'
 			path: classes/helpers/FrmCSVExportHelper.php
@@ -254,6 +258,12 @@ parameters:
 				- stripe/helpers/FrmStrpLiteConnectApiAdapter.php
 				- stripe/helpers/FrmTransLiteListHelper.php
 				- stripe/models/FrmStrpLiteSettings.php
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
+				- paypal/controllers/FrmPayPalLiteEventsController.php
+				- paypal/helpers/FrmPayPalLiteApiHelper.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
+				- paypal/models/FrmPayPalLiteSettings.php
 		- message: '#results in an error.#'
 		- message: '#Possibly invalid array key type mixed#'
 		- message: '#of encapsed string cannot be cast to string#'
@@ -272,6 +282,10 @@ parameters:
 				- classes/models/FrmSalesApi.php
 				- classes/models/FrmTableHTMLGenerator.php
 				- classes/models/FrmYoutubeFeedApi.php
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
+				- paypal/controllers/FrmPayPalLiteEventsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 				- square/controllers/FrmSquareLiteAppController.php
 				- stripe/controllers/FrmStrpLiteLinkController.php
 				- stripe/controllers/FrmTransLiteCRUDController.php
@@ -292,12 +306,15 @@ parameters:
 				- classes/views/styles/_styles-list.php
 				- css/_single_theme.css.php
 				- css/custom_theme.css.php
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
 				- square/controllers/FrmSquareLiteActionsController.php
 				- square/controllers/FrmSquareLiteAppController.php
 				- stripe/controllers/FrmStrpLiteLinkController.php
 				- stripe/controllers/FrmTransLiteActionsController.php
 				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
 				- stripe/models/FrmStrpLiteAuth.php
+				- stripe/views/action-settings/payments-options.php
 		-
 			message: '#cannot be converted to string.#'
 			paths:
@@ -331,6 +348,8 @@ parameters:
 				- classes/helpers/FrmFormsHelper.php
 				- classes/helpers/FrmXMLHelper.php
 				- classes/models/FrmEntryValidate.php
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 		- message: '#Possibly invalid array key#'
 		-
 			message: '#should return array<(string|array)> but returns array#'
@@ -351,7 +370,7 @@ parameters:
 		-
 			message: '#function array_map expects#'
 			paths:
-				- classes/helpers/FrmAppHelper.php  
+				- classes/helpers/FrmAppHelper.php
 				- classes/helpers/FrmHtmlHelper.php
 				- classes/models/FrmEntry.php
 				- classes/models/fields/FrmFieldType.php
@@ -373,11 +392,6 @@ parameters:
 		- message: '#array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics.#'
 		- message: '#Static call to __construct\(\) is only allowed on a parent class in the constructor#'
 		- message: '#Variable static method call on#'
-		-
-			message: '#should be contravariant with#'
-			paths:
-				- classes/helpers/FrmFormsListHelper.php
-				- classes/models/FrmInstallerSkin.php
 		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
 		-
 			message: '#Foreach overwrites \$ip with its value variable.#'
@@ -396,3 +410,22 @@ parameters:
 			message: '#always exists and is not falsy.#'
 			paths:
 				- classes/models/FrmAddon.php
+		-
+			message: '#does not extend any class#'
+			path: classes/views/frm-form-actions/default_actions.php
+		-
+			message: '#in empty\(\) does not exist#'
+			paths:
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
+		-
+			message: "#Casting to .+ something that's already#"
+			paths:
+				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/helpers/FrmPayPalLiteConnectHelper.php
+		-
+			message: '#is not subtype of native type#'
+			path: paypal/helpers/FrmPayPalLiteConnectHelper.php
+		-
+			message: '#Switch condition type#'
+			path: paypal/controllers/FrmPayPalLiteAppController.php
