@@ -438,6 +438,7 @@ class FrmStyle {
 		if ( $add_css_to_uploads_dir ) {
 			$create_file_args['folder_name'] = 'formidable/css';
 		}
+
 		return $create_file_args;
 	}
 
@@ -445,6 +446,7 @@ class FrmStyle {
 	 * @since x.x
 	 *
 	 * @param bool $add_css_to_uploads_dir
+	 *
 	 * @return string
 	 */
 	public static function get_generated_css_file_path( $add_css_to_uploads_dir ) {

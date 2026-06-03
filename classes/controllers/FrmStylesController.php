@@ -246,8 +246,7 @@ class FrmStylesController {
 			return;
 		}
 
-		$base_url = $add_css_to_uploads_dir ? wp_upload_dir()['baseurl'] . '/formidable/css/' : FrmAppHelper::plugin_url() . '/css/';
-
+		$base_url                      = $add_css_to_uploads_dir ? wp_upload_dir()['baseurl'] . '/formidable/css/' : FrmAppHelper::plugin_url() . '/css/';
 		$stylesheet_urls['formidable'] = $base_url . self::get_file_name();
 	}
 
