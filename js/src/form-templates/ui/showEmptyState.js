@@ -27,7 +27,7 @@ export function showSearchEmptyState() {
 	if ( VIEW_SLUGS.SEARCH === emptyState.dataset?.view ) {
 		if ( notEmptySearchText ) {
 			show( emptyState );
-			hideElements([ pageTitle, applicationTemplates ]);
+			hideElements( [ pageTitle, applicationTemplates ] );
 		} else {
 			hide( emptyState );
 			emptyState.removeAttribute( 'data-view' );
@@ -49,9 +49,9 @@ export function showSearchEmptyState() {
 	emptyStateButton.textContent = __( 'Start from Scratch', 'formidable' );
 
 	// Display the empty state
-	hideElements([ pageTitle, applicationTemplates ]);
-	showElements([ emptyState, emptyStateButton ]);
-};
+	hideElements( [ pageTitle, applicationTemplates ] );
+	showElements( [ emptyState, emptyStateButton ] );
+}
 
 /**
  * Display the favorites-empty state.
@@ -73,9 +73,9 @@ export function showFavoritesEmptyState() {
 	);
 
 	// Display the empty state
-	hideElements([ pageTitle, emptyStateButton ]);
+	hideElements( [ pageTitle, emptyStateButton ] );
 	show( emptyState );
-};
+}
 
 /**
  * Display the custom-empty state.
@@ -99,8 +99,8 @@ export function showCustomTemplatesEmptyState() {
 
 	// Display the empty state
 	hide( pageTitle );
-	showElements([ emptyState, emptyStateButton ]);
-};
+	showElements( [ emptyState, emptyStateButton ] );
+}
 
 /**
  * Display the available-templates-empty state.
@@ -118,11 +118,12 @@ export function showAvailableTemplatesEmptyState() {
 	const { extraTemplatesCount } = getState();
 	emptyStateTitle.textContent = __( 'No Templates Available', 'formidable' );
 	emptyStateText.textContent = sprintf(
+		// translators: %s is the number of extra templates available
 		__( 'Upgrade to PRO for %s+ options or explore Free Templates.', 'formidable' ),
 		extraTemplatesCount
 	);
 
 	// Display the empty state
-	hideElements([ pageTitle, emptyStateButton ]);
+	hideElements( [ pageTitle, emptyStateButton ] );
 	show( emptyState );
-};
+}

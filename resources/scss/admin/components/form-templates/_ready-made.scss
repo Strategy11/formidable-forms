@@ -1,0 +1,25 @@
+/**
+ * Ready-made solution styles
+ */
+
+.frm-ready-made-solution:not(.frm-search-result) {
+	display: none !important;
+}
+
+#frm_leave_email_wrapper .frmsvg {
+	top: 0;
+}
+
+#frm-add-my-email-address {
+	margin-top: 30px;
+}
+
+.frm-ready-made-solution h3 ~ a {
+	color: var(--primary-500);
+}
+
+.frm-ready-made-solution img {
+	max-width: 100%;
+	display: block;
+	box-shadow: var(--box-shadow-lg);
+}

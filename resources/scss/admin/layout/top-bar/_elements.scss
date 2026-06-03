@@ -1,0 +1,59 @@
+/**
+ * Layout - Top Bar - Elements
+ */
+
+#frm_top_bar h1 {
+	font-weight: 400;
+	padding: 0;
+	margin: 0;
+	color: var(--grey-900);
+	display: inline-flex;
+	gap: var(--gap-sm);
+	align-items: center;
+	text-align: left;
+	min-width: 200px;
+}
+
+#frm_top_bar h1 span {
+	max-width: 175px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	display: inline-block;
+	vertical-align: bottom;
+}
+
+#frm_top_bar ul.frm_form_nav,
+#frm_top_bar .frm-header-logo,
+#frm_top_bar #frm_bs_dropdown {
+	align-self: center;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+}
+
+#frm_top_bar .frm-header-logo {
+	display: flex; /* Get rid of extra padding below logo */
+}
+
+#frm_top_bar h2 {
+	float: left;
+	margin: 0 0 0 var(--gap-sm);
+	padding: 2px 0 2px var(--gap-sm);
+	font-weight: 400;
+	border-left: 2px solid var(--grey);
+}
+
+.frm_wrap > #frm_top_bar #frm-publishing {
+	margin-top: 0;
+}
+
+#frm-publishing {
+	min-width: 225px;
+	align-self: center;
+	align-items: center;
+	display: flex;
+	flex-direction: row-reverse;
+	gap: 0 var(--gap-sm);
+	flex-wrap: wrap;
+}

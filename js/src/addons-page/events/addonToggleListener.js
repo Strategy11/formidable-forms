@@ -14,13 +14,13 @@ let targetButton;
 function addAddonToggleEvents() {
 	const { addonsToggle } = getElements();
 
-	addonsToggle.forEach( ( addonToggle ) =>
+	addonsToggle.forEach( addonToggle =>
 		addonToggle.addEventListener( 'click', onAddonToggleClick )
 	);
 
-	wp.hooks.addAction('frm_update_addon_state', 'frmAddonPage', () => {
+	wp.hooks.addAction( 'frm_update_addon_state', 'frmAddonPage', () => {
 		setupActiveCategory();
-	});
+	} );
 }
 
 /**
@@ -30,8 +30,8 @@ function addAddonToggleEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onAddonToggleClick = ( event ) => {
-	if (targetButton?.classList.contains( 'frm_loading_button' )) {
+const onAddonToggleClick = event => {
+	if ( targetButton?.classList.contains( 'frm_loading_button' ) ) {
 		return;
 	}
 

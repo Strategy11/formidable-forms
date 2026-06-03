@@ -2,7 +2,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 $tooltip = __( 'Generate unique tokens for validating form submissions.', 'formidable' );
+
 if ( FrmAppHelper::pro_is_installed() ) {
 	$tooltip .= ' ' . __( 'Uploaded files will also be validated for spam.', 'formidable' );
 }

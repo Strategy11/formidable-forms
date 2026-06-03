@@ -1,0 +1,12 @@
+/**
+ * Customize HTML Tab styles
+ */
+
+/* Customize HTML Tab */
+#frm_html_tab.frm_hidden {
+	display: none;
+}
+
+#frm_html_tab.active {
+	display: inline;
+}

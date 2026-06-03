@@ -7,14 +7,14 @@ class FrmTransLiteAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_stripe_icon frm_credit_card_alt_icon frm_icon_font',
+			'classes'  => 'frm_stripe_icon frm_credit_card_alt_icon frmfont',
 			// This is 99 in the Payments submodule but Stripe Lite only supports a single action.
 			'limit'    => 1,
 			'active'   => true,
 			// After user registration.
 			'priority' => 45,
 			'event'    => array( 'create' ),
-			'color'    => 'var(--green)',
+			'color'    => '#3fac25',
 		);
 
 		$this->FrmFormAction( 'payment', __( 'Collect a Payment', 'formidable' ), $action_ops );
@@ -34,8 +34,8 @@ class FrmTransLiteAction extends FrmFormAction {
 		$options             = $form_action->post_content;
 		$form_fields         = $this->get_field_options( $args['form']->id );
 		$field_dropdown_atts = compact( 'form_fields', 'form_action' );
-		$currencies          = FrmCurrencyHelper::get_currencies();
 		$repeat_times        = FrmTransLiteAppHelper::get_repeat_times();
+		$gateways            = FrmTransLiteAppHelper::get_gateways();
 
 		if ( ! isset( $form_action->post_content['payment_limit'] ) ) {
 			$form_action->post_content['payment_limit'] = '';
@@ -51,12 +51,15 @@ class FrmTransLiteAction extends FrmFormAction {
 	 *
 	 * @since 6.5
 	 *
+	 * @param string $selected_gateway The selected gateway for the given payment action.
+	 *
 	 * @return void
 	 */
-	public function echo_capture_payment_upsell() {
+	public function echo_capture_payment_upsell( $selected_gateway = 'stripe' ) {
 		// Add an upsell placeholder for the capture payment setting.
 		$upgrading      = FrmAddonsController::install_link( 'stripe' );
 		$upgrade_params = array();
+
 		if ( isset( $upgrading['url'] ) ) {
 			$upgrade_params['data-oneclick'] = json_encode( $upgrading );
 		} else {
@@ -84,6 +87,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
+			'entry_data_sync'      => 'overwrite',
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
@@ -96,6 +100,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	private function default_currency() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$currency     = trim( $frm_settings->currency );
+
 		if ( ! $currency ) {
 			$currency = 'USD';
 		}
@@ -105,10 +110,10 @@ class FrmTransLiteAction extends FrmFormAction {
 
 	/**
 	 * @param mixed $form_id
+	 *
 	 * @return array
 	 */
 	public function get_field_options( $form_id ) {
-
 		$form_id  = absint( $form_id );
 		$form_ids = $form_id;
 
@@ -122,15 +127,13 @@ class FrmTransLiteAction extends FrmFormAction {
 		 */
 		$form_ids = apply_filters( 'frm_trans_action_get_field_options_form_id', $form_ids, $form_id );
 
-		$form_fields = FrmField::getAll(
+		return FrmField::getAll(
 			array(
 				'fi.form_id'  => $form_ids,
 				'fi.type not' => array( 'divider', 'end_divider', 'html', 'break', 'captcha', 'rte', 'form' ),
 			),
 			'field_order'
 		);
-
-		return $form_fields;
 	}
 
 	/**
@@ -139,6 +142,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * This is saved as part of the Stripe payment action.
 	 *
 	 * @param array $form_atts
+	 *
 	 * @return int
 	 */
 	public function get_credit_card_field_id( $form_atts ) {
@@ -162,6 +166,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	 *
 	 * @param  array $form_atts
 	 * @param  array $field_atts
+	 *
 	 * @return void
 	 */
 	public function show_fields_dropdown( $form_atts, $field_atts ) {
@@ -174,7 +179,9 @@ class FrmTransLiteAction extends FrmFormAction {
 		}
 
 		$has_field = false;
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
+		<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		<select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
 			<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
 			<?php
@@ -192,19 +199,22 @@ class FrmTransLiteAction extends FrmFormAction {
 				$has_field  = true;
 				$key_exists = array_key_exists( $field_atts['name'], $form_atts['form_action']->post_content );
 				?>
+				<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<option value="<?php echo esc_attr( $field->id ); ?>" <?php selected( $key_exists ? $form_atts['form_action']->post_content[ $field_atts['name'] ] : 0, $field->id ); ?>>
 					<?php
-					echo esc_attr( FrmAppHelper::truncate( $field->name, 50, 1 ) );
+					echo esc_html( FrmAppHelper::truncate( $field->name, 50, 1 ) );
 
 					if ( 'name' === $field->type && isset( $field_atts['name'] ) ) {
 						switch ( $field_atts['name'] ) {
 							case 'billing_first_name':
+							case 'shipping_first_name':
 								echo ' (';
 								esc_html_e( 'First', 'formidable' );
 								echo ')';
 								break;
 
 							case 'billing_last_name':
+							case 'shipping_last_name':
 								echo ' (';
 								esc_html_e( 'Last', 'formidable' );
 								echo ')';
@@ -231,6 +241,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	public static function get_single_action_type( $action_id, $type = '' ) {

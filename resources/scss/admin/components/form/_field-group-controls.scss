@@ -1,0 +1,46 @@
+#frm_builder_page #frm_field_group_controls {
+	position: absolute;
+	padding: 5px;
+	border-radius: 4px 4px 0 0;
+	text-align: right;
+	box-sizing: border-box;
+	right: 0;
+	top: -28px;
+	height: 28px;
+	z-index: 3; /* section dividers use z-index: 2; position above that to avoid it taking over hover control. */
+}
+
+.frm-field-group-hover-target,
+.frm-has-open-field-group-popup,
+#frm_builder_page #frm_field_group_controls,
+.frm-selected-field-group {
+	background: rgba(65, 153, 253, 0.04);
+}
+
+.frm-selected-field-group {
+	position: relative;
+}
+
+#frm_builder_page #frm_field_group_controls > span:first-child {
+	margin-right: 5px;
+}
+
+#frm_builder_page #frm_field_group_controls svg {
+	pointer-events: none;
+}
+
+#frm_field_group_controls {
+	visibility: hidden;
+}
+
+.frm-field-group-hover-target #frm_field_group_controls {
+	visibility: visible;
+}
+
+#frm_field_group_controls .dropdown-item a span {
+	color: var(--grey-700);
+}
+
+#frm_field_group_controls .dropdown-item a:hover {
+	text-decoration: none;
+}

@@ -1,13 +1,13 @@
 ( function() {
 	function toggleSub() {
-		var val  = this.value;
-		var show = val === 'recurring';
+		const val = this.value;
+		const show = val === 'recurring';
 		slideOpts( this, show, '.frm_trans_sub_opts' );
 		toggleOpts( this, ! show, '.frm_gateway_no_recur' );
 	}
 
 	function slideOpts( opt, show, c ) {
-		var opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
+		const opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
 		if ( show ) {
 			opts.slideDown( 'fast' );
 		} else {
@@ -16,20 +16,67 @@
 	}
 
 	function toggleOpts( opt, show, c ) {
-		var opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
+		const opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
 		if ( show ) {
-			opts.show();
+			opts.css( 'display', '' );
+			opts.removeClass( 'frm_hidden' );
 		} else {
-			opts.hide();
+			opts.css( 'display', 'none' );
+			opts.addClass( 'frm_hidden' );
 		}
+	}
+
+	function toggleGateway() {
+		const gateway = this.value;
+		const { checked } = this;
+
+		toggleOpts( this, checked, `.show_${ gateway }` );
+
+		const gateways = [ 'stripe', 'square', 'paypal' ];
+		const toggleOff = gateways.filter( g => g !== gateway );
+
+		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
+		const showClass = `show_${ settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' ) }`;
+
+		toggleOff.forEach(
+			function( gateway ) {
+				const gatewaySettings = settings.get( 0 ).querySelectorAll( `.show_${ gateway }` );
+				gatewaySettings.forEach(
+					setting => {
+						if ( ! setting.classList.contains( showClass ) ) {
+							setting.style.display = 'none';
+						}
+					}
+				);
+			}
+		);
+
+		wp.hooks.doAction( 'frm_trans_toggled_gateway', { gateway, checked, settings } );
+
+		document.querySelectorAll( '.frm-billing-section-heading' ).forEach( function( el ) {
+			el.textContent = gateway === 'paypal' ? el.dataset.billingLabel : el.dataset.customerLabel;
+		} );
 	}
 
 	function frmTransLiteAdminJS() {
 		return {
-			init: function() {
-				var actions = document.getElementById( 'frm_notification_settings' );
-				if ( actions !== null ) {
+			init() {
+				const actions = document.getElementById( 'frm_notification_settings' );
+				if ( actions ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
+
+					document.addEventListener(
+						'change',
+						function( event ) {
+							if ( ! event.target || ! event.target.checked || 'radio' !== event.target.type ) {
+								return;
+							}
+
+							if ( event.target.closest( '.frm-long-icon-buttons' ) && event.target.closest( '.frm_form_action_settings' ) ) {
+								toggleGateway.call( event.target );
+							}
+						}
+					);
 				}
 
 				document.querySelectorAll( '.frm_trans_ajax_link' ).forEach(
@@ -47,32 +94,38 @@
 	function runAjaxLink( e ) {
 		e.preventDefault();
 
-		const $link                = jQuery( this );
+		const $link = jQuery( this );
 		const handleConfirmedClick = e => {
 			e.preventDefault();
 
-			const href             = $link.attr( 'href' );
-			const loadingImage     = document.createElement( 'span' );
+			const href = $link.attr( 'href' );
+			const loadingImage = document.createElement( 'span' );
 			loadingImage.className = 'frm-loading-img';
 
 			$link.replaceWith( loadingImage );
-			jQuery.ajax({
+			jQuery.ajax( {
 				type: 'GET',
 				url: href,
 				data: {
 					nonce: frm_trans_vars.nonce
 				},
-				success: function( html ) {
+				success( html ) {
 					jQuery( loadingImage ).replaceWith( html );
 				}
-			});
+			} );
 		};
+
+		if ( ! e.currentTarget.dataset.frmverify ) {
+			handleConfirmedClick( e );
+			return;
+		}
 
 		jQuery( '#frm-confirmed-click' ).one( 'click', handleConfirmedClick );
 
 		// Prevent handleConfirmedClick from triggering when the current modal is closed so that it won't be run by other elements.
 		const unbindHandleConfirmedClick = e => {
 			if ( e.target.matches( '.ui-widget-overlay, .dismiss' ) ) {
+				// eslint-disable-next-line no-jquery/no-bind
 				jQuery( '#frm-confirmed-click' ).unbind( 'click', handleConfirmedClick );
 				document.removeEventListener( 'click', unbindHandleConfirmedClick );
 			}

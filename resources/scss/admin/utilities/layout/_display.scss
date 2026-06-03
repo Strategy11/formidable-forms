@@ -1,0 +1,29 @@
+/**
+ * Utilities - Display
+ */
+
+#wpwrap .frm-force-hidden,
+.frm-force-hidden {
+	display: none !important;
+}
+
+.frm_block, /* deprecated */
+.frm-block {
+	display: block;
+}
+
+.frm-block-force {
+	display: block !important;
+}
+
+.frm_inline {
+	display: inline;
+}
+
+.frm-force-inline {
+	display: inline !important;
+}
+
+.frm_inline_block {
+	display: inline-block !important;
+}

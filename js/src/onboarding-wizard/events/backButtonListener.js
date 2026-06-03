@@ -20,7 +20,7 @@ function addBackButtonEvents() {
 	// Attach click event listeners to each back buttons
 	backButtons.forEach( backButton => {
 		onClickPreventDefault( backButton, onBackButtonClick );
-	});
+	} );
 }
 
 /**

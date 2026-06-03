@@ -1,0 +1,93 @@
+/**
+ * Layout - Top Bar - Navigation
+ */
+
+.frm_top_left {
+	text-align: left;
+	float: left;
+	white-space: nowrap;
+	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	align-self: center;
+}
+
+.post-type-frm_display .frm_top_left,
+.frm_top_left.frm_top_wide {
+	max-width: 100%;
+}
+
+.post-type-frm_display .frm_nav_bar .frm-header-logo,
+.frm_nav_bar .frm-header-logo {
+	margin: 18px 0 10px;
+}
+
+#frm_top_bar .frm_form_nav {
+	flex: 1;
+}
+
+ul.frm_form_nav {
+	margin: 0 auto;
+	padding-top: 18px;
+	display: block;
+	min-width: 240px;
+}
+
+.nav-tab-wrapper.frm_form_nav {
+	padding: 0 25px;
+}
+
+ul.frm_form_nav > li {
+	margin: 0 min(3.5%, 32px) 0 0;
+	display: inline-block;
+}
+
+.post-type-frm_display #advanced-sortables h2.hndle,
+.post-type-frm_display #side-sortables h2.hndle,
+.post-type-frm_display #normal-sortables h2.hndle,
+.post-type-frm_display .frm_form_nav .nav-tab-active,
+.frm_form_nav > li > a {
+	font-size: 1.3em;
+	text-decoration: none;
+	display: block;
+	padding: 6px 2px 4px;
+	font-weight: 500;
+	color: var(--grey-700);
+	border-bottom: 2px solid transparent;
+}
+
+.post-type-frm_display.js .postbox .handlediv .toggle-indicator::before {
+	margin-top: 10px;
+}
+
+.frm-nav-tabs a:focus,
+.frm-nav-tabs a:active,
+.frm_form_nav a:active,
+.frm_form_nav a:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+.frm_form_nav > li > a {
+	font-size: var(--text-md);
+	font-weight: 400;
+	color: var(--grey-500);
+}
+
+.frm_form_nav > li > a:hover {
+	border-color: var(--primary-700);
+}
+
+.frm_form_nav .frm-dropdown-menu a:hover {
+	background-color: #eaf2fa;
+}
+
+.post-type-frm_display .frm_form_nav .nav-tab-active,
+.post-type-frm_display .frm_form_nav .nav-tab-active:hover,
+.frm_form_nav > li a.current_page {
+	color: var(--primary-500);
+	border-color: var(--primary-500);
+	background: transparent;
+	opacity: 1;
+	font-weight: 600;
+}

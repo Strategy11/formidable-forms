@@ -1,0 +1,58 @@
+/**
+ * Components - Divider Icons
+ */
+
+.edit_field_type_divider .frm-divider-icon.frmsvg {
+	padding: 2px;
+	position: absolute;
+	left: -12px;
+	color: #fff;
+	background-color: var(--primary-700);
+	border-radius: 50%;
+}
+
+.edit_field_type_divider .start_divider .frm-divider-icon.frmsvg {
+	height: 8px;
+	width: 8px;
+	padding: 0;
+	bottom: -4px;
+	left: -24.5px;
+	color: var(--primary-700);
+	background-color: #fff;
+}
+
+.edit_field_type_divider.selected .frm-divider-icon.frmsvg,
+.edit_field_type_divider:hover .frm-divider-icon.frmsvg {
+	background: var(--primary-500);
+}
+
+.edit_field_type_divider.selected .start_divider .frm-divider-icon.frmsvg,
+.edit_field_type_divider:hover .start_divider .frm-divider-icon.frmsvg {
+	background-color: #fff;
+	color: var(--primary-500);
+}
+
+.frm-page-break::before,
+.frm-page-break::after {
+	width: 8px;
+	height: 8px;
+	top: -6px;
+	border-color: var(--grey);
+}
+
+.frm-page-break::after {
+	right: 0;
+}
+
+#frm-fake-page .frm-page-break {
+	border-color: var(--grey);
+}
+
+#frm-fake-page {
+	padding: 0 5px;
+}
+
+.frm_sorting li.edit_field_type_divider:hover,
+.frm_sorting li.edit_field_type_divider.selected {
+	border-left-color: var(--primary-500);
+}

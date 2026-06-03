@@ -16,4 +16,4 @@ import { getElements } from '../elements';
 export function showHeaderCancelButton() {
 	const { headerCancelButton } = getElements();
 	new frmAnimate( headerCancelButton ).fadeIn();
-};
+}

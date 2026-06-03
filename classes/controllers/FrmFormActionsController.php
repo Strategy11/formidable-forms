@@ -4,10 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormActionsController {
+
+	/**
+	 * @var string
+	 */
 	public static $action_post_type = 'frm_form_actions';
 
 	/**
-	 * @var array|null
+	 * @var Frm_Form_Action_Factory|null
 	 */
 	public static $registered_actions;
 
@@ -34,6 +38,7 @@ class FrmFormActionsController {
 			)
 		);
 
+		self::maybe_setup_unlicensed_action_gate();
 		self::actions_init();
 	}
 
@@ -52,34 +57,106 @@ class FrmFormActionsController {
 			'email'             => 'FrmEmailAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
-			'paypal'            => 'FrmDefPayPalAction',
+			'stripe'            => 'FrmStripeLiteAction',
+			'square'            => 'FrmSquareAction',
+			'paypal'            => 'FrmPayPalLiteAction',
+			'paypal-legacy'     => 'FrmDefPayPalLegacyAction',
 			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
-			'mailchimp'         => 'FrmDefMlcmpAction',
 			'api'               => 'FrmDefApiAction',
-			'salesforce'        => 'FrmDefSalesforceAction',
+			'mailchimp'         => 'FrmDefMlcmpAction',
 			'activecampaign'    => 'FrmDefActiveCampaignAction',
 			'constantcontact'   => 'FrmDefConstContactAction',
 			'getresponse'       => 'FrmDefGetResponseAction',
-			'hubspot'           => 'FrmDefHubspotAction',
-			'zapier'            => 'FrmDefZapierAction',
-			'twilio'            => 'FrmDefTwilioAction',
-			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
-			'aweber'            => 'FrmDefAweberAction',
 			'convertkit'        => 'FrmDefConvertKitAction',
+			'aweber'            => 'FrmDefAweberAction',
+			'twilio'            => 'FrmDefTwilioAction',
+			'salesforce'        => 'FrmDefSalesforceAction',
+			'hubspot'           => 'FrmDefHubspotAction',
+			'highrise'          => 'FrmDefHighriseAction',
+			'zapier'            => 'FrmDefZapierAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
+			'n8n'               => 'FrmDefN8NAction',
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
+		$action_classes = self::maybe_unset_highrise( $action_classes );
 
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
 
+		// This needs to be called after we include default_actions.php or FrmDefPayPalLegacyAction will never exist.
+		if ( 'FrmPayPalLiteAction' === $action_classes['paypal'] || ! class_exists( 'FrmPaymentAction' ) || ! class_exists( 'FrmDefPayPalLegacyAction' ) ) {
+			unset( $action_classes['paypal-legacy'] );
+		}
+
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
 		}
+
+		self::apply_default_action_descriptions();
+	}
+
+	/**
+	 * Sets default descriptions on registered actions from a central list.
+	 *
+	 * Keeps the description when an add-on replaces a base action class without its own.
+	 *
+	 * @since 6.31
+	 *
+	 * @return void
+	 */
+	private static function apply_default_action_descriptions() {
+		$descriptions = array(
+			'on_submit'         => __( 'Success messages', 'formidable' ),
+			'email'             => __( 'Autoresponder alerts', 'formidable' ),
+			'wppost'            => __( 'Content publishing', 'formidable' ),
+			'register'          => __( 'Account creation', 'formidable' ),
+			'payment'           => __( 'Transaction alerts', 'formidable' ),
+			'stripe'            => __( 'Payment gateway', 'formidable' ),
+			'square'            => __( 'Payment gateway', 'formidable' ),
+			'paypal'            => __( 'Payment gateway', 'formidable' ),
+			'quiz'              => __( 'Automated grading', 'formidable' ),
+			'quiz_outcome'      => __( 'Result logic', 'formidable' ),
+			'aweber'            => __( 'List triggers', 'formidable' ),
+			'mailchimp'         => __( 'Subscription confirmation', 'formidable' ),
+			'zapier'            => __( 'App automation', 'formidable' ),
+			'n8n'               => __( 'Workflow automation', 'formidable' ),
+			'twilio'            => __( 'Text notifications', 'formidable' ),
+			'activecampaign'    => __( 'Contact automation', 'formidable' ),
+			'salesforce'        => __( 'Lead automation', 'formidable' ),
+			'constantcontact'   => __( 'Content distribution', 'formidable' ),
+			'getresponse'       => __( 'Success notifications', 'formidable' ),
+			'hubspot'           => __( 'CRM alerts', 'formidable' ),
+			'mailpoet'          => __( 'Plugin automation', 'formidable' ),
+			'api'               => __( 'System integration', 'formidable' ),
+			'googlespreadsheet' => __( 'Spreadsheet sync', 'formidable' ),
+			'convertkit'        => __( 'Broadcast publishing', 'formidable' ),
+		);
+
+		foreach ( self::$registered_actions->actions as $action ) {
+			if ( $action->action_options['description'] === '' && isset( $descriptions[ $action->id_base ] ) ) {
+				$action->action_options['description'] = $descriptions[ $action->id_base ];
+			}
+		}
+	}
+
+	/**
+	 * Remove the Highrise action if it is not registered.
+	 *
+	 * @since 6.23
+	 *
+	 * @param array $action_classes
+	 *
+	 * @return array
+	 */
+	private static function maybe_unset_highrise( $action_classes ) {
+		if ( 'FrmDefHighriseAction' === ( $action_classes['highrise'] ?? '' ) ) {
+			unset( $action_classes['highrise'] );
+		}
+		return $action_classes;
 	}
 
 	/**
@@ -88,9 +165,8 @@ class FrmFormActionsController {
 	 * @param array $values
 	 */
 	public static function email_settings( $values ) {
-		$form   = FrmForm::getOne( $values['id'] );
-		$groups = self::form_action_groups();
-
+		$form            = FrmForm::getOne( $values['id'] );
+		$groups          = self::form_action_groups();
 		$action_controls = self::get_form_actions();
 		self::maybe_add_action_to_group( $action_controls, $groups );
 
@@ -103,21 +179,39 @@ class FrmFormActionsController {
 	 * Add unknown actions to a group.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $action_controls
+	 * @param array $groups
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_action_to_group( $action_controls, &$groups ) {
 		$grouped = array();
+
 		foreach ( $groups as $group ) {
 			if ( isset( $group['actions'] ) ) {
 				$grouped = array_merge( $grouped, $group['actions'] );
 			}
+
+			// Also collect actions from sections
+			if ( ! isset( $group['sections'] ) ) {
+				continue;
+			}
+
+			foreach ( $group['sections'] as $section ) {
+				if ( isset( $section['actions'] ) ) {
+					$grouped = array_merge( $grouped, $section['actions'] );
+				}
+			}
 		}
 
 		foreach ( $action_controls as $action ) {
-			if ( isset( $groups[ $action->id_base ] ) || in_array( $action->id_base, $grouped ) ) {
+			if ( isset( $groups[ $action->id_base ] ) || in_array( $action->id_base, $grouped, true ) ) {
 				continue;
 			}
 
 			$this_group = $action->action_options['group'];
+
 			if ( ! isset( $groups[ $this_group ] ) ) {
 				$this_group = 'misc';
 			}
@@ -137,30 +231,46 @@ class FrmFormActionsController {
 	 * @return array
 	 */
 	public static function form_action_groups() {
+		// Get all action controls to check which are active
+		$action_controls = self::get_form_actions();
+
+		// Determine which actions are currently available
+		$available_actions = self::get_available_my_actions( $action_controls );
+
+		// Featured actions are add-ons that are NOT currently available
+		$all_addon_actions = array(
+			'api',
+			'register',
+			'n8n',
+			'quiz',
+			'quiz_outcome',
+			'googlespreadsheet',
+		);
+		$featured_actions  = array_diff( $all_addon_actions, $available_actions );
+
 		$groups = array(
-			'misc'      => array(
-				'name'    => '',
-				'icon'    => 'frm_icon_font frm_shuffle_icon',
-				'actions' => array(
-					'email',
-					'wppost',
-					'register',
-					'quiz',
-					'quiz_outcome',
-					'twilio',
+			'my_actions' => array(
+				'name'     => __( 'My Actions', 'formidable' ),
+				'icon'     => 'frmfont frm_shuffle_icon',
+				'sections' => array(
+					'active'   => array(
+						'name'    => '',
+						'actions' => $available_actions,
+					),
+					'featured' => array(
+						'name'    => __( 'Featured', 'formidable' ),
+						'actions' => array_values( $featured_actions ),
+					),
 				),
 			),
-			'payment'   => array(
-				'name'    => __( 'eCommerce', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_credit_card_alt_icon',
-				'actions' => array(
-					'paypal',
-					'payment',
-				),
+			'payment'    => array(
+				'name'    => __( 'E-Commerce', 'formidable' ),
+				'icon'    => 'frmfont frm_credit_card_alt_icon',
+				'actions' => self::get_payment_actions( $action_controls ),
 			),
-			'marketing' => array(
-				'name'    => __( 'Email Marketing', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_mail_bulk_icon',
+			'marketing'  => array(
+				'name'    => __( 'Marketing', 'formidable' ),
+				'icon'    => 'frmfont frm_mail_bulk_icon',
 				'actions' => array(
 					'mailchimp',
 					'activecampaign',
@@ -168,16 +278,19 @@ class FrmFormActionsController {
 					'getresponse',
 					'aweber',
 					'mailpoet',
+					'convertkit',
+					'twilio',
 				),
 			),
-			'crm'       => array(
+			'crm'        => array(
 				'name'    => __( 'CRM', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_address_card_icon',
-				'actions' => array(
-					'salesforce',
-					'hubspot',
-					'highrise',
-				),
+				'icon'    => 'frmfont frm_address_card_icon',
+				'actions' => self::get_crm_actions(),
+			),
+			'misc'       => array(
+				'name'    => __( 'Misc', 'formidable' ),
+				'icon'    => 'frmfont frm_shuffle_icon',
+				'actions' => self::get_misc_actions( $action_controls ),
 			),
 		);
 
@@ -185,19 +298,140 @@ class FrmFormActionsController {
 	}
 
 	/**
+	 * Get the actions that are currently available (active) for My Actions section.
+	 *
+	 * @since 6.31
+	 *
+	 * @param array $action_controls The registered action controls.
+	 *
+	 * @return array
+	 */
+	private static function get_available_my_actions( $action_controls ) {
+		$available = array(
+			'on_submit',
+			'email',
+			'stripe',
+			'square',
+			'paypal',
+		);
+
+		// Include all actions that are marked as active, including custom actions.
+		// This ensures custom actions appear in "My Actions" when enabled.
+		foreach ( $action_controls as $action_id => $action_control ) {
+			if ( ! in_array( $action_id, $available, true ) && ! empty( $action_control->action_options['active'] ) ) {
+				$available[] = $action_id;
+			}
+		}
+
+		return $available;
+	}
+
+	/**
+	 * Get the actions to include in the Misc section.
+	 *
+	 * @since 6.31
+	 *
+	 * @param array $action_controls The registered action controls.
+	 *
+	 * @return array
+	 */
+	private static function get_misc_actions( $action_controls ) {
+		$misc_actions = array(
+			'on_submit',
+			'email',
+			'wppost',
+			'register',
+			'api',
+			'n8n',
+			'quiz',
+			'quiz_outcome',
+			'googlespreadsheet',
+		);
+
+		// Include all active actions that aren't in specific groups (payment, marketing, crm).
+		// This ensures custom actions appear in "Misc" when enabled.
+		$payment_actions   = self::get_payment_actions( $action_controls );
+		$marketing_actions = array( 'mailchimp', 'activecampaign', 'constantcontact', 'getresponse', 'aweber', 'mailpoet', 'convertkit', 'twilio' );
+
+		$excluded_actions = array_merge( $payment_actions, $marketing_actions, self::get_crm_actions() );
+
+		foreach ( $action_controls as $action_id => $action_control ) {
+			if ( ! in_array( $action_id, $misc_actions, true ) && ! in_array( $action_id, $excluded_actions, true ) && ! empty( $action_control->action_options['active'] ) ) {
+				$misc_actions[] = $action_id;
+			}
+		}
+
+		return $misc_actions;
+	}
+
+	/**
+	 * Get the actions to include in the E-Commerce section.
+	 *
+	 * @since 6.33
+	 *
+	 * @param array $action_controls
+	 *
+	 * @return array
+	 */
+	private static function get_payment_actions( $action_controls ) {
+		$payment_actions = array(
+			'paypal',
+			'stripe',
+			'square',
+		);
+
+		if ( isset( $action_controls['paypal-legacy'] ) ) {
+			$payment_actions[] = 'paypal-legacy';
+		}
+
+		if ( isset( $action_controls['payment'] ) ) {
+			$payment_actions[] = 'payment';
+		}
+
+		return $payment_actions;
+	}
+
+	/**
+	 * Get the actions to include in the CRM section.
+	 *
+	 * @since 6.23
+	 *
+	 * @return array
+	 */
+	private static function get_crm_actions() {
+		$crm_actions = array(
+			'salesforce',
+			'hubspot',
+			'zapier',
+		);
+
+		// Only include Highrise when the add-on is active.
+		// This is because Highrise is deprecated. We don't want to show it in Lite.
+		if ( class_exists( 'FrmHrsSettings' ) ) {
+			$crm_actions[] = 'highrise';
+		}
+
+		return $crm_actions;
+	}
+
+	/**
 	 * Get the number of currently active form actions.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $action_controls
 	 *
 	 * @return array
 	 */
 	private static function active_actions( $action_controls ) {
 		$allowed = array();
+
 		foreach ( $action_controls as $action_control ) {
-			if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
+			if ( ! empty( $action_control->action_options['active'] ) ) {
 				$allowed[] = $action_control->id_base;
 			}
 		}
+
 		return $allowed;
 	}
 
@@ -205,13 +439,13 @@ class FrmFormActionsController {
 	 * For each add-on, add an li, class, and javascript function. If active, add an additional class.
 	 *
 	 * @since 4.0
+	 *
 	 * @param object $action_control
 	 * @param array  $allowed
 	 */
 	public static function show_action_icon_link( $action_control, $allowed ) {
-		$data    = array();
-		$classes = ' frm_' . $action_control->id_base . '_action frm_single_action';
-
+		$data        = array();
+		$classes     = ' frm_' . $action_control->id_base . '_action frm_single_action';
 		$group_class = ' frm-group-' . $action_control->action_options['group'];
 
 		/* translators: %s: Name of form action */
@@ -219,13 +453,18 @@ class FrmFormActionsController {
 
 		$default_shown    = array( 'wppost', 'register', 'payment', 'quiz', 'hubspot' );
 		$default_shown    = array_values( array_diff( $default_shown, $allowed ) );
-		$default_position = array_search( $action_control->id_base, $default_shown );
+		$default_position = array_search( $action_control->id_base, $default_shown, true );
 		$allowed_count    = count( $allowed );
 
-		if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
+		if ( ! empty( $action_control->action_options['active'] ) ) {
 			$classes .= ' frm_active_action';
 		} else {
 			$classes .= ' frm_inactive_action';
+
+			if ( str_contains( $action_control->action_options['classes'], 'frm_show_expired_modal' ) ) {
+				$classes .= ' frm_show_expired_modal';
+			}
+
 			if ( $default_position !== false && ( $allowed_count + $default_position ) < 6 ) {
 				$group_class .= ' frm-default-show';
 			}
@@ -234,6 +473,7 @@ class FrmFormActionsController {
 			$data['data-medium']  = 'settings-' . $action_control->id_base;
 
 			$upgrading = FrmAddonsController::install_link( $action_control->action_options['plugin'] );
+
 			if ( isset( $upgrading['url'] ) ) {
 				$data['data-oneclick'] = json_encode( $upgrading );
 			}
@@ -243,39 +483,65 @@ class FrmFormActionsController {
 			}
 
 			$requires = FrmFormsHelper::get_plan_required( $upgrading );
+
 			if ( $requires && 'free' !== $requires ) {
 				$data['data-requires'] = $requires;
 			}
-		}//end if
 
-		// HTML to include on the icon.
-		$icon_atts = array();
-		if ( $action_control->action_options['color'] !== 'var(--primary-700)' ) {
-			$icon_atts = array(
-				'style' => '--primary-700:' . $action_control->action_options['color'],
-			);
-		}
+			$learn_more_slug = ! empty( $action_control->action_options['learn-more'] )
+			? $action_control->action_options['learn-more']
+			: self::get_learn_more_slug( $action_control->id_base );
+
+			if ( $learn_more_slug ) {
+				$data['data-learn-more'] = FrmAppHelper::get_doc_url(
+					$learn_more_slug,
+					'settings-' . $action_control->id_base,
+					! str_contains( $learn_more_slug, '/' )
+				);
+			}
+		}//end if
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
 	}
 
 	/**
+	 * Get the HTML attributes for the action icon.
+	 *
+	 * @since 6.31
+	 *
+	 * @param object $action_control
+	 *
+	 * @return array
+	 */
+	public static function get_action_icon_atts( $action_control ) {
+		if ( 'var(--primary-700)' !== $action_control->action_options['color'] ) {
+			return array(
+				'style' => '--primary-700:' . $action_control->action_options['color'],
+			);
+		}
+
+		return array();
+	}
+
+	/**
 	 * @param string $action
+	 *
 	 * @return array|FrmFormAction A single form action is returned when a specific $action value is requested.
 	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
-		if ( empty( $temp_actions ) ) {
+
+		if ( $temp_actions ) {
+			$temp_actions = $temp_actions->actions;
+		} else {
 			self::actions_init();
 			$temp_actions = self::$registered_actions->actions;
-		} else {
-			$temp_actions = $temp_actions->actions;
 		}
 
 		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
-			if ( 'all' !== $action && $a->id_base == $action ) {
+			if ( 'all' !== $action && $a->id_base === $action ) {
 				return $a;
 			}
 
@@ -287,9 +553,14 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param object $form
+	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	public static function list_actions( $form, $values ) {
-		if ( empty( $form ) ) {
+		if ( ! $form ) {
 			return;
 		}
 
@@ -318,9 +589,13 @@ class FrmFormActionsController {
 
 		self::maybe_show_limit_warning( $form->id, $form_actions );
 
+		echo '<p class="frm-mb-lg frm-no-actions-message' . ( $form_actions ? ' frm_hidden' : '' ) . '"> '
+		. esc_html__( 'No actions have been added yet. Select an action above to get started.', 'formidable' )
+		. '</p>';
+
 		foreach ( $form_actions as $action ) {
 			if ( ! isset( $action_map[ $action->post_excerpt ] ) ) {
-				// don't try and show settings if action no longer exists
+				// Don't try and show settings if action no longer exists
 				continue;
 			}
 
@@ -336,15 +611,18 @@ class FrmFormActionsController {
 	 *
 	 * @param int|string $form_id
 	 * @param array      $form_actions
+	 *
 	 * @return void
 	 */
 	private static function maybe_show_limit_warning( $form_id, $form_actions ) {
 		$count = count( $form_actions );
+
 		if ( $count < 99 ) {
 			return;
 		}
 
 		$limit = FrmFormAction::get_action_limit( $form_id );
+
 		if ( $limit < 99 || $count < $limit ) {
 			return;
 		}
@@ -352,7 +630,7 @@ class FrmFormActionsController {
 		$documentation_url = 'https://formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-limit-of-form-actions';
 
 		echo '<div class="frm_warning_style">';
-		FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon' );
 		echo '&nbsp;';
 		printf(
 			// translators: %s: URL to documentation
@@ -362,6 +640,15 @@ class FrmFormActionsController {
 		echo '</div>';
 	}
 
+	/**
+	 * @param WP_Post       $form_action
+	 * @param object        $form
+	 * @param int           $action_key Action ID.
+	 * @param FrmFormAction $action_control
+	 * @param array         $values
+	 *
+	 * @return void
+	 */
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {
 		$action_control->_set( $action_key );
 
@@ -374,10 +661,15 @@ class FrmFormActionsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		global $frm_vars;
+		$action_key   = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
+		$action_type  = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
+		$lite_actions = array_fill_keys( self::get_lite_actions(), true );
 
-		$action_key  = FrmAppHelper::get_param( 'list_id', '', 'post', 'absint' );
-		$action_type = FrmAppHelper::get_param( 'type', '', 'post', 'sanitize_text_field' );
+		if ( ! FrmAppHelper::pro_is_connected() && ! isset( $lite_actions[ $action_type ] ) ) {
+			wp_die();
+		}
+
+		global $frm_vars;
 
 		/**
 		 * @var FrmFormAction
@@ -385,35 +677,58 @@ class FrmFormActionsController {
 		$action_control = self::get_form_actions( $action_type );
 		$action_control->_set( $action_key );
 
-		$form_id = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
+		$form_id         = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
+		$form_action     = $action_control->prepare_new( $form_id );
+		$existing_titles = (array) FrmAppHelper::get_post_param( 'existing_titles', array(), 'sanitize_text_field' );
 
-		$form_action = $action_control->prepare_new( $form_id );
+		if ( $existing_titles ) {
+			$form_action->post_title = self::get_unique_action_title( $form_action->post_title, $existing_titles );
+		}
+
 		$use_logging = self::should_show_log_message( $action_type );
-
-		$values = array();
-		$form   = self::fields_to_values( $form_id, $values );
+		$values      = array();
+		$form        = self::fields_to_values( $form_id, $values );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 		wp_die();
+	}
+
+	/**
+	 * Returns the first available title not in $existing_titles, appending " (2)", " (3)", etc. if needed.
+	 *
+	 * @since 6.31
+	 *
+	 * @param string   $base_title      Default action title from the action type.
+	 * @param string[] $existing_titles Titles currently visible in the form editor.
+	 *
+	 * @return string
+	 */
+	private static function get_unique_action_title( $base_title, array $existing_titles ) {
+		$taken = array_flip( $existing_titles );
+		$title = $base_title;
+
+		for ( $n = 2; isset( $taken[ $title ] ); $n++ ) {
+			$title = $base_title . ' (' . $n . ')';
+		}
+
+		return $title;
 	}
 
 	public static function fill_action() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$action_key  = FrmAppHelper::get_param( 'action_id', '', 'post', 'absint' );
-		$action_type = FrmAppHelper::get_param( 'action_type', '', 'post', 'sanitize_text_field' );
-
+		$action_key     = FrmAppHelper::get_param( 'action_id', '', 'post', 'absint' );
+		$action_type    = FrmAppHelper::get_param( 'action_type', '', 'post', 'sanitize_text_field' );
 		$action_control = self::get_form_actions( $action_type );
-		if ( empty( $action_control ) ) {
+
+		if ( ! $action_control ) {
 			wp_die();
 		}
 
 		$form_action = $action_control->get_single_action( $action_key );
-
-		$values = array();
-		$form   = self::fields_to_values( $form_action->menu_order, $values );
-
+		$values      = array();
+		$form        = self::fields_to_values( $form_action->menu_order, $values );
 		$use_logging = self::should_show_log_message( $action_type );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php';
@@ -422,6 +737,9 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param string $action_type
+	 *
 	 * @return bool
 	 */
 	private static function should_show_log_message( $action_type ) {
@@ -429,6 +747,12 @@ class FrmFormActionsController {
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $values
+	 *
+	 * @return object
+	 */
 	private static function fields_to_values( $form_id, array &$values ) {
 		$form = FrmForm::getOne( $form_id );
 
@@ -438,10 +762,12 @@ class FrmFormActionsController {
 		);
 
 		$fields = FrmField::get_all_for_form( $form->id );
+
 		foreach ( $fields as $k => $f ) {
 			$f    = (array) $f;
 			$opts = (array) $f['field_options'];
 			$f    = array_merge( $opts, $f );
+
 			if ( ! isset( $f['post_field'] ) ) {
 				$f['post_field'] = '';
 			}
@@ -454,11 +780,13 @@ class FrmFormActionsController {
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return void
 	 */
 	public static function update_settings( $form_id ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			$error_args   = array(
@@ -493,15 +821,17 @@ class FrmFormActionsController {
 
 		foreach ( $registered_actions as $registered_action ) {
 			$action_ids = $registered_action->update_callback( $form_id );
-			if ( ! empty( $action_ids ) ) {
+
+			if ( $action_ids ) {
 				$new_actions[] = $action_ids;
 			}
 		}
 
 		// Only use array_merge if there are new actions.
-		if ( ! empty( $new_actions ) ) {
+		if ( $new_actions ) {
 			$new_actions = call_user_func_array( 'array_merge', $new_actions );
 		}
+
 		$old_actions = array_diff( $old_actions, $new_actions );
 
 		self::delete_missing_actions( $old_actions );
@@ -509,15 +839,30 @@ class FrmFormActionsController {
 		FrmOnSubmitHelper::save_on_submit_settings( $form_id );
 	}
 
+	/**
+	 * @param array $old_actions
+	 *
+	 * @return void
+	 */
 	public static function delete_missing_actions( $old_actions ) {
-		if ( ! empty( $old_actions ) ) {
-			foreach ( $old_actions as $old_id ) {
-				wp_delete_post( $old_id );
-			}
-			FrmDb::cache_delete_group( 'frm_actions' );
+		if ( ! $old_actions ) {
+			return;
 		}
+
+		foreach ( $old_actions as $old_id ) {
+			wp_delete_post( $old_id );
+		}
+
+		FrmDb::cache_delete_group( 'frm_actions' );
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 * @param int|string $form_id
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
 		$filter_args             = $args;
 		$filter_args['entry_id'] = $entry_id;
@@ -536,24 +881,32 @@ class FrmFormActionsController {
 	}
 
 	/**
-	 * @param string $event
+	 * @param string            $event
+	 * @param int|object|string $form
+	 * @param int|object|string $entry
+	 * @param string            $type
+	 * @param array             $args
+	 *
+	 * @return void
 	 */
-	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
+	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$action_status = array(
 			'post_status' => 'publish',
 		);
-		$form_actions  = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
+		$form_actions  = FrmFormAction::get_action_for_form( is_object( $form ) ? $form->id : $form, $type, $action_status );
 
-		if ( empty( $form_actions ) ) {
+		if ( ! $form_actions ) {
 			return;
 		}
 
 		FrmForm::maybe_get_form( $form );
+
 		if ( ! is_object( $form ) ) {
 			return;
 		}
 
 		$link_settings = self::get_form_actions( $type );
+
 		if ( 'all' !== $type ) {
 			$link_settings = array( $type => $link_settings );
 		}
@@ -568,9 +921,9 @@ class FrmFormActionsController {
 		}
 
 		foreach ( $form_actions as $action ) {
-
 			$skip_this_action = ! in_array( $this_event, $action->post_content['event'], true ) || FrmOnSubmitAction::$slug === $action->post_excerpt;
 			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
+
 			if ( $skip_this_action ) {
 				continue;
 			}
@@ -579,15 +932,16 @@ class FrmFormActionsController {
 				$entry = FrmEntry::getOne( $entry, true );
 			}
 
-			if ( empty( $entry ) || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event ) ) {
+			if ( ! $entry || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event ) ) {
 				continue;
 			}
 
-			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
+			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( (int) $entry->form_id !== (int) $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( $child_entry ) {
-				// maybe trigger actions for sub forms
+				// Maybe trigger actions for sub forms
 				$trigger_children = apply_filters( 'frm_use_embedded_form_actions', false, compact( 'form', 'entry' ) );
+
 				if ( ! $trigger_children ) {
 					continue;
 				}
@@ -595,6 +949,7 @@ class FrmFormActionsController {
 
 			// Check conditional logic.
 			$stop = FrmFormAction::action_conditions_met( $action, $entry );
+
 			if ( $stop ) {
 				continue;
 			}
@@ -606,7 +961,7 @@ class FrmFormActionsController {
 			unset( $action );
 		}//end foreach
 
-		if ( ! empty( $stored_actions ) ) {
+		if ( $stored_actions ) {
 			asort( $action_priority );
 
 			// Make sure hooks are loaded.
@@ -639,6 +994,13 @@ class FrmFormActionsController {
 		}//end if
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $values
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {
 		if ( empty( $args['old_id'] ) ) {
 			// Continue if we know which actions to copy.
@@ -656,6 +1018,11 @@ class FrmFormActionsController {
 		}
 	}
 
+	/**
+	 * @param string $where
+	 *
+	 * @return string
+	 */
 	public static function limit_by_type( $where ) {
 		global $frm_vars, $wpdb;
 
@@ -663,39 +1030,164 @@ class FrmFormActionsController {
 			return $where;
 		}
 
-		$where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
-
-		return $where;
+		return $where . $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
 	}
 
 	/**
 	 * Prevent WPML from filtering form actions based on the active language.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param bool|null $null
 	 * @param string    $post_type
+	 *
 	 * @return bool|null
 	 */
 	public static function prevent_wpml_translations( $null, $post_type ) {
-		if ( self::$action_post_type === $post_type ) {
-			return false;
+		return self::$action_post_type === $post_type ? false : $null;
+	}
+
+	/**
+	 * If Pro is not connected, hook a filter that will force all non-Lite
+	 * actions to inactive so the upgrade popup is shown instead.
+	 *
+	 * @since 6.31
+	 *
+	 * @return void
+	 */
+	private static function maybe_setup_unlicensed_action_gate() {
+		if ( FrmAppHelper::pro_is_connected() ) {
+			return;
 		}
-		return $null;
+
+		add_filter( 'frm_registered_form_actions', array( self::class, 'disable_unlicensed_actions' ), 100 );
+	}
+
+	/**
+	 * For every registered action that is not a Lite action, add a per-action
+	 * options filter that forces it to inactive with the upgrade class.
+	 *
+	 * Runs inside apply_filters('frm_registered_form_actions') at priority 100,
+	 * so the per-key option filters are in place before the class constructors
+	 * run in the foreach loop that follows.
+	 *
+	 * @since 6.31
+	 *
+	 * @param array $actions Map of action_key => class_name.
+	 *
+	 * @return array
+	 */
+	public static function disable_unlicensed_actions( $actions ) {
+		$lite_actions = array_fill_keys( self::get_lite_actions(), true );
+
+		foreach ( array_keys( $actions ) as $key ) {
+			if ( isset( $lite_actions[ $key ] ) ) {
+				continue;
+			}
+
+			add_filter(
+				'frm_' . $key . '_action_options',
+				function ( $options ) {
+					$options['active'] = false;
+
+					if ( ! str_contains( $options['classes'], 'frm_show_upgrade' ) ) {
+						$options['classes'] .= ' frm_show_upgrade';
+					}
+
+					return $options;
+				}
+			);
+		}//end foreach
+
+		return $actions;
+	}
+
+	/**
+	 * Get action keys that are available in Lite without a Pro license.
+	 *
+	 * @since 6.31
+	 *
+	 * @return string[]
+	 */
+	public static function get_lite_actions() {
+		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment', 'stripe', 'square', 'paypal' ) );
+	}
+
+	/**
+	 * Single source of truth for learn-more URL slugs used in
+	 * upgrade modals for non-Lite form actions.
+	 *
+	 * Slugs without '/' are KB doc slugs (knowledgebase/ prefix is added).
+	 * Slugs with '/' are direct paths (e.g. features/) used as-is.
+	 *
+	 * @since 6.31
+	 *
+	 * @return array<string,string> Map of action_key => URL slug.
+	 */
+	public static function get_action_learn_more_links() {
+		return array(
+			'wppost'            => 'features/user-submitted-posts-wordpress-forms',
+			'register'          => 'user-registration',
+			'paypal'            => 'features/paypal-wordpress-payments',
+			'quiz'              => 'quiz-maker-forms',
+			'quiz_outcome'      => 'quiz-maker-forms',
+			'aweber'            => 'features/aweber-addon',
+			'mailchimp'         => 'features/mailchimp-addon',
+			'zapier'            => 'features/form-entry-routing-with-zapier',
+			'twilio'            => 'features/twilio-sms-form-notifications',
+			'activecampaign'    => 'features/entries-to-activecampaign',
+			'salesforce'        => 'features/form-entries-to-salesforce',
+			'constantcontact'   => 'features/entries-to-constant-contact',
+			'getresponse'       => 'features/form-entries-to-getresponse',
+			'hubspot'           => 'features/form-entries-to-hubspot',
+			'mailpoet'          => 'features/mailpoet-newsletters-addon',
+			'api'               => 'features/wordpress-form-api',
+			'googlespreadsheet' => 'features/google-sheets',
+			'n8n'               => 'features/connect-your-forms-to-any-app-with-n8n',
+			'convertkit'        => 'features/convertkit',
+		);
+	}
+
+	/**
+	 * Look up the learn-more doc slug for a given action key.
+	 *
+	 * @since 6.31
+	 *
+	 * @param string $action_key Action identifier (e.g. 'register').
+	 *
+	 * @return string Doc slug or empty string.
+	 */
+	private static function get_learn_more_slug( $action_key ) {
+		$links = self::get_action_learn_more_links();
+		return $links[ $action_key ] ?? '';
 	}
 }
 
 class Frm_Form_Action_Factory {
+
+	/**
+	 * @var array
+	 */
 	public $actions = array();
 
 	public function __construct() {
 		add_action( 'frm_form_actions_init', array( $this, '_register_actions' ), 100 );
 	}
 
+	/**
+	 * @param string $action_class
+	 *
+	 * @return void
+	 */
 	public function register( $action_class ) {
 		$this->actions[ $action_class ] = new $action_class();
 	}
 
+	/**
+	 * @param string $action_class
+	 *
+	 * @return void
+	 */
 	public function unregister( $action_class ) {
 		if ( isset( $this->actions[ $action_class ] ) ) {
 			unset( $this->actions[ $action_class ] );
@@ -706,7 +1198,7 @@ class Frm_Form_Action_Factory {
 		$keys = array_keys( $this->actions );
 
 		foreach ( $keys as $key ) {
-			// don't register new action if old action with the same id is already registered
+			// Don't register new action if old action with the same id is already registered
 			if ( ! isset( $this->actions[ $key ] ) ) {
 				$this->actions[ $key ]->_register();
 			}

@@ -1,0 +1,36 @@
+/**
+ * Components - Settings - Has Shortcodes
+ */
+
+#new_fields,
+.frm-has-modal,
+p.frm_has_shortcodes {
+	position: relative;
+}
+
+.frm-inline-modal.postbox {
+	background: #fff;
+	border-color: var(--grey-100);
+	border-radius: var(--small-radius);
+	box-shadow: var(--box-shadow-lg);
+}
+
+.frm_has_shortcodes .frmsvg:not(.frm_help .frmsvg),
+.frm_has_shortcodes i:not([class*="mce-"]) {
+	position: absolute;
+	color: var(--primary-500);
+	border-radius: 50%;
+	border: 1px solid transparent;
+	z-index: 100;
+	text-align: center;
+}
+
+.frm_has_shortcodes .frmsvg.frm-show-box {
+	border-radius: 6px !important;
+}
+
+.frm_has_shortcodes input,
+.frm_has_shortcodes textarea {
+	padding-left: 18px;
+	box-sizing: border-box;
+}

@@ -11,7 +11,7 @@ import { showElements } from 'core/utils';
 /**
  * Internal dependencies
  */
-import { getElements } from "../elements";
+import { getElements } from '../elements';
 import { getState } from '../shared';
 import { addonRequestURL } from '../constants';
 

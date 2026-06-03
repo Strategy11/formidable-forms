@@ -1,0 +1,20 @@
+/**
+ * Inline Modals
+ */
+
+.frm-open + .frm-inline-modal {
+	top: -10px;
+	margin-bottom: 0;
+
+	&.frm-modal-no-dismiss .inside > .frm-search:first-child {
+		margin-top: var(--gap-sm);
+	}
+}
+
+.frm_grid_container > .frm-open + .frm-inline-modal {
+	top: -4px;
+
+	&.frm-modal-no-dismiss {
+		top: 0 !important;
+	}
+}

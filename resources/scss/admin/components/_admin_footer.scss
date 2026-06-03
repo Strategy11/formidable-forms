@@ -1,0 +1,41 @@
+/**
+ * Components - Admin Footer
+ */
+
+.frm-white-body #footer-upgrade {
+	display: none;
+}
+
+.frm-admin-footer-links,
+.frm-admin-footer-links-nav,
+.frm-admin-footer-links-socials {
+	display: flex;
+	justify-content: center;
+}
+
+.frm-admin-footer-links {
+	gap: var(--gap-2xs);
+	flex-direction: column;
+	text-align: center;
+	padding: var(--gap-xl) 0 var(--gap-lg);
+	font-size: var(--text-xs);
+	color: var(--grey-400);
+}
+
+body.frm-hidden-overflow {
+	height: 100%;
+	overflow: hidden;
+}
+
+.frm-admin-footer-links-nav {
+	gap: var(--gap-2xs);
+	margin-bottom: var(--gap-xs);
+}
+
+.frm-admin-footer-links-socials {
+	gap: var(--gap-xs);
+}
+
+.frm-admin-footer-links-socials a {
+	color: var(--grey-400);
+}

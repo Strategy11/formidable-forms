@@ -1,0 +1,84 @@
+/**
+ * Form Settings Tab styles
+ */
+
+#form_settings_page .frm-inner-content {
+	position: relative;
+	padding-right: var(--gap-xl);
+	padding-bottom: 150px;
+	padding-left: var(--gap-xl);
+
+	> .frm_updated_message:first-child {
+		margin-top: 0;
+	}
+}
+
+h2.frm-h2,
+.frm_form_settings h2 {
+	border-bottom: 1px solid var(--grey-300);
+	color: var(--grey-900);
+	font-weight: 400 !important;
+	padding: 9px 0 5px;
+	margin: 0;
+}
+
+.frm_settings_form h3,
+.frm_form_settings h3 {
+	font-size: var(--text-md);
+	border-top: 1px solid var(--grey-200);
+	padding-top: var(--gap-sm);
+	margin: var(--gap-sm) 0;
+	font-weight: 400;
+	text-transform: uppercase;
+	color: var(--medium-grey);
+	display: block;
+}
+
+.frm_form_settings .howto {
+	color: var(--grey-500);
+	font-size: var(--text-sm);
+	margin-top: 8px;
+}
+
+.frm_form_settings .advanced_settings .form-table {
+	margin-top: 0;
+}
+
+.frm_form_settings td.frm_175_width {
+	width: 175px;
+}
+
+.frm_form_settings #success_url {
+	width: 95%;
+}
+
+.frm_form_settings .frm-form-setting-tabs a .frmsvg {
+	width: 24px;
+	height: 24px;
+}
+
+.frm_wrap .ui-autocomplete {
+	padding: 3px 0;
+	max-height: 310px;
+}
+
+.frm_wrap .ui-widget {
+	font-family: inherit;
+}
+
+.frm_wrap .ui-autocomplete li {
+	padding: 2px 4px;
+	background: none;
+	color: var(--grey-700);
+	border: none;
+	font-weight: 400;
+}
+
+.frm_wrap .ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
+	border: none;
+	font-weight: inherit;
+}
+
+.frm_select_with_label {
+	margin: 7px 0 0;
+}

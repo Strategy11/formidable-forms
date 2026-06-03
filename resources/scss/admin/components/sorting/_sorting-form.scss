@@ -1,0 +1,11 @@
+/**
+ * Form Widget styles
+ */
+
+.frm_sorting .form-field .widget input[type="text"],
+.frm_sorting .form-field .widget input[type="number"],
+.frm_sorting .form-field .widget select,
+#wpcontent .frm_sorting .form-field .widget select,
+.frm_sorting .form-field .widget textarea {
+	width: auto;
+}

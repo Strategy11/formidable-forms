@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<p class="howto">
-			<?php echo esc_html( __( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ) ); ?>
+			<?php esc_html_e( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ); ?>
 		</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml" class="frm-fields frm_grid_container">
 			<input type="hidden" name="action" value="frm_export_xml" />
@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<select id="format" name="format">
 					<?php foreach ( $export_format as $t => $type ) { ?>
 						<option value="<?php echo esc_attr( $t ); ?>" data-support="<?php echo esc_attr( $type['support'] ); ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
-							<?php echo esc_html( isset( $type['name'] ) ? $type['name'] : $t ); ?>
+							<?php echo esc_html( $type['name'] ?? $t ); ?>
 						</option>
 					<?php } ?>
 				</select>
@@ -187,11 +187,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</td>
 								<td class="column-entries">
 									<?php
-									$style = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : 1;
-									if ( empty( $style ) ) {
-										echo '0';
-									} else {
+									$style = $form->options['custom_style'] ?? 1;
+
+									if ( $style ) {
 										echo '1';
+									} else {
+										echo '0';
 									}
 									?>
 								</td>

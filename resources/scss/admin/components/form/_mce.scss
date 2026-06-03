@@ -1,0 +1,14 @@
+/**
+ * Components - MCE Styles
+ */
+
+.with_frm_style .wp-editor-container textarea,
+.postbox .wp-editor-container textarea,
+.frm_remove_border {
+	border: none;
+}
+
+.with_frm_style .mceIframeContainer,
+.postbox .mceIframeContainer {
+	background-color: #fff;
+}

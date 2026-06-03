@@ -27,7 +27,7 @@ function addConsentTrackingButtonEvents() {
  * @private
  * @return {void}
  */
-const onConsentTrackingButtonClick = async() => {
+const onConsentTrackingButtonClick = async () => {
 	const { doJsonPost } = frmDom.ajax;
 	doJsonPost( 'onboarding_consent_tracking', new FormData() ).then( navigateToNextStep );
 };

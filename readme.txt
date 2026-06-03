@@ -2,10 +2,10 @@
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for WordPress
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
-Requires at least: 5.2
-Tested up to: 6.7.2
+Requires at least: 6.3
+Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.19
+Stable tag: 6.31
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -61,11 +61,11 @@ Formidable transcends typical contact form plugin functionality by offering opti
 
 == Seamless Payments and Credit Card Processing ==
 
-Introducing sophisticated payment forms, donation forms, and other credit card forms is fast with integrations with leading payment services like PayPal, Stripe, and Authorize.net. A custom WooCommerce form with custom fields is straightforward, ensuring your eCommerce solutions are as versatile as they are powerful.
+Introducing sophisticated payment forms, donation forms, and other credit card forms is fast with integrations with leading payment services like PayPal, Stripe, Square, and Authorize.net. A custom WooCommerce form with custom fields is straightforward, ensuring your eCommerce solutions are as versatile as they are powerful.
 
 == Data-Driven Web Applications Made Easy ==
 
-With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, and much more.
+With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, timelines, and much more.
 
 == Elevate Your Online Store with WooCommerce Product Order Forms ==
 
@@ -265,7 +265,7 @@ To get access to more features, integrations, and support, [upgrade to Formidabl
 
 = Can I create a payment form? =
 
-Yes! We make it easy to accept payments using Stripe, PayPal, and Authorize.net.
+Yes! We make it easy to accept payments using Stripe, Square, PayPal, and Authorize.net.
 
 Our Stripe integration helps you quickly accept credit card payments online. Our PayPal forms allow you to accept PayPal payments, subscriptions, and donations online.
 
@@ -318,7 +318,7 @@ Additionally, our Payment fields will help you create a credit card form, donati
 * Dropdown Items
 * Product Quantity
 * Total
-* Credit Card (Stripe or Authorize.net)
+* Credit Card (Stripe, Square, or Authorize.net)
 
 = Can I import and export submissions? =
 
@@ -372,32 +372,41 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.19 =
-* New: A new Enable GDPR related features and enhancements setting has been added to Global Settings. When enabled, a new GDPR field is available in the form builder. The GDPR field is a special required checkbox field that must be checked in order for the form to be submitted.
-* New: Sorting preferences are now remembered on the Forms and Entries list admin pages. Forms are now also automatically sorted with the newest forms at the top.
-* New: A quick link to the views tab is now available on the form list admin page.
-* New: A new setting to disable cookies has been added to Global Settings in the GDPR section.
-* New: The enter key will now quickly jump between inputs when setting options for Radio Button, Checkbox, and Dropdown fields.
-* Fix: The accordions on the visual styler page looked incorrect when using WordPress v6.7.2.
-* Fix: After updating an entry, empty user ID values would convert to 0, causing issues when trying to filter a view with an empty user ID.
-* Fix: Turnstile captcha fields would not properly reset on an error when submitting with AJAX.
-* Fix: A Javascript error would occur when triggering a change event on a hidden field with custom code.
+= 6.31 =
+* New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
+* New: Form action settings have been redesigned.
+* New: Payment actions now use buttons to toggle the selected gateway, and gateway is the top action setting. Note that when custom gateways or Authorize.Net are active, gateways will still revert to the old settings.
+* New: The Collect a Payment action icon is now hidden by default, replaced by individual icons for Stripe, Square, and PayPal Commerce. If other gateways are active, Collect a Payment is still included.
+* New: Border styling rules have been added so autofill fields in Chrome and Safari will appear more consistent with other fields.
+* New: A new frm_after_import_forms action has been added for handling an imported XML after all forms have been imported.
+* Fix: A form would incorrectly try to submit a second time when redirecting and submitting with AJAX.
 
-= 6.18 =
-* New: Invalid checkbox fields will now properly show a red outline to improve user experience.
-* Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
-* Fix: Automatic width would not work for dropdown fields with a field label positioned to the left or right.
-* Fix: Float values used in style settings would lose the decimal places, only allowing whole number values.
-* Fix: Some style setting values would result in invalid undefined or NaN values.
-* Text will no longer be selected when multi-selecting fields while holding the shift key.
-* The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
-* The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
+= 6.30 =
+* New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
+* New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
+* New: New frm_after_create_entry_{form_key} and frm_after_update_entry_{form_key} actions have been added.
+* Fix: When editing an entry, the Other option would not correctly appear selected.
+* Fix: Entries would fail to save in some cases where entry names would exceed 255 characters with special unicode characters.
+* Fix: Custom style CSS would not properly prefix selectors when ::before or ::after were used.
+* Fix: Attempting to refund a Square payment would result in a fatal error when the Stripe or Authorize.Net add-ons were also active.
+* Fix: A check has been added to prevent a possible Cannot access offset of type string on string fatal PHP error issue.
 
-= 6.17.1 =
-* Fix: The payments table admin page would appear empty when there were unread inbox notices.
+= 6.29 =
+* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
+* Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
+* Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
+* Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
+* Fix: The field options dropdown for the far left field would render underneath the field settings sidebar in rows with a lot of fields.
+* Fix: An Undefined array key "slug" PHP Warning has been fixed.
+* Fix: When a missing payment field is automatically added to a form with a payment action, the new field would incorrectly appear below the submit button.
+* Breaking: The deprecated FrmDb constructor method has been removed.
+
+= 6.28 =
+* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
+* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.16.2 =
-This version fixes a security-related bug. Upgrade immediately.
+= 6.29 =
+This version improves Stripe payment validation. Upgrade immediately if you are using Stripe payments.

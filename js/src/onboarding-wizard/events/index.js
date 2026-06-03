@@ -37,8 +37,8 @@ export function addEventListeners() {
  * @param {PopStateEvent} event The event object associated with the navigation action.
  * @return {void}
  */
-window.addEventListener( 'popstate', ( event ) => {
+window.addEventListener( 'popstate', event => {
 	const stepName = event.state?.step || getQueryParam( 'step' );
 	// Navigate to the specified step without adding to browser history
 	navigateToStep( stepName, 'replaceState' );
-});
+} );

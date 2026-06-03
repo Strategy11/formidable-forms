@@ -3,6 +3,7 @@
  * On Submit redirect settings
  *
  * @package Formidable
+ *
  * @since 6.17
  *
  * @var array $args See {@see FrmOnSubmitHelper::show_redirect_settings()}.
@@ -14,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $id_attr = $args['action_control']->get_field_id( 'success_url' );
 ?>
-<div class="frm_form_field frm_has_shortcodes">
+<div class="frm_form_field frm_has_shortcodes frm-mt-xs">
 	<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect URL', 'formidable' ); ?></label>
 	<input
 		type="text"
@@ -71,6 +72,7 @@ $redirect_delay = ! empty( $args['form_action']->post_content['redirect_delay'] 
 
 <?php
 $css_class = 'frm_redirect_delay_settings';
+
 if ( ! $redirect_delay ) {
 	$css_class .= ' frm_hidden';
 }
@@ -79,6 +81,7 @@ if ( ! $redirect_delay ) {
 	<?php
 	$id_attr    = $args['action_control']->get_field_id( 'redirect_delay_time' );
 	$delay_time = intval( $args['form_action']->post_content['redirect_delay_time'] );
+
 	if ( $delay_time < 1 ) {
 		$delay_time = 8;
 	}
@@ -101,7 +104,7 @@ if ( ! $redirect_delay ) {
 	<?php
 	$id_attr = $args['action_control']->get_field_id( 'redirect_delay_msg' );
 	?>
-	<div class="frm_form_field frm_has_shortcodes">
+	<div class="frm_form_field frm_has_shortcodes frm-mt-xs">
 		<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
 			<?php esc_html_e( 'Redirect message', 'formidable' ); ?>
 		</label>

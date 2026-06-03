@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<select id="frm_currency" name="frm_currency" class="frm8 frm_form_field">
 		<?php
 		$selected_currency = ! empty( $frm_settings->currency ) ? strtoupper( $frm_settings->currency ) : 'USD';
+
 		foreach ( $currencies as $code => $currency ) {
 			?>
 			<option value="<?php echo esc_attr( $code ); ?>"<?php selected( $selected_currency, strtoupper( $code ) ); ?>>

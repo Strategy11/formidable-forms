@@ -30,7 +30,7 @@ function addInstallAddonsButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onInstallAddonsButtonClick = async( event ) => {
+const onInstallAddonsButtonClick = async event => {
 	const addons = document.querySelectorAll( '.frm-option-box.frm-checked:not(.frm-disabled)' );
 	const { installedAddons } = getState();
 	const installAddonsButton = event.currentTarget;
@@ -67,7 +67,7 @@ const onInstallAddonsButtonClick = async( event ) => {
  * @param {boolean} options.isVendor    Indicates whether the plugin is a vendor plugin (true) or a regular add-on (false).
  * @return {Promise<any>} A promise that resolves with the JSON response from the server after the installation request is completed.
  */
-async function installAddon( plugin, {isVendor, isInstalled}) {
+async function installAddon( plugin, { isVendor, isInstalled } ) {
 	// Prepare FormData for the POST request
 	const formData = new FormData();
 	formData.append( 'nonce', nonce );
@@ -81,10 +81,10 @@ async function installAddon( plugin, {isVendor, isInstalled}) {
 		const response = await fetch( ajaxurl, {
 			method: 'POST',
 			body: formData
-		});
+		} );
 
 		if ( ! response.ok ) {
-			throw new Error( `Server responded with status ${response.status}` );
+			throw new Error( `Server responded with status ${ response.status }` );
 		}
 
 		// Parse the JSON response

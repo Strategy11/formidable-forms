@@ -1,0 +1,34 @@
+/**
+ * Base - Headings
+ */
+
+.frm-white-body h1,
+.frm-white-body h2,
+.frm-white-body h3,
+.frm-white-body h4 {
+	color: var(--grey-900);
+	font-weight: 400;
+	line-height: var(--leading) !important;
+}
+
+.frm-white-body .wrap h1,
+.frm-white-body h1 {
+	font-size: var(--text-xl);
+}
+
+.frm-white-body .wrap h2,
+.frm-white-body h2 {
+	font-size: var(--text-lg);
+	font-weight: 500;
+}
+
+.frm-white-body .wrap h3,
+.frm-white-body h3 {
+	font-size: var(--text-md);
+}
+
+.frm-white-body .wrap h4,
+.frm-white-body h4 {
+	font-size: var(--text-sm);
+	font-weight: 500;
+}

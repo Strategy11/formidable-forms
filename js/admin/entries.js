@@ -5,7 +5,6 @@
  */
 
 wp.domReady( () => {
-
 	/**
 	 * Internal dependencies
 	 */
@@ -46,6 +45,6 @@ wp.domReady( () => {
 			setTimeout( () => {
 				applyZebraStriping( '.frm-alt-table', newShowState === 'true' ? '' : 'frm-empty-row' );
 			}, newShowState === 'true' ? 0 : 200 );
-		});
+		} );
 	}
-});
+} );

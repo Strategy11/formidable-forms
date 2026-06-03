@@ -6,3 +6,4 @@ export * from './showSelectedCategory';
 export * from './searchState';
 export * from './showEmptyState';
 export * from './showModal';
+export * from './showError';

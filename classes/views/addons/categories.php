@@ -3,6 +3,8 @@
  * Add-Ons categories.
  *
  * @package Formidable
+ *
+ * @var array<string, array{name: string, count: int}> $categories Categories keyed by slug.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,6 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( 'all-items' === $category_slug || 'basic' === $category_slug ) {
 			echo '<li class="frm-page-skeleton-divider frm-mt-xs frm-mb-xs"></li>';
 		}
+
 		if ( 'all-items' === $category_slug ) {
 			$classes .= ' frm-current';
 		}

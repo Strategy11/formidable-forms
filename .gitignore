@@ -5,11 +5,15 @@ pro
 frm.min.js
 frmstrp.min.js
 formidableforms.css
-formidableforms1.css
+formidableforms[0-9]*.css
 formidable.zip
 languages/formidable-js.pot
 languages/formidable-js-strings.php
 js/*.js.LICENSE.txt
+
+# Ignore map files
+**/*.css.map
+**/*.js.map
 
 # Node
 node_modules
@@ -30,3 +34,6 @@ composer.lock
 sonar-project.properties
 .sonar_lock
 report-task.txt
+
+# Mago
+bin/mago

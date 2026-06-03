@@ -10,12 +10,14 @@ class FrmFieldPhone extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'phone';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -60,6 +62,7 @@ class FrmFieldPhone extends FrmFieldType {
 	 * @return void Outputs the HTML option tag directly.
 	 */
 	protected function print_international_option() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<option
 			value=""
@@ -70,6 +73,7 @@ class FrmFieldPhone extends FrmFieldType {
 			<?php esc_html_e( 'International', 'formidable' ); ?>
 		</option>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -81,6 +85,8 @@ class FrmFieldPhone extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value
 	 *
 	 * @return void
 	 */

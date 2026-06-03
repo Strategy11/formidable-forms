@@ -10,6 +10,7 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'textarea';
@@ -47,12 +48,21 @@ class FrmFieldTextarea extends FrmFieldType {
 		$size = FrmField::get_option( $this->field, 'size' );
 		$max  = FrmField::get_option( $this->field, 'max' );
 
-		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" rows="' . esc_attr( $max ) . '" id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value"';
+		$html_atts = array(
+			'name'        => $this->html_name( $name ),
+			'id'          => $this->html_id(),
+			'rows'        => $max,
+			'class'       => 'dyn_default_value',
+			'placeholder' => FrmField::get_option( $this->field, 'placeholder' ),
+		);
+		echo '<textarea';
+		FrmAppHelper::array_to_html_params( $html_atts, true );
 
 		if ( $size ) {
 			if ( is_numeric( $size ) ) {
 				$size .= 'px';
 			}
+
 			$style = 'width:' . $size . ';';
 			echo ' style="' . esc_attr( $style ) . '"';
 		}
@@ -64,7 +74,6 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	protected function prepare_display_value( $value, $atts ) {
 		FrmFieldsHelper::run_wpautop( $atts, $value );
-
 		return $value;
 	}
 
@@ -92,9 +101,11 @@ class FrmFieldTextarea extends FrmFieldType {
 		$this->add_aria_description( $args, $input_html );
 		$rows = $this->field['max'] ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
 			$rows . $input_html . '>' .
 			FrmAppHelper::esc_textarea( $this->field['value'] ) .
 			'</textarea>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 }

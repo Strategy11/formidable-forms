@@ -1,0 +1,23 @@
+/**
+ * Components - Modal - Inline Modal
+ */
+
+.frm-right-panel .frm-inline-modal.postbox .inside {
+	margin: 0;
+	padding: 0 14px 14px;
+
+	.frm-with-line,
+	.accordion-section-content h4 {
+		margin-left: -14px;
+		margin-right: -14px;
+	}
+}
+
+.frm-right-panel .frm-inline-modal .inside p:not(.howto),
+.frm-right-panel .frm-inline-modal .inside a {
+	font-size: 15px;
+}
+
+.frm-inline-modal .inside a.frm_icon_font {
+	font-size: 18px;
+}

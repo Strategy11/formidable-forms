@@ -1,0 +1,40 @@
+/**
+ * Category Tabs
+ */
+
+ul.frm-category-tabs {
+	margin-top: 2px;
+}
+
+.frm-category-tabs > li a,
+.frm-category-tabs > li a:active {
+	outline: none;
+	box-shadow: none;
+	display: flex;
+	gap: var(--gap-xs);
+	align-items: center;
+}
+
+.frm-category-tabs > li.active .frmsvg,
+.frm-category-tabs > li.active i,
+.frm-category-tabs > li.active span,
+.frm-category-tabs > li.active a {
+	color: var(--primary-500);
+}
+
+.frm_wrap .manage-menus {
+	margin-top: 0;
+	border: none;
+	border-bottom: 1px solid var(--grey-300);
+	background: var(--lightest-grey);
+}
+
+.general_settings .postbox .manage-menus {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.frm-postbox-no-h3 {
+	padding-top: 10px;
+}

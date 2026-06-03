@@ -22,13 +22,13 @@ import { updateRootline } from '../ui';
  */
 export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
 	// Find the target step element
-	const targetStep = document.querySelector( `.${PREFIX}-step[data-step-name="${stepName}"]` );
+	const targetStep = document.querySelector( `.${ PREFIX }-step[data-step-name="${ stepName }"]` );
 	if ( ! targetStep ) {
 		return;
 	}
 
 	// Find and hide the current step element
-	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
+	const currentStep = document.querySelector( `.${ PREFIX }-step.${ CURRENT_CLASS }` );
 	if ( currentStep ) {
 		currentStep.classList.remove( CURRENT_CLASS );
 		hide( currentStep );
@@ -57,7 +57,7 @@ export const navigateToStep = ( stepName, updateMethod = 'pushState' ) => {
  * @return {void}
  */
 export const navigateToNextStep = () => {
-	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
+	const currentStep = document.querySelector( `.${ PREFIX }-step.${ CURRENT_CLASS }` );
 	const nextStep = currentStep?.nextElementSibling;
 
 	if ( ! nextStep ) {
@@ -86,7 +86,7 @@ export const navigateToNextStep = () => {
  * @return {void}
  */
 export const navigateToPrevStep = () => {
-	const currentStep = document.querySelector( `.${PREFIX}-step.${CURRENT_CLASS}` );
+	const currentStep = document.querySelector( `.${ PREFIX }-step.${ CURRENT_CLASS }` );
 	const prevStep = currentStep?.previousElementSibling;
 
 	if ( ! prevStep ) {

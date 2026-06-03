@@ -3,6 +3,10 @@
  * Add-Ons addon view.
  *
  * @package Formidable
+ *
+ * @var array  $addon        Single add-on data (slug, title, display_name, excerpt, status, docs, docs_label, is_new, etc.).
+ * @var string $license_type Current license type or empty string.
+ * @var string $pricing      Upgrade URL used for CTAs.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,7 +34,13 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 		</h3>
 
 		<?php
-		if ( ! FrmAddonsHelper::is_locked() ) {
+		if ( FrmAddonsHelper::is_locked() ) {
+			?>
+			<span class="frm-card-lock-icon frm-ml-auto">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
+			</span>
+			<?php
+		} else {
 			FrmAddonsController::show_conditional_action_button(
 				array(
 					'addon'         => $addon,
@@ -50,12 +60,6 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 					'aria-label-attr' => $addon['title'],
 				)
 			);
-		} else {
-			?>
-			<span class="frm-card-lock-icon frm-ml-auto">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
-			</span>
-			<?php
 		}//end if
 		?>
 	</div>
@@ -69,14 +73,15 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 	<div class="frm-flex frm-items-center frm-justify-between">
 		<?php
 		if ( ! empty( $addon['docs'] ) && ! FrmAddonsHelper::get_plan() ) {
+			$docs_label = ! empty( $addon['docs_label'] ) ? $addon['docs_label'] : __( 'View Docs', 'formidable' );
 			?>
-			<a class="frm-link-with-external-icon" href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">
-				<?php esc_html_e( 'View Docs', 'formidable' ); ?>
+			<a class="frm-link-with-external-icon" href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php echo esc_attr( $docs_label ); ?>">
+				<?php echo esc_html( $docs_label ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup8_icon' ); ?>
 			</a>
 			<?php
 		} else {
-			FrmFormsHelper::show_plan_required( FrmAddonsHelper::get_plan(), $pricing . ' & utm_content = ' . $addon['slug'] );
+			FrmFormsHelper::show_plan_required( FrmAddonsHelper::get_plan(), $pricing . '&utm_content=' . $addon['slug'] );
 			?>
 			<div>
 				<?php FrmAddonsController::addon_upgrade_link( $addon, $pricing ); ?>

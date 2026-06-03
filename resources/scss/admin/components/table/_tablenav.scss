@@ -1,0 +1,17 @@
+/**
+ * Components - Table Nav
+ */
+
+.post-type-frm_display .tablenav,
+.frm_wrap .tablenav {
+	margin-bottom: 10px;
+}
+
+.frm-white-body .tablenav .actions select,
+.wp-admin .frm_wrap .tablenav select {
+	margin-right: var(--gap-xs);
+}
+
+.tablenav .actions .button {
+	margin-top: 1px;
+}

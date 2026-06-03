@@ -19,12 +19,12 @@ export function buildCategorizedTemplates() {
 
 		categories.forEach( category => {
 			// Initialize the category array if not already done
-			if ( ! categorizedTemplates[ category ]) {
+			if ( ! categorizedTemplates[ category ] ) {
 				categorizedTemplates[ category ] = [];
 			}
 
 			// Add the template to the appropriate category
 			categorizedTemplates[ category ].push( template );
-		});
-	});
+		} );
+	} );
 }

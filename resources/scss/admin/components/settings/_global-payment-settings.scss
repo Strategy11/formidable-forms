@@ -1,0 +1,40 @@
+/**
+ * Global Payment Settings
+ */
+
+#payments_settings .frm_payments_section .form-table td {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+#payments_settings .frm_payments_section .form-table {
+	margin-top: 0;
+}
+
+#frm_authnet_general_settings > tr:first-of-type > td:first-of-type {
+	padding-top: 0;
+}
+
+#frm_authnet_general_settings h3 {
+	margin-bottom: 0;
+}
+
+.frm_payment_settings_tab .frmsvg {
+	height: 22px;
+}
+
+.frm_payment_settings_tab[for="frm_toggle_paypal_settings"] .frmsvg {
+	width: 83px;
+}
+
+.frm_payment_settings_tab[for="frm_toggle_authorize_net_settings"] .frmsvg {
+	width: 99px;
+}
+
+.frm_payment_settings_tab[for="frm_toggle_square_settings"] .frmsvg {
+	width: 89px;
+}
+
+.frm_payment_settings_tab[for="frm_toggle_stripe_settings"] .frmsvg {
+	width: 53px;
+}

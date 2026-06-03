@@ -20,7 +20,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	 * @covers FrmFormTemplatesController::menu
 	 */
 	public function test_menu() {
-		$this->assertEquals( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
+		$this->assertSame( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
 	}
 
 	/**
@@ -29,7 +29,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	public function test_render() {
 		// Prepare the necessary environment and data for the test.
 		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
-		$this->controller::set_form_templates_data();
+		$this->set_form_templates_data();
 
 		// Assertions for verifying that necessary variables are set by the render method.
 		$this->assertNotEmpty( $this->controller::get_view_path(), 'View path should be set.' );
@@ -68,7 +68,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Prepare the necessary environment and data for the test.
 		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
-		$this->controller::set_form_templates_data();
+		$this->set_form_templates_data();
 
 		ob_start();
 		$this->controller::render_modal();
@@ -133,7 +133,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 			// Verify the favorite templates are correctly initialized.
 			$this->assertIsArray( $favorites, 'Favorite templates should be an array.' );
-			$this->assertTrue( isset( $favorites['default'] ), 'Missing default in favorites.' );
+			$this->assertArrayHasKey( 'default', $favorites, 'Missing default in favorites.' );
 
 			$expected = array_merge( $test_favorite, $default );
 			$this->assertEquals( $expected, $favorites, 'Favorite templates should match the example data.' );
@@ -146,7 +146,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 	public function test_fetch_and_format_custom_templates() {
 		// Prepare the necessary environment and data for the test.
 		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
-		$this->controller::set_form_templates_data();
+		$this->set_form_templates_data();
 
 		// Get the custom templates.
 		$templates = $this->controller::get_custom_templates();
@@ -164,7 +164,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Set up the testing environment by initializing template data and categorizing them.
 		$this->set_private_property( $this->controller, 'custom_templates', array() );
 		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
-		$this->controller::set_form_templates_data();
+		$this->set_form_templates_data();
 		$this->run_private_method( array( $this->controller, 'organize_and_set_categories' ) );
 
 		// Get the organized categories for validation.
@@ -172,6 +172,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Ensure the organized categories are structured correctly.
 		$this->assertIsArray( $categories, 'Organized categories should be an array.' );
+
 		foreach ( $categories as $slug => $category ) {
 			$this->assertIsArray( $category, 'Each category should be an array.' );
 			$this->assertArrayHasKey( 'name', $category, "Category '{$slug}' should have a 'name' key." );
@@ -180,6 +181,7 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 
 		// Define and validate the presence of specific categories.
 		$expected_categories = array( 'favorites', 'custom', 'all-items' );
+
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$expected_categories[] = 'available-templates';
 		}
@@ -189,24 +191,26 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 			$this->assertArrayHasKey( $expected_category, $categories, "Should contain the '{$expected_category}' category." );
 
 			// Calculate the expected count for each category and validate it.
-			if ( isset( $categories[ $expected_category ] ) ) {
-				$expected_count = 0;
-				switch ( $expected_category ) {
-					case 'favorites':
-						$expected_count = $this->controller::get_favorite_templates_count();
-						break;
-					case 'custom':
-						$expected_count = count( $this->controller::get_custom_templates() );
-						break;
-					case 'all-items':
-						$expected_count = count( $this->controller::get_templates() );
-						break;
-					case 'available-templates':
-						$expected_count = 0;
-						break;
-				}
-				$this->assertEquals( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
+			if ( ! isset( $categories[ $expected_category ] ) ) {
+				continue;
 			}
+
+			$expected_count = 0;
+			switch ( $expected_category ) {
+				case 'favorites':
+					$expected_count = $this->controller::get_favorite_templates_count();
+					break;
+				case 'custom':
+					$expected_count = count( $this->controller::get_custom_templates() );
+					break;
+				case 'all-items':
+					$expected_count = count( $this->controller::get_templates() );
+					break;
+				case 'available-templates':
+					$expected_count = 0;
+					break;
+			}
+			$this->assertSame( $expected_count, $categories[ $expected_category ]['count'], "The '{$expected_category}' category count should match the expected number." );
 		}
 	}
 
@@ -227,18 +231,20 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Case 1: 'new_template' not present in the URL.
 		$_GET['new_template'] = null;
 		$modified_nav_items   = $this->controller::append_new_template_to_nav( $nav_items, array() );
+
 		// Assert that the links are unchanged.
 		foreach ( $modified_nav_items as $index => $item ) {
-			$this->assertEquals( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
+			$this->assertSame( $nav_items[ $index ]['link'], $item['link'], "Link should remain unchanged when 'new_template' is not present." );
 		}
 
 		// Case 2: 'new_template' is present in the URL.
 		$_GET['new_template'] = 'true';
 		$modified_nav_items   = $this->controller::append_new_template_to_nav( $nav_items, array() );
+
 		// Assert that 'new_template=true' is appended to each link.
 		foreach ( $modified_nav_items as $index => $item ) {
 			$expected_link = $nav_items[ $index ]['link'] . '&new_template=true';
-			$this->assertEquals( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
+			$this->assertSame( $expected_link, $item['link'], "Link should have 'new_template=true' appended." );
 		}
 	}
 
@@ -263,10 +269,28 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		// Case 2: On the form templates page.
 		$_GET['page'] = $this->controller::PAGE_SLUG;
 		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
-		$this->controller::set_form_templates_data();
+		$this->set_form_templates_data();
 		$this->controller::enqueue_assets();
 		// Assert that the specific scripts and styles for the form templates page are enqueued.
 		$this->assertTrue( wp_script_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Script should be enqueued on the form templates page.' );
 		$this->assertTrue( wp_style_is( $this->controller::SCRIPT_HANDLE, 'enqueued' ), 'Style should be enqueued on the form templates page.' );
+	}
+
+	private function set_form_templates_data() {
+		$form_template_api = new FrmFormTemplateApi();
+		$this->set_private_property( $this->controller, 'form_template_api', $form_template_api );
+
+		$this->run_private_method( array( $this->controller, 'init_favorite_templates' ) );
+		$this->run_private_method( array( $this->controller, 'fetch_and_format_custom_templates' ) );
+
+		if ( ! $this->get_private_property( $this->controller, 'templates' ) ) {
+			$this->set_private_property( $this->controller, 'templates', $form_template_api->get_api_info() );
+		}
+
+		$this->set_private_property( $this->controller, 'is_expired', FrmAddonsController::is_license_expired() );
+		$this->set_private_property( $this->controller, 'license_type', FrmAddonsController::license_type() );
+
+		$this->run_private_method( array( $this->controller, 'organize_and_set_categories' ) );
+		$this->run_private_method( array( $this->controller, 'assign_featured_templates' ) );
 	}
 }

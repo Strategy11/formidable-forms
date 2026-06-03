@@ -36,7 +36,7 @@ function addSearchEvents() {
  * @param {Event}   event                   The event object (input, search, or change event).
  * @return {void}
  */
-function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
+function handleSearchResult( { foundSomething, notEmptySearchText }, event ) {
 	// Prevent double calls as window.frmDom.search.init attaches both 'input' and 'search' events,
 	// triggering this method twice on 'x' button click.
 	if ( event && event.type === 'search' && event.target.value === '' ) {
@@ -51,7 +51,7 @@ function handleSearchResult({ foundSomething, notEmptySearchText }, event ) {
 	// Revert to 'All Templates' if search and selected category are both empty
 	if ( ! state.notEmptySearchText && ! state.selectedCategory ) {
 		allItemsCategory.dispatchEvent(
-			new Event( 'click', { bubbles: true })
+			new Event( 'click', { bubbles: true } )
 		);
 
 		return;

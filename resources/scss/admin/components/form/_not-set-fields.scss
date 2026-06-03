@@ -1,0 +1,14 @@
+/**
+ * Not Set Fields
+ */
+
+.frm-not-set input {
+	color: var(--primary-500) !important;
+	font-size: 13px;
+}
+
+.frm-not-set .frmsvg,
+.frm-not-set i {
+	color: var(--primary-700);
+	opacity: 1;
+}

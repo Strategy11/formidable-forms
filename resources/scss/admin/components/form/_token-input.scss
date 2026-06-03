@@ -1,0 +1,74 @@
+/**
+ * Token Input Component
+ *
+ * Displays space-separated values as selectable tokens
+ */
+
+.frm-token-container {
+	position: relative;
+	display: block;
+	direction: ltr;
+
+	.frm-tokens {
+		position: absolute;
+		top: 0;
+		left: 0;
+		max-width: calc(100% - var(--gap-xl));
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--gap-2xs);
+		padding: 6px var(--gap-xs);
+		margin: 0;
+	}
+
+	.frm-token {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: var(--gap-xs);
+		min-height: 24px;
+		height: auto;
+		color: var(--grey-900);
+		background: var(--grey-100);
+		border-radius: 4px;
+		padding: 0 var(--gap-xs);
+		font-size: var(--text-md);
+		margin: 0;
+		z-index: 2;
+
+		.frm-token-value {
+			line-height: var(--leading);
+			white-space: normal;
+			word-break: break-word;
+		}
+
+		.frm-token-remove {
+			display: flex;
+			flex-shrink: 0;
+			cursor: pointer;
+
+			.frmsvg {
+				color: var(--grey-900);
+				position: static;
+				width: 12px;
+				height: 12px;
+				padding: 0;
+			}
+
+			&:hover .frmsvg {
+				color: var(--error-500);
+			}
+		}
+	}
+
+	.frm-show-inline-modal {
+		z-index: 3 !important;
+	}
+
+	.frm-token-proxy-input {
+		position: relative;
+		z-index: 1;
+		padding-right: var(--gap-xl) !important;
+	}
+}

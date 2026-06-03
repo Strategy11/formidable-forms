@@ -1,0 +1,18 @@
+/**
+ * Editor Elements
+ */
+
+/*hide elements if js is avail*/
+select.texture {
+	display: none;
+}
+
+.post-type-frm_display #wp-content-editor-tools,
+#wp-content-editor-tools {
+	background-color: transparent;
+}
+
+.post-type-frm_display #major-publishing-actions {
+	border-color: var(--grey-300);
+	background: var(--sidebar-color);
+}

@@ -20,8 +20,8 @@ import './commands';
 // require('./commands')
 
 import '@10up/cypress-wp-utils';
-import 'cypress-axe'
+import 'cypress-axe';
 
-import "cypress-html-validate/commands";
+import 'cypress-html-validate/commands';
 
-require('cypress-xpath');
+require( 'cypress-xpath' );

@@ -1,0 +1,9 @@
+@import "components/list/checklist";
+@import "components/tour/spotlight";
+
+.frm-welcome-tour .frm-checklist {
+	position: fixed;
+	right: var(--gap-md);
+	bottom: var(--gap-sm);
+	z-index: 9999;
+}

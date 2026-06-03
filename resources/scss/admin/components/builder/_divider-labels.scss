@@ -1,0 +1,23 @@
+/**
+ * Divider Labels
+ */
+
+.frm_sorting .divider_section_only > .frm_ipe_field_label {
+	font-size: 116%;
+}
+
+#frm_form_editor_container .edit_field_type_break .frm_primary_label.frm_ipe_field_label.button {
+	width: 150px;
+	text-align: center;
+	margin-bottom: 3px;
+	display: block;
+}
+
+tr.frm_options_heading td {
+	padding-bottom: 0;
+}
+
+.frm_sorting .widget-inside .form-table td p,
+.frm_sorting .widget-inside .form-wrap label {
+	padding: 10px 0;
+}

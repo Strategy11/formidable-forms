@@ -1,0 +1,37 @@
+/**
+ * Utilities - Generic Classes
+ */
+
+.frm-fields p > label.frm_hidden,
+#wpbody-content label.frm_hidden,
+.frm-lookup-modal .dismiss,
+.frm-right-panel .inside a.frm_hidden,
+#form_global_settings .frm_hidden,
+ul.frm_form_nav > li.frm_hidden,
+a.frm_hidden,
+.button.frm_hidden,
+.wp-core-ui .button.frm_hidden {
+	display: none;
+}
+
+.postbox .inside > p.frm_no_bottom_margin:last-child {
+	margin-bottom: 0 !important;
+}
+
+.frm_no_section_fields.frm_block {
+	display: block;
+}
+
+.actions.frm_visible_overflow {
+	overflow: visible !important;
+}
+
+.frm_full_opacity, /* deprecated */
+.frm_submit .frm_full_opacity,
+.frm_submit .frm-opacity-100 {
+	opacity: 1;
+}
+
+.frm-dropdown-menu.frm-on-top {
+	z-index: 99999;
+}

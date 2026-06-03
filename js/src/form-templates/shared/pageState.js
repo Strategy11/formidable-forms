@@ -12,12 +12,11 @@ const { templatesCount, favoritesCount, customCount } = window.frmFormTemplatesV
 const { availableTemplateItems } = getElements();
 const availableTemplatesCount = availableTemplateItems.length;
 
-setState({
+setState( {
 	availableTemplatesCount,
 	customCount: Number( customCount ),
 	extraTemplatesCount: templatesCount - availableTemplatesCount,
 	favoritesCount,
-	selectedTemplate: false,
-});
+} );
 
 export { getState, getSingleState, setState, setSingleState };

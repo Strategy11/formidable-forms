@@ -50,7 +50,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @return string
 	 */
 	public function get_site_key_tooltip() {
-		return __( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' );
+		return __( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -60,6 +60,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 *
 	 * @param array $attributes
 	 * @param array $field
+	 *
 	 * @return array
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
@@ -77,6 +78,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @since 6.8.4
 	 *
 	 * @param array $field
+	 *
 	 * @return string
 	 */
 	protected function get_captcha_size( $field ) {
@@ -116,8 +118,22 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Only add the "frm-" prefix if multiple reCAPTCHA fields are allowed.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param bool $allow_multiple
+	 *
+	 * @return string
+	 */
+	public function get_class_prefix( $allow_multiple ) {
+		return $allow_multiple ? 'frm-' : '';
+	}
+
+	/**
 	 * @since 6.8.4
 	 * @deprecated 6.11.1
+	 *
 	 * @return string
 	 */
 	public function getName() {

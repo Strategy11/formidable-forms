@@ -1,9 +1,15 @@
 <?php
+/**
+ * User ID field form builder view.
+ *
+ * @package Formidable
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<span class="frm-with-left-icon">
+<span class="frm-with-left-icon frm-block">
 	<?php FrmAppHelper::icon_by_class( 'frmfont frm_user_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<input type="text" value="<?php esc_attr_e( 'User ID fields will not show in your form.', 'formidable' ); ?>" disabled />
 </span>

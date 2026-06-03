@@ -1,0 +1,23 @@
+/**
+ * Layout - Postbox
+ */
+
+.frm_wrap .postbox {
+	border-color: var(--grey-300);
+	border-radius: 6px;
+	box-shadow: none;
+}
+
+.frm_wrap .postbox h3.hndle {
+	cursor: default;
+	padding: 10px 20px;
+	margin: 0;
+	line-height: 1.4em;
+	border-color: var(--grey-300);
+}
+
+.frm-pre-hndle {
+	font-size: 15px;
+	padding: 5px;
+	margin: 9px 15px;
+}

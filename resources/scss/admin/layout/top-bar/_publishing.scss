@@ -1,0 +1,19 @@
+/**
+ * Layout: Publishing
+ */
+
+.frm-admin-page-styles #frm-publishing #save_menu_header,
+.frm-admin-page-styles2 #frm-publishing #save_menu_header {
+	display: inline-block;
+}
+
+/* Change the order of subfields of the Name field in the backend */
+.edit_form_item .frm_combo_inputs_container[data-name-layout="last_first"] .frm_form_subfield-first {
+	order: 2;
+}
+
+.frm-video-wrapper iframe {
+	width: 100%;
+	max-width: 843px;
+	border-radius: var(--border-radius);
+}

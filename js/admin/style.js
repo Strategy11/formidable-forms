@@ -3,15 +3,14 @@
  * Pro-specific features are in the style-settings.js file in Pro.
  */
 ( function() {
-	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
 
 	if ( ! document.getElementById( 'frm_active_style_form' ) ) {
 		return;
 	}
 
-	const { __, sprintf }                                        = wp.i18n;
-	const state                                                  = {
+	const { __, sprintf } = wp.i18n;
+	const state = {
 		showingSampleForm: document.getElementById( 'frm_active_style_form' ).classList.contains( 'frm_hidden' ), // boolean
 		unsavedChanges: false, // boolean
 		autoId: 0, // Number
@@ -21,9 +20,9 @@
 		initialSelectedStyleValue: false // String|false
 	};
 	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
-	const { onClickPreventDefault }                              = frmDom.util;
-	const { maybeCreateModal, footerButton }                     = frmDom.modal;
-	const { doJsonPost }                                         = frmDom.ajax;
+	const { onClickPreventDefault } = frmDom.util;
+	const { maybeCreateModal, footerButton } = frmDom.modal;
+	const { doJsonPost } = frmDom.ajax;
 
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
@@ -38,7 +37,7 @@
 	 * These are shared events for both the edit/list views like the sample form toggle.
 	 * This includes preview events, but also the update button click event handling for both views.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initCommonEventListeners() {
 		document.addEventListener( 'click', handleCommonClickEvents );
@@ -49,7 +48,7 @@
 	/**
 	 * Initialize common functions required for the preview in both the edit and list views.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initPreview() {
 		initFloatingLabels();
@@ -62,14 +61,13 @@
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
 
 		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
-
 	}
 
 	/**
 	 * Initialize the slider functionality in the style preview.
 	 *
 	 * @param {HTMLElement} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initSliderPreview( event ) {
 		const wrapper = event.target.closest( '.frm_range_container' );
@@ -83,7 +81,7 @@
 	 * Add the wp-core-ui class to the #wp-auth-check-wrap element.
 	 * As this style isn't included on the body for the styler, the close button on the auth modal wasn't getting styled properly.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function fixWpAuthModal() {
 		const authWrap = document.getElementById( 'wp-auth-check-wrap' );
@@ -93,7 +91,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
@@ -102,8 +100,8 @@
 		setTimeout( addHamburgerMenusToCards, 1 );
 		initDatepickerSample();
 
-		const enableToggle              = document.getElementById( 'frm_enable_styling' );
-		const styleIdInput              = getStyleIdInput();
+		const enableToggle = document.getElementById( 'frm_enable_styling' );
+		const styleIdInput = getStyleIdInput();
 		state.initialSelectedStyleValue = styleIdInput.value;
 
 		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
@@ -126,14 +124,14 @@
 	/**
 	 * Handle pagination click events.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initStyleCardPagination() {
 		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
 			pagination => {
-				const wrapper       = pagination.closest( '.frm-style-card-wrapper' );
+				const wrapper = pagination.closest( '.frm-style-card-wrapper' );
 				const showAllAnchor = pagination.querySelector( '.frm-show-all-styles' );
-				let showingAll      = false;
+				let showingAll = false;
 
 				onClickPreventDefault(
 					showAllAnchor,
@@ -151,7 +149,7 @@
 						wrapper.querySelectorAll( '.frm-style-card:nth-child(3) ~ .frm-style-card' ).forEach(
 							card => card.classList.add( 'frm_hidden' )
 						);
-						const hiddenCount         = wrapper.querySelectorAll( '.frm-style-card.frm_hidden' ).length;
+						const hiddenCount = wrapper.querySelectorAll( '.frm-style-card.frm_hidden' ).length;
 						/* translators: %d: The number of hidden items to show. */
 						showAllAnchor.textContent = sprintf( __( 'Show all (%d)', 'formidable' ), hiddenCount );
 					}
@@ -161,8 +159,8 @@
 	}
 
 	/**
-	 * @param {String} labelPosition
-	 * @returns {void}
+	 * @param {string} labelPosition
+	 * @return {void} Changes the label position in the preview.
 	 */
 	function changeLabelPositionsInPreview( labelPosition ) {
 		const input = tag( 'input' );
@@ -171,7 +169,7 @@
 	}
 
 	/**
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The active style card.
 	 */
 	function getActiveCard() {
 		return document.querySelector( '.frm-active-style-card' );
@@ -183,7 +181,7 @@
 	 * This is because disabling styles is linked to the custom_style option as well.
 	 *
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
 		const stylesEnabled = event.target.checked;
@@ -217,19 +215,19 @@
 	 * We track the value on load with state.initialSelectedStyleValue.
 	 * Only consider unsaved changes on the page when this variable is no longer set to the original value.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function trackListPageChange() {
-		const styleIdInput   = getStyleIdInput();
+		const styleIdInput = getStyleIdInput();
 		state.unsavedChanges = styleIdInput.value !== state.initialSelectedStyleValue;
 	}
 
 	/**
 	 * @param {boolean} on
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function toggleFormidableStylingInPreviewForms( on ) {
-		const preview    = document.getElementById( 'frm_style_preview' );
+		const preview = document.getElementById( 'frm_style_preview' );
 		const activeCard = getActiveCard();
 
 		let selector = '.frm_forms';
@@ -246,7 +244,7 @@
 	}
 
 	/**
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The style ID input element.
 	 */
 	function getStyleIdInput() {
 		return document.getElementById( 'frm_style_list_form' ).querySelector( '[name="style_id"]' );
@@ -254,10 +252,10 @@
 
 	/**
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleCommonClickEvents( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( 'frm_toggle_sample_form' === target.id || target.closest( '#frm_toggle_sample_form' ) ) {
 			toggleSampleForm();
@@ -272,18 +270,18 @@
 
 		if ( target.classList.contains( 'frm-edit-style' ) || null !== target.closest( '.frm-edit-style' ) || 'frm_edit_style' === target.id ) {
 			modifyStylerUrl( target );
-			return;
 		}
 	}
 
 	/**
 	 * This function is used to update the form action when switching from the advanced settings and quick-settings.
+	 *
 	 * @param {Object} target The submit button event target
 	 * @return {void}
 	 */
 	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
-		if ( null === form ) {
+		if ( ! form ) {
 			return;
 		}
 		if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
@@ -296,7 +294,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disablePreviewSubmitButtons() {
 		const preview = document.getElementById( 'frm_style_preview' );
@@ -307,7 +305,7 @@
 				 * Prevent form submit event.
 				 *
 				 * @param {Event} event
-				 * @returns {false}
+				 * @return {false} Prevents the default action and stops the event from bubbling.
 				 */
 				event => {
 					event.preventDefault();
@@ -320,14 +318,13 @@
 
 	/**
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleClickEventsForListPage( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
-			return;
 		}
 	}
 
@@ -336,17 +333,17 @@
 	 * If the Update button is clicked after selecting a style card, the active card will be saved as the target form's style.
 	 *
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleStyleCardClick( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.closest( '.dropdown' ) ) {
 			// Ignore the hamburger menu inside of the card.
 			return;
 		}
 
-		const card         = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
+		const card = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
 		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
 
 		if ( cardIsLocked ) {
@@ -354,9 +351,9 @@
 			return; // Exit early as we're not actually selecting a locked template for preview.
 		}
 
-		const previewArea  = document.getElementById( 'frm_style_preview' );
-		const activeCard   = document.querySelector( '.frm-active-style-card' );
-		const sampleForm   = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
+		const previewArea = document.getElementById( 'frm_style_preview' );
+		const activeCard = document.querySelector( '.frm-active-style-card' );
+		const sampleForm = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
 		const styleIdInput = getStyleIdInput();
 
 		disableLabelTransitions();
@@ -374,35 +371,33 @@
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
 
-		if ( ! cardIsLocked ) {
-			// Don't update the form when a locked card is clicked.
-			styleIdInput.value = card.dataset.styleId;
-			trackListPageChange();
-		}
+		// cardIsLocked is always false here due to early return above.
+		styleIdInput.value = card.dataset.styleId;
+		trackListPageChange();
 
 		setTimeout( enableLabelTransitions, 1 );
 
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
-		const editButton     = document.getElementById( 'frm_edit_style' );
+		const editButton = document.getElementById( 'frm_edit_style' );
 		const showEditButton = null !== card.querySelector( '.frm-style-card-info' ); // Only the "Applied style" has card info.
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
 
 		// Trigger an action here so Pro can handle template preview updates on card click.
-		const hookName      = 'frm_style_card_click';
-		const hookArgs      = { card, styleIdInput };
+		const hookName = 'frm_style_card_click';
+		const hookArgs = { card, styleIdInput };
 		wp.hooks.doAction( hookName, hookArgs );
 	}
 
 	/**
 	 * @param {HTMLElement} card
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The modal element.
 	 */
 	function maybeCreateStyleTemplateModal( card ) {
-		const titleElement  = card.querySelector( '.frm-style-card-title' );
+		const titleElement = card.querySelector( '.frm-style-card-title' );
 		const templateTitle = titleElement.textContent;
-		const modal         = maybeCreateModal(
+		const modal = maybeCreateModal(
 			'frm_style_template_modal',
 			{
 				content: getStyleTemplateModalContent( card ),
@@ -415,59 +410,59 @@
 
 	/**
 	 * @param {HTMLElement} card
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The modal content element.
 	 */
 	function getStyleTemplateModalContent( card ) {
 		const children = [];
 
 		children.push(
-			div({
+			div( {
 				className: 'frm_warning_style',
 				children: [
 					span(
 						/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
 						sprintf( __( 'Access to this style requires the %s plan.', 'formidable' ), card.dataset.requires )
 					),
-					a({
+					a( {
 						text: getUpgradeNowText(),
 						href: card.dataset.upgradeUrl,
 						target: '_blank'
-					})
+					} )
 				]
-			})
+			} )
 		);
 
-		return div({ children });
+		return div( { children } );
 	}
 
 	/**
 	 * @param {HTMLElement} card
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The modal footer element.
 	 */
 	function getStyleTemplateModalFooter( card ) {
-		const viewDemoSiteButton = footerButton({
+		const viewDemoSiteButton = footerButton( {
 			text: __( 'Learn More', 'formidable' ),
 			buttonType: 'secondary'
-		});
+		} );
 		viewDemoSiteButton.href = card.dataset.upgradeUrl;
 		viewDemoSiteButton.target = '_blank';
 
-		let primaryActionButton = footerButton({
+		const primaryActionButton = footerButton( {
 			text: getUpgradeNowText(),
 			buttonType: 'primary'
-		});
+		} );
 
 		primaryActionButton.classList.remove( 'dismiss' );
 		primaryActionButton.setAttribute( 'href', card.dataset.upgradeUrl );
 		primaryActionButton.target = '_blank';
 
-		return div({
+		return div( {
 			children: [ viewDemoSiteButton, primaryActionButton ]
-		});
+		} );
 	}
 
 	/**
-	 * @returns {String}
+	 * @return {string} The upgrade now text.
 	 */
 	function getUpgradeNowText() {
 		return __( 'Upgrade Now', 'formidable' );
@@ -477,7 +472,7 @@
 	 * Track an unsaved change on the edit page.
 	 * This is included in the frmStylerFunctions global so unsaved changes can be tracked in Pro as well.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function trackUnsavedChange() {
 		state.unsavedChanges = true;
@@ -487,7 +482,7 @@
 	 * Possibly prevent leaving the page if there are unsaved changes.
 	 *
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeConfirmExit( event ) {
 		if ( ! state.unsavedChanges ) {
@@ -501,22 +496,22 @@
 	/**
 	 * Floating labels have a transition style. Turn it off temporarily when switching between cards to avoid a transition between two different style classes.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disableLabelTransitions() {
 		setLabelTransitionStyle( 'none' );
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function enableLabelTransitions() {
 		setLabelTransitionStyle( '' );
 	}
 
 	/**
-	 * @param {String} value
-	 * @returns {void}
+	 * @param {string} value
+	 * @return {void}
 	 */
 	function setLabelTransitionStyle( value ) {
 		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_inside_container' ).forEach(
@@ -525,7 +520,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function toggleSampleForm() {
 		state.showingSampleForm = ! state.showingSampleForm;
@@ -534,7 +529,7 @@
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleUpdateClick() {
 		state.unsavedChanges = false; // Prevent the saved changes pop up from triggering when submitting the form.
@@ -557,7 +552,7 @@
 	 * If the sample form toggle is active, we want to pass that as a query parameter so we know to default to the sample form on load.
 	 *
 	 * @param {HTMLElement} clickTarget
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function modifyStylerUrl( clickTarget ) {
 		if ( ! state.showingSampleForm ) {
@@ -566,13 +561,13 @@
 		}
 
 		const anchor = clickTarget.hasAttribute( 'href' ) ? clickTarget : clickTarget.querySelector( 'a[href]' );
-		anchor.setAttribute( 'href', anchor.getAttribute( 'href' ) + '&sample=1' );
+		anchor.setAttribute( 'href', `${ anchor.getAttribute( 'href' ) }&sample=1` );
 	}
 
 	/**
 	 * Add menu dropdowns to style cards dynamically on load.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function addHamburgerMenusToCards() {
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
@@ -580,29 +575,29 @@
 	}
 
 	/**
-	 * @param {HTMLlement} card
-	 * @returns {void}
+	 * @param {HTMLElement} card
+	 * @return {void}
 	 */
 	function maybeAddMenuToCard( card ) {
 		if ( ! shouldAddMenuToCard( card ) ) {
 			return;
 		}
 
-		card.appendChild( getHamburgerMenu( card.dataset ) );
+		card.append( getHamburgerMenu( card.dataset ) );
 	}
 
 	/**
 	 * Avoid adding a menu to an upsell card or a template card.
 	 *
-	 * @param {HTMLlement} card
-	 * @returns {boolean}
+	 * @param {HTMLElement} card
+	 * @return {boolean} Whether to add a menu to the card.
 	 */
 	function shouldAddMenuToCard( card ) {
 		return 'frm_template_style_cards_wrapper' !== card.parentNode.id || ! card.classList.contains( 'frm-locked-style' );
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function addHamburgerMenuForEditPage() {
 		const styleName = document.getElementById( 'frm_style_name' );
@@ -612,7 +607,7 @@
 
 		const styleId = document.getElementById( 'frm_styling_form' ).querySelector( 'input[name="ID"]' ).value;
 
-		const hamburgerMenu = getHamburgerMenu({ styleId });
+		const hamburgerMenu = getHamburgerMenu( { styleId } );
 		hamburgerMenu.classList.add( 'alignright' );
 		styleName.parentNode.insertBefore( hamburgerMenu, styleName );
 	}
@@ -621,49 +616,49 @@
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
 	 * @param {DOMStringMap} data {
-	 *     @type {String} editUrl
-	 *     @type {String} styleId
-	 *     @type {String} labelPosition
-	 *     @type {String} classname
+	 *     @type {string} editUrl
+	 *     @type {string} styleId
+	 *     @type {string} labelPosition
+	 *     @type {string} classname
 	 * }
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The hamburger menu element.
 	 */
 	function getHamburgerMenu( data ) {
-		const hamburgerMenu = a({
+		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
-			child: svg({ href: '#frm_thick_more_vert_icon' })
-		});
-		hamburgerMenu.setAttribute( 'data-toggle', 'dropdown' );
-		hamburgerMenu.setAttribute( 'data-container', 'body' );
+			child: svg( { href: '#frm_thick_more_vert_icon' } )
+		} );
+		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
+		hamburgerMenu.setAttribute( 'data-bs-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
-		const isTemplate        = 'undefined' !== typeof data.templateKey;
+		const isTemplate = data.templateKey !== undefined;
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
-			const applyOption = a({
+			const applyOption = a( {
 				text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
-			});
+			} );
 			addIconToOption( applyOption, 'frm_save_icon' );
-			dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
+			dropdownMenuOptions.push( { anchor: applyOption, type: 'apply' } );
 			onClickPreventDefault( applyOption, handleApplyOptionClick );
 		}
 
 		if ( ! isTemplate ) {
 			if ( 'string' === typeof data.editUrl ) {
 				// The Edit option is not included on the Edit page.
-				const editOption = a({
+				const editOption = a( {
 					text: __( 'Edit', 'formidable' ),
 					href: data.editUrl
-				});
+				} );
 				addIconToOption( editOption, 'frm_pencil_icon' );
-				dropdownMenuOptions.push({ anchor: editOption, type: 'edit' });
+				dropdownMenuOptions.push( { anchor: editOption, type: 'edit' } );
 			}
 
-			const resetOption = a({
+			const resetOption = a( {
 				text: __( 'Reset to Defaults', 'formidable' )
-			});
+			} );
 			addIconToOption( resetOption, 'frm_repeater_icon' );
 			onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
@@ -673,39 +668,39 @@
 			);
 		}
 
-		const hookName      = 'frm_style_card_dropdown_options';
-		const hookArgs      = { data, addIconToOption, isTemplate };
+		const hookName = 'frm_style_card_dropdown_options';
+		const hookArgs = { data, addIconToOption, isTemplate };
 		dropdownMenuOptions = wp.hooks.applyFilters( hookName, dropdownMenuOptions, hookArgs );
 
 		if ( isListPage && ! isTemplate ) {
 			maybeAddDuplicateUpsell( dropdownMenuOptions );
 		}
 
-		const dropdownMenu  = div({
+		const dropdownMenu = div( {
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
 			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
-		});
+		} );
 
 		const isRtl = document.body.classList.contains( 'rtl' );
-		dropdownMenu.classList.add( 'dropdown-menu-' + ( isRtl ? 'left' : 'right' ) );
+		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
-		return div({
+		return div( {
 			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
 			children: [ hamburgerMenu, dropdownMenu ]
-		});
+		} );
 	}
 
 	/**
 	 * @param {Array} dropdownMenuOptions
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeAddDuplicateUpsell( dropdownMenuOptions ) {
 		let duplicateOptionExists = false;
 		for ( let i = 0; i < dropdownMenuOptions.length; ++i ) {
-			if ( dropdownMenuOptions[i].type === 'duplicate' ) {
+			if ( dropdownMenuOptions[ i ].type === 'duplicate' ) {
 				duplicateOptionExists = true;
 				break;
 			}
@@ -715,10 +710,10 @@
 			return;
 		}
 
-		const duplicateUpsell = a({
+		const duplicateUpsell = a( {
 			text: __( 'Duplicate', 'formidable' ),
 			className: 'frm_noallow'
-		});
+		} );
 		addIconToOption( duplicateUpsell, 'frm_clone_icon' );
 		onClickPreventDefault( duplicateUpsell, () => document.getElementById( 'frm_new_style_trigger' ).click() );
 		const upsellOption = { anchor: duplicateUpsell, type: 'duplicate' };
@@ -727,11 +722,11 @@
 
 	/**
 	 * @param {Event} event
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleApplyOptionClick( event ) {
 		const option = event.target;
-		const card   = option.closest( '.frm-style-card' );
+		const card = option.closest( '.frm-style-card' );
 		if ( ! card ) {
 			return;
 		}
@@ -741,12 +736,12 @@
 	}
 
 	/**
-	 * @param {String} styleId
-	 * @returns {HTMLElement}
+	 * @param {string} styleId
+	 * @return {HTMLElement} The rename option element.
 	 */
 	function getRenameOption( styleId ) {
 		const renameOption = a( __( 'Rename', 'formidable' ) );
-		addIconToOption( renameOption, 'frm_signature_icon' );
+		addIconToOption( renameOption, 'frm_signature2_icon' );
 
 		let titleTarget;
 
@@ -776,9 +771,9 @@
 	}
 
 	/**
-	 * @param {String} id
+	 * @param {string} id
 	 * @param {Object} args
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The modal element.
 	 */
 	function stylerModal( id, args ) {
 		const modal = maybeCreateModal( id, args );
@@ -793,23 +788,23 @@
 	 * Get modal content with just a "Style Name" input.
 	 * This is used for New style, Duplicate style, and for Rename style.
 	 *
-	 * @param {String} context
-	 * @param {String|undefined} value
-	 * @returns {HTMLElement}
+	 * @param {string}           context
+	 * @param {string|undefined} value
+	 * @return {HTMLElement} The modal content element.
 	 */
 	function getStyleInputNameModalContent( context, value ) {
 		// Create a form so we can listen to Enter key presses that trigger a form submit event.
 		const form = tag(
 			'form',
 			{
-				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable' ), 'style_name' )
+				child: labelledTextInput( `frm_${ context }_style_name_input`, __( 'Style name', 'formidable' ), 'style_name' )
 			}
 		);
 		form.addEventListener(
 			'submit',
 			/**
 			 * @param {Event} event
-			 * @returns {false}
+			 * @return {false} Prevents the default action and stops the event from bubbling.
 			 */
 			event => {
 				// Prevent the form in the modal from submitting and trigger the click button in the modal footer instead.
@@ -821,7 +816,7 @@
 				return false;
 			}
 		);
-		const content = div({ child: form });
+		const content = div( { child: form } );
 		content.style.padding = '20px';
 		content.querySelector( 'label' ).style.lineHeight = 1.5;
 
@@ -848,30 +843,30 @@
 	}
 
 	/**
-	 * @param {String} styleId
-	 * @returns {HTMLELement}
+	 * @param {string} styleId
+	 * @return {HTMLElement} The modal footer element.
 	 */
-	 function getRenameStyleModalFooter( styleId ) {
-		const cancelButton = footerButton({ text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' });
+	function getRenameStyleModalFooter( styleId ) {
+		const cancelButton = footerButton( { text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' } );
 		cancelButton.classList.add( 'dismiss' );
 
-		const renameButton = footerButton({ text: __( 'Rename style', 'formidable' ), buttonType: 'primary' });
+		const renameButton = footerButton( { text: __( 'Rename style', 'formidable' ), buttonType: 'primary' } );
 		onClickPreventDefault( renameButton, () => renameStyle( styleId ) );
 
-		return div({
+		return div( {
 			children: [ cancelButton, renameButton ]
-		});
+		} );
 	}
 
 	/**
 	 * Call frm_rename_style action when the rename style button is clicked in rename modal.
 	 *
-	 * @param {String} styleId
-	 * @returns {void}
+	 * @param {string} styleId
+	 * @return {void}
 	 */
 	function renameStyle( styleId ) {
 		const styleNameInput = document.getElementById( 'frm_rename_style_name_input' );
-		const newStyleName   = styleNameInput.value;
+		const newStyleName = styleNameInput.value;
 
 		if ( '' === newStyleName ) {
 			// Avoid setting an empty name.
@@ -879,7 +874,7 @@
 			return;
 		}
 
-		const formData  = new FormData();
+		const formData = new FormData();
 		formData.append( 'style_id', styleId );
 		formData.append( 'style_name', newStyleName );
 		doJsonPost( 'rename_style', formData ).then(
@@ -889,7 +884,7 @@
 			 * If on the list page, update the style card after renaming a style.
 			 * On the edit page, update the style name element instead.
 			 *
-			 * @returns {void}
+			 * @return {void}
 			 */
 			() => {
 				success( __( 'Style has been renamed successfully', 'formidable' ) );
@@ -906,31 +901,22 @@
 	}
 
 	/**
-	 * @param {String} styleId
-	 * @param {String} newStyleName
-	 * @returns {void}
+	 * @param {string} styleId
+	 * @param {string} newStyleName
+	 * @return {void}
 	 */
 	function updateStyleNameInCard( styleId, newStyleName ) {
-		const card         = getCardByStyleId( styleId );
+		const card = getCardByStyleId( styleId );
 		const titleElement = card.querySelector( '.frm-style-card-title' );
 		titleElement.textContent = newStyleName;
 	}
 
 	/**
-	 * @param {String} templateKey
-	 * @returns {HTMLElement}
-	 */
-	function getTemplateCard( templateKey ) {
-		const templateCard = document.getElementById( 'frm_template_style_cards_wrapper' ).querySelector( '.frm-style-card[data-template-key="' + templateKey + '"]' );
-		return templateCard;
-	}
-
-	/**
-	 * @param {String} styleId
-	 * @returns {HTMLElement}
+	 * @param {string} styleId
+	 * @return {HTMLElement} The card element.
 	 */
 	function getCardByStyleId( styleId ) {
-		const defaultCard = document.querySelector( '#frm_default_style_cards_wrapper > div[data-style-id="' + styleId + '"]' );
+		const defaultCard = document.querySelector( `#frm_default_style_cards_wrapper > div[data-style-id="${ styleId }"]` );
 		if ( defaultCard ) {
 			return defaultCard;
 		}
@@ -939,17 +925,17 @@
 
 	/**
 	 * @param {HTMLElement} option
-	 * @param {String} iconId
-	 * @returns {void}
+	 * @param {string}      iconId
+	 * @return {void}
 	 */
 	function addIconToOption( option, iconId ) {
-		const icon = frmDom.svg({ href: '#' + iconId });
+		const icon = frmDom.svg( { href: `#${ iconId }` } );
 		option.insertBefore( icon, option.firstChild );
 	}
 
 	/**
-	 * @param {String} styleId
-	 * @returns {void}
+	 * @param {string} styleId
+	 * @return {void}
 	 */
 	function confirmResetStyle( styleId ) {
 		stylerModal(
@@ -963,7 +949,7 @@
 	}
 
 	/**
-	 * @returns {HTMLElement}
+	 * @return {HTMLElement} The modal content element.
 	 */
 	function getResetStyleModalContent() {
 		const content = div( __( 'Reset this style back to the default?', 'formidable' ) );
@@ -972,29 +958,29 @@
 	}
 
 	/**
-	 * @param {String} styleId
-	 * @returns {HTMLElement}
+	 * @param {string} styleId
+	 * @return {HTMLElement} The modal footer element.
 	 */
 	function getResetStyleModalFooter( styleId ) {
-		const cancelButton = footerButton({
+		const cancelButton = footerButton( {
 			text: __( 'Cancel', 'formidable' ),
 			buttonType: 'cancel'
-		});
+		} );
 		cancelButton.classList.add( 'dismiss' );
-		const resetButton = footerButton({
+		const resetButton = footerButton( {
 			text: __( 'Reset style', 'formidable' ),
 			buttonType: 'primary'
-		});
+		} );
 		onClickPreventDefault( resetButton, () => resetStyle( styleId ) );
-		return div({ children: [ cancelButton, resetButton ] });
+		return div( { children: [ cancelButton, resetButton ] } );
 	}
 
 	/**
 	 * Handle reset dropdown action.
 	 * This function handles the front end routing for the reset action as reset works differently for edit and list views.
 	 *
-	 * @param {String} styleId
-	 * @returns {void}
+	 * @param {string} styleId
+	 * @return {void}
 	 */
 	function resetStyle( styleId ) {
 		if ( isListPage ) {
@@ -1007,8 +993,8 @@
 	/**
 	 * Make a POST request to reset the style then reload the CSS and reset the card styles.
 	 *
-	 * @param {String} styleId
-	 * @returns {void}
+	 * @param {string} styleId
+	 * @return {void}
 	 */
 	function resetStyleOnListPage( styleId ) {
 		const formData = new FormData();
@@ -1033,10 +1019,10 @@
 	/**
 	 * Reset the style in-page (without actually updating it).
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function resetStyleOnEditPage() {
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -1044,7 +1030,7 @@
 				nonce: frmGlobal.nonce
 			},
 			success: syncEditPageAfterResetAction
-		});
+		} );
 	}
 
 	/**
@@ -1054,7 +1040,7 @@
 	 * @todo Stop triggering change events with jQuery. And remove the other jQuery as well.
 	 *
 	 * @param {Object} response
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function syncEditPageAfterResetAction( response ) {
 		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
@@ -1063,14 +1049,14 @@
 		}
 
 		for ( const key in defaultValues ) {
-			let targetInput = document.querySelector( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' );
+			let targetInput = document.querySelector( `input[name$="[${ key }]"], select[name$="[${ key }]"]` );
 			if ( ! targetInput ) {
 				continue;
 			}
 
 			if ( 'radio' === targetInput.getAttribute( 'type' ) ) {
 				// Reset the repeater icon dropdown.
-				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + defaultValues[ key ] + '"]' );
+				targetInput = document.querySelector( `input[name$="[${ key }]"][value="${ defaultValues[ key ] }"]` );
 				if ( targetInput ) {
 					targetInput.checked = true;
 					jQuery( targetInput ).trigger( 'change' );
@@ -1086,15 +1072,31 @@
 			}
 		}
 
+		resetCustomCSSEditor();
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
 	}
 
 	/**
+	 * Reset the custom CSS editor.
+	 *
+	 * @return {void}
+	 */
+	function resetCustomCSSEditor() {
+		const checkbox = document.getElementById( 'frm_enable_single_style_custom_css' );
+		const editorWrapper = document.getElementById( 'frm_single_style_custom_css_editor' );
+		if ( ! checkbox || ! editorWrapper ) {
+			return;
+		}
+		checkbox.checked = false;
+		editorWrapper.classList.add( 'frm_hidden' );
+	}
+
+	/**
 	 * Reload Formidable CSS after a style is reset so the preview updates immediately without needing to reload the page.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function reloadCSSAfterStyleReset() {
 		const style = document.getElementById( 'frm-custom-theme-css' );
@@ -1103,53 +1105,52 @@
 		}
 
 		const newStyle = document.createElement( 'link' );
-		newStyle.rel   = 'stylesheet';
-		newStyle.type  = 'text/css';
-		newStyle.href  = style.href + '&key=' + getAutoId(); // Make the URL unique so the old stylesheet doesn't get picked up by cache.
+		newStyle.rel = 'stylesheet';
+		newStyle.type = 'text/css';
+		newStyle.href = `${ style.href }&key=${ getAutoId() }`; // Make the URL unique so the old stylesheet doesn't get picked up by cache.
 
 		// Listen for the new style to load before removing the old style to avoid having no styles while the new style is loading.
 		newStyle.addEventListener(
 			'load',
 			() => {
-				style.parentNode.removeChild( style );
+				style.remove();
 				newStyle.id = 'frm-custom-theme-css'; // Assign the old ID to the new style so it can be removed in the next reset action.
 			}
 		);
 
-		const head = document.getElementsByTagName( 'HEAD' )[0];
-		head.appendChild( newStyle );
+		const head = document.getElementsByTagName( 'HEAD' )[ 0 ];
+		head.append( newStyle );
 	}
 
 	/**
-	 * @returns {Number}
+	 * @return {number} The auto ID.
 	 */
 	function getAutoId() {
 		return ++state.autoId;
 	}
 
 	/**
-	 * @param {Object} data {
-	 *     @type {Element} anchor
-	 *     @type {String} type
-	 * }
-	 * @returns {Element}
+	 * @param {Object}      data
+	 * @param {HTMLElement} data.anchor
+	 * @param {string}      data.type
+	 * @return {HTMLElement} The dropdown item element.
 	 */
-	function wrapDropdownItem({ anchor, type }) {
-		return div({
-			className: 'dropdown-item frm-' + type + '-style',
+	function wrapDropdownItem( { anchor, type } ) {
+		return div( {
+			className: `dropdown-item frm-${ type }-style`,
 			child: anchor
-		});
+		} );
 	}
 
 	/**
 	 * This gets triggered through a hook called in frmAdminBuild.styleInit() from formidable_admin.js.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initEditPage() {
-		const { debounce }           = frmDom.util;
+		const { debounce } = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
-		const debouncedColorChange	 = debounce(( event, value ) => {
+		const debouncedColorChange	 = debounce( ( event, value ) => {
 			/**
 			 * Fires on style colorpicker change.
 			 *
@@ -1162,12 +1163,12 @@
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
-		['frm_field_height', 'frm_field_font_size', 'frm_field_pad'].forEach( selector => {
+		[ 'frm_field_height', 'frm_field_font_size', 'frm_field_pad' ].forEach( selector => {
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
-		});
+		} );
 
-		jQuery( 'input.hex' ).wpColorPicker({
-			change: function( event, ui ) {
+		jQuery( 'input.hex' ).wpColorPicker( {
+			change( event, ui ) {
 				let color = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
 				if ( ui.color._alpha < 1 ) {
@@ -1183,14 +1184,14 @@
 
 				jQuery( event.target ).val( color ).trigger( 'change' );
 			}
-		});
+		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 			const container = jQuery( this ).closest( '.wp-picker-container' );
-			if ( 'undefined' !== typeof container && container[0].parentElement.classList.contains( 'frm-colorpicker' ) ) {
-				return container[0].querySelector( '.wp-color-picker' ).value;
+			if ( container !== undefined && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+				return container[ 0 ].querySelector( '.wp-color-picker' ).value;
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
-		});
+		} );
 		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', debouncedPreviewUpdate );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
@@ -1206,15 +1207,15 @@
 		 * Sends an AJAX POST request for new CSS to use for the preview.
 		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		function changeStyling() {
 			const styleInputs = Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
 				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
 			);
-			const locStr      = JSON.stringify( jQuery( styleInputs ).serializeArray() );
+			const locStr = JSON.stringify( jQuery( styleInputs ).serializeArray() );
 
-			jQuery.ajax({
+			jQuery.ajax( {
 				type: 'POST',
 				url: ajaxurl,
 				data: {
@@ -1222,22 +1223,22 @@
 					nonce: frmGlobal.nonce,
 					frm_style_setting: locStr
 				},
-				success: ( css ) => {
+				success: css => {
 					handleChangeStylingSuccess( css );
 					setSelectPlaceholderColor();
 				}
-			});
+			} );
 		}
 
 		/**
 		 * Update the CSS used for the preview on the edit page when a styling input has been updated.
 		 *
-		 * @param {String} css The response from the frm_change_styling request.
-		 * @returns {void}
+		 * @param {string} css The response from the frm_change_styling request.
+		 * @return {void}
 		 */
 		function handleChangeStylingSuccess( css ) {
 			// Validate the string response. A valid output will include rules with .with_frm_style
-			if ( -1 === css.indexOf( '.with_frm_style' ) ) {
+			if ( ! css.includes( '.with_frm_style' ) ) {
 				// Handle error (possibly a permission error, or an outdated nonce).
 				alert( css );
 				return;
@@ -1249,15 +1250,15 @@
 		 * Possibly pop up with a warning that "text will not display correctly if the field height is too small relative to the field padding and text size".
 		 * This can be triggered when modifying font size, height, and padding.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		function textSquishCheck() {
 			if ( null !== frmDom.util.getCookie( 'frm-style-text-squish-check' ) ) {
 				return;
 			}
-			const height         = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
+			const height = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
 			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
-			const paddingCount   = paddingEntered.length;
+			const paddingCount = paddingEntered.length;
 
 			frmDom.util.setCookie( 'frm-style-text-squish-check', 1, 30 );
 
@@ -1268,10 +1269,10 @@
 
 			const size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
 			// Get the top and bottom padding from entered values
-			const paddingTop    = paddingEntered[0].replace( /\D/g, '' );
-			let   paddingBottom = paddingTop;
+			const paddingTop = paddingEntered[ 0 ].replace( /\D/g, '' );
+			let paddingBottom = paddingTop;
 			if ( paddingCount >= 3 ) {
-				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
+				paddingBottom = paddingEntered[ 2 ].replace( /\D/g, '' );
 			}
 
 			// Check if there is enough space for text
@@ -1285,21 +1286,21 @@
 		 * When the Collapse icons are updated, sync the dropdown.
 		 * Otherwise the previously selected value will still appear as the selected value.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
 			trackUnsavedChange();
 
-			const radio  = this;
+			const radio = this;
 			const btnGrp = radio.closest( '.btn-group' );
-			const btnId  = btnGrp.getAttribute( 'id' );
+			const btnId = btnGrp.getAttribute( 'id' );
 
 			const select = document.getElementById( btnId.replace( '_select', '' ) );
 			if ( select ) {
 				select.value = radio.value;
 			}
 
-			jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+			jQuery( btnGrp ).children( 'button' ).html( `${ radio.nextElementSibling.innerHTML } <b class="caret"></b>` );
 
 			const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
 			if ( activeItem ) {
@@ -1307,7 +1308,7 @@
 			}
 
 			radio.closest( '.dropdown-item' ).classList.add( 'active' );
-		});
+		} );
 
 		if ( frm_admin_js.requireAccordionTitleClickListener ) {
 			document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
@@ -1315,31 +1316,15 @@
 					if ( ! event.target.closest( 'button' ) ) {
 						el.querySelector( 'button' ).click();
 					}
-				});
-			});
+				} );
+			} );
 		}
-	}
-
-	/**
-	 * @param {Event} event
-	 */
-	function maybeCollapseSettings( event ) {
-		let expanded;
-		const sectionParent = event.target.parentElement;
-		if ( event.type === 'keydown' ) {
-			expanded = sectionParent.classList.toggle( 'open' );
-			jQuery( sectionParent.querySelector( '.accordion-section-content' ) ).toggle( ! expanded ).slideToggle( 150 ); // Animate toggle as in click/enter.
-		} else {
-			expanded = sectionParent.classList.contains( 'open' );
-		}
-
-		event.target.setAttribute( 'aria-expanded', expanded );
 	}
 
 	/**
 	 * @param {HTMLElement} input
 	 * @param {HTMLElement} container
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkFloatingLabelsForStyles( input, container ) {
 		if ( ! container ) {
@@ -1361,16 +1346,14 @@
 				firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
 				firstOpt.removeAttribute( 'data-label' );
 			}
-		} else {
-			if ( firstOpt.textContent ) {
-				firstOpt.setAttribute( 'data-label', firstOpt.textContent );
-				firstOpt.textContent = '';
-			}
+		} else if ( firstOpt.textContent ) {
+			firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+			firstOpt.textContent = '';
 		}
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initPosClass() {
 		const positionSetting = document.getElementById( 'frm_position' );
@@ -1386,11 +1369,11 @@
 	/**
 	 * Update label container classes when the label "Position" setting is changed.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function setPosClass() {
 		/*jshint validthis:true */
-		let value = this.value;
+		let { value } = this;
 		if ( value === 'none' ) {
 			value = 'top';
 		} else if ( value === 'no_label' ) {
@@ -1398,21 +1381,21 @@
 		}
 
 		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field.frm-default-label-position, #frm_sample_form .frm_form_field' ).forEach( container => {
-			const input                 = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
+			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
 			const shouldForceTopStyling = 'inside' === value && ( ! input || 'hidden' === input.type ); // We do not want file upload to use floating labels, or inline datepickers, which both use hidden inputs.
-			const currentValue          = shouldForceTopStyling ? 'top' : value;
+			const currentValue = shouldForceTopStyling ? 'top' : value;
 
 			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
-			container.classList.add( 'frm_' + currentValue + '_container' );
+			container.classList.add( `frm_${ currentValue }_container` );
 
 			if ( 'inside' === currentValue ) {
 				checkFloatingLabelsForStyles( input, container );
 			}
-		});
+		} );
 	}
 
 	/**
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initFloatingLabels() {
 		[ 'focus', 'blur', 'change' ].forEach(
@@ -1430,10 +1413,10 @@
 	 * Without this, drawing in a signature field triggers a "Uncaught ReferenceError: frmFrontForm is not defined" error.
 	 * We don't want the validation to actually triggr, so just fill in an empty function.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function fillMissingSignatureValidationFunction() {
-		if ( 'undefined' === typeof window.__FRMSIG || 'undefined' !== typeof window.frmFrontForm ) {
+		if ( window.__FRMSIG === undefined || window.frmFrontForm !== undefined ) {
 			return;
 		}
 
@@ -1443,12 +1426,17 @@
 	/**
 	 * Enable the datepicker in the sample form preview.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function initDatepickerSample() {
+		// If flatpickr is defined, then is a recent version of Pro which handles the datepicker preview as it's a PRO feature.
+		if ( 'undefined' !== typeof flatpickr ) {
+			return;
+		}
+
 		const $sample = jQuery( '#datepicker_sample' );
 		if ( $sample.length && 'function' === typeof $sample.datepicker ) {
-			$sample.datepicker({ changeMonth: true, changeYear: true });
+			$sample.datepicker( { changeMonth: true, changeYear: true } );
 		}
 	}
 
@@ -1468,8 +1456,8 @@
 		}
 
 		// Function to change the color of a select element
-		const changeSelectColor = ( select ) => {
-			if ( select.options[select.selectedIndex] && select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
+		const changeSelectColor = select => {
+			if ( select.options[ select.selectedIndex ]?.classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';
@@ -1477,13 +1465,13 @@
 		};
 
 		// Use a loop to iterate through each select element
-		selects.forEach( ( select ) => {
+		selects.forEach( select => {
 			// Apply the color change to each select element
 			changeSelectColor( select );
 
 			// Add an event listener for future changes
 			select.addEventListener( 'change', () => changeSelectColor( select ) );
-		});
+		} );
 	}
 
 	// Hook into the styleInit function in formidable_admin.js

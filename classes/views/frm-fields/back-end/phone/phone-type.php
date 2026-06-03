@@ -3,6 +3,7 @@
  * HTML for an 'International' option in a dropdown.
  *
  * @package Formidable
+ *
  * @since 6.9
  *
  * @var array        $field Field array.
@@ -32,7 +33,7 @@ $format   = FrmField::get_option( $field, 'format' );
 			<?php esc_html_e( 'None', 'formidable' ); ?>
 		</option>
 		<?php $this->print_international_option(); ?>
-		<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'international' !== $format, true ); ?>>
+		<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( $format && 'international' !== $format, true ); ?>>
 			<?php esc_html_e( 'Custom', 'formidable' ); ?>
 		</option>
 	</select>

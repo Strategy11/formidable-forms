@@ -1,0 +1,25 @@
+/**
+ * Tag Checklist styles
+ */
+
+.tagchecklist span.no_taglist {
+	display: inline;
+	float: none;
+	line-height: 15px;
+	margin-right: 0;
+	font-size: inherit;
+}
+
+.tagchecklist .frm_exclude_cat_list span {
+	display: inline;
+}
+
+.tagchecklist span a::before {
+	line-height: 23px;
+	text-align: start;
+}
+
+.frm_form_action_settings .frm_email_row .frm_tooltip_icon {
+	position: relative;
+	bottom: 2px;
+}

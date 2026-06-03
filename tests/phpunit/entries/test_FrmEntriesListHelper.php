@@ -34,13 +34,13 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 
 		$column_value = $this->column_value( $item, 'description' );
 		$this->assertIsString( $column_value );
-		$this->assertEquals( 'Description field value', $column_value );
+		$this->assertSame( 'Description field value', $column_value );
 
 		$column_value = $this->column_value( $item, 'id' );
-		$this->assertEquals( 1, $column_value );
+		$this->assertSame( 1, $column_value );
 
 		$column_value = $this->column_value( $item, 'name' );
-		$this->assertEquals( 'My entry name', $column_value );
+		$this->assertSame( 'My entry name', $column_value );
 	}
 
 	/**

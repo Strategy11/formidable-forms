@@ -18,6 +18,7 @@ $sidebar_params    = array(
 	'class' => 'frm-right-panel frm-p-6 frm_wrap',
 );
 $toggle_input_html = array();
+
 if ( $globally_disabled ) {
 	$sidebar_params['class']      .= ' frm-styles-globally-disabled';
 	$toggle_input_html['disabled'] = 'disabled';
@@ -30,6 +31,7 @@ if ( $globally_disabled ) {
 		'id'   => 'frm_new_style_trigger',
 		'href' => '#',
 	);
+
 	if ( $can_create_styles ) {
 		$trigger_params['data-new-style-url'] = esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=new_style' ) );
 	} else {
