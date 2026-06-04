@@ -26,16 +26,24 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 		update_option( $this->get_disallowed_option_name(), $new_block );
 		$this->assertSame( $new_block, get_option( $this->get_disallowed_option_name() ) );
 
-		$wp_test = $this->run_private_method(
-			array( $spam_check, 'do_check_wp_disallowed_words' ),
-			array( 'Author', 'author@gmail.com', '', 'No spam here', FrmAppHelper::get_ip_address(), FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) )
+		$wp_test = wp_check_comment_disallowed_list(
+			'Author',
+			'author@gmail.com',
+			'',
+			'No spam here',
+			FrmAppHelper::get_ip_address(),
+			FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' )
 		);
 		$this->assertFalse( $wp_test );
 
 		$ip      = FrmAppHelper::get_ip_address();
-		$wp_test = $this->run_private_method(
-			array( $spam_check, 'do_check_wp_disallowed_words' ),
-			array( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) )
+		$wp_test = wp_check_comment_disallowed_list(
+			'Author',
+			'author@gmail.com',
+			'',
+			$blocked,
+			$ip,
+			FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' )
 		);
 
 		if ( ! $wp_test ) {
