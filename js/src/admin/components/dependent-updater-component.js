@@ -47,9 +47,33 @@ export default class frmStyleDependentUpdaterComponent {
 	 * @param {string} value - The value to update the dependent elements with.
 	 */
 	updateAllDependentElements( value ) {
+		const format = this.detectColorFormat( value );
 		this.data.propagateInputs.forEach( input => {
 			input.value = value;
+			input.dataset.colorFormat = format;
 		} );
 		this.data.propagateInputs[ 0 ].dispatchEvent( this.data.changeEvent );
+	}
+
+	/**
+	 * Detects the color format from a color string.
+	 *
+	 * @param {string} value - The color value to detect the format of.
+	 * @return {string} The detected format: 'rgba', 'rgb', 'hsla', 'hsl', or 'hex'.
+	 */
+	detectColorFormat( value ) {
+		if ( /^rgba/.test( value ) ) {
+			return 'rgba';
+		}
+		if ( /^rgb/.test( value ) ) {
+			return 'rgb';
+		}
+		if ( /^hsla/.test( value ) ) {
+			return 'hsla';
+		}
+		if ( /^hsl/.test( value ) ) {
+			return 'hsl';
+		}
+		return 'hex';
 	}
 }

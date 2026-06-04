@@ -868,9 +868,6 @@ class FrmStylesHelper {
 
 		if ( ! $color ) {
 			$color = $default;
-		} elseif ( str_contains( $color, 'rgb(' ) ) {
-			$color = str_replace( 'rgb(', 'rgba(', $color );
-			$color = str_replace( ')', ',1)', $color );
 		} elseif ( ! str_contains( $color, '#' ) && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
@@ -888,6 +885,7 @@ class FrmStylesHelper {
 	 */
 	private static function is_hex( $color ) {
 		$non_hex_substrings = array(
+			'rgb(',
 			'rgba(',
 			'hsl(',
 			'hsla(',

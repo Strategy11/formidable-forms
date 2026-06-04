@@ -143,11 +143,12 @@ legend.frm_hidden{
 <?php } ?>
 }
 
-<?php if ( ! empty( $defaults['form_desc_size'] ) ) { ?>
 .with_frm_style .frm_form_field.frm_html_container{
+<?php if ( ! empty( $defaults['form_desc_size'] ) ) { ?>
 	font-size: var(--form-desc-size)<?php echo esc_html( $important ); ?>;
-}
 <?php } ?>
+	overflow-wrap: break-word<?php echo esc_html( $important ); ?>;
+}
 
 .with_frm_style .frm_form_field .frm_show_it{
 <?php if ( ! empty( $defaults['field_font_size'] ) ) { ?>
