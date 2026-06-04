@@ -1,4 +1,14 @@
 <?php
+/**
+ * Radio field front-end input.
+ *
+ * @package Formidable
+ *
+ * @var array  $field      Field data including 'post_field', 'type', 'options', 'value'.
+ * @var string $field_name HTML name attribute for the radio inputs.
+ * @var string $html_id    HTML id prefix for each radio option.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

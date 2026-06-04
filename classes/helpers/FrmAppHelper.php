@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.30';
+	public static $plug_version = '6.31';
 
 	/**
 	 * @var bool
@@ -3952,6 +3952,8 @@ class FrmAppHelper {
 				/* translators: %d is the number of allowed actions per form */
 				'only_one_action'                    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
 				'edit_action_text'                   => __( 'Please edit the existing form action.', 'formidable' ),
+				'only_one_payment_action'            => __( 'This form already has a payment action, and is currently limited to a single payment action.', 'formidable' ),
+				'only_one_stripe_action'             => __( 'This form already has a payment action. Multiple Stripe actions are available when using the Stripe add-on, available for Formidable Business licenses and higher.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'unsafe_params'                      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
 				'slug_is_reserved'                   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -4010,7 +4012,8 @@ class FrmAppHelper {
 
 		$stripe_connected      = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
 		$square_connected      = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
-		$gateway_connected     = $stripe_connected || $square_connected;
+		$paypal_connected      = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+		$gateway_connected     = $stripe_connected || $square_connected || $paypal_connected;
 		$payments_settings_url = FrmStrpLiteAppController::get_payments_settings_url();
 
 		if ( ! $gateway_connected ) {
@@ -5101,11 +5104,16 @@ class FrmAppHelper {
 	 *
 	 * @since 6.24
 	 *
-	 * @param string $string The string to check.
+	 * @param string|null $string The string to check.
 	 *
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {
+		if ( is_null( $string ) ) {
+			// Return true so we do not attempt to change encoding on a null value.
+			return true;
+		}
+
 		// wp_is_valid_utf8 is added in WP 6.9.
 		if ( function_exists( 'wp_is_valid_utf8' ) ) {
 			return wp_is_valid_utf8( $string );
