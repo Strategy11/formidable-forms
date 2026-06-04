@@ -613,10 +613,14 @@ class FrmFieldsController {
 
 		unset( $add_html );
 
-		if ( isset( $field['args'] ) ) {
-			$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
-			$field_object->add_aria_description( $field['args'], $add_html );
-		}
+		$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
+		$field_object->add_aria_description(
+			array(
+				'field_id' => $field['id'],
+				'html_id'  => $field['html_id'] ?? FrmFieldsHelper::get_html_id( $field ),
+			),
+			$add_html
+		);
 
 		if ( $echo ) {
 			echo $add_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
