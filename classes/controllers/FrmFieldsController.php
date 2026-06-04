@@ -585,12 +585,21 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Add additional HTML when the frm_field_input_html hook is triggered.
+	 *
+	 * @since x.x Added $args param.
+	 *
 	 * @param array $field
 	 * @param bool  $echo
+	 * @param array $args  Optional rendering context passed by the input view via the
+	 *                     `frm_field_input_html` action. Used to add the aria description.
+	 *                     May include `field_id`, `html_id` and `errors`.
+	 *
+	 * @since x.x Added the `$args` parameter.
 	 *
 	 * @return string
 	 */
-	public static function input_html( $field, $echo = true ) {
+	public static function input_html( $field, $echo = true, $args = array() ) {
 		$class = array();
 		self::add_input_classes( $field, $class );
 
@@ -612,13 +621,7 @@ class FrmFieldsController {
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
 		$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
-		$field_object->add_aria_description(
-			array(
-				'field_id' => $field['id'],
-				'html_id'  => ! empty( $field['html_id'] ) ? $field['html_id'] : FrmFieldsHelper::get_html_id( $field ),
-			),
-			$add_html
-		);
+		$field_object->add_aria_description( $args, $add_html );
 
 		if ( $echo ) {
 			echo $add_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -626,6 +629,7 @@ class FrmFieldsController {
 
 		return $add_html;
 	}
+
 
 	/**
 	 * @param array $field

@@ -2,7 +2,8 @@
 /**
  * @package Formidable
  *
- * @var array $field
+ * @var array      $field
+ * @var array|null $args
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,14 +24,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 	if ( $read_only ) {
 		?>
-		<select <?php do_action( 'frm_field_input_html', $field ); ?>>
+		<select <?php do_action( 'frm_field_input_html', $field, true, $args ); ?>>
 		<?php
 	} else {
-		if ( isset( $args ) ) {
-			$field['args'] = $args;
-		}
 		?>
-		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id ); ?>" <?php do_action( 'frm_field_input_html', $field ); ?>>
+		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id ); ?>" <?php do_action( 'frm_field_input_html', $field, true, $args ); ?>>
 		<?php
 	}
 
