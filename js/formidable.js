@@ -1136,6 +1136,38 @@ function frmFrontFormJS() {
 		return kvp.join( '&' );
 	}
 
+	/**
+	 * Returns HTML that is wrapped in the error class so that it can be removed with removeAllErrors().
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} errorMessage The error message to wrap.
+	 * @param {string} id           The ID to use for the error element.
+	 *
+	 * @return {string} The error HTML.
+	 */
+	function getErrorHtml( errorMessage, id ) {
+		const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+
+		if ( ! errorMessage.startsWith( '<div' ) ) {
+			return `<div class="frm_error" ${ roleString } id="${ id }">${ errorMessage }</div>`;
+		}
+
+		const tempDiv = document.createElement( 'div' );
+		tempDiv.innerHTML = errorMessage;
+		const errorDiv = tempDiv.querySelector( 'div' );
+		if ( errorDiv ) {
+			errorDiv.classList.add( 'frm_error' );
+			errorDiv.id = id;
+			if ( frm_js.include_alert_role ) {
+				errorDiv.setAttribute( 'role', 'alert' );
+			}
+			return errorDiv.outerHTML;
+		}
+
+		return `<div class="frm_error" ${ roleString } id="${ id }">${ errorMessage }</div>`;
+	}
+
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
@@ -1152,15 +1184,7 @@ function frmFrontFormJS() {
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
 		} else {
-			let errorHtml;
-			if ( jsErrors[ key ].includes( '<div' ) ) {
-				errorHtml = jsErrors[ key ];
-			} else {
-				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
-				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
-			}
-			container.insertAdjacentHTML( 'beforeend', errorHtml );
-
+			container.insertAdjacentHTML( 'beforeend', getErrorHtml( jsErrors[ key ], id ) );
 			if ( input ) {
 				if ( ! describedBy ) {
 					describedBy = id;
