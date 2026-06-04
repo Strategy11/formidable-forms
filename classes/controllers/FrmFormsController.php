@@ -1737,7 +1737,7 @@ class FrmFormsController {
 		$col              = 'one';
 		$settings_tab     = FrmAppHelper::is_admin_page( 'formidable' );
 		$cond_shortcodes  = apply_filters( 'frm_conditional_shortcodes', array() );
-		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab );
+		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab, $form_id );
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
 		if ( 'default' === $template_path || ! file_exists( $template_path ) ) {
@@ -1846,10 +1846,11 @@ class FrmFormsController {
 	 * @since 2.0.6
 	 *
 	 * @param bool $settings_tab
+	 * @param int  $form_id
 	 *
 	 * @return array
 	 */
-	private static function get_shortcode_helpers( $settings_tab ) {
+	private static function get_shortcode_helpers( $settings_tab, $form_id = 0 ) {
 		$entry_shortcodes = array(
 			'id'         => __( 'Entry ID', 'formidable' ),
 			'key'        => __( 'Entry Key', 'formidable' ),
@@ -1878,7 +1879,7 @@ class FrmFormsController {
 		 * @param array $entry_shortcodes
 		 * @param bool  $settings_tab
 		 */
-		return apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab );
+		return apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab, $form_id );
 	}
 
 	/**
