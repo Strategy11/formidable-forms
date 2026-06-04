@@ -42,20 +42,10 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 	}
 
 	/**
-	 * For WP 5.5 compatibility.
-	 *
 	 * @return string
 	 */
 	private function get_disallowed_words() {
-		$keys = get_option( 'disallowed_keys' );
-
-		if ( false === $keys ) {
-			// Fallback for WP < 5.5.
-			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
-			return get_option( 'blacklist_keys' );
-		}
-
-		return $keys;
+		return get_option( 'disallowed_keys' );
 	}
 
 	/**
@@ -71,11 +61,7 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 	 * @return bool Return `true` if contains disallowed words.
 	 */
 	private function do_check_wp_disallowed_words( $author, $email, $url, $content, $ip, $user_agent ) {
-		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
-			return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
-		}
-		// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_blacklist_checkFound
-		return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
+		return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
 	}
 
 	protected function is_enabled() {

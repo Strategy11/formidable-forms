@@ -64,8 +64,6 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 	 * @return string
 	 */
 	private function get_disallowed_option_name() {
-		$keys = get_option( 'disallowed_keys' );
-		// Fallback for WP < 5.5.
-		return false === $keys ? 'blacklist_keys' : 'disallowed_keys';
+		return 'disallowed_keys';
 	}
 }
