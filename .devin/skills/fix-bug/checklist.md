@@ -4,12 +4,12 @@
 
 ## Coding Standards
 
-- [ ] Follows `.windsurf/rules/formidable/frm-php.md` (PHP files)
-- [ ] Follows `.windsurf/rules/wordpress/php.md` (PHP files)
-- [ ] Follows `.windsurf/rules/wordpress-vip/wpvip-performance.md` (PHP files)
-- [ ] Follows `.windsurf/rules/wordpress-vip/wpvip-security.md` (PHP/JS files)
-- [ ] Follows `.windsurf/rules/formidable/frm-javascript.md` (JS files)
-- [ ] Follows `.windsurf/rules/wordpress/javascript.md` (JS files)
+- [ ] Follows `.devin/rules/formidable/frm-php.md` (PHP files)
+- [ ] Follows `.devin/rules/wordpress/php.md` (PHP files)
+- [ ] Follows `.devin/rules/wordpress-vip/wpvip-performance.md` (PHP files)
+- [ ] Follows `.devin/rules/wordpress-vip/wpvip-security.md` (PHP/JS files)
+- [ ] Follows `.devin/rules/formidable/frm-javascript.md` (JS files)
+- [ ] Follows `.devin/rules/wordpress/javascript.md` (JS files)
 
 ## Documentation
 
