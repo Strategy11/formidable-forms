@@ -39,10 +39,7 @@ abstract class FrmSpamCheck {
 
 		$is_spam = $this->check();
 
-		if ( ! $is_spam ) {
-			return false;
-		}
-		return $this->get_spam_message();
+		return $is_spam ? $this->get_spam_message() : false;
 	}
 
 	/**

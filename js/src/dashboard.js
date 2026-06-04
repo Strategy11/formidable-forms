@@ -3,7 +3,7 @@
  */
 import { frmAnimate } from 'core/utils';
 
-import { frmTabsNavigator } from './components/class-tabs-navigator';
+import { frmTabsNavigator } from './components/tabs/class-tabs-navigator';
 import { frmCounter } from './components/class-counter';
 class frmDashboard {
 	constructor() {
@@ -69,7 +69,7 @@ class frmDashboard {
 			body: new URLSearchParams( {
 				action: this.options.ajax.action,
 				dashboard_action: this.options.ajax.dashboardActions.saveSubscribedEmail,
-				email: email
+				email
 			} )
 		} ).then( result => result.json() );
 	}

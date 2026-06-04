@@ -8,9 +8,11 @@ a[href="#square_settings"] svg.frmsvg {
 }
 
 @media only screen and (max-width: 900px) {
+
 	#square_settings .frm_grid_container:has(.frm-card-item) {
 		grid-template-columns: repeat(1, 1fr);
 	}
+
 	#square_settings .frm-card-item + .frm-card-item {
 		margin-top: var(--gap-sm);
 	}

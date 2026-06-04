@@ -6,47 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDb {
 
 	/**
-	 * The table name for Formidable Fields.
-	 *
-	 * @var string
-	 */
-	public $fields;
-
-	/**
-	 * The table name for Formidable Forms.
-	 *
-	 * @var string
-	 */
-	public $forms;
-
-	/**
-	 * The table name for Formidable Entries.
-	 *
-	 * @var string
-	 */
-	public $entries;
-
-	/**
-	 * The table name for Formidable Entry Metas.
-	 *
-	 * @var string
-	 */
-	public $entry_metas;
-
-	public function __construct() {
-		if ( ! defined( 'ABSPATH' ) ) {
-			die( 'You are not allowed to call this page directly.' );
-		}
-
-		_deprecated_function( __METHOD__, '2.05.06', 'FrmMigrate' );
-		global $wpdb;
-		$this->fields      = $wpdb->prefix . 'frm_fields';
-		$this->forms       = $wpdb->prefix . 'frm_forms';
-		$this->entries     = $wpdb->prefix . 'frm_items';
-		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
-	}
-
-	/**
 	 * Change array into format $wpdb->prepare can use
 	 *
 	 * @param array  $args
@@ -55,8 +14,8 @@ class FrmDb {
 	 * @return void
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
-		if ( empty( $args ) ) {
-			// add an arg to prevent prepare from failing
+		if ( ! $args ) {
+			// Add an arg to prevent prepare from failing
 			$args = array(
 				'where'  => $starts_with . '1=%d',
 				'values' => array( 1 ),
@@ -93,8 +52,9 @@ class FrmDb {
 		}
 
 		foreach ( $args as $key => $value ) {
-			$where         .= empty( $where ) ? $base_where : $condition;
-			$array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
+			$where .= $where ? $condition : $base_where;
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			$array_inc_null = ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value );
 
 			if ( is_numeric( $key ) || $array_inc_null ) {
 				$where       .= ' ( ';
@@ -121,10 +81,10 @@ class FrmDb {
 	}
 
 	/**
-	 * @param string       $key
-	 * @param array|string $value
-	 * @param string       $where
-	 * @param array        $values
+	 * @param string            $key
+	 * @param array|string|null $value
+	 * @param string            $where
+	 * @param array             $values
 	 *
 	 * @return void
 	 */
@@ -142,7 +102,7 @@ class FrmDb {
 		$lowercase_key = end( $lowercase_key );
 
 		if ( is_array( $value ) ) {
-			// translate array of values to "in"
+			// Translate array of values to "in"
 			if ( str_contains( $lowercase_key, 'like' ) ) {
 				$where  = preg_replace( '/' . $key . '$/', '', $where );
 				$where .= '(';
@@ -159,7 +119,7 @@ class FrmDb {
 				}
 
 				$where .= ')';
-			} elseif ( ! empty( $value ) ) {
+			} elseif ( $value ) {
 				$where .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
 				$values = array_merge( $values, $value );
 			}
@@ -183,7 +143,6 @@ class FrmDb {
 
 			$where   .= ' %s';
 			$values[] = $start . self::esc_like( $value ) . $end;
-
 		} elseif ( $value === null ) {
 			$where .= ' IS NULL';
 		} else {
@@ -230,7 +189,6 @@ class FrmDb {
 	 */
 	public static function get_count( $table, $where = array(), $args = array() ) {
 		$count = self::get_var( $table, $where, 'COUNT(*)', $args );
-
 		return (int) $count;
 	}
 
@@ -253,8 +211,7 @@ class FrmDb {
 			$args['limit'] = 1;
 		}
 
-		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
-
+		$query     = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 		$cache_key = self::generate_cache_key( $where, $args, $field, $type );
 
 		return self::check_cache( $cache_key, $group, $query, 'get_' . $type );
@@ -386,11 +343,11 @@ class FrmDb {
 		$prefix = $wpdb->base_prefix;
 		self::maybe_remove_prefix( $prefix, $group );
 
-		if ( $group == $table ) {
+		if ( $group === $table ) {
 			$table = $wpdb->prefix . $table;
 		}
 
-		// switch to singular group name
+		// Switch to singular group name
 		$group = rtrim( $group, 's' );
 	}
 
@@ -422,17 +379,18 @@ class FrmDb {
 			$args = array( 'order_by' => $args );
 		}
 
-		if ( ! empty( $order_by ) ) {
+		if ( $order_by ) {
 			$args['order_by'] = $order_by;
 		}
 
-		if ( ! empty( $limit ) ) {
+		if ( $limit ) {
 			$args['limit'] = $limit;
 		}
 
 		$temp_args = $args;
 
 		foreach ( $temp_args as $k => $v ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $v == '' ) {
 				unset( $args[ $k ] );
 				continue;
@@ -446,11 +404,13 @@ class FrmDb {
 		}
 
 		// Make sure LIMIT is the last argument
-		if ( isset( $args['order_by'] ) && isset( $args['limit'] ) ) {
-			$temp_limit = $args['limit'];
-			unset( $args['limit'] );
-			$args['limit'] = $temp_limit;
+		if ( ! isset( $args['order_by'] ) || ! isset( $args['limit'] ) ) {
+			return;
 		}
+
+		$temp_limit = $args['limit'];
+		unset( $args['limit'] );
+		$args['limit'] = $temp_limit;
 	}
 
 	/**
@@ -468,8 +428,7 @@ class FrmDb {
 		$group = '';
 		self::get_group_and_table_name( $table, $group );
 
-		$query = self::generate_query_string_from_pieces( $columns, $table, $where );
-
+		$query     = self::generate_query_string_from_pieces( $columns, $table, $where );
 		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A', ' WHERE' ) );
 
 		return self::check_cache( $cache_key, $group, $query, 'get_associative_results' );
@@ -492,13 +451,15 @@ class FrmDb {
 
 		self::esc_query_args( $args );
 
-		if ( is_array( $where ) || empty( $where ) ) {
-			self::get_where_clause_and_values( $where );
-			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! is_array( $where ) && $where ) {
+			return $query;
 		}
 
-		return $query;
+		self::get_where_clause_and_values( $where );
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
 	}
 
 	/**
@@ -516,6 +477,7 @@ class FrmDb {
 				$args[ $param ] = self::esc_limit( $value );
 			}
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $args[ $param ] == '' ) {
 				unset( $args[ $param ] );
 			}
@@ -533,7 +495,6 @@ class FrmDb {
 	 */
 	public static function esc_like( $term ) {
 		global $wpdb;
-
 		return $wpdb->esc_like( $term );
 	}
 
@@ -545,7 +506,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function esc_order( $order_query ) {
-		if ( empty( $order_query ) ) {
+		if ( ! $order_query ) {
 			return '';
 		}
 
@@ -557,11 +518,10 @@ class FrmDb {
 		}
 
 		$order_query = explode( ' ', trim( $order_query ) );
+		$order       = trim( reset( $order_query ) );
+		$safe_order  = array( 'count(*)' );
 
-		$order      = trim( reset( $order_query ) );
-		$safe_order = array( 'count(*)' );
-
-		if ( ! in_array( strtolower( $order ), $safe_order ) ) {
+		if ( ! in_array( strtolower( $order ), $safe_order, true ) ) {
 			$order = preg_replace( '/[^a-zA-Z0-9\-\_\.\+]/', '', $order );
 		}
 
@@ -600,7 +560,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function esc_limit( $limit ) {
-		if ( empty( $limit ) ) {
+		if ( ! $limit ) {
 			return '';
 		}
 
@@ -635,7 +595,6 @@ class FrmDb {
 	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
 		$placeholders = array_fill( 0, count( $array ), $type );
-
 		return implode( ', ', $placeholders );
 	}
 
@@ -648,12 +607,12 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-		if ( empty( $where ) ) {
+		if ( ! $where ) {
 			$where = '';
 		} elseif ( is_array( $where ) ) {
-				global $wpdb;
-				self::get_where_clause_and_values( $where, $starts_with );
-				$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			global $wpdb;
+			self::get_where_clause_and_values( $where, $starts_with );
+			$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$where = $starts_with . $where;
 		}
@@ -687,7 +646,7 @@ class FrmDb {
 			unset( $settings['ID'] );
 		}
 
-		// delete all caches for this group
+		// Delete all caches for this group
 		self::cache_delete_group( $group );
 
 		return self::save_json_post( $settings );
@@ -718,7 +677,7 @@ class FrmDb {
 
 		$post = wp_insert_post( $settings );
 
-		// add the content filters back for views or posts
+		// Add the content filters back for views or posts
 		if ( isset( $filters ) ) {
 			$wp_filter['content_save_pre'] = $filters;
 		}
@@ -743,11 +702,11 @@ class FrmDb {
 		$found   = null;
 		$results = wp_cache_get( $cache_key, $group, false, $found );
 
-		if ( ( $found === true && $results !== false ) || empty( $query ) ) {
+		if ( ( $found === true && $results !== false ) || ! $query ) {
 			return $results;
 		}
 
-		if ( 'get_posts' == $type ) {
+		if ( 'get_posts' === $type ) {
 			$results = get_posts( $query );
 		} elseif ( 'get_associative_results' === $type ) {
 			global $wpdb;
@@ -773,10 +732,12 @@ class FrmDb {
 	 * @return void
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		if ( ! FrmAppHelper::prevent_caching() ) {
-			self::add_key_to_group_cache( $cache_key, $group );
-			wp_cache_set( $cache_key, $results, $group, $time );
+		if ( FrmAppHelper::prevent_caching() ) {
+			return;
 		}
+
+		self::add_key_to_group_cache( $cache_key, $group );
+		wp_cache_set( $cache_key, $results, $group, $time );
 	}
 
 	/**
@@ -807,7 +768,7 @@ class FrmDb {
 		$cached = wp_cache_get( 'cached_keys', $group );
 
 		if ( ! $cached || ! is_array( $cached ) ) {
-			$cached = array();
+			return array();
 		}
 
 		return $cached;
@@ -838,13 +799,15 @@ class FrmDb {
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );
 
-		if ( ! empty( $cached_keys ) ) {
-			foreach ( $cached_keys as $key ) {
-				wp_cache_delete( $key, $group );
-			}
-
-			wp_cache_delete( 'cached_keys', $group );
+		if ( ! $cached_keys ) {
+			return;
 		}
+
+		foreach ( $cached_keys as $key ) {
+			wp_cache_delete( $key, $group );
+		}
+
+		wp_cache_delete( 'cached_keys', $group );
 	}
 
 	/**

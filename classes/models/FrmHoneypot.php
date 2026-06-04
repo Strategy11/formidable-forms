@@ -34,8 +34,7 @@ class FrmHoneypot extends FrmValidate {
 	 * @return bool
 	 */
 	private static function is_enabled() {
-		$frm_settings = FrmAppHelper::get_settings();
-		return $frm_settings->honeypot;
+		return (bool) FrmAppHelper::get_settings()->honeypot;
 	}
 
 	/**
@@ -43,7 +42,7 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	public function validate() {
 		if ( ! $this->is_option_on() || ! $this->check_honeypot_filter() ) {
-			// never flag as honeypot spam if disabled.
+			// Never flag as honeypot spam if disabled.
 			return true;
 		}
 		return ! $this->is_honeypot_spam();
@@ -56,7 +55,6 @@ class FrmHoneypot extends FrmValidate {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
 
 		if ( ! $is_honeypot_spam ) {
-
 			$field_id = $this->get_honeypot_field_id();
 
 			if ( ! $field_id ) {
@@ -122,8 +120,7 @@ class FrmHoneypot extends FrmValidate {
 		global $frm_vars;
 		$offset            = isset( $frm_vars['honeypot_selectors'] ) ? count( $frm_vars['honeypot_selectors'] ) + 1 : 1;
 		$honeypot_field_id = $max_field_id ? $max_field_id + $offset : $offset;
-
-		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
 
 		$honeypot->render_field( $honeypot_field_id );
@@ -242,6 +239,7 @@ class FrmHoneypot extends FrmValidate {
 
 		$container_id = 'frm_field_' . $field_id . '_container';
 		$this->track_html_id( $container_id );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div id="<?php echo esc_attr( $container_id ); ?>">
 			<label for="<?php echo esc_attr( $input_attrs['id'] ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?>>
@@ -250,6 +248,7 @@ class FrmHoneypot extends FrmValidate {
 			<input <?php FrmAppHelper::array_to_html_params( $input_attrs, true ); ?> <?php FrmFormsHelper::maybe_hide_inline(); ?> />
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -335,6 +334,7 @@ class FrmHoneypot extends FrmValidate {
 			// For backward compatibility use the old class name.
 			return 'frm_verify';
 		}
+
 		return $option;
 	}
 }

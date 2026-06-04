@@ -53,7 +53,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * @return void
 	 */
 	public function handle_error( $error_code, $charge_id = '' ) {
-		if ( ! empty( $this->entry_id ) ) {
+		if ( $this->entry_id ) {
 			$referer = FrmStrpLiteAuth::get_referer_url( $this->entry_id );
 		}
 
@@ -133,6 +133,7 @@ class FrmStrpLiteLinkRedirectHelper {
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
 		}
+
 		return ! str_starts_with( $url, $home_url );
 	}
 

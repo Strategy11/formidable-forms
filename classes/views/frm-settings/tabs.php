@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				>
 				<?php FrmAppHelper::icon_by_class( $section['icon'], array( 'aria-hidden' => 'true' ) ); ?>
-				<?php FrmAppHelper::kses_echo( $section['name'], array( 'span' ) ); ?>
+				<span class="frm-font-medium"><?php FrmAppHelper::kses_echo( $section['name'], array( 'span' ) ); ?></span>
 			</a>
 		</li>
 	<?php } ?>

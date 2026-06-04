@@ -183,17 +183,15 @@ class FrmTableHTMLGenerator {
 	 */
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
-
 			$this->table_style  = ' style="' . esc_attr( 'border-spacing:0;font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
 			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
-
 		}
 
 		if ( ! empty( $this->style_settings['class'] ) ) {
 			$this->table_style .= ' class="' . esc_attr( $this->style_settings['class'] ) . '"';
 		}
 
-		if ( ! empty( $this->width ) ) {
+		if ( $this->width ) {
 			$this->table_style .= ' width="' . esc_attr( $this->width ) . '"';
 		}
 	}
@@ -206,14 +204,15 @@ class FrmTableHTMLGenerator {
 	 * @return void
 	 */
 	private function init_td_style() {
-		if ( $this->use_inline_style === true ) {
-
-			$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
-			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
-			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
-
-			$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
+		if ( $this->use_inline_style !== true ) {
+			return;
 		}
+
+		$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
+		$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
+		$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
+
+		$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
 	}
 
 	/**
@@ -264,7 +263,7 @@ class FrmTableHTMLGenerator {
 
 		// Check if each character in string is valid hex digit
 		if ( FrmAppHelper::ctype_xdigit( $color_markup ) ) {
-			$color_markup = '#' . $color_markup;
+			return '#' . $color_markup;
 		}
 
 		return $color_markup;
@@ -278,7 +277,7 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	private function table_row_background_color() {
-		return ( $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'] );
+		return $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'];
 	}
 
 	/**
@@ -291,7 +290,6 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function tr_style() {
-
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
 		} elseif ( $this->use_inline_style ) {
@@ -373,14 +371,13 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value, $args = array() ) {
-		$row  = '<tr' . $this->tr_style();
-		$row .= $this->add_row_class( $value === '' );
-		$row .= '>';
-
+		$row   = '<tr' . $this->tr_style();
+		$row  .= $this->add_row_class( $value === '' );
+		$row  .= '>';
 		$label = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$value = '<td' . $this->td_style . '>' . $this->filter_value_for_display( $value, $args ) . '</td>';
 
-		if ( 'rtl' == $this->direction ) {
+		if ( 'rtl' === $this->direction ) {
 			$row .= $value;
 			$row .= $label;
 		} else {
@@ -452,9 +449,6 @@ class FrmTableHTMLGenerator {
 			$class .= ' frm-child-row';
 		}
 
-		if ( $class ) {
-			$class = ' class="' . trim( $class ) . '"';
-		}
-		return $class;
+		return $class ? ' class="' . trim( $class ) . '"' : $class;
 	}
 }

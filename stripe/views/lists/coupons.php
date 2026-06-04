@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm_wrap">
 	<?php
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param bool $publish
 	 */
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * If the return value of the hook doesn't change, the coupons upsell
 		 * will be displayed instead.
 		 *
-		 * @since x.x
+		 * @since 6.27
 		 *
 		 * @param bool $coupons_list_displayed
 		 */

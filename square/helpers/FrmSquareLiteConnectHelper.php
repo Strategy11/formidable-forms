@@ -22,6 +22,9 @@ class FrmSquareLiteConnectHelper {
 
 		self::register_settings_scripts();
 
+		FrmSquareLiteAppHelper::fee_education( 'square-global-settings-tip' );
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<table class="form-table" style="width: 400px;">
 			<tr class="form-field">
@@ -57,6 +60,7 @@ class FrmSquareLiteConnectHelper {
 			</div>
 		<?php } ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -65,9 +69,10 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function render_settings_for_mode( $mode ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-card-item frm4">
-			<div class="frm-flex-col">
+			<div class="frm-flex-col" style="width: 100%;">
 				<div>
 					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
 						<?php
@@ -113,16 +118,16 @@ class FrmSquareLiteConnectHelper {
 			</div>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$script_url     = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
-		$dependencies   = array( 'formidable_dom' );
-		$plugin_version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, $plugin_version, true );
+		$script_url   = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
+		$dependencies = array( 'formidable_dom' );
+		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, FrmAppHelper::plugin_version(), true );
 		wp_enqueue_script( 'formidable_square_settings' );
 	}
 
@@ -152,7 +157,7 @@ class FrmSquareLiteConnectHelper {
 		}
 
 		if ( ! empty( $data->password ) ) {
-			update_option( self::get_server_side_token_option_name( $mode ), $data->password, 'no' );
+			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
 		}
 
 		if ( ! is_object( $data ) || empty( $data->redirect_url ) ) {
@@ -177,10 +182,6 @@ class FrmSquareLiteConnectHelper {
 		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
 
-		if ( ! $headers ) {
-			return 'Unable to build headers for post. Is your pro license configured properly?';
-		}
-
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;
 
@@ -199,6 +200,7 @@ class FrmSquareLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+
 			return 'Response from server was not successful';
 		}
 
@@ -275,11 +277,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
-
-		if ( 2 === count( $split_on_language ) ) {
-			$url = $split_on_language[0];
-		}
-		return $url;
+		return 2 === count( $split_on_language ) ? $split_on_language[0] : $url;
 	}
 
 	/**
@@ -312,6 +310,7 @@ class FrmSquareLiteConnectHelper {
 				$password = $pro_license;
 			}
 		}
+
 		return ! empty( $password ) ? $password : false;
 	}
 
@@ -346,7 +345,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	private static function generate_client_password( $mode ) {
 		$client_password = wp_generate_password();
-		update_option( self::get_client_side_token_option_name( $mode ), $client_password, 'no' );
+		update_option( self::get_client_side_token_option_name( $mode ), $client_password, false );
 		return $client_password;
 	}
 
@@ -475,17 +474,17 @@ class FrmSquareLiteConnectHelper {
 		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
 
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
-			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
+			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, false );
 
 			$currency    = self::get_merchant_currency( true, $mode );
 			$location_id = self::get_location_id( true, $mode );
 
 			if ( $currency ) {
-				update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
+				update_option( self::get_merchant_currency_option_name( $mode ), $currency, false );
 			}
 
 			if ( $location_id ) {
-				update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
+				update_option( self::get_location_id_option_name( $mode ), $location_id, false );
 			}
 
 			FrmTransLiteAppController::install();
@@ -533,8 +532,8 @@ class FrmSquareLiteConnectHelper {
 		}
 
 		if ( is_array( $response ) ) {
-			// reformat empty arrays as empty objects
-			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			// Reformat empty arrays as empty objects
+			// If the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
 
@@ -544,6 +543,7 @@ class FrmSquareLiteConnectHelper {
 		} else {
 			self::$latest_error_from_square_api = '';
 		}
+
 		return false;
 	}
 
@@ -584,10 +584,11 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $receipt_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function refund_payment( $receipt_id ) {
-		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		$data = self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		return is_object( $data );
 	}
 
 	/**
@@ -624,7 +625,7 @@ class FrmSquareLiteConnectHelper {
 		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
 
 		if ( is_object( $response ) ) {
-			update_option( self::get_location_id_option_name( $mode ), $response->id, 'no' );
+			update_option( self::get_location_id_option_name( $mode ), $response->id, false );
 			return $response->id;
 		}
 
@@ -640,6 +641,7 @@ class FrmSquareLiteConnectHelper {
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
+
 		return $data->event_ids;
 	}
 
@@ -696,10 +698,10 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $subscription_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function cancel_subscription( $subscription_id ) {
-		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+		return false !== self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
 
 	public static function handle_disconnect() {
@@ -757,7 +759,7 @@ class FrmSquareLiteConnectHelper {
 		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );
 
 		if ( is_object( $response ) && ! empty( $response->currency ) ) {
-			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, 'no' );
+			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, false );
 			return $response->currency;
 		}
 
@@ -786,13 +788,13 @@ class FrmSquareLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
+
 		wp_send_json_error();
 	}
 
@@ -807,6 +809,7 @@ class FrmSquareLiteConnectHelper {
 		if ( is_object( $response ) && is_object( $response->subscription ) ) {
 			return $response->subscription;
 		}
+
 		return false;
 	}
 }

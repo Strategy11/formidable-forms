@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $id_attr = $args['action_control']->get_field_id( 'success_url' );
 ?>
-<div class="frm_form_field frm_has_shortcodes">
+<div class="frm_form_field frm_has_shortcodes frm-mt-xs">
 	<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect URL', 'formidable' ); ?></label>
 	<input
 		type="text"
@@ -104,7 +104,7 @@ if ( ! $redirect_delay ) {
 	<?php
 	$id_attr = $args['action_control']->get_field_id( 'redirect_delay_msg' );
 	?>
-	<div class="frm_form_field frm_has_shortcodes">
+	<div class="frm_form_field frm_has_shortcodes frm-mt-xs">
 		<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
 			<?php esc_html_e( 'Redirect message', 'formidable' ); ?>
 		</label>

@@ -15,6 +15,7 @@ import {
 	initToggleGroupComponents,
 	setupUnitInputHandlers
 } from './components';
+import { initFormActionsSearch } from './components/formActionsSearch';
 
 domReady( () => {
 	new frmRadioComponent();
@@ -24,4 +25,5 @@ domReady( () => {
 	initTokenInputFields();
 	initToggleGroupComponents();
 	setupUnitInputHandlers();
+	initFormActionsSearch();
 } );

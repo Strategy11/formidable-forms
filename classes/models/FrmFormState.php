@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormState {
 
 	/**
-	 * @var FrmFormState
+	 * @var FrmFormState|null
 	 */
 	private static $instance;
 
@@ -47,7 +47,7 @@ class FrmFormState {
 	 * @return bool true if just initialized.
 	 */
 	private static function maybe_initialize() {
-		if ( empty( self::$instance ) ) {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 			return true;
 		}
@@ -103,7 +103,7 @@ class FrmFormState {
 			return;
 		}
 
-		if ( empty( self::$instance ) && ! self::get_state_from_request() ) {
+		if ( ! self::$instance && ! self::get_state_from_request() ) {
 			return;
 		}
 
@@ -153,6 +153,7 @@ class FrmFormState {
 		foreach ( $decoded_state as $key => $value ) {
 			self::set_initial_value( self::decompressed_key( $key ), $value );
 		}
+
 		return true;
 	}
 
@@ -168,8 +169,7 @@ class FrmFormState {
 			return;
 		}
 
-		$state_string = $this->get_state_string();
-		echo '<input name="frm_state" type="hidden" value="' . esc_attr( $state_string ) . '" />';
+		echo '<input name="frm_state" type="hidden" value="' . esc_attr( $this->get_state_string() ) . '" />';
 	}
 
 	/**
@@ -180,9 +180,8 @@ class FrmFormState {
 			return '';
 		}
 
-		$secret           = self::get_encryption_secret();
-		$compressed_state = $this->compressed_state();
-		$json_encoded     = json_encode( $compressed_state );
+		$secret       = self::get_encryption_secret();
+		$json_encoded = json_encode( $this->compressed_state() );
 		return openssl_encrypt( $json_encoded, 'AES-128-ECB', $secret );
 	}
 
@@ -208,6 +207,7 @@ class FrmFormState {
 		foreach ( $this->state as $key => $value ) {
 			$compressed[ self::compressed_key( $key ) ] = $value;
 		}
+
 		return $compressed;
 	}
 
@@ -258,7 +258,7 @@ class FrmFormState {
 
 		// We don't have a secret, so let's generate one.
 		$secret_key = is_callable( 'sodium_crypto_secretbox_keygen' ) ? sodium_crypto_secretbox_keygen() : wp_generate_password( 32, true, true );
-		update_option( 'frm_form_state_key', base64_encode( $secret_key ), 'no' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		update_option( 'frm_form_state_key', base64_encode( $secret_key ), false ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 
 		return $secret_key;
 	}

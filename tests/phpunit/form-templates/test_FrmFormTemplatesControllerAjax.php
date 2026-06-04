@@ -37,7 +37,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		$current_favorites = $this->controller::get_favorite_templates();
 
 		// Assert that the arrays are equal.
-		$this->assertEquals( $current_favorites, $response_favorites, 'The favorite templates from AJAX response should match the current state.' );
+		$this->assertSame( $current_favorites, $response_favorites, 'The favorite templates from AJAX response should match the current state.' );
 	}
 
 	/**

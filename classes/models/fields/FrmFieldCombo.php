@@ -56,7 +56,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$defaults = $this->get_default_sub_field();
 
 		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( empty( $sub_field ) ) {
+			if ( ! $sub_field ) {
 				continue;
 			}
 
@@ -404,13 +404,16 @@ class FrmFieldCombo extends FrmFieldType {
 		if ( ! empty( $sub_field['name'] ) ) {
 			$field['subfield_name'] = $sub_field['name'];
 		}
+
 		do_action( 'frm_field_input_html', $field );
 
 		// Print custom attributes.
-		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
-			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
-				echo esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '" ';
-			}
+		if ( empty( $sub_field['atts'] ) || ! is_array( $sub_field['atts'] ) ) {
+			return;
+		}
+
+		foreach ( $sub_field['atts'] as $att_name => $att_value ) {
+			echo esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '" ';
 		}
 	}
 
@@ -436,16 +439,17 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
-
+		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		$sub_fields = $this->get_processed_sub_fields();
 
 		// Validate not empty.
 		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( empty( $sub_field['optional'] ) && empty( $args['value'][ $name ] ) ) {
-				$errors[ 'field' . $args['id'] . '-' . $name ] = '';
-				$errors[ 'field' . $args['id'] ]               = $blank_msg;
+			if ( ! empty( $sub_field['optional'] ) || ! empty( $args['value'][ $name ] ) ) {
+				continue;
 			}
+
+			$errors[ 'field' . $args['id'] . '-' . $name ] = '';
+			$errors[ 'field' . $args['id'] ]               = $blank_msg;
 		}
 
 		return $errors;

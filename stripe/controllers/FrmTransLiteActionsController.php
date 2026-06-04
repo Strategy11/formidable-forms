@@ -106,7 +106,7 @@ class FrmTransLiteActionsController {
 		$response   = $class_name::trigger_gateway( $action, $entry, $form );
 
 		if ( ! $response['success'] && $response['show_errors'] ) {
-			// the payment failed
+			// The payment failed
 			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
 		}
 	}
@@ -159,7 +159,7 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$message = $frm_vars['frm_trans']['error'] ?? '';
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			$message = __( 'There was an error processing your payment.', 'formidable' );
 		}
 
@@ -262,15 +262,14 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$entry = FrmEntry::getOne( $payment->item_id );
-
-		$trigger_event = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
-
+		$entry            = FrmEntry::getOne( $payment->item_id );
+		$trigger_event    = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
 			$trigger_event = $payment->status === 'complete' ? 'payment-success' : 'payment-failed';
 		}
+
 		FrmFormActionsController::trigger_actions( $trigger_event, $entry->form_id, $entry->id );
 	}
 
@@ -285,11 +284,13 @@ class FrmTransLiteActionsController {
 	public static function prepare_description( &$action, $atts ) {
 		$description = $action->post_content['description'];
 
-		if ( ! empty( $description ) ) {
-			$atts['value']                       = $description;
-			$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
-			$action->post_content['description'] = $description;
+		if ( ! $description ) {
+			return;
 		}
+
+		$atts['value']                       = $description;
+		$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
+		$action->post_content['description'] = $description;
 	}
 
 	/**
@@ -312,8 +313,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$currency = self::get_currency_for_action( $atts );
-
-		$total = 0;
+		$total    = 0;
 
 		foreach ( (array) $amount as $a ) {
 			$this_amount = self::get_amount_from_string( $a );
@@ -457,10 +457,7 @@ class FrmTransLiteActionsController {
 		);
 		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
 
-		if ( ! $payment_actions ) {
-			$payment_actions = array();
-		}
-		return $payment_actions;
+		return $payment_actions ? $payment_actions : array();
 	}
 
 	/**
@@ -500,7 +497,8 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$previous_entry = $frm_vars['frm_trans']['pay_entry'] ?? false;
 
-		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $previous_entry || $previous_entry->form_id != $field->form_id ) {
 			return $values;
 		}
 
@@ -509,8 +507,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$frm_vars['trans_filled'] = true;
-
-		$previous_entry_id = $previous_entry->id;
+		$previous_entry_id        = $previous_entry->id;
 		self::destroy_entry_later( $previous_entry_id );
 
 		return $values;
@@ -565,9 +562,8 @@ class FrmTransLiteActionsController {
 	public static function before_save_settings( $settings, $action ) {
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
-		if ( in_array( 'square', $settings['gateway'] ) ) {
-			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
-
+		if ( in_array( 'square', $settings['gateway'], true ) ) {
+			$currency             = FrmSquareLiteConnectHelper::get_merchant_currency();
 			$settings['currency'] = false !== $currency ? strtolower( $currency ) : 'usd';
 		} else {
 			$settings['currency'] = strtolower( $settings['currency'] );
@@ -639,8 +635,53 @@ class FrmTransLiteActionsController {
 	 * @return false|int
 	 */
 	protected static function add_a_field( $form_id, $field_type, $field_name ) {
-		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$new_values['name'] = $field_name;
+		$new_values                = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+		$new_values['name']        = $field_name;
+		$new_values['field_order'] = self::get_field_order_before_submit( $form_id, $new_values['field_order'] );
 		return FrmField::create( $new_values );
+	}
+
+	/**
+	 * When auto-injecting a field, ensure it is placed before the submit button.
+	 *
+	 * @since 6.29
+	 *
+	 * @param int $form_id
+	 * @param int $field_order
+	 *
+	 * @return int
+	 */
+	private static function get_field_order_before_submit( $form_id, $field_order ) {
+		$submit_field = FrmSubmitHelper::get_submit_field( $form_id );
+
+		if ( ! $submit_field || $field_order < (int) $submit_field->field_order ) {
+			return $field_order;
+		}
+
+		$submit_order = (int) $submit_field->field_order;
+		FrmField::update( $submit_field->id, array( 'field_order' => $submit_order + 1 ) );
+		return $submit_order;
+	}
+
+	/**
+	 * Remove credit card validation errors.
+	 *
+	 * @param array    $errors
+	 * @param stdClass $field
+	 *
+	 * @return array
+	 */
+	public static function remove_cc_errors( $errors, $field ) {
+		$field_id = $field->temp_id ?? $field->id;
+
+		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
+			unset( $errors[ 'field' . $field_id . '-cc' ] );
+		}
+
+		if ( isset( $errors[ 'field' . $field_id ] ) ) {
+			unset( $errors[ 'field' . $field_id ] );
+		}
+
+		return $errors;
 	}
 }

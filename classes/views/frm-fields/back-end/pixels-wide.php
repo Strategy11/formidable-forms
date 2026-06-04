@@ -1,4 +1,13 @@
 <?php
+/**
+ * Field size (pixels wide) setting in field settings.
+ *
+ * @package Formidable
+ *
+ * @var array $field       Field data including 'id' and 'size'.
+ * @var bool  $display_max Whether to include the Max Characters input.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

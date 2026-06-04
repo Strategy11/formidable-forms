@@ -1,15 +1,13 @@
-/* global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
-/* eslint-disable prefer-const, compat/compat */
 
 jQuery( document ).ready( function() {
-	let deauthLink, submenuItem, li,
-		installLink = document.getElementById( 'frm_install_link' );
-	if ( installLink !== null ) {
+	const installLink = document.getElementById( 'frm_install_link' );
+
+	if ( installLink ) {
 		jQuery( installLink ).on( 'click', frmInstallPro );
 	}
 
-	deauthLink = jQuery( '.frm_deauthorize_link' );
+	const deauthLink = jQuery( '.frm_deauthorize_link' );
 	if ( deauthLink.length ) {
 		deauthLink.on( 'click', frmDeauthorizeNow );
 	}
@@ -18,9 +16,9 @@ jQuery( document ).ready( function() {
 		frmAdminPopup.init();
 	}
 
-	submenuItem = document.querySelector( '.frm-upgrade-submenu' );
-	if ( null !== submenuItem ) {
-		li = submenuItem.parentNode.parentNode;
+	const submenuItem = document.querySelector( '.frm-upgrade-submenu' );
+	if ( submenuItem ) {
+		const li = submenuItem.parentNode.parentNode;
 		if ( li ) {
 			li.classList.add( 'frm-submenu-highlight' );
 		}
@@ -29,7 +27,7 @@ jQuery( document ).ready( function() {
 
 function frm_install_now() { // eslint-disable-line camelcase
 	const $msg = jQuery( document.getElementById( 'frm_install_message' ) );
-	$msg.html( '<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>' );
+	$msg.html( `<div class="frm_plugin_updating">${ frmGlobal.updating_msg }<div class="spinner frm_spinner"></div></div>` );
 	jQuery.ajax( {
 		type: 'POST',
 		url: ajaxurl,
@@ -37,7 +35,7 @@ function frm_install_now() { // eslint-disable-line camelcase
 			action: 'frm_install',
 			nonce: frmGlobal.nonce
 		},
-		success: function() {
+		success() {
 			$msg.fadeOut( 'slow' );
 		}
 	} );
@@ -45,16 +43,15 @@ function frm_install_now() { // eslint-disable-line camelcase
 }
 
 function frmInstallPro( e ) {
-	let $msg,
-		plugin = this.getAttribute( 'data-prourl' );
+	const plugin = this.getAttribute( 'data-prourl' );
 	if ( plugin === '' ) {
 		return true;
 	}
 
 	e.preventDefault();
 
-	$msg = jQuery( document.getElementById( 'frm_install_message' ) );
-	$msg.html( '<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>' );
+	const $msg = jQuery( document.getElementById( 'frm_install_message' ) );
+	$msg.html( `<div class="frm_plugin_updating">${ frmGlobal.updating_msg }<div class="spinner frm_spinner"></div></div>` );
 	$msg.fadeIn( 'slow' );
 
 	jQuery.ajax( {
@@ -66,13 +63,13 @@ function frmInstallPro( e ) {
 		data: {
 			action: 'frm_install_addon',
 			nonce: frmGlobal.nonce,
-			plugin: plugin
+			plugin
 		},
-		success: function() {
+		success() {
 			$msg.fadeOut( 'slow' );
 			$msg.parent().fadeOut( 'slow' );
 		},
-		error: function() {
+		error() {
 			$msg.fadeOut( 'slow' );
 		}
 	} );
@@ -91,7 +88,7 @@ function frmDeauthorizeNow() {
 			action: 'frm_deauthorize',
 			nonce: frmGlobal.nonce
 		},
-		success: function() {
+		success() {
 			jQuery( '.error' ).fadeOut( 'slow' );
 		}
 	} );
@@ -105,17 +102,17 @@ function frmSelectSubnav() {
 }
 
 function frmCreatePostEntry( id, postId ) {
-	jQuery( '#frm_create_entry p' ).replaceWith( '<img src="' + frmGlobal.url + '/images/wpspin_light.gif" alt="' + frmGlobal.loading + '" />' );
+	jQuery( '#frm_create_entry p' ).replaceWith( `<img src="${ frmGlobal.url }/images/wpspin_light.gif" alt="${ frmGlobal.loading }" />` );
 	jQuery.ajax( {
 		type: 'POST',
 		url: ajaxurl,
 		data: {
 			action: 'frm_create_post_entry',
-			id: id,
+			id,
 			post_id: postId,
 			nonce: frmGlobal.nonce
 		},
-		success: function() {
+		success() {
 			jQuery( document.getElementById( 'frm_create_entry' ) ).fadeOut( 'slow' );
 		}
 	} );
@@ -123,31 +120,30 @@ function frmCreatePostEntry( id, postId ) {
 
 function frmAdminPopupJS() {
 	function switchSc() {
-		let val;
 		jQuery( '.frm_switch_sc' ).removeClass( 'active' );
 		jQuery( this ).addClass( 'active' );
 		toggleMenu();
-		jQuery( '#frm_popup_content .media-frame-title h1' ).html( jQuery( this ).children( '.howto' ).text() + ' <span class="spinner" style="float:left;"></span>' );
-		val = this.id.replace( 'sc-link-', '' );
+		jQuery( '#frm_popup_content .media-frame-title h1' ).html( `${ jQuery( this ).children( '.howto' ).text() } <span class="spinner" style="float:left;"></span>` );
+		const val = this.id.replace( 'sc-link-', '' );
 		populateOpts( val );
 		return false;
 	}
 
 	function populateOpts( val ) {
-		let $settings, $scOpts, $spinner,
-			sc = document.getElementById( 'frm_complete_shortcode' );
-		if ( sc !== null ) {
-			sc.value = '[' + val + ']';
+		const sc = document.getElementById( 'frm_complete_shortcode' );
+
+		if ( sc ) {
+			sc.value = `[${ val }]`;
 		}
 		jQuery( '.frm_shortcode_option' ).hide();
 
-		$settings = document.getElementById( 'sc-opts-' + val );
-		if ( $settings !== null ) {
+		const $settings = document.getElementById( `sc-opts-${ val }` );
+		if ( $settings ) {
 			$settings.style.display = '';
-			jQuery( document.getElementById( 'sc-' + val ) ).trigger( 'click' );
+			jQuery( document.getElementById( `sc-${ val }` ) ).trigger( 'click' );
 		} else {
-			$scOpts = jQuery( document.getElementById( 'frm_shortcode_options' ) );
-			$spinner = jQuery( '.media-frame-title .spinner' );
+			const $scOpts = jQuery( document.getElementById( 'frm_shortcode_options' ) );
+			const $spinner = jQuery( '.media-frame-title .spinner' );
 			$spinner.show();
 			jQuery.ajax( {
 				type: 'POST',
@@ -157,10 +153,10 @@ function frmAdminPopupJS() {
 					shortcode: val,
 					nonce: frmGlobal.nonce
 				},
-				success: function( html ) {
+				success( html ) {
 					$spinner.hide();
 					$scOpts.append( html );
-					jQuery( document.getElementById( 'sc-' + val ) ).trigger( 'click' );
+					jQuery( document.getElementById( `sc-${ val }` ) ).trigger( 'click' );
 				}
 			} );
 		}
@@ -168,19 +164,21 @@ function frmAdminPopupJS() {
 
 	function addToShortcode() {
 		const sc = jQuery( 'input[name=frmsc]:checked' ).val();
-		const inputs = jQuery( document.getElementById( 'sc-opts-' + sc ) ).find( 'input, select' );
-		let output = '[' + sc;
+		const inputs = jQuery( document.getElementById( `sc-opts-${ sc }` ) ).find( 'input, select' );
+		let output = `[${ sc }`;
+
 		inputs.each( function() {
-			let attrName, attrVal,
-				$thisInput = jQuery( this ),
-				attrId = this.id;
+			let attrName;
+			let attrVal;
+			const $thisInput = jQuery( this );
+			const attrId = this.id;
+
 			if ( attrId.indexOf( 'frmsc_' ) === 0 ) {
-				attrName = attrId.replace( 'frmsc_' + sc + '_', '' );
+				attrName = attrId.replace( `frmsc_${ sc }_`, '' );
 				attrVal = $thisInput.val();
 
-				if ( ( $thisInput.attr( 'type' ) === 'checkbox' && ! this.checked ) || ( ( $thisInput.attr( 'type' ) === 'text' || $thisInput.is( 'select' ) ) && attrVal === '' ) ) {
-				} else {
-					output += ' ' + attrName + '="' + attrVal + '"';
+				if ( ( $thisInput.attr( 'type' ) !== 'checkbox' || this.checked ) && ( ( $thisInput.attr( 'type' ) !== 'text' && ! $thisInput.is( 'select' ) ) || attrVal !== '' ) ) {
+					output += ` ${ attrName }="${ attrVal }"`;
 				}
 			}
 		} );
@@ -194,8 +192,8 @@ function frmAdminPopupJS() {
 	}
 
 	function getFieldSelection() {
-		let thisId,
-			formId = this.value;
+		let thisId;
+		const formId = this.value;
 		if ( formId ) {
 			thisId = this.id;
 			jQuery.ajax( {
@@ -207,10 +205,10 @@ function frmAdminPopupJS() {
 					form_id: formId,
 					nonce: frmGlobal.nonce
 				},
-				success: function( msg ) {
+				success( msg ) {
 					const baseId = thisId.replace( '_form', '' );
-					msg = msg.replace( 'name="field_options[form_select_0]"', 'id="frmsc_' + baseId + '_fields"' );
-					jQuery( document.getElementById( baseId + '_fields_container' ) ).html( msg );
+					msg = msg.replace( 'name="field_options[form_select_0]"', `id="frmsc_${ baseId }_fields"` );
+					jQuery( document.getElementById( `${ baseId }_fields_container` ) ).html( msg );
 				}
 			} );
 		}
@@ -221,16 +219,14 @@ function frmAdminPopupJS() {
 	}
 
 	return {
-		init: function() {
-			let $scOptsDiv;
-
+		init() {
 			jQuery( '.frm_switch_sc' ).on( 'click', switchSc );
 			jQuery( '.button.frm_insert_form' ).on( 'click', function() {
 				populateOpts( 'formidable' );
 			} );
 			jQuery( document.getElementById( 'frm_insert_shortcode' ) ).on( 'click', insertShortcode );
 
-			$scOptsDiv = jQuery( document.getElementById( 'frm_shortcode_options' ) );
+			const $scOptsDiv = jQuery( document.getElementById( 'frm_shortcode_options' ) );
 			$scOptsDiv.on( 'change', 'select, input', addToShortcode );
 			$scOptsDiv.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
@@ -253,8 +249,8 @@ function frmWidgetsJS() {
 	}
 
 	function getFields() {
-		let widget,
-			displayId = this.value;
+		let widget;
+		const displayId = this.value;
 		if ( displayId !== '' ) {
 			widget = jQuery( this ).closest( '.widget-content' );
 
@@ -267,16 +263,15 @@ function frmWidgetsJS() {
 					display_id: displayId,
 					nonce: frmGlobal.nonce
 				},
-				success: function( opts ) {
-					let titleField,
-						catField = widget.find( '.frm_list_items_cat_id' );
+				success( opts ) {
+					const catField = widget.find( '.frm_list_items_cat_id' );
 					catField.find( 'option' ).remove().end();
 					catField.append( jQuery( '<option></option>' ) );
 					jQuery.each( opts.catValues, function( key, value ) {
 						catField.append( jQuery( '<option></option>' ).attr( 'value', key ).text( value ) );
 					} );
 
-					titleField = widget.find( '.frm_list_items_title_id' );
+					const titleField = widget.find( '.frm_list_items_title_id' );
 					titleField.find( 'option' ).remove().end();
 					titleField.append( jQuery( '<option></option>' ) );
 					jQuery.each( opts.titleValues, function( key, value ) {
@@ -288,7 +283,7 @@ function frmWidgetsJS() {
 	}
 
 	return {
-		init: function() {
+		init() {
 			jQuery( document ).on( 'click', '.frm_list_items_cat_list', toggleCatOpt );
 			jQuery( document ).on( 'change', '.frm_list_items_display_id', getFields );
 		}
