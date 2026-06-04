@@ -17,7 +17,7 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 	 * @return bool
 	 */
 	public function check() {
-		$mod_keys = trim( $this->get_disallowed_words() );
+		$mod_keys = trim( get_option( 'disallowed_keys' ) );
 
 		if ( ! $mod_keys ) {
 			return false;
@@ -39,13 +39,6 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 			$ip,
 			$user_agent
 		);
-	}
-
-	/**
-	 * @return string
-	 */
-	private function get_disallowed_words() {
-		return get_option( 'disallowed_keys' );
 	}
 
 	/**
