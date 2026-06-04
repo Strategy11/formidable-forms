@@ -17,14 +17,16 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 			'form_id'        => 1,
 		);
 
-		update_option( $this->get_disallowed_option_name(), '' );
+		$option_name = 'disallowed_keys';
+
+		update_option( $option_name, '' );
 		$spam_check = new FrmSpamCheckWPDisallowedWords( $values );
 		$this->assertFalse( $spam_check->is_spam() );
 
 		$blocked   = '23.343.12332';
 		$new_block = $blocked . "\nspamemail@example.com";
-		update_option( $this->get_disallowed_option_name(), $new_block );
-		$this->assertSame( $new_block, get_option( $this->get_disallowed_option_name() ) );
+		update_option( $option_name, $new_block );
+		$this->assertSame( $new_block, get_option( $option_name ) );
 
 		$wp_test = wp_check_comment_disallowed_list(
 			'Author',
@@ -64,14 +66,5 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 		$values['item_meta']['25'] = $blocked . '23.343.1233234323';
 		$is_spam                   = FrmAntiSpamController::contains_wp_disallowed_words( $values );
 		$this->assertSame( $is_spam, $spam_msg );
-	}
-
-	/**
-	 * The name of the disallowed list of words was changed in WP 5.5.
-	 *
-	 * @return string
-	 */
-	private function get_disallowed_option_name() {
-		return 'disallowed_keys';
 	}
 }
