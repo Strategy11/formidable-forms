@@ -61,19 +61,19 @@ class FrmGatedContentAction extends FrmFormAction {
 	 */
 	public static function get_types() {
 		$types = array(
-			'page'       => array(
+			'page'     => array(
 				'label'    => __( 'Page', 'formidable' ),
 				'disabled' => false,
 			),
-			'post'       => array(
+			'post'     => array(
 				'label'    => __( 'Post', 'formidable' ),
 				'disabled' => false,
 			),
-			'frm_file'   => array(
+			'frm_file' => array(
 				'label'    => __( 'Formidable file (Pro)', 'formidable' ),
 				'disabled' => true,
 			),
-			'frm_pdf'    => array(
+			'frm_pdf'  => array(
 				'label'    => __( 'Formidable PDF (PDFs add-on)', 'formidable' ),
 				'disabled' => true,
 			),
