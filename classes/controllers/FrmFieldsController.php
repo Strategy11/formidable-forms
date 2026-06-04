@@ -615,7 +615,7 @@ class FrmFieldsController {
 		$field_object->add_aria_description(
 			array(
 				'field_id' => $field['id'],
-				'html_id'  => FrmFieldsHelper::get_html_id( $field ),
+				'html_id'  => ! empty( $field['html_id'] ) ? $field['html_id'] : FrmFieldsHelper::get_html_id( $field ),
 			),
 			$add_html
 		);
