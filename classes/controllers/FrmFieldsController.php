@@ -587,15 +587,13 @@ class FrmFieldsController {
 	/**
 	 * Add additional HTML when the frm_field_input_html hook is triggered.
 	 *
-	 * @since x.x Added $args param.
+	 * @since x.x Added the $args param.
 	 *
 	 * @param array $field
 	 * @param bool  $echo
 	 * @param array $args  Optional rendering context passed by the input view via the
 	 *                     `frm_field_input_html` action. Used to add the aria description.
 	 *                     May include `field_id`, `html_id` and `errors`.
-	 *
-	 * @since x.x Added the `$args` parameter.
 	 *
 	 * @return string
 	 */
