@@ -1074,11 +1074,7 @@ DEFAULT_HTML;
 
 		$this->prepare_align_class( $align );
 
-		if ( $align ) {
-			return ' ' . $align;
-		}
-
-		return '';
+		return $align ? ' ' . $align : '';
 	}
 
 	/**
