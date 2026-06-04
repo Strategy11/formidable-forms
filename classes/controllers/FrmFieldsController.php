@@ -611,13 +611,11 @@ class FrmFieldsController {
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
-		unset( $add_html );
-
 		$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
 		$field_object->add_aria_description(
 			array(
 				'field_id' => $field['id'],
-				'html_id'  => $field['html_id'] ?? FrmFieldsHelper::get_html_id( $field ),
+				'html_id'  => FrmFieldsHelper::get_html_id( $field ),
 			),
 			$add_html
 		);
