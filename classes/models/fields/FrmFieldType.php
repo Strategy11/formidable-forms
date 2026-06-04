@@ -1066,17 +1066,15 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function get_container_class() {
-		$is_radio    = FrmField::is_radio( $this->field );
-		$is_checkbox = FrmField::is_checkbox( $this->field );
-		$align       = FrmField::get_option( $this->field, 'align' );
-		$class       = '';
-
-		if ( $align && ( $is_radio || $is_checkbox ) ) {
-			self::prepare_align_class( $align );
-			$class .= ' ' . $align;
+		if ( ! FrmField::is_radio( $this->field ) && ! FrmField::is_checkbox( $this->field ) ) {
+			return '';
 		}
 
-		return $class;
+		$align = FrmField::get_option( $this->field, 'align' );
+
+		$this->prepare_align_class( $align );
+
+		return $align ? ' ' . $align : '';
 	}
 
 	/**

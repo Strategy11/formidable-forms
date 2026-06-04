@@ -6963,6 +6963,9 @@ window.frmAdminBuildJS = function() {
 		let replaceWith = ` ${ setting.value }`;
 		const fieldId = field.getAttribute( 'data-fid' );
 
+		if ( '' === replaceWith.trim() ) {
+			replaceWith = ' ' + setting.querySelector( 'option[data-align]' ).getAttribute( 'data-align' );
+		}
 		// Include classes from multiple settings.
 		if ( fieldId !== undefined ) {
 			if ( setting.classList.contains( 'field_options_align' ) ) {
