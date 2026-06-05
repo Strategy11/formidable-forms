@@ -5,7 +5,7 @@
  * Internal dependencies
  */
 const { validateField } = require( './settings/validateField' );
-const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting } = require( './settings/validateRangeSettings' );
+const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -8457,10 +8457,7 @@ window.frmAdminBuildJS = function() {
 	function handleBuilderChangeEvent( event ) {
 		const target = event.target;
 		maybeShowSaveAndReloadModal( target );
-		if ( ! frmGlobal.proIsConnected ) {
-			validateNumberRangeSetting( target );
-			validateStepSetting( target );
-		}
+		validateRangeSettings( target );
 	}
 
 	/**
@@ -11176,6 +11173,7 @@ window.frmAdminBuildJS = function() {
 				getRangeSettingsDefaults,
 				validateNumberRangeSetting,
 				validateStepSetting,
+				validateRangeSettings,
 			},
 		},
 

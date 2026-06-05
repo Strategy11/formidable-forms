@@ -13,9 +13,32 @@ export function validateField( field, getError ) {
 	if ( errorMessage ) {
 		frmAdminBuild.infoModal( errorMessage );
 		field.classList.add( 'frm_invalid_field' );
+		focusFieldOnModalDismiss( field );
 	} else {
 		field.classList.remove( 'frm_invalid_field' );
 	}
 
 	return errorMessage;
+}
+
+/**
+ * Returns focus to the invalid field once the info modal is dismissed.
+ *
+ * @since x.x
+ *
+ * @param {HTMLElement} field The invalid field element.
+ *
+ * @return {void}
+ */
+function focusFieldOnModalDismiss( field ) {
+	const dismissers = document.querySelectorAll(
+		'#frm_info_modal .dismiss, #frm_info_modal #frm-info-click, .ui-widget-overlay.ui-front'
+	);
+
+	function onModalClose() {
+		setTimeout( () => field.focus(), 0 );
+		dismissers.forEach( el => el.removeEventListener( 'click', onModalClose ) );
+	}
+
+	dismissers.forEach( el => el.addEventListener( 'click', onModalClose ) );
 }

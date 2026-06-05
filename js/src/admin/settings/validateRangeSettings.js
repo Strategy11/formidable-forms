@@ -118,3 +118,37 @@ export function validateStepSetting( field ) {
 			: '';
 	} );
 }
+
+/**
+ * Validates all range related settings for a field and lets add-ons extend the validation.
+ *
+ * This is the single entry point used by the builder change handler. It runs
+ * the number range and step checks, then exposes the `frm_validate_range_settings`
+ * filter so add-ons (like Pro) can contribute additional checks (e.g. gap range)
+ * without the core needing to know anything about them.
+ *
+ * @since x.x
+ *
+ * @param {HTMLElement} field The field element being validated.
+ *
+ * @return {string} The error message, or empty string when valid.
+ */
+export function validateRangeSettings( field ) {
+	let errorMessage = validateNumberRangeSetting( field );
+	if ( ! errorMessage ) {
+		errorMessage = validateStepSetting( field );
+	}
+
+	/**
+	 * Filters the range settings validation result so add-ons can add their own checks.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string}      errorMessage  The current error message, or empty string when valid.
+	 * @param {Object}      context       Additional context.
+	 * @param {HTMLElement} context.field The field element being validated.
+	 *
+	 * @return {string} The (possibly updated) error message.
+	 */
+	return wp.hooks.applyFilters( 'frm_validate_range_settings', errorMessage || '', { field } );
+}
