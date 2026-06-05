@@ -282,9 +282,12 @@ function frmFrontFormJS() {
 			maybeAddHttpsToUrl( field );
 		}
 		const form = field.closest( 'form' );
-		if ( form && hasClass( form, 'frm_js_validate' ) ) {
-			validateField( field );
+		if ( ! form ) {
+			return;
 		}
+
+		// Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+		validateField( field, hasClass( form, 'frm_js_validate' ) );
 	}
 
 	/**
@@ -301,11 +304,16 @@ function frmFrontFormJS() {
 	/**
 	 * Validate a field with JS.
 	 *
+	 * Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+	 *
+	 * @since x.x Added the `addErrors` parameter.
+	 *
 	 * @param {HTMLElement} field
+	 * @param {boolean}     addErrors Whether to add new errors. Defaults to `true`.
 	 *
 	 * @return {void}
 	 */
-	function validateField( field ) {
+	function validateField( field, addErrors = true ) {
 		let errors;
 		let key;
 
@@ -325,11 +333,18 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
-		removeFieldError( fieldContainer );
-		if ( Object.keys( errors ).length > 0 ) {
-			for ( key in errors ) {
-				addFieldError( fieldContainer, key, errors );
+		const hasErrors = Object.keys( errors ).length > 0;
+
+		if ( addErrors ) {
+			removeFieldError( fieldContainer );
+			if ( hasErrors ) {
+				for ( key in errors ) {
+					addFieldError( fieldContainer, key, errors );
+				}
 			}
+		} else if ( ! hasErrors ) {
+			// JS validation is off, so only remove existing errors once the field passes validation.
+			removeFieldError( fieldContainer );
 		}
 	}
 
