@@ -1219,9 +1219,7 @@ function frmFrontFormJS() {
 		}
 
 		const errorMessage = container.querySelector( '.frm_error' );
-		const errorId = errorMessage ? errorMessage.id : '';
 		const input = container.querySelector( 'input, select, textarea' );
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
 
@@ -1237,17 +1235,8 @@ function frmFrontFormJS() {
 		}
 
 		if ( errorMessage ) {
+			updateInputElementsAriaDescribedBy( errorMessage );
 			errorMessage.remove();
-		}
-
-		if ( input ) {
-			input.removeAttribute( 'aria-describedby' );
-			if ( describedBy ) {
-				describedBy = describedBy.replace( errorId, '' ).trim();
-				if ( describedBy ) {
-					input.setAttribute( 'aria-describedby', describedBy );
-				}
-			}
 		}
 	}
 
