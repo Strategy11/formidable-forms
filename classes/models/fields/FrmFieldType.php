@@ -1549,7 +1549,7 @@ DEFAULT_HTML;
 			$error_comes_first = false;
 		}
 
-		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
+		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields && ! in_array( 'frm_error_' . $args['html_id'], $describedby, true ) ) {
 			if ( $error_comes_first ) {
 				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
 			} else {
@@ -1573,7 +1573,7 @@ DEFAULT_HTML;
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
 
-		if ( ! $error_comes_first ) {
+		if ( ! $error_comes_first && ! str_contains( $input_html, 'data-error-first=' ) ) {
 			$input_html .= ' data-error-first="0"';
 		}
 	}
