@@ -618,38 +618,11 @@ class FrmFieldsController {
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
-		$args         = self::add_missing_args( $args, $field );
-		$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
-
-		$field_object->add_aria_description( $args, $add_html );
-
 		if ( $echo ) {
 			echo $add_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		return $add_html;
-	}
-
-	/**
-	 * @param array $args
-	 * @param array $field
-	 *
-	 * @return array
-	 */
-	private static function add_missing_args( $args, $field ) {
-		if ( ! isset( $args['field_id'] ) ) {
-			$args['field_id'] = $field['id'];
-		}
-
-		if ( ! isset( $args['html_id'] ) ) {
-			$args['html_id'] = FrmFieldsHelper::get_html_id( $field );
-		}
-
-		if ( ! isset( $args['errors'] ) ) {
-			$args['errors'] = array();
-		}
-
-		return $args;
 	}
 
 	/**

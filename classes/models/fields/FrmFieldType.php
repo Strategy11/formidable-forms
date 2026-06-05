@@ -93,6 +93,18 @@ abstract class FrmFieldType {
 	protected $array_allowed = true;
 
 	/**
+	 * Whether the aria description has already been added to this field's
+	 * inputs during the current render. Prevents a field type that adds it in
+	 * its own front_field_input from having it added a second time by
+	 * add_aria_description_to_inputs.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	protected $aria_description_added = false;
+
+	/**
 	 * @var bool|null Whether or not draft fields should be hidden on the front end.
 	 */
 	private static $should_hide_draft_fields;
@@ -1155,15 +1167,68 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function include_front_field_input( $args, $shortcode_atts ) {
+		$this->aria_description_added = false;
+
 		if ( $this->include_front_form_file() ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
 			$input = $this->front_field_input( $args, $shortcode_atts );
 		}
 
+		$this->add_aria_description_to_inputs( $args, $input );
 		$this->load_field_scripts( $args );
 
 		return $input;
+	}
+
+	/**
+	 * Link every input, select, and textarea in the field HTML to the field
+	 * error and description for screen readers.
+	 *
+	 * Applying it here covers single-input fields and multi-input fields
+	 * (checkboxes, radios) in one place, since both produce their final HTML
+	 * through this method.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $args       Rendering context. May include `field_id`, `html_id` and `errors`.
+	 * @param string $input_html Full field HTML. Passed by reference.
+	 *
+	 * @return void
+	 */
+	public function add_aria_description_to_inputs( $args, &$input_html ) {
+		if ( '' === $input_html || $this->aria_description_added ) {
+			// A front_field_input override (e.g. in Pro) already added it.
+			return;
+		}
+
+		if ( ! isset( $args['field_id'] ) ) {
+			$args['field_id'] = $this->get_field_column( 'id' );
+		}
+
+		if ( empty( $args['html_id'] ) ) {
+			$args['html_id'] = FrmFieldsHelper::get_html_id( $this->field );
+		}
+
+		if ( ! isset( $args['errors'] ) || ! is_array( $args['errors'] ) ) {
+			$args['errors'] = array();
+		}
+
+		$input_html = preg_replace_callback(
+			'/<(input|select|textarea)\b([^>]*?)(\s*\/?)>/i',
+			function ( $matches ) use ( $args ) {
+				// Hidden inputs are not announced to screen readers, so skip them.
+				if ( 'input' === strtolower( $matches[1] ) && preg_match( '/type\s*=\s*["\']hidden["\']/i', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				$atts = $matches[2];
+				$this->add_aria_description( $args, $atts );
+
+				return '<' . $matches[1] . $atts . $matches[3] . '>';
+			},
+			$input_html
+		);
 	}
 
 	/**
@@ -1219,7 +1284,6 @@ DEFAULT_HTML;
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
-		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
 		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -1549,7 +1613,7 @@ DEFAULT_HTML;
 			$error_comes_first = false;
 		}
 
-		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields && ! in_array( 'frm_error_' . $args['html_id'], $describedby, true ) ) {
+		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
 			if ( $error_comes_first ) {
 				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
 			} else {
@@ -1573,9 +1637,11 @@ DEFAULT_HTML;
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
 
-		if ( ! $error_comes_first && ! str_contains( $input_html, 'data-error-first=' ) ) {
+		if ( ! $error_comes_first ) {
 			$input_html .= ' data-error-first="0"';
 		}
+
+		$this->aria_description_added = true;
 	}
 
 	/**
