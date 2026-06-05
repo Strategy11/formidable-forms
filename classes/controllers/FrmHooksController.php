@@ -335,7 +335,7 @@ class FrmHooksController {
 	public static function load_form_hooks() {
 		// Fields Controller.
 		add_filter( 'frm_field_type', 'FrmFieldsController::change_type' );
-		add_action( 'frm_field_input_html', 'FrmFieldsController::input_html', 10, 3 );
+		add_action( 'frm_field_input_html', 'FrmFieldsController::input_html' );
 		add_filter( 'frm_field_value_saved', 'FrmFieldsController::check_value', 50, 3 );
 		add_filter( 'frm_field_label_seen', 'FrmFieldsController::check_label' );
 

@@ -75,14 +75,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?>
 		<input type="radio" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"
 		<?php
-		/**
-		 * @since x.x Added $echo and $args parameters.
-		 *
-		 * @param array $field Field array.
-		 * @param bool  $echo  Whether to echo the HTML.
-		 * @param array $args  Additional arguments.
-		 */
-		do_action( 'frm_field_input_html', $field, true, $args );
+		do_action( 'frm_field_input_html', $field );
 		echo $checked; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( $should_echo_disabled_att ) {

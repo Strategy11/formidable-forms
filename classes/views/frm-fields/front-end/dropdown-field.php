@@ -24,11 +24,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 	if ( $read_only ) {
 		?>
-		<select <?php do_action( 'frm_field_input_html', $field, true, $args ); ?>>
+		<select <?php do_action( 'frm_field_input_html', $field ); ?>>
 		<?php
 	} else {
 		?>
-		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id ); ?>" <?php do_action( 'frm_field_input_html', $field, true, $args ); ?>>
+		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id ); ?>" <?php do_action( 'frm_field_input_html', $field ); ?>>
 		<?php
 	}
 

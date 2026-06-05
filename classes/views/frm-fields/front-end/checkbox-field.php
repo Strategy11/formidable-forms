@@ -89,7 +89,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		do_action( 'frm_field_input_html', $field, true, $args );
+		do_action( 'frm_field_input_html', $field );
 
 		if ( $should_echo_disabled_att ) {
 			echo 'disabled="disabled" data-max-reached="1" ';
