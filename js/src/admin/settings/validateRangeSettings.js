@@ -102,7 +102,7 @@ export function validateStepSetting( field ) {
 	}
 
 	return validateField( field, () => {
-		const { step, maxNum } = getRangeSettingsDefaults( singleSettings );
+		const { step, minNum, maxNum } = getRangeSettingsDefaults( singleSettings );
 		const stepInputValue = parseFloat( stepInput.value || step );
 		if ( stepInputValue <= 0 ) {
 			return __( 'Step value must be greater than 0.', 'formidable' );
@@ -113,8 +113,12 @@ export function validateStepSetting( field ) {
 			return '';
 		}
 
-		return stepInputValue > parseFloat( maxValueInput.value || maxNum )
-			? __( 'Step value must be less than maximum value.', 'formidable' )
+		const minValueInput = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` );
+		const minValue = parseFloat( minValueInput?.value || minNum );
+		const maxValue = parseFloat( maxValueInput.value || maxNum );
+
+		return stepInputValue > maxValue - minValue
+			? __( 'Step value cannot be greater than the difference between the minimum and maximum values.', 'formidable' )
 			: '';
 	} );
 }
