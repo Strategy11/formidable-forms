@@ -1,5 +1,11 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 
+/**
+ * Internal dependencies
+ */
+const { validateField } = require( './settings/validateField' );
+const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
+
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
 		messageBox: null,
@@ -8793,7 +8799,9 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleBuilderChangeEvent( event ) {
-		maybeShowSaveAndReloadModal( event.target );
+		const target = event.target;
+		maybeShowSaveAndReloadModal( target );
+		validateRangeSettings( target );
 	}
 
 	/**
@@ -11485,6 +11493,19 @@ window.frmAdminBuildJS = function() {
 			addAction( hookName, callback, priority ) {
 				return wp.hooks.addAction( hookName, 'formidable', callback, priority );
 			}
+		},
+
+		/**
+		 * @since x.x
+		 */
+		settings: {
+			validate: {
+				validateField,
+				getRangeSettingsDefaults,
+				validateNumberRangeSetting,
+				validateStepSetting,
+				validateRangeSettings,
+			},
 		},
 
 		applyZebraStriping,
