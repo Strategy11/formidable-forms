@@ -1235,20 +1235,20 @@ function frmFrontFormJS() {
 		}
 
 		if ( errorMessage ) {
-			updateInputElementsAriaDescribedBy( errorMessage );
+			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
 		}
 	}
 
 	/**
-	 * Updates the aria-describedby attribute of input elements to remove the error element ID.
+	 * Updates the aria-describedby attribute, removing the target element ID.
 	 *
 	 * @since x.x
 	 *
-	 * @param {HTMLElement} el The error element.
+	 * @param {HTMLElement} el The target element that is removed from the aria-describedby data.
 	 * @return {void}
 	 */
-	function updateInputElementsAriaDescribedBy( el ) {
+	function removeElementFromInputDescribedBy( el ) {
 		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
 			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
 			ariaDescribedBy = ariaDescribedBy.filter( value => {
@@ -1269,7 +1269,7 @@ function frmFrontFormJS() {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
 		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
-			updateInputElementsAriaDescribedBy( el );
+			removeElementFromInputDescribedBy( el );
 			el.remove();
 		} );
 		document.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
