@@ -36,18 +36,39 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		add_action(
-			'admin_init',
-			function () {
-				self::fix_addon_hooks();
-			}
-		);
-
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
-			// Exit early, let the Payments submodule handle everything.
+			add_action( 'frm_pay_show_stripe_options', 'FrmStrpLiteActionsController::add_action_options' );
+
+			remove_action( 'admin_head', 'FrmTransListsController::add_list_hooks' );
+			add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
+
+			self::maybe_set_admin_menu();
+
+			add_action(
+				'init',
+				function () {
+					if ( ! self::on_form_settings_page() ) {
+						return;
+					}
+
+					$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+
+					// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
+					// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
+					if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
+						add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
+					}
+				}
+			);
+
+			// Exit early, let the Payments submodule handle everything else.
 			return;
+		}//end if
+
+		if ( self::on_form_settings_page() ) {
+			add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
 		}
 
 		// Actions.
@@ -68,41 +89,49 @@ class FrmTransLiteHooksController {
 	}
 
 	/**
+	 * @since 6.31
+	 *
+	 * @return bool
+	 */
+	private static function on_form_settings_page() {
+		return 'formidable' === FrmAppHelper::simple_get( 'page' ) && 'settings' === FrmAppHelper::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * Hide the Collect Payment action if there are no additional gateways enabled (like Authorize.Net).
+	 *
+	 * @since 6.31
+	 *
+	 * @return void
+	 */
+	public static function hide_collect_payment_action() {
+		echo '
+		<style>
+			li.frm-action:has(.frm_payment_action) { display: none; }
+		</style>
+		';
+	}
+
+	/**
+	 * @since 6.27
+	 *
+	 * @return void
+	 */
+	private static function maybe_set_admin_menu() {
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new', 'bulk_delete' ), true ) ) {
+			// We're still falling back to the Stripe, Authorize.Net, or PayPal add-on to handle these routes.
+			return;
+		}
+
+		remove_action( 'admin_menu', 'FrmTransPaymentsController::menu', 25 );
+		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
+	}
+
+	/**
 	 * @return void
 	 */
 	private static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_trans_refund', 'FrmTransLitePaymentsController::refund_payment' );
 		add_action( 'wp_ajax_frm_trans_cancel', 'FrmTransLiteSubscriptionsController::cancel_subscription' );
-	}
-
-	/**
-	 * Make sure that Payments appear when there are inbox items for all Payments plugins.
-	 *
-	 * @since 6.17.1
-	 *
-	 * @return void
-	 */
-	private static function fix_addon_hooks() {
-		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
-
-		if ( ! $unread_count ) {
-			// Nothing to fix.
-			return;
-		}
-
-		$menu_name = FrmAppHelper::get_menu_name();
-		$hook_name = 'manage_' . sanitize_title( $menu_name ) . '-' . $unread_count . '_page_formidable-payments_columns';
-
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() && is_callable( 'FrmPaymentsController::payment_columns' ) ) {
-			// Fallback to PayPal add-on.
-			add_filter( $hook_name, 'FrmPaymentsController::payment_columns' );
-		} elseif ( is_callable( 'FrmTransListsController::payment_columns' ) ) {
-			// Fallback to the Payments submodule.
-			add_filter( $hook_name, 'FrmTransListsController::payment_columns' );
-		} else {
-			return;
-		}
-
-		add_filter( 'screen_options_show_screen', 'FrmTransLiteListsController::remove_screen_options', 10, 2 );
 	}
 }

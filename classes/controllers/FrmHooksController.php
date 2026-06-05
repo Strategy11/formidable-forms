@@ -13,12 +13,11 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function trigger_load_hook( $hooks = 'load_hooks' ) {
-		$controllers = apply_filters( 'frm_load_controllers', array( 'FrmHooksController' ) );
-
+		$controllers   = apply_filters( 'frm_load_controllers', array( 'FrmHooksController' ) );
 		$trigger_hooks = $hooks;
 		$hooks         = (array) $hooks;
 
-		if ( 'load_hooks' == $trigger_hooks ) {
+		if ( 'load_hooks' === $trigger_hooks ) {
 			if ( is_admin() ) {
 				$hooks[] = 'load_admin_hooks';
 
@@ -116,6 +115,7 @@ class FrmHooksController {
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
 		FrmSquareLiteHooksController::load_hooks();
+		FrmPayPalLiteHooksController::load_hooks();
 
 		// GDPR
 		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
@@ -147,6 +147,9 @@ class FrmHooksController {
 		}
 
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
+
+		// Fields Model.
+		add_filter( 'frm_pro_available_fields', 'FrmField::show_update_for_pro_fields' );
 
 		// Forms Controller.
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
@@ -217,6 +220,7 @@ class FrmHooksController {
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSquareLiteHooksController::load_admin_hooks();
+		FrmPayPalLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();

@@ -3,8 +3,8 @@
 		return;
 	}
 
-	const appId = frmSquareVars.appId;
-	const locationId = frmSquareVars.locationId;
+	const { appId } = frmSquareVars;
+	const { locationId } = frmSquareVars;
 
 	// Track the state of the Square card element
 	let squareCardElementIsComplete = false;
@@ -15,12 +15,13 @@
 
 	const buyerTokens = {};
 
-	// Track the state of each field in the card form
+	// Track the state of each field in the card form.
+	// postalCode is not included by default because Square hides it
+	// for cards issued in countries that don't require it (e.g., Australia).
 	const cardFields = {
 		cardNumber: false,
 		expirationDate: false,
-		cvv: false,
-		postalCode: false
+		cvv: false
 	};
 
 	async function initializeCard( payments ) {
@@ -35,10 +36,20 @@
 
 		card.configure( { style: cardStyle } );
 
+		// Track when the postal code field is rendered by Square.
+		// Square hides the postal code for cards issued in certain countries.
+		card.addEventListener( 'focusClassAdded', event => {
+			const { field } = event.detail;
+			if ( field === 'postalCode' ) {
+				cardFields.postalCode = event.detail.currentState.isCompletelyValid;
+			}
+		} );
+
 		// Add event listener to track when the card form is valid
-		card.addEventListener( 'focusClassRemoved', e => {
-			const field = e.detail.field;
-			const value = e.detail.currentState.isCompletelyValid;
+		card.addEventListener( 'focusClassRemoved', event => {
+			const { field } = event.detail;
+			const value = event.detail.currentState.isCompletelyValid;
+
 			cardFields[ field ] = value;
 
 			// Check if all fields are valid
@@ -51,6 +62,25 @@
 				} else {
 					disableSubmit( thisForm );
 				}
+			}
+		} );
+
+		/**
+		 * Enable the submit button when postal code is completed.
+		 * This is the best we can do for now as Square does not provide
+		 * any way of knowing that the credit card was auto-filled.
+		 */
+		card.addEventListener( 'postalCodeChanged', function( event ) {
+			if ( event.detail.currentState.isCompletelyValid ) {
+				cardFields.cardNumber = true;
+				cardFields.expirationDate = true;
+				cardFields.cvv = true;
+				cardFields.postalCode = true;
+				enableSubmit();
+			} else {
+				cardFields.postalCode = false;
+				squareCardElementIsComplete = false;
+				disableSubmit();
 			}
 		} );
 
@@ -86,7 +116,7 @@
 
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', {
-			detail: { form: form }
+			detail: { form }
 		} );
 		document.dispatchEvent( event );
 	}
@@ -104,8 +134,8 @@
 
 		// Use the thisForm variable that we set earlier
 		if ( thisForm ) {
-			thisForm.appendChild( tokenInput );
-			thisForm.appendChild( verificationInput );
+			thisForm.append( tokenInput );
+			thisForm.append( verificationInput );
 
 			if ( typeof frmFrontForm.submitFormManual === 'function' ) {
 				frmFrontForm.submitFormManual( event, thisForm );
@@ -161,7 +191,7 @@
 			return buyerTokens[ verificationData.data.hash ];
 		}
 
-		const verificationDetails = verificationData.data.verificationDetails;
+		const { verificationDetails } = verificationData.data;
 		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
 
 		buyerTokens[ verificationData.data.hash ] = verificationResults.token;

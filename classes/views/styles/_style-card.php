@@ -49,7 +49,7 @@ $include_info = $is_active_style;
 			$index  = 0;
 
 			foreach ( $colors as $css_var_name => $color ) {
-				if ( 0 !== strpos( $color, 'rgb' ) ) {
+				if ( ! str_starts_with( $color, 'rgb' ) ) {
 					$color = '#' . $color;
 				}
 

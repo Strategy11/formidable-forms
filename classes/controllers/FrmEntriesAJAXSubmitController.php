@@ -54,9 +54,7 @@ class FrmEntriesAJAXSubmitController {
 			wp_die();
 		}
 
-		$is_ajax_on = FrmForm::is_ajax_on( $form );
-
-		if ( ! $is_ajax_on ) {
+		if ( ! FrmForm::is_ajax_on( $form ) ) {
 			// This continues in the Pro version as it is required for other features including in-place edit.
 			// In Lite, if AJAX submit is not on, just exit early as this function is getting called incorrectly.
 			echo json_encode( $response );
@@ -65,28 +63,7 @@ class FrmEntriesAJAXSubmitController {
 
 		$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		if ( ! $errors ) {
-			global $frm_vars;
-			$frm_vars['ajax']       = true;
-			$frm_vars['css_loaded'] = true;
-
-			FrmEntriesController::process_entry( '', true );
-
-			$title                = FrmFormState::get_from_request( 'title', 'auto' );
-			$description          = FrmFormState::get_from_request( 'description', 'auto' );
-			$response['content'] .= FrmFormsController::show_form( $form->id, '', $title, $description );
-
-			// Trigger the footer scripts if there is a form to show.
-			if ( ! empty( $frm_vars['forms_loaded'] ) ) {
-				ob_start();
-				self::print_ajax_scripts();
-				$response['content'] .= ob_get_contents();
-				ob_end_clean();
-
-				// Mark the end of added footer content.
-				$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';
-			}
-		} else {
+		if ( $errors ) {
 			$obj = array();
 
 			foreach ( $errors as $field => $error ) {
@@ -105,6 +82,26 @@ class FrmEntriesAJAXSubmitController {
 					'class'    => FrmFormsHelper::form_error_class(),
 				)
 			);
+		} else {
+			global $frm_vars;
+			$frm_vars['ajax']       = true;
+			$frm_vars['css_loaded'] = true;
+
+			FrmEntriesController::process_entry( '', true );
+
+			$title                = FrmFormState::get_from_request( 'title', 'auto' );
+			$description          = FrmFormState::get_from_request( 'description', 'auto' );
+			$response['content'] .= FrmFormsController::show_form( $form->id, '', $title, $description );
+
+			// Trigger the footer scripts if there is a form to show.
+			if ( ! empty( $frm_vars['forms_loaded'] ) ) {
+				ob_start();
+				self::print_ajax_scripts();
+				$response['content'] .= ob_get_clean();
+
+				// Mark the end of added footer content.
+				$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';
+			}
 		}//end if
 
 		$response = self::check_for_failed_form_submission( $response, $form->id );
@@ -203,7 +200,7 @@ class FrmEntriesAJAXSubmitController {
 	private static function check_for_failed_form_submission( $response, $form_id ) {
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form_id ) );
 
-		if ( false !== strpos( $response['content'], $frm_settings->failed_msg ) ) {
+		if ( str_contains( $response['content'], $frm_settings->failed_msg ) ) {
 			$response['errors']['failed'] = $frm_settings->failed_msg;
 			$response['content']          = '';
 		}

@@ -2,12 +2,12 @@
  * Formidable Forms Development Server
  *
  * Run `npm run serve` to start the development server. You'll be prompted
- * for your WordPress site URL, and a development server will start at localhost:3000.
+ * for your WordPress site URL and JS/PHP watching, then a dev server starts at localhost:8880.
  *
  * Development is streamlined with automatic updates:
  * - CSS/SCSS changes are injected in real-time without page refresh
- * - JavaScript and PHP changes trigger an automatic full page reload
- * - Browser opens automatically to localhost:3000
+ * - JavaScript and PHP changes trigger an automatic full page reload (opt-in)
+ * - Browser opens automatically to localhost:8880
  */
 
 /**
@@ -22,11 +22,11 @@ const webpackDevMiddleware = require( 'webpack-dev-middleware' );
  */
 const config = {
 	// WordPress site URL from environment variable or default
-	siteDomain: process.env.SITE_URL || 'formidable.local',
+	siteDomain: process.env.SITE_DOMAIN || 'formidable.local',
 
-	// Server ports
-	port: 3000,
-	uiPort: 3001,
+	// Server ports (8880/8881 to avoid conflicts with common dev tools)
+	port: 8880,
+	uiPort: 8881,
 
 	// Paths to watch for changes
 	cssPath: '../formidable*/**/*.css',
@@ -70,6 +70,11 @@ const init = () => {
 			]
 		},
 
+		// Exclude 3rd-party directories from all file watchers
+		watchOptions: {
+			ignored: [ '**/node_modules/**', '**/vendor/**' ]
+		},
+
 		// File watching
 		files: [
 			// CSS changes, inject without reload
@@ -80,13 +85,28 @@ const init = () => {
 					browserSyncInstance.reload( '*.css' );
 				}
 			},
-			// JS source changes
+			// JS source changes log rebuild progress (webpack handles actual compilation)
 			{
 				match: [ config.jsSrcPath ],
 				fn: ( event, file ) => console.log( `JS source updated: ${ file }\nRebuilding JS bundles...` )
 			},
-			// Conditionally watch compiled JS and PHP files
-			...( process.env.WATCH_FILES && process.env.WATCH_FILES.toLowerCase().startsWith( 'y' ) ? [ config.jsPath, config.phpPath ] : [] )
+			// Conditionally watch compiled JS and PHP files for full page reload
+			...( process.env.ENABLE_WATCH && process.env.ENABLE_WATCH.toLowerCase().startsWith( 'y' ) ? [
+				{
+					match: [ config.jsPath ],
+					fn: ( event, file ) => {
+						console.log( `JS updated: ${ file }` );
+						browserSyncInstance.reload();
+					}
+				},
+				{
+					match: [ config.phpPath ],
+					fn: ( event, file ) => {
+						console.log( `PHP updated: ${ file }` );
+						browserSyncInstance.reload();
+					}
+				}
+			] : [] )
 		],
 
 		// Server settings
@@ -105,7 +125,7 @@ const init = () => {
 		} ]
 	} );
 
-	console.log( `Development server running at: http://localhost:${ config.port }` );
+	console.log( `Development server running at http://localhost:${ config.port }` );
 };
 
 // Start the server

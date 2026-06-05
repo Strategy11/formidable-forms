@@ -18,7 +18,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	const COMPARE_EQUALS = 'equals';
 
 	/**
-	 * @var array
+	 * @var array|null
 	 */
 	protected $posted_fields;
 
@@ -156,11 +156,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return bool
 	 */
 	public function check() {
-		if ( $this->check_ip() ) {
-			return true;
-		}
-
-		return $this->check_values();
+		return $this->check_ip() ? true : $this->check_values();
 	}
 
 	/**
@@ -231,7 +227,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		// Some field types should never be checked.
 		$denylist['skip_field_types'] = array_merge(
 			$denylist['skip_field_types'],
-			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select' )
+			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select', 'ranking' )
 		);
 	}
 
@@ -290,11 +286,12 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 					return true;
 				}
 			}
+
 			return false;
 		}
 
 		$values_str = strtolower( $this->convert_values_to_string( $values_to_check ) );
-		return strpos( $values_str, $line ) !== false;
+		return str_contains( $values_str, $line );
 	}
 
 	/**
@@ -396,7 +393,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}//end foreach
 
 		if ( isset( $denylist['extract_value'] ) && is_callable( $denylist['extract_value'] ) ) {
-			$values_to_check = call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
+			return call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
 		}
 
 		return $values_to_check;
@@ -405,8 +402,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	/**
 	 * Checks if should check the value of the given field ID.
 	 *
-	 * @param int   $field_id           Field ID.
-	 * @param int[] $field_ids_to_check Field IDs to check.
+	 * @param int         $field_id           Field ID.
+	 * @param false|int[] $field_ids_to_check Field IDs to check.
 	 *
 	 * @return bool
 	 */
@@ -424,7 +421,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return void
 	 */
 	protected function add_to_values_to_check( &$values_to_check, $value ) {
-		$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
+		$values_to_check[] = is_array( $value ) ? FrmAppHelper::safe_implode( ' ', $value ) : $value;
 	}
 
 	/**
@@ -497,14 +494,16 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 			$is_spam = $callback( $line, $callback_args );
 
-			if ( $is_spam ) {
-				if ( is_array( $callback ) && isset( $callback[1] ) && 'single_line_check_values' === $callback[1] ) {
-					self::add_spam_keyword_to_option( $line );
-				}
-
-				fclose( $fp );
-				return true;
+			if ( ! $is_spam ) {
+				continue;
 			}
+
+			if ( is_array( $callback ) && isset( $callback[1] ) && 'single_line_check_values' === $callback[1] ) {
+				self::add_spam_keyword_to_option( $line );
+			}
+
+			fclose( $fp );
+			return true;
 		}
 
 		fclose( $fp );
@@ -548,7 +547,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return $ip === $cidr_ip;
 		}
 
-		if ( 0 === strpos( $ip . '/', $cidr_ip ) ) {
+		if ( str_starts_with( $ip . '/', $cidr_ip ) ) {
 			// 1.1.1.1 and 1.1.1.1/24 matches.
 			return true;
 		}

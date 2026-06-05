@@ -58,17 +58,37 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
+	 * Gets payments settings URL.
+	 *
+	 * @since 6.30
+	 *
+	 * @return string
+	 */
+	public static function get_payments_settings_url() {
+		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' );
+	}
+
+	/**
 	 * Redirect to Stripe settings when payments are not yet installed
 	 * and the payments page is accessed by its URL.
 	 *
 	 * @return void
 	 */
 	public static function maybe_redirect_to_stripe_settings() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) || FrmTransLiteAppHelper::payments_table_exists() ) {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) ) {
 			return;
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) );
+		if ( class_exists( 'FrmPaymentsController' ) ) {
+			// Never redirect when someone is using the PayPal add-on.
+			return;
+		}
+
+		if ( FrmTransLiteAppHelper::payments_table_exists() ) {
+			return;
+		}
+
+		wp_safe_redirect( self::get_payments_settings_url() );
 		die();
 	}
 
@@ -153,7 +173,7 @@ class FrmStrpLiteAppController {
 			return $errors;
 		}
 
-		$is_setup_intent = 0 === strpos( $intent->id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent->id, 'seti_' );
 
 		if ( $is_setup_intent ) {
 			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_setup_error ) ? $intent->last_setup_error->message : '';

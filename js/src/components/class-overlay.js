@@ -71,14 +71,14 @@ export class frmOverlay {
 
 	getButtons() {
 		const buttons = this.overlayData.buttons.map( ( button, index ) => {
-			if ( ! button.url || '' === button.url ) {
+			if ( ! button.url ) {
 				return '';
 			}
 			const buttonTypeClassname = 1 === index ? 'frm-button-primary' : 'frm-button-secondary';
 			const options = {
 				href: button.url,
 				text: button.label,
-				className: 'button frm_animate_bg ' + buttonTypeClassname
+				className: `button frm_animate_bg ${ buttonTypeClassname }`
 			};
 			if ( button.target ) {
 				options.target = button.target;

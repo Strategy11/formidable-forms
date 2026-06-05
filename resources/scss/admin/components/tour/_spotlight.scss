@@ -15,7 +15,7 @@
 	}
 
 	> * {
-		flex: 0 0 auto
+		flex: 0 0 auto;
 	}
 
 	&__content {
@@ -27,7 +27,7 @@
 		overflow: visible;
 
 		&::after {
-			content: '';
+			content: "";
 			position: absolute;
 			width: 11px;
 			height: 11px;

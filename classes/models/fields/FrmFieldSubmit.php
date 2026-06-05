@@ -43,13 +43,11 @@ class FrmFieldSubmit extends FrmFieldType {
 	 * @return string
 	 */
 	public function default_html() {
-		$default_html = <<<DEFAULT_HTML
+		return <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
 	[input]
 </div>
 DEFAULT_HTML;
-
-		return $default_html;
 	}
 
 	/**
@@ -58,7 +56,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'required'       => false,
 			'visibility'     => false,
 			'label_position' => false,
@@ -67,8 +65,6 @@ DEFAULT_HTML;
 			'description'    => false,
 			'logic'          => true,
 		);
-
-		return $settings;
 	}
 
 	/**

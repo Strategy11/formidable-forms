@@ -18,7 +18,7 @@ class FrmSquareLiteSettingsController {
 		$sections['square'] = array(
 			'class'    => self::class,
 			'function' => 'route',
-			'icon'     => 'frm_icon_font frm_square_icon',
+			'icon'     => 'frmfont frm_square_icon',
 		);
 
 		return $sections;
@@ -52,7 +52,7 @@ class FrmSquareLiteSettingsController {
 	public static function process_form() {
 		$settings = FrmSquareLiteAppHelper::get_settings();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$settings->update( $_POST );
+		$settings->update( wp_unslash( $_POST ) );
 		$settings->store();
 	}
 }

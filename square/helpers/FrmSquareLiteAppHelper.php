@@ -47,22 +47,19 @@ class FrmSquareLiteAppHelper {
 	 * @psalm-return 'live'|'test'
 	 */
 	public static function active_mode() {
-		$settings = self::get_settings();
-		return $settings->settings->test_mode ? 'test' : 'live';
+		return self::get_settings()->settings->test_mode ? 'test' : 'live';
 	}
 
 	/**
 	 * Add education about Stripe fees.
 	 *
-	 * @param string             $medium  Medium identifier for the tip (for example 'tip').
+	 * @param string             $content UTM Content for the admin upgrade link.
 	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
 	 *
 	 * @return void
 	 */
-	public static function fee_education( $medium = 'tip', $gateway = false ) {
-		$license_type = FrmAddonsController::license_type();
-
-		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+	public static function fee_education( $content = 'tip', $gateway = false ) {
+		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
 			return;
 		}
 
@@ -75,8 +72,8 @@ class FrmSquareLiteAppHelper {
 		FrmTipsHelper::show_tip(
 			array(
 				'link'  => array(
-					'content' => 'square-fee',
-					'medium'  => $medium,
+					'campaign' => 'square-fee',
+					'content'  => $content,
 				),
 				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Square fees.',
 				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),

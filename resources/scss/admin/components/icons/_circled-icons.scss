@@ -34,7 +34,7 @@
 
 .frm-circled-icon .frmsvg use {
 	color: var(--primary-500);
- }
+}
 
 .frm-circled-icon-green .frmsvg use {
 	color: var(--success-500);
@@ -48,6 +48,21 @@
 	height: 40px;
 	border: 1px solid var(--grey-300);
 	border-radius: var(--small-radius);
+
+	&--small {
+		width: 24px;
+		height: 24px;
+		border-radius: var(--x-small-radius);
+
+		.frmsvg {
+			width: 14px;
+			height: 14px;
+		}
+	}
+
+	&:has(.frm-inverse) {
+		border-color: transparent;
+	}
 }
 
 .frm-upgrade-message img {

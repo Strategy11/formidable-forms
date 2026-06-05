@@ -59,9 +59,8 @@ class FrmTransLiteAppController {
 	 * @return void
 	 */
 	public static function run_payment_cron() {
-		$frm_sub     = new FrmTransLiteSubscription();
-		$frm_payment = new FrmTransLitePayment();
-
+		$frm_sub               = new FrmTransLiteSubscription();
+		$frm_payment           = new FrmTransLitePayment();
 		$overdue_subscriptions = $frm_sub->get_overdue_subscriptions();
 		FrmTransLiteLog::log_message( 'Stripe Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
 
@@ -87,7 +86,7 @@ class FrmTransLiteAppController {
 			} else {
 				// Get the most recent payment after the gateway has a chance to create one.
 				$check_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
-				$new_payment   = $check_payment->id != $last_payment->id;
+				$new_payment   = (int) $check_payment->id !== (int) $last_payment->id;
 				$last_payment  = $check_payment;
 				$status        = 'no';
 
@@ -196,15 +195,35 @@ class FrmTransLiteAppController {
 	public static function add_repeat_cadence_value( $args ) {
 		$action = $args['form_action'];
 
-		if ( ! empty( $action->post_content['repeat_cadence'] ) ) {
-			$params = array(
-				'type'  => 'hidden',
-				'class' => 'frm-repeat-cadence-value',
-				'value' => $action->post_content['repeat_cadence'],
-			);
-			echo '<input ';
-			FrmAppHelper::array_to_html_params( $params, true );
-			echo ' />';
+		if ( empty( $action->post_content['repeat_cadence'] ) ) {
+			return;
 		}
+
+		$params = array(
+			'type'  => 'hidden',
+			'class' => 'frm-repeat-cadence-value',
+			'value' => $action->post_content['repeat_cadence'],
+		);
+		echo '<input ';
+		FrmAppHelper::array_to_html_params( $params, true );
+		echo ' />';
+	}
+
+	/**
+	 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
+	 * They do however need to be visible when the payments submodule is active.
+	 *
+	 * @since 6.30
+	 *
+	 * @return void
+	 */
+	public static function hide_gateway_fields_in_builder() {
+		wp_add_inline_style(
+			'formidable-admin',
+			'
+			#frm_builder_page li[data-ftype="gateway"] { display: none; }
+			.frm_field_box:has(li[data-ftype="gateway"]:only-child) { display: none; }
+			'
+		);
 	}
 }

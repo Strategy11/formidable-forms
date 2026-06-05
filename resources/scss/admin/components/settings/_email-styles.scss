@@ -24,7 +24,7 @@
 		display: block;
 		border-radius: 12px;
 		border: 1px solid var(--grey-200);
-		box-shadow: 0px 0.47px 0.94px 0px #1018280F;
+		box-shadow: 0 0.47px 0.94px 0 #1018280f;
 
 		&:focus,
 		.frm-email-style--selected & {
@@ -37,8 +37,8 @@
 			display: block;
 		}
 
-		.frm-email-style--disabled &:after {
-			content: '';
+		.frm-email-style--disabled &::after {
+			content: "";
 			display: block;
 			position: absolute;
 			top: 0;
@@ -77,6 +77,7 @@
 	}
 
 	&--selected &__button {
+
 		&:disabled {
 			display: block;
 		}
@@ -105,6 +106,7 @@
 }
 
 #frm-send-test-email-modal {
+
 	.postbox {
 		padding: var(--gap-sm) var(--gap-md);
 

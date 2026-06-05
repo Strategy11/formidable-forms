@@ -3,10 +3,11 @@
 	.frm-white-body,
 	.frm_wrap {
 		--small-sidebar: 20%;
-		--medium-sidebar: 35%
+		--medium-sidebar: 35%;
 	}
 
-	#form_settings_page .advanced_settings .form-table td, .form-table th {
+	#form_settings_page .advanced_settings .form-table td,
+	.form-table th {
 		display: table-cell;
 		width: auto !important;
 	}

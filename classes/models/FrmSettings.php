@@ -174,7 +174,7 @@ class FrmSettings {
 	public $current_form = 0;
 
 	/**
-	 * @var bool
+	 * @var bool|int
 	 */
 	public $tracking;
 
@@ -211,7 +211,7 @@ class FrmSettings {
 	public $custom_css;
 
 	/**
-	 * @var string
+	 * @var int
 	 */
 	public $honeypot;
 
@@ -280,7 +280,7 @@ class FrmSettings {
 		// If unserializing didn't work.
 		$settings = $this;
 
-		update_option( $this->option_name, $settings, 'yes' );
+		update_option( $this->option_name, $settings, true );
 
 		return $settings;
 	}
@@ -350,7 +350,7 @@ class FrmSettings {
 		if ( is_multisite() && is_admin() ) {
 			$mu_menu = get_site_option( 'frm_admin_menu_name' );
 
-			if ( $mu_menu && ! empty( $mu_menu ) ) {
+			if ( $mu_menu && $mu_menu ) {
 				$this->menu    = $mu_menu;
 				$this->mu_menu = 1;
 			}
@@ -425,6 +425,7 @@ class FrmSettings {
 				// Avoid changing the false default value to an empty string.
 				return $value;
 			}
+
 			return sanitize_textarea_field( $value );
 		}
 
@@ -462,7 +463,7 @@ class FrmSettings {
 			$re_lang       = $recaptcha_opt['re_lang'] ?? $re_lang;
 		}
 
-		if ( empty( $this->re_msg ) ) {
+		if ( ! $this->re_msg ) {
 			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
@@ -509,13 +510,15 @@ class FrmSettings {
 	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
-		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
-			$this->current_form = $args['current_form'];
+		if ( ! isset( $args['current_form'] ) || ! is_numeric( $args['current_form'] ) ) {
+			return;
+		}
 
-			foreach ( $this->translatable_strings() as $string ) {
-				$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
-				$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
-			}
+		$this->current_form = $args['current_form'];
+
+		foreach ( $this->translatable_strings() as $string ) {
+			$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
+			$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
 		}
 	}
 
@@ -548,11 +551,13 @@ class FrmSettings {
 
 		do_action( 'frm_update_settings', $params );
 
-		if ( function_exists( 'get_filesystem_method' ) ) {
-			// Save styling settings in case fallback setting changes.
-			$frm_style = new FrmStyle();
-			$frm_style->update( 'default' );
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			return;
 		}
+
+		// Save styling settings in case fallback setting changes.
+		$frm_style = new FrmStyle();
+		$frm_style->update( 'default' );
 	}
 
 	/**
@@ -618,7 +623,7 @@ class FrmSettings {
 			}
 
 			foreach ( $roles as $role => $details ) {
-				if ( in_array( $role, $this->$frm_role ) ) {
+				if ( in_array( $role, $this->$frm_role, true ) ) {
 					$wp_roles->add_cap( $role, $frm_role );
 				} else {
 					$wp_roles->remove_cap( $role, $frm_role );

@@ -52,9 +52,10 @@ class FrmFieldEmail extends FrmFieldType {
 
 		$errors = array();
 
-		if ( false !== strpos( $args['value'], '.@' ) || ! is_email( $args['value'] ) ) {
+		if ( str_contains( $args['value'], '.@' ) || ! is_email( $args['value'] ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
+
 		return $errors;
 	}
 

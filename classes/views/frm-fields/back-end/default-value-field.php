@@ -1,4 +1,15 @@
 <?php
+/**
+ * Text input for the default value setting.
+ *
+ * @package Formidable
+ *
+ * @var FrmFieldType     $this          Field type handler that included this template.
+ * @var array            $field         Field data including 'id' and 'field_key'.
+ * @var string           $default_name  HTML name attribute for the input.
+ * @var float|int|string $default_value Current default value.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

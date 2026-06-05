@@ -63,7 +63,7 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @var stdClass|null
+	 * @var FrmStyleComponent|null
 	 */
 	private static $instance;
 
@@ -80,10 +80,8 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	public static function register_assets() {
-		$plugin_url = FrmAppHelper::plugin_url();
-		$version    = FrmAppHelper::plugin_version();
-
-		wp_register_script( self::ASSETS_SLUG, $plugin_url . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
+		$version = FrmAppHelper::plugin_version();
+		wp_register_script( self::ASSETS_SLUG, FrmAppHelper::plugin_url() . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
 	}
 
 	/**
@@ -91,11 +89,11 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return stdClass|void
+	 * @return FrmStyleComponent|null
 	 */
 	protected static function get_instance() {
 		if ( self::$instance ) {
-			return;
+			return null;
 		}
 
 		self::$instance = new FrmStyleComponent();
@@ -149,6 +147,7 @@ class FrmStyleComponent {
 		if ( ! empty( $this->data['will_change'] ) ) {
 			return $class . ' frm-style-dependent-updater-component';
 		}
+
 		return $class;
 	}
 
@@ -176,6 +175,7 @@ class FrmStyleComponent {
 		if ( ! empty( $this->data['will_change'] ) ) {
 			$attributes .= 'data-will-change=' . wp_json_encode( $this->data['will_change'] );
 		}
+
 		return $attributes;
 	}
 
@@ -188,7 +188,7 @@ class FrmStyleComponent {
 	 * @return string
 	 */
 	private function get_field_name() {
-		return ! empty( $this->field_name ) ? 'name=' . $this->field_name : '';
+		return $this->field_name ? 'name=' . $this->field_name : '';
 	}
 
 	/**
@@ -210,7 +210,7 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	protected function load_view() {
-		if ( empty( $this->view_name ) ) {
+		if ( ! $this->view_name ) {
 			return;
 		}
 
@@ -231,12 +231,7 @@ class FrmStyleComponent {
 		if ( empty( $this->data['not_show_in'] ) ) {
 			return false;
 		}
-
-		if ( FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'] ) {
-			return true;
-		}
-
-		return false;
+		return FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'];
 	}
 
 	/**

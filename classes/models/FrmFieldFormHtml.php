@@ -180,7 +180,7 @@ class FrmFieldFormHtml {
 		// Replace [id].
 		$this->html = str_replace( '[id]', $this->field_id, $this->html );
 
-		// set the label for
+		// Set the label for
 		$this->html = str_replace( 'field_[key]', $this->html_id, $this->html );
 
 		// Replace [key].
@@ -212,7 +212,7 @@ class FrmFieldFormHtml {
 	 */
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
 		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
-		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
+		$should_replace = $is_html ? $wp_processed : ! $wp_processed;
 
 		if ( $should_replace ) {
 			$this->replace_description_shortcode();
@@ -227,7 +227,8 @@ class FrmFieldFormHtml {
 	private function replace_description_shortcode() {
 		$this->maybe_add_description_id();
 		$description = FrmAppHelper::maybe_kses( $this->field_obj->get_field_column( 'description' ) );
-		FrmShortcodeHelper::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $this->html );
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		FrmShortcodeHelper::remove_inline_conditions( $description && $description != '', 'description', $description, $this->html );
 	}
 
 	/**
@@ -241,6 +242,7 @@ class FrmFieldFormHtml {
 	private function maybe_add_description_id() {
 		$description = $this->field_obj->get_field_column( 'description' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $description != '' ) {
 			$this->add_element_id( 'description', 'desc' );
 		}
@@ -267,14 +269,18 @@ class FrmFieldFormHtml {
 			$inner_html[2] = $inner_html[2][0];
 		}
 
-		if ( is_string( $inner_html[2] ) ) {
-			$has_id = strpos( $inner_html[2], ' id=' );
-
-			if ( ! $has_id ) {
-				$id         = 'frm_' . $id . '_' . $this->html_id;
-				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
-			}
+		if ( ! is_string( $inner_html[2] ) ) {
+			return;
 		}
+
+		$has_id = str_contains( $inner_html[2], ' id=' );
+
+		if ( $has_id ) {
+			return;
+		}
+
+		$id         = 'frm_' . $id . '_' . $this->html_id;
+		$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 	}
 
 	/**
@@ -286,10 +292,10 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
+		if ( $error && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
 
-			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
+			if ( is_string( $error_body ) && ! str_contains( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
 				$this->html     = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $new_error_body . '[/if error]', $this->html );
 			}
@@ -318,8 +324,7 @@ class FrmFieldFormHtml {
 			return false;
 		}
 
-		$error_body = substr( $html, $start + 10, $end - $start - 10 );
-		return $error_body;
+		return substr( $html, $start + 10, $end - $start - 10 );
 	}
 
 	/**
@@ -356,15 +361,17 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	private function replace_form_shortcodes() {
-		if ( ! empty( $this->form ) ) {
-			$form = (array) $this->form;
-
-			// Replace [form_key].
-			$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
-
-			// Replace [form_name].
-			$this->html = str_replace( '[form_name]', $form['name'], $this->html );
+		if ( ! $this->form ) {
+			return;
 		}
+
+		$form = (array) $this->form;
+
+		// Replace [form_key].
+		$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
+
+		// Replace [form_name].
+		$this->html = str_replace( '[form_name]', $form['name'], $this->html );
 	}
 
 	/**
@@ -376,7 +383,7 @@ class FrmFieldFormHtml {
 		$this->html .= "\n";
 
 		// Stop html filtering on confirmation field to prevent loop
-		if ( $this->field_obj->get_field_column( 'conf_field' ) != 'stop' ) {
+		if ( $this->field_obj->get_field_column( 'conf_field' ) !== 'stop' ) {
 			$this->filter_for_more_shortcodes();
 		}
 	}
@@ -409,7 +416,7 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	public function remove_collapse_shortcode( &$html ) {
-		if ( strpos( $html, '[collapse_this]' ) ) {
+		if ( str_contains( $html, '[collapse_this]' ) ) {
 			$html = str_replace( '[collapse_this]', '', $html );
 		}
 	}
@@ -425,8 +432,7 @@ class FrmFieldFormHtml {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$tag            = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
-
-			$replace_with = '';
+			$replace_with   = '';
 
 			if ( $tag === 'deletelink' && FrmAppHelper::pro_is_installed() ) {
 				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
@@ -445,7 +451,6 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_input_shortcode( $shortcode_atts ) {
 		$shortcode_atts = $this->prepare_input_shortcode_atts( $shortcode_atts );
-
 		return $this->field_obj->include_front_field_input( $this->pass_args, $shortcode_atts );
 	}
 
@@ -508,8 +513,8 @@ class FrmFieldFormHtml {
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
 
-		if ( in_array( $this->field_obj->get_field_column( 'type' ), array( 'html', 'summary' ), true ) && strpos( $this->html, '[error_class]' ) === false ) {
-			// there is no error_class shortcode for HTML fields
+		if ( in_array( $this->field_obj->get_field_column( 'type' ), array( 'html', 'summary' ), true ) && ! str_contains( $this->html, '[error_class]' ) ) {
+			// There is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . esc_attr( $classes ), $this->html );
 			return;
 		}
@@ -522,7 +527,7 @@ class FrmFieldFormHtml {
 	 *
 	 * @since 3.0
 	 *
-	 * @return string $classes
+	 * @return string Classes.
 	 */
 	private function get_field_div_classes() {
 		// Add error class
@@ -531,7 +536,7 @@ class FrmFieldFormHtml {
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
 
-		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
+		if ( ! empty( $settings['label_position'] ) ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
 			$classes       .= ' frm_' . $label_position . '_container';
 
@@ -544,8 +549,8 @@ class FrmFieldFormHtml {
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
 
-		if ( ! empty( $extra_classes ) ) {
-			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
+		if ( $extra_classes ) {
+			if ( ! str_contains( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}
 
@@ -558,9 +563,7 @@ class FrmFieldFormHtml {
 		$classes = apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
 
 		// Remove unexpected characters from class.
-		$classes = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $classes ) ) );
-
-		return $classes;
+		return implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $classes ) ) );
 	}
 
 	/**

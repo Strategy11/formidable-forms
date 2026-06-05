@@ -36,13 +36,7 @@ class FrmInstallPlugin {
 		if ( $this->is_installed() && $this->is_active() ) {
 			return '';
 		}
-
-		if ( $this->is_installed() ) {
-			$url = $this->activate_url();
-		} else {
-			$url = $this->install_url();
-		}
-		return $url;
+		return $this->is_installed() ? $this->activate_url() : $this->install_url();
 	}
 
 	/**
