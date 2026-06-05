@@ -1144,10 +1144,10 @@ function frmFrontFormJS() {
 		}
 
 		container.classList.add( 'frm_blank_field' );
-		const input = container.querySelector( 'input, select, textarea' );
-		const id = getErrorElementId( key, input );
+		const inputs = container.querySelectorAll( 'input, select, textarea' );
+		const id = getErrorElementId( key, inputs[ 0 ] );
 
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		let describedBy;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
