@@ -298,6 +298,12 @@
 			return;
 		}
 
+		// Skip (and avoid the SDK wait) when Google Pay / Apple Pay were not enqueued
+		// server-side, e.g. via the frm_include_google_pay_apple_pay filter or non-SSL.
+		if ( ! frmPayPalVars.includeGooglePayApplePay ) {
+			return;
+		}
+
 		// Resolve both eligibility checks in parallel so the combined wait is bounded by
 		// the slower of the two, then register them in a fixed order (Google Pay, then
 		// Apple Pay). Registration happens before the selector is built, so they render
