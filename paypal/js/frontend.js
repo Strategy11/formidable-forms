@@ -367,7 +367,7 @@
 	 *
 	 * @return {Promise<boolean>} Whether the predicate became true before the timeout.
 	 */
-	function waitFor( predicate, timeout = 2000, interval = 50 ) {
+	function waitFor( predicate, timeout = 3000, interval = 50 ) {
 		return new Promise( resolve => {
 			if ( predicate() ) {
 				resolve( true );
