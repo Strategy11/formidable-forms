@@ -1102,7 +1102,7 @@ DEFAULT_HTML;
 	 *
 	 * @return string
 	 */
-	protected function get_align_class_from_style_settings() {
+	public function get_align_class_from_style_settings() {
 		$field_type   = FrmField::is_checkbox( $this->field ) ? 'checkbox' : 'radio';
 		$key          = FrmStylesController::get_align_key_for_style_settings( $field_type );
 		$active_style = FrmStylesController::get_active_style( $this->field );
