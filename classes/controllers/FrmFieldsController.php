@@ -262,7 +262,7 @@ class FrmFieldsController {
 			return '';
 		}
 
-		$align = FrmStylesController::get_align_from_active_style( $field );
+		$align = FrmStylesHelper::get_align_from_active_style( $field );
 		$field_info->prepare_align_class( $align );
 
 		return $align;

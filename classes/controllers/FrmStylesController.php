@@ -1327,22 +1327,6 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Get the raw alignment value stored in the active style for a radio or checkbox field.
-	 *
-	 * @since x.x
-	 *
-	 * @param array|int $field The 'field' array.
-	 *
-	 * @return string
-	 */
-	public static function get_align_from_active_style( $field ) {
-		$field_type = FrmField::is_checkbox( $field ) ? 'checkbox' : 'radio';
-		$key        = self::get_align_key_for_style_settings( $field_type );
-
-		return self::get_active_style( $field )->post_content[ $key ] ?? '';
-	}
-
-	/**
 	 * @param string $class
 	 * @param string $style
 	 *
