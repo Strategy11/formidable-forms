@@ -218,6 +218,12 @@ class FrmFieldsController {
 		$li_classes  = $field_info->form_builder_classes( $display['type'] );
 		$li_classes .= ' frm_form_field frmstart ';
 
+		$style_align_class = self::get_builder_field_style_align_class( $field, $field_info );
+
+		if ( $style_align_class ) {
+			$li_classes .= $style_align_class . ' ';
+		}
+
 		if ( isset( $field['classes'] ) ) {
 			$li_classes .= trim( $field['classes'] ) . ' ';
 		}
@@ -229,6 +235,37 @@ class FrmFieldsController {
 		}
 
 		return $li_classes;
+	}
+
+	/**
+	 * Apply the active style alignment to a radio or checkbox builder preview on load.
+	 *
+	 * The per-field alignment setting only exists in Pro, so on load the style setting is
+	 * used. When the field has an explicit alignment (Pro), the frm_build_field_class filter
+	 * applies it instead. When Pro is not installed, any saved alignment is treated as empty.
+	 *
+	 * @since x.x
+	 *
+	 * @param array        $field
+	 * @param FrmFieldType $field_info
+	 *
+	 * @return string
+	 */
+	private static function get_builder_field_style_align_class( $field, $field_info ) {
+		if ( empty( $field ) || ! is_array( $field ) || ( ! FrmField::is_radio( $field ) && ! FrmField::is_checkbox( $field ) ) ) {
+			return '';
+		}
+
+		$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $field, 'align' ) : '';
+
+		if ( $align ) {
+			return '';
+		}
+
+		$align = FrmStylesController::get_align_from_active_style( $field );
+		$field_info->prepare_align_class( $align );
+
+		return $align;
 	}
 
 	public static function destroy() {
