@@ -1336,11 +1336,10 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function get_align_from_active_style( $field ) {
-		$field_type   = FrmField::is_checkbox( $field ) ? 'checkbox' : 'radio';
-		$key          = self::get_align_key_for_style_settings( $field_type );
-		$active_style = self::get_active_style( $field );
+		$field_type = FrmField::is_checkbox( $field ) ? 'checkbox' : 'radio';
+		$key        = self::get_align_key_for_style_settings( $field_type );
 
-		return $active_style->post_content[ $key ] ?? '';
+		return self::get_active_style( $field )->post_content[ $key ] ?? '';
 	}
 
 	/**

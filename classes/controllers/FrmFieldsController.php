@@ -252,7 +252,7 @@ class FrmFieldsController {
 	 * @return string
 	 */
 	private static function get_builder_field_style_align_class( $field, $field_info ) {
-		if ( empty( $field ) || ! is_array( $field ) || ( ! FrmField::is_radio( $field ) && ! FrmField::is_checkbox( $field ) ) ) {
+		if ( ! $field || ! is_array( $field ) || ( ! FrmField::is_radio( $field ) && ! FrmField::is_checkbox( $field ) ) ) {
 			return '';
 		}
 
