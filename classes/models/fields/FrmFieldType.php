@@ -1082,11 +1082,31 @@ DEFAULT_HTML;
 			return '';
 		}
 
-		$align = FrmField::get_option( $this->field, 'align' );
+		$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $this->field, 'align' ) : '';
+
+		if ( ! $align ) {
+			$align = $this->get_align_class_from_style_settings();
+		}
 
 		$this->prepare_align_class( $align );
 
 		return $align ? ' ' . $align : '';
+	}
+
+	/**
+	 * Get the alignment value from the active style settings.
+	 *
+	 * Used as the fallback when the field has no specific alignment option set.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function get_align_class_from_style_settings() {
+		$key          = FrmStylesController::get_align_key_for_style_settings( FrmField::get_field_type( $this->field ) );
+		$active_style = FrmStylesController::get_active_style( $this->field );
+
+		return $active_style->post_content[ $key ] ?? '';
 	}
 
 	/**
