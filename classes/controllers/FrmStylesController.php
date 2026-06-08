@@ -21,6 +21,15 @@ class FrmStylesController {
 	private static $message;
 
 	/**
+	 * Cache of the active style object keyed by form ID.
+	 *
+	 * @since x.x
+	 *
+	 * @var array
+	 */
+	private static $active_style = array();
+
+	/**
 	 * @return void
 	 */
 	public static function load_pro_hooks() {
@@ -1271,6 +1280,50 @@ class FrmStylesController {
 
 		$frm_style = new FrmStyle( $style );
 		return $frm_style->get_one();
+	}
+
+	/**
+	 * Get the active style object for a field's form.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|int $field The 'field' array.
+	 *
+	 * @return object
+	 */
+	public static function get_active_style( $field ) {
+		if ( ! is_array( $field ) ) {
+			return new stdClass();
+		}
+
+		$form_id = $field['parent_form_id'] ?? $field['form_id'];
+
+		if ( isset( self::$active_style[ $form_id ] ) ) {
+			return self::$active_style[ $form_id ];
+		}
+
+		$active_style = self::get_form_style( $form_id );
+
+		if ( ! is_object( $active_style ) ) {
+			$active_style = new stdClass();
+		}
+
+		self::$active_style[ $form_id ] = $active_style;
+
+		return self::$active_style[ $form_id ];
+	}
+
+	/**
+	 * Get the style setting key that stores the alignment for a field type.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $field_type
+	 *
+	 * @return string
+	 */
+	public static function get_align_key_for_style_settings( $field_type ) {
+		return 'checkbox' === $field_type ? 'check_align' : 'radio_align';
 	}
 
 	/**
