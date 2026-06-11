@@ -582,7 +582,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$cached_posts = get_transient( self::$embed_posts_transient_name );
 
 		if ( isset( $cached_posts[ $form->id ] ) ) {
-			 return $cached_posts[ $form->id ];
+			return $cached_posts[ $form->id ];
 		}
 
 		$posts = $this->query_posts_contain_form( $form );
