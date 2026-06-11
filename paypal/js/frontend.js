@@ -350,33 +350,78 @@
 	 * @return {Promise<boolean>} Whether Apple Pay is eligible.
 	 */
 	async function resolveApplePayEligibility() {
+		// Wait for Apple Pay session to be available (requires Apple Pay SDK to load).
+		const sessionReady = await waitFor( () => undefined !== window.ApplePaySession );
+		if ( ! sessionReady ) {
+			return false;
+		}
+
+		// Wait for canMakePayments to return true.
+		const canMakePaymentsReady = await waitFor( () => ApplePaySession.canMakePayments() );
+		if ( ! canMakePaymentsReady ) {
+			return false;
+		}
+
+		// First ensure the PayPal SDK itself is loaded.
+		const paypalReady = await waitFor( () => 'object' === typeof window.paypal );
+		if ( ! paypalReady ) {
+			return false;
+		}
+
+		// Wait for the Apple Pay function to be available.
 		const sdkReady = await waitFor( () => 'function' === typeof paypal.Applepay );
 		if ( ! sdkReady ) {
 			return false;
 		}
 
-		return '' === await checkApplePayEligibility();
+		// Wait for the config call to actually succeed, not just the function to exist.
+		// This handles the race condition where the function exists but SDK isn't fully initialized.
+		const configReady = await waitFor( async () => {
+			try {
+				const instance = paypal.Applepay();
+				const config = await instance.config();
+				return config?.isEligible;
+			} catch ( e ) {
+				return false;
+			}
+		} );
+
+		if ( ! configReady ) {
+			return false;
+		}
+
+		// Config succeeded, cache it and return true.
+		applePayInstance = paypal.Applepay();
+		applePayConfig = await applePayInstance.config();
+		return true;
 	}
 
 	/**
 	 * Poll for a condition until it is true or a timeout elapses.
 	 *
-	 * @param {Function} predicate  Returns true when the awaited dependency is ready.
+	 * @param {Function} predicate  Returns true (or a Promise resolving to true) when the awaited dependency is ready.
 	 * @param {number}   [timeout]  Maximum time to wait, in milliseconds.
 	 * @param {number}   [interval] Poll interval, in milliseconds.
 	 *
 	 * @return {Promise<boolean>} Whether the predicate became true before the timeout.
 	 */
-	function waitFor( predicate, timeout = 3000, interval = 50 ) {
-		return new Promise( resolve => {
-			if ( predicate() ) {
-				resolve( true );
-				return;
+	async function waitFor( predicate, timeout = 3000, interval = 50 ) {
+		const checkPredicate = async () => {
+			const result = predicate();
+			if ( result instanceof Promise ) {
+				return await result;
 			}
+			return result;
+		};
 
-			const start = Date.now();
-			const timer = setInterval( () => {
-				if ( predicate() ) {
+		if ( await checkPredicate() ) {
+			return true;
+		}
+
+		const start = Date.now();
+		return new Promise( resolve => {
+			const timer = setInterval( async () => {
+				if ( await checkPredicate() ) {
 					clearInterval( timer );
 					resolve( true );
 				} else if ( Date.now() - start >= timeout ) {
@@ -749,21 +794,18 @@
 
 		const observerOptions = { attributes: true, attributeFilter: [ 'style' ] };
 
-		const observerCallback = ( mutationsList, observer ) => {
-			observer.disconnect();
-
+		const observerCallback = mutationsList => {
 			for ( const mutation of mutationsList ) {
 				if ( mutation.type !== 'attributes' || mutation.attributeName !== 'style' ) {
 					continue;
 				}
 
 				const currentHeight = mutation.target.offsetHeight;
-				if ( currentHeight > 0 ) {
+				// Only adjust if height is reasonable and not already adjusted.
+				if ( currentHeight > 40 && currentHeight < 100 ) {
 					mutation.target.style.height = `${ currentHeight + 1 }px`;
 				}
 			}
-
-			wrappers.forEach( w => observer.observe( w, observerOptions ) );
 		};
 
 		const observer = new MutationObserver( observerCallback );
@@ -1043,39 +1085,6 @@
 	}
 
 	/**
-	 * Check if Apple Pay is eligible (without rendering).
-	 *
-	 * @return {Promise<string>} An empty string if Apple Pay is supported and ready to accept payments in the current environment, or a string with the reason for ineligibility.
-	 */
-	async function checkApplePayEligibility() {
-		if ( 'function' !== typeof paypal.Applepay ) {
-			return 'PayPal Apple Pay SDK not loaded';
-		}
-
-		if ( ! window.ApplePaySession ) {
-			return 'Not on Apple device';
-		}
-
-		if ( ! ApplePaySession.canMakePayments() ) {
-			return 'Apple Pay not configured on device';
-		}
-
-		// Use paypal.Applepay().config() as the definitive eligibility check (per PayPal multiparty docs).
-		try {
-			applePayInstance = paypal.Applepay();
-			applePayConfig = await applePayInstance.config();
-
-			if ( ! applePayConfig || ! applePayConfig.isEligible ) {
-				return 'PayPal reports Apple Pay is not eligible for this merchant/domain';
-			}
-		} catch ( err ) {
-			return `Apple Pay config check failed: ${ err.message }`;
-		}
-
-		return '';
-	}
-
-	/**
 	 * Render the Apple Pay button into its method container.
 	 *
 	 * The <apple-pay-button> web component uses CSS custom properties for sizing,
@@ -1089,6 +1098,11 @@
 
 		const container = method.containerEl;
 		container.innerHTML = '';
+
+		// Check if Apple Pay is available on the device.
+		if ( 'undefined' === typeof ApplePaySession ) {
+			return;
+		}
 
 		const applePayStyle = getApplePayButtonStyle();
 
