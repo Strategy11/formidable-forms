@@ -622,7 +622,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			if ( '' === $post->post_title ) {
 				$post->post_title = __( '(no title)', 'formidable' );
 			}
-		}
+		}//end foreach
 
 		if ( ! is_array( $cached_posts ) ) {
 			$cached_posts = array();
