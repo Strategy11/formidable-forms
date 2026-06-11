@@ -351,6 +351,10 @@
 	 */
 	async function resolveApplePayEligibility() {
 		// First ensure the PayPal SDK itself is loaded.
+		const paypalReady = await waitFor( () => 'object' === typeof window.paypal );
+		if ( ! paypalReady ) {
+			return false;
+		}
 
 		// Wait for the Apple Pay function to be available.
 		const sdkReady = await waitFor( () => 'function' === typeof paypal.Applepay );
