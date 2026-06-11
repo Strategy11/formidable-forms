@@ -353,7 +353,7 @@
 		// First ensure the PayPal SDK itself is loaded.
 
 		// Wait for the Apple Pay function to be available.
-		const sdkReady = await waitFor( () => 'function' === typeof paypal.Applepay, 3000 );
+		const sdkReady = await waitFor( () => 'function' === typeof paypal.Applepay );
 		if ( ! sdkReady ) {
 			return false;
 		}
@@ -368,7 +368,7 @@
 			} catch ( e ) {
 				return false;
 			}
-		}, 3000 );
+		} );
 
 		if ( ! configReady ) {
 			return false;
