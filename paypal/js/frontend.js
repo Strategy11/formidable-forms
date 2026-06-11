@@ -350,33 +350,62 @@
 	 * @return {Promise<boolean>} Whether Apple Pay is eligible.
 	 */
 	async function resolveApplePayEligibility() {
-		const sdkReady = await waitFor( () => 'function' === typeof paypal.Applepay );
+		// First ensure the PayPal SDK itself is loaded.
+
+		// Wait for the Apple Pay function to be available.
+		const sdkReady = await waitFor( () => 'function' === typeof paypal.Applepay, 3000 );
 		if ( ! sdkReady ) {
 			return false;
 		}
 
-		return '' === await checkApplePayEligibility();
+		// Wait for the config call to actually succeed, not just the function to exist.
+		// This handles the race condition where the function exists but SDK isn't fully initialized.
+		const configReady = await waitFor( async () => {
+			try {
+				const instance = paypal.Applepay();
+				const config = await instance.config();
+				return config && config.isEligible;
+			} catch ( e ) {
+				return false;
+			}
+		}, 3000 );
+
+		if ( ! configReady ) {
+			return false;
+		}
+
+		// Config succeeded, cache it and return true.
+		applePayInstance = paypal.Applepay();
+		applePayConfig = await applePayInstance.config();
+		return true;
 	}
 
 	/**
 	 * Poll for a condition until it is true or a timeout elapses.
 	 *
-	 * @param {Function} predicate  Returns true when the awaited dependency is ready.
+	 * @param {Function} predicate  Returns true (or a Promise resolving to true) when the awaited dependency is ready.
 	 * @param {number}   [timeout]  Maximum time to wait, in milliseconds.
 	 * @param {number}   [interval] Poll interval, in milliseconds.
 	 *
 	 * @return {Promise<boolean>} Whether the predicate became true before the timeout.
 	 */
-	function waitFor( predicate, timeout = 3000, interval = 50 ) {
-		return new Promise( resolve => {
-			if ( predicate() ) {
-				resolve( true );
-				return;
+	async function waitFor( predicate, timeout = 3000, interval = 50 ) {
+		const checkPredicate = async () => {
+			const result = predicate();
+			if ( result instanceof Promise ) {
+				return await result;
 			}
+			return result;
+		};
 
-			const start = Date.now();
-			const timer = setInterval( () => {
-				if ( predicate() ) {
+		if ( await checkPredicate() ) {
+			return true;
+		}
+
+		const start = Date.now();
+		return new Promise( resolve => {
+			const timer = setInterval( async () => {
+				if ( await checkPredicate() ) {
 					clearInterval( timer );
 					resolve( true );
 				} else if ( Date.now() - start >= timeout ) {
@@ -1089,6 +1118,12 @@
 
 		const container = method.containerEl;
 		container.innerHTML = '';
+
+		// Check if Apple Pay is available on the device.
+		if ( 'undefined' === typeof ApplePaySession ) {
+			container.innerHTML = '<span class="frm_error">Apple Pay is not available on this device.</span>';
+			return;
+		}
 
 		const applePayStyle = getApplePayButtonStyle();
 
