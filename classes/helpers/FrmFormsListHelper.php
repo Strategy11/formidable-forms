@@ -667,7 +667,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @return array
 	 */
-	private function get_forms_contain_embedded_form( $embedded_form_id ) {
+	protected function get_forms_contain_embedded_form( $embedded_form_id ) {
 		// This is a Pro feature for nested forms. Return empty array in Lite.
 		return array();
 	}
