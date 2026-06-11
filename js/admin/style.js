@@ -123,7 +123,7 @@
 			const container = option.closest( '.frm_form_field' );
 
 			// Only fields using the style setting (no override) are marked in the styler preview.
-			if ( container && container.classList.contains( 'frm-default-option-align' ) ) {
+			if ( container?.classList.contains( 'frm-default-option-align' ) ) {
 				containers.add( container );
 			}
 		} );

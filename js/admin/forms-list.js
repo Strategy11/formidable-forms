@@ -2,7 +2,7 @@
 
 ( function() {
 	const { documentOn } = frmDom.util;
-	const { __ }         = wp.i18n;
+	const { __ } = wp.i18n;
 
 	function closeSettingsPanel( panel ) {
 		panel.classList.remove( 'frm-forms-list-settings--visible' );
@@ -210,7 +210,7 @@
 		}
 
 		const id = rowEl.id.replace( 'item-action-', '' );
-		const trInFragment = documentFragment.querySelector( '#frm-forms-list-embeds-row-' + id );
+		const trInFragment = documentFragment.querySelector( `#frm-forms-list-embeds-row-${ id }` );
 		if ( trInFragment ) {
 			// Use the existing fragment row if it exists.
 			btn.classList.add( btnOpenedClass );
@@ -219,7 +219,7 @@
 		}
 
 		const columnsCount = rowEl.querySelectorAll( 'td:not(.hidden), th:not(.hidden)' ).length;
-		const extraTdEl    = frmDom.tag( 'td', {
+		const extraTdEl = frmDom.tag( 'td', {
 			className: 'colspanchange',
 			children: [
 				frmDom.tag( 'h4', {
@@ -231,16 +231,16 @@
 						const postLink = frmDom.a( {
 							href: post.edit_link,
 							target: '_blank',
-							text: post.post_title || ( post.post_name ? '/' + post.post_name : __( '(no title)', 'formidable' ) ),
+							text: post.post_title || ( post.post_name ? `/${ post.post_name }` : __( '(no title)', 'formidable' ) ),
 						} );
 						if ( post.title_contains_html ) {
-							postLink.innerHTML = frmAdminBuild.purifyHtml( post.post_title || ( post.post_name ? '/' + post.post_name : __( '(no title)', 'formidable' ) ) );
+							postLink.innerHTML = frmAdminBuild.purifyHtml( post.post_title || ( post.post_name ? `/${ post.post_name }` : __( '(no title)', 'formidable' ) ) );
 						}
 
 						const leftChildren = [
 							postLink,
 							post.post_title && post.post_name && post.post_name !== '' ? frmDom.span( {
-								text: '/' + post.post_name
+								text: `/${ post.post_name }`
 							} ) : undefined
 						].filter( Boolean );
 
@@ -260,13 +260,13 @@
 											__( 'View in new tab', 'formidable' ),
 											frmDom.svg( {
 												href: '#frm_arrowup8_icon',
-												classList: ['frm-rotate-45'],
+												classList: [ 'frm-rotate-45' ],
 											} )
 										]
 									} )
 								} )
 							]
-						} )
+						} );
 					} )
 				} )
 			]
@@ -278,12 +278,12 @@
 				frmDom.tag( 'td' ),
 				extraTdEl,
 			],
-			id: 'frm-forms-list-embeds-row-' + rowEl.id.replace( 'item-action-', '' ),
+			id: `frm-forms-list-embeds-row-${ rowEl.id.replace( 'item-action-', '' ) }`,
 			className: 'frm-forms-list-embeds-row',
-		});
+		} );
 
 		btn.classList.add( btnOpenedClass );
 		documentFragment.append( extraRowEl );
 		rowEl.after( extraRowEl );
-	});
+	} );
 }() );
