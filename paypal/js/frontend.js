@@ -368,7 +368,7 @@
 			try {
 				const instance = paypal.Applepay();
 				const config = await instance.config();
-				return config && config.isEligible;
+				return config?.isEligible;
 			} catch ( e ) {
 				return false;
 			}
