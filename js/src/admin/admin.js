@@ -6970,7 +6970,7 @@ window.frmAdminBuildJS = function() {
 		const fieldId = field.getAttribute( 'data-fid' );
 
 		if ( '' === replaceWith.trim() ) {
-			replaceWith = ' ' + setting.querySelector( 'option[data-align]' ).getAttribute( 'data-align' );
+			replaceWith = ` ${ setting.querySelector( 'option[data-align]' ).getAttribute( 'data-align' ) }`;
 		}
 		// Include classes from multiple settings.
 		if ( fieldId !== undefined ) {
@@ -8799,7 +8799,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleBuilderChangeEvent( event ) {
-		const target = event.target;
+		const { target } = event;
 		maybeShowSaveAndReloadModal( target );
 		validateRangeSettings( target );
 	}

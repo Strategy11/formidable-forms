@@ -94,6 +94,7 @@
 		"globals": "^15.14.0",
 		"html-validate": "^8.20.0",
 		"mini-css-extract-plugin": "^2.9.2",
+		"oxlint": "^1.59.0",
 		"prompts": "^2.4.2",
 		"raw-loader": "^4.0.2",
 		"sass": "1.54.0",

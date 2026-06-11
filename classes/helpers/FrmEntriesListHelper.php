@@ -364,7 +364,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			}
 
 			if ( in_array( $column_name, $hidden, true ) ) {
-				$class .= ' frm_hidden';
+				$class .= ' hidden';
 			} elseif ( ! $action_col && ! in_array( $column_name, $action_columns, true ) ) {
 				$action_col = $column_name;
 			}
