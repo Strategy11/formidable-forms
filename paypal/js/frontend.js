@@ -351,7 +351,7 @@
 	 */
 	async function resolveApplePayEligibility() {
 		// Wait for Apple Pay session to be available (requires Apple Pay SDK to load).
-		const sessionReady = await waitFor( () => 'undefined' !== typeof window.ApplePaySession );
+		const sessionReady = await waitFor( () => undefined !== window.ApplePaySession );
 		if ( ! sessionReady ) {
 			return false;
 		}
@@ -794,7 +794,7 @@
 
 		const observerOptions = { attributes: true, attributeFilter: [ 'style' ] };
 
-		const observerCallback = ( mutationsList ) => {
+		const observerCallback = mutationsList => {
 			for ( const mutation of mutationsList ) {
 				if ( mutation.type !== 'attributes' || mutation.attributeName !== 'style' ) {
 					continue;
