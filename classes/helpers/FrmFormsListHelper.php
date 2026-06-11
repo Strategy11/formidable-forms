@@ -585,7 +585,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @param stdClass $form Form object.
 	 *
-	 * @return stdClass[]
+	 * @return array
 	 */
 	private function get_posts_contain_form( $form ) {
 		$cached_posts = get_transient( self::$embed_posts_transient_name );
@@ -671,7 +671,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @param stdClass $form Form object.
 	 *
-	 * @return stdClass[]
+	 * @return array
 	 */
 	private function query_posts_contain_form( $form ) {
 		$form_id = $form->id;
