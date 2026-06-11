@@ -88,6 +88,17 @@ if ( ! empty( $should_show_warning ) ) {
 				}
 				?>
 				</select>
+
+				<?php
+				/**
+				 * Fires inside the enabled form actions container.
+				 *
+				 * @since x.x
+				 *
+				 * @param array $form_actions
+				 */
+				do_action( 'frm_testmode_form_actions', $form_actions );
+				?>
 			</div>
 		</label>
 	</div>
