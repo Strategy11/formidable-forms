@@ -3745,23 +3745,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Adds custom screen options.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $settings_html Settings HTML.
-	 *
-	 * @return string
-	 */
-	public static function add_screen_options( $settings_html ) {
-		if ( ! FrmAppHelper::on_form_listing_page() ) {
-			return $settings_html;
-		}
-
-		return $settings_html;
-	}
-
-	/**
 	 * @deprecated 4.0
 	 *
 	 * @param array $values
