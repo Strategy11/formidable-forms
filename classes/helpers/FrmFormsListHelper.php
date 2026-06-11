@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormsListHelper extends FrmListHelper {
 
+	/**
+	 * The transient name that stores data for which posts a form is embedded in.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
 	private static $embed_posts_transient_name = 'frm_posts_contain_form';
 
 	/**
