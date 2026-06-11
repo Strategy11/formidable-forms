@@ -85,6 +85,9 @@ class FrmHooksController {
 
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
+		// Clear embed posts transient when posts are updated.
+		add_action( 'wp_insert_post', 'FrmFormsListHelper::maybe_clear_embed_posts_transient', 10, 2 );
+
 		// Form Shortcodes.
 		add_shortcode( 'formidable', 'FrmFormsController::get_form_shortcode' );
 

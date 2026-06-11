@@ -2,6 +2,7 @@
 
 ( function() {
 	const { documentOn } = frmDom.util;
+	const { __ }         = wp.i18n;
 
 	function closeSettingsPanel( panel ) {
 		panel.classList.remove( 'frm-forms-list-settings--visible' );
@@ -177,4 +178,112 @@
 	documentOn( 'click', '#frm-save-forms-list-settings-btn', handleClickApplyBtn );
 
 	documentOn( 'click', '.frm-collapsible-box__btn', handleClickCollapsibleBtn );
+
+	// Embeds toggle functionality
+	const documentFragment = document.createDocumentFragment();
+
+	documentOn( 'click', '.frm-forms-list-embeds-btn', event => {
+		event.preventDefault();
+
+		let btn = event.target;
+		if ( ! event.target.classList.contains( 'frm-forms-list-embeds-btn' ) ) {
+			btn = event.target.closest( '.frm-forms-list-embeds-btn' );
+		}
+
+		if ( ! btn.dataset.posts ) {
+			return;
+		}
+
+		const posts = JSON.parse( btn.dataset.posts );
+		if ( ! posts.length ) {
+			return;
+		}
+
+		const btnOpenedClass = 'frm-forms-list-embeds-btn--opened';
+
+		const rowEl = btn.closest( 'tr' );
+		if ( rowEl.nextElementSibling?.id.startsWith( 'frm-forms-list-embeds-row-' ) ) {
+			// Remove the extra row if it exists. Move it to fragment to reuse later.
+			btn.classList.remove( btnOpenedClass );
+			documentFragment.append( rowEl.nextElementSibling );
+			return;
+		}
+
+		const id = rowEl.id.replace( 'item-action-', '' );
+		const trInFragment = documentFragment.querySelector( '#frm-forms-list-embeds-row-' + id );
+		if ( trInFragment ) {
+			// Use the existing fragment row if it exists.
+			btn.classList.add( btnOpenedClass );
+			rowEl.after( trInFragment );
+			return;
+		}
+
+		const columnsCount = rowEl.querySelectorAll( 'td:not(.hidden), th:not(.hidden)' ).length;
+		const extraTdEl    = frmDom.tag( 'td', {
+			className: 'colspanchange',
+			children: [
+				frmDom.tag( 'h4', {
+					text: __( 'Embed Locations', 'formidable' )
+				} ),
+				frmDom.div( {
+					className: 'frm-forms-list-embeds-posts',
+					children: posts.map( post => {
+						const postLink = frmDom.a( {
+							href: post.edit_link,
+							target: '_blank',
+							text: post.post_title || ( post.post_name ? '/' + post.post_name : __( '(no title)', 'formidable' ) ),
+						} );
+						if ( post.title_contains_html ) {
+							postLink.innerHTML = frmAdminBuild.purifyHtml( post.post_title || ( post.post_name ? '/' + post.post_name : __( '(no title)', 'formidable' ) ) );
+						}
+
+						const leftChildren = [
+							postLink,
+							post.post_title && post.post_name && post.post_name !== '' ? frmDom.span( {
+								text: '/' + post.post_name
+							} ) : undefined
+						].filter( Boolean );
+
+						return frmDom.div( {
+							className: 'frm-forms-list-embeds-post',
+							children: [
+								frmDom.div( {
+									className: 'frm-forms-list-embeds-post__left',
+									children: leftChildren,
+								} ),
+								frmDom.div( {
+									className: 'frm-forms-list-embeds-post__right',
+									child: frmDom.a( {
+										href: post.permalink,
+										target: '_blank',
+										children: [
+											__( 'View in new tab', 'formidable' ),
+											frmDom.svg( {
+												href: '#frm_arrowup8_icon',
+												classList: ['frm-rotate-45'],
+											} )
+										]
+									} )
+								} )
+							]
+						} )
+					} )
+				} )
+			]
+		} );
+
+		extraTdEl.colSpan = columnsCount - 1;
+		const extraRowEl = frmDom.tag( 'tr', {
+			children: [
+				frmDom.tag( 'td' ),
+				extraTdEl,
+			],
+			id: 'frm-forms-list-embeds-row-' + rowEl.id.replace( 'item-action-', '' ),
+			className: 'frm-forms-list-embeds-row',
+		});
+
+		btn.classList.add( btnOpenedClass );
+		documentFragment.append( extraRowEl );
+		rowEl.after( extraRowEl );
+	});
 }() );
