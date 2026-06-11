@@ -282,9 +282,12 @@ function frmFrontFormJS() {
 			maybeAddHttpsToUrl( field );
 		}
 		const form = field.closest( 'form' );
-		if ( form && hasClass( form, 'frm_js_validate' ) ) {
-			validateField( field );
+		if ( ! form ) {
+			return;
 		}
+
+		// Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+		validateField( field, hasClass( form, 'frm_js_validate' ) );
 	}
 
 	/**
@@ -301,11 +304,16 @@ function frmFrontFormJS() {
 	/**
 	 * Validate a field with JS.
 	 *
+	 * Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+	 *
+	 * @since x.x Added the `addErrors` parameter.
+	 *
 	 * @param {HTMLElement} field
+	 * @param {boolean}     addErrors Whether to add new errors. Defaults to `true`.
 	 *
 	 * @return {void}
 	 */
-	function validateField( field ) {
+	function validateField( field, addErrors = true ) {
 		let errors;
 		let key;
 
@@ -325,11 +333,18 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
-		removeFieldError( fieldContainer );
-		if ( Object.keys( errors ).length > 0 ) {
-			for ( key in errors ) {
-				addFieldError( fieldContainer, key, errors );
+		const hasErrors = Object.keys( errors ).length > 0;
+
+		if ( addErrors ) {
+			removeFieldError( fieldContainer );
+			if ( hasErrors ) {
+				for ( key in errors ) {
+					addFieldError( fieldContainer, key, errors );
+				}
 			}
+		} else if ( ! hasErrors ) {
+			// JS validation is off, so only remove existing errors once the field passes validation.
+			removeFieldError( fieldContainer );
 		}
 	}
 
@@ -883,6 +898,8 @@ function frmFrontFormJS() {
 				}
 			}
 
+			let willRedirect = false;
+
 			if ( response.redirect !== undefined ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
@@ -896,6 +913,8 @@ function frmFrontFormJS() {
 				} else {
 					doRedirect( response );
 				}
+
+				willRedirect = true;
 			}
 
 			if ( 'string' === typeof response.content && response.content !== '' ) {
@@ -940,7 +959,7 @@ function frmFrontFormJS() {
 					},
 					delay
 				);
-			} else if ( Object.keys( response.errors ).length ) {
+			} else if ( response.errors !== undefined && Object.keys( response.errors ).length ) {
 				// errors were returned
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
@@ -1007,8 +1026,8 @@ function frmFrontFormJS() {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
-			} else {
-				// there may have been a plugin conflict, or the form is not set to submit with ajax
+			} else if ( ! willRedirect ) { // Avoid double submission if redirecting to a page.
+				// There may have been a plugin conflict, or the form is not set to submit with ajax.
 
 				showFileLoading( object );
 
@@ -1140,10 +1159,10 @@ function frmFrontFormJS() {
 		}
 
 		container.classList.add( 'frm_blank_field' );
-		const input = container.querySelector( 'input, select, textarea' );
-		const id = getErrorElementId( key, input );
+		const inputs = container.querySelectorAll( 'input, select, textarea' );
+		const id = getErrorElementId( key, inputs[ 0 ] );
 
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		let describedBy;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1156,8 +1175,8 @@ function frmFrontFormJS() {
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
-
-			if ( input ) {
+			inputs.forEach( input => {
+				describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
@@ -1169,10 +1188,10 @@ function frmFrontFormJS() {
 					}
 				}
 				input.setAttribute( 'aria-describedby', describedBy );
-			}
+			} );
 		}
 
-		if ( input ) {
+		inputs.forEach( input => {
 			if ( [ 'radio', 'checkbox' ].includes( input.type ) ) {
 				const group = input.closest( '[role="radiogroup"], [role="group"]' );
 				if ( group ) {
@@ -1181,7 +1200,7 @@ function frmFrontFormJS() {
 			} else {
 				input.setAttribute( 'aria-invalid', 'true' );
 			}
-		}
+		} );
 
 		jQuery( document ).trigger( 'frmAddFieldError', [ jQuery( container ), key, jsErrors ] );
 	}
@@ -1215,9 +1234,7 @@ function frmFrontFormJS() {
 		}
 
 		const errorMessage = container.querySelector( '.frm_error' );
-		const errorId = errorMessage ? errorMessage.id : '';
 		const input = container.querySelector( 'input, select, textarea' );
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
 
@@ -1233,25 +1250,43 @@ function frmFrontFormJS() {
 		}
 
 		if ( errorMessage ) {
+			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
 		}
+	}
 
-		if ( input ) {
-			input.removeAttribute( 'aria-describedby' );
-			if ( describedBy ) {
-				describedBy = describedBy.replace( errorId, '' ).trim();
-				if ( describedBy ) {
-					input.setAttribute( 'aria-describedby', describedBy );
-				}
+	/**
+	 * Updates the aria-describedby attribute, removing the target element ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} el The target element that is removed from the aria-describedby data.
+	 * @return {void}
+	 */
+	function removeElementFromInputDescribedBy( el ) {
+		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
+			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
+			ariaDescribedBy = ariaDescribedBy.filter( value => {
+				const trimmedValue = value.trim();
+				return trimmedValue && trimmedValue !== el.id;
+			} );
+
+			if ( ariaDescribedBy.length ) {
+				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
+				return;
 			}
-		}
+			input.removeAttribute( 'aria-describedby' );
+		} );
 	}
 
 	function removeAllErrors() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( error => error.remove() );
+		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+			removeElementFromInputDescribedBy( el );
+			el.remove();
+		} );
 		document.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
 	}
 

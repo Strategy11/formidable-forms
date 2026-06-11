@@ -11,6 +11,10 @@
 	padding: var(--gap-2xs);
 }
 
+.frm-p-2xs-force {
+	padding: var(--gap-2xs) !important;
+}
+
 .frm-p-sm,
 .frm-p-4 {
 	padding: var(--gap-sm) !important;
@@ -51,6 +55,11 @@
 .frm-py-sm {
 	padding-top: var(--gap-sm) !important;
 	padding-bottom: var(--gap-sm) !important;
+}
+
+.frm-py-md {
+	padding-top: var(--gap-md) !important;
+	padding-bottom: var(--gap-md) !important;
 }
 
 .frm-pt-0 {
@@ -101,6 +110,10 @@
 	padding-bottom: 0 !important;
 }
 
+.frm-pl-xs {
+	padding-left: var(--gap-xs) !important;
+}
+
 .frm-px-sm {
 	padding-right: var(--gap-sm) !important;
 	padding-left: var(--gap-sm) !important;
@@ -114,4 +127,9 @@
 .frm-px-md {
 	padding-right: var(--gap-md) !important;
 	padding-left: var(--gap-md) !important;
+}
+
+.frm-children-px-sm > * {
+	padding-right: var(--gap-sm) !important;
+	padding-left: var(--gap-sm) !important;
 }

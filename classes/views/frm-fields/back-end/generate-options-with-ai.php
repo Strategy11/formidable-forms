@@ -1,4 +1,13 @@
 <?php
+/**
+ * Generate options with AI button.
+ *
+ * @package Formidable
+ *
+ * @var array $args       Arguments including 'button_text' and 'show_pill'.
+ * @var array $attributes HTML attributes for the button.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

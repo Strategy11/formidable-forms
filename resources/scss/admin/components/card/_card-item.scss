@@ -9,10 +9,27 @@
 	padding: var(--gap-sm);
 	box-shadow: var(--box-shadow-xs);
 	background: #fff;
-}
 
-.frm-card-item:not(.frm-counter-card) {
-	gap: 10px;
+	&:not(.frm-counter-card) {
+		gap: 10px;
+	}
+
+	&.frm-card-item--outlined {
+		padding: var(--gap-sm) var(--gap-md);
+		gap: 12px;
+		border-color: var(--grey-300);
+		box-shadow: var(--box-shadow-sm);
+		transition: box-shadow 200ms ease-in-out;
+
+		&:hover {
+			box-shadow: var(--box-shadow-md);
+		}
+
+		p,
+		h3 {
+			margin: 0;
+		}
+	}
 }
 
 .frm-compact-card-item {

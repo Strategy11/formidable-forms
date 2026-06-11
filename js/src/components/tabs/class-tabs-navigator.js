@@ -1,3 +1,6 @@
+import { applyContentFilter, getFilterTarget } from './filter.js';
+import { observeVisibility, disconnectVisibilityObserver } from 'core/utils/visibilityObserver';
+
 export class frmTabsNavigator {
 	constructor( wrapper ) {
 		if ( wrapper === undefined ) {
@@ -17,24 +20,42 @@ export class frmTabsNavigator {
 		this.slides = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
 		this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
 		this.resizeObserver = null;
+		this.filterTarget = getFilterTarget( this.wrapper );
 
 		this.init();
 	}
 
 	init() {
-		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || null === this.slideTrack || ! this.slides.length ) {
+		const isMissingTrackAndFilter = ! this.filterTarget && ( null === this.slideTrack || 0 === this.slides.length );
+
+		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || isMissingTrackAndFilter ) {
 			return;
 		}
 
+		const navList = this.navs[ 0 ]?.parentElement;
+		if ( navList ) {
+			navList.setAttribute( 'role', 'tablist' );
+		}
+
 		this.navs.forEach( ( nav, index ) => {
+			nav.setAttribute( 'tabindex', '0' );
+			nav.setAttribute( 'role', 'tab' );
+			nav.setAttribute( 'aria-selected', String( nav.classList.contains( 'frm-active' ) ) );
+
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
+			nav.addEventListener( 'keydown', event => this.onNavKeydown( event, index ) );
+
 			if ( nav.classList.contains( 'frm-active' ) ) {
 				this.initSlideTrackUnderline( nav );
+				if ( this.filterTarget ) {
+					applyContentFilter( nav.dataset.filter || 'all' );
+				}
 			}
 		} );
 		this.slideTrackLine.style.display = 'block';
 
 		this.setupScrollbarObserver();
+		this.setupVisibilityObserver();
 		// Cleanup observers when page unloads to prevent memory leaks
 		window.addEventListener( 'beforeunload', this.cleanupObservers );
 	}
@@ -46,7 +67,15 @@ export class frmTabsNavigator {
 
 		this.removeActiveClassnameFromNavs();
 		navItem.classList.add( 'frm-active' );
+		this.navs.forEach( nav => nav.setAttribute( 'aria-selected', 'false' ) );
+		navItem.setAttribute( 'aria-selected', 'true' );
 		this.initSlideTrackUnderline( navItem );
+
+		if ( this.filterTarget ) {
+			applyContentFilter( navItem.dataset.filter || 'all' );
+			return;
+		}
+
 		this.changeSlide( index );
 
 		// Handle special case for frm_insert_fields_tab
@@ -56,14 +85,39 @@ export class frmTabsNavigator {
 		}
 	}
 
+	/**
+	 * Handles keyboard activation for tab navigation.
+	 *
+	 * @param {KeyboardEvent} event The keydown event.
+	 * @param {number}        index The index of the focused tab in `this.navs`.
+	 * @return {void}
+	 */
+	onNavKeydown( event, index ) {
+		if ( event.key === 'Enter' || event.key === ' ' ) {
+			event.preventDefault();
+			this.onNavClick( event, index );
+		}
+	}
+
 	initSlideTrackUnderline( nav ) {
 		const activeNav = nav !== undefined ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
 		this.positionUnderlineIndicator( activeNav );
 	}
 
 	/**
-	 * Sets up a ResizeObserver to watch for scrollbar changes in the parent container.
-	 * Automatically repositions the underline indicator when layout changes occur.
+	 * Automatically repositions the underline indicator when the wrapper becomes visible.
+	 */
+	setupVisibilityObserver() {
+		observeVisibility( this.wrapper, () => {
+			const activeNav = this.wrapper.querySelector( '.frm-tabs-navs ul > li.frm-active' );
+			if ( activeNav ) {
+				this.positionUnderlineIndicator( activeNav );
+			}
+		} );
+	}
+
+	/**
+	 * Uses ResizeObserver to reposition the underline indicator when the parent container layout changes.
 	 */
 	setupScrollbarObserver() {
 		const resizeObserverTarget = document.querySelector( '.frm-scrollbar-wrapper, .styling_settings' ) || document.body;
@@ -88,6 +142,7 @@ export class frmTabsNavigator {
 			this.resizeObserver.disconnect();
 			this.resizeObserver = null;
 		}
+		disconnectVisibilityObserver();
 	}
 
 	/**
