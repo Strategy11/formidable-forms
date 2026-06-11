@@ -564,16 +564,18 @@ class FrmFormsListHelper extends FrmListHelper {
 			return '<span class="frm-forms-list-embeds-zero">0</span>';
 		}
 
-		ob_start();
-		?>
-		<a href="#" class="frm-forms-list-embeds-btn" data-posts="<?php echo esc_attr( wp_json_encode( $posts ) ); ?>">
-			<?php
-			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon' );
-			echo intval( count( $posts ) );
-			?>
-		</a>
-		<?php
-		return ob_get_clean();
+		return FrmAppHelper::clip(
+			function () use ( $posts ) {
+				?>
+				<a href="#" class="frm-forms-list-embeds-btn" data-posts="<?php echo esc_attr( wp_json_encode( $posts ) ); ?>">
+					<?php
+					FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon' );
+					echo intval( count( $posts ) );
+					?>
+				</a>
+				<?php
+			}
+		);
 	}
 
 	/**

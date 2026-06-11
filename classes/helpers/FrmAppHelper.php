@@ -1536,6 +1536,7 @@ class FrmAppHelper {
 	 * @param bool    $echo
 	 *
 	 * @return string|null
+	 * @psalm-return ($echo is true ? null : string)
 	 */
 	public static function clip( $echo_function, $echo = false ) {
 		if ( ! $echo ) {
