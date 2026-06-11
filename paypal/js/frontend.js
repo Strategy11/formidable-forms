@@ -350,6 +350,18 @@
 	 * @return {Promise<boolean>} Whether Apple Pay is eligible.
 	 */
 	async function resolveApplePayEligibility() {
+		// Wait for Apple Pay session to be available (requires Apple Pay SDK to load).
+		const sessionReady = await waitFor( () => 'undefined' !== typeof window.ApplePaySession );
+		if ( ! sessionReady ) {
+			return false;
+		}
+
+		// Wait for canMakePayments to return true.
+		const canMakePaymentsReady = await waitFor( () => ApplePaySession.canMakePayments() );
+		if ( ! canMakePaymentsReady ) {
+			return false;
+		}
+
 		// First ensure the PayPal SDK itself is loaded.
 		const paypalReady = await waitFor( () => 'object' === typeof window.paypal );
 		if ( ! paypalReady ) {
@@ -782,21 +794,18 @@
 
 		const observerOptions = { attributes: true, attributeFilter: [ 'style' ] };
 
-		const observerCallback = ( mutationsList, observer ) => {
-			observer.disconnect();
-
+		const observerCallback = ( mutationsList ) => {
 			for ( const mutation of mutationsList ) {
 				if ( mutation.type !== 'attributes' || mutation.attributeName !== 'style' ) {
 					continue;
 				}
 
 				const currentHeight = mutation.target.offsetHeight;
-				if ( currentHeight > 0 ) {
+				// Only adjust if height is reasonable and not already adjusted.
+				if ( currentHeight > 40 && currentHeight < 100 ) {
 					mutation.target.style.height = `${ currentHeight + 1 }px`;
 				}
 			}
-
-			wrappers.forEach( w => observer.observe( w, observerOptions ) );
 		};
 
 		const observer = new MutationObserver( observerCallback );
@@ -1073,39 +1082,6 @@
 		}
 
 		return options;
-	}
-
-	/**
-	 * Check if Apple Pay is eligible (without rendering).
-	 *
-	 * @return {Promise<string>} An empty string if Apple Pay is supported and ready to accept payments in the current environment, or a string with the reason for ineligibility.
-	 */
-	async function checkApplePayEligibility() {
-		if ( 'function' !== typeof paypal.Applepay ) {
-			return 'PayPal Apple Pay SDK not loaded';
-		}
-
-		if ( ! window.ApplePaySession ) {
-			return 'Not on Apple device';
-		}
-
-		if ( ! ApplePaySession.canMakePayments() ) {
-			return 'Apple Pay not configured on device';
-		}
-
-		// Use paypal.Applepay().config() as the definitive eligibility check (per PayPal multiparty docs).
-		try {
-			applePayInstance = paypal.Applepay();
-			applePayConfig = await applePayInstance.config();
-
-			if ( ! applePayConfig || ! applePayConfig.isEligible ) {
-				return 'PayPal reports Apple Pay is not eligible for this merchant/domain';
-			}
-		} catch ( err ) {
-			return `Apple Pay config check failed: ${ err.message }`;
-		}
-
-		return '';
 	}
 
 	/**
