@@ -590,7 +590,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	private function get_posts_contain_form( $form ) {
 		$cached_posts = get_transient( self::$embed_posts_transient_name );
 
-		if ( isset( $cached_posts[ $form->id ] ) ) {
+		if ( isset( $cached_posts[ $form->id ] ) && is_array( $cached_posts[ $form->id ] ) ) {
 			return $cached_posts[ $form->id ];
 		}
 
@@ -630,6 +630,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$cached_posts[ $form->id ] = $posts;
 		set_transient( self::$embed_posts_transient_name, $cached_posts, DAY_IN_SECONDS );
+
 		return $posts;
 	}
 
@@ -670,7 +671,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @param stdClass $form Form object.
 	 *
-	 * @return stdClass[]|null
+	 * @return stdClass[]
 	 */
 	private function query_posts_contain_form( $form ) {
 		$form_id = $form->id;
@@ -694,7 +695,14 @@ class FrmFormsListHelper extends FrmListHelper {
 		 * @param stdClass[] $posts
 		 * @param array      $args
 		 */
-		return apply_filters( 'frm_get_posts_contain_form', $posts, compact( 'form' ) );
+		$filtered_posts = apply_filters( 'frm_get_posts_contain_form', $posts, compact( 'form' ) );
+
+		if ( ! is_array( $filtered_posts ) ) {
+			_doing_it_wrong( 'frm_get_posts_contain_form', 'Filter should return an array.', 'x.x' );
+			return $posts;
+		}
+
+		return $filtered_posts;
 	}
 
 	/**
