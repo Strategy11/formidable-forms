@@ -627,49 +627,33 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Gets search strings for a form inside a post.
 	 *
-	 * @param int  $form_id             Form ID.
-	 * @param bool $skip_embedded_check Whether to skip checking if the form is embedded in another form.
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
 	 *
 	 * @return string[]
 	 */
-	private function get_search_strings_for_form( $form_id, $skip_embedded_check = false ) {
-		$query_strings = array(
+	protected function get_search_strings_for_form( $form_id ) {
+		return $this->get_base_search_strings_for_form( $form_id );
+	}
+
+	/**
+	 * Gets the base search strings for a form inside a post.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return string[]
+	 */
+	protected function get_base_search_strings_for_form( $form_id ) {
+		return array(
 			'[formidable id=' . $form_id . ']',
 			'[formidable id=' . $form_id . ' ',
 			'[formidable id="' . $form_id . '"',
 			"[formidable id='" . $form_id . "'",
 			'<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"',
 		);
-
-		if ( $skip_embedded_check ) {
-			return $query_strings;
-		}
-
-		$forms_contain_this = $this->get_forms_contain_embedded_form( $form_id );
-
-		if ( ! $forms_contain_this ) {
-			return $query_strings;
-		}
-
-		foreach ( $forms_contain_this as $form_contain_this ) {
-			$query_strings = array_merge( $query_strings, $this->get_search_strings_for_form( $form_contain_this, true ) );
-		}
-
-		return $query_strings;
-	}
-
-	/**
-	 * Gets forms that contain the given form as an embedded form.
-	 *
-	 * @since x.x
-	 *
-	 * @param int $embedded_form_id The ID of the embedded form.
-	 *
-	 * @return array
-	 */
-	protected function get_forms_contain_embedded_form( $embedded_form_id ) {
-		// This is a Pro feature for nested forms. Return empty array in Lite.
-		return array();
 	}
 
 	/**
