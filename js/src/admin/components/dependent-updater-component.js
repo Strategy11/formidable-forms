@@ -62,16 +62,16 @@ export default class frmStyleDependentUpdaterComponent {
 	 * @return {string} The detected format: 'rgba', 'rgb', 'hsla', 'hsl', or 'hex'.
 	 */
 	detectColorFormat( value ) {
-		if ( /^rgba/.test( value ) ) {
+		if ( value.startsWith( 'rgba' ) ) {
 			return 'rgba';
 		}
-		if ( /^rgb/.test( value ) ) {
+		if ( value.startsWith( 'rgb' ) ) {
 			return 'rgb';
 		}
-		if ( /^hsla/.test( value ) ) {
+		if ( value.startsWith( 'hsla' ) ) {
 			return 'hsla';
 		}
-		if ( /^hsl/.test( value ) ) {
+		if ( value.startsWith( 'hsl' ) ) {
 			return 'hsl';
 		}
 		return 'hex';
