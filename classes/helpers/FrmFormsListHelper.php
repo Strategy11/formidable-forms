@@ -689,6 +689,10 @@ class FrmFormsListHelper extends FrmListHelper {
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$posts = $wpdb->get_results( "SELECT ID,post_title,post_name FROM $wpdb->posts WHERE $where" );
 
+		if ( ! is_array( $posts ) ) {
+			return array();
+		}
+
 		/**
 		 * @since x.x
 		 *
