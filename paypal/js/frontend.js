@@ -1101,7 +1101,6 @@
 
 		// Check if Apple Pay is available on the device.
 		if ( 'undefined' === typeof ApplePaySession ) {
-			container.innerHTML = '<span class="frm_error">Apple Pay is not available on this device.</span>';
 			return;
 		}
 
