@@ -131,4 +131,30 @@ class FrmHtmlHelper {
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
+
+	/**
+	 * Renders an NPS 0-10 radio scale. Enqueues the component stylesheet so callers
+	 * don't need to coordinate a separate asset handle.
+	 *
+	 * @since 6.26.1
+	 *
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	public static function echo_nps( $args = array() ) {
+		wp_enqueue_style( 'formidable-lite-nps', FrmAppHelper::plugin_url() . '/css/components/nps.css', array(), FrmAppHelper::plugin_version() );
+
+		$defaults = array(
+			'id'                 => '',
+			'class'              => '',
+			'name'               => 'nps_score',
+			'value'              => '0',
+			'negative_statement' => __( 'Not satisfied', 'formidable' ),
+			'positive_statement' => __( 'Very satisfied', 'formidable' ),
+		);
+		$args     = wp_parse_args( $args, $defaults );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/nps.php';
+	}
 }
