@@ -231,6 +231,7 @@ class FrmPayPalLiteAppController {
 		$shipping            = self::get_shipping_data_from_posted_values( $action );
 		$shipping_preference = self::get_shipping_preference( $action );
 		$pricing_data        = self::get_pricing_data_from_posted_values( $form_id );
+		$description         = self::process_shortcodes_for_action( $action->post_content['description'] ?? '', $action );
 
 		if ( 0.0 === floatval( $amount ) ) {
 			wp_send_json_error( __( 'Order amount cannot be zero.', 'formidable' ) );
@@ -240,7 +241,7 @@ class FrmPayPalLiteAppController {
 		$amount   = number_format( floatval( $amount ), 2, '.', '' );
 		$currency = strtoupper( $action->post_content['currency'] );
 
-		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data, $shipping );
+		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data, $shipping, $description );
 
 		if ( class_exists( 'FrmLog' ) ) {
 			$log = new FrmLog();
@@ -624,13 +625,14 @@ class FrmPayPalLiteAppController {
 
 		// Pass $product_name, $interval and $interval_count to the helper
 		// As well as trial period and the maximum number of payments.
-		// Also send subscriber email.
+		// Also send subscriber email and description.
 		$product_name   = self::process_shortcodes_for_action( $action->post_content['product_name'] ?? '', $action );
 		$interval       = $action->post_content['interval'] ?? '';
 		$interval_count = $action->post_content['interval_count'] ?? 1;
 		$trial_period   = $action->post_content['trial_interval_count'] ?? '';
 		$payment_limit  = $action->post_content['payment_limit'] ?? '';
 		$product_type   = $action->post_content['product_type'] ?? 'SERVICE';
+		$description    = self::process_shortcodes_for_action( $action->post_content['description'] ?? '', $action );
 
 		if ( ! $product_name ) {
 			wp_send_json_error( __( 'A product name is required for subscriptions. Please update your PayPal action settings.', 'formidable' ) );
@@ -655,6 +657,7 @@ class FrmPayPalLiteAppController {
 			'payment_limit'       => $payment_limit,
 			'payer'               => self::get_payer_data_from_posted_values( $action ),
 			'shipping_preference' => self::get_shipping_preference( $action ),
+			'description'         => $description,
 		);
 
 		$vault_setup_token = FrmAppHelper::get_post_param( 'vault_setup_token', '', 'sanitize_text_field' );
