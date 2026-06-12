@@ -389,10 +389,15 @@ class FrmAppController {
 			$upgrade_content = $is_expired ? 'renew' : 'upgrade';
 			$upgrade_link    = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
 
+			$utm = array(
+				'medium'  => 'plugin-row',
+				'content' => $upgrade_content,
+			);
+
 			if ( $upgrade_link ) {
-				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, array( 'medium' => 'plugin-row', 'content' => $upgrade_content ) );
+				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
 			} else {
-				$upgrade_link = FrmAppHelper::admin_upgrade_link( array( 'campaign' => 'plugin-row', 'content' => $upgrade_content ) );
+				$upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
 			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
