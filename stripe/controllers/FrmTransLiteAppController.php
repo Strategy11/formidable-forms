@@ -62,6 +62,11 @@ class FrmTransLiteAppController {
 		$frm_sub               = new FrmTransLiteSubscription();
 		$frm_payment           = new FrmTransLitePayment();
 		$overdue_subscriptions = $frm_sub->get_overdue_subscriptions();
+
+		if ( ! $overdue_subscriptions && ! $frm_sub->get_active_subscriptions() ) {
+			return;
+		}
+
 		FrmTransLiteLog::log_message( 'Overdue Subscription Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
 
 		foreach ( $overdue_subscriptions as $sub ) {
