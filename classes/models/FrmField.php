@@ -134,6 +134,14 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'file-upload-field-preview.webp',
 				'learn-more'   => 'features/wordpress-multiple-file-upload-form',
 			),
+			'audio'           => array(
+				'name' => __( 'Audio', 'formidable' ),
+				'icon' => 'frm_icon_font frm-audio-field-icon',
+			),
+			'camera'          => array(
+				'name' => __( 'Camera', 'formidable' ),
+				'icon' => 'frm_icon_font frm-camera-field-icon',
+			),
 			'ranking'         => array(
 				'name'         => __( 'Ranking', 'formidable' ),
 				'icon'         => 'frmfont frm_chart_bar_icon frm_show_upgrade',
