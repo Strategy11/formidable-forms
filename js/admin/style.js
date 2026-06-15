@@ -745,6 +745,16 @@
 				dropdownMenuOptions.push( { anchor: editOption, type: 'edit' } );
 			}
 
+			// Add Edit with AI option if both AI and API add-ons are active.
+			if ( shouldShowEditWithAI() ) {
+				const editWithAiOption = a( {
+					text: __( 'Edit with AI', 'formidable' )
+				} );
+				addIconToOption( editWithAiOption, 'frm_ai_icon' );
+				onClickPreventDefault( editWithAiOption, () => openEditWithAIModal( data.styleId ) );
+				dropdownMenuOptions.push( { anchor: editWithAiOption, type: 'edit_with_ai' } );
+			}
+
 			const resetOption = a( {
 				text: __( 'Reset to Defaults', 'formidable' )
 			} );
@@ -1636,6 +1646,31 @@
 			// Add an event listener for future changes
 			select.addEventListener( 'change', () => changeSelectColor( select ) );
 		} );
+	}
+
+	/**
+	 * Check if both AI and API add-ons are active to show Edit with AI option.
+	 *
+	 * @return {boolean} True if both add-ons are active.
+	 */
+	function shouldShowEditWithAI() {
+		// Check if the AI add-on is loaded and if the API add-on is active
+		return 'undefined' !== typeof frmAIEditStyleVars && frmAIEditStyleVars.ai_addon_active && frmAIEditStyleVars.api_addon_active;
+	}
+
+	/**
+	 * Open the Edit with AI modal.
+	 *
+	 * @param {string} styleId The style ID to edit.
+	 * @return {void}
+	 */
+	function openEditWithAIModal( styleId ) {
+		if ( 'undefined' === typeof frmAIEditStyle ) {
+			console.error( 'AI Edit Style module not loaded' );
+			return;
+		}
+
+		frmAIEditStyle.openModal( styleId );
 	}
 
 	// Hook into the styleInit function in formidable_admin.js
