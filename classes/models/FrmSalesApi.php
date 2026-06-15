@@ -72,7 +72,7 @@ class FrmSalesApi extends FrmFormApi {
 	/**
 	 * If the last check was a rate limit, we'll need to check again sooner.
 	 *
-	 * @since 6.25.1
+	 * @since x.x
 	 *
 	 * @param array $addons
 	 *
