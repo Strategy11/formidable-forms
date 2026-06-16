@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param array $align_options
 	 * @param array $atts
@@ -96,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm7 frm_form_field">
 	<?php
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param array $align_options
 	 * @param array $atts

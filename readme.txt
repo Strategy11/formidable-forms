@@ -4,7 +4,7 @@ Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.31
+Stable tag: 6.32
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -364,6 +364,22 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.32 =
+* New: The form listing table now includes new Embeds and List Settings columns, for displaying every post and page where a form is embedded, and an added gear icon for controlling screen options.
+* New: The generated Formidable CSS file can now work from the uploads directory instead of the plugin directory. This will automatically work based on the DISALLOW_FILE_MODS constant, and can additionally be controlled using a new frm_add_css_to_uploads_dir filter.
+* New: Field errors will now get removed automatically on change events regardless of the JS validation setting.
+* Fix: The aria-describedby attribute would not update properly when a form was submitted with errors for fields with multiple inputs.
+* Fix: A small styling rule has been added to prevent HTML fields from overflowing past their container when using long strings.
+* Fix: Color pickers used on the form styler page have been updated to help maintain the active color format, preventing automatic conversions from rgb to hex.
+* Fix: Validation for Square has been modified to prevent the submit button from remaining disabled when the Square inputs do not include a postal code input, which happens in some countries including Japan and Australia.
+* Fix: A cannot modify header information - headers already sent by FrmTransLiteHooksController.php:108 warning has been fixed.
+* Fix: Custom CSS saved in form styles would not appear as expected after duplicating, showing additional CSS selectors for the original style.
+* Fix: A possible TypeError when calling wp_is_valid_utf8 with a null value has been fixed.
+* Fix: A new form style would not properly rename when it did not yet have a style ID.
+* Fix: PayPal Commerce has been updated to prevent issues where Google Pay and Apple Pay options would not appear if the SDKs had not loaded in time.
+* Fix: PayPal Commerce orders and products were not including the payment action description setting.
+* The overdue subscription cron message will no longer get logged when there are no active subscriptions.
+
 = 6.31 =
 * New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
 * New: Form action settings have been redesigned.
@@ -382,20 +398,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Custom style CSS would not properly prefix selectors when ::before or ::after were used.
 * Fix: Attempting to refund a Square payment would result in a fatal error when the Stripe or Authorize.Net add-ons were also active.
 * Fix: A check has been added to prevent a possible Cannot access offset of type string on string fatal PHP error issue.
-
-= 6.29 =
-* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
-* Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
-* Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
-* Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
-* Fix: The field options dropdown for the far left field would render underneath the field settings sidebar in rows with a lot of fields.
-* Fix: An Undefined array key "slug" PHP Warning has been fixed.
-* Fix: When a missing payment field is automatically added to a form with a payment action, the new field would incorrectly appear below the submit button.
-* Breaking: The deprecated FrmDb constructor method has been removed.
-
-= 6.28 =
-* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
-* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

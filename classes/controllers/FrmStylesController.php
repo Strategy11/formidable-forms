@@ -23,7 +23,7 @@ class FrmStylesController {
 	/**
 	 * Cache of the active style object keyed by form ID.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @var array
 	 */
@@ -700,7 +700,7 @@ class FrmStylesController {
 	 *
 	 * Falls back to the auto-generated key when no style name was provided so the scope is never empty.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param string $fallback The auto-generated post_name to use when no style name is chosen.
 	 *
@@ -1285,7 +1285,7 @@ class FrmStylesController {
 	/**
 	 * Get the active style object for a field's form.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param array|int $field The 'field' array.
 	 *
@@ -1316,7 +1316,7 @@ class FrmStylesController {
 	/**
 	 * Get the style setting key that stores the alignment for a field type.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param string $field_type
 	 *

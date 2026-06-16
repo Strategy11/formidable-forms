@@ -87,7 +87,7 @@
 	 * Update the 'mode' query param in the current URL based on the show description toggle.
 	 * The screen-options redirect uses HTTP_REFERER, so the updated URL is preserved after submit.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return {void}
 	 */

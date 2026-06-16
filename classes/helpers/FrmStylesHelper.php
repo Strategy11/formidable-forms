@@ -929,7 +929,7 @@ class FrmStylesHelper {
 	/**
 	 * Get the raw alignment value stored in the active style for a radio or checkbox field.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param array|int $field The 'field' array.
 	 *

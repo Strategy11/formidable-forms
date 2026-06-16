@@ -1,7 +1,7 @@
 /**
  * Runs validation and handles UI feedback.
  *
- * @since x.x
+ * @since 6.32
  *
  * @param {HTMLElement} field    The field element being validated.
  * @param {Function}    getError Function that returns error message or empty string.
@@ -24,7 +24,7 @@ export function validateField( field, getError ) {
 /**
  * Returns focus to the invalid field once the info modal is dismissed.
  *
- * @since x.x
+ * @since 6.32
  *
  * @param {HTMLElement} field The invalid field element.
  *
