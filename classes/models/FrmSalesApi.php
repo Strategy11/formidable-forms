@@ -71,6 +71,7 @@ class FrmSalesApi extends FrmFormApi {
 
 	/**
 	 * If the last check was a rate limit, we'll need to check again sooner.
+	 * Other APIs use the FrmFormApi function which uses a 5 minute timeout. But for Sales, we can use 1 hour.
 	 *
 	 * @since x.x
 	 *
