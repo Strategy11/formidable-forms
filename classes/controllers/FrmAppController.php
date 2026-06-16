@@ -390,8 +390,8 @@ class FrmAppController {
 			$upgrade_link    = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
 
 			$utm = array(
-				'medium'  => 'plugin-row',
-				'content' => $upgrade_content,
+				'campaign' => 'plugin-row',
+				'content'  => $upgrade_content,
 			);
 
 			if ( $upgrade_link ) {
