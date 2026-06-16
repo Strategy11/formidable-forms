@@ -51,7 +51,7 @@
 	},
 	"devDependencies": {
 		"@10up/cypress-wp-utils": "^0.3.0",
-		"@babel/core": "7.25.7",
+		"@babel/core": "7.29.6",
 		"@babel/eslint-parser": "^7.28.6",
 		"@babel/plugin-syntax-jsx": "7.25.7",
 		"@babel/plugin-transform-react-jsx": "^7.22.15",
