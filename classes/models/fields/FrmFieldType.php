@@ -98,7 +98,7 @@ abstract class FrmFieldType {
 	 * its own front_field_input from having it added a second time by
 	 * add_aria_description_to_inputs.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @var bool
 	 */
@@ -1193,7 +1193,7 @@ DEFAULT_HTML;
 	 * (checkboxes, radios) in one place, since both produce their final HTML
 	 * through this method.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param array  $args       Rendering context. May include `field_id`, `html_id` and `errors`.
 	 * @param string $input_html Full field HTML. Passed by reference.
@@ -1599,7 +1599,7 @@ DEFAULT_HTML;
 	 * Link input to field description for screen readers.
 	 *
 	 * @since 3.0
-	 * @since x.x Function privacy changed from `protected` to `public`.
+	 * @since 6.32 Function privacy changed from `protected` to `public`.
 	 *
 	 * @param array  $args
 	 * @param string $input_html

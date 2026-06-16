@@ -8,7 +8,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * The transient name that stores data for which posts a form is embedded in.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @var string
 	 */
@@ -366,7 +366,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
 	 * @since 6.0
-	 * @deprecated x.x We moved these actions to other places. This column will show if there is a filter added to the hook.
+	 * @deprecated 6.32 We moved these actions to other places. This column will show if there is a filter added to the hook.
 	 *
 	 * @param stdClass $form
 	 *
@@ -445,7 +445,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Get the HTML for the Settings column in the form list.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return string
 	 */
@@ -581,7 +581,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Gets posts or pages that contain the form shortcode.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param stdClass $form Form object.
 	 *
@@ -637,7 +637,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Gets search strings for a form inside a post.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param int $form_id Form ID.
 	 *
@@ -650,7 +650,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Gets the base search strings for a form inside a post.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param int $form_id Form ID.
 	 *
@@ -694,7 +694,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.32
 		 *
 		 * @param stdClass[] $posts
 		 * @param array      $args
@@ -702,7 +702,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$filtered_posts = apply_filters( 'frm_get_posts_contain_form', $posts, compact( 'form' ) );
 
 		if ( ! is_array( $filtered_posts ) ) {
-			_doing_it_wrong( 'frm_get_posts_contain_form', 'Filter should return an array.', 'x.x' );
+			_doing_it_wrong( 'frm_get_posts_contain_form', 'Filter should return an array.', '6.32' );
 			return $posts;
 		}
 
@@ -712,7 +712,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Maybe clear the embed posts transient.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.

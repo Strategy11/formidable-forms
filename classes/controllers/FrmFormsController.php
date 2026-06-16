@@ -51,7 +51,7 @@ class FrmFormsController {
 	/**
 	 * Runs on admin head of the formidable forms page.
 	 *
-	 * @since x.x This adds screen options.
+	 * @since 6.32 This adds screen options.
 	 *
 	 * @return void
 	 */
@@ -3716,7 +3716,7 @@ class FrmFormsController {
 	/**
 	 * Prints necessary templates for the forms list page.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return void
 	 */

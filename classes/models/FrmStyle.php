@@ -424,7 +424,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return array
 	 */
@@ -443,7 +443,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param bool $add_css_to_uploads_dir
 	 *
@@ -459,13 +459,13 @@ class FrmStyle {
 	/**
 	 * Returns true if generated css file should be saved in the uploads directory.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return bool
 	 */
 	public static function add_css_to_uploads_dir() {
 		/**
-		 * @since x.x
+		 * @since 6.32
 		 *
 		 * @param bool $add_css_to_uploads_dir
 		 */
@@ -473,7 +473,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return string
 	 */
@@ -482,7 +482,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return string
 	 */

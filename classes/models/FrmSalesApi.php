@@ -70,6 +70,23 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
+	 * If the last check was a rate limit, we'll need to check again sooner.
+	 * Other APIs use the FrmFormApi function which uses a 5 minute timeout. But for Sales, we can use 1 hour.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $addons
+	 *
+	 * @return string
+	 */
+	protected function get_cache_timeout( $addons ) {
+		if ( isset( $addons['response_code'] ) && 429 === $addons['response_code'] ) {
+			return '+1 hour';
+		}
+		return $this->cache_timeout;
+	}
+
+	/**
 	 * @since 6.17
 	 *
 	 * @return void

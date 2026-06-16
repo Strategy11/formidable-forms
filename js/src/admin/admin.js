@@ -11496,7 +11496,7 @@ window.frmAdminBuildJS = function() {
 		},
 
 		/**
-		 * @since x.x
+		 * @since 6.32
 		 */
 		settings: {
 			validate: {

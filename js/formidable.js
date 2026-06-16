@@ -306,7 +306,7 @@ function frmFrontFormJS() {
 	 *
 	 * Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
 	 *
-	 * @since x.x Added the `addErrors` parameter.
+	 * @since 6.32 Added the `addErrors` parameter.
 	 *
 	 * @param {HTMLElement} field
 	 * @param {boolean}     addErrors Whether to add new errors. Defaults to `true`.
@@ -1258,7 +1258,7 @@ function frmFrontFormJS() {
 	/**
 	 * Updates the aria-describedby attribute, removing the target element ID.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param {HTMLElement} el The target element that is removed from the aria-describedby data.
 	 * @return {void}
