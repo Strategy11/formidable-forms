@@ -244,7 +244,7 @@ class FrmFieldsController {
 	 * used. When the field has an explicit alignment (Pro), the frm_build_field_class filter
 	 * applies it instead. When Pro is not installed, any saved alignment is treated as empty.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param array        $field
 	 * @param FrmFieldType $field_info

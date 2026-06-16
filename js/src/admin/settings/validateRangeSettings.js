@@ -12,7 +12,7 @@ import { getFieldId, getFieldType } from './utils';
 /**
  * Gets the default values for range settings validation.
  *
- * @since x.x
+ * @since 6.32
  *
  * @param {HTMLElement} singleSettings The single settings element.
  *
@@ -29,7 +29,7 @@ export function getRangeSettingsDefaults( singleSettings ) {
 	/**
 	 * Filters the default values for range settings validation.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param {Object}      defaultSettings        The default settings.
 	 * @param {Object}      context                Additional context.
@@ -44,7 +44,7 @@ export function getRangeSettingsDefaults( singleSettings ) {
 /**
  * Validates number range setting.
  *
- * @since x.x
+ * @since 6.32
  *
  * @param {HTMLElement} field The field element being validated.
  */
@@ -81,7 +81,7 @@ export function validateNumberRangeSetting( field ) {
 /**
  * Validates step setting.
  *
- * @since x.x
+ * @since 6.32
  *
  * @param {HTMLElement} field The field element being validated.
  */
@@ -131,7 +131,7 @@ export function validateStepSetting( field ) {
  * filter so add-ons (like Pro) can contribute additional checks (e.g. gap range)
  * without the core needing to know anything about them.
  *
- * @since x.x
+ * @since 6.32
  *
  * @param {HTMLElement} field The field element being validated.
  *
@@ -146,7 +146,7 @@ export function validateRangeSettings( field ) {
 	/**
 	 * Filters the range settings validation result so add-ons can add their own checks.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param {string}      errorMessage  The current error message, or empty string when valid.
 	 * @param {Object}      context       Additional context.
