@@ -5,12 +5,12 @@
 * New: Field errors will now get removed automatically on change events regardless of the JS validation setting.
 * Fix: The aria-describedby attribute would not update properly when a form was submitted with errors for fields with multiple inputs.
 * Fix: A small styling rule has been added to prevent HTML fields from overflowing past their container when using long strings.
-* Fix: Color pickers used on the form styler page have been updated to help maintain the active color format, preventing automatic conversions from rgb to hex.
+* Fix: Color pickers used on the styler page have been updated to help maintain the active color format, preventing automatic conversions from rgb to hex.
 * Fix: Validation for Square has been modified to prevent the submit button from remaining disabled when the Square inputs do not include a postal code input, which happens in some countries including Japan and Australia.
 * Fix: A cannot modify header information - headers already sent by FrmTransLiteHooksController.php:108 warning has been fixed.
-* Fix: Custom CSS saved in form styles would not appear as expected after duplicating, showing additional CSS selectors for the original style.
+* Fix: Custom CSS saved in styles would not appear as expected after duplicating, showing additional CSS selectors for the original style.
 * Fix: A possible TypeError when calling wp_is_valid_utf8 with a null value has been fixed.
-* Fix: A new form style would not properly rename when it did not yet have a style ID.
+* Fix: A new style would not properly rename when it did not yet have a style ID.
 * Fix: PayPal Commerce has been updated to prevent issues where Google Pay and Apple Pay options would not appear if the SDKs had not loaded in time.
 * Fix: PayPal Commerce orders and products were not including the payment action description setting.
 * The overdue subscription cron message will no longer get logged when there are no active subscriptions.
