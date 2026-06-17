@@ -662,6 +662,11 @@ class FrmStrpLiteConnectHelper {
 	 * @return string 'test' or 'live'
 	 */
 	private static function get_mode_value_from_post() {
+		if ( ! current_user_can( 'frm_change_settings' ) && ! current_user_can( 'administrator' ) ) {
+			// Prevent the mode from being changed if the user doesn't have permission.
+			return FrmStrpLiteAppHelper::active_mode();
+		}
+	
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmStrpLiteAppHelper::active_mode();
