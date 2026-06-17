@@ -615,7 +615,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return false;
 		}
 
-		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED', 'APPROVAL_PENDING' ), true );
+		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED' ), true );
 	}
 
 	/**
@@ -629,11 +629,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool
 	 */
 	private static function validate_subscription_amount( $subscription, $expected_amount ) {
-		// Vault-created subscriptions in APPROVAL_PENDING have no billing details yet.
-		if ( isset( $subscription->status ) && 'APPROVAL_PENDING' === $subscription->status ) {
-			return true;
-		}
-
 		$subscription_amount = $subscription->billing_info->last_payment->amount->value ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value ?? '';
 
 		if ( ! $subscription_amount ) {
