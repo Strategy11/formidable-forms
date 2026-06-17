@@ -375,6 +375,7 @@ class FrmStylesHelper {
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
+		$original_hex = $hex;
 
 		if ( str_starts_with( $hex, 'rgba(' ) ) {
 			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
@@ -388,6 +389,12 @@ class FrmStylesHelper {
 		// Normalize into a six character long hex string
 		$hex = str_replace( '#', '', $hex );
 		self::fill_hex( $hex );
+
+		// Validate hex string contains only valid hex characters
+		if ( ! FrmAppHelper::ctype_xdigit( $hex ) ) {
+			// Return the original value unchanged if it's not valid hex
+			return $original_hex;
+		}
 
 		// Split into three parts: R, G and B
 		$color_parts = str_split( $hex, 2 );
@@ -429,7 +436,14 @@ class FrmStylesHelper {
 			$color = $hsl_to_hex;
 		}
 
+		// Normalize hex string by removing # prefix
+		$color = str_replace( '#', '', $color );
 		self::fill_hex( $color );
+
+		// Validate hex string contains only valid hex characters
+		if ( ! FrmAppHelper::ctype_xdigit( $color ) ) {
+			return 0;
+		}
 
 		$c_r = hexdec( substr( $color, 0, 2 ) );
 		$c_g = hexdec( substr( $color, 2, 2 ) );
