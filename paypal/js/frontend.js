@@ -1192,6 +1192,12 @@
 					await applePayInstance.initiatePayerAction( { orderId } );
 				}
 
+				if ( approvalStatus !== 'APPROVED' && approvalStatus !== 'COMPLETED' ) {
+					session.completePayment( ApplePaySession.STATUS_FAILURE );
+					sessionCompleted = true;
+					return;
+				}
+
 				session.completePayment( ApplePaySession.STATUS_SUCCESS );
 				sessionCompleted = true;
 
