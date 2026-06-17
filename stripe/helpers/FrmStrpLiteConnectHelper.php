@@ -348,7 +348,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
+		$mode = FrmStrpLiteAppHelper::active_mode();
 		return array(
 			'account_id'      => get_option( self::get_account_id_option_name( $mode ) ),
 			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
@@ -661,12 +661,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @return string 'test' or 'live'
 	 */
-	private static function get_mode_value_from_post() {
-		if ( ! current_user_can( 'frm_change_settings' ) && ! current_user_can( 'administrator' ) ) {
-			// Prevent the mode from being changed if the user doesn't have permission.
-			return FrmStrpLiteAppHelper::active_mode();
-		}
-	
+	private static function get_mode_value_from_post() {	
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmStrpLiteAppHelper::active_mode();
