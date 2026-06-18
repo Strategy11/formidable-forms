@@ -45,12 +45,23 @@ class FrmTransLiteAppController {
 	}
 
 	/**
-	 * Remove the cron when the plugin is deactivated.
+	 * Remove the payment cron when all gateways are disconnected.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode 'test' or 'live'.
 	 *
 	 * @return void
 	 */
-	public static function remove_cron() {
-		wp_clear_scheduled_hook( 'frm_payment_cron' );
+	public static function maybe_remove_payment_cron( $gateway, $mode ) {
+		$stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+		$square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$paypal_connected = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+
+		if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
+			wp_clear_scheduled_hook( 'frm_payment_cron' );
+		}
 	}
 
 	/**
@@ -230,5 +241,17 @@ class FrmTransLiteAppController {
 			.frm_field_box:has(li[data-ftype="gateway"]:only-child) { display: none; }
 			'
 		);
+	}
+
+	/**
+	 * Remove the cron when the plugin is deactivated.
+	 *
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function remove_cron() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		wp_clear_scheduled_hook( 'frm_payment_cron' );
 	}
 }
