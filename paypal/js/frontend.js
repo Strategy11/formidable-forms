@@ -155,7 +155,11 @@
 		}
 
 		// 2. Build the radio selector UI, then render marks after it's in the DOM.
+		// Hide the radio group if there's only one payment method available.
 		const radioGroup = buildRadioGroup();
+		if ( paymentMethods.size === 1 ) {
+			radioGroup.style.display = 'none';
+		}
 		cardElement.append( radioGroup );
 		renderMarks();
 
