@@ -290,7 +290,6 @@ class FrmStrpLiteConnectHelper {
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
-
 	/**
 	 * @since 6.5
 	 *
