@@ -57,32 +57,6 @@ class FrmPayPalLiteSettingsController {
 	}
 
 	/**
-	 * Sync test_mode after PayPal add-on saves its settings.
-	 * This runs with high priority to ensure it runs after the add-on's process_form.
-	 *
-	 * @param array $params
-	 *
-	 * @return void
-	 */
-	public static function sync_test_mode_after_addon( $params ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['frm_paypal_test_mode'] ) ) {
-			return;
-		}
-
-		$test_mode = absint( $_POST['frm_paypal_test_mode'] );
-		$options = get_option( 'frm_paypal_options' );
-
-		if ( ! is_object( $options ) ) {
-			$options = new stdClass();
-		}
-
-		// Preserve test_mode which the add-on's update() method doesn't handle
-		$options->test_mode = $test_mode;
-		update_option( 'frm_paypal_options', $options );
-	}
-
-	/**
 	 * Preserve test_mode when the PayPal add-on updates frm_paypal_options.
 	 * This hooks into update_option to ensure test_mode isn't lost.
 	 *
