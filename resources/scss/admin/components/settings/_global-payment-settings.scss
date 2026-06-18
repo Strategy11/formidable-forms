@@ -40,7 +40,7 @@
 }
 
 /**
- * Hide Safari contacts auto-fill button for inputs with autocomplete="off".
+ * Hide Safari contacts auto-fill button for payment action inputs with email in the name attribute.
  */
 .frm_single_payment_settings input[name*="email"]::-webkit-contacts-auto-fill-button {
 	visibility: hidden;
