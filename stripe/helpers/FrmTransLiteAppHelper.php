@@ -646,7 +646,7 @@ class FrmTransLiteAppHelper {
 	 * @since x.x
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
-	 * @param string $mode 'test' or 'live'
+	 * @param string $mode 'test' or 'live'.
 	 *
 	 * @return void
 	 */
