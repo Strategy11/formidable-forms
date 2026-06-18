@@ -1454,6 +1454,7 @@
 
 		thisForm.append( paymentSourceInput );
 
+		// If using the PayPal buttons to submit, there will not be a submitEvent.
 		if ( ! submitEvent ) {
 			submitEvent = new Event( 'submit', { cancelable: true, bubbles: true } );
 			submitEvent.target = thisForm;
