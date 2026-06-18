@@ -71,10 +71,12 @@ class FrmPayPalLiteSettingsController {
 		}
 
 		// If old value had test_mode but new value doesn't, preserve it
-		if ( isset( $old_value->test_mode ) && ! isset( $new_value->test_mode ) ) {
-			$new_value->test_mode = $old_value->test_mode;
-			// Update the option with the preserved test_mode
-			update_option( 'frm_paypal_options', $new_value );
+		if ( ! isset( $old_value->test_mode ) || isset( $new_value->test_mode ) ) {
+			return;
 		}
+
+		$new_value->test_mode = $old_value->test_mode;
+		// Update the option with the preserved test_mode
+		update_option( 'frm_paypal_options', $new_value );
 	}
 }
