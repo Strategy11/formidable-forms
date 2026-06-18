@@ -1781,8 +1781,6 @@
 			return;
 		}
 
-		console.log( 'Handle form submission', event );
-
 		event.preventDefault();
 		event.stopPropagation();
 
