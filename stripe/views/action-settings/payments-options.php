@@ -237,7 +237,7 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>">
 			<?php esc_html_e( 'Email', 'formidable' ); ?>
 		</label>
-		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'email' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email'] ); ?>" class="frm_not_email_to large-text" autocomplete="off" />
+		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'email' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email'] ); ?>" class="frm_not_email_to large-text" />
 	</p>
 
 	<?php
