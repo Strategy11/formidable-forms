@@ -65,6 +65,8 @@ class FrmPayPalLiteSettings {
 	public function get_options() {
 		$settings = get_option( 'frm_' . $this->param() . '_options' );
 
+		error_log( 'PayPal Lite get_options: raw settings = ' . print_r( $settings, true ) );
+
 		if ( is_object( $settings ) ) {
 			$this->set_default_options( $settings );
 		} elseif ( $settings ) {
@@ -74,6 +76,8 @@ class FrmPayPalLiteSettings {
 			$this->set_default_options( true );
 			$this->store();
 		}
+
+		error_log( 'PayPal Lite get_options: final test_mode = ' . $this->settings->test_mode );
 
 		return $this->settings;
 	}
@@ -85,14 +89,15 @@ class FrmPayPalLiteSettings {
 	 */
 	public function update( $params ) {
 		$settings = $this->default_options();
+		$param    = $this->param();
 
 		foreach ( $settings as $setting => $default ) {
-			if ( isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
-				$this->settings->{$setting} = sanitize_text_field( $params[ 'frm_' . $this->param() . '_' . $setting ] );
+			if ( isset( $params[ 'frm_' . $param . '_' . $setting ] ) ) {
+				$this->settings->{$setting} = sanitize_text_field( $params[ 'frm_' . $param . '_' . $setting ] );
 			}
 		}
 
-		$this->settings->test_mode = isset( $params[ 'frm_' . $this->param() . '_test_mode' ] ) ? absint( $params[ 'frm_' . $this->param() . '_test_mode' ] ) : 0;
+		$this->settings->test_mode = isset( $params[ 'frm_' . $param . '_test_mode' ] ) ? absint( $params[ 'frm_' . $param . '_test_mode' ] ) : 0;
 	}
 
 	/**

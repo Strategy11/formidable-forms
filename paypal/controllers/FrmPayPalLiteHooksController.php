@@ -32,6 +32,11 @@ class FrmPayPalLiteHooksController {
 		// These are called explicitly below the Lite PayPal settings.
 		add_filter( 'frm_add_settings_section', 'FrmPayPalLiteSettingsController::add_settings_section', 99 );
 		add_action( 'frm_update_settings', 'FrmPayPalLiteSettingsController::process_form' );
+		// Hook with high priority to sync test_mode after add-on saves
+		add_action( 'frm_update_settings', 'FrmPayPalLiteSettingsController::sync_test_mode_after_addon', 999 );
+
+		// Hook into update_option to preserve test_mode when add-on saves
+		add_action( 'update_option_frm_paypal_options', 'FrmPayPalLiteSettingsController::preserve_test_mode_on_update', 10, 2 );
 
 		add_filter( 'frm_before_save_payment_action', 'FrmPayPalLiteActionsController::before_save_settings', 20, 2 );
 
