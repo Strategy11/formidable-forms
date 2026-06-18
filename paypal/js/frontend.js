@@ -1454,16 +1454,7 @@
 
 		thisForm.append( paymentSourceInput );
 
-		if ( ! submitEvent ) {
-			submitEvent = new Event( 'submit', { cancelable: true, bubbles: true } );
-			submitEvent.target = thisForm;
-		}
-
-		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			frmFrontForm.submitFormManual( submitEvent, thisForm );
-		} else {
-			thisForm.submit();
-		}
+		frmFrontForm.submitFormManual( submitEvent, thisForm );
 	}
 
 	/**
