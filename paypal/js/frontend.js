@@ -1454,6 +1454,11 @@
 
 		thisForm.append( paymentSourceInput );
 
+		if ( ! submitEvent ) {
+			submitEvent = new Event( 'submit', { cancelable: true, bubbles: true } );
+			submitEvent.target = thisForm;
+		}
+
 		frmFrontForm.submitFormManual( submitEvent, thisForm );
 	}
 
@@ -1775,6 +1780,8 @@
 		if ( selectedMethod !== 'card' ) {
 			return;
 		}
+
+		console.log( 'Handle form submission', event );
 
 		event.preventDefault();
 		event.stopPropagation();
