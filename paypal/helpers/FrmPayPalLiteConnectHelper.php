@@ -1117,9 +1117,7 @@ class FrmPayPalLiteConnectHelper {
 			return $status;
 		}
 
-		$additional_body = array(
-			'frm_paypal_api_mode' => $mode,
-		);
+		$additional_body = self::get_body_for_mode( $mode );
 
 		return self::post_with_authenticated_body( 'get_seller_status', $additional_body );
 	}
