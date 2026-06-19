@@ -223,7 +223,8 @@
 		const { cardFieldsAreSupported, buttonsAreEnabled, isRecurring } = opts;
 
 		// --- Card Fields ---
-		if ( cardFieldsAreSupported ) {
+		// Card fields are not supported for recurring payments
+		if ( cardFieldsAreSupported && ! isRecurring ) {
 			const cardFields = createCardFieldsSDKInstance();
 			if ( cardFields?.isEligible() ) {
 				cardFieldsInstance = cardFields;
