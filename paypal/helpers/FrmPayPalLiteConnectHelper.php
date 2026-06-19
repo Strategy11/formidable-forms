@@ -850,12 +850,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
-		return array(
-			'merchant_id'     => get_option( self::get_merchant_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
-		);
+		return self::get_body_for_mode( FrmPayPalLiteAppHelper::active_mode() );
 	}
 
 	/**
@@ -864,11 +859,6 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string 'test' or 'live'
 	 */
 	private static function get_mode_value_from_post() {
-		if ( ! current_user_can( 'frm_change_settings' ) && ! current_user_can( 'administrator' ) ) {
-			// Prevent the mode from being changed if the user doesn't have permission.
-			return FrmPayPalLiteAppHelper::active_mode();
-		}
-
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmPayPalLiteAppHelper::active_mode();
@@ -876,6 +866,24 @@ class FrmPayPalLiteConnectHelper {
 
 		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
 		return $test_mode ? 'test' : 'live';
+	}
+
+	/**
+	 * Get the standard body for unauthenticated requests that includes mode and passwords.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return array
+	 */
+	private static function get_body_for_mode( $mode ) {
+		return array(
+			'merchant_id'         => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_paypal_api_mode' => $mode,
+		);
 	}
 
 	/**
@@ -950,9 +958,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function disconnect() {
-		$additional_body = array(
-			'frm_paypal_api_mode' => self::get_mode_value_from_post(),
-		);
+		$additional_body = self::get_body_for_mode( self::get_mode_value_from_post() );
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
