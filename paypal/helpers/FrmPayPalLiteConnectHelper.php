@@ -77,7 +77,6 @@ class FrmPayPalLiteConnectHelper {
 			return true;
 		}
 
-		// TODO: Only render when we visit the PayPal tab.
 		$status = self::get_seller_status();
 
 		/*
