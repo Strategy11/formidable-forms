@@ -119,16 +119,20 @@ class FrmStyle {
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
 
-			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
-				$css_scope = 'frm_style_' . $new_instance['post_name'];
-				$new_instance['post_content']['single_style_custom_css'] = $css_scope_helper->nest( $new_instance['post_content']['single_style_custom_css'], $css_scope );
-			}
-
 			$new_instance['post_type']   = FrmStylesController::$post_type;
 			$new_instance['post_status'] = 'publish';
 
 			if ( ! $id ) {
-				$new_instance['post_name'] = $new_instance['post_title'];
+				// For a new style (including a duplicate), the post_name is derived from the title.
+				// Resolve slug uniqueness up front (WordPress appends -2, -3, etc. to duplicate slugs)
+				// so the CSS scope below matches the slug WordPress will actually store.
+				$slug                      = sanitize_title( $new_instance['post_title'] );
+				$new_instance['post_name'] = wp_unique_post_slug( $slug, 0, $new_instance['post_status'], $new_instance['post_type'], 0 );
+			}
+
+			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
+				$css_scope = 'frm_style_' . $new_instance['post_name'];
+				$new_instance['post_content']['single_style_custom_css'] = $css_scope_helper->nest( $new_instance['post_content']['single_style_custom_css'], $css_scope );
 			}
 
 			$default_settings = $this->get_defaults();
@@ -213,7 +217,7 @@ class FrmStyle {
 				} else {
 					$new_value = absint( $value );
 				}
-			} else {
+			} else { // phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				// Insert a value for alpha.
 				if ( $value_is_empty_string ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
@@ -392,9 +396,7 @@ class FrmStyle {
 	 * @return array
 	 */
 	public function get_color_settings() {
-		$defaults = $this->get_defaults();
-		$settings = array_keys( $defaults );
-
+		$settings = array_keys( $this->get_defaults() );
 		return array_filter( $settings, array( $this, 'is_color' ) );
 	}
 
@@ -414,16 +416,78 @@ class FrmStyle {
 		$this->clear_cache();
 
 		$css         = $this->get_css_content( $filename );
-		$create_file = new FrmCreateFile(
-			array(
-				'file_name'     => FrmStylesController::get_file_name(),
-				'new_file_path' => FrmAppHelper::plugin_path() . '/css',
-			)
-		);
+		$create_file = new FrmCreateFile( self::get_create_style_file_args() );
 		$create_file->create_file( $css );
 
 		update_option( 'frmpro_css', $css, false );
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
+	}
+
+	/**
+	 * @since 6.32
+	 *
+	 * @return array
+	 */
+	private static function get_create_style_file_args() {
+		$add_css_to_uploads_dir = self::add_css_to_uploads_dir();
+		$create_file_args       = array(
+			'file_name'     => FrmStylesController::get_file_name(),
+			'new_file_path' => self::get_generated_css_file_path( $add_css_to_uploads_dir ),
+		);
+
+		if ( $add_css_to_uploads_dir ) {
+			$create_file_args['folder_name'] = 'formidable/css';
+		}
+
+		return $create_file_args;
+	}
+
+	/**
+	 * @since 6.32
+	 *
+	 * @param bool $add_css_to_uploads_dir
+	 *
+	 * @return string
+	 */
+	public static function get_generated_css_file_path( $add_css_to_uploads_dir ) {
+		if ( $add_css_to_uploads_dir ) {
+			return self::target_css_uploads_dir();
+		}
+		return self::target_css_plugin_dir();
+	}
+
+	/**
+	 * Returns true if generated css file should be saved in the uploads directory.
+	 *
+	 * @since 6.32
+	 *
+	 * @return bool
+	 */
+	public static function add_css_to_uploads_dir() {
+		/**
+		 * @since 6.32
+		 *
+		 * @param bool $add_css_to_uploads_dir
+		 */
+		return apply_filters( 'frm_add_css_to_uploads_dir', ! wp_is_file_mod_allowed( 'frm_save_css_to_plugin_folder' ) );
+	}
+
+	/**
+	 * @since 6.32
+	 *
+	 * @return string
+	 */
+	private static function target_css_uploads_dir() {
+		return wp_upload_dir()['basedir'] . '/formidable/css';
+	}
+
+	/**
+	 * @since 6.32
+	 *
+	 * @return string
+	 */
+	private static function target_css_plugin_dir() {
+		return FrmAppHelper::plugin_path() . '/css';
 	}
 
 	/**

@@ -93,6 +93,18 @@ abstract class FrmFieldType {
 	protected $array_allowed = true;
 
 	/**
+	 * Whether the aria description has already been added to this field's
+	 * inputs during the current render. Prevents a field type that adds it in
+	 * its own front_field_input from having it added a second time by
+	 * add_aria_description_to_inputs.
+	 *
+	 * @since 6.32
+	 *
+	 * @var bool
+	 */
+	protected $aria_description_added = false;
+
+	/**
 	 * @var bool|null Whether or not draft fields should be hidden on the front end.
 	 */
 	private static $should_hide_draft_fields;
@@ -129,12 +141,14 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_type( $type ) {
-		if ( empty( $this->type ) ) {
-			$this->type = $this->get_field_column( 'type' );
+		if ( $this->type ) {
+			return;
+		}
 
-			if ( empty( $this->type ) && $type ) {
-				$this->type = $type;
-			}
+		$this->type = $this->get_field_column( 'type' );
+
+		if ( ! $this->type && $type ) {
+			$this->type = $type;
 		}
 	}
 
@@ -144,7 +158,7 @@ abstract class FrmFieldType {
 	 * @return void
 	 */
 	protected function set_field_id() {
-		if ( empty( $this->field ) ) {
+		if ( ! $this->field ) {
 			return;
 		}
 
@@ -386,10 +400,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function display_field_settings() {
-		$default_settings    = $this->default_field_settings();
-		$field_type_settings = $this->field_settings_for_type();
-
-		return array_merge( $default_settings, $field_type_settings );
+		return array_merge( $this->default_field_settings(), $this->field_settings_for_type() );
 	}
 
 	/**
@@ -427,10 +438,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		if ( ! $this->has_input ) {
-			return $this->no_input_settings();
-		}
-		return array();
+		return $this->has_input ? array() : $this->no_input_settings();
 	}
 
 	/**
@@ -643,7 +651,7 @@ DEFAULT_HTML;
 		return $this->should_continue_to_field_options(
 			array(
 				'field' => array(
-					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type'],
+					'type' => FrmField::get_field_type( $this->field ),
 				),
 			)
 		);
@@ -719,7 +727,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
-		$all_field_types = self::get_all_field_types();
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
@@ -727,7 +734,7 @@ DEFAULT_HTML;
 			printf(
 				/* translators: %s: Field type */
 				esc_html__( '%s Options', 'formidable' ),
-				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
+				esc_html( self::get_all_field_types()[ $args['display']['type'] ]['name'] )
 			);
 			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) );
 			?>
@@ -908,8 +915,7 @@ DEFAULT_HTML;
 			'placeholder'        => '',
 			'draft'              => 0,
 		);
-		$field_opts  = $this->extra_field_opts();
-		$opts        = array_merge( $opts, $field_opts );
+		$opts        = array_merge( $opts, $this->extra_field_opts() );
 		$filter_args = array(
 			'field' => $this->field,
 			'type'  => $this->type,
@@ -977,7 +983,14 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_field( $args ) {
-		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
+		/**
+		 * @since 6.31 Added $field parameter.
+		 *
+		 * @param bool   $show_normal_field_type
+		 * @param string $type
+		 * @param array  $field
+		 */
+		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type, $this->field ) ) {
 			echo $this->prepare_field_html( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			do_action( 'frm_show_other_field_type', $this->field, $args['form'], array( 'action' => $args['form_action'] ) );
@@ -1065,17 +1078,19 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function get_container_class() {
-		$is_radio    = FrmField::is_radio( $this->field );
-		$is_checkbox = FrmField::is_checkbox( $this->field );
-		$align       = FrmField::get_option( $this->field, 'align' );
-		$class       = '';
-
-		if ( $align && ( $is_radio || $is_checkbox ) ) {
-			self::prepare_align_class( $align );
-			$class .= ' ' . $align;
+		if ( ! FrmField::is_radio( $this->field ) && ! FrmField::is_checkbox( $this->field ) ) {
+			return '';
 		}
 
-		return $class;
+		$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $this->field, 'align' ) : '';
+
+		if ( ! $align ) {
+			$align = FrmStylesHelper::get_align_from_active_style( $this->field );
+		}
+
+		$this->prepare_align_class( $align );
+
+		return $align ? ' ' . $align : '';
 	}
 
 	/**
@@ -1156,17 +1171,68 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function include_front_field_input( $args, $shortcode_atts ) {
-		$include_file = $this->include_front_form_file();
+		$this->aria_description_added = false;
 
-		if ( $include_file ) {
+		if ( $this->include_front_form_file() ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
 			$input = $this->front_field_input( $args, $shortcode_atts );
 		}
 
+		$this->add_aria_description_to_inputs( $args, $input );
 		$this->load_field_scripts( $args );
 
 		return $input;
+	}
+
+	/**
+	 * Link every input, select, and textarea in the field HTML to the field
+	 * error and description for screen readers.
+	 *
+	 * Applying it here covers single-input fields and multi-input fields
+	 * (checkboxes, radios) in one place, since both produce their final HTML
+	 * through this method.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array  $args       Rendering context. May include `field_id`, `html_id` and `errors`.
+	 * @param string $input_html Full field HTML. Passed by reference.
+	 *
+	 * @return void
+	 */
+	public function add_aria_description_to_inputs( $args, &$input_html ) {
+		if ( '' === $input_html || $this->aria_description_added ) {
+			// A front_field_input override (e.g. in Pro) already added it.
+			return;
+		}
+
+		if ( ! isset( $args['field_id'] ) ) {
+			$args['field_id'] = $this->get_field_column( 'id' );
+		}
+
+		if ( empty( $args['html_id'] ) ) {
+			$args['html_id'] = FrmFieldsHelper::get_html_id( $this->field );
+		}
+
+		if ( ! isset( $args['errors'] ) || ! is_array( $args['errors'] ) ) {
+			$args['errors'] = array();
+		}
+
+		$input_html = preg_replace_callback(
+			'/<(input|select|textarea)\b([^>]*?)(\s*\/?)>/i',
+			function ( $matches ) use ( $args ) {
+				// Hidden inputs are not announced to screen readers, so skip them.
+				if ( 'input' === strtolower( $matches[1] ) && preg_match( '/type\s*=\s*["\']hidden["\']/i', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				$atts = $matches[2];
+				$this->add_aria_description( $args, $atts );
+
+				return '<' . $matches[1] . $atts . $matches[3] . '>';
+			},
+			$input_html
+		);
 	}
 
 	/**
@@ -1201,6 +1267,8 @@ DEFAULT_HTML;
 		$html_id    = $args['html_id'];
 		$field_name = $args['field_name'];
 		$read_only  = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
+		$hide_label = isset( $shortcode_atts['label'] ) && ! $shortcode_atts['label'];
+
 		// Lighten up on memory usage.
 		unset( $args['form'] );
 
@@ -1220,7 +1288,6 @@ DEFAULT_HTML;
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
-		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
 		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -1529,9 +1596,10 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * Link input to field description for screen readers
+	 * Link input to field description for screen readers.
 	 *
 	 * @since 3.0
+	 * @since 6.32 Function privacy changed from `protected` to `public`.
 	 *
 	 * @param array  $args
 	 * @param string $input_html
@@ -1545,10 +1613,8 @@ DEFAULT_HTML;
 		$custom_error_fields     = preg_grep( '/frm_error_field_*/', $describedby );
 		$custom_desc_fields      = preg_grep( '/frm_desc_field_*/', $describedby );
 
-		if ( $custom_desc_fields && $custom_error_fields ) {
-			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
-				$error_comes_first = false;
-			}
+		if ( $custom_desc_fields && $custom_error_fields && array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
+			$error_comes_first = false;
 		}
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
@@ -1560,10 +1626,10 @@ DEFAULT_HTML;
 		}
 
 		if ( $this->get_field_column( 'description' ) !== '' && ! in_array( 'frm_desc_' . $args['html_id'], $describedby, true ) ) {
-			if ( ! $error_comes_first ) {
-				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
-			} else {
+			if ( $error_comes_first ) {
 				array_push( $describedby, 'frm_desc_' . $args['html_id'] );
+			} else {
+				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
 			}
 		}
 
@@ -1578,6 +1644,8 @@ DEFAULT_HTML;
 		if ( ! $error_comes_first ) {
 			$input_html .= ' data-error-first="0"';
 		}
+
+		$this->aria_description_added = true;
 	}
 
 	/**
@@ -1880,10 +1948,12 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
-					$csv_values_checked[] = $option['value'];
-					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
+				if ( ! isset( $option['value'] ) || ! str_contains( $filtered_checked, $option['value'] ) ) {
+					continue;
 				}
+
+				$csv_values_checked[] = $option['value'];
+				$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 			}
 
 			$csv_values_checked = array_reverse( $csv_values_checked );

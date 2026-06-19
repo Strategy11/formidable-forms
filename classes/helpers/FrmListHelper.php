@@ -305,10 +305,12 @@ class FrmListHelper {
 	 * @return void
 	 */
 	private function hidden_search_inputs( $param_name ) {
-		if ( ! empty( $_REQUEST[ $param_name ] ) ) {
-			$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
-			echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
+		if ( empty( $_REQUEST[ $param_name ] ) ) {
+			return;
 		}
+
+		$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
+		echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
 	}
 
 	/**
@@ -400,7 +402,7 @@ class FrmListHelper {
 			$two = '2';
 		}//end if
 
-		if ( empty( $this->_actions ) ) {
+		if ( ! $this->_actions ) {
 			return;
 		}
 
@@ -541,8 +543,7 @@ class FrmListHelper {
 			foreach ( $this->modes as $mode => $title ) {
 				$classes = array( 'view-' . $mode );
 
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $current_mode == $mode ) {
+				if ( $current_mode === $mode ) {
 					$classes[] = 'current';
 				}
 
@@ -617,7 +618,7 @@ class FrmListHelper {
 	 * @param string $which
 	 */
 	protected function pagination( $which ) {
-		if ( empty( $this->_pagination_args ) ) {
+		if ( ! $this->_pagination_args ) {
 			return;
 		}
 
@@ -823,12 +824,11 @@ class FrmListHelper {
 	 * @return string Name of the default primary column, in this case, an empty string.
 	 */
 	protected function get_default_primary_column_name() {
-		$columns = $this->get_columns();
-		$column  = '';
+		$column = '';
 
 		// We need a primary defined so responsive views show something,
 		// So let's fall back to the first non-checkbox column.
-		foreach ( $columns as $col => $column_name ) {
+		foreach ( $this->get_columns() as $col => $column_name ) {
 			if ( 'cb' === $col ) {
 				continue;
 			}
@@ -895,9 +895,8 @@ class FrmListHelper {
 			return $column_headers;
 		}
 
-		$columns          = get_column_headers( $this->screen );
-		$hidden           = get_hidden_columns( $this->screen );
-		$sortable_columns = $this->get_sortable_columns();
+		$columns = get_column_headers( $this->screen );
+		$hidden  = get_hidden_columns( $this->screen );
 		/**
 		 * Filter the list table sortable columns for a specific screen.
 		 *
@@ -908,7 +907,7 @@ class FrmListHelper {
 		 *
 		 * @param array $sortable_columns An array of sortable columns.
 		 */
-		$_sortable = apply_filters( "manage_{$this->screen->id}_sortable_columns", $sortable_columns );
+		$_sortable = apply_filters( "manage_{$this->screen->id}_sortable_columns", $this->get_sortable_columns() );
 
 		$sortable = array();
 
@@ -1215,7 +1214,7 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @param object $item The current item.
+	 * @param stdClass $item The current item.
 	 */
 	public function single_row( $item ) {
 		echo '<tr>';

@@ -42,14 +42,14 @@ class FrmSolution {
 	 * @param array $atts
 	 */
 	public function __construct( $atts = array() ) {
-		if ( empty( $this->plugin_slug ) ) {
+		if ( ! $this->plugin_slug ) {
 			return;
 		}
 
 		add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
 		add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
 
-		if ( empty( $this->plugin_file ) ) {
+		if ( ! $this->plugin_file ) {
 			$this->plugin_file = $this->plugin_slug . '.php';
 		}
 	}
@@ -347,7 +347,7 @@ class FrmSolution {
 				'label'        => __( 'Connect to FormidableForms.com', 'formidable' ),
 				'description'  => __( 'Create a connection to get plugin downloads.', 'formidable' ),
 				'button_label' => __( 'Connect an Account', 'formidable' ),
-				'current'      => empty( $pro_installed ),
+				'current'      => ! $pro_installed,
 				'complete'     => $pro_installed,
 				'num'          => 1,
 			),
@@ -462,7 +462,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_top( $step ) {
-		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
+		$section_class = ! empty( $step['current'] ) ? '' : 'frm_grey';
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
@@ -775,9 +775,8 @@ class FrmSolution {
 	 */
 	protected function previously_imported_forms() {
 		$imported = array();
-		$forms    = $this->form_options();
 
-		foreach ( $forms as $form ) {
+		foreach ( $this->form_options() as $form ) {
 			$was_imported = isset( $form['form'] ) ? FrmForm::get_id_by_key( $form['form'] ) : false;
 
 			if ( $was_imported ) {

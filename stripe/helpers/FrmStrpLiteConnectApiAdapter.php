@@ -25,8 +25,7 @@ class FrmStrpLiteConnectApiAdapter {
 		if ( current_user_can( 'administrator' ) ) {
 			$customer_id = false;
 		} else {
-			$user_id  = get_current_user_id();
-			$customer = self::get_customer_by_id( $user_id );
+			$customer = self::get_customer_by_id( get_current_user_id() );
 
 			if ( ! is_object( $customer ) ) {
 				return false;

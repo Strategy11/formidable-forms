@@ -14,7 +14,7 @@ export class frmAddonAPI {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			body: new URLSearchParams( {
-				action: action,
+				action,
 				nonce: frmGlobal.nonce,
 				plugin: addon
 			} )

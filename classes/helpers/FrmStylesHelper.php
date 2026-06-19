@@ -684,14 +684,14 @@ class FrmStylesHelper {
 				//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$posted = wp_unslash( $_POST['frm_style_setting'] );
 
-				if ( ! is_array( $posted ) ) {
+				if ( is_array( $posted ) ) {
+					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
+					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
+				} else {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
 					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
-				} else {
-					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
-					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
 				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );
@@ -868,9 +868,6 @@ class FrmStylesHelper {
 
 		if ( ! $color ) {
 			$color = $default;
-		} elseif ( str_contains( $color, 'rgb(' ) ) {
-			$color = str_replace( 'rgb(', 'rgba(', $color );
-			$color = str_replace( ')', ',1)', $color );
 		} elseif ( ! str_contains( $color, '#' ) && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
@@ -888,6 +885,7 @@ class FrmStylesHelper {
 	 */
 	private static function is_hex( $color ) {
 		$non_hex_substrings = array(
+			'rgb(',
 			'rgba(',
 			'hsl(',
 			'hsla(',
@@ -926,6 +924,22 @@ class FrmStylesHelper {
 		}
 
 		return $change_margin;
+	}
+
+	/**
+	 * Get the raw alignment value stored in the active style for a radio or checkbox field.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array|int $field The 'field' array.
+	 *
+	 * @return string
+	 */
+	public static function get_align_from_active_style( $field ) {
+		$field_type = FrmField::is_checkbox( $field ) ? 'checkbox' : 'radio';
+		$key        = FrmStylesController::get_align_key_for_style_settings( $field_type );
+
+		return FrmStylesController::get_active_style( $field )->post_content[ $key ] ?? '';
 	}
 
 	/**
@@ -1161,5 +1175,91 @@ class FrmStylesHelper {
 		$parts = explode( ' ', $value );
 
 		return count( $parts ) < 3 ? $parts[0] : $parts[2];
+	}
+
+	/**
+	 * Scope CSS to .frm_forms on admin pages to prevent style conflicts.
+	 * On front-end pages, the CSS is returned unchanged.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $css The CSS to scope.
+	 *
+	 * @return string
+	 */
+	public static function maybe_scope_css_for_admin( $css ) {
+		if ( ! self::should_scope_custom_css() ) {
+			return $css;
+		}
+
+		/**
+		 * Filter the CSS selector used for @scope when scoping custom CSS on admin pages.
+		 *
+		 * @since 6.30
+		 *
+		 * @param string $selector The CSS selector to scope to. Default '.frm_forms'.
+		 */
+		$selector = apply_filters( 'frm_scope_custom_css_selector', '.frm_forms' );
+
+		return '@scope (' . $selector . ') {' . $css . '}';
+	}
+
+	/**
+	 * Scope only the custom CSS portion of the full cached stylesheet for admin pages.
+	 * Extracts the global custom CSS from the cached CSS, outputs the theme CSS unchanged,
+	 * and returns only the custom CSS portion scoped.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $css The full cached CSS containing both theme and custom CSS.
+	 *
+	 * @return string The theme CSS with only the custom CSS portion scoped.
+	 */
+	public static function maybe_scope_custom_css_in_cached_output( $css ) {
+		if ( ! self::should_scope_custom_css() ) {
+			return $css;
+		}
+
+		$custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
+		if ( ! $custom_css ) {
+			return $css;
+		}
+
+		// The cached CSS is minified. Minify the custom CSS the same way to find it.
+		$minified_custom_css = self::minify_css( $custom_css );
+		$custom_css_pos      = strrpos( $css, $minified_custom_css );
+
+		if ( false !== $custom_css_pos ) {
+			$css = substr( $css, 0, $custom_css_pos );
+		}
+
+		return $css . self::maybe_scope_css_for_admin( $custom_css );
+	}
+
+	/**
+	 * Minify CSS by stripping comments and whitespace.
+	 * Matches the minification used when saving the cached CSS file.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $css The CSS to minify.
+	 *
+	 * @return string
+	 */
+	private static function minify_css( $css ) {
+		return preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $css ) );
+	}
+
+	/**
+	 * Check if custom CSS should be scoped for admin context.
+	 *
+	 * @since 6.30
+	 *
+	 * @return bool
+	 */
+	private static function should_scope_custom_css() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
+		return isset( $_GET['frm_scope_custom_css'] );
 	}
 }

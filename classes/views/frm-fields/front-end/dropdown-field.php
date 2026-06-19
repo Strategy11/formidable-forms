@@ -2,7 +2,8 @@
 /**
  * @package Formidable
  *
- * @var array $field
+ * @var array      $field
+ * @var array|null $args
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +25,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	if ( $read_only ) {
 		?>
 		<select <?php do_action( 'frm_field_input_html', $field ); ?>>
-	<?php } else { ?>
+		<?php
+	} else {
+		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id ); ?>" <?php do_action( 'frm_field_input_html', $field ); ?>>
 		<?php
 	}
@@ -84,7 +87,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 		echo '<option ';
 		FrmAppHelper::array_to_html_params( $option_params, true );
-		selected( $selected );
+		selected( (bool) $selected );
 		echo '>';
 		echo esc_html( $opt === '' ? ' ' : $opt );
 		FrmFieldsHelper::after_choice_input( $field, $opt_key );

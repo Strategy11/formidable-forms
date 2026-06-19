@@ -62,7 +62,12 @@ class FrmTransLiteAppController {
 		$frm_sub               = new FrmTransLiteSubscription();
 		$frm_payment           = new FrmTransLitePayment();
 		$overdue_subscriptions = $frm_sub->get_overdue_subscriptions();
-		FrmTransLiteLog::log_message( 'Stripe Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
+
+		if ( ! $overdue_subscriptions && ! $frm_sub->get_active_subscriptions() ) {
+			return;
+		}
+
+		FrmTransLiteLog::log_message( 'Overdue Subscription Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
@@ -112,7 +117,7 @@ class FrmTransLiteAppController {
 				}
 			}//end if
 
-			FrmTransLiteLog::log_message( 'Stripe Cron Message', $log_message );
+			FrmTransLiteLog::log_message( 'Overdue Subscription Cron Message', $log_message );
 
 			self::maybe_trigger_changes(
 				array(
@@ -207,5 +212,23 @@ class FrmTransLiteAppController {
 		echo '<input ';
 		FrmAppHelper::array_to_html_params( $params, true );
 		echo ' />';
+	}
+
+	/**
+	 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
+	 * They do however need to be visible when the payments submodule is active.
+	 *
+	 * @since 6.30
+	 *
+	 * @return void
+	 */
+	public static function hide_gateway_fields_in_builder() {
+		wp_add_inline_style(
+			'formidable-admin',
+			'
+			#frm_builder_page li[data-ftype="gateway"] { display: none; }
+			.frm_field_box:has(li[data-ftype="gateway"]:only-child) { display: none; }
+			'
+		);
 	}
 }

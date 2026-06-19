@@ -21,6 +21,15 @@ class FrmStylesController {
 	private static $message;
 
 	/**
+	 * Cache of the active style object keyed by form ID.
+	 *
+	 * @since 6.32
+	 *
+	 * @var array
+	 */
+	private static $active_style = array();
+
+	/**
 	 * @return void
 	 */
 	public static function load_pro_hooks() {
@@ -135,7 +144,7 @@ class FrmStylesController {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
+		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
 
@@ -238,15 +247,16 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
-		$file_name = '/css/' . self::get_file_name();
+		$add_css_to_uploads_dir = FrmStyle::add_css_to_uploads_dir();
+		$file_path              = FrmStyle::get_generated_css_file_path( $add_css_to_uploads_dir ) . '/' . self::get_file_name();
 
-		if ( is_readable( FrmAppHelper::plugin_path() . $file_name ) ) {
-			$url = FrmAppHelper::plugin_url() . $file_name;
-		} else {
-			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
+		if ( ! is_readable( $file_path ) ) {
+			$stylesheet_urls['formidable'] = admin_url( 'admin-ajax.php?action=frmpro_css' );
+			return;
 		}
 
-		$stylesheet_urls['formidable'] = $url;
+		$base_url                      = $add_css_to_uploads_dir ? wp_upload_dir()['baseurl'] . '/formidable/css/' : FrmAppHelper::plugin_url() . '/css/';
+		$stylesheet_urls['formidable'] = $base_url . self::get_file_name();
 	}
 
 	/**
@@ -258,8 +268,7 @@ class FrmStylesController {
 	 */
 	public static function get_file_name() {
 		if ( is_multisite() ) {
-			$blog_id = get_current_blog_id();
-			return 'formidableforms' . absint( $blog_id ) . '.css';
+			return 'formidableforms' . absint( get_current_blog_id() ) . '.css';
 		}
 
 		return 'formidableforms.css';
@@ -368,9 +377,8 @@ class FrmStylesController {
 			return;
 		}
 
-		$frm_style     = new FrmStyle( $style_id );
-		$active_style  = $frm_style->get_one();
-		$default_style = self::get_default_style();
+		$frm_style    = new FrmStyle( $style_id );
+		$active_style = $frm_style->get_one();
 
 		self::disable_admin_page_styling_on_submit_buttons();
 
@@ -381,7 +389,7 @@ class FrmStylesController {
 		 */
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
-		self::render_style_page( $active_style, $form, $default_style );
+		self::render_style_page( $active_style, $form, self::get_default_style() );
 	}
 
 	/**
@@ -526,9 +534,8 @@ class FrmStylesController {
 		// If the default style is selected, use the "Always use default" legacy option instead of the default style.
 		// There's also a check here for conversational forms.
 		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
-		$default_style = self::get_default_style();
 
-		if ( $style_id === $default_style->ID && empty( $form->options['chat'] ) ) {
+		if ( $style_id === self::get_default_style()->ID && empty( $form->options['chat'] ) ) {
 			$style_id = 1;
 		}
 
@@ -627,20 +634,42 @@ class FrmStylesController {
 				break;
 
 			case 'duplicate':
-				$style            = clone $active_style;
-				$new_style        = $frm_style->get_new();
+				$style     = clone $active_style;
+				$new_style = $frm_style->get_new();
+				$new_name  = self::get_new_style_post_name( $new_style->post_name );
+
+				// The single style custom CSS is nested under the old style's scope. Re-scope it to the
+				// new style's scope so it unnests correctly for display and re-nests correctly on save.
+				if ( ! empty( $style->post_content['single_style_custom_css'] ) ) {
+					$css_scope_helper                               = new FrmCssScopeHelper();
+					$unnested_css                                   = $css_scope_helper->unnest( $style->post_content['single_style_custom_css'], 'frm_style_' . $style->post_name ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+					$style->post_content['single_style_custom_css'] = $css_scope_helper->nest( $unnested_css, 'frm_style_' . $new_name );
+				}
+
 				$style->ID        = $new_style->ID;
-				$style->post_name = $new_style->post_name;
-				unset( $new_style );
+				$style->post_name = $new_name;
+				unset( $new_style, $new_name );
 				break;
 
 			case 'new_style':
-				$style = $frm_style->get_new();
+				$style            = $frm_style->get_new();
+				$style->post_name = self::get_new_style_post_name( $style->post_name );
 				break;
-		}
+		}//end switch
 
 		if ( in_array( $view, array( 'duplicate', 'new_style' ), true ) ) {
-			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
+			// A new or duplicated style has no ID yet, so the Rename modal updates the post_title input
+			// instead of calling an endpoint. Prefer that posted title over $_GET['style_name'] when present.
+			$posted_title = '';
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( isset( $_POST['frm_style_setting']['post_title'] ) ) {
+				// The nonce is verified in FrmStylesController::save_style before this renders.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$posted_title = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
+			}
+
+			$style->post_title = '' !== $posted_title ? $posted_title : FrmAppHelper::simple_get( 'style_name' );
 			$style->menu_order = 0;
 		}
 
@@ -663,6 +692,25 @@ class FrmStylesController {
 		$notes                    = $preview_helper->get_notes_for_styler_preview();
 
 		include $style_views_path . 'show.php';
+	}
+
+	/**
+	 * Derive the temporary post_name (CSS scope slug) for a new or duplicated style from the chosen
+	 * style name so the displayed scope matches the slug WordPress will store on save.
+	 *
+	 * Falls back to the auto-generated key when no style name was provided so the scope is never empty.
+	 *
+	 * @since 6.32
+	 *
+	 * @param string $fallback The auto-generated post_name to use when no style name is chosen.
+	 *
+	 * @return string
+	 */
+	private static function get_new_style_post_name( $fallback ) {
+		$style_name = FrmAppHelper::simple_get( 'style_name' );
+		$slug       = $style_name ? sanitize_title( $style_name ) : '';
+
+		return $slug ? $slug : $fallback;
 	}
 
 	/**
@@ -710,6 +758,8 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function save_style() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+
 		$frm_style   = new FrmStyle();
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
@@ -985,8 +1035,7 @@ class FrmStylesController {
 			// A style ID is not sent when resetting on the edit page.
 			// Instead of resetting the style, send the defaults back so the inputs can be updated with JavaScript.
 			$frm_style = new FrmStyle();
-			$defaults  = $frm_style->get_defaults();
-			echo json_encode( $defaults );
+			echo json_encode( $frm_style->get_defaults() );
 			wp_die();
 		}
 
@@ -1231,6 +1280,50 @@ class FrmStylesController {
 
 		$frm_style = new FrmStyle( $style );
 		return $frm_style->get_one();
+	}
+
+	/**
+	 * Get the active style object for a field's form.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array|int $field The 'field' array.
+	 *
+	 * @return object
+	 */
+	public static function get_active_style( $field ) {
+		if ( ! is_array( $field ) ) {
+			return new stdClass();
+		}
+
+		$form_id = $field['parent_form_id'] ?? $field['form_id'];
+
+		if ( isset( self::$active_style[ $form_id ] ) ) {
+			return self::$active_style[ $form_id ];
+		}
+
+		$active_style = self::get_form_style( $form_id );
+
+		if ( ! is_object( $active_style ) ) {
+			$active_style = new stdClass();
+		}
+
+		self::$active_style[ $form_id ] = $active_style;
+
+		return self::$active_style[ $form_id ];
+	}
+
+	/**
+	 * Get the style setting key that stores the alignment for a field type.
+	 *
+	 * @since 6.32
+	 *
+	 * @param string $field_type
+	 *
+	 * @return string
+	 */
+	public static function get_align_key_for_style_settings( $field_type ) {
+		return 'checkbox' === $field_type ? 'check_align' : 'radio_align';
 	}
 
 	/**

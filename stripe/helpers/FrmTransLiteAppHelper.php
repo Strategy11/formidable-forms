@@ -175,11 +175,7 @@ class FrmTransLiteAppHelper {
 
 		$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
 
-		if ( ! $form_action ) {
-			return array();
-		}
-
-		return $form_action->post_content;
+		return $form_action ? $form_action->post_content : array();
 	}
 
 	/**
@@ -393,18 +389,20 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
-		if ( $value ) {
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
-			?>
-			<tr>
-				<th scope="row"><?php echo esc_html( $label ); ?>:</th>
-				<td>
-					<?php echo esc_html( $value ); ?>
-				</td>
-			</tr>
-			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		if ( ! $value ) {
+			return;
 		}
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<tr>
+			<th scope="row"><?php echo esc_html( $label ); ?>:</th>
+			<td>
+				<?php echo esc_html( $value ); ?>
+			</td>
+		</tr>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -605,5 +603,42 @@ class FrmTransLiteAppHelper {
 	public static function should_fallback_to_paypal() {
 		_deprecated_function( __METHOD__, '6.27' );
 		return false;
+	}
+
+	/**
+	 * Render the gateway icon buttons for the payment action settings.
+	 *
+	 * @param array         $gateways
+	 * @param WP_Post       $form_action
+	 * @param FrmFormAction $action_control
+	 *
+	 * @return void
+	 */
+	public static function show_gateway_buttons( $gateways, $form_action, $action_control ) {
+		$gateway_order = array( 'stripe', 'square', 'paypal' );
+		$gateways      = self::sort_gateways( $gateways, $gateway_order );
+
+		include self::plugin_path() . '/views/action-settings/gateway-buttons.php';
+	}
+
+	/**
+	 * Sort gateways by a predefined order.
+	 * Unlisted gateways are appended at the end.
+	 *
+	 * @param array $gateways
+	 * @param array $order Gateway keys in desired order.
+	 *
+	 * @return array
+	 */
+	private static function sort_gateways( $gateways, $order ) {
+		$sorted = array();
+
+		foreach ( $order as $key ) {
+			if ( isset( $gateways[ $key ] ) ) {
+				$sorted[ $key ] = $gateways[ $key ];
+			}
+		}
+
+		return $sorted + $gateways;
 	}
 }

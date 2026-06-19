@@ -463,7 +463,7 @@ class FrmSettings {
 			$re_lang       = $recaptcha_opt['re_lang'] ?? $re_lang;
 		}
 
-		if ( empty( $this->re_msg ) ) {
+		if ( ! $this->re_msg ) {
 			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
@@ -510,13 +510,15 @@ class FrmSettings {
 	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
-		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
-			$this->current_form = $args['current_form'];
+		if ( ! isset( $args['current_form'] ) || ! is_numeric( $args['current_form'] ) ) {
+			return;
+		}
 
-			foreach ( $this->translatable_strings() as $string ) {
-				$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
-				$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
-			}
+		$this->current_form = $args['current_form'];
+
+		foreach ( $this->translatable_strings() as $string ) {
+			$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
+			$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
 		}
 	}
 

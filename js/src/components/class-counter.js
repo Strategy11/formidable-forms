@@ -17,7 +17,7 @@ export class frmCounter {
 		this.activeCounter = 0;
 		this.locale = element.dataset.locale ? element.dataset.locale.replace( '_', '-' ) : 'en-US';
 		this.timeoutInterval = 50;
-		this.timeToFinish = 'undefined' !== typeof options && 'undefined' !== typeof options.timetoFinish ? options.timetoFinish : 1400;
+		this.timeToFinish = options !== undefined && options.timetoFinish !== undefined ? options.timetoFinish : 1400;
 		this.valueStep = this.value / Math.ceil( this.timeToFinish / this.timeoutInterval );
 
 		if ( 0 === this.value ) {

@@ -214,10 +214,12 @@ class FrmSettingsController {
 		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
 
 		foreach ( $sections as $key => $section ) {
-			if ( in_array( $key, $payment_section_keys, true ) ) {
-				self::$removed_payments_sections[ $key ] = $section;
-				unset( $sections[ $key ] );
+			if ( ! in_array( $key, $payment_section_keys, true ) ) {
+				continue;
 			}
+
+			self::$removed_payments_sections[ $key ] = $section;
+			unset( $sections[ $key ] );
 		}
 
 		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
