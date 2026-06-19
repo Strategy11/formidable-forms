@@ -473,6 +473,12 @@ class FrmTransLiteActionsController {
 			return $values;
 		}
 
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			// The hooks this uses can get called in the form builder and settings pages.
+			// But we do not need the script in this case.
+			return $values;
+		}
+
 		// This is also called from the frm_enqueue_form_scripts hook.
 		// With this here, the value of frm_stripe_vars.settings[0].fields is -1
 		// This is because the amount value is processed and a shortcode is not found in '000'.
