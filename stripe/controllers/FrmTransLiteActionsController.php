@@ -595,6 +595,11 @@ class FrmTransLiteActionsController {
 			}
 		}
 
+		if ( ! in_array( 'stripe', $settings['gateway'], true ) ) {
+			// We only need a gateway field for Stripe compatibility, so unless Stripe is selected, we can return early.
+			return $settings;
+		}
+
 		$gateway_field_id = FrmDb::get_var(
 			'frm_fields',
 			array(
