@@ -325,8 +325,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = FrmStrpLiteAppHelper::active_mode();
-		return self::get_body_for_mode( $mode );
+		return self::get_body_for_mode( FrmStrpLiteAppHelper::active_mode() );
 	}
 
 	/**
