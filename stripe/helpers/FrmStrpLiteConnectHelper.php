@@ -657,7 +657,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @return string 'test' or 'live'
 	 */
-	private static function get_mode_value_from_post() {	
+	private static function get_mode_value_from_post() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmStrpLiteAppHelper::active_mode();
