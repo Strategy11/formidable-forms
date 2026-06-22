@@ -721,7 +721,7 @@
 					onChange: onCardFieldsChange
 				}
 			};
-			
+
 			config.createOrder = createOrder;
 			config.onApprove = onApprove;
 
