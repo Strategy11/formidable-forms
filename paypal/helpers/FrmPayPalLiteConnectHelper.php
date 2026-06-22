@@ -1086,17 +1086,6 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since 6.31
-	 *
-	 * @param array $data Setup token data including payment_source.
-	 *
-	 * @return false|object
-	 */
-	public static function create_vault_setup_token( $data = array() ) {
-		return self::post_with_authenticated_body( 'create_vault_setup_token', compact( 'data' ) );
-	}
-
-	/**
 	 * @return false|object
 	 */
 	public static function get_seller_status() {
@@ -1154,5 +1143,18 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	public static function get_bn_code() {
 		return 'Strategy11LLCPPCP_SP';
+	}
+
+	/**
+	 * @since 6.31
+	 * @deprecated x.x
+	 *
+	 * @param array $data Setup token data including payment_source.
+	 *
+	 * @return false|object
+	 */
+	public static function create_vault_setup_token( $data = array() ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return false;
 	}
 }

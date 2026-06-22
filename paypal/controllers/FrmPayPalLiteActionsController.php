@@ -615,7 +615,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return false;
 		}
 
-		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED', 'APPROVAL_PENDING' ), true );
+		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED' ), true );
 	}
 
 	/**
@@ -629,11 +629,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool
 	 */
 	private static function validate_subscription_amount( $subscription, $expected_amount ) {
-		// Vault-created subscriptions in APPROVAL_PENDING have no billing details yet.
-		if ( isset( $subscription->status ) && 'APPROVAL_PENDING' === $subscription->status ) {
-			return true;
-		}
-
 		$subscription_amount = $subscription->billing_info->last_payment->amount->value ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value ?? '';
 
 		if ( ! $subscription_amount ) {
@@ -1264,24 +1259,31 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$query_args['vault'] = 'true';
 		}
 
-		$include_buttons     = false;
-		$include_card_fields = false;
-		$include_messages    = true;
+		if ( 'subscription' === $intent ) {
+			$include_buttons     = true;
+			$include_card_fields = false;
+		} else {
+			// One time payments.
+			$include_buttons     = false;
+			$include_card_fields = false;
 
-		switch ( $action->post_content['paypal_layout'] ?? 'card_and_checkout' ) {
-			case 'card_only':
-				$include_card_fields = true;
-				break;
+			switch ( $action->post_content['paypal_layout'] ?? 'card_and_checkout' ) {
+				case 'card_only':
+					$include_card_fields = true;
+					break;
 
-			case 'checkout_only':
-				$include_buttons = true;
-				break;
+				case 'checkout_only':
+					$include_buttons = true;
+					break;
 
-			default:
-				$include_buttons     = true;
-				$include_card_fields = true;
-				break;
+				default:
+					$include_buttons     = true;
+					$include_card_fields = true;
+					break;
+			}
 		}
+
+		$include_messages = true;
 
 		switch ( $action->post_content['pay_later'] ?? 'auto' ) {
 			case 'off':
@@ -1295,7 +1297,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$components               = array();
-		$include_google_apple_pay = $include_buttons && is_ssl() && self::include_google_pay_apple_pay();
+		$include_google_apple_pay = $include_buttons && 'subscription' !== $intent && is_ssl() && self::include_google_pay_apple_pay();
 
 		if ( $include_buttons ) {
 			$components[] = 'buttons';
