@@ -284,9 +284,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function disconnect() {
-		$additional_body = array(
-			'frm_strp_connect_mode' => self::get_mode_value_from_post(),
-		);
+		$mode            = self::get_mode_value_from_post();
+		$additional_body = self::get_body_for_mode( $mode );
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
@@ -303,14 +302,13 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function handle_reauth() {
-		$additional_body = array(
-			'frm_strp_connect_mode' => self::get_mode_value_from_post(),
-		);
+		$mode            = self::get_mode_value_from_post();
+		$additional_body = self::get_body_for_mode( $mode );
 		$data            = self::post_with_authenticated_body( 'reauth', $additional_body );
 
 		if ( false === $data ) {
 			// Check account status.
-			if ( self::check_server_for_connected_account_status() ) {
+			if ( self::check_server_for_connected_account_status( $mode ) ) {
 				wp_send_json_success();
 			}
 
@@ -327,11 +325,25 @@ class FrmStrpLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
+		$mode = FrmStrpLiteAppHelper::active_mode();
+		return self::get_body_for_mode( $mode );
+	}
+
+	/**
+	 * Get the standard body for unauthenticated requests that includes mode and passwords.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return array
+	 */
+	private static function get_body_for_mode( $mode ) {
 		return array(
-			'account_id'      => get_option( self::get_account_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'account_id'            => get_option( self::get_account_id_option_name( $mode ) ),
+			'server_password'       => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'       => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_strp_connect_mode' => $mode,
 		);
 	}
 
@@ -441,18 +453,24 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
+	 * @param string $mode
+	 *
 	 * @return bool true if our account is onboarded
 	 */
-	public static function check_server_for_connected_account_status() {
-		$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
+	public static function check_server_for_connected_account_status( $mode = 'check_get' ) {
+		if ( 'check_get' === $mode ) {
+			$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
 
-		if ( 'live' !== $mode ) {
-			$mode = 'test';
+			if ( 'live' !== $mode ) {
+				$mode = 'test';
+			}
 		}
 
-		$additional_body = array(
-			'frm_strp_connect_mode' => $mode,
-		);
+		if ( self::stripe_connect_is_setup( $mode ) ) {
+			return false;
+		}
+
+		$additional_body = self::get_body_for_mode( $mode );
 		$data            = self::post_with_authenticated_body( 'account_status', $additional_body );
 		$success         = false !== $data && ! empty( $data->details_submitted );
 
@@ -640,7 +658,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @return string 'test' or 'live'
 	 */
-	private static function get_mode_value_from_post() {
+	private static function get_mode_value_from_post() {	
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmStrpLiteAppHelper::active_mode();
