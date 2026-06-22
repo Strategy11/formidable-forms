@@ -938,6 +938,7 @@ class FrmPayPalLiteConnectHelper {
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_paypal_api_integration();
+		FrmTransLiteAppHelper::trigger_gateway_disconnected_hook( 'paypal', self::get_mode_value_from_post() );
 		wp_send_json_success();
 	}
 

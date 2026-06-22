@@ -1330,14 +1330,18 @@ class FrmAppController {
 
 	/**
 	 * The payment cron is unscheduled when Formidable is deactivated.
-	 * We need to add it back again on activation if Stripe is configured.
+	 * We need to add it back again on activation if any payment gateway is configured.
 	 *
 	 * @since 6.5
 	 *
 	 * @return void
 	 */
 	private static function maybe_activate_payment_cron() {
-		if ( ! FrmStrpLiteConnectHelper::stripe_connect_is_setup() ) {
+		$stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+		$square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$paypal_connected = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+
+		if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 			return;
 		}
 
