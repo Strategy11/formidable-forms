@@ -870,7 +870,7 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * Get the standard body for unauthenticated requests that includes mode and passwords.
 	 *
-	 * @since x.x
+	 * @since 6.32.1
 	 *
 	 * @param string $mode 'live' or 'test'.
 	 *
@@ -1155,14 +1155,14 @@ class FrmPayPalLiteConnectHelper {
 
 	/**
 	 * @since 6.31
-	 * @deprecated x.x
+	 * @deprecated 6.32.1
 	 *
 	 * @param array $data Setup token data including payment_source.
 	 *
 	 * @return false|object
 	 */
 	public static function create_vault_setup_token( $data = array() ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.32.1' );
 		return false;
 	}
 }

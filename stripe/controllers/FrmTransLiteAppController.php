@@ -47,7 +47,7 @@ class FrmTransLiteAppController {
 	/**
 	 * Remove the payment cron when all gateways are disconnected.
 	 *
-	 * @since x.x
+	 * @since 6.32.1
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 * @param string $mode 'test' or 'live'.
@@ -246,12 +246,12 @@ class FrmTransLiteAppController {
 	/**
 	 * Remove the cron when the plugin is deactivated.
 	 *
-	 * @deprecated x.x
+	 * @deprecated 6.32.1
 	 *
 	 * @return void
 	 */
 	public static function remove_cron() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.32.1' );
 		wp_clear_scheduled_hook( 'frm_payment_cron' );
 	}
 }

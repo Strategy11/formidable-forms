@@ -332,7 +332,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * Get the standard body for unauthenticated requests that includes mode and passwords.
 	 *
-	 * @since x.x
+	 * @since 6.32.1
 	 *
 	 * @param string $mode 'live' or 'test'.
 	 *

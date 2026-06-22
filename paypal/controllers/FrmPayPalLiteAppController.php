@@ -849,10 +849,10 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.32.1
 	 */
 	public static function create_vault_setup_token() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.32.1' );
 		wp_send_json_error( 'This API endpoint is no longer in use.' );
 	}
 }
