@@ -570,7 +570,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * Get the standard body for unauthenticated requests that includes mode and passwords.
+	 * Get the standard body with account id, mode, and passwords to send to the connect server.
 	 *
 	 * @since 6.32.1
 	 *
