@@ -1,7 +1,7 @@
 == Changelog ==
 = 6.32.1 =
 * Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
-* Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status.
+* Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status. Credit to Yaswanth Reddy Sunkara and WPScan for reporting the issue.
 * Security: Additional validation has been added to guarantee a PayPal Commerce Apple Pay payment has the correct status.
 * Fix: A cron job for handling overdue subscriptions would not properly get unscheduled after disconnecting Square and PayPal.
 * Fix: The PayPal Commerce test mode option would not properly update on save when the PayPal add-on was also active.
