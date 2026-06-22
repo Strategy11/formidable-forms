@@ -1419,6 +1419,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'buttonStyle'              => self::get_button_style_for_js( $action ),
 			'imagesUrl'                => FrmPayPalLiteAppHelper::plugin_url() . 'images/',
 			'includeGooglePayApplePay' => $include_google_apple_pay,
+			'mode'                     => FrmPayPalLiteAppHelper::active_mode(),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );

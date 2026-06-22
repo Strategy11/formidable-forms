@@ -920,7 +920,7 @@
 	 */
 	function getGooglePaymentsClient() {
 		return new google.payments.api.PaymentsClient( {
-			environment: 'TEST',
+			environment: frmPayPalVars.mode === 'test' ? 'TEST' : 'PRODUCTION',
 			paymentDataCallbacks: {
 				onPaymentAuthorized
 			}
