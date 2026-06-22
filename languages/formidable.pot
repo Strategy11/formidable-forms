@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 6.32\n"
+"Project-Id-Version: Formidable Forms 6.32.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-16T13:29:56+00:00\n"
+"POT-Creation-Date: 2026-06-22T13:58:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -180,7 +180,7 @@ msgstr ""
 msgid "Build a Form"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:1424
+#: classes/controllers/FrmAppController.php:1428
 #: classes/controllers/FrmFormsController.php:260
 #: classes/controllers/FrmFormTemplatesController.php:656
 #: classes/controllers/FrmSettingsController.php:393
@@ -197,7 +197,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:1428
+#: classes/controllers/FrmAppController.php:1432
 msgid "Continue"
 msgstr ""
 
@@ -2023,405 +2023,411 @@ msgstr ""
 msgid "Square"
 msgstr ""
 
-#. translators: %s: Stripe or Square.
-#: classes/helpers/FrmAppHelper.php:4059
+#: classes/helpers/FrmAppHelper.php:4058
+#: paypal/controllers/FrmPayPalLiteActionsController.php:238
+#: paypal/views/settings/button-settings.php:46
+msgid "PayPal"
+msgstr ""
+
+#. translators: %s: Stripe, Square, or PayPal.
+#: classes/helpers/FrmAppHelper.php:4063
 msgid "You already have %s connected, so these have already been unlocked."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4060
+#: classes/helpers/FrmAppHelper.php:4064
 msgid "and"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4063
+#: classes/helpers/FrmAppHelper.php:4067
 msgid "I'll do it later!"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4064
+#: classes/helpers/FrmAppHelper.php:4068
 msgid "Setup Payments Now"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4067
-msgid "We've unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings."
+#: classes/helpers/FrmAppHelper.php:4071
+msgid "We've unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, Square, or PayPal) in your settings."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4081
+#: classes/helpers/FrmAppHelper.php:4085
 msgid "(no label)"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4141
+#: classes/helpers/FrmAppHelper.php:4145
 msgid "You are running an outdated version of Formidable. This plugin may not work correctly if you do not update Formidable."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4195
+#: classes/helpers/FrmAppHelper.php:4199
 msgid "The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4216
+#: classes/helpers/FrmAppHelper.php:4220
 msgid "English"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4217
+#: classes/helpers/FrmAppHelper.php:4221
 msgid "Afrikaans"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4218
+#: classes/helpers/FrmAppHelper.php:4222
 msgid "Albanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4219
+#: classes/helpers/FrmAppHelper.php:4223
 msgid "Algerian Arabic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4220
+#: classes/helpers/FrmAppHelper.php:4224
 msgid "Amharic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4221
+#: classes/helpers/FrmAppHelper.php:4225
 msgid "Arabic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4222
+#: classes/helpers/FrmAppHelper.php:4226
 msgid "Armenian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4223
+#: classes/helpers/FrmAppHelper.php:4227
 msgid "Azerbaijani"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4224
+#: classes/helpers/FrmAppHelper.php:4228
 msgid "Basque"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4225
+#: classes/helpers/FrmAppHelper.php:4229
 msgid "Belarusian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4226
+#: classes/helpers/FrmAppHelper.php:4230
 msgid "Bengali"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4227
+#: classes/helpers/FrmAppHelper.php:4231
 msgid "Bosnian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4228
+#: classes/helpers/FrmAppHelper.php:4232
 msgid "Bulgarian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4229
+#: classes/helpers/FrmAppHelper.php:4233
 msgid "Catalan"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4230
+#: classes/helpers/FrmAppHelper.php:4234
 msgid "Chinese Hong Kong"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4231
+#: classes/helpers/FrmAppHelper.php:4235
 msgid "Chinese Simplified"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4232
+#: classes/helpers/FrmAppHelper.php:4236
 msgid "Chinese Traditional"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4233
+#: classes/helpers/FrmAppHelper.php:4237
 msgid "Croatian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4234
+#: classes/helpers/FrmAppHelper.php:4238
 msgid "Czech"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4235
+#: classes/helpers/FrmAppHelper.php:4239
 msgid "Danish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4236
+#: classes/helpers/FrmAppHelper.php:4240
 msgid "Dutch"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4237
+#: classes/helpers/FrmAppHelper.php:4241
 msgid "English/UK"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4238
+#: classes/helpers/FrmAppHelper.php:4242
 msgid "Esperanto"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4239
+#: classes/helpers/FrmAppHelper.php:4243
 msgid "Estonian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4240
+#: classes/helpers/FrmAppHelper.php:4244
 msgid "Faroese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4241
+#: classes/helpers/FrmAppHelper.php:4245
 msgid "Farsi/Persian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4242
+#: classes/helpers/FrmAppHelper.php:4246
 msgid "Filipino"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4243
+#: classes/helpers/FrmAppHelper.php:4247
 msgid "Finnish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4244
+#: classes/helpers/FrmAppHelper.php:4248
 msgid "French"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4245
+#: classes/helpers/FrmAppHelper.php:4249
 msgid "French/Canadian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4246
+#: classes/helpers/FrmAppHelper.php:4250
 msgid "French/Swiss"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4247
+#: classes/helpers/FrmAppHelper.php:4251
 msgid "Galician"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4248
+#: classes/helpers/FrmAppHelper.php:4252
 msgid "Georgian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4249
+#: classes/helpers/FrmAppHelper.php:4253
 msgid "German"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4250
+#: classes/helpers/FrmAppHelper.php:4254
 msgid "German/Austria"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4251
+#: classes/helpers/FrmAppHelper.php:4255
 msgid "German/Switzerland"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4252
+#: classes/helpers/FrmAppHelper.php:4256
 msgid "Greek"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4253
+#: classes/helpers/FrmAppHelper.php:4257
 msgid "Gujarati"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4254
-#: classes/helpers/FrmAppHelper.php:4255
+#: classes/helpers/FrmAppHelper.php:4258
+#: classes/helpers/FrmAppHelper.php:4259
 msgid "Hebrew"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4256
+#: classes/helpers/FrmAppHelper.php:4260
 msgid "Hindi"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4257
+#: classes/helpers/FrmAppHelper.php:4261
 msgid "Hungarian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4258
+#: classes/helpers/FrmAppHelper.php:4262
 msgid "Icelandic"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4259
+#: classes/helpers/FrmAppHelper.php:4263
 msgid "Indonesian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4260
+#: classes/helpers/FrmAppHelper.php:4264
 msgid "Italian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4261
+#: classes/helpers/FrmAppHelper.php:4265
 msgid "Japanese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4262
+#: classes/helpers/FrmAppHelper.php:4266
 msgid "Kannada"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4263
+#: classes/helpers/FrmAppHelper.php:4267
 msgid "Kazakh"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4264
+#: classes/helpers/FrmAppHelper.php:4268
 msgid "Khmer"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4265
+#: classes/helpers/FrmAppHelper.php:4269
 msgid "Korean"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4266
+#: classes/helpers/FrmAppHelper.php:4270
 msgid "Kyrgyz"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4267
+#: classes/helpers/FrmAppHelper.php:4271
 msgid "Laothian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4268
+#: classes/helpers/FrmAppHelper.php:4272
 msgid "Latvian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4269
+#: classes/helpers/FrmAppHelper.php:4273
 msgid "Lithuanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4270
+#: classes/helpers/FrmAppHelper.php:4274
 msgid "Luxembourgish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4271
+#: classes/helpers/FrmAppHelper.php:4275
 msgid "Macedonian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4272
+#: classes/helpers/FrmAppHelper.php:4276
 msgid "Malayalam"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4273
+#: classes/helpers/FrmAppHelper.php:4277
 msgid "Malaysian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4274
+#: classes/helpers/FrmAppHelper.php:4278
 msgid "Marathi"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4275
+#: classes/helpers/FrmAppHelper.php:4279
 msgid "Norwegian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4276
+#: classes/helpers/FrmAppHelper.php:4280
 msgid "Norwegian Bokmål"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4277
+#: classes/helpers/FrmAppHelper.php:4281
 msgid "Norwegian Nynorsk"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4278
+#: classes/helpers/FrmAppHelper.php:4282
 msgid "Polish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4279
+#: classes/helpers/FrmAppHelper.php:4283
 msgid "Portuguese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4280
+#: classes/helpers/FrmAppHelper.php:4284
 msgid "Portuguese/Brazilian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4281
+#: classes/helpers/FrmAppHelper.php:4285
 msgid "Portuguese/Portugal"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4282
+#: classes/helpers/FrmAppHelper.php:4286
 msgid "Romansh"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4283
+#: classes/helpers/FrmAppHelper.php:4287
 msgid "Romanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4284
+#: classes/helpers/FrmAppHelper.php:4288
 msgid "Russian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4285
-#: classes/helpers/FrmAppHelper.php:4286
+#: classes/helpers/FrmAppHelper.php:4289
+#: classes/helpers/FrmAppHelper.php:4290
 msgid "Serbian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4287
+#: classes/helpers/FrmAppHelper.php:4291
 msgid "Sinhalese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4288
+#: classes/helpers/FrmAppHelper.php:4292
 msgid "Slovak"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4289
+#: classes/helpers/FrmAppHelper.php:4293
 msgid "Slovenian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4290
+#: classes/helpers/FrmAppHelper.php:4294
 msgid "Spanish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4291
+#: classes/helpers/FrmAppHelper.php:4295
 msgid "Spanish/Latin America"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4292
+#: classes/helpers/FrmAppHelper.php:4296
 msgid "Swahili"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4293
+#: classes/helpers/FrmAppHelper.php:4297
 msgid "Swedish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4294
+#: classes/helpers/FrmAppHelper.php:4298
 msgid "Tamil"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4295
+#: classes/helpers/FrmAppHelper.php:4299
 msgid "Telugu"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4296
+#: classes/helpers/FrmAppHelper.php:4300
 msgid "Thai"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4297
+#: classes/helpers/FrmAppHelper.php:4301
 msgid "Tajiki"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4298
+#: classes/helpers/FrmAppHelper.php:4302
 msgid "Turkish"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4299
+#: classes/helpers/FrmAppHelper.php:4303
 msgid "Ukrainian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4300
+#: classes/helpers/FrmAppHelper.php:4304
 msgid "Urdu"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4301
+#: classes/helpers/FrmAppHelper.php:4305
 msgid "Vietnamese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4302
+#: classes/helpers/FrmAppHelper.php:4306
 msgid "Welsh"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4303
+#: classes/helpers/FrmAppHelper.php:4307
 msgid "Zulu"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4696
+#: classes/helpers/FrmAppHelper.php:4700
 msgid "Form Landing Pages"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4697
+#: classes/helpers/FrmAppHelper.php:4701
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4794
+#: classes/helpers/FrmAppHelper.php:4798
 #: classes/views/styles/_style-card.php:38
 #: js/admin/applications.js:312
 msgid "NEW"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4955
+#: classes/helpers/FrmAppHelper.php:4959
 msgctxt "warning message: close icon label"
 msgid "Dismiss"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:4997
+#: classes/helpers/FrmAppHelper.php:5001
 msgid "You're using Formidable Forms Lite - no license needed. Enjoy!"
 msgstr ""
 
@@ -3892,7 +3898,7 @@ msgstr ""
 #: classes/helpers/FrmFieldsHelper.php:2291
 #: classes/helpers/FrmFieldsHelper.php:2307
 #: classes/helpers/FrmFieldsHelper.php:2323
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:313
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:312
 msgid "N/A"
 msgstr ""
 
@@ -5145,7 +5151,7 @@ msgstr ""
 #: paypal/controllers/FrmPayPalLiteAppController.php:19
 #: square/controllers/FrmSquareLiteAppController.php:19
 #: stripe/controllers/FrmStrpLiteAppController.php:106
-#: stripe/controllers/FrmTransLiteActionsController.php:615
+#: stripe/controllers/FrmTransLiteActionsController.php:627
 #: stripe/controllers/FrmTransLiteCRUDController.php:34
 #: stripe/views/payments/show.php:27
 msgid "Payment"
@@ -5190,7 +5196,7 @@ msgid "Capture exact calendar dates effortlessly with a sleek pop-up date picker
 msgstr ""
 
 #: classes/models/FrmField.php:160
-#: paypal/views/settings/connect-settings-container.php:64
+#: paypal/views/settings/connect-settings-container.php:65
 msgid "Time"
 msgstr ""
 
@@ -5510,7 +5516,7 @@ msgid "Ok, you deserve it"
 msgstr ""
 
 #. translators: %s is the discount percentage.
-#: classes/models/FrmSalesApi.php:408
+#: classes/models/FrmSalesApi.php:313
 msgid "GET %s OFF NOW"
 msgstr ""
 
@@ -6170,12 +6176,12 @@ msgid "Field Size"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/product-options.php:16
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2564
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2566
 msgid "Product Type"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/product-single-option.php:28
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2556
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2558
 msgid "Product Name"
 msgstr ""
 
@@ -7837,7 +7843,7 @@ msgstr ""
 
 #: classes/views/styles/_field-colors.php:15
 #: classes/views/styles/_form-messages.php:13
-#: paypal/views/settings/connect-settings-container.php:62
+#: paypal/views/settings/connect-settings-container.php:63
 msgid "Error"
 msgstr ""
 
@@ -8407,11 +8413,6 @@ msgstr ""
 msgid "Payment made by: "
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:238
-#: paypal/views/settings/button-settings.php:46
-msgid "PayPal"
-msgstr ""
-
 #: paypal/controllers/FrmPayPalLiteActionsController.php:240
 #: paypal/views/settings/action-settings-options.php:25
 msgid "Pay Later"
@@ -8425,31 +8426,31 @@ msgstr ""
 msgid "Failed to capture order."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:1018
+#: paypal/controllers/FrmPayPalLiteActionsController.php:1013
 msgid "No PayPal subscription ID found."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2568
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2570
 msgid "Service"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2569
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2571
 msgid "Digital"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2570
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2572
 msgid "Physical"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2604
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2606
 msgid "PayPal Email"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2605
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2607
 msgid "PayPal Name"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2608
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2610
 msgid "PayPal Address"
 msgstr ""
 
@@ -8490,15 +8491,15 @@ msgstr ""
 msgid "A valid amount is required for subscriptions. Zero amounts are not allowed."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:731
+#: paypal/controllers/FrmPayPalLiteAppController.php:703
 msgid "Payment failed. Please try again."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:829
+#: paypal/controllers/FrmPayPalLiteAppController.php:801
 msgid "PayPal is not connected. Please connect your PayPal account to process payments."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteAppController.php:832
+#: paypal/controllers/FrmPayPalLiteAppController.php:804
 msgid "You can connect PayPal in Global Settings, under the Payments section."
 msgstr ""
 
@@ -8530,72 +8531,72 @@ msgstr ""
 msgid "Invalid nonce."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:92
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:91
 msgid "Unable to retrieve seller status."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:100
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:99
 msgid "Primary email not confirmed."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:105
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:104
 msgid "Payments are not receivable."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:111
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:110
 msgid "OAuth integrations are not enabled. Please finish connecting your PayPal account."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:130
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:129
 msgid "No data was found for expected PayPal product."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:135
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:134
 msgid "PayPal Checkout is not available."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:147
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:146
 msgid "Your seller status is valid."
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:155
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:154
 msgid "Enabled scopes:"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:167
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:166
 msgid "Enabled capabilities:"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:170
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:169
 #: paypal/views/settings/button-settings.php:47
 msgid "PayPal Checkout"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:175
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:174
 msgid "Card Processing"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:199
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:198
 msgid "ACDC Application Vetting Status:"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:209
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:208
 msgid "Reapply for Advanced Card Processing"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:295
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:294
 msgid "Connected account:"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:307
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:306
 msgid "Merchant ID:"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:336
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:335
 msgid "Resolve this issue"
 msgstr ""
 
-#: paypal/helpers/FrmPayPalLiteConnectHelper.php:343
+#: paypal/helpers/FrmPayPalLiteConnectHelper.php:342
 msgid "Reconnect"
 msgstr ""
 
@@ -8749,27 +8750,27 @@ msgstr ""
 msgid "Test Mode"
 msgstr ""
 
-#: paypal/views/settings/connect-settings-container.php:15
+#: paypal/views/settings/connect-settings-container.php:16
 msgid "Use the PayPal test mode"
 msgstr ""
 
-#: paypal/views/settings/connect-settings-container.php:36
+#: paypal/views/settings/connect-settings-container.php:37
 msgid "Your site is not using SSL. Before using PayPal to collect payments, you will need to install an SSL certificate on your site."
 msgstr ""
 
-#: paypal/views/settings/connect-settings-container.php:54
+#: paypal/views/settings/connect-settings-container.php:55
 msgid "Recent PayPal Debug IDs"
 msgstr ""
 
-#: paypal/views/settings/connect-settings-container.php:56
+#: paypal/views/settings/connect-settings-container.php:57
 msgid "These debug IDs can be provided to PayPal support when troubleshooting payment issues."
 msgstr ""
 
-#: paypal/views/settings/connect-settings-container.php:61
+#: paypal/views/settings/connect-settings-container.php:62
 msgid "Debug ID"
 msgstr ""
 
-#: paypal/views/settings/connect-settings-container.php:63
+#: paypal/views/settings/connect-settings-container.php:64
 msgid "Context"
 msgstr ""
 
@@ -8838,7 +8839,7 @@ msgstr ""
 msgid "There was an error processing your payment."
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteActionsController.php:627
+#: stripe/controllers/FrmTransLiteActionsController.php:639
 msgid "Payment Method"
 msgstr ""
 
@@ -8994,15 +8995,15 @@ msgstr ""
 msgid "Unable to retrieve customer through Stripe Connect."
 msgstr ""
 
-#: stripe/helpers/FrmStrpLiteConnectHelper.php:614
+#: stripe/helpers/FrmStrpLiteConnectHelper.php:611
 msgid "Connection Status"
 msgstr ""
 
-#: stripe/helpers/FrmStrpLiteConnectHelper.php:635
+#: stripe/helpers/FrmStrpLiteConnectHelper.php:632
 msgid "TEST"
 msgstr ""
 
-#: stripe/helpers/FrmStrpLiteConnectHelper.php:635
+#: stripe/helpers/FrmStrpLiteConnectHelper.php:632
 msgid "LIVE"
 msgstr ""
 
@@ -9208,24 +9209,24 @@ msgstr ""
 msgid "Customer Information"
 msgstr ""
 
-#: stripe/views/lists/coupons-upsell.php:9
+#: stripe/views/lists/coupons-upsell.php:12
 #: stripe/views/lists/tabs.php:13
 msgid "Coupons"
 msgstr ""
 
-#: stripe/views/lists/coupons-upsell.php:12
+#: stripe/views/lists/coupons-upsell.php:15
 msgid "Offer discounts with custom coupon codes. Add a Coupon field to your payment form and set percentage or fixed discounts, usage limits, and availability. Requires a Pro license or higher."
 msgstr ""
 
-#: stripe/views/lists/coupons-upsell.php:26
+#: stripe/views/lists/coupons-upsell.php:29
 msgid "New Coupon Settings"
 msgstr ""
 
-#: stripe/views/lists/coupons-upsell.php:31
+#: stripe/views/lists/coupons-upsell.php:34
 msgid "Coupon List"
 msgstr ""
 
-#: stripe/views/lists/coupons-upsell.php:34
+#: stripe/views/lists/coupons-upsell.php:37
 msgid "Coupon Field Settings"
 msgstr ""
 
