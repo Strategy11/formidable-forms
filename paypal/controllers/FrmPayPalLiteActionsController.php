@@ -1281,7 +1281,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 					$include_card_fields = true;
 					break;
 			}
-		}
+		}//end if
 
 		$include_messages = true;
 
