@@ -366,8 +366,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 == Changelog ==
 = 6.32.1 =
 * Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
-* Security: Additional validation has been added to guarantee a PayPal Commerce Apple Pay payment has the correct status.
 * Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status.
+* Security: Additional validation has been added to guarantee a PayPal Commerce Apple Pay payment has the correct status.
 * Fix: A cron job for handling overdue subscriptions would not properly get unscheduled after disconnecting Square and PayPal.
 * Fix: The PayPal Commerce test mode option would not properly update on save when the PayPal add-on was also active.
 * Fix: Email settings in payment actions would incorrectly display autofill options in Safari.
