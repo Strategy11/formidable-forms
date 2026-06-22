@@ -224,7 +224,17 @@ class FrmSalesApi extends FrmFormApi {
 
 		$sale = self::$instance->get_best_sale();
 
-		return is_array( $sale ) && ! empty( $sale[ $key ] ) ? $sale[ $key ] : false;
+		if ( ! is_array( $sale ) || empty( $sale[ $key ] ) ) {
+			return false;
+		}
+
+		$sale_value = $sale[ $key ];
+
+		if ( str_ends_with( $key, '_link' ) && ! str_starts_with( $sale_value, 'https://formidableforms.com' ) ) {
+			return false;
+		}
+
+		return $sale_value;
 	}
 
 	/**

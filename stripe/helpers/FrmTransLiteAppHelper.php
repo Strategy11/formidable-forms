@@ -643,7 +643,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32.1
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 * @param string $mode 'test' or 'live'.
@@ -652,7 +652,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function trigger_gateway_disconnected_hook( $gateway, $mode ) {
 		/**
-		 * @since x.x
+		 * @since 6.32.1
 		 *
 		 * @param string $gateway 'stripe', 'square', or 'paypal'.
 		 * @param string $mode 'test' or 'live'.
