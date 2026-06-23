@@ -719,7 +719,7 @@
 				style: frmPayPalVars.style,
 				inputEvents: {
 					onChange: onCardFieldsChange,
-					onFocus: function() {
+					onFocus() {
 						// onBlur only triggers if onFocus is defined.
 						// But we don't need to do anything on focus.
 					},
