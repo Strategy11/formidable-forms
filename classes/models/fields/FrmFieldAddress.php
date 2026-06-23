@@ -337,7 +337,9 @@ class FrmFieldAddress extends FrmFieldCombo {
 			return $value;
 		}
 
-		$sep   = apply_filters( 'frm_csv_sep', ', ' );
+		/** @var string */
+		$sep = apply_filters( 'frm_csv_sep', ', ' );
+		$sep = is_string( $sep ) && $sep !== '' ? $sep : ', ';
 		$value = explode( $sep, $value );
 		$count = count( $value );
 

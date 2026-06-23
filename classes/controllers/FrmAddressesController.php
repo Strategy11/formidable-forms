@@ -288,7 +288,9 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 */
 	public static function get_country_code( $country ) {
 		self::maybe_define_country_codes();
-		return self::$country_codes[ $country ] ?? '';
+		/** @var string */
+		$code = self::$country_codes[ $country ] ?? '';
+		return is_string( $code ) ? $code : '';
 	}
 
 	/**

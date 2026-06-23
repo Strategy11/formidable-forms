@@ -208,6 +208,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 		$field = (object) array(
 			'id'   => 10,
 			'type' => 'address',
+			'name' => 'Address',
 		);
 
 		$columns = array(
