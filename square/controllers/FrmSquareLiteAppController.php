@@ -179,7 +179,7 @@ class FrmSquareLiteAppController {
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$details, $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) ) {
 			return;
 		}
 
