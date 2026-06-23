@@ -761,7 +761,6 @@
 	 * @param {Object} data The onBlur event data.
 	 */
 	function onCardFieldsBlur( data ) {
-		alert( 'blur' );
 		if ( selectedMethod === 'card' && data.isFormValid ) {
 			cardFieldsValid = true;
 			enableSubmit();
