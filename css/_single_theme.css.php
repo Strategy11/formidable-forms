@@ -315,6 +315,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 			max-width:var(--submit-width)<?php echo esc_html( $important ); ?>;
 		<?php } ?>
 }
+.<?php echo esc_html( $style_class ); ?> input[type=submit][disabled],
+.<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button][disabled],
+.<?php echo esc_html( $style_class ); ?> .frm_submit button[disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
 		<?php
 	}//end if
 }//end if
