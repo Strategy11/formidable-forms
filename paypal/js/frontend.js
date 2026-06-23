@@ -1603,9 +1603,9 @@
 	 */
 	function mapPayPalErrorCode( code ) {
 		const codeMap = {
-			'INVALID_CVV': 'Please enter a valid CVV code.',
-			'INVALID_CARD_NUMBER': 'Please enter a valid card number.',
-			'INVALID_EXPIRY': 'Please enter a valid expiry date.',
+			INVALID_CVV: 'Please enter a valid CVV code.',
+			INVALID_CARD_NUMBER: 'Please enter a valid card number.',
+			INVALID_EXPIRY: 'Please enter a valid expiry date.',
 		};
 
 		const upperCode = code.toUpperCase();
