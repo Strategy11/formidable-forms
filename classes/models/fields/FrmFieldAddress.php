@@ -153,13 +153,6 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	/**
-	 * @since x.x
-	 */
-	public function translatable_strings() {
-		return parent::translatable_strings();
-	}
-
-	/**
 	 * @param array $atts
 	 *
 	 * @return void

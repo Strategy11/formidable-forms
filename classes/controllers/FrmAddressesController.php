@@ -147,7 +147,9 @@ class FrmAddressesController extends FrmComboFieldsController {
 			),
 		);
 
-		if ( 'europe' === $field['address_type'] ) {
+		$address_type = isset( $field['address_type'] ) ? $field['address_type'] : 'international';
+
+		if ( 'europe' === $address_type ) {
 			$city_field = $fields['city'];
 			unset( $fields['state'], $fields['city'] );
 			$fields['city']            = $city_field;
@@ -155,10 +157,10 @@ class FrmAddressesController extends FrmComboFieldsController {
 			$fields['zip']['classes'] .= ' frm_first';
 		}
 
-		if ( $field['address_type'] === 'us' ) {
+		if ( $address_type === 'us' ) {
 			$fields['state']['type']    = 'select';
 			$fields['state']['options'] = FrmFieldsHelper::get_us_states();
-		} elseif ( $field['address_type'] !== 'generic' ) {
+		} elseif ( $address_type !== 'generic' ) {
 			$fields['country'] = array(
 				'type'    => 'select',
 				'classes' => '',
@@ -282,7 +284,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 *
 	 * @param string $country Country name.
 	 *
-	 * @return string Country code.
+	 * @return string Country code or empty string if not found.
 	 */
 	public static function get_country_code( $country ) {
 		self::maybe_define_country_codes();
@@ -296,7 +298,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 *
 	 * @return void
 	 */
-	private static function maybe_define_country_codes() {
+	private static function maybe_define_country_codes() { // phpcs:ignore SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
 		if ( isset( self::$country_codes ) ) {
 			return;
 		}

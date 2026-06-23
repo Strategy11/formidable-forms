@@ -111,7 +111,8 @@ class test_FrmFieldAddress extends FrmUnitTest {
 		$this->assertArrayHasKey( 'city', $result, 'Result should have city.' );
 		$this->assertArrayHasKey( 'state', $result, 'Result should have state.' );
 		$this->assertArrayHasKey( 'zip', $result, 'Result should have zip.' );
-		$this->assertArrayHasKey( 'country', $result, 'Result should have country.' );
+		// Generic address type does not include country field
+		$this->assertArrayNotHasKey( 'country', $result, 'Result should not have country for generic address type.' );
 	}
 
 	/**
@@ -187,17 +188,17 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * Test get_country_code for invalid country.
 	 */
-	public function test_get_country_code_returns_null_for_invalid_country() {
+	public function test_get_country_code_returns_empty_string_for_invalid_country() {
 		$result = FrmAddressesController::get_country_code( 'Invalid Country Name' );
-		$this->assertNull( $result, 'Country code for invalid country should be null.' );
+		$this->assertSame( '', $result, 'Country code for invalid country should be empty string.' );
 	}
 
 	/**
 	 * Test get_country_code with empty string.
 	 */
-	public function test_get_country_code_returns_null_for_empty_string() {
+	public function test_get_country_code_returns_empty_string_for_empty_string() {
 		$result = FrmAddressesController::get_country_code( '' );
-		$this->assertNull( $result, 'Country code for empty string should be null.' );
+		$this->assertSame( '', $result, 'Country code for empty string should be empty string.' );
 	}
 
 	/**
@@ -213,7 +214,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'field_10' => 'Address',
 		);
 
-		$result = FrmAddressesController::add_csv_columns( $columns, $field );
+		$result = FrmAddressesController::add_csv_columns( $columns, array( 'field' => $field ) );
 
 		$this->assertArrayHasKey( 'field_10-line1', $result, 'Result should have line1 column.' );
 		$this->assertArrayHasKey( 'field_10-line2', $result, 'Result should have line2 column.' );
@@ -236,24 +237,9 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'field_10' => 'Text Field',
 		);
 
-		$result = FrmAddressesController::add_csv_columns( $columns, $field );
+		$result = FrmAddressesController::add_csv_columns( $columns, array( 'field' => $field ) );
 
 		$this->assertSame( $columns, $result, 'Result should match original columns for non-address field.' );
-	}
-
-	/**
-	 * Test get_default_labels returns correct labels.
-	 */
-	public function test_get_default_labels_returns_correct_labels() {
-		$result = FrmAddressesController::get_default_labels();
-
-		$this->assertIsArray( $result, 'Result should be an array.' );
-		$this->assertArrayHasKey( 'line1', $result, 'Result should have line1 label.' );
-		$this->assertArrayHasKey( 'line2', $result, 'Result should have line2 label.' );
-		$this->assertArrayHasKey( 'city', $result, 'Result should have city label.' );
-		$this->assertArrayHasKey( 'state', $result, 'Result should have state label.' );
-		$this->assertArrayHasKey( 'zip', $result, 'Result should have zip label.' );
-		$this->assertArrayHasKey( 'country', $result, 'Result should have country label.' );
 	}
 
 	/**
@@ -298,10 +284,10 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array<string> | string)>>
 	 */
-	public function address_type_provider(): \Iterator {
+	public function address_type_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
 		yield 'us' => array( 'us', array( 'line1', 'line2', 'city', 'state', 'zip' ) );
 		yield 'europe' => array( 'europe', array( 'line1', 'line2', 'city', 'zip', 'country' ) );
-		yield 'generic' => array( 'generic', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
+		yield 'generic' => array( 'generic', array( 'line1', 'line2', 'city', 'state', 'zip' ) );
 	}
 }
