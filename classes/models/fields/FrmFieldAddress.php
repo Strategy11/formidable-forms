@@ -52,16 +52,11 @@ class FrmFieldAddress extends FrmFieldCombo {
 
 	protected function field_settings_for_type() {
 		$settings = array(
-			'clear_on_focus'            => false,
-			// Don't use the regular placeholder option.
-						'default_value' => true,
-			'description'               => false,
-			'visibility'                => true,
+			'clear_on_focus' => false,
+			'default_value'  => true,
+			'description'    => false,
+			'default'        => false,
 		);
-
-		if ( is_array( $this->default_value_to_array() ) ) {
-			$settings['default'] = false;
-		}
 
 		return $settings;
 	}
@@ -259,23 +254,6 @@ class FrmFieldAddress extends FrmFieldCombo {
 		/** @var string */
 		$result = apply_filters( 'frm_address_format', $address_format, array( 'field' => $this->field ) );
 		return is_string( $result ) ? $result : $address_format;
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return array|string
-	 */
-	private function default_value_to_array() {
-		$default_value = $this->get_default_value();
-
-		if ( ! is_array( $default_value ) && ! str_contains( $default_value, ']' ) ) {
-			// This is a default value without a shortcode so tear it up.
-			return $this->address_string_to_array( $default_value );
-		}
-
-		/** @var array|string */
-		return $default_value;
 	}
 
 	/**

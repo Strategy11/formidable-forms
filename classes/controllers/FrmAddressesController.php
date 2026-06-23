@@ -147,7 +147,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 			),
 		);
 
-		$address_type = isset( $field['address_type'] ) ? $field['address_type'] : 'international';
+		$address_type = $field['address_type'] ?? 'international';
 
 		if ( 'europe' === $address_type ) {
 			$city_field = $fields['city'];

@@ -43,25 +43,52 @@ $labels    = $this->get_built_in_option_labels();
 					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
 						<?php echo esc_html( $labels[ $option ] ); ?>
 					</label>
-					<span class="frm-with-right-icon">
-						<input
-							type="text"
+					<?php
+					if ( isset( $sub_field['type'] ) && 'select' === $sub_field['type'] && isset( $sub_field['options'] ) ) {
+						?>
+						<select
 							name="<?php echo esc_attr( $input_name ); ?>"
 							id="<?php echo esc_attr( $input_id ); ?>"
-							value="<?php echo esc_attr( $default_value[ $sub_field['name'] ] ?? '' ); ?>"
 							data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 							data-changeatt="value"
-						/>
+						>
+							<option value=""><?php esc_html_e( '&mdash; Select &mdash;', 'formidable' ); ?></option>
+							<?php
+							foreach ( $sub_field['options'] as $opt_value => $opt_label ) {
+								$selected = isset( $default_value[ $sub_field['name'] ] ) && $default_value[ $sub_field['name'] ] === $opt_value ? 'selected' : '';
+								?>
+								<option value="<?php echo esc_attr( $opt_value ); ?>" <?php echo esc_attr( $selected ); ?>>
+									<?php echo esc_html( $opt_label ); ?>
+								</option>
+								<?php
+							}
+							?>
+						</select>
 						<?php
-						FrmAppHelper::icon_by_class(
-							'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
-							array(
-								'data-open' => 'frm-smart-values-box',
-								'tabindex'  => '0',
-							)
-						);
+					} else {
 						?>
-					</span>
+						<span class="frm-with-right-icon">
+							<input
+								type="text"
+								name="<?php echo esc_attr( $input_name ); ?>"
+								id="<?php echo esc_attr( $input_id ); ?>"
+								value="<?php echo esc_attr( $default_value[ $sub_field['name'] ] ?? '' ); ?>"
+								data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
+								data-changeatt="value"
+							/>
+							<?php
+							FrmAppHelper::icon_by_class(
+								'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+								array(
+									'data-open' => 'frm-smart-values-box',
+									'tabindex'  => '0',
+								)
+							);
+							?>
+						</span>
+						<?php
+					}
+					?>
 				</p>
 				<?php
 				break;
