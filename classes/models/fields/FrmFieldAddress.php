@@ -51,14 +51,11 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'clear_on_focus' => false,
-			'default_value'  => true,
 			'description'    => false,
 			'default'        => false,
 		);
-
-		return $settings;
 	}
 
 	protected function extra_field_opts() {
