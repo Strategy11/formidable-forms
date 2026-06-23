@@ -718,7 +718,12 @@
 				onError,
 				style: frmPayPalVars.style,
 				inputEvents: {
-					onChange: onCardFieldsChange
+					onChange: onCardFieldsChange,
+					onFocus: function() {
+						// onBlur only triggers if onFocus is defined.
+						// But we don't need to do anything on focus.
+					},
+					onBlur: onCardFieldsBlur
 				}
 			};
 
@@ -746,6 +751,20 @@
 			} else {
 				disableSubmit( thisForm );
 			}
+		}
+	}
+
+	/**
+	 * Handle card field blur events.
+	 * This detects autofilled fields that may not trigger onChange.
+	 *
+	 * @param {Object} data The onBlur event data.
+	 */
+	function onCardFieldsBlur( data ) {
+		alert( 'blur' );
+		if ( selectedMethod === 'card' && data.isFormValid ) {
+			cardFieldsValid = true;
+			enableSubmit();
 		}
 	}
 
