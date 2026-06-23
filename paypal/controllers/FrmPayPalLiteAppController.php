@@ -399,7 +399,7 @@ class FrmPayPalLiteAppController {
 	 * @return array|false The formatted address array, or false if invalid.
 	 */
 	private static function format_address_for_paypal( $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) ) {
 			return false;
 		}
 
@@ -412,7 +412,7 @@ class FrmPayPalLiteAppController {
 		if ( 'us' === $address_field->field_options['address_type'] ) {
 			$country_code = 'US';
 		} else {
-			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+			$country_code = FrmAddressesController::get_country_code( $address['country'] );
 		}
 
 		if ( ! $address['line1'] || ! $address['city'] || ! $address['state'] || ! $address['zip'] || ! $country_code ) {
@@ -462,7 +462,7 @@ class FrmPayPalLiteAppController {
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$payer, $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) ) {
 			return;
 		}
 
@@ -475,7 +475,7 @@ class FrmPayPalLiteAppController {
 		if ( 'us' === $address_field->field_options['address_type'] ) {
 			$country_code = 'US';
 		} else {
-			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+			$country_code = FrmAddressesController::get_country_code( $address['country'] );
 		}
 
 		if ( ! $address['line1'] || ! $address['city'] || ! $address['state'] || ! $address['zip'] || ! $country_code ) {

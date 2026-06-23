@@ -65,6 +65,15 @@ form .frm_primary_label input {
 	margin-bottom: 0;
 }
 
+/* Add spacing between address field rows in form builder */
+#frm_builder_page .with_frm_style form .frm_combo_inputs_container > .form-field {
+	margin-top: 10px;
+}
+
+#frm_builder_page .with_frm_style form .frm_combo_inputs_container > .form-field:first-child {
+	margin-top: 0;
+}
+
 .frm_description,
 .with_frm_style form div.description,
 .frm_error,
