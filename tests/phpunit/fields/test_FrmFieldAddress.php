@@ -10,7 +10,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 */
 	public function test_empty_value_array_returns_correct_structure() {
 		$controller = new FrmAddressesController();
-		$result      = $this->run_private_method(
+		$result     = $this->run_private_method(
 			array( $controller, 'empty_value_array' ),
 			array()
 		);
@@ -181,7 +181,6 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 */
 	public function test_get_country_code_returns_code_for_valid_country() {
 		$result = FrmAddressesController::get_country_code( 'United States' );
-
 		$this->assertSame( 'US', $result, 'Country code for United States should be US.' );
 	}
 
@@ -190,7 +189,6 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 */
 	public function test_get_country_code_returns_null_for_invalid_country() {
 		$result = FrmAddressesController::get_country_code( 'Invalid Country Name' );
-
 		$this->assertNull( $result, 'Country code for invalid country should be null.' );
 	}
 
@@ -199,7 +197,6 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 */
 	public function test_get_country_code_returns_null_for_empty_string() {
 		$result = FrmAddressesController::get_country_code( '' );
-
 		$this->assertNull( $result, 'Country code for empty string should be null.' );
 	}
 
@@ -263,9 +260,8 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 * Test add_optional_class adds frm_optional class.
 	 */
 	public function test_add_optional_class_adds_frm_optional() {
-		$class = 'frm_form_field';
-		$field = array( 'type' => 'address' );
-
+		$class  = 'frm_form_field';
+		$field  = array( 'type' => 'address' );
 		$result = FrmAddressesController::add_optional_class( $class, $field );
 
 		$this->assertStringContainsString( 'frm_optional', $result, 'Result should contain frm_optional class.' );
@@ -299,12 +295,13 @@ class test_FrmFieldAddress extends FrmUnitTest {
 		}
 	}
 
-	public function address_type_provider() {
-		return array(
-			'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) ),
-			'us'           => array( 'us', array( 'line1', 'line2', 'city', 'state', 'zip' ) ),
-			'europe'       => array( 'europe', array( 'line1', 'line2', 'city', 'zip', 'country' ) ),
-			'generic'      => array( 'generic', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) ),
-		);
+	/**
+	 * @return void array<(array<string> | string)>>
+	 */
+	public function address_type_provider(): \Iterator {
+		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
+		yield 'us' => array( 'us', array( 'line1', 'line2', 'city', 'state', 'zip' ) );
+		yield 'europe' => array( 'europe', array( 'line1', 'line2', 'city', 'zip', 'country' ) );
+		yield 'generic' => array( 'generic', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
 	}
 }

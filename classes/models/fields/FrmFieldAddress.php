@@ -52,10 +52,11 @@ class FrmFieldAddress extends FrmFieldCombo {
 
 	protected function field_settings_for_type() {
 		$settings = array(
-			'clear_on_focus' => false, // Don't use the regular placeholder option.
-			'default_value'  => true,
-			'description'    => false,
-			'visibility'     => true,
+			'clear_on_focus'            => false,
+			// Don't use the regular placeholder option.
+						'default_value' => true,
+			'description'               => false,
+			'visibility'                => true,
 		);
 
 		if ( is_array( $this->default_value_to_array() ) ) {
@@ -66,7 +67,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	protected function extra_field_opts() {
-		$options = parent::extra_field_opts();
+		$options                 = parent::extra_field_opts();
 		$options['address_type'] = 'international';
 
 		return $options;
@@ -86,10 +87,22 @@ class FrmFieldAddress extends FrmFieldCombo {
 		// Set default classes and attributes
 		$default_atts = array(
 			'line1'   => array( 'autocomplete' => 'address-line1' ),
-			'line2'   => array( 'autocomplete' => 'address-line2', 'optional' => true ),
-			'city'    => array( 'autocomplete' => 'address-level2', 'wrapper_classes' => 'frm_third frm_first' ),
-			'state'   => array( 'autocomplete' => 'address-level1', 'wrapper_classes' => 'frm_third' ),
-			'zip'     => array( 'autocomplete' => 'postal-code', 'wrapper_classes' => 'frm_third' ),
+			'line2'   => array(
+				'autocomplete' => 'address-line2',
+				'optional'     => true,
+			),
+			'city'    => array(
+				'autocomplete'    => 'address-level2',
+				'wrapper_classes' => 'frm_third frm_first',
+			),
+			'state'   => array(
+				'autocomplete'    => 'address-level1',
+				'wrapper_classes' => 'frm_third',
+			),
+			'zip'     => array(
+				'autocomplete'    => 'postal-code',
+				'wrapper_classes' => 'frm_third',
+			),
 			'country' => array( 'autocomplete' => 'country-name' ),
 		);
 
@@ -103,18 +116,18 @@ class FrmFieldAddress extends FrmFieldCombo {
 		if ( 'europe' === $address_type ) {
 			unset( $sub_fields['state'] );
 			$sub_fields['city']['wrapper_classes'] = 'frm_third';
-			$sub_fields['zip']['wrapper_classes'] = 'frm_third frm_first';
+			$sub_fields['zip']['wrapper_classes']  = 'frm_third frm_first';
 		}
 
 		// Handle US address type (state dropdown)
 		if ( 'us' === $address_type ) {
-			$sub_fields['state']['type'] = 'select';
+			$sub_fields['state']['type']    = 'select';
 			$sub_fields['state']['options'] = FrmFieldsHelper::get_us_states();
 		}
 
 		// Handle international address type (country dropdown)
 		if ( 'international' === $address_type ) {
-			$sub_fields['country']['type'] = 'select';
+			$sub_fields['country']['type']    = 'select';
 			$sub_fields['country']['options'] = FrmFieldsHelper::get_countries();
 		}
 
@@ -143,8 +156,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	 * @since x.x
 	 */
 	public function translatable_strings() {
-		$strings = parent::translatable_strings();
-		return $strings;
+		return parent::translatable_strings();
 	}
 
 	/**
@@ -262,7 +274,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 
 		if ( ! is_array( $default_value ) && ! str_contains( $default_value, ']' ) ) {
 			// This is a default value without a shortcode so tear it up.
-			$default_value = $this->address_string_to_array( $default_value );
+			return $this->address_string_to_array( $default_value );
 		}
 
 		return $default_value;
@@ -321,7 +333,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	 * @since x.x
 	 *
 	 * @param array|string $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return array
 	 */
@@ -348,8 +360,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 		);
 
 		$new_value['line1'] = $value[0];
-
-		$last_item = end( $value );
+		$last_item          = end( $value );
 
 		if ( $count === 6 || ( $count === 5 && is_numeric( $last_item ) ) ) {
 			$new_value['line2'] = $value[1];

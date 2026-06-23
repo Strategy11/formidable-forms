@@ -60,7 +60,7 @@ class FrmComboFieldsController {
 			if ( ( ! $use_placeholder || empty( $default_value[ $sub_field ] ) ) && $sub_field === 'line1' ) {
 				// Allow for 'inside' label position.
 				$default_value[ $sub_field ] = FrmFieldsController::get_default_value_from_name( $field );
-				$use_placeholder             = $default_value[ $sub_field ] != '';
+				$use_placeholder             = $default_value[ $sub_field ] !== '';
 			}
 
 			if ( ! $use_placeholder ) {
@@ -105,6 +105,9 @@ class FrmComboFieldsController {
 		$field_obj     = FrmFieldFactory::get_field_type( $atts['field']['type'], $atts['field'] );
 
 		if ( $atts['field']['type'] === 'address' ) {
+			/**
+			 * @var FrmFieldAddress $field_obj
+			 */
 			$placeholder   = $field_obj->address_string_to_array( $placeholder );
 			$default_value = $field_obj->address_string_to_array( $default_value );
 		}

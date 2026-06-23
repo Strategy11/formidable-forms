@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'key' ) );
 	?> />
 	<?php
-	}
+	}//end if
 
 	if ( $sub_field['label'] ) {
 		FrmComboFieldsController::include_sub_label(
@@ -55,6 +55,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 	?>
 </div>
-<?php } ?>
+<?php
+}//end foreach
+ ?>
 </div>
 </fieldset>
