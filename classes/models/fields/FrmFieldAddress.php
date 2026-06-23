@@ -204,6 +204,8 @@ class FrmFieldAddress extends FrmFieldCombo {
 	 *
 	 * @param array $value
 	 * @param array $atts
+	 *
+	 * @return array|string
 	 */
 	public function format_address_for_display( $value, $atts = array() ) {
 		$defaults = $this->empty_value_array();
@@ -261,7 +263,9 @@ class FrmFieldAddress extends FrmFieldCombo {
 		 * @param string $address_format
 		 * @param array  $args
 		 */
-		return apply_filters( 'frm_address_format', $address_format, array( 'field' => $this->field ) );
+		/** @var string */
+		$result = apply_filters( 'frm_address_format', $address_format, array( 'field' => $this->field ) );
+		return is_string( $result ) ? $result : $address_format;
 	}
 
 	/**
@@ -277,12 +281,25 @@ class FrmFieldAddress extends FrmFieldCombo {
 			return $this->address_string_to_array( $default_value );
 		}
 
+		/** @var array|string */
 		return $default_value;
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param mixed $value
+	 *
+	 * @return array
+	 */
 	public function address_string_to_array( $value ) {
 		if ( is_array( $value ) ) {
 			return $value;
+		}
+
+		if ( ! is_string( $value ) ) {
+			$empty_array = array_keys( $this->empty_value_array() );
+			return array_combine( $empty_array, array_fill( 0, count( $empty_array ), '' ) );
 		}
 
 		$value             = array_map( 'trim', explode( ',', $value ) );
@@ -314,7 +331,8 @@ class FrmFieldAddress extends FrmFieldCombo {
 		 *
 		 * @param array $empty_value_array array of empty address data.
 		 */
-		return apply_filters(
+		/** @var array */
+		$result = apply_filters(
 			'frm_address_empty_value_array',
 			array(
 				'line1'   => '',
@@ -324,6 +342,15 @@ class FrmFieldAddress extends FrmFieldCombo {
 				'zip'     => '',
 				'country' => '',
 			)
+		);
+
+		return is_array( $result ) ? $result : array(
+			'line1'   => '',
+			'line2'   => '',
+			'city'    => '',
+			'state'   => '',
+			'zip'     => '',
+			'country' => '',
 		);
 	}
 

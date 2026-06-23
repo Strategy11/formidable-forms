@@ -508,7 +508,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @return array
 	 */
-	protected function get_inputs_container_attrs() {
+	public function get_inputs_container_attrs() {
 		return array(
 			'class' => 'frm_combo_inputs_container',
 			'id'    => 'frm_combo_inputs_container_' . $this->field_id,

@@ -70,7 +70,8 @@ class FrmAddressesController extends FrmComboFieldsController {
 		 *
 		 * @param array $empty_value_array array of empty address data.
 		 */
-		return apply_filters(
+		/** @var array */
+		$result = apply_filters(
 			'frm_address_empty_value_array',
 			array(
 				'line1'   => '',
@@ -80,6 +81,15 @@ class FrmAddressesController extends FrmComboFieldsController {
 				'zip'     => '',
 				'country' => '',
 			)
+		);
+
+		return is_array( $result ) ? $result : array(
+			'line1'   => '',
+			'line2'   => '',
+			'city'    => '',
+			'state'   => '',
+			'zip'     => '',
+			'country' => '',
 		);
 	}
 
@@ -175,7 +185,10 @@ class FrmAddressesController extends FrmComboFieldsController {
 		 * @param array $fields
 		 * @param array $field
 		 */
-		return apply_filters( 'frm_address_sub_fields', $fields, $field );
+		/** @var array */
+		$result = apply_filters( 'frm_address_sub_fields', $fields, $field );
+
+		return is_array( $result ) ? $result : $fields;
 	}
 
 	/**
@@ -269,7 +282,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 *
 	 * @param string $country Country name.
 	 *
-	 * @return string $country_code Country code.
+	 * @return string Country code.
 	 */
 	public static function get_country_code( $country ) {
 		self::maybe_define_country_codes();
