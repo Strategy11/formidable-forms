@@ -27,9 +27,9 @@ class test_FrmFieldCombo extends FrmUnitTest {
 						'label'   => 'Third child',
 						'options' => array(),
 					),
-					'forth_child'  => array(
+					'fourth_child' => array(
 						'type'    => 'text',
-						'label'   => 'Forth child',
+						'label'   => 'Fourth child',
 						'options' => array(),
 					),
 				),
@@ -141,7 +141,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 						'name'    => 'another name',
 						'options' => array(),
 					),
-					'forth'  => true,
+					'fourth' => true,
 				),
 			)
 		);
@@ -200,10 +200,10 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$this->assertSame(
 			array(
-				'first_child'  => '',
-				'second_child' => '',
-				'third_child'  => '',
-				'forth_child'  => '',
+				'first_child'   => '',
+				'second_child'  => '',
+				'third_child'   => '',
+				'fourth_child'  => '',
 			),
 			$this->run_private_method( array( $combo_field, 'get_default_value' ) )
 		);
@@ -286,8 +286,8 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertSame( ' class="frm-class1 frm-class2 frm_optional"  ', $atts );
 
 		$sub_field = array(
-			'name'    => 'forth',
-			'label'   => 'Forth',
+			'name'    => 'fourth',
+			'label'   => 'Fourth',
 			'type'    => 'text',
 			'options' => array(),
 		);
