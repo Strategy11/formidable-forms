@@ -40,7 +40,11 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'address_type' => 'international',
 		);
 
-		$result = FrmAddressesController::get_sub_fields( $field );
+		$controller = new FrmAddressesController();
+		$result     = $this->run_private_method(
+			array( $controller, 'get_sub_fields' ),
+			array( $field )
+		);
 
 		$this->assertIsArray( $result, 'Result should be an array.' );
 		$this->assertArrayHasKey( 'line1', $result, 'Result should have line1.' );
@@ -61,7 +65,11 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'address_type' => 'us',
 		);
 
-		$result = FrmAddressesController::get_sub_fields( $field );
+		$controller = new FrmAddressesController();
+		$result     = $this->run_private_method(
+			array( $controller, 'get_sub_fields' ),
+			array( $field )
+		);
 
 		$this->assertIsArray( $result, 'Result should be an array.' );
 		$this->assertArrayHasKey( 'line1', $result, 'Result should have line1.' );
@@ -82,7 +90,11 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'address_type' => 'europe',
 		);
 
-		$result = FrmAddressesController::get_sub_fields( $field );
+		$controller = new FrmAddressesController();
+		$result     = $this->run_private_method(
+			array( $controller, 'get_sub_fields' ),
+			array( $field )
+		);
 
 		$this->assertIsArray( $result, 'Result should be an array.' );
 		$this->assertArrayHasKey( 'line1', $result, 'Result should have line1.' );
@@ -103,7 +115,11 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'address_type' => 'generic',
 		);
 
-		$result = FrmAddressesController::get_sub_fields( $field );
+		$controller = new FrmAddressesController();
+		$result     = $this->run_private_method(
+			array( $controller, 'get_sub_fields' ),
+			array( $field )
+		);
 
 		$this->assertIsArray( $result, 'Result should be an array.' );
 		$this->assertArrayHasKey( 'line1', $result, 'Result should have line1.' );
@@ -124,7 +140,11 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'type' => 'address',
 		);
 
-		$result = FrmAddressesController::get_sub_fields( $field );
+		$controller = new FrmAddressesController();
+		$result     = $this->run_private_method(
+			array( $controller, 'get_sub_fields' ),
+			array( $field )
+		);
 
 		$this->assertArrayHasKey( 'country', $result, 'Result should have country when address_type is missing.' );
 	}
@@ -255,7 +275,11 @@ class test_FrmFieldAddress extends FrmUnitTest {
 			'address_type' => $address_type,
 		);
 
-		$result = FrmAddressesController::get_sub_fields( $field );
+		$controller = new FrmAddressesController();
+		$result     = $this->run_private_method(
+			array( $controller, 'get_sub_fields' ),
+			array( $field )
+		);
 
 		foreach ( $expected_keys as $key ) {
 			$this->assertArrayHasKey( $key, $result, "Result should have {$key} for {$address_type} address type." );

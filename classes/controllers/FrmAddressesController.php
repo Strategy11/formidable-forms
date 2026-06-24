@@ -94,12 +94,12 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 *
 	 * @return array
 	 */
-	public static function get_sub_fields( $field ) {
+	protected static function get_sub_fields( $field ) {
 		$fields = array(
 			'line1' => array(
 				'type'    => 'text',
 				'classes' => '',
-				'label'   => 1,
+				'label'   => __( 'Line 1', 'formidable' ),
 				'atts'    => array(
 					'autocomplete' => 'address-line1',
 				),
@@ -108,7 +108,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 				'type'     => 'text',
 				'classes'  => '',
 				'optional' => true,
-				'label'    => 1,
+				'label'    => __( 'Line 2', 'formidable' ),
 				'atts'     => array(
 					'autocomplete' => 'address-line2',
 				),
@@ -116,7 +116,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 			'city'  => array(
 				'type'    => 'text',
 				'classes' => 'frm_third frm_first',
-				'label'   => 1,
+				'label'   => __( 'City', 'formidable' ),
 				'atts'    => array(
 					'autocomplete' => 'address-level2',
 				),
@@ -124,7 +124,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 			'state' => array(
 				'type'    => 'text',
 				'classes' => 'frm_third',
-				'label'   => 1,
+				'label'   => __( 'State/Province', 'formidable' ),
 				'atts'    => array(
 					'autocomplete' => 'address-level1',
 				),
@@ -132,7 +132,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 			'zip'   => array(
 				'type'    => 'text',
 				'classes' => 'frm_third',
-				'label'   => 1,
+				'label'   => __( 'Zip/Postal', 'formidable' ),
 				'atts'    => array(
 					'autocomplete' => 'postal-code',
 				),
@@ -156,7 +156,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 			$fields['country'] = array(
 				'type'    => 'select',
 				'classes' => '',
-				'label'   => 1,
+				'label'   => __( 'Country', 'formidable' ),
 				'options' => FrmFieldsHelper::get_countries(),
 				'atts'    => array(
 					'autocomplete' => 'country-name',

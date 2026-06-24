@@ -12,19 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmComboFieldsController {
 
 	/**
-	 * Get sub fields for combo fields.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $field
-	 *
-	 * @return array
-	 */
-	public static function get_sub_fields( $field ) {
-		return array();
-	}
-
-	/**
 	 * Fill values with defaults.
 	 *
 	 * @since x.x

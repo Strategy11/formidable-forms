@@ -41,7 +41,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @return array
 	 */
-	public function get_sub_fields() {
+	protected function get_sub_fields() {
 		return $this->sub_fields;
 	}
 

@@ -62,6 +62,14 @@ class FrmFieldAddress extends FrmFieldCombo {
 		$options                 = parent::extra_field_opts();
 		$options['address_type'] = 'international';
 
+		// Default descriptions for sub-fields (line1 and line2 are empty).
+		$options['line1_desc']   = '';
+		$options['line2_desc']   = '';
+		$options['city_desc']    = __( 'City', 'formidable' );
+		$options['state_desc']   = __( 'State/Province', 'formidable' );
+		$options['zip_desc']     = __( 'Zip/Postal', 'formidable' );
+		$options['country_desc'] = __( 'Country', 'formidable' );
+
 		return $options;
 	}
 
@@ -101,6 +109,10 @@ class FrmFieldAddress extends FrmFieldCombo {
 		foreach ( $sub_fields as $name => &$sub_field ) {
 			if ( isset( $default_atts[ $name ] ) ) {
 				$sub_field = array_merge( $sub_field, $default_atts[ $name ] );
+			}
+			// Ensure label is preserved from registered sub-fields.
+			if ( ! isset( $sub_field['label'] ) ) {
+				$sub_field['label'] = $this->sub_fields[ $name ]['label'] ?? '';
 			}
 		}
 
