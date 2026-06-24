@@ -772,7 +772,6 @@
 				}
 			}
 		} catch ( err ) {
-			console.error( 'Failed to get card field state on blur', err );
 		}
 	}
 
