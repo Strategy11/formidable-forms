@@ -718,7 +718,12 @@
 				onError,
 				style: frmPayPalVars.style,
 				inputEvents: {
-					onChange: onCardFieldsChange
+					onChange: onCardFieldsChange,
+					onFocus: function() {
+						// This is intentionally left blank, but it should not be deleted.
+						// onFocus is required for onBlur to work.
+					},
+					onBlur: onCardFieldsBlur
 				}
 			};
 
@@ -746,6 +751,28 @@
 			} else {
 				disableSubmit( thisForm );
 			}
+		}
+	}
+
+	/**
+	 * Handle card field blur events.
+	 *
+	 * @param {Object} data The onBlur event data.
+	 */
+	async function onCardFieldsBlur( data ) {
+		try {
+			const state = await cardFieldsInstance.getState();
+			cardFieldsValid = state.isFormValid;
+
+			if ( selectedMethod === 'card' ) {
+				if ( cardFieldsValid ) {
+					enableSubmit();
+				} else {
+					disableSubmit( thisForm );
+				}
+			}
+		} catch ( err ) {
+			console.error( 'Failed to get card field state on blur', err );
 		}
 	}
 
