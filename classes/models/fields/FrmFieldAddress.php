@@ -110,6 +110,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 			if ( isset( $default_atts[ $name ] ) ) {
 				$sub_field = array_merge( $sub_field, $default_atts[ $name ] );
 			}
+
 			// Ensure label is preserved from registered sub-fields.
 			if ( ! isset( $sub_field['label'] ) ) {
 				$sub_field['label'] = $this->sub_fields[ $name ]['label'] ?? '';
@@ -452,7 +453,8 @@ class FrmFieldAddress extends FrmFieldCombo {
 			$field_id => $field_name,
 		);
 
-		// Include sub-field headings.
-		return array_merge( $headings, parent::get_export_headings() );
+		// Include sub-field headings. Use the union operator instead of array_merge
+		// so the numeric main field key (e.g. 10) is preserved and not re-indexed.
+		return $headings + parent::get_export_headings();
 	}
 }
