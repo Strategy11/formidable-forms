@@ -215,12 +215,12 @@ class test_FrmFieldAddress extends FrmUnitTest {
 		$result        = $address_field->get_export_headings();
 
 		$this->assertArrayHasKey( 10, $result, 'Result should have main field column.' );
-		$this->assertArrayHasKey( '10-line1', $result, 'Result should have line1 column.' );
-		$this->assertArrayHasKey( '10-line2', $result, 'Result should have line2 column.' );
-		$this->assertArrayHasKey( '10-city', $result, 'Result should have city column.' );
-		$this->assertArrayHasKey( '10-state', $result, 'Result should have state column.' );
-		$this->assertArrayHasKey( '10-zip', $result, 'Result should have zip column.' );
-		$this->assertArrayHasKey( '10-country', $result, 'Result should have country column.' );
+		$this->assertArrayHasKey( '10_line1', $result, 'Result should have line1 column.' );
+		$this->assertArrayHasKey( '10_line2', $result, 'Result should have line2 column.' );
+		$this->assertArrayHasKey( '10_city', $result, 'Result should have city column.' );
+		$this->assertArrayHasKey( '10_state', $result, 'Result should have state column.' );
+		$this->assertArrayHasKey( '10_zip', $result, 'Result should have zip column.' );
+		$this->assertArrayHasKey( '10_country', $result, 'Result should have country column.' );
 	}
 
 	/**

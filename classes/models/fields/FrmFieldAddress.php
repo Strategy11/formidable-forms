@@ -248,8 +248,8 @@ class FrmFieldAddress extends FrmFieldCombo {
 		 * @param string $address_format
 		 * @param array  $args
 		 */
-		/** @var string */
 		$result = apply_filters( 'frm_address_format', $address_format, array( 'field' => $this->field ) );
+
 		return is_string( $result ) ? $result : $address_format;
 	}
 
@@ -337,7 +337,6 @@ class FrmFieldAddress extends FrmFieldCombo {
 			return $value;
 		}
 
-		/** @var string */
 		$sep   = apply_filters( 'frm_csv_sep', ', ' );
 		$sep   = is_string( $sep ) && $sep !== '' ? $sep : ', ';
 		$value = explode( $sep, $value );

@@ -87,8 +87,15 @@ class FrmComboFieldsController {
 	 */
 	public static function get_dropdown_label( $atts ) {
 		$default = $atts['sub_field']['placeholder'] ?? ' ';
-		/** @var string */
+
+		/**
+		 * @since x.x
+		 *
+		 * @param string $default
+		 * @param array  $atts
+		 */
 		$result = apply_filters( 'frm_combo_dropdown_label', $default, $atts );
+
 		return is_string( $result ) ? $result : $default;
 	}
 
