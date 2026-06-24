@@ -206,7 +206,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 */
 	public function test_get_export_headings_adds_address_columns() {
 		$field = array(
-			'id'   => 10,
+			'id'   => '10',
 			'type' => 'address',
 			'name' => 'Address',
 		);
@@ -214,7 +214,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 		$address_field = new FrmFieldAddress( $field );
 		$result        = $address_field->get_export_headings();
 
-		$this->assertArrayHasKey( 10, $result, 'Result should have main field column.' );
+		$this->assertArrayHasKey( '10', $result, 'Result should have main field column.' );
 		$this->assertArrayHasKey( '10_line1', $result, 'Result should have line1 column.' );
 		$this->assertArrayHasKey( '10_line2', $result, 'Result should have line2 column.' );
 		$this->assertArrayHasKey( '10_city', $result, 'Result should have city column.' );
