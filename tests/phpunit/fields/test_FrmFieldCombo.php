@@ -322,7 +322,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 				$field_id . '_first_child'  => $field_name . ' - First child',
 				$field_id . '_second_child' => $field_name . ' - Second child',
 				$field_id . '_third_child'  => $field_name . ' - Third child',
-				$field_id . '_forth_child'  => $field_name . ' - Forth child',
+				$field_id . '_fourth_child' => $field_name . ' - Fourth child',
 			),
 			$combo_field->get_export_headings()
 		);
