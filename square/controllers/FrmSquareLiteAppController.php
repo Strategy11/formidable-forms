@@ -179,7 +179,7 @@ class FrmSquareLiteAppController {
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$details, $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) ) {
 			return;
 		}
 
@@ -192,7 +192,7 @@ class FrmSquareLiteAppController {
 		if ( 'us' === $address_field->field_options['address_type'] ) {
 			$country_code = 'US';
 		} else {
-			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+			$country_code = FrmAddressesController::get_country_code( $address['country'] );
 		}
 
 		if ( ! $address['line1'] && ! $address['line2'] && ! $address['city'] && ! $address['state'] && ! $address['zip'] && ! $country_code ) {
