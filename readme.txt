@@ -4,7 +4,7 @@ Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.32
+Stable tag: 6.32.1
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -364,6 +364,15 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.32.1 =
+* Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
+* Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status. Credit to Yaswanth Reddy Sunkara and WPScan for reporting the issue.
+* Security: Additional validation has been added to guarantee a PayPal Commerce Apple Pay payment has the correct status.
+* Fix: A cron job for handling overdue subscriptions would not properly get unscheduled after disconnecting Square and PayPal.
+* Fix: The PayPal Commerce test mode option would not properly update on save when the PayPal add-on was also active.
+* Fix: Email settings in payment actions would incorrectly display autofill options in Safari.
+* Options to use credit cards in PayPal Commerce subscriptions has been removed as it did not properly work.
+
 = 6.32 =
 * New: The form listing table now includes new Embeds and List Settings columns, for displaying every post and page where a form is embedded, and an added gear icon for controlling screen options.
 * New: The generated Formidable CSS file can now work from the uploads directory instead of the plugin directory. This will automatically work based on the DISALLOW_FILE_MODS constant, and can additionally be controlled using a new frm_add_css_to_uploads_dir filter.
@@ -402,5 +411,5 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.29 =
-This version improves Stripe payment validation. Upgrade immediately if you are using Stripe payments.
+= 6.32.1 =
+This version improves Stripe, Square, and PayPal Commerce payment validation. Upgrade immediately if you are using any of these payment methods.

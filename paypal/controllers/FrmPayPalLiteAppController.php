@@ -660,12 +660,6 @@ class FrmPayPalLiteAppController {
 			'description'         => $description,
 		);
 
-		$vault_setup_token = FrmAppHelper::get_post_param( 'vault_setup_token', '', 'sanitize_text_field' );
-
-		if ( $vault_setup_token ) {
-			$data['vault_setup_token'] = $vault_setup_token;
-		}
-
 		$response = FrmPayPalLiteConnectHelper::create_subscription( $data );
 
 		if ( false === $response ) {
@@ -683,28 +677,6 @@ class FrmPayPalLiteAppController {
 		}
 
 		wp_send_json_success( array( 'subscriptionID' => $response->subscription_id ) );
-	}
-
-	public static function create_vault_setup_token() {
-		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
-
-		$payment_source = FrmAppHelper::get_post_param( 'payment_source', 'card', 'sanitize_text_field' );
-
-		$data = array(
-			'payment_source' => $payment_source,
-		);
-
-		$response = FrmPayPalLiteConnectHelper::create_vault_setup_token( $data );
-
-		if ( false === $response ) {
-			wp_send_json_error( 'Failed to create PayPal vault setup token' );
-		}
-
-		if ( ! isset( $response->token ) ) {
-			wp_send_json_error( 'Failed to create PayPal vault setup token' );
-		}
-
-		wp_send_json_success( array( 'token' => $response->token ) );
 	}
 
 	/**
@@ -874,5 +846,13 @@ class FrmPayPalLiteAppController {
 			'message'  => $clean_message ? $clean_message : $fallback,
 			'debug_id' => $matches[1],
 		);
+	}
+
+	/**
+	 * @deprecated 6.32.1
+	 */
+	public static function create_vault_setup_token() {
+		_deprecated_function( __METHOD__, '6.32.1' );
+		wp_send_json_error( 'This API endpoint is no longer in use.' );
 	}
 }

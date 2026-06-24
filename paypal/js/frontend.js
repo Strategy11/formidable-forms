@@ -155,7 +155,11 @@
 		}
 
 		// 2. Build the radio selector UI, then render marks after it's in the DOM.
+		// Hide the radio group if there's only one payment method available.
 		const radioGroup = buildRadioGroup();
+		if ( paymentMethods.size === 1 ) {
+			radioGroup.style.display = 'none';
+		}
 		cardElement.append( radioGroup );
 		renderMarks();
 
@@ -219,7 +223,8 @@
 		const { cardFieldsAreSupported, buttonsAreEnabled, isRecurring } = opts;
 
 		// --- Card Fields ---
-		if ( cardFieldsAreSupported ) {
+		// Card fields are not supported for recurring payments
+		if ( cardFieldsAreSupported && ! isRecurring ) {
 			const cardFields = createCardFieldsSDKInstance();
 			if ( cardFields?.isEligible() ) {
 				cardFieldsInstance = cardFields;
@@ -703,6 +708,11 @@
 	 * @return {Object|null} The card fields instance.
 	 */
 	function createCardFieldsSDKInstance() {
+		if ( isRecurring ) {
+			// Credit cards are only supported for one time payments.
+			return null;
+		}
+
 		try {
 			const config = {
 				onError,
@@ -712,13 +722,8 @@
 				}
 			};
 
-			if ( isRecurring ) {
-				config.createVaultSetupToken = createVaultSetupToken;
-				config.onApprove = onVaultApprove;
-			} else {
-				config.createOrder = createOrder;
-				config.onApprove = onApprove;
-			}
+			config.createOrder = createOrder;
+			config.onApprove = onApprove;
 
 			return window.paypal.CardFields( config );
 		} catch ( err ) {
@@ -915,7 +920,7 @@
 	 */
 	function getGooglePaymentsClient() {
 		return new google.payments.api.PaymentsClient( {
-			environment: 'TEST',
+			environment: frmPayPalVars.mode === 'test' ? 'TEST' : 'PRODUCTION',
 			paymentDataCallbacks: {
 				onPaymentAuthorized
 			}
@@ -1192,6 +1197,12 @@
 					await applePayInstance.initiatePayerAction( { orderId } );
 				}
 
+				if ( approvalStatus !== 'APPROVED' && approvalStatus !== 'COMPLETED' ) {
+					session.completePayment( ApplePaySession.STATUS_FAILURE );
+					sessionCompleted = true;
+					return;
+				}
+
 				session.completePayment( ApplePaySession.STATUS_SUCCESS );
 				sessionCompleted = true;
 
@@ -1354,69 +1365,7 @@
 		return orderData.data.orderID;
 	}
 
-	async function createVaultSetupToken() {
-		const formData = new FormData( thisForm );
-		formData.append( 'action', 'frm_paypal_create_vault_setup_token' );
-		formData.append( 'nonce', frmPayPalVars.nonce );
-		formData.append( 'payment_source', 'card' );
-
-		formData.delete( 'frm_action' );
-		formData.delete( 'form_key' );
-		formData.delete( 'item_key' );
-
-		const response = await fetch( frmPayPalVars.ajax, {
-			method: 'POST',
-			body: formData
-		} );
-
-		if ( ! response.ok ) {
-			throw new Error( 'Failed to create PayPal vault setup token' );
-		}
-
-		const tokenData = await response.json();
-
-		if ( ! tokenData.success || ! tokenData.data.token ) {
-			console.error( 'Vault setup token response:', tokenData );
-			throwServerError( tokenData.data, 'Failed to create PayPal vault setup token', 'create_vault_token' );
-		}
-
-		return tokenData.data.token;
-	}
-
 	// ---- Payment Callbacks ----
-
-	/**
-	 * Handle vault approval for card field subscriptions.
-	 * Receives the vaultSetupToken, sends it to the server to create
-	 * a payment token and subscription, then submits the form.
-	 *
-	 * @param {Object} data The approval data containing vaultSetupToken.
-	 */
-	async function onVaultApprove( data ) {
-		if ( 'NO' === data.liabilityShift || 'UNKNOWN' === data.liabilityShift ) {
-			onError( new Error( 'This payment was flagged as possible fraud and has been rejected.' ) );
-			return;
-		}
-
-		try {
-			let vaultInput = thisForm.querySelector( 'input[name="vault_setup_token"]' );
-			if ( ! vaultInput ) {
-				vaultInput = document.createElement( 'input' );
-				vaultInput.type = 'hidden';
-				vaultInput.name = 'vault_setup_token';
-				thisForm.append( vaultInput );
-			}
-			vaultInput.value = data.vaultSetupToken;
-
-			const subscriptionID = await createSubscription( data );
-			await onApprove( {
-				subscriptionID,
-				paymentSource: 'card'
-			} );
-		} catch ( err ) {
-			onError( err );
-		}
-	}
 
 	/**
 	 * Handle approved payment.
@@ -1454,16 +1403,13 @@
 
 		thisForm.append( paymentSourceInput );
 
+		// If using the PayPal buttons to submit, there will not be a submitEvent.
 		if ( ! submitEvent ) {
 			submitEvent = new Event( 'submit', { cancelable: true, bubbles: true } );
 			submitEvent.target = thisForm;
 		}
 
-		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			frmFrontForm.submitFormManual( submitEvent, thisForm );
-		} else {
-			thisForm.submit();
-		}
+		frmFrontForm.submitFormManual( submitEvent, thisForm );
 	}
 
 	/**
@@ -1622,7 +1568,11 @@
 		}
 
 		if ( 'string' === typeof err ) {
-			return parsePayPalErrorString( err ) || err;
+			const parsed = parsePayPalErrorString( err );
+			if ( parsed ) {
+				return parsed;
+			}
+			return mapPayPalErrorCode( err ) || err;
 		}
 
 		// PayPal SDK sometimes nests the payload under `err.data` or `err.response`.
@@ -1635,10 +1585,31 @@
 		}
 
 		if ( err.message ) {
-			return parsePayPalErrorString( err.message ) || err.message;
+			const parsed = parsePayPalErrorString( err.message );
+			if ( parsed ) {
+				return parsed;
+			}
+			return mapPayPalErrorCode( err.message ) || err.message;
 		}
 
 		return fallback;
+	}
+
+	/**
+	 * Map PayPal error codes to user-friendly messages.
+	 *
+	 * @param {string} code The PayPal error code (e.g. INVALID_CVV).
+	 * @return {string} The user-friendly message, or empty string if not mapped.
+	 */
+	function mapPayPalErrorCode( code ) {
+		const codeMap = {
+			INVALID_CVV: 'Please enter a valid CVV code.',
+			INVALID_CARD_NUMBER: 'Please enter a valid card number.',
+			INVALID_EXPIRY: 'Please enter a valid expiry date.',
+		};
+
+		const upperCode = code.toUpperCase();
+		return codeMap[ upperCode ] || '';
 	}
 
 	/**

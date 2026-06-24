@@ -641,4 +641,22 @@ class FrmTransLiteAppHelper {
 
 		return $sorted + $gateways;
 	}
+
+	/**
+	 * @since 6.32.1
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode 'test' or 'live'.
+	 *
+	 * @return void
+	 */
+	public static function trigger_gateway_disconnected_hook( $gateway, $mode ) {
+		/**
+		 * @since 6.32.1
+		 *
+		 * @param string $gateway 'stripe', 'square', or 'paypal'.
+		 * @param string $mode 'test' or 'live'.
+		 */
+		do_action( 'frm_disconnected_gateway', $gateway, $mode );
+	}
 }

@@ -38,3 +38,12 @@
 .frm_payment_settings_tab[for="frm_toggle_stripe_settings"] .frmsvg {
 	width: 53px;
 }
+
+/**
+ * Hide Safari contacts auto-fill button for payment action inputs with email in the name attribute.
+ */
+.frm_single_payment_settings input[name*="email"]::-webkit-contacts-auto-fill-button {
+	visibility: hidden;
+	display: none !important;
+	pointer-events: none;
+}
