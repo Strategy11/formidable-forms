@@ -24,5 +24,8 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Install Oxlint
+        run: npm install oxlint@1.59.0 --no-package-lock
+
       - name: Run Oxlint
         run: ./node_modules/.bin/oxlint . --format unix
