@@ -423,4 +423,24 @@ class FrmFieldAddress extends FrmFieldCombo {
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
 	}
+
+	/**
+	 * Get export headings for address field.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_export_headings() {
+		$field_id   = $this->field->id ?? $this->field['id'];
+		$field_name = $this->field->name ?? $this->field['name'];
+
+		// Include main field heading at the front.
+		$headings = array(
+			$field_id => $field_name,
+		);
+
+		// Include sub-field headings.
+		return array_merge( $headings, parent::get_export_headings() );
+	}
 }

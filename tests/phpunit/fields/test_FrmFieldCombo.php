@@ -318,7 +318,6 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$this->assertSame(
 			array(
-				$field_id                   => $field_name,
 				$field_id . '_first_child'  => $field_name . ' - First child',
 				$field_id . '_second_child' => $field_name . ' - Second child',
 				$field_id . '_third_child'  => $field_name . ' - Third child',
