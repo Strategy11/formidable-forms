@@ -65,25 +65,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 * @return array
 	 */
 	private static function empty_value_array() {
-		/**
-		 * @since x.x
-		 *
-		 * @param array $empty_value_array array of empty address data.
-		 */
-		/** @var array */
-		$result = apply_filters(
-			'frm_address_empty_value_array',
-			array(
-				'line1'   => '',
-				'line2'   => '',
-				'city'    => '',
-				'state'   => '',
-				'zip'     => '',
-				'country' => '',
-			)
-		);
-
-		return is_array( $result ) ? $result : array(
+		$default = array(
 			'line1'   => '',
 			'line2'   => '',
 			'city'    => '',
@@ -91,6 +73,16 @@ class FrmAddressesController extends FrmComboFieldsController {
 			'zip'     => '',
 			'country' => '',
 		);
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array $empty_value_array array of empty address data.
+		 */
+		/** @var array */
+		$result = apply_filters( 'frm_address_empty_value_array', $default );
+
+		return is_array( $result ) ? $result : $default;
 	}
 
 	/**
