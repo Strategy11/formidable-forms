@@ -202,45 +202,25 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * Test add_csv_columns adds address columns.
+	 * Test get_export_headings adds address columns.
 	 */
-	public function test_add_csv_columns_adds_address_columns() {
-		$field = (object) array(
+	public function test_get_export_headings_adds_address_columns() {
+		$field = array(
 			'id'   => 10,
 			'type' => 'address',
 			'name' => 'Address',
 		);
 
-		$columns = array(
-			'field_10' => 'Address',
-		);
+		$address_field = new FrmFieldAddress( $field );
+		$result        = $address_field->get_export_headings();
 
-		$result = FrmAddressesController::add_csv_columns( $columns, array( 'field' => $field ) );
-
+		$this->assertArrayHasKey( 'field_10', $result, 'Result should have main field column.' );
 		$this->assertArrayHasKey( 'field_10-line1', $result, 'Result should have line1 column.' );
 		$this->assertArrayHasKey( 'field_10-line2', $result, 'Result should have line2 column.' );
 		$this->assertArrayHasKey( 'field_10-city', $result, 'Result should have city column.' );
 		$this->assertArrayHasKey( 'field_10-state', $result, 'Result should have state column.' );
 		$this->assertArrayHasKey( 'field_10-zip', $result, 'Result should have zip column.' );
 		$this->assertArrayHasKey( 'field_10-country', $result, 'Result should have country column.' );
-	}
-
-	/**
-	 * Test add_csv_columns does not modify non-address fields.
-	 */
-	public function test_add_csv_columns_does_not_modify_non_address_fields() {
-		$field = (object) array(
-			'id'   => 10,
-			'type' => 'text',
-		);
-
-		$columns = array(
-			'field_10' => 'Text Field',
-		);
-
-		$result = FrmAddressesController::add_csv_columns( $columns, array( 'field' => $field ) );
-
-		$this->assertSame( $columns, $result, 'Result should match original columns for non-address field.' );
 	}
 
 	/**

@@ -192,11 +192,6 @@ class FrmHooksController {
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
 		add_action( 'enqueue_block_assets', 'FrmSimpleBlocksController::block_assets' );
 
-		// Address field CSV columns.
-		if ( ! FrmAppHelper::pro_is_installed() ) {
-			add_filter( 'frm_csv_field_columns', 'FrmAddressesController::add_csv_columns', 10, 2 );
-		}
-
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
 		// Applications Controller.
