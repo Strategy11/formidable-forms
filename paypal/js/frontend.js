@@ -756,10 +756,8 @@
 
 	/**
 	 * Handle card field blur events.
-	 *
-	 * @param {Object} data The onBlur event data.
 	 */
-	async function onCardFieldsBlur( data ) {
+	async function onCardFieldsBlur() {
 		try {
 			const state = await cardFieldsInstance.getState();
 			cardFieldsValid = state.isFormValid;
