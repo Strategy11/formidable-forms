@@ -719,7 +719,7 @@
 				style: frmPayPalVars.style,
 				inputEvents: {
 					onChange: onCardFieldsChange,
-					onFocus: function() {
+					onFocus() {
 						// This is intentionally left blank, but it should not be deleted.
 						// onFocus is required for onBlur to work.
 					},
