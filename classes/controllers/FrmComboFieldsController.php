@@ -88,6 +88,10 @@ class FrmComboFieldsController {
 	public static function get_dropdown_label( $atts ) {
 		$default = $atts['sub_field']['placeholder'] ?? ' ';
 
+		if ( ! is_string( $default ) ) {
+			$default = '';
+		}
+
 		/**
 		 * @since x.x
 		 *
