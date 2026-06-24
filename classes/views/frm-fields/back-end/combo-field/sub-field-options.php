@@ -87,7 +87,7 @@ $labels    = $this->get_built_in_option_labels();
 							?>
 						</span>
 						<?php
-					}
+					}//end if
 					?>
 				</p>
 				<?php
