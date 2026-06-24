@@ -719,6 +719,7 @@
 				style: frmPayPalVars.style,
 				inputEvents: {
 					onChange: onCardFieldsChange,
+					// eslint-disable-next-line no-empty, unicorn/no-empty-brace-spaces
 					onFocus() {
 						// This is intentionally left blank, but it should not be deleted.
 						// onFocus is required for onBlur to work.
