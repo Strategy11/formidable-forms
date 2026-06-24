@@ -2083,15 +2083,4 @@ DEFAULT_HTML;
 	public function filter_value_for_table_html( $value ) {
 		return wp_kses_post( $value );
 	}
-
-	/**
-	 * @since 4.04
-	 * @deprecated 6.24
-	 *
-	 * @return string
-	 */
-	protected function get_add_option_string() {
-		_deprecated_function( __METHOD__, '6.24' );
-		return __( 'Add Option', 'formidable' );
-	}
 }
