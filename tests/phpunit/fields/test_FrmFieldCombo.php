@@ -200,10 +200,10 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$this->assertSame(
 			array(
-				'first_child'   => '',
-				'second_child'  => '',
-				'third_child'   => '',
-				'fourth_child'  => '',
+				'first_child'  => '',
+				'second_child' => '',
+				'third_child'  => '',
+				'fourth_child' => '',
 			),
 			$this->run_private_method( array( $combo_field, 'get_default_value' ) )
 		);
