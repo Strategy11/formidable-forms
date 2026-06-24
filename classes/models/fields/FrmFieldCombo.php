@@ -462,8 +462,8 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	public function get_export_headings() {
 		$headings   = array();
-		$field_id   = $this->field->id ?? $this->field['id'];
-		$field_name = $this->field->name ?? $this->field['name'];
+		$field_id   = is_object( $this->field ) ? $this->field->id : $this->field['id'];
+		$field_name = is_object( $this->field ) ? $this->field->name : $this->field['name'];
 		$sub_fields = $this->get_processed_sub_fields();
 
 		// Include sub-field headings.

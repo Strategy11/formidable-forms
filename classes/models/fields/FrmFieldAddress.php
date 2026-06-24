@@ -432,8 +432,8 @@ class FrmFieldAddress extends FrmFieldCombo {
 	 * @return array
 	 */
 	public function get_export_headings() {
-		$field_id   = $this->field->id ?? $this->field['id'];
-		$field_name = $this->field->name ?? $this->field['name'];
+		$field_id   = is_object( $this->field ) ? $this->field->id : $this->field['id'];
+		$field_name = is_object( $this->field ) ? $this->field->name : $this->field['name'];
 
 		// Include main field heading at the front.
 		$headings = array(
