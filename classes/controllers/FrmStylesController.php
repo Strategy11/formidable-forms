@@ -600,24 +600,6 @@ class FrmStylesController {
 		wp_print_styles( 'formidable' );
 		wp_enqueue_script( 'formidable_style' );
 		wp_set_script_translations( 'formidable_style', 'formidable' );
-
-		// Localize script with AI add-on status for conditional display of Edit with AI option.
-		$ai_addon_active = is_plugin_active( 'formidable-ai/formidable-ai.php' );
-		$api_addon_active = is_plugin_active( 'formidable-api/formidable-api.php' );
-		wp_localize_script(
-			'formidable_style',
-			'frmAIEditStyleVars',
-			array(
-				'ai_addon_active' => $ai_addon_active,
-				'api_addon_active' => $api_addon_active,
-			)
-		);
-
-		// Enqueue AI style editor script if AI add-on is active.
-		if ( $ai_addon_active ) {
-			$ai_plugin_url = plugins_url( 'formidable-ai/js/edit-style-with-ai.js' );
-			wp_enqueue_script( 'formidable-edit-style-with-ai', $ai_plugin_url, array( 'formidable_style', 'jquery' ), $version, true );
-		}
 	}
 
 	/**
