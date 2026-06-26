@@ -85,12 +85,67 @@ if ( ! $values['is_template'] ) {
 	</label>
 </p>
 
-<?php
-if ( is_callable( 'FrmFormsController::render_spam_settings' ) ) {
-	FrmFormsController::render_spam_settings( $values );
-}
-FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
-?>
+<!--Spam Section-->
+<h3>
+	<?php esc_html_e( 'Spam', 'formidable' ); ?>
+</h3>
+
+<div class="frm_grid_container">
+	<div class="frm6">
+		<?php
+		if ( is_callable( 'FrmFormsController::render_spam_settings' ) ) {
+			FrmFormsController::render_spam_settings( $values );
+		}
+		?>
+	</div>
+
+	<div class="frm6 misc-pub-section">
+		<p class="howto">
+			<?php esc_html_e( 'Global Spam Settings', 'formidable' ); ?>
+		</p>
+
+		<?php
+		$frm_settings = FrmAppHelper::get_settings();
+		$captcha_configured = false;
+
+		if ( 'recaptcha' === $frm_settings->active_captcha ) {
+			$captcha_configured = ! empty( $frm_settings->pubkey ) && ! empty( $frm_settings->privkey );
+		} elseif ( 'hcaptcha' === $frm_settings->active_captcha ) {
+			$captcha_configured = ! empty( $frm_settings->hcaptcha_pubkey ) && ! empty( $frm_settings->hcaptcha_privkey );
+		} elseif ( 'turnstile' === $frm_settings->active_captcha ) {
+			$captcha_configured = ! empty( $frm_settings->turnstile_pubkey ) && ! empty( $frm_settings->turnstile_privkey );
+		}
+		?>
+
+		<p>
+			<?php FrmAppHelper::icon_by_class( 'frmfont ' . ( $captcha_configured ? 'frm_check1_icon' : 'frm_x_icon' ) ); ?>
+			<span><?php esc_html_e( 'Captcha configured', 'formidable' ); ?></span>
+		</p>
+
+		<p>
+			<?php FrmAppHelper::icon_by_class( 'frmfont ' . ( $frm_settings->honeypot ? 'frm_check1_icon' : 'frm_x_icon' ) ); ?>
+			<span><?php esc_html_e( 'Use honeypot to check entries for spam', 'formidable' ); ?></span>
+		</p>
+
+		<p>
+			<?php FrmAppHelper::icon_by_class( 'frmfont ' . ( $frm_settings->wp_spam_check ? 'frm_check1_icon' : 'frm_x_icon' ) ); ?>
+			<span><?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?></span>
+		</p>
+
+		<p>
+			<?php FrmAppHelper::icon_by_class( 'frmfont ' . ( $frm_settings->denylist_check ? 'frm_check1_icon' : 'frm_x_icon' ) ); ?>
+			<span><?php esc_html_e( 'Check denylist data to validate for spam', 'formidable' ); ?></span>
+		</p>
+
+		<p>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings&t=captcha_settings' ) ); ?>" target="_blank">
+				<?php esc_html_e( 'To change these values, visit Global Spam Settings', 'formidable' ); ?>
+			</a>
+		</p>
+	</div>
+</div>
+
+<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 
 <!--AJAX Section-->
 <h3><?php esc_html_e( 'AJAX', 'formidable' ); ?>
