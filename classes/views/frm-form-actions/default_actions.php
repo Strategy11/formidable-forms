@@ -57,8 +57,6 @@ if ( class_exists( 'FrmPaymentAction' ) ) {
 			// POST data namespace with the PayPal add-on's 'paypal' action, which would make
 			// both action controls save the same submission and create a duplicate action.
 			$this->option_name = 'frm_' . $this->id_base . '_action';
-
-			$this->action_options['is_beta'] = false;
 		}
 	}
 }
