@@ -148,10 +148,11 @@ class FrmGatedTokenHelper {
 	public static function cleanup_expired() {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query(
 			$wpdb->prepare(
-				'DELETE FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE expired_at IS NOT NULL AND expired_at < %d',
+				'DELETE FROM %i WHERE expired_at IS NOT NULL AND expired_at < %d',
+				$wpdb->prefix . 'frm_gated_tokens',
 				time()
 			)
 		);
@@ -170,7 +171,8 @@ class FrmGatedTokenHelper {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE user_id = %d',
+				'SELECT * FROM %i WHERE user_id = %d',
+				$wpdb->prefix . 'frm_gated_tokens',
 				$user_id
 			)
 		);
@@ -218,10 +220,11 @@ class FrmGatedTokenHelper {
 
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
-				'SELECT * FROM ' . $wpdb->prefix . 'frm_gated_tokens WHERE token_hash = %s LIMIT 1',
+				'SELECT * FROM %i WHERE token_hash = %s LIMIT 1',
+				$wpdb->prefix . 'frm_gated_tokens',
 				$hash
 			)
 		);
