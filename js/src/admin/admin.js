@@ -11727,7 +11727,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 				option.style.display = '';
 				return;
 			}
-			option.style.display = ( ! selectedFormId || optFormId !== selectedFormId ) ? 'none' : '';
+			option.style.display = ! selectedFormId || optFormId !== selectedFormId ? 'none' : '';
 		} );
 
 		// If the currently selected field option is now hidden, reset the select.
