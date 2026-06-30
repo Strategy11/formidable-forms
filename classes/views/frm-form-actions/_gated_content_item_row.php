@@ -39,22 +39,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php /* ── Col 1: Type (4/12) ──────────────────────── */ ?>
 	<div class="frm4">
 		<div class="frm_form_field frm-mt-xs frm-mb-xs">
-			<?php if ( $is_template ) : ?>
-				<label data-frm-gc-for="type">
-			<?php else : ?>
-				<label for="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>">
-			<?php endif; ?>
+			<?php
+			$frm_gc_label_atts = $is_template
+				? array( 'data-frm-gc-for' => 'type' )
+				: array( 'for' => $frm_gc_type_sel_id );
+			?>
+			<label <?php FrmAppHelper::array_to_html_params( $frm_gc_label_atts, true ); ?>>
 				<?php esc_html_e( 'Type', 'formidable' ); ?>
 			</label>
-			<select
-				<?php if ( $is_template ) : ?>
-					data-frm-gc-field="type"
-				<?php else : ?>
-					id="<?php echo esc_attr( $frm_gc_type_sel_id ); ?>"
-					name="<?php echo esc_attr( $frm_gc_item_base . '[type]' ); ?>"
-				<?php endif; ?>
-				class="frm-gc-item-type"
-			>
+			<?php
+			$frm_gc_type_sel_atts = array( 'class' => 'frm-gc-item-type' );
+			if ( $is_template ) {
+				$frm_gc_type_sel_atts['data-frm-gc-field'] = 'type';
+			} else {
+				$frm_gc_type_sel_atts['id']   = $frm_gc_type_sel_id;
+				$frm_gc_type_sel_atts['name'] = $frm_gc_item_base . '[type]';
+			}
+			?>
+			<select <?php FrmAppHelper::array_to_html_params( $frm_gc_type_sel_atts, true ); ?>>
 				<?php foreach ( $frm_gc_types as $frm_gc_type_key => $frm_gc_type ) : ?>
 					<option
 						value="<?php echo esc_attr( $frm_gc_type_key ); ?>"
@@ -104,18 +106,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$frm_gc_first_pt_rendered = true;
 			}
 			$frm_gc_pt_hidden = ! $is_template && $frm_gc_item_type !== $frm_gc_pt_key;
+
+			$frm_gc_div_atts = array(
+				'class'     => 'frm-gc-type-settings',
+				'data-type' => $frm_gc_pt_key,
+			);
+			if ( $frm_gc_pt_hidden ) {
+				$frm_gc_div_atts['hidden'] = '';
+			}
 		?>
-		<div
-			class="frm-gc-type-settings"
-			data-type="<?php echo esc_attr( $frm_gc_pt_key ); ?>"
-			<?php echo $frm_gc_pt_hidden ? 'hidden' : ''; ?>
-		>
+		<div <?php FrmAppHelper::array_to_html_params( $frm_gc_div_atts, true ); ?>>
 			<div class="frm_form_field frm-mt-xs frm-mb-xs">
-				<?php if ( $is_template ) : ?>
-					<label data-frm-gc-for="id">
-				<?php else : ?>
-					<label for="<?php echo esc_attr( $frm_gc_pt_sel_id ); ?>">
-				<?php endif; ?>
+				<?php
+				$frm_gc_pt_label_atts = $is_template
+					? array( 'data-frm-gc-for' => 'id' )
+					: array( 'for' => $frm_gc_pt_sel_id );
+				?>
+				<label <?php FrmAppHelper::array_to_html_params( $frm_gc_pt_label_atts, true ); ?>>
 					<?php echo esc_html( $frm_gc_pt_config['label'] ); ?>
 				</label>
 				<?php if ( $frm_gc_use_autocomplete ) : ?>
@@ -130,33 +137,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 							}
 						}
 					}
+
+					$frm_gc_ac_text_atts = array(
+						'type'        => 'text',
+						'class'       => 'frm-custom-search',
+						'data-source' => $frm_gc_pt_source,
+						'placeholder' => __( '— Select —', 'formidable' ),
+						'value'       => $frm_gc_pt_selected_title,
+					);
+					if ( ! $is_template ) {
+						$frm_gc_ac_text_atts['id'] = $frm_gc_pt_sel_id;
+					}
 					?>
-					<input type="text" class="frm-custom-search"
-						<?php if ( ! $is_template ) : ?>
-							id="<?php echo esc_attr( $frm_gc_pt_sel_id ); ?>"
-						<?php endif; ?>
-						data-source="<?php echo esc_attr( $frm_gc_pt_source ); ?>"
-						placeholder="<?php esc_attr_e( '— Select —', 'formidable' ); ?>"
-						value="<?php echo esc_attr( $frm_gc_pt_selected_title ); ?>"
-					/>
-					<input type="hidden"
-						data-frm-gc-field="id"
-						class="frm_autocomplete_value_input"
-						<?php if ( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key ) : ?>
-							name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
-						<?php endif; ?>
-						value="<?php echo esc_attr( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key && $frm_gc_item_id ? $frm_gc_item_id : '' ); ?>"
-					/>
+					<input <?php FrmAppHelper::array_to_html_params( $frm_gc_ac_text_atts, true ); ?> />
+					<?php
+					$frm_gc_ac_hidden_atts = array(
+						'type'              => 'hidden',
+						'data-frm-gc-field' => 'id',
+						'class'             => 'frm_autocomplete_value_input',
+						'value'             => ! $is_template && $frm_gc_item_type === $frm_gc_pt_key && $frm_gc_item_id ? (string) $frm_gc_item_id : '',
+					);
+					if ( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key ) {
+						$frm_gc_ac_hidden_atts['name'] = $frm_gc_item_base . '[id]';
+					}
+					?>
+					<input <?php FrmAppHelper::array_to_html_params( $frm_gc_ac_hidden_atts, true ); ?> />
 				<?php else : ?>
-					<select
-						<?php if ( ! $is_template ) : ?>
-							id="<?php echo esc_attr( $frm_gc_pt_sel_id ); ?>"
-							<?php if ( $frm_gc_item_type === $frm_gc_pt_key ) : ?>
-								name="<?php echo esc_attr( $frm_gc_item_base . '[id]' ); ?>"
-							<?php endif; ?>
-						<?php endif; ?>
-						data-frm-gc-field="id"
-					>
+					<?php
+					$frm_gc_sel_atts = array( 'data-frm-gc-field' => 'id' );
+					if ( ! $is_template ) {
+						$frm_gc_sel_atts['id'] = $frm_gc_pt_sel_id;
+						if ( $frm_gc_item_type === $frm_gc_pt_key ) {
+							$frm_gc_sel_atts['name'] = $frm_gc_item_base . '[id]';
+						}
+					}
+					?>
+					<select <?php FrmAppHelper::array_to_html_params( $frm_gc_sel_atts, true ); ?>>
 						<option value=""><?php esc_html_e( '— Select —', 'formidable' ); ?></option>
 						<?php foreach ( $frm_gc_pt_posts as $frm_gc_post ) : ?>
 							<option
@@ -188,7 +204,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</div><!-- [data-type="<?php echo esc_attr( $frm_gc_pt_key ); ?>"] -->
 		<?php endforeach; ?>
-		<?php unset( $frm_gc_pt_key, $frm_gc_pt_config, $frm_gc_pt_posts, $frm_gc_pt_sel_id, $frm_gc_pt_source, $frm_gc_pt_is_first, $frm_gc_first_pt_rendered, $frm_gc_pt_hidden, $frm_gc_pt_selected_title, $frm_gc_post ); ?>
+		<?php unset( $frm_gc_pt_key, $frm_gc_pt_config, $frm_gc_pt_posts, $frm_gc_pt_sel_id, $frm_gc_pt_source, $frm_gc_pt_is_first, $frm_gc_first_pt_rendered, $frm_gc_pt_hidden, $frm_gc_pt_selected_title, $frm_gc_post, $frm_gc_div_atts, $frm_gc_pt_label_atts, $frm_gc_ac_text_atts, $frm_gc_ac_hidden_atts, $frm_gc_sel_atts ); ?>
 
 		<?php
 		/**
