@@ -1878,6 +1878,7 @@ class FrmFormsController {
 		 *
 		 * @param array $entry_shortcodes
 		 * @param bool  $settings_tab
+		 * @param int   $form_id
 		 */
 		return apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab, $form_id );
 	}
