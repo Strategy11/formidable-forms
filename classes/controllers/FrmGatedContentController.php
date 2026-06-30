@@ -165,7 +165,7 @@ class FrmGatedContentController {
 		}
 
 		// Detect whether the token arrived via URL param before falling back to cookies.
-		$from_url_param = FrmAppHelper::simple_get( 'access_code' );
+		$access_code_from_url = FrmAppHelper::simple_get( 'access_code' );
 
 		$post_item   = FrmGatedItem::make(
 			array(
@@ -186,7 +186,7 @@ class FrmGatedContentController {
 			// Strip the raw token from the URL to prevent leakage via browser history,
 			// server logs, and Referer headers. The cookie set above grants access on
 			// the redirected request without the query parameter.
-			if ( $from_url_param && wp_safe_redirect( remove_query_arg( 'access_code' ) ) ) {
+			if ( $access_code_from_url && wp_safe_redirect( remove_query_arg( 'access_code' ) ) ) {
 				exit;
 			}
 
