@@ -29,20 +29,6 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	private static $best_sale;
 
-	/**
-	 * @since 6.25.1
-	 *
-	 * @var string|null
-	 */
-	private static $cross_sell_text;
-
-	/**
-	 * @since 6.25.1
-	 *
-	 * @var string|null
-	 */
-	private static $cross_sell_link;
-
 	public function __construct() {
 		$this->set_cache_key();
 
@@ -70,6 +56,23 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
+	 * If the last check was a rate limit, we'll need to check again sooner.
+	 * Other APIs use the FrmFormApi function which uses a 5 minute timeout. But for Sales, we can use 1 hour.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $addons
+	 *
+	 * @return string
+	 */
+	protected function get_cache_timeout( $addons ) {
+		if ( isset( $addons['response_code'] ) && 429 === $addons['response_code'] ) {
+			return '+1 hour';
+		}
+		return $this->cache_timeout;
+	}
+
+	/**
 	 * @since 6.17
 	 *
 	 * @return void
@@ -85,98 +88,7 @@ class FrmSalesApi extends FrmFormApi {
 
 		foreach ( $api as $sale ) {
 			$this->add_sale( $sale );
-
-			if ( is_array( $sale ) && isset( $sale['cross_sell_text'] ) ) {
-				$this->set_cross_sell( $sale );
-			}
 		}
-	}
-
-	/**
-	 * Check for a special array in the sales API array.
-	 * Normally cross_sell_text and cross_sell_link are not set.
-	 * But one array, that isn't actually a sale, contains cross sell data.
-	 * This should be near the end of the array.
-	 *
-	 * @since 6.25.1
-	 *
-	 * @param array $data
-	 *
-	 * @return void
-	 */
-	private function set_cross_sell( $data ) {
-		if ( ! self::cross_sell_is_valid( $data ) ) {
-			return;
-		}
-
-		$cross_sell_text  = $data['cross_sell_text'];
-		$cross_sell_links = $data['cross_sell_link'];
-		$index            = self::determine_cross_sell_index( $cross_sell_text );
-
-		self::$cross_sell_text = sanitize_text_field( $cross_sell_text[ $index ] );
-		self::$cross_sell_link = esc_url_raw( $cross_sell_links[ $index ] );
-	}
-
-	/**
-	 * Check that both cross_sell_text and cross_sell_link are set and are arrays of the same size.
-	 *
-	 * @since 6.25.1
-	 *
-	 * @param array $data
-	 *
-	 * @return bool
-	 */
-	private function cross_sell_is_valid( $data ) {
-		if ( empty( $data['cross_sell_text'] ) || empty( $data['cross_sell_link'] ) ) {
-			return false;
-		}
-
-		if ( ! is_array( $data['cross_sell_text'] ) || ! is_array( $data['cross_sell_link'] ) ) {
-			return false;
-		}
-
-		return count( $data['cross_sell_link'] ) === count( $data['cross_sell_text'] );
-	}
-
-	/**
-	 * Determine which cross sell text to use.
-	 * These are shown in order for 30 days before moving on to the next one.
-	 *
-	 * @since 6.25.1
-	 *
-	 * @param array $cross_sell_text
-	 *
-	 * @return int
-	 */
-	private static function determine_cross_sell_index( $cross_sell_text ) {
-		$option_name         = 'frm_cross_sell_settings';
-		$cross_sell_settings = get_option( $option_name );
-
-		if ( ! is_array( $cross_sell_settings ) ) {
-			$cross_sell_settings = array(
-				reset( $cross_sell_text ) => time(),
-			);
-			update_option( $option_name, $cross_sell_settings );
-			return 0;
-		}
-
-		foreach ( $cross_sell_text as $index => $current_text ) {
-			if ( ! isset( $cross_sell_settings[ $current_text ] ) ) {
-				$cross_sell_settings[ $current_text ] = time();
-				update_option( $option_name, $cross_sell_settings );
-				return $index;
-			}
-
-			$time_elapsed = time() - $cross_sell_settings[ $current_text ];
-
-			if ( $time_elapsed < DAY_IN_SECONDS * 30 ) {
-				return $index;
-			}
-		}
-
-		// If all options are expired, reset the option.
-		delete_option( $option_name );
-		return 0;
 	}
 
 	/**
@@ -312,7 +224,17 @@ class FrmSalesApi extends FrmFormApi {
 
 		$sale = self::$instance->get_best_sale();
 
-		return is_array( $sale ) && ! empty( $sale[ $key ] ) ? $sale[ $key ] : false;
+		if ( ! is_array( $sale ) || empty( $sale[ $key ] ) ) {
+			return false;
+		}
+
+		$sale_value = $sale[ $key ];
+
+		if ( str_ends_with( $key, '_link' ) && ! str_starts_with( $sale_value, 'https://formidableforms.com' ) ) {
+			return false;
+		}
+
+		return $sale_value;
 	}
 
 	/**
@@ -503,43 +425,5 @@ class FrmSalesApi extends FrmFormApi {
 	private static function is_banner_dismissed( $key ) {
 		$dismissed_sales = get_user_option( 'frm_dismissed_sales', get_current_user_id() );
 		return is_array( $dismissed_sales ) && in_array( $key, $dismissed_sales, true );
-	}
-
-	/**
-	 * @return void
-	 */
-	public static function menu() {
-		if ( false === self::$sales ) {
-			new self();
-		}
-
-		if ( ! self::$cross_sell_text || ! self::$cross_sell_link ) {
-			return;
-		}
-
-		add_submenu_page(
-			'formidable',
-			esc_html( self::$cross_sell_text ) . ' | Formidable',
-			esc_html( self::$cross_sell_text ),
-			'activate_plugins',
-			'frm-sales-api-cross-sell',
-			function () {
-				// There is no page. The redirect logic is handled below, before this callback is triggered.
-			}
-		);
-
-		add_action(
-			'admin_init',
-			function () {
-				if ( ! current_user_can( 'activate_plugins' ) ) {
-					return;
-				}
-
-				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && self::$cross_sell_link ) {
-					wp_redirect( self::$cross_sell_link );
-					exit;
-				}
-			}
-		);
 	}
 }

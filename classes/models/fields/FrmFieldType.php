@@ -93,6 +93,18 @@ abstract class FrmFieldType {
 	protected $array_allowed = true;
 
 	/**
+	 * Whether the aria description has already been added to this field's
+	 * inputs during the current render. Prevents a field type that adds it in
+	 * its own front_field_input from having it added a second time by
+	 * add_aria_description_to_inputs.
+	 *
+	 * @since 6.32
+	 *
+	 * @var bool
+	 */
+	protected $aria_description_added = false;
+
+	/**
 	 * @var bool|null Whether or not draft fields should be hidden on the front end.
 	 */
 	private static $should_hide_draft_fields;
@@ -1066,17 +1078,19 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function get_container_class() {
-		$is_radio    = FrmField::is_radio( $this->field );
-		$is_checkbox = FrmField::is_checkbox( $this->field );
-		$align       = FrmField::get_option( $this->field, 'align' );
-		$class       = '';
-
-		if ( $align && ( $is_radio || $is_checkbox ) ) {
-			self::prepare_align_class( $align );
-			$class .= ' ' . $align;
+		if ( ! FrmField::is_radio( $this->field ) && ! FrmField::is_checkbox( $this->field ) ) {
+			return '';
 		}
 
-		return $class;
+		$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $this->field, 'align' ) : '';
+
+		if ( ! $align ) {
+			$align = FrmStylesHelper::get_align_from_active_style( $this->field );
+		}
+
+		$this->prepare_align_class( $align );
+
+		return $align ? ' ' . $align : '';
 	}
 
 	/**
@@ -1157,15 +1171,68 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function include_front_field_input( $args, $shortcode_atts ) {
+		$this->aria_description_added = false;
+
 		if ( $this->include_front_form_file() ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
 			$input = $this->front_field_input( $args, $shortcode_atts );
 		}
 
+		$this->add_aria_description_to_inputs( $args, $input );
 		$this->load_field_scripts( $args );
 
 		return $input;
+	}
+
+	/**
+	 * Link every input, select, and textarea in the field HTML to the field
+	 * error and description for screen readers.
+	 *
+	 * Applying it here covers single-input fields and multi-input fields
+	 * (checkboxes, radios) in one place, since both produce their final HTML
+	 * through this method.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array  $args       Rendering context. May include `field_id`, `html_id` and `errors`.
+	 * @param string $input_html Full field HTML. Passed by reference.
+	 *
+	 * @return void
+	 */
+	public function add_aria_description_to_inputs( $args, &$input_html ) {
+		if ( '' === $input_html || $this->aria_description_added ) {
+			// A front_field_input override (e.g. in Pro) already added it.
+			return;
+		}
+
+		if ( ! isset( $args['field_id'] ) ) {
+			$args['field_id'] = $this->get_field_column( 'id' );
+		}
+
+		if ( empty( $args['html_id'] ) ) {
+			$args['html_id'] = FrmFieldsHelper::get_html_id( $this->field );
+		}
+
+		if ( ! isset( $args['errors'] ) || ! is_array( $args['errors'] ) ) {
+			$args['errors'] = array();
+		}
+
+		$input_html = preg_replace_callback(
+			'/<(input|select|textarea)\b([^>]*?)(\s*\/?)>/i',
+			function ( $matches ) use ( $args ) {
+				// Hidden inputs are not announced to screen readers, so skip them.
+				if ( 'input' === strtolower( $matches[1] ) && preg_match( '/type\s*=\s*["\']hidden["\']/i', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				$atts = $matches[2];
+				$this->add_aria_description( $args, $atts );
+
+				return '<' . $matches[1] . $atts . $matches[3] . '>';
+			},
+			$input_html
+		);
 	}
 
 	/**
@@ -1221,7 +1288,6 @@ DEFAULT_HTML;
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field_type = $this->html5_input_type();
 		$input_html = $this->get_field_input_html_hook( $this->field );
-		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
 		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -1530,9 +1596,10 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * Link input to field description for screen readers
+	 * Link input to field description for screen readers.
 	 *
 	 * @since 3.0
+	 * @since 6.32 Function privacy changed from `protected` to `public`.
 	 *
 	 * @param array  $args
 	 * @param string $input_html
@@ -1577,6 +1644,8 @@ DEFAULT_HTML;
 		if ( ! $error_comes_first ) {
 			$input_html .= ' data-error-first="0"';
 		}
+
+		$this->aria_description_added = true;
 	}
 
 	/**
@@ -2013,16 +2082,5 @@ DEFAULT_HTML;
 	 */
 	public function filter_value_for_table_html( $value ) {
 		return wp_kses_post( $value );
-	}
-
-	/**
-	 * @since 4.04
-	 * @deprecated 6.24
-	 *
-	 * @return string
-	 */
-	protected function get_add_option_string() {
-		_deprecated_function( __METHOD__, '6.24' );
-		return __( 'Add Option', 'formidable' );
 	}
 }

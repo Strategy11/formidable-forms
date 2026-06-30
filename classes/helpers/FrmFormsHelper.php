@@ -1248,7 +1248,7 @@ BEFORE_HTML;
 			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
-					'label' => __( 'Duplicate Form', 'formidable' ),
+					'label' => __( 'Duplicate', 'formidable' ),
 					'icon'  => 'frmfont frm_clone_icon',
 				);
 			}

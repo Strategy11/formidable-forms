@@ -61,6 +61,95 @@
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
 
 		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
+
+		initOptionLayoutPreview();
+	}
+
+	/**
+	 * Sync the radio/checkbox option layout (alignment) style settings to the preview form in real time.
+	 *
+	 * The layout is applied to the front end through a container class, so changing the style setting
+	 * does not re-render the preview form. This swaps the container class on preview fields that use the
+	 * style setting. The styler preview marks those fields with .frm-default-option-align, so fields with
+	 * their own alignment override are left untouched.
+	 *
+	 * @return {void}
+	 */
+	function initOptionLayoutPreview() {
+		bindOptionLayoutSelect( document.getElementById( 'frm_radio_align' ), '.frm_radio' );
+		bindOptionLayoutSelect( document.getElementById( 'frm_check_align' ), '.frm_checkbox' );
+	}
+
+	/**
+	 * Listen for changes on an option layout style setting and update the preview to match.
+	 *
+	 * @param {HTMLSelectElement|null} select         The style setting dropdown.
+	 * @param {string}                 optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @return {void}
+	 */
+	function bindOptionLayoutSelect( select, optionSelector ) {
+		if ( ! select ) {
+			return;
+		}
+
+		select.addEventListener( 'change', () => {
+			updatePreviewOptionLayout( optionSelector, select.value );
+		} );
+	}
+
+	/**
+	 * Replace the alignment container class on preview fields that are using the style setting.
+	 *
+	 * @param {string} optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @param {string} newAlign       The newly selected style alignment value.
+	 * @return {void}
+	 */
+	function updatePreviewOptionLayout( optionSelector, newAlign ) {
+		const newClass = optionLayoutAlignToClass( newAlign );
+
+		if ( ! newClass ) {
+			return;
+		}
+
+		const activeForm = document.getElementById( 'frm_active_style_form' );
+		if ( ! activeForm ) {
+			return;
+		}
+
+		const alignClasses = [ 'vertical_radio', 'horizontal_radio', 'frm_two_col', 'frm_three_col', 'frm_four_col' ];
+		const containers = new Set();
+
+		activeForm.querySelectorAll( optionSelector ).forEach( option => {
+			const container = option.closest( '.frm_form_field' );
+
+			// Only fields using the style setting (no override) are marked in the styler preview.
+			if ( container?.classList.contains( 'frm-default-option-align' ) ) {
+				containers.add( container );
+			}
+		} );
+
+		containers.forEach( container => {
+			container.classList.remove( ...alignClasses );
+			container.classList.add( newClass );
+		} );
+	}
+
+	/**
+	 * Map an option layout style value to its front-end container class.
+	 *
+	 * @param {string} align The style alignment value.
+	 * @return {string} The matching container class.
+	 */
+	function optionLayoutAlignToClass( align ) {
+		if ( 'inline' === align ) {
+			return 'horizontal_radio';
+		}
+
+		if ( 'block' === align ) {
+			return 'vertical_radio';
+		}
+
+		return align;
 	}
 
 	/**

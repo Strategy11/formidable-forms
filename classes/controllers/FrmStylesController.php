@@ -21,6 +21,15 @@ class FrmStylesController {
 	private static $message;
 
 	/**
+	 * Cache of the active style object keyed by form ID.
+	 *
+	 * @since 6.32
+	 *
+	 * @var array
+	 */
+	private static $active_style = array();
+
+	/**
 	 * @return void
 	 */
 	public static function load_pro_hooks() {
@@ -238,15 +247,16 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
-		$file_name = '/css/' . self::get_file_name();
+		$add_css_to_uploads_dir = FrmStyle::add_css_to_uploads_dir();
+		$file_path              = FrmStyle::get_generated_css_file_path( $add_css_to_uploads_dir ) . '/' . self::get_file_name();
 
-		if ( is_readable( FrmAppHelper::plugin_path() . $file_name ) ) {
-			$url = FrmAppHelper::plugin_url() . $file_name;
-		} else {
-			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
+		if ( ! is_readable( $file_path ) ) {
+			$stylesheet_urls['formidable'] = admin_url( 'admin-ajax.php?action=frmpro_css' );
+			return;
 		}
 
-		$stylesheet_urls['formidable'] = $url;
+		$base_url                      = $add_css_to_uploads_dir ? wp_upload_dir()['baseurl'] . '/formidable/css/' : FrmAppHelper::plugin_url() . '/css/';
+		$stylesheet_urls['formidable'] = $base_url . self::get_file_name();
 	}
 
 	/**
@@ -690,7 +700,7 @@ class FrmStylesController {
 	 *
 	 * Falls back to the auto-generated key when no style name was provided so the scope is never empty.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param string $fallback The auto-generated post_name to use when no style name is chosen.
 	 *
@@ -1270,6 +1280,50 @@ class FrmStylesController {
 
 		$frm_style = new FrmStyle( $style );
 		return $frm_style->get_one();
+	}
+
+	/**
+	 * Get the active style object for a field's form.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array|int $field The 'field' array.
+	 *
+	 * @return object
+	 */
+	public static function get_active_style( $field ) {
+		if ( ! is_array( $field ) ) {
+			return new stdClass();
+		}
+
+		$form_id = $field['parent_form_id'] ?? $field['form_id'];
+
+		if ( isset( self::$active_style[ $form_id ] ) ) {
+			return self::$active_style[ $form_id ];
+		}
+
+		$active_style = self::get_form_style( $form_id );
+
+		if ( ! is_object( $active_style ) ) {
+			$active_style = new stdClass();
+		}
+
+		self::$active_style[ $form_id ] = $active_style;
+
+		return self::$active_style[ $form_id ];
+	}
+
+	/**
+	 * Get the style setting key that stores the alignment for a field type.
+	 *
+	 * @since 6.32
+	 *
+	 * @param string $field_type
+	 *
+	 * @return string
+	 */
+	public static function get_align_key_for_style_settings( $field_type ) {
+		return 'checkbox' === $field_type ? 'check_align' : 'radio_align';
 	}
 
 	/**

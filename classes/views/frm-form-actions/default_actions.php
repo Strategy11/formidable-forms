@@ -52,7 +52,11 @@ if ( class_exists( 'FrmPaymentAction' ) ) {
 			$this->id_base = 'paypal-legacy';
 			$this->name    = 'PayPal (Legacy)';
 
-			$this->action_options['is_beta'] = false;
+			// FrmPaymentAction sets option_name to 'frm_paypal_action' using its 'paypal'
+			// id_base. Recompute it from the new id_base so this action does not share the
+			// POST data namespace with the PayPal add-on's 'paypal' action, which would make
+			// both action controls save the same submission and create a duplicate action.
+			$this->option_name = 'frm_' . $this->id_base . '_action';
 		}
 	}
 }

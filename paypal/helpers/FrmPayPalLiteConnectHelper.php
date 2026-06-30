@@ -77,7 +77,6 @@ class FrmPayPalLiteConnectHelper {
 			return true;
 		}
 
-		// TODO: Only render when we visit the PayPal tab.
 		$status = self::get_seller_status();
 
 		/*
@@ -850,12 +849,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
-		return array(
-			'merchant_id'     => get_option( self::get_merchant_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
-		);
+		return self::get_body_for_mode( FrmPayPalLiteAppHelper::active_mode() );
 	}
 
 	/**
@@ -871,6 +865,24 @@ class FrmPayPalLiteConnectHelper {
 
 		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
 		return $test_mode ? 'test' : 'live';
+	}
+
+	/**
+	 * Get the standard body with account id, mode, and passwords to send to the connect server.
+	 *
+	 * @since 6.32.1
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return array
+	 */
+	private static function get_body_for_mode( $mode ) {
+		return array(
+			'merchant_id'         => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_paypal_api_mode' => $mode,
+		);
 	}
 
 	/**
@@ -938,6 +950,7 @@ class FrmPayPalLiteConnectHelper {
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_paypal_api_integration();
+		FrmTransLiteAppHelper::trigger_gateway_disconnected_hook( 'paypal', self::get_mode_value_from_post() );
 		wp_send_json_success();
 	}
 
@@ -945,9 +958,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function disconnect() {
-		$additional_body = array(
-			'frm_paypal_api_mode' => self::get_mode_value_from_post(),
-		);
+		$additional_body = self::get_body_for_mode( self::get_mode_value_from_post() );
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
@@ -1008,14 +1019,15 @@ class FrmPayPalLiteConnectHelper {
 	 * @param string $shipping_preference
 	 * @param array  $pricing_data Optional. Array of products with prices and quantities.
 	 * @param array  $shipping     Optional. Shipping name and address data.
+	 * @param string $description  Optional. Description for the order.
 	 *
 	 * @return false|object
 	 */
-	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data = array(), $shipping = array() ) {
+	public static function create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data = array(), $shipping = array(), $description = '' ) {
 		$brand_name = self::get_brand_name();
 
 		// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data', 'shipping' ) );
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency', 'payment_source', 'brand_name', 'payer', 'shipping_preference', 'pricing_data', 'shipping', 'description' ) );
 	}
 
 	/**
@@ -1084,17 +1096,6 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @since 6.31
-	 *
-	 * @param array $data Setup token data including payment_source.
-	 *
-	 * @return false|object
-	 */
-	public static function create_vault_setup_token( $data = array() ) {
-		return self::post_with_authenticated_body( 'create_vault_setup_token', compact( 'data' ) );
-	}
-
-	/**
 	 * @return false|object
 	 */
 	public static function get_seller_status() {
@@ -1105,9 +1106,7 @@ class FrmPayPalLiteConnectHelper {
 			return $status;
 		}
 
-		$additional_body = array(
-			'frm_paypal_api_mode' => $mode,
-		);
+		$additional_body = self::get_body_for_mode( $mode );
 
 		return self::post_with_authenticated_body( 'get_seller_status', $additional_body );
 	}
@@ -1152,5 +1151,18 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	public static function get_bn_code() {
 		return 'Strategy11LLCPPCP_SP';
+	}
+
+	/**
+	 * @since 6.31
+	 * @deprecated 6.32.1
+	 *
+	 * @param array $data Setup token data including payment_source.
+	 *
+	 * @return false|object
+	 */
+	public static function create_vault_setup_token( $data = array() ) {
+		_deprecated_function( __METHOD__, '6.32.1' );
+		return false;
 	}
 }

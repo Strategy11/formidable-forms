@@ -1,4 +1,29 @@
 == Changelog ==
+= 6.32.1 =
+* Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
+* Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status. Credit to Yaswanth Reddy Sunkara and WPScan for reporting the issue.
+* Security: Additional validation has been added to guarantee a PayPal Commerce Apple Pay payment has the correct status.
+* Fix: A cron job for handling overdue subscriptions would not properly get unscheduled after disconnecting Square and PayPal.
+* Fix: The PayPal Commerce test mode option would not properly update on save when the PayPal add-on was also active.
+* Fix: Email settings in payment actions would incorrectly display autofill options in Safari.
+* Options to use credit cards in PayPal Commerce subscriptions has been removed as it did not properly work.
+
+= 6.32 =
+* New: The form listing table now includes new Embeds and List Settings columns, for displaying every post and page where a form is embedded, and an added gear icon for controlling screen options.
+* New: The generated Formidable CSS file can now work from the uploads directory instead of the plugin directory. This will automatically work based on the DISALLOW_FILE_MODS constant, and can additionally be controlled using a new frm_add_css_to_uploads_dir filter.
+* New: Field errors will now get removed automatically on change events regardless of the JS validation setting.
+* Fix: The aria-describedby attribute would not update properly when a form was submitted with errors for fields with multiple inputs.
+* Fix: A small styling rule has been added to prevent HTML fields from overflowing past their container when using long strings.
+* Fix: Color pickers used on the styler page have been updated to help maintain the active color format, preventing automatic conversions from rgb to hex.
+* Fix: Validation for Square has been modified to prevent the submit button from remaining disabled when the Square inputs do not include a postal code input, which happens in some countries including Japan and Australia.
+* Fix: A cannot modify header information - headers already sent by FrmTransLiteHooksController.php:108 warning has been fixed.
+* Fix: Custom CSS saved in styles would not appear as expected after duplicating, showing additional CSS selectors for the original style.
+* Fix: A possible TypeError when calling wp_is_valid_utf8 with a null value has been fixed.
+* Fix: A new style would not properly rename when it did not yet have a style ID.
+* Fix: PayPal Commerce has been updated to prevent issues where Google Pay and Apple Pay options would not appear if the SDKs had not loaded in time.
+* Fix: PayPal Commerce orders and products were not including the payment action description setting.
+* The overdue subscription cron message will no longer get logged when there are no active subscriptions.
+
 = 6.31 =
 * New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
 * New: Form action settings have been redesigned.

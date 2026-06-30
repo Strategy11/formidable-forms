@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.31';
+	public static $plug_version = '6.32.1';
 
 	/**
 	 * @var bool
@@ -1536,6 +1536,8 @@ class FrmAppHelper {
 	 * @param bool    $echo
 	 *
 	 * @return string|null
+	 *
+	 * @psalm-return ($echo is true ? null : string)
 	 */
 	public static function clip( $echo_function, $echo = false ) {
 		if ( ! $echo ) {
@@ -4052,8 +4054,12 @@ class FrmAppHelper {
 				$gateway_texts['square'] = esc_html__( 'Square', 'formidable' );
 			}
 
+			if ( $paypal_connected ) {
+				$gateway_texts['paypal'] = esc_html__( 'PayPal', 'formidable' );
+			}
+
 			$admin_script_strings['pricingFieldsModal']['msg'] = sprintf(
-				// translators: %s: Stripe or Square.
+				// translators: %s: Stripe, Square, or PayPal.
 				esc_html__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
 				esc_html( implode( ' ' . esc_html__( 'and', 'formidable' ) . ' ', $gateway_texts ) )
 			);
@@ -4062,7 +4068,7 @@ class FrmAppHelper {
 			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
 			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
 			// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, Square, or PayPal) in your settings.', 'formidable' );
 		}//end if
 
 		delete_option( 'frm_show_pricing_fields_modal' );

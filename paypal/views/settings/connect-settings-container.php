@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</td>
 		<td>
 			<label>
+				<input type="hidden" name="frm_paypal_test_mode" value="0" />
 				<input type="checkbox" name="frm_paypal_test_mode" id="frm_paypal_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
 				<?php esc_html_e( 'Use the PayPal test mode', 'formidable' ); ?>
 			</label>
