@@ -94,13 +94,14 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}frm_gated_tokens WHERE token_hash = %s",
+				'SELECT * FROM %i WHERE token_hash = %s',
+				$wpdb->prefix . 'frm_gated_tokens',
 				FrmGatedTokenHelper::hash_token( $token )
 			)
 		);
 
 		$this->assertNotNull( $row, 'Token row not found in DB.' );
-		$this->assertEquals( $this->action_id, (int) $row->action_id );
+		$this->assertSame( $this->action_id, (int) $row->action_id );
 	}
 
 	/**
