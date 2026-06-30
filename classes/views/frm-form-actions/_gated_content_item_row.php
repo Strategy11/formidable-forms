@@ -239,7 +239,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<button
 				type="button"
 				class="frm_gc_remove_item button-link"
-				style="color: var(--error-500);"
 				aria-label="<?php esc_attr_e( 'Remove item', 'formidable' ); ?>"
 			>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>

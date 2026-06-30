@@ -45,6 +45,10 @@
 .frm-gc-item-delete {
 	flex-shrink: 0;
 	margin-top: 42px;
+
+	.frm_gc_remove_item {
+		color: var(--error-500);
+	}
 }
 
 // Search
