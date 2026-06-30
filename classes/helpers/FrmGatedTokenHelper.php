@@ -253,7 +253,7 @@ class FrmGatedTokenHelper {
 	 *
 	 * Hashes the code, fetches the matching DB row, then delegates to
 	 * FrmGatedToken::validate() — which enforces expiry, item-membership, and the
-	 * frm_gated_content_validate filter.
+	 * frm_gated_content_is_valid filter.
 	 *
 	 * @param string       $access_code Raw access token (same value as the access_code URL parameter).
 	 * @param FrmGatedItem $item        Content item to validate against, or null to skip item check.

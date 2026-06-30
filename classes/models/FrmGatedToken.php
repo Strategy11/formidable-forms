@@ -137,7 +137,7 @@ class FrmGatedToken {
 	 * frm_pdf) that are identified by shortcode rather than a fixed item ID.
 	 * Successful item lookups are cached in a transient to avoid re-fetching
 	 * action settings on subsequent requests. Only the structural item check is
-	 * cached — the `frm_gated_content_validate` filter still fires every time.
+	 * cached — the `frm_gated_content_is_valid` filter still fires every time.
 	 *
 	 * @param FrmGatedItem $item Content item (type slug + ID).
 	 *
@@ -163,7 +163,7 @@ class FrmGatedToken {
 		 * }
 		 */
 		return (bool) apply_filters(
-			'frm_gated_content_validate',
+			'frm_gated_content_is_valid',
 			$is_valid,
 			array(
 				'token' => $this,

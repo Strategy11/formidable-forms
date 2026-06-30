@@ -77,17 +77,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		// Build args for inner/outer type-settings hooks once (all vars are available here).
-		$filter_args = array(
+		$action_args = array(
 			'is_template' => $is_template,
 			'types'       => $frm_gc_types,
 		);
 
 		if ( ! $is_template ) {
-			$filter_args['active_type'] = $frm_gc_item_type;
-			$filter_args['idx']         = $frm_gc_idx;
-			$filter_args['item']        = $frm_gc_item;
-			$filter_args['item_base']   = $frm_gc_item_base;
-			$filter_args['wrapper_id']  = $frm_gc_wrapper_id;
+			$action_args['active_type'] = $frm_gc_item_type;
+			$action_args['idx']         = $frm_gc_idx;
+			$action_args['item']        = $frm_gc_item;
+			$action_args['item_base']   = $frm_gc_item_base;
+			$action_args['wrapper_id']  = $frm_gc_wrapper_id;
 		}
 
 		// One settings div per post-type-backed item type.
@@ -200,7 +200,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 * @param string $type     Post-type key for this settings div (e.g. 'frm_display').
 			 * @param array  $row_args Same keys as the outer `frm_gated_content_item_type_settings` hook.
 			 */
-			do_action( 'frm_gated_content_type_settings_inner', $frm_gc_pt_key, $filter_args );
+			do_action( 'frm_gated_content_type_settings_inner', $frm_gc_pt_key, $action_args );
 			?>
 		</div><!-- [data-type="<?php echo esc_attr( $frm_gc_pt_key ); ?>"] -->
 		<?php endforeach; ?>
@@ -232,7 +232,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 *     @type string $wrapper_id  Unique wrapper element ID (existing rows only).
 		 * }
 		 */
-		do_action( 'frm_gated_content_item_type_settings', $filter_args );
+		do_action( 'frm_gated_content_item_type_settings', $action_args );
 		?>
 
 		<div class="frm-gc-item-delete">
