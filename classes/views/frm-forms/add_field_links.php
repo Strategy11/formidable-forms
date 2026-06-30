@@ -78,7 +78,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 							}
 
 							$pro_fields = FrmField::pro_field_selection();
-							// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
 
 							FrmField::remove_moved_field_types_from_pro( $pro_fields );
 
