@@ -116,6 +116,7 @@ class FrmGatedItem {
 			$post              = clone $post;
 			$post->post_status = 'publish';
 		}
+
 		return (string) get_permalink( $post );
 	}
 
