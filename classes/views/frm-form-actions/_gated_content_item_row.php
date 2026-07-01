@@ -49,6 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</label>
 			<?php
 			$frm_gc_type_sel_atts = array( 'class' => 'frm-gc-item-type' );
+
 			if ( $is_template ) {
 				$frm_gc_type_sel_atts['data-frm-gc-field'] = 'type';
 			} else {
@@ -111,6 +112,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'class'     => 'frm-gc-type-settings',
 				'data-type' => $frm_gc_pt_key,
 			);
+
 			if ( $frm_gc_pt_hidden ) {
 				$frm_gc_div_atts['hidden'] = '';
 			}
@@ -145,6 +147,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'placeholder' => __( '— Select —', 'formidable' ),
 						'value'       => $frm_gc_pt_selected_title,
 					);
+
 					if ( ! $is_template ) {
 						$frm_gc_ac_text_atts['id'] = $frm_gc_pt_sel_id;
 					}
@@ -157,6 +160,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'class'             => 'frm_autocomplete_value_input',
 						'value'             => ! $is_template && $frm_gc_item_type === $frm_gc_pt_key && $frm_gc_item_id ? (string) $frm_gc_item_id : '',
 					);
+
 					if ( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key ) {
 						$frm_gc_ac_hidden_atts['name'] = $frm_gc_item_base . '[id]';
 					}
@@ -165,8 +169,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php else : ?>
 					<?php
 					$frm_gc_sel_atts = array( 'data-frm-gc-field' => 'id' );
+
 					if ( ! $is_template ) {
 						$frm_gc_sel_atts['id'] = $frm_gc_pt_sel_id;
+
 						if ( $frm_gc_item_type === $frm_gc_pt_key ) {
 							$frm_gc_sel_atts['name'] = $frm_gc_item_base . '[id]';
 						}

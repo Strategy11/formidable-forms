@@ -94,7 +94,7 @@ class FrmGatedItem {
 	 * @return string Full URL with access_code parameter, or empty string on failure.
 	 */
 	public function get_url( $raw_token ) {
-		$url = (string) self::get_permalink_for_gated_item( $this->id );
+		$url = self::get_permalink_for_gated_item( $this->id );
 		return $url ? add_query_arg( 'access_code', $raw_token, $url ) : '';
 	}
 
@@ -111,6 +111,7 @@ class FrmGatedItem {
 	 */
 	protected static function get_permalink_for_gated_item( $post_id ) {
 		$post = get_post( $post_id );
+
 		if ( $post && 'private' === $post->post_status ) {
 			$post              = clone $post;
 			$post->post_status = 'publish';
