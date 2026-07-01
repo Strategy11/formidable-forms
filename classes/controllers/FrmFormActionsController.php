@@ -55,6 +55,7 @@ class FrmFormActionsController {
 		$action_classes = array(
 			'on_submit'         => 'FrmOnSubmitAction',
 			'email'             => 'FrmEmailAction',
+			'gated_content'     => 'FrmGatedContentAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'stripe'            => 'FrmStripeLiteAction',

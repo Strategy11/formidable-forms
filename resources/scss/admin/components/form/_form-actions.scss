@@ -18,6 +18,39 @@
 	}
 }
 
+// ── Gated Content action ─────────────────────────────────────────────────── //
+
+.frm-gc-item-settings {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.frm_gc_shortcode_table code {
+	background: none;
+}
+
+.frm_gc_shortcode_table th {
+	font-size: var(--text-sm);
+}
+
+.frm_gc_copy_shortcode .frmsvg {
+	color: var(--primary-500);
+}
+
+.frm-gc-type-settings {
+	flex: 1;
+}
+
+.frm-gc-item-delete {
+	flex-shrink: 0;
+	margin-top: 42px;
+
+	.frm_gc_remove_item {
+		color: var(--error-500);
+	}
+}
+
 // Search
 #frm_email_addon_menu .frm-search {
 	float: unset;
