@@ -94,8 +94,28 @@ class FrmGatedItem {
 	 * @return string Full URL with access_code parameter, or empty string on failure.
 	 */
 	public function get_url( $raw_token ) {
-		$url = (string) get_permalink( $this->id );
+		$url = (string) self::get_permalink_for_gated_item( $this->id );
 		return $url ? add_query_arg( 'access_code', $raw_token, $url ) : '';
+	}
+
+	/**
+	 * Return the permalink for a gated item, using the pretty URL even for private posts/pages.
+	 *
+	 * WordPress's _get_page_link() falls back to ?page_id=ID for private pages when
+	 * the current user cannot read private pages. Passing a cloned post object with
+	 * post_status set to 'publish' bypasses that capability check.
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return string
+	 */
+	protected static function get_permalink_for_gated_item( $post_id ) {
+		$post = get_post( $post_id );
+		if ( $post && 'private' === $post->post_status ) {
+			$post              = clone $post;
+			$post->post_status = 'publish';
+		}
+		return (string) get_permalink( $post );
 	}
 
 	/**
