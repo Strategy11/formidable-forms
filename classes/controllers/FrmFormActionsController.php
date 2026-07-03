@@ -135,6 +135,7 @@ class FrmFormActionsController {
 			'api'               => __( 'System integration', 'formidable' ),
 			'googlespreadsheet' => __( 'Spreadsheet sync', 'formidable' ),
 			'convertkit'        => __( 'Broadcast publishing', 'formidable' ),
+			'gated_content'     => __( 'Access control', 'formidable' ),
 		);
 
 		foreach ( self::$registered_actions->actions as $action ) {
