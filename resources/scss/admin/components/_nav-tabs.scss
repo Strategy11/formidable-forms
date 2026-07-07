@@ -105,6 +105,26 @@
 	.frm-payments-tab-filler:last-child {
 		flex: 1;
 	}
+
+	.frm-payments-settings-button {
+		display: flex;
+		align-items: center;
+		padding: 8px 12px;
+		border-bottom: 1px solid rgba(234, 236, 240, 1);
+
+		.button {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+
+			svg {
+				width: 22px;
+				height: 22px;
+				position: relative;
+				bottom: 1px;
+			}
+		}
+	}
 }
 
 .frm-payments-tab.frm-active {
