@@ -13,7 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$frm_settings = FrmAppHelper::get_settings();
+$frm_settings  = FrmAppHelper::get_settings();
+$view_dir_path = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/';
+
 ?>
 <div class="frm-spam-settings">
 <p class="howto">
@@ -22,26 +24,27 @@ $frm_settings = FrmAppHelper::get_settings();
 
 <?php
 if ( function_exists( 'akismet_http_post' ) ) {
-	include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
+	include $view_dir_path . 'akismet.php';
 }
-include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/stopforumspam.php';
-include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
+
+include $view_dir_path . 'stopforumspam.php';
+include $view_dir_path . 'antispam.php';
 ?>
 
 <?php
 // Check if captcha is configured
-$captcha_settings = FrmCaptchaFactory::get_settings_object();
+$captcha_settings   = FrmCaptchaFactory::get_settings_object();
 $captcha_configured = $captcha_settings->has_pubkey();
 
 // Check if form has a captcha field
-$form_fields = FrmField::get_all_for_form( $values['id'], '', 'exclude' );
+$form_fields       = FrmField::get_all_for_form( $values['id'], '', 'exclude' );
 $has_captcha_field = false;
-$captcha_field_id = 0;
+$captcha_field_id  = 0;
 
 foreach ( $form_fields as $field ) {
 	if ( 'captcha' === $field->type ) {
 		$has_captcha_field = true;
-		$captcha_field_id = $field->id;
+		$captcha_field_id  = $field->id;
 		break;
 	}
 }

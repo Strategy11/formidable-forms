@@ -314,8 +314,8 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function handle_captcha_field( $form_id, $include_captcha ) {
-		$form_fields = FrmField::get_all_for_form( $form_id, '', 'exclude' );
-		$captcha_field_id = 0;
+		$form_fields        = FrmField::get_all_for_form( $form_id, '', 'exclude' );
+		$captcha_field_id   = 0;
 		$submit_field_order = 0;
 
 		foreach ( $form_fields as $field ) {
@@ -323,6 +323,7 @@ class FrmFormsController {
 				$captcha_field_id = $field->id;
 				break;
 			}
+
 			if ( 'submit' === $field->type ) {
 				$submit_field_order = $field->field_order;
 			}
@@ -331,9 +332,9 @@ class FrmFormsController {
 		if ( $include_captcha && ! $captcha_field_id ) {
 			// Create captcha field just before submit button
 			$field_values = array(
-				'form_id'    => $form_id,
-				'type'       => 'captcha',
-				'name'       => __( 'Captcha', 'formidable' ),
+				'form_id'     => $form_id,
+				'type'        => 'captcha',
+				'name'        => __( 'Captcha', 'formidable' ),
 				'field_order' => $submit_field_order > 0 ? $submit_field_order - 1 : 0,
 			);
 			FrmField::create( $field_values );

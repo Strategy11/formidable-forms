@@ -41,6 +41,7 @@ class FrmHtmlHelper {
 	 * @since x.x
 	 *
 	 * @param bool $is_enabled Whether the setting is enabled.
+	 *
 	 * @return void
 	 */
 	public static function show_readonly_setting_icon( $is_enabled ) {
