@@ -59,8 +59,17 @@ foreach ( $form_fields as $field ) {
 </p>
 
 <?php if ( ! $captcha_configured ) : ?>
-	<div class="frm_warning_style">
-		<span><?php esc_html_e( 'To enable Captcha, first set up a Captcha service in Global Spam Settings.', 'formidable' ); ?></span>
+	<div class="frm_warning_style frm_force_visible_warning">
+		<span>
+			<?php
+			printf(
+				/* translators: %1$s: Opening anchor tag, %2$s: Closing anchor tag */
+				esc_html__( 'To enable Captcha, first set up a Captcha service in %1$sGlobal Spam Settings%2$s.', 'formidable' ),
+				'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=captcha_settings' ) ) . '">',
+				'</a>'
+			);
+			?>
+		</span>
 	</div>
 <?php else : ?>
 	<div id="frm_captcha_add_warning" class="frm_warning_style" style="display: none;">

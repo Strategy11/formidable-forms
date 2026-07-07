@@ -939,7 +939,7 @@ window.frmAdminBuildJS = function() {
 		if ( auto !== 'auto' ) {
 			// Hide success message on tab change.
 			jQuery( '.frm_updated_message' ).hide();
-			jQuery( '.frm_warning_style' ).hide();
+			jQuery( '.frm_warning_style:not(.frm_force_visible_warning)' ).hide();
 		}
 
 		if ( jQuery( link ).closest( '#frm_adv_info' ).length ) {
