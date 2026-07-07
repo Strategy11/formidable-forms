@@ -306,7 +306,7 @@ class FrmFormsController {
 	/**
 	 * Handle captcha field inclusion in form
 	 *
-	 * @since 6.21
+	 * @since x.x
 	 *
 	 * @param int  $form_id         Form ID.
 	 * @param bool $include_captcha Whether to include captcha field.
