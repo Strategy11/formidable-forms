@@ -11054,23 +11054,29 @@ window.frmAdminBuildJS = function() {
 			} );
 
 			// Handle spam settings redirect link
-			jQuery( 'a[href="#spam_settings"]' ).on( 'click', function( e ) {
-				e.preventDefault();
-				const spamTab = jQuery( '.frm-category-tabs a[href="#spam_settings"]' );
-				if ( spamTab.length ) {
-					clickTab( spamTab );
-					// Scroll to top after tab switch
-					setTimeout( function() {
-						jQuery( '#frm-categorydiv' )[0].scrollIntoView( { block: 'start' } );
-					}, 50 );
-				}
+			const spamRedirectLinks = document.querySelectorAll( 'a[href="#spam_settings"]' );
+			spamRedirectLinks.forEach( function( link ) {
+				link.addEventListener( 'click', function( e ) {
+					e.preventDefault();
+					const spamTab = document.querySelector( '.frm-category-tabs a[href="#spam_settings"]' );
+					if ( spamTab ) {
+						clickTab( spamTab );
+						// Scroll to top after tab switch
+						setTimeout( function() {
+							const categoryDiv = document.getElementById( 'frm-categorydiv' );
+							if ( categoryDiv ) {
+								categoryDiv.scrollIntoView( { block: 'start' } );
+							}
+						}, 50 );
+					}
+				} );
 			} );
 
 			// Handle Captcha checkbox toggle to show/hide warnings
 			const captchaCheckbox = document.getElementById( 'frm_include_captcha' );
 			if ( captchaCheckbox ) {
 				const initialState = captchaCheckbox.checked;
-				jQuery( captchaCheckbox ).on( 'change', function() {
+				captchaCheckbox.addEventListener( 'change', function() {
 					const addWarning = document.getElementById( 'frm_captcha_add_warning' );
 					const removeWarning = document.getElementById( 'frm_captcha_remove_warning' );
 					if ( addWarning && removeWarning ) {
