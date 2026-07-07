@@ -39,6 +39,7 @@ $tabs = array(
 		$filler_params = array(
 			'class' => 'frm-payments-tab-filler',
 		);
+
 		if ( 'coupons' === $tab_key ) {
 			$filler_params['style'] = 'flex: 1;';
 		}

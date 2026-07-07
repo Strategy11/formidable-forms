@@ -241,7 +241,7 @@ class FrmStrpLiteAppController {
 	 * and the payments page is accessed by its URL.
 	 *
 	 * @deprecated x.x
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function maybe_redirect_to_stripe_settings() {
