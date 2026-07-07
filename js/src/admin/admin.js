@@ -11053,6 +11053,45 @@ window.frmAdminBuildJS = function() {
 				}
 			} );
 
+			// Handle spam settings redirect link
+			jQuery( 'a[href="#spam_settings"]' ).on( 'click', function( e ) {
+				e.preventDefault();
+				const spamTab = jQuery( '.frm-category-tabs a[href="#spam_settings"]' );
+				if ( spamTab.length ) {
+					clickTab( spamTab );
+					// Scroll to top after tab switch
+					setTimeout( function() {
+						jQuery( '#frm-categorydiv' )[0].scrollIntoView( { block: 'start' } );
+					}, 50 );
+				}
+			} );
+
+			// Handle Captcha checkbox toggle to show/hide warnings
+			const captchaCheckbox = document.getElementById( 'frm_include_captcha' );
+			if ( captchaCheckbox ) {
+				const initialState = captchaCheckbox.checked;
+				jQuery( captchaCheckbox ).on( 'change', function() {
+					const addWarning = document.getElementById( 'frm_captcha_add_warning' );
+					const removeWarning = document.getElementById( 'frm_captcha_remove_warning' );
+					if ( addWarning && removeWarning ) {
+						// Only show warning if current state differs from initial state
+						if ( this.checked !== initialState ) {
+							if ( this.checked ) {
+								addWarning.style.display = 'block';
+								removeWarning.style.display = 'none';
+							} else {
+								addWarning.style.display = 'none';
+								removeWarning.style.display = 'block';
+							}
+						} else {
+							// Hide warnings if toggled back to initial state
+							addWarning.style.display = 'none';
+							removeWarning.style.display = 'none';
+						}
+					}
+				} );
+			}
+
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
 			const $loggedIn = document.getElementById( 'logged_in' );
