@@ -109,13 +109,15 @@
 	.frm-payments-settings-button {
 		display: flex;
 		align-items: center;
-		padding: 8px 12px;
+		padding: 0 12px 8px;
 		border-bottom: 1px solid rgba(234, 236, 240, 1);
 
 		.button {
 			display: inline-flex;
 			align-items: center;
 			gap: 6px;
+			padding-top: var(--gap-2xs) !important;
+			padding-bottom: var(--gap-2xs) !important;
 
 			svg {
 				width: 22px;
