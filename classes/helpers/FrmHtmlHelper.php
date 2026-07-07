@@ -49,11 +49,12 @@ class FrmHtmlHelper {
 			echo '<span class="frm-success-icon">';
 			FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) );
 			echo '</span>';
-		} else {
-			echo '<span class="frm-x-icon">';
-			FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) );
-			echo '</span>';
+			return;
 		}
+
+		echo '<span class="frm-x-icon">';
+		FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) );
+		echo '</span>';
 	}
 
 	/**

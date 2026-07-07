@@ -3803,4 +3803,15 @@ class FrmFormsController {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
 	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	public static function render_spam_settings( $values ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
 }
