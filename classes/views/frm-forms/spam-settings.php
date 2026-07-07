@@ -77,31 +77,19 @@ foreach ( $form_fields as $field ) {
 <table class="form-table frm-fields frm-global-spam-table">
 	<tr>
 		<td>
-			<?php if ( $frm_settings->honeypot ) : ?>
-				<span class="frm-success-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
-			<?php else : ?>
-				<span class="frm-x-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
-			<?php endif; ?>
+			<?php FrmHtmlHelper::show_readonly_setting_icon( $frm_settings->honeypot ); ?>
 			<?php esc_html_e( 'Use honeypot to check entries for spam', 'formidable' ); ?>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<?php if ( $frm_settings->wp_spam_check ) : ?>
-				<span class="frm-success-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
-			<?php else : ?>
-				<span class="frm-x-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
-			<?php endif; ?>
+			<?php FrmHtmlHelper::show_readonly_setting_icon( $frm_settings->wp_spam_check ); ?>
 			<?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<?php if ( $frm_settings->denylist_check ) : ?>
-				<span class="frm-success-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
-			<?php else : ?>
-				<span class="frm-x-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
-			<?php endif; ?>
+			<?php FrmHtmlHelper::show_readonly_setting_icon( $frm_settings->denylist_check ); ?>
 			<?php esc_html_e( 'Check denylist data to validate for spam', 'formidable' ); ?>
 		</td>
 	</tr>
