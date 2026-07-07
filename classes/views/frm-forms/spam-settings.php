@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $frm_settings = FrmAppHelper::get_settings();
 ?>
+<div class="frm-spam-settings">
 <p class="howto">
 	<?php esc_html_e( 'Prevent spam submissions with anti-spam tools.', 'formidable' ); ?>
 </p>
@@ -67,19 +68,19 @@ foreach ( $form_fields as $field ) {
 	</div>
 <?php endif; ?>
 
-<h3 style="margin-bottom: 0.5em;"><?php esc_html_e( 'Global Spam Settings', 'formidable' ); ?></h3>
+<h3><?php esc_html_e( 'Global Spam Settings', 'formidable' ); ?></h3>
 
-<p class="howto" style="margin-top: 0;">
+<p class="howto">
 	<?php esc_html_e( 'Managed in Global Settings and applied to every form.', 'formidable' ); ?>
 </p>
 
-<table class="form-table frm-fields">
+<table class="form-table frm-fields frm-global-spam-table">
 	<tr>
 		<td>
 			<?php if ( $frm_settings->honeypot ) : ?>
-				<span class="frm_success_icon" style="color: rgba(3, 152, 85, 1); font-size: 16px; margin-right: 8px;"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
+				<span class="frm-success-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
 			<?php else : ?>
-				<span style="font-size: 16px; margin-right: 8px;"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
+				<span class="frm-x-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
 			<?php endif; ?>
 			<?php esc_html_e( 'Use honeypot to check entries for spam', 'formidable' ); ?>
 		</td>
@@ -87,9 +88,9 @@ foreach ( $form_fields as $field ) {
 	<tr>
 		<td>
 			<?php if ( $frm_settings->wp_spam_check ) : ?>
-				<span class="frm_success_icon" style="color: rgba(3, 152, 85, 1); font-size: 16px; margin-right: 8px;"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
+				<span class="frm-success-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
 			<?php else : ?>
-				<span style="font-size: 16px; margin-right: 8px;"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
+				<span class="frm-x-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
 			<?php endif; ?>
 			<?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?>
 		</td>
@@ -97,9 +98,9 @@ foreach ( $form_fields as $field ) {
 	<tr>
 		<td>
 			<?php if ( $frm_settings->denylist_check ) : ?>
-				<span class="frm_success_icon" style="color: rgba(3, 152, 85, 1); font-size: 16px; margin-right: 8px;"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
+				<span class="frm-success-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
 			<?php else : ?>
-				<span style="font-size: 16px; margin-right: 8px;"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
+				<span class="frm-x-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) ); ?></span>
 			<?php endif; ?>
 			<?php esc_html_e( 'Check denylist data to validate for spam', 'formidable' ); ?>
 		</td>
@@ -116,3 +117,4 @@ foreach ( $form_fields as $field ) {
 	);
 	?>
 </p>
+</div>
