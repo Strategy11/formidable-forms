@@ -548,11 +548,11 @@ window.frmAdminBuildJS = function() {
 			tooltipTarget = tooltipTarget.parentElement;
 		}
 
-		jQuery( tooltipTarget ).tooltip();
+		const tooltip = new bootstrap.Tooltip( tooltipTarget );
 
 		if ( show ) {
 			deleteTooltips();
-			jQuery( tooltipTarget ).tooltip( 'show' );
+			tooltip.show();
 		}
 	}
 
@@ -1595,8 +1595,8 @@ window.frmAdminBuildJS = function() {
 		element.addEventListener(
 			'mouseover',
 			function() {
-				if ( null === element.getAttribute( 'data-original-title' ) ) {
-					jQuery( element ).tooltip();
+				if ( ! element.__bootstrapTooltip ) {
+					element.__bootstrapTooltip = new bootstrap.Tooltip( element );
 				}
 			}
 		);
