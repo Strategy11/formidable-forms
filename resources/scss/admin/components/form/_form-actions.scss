@@ -91,9 +91,8 @@
 
 .frm_gc_copy_shortcode {
 	position: relative;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+	display: inline-block;
+	vertical-align: text-top;
 	border-radius: 4px;
 	padding: 16px;
 	outline: 0;
