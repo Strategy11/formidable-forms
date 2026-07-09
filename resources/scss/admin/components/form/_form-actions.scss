@@ -20,12 +20,6 @@
 
 // ── Gated Content action ─────────────────────────────────────────────────── //
 
-.frm-gc-item-settings {
-	display: flex;
-	align-items: flex-start;
-	gap: 16px;
-}
-
 @keyframes frm-gc-row-enter {
 
 	from {
@@ -88,6 +82,13 @@
 		padding: 0;
 	}
 }
+
+.frm-gc-item-settings {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+}
+
 
 .frm_gc_copy_shortcode {
 	position: relative;
