@@ -94,10 +94,25 @@
 
 	.frmsvg {
 		color: var(--primary-500);
+		transition: color var(--hover-duration) ease-out;
 	}
 
 	&:hover {
-		background-color: var(--grey-100);
+		background-color: var(--primary-50);
+
+		.frmsvg {
+			color: var(--primary-700);
+		}
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--primary-500);
+		outline-offset: 1px;
+		background-color: transparent;
+	}
+
+	&.is-copied:hover {
+		background-color: #f0fdf4;
 	}
 
 	&:active {
