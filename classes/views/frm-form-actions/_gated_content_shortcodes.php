@@ -39,8 +39,11 @@ $frm_gc_shortcodes = FrmGatedContentAction::get_shortcodes( $frm_gc_action_id );
 							data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>"
 							aria-label="<?php esc_attr_e( 'Copy shortcode', 'formidable' ); ?>"
 						>
-							<svg class="frmsvg frm_svg14" aria-hidden="true" focusable="false">
+							<svg class="frmsvg frm_svg14 frm-gc-icon frm-gc-icon--copy" aria-hidden="true" focusable="false">
 								<use href="#frm_clone_icon"></use>
+							</svg>
+							<svg class="frmsvg frm_svg14 frm-gc-icon frm-gc-icon--check" aria-hidden="true" focusable="false">
+								<use href="#frm_checkmark_icon"></use>
 							</svg>
 						</button>
 					</td>

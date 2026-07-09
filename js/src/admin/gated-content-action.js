@@ -149,22 +149,23 @@
 	}
 
 	/**
-	 * Temporarily swap the button icon and aria-label to confirm a successful copy.
+	 * Transition the button to the "copied" state and revert after 1600 ms.
+	 *
+	 * Adds `.is-copied` so CSS cross-fades the copy↔check icons via scale+blur.
+	 *
+	 * @since x.x
 	 *
 	 * @param {HTMLElement} btn - The .frm_gc_copy_shortcode button element.
 	 */
 	function showCopied( btn ) {
-		const use = btn.querySelector( 'use' );
-		const originalHref = use.getAttribute( 'href' );
 		const originalLabel = btn.getAttribute( 'aria-label' );
-
-		use.setAttribute( 'href', '#frm_checkmark_icon' );
+		btn.classList.add( 'is-copied' );
 		btn.setAttribute( 'aria-label', btn.dataset.copiedLabel || 'Copied!' );
 
 		setTimeout( () => {
-			use.setAttribute( 'href', originalHref );
+			btn.classList.remove( 'is-copied' );
 			btn.setAttribute( 'aria-label', originalLabel );
-		}, 1500 );
+		}, 1600 );
 	}
 
 	document.addEventListener( 'click', function( event ) {
