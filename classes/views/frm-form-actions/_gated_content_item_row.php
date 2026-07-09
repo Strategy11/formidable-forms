@@ -36,8 +36,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <li class="frm_gc_item_row frm_grid_container">
 
-	<?php /* ── Col 1: Type (4/12) ──────────────────────── */ ?>
-	<div class="frm4">
+	<?php /* ── Col 1: Type (6/12) ──────────────────────── */ ?>
+	<div class="frm6">
 		<div class="frm_form_field frm-mt-xs frm-mb-xs">
 			<?php
 			$frm_gc_label_atts = $is_template
@@ -73,8 +73,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div><!-- .frm_form_field -->
 	</div><!-- .frm4 -->
 
-	<?php /* ── Col 2: Type-specific settings + delete (8/12) ── */ ?>
-	<div class="frm8 frm-gc-item-settings">
+	<?php /* ── Col 2: Type-specific settings + delete (6/12) ── */ ?>
+	<div class="frm6 frm-gc-item-settings">
 
 		<?php
 		// Build args for inner/outer type-settings hooks once (all vars are available here).
@@ -250,6 +250,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>
 			</button>
 		</div><!-- .frm-gc-item-delete -->
-	</div><!-- .frm8 -->
+	</div><!-- .frm6 -->
 
 </li>
