@@ -65,17 +65,14 @@
 		animation: frm-gc-row-enter 400ms var(--ease-out-expo) both;
 
 		&:nth-child(1) { animation-delay: 60ms; }
-
 		&:nth-child(2) { animation-delay: 160ms; }
-
 		&:nth-child(3) { animation-delay: 260ms; }
-
 		&:nth-child(4) { animation-delay: 360ms; }
 	}
-}
 
-.frm_gc_shortcode_table th {
-	font-size: var(--text-sm);
+	th {
+		font-size: var(--text-sm);
+	}
 }
 
 .frm_gc_copy_shortcode {
@@ -88,8 +85,8 @@
 	outline: 0;
 	box-shadow: none !important;
 	transition:
-		background-color var(--hover-duration, 200ms) ease-out,
-		transform var(--press-duration, 150ms) ease-out;
+		background-color var(--hover-duration) ease-out,
+		transform var(--press-duration) ease-out;
 
 	.frmsvg {
 		color: var(--primary-500);
@@ -100,7 +97,7 @@
 	}
 
 	&:active {
-		transform: scale(var(--press-scale, 0.96));
+		transform: scale(var(--press-scale));
 	}
 
 	// Tooltip rises 4px into view on hover
@@ -119,8 +116,8 @@
 		opacity: 0;
 		pointer-events: none;
 		transition:
-			opacity var(--hover-duration, 200ms) ease-out,
-			transform var(--hover-duration, 200ms) ease-out;
+			opacity var(--hover-duration) ease-out,
+			transform var(--hover-duration) ease-out;
 	}
 
 	&:hover::after {
@@ -132,25 +129,25 @@
 	.frm-gc-icon {
 		display: block;
 		transition:
-			opacity var(--swap-duration, 150ms) var(--ease-out-expo, cubic-bezier(0.2, 0, 0, 1)),
-			transform var(--swap-duration, 150ms) var(--ease-out-expo, cubic-bezier(0.2, 0, 0, 1)),
-			filter var(--swap-duration, 150ms) var(--ease-out-expo, cubic-bezier(0.2, 0, 0, 1));
+			opacity var(--swap-duration) var(--ease-out-expo),
+			transform var(--swap-duration) var(--ease-out-expo),
+			filter var(--swap-duration) var(--ease-out-expo);
 	}
 
 	.frm-gc-icon--check {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%, -50%) scale(var(--swap-scale, 0.5));
+		transform: translate(-50%, -50%) scale(var(--swap-scale));
 		opacity: 0;
-		filter: blur(var(--swap-blur, 2px));
+		filter: blur(var(--swap-blur));
 	}
 
 	&.is-copied {
 		.frm-gc-icon--copy {
 			opacity: 0;
-			transform: scale(var(--swap-scale, 0.5));
-			filter: blur(var(--swap-blur, 2px));
+			transform: scale(var(--swap-scale));
+			filter: blur(var(--swap-blur));
 		}
 
 		.frm-gc-icon--check {
