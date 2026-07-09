@@ -49,21 +49,30 @@
 	--press-scale: 0.96;
 	--press-duration: 150ms;
 	--hover-duration: 200ms;
-	table-layout: fixed;
 
-	th,
-	td {
-		width: 50%;
-		padding-top: 10px !important;
-		padding-bottom: 10px !important;
+	.frm_gc_shortcode_header {
+
+		> div {
+			padding: 10px 0;
+			font-size: var(--text-sm);
+			font-weight: 700;
+		}
 	}
 
-	code {
-		background: none;
-	}
-
-	tbody tr {
+	.frm_gc_shortcode_row {
 		animation: frm-gc-row-enter 400ms var(--ease-out-expo) both;
+
+		> div {
+			padding: 10px 0;
+		}
+
+		> div:first-child {
+			padding-left: 10px;
+		}
+
+		&:nth-child(odd) {
+			background-color: var(--grey-50);
+		}
 
 		&:nth-child(1) { animation-delay: 60ms; }
 
@@ -74,8 +83,9 @@
 		&:nth-child(4) { animation-delay: 360ms; }
 	}
 
-	th {
-		font-size: var(--text-sm);
+	code {
+		background: none;
+		padding: 0;
 	}
 }
 

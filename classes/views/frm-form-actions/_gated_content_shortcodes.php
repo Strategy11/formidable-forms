@@ -20,17 +20,15 @@ $frm_gc_shortcodes = FrmGatedContentAction::get_shortcodes( $frm_gc_action_id );
 	<p class="frm_description">
 		<?php esc_html_e( 'Add these shortcodes to a Confirmation or Send Email action to include the access link.', 'formidable' ); ?>
 	</p>
-	<table class="frm_gc_shortcode_table widefat striped">
-		<thead>
-			<tr>
-				<th><?php esc_html_e( 'Shortcode', 'formidable' ); ?></th>
-				<th><?php esc_html_e( 'Output', 'formidable' ); ?></th>
-			</tr>
-		</thead>
-		<tbody>
+	<div class="frm_gc_shortcode_table">
+		<div class="frm_gc_shortcode_header frm_grid_container">
+			<div class="frm6"><?php esc_html_e( 'Shortcode', 'formidable' ); ?></div>
+			<div class="frm6"><?php esc_html_e( 'Output', 'formidable' ); ?></div>
+		</div>
+		<div class="frm_gc_shortcode_body">
 			<?php foreach ( $frm_gc_shortcodes as $frm_gc_shortcode ) : ?>
-				<tr>
-					<td>
+				<div class="frm_gc_shortcode_row frm_grid_container">
+					<div class="frm6">
 						<code><?php echo esc_html( $frm_gc_shortcode['code'] ); ?></code>
 						<button
 							type="button"
@@ -46,11 +44,11 @@ $frm_gc_shortcodes = FrmGatedContentAction::get_shortcodes( $frm_gc_action_id );
 								<use href="#frm_checkmark_icon"></use>
 							</svg>
 						</button>
-					</td>
-					<td><?php echo esc_html( $frm_gc_shortcode['output'] ); ?></td>
-				</tr>
+					</div>
+					<div class="frm6"><?php echo esc_html( $frm_gc_shortcode['output'] ); ?></div>
+				</div>
 			<?php endforeach; ?>
-		</tbody>
-	</table>
+		</div>
+	</div><!-- .frm_gc_shortcode_table -->
 </div><!-- .frm_gc_shortcodes_section -->
 <?php unset( $frm_gc_shortcodes, $frm_gc_shortcode ); ?>
