@@ -36,7 +36,7 @@ if ( 'paypal' === $action_control->id_base ) {
 		</span>
 
 		<div class="frm-flex-col frm-min-w-0">
-			<h3 class="frm-h-stack-xs frm-text-md frm-capitalize">
+			<h3 class="frm-h-stack-xs frm-capitalize">
 				<?php
 				if ( isset( $data['data-upgrade'] ) && ! isset( $data['data-oneclick'] ) ) {
 					FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_svg15', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) );
