@@ -51,8 +51,6 @@
 
 // Action Cards
 .frm_actions_list .frm-card-item.frm-card-item--outlined {
-	padding-left: var(--gap-sm);
-	padding-right: var(--gap-sm);
 	margin: 0;
 	transition: box-shadow 200ms ease-in-out, background-color 200ms ease-out;
 
@@ -94,6 +92,19 @@
 	&:focus-within .frm_single_action {
 		display: flex;
 	}
+}
+
+.frm-action.frm-card-item {
+	padding: 12px !important;
+}
+
+.frm-action.frm-card-item h3 + p {
+	font-size: 13px;
+}
+
+// The minmax usually uses 303px. Allow action card items to be a bit smaller.
+.frm-list-grid-layout.frm_actions_list {
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
 // Action Widgets/Settings
