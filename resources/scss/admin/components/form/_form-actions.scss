@@ -102,6 +102,12 @@
 	font-size: 13px;
 }
 
+.frm-action .frm-border-icon {
+	box-sizing: border-box;
+	width: 36px;
+	height: 36px;
+}
+
 // The minmax usually uses 303px. Allow action card items to be a bit smaller.
 .frm-list-grid-layout.frm_actions_list {
 	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
