@@ -331,12 +331,9 @@ class FrmFormsController {
 
 		if ( $include_captcha && ! $captcha_field_id ) {
 			// Create captcha field just before submit button
-			$field_values = array(
-				'form_id'     => $form_id,
-				'type'        => 'captcha',
-				'name'        => __( 'Captcha', 'formidable' ),
-				'field_order' => $submit_field_order > 0 ? $submit_field_order - 1 : 0,
-			);
+			$field_values                = FrmFieldsHelper::setup_new_vars( 'captcha', $form_id );
+			$field_values['name']        = __( 'Captcha', 'formidable' );
+			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : 0;
 			FrmField::create( $field_values );
 		} elseif ( ! $include_captcha && $captcha_field_id ) {
 			// Delete captcha field
