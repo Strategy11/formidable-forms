@@ -11611,6 +11611,8 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	} );
 };
 
+require( './gated-content-action' );
+
 window.frmImportCsv = formID => {
 	let urlVars = '';
 	if ( typeof __FRMURLVARS !== 'undefined' ) {

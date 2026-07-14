@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 105;
+	public static $db_version = 106;
 
 	/**
 	 * Used by the API add-on.
