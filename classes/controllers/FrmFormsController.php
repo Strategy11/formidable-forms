@@ -284,6 +284,10 @@ class FrmFormsController {
 			FrmAntiSpam::clear_caches();
 		}
 
+		// Handle captcha field inclusion
+		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		self::handle_captcha_field( $id, $include_captcha );
+
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
 		self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
@@ -297,6 +301,44 @@ class FrmFormsController {
 	private static function antispam_was_on( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 		return ! empty( $form->options['antispam'] );
+	}
+
+	/**
+	 * Handle captcha field inclusion in form
+	 *
+	 * @since x.x
+	 *
+	 * @param int  $form_id         Form ID.
+	 * @param bool $include_captcha Whether to include captcha field.
+	 *
+	 * @return void
+	 */
+	private static function handle_captcha_field( $form_id, $include_captcha ) {
+		$form_fields        = FrmField::get_all_for_form( $form_id, '', 'exclude' );
+		$captcha_field_id   = 0;
+		$submit_field_order = 0;
+
+		foreach ( $form_fields as $field ) {
+			if ( 'captcha' === $field->type ) {
+				$captcha_field_id = $field->id;
+				break;
+			}
+
+			if ( 'submit' === $field->type ) {
+				$submit_field_order = $field->field_order;
+			}
+		}
+
+		if ( $include_captcha && ! $captcha_field_id ) {
+			// Create captcha field just before submit button
+			$field_values                = FrmFieldsHelper::setup_new_vars( 'captcha', $form_id );
+			$field_values['name']        = __( 'Captcha', 'formidable' );
+			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : 0;
+			FrmField::create( $field_values );
+		} elseif ( ! $include_captcha && $captcha_field_id ) {
+			// Delete captcha field
+			FrmField::destroy( $captcha_field_id );
+		}
 	}
 
 	/**
@@ -1546,6 +1588,11 @@ class FrmFormsController {
 				'id'       => 'frm_notification_settings',
 				'icon'     => 'frmfont frm_notification_check_icon',
 			),
+			'spam'        => array(
+				'name'     => __( 'Spam', 'formidable' ),
+				'function' => array( self::class, 'spam_settings' ),
+				'icon'     => 'frmfont frm_shield_check2_icon',
+			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
 				'icon'       => 'frmfont frm_lock_closed2_icon',
@@ -1665,16 +1712,14 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param array $values
 	 *
 	 * @return void
 	 */
-	public static function render_spam_settings( $values ) {
-		if ( function_exists( 'akismet_http_post' ) ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
-		}
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/stopforumspam.php';
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
+	public static function spam_settings( $values ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings.php';
 	}
 
 	/**
@@ -3756,5 +3801,16 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	public static function render_spam_settings( $values ) {
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }
