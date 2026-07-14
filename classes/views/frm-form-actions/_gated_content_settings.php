@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  *
  * @var object                $instance Form action post object. Settings in $instance->post_content.
  * @var array                 $args     Contains `form`, `action_key`, `values`.

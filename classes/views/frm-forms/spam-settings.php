@@ -2,7 +2,7 @@
 /**
  * Spam settings for form
  *
- * @since x.x
+ * @since 6.33
  *
  * @package Formidable
  *

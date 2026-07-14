@@ -8,7 +8,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -57,7 +57,7 @@ class FrmGatedItem {
 		 * Return a FrmGatedItem subclass instance to handle the given type.
 		 * Return null to fall back to the base FrmGatedItem.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param FrmGatedItem|null                   $instance Instance, or null to use base class.
 		 * @param array{type: string, id: int|string} $item     Item data array with 'type' and 'id' keys.
@@ -138,7 +138,7 @@ class FrmGatedItem {
 	 * Subclasses may override to produce a more specific name — e.g. when the
 	 * same post type can have multiple distinct access scopes (view + entry).
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @return string
 	 */
@@ -154,7 +154,7 @@ class FrmGatedItem {
 	 * include extra scope — e.g. entry ID for view items — so that cache
 	 * entries for different access scopes never collide.
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @return string
 	 */

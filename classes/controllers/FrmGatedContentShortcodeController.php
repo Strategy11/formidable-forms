@@ -6,7 +6,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -56,7 +56,7 @@ class FrmGatedContentShortcodeController {
 		 * Return a non-null string to short-circuit the default rendering. Return null
 		 * to let the shortcode fall through to its built-in show= handlers.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param string|null $output Output string, or null to continue default handling.
 		 * @param array       $atts   Full shortcode attributes array (id, show, item, …).

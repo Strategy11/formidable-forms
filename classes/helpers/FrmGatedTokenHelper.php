@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -83,7 +83,7 @@ class FrmGatedTokenHelper {
 		 * token — for example, Formidable Registration hooks here to set the correct
 		 * user_id when the registrant is not yet logged in at trigger time.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param array  $data Row data to insert into wp_frm_gated_tokens.
 		 * @param array  $args {
@@ -483,7 +483,7 @@ class FrmGatedTokenHelper {
 		 * a valid token. Add-ons can return a validated FrmGatedToken to grant access from
 		 * alternative sources, or null to indicate no token is available.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param FrmGatedToken|null        $token Null — no valid token found by core.
 		 * @param array{item: FrmGatedItem} $args  Array containing the content item being accessed.
