@@ -158,14 +158,15 @@ class FrmGatedContentController {
 
 		$is_password_protected = '' !== $post->post_password;
 		$is_restricted_private = 'private' === $post->post_status && ! current_user_can( 'read_private_posts', $post_id );
+		$access_code_from_url  = FrmAppHelper::simple_get( 'access_code' );
 
 		// Nothing to unlock — post is publicly accessible.
 		if ( ! $is_password_protected && ! $is_restricted_private ) {
+			if ( $access_code_from_url && wp_safe_redirect( remove_query_arg( 'access_code' ) ) ) {
+				exit;
+			}
 			return;
 		}
-
-		// Detect whether the token arrived via URL param before falling back to cookies.
-		$access_code_from_url = FrmAppHelper::simple_get( 'access_code' );
 
 		$post_item   = FrmGatedItem::make(
 			array(
