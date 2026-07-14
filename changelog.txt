@@ -1,4 +1,12 @@
 == Changelog ==
+= 6.33 =
+* New: A new Gated Content form action type has been added. Now you can easily give access to restricted pages, views, pdfs, and files!
+* New: A new Spam settings section has been added to Form settings. Several spam settings have been moved here. In addition this section includes a summary of Global Spam settings, and a new Include Captcha in this form setting to easily add and remove Captcha fields.
+* New: PayPal Commerce front end error messages have been improved.
+* New: A Payment Settings button has been added to the Payments list page.
+* Fix: Google Pay would use the test environment incorrectly when using PayPal Commerce.
+* Fix: A Using null as an array offset is deprecated, use an empty string instead PHP deprecated message has been fixed.
+
 = 6.32.1 =
 * Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
 * Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status. Credit to Yaswanth Reddy Sunkara and WPScan for reporting the issue.

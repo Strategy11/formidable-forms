@@ -240,11 +240,11 @@ class FrmStrpLiteAppController {
 	 * Redirect to Stripe settings when payments are not yet installed
 	 * and the payments page is accessed by its URL.
 	 *
-	 * @deprecated x.x
+	 * @deprecated 6.33
 	 *
 	 * @return void
 	 */
 	public static function maybe_redirect_to_stripe_settings() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.33' );
 	}
 }

@@ -4,7 +4,7 @@ Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.32.1
+Stable tag: 6.33
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -364,6 +364,14 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.33 =
+* New: A new Gated Content form action type has been added. Now you can easily give access to restricted pages, views, pdfs, and files!
+* New: A new Spam settings section has been added to Form settings. Several spam settings have been moved here. In addition this section includes a summary of Global Spam settings, and a new Include Captcha in this form setting to easily add and remove Captcha fields.
+* New: PayPal Commerce front end error messages have been improved.
+* New: A Payment Settings button has been added to the Payments list page.
+* Fix: Google Pay would use the test environment incorrectly when using PayPal Commerce.
+* Fix: A Using null as an array offset is deprecated, use an empty string instead PHP deprecated message has been fixed.
+
 = 6.32.1 =
 * Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
 * Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status. Credit to Yaswanth Reddy Sunkara and WPScan for reporting the issue.
@@ -388,25 +396,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: PayPal Commerce has been updated to prevent issues where Google Pay and Apple Pay options would not appear if the SDKs had not loaded in time.
 * Fix: PayPal Commerce orders and products were not including the payment action description setting.
 * The overdue subscription cron message will no longer get logged when there are no active subscriptions.
-
-= 6.31 =
-* New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
-* New: Form action settings have been redesigned.
-* New: Payment actions now use buttons to toggle the selected gateway, and gateway is the top action setting. Note that when custom gateways or Authorize.Net are active, gateways will still revert to the old settings.
-* New: The Collect a Payment action icon is now hidden by default, replaced by individual icons for Stripe, Square, and PayPal Commerce. If other gateways are active, Collect a Payment is still included.
-* New: Border styling rules have been added so autofill fields in Chrome and Safari will appear more consistent with other fields.
-* New: A new frm_after_import_forms action has been added for handling an imported XML after all forms have been imported.
-* Fix: A form would incorrectly try to submit a second time when redirecting and submitting with AJAX.
-
-= 6.30 =
-* New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
-* New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
-* New: New frm_after_create_entry_{form_key} and frm_after_update_entry_{form_key} actions have been added.
-* Fix: When editing an entry, the Other option would not correctly appear selected.
-* Fix: Entries would fail to save in some cases where entry names would exceed 255 characters with special unicode characters.
-* Fix: Custom style CSS would not properly prefix selectors when ::before or ::after were used.
-* Fix: Attempting to refund a Square payment would result in a fatal error when the Stripe or Authorize.Net add-ons were also active.
-* Fix: A check has been added to prevent a possible Cannot access offset of type string on string fatal PHP error issue.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

@@ -7,7 +7,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -153,7 +153,7 @@ class FrmGatedToken {
 		/**
 		 * Filters whether a resolved token grants access to a content item.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param bool          $is_valid  Whether the token passes structural validation.
 		 * @param array         $args {

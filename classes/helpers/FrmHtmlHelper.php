@@ -38,7 +38,7 @@ class FrmHtmlHelper {
 	/**
 	 * Show readonly setting icon
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @param bool $is_enabled Whether the setting is enabled.
 	 *

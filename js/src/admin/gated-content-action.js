@@ -10,7 +10,7 @@
  * children. Only the active type's settings div is visible and has its [id]
  * select named — preventing duplicate field names on form submit.
  *
- * @since x.x
+ * @since 6.33
  */
 ( function() {
 	/**
@@ -52,7 +52,7 @@
 	 * Keeps name and id attributes contiguous so the submitted PHP array has no
 	 * gaps and for/id pairs remain unique. Called after every add or remove.
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @param {HTMLElement} wrapper - The .frm_gated_content_settings element.
 	 * @return {void}
@@ -153,7 +153,7 @@
 	 *
 	 * Adds `.is-copied` so CSS cross-fades the copy↔check icons via scale+blur.
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @param {HTMLElement} btn - The .frm_gc_copy_shortcode button element.
 	 */

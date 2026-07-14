@@ -306,7 +306,7 @@ class FrmFormsController {
 	/**
 	 * Handle captcha field inclusion in form
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @param int  $form_id         Form ID.
 	 * @param bool $include_captcha Whether to include captcha field.
@@ -1712,7 +1712,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @param array $values
 	 *
@@ -3804,13 +3804,13 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.33
 	 *
 	 * @param array $values
 	 *
 	 * @return void
 	 */
 	public static function render_spam_settings( $values ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.33' );
 	}
 }

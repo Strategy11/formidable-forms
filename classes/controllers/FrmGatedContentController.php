@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -306,7 +306,7 @@ class FrmGatedContentController {
 	 *
 	 * Hooked to `frm_helper_shortcodes` with 3 accepted args.
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @param array  $shortcodes   Existing shortcode helpers array (shortcode => label).
 	 * @param string $settings_tab Active settings tab slug.

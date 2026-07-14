@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -134,7 +134,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 * The `frm_gated_content_shortcodes` filter allows Pro and add-ons to append
 	 * additional rows (e.g. show="expired_time" when expiry is configured).
 	 *
-	 * @since x.x
+	 * @since 6.33
 	 *
 	 * @param int $action_id Gated content action post ID.
 	 *
@@ -167,7 +167,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		 * - code   (string) The shortcode string to display and copy.
 		 * - output (string) Human-readable description of what it outputs.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param array<int, array{code: string, output: string}> $shortcodes Shortcode rows.
 		 * @param int                                             $action_id  Gated content action post ID.
@@ -214,7 +214,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		 *
 		 * The filtered list is then narrowed to private and password-protected posts only.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param array $query_args get_posts() argument array.
 		 */

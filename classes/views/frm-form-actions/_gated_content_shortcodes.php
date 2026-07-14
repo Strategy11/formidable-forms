@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  *
  * @var int $frm_gc_action_id Gated content action post ID.
  */

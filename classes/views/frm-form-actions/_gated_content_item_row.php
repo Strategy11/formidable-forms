@@ -14,7 +14,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.33
  *
  * @var bool         $is_template         True when rendering the JS clone template.
  * @var string       $frm_gc_item_type    Active type key ('post', 'frm_file', …). Always 'post' for template.
@@ -201,7 +201,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 * wrapper as the primary post selector. Fires for both existing rows and the
 			 * JS <template> row.
 			 *
-			 * @since x.x
+			 * @since 6.33
 			 *
 			 * @param string $type     Post-type key for this settings div (e.g. 'frm_display').
 			 * @param array  $row_args Same keys as the outer `frm_gated_content_item_type_settings` hook.
@@ -225,7 +225,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * - In existing-row mode: add `hidden` when `$args['active_type'] !== '{TYPE}'`; use real for/id/name.
 		 * - Add `data-frm-gc-field="{KEY}"` to each input so JS manages its name on type change.
 		 *
-		 * @since x.x
+		 * @since 6.33
 		 *
 		 * @param array $args {
 		 *
