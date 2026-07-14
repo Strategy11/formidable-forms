@@ -165,6 +165,7 @@ class FrmGatedContentController {
 			if ( $access_code_from_url && wp_safe_redirect( remove_query_arg( 'access_code' ) ) ) {
 				exit;
 			}
+
 			return;
 		}
 
