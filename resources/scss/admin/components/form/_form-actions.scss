@@ -18,6 +18,189 @@
 	}
 }
 
+// ── Gated Content action ─────────────────────────────────────────────────── //
+
+@keyframes frm-gc-row-enter {
+
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+		filter: blur(4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+		filter: blur(0);
+	}
+}
+
+.frm_gc_shortcode_table {
+	--swap-duration: 150ms;
+	--swap-blur: 2px;
+	--swap-scale: 0.5;
+	--ease-out-expo: cubic-bezier(0.2, 0, 0, 1);
+	--press-scale: 0.96;
+	--press-duration: 150ms;
+	--hover-duration: 200ms;
+
+	.frm_gc_shortcode_header {
+
+		> div {
+			padding: 10px 0;
+			font-size: var(--text-sm);
+			font-weight: 700;
+		}
+	}
+
+	.frm_gc_shortcode_row {
+		animation: frm-gc-row-enter 400ms var(--ease-out-expo) both;
+
+		> div {
+			padding: 10px 0;
+		}
+
+		> div:first-child {
+			padding-left: 10px;
+		}
+
+		&:nth-child(odd) {
+			background-color: var(--grey-50);
+		}
+
+		&:nth-child(1) { animation-delay: 60ms; }
+
+		&:nth-child(2) { animation-delay: 160ms; }
+
+		&:nth-child(3) { animation-delay: 260ms; }
+
+		&:nth-child(4) { animation-delay: 360ms; }
+	}
+
+	code {
+		background: none;
+		padding: 0;
+	}
+}
+
+.frm-gc-item-settings {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+}
+
+
+.frm_gc_copy_shortcode {
+	position: relative;
+	display: inline-block;
+	vertical-align: text-top;
+	border-radius: 4px;
+	padding: 16px;
+	outline: 0;
+	box-shadow: none !important;
+	transition:
+		background-color var(--hover-duration) ease-out,
+		transform var(--press-duration) ease-out;
+
+	.frmsvg {
+		color: var(--primary-500);
+		transition: color var(--hover-duration) ease-out;
+	}
+
+	&:hover {
+		background-color: var(--primary-50);
+
+		.frmsvg {
+			color: var(--primary-700);
+		}
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--primary-500);
+		outline-offset: 1px;
+		background-color: transparent;
+	}
+
+	&.is-copied:hover {
+		background-color: #f0fdf4;
+	}
+
+	&:active {
+		transform: scale(var(--press-scale));
+	}
+
+	// Tooltip rises 4px into view on hover
+	&::after {
+		content: attr(aria-label);
+		position: absolute;
+		bottom: calc(100% + 6px);
+		left: 50%;
+		transform: translateX(-50%) translateY(4px);
+		white-space: nowrap;
+		font-size: var(--text-xs);
+		color: #fff;
+		background: var(--grey-800);
+		border-radius: 4px;
+		padding: 2px 6px;
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			opacity var(--hover-duration) ease-out,
+			transform var(--hover-duration) ease-out;
+	}
+
+	&:hover::after {
+		opacity: 1;
+		transform: translateX(-50%) translateY(0);
+	}
+
+	// Icon cross-fade: copy ↔ check (scale + blur)
+	.frm-gc-icon {
+		display: block;
+		transition:
+			opacity var(--swap-duration) var(--ease-out-expo),
+			transform var(--swap-duration) var(--ease-out-expo),
+			filter var(--swap-duration) var(--ease-out-expo);
+	}
+
+	.frm-gc-icon--check {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) scale(var(--swap-scale));
+		opacity: 0;
+		filter: blur(var(--swap-blur));
+	}
+
+	&.is-copied {
+
+		.frm-gc-icon--copy {
+			opacity: 0;
+			transform: scale(var(--swap-scale));
+			filter: blur(var(--swap-blur));
+		}
+
+		.frm-gc-icon--check {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+			filter: blur(0);
+		}
+	}
+}
+
+.frm-gc-type-settings {
+	flex: 1;
+}
+
+.frm-gc-item-delete {
+	flex-shrink: 0;
+	margin-top: 42px;
+
+	.frm_gc_remove_item {
+		color: var(--primary-500) !important;
+	}
+}
+
 // Search
 #frm_email_addon_menu .frm-search {
 	float: unset;
