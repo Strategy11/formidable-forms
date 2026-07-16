@@ -834,6 +834,7 @@ class FrmEntriesHelper {
 			return $actions;
 		}
 
+		// Make delete the last link.
 		$delete_action = $actions['frm_delete'];
 		unset( $actions['frm_delete'] );
 		$actions['frm_delete'] = $delete_action;
