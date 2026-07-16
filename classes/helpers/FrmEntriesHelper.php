@@ -830,11 +830,13 @@ class FrmEntriesHelper {
 
 		$actions = apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
 
-		if ( isset( $actions['frm_delete'] ) ) {
-			$delete_action = $actions['frm_delete'];
-			unset( $actions['frm_delete'] );
-			$actions['frm_delete'] = $delete_action;
+		if ( ! isset( $actions['frm_delete'] ) ) {
+			return $actions;
 		}
+
+		$delete_action = $actions['frm_delete'];
+		unset( $actions['frm_delete'] );
+		$actions['frm_delete'] = $delete_action;
 
 		return $actions;
 	}
