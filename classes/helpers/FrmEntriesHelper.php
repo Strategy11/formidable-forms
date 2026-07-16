@@ -774,6 +774,7 @@ class FrmEntriesHelper {
 			$actions['frm_delete'] = array(
 				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
 				'label' => __( 'Delete Entry', 'formidable' ),
+				'class' => 'frm_delete_entry',
 				'icon'  => 'frmfont frm_delete_icon',
 				'data'  => array(
 					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
