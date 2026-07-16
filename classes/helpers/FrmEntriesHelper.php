@@ -793,6 +793,16 @@ class FrmEntriesHelper {
 			);
 		}
 
+		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
+			$actions['frm_download_pdf'] = array(
+				'url'   => '#',
+				'label' => __( 'Download as PDF', 'formidable' ),
+				'class' => 'frm_noallow',
+				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
+				'icon'  => 'frmfont frm_download_icon',
+			);
+		}
+
 		$actions['frm_resend'] = array(
 			'url'   => '#',
 			'label' => __( 'Resend Emails', 'formidable' ),
@@ -804,16 +814,6 @@ class FrmEntriesHelper {
 			),
 			'icon'  => 'frmfont frm_email_icon',
 		);
-
-		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
-			$actions['frm_download_pdf'] = array(
-				'url'   => '#',
-				'label' => __( 'Download as PDF', 'formidable' ),
-				'class' => 'frm_noallow',
-				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
-				'icon'  => 'frmfont frm_download_icon',
-			);
-		}
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$actions['frm_delete'] = array(
