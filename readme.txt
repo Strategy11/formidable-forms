@@ -4,7 +4,7 @@ Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.33
+Stable tag: 6.33.1
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -364,6 +364,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.33.1 =
+* Fix: Public taxonomy pages could result in 404 errors, caused by a missing check in the new Gated Content actions.
+
 = 6.33 =
 * New: A new Gated Content form action type has been added. Now you can easily give access to restricted pages, views, pdfs, and files!
 * New: A new Spam settings section has been added to Form settings. Several spam settings have been moved here. In addition this section includes a summary of Global Spam settings, and a new Include Captcha in this form setting to easily add and remove Captcha fields.
