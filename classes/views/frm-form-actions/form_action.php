@@ -20,21 +20,26 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	class="widget frm_form_action_settings frm_single_<?php echo esc_attr( $form_action->post_excerpt ); ?>_settings <?php echo esc_attr( $form_action->post_status === 'publish' ? '' : 'frm_disabled_action' ); ?>"
 	<?php FrmAppHelper::array_to_html_params( $data_attrs, true ); ?>
 >
-	<div class="widget-top">
-		<div class="widget-title-action">
-			<button type="button" class="widget-action hide-if-no-js" aria-expanded="false">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon' ); ?>
-			</button>
+	<div class="widget-top frm-h-stack-xs frm-cursor-pointer" tabindex="0">
+		<div class="widget-title frm-flex-full">
+			<h4 class="frm-h-stack-xs frm-text-md">
+				<span class="frm-border-icon frm-border-icon--small"><?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?></span>
+				<span><?php echo esc_html( $form_action->post_title ); ?></span>
+			</h4>
 		</div>
-		<span class="frm_email_icons alignright">
-			<?php if ( $action_control->action_options['limit'] > 2 ) { ?>
-				<a href="javascript:void(0)" class="frm_duplicate_form_action" title="<?php esc_attr_e( 'Duplicate', 'formidable' ); ?>">
-					<?php FrmAppHelper::icon_by_class( 'frmfont frm_clone_icon' ); ?>
+
+		<div class="frm-ml-auto frm-h-stack-sm frm-p-sm">
+			<span class="frm_email_icons frm-flex frm-items-center frm-gap-sm frm-fadein-down-short">
+				<?php if ( $action_control->action_options['limit'] > 2 ) { ?>
+					<a href="javascript:void(0)" class="frm_duplicate_form_action" title="<?php esc_attr_e( 'Duplicate', 'formidable' ); ?>">
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon frm_svg24 frm-text-grey-800' ); ?>
+					</a>
+				<?php } ?>
+
+				<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php esc_attr_e( 'Delete this form action?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_trash_icon frm_svg24 frm-text-grey-800' ); ?>
 				</a>
-			<?php } ?>
-			<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php esc_attr_e( 'Delete this form action?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon ' ); ?>
-			</a>
+			</span>
 
 			<?php
 			FrmHtmlHelper::toggle(
@@ -46,27 +51,26 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 					'off_label'   => 'OFF',
 					'show_labels' => false,
 					'echo'        => true,
+					'div_class'   => 'frm-ml-xs',
 				)
 			);
 			?>
-		</span>
-		<div class="widget-title">
-			<h4>
-				<span class="frm_form_action_icon frm-outer-circle <?php echo esc_attr( str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? ' frm-inverse' : '' ); ?>">
-					<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'] ); ?>
-				</span>
-				<?php echo esc_html( $form_action->post_title ); ?>
-			</h4>
+
+			<div class="widget-title-action">
+				<button type="button" class="widget-action frm-flex frm-p-2xs-force hide-if-no-js" aria-expanded="false">
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg14' ); ?>
+				</button>
+			</div>
 		</div>
 	</div>
+
 	<div class="widget-inside">
 		<?php
+		// Load settings only if just added or open, otherwise include hidden settings to prevent losing the action on update.
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			// Only load settings if they are just added or are open
 			include __DIR__ . '/_action_inside.php';
 		} else {
-			// Include hidden settings so action won't get lost on update
-			?>
+		?>
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 		<?php } ?>

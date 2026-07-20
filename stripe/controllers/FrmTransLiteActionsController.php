@@ -473,6 +473,12 @@ class FrmTransLiteActionsController {
 			return $values;
 		}
 
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			// The hooks this uses can get called in the form builder and settings pages.
+			// But we do not need the script in this case.
+			return $values;
+		}
+
 		// This is also called from the frm_enqueue_form_scripts hook.
 		// With this here, the value of frm_stripe_vars.settings[0].fields is -1
 		// This is because the amount value is processed and a shortcode is not found in '000'.
@@ -589,6 +595,12 @@ class FrmTransLiteActionsController {
 			}
 		}
 
+		if ( ! in_array( 'stripe', $settings['gateway'], true ) ) {
+			// We only need a gateway field for Stripe add-on compatibility,
+			// so unless Stripe is selected, we can return early.
+			return $settings;
+		}
+
 		$gateway_field_id = FrmDb::get_var(
 			'frm_fields',
 			array(
@@ -661,5 +673,27 @@ class FrmTransLiteActionsController {
 		$submit_order = (int) $submit_field->field_order;
 		FrmField::update( $submit_field->id, array( 'field_order' => $submit_order + 1 ) );
 		return $submit_order;
+	}
+
+	/**
+	 * Remove credit card validation errors.
+	 *
+	 * @param array    $errors
+	 * @param stdClass $field
+	 *
+	 * @return array
+	 */
+	public static function remove_cc_errors( $errors, $field ) {
+		$field_id = $field->temp_id ?? $field->id;
+
+		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
+			unset( $errors[ 'field' . $field_id . '-cc' ] );
+		}
+
+		if ( isset( $errors[ 'field' . $field_id ] ) ) {
+			unset( $errors[ 'field' . $field_id ] );
+		}
+
+		return $errors;
 	}
 }

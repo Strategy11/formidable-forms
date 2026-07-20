@@ -48,6 +48,13 @@ class FrmFormsController {
 		add_filter( 'manage_toplevel_page_formidable_sortable_columns', 'FrmFormsController::get_sortable_columns' );
 	}
 
+	/**
+	 * Runs on admin head of the formidable forms page.
+	 *
+	 * @since 6.32 This adds screen options.
+	 *
+	 * @return void
+	 */
 	public static function head() {
 		if ( wp_is_mobile() ) {
 			wp_enqueue_script( 'jquery-touch-punch' );
@@ -277,6 +284,10 @@ class FrmFormsController {
 			FrmAntiSpam::clear_caches();
 		}
 
+		// Handle captcha field inclusion
+		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		self::handle_captcha_field( $id, $include_captcha );
+
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
 		self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
@@ -290,6 +301,44 @@ class FrmFormsController {
 	private static function antispam_was_on( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 		return ! empty( $form->options['antispam'] );
+	}
+
+	/**
+	 * Handle captcha field inclusion in form
+	 *
+	 * @since 6.33
+	 *
+	 * @param int  $form_id         Form ID.
+	 * @param bool $include_captcha Whether to include captcha field.
+	 *
+	 * @return void
+	 */
+	private static function handle_captcha_field( $form_id, $include_captcha ) {
+		$form_fields        = FrmField::get_all_for_form( $form_id, '', 'exclude' );
+		$captcha_field_id   = 0;
+		$submit_field_order = 0;
+
+		foreach ( $form_fields as $field ) {
+			if ( 'captcha' === $field->type ) {
+				$captcha_field_id = $field->id;
+				break;
+			}
+
+			if ( 'submit' === $field->type ) {
+				$submit_field_order = $field->field_order;
+			}
+		}
+
+		if ( $include_captcha && ! $captcha_field_id ) {
+			// Create captcha field just before submit button
+			$field_values                = FrmFieldsHelper::setup_new_vars( 'captcha', $form_id );
+			$field_values['name']        = __( 'Captcha', 'formidable' );
+			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : 0;
+			FrmField::create( $field_values );
+		} elseif ( ! $include_captcha && $captcha_field_id ) {
+			// Delete captcha field
+			FrmField::destroy( $captcha_field_id );
+		}
 	}
 
 	/**
@@ -1233,14 +1282,24 @@ class FrmFormsController {
 		$columns['cb']       = '<input type="checkbox" />';
 		$columns['name']     = esc_html__( 'Form Title', 'formidable' );
 		$columns['entries']  = esc_html__( 'Entries', 'formidable' );
+		$columns['views']    = esc_html__( 'Views', 'formidable' );
 		$columns['id']       = 'ID';
 		$columns['form_key'] = esc_html__( 'Key', 'formidable' );
 
-		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) && has_filter( 'frm_form_list_actions' ) ) {
+			// If there is any filters added, keep this column.
 			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
 		}
 
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
+
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+			$columns['embeds']    = esc_html__( 'Embeds', 'formidable' );
+			$columns['settings']  = '<div class="frm-forms-list-settings-btn-wrapper"><a href="#" class="frm-forms-list-settings-btn">';
+			$columns['settings'] .= FrmAppHelper::icon_by_class( 'frmfont frm_settings_icon', array( 'echo' => false ) );
+			$columns['settings'] .= '<span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span>';
+			$columns['settings'] .= '</a></div>';
+		}
 
 		add_screen_option(
 			'per_page',
@@ -1521,17 +1580,22 @@ class FrmFormsController {
 				'name'     => __( 'General', 'formidable' ),
 				'title'    => __( 'General Form Settings', 'formidable' ),
 				'function' => array( self::class, 'advanced_settings' ),
-				'icon'     => 'frmfont frm_settings_icon',
+				'icon'     => 'frmfont frm_small_settings_icon',
 			),
 			'email'       => array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
 				'function' => array( 'FrmFormActionsController', 'email_settings' ),
 				'id'       => 'frm_notification_settings',
-				'icon'     => 'frmfont frm_mail_bulk_icon',
+				'icon'     => 'frmfont frm_notification_check_icon',
+			),
+			'spam'        => array(
+				'name'     => __( 'Spam', 'formidable' ),
+				'function' => array( self::class, 'spam_settings' ),
+				'icon'     => 'frmfont frm_shield_check2_icon',
 			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
-				'icon'       => 'frmfont frm_lock_closed_icon',
+				'icon'       => 'frmfont frm_lock_closed2_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'permissions',
@@ -1543,7 +1607,7 @@ class FrmFormsController {
 			),
 			'scheduling'  => array(
 				'name'       => __( 'Form Scheduling', 'formidable' ),
-				'icon'       => 'frmfont frm_calendar_icon',
+				'icon'       => 'frmfont frm_schedule_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'scheduling',
@@ -1556,17 +1620,17 @@ class FrmFormsController {
 				'name'     => __( 'Buttons', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'buttons_settings',
-				'icon'     => 'frmfont frm_button_icon',
+				'icon'     => 'frmfont frm-buttons-style',
 			),
 			'landing'     => array(
 				'name'       => __( 'Form Landing Page', 'formidable' ),
-				'icon'       => 'frmfont frm_file_text_icon',
+				'icon'       => 'frmfont frm_cross_device_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
 			),
 			'chat'        => array(
 				'name'       => __( 'Conversational Forms', 'formidable' ),
-				'icon'       => 'frmfont frm_chat_forms_icon',
+				'icon'       => 'frmfont frm_chat_bubbles_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'chat',
@@ -1596,7 +1660,7 @@ class FrmFormsController {
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'html_settings',
-				'icon'     => 'frmfont frm_code_icon',
+				'icon'     => 'frmfont frm_code2_icon',
 			),
 		);
 
@@ -1648,16 +1712,14 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since 6.33
+	 *
 	 * @param array $values
 	 *
 	 * @return void
 	 */
-	public static function render_spam_settings( $values ) {
-		if ( function_exists( 'akismet_http_post' ) ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
-		}
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/stopforumspam.php';
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
+	public static function spam_settings( $values ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings.php';
 	}
 
 	/**
@@ -1737,7 +1799,7 @@ class FrmFormsController {
 		$col              = 'one';
 		$settings_tab     = FrmAppHelper::is_admin_page( 'formidable' );
 		$cond_shortcodes  = apply_filters( 'frm_conditional_shortcodes', array() );
-		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab );
+		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab, $form_id );
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
 		if ( 'default' === $template_path || ! file_exists( $template_path ) ) {
@@ -1846,10 +1908,11 @@ class FrmFormsController {
 	 * @since 2.0.6
 	 *
 	 * @param bool $settings_tab
+	 * @param int  $form_id
 	 *
 	 * @return array
 	 */
-	private static function get_shortcode_helpers( $settings_tab ) {
+	private static function get_shortcode_helpers( $settings_tab, $form_id = 0 ) {
 		$entry_shortcodes = array(
 			'id'         => __( 'Entry ID', 'formidable' ),
 			'key'        => __( 'Entry Key', 'formidable' ),
@@ -1877,8 +1940,9 @@ class FrmFormsController {
 		 *
 		 * @param array $entry_shortcodes
 		 * @param bool  $settings_tab
+		 * @param int   $form_id
 		 */
-		return apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab );
+		return apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab, $form_id );
 	}
 
 	/**
@@ -2216,7 +2280,8 @@ class FrmFormsController {
 
 		if ( $name === $form->name ) {
 			// Nothing to change so exit early.
-			wp_send_json_success();
+			$form_key = $form->form_key;
+			wp_send_json_success( compact( 'form_key' ) );
 		}
 
 		$to_update = array(
@@ -3696,6 +3761,37 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Prints necessary templates for the forms list page.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	public static function print_forms_list_templates() {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+
+		if ( ! $screen ) {
+			return;
+		}
+
+		$columns             = get_column_headers( $screen );
+		$hidden              = get_hidden_columns( $screen );
+		$skip_cols           = array( 'cb', 'name', 'settings' );
+		$per_page            = get_user_option( 'formidable_page_formidable_per_page' );
+		$show_screen_options = $screen->show_screen_options();
+
+		if ( $per_page < 1 ) {
+			$per_page = 20;
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/forms-list-settings.php';
+	}
+
+	/**
 	 * @deprecated 4.0
 	 *
 	 * @param array $values
@@ -3705,5 +3801,16 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
+	}
+
+	/**
+	 * @deprecated 6.33
+	 *
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	public static function render_spam_settings( $values ) {
+		_deprecated_function( __METHOD__, '6.33' );
 	}
 }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Formidable Forms
  * Description: Quickly and easily create drag-and-drop forms
- * Version: 6.30
+ * Version: 6.33.1
  * Plugin URI: https://formidableforms.com/
  * Author URI: https://formidableforms.com/
  * Author: Strategy11 Form Builder Team
@@ -108,32 +108,18 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		return;
 	}
 
+	$filepath = $original_filepath;
+
 	if ( preg_match( '/^FrmStrpLite.+$/', $class_name ) || preg_match( '/^FrmTransLite.+$/', $class_name ) ) {
 		// Autoload for /stripe/ folder.
-		$filepath = $original_filepath . '/stripe/';
-
-		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
-			$filepath .= 'helpers/';
-		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
-			$filepath .= 'controllers/';
-		} else {
-			$filepath .= 'models/';
-		}
-
-		$filepath .= $class_name . '.php';
-
-		if ( file_exists( $filepath ) ) {
-			require $filepath;
-		}
-
+		$filepath .= '/stripe/';
+	} elseif ( preg_match( '/^FrmSquareLite.+$/', $class_name ) ) {
+		$filepath .= '/square/';
+	} elseif ( preg_match( '/^FrmPayPalLite.+$/', $class_name ) ) {
+		$filepath .= '/paypal/';
+	} else {
 		return;
 	}
-
-	if ( ! preg_match( '/^FrmSquareLite.+$/', $class_name ) ) {
-		return;
-	}
-
-	$filepath = $original_filepath . '/square/';
 
 	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 		$filepath .= 'helpers/';

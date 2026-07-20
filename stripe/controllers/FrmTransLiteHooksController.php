@@ -36,16 +36,41 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		add_action( 'frm_disconnected_gateway', 'FrmTransLiteAppController::maybe_remove_payment_cron', 10, 2 );
+
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
+
+			add_action( 'frm_pay_show_stripe_options', 'FrmStrpLiteActionsController::add_action_options' );
 
 			remove_action( 'admin_head', 'FrmTransListsController::add_list_hooks' );
 			add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 
 			self::maybe_set_admin_menu();
 
+			add_action(
+				'init',
+				function () {
+					if ( ! self::on_form_settings_page() ) {
+						return;
+					}
+
+					$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+
+					// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
+					// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
+					if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
+						add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
+					}
+				}
+			);
+
 			// Exit early, let the Payments submodule handle everything else.
 			return;
+		}//end if
+
+		if ( self::on_form_settings_page() ) {
+			add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
 		}
 
 		// Actions.
@@ -63,6 +88,30 @@ class FrmTransLiteHooksController {
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
+	}
+
+	/**
+	 * @since 6.31
+	 *
+	 * @return bool
+	 */
+	private static function on_form_settings_page() {
+		return 'formidable' === FrmAppHelper::simple_get( 'page' ) && 'settings' === FrmAppHelper::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * Hide the Collect Payment action if there are no additional gateways enabled (like Authorize.Net).
+	 *
+	 * @since 6.31
+	 *
+	 * @return void
+	 */
+	public static function hide_collect_payment_action() {
+		echo '
+		<style>
+			li.frm-action:has(.frm_payment_action) { display: none; }
+		</style>
+		';
 	}
 
 	/**

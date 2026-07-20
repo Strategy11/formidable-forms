@@ -61,6 +61,95 @@
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
 
 		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
+
+		initOptionLayoutPreview();
+	}
+
+	/**
+	 * Sync the radio/checkbox option layout (alignment) style settings to the preview form in real time.
+	 *
+	 * The layout is applied to the front end through a container class, so changing the style setting
+	 * does not re-render the preview form. This swaps the container class on preview fields that use the
+	 * style setting. The styler preview marks those fields with .frm-default-option-align, so fields with
+	 * their own alignment override are left untouched.
+	 *
+	 * @return {void}
+	 */
+	function initOptionLayoutPreview() {
+		bindOptionLayoutSelect( document.getElementById( 'frm_radio_align' ), '.frm_radio' );
+		bindOptionLayoutSelect( document.getElementById( 'frm_check_align' ), '.frm_checkbox' );
+	}
+
+	/**
+	 * Listen for changes on an option layout style setting and update the preview to match.
+	 *
+	 * @param {HTMLSelectElement|null} select         The style setting dropdown.
+	 * @param {string}                 optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @return {void}
+	 */
+	function bindOptionLayoutSelect( select, optionSelector ) {
+		if ( ! select ) {
+			return;
+		}
+
+		select.addEventListener( 'change', () => {
+			updatePreviewOptionLayout( optionSelector, select.value );
+		} );
+	}
+
+	/**
+	 * Replace the alignment container class on preview fields that are using the style setting.
+	 *
+	 * @param {string} optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @param {string} newAlign       The newly selected style alignment value.
+	 * @return {void}
+	 */
+	function updatePreviewOptionLayout( optionSelector, newAlign ) {
+		const newClass = optionLayoutAlignToClass( newAlign );
+
+		if ( ! newClass ) {
+			return;
+		}
+
+		const activeForm = document.getElementById( 'frm_active_style_form' );
+		if ( ! activeForm ) {
+			return;
+		}
+
+		const alignClasses = [ 'vertical_radio', 'horizontal_radio', 'frm_two_col', 'frm_three_col', 'frm_four_col' ];
+		const containers = new Set();
+
+		activeForm.querySelectorAll( optionSelector ).forEach( option => {
+			const container = option.closest( '.frm_form_field' );
+
+			// Only fields using the style setting (no override) are marked in the styler preview.
+			if ( container?.classList.contains( 'frm-default-option-align' ) ) {
+				containers.add( container );
+			}
+		} );
+
+		containers.forEach( container => {
+			container.classList.remove( ...alignClasses );
+			container.classList.add( newClass );
+		} );
+	}
+
+	/**
+	 * Map an option layout style value to its front-end container class.
+	 *
+	 * @param {string} align The style alignment value.
+	 * @return {string} The matching container class.
+	 */
+	function optionLayoutAlignToClass( align ) {
+		if ( 'inline' === align ) {
+			return 'horizontal_radio';
+		}
+
+		if ( 'block' === align ) {
+			return 'vertical_radio';
+		}
+
+		return align;
 	}
 
 	/**
@@ -874,6 +963,24 @@
 			return;
 		}
 
+		if ( ! styleId || '0' === String( styleId ) ) {
+			// A new or duplicated style has no ID yet, so there is nothing to rename on the server.
+			// Update the post_title input (which overrides $_GET['style_name'] on save) and the
+			// visible style name instead of calling the rename_style endpoint.
+			const postTitleInput = document.querySelector( 'input[name="frm_style_setting[post_title]"]' );
+			if ( postTitleInput ) {
+				postTitleInput.value = newStyleName;
+			}
+
+			const styleNameElement = document.getElementById( 'frm_style_name' );
+			if ( styleNameElement ) {
+				styleNameElement.textContent = newStyleName;
+			}
+
+			success( __( 'Style has been renamed successfully', 'formidable' ) );
+			return;
+		}
+
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
 		formData.append( 'style_name', newStyleName );
@@ -1167,22 +1274,79 @@
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
 		} );
 
-		jQuery( 'input.hex' ).wpColorPicker( {
-			change( event, ui ) {
-				let color = jQuery( this ).wpColorPicker( 'color' );
-				trackUnsavedChange();
-				if ( ui.color._alpha < 1 ) {
-					// If there's transparency, use RGBA
-					color = ui.color.toCSS( 'rgba' );
+		function detectColorFormat( value ) {
+			if ( value.startsWith( 'rgba' ) ) {
+				return 'rgba';
+			}
+			if ( value.startsWith( 'rgb' ) ) {
+				return 'rgb';
+			}
+			if ( value.startsWith( 'hsla' ) ) {
+				return 'hsla';
+			}
+			if ( value.startsWith( 'hsl' ) ) {
+				return 'hsl';
+			}
+			return 'hex';
+		}
+
+		const nativeInputValueDescriptor = Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, 'value' );
+
+		jQuery( 'input.hex' ).each( function() {
+			this.dataset.colorFormat = detectColorFormat( this.value );
+
+			// Prevent iris from overwriting non-hex formats with hex during color picking.
+			const input = this;
+			Object.defineProperty( input, 'value', {
+				get() {
+					return nativeInputValueDescriptor.get.call( this );
+				},
+				set( val ) {
+					const format = input.dataset.colorFormat;
+					if ( format && 'hex' !== format && /^#[0-9a-f]{3,8}$/i.test( val ) ) {
+						return;
+					}
+					nativeInputValueDescriptor.set.call( this, val );
+				},
+				configurable: true
+			} );
+		} ).on( 'keyup', function() {
+			const newFormat = detectColorFormat( this.value );
+			if ( this.dataset.colorFormat !== newFormat ) {
+				this.dataset.colorFormat = newFormat;
+				const container = this.closest( '.wp-picker-container' );
+				if ( container ) {
+					container.querySelector( '.wp-color-result-text' ).textContent = this.value;
 				}
+				debouncedColorChange( { target: this }, this.value );
+			}
+		} ).wpColorPicker( {
+			change( event, ui ) {
+				const input = event.target;
+				const format = input.dataset.colorFormat || 'hex';
+				let color;
+
+				trackUnsavedChange();
+
+				if ( ui.color._alpha < 1 ) {
+					input.dataset.colorFormat = 'rgba';
+					color = ui.color.toCSS( 'rgba' );
+				} else if ( 'hex' === format ) {
+					color = ui.color.toString();
+				} else {
+					color = ui.color.toCSS( format );
+				}
+
 				debouncedColorChange( event, color );
 
-				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+				input.value = color;
+
+				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				jQuery( event.target ).val( color ).trigger( 'change' );
+				debouncedPreviewUpdate();
 			}
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {

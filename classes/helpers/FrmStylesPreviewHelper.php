@@ -57,6 +57,47 @@ class FrmStylesPreviewHelper {
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
 		$this->add_a_div_class_for_default_label_positions();
+		$this->add_a_div_class_for_style_driven_alignment();
+	}
+
+	/**
+	 * Add a marker class to radio and checkbox fields that use the style's option
+	 * alignment setting rather than a field level override.
+	 *
+	 * Only fields with this class change when the radio or checkbox alignment style
+	 * setting is updated in the styler preview. Fields with their own alignment
+	 * override are left untouched.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	private function add_a_div_class_for_style_driven_alignment() {
+		add_filter(
+			'frm_field_div_classes',
+			/**
+			 * @param string       $classes
+			 * @param array|object $field
+			 *
+			 * @return string
+			 */
+			function ( $classes, $field ) {
+				if ( ! FrmField::is_radio( $field ) && ! FrmField::is_checkbox( $field ) ) {
+					return $classes;
+				}
+
+				// Mirror FrmFieldType::get_container_class(): an override only exists in Pro.
+				$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $field, 'align' ) : '';
+
+				if ( ! $align ) {
+					$classes .= ' frm-default-option-align';
+				}
+
+				return $classes;
+			},
+			10,
+			2
+		);
 	}
 
 	/**

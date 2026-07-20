@@ -9,3 +9,10 @@
 .frm_single_entry_page .hndle a {
 	font-size: 13px;
 }
+
+#form_show_entry_page .misc-pub-section .frm_delete_entry,
+#form_entries_page .misc-pub-section .frm_delete_entry,
+#form_show_entry_page .misc-pub-section .frm_delete_entry .frmsvg,
+#form_entries_page .misc-pub-section .frm_delete_entry .frmsvg {
+	color: var(--error-700);
+}

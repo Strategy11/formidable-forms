@@ -78,7 +78,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 							}
 
 							$pro_fields = FrmField::pro_field_selection();
-							// These are Lite fields. They're kept in pro_field_selection for backward compatibility.
 
 							FrmField::remove_moved_field_types_from_pro( $pro_fields );
 
@@ -224,6 +223,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</form>
 						</div>
 					</div>
+					<?php
+					if ( isset( $form ) ) {
+						/**
+						 * Hook in so people can include additional tab content.
+						 * Used along with frm_extra_form_instruction_tabs which is used to
+						 * include the tabs.
+						 *
+						 * @since 6.31
+						 *
+						 * @param stdClass $form The form object.
+						 */
+						do_action( 'frm_extra_form_instruction_tabs_content', $form );
+					}
+					?>
 				</div>
 			</div>
 		</div>

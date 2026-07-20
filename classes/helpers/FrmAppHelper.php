@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 105;
+	public static $db_version = 106;
 
 	/**
 	 * Used by the API add-on.
@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.30';
+	public static $plug_version = '6.33.1';
 
 	/**
 	 * @var bool
@@ -1536,6 +1536,8 @@ class FrmAppHelper {
 	 * @param bool    $echo
 	 *
 	 * @return string|null
+	 *
+	 * @psalm-return ($echo is true ? null : string)
 	 */
 	public static function clip( $echo_function, $echo = false ) {
 		if ( ! $echo ) {
@@ -3952,6 +3954,8 @@ class FrmAppHelper {
 				/* translators: %d is the number of allowed actions per form */
 				'only_one_action'                    => sprintf( __( 'This form action is limited to %d per form.', 'formidable' ), 1 ),
 				'edit_action_text'                   => __( 'Please edit the existing form action.', 'formidable' ),
+				'only_one_payment_action'            => __( 'This form already has a payment action, and is currently limited to a single payment action.', 'formidable' ),
+				'only_one_stripe_action'             => __( 'This form already has a payment action. Multiple Stripe actions are available when using the Stripe add-on, available for Formidable Business licenses and higher.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'unsafe_params'                      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
 				'slug_is_reserved'                   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -4010,7 +4014,8 @@ class FrmAppHelper {
 
 		$stripe_connected      = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
 		$square_connected      = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
-		$gateway_connected     = $stripe_connected || $square_connected;
+		$paypal_connected      = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+		$gateway_connected     = $stripe_connected || $square_connected || $paypal_connected;
 		$payments_settings_url = FrmStrpLiteAppController::get_payments_settings_url();
 
 		if ( ! $gateway_connected ) {
@@ -4049,8 +4054,12 @@ class FrmAppHelper {
 				$gateway_texts['square'] = esc_html__( 'Square', 'formidable' );
 			}
 
+			if ( $paypal_connected ) {
+				$gateway_texts['paypal'] = esc_html__( 'PayPal', 'formidable' );
+			}
+
 			$admin_script_strings['pricingFieldsModal']['msg'] = sprintf(
-				// translators: %s: Stripe or Square.
+				// translators: %s: Stripe, Square, or PayPal.
 				esc_html__( 'You already have %s connected, so these have already been unlocked.', 'formidable' ),
 				esc_html( implode( ' ' . esc_html__( 'and', 'formidable' ) . ' ', $gateway_texts ) )
 			);
@@ -4059,7 +4068,7 @@ class FrmAppHelper {
 			$admin_script_strings['pricingFieldsModal']['actionText'] = __( 'Setup Payments Now', 'formidable' );
 			$admin_script_strings['pricingFieldsModal']['actionUrl']  = $payments_settings_url;
 			// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, or Square) in your settings.', 'formidable' );
+			$admin_script_strings['pricingFieldsModal']['msg'] = __( 'We\'ve unlocked Product, Quantity, and Total fields for Lite users! You can now transform your forms into checkout pages. To start collecting revenue, simply connect your preferred payment gateway (Stripe, Square, or PayPal) in your settings.', 'formidable' );
 		}//end if
 
 		delete_option( 'frm_show_pricing_fields_modal' );
@@ -5101,11 +5110,16 @@ class FrmAppHelper {
 	 *
 	 * @since 6.24
 	 *
-	 * @param string $string The string to check.
+	 * @param string|null $string The string to check.
 	 *
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {
+		if ( is_null( $string ) ) {
+			// Return true so we do not attempt to change encoding on a null value.
+			return true;
+		}
+
 		// wp_is_valid_utf8 is added in WP 6.9.
 		if ( function_exists( 'wp_is_valid_utf8' ) ) {
 			return wp_is_valid_utf8( $string );

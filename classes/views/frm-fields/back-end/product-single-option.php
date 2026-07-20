@@ -1,4 +1,21 @@
 <?php
+/**
+ * Single product option row in field settings.
+ *
+ * @package Formidable
+ *
+ * @var array  $field         Field data including 'id' and 'separate_value'.
+ * @var string $opt_key       Option key.
+ * @var string $opt           Option label.
+ * @var string $field_val     Saved value for the option.
+ * @var string $html_id       HTML id prefix for the row.
+ * @var string $field_name    HTML name attribute for the input.
+ * @var string $default_type  Input type (radio/checkbox).
+ * @var bool   $checked       Whether the option is checked.
+ * @var string $price         Product price for the option.
+ * @var int    $options_count Total number of options.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
