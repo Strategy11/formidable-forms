@@ -32,6 +32,13 @@
 
 		const card = await payments.card();
 		const cardStyle = frmSquareVars.style;
+
+		// Never attach while the card element is hidden (e.g. by conditional
+		// logic). Square measures the container on attach, and a hidden
+		// container measures as zero-size, so the card form renders with the
+		// wrong height. Wait until the element is visible before attaching.
+		await waitForVisibleCardElement( cardElement );
+
 		await card.attach( '.frm-card-element' );
 
 		card.configure( { style: cardStyle } );
@@ -91,6 +98,42 @@
 		} );
 
 		return card;
+	}
+
+	/**
+	 * Resolve once the card element is visible (has a layout box).
+	 * A width of zero means the element or one of its ancestors is hidden,
+	 * usually by conditional logic setting display: none.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} cardElement
+	 * @return {Promise<void>}
+	 */
+	function waitForVisibleCardElement( cardElement ) {
+		return new Promise( resolve => {
+			if ( cardElement.getBoundingClientRect().width > 0 ) {
+				resolve();
+				return;
+			}
+
+			const form     = cardElement.closest( 'form' );
+			const observer = new MutationObserver( () => {
+				if ( cardElement.getBoundingClientRect().width > 0 ) {
+					observer.disconnect();
+					resolve();
+				}
+			} );
+
+			// Conditional logic toggles inline styles on field and section
+			// containers, so watch the whole form for attribute changes and
+			// re-check the card element's visibility on each change.
+			observer.observe( form || document.body, {
+				attributes: true,
+				attributeFilter: [ 'style', 'class' ],
+				subtree: true
+			} );
+		} );
 	}
 
 	/**
