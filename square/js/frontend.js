@@ -411,7 +411,7 @@
 				return;
 			}
 
-			const shouldEnable = 'none' === mutation.target.display || ! squareCardElementIsComplete || squareIsConditionallyDisabled( form );
+			const shouldEnable = 'none' === mutation.target.display || squareCardElementIsComplete || squareIsConditionallyDisabled( form );
 			if ( ! shouldEnable ) {
 				disableSubmit( form );
 				return;
