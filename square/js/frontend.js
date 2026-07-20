@@ -412,11 +412,19 @@
 			}
 
 			const isFieldVisible = 'none' !== mutation.target.style.display;
+
+			// If field is hidden, enable submit (field is conditionally not required)
 			if ( ! isFieldVisible ) {
+				thisForm = form;
+				running = 0;
+				enableSubmit();
 				return;
 			}
 
-			cardGlobal.recalculateSize();
+			// Field is now visible, recalculate size and check validation
+			if ( cardGlobal ) {
+				cardGlobal.recalculateSize();
+			}
 
 			const shouldEnable = squareCardElementIsComplete || squareIsConditionallyDisabled( form );
 			if ( ! shouldEnable ) {
