@@ -163,7 +163,7 @@ class FrmAddonsController {
 				'excerpt'    => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
 			),
 		);
-		$addons = $pro + $addons;
+		$addons = $pro + self::get_built_in_addons() + $addons;
 		self::prepare_addons( $addons );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
@@ -172,6 +172,74 @@ class FrmAddonsController {
 		$categories = self::$categories;
 
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Get the payment gateways that ship inside Lite so they render as active add-on cards.
+	 *
+	 * These are not installable plugins. The `built_in` flag gives them an active
+	 * status, keeps them unlocked, and swaps the card footer for a transaction fee note.
+	 *
+	 * @since 6.15
+	 *
+	 * @return array<string,array<string,mixed>>
+	 */
+	protected static function get_built_in_addons() {
+		return array(
+			'stripe-payments' => array(
+				'slug'       => 'stripe-payments',
+				'title'      => 'Stripe',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/stripe/',
+				'excerpt'    => 'Any Formidable forms on your site can accept credit card payments without users ever leaving your site.',
+			),
+			'square-payments' => array(
+				'slug'       => 'square-payments',
+				'title'      => 'Square',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/square/',
+				'excerpt'    => 'Take one-time payments with Square, with support for Apple Pay and Google Pay.',
+			),
+			'paypal-payments' => array(
+				'slug'       => 'paypal-payments',
+				'title'      => 'PayPal',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/formidable-paypal/',
+				'excerpt'    => 'Collect instant payments and recurring payments with PayPal on any Formidable form.',
+			),
+		);
+	}
+
+	/**
+	 * Override how an add-on is presented on the Add-Ons page.
+	 *
+	 * The built-in gateways cover base payment processing, so the add-ons that
+	 * extend them are presented as their Pro/Legacy tiers until the API reflects it.
+	 *
+	 * @since 6.15
+	 *
+	 * @param array  $addon The addon array that will be modified by reference.
+	 * @param string $slug  The addon slug.
+	 *
+	 * @return void
+	 */
+	protected static function override_addon_display( &$addon, $slug ) {
+		$overrides = array(
+			'stripe'          => array(
+				'display_name' => 'Stripe Pro',
+				'excerpt'      => 'Remove the 3% transaction fee, and unlock non-Link payment methods, After Payment settings, capture payments later, extra shortcodes, and more.',
+			),
+			'paypal-standard' => array(
+				'display_name' => 'PayPal Legacy',
+			),
+		);
+
+		if ( isset( $overrides[ $slug ] ) ) {
+			$addon = array_merge( $addon, $overrides[ $slug ] );
+		}
 	}
 
 	/**
@@ -899,6 +967,8 @@ class FrmAddonsController {
 				}
 			}
 
+			self::override_addon_display( $addon, $slug );
+
 			$addon['installed'] = self::is_installed( $file_name );
 
 			if ( 'highrise' === $slug && ! $addon['installed'] ) {
@@ -1001,7 +1071,12 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function set_addon_status( &$addon ) {
-		if ( ! empty( $addon['activate_url'] ) ) {
+		if ( ! empty( $addon['built_in'] ) ) {
+			$addon['status'] = array(
+				'type'  => 'active',
+				'label' => __( 'Active', 'formidable' ),
+			);
+		} elseif ( ! empty( $addon['activate_url'] ) ) {
 			$addon['status'] = array(
 				'type'  => 'installed',
 				'label' => __( 'Installed', 'formidable' ),
