@@ -178,7 +178,7 @@ class FrmAddonsController {
 	 * Get the payment gateways that ship inside Lite so they render as active add-on cards.
 	 *
 	 * These are not installable plugins. The `built_in` flag gives them an active
-	 * status, keeps them unlocked, and swaps the card footer for a transaction fee note.
+	 * status, keeps them unlocked, and limits the card footer to the docs link.
 	 *
 	 * @since 6.15
 	 *
@@ -202,13 +202,13 @@ class FrmAddonsController {
 				'docs'       => 'knowledgebase/square/',
 				'excerpt'    => 'Take one-time payments with Square, with support for Apple Pay and Google Pay.',
 			),
-			'paypal-payments' => array(
-				'slug'       => 'paypal-payments',
-				'title'      => 'PayPal',
+			'paypal-commerce' => array(
+				'slug'       => 'paypal-commerce',
+				'title'      => 'PayPal Commerce',
 				'built_in'   => true,
 				'categories' => array( 'Ecommerce' ),
 				'docs'       => 'knowledgebase/formidable-paypal/',
-				'excerpt'    => 'Collect instant payments and recurring payments with PayPal on any Formidable form.',
+				'excerpt'    => 'Collect instant payments and recurring payments with PayPal Commerce on any Formidable form.',
 			),
 		);
 	}

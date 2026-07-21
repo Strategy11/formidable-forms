@@ -177,7 +177,7 @@ class FrmAddonsHelper {
 			'hubspot-wordpress'               => 'hubspot',
 			'mailchimp'                       => 'mailchimp',
 			'mailpoet-newsletters'            => 'mailpoet',
-			'paypal-payments'                 => 'paypal',
+			'paypal-commerce'                 => 'paypal',
 			'paypal-standard'                 => 'paypal',
 			'polylang'                        => 'polylang',
 			'square-payments'                 => 'square',
