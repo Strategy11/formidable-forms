@@ -112,7 +112,7 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 				<?php FrmAddonsController::addon_upgrade_link( $addon, $pricing ); ?>
 			</div>
 			<?php
-		}
+		}//end if
 		?>
 	</div>
 </li>

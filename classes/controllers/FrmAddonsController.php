@@ -1091,7 +1091,7 @@ class FrmAddonsController {
 				'type'  => 'not-installed',
 				'label' => __( 'Not Installed', 'formidable' ),
 			);
-		}
+		}//end if
 	}
 
 	/**
