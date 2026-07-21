@@ -180,7 +180,7 @@ class FrmAddonsController {
 	 * These are not installable plugins. The `built_in` flag gives them an active
 	 * status, keeps them unlocked, and limits the card footer to the docs link.
 	 *
-	 * @since 6.15
+	 * @since x.x
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
@@ -220,7 +220,7 @@ class FrmAddonsController {
 	 * extend them are presented as their Pro/Legacy tiers until the API reflects
 	 * it. Names only — the add-ons keep their original excerpts.
 	 *
-	 * @since 6.15
+	 * @since x.x
 	 *
 	 * @param array  $addon The addon array that will be modified by reference.
 	 * @param string $slug  The addon slug.
