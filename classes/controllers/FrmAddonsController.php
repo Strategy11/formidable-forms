@@ -217,7 +217,8 @@ class FrmAddonsController {
 	 * Override how an add-on is presented on the Add-Ons page.
 	 *
 	 * The built-in gateways cover base payment processing, so the add-ons that
-	 * extend them are presented as their Pro/Legacy tiers until the API reflects it.
+	 * extend them are presented as their Pro/Legacy tiers until the API reflects
+	 * it. Names only — the add-ons keep their original excerpts.
 	 *
 	 * @since 6.15
 	 *
@@ -230,7 +231,6 @@ class FrmAddonsController {
 		$overrides = array(
 			'stripe'          => array(
 				'display_name' => 'Stripe Pro',
-				'excerpt'      => 'Remove the 3% transaction fee, and unlock non-Link payment methods, After Payment settings, capture payments later, extra shortcodes, and more.',
 			),
 			'paypal-standard' => array(
 				'display_name' => 'PayPal Legacy',
