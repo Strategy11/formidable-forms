@@ -603,17 +603,23 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function actions() {
-		$actions = array();
-		$offset  = 0;
-		$limit   = 100;
+		$actions        = array();
+		$offset         = 0;
+		$limit          = 100;
+		$limit_plus_one = $limit + 1;
 
 		do {
 			$args          = array(
 				'post_type'   => FrmFormActionsController::$action_post_type,
-				'numberposts' => $limit,
+				'numberposts' => $limit_plus_one,
 				'offset'      => $offset,
 			);
 			$saved_actions = get_posts( $args );
+
+			$has_more = count( $saved_actions ) === $limit_plus_one;
+			if ( $has_more ) {
+				array_pop( $saved_actions );
+			}
 
 			foreach ( $saved_actions as $action ) {
 				$actions[] = array(
@@ -627,11 +633,10 @@ class FrmUsage {
 
 			$offset += $limit;
 
-			$saved_actions_remain = ! empty( $saved_actions );
 			unset( $saved_actions );
 
 			gc_collect_cycles();
-		} while ( $saved_actions_remain );
+		} while ( $has_more );
 
 		return $actions;
 	}
