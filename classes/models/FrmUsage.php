@@ -615,9 +615,10 @@ class FrmUsage {
 				'offset'      => $offset,
 			);
 			$saved_actions = get_posts( $args );
+			$has_more      = count( $saved_actions ) === $limit_plus_one;
 
-			$has_more = count( $saved_actions ) === $limit_plus_one;
 			if ( $has_more ) {
+				// Pop off the last item as it is only queried to determine if there are more results.
 				array_pop( $saved_actions );
 			}
 
