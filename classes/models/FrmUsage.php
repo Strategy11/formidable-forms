@@ -626,10 +626,12 @@ class FrmUsage {
 			}
 
 			$offset += $limit;
+
+			$saved_actions_remain = ! empty( $saved_actions );
 			unset( $saved_actions );
 
 			gc_collect_cycles();
-		} while ( count( $actions ) >= $offset );
+		} while ( $saved_actions_remain );
 
 		return $actions;
 	}
