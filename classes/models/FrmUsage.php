@@ -603,22 +603,31 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function actions() {
-		$args = array(
-			'post_type'   => FrmFormActionsController::$action_post_type,
-			'numberposts' => 100,
-		);
+		$actions = array();
+		$offset  = 0;
+		$limit   = 100;
 
-		$actions       = array();
-		$saved_actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
-
-		foreach ( $saved_actions as $action ) {
-			$actions[] = array(
-				'form_id'  => $action->menu_order,
-				'type'     => $action->post_excerpt,
-				'status'   => $action->post_status,
-				'settings' => FrmAppHelper::maybe_json_decode( $action->post_content ),
+		do {
+			$args          = array(
+				'post_type'   => FrmFormActionsController::$action_post_type,
+				'numberposts' => $limit,
+				'offset'      => $offset,
 			);
-		}
+			$saved_actions = get_posts( $args );
+
+			foreach ( $saved_actions as $action ) {
+				$actions[] = array(
+					'form_id'  => $action->menu_order,
+					'type'     => $action->post_excerpt,
+					'status'   => $action->post_status,
+					'settings' => FrmAppHelper::maybe_json_decode( $action->post_content ),
+				);
+				unset( $action );
+			}
+
+			$offset += $limit;
+			unset( $saved_actions );
+		} while ( count( $actions ) >= $offset );
 
 		return $actions;
 	}
