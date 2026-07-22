@@ -627,6 +627,8 @@ class FrmUsage {
 
 			$offset += $limit;
 			unset( $saved_actions );
+
+			gc_collect_cycles();
 		} while ( count( $actions ) >= $offset );
 
 		return $actions;
