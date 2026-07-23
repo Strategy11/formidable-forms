@@ -48,6 +48,7 @@ zip -r $zipname $destination \
 	-x "*/.gitignore" \
 	-x "*/.windsurf/*" \
 	-x "*/.devin/*" \
+	-x "*/.vscode/*" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
