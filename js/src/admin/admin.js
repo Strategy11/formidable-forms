@@ -11372,6 +11372,10 @@ window.frmAdminBuildJS = function() {
 				fieldsUpdated = 0;
 			} );
 
+			// License keys save with their own button, and the payment section inputs are only used as tabs.
+			// This is delegated from the wrap element, not the document, because hideShowItem returns false and stops change events from reaching the document.
+			jQuery( '#form_global_settings' ).on( 'change', 'input:not(.frm-search-input):not(.frm_addon_license_key):not([name="frm_payment_section"]), select, textarea', fieldUpdated );
+
 			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
 			if ( manageStyleSettings ) {
 				manageStyleSettings.addEventListener(
