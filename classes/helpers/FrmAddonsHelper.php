@@ -23,6 +23,13 @@ class FrmAddonsHelper {
 	private static $plan_required;
 
 	/**
+	 * Whether the add-on being rendered is built into Lite (e.g. Stripe, Square, PayPal).
+	 *
+	 * @var bool
+	 */
+	private static $built_in = false;
+
+	/**
 	 * Show the CTA to upgrade or renew.
 	 *
 	 * @since 6.15
@@ -170,8 +177,11 @@ class FrmAddonsHelper {
 			'hubspot-wordpress'               => 'hubspot',
 			'mailchimp'                       => 'mailchimp',
 			'mailpoet-newsletters'            => 'mailpoet',
+			'paypal-commerce'                 => 'paypal',
 			'paypal-standard'                 => 'paypal',
 			'polylang'                        => 'polylang',
+			'square-payments'                 => 'square',
+			'stripe-payments'                 => 'stripe',
 			'salesforce'                      => 'salesforcealt',
 			'stripe'                          => 'stripealt',
 			'twilio'                          => 'twilio',
@@ -249,7 +259,22 @@ class FrmAddonsHelper {
 	 * @return bool
 	 */
 	public static function is_locked() {
+		if ( self::$built_in ) {
+			return false;
+		}
+
 		return self::$plan_required || ! FrmAppHelper::pro_is_installed();
+	}
+
+	/**
+	 * Check if the add-on being rendered is built into Lite.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_built_in() {
+		return self::$built_in;
 	}
 
 	/**
@@ -267,6 +292,7 @@ class FrmAddonsHelper {
 	 */
 	private static function set_plan_required( $addon ) {
 		self::$plan_required = FrmFormsHelper::get_plan_required( $addon );
+		self::$built_in      = ! empty( $addon['built_in'] );
 	}
 
 	/**
