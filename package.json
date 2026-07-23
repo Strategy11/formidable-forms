@@ -34,7 +34,7 @@
 		"@babel/runtime": "^7.23.0",
 		"@wordpress/api-fetch": "^2.2.8",
 		"@wordpress/api-request": "^1.0.0",
-		"@wordpress/components": "^6.0.1",
+		"@wordpress/components": "^37.0.0",
 		"@wordpress/data": "^3.1.2",
 		"@wordpress/dom-ready": "^3.6.0",
 		"@wordpress/element": "^2.16.0",
@@ -104,7 +104,7 @@
 		"webpack": "5.97.0",
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-middleware": "^7.4.2",
-		"webpack-dev-server": "^5.2.5",
+		"webpack-dev-server": "^6.0.0",
 		"webpack-remove-empty-scripts": "^1.1.1"
 	},
 	"repository": {
