@@ -220,6 +220,7 @@ class FrmGatedContentAction extends FrmFormAction {
 			}
 
 			$post_type = (string) $post->post_type;
+
 			if ( isset( $grouped[ $post_type ] ) ) {
 				$grouped[ $post_type ][] = $post;
 			}
