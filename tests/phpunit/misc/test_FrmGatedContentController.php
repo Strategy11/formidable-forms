@@ -144,6 +144,25 @@ class test_FrmGatedContentController extends FrmUnitTest {
 			)
 		);
 
+		// Register the post in a gated content action so the code reaches the cap check.
+		wp_insert_post(
+			array(
+				'post_type'    => 'frm_form_actions',
+				'post_excerpt' => 'gated_content',
+				'post_status'  => 'publish',
+				'post_content' => wp_json_encode(
+					array(
+						'items' => array(
+							array(
+								'type' => $post->post_type,
+								'id'   => $post->ID,
+							),
+						),
+					)
+				),
+			)
+		);
+
 		// Subscriber has read_private_books (the CPT cap) but NOT read_private_posts.
 		$user_id = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 		$user    = new WP_User( $user_id );
@@ -151,9 +170,13 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		wp_set_current_user( $user_id );
 
 		// Simulate a singular WP query for this private CPT post.
+		// Both queried_object and queried_object_id must be set: get_queried_object()
+		// returns early when queried_object is set, which skips the code path that
+		// also writes queried_object_id, so get_queried_object_id() would return 0.
 		global $wp_query;
-		$wp_query->is_singular    = true;
-		$wp_query->queried_object = $post;
+		$wp_query->is_singular       = true;
+		$wp_query->queried_object    = $post;
+		$wp_query->queried_object_id = $post->ID;
 
 		FrmGatedContentController::maybe_unlock_post();
 
@@ -163,8 +186,9 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		);
 
 		// Restore query state.
-		$wp_query->is_singular    = false;
-		$wp_query->queried_object = null;
+		$wp_query->is_singular       = false;
+		$wp_query->queried_object    = null;
+		$wp_query->queried_object_id = 0;
 		wp_set_current_user( 0 );
 		unregister_post_type( 'frm_gc_test_book' );
 	}
@@ -186,8 +210,9 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
 
 		global $wp_query;
-		$wp_query->is_singular    = true;
-		$wp_query->queried_object = $post;
+		$wp_query->is_singular       = true;
+		$wp_query->queried_object    = $post;
+		$wp_query->queried_object_id = $post->ID;
 
 		FrmGatedContentController::maybe_unlock_post();
 
@@ -196,8 +221,9 @@ class test_FrmGatedContentController extends FrmUnitTest {
 			'maybe_unlock_post() must not 404 a private post that is not a gated content item.'
 		);
 
-		$wp_query->is_singular    = false;
-		$wp_query->queried_object = null;
+		$wp_query->is_singular       = false;
+		$wp_query->queried_object    = null;
+		$wp_query->queried_object_id = 0;
 		wp_set_current_user( 0 );
 	}
 
@@ -235,8 +261,9 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
 
 		global $wp_query;
-		$wp_query->is_singular    = true;
-		$wp_query->queried_object = $post;
+		$wp_query->is_singular       = true;
+		$wp_query->queried_object    = $post;
+		$wp_query->queried_object_id = $post->ID;
 
 		FrmGatedContentController::maybe_unlock_post();
 
@@ -245,9 +272,10 @@ class test_FrmGatedContentController extends FrmUnitTest {
 			'maybe_unlock_post() must force-404 a gated private post when no valid token exists.'
 		);
 
-		$wp_query->is_404         = false;
-		$wp_query->is_singular    = false;
-		$wp_query->queried_object = null;
+		$wp_query->is_404            = false;
+		$wp_query->is_singular       = false;
+		$wp_query->queried_object    = null;
+		$wp_query->queried_object_id = 0;
 		wp_set_current_user( 0 );
 	}
 
