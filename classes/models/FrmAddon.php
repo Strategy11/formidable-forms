@@ -444,8 +444,14 @@ class FrmAddon {
 		$api = new FrmApplicationApi( $this->license );
 		$api->reset_cached();
 
+		// The Sales API tries to pull API data in the constructor.
+		// But we do not need sales data here.
+		FrmSalesApi::prevent_new_sales_requests();
+
 		$api = new FrmSalesApi();
 		$api->reset_cached();
+
+		FrmSalesApi::allow_new_sales_requests();
 
 		$api = new FrmStyleApi();
 		$api->reset_cached();
