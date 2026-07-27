@@ -244,7 +244,7 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function transient_key() {
-		return strtolower( self::class ) . '_request_lock';
+		return strtolower( static::class ) . '_request_lock';
 	}
 
 	/**
