@@ -160,10 +160,10 @@ class FrmGatedContentController {
 			return;
 		}
 
-		$is_password_protected  = '' !== $post->post_password;
-		$post_type_obj          = get_post_type_object( $post->post_type );
-		$read_private_cap       = $post_type_obj ? $post_type_obj->cap->read_private_posts : 'read_private_posts';
-		$is_restricted_private  = 'private' === $post->post_status && ! current_user_can( $read_private_cap, $post_id );
+		$is_password_protected = '' !== $post->post_password;
+		$post_type_obj         = get_post_type_object( $post->post_type );
+		$read_private_cap      = $post_type_obj ? $post_type_obj->cap->read_private_posts : 'read_private_posts';
+		$is_restricted_private = 'private' === $post->post_status && ! current_user_can( $read_private_cap, $post_id );
 		$access_code_from_url  = FrmAppHelper::simple_get( 'access_code' );
 
 		// Nothing to unlock — post is publicly accessible.
