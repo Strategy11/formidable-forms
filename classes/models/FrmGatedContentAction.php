@@ -210,6 +210,7 @@ class FrmGatedContentAction extends FrmFormAction {
 		);
 
 		// Initialise empty buckets in get_types() order.
+		/** @var array<string, list<object>> $grouped */
 		$grouped = array_fill_keys( $post_types, array() );
 
 		foreach ( $raw_posts as $post ) {
@@ -218,8 +219,9 @@ class FrmGatedContentAction extends FrmFormAction {
 				continue;
 			}
 
-			if ( isset( $grouped[ $post->post_type ] ) ) {
-				$grouped[ $post->post_type ][] = $post;
+			$post_type = (string) $post->post_type;
+			if ( isset( $grouped[ $post_type ] ) ) {
+				$grouped[ $post_type ][] = $post;
 			}
 		}
 
