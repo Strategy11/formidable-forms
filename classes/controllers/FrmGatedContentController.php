@@ -228,14 +228,16 @@ class FrmGatedContentController {
 	private static function has_gated_action_for_item( FrmGatedItem $item ): bool {
 		global $wpdb;
 
-		$action_ids = FrmDb::get_col(
-			$wpdb->posts,
-			array(
-				'post_type'    => FrmFormActionsController::$action_post_type,
-				'post_excerpt' => FrmGatedContentAction::$slug,
-				'post_status'  => 'publish',
-			),
-			'ID'
+		// Direct query — FrmDb caches results per-request which would hide newly
+		// created actions until the cache expires. action_contains_item() already
+		// handles per-action caching via transients.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$action_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_excerpt = %s AND post_status = 'publish'",
+				FrmFormActionsController::$action_post_type,
+				FrmGatedContentAction::$slug
+			)
 		);
 
 		foreach ( $action_ids as $action_id ) {
