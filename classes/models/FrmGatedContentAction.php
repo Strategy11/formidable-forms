@@ -183,7 +183,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 * Only private and password-protected posts are included — plain published posts
 	 * are publicly accessible and should not appear as selectable gated content items.
 	 *
-	 * @return array<string, object[]> Posts keyed by item type slug (e.g. 'page', 'post').
+	 * @return array<string, list<object>> Posts keyed by item type slug (e.g. 'page', 'post').
 	 */
 	public static function get_posts() {
 		$post_types = array();
