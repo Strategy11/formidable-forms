@@ -17,7 +17,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 		$post    = $this->factory->post->create_and_get( array( 'post_status' => 'publish' ) );
 		FrmDb::cache_delete_group( 'post' );
 		$grouped = FrmGatedContentAction::get_posts();
-		$ids     = array_column( $grouped['post'] ?? array(), 'ID' );
+		$ids     = array_map( 'intval', array_column( $grouped['post'] ?? array(), 'ID' ) );
 		$this->assertNotContains(
 			$post->ID,
 			$ids,
@@ -37,7 +37,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 		$grouped = FrmGatedContentAction::get_posts();
 
 		$this->assertArrayHasKey( 'post', $grouped );
-		$ids = array_column( $grouped['post'], 'ID' );
+		$ids = array_map( 'intval', array_column( $grouped['post'], 'ID' ) );
 		$this->assertContains(
 			$post->ID,
 			$ids,
@@ -62,7 +62,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 		$grouped = FrmGatedContentAction::get_posts();
 
 		$this->assertArrayHasKey( 'post', $grouped );
-		$ids = array_column( $grouped['post'], 'ID' );
+		$ids = array_map( 'intval', array_column( $grouped['post'], 'ID' ) );
 		$this->assertContains(
 			$post->ID,
 			$ids,
@@ -91,8 +91,8 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 		);
 		FrmDb::cache_delete_group( 'post' );
 		$grouped  = FrmGatedContentAction::get_posts();
-		$post_ids = array_column( $grouped['post'] ?? array(), 'ID' );
-		$page_ids = array_column( $grouped['page'] ?? array(), 'ID' );
+		$post_ids = array_map( 'intval', array_column( $grouped['post'] ?? array(), 'ID' ) );
+		$page_ids = array_map( 'intval', array_column( $grouped['page'] ?? array(), 'ID' ) );
 
 		$this->assertContains( $post->ID, $post_ids, 'Private post must appear under the "post" key.' );
 		$this->assertNotContains( $post->ID, $page_ids, 'Post must not bleed into the "page" bucket.' );
