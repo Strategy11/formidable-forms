@@ -198,6 +198,7 @@ class FrmGatedContentAction extends FrmFormAction {
 			return array();
 		}
 
+		/** @var object[] $raw_posts */
 		$raw_posts = FrmDb::get_results(
 			'posts',
 			array(
@@ -209,7 +210,6 @@ class FrmGatedContentAction extends FrmFormAction {
 		);
 
 		// Initialise empty buckets in get_types() order.
-		/** @var array<string, object[]> $grouped */
 		$grouped = array_fill_keys( $post_types, array() );
 
 		foreach ( $raw_posts as $post ) {

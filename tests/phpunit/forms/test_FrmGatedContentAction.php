@@ -15,7 +15,6 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 */
 	public function test_get_posts_excludes_plain_published_post() {
 		$post    = $this->factory->post->create_and_get( array( 'post_status' => 'publish' ) );
-		FrmDb::cache_delete_group( 'post' );
 		$grouped = FrmGatedContentAction::get_posts();
 		$ids     = array_map( 'intval', array_column( $grouped['post'] ?? array(), 'ID' ) );
 		$this->assertNotContains(
@@ -33,7 +32,6 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 */
 	public function test_get_posts_includes_private_post() {
 		$post    = $this->factory->post->create_and_get( array( 'post_status' => 'private' ) );
-		FrmDb::cache_delete_group( 'post' );
 		$grouped = FrmGatedContentAction::get_posts();
 
 		$this->assertArrayHasKey( 'post', $grouped );
@@ -52,13 +50,12 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * @covers FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_includes_password_protected_post() {
-		$post = $this->factory->post->create_and_get(
+		$post    = $this->factory->post->create_and_get(
 			array(
 				'post_status'   => 'publish',
 				'post_password' => 'secret',
 			)
 		);
-		FrmDb::cache_delete_group( 'post' );
 		$grouped = FrmGatedContentAction::get_posts();
 
 		$this->assertArrayHasKey( 'post', $grouped );
@@ -89,7 +86,6 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 				'post_status' => 'private',
 			)
 		);
-		FrmDb::cache_delete_group( 'post' );
 		$grouped  = FrmGatedContentAction::get_posts();
 		$post_ids = array_map( 'intval', array_column( $grouped['post'] ?? array(), 'ID' ) );
 		$page_ids = array_map( 'intval', array_column( $grouped['page'] ?? array(), 'ID' ) );
