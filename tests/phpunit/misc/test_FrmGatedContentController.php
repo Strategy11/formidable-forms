@@ -95,6 +95,82 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		$this->assertSame( 32, strlen( $raw_token ) );
 	}
 
+	// ── maybe_unlock_post() ─────────────────────────────────────────────────── //
+
+	/**
+	 * Taxonomy archive pages must not be force-404'd.
+	 *
+	 * Before the fix, get_queried_object_id() on an archive returned a term ID which
+	 * get_post() silently resolved to an unrelated post — potentially a private one —
+	 * causing force_404() to fire on a perfectly valid archive page.
+	 *
+	 * @covers FrmGatedContentController::maybe_unlock_post
+	 */
+	public function test_maybe_unlock_post_skips_on_taxonomy_archive() {
+		$cat_id = $this->factory->category->create();
+		$this->set_front_end( get_category_link( $cat_id ) );
+
+		$this->assertFalse( is_singular(), 'Prerequisite: category archive must not be singular.' );
+		$this->assertFalse( is_404(), 'Prerequisite: category archive must not start as a 404.' );
+
+		FrmGatedContentController::maybe_unlock_post();
+
+		$this->assertFalse( is_404(), 'maybe_unlock_post() must not force-404 a taxonomy archive.' );
+	}
+
+	/**
+	 * A user who holds a CPT-specific read-private cap must not be force-404'd.
+	 *
+	 * Before the fix the check always used the built-in `read_private_posts` cap.
+	 * CPTs with a custom capability_type map that abstract name to e.g. `read_private_books`.
+	 * Users who have `read_private_books` but not `read_private_posts` were incorrectly blocked.
+	 *
+	 * @covers FrmGatedContentController::maybe_unlock_post
+	 */
+	public function test_maybe_unlock_post_respects_cpt_read_private_cap() {
+		register_post_type(
+			'frm_gc_test_book',
+			array(
+				'capability_type' => array( 'book', 'books' ),
+				'map_meta_cap'    => true,
+				'public'          => false,
+			)
+		);
+
+		$post = $this->factory->post->create_and_get(
+			array(
+				'post_type'   => 'frm_gc_test_book',
+				'post_status' => 'private',
+			)
+		);
+
+		// Subscriber has read_private_books (the CPT cap) but NOT read_private_posts.
+		$user_id = $this->factory->user->create( array( 'role' => 'subscriber' ) );
+		$user    = new WP_User( $user_id );
+		$user->add_cap( 'read_private_books' );
+		wp_set_current_user( $user_id );
+
+		// Simulate a singular WP query for this private CPT post.
+		global $wp_query;
+		$wp_query->is_singular    = true;
+		$wp_query->queried_object = $post;
+
+		FrmGatedContentController::maybe_unlock_post();
+
+		$this->assertFalse(
+			is_404(),
+			'A user with the CPT-specific read_private cap must not be force-404d by maybe_unlock_post().'
+		);
+
+		// Restore query state.
+		$wp_query->is_singular    = false;
+		$wp_query->queried_object = null;
+		wp_set_current_user( 0 );
+		unregister_post_type( 'frm_gc_test_book' );
+	}
+
+	// ── payment-success event ─────────────────────────────────────────────── //
+
 	/**
 	 * A gated content action with only 'create' in its event list must NOT generate
 	 * a token when the payment-success event fires.
