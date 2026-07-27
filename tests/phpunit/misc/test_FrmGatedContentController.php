@@ -169,6 +169,88 @@ class test_FrmGatedContentController extends FrmUnitTest {
 		unregister_post_type( 'frm_gc_test_book' );
 	}
 
+	/**
+	 * A private post that is not listed in any gated content action must not be force-404'd.
+	 *
+	 * Before the fix, maybe_unlock_post() would call force_404() on any private singular
+	 * post the current user cannot read, even when gated content had nothing to do with it.
+	 * The has_gated_action_for_item() guard must short-circuit before that path.
+	 *
+	 * @covers FrmGatedContentController::maybe_unlock_post
+	 */
+	public function test_maybe_unlock_post_does_not_404_non_gated_private_post() {
+		// No gated content actions exist — this post is unrelated to gated content.
+		$post = $this->factory->post->create_and_get( array( 'post_status' => 'private' ) );
+
+		// Subscriber cannot read private posts.
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
+
+		global $wp_query;
+		$wp_query->is_singular    = true;
+		$wp_query->queried_object = $post;
+
+		FrmGatedContentController::maybe_unlock_post();
+
+		$this->assertFalse(
+			is_404(),
+			'maybe_unlock_post() must not 404 a private post that is not a gated content item.'
+		);
+
+		$wp_query->is_singular    = false;
+		$wp_query->queried_object = null;
+		wp_set_current_user( 0 );
+	}
+
+	/**
+	 * A private post that IS a gated content item must still be force-404'd when no token exists.
+	 *
+	 * Verifies that the has_gated_action_for_item() guard does not accidentally suppress the
+	 * 404 for posts that are legitimately under gated content control.
+	 *
+	 * @covers FrmGatedContentController::maybe_unlock_post
+	 */
+	public function test_maybe_unlock_post_force_404s_gated_private_post_without_token() {
+		$post = $this->factory->post->create_and_get( array( 'post_status' => 'private' ) );
+
+		// Register a gated content action that includes this post.
+		wp_insert_post(
+			array(
+				'post_type'    => 'frm_form_actions',
+				'post_excerpt' => 'gated_content',
+				'post_status'  => 'publish',
+				'post_content' => wp_json_encode(
+					array(
+						'items' => array(
+							array(
+								'type' => $post->post_type,
+								'id'   => $post->ID,
+							),
+						),
+					)
+				),
+			)
+		);
+
+		// Subscriber cannot read private posts and has no token.
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
+
+		global $wp_query;
+		$wp_query->is_singular    = true;
+		$wp_query->queried_object = $post;
+
+		FrmGatedContentController::maybe_unlock_post();
+
+		$this->assertTrue(
+			is_404(),
+			'maybe_unlock_post() must force-404 a gated private post when no valid token exists.'
+		);
+
+		$wp_query->is_404         = false;
+		$wp_query->is_singular    = false;
+		$wp_query->queried_object = null;
+		wp_set_current_user( 0 );
+	}
+
 	// ── payment-success event ─────────────────────────────────────────────── //
 
 	/**
