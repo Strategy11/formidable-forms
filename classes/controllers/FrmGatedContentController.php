@@ -160,6 +160,19 @@ class FrmGatedContentController {
 			return;
 		}
 
+		$post_item = FrmGatedItem::make(
+			array(
+				'type' => $post->post_type,
+				'id'   => $post_id,
+			)
+		);
+
+		// Only act on posts that are registered in an active gated content action.
+		// Posts unrelated to gated content must not have their access interfered with.
+		if ( ! self::has_gated_action_for_item( $post_item ) ) {
+			return;
+		}
+
 		$is_password_protected = '' !== $post->post_password;
 		$post_type_obj         = get_post_type_object( $post->post_type );
 		$read_private_cap      = $post_type_obj ? $post_type_obj->cap->read_private_posts : 'read_private_posts';
@@ -175,12 +188,6 @@ class FrmGatedContentController {
 			return;
 		}
 
-		$post_item   = FrmGatedItem::make(
-			array(
-				'type' => $post->post_type,
-				'id'   => $post_id,
-			)
-		);
 		$valid_token = FrmGatedTokenHelper::get_valid_token( $post_item );
 
 		if ( $valid_token ) {
@@ -205,6 +212,39 @@ class FrmGatedContentController {
 		if ( $is_restricted_private ) {
 			self::force_404();
 		}
+	}
+
+	/**
+	 * Check whether a content item is registered in at least one active gated content action.
+	 *
+	 * Used by maybe_unlock_post() to avoid interfering with private posts that are unrelated
+	 * to gated content — only items explicitly listed in a published gated content action
+	 * should have their access controlled by this plugin.
+	 *
+	 * @param FrmGatedItem $item Content item to look up.
+	 *
+	 * @return bool True if any published gated content action lists this item.
+	 */
+	private static function has_gated_action_for_item( FrmGatedItem $item ): bool {
+		global $wpdb;
+
+		$action_ids = FrmDb::get_col(
+			$wpdb->posts,
+			array(
+				'post_type'    => FrmFormActionsController::$action_post_type,
+				'post_excerpt' => FrmGatedContentAction::$slug,
+				'post_status'  => 'publish',
+			),
+			'ID'
+		);
+
+		foreach ( $action_ids as $action_id ) {
+			if ( FrmGatedTokenHelper::action_contains_item( (int) $action_id, $item ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
