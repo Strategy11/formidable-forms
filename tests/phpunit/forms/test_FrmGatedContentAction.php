@@ -14,11 +14,9 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * @covers FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_excludes_plain_published_post() {
-		$post = $this->factory->post->create_and_get( array( 'post_status' => 'publish' ) );
-
+		$post    = $this->factory->post->create_and_get( array( 'post_status' => 'publish' ) );
 		$grouped = FrmGatedContentAction::get_posts();
-
-		$ids = array_column( $grouped['post'] ?? array(), 'ID' );
+		$ids     = array_column( $grouped['post'] ?? array(), 'ID' );
 		$this->assertNotContains(
 			$post->ID,
 			$ids,
@@ -33,8 +31,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * @covers FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_includes_private_post() {
-		$post = $this->factory->post->create_and_get( array( 'post_status' => 'private' ) );
-
+		$post    = $this->factory->post->create_and_get( array( 'post_status' => 'private' ) );
 		$grouped = FrmGatedContentAction::get_posts();
 
 		$this->assertArrayHasKey( 'post', $grouped );
@@ -78,11 +75,19 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * @covers FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_groups_results_by_post_type() {
-		$post = $this->factory->post->create_and_get( array( 'post_type' => 'post', 'post_status' => 'private' ) );
-		$page = $this->factory->post->create_and_get( array( 'post_type' => 'page', 'post_status' => 'private' ) );
-
-		$grouped = FrmGatedContentAction::get_posts();
-
+		$post     = $this->factory->post->create_and_get(
+			array(
+				'post_type'   => 'post',
+				'post_status' => 'private',
+			)
+		);
+		$page     = $this->factory->post->create_and_get(
+			array(
+				'post_type'   => 'page',
+				'post_status' => 'private',
+			)
+		);
+		$grouped  = FrmGatedContentAction::get_posts();
 		$post_ids = array_column( $grouped['post'] ?? array(), 'ID' );
 		$page_ids = array_column( $grouped['page'] ?? array(), 'ID' );
 
