@@ -231,10 +231,11 @@ class FrmGatedContentController {
 		// Direct query — FrmDb caches results per-request which would hide newly
 		// created actions until the cache expires. action_contains_item() already
 		// handles per-action caching via transients.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$action_ids = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_excerpt = %s AND post_status = 'publish'",
+				"SELECT ID FROM %i WHERE post_type = %s AND post_excerpt = %s AND post_status = 'publish'",
+				$wpdb->posts,
 				FrmFormActionsController::$action_post_type,
 				FrmGatedContentAction::$slug
 			)
