@@ -451,14 +451,147 @@ class FrmStrpLiteEventsController {
 	 */
 	public function process_connect_events() {
 		$this->flush_response();
+		$this->pull_connect_events();
+		wp_send_json_success();
+	}
 
-		$unprocessed_event_ids = FrmStrpLiteConnectHelper::get_unprocessed_event_ids();
-
-		if ( $unprocessed_event_ids ) {
-			$this->process_event_ids( $unprocessed_event_ids );
+	/**
+	 * Pull any unprocessed Connect events from the relay and handle them.
+	 *
+	 * Shared by the relay-triggered ajax entry point ( process_connect_events )
+	 * and the scheduled backstop ( run_scheduled_pull ). Unlike the ajax entry
+	 * point it emits no output and does not call wp_die, so it is safe to run
+	 * outside of a request (e.g. WP-Cron). A short transient lock serializes this
+	 * with any concurrent pull (a cron run or a relay ping) so the same event
+	 * cannot be handled twice; the per-event de-duplication in
+	 * process_event_ids() remains a second layer of protection.
+	 *
+	 * @since 6.34
+	 *
+	 * @return void
+	 */
+	public function pull_connect_events() {
+		if ( get_transient( 'frm_strp_connect_pull_lock' ) ) {
+			// Another pull (a concurrent cron run or relay ping) is already in
+			// flight; skip so the two cannot double-process the same event. The
+			// skipped events stay unprocessed and are pulled on the next run.
+			return;
 		}
 
-		wp_send_json_success();
+		set_transient( 'frm_strp_connect_pull_lock', 1, 2 * MINUTE_IN_SECONDS );
+
+		try {
+			$unprocessed_event_ids = FrmStrpLiteConnectHelper::get_unprocessed_event_ids();
+
+			if ( $unprocessed_event_ids ) {
+				$this->process_event_ids( $unprocessed_event_ids );
+			}
+		} finally {
+			// Always release the lock, even if event handling throws, so a
+			// single bad event cannot stall ingestion for the lock's TTL.
+			delete_transient( 'frm_strp_connect_pull_lock' );
+		}
+	}
+
+	/**
+	 * WP-Cron backstop that pulls Connect events even when the relay has not
+	 * pinged the site's ajax endpoint. The relay push remains the primary,
+	 * near-real-time path; this bounds worst-case ingestion latency to the
+	 * schedule interval so payment-reactive consumers (subscription renewal
+	 * failures, refunds, cancellations) are handled reliably.
+	 *
+	 * @since 6.34
+	 *
+	 * @return void
+	 */
+	public static function run_scheduled_pull() {
+		if ( class_exists( 'FrmStrpHooksController', false ) ) {
+			// The paid Stripe add-on is active and owns event handling.
+			return;
+		}
+
+		// pull_connect_events() holds the concurrency lock for both this cron
+		// path and the relay-triggered ajax path.
+		$controller = new self();
+		$controller->pull_connect_events();
+	}
+
+	/**
+	 * Ensure the Connect-events backstop cron is scheduled while Stripe is
+	 * connected. Idempotent, and reschedules if the filterable interval changed.
+	 *
+	 * @since 6.34
+	 *
+	 * @return void
+	 */
+	public static function maybe_schedule_connect_pull() {
+		if ( class_exists( 'FrmStrpHooksController', false ) ) {
+			return;
+		}
+
+		if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			// Self-heal: never leave the backstop scheduled once Stripe is gone.
+			wp_clear_scheduled_hook( 'frm_strp_pull_connect_events' );
+			return;
+		}
+
+		$recurrence = self::get_connect_pull_recurrence();
+		$scheduled  = wp_get_scheduled_event( 'frm_strp_pull_connect_events' );
+
+		if ( $scheduled && $scheduled->schedule !== $recurrence ) {
+			wp_clear_scheduled_hook( 'frm_strp_pull_connect_events' );
+			$scheduled = false;
+		}
+
+		if ( ! $scheduled ) {
+			wp_schedule_event( time(), $recurrence, 'frm_strp_pull_connect_events' );
+		}
+	}
+
+	/**
+	 * Resolve the backstop interval. Defaults to hourly; filterable to any
+	 * registered WP-Cron schedule name, falling back to hourly if the filtered
+	 * value is not a registered schedule.
+	 *
+	 * @since 6.34
+	 *
+	 * @return string
+	 */
+	private static function get_connect_pull_recurrence() {
+		/**
+		 * Filters the recurrence of the Stripe Connect events backstop cron.
+		 *
+		 * @since 6.34
+		 *
+		 * @param string $recurrence A registered WP-Cron schedule name. Default 'hourly'.
+		 */
+		$recurrence = apply_filters( 'frm_strp_connect_pull_interval', 'hourly' );
+		$schedules  = wp_get_schedules();
+
+		if ( ! is_string( $recurrence ) || ! isset( $schedules[ $recurrence ] ) ) {
+			$recurrence = 'hourly';
+		}
+
+		return $recurrence;
+	}
+
+	/**
+	 * Clear the backstop cron when Stripe is no longer connected in any mode.
+	 * Hooked to frm_disconnected_gateway.
+	 *
+	 * @since 6.34
+	 *
+	 * @param string $gateway The disconnected gateway (unused).
+	 * @param string $mode    The disconnected mode (unused).
+	 *
+	 * @return void
+	 */
+	public static function maybe_remove_connect_pull( $gateway = '', $mode = '' ) {
+		unset( $gateway, $mode );
+
+		if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			wp_clear_scheduled_hook( 'frm_strp_pull_connect_events' );
+		}
 	}
 
 	/**

@@ -19,6 +19,15 @@ class FrmStrpLiteHooksController {
 		add_action( 'frm_enqueue_form_scripts', 'FrmStrpLiteActionsController::maybe_load_scripts' );
 		add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
 
+		// WP-Cron backstop that pulls Connect events if the relay has not pinged
+		// the site's ajax endpoint, so payment-reactive features still see
+		// renewal failures, refunds and cancellations. The cron action is bound
+		// here (not in load_ajax_hooks) so it is registered during WP-Cron; the
+		// schedule is ensured on admin load, and cleared when Stripe disconnects.
+		add_action( 'frm_strp_pull_connect_events', 'FrmStrpLiteEventsController::run_scheduled_pull' );
+		add_action( 'admin_init', 'FrmStrpLiteEventsController::maybe_schedule_connect_pull' );
+		add_action( 'frm_disconnected_gateway', 'FrmStrpLiteEventsController::maybe_remove_connect_pull', 10, 2 );
+
 		// Filters.
 		add_filter( 'frm_saved_errors', 'FrmStrpLiteAppController::maybe_add_payment_error', 10, 2 );
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
