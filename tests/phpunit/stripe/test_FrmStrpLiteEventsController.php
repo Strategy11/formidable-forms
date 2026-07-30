@@ -22,12 +22,12 @@ class test_FrmStrpLiteEventsController extends FrmUnitTest {
 	 */
 	private $lock = 'frm_strp_connect_pull_lock';
 
-	public function tear_down() {
+	public function tearDown(): void {
 		delete_option( $this->connected_option );
 		delete_transient( $this->lock );
 		wp_clear_scheduled_hook( $this->hook );
 		remove_all_filters( 'frm_strp_connect_pull_interval' );
-		parent::tear_down();
+		parent::tearDown();
 	}
 
 	/**
@@ -66,7 +66,9 @@ class test_FrmStrpLiteEventsController extends FrmUnitTest {
 		update_option( $this->connected_option, 1 );
 
 		FrmStrpLiteEventsController::maybe_schedule_connect_pull();
-		$this->assertSame( 'hourly', wp_get_scheduled_event( $this->hook )->schedule );
+		$event = wp_get_scheduled_event( $this->hook );
+		$this->assertNotFalse( $event );
+		$this->assertSame( 'hourly', $event->schedule );
 
 		add_filter(
 			'frm_strp_connect_pull_interval',
@@ -76,7 +78,9 @@ class test_FrmStrpLiteEventsController extends FrmUnitTest {
 		);
 		FrmStrpLiteEventsController::maybe_schedule_connect_pull();
 
-		$this->assertSame( 'twicedaily', wp_get_scheduled_event( $this->hook )->schedule );
+		$event = wp_get_scheduled_event( $this->hook );
+		$this->assertNotFalse( $event );
+		$this->assertSame( 'twicedaily', $event->schedule );
 	}
 
 	/**
