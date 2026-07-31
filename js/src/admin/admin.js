@@ -9051,6 +9051,31 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Track changes made in the Custom CSS CodeMirror editor for the unsaved changes pop up.
+	 * CodeMirror replaces the textarea, so edits there never fire a native change event.
+	 * The editor initializes on document ready, so retry a few times until it exists.
+	 *
+	 * @since x.x
+	 *
+	 * @param {number} retryCount The number of times this function has run while waiting for CodeMirror to initialize.
+	 * @return {void}
+	 */
+	function addCustomCSSEditorChangeListener( retryCount = 0 ) {
+		const retryLimit = 5;
+		const retryInterval = 500;
+		const editor = window.frm_codemirror_box_wp_editor;
+
+		if ( editor === undefined || editor.codemirror === undefined ) {
+			if ( retryCount < retryLimit ) {
+				setTimeout( () => addCustomCSSEditorChangeListener( retryCount + 1 ), retryInterval );
+			}
+			return;
+		}
+
+		editor.codemirror.on( 'change', fieldUpdated );
+	}
+
 	function buildSubmittedNoAjax() {
 		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
 		fieldsUpdated = 0;
@@ -11371,6 +11396,12 @@ window.frmAdminBuildJS = function() {
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
 				fieldsUpdated = 0;
 			} );
+
+			// License keys save with their own button, and the payment section inputs are only used as tabs.
+			// This is delegated from the wrap element, not the document, because hideShowItem returns false and stops change events from reaching the document.
+			jQuery( '#form_global_settings' ).on( 'change', 'input:not(.frm-search-input):not(.frm_addon_license_key):not([name="frm_payment_section"]), select, textarea', fieldUpdated );
+
+			addCustomCSSEditorChangeListener();
 
 			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
 			if ( manageStyleSettings ) {
