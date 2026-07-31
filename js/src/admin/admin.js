@@ -886,17 +886,35 @@ window.frmAdminBuildJS = function() {
 	function clickNewTab() {
 		/*jshint validthis:true */
 		const href = this.getAttribute( 'href' );
-		if ( href === null ) {
+		// A tab anchor always points at an in-page fragment (#anchor). Ignore anything else.
+		if ( href === null || href.charAt( 0 ) !== '#' ) {
 			return false;
 		}
 
-		const classSelector = href.replace( '#', '.' );
-		const $link = jQuery( this );
+		const targetId = href.slice( 1 );
 
-		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
-		$link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
+		const li = this.closest( 'li' );
+		if ( li ) {
+			li.classList.add( 'frm-tabs', 'active' );
+			Array.from( li.parentNode.children ).forEach( sibling => {
+				if ( sibling !== li && sibling.tagName === 'LI' ) {
+					sibling.classList.remove( 'frm-tabs', 'active', 'starttab' );
+				}
+			} );
+		}
 
-		const tabContent = document.getElementById( href.replace( '#', '' ) );
+		// Hide the sibling tab panels, matching the active one by its literal id or class so href is
+		// never turned into a selector.
+		const container = this.closest( 'div' );
+		if ( container ) {
+			Array.from( container.children ).forEach( child => {
+				if ( child.classList.contains( 'tabs-panel' ) && child.id !== targetId && ! child.classList.contains( targetId ) ) {
+					child.style.display = 'none';
+				}
+			} );
+		}
+
+		const tabContent = document.getElementById( targetId );
 		if ( tabContent ) {
 			tabContent.style.display = 'block';
 		}
@@ -911,7 +929,8 @@ window.frmAdminBuildJS = function() {
 	function clickTab( link, auto ) {
 		link = jQuery( link );
 		const href = link.attr( 'href' );
-		if ( href === undefined ) {
+		// A tab anchor always points at an in-page fragment (#anchor). Ignore anything else.
+		if ( href === undefined || href.charAt( 0 ) !== '#' ) {
 			return;
 		}
 
@@ -931,7 +950,10 @@ window.frmAdminBuildJS = function() {
 			/* form settings page */
 			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
-		jQuery( href ).show();
+		// Match the target against existing elements by id and class rather than passing href to
+		// jQuery(), so href and its derived selector are only ever used to find elements, never to
+		// build new markup.
+		jQuery( document.getElementById( href.slice( 1 ) ) ).show();
 		jQuery( classSelector ).show();
 
 		hideShortcodes();
