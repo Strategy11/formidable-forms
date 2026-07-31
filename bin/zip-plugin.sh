@@ -99,6 +99,8 @@ zip -r $zipname $destination \
 	-x "*/*.stubs.php" \
 	-x "*/stubs.php" \
 	-x "*/stubs" \
+	-x "*/stubs-mcp-adapter" \
+	-x "*/stubs-wp-rest-controller" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
