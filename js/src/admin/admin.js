@@ -950,10 +950,10 @@ window.frmAdminBuildJS = function() {
 			/* form settings page */
 			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
-		// Match the target against existing elements by id and class rather than passing href to
-		// jQuery(), so href and its derived selector are only ever used to find elements, never to
-		// build new markup.
-		jQuery( document.getElementById( href.slice( 1 ) ) ).show();
+		const targetEl = document.getElementById( href.slice( 1 ) );
+		if ( targetEl ) {
+			targetEl.style.display = '';
+		}
 		jQuery( classSelector ).show();
 
 		hideShortcodes();
@@ -10713,7 +10713,7 @@ window.frmAdminBuildJS = function() {
 				clickTab( this );
 				return false;
 			} );
-			clickTab( jQuery( '.starttab a' ), 'auto' );
+			clickTab( jQuery( '.frm-category-tabs .starttab a' ), 'auto' );
 
 			// submit the search form with dropdown
 			jQuery( document ).on( 'click', '#frm-fid-search-menu a', function() {
