@@ -27,11 +27,13 @@ class FrmHtmlSanitizer {
 			return $value;
 		}
 
-		return preg_replace_callback(
+		$sanitized = preg_replace_callback(
 			'/\b(href|src)\s*=\s*"([^"]*)"/',
 			array( self::class, 'sanitize_url_attribute_value' ),
 			$value
 		);
+
+		return null === $sanitized ? '' : $sanitized;
 	}
 
 	/**
@@ -47,6 +49,10 @@ class FrmHtmlSanitizer {
 		$url = trim( html_entity_decode( $matches[2], ENT_QUOTES, 'UTF-8' ) );
 
 		if ( '#' === substr( $url, 0, 1 ) ) {
+			return $matches[1] . '="' . esc_attr( $url ) . '"';
+		}
+
+		if ( 'src' === $matches[1] && self::is_png_data_uri( $url ) ) {
 			return $matches[1] . '="' . esc_attr( $url ) . '"';
 		}
 
@@ -66,5 +72,21 @@ class FrmHtmlSanitizer {
 		}
 
 		return $matches[1] . '="' . esc_attr( $safe ) . '"';
+	}
+
+	/**
+	 * Check for a PNG data URI that contains only base64 characters, like a drawn signature image src.
+	 *
+	 * The pattern allows only base64 characters after the prefix, so the value cannot carry a media
+	 * type of its own or any markup into the attribute.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $url Decoded URL value to check.
+	 *
+	 * @return bool
+	 */
+	private static function is_png_data_uri( $url ) {
+		return 1 === preg_match( '#^data:image/png;base64,[A-Za-z0-9+/]+={0,2}$#D', $url );
 	}
 }
