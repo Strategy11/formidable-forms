@@ -64,6 +64,41 @@
 	display: inline-block;
 }
 
+/**
+ * Tactile press feedback: buttons dip slightly while pressed, then spring back
+ * via the transition above. Disabled under reduced-motion.
+ */
+.frm-button-primary,
+.wp-core-ui .button-primary.frm-button-primary,
+.wp-core-ui .button.frm-button-primary,
+.frm-button-secondary,
+.wp-core-ui .button-secondary.frm-button-secondary,
+.wp-core-ui .button.frm-button-secondary,
+.frm-button-tertiary,
+.frm-button-red {
+
+	&:active {
+		transform: scale(0.96);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-button-primary,
+	.wp-core-ui .button-primary.frm-button-primary,
+	.wp-core-ui .button.frm-button-primary,
+	.frm-button-secondary,
+	.wp-core-ui .button-secondary.frm-button-secondary,
+	.wp-core-ui .button.frm-button-secondary,
+	.frm-button-tertiary,
+	.frm-button-red {
+
+		&:active {
+			transform: none;
+		}
+	}
+}
+
 .frm-button-primary.frm-sharp,
 .frm-button-secondary.frm-sharp {
 	border-radius: 12px !important;
