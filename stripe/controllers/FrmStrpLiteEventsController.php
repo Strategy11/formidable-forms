@@ -466,7 +466,7 @@ class FrmStrpLiteEventsController {
 	 * cannot be handled twice; the per-event de-duplication in
 	 * process_event_ids() remains a second layer of protection.
 	 *
-	 * @since 6.34
+	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -500,7 +500,7 @@ class FrmStrpLiteEventsController {
 	 * schedule interval so payment-reactive consumers (subscription renewal
 	 * failures, refunds, cancellations) are handled reliably.
 	 *
-	 * @since 6.34
+	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -520,7 +520,7 @@ class FrmStrpLiteEventsController {
 	 * Ensure the Connect-events backstop cron is scheduled while Stripe is
 	 * connected. Idempotent, and reschedules if the filterable interval changed.
 	 *
-	 * @since 6.34
+	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -553,7 +553,7 @@ class FrmStrpLiteEventsController {
 	 * registered WP-Cron schedule name, falling back to hourly if the filtered
 	 * value is not a registered schedule.
 	 *
-	 * @since 6.34
+	 * @since x.x
 	 *
 	 * @return string
 	 */
@@ -561,7 +561,7 @@ class FrmStrpLiteEventsController {
 		/**
 		 * Filters the recurrence of the Stripe Connect events backstop cron.
 		 *
-		 * @since 6.34
+		 * @since x.x
 		 *
 		 * @param string $recurrence A registered WP-Cron schedule name. Default 'hourly'.
 		 */
@@ -579,7 +579,7 @@ class FrmStrpLiteEventsController {
 	 * Clear the backstop cron when Stripe is no longer connected in any mode.
 	 * Hooked to frm_disconnected_gateway.
 	 *
-	 * @since 6.34
+	 * @since x.x
 	 *
 	 * @param string $gateway The disconnected gateway (unused).
 	 * @param string $mode    The disconnected mode (unused).
