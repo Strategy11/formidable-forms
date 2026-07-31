@@ -24,7 +24,7 @@
  * @var int          $frm_gc_idx          Zero-based item index. 0 for template rows.
  * @var array        $frm_gc_item         Saved item data. Empty array for template rows.
  * @var array        $frm_gc_types        All registered type configurations.
- * @var array<string, WP_Post[]> $frm_gc_posts        Posts grouped by item type key.
+ * @var array<string, list<object>> $frm_gc_posts      Posts grouped by item type key.
  * @var bool                    $frm_gc_use_autocomplete Whether to render autocomplete inputs.
  * @var array<string, string>   $frm_gc_posts_source JSON-encoded autocomplete source per type. Only set when $frm_gc_use_autocomplete.
  * @var string       $frm_gc_wrapper_id   Unique wrapper element ID.
