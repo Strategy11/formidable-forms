@@ -954,7 +954,9 @@ window.frmAdminBuildJS = function() {
 		if ( targetEl ) {
 			targetEl.style.display = '';
 		}
-		jQuery( classSelector ).show();
+		document.querySelectorAll( classSelector ).forEach( el => {
+			el.style.display = '';
+		} );
 
 		hideShortcodes();
 
