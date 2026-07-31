@@ -6970,7 +6970,8 @@ window.frmAdminBuildJS = function() {
 		const fieldId = field.getAttribute( 'data-fid' );
 
 		if ( '' === replaceWith.trim() ) {
-			replaceWith = ` ${ setting.querySelector( 'option[data-align]' ).getAttribute( 'data-align' ) }`;
+			const alignOption = setting.querySelector( 'option[data-align]' );
+			replaceWith = alignOption ? ` ${ alignOption.getAttribute( 'data-align' ) }` : '';
 		}
 		// Include classes from multiple settings.
 		if ( fieldId !== undefined ) {
