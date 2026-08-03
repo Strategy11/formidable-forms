@@ -134,6 +134,30 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function no_items() {
+		$s = self::get_param(
+			array(
+				'param'    => 's',
+				'sanitize' => 'sanitize_text_field',
+			)
+		);
+
+		if ( $s !== '' ) {
+			$current_url = set_url_scheme(
+				'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' )
+			);
+			$clear_url   = remove_query_arg( 's', $current_url );
+
+			echo '<p>';
+			printf(
+				/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+				esc_html__( 'No forms match your search. %1$sClear search%2$s', 'formidable' ),
+				'<a href="' . esc_url( $clear_url ) . '">',
+				'</a>'
+			);
+			echo '</p>';
+			return;
+		}
+
 		if ( $this->status === 'trash' ) {
 			echo '<p>';
 			esc_html_e( 'No forms found in the trash.', 'formidable' );

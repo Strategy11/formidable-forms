@@ -682,12 +682,26 @@ class FrmStyle {
 		}
 
 		if ( ! isset( $settings['submit_hover_bg_color'] ) && isset( $settings['submit_bg_color'] ) ) {
-			$settings['submit_hover_bg_color']     = $settings['submit_bg_color'];
-			$settings['submit_hover_color']        = $settings['submit_text_color'];
-			$settings['submit_hover_border_color'] = $settings['submit_border_color'];
+			$settings['submit_hover_bg_color'] = $settings['submit_bg_color'];
+		}
 
-			$settings['submit_active_bg_color']     = $settings['submit_bg_color'];
-			$settings['submit_active_color']        = $settings['submit_text_color'];
+		if ( ! isset( $settings['submit_hover_color'] ) && isset( $settings['submit_text_color'] ) ) {
+			$settings['submit_hover_color'] = $settings['submit_text_color'];
+		}
+
+		if ( ! isset( $settings['submit_hover_border_color'] ) && isset( $settings['submit_border_color'] ) ) {
+			$settings['submit_hover_border_color'] = $settings['submit_border_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_bg_color'] ) && isset( $settings['submit_bg_color'] ) ) {
+			$settings['submit_active_bg_color'] = $settings['submit_bg_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_color'] ) && isset( $settings['submit_text_color'] ) ) {
+			$settings['submit_active_color'] = $settings['submit_text_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_border_color'] ) && isset( $settings['submit_border_color'] ) ) {
 			$settings['submit_active_border_color'] = $settings['submit_border_color'];
 		}
 

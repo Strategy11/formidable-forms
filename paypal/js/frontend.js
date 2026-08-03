@@ -1568,7 +1568,11 @@
 		}
 
 		if ( 'string' === typeof err ) {
-			return parsePayPalErrorString( err ) || err;
+			const parsed = parsePayPalErrorString( err );
+			if ( parsed ) {
+				return parsed;
+			}
+			return mapPayPalErrorCode( err ) || err;
 		}
 
 		// PayPal SDK sometimes nests the payload under `err.data` or `err.response`.
@@ -1581,10 +1585,31 @@
 		}
 
 		if ( err.message ) {
-			return parsePayPalErrorString( err.message ) || err.message;
+			const parsed = parsePayPalErrorString( err.message );
+			if ( parsed ) {
+				return parsed;
+			}
+			return mapPayPalErrorCode( err.message ) || err.message;
 		}
 
 		return fallback;
+	}
+
+	/**
+	 * Map PayPal error codes to user-friendly messages.
+	 *
+	 * @param {string} code The PayPal error code (e.g. INVALID_CVV).
+	 * @return {string} The user-friendly message, or empty string if not mapped.
+	 */
+	function mapPayPalErrorCode( code ) {
+		const codeMap = {
+			INVALID_CVV: 'Please enter a valid CVV code.',
+			INVALID_CARD_NUMBER: 'Please enter a valid card number.',
+			INVALID_EXPIRY: 'Please enter a valid expiry date.',
+		};
+
+		const upperCode = code.toUpperCase();
+		return codeMap[ upperCode ] || '';
 	}
 
 	/**
