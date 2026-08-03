@@ -83,9 +83,7 @@
 		frmFrontForm.showSubmitLoading( $form );
 		const meta = addName( $form );
 
-		if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.addAddressMeta ) {
-			window.frmProForm.addAddressMeta( $form, meta );
-		}
+		addAddressMeta( meta );
 
 		if ( ! isStripeLink ) {
 			return;
@@ -132,9 +130,7 @@
 				}
 			};
 
-			if ( 'object' === typeof window.frmProForm && 'function' === typeof frmProForm.beforeConfirmPayment ) {
-				params = frmProForm.beforeConfirmPayment( params, meta );
-			}
+			params = addBillingDetailsToParams( params, meta );
 
 			const confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
 
@@ -200,6 +196,122 @@
 
 			return true;
 		}
+	}
+
+	/**
+	 * Add address values to the payment meta when an address field is mapped in the payment action.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object} cardObject
+	 * @return {void}
+	 */
+	function addAddressMeta( cardObject ) {
+		let addressID = '';
+
+		each(
+			getStripeSettings(),
+			function( setting ) {
+				if ( setting.address ) {
+					addressID = setting.address;
+				}
+			}
+		);
+
+		if ( '' === addressID ) {
+			return;
+		}
+
+		let prefix = '';
+		let addressContainer = document.querySelector( `#frm_field_${ addressID }_container, .frm_field_${ addressID }_container` );
+
+		if ( ! addressContainer ) {
+			const line1Input = document.querySelector( `input[name="item_meta[${ addressID }][line1]"]` );
+			if ( line1Input ) {
+				prefix = `${ addressID }][`;
+				addressContainer = line1Input.parentNode;
+			}
+		}
+
+		if ( ! addressContainer ) {
+			return;
+		}
+
+		addValToRequest( addressContainer, `${ prefix }line1`, cardObject, 'address_line1' );
+		addValToRequest( addressContainer, `${ prefix }line2`, cardObject, 'address_line2' );
+		addValToRequest( addressContainer, `${ prefix }city`, cardObject, 'address_city' );
+		addValToRequest( addressContainer, `${ prefix }state`, cardObject, 'address_state' );
+		addValToRequest( addressContainer, `${ prefix }zip`, cardObject, 'address_zip' );
+
+		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
+		if ( ! countryDropdown ) {
+			return;
+		}
+
+		const countryOption = countryDropdown.querySelector( `option[value="${ countryDropdown.value }"]` );
+		if ( countryOption?.getAttribute( 'data-code' ) ) {
+			cardObject.address_country = countryOption.getAttribute( 'data-code' );
+		}
+	}
+
+	/**
+	 * Add a single address input value to the card object if it is filled.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} container
+	 * @param {string}  inputName
+	 * @param {Object}  cardObject
+	 * @param {string}  objectName
+	 * @return {void}
+	 */
+	function addValToRequest( container, inputName, cardObject, objectName ) {
+		const input = container.querySelector( `input[name$="[${ inputName }]"], select[name$="[${ inputName }]"]` );
+		if ( input?.value ) {
+			cardObject[ objectName ] = input.value;
+		}
+	}
+
+	/**
+	 * Add billing details built from the payment meta to the confirm params.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object} params
+	 * @param {Object} meta
+	 * @return {Object} The confirm params with billing details included.
+	 */
+	function addBillingDetailsToParams( params, meta ) {
+		params.confirmParams.payment_method_data = {
+			billing_details: convertToAddressObject( meta )
+		};
+		return params;
+	}
+
+	/**
+	 * Convert flat address_* meta keys to the nested address object Stripe expects.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object} meta
+	 * @return {Object} Billing details with a nested address object.
+	 */
+	function convertToAddressObject( meta ) {
+		const newMeta = { address: {} };
+
+		Object.keys( meta ).forEach(
+			function( key ) {
+				if ( 'address_zip' === key ) {
+					newMeta.address.postal_code = meta[ key ];
+				} else if ( 0 === key.indexOf( 'address_' ) ) {
+					newMeta.address[ key.replace( 'address_', '' ) ] = meta[ key ];
+				} else {
+					newMeta[ key ] = meta[ key ];
+				}
+			}
+		);
+
+		return newMeta;
 	}
 
 	/**

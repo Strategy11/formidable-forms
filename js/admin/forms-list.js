@@ -239,7 +239,7 @@
 
 						const leftChildren = [
 							postLink,
-							post.post_title && post.post_name && post.post_name !== '' ? frmDom.span( {
+							post.post_title && post.post_name ? frmDom.span( {
 								text: `/${ post.post_name }`
 							} ) : undefined
 						].filter( Boolean );

@@ -117,21 +117,27 @@ class FrmFieldAddress extends FrmFieldCombo {
 			}
 		}
 
-		// Handle Europe address type (no state field)
+		// Handle Europe address type (no state field, zip shown before city)
 		if ( 'europe' === $address_type ) {
-			unset( $sub_fields['state'] );
+			$city_field    = $sub_fields['city'];
+			$country_field = $sub_fields['country'];
+			unset( $sub_fields['state'], $sub_fields['city'], $sub_fields['country'] );
+			$sub_fields['city']    = $city_field;
+			$sub_fields['country'] = $country_field;
+
 			$sub_fields['city']['wrapper_classes'] = 'frm_third';
 			$sub_fields['zip']['wrapper_classes']  = 'frm_third frm_first';
 		}
 
-		// Handle US address type (state dropdown)
+		// Handle US address type (state dropdown, no country field)
 		if ( 'us' === $address_type ) {
 			$sub_fields['state']['type']    = 'select';
 			$sub_fields['state']['options'] = FrmFieldsHelper::get_us_states();
+			unset( $sub_fields['country'] );
 		}
 
-		// Handle international address type (country dropdown)
-		if ( 'international' === $address_type ) {
+		// International and Europe address types use a country dropdown
+		if ( in_array( $address_type, array( 'international', 'europe' ), true ) ) {
 			$sub_fields['country']['type']    = 'select';
 			$sub_fields['country']['options'] = FrmFieldsHelper::get_countries();
 		}

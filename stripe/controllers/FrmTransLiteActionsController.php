@@ -411,6 +411,7 @@ class FrmTransLiteActionsController {
 				'id'         => $payment_action->ID,
 				'first_name' => $payment_action->post_content['billing_first_name'],
 				'last_name'  => $payment_action->post_content['billing_last_name'],
+				'address'    => $payment_action->post_content['billing_address'] ?? '',
 				'gateways'   => $payment_action->post_content['gateway'],
 				'fields'     => self::get_fields_for_price( $payment_action ),
 				'one'        => $payment_action->post_content['type'],

@@ -28,6 +28,7 @@ $sub_fields   = $args['sub_fields'];
 $html_id      = $args['html_id'];
 $field_name   = $args['field_name'];
 $errors       = $args['errors'];
+$atts         = $args['shortcode_atts'] ?? array();
 $inputs_attrs = $this->get_inputs_container_attrs();
 ?>
 <fieldset aria-labelledby="<?php echo esc_attr( $html_id ); ?>_label">
@@ -37,14 +38,15 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 
 	<div <?php FrmAppHelper::array_to_html_params( $inputs_attrs, true ); ?>>
 		<?php
-		foreach ( $sub_fields as $name => $sub_field ) {
+		foreach ( $sub_fields as $key => $sub_field ) {
+			$name              = $key;
 			$sub_field['name'] = $name;
 			?>
 			<div
 				id="frm_field_<?php echo esc_attr( $field_id . '-' . $name ); ?>_container"
 				class="frm_form_field form-field frm_form_subfield-<?php echo esc_attr( $name ); ?> <?php echo esc_attr( $sub_field['wrapper_classes'] ); ?><?php
 				if ( isset( $errors ) ) {
-					FrmComboFieldsController::maybe_add_error_class( compact( 'field', 'name', 'errors', 'atts' ) );
+					FrmComboFieldsController::maybe_add_error_class( compact( 'field', 'key', 'errors', 'atts' ) );
 				}
 				?>"
 				data-sub-field-name="<?php echo esc_attr( $name ); ?>"
@@ -53,24 +55,24 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 					<?php echo esc_html( ! empty( $field[ $name . '_desc' ] ) ? $field[ $name . '_desc' ] : $field['name'] ); ?>
 				</label>
 				<?php if ( 'select' === $sub_field['type'] ) { ?>
-					<select name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $name ); ?>]" id="<?php echo esc_attr( $html_id . '_' . $name ); ?>" <?php FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'name' ) ); ?>>
+					<select name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $name ); ?>]" id="<?php echo esc_attr( $html_id . '_' . $name ); ?>" <?php FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'key' ) ); ?>>
 						<option value="" class="<?php echo esc_attr( ! empty( $field['placeholder'][ $name ] ) ? 'frm-select-placeholder' : '' ); ?>">
-							<?php echo esc_html( FrmComboFieldsController::get_dropdown_label( compact( 'field', 'name', 'sub_field' ) ) ); ?>
+							<?php echo esc_html( FrmComboFieldsController::get_dropdown_label( compact( 'field', 'key', 'sub_field' ) ) ); ?>
 						</option>
 						<?php
-						foreach ( $sub_field['options'] as $value => $label ) {
-							$selected = isset( $field['value'][ $name ] ) && (string) $field['value'][ $name ] === (string) $value;
-							$params   = array( 'value' => $value );
+						foreach ( $sub_field['options'] as $option ) {
+							$selected = isset( $field['value'][ $name ] ) && (string) $field['value'][ $name ] === (string) $option;
+							$params   = array( 'value' => $option );
 
 							if ( 'address' === $field['type'] && 'country' === $name ) {
-								$code = FrmAddressesController::get_country_code( $value );
+								$code = FrmAddressesController::get_country_code( $option );
 
 								if ( $code ) {
 									$params['data-code'] = $code;
 								}
 							}
 
-							FrmHtmlHelper::echo_dropdown_option( $label, $selected, $params );
+							FrmHtmlHelper::echo_dropdown_option( $option, $selected, $params );
 						}
 						?>
 					</select>
@@ -79,7 +81,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 					if ( empty( $remove_names ) ) {
 						echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
 					}
-					FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'name' ) );
+					FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'key' ) );
 					?> />
 				<?php
 				}//end if
