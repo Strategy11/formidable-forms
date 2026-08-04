@@ -1537,6 +1537,9 @@ class FrmStylesController {
 			die();
 		}
 
+		/**
+		 * @var WP_Post|null $post
+		 */
 		$post = get_post( $style_id );
 
 		if ( ! $post || $post->post_type !== self::$post_type ) {

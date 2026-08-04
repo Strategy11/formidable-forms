@@ -110,14 +110,21 @@ class FrmGatedItem {
 	 * @return string
 	 */
 	protected static function get_permalink_for_gated_item( $post_id ) {
+		/**
+		 * @var WP_Post|null $post
+		 */
 		$post = get_post( $post_id );
 
-		if ( $post && 'private' === $post->post_status ) {
+		if ( ! $post instanceof WP_Post ) {
+			return '';
+		}
+
+		if ( 'private' === $post->post_status ) {
 			$post              = clone $post;
 			$post->post_status = 'publish';
 		}
 
-		return (string) get_permalink( $post );
+		return get_permalink( $post );
 	}
 
 	/**

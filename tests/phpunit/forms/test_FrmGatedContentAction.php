@@ -53,7 +53,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 		$post    = $this->factory->post->create_and_get(
 			array(
 				'post_status'   => 'publish',
-				'post_password' => 'secret',
+				'post_password' => wp_generate_password( 12 ),
 			)
 		);
 		$grouped = FrmGatedContentAction::get_posts();
