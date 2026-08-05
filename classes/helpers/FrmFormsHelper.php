@@ -418,21 +418,21 @@ class FrmFormsHelper {
 			$cached = FrmDb::check_cache( $field_id, 'frm_field' );
 
 			if ( is_object( $cached ) ) {
-				$fields_by_id[ (int) $field_id ] = $cached;
+				$fields_by_id[ $field_id ] = $cached;
 			}
 		}
 
 		// Only touch the database for fields that are still unresolved.
 		$missing = array_diff( $field_ids, array_keys( $fields_by_id ) );
 
-		if ( $missing ) {
-			echo 'Shucks';
-			die();
-			$fields = FrmDb::get_results( 'frm_fields', array( 'id' => array_values( $missing ) ), 'id,field_key,type,field_order,form_id' );
+		if ( ! $missing ) {
+			return $fields_by_id;
+		}
 
-			foreach ( $fields as $field ) {
-				$fields_by_id[ (int) $field->id ] = $field;
-			}
+		$fields = FrmDb::get_results( 'frm_fields', array( 'id' => array_values( $missing ) ), 'id,field_key,type,field_order,form_id' );
+
+		foreach ( $fields as $field ) {
+			$fields_by_id[ (int) $field->id ] = $field;
 		}
 
 		return $fields_by_id;
