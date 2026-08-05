@@ -288,15 +288,14 @@ class FrmFormsHelper {
 			$settings_args['current_form'] = $args['form']->id;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-
+		$frm_settings         = FrmAppHelper::get_settings( $settings_args );
 		$field_error_messages = self::get_clickable_field_error_messages( $args );
-
-		$invalid_msg = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+		$invalid_msg          = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
 
 		if ( $field_error_messages ) {
 			$invalid_msg .= "<ul>$field_error_messages</ul>";
 		}
+
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
@@ -310,27 +309,17 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	private static function get_clickable_field_error_messages( $args ) {
-		$field_error_messages = '';
-
 		if ( empty( $args['errors'] ) ) {
-			return $field_error_messages;
+			return '';
 		}
 
-		$field_ids  = array_map(
-			function ( $field_plus_id ) {
-				$field_id = str_replace( 'field', '', $field_plus_id );
-
-				if ( strpos( $field_id, '-' ) !== false ) {
-					$field_id = explode( '-', $field_id )[0];
-				}
-				return $field_id;
-			},
-			array_keys( $args['errors'] )
-		);
-		$field_keys = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type' );
+		// Parse each error key once into its field ID and repeater row suffix, skipping
+		// non-field errors like 'form' or 'spam' that have no input to link to.
+		$parsed_errors = array();
+		$field_ids     = array();
 
 		foreach ( $args['errors'] as $field_plus_id => $error ) {
-			$field_id = str_replace( 'field', '', $field_plus_id );
+			$field_id = preg_replace( '/^field/', '', $field_plus_id );
 			$row      = '';
 
 			if ( strpos( $field_id, '-' ) !== false ) {
@@ -342,21 +331,40 @@ class FrmFormsHelper {
 				}
 			}
 
-			$index = array_search( $field_id, array_column( $field_keys, 'id' ), true );
+			if ( ! is_numeric( $field_id ) ) {
+				continue;
+			}
+
+			$field_ids[]     = (int) $field_id;
+			$parsed_errors[] = compact( 'field_id', 'row', 'error' );
+		}
+
+		if ( ! $field_ids ) {
+			return '';
+		}
+
+		$fields               = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type' );
+		$ids                  = array_map( 'intval', array_column( $fields, 'id' ) );
+		$field_error_messages = '';
+
+		foreach ( $parsed_errors as $parsed_error ) {
+			$index = array_search( (int) $parsed_error['field_id'], $ids, true );
 
 			if ( false === $index ) {
 				continue;
 			}
 
-			$html_id = 'field_' . $field_keys[ $index ]->field_key . $row;
+			$field   = $fields[ $index ];
+			$html_id = 'field_' . $field->field_key . $parsed_error['row'];
 
-			if ( in_array( $field_keys[ $index ]->type, array( 'checkbox', 'radio' ), true ) ) {
-				// Needed to focus on the first option when error link is clicked.
+			if ( in_array( $field->type, array( 'checkbox', 'radio' ), true ) ) {
+				// Needed to focus on the first option when the error link is clicked.
 				$html_id .= '-0';
 			}
 
-			$field_error_messages .= '<li><a href="#' . $html_id . '">' . $error . '</a></li>';
+			$field_error_messages .= '<li><a href="#' . esc_attr( $html_id ) . '">' . esc_html( $parsed_error['error'] ) . '</a></li>';
 		}//end foreach
+
 		return $field_error_messages;
 	}
 
