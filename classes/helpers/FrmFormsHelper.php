@@ -343,12 +343,7 @@ class FrmFormsHelper {
 			return '';
 		}
 
-		$fields       = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type,field_order,form_id' );
-		$fields_by_id = array();
-
-		foreach ( $fields as $field ) {
-			$fields_by_id[ (int) $field->id ] = $field;
-		}
+		$fields_by_id = self::get_error_fields_by_id( $args, $field_ids );
 
 		// Error messages are admin configured and may include shortcodes, so allow the same
 		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
@@ -385,6 +380,62 @@ class FrmFormsHelper {
 		}//end foreach
 
 		return $field_error_messages;
+	}
+
+	/**
+	 * Map the errored field IDs to field data.
+	 *
+	 * The fields for the form have already been loaded to render or validate the submission,
+	 * so this reuses them (threaded down in $args, or the per-field cache warmed while
+	 * validating the entry) and only queries for any field it still cannot resolve, keeping
+	 * the error summary from adding a database round trip in the normal flow.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args      Includes optional 'fields'.
+	 * @param int[] $field_ids Field IDs referenced by the current errors.
+	 *
+	 * @return array Field objects keyed by field ID.
+	 */
+	private static function get_error_fields_by_id( $args, $field_ids ) {
+		$fields_by_id = array();
+
+		// Prefer the fields already prepared for the form being shown, threaded down in $args.
+		if ( ! empty( $args['fields'] ) && is_array( $args['fields'] ) ) {
+			foreach ( $args['fields'] as $field ) {
+				// Display fields arrive as arrays; normalize to the object shape used below.
+				$field = (object) $field;
+
+				if ( isset( $field->id ) ) {
+					$fields_by_id[ (int) $field->id ] = $field;
+				}
+			}
+		}
+
+		// Next, the per-field cache warmed while validating the entry (getAll caches every
+		// field by id), so an AJAX submit resolves its errored fields without a query.
+		foreach ( array_diff( $field_ids, array_keys( $fields_by_id ) ) as $field_id ) {
+			$cached = FrmDb::check_cache( $field_id, 'frm_field' );
+
+			if ( is_object( $cached ) ) {
+				$fields_by_id[ (int) $field_id ] = $cached;
+			}
+		}
+
+		// Only touch the database for fields that are still unresolved.
+		$missing = array_diff( $field_ids, array_keys( $fields_by_id ) );
+
+		if ( $missing ) {
+			echo 'Shucks';
+			die();
+			$fields = FrmDb::get_results( 'frm_fields', array( 'id' => array_values( $missing ) ), 'id,field_key,type,field_order,form_id' );
+
+			foreach ( $fields as $field ) {
+				$fields_by_id[ (int) $field->id ] = $field;
+			}
+		}
+
+		return $fields_by_id;
 	}
 
 	/**
