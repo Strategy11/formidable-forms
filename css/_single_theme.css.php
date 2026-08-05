@@ -430,6 +430,8 @@ endif;
 	list-style: inside<?php echo esc_html( $important ); ?>;
 	color: var(--error-text)<?php echo esc_html( $important ); ?>;
 	margin-bottom: 0<?php echo esc_html( $important ); ?>;
+	margin-left: 0;
+	list-style-position: outside;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a{
