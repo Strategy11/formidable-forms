@@ -435,10 +435,6 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( class_exists( 'FrmProFieldsHelper' ) && ! FrmProFieldsHelper::is_field_visible_to_user( $this->field ) ) {
-			return $errors;
-		}
-
 		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		$sub_fields = $this->get_processed_sub_fields();
 
