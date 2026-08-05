@@ -55,6 +55,7 @@ class FrmFormActionsController {
 		$action_classes = array(
 			'on_submit'         => 'FrmOnSubmitAction',
 			'email'             => 'FrmEmailAction',
+			'gated_content'     => 'FrmGatedContentAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'stripe'            => 'FrmStripeLiteAction',
@@ -134,6 +135,7 @@ class FrmFormActionsController {
 			'api'               => __( 'System integration', 'formidable' ),
 			'googlespreadsheet' => __( 'Spreadsheet sync', 'formidable' ),
 			'convertkit'        => __( 'Broadcast publishing', 'formidable' ),
+			'gated_content'     => __( 'Access control', 'formidable' ),
 		);
 
 		foreach ( self::$registered_actions->actions as $action ) {
@@ -743,7 +745,23 @@ class FrmFormActionsController {
 	 * @return bool
 	 */
 	private static function should_show_log_message( $action_type ) {
-		$logging = array( 'api', 'salesforce', 'constantcontact', 'activecampaign' );
+		$logging = array(
+			'activecampaign',
+			'api',
+			'aweber',
+			'campaignmonitor',
+			'constantcontact',
+			'convertkit',
+			'getresponse',
+			'googlespreadsheet',
+			'hubspot',
+			'mailchimp',
+			'mailpoet',
+			'n8n',
+			'salesforce',
+			'twilio',
+			'zapier',
+		);
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
@@ -1110,7 +1128,7 @@ class FrmFormActionsController {
 	 * @return string[]
 	 */
 	public static function get_lite_actions() {
-		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment', 'stripe', 'square', 'paypal' ) );
+		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment', 'stripe', 'square', 'paypal', 'gated_content' ) );
 	}
 
 	/**

@@ -324,6 +324,15 @@ namespace {
 		public static function plugin_version() {
 		}
 	}
+	class FrmViewsDisplay {
+		/**
+		 * @param int $form_id
+		 *
+		 * @return array
+		 */
+		public static function get_display_ids_by_form( $form_id ) {
+		}
+	}
 	class FrmProCreditCardsController {
 		/**
 		 * @param array  $field

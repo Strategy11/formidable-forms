@@ -1,5 +1,11 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 
+/**
+ * Internal dependencies
+ */
+const { validateField } = require( './settings/validateField' );
+const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
+
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
 		messageBox: null,
@@ -542,11 +548,11 @@ window.frmAdminBuildJS = function() {
 			tooltipTarget = tooltipTarget.parentElement;
 		}
 
-		jQuery( tooltipTarget ).tooltip();
+		const tooltip = new bootstrap.Tooltip( tooltipTarget );
 
 		if ( show ) {
 			deleteTooltips();
-			jQuery( tooltipTarget ).tooltip( 'show' );
+			tooltip.show();
 		}
 	}
 
@@ -933,7 +939,7 @@ window.frmAdminBuildJS = function() {
 		if ( auto !== 'auto' ) {
 			// Hide success message on tab change.
 			jQuery( '.frm_updated_message' ).hide();
-			jQuery( '.frm_warning_style' ).hide();
+			jQuery( '.frm_warning_style:not(.frm_force_visible_warning)' ).hide();
 		}
 
 		if ( jQuery( link ).closest( '#frm_adv_info' ).length ) {
@@ -1589,8 +1595,8 @@ window.frmAdminBuildJS = function() {
 		element.addEventListener(
 			'mouseover',
 			function() {
-				if ( null === element.getAttribute( 'data-original-title' ) ) {
-					jQuery( element ).tooltip();
+				if ( ! element.__bootstrapTooltip ) {
+					element.__bootstrapTooltip = new bootstrap.Tooltip( element );
 				}
 			}
 		);
@@ -6963,6 +6969,10 @@ window.frmAdminBuildJS = function() {
 		let replaceWith = ` ${ setting.value }`;
 		const fieldId = field.getAttribute( 'data-fid' );
 
+		if ( '' === replaceWith.trim() ) {
+			const alignOption = setting.querySelector( 'option[data-align]' );
+			replaceWith = alignOption ? ` ${ alignOption.getAttribute( 'data-align' ) }` : '';
+		}
 		// Include classes from multiple settings.
 		if ( fieldId !== undefined ) {
 			if ( setting.classList.contains( 'field_options_align' ) ) {
@@ -8790,7 +8800,9 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleBuilderChangeEvent( event ) {
-		maybeShowSaveAndReloadModal( event.target );
+		const { target } = event;
+		maybeShowSaveAndReloadModal( target );
+		validateRangeSettings( target );
 	}
 
 	/**
@@ -11042,6 +11054,51 @@ window.frmAdminBuildJS = function() {
 				}
 			} );
 
+			// Handle spam settings redirect link
+			const spamRedirectLinks = document.querySelectorAll( 'a[href="#spam_settings"]' );
+			spamRedirectLinks.forEach( function( link ) {
+				link.addEventListener( 'click', function( e ) {
+					e.preventDefault();
+					const spamTab = document.querySelector( '.frm-category-tabs a[href="#spam_settings"]' );
+					if ( spamTab ) {
+						clickTab( spamTab );
+						// Scroll to top after tab switch
+						setTimeout( function() {
+							const categoryDiv = document.getElementById( 'frm-categorydiv' );
+							if ( categoryDiv ) {
+								categoryDiv.scrollIntoView( { block: 'start' } );
+							}
+						}, 50 );
+					}
+				} );
+			} );
+
+			// Handle Captcha checkbox toggle to show/hide warnings
+			const captchaCheckbox = document.getElementById( 'frm_include_captcha' );
+			if ( captchaCheckbox ) {
+				const initialState = captchaCheckbox.checked;
+				captchaCheckbox.addEventListener( 'change', function() {
+					const addWarning = document.getElementById( 'frm_captcha_add_warning' );
+					const removeWarning = document.getElementById( 'frm_captcha_remove_warning' );
+					if ( addWarning && removeWarning ) {
+						// Only show warning if current state differs from initial state
+						if ( this.checked !== initialState ) {
+							if ( this.checked ) {
+								addWarning.style.display = 'block';
+								removeWarning.style.display = 'none';
+							} else {
+								addWarning.style.display = 'none';
+								removeWarning.style.display = 'block';
+							}
+						} else {
+							// Hide warnings if toggled back to initial state
+							addWarning.style.display = 'none';
+							removeWarning.style.display = 'none';
+						}
+					}
+				} );
+			}
+
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
 			const $loggedIn = document.getElementById( 'logged_in' );
@@ -11484,6 +11541,19 @@ window.frmAdminBuildJS = function() {
 			}
 		},
 
+		/**
+		 * @since 6.32
+		 */
+		settings: {
+			validate: {
+				validateField,
+				getRangeSettingsDefaults,
+				validateNumberRangeSetting,
+				validateStepSetting,
+				validateRangeSettings,
+			},
+		},
+
 		applyZebraStriping,
 		initModal,
 		infoModal,
@@ -11586,6 +11656,8 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		}
 	} );
 };
+
+require( './gated-content-action' );
 
 window.frmImportCsv = formID => {
 	let urlVars = '';

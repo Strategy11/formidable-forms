@@ -138,7 +138,7 @@ class FrmSerializedStringParserHelper {
 			$array_key   = $this->do_parse( $string );
 			$array_value = $this->do_parse( $string );
 
-			if ( ! is_array( $array_key ) ) {
+			if ( ! is_array( $array_key ) && null !== $array_key ) {
 				$val[ $array_key ] = $array_value;
 			}
 		}

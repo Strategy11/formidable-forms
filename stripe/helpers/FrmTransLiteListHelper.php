@@ -109,7 +109,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function no_items() {
-		esc_html_e( 'No payments found.', 'formidable' );
+		include FrmTransLiteAppHelper::plugin_path() . '/views/lists/no-payments.php';
 	}
 
 	/**

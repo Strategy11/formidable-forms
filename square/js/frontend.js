@@ -15,12 +15,13 @@
 
 	const buyerTokens = {};
 
-	// Track the state of each field in the card form
+	// Track the state of each field in the card form.
+	// postalCode is not included by default because Square hides it
+	// for cards issued in countries that don't require it (e.g., Australia).
 	const cardFields = {
 		cardNumber: false,
 		expirationDate: false,
-		cvv: false,
-		postalCode: false
+		cvv: false
 	};
 
 	async function initializeCard( payments ) {
@@ -35,10 +36,20 @@
 
 		card.configure( { style: cardStyle } );
 
+		// Track when the postal code field is rendered by Square.
+		// Square hides the postal code for cards issued in certain countries.
+		card.addEventListener( 'focusClassAdded', event => {
+			const { field } = event.detail;
+			if ( field === 'postalCode' ) {
+				cardFields.postalCode = event.detail.currentState.isCompletelyValid;
+			}
+		} );
+
 		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', event => {
 			const { field } = event.detail;
 			const value = event.detail.currentState.isCompletelyValid;
+
 			cardFields[ field ] = value;
 
 			// Check if all fields are valid
@@ -67,6 +78,8 @@
 				cardFields.postalCode = true;
 				enableSubmit();
 			} else {
+				cardFields.postalCode = false;
+				squareCardElementIsComplete = false;
 				disableSubmit();
 			}
 		} );

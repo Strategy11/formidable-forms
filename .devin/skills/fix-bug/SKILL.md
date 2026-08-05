@@ -7,7 +7,7 @@ description: Bug-fixing workflow for Formidable Forms. Use when fixing bugs, deb
 
 Structured bug-fixing workflow for the Formidable Forms plugin ecosystem, following WordPress, Formidable Forms, and WordPress VIP coding standards.
 
-This skill builds on the always-on rules in `.windsurf/rules/enterprise/` which define core principles, code change phases, writing style, and commit message format. Those rules apply automatically to every conversation. This skill extends them with bug-fix-specific steps.
+This skill builds on the always-on rules in `.devin/rules/enterprise/` which define core principles, code change phases, writing style, and commit message format. Those rules apply automatically to every conversation. This skill extends them with bug-fix-specific steps.
 
 ## When to Use
 
@@ -20,7 +20,7 @@ This skill builds on the always-on rules in `.windsurf/rules/enterprise/` which 
 
 ## Coding Standards
 
-Before writing or modifying ANY code, read and follow the applicable rules from `.windsurf/rules/`:
+Before writing or modifying ANY code, read and follow the applicable rules from `.devin/rules/`:
 
 | File type                | Rules to read                                                                                                        |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------- |

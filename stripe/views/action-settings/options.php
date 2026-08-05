@@ -3,6 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+if ( class_exists( 'FrmStrpHooksController', false ) ) {
+	// Prevent the Layout setting from appearing twice when the Stripe add-on is active.
+	return;
+}
+
 $show_layout_setting         = in_array( 'stripe', (array) $form_action->post_content['gateway'], true );
 $layout_setting_wrapper_atts = array( 'class' => 'frm_grid_container show_stripe frm-mb-xs' );
 

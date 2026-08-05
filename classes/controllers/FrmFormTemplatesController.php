@@ -352,7 +352,7 @@ class FrmFormTemplatesController {
 		}
 
 		// Update the favorite templates option.
-		update_option( self::FAVORITE_TEMPLATES_OPTION, self::$favorite_templates );
+		update_option( self::FAVORITE_TEMPLATES_OPTION, self::$favorite_templates, false );
 
 		// Return the updated list of favorite templates.
 		wp_send_json_success( self::$favorite_templates );

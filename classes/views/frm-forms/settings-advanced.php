@@ -85,10 +85,12 @@ if ( ! $values['is_template'] ) {
 	</label>
 </p>
 
+<div class="frm_note_style">
+	<?php esc_html_e( 'Spam settings have been moved to a new section.', 'formidable' ); ?>
+	<a href="#spam_settings"><?php esc_html_e( 'Click here to jump to Spam settings.', 'formidable' ); ?></a>
+</div>
+
 <?php
-if ( is_callable( 'FrmFormsController::render_spam_settings' ) ) {
-	FrmFormsController::render_spam_settings( $values );
-}
 FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 ?>
 
