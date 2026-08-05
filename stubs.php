@@ -317,7 +317,7 @@ namespace {
 		public static function is_field_visible_to_user( $field ) {
 		}
 		/**
-		 * @param array|object|int $field
+		 * @param array|int|object $field
 		 *
 		 * @return bool
 		 */
