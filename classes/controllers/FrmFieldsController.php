@@ -134,7 +134,7 @@ class FrmFieldsController {
 		$new_field = FrmField::duplicate_single_field( $field_id, $form_id );
 
 		if ( is_array( $new_field ) && ! empty( $new_field['field_id'] ) ) {
-			self::load_single_field( $new_field['field_id'], $new_field['values'] );
+			self::load_single_field( $new_field['field_id'], $new_field['values'], $form_id );
 		}
 
 		wp_die();
@@ -184,7 +184,10 @@ class FrmFieldsController {
 		}
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			$field_object->parent_form_id = $values['id'] ?? $field_object->form_id;
+			// Prefer the explicit form id. $values['id'] is not always a form id (for example when
+			// duplicating a field it is the copied field's id), so trusting it would set parent_form_id
+			// to a field id and break settings that resolve fields against the parent form.
+			$field_object->parent_form_id = $form_id ? $form_id : ( $values['id'] ?? $field_object->form_id );
 			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
