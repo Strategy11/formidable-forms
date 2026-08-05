@@ -222,11 +222,12 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	}
 
 	/**
-	 * Error text and IDs must be escaped so a malicious field key or message cannot inject markup.
+	 * Error messages may contain admin HTML, so unsafe markup is stripped while safe inline
+	 * formatting is kept, and anchors are removed so they cannot nest inside the summary link.
 	 *
 	 * @covers FrmFormsHelper::get_invalid_error_message
 	 */
-	public function test_get_invalid_error_message_escapes_output() {
+	public function test_get_invalid_error_message_sanitizes_error_html() {
 		$this->form = $this->factory->form->create_and_get();
 		$text_id    = $this->create_field_with_key( 'text', 'escape_test' );
 
@@ -234,13 +235,53 @@ class test_FrmFormsHelper extends FrmUnitTest {
 			array(
 				'form'   => $this->form,
 				'errors' => array(
-					'field' . $text_id => '<script>alert(1)</script>',
+					'field' . $text_id => '<strong>Name</strong> is required<script>alert(1)</script><a href="https://evil.test">x</a>',
 				),
 			)
 		);
 
-		$this->assertStringNotContainsString( '<script>alert(1)</script>', $message );
-		$this->assertStringContainsString( '&lt;script&gt;', $message );
+		// Scripts are removed entirely.
+		$this->assertStringNotContainsString( '<script', $message );
+		// Anchors in the message are stripped so they cannot nest inside the summary link.
+		$this->assertStringNotContainsString( 'https://evil.test', $message );
+		// The only anchor present is the summary link itself.
+		$this->assertSame( 1, substr_count( $message, '<a ' ) );
+		// Safe inline formatting from the admin message is preserved.
+		$this->assertStringContainsString( '<strong>Name</strong> is required', $message );
+	}
+
+	/**
+	 * Hidden and user ID fields render as hidden inputs that cannot receive focus, so their
+	 * errors should be listed as plain text instead of a link that would go nowhere.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_does_not_link_hidden_fields() {
+		$this->form = $this->factory->form->create_and_get();
+
+		$hidden_id = $this->create_field_with_key( 'hidden', 'my_hidden' );
+		$user_id   = $this->create_field_with_key( 'user_id', 'my_user_id' );
+		$text_id   = $this->create_field_with_key( 'text', 'visible_text' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $hidden_id => 'Hidden is required',
+					'field' . $user_id   => 'User ID is required',
+					'field' . $text_id   => 'Text is required',
+				),
+			)
+		);
+
+		// Hidden and user ID errors appear as plain list items, with no anchor to a non-focusable input.
+		$this->assertStringContainsString( '<li>Hidden is required</li>', $message );
+		$this->assertStringContainsString( '<li>User ID is required</li>', $message );
+		$this->assertStringNotContainsString( '#field_my_hidden', $message );
+		$this->assertStringNotContainsString( '#field_my_user_id', $message );
+
+		// A normal field in the same summary is still a link.
+		$this->assertStringContainsString( '<li><a href="#field_visible_text">Text is required</a></li>', $message );
 	}
 
 	/**
@@ -262,6 +303,38 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		);
 
 		$this->assertStringContainsString( '<li><a href="#field_repeated_text-2">Repeated text is required</a></li>', $message );
+	}
+
+	/**
+	 * The message wrapper defaults to role="status" but can be switched to role="alert" for errors,
+	 * so the ajax error summary is announced the same way as the non-ajax one.
+	 *
+	 * @covers FrmFormsHelper::get_success_message
+	 */
+	public function test_get_success_message_role() {
+		$form = $this->factory->form->create_and_get();
+
+		$default = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Saved.',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => 'frm_message',
+			)
+		);
+		$this->assertStringContainsString( 'role="status"', $default );
+
+		$alert = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Please correct the errors.',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => FrmFormsHelper::form_error_class(),
+				'role'     => 'alert',
+			)
+		);
+		$this->assertStringContainsString( 'role="alert"', $alert );
+		$this->assertStringNotContainsString( 'role="status"', $alert );
 	}
 
 	/**

@@ -85,6 +85,7 @@ class FrmEntriesAJAXSubmitController {
 					'form'     => $form,
 					'entry_id' => 0,
 					'class'    => FrmFormsHelper::form_error_class(),
+					'role'     => 'alert',
 				)
 			);
 		} else {

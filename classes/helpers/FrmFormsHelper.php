@@ -347,6 +347,11 @@ class FrmFormsHelper {
 		$ids                  = array_map( 'intval', array_column( $fields, 'id' ) );
 		$field_error_messages = '';
 
+		// Error messages are admin configured and may include shortcodes, so allow the same
+		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
+		// are intentionally excluded so a message link cannot nest inside the summary link.
+		$allowed_tags = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
+
 		foreach ( $parsed_errors as $parsed_error ) {
 			$index = array_search( (int) $parsed_error['field_id'], $ids, true );
 
@@ -354,7 +359,16 @@ class FrmFormsHelper {
 				continue;
 			}
 
-			$field   = $fields[ $index ];
+			$field = $fields[ $index ];
+			$error = FrmAppHelper::kses( $parsed_error['error'], $allowed_tags );
+
+			if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
+				// These render as hidden inputs, which cannot receive focus, so list the
+				// error without a link that would go nowhere when clicked.
+				$field_error_messages .= '<li>' . $error . '</li>';
+				continue;
+			}
+
 			$html_id = 'field_' . $field->field_key . $parsed_error['row'];
 
 			if ( in_array( $field->type, array( 'checkbox', 'radio' ), true ) ) {
@@ -362,7 +376,7 @@ class FrmFormsHelper {
 				$html_id .= '-0';
 			}
 
-			$field_error_messages .= '<li><a href="#' . esc_attr( $html_id ) . '">' . esc_html( $parsed_error['error'] ) . '</a></li>';
+			$field_error_messages .= '<li><a href="#' . esc_attr( $html_id ) . '">' . $error . '</a></li>';
 		}//end foreach
 
 		return $field_error_messages;
@@ -376,6 +390,9 @@ class FrmFormsHelper {
 	 *     @type stdClass $form
 	 *     @type int      $entry_id
 	 *     @type string   $class
+	 *     @type string   $role  Optional. ARIA live region role for the wrapper. Defaults to 'status'.
+	 *                           Pass 'alert' when the message reports a validation error so it is
+	 *                           announced assertively, matching the non-ajax error wrapper.
 	 * }
 	 *
 	 * @return string
@@ -403,7 +420,9 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
+		$role    = isset( $atts['role'] ) ? $atts['role'] : 'status';
+
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
 	}
 
 	/**
