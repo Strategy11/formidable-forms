@@ -146,4 +146,210 @@ class test_FrmFormsHelper extends FrmUnitTest {
 			)
 		);
 	}
+
+	/**
+	 * The invalid error message should include a list of links that jump to each field that failed validation.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_builds_clickable_field_links() {
+		$this->form = $this->factory->form->create_and_get();
+
+		$text_id     = $this->create_field_with_key( 'text', 'my_text' );
+		$select_id   = $this->create_field_with_key( 'select', 'my_select' );
+		$checkbox_id = $this->create_field_with_key( 'checkbox', 'my_checkbox' );
+		$radio_id    = $this->create_field_with_key( 'radio', 'my_radio' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $text_id     => 'Text is required',
+					'field' . $select_id   => 'Select is required',
+					'field' . $checkbox_id => 'Checkbox is required',
+					'field' . $radio_id    => 'Radio is required',
+				),
+			)
+		);
+
+		// The base invalid message is wrapped in a span, and the links are inside a list.
+		$this->assertStringContainsString( '<ul>', $message );
+		$this->assertStringContainsString( '<li><a href="#field_my_text">Text is required</a></li>', $message );
+		$this->assertStringContainsString( '<li><a href="#field_my_select">Select is required</a></li>', $message );
+
+		// Checkbox and radio links target the first option so focus lands on a real input.
+		$this->assertStringContainsString( '<li><a href="#field_my_checkbox-0">Checkbox is required</a></li>', $message );
+		$this->assertStringContainsString( '<li><a href="#field_my_radio-0">Radio is required</a></li>', $message );
+	}
+
+	/**
+	 * Non-field errors such as 'form' or 'spam' have no input to link to and should be skipped.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_skips_non_field_errors() {
+		$this->form = $this->factory->form->create_and_get();
+		$text_id    = $this->create_field_with_key( 'text', 'linkable_text' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'form'             => 'There was a problem with your submission.',
+					'spam'             => 'Your entry appears to be spam!',
+					'field' . $text_id => 'Text is required',
+				),
+			)
+		);
+
+		$this->assertStringContainsString( '<li><a href="#field_linkable_text">Text is required</a></li>', $message );
+		$this->assertStringNotContainsString( 'appears to be spam', $message );
+		$this->assertStringNotContainsString( '<a href="#field_spam', $message );
+	}
+
+	/**
+	 * With no field errors there should be no list at all, only the base message.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_without_errors_has_no_list() {
+		$this->form = $this->factory->form->create_and_get();
+
+		$message = FrmFormsHelper::get_invalid_error_message( array( 'form' => $this->form ) );
+
+		$this->assertStringNotContainsString( '<ul>', $message );
+		$this->assertStringNotContainsString( '<li>', $message );
+	}
+
+	/**
+	 * Error messages may contain admin HTML, so unsafe markup is stripped while safe inline
+	 * formatting is kept, and anchors are removed so they cannot nest inside the summary link.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_sanitizes_error_html() {
+		$this->form = $this->factory->form->create_and_get();
+		$text_id    = $this->create_field_with_key( 'text', 'escape_test' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $text_id => '<strong>Name</strong> is required<script>alert(1)</script><a href="https://evil.test">x</a>',
+				),
+			)
+		);
+
+		// Scripts are removed entirely.
+		$this->assertStringNotContainsString( '<script', $message );
+		// Anchors in the message are stripped so they cannot nest inside the summary link.
+		$this->assertStringNotContainsString( 'https://evil.test', $message );
+		// The only anchor present is the summary link itself.
+		$this->assertSame( 1, substr_count( $message, '<a ' ) );
+		// Safe inline formatting from the admin message is preserved.
+		$this->assertStringContainsString( '<strong>Name</strong> is required', $message );
+	}
+
+	/**
+	 * Hidden and user ID fields render as hidden inputs that cannot receive focus, so their
+	 * errors should be listed as plain text instead of a link that would go nowhere.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_does_not_link_hidden_fields() {
+		$this->form = $this->factory->form->create_and_get();
+
+		$hidden_id = $this->create_field_with_key( 'hidden', 'my_hidden' );
+		$user_id   = $this->create_field_with_key( 'user_id', 'my_user_id' );
+		$text_id   = $this->create_field_with_key( 'text', 'visible_text' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $hidden_id => 'Hidden is required',
+					'field' . $user_id   => 'User ID is required',
+					'field' . $text_id   => 'Text is required',
+				),
+			)
+		);
+
+		// Hidden and user ID errors appear as plain list items, with no anchor to a non-focusable input.
+		$this->assertStringContainsString( '<li>Hidden is required</li>', $message );
+		$this->assertStringContainsString( '<li>User ID is required</li>', $message );
+		$this->assertStringNotContainsString( '#field_my_hidden', $message );
+		$this->assertStringNotContainsString( '#field_my_user_id', $message );
+
+		// A normal field in the same summary is still a link.
+		$this->assertStringContainsString( '<li><a href="#field_visible_text">Text is required</a></li>', $message );
+	}
+
+	/**
+	 * A repeater style error key (field{id}-{row_meta}-{row}) should link to the field in the correct row.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_handles_repeater_row_keys() {
+		$this->form = $this->factory->form->create_and_get();
+		$text_id    = $this->create_field_with_key( 'text', 'repeated_text' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $text_id . '-55-2' => 'Repeated text is required',
+				),
+			)
+		);
+
+		$this->assertStringContainsString( '<li><a href="#field_repeated_text-2">Repeated text is required</a></li>', $message );
+	}
+
+	/**
+	 * The message wrapper defaults to role="status" but can be switched to role="alert" for errors,
+	 * so the ajax error summary is announced the same way as the non-ajax one.
+	 *
+	 * @covers FrmFormsHelper::get_success_message
+	 */
+	public function test_get_success_message_role() {
+		$form = $this->factory->form->create_and_get();
+
+		$default = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Saved.',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => 'frm_message',
+			)
+		);
+		$this->assertStringContainsString( 'role="status"', $default );
+
+		$alert = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Please correct the errors.',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => FrmFormsHelper::form_error_class(),
+				'role'     => 'alert',
+			)
+		);
+		$this->assertStringContainsString( 'role="alert"', $alert );
+		$this->assertStringNotContainsString( 'role="status"', $alert );
+	}
+
+	/**
+	 * @param string $type
+	 * @param string $field_key
+	 *
+	 * @return int
+	 */
+	private function create_field_with_key( $type, $field_key ) {
+		return $this->factory->field->create(
+			array(
+				'form_id'   => $this->form->id,
+				'type'      => $type,
+				'field_key' => $field_key,
+			)
+		);
+	}
 }

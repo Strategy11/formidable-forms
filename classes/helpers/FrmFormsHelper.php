@@ -288,15 +288,14 @@ class FrmFormsHelper {
 			$settings_args['current_form'] = $args['form']->id;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-
+		$frm_settings         = FrmAppHelper::get_settings( $settings_args );
 		$field_error_messages = self::get_clickable_field_error_messages( $args );
-
-		$invalid_msg = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+		$invalid_msg          = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
 
 		if ( $field_error_messages ) {
 			$invalid_msg .= "<ul>$field_error_messages</ul>";
 		}
+
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
@@ -310,30 +309,20 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	private static function get_clickable_field_error_messages( $args ) {
-		$field_error_messages = '';
-
 		if ( empty( $args['errors'] ) ) {
-			return $field_error_messages;
+			return '';
 		}
 
-		$field_ids  = array_map(
-			function ( $field_plus_id ) {
-				$field_id = str_replace( 'field', '', $field_plus_id );
-
-				if ( strpos( $field_id, '-' ) !== false ) {
-					$field_id = explode( '-', $field_id )[0];
-				}
-				return $field_id;
-			},
-			array_keys( $args['errors'] )
-		);
-		$field_keys = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type' );
+		// Parse each error key once into its field ID and repeater row suffix, skipping
+		// non-field errors like 'form' or 'spam' that have no input to link to.
+		$parsed_errors = array();
+		$field_ids     = array();
 
 		foreach ( $args['errors'] as $field_plus_id => $error ) {
-			$field_id = str_replace( 'field', '', $field_plus_id );
+			$field_id = preg_replace( '/^field/', '', $field_plus_id );
 			$row      = '';
 
-			if ( strpos( $field_id, '-' ) !== false ) {
+			if ( str_contains( $field_id, '-' ) ) {
 				$field_id_parts = explode( '-', $field_id );
 
 				if ( count( $field_id_parts ) === 3 ) {
@@ -342,22 +331,88 @@ class FrmFormsHelper {
 				}
 			}
 
-			$index = array_search( $field_id, array_column( $field_keys, 'id' ), true );
-
-			if ( false === $index ) {
+			if ( ! is_numeric( $field_id ) ) {
 				continue;
 			}
 
-			$html_id = 'field_' . $field_keys[ $index ]->field_key . $row;
+			$field_ids[]     = (int) $field_id;
+			$parsed_errors[] = compact( 'field_id', 'row', 'error' );
+		}
 
-			if ( in_array( $field_keys[ $index ]->type, array( 'checkbox', 'radio' ), true ) ) {
-				// Needed to focus on the first option when error link is clicked.
+		if ( ! $field_ids ) {
+			return '';
+		}
+
+		$fields       = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type,field_order,form_id' );
+		$fields_by_id = array();
+
+		foreach ( $fields as $field ) {
+			$fields_by_id[ (int) $field->id ] = $field;
+		}
+
+		// Error messages are admin configured and may include shortcodes, so allow the same
+		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
+		// are intentionally excluded so a message link cannot nest inside the summary link.
+		$allowed_tags         = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
+		$field_error_messages = '';
+
+		foreach ( $parsed_errors as $parsed_error ) {
+			$field_id = (int) $parsed_error['field_id'];
+
+			if ( ! isset( $fields_by_id[ $field_id ] ) ) {
+				continue;
+			}
+
+			$field = $fields_by_id[ $field_id ];
+			$error = FrmAppHelper::kses( $parsed_error['error'], $allowed_tags );
+
+			if ( ! self::error_field_is_linkable( $field ) ) {
+				// The field has no focusable input on the page being shown (a hidden field, or a
+				// field on another page of a multi-page form), so list the error as plain text
+				// rather than a link that would go nowhere when clicked.
+				$field_error_messages .= '<li>' . $error . '</li>';
+				continue;
+			}
+
+			$html_id = 'field_' . $field->field_key . $parsed_error['row'];
+
+			if ( in_array( $field->type, array( 'checkbox', 'radio' ), true ) ) {
+				// Needed to focus on the first option when the error link is clicked.
 				$html_id .= '-0';
 			}
 
-			$field_error_messages .= '<li><a href="#' . $html_id . '">' . $error . '</a></li>';
+			$field_error_messages .= '<li><a href="#' . esc_attr( $html_id ) . '">' . $error . '</a></li>';
 		}//end foreach
+
 		return $field_error_messages;
+	}
+
+	/**
+	 * Whether an error summary should link to the field, or just list its message as plain text.
+	 *
+	 * A link is only useful when the field renders a focusable input that is actually on the page
+	 * being shown. Hidden and user ID fields render as hidden inputs that cannot receive focus, and
+	 * a field on another page of a multi-page form is not visible, so neither should be linked.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field Field row with at least type, field_order and form_id.
+	 *
+	 * @return bool
+	 */
+	private static function error_field_is_linkable( $field ) {
+		if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
+			// Hidden inputs cannot receive focus, so there is nothing to link to.
+			return false;
+		}
+
+		if ( ! is_callable( 'FrmProFieldsHelper::field_on_current_page' ) ) {
+			// Multi-page forms are a Pro feature; in Lite every field is on the only page.
+			return true;
+		}
+
+		// On a multi-page form, do not link a field that is on a page other than the one being shown.
+		return FrmProFieldsHelper::field_on_current_page( $field );
 	}
 
 	/**
@@ -368,6 +423,9 @@ class FrmFormsHelper {
 	 *     @type stdClass $form
 	 *     @type int      $entry_id
 	 *     @type string   $class
+	 *     @type string   $role  Optional. ARIA live region role for the wrapper. Defaults to 'status'.
+	 *                           Pass 'alert' when the message reports a validation error so it is
+	 *                           announced assertively, matching the non-ajax error wrapper.
 	 * }
 	 *
 	 * @return string
@@ -395,7 +453,9 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
+		$role    = $atts['role'] ?? 'status';
+
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
 	}
 
 	/**

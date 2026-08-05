@@ -423,20 +423,21 @@ endif;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style span{
-	font-weight: bold<?php echo esc_html( $important ); ?>;;
+	font-weight: bold<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul{
-	list-style: inside<?php echo esc_html( $important ); ?>;;
-	color: <?php echo esc_html( $error_text . $important ); ?>;
+	list-style: inside<?php echo esc_html( $important ); ?>;
+	color: var(--error-text)<?php echo esc_html( $important ); ?>;
+	margin-bottom: 0<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a{
-	color: <?php echo esc_html( $error_text . $important ); ?>;
+	color: var(--error-text)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:hover{
-	text-decoration: underline<?php echo esc_html( $important ); ?>;;
+	text-decoration: underline<?php echo esc_html( $important ); ?>;
 }
 
 <?php if ( $pro_is_installed ) { ?>
