@@ -322,7 +322,7 @@ class FrmFormsHelper {
 			$field_id = preg_replace( '/^field/', '', $field_plus_id );
 			$row      = '';
 
-			if ( strpos( $field_id, '-' ) !== false ) {
+			if ( str_contains( $field_id, '-' ) ) {
 				$field_id_parts = explode( '-', $field_id );
 
 				if ( count( $field_id_parts ) === 3 ) {
@@ -344,8 +344,13 @@ class FrmFormsHelper {
 		}
 
 		$fields               = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type,field_order,form_id' );
-		$ids                  = array_map( 'intval', array_column( $fields, 'id' ) );
 		$field_error_messages = '';
+
+		$fields_by_id = array();
+
+		foreach ( $fields as $field ) {
+			$fields_by_id[ (int) $field->id ] = $field;
+		}
 
 		// Error messages are admin configured and may include shortcodes, so allow the same
 		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
@@ -353,13 +358,13 @@ class FrmFormsHelper {
 		$allowed_tags = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
 
 		foreach ( $parsed_errors as $parsed_error ) {
-			$index = array_search( (int) $parsed_error['field_id'], $ids, true );
+			$field_id = (int) $parsed_error['field_id'];
 
-			if ( false === $index ) {
+			if ( ! isset( $fields_by_id[ $field_id ] ) ) {
 				continue;
 			}
 
-			$field = $fields[ $index ];
+			$field = $fields_by_id[ $field_id ];
 			$error = FrmAppHelper::kses( $parsed_error['error'], $allowed_tags );
 
 			if ( ! self::error_field_is_linkable( $field ) ) {
@@ -398,14 +403,17 @@ class FrmFormsHelper {
 	 */
 	private static function error_field_is_linkable( $field ) {
 		if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
+			// Hidden inputs cannot receive focus, so there is nothing to link to.
 			return false;
 		}
 
-		if ( is_callable( 'FrmProFieldsHelper::field_on_current_page' ) && ! FrmProFieldsHelper::field_on_current_page( $field ) ) {
-			return false;
+		if ( ! is_callable( 'FrmProFieldsHelper::field_on_current_page' ) ) {
+			// Multi-page forms are a Pro feature; in Lite every field is on the only page.
+			return true;
 		}
 
-		return true;
+		// On a multi-page form, do not link a field that is on a page other than the one being shown.
+		return FrmProFieldsHelper::field_on_current_page( $field );
 	}
 
 	/**
@@ -446,7 +454,7 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		$role    = isset( $atts['role'] ) ? $atts['role'] : 'status';
+		$role    = $atts['role'] ?? 'status';
 
 		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
 	}
