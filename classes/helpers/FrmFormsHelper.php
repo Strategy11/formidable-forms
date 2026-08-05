@@ -343,7 +343,7 @@ class FrmFormsHelper {
 			return '';
 		}
 
-		$fields               = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type' );
+		$fields               = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type,field_order,form_id' );
 		$ids                  = array_map( 'intval', array_column( $fields, 'id' ) );
 		$field_error_messages = '';
 
@@ -362,9 +362,10 @@ class FrmFormsHelper {
 			$field = $fields[ $index ];
 			$error = FrmAppHelper::kses( $parsed_error['error'], $allowed_tags );
 
-			if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
-				// These render as hidden inputs, which cannot receive focus, so list the
-				// error without a link that would go nowhere when clicked.
+			if ( ! self::error_field_is_linkable( $field ) ) {
+				// The field has no focusable input on the page being shown (a hidden field, or a
+				// field on another page of a multi-page form), so list the error as plain text
+				// rather than a link that would go nowhere when clicked.
 				$field_error_messages .= '<li>' . $error . '</li>';
 				continue;
 			}
@@ -380,6 +381,31 @@ class FrmFormsHelper {
 		}//end foreach
 
 		return $field_error_messages;
+	}
+
+	/**
+	 * Whether an error summary should link to the field, or just list its message as plain text.
+	 *
+	 * A link is only useful when the field renders a focusable input that is actually on the page
+	 * being shown. Hidden and user ID fields render as hidden inputs that cannot receive focus, and
+	 * a field on another page of a multi-page form is not visible, so neither should be linked.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field Field row with at least type, field_order and form_id.
+	 *
+	 * @return bool
+	 */
+	private static function error_field_is_linkable( $field ) {
+		if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
+			return false;
+		}
+
+		if ( is_callable( 'FrmProFieldsHelper::field_on_current_page' ) && ! FrmProFieldsHelper::field_on_current_page( $field ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
