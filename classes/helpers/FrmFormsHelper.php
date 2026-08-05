@@ -343,9 +343,7 @@ class FrmFormsHelper {
 			return '';
 		}
 
-		$fields               = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type,field_order,form_id' );
-		$field_error_messages = '';
-
+		$fields       = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type,field_order,form_id' );
 		$fields_by_id = array();
 
 		foreach ( $fields as $field ) {
@@ -355,7 +353,8 @@ class FrmFormsHelper {
 		// Error messages are admin configured and may include shortcodes, so allow the same
 		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
 		// are intentionally excluded so a message link cannot nest inside the summary link.
-		$allowed_tags = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
+		$allowed_tags         = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
+		$field_error_messages = '';
 
 		foreach ( $parsed_errors as $parsed_error ) {
 			$field_id = (int) $parsed_error['field_id'];
