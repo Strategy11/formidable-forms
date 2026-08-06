@@ -147,9 +147,7 @@ class FrmTransLiteDb {
 		 */
 		do_action( 'frm_before_destroy_' . $this->singular, $id );
 
-		// @codingStandardsIgnoreStart
-		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d', $id ) );
-		// @codingStandardsIgnoreEnd
+		return $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id=%d', $wpdb->prefix . $this->table_name, $id ) );
 	}
 
 	/**
@@ -160,14 +158,13 @@ class FrmTransLiteDb {
 	public function get_one( $id ) {
 		global $wpdb;
 
-		// @codingStandardsIgnoreStart
 		return $wpdb->get_row(
 			$wpdb->prepare(
-				'SELECT * FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d',
+				'SELECT * FROM %i WHERE id=%d',
+				$wpdb->prefix . $this->table_name,
 				$id
 			)
 		);
-		// @codingStandardsIgnoreEnd
 	}
 
 	/**
@@ -183,17 +180,15 @@ class FrmTransLiteDb {
 		}
 
 		global $wpdb;
-		// Can this be exploited?
-		$field = sanitize_text_field( $field );
-		// @codingStandardsIgnoreStart
+
 		return $wpdb->get_row(
 			$wpdb->prepare(
-				'SELECT * FROM ' . $wpdb->prefix . $this->table_name
-				. ' WHERE ' . $field . ' = %s ORDER BY created_at DESC',
+				'SELECT * FROM %i WHERE %i = %s ORDER BY created_at DESC',
+				$wpdb->prefix . $this->table_name,
+				$field,
 				$id
 			)
 		);
-		// @codingStandardsIgnoreEnd
 	}
 
 	/**
@@ -216,15 +211,15 @@ class FrmTransLiteDb {
 		}
 
 		global $wpdb;
-		// @codingStandardsIgnoreStart
+
 		return $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT * FROM ' . $wpdb->prefix . $this->table_name
-				. ' WHERE ' . $field . ' = %s ORDER BY created_at DESC',
+				'SELECT * FROM %i WHERE %i = %s ORDER BY created_at DESC',
+				$wpdb->prefix . $this->table_name,
+				$field,
 				$value
 			)
 		);
-		// @codingStandardsIgnoreEnd
 	}
 
 	/**
@@ -234,21 +229,22 @@ class FrmTransLiteDb {
 	 */
 	public function get_all_for_user( $user_id ) {
 		global $wpdb;
-		// @codingStandardsIgnoreStart
+
 		return $wpdb->get_results(
 			$wpdb->prepare(
 				'SELECT
 					*,
 					e.id as entry_id,
 					p.id as id
-				FROM ' . $wpdb->prefix . $this->table_name . ' p '
-				. 'LEFT JOIN ' . $wpdb->prefix . 'frm_items e ON e.id = p.item_id '
-				. 'WHERE e.user_id = %d '
-				. 'ORDER BY p.created_at DESC',
+				FROM %i p
+				LEFT JOIN %i e ON e.id = p.item_id
+				WHERE e.user_id = %d
+				ORDER BY p.created_at DESC',
+				$wpdb->prefix . $this->table_name,
+				$wpdb->prefix . 'frm_items',
 				$user_id
 			)
 		);
-		// @codingStandardsIgnoreEnd
 	}
 
 	/**
@@ -265,11 +261,7 @@ class FrmTransLiteDb {
 	 */
 	public function get_count() {
 		global $wpdb;
-		// @codingStandardsIgnoreStart
-		return $wpdb->get_var(
-			'SELECT COUNT(*) FROM ' . $wpdb->prefix . $this->table_name
-		);
-		// @codingStandardsIgnoreEnd
+		return $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $wpdb->prefix . $this->table_name ) );
 	}
 
 	/**
