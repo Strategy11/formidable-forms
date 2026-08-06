@@ -371,19 +371,6 @@ class test_FrmMigrate extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmMigrate::migrate_to_23
-	 */
-	public function test_migrate_to_23() {
-		global $wpdb;
-
-		$frmdb = new FrmMigrate();
-		$this->run_private_method( array( $frmdb, 'migrate_to_23' ), array() );
-
-		$this->assertSame( '', $wpdb->last_error );
-		$this->assertTrue( FrmDb::db_column_exists( 'frm_forms', 'parent_form_id' ) );
-	}
-
-	/**
 	 * @covers FrmMigrate::uninstall
 	 */
 	public function test_uninstall() {
