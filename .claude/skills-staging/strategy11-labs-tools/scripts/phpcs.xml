@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<ruleset name="Strategy11-Labs">
+    <description>PHPCS ruleset for Strategy11 Labs plugins. Enforces WordPress coding
+    standards with an emphasis on security sniffs.</description>
+
+    <!-- Scan all PHP files in the plugin directory -->
+    <file>.</file>
+
+    <!-- Ignore third-party code -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/.git/*</exclude-pattern>
+
+    <!-- WordPress coding standards (Extra includes all security sniffs) -->
+    <rule ref="WordPress-Extra">
+        <!-- House style enforces long array syntax via the rule below; exclude the
+             conflicting short-array sniff so the two don't fight (WPCS 2.x/3.x). -->
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
+    </rule>
+    <rule ref="WordPress-Docs"/>
+
+    <!-- Enforce long array syntax array() not [] (house style) -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+    <!-- Minimum PHP and WP versions to check against -->
+    <config name="testVersion" value="7.4-"/>
+    <config name="minimum_supported_wp_version" value="6.3"/>
+
+    <!-- Report full error codes so they can be targeted for exclusion if needed -->
+    <arg value="s"/>
+
+    <!-- Coloured output, show progress -->
+    <arg name="colors"/>
+    <arg value="p"/>
+
+    <!-- Key security rules included via WordPress-Extra:
+         - WordPress.Security.EscapeOutput       (escaping at echo)
+         - WordPress.Security.NonceVerification   (nonce checks on form/AJAX)
+         - WordPress.Security.ValidatedSanitizedInput (sanitize before use)
+         - WordPress.DB.PreparedSQL               ($wpdb->prepare on raw SQL)
+         - WordPress.DB.DirectDatabaseQuery       (flag raw DB calls)
+         - WordPress.PHP.DiscouragedPHPFunctions  (eval, system, exec etc.)
+         - WordPress.WP.AlternativeFunctions      (prefer WP functions)
+
+         WordPress-Docs enforces complete docblocks, including a @param comment
+         for every parameter (Squiz.Commenting.FunctionComment) — keep it enabled.
+
+         Lint coverage rule: every PHP/JS file shipped must be covered by the
+         linter. Do not add files that escape phpcs/eslint (the reviewer rejects
+         "files that aren't getting validated"). Wire new JS files into the
+         eslint config and keep <file>.</file> broad enough to catch new PHP.
+
+         Style conventions that have no off-the-shelf sniff (negative-leading
+         conditionals, double-escaping after array_to_html_params, returning
+         apply_filters() without a cast, jQuery-over-vanilla) are enforced by the
+         independent API review in api_review.py, category "Convention".
+    -->
+</ruleset>

@@ -1,0 +1,26 @@
+parameters:
+    # Level 5 catches real bugs without being noisy on a typical WordPress codebase.
+    # Raise to 6–8 incrementally once the codebase is clean at 5.
+    level: 5
+
+    paths:
+        - .
+
+    excludePaths:
+        analyse:
+            - vendor
+            - node_modules
+
+    # WordPress stubs: PHPStan doesn't know about WP globals/functions by default.
+    # The wp-phpstan/wordpress-stubs package is installed by review.sh.
+    bootstrapFiles: []
+
+    # Suppress noise from WP's loose typing of options/meta values
+    checkMissingIterableValueType: false
+
+    # Don't require return type declarations — not realistic for WP plugins yet
+    checkPhpDocMissingReturn: false
+
+    ignoreErrors:
+        # WordPress plugin file headers trigger "no code in file" notices
+        - '#Ignore\s#'
