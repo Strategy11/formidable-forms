@@ -710,8 +710,8 @@ class FrmFormsListHelper extends FrmListHelper {
 		$like_where = implode( ' OR ', $like_where );
 		$where      = "post_type IN ('post', 'page') AND ($like_where)";
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$posts = $wpdb->get_results( "SELECT ID,post_title,post_name FROM $wpdb->posts WHERE $where" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$posts = $wpdb->get_results( $wpdb->prepare( 'SELECT ID,post_title,post_name FROM %i', $wpdb->posts ) . ' WHERE ' . $where );
 
 		if ( ! is_array( $posts ) ) {
 			return array();

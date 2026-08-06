@@ -55,7 +55,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	public static function show_cancel_link( $sub, $atts = array() ) {
 		if ( ! isset( $sub->user_id ) ) {
 			global $wpdb;
-			$sub->user_id = $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $sub->item_id ) );
+			$sub->user_id = $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $sub->item_id ) );
 		}
 
 		$link = self::cancel_link( $sub, $atts );

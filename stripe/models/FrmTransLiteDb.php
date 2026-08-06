@@ -326,14 +326,14 @@ class FrmTransLiteDb {
 	 */
 	private function migrate_to_4() {
 		global $wpdb;
-		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . 'frm_payments LIKE %s', 'completed' ) );
+		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM %i LIKE %s', $wpdb->prefix . 'frm_payments', 'completed' ) );
 
 		if ( ! $result ) {
 			return;
 		}
 
 		$payments = $wpdb->get_results(
-			"SELECT * FROM {$wpdb->prefix}frm_payments WHERE completed is NOT NULL AND status is NULL"
+			$wpdb->prepare( 'SELECT * FROM %i WHERE completed is NOT NULL AND status is NULL', $wpdb->prefix . 'frm_payments' )
 		);
 
 		foreach ( $payments as $payment ) {

@@ -383,8 +383,8 @@ class FrmEntry {
 		 */
 		do_action( 'frm_before_destroy_entry', $id, $entry );
 
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE item_id=%d', $id ) );
-		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $id ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE item_id=%d', $wpdb->prefix . 'frm_item_metas', $id ) );
+		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id ) );
 
 		self::clear_cache();
 

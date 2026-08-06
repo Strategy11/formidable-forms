@@ -176,7 +176,8 @@ class FrmStrpLiteEventsController {
 		}
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM $wpdb->usermeta WHERE meta_value = %s AND meta_key LIKE %s",
+				'DELETE FROM %i WHERE meta_value = %s AND meta_key LIKE %s',
+				$wpdb->usermeta,
 				$customer_id,
 				'_frmstrp_customer_id%'
 			)
