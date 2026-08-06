@@ -3089,24 +3089,40 @@ window.frmAdminBuildJS = function() {
 			}
 
 			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
-			if ( shouldShowFieldLabelShortcode( fields[ i ].fieldType, fields[ i ].fieldId ) ) {
-				addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId + ' show=label', fields[ i ].fieldName + ' (Label)', fields[ i ].fieldType );
-			}
-			maybeAddNamePartShortcodes( fields[ i ], fieldId, list );
 
-			/**
-			 * Allows add-ons to add field part shortcodes to calculation popup.
-			 *
-			 * @since x.x
-			 *
-			 * @param {Object}      hookArgs                      Arguments passed to the hook.
-			 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
-			 * @param {Number}      hookArgs.fieldId              ID of the field triggering the popup.
-			 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
-			 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
-			 */
-			wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field: fields[ i ], fieldId, list, addCalcFieldLiToList } );
+			if ( ! isSummary ) {
+				// The summary field list is a list of fields to exclude, not a list of shortcodes, so field parts don't belong in it.
+				addFieldPartShortcodes( fields[ i ], fieldId, list );
+			}
 		}
+	}
+
+	/**
+	 * Adds shortcodes for the individual parts of a multi-part field, like [25 show=last] for a Name field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
+	 * @param {Number}      fieldId ID of the field the popup was opened for.
+	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
+	 *
+	 * @returns {void}
+	 */
+	function addFieldPartShortcodes( field, fieldId, list ) {
+		maybeAddNamePartShortcodes( field, fieldId, list );
+
+		/**
+		 * Allows add-ons to add field part shortcodes to calculation popup.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object}      hookArgs                      Arguments passed to the hook.
+		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
+		 * @param {Number}      hookArgs.fieldId              ID of the field triggering the popup.
+		 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
+		 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
+		 */
+		wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field, fieldId, list, addCalcFieldLiToList } );
 	}
 
 	/**
@@ -3124,11 +3140,8 @@ window.frmAdminBuildJS = function() {
 		if ( 'name' !== field.fieldType ) {
 			return;
 		}
-		Object.entries( {
-			first: __( 'First', 'formidable' ),
-			middle: __( 'Middle', 'formidable' ),
-			last: __( 'Last', 'formidable' ),
-		} ).forEach(
+
+		Object.entries( getNamePartLabels( field.fieldId ) ).forEach(
 			( [ code, label ] ) => {
 				addCalcFieldLiToList(
 					list,
@@ -3142,17 +3155,32 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Returns true if [fieldId show=label] type shortcodes should be available in calculation fields popup.
+	 * Gets the parts of a Name field that are in use, keyed by their show= value.
+	 * Only the parts included in the selected name layout have a value to show.
 	 *
 	 * @since x.x
 	 *
-	 * @param {string} fieldType
-	 * @param {Number} fieldId
+	 * @param {String} nameFieldId ID of the Name field.
 	 *
-	 * @returns {Boolean}
+	 * @returns {Object} Part labels keyed by their show= value, in layout order.
 	 */
-	function shouldShowFieldLabelShortcode( fieldType, fieldId ) {
-		return [ 'radio', 'checkbox', 'dropdown' ].includes( fieldType ) && !! document.getElementById( `separate_value_${ fieldId }` )?.checked;
+	function getNamePartLabels( nameFieldId ) {
+		const labels = {
+			first: __( 'First', 'formidable' ),
+			middle: __( 'Middle', 'formidable' ),
+			last: __( 'Last', 'formidable' )
+		};
+		// The layout option names the parts in use, in display order, like first_middle_last.
+		const layout = document.getElementById( 'name_layout_' + nameFieldId )?.value || 'first_last';
+		const parts = {};
+
+		layout.split( '_' ).forEach( part => {
+			if ( labels[ part ] ) {
+				parts[ part ] = labels[ part ];
+			}
+		} );
+
+		return parts;
 	}
 
 	/**
@@ -3168,10 +3196,8 @@ window.frmAdminBuildJS = function() {
 		const anchor = a( {
 			className: 'frm_insert_code',
 			children: [
-				span( {
-					text: '[' + code + ']'
-				} ),
-				document.createTextNode( label )
+				span( label ),
+				span( { className: 'frm-text-sm frm-text-grey-500', text: '[' + code + ']' } )
 			],
 			data: {
 				code
@@ -3182,7 +3208,7 @@ window.frmAdminBuildJS = function() {
 			tag(
 				'li',
 				{
-					className: 'frm-field-list-' + fieldId + ' ' + 'frm-field-list-' + fieldType,
+					className: 'frm-field-list-' + fieldId + ' frm-field-list-' + fieldType,
 					child: anchor
 				}
 			)

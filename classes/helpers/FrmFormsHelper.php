@@ -744,7 +744,7 @@ BEFORE_HTML;
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_attr( $args['key_label'] ?? FrmAppHelper::truncate( $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
