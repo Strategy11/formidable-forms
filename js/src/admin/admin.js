@@ -3296,16 +3296,24 @@ window.frmAdminBuildJS = function() {
 		const codeList = box.querySelector( '.frm_code_list' );
 		const exclude = getExcludeArray( codeList, isSummary );
 		const excludedOpts = extractExcludedOptions( exclude );
-		const numericTypes = isMathCalcType( box ) ? getNumericFieldTypes( codeList ) : null;
 
-		const fields = getFieldList();
+		/**
+		 * Filters the fields offered in a calculation box.
+		 *
+		 * Add-ons that own a calculation type can drop fields it can't use. When
+		 * nothing is hooked in, every field is offered, matching the behavior
+		 * before calculation-type specific filtering existed.
+		 *
+		 * @param {Array}  fields The candidate fields.
+		 * @param {Object} args   Context with the box, code list, and isSummary flag.
+		 */
+		const fields = wp.hooks.applyFilters( 'frm_calc_field_list', getFieldList(), { box, codeList, isSummary } );
 		const list = document.getElementById( `frm-calc-list-${ fieldId }` );
 		list.innerHTML = '';
 
 		for ( let i = 0; i < fields.length; i++ ) {
 			if ( exclude?.includes( fields[ i ].fieldType ) ||
-				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ||
-				( numericTypes && ! numericTypes.includes( fields[ i ].fieldType ) ) ) {
+				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
 
@@ -3351,32 +3359,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		return exclude;
-	}
-
-	/**
-	 * Gets the numeric field types from the calculation box.
-	 *
-	 * @param {HTMLElement} codeList The code list element.
-	 * @return {Array|null} The numeric field types, or null if not available.
-	 */
-	function getNumericFieldTypes( codeList ) {
-		const numericTypes = codeList.dataset.numericTypes;
-		return numericTypes ? JSON.parse( numericTypes ) : null;
-	}
-
-	/**
-	 * Checks if the calculation is a math calculation.
-	 *
-	 * @param {HTMLElement} calcBox The calculation box element.
-	 * @return {boolean} True if the calculation is a math calculation, false otherwise.
-	 */
-	function isMathCalcType( calcBox ) {
-		const fieldFormula = calcBox.parentElement;
-		if ( ! fieldFormula?.classList.contains( 'frm-field-formula' ) ) {
-			return false;
-		}
-
-		return document.querySelector( `input[name="field_options[calc_type_${ fieldFormula.dataset.fieldId }]"]:checked` ).value !== 'text';
 	}
 
 	function getIncludedExtras() {
