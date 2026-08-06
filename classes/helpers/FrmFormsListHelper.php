@@ -6,12 +6,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsListHelper extends FrmListHelper {
 
 	/**
+	 * The transient name that stores data for which posts a form is embedded in.
+	 *
+	 * @since 6.32
+	 *
+	 * @var string
+	 */
+	private static $embed_posts_transient_name = 'frm_posts_contain_form';
+
+	/**
 	 * @var string
 	 */
 	public $status = '';
 
 	public $total_items = 0;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
@@ -27,17 +39,18 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function prepare_items() {
-		global $wpdb, $per_page, $mode;
+		global $per_page, $mode;
 
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
 
-		$mode    = self::get_param(
+		$mode = self::get_param(
 			array(
 				'param'   => 'mode',
 				'default' => 'list',
 			)
 		);
+
 		$orderby = self::get_param(
 			array(
 				'param'   => 'orderby',
@@ -53,7 +66,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		$start   = self::get_param(
+		$start = self::get_param(
 			array(
 				'param'   => 'start',
 				'default' => ( $page - 1 ) * $per_page,
@@ -88,7 +101,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( $s != '' ) {
+		if ( $s !== '' ) {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
 
@@ -121,14 +134,40 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function no_items() {
+		$s = self::get_param(
+			array(
+				'param'    => 's',
+				'sanitize' => 'sanitize_text_field',
+			)
+		);
+
+		if ( $s !== '' ) {
+			$current_url = set_url_scheme(
+				'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' )
+			);
+			$clear_url   = remove_query_arg( 's', $current_url );
+
+			echo '<p>';
+			printf(
+				/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+				esc_html__( 'No forms match your search. %1$sClear search%2$s', 'formidable' ),
+				'<a href="' . esc_url( $clear_url ) . '">',
+				'</a>'
+			);
+			echo '</p>';
+			return;
+		}
+
 		if ( $this->status === 'trash' ) {
 			echo '<p>';
 			esc_html_e( 'No forms found in the trash.', 'formidable' );
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
 				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 			echo '</p>';
 		} else {
 			$title = __( 'No Forms Found', 'formidable' );
@@ -166,13 +205,17 @@ class FrmFormsListHelper extends FrmListHelper {
 			return;
 		}
 
-		if ( 'trash' === $this->status && current_user_can( 'frm_delete_forms' ) ) {
-			?>
-			<div class="alignleft actions frm_visible_overflow">
-				<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
-			</div>
-			<?php
+		if ( 'trash' !== $this->status || ! current_user_can( 'frm_delete_forms' ) ) {
+			return;
 		}
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<div class="alignleft actions frm_visible_overflow">
+			<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
+		</div>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -201,16 +244,11 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		foreach ( $statuses as $status => $name ) {
-
-			if ( $status == $form_type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status == $form_type ? ' class="current"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */
-				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>';
+				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 
 			unset( $status, $name );
@@ -220,28 +258,13 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param string $which
-	 *
-	 * @return void
-	 */
-	public function pagination( $which ) {
-		global $mode;
-
-		parent::pagination( $which );
-
-		if ( 'top' === $which ) {
-			$this->view_switcher( $mode );
-		}
-	}
-
-	/**
 	 * @param stdClass $item
 	 * @param string   $style
 	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
-		global $frm_vars, $mode;
+		global $mode;
 
 		// Set up the hover actions for this user
 		$actions   = array();
@@ -250,18 +273,8 @@ class FrmFormsListHelper extends FrmListHelper {
 		$this->get_actions( $actions, $item, $edit_link );
 
 		$action_links = $this->row_actions( $actions );
-
-		// Set up the checkbox ( because the user is editable, otherwise its empty )
-		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
-		$checkbox_label_text = sprintf(
-			// translators: Form title
-			__( 'Select %s', 'formidable' ),
-			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
-		);
-
-		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
-
-		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
+		$checkbox     = $this->get_row_checkbox( $item );
+		$r            = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -273,20 +286,18 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name . ' column-' . $column_name . ( 'name' === $column_name ? ' post-title page-title column-title' : '' );
-
 			$style = '';
 
 			if ( in_array( $column_name, $hidden, true ) ) {
-				$class .= ' frm_hidden';
+				$class .= ' hidden';
 			}
 
 			if ( $column_name === 'name' ) {
 				$class .= ' column-primary';
 			}
 
-			$class        = 'class="' . esc_attr( $class ) . '"';
-			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
-			$attributes   = $class . $style . $data_colname;
+			$class      = 'class="' . esc_attr( $class ) . '"';
+			$attributes = $class . $style . $this->get_column_data_attr( $column_name, $column_display_name );
 
 			switch ( $column_name ) {
 				case 'cb':
@@ -305,19 +316,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'entries':
-					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
-						$val = FrmAppHelper::icon_by_class(
-							'frmfont frm_forbid_icon frm_bstooltip',
-							array(
-								'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
-								'echo'  => false,
-							)
-						);
-					} else {
-						$text = FrmEntry::getRecordCount( $item->id );
-						$val  = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;
-						unset( $text );
-					}
+					$val = $this->get_entries_column_value( $item );
 					break;
 				default:
 					if ( method_exists( $this, 'column_' . $column_name ) ) {
@@ -333,9 +332,57 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 			unset( $val );
 		}//end foreach
-		$r .= '</tr>';
+		return $r . '</tr>';
+	}
 
-		return $r;
+	/**
+	 * @param string $column_name
+	 * @param string $column_display_name
+	 *
+	 * @return string
+	 */
+	private function get_column_data_attr( $column_name, $column_display_name ) {
+		if ( 'settings' === $column_name ) {
+			return ' data-colname="' . esc_attr( trim( strip_tags( $column_display_name ) ) ) . '"';
+		}
+		return ' data-colname="' . esc_attr( $column_display_name ) . '"';
+	}
+
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_entries_column_value( $item ) {
+		if ( ! empty( $item->options['no_save'] ) ) {
+			return (string) FrmAppHelper::icon_by_class(
+				'frmfont frm_forbid_icon frm_bstooltip',
+				array(
+					'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
+					'echo'  => false,
+				)
+			);
+		}
+
+		$text = intval( FrmEntry::getRecordCount( $item->id ) );
+		return current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : (string) $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+	}
+
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_row_checkbox( $item ) {
+		// Set up the checkbox (because the user is editable, otherwise it's empty).
+		$checkbox            = '<input type="checkbox" name="item-action[]" id="cb-item-action-' . absint( $item->id ) . '" value="' . esc_attr( $item->id ) . '" />';
+		$checkbox_label_text = sprintf(
+			// translators: Form title
+			__( 'Select %s', 'formidable' ),
+			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
+		);
+
+		return $checkbox . '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
 	}
 
 	/**
@@ -343,20 +390,20 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
 	 * @since 6.0
+	 * @deprecated 6.32 We moved these actions to other places. This column will show if there is a filter added to the hook.
 	 *
 	 * @param stdClass $form
 	 *
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
-		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$val .= $this->column_style( $form );
 		$val .= $this->column_views( $form );
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
 		$val = str_replace( '&nbsp;', '', $val );
-		$val = '<div>' . $val . '</div>';
-		return $val;
+		return '<div>' . $val . '</div>';
 	}
 
 	/**
@@ -386,7 +433,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$href = FrmStylesHelper::get_edit_url( $style, $form->id );
-		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr( $style->post_title ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_pallet_icon', array( 'echo' => false ) ) . '</a>';
+		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr( $style->post_title ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_pallet_icon', array( 'echo' => false ) ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -405,9 +452,29 @@ class FrmFormsListHelper extends FrmListHelper {
 			'target' => '_blank',
 		);
 
+		if ( class_exists( 'FrmViewsDisplay' ) ) {
+			$view_ids   = FrmViewsDisplay::get_display_ids_by_form( $form->id );
+			$view_count = $view_ids ? count( $view_ids ) : 0;
+		} else {
+			$view_count = 0;
+		}
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
-					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
+					' . intval( $view_count ) .
 				'</a>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Get the HTML for the Settings column in the form list.
+	 *
+	 * @since 6.32
+	 *
+	 * @return string
+	 */
+	protected function column_settings() {
+		return '&nbsp;';
 	}
 
 	/**
@@ -430,12 +497,13 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {
-			$actions['frm_edit']     = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
-			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . __( 'Settings', 'formidable' ) . '</a>';
+			$actions['frm_edit']     = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
+			$actions['frm_settings'] = '<a href="' . esc_url( '?page=formidable&frm_action=settings&id=' . $item->id ) . '">' . esc_html__( 'Settings', 'formidable' ) . '</a>';
 		}
 
-		$actions         = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . __( 'Preview', 'formidable' ) . '</a>';
+		$actions          = array_merge( $actions, $new_actions );
+		$actions['embed'] = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . esc_html__( 'Embed', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$actions['view']  = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -455,7 +523,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$form_name = FrmAppHelper::kses( $form_name );
 
-		if ( 'excerpt' != $mode ) {
+		if ( 'excerpt' !== $mode ) {
 			$form_name = FrmAppHelper::truncate( $form_name, 50 );
 		}
 
@@ -464,7 +532,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( 'trash' === $this->status ) {
 			$val .= $form_name;
 		} else {
-			$val .= '<a href="' . esc_url( isset( $actions['frm_edit'] ) ? $edit_link : FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" class="row-title">' . FrmAppHelper::kses( $form_name ) . '</a> ';
+			$val .= '<a href="' . esc_url( isset( $actions['frm_edit'] ) ? $edit_link : FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" class="row-title">' . FrmAppHelper::kses( $form_name ) . '</a> '; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$this->add_draft_label( $item, $val );
@@ -482,7 +550,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	private function add_draft_label( $item, &$val ) {
-		if ( 'draft' === $item->status && 'draft' != $this->status ) {
+		if ( 'draft' === $item->status && 'draft' !== $this->status ) {
 			$val .= ' - <span class="post-state">' . esc_html__( 'Draft', 'formidable' ) . '</span>';
 		}
 	}
@@ -506,5 +574,197 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	protected function confirm_bulk_delete() {
 		return __( 'ALL selected forms and their entries will be permanently deleted. Want to proceed?', 'formidable' );
+	}
+
+	/**
+	 * @param stdClass $form
+	 *
+	 * @return string
+	 */
+	public function column_embeds( $form ) {
+		$posts = $this->get_posts_contain_form( $form );
+
+		if ( ! $posts ) {
+			return '<span class="frm-forms-list-embeds-zero">0</span>';
+		}
+
+		return FrmAppHelper::clip(
+			function () use ( $posts ) {
+				?>
+				<a href="#" class="frm-forms-list-embeds-btn" data-posts="<?php echo esc_attr( wp_json_encode( $posts ) ); ?>">
+					<?php
+					FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon' );
+					echo intval( count( $posts ) );
+					?>
+				</a>
+				<?php
+			}
+		);
+	}
+
+	/**
+	 * Gets posts or pages that contain the form shortcode.
+	 *
+	 * @since 6.32
+	 *
+	 * @param stdClass $form Form object.
+	 *
+	 * @return array
+	 */
+	private function get_posts_contain_form( $form ) {
+		$cached_posts = get_transient( self::$embed_posts_transient_name );
+
+		if ( isset( $cached_posts[ $form->id ] ) && is_array( $cached_posts[ $form->id ] ) ) {
+			return $cached_posts[ $form->id ];
+		}
+
+		$posts = $this->query_posts_contain_form( $form );
+
+		if ( ! is_array( $posts ) ) {
+			return array();
+		}
+
+		foreach ( $posts as $post ) {
+			if ( ! property_exists( $post, 'permalink' ) ) {
+				$post->permalink = get_permalink( $post->ID );
+			}
+
+			if ( ! property_exists( $post, 'edit_link' ) ) {
+				$post->edit_link = get_edit_post_link( $post->ID );
+			}
+
+			// Ensure post_name is not null or the string "null"
+			if ( ! isset( $post->post_name ) ) {
+				$post->post_name = '';
+			}
+
+			// Ensure post_title is not null or the string "null"
+			if ( ! isset( $post->post_title ) ) {
+				$post->post_title = '';
+			}
+
+			if ( '' === $post->post_title ) {
+				$post->post_title = __( '(no title)', 'formidable' );
+			}
+		}//end foreach
+
+		if ( ! is_array( $cached_posts ) ) {
+			$cached_posts = array();
+		}
+
+		$cached_posts[ $form->id ] = $posts;
+		set_transient( self::$embed_posts_transient_name, $cached_posts, DAY_IN_SECONDS );
+
+		return $posts;
+	}
+
+	/**
+	 * Gets search strings for a form inside a post.
+	 *
+	 * @since 6.32
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return string[]
+	 */
+	protected function get_search_strings_for_form( $form_id ) {
+		return $this->get_base_search_strings_for_form( $form_id );
+	}
+
+	/**
+	 * Gets the base search strings for a form inside a post.
+	 *
+	 * @since 6.32
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return string[]
+	 */
+	protected function get_base_search_strings_for_form( $form_id ) {
+		return array(
+			'[formidable id=' . $form_id . ']',
+			'[formidable id=' . $form_id . ' ',
+			'[formidable id="' . $form_id . '"',
+			"[formidable id='" . $form_id . "'",
+			'<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"',
+		);
+	}
+
+	/**
+	 * Queries for posts that contain the form shortcode.
+	 *
+	 * @param stdClass $form Form object.
+	 *
+	 * @return array
+	 */
+	private function query_posts_contain_form( $form ) {
+		$form_id = $form->id;
+		global $wpdb;
+		$query_strings = $this->get_search_strings_for_form( $form_id );
+		$like_where    = array();
+
+		foreach ( $query_strings as $query_string ) {
+			$like_where[] = $wpdb->remove_placeholder_escape( $wpdb->prepare( 'post_content LIKE %s', '%' . $query_string . '%' ) );
+		}
+
+		$like_where = implode( ' OR ', $like_where );
+		$where      = "post_type IN ('post', 'page') AND ($like_where)";
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$posts = $wpdb->get_results( "SELECT ID,post_title,post_name FROM $wpdb->posts WHERE $where" );
+
+		if ( ! is_array( $posts ) ) {
+			return array();
+		}
+
+		/**
+		 * @since 6.32
+		 *
+		 * @param stdClass[] $posts
+		 * @param array      $args
+		 */
+		$filtered_posts = apply_filters( 'frm_get_posts_contain_form', $posts, compact( 'form' ) );
+
+		if ( ! is_array( $filtered_posts ) ) {
+			_doing_it_wrong( 'frm_get_posts_contain_form', 'Filter should return an array.', '6.32' );
+			return $posts;
+		}
+
+		return $filtered_posts;
+	}
+
+	/**
+	 * Maybe clear the embed posts transient.
+	 *
+	 * @since 6.32
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 *
+	 * @return void
+	 */
+	public static function maybe_clear_embed_posts_transient( $post_id, $post ) {
+		if ( str_contains( $post->post_content, '[formidable ' ) || str_contains( $post->post_content, '<!-- wp:formidable/simple-form ' ) ) {
+			// New post contains the form shortcode, so clear the embed posts transient.
+			delete_transient( self::$embed_posts_transient_name );
+			return;
+		}
+
+		$cached_posts = get_transient( self::$embed_posts_transient_name );
+
+		if ( ! is_array( $cached_posts ) ) {
+			return;
+		}
+
+		// If the new post data of a cached post doesn't contain the Formidable forms, clear the transient.
+		foreach ( $cached_posts as $posts ) {
+			foreach ( $posts as $post_data ) {
+				if ( intval( $post_data->ID ) === intval( $post_id ) ) {
+					// This post contains the form shortcode before updating, so clear the embed posts transient.
+					delete_transient( self::$embed_posts_transient_name );
+					return;
+				}
+			}
+		}
 	}
 }

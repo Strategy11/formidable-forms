@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-FrmStrpLiteAppHelper::fee_education( 'settings' );
+FrmStrpLiteAppHelper::fee_education( 'stripe-global-settings-tip' );
 ?>
 <table class="form-table">
 	<tr class="form-field">

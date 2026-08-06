@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		FrmAppHelper::icon_by_class(
 			'frmfont frm-flag frm_svg40 frm-review-notice-icon frm-text-success-500',
 			array(
-				'echo'        => true,
+
 				'aria-hidden' => 'true',
 			)
 		);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		FrmAppHelper::icon_by_class(
 			'frmfont frm-star-feedback-icon frm_svg40 frm-review-notice-icon frm-text-warning-500',
 			array(
-				'echo'        => true,
+
 				'aria-hidden' => 'true',
 			)
 		);
@@ -60,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		FrmAppHelper::icon_by_class(
 			'frmfont frm-pencil-message-icon frm_svg40 frm-review-notice-icon frm-text-primary-500',
 			array(
-				'echo'        => true,
+
 				'aria-hidden' => 'true',
 			)
 		);

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Dashboard payment placeholder widget.
+ *
+ * @package Formidable
+ *
+ * @var array $template Widget data with 'counters' and 'placeholder' (copy, cta[link, label, classname]) keys.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

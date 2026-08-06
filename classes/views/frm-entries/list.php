@@ -15,12 +15,12 @@ $should_show_add_new_button = $form && $pro_is_installed && current_user_can( 'f
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
 				'import_link' => $pro_is_installed,
-				'publish'     => ! $should_show_add_new_button ? true : array(
+				'publish'     => $should_show_add_new_button ? array(
 					'FrmAppHelper::add_new_item_link',
 					array(
 						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
 					),
-				),
+				) : true,
 			)
 		);
 		?>

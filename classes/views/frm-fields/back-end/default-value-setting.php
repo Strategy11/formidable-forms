@@ -1,4 +1,14 @@
 <?php
+/**
+ * Default value setting in the field settings.
+ *
+ * @package Formidable
+ *
+ * @var array        $field     Field data including 'id', 'default_value', 'dyn_default_value'.
+ * @var FrmFieldType $field_obj Field type handler.
+ * @var array        $display   Display options; may include 'default_value'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -15,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<span class="frm-flex-col frm-with-right-icon">
 		<?php
-		if ( isset( $display['default_value'] ) && $display['default_value'] ) {
+		if ( ! empty( $display['default_value'] ) ) {
 			$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
 			$default_value = $field['dyn_default_value'] ?? '';
 		} else {

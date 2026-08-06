@@ -3,6 +3,8 @@
  * Add-Ons categories.
  *
  * @package Formidable
+ *
+ * @var array<string, array{name: string, count: int}> $categories Categories keyed by slug.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

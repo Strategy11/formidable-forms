@@ -3,8 +3,6 @@
  * of the card with customized content.
  */
 
-/* global frmPlugSearch */
-
 let FormidablePSH = {};
 
 function frmPS() {
@@ -16,27 +14,23 @@ function frmPS() {
 		 *
 		 * @return {Element|null} The parent search hint element.
 		 */
-		getCard: function() {
+		getCard() {
 			return document.querySelector( '.plugin-card-frm-plugin-search' );
 		},
 
 		/**
 		 * Replace bottom row of the card to insert logo, text and link to dismiss the card.
 		 */
-		replaceCardBottom: function() {
+		replaceCardBottom() {
 			const hint = FormidablePSH.getCard();
 			if ( 'object' === typeof hint && null !== hint ) {
 				hint.querySelector( '.plugin-card-bottom' ).outerHTML =
-					'<div class="plugin-card-bottom frm-plugin-search__bottom">' +
-					'<p class="frm-plugin-search__text">' +
-					frmPlugSearch.legend +
-					'</p>' +
-					'</div>';
+					`<div class="plugin-card-bottom frm-plugin-search__bottom"><p class="frm-plugin-search__text">${ frmPlugSearch.legend }</p></div>`;
 
 				// Remove link and parent li from action links and move it to bottom row
 				const dismissLink = document.querySelector( '.frm-plugin-search__dismiss' );
-				dismissLink.parentNode.parentNode.removeChild( dismissLink.parentNode );
-				document.querySelector( '.frm-plugin-search__bottom' ).appendChild( dismissLink );
+				dismissLink.parentNode.remove();
+				document.querySelector( '.frm-plugin-search__bottom' ).append( dismissLink );
 			}
 		},
 
@@ -45,7 +39,7 @@ function frmPS() {
 		 *
 		 * @param {Array} mutationsList
 		 */
-		replaceOnNewResults: function( mutationsList ) {
+		replaceOnNewResults( mutationsList ) {
 			mutationsList.forEach( function( mutation ) {
 				if (
 					'childList' === mutation.type &&
@@ -59,7 +53,7 @@ function frmPS() {
 		/**
 		 * Start suggesting.
 		 */
-		init: function() {
+		init() {
 			if ( FormidablePSH.$pluginFilter === null ) {
 				return;
 			}

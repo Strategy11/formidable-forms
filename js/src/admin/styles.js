@@ -40,7 +40,7 @@ class frmStyleOptions {
 			return;
 		}
 
-		if ( 'undefined' === typeof window.frm_single_style_custom_css_wp_editor || 'undefined' === typeof window.frm_single_style_custom_css_wp_editor.codemirror ) {
+		if ( window.frm_single_style_custom_css_wp_editor === undefined || window.frm_single_style_custom_css_wp_editor.codemirror === undefined ) {
 			setTimeout( () => {
 				this.cssEditorOptions.retryCount++;
 				this.initCustomCSSEditorInstance();
@@ -63,7 +63,7 @@ class frmStyleOptions {
 		}
 
 		this.cssInlineStyleElement = document.createElement( 'style' );
-		document.head.appendChild( this.cssInlineStyleElement );
+		document.head.append( this.cssInlineStyleElement );
 		return this.cssInlineStyleElement;
 	}
 
@@ -96,11 +96,11 @@ class frmStyleOptions {
 
 		components.forEach( component => {
 			const element = component.querySelector( 'input.hex' );
-			const id = 'undefined' !== typeof element ? element.getAttribute( 'id' ) : null;
+			const id = element !== undefined ? element.getAttribute( 'id' ) : null;
 
 			if ( null !== id ) {
 				elements.push( {
-					id: id,
+					id,
 					dependentUpdaterClass: new frmStyleDependentUpdaterComponent( component, 'colorpicker' )
 				} );
 			}
@@ -127,13 +127,13 @@ class frmStyleOptions {
 	 */
 	initHover() {
 		const settingsWrapper = document.querySelector( '.frm-right-panel .styling_settings .accordion-container' );
-		if ( null === settingsWrapper ) {
+		if ( ! settingsWrapper ) {
 			return;
 		}
 		const hoverElement = document.createElement( 'div' );
 		hoverElement.classList.add( 'frm_hidden' );
 		hoverElement.classList.add( 'frm-style-settings-hover' );
-		settingsWrapper.appendChild( hoverElement );
+		settingsWrapper.append( hoverElement );
 
 		const styleOptionsMenu = settingsWrapper.querySelector( ':scope > ul' );
 
@@ -218,7 +218,7 @@ class frmStyleOptions {
 		temp.setAttribute( 'type', 'text' );
 		temp.value = couponCode;
 
-		copyButton.parentElement.appendChild( temp );
+		copyButton.parentElement.append( temp );
 
 		temp.focus();
 		temp.select();

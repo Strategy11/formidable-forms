@@ -40,10 +40,7 @@ class FrmApiHelper {
 			return true;
 		}
 
-		if ( self::check_free_segments( $who ) ) {
-			return true;
-		}
-		return false;
+		return self::check_free_segments( $who );
 	}
 
 	/**
@@ -103,7 +100,7 @@ class FrmApiHelper {
 
 		if ( false === $activation_timestamp ) {
 			// If the option does not exist, assume that it is
-			// because the user was active before this option was introduced.
+			// Because the user was active before this option was introduced.
 			return false;
 		}
 

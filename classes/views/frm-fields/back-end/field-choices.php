@@ -1,4 +1,13 @@
 <?php
+/**
+ * Field choices wrapper in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var FrmFieldType $this Field type handler that included this template.
+ * @var array        $args Arguments including 'field' (with 'post_field', 'id', 'taxonomy' keys).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

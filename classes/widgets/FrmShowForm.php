@@ -17,7 +17,7 @@ class FrmShowForm extends WP_Widget {
 	 * @return void
 	 */
 	public function widget( $args, $instance ) {
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
+		$title = apply_filters( 'widget_title', ! empty( $instance['title'] ) ? $instance['title'] : '', $instance, $this->id_base );
 
 		FrmAppHelper::kses_echo( $args['before_widget'], 'all' );
 
@@ -64,6 +64,7 @@ class FrmShowForm extends WP_Widget {
 			'description' => false,
 		);
 		$instance = wp_parse_args( $instance, $defaults );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
@@ -101,6 +102,7 @@ class FrmShowForm extends WP_Widget {
 			</label>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		return '';
 	}
 }

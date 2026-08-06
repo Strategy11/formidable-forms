@@ -14,7 +14,7 @@
 
 				<input id="<?php echo esc_attr( $radio_id ); ?>" <?php checked( $field_value, $align ); ?> type="radio" <?php echo esc_attr( $field_name ); ?> value="<?php echo esc_attr( $align ); ?>" />
 				<label class="frm-flex-center" for="<?php echo esc_attr( $radio_id ); ?>" tabindex="0">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-align-' . $align ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm-align-' . $align ); ?>
 				</label>
 
 				<?php

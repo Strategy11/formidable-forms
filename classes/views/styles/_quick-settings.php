@@ -248,12 +248,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 </div>
 
-<div id="frm_single_style_custom_css_editor" class="frm12 frm_form_field frm-style-component <?php echo empty( $style->post_content['enable_style_custom_css'] ) ? 'frm_hidden' : ''; ?>">
+<div id="frm_single_style_custom_css_editor" class="frm12 frm_form_field frm-style-component <?php echo ! empty( $style->post_content['enable_style_custom_css'] ) ? '' : 'frm_hidden'; ?>">
 	<?php
 	$css_scope_helper = new FrmCssScopeHelper();
 	$custom_css       = $style->post_content['single_style_custom_css'] ?? '';
 
-	if ( ! empty( $custom_css ) ) {
+	if ( $custom_css ) {
 		$custom_css = $css_scope_helper->unnest( $custom_css, 'frm_style_' . $style->post_name );
 	}
 
@@ -281,7 +281,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm9 frm_form_field frm-style-component" id="frm_style_class_custom_css" data-css-scope="<?php echo esc_attr( 'frm_style_' . $style->post_name ); ?>">
 	<label class="frm-copy-text">.frm_style_<?php
 		echo esc_html( $style->post_name );
-		FrmAppHelper::icon_by_class( 'frm_icon_font frm-copy-icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' );
 	?>
 	</label>
 </div>

@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					foreach ( $sections as $section ) {
 						if ( $current === $section['anchor'] ) {
 							?>
-							<style type="text/css">.<?php echo esc_attr( $section['anchor'] ); ?> {
+							<style type="text/css">.<?php echo esc_html( $section['anchor'] ); ?> {
 								display: block;
 							}</style>
 						<?php } ?>

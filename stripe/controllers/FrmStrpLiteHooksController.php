@@ -32,6 +32,11 @@ class FrmStrpLiteHooksController {
 			function ( $form_cols ) {
 				return array_filter(
 					$form_cols,
+					/**
+					 * @param stdClass $form_col
+					 *
+					 * @return bool
+					 */
 					function ( $form_col ) {
 						return 'gateway' !== $form_col->type;
 					}
@@ -59,7 +64,6 @@ class FrmStrpLiteHooksController {
 		// Actions.
 		add_action( 'frm_after_uninstall', 'FrmStrpLiteAppController::uninstall' );
 		add_filter( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
-		add_action( 'admin_init', 'FrmStrpLiteAppController::maybe_redirect_to_stripe_settings' );
 		add_action( 'frm_update_settings', 'FrmStrpLiteSettingsController::process_form' );
 
 		// Filters.
