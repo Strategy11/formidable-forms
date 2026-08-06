@@ -3332,12 +3332,18 @@ window.frmAdminBuildJS = function() {
 	 * @since x.x
 	 *
 	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
-	 * @param {Number}      fieldId ID of the field the popup was opened for.
+	 * @param {string}      fieldId ID of the field the popup was opened for.
 	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function addFieldPartShortcodes( field, fieldId, list ) {
+		if ( ! isTextCalc( fieldId ) ) {
+			// Only a text calculation resolves a show= option. In any other type the shortcode
+			// is left as-is and the formula fails to evaluate, so don't offer the parts at all.
+			return;
+		}
+
 		maybeAddNamePartShortcodes( field, fieldId, list );
 
 		/**
@@ -3347,7 +3353,7 @@ window.frmAdminBuildJS = function() {
 		 *
 		 * @param {Object}      hookArgs                      Arguments passed to the hook.
 		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
-		 * @param {Number}      hookArgs.fieldId              ID of the field triggering the popup.
+		 * @param {string}      hookArgs.fieldId              ID of the field triggering the popup.
 		 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
 		 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
 		 */
@@ -3355,15 +3361,29 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Checks whether the calculation being edited is a text calculation.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldId ID of the field the calculation belongs to.
+	 *
+	 * @return {boolean} True when the calculation type is text.
+	 */
+	function isTextCalc( fieldId ) {
+		const calcType = document.querySelector( `input[name="field_options[calc_type_${ fieldId }]"]:checked` );
+		return calcType ? 'text' === calcType.value : false;
+	}
+
+	/**
 	 * Adds shortcodes like [nameFieldId show=last] to the calculation popup.
 	 *
 	 * @since x.x
 	 *
-	 * @param {Object}      field
-	 * @param {Number}      fieldId
+	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
+	 * @param {string}      fieldId ID of the field the popup was opened for.
 	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeAddNamePartShortcodes( field, fieldId, list ) {
 		if ( 'name' !== field.fieldType ) {
@@ -3375,8 +3395,8 @@ window.frmAdminBuildJS = function() {
 				addCalcFieldLiToList(
 					list,
 					fieldId,
-					field.fieldId + ' show=' + code,
-					field.fieldName + ' (' + label + ')',
+					`${ field.fieldId } show=${ code }`,
+					`${ field.fieldName } (${ label })`,
 					field.fieldType
 				);
 			}
@@ -3389,9 +3409,9 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {String} nameFieldId ID of the Name field.
+	 * @param {string} nameFieldId ID of the Name field.
 	 *
-	 * @returns {Object} Part labels keyed by their show= value, in layout order.
+	 * @return {Object} Part labels keyed by their show= value, in layout order.
 	 */
 	function getNamePartLabels( nameFieldId ) {
 		const labels = {
@@ -3400,7 +3420,7 @@ window.frmAdminBuildJS = function() {
 			last: __( 'Last', 'formidable' )
 		};
 		// The layout option names the parts in use, in display order, like first_middle_last.
-		const layout = document.getElementById( 'name_layout_' + nameFieldId )?.value || 'first_last';
+		const layout = document.getElementById( `name_layout_${ nameFieldId }` )?.value || 'first_last';
 		const parts = {};
 
 		layout.split( '_' ).forEach( part => {
