@@ -63,16 +63,14 @@ class FrmStrpLiteAuth {
 			// Append an additional processing message to the end of the success message.
 			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
-				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
-				return $message;
+				return $message . ( '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>' );
 			};
 			add_filter( 'frm_content', $filter );
 		}
 
 		ob_start();
 		FrmFormsController::run_on_submit_actions( $atts );
-		$message = ob_get_contents();
-		ob_end_clean();
+		$message = ob_get_clean();
 
 		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
 		if ( $intent_is_processing ) {
@@ -118,7 +116,7 @@ class FrmStrpLiteAuth {
 		foreach ( self::$form_ids as $form_id ) {
 			$substring = '<input type="hidden" name="form_id" value="' . $form_id . '"';
 
-			if ( strpos( $html, $substring ) ) {
+			if ( str_contains( $html, $substring ) ) {
 				return $form_id;
 			}
 		}
@@ -154,6 +152,8 @@ class FrmStrpLiteAuth {
 				return __( 'Something went wrong when trying to create a subscription.', 'formidable' );
 			case 'payment_failed':
 				return __( 'Payment was not successfully processed.', 'formidable' );
+			case 'amount_mismatch':
+				return __( 'The payment amount does not match the expected amount.', 'formidable' );
 		}
 		return '';
 	}
@@ -175,12 +175,14 @@ class FrmStrpLiteAuth {
 
 		$actions = FrmFormsController::get_met_on_submit_actions( $atts, 'create' );
 
-		if ( $actions ) {
-			$action = reset( $actions );
+		if ( ! $actions ) {
+			return;
+		}
 
-			if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
-				$atts['conf_method'] = $action->post_content['success_action'];
-			}
+		$action = reset( $actions );
+
+		if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
+			$atts['conf_method'] = $action->post_content['success_action'];
 		}
 	}
 
@@ -213,7 +215,7 @@ class FrmStrpLiteAuth {
 	public static function add_hidden_token_field( $form ) {
 		$posted_form = FrmAppHelper::get_param( 'form_id', 0, 'post', 'absint' );
 
-		if ( $posted_form != $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
+		if ( $posted_form !== (int) $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
 			// Check to make sure the correct form was submitted.
 			// Was an entry already created and the form should be loaded fresh?
 
@@ -225,8 +227,8 @@ class FrmStrpLiteAuth {
 
 		$intents = self::get_payment_intents( 'frmintent' . $form->id );
 
-		if ( ! empty( $intents ) ) {
-			self::update_intent_pricing( $form->id, $intents );
+		if ( $intents ) {
+			self::update_intent_pricing( $form->id, $intents, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		} else {
 			$intents = self::maybe_create_intents( $form->id );
 		}
@@ -273,7 +275,8 @@ class FrmStrpLiteAuth {
 			return array();
 		}
 
-		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		$intents = $_POST[ $name ];
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
 	}
@@ -292,7 +295,8 @@ class FrmStrpLiteAuth {
 			wp_die();
 		}
 
-		$form = json_decode( stripslashes( $_POST['form'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$form = json_decode( stripslashes( $_POST['form'] ), true );
 
 		if ( ! is_array( $form ) ) {
 			wp_die();
@@ -303,22 +307,21 @@ class FrmStrpLiteAuth {
 		$form_id = absint( $form['form_id'] );
 		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
-		if ( empty( $intents ) ) {
+		if ( ! $intents ) {
 			wp_die();
 		}
 
-		if ( ! is_array( $intents ) ) {
-			$intents = array( $intents );
-		} else {
+		if ( is_array( $intents ) ) {
 			foreach ( $intents as $k => $intent ) {
 				if ( is_array( $intent ) && isset( $intent[ $k ] ) ) {
 					$intents[ $k ] = $intent[ $k ];
 				}
 			}
+		} else {
+			$intents = array( $intents );
 		}
 
-		$_POST = $form;
-		self::update_intent_pricing( $form_id, $intents );
+		self::update_intent_pricing( $form_id, $intents, $form );
 
 		wp_die();
 	}
@@ -328,20 +331,20 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param int   $form_id
-	 * @param array $intents
+	 * @param int|string $form_id
+	 * @param array      $intents
+	 * @param array      $form_data
 	 *
 	 * @return void
 	 */
-	private static function update_intent_pricing( $form_id, &$intents ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['form_id'] ) || absint( $_POST['form_id'] ) != $form_id ) {
+	private static function update_intent_pricing( $form_id, &$intents, $form_data ) {
+		if ( ! isset( $form_data['form_id'] ) || absint( $form_data['form_id'] ) !== (int) $form_id ) {
 			return;
 		}
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) || empty( $intents ) ) {
+		if ( ! $actions || ! $intents ) {
 			return;
 		}
 
@@ -358,7 +361,7 @@ class FrmStrpLiteAuth {
 
 		foreach ( $intents as $k => $intent ) {
 			$intent_id       = explode( '_secret_', $intent )[0];
-			$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+			$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 
 			if ( $is_setup_intent ) {
 				continue;
@@ -371,9 +374,11 @@ class FrmStrpLiteAuth {
 			}
 
 			foreach ( $actions as $action ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
 				}
+
 				$intents[ $k ] = array(
 					'id'     => $intent,
 					'action' => $action->ID,
@@ -381,15 +386,16 @@ class FrmStrpLiteAuth {
 
 				$amount = $action->post_content['amount'];
 
-				if ( strpos( $amount, '[' ) === false ) {
+				if ( ! str_contains( $amount, '[' ) ) {
 					// The amount is static, so it doesn't need an update.
 					continue;
 				}
 
 				// Update amount based on field shortcodes.
-				$entry  = self::generate_false_entry();
+				$entry  = self::generate_false_entry( $form_data );
 				$amount = FrmStrpLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $saved->amount == $amount || $amount == '000' ) {
 					continue;
 				}
@@ -404,28 +410,30 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
+	 * @param array $form_data
+	 *
 	 * @return stdClass
 	 */
-	private static function generate_false_entry() {
+	private static function generate_false_entry( $form_data ) {
 		$entry           = new stdClass();
 		$entry->post_id  = 0;
 		$entry->id       = 0;
 		$entry->item_key = '';
 		$entry->metas    = array();
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		foreach ( $_POST as $k => $v ) {
+		foreach ( $form_data as $k => $v ) {
 			$k = sanitize_text_field( stripslashes( $k ) );
 			$v = wp_unslash( $v );
 
-			if ( $k === 'item_meta' ) {
-				foreach ( $v as $f => $value ) {
-					FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-					$entry->metas[ absint( $f ) ] = $value;
-				}
-			} else {
+			if ( $k !== 'item_meta' ) {
 				FrmAppHelper::sanitize_value( 'wp_kses_post', $v );
 				$entry->{$k} = $v;
+				continue;
+			}
+
+			foreach ( $v as $f => $value ) {
+				FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+				$entry->metas[ absint( $f ) ] = $value;
 			}
 		}
 
@@ -447,14 +455,15 @@ class FrmStrpLiteAuth {
 		foreach ( $form as $input ) {
 			$key = $input['name'];
 
-			if ( isset( $formatted[ $key ] ) ) {
-				if ( is_array( $formatted[ $key ] ) ) {
-					$formatted[ $key ][] = $input['value'];
-				} else {
-					$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
-				}
-			} else {
+			if ( ! isset( $formatted[ $key ] ) ) {
 				$formatted[ $key ] = $input['value'];
+				continue;
+			}
+
+			if ( is_array( $formatted[ $key ] ) ) {
+				$formatted[ $key ][] = $input['value'];
+			} else {
+				$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
 			}
 		}
 
@@ -473,7 +482,6 @@ class FrmStrpLiteAuth {
 	 */
 	private static function maybe_create_intents( $form_id ) {
 		$intents = array();
-
 		$details = self::check_request_params( $form_id );
 
 		if ( is_array( $details ) ) {
@@ -540,6 +548,7 @@ class FrmStrpLiteAuth {
 		$amount   = $action->post_content['amount'];
 		$currency = $action->post_content['currency'];
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $amount == '000' ) {
 			// Create the intent when the form loads.
 			$amount = in_array( strtolower( $currency ), array( 'aud', 'cad', 'eur', 'gbp', 'usd' ), true ) ? 100 : 1000;
@@ -611,11 +620,7 @@ class FrmStrpLiteAuth {
 
 		$name = self::strip_special_characters_from_statement_descriptor( $name );
 
-		if ( ! self::statement_descriptor_is_valid( $name ) ) {
-			return false;
-		}
-
-		return $name;
+		return self::statement_descriptor_is_valid( $name ) ? $name : false;
 	}
 
 	/**
@@ -658,11 +663,7 @@ class FrmStrpLiteAuth {
 			$name = substr( $name, 0, 22 );
 		}
 
-		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name ) ) {
-			return false;
-		}
-
-		return true;
+		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
 	/**
@@ -698,7 +699,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function add_amount_to_actions( $form_id, &$actions ) {
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 
@@ -738,13 +739,7 @@ class FrmStrpLiteAuth {
 		);
 		self::prepare_success_atts( $atts );
 
-		if ( $atts['conf_method'] === 'redirect' ) {
-			$redirect = self::get_redirect_url( $atts );
-		} else {
-			$redirect = self::get_message_url( $atts );
-		}
-
-		return $redirect;
+		return $atts['conf_method'] === 'redirect' ? self::get_redirect_url( $atts ) : self::get_message_url( $atts );
 	}
 
 	/**
@@ -796,6 +791,7 @@ class FrmStrpLiteAuth {
 		if ( false === $url ) {
 			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
+
 		return add_query_arg( array( 'frmstrp' => $atts['entry_id'] ), $url );
 	}
 
@@ -829,7 +825,10 @@ class FrmStrpLiteAuth {
 			return false;
 		}
 
-		self::delete_temporary_referer_meta( (int) $row->id );
+		if ( $delete_meta ) {
+			self::delete_temporary_referer_meta( (int) $row->id );
+		}
+
 		return $meta['referer'];
 	}
 
@@ -872,12 +871,7 @@ class FrmStrpLiteAuth {
 		if ( self::intent_has_failed_status( $intent ) ) {
 			return true;
 		}
-
 		// The $intent will be "succeeded" with a failed payment when testing with the 4000000000000341 credit card.
-		if ( 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status ) {
-			return true;
-		}
-
-		return false;
+		return 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status;
 	}
 }

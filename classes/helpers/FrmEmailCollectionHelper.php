@@ -85,7 +85,7 @@ class FrmEmailCollectionHelper {
 		);
 
 		foreach ( $substrings as $substring ) {
-			if ( false !== strpos( $email, $substring ) ) {
+			if ( str_contains( $email, $substring ) ) {
 				return true;
 			}
 		}

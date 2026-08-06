@@ -12,7 +12,7 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	 * @return array
 	 */
 	public function get_defaults() {
-		$values = array(
+		return array(
 			'sub_id'         => array(
 				'sanitize' => 'sanitize_text_field',
 				'default'  => '',
@@ -74,8 +74,6 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 				'default'  => null,
 			),
 		);
-
-		return $values;
 	}
 
 	/**
@@ -91,6 +89,23 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 					AND (status = 'active' OR status = 'future_cancel')",
 				3,
 				gmdate( 'Y-m-d' )
+			)
+		);
+	}
+
+	/**
+	 * Get all active or future_cancel subscriptions without next_bill_date check.
+	 *
+	 * @since 6.32
+	 *
+	 * @return array
+	 */
+	public function get_active_subscriptions() {
+		global $wpdb;
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM %i WHERE (status = 'active' OR status = 'future_cancel')",
+				$wpdb->prefix . 'frm_subscriptions'
 			)
 		);
 	}

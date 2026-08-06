@@ -9,7 +9,7 @@ class test_FrmXMLController extends FrmUnitTest {
 		$example_access_key_id = 'ABC123';
 		$expires               = time();
 		$signature             = 'DEF456';
-		$example_url           = "https://s3.amazonaws.com/fp.strategy11.com/form-templates/contact-us-form.xml?AWSAccessKeyId={$example_access_key_id}&Expires={$expires}&Signature={$signature}";
+		$example_url           = "https://s3.amazonaws.com/fp.strategy11.com/form-templates/contact-us-form.xml?AWSAccessKeyId={$example_access_key_id}&Expires={$expires}&Signature={$signature}"; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$this->assertTrue( $this->validate_xml_url( $example_url ) );
 		$this->assertFalse( $this->validate_xml_url( 'https://example.com' ), 'We want to block any requests that are not from our S3 Bucket' );

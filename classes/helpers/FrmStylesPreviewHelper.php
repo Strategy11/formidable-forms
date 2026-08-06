@@ -57,6 +57,47 @@ class FrmStylesPreviewHelper {
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
 		$this->add_a_div_class_for_default_label_positions();
+		$this->add_a_div_class_for_style_driven_alignment();
+	}
+
+	/**
+	 * Add a marker class to radio and checkbox fields that use the style's option
+	 * alignment setting rather than a field level override.
+	 *
+	 * Only fields with this class change when the radio or checkbox alignment style
+	 * setting is updated in the styler preview. Fields with their own alignment
+	 * override are left untouched.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	private function add_a_div_class_for_style_driven_alignment() {
+		add_filter(
+			'frm_field_div_classes',
+			/**
+			 * @param string       $classes
+			 * @param array|object $field
+			 *
+			 * @return string
+			 */
+			function ( $classes, $field ) {
+				if ( ! FrmField::is_radio( $field ) && ! FrmField::is_checkbox( $field ) ) {
+					return $classes;
+				}
+
+				// Mirror FrmFieldType::get_container_class(): an override only exists in Pro.
+				$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $field, 'align' ) : '';
+
+				if ( ! $align ) {
+					$classes .= ' frm-default-option-align';
+				}
+
+				return $classes;
+			},
+			10,
+			2
+		);
 	}
 
 	/**
@@ -124,10 +165,7 @@ class FrmStylesPreviewHelper {
 			 * @return bool
 			 */
 			function ( $show, $field_type ) {
-				if ( 'captcha' === $field_type ) {
-					$show = false;
-				}
-				return $show;
+				return 'captcha' === $field_type ? false : $show;
 			},
 			10,
 			2
@@ -189,13 +227,10 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @todo Only show the note once for a form per user per month or something.
-	 *
 	 * @return array<string>
 	 */
 	public function get_notes_for_styler_preview() {
-		$notes = array();
-
+		$notes              = array();
 		$fallback_form_note = $this->get_fallback_form_note();
 
 		if ( is_string( $fallback_form_note ) ) {
@@ -213,10 +248,6 @@ class FrmStylesPreviewHelper {
 					'</a>'
 				);
 			};
-		}
-
-		if ( class_exists( 'FrmProStylesController' ) && ! class_exists( 'FrmProStylesPreviewHelper' ) ) {
-			$notes[] = __( 'You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features.', 'formidable' );
 		}
 
 		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {
@@ -328,7 +359,7 @@ class FrmStylesPreviewHelper {
 		$styles->remove( 'edit' );
 
 		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
-		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+		$edit_key              = array_search( 'edit', $wp_admin_dependencies, true );
 
 		if ( false === $edit_key ) {
 			return;
@@ -395,7 +426,8 @@ class FrmStylesPreviewHelper {
 	 */
 	private static function remove_wp_admin_dependency( $styles, $key ) {
 		$dependencies = $styles->registered['wp-admin']->deps;
-		$index        = array_search( $key, $dependencies );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$index = array_search( $key, $dependencies );
 
 		if ( false === $index ) {
 			return;

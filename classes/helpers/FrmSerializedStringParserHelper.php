@@ -61,7 +61,7 @@ class FrmSerializedStringParserHelper {
 	 * @return bool
 	 */
 	private function serialized_value_is_valid( $value ) {
-		return ! is_string( $value ) || strpos( $value, ';s:' ) === false;
+		return ! is_string( $value ) || ! str_contains( $value, ';s:' );
 	}
 
 	/**
@@ -78,7 +78,7 @@ class FrmSerializedStringParserHelper {
 		);
 
 		foreach ( $invalid_substrings as $invalid ) {
-			if ( strpos( $string, $invalid ) !== false ) {
+			if ( str_contains( $string, $invalid ) ) {
 				return true;
 			}
 		}
@@ -138,7 +138,7 @@ class FrmSerializedStringParserHelper {
 			$array_key   = $this->do_parse( $string );
 			$array_value = $this->do_parse( $string );
 
-			if ( ! is_array( $array_key ) ) {
+			if ( ! is_array( $array_key ) && null !== $array_key ) {
 				$val[ $array_key ] = $array_value;
 			}
 		}

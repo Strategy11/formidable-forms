@@ -335,11 +335,13 @@ class FrmWelcomeTourController {
 
 		foreach ( $links as $key => $link ) {
 			$attrs = $button_attrs + array( 'data-tracking-value' => $key );
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="<?php echo esc_url( $link['url'] ); ?>" <?php FrmAppHelper::array_to_html_params( $attrs, true ); ?>>
 				<?php echo esc_html( $link['text'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
@@ -358,7 +360,6 @@ class FrmWelcomeTourController {
 		$page                   = FrmAppHelper::simple_get( 'page' );
 		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
 		$is_form_builder_page   = FrmAppHelper::is_form_builder_page();
-		$is_style_editor_page   = FrmAppHelper::is_style_editor_page();
 
 		switch ( $active_step ) {
 			case 'create-form':
@@ -368,7 +369,7 @@ class FrmWelcomeTourController {
 			case 'style-form':
 			case 'embed-form':
 			case 'completed':
-				return $is_form_builder_page || $is_style_editor_page;
+				return $is_form_builder_page || FrmAppHelper::is_style_editor_page();
 			default:
 				return false;
 		}
@@ -620,9 +621,8 @@ class FrmWelcomeTourController {
 		}
 
 		$usage_data = array();
-		$steps      = self::get_steps();
 
-		foreach ( $steps as $key => $step ) {
+		foreach ( self::get_steps() as $key => $step ) {
 			$usage_data[ 'completed_step_' . $key ] = empty( $option['completed_steps'][ $key ] ) ? 0 : 1;
 		}
 

@@ -19,8 +19,12 @@ $rules  = array(
 	'no_useless_else'                      => true,
 	'no_superfluous_elseif'                => true,
 	'elseif'                               => true,
-	'phpdoc_add_missing_param_annotation'  => true,
 	'no_extra_blank_lines'                 => true,
+	'no_trailing_whitespace'               => true,
+	'no_whitespace_in_blank_line'          => true,
+	'ternary_to_null_coalescing'           => true,
+	'no_null_property_initialization'      => true,
+	'return_assignment'                    => true,
 	'blank_line_before_statement'          => array(
 		'statements' => array(
 			'try',
@@ -33,9 +37,14 @@ $rules  = array(
 	'phpdoc_types_order'                   => array(
 		'null_adjustment' => 'always_last',
 	),
+	PhpCsFixerCustomFixers\Fixer\PhpUnitAssertArgumentsOrderFixer::name() => true,
+	PhpCsFixerCustomFixers\Fixer\PhpUnitDedicatedAssertFixer::name() => true,
+	PhpCsFixerCustomFixers\Fixer\NoUselessStrlenFixer::name() => true,
+	PhpCsFixerCustomFixers\Fixer\NoUselessParenthesisFixer::name() => true,
 );
 
 $config = new PhpCsFixer\Config();
+$config->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers());
 $config->setRules( $rules );
 
 return $config->setFinder( $finder );

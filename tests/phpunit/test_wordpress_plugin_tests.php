@@ -7,11 +7,13 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 	}
 
 	public function test_wpml_install() {
-		if ( is_callable( 'FrmProCopy::install' ) ) {
-			$copy = new FrmProCopy();
-			$copy->install();
-			self::do_tables_exist( true );
+		if ( ! is_callable( 'FrmProCopy::install' ) ) {
+			return;
 		}
+
+		$copy = new FrmProCopy();
+		$copy->install();
+		self::do_tables_exist( true );
 	}
 }
 

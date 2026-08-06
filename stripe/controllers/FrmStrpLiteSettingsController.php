@@ -16,7 +16,7 @@ class FrmStrpLiteSettingsController {
 		$sections['stripe'] = array(
 			'class'    => self::class,
 			'function' => 'route',
-			'icon'     => 'frm_icon_font frm_stripe_icon',
+			'icon'     => 'frmfont frm_stripe_icon',
 		);
 
 		add_action(
@@ -80,7 +80,7 @@ class FrmStrpLiteSettingsController {
 	public static function process_form() {
 		$settings = FrmStrpLiteAppHelper::get_settings();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$settings->update( $_POST );
+		$settings->update( wp_unslash( $_POST ) );
 		$settings->store();
 	}
 }

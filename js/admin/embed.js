@@ -118,7 +118,7 @@
 	function offsetModalY( $modal, amount ) {
 		const position = {
 			my: 'top',
-			at: 'top+' + amount,
+			at: `top+${ amount }`,
 			of: window
 		};
 		$modal.dialog( 'option', 'position', position );
@@ -148,11 +148,11 @@
 					const spinner = tag( 'span' );
 					spinner.className = 'frm-wait frm_spinner';
 					spinner.style.visibility = 'visible';
-					content.appendChild( spinner );
+					content.append( spinner );
 
 					const gap = div();
 					gap.style.height = '20px';
-					content.appendChild( gap );
+					content.append( gap );
 
 					content.classList.add( 'frm-loading-page-options' );
 
@@ -182,11 +182,11 @@
 
 						const title = getLabel( titleText );
 						title.setAttribute( 'for', 'frm_page_dropdown' );
-						content.appendChild( title );
+						content.append( title );
 
 						let editPageUrl;
 
-						doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+						const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
 						doneButton.classList.remove( 'dismiss' );
 						/* translators: %s: type (ie. view, form). */
 						doneButton.textContent = sprintf( __( 'Insert %s', 'formidable' ), typeDescription );
@@ -194,10 +194,10 @@
 
 						const dropdownWrapper = div();
 						dropdownWrapper.innerHTML = response.html;
-						content.appendChild( dropdownWrapper );
+						content.append( dropdownWrapper );
 
 						if ( 'form' === state.type ) {
-							editPageUrl = response.edit_page_url + '&frmForm=' + state.objectId;
+							editPageUrl = `${ response.edit_page_url }&frmForm=${ state.objectId }`;
 						} else {
 							const hookName = 'frm_embed_edit_page_url';
 							const hookArgs = {
@@ -229,7 +229,7 @@
 								return;
 							}
 
-							window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
+							window.location.href = editPageUrl.replace( 'post=0', `post=${ pageId }` );
 						}
 					}
 				}
@@ -261,7 +261,7 @@
 							url: ajaxurl,
 							data,
 							dataType: 'json',
-							success: function( response ) {
+							success( response ) {
 								if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
 									window.location.href = response.redirect;
 								}
@@ -281,20 +281,20 @@
 
 					const title = getLabel( __( 'What will you call the new page?', 'formidable' ) );
 					title.setAttribute( 'for', 'frm_name_your_page' );
-					form.appendChild( title );
+					form.append( title );
 
 					const input = tag( 'input' );
 					input.id = 'frm_name_your_page';
 					input.placeholder = __( 'Name your page', 'formidable' );
-					form.appendChild( input );
+					form.append( input );
 
-					wrapper.appendChild( form );
-					content.appendChild( wrapper );
+					wrapper.append( form );
+					content.append( wrapper );
 
 					input.type = 'text';
 					input.focus();
 
-					doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+					const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
 					doneButton.textContent = __( 'Create page', 'formidable' );
 					doneButton.addEventListener(
 						'click',
@@ -313,7 +313,7 @@
 					content.innerHTML = '';
 
 					if ( 'form' === state.type ) {
-						getEmbedFormManualExamples().forEach( example => content.appendChild( getEmbedExample( example ) ) );
+						getEmbedFormManualExamples().forEach( example => content.append( getEmbedExample( example ) ) );
 					} else {
 						const hookName = 'frm_embed_examples';
 						const hookArgs = {
@@ -322,7 +322,7 @@
 							objectKey: state.objectKey
 						};
 						wp.hooks.applyFilters( hookName, [], hookArgs ).forEach(
-							example => content.appendChild( getEmbedExample( example ) )
+							example => content.append( getEmbedExample( example ) )
 						);
 					}
 				}
@@ -330,7 +330,7 @@
 		];
 
 		options.forEach(
-			option => content.appendChild( getModalOption( option ) )
+			option => content.append( getModalOption( option ) )
 		);
 
 		return content;
@@ -348,17 +348,17 @@
 
 	function getModalOption( { icon, label, description, callback } ) {
 		const output = div();
-		output.appendChild( wrapModalOptionIcon( icon ) );
+		output.append( wrapModalOptionIcon( icon ) );
 		output.className = 'frm-embed-modal-option';
 		output.setAttribute( 'tabindex', 0 );
 		output.setAttribute( 'role', 'button' );
 
 		const textWrapper = div();
-		textWrapper.appendChild( getLabel( label ) );
-		textWrapper.appendChild( div( description ) );
-		output.appendChild( textWrapper );
+		textWrapper.append( getLabel( label ) );
+		textWrapper.append( div( description ) );
+		output.append( textWrapper );
 
-		output.appendChild( div( { className: 'caret' } ) );
+		output.append( div( { className: 'caret' } ) );
 
 		output.addEventListener(
 			'click',
@@ -384,13 +384,13 @@
 		let examples = [
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
-				example: '[formidable id=' + formId + ']',
+				example: `[formidable id=${ formId }]`,
 				link: 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually',
 				linkLabel: __( 'How to use shortcodes in WordPress', 'formidable' )
 			},
 			{
 				label: __( 'Use PHP code', 'formidable' ),
-				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ' ) ); ?>'
+				example: `<?php echo FrmFormsController::get_form_shortcode( array( 'id' => ${ formId } ) ); ?>`
 			}
 		];
 
@@ -404,10 +404,10 @@
 		const unique = getAutoId();
 
 		const labelElement = getLabel( label );
-		labelElement.id = 'frm_embed_example_label_' + unique;
+		labelElement.id = `frm_embed_example_label_${ unique }`;
 
 		const element = div();
-		element.appendChild( labelElement );
+		element.append( labelElement );
 
 		let exampleElement;
 		if ( example.length > 80 ) {
@@ -417,22 +417,22 @@
 			exampleElement.type = 'text';
 		}
 
-		exampleElement.id = 'frm_embed_example_' + unique;
+		exampleElement.id = `frm_embed_example_${ unique }`;
 		exampleElement.className = 'frm_embed_example';
 		exampleElement.value = example;
 		exampleElement.readOnly = true;
 		exampleElement.setAttribute( 'tabindex', -1 );
 
-		if ( 'undefined' !== typeof link && 'undefined' !== typeof linkLabel ) {
+		if ( link !== undefined && linkLabel !== undefined ) {
 			const linkElement = tag( 'a' );
 			linkElement.href = link;
 			linkElement.textContent = linkLabel;
 			linkElement.setAttribute( 'target', '_blank' );
-			element.appendChild( linkElement );
+			element.append( linkElement );
 		}
 
-		element.appendChild( exampleElement );
-		element.appendChild( getCopyIcon( label ) );
+		element.append( exampleElement );
+		element.append( getCopyIcon( label ) );
 
 		return element;
 	}
@@ -444,7 +444,7 @@
 
 	function getCopyIcon( label ) {
 		const icon = svg( { href: '#frm_clone_icon' } );
-		icon.id = 'frm_copy_embed_' + getAutoId();
+		icon.id = `frm_copy_embed_${ getAutoId() }`;
 		icon.setAttribute( 'tabindex', 0 );
 		icon.setAttribute( 'role', 'button' );
 		/* translators: %s: Example type (ie. WordPress shortcode, API Form script) */
@@ -487,15 +487,15 @@
 
 	function speak( message ) {
 		const element = document.createElement( 'div' );
-		const id = 'speak-' + getAutoId();
+		const id = `speak-${ getAutoId() }`;
 
 		element.setAttribute( 'aria-live', 'assertive' );
 		element.setAttribute( 'id', id );
 		element.className = 'frm_screen_reader frm_hidden';
 		element.textContent = message;
-		document.body.appendChild( element );
+		document.body.append( element );
 
-		setTimeout( () => document.body.removeChild( element ), 1000 );
+		setTimeout( () => element.remove(), 1000 );
 	}
 
 	/**

@@ -13,6 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAntiSpam extends FrmValidate {
 
 	/**
+	 * Track when the token filters have been added so they are only added once.
+	 * The callback checks the Anti-Spam setting of the form being rendered, so
+	 * a single callback covers every form on the page. Adding one callback for
+	 * each form would print duplicate data-token attributes.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $filters_added = false;
+
+	/**
 	 * @return string
 	 */
 	protected function get_option_key() {
@@ -40,8 +52,14 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return void
 	 */
 	public function init() {
-		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
-		add_filter( 'frm_form_div_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
+		if ( self::$filters_added ) {
+			return;
+		}
+
+		self::$filters_added = true;
+
+		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
+		add_filter( 'frm_form_div_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
 	}
 
 	/**
@@ -56,11 +74,7 @@ class FrmAntiSpam extends FrmValidate {
 	private function get( $current = true ) {
 		// If $current was not passed, or it is true, we use the current timestamp.
 		// If $current was passed in as a string, we'll use that passed in timestamp.
-		if ( $current !== true ) {
-			$time = $current;
-		} else {
-			$time = time();
-		}
+		$time = $current === true ? time() : $current;
 
 		// Format the timestamp to be less exact, as we want to deal in days.
 		// June 19th, 2020 would get formatted as: 1906202017125.
@@ -68,9 +82,7 @@ class FrmAntiSpam extends FrmValidate {
 		$token_date = gmdate( 'dmYzW', $time );
 
 		// Combine our token date and our token salt, and md5 it.
-		$form_token_string = md5( $token_date . $this->get_antispam_secret_key() );
-
-		return $form_token_string;
+		return md5( $token_date . $this->get_antispam_secret_key() );
 	}
 
 	/**
@@ -107,14 +119,14 @@ class FrmAntiSpam extends FrmValidate {
 		$current_date = time();
 
 		// Create our array of times to check before today. A user with a longer
-		// cache time can extend this. A user with a shorter cache time can remove times.
+		// Cache time can extend this. A user with a shorter cache time can remove times.
 		$valid_token_times_before = apply_filters(
 			'frm_form_token_check_before_today',
 			array(
 				// Two days ago.
 				2 * DAY_IN_SECONDS,
 				// One day ago.
-				1 * DAY_IN_SECONDS,
+				DAY_IN_SECONDS,
 			)
 		);
 
@@ -166,17 +178,29 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
-	 * Add the token field to the form.
+	 * Add the token field to the form if the form has Anti-Spam enabled.
 	 *
 	 * @since 4.11
+	 * @since x.x The $form param was added, and forms without Anti-Spam enabled are now skipped.
 	 *
-	 * @param string $attributes
+	 * @param string      $attributes
+	 * @param object|null $form The form being rendered.
 	 *
 	 * @return string
 	 */
-	public function add_token_to_form( $attributes ) {
-		$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
-		return $attributes;
+	public function add_token_to_form( $attributes, $form = null ) {
+		$antispam = $this;
+
+		if ( $form ) {
+			$antispam       = new self( (int) $form->id );
+			$antispam->form = $form;
+		}
+
+		if ( ! $antispam->run_antispam() ) {
+			return $attributes;
+		}
+
+		return $attributes . ( ' data-token="' . esc_attr( $antispam->get() ) . '"' );
 	}
 
 	/**
@@ -216,9 +240,10 @@ class FrmAntiSpam extends FrmValidate {
 		// If the antispam setting is enabled and we don't have a token, bail.
 		if ( ! $token ) {
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
-				// add an exception for the entries page.
+				// Add an exception for the entries page.
 				return true;
 			}
+
 			return $this->process_antispam_filter( $this->get_missing_token_message() );
 		}
 
@@ -280,7 +305,7 @@ class FrmAntiSpam extends FrmValidate {
 
 		// If the user is an admin, return text with a link to support.
 		// We add a space here to separate the sentences, but outside of the localized
-		// text to avoid it being removed.
+		// Text to avoid it being removed.
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.
 			esc_html__( 'Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue.', 'formidable' ),
@@ -321,10 +346,12 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return void
 	 */
 	private static function clear_wp_super_cache() {
-		if ( function_exists( 'wp_cache_clean_cache' ) ) {
-			global $file_prefix;
-			wp_cache_clean_cache( $file_prefix, true );
+		if ( ! function_exists( 'wp_cache_clean_cache' ) ) {
+			return;
 		}
+
+		global $file_prefix;
+		wp_cache_clean_cache( $file_prefix, true );
 	}
 
 	/**

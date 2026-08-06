@@ -58,11 +58,7 @@ class FrmFieldOption {
 	 * @return void
 	 */
 	private function set_option_label() {
-		if ( is_array( $this->option ) ) {
-			$this->option_label = ( $this->option['label'] ?? reset( $this->option ) );
-		} else {
-			$this->option_label = $this->option;
-		}
+		$this->option_label = is_array( $this->option ) ? ( $this->option['label'] ?? reset( $this->option ) ) : $this->option;
 	}
 
 	/**
@@ -93,7 +89,7 @@ class FrmFieldOption {
 		}
 
 		if ( $use_value_as_label && '' === trim( $this->option_label ) ) {
-			$label = '' !== (string) $this->saved_value ? $this->saved_value : FrmAppHelper::get_no_label_text();
+			$label = '' !== $this->saved_value ? $this->saved_value : FrmAppHelper::get_no_label_text();
 		} else {
 			$label = $this->option_label;
 		}

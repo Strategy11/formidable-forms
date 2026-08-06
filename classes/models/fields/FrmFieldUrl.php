@@ -65,10 +65,13 @@ class FrmFieldUrl extends FrmFieldType {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$value = $args['value'];
 
-		if ( trim( $value ) === 'http://' || empty( $value ) ) {
+		if ( trim( $value ) === 'http://' || ! $value ) {
 			$value = '';
 		} else {
 			$value = esc_url_raw( $value );
@@ -79,10 +82,10 @@ class FrmFieldUrl extends FrmFieldType {
 
 		$errors = array();
 
-		// validate the url format
-		if ( ! empty( $value ) && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
+		// Validate the url format
+		if ( $value && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
-		} elseif ( $this->field->required == '1' && empty( $value ) ) {
+		} elseif ( $this->field->required == '1' && ! $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		}
 
@@ -90,24 +93,24 @@ class FrmFieldUrl extends FrmFieldType {
 	}
 
 	protected function prepare_display_value( $value, $atts ) {
-		if ( $atts['html'] ) {
-			$images = '';
-
-			foreach ( (array) $value as $url ) {
-				$image_regex = '/(\.(?i)(jpg|jpeg|png|gif))$/';
-				$is_image    = preg_match( $image_regex, $url );
-
-				if ( $is_image ) {
-					$images .= '<img src="' . esc_url( $url ) . '" class="frm_image_from_url" alt="" /> ';
-				} else {
-					$images .= strip_tags( $url );
-				}
-			}
-
-			$value = $images;
+		if ( ! $atts['html'] ) {
+			return $value;
 		}
 
-		return $value;
+		$images = '';
+
+		foreach ( (array) $value as $url ) {
+			$image_regex = '/(\.(?i)(jpg|jpeg|png|gif))$/';
+			$is_image    = preg_match( $image_regex, $url );
+
+			if ( $is_image ) {
+				$images .= '<img src="' . esc_url( $url ) . '" class="frm_image_from_url" alt="" /> ';
+			} else {
+				$images .= strip_tags( $url );
+			}
+		}
+
+		return $images;
 	}
 
 	/**

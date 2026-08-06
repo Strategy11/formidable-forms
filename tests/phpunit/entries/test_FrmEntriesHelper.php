@@ -19,6 +19,6 @@ class test_FrmEntriesHelper extends FrmUnitTest {
 		$atts          = array();
 		$display_value = FrmEntriesHelper::display_value( $value, $field, $atts );
 		$this->assertIsString( $display_value );
-		$this->assertEquals( 'Option 1, Option 2', $display_value );
+		$this->assertSame( 'Option 1, Option 2', $display_value );
 	}
 }

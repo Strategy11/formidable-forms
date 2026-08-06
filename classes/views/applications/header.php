@@ -1,4 +1,13 @@
 <?php
+/**
+ * Applications header.
+ *
+ * @package Formidable
+ *
+ * @var string $title   Header title text.
+ * @var string $context Current applications view context (e.g. 'index').
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

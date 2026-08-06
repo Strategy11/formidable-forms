@@ -80,8 +80,6 @@ if ( ! $only_contain_submit ) {
 	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
 }//end if
 
-$frm_settings = FrmAppHelper::get_settings();
-
 if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !== $_GET['action'] ) ) {
 	?>
 	<div class="frm_form_field form-field">
@@ -101,13 +99,13 @@ do_action( 'frm_entry_form', $form, $form_action, $errors );
 
 global $frm_vars;
 
-// close open section div
+// Close open section div
 if ( ! empty( $frm_vars['div'] ) ) {
 	echo "</div>\n";
 	unset( $frm_vars['div'] );
 }
 
-// close open collapsible toggle div
+// Close open collapsible toggle div
 if ( ! empty( $frm_vars['collapse_div'] ) ) {
 	echo "</div>\n";
 	unset( $frm_vars['collapse_div'] );
@@ -124,7 +122,7 @@ if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_cur
 	$copy_values = $values;
 	unset( $copy_values['fields'] );
 
-	if ( isset( $form->options['form_class'] ) && strpos( $form->options['form_class'], 'frm_inline_success' ) !== false ) {
+	if ( isset( $form->options['form_class'] ) && str_contains( $form->options['form_class'], 'frm_inline_success' ) ) {
 		ob_start();
 		ob_implicit_flush( false );
 		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );

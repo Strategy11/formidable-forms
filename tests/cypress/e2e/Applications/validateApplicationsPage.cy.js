@@ -27,7 +27,8 @@ describe( 'Applications page', () => {
 							t.includes( 'the most advanced wordpress form builder' ) ||
 							t.includes( 'more than just a wordpress form builder' ) ||
 							t.includes( 'get more done in less time with better wordpress forms' ) ||
-							t.includes( 'power your wordpress site like never before' )
+							t.includes( 'power your wordpress site like never before' ) ||
+							t.includes( 'stop patching together plugins. start building what you actually need.' )
 						);
 					} );
 				} );

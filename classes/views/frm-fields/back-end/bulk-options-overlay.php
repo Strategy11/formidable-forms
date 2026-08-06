@@ -1,4 +1,12 @@
 <?php
+/**
+ * Bulk edit options modal.
+ *
+ * @package Formidable
+ *
+ * @var array<string, array> $prepop Preset options groups keyed by label; each may contain a 'class' key.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
