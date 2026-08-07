@@ -3268,6 +3268,12 @@ window.frmAdminBuildJS = function() {
 		return `field_options${ opt.substring( 0, at ) }_${ fieldId }${ opt.substring( at ) }`;
 	}
 
+	/**
+	 * Populates the calculation field list.
+	 *
+	 * @param {HTMLElement} element The calculation box element.
+	 * @param {boolean}     force   Whether to force the refresh.
+	 */
 	function popCalcFields( element, force ) {
 		const settingsBox = jQuery( element ).closest( '.frm-single-settings' );
 		const calc = settingsBox.find( '.frm-calc-field' );
@@ -3287,10 +3293,21 @@ window.frmAdminBuildJS = function() {
 			box = document.getElementById( `frm-calc-box-${ fieldId }` );
 		}
 
-		const exclude = getExcludeArray( box, isSummary );
+		const codeList = box.querySelector( '.frm_code_list' );
+		const exclude = getExcludeArray( codeList, isSummary );
 		const excludedOpts = extractExcludedOptions( exclude );
 
-		const fields = getFieldList();
+		/**
+		 * Filters the fields offered in a calculation box.
+		 *
+		 * Add-ons that own a calculation type can drop fields it can't use. When
+		 * nothing is hooked in, every field is offered, matching the behavior
+		 * before calculation-type specific filtering existed.
+		 *
+		 * @param {Array}  fields The candidate fields.
+		 * @param {Object} args   Context with the box, code list, and isSummary flag.
+		 */
+		const fields = wp.hooks.applyFilters( 'frm_calc_field_list', getFieldList(), { box, codeList, isSummary } );
 		const list = document.getElementById( `frm-calc-list-${ fieldId }` );
 		list.innerHTML = '';
 
@@ -3315,8 +3332,14 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function getExcludeArray( calcBox, isSummary ) {
-		const codeList = calcBox.querySelector( '.frm_code_list' );
+	/**
+	 * Gets the exclude array for the calculation box.
+	 *
+	 * @param {HTMLElement} codeList  The code list element.
+	 * @param {boolean}     isSummary Whether the calculation box is for a summary.
+	 * @return {Array} The exclude array.
+	 */
+	function getExcludeArray( codeList, isSummary ) {
 		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
@@ -6970,7 +6993,8 @@ window.frmAdminBuildJS = function() {
 		const fieldId = field.getAttribute( 'data-fid' );
 
 		if ( '' === replaceWith.trim() ) {
-			replaceWith = ` ${ setting.querySelector( 'option[data-align]' ).getAttribute( 'data-align' ) }`;
+			const alignOption = setting.querySelector( 'option[data-align]' );
+			replaceWith = alignOption ? ` ${ alignOption.getAttribute( 'data-align' ) }` : '';
 		}
 		// Include classes from multiple settings.
 		if ( fieldId !== undefined ) {

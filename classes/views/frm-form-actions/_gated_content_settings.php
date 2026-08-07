@@ -24,7 +24,7 @@ $frm_gc_types           = FrmGatedContentAction::get_types();
 // gated content actions exist on the same form.
 $frm_gc_wrapper_id = 'frm_gc_settings_' . $this->number;
 
-// array<string, WP_Post[]> — posts grouped by item type key (e.g. 'page', 'post').
+// array<string, list<object>> — posts grouped by item type key (e.g. 'page', 'post').
 $frm_gc_posts = FrmGatedContentAction::get_posts();
 
 $frm_gc_total_posts      = array_sum( array_map( 'count', $frm_gc_posts ) );
