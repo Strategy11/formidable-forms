@@ -11,8 +11,8 @@ class test_FrmMisc extends FrmUnitTest {
 	public function test_load_formidable_forms() {
 		global $frm_vars;
 		$this->assertNotEmpty( $frm_vars );
-		$this->assertTrue( isset( $frm_vars['load_css'] ) );
-		$this->assertTrue( isset( $frm_vars['pro_is_authorized'] ) );
+		$this->assertArrayHasKey( 'load_css', $frm_vars );
+		$this->assertArrayHasKey( 'pro_is_authorized', $frm_vars );
 
 		$this->assertSame( 0, has_action( 'init', 'FrmAppController::load_lang' ) );
 	}

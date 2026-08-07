@@ -40,10 +40,10 @@ class FrmFieldDefault extends FrmFieldType {
 		do_action( 'frm_display_added_' . $this->type . '_field', $field );
 		$input_html = ob_get_clean();
 
-		if ( ! $input_html ) {
-			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		} else {
+		if ( $input_html ) {
 			echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		} else {
+			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 

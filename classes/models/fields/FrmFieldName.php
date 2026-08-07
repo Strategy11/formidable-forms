@@ -61,10 +61,9 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_processed_sub_fields() {
-		$name_layout = $this->get_name_layout();
-		$names       = explode( '_', $name_layout );
-		$col_class   = 'frm' . intval( 12 / count( $names ) );
-		$result      = array();
+		$names     = explode( '_', $this->get_name_layout() );
+		$col_class = 'frm' . intval( 12 / count( $names ) );
+		$result    = array();
 
 		foreach ( $names as $name ) {
 			if ( empty( $this->sub_fields[ $name ] ) ) {
@@ -147,8 +146,6 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value[ $atts['show'] ] ?? '';
 		}
 
-		$name_layout = $this->get_name_layout();
-
 		$value = wp_parse_args(
 			$value,
 			array(
@@ -158,7 +155,7 @@ class FrmFieldName extends FrmFieldCombo {
 			)
 		);
 
-		switch ( $name_layout ) {
+		switch ( $this->get_name_layout() ) {
 			case 'last_first':
 				$value = $value['last'] . ' ' . $value['first'];
 				break;
@@ -221,13 +218,15 @@ class FrmFieldName extends FrmFieldCombo {
 		parent::process_args_for_field_output( $args );
 
 		// Show all subfields in form builder then use JS to show or hide them.
-		if ( $this->should_print_hidden_sub_fields() && count( $args['sub_fields'] ) !== count( $this->sub_fields ) ) {
-			$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
-			$args['sub_fields'] = $this->sub_fields;
+		if ( ! $this->should_print_hidden_sub_fields() || count( $args['sub_fields'] ) === count( $this->sub_fields ) ) {
+			return;
+		}
 
-			foreach ( $hidden_fields as $name => $hidden_field ) {
-				$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
-			}
+		$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
+		$args['sub_fields'] = $this->sub_fields;
+
+		foreach ( $hidden_fields as $name => $hidden_field ) {
+			$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
 		}
 	}
 
@@ -246,7 +245,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 *
 	 * @return array
 	 */
-	protected function get_inputs_container_attrs() {
+	public function get_inputs_container_attrs() {
 		$attrs = parent::get_inputs_container_attrs();
 
 		$attrs['data-name-layout'] = $this->get_name_layout();

@@ -72,7 +72,7 @@ class FrmSquareLiteConnectHelper {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-card-item frm4">
-			<div class="frm-flex-col">
+			<div class="frm-flex-col" style="width: 100%;">
 				<div>
 					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
 						<?php
@@ -125,10 +125,9 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$script_url     = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
-		$dependencies   = array( 'formidable_dom' );
-		$plugin_version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, $plugin_version, true );
+		$script_url   = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
+		$dependencies = array( 'formidable_dom' );
+		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, FrmAppHelper::plugin_version(), true );
 		wp_enqueue_script( 'formidable_square_settings' );
 	}
 
@@ -136,7 +135,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|string
 	 */
 	public static function get_oauth_redirect_url() {
-		$mode = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
+		$mode = self::get_mode_value_from_post();
 
 		if ( self::get_merchant_id( $mode ) ) {
 			// Do not allow for initialize if there is already a configured account id.
@@ -182,10 +181,6 @@ class FrmSquareLiteConnectHelper {
 		$body    = array_merge( $body, $additional_body );
 		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
-
-		if ( ! $headers ) {
-			return 'Unable to build headers for post. Is your pro license configured properly?';
-		}
 
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;
@@ -556,16 +551,11 @@ class FrmSquareLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
-		return array(
-			'merchant_id'     => get_option( self::get_merchant_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
-		);
+		return self::get_body_for_mode( FrmSquareLiteAppHelper::active_mode() );
 	}
 
 	/**
-	 * Check $_POST for live or test mode value as it can be updated in real time from Stripe Settings and can be configured before the update is saved.
+	 * Check $_POST for live or test mode value as it can be updated in real time from Square Settings and can be configured before the update is saved.
 	 *
 	 * @return string 'test' or 'live'
 	 */
@@ -580,6 +570,24 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
+	 * Get the standard body with account id, mode, and passwords to send to the connect server.
+	 *
+	 * @since 6.32.1
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return array
+	 */
+	private static function get_body_for_mode( $mode ) {
+		return array(
+			'merchant_id'         => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_square_api_mode' => $mode,
+		);
+	}
+
+	/**
 	 * @return string|null
 	 */
 	public static function get_latest_error_from_square_api() {
@@ -589,10 +597,11 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $receipt_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function refund_payment( $receipt_id ) {
-		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		$data = self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+		return is_object( $data );
 	}
 
 	/**
@@ -622,8 +631,7 @@ class FrmSquareLiteConnectHelper {
 		$request_body = array();
 
 		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
+			$request_body = self::get_body_for_mode( $mode );
 		}
 
 		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
@@ -702,15 +710,16 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $subscription_id
 	 *
-	 * @return false|object
+	 * @return bool
 	 */
 	public static function cancel_subscription( $subscription_id ) {
-		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+		return false !== self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
 
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_square_api_integration();
+		FrmTransLiteAppHelper::trigger_gateway_disconnected_hook( 'square', self::get_mode_value_from_post() );
 		wp_send_json_success();
 	}
 
@@ -718,9 +727,8 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function disconnect() {
-		$additional_body = array(
-			'frm_square_api_mode' => self::get_mode_value_from_post(),
-		);
+		$mode            = self::get_mode_value_from_post();
+		$additional_body = self::get_body_for_mode( $mode );
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
@@ -756,8 +764,7 @@ class FrmSquareLiteConnectHelper {
 		$request_body = array();
 
 		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
+			$request_body = self::get_body_for_mode( $mode );
 		}
 
 		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );
@@ -792,11 +799,10 @@ class FrmSquareLiteConnectHelper {
 
 		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
 		$usage           = new FrmUsage();
-		$uuid            = $usage->uuid();
 
 		update_option( $option_name, time() );
 
-		if ( $site_identifier === $uuid ) {
+		if ( $site_identifier === $usage->uuid() ) {
 			wp_send_json_success();
 		}
 

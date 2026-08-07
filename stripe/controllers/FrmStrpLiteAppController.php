@@ -58,27 +58,14 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
-	 * Redirect to Stripe settings when payments are not yet installed
-	 * and the payments page is accessed by its URL.
+	 * Gets payments settings URL.
 	 *
-	 * @return void
+	 * @since 6.30
+	 *
+	 * @return string
 	 */
-	public static function maybe_redirect_to_stripe_settings() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) ) {
-			return;
-		}
-
-		if ( class_exists( 'FrmPaymentsController' ) ) {
-			// Never redirect when someone is using the PayPal add-on.
-			return;
-		}
-
-		if ( FrmTransLiteAppHelper::payments_table_exists() ) {
-			return;
-		}
-
-		wp_safe_redirect( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) );
-		die();
+	public static function get_payments_settings_url() {
+		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' );
 	}
 
 	/**
@@ -247,5 +234,17 @@ class FrmStrpLiteAppController {
 			return FrmTransLiteActionsController::fill_entry_from_previous( $values, $field );
 		}
 		return $values;
+	}
+
+	/**
+	 * Redirect to Stripe settings when payments are not yet installed
+	 * and the payments page is accessed by its URL.
+	 *
+	 * @deprecated 6.33
+	 *
+	 * @return void
+	 */
+	public static function maybe_redirect_to_stripe_settings() {
+		_deprecated_function( __METHOD__, '6.33' );
 	}
 }

@@ -77,7 +77,7 @@ class AddMissingParamTypeFromCallsSniff implements Sniff {
 
 		// Check if function has a docblock.
 		$docblock       = $this->findDocblock( $phpcsFile, $stackPtr );
-		$hasDocblock    = ( false !== $docblock );
+		$hasDocblock    = false !== $docblock;
 		$existingParams = array();
 
 		if ( $hasDocblock ) {

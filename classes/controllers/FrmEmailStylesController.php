@@ -135,14 +135,14 @@ class FrmEmailStylesController {
 			),
 		);
 
-		if ( 'plain' !== $style_key ) {
-			$content = self::get_test_rich_text_email_content( $style_key, $table_rows );
-		} else {
+		if ( 'plain' === $style_key ) {
 			$content = '';
 
 			foreach ( $table_rows as $row ) {
 				$content .= $row['label'] . ': ' . $row['value'] . "\r\n";
 			}
+		} else {
+			$content = self::get_test_rich_text_email_content( $style_key, $table_rows );
 		}//end if
 
 		return $content;
@@ -272,9 +272,7 @@ class FrmEmailStylesController {
 			die( esc_html( $not_exist_msg ) );
 		}
 
-		$styles = self::get_email_styles();
-
-		if ( ! isset( $styles[ $style_key ] ) ) {
+		if ( ! isset( self::get_email_styles()[ $style_key ] ) ) {
 			die( esc_html( $not_exist_msg ) );
 		}
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Dashboard widget placeholder.
+ *
+ * @package Formidable
+ *
+ * @var array $template Widget data with 'widget-heading' and 'placeholder' (background, heading, copy, button[link, label, classname]).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

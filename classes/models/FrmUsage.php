@@ -90,6 +90,7 @@ class FrmUsage {
 			'form_count'        => $form_counts->published,
 			'entry_count'       => FrmEntry::getRecordCount(),
 			'timestamp'         => gmdate( 'c' ),
+			'misc'              => array(),
 
 			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
 			'plugins'           => $this->plugins(),
@@ -180,7 +181,7 @@ class FrmUsage {
 		/**
 		 * Filter the keys to skip when cleaning the snapshot data before sending.
 		 *
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @param array $skip_keys Data keys.
 		 */
@@ -191,14 +192,24 @@ class FrmUsage {
 		/**
 		 * Filter the keys to replace with a long text placeholder before sending.
 		 *
-		 * @since x.x
+		 * @since 6.28
 		 *
 		 * @paramm array $long_text_keys Data keys.
 		 */
 		$long_text_keys = apply_filters( 'frm_usage_long_text_keys', $long_text_keys );
 
 		foreach ( $data as $key => &$value ) {
-			if ( ! $value || in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
+			if ( ! $value ) {
+				continue;
+			}
+
+			if ( in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
+				unset( $data[ $key ] );
+				continue;
+			}
+
+			if ( is_object( $value ) ) {
+				$value = '{{object}}';
 				continue;
 			}
 
@@ -214,7 +225,7 @@ class FrmUsage {
 			}
 
 			// If key ends with `_email`, or value contains `@`, this might contain an email address.
-			if ( str_ends_with( $key, '_email' ) || str_contains( $value, '@' ) ) {
+			if ( str_ends_with( $key, '_email' ) || ( is_string( $value ) && str_contains( $value, '@' ) ) ) {
 				// Replace it with a placeholder.
 				$value = '{{contain_email}}';
 			}
@@ -257,22 +268,11 @@ class FrmUsage {
 	private function payments( $table = 'frm_payments' ) {
 		$allowed_tables = array( 'frm_payments', 'frm_subscriptions' );
 
-		if ( ! in_array( $table, $allowed_tables, true ) ) {
+		if ( ! in_array( $table, $allowed_tables, true ) || ! FrmTransLiteAppHelper::payments_table_exists() ) {
 			return array();
 		}
 
-		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
-			return array();
-		}
-
-		global $wpdb;
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
-				'SELECT amount, status, paysys, created_at FROM %1$s',
-				$wpdb->prefix . $table
-			)
-		);
-
+		$rows     = $this->get_payment_db_rows( $table );
 		$payments = array();
 
 		foreach ( $rows as $row ) {
@@ -285,6 +285,34 @@ class FrmUsage {
 		}
 
 		return $payments;
+	}
+
+	/**
+	 * @since 6.30
+	 *
+	 * @param string $table
+	 *
+	 * @return array
+	 */
+	private function get_payment_db_rows( $table ) {
+		global $wpdb;
+
+		if ( FrmDb::db_column_exists( $table, 'test' ) ) {
+			return $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT amount, status, paysys, created_at FROM %i WHERE test IS NULL OR test != 1',
+					$wpdb->prefix . $table
+				)
+			);
+		}
+
+		// Fallback for PayPal add-on where this column does not exist.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT amount, status, paysys, created_at FROM %i',
+				$wpdb->prefix . $table
+			)
+		);
 	}
 
 	/**
@@ -477,25 +505,28 @@ class FrmUsage {
 			);
 
 			foreach ( $settings as $setting ) {
-				if ( isset( $form->options[ $setting ] ) ) {
-					if ( 'custom_style' === $setting ) {
-						$style->id = $form->options[ $setting ];
-
-						if ( ! $style->id ) {
-							$style_name = 0;
-						} elseif ( 1 === intval( $style->id ) ) {
-							$style_name = 'formidable-style';
-						} else {
-							$style_post = $style->get_one();
-							$style_name = $style_post ? $style_post->post_name : 'formidable-style';
-						}
-
-						$new_form[ $setting ] = $style_name;
-					} else {
-						$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
-					}
+				if ( ! isset( $form->options[ $setting ] ) ) {
+					continue;
 				}
-			}
+
+				if ( 'custom_style' !== $setting ) {
+					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					continue;
+				}
+
+				$style->id = $form->options[ $setting ];
+
+				if ( ! $style->id ) {
+					$style_name = 0;
+				} elseif ( 1 === intval( $style->id ) ) {
+					$style_name = 'formidable-style';
+				} else {
+					$style_post = $style->get_one();
+					$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+				}
+
+				$new_form[ $setting ] = $style_name;
+			}//end foreach
 
 			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
 		}//end foreach
@@ -572,22 +603,41 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function actions() {
-		$args = array(
-			'post_type'   => FrmFormActionsController::$action_post_type,
-			'numberposts' => 100,
-		);
+		$actions        = array();
+		$offset         = 0;
+		$limit          = 100;
+		$limit_plus_one = $limit + 1;
 
-		$actions       = array();
-		$saved_actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
-
-		foreach ( $saved_actions as $action ) {
-			$actions[] = array(
-				'form_id'  => $action->menu_order,
-				'type'     => $action->post_excerpt,
-				'status'   => $action->post_status,
-				'settings' => FrmAppHelper::maybe_json_decode( $action->post_content ),
+		do {
+			$args          = array(
+				'post_type'   => FrmFormActionsController::$action_post_type,
+				'numberposts' => $limit_plus_one,
+				'offset'      => $offset,
 			);
-		}
+			$saved_actions = get_posts( $args );
+			$has_more      = count( $saved_actions ) === $limit_plus_one;
+
+			if ( $has_more ) {
+				// Pop off the last item as it is only queried to determine if there are more results.
+				array_pop( $saved_actions );
+			}
+
+			foreach ( $saved_actions as $action ) {
+				$actions[] = array(
+					'form_id'  => $action->menu_order,
+					'type'     => $action->post_excerpt,
+					'status'   => $action->post_status,
+					'settings' => FrmAppHelper::maybe_json_decode( $action->post_content ),
+				);
+				unset( $action );
+			}
+
+			$offset += $limit;
+
+			unset( $saved_actions );
+
+			gc_collect_cycles();
+		} while ( $has_more );
 
 		return $actions;
 	}

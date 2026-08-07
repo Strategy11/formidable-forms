@@ -13,6 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAntiSpam extends FrmValidate {
 
 	/**
+	 * Track when the token filters have been added so they are only added once.
+	 * The callback checks the Anti-Spam setting of the form being rendered, so
+	 * a single callback covers every form on the page. Adding one callback for
+	 * each form would print duplicate data-token attributes.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $filters_added = false;
+
+	/**
 	 * @return string
 	 */
 	protected function get_option_key() {
@@ -40,8 +52,14 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return void
 	 */
 	public function init() {
-		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
-		add_filter( 'frm_form_div_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
+		if ( self::$filters_added ) {
+			return;
+		}
+
+		self::$filters_added = true;
+
+		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
+		add_filter( 'frm_form_div_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
 	}
 
 	/**
@@ -108,7 +126,7 @@ class FrmAntiSpam extends FrmValidate {
 				// Two days ago.
 				2 * DAY_IN_SECONDS,
 				// One day ago.
-				1 * DAY_IN_SECONDS,
+				DAY_IN_SECONDS,
 			)
 		);
 
@@ -160,16 +178,29 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
-	 * Add the token field to the form.
+	 * Add the token field to the form if the form has Anti-Spam enabled.
 	 *
 	 * @since 4.11
+	 * @since x.x The $form param was added, and forms without Anti-Spam enabled are now skipped.
 	 *
-	 * @param string $attributes
+	 * @param string      $attributes
+	 * @param object|null $form The form being rendered.
 	 *
 	 * @return string
 	 */
-	public function add_token_to_form( $attributes ) {
-		return $attributes . ( ' data-token="' . esc_attr( $this->get() ) . '"' );
+	public function add_token_to_form( $attributes, $form = null ) {
+		$antispam = $this;
+
+		if ( $form ) {
+			$antispam       = new self( (int) $form->id );
+			$antispam->form = $form;
+		}
+
+		if ( ! $antispam->run_antispam() ) {
+			return $attributes;
+		}
+
+		return $attributes . ( ' data-token="' . esc_attr( $antispam->get() ) . '"' );
 	}
 
 	/**
@@ -315,10 +346,12 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return void
 	 */
 	private static function clear_wp_super_cache() {
-		if ( function_exists( 'wp_cache_clean_cache' ) ) {
-			global $file_prefix;
-			wp_cache_clean_cache( $file_prefix, true );
+		if ( ! function_exists( 'wp_cache_clean_cache' ) ) {
+			return;
 		}
+
+		global $file_prefix;
+		wp_cache_clean_cache( $file_prefix, true );
 	}
 
 	/**

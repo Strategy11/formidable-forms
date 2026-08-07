@@ -14,8 +14,7 @@ class test_FrmHooksController extends FrmUnitTest {
 		);
 
 		foreach ( $expected_hooks as $tag => $function ) {
-			$has_filter = has_filter( $tag, $function );
-			$this->assertTrue( $has_filter !== false, 'The ' . $tag . ' hook is not loaded' );
+			$this->assertNotFalse( has_filter( $tag, $function ), 'The ' . $tag . ' hook is not loaded' );
 		}
 	}
 }

@@ -1,4 +1,13 @@
 <?php
+/**
+ * Shared entry sidebar publish box.
+ *
+ * @package Formidable
+ *
+ * @var stdClass|null $entry  Entry object (falls back to $record).
+ * @var stdClass|null $record Legacy entry object used when $entry is not set.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -22,6 +31,7 @@ if ( ! isset( $entry ) ) {
 	 * @param string   $text
 	 * @param stdClass $entry
 	 */
+	// skipcq: PHP-W1020
 	$additional_timestamp_text = apply_filters( 'frm_additional_timestamp_text', '', $entry );
 
 	printf(

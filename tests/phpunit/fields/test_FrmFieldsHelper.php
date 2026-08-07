@@ -190,7 +190,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		foreach ( $tests as $test ) {
 			$result         = FrmFieldsHelper::value_meets_condition( $test['observed_value'], $test['condition'], $test['hide_opt'] );
 			$observed_value = is_array( $test['observed_value'] ) ? implode( ',', $test['observed_value'] ) : $test['observed_value'];
-			$this->assertEquals( $test['expected'], $result, $observed_value . ' ' . $test['condition'] . ' ' . $test['hide_opt'] . ' failed' );
+			$this->assertSame( $test['expected'], $result, $observed_value . ' ' . $test['condition'] . ' ' . $test['hide_opt'] . ' failed' );
 		}
 	}
 
@@ -199,7 +199,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 	 */
 	public function test_get_draft_field_results() {
 		$form_id = $this->factory->form->create();
-		$this->assertEquals( array(), FrmFieldsHelper::get_draft_field_results( $form_id ) );
+		$this->assertSame( array(), FrmFieldsHelper::get_draft_field_results( $form_id ) );
 
 		$draft_field_options = array(
 			'form_id'       => $form_id,
@@ -253,7 +253,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		$entry      = $this->factory->entry->create_and_get( $entry_data );
 		$shortcode  = '[' . $checkbox_field->id . ' sep="</div><div>"]';
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $shortcode, $form->id );
-		$this->assertEquals(
+		$this->assertSame(
 			implode( '</div><div>', array( 'Option 1', 'Option 2' ) ),
 			FrmFieldsHelper::replace_content_shortcodes( $shortcode, $entry, $shortcodes )
 		);

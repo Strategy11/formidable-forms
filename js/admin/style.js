@@ -3,7 +3,6 @@
  * Pro-specific features are in the style-settings.js file in Pro.
  */
 ( function() {
-	/* globals frmDom, frmAdminBuild */
 	'use strict';
 
 	if ( ! document.getElementById( 'frm_active_style_form' ) ) {
@@ -62,6 +61,95 @@
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
 
 		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
+
+		initOptionLayoutPreview();
+	}
+
+	/**
+	 * Sync the radio/checkbox option layout (alignment) style settings to the preview form in real time.
+	 *
+	 * The layout is applied to the front end through a container class, so changing the style setting
+	 * does not re-render the preview form. This swaps the container class on preview fields that use the
+	 * style setting. The styler preview marks those fields with .frm-default-option-align, so fields with
+	 * their own alignment override are left untouched.
+	 *
+	 * @return {void}
+	 */
+	function initOptionLayoutPreview() {
+		bindOptionLayoutSelect( document.getElementById( 'frm_radio_align' ), '.frm_radio' );
+		bindOptionLayoutSelect( document.getElementById( 'frm_check_align' ), '.frm_checkbox' );
+	}
+
+	/**
+	 * Listen for changes on an option layout style setting and update the preview to match.
+	 *
+	 * @param {HTMLSelectElement|null} select         The style setting dropdown.
+	 * @param {string}                 optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @return {void}
+	 */
+	function bindOptionLayoutSelect( select, optionSelector ) {
+		if ( ! select ) {
+			return;
+		}
+
+		select.addEventListener( 'change', () => {
+			updatePreviewOptionLayout( optionSelector, select.value );
+		} );
+	}
+
+	/**
+	 * Replace the alignment container class on preview fields that are using the style setting.
+	 *
+	 * @param {string} optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @param {string} newAlign       The newly selected style alignment value.
+	 * @return {void}
+	 */
+	function updatePreviewOptionLayout( optionSelector, newAlign ) {
+		const newClass = optionLayoutAlignToClass( newAlign );
+
+		if ( ! newClass ) {
+			return;
+		}
+
+		const activeForm = document.getElementById( 'frm_active_style_form' );
+		if ( ! activeForm ) {
+			return;
+		}
+
+		const alignClasses = [ 'vertical_radio', 'horizontal_radio', 'frm_two_col', 'frm_three_col', 'frm_four_col' ];
+		const containers = new Set();
+
+		activeForm.querySelectorAll( optionSelector ).forEach( option => {
+			const container = option.closest( '.frm_form_field' );
+
+			// Only fields using the style setting (no override) are marked in the styler preview.
+			if ( container?.classList.contains( 'frm-default-option-align' ) ) {
+				containers.add( container );
+			}
+		} );
+
+		containers.forEach( container => {
+			container.classList.remove( ...alignClasses );
+			container.classList.add( newClass );
+		} );
+	}
+
+	/**
+	 * Map an option layout style value to its front-end container class.
+	 *
+	 * @param {string} align The style alignment value.
+	 * @return {string} The matching container class.
+	 */
+	function optionLayoutAlignToClass( align ) {
+		if ( 'inline' === align ) {
+			return 'horizontal_radio';
+		}
+
+		if ( 'block' === align ) {
+			return 'vertical_radio';
+		}
+
+		return align;
 	}
 
 	/**
@@ -256,7 +344,7 @@
 	 * @return {void}
 	 */
 	function handleCommonClickEvents( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( 'frm_toggle_sample_form' === target.id || target.closest( '#frm_toggle_sample_form' ) ) {
 			toggleSampleForm();
@@ -282,7 +370,7 @@
 	 */
 	function switchAdvancedSettingsFormAction( target ) {
 		const form = document.querySelector( '#frm_styling_form' );
-		if ( null === form ) {
+		if ( ! form ) {
 			return;
 		}
 		if ( target.closest( 'a#frm_style_back_to_quick_settings' ) ) {
@@ -322,7 +410,7 @@
 	 * @return {void}
 	 */
 	function handleClickEventsForListPage( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
@@ -337,7 +425,7 @@
 	 * @return {void}
 	 */
 	function handleStyleCardClick( event ) {
-		const target = event.target;
+		const { target } = event;
 
 		if ( target.closest( '.dropdown' ) ) {
 			// Ignore the hamburger menu inside of the card.
@@ -562,7 +650,7 @@
 		}
 
 		const anchor = clickTarget.hasAttribute( 'href' ) ? clickTarget : clickTarget.querySelector( 'a[href]' );
-		anchor.setAttribute( 'href', anchor.getAttribute( 'href' ) + '&sample=1' );
+		anchor.setAttribute( 'href', `${ anchor.getAttribute( 'href' ) }&sample=1` );
 	}
 
 	/**
@@ -634,7 +722,7 @@
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
-		const isTemplate = 'undefined' !== typeof data.templateKey;
+		const isTemplate = data.templateKey !== undefined;
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
@@ -684,7 +772,7 @@
 		} );
 
 		const isRtl = document.body.classList.contains( 'rtl' );
-		dropdownMenu.classList.add( 'dropdown-menu-' + ( isRtl ? 'left' : 'right' ) );
+		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
@@ -798,7 +886,7 @@
 		const form = tag(
 			'form',
 			{
-				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable' ), 'style_name' )
+				child: labelledTextInput( `frm_${ context }_style_name_input`, __( 'Style name', 'formidable' ), 'style_name' )
 			}
 		);
 		form.addEventListener(
@@ -875,6 +963,24 @@
 			return;
 		}
 
+		if ( ! styleId || '0' === String( styleId ) ) {
+			// A new or duplicated style has no ID yet, so there is nothing to rename on the server.
+			// Update the post_title input (which overrides $_GET['style_name'] on save) and the
+			// visible style name instead of calling the rename_style endpoint.
+			const postTitleInput = document.querySelector( 'input[name="frm_style_setting[post_title]"]' );
+			if ( postTitleInput ) {
+				postTitleInput.value = newStyleName;
+			}
+
+			const styleNameElement = document.getElementById( 'frm_style_name' );
+			if ( styleNameElement ) {
+				styleNameElement.textContent = newStyleName;
+			}
+
+			success( __( 'Style has been renamed successfully', 'formidable' ) );
+			return;
+		}
+
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
 		formData.append( 'style_name', newStyleName );
@@ -917,7 +1023,7 @@
 	 * @return {HTMLElement} The card element.
 	 */
 	function getCardByStyleId( styleId ) {
-		const defaultCard = document.querySelector( '#frm_default_style_cards_wrapper > div[data-style-id="' + styleId + '"]' );
+		const defaultCard = document.querySelector( `#frm_default_style_cards_wrapper > div[data-style-id="${ styleId }"]` );
 		if ( defaultCard ) {
 			return defaultCard;
 		}
@@ -930,7 +1036,7 @@
 	 * @return {void}
 	 */
 	function addIconToOption( option, iconId ) {
-		const icon = frmDom.svg( { href: '#' + iconId } );
+		const icon = frmDom.svg( { href: `#${ iconId }` } );
 		option.insertBefore( icon, option.firstChild );
 	}
 
@@ -1050,14 +1156,14 @@
 		}
 
 		for ( const key in defaultValues ) {
-			let targetInput = document.querySelector( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' );
+			let targetInput = document.querySelector( `input[name$="[${ key }]"], select[name$="[${ key }]"]` );
 			if ( ! targetInput ) {
 				continue;
 			}
 
 			if ( 'radio' === targetInput.getAttribute( 'type' ) ) {
 				// Reset the repeater icon dropdown.
-				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + defaultValues[ key ] + '"]' );
+				targetInput = document.querySelector( `input[name$="[${ key }]"][value="${ defaultValues[ key ] }"]` );
 				if ( targetInput ) {
 					targetInput.checked = true;
 					jQuery( targetInput ).trigger( 'change' );
@@ -1108,7 +1214,7 @@
 		const newStyle = document.createElement( 'link' );
 		newStyle.rel = 'stylesheet';
 		newStyle.type = 'text/css';
-		newStyle.href = style.href + '&key=' + getAutoId(); // Make the URL unique so the old stylesheet doesn't get picked up by cache.
+		newStyle.href = `${ style.href }&key=${ getAutoId() }`; // Make the URL unique so the old stylesheet doesn't get picked up by cache.
 
 		// Listen for the new style to load before removing the old style to avoid having no styles while the new style is loading.
 		newStyle.addEventListener(
@@ -1138,7 +1244,7 @@
 	 */
 	function wrapDropdownItem( { anchor, type } ) {
 		return div( {
-			className: 'dropdown-item frm-' + type + '-style',
+			className: `dropdown-item frm-${ type }-style`,
 			child: anchor
 		} );
 	}
@@ -1168,27 +1274,84 @@
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
 		} );
 
-		jQuery( 'input.hex' ).wpColorPicker( {
-			change: function( event, ui ) {
-				let color = jQuery( this ).wpColorPicker( 'color' );
-				trackUnsavedChange();
-				if ( ui.color._alpha < 1 ) {
-					// If there's transparency, use RGBA
-					color = ui.color.toCSS( 'rgba' );
+		function detectColorFormat( value ) {
+			if ( value.startsWith( 'rgba' ) ) {
+				return 'rgba';
+			}
+			if ( value.startsWith( 'rgb' ) ) {
+				return 'rgb';
+			}
+			if ( value.startsWith( 'hsla' ) ) {
+				return 'hsla';
+			}
+			if ( value.startsWith( 'hsl' ) ) {
+				return 'hsl';
+			}
+			return 'hex';
+		}
+
+		const nativeInputValueDescriptor = Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, 'value' );
+
+		jQuery( 'input.hex' ).each( function() {
+			this.dataset.colorFormat = detectColorFormat( this.value );
+
+			// Prevent iris from overwriting non-hex formats with hex during color picking.
+			const input = this;
+			Object.defineProperty( input, 'value', {
+				get() {
+					return nativeInputValueDescriptor.get.call( this );
+				},
+				set( val ) {
+					const format = input.dataset.colorFormat;
+					if ( format && 'hex' !== format && /^#[0-9a-f]{3,8}$/i.test( val ) ) {
+						return;
+					}
+					nativeInputValueDescriptor.set.call( this, val );
+				},
+				configurable: true
+			} );
+		} ).on( 'keyup', function() {
+			const newFormat = detectColorFormat( this.value );
+			if ( this.dataset.colorFormat !== newFormat ) {
+				this.dataset.colorFormat = newFormat;
+				const container = this.closest( '.wp-picker-container' );
+				if ( container ) {
+					container.querySelector( '.wp-color-result-text' ).textContent = this.value;
 				}
+				debouncedColorChange( { target: this }, this.value );
+			}
+		} ).wpColorPicker( {
+			change( event, ui ) {
+				const input = event.target;
+				const format = input.dataset.colorFormat || 'hex';
+				let color;
+
+				trackUnsavedChange();
+
+				if ( ui.color._alpha < 1 ) {
+					input.dataset.colorFormat = 'rgba';
+					color = ui.color.toCSS( 'rgba' );
+				} else if ( 'hex' === format ) {
+					color = ui.color.toString();
+				} else {
+					color = ui.color.toCSS( format );
+				}
+
 				debouncedColorChange( event, color );
 
-				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+				input.value = color;
+
+				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
 					debouncedPreviewUpdate();
 					return;
 				}
 
-				jQuery( event.target ).val( color ).trigger( 'change' );
+				debouncedPreviewUpdate();
 			}
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 			const container = jQuery( this ).closest( '.wp-picker-container' );
-			if ( 'undefined' !== typeof container && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+			if ( container !== undefined && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
 				return container[ 0 ].querySelector( '.wp-color-picker' ).value;
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
@@ -1239,7 +1402,7 @@
 		 */
 		function handleChangeStylingSuccess( css ) {
 			// Validate the string response. A valid output will include rules with .with_frm_style
-			if ( -1 === css.indexOf( '.with_frm_style' ) ) {
+			if ( ! css.includes( '.with_frm_style' ) ) {
 				// Handle error (possibly a permission error, or an outdated nonce).
 				alert( css );
 				return;
@@ -1301,7 +1464,7 @@
 				select.value = radio.value;
 			}
 
-			jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+			jQuery( btnGrp ).children( 'button' ).html( `${ radio.nextElementSibling.innerHTML } <b class="caret"></b>` );
 
 			const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
 			if ( activeItem ) {
@@ -1374,7 +1537,7 @@
 	 */
 	function setPosClass() {
 		/*jshint validthis:true */
-		let value = this.value;
+		let { value } = this;
 		if ( value === 'none' ) {
 			value = 'top';
 		} else if ( value === 'no_label' ) {
@@ -1387,7 +1550,7 @@
 			const currentValue = shouldForceTopStyling ? 'top' : value;
 
 			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
-			container.classList.add( 'frm_' + currentValue + '_container' );
+			container.classList.add( `frm_${ currentValue }_container` );
 
 			if ( 'inside' === currentValue ) {
 				checkFloatingLabelsForStyles( input, container );
@@ -1417,7 +1580,7 @@
 	 * @return {void}
 	 */
 	function fillMissingSignatureValidationFunction() {
-		if ( 'undefined' === typeof window.__FRMSIG || 'undefined' !== typeof window.frmFrontForm ) {
+		if ( window.__FRMSIG === undefined || window.frmFrontForm !== undefined ) {
 			return;
 		}
 
@@ -1458,7 +1621,7 @@
 
 		// Function to change the color of a select element
 		const changeSelectColor = select => {
-			if ( select.options[ select.selectedIndex ] && select.options[ select.selectedIndex ].classList.contains( 'frm-select-placeholder' ) ) {
+			if ( select.options[ select.selectedIndex ]?.classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';

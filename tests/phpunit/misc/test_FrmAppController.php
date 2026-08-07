@@ -53,9 +53,9 @@ class test_FrmAppController extends FrmUnitTest {
 			$menu_page = menu_page_url( $name, false );
 
 			if ( $allow === 'allow' ) {
-				$this->assertEquals( $value, $menu_page );
+				$this->assertSame( $value, $menu_page );
 			} else {
-				$this->assertNotEquals( $value, $menu_page );
+				$this->assertNotSame( $value, $menu_page );
 			}
 		}
 	}
@@ -98,8 +98,7 @@ class test_FrmAppController extends FrmUnitTest {
 	 */
 	public function test_needs_update() {
 		update_option( 'frm_db_version', 1 );
-		$needs_update = FrmAppController::needs_update();
-		$this->assertTrue( $needs_update, 'The DB needs update but is skipping it' );
+		$this->assertTrue( FrmAppController::needs_update(), 'The DB needs update but is skipping it' );
 	}
 
 	/**
@@ -172,7 +171,7 @@ class test_FrmAppController extends FrmUnitTest {
 					'new_plugin_version' => FrmAppHelper::plugin_version(),
 				)
 			);
-			$this->assertEquals( $test['expected'], $upgrade, $test['version'] . ' db: ' . $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$this->assertSame( $test['expected'], $upgrade, $test['version'] . ' db: ' . $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 	}
 

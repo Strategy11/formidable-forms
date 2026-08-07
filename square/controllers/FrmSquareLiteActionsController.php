@@ -116,7 +116,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! self::square_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Square. Please try again.', 'formidable' );
+			$response['error'] = __( 'Square still needs to be configured.', 'formidable' );
 			return $response;
 		}
 
@@ -694,17 +694,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = $field->temp_id ?? $field->id;
-
-		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
-			unset( $errors[ 'field' . $field_id . '-cc' ] );
-		}
-
-		if ( isset( $errors[ 'field' . $field_id ] ) ) {
-			unset( $errors[ 'field' . $field_id ] );
-		}
-
-		return $errors;
+		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
 	}
 
 	/**

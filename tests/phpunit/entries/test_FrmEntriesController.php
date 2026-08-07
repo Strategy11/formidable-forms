@@ -61,7 +61,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 		$entry = FrmEntry::getOne( $entry_key );
 		$this->assertNotEmpty( $entry );
-		$this->assertEquals( $entry->post_id, $new_post->ID );
+		$this->assertSame( (int) $entry->post_id, $new_post->ID );
 
 		FrmFormsController::get_form( $form, false, false ); // This is where the entry is deleted
 

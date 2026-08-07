@@ -74,7 +74,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	}
 
 	private function assert_current_list_size( $expected, $message = '' ) {
-		$this->assertEquals( $expected, $this->get_private_property( $this->helper, 'current_list_size' ), $message );
+		$this->assertSame( $expected, $this->get_private_property( $this->helper, 'current_list_size' ), $message );
 	}
 
 	/**
@@ -108,7 +108,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 
 		$this->sync_current_field_once( 0 );
 		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
-		$this->assertTrue( $this->section_helper instanceof FrmFieldGridHelper );
+		$this->assertInstanceOf( \FrmFieldGridHelper::class, $this->section_helper );
 		$this->assert_section_helper_size( 0 );
 
 		$this->helper->set_field( $half_width_field );
@@ -122,12 +122,12 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$this->sync_current_field_once( 6 );
 
 		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
-		$this->assertTrue( empty( $this->section_helper ) );
+		$this->assertEmpty( $this->section_helper );
 
 		$this->helper->set_field( $quarter_width_section );
 		$this->sync_current_field_once( 6 );
 		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
-		$this->assertTrue( $this->section_helper instanceof FrmFieldGridHelper );
+		$this->assertInstanceOf( \FrmFieldGridHelper::class, $this->section_helper );
 		$this->assert_section_helper_size( 0 );
 
 		$this->helper->set_field( $half_width_field );
@@ -144,7 +144,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	 * @param int $expected
 	 */
 	private function assert_section_helper_size( $expected ) {
-		$this->assertEquals( $expected, $this->get_private_property( $this->section_helper, 'current_list_size' ) );
+		$this->assertSame( $expected, $this->get_private_property( $this->section_helper, 'current_list_size' ) );
 	}
 
 	public function test_frm_first() {

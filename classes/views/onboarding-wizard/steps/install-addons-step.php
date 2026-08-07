@@ -18,10 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h2 class="frm-card-box-title frmcenter"><?php esc_html_e( 'Install Formidable Add-ons', 'formidable' ); ?></h2>
 		<p class="frm-card-box-text frmcenter">
 			<?php
-			if ( ! $pro_is_installed ) {
-				esc_html_e( 'A few of our add-ons come with every installation. But more are available on the add-ons page!', 'formidable' );
-			} else {
+			if ( $pro_is_installed ) {
 				esc_html_e( 'Here\'s just a few of our most popular add-ons! You\'ll find even more on the add-ons page.', 'formidable' );
+			} else {
+				esc_html_e( 'A few of our add-ons come with every installation. But more are available on the add-ons page!', 'formidable' );
 			}
 			?>
 		</p>
@@ -55,18 +55,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<span class="frm-banner-text frm-text-xs">
 				<?php
-				if ( ! $pro_is_installed ) {
+				if ( $pro_is_installed ) {
 					printf(
 						/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
-						esc_html__( '%1$sUpgrade to PRO%2$s and get more out of Formidable Forms', 'formidable' ),
-						'<a href="' . esc_url( $upgrade_link ) . '" target="_blank">',
+						esc_html__( 'Check them all out on the %1$sadd-ons%2$s page.', 'formidable' ),
+						'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '" target="_blank">',
 						'</a>'
 					);
 				} else {
 					printf(
 						/* translators: %1$s: Open anchor tag, %2$s: Close anchor tag */
-						esc_html__( 'Check them all out on the %1$sadd-ons%2$s page.', 'formidable' ),
-						'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '" target="_blank">',
+						esc_html__( '%1$sUpgrade to PRO%2$s and get more out of Formidable Forms', 'formidable' ),
+						'<a href="' . esc_url( $upgrade_link ) . '" target="_blank">',
 						'</a>'
 					);
 				}

@@ -1,4 +1,13 @@
 <?php
+/**
+ * Dashboard entries list widget.
+ *
+ * @package Formidable
+ *
+ * @var array               $template      Widget data with 'widget-heading' string and 'cta' (link, label) array.
+ * @var FrmEntriesListHelper $wp_list_table Prepared entries list table instance (filterable via frm_entries_list_class).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

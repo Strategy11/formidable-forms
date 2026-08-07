@@ -2,8 +2,8 @@
 /**
  * Formidable_Sniffs_CodeAnalysis_PreferNotEmptyTernarySniff
  *
- * Detects ternary expressions using `empty( A ) ? B : A` and converts them
- * to the preferred form `! empty( A ) ? A : B`.
+ * Detects ternary expressions using `empty( A ) ? B : C` and converts them
+ * to the preferred form `! empty( A ) ? C : B`.
  *
  * @package Formidable\Sniffs
  */
@@ -14,13 +14,13 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Prefers `! empty( A ) ? A : B` over `empty( A ) ? B : A`.
+ * Prefers `! empty( A ) ? C : B` over `empty( A ) ? B : C`.
  *
  * Bad:
- * empty( $var ) ? $default : $var
+ * empty( $var ) ? $default : $value
  *
  * Good:
- * ! empty( $var ) ? $var : $default
+ * ! empty( $var ) ? $value : $default
  */
 class PreferNotEmptyTernarySniff implements Sniff {
 
@@ -107,20 +107,15 @@ class PreferNotEmptyTernarySniff implements Sniff {
 			return;
 		}
 
-		// Check if the else part matches the empty() argument.
-		if ( $elseContent['content'] !== $emptyContent['content'] ) {
-			return;
-		}
-
-		// We have a match: empty( A ) ? B : A
-		// Should become: ! empty( A ) ? A : B
+		// We have a match: empty( A ) ? B : C
+		// Should become: ! empty( A ) ? C : B
 		$fix = $phpcsFile->addFixableError(
 			'Prefer "! empty( %s ) ? %s : %s" over "empty( %s ) ? %s : %s".',
 			$stackPtr,
 			'Found',
 			array(
 				$emptyContent['content'],
-				$emptyContent['content'],
+				$elseContent['content'],
 				$thenContent['content'],
 				$emptyContent['content'],
 				$thenContent['content'],
@@ -136,8 +131,8 @@ class PreferNotEmptyTernarySniff implements Sniff {
 				$ternaryOperator,
 				$colonOperator,
 				$ternaryEnd,
-				$emptyContent,
-				$thenContent
+				$thenContent,
+				$elseContent
 			);
 		}
 	}
@@ -216,6 +211,7 @@ class PreferNotEmptyTernarySniff implements Sniff {
 
 			// Track parentheses.
 			if ( $code === T_OPEN_PARENTHESIS ) {
+				$end = $i;
 				++$parenDepth;
 				continue;
 			}
@@ -223,6 +219,7 @@ class PreferNotEmptyTernarySniff implements Sniff {
 			if ( $code === T_CLOSE_PARENTHESIS ) {
 				if ( $parenDepth > 0 ) {
 					--$parenDepth;
+					$end = $i;
 					continue;
 				}
 
@@ -232,7 +229,7 @@ class PreferNotEmptyTernarySniff implements Sniff {
 
 			// Only process at the same parenthesis level.
 			if ( $parenDepth > 0 ) {
-				if ( $tokens[ $i ]['code'] !== T_WHITESPACE ) {
+				if ( $code !== T_WHITESPACE ) {
 					$end = $i;
 				}
 				continue;
@@ -243,7 +240,7 @@ class PreferNotEmptyTernarySniff implements Sniff {
 				return $end;
 			}
 
-			if ( $tokens[ $i ]['code'] !== T_WHITESPACE ) {
+			if ( $code !== T_WHITESPACE ) {
 				$end = $i;
 			}
 		}
@@ -291,7 +288,7 @@ class PreferNotEmptyTernarySniff implements Sniff {
 	}
 
 	/**
-	 * Apply the fix to convert empty(A) ? B : A to ! empty(A) ? A : B.
+	 * Apply the fix to convert empty(A) ? B : C to ! empty(A) ? C : B.
 	 *
 	 * @param File  $phpcsFile       The file being scanned.
 	 * @param int   $emptyToken      Position of empty keyword.
@@ -299,12 +296,12 @@ class PreferNotEmptyTernarySniff implements Sniff {
 	 * @param int   $ternaryOperator Position of ?.
 	 * @param int   $colonOperator   Position of :.
 	 * @param int   $ternaryEnd      Position of end of ternary.
-	 * @param array $emptyContent    The A content.
-	 * @param array $thenContent     The B content.
+	 * @param array $thenContent     The B content (original then).
+	 * @param array $elseContent     The C content (original else).
 	 *
 	 * @return void
 	 */
-	private function applyFix( File $phpcsFile, $emptyToken, $closeParen, $ternaryOperator, $colonOperator, $ternaryEnd, $emptyContent, $thenContent ) {
+	private function applyFix( File $phpcsFile, $emptyToken, $closeParen, $ternaryOperator, $colonOperator, $ternaryEnd, $thenContent, $elseContent ) {
 		$tokens = $phpcsFile->getTokens();
 		$fixer  = $phpcsFile->fixer;
 
@@ -313,29 +310,24 @@ class PreferNotEmptyTernarySniff implements Sniff {
 		// Add "! " before empty.
 		$fixer->addContentBefore( $emptyToken, '! ' );
 
-		// Replace the "then" part (B) with A.
+		// Replace the "then" part (B) with C.
 		$thenStart = $phpcsFile->findNext( T_WHITESPACE, $ternaryOperator + 1, $colonOperator, true );
 		$thenEnd   = $phpcsFile->findPrevious( T_WHITESPACE, $colonOperator - 1, $ternaryOperator, true );
 
 		if ( false !== $thenStart && false !== $thenEnd ) {
-			// Clear the then part.
 			for ( $i = $thenStart; $i <= $thenEnd; $i++ ) {
 				$fixer->replaceToken( $i, '' );
 			}
-			// Add A in place of B.
-			$fixer->addContent( $thenStart - 1, ' ' . $emptyContent['raw'] . ' ' );
+			$fixer->addContent( $thenStart - 1, ' ' . $elseContent['raw'] . ' ' );
 		}
 
-		// Replace the "else" part (A) with B.
-		// $ternaryEnd is the last token of the else expression (before semicolon/terminator).
+		// Replace the "else" part (C) with B.
 		$elseStart = $phpcsFile->findNext( T_WHITESPACE, $colonOperator + 1, $ternaryEnd + 1, true );
 
 		if ( false !== $elseStart ) {
-			// Clear the else part (from elseStart to ternaryEnd inclusive).
 			for ( $i = $elseStart; $i <= $ternaryEnd; $i++ ) {
 				$fixer->replaceToken( $i, '' );
 			}
-			// Add B in place of A.
 			$fixer->addContent( $elseStart - 1, ' ' . $thenContent['raw'] );
 		}
 

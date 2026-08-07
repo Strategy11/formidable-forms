@@ -62,7 +62,7 @@
 
 .frm-nav-tabs a {
 	display: block;
-	opacity: .9;
+	opacity: 0.9;
 }
 
 #frm_adv_info .frm-nav-tabs a {
@@ -105,6 +105,28 @@
 	.frm-payments-tab-filler:last-child {
 		flex: 1;
 	}
+
+	.frm-payments-settings-button {
+		display: flex;
+		align-items: center;
+		padding: 0 12px 8px;
+		border-bottom: 1px solid rgba(234, 236, 240, 1);
+
+		.button {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding-top: var(--gap-2xs) !important;
+			padding-bottom: var(--gap-2xs) !important;
+
+			svg {
+				width: 22px;
+				height: 22px;
+				position: relative;
+				bottom: 1px;
+			}
+		}
+	}
 }
 
 .frm-payments-tab.frm-active {
@@ -114,5 +136,5 @@
 
 .frm-payments-tab a {
 	text-decoration: none;
-	color: var(--grey-900);				
+	color: var(--grey-900);
 }

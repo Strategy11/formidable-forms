@@ -72,7 +72,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * Replace the "for" attribute for captcha field so it matches the response ID.
+	 * Modify the captcha field label so it is not orphaned.
+	 *
+	 * The label is omitted when the label position is set to "none".
+	 * When the label is visible it is rendered as a <span> instead of a <label>,
+	 * since the captcha response input is inside an iframe and cannot be referenced.
 	 *
 	 * @param array  $args
 	 * @param string $html
@@ -80,8 +84,17 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
-		$settings = FrmCaptchaFactory::get_settings_object();
-		return str_replace( ' for="field_[key]"', ' for="' . esc_attr( $settings->token_field ) . '"', $html );
+		if ( 'none' === FrmField::get_option( $this->field, 'label' ) ) {
+			// Fully strip the label for a CAPTCHA if it is set to hidden.
+			return preg_replace( '~\s*<label\b[^>]*for="field_\[key\]"[^>]*>.*?</label>\s*~s', '', $html );
+		}
+
+		// Convert a CAPTCHA label to a span to prevent an orphaned label issue in WAVE.
+		return preg_replace(
+			'~<label\b([^>]*?)\s*for="field_\[key\]"([^>]*?)>(.*?)</label>~s',
+			'<span$1$2>$3</span>',
+			$html
+		);
 	}
 
 	/**
@@ -141,9 +154,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {
-		$api_js_url = $this->api_url();
-
-		wp_register_script( 'captcha-api', $api_js_url, array( 'formidable' ), '3', true );
+		wp_register_script( 'captcha-api', $this->api_url(), array( 'formidable' ), '3', true );
 		wp_enqueue_script( 'captcha-api' );
 	}
 
@@ -304,16 +315,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
-				$threshold = floatval( $frm_settings->re_threshold );
-				$score     = floatval( $response['score'] );
+		if ( $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
+			$threshold = floatval( $frm_settings->re_threshold );
+			$score     = floatval( $response['score'] );
 
-				$this->set_score( $score );
+			$this->set_score( $score );
 
-				if ( $score < $threshold ) {
-					$response['success'] = false;
-				}
+			if ( $score < $threshold ) {
+				$response['success'] = false;
 			}
 		}
 

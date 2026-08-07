@@ -1,4 +1,14 @@
 <?php
+/**
+ * Ajax field placeholder in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var object $field_object Field object with 'id', 'type', 'form_id' properties.
+ * @var string $li_classes   Classes for the list item wrapper.
+ * @var array  $display      Display options; 'type' is used.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

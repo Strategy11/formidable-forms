@@ -119,7 +119,7 @@ class AddMissingDocblockSniff implements Sniff {
 		}
 
 		// Check for missing @return tag.
-		$missingReturn = ( ! $hasReturnTag && null !== $returnType );
+		$missingReturn = ! $hasReturnTag && null !== $returnType;
 
 		if ( empty( $missingParams ) && ! $missingReturn ) {
 			return;

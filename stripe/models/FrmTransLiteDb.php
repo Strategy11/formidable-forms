@@ -35,8 +35,7 @@ class FrmTransLiteDb {
 			$old_db_version = get_option( $this->db_opt_name );
 		}
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( $this->db_version == $old_db_version ) {
+		if ( $this->db_version === (int) $old_db_version ) {
 			return;
 		}
 
@@ -287,9 +286,7 @@ class FrmTransLiteDb {
 	 * @return void
 	 */
 	private function fill_values( $values, &$new_values ) {
-		$defaults = $this->get_defaults();
-
-		foreach ( $defaults as $val => $default ) {
+		foreach ( $this->get_defaults() as $val => $default ) {
 			if ( isset( $values[ $val ] ) ) {
 				if ( $default['sanitize'] === 'float' ) {
 					$new_values[ $val ] = (float) $values[ $val ];
@@ -313,10 +310,12 @@ class FrmTransLiteDb {
 		$migrations = array( 4 );
 
 		foreach ( $migrations as $migration ) {
-			if ( $this->db_version >= $migration && $old_db_version < $migration ) {
-				$function_name = 'migrate_to_' . $migration;
-				$this->$function_name();
+			if ( $this->db_version < $migration || $old_db_version >= $migration ) {
+				continue;
 			}
+
+			$function_name = 'migrate_to_' . $migration;
+			$this->$function_name();
 		}
 	}
 

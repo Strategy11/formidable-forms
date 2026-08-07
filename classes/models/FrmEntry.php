@@ -853,7 +853,7 @@ class FrmEntry {
 		$item_name  = self::get_new_entry_name( $values, $values['item_key'] );
 		$new_values = array(
 			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
-			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '' ),
+			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '', true ),
 			'ip'             => self::get_ip( $values ),
 			'is_draft'       => self::get_is_draft_value( $values ),
 			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
@@ -1059,10 +1059,12 @@ class FrmEntry {
 		// It is used to check for duplicate entries.
 		$unique_id = sanitize_key( $values['unique_id'] );
 
-		if ( $unique_id ) {
-			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
-			self::flag_new_unique_key( $unique_id );
+		if ( ! $unique_id ) {
+			return;
 		}
+
+		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
+		self::flag_new_unique_key( $unique_id );
 	}
 
 	/**
@@ -1076,10 +1078,12 @@ class FrmEntry {
 	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {
 		global $frm_vars;
 
-		if ( array_key_exists( 'captcha_scores', $frm_vars ) && array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
-			$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
-			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
+		if ( ! array_key_exists( 'captcha_scores', $frm_vars ) || ! array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
+			return;
 		}
+
+		$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
+		FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
 	}
 
 	/**
@@ -1099,6 +1103,16 @@ class FrmEntry {
 
 		do_action( 'frm_after_create_entry', $entry_id, $new_values['form_id'], compact( 'is_child' ) );
 		do_action( 'frm_after_create_entry_' . $new_values['form_id'], $entry_id, compact( 'is_child' ) );
+
+		if ( ! empty( $values['form_key'] ) ) {
+			/**
+			 * @since 6.30
+			 *
+			 * @param int   $entry_id
+			 * @param array $is_child
+			 */
+			do_action( 'frm_after_create_entry_' . $values['form_key'], $entry_id, compact( 'is_child' ) );
+		}
 	}
 
 	/**
@@ -1164,7 +1178,7 @@ class FrmEntry {
 		global $wpdb;
 
 		$new_values = array(
-			'name'       => self::get_new_entry_name( $values ),
+			'name'       => FrmAppHelper::truncate( self::get_new_entry_name( $values ), 255, 1, '', true ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
 			'is_draft'   => self::get_is_draft_value( $values ),
 			'updated_at' => current_time( 'mysql', 1 ),
@@ -1221,6 +1235,15 @@ class FrmEntry {
 
 		do_action( 'frm_after_update_entry', $id, $new_values['form_id'] );
 		do_action( 'frm_after_update_entry_' . $new_values['form_id'], $id );
+
+		if ( ! empty( $values['form_key'] ) ) {
+			/**
+			 * @since 6.30
+			 *
+			 * @param int $entry_id
+			 */
+			do_action( 'frm_after_update_entry_' . $values['form_key'], $id );
+		}
 	}
 
 	/**
