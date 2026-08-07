@@ -415,12 +415,20 @@ export default class frmSliderComponent {
 		if ( element.dataset.displaySliders === undefined ) {
 			return [];
 		}
+
+		// A slider is not always inside a style component, and throwing here would abandon the
+		// setup of every slider that comes after this one.
+		const wrapper = element.closest( '.frm-style-component' );
+		if ( ! wrapper ) {
+			return [];
+		}
+
 		const slidersGroup = element.dataset.displaySliders.split( ',' );
 		const query = slidersGroup.map( item => {
 			return `.frm-slider-component[data-type="${ item }"]`;
 		} ).join( ', ' );
 
-		return element.closest( '.frm-style-component' ).querySelectorAll( query );
+		return wrapper.querySelectorAll( query );
 	}
 
 	/**

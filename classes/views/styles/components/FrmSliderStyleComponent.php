@@ -203,8 +203,15 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$max = $this->get_max_for_unit( $unit, $number );
 
+		/*
+		 * The coloured part of the track is drawn from this ratio, so print it here rather than wait
+		 * for the script to fill it in. The track is then right on the first paint, with no flash of
+		 * an empty track and nothing to go wrong if the script is stale or fails to run.
+		 */
+		$fill = $max > 0 ? $number / $max : 0;
+
 		?>
-		<input type="range" class="frm-slider" min="0" max="<?php echo esc_attr( self::format_number( $max ) ); ?>" step="<?php echo esc_attr( self::get_step_for_value( $number ) ); ?>" value="<?php echo esc_attr( self::format_number( $number ) ); ?>" aria-label="<?php echo esc_attr( $label ); ?>" <?php disabled( $is_disabled ); ?> />
+		<input type="range" class="frm-slider" min="0" max="<?php echo esc_attr( self::format_number( $max ) ); ?>" step="<?php echo esc_attr( self::get_step_for_value( $number ) ); ?>" value="<?php echo esc_attr( self::format_number( $number ) ); ?>" style="--frm-fill:<?php echo esc_attr( round( $fill, 6 ) ); ?>" aria-label="<?php echo esc_attr( $label ); ?>" <?php disabled( $is_disabled ); ?> />
 		<?php
 	}
 

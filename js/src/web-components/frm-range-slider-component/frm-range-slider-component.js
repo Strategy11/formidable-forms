@@ -358,6 +358,9 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		frmSliderComponent.applyStep( slider, value.value );
 		slider.value = value.value.toString();
 
+		// Colour the track straight away so it is right before anything else touches the slider.
+		frmSliderComponent.updateFill( slider );
+
 		if ( ariaLabel ) {
 			slider.setAttribute( 'aria-label', ariaLabel );
 		}
