@@ -636,9 +636,10 @@ class FrmForm {
 				'or'             => 1,
 			);
 			FrmDb::get_where_clause_and_values( $where );
-			array_unshift( $where['values'], $status );
+			array_unshift( $where['values'], $wpdb->prefix . 'frm_forms', $status );
 
-			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE %i SET status = %s ' . $where['where'], $where['values'] ) );
 		} else {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'id' => $id ) );
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'parent_form_id' => $id ) );
@@ -729,9 +730,9 @@ class FrmForm {
 		}
 
 		// Disconnect the fields from this form
-		$wpdb->query( $wpdb->prepare( 'DELETE fi FROM ' . $wpdb->prefix . 'frm_fields AS fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $id, $id ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$wpdb->query( $wpdb->prepare( 'DELETE fi FROM %i AS fi LEFT JOIN %i fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $wpdb->prefix . 'frm_fields', $wpdb->prefix . 'frm_forms', $id, $id ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
+		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id=%d OR parent_form_id=%d', $wpdb->prefix . 'frm_forms', $id, $id ) );
 
 		if ( ! $query_results ) {
 			return $query_results;

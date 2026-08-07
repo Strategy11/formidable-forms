@@ -83,10 +83,11 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 		global $wpdb;
 		return $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM `{$wpdb->prefix}frm_subscriptions`
+				"SELECT * FROM %i
 				WHERE fail_count < %d
 					AND next_bill_date < %s
 					AND (status = 'active' OR status = 'future_cancel')",
+				$wpdb->prefix . 'frm_subscriptions',
 				3,
 				gmdate( 'Y-m-d' )
 			)

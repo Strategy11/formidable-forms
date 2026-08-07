@@ -588,7 +588,7 @@ class FrmStyle {
 		if ( ! $temp_styles ) {
 			global $wpdb;
 			// Make sure there wasn't a conflict with the query
-			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$query       = $wpdb->prepare( 'SELECT * FROM %i WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', $wpdb->posts, FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
 
 			if ( ! $temp_styles ) {

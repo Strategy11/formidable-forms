@@ -185,9 +185,10 @@ class FrmEntryMeta {
 			'field_id' => $field_ids_to_remove,
 		);
 		FrmDb::get_where_clause_and_values( $where );
+		array_unshift( $where['values'], $wpdb->prefix . 'frm_item_metas' );
 
 		// Delete any leftovers
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		self::clear_cache();
 	}
 
@@ -226,7 +227,7 @@ class FrmEntryMeta {
 		global $wpdb;
 		self::clear_cache();
 
-		return $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_item_metas WHERE field_id=%d AND item_id=%d", $field_id, $entry_id ) );
+		return $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE field_id=%d AND item_id=%d', $wpdb->prefix . 'frm_item_metas', $field_id, $entry_id ) );
 	}
 
 	/**
@@ -356,7 +357,7 @@ class FrmEntryMeta {
 		if ( is_numeric( $field_id ) ) {
 			$query[] = $wpdb->prepare( 'WHERE em.field_id=%d', $field_id );
 		} else {
-			$query[] = $wpdb->prepare( 'LEFT JOIN ' . $wpdb->prefix . 'frm_fields fi ON (em.field_id = fi.id) WHERE fi.field_key=%s', $field_id );
+			$query[] = $wpdb->prepare( 'LEFT JOIN %i fi ON (em.field_id = fi.id) WHERE fi.field_key=%s', $wpdb->prefix . 'frm_fields', $field_id );
 		}
 
 		if ( ! $args['is_draft'] ) {
@@ -636,7 +637,7 @@ class FrmEntryMeta {
 				$search = '%' . $search . '%';
 			}
 
-			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM %i WHERE meta_value {$operator} %s and field_id = %d", $wpdb->prefix . 'frm_item_metas', $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}//end if
 
 		$results = $wpdb->get_col( $query, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared

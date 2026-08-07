@@ -63,7 +63,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$query       = $this->get_table_query();
 		$order_query = FrmDb::esc_order( "ORDER BY p.{$orderby} $order" );
 
-		// @codingStandardsIgnoreStart
+		// The table query and order query are prepared and escaped where they are built.
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
 		$this->items = $wpdb->get_results(
 			$wpdb->prepare(
 				'SELECT p.* ' . $query . $order_query . ' LIMIT %d, %d',
@@ -72,7 +73,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			)
 		);
 		$total_items = $wpdb->get_var( 'SELECT COUNT(*) ' . $query );
-		// @codingStandardsIgnoreEnd
+		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
 
 		$this->set_pagination_args(
 			array(
@@ -92,17 +93,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$form_id    = FrmAppHelper::get_param( 'form', 0, 'get', 'absint' );
 
 		if ( ! $form_id ) {
-			return "FROM `{$wpdb->prefix}{$table_name}` p";
+			return $wpdb->prepare( 'FROM %i p', $wpdb->prefix . $table_name );
 		}
 
-        // @codingStandardsIgnoreStart
-        return $wpdb->prepare(
-            "FROM `{$wpdb->prefix}{$table_name}` p
-            JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
-            WHERE i.form_id = %d",
-            $form_id
-        );
-        // @codingStandardsIgnoreEnd
+		return $wpdb->prepare(
+			'FROM %i p
+			JOIN %i i ON p.item_id = i.id
+			WHERE i.form_id = %d',
+			$wpdb->prefix . $table_name,
+			$wpdb->prefix . 'frm_items',
+			$form_id
+		);
 	}
 
 	/**
@@ -334,17 +335,20 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 
 		global $wpdb;
-		// @codingStandardsIgnoreStart
-		$forms = $wpdb->get_results(
-			"SELECT
-				fo.id as form_id,
-				fo.name,
-				e.id
-			FROM {$wpdb->prefix}frm_items e
-			LEFT JOIN {$wpdb->prefix}frm_forms fo ON e.form_id = fo.id
-			WHERE e.id in (" . implode( ',', $entry_ids ) . ')'
+
+		$ids_placeholders = implode( ',', array_fill( 0, count( $entry_ids ), '%d' ) );
+		$forms            = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT
+					fo.id as form_id,
+					fo.name,
+					e.id
+				FROM %i e
+				LEFT JOIN %i fo ON e.form_id = fo.id
+				WHERE e.id in (' . $ids_placeholders . ')', // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				array_merge( array( $wpdb->prefix . 'frm_items', $wpdb->prefix . 'frm_forms' ), $entry_ids )
+			)
 		);
-		// @codingStandardsIgnoreEnd
 		unset( $entry_ids );
 
 		$form_ids = array();

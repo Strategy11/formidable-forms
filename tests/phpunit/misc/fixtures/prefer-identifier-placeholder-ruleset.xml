@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ruleset name="FormidableSniffTest">
+	<description>Runs only the PreferIdentifierPlaceholder sniff for its unit tests.</description>
+	<rule ref="Formidable.Security.PreferIdentifierPlaceholder" />
+</ruleset>
