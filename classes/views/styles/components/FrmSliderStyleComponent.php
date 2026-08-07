@@ -171,11 +171,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 			'right'      => __( 'Right value', 'formidable' ),
 		);
 
-		if ( isset( $labels[ $type ] ) ) {
-			return $labels[ $type ];
-		}
-
-		return __( 'Field value', 'formidable' );
+		return $labels[ $type ] ?? __( 'Field value', 'formidable' );
 	}
 
 	/**
