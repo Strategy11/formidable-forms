@@ -356,12 +356,18 @@ export default class frmSliderComponent {
 			if ( '' === unit ) {
 				element.classList.add( 'frm-disabled', 'frm-empty' );
 				rangeInput.disabled = true;
+
+				// Drop the old unit from what is announced, the value no longer carries one.
+				this.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
 				return;
 			}
 
 			if ( 'auto' === unit ) {
 				element.classList.add( 'frm-disabled' );
 				rangeInput.disabled = true;
+
+				// The slider no longer stands for a number, so announce the keyword that replaced it.
+				rangeInput.setAttribute( 'aria-valuetext', unit );
 				this.updateValue( element, 'auto' );
 				this.triggerValueChange( index );
 
