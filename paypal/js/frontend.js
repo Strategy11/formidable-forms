@@ -1778,19 +1778,11 @@
 			submitArgs.cardholderName = meta.name;
 		}
 
-		/*
-		TODO Add the billing address here as well.
-		Stripe calls a window.frmProForm.addAddressMeta function.
-		That's included in frmstrp.js though, so we need to add a script in Pro for PayPal as well.
+		const billingAddress = getBillingAddress();
 
-		billingAddress: {
-			addressLine1: '555 Billing Ave',
-			adminArea1: 'NY',
-			adminArea2: 'New York',
-			postalCode: '10001',
-			countryCode: 'US'
+		if ( billingAddress ) {
+			submitArgs.billingAddress = billingAddress;
 		}
-		*/
 
 		try {
 			await cardFieldsInstance.submit( submitArgs );
@@ -1802,6 +1794,99 @@
 			}
 			reportErrorToServer( err, 'card_submit' );
 		}
+	}
+
+	/**
+	 * Build the billing address for the card fields from the address field mapped in the payment action.
+	 *
+	 * @since x.x
+	 *
+	 * @return {Object|null} Billing address for the card fields submit args, or null when no address is available.
+	 */
+	function getBillingAddress() {
+		let addressID = '';
+
+		getPayPalSettings().forEach( function( setting ) {
+			if ( setting.address ) {
+				addressID = setting.address;
+			}
+		} );
+
+		if ( '' === addressID ) {
+			return null;
+		}
+
+		let prefix = '';
+		let addressContainer = document.querySelector( `#frm_field_${ addressID }_container, .frm_field_${ addressID }_container` );
+
+		if ( ! addressContainer ) {
+			const line1Input = document.querySelector( `input[name="item_meta[${ addressID }][line1]"]` );
+			if ( line1Input ) {
+				prefix = `${ addressID }][`;
+				addressContainer = line1Input.parentNode;
+			}
+		}
+
+		if ( ! addressContainer ) {
+			return null;
+		}
+
+		const getSubFieldValue = function( name ) {
+			const input = addressContainer.querySelector( `input[name$="[${ prefix }${ name }]"], select[name$="[${ prefix }${ name }]"]` );
+			return input?.value ? input.value : '';
+		};
+
+		const subFieldMapping = {
+			line1: 'addressLine1',
+			line2: 'addressLine2',
+			city: 'adminArea2',
+			state: 'adminArea1',
+			zip: 'postalCode'
+		};
+
+		const billingAddress = {};
+
+		Object.keys( subFieldMapping ).forEach( function( name ) {
+			const value = getSubFieldValue( name );
+			if ( value ) {
+				billingAddress[ subFieldMapping[ name ] ] = value;
+			}
+		} );
+
+		if ( ! billingAddress.addressLine1 ) {
+			return null;
+		}
+
+		const countryCode = getCountryCode( addressContainer, prefix );
+
+		if ( countryCode ) {
+			billingAddress.countryCode = countryCode;
+		}
+
+		return billingAddress;
+	}
+
+	/**
+	 * Get the two letter country code for the filled address.
+	 * The country dropdown holds the code in a data-code attribute.
+	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} addressContainer
+	 * @param {string}  prefix
+	 * @return {string} Country code, or an empty string when the country is unknown.
+	 */
+	function getCountryCode( addressContainer, prefix ) {
+		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
+
+		if ( countryDropdown ) {
+			const countryOption = countryDropdown.querySelector( `option[value="${ countryDropdown.value }"]` );
+			return countryOption?.getAttribute( 'data-code' ) || '';
+		}
+
+		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
+		return stateDropdown ? 'US' : '';
 	}
 
 	// ---- Price / Pay Later ----

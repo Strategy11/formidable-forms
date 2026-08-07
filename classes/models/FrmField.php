@@ -80,6 +80,10 @@ class FrmField {
 				'name' => __( 'Payment', 'formidable' ),
 				'icon' => 'frmfont frm_credit_card2_icon',
 			),
+			'address'                      => array(
+				'name' => __( 'Address', 'formidable' ),
+				'icon' => 'frmfont frm_location2_icon',
+			),
 			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
 				'hide' => true,
@@ -439,6 +443,7 @@ class FrmField {
 		unset( $pro_fields['product'] );
 		unset( $pro_fields['quantity'] );
 		unset( $pro_fields['total'] );
+		unset( $pro_fields['address'] );
 	}
 
 	/**
