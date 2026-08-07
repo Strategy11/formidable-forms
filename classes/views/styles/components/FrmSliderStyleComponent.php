@@ -77,6 +77,94 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	}
 
 	/**
+	 * Get the highest value a slider may be dragged to for a given unit.
+	 * A percentage always runs from 0 to 100, whatever pixel maximum the component was given.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $unit The unit of measurement, for instance 'px', 'em' or '%'.
+	 *
+	 * @return int
+	 */
+	private function get_max_for_unit( $unit ) {
+		return '%' === $unit ? 100 : (int) $this->data['max_value'];
+	}
+
+	/**
+	 * Get the number at the start of a style value.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $value The value to read, for instance '10px', 12.5 or 'auto'.
+	 *
+	 * @return float|null The number found, or null when the value has none.
+	 */
+	private static function get_numeric_value( $value ) {
+		if ( ! preg_match( '/^\s*-?\d+(?:\.\d+)?/', (string) $value, $matches ) ) {
+			return null;
+		}
+
+		return (float) $matches[0];
+	}
+
+	/**
+	 * Get the accessible label describing one part of a multi part slider.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $type The slider part, for instance 'top' or 'left'.
+	 *
+	 * @return string
+	 */
+	protected function get_label_for_type( $type ) {
+		$labels = array(
+			'vertical'   => __( 'Vertical value', 'formidable' ),
+			'horizontal' => __( 'Horizontal value', 'formidable' ),
+			'top'        => __( 'Top value', 'formidable' ),
+			'bottom'     => __( 'Bottom value', 'formidable' ),
+			'left'       => __( 'Left value', 'formidable' ),
+			'right'      => __( 'Right value', 'formidable' ),
+		);
+
+		if ( isset( $labels[ $type ] ) ) {
+			return $labels[ $type ];
+		}
+
+		return __( 'Field value', 'formidable' );
+	}
+
+	/**
+	 * Print the range input a user drags to change a slider value.
+	 * The max, the printed value and the disabled state all follow the unit that is currently selected,
+	 * so the range never offers a value the unit does not allow.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $label Accessible label describing what this slider controls.
+	 * @param mixed  $value The current value. It may carry a unit ('10px') or be a keyword ('auto').
+	 * @param string $unit  The unit of measurement selected for this slider.
+	 *
+	 * @return void
+	 */
+	protected function print_range_input( $label, $value, $unit ) {
+		$max    = $this->get_max_for_unit( $unit );
+		$number = self::get_numeric_value( $value );
+
+		// A value like 'auto' has no position on the track, so the range is shown at zero and switched off.
+		$is_disabled = null === $number;
+
+		if ( $is_disabled ) {
+			$number = 0;
+		} elseif ( $number > $max ) {
+			$number = $max;
+		}
+
+		?>
+		<input type="range" class="frm-slider" min="0" max="<?php echo esc_attr( $max ); ?>" value="<?php echo (int) round( $number ); ?>" aria-label="<?php echo esc_attr( $label ); ?>" <?php disabled( $is_disabled ); ?> />
+		<?php
+	}
+
+	/**
 	 * Init the slider multiple values data. It works with sliders which has multiple values only: top&bottom and left&right.
 	 * This is used for cases when there are 4 sliders in the same field.
 	 *

@@ -3,6 +3,27 @@ import frmSliderComponent from '../../settings-components/components/slider-comp
 import style from './frm-range-slider-component.css';
 import { __ } from '@wordpress/i18n';
 
+/**
+ * Accessible labels for each part of a multi part slider.
+ *
+ * @since x.x
+ *
+ * @param {string} type - The slider part, for instance 'top' or 'left'.
+ * @return {string} The label describing that part.
+ */
+const getLabelForType = type => {
+	const labels = {
+		vertical: __( 'Vertical value', 'formidable' ),
+		horizontal: __( 'Horizontal value', 'formidable' ),
+		top: __( 'Top value', 'formidable' ),
+		bottom: __( 'Bottom value', 'formidable' ),
+		left: __( 'Left value', 'formidable' ),
+		right: __( 'Right value', 'formidable' )
+	};
+
+	return labels[ type ] || __( 'Field value', 'formidable' );
+};
+
 export class frmRangeSliderComponent extends frmWebComponent {
 	#onChange = () => {};
 	#sliderDefaultValue = '0px';
@@ -219,14 +240,14 @@ export class frmRangeSliderComponent extends frmWebComponent {
 				type: 'vertical',
 				displaySliders: 'top,bottom',
 				iconSvgId: 'frm-margin-top-bottom',
-				ariaLabel: 'Vertical value',
+				ariaLabel: getLabelForType( 'vertical' ),
 				defaultValues: defaultValues.vertical,
 			},
 			{
 				type: 'horizontal',
 				displaySliders: 'left,right',
 				iconSvgId: 'frm-margin-left-right',
-				ariaLabel: 'Horizontal value',
+				ariaLabel: getLabelForType( 'horizontal' ),
 				defaultValues: defaultValues.horizontal,
 			}
 		];
@@ -304,7 +325,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 				units: options.units,
 				value: options.defaultValues[ item ],
 				iconSvgId: `frm-margin-${ item }`,
-				ariaLabel: `${ item } value`,
+				ariaLabel: getLabelForType( item ),
 				hidden: true,
 				addHiddenInputValue: false
 			} ) );
@@ -316,17 +337,22 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to create the slider track. This method is used to create the slider track.
 	 *
-	 * @param {Object} value    - The value of the slider.
-	 * @param {number} maxValue - The maximum value of the slider.
+	 * @param {Object} value     - The value of the slider.
+	 * @param {number} maxValue  - The maximum value of the slider.
+	 * @param {string} ariaLabel - The accessible label describing what the slider controls.
 	 * @return {Element} - The slider track element.
 	 */
-	static createSliderTrack( value, maxValue ) {
+	static createSliderTrack( value, maxValue, ariaLabel ) {
 		const slider = document.createElement( 'input' );
 		slider.type = 'range';
 		slider.classList.add( 'frm-slider' );
 		slider.min = '0';
 		slider.max = maxValue.toString();
 		slider.value = value.value.toString();
+
+		if ( ariaLabel ) {
+			slider.setAttribute( 'aria-label', ariaLabel );
+		}
 
 		return slider;
 	}
@@ -407,7 +433,10 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @return {Element} - The slider element.
 	 */
 	createSlider( options ) {
-		const { type, maxValue, units, value, iconSvgId, ariaLabel, hidden, addHiddenInputValue } = options;
+		const { type, maxValue, units, value, iconSvgId, hidden, addHiddenInputValue } = options;
+
+		// Fall back to the component's own label so a single slider is still named for screen readers.
+		const ariaLabel = options.ariaLabel || this._labelText || '';
 
 		const sliderWrapper = document.createElement( 'div' );
 		sliderWrapper.classList.add( 'frm-slider-component' );
@@ -434,7 +463,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		}
 
 		// Slider track
-		sliderContainer.append( frmRangeSliderComponent.createSliderTrack( value, maxValue ) );
+		sliderContainer.append( frmRangeSliderComponent.createSliderTrack( value, maxValue, ariaLabel ) );
 		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
