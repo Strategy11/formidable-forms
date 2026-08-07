@@ -92,7 +92,7 @@ export default class frmSliderComponent {
 			valueInput.addEventListener( 'change', event => {
 				const unit = frmSliderComponent.getUnit( element );
 
-				if ( this.getMaxValue( unit, index ) < parseInt( event.target.value, 10 ) ) {
+				if ( parseFloat( rangeInput.max ) < parseFloat( event.target.value ) ) {
 					return;
 				}
 
@@ -205,7 +205,7 @@ export default class frmSliderComponent {
 			return steps[ parseInt( rangeInput.value, 10 ) ];
 		}
 
-		return parseInt( rangeInput.value, 10 );
+		return parseFloat( rangeInput.value );
 	}
 
 	/**
@@ -226,7 +226,25 @@ export default class frmSliderComponent {
 			return;
 		}
 
+		frmSliderComponent.applyStep( rangeInput, value );
 		rangeInput.value = value;
+	}
+
+	/**
+	 * Makes sure the range can hold the given value exactly.
+	 *
+	 * A range snaps its value to the step, so a fractional value needs a step fine enough to land
+	 * on. Whole numbers keep stepping by one so the arrow keys stay useful.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number|string}    value      - The value about to be set.
+	 * @return {void}
+	 */
+	static applyStep( rangeInput, value ) {
+		const decimals = ( String( value ).split( '.' )[ 1 ] || '' ).length;
+		rangeInput.step = decimals > 0 ? `0.${ '0'.repeat( decimals - 1 ) }1` : '1';
 	}
 
 	/**
@@ -297,7 +315,7 @@ export default class frmSliderComponent {
 			}
 
 			if ( childText ) {
-				childText.value = parseInt( value, 10 );
+				childText.value = value;
 			}
 		} );
 	}
@@ -513,7 +531,7 @@ export default class frmSliderComponent {
 			const childSlidersGroup = this.getSliderGroupItems( element );
 			childSlidersGroup.forEach( slider => {
 				const unitMeasure = this.getUnitMeasureFromValue( value );
-				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseInt( value, 10 );
+				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseFloat( value );
 				slider.querySelector( 'select' ).value = unitMeasure;
 			} );
 
@@ -525,7 +543,7 @@ export default class frmSliderComponent {
 			const visibleValues = element.querySelectorAll( '.frm-slider-value input[type="text"]' );
 			inputValues.forEach( ( input, index ) => {
 				input.value = value;
-				visibleValues[ index + 1 ].value = parseInt( value, 10 );
+				visibleValues[ index + 1 ].value = parseFloat( value );
 			} );
 
 			return value;

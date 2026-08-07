@@ -77,17 +77,62 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	}
 
 	/**
-	 * Get the highest value a slider may be dragged to for a given unit.
-	 * A percentage always runs from 0 to 100, whatever pixel maximum the component was given.
+	 * Get the highest value a slider may be dragged to.
+	 * A percentage runs from 0 to 100 whatever pixel maximum the component was given. A value that
+	 * was already saved above the maximum still has to be reachable, otherwise the slider would sit
+	 * at a different value than the one shown in the text box beside it.
 	 *
 	 * @since x.x
 	 *
-	 * @param string $unit The unit of measurement, for instance 'px', 'em' or '%'.
+	 * @param string     $unit   The unit of measurement, for instance 'px', 'em' or '%'.
+	 * @param float|null $number The value about to be shown, or null when the value is not a number.
 	 *
-	 * @return int
+	 * @return float
 	 */
-	private function get_max_for_unit( $unit ) {
-		return '%' === $unit ? 100 : (int) $this->data['max_value'];
+	private function get_max_for_unit( $unit, $number ) {
+		$max = '%' === $unit ? 100.0 : (float) $this->data['max_value'];
+
+		if ( null !== $number && $number > $max ) {
+			return ceil( $number );
+		}
+
+		return $max;
+	}
+
+	/**
+	 * Print a number the way an HTML attribute needs it, without a trailing run of zeros.
+	 *
+	 * @since x.x
+	 *
+	 * @param float $number The number to print.
+	 *
+	 * @return string
+	 */
+	private static function format_number( $number ) {
+		return rtrim( rtrim( sprintf( '%.4F', $number ), '0' ), '.' );
+	}
+
+	/**
+	 * Get the step a range input needs in order to hold the given value exactly.
+	 * A range snaps its value to the step, so '1.5em' on the default step of 1 would move the
+	 * handle to 2. Whole numbers keep stepping by one so the arrow keys stay useful.
+	 *
+	 * @since x.x
+	 *
+	 * @param float $number The value about to be shown.
+	 *
+	 * @return string
+	 */
+	private static function get_step_for_value( $number ) {
+		$printed = self::format_number( $number );
+		$dot     = strpos( $printed, '.' );
+
+		if ( false === $dot ) {
+			return '1';
+		}
+
+		$decimals = strlen( $printed ) - $dot - 1;
+		return '0.' . str_repeat( '0', $decimals - 1 ) . '1';
 	}
 
 	/**
@@ -147,20 +192,19 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * @return void
 	 */
 	protected function print_range_input( $label, $value, $unit ) {
-		$max    = $this->get_max_for_unit( $unit );
 		$number = self::get_numeric_value( $value );
 
 		// A value like 'auto' has no position on the track, so the range is shown at zero and switched off.
 		$is_disabled = null === $number;
 
-		if ( $is_disabled ) {
+		if ( $is_disabled || $number < 0 ) {
 			$number = 0;
-		} elseif ( $number > $max ) {
-			$number = $max;
 		}
 
+		$max = $this->get_max_for_unit( $unit, $number );
+
 		?>
-		<input type="range" class="frm-slider" min="0" max="<?php echo esc_attr( $max ); ?>" value="<?php echo (int) round( $number ); ?>" aria-label="<?php echo esc_attr( $label ); ?>" <?php disabled( $is_disabled ); ?> />
+		<input type="range" class="frm-slider" min="0" max="<?php echo esc_attr( self::format_number( $max ) ); ?>" step="<?php echo esc_attr( self::get_step_for_value( $number ) ); ?>" value="<?php echo esc_attr( self::format_number( $number ) ); ?>" aria-label="<?php echo esc_attr( $label ); ?>" <?php disabled( $is_disabled ); ?> />
 		<?php
 	}
 

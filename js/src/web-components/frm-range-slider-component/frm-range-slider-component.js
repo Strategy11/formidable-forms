@@ -207,12 +207,13 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			return defaultValue;
 		}
 
-		const match = valueStr.match( /^(\d+)(px|em|%|\s)?$/ );
+		// Lengths are not always whole numbers, '1.5em' has to survive the round trip.
+		const match = String( valueStr ).match( /^(\d+(?:\.\d+)?)(px|em|%|\s)?$/ );
 		if ( ! match ) {
 			return defaultValue;
 		}
 		return {
-			value: parseInt( match[ 1 ], 10 ),
+			value: parseFloat( match[ 1 ] ),
 			unit: match[ 2 ] || 'px'
 		};
 	}
@@ -347,7 +348,14 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		slider.type = 'range';
 		slider.classList.add( 'frm-slider' );
 		slider.min = '0';
-		slider.max = maxValue.toString();
+
+		// A percentage runs to 100 whatever maximum the component was given, but a value already
+		// saved above the maximum still has to be reachable or the handle would sit somewhere else.
+		const unitMax = '%' === value.unit ? 100 : parseFloat( maxValue );
+		slider.max = String( Math.max( unitMax, Math.ceil( value.value ) ) );
+
+		// Set the step before the value, since a range snaps whatever it is given to its step.
+		frmSliderComponent.applyStep( slider, value.value );
 		slider.value = value.value.toString();
 
 		if ( ariaLabel ) {
