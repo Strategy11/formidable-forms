@@ -722,7 +722,7 @@ BEFORE_HTML;
 
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_html( $args['key_label'] ?? FrmAppHelper::truncate( $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
