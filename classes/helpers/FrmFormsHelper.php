@@ -288,9 +288,182 @@ class FrmFormsHelper {
 			$settings_args['current_form'] = $args['form']->id;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-		$invalid_msg  = do_shortcode( $frm_settings->invalid_msg );
+		$frm_settings         = FrmAppHelper::get_settings( $settings_args );
+		$field_error_messages = self::get_clickable_field_error_messages( $args );
+		$invalid_msg          = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+
+		if ( $field_error_messages ) {
+			$invalid_msg .= "<ul>$field_error_messages</ul>";
+		}
+
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
+	}
+
+	/**
+	 * Get clickable field error messages.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	private static function get_clickable_field_error_messages( $args ) {
+		if ( empty( $args['errors'] ) ) {
+			return '';
+		}
+
+		// Parse each error key once into its field ID and repeater row suffix, skipping
+		// non-field errors like 'form' or 'spam' that have no input to link to.
+		$parsed_errors = array();
+		$field_ids     = array();
+
+		foreach ( $args['errors'] as $field_plus_id => $error ) {
+			$field_id = preg_replace( '/^field/', '', $field_plus_id );
+			$row      = '';
+
+			if ( str_contains( $field_id, '-' ) ) {
+				$field_id_parts = explode( '-', $field_id );
+
+				if ( count( $field_id_parts ) === 3 ) {
+					$field_id = $field_id_parts[0];
+					$row      = '-' . $field_id_parts[2];
+				}
+			}
+
+			if ( ! is_numeric( $field_id ) ) {
+				continue;
+			}
+
+			$field_ids[]     = (int) $field_id;
+			$parsed_errors[] = compact( 'field_id', 'row', 'error' );
+		}
+
+		if ( ! $field_ids ) {
+			return '';
+		}
+
+		$fields_by_id = self::get_error_fields_by_id( $args, $field_ids );
+
+		// Error messages are admin configured and may include shortcodes, so allow the same
+		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
+		// are intentionally excluded so a message link cannot nest inside the summary link.
+		$allowed_tags         = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
+		$field_error_messages = '';
+
+		foreach ( $parsed_errors as $parsed_error ) {
+			$field_id = (int) $parsed_error['field_id'];
+
+			if ( ! isset( $fields_by_id[ $field_id ] ) ) {
+				continue;
+			}
+
+			$field = $fields_by_id[ $field_id ];
+			$error = FrmAppHelper::kses( $parsed_error['error'], $allowed_tags );
+
+			if ( ! self::error_field_is_linkable( $field ) ) {
+				// The field has no focusable input on the page being shown (a hidden field, or a
+				// field on another page of a multi-page form), so list the error as plain text
+				// rather than a link that would go nowhere when clicked.
+				$field_error_messages .= '<li>' . $error . '</li>';
+				continue;
+			}
+
+			$html_id = 'field_' . $field->field_key . $parsed_error['row'];
+
+			if ( in_array( $field->type, array( 'checkbox', 'radio' ), true ) ) {
+				// Needed to focus on the first option when the error link is clicked.
+				$html_id .= '-0';
+			}
+
+			$field_error_messages .= '<li><a href="#' . esc_attr( $html_id ) . '">' . $error . '</a></li>';
+		}//end foreach
+
+		return $field_error_messages;
+	}
+
+	/**
+	 * Map the errored field IDs to field data.
+	 *
+	 * The fields for the form have already been loaded to render or validate the submission,
+	 * so this reuses them (threaded down in $args, or the per-field cache warmed while
+	 * validating the entry) and only queries for any field it still cannot resolve, keeping
+	 * the error summary from adding a database round trip in the normal flow.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args      Includes optional 'fields'.
+	 * @param int[] $field_ids Field IDs referenced by the current errors.
+	 *
+	 * @return array Field objects keyed by field ID.
+	 */
+	private static function get_error_fields_by_id( $args, $field_ids ) {
+		$fields_by_id = array();
+
+		// Prefer the fields already prepared for the form being shown, threaded down in $args.
+		if ( ! empty( $args['fields'] ) && is_array( $args['fields'] ) ) {
+			foreach ( $args['fields'] as $field ) {
+				// Display fields arrive as arrays; normalize to the object shape used below.
+				$field = (object) $field;
+
+				if ( isset( $field->id ) ) {
+					$fields_by_id[ (int) $field->id ] = $field;
+				}
+			}
+		}
+
+		// Next, the per-field cache warmed while validating the entry (getAll caches every
+		// field by id), so an AJAX submit resolves its errored fields without a query.
+		foreach ( array_diff( $field_ids, array_keys( $fields_by_id ) ) as $field_id ) {
+			$cached = FrmDb::check_cache( $field_id, 'frm_field' );
+
+			if ( is_object( $cached ) ) {
+				$fields_by_id[ $field_id ] = $cached;
+			}
+		}
+
+		// Only touch the database for fields that are still unresolved.
+		$missing = array_diff( $field_ids, array_keys( $fields_by_id ) );
+
+		if ( ! $missing ) {
+			return $fields_by_id;
+		}
+
+		$fields = FrmDb::get_results( 'frm_fields', array( 'id' => array_values( $missing ) ), 'id,field_key,type,field_order,form_id' );
+
+		foreach ( $fields as $field ) {
+			$fields_by_id[ (int) $field->id ] = $field;
+		}
+
+		return $fields_by_id;
+	}
+
+	/**
+	 * Whether an error summary should link to the field, or just list its message as plain text.
+	 *
+	 * A link is only useful when the field renders a focusable input that is actually on the page
+	 * being shown. Hidden and user ID fields render as hidden inputs that cannot receive focus, and
+	 * a field on another page of a multi-page form is not visible, so neither should be linked.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field Field row with at least type, field_order and form_id.
+	 *
+	 * @return bool
+	 */
+	private static function error_field_is_linkable( $field ) {
+		if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
+			// Hidden inputs cannot receive focus, so there is nothing to link to.
+			return false;
+		}
+
+		if ( ! is_callable( 'FrmProFieldsHelper::field_on_current_page' ) ) {
+			// Multi-page forms are a Pro feature; in Lite every field is on the only page.
+			return true;
+		}
+
+		// On a multi-page form, do not link a field that is on a page other than the one being shown.
+		return FrmProFieldsHelper::field_on_current_page( $field );
 	}
 
 	/**
@@ -301,6 +474,9 @@ class FrmFormsHelper {
 	 *     @type stdClass $form
 	 *     @type int      $entry_id
 	 *     @type string   $class
+	 *     @type string   $role  Optional. ARIA live region role for the wrapper. Defaults to 'status'.
+	 *                           Pass 'alert' when the message reports a validation error so it is
+	 *                           announced assertively, matching the non-ajax error wrapper.
 	 * }
 	 *
 	 * @return string
@@ -328,7 +504,9 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
+		$role    = $atts['role'] ?? 'status';
+
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
 	}
 
 	/**
