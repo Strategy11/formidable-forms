@@ -93,7 +93,7 @@
 			} else {
 				cardFields.postalCode = false;
 				squareCardElementIsComplete = false;
-				disableSubmit();
+				disableSubmit( thisForm );
 			}
 		} );
 
@@ -117,7 +117,7 @@
 				return;
 			}
 
-			const form     = cardElement.closest( 'form' );
+			const form = cardElement.closest( 'form' );
 			const observer = new MutationObserver( () => {
 				if ( cardElement.getBoundingClientRect().width > 0 ) {
 					observer.disconnect();
@@ -180,9 +180,18 @@
 
 	/**
 	 * Enable the submit button for the form.
+	 *
+	 * Square being ready is only half of what enables the button. When the submit
+	 * button has conditional logic of its own that is not satisfied, it stays
+	 * disabled no matter what state the card is in, so every caller is checked
+	 * here rather than at the individual call sites.
 	 */
 	function enableSubmit() {
 		if ( running > 0 ) {
+			return;
+		}
+
+		if ( submitButtonIsConditionallyDisabled( getFormIdForForm( thisForm ) ) ) {
 			return;
 		}
 
@@ -314,6 +323,7 @@
 			thisForm = cardContainer.closest( 'form' );
 			if ( thisForm ) {
 				listenForFieldMutations( thisForm );
+				listenForSubmitButtonMutations( thisForm );
 
 				if ( ! squareIsConditionallyDisabled( thisForm ) ) {
 					// Initially disable the submit button until card is valid
@@ -436,8 +446,6 @@
 			observeAttributeMutations( section, handleMutation );
 		}
 
-		const formId = getFormIdForForm( form );
-
 		/**
 		 * Handle a style attribute change for either a payment field container
 		 * or the field container of its parent section.
@@ -447,10 +455,6 @@
 		 */
 		function handleMutation( mutation ) {
 			if ( mutation.attributeName !== 'style' ) {
-				return;
-			}
-
-			if ( submitButtonIsConditionallyDisabled( formId ) ) {
 				return;
 			}
 
@@ -482,8 +486,41 @@
 	}
 
 	/**
+	 * Keep the submit button disabled while the Square card is not ready.
+	 *
+	 * Conditional logic on the submit button enables it as soon as its own
+	 * conditions are met, with no knowledge of the payment field. Watch for that
+	 * and disable it again until the card details are complete.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 * @return {void}
+	 */
+	function listenForSubmitButtonMutations( form ) {
+		const submitButton = form.querySelector( '.frm_final_submit' );
+		if ( ! submitButton ) {
+			return;
+		}
+
+		observeAttributeMutations( submitButton, mutation => {
+			if ( mutation.attributeName !== 'disabled' || submitButton.disabled ) {
+				return;
+			}
+
+			if ( squareCardElementIsComplete || squareIsConditionallyDisabled( form ) ) {
+				// Either the card is filled in or it is conditionally hidden, so
+				// there is nothing left for Square to wait on.
+				return;
+			}
+
+			disableSubmit( form );
+		} );
+	}
+
+	/**
 	 * @param {HTMLElement} element
-	 * @param {function}    mutationHandler
+	 * @param {Function}    mutationHandler
 	 *
 	 * @return {void}
 	 */
@@ -510,7 +547,14 @@
 	 * @return {boolean} True if the submit button is conditionally disabled, false otherwise.
 	 */
 	function submitButtonIsConditionallyDisabled( formId ) {
-		return submitButtonIsConditionallyNotAvailable( formId ) && 'disable' === __FRMRULES[ `submit_${ formId }` ].hideDisable;
+		if ( ! submitButtonIsConditionallyNotAvailable( formId ) ) {
+			return false;
+		}
+
+		// __FRMRULES is only defined when conditional logic is on the page.
+		const submitRules = typeof __FRMRULES === 'undefined' ? undefined : __FRMRULES[ `submit_${ formId }` ];
+
+		return Boolean( submitRules ) && 'disable' === submitRules.hideDisable;
 	}
 
 	/**
@@ -524,7 +568,17 @@
 	 */
 	function submitButtonIsConditionallyNotAvailable( formId ) {
 		const hideFields = document.getElementById( `frm_hide_fields_${ formId }` );
-		return hideFields && hideFields.value.includes( `["frm_form_${ formId }_container .frm_final_submit"]` );
+		if ( ! hideFields ) {
+			return false;
+		}
+
+		// The value is a JSON array of every container conditional logic has
+		// hidden, for example ["frm_field_25_container","frm_form_16_container
+		// .frm_final_submit"], so match the quoted entry anywhere in it. Matching
+		// the array brackets too would only find the submit button when it is the
+		// single hidden entry, and it never is once the payment field has
+		// conditional logic of its own.
+		return hideFields.value.includes( `"frm_form_${ formId }_container .frm_final_submit"` );
 	}
 
 	/**
