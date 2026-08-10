@@ -303,19 +303,21 @@
 			return;
 		}
 
-		// Skip (and avoid the SDK wait) when Google Pay / Apple Pay were not enqueued
-		// server-side, e.g. via the frm_include_google_pay_apple_pay filter or non-SSL.
-		if ( ! frmPayPalVars.includeGooglePayApplePay ) {
+		// Skip (and avoid the SDK wait) when neither wallet was enqueued server-side,
+		// e.g. via the frm_include_google_pay_apple_pay filter or non-SSL.
+		if ( ! frmPayPalVars.includeGooglePay && ! frmPayPalVars.includeApplePay ) {
 			return;
 		}
 
 		// Resolve both eligibility checks in parallel so the combined wait is bounded by
 		// the slower of the two, then register them in a fixed order (Google Pay, then
 		// Apple Pay). Registration happens before the selector is built, so they render
-		// together with the other methods.
+		// together with the other methods. A wallet turned off server-side, e.g. via
+		// frm_paypal_commerce_include_google_pay or frm_paypal_commerce_include_apple_pay,
+		// skips its check so it never waits on an SDK that was never enqueued.
 		const [ googlePayEligible, applePayEligible ] = await Promise.all( [
-			resolveGooglePayEligibility(),
-			resolveApplePayEligibility()
+			frmPayPalVars.includeGooglePay ? resolveGooglePayEligibility() : false,
+			frmPayPalVars.includeApplePay ? resolveApplePayEligibility() : false
 		] );
 
 		if ( googlePayEligible ) {
