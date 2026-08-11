@@ -998,7 +998,7 @@ class FrmEntry {
 	 * submission neither is true, so the owner falls back to the current user and cannot be set to
 	 * another account.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param string $type The create/update type. 'xml' for an import.
 	 *

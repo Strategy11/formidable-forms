@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Sanitize HTML attribute values to prevent stored XSS.
  *
- * @since x.x
+ * @since 6.34
  */
 class FrmHtmlSanitizer {
 
@@ -16,7 +16,7 @@ class FrmHtmlSanitizer {
 	 * Decodes HTML entities in the attribute value before validating,
 	 * so entity-encoded payloads are rejected.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param string $value HTML string to process.
 	 *
@@ -39,7 +39,7 @@ class FrmHtmlSanitizer {
 	/**
 	 * Callback to sanitize a single URL attribute match.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $matches Regex matches with attribute name and value.
 	 *
@@ -80,7 +80,7 @@ class FrmHtmlSanitizer {
 	 * The pattern allows only base64 characters after the prefix, so the value cannot carry a media
 	 * type of its own or any markup into the attribute.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param string $url Decoded URL value to check.
 	 *
