@@ -7,14 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Base controller for combo fields (fields with multiple sub-fields like Address).
  *
- * @since x.x
+ * @since 6.34
  */
 class FrmComboFieldsController {
 
 	/**
 	 * Fill values with defaults.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param mixed $value
 	 * @param array $defaults
@@ -28,7 +28,7 @@ class FrmComboFieldsController {
 	/**
 	 * Include placeholder attribute for sub-field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param mixed  $default_value
 	 * @param string $sub_field
@@ -66,7 +66,7 @@ class FrmComboFieldsController {
 	/**
 	 * Get dropdown label for select sub-fields.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $atts
 	 *
@@ -80,7 +80,7 @@ class FrmComboFieldsController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.34
 		 *
 		 * @param string $default
 		 * @param array  $atts
@@ -93,7 +93,7 @@ class FrmComboFieldsController {
 	/**
 	 * Add attributes to input field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $atts
 	 *
@@ -141,7 +141,7 @@ class FrmComboFieldsController {
 	/**
 	 * Include sub-label for field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $atts
 	 *
@@ -154,7 +154,7 @@ class FrmComboFieldsController {
 	/**
 	 * Show sub-label for field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $atts
 	 *
@@ -172,7 +172,7 @@ class FrmComboFieldsController {
 	/**
 	 * Add error class if field has error.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $atts
 	 *

@@ -93,7 +93,7 @@ if ( ! empty( $should_show_warning ) ) {
 				/**
 				 * Fires inside the enabled form actions container.
 				 *
-				 * @since x.x
+				 * @since 6.34
 				 *
 				 * @param array $form_actions
 				 */

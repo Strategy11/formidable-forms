@@ -7,14 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Address field type.
  *
- * @since x.x
+ * @since 6.34
  */
 class FrmFieldAddress extends FrmFieldCombo {
 
 	/**
 	 * @var string
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 */
 	protected $type = 'address';
 
@@ -23,14 +23,14 @@ class FrmFieldAddress extends FrmFieldCombo {
 	 *
 	 * @var bool
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 */
 	public $is_combo_field = true;
 
 	/**
 	 * Constructor - register sub-fields.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array|int|object $field
 	 * @param string           $type
@@ -76,7 +76,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	/**
 	 * Get processed sub-fields based on address type.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return array
 	 */
@@ -151,7 +151,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $args - Includes 'field', 'display', and 'values'.
 	 */
@@ -204,7 +204,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $value
 	 * @param array $atts
@@ -231,7 +231,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $atts
 	 * @param array $value
@@ -262,7 +262,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 		/**
 		 * Change the format of a displayed address
 		 *
-		 * @since x.x
+		 * @since 6.34
 		 *
 		 * @param string $address_format
 		 * @param array  $args
@@ -273,7 +273,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param mixed $value
 	 *
@@ -308,13 +308,13 @@ class FrmFieldAddress extends FrmFieldCombo {
 	/**
 	 * Get empty value array for address.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return array
 	 */
 	private function empty_value_array() {
 		/**
-		 * @since x.x
+		 * @since 6.34
 		 *
 		 * @param array $empty_value_array array of empty address data.
 		 */
@@ -344,7 +344,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	/**
 	 * Convert comma-separated address values to an associative array
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array|string $value
 	 * @param array        $atts
@@ -402,7 +402,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	/**
 	 * Validate field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $args Arguments. Includes `errors`, `value`.
 	 *
@@ -435,7 +435,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param mixed $value
 	 */
@@ -446,7 +446,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	/**
 	 * Get export headings for address field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return array
 	 */
