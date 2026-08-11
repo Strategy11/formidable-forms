@@ -365,6 +365,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 == Changelog ==
 = 6.34 =
+* Security: Additional validation has been added to guarantee that submitted HTML in form data by untrusted users cannot be used for XSS.
 * New: Address fields are now included in Lite!
 * New: Address field data is included in PayPal Commerce credit card payments when defined in payment action settings to help prevent entries from incorrectly getting flagged as fraudulent.
 * New: Buttons on admin pages will now shrink slightly when clicked, to give a more tactile response.
