@@ -1782,6 +1782,8 @@ DEFAULT_HTML;
 
 		$value = $this->prepare_display_value( $value, $atts );
 
+		FrmAppHelper::sanitize_value( 'FrmHtmlSanitizer::sanitize_url_attributes', $value );
+
 		if ( ! is_array( $value ) ) {
 			return $value;
 		}
@@ -2081,6 +2083,6 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function filter_value_for_table_html( $value ) {
-		return wp_kses_post( $value );
+		return FrmHtmlSanitizer::sanitize_url_attributes( wp_kses_post( $value ) );
 	}
 }
