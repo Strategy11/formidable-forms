@@ -4,7 +4,7 @@ Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.33.1
+Stable tag: 6.34
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -364,6 +364,15 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.34 =
+* New: Address fields are now included in Lite!
+* New: Address field data is included in PayPal Commerce credit card payments when defined in payment action settings to help prevent entries from incorrectly getting flagged as fraudulent.
+* New: Buttons on admin pages will now shrink slightly when clicked, to give a more tactile response.
+* Fix: Additional checks have been added to make sure that pages will not result in 404 errors when Gated Content actions are not actually defined for the page. In addition, when a custom permission is used for handling access to a private page, the custom permission is properly checked for.
+* Fix: Captcha field labels no longer use labels to prevent orphaned label issues since the label cannot reference the input in an iframe.
+* Fix: A JS error would occur when removing the last layout class from a field.
+* Fix: The JS spam token would get added to a form multiple times when multiple forms were on a page.
+
 = 6.33.1 =
 * Fix: Public taxonomy pages could result in 404 errors, caused by a missing check in the new Gated Content actions.
 
