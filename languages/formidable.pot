@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-11T15:27:01+00:00\n"
+"POT-Creation-Date: 2026-08-11T16:59:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -226,8 +226,8 @@ msgstr ""
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:73
 #: js/admin/style.js:939
 #: js/admin/style.js:1073
-#: js/src/admin/admin.js:4714
-#: js/src/admin/admin.js:8915
+#: js/src/admin/admin.js:4742
+#: js/src/admin/admin.js:8943
 msgid "Cancel"
 msgstr ""
 
@@ -1462,7 +1462,7 @@ msgid "Field Colors"
 msgstr ""
 
 #: classes/controllers/FrmStylesController.php:1101
-#: js/src/admin/admin.js:2868
+#: js/src/admin/admin.js:2896
 msgid "Field Settings"
 msgstr ""
 
@@ -2818,7 +2818,7 @@ msgstr ""
 #: stripe/helpers/FrmTransLiteListHelper.php:462
 #: stripe/views/payments/show.php:173
 #: stripe/views/subscriptions/show.php:129
-#: js/src/admin/admin.js:2895
+#: js/src/admin/admin.js:2923
 msgid "Delete"
 msgstr ""
 
@@ -4198,7 +4198,7 @@ msgstr ""
 #: classes/helpers/FrmFormsHelper.php:1251
 #: classes/views/frm-form-actions/form_action.php:34
 #: js/admin/style.js:803
-#: js/src/admin/admin.js:2901
+#: js/src/admin/admin.js:2929
 msgid "Duplicate"
 msgstr ""
 
@@ -4341,7 +4341,7 @@ msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:2013
 #: classes/views/form-templates/modals/name-your-form-modal.php:35
-#: js/src/admin/admin.js:4719
+#: js/src/admin/admin.js:4747
 msgid "Save"
 msgstr ""
 
@@ -6752,14 +6752,14 @@ msgid "Move Field"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:44
-#: js/src/admin/admin.js:1647
-#: js/src/admin/admin.js:1653
-#: js/src/admin/admin.js:2825
+#: js/src/admin/admin.js:1675
+#: js/src/admin/admin.js:1681
+#: js/src/admin/admin.js:2853
 msgid "More Options"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:46
-#: js/src/admin/admin.js:1639
+#: js/src/admin/admin.js:1667
 msgid "Toggle More Options Dropdown"
 msgstr ""
 
@@ -9785,7 +9785,7 @@ msgstr ""
 #: js/formidable_admin.js:1
 #: js/frm_testing_mode.js:2
 #: js/src/admin/addon-state.js:175
-#: js/src/admin/admin.js:8906
+#: js/src/admin/admin.js:8934
 msgid "Save and Reload"
 msgstr ""
 
@@ -9838,95 +9838,95 @@ msgstr ""
 msgid "Sorry, we didn't find any add-ons that match your criteria."
 msgstr ""
 
-#: js/src/admin/admin.js:1066
+#: js/src/admin/admin.js:1094
 msgid "Field Group"
 msgstr ""
 
-#: js/src/admin/admin.js:1598
+#: js/src/admin/admin.js:1626
 msgid "Set Row Layout"
 msgstr ""
 
-#: js/src/admin/admin.js:1605
+#: js/src/admin/admin.js:1633
 msgid "Move Field Group"
 msgstr ""
 
-#: js/src/admin/admin.js:2437
+#: js/src/admin/admin.js:2465
 msgid "This field type has reached its limit."
 msgstr ""
 
 #. translators: %1$d: Maximum number of fields allowed in a field group.
-#: js/src/admin/admin.js:2559
+#: js/src/admin/admin.js:2587
 msgid "You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again."
 msgstr ""
 
-#: js/src/admin/admin.js:2895
+#: js/src/admin/admin.js:2923
 msgid "Delete Group"
 msgstr ""
 
-#: js/src/admin/admin.js:2901
+#: js/src/admin/admin.js:2929
 msgid "Duplicate Group"
 msgstr ""
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/src/admin/admin.js:4169
+#: js/src/admin/admin.js:4197
 msgid "Are you sure you want to delete these %1$s selected field(s)?"
 msgstr ""
 
-#: js/src/admin/admin.js:4400
+#: js/src/admin/admin.js:4428
 msgid "Custom layout"
 msgstr ""
 
-#: js/src/admin/admin.js:4423
+#: js/src/admin/admin.js:4451
 msgid "Break into rows"
 msgstr ""
 
-#: js/src/admin/admin.js:4433
+#: js/src/admin/admin.js:4461
 msgid "Row Layout"
 msgstr ""
 
-#: js/src/admin/admin.js:4699
+#: js/src/admin/admin.js:4727
 msgid "Enter number of columns for each field"
 msgstr ""
 
-#: js/src/admin/admin.js:4703
+#: js/src/admin/admin.js:4731
 msgid "Layouts are based on a 12-column grid system"
 msgstr ""
 
-#: js/src/admin/admin.js:5147
+#: js/src/admin/admin.js:5175
 msgid "Merge into row"
 msgstr ""
 
 #. translators: %s: The detected option value.
-#: js/src/admin/admin.js:6747
+#: js/src/admin/admin.js:6775
 msgid "Duplicate option value \"%s\" detected"
 msgstr ""
 
 #. translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling).
-#: js/src/admin/admin.js:7466
+#: js/src/admin/admin.js:7494
 msgid "%s are not installed"
 msgstr ""
 
-#: js/src/admin/admin.js:8887
+#: js/src/admin/admin.js:8915
 msgid "You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?"
 msgstr ""
 
-#: js/src/admin/admin.js:8892
+#: js/src/admin/admin.js:8920
 msgid "Save and Reload?"
 msgstr ""
 
-#: js/src/admin/admin.js:9737
+#: js/src/admin/admin.js:9765
 msgid "Unable to install template"
 msgstr ""
 
-#: js/src/admin/admin.js:10031
+#: js/src/admin/admin.js:10059
 msgid "Please enter a valid number."
 msgstr ""
 
-#: js/src/admin/admin.js:10314
+#: js/src/admin/admin.js:10342
 msgid "Only 10 columns can be selected at a time."
 msgstr ""
 
-#: js/src/admin/admin.js:10489
+#: js/src/admin/admin.js:10517
 msgid "Thank you for signing up!"
 msgstr ""
 
