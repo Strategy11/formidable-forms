@@ -883,6 +883,37 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Hides the tab panels in a container, apart from the one the clicked tab points at.
+	 * The active panel is matched by its literal id or class name so the tab href is never
+	 * turned into a selector.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} container Element holding the tab panels as direct children.
+	 * @param {string}      targetId  Tab anchor with the leading # removed.
+	 * @return {void}
+	 */
+	function hideOtherTabPanels( container, targetId ) {
+		Array.from( container.children ).forEach( child => {
+			if ( child.classList.contains( 'tabs-panel' ) && child.id !== targetId && ! child.classList.contains( targetId ) ) {
+				child.style.display = 'none';
+			}
+		} );
+	}
+
+	/**
+	 * Shows a tab panel.
+	 * Panels are also hidden by the frm_hidden class in the markup, so the inline display has to be
+	 * set to a visible value. Clearing it would leave that class rule in charge and the panel empty.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} panel Tab panel to show.
+	 * @return {void}
+	 */
+	function showTabPanel( panel ) {
+		panel.style.display = 'block';
+	}
+
 	function clickNewTab() {
 		/*jshint validthis:true */
 		const href = this.getAttribute( 'href' );
@@ -903,20 +934,14 @@ window.frmAdminBuildJS = function() {
 			} );
 		}
 
-		// Hide the sibling tab panels, matching the active one by its literal id or class so href is
-		// never turned into a selector.
 		const container = this.closest( 'div' );
 		if ( container ) {
-			Array.from( container.children ).forEach( child => {
-				if ( child.classList.contains( 'tabs-panel' ) && child.id !== targetId && ! child.classList.contains( targetId ) ) {
-					child.style.display = 'none';
-				}
-			} );
+			hideOtherTabPanels( container, targetId );
 		}
 
 		const tabContent = document.getElementById( targetId );
 		if ( tabContent ) {
-			tabContent.style.display = 'block';
+			showTabPanel( tabContent );
 		}
 
 		// clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
@@ -934,11 +959,12 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const classSelector = href.replace( '#', '.' );
+		const targetId = href.slice( 1 );
 
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
-		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
-			link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
+		const [ container ] = link.closest( 'div' );
+		if ( container?.querySelector( '.tabs-panel' ) ) {
+			hideOtherTabPanels( container, targetId );
 		} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 			/* global settings */
 			const ajax = link.data( 'frmajax' );
@@ -950,13 +976,15 @@ window.frmAdminBuildJS = function() {
 			/* form settings page */
 			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
-		const targetEl = document.getElementById( href.slice( 1 ) );
+
+		const targetEl = document.getElementById( targetId );
 		if ( targetEl ) {
-			targetEl.style.display = '';
+			showTabPanel( targetEl );
 		}
-		document.querySelectorAll( classSelector ).forEach( el => {
-			el.style.display = '';
-		} );
+
+		// A panel is not always given an id matching its tab anchor, so match on the class too.
+		// getElementsByClassName takes a literal class name, never a selector built from href.
+		Array.from( document.getElementsByClassName( targetId ) ).forEach( panel => showTabPanel( panel ) );
 
 		hideShortcodes();
 
@@ -971,9 +999,9 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( jQuery( '.frm_form_settings' ).length ) {
-			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ href.replace( '#', '' ) }` );
+			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ targetId }` );
 		} else {
-			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ href.replace( '#', '' ) }` );
+			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ targetId }` );
 		}
 	}
 
