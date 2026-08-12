@@ -242,7 +242,7 @@ describe( 'Applications page', () => {
 				cy.get( 'h3 .frm-inner-text' ).should( 'contain.text', 'Product Review and Purchase' );
 				cy.get( '.button.frm-button-secondary.frm-button-sm' )
 					.should( 'contain.text', 'Learn More' )
-					.and( 'have.attr', 'aria-description', 'Product Review and Purchase Template' );
+					.and( 'have.attr', 'aria-description', 'WordPress Product Review and Purchase Template' );
 				cy.get( '.frm-application-card-image-wrapper img' )
 					.should( 'have.attr', 'src' )
 					.and( 'include', '/images/applications/thumbnails/product-review.png' );
