@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-11T16:59:37+00:00\n"
+"POT-Creation-Date: 2026-08-12T13:49:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -6290,12 +6290,12 @@ msgid "Field Size"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/product-options.php:16
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2567
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2617
 msgid "Product Type"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/product-single-option.php:28
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2559
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2609
 msgid "Product Name"
 msgstr ""
 
@@ -8629,27 +8629,27 @@ msgstr ""
 msgid "No PayPal subscription ID found."
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2571
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2621
 msgid "Service"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2572
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2622
 msgid "Digital"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2573
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2623
 msgid "Physical"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2607
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2657
 msgid "PayPal Email"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2608
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2658
 msgid "PayPal Name"
 msgstr ""
 
-#: paypal/controllers/FrmPayPalLiteActionsController.php:2611
+#: paypal/controllers/FrmPayPalLiteActionsController.php:2661
 msgid "PayPal Address"
 msgstr ""
 
