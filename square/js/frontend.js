@@ -105,7 +105,7 @@
 	 * A width of zero means the element or one of its ancestors is hidden,
 	 * usually by conditional logic setting display: none.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {HTMLElement} cardElement
 	 * @return {Promise<void>}
@@ -140,7 +140,7 @@
 	 * Check if a Square card element is conditionally hidden.
 	 * If it is, we should not be disabling the submit button.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -428,7 +428,7 @@
 	/**
 	 * Possibly toggle on and off the submit button when a Stripe Link payment field is conditionally shown or hidden.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {HTMLElement} form
 	 * @return {void}
@@ -492,7 +492,7 @@
 	 * conditions are met, with no knowledge of the payment field. Watch for that
 	 * and disable it again until the card details are complete.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {HTMLElement} form
 	 * @return {void}
@@ -540,7 +540,7 @@
 	 * Check if the submit button is conditionally disabled.
 	 * This is required for Stripe link so the button does not get enabled at the wrong time after completing the Stripe elements.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {string} formId
 	 *
@@ -560,7 +560,7 @@
 	/**
 	 * Check submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {string} formId
 	 *

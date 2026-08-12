@@ -9,12 +9,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides helper methods for CSV export and country codes.
  * Rendering is handled by FrmFieldAddress model.
  *
- * @since x.x
+ * @since 6.34
  */
 class FrmAddressesController extends FrmComboFieldsController {
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @var array|null Country codes indexed by country name. This is stored when maybe_define_country_codes is called the first time.
 	 */
@@ -23,7 +23,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	/**
 	 * Show address field in form.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array  $field
 	 * @param string $field_name
@@ -46,7 +46,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	/**
 	 * Add optional class to field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param string $class
 	 * @param array  $field
@@ -60,7 +60,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	/**
 	 * Get empty value array for address field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return array
 	 */
@@ -75,7 +75,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 		);
 
 		/**
-		 * @since x.x
+		 * @since 6.34
 		 *
 		 * @param array $empty_value_array array of empty address data.
 		 */
@@ -88,7 +88,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	/**
 	 * Get sub-fields for address field.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param array $field
 	 *
@@ -174,7 +174,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 		/**
 		 * Filter sub fields so an Address field can be customized.
 		 *
-		 * @since x.x
+		 * @since 6.34
 		 *
 		 * @param array $fields
 		 * @param array $field
@@ -188,7 +188,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	/**
 	 * Maps Country name to Country code.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param string $country Country name.
 	 *
@@ -203,7 +203,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	/**
 	 * Define country codes mapping.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return void
 	 */
@@ -468,7 +468,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 		/**
 		 * Allows modifying the list of country name to code mapping.
 		 *
-		 * @since x.x
+		 * @since 6.34
 		 *
 		 * @param array $country_codes Array of country name to code mapping.
 		 */

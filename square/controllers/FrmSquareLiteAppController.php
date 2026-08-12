@@ -130,7 +130,7 @@ class FrmSquareLiteAppController {
 	 * Show a warning in the payment action settings when the selected address field
 	 * uses an address type without a country, as Square requires a country code.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param object $action
 	 *
@@ -173,7 +173,7 @@ class FrmSquareLiteAppController {
 	/**
 	 * Square requires a country code, which the generic address type does not collect.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param stdClass $field
 	 *

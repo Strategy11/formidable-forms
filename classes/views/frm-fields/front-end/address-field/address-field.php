@@ -4,7 +4,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 6.34
  *
  * @var array         $args           Data passed to this view. See FrmFieldCombo::load_field_output().
  * @var array         $shortcode_atts Shortcode attributes.

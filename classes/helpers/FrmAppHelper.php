@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.33.1';
+	public static $plug_version = '6.34';
 
 	/**
 	 * @var bool
@@ -938,6 +938,7 @@ class FrmAppHelper {
 			self::sanitize_value( self::class . '::strip_most_html', $value );
 		}
 		self::decode_specialchars( $value );
+		self::sanitize_value( 'FrmHtmlSanitizer::sanitize_url_attributes', $value );
 	}
 
 	/**

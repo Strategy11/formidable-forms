@@ -201,7 +201,7 @@
 	/**
 	 * Add address values to the payment meta when an address field is mapped in the payment action.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {Object} cardObject
 	 * @return {void}
@@ -257,7 +257,7 @@
 	/**
 	 * Add a single address input value to the card object if it is filled.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {Element} container
 	 * @param {string}  inputName
@@ -275,7 +275,7 @@
 	/**
 	 * Add billing details built from the payment meta to the confirm params.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {Object} params
 	 * @param {Object} meta
@@ -291,7 +291,7 @@
 	/**
 	 * Convert flat address_* meta keys to the nested address object Stripe expects.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {Object} meta
 	 * @return {Object} Billing details with a nested address object.

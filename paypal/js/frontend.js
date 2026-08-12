@@ -1801,7 +1801,7 @@
 	/**
 	 * Build the billing address for the card fields from the address field mapped in the payment action.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return {Object|null} Billing address for the card fields submit args, or null when no address is available.
 	 */
@@ -1873,7 +1873,7 @@
 	 * The country dropdown holds the code in a data-code attribute.
 	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @param {Element} addressContainer
 	 * @param {string}  prefix
