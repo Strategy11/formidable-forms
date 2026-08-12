@@ -718,7 +718,11 @@
 				onError,
 				style: frmPayPalVars.style,
 				inputEvents: {
-					onChange: onCardFieldsChange
+					onChange: onCardFieldsChange,
+					// This is intentionally left blank, but it should not be deleted. onFocus is required for onBlur to work.
+					// eslint-disable-next-line no-empty
+					onFocus() {},
+					onBlur: onCardFieldsBlur
 				}
 			};
 
@@ -747,6 +751,24 @@
 				disableSubmit( thisForm );
 			}
 		}
+	}
+
+	/**
+	 * Handle card field blur events.
+	 */
+	async function onCardFieldsBlur() {
+		try {
+			const state = await cardFieldsInstance.getState();
+			cardFieldsValid = state.isFormValid;
+
+			if ( selectedMethod === 'card' ) {
+				if ( cardFieldsValid ) {
+					enableSubmit();
+				} else {
+					disableSubmit( thisForm );
+				}
+			}
+		} catch ( err ) {} // eslint-disable-line no-empty
 	}
 
 	/**
