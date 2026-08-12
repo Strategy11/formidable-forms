@@ -888,7 +888,7 @@ window.frmAdminBuildJS = function() {
 	 * The active panel is matched by its literal id or class name so the tab href is never
 	 * turned into a selector.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 * @param {HTMLElement} container Element holding the tab panels as direct children.
 	 * @param {string}      targetId  Tab anchor with the leading # removed.
 	 * @return {void}
@@ -906,7 +906,7 @@ window.frmAdminBuildJS = function() {
 	 * Panels are also hidden by the frm_hidden class in the markup, so the inline display has to be
 	 * set to a visible value. Clearing it would leave that class rule in charge and the panel empty.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 * @param {HTMLElement} panel Tab panel to show.
 	 * @return {void}
 	 */
