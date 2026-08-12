@@ -289,7 +289,7 @@ describe( 'Applications page', () => {
 			.within( () => {
 				cy.get( '.button.frm-button-secondary.frm-button-sm' )
 					.should( 'contain.text', 'Learn More' )
-					.and( 'have.attr', 'aria-description', 'Testimonials Template' );
+					.and( 'have.attr', 'aria-description', 'WordPress Testimonials Template' );
 				cy.get( '.frm-application-card-image-wrapper img' )
 					.should( 'have.attr', 'src' )
 					.and( 'include', '/images/applications/thumbnails/testimonials.webp' );
