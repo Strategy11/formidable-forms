@@ -33,7 +33,7 @@ class FrmHtmlSanitizer {
 			$value
 		);
 
-		return null === $sanitized ? '' : $sanitized;
+		return $sanitized ?? '';
 	}
 
 	/**
@@ -48,7 +48,7 @@ class FrmHtmlSanitizer {
 	private static function sanitize_url_attribute_value( $matches ) {
 		$url = trim( html_entity_decode( $matches[2], ENT_QUOTES, 'UTF-8' ) );
 
-		if ( '#' === substr( $url, 0, 1 ) ) {
+		if ( str_starts_with( $url, '#' ) ) {
 			return $matches[1] . '="' . esc_attr( $url ) . '"';
 		}
 
@@ -67,6 +67,7 @@ class FrmHtmlSanitizer {
 		}
 
 		$host = wp_parse_url( $safe, PHP_URL_HOST );
+
 		if ( $host && preg_match( '/%[0-9a-f]{2}/i', $host ) ) {
 			return $matches[1] . '=""';
 		}
