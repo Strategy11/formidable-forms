@@ -320,7 +320,7 @@ describe( 'Applications page', () => {
 			} );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1' ).should( 'have.text', 'Testimonials Template' );
+			cy.get( 'h1' ).should( 'have.text', 'WordPress Testimonials Template' );
 			cy.get( 'div.c-template-info__text' ).within( () => {
 				cy.contains( 'This template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Business plan.' ).should( 'be.visible' );
