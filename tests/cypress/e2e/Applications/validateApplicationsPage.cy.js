@@ -242,7 +242,7 @@ describe( 'Applications page', () => {
 				cy.get( 'h3 .frm-inner-text' ).should( 'contain.text', 'Product Review and Purchase' );
 				cy.get( '.button.frm-button-secondary.frm-button-sm' )
 					.should( 'contain.text', 'Learn More' )
-					.and( 'have.attr', 'aria-description', 'Product Review and Purchase Template' );
+					.and( 'have.attr', 'aria-description', 'WordPress Product Review and Purchase Template' );
 				cy.get( '.frm-application-card-image-wrapper img' )
 					.should( 'have.attr', 'src' )
 					.and( 'include', '/images/applications/thumbnails/product-review.png' );
@@ -289,7 +289,7 @@ describe( 'Applications page', () => {
 			.within( () => {
 				cy.get( '.button.frm-button-secondary.frm-button-sm' )
 					.should( 'contain.text', 'Learn More' )
-					.and( 'have.attr', 'aria-description', 'Testimonials Template' );
+					.and( 'have.attr', 'aria-description', 'WordPress Testimonials Template' );
 				cy.get( '.frm-application-card-image-wrapper img' )
 					.should( 'have.attr', 'src' )
 					.and( 'include', '/images/applications/thumbnails/testimonials.webp' );
@@ -320,7 +320,7 @@ describe( 'Applications page', () => {
 			} );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1' ).should( 'have.text', 'Testimonials Template' );
+			cy.get( 'h1' ).should( 'have.text', 'WordPress Testimonials Template' );
 			cy.get( 'div.c-template-info__text' ).within( () => {
 				cy.contains( 'This template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Business plan.' ).should( 'be.visible' );
