@@ -38,6 +38,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		self::$instance = $this;
 		parent::setUp();
 
+		self::reset_shared_state();
+
 		// The JavaScript antispam check doesn't work with unit tests so turn it off.
 		add_filter( 'frm_run_antispam', '__return_false' );
 
@@ -54,6 +56,32 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->factory->form  = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
+	}
+
+	/**
+	 * Clear state that outlives a single test.
+	 *
+	 * PHPUnit gives each test its own database transaction, but globals and singletons live
+	 * for the whole process, so one test can leave another reading values it never set. A
+	 * test that needs any of this state should set it up itself; anything that passes only
+	 * because a previous test set it up is relying on the suite's ordering.
+	 *
+	 * @return void
+	 */
+	public static function reset_shared_state() {
+		// Read by FrmXMLHelper::populate_postmeta(), which takes a different code path when set.
+		$GLOBALS['frm_duplicate_ids'] = array();
+
+		// Populated in production only when a form renders, via FrmHoneypot::maybe_render_field().
+		foreach ( array( 'FrmFormState', 'FrmProFormState' ) as $state_class ) {
+			if ( ! class_exists( $state_class ) ) {
+				continue;
+			}
+
+			$instance = new ReflectionProperty( $state_class, 'instance' );
+			$instance->setAccessible( true );
+			$instance->setValue( null, null );
+		}
 	}
 
 	/**
@@ -82,7 +110,19 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		if ( self::$installed ) {
+			/**
+			 * Empty the tables before re-importing.
+			 *
+			 * Importing over forms that already exist updates those forms but skips their
+			 * entries, so a re-import on its own leaves the fixture set with forms and no
+			 * entries. Every class that runs later in the same process then inherits that,
+			 * and which classes those are depends on how the suite happens to be ordered.
+			 * Truncating first makes the re-import restore entries too, so a class gets the
+			 * same fixture data no matter what ran before it.
+			 */
+			self::empty_tables();
 			self::import_xml();
+			self::create_files();
 			return;
 		}
 
