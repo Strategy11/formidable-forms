@@ -449,7 +449,23 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( current_user_can( 'frm_view_forms' ), 'Subscriber can frm_view_forms' );
 		$this->assertFalse( current_user_can( 'frm_edit_forms' ), 'Subscriber can frm_edit_forms' );
 
-		$this->set_user_by_role( 'administrator' );
+		$admin_id = $this->set_user_by_role( 'administrator' );
+
+		/**
+		 * Reload the current user so the new capabilities are visible.
+		 *
+		 * Capabilities are granted by set_user_by_role(), which calls
+		 * FrmAppHelper::maybe_add_permissions(), and that writes them through its own WP_User
+		 * instance. The current user object consulted by current_user_can() is not updated, and
+		 * wp_set_current_user() returns early when the ID has not changed, so switch away and
+		 * back to force it to be rebuilt from the database. In production this does not arise:
+		 * the capabilities are written on one request and read on the next. Without this, the
+		 * assertions below only pass when an earlier test class already committed the
+		 * capabilities to this user's meta.
+		 */
+		wp_set_current_user( 0 );
+		wp_set_current_user( $admin_id );
+
 		$frm_roles = FrmAppHelper::frm_capabilities();
 
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
