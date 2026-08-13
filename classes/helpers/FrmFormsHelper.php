@@ -313,31 +313,62 @@ class FrmFormsHelper {
 			return '';
 		}
 
-		// Parse each error key once into its field ID and repeater row suffix, skipping
+		/**
+		 * Allows the list of clickable field errors to be turned off, leaving only the invalid
+		 * message on its own. Return false to opt a site, or a single form, out of the summary.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  $show_summary Whether to list each field that failed validation.
+		 * @param array $args         Includes 'form' and 'errors'.
+		 */
+		if ( ! apply_filters( 'frm_show_clickable_field_errors', true, $args ) ) {
+			return '';
+		}
+
+		// Parse each error key once into its field ID and container ID, skipping
 		// non-field errors like 'form' or 'spam' that have no input to link to.
 		$parsed_errors = array();
 		$field_ids     = array();
 
 		foreach ( $args['errors'] as $field_plus_id => $error ) {
-			$field_id = preg_replace( '/^field/', '', $field_plus_id );
-			$row      = '';
-
-			if ( str_contains( $field_id, '-' ) ) {
-				$field_id_parts = explode( '-', $field_id );
-
-				if ( count( $field_id_parts ) === 3 ) {
-					$field_id = $field_id_parts[0];
-					$row      = '-' . $field_id_parts[2];
-				}
+			if ( ! str_starts_with( $field_plus_id, 'field' ) ) {
+				continue;
 			}
+
+			if ( ! is_string( $error ) || '' === trim( $error ) ) {
+				// A combo field flags a sub field that failed with an empty error, which is a marker
+				// for the input rather than a message. Listing it would add an empty link.
+				continue;
+			}
+
+			// Everything after the 'field' prefix identifies the field in the DOM. It is the field
+			// ID on its own, plus a '-{sub_field}' suffix for a combo sub field such as a name or
+			// address line, a '-{section_id}-{row}' suffix for a field in a repeater row, or both.
+			$key_parts = explode( '-', substr( $field_plus_id, strlen( 'field' ) ) );
+			$field_id  = $key_parts[0];
 
 			if ( ! is_numeric( $field_id ) ) {
 				continue;
 			}
 
+			if ( count( $key_parts ) > 3 ) {
+				// A combo sub field inside a repeater row has no container of its own, so link to
+				// the row's container for the whole field. The front end script picks the sub input
+				// that failed out of it.
+				$key_parts = array_slice( $key_parts, 0, 3 );
+			}
+
+			// Link to the field container rather than to an input. Every field type renders one,
+			// with the same suffixes the error key carries, while the ID of the input inside it
+			// differs per field type, and several types have no input matching the field key at
+			// all. The container is also what the front end script uses to find the input to
+			// focus, so this stays correct for field types this file knows nothing about.
+			$container_id = 'frm_field_' . implode( '-', $key_parts ) . '_container';
+
 			$field_ids[]     = (int) $field_id;
-			$parsed_errors[] = compact( 'field_id', 'row', 'error' );
-		}
+			$parsed_errors[] = compact( 'field_id', 'container_id', 'error' );
+		}//end foreach
 
 		if ( ! $field_ids ) {
 			return '';
@@ -369,14 +400,9 @@ class FrmFormsHelper {
 				continue;
 			}
 
-			$html_id = 'field_' . $field->field_key . $parsed_error['row'];
-
-			if ( in_array( $field->type, array( 'checkbox', 'radio' ), true ) ) {
-				// Needed to focus on the first option when the error link is clicked.
-				$html_id .= '-0';
-			}
-
-			$field_error_messages .= '<li><a href="#' . esc_attr( $html_id ) . '">' . $error . '</a></li>';
+			// The frm_error_link class is the hook the front end script uses to move focus into the
+			// field. Without JavaScript the browser still jumps to the container the link targets.
+			$field_error_messages .= '<li><a class="frm_error_link" href="#' . esc_attr( $parsed_error['container_id'] ) . '">' . $error . '</a></li>';
 		}//end foreach
 
 		return $field_error_messages;

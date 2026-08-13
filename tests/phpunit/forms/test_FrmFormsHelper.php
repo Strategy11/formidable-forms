@@ -174,12 +174,165 @@ class test_FrmFormsHelper extends FrmUnitTest {
 
 		// The base invalid message is wrapped in a span, and the links are inside a list.
 		$this->assertStringContainsString( '<ul>', $message );
-		$this->assertStringContainsString( '<li><a href="#field_my_text">Text is required</a></li>', $message );
-		$this->assertStringContainsString( '<li><a href="#field_my_select">Select is required</a></li>', $message );
 
-		// Checkbox and radio links target the first option so focus lands on a real input.
-		$this->assertStringContainsString( '<li><a href="#field_my_checkbox-0">Checkbox is required</a></li>', $message );
-		$this->assertStringContainsString( '<li><a href="#field_my_radio-0">Radio is required</a></li>', $message );
+		// Links target the field container, which every field type renders, rather than an input
+		// ID that only some field types have.
+		$this->assertStringContainsString( $this->error_link_html( $text_id, 'Text is required' ), $message );
+		$this->assertStringContainsString( $this->error_link_html( $select_id, 'Select is required' ), $message );
+		$this->assertStringContainsString( $this->error_link_html( $checkbox_id, 'Checkbox is required' ), $message );
+		$this->assertStringContainsString( $this->error_link_html( $radio_id, 'Radio is required' ), $message );
+	}
+
+	/**
+	 * Field types that render no input matching the field key, or an input that cannot take focus,
+	 * used to produce a link that went nowhere. Every type links to its container instead.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_links_every_field_type() {
+		$this->form = $this->factory->form->create_and_get();
+
+		// The types reported as having broken links, plus the Lite types that always worked.
+		$types = array( 'file', 'name', 'address', 'time', 'star', 'scale', 'nps', 'gdpr', 'ranking', 'likert', 'text', 'email' );
+
+		$errors    = array();
+		$field_ids = array();
+
+		foreach ( $types as $type ) {
+			$field_id                      = $this->create_field_with_key( $type, 'my_' . $type );
+			$field_ids[ $type ]            = $field_id;
+			$errors[ 'field' . $field_id ] = ucfirst( $type ) . ' is required';
+		}
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => $errors,
+			)
+		);
+
+		foreach ( $types as $type ) {
+			$this->assertStringContainsString(
+				$this->error_link_html( $field_ids[ $type ], ucfirst( $type ) . ' is required' ),
+				$message,
+				'The ' . $type . ' field should link to its container.'
+			);
+		}
+
+		// The old format guessed at an input ID from the field key. Nothing should use it anymore.
+		$this->assertStringNotContainsString( 'href="#field_my_', $message );
+	}
+
+	/**
+	 * A combo field such as name or address reports an error per sub field, keyed
+	 * field{id}-{sub_field}. Those keys have their own container to link to.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_handles_combo_sub_field_keys() {
+		$this->form = $this->factory->form->create_and_get();
+		$name_id    = $this->create_field_with_key( 'name', 'my_name' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $name_id . '-first' => 'First name is required',
+					'field' . $name_id . '-last'  => 'Last name is required',
+				),
+			)
+		);
+
+		$this->assertStringContainsString(
+			'<li><a class="frm_error_link" href="#frm_field_' . $name_id . '-first_container">First name is required</a></li>',
+			$message
+		);
+		$this->assertStringContainsString(
+			'<li><a class="frm_error_link" href="#frm_field_' . $name_id . '-last_container">Last name is required</a></li>',
+			$message
+		);
+	}
+
+	/**
+	 * A combo sub field inside a repeater row (field{id}-{section_id}-{row}-{sub_field}) has no
+	 * container of its own in the markup, so the link falls back to the row's field container.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_handles_combo_sub_fields_in_repeater_rows() {
+		$this->form = $this->factory->form->create_and_get();
+		$name_id    = $this->create_field_with_key( 'name', 'repeated_name' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $name_id . '-55-2-first' => 'First name is required',
+					'field' . $name_id . '-55-2-last'  => 'Last name is required',
+				),
+			)
+		);
+
+		$this->assertStringContainsString(
+			'<li><a class="frm_error_link" href="#frm_field_' . $name_id . '-55-2_container">First name is required</a></li>',
+			$message
+		);
+		$this->assertStringContainsString(
+			'<li><a class="frm_error_link" href="#frm_field_' . $name_id . '-55-2_container">Last name is required</a></li>',
+			$message
+		);
+	}
+
+	/**
+	 * A combo field flags the sub field that failed with an empty error, as a marker for the input
+	 * rather than a message to show. Those must not become empty links in the summary.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_skips_errors_with_no_message() {
+		$this->form = $this->factory->form->create_and_get();
+		$name_id    = $this->create_field_with_key( 'name', 'marker_name' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $name_id . '-first' => '',
+					'field' . $name_id . '-last'  => '   ',
+					'field' . $name_id            => 'Name is required',
+				),
+			)
+		);
+
+		$this->assertStringNotContainsString( '</a></li><li><a', str_replace( "\n", '', $message ) );
+		$this->assertSame( 1, substr_count( $message, '<li>' ) );
+		$this->assertStringContainsString( $this->error_link_html( $name_id, 'Name is required' ), $message );
+	}
+
+	/**
+	 * The summary can be turned off entirely with a filter, leaving just the invalid message.
+	 *
+	 * @covers FrmFormsHelper::get_invalid_error_message
+	 */
+	public function test_get_invalid_error_message_summary_can_be_filtered_off() {
+		$this->form = $this->factory->form->create_and_get();
+		$text_id    = $this->create_field_with_key( 'text', 'filtered_text' );
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+
+		$message = FrmFormsHelper::get_invalid_error_message(
+			array(
+				'form'   => $this->form,
+				'errors' => array(
+					'field' . $text_id => 'Text is required',
+				),
+			)
+		);
+
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+
+		$this->assertStringNotContainsString( '<ul>', $message );
+		$this->assertStringNotContainsString( 'Text is required', $message );
 	}
 
 	/**
@@ -202,9 +355,10 @@ class test_FrmFormsHelper extends FrmUnitTest {
 			)
 		);
 
-		$this->assertStringContainsString( '<li><a href="#field_linkable_text">Text is required</a></li>', $message );
+		$this->assertStringContainsString( $this->error_link_html( $text_id, 'Text is required' ), $message );
 		$this->assertStringNotContainsString( 'appears to be spam', $message );
-		$this->assertStringNotContainsString( '<a href="#field_spam', $message );
+		$this->assertStringNotContainsString( 'frm_field_spam', $message );
+		$this->assertStringNotContainsString( 'frm_field_form_container', $message );
 	}
 
 	/**
@@ -277,15 +431,16 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		// Hidden and user ID errors appear as plain list items, with no anchor to a non-focusable input.
 		$this->assertStringContainsString( '<li>Hidden is required</li>', $message );
 		$this->assertStringContainsString( '<li>User ID is required</li>', $message );
-		$this->assertStringNotContainsString( '#field_my_hidden', $message );
-		$this->assertStringNotContainsString( '#field_my_user_id', $message );
+		$this->assertStringNotContainsString( 'frm_field_' . $hidden_id . '_container', $message );
+		$this->assertStringNotContainsString( 'frm_field_' . $user_id . '_container', $message );
 
 		// A normal field in the same summary is still a link.
-		$this->assertStringContainsString( '<li><a href="#field_visible_text">Text is required</a></li>', $message );
+		$this->assertStringContainsString( $this->error_link_html( $text_id, 'Text is required' ), $message );
 	}
 
 	/**
-	 * A repeater style error key (field{id}-{row_meta}-{row}) should link to the field in the correct row.
+	 * A repeater style error key (field{id}-{section_id}-{row}) should link to the field in the
+	 * correct row. A repeater row container carries the same suffix the error key does.
 	 *
 	 * @covers FrmFormsHelper::get_invalid_error_message
 	 */
@@ -302,7 +457,10 @@ class test_FrmFormsHelper extends FrmUnitTest {
 			)
 		);
 
-		$this->assertStringContainsString( '<li><a href="#field_repeated_text-2">Repeated text is required</a></li>', $message );
+		$this->assertStringContainsString(
+			'<li><a class="frm_error_link" href="#frm_field_' . $text_id . '-55-2_container">Repeated text is required</a></li>',
+			$message
+		);
 	}
 
 	/**
@@ -335,6 +493,18 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		);
 		$this->assertStringContainsString( 'role="alert"', $alert );
 		$this->assertStringNotContainsString( 'role="status"', $alert );
+	}
+
+	/**
+	 * The list item a linkable field error should produce.
+	 *
+	 * @param int    $field_id ID of the field the error belongs to.
+	 * @param string $error    Error message text.
+	 *
+	 * @return string
+	 */
+	private function error_link_html( $field_id, $error ) {
+		return '<li><a class="frm_error_link" href="#frm_field_' . $field_id . '_container">' . $error . '</a></li>';
 	}
 
 	/**
