@@ -158,37 +158,12 @@ class FrmStyle {
 			}
 
 			$new_instance['post_content'] = FrmStylesHelper::update_base_font_size( $new_instance['post_content'], $this->get_defaults() );
-			$new_instance['post_content'] = $this->slash_custom_css_settings( $new_instance['post_content'] );
 			$action_ids[]                 = $this->save( $new_instance );
 		}//end foreach
 
 		$this->save_settings();
 
 		return $action_ids;
-	}
-
-	/**
-	 * Slash the Custom CSS settings so a lone backslash in them survives being saved.
-	 *
-	 * Styles are stored as JSON through FrmAppHelper::prepare_and_encode, which strips one
-	 * level of slashes before it escapes and encodes. Custom CSS is the only style setting
-	 * that can legitimately contain a backslash, so without slashing it first a CSS escape
-	 * written as content: '\e052' would be stored as content: 'e052'.
-	 *
-	 * @since 6.35
-	 *
-	 * @param array $post_content The style settings about to be saved.
-	 *
-	 * @return array
-	 */
-	private function slash_custom_css_settings( $post_content ) {
-		foreach ( array( 'custom_css', 'single_style_custom_css' ) as $setting ) {
-			if ( ! empty( $post_content[ $setting ] ) && is_string( $post_content[ $setting ] ) ) {
-				$post_content[ $setting ] = wp_slash( $post_content[ $setting ] );
-			}
-		}
-
-		return $post_content;
 	}
 
 	/**
