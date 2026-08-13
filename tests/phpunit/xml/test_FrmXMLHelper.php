@@ -87,6 +87,16 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	 * @covers FrmXMLHelper::populate_postmeta
 	 */
 	public function test_populate_postmeta() {
+		/**
+		 * populate_postmeta() reads this global and takes an extra path when it is set,
+		 * running the view content through maybe_prepare_json_view_content() and
+		 * switch_field_ids(). The expected value below is the output of that path, so set the
+		 * global here instead of depending on an import test having left it populated. The
+		 * IDs are dummies: this content has no field shortcodes for switch_field_ids() to map.
+		 */
+		global $frm_duplicate_ids;
+		$frm_duplicate_ids = array( 999 => 999 );
+
 		$post             = array();
 		$meta             = new stdClass();
 		$meta->meta_key   = 'frm_dyncontent';
