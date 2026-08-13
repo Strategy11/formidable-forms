@@ -32,7 +32,7 @@ class FrmSalesApi extends FrmFormApi {
 	/**
 	 * Flag to prevent the $this->set_sales() call in the constructor.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @var bool
 	 */
@@ -47,7 +47,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return void
 	 */
@@ -56,7 +56,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @return void
 	 */

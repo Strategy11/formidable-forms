@@ -18,7 +18,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * a single callback covers every form on the page. Adding one callback for
 	 * each form would print duplicate data-token attributes.
 	 *
-	 * @since x.x
+	 * @since 6.34
 	 *
 	 * @var bool
 	 */
@@ -181,7 +181,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * Add the token field to the form if the form has Anti-Spam enabled.
 	 *
 	 * @since 4.11
-	 * @since x.x The $form param was added, and forms without Anti-Spam enabled are now skipped.
+	 * @since 6.34 The $form param was added, and forms without Anti-Spam enabled are now skipped.
 	 *
 	 * @param string      $attributes
 	 * @param object|null $form The form being rendered.
