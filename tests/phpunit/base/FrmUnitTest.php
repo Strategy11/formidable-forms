@@ -145,6 +145,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		 */
 		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 
+		self::isolate_install_from_plugin_folder();
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
@@ -164,6 +166,62 @@ class FrmUnitTest extends WP_UnitTestCase {
 		self::import_xml();
 		self::create_files();
 		self::$installed = true;
+	}
+
+	/**
+	 * Keep the install from writing into the plugin folder or reaching for the network.
+	 *
+	 * FrmAppHelper::plugin_path() and plugin_url() are derived from __DIR__, which PHP
+	 * resolves through symlinks, so they point at the real plugin folder rather than the
+	 * copy inside the wordpress-develop checkout the tests run against. Everything the
+	 * install writes relative to those therefore lands in the working tree of whoever is
+	 * running the suite, and is picked up by the site they develop against. Two writes do
+	 * that, and both are redirected here rather than skipped, so the code under test still
+	 * runs the same path it runs in production.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function isolate_install_from_plugin_folder() {
+		// Generate the stylesheet under uploads, which is disposable, instead of over css/formidableforms.css.
+		add_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
+
+		// Answer the request FrmMigrate makes before deciding to delete the plugin's .htaccess.
+		add_filter( 'pre_http_request', 'FrmUnitTest::respond_to_plugin_asset_request', 10, 3 );
+	}
+
+	/**
+	 * Serve requests for the plugin's own assets from here instead of over HTTP.
+	 *
+	 * A test run has no web server able to serve the plugin, so a request for one of its
+	 * files can only fail. FrmMigrate::maybe_delete_htaccess_file() reads that failure as a
+	 * server that cannot be trusted with the file and deletes the plugin's .htaccess, which
+	 * is tracked in the repository. Requests to anywhere else are left alone.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|false|WP_Error $response A preemptive response, or false to let the request run.
+	 * @param array                $args     Request arguments.
+	 * @param string               $url      The request URL.
+	 *
+	 * @return array|false|WP_Error
+	 */
+	public static function respond_to_plugin_asset_request( $response, $args, $url ) {
+		if ( ! str_starts_with( $url, FrmAppHelper::plugin_url() . '/' ) ) {
+			return $response;
+		}
+
+		return array(
+			'headers'  => array(),
+			'body'     => '',
+			'response' => array(
+				'code'    => 200,
+				'message' => 'OK',
+			),
+			'cookies'  => array(),
+			'filename' => null,
+		);
 	}
 
 	public static function get_table_names() {
