@@ -478,11 +478,11 @@ class FrmField {
 			}
 		}
 
-		$new_values['options']       = self::maybe_filter_options( $values['options'] );
+		$new_values['options']       = self::maybe_filter_options( self::get_option_array( $values, 'options' ) );
 		$new_values['field_order']   = isset( $values['field_order'] ) ? (int) $values['field_order'] : null;
 		$new_values['required']      = isset( $values['required'] ) ? (int) $values['required'] : 0;
 		$new_values['form_id']       = isset( $values['form_id'] ) ? (int) $values['form_id'] : null;
-		$new_values['field_options'] = $values['field_options'];
+		$new_values['field_options'] = self::get_option_array( $values, 'field_options' );
 		$new_values['created_at']    = current_time( 'mysql', 1 );
 
 		if ( isset( $values['id'] ) ) {
@@ -543,6 +543,25 @@ class FrmField {
 		}
 
 		return $options;
+	}
+
+	/**
+	 * Get one of the serialized option arrays from the values being saved.
+	 *
+	 * Callers do not always pass these keys, and a few pass a non-array. self::update skips
+	 * the key in that case, but self::create is an insert and has to write something, so it
+	 * writes an empty array. That avoids an undefined array key warning and keeps the column
+	 * readable as an array, so consumers of $field->field_options never get null.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $values The values being saved.
+	 * @param string $key    Either 'options' or 'field_options'.
+	 *
+	 * @return array
+	 */
+	private static function get_option_array( $values, $key ) {
+		return isset( $values[ $key ] ) && is_array( $values[ $key ] ) ? $values[ $key ] : array();
 	}
 
 	/**

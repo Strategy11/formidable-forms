@@ -28,6 +28,50 @@ class test_FrmField extends FrmUnitTest {
 	}
 
 	/**
+	 * A caller may leave options or field_options out, or pass something that is not an
+	 * array. Neither should warn, and the stored value should always read back as an array
+	 * so consumers of $field->field_options can index it safely.
+	 *
+	 * @covers FrmField::create
+	 */
+	public function test_create_without_option_arrays() {
+		$form_id = $this->factory->form->get_id_by_key( 'contact-db12' );
+
+		$cases = array(
+			'field_options missing'    => array(
+				'name'    => 'No field options',
+				'type'    => 'text',
+				'form_id' => $form_id,
+				'options' => array(),
+			),
+			'both option keys missing' => array(
+				'name'    => 'Neither option key',
+				'type'    => 'text',
+				'form_id' => $form_id,
+			),
+			'field_options not array'  => array(
+				'name'          => 'Field options is a string',
+				'type'          => 'text',
+				'form_id'       => $form_id,
+				'options'       => array(),
+				'field_options' => '',
+			),
+		);
+
+		foreach ( $cases as $label => $values ) {
+			$field_id = FrmField::create( $values );
+			$this->assertIsNumeric( $field_id, 'A field should be created when ' . $label . '.' );
+
+			$field = FrmField::getOne( $field_id );
+			$this->assertIsArray( $field->field_options, 'field_options should read back as an array when ' . $label . '.' );
+			$this->assertIsArray( $field->options, 'options should read back as an array when ' . $label . '.' );
+
+			FrmField::destroy( $field_id );
+			unset( $label, $values );
+		}
+	}
+
+	/**
 	 * @covers FrmField::getAll
 	 */
 	public function test_getAll() {
