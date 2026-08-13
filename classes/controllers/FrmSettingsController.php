@@ -164,6 +164,7 @@ class FrmSettingsController {
 		 * @param array<array> $sections
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
+		self::add_inactive_addon_sections( $sections );
 		self::remove_payments_sections( $sections );
 
 		$sections['misc'] = array(
@@ -198,6 +199,94 @@ class FrmSettingsController {
 		}//end foreach
 
 		return $sections;
+	}
+
+	/**
+	 * Add a placeholder section for each add-on that owns a Global Settings
+	 * section but is not active.
+	 *
+	 * A placeholder reads as disabled and opens a page offering to activate the
+	 * add-on or to upgrade, depending on what the license allows. It goes at the
+	 * head of the add-on sections, right after Inbox, so it sits with the rest of
+	 * the add-on settings instead of trailing them. A section already claimed by
+	 * an active plugin is left alone, so nothing stands in for a section that is
+	 * really there.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 *
+	 * @return void
+	 */
+	private static function add_inactive_addon_sections( &$sections ) {
+		if ( isset( $sections['api'] ) ) {
+			return;
+		}
+
+		self::insert_section_after( $sections, 'inbox', 'api', self::get_api_placeholder_section() );
+	}
+
+	/**
+	 * Insert a section directly after another one, leaving the rest of the order alone.
+	 *
+	 * Assigning a new key lands the section at the end of the array, so the array
+	 * is rebuilt to put it where it belongs.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 * @param string       $after    Key of the section the new one follows. The new section goes last when this key is not there.
+	 * @param string       $key      Key for the new section.
+	 * @param array        $section  The section to insert.
+	 *
+	 * @return void
+	 */
+	private static function insert_section_after( &$sections, $after, $key, $section ) {
+		if ( ! isset( $sections[ $after ] ) ) {
+			$sections[ $key ] = $section;
+			return;
+		}
+
+		$ordered = array();
+
+		foreach ( $sections as $section_key => $existing_section ) {
+			$ordered[ $section_key ] = $existing_section;
+
+			if ( $section_key === $after ) {
+				$ordered[ $key ] = $section;
+			}
+		}
+
+		$sections = $ordered;
+	}
+
+	/**
+	 * Get the placeholder that stands in for the API add-on's section.
+	 *
+	 * The upgrade data decides which call to action the page shows. When the
+	 * license covers the add-on, it carries the one click install or activate
+	 * link. Otherwise it carries the plan the add-on needs, and the page asks
+	 * the user to upgrade to it.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_api_placeholder_section() {
+		return array(
+			'name'       => __( 'API', 'formidable' ),
+			'icon'       => 'frm_icon_font frm_feed_icon',
+			'html_class' => 'frm_show_upgrade_tab frm_noallow',
+			'data'       => FrmAppHelper::get_upgrade_data_params(
+				'api',
+				array(
+					'medium'     => 'api-settings',
+					'upgrade'    => __( 'API settings', 'formidable' ),
+					'message'    => __( 'Send entries to any site with a REST API, and let AI assistants build your forms. Upgrade to get the API add-on.', 'formidable' ),
+					'learn-more' => FrmAppHelper::get_doc_url( 'formidable-api', 'api-global-settings' ),
+				)
+			),
+		);
 	}
 
 	/**
