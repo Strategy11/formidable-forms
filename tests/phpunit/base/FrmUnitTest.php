@@ -122,7 +122,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 			 */
 			self::empty_tables();
 			self::import_xml();
-			self::create_files();
 			return;
 		}
 
