@@ -148,6 +148,19 @@ class FrmUnitTest extends WP_UnitTestCase {
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
+
+		/**
+		 * Start from empty tables even on the first install of the process.
+		 *
+		 * WordPress' install.php drops and recreates the tables it knows about on every process,
+		 * but Formidable's tables are not among them, so rows from a previous run survive. The
+		 * import below would then update the existing forms and skip their entries, leaving a
+		 * fixture set with forms and no entries. That is what makes a re-used database produce
+		 * failures unrelated to the code under test, and what breaks a parallel run as soon as
+		 * one worker runs a second process.
+		 */
+		self::empty_tables();
+
 		self::import_xml();
 		self::create_files();
 		self::$installed = true;
