@@ -28,9 +28,10 @@ class test_FrmField extends FrmUnitTest {
 	}
 
 	/**
-	 * A caller may leave options or field_options out, or pass something that is not an
-	 * array. Neither should warn, and the stored value should always read back as an array
-	 * so consumers of $field->field_options can index it safely.
+	 * A caller may leave options or field_options out, or pass a field_options that is not an
+	 * array. Neither should warn, and field_options should read back as an array so consumers
+	 * of $field->field_options can index it safely. The shapes options accepts are covered by
+	 * test_create_with_non_array_options.
 	 *
 	 * @covers FrmField::create
 	 */
@@ -68,6 +69,63 @@ class test_FrmField extends FrmUnitTest {
 
 			FrmField::destroy( $field_id );
 			unset( $label, $values );
+		}
+	}
+
+	/**
+	 * The options column takes more than an array. Choice fields pass their defaults already
+	 * serialized, FrmFieldsHelper::fill_field does the same when a field is duplicated, and
+	 * fields with no choices pass an empty string. Every one of those has to survive create,
+	 * or new checkbox, radio and select fields come out with no choices at all.
+	 *
+	 * @covers FrmField::create
+	 */
+	public function test_create_with_non_array_options() {
+		$form_id = $this->factory->form->get_id_by_key( 'contact-db12' );
+		$choices = array( 'Option 1', 'Option 2' );
+
+		$field_id = FrmField::create(
+			array(
+				'name'    => 'Checkbox with serialized options',
+				'type'    => 'checkbox',
+				'form_id' => $form_id,
+				'options' => serialize( $choices ),
+			)
+		);
+		$field    = FrmField::getOne( $field_id );
+		$this->assertSame( $choices, $field->options, 'Serialized options should survive create.' );
+		FrmField::destroy( $field_id );
+
+		$field_id = FrmField::create(
+			array(
+				'name'    => 'Text with empty options',
+				'type'    => 'text',
+				'form_id' => $form_id,
+				'options' => '',
+			)
+		);
+		$field    = FrmField::getOne( $field_id );
+		$this->assertEmpty( $field->options, 'An empty options string should stay empty.' );
+		FrmField::destroy( $field_id );
+	}
+
+	/**
+	 * Every field type that ships default choices has to keep them when the field is created
+	 * from the builder, which passes what new_field_settings returns straight through.
+	 *
+	 * @covers FrmField::create
+	 */
+	public function test_create_keeps_default_choices() {
+		$form_id = $this->factory->form->get_id_by_key( 'contact-db12' );
+
+		foreach ( array( 'checkbox', 'radio', 'select' ) as $type ) {
+			$field_id = FrmField::create( FrmFieldsHelper::setup_new_vars( $type, $form_id ) );
+			$field    = FrmField::getOne( $field_id );
+
+			$this->assertNotEmpty( $field->options, 'A new ' . $type . ' field should keep its default choices.' );
+
+			FrmField::destroy( $field_id );
+			unset( $type );
 		}
 	}
 
