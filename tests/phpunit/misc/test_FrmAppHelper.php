@@ -454,15 +454,16 @@ class test_FrmAppHelper extends FrmUnitTest {
 		/**
 		 * Reload the current user so the new capabilities are visible.
 		 *
-		 * set_user_by_role() calls FrmAppHelper::maybe_add_permissions(), which grants the
-		 * capabilities through its own WP_User instance — the global $current_user object that
-		 * current_user_can() consults is not updated, and wp_set_current_user() returns early
-		 * when the ID has not changed. In production this does not arise because the
-		 * capabilities are written on one request and read on the next. Without this, the
+		 * Capabilities are granted by set_user_by_role(), which calls
+		 * FrmAppHelper::maybe_add_permissions(), and that writes them through its own WP_User
+		 * instance. The current user object consulted by current_user_can() is not updated, and
+		 * wp_set_current_user() returns early when the ID has not changed, so switch away and
+		 * back to force it to be rebuilt from the database. In production this does not arise:
+		 * the capabilities are written on one request and read on the next. Without this, the
 		 * assertions below only pass when an earlier test class already committed the
 		 * capabilities to this user's meta.
 		 */
-		$GLOBALS['current_user'] = null;
+		wp_set_current_user( 0 );
 		wp_set_current_user( $admin_id );
 
 		$frm_roles = FrmAppHelper::frm_capabilities();
