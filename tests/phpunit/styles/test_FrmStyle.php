@@ -377,6 +377,13 @@ class test_FrmStyle extends FrmUnitTest {
 	 * agree either way. The end-state assertions are kept as well, so both the ordering and the
 	 * resulting consistency are covered.
 	 *
+	 * The invariant is asserted for every observed write rather than for a single expected one.
+	 * save_settings() can legitimately run more than once per call: get_css_content() renders
+	 * custom_theme.css.php, which reads FrmStyle::get_all(), which creates a default style and
+	 * calls update( 'default' ) -- and therefore save_settings() again -- when no style rows exist
+	 * yet. How many writes happen is incidental and depends on the state the suite leaves behind;
+	 * that each one is ordered after its own frmpro_css write is the property that matters.
+	 *
 	 * @covers FrmStyle::save_settings
 	 */
 	public function test_frmpro_css_is_populated_before_version_advances() {
@@ -407,17 +414,24 @@ class test_FrmStyle extends FrmUnitTest {
 		$version = get_option( 'frm_last_style_update' );
 		$this->assertNotEmpty( $version, 'Test setup assumption: the write should succeed and the version should advance in this environment.' );
 
-		$this->assertCount( 1, $observed, 'save_settings() must write the version exactly once when the file write succeeds.' );
+		$this->assertNotEmpty( $observed, 'The version write must have been observed, or this test asserts nothing about the ordering.' );
 
-		$at_write = $observed[0];
-		$this->assertNotEmpty( $at_write['option'], 'The frmpro_css option must already be populated at the moment the version is written, not afterwards.' );
-		$this->assertNotEmpty( $at_write['transient'], 'The frmpro_css transient must already be populated at the moment the version is written, not afterwards.' );
-		$this->assertSame(
-			$at_write['version'],
-			substr( md5( $at_write['option'] ), 0, 12 ),
-			'The version being written must hash the CSS already in frmpro_css, so the URL never advertises content the fallback is not serving.'
-		);
-		$this->assertSame( $at_write['option'], $at_write['transient'], 'The frmpro_css option and transient must already agree at the moment the version is written.' );
+		foreach ( $observed as $index => $at_write ) {
+			$where = ' (version write ' . ( $index + 1 ) . ' of ' . count( $observed ) . ')';
+
+			$this->assertNotEmpty( $at_write['option'], 'The frmpro_css option must already be populated at the moment the version is written, not afterwards.' . $where );
+			$this->assertNotEmpty( $at_write['transient'], 'The frmpro_css transient must already be populated at the moment the version is written, not afterwards.' . $where );
+			$this->assertSame(
+				$at_write['version'],
+				substr( md5( $at_write['option'] ), 0, 12 ),
+				'The version being written must hash the CSS already in frmpro_css, so the URL never advertises content the fallback is not serving.' . $where
+			);
+			$this->assertSame(
+				$at_write['option'],
+				$at_write['transient'],
+				'The frmpro_css option and transient must already agree at the moment the version is written.' . $where
+			);
+		}
 
 		$stored_css    = get_option( 'frmpro_css' );
 		$transient_css = get_transient( 'frmpro_css' );
