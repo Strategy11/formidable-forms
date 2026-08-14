@@ -176,6 +176,7 @@ class test_FrmStyle extends FrmUnitTest {
 		);
 
 		$legacy_versions = array();
+
 		foreach ( $colliding_timestamps as $timestamp ) {
 			$legacy_versions[] = gmdate( 'njGi', $timestamp );
 		}
@@ -192,6 +193,7 @@ class test_FrmStyle extends FrmUnitTest {
 		// Distinct content "saved" at each of those colliding moments must produce distinct
 		// versions. This is the property the legacy format could not provide.
 		$distinct_versions = array();
+
 		foreach ( $colliding_timestamps as $index => $timestamp ) {
 			$this->run_private_method( array( 'FrmStyle', 'update_css_version' ), array( 'body{--collision-check:' . $index . '}' ) );
 			$distinct_versions[] = get_option( 'frm_last_style_update' );
@@ -202,6 +204,7 @@ class test_FrmStyle extends FrmUnitTest {
 		// Identical content "saved" at each of those same moments must produce the SAME version,
 		// proving the derivation is clock-independent rather than merely higher resolution.
 		$stable_versions = array();
+
 		foreach ( $colliding_timestamps as $timestamp ) {
 			$this->run_private_method( array( 'FrmStyle', 'update_css_version' ), array( 'body{color:#123456}' ) );
 			$stable_versions[] = get_option( 'frm_last_style_update' );
@@ -290,6 +293,15 @@ class test_FrmStyle extends FrmUnitTest {
 	 * write failure -- via a genuine filesystem directory collision, not a mock -- and asserts
 	 * frm_last_style_update is left completely untouched: neither overwritten nor deleted.
 	 *
+	 * The sentinel assertion on its own would also hold if save_settings() never got as far as
+	 * FrmCreateFile::create_file() -- it returns early when css/custom_theme.css.php is missing,
+	 * which would make this test pass without exercising the failed write at all. Two guards
+	 * close that off: the source stylesheet is asserted to exist before the call, and frmpro_css
+	 * is asserted to have been populated afterwards. The option is only written after
+	 * create_file() has returned, so a populated frmpro_css alongside an untouched version proves
+	 * the write was attempted, reported failure, and the version write was skipped for that
+	 * reason.
+	 *
 	 * @covers FrmStyle::save_settings
 	 */
 	public function test_save_settings_leaves_version_untouched_when_file_write_fails() {
@@ -306,12 +318,21 @@ class test_FrmStyle extends FrmUnitTest {
 		try {
 			$this->assertNotFalse( file_put_contents( $blocked_path, 'not a directory' ), 'Test setup: failed to create the blocking file.' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 			$this->assertTrue( is_file( $blocked_path ), 'Test setup assumption: the blocking path must be a plain file, not a directory, so FrmCreateFile cannot create its "formidable" subdirectory there.' );
+			$this->assertTrue(
+				is_file( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' ),
+				'Test setup assumption: the source stylesheet must exist, or save_settings() returns before FrmCreateFile::create_file() and this test asserts nothing.'
+			);
 
 			update_option( 'frm_last_style_update', 'sentinel-untouched' );
+			delete_option( 'frmpro_css' );
 
 			$frm_style = new FrmStyle( 'default' );
 			$frm_style->save_settings();
 
+			$this->assertNotEmpty(
+				get_option( 'frmpro_css' ),
+				'The generated CSS must have been stored, which only happens once FrmCreateFile::create_file() has been called -- otherwise the failed write was never exercised.'
+			);
 			$this->assertSame( 'sentinel-untouched', get_option( 'frm_last_style_update' ), 'frm_last_style_update must be left untouched (not updated, not deleted) when the CSS file write fails.' );
 		} finally {
 			remove_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
@@ -349,6 +370,13 @@ class test_FrmStyle extends FrmUnitTest {
 	 * is not already serving. Whenever save_settings() advances the version, frmpro_css must
 	 * already be populated with exactly the content that hash was derived from.
 	 *
+	 * This is an ordering claim, so it is asserted at the ordering boundary rather than after the
+	 * fact: a pre_update_option_frm_last_style_update filter records what frmpro_css held at the
+	 * instant the version write was attempted. Checking only the end state would let a regression
+	 * that advances the version first and stores the CSS afterwards pass, since the final values
+	 * agree either way. The end-state assertions are kept as well, so both the ordering and the
+	 * resulting consistency are covered.
+	 *
 	 * @covers FrmStyle::save_settings
 	 */
 	public function test_frmpro_css_is_populated_before_version_advances() {
@@ -356,11 +384,40 @@ class test_FrmStyle extends FrmUnitTest {
 		delete_option( 'frmpro_css' );
 		delete_transient( 'frmpro_css' );
 
-		$frm_style = new FrmStyle( 'default' );
-		$frm_style->save_settings();
+		$observed = array();
+		$observer = function ( $value ) use ( &$observed ) {
+			$observed[] = array(
+				'version'   => $value,
+				'option'    => get_option( 'frmpro_css' ),
+				'transient' => get_transient( 'frmpro_css' ),
+			);
+
+			return $value;
+		};
+
+		add_filter( 'pre_update_option_frm_last_style_update', $observer );
+
+		try {
+			$frm_style = new FrmStyle( 'default' );
+			$frm_style->save_settings();
+		} finally {
+			remove_filter( 'pre_update_option_frm_last_style_update', $observer );
+		}
 
 		$version = get_option( 'frm_last_style_update' );
 		$this->assertNotEmpty( $version, 'Test setup assumption: the write should succeed and the version should advance in this environment.' );
+
+		$this->assertCount( 1, $observed, 'save_settings() must write the version exactly once when the file write succeeds.' );
+
+		$at_write = $observed[0];
+		$this->assertNotEmpty( $at_write['option'], 'The frmpro_css option must already be populated at the moment the version is written, not afterwards.' );
+		$this->assertNotEmpty( $at_write['transient'], 'The frmpro_css transient must already be populated at the moment the version is written, not afterwards.' );
+		$this->assertSame(
+			$at_write['version'],
+			substr( md5( $at_write['option'] ), 0, 12 ),
+			'The version being written must hash the CSS already in frmpro_css, so the URL never advertises content the fallback is not serving.'
+		);
+		$this->assertSame( $at_write['option'], $at_write['transient'], 'The frmpro_css option and transient must already agree at the moment the version is written.' );
 
 		$stored_css    = get_option( 'frmpro_css' );
 		$transient_css = get_transient( 'frmpro_css' );
