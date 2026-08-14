@@ -233,30 +233,41 @@ class test_FrmStyle extends FrmUnitTest {
 	}
 
 	/**
-	 * Two saves within the same minute (in fact, within the same PHP process) with different
-	 * content must produce different versions. This fails by construction against the legacy
-	 * gmdate( 'njGi' ) implementation, which is minute-granularity and would store the identical
-	 * value for both saves.
+	 * Two consecutive saves in the same PHP process with different content must produce different
+	 * versions, and each version must be derived from that content alone. This fails by
+	 * construction against the legacy gmdate( 'njGi' ) implementation, which is minute-granularity
+	 * and would store the identical value for both saves.
+	 *
+	 * The clock-independence claim is asserted against the content, not against the wall clock. An
+	 * earlier form of this test first sanity-checked that both saves landed in the same legacy
+	 * gmdate( 'njGi' ) bucket, which fails whenever two consecutive calls happen to straddle a
+	 * minute boundary -- a red build for correct product behaviour, on a premise the assertions
+	 * below do not actually need. Pinning each version to the hash of its own content proves the
+	 * property outright rather than relying on the run being lucky.
 	 *
 	 * @covers FrmStyle::update_css_version
 	 */
-	public function test_same_minute_saves_with_different_content_produce_different_versions() {
+	public function test_consecutive_saves_with_different_content_produce_content_derived_versions() {
 		delete_option( 'frm_last_style_update' );
 
-		$before = time();
-		$this->run_private_method( array( 'FrmStyle', 'update_css_version' ), array( 'body{color:#aaaaaa}' ) );
+		$css_1 = 'body{color:#aaaaaa}';
+		$css_2 = 'body{color:#bbbbbb}';
+
+		$this->run_private_method( array( 'FrmStyle', 'update_css_version' ), array( $css_1 ) );
 		$version_1 = get_option( 'frm_last_style_update' );
 
-		$this->run_private_method( array( 'FrmStyle', 'update_css_version' ), array( 'body{color:#bbbbbb}' ) );
+		$this->run_private_method( array( 'FrmStyle', 'update_css_version' ), array( $css_2 ) );
 		$version_2 = get_option( 'frm_last_style_update' );
-		$after     = time();
-
-		// Sanity check that this test actually exercises the same-minute case it claims to.
-		$this->assertSame( gmdate( 'njGi', $before ), gmdate( 'njGi', $after ), 'Test setup assumption: both saves happened within the same legacy gmdate( "njGi" ) bucket.' );
 
 		$this->assertNotEmpty( $version_1 );
 		$this->assertNotEmpty( $version_2 );
-		$this->assertNotSame( $version_1, $version_2, 'Two same-minute saves with different content must produce different versions.' );
+		$this->assertNotSame( $version_1, $version_2, 'Two consecutive saves with different content must produce different versions.' );
+
+		// Each version is the hash of its own content and nothing else. No minute-granularity
+		// value -- or any other clock-derived one -- can satisfy both of these assertions, which
+		// is the reversion this test exists to catch.
+		$this->assertSame( substr( md5( $css_1 ), 0, 12 ), $version_1, 'The version must be derived from the stylesheet content alone.' );
+		$this->assertSame( substr( md5( $css_2 ), 0, 12 ), $version_2, 'The version must be derived from the stylesheet content alone.' );
 	}
 
 	/**
