@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSettingsController {
 
 	/**
+	 * Icon for the API section, used whether the add-on is active or only a placeholder.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	private static $api_section_icon = 'frmfont frm_cloud_icon';
+
+	/**
 	 * Payments sections are removed from the top level and added to a payments section.
 	 *
 	 * @since 6.22.1
@@ -220,6 +229,9 @@ class FrmSettingsController {
 	 */
 	private static function add_inactive_addon_sections( &$sections ) {
 		if ( isset( $sections['api'] ) ) {
+			// The add-on is active, so it owns the section. Only the icon is taken over,
+			// so the tab looks the same whether or not the add-on is installed.
+			$sections['api']['icon'] = self::$api_section_icon;
 			return;
 		}
 
@@ -266,26 +278,34 @@ class FrmSettingsController {
 	 * The upgrade data decides which call to action the page shows. When the
 	 * license covers the add-on, it carries the one click install or activate
 	 * link. Otherwise it carries the plan the add-on needs, and the page asks
-	 * the user to upgrade to it.
+	 * the user to upgrade to it, on a gradient button that sets the upgrade
+	 * apart from a one click install.
 	 *
 	 * @since x.x
 	 *
 	 * @return array
 	 */
 	private static function get_api_placeholder_section() {
+		$data = FrmAppHelper::get_upgrade_data_params(
+			'api',
+			array(
+				'medium'        => 'api-settings',
+				'upgrade'       => __( 'API settings', 'formidable' ),
+				'message'       => __( 'Send entries to any site with a REST API, and let AI assistants build your forms. Upgrade to get the API add-on.', 'formidable' ),
+				'learn-more'    => FrmAppHelper::get_doc_url( 'formidable-api', 'api-global-settings' ),
+				'upsell-images' => 'api-settings-1.png,api-settings-2.png,api-settings-3.png',
+			)
+		);
+
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$data['gradient-upgrade'] = 1;
+		}
+
 		return array(
 			'name'       => __( 'API', 'formidable' ),
-			'icon'       => 'frm_icon_font frm_feed_icon',
+			'icon'       => self::$api_section_icon,
 			'html_class' => 'frm_show_upgrade_tab frm_noallow',
-			'data'       => FrmAppHelper::get_upgrade_data_params(
-				'api',
-				array(
-					'medium'     => 'api-settings',
-					'upgrade'    => __( 'API settings', 'formidable' ),
-					'message'    => __( 'Send entries to any site with a REST API, and let AI assistants build your forms. Upgrade to get the API add-on.', 'formidable' ),
-					'learn-more' => FrmAppHelper::get_doc_url( 'formidable-api', 'api-global-settings' ),
-				)
-			),
+			'data'       => $data,
 		);
 	}
 
