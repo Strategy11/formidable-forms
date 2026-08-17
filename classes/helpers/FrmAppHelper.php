@@ -1632,7 +1632,7 @@ class FrmAppHelper {
 				printf(
 					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
 					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$s%2$s%3$s.', 'formidable' ),
-					'<a href="' . esc_url( $upgrade_link ) . '">',
+					'<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener noreferrer">',
 					esc_html( $cta_text ),
 					'</a>'
 				);

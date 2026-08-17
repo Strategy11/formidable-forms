@@ -309,7 +309,7 @@ class FrmAntiSpam extends FrmValidate {
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.
 			esc_html__( 'Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue.', 'formidable' ),
-			'<a href="https://formidableforms.com/knowledgebase/add-spam-protection/">',
+			'<a href="https://formidableforms.com/knowledgebase/add-spam-protection/" target="_blank" rel="noopener noreferrer">',
 			'</a>'
 		);
 	}

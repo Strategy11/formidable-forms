@@ -525,6 +525,8 @@
 		if ( data.upgradeUrl ) {
 			primaryActionButton.classList.remove( 'dismiss' );
 			primaryActionButton.setAttribute( 'href', data.upgradeUrl );
+			primaryActionButton.target = '_blank';
+			primaryActionButton.rel = 'noopener noreferrer';
 		}
 
 		const hookName = 'frm_view_application_modal_primary_action_button';
