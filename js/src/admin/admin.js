@@ -7575,6 +7575,9 @@ window.frmAdminBuildJS = function() {
 		container.classList.add( 'frmcenter' );
 
 		const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
+
+		// The message explains the heading, so it reads before the call to action, the same way it does in the modal.
+		appendClonedModalElementToContainer( 'frm-upgrade-message' );
 		appendClonedModalElementToContainer( 'frm-oneclick' );
 		appendClonedModalElementToContainer( 'frm-addon-status' );
 
@@ -7593,6 +7596,9 @@ window.frmAdminBuildJS = function() {
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
+			if ( element.dataset.gradientUpgrade ) {
+				upgradeButton.classList.add( 'frm-gradient' );
+			}
 			container.append( upgradeActions || upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
@@ -7603,8 +7609,6 @@ window.frmAdminBuildJS = function() {
 			appendClonedModalElementToContainer( 'frm-oneclick-button' );
 		}
 
-		appendClonedModalElementToContainer( 'frm-upgrade-message' );
-
 		let upgradeLabel = element.dataset.message;
 
 		if ( upgradeLabel === undefined ) {
@@ -7612,13 +7616,42 @@ window.frmAdminBuildJS = function() {
 		}
 		addOneClick( element, 'tab', upgradeLabel );
 
-		if ( element.dataset.screenshot ) {
+		if ( element.dataset.upsellImages ) {
+			container.append( getUpsellImagesWrapper( element.dataset.upsellImages, title ) );
+		} else if ( element.dataset.screenshot ) {
 			container.append( getScreenshotWrapper( element.dataset.screenshot ) );
 		}
 
 		function appendClonedModalElementToContainer( className ) {
 			container.append( upgradeModal.querySelector( `.${ className }` ).cloneNode( true ) );
 		}
+	}
+
+	/**
+	 * Build the previews shown below an upgrade tab's call to action.
+	 *
+	 * Unlike a screenshot, these images carry their own framing, so they get no
+	 * browser chrome around them. The first one takes a row to itself and the rest
+	 * share the row below it, scaled to keep their proportions.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} images Comma separated file names, relative to the images/upsell folder.
+	 * @param {string} alt    Name of the feature being previewed.
+	 * @return {Element} The wrapper to append to the tab.
+	 */
+	function getUpsellImagesWrapper( images, alt ) {
+		const folderUrl = `${ frmGlobal.url }/images/upsell/`;
+		const [ featured, ...rest ] = images.split( ',' ).map(
+			image => img( { src: folderUrl + image.trim(), alt } )
+		);
+		const children = [ featured ];
+
+		if ( rest.length ) {
+			children.push( div( { className: 'frm-upsell-images-row', children: rest } ) );
+		}
+
+		return div( { className: 'frm-upsell-images', children } );
 	}
 
 	function getScreenshotWrapper( screenshot ) {

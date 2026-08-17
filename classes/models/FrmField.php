@@ -478,11 +478,17 @@ class FrmField {
 			}
 		}
 
-		$new_values['options']       = self::maybe_filter_options( $values['options'] );
+		// Both option columns are stored serialized, but they do not accept the same shapes.
+		// Choice fields pass options already serialized, as does FrmFieldsHelper::fill_field
+		// when a field is duplicated, and fields with no choices pass an empty string, so a
+		// missing key is the only thing worth defaulting. An is_array check here would throw
+		// every one of those defaults away. field_options is always an array, so anything
+		// else is invalid input, and replacing it stops consumers getting null.
+		$new_values['options']       = self::maybe_filter_options( $values['options'] ?? array() );
 		$new_values['field_order']   = isset( $values['field_order'] ) ? (int) $values['field_order'] : null;
 		$new_values['required']      = isset( $values['required'] ) ? (int) $values['required'] : 0;
 		$new_values['form_id']       = isset( $values['form_id'] ) ? (int) $values['form_id'] : null;
-		$new_values['field_options'] = $values['field_options'];
+		$new_values['field_options'] = isset( $values['field_options'] ) && is_array( $values['field_options'] ) ? $values['field_options'] : array();
 		$new_values['created_at']    = current_time( 'mysql', 1 );
 
 		if ( isset( $values['id'] ) ) {
@@ -527,7 +533,7 @@ class FrmField {
 	 *
 	 * @since 5.0.08
 	 *
-	 * @param array $options
+	 * @param array|string $options Already serialized for choice fields, and an empty string for fields with no choices.
 	 *
 	 * @return array
 	 */
