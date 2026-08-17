@@ -108,6 +108,15 @@ class FrmAddon {
 	 */
 	protected $should_clear_cache = true;
 
+	/**
+	 * Cached for the request, since every add-on asks for the same value.
+	 *
+	 * @since x.x
+	 *
+	 * @var string|null
+	 */
+	private static $tested_wp_version;
+
 	public function __construct() {
 		if ( ! $this->plugin_slug ) {
 			$this->plugin_slug = preg_replace( '/[^a-zA-Z0-9_\s]/', '', str_replace( ' ', '_', strtolower( $this->plugin_name ) ) );
@@ -161,11 +170,21 @@ class FrmAddon {
 
 		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'maybe_show_license_message' ), 10, 2 );
 
+		$is_addon = 'formidable/formidable.php' !== $this->plugin_folder;
+
+		if ( $is_addon ) {
+			// Lite gets a tested version from wordpress.org, add-ons have no such source.
+			// Added before the license check, since a site without a license still needs to
+			// know which WordPress version its add-ons were tested with.
+			add_filter( 'site_transient_update_plugins', array( $this, 'add_tested_wp_version' ), 20 );
+			add_filter( 'plugins_api', array( $this, 'add_tested_to_plugin_info' ), 20, 3 );
+		}
+
 		if ( ! $license ) {
 			return;
 		}
 
-		if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
+		if ( $is_addon ) {
 			add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
 		}
 
@@ -188,10 +207,7 @@ class FrmAddon {
 			return $_data;
 		}
 
-		$slug  = basename( $this->plugin_file, '.php' );
-		$slug2 = str_replace( '/' . $slug . '.php', '', $this->plugin_folder );
-
-		if ( empty( $_args->slug ) || ( $_args->slug !== $slug && $_args->slug !== $slug2 ) ) {
+		if ( empty( $_args->slug ) || ! $this->is_plugin_slug( $_args->slug ) ) {
 			return $_data;
 		}
 
@@ -231,6 +247,184 @@ class FrmAddon {
 		$_data['homepage'] = $this->store_url;
 
 		return (object) $_data;
+	}
+
+	/**
+	 * Checks if a requested plugin_information slug refers to this plugin.
+	 *
+	 * Either the plugin file name or the plugin folder may be used as an add-on's slug.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $slug The requested slug.
+	 *
+	 * @return bool
+	 */
+	private function is_plugin_slug( $slug ) {
+		$file_slug   = basename( $this->plugin_file, '.php' );
+		$folder_slug = str_replace( '/' . $file_slug . '.php', '', $this->plugin_folder );
+
+		return $slug === $file_slug || $slug === $folder_slug;
+	}
+
+	/**
+	 * Adds a tested WordPress version to this add-on's update data.
+	 *
+	 * The API reports no tested version, so anything reading the update transient has no way
+	 * to tell whether an add-on has been tried with the WordPress release in use.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $transient The update_plugins site transient.
+	 *
+	 * @return mixed
+	 */
+	public function add_tested_wp_version( $transient ) {
+		if ( ! is_object( $transient ) ) {
+			return $transient;
+		}
+
+		$tested = self::get_tested_wp_version();
+
+		if ( ! $tested ) {
+			return $transient;
+		}
+
+		foreach ( array( 'response', 'no_update' ) as $group ) {
+			$plugins = $transient->$group ?? false;
+
+			if ( ! is_array( $plugins ) || empty( $plugins[ $this->plugin_folder ] ) ) {
+				continue;
+			}
+
+			// The entries are objects, so this updates the transient in place.
+			$plugin = $plugins[ $this->plugin_folder ];
+
+			if ( is_object( $plugin ) && empty( $plugin->tested ) ) {
+				$plugin->tested = $tested;
+			}
+		}
+
+		return $transient;
+	}
+
+	/**
+	 * Adds a tested WordPress version to this add-on's plugin information.
+	 *
+	 * This is where WordPress itself reads the value, for the "Compatible up to" line and the
+	 * compatibility warning in the plugin details modal. It is separate from
+	 * plugins_api_filter because that filter is only added when a license is set.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed       $data   Plugin information from an earlier filter, or false if none.
+	 * @param string      $action The requested action.
+	 * @param object|null $args   Arguments for the request, including the slug.
+	 *
+	 * @return mixed
+	 */
+	public function add_tested_to_plugin_info( $data, $action = '', $args = null ) {
+		if ( 'plugin_information' !== $action || empty( $args->slug ) || ! $this->is_plugin_slug( $args->slug ) ) {
+			return $data;
+		}
+
+		$tested = self::get_tested_wp_version();
+
+		if ( ! $tested ) {
+			return $data;
+		}
+
+		if ( is_object( $data ) && ! is_wp_error( $data ) && empty( $data->tested ) ) {
+			$data->tested = $tested;
+		} elseif ( is_array( $data ) && empty( $data['tested'] ) ) {
+			$data['tested'] = $tested;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Gets the WordPress version the add-ons report as tested.
+	 *
+	 * Read from Lite's readme, which is the same place wordpress.org reads it from, so the
+	 * add-ons report what Lite reports without anything being added to the API.
+	 *
+	 * @since x.x
+	 *
+	 * @return string The tested version, or an empty string if the readme has none.
+	 */
+	public static function get_tested_wp_version() {
+		if ( null !== self::$tested_wp_version ) {
+			return self::$tested_wp_version;
+		}
+
+		$tested = '';
+		$readme = FrmAppHelper::plugin_path() . '/readme.txt';
+
+		if ( is_readable( $readme ) ) {
+			$data   = get_file_data( $readme, array( 'tested' => 'Tested up to' ) );
+			$tested = isset( $data['tested'] ) ? trim( $data['tested'] ) : '';
+		}
+
+		/**
+		 * Filters the WordPress version the add-ons report as tested.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $tested The version read from Lite's readme.
+		 */
+		$tested = (string) apply_filters( 'frm_tested_wp_version', $tested );
+
+		self::$tested_wp_version = self::expand_tested_branch( $tested );
+
+		return self::$tested_wp_version;
+	}
+
+	/**
+	 * Expands a tested release branch to the release running on this site.
+	 *
+	 * A readme names a branch, like 7.0, while wordpress.org reports the newest release in
+	 * that branch, like 7.0.4. The difference matters because WordPress compares the tested
+	 * version to the current one exactly, so a site on 7.0.4 reading 7.0 is warned that the
+	 * plugin is untested when it is not. Only versions within the tested branch are expanded,
+	 * so a genuinely older tested version is still reported as older.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $tested The tested version from the readme.
+	 *
+	 * @return string
+	 */
+	private static function expand_tested_branch( $tested ) {
+		if ( ! $tested ) {
+			return $tested;
+		}
+
+		// Drop any pre-release suffix, since 7.1-RC4 is not a release to report as tested.
+		$current = preg_replace( '/[^0-9.].*$/', '', get_bloginfo( 'version' ) );
+
+		if ( self::get_version_branch( $current ) !== self::get_version_branch( $tested ) ) {
+			return $tested;
+		}
+
+		return version_compare( $current, $tested, '>' ) ? $current : $tested;
+	}
+
+	/**
+	 * Reduces a version to its major.minor release branch.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $version A WordPress version.
+	 *
+	 * @return string The branch, or an empty string if the version cannot be read.
+	 */
+	private static function get_version_branch( $version ) {
+		if ( ! preg_match( '/^(\d+)\.(\d+)/', $version, $matches ) ) {
+			return '';
+		}
+
+		return $matches[1] . '.' . $matches[2];
 	}
 
 	/**
