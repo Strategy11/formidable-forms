@@ -96,7 +96,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			),
 			array(
 				'file'             => FrmAppHelper::plugin_path() . '/denylist/splorp-wp-comment.txt',
-				'skip'             => FrmAppHelper::current_user_can( 'frm_create_entries' ),
+				'skip'             => current_user_can( 'frm_create_entries' ),
 				'skip_field_types' => array( 'file' ),
 			),
 			array(
