@@ -46,3 +46,42 @@
 .edit_field_type_end_divider > label {
 	display: none !important;
 }
+
+/**
+ * Field card hover
+ *
+ * A step below selected, leaving the full-weight primary border to mean "the field you are
+ * editing". Radius matches .divider_section_only so a hovered field sits inside a section.
+ */
+.frm_sorting li.ui-state-default.frm_not_divider {
+	border-radius: var(--small-radius);
+
+	/* Declared off-hover too, so the state fades out as well as in. */
+	transition:
+		0.15s background-color ease,
+		0.15s border-color ease,
+		0.15s box-shadow ease;
+}
+
+.frm_sorting li.ui-state-default.frm_not_divider:not(.selected):hover {
+	background-color: var(--primary-25);
+	border-color: var(--primary-200);
+	box-shadow: var(--button-shadow);
+
+	/* Repeated to beat the 0.5s border-color transition in the shared rule above. */
+	transition:
+		0.15s background-color ease,
+		0.15s border-color ease,
+		0.15s box-shadow ease;
+}
+
+/* Selected keeps the strongest treatment: a ring, not the old 1px blur that read as hover. */
+.frm_sorting li.ui-state-default.frm_not_divider.selected {
+	box-shadow: 0 0 0 1px var(--primary-500);
+
+	/* Selecting is a deliberate click, so confirm it promptly. */
+	transition:
+		0.15s background-color ease,
+		0.15s border-color ease,
+		0.15s box-shadow ease;
+}
