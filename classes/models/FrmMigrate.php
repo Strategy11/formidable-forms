@@ -160,8 +160,8 @@ class FrmMigrate {
 		$message = array(
 			'key'     => 'failed-to-create-tables',
 			'subject' => 'Something went wrong setting up the database',
-			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener noreferrer">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener noreferrer">Learn More</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener">Learn More</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'type'    => 'error',
 		);
 

@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php do_action( 'frm_applications_header_inside_title_after_span', $context ); ?>
 		<?php do_action( 'frm_applications_header_after_title', $context ); ?>
 		<?php if ( 'index' === $context && ! FrmAppHelper::pro_is_installed() ) { ?>
-			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary" target="_blank" rel="noopener noreferrer">
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary" target="_blank" rel="noopener">
 				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
 			</a>
 		<?php } ?>

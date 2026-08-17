@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php FrmAppHelper::kses_echo( $message, array( 'span' ) ); ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
-						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" target="_blank" rel="noopener noreferrer" data-default="<?php echo esc_url( $default_link ); ?>">
+						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" target="_blank" rel="noopener" data-default="<?php echo esc_url( $default_link ); ?>">
 							<?php
 							if ( FrmAddonsController::is_license_expired() ) {
 								esc_html_e( 'Renew', 'formidable' );
