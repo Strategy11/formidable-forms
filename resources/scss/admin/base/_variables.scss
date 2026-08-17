@@ -27,6 +27,9 @@
 	--primary-500: #4199fd;
 	--primary-300: #80bbfe;
 	--primary-200: #c0ddfe;
+
+	/* Derived to sit between 50 and 200 at the same spacing the grey ramp uses for its 100. */
+	--primary-100: #d7ebff;
 	--primary-50: #ecf5ff;
 	--primary-25: #f5faff;
 	--primary-color: var(--primary-500); /* Deprecated */
