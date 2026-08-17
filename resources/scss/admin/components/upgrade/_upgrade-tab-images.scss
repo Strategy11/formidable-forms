@@ -1,0 +1,41 @@
+/**
+ * Components - Upgrade Tab Images
+ *
+ * Previews shown below the call to action on an upgrade tab, in place of a
+ * screenshot. These images are framed in the artwork itself, so they get no
+ * chrome here, only a layout.
+ */
+
+.frm-upsell-images {
+	max-width: 1110px;
+	margin: 56px auto;
+}
+
+.frm-upsell-images img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.frm-upsell-images-row {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 36px;
+	margin-top: 36px;
+}
+
+/**
+ * The default basis of an image is its intrinsic width, so images that share a
+ * row shrink in proportion to each other and keep a common height.
+ */
+.frm-upsell-images-row img {
+	min-width: 0;
+}
+
+@media screen and (min-width: 600px) {
+
+	.frm-upsell-images-row {
+		flex-direction: row;
+	}
+}
