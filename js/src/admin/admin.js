@@ -4915,9 +4915,21 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
-		const shiftKeyIsDown = e.shiftKey;
-		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
+		selectFieldGroup( hoverTarget, e.ctrlKey || e.metaKey, e.shiftKey );
+	}
+
+	/**
+	 * Select a field group, either replacing the current selection or adding to it when a multiselect key is down.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} fieldGroup         The field group list to select.
+	 * @param {boolean}     ctrlOrCmdKeyIsDown True when the ctrl or cmd key is down, so the group toggles within the selection.
+	 * @param {boolean}     shiftKeyIsDown     True when the shift key is down, so every group between the first selected group and this one gets selected.
+	 * @return {void}
+	 */
+	function selectFieldGroup( fieldGroup, ctrlOrCmdKeyIsDown, shiftKeyIsDown ) {
+		const groupIsActive = fieldGroup.classList.contains( 'frm-selected-field-group' );
 		const $selectedFieldGroups = getSelectedFieldGroups();
 
 		let numberOfSelectedGroups = $selectedFieldGroups.length;
@@ -4936,7 +4948,7 @@ window.frmAdminBuildJS = function() {
 				if ( groupIsActive ) {
 					// unselect if holding ctrl or cmd and the group was already active.
 					--numberOfSelectedGroups;
-					hoverTarget.classList.remove( 'frm-selected-field-group' );
+					fieldGroup.classList.remove( 'frm-selected-field-group' );
 					syncAfterMultiSelect( numberOfSelectedGroups );
 					return; // exit early to avoid adding back frm-selected-field-group
 				}
@@ -4947,10 +4959,10 @@ window.frmAdminBuildJS = function() {
 				const $firstGroup = $selectedFieldGroups.first();
 
 				let $range;
-				if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
-					$range = $firstGroup.parent().nextUntil( hoverTarget.parentNode );
+				if ( $firstGroup.parent().index() < jQuery( fieldGroup.parentNode ).index() ) {
+					$range = $firstGroup.parent().nextUntil( fieldGroup.parentNode );
 				} else {
-					$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
+					$range = $firstGroup.parent().prevUntil( fieldGroup.parentNode );
 				}
 
 				$range.each(
@@ -4969,7 +4981,7 @@ window.frmAdminBuildJS = function() {
 			numberOfSelectedGroups = 1;
 		}
 
-		hoverTarget.classList.add( 'frm-selected-field-group' );
+		fieldGroup.classList.add( 'frm-selected-field-group' );
 		syncAfterMultiSelect( numberOfSelectedGroups );
 
 		maybeHideFieldGroupMessage();
@@ -6054,7 +6066,36 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
+		if ( e.metaKey || e.ctrlKey ) {
+			// A section keeps its pointer events while a multiselect key is down, so its clicks land here
+			// instead of on the field group list. Multiselect the section's group rather than opening its settings.
+			const fieldGroup = getMultiselectableFieldGroup( this );
+			if ( fieldGroup ) {
+				selectFieldGroup( fieldGroup, true, false );
+				return;
+			}
+		}
+
 		clickAction( this );
+	}
+
+	/**
+	 * Get the field group list that should be multiselected when a field is clicked with a multiselect key down.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} field The clicked field.
+	 * @return {HTMLElement|null} The field group list, or null when the field does not belong to one.
+	 */
+	function getMultiselectableFieldGroup( field ) {
+		const fieldGroup = field.closest( 'ul.frm_sorting' );
+
+		if ( ! fieldGroup || 'frm-show-fields' === fieldGroup.id || fieldGroup.classList.contains( 'start_divider' ) ) {
+			// The section's own list is not a field group, so there is nothing to multiselect.
+			return null;
+		}
+
+		return fieldGroup;
 	}
 
 	/**
