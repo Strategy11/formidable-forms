@@ -3379,7 +3379,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Adds shortcodes for the individual parts of a multi-part field, like [25 show=last] for a Name field.
+	 * Lets the plugin that owns the calculation type add shortcodes for the individual
+	 * parts of a multi-part field, like [25 show=last] for a Name field.
+	 *
+	 * Nothing in Lite renders a calculation box, so Lite offers the extension point and
+	 * leaves the parts themselves to whichever plugin owns the calculation.
 	 *
 	 * @since x.x
 	 *
@@ -3390,14 +3394,6 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function addFieldPartShortcodes( field, fieldId, list ) {
-		if ( ! isTextCalc( fieldId ) ) {
-			// Only a text calculation resolves a show= option. In any other type the shortcode
-			// is left as-is and the formula fails to evaluate, so don't offer the parts at all.
-			return;
-		}
-
-		maybeAddNamePartShortcodes( field, fieldId, list );
-
 		/**
 		 * Allows add-ons to add field part shortcodes to calculation popup.
 		 *
@@ -3410,78 +3406,6 @@ window.frmAdminBuildJS = function() {
 		 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
 		 */
 		wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field, fieldId, list, addCalcFieldLiToList } );
-	}
-
-	/**
-	 * Checks whether the calculation being edited is a text calculation.
-	 *
-	 * @since x.x
-	 *
-	 * @param {string} fieldId ID of the field the calculation belongs to.
-	 *
-	 * @return {boolean} True when the calculation type is text.
-	 */
-	function isTextCalc( fieldId ) {
-		const calcType = document.querySelector( `input[name="field_options[calc_type_${ fieldId }]"]:checked` );
-		return calcType ? 'text' === calcType.value : false;
-	}
-
-	/**
-	 * Adds shortcodes like [nameFieldId show=last] to the calculation popup.
-	 *
-	 * @since x.x
-	 *
-	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
-	 * @param {string}      fieldId ID of the field the popup was opened for.
-	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
-	 *
-	 * @return {void}
-	 */
-	function maybeAddNamePartShortcodes( field, fieldId, list ) {
-		if ( 'name' !== field.fieldType ) {
-			return;
-		}
-
-		Object.entries( getNamePartLabels( field.fieldId ) ).forEach(
-			( [ code, label ] ) => {
-				addCalcFieldLiToList(
-					list,
-					fieldId,
-					`${ field.fieldId } show=${ code }`,
-					`${ field.fieldName } (${ label })`,
-					field.fieldType
-				);
-			}
-		);
-	}
-
-	/**
-	 * Gets the parts of a Name field that are in use, keyed by their show= value.
-	 * Only the parts included in the selected name layout have a value to show.
-	 *
-	 * @since x.x
-	 *
-	 * @param {string} nameFieldId ID of the Name field.
-	 *
-	 * @return {Object} Part labels keyed by their show= value, in layout order.
-	 */
-	function getNamePartLabels( nameFieldId ) {
-		const labels = {
-			first: __( 'First', 'formidable' ),
-			middle: __( 'Middle', 'formidable' ),
-			last: __( 'Last', 'formidable' )
-		};
-		// The layout option names the parts in use, in display order, like first_middle_last.
-		const layout = document.getElementById( `name_layout_${ nameFieldId }` )?.value || 'first_last';
-		const parts = {};
-
-		layout.split( '_' ).forEach( part => {
-			if ( labels[ part ] ) {
-				parts[ part ] = labels[ part ];
-			}
-		} );
-
-		return parts;
 	}
 
 	/**

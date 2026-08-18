@@ -1890,10 +1890,16 @@ class FrmFormsController {
 	 * @return array Part labels keyed by the show= option value.
 	 */
 	private static function get_field_parts( $field ) {
-		$parts = 'name' === $field->type ? self::get_name_field_parts( $field ) : array();
+		$parts = array();
+
+		if ( 'name' === $field->type ) {
+			$parts = self::get_name_field_parts( $field );
+		} elseif ( 'address' === $field->type ) {
+			$parts = self::get_address_field_parts( $field );
+		}
 
 		/**
-		 * Allows add-ons to add the parts of their own multi-part fields, like the Pro Address field.
+		 * Allows add-ons to add the parts of their own multi-part fields.
 		 *
 		 * @since x.x
 		 *
@@ -1933,6 +1939,29 @@ class FrmFormsController {
 				$parts[ $part ] = $labels[ $part ];
 			}
 			unset( $part );
+		}
+
+		return $parts;
+	}
+
+	/**
+	 * Gets the parts of an Address field that are in use. The address type decides which
+	 * parts are on the form, so the rest would always show as blank.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value.
+	 */
+	private static function get_address_field_parts( $field ) {
+		$parts        = FrmFieldAddress::get_part_labels();
+		$address_type = FrmField::get_option( $field, 'address_type' );
+
+		if ( in_array( $address_type, array( 'us', 'generic' ), true ) ) {
+			unset( $parts['country'] );
+		} elseif ( 'europe' === $address_type ) {
+			unset( $parts['state'] );
 		}
 
 		return $parts;
