@@ -250,3 +250,77 @@ a.frm_option_icon:hover::before {
 	padding: 4px;
 	margin-bottom: 3px;
 }
+
+/*
+ * Action menus: the Preview dropdown and the style options menu.
+ * These hover neutral so blue stays reserved for the selected state.
+ * Pickers and multiselect lists keep the blue hover from _code-list.scss.
+ */
+.frm-dropdown-menu.frm-style-options-menu,
+.preview.dropdown .frm-dropdown-menu {
+
+	/* Concentric with the 8px items plus the menu's own 4px padding. */
+	border-radius: 12px;
+	padding-left: 8px;
+	padding-right: 8px;
+
+	> .dropdown-item + .dropdown-item {
+		margin-top: 2px;
+	}
+
+	> .dropdown-item > a {
+
+		padding: 6px 12px;
+		transition:
+			0.12s background-color ease,
+			0.12s color ease;
+
+		@include focus-outline($radius: var(--small-radius));
+
+		.frmsvg {
+
+			/* Replaces an opacity fade. --grey-500 is described as roughly 65% opacity. */
+			opacity: 1;
+			color: var(--grey-500);
+			transition: 0.12s color ease;
+		}
+
+		&:hover {
+			background: var(--grey-100);
+			color: var(--grey-900);
+
+			.frmsvg {
+				color: var(--grey-900);
+			}
+		}
+	}
+}
+
+.preview.dropdown .frm-dropdown-toggle {
+
+	.frmsvg {
+
+		/* Replaces the inherited transition: all. */
+		transition: transform 200ms ease-out;
+	}
+
+	&[aria-expanded="true"] .frmsvg {
+		transform: rotate(-180deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-dropdown-menu.frm-style-options-menu,
+	.preview.dropdown .frm-dropdown-menu {
+
+		> .dropdown-item > a,
+		> .dropdown-item > a .frmsvg {
+			transition: none;
+		}
+	}
+
+	.preview.dropdown .frm-dropdown-toggle .frmsvg {
+		transition: none;
+	}
+}
