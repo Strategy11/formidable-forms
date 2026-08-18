@@ -31,8 +31,12 @@ p.frm_has_shortcodes {
 
 /**
  * Shortcode box states
+ *
+ * Both classes render the same control — .frm-show-box opens the shortcode popup, and
+ * .frm-show-inline-modal opens the inline one — so they need the same states.
  */
-.frmsvg.frm-show-box {
+.frmsvg.frm-show-box,
+.frmsvg.frm-show-inline-modal {
 	transition:
 		0.12s background-color ease,
 		0.12s transform ease;
@@ -67,7 +71,8 @@ p.frm_has_shortcodes {
 	}
 }
 
-.frmsvg.frm-show-box.frm-icon-swapping use {
+.frmsvg.frm-show-box.frm-icon-swapping use,
+.frmsvg.frm-show-inline-modal.frm-icon-swapping use {
 
 	/* fill-box so the glyph scales from its own centre, not the SVG viewport origin. */
 	transform-box: fill-box;
@@ -78,11 +83,13 @@ p.frm_has_shortcodes {
 
 @media (prefers-reduced-motion: reduce) {
 
-	.frmsvg.frm-show-box.frm-icon-swapping use {
+	.frmsvg.frm-show-box.frm-icon-swapping use,
+	.frmsvg.frm-show-inline-modal.frm-icon-swapping use {
 		animation: none;
 	}
 
-	.frmsvg.frm-show-box {
+	.frmsvg.frm-show-box,
+	.frmsvg.frm-show-inline-modal {
 		transition: none;
 
 		&:active {

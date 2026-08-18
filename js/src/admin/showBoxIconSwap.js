@@ -11,6 +11,25 @@
 const SWAP_CLASS = 'frm-icon-swapping';
 
 /**
+ * Both classes render the same control: one opens the shortcode popup, the other the inline modal.
+ *
+ * @type {string[]}
+ */
+const BOX_CLASSES = [ 'frm-show-box', 'frm-show-inline-modal' ];
+
+/**
+ * Whether an element is one of the shortcode boxes.
+ *
+ * @since x.x
+ *
+ * @param {HTMLElement} element The element to test.
+ * @return {boolean} True when it is a shortcode box.
+ */
+function isShortcodeBox( element ) {
+	return Boolean( element?.classList ) && BOX_CLASSES.some( name => element.classList.contains( name ) );
+}
+
+/**
  * Watches every shortcode box for an icon change.
  *
  * @since x.x
@@ -35,7 +54,7 @@ export function initShowBoxIconSwap() {
 
 			const svg = mutation.target.parentElement;
 
-			if ( svg?.classList?.contains( 'frm-show-box' ) ) {
+			if ( isShortcodeBox( svg ) ) {
 				swapped.add( svg );
 			}
 		} );
@@ -54,7 +73,7 @@ export function initShowBoxIconSwap() {
  *
  * @since x.x
  *
- * @param {HTMLElement} svg The .frm-show-box element.
+ * @param {HTMLElement} svg The shortcode box element.
  * @return {void}
  */
 function replayBloom( svg ) {
