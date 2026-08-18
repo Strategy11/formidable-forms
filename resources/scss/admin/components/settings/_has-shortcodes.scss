@@ -29,6 +29,75 @@ p.frm_has_shortcodes {
 	border-radius: 6px !important;
 }
 
+/**
+ * Shortcode box states
+ *
+ * Both classes render the same control — .frm-show-box opens the shortcode popup, and
+ * .frm-show-inline-modal opens the inline one — so they need the same states.
+ */
+.frmsvg.frm-show-box,
+.frmsvg.frm-show-inline-modal {
+	transition:
+		0.12s background-color ease,
+		0.12s transform ease;
+
+	&:hover {
+		background-color: var(--primary-100);
+	}
+
+	&:active {
+		transform: scale(0.96);
+	}
+}
+
+/**
+ * Icon bloom
+ *
+ * Replayed by initShowBoxIconSwap() on every glyph change. Only the glyph animates, so the chip
+ * does not appear to jump.
+ */
+@keyframes frmIconBloom {
+
+	from {
+		opacity: 0;
+		transform: scale(0.25);
+		filter: blur(4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: scale(1);
+		filter: blur(0);
+	}
+}
+
+.frmsvg.frm-show-box.frm-icon-swapping use,
+.frmsvg.frm-show-inline-modal.frm-icon-swapping use {
+
+	/* fill-box so the glyph scales from its own centre, not the SVG viewport origin. */
+	transform-box: fill-box;
+	transform-origin: center;
+	will-change: transform, opacity, filter;
+	animation: frmIconBloom 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frmsvg.frm-show-box.frm-icon-swapping use,
+	.frmsvg.frm-show-inline-modal.frm-icon-swapping use {
+		animation: none;
+	}
+
+	.frmsvg.frm-show-box,
+	.frmsvg.frm-show-inline-modal {
+		transition: none;
+
+		&:active {
+			transform: none;
+		}
+	}
+}
+
 .frm_has_shortcodes input,
 .frm_has_shortcodes textarea {
 	padding-left: 18px;
