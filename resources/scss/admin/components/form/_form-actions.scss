@@ -338,7 +338,33 @@
 	.frm_email_icons {
 		display: none;
 
-		a,
+		a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 24px;
+			height: 24px;
+			border-radius: 4px;
+			transition:
+				0.12s background-color ease,
+				0.12s transform ease;
+
+			@include focus-outline($radius: 4px);
+
+			&:hover {
+				background-color: var(--surface-hover-compact);
+
+				.frmsvg {
+					color: var(--grey-900) !important;
+				}
+			}
+
+			&:active {
+				background-color: var(--surface-active-compact);
+				transform: scale(0.96);
+			}
+		}
+
 		.frm_toggle {
 
 			@include focus-outline($radius: var(--small-radius));
@@ -346,10 +372,26 @@
 	}
 
 	.widget-action {
+		width: 24px;
+		height: 24px;
 		color: var(--grey-800);
-		transition: transform 200ms ease-out;
+		border-radius: 4px;
 
-		@include focus-outline($radius: var(--small-radius));
+		// The open state rotates this button, so it keeps its own transform transition
+		// rather than taking the press scale that would overwrite that rotation.
+		transition:
+			transform 200ms ease-out,
+			0.12s background-color ease;
+
+		@include focus-outline($radius: 4px);
+
+		&:hover {
+			background-color: var(--surface-hover-compact);
+
+			.frmsvg {
+				color: var(--grey-900) !important;
+			}
+		}
 	}
 
 	&:hover,
@@ -446,4 +488,19 @@
 	width: 22px;
 	height: 22px;
 	overflow: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm_form_action_settings {
+
+		.frm_email_icons a,
+		.widget-action {
+			transition: none;
+		}
+
+		.frm_email_icons a:active {
+			transform: none;
+		}
+	}
 }
