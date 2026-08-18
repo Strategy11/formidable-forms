@@ -241,3 +241,59 @@ input[disabled] {
 .frmbutton.frm_at_limit {
 	opacity: 0.5;
 }
+
+/**
+ * Hover pill
+ *
+ * Created by initFieldListHoverPill(), which also adds .frm-has-hover-pill. Without it the
+ * per-button hover above still applies.
+ */
+.field_type_list {
+	position: relative;
+}
+
+.frm-insert-fields-hover {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	border-radius: var(--small-radius);
+	background: #fff;
+	box-shadow: var(--box-shadow-md);
+	pointer-events: none;
+	will-change: transform;
+
+	/* Set per move by initFieldListHoverPill(), scaled to the distance. */
+	--frm-pill-travel: 300ms;
+
+	transition:
+		0.15s opacity ease,
+		var(--frm-pill-travel) transform cubic-bezier(0.165, 0.84, 0.44, 1),
+		var(--frm-pill-travel) width cubic-bezier(0.165, 0.84, 0.44, 1),
+		var(--frm-pill-travel) height cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.frm-insert-fields-hover.frm-animating {
+	opacity: 0.45;
+}
+
+.field_type_list.frm-has-hover-pill {
+
+	li.frmbutton a {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* The pill paints the hover state now, so the button stops painting its own. */
+	li.frmbutton a:not(.disabled):hover {
+		background: transparent;
+		box-shadow: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-insert-fields-hover {
+		transition: none;
+	}
+}

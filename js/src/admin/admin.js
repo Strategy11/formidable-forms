@@ -5,6 +5,7 @@
  */
 const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
+const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -11000,6 +11001,7 @@ window.frmAdminBuildJS = function() {
 			setupSortable( 'ul.frm_sorting' );
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
+			initFieldListHoverPill();
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
