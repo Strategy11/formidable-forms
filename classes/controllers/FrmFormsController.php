@@ -1867,13 +1867,14 @@ class FrmFormsController {
 		foreach ( self::get_field_parts( $field ) as $part => $label ) {
 			FrmFormsHelper::insert_opt_html(
 				array(
-					'id'        => $field->id . ' show=' . $part,
-					'key'       => $field->field_key . ' show=' . $part,
-					// Truncate the key on its own so the part stays readable.
-					'key_label' => FrmAppHelper::truncate( $field->field_key, 7 ) . ' show=' . $part,
-					'name'      => $field->name . ' (' . $label . ')',
-					'type'      => $field->type,
-					'class'     => 'frm-customize-list dropdown-item',
+					'id'         => $field->id . ' show=' . $part,
+					'key'        => $field->field_key . ' show=' . $part,
+					// Keep the option out of the truncated part so it stays readable.
+					'key_label'  => $field->field_key,
+					'key_suffix' => ' show=' . $part,
+					'name'       => $field->name . ' (' . $label . ')',
+					'type'       => $field->type,
+					'class'      => 'frm-customize-list dropdown-item',
 				)
 			);
 			unset( $part, $label );
