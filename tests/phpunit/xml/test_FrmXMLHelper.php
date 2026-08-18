@@ -87,11 +87,23 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	 * @covers FrmXMLHelper::populate_postmeta
 	 */
 	public function test_populate_postmeta() {
-		$post             = array();
-		$meta             = new stdClass();
-		$meta->meta_key   = 'frm_dyncontent';
-		$meta->meta_value = '[{"box":1,"content":"<div id=\"box_1\">Box 1 Content<\/div>"},{"box":2,"content":"Box 2 Content\nBox 2 Line 2"}]';
-		$imported         = array(
+		/**
+		 * Set the duplicate IDs this test relies on.
+		 *
+		 * The method under test reads this global and takes an extra path when it is set,
+		 * running the view content through maybe_prepare_json_view_content() and
+		 * switch_field_ids(). The expected value below is the output of that path, so set the
+		 * global here instead of depending on an import test having left it populated. The
+		 * IDs are dummies: this content has no field shortcodes for switch_field_ids() to map.
+		 */
+		global $frm_duplicate_ids;
+
+		$frm_duplicate_ids = array( 999 => 999 );
+		$post              = array();
+		$meta              = new stdClass();
+		$meta->meta_key    = 'frm_dyncontent';
+		$meta->meta_value  = '[{"box":1,"content":"<div id=\"box_1\">Box 1 Content<\/div>"},{"box":2,"content":"Box 2 Content\nBox 2 Line 2"}]';
+		$imported          = array(
 			'forms' => array(),
 		);
 
@@ -169,5 +181,67 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		// Test that a ISO-8859-1 characters (\xC1 and \xE9) convert to UTF-8.
 		$this->assertSame( '<![CDATA[HelloÁWorld]]>', FrmXMLHelper::cdata( "Hello\xC1World" ) ); // \xC1 is the Á character.
 		$this->assertSame( '<![CDATA[é]]>', FrmXMLHelper::cdata( "\xE9" ) ); // \xE9 is the é character.
+	}
+
+	/**
+	 * Field options are a settings map, and every step of an import reads them as
+	 * one. A file whose value there cannot be read used to end the whole import
+	 * with a fatal error on the first field it reached, so anything unreadable
+	 * becomes an empty set of options and the field type's defaults fill the gaps.
+	 *
+	 * @covers FrmXMLHelper::fill_field_options
+	 *
+	 * @dataProvider unreadable_field_options_provider
+	 *
+	 * @param string $stored Value as it appears in the file.
+	 *
+	 * @return void
+	 */
+	public function test_fill_field_options_always_returns_an_array( $stored ) {
+		$field   = new SimpleXMLElement( '<field><field_options>' . $stored . '</field_options></field>' );
+		$options = $this->run_private_method( array( 'FrmXMLHelper', 'fill_field_options' ), array( $field ) );
+
+		$this->assertIsArray( $options, "Options stored as '{$stored}' should be read as an array." );
+	}
+
+	/**
+	 * @return void array<string>>
+	 */
+	public function unreadable_field_options_provider(): \Iterator {
+		yield 'serialized null' => array( 'N;' );
+		yield 'empty' => array( '' );
+		yield 'not json' => array( 'not json' );
+		yield 'a bare number' => array( '0' );
+	}
+
+	/**
+	 * Options written by an older version are serialized rather than JSON, so
+	 * they are read rather than thrown away for not being JSON.
+	 *
+	 * @covers FrmXMLHelper::fill_field_options
+	 *
+	 * @return void
+	 */
+	public function test_fill_field_options_reads_serialized_options() {
+		$serialized = 'a:2:{s:10:"start_year";s:4:"1990";s:8:"end_year";s:4:"2050";}';
+		$field      = new SimpleXMLElement( '<field><field_options>' . $serialized . '</field_options></field>' );
+		$options    = $this->run_private_method( array( 'FrmXMLHelper', 'fill_field_options' ), array( $field ) );
+
+		$this->assertSame( '1990', $options['start_year'], 'Serialized options should survive the import.' );
+		$this->assertSame( '2050', $options['end_year'], 'Serialized options should survive the import.' );
+	}
+
+	/**
+	 * JSON options, which is what an export writes today.
+	 *
+	 * @covers FrmXMLHelper::fill_field_options
+	 *
+	 * @return void
+	 */
+	public function test_fill_field_options_reads_json_options() {
+		$field   = new SimpleXMLElement( '<field><field_options>{"start_year":"1990"}</field_options></field>' );
+		$options = $this->run_private_method( array( 'FrmXMLHelper', 'fill_field_options' ), array( $field ) );
+
+		$this->assertSame( '1990', $options['start_year'], 'JSON options should be read as an array.' );
 	}
 }

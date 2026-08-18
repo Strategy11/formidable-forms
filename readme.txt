@@ -4,7 +4,7 @@ Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 6.33.1
+Stable tag: 6.34
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -364,6 +364,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.34 =
+* Security: Additional validation has been added to guarantee that submitted HTML in form data by untrusted users cannot be used for XSS.
+* New: Address fields are now included in Lite!
+* New: Address field data is included in PayPal Commerce credit card payments when defined in payment action settings to help prevent entries from incorrectly getting flagged as fraudulent.
+* New: Buttons on admin pages will now shrink slightly when clicked, to give a more tactile response.
+* Fix: Additional checks have been added to make sure that pages will not result in 404 errors when Gated Content actions are not actually defined for the page. In addition, when a custom permission is used for handling access to a private page, the custom permission is properly checked for.
+* Fix: Captcha field labels no longer use labels to prevent orphaned label issues since the label cannot reference the input in an iframe.
+* Fix: A JS error would occur when removing the last layout class from a field.
+* Fix: The JS spam token would get added to a form multiple times when multiple forms were on a page.
+
 = 6.33.1 =
 * Fix: Public taxonomy pages could result in 404 errors, caused by a missing check in the new Gated Content actions.
 
@@ -384,24 +394,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Email settings in payment actions would incorrectly display autofill options in Safari.
 * Options to use credit cards in PayPal Commerce subscriptions has been removed as it did not properly work.
 
-= 6.32 =
-* New: The form listing table now includes new Embeds and List Settings columns, for displaying every post and page where a form is embedded, and an added gear icon for controlling screen options.
-* New: The generated Formidable CSS file can now work from the uploads directory instead of the plugin directory. This will automatically work based on the DISALLOW_FILE_MODS constant, and can additionally be controlled using a new frm_add_css_to_uploads_dir filter.
-* New: Field errors will now get removed automatically on change events regardless of the JS validation setting.
-* Fix: The aria-describedby attribute would not update properly when a form was submitted with errors for fields with multiple inputs.
-* Fix: A small styling rule has been added to prevent HTML fields from overflowing past their container when using long strings.
-* Fix: Color pickers used on the styler page have been updated to help maintain the active color format, preventing automatic conversions from rgb to hex.
-* Fix: Validation for Square has been modified to prevent the submit button from remaining disabled when the Square inputs do not include a postal code input, which happens in some countries including Japan and Australia.
-* Fix: A cannot modify header information - headers already sent by FrmTransLiteHooksController.php:108 warning has been fixed.
-* Fix: Custom CSS saved in styles would not appear as expected after duplicating, showing additional CSS selectors for the original style.
-* Fix: A possible TypeError when calling wp_is_valid_utf8 with a null value has been fixed.
-* Fix: A new style would not properly rename when it did not yet have a style ID.
-* Fix: PayPal Commerce has been updated to prevent issues where Google Pay and Apple Pay options would not appear if the SDKs had not loaded in time.
-* Fix: PayPal Commerce orders and products were not including the payment action description setting.
-* The overdue subscription cron message will no longer get logged when there are no active subscriptions.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.32.1 =
-This version improves Stripe, Square, and PayPal Commerce payment validation. Upgrade immediately if you are using any of these payment methods.
+= 6.34 =
+This version fixes a security-related bug. Upgrade immediately.

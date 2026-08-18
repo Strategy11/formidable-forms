@@ -104,6 +104,19 @@ zip -r $zipname $destination \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
+	-x "formidable-api/lib/vendor/*/docs/*" \
+	-x "formidable-api/lib/vendor/*/generator/*" \
+	-x "formidable-api/lib/vendor/*/skill/*" \
+	-x "formidable-api/lib/vendor/*/CHANGELOG.md" \
+	-x "formidable-api/lib/vendor/*/CLAUDE.md" \
+	-x "formidable-api/lib/vendor/*/CONTRIBUTING.md" \
+	-x "formidable-api/lib/vendor/*/README-INITIAL.md" \
+	-x "formidable-api/lib/vendor/*/.nvmrc" \
+	-x "formidable-api/lib/vendor/*/.prettierignore" \
+	-x "formidable-api/lib/vendor/*/.prettierrc.js" \
+	-x "formidable-api/lib/vendor/*/.wp-env.json" \
+	-x "formidable-api/lib/vendor/*/phpcs.xml.dist" \
+	-x "formidable-api/lib/vendor/*/phpstan.neon.dist" \
 	-x "$source/vendor/*" \
 	-x "$source/formidable-payments/vendor/*" \
 	-x "*/temp.xml" \

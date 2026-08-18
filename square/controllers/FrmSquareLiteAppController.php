@@ -127,6 +127,63 @@ class FrmSquareLiteAppController {
 	}
 
 	/**
+	 * Show a warning in the payment action settings when the selected address field
+	 * uses an address type without a country, as Square requires a country code.
+	 *
+	 * @since 6.34
+	 *
+	 * @param object $action
+	 *
+	 * @return void
+	 */
+	public static function maybe_show_address_type_warning( $action ) {
+		if ( is_callable( 'FrmProSquareLiteController::maybe_show_address_type_warning' ) ) {
+			// Pro renders this warning with the same hook.
+			return;
+		}
+
+		if ( empty( $action->post_content['gateway'] ) ) {
+			return;
+		}
+
+		$gateways = (array) $action->post_content['gateway'];
+
+		if ( ! in_array( 'square', $gateways, true ) ) {
+			return;
+		}
+
+		if ( empty( $action->post_content['billing_address'] ) ) {
+			return;
+		}
+
+		$address_field = FrmField::getOne( $action->post_content['billing_address'] );
+
+		if ( ! $address_field || self::address_field_is_compatible_with_square( $address_field ) ) {
+			return;
+		}
+		?>
+		<div class="frm_warning_style">
+		<?php
+		esc_html_e( 'The address field selected is not compatible with Square, because it does not include the country code. Select another address type to prevent checkout errors.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Square requires a country code, which the generic address type does not collect.
+	 *
+	 * @since 6.34
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return bool
+	 */
+	private static function address_field_is_compatible_with_square( $field ) {
+		return ! isset( $field->field_options['address_type'] ) || 'generic' !== $field->field_options['address_type'];
+	}
+
+	/**
 	 * @param WP_Post $action
 	 *
 	 * @return array
@@ -135,7 +192,9 @@ class FrmSquareLiteAppController {
 		$email_setting      = $action->post_content['email'];
 		$first_name_setting = $action->post_content['billing_first_name'];
 		$last_name_setting  = $action->post_content['billing_last_name'];
-		$address_setting    = $action->post_content['billing_address'];
+
+		// @phpstan-ignore-next-line
+		$address_setting = $action->post_content['billing_address'] ?? '';
 
 		$entry      = self::generate_false_entry();
 		$first_name = $first_name_setting && isset( $entry->metas[ $first_name_setting ] ) ? $entry->metas[ $first_name_setting ] : '';
@@ -179,7 +238,7 @@ class FrmSquareLiteAppController {
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$details, $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) ) {
 			return;
 		}
 
@@ -192,7 +251,7 @@ class FrmSquareLiteAppController {
 		if ( 'us' === $address_field->field_options['address_type'] ) {
 			$country_code = 'US';
 		} else {
-			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+			$country_code = FrmAddressesController::get_country_code( $address['country'] );
 		}
 
 		if ( ! $address['line1'] && ! $address['line2'] && ! $address['city'] && ! $address['state'] && ! $address['zip'] && ! $country_code ) {

@@ -349,7 +349,7 @@ class FrmEntry {
 			return false;
 		}
 
-		$new_values    = self::package_entry_to_update( $id, $values );
+		$new_values    = self::package_entry_to_update( $id, $values, $update_type );
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_items', $new_values, compact( 'id' ) );
 
 		self::after_update_entry( $query_results, $id, $values, $new_values );
@@ -782,7 +782,7 @@ class FrmEntry {
 			$values = apply_filters( 'frm_pre_create_entry', $values );
 		}
 
-		return self::package_entry_data( $values );
+		return self::package_entry_data( $values, $type );
 	}
 
 	/**
@@ -839,11 +839,12 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param array $values
+	 * @param array  $values
+	 * @param string $type   The create type. 'xml' for an import.
 	 *
 	 * @return array New values.
 	 */
-	private static function package_entry_data( &$values ) {
+	private static function package_entry_data( &$values, $type = 'standard' ) {
 		global $wpdb;
 
 		if ( ! isset( $values['item_key'] ) ) {
@@ -862,7 +863,7 @@ class FrmEntry {
 			'created_at'     => self::get_created_at( $values ),
 			'updated_at'     => self::get_updated_at( $values ),
 			'description'    => self::get_entry_description( $values ),
-			'user_id'        => self::get_entry_user_id( $values ),
+			'user_id'        => self::get_entry_user_id( $values, $type ),
 		);
 
 		$new_values['updated_by'] = $values['updated_by'] ?? $new_values['user_id'];
@@ -975,17 +976,40 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param array $values
+	 * @param array  $values
+	 * @param string $type   The create type. 'xml' for an import.
 	 *
 	 * @return int
 	 */
-	private static function get_entry_user_id( $values ) {
-		if ( isset( $values['frm_user_id'] ) && ( is_numeric( $values['frm_user_id'] ) || FrmAppHelper::is_admin() ) ) {
+	private static function get_entry_user_id( $values, $type = 'standard' ) {
+		if ( isset( $values['frm_user_id'] ) && self::can_set_entry_user_id_from_values( $type ) ) {
 			return $values['frm_user_id'];
 		}
 
 		$current_user_id = get_current_user_id();
 		return $current_user_id ? $current_user_id : 0;
+	}
+
+	/**
+	 * Whether a submitted frm_user_id is allowed to set the entry owner.
+	 *
+	 * The owner is only taken from the submitted value when the current user is allowed to manage
+	 * entries, or during a trusted import that restores each entry's original owner. On a public
+	 * submission neither is true, so the owner falls back to the current user and cannot be set to
+	 * another account.
+	 *
+	 * @since 6.34
+	 *
+	 * @param string $type The create/update type. 'xml' for an import.
+	 *
+	 * @return bool
+	 */
+	private static function can_set_entry_user_id_from_values( $type = 'standard' ) {
+		if ( 'xml' === $type || ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) ) {
+			return true;
+		}
+
+		return current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' );
 	}
 
 	/**
@@ -1169,12 +1193,13 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int   $id
-	 * @param array $values
+	 * @param int    $id
+	 * @param array  $values
+	 * @param string $update_type The update type. 'xml' for an import.
 	 *
 	 * @return array New values.
 	 */
-	private static function package_entry_to_update( $id, $values ) {
+	private static function package_entry_to_update( $id, $values, $update_type = 'standard' ) {
 		global $wpdb;
 
 		$new_values = array(
@@ -1197,7 +1222,7 @@ class FrmEntry {
 			$new_values['parent_item_id'] = (int) $values['parent_item_id'];
 		}
 
-		if ( isset( $values['frm_user_id'] ) && is_numeric( $values['frm_user_id'] ) ) {
+		if ( isset( $values['frm_user_id'] ) && is_numeric( $values['frm_user_id'] ) && self::can_set_entry_user_id_from_values( $update_type ) ) {
 			$new_values['user_id'] = $values['frm_user_id'];
 		}
 

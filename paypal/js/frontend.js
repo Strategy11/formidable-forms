@@ -303,19 +303,21 @@
 			return;
 		}
 
-		// Skip (and avoid the SDK wait) when Google Pay / Apple Pay were not enqueued
-		// server-side, e.g. via the frm_include_google_pay_apple_pay filter or non-SSL.
-		if ( ! frmPayPalVars.includeGooglePayApplePay ) {
+		// Skip (and avoid the SDK wait) when neither wallet was enqueued server-side,
+		// e.g. via the frm_include_google_pay_apple_pay filter or non-SSL.
+		if ( ! frmPayPalVars.includeGooglePay && ! frmPayPalVars.includeApplePay ) {
 			return;
 		}
 
 		// Resolve both eligibility checks in parallel so the combined wait is bounded by
 		// the slower of the two, then register them in a fixed order (Google Pay, then
 		// Apple Pay). Registration happens before the selector is built, so they render
-		// together with the other methods.
+		// together with the other methods. A wallet turned off server-side, e.g. via
+		// frm_paypal_commerce_include_google_pay or frm_paypal_commerce_include_apple_pay,
+		// skips its check so it never waits on an SDK that was never enqueued.
 		const [ googlePayEligible, applePayEligible ] = await Promise.all( [
-			resolveGooglePayEligibility(),
-			resolveApplePayEligibility()
+			frmPayPalVars.includeGooglePay ? resolveGooglePayEligibility() : false,
+			frmPayPalVars.includeApplePay ? resolveApplePayEligibility() : false
 		] );
 
 		if ( googlePayEligible ) {
@@ -1778,19 +1780,11 @@
 			submitArgs.cardholderName = meta.name;
 		}
 
-		/*
-		TODO Add the billing address here as well.
-		Stripe calls a window.frmProForm.addAddressMeta function.
-		That's included in frmstrp.js though, so we need to add a script in Pro for PayPal as well.
+		const billingAddress = getBillingAddress();
 
-		billingAddress: {
-			addressLine1: '555 Billing Ave',
-			adminArea1: 'NY',
-			adminArea2: 'New York',
-			postalCode: '10001',
-			countryCode: 'US'
+		if ( billingAddress ) {
+			submitArgs.billingAddress = billingAddress;
 		}
-		*/
 
 		try {
 			await cardFieldsInstance.submit( submitArgs );
@@ -1802,6 +1796,99 @@
 			}
 			reportErrorToServer( err, 'card_submit' );
 		}
+	}
+
+	/**
+	 * Build the billing address for the card fields from the address field mapped in the payment action.
+	 *
+	 * @since 6.34
+	 *
+	 * @return {Object|null} Billing address for the card fields submit args, or null when no address is available.
+	 */
+	function getBillingAddress() {
+		let addressID = '';
+
+		getPayPalSettings().forEach( function( setting ) {
+			if ( setting.address ) {
+				addressID = setting.address;
+			}
+		} );
+
+		if ( '' === addressID ) {
+			return null;
+		}
+
+		let prefix = '';
+		let addressContainer = document.querySelector( `#frm_field_${ addressID }_container, .frm_field_${ addressID }_container` );
+
+		if ( ! addressContainer ) {
+			const line1Input = document.querySelector( `input[name="item_meta[${ addressID }][line1]"]` );
+			if ( line1Input ) {
+				prefix = `${ addressID }][`;
+				addressContainer = line1Input.parentNode;
+			}
+		}
+
+		if ( ! addressContainer ) {
+			return null;
+		}
+
+		const getSubFieldValue = function( name ) {
+			const input = addressContainer.querySelector( `input[name$="[${ prefix }${ name }]"], select[name$="[${ prefix }${ name }]"]` );
+			return input?.value ? input.value : '';
+		};
+
+		const subFieldMapping = {
+			line1: 'addressLine1',
+			line2: 'addressLine2',
+			city: 'adminArea2',
+			state: 'adminArea1',
+			zip: 'postalCode'
+		};
+
+		const billingAddress = {};
+
+		Object.keys( subFieldMapping ).forEach( function( name ) {
+			const value = getSubFieldValue( name );
+			if ( value ) {
+				billingAddress[ subFieldMapping[ name ] ] = value;
+			}
+		} );
+
+		if ( ! billingAddress.addressLine1 ) {
+			return null;
+		}
+
+		const countryCode = getCountryCode( addressContainer, prefix );
+
+		if ( countryCode ) {
+			billingAddress.countryCode = countryCode;
+		}
+
+		return billingAddress;
+	}
+
+	/**
+	 * Get the two letter country code for the filled address.
+	 * The country dropdown holds the code in a data-code attribute.
+	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {Element} addressContainer
+	 * @param {string}  prefix
+	 * @return {string} Country code, or an empty string when the country is unknown.
+	 */
+	function getCountryCode( addressContainer, prefix ) {
+		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
+
+		if ( countryDropdown ) {
+			const countryOption = countryDropdown.querySelector( `option[value="${ countryDropdown.value }"]` );
+			return countryOption?.getAttribute( 'data-code' ) || '';
+		}
+
+		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
+		return stateDropdown ? 'US' : '';
 	}
 
 	// ---- Price / Pay Later ----
