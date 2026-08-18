@@ -261,6 +261,8 @@ a.frm_option_icon:hover::before {
 
 	/* Concentric with the 8px items plus the menu's own 4px padding. */
 	border-radius: 12px;
+	padding-left: 8px;
+	padding-right: 8px;
 
 	> .dropdown-item > a {
 		transition:
@@ -288,6 +290,19 @@ a.frm_option_icon:hover::before {
 	}
 }
 
+.preview.dropdown .frm-dropdown-toggle {
+
+	.frmsvg {
+
+		/* Replaces the inherited transition: all. */
+		transition: transform 200ms ease-out;
+	}
+
+	&[aria-expanded="true"] .frmsvg {
+		transform: rotate(-180deg);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 
 	.frm-dropdown-menu.frm-style-options-menu,
@@ -297,5 +312,9 @@ a.frm_option_icon:hover::before {
 		> .dropdown-item > a .frmsvg {
 			transition: none;
 		}
+	}
+
+	.preview.dropdown .frm-dropdown-toggle .frmsvg {
+		transition: none;
 	}
 }
