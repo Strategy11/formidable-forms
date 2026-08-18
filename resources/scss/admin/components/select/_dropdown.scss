@@ -264,7 +264,14 @@ a.frm_option_icon:hover::before {
 	padding-left: 8px;
 	padding-right: 8px;
 
+	> .dropdown-item + .dropdown-item {
+		margin-top: 2px;
+	}
+
 	> .dropdown-item > a {
+
+		/* 8px clears the 8px radius, so the corners stop cutting into the label. */
+		padding: 8px 12px;
 		transition:
 			0.12s background-color ease,
 			0.12s color ease;
