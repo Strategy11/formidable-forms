@@ -17,7 +17,7 @@ button.frm_choose_image_box,
 .frm_wrap textarea,
 .frm_wrap input[type="tel"],
 .frm_wrap input[type="text"],
-.frm_wrap input[type="email"]
+.frm_wrap input[type="email"],
 .frm_wrap input[type="search"],
 .frm_wrap input[type="number"],
 .frm_wrap input[type="date"],
@@ -37,6 +37,111 @@ button.frm_choose_image_box,
 	margin: 0;
 	background-color: #fff;
 	line-height: var(--leading);
+}
+
+/**
+ * Input hover
+ *
+ * Neutral rather than primary, so it never reads as focus. Skipped for disabled, readonly and
+ * focused controls, and for the builder canvas, where the field card already answers the cursor.
+ */
+.frm_wrap :is(
+	input[type="text"],
+	input[type="email"],
+	input[type="url"],
+	input[type="tel"],
+	input[type="search"],
+	input[type="number"],
+	input[type="date"],
+	input[type="password"],
+	textarea,
+	select
+),
+.frm-white-body .wrap :is(
+	input[type="text"],
+	input[type="search"],
+	input[type="number"],
+	textarea,
+	select
+),
+.field-group :is( input[type="text"], textarea, select ),
+.frm-fields .frm-input-field {
+	transition:
+		0.12s border-color ease,
+		0.12s box-shadow ease;
+
+	/* A full step to --grey-400 is 1.47:1 to 2.58:1 against the white fill, which made a hovered
+	   field jump out of a panel that is mostly borders. A quarter of that, plus a shadow lift. */
+	&:hover:not(:disabled):not([readonly]):not(:focus) {
+
+		/* Without color-mix support the stroke simply holds and the shadow carries the state. */
+		border-color: var(--grey-300);
+		border-color: color-mix(in oklab, var(--grey-400) 30%, var(--grey-300));
+		box-shadow: var(--box-shadow-sm);
+	}
+}
+
+/**
+ * Controls whose visible box is painted by something else
+ *
+ * The slider unit select has border-width 0, so its box belongs to .frm-slider-value. The colour
+ * picker is a <button> styled as a field, so it picked up WordPress's button hover.
+ */
+.frm_wrap .frm-slider-value,
+.frm_wrap .wp-picker-container .wp-color-result {
+
+	/* .wp-color-result ships transition: all — name the properties instead. */
+	transition:
+		0.12s border-color ease,
+		0.12s box-shadow ease;
+}
+
+.frm_wrap .frm-slider-value:hover,
+.frm_wrap .wp-picker-container .wp-color-result:hover:not(:focus) {
+	border-color: var(--grey-300);
+	border-color: color-mix(in oklab, var(--grey-400) 30%, var(--grey-300));
+	box-shadow: var(--box-shadow-sm);
+}
+
+/**
+ * Multiselect toggle
+ *
+ * A <button> with an input's exact resting state that matched no hover rule at all. The shared
+ * input :focus rule already covers it.
+ */
+.frm-btn-group .multiselect.dropdown-toggle,
+button.frm_choose_image_box {
+
+	/* Both ship transition: all — name the properties instead. */
+	transition:
+		0.12s border-color ease,
+		0.12s box-shadow ease;
+
+	&:hover:not(:disabled):not(:focus) {
+		border-color: var(--grey-300);
+		border-color: color-mix(in oklab, var(--grey-400) 30%, var(--grey-300));
+		box-shadow: var(--box-shadow-sm);
+	}
+}
+
+/* Canvas previews hold their resting state; the field card answers the cursor instead. Split by
+   control type because the two have different resting shadows. */
+#frm-show-fields :is( input:not([type="checkbox"]):not([type="radio"]), textarea, select ):hover:not(:disabled):not([readonly]):not(:focus) {
+	border-color: var(--grey-300);
+	box-shadow: var(--box-shadow-xs);
+}
+
+#frm-show-fields :is( input[type="checkbox"], input[type="radio"] ):hover:not(:disabled):not([readonly]):not(:focus),
+#frm-show-fields label:hover > :is( input[type="checkbox"], input[type="radio"] ):not(:disabled):not([readonly]):not(:focus) {
+	border-color: var(--grey-300);
+	box-shadow: var(--box-shadow-sm);
+}
+
+/* Matching !important, because the checked hover it is cancelling carries one. */
+#frm-show-fields input[type="checkbox"]:checked:hover:not(:disabled):not([readonly]):not(:focus),
+#frm-show-fields label:hover > input[type="checkbox"]:checked:not(:disabled):not([readonly]):not(:focus) {
+	background-color: var(--border-color-active, var(--primary-500)) !important;
+	border-color: var(--border-color-active, var(--primary-500)) !important;
 }
 
 .frm_input_with_suffix {
