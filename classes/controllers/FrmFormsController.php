@@ -1852,6 +1852,123 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Adds a shortcode for each part of a multi-part field to the field shortcode list,
+	 * so a single part can be used on its own, like [25 show=first] for a Name field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $atts Includes 'field'.
+	 *
+	 * @return void
+	 */
+	public static function field_part_shortcodes( $atts ) {
+		$field = $atts['field'];
+
+		foreach ( self::get_field_parts( $field ) as $part => $label ) {
+			FrmFormsHelper::insert_opt_html(
+				array(
+					'id'         => $field->id . ' show=' . $part,
+					'key'        => $field->field_key . ' show=' . $part,
+					// Keep the option out of the truncated part so it stays readable.
+					'key_label'  => $field->field_key,
+					'key_suffix' => ' show=' . $part,
+					'name'       => $field->name . ' (' . $label . ')',
+					'type'       => $field->type,
+					'class'      => 'frm-customize-list dropdown-item',
+				)
+			);
+			unset( $part, $label );
+		}
+	}
+
+	/**
+	 * Gets the parts of a multi-part field that can be shown on their own with a show= shortcode option.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value.
+	 */
+	private static function get_field_parts( $field ) {
+		$parts = array();
+
+		if ( 'name' === $field->type ) {
+			$parts = self::get_name_field_parts( $field );
+		} elseif ( 'address' === $field->type ) {
+			$parts = self::get_address_field_parts( $field );
+		}
+
+		/**
+		 * Allows add-ons to add the parts of their own multi-part fields.
+		 *
+		 * @since x.x
+		 *
+		 * @param array    $parts Part labels keyed by the show= option value.
+		 * @param stdClass $field The field the parts belong to.
+		 */
+		return apply_filters( 'frm_field_parts_for_shortcodes', $parts, $field );
+	}
+
+	/**
+	 * Gets the parts of a Name field that are in use. Only the parts included in the
+	 * selected name layout hold a value, so the rest would always show as blank.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value, in layout order.
+	 */
+	private static function get_name_field_parts( $field ) {
+		$labels = array(
+			'first'  => __( 'First', 'formidable' ),
+			'middle' => __( 'Middle', 'formidable' ),
+			'last'   => __( 'Last', 'formidable' ),
+		);
+		$layout = FrmField::get_option( $field, 'name_layout' );
+
+		if ( ! $layout ) {
+			$layout = 'first_last';
+		}
+
+		// The layout option names the parts in use, in display order, like first_middle_last.
+		$parts = array();
+
+		foreach ( explode( '_', $layout ) as $part ) {
+			if ( isset( $labels[ $part ] ) ) {
+				$parts[ $part ] = $labels[ $part ];
+			}
+			unset( $part );
+		}
+
+		return $parts;
+	}
+
+	/**
+	 * Gets the parts of an Address field that are in use. The address type decides which
+	 * parts are on the form, so the rest would always show as blank.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value.
+	 */
+	private static function get_address_field_parts( $field ) {
+		$parts        = FrmFieldAddress::get_part_labels();
+		$address_type = FrmField::get_option( $field, 'address_type' );
+
+		if ( in_array( $address_type, array( 'us', 'generic' ), true ) ) {
+			unset( $parts['country'] );
+		} elseif ( 'europe' === $address_type ) {
+			unset( $parts['state'] );
+		}
+
+		return $parts;
+	}
+
+	/**
 	 * Get an array of the options to display in the advanced tab
 	 * of the customization panel
 	 *

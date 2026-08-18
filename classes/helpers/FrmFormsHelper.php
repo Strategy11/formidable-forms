@@ -674,7 +674,10 @@ BEFORE_HTML;
 	/**
 	 * @since 4.0
 	 *
-	 * @param array $args
+	 * @param array $args Includes 'id', 'key', 'name', 'type' and 'class'. Optionally 'id_label'
+	 *                    and 'key_label' to show something other than the id or key, and
+	 *                    'key_suffix' for text appended after the key is truncated, so a
+	 *                    shortcode option like ' show=first' survives the truncation.
 	 *
 	 * @return void
 	 */
@@ -722,7 +725,7 @@ BEFORE_HTML;
 
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) . ( $args['key_suffix'] ?? '' ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
