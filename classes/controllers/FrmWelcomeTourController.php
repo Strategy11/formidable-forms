@@ -360,7 +360,6 @@ class FrmWelcomeTourController {
 		$page                   = FrmAppHelper::simple_get( 'page' );
 		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
 		$is_form_builder_page   = FrmAppHelper::is_form_builder_page();
-		$is_style_editor_page   = FrmAppHelper::is_style_editor_page();
 
 		switch ( $active_step ) {
 			case 'create-form':
@@ -370,7 +369,7 @@ class FrmWelcomeTourController {
 			case 'style-form':
 			case 'embed-form':
 			case 'completed':
-				return $is_form_builder_page || $is_style_editor_page;
+				return $is_form_builder_page || FrmAppHelper::is_style_editor_page();
 			default:
 				return false;
 		}
@@ -622,9 +621,8 @@ class FrmWelcomeTourController {
 		}
 
 		$usage_data = array();
-		$steps      = self::get_steps();
 
-		foreach ( $steps as $key => $step ) {
+		foreach ( self::get_steps() as $key => $step ) {
 			$usage_data[ 'completed_step_' . $key ] = empty( $option['completed_steps'][ $key ] ) ? 0 : 1;
 		}
 

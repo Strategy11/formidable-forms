@@ -76,7 +76,7 @@ if ( ! $values['is_template'] ) {
 	<?php FrmAppHelper::tooltip_icon( __( 'Choose what will happen after the user submits this form.', 'formidable' ) ); ?>
 </h3>
 
-<input type="hidden" name="options[on_submit_migrated]" value="<?php echo empty( $values['on_submit_migrated'] ) ? '' : intval( $values['on_submit_migrated'] ); ?>" />
+<input type="hidden" name="options[on_submit_migrated]" value="<?php echo ! empty( $values['on_submit_migrated'] ) ? intval( $values['on_submit_migrated'] ) : ''; ?>" />
 
 <p class="frm8 frm_form_field">
 	<label for="no_save" class="frm_inline_block">
@@ -85,10 +85,12 @@ if ( ! $values['is_template'] ) {
 	</label>
 </p>
 
+<div class="frm_note_style">
+	<?php esc_html_e( 'Spam settings have been moved to a new section.', 'formidable' ); ?>
+	<a href="#spam_settings"><?php esc_html_e( 'Click here to jump to Spam settings.', 'formidable' ); ?></a>
+</div>
+
 <?php
-if ( is_callable( 'FrmFormsController::render_spam_settings' ) ) {
-	FrmFormsController::render_spam_settings( $values );
-}
 FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 ?>
 

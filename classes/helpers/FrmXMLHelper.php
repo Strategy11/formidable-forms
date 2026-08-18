@@ -100,15 +100,17 @@ class FrmXMLHelper {
 		$channel_start_position     = strpos( $xml_string, '<channel>' );
 		$content_before_channel_tag = substr( $xml_string, 0, $channel_start_position );
 
-		if ( ! str_starts_with( $content_before_channel_tag, '<meta name="generator" ' ) ) {
-			$content_before_channel_tag = preg_replace(
-				'/<meta\s+[^>]*name="generator"[^>]*\/>/i',
-				'',
-				$content_before_channel_tag,
-				1
-			);
-			$xml_string                 = $content_before_channel_tag . substr( $xml_string, $channel_start_position );
+		if ( str_starts_with( $content_before_channel_tag, '<meta name="generator" ' ) ) {
+			return;
 		}
+
+		$content_before_channel_tag = preg_replace(
+			'/<meta\s+[^>]*name="generator"[^>]*\/>/i',
+			'',
+			$content_before_channel_tag,
+			1
+		);
+		$xml_string                 = $content_before_channel_tag . substr( $xml_string, $channel_start_position );
 	}
 
 	/**
@@ -131,11 +133,13 @@ class FrmXMLHelper {
 
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
 			// Grab cats, tags, and terms, or forms or posts.
-			if ( isset( $xml->{$item_type} ) ) {
-				$function_name = 'import_xml_' . $item_type . 's';
-				$imported      = self::$function_name( $xml->{$item_type}, $imported );
-				unset( $function_name, $xml->{$item_type} );
+			if ( ! isset( $xml->{$item_type} ) ) {
+				continue;
 			}
+
+			$function_name = 'import_xml_' . $item_type . 's';
+			$imported      = self::$function_name( $xml->{$item_type}, $imported );
+			unset( $function_name, $xml->{$item_type} );
 		}
 
 		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
@@ -290,6 +294,21 @@ class FrmXMLHelper {
 		}//end foreach
 
 		self::maybe_update_child_form_parent_id( $imported['forms'], $child_forms );
+
+		/**
+		 * Fires after all forms in the XML have been imported.
+		 *
+		 * Child forms are imported before their parent form, so per-form fix-ups
+		 * cannot resolve conditional logic that references fields in a form
+		 * imported later. Use this action for cross-form fix-ups that require
+		 * the fully populated `$frm_duplicate_ids` map.
+		 *
+		 * @since 6.31
+		 *
+		 * @param array $imported Summary of imported items, including
+		 *                        'forms' => array( old_form_id => new_form_id ).
+		 */
+		do_action( 'frm_after_import_forms', $imported );
 
 		return $imported;
 	}
@@ -463,12 +482,14 @@ class FrmXMLHelper {
 	 */
 	private static function maybe_update_child_form_parent_id( $imported_forms, $child_forms ) {
 		foreach ( $child_forms as $child_form_id => $old_parent_form_id ) {
-			if ( isset( $imported_forms[ $old_parent_form_id ] ) && (int) $imported_forms[ $old_parent_form_id ] !== (int) $old_parent_form_id ) {
-				// Update all children with this old parent_form_id
-				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
-				FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
-				do_action( 'frm_update_child_form_parent_id', $child_form_id, $new_parent_form_id );
+			if ( ! isset( $imported_forms[ $old_parent_form_id ] ) || (int) $imported_forms[ $old_parent_form_id ] === (int) $old_parent_form_id ) {
+				continue;
 			}
+
+			// Update all children with this old parent_form_id
+			$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
+			FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
+			do_action( 'frm_update_child_form_parent_id', $child_form_id, $new_parent_form_id );
 		}
 	}
 
@@ -599,8 +620,35 @@ class FrmXMLHelper {
 			'form_id'       => (int) $form_id,
 			'required'      => (int) $field->required,
 			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
-			'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
+			'field_options' => self::fill_field_options( $field ),
 		);
+	}
+
+	/**
+	 * Reads a field's options out of the file as an array.
+	 *
+	 * Field options are a settings map, and every step of the import reads them
+	 * as one. A file whose value there cannot be read, because it is empty or
+	 * was written by something other than an export, used to end the whole
+	 * import with a fatal error on the first field it reached. An empty set of
+	 * options is recoverable, since the defaults for the field type fill the
+	 * gaps, so prefer that over stopping.
+	 *
+	 * Unserialize is tried as well as JSON so options written by an older
+	 * version are still read rather than thrown away.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $field Field element from the file.
+	 *
+	 * @return array
+	 */
+	private static function fill_field_options( $field ) {
+		$options = (string) $field->field_options;
+
+		FrmAppHelper::unserialize_or_decode( $options );
+
+		return is_array( $options ) ? $options : array();
 	}
 
 	/**
@@ -624,12 +672,14 @@ class FrmXMLHelper {
 			'tag',
 		);
 
-		if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
-			if ( count( $f['default_value'] ) === 1 ) {
-				$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
-			} else {
-				$f['default_value'] = reset( $f['default_value'] );
-			}
+		if ( ! is_array( $f['default_value'] ) || ! in_array( $f['type'], $has_default, true ) ) {
+			return;
+		}
+
+		if ( count( $f['default_value'] ) === 1 ) {
+			$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
+		} else {
+			$f['default_value'] = reset( $f['default_value'] );
 		}
 	}
 
@@ -688,14 +738,18 @@ class FrmXMLHelper {
 			return;
 		}
 
-		if ( $f['type'] === 'form' || ( $f['type'] === 'divider' && FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
-			if ( FrmField::is_option_true( $f['field_options'], 'form_select' ) ) {
-				$form_select = (int) $f['field_options']['form_select'];
+		if ( $f['type'] !== 'form' && ( $f['type'] !== 'divider' || ! FrmField::is_option_true( $f['field_options'], 'repeat' ) ) ) {
+			return;
+		}
 
-				if ( isset( $imported['forms'][ $form_select ] ) ) {
-					$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
-				}
-			}
+		if ( ! FrmField::is_option_true( $f['field_options'], 'form_select' ) ) {
+			return;
+		}
+
+		$form_select = (int) $f['field_options']['form_select'];
+
+		if ( isset( $imported['forms'][ $form_select ] ) ) {
+			$f['field_options']['form_select'] = $imported['forms'][ $form_select ];
 		}
 	}
 
@@ -714,12 +768,14 @@ class FrmXMLHelper {
 			return;
 		}
 
-		if ( FrmField::is_option_true_in_array( $f['field_options'], 'get_values_form' ) ) {
-			$old_form = $f['field_options']['get_values_form'];
+		if ( ! FrmField::is_option_true_in_array( $f['field_options'], 'get_values_form' ) ) {
+			return;
+		}
 
-			if ( isset( $imported['forms'][ $old_form ] ) ) {
-				$f['field_options']['get_values_form'] = $imported['forms'][ $old_form ];
-			}
+		$old_form = $f['field_options']['get_values_form'];
+
+		if ( isset( $imported['forms'][ $old_form ] ) ) {
+			$f['field_options']['get_values_form'] = $imported['forms'][ $old_form ];
 		}
 	}
 
@@ -821,10 +877,12 @@ class FrmXMLHelper {
 
 		$new_id = FrmField::create( $f );
 
-		if ( $new_id ) {
-			++$imported['imported']['fields'];
-			do_action( 'frm_after_field_is_imported', $f, $new_id );
+		if ( ! $new_id ) {
+			return;
 		}
+
+		++$imported['imported']['fields'];
+		do_action( 'frm_after_field_is_imported', $f, $new_id );
 	}
 
 	/**
@@ -892,13 +950,15 @@ class FrmXMLHelper {
 			$frm_duplicate_ids = $keys_by_original_field_id;
 			$after             = FrmFieldsHelper::switch_field_ids( $field );
 
-			if ( $before['field_options'] !== $after['field_options'] ) {
-				$frm_duplicate_ids = $field_id_by_key;
-				$after             = FrmFieldsHelper::switch_field_ids( $after );
+			if ( $before['field_options'] === $after['field_options'] ) {
+				continue;
+			}
 
-				if ( $before['field_options'] !== $after['field_options'] ) {
-					FrmField::update( $field['id'], array( 'field_options' => $after['field_options'] ) );
-				}
+			$frm_duplicate_ids = $field_id_by_key;
+			$after             = FrmFieldsHelper::switch_field_ids( $after );
+
+			if ( $before['field_options'] !== $after['field_options'] ) {
+				FrmField::update( $field['id'], array( 'field_options' => $after['field_options'] ) );
 			}
 		}
 
@@ -1499,13 +1559,15 @@ class FrmXMLHelper {
 	 * @param int   $post_id
 	 */
 	private static function update_layout( &$post, $post_id ) {
-		if ( is_callable( 'FrmViewsLayout::maybe_create_layouts_for_view' ) ) {
-			$listing_layout = ! empty( $post['layout']['listing'] ) ? json_decode( $post['layout']['listing'], true ) : array();
-			$detail_layout  = ! empty( $post['layout']['detail'] ) ? json_decode( $post['layout']['detail'], true ) : array();
+		if ( ! is_callable( 'FrmViewsLayout::maybe_create_layouts_for_view' ) ) {
+			return;
+		}
 
-			if ( $listing_layout || $detail_layout ) {
-				FrmViewsLayout::maybe_create_layouts_for_view( $post_id, $listing_layout, $detail_layout );
-			}
+		$listing_layout = ! empty( $post['layout']['listing'] ) ? json_decode( $post['layout']['listing'], true ) : array();
+		$detail_layout  = ! empty( $post['layout']['detail'] ) ? json_decode( $post['layout']['detail'], true ) : array();
+
+		if ( $listing_layout || $detail_layout ) {
+			FrmViewsLayout::maybe_create_layouts_for_view( $post_id, $listing_layout, $detail_layout );
 		}
 	}
 
@@ -1545,10 +1607,9 @@ class FrmXMLHelper {
 
 			// Remove the SimpleXML_parse_error from the WP_Error object to avoid
 			// displaying duplicate error messages from $result->get_error_message()
-			$error_codes   = $result->get_error_codes();
 			$error_details = array();
 
-			foreach ( $error_codes as $error_code ) {
+			foreach ( $result->get_error_codes() as $error_code ) {
 				// Clone WP_Error data because WP_Error removes all error messages and data
 				// Associated with the specified error code when an item is removed.
 				// Source: https://developer.wordpress.org/reference/classes/wp_error/remove/#source
@@ -1596,12 +1657,14 @@ class FrmXMLHelper {
 				unset( $k, $m );
 			}
 
-			if ( $s_message ) {
-				$message .= '<li><strong>' . $t_strings[ $type ] . ':</strong> ';
-				$message .= implode( ', ', $s_message );
-				$message .= '</li>';
+			if ( ! $s_message ) {
+				continue;
 			}
-		}
+
+			$message .= '<li><strong>' . $t_strings[ $type ] . ':</strong> ';
+			$message .= implode( ', ', $s_message );
+			$message .= '</li>';
+		}//end foreach
 
 		if ( $message === '<ul>' ) {
 			$message  = '';
@@ -1688,11 +1751,13 @@ class FrmXMLHelper {
 
 		$primary_form = reset( $result['forms'] );
 
-		if ( $primary_form ) {
-			$primary_form = FrmForm::getOne( $primary_form );
-			$form_id      = ! empty( $primary_form->parent_form_id ) ? $primary_form->parent_form_id : $primary_form->id;
-			$message     .= '<li><a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html__( 'Go to imported form', 'formidable' ) . '</a></li>';
+		if ( ! $primary_form ) {
+			return;
 		}
+
+		$primary_form = FrmForm::getOne( $primary_form );
+		$form_id      = ! empty( $primary_form->parent_form_id ) ? $primary_form->parent_form_id : $primary_form->id;
+		$message     .= '<li><a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html__( 'Go to imported form', 'formidable' ) . '</a></li>';
 	}
 
 	/**
@@ -1814,10 +1879,12 @@ class FrmXMLHelper {
 		}
 
 		foreach ( $options as $key => $option ) {
-			if ( is_array( $option ) && ! empty( $option['image'] ) ) {
-				$options[ $key ]['src'] = wp_get_attachment_url( $option['image'] );
-				$updated                = true;
+			if ( ! is_array( $option ) || empty( $option['image'] ) ) {
+				continue;
 			}
+
+			$options[ $key ]['src'] = wp_get_attachment_url( $option['image'] );
+			$updated                = true;
 		}
 
 		if ( $updated ) {
@@ -2034,11 +2101,13 @@ class FrmXMLHelper {
 			)
 		);
 
-		if ( ! $exists ) {
-			// This isn't an email, but we need to use a class that will always be included
-			FrmDb::save_json_post( $new_action );
-			++$imported['imported']['actions'];
+		if ( $exists ) {
+			return;
 		}
+
+		// This isn't an email, but we need to use a class that will always be included
+		FrmDb::save_json_post( $new_action );
+		++$imported['imported']['actions'];
 	}
 
 	/**
@@ -2283,14 +2352,16 @@ class FrmXMLHelper {
 				$atts['email_to'][ $key ] = '[' . $email_field . ']';
 			}
 
-			if ( str_contains( $email_field, '|' ) ) {
-				$email_opt = explode( '|', $email_field );
-
-				if ( isset( $email_opt[0] ) ) {
-					$atts['email_to'][ $key ] = '[' . $email_opt[0] . ' show=' . $email_opt[1] . ']';
-				}
-				unset( $email_opt );
+			if ( ! str_contains( $email_field, '|' ) ) {
+				continue;
 			}
+
+			$email_opt = explode( '|', $email_field );
+
+			if ( isset( $email_opt[0] ) ) {
+				$atts['email_to'][ $key ] = '[' . $email_opt[0] . ' show=' . $email_opt[1] . ']';
+			}
+			unset( $email_opt );
 		}
 
 		$atts['email_to'] = implode( ', ', $atts['email_to'] );

@@ -223,7 +223,7 @@ class FrmEntriesHelper {
 		$field_value = $entry->metas[ $field->id ] ?? false;
 
 		if ( FrmAppHelper::pro_is_installed() ) {
-			$empty = empty( $field_value );
+			$empty = ! $field_value;
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
 
 			if ( $empty && $field_value ) {
@@ -450,13 +450,14 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 4.02.04
+	 * @since 6.29 This is public.
 	 *
 	 * @param int|string $field_id Field ID.
 	 * @param array      $args     Additional arguments.
 	 *
 	 * @return mixed
 	 */
-	private static function get_posted_meta( $field_id, $args ) {
+	public static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
 			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -495,19 +496,20 @@ class FrmEntriesHelper {
 		self::set_other_repeating_vals( $field, $value, $args );
 
 		// Check if there are any posted "Other" values.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-
-			// Save original value.
-			$args['temp_value'] = $value;
-			$args['other']      = true;
-
-			// Sanitizing is done next.
-			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
-
-			// Set the validation value now
-			self::set_other_validation_val( $value, $other_vals, $field, $args );
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
 		}
+
+		// Save original value.
+		$args['temp_value'] = $value;
+		$args['other']      = true;
+
+		// Sanitizing is done next.
+		$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
+
+		// Set the validation value now
+		self::set_other_validation_val( $value, $other_vals, $field, $args );
 	}
 
 	/**
@@ -760,23 +762,23 @@ class FrmEntriesHelper {
 		$page    = FrmAppHelper::get_param( 'frm_action' );
 		$actions = array();
 
+		$actions['frm_edit'] = array(
+			'url'   => '#',
+			'label' => __( 'Edit Entry', 'formidable' ),
+			'class' => 'frm_noallow',
+			'data'  => array(
+				'upgrade' => __( 'Entry edits', 'formidable' ),
+				'medium'  => 'edit-entries',
+				'content' => 'entry',
+			),
+			'icon'  => 'frmfont frm_pencil_icon',
+		);
+
 		if ( $page !== 'show' ) {
 			$actions['frm_view'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'View Entry', 'formidable' ),
 				'icon'  => 'frmfont frm_save_icon',
-			);
-		}
-
-		if ( current_user_can( 'frm_delete_entries' ) ) {
-			$actions['frm_delete'] = array(
-				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
-				'label' => __( 'Delete Entry', 'formidable' ),
-				'icon'  => 'frmfont frm_delete_icon',
-				'data'  => array(
-					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
-					'frmverify-btn' => 'frm-button-red',
-				),
 			);
 		}
 
@@ -788,6 +790,16 @@ class FrmEntriesHelper {
 					'frmprint' => '1',
 				),
 				'icon'  => 'frmfont frm_printer_icon',
+			);
+		}
+
+		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
+			$actions['frm_download_pdf'] = array(
+				'url'   => '#',
+				'label' => __( 'Download as PDF', 'formidable' ),
+				'class' => 'frm_noallow',
+				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
+				'icon'  => 'frmfont frm_download_icon',
 			);
 		}
 
@@ -803,29 +815,31 @@ class FrmEntriesHelper {
 			'icon'  => 'frmfont frm_email_icon',
 		);
 
-		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
-			$actions['frm_download_pdf'] = array(
-				'url'   => '#',
-				'label' => __( 'Download as PDF', 'formidable' ),
-				'class' => 'frm_noallow',
-				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
-				'icon'  => 'frmfont frm_download_icon',
+		if ( current_user_can( 'frm_delete_entries' ) ) {
+			$actions['frm_delete'] = array(
+				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
+				'label' => __( 'Delete Entry', 'formidable' ),
+				'class' => 'frm_delete_entry',
+				'icon'  => 'frmfont frm_delete_icon',
+				'data'  => array(
+					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
+				),
 			);
 		}
 
-		$actions['frm_edit'] = array(
-			'url'   => '#',
-			'label' => __( 'Edit Entry', 'formidable' ),
-			'class' => 'frm_noallow',
-			'data'  => array(
-				'upgrade' => __( 'Entry edits', 'formidable' ),
-				'medium'  => 'edit-entries',
-				'content' => 'entry',
-			),
-			'icon'  => 'frmfont frm_pencil_icon',
-		);
+		$actions = apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
 
-		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
+		if ( ! isset( $actions['frm_delete'] ) ) {
+			return $actions;
+		}
+
+		// Make delete the last link.
+		$delete_action = $actions['frm_delete'];
+		unset( $actions['frm_delete'] );
+		$actions['frm_delete'] = $delete_action;
+
+		return $actions;
 	}
 
 	/**
@@ -892,9 +906,7 @@ class FrmEntriesHelper {
 	 * @return int
 	 */
 	public static function get_entry_status( $status ) {
-		$statuses = self::get_entry_statuses();
-
-		if ( array_key_exists( $status, $statuses ) ) {
+		if ( array_key_exists( $status, self::get_entry_statuses() ) ) {
 			return $status;
 		}
 
@@ -917,8 +929,7 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function get_entry_status_label( $status ) {
-		$statuses = self::get_entry_statuses();
-		return $statuses[ self::get_entry_status( $status ) ];
+		return self::get_entry_statuses()[ self::get_entry_status( $status ) ];
 	}
 
 	/**
@@ -961,9 +972,7 @@ class FrmEntriesHelper {
 	 * @return int
 	 */
 	public static function get_visible_unread_inbox_count() {
-		$menu_name = FrmAppHelper::get_menu_name();
-
-		if ( ! in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+		if ( ! in_array( FrmAppHelper::get_menu_name(), array( 'Formidable', 'Forms' ), true ) ) {
 			return 0;
 		}
 

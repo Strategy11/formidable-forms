@@ -30,7 +30,7 @@ h1 .fa-caret-down {
 
 .frm-btn-group .caret {
 	float: right;
-	margin-top: calc( var(--text-md) / 2 );
+	margin-top: calc(var(--text-md) / 2);
 }
 
 .dropdown {
@@ -51,7 +51,6 @@ h1 .fa-caret-down {
 	left: 0;
 	z-index: 1000;
 	display: none;
-	min-width: 10rem;
 	padding-left: 4px;
 	padding-right: 4px;
 	margin: var(--gap-xs) 0 0;
@@ -93,7 +92,7 @@ h1 .fa-caret-down {
 
 .frm-field-action-icons .frm-dropdown-toggle svg,
 #frm_field_group_controls .frm-dropdown-toggle svg {
-	color: #9EA9B8;
+	color: #9ea9b8;
 }
 
 .multiselect-container.frm-dropdown-menu,
@@ -141,7 +140,9 @@ h1 .fa-caret-down {
 }
 
 .frm-select-list-item.disabled,
-.frm-dropdown-menu > .disabled > a, .frm-dropdown-menu > .disabled > a:hover, .frm-dropdown-menu > .disabled > a:focus {
+.frm-dropdown-menu > .disabled > a,
+.frm-dropdown-menu > .disabled > a:hover,
+.frm-dropdown-menu > .disabled > a:focus {
 	color: #999;
 }
 
@@ -237,7 +238,7 @@ a.frm_option_icon:hover::before {
 
 .frm-dropdown-menu .frm_icon_font {
 	vertical-align: middle;
-	color: #5F6C72;
+	color: #5f6c72;
 	margin-right: 3px;
 }
 

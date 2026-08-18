@@ -34,7 +34,7 @@ export default class frmStyleDependentUpdaterComponent {
 		const list = [];
 		inputNames.forEach( name => {
 			const input = document.querySelector( `input[name="${ name }"]` );
-			if ( null !== input ) {
+			if ( input ) {
 				list.push( input );
 			}
 		} );
@@ -47,9 +47,33 @@ export default class frmStyleDependentUpdaterComponent {
 	 * @param {string} value - The value to update the dependent elements with.
 	 */
 	updateAllDependentElements( value ) {
+		const format = this.detectColorFormat( value );
 		this.data.propagateInputs.forEach( input => {
 			input.value = value;
+			input.dataset.colorFormat = format;
 		} );
 		this.data.propagateInputs[ 0 ].dispatchEvent( this.data.changeEvent );
+	}
+
+	/**
+	 * Detects the color format from a color string.
+	 *
+	 * @param {string} value - The color value to detect the format of.
+	 * @return {string} The detected format: 'rgba', 'rgb', 'hsla', 'hsl', or 'hex'.
+	 */
+	detectColorFormat( value ) {
+		if ( value.startsWith( 'rgba' ) ) {
+			return 'rgba';
+		}
+		if ( value.startsWith( 'rgb' ) ) {
+			return 'rgb';
+		}
+		if ( value.startsWith( 'hsla' ) ) {
+			return 'hsla';
+		}
+		if ( value.startsWith( 'hsl' ) ) {
+			return 'hsl';
+		}
+		return 'hex';
 	}
 }

@@ -405,7 +405,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_query_var
 	 */
 	public function test_get_query_var() {
-		$new_post_id = $this->go_to_new_post();
+		$new_post_id = $this->go_to_new_post(); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 		$get_post_id = FrmAppHelper::get_query_var( '', 'p' );
 		$this->assertSame( $new_post_id, $get_post_id );
 	}
@@ -449,7 +449,23 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( current_user_can( 'frm_view_forms' ), 'Subscriber can frm_view_forms' );
 		$this->assertFalse( current_user_can( 'frm_edit_forms' ), 'Subscriber can frm_edit_forms' );
 
-		$this->set_user_by_role( 'administrator' );
+		$admin_id = $this->set_user_by_role( 'administrator' );
+
+		/**
+		 * Reload the current user so the new capabilities are visible.
+		 *
+		 * Capabilities are granted by set_user_by_role(), which calls
+		 * FrmAppHelper::maybe_add_permissions(), and that writes them through its own WP_User
+		 * instance. The current user object consulted by current_user_can() is not updated, and
+		 * wp_set_current_user() returns early when the ID has not changed, so switch away and
+		 * back to force it to be rebuilt from the database. In production this does not arise:
+		 * the capabilities are written on one request and read on the next. Without this, the
+		 * assertions below only pass when an earlier test class already committed the
+		 * capabilities to this user's meta.
+		 */
+		wp_set_current_user( 0 );
+		wp_set_current_user( $admin_id );
+
 		$frm_roles = FrmAppHelper::frm_capabilities();
 
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
@@ -531,11 +547,11 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$column     = 'field_key';
 		$name       = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
 		$key        = FrmAppHelper::get_unique_key( $name, $table_name, $column );
-		$this->assertTrue( strlen( $key ) < 100, 'field key length should never be over 100' );
+		$this->assertLessThan( 100, strlen( $key ), 'field key length should never be over 100' );
 
 		$name = 'key';
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
-		$this->assertTrue( 'key' !== $key, 'key is a reserved key so get_unique_key should never return it.' );
+		$this->assertNotSame( 'key', $key, 'key is a reserved key so get_unique_key should never return it.' );
 
 		$name = 123;
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
@@ -573,7 +589,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$table_name = 'frm_forms';
 		$column     = 'form_key';
 		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, $table_name, $column );
-		$this->assertTrue( strlen( $unique_key ) <= 70 );
+		$this->assertLessThanOrEqual( 70, strlen( $unique_key ) );
 		$this->assertNotSame( $super_long_form_key, $unique_key );
 	}
 
@@ -757,6 +773,39 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$result = FrmAppHelper::truncate( $assertion['string'], $assertion['length'] );
 			$this->assertSame( $assertion['expected'], $result );
 		}
+	}
+
+	/**
+	 * @covers FrmAppHelper::truncate
+	 */
+	public function test_truncate_with_force_length_limit() {
+		// Test force_length_limit=false (default - can exceed limit slightly)
+		$result = FrmAppHelper::truncate( 'This is a test string that is quite long', 10, 3, '...', false );
+		$this->assertLessThanOrEqual( 20, strlen( $result ), 'Default behavior allows some overage' );
+
+		// Test force_length_limit=true (strict limit)
+		$result = FrmAppHelper::truncate( 'This is a test string that is quite long', 10, 3, '', true );
+		$this->assertSame( 'This is a ', $result );
+		$this->assertLessThanOrEqual( 10, strlen( $result ), 'Force limit should not exceed length' );
+
+		// Test with multibyte characters (Ø)
+		$result = FrmAppHelper::truncate( 'Test with Ø character and more text here', 20, 1, '', true );
+		$this->assertLessThanOrEqual( 20, mb_strlen( $result ), 'Force limit should handle multibyte characters' );
+		$this->assertStringContainsString( 'Ø', $result, 'Multibyte character should be preserved' );
+
+		// Test strict limit for 255 characters (database column limit)
+		$long_string = str_repeat( 'a', 300 );
+		$result      = FrmAppHelper::truncate( $long_string, 255, 1, '', true );
+		$this->assertSame( 255, strlen( $result ), 'Should be exactly 255 characters' );
+
+		// Test with multibyte string at 255 limit
+		$mb_string = str_repeat( 'Ø', 300 );
+		$result    = FrmAppHelper::truncate( $mb_string, 255, 1, '', true );
+		$this->assertLessThanOrEqual( 255, mb_strlen( $result ), 'Multibyte string should not exceed 255 characters' );
+
+		// Test short string with force_length_limit
+		$result = FrmAppHelper::truncate( 'Short', 10, 3, '', true );
+		$this->assertSame( 'Short', $result, 'Short string should not be modified' );
 	}
 
 	/**

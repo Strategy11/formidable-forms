@@ -78,7 +78,7 @@ class FrmEntryShortcodeFormatter {
 		$this->init_form_id( $form_id );
 		$this->init_fields();
 
-		if ( empty( $this->fields ) ) {
+		if ( ! $this->fields ) {
 			return;
 		}
 
@@ -165,7 +165,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return array|string
 	 */
 	public function content() {
-		if ( ! $this->form_id || empty( $this->fields ) ) {
+		if ( ! $this->form_id || ! $this->fields ) {
 			return '';
 		}
 

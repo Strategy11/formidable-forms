@@ -109,7 +109,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function no_items() {
-		esc_html_e( 'No payments found.', 'formidable' );
+		include FrmTransLiteAppHelper::plugin_path() . '/views/lists/no-payments.php';
 	}
 
 	/**
@@ -139,7 +139,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		foreach ( $statuses as $status => $name ) {
 			$class = $status === $type ? ' class="current"' : '';
 
-			if ( $counts[ $status ] || 'published' === $status ) {
+			if ( $counts[ $status ] || 'payments' === $status ) {
 				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
 					// translators: %1$s: Transaction type (Payments or Subscriptions), %2$s: Span start tag, %3$s: Count, %4$s: Span close tag.
@@ -621,13 +621,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_paysys_column( $item, $atts ) {
 		if ( isset( $atts['gateways'][ $item->paysys ] ) ) {
 			return $atts['gateways'][ $item->paysys ]['label'];
-		}
-
-		if ( 'paypal' === $item->paysys ) {
-			// The PayPal add-on does not use a gateway.
-			// This should be safe to remove once we release
-			// PayPal Commerce in Lite.
-			return 'PayPal';
 		}
 
 		return $item->paysys;

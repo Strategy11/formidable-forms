@@ -87,10 +87,12 @@ class FrmEntryMeta {
 	private static function set_value_before_save( &$values ) {
 		$field = FrmField::getOne( $values['field_id'] );
 
-		if ( $field ) {
-			$field_obj            = FrmFieldFactory::get_field_object( $field );
-			$values['meta_value'] = $field_obj->set_value_before_save( $values['meta_value'] );
+		if ( ! $field ) {
+			return;
 		}
+
+		$field_obj            = FrmFieldFactory::get_field_object( $field );
+		$values['meta_value'] = $field_obj->set_value_before_save( $values['meta_value'] );
 	}
 
 	/**
@@ -515,11 +517,9 @@ class FrmEntryMeta {
 			$query[] = 'it.item_id';
 		}
 
-		$from                               = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
-		$should_join_fields_table__where    = self::should_join_fields_table( $where );
-		$should_join_fields_table__order_by = self::should_join_fields_table( $order_by );
+		$from = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
 
-		if ( $should_join_fields_table__where || $should_join_fields_table__order_by ) {
+		if ( self::should_join_fields_table( $where ) || self::should_join_fields_table( $order_by ) ) {
 			$from .= ' LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 		}
 

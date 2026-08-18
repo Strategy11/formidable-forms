@@ -83,9 +83,7 @@ class FrmInboxController {
 	 * @return void
 	 */
 	private static function add_tracking_request() {
-		$settings = FrmAppHelper::get_settings();
-
-		if ( $settings->tracking ) {
+		if ( FrmAppHelper::get_settings()->tracking ) {
 			return;
 		}
 
@@ -110,9 +108,11 @@ class FrmInboxController {
 	 * @return void
 	 */
 	private static function remove_free_template_message() {
-		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$message = new FrmInbox();
-			$message->dismiss( 'free_templates' );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return;
 		}
+
+		$message = new FrmInbox();
+		$message->dismiss( 'free_templates' );
 	}
 }

@@ -11,7 +11,7 @@ const { Notice } = wp.components;
 const { useBlockProps } = wp.blockEditor;
 
 function Edit( { setAttributes, attributes } ) {
-	const forms = formidable_form_selector.forms;
+	const { forms } = formidable_form_selector;
 	const blockProps = useBlockProps();
 
 	if ( forms.length === 0 ) {
@@ -38,7 +38,7 @@ function Edit( { setAttributes, attributes } ) {
 								{ __( 'Upgrade Formidable Forms.', 'formidable' ) }
 							</a>
 						</Notice>
-						<img src={ formidable_form_selector.url + '/images/conversion-calc.jpg' } alt={ __( 'Calculator Form', 'formidable' ) } />
+						<img src={ `${ formidable_form_selector.url }/images/conversion-calc.jpg` } alt={ __( 'Calculator Form', 'formidable' ) } />
 					</div>
 				</div>
 			</div>

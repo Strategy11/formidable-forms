@@ -30,14 +30,14 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		// Check for auto contact form.
 		$form = FrmForm::getOne( 'contact-form' );
-		$this->assertNotEmpty( $form );
+		$this->assertInstanceOf( \stdClass::class, $form );
 		$this->assertSame( 'contact-form', $form->form_key );
 
 		// Make sure the form isn't recreated after delete
 		FrmForm::destroy( 'contact-form' );
 		$frmdb->upgrade();
 		$form = FrmForm::getOne( 'contact-form' );
-		$this->assertEmpty( $form );
+		$this->assertNotInstanceOf( \stdClass::class, $form );
 	}
 
 	/**
@@ -361,7 +361,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$form         = FrmForm::getOne( 'contact-db12-copy' );
 		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'email' );
 
-		$this->assertTrue( ! isset( $form->options['notification'] ), 'The migrated notification settings are not cleared from form.' );
+		$this->assertArrayNotHasKey( 'notification', $form->options, 'The migrated notification settings are not cleared from form.' );
 
 		$this->assertCount( 1, $form_actions, 'Old form settings are not converted to email action.' );
 

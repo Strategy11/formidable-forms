@@ -383,9 +383,8 @@ class FrmSMTPController {
 			return false;
 		}
 
-		$phpmailer          = $this->get_phpmailer();
 		$mailer             = WPMailSMTP\Options::init()->get( 'mail', 'mailer' );
-		$is_mailer_complete = wp_mail_smtp()->get_providers()->get_mailer( $mailer, $phpmailer )->is_mailer_complete();
+		$is_mailer_complete = wp_mail_smtp()->get_providers()->get_mailer( $mailer, $this->get_phpmailer() )->is_mailer_complete();
 
 		return 'mail' !== $mailer && $is_mailer_complete;
 	}

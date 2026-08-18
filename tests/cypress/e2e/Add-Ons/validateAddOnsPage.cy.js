@@ -39,7 +39,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'CRM' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
-				expect( count ).to.be.at.least( 3 );
+				expect( count ).to.be.at.least( 2 );
 			} );
 		} );
 
@@ -154,13 +154,13 @@ describe( 'Add-Ons page', () => {
 			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Formidable Forms Pro' );
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.' );
-			cy.get( 'a[aria-label="View Docs"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/?utm_source=plugin&utm_medium=lite&utm_campaign=addons' )
+			cy.get( 'a[aria-label="Why Upgrade"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/what-is-the-difference-between-the-lite-free-and-pro-version/?utm_source=plugin&utm_medium=lite&utm_campaign=addons' )
 				.and( 'have.attr', 'target', '_blank' )
 				.invoke( 'removeAttr', 'target' ).click();
 		} );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1' ).should( 'have.text', 'Docs & Support' );
+			cy.get( 'h1' ).should( 'contain.text', 'What is the difference between the Lite' );
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-addons' );
@@ -319,18 +319,6 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Are your WooCommerce product forms too basic? Add custom fields to a product form and collect more data when it is added to the cart.' );
 			cy.contains( 'Plan required:' ).within( () => {
 				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=woocommerce' ).and( 'contain.text', 'Elite' );
-			} );
-			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
-				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
-		} );
-
-		cy.log( 'Highrise card' );
-		cy.get( 'li[data-slug="highrise"]' ).within( () => {
-			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Highrise' );
-			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_highrise_icon' );
-			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Capture leads in your WordPress contact forms, and save them in your Highrise CRM account too.' );
-			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=highrise' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );

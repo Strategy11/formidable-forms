@@ -28,7 +28,6 @@ use-tabs = true
 integrations = [ "wordpress", "phpunit" ]
 
 [linter.rules]
-ambiguous-function-call = { enabled = false }
 array-style = { enabled = false }
 braced-string-interpolation = { enabled = false }
 class-name = { enabled = false }
@@ -40,7 +39,6 @@ halstead = { enabled = false } # Consider enabling this soon.
 identity-comparison = { enabled = false }
 kan-defect = { enabled = false }
 literal-named-argument = { enabled = false }
-loop-does-not-iterate = { enabled = false }
 no-assign-in-condition = { enabled = false }
 no-closing-tag = { enabled = false }
 no-else-clause = { enabled = false }
@@ -50,7 +48,6 @@ no-global = { enabled = false }
 no-insecure-comparison = { enabled = false } # Consider enabling this soon.
 no-nested-ternary = { enabled = false }
 no-redundant-math = { enabled = false }
-no-redundant-method-override = { enabled = false } # Fix this first.
 no-request-variable = { enabled = false }
 no-sprintf-concat = { enabled = false }
 prefer-arrow-function = { enabled = false }
@@ -64,6 +61,10 @@ tagged-todo = { enabled = false }
 too-many-methods = { enabled = false }
 too-many-properties = { enabled = false }
 use-compound-assignment = { enabled = false } # Consider enabling this soon.
+no-isset = { enabled = false }
+file-name = { enabled = false }
+readable-literal = { enabled = false }
+single-class-per-file = { enabled = false }
 # PHPUnit Rules
 assertion-style = { enabled = false }
 # WordPress Rules
@@ -72,6 +73,8 @@ no-direct-db-query = { enabled = false }
 no-roles-as-capabilities = { enabled = false }
 no-unescaped-output = { enabled = false }
 use-wp-functions = { enabled = false }
+valid-docblock = { enabled = false }
+loop-does-not-iterate = { enabled = false }
 
 [analyzer]
 plugins = []
@@ -80,20 +83,21 @@ find-unused-expressions = false
 analyze-dead-code = true
 memoize-properties = true
 allow-possibly-undefined-array-keys = true
+trust-existence-checks = false
 check-throws = false
 check-missing-override = false
 find-unused-parameters = false
-strict-list-index-checks = false
-no-boolean-literal-comparison = false
+strict-list-index-checks = true
+no-boolean-literal-comparison = true
 check-missing-type-hints = false
 register-super-globals = true
 ignore = [
-    "ambiguous-instantiation-target",
     "ambiguous-object-method-access",
     "ambiguous-object-property-access",
     "array-to-string-conversion",
     "conflicting-reference-constraint",
     "deprecated-function",
+    "docblock-type-mismatch",
     "falsable-return-statement",
     "false-argument",
     "generic-object-iteration",
@@ -101,12 +105,12 @@ ignore = [
     "impossible-nonnull-entry-check",
     "impossible-type-comparison",
     "incompatible-parameter-name",
-    "incompatible-parameter-type",
     "invalid-argument",
     "invalid-array-access",
     "invalid-array-element-key",
     "invalid-array-index",
     "invalid-destructuring-source",
+    "invalid-docblock",
     "invalid-global",
     "invalid-iterator",
     "invalid-member-selector",
@@ -123,6 +127,7 @@ ignore = [
     "less-specific-nested-argument-type",
     "less-specific-nested-return-statement",
     "less-specific-return-statement",
+    "malformed-docblock-comment",
     "method-access-on-null",
     "mismatched-array-index",
     "missing-return-statement",
@@ -149,9 +154,11 @@ ignore = [
     "nullable-return-statement",
     "possible-method-access-on-null",
     "possibly-false-argument",
+    "possibly-false-array-access",
     "possibly-false-iterator",
     "possibly-false-operand",
     "possibly-invalid-argument",
+    "possibly-invalid-array-access",
     "possibly-invalid-iterator",
     "possibly-invalid-operand",
     "possibly-null-argument",
@@ -184,4 +191,5 @@ ignore = [
     "unsafe-instantiation",
     "unused-method",
     "unused-property",
+    "template-constraint-violation"
 ]

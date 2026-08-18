@@ -6,8 +6,9 @@ button.frm-loading {
 	min-width: 70px;
 	overflow: hidden;
 }
-button.frm-loading:before {
-	content: '';
+
+button.frm-loading::before {
+	content: "";
 	display: inline-block;
 	position: absolute;
 	background: transparent;

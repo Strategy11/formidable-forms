@@ -38,7 +38,7 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 *
 	 * @since 3.04.02
 	 *
-	 * @param object $result The result of the install process.
+	 * @param bool|string|WP_Error $result The result of the install process.
 	 *
 	 * @return void
 	 */
@@ -87,11 +87,11 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 			)
 		);
 
-		if ( wp_doing_ajax() ) {
-			wp_die();
-		} else {
+		if ( ! wp_doing_ajax() ) {
 			die();
 		}
+
+		wp_die();
 	}
 
 	/**

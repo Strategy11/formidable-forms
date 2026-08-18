@@ -80,6 +80,10 @@ class FrmField {
 				'name' => __( 'Payment', 'formidable' ),
 				'icon' => 'frmfont frm_credit_card2_icon',
 			),
+			'address'                      => array(
+				'name' => __( 'Address', 'formidable' ),
+				'icon' => 'frmfont frm_location2_icon',
+			),
 			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
 				'hide' => true,
@@ -88,6 +92,21 @@ class FrmField {
 				'name' => __( 'GDPR', 'formidable' ),
 				'icon' => 'frmfont frm-gdpr-icon',
 				'hide' => FrmFieldGdprHelper::hide_gdpr_field(),
+			),
+			'product'                      => array(
+				'name'    => __( 'Product', 'formidable' ),
+				'icon'    => 'frmfont frm_product2_icon',
+				'section' => 'pricing',
+			),
+			'quantity'                     => array(
+				'name'    => __( 'Quantity', 'formidable' ),
+				'icon'    => 'frmfont frm_quantity_icon',
+				'section' => 'pricing',
+			),
+			'total'                        => array(
+				'name'    => __( 'Total', 'formidable' ),
+				'icon'    => 'frmfont frm_total2_icon',
+				'section' => 'pricing',
 			),
 		);
 
@@ -302,6 +321,14 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'appointment-field-preview.webp',
 				'learn-more'   => 'simply-schedule-appointments-forms',
 			),
+			'virtual'         => array(
+				'name'         => __( 'Virtual', 'formidable' ),
+				'icon'         => 'frmfont frm-virtual-field-icon',
+				'message'      => esc_html__( 'Protect sensitive data by storing field values server-side only, preventing users from viewing or manipulating them in their browser.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				'upsell_image' => $upsell_images_url . 'virtual-field-preview.webp',
+				'learn-more'   => '/virtual',
+				'is_new'       => self::field_is_new( 'virtual' ),
+			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
 				'icon'         => 'frmfont frm_product2_icon',
@@ -347,6 +374,39 @@ class FrmField {
 	}
 
 	/**
+	 * Flag Pro field types that require a newer Pro version with frm_show_update.
+	 *
+	 * @since 6.29
+	 *
+	 * @param array $fields Available Pro field types.
+	 *
+	 * @return array
+	 */
+	public static function show_update_for_pro_fields( $fields ) {
+		if ( FrmAppHelper::pro_is_installed() && ! class_exists( 'FrmProVirtualFieldController', false ) ) {
+			$fields['virtual']['icon'] .= ' frm_show_update';
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Gets field section labels in the form builder.
+	 *
+	 * @since 6.30
+	 *
+	 * @return array
+	 */
+	public static function field_section_labels() {
+		return apply_filters(
+			'frm_available_field_sections',
+			array(
+				'pricing' => __( 'Pricing Fields', 'formidable' ),
+			)
+		);
+	}
+
+	/**
 	 * Consider a field new for 90 days after the release date.
 	 *
 	 * @since 6.8.3
@@ -357,7 +417,7 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			'coupon' => '2026-01-13',
+			'virtual' => '2026-03-10',
 		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
@@ -370,13 +430,29 @@ class FrmField {
 	}
 
 	/**
+	 * Remove field types that are moved from Pro to Lite.
+	 *
+	 * @since 6.30
+	 *
+	 * @param array $pro_fields
+	 *
+	 * @return void
+	 */
+	public static function remove_moved_field_types_from_pro( &$pro_fields ) {
+		unset( $pro_fields['credit_card'] );
+		unset( $pro_fields['product'] );
+		unset( $pro_fields['quantity'] );
+		unset( $pro_fields['total'] );
+		unset( $pro_fields['address'] );
+	}
+
+	/**
 	 * @since 4.0
 	 *
 	 * @return array
 	 */
 	public static function all_field_selection() {
-		$pro_field_selection = self::pro_field_selection();
-		return array_merge( $pro_field_selection, self::field_selection() );
+		return array_merge( self::pro_field_selection(), self::field_selection() );
 	}
 
 	/**
@@ -402,11 +478,17 @@ class FrmField {
 			}
 		}
 
-		$new_values['options']       = self::maybe_filter_options( $values['options'] );
+		// Both option columns are stored serialized, but they do not accept the same shapes.
+		// Choice fields pass options already serialized, as does FrmFieldsHelper::fill_field
+		// when a field is duplicated, and fields with no choices pass an empty string, so a
+		// missing key is the only thing worth defaulting. An is_array check here would throw
+		// every one of those defaults away. field_options is always an array, so anything
+		// else is invalid input, and replacing it stops consumers getting null.
+		$new_values['options']       = self::maybe_filter_options( $values['options'] ?? array() );
 		$new_values['field_order']   = isset( $values['field_order'] ) ? (int) $values['field_order'] : null;
 		$new_values['required']      = isset( $values['required'] ) ? (int) $values['required'] : 0;
 		$new_values['form_id']       = isset( $values['form_id'] ) ? (int) $values['form_id'] : null;
-		$new_values['field_options'] = $values['field_options'];
+		$new_values['field_options'] = isset( $values['field_options'] ) && is_array( $values['field_options'] ) ? $values['field_options'] : array();
 		$new_values['created_at']    = current_time( 'mysql', 1 );
 
 		if ( isset( $values['id'] ) ) {
@@ -451,7 +533,7 @@ class FrmField {
 	 *
 	 * @since 5.0.08
 	 *
-	 * @param array $options
+	 * @param array|string $options Already serialized for choice fields, and an empty string for fields with no choices.
 	 *
 	 * @return array
 	 */
@@ -503,11 +585,7 @@ class FrmField {
 				$safe_atts = array();
 
 				foreach ( $attr as $attr_key => $att ) {
-					if ( ! is_numeric( $attr_key ) ) {
-						// opt=1 without parentheses for example is mapped like 'opt' => 1.
-						$key   = $attr_key;
-						$value = $att;
-					} else {
+					if ( is_numeric( $attr_key ) ) {
 						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
 						$split = explode( '=', $att, 2 );
 
@@ -517,6 +595,10 @@ class FrmField {
 
 						$key   = trim( $split[0] );
 						$value = trim( $split[1], '"' );
+					} else {
+						// opt=1 without parentheses for example is mapped like 'opt' => 1.
+						$key   = $attr_key;
+						$value = $att;
 					}
 
 					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
@@ -690,13 +772,15 @@ class FrmField {
 
 		// Serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
-			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
-				if ( 'field_options' === $opt ) {
-					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
-				}
-
-				$values[ $opt ] = serialize( $values[ $opt ] );
+			if ( ! isset( $values[ $opt ] ) || ! is_array( $values[ $opt ] ) ) {
+				continue;
 			}
+
+			if ( 'field_options' === $opt ) {
+				$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
+			}
+
+			$values[ $opt ] = serialize( $values[ $opt ] );
 		}
 
 		if ( isset( $values['default_value'] ) && is_array( $values['default_value'] ) ) {
@@ -1001,15 +1085,17 @@ class FrmField {
 	 * @return void
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
-		if ( $inc_repeat === 'include' ) {
-			$form_id = $where['fi.form_id'];
-			$where[] = array(
-				'or'                => 1,
-				'fi.form_id'        => $form_id,
-				'fr.parent_form_id' => $form_id,
-			);
-			unset( $where['fi.form_id'] );
+		if ( $inc_repeat !== 'include' ) {
+			return;
 		}
+
+		$form_id = $where['fi.form_id'];
+		$where[] = array(
+			'or'                => 1,
+			'fi.form_id'        => $form_id,
+			'fr.parent_form_id' => $form_id,
+		);
+		unset( $where['fi.form_id'] );
 	}
 
 	/**
@@ -1184,12 +1270,14 @@ class FrmField {
 
 		$field_object = FrmFieldFactory::get_field_type( $results->type );
 
-		if ( $field_object->should_unserialize_value() ) {
-			FrmAppHelper::unserialize_or_decode( $results->default_value );
+		if ( ! $field_object->should_unserialize_value() ) {
+			return;
+		}
 
-			if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
-				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
-			}
+		FrmAppHelper::unserialize_or_decode( $results->default_value );
+
+		if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
+			$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 		}
 	}
 
@@ -1226,15 +1314,19 @@ class FrmField {
 		$name        = $next ? $base_name . $next : $base_name;
 		$next_fields = get_transient( $name );
 
-		if ( $next_fields ) {
-			$fields = array_merge( $fields, $next_fields );
-
-			if ( count( $next_fields ) >= self::$transient_size ) {
-				// If this transient is full, check for another
-				++$next;
-				self::get_next_transient( $fields, $base_name, $next );
-			}
+		if ( ! $next_fields ) {
+			return;
 		}
+
+		$fields = array_merge( $fields, $next_fields );
+
+		if ( count( $next_fields ) < self::$transient_size ) {
+			return;
+		}
+
+		// If this transient is full, check for another
+		++$next;
+		self::get_next_transient( $fields, $base_name, $next );
 	}
 
 	/**
@@ -1346,9 +1438,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_multiple_select( $field ) {
-		$field_type  = self::get_field_type( $field );
-		$is_multiple = self::is_option_true( $field, 'multiple' ) && self::is_field_type( $field, 'select' ) && $field_type !== 'hidden';
-
+		$is_multiple = self::is_option_true( $field, 'multiple' ) && self::is_field_type( $field, 'select' ) && self::get_field_type( $field ) !== 'hidden';
 		return apply_filters( 'frm_is_multiple_select', $is_multiple, $field );
 	}
 

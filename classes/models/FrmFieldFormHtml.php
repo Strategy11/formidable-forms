@@ -269,14 +269,18 @@ class FrmFieldFormHtml {
 			$inner_html[2] = $inner_html[2][0];
 		}
 
-		if ( is_string( $inner_html[2] ) ) {
-			$has_id = str_contains( $inner_html[2], ' id=' );
-
-			if ( ! $has_id ) {
-				$id         = 'frm_' . $id . '_' . $this->html_id;
-				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
-			}
+		if ( ! is_string( $inner_html[2] ) ) {
+			return;
 		}
+
+		$has_id = str_contains( $inner_html[2], ' id=' );
+
+		if ( $has_id ) {
+			return;
+		}
+
+		$id         = 'frm_' . $id . '_' . $this->html_id;
+		$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
 	}
 
 	/**
@@ -288,16 +292,26 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( $error && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
+		if ( ! $error ) {
+			FrmShortcodeHelper::remove_inline_conditions( false, 'error', $error, $this->html );
+			return;
+		}
+
+		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
+		$has_alert_role                     = str_contains( $this->html, 'role="alert"' );
+
+		if ( ! $has_alert_role && $include_alert_role_on_field_errors ) {
 			$error_body = self::get_error_body( $this->html );
 
 			if ( is_string( $error_body ) && ! str_contains( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
 				$this->html     = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $new_error_body . '[/if error]', $this->html );
 			}
+		} elseif ( ! $include_alert_role_on_field_errors && $has_alert_role ) {
+			$this->html = str_replace( 'role="alert"', '', $this->html );
 		}
 
-		FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
+		FrmShortcodeHelper::remove_inline_conditions( true, 'error', $error, $this->html );
 	}
 
 	/**
@@ -357,15 +371,17 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	private function replace_form_shortcodes() {
-		if ( ! empty( $this->form ) ) {
-			$form = (array) $this->form;
-
-			// Replace [form_key].
-			$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
-
-			// Replace [form_name].
-			$this->html = str_replace( '[form_name]', $form['name'], $this->html );
+		if ( ! $this->form ) {
+			return;
 		}
+
+		$form = (array) $this->form;
+
+		// Replace [form_key].
+		$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
+
+		// Replace [form_name].
+		$this->html = str_replace( '[form_name]', $form['name'], $this->html );
 	}
 
 	/**

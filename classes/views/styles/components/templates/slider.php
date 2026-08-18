@@ -208,7 +208,7 @@ if ( $component['has-multiple-values'] ) : ?>
 									</span>
 								</div>
 								<div class="frm-slider-value">
-									<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo empty( $component['unit_measurement'] ) ? esc_attr( $field['value'] ) : (int) $field['value']; ?>" />
+									<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo ! empty( $component['unit_measurement'] ) ? (int) $field['value'] : esc_attr( $field['value'] ); ?>" />
 									<input type="hidden" name="<?php echo esc_attr( $field['name'] ); ?>" value="<?php echo esc_attr( $field['value'] ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" />
 									<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 										<?php foreach ( $component['units'] as $unit ) : ?>
