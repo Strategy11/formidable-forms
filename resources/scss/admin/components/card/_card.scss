@@ -75,3 +75,50 @@
 	color: var(--grey-600) !important;
 	margin-top: 0 !important;
 }
+
+/**
+ * Style card menu
+ *
+ * The ⋮ on a style card had no hover state and an 18x17 target. Matches the action icons on the
+ * builder's field cards so the same control behaves the same way wherever it appears.
+ */
+.frm-style-card .frm-dropdown-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	transition:
+		0.12s background-color ease,
+		0.12s transform ease;
+
+	.frmsvg {
+		width: 16px;
+		height: 16px;
+	}
+
+	&:hover {
+		background-color: var(--surface-hover-compact);
+
+		.frmsvg {
+			color: var(--grey-900);
+		}
+	}
+
+	&:active {
+		background-color: var(--surface-active-compact);
+		transform: scale(0.96);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-style-card .frm-dropdown-toggle {
+		transition: none;
+
+		&:active {
+			transform: none;
+		}
+	}
+}
