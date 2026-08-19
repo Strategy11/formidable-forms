@@ -541,7 +541,9 @@ function frmFrontFormJS() {
 		let fieldID;
 		const url = field.value;
 
-		if ( url !== '' && ! /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i.test( url ) ) {
+		// Keep in sync with FrmFieldUrl::validate(), but the ranges differ by design: JS matches UTF-16
+		// code units, so this needs \u0080-\uFFFF where the PHP side matches raw UTF-8 bytes instead.
+		if ( url !== '' && ! /^http(s)?:\/\/(?:localhost|(?:[\da-z\u0080-\uFFFF\.-]+\.[\da-z\u0080-\uFFFF\.-]+))/i.test( url ) ) {
 			fieldID = getFieldId( field, true );
 			if ( ! ( fieldID in errors ) ) {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );

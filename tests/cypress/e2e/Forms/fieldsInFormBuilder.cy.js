@@ -251,6 +251,48 @@ describe( 'Fields in the form builder', () => {
 		cy.go( 'back' );
 	} );
 
+	it( 'should accept an internationalized domain name in a Website/URL field', () => {
+		cy.openForm();
+
+		cy.log( 'Create a text field and a Website/URL field' );
+		cy.get( `li[id="text"] a[title="Text"]` ).click( { force: true } );
+		cy.get( `li[id="url"] a[title="Website/URL"]` ).click( { force: true } );
+
+		cy.log( 'Update form' );
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
+
+		cy.log( "Enabling the 'Validate this form with javascript' setting" );
+		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
+		cy.get( '#js_validate' ).click( { force: true } );
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
+
+		cy.log( 'Click on Preview - Blank Page' );
+		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
+		cy.get( '.preview > .frm-dropdown-menu > :nth-child(1) > a' ).should( 'contain', 'On Blank Page' ).invoke( 'removeAttr', 'target' ).click();
+
+		/**
+		 * A host with no dot must still be rejected. This proves the javascript validator really is
+		 * running on this field, so the assertion further down cannot pass for the wrong reason.
+		 */
+		cy.log( 'A host with no dot is still rejected' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 1 ).type( 'münchen' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 0 ).click();
+		cy.get( `[id^="frm_error_field_"]` ).should( 'exist' );
+
+		/**
+		 * An accented host must be accepted. The regex runs out of the committed js/formidable.min.js,
+		 * which is rebuilt into js/frm.min.js when the plugin is activated, so a stale minified
+		 * artifact fails right here.
+		 */
+		cy.log( 'An internationalized domain name is accepted' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 1 ).clear().type( 'https://ernährung.ch' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 0 ).click();
+		cy.get( `[id^="frm_error_field_"]` ).should( 'not.exist' );
+
+		cy.log( 'Navigate back to the formidable form page' );
+		cy.go( 'back' );
+	} );
+
 	afterEach( () => {
 		cy.log( 'Teardown - Save the form and delete it' );
 		cy.get( "a[aria-label='Close']", { timeout: 10000 } ).click( { force: true } );
