@@ -184,9 +184,16 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		// Add a timeout so Pro has a chance to add a filter first.
-		// 0 does not always work in Google Chrome, so use 1.
-		setTimeout( addHamburgerMenusToCards, 1 );
+		// Pro adds its options to these menus with a filter registered from a separate
+		// script file. DOMContentLoaded is the first point at which every enqueued
+		// script has run, so it guarantees the filter is in place. A timeout cannot:
+		// when Pro loses the race the menus are built without Duplicate, Set as
+		// Default and Delete, and a disabled Duplicate upsell is added instead.
+		if ( 'complete' === document.readyState ) {
+			addHamburgerMenusToCards();
+		} else {
+			document.addEventListener( 'DOMContentLoaded', addHamburgerMenusToCards );
+		}
 		initDatepickerSample();
 
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
