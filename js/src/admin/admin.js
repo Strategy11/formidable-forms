@@ -255,6 +255,7 @@ window.frmAdminBuildJS = function() {
 	let fieldsUpdated = 0;
 	let thisFormId = 0;
 	let autoId = 0;
+	let nextFieldOrder = 0;
 	const optionMap = {};
 	let lastNewActionIdReturned = 0;
 
@@ -1860,6 +1861,7 @@ window.frmAdminBuildJS = function() {
 	 * Get the arguments for inserting a new field.
 	 *
 	 * @since 6.23
+	 * @since x.x A field_order is reserved for the new field.
 	 *
 	 * @param {string} fieldType The type of field to insert.
 	 * @param {string} sectionId The section ID to insert into.
@@ -1883,6 +1885,8 @@ window.frmAdminBuildJS = function() {
 		if ( ! isInRepeater ) {
 			fieldArgs.last_row_field_ids = getFieldIdsInSubmitRow();
 		}
+
+		fieldArgs.field_order = reserveFieldOrder( isInRepeater ? 0 : fieldArgs.last_row_field_ids.length );
 
 		return fieldArgs;
 	}
@@ -1940,6 +1944,7 @@ window.frmAdminBuildJS = function() {
 			url: ajaxurl,
 			data: getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ),
 			success( msg ) {
+				syncFieldOrderWithResponse( msg );
 				handleInsertFieldByDraggingResponse( msg, $placeholder );
 
 				const fieldId = checkMsgForFieldId( msg );
@@ -2062,6 +2067,76 @@ window.frmAdminBuildJS = function() {
 	 */
 	function getAutoId() {
 		return ++autoId;
+	}
+
+	/**
+	 * Reserve a unique field_order for a field that is about to be created.
+	 *
+	 * The server cannot allocate this on its own. It reads the current highest
+	 * field_order and inserts the row in two separate queries, so requests that
+	 * overlap, which is what happens when fields are dragged in faster than the
+	 * requests come back, all read the same value and end up sharing an order.
+	 * Fields are then sorted on an ambiguous field_order and swap places between
+	 * page loads. JavaScript is single threaded, so a counter here can never hand
+	 * out the same value twice.
+	 *
+	 * @since x.x
+	 *
+	 * @param {number} lastRowFieldCount How many fields in the submit row the server
+	 *                                   will push after the new one.
+	 * @return {number} The reserved field order, or 0 to let the server pick one.
+	 */
+	function reserveFieldOrder( lastRowFieldCount ) {
+		if ( ! nextFieldOrder ) {
+			// There is nothing to count up from yet, so let the server allocate the
+			// order the way it always has rather than risk handing out one that is
+			// already taken. The first response seeds the counter for the rest.
+			return 0;
+		}
+
+		const reserved = ++nextFieldOrder;
+
+		// The submit row is moved to the orders directly after the new field, so
+		// step over those as well to leave the next reservation somewhere free.
+		nextFieldOrder += lastRowFieldCount;
+
+		return reserved;
+	}
+
+	/**
+	 * Catch the counter up to the orders the server actually used.
+	 *
+	 * One insert can move or create more than one field. A section also gets an end
+	 * divider, a summary field can add a page break, and the submit row is pushed
+	 * along behind them. Those orders are all picked server side, where they are
+	 * still read from the database, so they can land above the counter. The response
+	 * reports every one of them, which makes it the authority on what was used.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} html The field HTML returned by the insert request.
+	 * @return {void}
+	 */
+	function syncFieldOrderWithResponse( html ) {
+		const wrapper = div();
+		wrapper.innerHTML = html;
+
+		const orders = [];
+
+		wrapper.querySelectorAll( 'input[name^="field_options[field_order_"]' ).forEach(
+			input => orders.push( parseInt( input.value, 10 ) )
+		);
+
+		const lastRowOrderInput = wrapper.querySelector( '#frm-last-row-fields-order' );
+		if ( lastRowOrderInput ) {
+			Object.values( JSON.parse( lastRowOrderInput.value ) ).forEach(
+				order => orders.push( parseInt( order, 10 ) )
+			);
+		}
+
+		if ( orders.length ) {
+			nextFieldOrder = Math.max( nextFieldOrder, ...orders );
+		}
 	}
 
 	/**
@@ -2509,6 +2584,7 @@ window.frmAdminBuildJS = function() {
 				url: ajaxurl,
 				data: Object.assign( getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ), { field_options: fieldOptions } ),
 				success( msg ) {
+					syncFieldOrderWithResponse( msg );
 					resolve( msg );
 
 					setTimeout( () => {
@@ -11046,6 +11122,7 @@ window.frmAdminBuildJS = function() {
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 			postBodyContent = document.getElementById( 'post-body-content' );
 			$postBodyContent = jQuery( postBodyContent );
+			nextFieldOrder = parseInt( $newFields[ 0 ].dataset.nextFieldOrder, 10 ) || 0;
 
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );

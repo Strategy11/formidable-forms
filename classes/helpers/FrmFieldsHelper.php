@@ -13,12 +13,16 @@ class FrmFieldsHelper {
 	private static $context_is_safe_to_load_field_options_from_request_data;
 
 	/**
+	 * @since x.x The $field_order parameter was added.
+	 *
 	 * @param string     $type
 	 * @param int|string $form_id
+	 * @param int        $field_order The field order reserved by the form builder.
+	 *                                Pass 0 to allocate one from the database instead.
 	 *
 	 * @return array
 	 */
-	public static function setup_new_vars( $type = '', $form_id = '' ) {
+	public static function setup_new_vars( $type = '', $form_id = '', $field_order = 0 ) {
 		if ( str_contains( $type, '|' ) ) {
 			list( $type, $setting ) = explode( '|', $type );
 		}
@@ -33,9 +37,24 @@ class FrmFieldsHelper {
 			array( 'order_by' => 'field_order DESC' )
 		);
 
+		$field_count = (int) $field_count;
+
+		/*
+		 * A reserved order is used exactly as it was given. The form builder reserves
+		 * one for every field it adds, because the count above is read in a query of
+		 * its own, so requests that overlap, which is what happens when fields are
+		 * dragged in faster than the requests come back, all read the same count and
+		 * would share an order. Fields sorted on an ambiguous field_order then swap
+		 * places between page loads. Reservations are already unique, so falling back
+		 * to the count for the ones that arrive out of order would only put two of
+		 * them back on the same value. Nothing is reserved when other code creates a
+		 * field, which is what the fallback is for.
+		 */
+		$field_order = $field_order > 0 ? $field_order : $field_count + 1;
+
 		$values['field_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
 		$values['form_id']     = $form_id;
-		$values['field_order'] = $field_count + 1;
+		$values['field_order'] = $field_order;
 
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
@@ -47,10 +66,42 @@ class FrmFieldsHelper {
 			}
 		}
 
-		// Increase the field order of submit field and fields in the same row.
-		FrmSubmitHelper::update_last_row_fields_order_when_adding_field( $field_count );
+		/*
+		 * Increase the field order of submit field and fields in the same row. The
+		 * highest order wins so that the submit row stays after every field, even
+		 * when this request reserved an order below one that is still in flight.
+		 */
+		FrmSubmitHelper::update_last_row_fields_order_when_adding_field( max( $field_order, $field_count ) );
 
 		return $values;
+	}
+
+	/**
+	 * Get the field order the form builder should count up from.
+	 *
+	 * The builder reserves an order for every field it adds so that overlapping
+	 * insert requests cannot share one. This is the value it starts from. Child
+	 * forms are included because a single counter covers every form the builder
+	 * can add a field to, and that includes the child form behind a repeater.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $form_id The ID of the form being edited.
+	 *
+	 * @return int
+	 */
+	public static function get_next_field_order( $form_id ) {
+		$form_ids   = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ), 'id' );
+		$form_ids[] = $form_id;
+
+		$highest_order = FrmDb::get_var(
+			'frm_fields',
+			array( 'form_id' => $form_ids ),
+			'field_order',
+			array( 'order_by' => 'field_order DESC' )
+		);
+
+		return (int) $highest_order;
 	}
 
 	/**
