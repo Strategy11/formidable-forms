@@ -100,9 +100,6 @@ h1 .fa-caret-down {
 	min-width: 200px !important;
 }
 
-.preview .frm-dropdown-menu {
-	min-width: 230px !important;
-}
 
 .frm-dropdown-menu.dropdown-menu-right {
 	right: 0;
@@ -263,6 +260,13 @@ a.frm_option_icon:hover::before {
 	border-radius: 14px;
 	padding: 6px;
 
+	/*
+	 * width: auto would size this against the space available beside it, which
+	 * clamps the panel near a container edge and lets overflow-x: hidden crop
+	 * the longest label. max-content sizes against the rows instead.
+	 */
+	width: max-content;
+
 	> .dropdown-item + .dropdown-item {
 		margin-top: 2px;
 	}
@@ -294,6 +298,9 @@ a.frm_option_icon:hover::before {
 		.frmsvg {
 			width: 16px;
 			height: 16px;
+
+			/* Without this the icon is what collapses when the row runs out of room. */
+			flex-shrink: 0;
 
 			/* Replaces an opacity fade. --grey-500 is described as roughly 65% opacity. */
 			opacity: 1;
