@@ -166,6 +166,8 @@ class FrmForm {
 	 * Switches field ID in fields.
 	 *
 	 * @since 5.3
+	 * @since x.x The description column is checked too, so a field id in a description survives a
+	 *            duplicate or import when the field it points at is created afterwards.
 	 *
 	 * @param int $form_id Form ID.
 	 *
@@ -175,7 +177,7 @@ class FrmForm {
 		global $wpdb;
 
 		// Keys of fields that you want to check to replace field ID.
-		$keys     = array( 'default_value', 'field_options' );
+		$keys     = array( 'default_value', 'description', 'field_options' );
 		$sql_cols = 'fi.id';
 
 		foreach ( $keys as $key ) {
