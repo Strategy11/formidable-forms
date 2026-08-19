@@ -107,6 +107,22 @@ h1 .fa-caret-down {
 .frm-dropdown-menu.dropdown-menu-right {
 	right: 0;
 	left: auto;
+
+	/*
+	 * Bootstrap 5 reads this custom property rather than the class name when it
+	 * asks Popper for a placement, and it ships that declaration in a stylesheet
+	 * this plugin does not use. Without it these menus open bottom-start, to the
+	 * left of their trigger.
+	 */
+	--bs-position: end;
+}
+
+/* Set by style.js when a statically positioned menu would run past its scroll panel. */
+.frm-dropdown-menu.frm-dropdown-menu-above {
+	top: auto;
+	bottom: 100%;
+	margin-top: 0;
+	margin-bottom: var(--gap-xs);
 }
 
 .frm-dropdown-menu .divider {
