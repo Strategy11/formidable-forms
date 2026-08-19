@@ -192,8 +192,7 @@
 			/**
 			 * The glyph was --grey-500 in every state, so the icon under the cursor was the one
 			 * element giving no feedback and the chip alone had to carry it.
-			 */
-			/**
+			 *
 			 * !important only because the resting colour carries one:
 			 * _icon-font.scss:119 sets .frm-field-action-icons > a .frmsvg to --grey-500 !important,
 			 * which no amount of specificity can outrank.
