@@ -85,6 +85,15 @@ class FrmFieldFactory {
 	 * @return string
 	 */
 	private static function get_field_type_class( $field_type ) {
+		// Rendering one form calls this three times per field, so build the map once per request.
+		// The frm_get_field_type_class filter still runs on every call, since add-ons can register
+		// it after the first lookup has already happened.
+		static $type_classes = null;
+
+		if ( null !== $type_classes ) {
+			return apply_filters( 'frm_get_field_type_class', $type_classes[ $field_type ] ?? '', $field_type );
+		}
+
 		$type_classes = array(
 			'text'                         => 'FrmFieldText',
 			'textarea'                     => 'FrmFieldTextarea',
@@ -105,7 +114,8 @@ class FrmFieldFactory {
 			'address'                      => 'FrmFieldAddress',
 			// Submit button field.
 			FrmSubmitHelper::FIELD_TYPE    => 'FrmFieldSubmit',
-			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
+			// get_gdpr_field_class only returns a class for the GDPR type, which is this entry's key.
+			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( FrmFieldGdprHelper::FIELD_TYPE ),
 			'product'                      => 'FrmFieldProduct',
 			'quantity'                     => 'FrmFieldQuantity',
 			'total'                        => 'FrmFieldTotal',

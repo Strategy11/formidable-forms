@@ -292,6 +292,7 @@ class FrmMigrate {
 	 * @since 6.6
 	 * @since 6.16.3 idx_form_id_is_draft was also added to frm_items.
 	 * @since 6.17 idx_form_id_type was also added to frm_fields.
+	 * @since 6.35 idx_form_id_is_draft_created_at was added to frm_items, and idx_parent_form_id to frm_forms.
 	 *
 	 * @return void
 	 */
@@ -324,6 +325,29 @@ class FrmMigrate {
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
 			$wpdb->query( "CREATE INDEX idx_form_id_type ON `{$wpdb->prefix}frm_fields` (form_id, type(30))" );
+		}
+
+		/**
+		 * Entry lists and Views filter on form_id plus is_draft and then sort by created_at.
+		 * Without created_at in the index the database sorts the whole matching set, so on a
+		 * form with tens of thousands of entries the first page reads thousands of rows.
+		 */
+		$table_name = "{$wpdb->prefix}frm_items";
+		$index_name = 'idx_form_id_is_draft_created_at';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_form_id_is_draft_created_at ON `{$wpdb->prefix}frm_items` (form_id, is_draft, created_at)" );
+		}
+
+		/**
+		 * Repeaters and embedded forms look their child forms up by parent_form_id, which had
+		 * no index at all, so every lookup was a full scan of frm_forms.
+		 */
+		$table_name = "{$wpdb->prefix}frm_forms";
+		$index_name = 'idx_parent_form_id';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_parent_form_id ON `{$wpdb->prefix}frm_forms` (parent_form_id)" );
 		}
 	}
 
