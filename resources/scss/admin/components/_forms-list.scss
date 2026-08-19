@@ -14,7 +14,7 @@
 	            transform 120ms ease-out;
 
 	&:hover,
-	&:focus {
+	&:focus-visible {
 		background-color: var(--surface-hover-compact);
 
 		/* !important because the resting rule this replaces carried one. */
@@ -45,7 +45,10 @@
 	width: 225px;
 	background-color: #fff;
 	border: 1px solid var(--grey-100);
-	border-radius: var(--small-radius);
+
+	/* Matches the action dropdown panels: 10px around 6px rows inset by 6px. */
+	border-radius: 10px;
+	padding: 6px;
 	box-shadow: var(--box-shadow-lg);
 
 	// Default positioning (below button)
@@ -137,14 +140,16 @@
 		font-weight: 600;
 		color: var(--grey-900);
 		cursor: pointer;
-		border-radius: var(--small-radius);
+		border-radius: 6px;
 		transition: background-color 120ms ease-out,
 		            color 120ms ease-out;
 
 		&:hover,
-		&:focus {
-			background-color: var(--primary-25);
-			color: var(--primary-500) !important;
+		&:focus-visible {
+			background-color: var(--surface-hover-compact);
+
+			/* !important because the resting colour is outranked here too. */
+			color: var(--grey-900) !important;
 			transition: background-color 80ms ease-out,
 			            color 80ms ease-out;
 		}
@@ -184,13 +189,13 @@
 		display: block;
 		padding: 6px 10px 6px calc(10px + var(--gap-2xs));
 		cursor: pointer;
-		border-radius: var(--small-radius);
+		border-radius: 6px;
 		transition: background-color 120ms ease-out,
 		            color 120ms ease-out;
 
 		&:hover {
-			background-color: var(--primary-25);
-			color: var(--primary-500);
+			background-color: var(--surface-hover-compact);
+			color: var(--grey-900);
 			transition: background-color 80ms ease-out,
 			            color 80ms ease-out;
 		}
@@ -223,7 +228,7 @@
 	}
 
 	&:hover,
-	&:focus {
+	&:focus-visible {
 		background-color: var(--primary-50);
 		transition: background-color 80ms ease-out,
 		            color 80ms ease-out;
