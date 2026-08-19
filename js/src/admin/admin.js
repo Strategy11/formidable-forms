@@ -3369,19 +3369,74 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
-			const anchor = document.createElement( 'a' );
-			anchor.setAttribute( 'href', '#' );
-			anchor.setAttribute( 'data-code', fields[ i ].fieldId );
-			anchor.classList.add( 'frm_insert_code' );
-			anchor.append( span( fields[ i ].fieldName ) );
-			anchor.append( span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ fields[ i ].fieldId }]` } ) );
+			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
 
-			const li = document.createElement( 'li' );
-			li.classList.add( `frm-field-list-${ fieldId }` );
-			li.classList.add( `frm-field-list-${ fields[ i ].fieldType }` );
-			li.append( anchor );
-			list.append( li );
+			if ( ! isSummary ) {
+				// The summary field list is a list of fields to exclude, not a list of shortcodes, so field parts don't belong in it.
+				addFieldPartShortcodes( fields[ i ], fieldId, list );
+			}
 		}
+	}
+
+	/**
+	 * Lets the plugin that owns the calculation type add shortcodes for the individual
+	 * parts of a multi-part field, like [25 show=last] for a Name field.
+	 *
+	 * Nothing in Lite renders a calculation box, so Lite offers the extension point and
+	 * leaves the parts themselves to whichever plugin owns the calculation.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
+	 * @param {string}      fieldId ID of the field the popup was opened for.
+	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
+	 *
+	 * @return {void}
+	 */
+	function addFieldPartShortcodes( field, fieldId, list ) {
+		/**
+		 * Allows add-ons to add field part shortcodes to calculation popup.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object}      hookArgs                      Arguments passed to the hook.
+		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
+		 * @param {string}      hookArgs.fieldId              ID of the field triggering the popup.
+		 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
+		 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
+		 */
+		wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field, fieldId, list, addCalcFieldLiToList } );
+	}
+
+	/**
+	 * Adds a row to a calculation box's field shortcode list.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} list      The 'ul' element that contains field shortcodes available for calculation.
+	 * @param {string}      fieldId   ID of the field the popup was opened for.
+	 * @param {string}      code      The shortcode to insert, without the brackets.
+	 * @param {string}      label     The name shown for the row.
+	 * @param {string}      fieldType Type of the field the shortcode belongs to.
+	 *
+	 * @return {void}
+	 */
+	function addCalcFieldLiToList( list, fieldId, code, label, fieldType ) {
+		const anchor = a( {
+			className: 'frm_insert_code',
+			children: [
+				span( label ),
+				span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ code }]` } )
+			],
+			data: { code }
+		} );
+
+		list.append(
+			tag( 'li', {
+				className: `frm-field-list-${ fieldId } frm-field-list-${ fieldType }`,
+				child: anchor
+			} )
+		);
 	}
 
 	/**
