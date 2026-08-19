@@ -255,8 +255,8 @@ describe( 'Fields in the form builder', () => {
 		cy.openForm();
 
 		cy.log( 'Create a text field and a Website/URL field' );
-		cy.get( `li[id="text"] a[title="Text"]` ).click( { force: true } );
-		cy.get( `li[id="url"] a[title="Website/URL"]` ).click( { force: true } );
+		cy.get( 'li[id="text"] a[title="Text"]' ).click( { force: true } );
+		cy.get( 'li[id="url"] a[title="Website/URL"]' ).click( { force: true } );
 
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
@@ -277,7 +277,7 @@ describe( 'Fields in the form builder', () => {
 		cy.log( 'A host with no dot is still rejected' );
 		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 1 ).type( 'münchen' );
 		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 0 ).click();
-		cy.get( `[id^="frm_error_field_"]` ).should( 'exist' );
+		cy.get( '[id^="frm_error_field_"]' ).should( 'exist' );
 
 		/**
 		 * An accented host must be accepted. The regex runs out of the committed js/formidable.min.js,
@@ -287,7 +287,7 @@ describe( 'Fields in the form builder', () => {
 		cy.log( 'An internationalized domain name is accepted' );
 		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 1 ).clear().type( 'https://ernährung.ch' );
 		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 0 ).click();
-		cy.get( `[id^="frm_error_field_"]` ).should( 'not.exist' );
+		cy.get( '[id^="frm_error_field_"]' ).should( 'not.exist' );
 
 		cy.log( 'Navigate back to the formidable form page' );
 		cy.go( 'back' );

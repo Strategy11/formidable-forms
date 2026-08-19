@@ -289,15 +289,15 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			$contents = file_get_contents( $file );
 			$name     = basename( $file );
 
-			$this->assertStringContainsString( '\u0080-\uFFFF', $contents, 'The JS host pattern is missing the code unit range in ' . $name );
-			$this->assertStringNotContainsString( '\x80-\xff', $contents, 'The PHP byte range was copied into ' . $name . '. JS matches UTF-16 code units, so that would reject the Cyrillic and CJK hosts the server accepts.' );
+			$this->assertStringContainsString( '\u0080-\u{10FFFF}', $contents, 'The JS host pattern is missing the code unit range in ' . $name );
+			$this->assertStringNotContainsString( '\x80-\xff', $contents, 'The PHP byte range was copied into ' . $name . '; that rejects Cyrillic and CJK hosts.' );
 			$this->assertStringNotContainsString( '[\da-z\.-]', $contents, 'The old ASCII-only host class is still present in ' . $name );
 		}
 
 		// The host class in the source must appear verbatim in the minified artifact.
 		$matched = preg_match( '/\[\\\\da-z[^\]]*\]/', file_get_contents( $source ), $matches );
 		$this->assertSame( 1, $matched, 'Could not find the url host class in js/formidable.js' );
-		$this->assertStringContainsString( $matches[0], file_get_contents( $minified ), 'js/formidable.min.js is stale. Rebuild it so it carries the same url host class as js/formidable.js.' );
+		$this->assertStringContainsString( $matches[0], file_get_contents( $minified ), 'js/formidable.min.js is stale. Rebuild it.' );
 	}
 
 	/**
