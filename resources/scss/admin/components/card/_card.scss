@@ -79,10 +79,14 @@
 /**
  * Style card menu
  *
- * The ⋮ on a style card had no hover state and an 18x17 target. Matches the action icons on the
+ * The ⋮ had no hover state and an 18x17 target. Matches the action icons on the
  * builder's field cards so the same control behaves the same way wherever it appears.
+ *
+ * Covers both style options triggers: getHamburgerMenu() in style.js builds this
+ * wrapper for the card menus and for the one beside the style name on the edit
+ * page, and .dropdown.frm_wrap is created nowhere else.
  */
-.frm-style-card .frm-dropdown-toggle {
+.dropdown.frm_wrap .frm-dropdown-toggle {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -112,9 +116,41 @@
 	}
 }
 
+/*
+ * Style cards paint in the style's own colours, so an opaque grey chip reads as a
+ * white square on a dark card. A translucent wash darkens or lightens whatever is
+ * behind it instead of assuming a light surface.
+ */
+.frm-style-card .dropdown.frm_wrap .frm-dropdown-toggle {
+
+	&:hover {
+		background-color: rgba(16, 24, 40, 0.08);
+	}
+
+	&:active {
+		background-color: rgba(16, 24, 40, 0.14);
+	}
+}
+
+.frm-style-card.frm-dark-style .dropdown.frm_wrap .frm-dropdown-toggle {
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.16);
+
+		/* The glyph is already white on these cards, so it must not darken. */
+		.frmsvg {
+			color: #fff;
+		}
+	}
+
+	&:active {
+		background-color: rgba(255, 255, 255, 0.24);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 
-	.frm-style-card .frm-dropdown-toggle {
+	.dropdown.frm_wrap .frm-dropdown-toggle {
 		transition: none;
 
 		&:active {
