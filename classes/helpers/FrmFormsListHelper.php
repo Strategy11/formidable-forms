@@ -6,15 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsListHelper extends FrmListHelper {
 
 	/**
-	 * The transient name that stores data for which posts a form is embedded in.
-	 *
-	 * @since 6.32
-	 *
-	 * @var string
-	 */
-	private static $embed_posts_transient_name = 'frm_posts_contain_form';
-
-	/**
 	 * @var string
 	 */
 	public $status = '';
@@ -612,7 +603,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return array
 	 */
 	private function get_posts_contain_form( $form ) {
-		$cached_posts = get_transient( self::$embed_posts_transient_name );
+		$cached_posts = get_transient( FrmFormsHelper::EMBED_POSTS_TRANSIENT );
 
 		if ( isset( $cached_posts[ $form->id ] ) && is_array( $cached_posts[ $form->id ] ) ) {
 			return $cached_posts[ $form->id ];
@@ -653,7 +644,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$cached_posts[ $form->id ] = $posts;
-		set_transient( self::$embed_posts_transient_name, $cached_posts, DAY_IN_SECONDS );
+		set_transient( FrmFormsHelper::EMBED_POSTS_TRANSIENT, $cached_posts, DAY_IN_SECONDS );
 
 		return $posts;
 	}
@@ -734,9 +725,9 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * Maybe clear the embed posts transient.
+	 * @deprecated 6.35 Moved to FrmFormsHelper so a front end post insert does not have to load this admin list table.
 	 *
-	 * @since 6.32
+	 * @codeCoverageIgnore
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
@@ -744,27 +735,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public static function maybe_clear_embed_posts_transient( $post_id, $post ) {
-		if ( str_contains( $post->post_content, '[formidable ' ) || str_contains( $post->post_content, '<!-- wp:formidable/simple-form ' ) ) {
-			// New post contains the form shortcode, so clear the embed posts transient.
-			delete_transient( self::$embed_posts_transient_name );
-			return;
-		}
-
-		$cached_posts = get_transient( self::$embed_posts_transient_name );
-
-		if ( ! is_array( $cached_posts ) ) {
-			return;
-		}
-
-		// If the new post data of a cached post doesn't contain the Formidable forms, clear the transient.
-		foreach ( $cached_posts as $posts ) {
-			foreach ( $posts as $post_data ) {
-				if ( intval( $post_data->ID ) === intval( $post_id ) ) {
-					// This post contains the form shortcode before updating, so clear the embed posts transient.
-					delete_transient( self::$embed_posts_transient_name );
-					return;
-				}
-			}
-		}
+		_deprecated_function( __METHOD__, '6.35', 'FrmFormsHelper::maybe_clear_embed_posts_transient' );
+		FrmFormsHelper::maybe_clear_embed_posts_transient( $post_id, $post );
 	}
 }
