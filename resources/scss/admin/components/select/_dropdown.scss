@@ -261,8 +261,7 @@ a.frm_option_icon:hover::before {
 
 	/* Concentric with the 8px items plus the menu's own 4px padding. */
 	border-radius: 12px;
-	padding-left: 8px;
-	padding-right: 8px;
+	padding: 4px;
 
 	> .dropdown-item + .dropdown-item {
 		margin-top: 2px;
@@ -270,7 +269,12 @@ a.frm_option_icon:hover::before {
 
 	> .dropdown-item > a {
 
-		padding: 6px 12px;
+		/*
+		 * 8px horizontal matches the optical gap above and below the label.
+		 * The 24px line-height on 16px text leaves ~4.4px of half-leading, so
+		 * equal padding values would not read as equal space.
+		 */
+		padding: 4px 8px;
 		transition:
 			0.12s background-color ease,
 			0.12s color ease;
