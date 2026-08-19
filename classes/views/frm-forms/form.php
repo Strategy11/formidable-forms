@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 
-	<ul id="frm-show-fields" class="frm_sorting inside">
+	<ul id="frm-show-fields" class="frm_sorting inside" data-next-field-order="<?php echo esc_attr( FrmFieldsHelper::get_next_field_order( $form->id ) ); ?>">
 		<?php
 		if ( ! empty( $values['fields'] ) ) {
 			$grid_helper     = new FrmFieldGridHelper();
