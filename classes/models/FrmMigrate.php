@@ -343,11 +343,6 @@ class FrmMigrate {
 			$wpdb->query( "CREATE INDEX idx_form_id_created_at ON `{$wpdb->prefix}frm_items` (form_id, created_at)" );
 		}
 
-		// Superseded by idx_form_id_created_at above, which the entry list can actually use.
-		if ( self::index_exists( $table_name, 'idx_form_id_is_draft_created_at' ) ) {
-			$wpdb->query( "DROP INDEX idx_form_id_is_draft_created_at ON `{$wpdb->prefix}frm_items`" );
-		}
-
 		/**
 		 * Repeaters and embedded forms look their child forms up by parent_form_id, which had
 		 * no index at all, so every lookup was a full scan of frm_forms.
