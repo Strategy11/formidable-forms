@@ -259,15 +259,22 @@ a.frm_option_icon:hover::before {
 .frm-dropdown-menu.frm-style-options-menu,
 .preview.dropdown .frm-dropdown-menu {
 
-	/* Concentric with the 8px items plus the menu's own 4px padding. */
-	border-radius: 12px;
-	padding: 4px;
+	/* Concentric with the 8px items plus the menu's own 6px padding. */
+	border-radius: 14px;
+	padding: 6px;
 
 	> .dropdown-item + .dropdown-item {
 		margin-top: 2px;
 	}
 
-	> .dropdown-item > a {
+	/*
+	 * The shared rule in _code-list.scss carries :link and :visited to override
+	 * jQuery UI, which lifts its specificity to match this block. That file is
+	 * imported later, so those pseudo-classes are repeated here to win the tie.
+	 */
+	> .dropdown-item > a,
+	> .dropdown-item > a:link,
+	> .dropdown-item > a:visited {
 
 		/*
 		 * 8px horizontal matches the optical gap above and below the label.
@@ -275,6 +282,9 @@ a.frm_option_icon:hover::before {
 		 * equal padding values would not read as equal space.
 		 */
 		padding: 4px 8px;
+
+		/* Icons ink to the full box, so they sit closer to the label than a padded set would. */
+		gap: 10px;
 		transition:
 			0.12s background-color ease,
 			0.12s color ease;
@@ -282,6 +292,8 @@ a.frm_option_icon:hover::before {
 		@include focus-outline($radius: var(--small-radius));
 
 		.frmsvg {
+			width: 16px;
+			height: 16px;
 
 			/* Replaces an opacity fade. --grey-500 is described as roughly 65% opacity. */
 			opacity: 1;
