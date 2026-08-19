@@ -42,10 +42,19 @@ label.frm-example-icon {
 	align-items: center;
 	width: calc(33% - var(--gap-sm));
 	box-sizing: border-box;
+	transition:
+		0.12s background-color ease,
+		0.12s color ease;
 }
 
+/*
+ * Neutral so it stays distinct from the selected state, which is a blue border.
+ * The checked rule below has the higher specificity, so a selected button keeps
+ * its blue border while still picking up the hover surface.
+ */
 .frm-long-icon-buttons > label:hover {
-	color: var(--primary-500);
+	background-color: var(--surface-hover);
+	color: var(--grey-900);
 }
 
 .frm-long-icon-buttons input[type="radio"] {
