@@ -256,8 +256,12 @@ a.frm_option_icon:hover::before {
 .frm-dropdown-menu.frm-style-options-menu,
 .preview.dropdown .frm-dropdown-menu {
 
-	/* Concentric with the 8px items plus the menu's own 6px padding. */
-	border-radius: 14px;
+	/*
+	 * Strictly concentric with the 6px items plus 6px padding would be 12px. 10px
+	 * is used because it reads better at this size, and 2px is not a difference
+	 * the eye can find when the items sit 6px in from the corner.
+	 */
+	border-radius: 10px;
 	padding: 6px;
 
 	/*
@@ -286,6 +290,7 @@ a.frm_option_icon:hover::before {
 		 * equal padding values would not read as equal space.
 		 */
 		padding: 4px 8px;
+		border-radius: 6px;
 
 		/* Icons ink to the full box, so they sit closer to the label than a padded set would. */
 		gap: 10px;
@@ -293,7 +298,7 @@ a.frm_option_icon:hover::before {
 			0.12s background-color ease,
 			0.12s color ease;
 
-		@include focus-outline($radius: var(--small-radius));
+		@include focus-outline($radius: 6px);
 
 		.frmsvg {
 			width: 16px;
