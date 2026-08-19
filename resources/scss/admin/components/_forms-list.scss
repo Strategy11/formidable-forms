@@ -10,14 +10,33 @@
 	height: 32px;
 	border-radius: var(--small-radius);
 	transition: background-color 120ms ease-out,
-	            color 120ms ease-out;
+	            color 120ms ease-out,
+	            transform 120ms ease-out;
 
 	&:hover,
 	&:focus {
-		background-color: var(--primary-25);
-		color: var(--primary-500) !important;
+		background-color: var(--surface-hover-compact);
+
+		/* !important because the resting rule this replaces carried one. */
+		color: var(--grey-900) !important;
 		transition: background-color 80ms ease-out,
 		            color 80ms ease-out;
+	}
+
+	&:active {
+		background-color: var(--surface-active-compact);
+		transform: scale(0.96);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-forms-list-settings-btn {
+		transition: none;
+
+		&:active {
+			transform: none;
+		}
 	}
 }
 
