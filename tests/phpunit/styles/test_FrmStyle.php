@@ -307,8 +307,7 @@ class test_FrmStyle extends FrmUnitTest {
 	public function test_save_settings_leaves_version_untouched_when_file_write_fails() {
 		add_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
 
-		$uploads      = wp_upload_dir();
-		$blocked_path = $uploads['basedir'] . '/formidable';
+		$blocked_path = wp_upload_dir()['basedir'] . '/formidable';
 
 		// A previous save (in this test or another) may have already created this as a real
 		// directory. It only holds generated/cache data, so it is safe to clear it to guarantee a
@@ -316,8 +315,15 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->rmdir_recursive( $blocked_path );
 
 		try {
-			$this->assertNotFalse( file_put_contents( $blocked_path, 'not a directory' ), 'Test setup: failed to create the blocking file.' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-			$this->assertTrue( is_file( $blocked_path ), 'Test setup assumption: the blocking path must be a plain file, not a directory, so FrmCreateFile cannot create its "formidable" subdirectory there.' );
+			$this->assertNotFalse(
+				file_put_contents( $blocked_path, 'not a directory' ), // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+				'Test setup: failed to create the blocking file.'
+			);
+			$this->assertTrue(
+				is_file( $blocked_path ),
+				'Test setup assumption: the blocking path must be a plain file, not a directory,'
+				. ' so FrmCreateFile cannot create its "formidable" subdirectory there.'
+			);
 			$this->assertTrue(
 				is_file( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' ),
 				'Test setup assumption: the source stylesheet must exist, or save_settings() returns before FrmCreateFile::create_file() and this test asserts nothing.'
@@ -333,7 +339,12 @@ class test_FrmStyle extends FrmUnitTest {
 				get_option( 'frmpro_css' ),
 				'The generated CSS must have been stored, which only happens once FrmCreateFile::create_file() has been called -- otherwise the failed write was never exercised.'
 			);
-			$this->assertSame( 'sentinel-untouched', get_option( 'frm_last_style_update' ), 'frm_last_style_update must be left untouched (not updated, not deleted) when the CSS file write fails.' );
+			$this->assertSame(
+				'sentinel-untouched',
+				get_option( 'frm_last_style_update' ),
+				'frm_last_style_update must be left untouched (not updated, not deleted)'
+				. ' when the CSS file write fails.'
+			);
 		} finally {
 			remove_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
 
@@ -358,7 +369,8 @@ class test_FrmStyle extends FrmUnitTest {
 			return;
 		}
 
-		foreach ( array_diff( scandir( $path ), array( '.', '..' ) ) as $item ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_scandir
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_scandir
+		foreach ( array_diff( scandir( $path ), array( '.', '..' ) ) as $item ) {
 			$this->rmdir_recursive( $path . '/' . $item );
 		}
 

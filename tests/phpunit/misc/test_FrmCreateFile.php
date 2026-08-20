@@ -38,10 +38,9 @@ class test_FrmCreateFile extends FrmUnitTest {
 			)
 		);
 
-		$content = 'body{color:#123456}';
-		$result  = $create_file->create_file( $content );
-
-		$written_path = $uploads['basedir'] . '/' . $folder . '/' . $file_name;
+		$content                   = 'body{color:#123456}';
+		$result                    = $create_file->create_file( $content );
+		$written_path              = $uploads['basedir'] . '/' . $folder . '/' . $file_name;
 		$this->paths_to_clean_up[] = $written_path;
 		$this->paths_to_clean_up[] = $uploads['basedir'] . '/' . $folder . '/index.php';
 		$this->paths_to_clean_up[] = $uploads['basedir'] . '/' . $folder;
@@ -83,11 +82,13 @@ class test_FrmCreateFile extends FrmUnitTest {
 	 * @covers FrmCreateFile::create_file
 	 */
 	public function test_create_file_returns_false_when_directory_cannot_be_created() {
-		$uploads  = wp_upload_dir();
-		$blocking = 'frm-test-blocking-' . wp_generate_password( 8, false );
-		$blocked_path = $uploads['basedir'] . '/' . $blocking;
+		$blocking     = 'frm-test-blocking-' . wp_generate_password( 8, false );
+		$blocked_path = wp_upload_dir()['basedir'] . '/' . $blocking;
 
-		$this->assertNotFalse( file_put_contents( $blocked_path, 'not a directory' ), 'Test setup: failed to create the blocking file.' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+		$this->assertNotFalse(
+			file_put_contents( $blocked_path, 'not a directory' ), // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+			'Test setup: failed to create the blocking file.'
+		);
 		$this->paths_to_clean_up[] = $blocked_path;
 
 		$create_file = new FrmCreateFile(
@@ -126,7 +127,7 @@ class test_FrmCreateFile extends FrmUnitTest {
 		$append_result_2 = $append_target->append_file( 'second-part;' );
 		$this->assertNull( $append_result_2 );
 
-		$appended_path = $uploads['basedir'] . '/' . $folder . '/append.css';
+		$appended_path             = $uploads['basedir'] . '/' . $folder . '/append.css';
 		$this->paths_to_clean_up[] = $appended_path;
 		$this->paths_to_clean_up[] = $uploads['basedir'] . '/' . $folder . '/index.php';
 		$this->paths_to_clean_up[] = $uploads['basedir'] . '/' . $folder;
@@ -150,9 +151,10 @@ class test_FrmCreateFile extends FrmUnitTest {
 		$combine_result = $combine_target->combine_files( array( $source_a, $source_b ) );
 		$this->assertNull( $combine_result, 'combine_files() must remain void regardless of create_file()\'s widened return type.' );
 
-		$combined_path = $uploads['basedir'] . '/' . $folder . '/combined.css';
+		$combined_path             = $uploads['basedir'] . '/' . $folder . '/combined.css';
 		$this->paths_to_clean_up[] = $combined_path;
 
-		$this->assertSame( "a{color:#111}\nb{color:#222}\n", file_get_contents( $combined_path ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$this->assertSame( "a{color:#111}\nb{color:#222}\n", file_get_contents( $combined_path ) );
 	}
 }

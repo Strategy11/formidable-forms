@@ -450,6 +450,7 @@ class FrmStyle {
 	 * @since x.x
 	 *
 	 * @param string $css Generated stylesheet contents.
+	 *
 	 * @return void
 	 */
 	private static function update_css_version( $css ) {
