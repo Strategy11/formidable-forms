@@ -3369,19 +3369,74 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
-			const anchor = document.createElement( 'a' );
-			anchor.setAttribute( 'href', '#' );
-			anchor.setAttribute( 'data-code', fields[ i ].fieldId );
-			anchor.classList.add( 'frm_insert_code' );
-			anchor.append( span( fields[ i ].fieldName ) );
-			anchor.append( span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ fields[ i ].fieldId }]` } ) );
+			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
 
-			const li = document.createElement( 'li' );
-			li.classList.add( `frm-field-list-${ fieldId }` );
-			li.classList.add( `frm-field-list-${ fields[ i ].fieldType }` );
-			li.append( anchor );
-			list.append( li );
+			if ( ! isSummary ) {
+				// The summary field list is a list of fields to exclude, not a list of shortcodes, so field parts don't belong in it.
+				addFieldPartShortcodes( fields[ i ], fieldId, list );
+			}
 		}
+	}
+
+	/**
+	 * Lets the plugin that owns the calculation type add shortcodes for the individual
+	 * parts of a multi-part field, like [25 show=last] for a Name field.
+	 *
+	 * Nothing in Lite renders a calculation box, so Lite offers the extension point and
+	 * leaves the parts themselves to whichever plugin owns the calculation.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
+	 * @param {string}      fieldId ID of the field the popup was opened for.
+	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
+	 *
+	 * @return {void}
+	 */
+	function addFieldPartShortcodes( field, fieldId, list ) {
+		/**
+		 * Allows add-ons to add field part shortcodes to calculation popup.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object}      hookArgs                      Arguments passed to the hook.
+		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
+		 * @param {string}      hookArgs.fieldId              ID of the field triggering the popup.
+		 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
+		 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
+		 */
+		wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field, fieldId, list, addCalcFieldLiToList } );
+	}
+
+	/**
+	 * Adds a row to a calculation box's field shortcode list.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} list      The 'ul' element that contains field shortcodes available for calculation.
+	 * @param {string}      fieldId   ID of the field the popup was opened for.
+	 * @param {string}      code      The shortcode to insert, without the brackets.
+	 * @param {string}      label     The name shown for the row.
+	 * @param {string}      fieldType Type of the field the shortcode belongs to.
+	 *
+	 * @return {void}
+	 */
+	function addCalcFieldLiToList( list, fieldId, code, label, fieldType ) {
+		const anchor = a( {
+			className: 'frm_insert_code',
+			children: [
+				span( label ),
+				span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ code }]` } )
+			],
+			data: { code }
+		} );
+
+		list.append(
+			tag( 'li', {
+				className: `frm-field-list-${ fieldId } frm-field-list-${ fieldType }`,
+				child: anchor
+			} )
+		);
 	}
 
 	/**
@@ -7078,7 +7133,86 @@ window.frmAdminBuildJS = function() {
 			replaceWith = replaceWith.trim();
 		}
 
+		const hadFrmFirstClass = field.classList.contains( 'frm_first' );
+
 		field.className = field.className.replace( replace, replaceWith );
+
+		if ( ! hadFrmFirstClass && field.classList.contains( 'frm_first' ) ) {
+			maybeBreakFieldGroup( field );
+		}
+	}
+
+	/**
+	 * Break a field out of its field group when the frm_first class gets added to it.
+	 *
+	 * frm_first starts a new row, so FrmFieldGridHelper opens a new field group for the field
+	 * the next time the builder loads. This applies the same split right away instead of
+	 * leaving the builder showing a row that the reloaded form will not match.
+	 *
+	 * Fields after the target field move into the new group as well, since the new row is
+	 * where they end up on reload too.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} field The field that just had the frm_first class added to it.
+	 * @return {void}
+	 */
+	function maybeBreakFieldGroup( field ) {
+		const list = field.parentElement;
+
+		if ( ! list || 'UL' !== list.nodeName || list.classList.contains( 'start_divider' ) ) {
+			// A field only ever needs breaking out when it is in a field group list.
+			return;
+		}
+
+		const fieldGroup = list.parentElement;
+
+		if ( ! fieldGroup || ! isFieldGroup( fieldGroup ) ) {
+			return;
+		}
+
+		const fieldsInRow = getFieldsInRow( jQuery( list ) ).get();
+
+		if ( fieldsInRow.indexOf( field ) < 1 ) {
+			// The field already starts its row, so there is nothing to break out of.
+			return;
+		}
+
+		const newList = tag( 'ul', { className: 'frm_grid_container frm_sorting' } );
+		const newFieldGroup = tag( 'li', { className: 'frm_field_box', child: newList } );
+
+		fieldGroup.after( newFieldGroup );
+		newList.append( ...getFieldAndFollowingFields( field ) );
+
+		makeDroppable( newList );
+		makeDraggable( newFieldGroup, '.frm-move' );
+
+		updateFieldGroupControls( jQuery( list ), getFieldsInRow( jQuery( list ) ).length );
+	}
+
+	/**
+	 * Get a field along with every field that follows it in the same list.
+	 *
+	 * The field group controls are shared between every group and get appended to whichever
+	 * group is hovered, so only list items are included.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} field The field to start from.
+	 * @return {Array.<HTMLElement>} The field and the fields after it.
+	 */
+	function getFieldAndFollowingFields( field ) {
+		const fields = [];
+
+		let sibling = field;
+		while ( sibling ) {
+			if ( 'LI' === sibling.nodeName ) {
+				fields.push( sibling );
+			}
+			sibling = sibling.nextElementSibling;
+		}
+
+		return fields;
 	}
 
 	function maybeShowInlineModal( e ) {
@@ -7496,6 +7630,9 @@ window.frmAdminBuildJS = function() {
 		container.classList.add( 'frmcenter' );
 
 		const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
+
+		// The message explains the heading, so it reads before the call to action, the same way it does in the modal.
+		appendClonedModalElementToContainer( 'frm-upgrade-message' );
 		appendClonedModalElementToContainer( 'frm-oneclick' );
 		appendClonedModalElementToContainer( 'frm-addon-status' );
 
@@ -7514,6 +7651,9 @@ window.frmAdminBuildJS = function() {
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
+			if ( element.dataset.gradientUpgrade ) {
+				upgradeButton.classList.add( 'frm-gradient' );
+			}
 			container.append( upgradeActions || upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
@@ -7524,8 +7664,6 @@ window.frmAdminBuildJS = function() {
 			appendClonedModalElementToContainer( 'frm-oneclick-button' );
 		}
 
-		appendClonedModalElementToContainer( 'frm-upgrade-message' );
-
 		let upgradeLabel = element.dataset.message;
 
 		if ( upgradeLabel === undefined ) {
@@ -7533,13 +7671,42 @@ window.frmAdminBuildJS = function() {
 		}
 		addOneClick( element, 'tab', upgradeLabel );
 
-		if ( element.dataset.screenshot ) {
+		if ( element.dataset.upsellImages ) {
+			container.append( getUpsellImagesWrapper( element.dataset.upsellImages, title ) );
+		} else if ( element.dataset.screenshot ) {
 			container.append( getScreenshotWrapper( element.dataset.screenshot ) );
 		}
 
 		function appendClonedModalElementToContainer( className ) {
 			container.append( upgradeModal.querySelector( `.${ className }` ).cloneNode( true ) );
 		}
+	}
+
+	/**
+	 * Build the previews shown below an upgrade tab's call to action.
+	 *
+	 * Unlike a screenshot, these images carry their own framing, so they get no
+	 * browser chrome around them. The first one takes a row to itself and the rest
+	 * share the row below it, scaled to keep their proportions.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} images Comma separated file names, relative to the images/upsell folder.
+	 * @param {string} alt    Name of the feature being previewed.
+	 * @return {Element} The wrapper to append to the tab.
+	 */
+	function getUpsellImagesWrapper( images, alt ) {
+		const folderUrl = `${ frmGlobal.url }/images/upsell/`;
+		const [ featured, ...rest ] = images.split( ',' ).map(
+			image => img( { src: folderUrl + image.trim(), alt } )
+		);
+		const children = [ featured ];
+
+		if ( rest.length ) {
+			children.push( div( { className: 'frm-upsell-images-row', children: rest } ) );
+		}
+
+		return div( { className: 'frm-upsell-images', children } );
 	}
 
 	function getScreenshotWrapper( screenshot ) {
