@@ -23,7 +23,16 @@ exclude_patterns = [
   "js/formidable-web-components.js",
   "js/frm_testing_mode.js",
   "js/welcome-tour.js",
-  "eslint-rules/**"
+  "eslint-rules/**",
+  # PHPUnit tests: the PHP analyzer cannot resolve PHPUnit\Framework\TestCase
+  # (it lives under the excluded vendor/**), so every assert*() call in these files
+  # is reported as "Call to an undefined method". PHPStan and Psalm are green on the
+  # same files only because both load stubs.php explicitly, which DeepSource has no
+  # equivalent setting for. test_patterns below is not enough: it relaxes the style
+  # and security categories but still reports bug-risk issues like undefined methods.
+  # Mirrors phpstan.neon's excludePaths (*/tests/*) and phpcs.xml's tests/phpunit/*
+  # rule exclusions.
+  "tests/phpunit/**"
 ]
 
 # 2. Test Patterns
