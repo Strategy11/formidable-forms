@@ -454,6 +454,11 @@ class FrmStyle {
 	 * @return void
 	 */
 	private static function update_css_version( $css ) {
+		// skipcq: PHP-A1004 -- md5() here is a content-derived cache-busting token, not a
+		// password hash. It must be deterministic so the same stylesheet always yields the
+		// same URL; password_hash() is salted and non-deterministic and would defeat the
+		// whole mechanism. Matches the existing md5()-for-cache-key calls in FrmAddon,
+		// FrmAntiSpam, FrmFormApi and FrmStyleApi.
 		update_option( 'frm_last_style_update', substr( md5( $css ), 0, 12 ) );
 	}
 
