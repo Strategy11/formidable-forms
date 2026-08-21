@@ -82,6 +82,37 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	}
 
 	/**
+	 * Callers may hand set_value_before_save() a field they have already loaded, so that
+	 * update_entry_metas() does not look the same field up a second time for every value.
+	 * The packing has to follow the field that was passed, otherwise the argument is being
+	 * ignored and the second lookup is back.
+	 *
+	 * @covers FrmEntryMeta::set_value_before_save
+	 */
+	public function test_set_value_before_save_packs_with_the_field_that_was_passed() {
+		list( , $text_field_id ) = $this->create_text_and_number_fields();
+
+		$as_number       = clone FrmField::getOne( $text_field_id );
+		$as_number->type = 'number';
+
+		$values = array(
+			'item_id'    => 1,
+			'field_id'   => $text_field_id,
+			'meta_value' => 'abc',
+		);
+		$this->run_private_method( array( 'FrmEntryMeta', 'set_value_before_save' ), array( &$values, $as_number ) );
+		$this->assertEqualsWithDelta( 0.0, $values['meta_value'], PHP_FLOAT_EPSILON, 'The passed number field should coerce a non-numeric value to a float.' );
+
+		$values = array(
+			'item_id'    => 1,
+			'field_id'   => $text_field_id,
+			'meta_value' => 'abc',
+		);
+		$this->run_private_method( array( 'FrmEntryMeta', 'set_value_before_save' ), array( &$values, null ) );
+		$this->assertSame( 'abc', $values['meta_value'], 'With no field passed the stored text field should be looked up and leave the value alone.' );
+	}
+
+	/**
 	 * The field argument has to stay optional. add_entry_meta() and update_entry_meta() are
 	 * called with four arguments from dozens of places across the add-ons, and those callers
 	 * ship on their own release cycles.
