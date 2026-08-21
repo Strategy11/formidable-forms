@@ -82,8 +82,9 @@ class FrmFieldUrl extends FrmFieldType {
 
 		$errors = array();
 
-		// Validate the url format
-		if ( $value && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
+		// Validate the url format. The host class allows \x80-\xff so internationalized domain names pass.
+		// Byte range by design, and no /u modifier: with /u, preg_match() returns false on invalid UTF-8.
+		if ( $value && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\x80-\xff\.-]+\.[\da-z\x80-\xff\.-]+))/i', $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		} elseif ( $this->field->required == '1' && ! $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );

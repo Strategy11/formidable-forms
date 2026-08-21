@@ -120,6 +120,21 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				'value'   => 'http://',
 				'invalid' => false,
 			),
+			array(
+				'type'    => 'url',
+				'value'   => 'https://ernährung.ch',
+				'invalid' => false,
+			),
+			array(
+				'type'    => 'url',
+				'value'   => 'https://пример.рф',
+				'invalid' => false,
+			),
+			array(
+				'type'    => 'url',
+				'value'   => 'https://a/b.com',
+				'invalid' => true,
+			),
 		);
 	}
 
@@ -181,6 +196,110 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		$errors = $this->check_single_value( array( $field->id => 'http://' ) );
 		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'http:// passed required validation ' . print_r( $errors, 1 ) );
+	}
+
+	/**
+	 * Internationalized domain names must pass validation.
+	 *
+	 * The host pattern in FrmFieldUrl::validate() matches UTF-8 bytes, so non-ASCII hosts are
+	 * accepted. These are real registrable domains - .ch permits accented vowels - and the punycode
+	 * spelling of the same domain has always passed, so accepting these adds no new capability.
+	 *
+	 * @covers FrmFieldUrl::validate
+	 */
+	public function test_url_idn_validation() {
+		$field = $this->factory->field->get_object_by_id( $this->get_field_key( 'url' ) );
+		$this->assertNotEmpty( $field );
+
+		$should_pass = array(
+			'https://ernährung.ch',
+			'https://münchen.de',
+			'https://café.fr',
+			'https://пример.рф',
+			'https://例え.jp',
+			'https://ÄPFEL.DE',
+			'https://xn--ernhrung-2za.ch',
+			'https://example.com',
+			'http://localhost',
+			'https://ernährung.ch/über-uns?q=grüße#süß',
+			'ernährung.ch',
+		);
+
+		foreach ( $should_pass as $url ) {
+			$errors = $this->check_single_value( array( $field->id => $url ) );
+			$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'A valid url failed validation: ' . $url );
+		}
+
+		/**
+		 * The last two must fail even though the class now allows non-ASCII: the pattern still
+		 * requires a dotted host, and a hyphen placed after the byte range would turn it into the
+		 * range 0x2E-0x80 and let path and query characters through.
+		 */
+		$should_fail = array(
+			'münchen',
+			'https://ä',
+			'https://a/b.com',
+			'https://a?b.com',
+		);
+
+		foreach ( $should_fail as $url ) {
+			$errors = $this->check_single_value( array( $field->id => $url ) );
+			$this->assertArrayHasKey( 'field' . $field->id, $errors, 'An invalid url passed validation: ' . $url );
+		}
+	}
+
+	/**
+	 * A raw Latin-1 host byte must still validate.
+	 *
+	 * This guards against adding the /u modifier to the host pattern. With /u, preg_match() returns
+	 * false on invalid UTF-8, and because the result is negated the value would be reported invalid.
+	 *
+	 * @covers FrmFieldUrl::validate
+	 */
+	public function test_url_non_utf8_host_byte() {
+		$field = $this->factory->field->get_object_by_id( $this->get_field_key( 'url' ) );
+		$this->assertNotEmpty( $field );
+
+		$url = "https://ex\xE4mple.com";
+
+		// Without this the assertion below would pass vacuously if the byte were stripped first.
+		$this->assertNotEmpty( esc_url_raw( $url ), 'The Latin-1 host byte did not survive sanitizing, so this test proves nothing.' );
+
+		$errors = $this->check_single_value( array( $field->id => $url ) );
+		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'A Latin-1 host byte failed validation, which suggests the /u modifier was added to the host pattern.' );
+	}
+
+	/**
+	 * The JS copy of the host pattern must stay in step with the PHP one, and the minified artifact
+	 * must be rebuilt whenever the source changes.
+	 *
+	 * There is no JS engine in this suite, so this asserts the rules on the source rather than
+	 * running the regex: the code unit range is present, the PHP byte range was not copied across by
+	 * mistake, the old ASCII-only class is gone, and the minified file carries the same class.
+	 *
+	 * Deliberately carries no @covers: it reads js/formidable.js and js/formidable.min.js and never
+	 * executes FrmFieldUrl::validate, so claiming to cover that method would credit it with
+	 * coverage it does not provide. test_url_value() below is the test that exercises it.
+	 */
+	public function test_url_field_js_regex_parity() {
+		$source   = FrmAppHelper::plugin_path() . '/js/formidable.js';
+		$minified = FrmAppHelper::plugin_path() . '/js/formidable.min.js';
+
+		foreach ( array( $source, $minified ) as $file ) {
+			$this->assertFileExists( $file );
+
+			$contents = file_get_contents( $file );
+			$name     = basename( $file );
+
+			$this->assertStringContainsString( '\u0080-\u{10FFFF}', $contents, 'The JS host pattern is missing the code unit range in ' . $name );
+			$this->assertStringNotContainsString( '\x80-\xff', $contents, 'The PHP byte range was copied into ' . $name . '; that rejects Cyrillic and CJK hosts.' );
+			$this->assertStringNotContainsString( '[\da-z\.-]', $contents, 'The old ASCII-only host class is still present in ' . $name );
+		}
+
+		// The host class in the source must appear verbatim in the minified artifact.
+		$matched = preg_match( '/\[\\\\da-z[^\]]*\]/', file_get_contents( $source ), $matches );
+		$this->assertSame( 1, $matched, 'Could not find the url host class in js/formidable.js' );
+		$this->assertStringContainsString( $matches[0], file_get_contents( $minified ), 'js/formidable.min.js is stale. Rebuild it.' );
 	}
 
 	/**
