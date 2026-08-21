@@ -277,7 +277,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 * running the regex: the code unit range is present, the PHP byte range was not copied across by
 	 * mistake, the old ASCII-only class is gone, and the minified file carries the same class.
 	 *
-	 * @covers FrmFieldUrl::validate
+	 * Deliberately carries no @covers: it reads js/formidable.js and js/formidable.min.js and never
+	 * executes FrmFieldUrl::validate, so claiming to cover that method would credit it with
+	 * coverage it does not provide. test_url_value() below is the test that exercises it.
 	 */
 	public function test_url_field_js_regex_parity() {
 		$source   = FrmAppHelper::plugin_path() . '/js/formidable.js';
