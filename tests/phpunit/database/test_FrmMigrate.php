@@ -298,6 +298,44 @@ class test_FrmMigrate extends FrmUnitTest {
 	}
 
 	/**
+	 * Make sure migrate_to_107 is actually reached by the migration dispatch (migrate_data())
+	 * when upgrading from db_version 106, not just that the method works when called directly.
+	 * A migration that is registered but never dispatched is the failure mode this guards
+	 * against.
+	 *
+	 * This deliberately calls migrate_data() directly rather than the public upgrade(), because
+	 * upgrade() unconditionally regenerates the default style at the end of every call
+	 * ( $frm_style->update( 'default' ) ), which would overwrite frm_last_style_update with a
+	 * fresh value regardless of whether migrate_to_107 actually ran, masking the result.
+	 *
+	 * @covers FrmMigrate::migrate_data
+	 * @covers FrmMigrate::migrate_to_107
+	 */
+	public function test_migrate_to_107_runs_on_dispatch_from_106() {
+		update_option( 'frm_last_style_update', '111059' );
+
+		$frmdb = new FrmMigrate();
+		$this->run_private_method( array( $frmdb, 'migrate_data' ), array( 106 ) );
+
+		$this->assertFalse( get_option( 'frm_last_style_update' ), 'migrate_to_107 should have been dispatched and deleted the legacy frm_last_style_update option.' );
+	}
+
+	/**
+	 * A site already on db_version 107 (or later) must not have migrate_to_107 run again.
+	 *
+	 * @covers FrmMigrate::migrate_data
+	 * @covers FrmMigrate::migrate_to_107
+	 */
+	public function test_migrate_to_107_does_not_run_again_once_applied() {
+		update_option( 'frm_last_style_update', 'abcdef123456' );
+
+		$frmdb = new FrmMigrate();
+		$this->run_private_method( array( $frmdb, 'migrate_data' ), array( 107 ) );
+
+		$this->assertSame( 'abcdef123456', get_option( 'frm_last_style_update' ), 'migrate_to_107 must not re-run once already at db_version 107.' );
+	}
+
+	/**
 	 * @covers FrmMigrate::collation
 	 */
 	public function test_collation() {

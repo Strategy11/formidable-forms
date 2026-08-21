@@ -202,6 +202,16 @@
 	</rule>
 	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink">
 		<exclude-pattern>test_FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>test_FrmCreateFile.php</exclude-pattern>
+		<exclude-pattern>test_FrmStyle.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents">
+		<exclude-pattern>test_FrmCreateFile.php</exclude-pattern>
+		<exclude-pattern>test_FrmStyle.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.Functions.RestrictedFunctions.directory_rmdir">
+		<exclude-pattern>test_FrmCreateFile.php</exclude-pattern>
+		<exclude-pattern>test_FrmStyle.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPressVIPMinimum.Security.ExitAfterRedirect.NoExit">
 		<exclude-pattern>FrmEntriesController.php</exclude-pattern>
