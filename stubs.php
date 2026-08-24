@@ -544,10 +544,12 @@ namespace {
 	 */
 	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
 		/**
-		 * FrmUnitTest::setUp() replaces this with a FrmUnitTestFactory, which is what every
-		 * plugin test actually sees, so it is typed as that rather than the core WP_UnitTest_Factory.
+		 * FrmUnitTest::setUp() actually replaces this with a FrmUnitTestFactory, but that class
+		 * lives under tests/, which phpstan.neon excludes from the analysis paths - PHPStan would
+		 * report "unknown class" for a type it can never load. WP_UnitTest_Factory is the real
+		 * base type and is declared below, so it resolves.
 		 *
-		 * @var FrmUnitTestFactory
+		 * @var WP_UnitTest_Factory
 		 */
 		protected $factory;
 
@@ -560,24 +562,37 @@ namespace {
 		 */
 		protected static function stub_check( $passed, $message = '' ) {
 			if ( ! $passed ) {
-				throw new Exception( (string) $message );
+				throw new Exception( $message );
 			}
 		}
 
+		/**
+		 * The parent parameter is array|ArrayAccess. Any concrete spelling of that PHPStan can
+		 * check - including a fully generic ArrayAccess<mixed,mixed> - reads as narrower than the
+		 * parent's bare, unparameterized ArrayAccess and trips the contravariance rule, so this is
+		 * typed mixed: the widest possible type, trivially at least as wide as the parent's.
+		 *
+		 * @param mixed $key
+		 * @param mixed $array
+		 */
 		public static function assertArrayHasKey( $key, $array, string $message = '' ): void {
 			self::stub_check( is_array( $array ) && array_key_exists( $key, $array ), $message );
 		}
 
+		/**
+		 * @param mixed $key
+		 * @param mixed $array
+		 */
 		public static function assertArrayNotHasKey( $key, $array, string $message = '' ): void {
 			self::stub_check( ! ( is_array( $array ) && array_key_exists( $key, $array ) ), $message );
 		}
 
 		public static function assertContains( $needle, iterable $haystack, string $message = '' ): void {
-			self::stub_check( in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), false ), $message );
+			self::stub_check( in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), true ), $message );
 		}
 
 		public static function assertNotContains( $needle, iterable $haystack, string $message = '' ): void {
-			self::stub_check( ! in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), false ), $message );
+			self::stub_check( ! in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), true ), $message );
 		}
 
 		public static function assertCount( int $expected_count, $haystack, string $message = '' ): void {
