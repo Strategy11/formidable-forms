@@ -535,9 +535,155 @@ namespace {
 	}
 
 	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
+		/**
+		 * FrmUnitTest::setUp() replaces this with a FrmUnitTestFactory, which is what every
+		 * plugin test actually sees, so it is typed as that rather than the core WP_UnitTest_Factory.
+		 *
+		 * @var FrmUnitTestFactory
+		 */
+		protected $factory;
 	}
 
 	class WP_UnitTestCase extends WP_UnitTestCase_Base {
+	}
+
+	class WP_UnitTest_Factory {
+		/**
+		 * @var WP_UnitTest_Factory_For_Post
+		 */
+		public $post;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Attachment
+		 */
+		public $attachment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Comment
+		 */
+		public $comment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_User
+		 */
+		public $user;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $term;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $category;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $tag;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Bookmark
+		 */
+		public $bookmark;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Blog
+		 */
+		public $blog;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Network
+		 */
+		public $network;
+	}
+
+	abstract class WP_UnitTest_Factory_For_Thing {
+		public $default_generation_definitions;
+		public $factory;
+
+		public function __construct( $factory, $default_generation_definitions = array() ) {
+		}
+
+		abstract public function create_object( $args );
+		abstract public function update_object( $object_id, $fields );
+		abstract public function get_object_by_id( $object_id );
+
+		public function create( $args = array(), $generation_definitions = null ) {
+		}
+
+		public function create_and_get( $args = array(), $generation_definitions = null ) {
+		}
+
+		public function create_many( $count, $args = array(), $generation_definitions = null ) {
+		}
+	}
+
+	class WP_UnitTest_Factory_For_Post extends WP_UnitTest_Factory_For_Thing {
+		public function create_object( $args ) {
+		}
+		public function update_object( $object_id, $fields ) {
+		}
+		public function get_object_by_id( $object_id ) {
+		}
+	}
+
+	class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
+	}
+
+	class WP_UnitTest_Factory_For_Comment extends WP_UnitTest_Factory_For_Thing {
+		public function create_object( $args ) {
+		}
+		public function update_object( $object_id, $fields ) {
+		}
+		public function get_object_by_id( $object_id ) {
+		}
+	}
+
+	class WP_UnitTest_Factory_For_User extends WP_UnitTest_Factory_For_Thing {
+		public function create_object( $args ) {
+		}
+		public function update_object( $object_id, $fields ) {
+		}
+		public function get_object_by_id( $object_id ) {
+		}
+	}
+
+	class WP_UnitTest_Factory_For_Term extends WP_UnitTest_Factory_For_Thing {
+		public function create_object( $args ) {
+		}
+		public function update_object( $object_id, $fields ) {
+		}
+		public function get_object_by_id( $object_id ) {
+		}
+	}
+
+	class WP_UnitTest_Factory_For_Bookmark extends WP_UnitTest_Factory_For_Thing {
+		public function create_object( $args ) {
+		}
+		public function update_object( $object_id, $fields ) {
+		}
+		public function get_object_by_id( $object_id ) {
+		}
+	}
+
+	class WP_UnitTest_Factory_For_Blog extends WP_UnitTest_Factory_For_Thing {
+		public function create_object( $args ) {
+		}
+		public function update_object( $object_id, $fields ) {
+		}
+		public function get_object_by_id( $object_id ) {
+		}
+	}
+
+	class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
+		public function create_object( $args ) {
+		}
+		public function update_object( $object_id, $fields ) {
+		}
+		public function get_object_by_id( $object_id ) {
+		}
 	}
 }
 
