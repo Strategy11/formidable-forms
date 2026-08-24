@@ -849,6 +849,36 @@ namespace {
 
 	abstract class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
 	}
+
+	/**
+	 * frm_factory.php uses this to generate unique default values (field names, entry names).
+	 * mago.toml's [source] paths includes "tests" directly - unlike PHPStan, mago analyzes that
+	 * file itself and needs this class to exist, not just its name.
+	 */
+	class WP_UnitTest_Generator_Sequence {
+		public static $incr = -1;
+		public $next;
+		public $template_string;
+
+		public function __construct( $template_string = '%s', $start = null ) {
+		}
+
+		public function next() {
+		}
+
+		public function get_incr() {
+		}
+
+		public function get_template_string() {
+		}
+	}
+
+	/**
+	 * frm_factory.php uses this to generate a random entry value, for the same reason as
+	 * WP_UnitTest_Generator_Sequence above.
+	 */
+	function rand_str( $length = 32 ) {
+	}
 }
 
 namespace Elementor {
