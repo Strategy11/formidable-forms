@@ -29,11 +29,6 @@
             "classes/views/"
 		]
 	},
-	"autoload-dev": {
-		"files": [
-			"stubs.php"
-		]
-	},
 	"require-dev": {
 		"php-stubs/wordpress-stubs": "^5.9",
 		"yoast/phpunit-polyfills": "^1.0",
