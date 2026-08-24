@@ -392,8 +392,8 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	 * The section helper is what wraps the fields that belong to a section, so it has to survive
 	 * the wrapper bookkeeping that runs for the section field itself.
 	 *
-	 * close_field_wrapper() calls maybe_close_section_helper(), so any change that closes the open
-	 * row while handling a section field discards the helper that set_field() just created.
+	 * Note that close_field_wrapper() calls maybe_close_section_helper(), so any change that closes
+	 * the open row while handling a section field discards the helper set_field() just created.
 	 */
 	public function test_a_section_keeps_its_helper_after_the_row_bookkeeping_runs() {
 		$this->form_id = $this->factory->form->create();
@@ -409,13 +409,21 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$helper->sync_list_size();
 
 		$helper->set_field( $section );
-		$this->assertInstanceOf( \FrmFieldGridHelper::class, $this->get_private_property( $helper, 'section_helper' ), 'set_field should open a section helper for a section field.' );
+		$this->assertInstanceOf(
+			\FrmFieldGridHelper::class,
+			$this->get_private_property( $helper, 'section_helper' ),
+			'set_field should open a section helper for a section field.'
+		);
 
 		$helper->maybe_begin_field_wrapper();
 
 		ob_end_clean();
 
-		$this->assertInstanceOf( \FrmFieldGridHelper::class, $this->get_private_property( $helper, 'section_helper' ), 'The section helper should still be open once the row bookkeeping has run.' );
+		$this->assertInstanceOf(
+			\FrmFieldGridHelper::class,
+			$this->get_private_property( $helper, 'section_helper' ),
+			'The section helper should still be open once the row bookkeeping has run.'
+		);
 	}
 
 	/**
@@ -527,24 +535,28 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	private function describe_grid( $html ) {
 		preg_match_all( '/<li class="frm_field_box"><ul[^>]*>|<\/ul><\/li>|<i>(\d+)<\/i>/', $html, $matches, PREG_SET_ORDER );
 
-		$layout = '';
+		$layout        = '';
+		$after_a_field = false;
 
 		foreach ( $matches as $match ) {
 			if ( '</ul></li>' === $match[0] ) {
-				$layout .= ']';
+				$layout       .= ']';
+				$after_a_field = false;
 				continue;
 			}
 
 			if ( ! isset( $match[1] ) ) {
-				$layout .= '[';
+				$layout       .= '[';
+				$after_a_field = false;
 				continue;
 			}
 
-			if ( '' !== $layout && ctype_digit( substr( $layout, -1 ) ) ) {
+			if ( $after_a_field ) {
 				$layout .= ',';
 			}
 
-			$layout .= $match[1];
+			$layout       .= $match[1];
+			$after_a_field = true;
 		}
 
 		return $layout;
