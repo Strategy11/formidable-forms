@@ -599,11 +599,21 @@ namespace {
 		public $network;
 	}
 
+	/**
+	 * The leaf *_For_* classes below are deliberately left abstract with no override of
+	 * create_object()/update_object()/get_object_by_id(): they exist only so property access
+	 * like $factory->post resolves to a type that inherits create()/create_and_get(), and an
+	 * abstract class is never instantiated from this file, so leaving them unimplemented is
+	 * fine for static analysis and avoids stubbing empty method bodies DeepSource flags as
+	 * PHP-W1080 (no body) with unused-parameter findings on top.
+	 */
 	abstract class WP_UnitTest_Factory_For_Thing {
 		public $default_generation_definitions;
 		public $factory;
 
 		public function __construct( $factory, $default_generation_definitions = array() ) {
+			$this->factory                        = $factory;
+			$this->default_generation_definitions = $default_generation_definitions;
 		}
 
 		abstract public function create_object( $args );
@@ -611,79 +621,44 @@ namespace {
 		abstract public function get_object_by_id( $object_id );
 
 		public function create( $args = array(), $generation_definitions = null ) {
+			if ( $generation_definitions === null ) {
+				$generation_definitions = $this->default_generation_definitions;
+			}
+
+			return $this->create_object( array_merge( (array) $generation_definitions, $args ) );
 		}
 
 		public function create_and_get( $args = array(), $generation_definitions = null ) {
+			return $this->get_object_by_id( $this->create( $args, $generation_definitions ) );
 		}
 
 		public function create_many( $count, $args = array(), $generation_definitions = null ) {
+			return array_fill( 0, $count, $this->create( $args, $generation_definitions ) );
 		}
 	}
 
-	class WP_UnitTest_Factory_For_Post extends WP_UnitTest_Factory_For_Thing {
-		public function create_object( $args ) {
-		}
-		public function update_object( $object_id, $fields ) {
-		}
-		public function get_object_by_id( $object_id ) {
-		}
+	abstract class WP_UnitTest_Factory_For_Post extends WP_UnitTest_Factory_For_Thing {
 	}
 
-	class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
+	abstract class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
 	}
 
-	class WP_UnitTest_Factory_For_Comment extends WP_UnitTest_Factory_For_Thing {
-		public function create_object( $args ) {
-		}
-		public function update_object( $object_id, $fields ) {
-		}
-		public function get_object_by_id( $object_id ) {
-		}
+	abstract class WP_UnitTest_Factory_For_Comment extends WP_UnitTest_Factory_For_Thing {
 	}
 
-	class WP_UnitTest_Factory_For_User extends WP_UnitTest_Factory_For_Thing {
-		public function create_object( $args ) {
-		}
-		public function update_object( $object_id, $fields ) {
-		}
-		public function get_object_by_id( $object_id ) {
-		}
+	abstract class WP_UnitTest_Factory_For_User extends WP_UnitTest_Factory_For_Thing {
 	}
 
-	class WP_UnitTest_Factory_For_Term extends WP_UnitTest_Factory_For_Thing {
-		public function create_object( $args ) {
-		}
-		public function update_object( $object_id, $fields ) {
-		}
-		public function get_object_by_id( $object_id ) {
-		}
+	abstract class WP_UnitTest_Factory_For_Term extends WP_UnitTest_Factory_For_Thing {
 	}
 
-	class WP_UnitTest_Factory_For_Bookmark extends WP_UnitTest_Factory_For_Thing {
-		public function create_object( $args ) {
-		}
-		public function update_object( $object_id, $fields ) {
-		}
-		public function get_object_by_id( $object_id ) {
-		}
+	abstract class WP_UnitTest_Factory_For_Bookmark extends WP_UnitTest_Factory_For_Thing {
 	}
 
-	class WP_UnitTest_Factory_For_Blog extends WP_UnitTest_Factory_For_Thing {
-		public function create_object( $args ) {
-		}
-		public function update_object( $object_id, $fields ) {
-		}
-		public function get_object_by_id( $object_id ) {
-		}
+	abstract class WP_UnitTest_Factory_For_Blog extends WP_UnitTest_Factory_For_Thing {
 	}
 
-	class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
-		public function create_object( $args ) {
-		}
-		public function update_object( $object_id, $fields ) {
-		}
-		public function get_object_by_id( $object_id ) {
-		}
+	abstract class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
 	}
 }
 
