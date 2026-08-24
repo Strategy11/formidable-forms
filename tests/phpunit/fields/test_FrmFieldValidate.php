@@ -132,6 +132,11 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			),
 			array(
 				'type'    => 'url',
+				'value'   => 'https://càphê.vn',
+				'invalid' => false,
+			),
+			array(
+				'type'    => 'url',
 				'value'   => 'https://a/b.com',
 				'invalid' => true,
 			),
@@ -217,6 +222,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			'https://café.fr',
 			'https://пример.рф',
 			'https://例え.jp',
+			'https://càphê.vn',
 			'https://ÄPFEL.DE',
 			'https://xn--ernhrung-2za.ch',
 			'https://example.com',
