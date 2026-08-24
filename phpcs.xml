@@ -110,6 +110,7 @@
 	<rule ref="SlevomatCodingStandard.Files.LineLength">
 		<properties>
 			<property name="lineLengthLimit" value="180" />
+			<property name="ignoreComments" value="true"/>
 		</properties>
 		<exclude-pattern>views/*</exclude-pattern>
 		<exclude-pattern>css/*</exclude-pattern>
