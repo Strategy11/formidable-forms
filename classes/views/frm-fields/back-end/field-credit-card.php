@@ -1,4 +1,12 @@
 <?php
+/**
+ * Credit card field form builder view.
+ *
+ * @package Formidable
+ *
+ * @var array $field Field data including 'form_id'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

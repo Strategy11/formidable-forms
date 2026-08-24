@@ -1,4 +1,12 @@
 <?php
+/**
+ * CAPTCHA field form builder view.
+ *
+ * @package Formidable
+ *
+ * @var string $field_name HTML name attribute for the hidden input.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

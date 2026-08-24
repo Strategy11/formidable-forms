@@ -39,10 +39,16 @@ zip -r $zipname $destination \
 	-x "*/.editorconfig" \
 	-x "*/.eslintignore" \
 	-x "*/.eslintrc.json" \
+	-x "*/eslint.config.mjs" \
+	-x "*/.eslintrc" \
+	-x "*/.git" \
 	-x "*/.git/*" \
 	-x "*/.gitattributes" \
 	-x "*/.github/*" \
 	-x "*/.gitignore" \
+	-x "*/.windsurf/*" \
+	-x "*/.devin/*" \
+	-x "*/.vscode/*" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
@@ -51,9 +57,15 @@ zip -r $zipname $destination \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
 	-x "*/.prettierrc" \
+	-x "*/.scannerwork" \
 	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
+	-x "*/.coderabbit.yaml" \
+	-x "*/.deepsource.toml" \
+	-x "*/.semgrepignore" \
+	-x "*/.gitmodules" \
+	-x "*/.oxlintrc.json" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -87,9 +99,23 @@ zip -r $zipname $destination \
 	-x "*/*.stubs.php" \
 	-x "*/stubs.php" \
 	-x "*/stubs" \
+	-x "*/stubs-*" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
+	-x "formidable-api/lib/vendor/*/docs/*" \
+	-x "formidable-api/lib/vendor/*/generator/*" \
+	-x "formidable-api/lib/vendor/*/skill/*" \
+	-x "formidable-api/lib/vendor/*/CHANGELOG.md" \
+	-x "formidable-api/lib/vendor/*/CLAUDE.md" \
+	-x "formidable-api/lib/vendor/*/CONTRIBUTING.md" \
+	-x "formidable-api/lib/vendor/*/README-INITIAL.md" \
+	-x "formidable-api/lib/vendor/*/.nvmrc" \
+	-x "formidable-api/lib/vendor/*/.prettierignore" \
+	-x "formidable-api/lib/vendor/*/.prettierrc.js" \
+	-x "formidable-api/lib/vendor/*/.wp-env.json" \
+	-x "formidable-api/lib/vendor/*/phpcs.xml.dist" \
+	-x "formidable-api/lib/vendor/*/phpstan.neon.dist" \
 	-x "$source/vendor/*" \
 	-x "$source/formidable-payments/vendor/*" \
 	-x "*/temp.xml" \
@@ -113,9 +139,14 @@ zip -r $zipname $destination \
 	-x "*/report-task.txt" \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
+	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
-	-x "*/phpcs-sniffs/*"
+	-x "*/eslint-rules/*" \
+	-x "*/phpcs-sniffs/*" \
+	-x "$source/venv/*" \
+	-x "formidable/resources/*" \
+	-x "formidable-pro/resources/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

@@ -1,5 +1,5 @@
 .frm-new-pill {
-	background: #F47449;
+	background: #f47449;
 	border-radius: 13px;
 	padding: 2px 6px;
 	color: #fff;
@@ -9,7 +9,7 @@
 }
 
 #adminmenu .frm-new-pill {
-	color: #F47449;
+	color: #f47449;
 	background: none;
 	margin-left: 5px;
 	font-size: 85%;
@@ -19,5 +19,5 @@
 }
 
 #adminmenu .frm-orange-text {
-	color: #F47449;
+	color: #f47449;
 }

@@ -20,16 +20,16 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$placeholder = $this->prepare_placeholder( $field );
 
 		// Since Floating labels, placeholder is not replaced by field name anymore.
-		$this->assertEquals( '', $placeholder );
+		$this->assertSame( '', $placeholder );
 
 		$field['placeholder'] = '0';
 		$placeholder          = $this->prepare_placeholder( $field );
-		$this->assertEquals( '0', $placeholder, '0 is a valid placeholder value.' );
+		$this->assertSame( '0', $placeholder, '0 is a valid placeholder value.' );
 
 		$field['placeholder'] = '';
 		$field['type']        = 'hidden';
 		$placeholder          = $this->prepare_placeholder( $field );
-		$this->assertEquals( '', $placeholder, 'some types of fields are not "is_placeholder_field_type" and should be left empty.' );
+		$this->assertSame( '', $placeholder, 'some types of fields are not "is_placeholder_field_type" and should be left empty.' );
 	}
 
 	private function prepare_placeholder( $field ) {
@@ -62,7 +62,7 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$field      = FrmFieldsHelper::setup_edit_vars( $field );
 		$error_body = FrmFieldsController::pull_custom_error_body_from_custom_html( $form, $field );
 
-		$this->assertEquals(
+		$this->assertSame(
 			'<div class="frm_error my_custom_error_class" id="frm_error_field_[key]">My custom error label: [error]</div>',
 			$error_body
 		);
@@ -77,33 +77,32 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$new_field    = FrmFieldsController::include_new_field( 'text', $form_id );
 		$field_output = ob_get_clean();
 
-		$this->assertEquals( 0, strpos( trim( $field_output ), '<li id="frm_field_id_' . $new_field['id'] . '"' ) );
+		$this->assertSame( 0, strpos( trim( $field_output ), '<li id="frm_field_id_' . $new_field['id'] . '"' ) );
 
 		// Confirm field is an array with type and form id keys.
 		$this->assertIsArray( $new_field );
 		$this->assertArrayHasKey( 'type', $new_field );
-		$this->assertEquals( 'text', $new_field['type'] );
+		$this->assertSame( 'text', $new_field['type'] );
 		$this->assertArrayHasKey( 'form_id', $new_field );
 		$this->assertEquals( $form_id, $new_field['form_id'] );
 
 		// Confirm new fields are flagged as "draft".
 		$this->assertArrayHasKey( 'draft', $new_field );
-		$this->assertEquals( 1, $new_field['draft'] );
+		$this->assertSame( 1, $new_field['draft'] );
 	}
 
 	/**
 	 * @covers FrmFieldsController::add_validation_messages
 	 */
 	public function test_add_validation_messages() {
-		$form_id = $this->factory->form->create();
-		$field   = $this->factory->field->create_and_get(
+		$form_id  = $this->factory->form->create();
+		$field    = $this->factory->field->create_and_get(
 			array(
 				'form_id' => $form_id,
 				'type'    => 'email',
 			)
 		);
-		$field   = FrmFieldsHelper::setup_edit_vars( $field );
-
+		$field    = FrmFieldsHelper::setup_edit_vars( $field );
 		$add_html = array();
 		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
 		$this->assertArrayHasKey( 'data-invmsg', $add_html );

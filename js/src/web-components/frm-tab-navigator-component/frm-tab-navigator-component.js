@@ -1,4 +1,4 @@
-import { frmTabsNavigator } from '../../components/class-tabs-navigator';
+import { frmTabsNavigator } from '../../components/tabs/class-tabs-navigator';
 import { frmWebComponent } from '../frm-web-component';
 import style from './frm-tab-navigator-component.css';
 
@@ -21,32 +21,15 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 		const wrapper = document.createElement( 'div' );
 		wrapper.classList.add( 'frm-tabs-wrapper' );
-		wrapper.appendChild( this.getTabDelimiter() );
-		wrapper.appendChild( this.getTabs() );
-		wrapper.appendChild( this.getTabContainer() );
-
-		new frmTabsNavigator( wrapper );
+		wrapper.append( this.getTabDelimiter() );
+		wrapper.append( this.getTabs() );
+		wrapper.append( this.getTabContainer() );
 
 		return wrapper;
 	}
 
 	afterViewInit( wrapper ) {
-		this.setInitialUnderlineWidth( wrapper );
-	}
-
-	/**
-	 * Sets the initial underline width of active tab nav item.
-	 *
-	 * @param {Element} wrapper - The wrapper element.
-	 */
-	setInitialUnderlineWidth( wrapper ) {
-		const li = wrapper.querySelector( 'li.frm-active' );
-		const tabActiveUnderline = wrapper.querySelector( '.frm-tabs-delimiter .frm-tabs-active-underline' );
-
-		if ( ! li || ! tabActiveUnderline ) {
-			return;
-		}
-		tabActiveUnderline.style.width = `${ li.clientWidth }px`;
+		this.tabsNavigator = new frmTabsNavigator( wrapper );
 	}
 
 	/**
@@ -58,10 +41,9 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 		const delimiter = document.createElement( 'div' );
 		const underline = document.createElement( 'span' );
 
-		underline.setAttribute( 'data-initial-width', '123' );
-		underline.classList.add( 'frm-tabs-active-underline', 'frm-first' );
+		underline.classList.add( 'frm-tabs-active-underline' );
 		delimiter.className = 'frm-tabs-delimiter';
-		delimiter.appendChild( underline );
+		delimiter.append( underline );
 
 		return delimiter;
 	}
@@ -76,10 +58,10 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 		const ul = document.createElement( 'ul' );
 
 		tabHeadings.className = 'frm-tabs-navs';
-		tabHeadings.appendChild( ul );
+		tabHeadings.append( ul );
 
 		Array.from( this.tabs ).forEach( ( tab, index ) => {
-			ul.appendChild( this.createTabHeading( tab, index ) );
+			ul.append( this.createTabHeading( tab, index ) );
 		} );
 
 		return tabHeadings;
@@ -96,10 +78,10 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 		tabContainer.className = 'frm-tabs-container';
 		slideTrack.className = 'frm-tabs-slide-track frm-flex-box';
-		tabContainer.appendChild( slideTrack );
+		tabContainer.append( slideTrack );
 
 		Array.from( this.tabs ).forEach( ( tab, index ) => {
-			slideTrack.appendChild( this.createTabContainer( tab, index ) );
+			slideTrack.append( this.createTabContainer( tab, index ) );
 		} );
 
 		return tabContainer;
@@ -134,7 +116,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 		container.className = `frm-tab-container ${ className }`;
 
 		Array.from( tab.children ).forEach( child => {
-			container.appendChild( child );
+			container.append( child );
 		} );
 
 		return container;
@@ -147,5 +129,9 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 */
 	getTabUnderline() {
 		return this.shadowRoot.querySelector( '.frm-tabs-active-underline' );
+	}
+
+	getLabelText() {
+		return null;
 	}
 }

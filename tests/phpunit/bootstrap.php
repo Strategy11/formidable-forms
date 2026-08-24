@@ -20,20 +20,17 @@ if ( file_exists( __DIR__ . '/../vendor/autoload.php' ) ) {
 	include __DIR__ . '/../vendor/autoload.php';
 }
 
-if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
-	require getenv( 'WP_DEVELOP_DIR' ) . 'tests/phpunit/includes/bootstrap.php';
-} else {
+if ( false === getenv( 'WP_DEVELOP_DIR' ) ) {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
+} else {
+	require getenv( 'WP_DEVELOP_DIR' ) . 'tests/phpunit/includes/bootstrap.php';
 }
 
 require_once __DIR__ . '/base/frm_factory.php';
 
-// include unit test base class
+// Include unit test base class
 require_once __DIR__ . '/base/FrmUnitTest.php';
 require_once __DIR__ . '/base/FrmAjaxUnitTest.php';
-
-// include our Stripe unit helper base class
-require_once __DIR__ . '/stripe/FrmStrpLiteUnitTest.php';
 
 // Ensure that the plugin has been installed and activated.
 FrmUnitTest::frm_install();

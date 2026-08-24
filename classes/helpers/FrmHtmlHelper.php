@@ -36,6 +36,28 @@ class FrmHtmlHelper {
 	}
 
 	/**
+	 * Show readonly setting icon
+	 *
+	 * @since 6.33
+	 *
+	 * @param bool $is_enabled Whether the setting is enabled.
+	 *
+	 * @return void
+	 */
+	public static function show_readonly_setting_icon( $is_enabled ) {
+		if ( $is_enabled ) {
+			echo '<span class="frm-success-icon">';
+			FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) );
+			echo '</span>';
+			return;
+		}
+
+		echo '<span class="frm-x-icon">';
+		FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) );
+		echo '</span>';
+	}
+
+	/**
 	 * Echo a dropdown option.
 	 * This is useful to avoid closing and opening PHP to echo <option> tags which leads to extra whitespace.
 	 * Avoiding whitespace saves 5KB of HTML for an international address field with a country dropdown with 252 options.
@@ -113,12 +135,13 @@ class FrmHtmlHelper {
 		if ( is_numeric( $hidden_value ) ) {
 			$hidden_value .= $args['default_unit'];
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span class="frm-unit-input">
 			<input type="hidden" value="<?php echo esc_attr( $hidden_value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
 			<input <?php FrmAppHelper::array_to_html_params( $input_number_attrs, true ); ?> />
 			<span class="frm-input-group-suffix">
-				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>" tabindex="0">
+				<select aria-label="<?php esc_attr_e( 'Select unit', 'formidable' ); ?>" tabindex="0">
 					<?php
 					foreach ( $units as $unit ) {
 						self::echo_dropdown_option( $unit, $unit === ( $selected_unit ?? $args['default_unit'] ), array( 'value' => $unit ) );
@@ -128,5 +151,6 @@ class FrmHtmlHelper {
 			</span>
 		</span>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 }

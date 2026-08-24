@@ -92,8 +92,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	protected function get_content_args() {
-		$args = parent::get_content_args();
-
+		$args          = parent::get_content_args();
 		$entries_count = FrmEmailSummaryHelper::get_entries_count( $this->from_date, $this->to_date );
 		$entries_stat  = array(
 			'entries' => array(

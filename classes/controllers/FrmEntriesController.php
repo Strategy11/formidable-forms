@@ -11,15 +11,15 @@ class FrmEntriesController {
 	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 
-		if ( ! $views_installed ) {
-			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
-			self::maybe_redirect_to_views_upsell();
-		} else {
+		if ( $views_installed ) {
 			self::maybe_redirect_to_views_index();
+		} else {
+			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			self::maybe_redirect_to_views_upsell();
 		}
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
@@ -85,8 +85,7 @@ class FrmEntriesController {
 	 */
 	private static function add_url_params_to_views_redirect_query_args( $query_args ) {
 		$query_args['show_nav'] = FrmAppHelper::simple_get( 'show_nav', 'absint', 0 );
-
-		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		$form_id                = FrmAppHelper::simple_get( 'form', 'absint', 0 );
 
 		if ( $form_id ) {
 			$query_args['form'] = $form_id;
@@ -101,16 +100,17 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
-			$menu_name = FrmAppHelper::get_menu_name();
-			$base      = self::base_column_key( $menu_name );
-
-			add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
-			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
-			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
-		} else {
+		if ( in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
 			add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
+			return;
 		}
+
+		$menu_name = FrmAppHelper::get_menu_name();
+		$base      = self::base_column_key( $menu_name );
+
+		add_filter( 'manage_' . $base . '_columns', 'FrmEntriesController::manage_columns' );
+		add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
+		add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
 	}
 
 	/**
@@ -155,7 +155,7 @@ class FrmEntriesController {
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 
 		if ( $screen->id === $menu_name . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries' ) {
-			$show_screen = false;
+			return false;
 		}
 
 		return $show_screen;
@@ -182,15 +182,14 @@ class FrmEntriesController {
 		}
 
 		$columns[ $form_id . '_is_draft' ]   = esc_html__( 'Entry Status', 'formidable' );
-		$columns[ $form_id . '_created_at' ] = __( 'Entry creation date', 'formidable' );
-		$columns[ $form_id . '_updated_at' ] = __( 'Entry update date', 'formidable' );
+		$columns[ $form_id . '_created_at' ] = esc_html__( 'Entry creation date', 'formidable' );
+		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
 
 		$frm_vars['cols'] = $columns;
+		$action           = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ) ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ), true ) ) {
 			add_screen_option(
 				'per_page',
 				array(
@@ -250,7 +249,7 @@ class FrmEntriesController {
 	private static function add_subform_cols( $field, $form_id, &$columns ) {
 		$sub_form_cols = FrmField::get_all_for_form( $field->field_options['form_select'] );
 
-		if ( empty( $sub_form_cols ) ) {
+		if ( ! $sub_form_cols ) {
 			return;
 		}
 
@@ -259,6 +258,7 @@ class FrmEntriesController {
 				unset( $sub_form_cols[ $k ] );
 				continue;
 			}
+
 			$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $field->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
 			unset( $sub_form_col );
 		}
@@ -276,7 +276,7 @@ class FrmEntriesController {
 	private static function add_field_cols( $field, $form_id, &$columns ) {
 		$col_id = $field->field_key;
 
-		if ( $field->form_id != $form_id ) {
+		if ( (int) $field->form_id !== (int) $form_id ) {
 			$col_id .= '-_-form' . $field->form_id;
 		}
 
@@ -305,7 +305,7 @@ class FrmEntriesController {
 	private static function maybe_format_field_name_for_column_title( $field, $include_column_for_sep_val, $is_value = true ) {
 		$field_name = FrmAppHelper::truncate( $field->name, 35 );
 
-		if ( ! $include_column_for_sep_val || ! in_array( $field->type, array( 'select', 'radio', 'checkbox' ), true ) ) {
+		if ( ! $include_column_for_sep_val || ! in_array( $field->type, array( 'select', 'radio', 'checkbox', 'product', 'ranking' ), true ) ) {
 			return $field_name;
 		}
 
@@ -338,11 +338,12 @@ class FrmEntriesController {
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$this_page_name = self::hidden_column_key();
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
 			return $check;
 		}
 
-		if ( empty( $prev_value ) ) {
+		if ( ! $prev_value ) {
 			$prev_value = get_metadata( 'user', $object_id, $meta_key, true );
 		}
 
@@ -366,20 +367,21 @@ class FrmEntriesController {
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$this_page_name = self::hidden_column_key();
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $meta_key != $this_page_name ) {
 			return;
 		}
 
 		global $frm_vars;
 
-		if ( ! isset( $frm_vars['prev_hidden_cols'] ) || ! $frm_vars['prev_hidden_cols'] ) {
+		if ( empty( $frm_vars['prev_hidden_cols'] ) ) {
 			// Don't continue if there's no previous value.
 			return;
 		}
 
 		foreach ( $meta_value as $mk => $mv ) {
 			// Remove blank values.
-			if ( empty( $mv ) ) {
+			if ( ! $mv ) {
 				unset( $meta_value[ $mk ] );
 			}
 		}
@@ -390,7 +392,8 @@ class FrmEntriesController {
 		$save            = false;
 
 		foreach ( (array) $frm_vars['prev_hidden_cols'] as $prev_hidden ) {
-			if ( empty( $prev_hidden ) || in_array( $prev_hidden, $meta_value ) ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			if ( ! $prev_hidden || in_array( $prev_hidden, $meta_value ) ) {
 				// Don't add blank cols or process included cols.
 				continue;
 			}
@@ -408,10 +411,11 @@ class FrmEntriesController {
 			unset( $form_prefix );
 		}
 
-		if ( $save ) {
-			$user_id = get_current_user_id();
-			update_user_option( $user_id, $this_page_name, $meta_value, true );
+		if ( ! $save ) {
+			return;
 		}
+
+		update_user_option( get_current_user_id(), $this_page_name, $meta_value, true );
 	}
 
 	/**
@@ -423,7 +427,6 @@ class FrmEntriesController {
 	 */
 	private static function hidden_column_key( $menu_name = '' ) {
 		$base = self::base_column_key( $menu_name );
-
 		return 'manage' . $base . 'columnshidden';
 	}
 
@@ -435,7 +438,7 @@ class FrmEntriesController {
 	 * @return string
 	 */
 	private static function base_column_key( $menu_name = '' ) {
-		if ( empty( $menu_name ) ) {
+		if ( ! $menu_name ) {
 			$menu_name = FrmAppHelper::get_menu_name();
 		}
 
@@ -453,7 +456,7 @@ class FrmEntriesController {
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
-			$save = (int) $value;
+			return (int) $value;
 		}
 
 		return $save;
@@ -523,7 +526,7 @@ class FrmEntriesController {
 		$i           = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
 		$max_columns = 11;
 
-		if ( ! empty( $hidden ) ) {
+		if ( $hidden ) {
 			$result = $hidden;
 			$i      = $i - count( $result );
 		}
@@ -549,15 +552,17 @@ class FrmEntriesController {
 		$hidden = array();
 
 		foreach ( (array) $result as $r ) {
-			if ( ! empty( $r ) ) {
-				list( $form_prefix, $field_key ) = explode( '_', $r );
-
-				if ( (int) $form_prefix === (int) $form_id ) {
-					$hidden[] = $r;
-				}
-
-				unset( $form_prefix );
+			if ( ! $r ) {
+				continue;
 			}
+
+			list( $form_prefix, $field_key ) = explode( '_', $r );
+
+			if ( (int) $form_prefix === (int) $form_id ) {
+				$hidden[] = $r;
+			}
+
+			unset( $form_prefix );
 		}
 
 		return $hidden;
@@ -581,15 +586,14 @@ class FrmEntriesController {
 			$atts['form_id'] . '_id'       => '',
 		);
 		$cols         = $remove_first + array_reverse( $frm_vars['cols'], true );
-
-		$i = $atts['i'];
+		$i            = $atts['i'];
 
 		foreach ( $cols as $col_key => $col ) {
 			if ( $i <= $atts['max_columns'] ) {
 				break;
 			}
 
-			if ( empty( $result ) || ! in_array( $col_key, $result, true ) ) {
+			if ( ! $result || ! in_array( $col_key, $result, true ) ) {
 				$result[] = $col_key;
 				--$i;
 			}
@@ -617,11 +621,9 @@ class FrmEntriesController {
 			self::get_delete_form_time( $form, $errors );
 		}
 
-		$table_class = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
-
+		$table_class   = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
 		$wp_list_table = new $table_class( array( 'params' => $params ) );
-
-		$pagenum = $wp_list_table->get_pagenum();
+		$pagenum       = $wp_list_table->get_pagenum();
 
 		$wp_list_table->prepare_items();
 
@@ -633,12 +635,13 @@ class FrmEntriesController {
 			if ( headers_sent() ) {
 				FrmAppHelper::js_redirect( $url, true );
 			} else {
-				wp_redirect( esc_url_raw( $url ) );
+				wp_safe_redirect( esc_url_raw( $url ) );
 			}
+
 			die();
 		}
 
-		if ( empty( $message ) && isset( $_GET['import-message'] ) ) {
+		if ( ! $message && isset( $_GET['import-message'] ) ) {
 			$message = __( 'Your import is complete', 'formidable' );
 		}
 
@@ -652,13 +655,15 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	private static function get_delete_form_time( $form, &$errors ) {
-		if ( 'trash' === $form->status ) {
-			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( $form->options['trash_time'] ?? time() ) );
-
-			/* translators: %1$s: Time string */
-			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
+		if ( 'trash' !== $form->status ) {
+			return;
 		}
+
+		$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
+		$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, $form->options['trash_time'] ?? time() );
+
+		/* translators: %1$s: Time string */
+		$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
 	}
 
 	/**
@@ -725,7 +730,7 @@ class FrmEntriesController {
 
 		$params = FrmForm::get_admin_params();
 
-		if ( isset( $params['keep_post'] ) && $params['keep_post'] ) {
+		if ( ! empty( $params['keep_post'] ) ) {
 			self::unlink_post( $params['id'] );
 		}
 
@@ -747,7 +752,7 @@ class FrmEntriesController {
 	public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 
-		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( FrmAppHelper::is_admin() || empty( $_POST ) || ! $form_id || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -776,6 +781,7 @@ class FrmEntriesController {
 			return;
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $errors == '' && ! $ajax ) {
 			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
@@ -790,26 +796,26 @@ class FrmEntriesController {
 
 		$frm_vars['created_entries'][ $form_id ] = array( 'errors' => $errors );
 
-		if ( empty( $errors ) ) {
-			$_POST['frm_skip_cookie'] = 1;
-			$do_success               = false;
-
-			if ( $params['action'] === 'create' ) {
-				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
-					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-
-					$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
-					$do_success   = true;
-				}
-			}
-
-			do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );
-
-			if ( $do_success ) {
-				FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
-			}
-			unset( $_POST['frm_skip_cookie'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( $errors ) {
+			return;
 		}
+
+		$_POST['frm_skip_cookie'] = 1;
+		$do_success               = false;
+
+		if ( $params['action'] === 'create' && apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
+			$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+			$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
+			$do_success   = true;
+		}
+
+		do_action( 'frm_process_entry', $params, $errors, $form, array( 'ajax' => $ajax ) );
+
+		if ( $do_success ) {
+			FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
+		}
+		unset( $_POST['frm_skip_cookie'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -836,7 +842,6 @@ class FrmEntriesController {
 	 */
 	public static function delete_entry_before_redirect( $url, $form, $atts ) {
 		self::_delete_entry( $atts['id'], $form );
-
 		return $url;
 	}
 
@@ -866,10 +871,12 @@ class FrmEntriesController {
 
 		FrmAppHelper::unserialize_or_decode( $form->options );
 
-		if ( isset( $form->options['no_save'] ) && $form->options['no_save'] ) {
-			self::unlink_post( $entry_id );
-			FrmEntry::destroy( $entry_id );
+		if ( empty( $form->options['no_save'] ) ) {
+			return;
 		}
+
+		self::unlink_post( $entry_id );
+		FrmEntry::destroy( $entry_id );
 	}
 
 	/**
@@ -922,8 +929,7 @@ class FrmEntriesController {
 			'array_separator' => ', ',
 		);
 		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
-
-		$atts = shortcode_atts( $defaults, $atts );
+		$atts     = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
 			$shortcode_atts  = array(
@@ -945,9 +951,8 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	public static function entry_sidebar( $entry = false ) {
-		$data = array();
-		$id   = 0;
-
+		$data        = array();
+		$id          = 0;
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
 

@@ -5,10 +5,6 @@
  */
 class test_FrmAddonsController extends FrmUnitTest {
 
-	public function setUp(): void {
-		parent::setUp();
-	}
-
 	/**
 	 * @covers FrmAddonsController::url_is_allowed
 	 * @covers FrmAddonsController::allowed_external_urls

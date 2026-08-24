@@ -89,8 +89,7 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		 */
 		$api_url = apply_filters( 'frm_stopforumspam_api_url', 'https://api.stopforumspam.org/api', array( 'values' => $this->values ) );
 
-		$url = add_query_arg( $request_data, $api_url );
-
+		$url      = add_query_arg( $request_data, $api_url );
 		$response = wp_remote_get( $url, array( 'timeout' => 15 ) );
 
 		return wp_remote_retrieve_body( $response );

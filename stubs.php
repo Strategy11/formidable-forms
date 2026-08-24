@@ -23,6 +23,14 @@ namespace {
 
 	class FrmProFormState {
 		public static function get_from_request( $key, $default ) {}
+		/**
+		 * @param string $key
+		 * @param mixed  $value
+		 *
+		 * @return void
+		 */
+		public static function set_initial_value( $key, $value ) {
+		}
 	}
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
@@ -93,7 +101,7 @@ namespace {
 		 *
 		 * @return array|object|string|null
 		 */
-		public static function &value_exists( $field_id, $value, $entry_id = false ) {
+		public static function value_exists( $field_id, $value, $entry_id = false ) {
 		}
 		public static function get_post_value( $post_id, $post_field, $custom_field, $atts ) {
 		}
@@ -249,7 +257,7 @@ namespace {
 		}
 	}
 	class FrmProFormsHelper {
-		public static function &post_type( $form ) {
+		public static function post_type( $form ) {
 		}
 		/**
 		 * @return array
@@ -306,7 +314,7 @@ namespace {
 		 *
 		 * @return bool
 		 */
-		public static function &is_field_visible_to_user( $field ) {
+		public static function is_field_visible_to_user( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {
@@ -314,6 +322,15 @@ namespace {
 		 * @return string
 		 */
 		public static function plugin_version() {
+		}
+	}
+	class FrmViewsDisplay {
+		/**
+		 * @param int $form_id
+		 *
+		 * @return array
+		 */
+		public static function get_display_ids_by_form( $form_id ) {
 		}
 	}
 	class FrmProCreditCardsController {
@@ -480,6 +497,387 @@ namespace {
 	}
 
 	class FrmProComboFieldsController {
+	}
+
+	class FrmProEntryMeta {
+		/**
+		 * @param object $field
+		 *
+		 * @return bool
+		 */
+		public static function skip_required_validation( $field ) {
+		}
+	}
+
+	class FrmProDashboardController {
+		/**
+		 * @return array
+		 */
+		public static function get_counters() {
+		}
+	}
+
+	class FrmProFormsController{
+		public static function enqueue_pro_web_components_script(){
+		}
+	}
+
+	/**
+	 * This class is in the PayPal add-on.
+	 */
+	class FrmPaymentSettingsController {
+		/**
+		 * @return void
+		 */
+		public static function route() {
+
+		}
+	}
+
+	/**
+	 * DeepSource's PHP analyzer excludes the vendor directory from its scan (see the
+	 * exclude_patterns in .deepsource.toml), so it never sees PHPUnit\Framework\TestCase's real
+	 * methods even though this class extends it - that extends clause only helps PHPStan, which
+	 * does load vendor/. Every PHPUnit method the plugin's tests actually call is therefore
+	 * re-declared concretely below, with a real (if simplified) body: an empty body would trip
+	 * DeepSource's PHP-W1080, and an unused parameter would trip PHP-W1037, on every one of these.
+	 */
+	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
+		/**
+		 * FrmUnitTest::setUp() actually replaces this with a FrmUnitTestFactory, but that class
+		 * lives under tests/, which phpstan.neon excludes from the analysis paths - PHPStan would
+		 * report "unknown class" for a type it can never load. WP_UnitTest_Factory is the real
+		 * base type and is declared below, so it resolves.
+		 *
+		 * @var WP_UnitTest_Factory
+		 */
+		protected $factory;
+
+		/**
+		 * Real PHPUnit\Framework\TestCase declares every assertion method static, so an override
+		 * has to match that or PHP fatals with "Cannot make static method ... non static".
+		 *
+		 * @param bool   $passed
+		 * @param string $message
+		 */
+		protected static function stub_check( $passed, $message = '' ) {
+			if ( ! $passed ) {
+				throw new Exception( $message );
+			}
+		}
+
+		/**
+		 * The parent parameter is array|ArrayAccess. Any concrete spelling of that PHPStan can
+		 * check - including a fully generic ArrayAccess<mixed,mixed> - reads as narrower than the
+		 * parent's bare, unparameterized ArrayAccess and trips the contravariance rule, so this is
+		 * typed mixed: the widest possible type, trivially at least as wide as the parent's.
+		 *
+		 * @param mixed $key
+		 * @param mixed $array
+		 */
+		public static function assertArrayHasKey( $key, $array, string $message = '' ): void {
+			self::stub_check( is_array( $array ) && array_key_exists( $key, $array ), $message );
+		}
+
+		/**
+		 * @param mixed $key
+		 * @param mixed $array
+		 */
+		public static function assertArrayNotHasKey( $key, $array, string $message = '' ): void {
+			self::stub_check( ! ( is_array( $array ) && array_key_exists( $key, $array ) ), $message );
+		}
+
+		public static function assertContains( $needle, iterable $haystack, string $message = '' ): void {
+			self::stub_check( in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), true ), $message );
+		}
+
+		public static function assertNotContains( $needle, iterable $haystack, string $message = '' ): void {
+			self::stub_check( ! in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), true ), $message );
+		}
+
+		public static function assertCount( int $expected_count, $haystack, string $message = '' ): void {
+			self::stub_check( is_countable( $haystack ) && count( $haystack ) === $expected_count, $message );
+		}
+
+		public static function assertEmpty( $actual, string $message = '' ): void {
+			self::stub_check( empty( $actual ), $message );
+		}
+
+		public static function assertNotEmpty( $actual, string $message = '' ): void {
+			self::stub_check( ! empty( $actual ), $message );
+		}
+
+		public static function assertEquals( $expected, $actual, string $message = '' ): void {
+			self::stub_check( $expected == $actual, $message ); // phpcs:ignore Universal.Operators.StrictComparisons
+		}
+
+		public static function assertTrue( $condition, string $message = '' ): void {
+			self::stub_check( $condition === true, $message );
+		}
+
+		public static function assertFalse( $condition, string $message = '' ): void {
+			self::stub_check( $condition === false, $message );
+		}
+
+		public static function assertNotFalse( $condition, string $message = '' ): void {
+			self::stub_check( $condition !== false, $message );
+		}
+
+		public static function assertFileExists( string $filename, string $message = '' ): void {
+			self::stub_check( file_exists( $filename ), $message );
+		}
+
+		public static function assertGreaterThan( $expected, $actual, string $message = '' ): void {
+			self::stub_check( $actual > $expected, $message );
+		}
+
+		public static function assertGreaterThanOrEqual( $expected, $actual, string $message = '' ): void {
+			self::stub_check( $actual >= $expected, $message );
+		}
+
+		public static function assertLessThan( $expected, $actual, string $message = '' ): void {
+			self::stub_check( $actual < $expected, $message );
+		}
+
+		public static function assertLessThanOrEqual( $expected, $actual, string $message = '' ): void {
+			self::stub_check( $actual <= $expected, $message );
+		}
+
+		public static function assertInstanceOf( string $expected, $actual, string $message = '' ): void {
+			self::stub_check( $actual instanceof $expected, $message );
+		}
+
+		public static function assertNotInstanceOf( string $expected, $actual, string $message = '' ): void {
+			self::stub_check( ! ( $actual instanceof $expected ), $message );
+		}
+
+		public static function assertIsArray( $actual, string $message = '' ): void {
+			self::stub_check( is_array( $actual ), $message );
+		}
+
+		public static function assertIsBool( $actual, string $message = '' ): void {
+			self::stub_check( is_bool( $actual ), $message );
+		}
+
+		public static function assertIsObject( $actual, string $message = '' ): void {
+			self::stub_check( is_object( $actual ), $message );
+		}
+
+		public static function assertIsString( $actual, string $message = '' ): void {
+			self::stub_check( is_string( $actual ), $message );
+		}
+
+		public static function assertIsNumeric( $actual, string $message = '' ): void {
+			self::stub_check( is_numeric( $actual ), $message );
+		}
+
+		public static function assertIsNotNumeric( $actual, string $message = '' ): void {
+			self::stub_check( ! is_numeric( $actual ), $message );
+		}
+
+		public static function assertNotNull( $actual, string $message = '' ): void {
+			self::stub_check( $actual !== null, $message );
+		}
+
+		public static function assertNull( $actual, string $message = '' ): void {
+			self::stub_check( $actual === null, $message );
+		}
+
+		public static function assertSame( $expected, $actual, string $message = '' ): void {
+			self::stub_check( $expected === $actual, $message );
+		}
+
+		public static function assertNotSame( $expected, $actual, string $message = '' ): void {
+			self::stub_check( $expected !== $actual, $message );
+		}
+
+		/**
+		 * assertObjectNotHasProperty is deliberately not overridden here: PHPUnit declares it
+		 * final, so any override at all is a fatal "Cannot override final method" - not just a
+		 * signature mismatch. It is only used in test_FrmEntry.php, which this stub rewrite does
+		 * not need to cover.
+		 */
+
+		public static function assertStringContainsString( string $needle, string $haystack, string $message = '' ): void {
+			self::stub_check( strpos( $haystack, $needle ) !== false, $message );
+		}
+
+		public static function assertStringNotContainsString( string $needle, string $haystack, string $message = '' ): void {
+			self::stub_check( strpos( $haystack, $needle ) === false, $message );
+		}
+
+		public static function assertStringStartsWith( string $prefix, string $string, string $message = '' ): void {
+			self::stub_check( strncmp( $string, $prefix, strlen( $prefix ) ) === 0, $message );
+		}
+
+		public static function fail( string $message = '' ): void {
+			throw new Exception( $message );
+		}
+
+		public static function markTestSkipped( string $message = '' ): void {
+			throw new Exception( $message );
+		}
+
+		/**
+		 * Real WP_UnitTestCase_Base declares this one an instance method, not static.
+		 */
+		public function go_to( $url ) {
+			self::stub_check( is_string( $url ) );
+		}
+
+		/**
+		 * Real WP_UnitTestCase_Base declares this one an instance method, not static.
+		 */
+		public function clean_up_global_scope() {
+			self::stub_check( true );
+		}
+	}
+
+	class WP_UnitTestCase extends WP_UnitTestCase_Base {
+	}
+
+	class WP_UnitTest_Factory {
+		/**
+		 * @var WP_UnitTest_Factory_For_Post
+		 */
+		public $post;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Attachment
+		 */
+		public $attachment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Comment
+		 */
+		public $comment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_User
+		 */
+		public $user;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $term;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $category;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $tag;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Bookmark
+		 */
+		public $bookmark;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Blog
+		 */
+		public $blog;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Network
+		 */
+		public $network;
+	}
+
+	/**
+	 * The leaf *_For_* classes below are deliberately left abstract with no override of
+	 * create_object()/update_object()/get_object_by_id(): they exist only so property access
+	 * like $factory->post resolves to a type that inherits create()/create_and_get(), and an
+	 * abstract class is never instantiated from this file, so leaving them unimplemented is
+	 * fine for static analysis and avoids stubbing empty method bodies DeepSource flags as
+	 * PHP-W1080 (no body) with unused-parameter findings on top.
+	 */
+	abstract class WP_UnitTest_Factory_For_Thing {
+		public $default_generation_definitions;
+		public $factory;
+
+		public function __construct( $factory, $default_generation_definitions = array() ) {
+			$this->factory                        = $factory;
+			$this->default_generation_definitions = $default_generation_definitions;
+		}
+
+		abstract public function create_object( $args );
+		abstract public function update_object( $object_id, $fields );
+		abstract public function get_object_by_id( $object_id );
+
+		public function create( $args = array(), $generation_definitions = null ) {
+			if ( $generation_definitions === null ) {
+				$generation_definitions = $this->default_generation_definitions;
+			}
+
+			return $this->create_object( array_merge( (array) $generation_definitions, $args ) );
+		}
+
+		public function create_and_get( $args = array(), $generation_definitions = null ) {
+			return $this->get_object_by_id( $this->create( $args, $generation_definitions ) );
+		}
+
+		public function create_many( $count, $args = array(), $generation_definitions = null ) {
+			return array_fill( 0, $count, $this->create( $args, $generation_definitions ) );
+		}
+	}
+
+	abstract class WP_UnitTest_Factory_For_Post extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Comment extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_User extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Term extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Bookmark extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Blog extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	/**
+	 * frm_factory.php uses this to generate unique default values (field names, entry names).
+	 * mago.toml's [source] paths includes "tests" directly - unlike PHPStan, mago analyzes that
+	 * file itself and needs this class to exist, not just its name.
+	 */
+	class WP_UnitTest_Generator_Sequence {
+		public static $incr = -1;
+		public $next;
+		public $template_string;
+
+		public function __construct( $template_string = '%s', $start = null ) {
+		}
+
+		public function next() {
+		}
+
+		public function get_incr() {
+		}
+
+		public function get_template_string() {
+		}
+	}
+
+	/**
+	 * frm_factory.php uses this to generate a random entry value, for the same reason as
+	 * WP_UnitTest_Generator_Sequence above.
+	 */
+	function rand_str( $length = 32 ) {
 	}
 }
 

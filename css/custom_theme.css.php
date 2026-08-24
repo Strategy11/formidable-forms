@@ -7,7 +7,7 @@ if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
 	if ( ! empty( $css ) ) {
-		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo strip_tags( FrmStylesHelper::maybe_scope_custom_css_in_cached_output( $css ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
@@ -20,7 +20,7 @@ if ( ! isset( $frm_style ) ) {
 $styles           = $frm_style->get_all();
 $default_style    = $frm_style->get_default_style( $styles );
 $defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
-$important        = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important        = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
 $use_chosen_js    = FrmStylesHelper::use_chosen_js();
 
@@ -143,11 +143,12 @@ legend.frm_hidden{
 <?php } ?>
 }
 
-<?php if ( ! empty( $defaults['form_desc_size'] ) ) { ?>
 .with_frm_style .frm_form_field.frm_html_container{
+<?php if ( ! empty( $defaults['form_desc_size'] ) ) { ?>
 	font-size: var(--form-desc-size)<?php echo esc_html( $important ); ?>;
-}
 <?php } ?>
+	overflow-wrap: break-word<?php echo esc_html( $important ); ?>;
+}
 
 .with_frm_style .frm_form_field .frm_show_it{
 <?php if ( ! empty( $defaults['field_font_size'] ) ) { ?>
@@ -192,6 +193,12 @@ legend.frm_hidden{
 	height:auto;
 }
 
+<?php if ( $use_chosen_js ) { ?>
+.with_frm_style .chosen-container-multi .chosen-choices,
+.with_frm_style .chosen-container-single .chosen-single,
+<?php } elseif ( $pro_is_installed ) { ?>
+.with_frm_style .frm_slimselect.ss-main,
+<?php } ?>
 .with_frm_style input[type=text],
 .with_frm_style input[type=password],
 .with_frm_style input[type=email],
@@ -206,12 +213,7 @@ legend.frm_hidden{
 .with_frm_style .frm_scroll_box .frm_opt_container,
 .frm_form_fields_active_style,
 .frm_form_fields_error_style,
-.with_frm_style .frm-card-element.StripeElement,
-<?php if ( $use_chosen_js ) { ?>
-.with_frm_style .chosen-container-multi .chosen-choices,
-.with_frm_style .chosen-container-single .chosen-single,
-<?php } ?>
-.with_frm_style .frm_slimselect.ss-main {
+.with_frm_style .frm-card-element.StripeElement {
 	color: var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
 	border-color: var(--border-color)<?php echo esc_html( $important ); ?>;
@@ -227,7 +229,12 @@ legend.frm_hidden{
 	font-weight: var(--field-weight);
 }
 
-<?php if ( ! empty( $important ) ) : ?>
+.with_frm_style input:-webkit-autofill:focus {
+	/* Prevent the user agent autofill background color from taking effect on focus. */
+	transition: background-color 5000s ease-in-out 0s<?php echo esc_html( $important ); ?>;
+}
+
+<?php if ( $important ) : ?>
 	<?php if ( $use_chosen_js ) { ?>
 	.with_frm_style .chosen-container-multi .chosen-choices,
 	.with_frm_style .chosen-container-single .chosen-single,
@@ -506,7 +513,7 @@ legend.frm_hidden{
 	clear:both;
 }
 
-.with_frm_style input[type=number][readonly]{
+.with_frm_style input[type=number][readonly] {
 	-moz-appearance: textfield;
 }
 
@@ -649,7 +656,9 @@ legend.frm_hidden{
 	margin-bottom:8px !important;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm-edit-page-btn,
+<?php } ?>
 .with_frm_style .frm_submit input[type=submit],
 .with_frm_style .frm_submit input[type=button],
 .with_frm_style .frm_submit button{
@@ -732,7 +741,7 @@ foreach ( $styles as $style ) {
 }
 
 // Set it again since it may have been overridden.
-$important = empty( $defaults['important_style'] ) ? '' : ' !important';
+$important = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 ?>
 
 .frm_ajax_loading{
@@ -1668,4 +1677,8 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 }
 <?php
 
-echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+$frm_custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
+if ( $frm_custom_css ) {
+	echo FrmStylesHelper::maybe_scope_css_for_admin( $frm_custom_css ) . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}

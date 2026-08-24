@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSettingsController {
 
 	/**
+	 * Icon for the API section, used whether the add-on is active or only a placeholder.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	private static $api_section_icon = 'frmfont frm_cloud_icon';
+
+	/**
 	 * Payments sections are removed from the top level and added to a payments section.
 	 *
 	 * @since 6.22.1
@@ -21,7 +30,7 @@ class FrmSettingsController {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -46,12 +55,10 @@ class FrmSettingsController {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
-
-		$uploads     = wp_upload_dir();
-		$target_path = $uploads['basedir'] . '/formidable/css';
-
-		$sections = self::get_settings_tabs();
-		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		$uploads      = wp_upload_dir();
+		$target_path  = $uploads['basedir'] . '/formidable/css';
+		$sections     = self::get_settings_tabs();
+		$current      = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
 		if ( in_array( $current, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$current = 'payments_settings';
@@ -145,7 +152,7 @@ class FrmSettingsController {
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
 			foreach ( $installed_addons as $installed_addon ) {
-				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' && $installed_addon->needs_license ) {
+				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name !== 'Formidable Pro' && $installed_addon->needs_license ) {
 					$show_licenses = true;
 					break;
 				}
@@ -166,6 +173,7 @@ class FrmSettingsController {
 		 * @param array<array> $sections
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
+		self::add_inactive_addon_sections( $sections );
 		self::remove_payments_sections( $sections );
 
 		$sections['misc'] = array(
@@ -203,6 +211,105 @@ class FrmSettingsController {
 	}
 
 	/**
+	 * Add a placeholder section for each add-on that owns a Global Settings
+	 * section but is not active.
+	 *
+	 * A placeholder reads as disabled and opens a page offering to activate the
+	 * add-on or to upgrade, depending on what the license allows. It goes at the
+	 * head of the add-on sections, right after Inbox, so it sits with the rest of
+	 * the add-on settings instead of trailing them. A section already claimed by
+	 * an active plugin is left alone, so nothing stands in for a section that is
+	 * really there.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 *
+	 * @return void
+	 */
+	private static function add_inactive_addon_sections( &$sections ) {
+		if ( isset( $sections['api'] ) ) {
+			// The add-on is active, so it owns the section. Only the icon is taken over,
+			// so the tab looks the same whether or not the add-on is installed.
+			$sections['api']['icon'] = self::$api_section_icon;
+			return;
+		}
+
+		self::insert_section_after( $sections, 'inbox', 'api', self::get_api_placeholder_section() );
+	}
+
+	/**
+	 * Insert a section directly after another one, leaving the rest of the order alone.
+	 *
+	 * Assigning a new key lands the section at the end of the array, so the array
+	 * is rebuilt to put it where it belongs.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 * @param string       $after    Key of the section the new one follows. The new section goes last when this key is not there.
+	 * @param string       $key      Key for the new section.
+	 * @param array        $section  The section to insert.
+	 *
+	 * @return void
+	 */
+	private static function insert_section_after( &$sections, $after, $key, $section ) {
+		if ( ! isset( $sections[ $after ] ) ) {
+			$sections[ $key ] = $section;
+			return;
+		}
+
+		$ordered = array();
+
+		foreach ( $sections as $section_key => $existing_section ) {
+			$ordered[ $section_key ] = $existing_section;
+
+			if ( $section_key === $after ) {
+				$ordered[ $key ] = $section;
+			}
+		}
+
+		$sections = $ordered;
+	}
+
+	/**
+	 * Get the placeholder that stands in for the API add-on's section.
+	 *
+	 * The upgrade data decides which call to action the page shows. When the
+	 * license covers the add-on, it carries the one click install or activate
+	 * link. Otherwise it carries the plan the add-on needs, and the page asks
+	 * the user to upgrade to it, on a gradient button that sets the upgrade
+	 * apart from a one click install.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_api_placeholder_section() {
+		$data = FrmAppHelper::get_upgrade_data_params(
+			'api',
+			array(
+				'medium'        => 'api-settings',
+				'upgrade'       => __( 'API settings', 'formidable' ),
+				'message'       => __( 'Send entries to any site with a REST API, and let AI assistants build your forms. Upgrade to get the API add-on.', 'formidable' ),
+				'learn-more'    => FrmAppHelper::get_doc_url( 'formidable-api', 'api-global-settings' ),
+				'upsell-images' => 'api-settings-1.png,api-settings-2.png,api-settings-3.png',
+			)
+		);
+
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$data['gradient-upgrade'] = 1;
+		}
+
+		return array(
+			'name'       => __( 'API', 'formidable' ),
+			'icon'       => self::$api_section_icon,
+			'html_class' => 'frm_show_upgrade_tab frm_noallow',
+			'data'       => $data,
+		);
+	}
+
+	/**
 	 * Remove the payments sections (PayPal, Square, Stripe, Authorize.Net)
 	 * and show them all on the payments section in separate tabs.
 	 *
@@ -216,10 +323,12 @@ class FrmSettingsController {
 		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
 
 		foreach ( $sections as $key => $section ) {
-			if ( in_array( $key, $payment_section_keys, true ) ) {
-				self::$removed_payments_sections[ $key ] = $section;
-				unset( $sections[ $key ] );
+			if ( ! in_array( $key, $payment_section_keys, true ) ) {
+				continue;
 			}
+
+			self::$removed_payments_sections[ $key ] = $section;
+			unset( $sections[ $key ] );
 		}
 
 		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
@@ -237,12 +346,13 @@ class FrmSettingsController {
 	 */
 	private static function payment_sections_sort_callback( $a, $b ) {
 		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
-		$first_key  = array_search( $a, $order );
-		$second_key = array_search( $b, $order );
+		$first_key  = array_search( $a, $order, true );
+		$second_key = array_search( $b, $order, true );
 
 		if ( false === $first_key || false === $second_key ) {
 			return 0;
 		}
+
 		return $first_key - $second_key;
 	}
 
@@ -262,8 +372,9 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( $section['function'] ?? $section ) );
+			call_user_func( $section['function'] ?? $section );
 		}
+
 		wp_die();
 	}
 
@@ -286,11 +397,10 @@ class FrmSettingsController {
 	 * Render the global currency selector if Pro is up to date.
 	 *
 	 * @param FrmSettings $frm_settings
-	 * @param string      $more_html
 	 *
 	 * @return void
 	 */
-	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
+	public static function maybe_render_currency_selector( $frm_settings ) {
 		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
 			FrmProSettingsController::add_currency_settings();
 			return;
@@ -307,7 +417,6 @@ class FrmSettingsController {
 	 */
 	public static function message_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php';
 	}
 
@@ -332,7 +441,6 @@ class FrmSettingsController {
 	 */
 	public static function email_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
 	}
 
@@ -353,8 +461,7 @@ class FrmSettingsController {
 	 */
 	public static function payments_settings() {
 		$payment_sections = self::$removed_payments_sections;
-
-		$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		$tab              = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
 		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$tab = str_replace( '_settings', '', $tab );
@@ -372,7 +479,6 @@ class FrmSettingsController {
 	 */
 	public static function misc_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php';
 	}
 
@@ -447,7 +553,7 @@ class FrmSettingsController {
 
 		if ( $action === 'process-form' ) {
 			self::process_form( $stop_load );
-		} elseif ( $stop_load != 'stop_load' ) {
+		} elseif ( $stop_load !== 'stop_load' ) {
 			self::display_form();
 		}
 	}
@@ -476,7 +582,7 @@ class FrmSettingsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		update_option( 'frm_lite_settings_upgrade', time(), 'no' );
+		update_option( 'frm_lite_settings_upgrade', time(), false );
 
 		wp_send_json_success();
 	}
@@ -506,8 +612,7 @@ class FrmSettingsController {
 			'order_by' => 'post_title',
 		);
 
-		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
-
+		$pages   = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
 		$results = array();
 
 		foreach ( $pages as $page ) {
@@ -532,7 +637,7 @@ class FrmSettingsController {
 	public static function fake_color_picker( $color ) {
 		?>
 		<div class="wp-picker-container">
-			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
 			</button>
 		</div>

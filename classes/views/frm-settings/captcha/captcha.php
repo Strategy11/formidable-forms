@@ -146,7 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	$transient = get_transient( 'frm_recent_spam_detected' );
 
-	if ( ! empty( $transient ) ) {
+	if ( $transient ) {
 		?>
 		<div class="frm_note_style">
 			<strong><?php esc_html_e( 'Spam keywords detected recently:', 'formidable' ); ?></strong>

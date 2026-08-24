@@ -25,7 +25,7 @@ describe( 'Run some basic Formidale tests', function() {
 
 		// Load the settings page fresh so it doesn't try to prompt for a form name on save.
 		cy.get( '#form_id' ).invoke( 'val' ).then( formId => {
-			cy.visit( 'wp-admin/admin.php?page=formidable&frm_action=settings&id=' + formId );
+			cy.visit( `wp-admin/admin.php?page=formidable&frm_action=settings&id=${ formId }` );
 
 			// Update the form settings. Give the form a name.
 			cy.get( '#frm_form_name' ).type( 'My form' );
@@ -35,7 +35,7 @@ describe( 'Run some basic Formidale tests', function() {
 			// Load the form preview and check if there is a submit button.
 			// Submit the form and expect a success message.
 			cy.get( '#frm_form_key' ).invoke( 'val' ).then( formKey => {
-				cy.visit( '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=' + formKey );
+				cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
 				cy.get( '.frm_button_submit' ).should( 'contain.text', 'Submit' ).click();
 				cy.get( '.frm_message' ).should( 'contain.text', 'Your responses were successfully submitted. Thank you!' );
 			} );

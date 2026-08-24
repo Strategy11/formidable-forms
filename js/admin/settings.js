@@ -40,12 +40,12 @@
 		}
 
 		if ( 'frm-send-test-email' === e.target.id ) {
-			showSendTestEmailModal( e );
+			showSendTestEmailModal();
 			return;
 		}
 
 		if ( 'frm-send-test-email-btn' === e.target.id ) {
-			handleClickSendTestEmailBtn( e );
+			handleClickSendTestEmailBtn();
 		}
 	}
 
@@ -58,11 +58,11 @@
 		const styleEl = e.target.closest( '.frm-email-style' );
 		styleEl.classList.add( 'frm-email-style--selected' );
 
-		const styleKey = styleEl.dataset.styleKey;
+		const { styleKey } = styleEl.dataset;
 		document.getElementById( 'frm-email-style-value' ).value = styleKey;
 	}
 
-	function showSendTestEmailModal( e ) {
+	function showSendTestEmailModal() {
 		if ( ! globalVars.sendTestEmailModal ) {
 			globalVars.sendTestEmailModal = frmAdminBuild.initModal( '#frm-send-test-email-modal', '400px' );
 		}
@@ -70,7 +70,7 @@
 		globalVars.sendTestEmailModal.dialog( 'open' );
 	}
 
-	function handleClickSendTestEmailBtn( e ) {
+	function handleClickSendTestEmailBtn() {
 		const emailInput = document.getElementById( 'frm-test-email-address' );
 		const resultEl = document.getElementById( 'frm-send-test-email-result' );
 

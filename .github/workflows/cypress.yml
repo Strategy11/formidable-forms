@@ -8,25 +8,42 @@ on:
     types: [ opened, labeled, synchronize ]
 
 name: E2E Test
+# Cancel superseded runs for the same branch. The group is named explicitly
+# rather than derived from github.workflow: several files share the workflow
+# name `Inspections` and would otherwise cancel each other.
+concurrency:
+  group: formidable-cypress-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   cypress:
-    if: contains(github.event.pull_request.labels.*.name, 'run tests')
+    if: contains(github.event.pull_request.labels.*.name, 'run e2e tests')
     runs-on: ubuntu-latest
 
     name: Cypress
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Composer install
-        run: composer install
+        uses: actions/checkout@v6
 
       - name: Install Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
+
+      - name: Cache dependencies
+        id: cache-npm
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/Cypress
+            node_modules
+          key: ${{ runner.os }}-cypress-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-node-modules-
 
       - name: Install dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps --include=dev
 
       - name: Set up WP environment

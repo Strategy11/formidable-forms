@@ -54,6 +54,7 @@ const entries = {
   scss: {
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
+    'admin/frm-legacy-paypal': './resources/scss/admin/frm-legacy-paypal.scss',
     font_icons: './resources/scss/font_icons.scss',
     // Dynamically generated web component SCSS files
     frm_testing_mode: './resources/scss/test-mode/frm_testing_mode.scss',

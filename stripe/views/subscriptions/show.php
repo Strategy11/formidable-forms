@@ -126,7 +126,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 
 							<div id="misc-pub-section">
-								<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this subscription?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
+								<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php esc_attr_e( 'Permanently delete this subscription?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
 									<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon' ); ?>
 									<span class="frm_link_label">
 										<?php esc_html_e( 'Delete Subscription', 'formidable' ); ?>

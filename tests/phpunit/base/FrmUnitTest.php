@@ -38,6 +38,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		self::$instance = $this;
 		parent::setUp();
 
+		self::reset_shared_state();
+
 		// The JavaScript antispam check doesn't work with unit tests so turn it off.
 		add_filter( 'frm_run_antispam', '__return_false' );
 
@@ -57,14 +59,39 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Clear state that outlives a single test.
+	 *
+	 * PHPUnit gives each test its own database transaction, but globals and singletons live
+	 * for the whole process, so one test can leave another reading values it never set. A
+	 * test that needs any of this state should set it up itself; anything that passes only
+	 * because a previous test set it up is relying on the suite's ordering.
+	 *
+	 * @return void
+	 */
+	public static function reset_shared_state() {
+		// Read by FrmXMLHelper::populate_postmeta(), which takes a different code path when set.
+		$GLOBALS['frm_duplicate_ids'] = array();
+
+		// Populated in production only when a form renders, via FrmHoneypot::maybe_render_field().
+		foreach ( array( 'FrmFormState', 'FrmProFormState' ) as $state_class ) {
+			if ( ! class_exists( $state_class ) ) {
+				continue;
+			}
+
+			$instance = new ReflectionProperty( $state_class, 'instance' );
+			$instance->setAccessible( true );
+			$instance->setValue( null, null );
+		}
+	}
+
+	/**
 	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
 	 * This is a temporary workaround until we review FrmDb tests in detail.
 	 */
 	public static function empty_tables() {
 		global $wpdb;
-		$tables = self::get_table_names();
 
-		foreach ( $tables as $table ) {
+		foreach ( self::get_table_names() as $table ) {
 			$exists = $wpdb->get_var( 'DESCRIBE ' . $table );
 
 			if ( $exists ) {
@@ -78,11 +105,22 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 */
 	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
-			// set this to false so all our tests won't be done with this active
+			// Set this to false so all our tests won't be done with this active
 			define( 'WP_IMPORTING', false );
 		}
 
 		if ( self::$installed ) {
+			/**
+			 * Empty the tables before re-importing.
+			 *
+			 * Importing over forms that already exist updates those forms but skips their
+			 * entries, so a re-import on its own leaves the fixture set with forms and no
+			 * entries. Every class that runs later in the same process then inherits that,
+			 * and which classes those are depends on how the suite happens to be ordered.
+			 * Truncating first makes the re-import restore entries too, so a class gets the
+			 * same fixture data no matter what ran before it.
+			 */
+			self::empty_tables();
 			self::import_xml();
 			return;
 		}
@@ -107,12 +145,83 @@ class FrmUnitTest extends WP_UnitTestCase {
 		 */
 		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 
+		self::isolate_install_from_plugin_folder();
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
+
+		/**
+		 * Start from empty tables even on the first install of the process.
+		 *
+		 * WordPress' install.php drops and recreates the tables it knows about on every process,
+		 * but Formidable's tables are not among them, so rows from a previous run survive. The
+		 * import below would then update the existing forms and skip their entries, leaving a
+		 * fixture set with forms and no entries. That is what makes a re-used database produce
+		 * failures unrelated to the code under test, and what breaks a parallel run as soon as
+		 * one worker runs a second process.
+		 */
+		self::empty_tables();
+
 		self::import_xml();
 		self::create_files();
 		self::$installed = true;
+	}
+
+	/**
+	 * Keep the install from writing into the plugin folder or reaching for the network.
+	 *
+	 * FrmAppHelper::plugin_path() and plugin_url() are derived from __DIR__, which PHP
+	 * resolves through symlinks, so they point at the real plugin folder rather than the
+	 * copy inside the wordpress-develop checkout the tests run against. Everything the
+	 * install writes relative to those therefore lands in the working tree of whoever is
+	 * running the suite, and is picked up by the site they develop against. Two writes do
+	 * that, and both are redirected here rather than skipped, so the code under test still
+	 * runs the same path it runs in production.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function isolate_install_from_plugin_folder() {
+		// Generate the stylesheet under uploads, which is disposable, instead of over css/formidableforms.css.
+		add_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
+
+		// Answer the request FrmMigrate makes before deciding to delete the plugin's .htaccess.
+		add_filter( 'pre_http_request', 'FrmUnitTest::respond_to_plugin_asset_request', 10, 3 );
+	}
+
+	/**
+	 * Serve requests for the plugin's own assets from here instead of over HTTP.
+	 *
+	 * A test run has no web server able to serve the plugin, so a request for one of its
+	 * files can only fail. FrmMigrate::maybe_delete_htaccess_file() reads that failure as a
+	 * server that cannot be trusted with the file and deletes the plugin's .htaccess, which
+	 * is tracked in the repository. Requests to anywhere else are left alone.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|false|WP_Error $response A preemptive response, or false to let the request run.
+	 * @param array                $args     Request arguments.
+	 * @param string               $url      The request URL.
+	 *
+	 * @return array|false|WP_Error
+	 */
+	public static function respond_to_plugin_asset_request( $response, $args, $url ) {
+		if ( ! str_starts_with( $url, FrmAppHelper::plugin_url() . '/' ) ) {
+			return $response;
+		}
+
+		return array(
+			'headers'  => array(),
+			'body'     => '',
+			'response' => array(
+				'code'    => 200,
+				'message' => 'OK',
+			),
+			'cookies'  => array(),
+			'filename' => null,
+		);
 	}
 
 	public static function get_table_names() {
@@ -143,12 +252,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function import_xml() {
-		// install test data in older format
+		// Install test data in older format
 		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
 		FrmXMLController::add_default_templates();
 
 		$form = FrmForm::getOne( 'contact-db12' );
-		self::assertEquals( $form->form_key, 'contact-db12' );
+		self::assertSame( 'contact-db12', $form->form_key );
 	}
 
 	public static function create_files() {
@@ -235,14 +344,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 					unset( $form_id_path );
 				}
 
-				if ( file_exists( $path ) ) {
-					if ( ! is_array( $media_ids ) ) {
-						$media_ids = array();
-					}
-
-					$id          = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
-					$media_ids[] = $id;
+				if ( ! file_exists( $path ) ) {
+					continue;
 				}
+
+				if ( ! is_array( $media_ids ) ) {
+					$media_ids = array();
+				}
+
+				$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
 			}
 
 			if ( is_array( $media_ids ) ) {
@@ -274,12 +384,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$this->repeat_sec_form_key  => 3,
 		);
 		$expected_field_num = $field_totals[ $form_key ] ?? 0;
-
-		$form_id = $this->factory->form->get_id_by_key( $form_key );
-		$fields  = FrmField::get_all_for_form( $form_id, '', 'include' );
-
-		$actual_field_num = count( $fields );
-		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' );
+		$form_id            = $this->factory->form->get_id_by_key( $form_key );
+		$fields             = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$actual_field_num   = count( $fields );
+		$this->assertSame( $expected_field_num, $actual_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return $fields;
 	}
@@ -332,7 +440,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			)
 		);
 
-		if ( empty( $users ) ) {
+		if ( ! $users ) {
 			$this->fail( 'No users with this role currently exist.' );
 			return null;
 		}
@@ -349,7 +457,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public function set_front_end( $page = '' ) {
-		if ( $page == '' ) {
+		if ( $page === '' ) {
 			$page = home_url( '/' );
 		}
 
@@ -395,7 +503,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->set_get_params( $page );
 		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
 		$this->assertTrue( is_admin(), 'Failed to switch to the back-end' );
-		$this->assertEquals( $screen->base, $current_screen->base, $page );
+		$this->assertSame( $screen->base, $current_screen->base, $page );
 
 		FrmHooksController::trigger_load_hook();
 	}
@@ -421,19 +529,23 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$_GET['pagenow']  = $base;
 		$_POST['pagenow'] = $base;
 
-		if ( ! empty( $url_params ) ) {
-			$url_params = explode( '&', $url_params );
+		if ( empty( $url_params ) ) {
+			return;
+		}
 
-			foreach ( $url_params as $param ) {
-				list( $name, $value ) = explode( '=', $param );
-				$_GET[ $name ]        = $value;
-				$_REQUEST[ $name ]    = $value;
+		$url_params = explode( '&', $url_params );
 
-				if ( $name === 'post' ) {
-					global $post;
-					$post = $this->factory->post->get_object_by_id( $value );
-				}
+		foreach ( $url_params as $param ) {
+			list( $name, $value ) = explode( '=', $param );
+			$_GET[ $name ]        = $value;
+			$_REQUEST[ $name ]    = $value;
+
+			if ( $name !== 'post' ) {
+				continue;
 			}
+
+			global $post;
+			$post = $this->factory->post->get_object_by_id( $value );
 		}
 	}
 
@@ -445,6 +557,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		global $frm_vars;
+
 		$frm_vars = array(
 			'load_css'          => false,
 			'forms_loaded'      => array(),
@@ -454,6 +567,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			'prev_page'         => array(),
 		);
 
+		// phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
 		if ( class_exists( 'FrmProEddController' ) ) {
 			$frmedd_update                 = new FrmProEddController();
 			$frm_vars['pro_is_authorized'] = $frmedd_update->pro_is_authorized();
@@ -463,12 +577,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public function get_footer_output() {
 		ob_start();
 		do_action( 'wp_footer' );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
+		return ob_get_clean();
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function install_data() {
 		return array(
 			__DIR__ . '/testdata.xml',
@@ -478,19 +592,22 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 	}
 
-	public static function generate_xml( $type, $xml_args ) {
+	/**
+	 * @param array $type
+	 */
+	public static function generate_xml( $type, $xml_args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		// Code copied from FrmXMLController::generate_xml
 		global $wpdb;
 
 		$type = (array) $type;
 
 		if ( in_array( 'items', $type, true ) && ! in_array( 'forms', $type, true ) ) {
-			// make sure the form is included if there are entries
+			// Make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
 		if ( in_array( 'forms', $type, true ) ) {
-			// include actions with forms
+			// Include actions with forms
 			$type[] = 'actions';
 		}
 
@@ -506,17 +623,16 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$args     = wp_parse_args( $xml_args, $defaults );
 
 		// Make sure ids are numeric.
-		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
+		if ( is_array( $args['ids'] ) && $args['ids'] ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
 
 		$records = array();
 
 		foreach ( $type as $tb_type ) {
-			$where = array();
-			$join  = '';
-			$table = $tables[ $tb_type ];
-
+			$where      = array();
+			$join       = '';
+			$table      = $tables[ $tb_type ];
 			$select     = $table . '.id';
 			$query_vars = array();
 
@@ -566,7 +682,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 					$where['post_type'] = 'frm_styles';
 
 					// Only export selected styles
-					if ( ! empty( $style_ids ) ) {
+					if ( $style_ids ) {
 						$where['ID'] = $style_ids;
 					}
 					break;
@@ -590,13 +706,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php';
-		$xml_body = ob_get_contents();
-		ob_end_clean();
-
-		$xml = $xml_header . $xml_body;
-
-		$cwd  = getcwd();
-		$path = "{$cwd}/temp.xml";
+		$xml_body = ob_get_clean();
+		$xml      = $xml_header . $xml_body;
+		$cwd      = getcwd();
+		$path     = "{$cwd}/temp.xml";
 		@chmod( $path, 0755 );
 		$fw = fopen( $path, 'w' );
 		fwrite( $fw, $xml, strlen( $xml ) );
@@ -647,6 +760,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $subscriber );
 	}
 
+	/**
+	 * @param array $method
+	 * @param array $args
+	 */
 	protected function run_private_method( $method, $args = array() ) {
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );
@@ -702,7 +819,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			case 'formidable_custom_role':
 				$user = wp_get_current_user();
 
-				// remove any standard roles to make room for a custom one
+				// Remove any standard roles to make room for a custom one
 				foreach ( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
 					$user->remove_role( $role );
 				}

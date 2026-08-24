@@ -30,11 +30,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
-			return $callback;
-		}
-
-		return self::class . '::show_card';
+		return $actions ? self::class . '::show_card' : $callback;
 	}
 
 	/**
@@ -81,6 +77,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				unset( $payment_actions[ $k ] );
 			}
 		}
+
 		return $payment_actions;
 	}
 
@@ -118,16 +115,16 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			'show_errors'  => true,
 		);
 		$atts     = compact( 'action', 'entry', 'form' );
+		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
-		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
-
-		if ( empty( $amount ) || $amount == 000 ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $amount || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}
 
 		if ( ! self::stripe_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Stripe. Please try again.', 'formidable' );
+			$response['error'] = __( 'Stripe still needs to be configured.', 'formidable' );
 			return $response;
 		}
 
@@ -140,7 +137,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$one_time_payment_args = compact( 'customer', 'form', 'entry', 'action', 'amount' );
 
-		FrmStrpLiteLinkController::create_pending_stripe_link_payment( $one_time_payment_args );
+		if ( ! FrmStrpLiteLinkController::create_pending_stripe_link_payment( $one_time_payment_args ) ) {
+			$response['error'] = __( 'There was something wrong with the payment data.', 'formidable' );
+			return $response;
+		}
+
 		$response['show_errors'] = false;
 		return $response;
 	}
@@ -285,9 +286,15 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function add_action_defaults( $defaults ) {
+		// Stripe action options.
 		$defaults['plan_id']     = '';
 		$defaults['capture']     = '';
 		$defaults['stripe_link'] = '';
+
+		// PayPal action options.
+		$defaults['product_name'] = '';
+		$defaults['pay_later']    = '';
+
 		return $defaults;
 	}
 
@@ -316,7 +323,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$settings['currency'] = strtolower( $settings['currency'] );
 
 		// Gateway is a radio button but it should always be an array in the database for
-		// compatibility with the payments submodule where it is a checkbox.
+		// compatibility with the payments submodule where it is a checkbox (when Authorize.Net is active).
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
@@ -347,6 +354,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$plan_opts = FrmStrpLiteSubscriptionHelper::prepare_plan_options( $settings );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $plan_opts['id'] != $settings['plan_id'] ) {
 			$settings['plan_id'] = FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan_opts );
 		}
@@ -374,6 +382,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function maybe_load_scripts( $params ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $params['form_id'] == $params['posted_form_id'] ) {
 			// This form has already been posted, so we aren't on the first page.
 			return;
@@ -459,14 +468,18 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$found_gateway   = false;
 
-		foreach ( $action_settings as $action ) {
+		foreach ( $action_settings as &$action ) {
 			$gateways = $action['gateways'];
 
 			if ( ! $gateways || in_array( 'stripe', (array) $gateways, true ) ) {
 				$found_gateway = true;
-				break;
+			}
+
+			if ( ! empty( $action['layout'] ) && ! in_array( $action['layout'], array( 'accordion', 'tabs' ), true ) ) {
+				$action['layout'] = '';
 			}
 		}
+		unset( $action );
 
 		if ( ! $found_gateway ) {
 			return;
@@ -580,8 +593,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		 * @param array $rules
 		 * @param array $settings
 		 */
-		$rules = apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
-		return $rules;
+		return apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
 	}
 
 	/**
@@ -656,16 +668,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = $field->temp_id ?? $field->id;
-
-		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
-			unset( $errors[ 'field' . $field_id . '-cc' ] );
-		}
-
-		if ( isset( $errors[ 'field' . $field_id ] ) ) {
-			unset( $errors[ 'field' . $field_id ] );
-		}
-
-		return $errors;
+		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
 	}
 }

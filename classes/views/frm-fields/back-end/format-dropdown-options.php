@@ -43,7 +43,7 @@ FrmHtmlHelper::echo_dropdown_option(
 if ( 'text' === $field_type ) {
 	FrmHtmlHelper::echo_dropdown_option(
 		__( 'Custom', 'formidable' ),
-		! empty( $format ) && ! FrmCurrencyHelper::is_currency_format( $format ),
+		$format && ! FrmCurrencyHelper::is_currency_format( $format ),
 		array(
 			'value'           => 'custom',
 			'data-dependency' => '#frm-field-format-custom-' . $field_id,
