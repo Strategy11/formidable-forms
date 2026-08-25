@@ -84,7 +84,9 @@ class FrmStrpLiteEventsController {
 
 			FrmTransLiteAppHelper::add_note_to_payment( $payment_values, $note );
 
-			$u = $frm_payment->update( $payment->id, $payment_values );
+			// Read the status again right before the update, in case another request has already changed it.
+			$payment_status_still_does_not_match = $this->payment_status_still_does_not_match( $payment->id );
+			$updated                             = $frm_payment->update( $payment->id, $payment_values );
 
 			echo json_encode(
 				array(
@@ -93,7 +95,7 @@ class FrmStrpLiteEventsController {
 				)
 			);
 
-			if ( ! $is_partial_refund ) {
+			if ( ! $is_partial_refund && $payment_status_still_does_not_match && $updated ) {
 				$run_triggers = true;
 			}
 		}//end if
@@ -106,6 +108,24 @@ class FrmStrpLiteEventsController {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Double check that the payment status has not changed.
+	 * This is to avoid running actions twice by mistake, since a Stripe Link
+	 * return URL and a webhook event can both process the same payment.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $payment_id The id of the payment to check.
+	 *
+	 * @return bool
+	 */
+	private function payment_status_still_does_not_match( $payment_id ) {
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+
+		return $payment && $payment->status !== $this->status;
 	}
 
 	/**
@@ -310,7 +330,9 @@ class FrmStrpLiteEventsController {
 		};
 
 		add_filter( $hook, $filter, 99 );
-		$cancelled = FrmStrpLiteApiHelper::cancel_subscription( $sub->sub_id );
+
+		// There is no logged in user when a webhook event is processed, so the customer check has to be skipped here.
+		$cancelled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription_without_customer_check', $sub->sub_id );
 
 		if ( $cancelled ) {
 			FrmTransLiteSubscriptionsController::change_subscription_status(
@@ -319,6 +341,8 @@ class FrmStrpLiteEventsController {
 					'sub'    => $sub,
 				)
 			);
+		} else {
+			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'Unable to cancel subscription ' . $sub->sub_id . ' after it reached its payment limit.' );
 		}
 
 		remove_filter( $hook, $filter, 99 );

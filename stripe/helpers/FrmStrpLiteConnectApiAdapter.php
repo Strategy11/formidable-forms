@@ -38,6 +38,21 @@ class FrmStrpLiteConnectApiAdapter {
 	}
 
 	/**
+	 * Cancel a subscription without checking that it belongs to the current user.
+	 * Use this when there is no logged in user, like when a webhook event is processed.
+	 * The customer check in self::cancel_subscription would always fail there because the current user ID is 0.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $sub_id
+	 *
+	 * @return bool
+	 */
+	public static function cancel_subscription_without_customer_check( $sub_id ) {
+		return FrmStrpLiteConnectHelper::cancel_subscription( $sub_id );
+	}
+
+	/**
 	 * @param string $payment_id
 	 *
 	 * @return bool
