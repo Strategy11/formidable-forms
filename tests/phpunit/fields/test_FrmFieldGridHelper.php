@@ -427,18 +427,13 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	}
 
 	/**
-	 * Documents the behaviour reported in https://github.com/Strategy11/formidable-pro/issues/3820.
+	 * Covers https://github.com/Strategy11/formidable-pro/issues/3820.
 	 *
-	 * A section is measured through section_size rather than active_field_size, and
-	 * should_first_close_the_active_field_wrapper() returns early while a section helper
-	 * exists, so the width check never runs for the section itself. The narrow field and the
-	 * full width section end up in one row even though they add up to sixteen columns.
-	 *
-	 * The assertion below records what the helper does today. Closing the row before the section
-	 * is only half the fix: close_field_wrapper() also drops the section helper, which
-	 * test_a_section_keeps_its_helper_after_the_row_bookkeeping_runs covers.
+	 * A four column field followed by a full width section adds up to sixteen columns, so the
+	 * section has to start its own row. The section still has to arrive intact, which is why the
+	 * nested row and the end marker are part of the expected layout rather than a bare '[1][2]'.
 	 */
-	public function test_a_section_currently_joins_a_row_it_cannot_fit_in() {
+	public function test_a_section_starts_a_new_row_when_it_cannot_fit() {
 		$layout = $this->get_grid_layout(
 			array(
 				$this->text_spec( 'frm4' ),
@@ -448,7 +443,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 			)
 		);
 
-		$this->assertSame( '[1,2[3]4]', $layout, 'Four columns plus a full width section overflow the row, but the row is not closed first.' );
+		$this->assertSame( '[1][2[3]4]', $layout, 'Four columns plus a full width section overflow the row, so the row closes first.' );
 	}
 
 	/**
