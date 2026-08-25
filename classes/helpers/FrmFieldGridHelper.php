@@ -61,24 +61,6 @@ class FrmFieldGridHelper {
 	private $section_is_open = false;
 
 	/**
-	 * True if the first field in the row had frm_first, indicating an intentional group.
-	 *
-	 * Example: Two fields grouped in one row.
-	 * - First field has frm_first → is_group_start = true.
-	 * - Second field has no frm_first, but is_group_start is true → stays in the same row.
-	 *
-	 * @var bool
-	 */
-	private $is_group_start = false;
-
-	/**
-	 * True if the first field in the row was a section (divider).
-	 *
-	 * @var bool
-	 */
-	private $is_section_start = false;
-
-	/**
 	 * @param bool $nested
 	 */
 	public function __construct( $nested = false ) {
@@ -178,13 +160,16 @@ class FrmFieldGridHelper {
 			return false;
 		}
 
-		// Close the current row before a section if it would overflow the grid.
-		// @see https://github.com/Strategy11/formidable-pro/issues/3820
-		if ( 'divider' === $this->field->type && ! $this->section_is_open ) {
-			return $this->current_list_size + $this->section_size > 12 || $this->is_frm_first || ! $this->is_group_start;
-		}
-
-		if ( $this->section_helper ) {
+		/**
+		 * Fields that sit inside an open section are wrapped by that section's own helper, so the
+		 * row here is not theirs to close. set_field() opens the section helper for the section
+		 * field itself, one step ahead of this check, and section_is_open is not set until
+		 * sync_list_size() runs afterwards. Testing both is what keeps the section field subject to
+		 * the width check below rather than being treated as though it were already inside itself.
+		 *
+		 * @see https://github.com/Strategy11/formidable-pro/issues/3820
+		 */
+		if ( $this->section_helper && $this->section_is_open ) {
 			return false;
 		}
 
@@ -192,7 +177,7 @@ class FrmFieldGridHelper {
 			return false;
 		}
 
-		return ! $this->can_support_current_layout() || $this->is_frm_first || ( $this->is_section_start && ! $this->is_group_start );
+		return ! $this->can_support_current_layout() || $this->is_frm_first;
 	}
 
 	/**
@@ -203,8 +188,6 @@ class FrmFieldGridHelper {
 		$this->parent_li           = true;
 		$this->current_list_size   = 0;
 		$this->current_field_count = 0;
-		$this->is_group_start      = $this->is_frm_first;
-		$this->is_section_start    = 'divider' === $this->field->type;
 	}
 
 	/**
@@ -290,7 +273,12 @@ class FrmFieldGridHelper {
 	 * @return void
 	 */
 	private function close_field_wrapper() {
-		$this->maybe_close_section_helper();
+		// Only an open section has a nested wrapper to close. A section helper that set_field() has
+		// just created belongs to the section about to start, so closing this row must leave it alone.
+		if ( $this->section_is_open ) {
+			$this->maybe_close_section_helper();
+		}
+
 		echo '</ul></li>';
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;
