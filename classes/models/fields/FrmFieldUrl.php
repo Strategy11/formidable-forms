@@ -86,7 +86,7 @@ class FrmFieldUrl extends FrmFieldType {
 		// Byte range by design, and no /u modifier: with /u, preg_match() returns false on invalid UTF-8.
 		if ( $value && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\x80-\xff\.-]+\.[\da-z\x80-\xff\.-]+))/i', $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
-		// skipcq: PHP-W1067 -- $this->field is always a field object by the time validate() runs; FrmFieldType's constructor just accepts array|int|object for lazy construction elsewhere.
+		// skipcq: PHP-W1067 -- $this->field is always a real object here; array|int|object only matters during lazy construction elsewhere.
 		} elseif ( $this->field->required == '1' && ! $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		}
