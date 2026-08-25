@@ -2301,9 +2301,50 @@ window.frmAdminBuildJS = function() {
 		return 1 === jQuery( fieldsInRow ).filter( `[data-fid="${ fieldId }"]` ).length;
 	}
 
-	function loadFields( fieldId ) {
-		const thisField = document.getElementById( fieldId );
-		const $thisField = jQuery( thisField );
+	/**
+	 * How many fields to ask for in a single frm_load_field request.
+	 *
+	 * A field costs about the same to render whether it arrives on its own or with others, so this
+	 * mostly decides how many times the browser pays for loading WordPress again. Fewer, larger
+	 * requests finish sooner, at the cost of a slightly longer wait for the first fields to appear.
+	 */
+	const FIELD_LOAD_BATCH_SIZE = 40;
+
+	/**
+	 * How many frm_load_field requests may be in flight at once.
+	 *
+	 * Responses are safe to arrive in any order because every field replaces its own placeholder by
+	 * id, and the placeholders are already sitting in the page in the right order.
+	 */
+	const FIELD_LOAD_CONCURRENCY = 3;
+
+	let activeFieldLoadRequests = 0;
+	let fieldLoadStarted = false;
+
+	/**
+	 * Start as many field load requests as the concurrency limit allows, and finish up once the
+	 * last one has come back.
+	 *
+	 * Fields are flagged with frm_load_now as soon as a request claims them, so the search for the
+	 * next batch never hands the same field to two requests.
+	 */
+	function fillFieldLoadQueue() {
+		while ( activeFieldLoadRequests < FIELD_LOAD_CONCURRENCY ) {
+			const nextField = document.querySelector( '#frm-show-fields .frm_field_loading:not(.frm_load_now)' );
+			if ( ! nextField ) {
+				break;
+			}
+
+			loadFields( nextField );
+		}
+
+		// Only of interest on a form that actually loads fields over ajax. buildInit covers the rest.
+		if ( fieldLoadStarted && 0 === activeFieldLoadRequests ) {
+			afterAllFieldsLoad();
+		}
+	}
+
+	function loadFields( thisField ) {
 		const field = [];
 		const addHtmlToField = element => {
 			const frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
@@ -2316,10 +2357,19 @@ window.frmAdminBuildJS = function() {
 		addHtmlToField( thisField );
 
 		let nextField = getNextField( thisField );
-		while ( nextField && field.length < 15 ) {
+		while ( nextField && field.length < FIELD_LOAD_BATCH_SIZE ) {
 			addHtmlToField( nextField );
 			nextField = getNextField( nextField );
 		}
+
+		if ( ! field.length ) {
+			// There is nothing to ask the server for. The fields are flagged either way, so the
+			// queue carries on past them instead of offering them up again.
+			return;
+		}
+
+		++activeFieldLoadRequests;
+		fieldLoadStarted = true;
 
 		jQuery.ajax( {
 			type: 'POST',
@@ -2330,7 +2380,11 @@ window.frmAdminBuildJS = function() {
 				form_id: thisFormId,
 				nonce: frmGlobal.nonce
 			},
-			success: html => handleAjaxLoadFieldSuccess( html, $thisField, field )
+			success: html => handleAjaxLoadFieldSuccess( html, field ),
+			complete: () => {
+				--activeFieldLoadRequests;
+				fillFieldLoadQueue();
+			}
 		} );
 	}
 
@@ -2341,9 +2395,8 @@ window.frmAdminBuildJS = function() {
 		return field.parentNode?.closest( '.frm_field_box' )?.nextElementSibling?.querySelector( '.form-field' );
 	}
 
-	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
+	function handleAjaxLoadFieldSuccess( html, field ) {
 		let key;
-		let $nextSet;
 
 		html = html.replace( /^\s+|\s+$/g, '' );
 		if ( html.indexOf( '{' ) !== 0 ) {
@@ -2352,6 +2405,9 @@ window.frmAdminBuildJS = function() {
 		}
 
 		html = JSON.parse( html );
+
+		const newFields = [];
+
 		for ( key in html ) {
 			if ( ! Object.hasOwn( html, key ) ) {
 				continue;
@@ -2360,6 +2416,7 @@ window.frmAdminBuildJS = function() {
 
 			const newReplacedField = document.getElementById( `frm_field_id_${ key }` );
 			if ( newReplacedField ) {
+				newFields.push( newReplacedField );
 				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
 			}
@@ -2368,24 +2425,24 @@ window.frmAdminBuildJS = function() {
 			makeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
 		}
 
-		$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
-		if ( $nextSet.length ) {
-			loadFields( $nextSet.attr( 'id' ) );
-		} else {
-			// go up a level
-			$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
-			if ( $nextSet.length ) {
-				loadFields( $nextSet.attr( 'id' ) );
-			}
-		}
-
-		initiateMultiselect();
-		renumberPageBreaks();
-		maybeHideQuantityProductFieldOption();
+		// Only the fields that just arrived need this. Doing it for the whole page once per batch
+		// re-initializes every field loaded so far, which turns into quadratic work on a long form.
+		initiateMultiselect( newFields );
 
 		const loadedEvent = new Event( 'frm_ajax_loaded_field', { bubbles: false } );
 		loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
 		document.dispatchEvent( loadedEvent );
+	}
+
+	/**
+	 * Handle the things that look at the form as a whole, once every field has arrived.
+	 *
+	 * These used to run after each batch, so a form loading in n batches did n passes over a
+	 * steadily growing page for a result only the last pass could get right.
+	 */
+	function afterAllFieldsLoad() {
+		renumberPageBreaks();
+		maybeHideQuantityProductFieldOption();
 	}
 
 	function addFieldClick() {
@@ -9789,8 +9846,16 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).hide().each( frmDom.bootstrap.multiselect.init );
+	/**
+	 * @param {Array|Element|jQuery} [container] Limit the set up to the multiselects inside this,
+	 *                                           instead of every multiselect in the page.
+	 */
+	function initiateMultiselect( container ) {
+		const $multiselect = container
+			? jQuery( container ).find( '.frm_multiselect' )
+			: jQuery( '.frm_multiselect' );
+
+		$multiselect.hide().each( frmDom.bootstrap.multiselect.init );
 	}
 
 	/* Addons page */
@@ -11041,16 +11106,11 @@ window.frmAdminBuildJS = function() {
 		buildInit() {
 			jQuery( '#frm_builder_page' ).on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
 
-			let loadFieldId;
-
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 			postBodyContent = document.getElementById( 'post-body-content' );
 			$postBodyContent = jQuery( postBodyContent );
 
-			if ( jQuery( '.frm_field_loading' ).length ) {
-				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
-				loadFields( loadFieldId );
-			}
+			fillFieldLoadQueue();
 
 			setupSortable( 'ul.frm_sorting' );
 
