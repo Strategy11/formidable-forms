@@ -1383,34 +1383,54 @@ window.frmAdminBuildJS = function() {
 		placeholder.style.top = `${ top }px`;
 	}
 
+	/**
+	 * Work out where in a list the dragged field would be dropped.
+	 *
+	 * This runs on every drag event, and reading an item's position forces the browser to lay the
+	 * page out again. Walking the list one item at a time therefore costs a layout per item, and on
+	 * a long form dragging near the top of the list meant reading nearly every field before finding
+	 * the answer. The items are stacked down the page, so their tops only ever increase, and a
+	 * binary search finds the same item after a handful of reads instead of hundreds.
+	 *
+	 * @param {jQuery} $list The list being dragged over.
+	 * @param {number} y     Mouse position.
+	 * @return {number} The index to insert at.
+	 */
 	function determineIndexBasedOffOfMousePositionInList( $list, y ) {
 		const $items = $list.children().not( '.edit_field_type_end_divider' );
 		const { length } = $items;
-
-		let index;
-		let item;
-		let itemTop;
-		let returnIndex;
 
 		if ( ! document.querySelector( '.frm-has-fields .frm_no_fields' ) ) {
 			// Always return 0 when there are no fields.
 			return 0;
 		}
 
-		returnIndex = 0;
-		for ( index = length - 1; index >= 0; --index ) {
-			item = $items.get( index );
-			itemTop = jQuery( item ).offset().top;
-			if ( y > itemTop ) {
-				returnIndex = index;
-				if ( y > itemTop + ( jQuery( item ).outerHeight() / 2 ) ) {
-					returnIndex = index + 1;
-				}
-				break;
+		const topOf = index => jQuery( $items.get( index ) ).offset().top;
+
+		// Find the last item that starts above the cursor.
+		let low = 0;
+		let high = length - 1;
+		let match = -1;
+
+		while ( low <= high ) {
+			const middle = Math.floor( ( low + high ) / 2 );
+
+			if ( y > topOf( middle ) ) {
+				match = middle;
+				low = middle + 1;
+			} else {
+				high = middle - 1;
 			}
 		}
 
-		return returnIndex;
+		if ( -1 === match ) {
+			return 0;
+		}
+
+		const $item = jQuery( $items.get( match ) );
+
+		// Past the halfway point of that item means the field belongs after it.
+		return y > $item.offset().top + ( $item.outerHeight() / 2 ) ? match + 1 : match;
 	}
 
 	function handleDragOverFieldGroup( { droppable, x, placeholder } ) {
