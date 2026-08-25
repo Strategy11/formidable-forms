@@ -10555,6 +10555,69 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Fill in the add and remove buttons the server left off this field's options.
+	 *
+	 * Every option carries the same pair of buttons, so printing them for a whole form means a lot
+	 * of markup for something no one sees until they open a field. The server prints one copy, on
+	 * the hidden template row, and the real rows get theirs from here the first time the field is
+	 * opened.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {number|string} fieldId The field whose options need their buttons.
+	 * @return {void}
+	 */
+	function addOptionControlsToField( fieldId ) {
+		const optionList = document.getElementById( `frm_field_${ fieldId }_opts` );
+		if ( ! optionList ) {
+			return;
+		}
+
+		const template = optionList.querySelector( '.frm_option_template' );
+		const templateRemove = template?.querySelector( '.frm_remove_tag' );
+		const templateAdd = template?.querySelector( '.frm_add_opt' );
+		if ( ! templateRemove || ! templateAdd ) {
+			return;
+		}
+
+		const rows = optionList.querySelectorAll( '.frm_single_option:not(.frm_option_template)' );
+
+		// The template row is printed before the option count is known, so it is always marked
+		// disabled. Removing an option is only off limits when it is the last one left.
+		const removingAllowed = rows.length > 1;
+
+		rows.forEach( row => {
+			if ( row.querySelector( '.frm_remove_tag' ) ) {
+				// This field has been opened before, or the server printed the buttons already.
+				return;
+			}
+
+			const optKey = row.dataset.optkey;
+			if ( undefined === optKey ) {
+				return;
+			}
+
+			const remove = templateRemove.cloneNode( true );
+			[ 'removeid', 'removemore' ].forEach( name => {
+				const value = remove.dataset[ name ];
+				if ( value ) {
+					remove.dataset[ name ] = value.replace( '-000', `-${ optKey }` );
+				}
+			} );
+			remove.classList.toggle( 'frm_disabled', ! removingAllowed );
+
+			// Keep the order the server uses: label input, remove, add, then the saved value box.
+			// Each row is its own parent, so there is nothing for a DocumentFragment to batch here.
+			const valueBox = row.querySelector( '.frm_option_key' );
+			if ( valueBox ) {
+				valueBox.before( remove, templateAdd.cloneNode( true ) );
+			} else {
+				row.append( remove, templateAdd.cloneNode( true ) );
+			}
+		} );
+	}
+
 	function maybeAddSaveAndDragIcons( fieldId ) {
 		const fieldOptions = document.querySelectorAll( `[id^=frm_delete_field_${ fieldId }-]` );
 		// return if there are no options.
@@ -11085,11 +11148,13 @@ window.frmAdminBuildJS = function() {
 				}
 			);
 
-			document.querySelectorAll( '#frm-show-fields > li, .frm_grid_container li' ).forEach( ( el, _key ) => {
-				el.addEventListener( 'click', function() {
-					const fieldId = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
-					maybeAddSaveAndDragIcons( fieldId );
-				} );
+			// Listen on the list rather than on the rows. Most of a form's fields arrive over ajax
+			// after this runs, and binding to the rows that happen to be here now left those later
+			// fields without their drag and save icons for good.
+			$newFields.on( 'click', '> li, .frm_grid_container li', function() {
+				const fieldId = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
+				maybeAddSaveAndDragIcons( fieldId );
+				addOptionControlsToField( fieldId );
 			} );
 
 			const smallScreenProceedButton = document.getElementById( 'frm_small_screen_proceed_button' );
