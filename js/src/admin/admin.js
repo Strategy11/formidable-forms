@@ -264,7 +264,9 @@ window.frmAdminBuildJS = function() {
 	let $postBodyContent;
 
 	const dragState = {
-		dragging: false
+		dragging: false,
+		offsetsRefreshed: false,
+		submitButtonRow: null
 	};
 
 	if ( thisForm ) {
@@ -1073,7 +1075,6 @@ window.frmAdminBuildJS = function() {
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
-			refreshPositions: true,
 			cursorAt: {
 				top: 0,
 				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
@@ -1127,6 +1128,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		dragState.dragging = true;
+		dragState.offsetsRefreshed = false;
 
 		const container = postBodyContent;
 		container.classList.add( 'frm-dragging-field' );
@@ -1156,6 +1158,13 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function handleDrag( event, ui ) {
+		if ( ! dragState.offsetsRefreshed ) {
+			// The drag start handler tidies up the field list, so re-measure once before
+			// the first drop target is worked out.
+			dragState.offsetsRefreshed = true;
+			refreshDroppableOffsets( event );
+		}
+
 		maybeScrollBuilder( event );
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
@@ -1191,6 +1200,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeScrollBuilder( event ) {
+		const scrollTopBefore = postBodyContent.scrollTop;
+
 		$postBodyContent.scrollTop(
 			( _, v ) => {
 				const moved = event.clientY;
@@ -1211,6 +1222,34 @@ window.frmAdminBuildJS = function() {
 				return v;
 			}
 		);
+
+		if ( scrollTopBefore !== postBodyContent.scrollTop ) {
+			refreshDroppableOffsets( event );
+		}
+	}
+
+	/**
+	 * Re-measure where every droppable sits on the page.
+	 *
+	 * The draggables deliberately leave jQuery UI's refreshPositions option off. With it on,
+	 * jQuery UI re-measures every droppable on every mouse move, which is one offset() read
+	 * per field group per event. On a form with hundreds of groups that is most of a second
+	 * per mouse move, so the drop placeholder ends up trailing seconds behind the cursor and
+	 * the narrow band between two field groups becomes impossible to hit.
+	 *
+	 * Nothing in a drag moves a droppable. The drop placeholder is laid out at zero height
+	 * between rows and absolutely positioned inside a row, so inserting it shifts nothing.
+	 * Scrolling the field list is the one thing that does move them, so the measurements are
+	 * refreshed there and on the first drag event, and left alone otherwise.
+	 *
+	 * @param {Event} event The drag event.
+	 * @return {void}
+	 */
+	function refreshDroppableOffsets( event ) {
+		const draggable = jQuery( event.target ).draggable( 'instance' );
+		if ( draggable ) {
+			jQuery.ui.ddmanager.prepareOffsets( draggable, event );
+		}
 	}
 
 	function getDragOffset( $helper ) {
@@ -1357,15 +1396,15 @@ window.frmAdminBuildJS = function() {
 
 		let top;
 
-		const $children = $list.children().not( '.edit_field_type_end_divider' );
-		if ( 0 === $children.length ) {
+		const children = getRowsInList( $list );
+		if ( 0 === children.length ) {
 			$list.prepend( placeholder );
 			top = 0;
 		} else {
-			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y );
+			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y, children );
 
-			if ( insertAtIndex === $children.length ) {
-				const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
+			if ( insertAtIndex === children.length ) {
+				const $lastChild = jQuery( children[ insertAtIndex - 1 ] );
 				top = $lastChild.offset().top + $lastChild.outerHeight();
 				$list.append( placeholder );
 
@@ -1375,8 +1414,8 @@ window.frmAdminBuildJS = function() {
 					$list.append( $endDivider );
 				}
 			} else {
-				top = jQuery( $children.get( insertAtIndex ) ).offset().top;
-				jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+				top = jQuery( children[ insertAtIndex ] ).offset().top;
+				jQuery( children[ insertAtIndex ] ).before( placeholder );
 			}
 		}
 
@@ -1384,30 +1423,48 @@ window.frmAdminBuildJS = function() {
 		placeholder.style.top = `${ top }px`;
 	}
 
-	function determineIndexBasedOffOfMousePositionInList( $list, y ) {
-		const $items = $list.children().not( '.edit_field_type_end_divider' );
-		const { length } = $items;
+	/**
+	 * Get the rows of a sortable list as a plain array, skipping the end divider.
+	 *
+	 * @param {jQuery} $list The list to read the rows from.
+	 * @return {Array.<Element>} The rows that can accept a drop.
+	 */
+	function getRowsInList( $list ) {
+		const list = $list.get( 0 );
+		if ( ! list ) {
+			return [];
+		}
+		return Array.from( list.children ).filter( row => ! row.classList.contains( 'edit_field_type_end_divider' ) );
+	}
 
-		let index;
-		let item;
-		let itemTop;
-		let returnIndex;
-
+	function determineIndexBasedOffOfMousePositionInList( $list, y, rows ) {
 		if ( ! document.querySelector( '.frm-has-fields .frm_no_fields' ) ) {
 			// Always return 0 when there are no fields.
 			return 0;
 		}
 
-		returnIndex = 0;
-		for ( index = length - 1; index >= 0; --index ) {
-			item = $items.get( index );
-			itemTop = jQuery( item ).offset().top;
-			if ( y > itemTop ) {
-				returnIndex = index;
-				if ( y > itemTop + ( jQuery( item ).outerHeight() / 2 ) ) {
-					returnIndex = index + 1;
-				}
-				break;
+		const items = rows || getRowsInList( $list );
+
+		// Rows are stacked vertically in document order, so their tops only ever increase.
+		// That makes this a binary search rather than a walk over every row.
+		// A walk reads the position of hundreds of rows, and because each drag event also
+		// moves the placeholder, every one of those reads forces the browser to lay the
+		// whole field list out again. On a form with a few hundred rows that alone costs
+		// hundreds of milliseconds per mouse move, which leaves the drop placeholder
+		// trailing seconds behind the cursor.
+		let low = 0;
+		let high = items.length - 1;
+		let returnIndex = 0;
+
+		while ( low <= high ) {
+			const middle = Math.floor( ( low + high ) / 2 );
+			const rect = items[ middle ].getBoundingClientRect();
+
+			if ( y > rect.top ) {
+				returnIndex = y > rect.top + ( rect.height / 2 ) ? middle + 1 : middle;
+				low = middle + 1;
+			} else {
+				high = middle - 1;
 			}
 		}
 
@@ -2065,6 +2122,27 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Get the top level row that holds the submit button.
+	 *
+	 * The row is remembered between calls and only looked up again once it leaves the list.
+	 * allowDrop runs several times per drag event, and searching the whole field list every
+	 * time is a full DOM walk on a long form.
+	 *
+	 * @param {HTMLElement} list The top level field list.
+	 * @return {HTMLElement|null} The row holding the submit button, or null when the form has none.
+	 */
+	function getSubmitButtonRow( list ) {
+		if ( dragState.submitButtonRow && dragState.submitButtonRow.parentNode === list ) {
+			return dragState.submitButtonRow;
+		}
+
+		const submitButton = list.querySelector( '.edit_field_type_submit' );
+		dragState.submitButtonRow = submitButton ? submitButton.closest( '#frm-show-fields > li' ) : null;
+
+		return dragState.submitButtonRow;
+	}
+
+	/**
 	 * Determine if a draggable element can be droppable into a droppable element.
 	 *
 	 * Don't allow page break, embed form, or section inside section field
@@ -2105,8 +2183,12 @@ window.frmAdminBuildJS = function() {
 			}
 
 			// Do not allow dropping other fields to below submit button.
-			const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
-			return draggableIndex <= submitButtonIndex;
+			const submitButtonRow = getSubmitButtonRow( droppable );
+			if ( ! submitButtonRow ) {
+				return true;
+			}
+
+			return draggableIndex <= Array.prototype.indexOf.call( droppable.children, submitButtonRow );
 		}
 
 		if ( isSubmitBtn ) {
