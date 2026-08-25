@@ -1017,7 +1017,6 @@ window.frmAdminBuildJS = function() {
 				}
 			}
 		);
-		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 	}
 
 	function makeDroppable( list ) {
@@ -11113,6 +11112,12 @@ window.frmAdminBuildJS = function() {
 			fillFieldLoadQueue();
 
 			setupSortable( 'ul.frm_sorting' );
+
+			// Once is enough for the life of the page. This always ran against the whole builder,
+			// so calling it from setupSortable meant repeating it for every field that loaded, and
+			// sortable picks up options added later on its own: it refreshes its item list on mouse
+			// down rather than at set up time.
+			setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 
