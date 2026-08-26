@@ -90,14 +90,15 @@ class FrmStrpLiteLinkRedirectHelper {
 		$redirect            = FrmStrpLiteAuth::return_url( compact( 'form', 'entry' ) );
 		$is_message_redirect = str_contains( $redirect, 'frmstrp=' );
 
+		// Call this before all redirects so the referer is always deleted.
+		$referer_url = $this->get_referer_url( $entry->id );
+
 		if ( $this->url_is_external( $redirect ) || ! $is_message_redirect ) {
 			wp_redirect( $redirect );
 			die();
 		}
 
 		// $redirect may not include the whole link to the form, breaking the redirect as iDEAL/Sofort have an additional redirect.
-		$referer_url = $this->get_referer_url( $entry->id );
-
 		if ( is_string( $referer_url ) ) {
 			$parts = explode( '?', $redirect, 2 );
 
