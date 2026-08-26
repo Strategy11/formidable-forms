@@ -277,8 +277,34 @@ namespace {
 	}
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
+	/**
+	 * The Registration add-on's entry controller. Constructing it is what lets a
+	 * registration form's entry run its user creation, and the abilities do that
+	 * behind a class_exists() guard.
+	 */
+	class FrmRegEntryController {
+	}
+	class FrmProField {
+		/**
+		 * @param int   $field_id ID of the repeater field, or 0 while it is being created.
+		 * @param array $args     Accepts parent_form_id and field_name.
+		 *
+		 * @return int ID of the child form that holds the repeater's fields.
+		 */
+		public static function create_repeat_form( $field_id, $args = array() ) {
+		}
+	}
 	class FrmProEntriesHelper {
 		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
+		}
+		/**
+		 * @param string     $search  The search term.
+		 * @param int|string $form_id The form to search in.
+		 * @param array      $args    Extra query args, such as is_draft.
+		 *
+		 * @return array Entry IDs matching the search.
+		 */
+		public static function get_search_ids( $search, $form_id, $args = array() ) {
 		}
 		/**
 		 * @param object           $field
@@ -878,6 +904,133 @@ namespace {
 	 * WP_UnitTest_Generator_Sequence above.
 	 */
 	function rand_str( $length = 32 ) {
+	}
+	/**
+	 * The WordPress Abilities API, added in WordPress 7.0 and so absent from the
+	 * wordpress-stubs release this plugin pins.
+	 */
+	class WP_Ability {
+		/**
+		 * @return string
+		 */
+		public function get_name() {
+		}
+		/**
+		 * @return array
+		 */
+		public function get_input_schema() {
+		}
+		/**
+		 * @param array $input Ability input parameters.
+		 *
+		 * @return mixed
+		 */
+		public function execute( $input = array() ) {
+		}
+	}
+	class WP_Ability_Category {
+	}
+	class WP_Abilities_Registry {
+		/**
+		 * @return WP_Abilities_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $name Ability name.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $name ) {
+		}
+	}
+	class WP_Ability_Categories_Registry {
+		/**
+		 * @return WP_Ability_Categories_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $slug Category slug.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $slug ) {
+		}
+	}
+	/**
+	 * @param string $name Ability name, including its namespace prefix.
+	 * @param array  $args Ability definition.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_register_ability( $name, $args ) {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 * @param array  $args Category definition.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_register_ability_category( $slug, $args ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_has_ability( $name ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_get_ability( $name ) {
+	}
+	/**
+	 * @return array<string, WP_Ability>
+	 */
+	function wp_get_abilities() {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_get_ability_category( $slug ) {
+	}
+}
+
+/**
+ * The MCP adapter vendored in lib/vendor. Only what FrmMcpController calls is
+ * stubbed: the adapter is loaded conditionally at runtime, so analysis cannot
+ * see it, and FrmMcpCompat checks for the real thing before any of this is used.
+ */
+namespace WP\MCP\Core {
+	class McpAdapter {
+		const VERSION = '';
+		/**
+		 * @return McpAdapter
+		 */
+		public static function instance() {
+		}
+		/**
+		 * @param string      $server_id             Unique server ID.
+		 * @param string      $server_route_namespace REST namespace to serve on.
+		 * @param string      $server_route          Route within the namespace.
+		 * @param string      $server_name           Human readable server name.
+		 * @param string      $server_description    Human readable server description.
+		 * @param string      $server_version        Server version string.
+		 * @param array       $mcp_transports        Transport class names.
+		 * @param string|null $error_handler         Error handler class name.
+		 * @param string|null $observability_handler Observability handler class name.
+		 * @param array       $tools                 Ability names exposed as tools.
+		 *
+		 * @return mixed True on success, or WP_Error on failure.
+		 */
+		public function create_server( $server_id, $server_route_namespace, $server_route, $server_name, $server_description, $server_version, $mcp_transports, $error_handler, $observability_handler = null, $tools = array() ) {
+		}
 	}
 }
 

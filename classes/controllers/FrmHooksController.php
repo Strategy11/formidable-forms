@@ -134,6 +134,11 @@ class FrmHooksController {
 		FrmSquareLiteHooksController::load_hooks();
 		FrmPayPalLiteHooksController::load_hooks();
 
+		// The MCP server and the abilities that drive it. Both stand down on a
+		// site where an API add-on that predates the move still owns them.
+		FrmMcpController::load_hooks();
+		FrmAbilitiesController::load_hooks();
+
 		// GDPR
 		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
 	}
@@ -240,6 +245,7 @@ class FrmHooksController {
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
+		FrmMcpSettingsController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 
