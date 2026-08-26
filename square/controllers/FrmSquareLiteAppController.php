@@ -103,6 +103,11 @@ class FrmSquareLiteAppController {
 	/**
 	 * Get the amount value for verification.
 	 *
+	 * Square's verifyBuyer expects the amount as a decimal string in the currency's
+	 * major units ("20.00" for twenty pounds), not the smallest denomination that the
+	 * Payments API uses. FrmSquareLiteActionsController::prepare_amount returns the
+	 * smallest denomination, so the parent is called here instead.
+	 *
 	 * @param WP_Post $action
 	 *
 	 * @return string
@@ -111,7 +116,8 @@ class FrmSquareLiteAppController {
 		$amount = $action->post_content['amount'];
 
 		if ( ! str_contains( $amount, '[' ) ) {
-			return $amount;
+			$currency = $action->post_content['currency'];
+			return FrmTransLiteActionsController::prepare_amount( $amount, compact( 'currency' ) );
 		}
 
 		$form = FrmForm::getOne( $action->menu_order );
@@ -123,7 +129,7 @@ class FrmSquareLiteAppController {
 		// Update amount based on field shortcodes.
 		$entry = self::generate_false_entry();
 
-		return FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+		return FrmTransLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 	}
 
 	/**
@@ -277,7 +283,9 @@ class FrmSquareLiteAppController {
 		$entry->post_id  = 0;
 		$entry->id       = 0;
 		$entry->item_key = '';
-		$entry->metas    = array();
+		// Shortcode replacement reads ip off of the entry, so it cannot be left unset.
+		$entry->ip    = '';
+		$entry->metas = array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {
