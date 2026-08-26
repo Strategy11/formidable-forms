@@ -45,7 +45,7 @@ Cypress.Commands.add( 'dismissInboxBanners', ( remainingAttempts = 5 ) => {
 			return;
 		}
 
-		cy.log( 'Dismiss inbox banner: ' + banner.attr( 'data-key' ) );
+		cy.log( `Dismiss inbox banner: ${ banner.attr( 'data-key' ) }` );
 		cy.window().then( win => {
 			cy.request( {
 				method: 'POST',
