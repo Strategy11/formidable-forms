@@ -767,7 +767,7 @@ class FrmStrpLiteAuth {
 			$success_url = $atts['form']->options['success_url'];
 		}
 
-		$success_url = trim( $atts['form']->options['success_url'] );
+		$success_url = trim( $success_url );
 		$success_url = apply_filters( 'frm_content', $success_url, $atts['form'], $atts['entry'] );
 		$success_url = do_shortcode( $success_url );
 		$atts['id']  = $atts['entry']->id;

@@ -264,7 +264,10 @@ window.frmAdminBuildJS = function() {
 	let $postBodyContent;
 
 	const dragState = {
-		dragging: false
+		dragging: false,
+		draggable: null,
+		offsetsRefreshed: false,
+		submitButtonRow: null
 	};
 
 	if ( thisForm ) {
@@ -1017,7 +1020,6 @@ window.frmAdminBuildJS = function() {
 				}
 			}
 		);
-		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 	}
 
 	function makeDroppable( list ) {
@@ -1073,7 +1075,6 @@ window.frmAdminBuildJS = function() {
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
-			refreshPositions: true,
 			cursorAt: {
 				top: 0,
 				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
@@ -1127,6 +1128,8 @@ window.frmAdminBuildJS = function() {
 		}
 
 		dragState.dragging = true;
+		dragState.draggable = null;
+		dragState.offsetsRefreshed = false;
 
 		const container = postBodyContent;
 		container.classList.add( 'frm-dragging-field' );
@@ -1145,6 +1148,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function handleDragStop() {
+		dragState.draggable = null;
+
 		const container = postBodyContent;
 		container.classList.remove( 'frm-dragging-field' );
 		document.body.classList.remove( 'frm-dragging' );
@@ -1156,6 +1161,14 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function handleDrag( event, ui ) {
+		if ( ! dragState.offsetsRefreshed ) {
+			// The drag start handler tidies up the field list, so re-measure once before
+			// the first drop target is worked out.
+			dragState.offsetsRefreshed = true;
+			dragState.draggable = jQuery( event.target ).draggable( 'instance' ) || null;
+			refreshDroppableOffsets( event );
+		}
+
 		maybeScrollBuilder( event );
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
@@ -1191,6 +1204,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeScrollBuilder( event ) {
+		const scrollTopBefore = postBodyContent.scrollTop;
+
 		$postBodyContent.scrollTop(
 			( _, v ) => {
 				const moved = event.clientY;
@@ -1211,6 +1226,36 @@ window.frmAdminBuildJS = function() {
 				return v;
 			}
 		);
+
+		if ( scrollTopBefore !== postBodyContent.scrollTop ) {
+			refreshDroppableOffsets( event );
+		}
+	}
+
+	/**
+	 * Re-measure where every droppable sits on the page.
+	 *
+	 * The draggables deliberately leave jQuery UI's refreshPositions option off. With it on,
+	 * jQuery UI re-measures every droppable on every mouse move, which is one offset() read
+	 * per field group per event. On a form with hundreds of groups that is most of a second
+	 * per mouse move, so the drop placeholder ends up trailing seconds behind the cursor and
+	 * the narrow band between two field groups becomes impossible to hit.
+	 *
+	 * Dragging on its own does not move a droppable. The drop placeholder is laid out at zero
+	 * height between rows and absolutely positioned inside a row, so inserting it shifts
+	 * nothing. Two other things do move them: scrolling the field list, and a batch of
+	 * AJAX loaded fields arriving while a drag is already under way. The measurements are
+	 * refreshed on the first drag event and at those two points, and left alone otherwise.
+	 *
+	 * @param {Event} [event] The drag event, when the refresh is driven by one.
+	 * @return {void}
+	 */
+	function refreshDroppableOffsets( event ) {
+		if ( ! dragState.draggable ) {
+			return;
+		}
+
+		jQuery.ui.ddmanager.prepareOffsets( dragState.draggable, event );
 	}
 
 	function getDragOffset( $helper ) {
@@ -1357,15 +1402,15 @@ window.frmAdminBuildJS = function() {
 
 		let top;
 
-		const $children = $list.children().not( '.edit_field_type_end_divider' );
-		if ( 0 === $children.length ) {
+		const children = getRowsInList( $list );
+		if ( 0 === children.length ) {
 			$list.prepend( placeholder );
 			top = 0;
 		} else {
-			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y );
+			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y, children );
 
-			if ( insertAtIndex === $children.length ) {
-				const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
+			if ( insertAtIndex === children.length ) {
+				const $lastChild = jQuery( children[ insertAtIndex - 1 ] );
 				top = $lastChild.offset().top + $lastChild.outerHeight();
 				$list.append( placeholder );
 
@@ -1375,8 +1420,8 @@ window.frmAdminBuildJS = function() {
 					$list.append( $endDivider );
 				}
 			} else {
-				top = jQuery( $children.get( insertAtIndex ) ).offset().top;
-				jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+				top = jQuery( children[ insertAtIndex ] ).offset().top;
+				jQuery( children[ insertAtIndex ] ).before( placeholder );
 			}
 		}
 
@@ -1384,34 +1429,66 @@ window.frmAdminBuildJS = function() {
 		placeholder.style.top = `${ top }px`;
 	}
 
-	function determineIndexBasedOffOfMousePositionInList( $list, y ) {
-		const $items = $list.children().not( '.edit_field_type_end_divider' );
-		const { length } = $items;
+	/**
+	 * Get the rows of a sortable list as a plain array, skipping the end divider.
+	 *
+	 * @param {jQuery} $list The list to read the rows from.
+	 * @return {Array.<Element>} The rows that can accept a drop.
+	 */
+	function getRowsInList( $list ) {
+		const list = $list.get( 0 );
+		if ( ! list ) {
+			return [];
+		}
+		return Array.from( list.children ).filter( row => ! row.classList.contains( 'edit_field_type_end_divider' ) );
+	}
 
-		let index;
-		let item;
-		let itemTop;
-		let returnIndex;
-
+	/**
+	 * Work out where in a list the dragged field would be dropped.
+	 *
+	 * This runs on every drag event, and reading an item's position forces the browser to lay the
+	 * page out again. Walking the list one item at a time therefore costs a layout per item, and on
+	 * a long form dragging near the top of the list meant reading nearly every field before finding
+	 * the answer. The items are stacked down the page, so their tops only ever increase, and a
+	 * binary search finds the same item after a handful of reads instead of hundreds.
+	 *
+	 * @param {jQuery}          $list  The list being dragged over.
+	 * @param {number}          y      Mouse position, relative to the viewport.
+	 * @param {Array.<Element>} [rows] The rows of the list, when the caller has already read them.
+	 * @return {number} The index to insert at.
+	 */
+	function determineIndexBasedOffOfMousePositionInList( $list, y, rows ) {
 		if ( ! document.querySelector( '.frm-has-fields .frm_no_fields' ) ) {
 			// Always return 0 when there are no fields.
 			return 0;
 		}
 
-		returnIndex = 0;
-		for ( index = length - 1; index >= 0; --index ) {
-			item = $items.get( index );
-			itemTop = jQuery( item ).offset().top;
-			if ( y > itemTop ) {
-				returnIndex = index;
-				if ( y > itemTop + ( jQuery( item ).outerHeight() / 2 ) ) {
-					returnIndex = index + 1;
-				}
-				break;
+		const items = rows || getRowsInList( $list );
+
+		// Find the last item that starts above the cursor.
+		let low = 0;
+		let high = items.length - 1;
+		let match = -1;
+
+		while ( low <= high ) {
+			const middle = Math.floor( ( low + high ) / 2 );
+
+			if ( y > items[ middle ].getBoundingClientRect().top ) {
+				match = middle;
+				low = middle + 1;
+			} else {
+				high = middle - 1;
 			}
 		}
 
-		return returnIndex;
+		if ( -1 === match ) {
+			return 0;
+		}
+
+		const rect = items[ match ].getBoundingClientRect();
+
+		// Past the halfway point of that item means the field belongs after it.
+		return y > rect.top + ( rect.height / 2 ) ? match + 1 : match;
 	}
 
 	function handleDragOverFieldGroup( { droppable, x, placeholder } ) {
@@ -2065,6 +2142,27 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Get the top level row that holds the submit button.
+	 *
+	 * The row is remembered between calls and only looked up again once it leaves the list.
+	 * allowDrop runs several times per drag event, and searching the whole field list every
+	 * time is a full DOM walk on a long form.
+	 *
+	 * @param {HTMLElement} list The top level field list.
+	 * @return {HTMLElement|null} The row holding the submit button, or null when the form has none.
+	 */
+	function getSubmitButtonRow( list ) {
+		if ( dragState.submitButtonRow && dragState.submitButtonRow.parentNode === list ) {
+			return dragState.submitButtonRow;
+		}
+
+		const submitButton = list.querySelector( '.edit_field_type_submit' );
+		dragState.submitButtonRow = submitButton ? submitButton.closest( '#frm-show-fields > li' ) : null;
+
+		return dragState.submitButtonRow;
+	}
+
+	/**
 	 * Determine if a draggable element can be droppable into a droppable element.
 	 *
 	 * Don't allow page break, embed form, or section inside section field
@@ -2105,8 +2203,12 @@ window.frmAdminBuildJS = function() {
 			}
 
 			// Do not allow dropping other fields to below submit button.
-			const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
-			return draggableIndex <= submitButtonIndex;
+			const submitButtonRow = getSubmitButtonRow( droppable );
+			if ( ! submitButtonRow ) {
+				return true;
+			}
+
+			return draggableIndex <= Array.prototype.indexOf.call( droppable.children, submitButtonRow );
 		}
 
 		if ( isSubmitBtn ) {
@@ -2301,9 +2403,50 @@ window.frmAdminBuildJS = function() {
 		return 1 === jQuery( fieldsInRow ).filter( `[data-fid="${ fieldId }"]` ).length;
 	}
 
-	function loadFields( fieldId ) {
-		const thisField = document.getElementById( fieldId );
-		const $thisField = jQuery( thisField );
+	/**
+	 * How many fields to ask for in a single frm_load_field request.
+	 *
+	 * A field costs about the same to render whether it arrives on its own or with others, so this
+	 * mostly decides how many times the browser pays for loading WordPress again. Fewer, larger
+	 * requests finish sooner, at the cost of a slightly longer wait for the first fields to appear.
+	 */
+	const FIELD_LOAD_BATCH_SIZE = 40;
+
+	/**
+	 * How many frm_load_field requests may be in flight at once.
+	 *
+	 * Responses are safe to arrive in any order because every field replaces its own placeholder by
+	 * id, and the placeholders are already sitting in the page in the right order.
+	 */
+	const FIELD_LOAD_CONCURRENCY = 3;
+
+	let activeFieldLoadRequests = 0;
+	let fieldLoadStarted = false;
+
+	/**
+	 * Start as many field load requests as the concurrency limit allows, and finish up once the
+	 * last one has come back.
+	 *
+	 * Fields are flagged with frm_load_now as soon as a request claims them, so the search for the
+	 * next batch never hands the same field to two requests.
+	 */
+	function fillFieldLoadQueue() {
+		while ( activeFieldLoadRequests < FIELD_LOAD_CONCURRENCY ) {
+			const nextField = document.querySelector( '#frm-show-fields .frm_field_loading:not(.frm_load_now)' );
+			if ( ! nextField ) {
+				break;
+			}
+
+			loadFields( nextField );
+		}
+
+		// Only of interest on a form that actually loads fields over ajax. buildInit covers the rest.
+		if ( fieldLoadStarted && 0 === activeFieldLoadRequests ) {
+			afterAllFieldsLoad();
+		}
+	}
+
+	function loadFields( thisField ) {
 		const field = [];
 		const addHtmlToField = element => {
 			const frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
@@ -2316,10 +2459,19 @@ window.frmAdminBuildJS = function() {
 		addHtmlToField( thisField );
 
 		let nextField = getNextField( thisField );
-		while ( nextField && field.length < 15 ) {
+		while ( nextField && field.length < FIELD_LOAD_BATCH_SIZE ) {
 			addHtmlToField( nextField );
 			nextField = getNextField( nextField );
 		}
+
+		if ( ! field.length ) {
+			// There is nothing to ask the server for. The fields are flagged either way, so the
+			// queue carries on past them instead of offering them up again.
+			return;
+		}
+
+		++activeFieldLoadRequests;
+		fieldLoadStarted = true;
 
 		jQuery.ajax( {
 			type: 'POST',
@@ -2330,7 +2482,11 @@ window.frmAdminBuildJS = function() {
 				form_id: thisFormId,
 				nonce: frmGlobal.nonce
 			},
-			success: html => handleAjaxLoadFieldSuccess( html, $thisField, field )
+			success: html => handleAjaxLoadFieldSuccess( html, field ),
+			complete: () => {
+				--activeFieldLoadRequests;
+				fillFieldLoadQueue();
+			}
 		} );
 	}
 
@@ -2341,9 +2497,8 @@ window.frmAdminBuildJS = function() {
 		return field.parentNode?.closest( '.frm_field_box' )?.nextElementSibling?.querySelector( '.form-field' );
 	}
 
-	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
+	function handleAjaxLoadFieldSuccess( html, field ) {
 		let key;
-		let $nextSet;
 
 		html = html.replace( /^\s+|\s+$/g, '' );
 		if ( html.indexOf( '{' ) !== 0 ) {
@@ -2352,6 +2507,9 @@ window.frmAdminBuildJS = function() {
 		}
 
 		html = JSON.parse( html );
+
+		const newFields = [];
+
 		for ( key in html ) {
 			if ( ! Object.hasOwn( html, key ) ) {
 				continue;
@@ -2360,6 +2518,7 @@ window.frmAdminBuildJS = function() {
 
 			const newReplacedField = document.getElementById( `frm_field_id_${ key }` );
 			if ( newReplacedField ) {
+				newFields.push( newReplacedField );
 				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
 			}
@@ -2368,24 +2527,30 @@ window.frmAdminBuildJS = function() {
 			makeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
 		}
 
-		$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
-		if ( $nextSet.length ) {
-			loadFields( $nextSet.attr( 'id' ) );
-		} else {
-			// go up a level
-			$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
-			if ( $nextSet.length ) {
-				loadFields( $nextSet.attr( 'id' ) );
-			}
-		}
+		// Only the fields that just arrived need this. Doing it for the whole page once per batch
+		// re-initializes every field loaded so far, which turns into quadratic work on a long form.
+		initiateMultiselect( newFields );
 
-		initiateMultiselect();
-		renumberPageBreaks();
-		maybeHideQuantityProductFieldOption();
+		if ( dragState.dragging ) {
+			// A batch replaces placeholders with the real fields, so everything below it moves.
+			// The drag is not re-measuring on its own, so tell it the rows have shifted.
+			refreshDroppableOffsets();
+		}
 
 		const loadedEvent = new Event( 'frm_ajax_loaded_field', { bubbles: false } );
 		loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
 		document.dispatchEvent( loadedEvent );
+	}
+
+	/**
+	 * Handle the things that look at the form as a whole, once every field has arrived.
+	 *
+	 * These used to run after each batch, so a form loading in n batches did n passes over a
+	 * steadily growing page for a result only the last pass could get right.
+	 */
+	function afterAllFieldsLoad() {
+		renumberPageBreaks();
+		maybeHideQuantityProductFieldOption();
 	}
 
 	function addFieldClick() {
@@ -9789,8 +9954,16 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).hide().each( frmDom.bootstrap.multiselect.init );
+	/**
+	 * @param {Array|Element|jQuery} [container] Limit the set up to the multiselects inside this,
+	 *                                           instead of every multiselect in the page.
+	 */
+	function initiateMultiselect( container ) {
+		const $multiselect = container
+			? jQuery( container ).find( '.frm_multiselect' )
+			: jQuery( '.frm_multiselect' );
+
+		$multiselect.hide().each( frmDom.bootstrap.multiselect.init );
 	}
 
 	/* Addons page */
@@ -10471,6 +10644,69 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Fill in the add and remove buttons the server left off this field's options.
+	 *
+	 * Every option carries the same pair of buttons, so printing them for a whole form means a lot
+	 * of markup for something no one sees until they open a field. The server prints one copy, on
+	 * the hidden template row, and the real rows get theirs from here the first time the field is
+	 * opened.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {number|string} fieldId The field whose options need their buttons.
+	 * @return {void}
+	 */
+	function addOptionControlsToField( fieldId ) {
+		const optionList = document.getElementById( `frm_field_${ fieldId }_opts` );
+		if ( ! optionList ) {
+			return;
+		}
+
+		const template = optionList.querySelector( '.frm_option_template' );
+		const templateRemove = template?.querySelector( '.frm_remove_tag' );
+		const templateAdd = template?.querySelector( '.frm_add_opt' );
+		if ( ! templateRemove || ! templateAdd ) {
+			return;
+		}
+
+		const rows = optionList.querySelectorAll( '.frm_single_option:not(.frm_option_template)' );
+
+		// The template row is printed before the option count is known, so it is always marked
+		// disabled. Removing an option is only off limits when it is the last one left.
+		const removingAllowed = rows.length > 1;
+
+		rows.forEach( row => {
+			if ( row.querySelector( '.frm_remove_tag' ) ) {
+				// This field has been opened before, or the server printed the buttons already.
+				return;
+			}
+
+			const optKey = row.dataset.optkey;
+			if ( undefined === optKey ) {
+				return;
+			}
+
+			const remove = templateRemove.cloneNode( true );
+			[ 'removeid', 'removemore' ].forEach( name => {
+				const value = remove.dataset[ name ];
+				if ( value ) {
+					remove.dataset[ name ] = value.replace( '-000', `-${ optKey }` );
+				}
+			} );
+			remove.classList.toggle( 'frm_disabled', ! removingAllowed );
+
+			// Keep the order the server uses: label input, remove, add, then the saved value box.
+			// Each row is its own parent, so there is nothing for a DocumentFragment to batch here.
+			const valueBox = row.querySelector( '.frm_option_key' );
+			if ( valueBox ) {
+				valueBox.before( remove, templateAdd.cloneNode( true ) );
+			} else {
+				row.append( remove, templateAdd.cloneNode( true ) );
+			}
+		} );
+	}
+
 	function maybeAddSaveAndDragIcons( fieldId ) {
 		const fieldOptions = document.querySelectorAll( `[id^=frm_delete_field_${ fieldId }-]` );
 		// return if there are no options.
@@ -11001,11 +11237,13 @@ window.frmAdminBuildJS = function() {
 				}
 			);
 
-			document.querySelectorAll( '#frm-show-fields > li, .frm_grid_container li' ).forEach( ( el, _key ) => {
-				el.addEventListener( 'click', function() {
-					const fieldId = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
-					maybeAddSaveAndDragIcons( fieldId );
-				} );
+			// Listen on the list rather than on the rows. Most of a form's fields arrive over ajax
+			// after this runs, and binding to the rows that happen to be here now left those later
+			// fields without their drag and save icons for good.
+			$newFields.on( 'click', '> li, .frm_grid_container li', function() {
+				const fieldId = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
+				maybeAddSaveAndDragIcons( fieldId );
+				addOptionControlsToField( fieldId );
 			} );
 
 			const smallScreenProceedButton = document.getElementById( 'frm_small_screen_proceed_button' );
@@ -11041,18 +11279,19 @@ window.frmAdminBuildJS = function() {
 		buildInit() {
 			jQuery( '#frm_builder_page' ).on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
 
-			let loadFieldId;
-
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 			postBodyContent = document.getElementById( 'post-body-content' );
 			$postBodyContent = jQuery( postBodyContent );
 
-			if ( jQuery( '.frm_field_loading' ).length ) {
-				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
-				loadFields( loadFieldId );
-			}
+			fillFieldLoadQueue();
 
 			setupSortable( 'ul.frm_sorting' );
+
+			// Once is enough for the life of the page. This always ran against the whole builder,
+			// so calling it from setupSortable meant repeating it for every field that loaded, and
+			// sortable picks up options added later on its own: it refreshes its item list on mouse
+			// down rather than at set up time.
+			setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 
