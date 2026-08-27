@@ -17,7 +17,7 @@ jobs:
       env:
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-        SLUG: tasty-recipes-lite
+        SLUG: formidable
         # GitHub main is ahead of SVN trunk between releases. Without this, the
         # action rsyncs the whole plugin, sees unreleased code / missing dist
         # files, and bails with "Other files have been modified".
