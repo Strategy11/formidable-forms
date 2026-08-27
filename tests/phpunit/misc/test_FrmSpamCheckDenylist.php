@@ -393,4 +393,260 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			)
 		);
 	}
+
+	/**
+	 * Runs check_values() against the given denylist data.
+	 *
+	 * @param array $denylist_data Array of denylists.
+	 *
+	 * @return bool
+	 */
+	private function check_values_with( $denylist_data ) {
+		$this->set_denylist_data( $denylist_data );
+		return $this->run_private_method( array( $this->spam_check, 'check_values' ) );
+	}
+
+	/**
+	 * A denylist file is compared line by line, and blank lines are skipped. A
+	 * blank line that reached the compare would match every submission, so a file
+	 * holding one that comes back clean is the assertion.
+	 */
+	public function test_check_values_with_denylist_file() {
+		$denylist = array(
+			'file' => __DIR__ . '/denylist-email-contain.txt',
+		);
+
+		// The file holds `wordpress` and `plugin`, both in the name field value.
+		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
+
+		// Neither word is in the email values, and the blank line must not match.
+		$denylist['field_types'] = array( 'email' );
+		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
+	}
+
+	/**
+	 * An allowed word skips its own line only. A later line still has to be able
+	 * to flag the submission.
+	 */
+	public function test_check_values_skips_allowed_words_line_by_line() {
+		$denylist = array(
+			'file' => __DIR__ . '/denylist-email-contain.txt',
+		);
+
+		// `wordpress` is the first line of the file and `plugin` the last. Allowing
+		// the first still has to leave the last able to flag the submission.
+		FrmAppHelper::get_settings()->update_setting( 'allowed_words', 'wordpress', 'sanitize_textarea_field' );
+		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
+
+		// Allowing both words leaves nothing to flag.
+		FrmAppHelper::get_settings()->update_setting( 'allowed_words', "wordpress\nplugin", 'sanitize_textarea_field' );
+		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
+
+		FrmAppHelper::get_settings()->update_setting( 'allowed_words', '', 'sanitize_textarea_field' );
+	}
+
+	/**
+	 * Each denylist is checked against the values its own field types select, so a
+	 * denylist that finds nothing must not stop the ones after it, and must not
+	 * lend its values to them either.
+	 */
+	public function test_check_values_scopes_values_to_each_denylist() {
+		$in_email_only = array(
+			'words'       => array( 'doe.com' ),
+			'field_types' => array( 'email' ),
+		);
+		$in_name_only  = array(
+			'words'       => array( 'wordpress' ),
+			'field_types' => array( 'name' ),
+		);
+
+		$this->assertTrue( $this->check_values_with( array( $in_email_only ) ) );
+		$this->assertTrue( $this->check_values_with( array( $in_name_only ) ) );
+
+		// Each word is only in the other denylist's fields, so neither can match.
+		$misses = array(
+			array(
+				'words'       => array( 'doe.com' ),
+				'field_types' => array( 'name' ),
+			),
+			array(
+				'words'       => array( 'wordpress' ),
+				'field_types' => array( 'email' ),
+			),
+		);
+		$this->assertFalse( $this->check_values_with( $misses ) );
+
+		// A denylist that finds nothing must not stop a later one from matching.
+		$this->assertTrue( $this->check_values_with( array( $misses[0], $in_email_only ) ) );
+		$this->assertTrue( $this->check_values_with( array( $misses[1], $in_name_only ) ) );
+	}
+
+	/**
+	 * A denylist whose field types select none of the submitted values is not spam,
+	 * even when the word is somewhere else in the submission.
+	 */
+	public function test_check_values_with_nothing_to_check() {
+		$denylist = array(
+			'words'       => array( 'plugin' ),
+			// The test form has text, email and name fields only.
+			'field_types' => array( 'url' ),
+		);
+
+		$this->assertSame(
+			array(),
+			$this->run_private_method(
+				array( $this->spam_check, 'get_field_ids_to_check' ),
+				array( $denylist )
+			)
+		);
+
+		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
+
+		// It must not stop a later denylist from checking the values it selects.
+		$this->assertTrue(
+			$this->check_values_with(
+				array(
+					$denylist,
+					array(
+						'words' => array( 'plugin' ),
+					),
+				)
+			)
+		);
+
+		// The same word does flag the submission once the name field is included.
+		$denylist['field_types'] = array( 'name' );
+		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
+	}
+
+	/**
+	 * The same instance has to answer the same way every time, and has to follow
+	 * the denylist it is given rather than one it was given earlier.
+	 */
+	public function test_check_values_is_repeatable() {
+		$matches = array(
+			'words' => array( 'plugin' ),
+		);
+		$misses  = array(
+			'words' => array( 'notinvalues' ),
+		);
+
+		$this->assertTrue( $this->check_values_with( array( $matches ) ) );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
+
+		$this->assertFalse( $this->check_values_with( array( $misses ) ) );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
+
+		$this->assertTrue( $this->check_values_with( array( $matches ) ) );
+	}
+
+	/**
+	 * COMPARE_EQUALS matches a whole value, ignoring case, and never a substring.
+	 */
+	public function test_check_values_with_equals_compare() {
+		$denylist = array(
+			'words'   => array( 'WordPress Plugin' ),
+			'compare' => FrmSpamCheckDenylist::COMPARE_EQUALS,
+		);
+		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
+
+		$denylist['words'] = array( 'wordpress plugin' );
+		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
+
+		// A substring of a value is not an equals match.
+		$denylist['words'] = array( 'plugin' );
+		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
+
+		// The same word is a contains match.
+		$denylist['compare'] = FrmSpamCheckDenylist::COMPARE_CONTAINS;
+		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
+	}
+
+	/**
+	 * Regex denylists are matched case insensitively against the values.
+	 */
+	public function test_check_values_with_regex() {
+		$denylist = array(
+			'words'    => array( 'wordpress\s+plugin' ),
+			'is_regex' => true,
+		);
+		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
+
+		$denylist['words'] = array( 'wordpress\s+theme' );
+		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
+
+		// Field types narrow a regex denylist the same way they narrow the others.
+		$denylist['words']       = array( 'wordpress\s+plugin' );
+		$denylist['field_types'] = array( 'email' );
+		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
+	}
+
+	/**
+	 * Repeater values arrive as a nested array carrying `form` and `row_ids` keys.
+	 * The rows are checked and those two keys are not.
+	 */
+	public function test_get_values_to_check_with_repeater_values() {
+		$values = $this->default_values;
+
+		// The key is a section field ID and the sub keys are its row IDs.
+		$values['item_meta'][9999] = array(
+			'form'    => 4242,
+			'row_ids' => array( 'i0' ),
+			'i0'      => array( 8888 => 'repeated value' ),
+		);
+
+		$spam_check      = new FrmSpamCheckDenylist( $values );
+		$values_to_check = $this->run_private_method(
+			array( $spam_check, 'get_values_to_check' ),
+			array( $this->custom_denylist_data['denylist_with_all_fields'] )
+		);
+
+		$this->assertContains( 'repeated value', $values_to_check );
+		$this->assertNotContains( 4242, $values_to_check );
+		$this->assertNotContains( array( 'i0' ), $values_to_check );
+	}
+
+	/**
+	 * Other values are checked unless `other` is in the skipped field types.
+	 */
+	public function test_get_values_to_check_with_other_values() {
+		$values                       = $this->default_values;
+		$values['item_meta']['other'] = array( 7777 => 'other value' );
+		$spam_check                   = new FrmSpamCheckDenylist( $values );
+
+		$denylist        = array(
+			'skip_field_types' => array(),
+		);
+		$values_to_check = $this->run_private_method(
+			array( $spam_check, 'get_values_to_check' ),
+			array( $denylist )
+		);
+		$this->assertContains( 'other value', $values_to_check );
+
+		$denylist['skip_field_types'] = array( 'other' );
+		$values_to_check              = $this->run_private_method(
+			array( $spam_check, 'get_values_to_check' ),
+			array( $denylist )
+		);
+		$this->assertNotContains( 'other value', $values_to_check );
+	}
+
+	/**
+	 * The word that flagged the submission is recorded, whether it came from the
+	 * denylist words or from a line of a denylist file.
+	 */
+	public function test_matched_word_is_recorded() {
+		$transient_name = 'frm_recent_spam_detected';
+
+		delete_transient( $transient_name );
+		$this->assertTrue( $this->check_values_with( array( array( 'words' => array( 'plugin' ) ) ) ) );
+		$this->assertContains( 'plugin', (array) get_transient( $transient_name ) );
+
+		delete_transient( $transient_name );
+		$this->assertTrue( $this->check_values_with( array( array( 'file' => __DIR__ . '/denylist-email-contain.txt' ) ) ) );
+		// `wordpress` is the first line of the file that matches.
+		$this->assertContains( 'wordpress', (array) get_transient( $transient_name ) );
+
+		delete_transient( $transient_name );
+	}
 }
