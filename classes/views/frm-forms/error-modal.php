@@ -25,8 +25,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 					endif;
 
 				if ( ! empty( $error_args['continue_text'] ) ) :
+					$continue_attrs = array(
+						'class' => trim( 'button button-primary dismiss frm-button-primary ' . $error_args['continue_classes'] ),
+					);
+
+					if ( ! empty( $error_args['continue_target'] ) ) {
+						$continue_attrs['target'] = $error_args['continue_target'];
+						$continue_attrs['rel']    = 'noopener';
+					}
 					?>
-					<a href="<?php echo esc_url( $error_args['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error_args['continue_classes'] ); ?>" <?php echo ! empty( $error_args['continue_target'] ) ? 'target="' . esc_attr( $error_args['continue_target'] ) . '" rel="noopener"' : ''; ?>><?php echo esc_html( $error_args['continue_text'] ); ?></a>
+					<a href="<?php echo esc_url( $error_args['continue_url'] ); ?>"<?php FrmAppHelper::array_to_html_params( $continue_attrs, true ); ?>><?php echo esc_html( $error_args['continue_text'] ); ?></a>
 				<?php endif; ?>
 			</div>
 		</div>
