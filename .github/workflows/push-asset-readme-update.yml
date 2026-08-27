@@ -4,8 +4,8 @@ on:
     branches:
     - main
 jobs:
-  main:
-    name: Push to main
+  master:
+    name: Push to master
     runs-on: ubuntu-latest
     steps:
     - name: Install Subversion
