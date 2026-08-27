@@ -407,19 +407,19 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	}
 
 	/**
-	 * Every line of a denylist file has to be compared, not just the first one,
-	 * and blank lines have to be skipped. A blank line that reaches the compare
-	 * would match every submission, so a file holding one is the assertion.
+	 * A denylist file is compared line by line, and blank lines are skipped. A
+	 * blank line that reached the compare would match every submission, so a file
+	 * holding one that comes back clean is the assertion.
 	 */
-	public function test_check_values_checks_every_line_of_a_file() {
+	public function test_check_values_with_denylist_file() {
 		$denylist = array(
-			'file' => __DIR__ . '/denylist-multiple-words.txt',
+			'file' => __DIR__ . '/denylist-email-contain.txt',
 		);
 
-		// The only word in the file that is in the values, `plugin`, is on the last line.
+		// The file holds `wordpress` and `plugin`, both in the name field value.
 		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
 
-		// None of the words are in the email values, and the blank line must not match either.
+		// Neither word is in the email values, and the blank line must not match.
 		$denylist['field_types'] = array( 'email' );
 		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
 	}
@@ -430,14 +430,16 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	 */
 	public function test_check_values_skips_allowed_words_line_by_line() {
 		$denylist = array(
-			'file' => __DIR__ . '/denylist-multiple-words.txt',
+			'file' => __DIR__ . '/denylist-email-contain.txt',
 		);
 
-		FrmAppHelper::get_settings()->update_setting( 'allowed_words', 'notinvalues', 'sanitize_textarea_field' );
+		// `wordpress` is the first line of the file and `plugin` the last. Allowing
+		// the first still has to leave the last able to flag the submission.
+		FrmAppHelper::get_settings()->update_setting( 'allowed_words', 'wordpress', 'sanitize_textarea_field' );
 		$this->assertTrue( $this->check_values_with( array( $denylist ) ) );
 
-		// Allowing the word that actually matches leaves nothing to flag.
-		FrmAppHelper::get_settings()->update_setting( 'allowed_words', "notinvalues\nplugin", 'sanitize_textarea_field' );
+		// Allowing both words leaves nothing to flag.
+		FrmAppHelper::get_settings()->update_setting( 'allowed_words', "wordpress\nplugin", 'sanitize_textarea_field' );
 		$this->assertFalse( $this->check_values_with( array( $denylist ) ) );
 
 		FrmAppHelper::get_settings()->update_setting( 'allowed_words', '', 'sanitize_textarea_field' );
@@ -641,8 +643,9 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->assertContains( 'plugin', (array) get_transient( $transient_name ) );
 
 		delete_transient( $transient_name );
-		$this->assertTrue( $this->check_values_with( array( array( 'file' => __DIR__ . '/denylist-multiple-words.txt' ) ) ) );
-		$this->assertContains( 'plugin', (array) get_transient( $transient_name ) );
+		$this->assertTrue( $this->check_values_with( array( array( 'file' => __DIR__ . '/denylist-email-contain.txt' ) ) ) );
+		// `wordpress` is the first line of the file that matches.
+		$this->assertContains( 'wordpress', (array) get_transient( $transient_name ) );
 
 		delete_transient( $transient_name );
 	}
