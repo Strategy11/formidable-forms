@@ -674,7 +674,10 @@ BEFORE_HTML;
 	/**
 	 * @since 4.0
 	 *
-	 * @param array $args
+	 * @param array $args Includes 'id', 'key', 'name', 'type' and 'class'. Optionally 'id_label'
+	 *                    and 'key_label' to show something other than the id or key, and
+	 *                    'name_suffix'/'key_suffix' for text appended after the name or key is
+	 *                    truncated, so a shortcode option like ' show=first' survives the truncation.
 	 *
 	 * @return void
 	 */
@@ -699,7 +702,8 @@ BEFORE_HTML;
 			$class .= ' frm_insert_url';
 		}
 
-		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
+		$full_name      = $args['name'] . ( $args['name_suffix'] ?? '' );
+		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 ) . ( $args['name_suffix'] ?? '' );
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
@@ -710,7 +714,11 @@ BEFORE_HTML;
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
-				echo esc_html( $truncated_name );
+				printf(
+					'<span title="%s">%s</span>',
+					esc_attr( $full_name ),
+					esc_html( $truncated_name )
+				);
 				?>
 				<span>[<?php echo esc_html( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>
@@ -720,9 +728,13 @@ BEFORE_HTML;
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
-				echo esc_html( $truncated_name );
+				printf(
+					'<span title="%s">%s</span>',
+					esc_attr( $full_name ),
+					esc_html( $truncated_name )
+				);
 				?>
-				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) . ( $args['key_suffix'] ?? '' ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
