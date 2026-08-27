@@ -265,6 +265,7 @@ Our Stripe integration helps you quickly accept credit card payments online. Our
 Our custom form and quiz builder comes with all the powerful fields that you need to create a solution-focused form, fast!
 
 * Single line text - Great for name, phone number, address, and more.
+* Name
 * Email
 * Website/URL
 * Paragraph text
@@ -277,6 +278,7 @@ Our custom form and quiz builder comes with all the powerful fields that you nee
 * HTML block - Great for custom HTML
 * Captcha for Google reCAPTCHA (invisible V2 or checkbox V2, V3), hCaptcha, or Cloudflare Turnstile.
 * GDPR - Great for compliance with General Data Protection Regulation (GDPR).
+* Address - Power it up with Google address autofill and geolocation with add-ons.
 
 Here is a list of our advanced premium fields that will come in handy:
 
@@ -298,7 +300,6 @@ Here is a list of our advanced premium fields that will come in handy:
 * Page Break
 * Embed Form - Great for reusing the same set of fields in multiple places.
 * Password Field
-* Address Field - Power it up with Google address autofill and geolocation.
 * Signature - Great for contracts and booking.
 * AI - Display AI-generated responses inside your form using OpenAI. Great for personalized results, recommendations, and dynamic content.
 
