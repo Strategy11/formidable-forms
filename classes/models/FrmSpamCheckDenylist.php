@@ -18,6 +18,31 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	const COMPARE_EQUALS = 'equals';
 
 	/**
+	 * How many leading characters of a denylist line are used as its index key.
+	 * Four measured best on the shipped denylists: shorter keys are not selective
+	 * enough, and longer ones push more lines below the length the index needs.
+	 *
+	 * @since x.x
+	 */
+	const PREFIX_LENGTH = 4;
+
+	/**
+	 * Values shorter than this are not indexed. Comparing them is already cheap
+	 * enough that building the index would cost more than it saves.
+	 *
+	 * @since x.x
+	 */
+	const MIN_LENGTH_TO_INDEX = 1024;
+
+	/**
+	 * Values longer than this are not indexed, so the index cannot grow without
+	 * bound on an unusually large submission.
+	 *
+	 * @since x.x
+	 */
+	const MAX_LENGTH_TO_INDEX = 524288;
+
+	/**
 	 * @var array|null
 	 */
 	protected $posted_fields;
@@ -263,8 +288,72 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		$denylist['values_to_check']     = $values_to_check;
 		$denylist['values_string']       = $values_string;
 		$denylist['values_string_lower'] = $this->convert_to_lowercase( $values_string );
+		$denylist['values_prefix_index'] = $this->get_values_prefix_index( $denylist );
 
 		return true;
+	}
+
+	/**
+	 * Indexes every PREFIX_LENGTH character window of the values.
+	 *
+	 * A line can only be inside the values if its own first PREFIX_LENGTH
+	 * characters are somewhere in them, so a line whose prefix is missing from
+	 * this index cannot match and does not need to be compared at all. The shipped
+	 * denylists hold tens of thousands of lines and each comparison reads the whole
+	 * values string, so ruling a line out with one array lookup is worth the index.
+	 *
+	 * Returns an empty array when the index would not answer for this denylist, or
+	 * would not pay for itself. Every line is then compared as before.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $denylist Denylist data, holding the values strings.
+	 *
+	 * @return array Index of value prefixes, or an empty array for no index.
+	 */
+	protected function get_values_prefix_index( $denylist ) {
+		if ( ! empty( $denylist['is_regex'] ) || self::COMPARE_CONTAINS !== $denylist['compare'] ) {
+			// A regex line is a pattern rather than a literal, so its leading
+			// characters are not text to look for. Only "contains" is indexable.
+			return array();
+		}
+
+		$values = $denylist['values_string_lower'];
+		$length = strlen( $values );
+
+		if ( $length < self::MIN_LENGTH_TO_INDEX || $length > self::MAX_LENGTH_TO_INDEX ) {
+			return array();
+		}
+
+		$index = array();
+		$last  = $length - self::PREFIX_LENGTH;
+
+		for ( $i = 0; $i <= $last; $i++ ) {
+			$index[ substr( $values, $i, self::PREFIX_LENGTH ) ] = true;
+		}
+
+		return $index;
+	}
+
+	/**
+	 * Checks the values index to rule a line out before comparing it.
+	 *
+	 * A `false` here does not mean the line matches, only that the index cannot
+	 * rule it out, so the caller still has to compare it.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $line The lowercased denylist line.
+	 * @param array  $args Check args, holding the index when there is one.
+	 *
+	 * @return bool True when the line cannot be inside the values.
+	 */
+	protected function line_is_ruled_out( $line, $args ) {
+		if ( empty( $args['values_prefix_index'] ) || strlen( $line ) < self::PREFIX_LENGTH ) {
+			return false;
+		}
+
+		return ! isset( $args['values_prefix_index'][ substr( $line, 0, self::PREFIX_LENGTH ) ] );
 	}
 
 	/**
@@ -322,6 +411,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				}
 			}
 
+			return false;
+		}
+
+		if ( $this->line_is_ruled_out( $line, $args ) ) {
 			return false;
 		}
 

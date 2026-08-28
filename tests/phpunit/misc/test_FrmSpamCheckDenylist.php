@@ -757,4 +757,176 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 			),
 		);
 	}
+
+	/**
+	 * Text long enough that the values pass MIN_LENGTH_TO_INDEX once encoded.
+	 *
+	 * @return string
+	 */
+	private function get_filler_text() {
+		return str_repeat( 'ordinary sentence about a kitchen remodel. ', 60 );
+	}
+
+	/**
+	 * Builds a submission whose values are long enough to be indexed, with the
+	 * given text planted in the middle of them.
+	 *
+	 * @param string $planted Text to plant in the middle of a value.
+	 *
+	 * @return FrmSpamCheckDenylist
+	 */
+	private function get_long_submission( $planted = '' ) {
+		$filler = $this->get_filler_text();
+
+		// Only the one field, so nothing in the other default values can match.
+		return new FrmSpamCheckDenylist(
+			array(
+				'form_id'   => $this->default_values['form_id'],
+				'item_meta' => array(
+					$this->text_field_id => $filler . $planted . ' ' . $filler,
+				),
+			)
+		);
+	}
+
+	/**
+	 * Returns the denylist shape get_values_prefix_index() reads: the comparison
+	 * settings and the lowercased values string.
+	 *
+	 * @param string $values_string_lower The values to index.
+	 * @param array  $extra               Denylist settings to override.
+	 *
+	 * @return array
+	 */
+	private function get_indexable_denylist( $values_string_lower, $extra = array() ) {
+		return array_merge(
+			array(
+				'is_regex'            => false,
+				'compare'             => FrmSpamCheckDenylist::COMPARE_CONTAINS,
+				'values_string_lower' => $values_string_lower,
+			),
+			$extra
+		);
+	}
+
+	/**
+	 * Runs get_values_prefix_index() for the given denylist shape.
+	 *
+	 * @param array $denylist Denylist data.
+	 *
+	 * @return array
+	 */
+	private function get_prefix_index( $denylist ) {
+		return $this->run_private_method(
+			array( $this->spam_check, 'get_values_prefix_index' ),
+			array( $denylist )
+		);
+	}
+
+	/**
+	 * The index holds every PREFIX_LENGTH character window of the values, and only
+	 * gets built for values long enough to be worth it.
+	 */
+	public function test_get_values_prefix_index() {
+		$long  = strtolower( wp_json_encode( array( $this->get_filler_text() ) ) );
+		$index = $this->get_prefix_index( $this->get_indexable_denylist( $long ) );
+
+		$this->assertNotEmpty( $index );
+
+		// Every window of the values is a key, and nothing else is.
+		$this->assertArrayHasKey( 'ordi', $index );
+		$this->assertArrayHasKey( 'kitc', $index );
+		$this->assertArrayNotHasKey( 'zzzz', $index );
+
+		// Short values are not indexed, so they are compared exactly as before.
+		$this->assertSame( array(), $this->get_prefix_index( $this->get_indexable_denylist( 'short values' ) ) );
+
+		// A regex line is a pattern, not text to look for, so it is never indexed.
+		$this->assertSame(
+			array(),
+			$this->get_prefix_index( $this->get_indexable_denylist( $long, array( 'is_regex' => true ) ) )
+		);
+
+		// An equals comparison is against whole values, not the joined string.
+		$this->assertSame(
+			array(),
+			$this->get_prefix_index(
+				$this->get_indexable_denylist( $long, array( 'compare' => FrmSpamCheckDenylist::COMPARE_EQUALS ) )
+			)
+		);
+	}
+
+	/**
+	 * The index only rules lines out, so an indexed submission has to reach the
+	 * same verdict as an unindexed one, for words and for file lines.
+	 */
+	public function test_prefix_index_does_not_change_the_verdict() {
+		$long = $this->get_long_submission( 'buy-cheap-widgets.example' );
+
+		$this->assertTrue(
+			$this->check_values_with( array( array( 'words' => array( 'buy-cheap-widgets.example' ) ) ), $long )
+		);
+		$this->assertFalse(
+			$this->check_values_with( array( array( 'words' => array( 'zzzz-not-in-the-values' ) ) ), $long )
+		);
+
+		// A word that shares its first characters with the values but is not in
+		// them survives the index and is then ruled out by the comparison.
+		$this->assertFalse(
+			$this->check_values_with( array( array( 'words' => array( 'kitchen-remodel-spam.example' ) ) ), $long )
+		);
+	}
+
+	/**
+	 * A match on the last line of a file is still found once the lines before it
+	 * have been ruled out by the index.
+	 */
+	public function test_prefix_index_still_finds_a_match_on_the_last_line() {
+		$denylist = array(
+			array(
+				// The file is `wordpress`, a blank line, then `plugin`.
+				'file' => __DIR__ . '/denylist-email-contain.txt',
+			),
+		);
+
+		// Only the word on the last line is present, so the first line has to be
+		// ruled out and the last one still found.
+		$long = $this->get_long_submission( 'a plugin for you' );
+		$this->assertTrue( $this->check_values_with( $denylist, $long ) );
+
+		// Neither word present, and the blank line must not match.
+		$clean = $this->get_long_submission( 'nothing to see' );
+		$this->assertFalse( $this->check_values_with( $denylist, $clean ) );
+	}
+
+	/**
+	 * A regex denylist still matches on a long submission, where the index would
+	 * have wrongly ruled the pattern out had it been applied.
+	 */
+	public function test_regex_denylist_matches_on_an_indexed_length_submission() {
+		$long = $this->get_long_submission( 'buy prada handbags' );
+
+		$this->assertTrue(
+			$this->check_values_with(
+				array(
+					array(
+						'words'    => array( 'prada\s+handbags' ),
+						'is_regex' => true,
+					),
+				),
+				$long
+			)
+		);
+	}
+
+	/**
+	 * Lines shorter than the index key cannot be looked up, so they are compared
+	 * rather than wrongly ruled out.
+	 */
+	public function test_lines_shorter_than_the_index_key_are_still_compared() {
+		$long = $this->get_long_submission( 'aaa' );
+
+		$this->assertTrue( $this->check_values_with( array( array( 'words' => array( 'aaa' ) ) ), $long ) );
+		$this->assertFalse( $this->check_values_with( array( array( 'words' => array( 'zqx' ) ) ), $long ) );
+	}
 }
