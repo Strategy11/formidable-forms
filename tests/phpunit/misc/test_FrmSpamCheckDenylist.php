@@ -397,13 +397,18 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	/**
 	 * Runs check_values() against the given denylist data.
 	 *
-	 * @param array $denylist_data Array of denylists.
+	 * @param array                     $denylist_data Array of denylists.
+	 * @param FrmSpamCheckDenylist|null $spam_check    The check to run, or null for the one built in setUp().
 	 *
 	 * @return bool
 	 */
-	private function check_values_with( $denylist_data ) {
-		$this->set_denylist_data( $denylist_data );
-		return $this->run_private_method( array( $this->spam_check, 'check_values' ) );
+	private function check_values_with( $denylist_data, $spam_check = null ) {
+		if ( null === $spam_check ) {
+			$spam_check = $this->spam_check;
+		}
+
+		$this->set_private_property( $spam_check, 'denylist', $denylist_data );
+		return $this->run_private_method( array( $spam_check, 'check_values' ) );
 	}
 
 	/**
@@ -648,5 +653,108 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->assertContains( 'wordpress', (array) get_transient( $transient_name ) );
 
 		delete_transient( $transient_name );
+	}
+
+	/**
+	 * The values are compared as a JSON string, which escapes forward slashes, and
+	 * they are unescaped again before the compare. Without that, no denylist entry
+	 * holding a slash could ever match.
+	 */
+	public function test_check_values_with_slashes_in_denylist_words() {
+		$values                                      = $this->default_values;
+		$values['item_meta'][ $this->text_field_id ] = 'go to spam/path/here and /joomla/ today';
+		$spam_check                                  = new FrmSpamCheckDenylist( $values );
+
+		$this->assertTrue( $this->check_values_with( array( array( 'words' => array( 'spam/path' ) ) ), $spam_check ) );
+		$this->assertTrue( $this->check_values_with( array( array( 'words' => array( '/joomla/' ) ) ), $spam_check ) );
+
+		// A slash in the word still has to be part of the value to match.
+		$this->assertFalse( $this->check_values_with( array( array( 'words' => array( 'spam/other' ) ) ), $spam_check ) );
+	}
+
+	/**
+	 * Option fields hold values the site author wrote, and password fields hold
+	 * secrets, so fill_default_denylist_data() always adds them to the skipped
+	 * field types. A denylisted word in one of them is not spam.
+	 */
+	public function test_check_values_skips_the_default_skipped_field_types() {
+		$form_id  = FrmField::getOne( $this->text_field_id )->form_id;
+		$denylist = array(
+			array(
+				'words' => array( 'zzspamword' ),
+			),
+		);
+
+		foreach ( array( 'radio', 'checkbox', 'select', 'password' ) as $type ) {
+			$field_id   = $this->factory->field->create(
+				array(
+					'type'    => $type,
+					'form_id' => $form_id,
+				)
+			);
+			$spam_check = new FrmSpamCheckDenylist(
+				array(
+					'form_id'   => $form_id,
+					'item_meta' => array( $field_id => 'zzspamword' ),
+				)
+			);
+
+			$this->assertFalse(
+				$this->check_values_with( $denylist, $spam_check ),
+				'A denylisted word in a ' . $type . ' field should not be spam.'
+			);
+		}
+
+		// The same word in a field type that is checked is spam.
+		$spam_check = new FrmSpamCheckDenylist(
+			array(
+				'form_id'   => $form_id,
+				'item_meta' => array( $this->text_field_id => 'zzspamword' ),
+			)
+		);
+		$this->assertTrue( $this->check_values_with( $denylist, $spam_check ) );
+	}
+
+	/**
+	 * The denylist check runs only while its setting is on, and the
+	 * frm_check_denylist filter can turn it off on its own.
+	 */
+	public function test_is_spam_respects_the_denylist_setting() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$was_enabled  = $frm_settings->denylist_check;
+
+		add_filter( 'frm_denylist_data', array( $this, 'filter_denylist_to_one_word' ) );
+
+		$frm_settings->update_setting( 'denylist_check', 1, 'absint' );
+		$spam_check = new FrmSpamCheckDenylist( $this->default_values );
+		$this->assertNotFalse( $spam_check->is_spam() );
+
+		$frm_settings->update_setting( 'denylist_check', 0, 'absint' );
+		$spam_check = new FrmSpamCheckDenylist( $this->default_values );
+		$this->assertFalse( $spam_check->is_spam() );
+
+		// The filter turns the check off while the setting is still on.
+		$frm_settings->update_setting( 'denylist_check', 1, 'absint' );
+		add_filter( 'frm_check_denylist', '__return_false' );
+		$spam_check = new FrmSpamCheckDenylist( $this->default_values );
+		$this->assertFalse( $spam_check->is_spam() );
+		remove_filter( 'frm_check_denylist', '__return_false' );
+
+		remove_filter( 'frm_denylist_data', array( $this, 'filter_denylist_to_one_word' ) );
+		$frm_settings->update_setting( 'denylist_check', $was_enabled, 'absint' );
+	}
+
+	/**
+	 * Replaces the shipped denylist with a single word that is in the test values,
+	 * so the setting is what decides the result rather than the denylist files.
+	 *
+	 * @return array[]
+	 */
+	public function filter_denylist_to_one_word() {
+		return array(
+			array(
+				'words' => array( 'plugin' ),
+			),
+		);
 	}
 }

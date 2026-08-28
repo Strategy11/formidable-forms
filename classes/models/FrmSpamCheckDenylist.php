@@ -180,6 +180,11 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			$this->fill_default_denylist_data( $denylist );
 			$denylist['allowed_words'] = $allowed_words;
 
+			if ( ! $this->add_values_to_check( $denylist ) ) {
+				// Nothing in this submission needs to be checked against this denylist.
+				continue;
+			}
+
 			if ( ! empty( $denylist['words'] ) ) {
 				foreach ( $denylist['words'] as $word ) {
 					if ( $this->single_line_check_values( $word, $denylist ) ) {
@@ -232,6 +237,37 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	}
 
 	/**
+	 * Extracts the submitted values this denylist needs to check, and the string
+	 * forms those values are compared against.
+	 *
+	 * The values depend on the denylist configuration, not on the word or file line
+	 * being compared, so they are extracted once here and carried on the denylist.
+	 * The shipped denylist files hold tens of thousands of lines and a large form
+	 * posts more than a thousand values, so extracting per line is quadratic.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $denylist Denylist data, with the defaults already filled in.
+	 *
+	 * @return bool False if this submission has no values for this denylist to check.
+	 */
+	protected function add_values_to_check( &$denylist ) {
+		$values_to_check = $this->get_values_to_check( $denylist );
+
+		if ( ! $values_to_check ) {
+			return false;
+		}
+
+		$values_string = $this->convert_values_to_string( $values_to_check );
+
+		$denylist['values_to_check']     = $values_to_check;
+		$denylist['values_string']       = $values_string;
+		$denylist['values_string_lower'] = $this->convert_to_lowercase( $values_string );
+
+		return true;
+	}
+
+	/**
 	 * Gets words from setting.
 	 *
 	 * @param string $setting_key Setting key.
@@ -255,7 +291,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Checks the values against each single word.
 	 *
 	 * @param string $line Single line.
-	 * @param array  $args Check args.
+	 * @param array  $args Check args. Carries the values to check when they have
+	 *                     already been extracted by {@see FrmSpamCheckDenylist::add_values_to_check()}.
 	 *
 	 * @return bool
 	 */
@@ -267,19 +304,17 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return false;
 		}
 
-		$values_to_check = $this->get_values_to_check( $args );
-
-		if ( ! $values_to_check ) {
+		if ( ! isset( $args['values_to_check'] ) && ! $this->add_values_to_check( $args ) ) {
 			// Nothing needs to be checked.
 			return false;
 		}
 
 		if ( ! empty( $args['is_regex'] ) ) {
-			return preg_match( '/' . trim( $line, '/' ) . '/i', $this->convert_values_to_string( $values_to_check ) );
+			return preg_match( '/' . trim( $line, '/' ) . '/i', $args['values_string'] );
 		}
 
 		if ( self::COMPARE_EQUALS === $args['compare'] ) {
-			foreach ( $values_to_check as $value ) {
+			foreach ( $args['values_to_check'] as $value ) {
 				$value = $this->convert_to_lowercase( $value );
 
 				if ( $line === $value ) {
@@ -290,8 +325,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return false;
 		}
 
-		$values_str = strtolower( $this->convert_values_to_string( $values_to_check ) );
-		return str_contains( $values_str, $line );
+		return str_contains( $args['values_string_lower'], $line );
 	}
 
 	/**
