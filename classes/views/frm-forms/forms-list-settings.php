@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<hr />
 
-	<div style="text-align: right;" class="frm-pt-2xs frm-pb-xs">
+	<div class="frm-pt-2xs frm-pb-xs">
 		<button type="button" class="frm-button-primary button-primary" id="frm-save-forms-list-settings-btn"><?php esc_html_e( 'Apply', 'formidable' ); ?></button>
 	</div>
 </div>

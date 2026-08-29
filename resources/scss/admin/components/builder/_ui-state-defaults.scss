@@ -46,3 +46,230 @@
 .edit_field_type_end_divider > label {
 	display: none !important;
 }
+
+/**
+ * Field card hover
+ *
+ * A translucent overlay and a darker label — nothing else. Blue stays reserved for selected, and
+ * leaving the border and shadow alone means one event produces one signal instead of three.
+ */
+.frm_sorting li.ui-state-default.frm_not_divider {
+	border-radius: var(--small-radius);
+
+	/* Declared off-hover too, so the state fades out as well as in. */
+	transition:
+		0.15s background-color ease,
+		0.15s border-color ease,
+		0.15s box-shadow ease;
+}
+
+.frm_sorting li.ui-state-default.frm_not_divider:not(.selected):hover {
+	background-color: var(--surface-hover);
+
+	/* The shared rule above turns the border --primary-500 on hover; hold it so blue stays selected-only. */
+	border-color: transparent;
+
+	/* Repeated to beat the 0.5s border-color transition in the shared rule above. */
+	transition:
+		0.15s background-color ease,
+		0.15s border-color ease,
+		0.15s box-shadow ease;
+}
+
+/* Selected keeps the strongest treatment: a ring, not the old 1px blur that read as hover. */
+.frm_sorting li.ui-state-default.frm_not_divider.selected {
+	box-shadow: 0 0 0 1px var(--primary-500);
+
+	/* Selecting is a deliberate click, so confirm it promptly. */
+	transition:
+		0.15s background-color ease,
+		0.15s border-color ease,
+		0.15s box-shadow ease;
+}
+
+/**
+ * Field card layout
+ *
+ * Measured from the Scratchpad design (node 1221:100). The card pads 10px on three sides and
+ * nothing at the bottom: .frm_field_box already carries a 10px bottom margin, so padding there
+ * doubled the gap and made the hover fill look bottom-heavy.
+ *
+ * The action icons move out of the top-right corner and into the label row, which is what the
+ * design shows and what stops them overlapping a long field label.
+ */
+#frm-show-fields li.ui-state-default.frm_not_divider {
+	padding: 10px 10px 0;
+
+	> .frm_inner_field_container {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+
+		> .frm_primary_label {
+			order: 1;
+			transition: 0.15s color ease;
+			flex: 1 1 auto;
+			min-width: 0;
+			margin-bottom: 0;
+		}
+
+		> .frm-field-action-icons {
+			order: 2;
+			position: static;
+			display: flex;
+			align-items: center;
+			margin-left: auto;
+
+			/* 6px between the icons; the ID adds 2px more to reach the 8px the design has. */
+			gap: 6px;
+
+			/**
+			 * 6px between the icons, 12px after the ID. Equal spacing left the ID reading as a
+			 * third item in the row rather than a label beside a pair of controls.
+			 */
+			.frm-field-id {
+				position: static;
+				margin-right: 6px;
+			}
+		}
+
+		/* Everything after the label row starts a new line. */
+		> .frm_form_fields,
+		> .clear,
+		> .frm_description {
+			order: 3;
+			flex: 0 0 100%;
+		}
+
+		> .frm_form_fields {
+			margin-top: 6px;
+		}
+	}
+}
+
+/**
+ * Fields with no label
+ *
+ * The submit button and other label-less fields have no row for the icons to share, so in flow
+ * they pushed the content down by the height of the icon row. They return to the corner, which is
+ * where they sat before the label row existed.
+ */
+#frm-show-fields li.ui-state-default.frm_not_divider > .frm_inner_field_container:not(:has(> .frm_primary_label)) {
+	position: relative;
+
+	> .frm-field-action-icons {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	> .frm_form_fields {
+		margin-top: 0;
+	}
+}
+
+/**
+ * Action icon buttons
+ *
+ * 20px targets around a 16px glyph, tinted grey on hover so they read as buttons rather than
+ * bare icons.
+ */
+#frm-show-fields .frm-field-action-icons {
+
+	> a,
+	.dropdown > a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		border-radius: 4px;
+		transition: 0.12s background-color ease;
+
+		&:hover {
+			background-color: var(--surface-hover-compact);
+
+			/**
+			 * The glyph was --grey-500 in every state, so the icon under the cursor was the one
+			 * element giving no feedback and the chip alone had to carry it.
+			 *
+			 * !important only because the resting colour carries one:
+			 * _icon-font.scss:119 sets .frm-field-action-icons > a .frmsvg to --grey-500 !important,
+			 * which no amount of specificity can outrank.
+			 */
+			.frmsvg {
+				color: var(--grey-900) !important;
+			}
+		}
+
+		&:active {
+			background-color: var(--surface-active-compact);
+			transform: scale(0.96);
+		}
+	}
+
+	/**
+	 * The dropdown glyph ships at #9ea9b8 while the move glyph is --grey-500, so on hover the two
+	 * travelled different distances to the same colour and only one appeared to react.
+	 */
+	.frm-dropdown-toggle .frmsvg {
+		color: var(--grey-500);
+	}
+
+	/**
+	 * The move symbol used to hardcode stroke="#9EA9B8" while every other icon uses currentColor,
+	 * so it was the one glyph that ignored colour. Fixed in images/icons.svg — CSS cannot reach
+	 * inside a <use> shadow tree, so it could not be corrected from here.
+	 */
+
+	/* Inline-block adds a line box, which made the label row 24px instead of the design's 21px. */
+	.dropdown {
+		display: flex;
+		align-items: center;
+	}
+
+	.frmsvg {
+		width: 16px;
+		height: 16px;
+	}
+
+	/**
+	 * Optical, not geometric: the move arrows fill their box edge to edge while the menu is three
+	 * dots down the middle, so at a matched 16px the arrows read noticeably heavier.
+	 */
+	.frm-move .frmsvg {
+		width: 14px;
+		height: 14px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	#frm-show-fields .frm-field-action-icons > a,
+	#frm-show-fields .frm-field-action-icons .dropdown > a {
+		transition: none;
+	}
+}
+
+/**
+ * Keyboard reveal
+ *
+ * The action icons sit at opacity 0 until the card is hovered or selected, so tabbing to Move or
+ * More focused a control nobody could see. Focus reveals them the same way hover does.
+ */
+#frm-show-fields li.frm_field_box:not(.edit_field_type_divider):focus-within > .frm_inner_field_container > .frm-show-hover {
+	opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	#frm-show-fields .frm-field-action-icons > a:active,
+	#frm-show-fields .frm-field-action-icons .dropdown > a:active {
+		transform: none;
+	}
+}
+
+/* The overlay is only 4%; the label darkening is what the eye actually reads. */
+#frm-show-fields li.ui-state-default.frm_not_divider:not(.selected):hover > .frm_inner_field_container > .frm_primary_label {
+	color: var(--grey-900);
+}
