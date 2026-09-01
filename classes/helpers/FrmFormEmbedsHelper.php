@@ -52,6 +52,15 @@ class FrmFormEmbedsHelper {
 	private static $cached_post_ids;
 
 	/**
+	 * Expanded affected form IDs, keyed by the embedded form IDs they came from.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string,array<int>>
+	 */
+	private static $affected_form_ids = array();
+
+	/**
 	 * Reads the embed posts cache, hitting the transient only once per request.
 	 *
 	 * @since x.x
@@ -115,6 +124,56 @@ class FrmFormEmbedsHelper {
 	}
 
 	/**
+	 * Reduces posts to the fields the Embeds column actually renders, before they are cached.
+	 *
+	 * The frm_get_posts_contain_form filter is free to return whole WP_Post objects, and the
+	 * Landing Pages add-on does. Caching those stores post_content and every other column, and
+	 * because the column JSON encodes this straight into a data-posts attribute it also puts
+	 * full post content, drafts included, into the admin page markup.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $posts Posts that embed a form.
+	 *
+	 * @return \stdClass[]
+	 */
+	public static function slim_posts( $posts ) {
+		/**
+		 * Filters the post fields kept in the embeds cache.
+		 *
+		 * Anything rendered by the Embeds dropdown has to be listed here to survive caching.
+		 *
+		 * @since x.x
+		 *
+		 * @param string[] $fields Property names to keep.
+		 */
+		$fields = apply_filters(
+			'frm_embed_post_cached_fields',
+			array( 'ID', 'post_title', 'post_name', 'title_contains_html', 'permalink', 'edit_link' )
+		);
+
+		$slim = array();
+
+		foreach ( $posts as $post ) {
+			if ( ! is_object( $post ) || ! isset( $post->ID ) ) {
+				continue;
+			}
+
+			$kept = array();
+
+			foreach ( $fields as $field ) {
+				if ( property_exists( $post, $field ) ) {
+					$kept[ $field ] = $post->$field;
+				}
+			}
+
+			$slim[] = (object) $kept;
+		}
+
+		return $slim;
+	}
+
+	/**
 	 * Adds the links and fallback titles the Embeds dropdown expects.
 	 *
 	 * @since x.x
@@ -124,31 +183,38 @@ class FrmFormEmbedsHelper {
 	 * @return array
 	 */
 	public static function prepare_posts( $posts ) {
+		$prepared = array();
+
 		foreach ( $posts as $post ) {
-			if ( ! property_exists( $post, 'permalink' ) ) {
-				$post->permalink = get_permalink( $post->ID );
+			// Copied so the derived values never end up back in the cached original.
+			$display = clone $post;
+
+			if ( ! property_exists( $display, 'permalink' ) ) {
+				$display->permalink = get_permalink( $display->ID );
 			}
 
-			if ( ! property_exists( $post, 'edit_link' ) ) {
-				$post->edit_link = get_edit_post_link( $post->ID );
+			if ( ! property_exists( $display, 'edit_link' ) ) {
+				$display->edit_link = get_edit_post_link( $display->ID );
 			}
 
 			// Ensure post_name is not null or the string "null"
-			if ( ! isset( $post->post_name ) ) {
-				$post->post_name = '';
+			if ( ! isset( $display->post_name ) ) {
+				$display->post_name = '';
 			}
 
 			// Ensure post_title is not null or the string "null"
-			if ( ! isset( $post->post_title ) ) {
-				$post->post_title = '';
+			if ( ! isset( $display->post_title ) ) {
+				$display->post_title = '';
 			}
 
-			if ( '' === $post->post_title ) {
-				$post->post_title = __( '(no title)', 'formidable' );
+			if ( '' === $display->post_title ) {
+				$display->post_title = __( '(no title)', 'formidable' );
 			}
+
+			$prepared[] = $display;
 		}//end foreach
 
-		return $posts;
+		return $prepared;
 	}
 
 	/**
@@ -250,9 +316,11 @@ class FrmFormEmbedsHelper {
 		// A post that has only just been created cannot be in the cache yet, so its own content
 		// is the only thing worth checking. Anything heavier here gets paid once per row by a
 		// bulk insert or an import.
-		if ( self::content_has_embed( $post->post_content ) ) {
-			self::clear();
+		if ( ! self::content_has_embed( $post->post_content ) ) {
+			return;
 		}
+
+		self::clear_for_forms( self::get_affected_form_ids( self::get_embedded_form_ids( $post->post_content ) ) );
 	}
 
 	/**
@@ -271,35 +339,31 @@ class FrmFormEmbedsHelper {
 			return;
 		}
 
-		$embedded_before = self::content_has_embed( $post_before->post_content );
-		$embedded_after  = self::content_has_embed( $post_after->post_content );
+		$before_ids     = self::get_embedded_form_ids( $post_before->post_content );
+		$after_ids      = self::get_embedded_form_ids( $post_after->post_content );
+		$status_changed = $post_before->post_status !== $post_after->post_status;
+		$embeds_changed = $before_ids !== $after_ids;
 
-		if ( $embedded_before !== $embedded_after ) {
-			// A form embed was either added or removed.
-			self::clear();
-			return;
+		// The dropdown lists the title and slug, so renaming a post makes the cached copy wrong.
+		$label_changed = $post_before->post_title !== $post_after->post_title || $post_before->post_name !== $post_after->post_name;
+
+		$form_ids = array();
+
+		if ( $embeds_changed || $status_changed ) {
+			// The forms this post embeds changed, or a status change moved the post in or out
+			// of the embeds query.
+			$form_ids = self::get_affected_form_ids( array_merge( $before_ids, $after_ids ) );
 		}
 
-		if ( $embedded_after ) {
-			// Both versions embed a form, so compare which ones. A status change matters too,
-			// since it can move the post in or out of the embeds query.
-			$signature_changed = self::get_embed_signature( $post_before->post_content ) !== self::get_embed_signature( $post_after->post_content );
+		$filter_added = ! $before_ids && ! $after_ids && $post_before->post_content !== $post_after->post_content;
 
-			if ( $signature_changed || $post_before->post_status !== $post_after->post_status ) {
-				self::clear();
-			}
-
-			return;
+		if ( $label_changed || $status_changed || $filter_added ) {
+			// A post the frm_get_posts_contain_form filter added is listed even though its own
+			// content does not say so, so fall back to whichever rows actually list it.
+			$form_ids = array_merge( $form_ids, self::get_cached_form_ids_for_post( $post_id ) );
 		}
 
-		if ( $post_before->post_content === $post_after->post_content && $post_before->post_status === $post_after->post_status ) {
-			// Nothing that could affect the embeds list changed.
-			return;
-		}
-
-		// Neither version embeds a form in its own content, so this post can only matter if the
-		// frm_get_posts_contain_form filter is what put it in the cache.
-		self::clear_if_cached( $post_id );
+		self::clear_for_forms( $form_ids );
 	}
 
 	/**
@@ -321,12 +385,9 @@ class FrmFormEmbedsHelper {
 			return;
 		}
 
-		if ( self::content_has_embed( $post->post_content ) ) {
-			self::clear();
-			return;
-		}
+		$form_ids = self::get_affected_form_ids( self::get_embedded_form_ids( $post->post_content ) );
 
-		self::clear_if_cached( $post_id );
+		self::clear_for_forms( array_merge( $form_ids, self::get_cached_form_ids_for_post( $post_id ) ) );
 	}
 
 	/**
@@ -354,36 +415,10 @@ class FrmFormEmbedsHelper {
 	}
 
 	/**
-	 * Extracts the Formidable embed markup from post content so two revisions can be compared.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $content Post content.
-	 *
-	 * @return string
-	 */
-	private static function get_embed_signature( $content ) {
-		if ( ! is_string( $content ) || '' === $content ) {
-			return '';
-		}
-
-		$matches = array();
-		preg_match_all( '/\[formidable\b[^\]]*\]|<!--\s*wp:formidable\/simple-form[^>]*-->/', $content, $matches );
-
-		if ( ! $matches[0] ) {
-			return '';
-		}
-
-		sort( $matches[0] );
-
-		return implode( '|', $matches[0] );
-	}
-
-	/**
 	 * Checks whether post content embeds a Formidable form.
 	 *
 	 * Deliberately two string searches and nothing more. This runs on every post save on the
-	 * site, so it is the gate that keeps the regex and the cache lookup off the hot path.
+	 * site, so it is the gate that keeps the parsing off the hot path.
 	 *
 	 * @since x.x
 	 *
@@ -400,18 +435,121 @@ class FrmFormEmbedsHelper {
 	}
 
 	/**
-	 * Clears the cache if the post is one of the posts it lists.
+	 * Extracts the IDs of the forms embedded in post content.
+	 *
+	 * Only id= shortcodes and the simple-form block are recognised, matching what
+	 * FrmFormsListHelper::get_base_search_strings_for_form() looks for. A key= shortcode is
+	 * deliberately not matched, because the Embeds column cannot find it either.
 	 *
 	 * @since x.x
 	 *
-	 * @param int $post_id Post ID.
+	 * @param string $content Post content.
 	 *
-	 * @return void
+	 * @return array Sorted, unique form IDs.
 	 */
-	private static function clear_if_cached( $post_id ) {
-		if ( isset( self::get_cached_post_ids()[ intval( $post_id ) ] ) ) {
-			self::clear();
+	private static function get_embedded_form_ids( $content ) {
+		if ( ! is_string( $content ) || '' === $content ) {
+			return array();
 		}
+
+		$ids     = array();
+		$matches = array();
+
+		// [formidable id=5], [formidable key="contact-form"], and every quoting of both.
+		preg_match_all( '/\[formidable\b[^\]]*\b(?:id|key)=["\']?([A-Za-z0-9_\-]+)/', $content, $matches );
+
+		if ( $matches[1] ) {
+			$ids = $matches[1];
+		}
+
+		$matches = array();
+
+		// <!-- wp:formidable/simple-form {"formId":"5" ... -->.
+		preg_match_all( '/wp:formidable\/simple-form\s*\{[^}]*"formId":"?(\d+)/', $content, $matches );
+
+		if ( $matches[1] ) {
+			$ids = array_merge( $ids, $matches[1] );
+		}
+
+		$form_ids = array();
+
+		foreach ( $ids as $id ) {
+			// A key in either attribute resolves to the same form the shortcode would render.
+			$form_ids[] = is_numeric( $id ) ? intval( $id ) : FrmForm::get_id_by_key( $id );
+		}
+
+		$form_ids = array_filter( $form_ids );
+
+		$form_ids = array_unique( $form_ids );
+		sort( $form_ids );
+
+		return $form_ids;
+	}
+
+	/**
+	 * Expands the forms embedded in a post to every form whose cached list they affect.
+	 *
+	 * A form's embeds list can be matched by a shortcode for a different form. Pro's nested
+	 * forms are the case that matters: FrmProFormsListHelper::get_search_strings_for_form()
+	 * makes form G's list match [formidable id=P] whenever form P embeds form G, so a change to
+	 * a post embedding P has to invalidate G too.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $form_ids Form IDs embedded in the post content.
+	 *
+	 * @return array
+	 */
+	private static function get_affected_form_ids( $form_ids ) {
+		if ( ! $form_ids ) {
+			return array();
+		}
+
+		$ids = array();
+
+		foreach ( $form_ids as $form_id ) {
+			$ids[] = intval( $form_id );
+		}
+
+		$form_ids = array_unique( $ids );
+		sort( $form_ids );
+
+		$key = implode( ',', $form_ids );
+
+		if ( isset( self::$affected_form_ids[ $key ] ) ) {
+			// Listeners hit the database to work this out, so a bulk import of pages embedding
+			// the same form must not pay for it once per page.
+			return self::$affected_form_ids[ $key ];
+		}
+
+		/**
+		 * Filters the forms whose cached embeds list is affected by a post embedding $form_ids.
+		 *
+		 * Anything that widens get_search_strings_for_form() has to widen this to match, or the
+		 * forms it added will keep a stale count.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $affected_form_ids Form IDs whose cached lists are affected.
+		 * @param array $form_ids          Form IDs embedded in the post content.
+		 */
+		$affected = apply_filters( 'frm_form_ids_affected_by_embed', $form_ids, $form_ids );
+
+		if ( ! is_array( $affected ) ) {
+			$affected = $form_ids;
+		}
+
+		$expanded = array();
+
+		foreach ( $affected as $form_id ) {
+			$expanded[] = intval( $form_id );
+		}
+
+		$expanded = array_values( array_unique( $expanded ) );
+
+		self::$affected_form_ids[ $key ] = $expanded;
+
+		return $expanded;
 	}
 
 	/**
@@ -444,6 +582,112 @@ class FrmFormEmbedsHelper {
 		}
 
 		return self::$cached_post_ids;
+	}
+
+	/**
+	 * Gets the cached forms that currently list a post.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return array
+	 */
+	private static function get_cached_form_ids_for_post( $post_id ) {
+		$post_id = intval( $post_id );
+
+		if ( ! isset( self::get_cached_post_ids()[ $post_id ] ) ) {
+			// Answers the overwhelming majority of saves without walking the cache.
+			return array();
+		}
+
+		$form_ids = array();
+
+		foreach ( self::get_cached_posts() as $form_id => $posts ) {
+			if ( ! is_array( $posts ) ) {
+				continue;
+			}
+
+			foreach ( $posts as $post_data ) {
+				if ( isset( $post_data->ID ) && intval( $post_data->ID ) === $post_id ) {
+					$form_ids[] = intval( $form_id );
+					break;
+				}
+			}
+		}
+
+		return $form_ids;
+	}
+
+	/**
+	 * Drops the given forms from the cache and keeps everything else.
+	 *
+	 * At 100k posts a rebuild costs seconds, so keeping the forms that did not change is worth
+	 * far more than the cost of writing the map back.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $form_ids Form IDs to drop.
+	 *
+	 * @return void
+	 */
+	private static function clear_for_forms( $form_ids ) {
+		if ( ! $form_ids ) {
+			return;
+		}
+
+		if ( ! self::can_target_forms() ) {
+			self::clear();
+			return;
+		}
+
+		$cached_posts = self::get_cached_posts();
+
+		if ( array() === $cached_posts ) {
+			return;
+		}
+
+		$dropped = false;
+
+		foreach ( $form_ids as $form_id ) {
+			if ( ! array_key_exists( $form_id, $cached_posts ) ) {
+				continue;
+			}
+
+			unset( $cached_posts[ $form_id ] );
+			$dropped = true;
+		}
+
+		if ( ! $dropped ) {
+			// None of the affected forms are cached, so every cached count is still accurate.
+			return;
+		}
+
+		if ( array() === $cached_posts ) {
+			self::clear();
+			return;
+		}
+
+		self::save_cached_posts( $cached_posts );
+	}
+
+	/**
+	 * Checks whether the affected forms can be worked out precisely.
+	 *
+	 * Pro widens get_search_strings_for_form() for nested forms. A Pro old enough not to hook
+	 * frm_form_ids_affected_by_embed cannot tell us which extra forms a post reaches, so on
+	 * those installs the whole cache is cleared rather than risk leaving a stale count.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function can_target_forms() {
+		if ( has_filter( 'frm_form_ids_affected_by_embed' ) ) {
+			return true;
+		}
+
+		return ! FrmAppHelper::pro_is_installed();
 	}
 
 	/**

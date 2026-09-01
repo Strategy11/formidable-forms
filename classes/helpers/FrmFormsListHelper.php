@@ -643,7 +643,10 @@ class FrmFormsListHelper extends FrmListHelper {
 			return array();
 		}
 
-		return $cached_posts[ $form->id ];
+		// Links and title fallbacks are derived at render time, not stored. get_edit_post_link()
+		// depends on the current user, so caching it in a shared transient would hand one user's
+		// edit link to another, and a permalink cached now goes stale on any slug change.
+		return FrmFormEmbedsHelper::prepare_posts( $cached_posts[ $form->id ] );
 	}
 
 	/**
@@ -677,7 +680,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $forms as $form_id => $form_to_scan ) {
 			$posts                    = $this->filter_embed_posts( $matched[ $form_id ], $form_to_scan );
-			$cached_posts[ $form_id ] = FrmFormEmbedsHelper::prepare_posts( $posts );
+			$cached_posts[ $form_id ] = FrmFormEmbedsHelper::slim_posts( $posts );
 		}
 
 		FrmFormEmbedsHelper::save_cached_posts( $cached_posts );
@@ -760,13 +763,29 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string[]
 	 */
 	protected function get_base_search_strings_for_form( $form_id ) {
-		return array(
-			'[formidable id=' . $form_id . ']',
-			'[formidable id=' . $form_id . ' ',
-			'[formidable id="' . $form_id . '"',
-			"[formidable id='" . $form_id . "'",
+		$strings = array(
 			'<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"',
 		);
+
+		// The shortcode renders a form from its key just as happily as from its ID, in either
+		// attribute, so all four spellings have to be searched or those pages never count.
+		$identifiers = array( $form_id );
+		$form_key    = FrmForm::get_key_by_id( $form_id );
+
+		if ( $form_key && $form_key !== (string) $form_id ) {
+			$identifiers[] = $form_key;
+		}
+
+		foreach ( $identifiers as $identifier ) {
+			foreach ( array( 'id', 'key' ) as $att ) {
+				$strings[] = '[formidable ' . $att . '=' . $identifier . ']';
+				$strings[] = '[formidable ' . $att . '=' . $identifier . ' ';
+				$strings[] = '[formidable ' . $att . '="' . $identifier . '"';
+				$strings[] = '[formidable ' . $att . "='" . $identifier . "'";
+			}
+		}
+
+		return $strings;
 	}
 
 	/**
