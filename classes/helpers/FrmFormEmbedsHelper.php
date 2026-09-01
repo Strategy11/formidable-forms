@@ -43,6 +43,15 @@ class FrmFormEmbedsHelper {
 	private static $candidate_posts;
 
 	/**
+	 * Every post ID that appears in the cache, flattened once per request.
+	 *
+	 * @since x.x
+	 *
+	 * @var array|null
+	 */
+	private static $cached_post_ids;
+
+	/**
 	 * Reads the embed posts cache, hitting the transient only once per request.
 	 *
 	 * @since x.x
@@ -68,7 +77,8 @@ class FrmFormEmbedsHelper {
 	 * @return void
 	 */
 	public static function save_cached_posts( $cached_posts ) {
-		self::$cached_posts = $cached_posts;
+		self::$cached_posts    = $cached_posts;
+		self::$cached_post_ids = null;
 		set_transient( self::TRANSIENT_NAME, $cached_posts, DAY_IN_SECONDS );
 	}
 
@@ -237,7 +247,12 @@ class FrmFormEmbedsHelper {
 			return;
 		}
 
-		self::clear_if_relevant( $post_id, $post->post_content );
+		// A post that has only just been created cannot be in the cache yet, so its own content
+		// is the only thing worth checking. Anything heavier here gets paid once per row by a
+		// bulk insert or an import.
+		if ( self::content_has_embed( $post->post_content ) ) {
+			self::clear();
+		}
 	}
 
 	/**
@@ -256,14 +271,35 @@ class FrmFormEmbedsHelper {
 			return;
 		}
 
-		$signature_changed = self::get_embed_signature( $post_before->post_content ) !== self::get_embed_signature( $post_after->post_content );
+		$embedded_before = self::content_has_embed( $post_before->post_content );
+		$embedded_after  = self::content_has_embed( $post_after->post_content );
 
-		if ( ! $signature_changed && $post_before->post_status === $post_after->post_status ) {
-			// The forms embedded in this post did not change, so the cached counts still hold.
+		if ( $embedded_before !== $embedded_after ) {
+			// A form embed was either added or removed.
+			self::clear();
 			return;
 		}
 
-		self::clear_if_relevant( $post_id, $post_after->post_content . $post_before->post_content );
+		if ( $embedded_after ) {
+			// Both versions embed a form, so compare which ones. A status change matters too,
+			// since it can move the post in or out of the embeds query.
+			$signature_changed = self::get_embed_signature( $post_before->post_content ) !== self::get_embed_signature( $post_after->post_content );
+
+			if ( $signature_changed || $post_before->post_status !== $post_after->post_status ) {
+				self::clear();
+			}
+
+			return;
+		}
+
+		if ( $post_before->post_content === $post_after->post_content && $post_before->post_status === $post_after->post_status ) {
+			// Nothing that could affect the embeds list changed.
+			return;
+		}
+
+		// Neither version embeds a form in its own content, so this post can only matter if the
+		// frm_get_posts_contain_form filter is what put it in the cache.
+		self::clear_if_cached( $post_id );
 	}
 
 	/**
@@ -285,7 +321,12 @@ class FrmFormEmbedsHelper {
 			return;
 		}
 
-		self::clear_if_relevant( $post_id, $post->post_content );
+		if ( self::content_has_embed( $post->post_content ) ) {
+			self::clear();
+			return;
+		}
+
+		self::clear_if_cached( $post_id );
 	}
 
 	/**
@@ -339,42 +380,70 @@ class FrmFormEmbedsHelper {
 	}
 
 	/**
-	 * Clears the cache, but only when the post could affect it.
+	 * Checks whether post content embeds a Formidable form.
+	 *
+	 * Deliberately two string searches and nothing more. This runs on every post save on the
+	 * site, so it is the gate that keeps the regex and the cache lookup off the hot path.
 	 *
 	 * @since x.x
 	 *
-	 * @param int    $post_id Post ID.
-	 * @param string $content Post content to test for an embed.
+	 * @param string $content Post content.
+	 *
+	 * @return bool
+	 */
+	private static function content_has_embed( $content ) {
+		if ( ! is_string( $content ) ) {
+			return false;
+		}
+
+		return str_contains( $content, '[formidable ' ) || str_contains( $content, '<!-- wp:formidable/simple-form ' );
+	}
+
+	/**
+	 * Clears the cache if the post is one of the posts it lists.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $post_id Post ID.
 	 *
 	 * @return void
 	 */
-	private static function clear_if_relevant( $post_id, $content ) {
-		if ( str_contains( $content, '[formidable ' ) || str_contains( $content, '<!-- wp:formidable/simple-form ' ) ) {
-			// This post embeds a form, so the cached counts may be stale.
+	private static function clear_if_cached( $post_id ) {
+		if ( isset( self::get_cached_post_ids()[ intval( $post_id ) ] ) ) {
 			self::clear();
-			return;
+		}
+	}
+
+	/**
+	 * Flattens the cache into a lookup of the post IDs it lists.
+	 *
+	 * Built once per request, so a bulk operation reads the cache once and then answers each
+	 * post with an array lookup instead of walking every form's post list every time.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_cached_post_ids() {
+		if ( null !== self::$cached_post_ids ) {
+			return self::$cached_post_ids;
 		}
 
-		$cached_posts = get_transient( self::TRANSIENT_NAME );
+		self::$cached_post_ids = array();
 
-		if ( ! is_array( $cached_posts ) ) {
-			return;
-		}
-
-		// If the new post data of a cached post doesn't contain the Formidable forms, clear the cache.
-		foreach ( $cached_posts as $posts ) {
+		foreach ( self::get_cached_posts() as $posts ) {
 			if ( ! is_array( $posts ) ) {
 				continue;
 			}
 
 			foreach ( $posts as $post_data ) {
-				if ( intval( $post_data->ID ) === intval( $post_id ) ) {
-					// This post contained a form shortcode before the change, so clear the cache.
-					self::clear();
-					return;
+				if ( isset( $post_data->ID ) ) {
+					self::$cached_post_ids[ intval( $post_data->ID ) ] = true;
 				}
 			}
 		}
+
+		return self::$cached_post_ids;
 	}
 
 	/**
@@ -385,7 +454,21 @@ class FrmFormEmbedsHelper {
 	 * @return void
 	 */
 	private static function clear() {
-		self::$cached_posts = null;
+		self::$cached_post_ids = array();
+
+		if ( array() === self::get_cached_posts() ) {
+			// Nothing left to delete. Without this, a bulk insert of pages that embed a form
+			// would run a delete query once per page.
+			//
+			// Reading the memoized copy rather than the transient is safe because
+			// save_cached_posts() is the only thing that writes this key, and it refreshes the
+			// memo. Pro and Landing delete the key on activation, which can only leave the memo
+			// stale in the harmless direction: one redundant delete.
+			return;
+		}
+
+		self::$cached_posts = array();
+
 		delete_transient( self::TRANSIENT_NAME );
 	}
 }
