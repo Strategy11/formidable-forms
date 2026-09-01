@@ -21,6 +21,7 @@ $file_params = array(
 	'data-upgrade' => __( 'Email attachments', 'formidable' ),
 	'data-message' => __( 'Attach a file of your choice to every email this form sends.', 'formidable' ),
 	'data-medium'  => 'email-attachment-file',
+	'data-content' => 'attachment-file',
 );
 
 $toggle_upsells = array(
@@ -30,6 +31,7 @@ $toggle_upsells = array(
 		'data-upgrade' => __( 'CSV email attachments', 'formidable' ),
 		'data-message' => __( 'Attach a CSV export of each new entry to the email.', 'formidable' ),
 		'data-medium'  => 'email-attachment-csv',
+		'data-content' => 'attachment-csv',
 	),
 	array(
 		'id'           => 'frm_attach_pdf_' . $action_key,
@@ -37,6 +39,7 @@ $toggle_upsells = array(
 		'data-upgrade' => __( 'Forms to PDF', 'formidable' ),
 		'data-message' => __( 'Attach a PDF of each new entry to the email.', 'formidable' ),
 		'data-medium'  => 'email-attachment-pdf',
+		'data-content' => 'attachment-pdf',
 	),
 );
 

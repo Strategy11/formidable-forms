@@ -100,6 +100,7 @@ if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->po
 		'class'        => 'frm-h-stack-xs frm-bt-200 frm-py-md frm-mb-xs frm_show_upgrade',
 		'data-upgrade' => __( 'Form action automations', 'formidable' ),
 		'data-medium'  => 'action-automation',
+		'data-content' => 'automation',
 	);
 
 	if ( isset( $upgrading['url'] ) ) {
@@ -136,7 +137,7 @@ if ( $use_logging ) {
 	if ( isset( $upgrading['url'] ) ) {
 		?>
 		<p>
-			<a href="javascript:void(0)" class="frm_show_upgrade frm-h-stack-xs" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
+			<a href="javascript:void(0)" class="frm_show_upgrade frm-h-stack-xs" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-content="logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_solid_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
 			</a>
