@@ -36,15 +36,14 @@ class FrmFormApi {
 	protected $force = false;
 
 	/**
-	 * Add-on info already read during this request, keyed by request url.
+	 * The most recent decode of each cache key's payload.
 	 *
-	 * get_api_info is called many times per request -- every upsell the form builder renders walks
-	 * the add-on list -- and each call unserializes the whole cached payload again. What it reads
-	 * cannot change mid-request, so keep the decoded array instead of rebuilding it.
+	 * Each entry is array( 'raw' => string, 'decoded' => mixed ). The raw JSON is kept so a reuse
+	 * can be checked against what is stored right now, rather than assumed to still be current.
 	 *
 	 * @var array<string,array>
 	 */
-	private static $memoized = array();
+	private static $decoded_cache = array();
 
 	/**
 	 * @since 3.06
@@ -130,16 +129,11 @@ class FrmFormApi {
 		if ( $this->force ) {
 			$addons      = false;
 			$this->force = false;
-			unset( self::$memoized[ $url ] );
 		} else {
-			if ( isset( self::$memoized[ $url ] ) ) {
-				return self::$memoized[ $url ];
-			}
 			$addons = $this->get_cached();
 		}
 
 		if ( is_array( $addons ) ) {
-			self::$memoized[ $url ] = $addons;
 			return $addons;
 		}
 
@@ -355,7 +349,39 @@ class FrmFormApi {
 			return false;
 		}
 
-		return json_decode( $cache['value'], true );
+		return $this->decode_cached( $cache['value'] );
+	}
+
+	/**
+	 * Decode a cached API payload, reusing the previous decode of an unchanged payload.
+	 *
+	 * The payload runs to tens of kilobytes of JSON, and decoding it costs far more than reading
+	 * the option it came from. That matters because a single form builder page decodes it once per
+	 * upsell it renders. The reuse is keyed on the raw JSON rather than on the cache key, so
+	 * anything that changes what is stored -- a new license, a cleared cache, a fresh API response,
+	 * a test replacing the option -- is picked up on the very next read instead of being masked.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $value The cached JSON.
+	 *
+	 * @return mixed
+	 */
+	private function decode_cached( $value ) {
+		$previous = self::$decoded_cache[ $this->cache_key ] ?? false;
+
+		if ( $previous && $previous['raw'] === $value ) {
+			return $previous['decoded'];
+		}
+
+		$decoded = json_decode( $value, true );
+
+		self::$decoded_cache[ $this->cache_key ] = array(
+			'raw'     => $value,
+			'decoded' => $decoded,
+		);
+
+		return $decoded;
 	}
 
 	/**
