@@ -175,6 +175,11 @@ namespace {
 		 */
 		public static function get_readable_license_type() {
 		}
+		/**
+		 * @return string Either grace, expired, expiring, or active.
+		 */
+		public static function get_license_status() {
+		}
 	}
 	class FrmProCurrencyHelper {
 		public static function normalize_formatted_numbers( $field, $formatted_value ) {}

@@ -128,7 +128,15 @@ class FrmMcpConnection {
 
 		if ( 'tools/call' === $method ) {
 			if ( isset( $params['arguments']['ability_name'] ) && is_string( $params['arguments']['ability_name'] ) ) {
-				return $params['arguments']['ability_name'];
+				$ability_name = $params['arguments']['ability_name'];
+
+				// The Formidable MCP server reaches every ability registered on
+				// the site, WooCommerce's and any other plugin's included, so an
+				// ability name arriving here is not necessarily one of ours.
+				// This table is Formidable's own activity log, so a name we do
+				// not own is recorded as a protocol request: the connection
+				// still counts, the endpoint is not listed.
+				return self::is_formidable_ability( $ability_name ) ? $ability_name : '';
 			}
 
 			return isset( $params['name'] ) && is_string( $params['name'] ) ? $params['name'] : '';
@@ -143,6 +151,43 @@ class FrmMcpConnection {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Check whether an ability name is one Formidable owns.
+	 *
+	 * A registered ability is judged by the category it registered into, which
+	 * is what every Formidable ability carries, add-on abilities included. When
+	 * the name is not registered the registry answers instead, so an ability
+	 * belonging to an add-on this site does not have is still recognised as
+	 * ours rather than being mistaken for another plugin's.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $ability_name Full ability name, including its namespace.
+	 *
+	 * @return bool
+	 */
+	private static function is_formidable_ability( $ability_name ) {
+		if ( '' === $ability_name ) {
+			return false;
+		}
+
+		if ( function_exists( 'wp_get_ability' ) ) {
+			$ability = wp_get_ability( $ability_name );
+
+			if ( $ability && is_callable( array( $ability, 'get_category' ) ) ) {
+				$category = $ability->get_category();
+
+				if ( is_object( $category ) && is_callable( array( $category, 'get_name' ) ) ) {
+					$category = $category->get_name();
+				}
+
+				return FrmAbilitiesController::CATEGORY === $category;
+			}
+		}
+
+		return FrmMcpAbilityRegistry::owns( $ability_name );
 	}
 
 	/**
