@@ -1395,74 +1395,42 @@ class FrmAppHelper {
 			}
 		}
 
-		$atts = self::allowed_icon_atts( $atts, $is_font_icon );
+		if ( $atts ) {
+			// A caller passed attributes, so kses still has to decide which of them survive. Its
+			// allowlist comes from safe_html() through the frm_striphtml_allowed_tags filter, and
+			// add-ons widen it around their own icons, so there is no fixed list to check against.
+			$html_atts = self::array_to_html_params( $atts );
+			$markup    = $is_font_icon
+			? '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>'
+			: '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use href="#' . esc_attr( $icon ) . '" /></svg>';
+
+			if ( ! $echo ) {
+				return $markup;
+			}
+
+			echo self::kses_icon( $markup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			return null;
+		}
 
 		/**
-		 * Echo the tag a piece at a time rather than building a string and running kses over it.
+		 * With no attributes from the caller, the tag is nothing but this method's own markup
+		 * around an escaped class and icon id, so there is nothing left for kses to decide and it
+		 * can be skipped. Echoing the pieces rather than a finished string keeps that safe to the
+		 * escaping sniff without an annotation.
 		 *
-		 * This method writes the markup itself, and array_to_html_params escapes every attribute
-		 * name and value, so the only thing kses was still deciding was which attribute names to
-		 * keep -- which allowed_icon_atts now answers directly. The form builder emits tens of
-		 * thousands of icons on a large form, and the kses pass was most of what each one cost.
+		 * This is the path the form builder takes for most of the tens of thousands of icons it
+		 * renders on a large form, and the kses pass was most of what each one cost.
 		 */
-		$callback = function () use ( $is_font_icon, $class, $icon, $atts ) {
+		$callback = function () use ( $is_font_icon, $class, $icon ) {
 			if ( $is_font_icon ) {
-				echo '<i class="' . esc_attr( $class ) . '"';
-				self::array_to_html_params( $atts, true );
-				echo '></i>';
+				echo '<i class="' . esc_attr( $class ) . '"></i>';
 				return;
 			}
 
-			echo '<svg class="frmsvg' . esc_attr( $class ) . '"';
-			self::array_to_html_params( $atts, true );
-			echo '><use href="#' . esc_attr( $icon ) . '" /></svg>';
+			echo '<svg class="frmsvg' . esc_attr( $class ) . '"><use href="#' . esc_attr( $icon ) . '" /></svg>';
 		};
 
 		return self::clip( $callback, $echo );
-	}
-
-	/**
-	 * Drop any attribute an icon tag has no business carrying.
-	 *
-	 * Every value is escaped on output, so this is only about attribute names: it keeps an event
-	 * handler or another arbitrary attribute from being added by a caller, which is the one thing
-	 * the kses pass in kses_icon was still deciding.
-	 *
-	 * These are the same names safe_html() and add_allowed_icon_tags() list for svg and i, so the
-	 * markup that comes out is what kses_icon would have left behind. Keep them in step with those
-	 * two methods. "class" is the one name deliberately left off both lists: icon_by_class writes
-	 * the class itself, and a caller passing another one used to produce a tag with two class
-	 * attributes that kses then reduced back to the first, so dropping it here gives the same
-	 * result without emitting the duplicate.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $atts
-	 * @param bool  $is_font_icon Whether the markup is an i tag rather than an svg.
-	 *
-	 * @return array
-	 */
-	private static function allowed_icon_atts( $atts, $is_font_icon ) {
-		if ( $is_font_icon ) {
-			$allowed = array( 'id', 'icon', 'style' );
-		} else {
-			$allowed = array(
-				'id',
-				'xmlns',
-				'viewbox',
-				'width',
-				'height',
-				'style',
-				'fill',
-				'aria-label',
-				'aria-hidden',
-				'data-open',
-				'title',
-				'tabindex',
-			);
-		}
-
-		return array_intersect_key( $atts, array_flip( $allowed ) );
 	}
 
 	/**
