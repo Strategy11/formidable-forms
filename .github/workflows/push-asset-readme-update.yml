@@ -8,10 +8,17 @@ jobs:
     name: Push to master
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - name: Install Subversion
+      run: sudo apt-get update && sudo apt-get install -y subversion
+
+    - uses: actions/checkout@v4
     - name: WordPress.org plugin asset/readme update
-      uses: 10up/action-wordpress-plugin-asset-update@1.4.1
+      uses: 10up/action-wordpress-plugin-asset-update@2.1.3
       env:
         SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
         SLUG: formidable
+        # GitHub main is ahead of SVN trunk between releases. Without this, the
+        # action rsyncs the whole plugin, sees unreleased code / missing dist
+        # files, and bails with "Other files have been modified".
+        IGNORE_OTHER_FILES: true
