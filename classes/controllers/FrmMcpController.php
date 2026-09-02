@@ -124,7 +124,29 @@ class FrmMcpController {
 
 		$inherited = self::api_addon_setting();
 
-		self::$enabled = $inherited ?? false;
+		if ( null !== $inherited ) {
+			self::$enabled = $inherited;
+			return self::$enabled;
+		}
+
+		/**
+		 * Whether the MCP server is on for a site that has never saved the setting.
+		 *
+		 * Only the default is filtered. A site owner who has been to the MCP
+		 * settings page has an explicit value stored, and that always wins over
+		 * this, so turning MCP off stays off no matter what a filter says. This
+		 * is for deciding what a site starts out as: a host that has already
+		 * decided its customers should arrive with MCP ready can return true
+		 * from a mu-plugin and skip the settings page entirely.
+		 *
+		 * Because the answer is memoized for the request, add this early
+		 * (mu-plugins or plugins_loaded), not on a later hook.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $enabled Whether MCP defaults to on. Default false.
+		 */
+		self::$enabled = (bool) apply_filters( 'frm_mcp_enabled_by_default', false );
 
 		return self::$enabled;
 	}

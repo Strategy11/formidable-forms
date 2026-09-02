@@ -255,7 +255,7 @@ class FrmMcpMissingAbilityController {
 	 *
 	 * @param array $input Input parameters, holding the requested ability_name.
 	 *
-	 * @return WP_Error|false False when the request is one to leave alone.
+	 * @return false|WP_Error False when the request is one to leave alone.
 	 */
 	private static function error_for( $input ) {
 		if ( ! self::should_answer( $input ) ) {

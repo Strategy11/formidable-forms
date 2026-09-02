@@ -206,15 +206,6 @@ class FrmMcpAbilityRegistry {
 	}
 
 	/**
-	 * Find the provider that owns one ability name.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $ability_name Full ability name, including the formidable-forms prefix.
-	 *
-	 * @return array|false The provider entry, or false when no provider claims the name.
-	 */
-	/**
 	 * Check whether an ability name is in Formidable's namespace.
 	 *
 	 * The Formidable MCP server reaches every ability registered on the site,
@@ -234,9 +225,18 @@ class FrmMcpAbilityRegistry {
 			return false;
 		}
 
-		return 0 === strpos( $ability_name, FrmAbilitiesController::CATEGORY . '/' );
+		return str_starts_with( $ability_name, FrmAbilitiesController::CATEGORY . '/' );
 	}
 
+	/**
+	 * Find the provider that owns one ability name.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $ability_name Full ability name, including the formidable-forms prefix.
+	 *
+	 * @return array|false The provider entry, or false when no provider claims the name.
+	 */
 	public static function provider_for( $ability_name ) {
 		$found = self::locate( $ability_name );
 
