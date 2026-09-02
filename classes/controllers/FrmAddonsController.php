@@ -16,6 +16,16 @@ class FrmAddonsController {
 	private static $categories = array();
 
 	/**
+	 * install_link results already resolved during this request, keyed by add-on slug.
+	 *
+	 * Resolving one add-on walks and decorates the whole add-on list, so the form builder paid for
+	 * that once per upsell it rendered. Nothing it reads changes mid-request.
+	 *
+	 * @var array<string,array>
+	 */
+	private static $install_links = array();
+
+	/**
 	 * @var string
 	 */
 	private static $request_addon_url;
@@ -733,6 +743,10 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	public static function install_link( $plugin ) {
+		if ( isset( self::$install_links[ $plugin ] ) ) {
+			return self::$install_links[ $plugin ];
+		}
+
 		$link  = array();
 		$addon = self::get_addon( $plugin );
 
@@ -762,6 +776,8 @@ class FrmAddonsController {
 				'class' => 'frm-activate-addon',
 			);
 		}//end if
+
+		self::$install_links[ $plugin ] = $link;
 
 		return $link;
 	}

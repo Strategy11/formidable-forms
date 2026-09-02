@@ -36,6 +36,17 @@ class FrmFormApi {
 	protected $force = false;
 
 	/**
+	 * Add-on info already read during this request, keyed by request url.
+	 *
+	 * get_api_info is called many times per request -- every upsell the form builder renders walks
+	 * the add-on list -- and each call unserializes the whole cached payload again. What it reads
+	 * cannot change mid-request, so keep the decoded array instead of rebuilding it.
+	 *
+	 * @var array<string,array>
+	 */
+	private static $memoized = array();
+
+	/**
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
@@ -119,11 +130,16 @@ class FrmFormApi {
 		if ( $this->force ) {
 			$addons      = false;
 			$this->force = false;
+			unset( self::$memoized[ $url ] );
 		} else {
+			if ( isset( self::$memoized[ $url ] ) ) {
+				return self::$memoized[ $url ];
+			}
 			$addons = $this->get_cached();
 		}
 
 		if ( is_array( $addons ) ) {
+			self::$memoized[ $url ] = $addons;
 			return $addons;
 		}
 
