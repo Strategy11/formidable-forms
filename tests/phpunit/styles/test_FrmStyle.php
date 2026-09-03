@@ -175,7 +175,7 @@ class test_FrmStyle extends FrmUnitTest {
 			array(
 				'post_type'   => FrmStylesController::$post_type,
 				'post_status' => 'any',
-				'numberposts' => -1,
+				'numberposts' => 999,
 			)
 		);
 
