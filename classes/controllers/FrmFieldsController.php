@@ -12,50 +12,88 @@ class FrmFieldsController {
 	 */
 	private static $field_selection_data;
 
+	/**
+	 * Render the fields the form builder asked for over ajax.
+	 *
+	 * The browser sends field ids only. The fields themselves are read from the form, which is one
+	 * indexed query shared with the rest of the request through the field cache, and cheaper than
+	 * shipping every field's data down to the page and straight back up again.
+	 *
+	 * @return void
+	 */
 	public static function load_field() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		// Javascript may be included in some field settings.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
+		$field_ids = FrmAppHelper::get_post_param( 'field_ids', array(), 'absint' );
+		$form_id   = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-		if ( ! $fields ) {
+		if ( ! $form_id || ! is_array( $field_ids ) || ! $field_ids ) {
 			wp_die();
 		}
 
 		$_GET['page'] = 'formidable';
-
-		$values     = array(
-			'id'         => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
+		$fields       = self::get_builder_fields_by_id( $form_id );
+		$values       = array(
+			'id'         => $form_id,
 			'doing_ajax' => true,
 		);
-		$field_html = array();
+		$field_html   = array();
 
-		foreach ( $fields as $field ) {
-			$field = htmlspecialchars_decode( nl2br( $field ) );
-			$field = json_decode( $field );
-
-			if ( ! isset( $field->id ) || ! is_numeric( $field->id ) ) {
-				// This field may have already been loaded
+		foreach ( $field_ids as $field_id ) {
+			if ( ! isset( $fields[ $field_id ] ) ) {
+				// This field may have already been loaded, or is no longer in the form.
 				continue;
 			}
 
-			if ( ! isset( $field->value ) ) {
-				$field->value = '';
-			}
-			$field->field_options = json_decode( json_encode( $field->field_options ), true );
-			$field->options       = json_decode( json_encode( $field->options ), true );
-			$field->default_value = json_decode( json_encode( $field->default_value ), true );
+			$field = $fields[ $field_id ];
 
 			ob_start();
 			self::load_single_field( $field, $values );
-			$field_html[ absint( $field->id ) ] = ob_get_clean();
+
+			$field_html[ $field_id ] = array(
+				// The type travels with the html so the js can report it to frm_ajax_loaded_field
+				// listeners without a copy of the field.
+				'type' => $field->type,
+				'html' => ob_get_clean(),
+			);
 		}//end foreach
 
 		echo json_encode( $field_html );
 
 		wp_die();
+	}
+
+	/**
+	 * Get a form's fields, as the form builder sees them, indexed by field id.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 *
+	 * @return array Field objects keyed by field id. Empty if the form is gone.
+	 */
+	private static function get_builder_fields_by_id( $form_id ) {
+		$form = FrmForm::getOne( $form_id );
+
+		if ( ! $form ) {
+			return array();
+		}
+
+		$fields = FrmField::get_all_for_form( $form_id );
+
+		/** This filter is documented in classes/controllers/FrmFormsController.php */
+		$fields = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
+
+		$fields_by_id = array();
+
+		foreach ( (array) $fields as $field ) {
+			if ( is_object( $field ) && ! empty( $field->id ) ) {
+				$fields_by_id[ (int) $field->id ] = $field;
+			}
+		}
+
+		return $fields_by_id;
 	}
 
 	/**
