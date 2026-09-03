@@ -110,7 +110,7 @@ class FrmSquareLiteAppController {
 	 *
 	 * @since 6.35
 	 *
-	 * @param non-empty-array<WP_Post> $actions
+	 * @param array $actions Payment actions from FrmSquareLiteActionsController::get_actions_before_submit. Never empty.
 	 *
 	 * @return WP_Post
 	 */
