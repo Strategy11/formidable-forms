@@ -718,8 +718,13 @@
 			child: svg( { href: '#frm_thick_more_vert_icon' } )
 		} );
 		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
-		hamburgerMenu.setAttribute( 'data-bs-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
+
+		// Style cards sit inside several overflow: hidden ancestors, which Popper treats
+		// as clipping parents and then positions from a broken rectangle. Static display
+		// opts out of Popper so the menu is placed by CSS, matching the More Options
+		// dropdown in admin.js.
+		hamburgerMenu.setAttribute( 'data-bs-display', 'static' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
 		const isTemplate = data.templateKey !== undefined;
@@ -775,6 +780,14 @@
 		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
+
+		// Static display has no flip of its own, so open upwards when the menu would
+		// otherwise run past the bottom of the panel it scrolls in.
+		hamburgerMenu.addEventListener( 'shown.bs.dropdown', () => {
+			const scroller = hamburgerMenu.closest( '#frm_style_sidebar' ) || document.documentElement;
+			const overflowsBelow = dropdownMenu.getBoundingClientRect().bottom > scroller.getBoundingClientRect().bottom;
+			dropdownMenu.classList.toggle( 'frm-dropdown-menu-above', overflowsBelow );
+		} );
 
 		return div( {
 			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
