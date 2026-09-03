@@ -189,27 +189,70 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	}
 
 	/**
+	 * Square verifies a single amount, so a form with two Square actions has to verify the
+	 * amount of the action the submission will actually trigger. Taking the first action
+	 * off the list ignored conditional logic, so a buyer picking the second action's option
+	 * got a 3DS challenge for the first action's amount.
+	 *
+	 * @covers FrmSquareLiteAppController::get_action_for_verification
+	 */
+	public function test_get_action_for_verification_skips_an_action_with_unmet_conditions() {
+		if ( ! $this->is_pro_active ) {
+			$this->markTestSkipped( 'Conditional logic on form actions requires Pro.' );
+		}
+
+		$form_id  = $this->factory->form->create();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'hidden',
+			)
+		);
+
+		$this->create_square_action( $form_id, '10.00', 'usd', $this->equals_condition( $field_id, 'basic' ), 'A basic' );
+		$this->create_square_action( $form_id, '25.00', 'usd', $this->equals_condition( $field_id, 'premium' ), 'B premium' );
+
+		$actions = FrmSquareLiteActionsController::get_actions_before_submit( $form_id );
+		$this->assertCount( 2, $actions );
+		$this->assertSame( '10.00', reset( $actions )->post_content['amount'], 'The unconditional first action is the one this used to pick.' );
+
+		$_POST['item_meta'] = array( $field_id => 'premium' );
+
+		$this->assertSame( '25.00', $this->get_action_for_verification( $actions )->post_content['amount'] );
+
+		$_POST['item_meta'] = array( $field_id => 'basic' );
+
+		$this->assertSame( '10.00', $this->get_action_for_verification( $actions )->post_content['amount'] );
+	}
+
+	/**
 	 * @param int    $form_id
-	 * @param string $amount   The amount setting, either a literal or a field shortcode.
-	 * @param string $currency The three letter currency code.
+	 * @param string $amount     The amount setting, either a literal or a field shortcode.
+	 * @param string $currency   The three letter currency code.
+	 * @param array  $conditions Conditional logic for the action, in the post_content format.
+	 * @param string $title      The action title. Actions are ordered by title, so pass one
+	 *                           when a test creates more than one action and cares about the order.
 	 *
 	 * @return object
 	 */
-	private function create_square_action( $form_id, $amount, $currency ) {
+	private function create_square_action( $form_id, $amount, $currency, $conditions = array(), $title = '' ) {
+		$post_content = array(
+			'gateway'  => array( 'square' ),
+			'type'     => 'single',
+			'amount'   => $amount,
+			'currency' => $currency,
+		);
+
+		if ( $conditions ) {
+			$post_content['conditions'] = $conditions;
+		}
+
 		$this->factory->post->create(
 			array(
 				// wp_insert_post expects slashed data. Without this the backslash in a
 				// \u00a3 escape is stripped and the amount decodes as u00a31,234.50.
-				'post_content' => wp_slash(
-					wp_json_encode(
-						array(
-							'gateway'  => array( 'square' ),
-							'type'     => 'single',
-							'amount'   => $amount,
-							'currency' => $currency,
-						)
-					)
-				),
+				'post_content' => wp_slash( wp_json_encode( $post_content ) ),
+				'post_title'   => $title,
 				'menu_order'   => $form_id,
 				'post_type'    => 'frm_form_actions',
 				'post_status'  => 'publish',
@@ -220,6 +263,33 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 		$actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
 
 		return reset( $actions );
+	}
+
+	/**
+	 * @param int    $field_id
+	 * @param string $value The value the field has to equal for the action to run.
+	 *
+	 * @return array
+	 */
+	private function equals_condition( $field_id, $value ) {
+		return array(
+			'send_stop' => 'send',
+			'any_all'   => 'all',
+			array(
+				'hide_field'      => $field_id,
+				'hide_field_cond' => '==',
+				'hide_opt'        => $value,
+			),
+		);
+	}
+
+	/**
+	 * @param array $actions
+	 *
+	 * @return object
+	 */
+	private function get_action_for_verification( $actions ) {
+		return $this->run_private_method( array( 'FrmSquareLiteAppController', 'get_action_for_verification' ), array( $actions ) );
 	}
 
 	/**

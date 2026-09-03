@@ -84,7 +84,7 @@ class FrmSquareLiteAppController {
 			wp_send_json_error( __( 'No Square actions found for this form', 'formidable' ) );
 		}
 
-		$action               = reset( $actions );
+		$action               = self::get_action_for_verification( $actions );
 		$verification_details = array(
 			'amount'         => self::get_amount_value_for_verification( $action ),
 			'billingContact' => self::get_billing_contact( $action ),
@@ -98,6 +98,36 @@ class FrmSquareLiteAppController {
 				'hash'                => md5( serialize( $verification_details ) ),
 			)
 		);
+	}
+
+	/**
+	 * Get the action that the submission will actually trigger.
+	 *
+	 * Square verifies a single amount, so when a form has more than one Square action,
+	 * the conditional logic of each action is checked against the posted values. Without
+	 * this, the first action always wins and the buyer gets verified for an amount that
+	 * a different action is going to charge.
+	 *
+	 * @since 6.35
+	 *
+	 * @param non-empty-array<WP_Post> $actions
+	 *
+	 * @return WP_Post
+	 */
+	private static function get_action_for_verification( $actions ) {
+		if ( count( $actions ) > 1 ) {
+			$entry = self::generate_false_entry();
+
+			foreach ( $actions as $action ) {
+				if ( ! FrmFormAction::action_conditions_met( $action, $entry ) ) {
+					// Conditions were met, so this is the action that will charge the buyer.
+					return $action;
+				}
+			}
+		}
+
+		// Either there is a single action, or no action passed its conditional logic.
+		return reset( $actions );
 	}
 
 	/**
