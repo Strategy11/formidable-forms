@@ -8,6 +8,7 @@
 	let isStripeLink = false;
 	let linkAuthenticationElementIsComplete = false;
 	let stripeLinkElementIsComplete = false;
+	let priceChangedTimer = 0;
 
 	const triggerCustomEvent = function( el, eventName, data ) {
 		frmFrontForm.triggerCustomEvent( el, eventName, data );
@@ -510,15 +511,39 @@
 			}
 		}
 		if ( run ) {
+			clearTimeout( priceChangedTimer );
+			priceChangedTimer = setTimeout( updateIntentAmount( field ), 600 );
+		}
+	}
+
+	/**
+	 * Get a callback that sends the current form values so the intent amount can be updated.
+	 * The call is skipped when the form has no intents to update.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} field The price field that changed.
+	 * @return {Function} Callback for the debounce timer.
+	 */
+	function updateIntentAmount( field ) {
+		return function() {
+			const form = jQuery( field ).closest( 'form' );
+			const formId = form.find( '[name="form_id"]' ).val();
+
+			if ( ! form.find( `[name^="frmintent${ formId }"]` ).length ) {
+				// There are no intents to update.
+				return;
+			}
+
 			const data = {
 				action: 'frm_strp_amount',
-				form: JSON.stringify( jQuery( field ).closest( 'form' ).serializeArray() ),
+				form: JSON.stringify( form.serializeArray() ),
 				nonce: frm_stripe_vars.nonce
 			};
 			postAjax( data, function() {
 				// Amount has been conditionally updated.
 			} );
-		}
+		};
 	}
 
 	function postAjax( data, success ) {
@@ -713,6 +738,70 @@
 		);
 		authenticationElement.mount( '.frm-link-authentication-element' );
 		authenticationElement.on( 'change', getAuthenticationChangeHandler( cardElement, emailInput ) );
+
+		/**
+		 * Stripe does not support the red required asterisk that we show on our other fields.
+		 * So we add one ourselves positioned absolute on top of the iframe.
+		 */
+		authenticationElement.on( 'ready', function() {
+			authenticationMountTarget.style.position = 'relative';
+
+			const requiredIndicator = document.createElement( 'span' );
+			requiredIndicator.textContent = '*';
+			requiredIndicator.className = 'frm_required';
+			requiredIndicator.style.position = 'absolute';
+			requiredIndicator.style.fontSize = 'var(--font-size)';
+			requiredIndicator.style.top = '-4px';
+			requiredIndicator.style.left = `${ getEmailAsteriskOffset( cardElement ) }px`;
+			requiredIndicator.style.padding = 'var(--label-padding)';
+			requiredIndicator.setAttribute( 'aria-hidden', 'true' );
+			authenticationMountTarget.append( requiredIndicator );
+		} );
+	}
+
+	/**
+	 * Create a temporary label element to determine the width of the Email label.
+	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} cardElement
+	 * @return {number} The label width in pixels.
+	 */
+	function getEmailAsteriskOffset( cardElement ) {
+		const label = document.createElement( 'label' );
+		label.classList.add( 'frm_primary_label', 'form-label' );
+		label.textContent = 'Email';
+		label.innerHTML += '&nbsp;';
+
+		const tempContainer = document.createElement( 'div' );
+		tempContainer.classList.add( 'with_frm_style' );
+		tempContainer.style.position = 'absolute';
+		tempContainer.style.visibility = 'hidden';
+		tempContainer.style.height = '0';
+		tempContainer.style.overflow = 'hidden';
+
+		const formContainer = cardElement.closest( '.with_frm_style' );
+		if ( formContainer ) {
+			each(
+				formContainer.classList,
+				function( className ) {
+					if ( className.startsWith( 'frm_style_' ) ) {
+						tempContainer.classList.add( className );
+						return false;
+					}
+				}
+			);
+		}
+
+		tempContainer.append( label );
+		document.body.append( tempContainer );
+
+		const labelWidth = label.getBoundingClientRect().width;
+
+		tempContainer.remove();
+
+		return labelWidth;
 	}
 
 	/**
@@ -997,6 +1086,39 @@
 	}
 
 	/**
+	 * Handle frmPageChanged events.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function onPageChange() {
+		loadElements();
+		runConditionalLogicOnPaymentFailure();
+	}
+
+	/**
+	 * The frmPageChanged event is triggered when a payment fails when submitting with AJAX.
+	 * When the payment fails, we run conditional logic.
+	 * Otherwise fields may be visible when they should be hidden.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function runConditionalLogicOnPaymentFailure() {
+		if ( ! document.querySelector( '.frm_error_style' ) ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof __frmHideOrShowFields || 'object' !== typeof window.frmProForm ) {
+			return;
+		}
+
+		window.frmProForm.hideOrShowFields( __frmHideOrShowFields, 'pageLoad' );
+	}
+
+	/**
 	 * Create and return a new element to use for mounting a Stripe element to.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
@@ -1059,7 +1181,7 @@
 
 			frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
 			loadElements();
-			jQuery( document ).on( 'frmPageChanged', loadElements );
+			jQuery( document ).on( 'frmPageChanged', onPageChange );
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.frmstrp', '.frm-show-form', validateForm );
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );

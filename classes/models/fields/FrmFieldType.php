@@ -307,6 +307,21 @@ DEFAULT_HTML;
 			<span class="frm-sub-label frm-collapsed-label">
 				<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
 			</span>
+			<?php
+			/**
+			 * Fires at the end of a field's label in the form builder.
+			 *
+			 * Use this to add a marker beside the field name, the way the
+			 * required indicator above does. Anything echoed here lands inside
+			 * the label, so keep it inline and decorative.
+			 *
+			 * @since x.x
+			 *
+			 * @param array $field The field settings, as prepared by
+			 *                     FrmFieldsHelper::setup_edit_vars().
+			 */
+			do_action( 'frm_builder_after_field_label', $field );
+			?>
 		</label>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent

@@ -37,16 +37,25 @@ class FrmFieldAddress extends FrmFieldCombo {
 	 */
 	public function __construct( $field = 0, $type = '' ) {
 		parent::__construct( $field, $type );
+		$this->register_sub_fields( self::get_part_labels() );
+	}
 
-		$this->register_sub_fields(
-			array(
-				'line1'   => __( 'Line 1', 'formidable' ),
-				'line2'   => __( 'Line 2', 'formidable' ),
-				'city'    => __( 'City', 'formidable' ),
-				'state'   => __( 'State/Province', 'formidable' ),
-				'zip'     => __( 'Zip/Postal', 'formidable' ),
-				'country' => __( 'Country', 'formidable' ),
-			)
+	/**
+	 * Gets the label for each part of an address, keyed by the value the part is
+	 * shown with in a shortcode, like [25 show=city].
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function get_part_labels() {
+		return array(
+			'line1'   => __( 'Line 1', 'formidable' ),
+			'line2'   => __( 'Line 2', 'formidable' ),
+			'city'    => __( 'City', 'formidable' ),
+			'state'   => __( 'State/Province', 'formidable' ),
+			'zip'     => __( 'Zip/Postal', 'formidable' ),
+			'country' => __( 'Country', 'formidable' ),
 		);
 	}
 
