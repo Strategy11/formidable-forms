@@ -572,11 +572,6 @@ class FrmFormsListHelper extends FrmListHelper {
 	 *
 	 * @return string
 	 */
-	/**
-	 * @param stdClass $form
-	 *
-	 * @return string
-	 */
 	public function column_embeds( $form ) {
 		if ( $this->column_is_hidden( 'embeds' ) ) {
 			// Locating embeds means scanning post_content, so skip it when the column is hidden.
