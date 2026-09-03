@@ -109,7 +109,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function no_items() {
-		esc_html_e( 'No payments found.', 'formidable' );
+		include FrmTransLiteAppHelper::plugin_path() . '/views/lists/no-payments.php';
 	}
 
 	/**
@@ -173,6 +173,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'sub_id'         => 'sub_id',
 			'begin_date'     => 'begin_date',
 			'expire_date'    => 'expire_date',
+			'paysys'         => 'paysys',
 			'status'         => 'status',
 			'next_bill_date' => 'next_bill_date',
 		);

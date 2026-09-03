@@ -12,6 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Collects an NPS score and feedback from Lite users after install.
  *
+ * Independent of FrmProPluginFeedbackController (Pro): the two plugins run their
+ * own eligibility checks and never inherit from each other. They intentionally
+ * share the same option key so a submission in either one suppresses the other's
+ * prompt for the same year if the site upgrades or downgrades mid-year.
+ *
  * @since 6.26.1
  */
 class FrmPluginFeedbackController {
@@ -21,19 +26,14 @@ class FrmPluginFeedbackController {
 	 *
 	 * @var string
 	 */
-	const PLUGIN_FEEDBACK_META_KEY = 'frm-plugin-feedback';
+	const PLUGIN_FEEDBACK_OPTION_KEY = 'frm-plugin-feedback';
 
 	/**
-	 * Marks a submission as originating from Lite when read from shared user meta.
+	 * Marks a submission as originating from Lite when read from the shared option.
 	 *
 	 * @var string
 	 */
 	const SOURCE = 'lite';
-
-	/**
-	 * @var int
-	 */
-	protected static $user_id;
 
 	/**
 	 * @var array
@@ -49,12 +49,11 @@ class FrmPluginFeedbackController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		if ( ! static::should_show_plugin_feedback() ) {
+		if ( ! self::should_show_plugin_feedback() ) {
 			return;
 		}
 
-		$user_id = get_current_user_id();
-		$class   = get_called_class();
+		$class = self::class;
 
 		add_filter( 'frm_should_show_floating_links', '__return_false' );
 		add_action( 'admin_enqueue_scripts', array( $class, 'enqueue_assets' ) );
@@ -65,26 +64,22 @@ class FrmPluginFeedbackController {
 	 * @return bool
 	 */
 	protected static function should_show_plugin_feedback() {
-		return static::passes_common_gates() && static::passes_product_specific_gates();
+		return self::passes_common_gates() && self::passes_product_specific_gates();
 	}
 
 	/**
 	 * @return bool
 	 */
 	protected static function passes_common_gates() {
-		if ( ! static::$user_id ) {
-			return false;
-		}
-
 		if ( ! current_user_can( 'frm_change_settings' ) ) {
 			return false;
 		}
 
-		if ( static::is_local_environment() ) {
+		if ( self::is_local_environment() ) {
 			return false;
 		}
 
-		if ( static::pro_is_blocking() ) {
+		if ( self::pro_is_blocking() ) {
 			return false;
 		}
 
@@ -96,18 +91,21 @@ class FrmPluginFeedbackController {
 			return false;
 		}
 
-		$current = static::get_current_year_feedback();
-		return ! empty( $current['submitted'] ) ? false : true;
+		$current = self::get_current_year_feedback();
+		return empty( $current['submitted'] );
 	}
 
 	/**
 	 * @return bool
 	 */
 	protected static function passes_product_specific_gates() {
-		return static::has_reached_install_age_threshold();
+		return self::has_reached_install_age_threshold();
 	}
 
 	/**
+	 * Lite goes fully silent once Pro is active; Pro runs its own,
+	 * license-based feedback flow independently.
+	 *
 	 * @return bool
 	 */
 	protected static function pro_is_blocking() {
@@ -122,16 +120,21 @@ class FrmPluginFeedbackController {
 	}
 
 	/**
+	 * The frm_first_activation option is only set on a genuinely fresh install, so
+	 * a site that predates the option never gets it. A missing option means an old,
+	 * established site rather than a new one. Mirrors FrmApiHelper::is_first_30().
+	 *
 	 * @return bool
 	 */
 	protected static function has_reached_install_age_threshold() {
-		$install_time = (int) get_option( 'frm_first_activation' );
-		if ( ! $install_time ) {
-			return false;
+		$install_time = get_option( 'frm_first_activation' );
+
+		if ( false === $install_time ) {
+			return true;
 		}
 
-		$threshold_days = (int) apply_filters( 'frm_lite_plugin_feedback_threshold_days', 20 );
-		return time() - $install_time >= $threshold_days * DAY_IN_SECONDS;
+		$threshold_days = (int) apply_filters( 'frm_lite_plugin_feedback_threshold_days', 90 );
+		return time() - (int) $install_time >= $threshold_days * DAY_IN_SECONDS;
 	}
 
 	/**
@@ -160,7 +163,7 @@ class FrmPluginFeedbackController {
 	 * @return void
 	 */
 	public static function enqueue_assets() {
-		$config  = static::get_config();
+		$config  = self::get_config();
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_script( $config['script']['handle'], $config['script']['url'], array( 'formidable_dom' ), $version, true );
@@ -171,10 +174,10 @@ class FrmPluginFeedbackController {
 	 * @return void
 	 */
 	public static function show_plugin_feedback() {
-		$current = static::get_current_year_feedback();
+		$current = self::get_current_year_feedback();
 		$step    = isset( $current['nps-score'] ) ? 'reasons' : 'nps';
-		$reasons = static::get_reasons();
-		$config  = static::get_config();
+		$reasons = self::get_reasons();
+		$config  = self::get_config();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/plugin-feedback.php';
 	}
@@ -186,14 +189,12 @@ class FrmPluginFeedbackController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		if ( static::pro_is_blocking() ) {
+		if ( self::pro_is_blocking() ) {
 			wp_send_json_error( array( 'type' => 'pro-active' ) );
 		}
 
-		static::$user_id = get_current_user_id();
-
-		static::maybe_save_nps_and_send_response();
-		static::submit_feedback_to_remote();
+		self::maybe_save_nps_and_send_response();
+		self::submit_feedback_to_remote();
 	}
 
 	/**
@@ -203,13 +204,11 @@ class FrmPluginFeedbackController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		if ( static::pro_is_blocking() ) {
+		if ( self::pro_is_blocking() ) {
 			wp_send_json_error( array( 'type' => 'pro-active' ) );
 		}
 
-		static::$user_id = get_current_user_id();
-
-		static::submit_feedback_to_remote();
+		self::submit_feedback_to_remote();
 	}
 
 	/**
@@ -226,7 +225,7 @@ class FrmPluginFeedbackController {
 			wp_send_json_error( array( 'type' => 'invalid-nps' ) );
 		}
 
-		static::set_current_year_feedback( 'nps-score', $nps_score );
+		self::set_current_year_feedback( 'nps-score', $nps_score );
 		wp_send_json_success( array( 'message' => __( 'Feedback score saved successfully.', 'formidable' ) ) );
 	}
 
@@ -234,19 +233,18 @@ class FrmPluginFeedbackController {
 	 * @return void
 	 */
 	protected static function submit_feedback_to_remote() {
-		$current = static::get_current_year_feedback();
+		$current = self::get_current_year_feedback();
 
 		if ( ! isset( $current['nps-score'] ) ) {
-			static::set_current_year_feedback( 'submitted', true );
-			static::after_submission_commit();
+			self::set_current_year_feedback( 'submitted', true );
 			wp_send_json_success( array( 'message' => __( 'Feedback dismissed successfully.', 'formidable' ) ) );
 		}
 
 		$remote_response = wp_remote_post(
-			static::get_config()['remote'],
+			self::get_config()['remote'],
 			array(
 				'timeout' => 30,
-				'body'    => http_build_query( static::build_remote_body() ),
+				'body'    => http_build_query( self::build_remote_body() ),
 			)
 		);
 
@@ -270,16 +268,17 @@ class FrmPluginFeedbackController {
 			);
 		}
 
-		static::set_current_year_feedback( 'submitted', true );
-		static::after_submission_commit();
+		self::set_current_year_feedback( 'submitted', true );
 		wp_send_json_success( array( 'message' => __( 'Feedback submitted successfully.', 'formidable' ) ) );
 	}
 
 	/**
+	 * Maps feedback field keys to the field codes formidableforms.com expects.
+	 *
 	 * @return array
 	 */
-	protected static function field_map() {
-		return array(
+	protected static function build_remote_body() {
+		$map = array(
 			'nps'     => 'NPS',
 			'reasons' => 'RSN',
 			'details' => 'DTL',
@@ -287,63 +286,32 @@ class FrmPluginFeedbackController {
 			'source'  => 'SRC',
 			'version' => 'VER',
 		);
-	}
 
-	/**
-	 * @return array
-	 */
-	protected static function build_remote_body() {
-		$map      = static::field_map();
-		$config   = static::get_config();
-		$feedback = static::get_current_year_feedback();
+		$feedback = self::get_current_year_feedback();
 
 		$body = array(
-			'l'            => base64_encode( (string) static::get_remote_identifier() ),
-			'form_key'     => isset( $config['remote_form_key'] ) ? $config['remote_form_key'] : '',
+			'l'            => base64_encode( (string) get_option( 'frm-usage-uuid' ) ),
+			'form_key'     => self::get_config()['remote_form_key'] ?? '',
 			'frm_action'   => 'create',
-			'form_id'      => static::get_remote_form_id(),
+			'form_id'      => 0,
 			'item_key'     => '',
 			'item_meta[0]' => '',
 		);
 
 		$values = array(
-			'nps'     => isset( $feedback['nps-score'] ) ? $feedback['nps-score'] : '',
-			'reasons' => static::format_reasons_list( static::get_posted_reasons() ),
+			'nps'     => $feedback['nps-score'] ?? '',
+			'reasons' => self::format_reasons_list( self::get_posted_reasons() ),
 			'details' => FrmAppHelper::get_post_param( 'details', '' ),
 			'url'     => site_url(),
-			'source'  => static::SOURCE,
+			'source'  => self::SOURCE,
 			'version' => FrmAppHelper::plugin_version(),
 		);
 
 		foreach ( $values as $key => $value ) {
-			if ( ! isset( $map[ $key ] ) ) {
-				continue;
-			}
-
 			$body[ 'item_meta[' . $map[ $key ] . ']' ] = $value;
 		}
 
 		return $body;
-	}
-
-	/**
-	 * @return string
-	 */
-	protected static function get_remote_identifier() {
-		return (string) get_option( 'frm-usage-uuid' );
-	}
-
-	/**
-	 * @return int
-	 */
-	protected static function get_remote_form_id() {
-		return 0;
-	}
-
-	/**
-	 * @return void
-	 */
-	protected static function after_submission_commit() {
 	}
 
 	/**
@@ -356,7 +324,7 @@ class FrmPluginFeedbackController {
 			array(
 				'type'  => 'array',
 				'items' => array(
-					'enum' => array_keys( static::get_reasons() ),
+					'enum' => array_keys( self::get_reasons() ),
 					'type' => 'string',
 				),
 			)
@@ -366,11 +334,12 @@ class FrmPluginFeedbackController {
 			wp_send_json_error( array( 'type' => 'invalid-reasons' ) );
 		}
 
-		return $reasons;
+		return is_array( $reasons ) ? $reasons : array();
 	}
 
 	/**
 	 * @param array $reason_keys
+	 *
 	 * @return string
 	 */
 	protected static function format_reasons_list( $reason_keys ) {
@@ -378,7 +347,7 @@ class FrmPluginFeedbackController {
 			return '';
 		}
 
-		$reasons           = static::get_reasons();
+		$reasons           = self::get_reasons();
 		$formatted_reasons = array_map(
 			static function ( $key ) use ( $reasons ) {
 				return '- ' . $reasons[ $key ];
@@ -393,58 +362,59 @@ class FrmPluginFeedbackController {
 	 * @return array
 	 */
 	protected static function get_plugin_feedback() {
-		if ( static::$plugin_feedback ) {
-			return static::$plugin_feedback;
+		if ( self::$plugin_feedback ) {
+			return self::$plugin_feedback;
 		}
 
-		static::$plugin_feedback = get_user_meta( static::$user_id, static::PLUGIN_FEEDBACK_META_KEY, true );
+		$plugin_feedback = get_option( self::PLUGIN_FEEDBACK_OPTION_KEY );
 
-		if ( ! is_array( static::$plugin_feedback ) ) {
-			static::$plugin_feedback = array(
-				static::get_current_year() => array(
-					'submitted' => false,
-					'source'    => static::SOURCE,
-				),
-			);
-		} elseif ( ! isset( static::$plugin_feedback[ static::get_current_year() ] ) ) {
-			static::$plugin_feedback[ static::get_current_year() ] = array(
+		if ( ! is_array( $plugin_feedback ) ) {
+			$plugin_feedback = array();
+		}
+
+		if ( ! isset( $plugin_feedback[ self::get_current_year() ] ) ) {
+			$plugin_feedback[ self::get_current_year() ] = array(
 				'submitted' => false,
-				'source'    => static::SOURCE,
+				'source'    => self::SOURCE,
 			);
 		}
 
-		return static::$plugin_feedback;
+		self::$plugin_feedback = $plugin_feedback;
+
+		return self::$plugin_feedback;
 	}
 
 	/**
 	 * @return array
 	 */
 	protected static function get_current_year_feedback() {
-		return static::get_plugin_feedback()[ static::get_current_year() ];
+		$year_feedback = self::get_plugin_feedback()[ self::get_current_year() ];
+		return is_array( $year_feedback ) ? $year_feedback : array();
 	}
 
 	/**
 	 * @param string $key
 	 * @param mixed  $value
+	 *
 	 * @return void
 	 */
 	protected static function set_current_year_feedback( $key, $value ) {
-		static::get_plugin_feedback();
-		static::$plugin_feedback[ static::get_current_year() ][ $key ]   = $value;
-		static::$plugin_feedback[ static::get_current_year() ]['source'] = static::SOURCE;
-		update_user_meta( static::$user_id, static::PLUGIN_FEEDBACK_META_KEY, static::$plugin_feedback );
+		self::get_plugin_feedback();
+		self::$plugin_feedback[ self::get_current_year() ][ $key ]   = $value;
+		self::$plugin_feedback[ self::get_current_year() ]['source'] = self::SOURCE;
+		update_option( self::PLUGIN_FEEDBACK_OPTION_KEY, self::$plugin_feedback, false );
 	}
 
 	/**
 	 * @return int
 	 */
 	protected static function get_current_year() {
-		if ( static::$current_year ) {
-			return static::$current_year;
+		if ( self::$current_year ) {
+			return self::$current_year;
 		}
 
-		static::$current_year = (int) wp_date( 'Y' );
-		return static::$current_year;
+		self::$current_year = (int) wp_date( 'Y' );
+		return self::$current_year;
 	}
 
 	/**

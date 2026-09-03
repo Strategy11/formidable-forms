@@ -66,7 +66,7 @@ do_action( 'frm_extra_field_actions', $field['id'] );
 /**
  * Fires after a field's box in the form builder, before the field settings.
  *
- * @since x.x
+ * @since 6.32
  *
  * @param array{field:array, display:array} $args Contains the `field` and `display` arrays.
  */

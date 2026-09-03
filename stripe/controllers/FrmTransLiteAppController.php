@@ -45,12 +45,23 @@ class FrmTransLiteAppController {
 	}
 
 	/**
-	 * Remove the cron when the plugin is deactivated.
+	 * Remove the payment cron when all gateways are disconnected.
+	 *
+	 * @since 6.32.1
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode 'test' or 'live'.
 	 *
 	 * @return void
 	 */
-	public static function remove_cron() {
-		wp_clear_scheduled_hook( 'frm_payment_cron' );
+	public static function maybe_remove_payment_cron( $gateway, $mode ) {
+		$stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+		$square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$paypal_connected = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+
+		if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
+			wp_clear_scheduled_hook( 'frm_payment_cron' );
+		}
 	}
 
 	/**
@@ -62,7 +73,12 @@ class FrmTransLiteAppController {
 		$frm_sub               = new FrmTransLiteSubscription();
 		$frm_payment           = new FrmTransLitePayment();
 		$overdue_subscriptions = $frm_sub->get_overdue_subscriptions();
-		FrmTransLiteLog::log_message( 'Stripe Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
+
+		if ( ! $overdue_subscriptions && ! $frm_sub->get_active_subscriptions() ) {
+			return;
+		}
+
+		FrmTransLiteLog::log_message( 'Overdue Subscription Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
@@ -112,7 +128,7 @@ class FrmTransLiteAppController {
 				}
 			}//end if
 
-			FrmTransLiteLog::log_message( 'Stripe Cron Message', $log_message );
+			FrmTransLiteLog::log_message( 'Overdue Subscription Cron Message', $log_message );
 
 			self::maybe_trigger_changes(
 				array(
@@ -225,5 +241,17 @@ class FrmTransLiteAppController {
 			.frm_field_box:has(li[data-ftype="gateway"]:only-child) { display: none; }
 			'
 		);
+	}
+
+	/**
+	 * Remove the cron when the plugin is deactivated.
+	 *
+	 * @deprecated 6.32.1
+	 *
+	 * @return void
+	 */
+	public static function remove_cron() {
+		_deprecated_function( __METHOD__, '6.32.1' );
+		wp_clear_scheduled_hook( 'frm_payment_cron' );
 	}
 }

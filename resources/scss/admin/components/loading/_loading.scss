@@ -63,7 +63,9 @@
 	display: inline-block;
 }
 
-#frm-show-fields .frm-wait:only-child {
+/* Only a spinner standing in for the whole field list, never a field placeholder. A
+ * placeholder is styled by components/loading/_field-loading.scss and stays in the flow. */
+#frm-show-fields > .frm-wait:only-child {
 	position: absolute;
 	left: 50px;
 	top: 30px;

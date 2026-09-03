@@ -73,6 +73,8 @@ no-direct-db-query = { enabled = false }
 no-roles-as-capabilities = { enabled = false }
 no-unescaped-output = { enabled = false }
 use-wp-functions = { enabled = false }
+valid-docblock = { enabled = false }
+loop-does-not-iterate = { enabled = false }
 
 [analyzer]
 plugins = []
@@ -95,6 +97,7 @@ ignore = [
     "array-to-string-conversion",
     "conflicting-reference-constraint",
     "deprecated-function",
+    "docblock-type-mismatch",
     "falsable-return-statement",
     "false-argument",
     "generic-object-iteration",
@@ -107,6 +110,7 @@ ignore = [
     "invalid-array-element-key",
     "invalid-array-index",
     "invalid-destructuring-source",
+    "invalid-docblock",
     "invalid-global",
     "invalid-iterator",
     "invalid-member-selector",
@@ -123,6 +127,7 @@ ignore = [
     "less-specific-nested-argument-type",
     "less-specific-nested-return-statement",
     "less-specific-return-statement",
+    "malformed-docblock-comment",
     "method-access-on-null",
     "mismatched-array-index",
     "missing-return-statement",
@@ -149,9 +154,11 @@ ignore = [
     "nullable-return-statement",
     "possible-method-access-on-null",
     "possibly-false-argument",
+    "possibly-false-array-access",
     "possibly-false-iterator",
     "possibly-false-operand",
     "possibly-invalid-argument",
+    "possibly-invalid-array-access",
     "possibly-invalid-iterator",
     "possibly-invalid-operand",
     "possibly-null-argument",

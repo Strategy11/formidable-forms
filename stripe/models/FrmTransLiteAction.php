@@ -87,6 +87,11 @@ class FrmTransLiteAction extends FrmFormAction {
 			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
+			'billing_address'      => '',
+			'shipping_email'       => '',
+			'shipping_first_name'  => '',
+			'shipping_last_name'   => '',
+			'shipping_address'     => '',
 			'entry_data_sync'      => 'overwrite',
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );

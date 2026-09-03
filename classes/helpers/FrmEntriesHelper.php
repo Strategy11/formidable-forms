@@ -762,23 +762,23 @@ class FrmEntriesHelper {
 		$page    = FrmAppHelper::get_param( 'frm_action' );
 		$actions = array();
 
+		$actions['frm_edit'] = array(
+			'url'   => '#',
+			'label' => __( 'Edit Entry', 'formidable' ),
+			'class' => 'frm_noallow',
+			'data'  => array(
+				'upgrade' => __( 'Entry edits', 'formidable' ),
+				'medium'  => 'edit-entries',
+				'content' => 'entry',
+			),
+			'icon'  => 'frmfont frm_pencil_icon',
+		);
+
 		if ( $page !== 'show' ) {
 			$actions['frm_view'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'View Entry', 'formidable' ),
 				'icon'  => 'frmfont frm_save_icon',
-			);
-		}
-
-		if ( current_user_can( 'frm_delete_entries' ) ) {
-			$actions['frm_delete'] = array(
-				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
-				'label' => __( 'Delete Entry', 'formidable' ),
-				'icon'  => 'frmfont frm_delete_icon',
-				'data'  => array(
-					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
-					'frmverify-btn' => 'frm-button-red',
-				),
 			);
 		}
 
@@ -790,6 +790,16 @@ class FrmEntriesHelper {
 					'frmprint' => '1',
 				),
 				'icon'  => 'frmfont frm_printer_icon',
+			);
+		}
+
+		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
+			$actions['frm_download_pdf'] = array(
+				'url'   => '#',
+				'label' => __( 'Download as PDF', 'formidable' ),
+				'class' => 'frm_noallow',
+				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
+				'icon'  => 'frmfont frm_download_icon',
 			);
 		}
 
@@ -805,29 +815,31 @@ class FrmEntriesHelper {
 			'icon'  => 'frmfont frm_email_icon',
 		);
 
-		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
-			$actions['frm_download_pdf'] = array(
-				'url'   => '#',
-				'label' => __( 'Download as PDF', 'formidable' ),
-				'class' => 'frm_noallow',
-				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
-				'icon'  => 'frmfont frm_download_icon',
+		if ( current_user_can( 'frm_delete_entries' ) ) {
+			$actions['frm_delete'] = array(
+				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
+				'label' => __( 'Delete Entry', 'formidable' ),
+				'class' => 'frm_delete_entry',
+				'icon'  => 'frmfont frm_delete_icon',
+				'data'  => array(
+					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
+				),
 			);
 		}
 
-		$actions['frm_edit'] = array(
-			'url'   => '#',
-			'label' => __( 'Edit Entry', 'formidable' ),
-			'class' => 'frm_noallow',
-			'data'  => array(
-				'upgrade' => __( 'Entry edits', 'formidable' ),
-				'medium'  => 'edit-entries',
-				'content' => 'entry',
-			),
-			'icon'  => 'frmfont frm_pencil_icon',
-		);
+		$actions = apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
 
-		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
+		if ( ! isset( $actions['frm_delete'] ) ) {
+			return $actions;
+		}
+
+		// Make delete the last link.
+		$delete_action = $actions['frm_delete'];
+		unset( $actions['frm_delete'] );
+		$actions['frm_delete'] = $delete_action;
+
+		return $actions;
 	}
 
 	/**

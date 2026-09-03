@@ -36,6 +36,8 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		add_action( 'frm_disconnected_gateway', 'FrmTransLiteAppController::maybe_remove_payment_cron', 10, 2 );
+
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 

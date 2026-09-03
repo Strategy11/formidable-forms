@@ -1,6 +1,13 @@
 on: [push]
 
 name: Mago Code Analysis and Linting
+# Cancel superseded runs for the same branch. The group is named explicitly
+# rather than derived from github.workflow: several files share the workflow
+# name `Inspections` and would otherwise cancel each other.
+concurrency:
+  group: formidable-mago-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   mago:
     name: Mago
@@ -16,8 +23,22 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: Install dependencies
-        run: composer install --dev --prefer-dist --no-progress
+      # Install only what this job runs, instead of every require-dev package.
+      # mago.toml lists vendor/php-stubs/wordpress-stubs/wordpress-stubs.php under
+      # includes. Without it `mago analyze` reports 8000+ non-existent-function
+      # errors for every WordPress call.
+      # The guard fails the job if a package is renamed or dropped from
+      # composer.json, rather than silently narrowing to nothing.
+      - name: Install Mago
+        run: |
+          NEED='carthage-software/mago php-stubs/wordpress-stubs'
+          for pkg in $NEED; do
+            jq -e --arg pkg "$pkg" '."require-dev" | has($pkg)' composer.json > /dev/null \
+              || { echo "::error::composer.json has no require-dev entry for $pkg"; exit 1; }
+          done
+          jq '{require, autoload, config, "require-dev": (."require-dev" | with_entries(select(.key as $k | $ARGS.positional | index($k))))}' \
+            composer.json --args $NEED > composer.ci.json
+          COMPOSER=composer.ci.json composer install --prefer-dist --no-progress
 
       - name: "✅ Mago Lint"
         run: vendor/bin/mago lint

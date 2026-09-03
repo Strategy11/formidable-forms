@@ -135,7 +135,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|string
 	 */
 	public static function get_oauth_redirect_url() {
-		$mode = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
+		$mode = self::get_mode_value_from_post();
 
 		if ( self::get_merchant_id( $mode ) ) {
 			// Do not allow for initialize if there is already a configured account id.
@@ -551,27 +551,47 @@ class FrmSquareLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
-		return array(
-			'merchant_id'     => get_option( self::get_merchant_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
-		);
+		return self::get_body_for_mode( FrmSquareLiteAppHelper::active_mode() );
 	}
 
 	/**
-	 * Check $_POST for live or test mode value as it can be updated in real time from Stripe Settings and can be configured before the update is saved.
+	 * Check $_POST for live or test mode value as it can be updated in real time from Square Settings and can be configured before the update is saved.
+	 * The connect request sends a 'mode' string, and the disconnect request sends a 'testMode' flag, so check for both.
 	 *
 	 * @return string 'test' or 'live'
 	 */
 	private static function get_mode_value_from_post() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
-			return FrmSquareLiteAppHelper::active_mode();
+		if ( array_key_exists( 'mode', $_POST ) ) {
+			$mode = FrmAppHelper::get_post_param( 'mode', '', 'sanitize_text_field' );
+			return 'test' === $mode ? 'test' : 'live';
 		}
 
-		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
-		return $test_mode ? 'test' : 'live';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( array_key_exists( 'testMode', $_POST ) ) {
+			$test_mode = FrmAppHelper::get_post_param( 'testMode', '', 'absint' );
+			return $test_mode ? 'test' : 'live';
+		}
+
+		return FrmSquareLiteAppHelper::active_mode();
+	}
+
+	/**
+	 * Get the standard body with account id, mode, and passwords to send to the connect server.
+	 *
+	 * @since 6.32.1
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return array
+	 */
+	private static function get_body_for_mode( $mode ) {
+		return array(
+			'merchant_id'         => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_square_api_mode' => $mode,
+		);
 	}
 
 	/**
@@ -618,8 +638,7 @@ class FrmSquareLiteConnectHelper {
 		$request_body = array();
 
 		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
+			$request_body = self::get_body_for_mode( $mode );
 		}
 
 		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
@@ -707,6 +726,7 @@ class FrmSquareLiteConnectHelper {
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_square_api_integration();
+		FrmTransLiteAppHelper::trigger_gateway_disconnected_hook( 'square', self::get_mode_value_from_post() );
 		wp_send_json_success();
 	}
 
@@ -714,9 +734,8 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function disconnect() {
-		$additional_body = array(
-			'frm_square_api_mode' => self::get_mode_value_from_post(),
-		);
+		$mode            = self::get_mode_value_from_post();
+		$additional_body = self::get_body_for_mode( $mode );
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
@@ -752,8 +771,7 @@ class FrmSquareLiteConnectHelper {
 		$request_body = array();
 
 		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
+			$request_body = self::get_body_for_mode( $mode );
 		}
 
 		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );

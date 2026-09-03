@@ -8,6 +8,7 @@
 	let isStripeLink = false;
 	let linkAuthenticationElementIsComplete = false;
 	let stripeLinkElementIsComplete = false;
+	let priceChangedTimer = 0;
 
 	const triggerCustomEvent = function( el, eventName, data ) {
 		frmFrontForm.triggerCustomEvent( el, eventName, data );
@@ -83,9 +84,7 @@
 		frmFrontForm.showSubmitLoading( $form );
 		const meta = addName( $form );
 
-		if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.addAddressMeta ) {
-			window.frmProForm.addAddressMeta( $form, meta );
-		}
+		addAddressMeta( meta );
 
 		if ( ! isStripeLink ) {
 			return;
@@ -132,9 +131,7 @@
 				}
 			};
 
-			if ( 'object' === typeof window.frmProForm && 'function' === typeof frmProForm.beforeConfirmPayment ) {
-				params = frmProForm.beforeConfirmPayment( params, meta );
-			}
+			params = addBillingDetailsToParams( params, meta );
 
 			const confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
 
@@ -200,6 +197,122 @@
 
 			return true;
 		}
+	}
+
+	/**
+	 * Add address values to the payment meta when an address field is mapped in the payment action.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {Object} cardObject
+	 * @return {void}
+	 */
+	function addAddressMeta( cardObject ) {
+		let addressID = '';
+
+		each(
+			getStripeSettings(),
+			function( setting ) {
+				if ( setting.address ) {
+					addressID = setting.address;
+				}
+			}
+		);
+
+		if ( '' === addressID ) {
+			return;
+		}
+
+		let prefix = '';
+		let addressContainer = document.querySelector( `#frm_field_${ addressID }_container, .frm_field_${ addressID }_container` );
+
+		if ( ! addressContainer ) {
+			const line1Input = document.querySelector( `input[name="item_meta[${ addressID }][line1]"]` );
+			if ( line1Input ) {
+				prefix = `${ addressID }][`;
+				addressContainer = line1Input.parentNode;
+			}
+		}
+
+		if ( ! addressContainer ) {
+			return;
+		}
+
+		addValToRequest( addressContainer, `${ prefix }line1`, cardObject, 'address_line1' );
+		addValToRequest( addressContainer, `${ prefix }line2`, cardObject, 'address_line2' );
+		addValToRequest( addressContainer, `${ prefix }city`, cardObject, 'address_city' );
+		addValToRequest( addressContainer, `${ prefix }state`, cardObject, 'address_state' );
+		addValToRequest( addressContainer, `${ prefix }zip`, cardObject, 'address_zip' );
+
+		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
+		if ( ! countryDropdown ) {
+			return;
+		}
+
+		const countryOption = countryDropdown.querySelector( `option[value="${ countryDropdown.value }"]` );
+		if ( countryOption?.getAttribute( 'data-code' ) ) {
+			cardObject.address_country = countryOption.getAttribute( 'data-code' );
+		}
+	}
+
+	/**
+	 * Add a single address input value to the card object if it is filled.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {Element} container
+	 * @param {string}  inputName
+	 * @param {Object}  cardObject
+	 * @param {string}  objectName
+	 * @return {void}
+	 */
+	function addValToRequest( container, inputName, cardObject, objectName ) {
+		const input = container.querySelector( `input[name$="[${ inputName }]"], select[name$="[${ inputName }]"]` );
+		if ( input?.value ) {
+			cardObject[ objectName ] = input.value;
+		}
+	}
+
+	/**
+	 * Add billing details built from the payment meta to the confirm params.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {Object} params
+	 * @param {Object} meta
+	 * @return {Object} The confirm params with billing details included.
+	 */
+	function addBillingDetailsToParams( params, meta ) {
+		params.confirmParams.payment_method_data = {
+			billing_details: convertToAddressObject( meta )
+		};
+		return params;
+	}
+
+	/**
+	 * Convert flat address_* meta keys to the nested address object Stripe expects.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {Object} meta
+	 * @return {Object} Billing details with a nested address object.
+	 */
+	function convertToAddressObject( meta ) {
+		const newMeta = { address: {} };
+
+		Object.keys( meta ).forEach(
+			function( key ) {
+				if ( 'address_zip' === key ) {
+					newMeta.address.postal_code = meta[ key ];
+				} else if ( 0 === key.indexOf( 'address_' ) ) {
+					newMeta.address[ key.replace( 'address_', '' ) ] = meta[ key ];
+				} else {
+					newMeta[ key ] = meta[ key ];
+				}
+			}
+		);
+
+		return newMeta;
 	}
 
 	/**
@@ -398,15 +511,39 @@
 			}
 		}
 		if ( run ) {
+			clearTimeout( priceChangedTimer );
+			priceChangedTimer = setTimeout( updateIntentAmount( field ), 600 );
+		}
+	}
+
+	/**
+	 * Get a callback that sends the current form values so the intent amount can be updated.
+	 * The call is skipped when the form has no intents to update.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} field The price field that changed.
+	 * @return {Function} Callback for the debounce timer.
+	 */
+	function updateIntentAmount( field ) {
+		return function() {
+			const form = jQuery( field ).closest( 'form' );
+			const formId = form.find( '[name="form_id"]' ).val();
+
+			if ( ! form.find( `[name^="frmintent${ formId }"]` ).length ) {
+				// There are no intents to update.
+				return;
+			}
+
 			const data = {
 				action: 'frm_strp_amount',
-				form: JSON.stringify( jQuery( field ).closest( 'form' ).serializeArray() ),
+				form: JSON.stringify( form.serializeArray() ),
 				nonce: frm_stripe_vars.nonce
 			};
 			postAjax( data, function() {
 				// Amount has been conditionally updated.
 			} );
-		}
+		};
 	}
 
 	function postAjax( data, success ) {
@@ -601,6 +738,70 @@
 		);
 		authenticationElement.mount( '.frm-link-authentication-element' );
 		authenticationElement.on( 'change', getAuthenticationChangeHandler( cardElement, emailInput ) );
+
+		/**
+		 * Stripe does not support the red required asterisk that we show on our other fields.
+		 * So we add one ourselves positioned absolute on top of the iframe.
+		 */
+		authenticationElement.on( 'ready', function() {
+			authenticationMountTarget.style.position = 'relative';
+
+			const requiredIndicator = document.createElement( 'span' );
+			requiredIndicator.textContent = '*';
+			requiredIndicator.className = 'frm_required';
+			requiredIndicator.style.position = 'absolute';
+			requiredIndicator.style.fontSize = 'var(--font-size)';
+			requiredIndicator.style.top = '-4px';
+			requiredIndicator.style.left = `${ getEmailAsteriskOffset( cardElement ) }px`;
+			requiredIndicator.style.padding = 'var(--label-padding)';
+			requiredIndicator.setAttribute( 'aria-hidden', 'true' );
+			authenticationMountTarget.append( requiredIndicator );
+		} );
+	}
+
+	/**
+	 * Create a temporary label element to determine the width of the Email label.
+	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} cardElement
+	 * @return {number} The label width in pixels.
+	 */
+	function getEmailAsteriskOffset( cardElement ) {
+		const label = document.createElement( 'label' );
+		label.classList.add( 'frm_primary_label', 'form-label' );
+		label.textContent = 'Email';
+		label.innerHTML += '&nbsp;';
+
+		const tempContainer = document.createElement( 'div' );
+		tempContainer.classList.add( 'with_frm_style' );
+		tempContainer.style.position = 'absolute';
+		tempContainer.style.visibility = 'hidden';
+		tempContainer.style.height = '0';
+		tempContainer.style.overflow = 'hidden';
+
+		const formContainer = cardElement.closest( '.with_frm_style' );
+		if ( formContainer ) {
+			each(
+				formContainer.classList,
+				function( className ) {
+					if ( className.startsWith( 'frm_style_' ) ) {
+						tempContainer.classList.add( className );
+						return false;
+					}
+				}
+			);
+		}
+
+		tempContainer.append( label );
+		document.body.append( tempContainer );
+
+		const labelWidth = label.getBoundingClientRect().width;
+
+		tempContainer.remove();
+
+		return labelWidth;
 	}
 
 	/**
@@ -885,6 +1086,39 @@
 	}
 
 	/**
+	 * Handle frmPageChanged events.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function onPageChange() {
+		loadElements();
+		runConditionalLogicOnPaymentFailure();
+	}
+
+	/**
+	 * The frmPageChanged event is triggered when a payment fails when submitting with AJAX.
+	 * When the payment fails, we run conditional logic.
+	 * Otherwise fields may be visible when they should be hidden.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function runConditionalLogicOnPaymentFailure() {
+		if ( ! document.querySelector( '.frm_error_style' ) ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof __frmHideOrShowFields || 'object' !== typeof window.frmProForm ) {
+			return;
+		}
+
+		window.frmProForm.hideOrShowFields( __frmHideOrShowFields, 'pageLoad' );
+	}
+
+	/**
 	 * Create and return a new element to use for mounting a Stripe element to.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
@@ -947,7 +1181,7 @@
 
 			frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
 			loadElements();
-			jQuery( document ).on( 'frmPageChanged', loadElements );
+			jQuery( document ).on( 'frmPageChanged', onPageChange );
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.frmstrp', '.frm-show-form', validateForm );
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );

@@ -84,7 +84,7 @@ class FrmSquareLiteAppController {
 			wp_send_json_error( __( 'No Square actions found for this form', 'formidable' ) );
 		}
 
-		$action               = reset( $actions );
+		$action               = self::get_action_for_verification( $actions );
 		$verification_details = array(
 			'amount'         => self::get_amount_value_for_verification( $action ),
 			'billingContact' => self::get_billing_contact( $action ),
@@ -101,7 +101,42 @@ class FrmSquareLiteAppController {
 	}
 
 	/**
+	 * Get the action that the submission will actually trigger.
+	 *
+	 * Square verifies a single amount, so when a form has more than one Square action,
+	 * the conditional logic of each action is checked against the posted values. Without
+	 * this, the first action always wins and the buyer gets verified for an amount that
+	 * a different action is going to charge.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array $actions Payment actions from FrmSquareLiteActionsController::get_actions_before_submit. Never empty.
+	 *
+	 * @return WP_Post
+	 */
+	private static function get_action_for_verification( $actions ) {
+		if ( count( $actions ) > 1 ) {
+			$entry = self::generate_false_entry();
+
+			foreach ( $actions as $action ) {
+				if ( ! FrmFormAction::action_conditions_met( $action, $entry ) ) {
+					// Conditions were met, so this is the action that will charge the buyer.
+					return $action;
+				}
+			}
+		}
+
+		// Either there is a single action, or no action passed its conditional logic.
+		return reset( $actions );
+	}
+
+	/**
 	 * Get the amount value for verification.
+	 *
+	 * Square's verifyBuyer expects the amount as a decimal string in the currency's
+	 * major units ("20.00" for twenty pounds), not the smallest denomination that the
+	 * Payments API uses. FrmSquareLiteActionsController::prepare_amount returns the
+	 * smallest denomination, so the parent is called here instead.
 	 *
 	 * @param WP_Post $action
 	 *
@@ -111,7 +146,8 @@ class FrmSquareLiteAppController {
 		$amount = $action->post_content['amount'];
 
 		if ( ! str_contains( $amount, '[' ) ) {
-			return $amount;
+			$currency = $action->post_content['currency'];
+			return FrmTransLiteActionsController::prepare_amount( $amount, compact( 'currency' ) );
 		}
 
 		$form = FrmForm::getOne( $action->menu_order );
@@ -123,7 +159,64 @@ class FrmSquareLiteAppController {
 		// Update amount based on field shortcodes.
 		$entry = self::generate_false_entry();
 
-		return FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+		return FrmTransLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+	}
+
+	/**
+	 * Show a warning in the payment action settings when the selected address field
+	 * uses an address type without a country, as Square requires a country code.
+	 *
+	 * @since 6.34
+	 *
+	 * @param object $action
+	 *
+	 * @return void
+	 */
+	public static function maybe_show_address_type_warning( $action ) {
+		if ( is_callable( 'FrmProSquareLiteController::maybe_show_address_type_warning' ) ) {
+			// Pro renders this warning with the same hook.
+			return;
+		}
+
+		if ( empty( $action->post_content['gateway'] ) ) {
+			return;
+		}
+
+		$gateways = (array) $action->post_content['gateway'];
+
+		if ( ! in_array( 'square', $gateways, true ) ) {
+			return;
+		}
+
+		if ( empty( $action->post_content['billing_address'] ) ) {
+			return;
+		}
+
+		$address_field = FrmField::getOne( $action->post_content['billing_address'] );
+
+		if ( ! $address_field || self::address_field_is_compatible_with_square( $address_field ) ) {
+			return;
+		}
+		?>
+		<div class="frm_warning_style">
+		<?php
+		esc_html_e( 'The address field selected is not compatible with Square, because it does not include the country code. Select another address type to prevent checkout errors.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Square requires a country code, which the generic address type does not collect.
+	 *
+	 * @since 6.34
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return bool
+	 */
+	private static function address_field_is_compatible_with_square( $field ) {
+		return ! isset( $field->field_options['address_type'] ) || 'generic' !== $field->field_options['address_type'];
 	}
 
 	/**
@@ -135,7 +228,9 @@ class FrmSquareLiteAppController {
 		$email_setting      = $action->post_content['email'];
 		$first_name_setting = $action->post_content['billing_first_name'];
 		$last_name_setting  = $action->post_content['billing_last_name'];
-		$address_setting    = $action->post_content['billing_address'];
+
+		// @phpstan-ignore-next-line
+		$address_setting = $action->post_content['billing_address'] ?? '';
 
 		$entry      = self::generate_false_entry();
 		$first_name = $first_name_setting && isset( $entry->metas[ $first_name_setting ] ) ? $entry->metas[ $first_name_setting ] : '';
@@ -179,7 +274,7 @@ class FrmSquareLiteAppController {
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$details, $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) ) {
 			return;
 		}
 
@@ -192,7 +287,7 @@ class FrmSquareLiteAppController {
 		if ( 'us' === $address_field->field_options['address_type'] ) {
 			$country_code = 'US';
 		} else {
-			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+			$country_code = FrmAddressesController::get_country_code( $address['country'] );
 		}
 
 		if ( ! $address['line1'] && ! $address['line2'] && ! $address['city'] && ! $address['state'] && ! $address['zip'] && ! $country_code ) {
@@ -218,7 +313,9 @@ class FrmSquareLiteAppController {
 		$entry->post_id  = 0;
 		$entry->id       = 0;
 		$entry->item_key = '';
-		$entry->metas    = array();
+		// Shortcode replacement reads ip off of the entry, so it cannot be left unset.
+		$entry->ip    = '';
+		$entry->metas = array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {

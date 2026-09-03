@@ -362,7 +362,20 @@ class FrmTransLiteAppHelper {
 	 * @return int
 	 */
 	public static function get_user_id_for_current_payment() {
-		return is_user_logged_in() ? get_current_user_id() : 0;
+		$user_id = is_user_logged_in() ? get_current_user_id() : 0;
+
+		/**
+		 * Set the user who owns the payment being made.
+		 * This makes it possible for an add on to claim the payment for a user who isn't logged in yet,
+		 * for example when the same submission registers them.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $user_id The logged in user, or 0 for a guest.
+		 */
+		$user_id = (int) apply_filters( 'frm_payment_user_id', $user_id );
+
+		return max( 0, $user_id );
 	}
 
 	/**
@@ -640,5 +653,23 @@ class FrmTransLiteAppHelper {
 		}
 
 		return $sorted + $gateways;
+	}
+
+	/**
+	 * @since 6.32.1
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode 'test' or 'live'.
+	 *
+	 * @return void
+	 */
+	public static function trigger_gateway_disconnected_hook( $gateway, $mode ) {
+		/**
+		 * @since 6.32.1
+		 *
+		 * @param string $gateway 'stripe', 'square', or 'paypal'.
+		 * @param string $mode 'test' or 'live'.
+		 */
+		do_action( 'frm_disconnected_gateway', $gateway, $mode );
 	}
 }

@@ -12,50 +12,88 @@ class FrmFieldsController {
 	 */
 	private static $field_selection_data;
 
+	/**
+	 * Render the fields the form builder asked for over ajax.
+	 *
+	 * The browser sends field ids only. The fields themselves are read from the form, which is one
+	 * indexed query shared with the rest of the request through the field cache, and cheaper than
+	 * shipping every field's data down to the page and straight back up again.
+	 *
+	 * @return void
+	 */
 	public static function load_field() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		// Javascript may be included in some field settings.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
+		$field_ids = FrmAppHelper::get_post_param( 'field_ids', array(), 'absint' );
+		$form_id   = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-		if ( ! $fields ) {
+		if ( ! $form_id || ! is_array( $field_ids ) || ! $field_ids ) {
 			wp_die();
 		}
 
 		$_GET['page'] = 'formidable';
-
-		$values     = array(
-			'id'         => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
+		$fields       = self::get_builder_fields_by_id( $form_id );
+		$values       = array(
+			'id'         => $form_id,
 			'doing_ajax' => true,
 		);
-		$field_html = array();
+		$field_html   = array();
 
-		foreach ( $fields as $field ) {
-			$field = htmlspecialchars_decode( nl2br( $field ) );
-			$field = json_decode( $field );
-
-			if ( ! isset( $field->id ) || ! is_numeric( $field->id ) ) {
-				// This field may have already been loaded
+		foreach ( $field_ids as $field_id ) {
+			if ( ! isset( $fields[ $field_id ] ) ) {
+				// This field may have already been loaded, or is no longer in the form.
 				continue;
 			}
 
-			if ( ! isset( $field->value ) ) {
-				$field->value = '';
-			}
-			$field->field_options = json_decode( json_encode( $field->field_options ), true );
-			$field->options       = json_decode( json_encode( $field->options ), true );
-			$field->default_value = json_decode( json_encode( $field->default_value ), true );
+			$field = $fields[ $field_id ];
 
 			ob_start();
 			self::load_single_field( $field, $values );
-			$field_html[ absint( $field->id ) ] = ob_get_clean();
+
+			$field_html[ $field_id ] = array(
+				// The type travels with the html so the js can report it to frm_ajax_loaded_field
+				// listeners without a copy of the field.
+				'type' => $field->type,
+				'html' => ob_get_clean(),
+			);
 		}//end foreach
 
 		echo json_encode( $field_html );
 
 		wp_die();
+	}
+
+	/**
+	 * Get a form's fields, as the form builder sees them, indexed by field id.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 *
+	 * @return array Field objects keyed by field id. Empty if the form is gone.
+	 */
+	private static function get_builder_fields_by_id( $form_id ) {
+		$form = FrmForm::getOne( $form_id );
+
+		if ( ! $form ) {
+			return array();
+		}
+
+		$fields = FrmField::get_all_for_form( $form_id );
+
+		/** This filter is documented in classes/controllers/FrmFormsController.php */
+		$fields = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
+
+		$fields_by_id = array();
+
+		foreach ( (array) $fields as $field ) {
+			if ( is_object( $field ) && ! empty( $field->id ) ) {
+				$fields_by_id[ (int) $field->id ] = $field;
+			}
+		}
+
+		return $fields_by_id;
 	}
 
 	/**
@@ -134,7 +172,7 @@ class FrmFieldsController {
 		$new_field = FrmField::duplicate_single_field( $field_id, $form_id );
 
 		if ( is_array( $new_field ) && ! empty( $new_field['field_id'] ) ) {
-			self::load_single_field( $new_field['field_id'], $new_field['values'] );
+			self::load_single_field( $new_field['field_id'], $new_field['values'], $form_id );
 		}
 
 		wp_die();
@@ -184,7 +222,10 @@ class FrmFieldsController {
 		}
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			$field_object->parent_form_id = $values['id'] ?? $field_object->form_id;
+			// Prefer the explicit form id. $values['id'] is not always a form id (for example when
+			// duplicating a field it is the copied field's id), so trusting it would set parent_form_id
+			// to a field id and break settings that resolve fields against the parent form.
+			$field_object->parent_form_id = $form_id ? $form_id : ( $values['id'] ?? $field_object->form_id );
 			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
@@ -218,6 +259,12 @@ class FrmFieldsController {
 		$li_classes  = $field_info->form_builder_classes( $display['type'] );
 		$li_classes .= ' frm_form_field frmstart ';
 
+		$style_align_class = self::get_builder_field_style_align_class( $field, $field_info );
+
+		if ( $style_align_class ) {
+			$li_classes .= $style_align_class . ' ';
+		}
+
 		if ( isset( $field['classes'] ) ) {
 			$li_classes .= trim( $field['classes'] ) . ' ';
 		}
@@ -229,6 +276,37 @@ class FrmFieldsController {
 		}
 
 		return $li_classes;
+	}
+
+	/**
+	 * Apply the active style alignment to a radio or checkbox builder preview on load.
+	 *
+	 * The per-field alignment setting only exists in Pro, so on load the style setting is
+	 * used. When the field has an explicit alignment (Pro), the frm_build_field_class filter
+	 * applies it instead. When Pro is not installed, any saved alignment is treated as empty.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array        $field
+	 * @param FrmFieldType $field_info
+	 *
+	 * @return string
+	 */
+	private static function get_builder_field_style_align_class( $field, $field_info ) {
+		if ( ! $field || ! is_array( $field ) || ( ! FrmField::is_radio( $field ) && ! FrmField::is_checkbox( $field ) ) ) {
+			return '';
+		}
+
+		$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $field, 'align' ) : '';
+
+		if ( $align ) {
+			return '';
+		}
+
+		$align = FrmStylesHelper::get_align_from_active_style( $field );
+		$field_info->prepare_align_class( $align );
+
+		return $align;
 	}
 
 	public static function destroy() {
@@ -418,10 +496,10 @@ class FrmFieldsController {
 
 			$show_upsell_for_unique_value          = in_array(
 				$field['type'],
-				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
+				array( 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
 				true
 			);
-			$show_upsell_for_read_only             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+			$show_upsell_for_read_only             = in_array( $field['type'], array( 'address', 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
 			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'quantity', 'select', 'tag', 'text', 'total', 'url' ), true );
 			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
 			$show_upsell_for_visibility            = $field['type'] !== 'hidden';

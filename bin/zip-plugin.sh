@@ -47,6 +47,8 @@ zip -r $zipname $destination \
 	-x "*/.github/*" \
 	-x "*/.gitignore" \
 	-x "*/.windsurf/*" \
+	-x "*/.devin/*" \
+	-x "*/.vscode/*" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
@@ -97,9 +99,23 @@ zip -r $zipname $destination \
 	-x "*/*.stubs.php" \
 	-x "*/stubs.php" \
 	-x "*/stubs" \
+	-x "*/stubs-*" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
+	-x "formidable-api/lib/vendor/*/docs/*" \
+	-x "formidable-api/lib/vendor/*/generator/*" \
+	-x "formidable-api/lib/vendor/*/skill/*" \
+	-x "formidable-api/lib/vendor/*/CHANGELOG.md" \
+	-x "formidable-api/lib/vendor/*/CLAUDE.md" \
+	-x "formidable-api/lib/vendor/*/CONTRIBUTING.md" \
+	-x "formidable-api/lib/vendor/*/README-INITIAL.md" \
+	-x "formidable-api/lib/vendor/*/.nvmrc" \
+	-x "formidable-api/lib/vendor/*/.prettierignore" \
+	-x "formidable-api/lib/vendor/*/.prettierrc.js" \
+	-x "formidable-api/lib/vendor/*/.wp-env.json" \
+	-x "formidable-api/lib/vendor/*/phpcs.xml.dist" \
+	-x "formidable-api/lib/vendor/*/phpstan.neon.dist" \
 	-x "$source/vendor/*" \
 	-x "$source/formidable-payments/vendor/*" \
 	-x "*/temp.xml" \
@@ -130,7 +146,8 @@ zip -r $zipname $destination \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
-	-x "formidable-pro/resources/*"
+	-x "formidable-pro/resources/*" \
+	-x "formidable/lib/vendor/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

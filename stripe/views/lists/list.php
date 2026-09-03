@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="wrap">
 		<?php
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
+
 		FrmTransLiteListHelper::render_tabs();
 		$wp_list_table->views();
 		?>

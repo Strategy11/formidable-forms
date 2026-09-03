@@ -61,6 +61,95 @@
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
 
 		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
+
+		initOptionLayoutPreview();
+	}
+
+	/**
+	 * Sync the radio/checkbox option layout (alignment) style settings to the preview form in real time.
+	 *
+	 * The layout is applied to the front end through a container class, so changing the style setting
+	 * does not re-render the preview form. This swaps the container class on preview fields that use the
+	 * style setting. The styler preview marks those fields with .frm-default-option-align, so fields with
+	 * their own alignment override are left untouched.
+	 *
+	 * @return {void}
+	 */
+	function initOptionLayoutPreview() {
+		bindOptionLayoutSelect( document.getElementById( 'frm_radio_align' ), '.frm_radio' );
+		bindOptionLayoutSelect( document.getElementById( 'frm_check_align' ), '.frm_checkbox' );
+	}
+
+	/**
+	 * Listen for changes on an option layout style setting and update the preview to match.
+	 *
+	 * @param {HTMLSelectElement|null} select         The style setting dropdown.
+	 * @param {string}                 optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @return {void}
+	 */
+	function bindOptionLayoutSelect( select, optionSelector ) {
+		if ( ! select ) {
+			return;
+		}
+
+		select.addEventListener( 'change', () => {
+			updatePreviewOptionLayout( optionSelector, select.value );
+		} );
+	}
+
+	/**
+	 * Replace the alignment container class on preview fields that are using the style setting.
+	 *
+	 * @param {string} optionSelector The single option selector ('.frm_radio' or '.frm_checkbox').
+	 * @param {string} newAlign       The newly selected style alignment value.
+	 * @return {void}
+	 */
+	function updatePreviewOptionLayout( optionSelector, newAlign ) {
+		const newClass = optionLayoutAlignToClass( newAlign );
+
+		if ( ! newClass ) {
+			return;
+		}
+
+		const activeForm = document.getElementById( 'frm_active_style_form' );
+		if ( ! activeForm ) {
+			return;
+		}
+
+		const alignClasses = [ 'vertical_radio', 'horizontal_radio', 'frm_two_col', 'frm_three_col', 'frm_four_col' ];
+		const containers = new Set();
+
+		activeForm.querySelectorAll( optionSelector ).forEach( option => {
+			const container = option.closest( '.frm_form_field' );
+
+			// Only fields using the style setting (no override) are marked in the styler preview.
+			if ( container?.classList.contains( 'frm-default-option-align' ) ) {
+				containers.add( container );
+			}
+		} );
+
+		containers.forEach( container => {
+			container.classList.remove( ...alignClasses );
+			container.classList.add( newClass );
+		} );
+	}
+
+	/**
+	 * Map an option layout style value to its front-end container class.
+	 *
+	 * @param {string} align The style alignment value.
+	 * @return {string} The matching container class.
+	 */
+	function optionLayoutAlignToClass( align ) {
+		if ( 'inline' === align ) {
+			return 'horizontal_radio';
+		}
+
+		if ( 'block' === align ) {
+			return 'vertical_radio';
+		}
+
+		return align;
 	}
 
 	/**
@@ -95,9 +184,8 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		// Add a timeout so Pro has a chance to add a filter first.
-		// 0 does not always work in Google Chrome, so use 1.
-		setTimeout( addHamburgerMenusToCards, 1 );
+		// The dropdown options are added on the first open, so there is no longer a filter from Pro to wait for here.
+		addHamburgerMenusToCards();
 		initDatepickerSample();
 
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
@@ -634,6 +722,70 @@
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
 		const isTemplate = data.templateKey !== undefined;
+
+		const dropdownMenu = div( {
+			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
+			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1'
+		} );
+
+		const isRtl = document.body.classList.contains( 'rtl' );
+		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
+
+		dropdownMenu.setAttribute( 'role', 'menu' );
+
+		fillDropdownMenuOnFirstOpen( hamburgerMenu, dropdownMenu, data, isTemplate );
+
+		return div( {
+			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
+			children: [ hamburgerMenu, dropdownMenu ]
+		} );
+	}
+
+	/**
+	 * Add the options to a style card dropdown the first time that dropdown is opened.
+	 *
+	 * The options are built through the frm_style_card_dropdown_options filter, and Pro registers its
+	 * callback while its own script file runs. Adding the options while the page loads raced that file,
+	 * so a request for it that was slow to come back left every card holding the Lite only options.
+	 * Waiting for the first open takes the script order out of it, since Pro has always registered the
+	 * filter by the time a card can be clicked.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}  hamburgerMenu The dropdown trigger.
+	 * @param {HTMLElement}  dropdownMenu  The dropdown to add the options to.
+	 * @param {DOMStringMap} data          The dataset of the style card, or an object with the style ID on the edit page.
+	 * @param {boolean}      isTemplate    Whether the card is for a style template.
+	 * @return {void}
+	 */
+	function fillDropdownMenuOnFirstOpen( hamburgerMenu, dropdownMenu, data, isTemplate ) {
+		const fillDropdownMenu = () => {
+			if ( dropdownMenu.children.length ) {
+				return;
+			}
+
+			const options = getDropdownMenuOptions( data, isTemplate );
+			dropdownMenu.append( ...options.map( wrapDropdownItem ) );
+		};
+
+		// Bootstrap fires this on the trigger before it measures and positions the dropdown.
+		hamburgerMenu.addEventListener( 'show.bs.dropdown', fillDropdownMenu );
+
+		// Fall back to the click in case the dropdown is ever opened without Bootstrap. Listen in the
+		// capture phase so the options are in place before Bootstrap's own delegated handler runs.
+		hamburgerMenu.addEventListener( 'click', fillDropdownMenu, true );
+	}
+
+	/**
+	 * Get the options for a single style card dropdown.
+	 *
+	 * @since x.x
+	 *
+	 * @param {DOMStringMap} data       The dataset of the style card, or an object with the style ID on the edit page.
+	 * @param {boolean}      isTemplate Whether the card is for a style template.
+	 * @return {Array} The dropdown options, each an object with an anchor and a type.
+	 */
+	function getDropdownMenuOptions( data, isTemplate ) {
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
@@ -676,21 +828,7 @@
 			maybeAddDuplicateUpsell( dropdownMenuOptions );
 		}
 
-		const dropdownMenu = div( {
-			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
-			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1',
-			children: dropdownMenuOptions.map( wrapDropdownItem )
-		} );
-
-		const isRtl = document.body.classList.contains( 'rtl' );
-		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
-
-		dropdownMenu.setAttribute( 'role', 'menu' );
-
-		return div( {
-			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
-			children: [ hamburgerMenu, dropdownMenu ]
-		} );
+		return dropdownMenuOptions;
 	}
 
 	/**

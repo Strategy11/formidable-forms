@@ -9,7 +9,7 @@ $pay_later_value = $form_action->post_content['pay_later'] ?? 'auto';
 	<div class="frm_grid_container">
 		<h3><?php esc_html_e( 'PayPal Settings', 'formidable' ); ?></h3>
 
-		<p class="frm6">
+		<p class="frm6 frm_paypal_layout_setting<?php echo 'recurring' === $form_action->post_content['type'] ? ' frm_hidden' : ''; ?>">
 			<label for="<?php echo esc_attr( $action_control->get_field_id( 'paypal_layout' ) ); ?>">
 				<?php esc_html_e( 'Layout', 'formidable' ); ?>
 			</label>
