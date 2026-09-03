@@ -405,7 +405,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105, 107 );
 
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version < $migration || $old_db_version >= $migration ) {
@@ -482,6 +482,26 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Discard the legacy generated-stylesheet cache-busting version.
+	 *
+	 * Versions before this stored frm_last_style_update as gmdate( 'njGi' ), which could repeat
+	 * across different dates and every year, so a third-party CSS cache keyed on the enqueued
+	 * stylesheet URL could keep serving a copy generated from superseded content.
+	 *
+	 * Removing the stored value makes FrmStylesController::get_css_version() fall back to the
+	 * plugin version, which guarantees the enqueued URL changes on this upgrade even when the
+	 * post-upgrade style regeneration is skipped. The content-derived value is written by the
+	 * next FrmStyle::save_settings() call.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function migrate_to_107() {
+		delete_option( 'frm_last_style_update' );
 	}
 
 	/**

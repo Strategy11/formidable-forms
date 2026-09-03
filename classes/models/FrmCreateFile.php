@@ -76,13 +76,15 @@ class FrmCreateFile {
 	}
 
 	/**
+	 * @since x.x Returns whether the file was written. Previously returned nothing.
+	 *
 	 * @param string $file_content
 	 *
-	 * @return void
+	 * @return bool True if the file was written to disk.
 	 */
 	public function create_file( $file_content ) {
 		if ( ! $this->has_permission ) {
-			return;
+			return false;
 		}
 
 		$dirs_exist = true;
@@ -92,11 +94,11 @@ class FrmCreateFile {
 
 		// Only write the file if the folders exist.
 		if ( ! $dirs_exist ) {
-			return;
+			return false;
 		}
 
 		global $wp_filesystem;
-		$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
+		return (bool) $wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
 	}
 
 	/**
