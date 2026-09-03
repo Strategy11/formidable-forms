@@ -36,6 +36,19 @@ class FrmPluginFeedbackController {
 	const SOURCE = 'lite';
 
 	/**
+	 * @var int
+	 */
+	const INSTALL_AGE_THRESHOLD_DAYS = 90;
+
+	/**
+	 * Minimum gap enforced between prompts, regardless of calendar year, so a
+	 * late-year submission can't be followed by another prompt days later.
+	 *
+	 * @var int
+	 */
+	const MIN_MONTHS_BETWEEN_PROMPTS = 3;
+
+	/**
 	 * @var array
 	 */
 	protected static $plugin_feedback;
@@ -83,23 +96,43 @@ class FrmPluginFeedbackController {
 			return false;
 		}
 
-		if ( is_network_admin() ) {
-			return false;
-		}
-
-		if ( ! FrmAppHelper::is_formidable_admin() ) {
-			return false;
-		}
-
-		$current = self::get_current_year_feedback();
-		return empty( $current['submitted'] );
+		return is_network_admin() ? false : FrmAppHelper::is_formidable_admin();
 	}
 
 	/**
 	 * @return bool
 	 */
 	protected static function passes_product_specific_gates() {
-		return self::has_reached_install_age_threshold();
+		return self::has_reached_install_age_threshold()
+		&& self::has_reached_january_25th()
+		&& ! self::has_recently_been_prompted();
+	}
+
+	/**
+	 * Matches Pro: the survey only opens for the year starting January 25th.
+	 *
+	 * @return bool
+	 */
+	protected static function has_reached_january_25th() {
+		return wp_date( 'm-d' ) >= '01-25';
+	}
+
+	/**
+	 * Enforces a minimum gap since the last prompt (submitted or dismissed),
+	 * independent of the January 25th window, so a late-year prompt can't
+	 * be immediately followed by another one when the year rolls over.
+	 *
+	 * @return bool
+	 */
+	protected static function has_recently_been_prompted() {
+		$plugin_feedback = self::get_plugin_feedback();
+		$last_prompted   = isset( $plugin_feedback['last_prompted'] ) ? (int) $plugin_feedback['last_prompted'] : 0;
+
+		if ( ! $last_prompted ) {
+			return false;
+		}
+
+		return time() - $last_prompted < self::MIN_MONTHS_BETWEEN_PROMPTS * MONTH_IN_SECONDS;
 	}
 
 	/**
@@ -133,8 +166,7 @@ class FrmPluginFeedbackController {
 			return true;
 		}
 
-		$threshold_days = (int) apply_filters( 'frm_lite_plugin_feedback_threshold_days', 90 );
-		return time() - (int) $install_time >= $threshold_days * DAY_IN_SECONDS;
+		return time() - (int) $install_time >= self::INSTALL_AGE_THRESHOLD_DAYS * DAY_IN_SECONDS;
 	}
 
 	/**
@@ -237,6 +269,7 @@ class FrmPluginFeedbackController {
 
 		if ( ! isset( $current['nps-score'] ) ) {
 			self::set_current_year_feedback( 'submitted', true );
+			self::record_prompt_timestamp();
 			wp_send_json_success( array( 'message' => __( 'Feedback dismissed successfully.', 'formidable' ) ) );
 		}
 
@@ -269,7 +302,17 @@ class FrmPluginFeedbackController {
 		}
 
 		self::set_current_year_feedback( 'submitted', true );
+		self::record_prompt_timestamp();
 		wp_send_json_success( array( 'message' => __( 'Feedback submitted successfully.', 'formidable' ) ) );
+	}
+
+	/**
+	 * @return void
+	 */
+	protected static function record_prompt_timestamp() {
+		self::get_plugin_feedback();
+		self::$plugin_feedback['last_prompted'] = time();
+		update_option( self::PLUGIN_FEEDBACK_OPTION_KEY, self::$plugin_feedback, false );
 	}
 
 	/**
