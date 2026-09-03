@@ -19,10 +19,16 @@ if ( ! isset( $frm_style ) ) {
 
 $styles           = $frm_style->get_all();
 $default_style    = $frm_style->get_default_style( $styles );
-$defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
-$important        = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
-$use_chosen_js    = FrmStylesHelper::use_chosen_js();
+
+if ( ! $pro_is_installed && $default_style ) {
+	// Per-form styles are a Pro feature, so only the default style is ever used without Pro.
+	$styles = array( $default_style->ID => $default_style );
+}
+
+$defaults      = FrmStylesHelper::get_settings_for_output( $default_style );
+$important     = ! empty( $defaults['important_style'] ) ? ' !important' : '';
+$use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 ?>
 .with_frm_style{
