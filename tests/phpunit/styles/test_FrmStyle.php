@@ -156,4 +156,38 @@ class test_FrmStyle extends FrmUnitTest {
 		$frm_style = new FrmStyle();
 		return $this->run_private_method( array( $frm_style, 'trim_braces' ), array( $value ) );
 	}
+
+	/**
+	 * @covers FrmStyle::get_all
+	 */
+	public function test_get_all() {
+		$frm_style = new FrmStyle();
+		$styles    = $frm_style->get_all();
+
+		$this->assertNotEmpty( $styles );
+
+		foreach ( $styles as $style ) {
+			$this->assertSame( FrmStylesController::$post_type, $style->post_type );
+		}
+
+		// With every style removed, a new default style is created on the fly.
+		$style_posts = get_posts(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'any',
+				'numberposts' => -1,
+			)
+		);
+
+		foreach ( $style_posts as $style_post ) {
+			wp_delete_post( $style_post->ID, true );
+		}
+
+		wp_cache_flush();
+
+		$styles = $frm_style->get_all();
+
+		$this->assertNotEmpty( $styles );
+		$this->assertSame( FrmStylesController::$post_type, reset( $styles )->post_type );
+	}
 }
