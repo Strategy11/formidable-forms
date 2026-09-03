@@ -29,15 +29,9 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * Square's 3DS challenge sheet show a shopper GBP 2,000.00 for a GBP 20.00 payment,
 	 * which only surfaced in live, where SCA regions actually render that sheet.
 	 *
-	 * On master this still returns the smallest denomination, and the false entry has
-	 * no ip for shortcode replacement to read, so the test is incomplete until the fix
-	 * in fix_square_amount_issues lands.
-	 *
 	 * @covers FrmSquareLiteAppController::get_amount_value_for_verification
 	 */
 	public function test_get_amount_value_for_verification_returns_major_units() {
-		$this->markTestIncomplete( 'Waiting on the fix in fix_square_amount_issues.' );
-
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create(
 			array(
@@ -59,14 +53,10 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	/**
 	 * An amount typed straight into the action setting is already in major units, but it
 	 * may still carry a currency symbol and a thousands separator that Square will reject.
-	 * On master it is passed through untouched, so this is incomplete until the fix in
-	 * fix_square_amount_issues lands.
 	 *
 	 * @covers FrmSquareLiteAppController::get_amount_value_for_verification
 	 */
 	public function test_get_amount_value_for_verification_normalizes_a_literal_amount() {
-		$this->markTestIncomplete( 'Waiting on the fix in fix_square_amount_issues.' );
-
 		$form_id = $this->factory->form->create();
 		$action  = $this->create_square_action( $form_id, '£1,234.50', 'gbp' );
 
