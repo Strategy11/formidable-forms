@@ -181,4 +181,28 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		FrmEmailSummaryHelper::maybe_remove_recipients_from_api( $recipients );
 		$this->assertSame( 'recipient2@example.com', $recipients );
 	}
+
+	/**
+	 * @covers FrmEmailSummaryHelper::get_top_forms
+	 */
+	public function test_get_top_forms() {
+		$form_a = $this->factory->form->create_and_get();
+		$form_b = $this->factory->form->create_and_get();
+
+		$this->factory->entry->create( $this->factory->field->generate_entry_array( $form_a ) );
+		$this->factory->entry->create( $this->factory->field->generate_entry_array( $form_a ) );
+		$this->factory->entry->create( $this->factory->field->generate_entry_array( $form_b ) );
+
+		$top_forms = FrmEmailSummaryHelper::get_top_forms( gmdate( 'Y-m-d', strtotime( '-1 day' ) ), gmdate( 'Y-m-d' ) );
+		$by_form   = array();
+
+		foreach ( $top_forms as $row ) {
+			$by_form[ (int) $row->form_id ] = (int) $row->items_count;
+		}
+
+		$this->assertArrayHasKey( $form_a->id, $by_form );
+		$this->assertArrayHasKey( $form_b->id, $by_form );
+		$this->assertSame( 2, $by_form[ $form_a->id ] );
+		$this->assertSame( 1, $by_form[ $form_b->id ] );
+	}
 }
