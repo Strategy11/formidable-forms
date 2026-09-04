@@ -285,7 +285,7 @@ class FrmFormsController {
 		}
 
 		// Handle captcha field inclusion
-		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === FrmAppHelper::get_post_param( 'frm_include_captcha', '', 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		self::handle_captcha_field( $id, $include_captcha );
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
@@ -2284,7 +2284,7 @@ class FrmFormsController {
 
 			// Javascript needs to be allowed in some field settings.
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-			$json_vars = htmlspecialchars_decode( nl2br( str_replace( '&quot;', '"', wp_unslash( $_POST['frm_compact_fields'] ) ) ) );
+			$json_vars = htmlspecialchars_decode( nl2br( str_replace( '&quot;', '"', FrmAppHelper::get_post_param( 'frm_compact_fields', '', 'sanitize_text_field' ) ) ) );
 			$json_vars = json_decode( $json_vars, true );
 
 			if ( $json_vars ) {

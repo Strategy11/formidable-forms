@@ -110,7 +110,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$posted_data = $_POST['item_meta'] ?? array();
+		$posted_data = FrmAppHelper::get_post_param( 'item_meta', '', 'sanitize_text_field' ) ?? array();
 
 		foreach ( $fields as $field ) {
 			if ( ! in_array( $field->type, array( 'product', 'quantity', 'total' ), true ) ) {

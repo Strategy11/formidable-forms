@@ -276,7 +276,7 @@ class FrmStrpLiteAuth {
 		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-		$intents = $_POST[ $name ];
+		$intents = FrmAppHelper::get_post_param( $name, '', 'sanitize_text_field' );
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
 	}
@@ -296,7 +296,7 @@ class FrmStrpLiteAuth {
 		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$form = json_decode( stripslashes( $_POST['form'] ), true );
+		$form = json_decode( FrmAppHelper::get_post_param( 'form', '', 'sanitize_text_field' ), true );
 
 		if ( ! is_array( $form ) ) {
 			wp_die();

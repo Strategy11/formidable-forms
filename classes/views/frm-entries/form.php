@@ -80,7 +80,7 @@ if ( ! $only_contain_submit ) {
 	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
 }//end if
 
-if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !== $_GET['action'] ) ) {
+if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !== FrmAppHelper::simple_get( 'action', 'sanitize_text_field' ) ) ) {
 	?>
 	<div class="frm_form_field form-field">
 	<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>

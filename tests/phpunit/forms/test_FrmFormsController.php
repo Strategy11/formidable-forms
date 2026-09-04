@@ -99,7 +99,7 @@ class test_FrmFormsController extends FrmUnitTest {
 				'unique_msg_' . $field->id         => '',
 			);
 
-			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );
+			$_POST['field_options'] = array_merge( FrmAppHelper::get_post_param( 'field_options', '', 'sanitize_text_field' ), $field_options );
 			$_REQUEST               = $_POST;
 		}
 	}
@@ -122,7 +122,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			}
 
 			// Check default value
-			$posted_val = $_POST[ 'default_value_' . $field->id ];
+			$posted_val = FrmAppHelper::get_post_param( 'default_value_' . $field->id, '', 'sanitize_text_field' );
 			$actual_val = $field->default_value;
 			$this->assertSame( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
 		}

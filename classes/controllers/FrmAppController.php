@@ -801,9 +801,9 @@ class FrmAppController {
 			self::include_info_overlay();
 		} elseif ( FrmAppHelper::is_view_builder_page() ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
-				$post_type = sanitize_title( wp_unslash( $_REQUEST['post_type'] ) );
-			} elseif ( isset( $_REQUEST['post'] ) && absint( $_REQUEST['post'] ) ) {
-				$post = get_post( absint( wp_unslash( $_REQUEST['post'] ) ) );
+				$post_type = FrmAppHelper::get_param( 'post_type', '', 'request', 'sanitize_title' );
+			} elseif ( isset( $_REQUEST['post'] ) && FrmAppHelper::get_param( 'post', '', 'request', 'absint' ) ) {
+				$post = get_post( FrmAppHelper::get_param( 'post', '', 'request', 'absint' ) );
 
 				if ( ! $post ) {
 					return;
