@@ -296,7 +296,7 @@ class FrmStrpLiteAuth {
 		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$form = json_decode( FrmAppHelper::get_post_param( 'form', '', 'sanitize_text_field' ), true );
+		$form = json_decode( stripslashes( $_POST['form'] ), true );
 
 		if ( ! is_array( $form ) ) {
 			wp_die();

@@ -79,7 +79,7 @@ class FrmEntryValidate {
 	 */
 	private static function maybe_fix_item_meta() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		if ( ! isset( $_POST['item_meta'] ) || ! is_array( FrmAppHelper::get_post_param( 'item_meta', '', 'sanitize_text_field' ) ) ) {
+		if ( ! isset( $_POST['item_meta'] ) || ! is_array( $_POST['item_meta'] ) ) {
 			$_POST['item_meta'] = array();
 		}
 	}

@@ -682,7 +682,7 @@ class FrmStylesHelper {
 
 				// Sanitizing is done later.
 				//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-				$posted = FrmAppHelper::get_post_param( 'frm_style_setting', '', 'sanitize_text_field' );
+				$posted = wp_unslash( $_POST['frm_style_setting'] );
 
 				if ( is_array( $posted ) ) {
 					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
@@ -949,7 +949,7 @@ class FrmStylesHelper {
 	 */
 	public static function previewing_style() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$ajax_change = isset( $_POST['action'] ) && FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ) === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
+		$ajax_change = FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ) === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}

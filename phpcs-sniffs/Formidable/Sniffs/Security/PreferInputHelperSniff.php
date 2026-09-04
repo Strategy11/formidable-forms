@@ -13,12 +13,16 @@
  * $title = FrmAppHelper::get_post_param( 'title', '', 'sanitize_text_field' );
  * $page  = FrmAppHelper::simple_get( 'page', 'sanitize_text_field' );
  *
- * When the read is already wrapped in a sanitizer the fix reuses that sanitizer, so the
- * replacement behaves the same. When there is no sanitizer to copy the fix falls back to
- * $defaultSanitize, which does change behaviour: the value gets unslashed and sanitized where
- * it previously was not. That is the point of the rule, but it means a raw payload that must
- * survive intact, JSON in particular, needs a different sanitizer picked by hand. Review those
- * hunks after running phpcbf.
+ * By default the sniff only reports reads it can rewrite faithfully, so phpcbf output is always
+ * behaviour preserving. That means the read has to be wrapped in a sanitizer already, which the
+ * fix then reuses. Three shapes are skipped:
+ *
+ * - a read with no sanitizer to copy, because the fix would have to invent one. Enable
+ *   $includeUnsanitizedReads to report and fix these under the separate Unsanitized* codes.
+ * - a read whose line carries a phpcs:ignore for InputNotSanitized or MissingUnslash, where not
+ *   sanitizing was a deliberate decision.
+ * - a read passed straight to is_array() or similar, where the helper cannot change the answer
+ *   and would recursively sanitize the whole payload for nothing.
  *
  * @package Formidable\Sniffs\Security
  */
@@ -92,9 +96,65 @@ class PreferInputHelperSniff implements Sniff {
 	/**
 	 * Sanitizer to use when the read is not already wrapped in one.
 	 *
+	 * Only used when $includeUnsanitizedReads is enabled.
+	 *
 	 * @var string
 	 */
 	public $defaultSanitize = 'sanitize_text_field';
+
+	/**
+	 * Whether to report reads that have no sanitizer for the fix to copy.
+	 *
+	 * Off by default. When the read is already wrapped in a sanitizer the fix reuses it and is
+	 * faithful by construction. With nothing to copy the fix has to pick $defaultSanitize
+	 * instead, which changes behaviour: a payload that has to survive intact, JSON or an email
+	 * body or custom CSS, gets flattened by sanitize_text_field. Rather than report something it
+	 * cannot fix faithfully, the sniff stays quiet. Turn this on deliberately, then read every
+	 * hunk phpcbf produces under the Unsanitized* codes:
+	 *
+	 * <rule ref="Formidable.Security.PreferInputHelper">
+	 *     <properties>
+	 *         <property name="includeUnsanitizedReads" value="true" />
+	 *     </properties>
+	 * </rule>
+	 *
+	 * @var bool
+	 */
+	public $includeUnsanitizedReads = false;
+
+	/**
+	 * phpcs:ignore codes that mark a read as deliberately left unsanitized.
+	 *
+	 * Where a developer has silenced the WordPress input sniffs on a line, not sanitizing was a
+	 * decision, and swapping in a sanitizing helper would undo it.
+	 *
+	 * @var string[]
+	 */
+	private $sanitizeIgnoreMarkers = array(
+		'InputNotSanitized',
+		'MissingUnslash',
+	);
+
+	/**
+	 * Functions that only inspect the shape of a value, never use it.
+	 *
+	 * `is_array( $_POST['item_meta'] )` gets the same answer through the helper, at the cost of
+	 * recursively sanitizing the whole payload and discarding it, so these are left alone.
+	 *
+	 * @var string[]
+	 */
+	private $typeChecks = array(
+		'count',
+		'is_array',
+		'is_bool',
+		'is_float',
+		'is_int',
+		'is_numeric',
+		'is_object',
+		'is_scalar',
+		'is_string',
+		'sizeof',
+	);
 
 	/**
 	 * Base names of files that are allowed to read the superglobals directly.
@@ -182,8 +242,23 @@ class PreferInputHelperSniff implements Sniff {
 			return;
 		}
 
+		if ( $this->isTypeCheckArgument( $phpcsFile, $stackPtr, $subscript['end'] ) ) {
+			return;
+		}
+
+		if ( $this->hasSanitizeIgnore( $phpcsFile, $stackPtr ) ) {
+			return;
+		}
+
 		$wrapper  = $this->getWrappingCalls( $phpcsFile, $stackPtr, $subscript['end'] );
 		$guessing = null === $wrapper['sanitizer'];
+
+		// Nothing to copy means the fix would have to invent a sanitizer, so stay quiet unless
+		// that was asked for. Everything this sniff reports, it can fix faithfully.
+		if ( $guessing && ! $this->includeUnsanitizedReads ) {
+			return;
+		}
+
 		$sanitize = $guessing ? $this->defaultSanitize : $wrapper['sanitizer'];
 		$keyExpr  = $this->getKeyExpression( $phpcsFile, $subscript['open'] );
 
@@ -452,6 +527,95 @@ class PreferInputHelperSniff implements Sniff {
 			}
 
 			if ( in_array( $tokens[ $before ]['code'], $checkTokens, true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determine if the read is the only argument to a function that just inspects its shape.
+	 *
+	 * @param File $phpcsFile    The file being scanned.
+	 * @param int  $stackPtr     The superglobal token.
+	 * @param int  $subscriptEnd The last token of the subscript chain.
+	 *
+	 * @return bool
+	 */
+	private function isTypeCheckArgument( File $phpcsFile, $stackPtr, $subscriptEnd ) {
+		$call = $this->getEnclosingSingleArgumentCall( $phpcsFile, $stackPtr, $subscriptEnd );
+
+		if ( null === $call ) {
+			return false;
+		}
+
+		return in_array( $call['name'], $this->typeChecks, true );
+	}
+
+	/**
+	 * Determine if a phpcs:ignore nearby marks the read as deliberately unsanitized.
+	 *
+	 * Looks at the read's own line and the line above it, which is where the annotation sits in
+	 * practice, either trailing the statement or on its own line above.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The superglobal token.
+	 *
+	 * @return bool
+	 */
+	private function hasSanitizeIgnore( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$line   = $tokens[ $stackPtr ]['line'];
+
+		for ( $ptr = $stackPtr; $ptr >= 0; $ptr-- ) {
+			if ( $tokens[ $ptr ]['line'] < $line - 1 ) {
+				break;
+			}
+
+			if ( $this->isSanitizeIgnoreComment( $tokens[ $ptr ] ) ) {
+				return true;
+			}
+		}
+
+		for ( $ptr = $stackPtr + 1; $ptr < $phpcsFile->numTokens; $ptr++ ) {
+			if ( $tokens[ $ptr ]['line'] > $line ) {
+				break;
+			}
+
+			if ( $this->isSanitizeIgnoreComment( $tokens[ $ptr ] ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determine if a token is a phpcs:ignore comment naming one of the input sniffs.
+	 *
+	 * @param array $token The token to inspect.
+	 *
+	 * @return bool
+	 */
+	private function isSanitizeIgnoreComment( $token ) {
+		$commentCodes = array( T_COMMENT );
+
+		// PHPCS 3.2+ gives its own annotations a dedicated token.
+		if ( defined( 'T_PHPCS_IGNORE' ) ) {
+			$commentCodes[] = T_PHPCS_IGNORE;
+		}
+
+		if ( ! in_array( $token['code'], $commentCodes, true ) ) {
+			return false;
+		}
+
+		if ( false === strpos( $token['content'], 'phpcs:ignore' ) ) {
+			return false;
+		}
+
+		foreach ( $this->sanitizeIgnoreMarkers as $marker ) {
+			if ( false !== strpos( $token['content'], $marker ) ) {
 				return true;
 			}
 		}

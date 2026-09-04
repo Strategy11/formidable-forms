@@ -236,8 +236,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return bool
 	 */
 	protected function should_print_hidden_sub_fields() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		return FrmAppHelper::is_form_builder_page() || FrmAppHelper::doing_ajax() && isset( $_POST['action'] ) && 'frm_insert_field' === FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' );
+		return FrmAppHelper::is_form_builder_page() || FrmAppHelper::doing_ajax() && 'frm_insert_field' === FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' );
 	}
 
 	/**

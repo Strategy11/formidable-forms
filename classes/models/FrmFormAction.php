@@ -478,13 +478,13 @@ class FrmFormAction {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST[ $this->option_name ] ) || ! is_array( FrmAppHelper::get_post_param( $this->option_name, '', 'sanitize_text_field' ) ) ) {
+		if ( ! isset( $_POST[ $this->option_name ] ) || ! is_array( $_POST[ $this->option_name ] ) ) {
 			return null;
 		}
 
 		// Sanitizing removes scripts and <email> type of values.
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-		$settings = FrmAppHelper::get_post_param( $this->option_name, '', 'sanitize_text_field' );
+		$settings = wp_unslash( $_POST[ $this->option_name ] );
 
 		$action_ids = array();
 

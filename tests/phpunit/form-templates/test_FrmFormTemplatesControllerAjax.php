@@ -28,7 +28,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 			'operation'          => 'add',
 			'is_custom_template' => 'false',
 		);
-		$response = $this->trigger_action( FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ) );
+		$response = $this->trigger_action( $_POST['action'] );
 
 		// Decode the response and get the favorite templates.
 		$response_favorites = json_decode( $response, true )['data'];
@@ -51,7 +51,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 			'name'   => 'Contact Us Template',
 			'desc'   => 'Lorem ipsum dolor sit amet consectetur.',
 		);
-		$response = $this->trigger_action( FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ) );
+		$response = $this->trigger_action( $_POST['action'] );
 
 		// Decode the response to an array.
 		$response_array = json_decode( $response, true );
