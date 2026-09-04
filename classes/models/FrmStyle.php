@@ -539,7 +539,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @return stdClass|WP_Post
+	 * @return stdClass|WP_Post|null Null when the style does not exist, or when no default style is set.
 	 */
 	public function get_one() {
 		if ( 'default' === $this->id ) {
