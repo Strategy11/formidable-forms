@@ -285,7 +285,7 @@ class FrmFormsController {
 		}
 
 		// Handle captcha field inclusion
-		$include_captcha = '1' === FrmAppHelper::get_post_param( 'frm_include_captcha', '', 'sanitize_text_field' );
+		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		self::handle_captcha_field( $id, $include_captcha );
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );

@@ -949,7 +949,7 @@ class FrmStylesHelper {
 	 */
 	public static function previewing_style() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$ajax_change = FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ) === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}

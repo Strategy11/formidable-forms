@@ -802,16 +802,15 @@ class FrmAppController {
 		} elseif ( FrmAppHelper::is_view_builder_page() ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
 				$post_type = FrmAppHelper::get_param( 'post_type', '', 'request', 'sanitize_title' );
-			} elseif ( isset( $_REQUEST['post'] ) && FrmAppHelper::get_param( 'post', '', 'request', 'absint' ) ) {
-				$post = get_post( FrmAppHelper::get_param( 'post', '', 'request', 'absint' ) );
+			} else {
+				$post_id = FrmAppHelper::get_param( 'post', '', 'request', 'absint' );
+				$post    = $post_id ? get_post( $post_id ) : null;
 
 				if ( ! $post ) {
 					return;
 				}
 
 				$post_type = $post->post_type;
-			} else {
-				return;
 			}
 
 			if ( $post_type === 'frm_display' ) {

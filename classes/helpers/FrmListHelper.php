@@ -963,7 +963,7 @@ class FrmListHelper {
 		$current_url     = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
 		$current_url     = remove_query_arg( 'paged', $current_url );
 		$current_orderby = FrmAppHelper::simple_get( 'orderby', 'sanitize_text_field' );
-		$current_order   = 'desc' === FrmAppHelper::simple_get( 'order', 'sanitize_text_field' ) ? 'desc' : 'asc';
+		$current_order   = isset( $_GET['order'] ) && 'desc' === $_GET['order'] ? 'desc' : 'asc';
 
 		FrmAppController::apply_saved_sort_preference( $current_orderby, $current_order );
 
