@@ -281,6 +281,29 @@
 	padding: 12px !important;
 }
 
+// An action that needs a plan upgrade reads as disabled: desaturated logo, muted
+// text and a flat icon box, so what this license can't use is obvious at a glance.
+// The .frm_actions_list prefix is needed to outrank the card rules above.
+.frm_actions_list .frm-card-item.frm-action-locked {
+
+	.frm-border-icon {
+		border-color: var(--grey-200);
+
+		.frmsvg {
+			filter: grayscale(1);
+			opacity: 0.6;
+		}
+	}
+
+	h3 {
+		color: var(--grey-500);
+	}
+
+	h3 + p {
+		color: var(--grey-400);
+	}
+}
+
 .frm-action.frm-card-item h3 + p {
 	font-size: 13px;
 }
