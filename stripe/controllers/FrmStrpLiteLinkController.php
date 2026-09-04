@@ -146,11 +146,34 @@ class FrmStrpLiteLinkController {
 
 		self::maybe_update_intent( $intent, $action, $entry );
 
-		$frm_payment->update( $payment->id, $new_payment_values );
-		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+		// A webhook event may have already updated this payment, so check the status again before running triggers.
+		$needs_triggers = $status !== $payment->status && self::payment_status_still_needs_to_update( $payment->id, $status );
+		$updated        = $frm_payment->update( $payment->id, $new_payment_values );
+
+		if ( $needs_triggers && $updated ) {
+			FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+		}
 
 		$redirect_helper->handle_success( $entry, isset( $charge ) ? $charge->id : '' );
 		die();
+	}
+
+	/**
+	 * Check that the payment status has not been updated by another request already.
+	 * This is to avoid running the payment actions twice.
+	 *
+	 * @since x.x
+	 *
+	 * @param int    $payment_id The id of the payment to check.
+	 * @param string $status     The status the payment is about to be updated to.
+	 *
+	 * @return bool
+	 */
+	private static function payment_status_still_needs_to_update( $payment_id, $status ) {
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+
+		return $payment && $payment->status !== $status;
 	}
 
 	/**

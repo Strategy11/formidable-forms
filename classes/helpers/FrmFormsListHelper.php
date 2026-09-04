@@ -6,15 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsListHelper extends FrmListHelper {
 
 	/**
-	 * The transient name that stores data for which posts a form is embedded in.
-	 *
-	 * @since 6.32
-	 *
-	 * @var string
-	 */
-	private static $embed_posts_transient_name = 'frm_posts_contain_form';
-
-	/**
 	 * @var string
 	 */
 	public $status = '';
@@ -582,6 +573,11 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	public function column_embeds( $form ) {
+		if ( $this->column_is_hidden( 'embeds' ) ) {
+			// Locating embeds means scanning post_content, so skip it when the column is hidden.
+			return '';
+		}
+
 		$posts = $this->get_posts_contain_form( $form );
 
 		if ( ! $posts ) {
@@ -603,6 +599,25 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * Checks if a column is hidden with Screen Options.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $column_name Column name.
+	 *
+	 * @return bool
+	 */
+	private function column_is_hidden( $column_name ) {
+		$column_info = $this->get_column_info();
+
+		if ( ! isset( $column_info[1] ) || ! is_array( $column_info[1] ) ) {
+			return false;
+		}
+
+		return in_array( $column_name, $column_info[1], true );
+	}
+
+	/**
 	 * Gets posts or pages that contain the form shortcode.
 	 *
 	 * @since 6.32
@@ -612,50 +627,112 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return array
 	 */
 	private function get_posts_contain_form( $form ) {
-		$cached_posts = get_transient( self::$embed_posts_transient_name );
+		$cached_posts = FrmFormEmbedsHelper::get_cached_posts();
 
-		if ( isset( $cached_posts[ $form->id ] ) && is_array( $cached_posts[ $form->id ] ) ) {
-			return $cached_posts[ $form->id ];
+		if ( ! isset( $cached_posts[ $form->id ] ) || ! is_array( $cached_posts[ $form->id ] ) ) {
+			// A single scan covers every form listed on this page, not just this one.
+			$cached_posts = $this->fill_embed_posts_cache( $form );
 		}
 
-		$posts = $this->query_posts_contain_form( $form );
-
-		if ( ! is_array( $posts ) ) {
+		if ( ! isset( $cached_posts[ $form->id ] ) || ! is_array( $cached_posts[ $form->id ] ) ) {
 			return array();
 		}
 
-		foreach ( $posts as $post ) {
-			if ( ! property_exists( $post, 'permalink' ) ) {
-				$post->permalink = get_permalink( $post->ID );
+		// Links and title fallbacks are derived at render time, not stored. get_edit_post_link()
+		// depends on the current user, so caching it in a shared transient would hand one user's
+		// edit link to another, and a permalink cached now goes stale on any slug change.
+		return FrmFormEmbedsHelper::prepare_posts( $cached_posts[ $form->id ] );
+	}
+
+	/**
+	 * Scans for embeds once and caches the result for every form listed on the current page.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form The form whose column is currently rendering.
+	 *
+	 * @return array Embed posts keyed by form ID.
+	 */
+	private function fill_embed_posts_cache( $form ) {
+		$cached_posts = FrmFormEmbedsHelper::get_cached_posts();
+		$search_map   = array();
+		$forms        = array();
+
+		foreach ( $this->get_forms_to_scan( $form ) as $form_id => $form_to_scan ) {
+			if ( isset( $cached_posts[ $form_id ] ) && is_array( $cached_posts[ $form_id ] ) ) {
+				continue;
 			}
 
-			if ( ! property_exists( $post, 'edit_link' ) ) {
-				$post->edit_link = get_edit_post_link( $post->ID );
-			}
-
-			// Ensure post_name is not null or the string "null"
-			if ( ! isset( $post->post_name ) ) {
-				$post->post_name = '';
-			}
-
-			// Ensure post_title is not null or the string "null"
-			if ( ! isset( $post->post_title ) ) {
-				$post->post_title = '';
-			}
-
-			if ( '' === $post->post_title ) {
-				$post->post_title = __( '(no title)', 'formidable' );
-			}
-		}//end foreach
-
-		if ( ! is_array( $cached_posts ) ) {
-			$cached_posts = array();
+			$search_map[ $form_id ] = $this->get_search_strings_for_form( $form_id );
+			$forms[ $form_id ]      = $form_to_scan;
 		}
 
-		$cached_posts[ $form->id ] = $posts;
-		set_transient( self::$embed_posts_transient_name, $cached_posts, DAY_IN_SECONDS );
+		if ( ! $forms ) {
+			return $cached_posts;
+		}
 
-		return $posts;
+		$matched = FrmFormEmbedsHelper::match_candidate_posts( $search_map );
+
+		foreach ( $forms as $form_id => $form_to_scan ) {
+			$posts                    = $this->filter_embed_posts( $matched[ $form_id ], $form_to_scan );
+			$cached_posts[ $form_id ] = FrmFormEmbedsHelper::slim_posts( $posts );
+		}
+
+		FrmFormEmbedsHelper::save_cached_posts( $cached_posts );
+
+		return $cached_posts;
+	}
+
+	/**
+	 * Gets every form rendered on the current list page, keyed by form ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form The form whose column is currently rendering.
+	 *
+	 * @return array
+	 */
+	private function get_forms_to_scan( $form ) {
+		$forms = array( $form->id => $form );
+
+		if ( ! is_array( $this->items ) ) {
+			return $forms;
+		}
+
+		foreach ( $this->items as $item ) {
+			if ( is_object( $item ) && isset( $item->id ) ) {
+				$forms[ $item->id ] = $item;
+			}
+		}
+
+		return $forms;
+	}
+
+	/**
+	 * Applies the frm_get_posts_contain_form filter to a form's embed posts.
+	 *
+	 * @since x.x
+	 *
+	 * @param array    $posts Posts that embed the form.
+	 * @param stdClass $form  Form object.
+	 *
+	 * @return array
+	 */
+	private function filter_embed_posts( $posts, $form ) {
+		/**
+		 * @since 6.32
+		 *
+		 * @param stdClass[] $posts
+		 * @param array      $args
+		 */
+		$filtered_posts = apply_filters( 'frm_get_posts_contain_form', $posts, compact( 'form' ) );
+
+		if ( ! is_array( $filtered_posts ) ) {
+			_doing_it_wrong( 'frm_get_posts_contain_form', 'Filter should return an array.', '6.32' );
+			return $posts;
+		}
+
+		return $filtered_posts;
 	}
 
 	/**
@@ -681,90 +758,72 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string[]
 	 */
 	protected function get_base_search_strings_for_form( $form_id ) {
-		return array(
-			'[formidable id=' . $form_id . ']',
-			'[formidable id=' . $form_id . ' ',
-			'[formidable id="' . $form_id . '"',
-			"[formidable id='" . $form_id . "'",
+		$strings = array(
 			'<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"',
 		);
+
+		// The shortcode renders a form from its key just as happily as from its ID, in either
+		// attribute, so all four spellings have to be searched or those pages never count.
+		$identifiers = array( $form_id );
+		$form_key    = FrmForm::get_key_by_id( $form_id );
+
+		if ( $form_key && $form_key !== (string) $form_id ) {
+			$identifiers[] = $form_key;
+		}
+
+		foreach ( $identifiers as $identifier ) {
+			foreach ( array( 'id', 'key' ) as $att ) {
+				$strings[] = '[formidable ' . $att . '=' . $identifier . ']';
+				$strings[] = '[formidable ' . $att . '=' . $identifier . ' ';
+				$strings[] = '[formidable ' . $att . '="' . $identifier . '"';
+				$strings[] = '[formidable ' . $att . "='" . $identifier . "'";
+			}
+		}
+
+		return $strings;
 	}
 
 	/**
-	 * Queries for posts that contain the form shortcode.
-	 *
-	 * @param stdClass $form Form object.
-	 *
-	 * @return array
-	 */
-	private function query_posts_contain_form( $form ) {
-		$form_id = $form->id;
-		global $wpdb;
-		$query_strings = $this->get_search_strings_for_form( $form_id );
-		$like_where    = array();
-
-		foreach ( $query_strings as $query_string ) {
-			$like_where[] = $wpdb->remove_placeholder_escape( $wpdb->prepare( 'post_content LIKE %s', '%' . $query_string . '%' ) );
-		}
-
-		$like_where = implode( ' OR ', $like_where );
-		$where      = "post_type IN ('post', 'page') AND ($like_where)";
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$posts = $wpdb->get_results( "SELECT ID,post_title,post_name FROM $wpdb->posts WHERE $where" );
-
-		if ( ! is_array( $posts ) ) {
-			return array();
-		}
-
-		/**
-		 * @since 6.32
-		 *
-		 * @param stdClass[] $posts
-		 * @param array      $args
-		 */
-		$filtered_posts = apply_filters( 'frm_get_posts_contain_form', $posts, compact( 'form' ) );
-
-		if ( ! is_array( $filtered_posts ) ) {
-			_doing_it_wrong( 'frm_get_posts_contain_form', 'Filter should return an array.', '6.32' );
-			return $posts;
-		}
-
-		return $filtered_posts;
-	}
-
-	/**
-	 * Maybe clear the embed posts transient.
+	 * Maybe clear the embed posts transient when a post is inserted.
 	 *
 	 * @since 6.32
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  True when an existing post was updated rather than created.
 	 *
 	 * @return void
 	 */
-	public static function maybe_clear_embed_posts_transient( $post_id, $post ) {
-		if ( str_contains( $post->post_content, '[formidable ' ) || str_contains( $post->post_content, '<!-- wp:formidable/simple-form ' ) ) {
-			// New post contains the form shortcode, so clear the embed posts transient.
-			delete_transient( self::$embed_posts_transient_name );
-			return;
-		}
+	public static function maybe_clear_embed_posts_transient( $post_id, $post, $update = false ) {
+		FrmFormEmbedsHelper::maybe_clear_on_insert( $post_id, $post, $update );
+	}
 
-		$cached_posts = get_transient( self::$embed_posts_transient_name );
+	/**
+	 * Maybe clear the embed posts transient when a post is updated.
+	 *
+	 * @since x.x
+	 *
+	 * @param int     $post_id     Post ID.
+	 * @param WP_Post $post_after  Post object after the update.
+	 * @param WP_Post $post_before Post object before the update.
+	 *
+	 * @return void
+	 */
+	public static function maybe_clear_embed_posts_transient_on_update( $post_id, $post_after, $post_before ) {
+		FrmFormEmbedsHelper::maybe_clear_on_update( $post_id, $post_after, $post_before );
+	}
 
-		if ( ! is_array( $cached_posts ) ) {
-			return;
-		}
-
-		// If the new post data of a cached post doesn't contain the Formidable forms, clear the transient.
-		foreach ( $cached_posts as $posts ) {
-			foreach ( $posts as $post_data ) {
-				if ( intval( $post_data->ID ) === intval( $post_id ) ) {
-					// This post contains the form shortcode before updating, so clear the embed posts transient.
-					delete_transient( self::$embed_posts_transient_name );
-					return;
-				}
-			}
-		}
+	/**
+	 * Maybe clear the embed posts transient when a post is trashed, untrashed or deleted.
+	 *
+	 * @since x.x
+	 *
+	 * @param int          $post_id Post ID.
+	 * @param WP_Post|null $post    Post object, when the hook provides one.
+	 *
+	 * @return void
+	 */
+	public static function clear_embed_posts_transient_for_post( $post_id, $post = null ) {
+		FrmFormEmbedsHelper::maybe_clear_for_post( $post_id, $post );
 	}
 }

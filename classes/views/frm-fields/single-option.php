@@ -21,7 +21,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <li id="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-optkey="<?php echo esc_attr( $opt_key ); ?>" class="frm_single_option <?php echo $opt_key === '000' ? 'frm_hidden frm_option_template' : ''; ?>">
 	<?php
-	$show_icons = empty( $field['do_not_include_icons'] );
+	$show_icons  = empty( $field['do_not_include_icons'] );
+	$is_template = '000' === $opt_key;
+
+	/**
+	 * The add and remove buttons are identical on every option of every field, and no one looks at
+	 * them until that field is opened, so leave them out alongside the icons. The hidden template
+	 * row keeps a copy either way, because that is what the builder fills the real rows in from.
+	 *
+	 * @see addOptionControlsToField() in js/src/admin/admin.js
+	 */
+	$show_option_controls = $show_icons || $is_template;
 
 	if ( $show_icons ) {
 		FrmAppHelper::icon_by_class( 'frmfont frm_drag_icon frm-drag' );
@@ -34,6 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][label]" value="<?php echo esc_attr( $opt ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option <?php echo esc_attr( $field['separate_value'] ? 'frm_with_key' : '' ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key . '-label' ); ?>" data-frmchange="trim,updateOption,checkUniqueOpt" />
 
+	<?php if ( $show_option_controls ) : ?>
 	<a href="javascript:void(0)" class="frm_remove_tag<?php echo ! empty( $options_count ) && $options_count > 1 ? '' : ' frm_disabled'; ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-removeid="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-removemore="#frm_<?php echo esc_attr( $default_type . '_' . $field['id'] . '-' . $opt_key ); ?>" data-showlast="#frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon frm_svg15' ); ?>
 	</a>
@@ -41,6 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm_add_opt frm_form_field" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus1_icon frm_add_tag frm_svg15' ); ?>
 	</a>
+	<?php endif; ?>
 
 	<span class="frm_option_key frm-with-right-icon field_<?php echo esc_attr( $field['id'] ); ?>_option_key<?php echo esc_attr( $field['separate_value'] ? '' : ' frm_hidden' ); ?>">
 		<?php if ( in_array( $default_type, array( 'radio', 'checkbox' ), true ) ) : ?>

@@ -60,7 +60,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 		}
 	} elseif ( ! FrmAppHelper::pro_is_installed() ) {
 		?>
-			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary" target="_blank" rel="noopener">
 				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
 			</a>
 		<?php

@@ -84,7 +84,7 @@ class FrmSquareLiteAppController {
 			wp_send_json_error( __( 'No Square actions found for this form', 'formidable' ) );
 		}
 
-		$action               = reset( $actions );
+		$action               = self::get_action_for_verification( $actions );
 		$verification_details = array(
 			'amount'         => self::get_amount_value_for_verification( $action ),
 			'billingContact' => self::get_billing_contact( $action ),
@@ -101,7 +101,42 @@ class FrmSquareLiteAppController {
 	}
 
 	/**
+	 * Get the action that the submission will actually trigger.
+	 *
+	 * Square verifies a single amount, so when a form has more than one Square action,
+	 * the conditional logic of each action is checked against the posted values. Without
+	 * this, the first action always wins and the buyer gets verified for an amount that
+	 * a different action is going to charge.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array $actions Payment actions from FrmSquareLiteActionsController::get_actions_before_submit. Never empty.
+	 *
+	 * @return WP_Post
+	 */
+	private static function get_action_for_verification( $actions ) {
+		if ( count( $actions ) > 1 ) {
+			$entry = self::generate_false_entry();
+
+			foreach ( $actions as $action ) {
+				if ( ! FrmFormAction::action_conditions_met( $action, $entry ) ) {
+					// Conditions were met, so this is the action that will charge the buyer.
+					return $action;
+				}
+			}
+		}
+
+		// Either there is a single action, or no action passed its conditional logic.
+		return reset( $actions );
+	}
+
+	/**
 	 * Get the amount value for verification.
+	 *
+	 * Square's verifyBuyer expects the amount as a decimal string in the currency's
+	 * major units ("20.00" for twenty pounds), not the smallest denomination that the
+	 * Payments API uses. FrmSquareLiteActionsController::prepare_amount returns the
+	 * smallest denomination, so the parent is called here instead.
 	 *
 	 * @param WP_Post $action
 	 *
@@ -111,7 +146,8 @@ class FrmSquareLiteAppController {
 		$amount = $action->post_content['amount'];
 
 		if ( ! str_contains( $amount, '[' ) ) {
-			return $amount;
+			$currency = $action->post_content['currency'];
+			return FrmTransLiteActionsController::prepare_amount( $amount, compact( 'currency' ) );
 		}
 
 		$form = FrmForm::getOne( $action->menu_order );
@@ -123,7 +159,7 @@ class FrmSquareLiteAppController {
 		// Update amount based on field shortcodes.
 		$entry = self::generate_false_entry();
 
-		return FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+		return FrmTransLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 	}
 
 	/**
@@ -277,7 +313,9 @@ class FrmSquareLiteAppController {
 		$entry->post_id  = 0;
 		$entry->id       = 0;
 		$entry->item_key = '';
-		$entry->metas    = array();
+		// Shortcode replacement reads ip off of the entry, so it cannot be left unset.
+		$entry->ip    = '';
+		$entry->metas = array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {

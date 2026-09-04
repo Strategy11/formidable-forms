@@ -1370,8 +1370,7 @@ class FrmAppHelper {
 			unset( $atts['echo'] );
 		}
 
-		$html_atts = self::array_to_html_params( $atts );
-		$icon      = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
 
 		// Replace icons that have been removed or renamed.
 		$deprecated = array(
@@ -1385,25 +1384,53 @@ class FrmAppHelper {
 			$class = str_replace( $icon, $deprecated[ $icon ], $class );
 		}
 
-		if ( $icon === $class ) {
-			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
-		} else {
+		$is_font_icon = $icon === $class;
+
+		if ( ! $is_font_icon ) {
 			$class = str_contains( $icon, ' ' ) ? ' ' . $icon : '';
 
 			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
-
-			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use href="#' . esc_attr( $icon ) . '" /></svg>';
 		}
 
-		if ( $echo ) {
-			echo self::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( $atts ) {
+			// A caller passed attributes, so kses still has to decide which of them survive. Its
+			// allowlist comes from safe_html() through the frm_striphtml_allowed_tags filter, and
+			// add-ons widen it around their own icons, so there is no fixed list to check against.
+			$html_atts = self::array_to_html_params( $atts );
+			$markup    = $is_font_icon
+			? '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>'
+			: '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use href="#' . esc_attr( $icon ) . '" /></svg>';
+
+			if ( ! $echo ) {
+				return $markup;
+			}
+
+			echo self::kses_icon( $markup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return null;
 		}
 
-		return $icon;
+		/**
+		 * With no attributes from the caller, the tag is nothing but this method's own markup
+		 * around an escaped class and icon id, so there is nothing left for kses to decide and it
+		 * can be skipped. Echoing the pieces rather than a finished string keeps that safe to the
+		 * escaping sniff without an annotation.
+		 *
+		 * This is the path the form builder takes for most of the tens of thousands of icons it
+		 * renders on a large form, and the kses pass was most of what each one cost.
+		 */
+		$callback = function () use ( $is_font_icon, $class, $icon ) {
+			if ( $is_font_icon ) {
+				echo '<i class="' . esc_attr( $class ) . '"></i>';
+				return;
+			}
+
+			echo '<svg class="frmsvg' . esc_attr( $class ) . '"><use href="#' . esc_attr( $icon ) . '" /></svg>';
+		};
+
+		return self::clip( $callback, $echo );
 	}
 
 	/**
@@ -1632,7 +1659,7 @@ class FrmAppHelper {
 				printf(
 					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
 					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$s%2$s%3$s.', 'formidable' ),
-					'<a href="' . esc_url( $upgrade_link ) . '">',
+					'<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener">',
 					esc_html( $cta_text ),
 					'</a>'
 				);
