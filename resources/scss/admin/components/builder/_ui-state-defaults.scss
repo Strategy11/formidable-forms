@@ -108,7 +108,11 @@
 		> .frm_primary_label {
 			order: 1;
 			transition: 0.15s color ease;
-			flex: 1 1 auto;
+
+			/* Basis 0, not auto. The label is a block element filling the row, so an auto
+			   basis resolved to the container's full width and the icons wrapped to a second
+			   line at every card size — not just narrow ones. */
+			flex: 1 1 0%;
 			min-width: 0;
 			margin-bottom: 0;
 		}
