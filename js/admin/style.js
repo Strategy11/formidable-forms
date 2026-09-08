@@ -785,6 +785,12 @@
 		// otherwise run past the bottom of the panel it scrolls in.
 		hamburgerMenu.addEventListener( 'shown.bs.dropdown', () => {
 			const scroller = hamburgerMenu.closest( '#frm_style_sidebar' ) || document.documentElement;
+
+			// Measure from the default downward position. The class survives the close,
+			// so leaving it on would measure the already-corrected menu, conclude it
+			// fits, and drop it back below — every second open would be wrong.
+			dropdownMenu.classList.remove( 'frm-dropdown-menu-above' );
+
 			const overflowsBelow = dropdownMenu.getBoundingClientRect().bottom > scroller.getBoundingClientRect().bottom;
 			dropdownMenu.classList.toggle( 'frm-dropdown-menu-above', overflowsBelow );
 		} );
