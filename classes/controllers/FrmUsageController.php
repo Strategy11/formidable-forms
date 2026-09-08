@@ -54,6 +54,21 @@ class FrmUsageController {
 	}
 
 	/**
+	 * Registers the filter that adds our custom cron schedule.
+	 *
+	 * The filter callback translates the schedule label, and 'cron_schedules' can be
+	 * applied at any point in the request, so the filter is only added once the text
+	 * domain has been loaded on init.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function add_schedules_filter() {
+		add_filter( 'cron_schedules', self::class . '::add_schedules' );
+	}
+
+	/**
 	 * Adds once weekly to the existing schedules.
 	 *
 	 * @since 3.06.04

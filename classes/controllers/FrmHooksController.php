@@ -104,7 +104,8 @@ class FrmHooksController {
 		// Simple Blocks Controller.
 		add_action( 'init', 'FrmSimpleBlocksController::register_simple_form_block' );
 
-		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
+		// Registered on init because the callback translates, and at 0 so it beats _wp_cron() on init.
+		add_action( 'init', 'FrmUsageController::add_schedules_filter', 0 );
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
 
 		/**
