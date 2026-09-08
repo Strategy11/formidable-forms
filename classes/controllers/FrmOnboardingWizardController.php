@@ -126,22 +126,27 @@ class FrmOnboardingWizardController {
 	public static function load_admin_hooks() {
 		self::set_page_url();
 		add_action( 'admin_init', self::class . '::do_admin_redirects' );
-		add_action( 'init', self::class . '::load_translated_admin_hooks' );
+		self::load_translated_admin_hooks();
 	}
 
 	/**
 	 * Initializes the hooks that depend on translated strings.
 	 *
-	 * These run on init rather than with the rest of the admin hooks because
-	 * add_wizard_to_floating_links() translates, and maybe_load_page() reads the inbox
-	 * option, which applies that filter. Translating before the text domain is loaded
-	 * triggers a _load_textdomain_just_in_time notice in WordPress 6.7+.
+	 * Defers itself to init when called earlier, because add_wizard_to_floating_links()
+	 * translates and maybe_load_page() reads the inbox option, which applies that filter.
+	 * Translating before the text domain is loaded triggers a _load_textdomain_just_in_time
+	 * notice in WordPress 6.7+.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
 	public static function load_translated_admin_hooks() {
+		if ( ! did_action( 'init' ) ) {
+			add_action( 'init', self::class . '::load_translated_admin_hooks' );
+			return;
+		}
+
 		if ( self::has_onboarding_been_skipped() ) {
 			add_filter( 'option_frm_inbox', self::class . '::add_wizard_to_floating_links' );
 		}
