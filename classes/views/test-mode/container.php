@@ -136,7 +136,7 @@ if ( ! empty( $should_show_warning ) ) {
 		<?php esc_html_e( 'Reset', 'formidable' ); ?>
 	</a>
 	<?php if ( ! empty( $should_show_upsell ) ) { ?>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'test-mode' ) ); ?>" class="frm-gradient" id="frm_testmode_upgrade">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'test-mode' ) ); ?>" class="frm-gradient" id="frm_testmode_upgrade" target="_blank" rel="noopener">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_speaker_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Unlock these powerful, time saving testing features by upgrading!', 'formidable' ); ?>
 		</a>

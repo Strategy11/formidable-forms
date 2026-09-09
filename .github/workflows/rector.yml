@@ -8,6 +8,13 @@ on:
     types: [ opened, labeled, synchronize ]
 
 name: Inspections
+# Cancel superseded runs for the same branch. The group is named explicitly
+# rather than derived from github.workflow: several files share the workflow
+# name `Inspections` and would otherwise cancel each other.
+concurrency:
+  group: formidable-rector-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   runRectorInspection:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
@@ -15,8 +22,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - name: Install dependencies
-        run: composer install --dev --prefer-dist --no-progress
+      # Install only what this job runs, instead of every require-dev package.
+      # phpstan/phpstan is here for its exact pin, which is what holds Rector at
+      # 2.3.5 - resolving without it picks Rector 2.6.2, which fails this job on
+      # deprecated-rule warnings. phpunit-polyfills supplies the PHPUnit classes
+      # that rector.php's withAutoloadPaths() ends up loading.
+      # The guard fails the job if a package is renamed or dropped from
+      # composer.json, rather than silently narrowing to nothing.
+      - name: Install Rector
+        run: |
+          NEED='rector/rector phpstan/phpstan yoast/phpunit-polyfills'
+          for pkg in $NEED; do
+            jq -e --arg pkg "$pkg" '."require-dev" | has($pkg)' composer.json > /dev/null \
+              || { echo "::error::composer.json has no require-dev entry for $pkg"; exit 1; }
+          done
+          jq '{require, autoload, config, "require-dev": (."require-dev" | with_entries(select(.key as $k | $ARGS.positional | index($k))))}' \
+            composer.json --args $NEED > composer.ci.json
+          COMPOSER=composer.ci.json composer install --prefer-dist --no-progress
 
       - name: Rector check
         run: ./vendor/bin/rector process --dry-run

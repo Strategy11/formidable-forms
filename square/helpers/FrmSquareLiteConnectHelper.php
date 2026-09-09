@@ -556,17 +556,24 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * Check $_POST for live or test mode value as it can be updated in real time from Square Settings and can be configured before the update is saved.
+	 * The connect request sends a 'mode' string, and the disconnect request sends a 'testMode' flag, so check for both.
 	 *
 	 * @return string 'test' or 'live'
 	 */
 	private static function get_mode_value_from_post() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
-			return FrmSquareLiteAppHelper::active_mode();
+		if ( array_key_exists( 'mode', $_POST ) ) {
+			$mode = FrmAppHelper::get_post_param( 'mode', '', 'sanitize_text_field' );
+			return 'test' === $mode ? 'test' : 'live';
 		}
 
-		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
-		return $test_mode ? 'test' : 'live';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( array_key_exists( 'testMode', $_POST ) ) {
+			$test_mode = FrmAppHelper::get_post_param( 'testMode', '', 'absint' );
+			return $test_mode ? 'test' : 'live';
+		}
+
+		return FrmSquareLiteAppHelper::active_mode();
 	}
 
 	/**
