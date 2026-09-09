@@ -104,7 +104,6 @@ class FrmHooksController {
 		// Simple Blocks Controller.
 		add_action( 'init', 'FrmSimpleBlocksController::register_simple_form_block' );
 
-		FrmUsageController::add_schedules_filter();
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
 
 		/**
