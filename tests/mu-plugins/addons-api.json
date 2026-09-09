@@ -1,0 +1,2255 @@
+{
+  "93790": {
+    "title": "Formidable Pro",
+    "name": "Formidable Pro",
+    "display_name": "Formidable Pro",
+    "slug": "formidable-pro",
+    "version": "6.34",
+    "new_version": "6.34",
+    "location": [
+      "fp.strategy11.com/releases/formidable-pro-6.34.zip"
+    ],
+    "excerpt": "",
+    "id": 93790,
+    "released": "2010-02-01 16:27:26",
+    "categories": [
+      "Basic",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-pro/",
+    "changelog": "<h4>v6.34 - August 12, 2026</h4>\n<ul>\n<li>New: Entry searches will now show results for matches in repeater entry data, and in embedded form entry data.</li>\n<li>New: Options for inserting shortcodes into a Math calculation are now filtered to exclude field types that do not work in math calculations.</li>\n<li>New: Scale fields now support before input and after input settings for easily placing descriptions for the left and right sides of a scale field.</li>\n<li>New: The icons to toggle password visibility now use more user friendly alt text.</li>\n<li>New: Datepicker styling for Today has been updated to make it easier to tell apart Today from a selected date.</li>\n<li>Fix: File upload fields would incorrectly use the same HTML ids in some cases, resulting in invalid HTML.</li>\n<li>Fix: Range sliders would not initialize properly in cases where the field is hidden on page load.</li>\n<li>Fix: The \"Show More\" button in a rootline element would not work after a mobile viewport resize event, getting stuck in a disabled state.</li>\n<li>Fix: Date range fields would incorrectly show both range values in the end date field when selecting the range using the end date field.</li>\n<li>Fix: Temporary uploaded files would not always immediately change chmod values, allowing direct access to the file incorrectly.</li>\n<li>Fix: Lookup fields would not always correctly map new field id settings in cases where an imported Lookup field is imported before the field it is watching.</li>\n</ul>\n<h4>v6.33.1 - July 16, 2026</h4>\n<ul>\n<li>Fix: Text field lookup requests for text fields that watch lookup fields would incorrectly fail validation and get blocked.</li>\n</ul>\n<h4>v6.33 - July 14, 2026</h4>\n<ul>\n<li>Security: Additional validation has been added to block requests for dynamic and lookup fields if the current user cannot access the form.</li>\n<li>Security: Uploaded SVG files are now filtered to remove unsafe HTML on upload, and protected file URLs will now download the SVG instead of displaying it a new tab to prevent scripts from running.</li>\n<li>New: Support has been added for accessing uploaded files using gated content actions.</li>\n<li>Fix: A html_entity_decode(): Passing null to parameter #1 ($string) of type string deprecated message has been fixed.</li>\n</ul>\n",
+    "plugin": "formidable-pro/formidable-pro.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-772x250.png"
+    },
+    "search_terms": ""
+  },
+  "163248": {
+    "title": "Signature",
+    "name": "Signature",
+    "display_name": "Digital Signatures",
+    "slug": "signature",
+    "version": "3.2",
+    "new_version": "3.2",
+    "location": [
+      "fp.strategy11.com/releases/formidable-signature/formidable-signature-3.2.zip"
+    ],
+    "excerpt": "Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.",
+    "id": 163248,
+    "released": "2013-03-04 00:00:00",
+    "categories": [
+      "Business",
+      "Form Functionality",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-signature/",
+    "link": "https://formidableforms.com/downloads/signature/",
+    "changelog": "<h4>v3.2 - August 17, 2026</h4>\n<ul>\n<li>New: Form settings have been added for forms with signature fields. \"Protect all signature files in this form\" can be enabled under Form Permissions settings. A setting for \"Role required to access signature files\" has also been added.</li>\n<li>New: A new setting to \"Permanently delete old signatures when entry is deleted\" has been added. Available in signature field settings, after the \"Allow editing\" setting.</li>\n<li>New: Signature URLs are now always used instead of base64 data when inside an email, API, or Zapier action.</li>\n<li>Fix: When a signature field was scaled down, the cursor would not position properly.</li>\n<li>Fix: When using RTL styles, the buttons to toggle between drawn and typed would appear on the right, overlapping typed signatures.</li>\n</ul>\n<h4>v3.1 - August 4, 2026</h4>\n<ul>\n<li>Security: Additional validation has been added to guarantee that only signature files can be deleted, and that only a signature associated with the active entry can be deleted. Credit to Rafie Muhammad and Wordfence for sharing the issue.</li>\n<li>Fix: Signatures would not appear properly in Views when displaying a draft entry.</li>\n<li>Fix: Exported values for repeated signatures would appear blank.</li>\n<li>Fix: Stale signatures images would occasionally appear after updating the signature image.</li>\n<li>Several old deprecated functions in FrmSigAppController have been removed.</li>\n</ul>\n<h4>v3.0.6 - September 9, 2025</h4>\n<ul>\n<li>Fix: Translations are now loaded on the init hook to improve compatibility with WordPress 6.7+.</li>\n<li>Signature field settings have been updated to match field settings updates introduced in Formidable Forms v6.24.</li>\n</ul>\n",
+    "plugin": "formidable-signature/signature.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "163255": {
+    "title": "Math Captcha",
+    "name": "Math Captcha",
+    "display_name": "Math Captcha",
+    "slug": "math-captcha",
+    "version": "1.15",
+    "new_version": "1.15",
+    "location": [
+      "fp.strategy11.com/releases/formidable-math-captcha/formidable-math-captcha-1.15.zip"
+    ],
+    "excerpt": "",
+    "id": 163255,
+    "released": "2015-10-12 14:00:35",
+    "categories": [],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/math-captcha/",
+    "changelog": "",
+    "plugin": "math-captcha/math-captcha.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "163257": {
+    "title": "PayPal Standard",
+    "name": "PayPal Standard",
+    "display_name": "PayPal Standard",
+    "slug": "paypal-standard",
+    "version": "3.09",
+    "new_version": "3.09",
+    "location": [
+      "fp.strategy11.com/releases/formidable-paypal/formidable-paypal-3.09.zip"
+    ],
+    "excerpt": "Collect instant payments and recurring payments to automate your online business. Calculate a total and send customers on to PayPal.",
+    "id": 163257,
+    "released": "2012-09-04 00:00:00",
+    "categories": [
+      "Business",
+      "Ecommerce",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-paypal/",
+    "link": "https://formidableforms.com/downloads/paypal-standard/",
+    "changelog": "<h4>v3.10 - December 31, 2024</h4>\n<ul>\n<li>Fix: An Undefined array key \"expire_date\" PHP Warning has been fixed.</li>\n<li>Fix: An Uncaught TypeError: strtotime PHP Fatal error has been fixed.</li>\n</ul>\n<h4>v3.09 - July 30, 2019</h4>\n<ul>\n<li>New: Account for tax when comparing amounts with the IPN</li>\n<li>Update form action icon and color</li>\n<li>Replace call to deprecated function with FrmFieldsHelper::get_user_display_name</li>\n<li>Requires Formidable v3.0+</li>\n</ul>\n<h4>v3.08 - November 18, 2017</h4>\n<ul>\n<li>Allow field shortcodes in more payments settings so values can be set from the form: PayPal email, trial amount, repeat period, trial length. This also allows payments to go to other members on your site.</li>\n<li>Allow regular WordPress shortcodes and Formidable dynamic values (ie [email]) in addition to basic field shortcodes</li>\n</ul>\n",
+    "plugin": "formidable-paypal/formidable-paypal.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "paypal"
+  },
+  "168072": {
+    "title": "Formidable API",
+    "name": "Formidable API",
+    "display_name": "Formidable API",
+    "slug": "formidable-api",
+    "version": "2.0.1",
+    "new_version": "2.0.1",
+    "location": [
+      "fp.strategy11.com/releases/formidable-api/formidable-api-2.0.1.zip"
+    ],
+    "excerpt": "Add a full forms API for forms, form fields, views, and entries. Then send submissions to other sites with REST APIs.",
+    "id": 168072,
+    "released": "2016-06-08 00:00:00",
+    "categories": [
+      "Automation",
+      "Business",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-api/",
+    "link": "https://formidableforms.com/downloads/formidable-api/",
+    "changelog": "<h4>v2.0.1 - August 17, 2026</h4>\n<ul>\n<li>New: The Formidable MCP server will now work with older compatible MCP adapter versions included in other plugins (including WooCommerce and Rank Math) instead of showing an incompatibility message.</li>\n</ul>\n<h4>v2.0 - August 11, 2026</h4>\n<ul>\n<li>Security: Additional validation has been added to lock down where an API key can be used.</li>\n<li>Security: API keys are validated using a more secure comparison method to help prevent time based brute force attempts.</li>\n<li>New: Support for the WordPress Abilities API and an MCP adapter have been added. Now you can more easily update Formidable objects using an AI assistant.</li>\n<li>New: New v3 REST APIs have added that allow more complete control of every Formidable object including forms, fields, form actions, views, styles, and applications.</li>\n<li>New: API global settings now includes toggles for enabling and disabling REST APIs, form embeds, and MCP server functionality.</li>\n<li>New: API global settings now includes a Allowed Domains setting to make it control where form embeds work.</li>\n<li>New: API actions can now be triggered when a form is abandoned.</li>\n<li>Fix: Likert values would clear when updating with the API.</li>\n</ul>\n<h4>v1.18 - December 11, 2024</h4>\n<ul>\n<li>New: Testing API connections has been improved. Previously messages like OK would appear in red even though the connection was valid.</li>\n<li>Fix: Icons to add or remove data rows in API actions were missing after a recent v6.16.3 Formidable Forms update.</li>\n<li>Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.</li>\n<li>Fix: Files would not properly save when creating entries using the rest API when file protection was enabled.</li>\n</ul>\n",
+    "plugin": "formidable-api/formidable-api.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "168456": {
+    "title": "Upload Importer",
+    "name": "Upload Importer",
+    "display_name": "Upload Importer",
+    "slug": "upload-importer",
+    "version": "1.0.01",
+    "new_version": "1.0.01",
+    "location": [
+      "fp.strategy11.com/releases/formidable-upload-importer/formidable-upload-importer-1.0.01.zip"
+    ],
+    "excerpt": "",
+    "id": 168456,
+    "released": "2015-10-16 17:05:47",
+    "categories": [
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/upload-importer/",
+    "changelog": "<h4>v1.0.01</h4>\n<ul>\n<li>Get updates from FormidablePro.com</li>\n</ul>\n<h4>v1.0</h4>\n<ul>\n<li>Allow importing of multiple file uploads</li>\n<li>Replace deprecated mime_content_type with fileinfo</li>\n<li>Update auto-updating</li>\n</ul>\n",
+    "plugin": "upload-importer/upload-importer.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "168460": {
+    "title": "Twilio",
+    "name": "Twilio",
+    "display_name": "Twilio WordPress SMS",
+    "slug": "twilio",
+    "version": "1.09",
+    "new_version": "1.09",
+    "location": [
+      "fp.strategy11.com/releases/formidable-twilio/formidable-twilio-1.09.zip"
+    ],
+    "excerpt": "Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.",
+    "id": 168460,
+    "released": "2014-03-10 00:00:00",
+    "categories": [
+      "Business",
+      "Email &amp; SMS Marketing",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/twilio-add-on/",
+    "link": "https://formidableforms.com/downloads/twilio/",
+    "changelog": "<h4>v1.10 - August 26, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>New: Twilio requests are now logged using the logging add-on when the plugin is available.</li>\n<li>New: Twilio actions now include the option to trigger on import.</li>\n</ul>\n<h4>v1.09 - November 2, 2020</h4>\n<ul>\n<li>New: Include sending numbers from the linked Twilio account in a dropdown. This makes it much easier to send messages successfully.</li>\n<li>New: Process the [default-message] when sending in an SMS message.</li>\n<li>Add more guidance to connect to the Twilio API and show messages in the form action when connecting fails.</li>\n<li>Fix: Some responses were not getting saved correctly into radio and checkbox fields.</li>\n<li>Clean up and update the code including removing support for Formidable &lt;2.0.</li>\n</ul>\n<h4>v1.08 - January 16, 2017</h4>\n<ul>\n<li>Improved: Removed deprecated instructions and screenshot.</li>\n<li>Improved: Removed deprecated valign attribute from table HTML.</li>\n</ul>\n",
+    "plugin": "formidable-twilio/formidable-twilio.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "168463": {
+    "title": "Bootstrap",
+    "name": "Bootstrap",
+    "display_name": "Bootstrap",
+    "slug": "bootstrap",
+    "version": "2.0.1",
+    "new_version": "2.0.1",
+    "location": [
+      "fp.strategy11.com/releases/formidable-bootstrap/formidable-bootstrap-2.0.1.zip"
+    ],
+    "excerpt": "Instantly add Bootstrap styling to all your Formidable forms.",
+    "id": 168463,
+    "released": "2014-08-05 00:00:00",
+    "categories": [
+      "Creator",
+      "Form Design &amp; Display",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-bootstrap/",
+    "link": "https://formidableforms.com/downloads/bootstrap/",
+    "changelog": "<h4>v2.0.1 - August 13, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n</ul>\n<h4>v2.0 - November 30, 2023</h4>\n<ul>\n<li>New: This add on now uses Bootstrap 5 (instead of Bootstrap 3). If moving to Bootstrap 5 is causing issues, the option to change back to Bootstrap 3 is available as a dropdown option in Global Settings.</li>\n<li>New: Admin page labels for Bootstrap settings have been updated for better accessibility.</li>\n<li>Fix: Radio button options displayed as buttons had too much left padding when using Bootstrap 3.</li>\n<li>Fix: Too many migration queries were being made when there was no Bootstrap data to migrate.</li>\n<li>Fix: The ellipses used in pagination containers was appearing as text outside of the pagination when using the Bootstrap add on.</li>\n</ul>\n<h4>vv1.03 - January 18, 2021</h4>\n<ul>\n<li>This update requires action. After updating, click the link to migrate the old settings.<strong> If you save a form with Bootstrap field options before running this migration, you risk losing those settings.</strong></li>\n<li>New: Moved Prepend and Append Bootstrap field options to Before Input and After Input.</li>\n<li>New: Errors are now shown by default and can no longer be turned off</li>\n<li>New: Improved plugin security</li>\n<li>New: Added bootstrap CSS file directly into plugin for GDPR compliance</li>\n</ul>\n",
+    "plugin": "formidable-bootstrap/formidable-bootstrap.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "168468": {
+    "title": "AWeber",
+    "name": "AWeber",
+    "display_name": "AWeber",
+    "slug": "aweber",
+    "version": "2.05",
+    "new_version": "2.05",
+    "location": [
+      "fp.strategy11.com/releases/formidable-aweber/formidable-aweber-2.05.zip"
+    ],
+    "excerpt": "AWeber is a powerful email marketing service. Subscribe contacts to an AWeber mailing list when they submit your WordPress contact forms.",
+    "id": 168468,
+    "released": "2013-11-26 00:00:00",
+    "categories": [
+      "Creator",
+      "Email &amp; SMS Marketing",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-aweber/",
+    "link": "https://formidableforms.com/downloads/aweber/",
+    "changelog": "<h4>v2.05 - August 20, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>Fix: Undefined array key \"ad_tracking\" and Undefined array key \"tags\" PHP warnings have been fixed when adding a new AWeber action.</li>\n<li>The deprecated <span class=\"blob-code-inner blob-code-marker js-code-nav-pass js-skip-tagsearch\" data-code-marker=\"-\"><span class=\"pl-en x x-first\">utf8_encode</span></span> PHP function is no longer referenced.</li>\n</ul>\n<h4>v2.04 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n<li>Fix: Name fields will now properly concatenate the first and last name when sending data to AWeber.</li>\n<li>Fix: An Uncaught TypeError: preg_match(): Argument 2 must be of type string fatal error has been fixed when trying to remove accents from array data.</li>\n</ul>\n<h4>v2.03 - March 3, 2022</h4>\n<ul>\n<li>New: Subscription errors and successful subscriptions will now be logged if the Formidable Logs add on is available.</li>\n<li>Fix: Accents will now be removed from characters when subscribing to avoid issues with special accented characters breaking in names in AWeber.</li>\n</ul>\n",
+    "plugin": "formidable-aweber/formidable-aweber.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "169998": {
+    "title": "WP Multilingual",
+    "name": "WP Multilingual",
+    "display_name": "WP Multilingual",
+    "slug": "wp-multilingual",
+    "version": "1.13",
+    "new_version": "1.13",
+    "location": [
+      "fp.strategy11.com/releases/formidable-wpml/formidable-wpml-1.13.zip"
+    ],
+    "excerpt": "Translate your forms into multiple languages using the Formidable-integrated WPML plugin.",
+    "id": 169998,
+    "released": "2013-04-29 00:00:00",
+    "categories": [
+      "Business",
+      "Multilingual",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-multi-language/",
+    "link": "https://formidableforms.com/downloads/wp-multilingual/",
+    "changelog": "<h4>v1.13 - December 9, 2024</h4>\n<ul>\n<li>New: Translation settings are now broken into multiple pages when the number of strings to translate exceeds the page size. Translation settings now also include a search input.</li>\n<li>New: Lookup field options can now be translated.</li>\n<li>New: Old removed options are now removed from translation settings when a form is updated.</li>\n<li>Fix: A foreach() argument must be of type array|object, null given PHP warning triggered when duplicating fields has been fixed.</li>\n<li>Fix: A database error would occur when viewing translation settings for a form with no fields.</li>\n<li>Fix: A translation issue with product field default values that would cause total field validation to fail for single products inside of conditional sections has been fixed.</li>\n<li>Fix: Fatal errors would occur when Polylang was active.</li>\n<li>Fix: An attempt to read property \"id\" on null PHP warning has been fixed.</li>\n<li>Fix: Error messages were not properly translating in some cases.</li>\n</ul>\n<h4>v1.12 - August 8, 2022</h4>\n<ul>\n<li>New: Translations are now copied when a field or form is duplicated.</li>\n<li>New: Confirmation field validation messages can now be translated.</li>\n<li>Fix: Placeholders for Lookup dropdowns were not translating.</li>\n<li>Fix: Updated translations were not properly updating.</li>\n</ul>\n<h4>v1.11 - March 25, 2022</h4>\n<ul>\n<li>Fix: Likert column headings were not translating properly.</li>\n<li>Fix: Incorrect and occasionally duplicate field translation options were appearing on translation pages.</li>\n<li>Fix: Formidable was appearing as an option in the WPML item dropdown, and has been removed.</li>\n</ul>\n<h4>v1.04 - October 25th, 2016</h4>\n<ul>\n<li>Allow translation of Add/Remove buttons</li>\n<li>Replace some deprecated WPML function calls and constants</li>\n<li>Make sure wpml strings are updated when form is updated</li>\n<li>Do not translate default value for all field types</li>\n<li>Make sure incorrect field message is translated with ajax submit</li>\n</ul>\n<h4>v1.03.03 - March 28, 2016</h4>\n<ul>\n<li>Send the language in the ajax url differently to prevent 404s during ajax calls. This should help with duplicate submissions.</li>\n<li>Prevent a license key from being saved for another plugin</li>\n</ul>\n<h4>v1.03.02</h4>\n<ul>\n<li>Get updates from FormidablePro.com</li>\n<li>Make it compatible with the free version of Formidable</li>\n<li>Fix errors when Formidable or WPML are deactivated</li>\n<li>Include the current language during ajax calls</li>\n<li>Force an English start language for strings for v2.2.6 of the WPML strings plugin</li>\n<li>Fix the issue with the default language in WPML being set different than the string language</li>\n<li>If values in the form settings page changed, update them when going to the translation settings</li>\n<li>Make sure the \"previous\" label is translatable when drafts are not enabled</li>\n<li>Don't show strings for inactive languages</li>\n<li>Translate fields in repeating sections</li>\n</ul>\n",
+    "plugin": "formidable-wpml/formidable-wpml.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "170641": {
+    "title": "Locations",
+    "name": "Locations",
+    "display_name": "Locations",
+    "slug": "locations",
+    "version": "2.03",
+    "new_version": "2.03",
+    "location": [
+      "fp.strategy11.com/releases/formidable-locations/formidable-locations-2.03.zip"
+    ],
+    "excerpt": "Populate fields with Countries, States/Provinces, U.S. Counties, and U.S. Cities. This data can then be used in dependent Data from Entries fields.",
+    "id": 170641,
+    "released": "2014-06-21 00:00:00",
+    "categories": [
+      "Creator",
+      "Data Collection",
+      "Form Functionality",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-locations/",
+    "link": "https://formidableforms.com/downloads/locations/",
+    "changelog": "<h4>v2.03 - April 20, 2023</h4>\n<ul>\n<li>Fix: Importing cities would stop at \"8 remaining\" and never stop making requests to import additional cities.</li>\n<li>Fix: Form ids are are no longer retrieved using a deprecated function.</li>\n<li>Fix: Some city values were importing incorrectly, displaying \"1920\" as the state.</li>\n</ul>\n<h4>v2.02 - September 11, 2017</h4>\n<ul>\n<li>Fix: Remove invalid city data.</li>\n</ul>\n<h4>v2.01 - May 10, 2016</h4>\n<ul>\n<li>Switch to using Lookup fields</li>\n<li>Add a link to reset the locations data</li>\n</ul>\n",
+    "plugin": "formidable-locations/us_locations.php",
+    "icons": {
+      "1x": "https://formidableforms.com/wp-content/uploads/2013/04/locations.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "170645": {
+    "title": "Zapier",
+    "name": "Zapier",
+    "display_name": "Zapier",
+    "slug": "zapier",
+    "version": "2.04",
+    "new_version": "2.04",
+    "location": [
+      "fp.strategy11.com/releases/formidable-zapier/formidable-zapier-2.04.zip"
+    ],
+    "excerpt": "Connect with hundreds of applications through Zapier. Automatically insert a Google spreadsheet row, tweet, or upload to Dropbox.",
+    "id": 170645,
+    "released": "2014-06-04 00:00:00",
+    "categories": [
+      "Automation",
+      "Business",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-zapier/",
+    "link": "https://formidableforms.com/downloads/zapier/",
+    "changelog": "<h4>v2.04 - August 19, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n</ul>\n<h4>v2.03 - March 11, 2024</h4>\n<ul>\n<li>Fix: When polling for entries, the first entry would always get returned. Now the newest entry is returned as expected.</li>\n</ul>\n<h4>v2.02 - March 21, 2023</h4>\n<ul>\n<li>New: Referrer checks for protected files are now allowed for Zapier requests so a protected file can be uploaded to Google Drive using a Zapier action. Protected files also need to be available to everyone or Zapier still will not have access.</li>\n<li>New: Added translation support.</li>\n<li>Fix: The /form API endpoint was calling a deprecated function.</li>\n<li>Fix: Prevent a fatal error when Formidable lite is inactive.</li>\n<li>Fix: The link to edit a zap would lead to a 404 page.</li>\n<li>Additional validation has been added to prevent notices for an incomplete API URL.</li>\n<li>The message to migrate will no longer be shown when no legacy Zapier posts exist.</li>\n<li>A warning will now be displayed on any temporary Zapier actions that get created for testing before publishing a zap.</li>\n</ul>\n",
+    "plugin": "formidable-zapier/formidable-zapier.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "170649": {
+    "title": "User Tracking",
+    "name": "User Tracking",
+    "display_name": "User Flow",
+    "slug": "user-tracking",
+    "version": "2.0.3",
+    "new_version": "2.0.3",
+    "location": [
+      "s3.amazonaws.com/fp.strategy11.com/releases/formidable-user-tracking/formidable-user-tracking-2.0.3.zip"
+    ],
+    "excerpt": "Track the pages a user visits and the time spent on each page prior to submitting a form.",
+    "id": 170649,
+    "released": "2015-10-19 00:00:00",
+    "categories": [
+      "Creator",
+      "Strategy11",
+      "Utilities"
+    ],
+    "docs": "/knowledgebase/formidable-user-tracking/",
+    "link": "https://formidableforms.com/downloads/user-tracking/",
+    "changelog": "<h4>v2.0.3 - December 2, 2024</h4>\n<ul>\n<li>Fix: Duplicate entry checks would usually fail with this add-on active because of the way that user journey data is stored. When performing duplicate checks with this add-on active, entry descriptions is no longer included in the query to allow for duplicate entry checks to work.</li>\n<li>Support for translations have been improved, including translated dates when viewing user flow data.</li>\n</ul>\n<h4>v2.0.2 - July 25, 2024</h4>\n<ul>\n<li>New: This add-on is now translated in German, Spanish, French, Italian, and Brazilian Portuguese.</li>\n<li>Fix: Additional checks have been added to fix issues with user sessions starting during REST API requests. This includes an error that would appear on the Site Health page.</li>\n<li>Fix: More checks have been added to avoid starting sessions when running CLI commands.</li>\n</ul>\n<h4>v2.0.1 - June 6, 2024</h4>\n<ul>\n<li>New: User flow summaries can now be collapsed and opened by date.</li>\n<li>New: Forms with no title will now display as (no title) in the user flow summary.</li>\n<li>Fix: Session start logic has been moved to help avoid a headers already sent PHP warning on admin pages.</li>\n<li>Fix: A bug has been fixed that would cause incorrect user flow duration values.</li>\n</ul>\n",
+    "plugin": "formidable-user-tracking/formidable-user-tracking.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "170655": {
+    "title": "Mailchimp",
+    "name": "Mailchimp",
+    "display_name": "Mailchimp",
+    "slug": "mailchimp",
+    "version": "2.10",
+    "new_version": "2.10",
+    "location": [
+      "fp.strategy11.com/releases/formidable-mailchimp/formidable-mailchimp-2.10.zip"
+    ],
+    "excerpt": "Get on the path to more leads in minutes. Add and update leads in a Mailchimp mailing list when a form is submitted.",
+    "id": 170655,
+    "released": "2013-10-17 00:00:00",
+    "categories": [
+      "Creator",
+      "Email &amp; SMS Marketing",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-mailchimp/",
+    "link": "https://formidableforms.com/downloads/mailchimp/",
+    "changelog": "<h4>v2.10 - June 18, 2025</h4>\n<ul>\n<li>New: Mailchimp actions can now be delayed using form action automation.</li>\n<li>Fix: When a subscriber re-subscribes and double opt-in was enabled, the subscriber status would not update to subscribed.</li>\n</ul>\n<h4>v2.09 - November 5, 2024</h4>\n<ul>\n<li>New: Mailchimp field data is now stored and re-used in the database to optimize Mailchimp actions. Previously two requests were required when subscribing, causing performance issues.</li>\n<li>New: When a Name field is mapped to a Mailchimp action, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.</li>\n</ul>\n<h4>v2.08 - September 3, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese. This does not include dynamic fields loaded from Mailchimp's API.</li>\n<li>New: The field limit retrieved from the Mailchimp API has been increased from 30 to 100.</li>\n</ul>\n",
+    "plugin": "formidable-mailchimp/formidable-mailchimp.php",
+    "icons": {
+      "1x": "https://formidableforms.com/wp-content/uploads/2013/04/mailchimp.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "172715": {
+    "title": "PayPal Basic",
+    "name": "PayPal Basic",
+    "display_name": "PayPal Basic",
+    "slug": "paypal-standard-single-payments",
+    "version": "3.08",
+    "new_version": "3.08",
+    "location": [
+      "fp.strategy11.com/releases/formidable-paypal/formidable-paypal-3.08.zip"
+    ],
+    "excerpt": "",
+    "id": 172715,
+    "released": "2015-10-21 12:20:35",
+    "categories": [
+      "Ecommerce",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/paypal-standard-single-payments/",
+    "changelog": "<h4>v3.02 - September 14, 2018</h4>\n<ul>\n<li>Merge the older grandfathered PayPal addon with the updated version.</li>\n</ul>\n<h4>v2.04.07 - January 25, 2015</h4>\n<ul>\n<li>Allow amounts with . for thousands and , for decimal. If a . is used in the decimal place for the amount when the currency uses a , make it work anyway</li>\n<li>Redirect to PayPal correctly without Pro</li>\n<li>Make sure email setting is trimmed before comparing</li>\n<li>Add download ID to make sure correct license is used</li>\n</ul>\n<h4>v2.04.06 - November 17, 2015</h4>\n<ul>\n<li>Prevent errors when updating Formidable</li>\n</ul>\n<h4>v2.04.05</h4>\n<ul>\n<li>Format decimals with . to allow float to work correctly</li>\n<li>Get updates from FormidablePro.com</li>\n</ul>\n<h4>v2.04.04</h4>\n<ul>\n<li>Allow the amount to be included in the \"other\" option</li>\n<li>Modify the user-agent in the IPN verification to prevent errors from PayPal</li>\n</ul>\n<h4>v2.04.03</h4>\n<ul>\n<li>Save the IPN parameters with the payment in the format that allows for multiple IPN notifications</li>\n<li>Fix sending users to Paypal when 2.x is installed, but the old settings haven't been moved to a form action</li>\n<li>Increased security related to XSS add_query_arg vulnerability</li>\n</ul>\n",
+    "plugin": "paypal-standard-single-payments/paypal-standard-single-payments.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "173984": {
+    "title": "User Registration",
+    "name": "User Registration",
+    "display_name": "User Registration",
+    "slug": "user-registration",
+    "version": "3.0.1",
+    "new_version": "3.0.1",
+    "location": [
+      "s3.amazonaws.com/fp.strategy11.com/releases/formidable-registration/formidable-registration-3.0.1.zip"
+    ],
+    "excerpt": "Give new users access to your site quickly and painlessly. Plus edit profiles and login from the front end.",
+    "id": 173984,
+    "released": "2011-12-21 00:00:00",
+    "categories": [
+      "Business",
+      "Data Collection",
+      "Form Functionality",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/user-registration/",
+    "link": "https://formidableforms.com/downloads/user-registration/",
+    "changelog": "<h4>v3.0.1 - January 27, 2025</h4>\n<ul>\n<li>New: Login forms will now use the label position setting used in the applied Formidable style added using the class shortcode option.</li>\n<li>New: An appropriate error message will now be shown the reset password email fails to send because of an email deliverability issue.</li>\n<li>New: Some changes have been made to support the SiteGround Security Optimizer plugin's custom login URL functionality. A new frmreg_supports_alternative_login_url filter has been added to enable an alternative URL for cases when wp-login is blocked by another plugin.</li>\n<li>Fix: Fields used in registration actions would fail required validation checks when inside of a conditionally hidden section.</li>\n<li>Fix: A fatal error would occur when unexpected array redirect data was submitted to the login form.</li>\n<li>Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.</li>\n<li>The setting to automatically log in users who submit this form was been removed from repeated registration actions.</li>\n</ul>\n<h4>v3.0 - October 8, 2024</h4>\n<ul>\n<li>New: Registration actions now include the option to run a registration action for each entry of a repeater. This allows you to create multiple users with a single form.</li>\n<li>New: When a Name field is mapped to a User Registration action, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.</li>\n<li>New: Missing for attributes have been added to user meta inputs to help improve accessibility.</li>\n<li>Fix: In some cases, multiple activation success messages would appear. A check has been added to limit the number of related success messages to one.</li>\n<li>Additional validation has been added when saving registration page settings to help prevent issues where shortcodes are later removed from previously valid login pages.</li>\n<li>Some references to old deprecated Pro functions have been updated.</li>\n</ul>\n<h4>v2.13 - April 4, 2024</h4>\n<ul>\n<li>New: User moderation redirects now support a new option to Redirect to a URL.</li>\n<li>New: Links and forms have been updated to use the site URL for logging in instead of the network site URL.</li>\n<li>New: The &#091;frm-login] shortcode now support several new options including register_link, label_register, class_register for adding registration links to login forms.</li>\n<li>New: The logout_redirect option used in &#091;frm-login] shortcodes now supports numeric page ID values.</li>\n<li>New: &#091;frm-reset-password] shortcodes now support new password_strength=\"1\" and password_visibility_toggle=\"1\" options.</li>\n<li>Fix: Errors messages will now show on page load when using the slide=1 option with a &#091;frm-login] shortcode.</li>\n<li>Several old deprecated functions have been removed.</li>\n</ul>\n",
+    "plugin": "formidable-registration/formidable-registration.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "registration, user registration, register"
+  },
+  "174006": {
+    "title": "WooCommerce",
+    "name": "WooCommerce",
+    "display_name": "WooCommerce",
+    "slug": "woocommerce",
+    "version": "1.14",
+    "new_version": "1.14",
+    "location": [
+      "fp.strategy11.com/releases/formidable-woocommerce/formidable-woocommerce-1.14.zip"
+    ],
+    "excerpt": "Are your WooCommerce product forms too basic? Add custom fields to a product form and collect more data when it is added to the cart.",
+    "id": 174006,
+    "released": "2016-01-19 00:00:00",
+    "categories": [
+      "Ecommerce",
+      "Elite",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-woocommerce/",
+    "link": "https://formidableforms.com/downloads/woocommerce/",
+    "changelog": "",
+    "plugin": "formidable-woocommerce/formidable-woocommerce.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "180495": {
+    "title": "Highrise",
+    "name": "Highrise",
+    "display_name": "Highrise",
+    "slug": "highrise",
+    "version": "1.06",
+    "new_version": "1.06",
+    "location": [
+      "fp.strategy11.com/releases/formidable-highrise/formidable-highrise-1.06.zip"
+    ],
+    "excerpt": "Capture leads in your WordPress contact forms, and save them in your Highrise CRM account too.",
+    "id": 180495,
+    "released": "2013-12-12 00:00:00",
+    "categories": [
+      "Creator",
+      "CRM",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-highrise/",
+    "link": "https://formidableforms.com/downloads/highrise/",
+    "changelog": "<h4>v1.06 - February 29, 2016</h4>\n<ul>\n<li>Send the custom fields correctly to Highrise</li>\n</ul>\n<h4>v1.05 - February 23, 2016</h4>\n<ul>\n<li>Fix email field settings in the Highrise action</li>\n<li>Make sure the license key is a Highrise license</li>\n</ul>\n<h4>v1.04 - February 9, 2016</h4>\n<ul>\n<li>Added options to separate out address fields. City, State, Zip, and Country can now be mapped separately.</li>\n<li>Fixed PHP7 warnings</li>\n</ul>\n",
+    "plugin": "formidable-highrise/formidable-highrise.php",
+    "icons": {
+      "1x": "https://formidableforms.com/wp-content/uploads/2012/01/highrise.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "185013": {
+    "title": "Bootstrap Modal",
+    "name": "Bootstrap Modal",
+    "display_name": "Bootstrap Modal",
+    "slug": "bootstrap-modal",
+    "version": "3.0.3",
+    "new_version": "3.0.3",
+    "location": [
+      "fp.strategy11.com/releases/formidable-modal/formidable-modal-3.0.3.zip"
+    ],
+    "excerpt": "Open forms, views, other shortcodes, or sections of content in a Bootstrap popup.",
+    "id": 185013,
+    "released": "2015-08-26 00:00:00",
+    "categories": [
+      "Creator",
+      "Form Design &amp; Display",
+      "Form Functionality",
+      "Strategy11"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/bootstrap-modal/",
+    "link": "https://formidableforms.com/downloads/bootstrap-modal/",
+    "changelog": "<h4>v3.0.3 - April 30, 2025</h4>\n<ul>\n<li>New: An info message shows in the modal if a form is used there without AJAX submission enabled.</li>\n<li>Fix: JS error when Formidable Forms isn't activated.</li>\n<li>Fix: A duplicated background color setting is removed.</li>\n</ul>\n<h4>v3.0.2 - December 11, 2023</h4>\n<ul>\n<li>New: The modal block button will now have a default \"Click here\" text instead of an empty input to make quick testing easier.</li>\n<li>New: The modal close button will now longer appear in the block preview as it was getting in the way and served no purpose.</li>\n<li>New: The modal block has been updated to work better with white label settings.</li>\n<li>Fix: The autocomplete popup from the Formidable Geolocation add on would not appear inside of a Bootstrap modal because of a z-index issue.</li>\n</ul>\n<h4>v3.0.1 - June 26, 2023</h4>\n<ul>\n<li>Fix: Modals were hidden when the Formidable Bootstrap add on was also active.</li>\n<li>Fix: Modals made with the [[frmmodal-content]] shortcode were missing a backdrop.</li>\n</ul>\n",
+    "plugin": "formidable-modal/formidable-modal.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "modal, popup"
+  },
+  "209561": {
+    "title": "Polylang",
+    "name": "Polylang",
+    "display_name": "Polylang",
+    "slug": "polylang",
+    "version": "1.16",
+    "new_version": "1.16",
+    "location": [
+      "fp.strategy11.com/releases/formidable-polylang/formidable-polylang-1.16.zip"
+    ],
+    "excerpt": "Create bilingual or multilingual forms with help from Polylang.",
+    "id": 209561,
+    "released": "2016-01-22 00:00:00",
+    "categories": [
+      "Business",
+      "Multilingual",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/formidable-polylang/",
+    "link": "https://formidableforms.com/downloads/polylang/",
+    "changelog": "<h4>v1.16 - April 10, 2026</h4>\n<ul>\n<li>New: Ranking field options can now be translated.</li>\n<li>Fix: A fatal error would prevent the translation settings page from properly loading when using new versions of Polylang.</li>\n<li>Fix: A translation bug would prevent conditional logic from working for an Other option when separate values was enabled.</li>\n<li>Fix: Shortcodes used in default values would incorrectly process for AJAX loaded fields in the form builder, causing default values to change.</li>\n</ul>\n<h4>v1.14 - June 2, 2025</h4>\n<ul>\n<li>Fix: Saving Polylang translations would trigger a fatal error when using the newest version of Polylang.</li>\n<li>Fix: Checkbox fields would fail option validation when the checkbox options were translated and the checkbox field was on a page other than the last page.</li>\n</ul>\n<h4>v1.13 - October 29, 2024</h4>\n<ul>\n<li>New: The text for previous buttons used in multiple page forms is now translatable.</li>\n<li>New: The text for the start and continue buttons used in conversational forms are now translatable.</li>\n</ul>\n",
+    "plugin": "formidable-polylang/frm-poly.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "224036": {
+    "title": "Blackboard Style",
+    "name": "Blackboard Style",
+    "display_name": "Blackboard Style",
+    "slug": "blackboard",
+    "version": "",
+    "new_version": "",
+    "location": [
+      "https://formidableforms.com/wp-content/uploads/edd/2017/01/blackboard-style.xml"
+    ],
+    "excerpt": "",
+    "id": 224036,
+    "released": "2016-01-13 14:04:53",
+    "categories": [
+      "WordPress Form Style Templates"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/blackboard/",
+    "changelog": "",
+    "plugin": "blackboard/blackboard.php",
+    "icons": {
+      "1x": "https://formidableforms.com/wp-content/uploads/edd/2016/01/blackboard-style.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "310430": {
+    "title": "Stripe",
+    "name": "Stripe",
+    "display_name": "Stripe",
+    "slug": "stripe",
+    "version": "3.1.11",
+    "new_version": "3.1.11",
+    "location": [
+      "fp.strategy11.com/releases/formidable-stripe/formidable-stripe-3.1.11.zip"
+    ],
+    "excerpt": "Any Formidable forms on your site can accept credit card payments without users ever leaving your site.",
+    "id": 310430,
+    "released": "2016-04-26 00:00:00",
+    "categories": [
+      "Business",
+      "Ecommerce",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/stripe/",
+    "link": "https://formidableforms.com/downloads/stripe/",
+    "changelog": "<h4>v3.1.11 - June 22, 2026</h4>\n<ul>\n<li>Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments.</li>\n</ul>\n<h4>v3.1.10 - May 26, 2026</h4>\n<ul>\n<li>New: Checks have been added to prevent unnecessary calls to update intent pricing in pages with no payment intents.</li>\n<li>New: Pricing updates are now debounced to help reduce the number of server requests.</li>\n<li>New: Required changes in order to support PayPal Commerce shipping settings in payment actions.</li>\n<li>New: Some payment settings have been rearranged. Payment type is now located near the top of the action settings.</li>\n</ul>\n<h4>v3.1.9 - March 11, 2026</h4>\n<ul>\n<li>New: Additional validation has been added to prevent people from manipulating amount values when making Stripe Link payments.</li>\n<li>New: Missing payment fields are automatically inserted into forms when a payment action is saved.</li>\n<li>New: A new `frm_strp_new_subscription` filter has been added, similar to the `frm_strp_new_charge` filter. Note that this filter does not apply to Stripe Link payments.</li>\n<li>Fix: Changes that trigger for successful payments would trigger incorrectly for pending 3D secure payments.</li>\n<li>Fix: An Undefined array key \"currency\" PHP Warning has been fixed.</li>\n<li>Fix: Multiple customer objects would get created for Stripe Link recurring payments.</li>\n<li>Fix: An Undefined property: stdClass::$item_key PHP Warning has been fixed.</li>\n<li>Fix: A conditionally shown payment gateway wouldn't correctly reset to its default value, causing payments not to trigger.</li>\n</ul>\n",
+    "plugin": "formidable-stripe/formidable-stripe.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "326042": {
+    "title": "Form Action Automation",
+    "name": "Form Action Automation",
+    "display_name": "Form Action Automation",
+    "slug": "autoresponder",
+    "version": "2.09",
+    "new_version": "2.09",
+    "location": [
+      "fp.strategy11.com/releases/autoresponder/formidable-autoresponder-2.09.zip"
+    ],
+    "excerpt": "Schedule email notifications, SMS messages, and API actions.",
+    "id": 326042,
+    "released": "2016-09-21 00:00:00",
+    "categories": [
+      "Automation",
+      "Elite",
+      "Marketing",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/schedule-autoresponder/",
+    "link": "https://formidableforms.com/downloads/autoresponder/",
+    "changelog": "<h4>v2.09 - June 18, 2025</h4>\n<ul>\n<li>New: Added support for automating more types of form actions.</li>\n</ul>\n<h4>v2.08 - August 13, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n</ul>\n<h4>v2.07 - April 29, 2024</h4>\n<ul>\n<li>New: The frm_autoresponder_time filter is now always applied. Previously this filter was only used when date or time fields were defined as the send date setting.</li>\n<li>New: Strings used in this plugin can now be translated.</li>\n<li>Fix: A bug has been fixed that would strip &#091;] shortcode characters after duplicating a form action with dashes in the value like a date format.</li>\n</ul>\n",
+    "plugin": "formidable-autoresponder/formidable-autoresponder.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "automate, automation"
+  },
+  "337527": {
+    "title": "Authorize.net AIM",
+    "name": "Authorize.net AIM",
+    "display_name": "Authorize.net AIM",
+    "slug": "authorize-net-aim",
+    "version": "2.05",
+    "new_version": "2.05",
+    "location": [
+      "fp.strategy11.com/releases/authorize-net/formidable-authorize-net-2.05.zip"
+    ],
+    "excerpt": "Accept one-time payments directly on your site, using Authorize.net AIM.",
+    "id": 337527,
+    "released": "2016-04-29 00:00:00",
+    "categories": [
+      "Ecommerce",
+      "Elite",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/authorize-net-aim/",
+    "link": "https://formidableforms.com/downloads/authorize-net-aim/",
+    "changelog": "<h4>v2.05 - May 26, 2026</h4>\n<ul>\n<li>New: Required changes in order to support PayPal Commerce shipping settings in payment actions.</li>\n<li>New: Some payment settings have been rearranged. Payment type is now located near the top of the action settings.</li>\n<li>Fix: Shipping address data would never get sent to Authorize.Net</li>\n</ul>\n<h4>v2.04 - June 5, 2025</h4>\n<ul>\n<li>New: A new &#091;frm-payment] shortcode has been added. This can be used to display quick details about a payment for a given entry ID. For example, &#091;frm-payment entry=&#091;id] show=amount] can be used in a view to get the payment amount.</li>\n<li>New: Screen reader text has been updated to the payments admin page to improve accessibility.</li>\n<li>Fix: Repeated fields would disappear after reloading a form as the result of a failed payment.</li>\n<li>Fix: Shipping information would not appear on load unless shipping was already enabled.</li>\n<li>Fix: An autoload issue would result in fatal errors on some sites.</li>\n<li>Fix: A Creation of dynamic property FrmAuthNetApi::$endpoint is deprecated PHP deprecation message that happens in PHP 8.2+ has been fixed.</li>\n<li>Fix: The PayPal gateway option wouldn't appear on the edit payment page.</li>\n<li>When a Name field is mapped to a payment action, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.</li>\n</ul>\n<h4>v2.03 - April 24, 2024</h4>\n<ul>\n<li>Fix: A FrmTransActionsController not found fatal error related to autoloading occuring on some server configurations has been fixed.</li>\n</ul>\n",
+    "plugin": "formidable-authorize-net/formidable-authorize-net.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "Authorize.net"
+  },
+  "11927748": {
+    "title": "Logs",
+    "name": "Logs",
+    "display_name": "Logs",
+    "slug": "logs",
+    "version": "1.0.4",
+    "new_version": "1.0.4",
+    "location": [
+      "fp.strategy11.com/releases/logs/formidable-logs-1.0.4.zip"
+    ],
+    "excerpt": "See your API requests along with their responses from add-ons including Zapier, Formidable API Webhooks, Salesforce and more.",
+    "id": 11927748,
+    "released": "2016-12-19 00:00:00",
+    "categories": [
+      "Basic",
+      "Strategy11",
+      "Utilities"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/logging/",
+    "link": "https://formidableforms.com/downloads/logs/",
+    "changelog": "",
+    "plugin": "formidable-logs/formidable-logs.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "18752634": {
+    "title": "True Blue Style",
+    "name": "True Blue Style",
+    "display_name": "True Blue Style",
+    "slug": "true-blue-style-template",
+    "version": "",
+    "new_version": "",
+    "location": [
+      "https://formidableforms.com/wp-content/uploads/edd/2017/01/true-blue-style.xml"
+    ],
+    "excerpt": "",
+    "id": 18752634,
+    "released": "2017-01-11 12:29:25",
+    "categories": [
+      "WordPress Form Style Templates"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/true-blue-style-template/",
+    "changelog": "",
+    "plugin": "true-blue-style-template/true-blue-style-template.php",
+    "icons": {
+      "1x": "https://formidableforms.com/wp-content/uploads/edd/2017/01/true-blue-style-template.jpg"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "19366992": {
+    "title": "Formidable Pro Elite Package",
+    "name": "Formidable Pro Elite Package",
+    "display_name": "Formidable Pro Elite Package",
+    "slug": "formidable-pro-enterprise-package",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 19366992,
+    "released": "2017-09-01 12:09:38",
+    "categories": [
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-pro-enterprise-package/",
+    "changelog": "",
+    "plugin": "formidable-pro-enterprise-package/formidable-pro-enterprise-package.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "19366995": {
+    "title": "Formidable Pro Business Package",
+    "name": "Formidable Pro Business Package",
+    "display_name": "Formidable Pro Business Package",
+    "slug": "formidable-pro-small-business-package",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 19366995,
+    "released": "2017-09-01 12:09:09",
+    "categories": [
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-pro-small-business-package/",
+    "changelog": "",
+    "plugin": "formidable-pro-small-business-package/formidable-pro-small-business-package.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "19367001": {
+    "title": "Formidable Pro Creator Package",
+    "name": "Formidable Pro Creator Package",
+    "display_name": "Formidable Pro Creator Package",
+    "slug": "formidable-pro-professional-package",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 19367001,
+    "released": "2017-09-01 12:10:24",
+    "categories": [
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-pro-professional-package/",
+    "changelog": "",
+    "plugin": "formidable-pro-professional-package/formidable-pro-professional-package.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "19367654": {
+    "title": "Formidable Pro Single Site",
+    "name": "Formidable Pro Single Site",
+    "display_name": "Formidable Pro Single Site",
+    "slug": "formidable-pro-single-site",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 19367654,
+    "released": "2017-09-01 13:36:16",
+    "categories": [
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-pro-single-site/",
+    "changelog": "",
+    "plugin": "formidable-pro-single-site/formidable-pro-single-site.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "19446880": {
+    "title": "Classic Blue Style",
+    "name": "Classic Blue Style",
+    "display_name": "Classic Blue Style",
+    "slug": "classic-blue",
+    "version": "",
+    "new_version": "",
+    "location": [
+      "https://formidableforms.com/wp-content/uploads/edd/2018/02/apidemos.formidable.2018-02-22.xml"
+    ],
+    "excerpt": "",
+    "id": 19446880,
+    "released": "2018-02-22 14:35:14",
+    "categories": [
+      "WordPress Form Style Templates"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/classic-blue/",
+    "changelog": "",
+    "plugin": "classic-blue/classic-blue.php",
+    "icons": {
+      "1x": "https://formidableforms.com/wp-content/uploads/edd/2018/02/classic-blue-style-e1519339929722.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "19446947": {
+    "title": "Yellow and Black Style",
+    "name": "Yellow and Black Style",
+    "display_name": "Yellow and Black Style",
+    "slug": "yellow-black-style",
+    "version": "",
+    "new_version": "",
+    "location": [
+      "https://formidableforms.com/wp-content/uploads/edd/2018/02/yellow-black.xml"
+    ],
+    "excerpt": "",
+    "id": 19446947,
+    "released": "2018-02-22 15:42:09",
+    "categories": [
+      "WordPress Form Style Templates"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/yellow-black-style/",
+    "changelog": "",
+    "plugin": "yellow-black-style/yellow-black-style.php",
+    "icons": {
+      "1x": "https://formidableforms.com/wp-content/uploads/edd/2018/02/yellow-black-style-e1519339940698.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20247260": {
+    "title": "Datepicker Options",
+    "name": "Datepicker Options",
+    "display_name": "Datepicker Options",
+    "slug": "datepicker-options",
+    "version": "3.0",
+    "new_version": "3.0",
+    "location": [
+      "fp.strategy11.com/releases/dates/formidable-dates-3.0.zip"
+    ],
+    "excerpt": "Add more options to date fields in your forms for so only the dates you choose can be chosen.",
+    "id": 20247260,
+    "released": "2018-07-30 00:00:00",
+    "categories": [
+      "Business",
+      "Form Functionality",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/datepicker-options/",
+    "link": "https://formidableforms.com/downloads/datepicker-options/",
+    "changelog": "<h4>v3.0 - September 9, 2025</h4>\n<ul>\n<li>New: Date fields now support a new Date Range setting. When enabled, a new End Date field will be added and linked to the Start Date field. Note that this requires version 6.24 of Formidable Pro.</li>\n<li>New: The settings for Date Fields have been updated. Blackout Dates and Exceptions Dates now use a new type of input.</li>\n<li>Fix: Additional checks have been added to help prevent unexpected errors when using date calculations and editing in-place.</li>\n</ul>\n<h4>v2.1 - February 24, 2025</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>Fix: Inline date fields would not initialize properly in new forms that appears after a form is completed when submitting with AJAX.</li>\n<li>Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.</li>\n</ul>\n<h4>v2.0.4 - March 28, 2024</h4>\n<ul>\n<li>New: Blocked dates are no longer counted in &#091;date_calc] shortcode calculations by default when using the format=\"days\" option. In order to count blocked out dates, you must now include a new count_blackout_dates=\"1\" option.</li>\n<li>New: The strings used in this add-on can now be translated.</li>\n<li>Fix: Date calculations would trigger an error pop up on the edit entry admin page.</li>\n<li>Fix: Some date field validation checks would fail when sending a date value in Y-m-d format instead of the global date format setting.</li>\n<li>Fix: When validating if a date value is greater than or less than today, the value for today was based on the UTC timezone instead of the server timezone.</li>\n</ul>\n",
+    "plugin": "formidable-dates/formidable-dates.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "datepicker"
+  },
+  "20266559": {
+    "title": "Salesforce",
+    "name": "Salesforce",
+    "display_name": "Salesforce",
+    "slug": "salesforce",
+    "version": "2.05",
+    "new_version": "2.05",
+    "location": [
+      "fp.strategy11.com/releases/salesforce/formidable-salesforce-2.05.zip"
+    ],
+    "excerpt": "Add new contacts and leads into your Salesforce CRM directly from the WordPress forms on your site.",
+    "id": 20266559,
+    "released": "2018-05-31 00:00:00",
+    "categories": [
+      "CRM",
+      "Elite"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/salesforce-forms/",
+    "link": "https://formidableforms.com/downloads/salesforce/",
+    "changelog": "<h4>v2.06 - November 1, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>New: Users are no longer required to replace the %3D%3D text copied from the end of their Authentication code when authenticating, making it easier to get set-up.</li>\n</ul>\n<h4>v2.05 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n<li>Fix: Authentication errors would not visibly appear, making it difficult to troubleshoot authentication issues.</li>\n<li>Fix: A Trying to access array offset on value of type bool PHP Warning has been fixed.</li>\n<li>Fix: An Implicit conversion from float to int loses precision PHP Deprecated message has been fixed.</li>\n<li>Fix: An Automatic conversion of false to array is deprecated PHP Deprecated message has been fixed.</li>\n</ul>\n<h4>v2.04 - December 10, 2019</h4>\n<ul>\n<li>New: Show Salesforce Authentication errors on the global settings page</li>\n<li>Add icon in global settings</li>\n<li>Use font icon instead of image in form action</li>\n<li>Remove debug mode in favor of logging</li>\n<li>Tweak: Clear the settings cache with a link instead of ajax for more reliable cache clearing</li>\n<li>Fix: Updating data in Salesforce wasn't working correctly</li>\n<li>Fix: There was an error when Formidable was disabled</li>\n</ul>\n",
+    "plugin": "formidable-salesforce/formidable-salesforce.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20781560": {
+    "title": "MailPoet Newsletters",
+    "name": "MailPoet Newsletters",
+    "display_name": "MailPoet Newsletters",
+    "slug": "mailpoet-newsletters",
+    "version": "1.04",
+    "new_version": "1.04",
+    "location": [
+      "fp.strategy11.com/releases/mailpoet/formidable-mailpoet-1.04.zip"
+    ],
+    "excerpt": "Send WordPress newsletters from your own site with MailPoet. And use Formidable to for your newsletter signup forms.",
+    "id": 20781560,
+    "released": "2018-06-05 00:00:00",
+    "categories": [
+      "Creator",
+      "Email &amp; SMS Marketing"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/mailpoet-newsletter-signup-forms/",
+    "link": "https://formidableforms.com/downloads/mailpoet-newsletters/",
+    "changelog": "<h4>v1.04 - August 20, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n</ul>\n<h4>v1.03 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n</ul>\n<h4>v1.02 - July 12, 2022</h4>\n<ul>\n<li>New: Added support for logging MailPoet subscriptions when the Logs add on is active.</li>\n<li>New: Name fields will now automatically map the proper first and last name values when sending to MailPoet.</li>\n<li>Fix: Users could not subscribe to multiple lists when the active language was not in English because the error check was specific to language.</li>\n<li>Fix: Prevent a warning when sending data with MailPoet action.</li>\n<li>Fix: Nothing would get sent when a user id field was set to something other than a name or email option.</li>\n</ul>\n",
+    "plugin": "formidable-mailpoet/formidable-mailpoet.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20790298": {
+    "title": "Active Campaign",
+    "name": "Active Campaign",
+    "display_name": "ActiveCampaign",
+    "slug": "activecampaign-wordpress-plugin",
+    "version": "1.11",
+    "new_version": "1.11",
+    "location": [
+      "fp.strategy11.com/releases/activecampaign/formidable-activecampaign-1.11.zip"
+    ],
+    "excerpt": "Add contacts to any ActiveCampaign list from your WordPress forms.",
+    "id": 20790298,
+    "released": "2018-07-05 00:00:00",
+    "categories": [
+      "Elite",
+      "Email &amp; SMS Marketing"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/activecampaign-forms/",
+    "link": "https://formidableforms.com/downloads/activecampaign-wordpress-plugin/",
+    "changelog": "<h4>v1.11 - August 12, 2025</h4>\n<ul>\n<li>Update translation strings.</li>\n<li>New: Show (First) and (Last) along with field name when mapping name fields.</li>\n<li>New: Add Formidable Form Action Automation support.</li>\n<li>Fix: Function _load_textdomain_just_in_time was called incorrectly.</li>\n</ul>\n<h4>v1.10 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n</ul>\n<h4>v1.09 - March 25, 2024</h4>\n<ul>\n<li>New: The strings used in this add-on can now be translated.</li>\n<li>Fix: An Uncaught Error: Class \"FrmFormAction\" not found fatal error has been fixed that happens on WPEngine hosted servers using PHP 8.2.</li>\n</ul>\n",
+    "plugin": "formidable-activecampaign/formidable-activecampaign.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "ActiveCampaign"
+  },
+  "20811871": {
+    "title": "HubSpot",
+    "name": "HubSpot",
+    "display_name": "HubSpot",
+    "slug": "hubspot-wordpress",
+    "version": "3.0",
+    "new_version": "3.0",
+    "location": [
+      "fp.strategy11.com/releases/hubspot/formidable-hubspot-3.0.zip"
+    ],
+    "excerpt": "HubSpot is a complete CRM platform with tools for increased leads, accelerated sales, or streamlined customer service.",
+    "id": 20811871,
+    "released": "2018-09-04 00:00:00",
+    "categories": [
+      "CRM",
+      "Elite"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/hubspot-forms/",
+    "link": "https://formidableforms.com/downloads/hubspot-wordpress/",
+    "changelog": "<h4>v3.0 - April 21, 2026</h4>\n<ul>\n<li>New: HubSpot Contact API requests have been updated to use the new v3 contact list APIs, removing calls to deprecated APIs.</li>\n<li>Fix: Data for embedded form fields would not properly get sent to HubSpot.</li>\n</ul>\n<h4>v2.0.2 - September 23, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>New: When a Name field is mapped to a HubSpot action, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.</li>\n</ul>\n<h4>v2.0.1 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n<li>New: The request sent to get lists from Hubspot will now only query for static lists, allowing each request to get more lists without hitting page limits.</li>\n<li>New: If there are more than 250 static contact lists, multiple requests will be made to get the full list of static Hubspot contact lists.</li>\n<li>Fix: European private app access tokens would fail to validate.</li>\n</ul>\n",
+    "plugin": "formidable-hubspot/formidable-hubspot.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20813244": {
+    "title": "GetResponse",
+    "name": "GetResponse",
+    "display_name": "GetResponse",
+    "slug": "getresponse-wordpress-plugin",
+    "version": "1.07",
+    "new_version": "1.07",
+    "location": [
+      "fp.strategy11.com/releases/getresponse/formidable-getresponse-1.07.zip"
+    ],
+    "excerpt": "Collect leads in WordPress forms and automatically add them in GetResponse. Then trigger automatic emails and other GetResponse marketing automations.",
+    "id": 20813244,
+    "released": "2018-09-06 00:00:00",
+    "categories": [
+      "Business",
+      "Email &amp; SMS Marketing"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/getresponse-forms/",
+    "link": "https://formidableforms.com/downloads/getresponse-wordpress-plugin/",
+    "changelog": "<h4>v1.07 - August 12, 2025</h4>\n<ul>\n<li>New: Show (First) and (Last) along with field name when mapping name fields.</li>\n<li>Fix: Function _load_textdomain_just_in_time was called incorrectly.</li>\n</ul>\n<h4>v1.06 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n<li>New: Strings used in this plugin can now be translated.</li>\n</ul>\n<h4>v1.05 - June 21, 2021</h4>\n<ul>\n<li>New: Name fields will now automatically map the proper first and last name values when sending to GetResponse.</li>\n<li>Fix: Nothing would get sent when a user id field was set to something other than a name or email option.</li>\n</ul>\n",
+    "plugin": "formidable-getresponse/formidable-getresponse.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20815759": {
+    "title": "Quiz Maker",
+    "name": "Quiz Maker",
+    "display_name": "Quiz Maker",
+    "slug": "quiz-maker",
+    "version": "3.1.8",
+    "new_version": "3.1.8",
+    "location": [
+      "fp.strategy11.com/releases/quiz/formidable-quizzes-3.1.8.zip"
+    ],
+    "excerpt": "Turn your forms into automated quizzes. Add questions and submit the quiz key. Then all the grading is done for you.",
+    "id": 20815759,
+    "released": "2018-09-13 00:00:00",
+    "categories": [
+      "Business",
+      "Data Collection",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/quiz-maker-forms/",
+    "link": "https://formidableforms.com/downloads/quiz-maker/",
+    "changelog": "<h4>v3.1.8 - May 27, 2026</h4>\n<ul>\n<li>New: Updates to Quiz action settings to work better with the new form action settings changes introduced in Formidable v6.31.</li>\n</ul>\n<h4>v3.1.7 - December 10, 2025</h4>\n<ul>\n<li>New: \"Randomize Questions\" and \"Randomize Options\" settings are moved from the Scored quiz action into the Form settings section.</li>\n<li>Fix: PHP error when filling text into the score input, or not selecting any correct answers in the Scored quiz action settings.</li>\n<li>Fix: Fatal error when viewing a quiz entry with the latest version of Formidable Forms.</li>\n</ul>\n<h4>v3.1.6 - January 30, 2025</h4>\n<p>Fix: Manual scoring doesn't work on the entry page.</p>\n",
+    "plugin": "formidable-quizzes/formidable-quizzes.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "quiz, quizzes"
+  },
+  "20826884": {
+    "title": "Constant Contact",
+    "name": "Constant Contact",
+    "display_name": "Constant Contact",
+    "slug": "constant-contact",
+    "version": "1.07",
+    "new_version": "1.07",
+    "location": [
+      "fp.strategy11.com/releases/constant-contact/formidable-constantcontact-1.07.zip"
+    ],
+    "excerpt": "Setup WordPress forms to create leads automatically in Constant Contact. Just select a list and match up form fields.",
+    "id": 20826884,
+    "released": "2018-10-15 00:00:00",
+    "categories": [
+      "Business",
+      "Email &amp; SMS Marketing"
+    ],
+    "docs": "/knowledgebase/constant-contact-forms/",
+    "link": "https://formidableforms.com/downloads/constant-contact/",
+    "changelog": "<h4>v1.08 - October 1, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n</ul>\n<h4>v1.07 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n</ul>\n<h4>v1.06 - March 25, 2024</h4>\n<ul>\n<li>New: The strings used in this add-on can now be translated.</li>\n<li>Fix: An Uncaught Error: Class \"FrmFormAction\" not found fatal error has been fixed that happens on WPEngine hosted servers using PHP 8.2.</li>\n</ul>\n",
+    "plugin": "formidable-constantcontact/formidable-constantcontact.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20834175": {
+    "title": "Formidable Payments",
+    "name": "Formidable Payments",
+    "display_name": "Formidable Payments",
+    "slug": "formidable-payments",
+    "version": "1.14",
+    "new_version": "1.14",
+    "location": [
+      "fp.strategy11.com/releases/payments/formidable-payments-1.14.zip"
+    ],
+    "excerpt": "",
+    "id": 20834175,
+    "released": "2018-11-06 12:08:25",
+    "categories": [],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-payments/",
+    "changelog": "",
+    "plugin": "formidable-payments/formidable-payments.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20891694": {
+    "title": "Campaign Monitor",
+    "name": "Campaign Monitor",
+    "display_name": "Campaign Monitor",
+    "slug": "campaign-monitor",
+    "version": "1.06",
+    "new_version": "1.06",
+    "location": [
+      "fp.strategy11.com/releases/campaign-monitor/formidable-campaignmonitor-1.06.zip"
+    ],
+    "excerpt": "Save time by automatically sending leads from WordPress forms to Campaign Monitor.",
+    "id": 20891694,
+    "released": "2019-06-17 00:00:00",
+    "categories": [
+      "Business",
+      "Email &amp; SMS Marketing"
+    ],
+    "docs": "/knowledgebase/campaign-monitor-forms/",
+    "link": "https://formidableforms.com/downloads/campaign-monitor/",
+    "changelog": "<h4>v1.06 - September 9, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n</ul>\n<h4>v1.05 - June 11, 2024</h4>\n<ul>\n<li>New: Field dropdowns have been updated to enable support for repeater actions.</li>\n<li>New: Strings used in this plugin can now be translated.</li>\n</ul>\n<h4>v1.04 - June 23, 2021</h4>\n<ul>\n<li>New: Name fields will now automatically map the proper first and last name values when sending to Campaign Monitor.</li>\n<li>Fix: Nothing would get sent when a user id field was set to something other than a name or email option.</li>\n<li>Fix: Prevent a fatal error that happens in PHP8 after trying to save Campaign Monitor API keys.</li>\n<li>Fix: Prevent a fatal error that happens in PHP8 after trying to load the fields for a specific contact list.</li>\n</ul>\n",
+    "plugin": "formidable-campaignmonitor/formidable-campaignmonitor.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20896934": {
+    "title": "Formidable Pro Plus",
+    "name": "Formidable Pro Plus",
+    "display_name": "Formidable Pro Plus",
+    "slug": "formidable-basic",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 20896934,
+    "released": "2019-07-22 09:03:39",
+    "categories": [
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-basic/",
+    "changelog": "",
+    "plugin": "formidable-basic/formidable-basic.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "20897348": {
+    "title": "Export View to CSV",
+    "name": "Export View to CSV",
+    "display_name": "Export View to CSV",
+    "slug": "export-view",
+    "version": "1.12",
+    "new_version": "1.12",
+    "location": [
+      "fp.strategy11.com/releases/export-view/formidable-export-view-1.12.zip"
+    ],
+    "excerpt": "Easily create custom CSV files and allow users to export their data from the front-end of your site.",
+    "id": 20897348,
+    "released": "2019-08-01 00:00:00",
+    "categories": [
+      "Business",
+      "Data Management",
+      "Strategy11"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/table-view-to-csv/",
+    "link": "https://formidableforms.com/downloads/export-view/",
+    "changelog": "<h4>v1.12 - July 23, 2026</h4>\n<ul>\n<li>Fix: The export view shortcode doesn't work if 'Show Export Link with View' is disabled in view settings.</li>\n</ul>\n<h4>v1.11 - July 14, 2026</h4>\n<ul>\n<li>Security: Links to download CSV data now use a more secure token, and more validation to prevent users without the right privileges from accessing view data. Old links from stale caches will no longer work.</li>\n<li>Performance: The database query for view options used in settings has been optimized, requiring less server memory.</li>\n<li>Fix: Only 99 views would get queried when displaying Views in export settings.</li>\n<li>Fix: A fputcsv(): the $escape parameter must be provided as its default value will change PHP deprecated message has been fixed.</li>\n</ul>\n<h4>v1.10 - August 13, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>Checks have been added to avoid trying to extend the time limit when the set_time_limit function does not exist to improve compatibility.</li>\n<li>Several references to deprecated functions have been updated.</li>\n</ul>\n",
+    "plugin": "formidable-export-view/formidable-export-view.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "export table"
+  },
+  "26596685": {
+    "title": "Directory",
+    "name": "Directory",
+    "display_name": "Directory",
+    "slug": "directory",
+    "version": "1.0.01",
+    "new_version": "1.0.01",
+    "location": [
+      "fp.strategy11.com/releases/directory/formidable-directory-1.0.01.zip"
+    ],
+    "excerpt": "",
+    "id": 26596685,
+    "released": "2020-06-29 00:00:00",
+    "categories": [
+      "Business+Views",
+      "Solution"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/formidable-directory/",
+    "link": "https://formidableforms.com/wordpress-directory-plugin/",
+    "changelog": "<h4>v1.0.01 - October 4, 2021</h4>\n<ul>\n<li>Fix: The frm-letter-filter shortcode would always filter by lname instead of using the custom param option.</li>\n</ul>\n",
+    "plugin": "formidable-directory/formidable-directory.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "",
+    "beta": {
+      "version": "100",
+      "location": [
+        "fp.strategy11.com/form-templates/business-directory.xml"
+      ]
+    }
+  },
+  "28027505": {
+    "title": "Views",
+    "name": "Views",
+    "display_name": "Legacy Views",
+    "slug": "views",
+    "version": "4.0.05",
+    "new_version": "4.0.05",
+    "location": [
+      "fp.strategy11.com/releases/views/formidable-views-4.0.05.zip"
+    ],
+    "excerpt": "Add the power of views to your Formidable Forms to display your form submissions in listings, tables, calendars, and more.",
+    "id": 28027505,
+    "released": "2010-10-28 00:00:00",
+    "categories": [
+      "Strategy11"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase-category/views/",
+    "link": "https://formidableforms.com/downloads/views/",
+    "changelog": "<h4>v5.7 - December 10, 2024</h4>\n<ul>\n<li>New: Calendar views now support a new End Event Time setting and a new Pop-up Location pop-up setting.</li>\n<li>New: Calendar views now support a new &#091;<span class=\"blob-code-inner blob-code-marker \" data-code-marker=\"+\"><span class=\"pl-s\">end_event_date</span></span>] shortcode.</li>\n<li>Fix: Support for repeated calendar events in modern calendar views has been improved.</li>\n<li>Fix: Support for RTL in modern calendar views has been improved.</li>\n<li>Fix: The Elementor Widget and Gutenberg blocks would only display options for 99 views. These dropdowns will now include every option, and the queries have been updated to help reduce the amount of memory required.</li>\n</ul>\n<h4>v5.6.4 - November 13, 2024</h4>\n<ul>\n<li>Fix: View blocks would fail to preview in the Gutenberg builder on WordPress 6.7.</li>\n<li>Fix: A styling conflict with the Divi theme would cause long responsive table column text to overlap over other content, and long strings will now wrap to multiple lines.</li>\n<li>Fix: Grid view layout data would get printed out when viewed when no form data source was selected.</li>\n<li>An unnecessary database query has been removed when checking if the detail page is active.</li>\n</ul>\n<h4>v5.4.2 - October 25, 2023</h4>\n<ul>\n<li>New: A new <span class=\"blob-code-inner blob-code-marker js-code-nav-pass \" data-code-marker=\"+\"><span class=\"pl-s\">frm_filter_final_view filter has been added for modifying the final result of a view.</span></span></li>\n<li>New: A few UI enhancements have been made. Now sliders for grid view settings include additional input fields with matching numeric values.</li>\n<li>New: The way CSS is added has been modified for better compatibility with the Snuffleupagus security module.</li>\n<li>New: The ID column is now sortable on the views list admin page.</li>\n<li>New: Some accessibility improvements have been added for view editor labels.</li>\n<li>New: A new filter has been added to support the new entry status types introduced with the form abandonment add on.</li>\n<li>Fix: Multiple warnings would get logged when sorting a view by a deleted field.</li>\n<li>Fix: Long view content would scroll underneath the type toggle elements.</li>\n<li>Fix: The preview result for address field shortcodes was not consistent with the front end result.</li>\n<li>Fix: The views editor would break with a fatal error when using the Google Listings and Ads plugin by WooCommerce. This conflict has been resolved.</li>\n<li>Fix: A Undefined array key PHP warning would get logged when loading the view editor if only a single view exists in the database.</li>\n<li>Fix: A deprecated use of self message would get logged when using the Gutenberg block for views.</li>\n</ul>\n",
+    "plugin": "formidable-views/formidable-views.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28029934": {
+    "title": "Formidable Pro Basic",
+    "name": "Formidable Pro Basic",
+    "display_name": "Formidable Pro Basic",
+    "slug": "formidable-basic2",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28029934,
+    "released": "2020-11-13 12:10:10",
+    "categories": [],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-basic2/",
+    "changelog": "",
+    "plugin": "formidable-basic2/formidable-basic2.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28058856": {
+    "title": "Visual Views",
+    "name": "Visual Views",
+    "display_name": "Visual Views",
+    "slug": "visual-views",
+    "version": "5.11",
+    "new_version": "5.11",
+    "location": [
+      "fp.strategy11.com/releases/views/formidable-views-5.11.zip"
+    ],
+    "excerpt": "Create WordPress web apps to display your form submissions in grids, tables, calendars, and more.",
+    "id": 28058856,
+    "released": "2021-05-31 00:00:00",
+    "categories": [
+      "Creator",
+      "Data Management",
+      "Strategy11"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase-category/views/",
+    "link": "https://formidableforms.com/downloads/visual-views/",
+    "changelog": "<h4>v5.11 - July 14, 2026</h4>\n<ul>\n<li>New: Support added for accessing Views with gated content actions.</li>\n<li>New: Address field inputs can now be selected when filtering and sorting views.</li>\n<li>New: Custom CSS is now scoped to the view builder preview so it does not conflict with other View editor elements.</li>\n<li>Fix: Sorting would not work properly when fields have multiple values like checkboxes and dropdowns that allow multiple selections.</li>\n<li>The entries list widget is now officially deprecated.</li>\n</ul>\n<h4>v5.10.1 - February 16, 2026</h4>\n<ul>\n<li>Fix: A bug in the customization sidebar was causing fields options to not appear when there were more than 8 fields in a given form.</li>\n</ul>\n<h4>v5.10 - February 12, 2026</h4>\n<ul>\n<li>New: Several views settings have been redesigned.</li>\n<li>New: Detail pages now use a separate View-specific Custom CSS setting.</li>\n<li>New: View-specific Custom CSS is now scoped to a specific view. Views with Custom CSS will have a unique class added automatically.</li>\n<li>Fix: The Views block was not clickable, making it difficult to update a View block.</li>\n<li>Fix: Tooltips were not working properly with the new version of Bootstrap included in Formidable Lite.</li>\n</ul>\n",
+    "plugin": "formidable-views/formidable-views.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28058858": {
+    "title": "Formidable Views + Forms Basic",
+    "name": "Formidable Views + Forms Basic",
+    "display_name": "Formidable Views + Forms Basic",
+    "slug": "formidable-views-basic",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28058858,
+    "released": "2021-05-12 12:29:57",
+    "categories": [],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-views-basic/",
+    "changelog": "",
+    "plugin": "formidable-views-basic/formidable-views-basic.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28058860": {
+    "title": "Formidable Apps + Forms Elite",
+    "name": "Formidable Apps + Forms Elite",
+    "display_name": "Formidable Apps + Forms Elite",
+    "slug": "formidable-views-elite",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28058860,
+    "released": "2021-05-12 12:22:02",
+    "categories": [],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-views-elite/",
+    "changelog": "",
+    "plugin": "formidable-views-elite/formidable-views-elite.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28058862": {
+    "title": "Formidable Apps + Forms Business",
+    "name": "Formidable Apps + Forms Business",
+    "display_name": "Formidable Apps + Forms Business",
+    "slug": "formidable-views-business",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28058862,
+    "released": "2021-05-12 12:27:07",
+    "categories": [],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-views-business/",
+    "changelog": "",
+    "plugin": "formidable-views-business/formidable-views-business.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28058864": {
+    "title": "Formidable Views + Forms Plus",
+    "name": "Formidable Views + Forms Plus",
+    "display_name": "Formidable Views + Forms Plus",
+    "slug": "formidable-views-plus",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28058864,
+    "released": "2021-05-12 12:28:21",
+    "categories": [],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/formidable-views-plus/",
+    "changelog": "",
+    "plugin": "formidable-views-plus/formidable-views-plus.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28067256": {
+    "title": "Surveys and Polls",
+    "name": "Surveys and Polls",
+    "display_name": "Surveys and Polls",
+    "slug": "surveys",
+    "version": "1.1.6",
+    "new_version": "1.1.6",
+    "location": [
+      "fp.strategy11.com/releases/surveys/formidable-surveys-1.1.6.zip"
+    ],
+    "excerpt": "Transform your WordPress site into a data collection machine with our user-friendly survey form builder.",
+    "id": 28067256,
+    "released": "2021-09-16 00:00:00",
+    "categories": [
+      "Business",
+      "Data Collection",
+      "Strategy11"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/surveys-and-polls-forms/",
+    "link": "https://formidableforms.com/downloads/surveys/",
+    "changelog": "<h4>v1.1.6 - February 12, 2026</h4>\n<ul>\n<li>New: Ranking field styles have been updated to use Formidable style settings more consistently.</li>\n<li>New: Support for the new choice limit settings has been added for fields with button display formatting.</li>\n<li>Fix: The image upload button would appear incorrectly after bulk editing options.</li>\n<li>Fix: A \"The use statement with non-compound name 'FrmAppHelper' has no effect\" warning has been fixed.</li>\n</ul>\n<h4>v1.1.5 - September 9, 2025</h4>\n<ul>\n<li>Fix: A \"PHP Fatal error: Uncaught TypeError: Cannot access offset of type string on string\" error when using ranking fields has been fixed.</li>\n<li>Fix: Drag and drop for ranking fields should now work better on mobile devices.</li>\n<li>Fix: Fields values would not display for ranking fields when separate values were not not defined.</li>\n<li>Survey field settings have been updated to match field settings updates introduced in Formidable Form v6.24</li>\n</ul>\n<h4>v1.1.4 - November 25, 2024</h4>\n<ul>\n<li>Fix: Ranking field is being sorted as string not integers in the form reports.</li>\n<li>Fix: Ranking items aren't aligned when dragging.</li>\n<li>Fix: Ranking field styling issue in Twenty Twenty-One theme.</li>\n<li>Improved accessibility for the Ranking field.</li>\n</ul>\n",
+    "plugin": "formidable-surveys/formidable-surveys.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28074303": {
+    "title": "Landing Pages",
+    "name": "Landing Pages",
+    "display_name": "Landing Pages",
+    "slug": "landing-pages",
+    "version": "1.0.03",
+    "new_version": "1.0.03",
+    "location": [
+      "fp.strategy11.com/releases/landing/formidable-landing-1.0.03.zip"
+    ],
+    "excerpt": "Create beautiful landing pages fast and rake in new leads.",
+    "id": 28074303,
+    "released": "2022-01-06 00:00:00",
+    "categories": [
+      "Creator",
+      "Form Design &amp; Display",
+      "Strategy11"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/landing-pages/",
+    "link": "https://formidableforms.com/downloads/landing-pages/",
+    "changelog": "<p>No Changes Found</p>\n",
+    "plugin": "formidable-landing/formidable-landing.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28100793": {
+    "title": "Conversational Forms",
+    "name": "Conversational Forms",
+    "display_name": "Conversational Forms",
+    "slug": "conversational-forms",
+    "version": "1.2.1",
+    "new_version": "1.2.1",
+    "location": [
+      "fp.strategy11.com/releases/chat/formidable-chat-1.2.1.zip"
+    ],
+    "excerpt": "Ask one question at a time to humanize forms and boost their conversion rates.",
+    "id": 28100793,
+    "released": "2022-01-25 00:00:00",
+    "categories": [
+      "Business",
+      "Form Design &amp; Display"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/conversational-forms/",
+    "link": "https://formidableforms.com/downloads/conversational-forms/",
+    "changelog": "<h4>v1.2.1 - May 27, 2026</h4>\n<ul>\n<li>New: The form settings icon has been updated to reflect form settings UI changes in Formidable v6.31.</li>\n<li>Fix: Collapsible repeater fields would not appear correctly in a conversational form.</li>\n<li>Fix: Repeaters with hidden field labels would get skipped.</li>\n<li>Fix: Recaptcha badges were not visible inside of conversational forms.</li>\n</ul>\n<h4>v1.2 - March 11, 2025</h4>\n<ul>\n<li>New: A new transition type setting has been added. Now, in addition to the horizontal transitions, there are new Vertical and Fade options.</li>\n<li>This update adds compatibility for the new flatpickr datepicker library available in Pro v6.19.</li>\n</ul>\n<h4>v1.1.5 - December 10, 2024</h4>\n<ul>\n<li>Fix: Form descriptions would appear twice when editing an entry.</li>\n<li>Fix: Stripe link email fields would appear even when the payment field is conditionally hidden.</li>\n<li>Fix: Fieldset padding is now reduced to 0 automatically on mobile device widths to allow more space for content.</li>\n<li>The toggle component has been updated to match other toggles used on admin pages.</li>\n</ul>\n",
+    "plugin": "formidable-chat/formidable-chat.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28118399": {
+    "title": "Geolocation",
+    "name": "Geolocation",
+    "display_name": "Geolocation",
+    "slug": "geolocation",
+    "version": "1.3.4",
+    "new_version": "1.3.4",
+    "location": [
+      "fp.strategy11.com/releases/geo/formidable-geo-1.3.4.zip"
+    ],
+    "excerpt": "Get more accurate data and make forms faster to complete with address autocomplete.",
+    "id": 28118399,
+    "released": "2022-04-12 00:00:00",
+    "categories": [
+      "Business",
+      "Data Collection"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/geolocation/",
+    "link": "https://formidableforms.com/downloads/geolocation/",
+    "changelog": "<h4>v1.3.4 - February 17, 2025</h4>\n<ul>\n<li>Fix: Geolocation information would not display correctly for some new entries created on the front end.</li>\n<li>Fix: Repeated address fields would reset to the visitor's location when a new repeater row was added.</li>\n</ul>\n<h4>v1.3.3 - November 26, 2024</h4>\n<ul>\n<li>Fix: Field validation errors would get incorrectly removed, allowing forms with invalid data to get submitted. This has been been fixed. You must also update to Formidable Pro version 6.16.1 or higher, or you might experience issues with required field validation for address fields.</li>\n<li>Fix: When changing between pages in a form, the default location would appear on the map instead of the previously submitted location.</li>\n</ul>\n<h4>v1.3.2 - September 25, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>Fix: Address field autocomplete options are now restricted to the default country on load.</li>\n<li>Fix: An Uncaught TypeError: google.maps.Geocoder error has been fixed.</li>\n</ul>\n",
+    "plugin": "formidable-geo/formidable-geo.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28123662": {
+    "title": "FAQ",
+    "name": "FAQ",
+    "display_name": "FAQ",
+    "slug": "faq",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28123662,
+    "released": "2022-05-02 13:25:45",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/faq/",
+    "changelog": "",
+    "plugin": "faq/faq.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28123664": {
+    "title": "Restaurant Menu",
+    "name": "Restaurant Menu",
+    "display_name": "Restaurant Menu",
+    "slug": "restaurant-menu",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28123664,
+    "released": "2022-05-02 13:25:31",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/restaurant-menu/",
+    "changelog": "",
+    "plugin": "restaurant-menu/restaurant-menu.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28123666": {
+    "title": "Business Hours",
+    "name": "Business Hours",
+    "display_name": "Business Hours",
+    "slug": "business-hours",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28123666,
+    "released": "2022-05-02 13:25:15",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/business-hours/",
+    "changelog": "",
+    "plugin": "business-hours/business-hours.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28123668": {
+    "title": "Team Directory",
+    "name": "Team Directory",
+    "display_name": "Team Directory",
+    "slug": "team-directory",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28123668,
+    "released": "2022-05-02 13:24:48",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/team-directory/",
+    "changelog": "",
+    "plugin": "team-directory/team-directory.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28123670": {
+    "title": "Application Shortcuts",
+    "name": "Application Shortcuts",
+    "display_name": "Application Shortcuts",
+    "slug": "application-shortcuts",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28123670,
+    "released": "2022-05-02 13:38:05",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/application-shortcuts/",
+    "changelog": "",
+    "plugin": "application-shortcuts/application-shortcuts.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28124331": {
+    "title": "Real Estate Listings",
+    "name": "Real Estate Listings",
+    "display_name": "Real Estate Listings",
+    "slug": "real-estate-listings",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28124331,
+    "released": "2022-05-05 13:53:10",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/real-estate-listings/",
+    "changelog": "",
+    "plugin": "real-estate-listings/real-estate-listings.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28124372": {
+    "title": "Product Reviews",
+    "name": "Product Reviews",
+    "display_name": "Product Reviews",
+    "slug": "product-reviews",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28124372,
+    "released": "2022-05-05 16:39:04",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/product-reviews/",
+    "changelog": "",
+    "plugin": "product-reviews/product-reviews.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28127946": {
+    "title": "Link in Bio Instagram Grid",
+    "name": "Link in Bio Instagram Grid",
+    "display_name": "Link in Bio Instagram Grid",
+    "slug": "link-in-bio-instagram-grid",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28127946,
+    "released": "2022-05-25 14:13:43",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/link-in-bio-instagram-grid/",
+    "changelog": "",
+    "plugin": "link-in-bio-instagram-grid/link-in-bio-instagram-grid.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28136428": {
+    "title": "PDFs",
+    "name": "PDFs",
+    "display_name": "PDFs",
+    "slug": "pdfs",
+    "version": "2.1",
+    "new_version": "2.1",
+    "location": [
+      "fp.strategy11.com/releases/pdfs/formidable-pdfs-2.1.zip"
+    ],
+    "excerpt": "Create PDFs from form entries automatically. Email them or let visitors download PDFs from your site.",
+    "id": 28136428,
+    "released": "2022-08-09 00:00:00",
+    "categories": [
+      "Business",
+      "Data Management",
+      "Utilities"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/pdfs/",
+    "link": "https://formidableforms.com/downloads/pdfs/",
+    "changelog": "<h4>v2.1 - July 14, 2026</h4>\n<ul>\n<li>New: Support added for accessing PDFs with gated content actions.</li>\n</ul>\n<h4>v2.0.7 - February 25, 2026</h4>\n<ul>\n<li>New: Add \"frm-pdf-html\" class to the &lt;html&gt; tag of the PDF file.</li>\n<li>Fix: The access token for the public PDF file is now more secure.</li>\n<li>Fix some deprecated PHP warnings.</li>\n</ul>\n<h4>v2.0.6 - May 28, 2025</h4>\n<ul>\n<li>Fix: translation notice in the backend.</li>\n<li>Fix: the styling issue of file upload icons in PDF file.</li>\n<li>Fix: the styling issue of image buttons in PDF file.</li>\n</ul>\n",
+    "plugin": "formidable-pdfs/formidable-pdfs.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28144027": {
+    "title": "Member Directory",
+    "name": "Member Directory",
+    "display_name": "Member Directory",
+    "slug": "member-directory",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28144027,
+    "released": "2022-08-24 15:18:56",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/member-directory/",
+    "changelog": "",
+    "plugin": "member-directory/member-directory.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28144089": {
+    "title": "Business Directory",
+    "name": "Business Directory",
+    "display_name": "Business Directory",
+    "slug": "business-directory",
+    "version": "",
+    "new_version": "",
+    "location": [],
+    "excerpt": "",
+    "id": 28144089,
+    "released": "2022-08-24 16:41:02",
+    "categories": [
+      "Solution",
+      "Strategy11"
+    ],
+    "docs": "",
+    "link": "https://formidableforms.com/downloads/business-directory/",
+    "changelog": "",
+    "plugin": "business-directory/business-directory.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28149579": {
+    "title": "Google Sheets",
+    "name": "Google Sheets",
+    "display_name": "Google Sheets",
+    "slug": "google-sheets",
+    "version": "1.0.5",
+    "new_version": "1.0.5",
+    "location": [
+      "fp.strategy11.com/releases/google-sheets/formidable-googlespreadsheet-1.0.5.zip"
+    ],
+    "excerpt": "Send form entries to a Google spreadsheet as a backup or for extra processing.",
+    "id": 28149579,
+    "released": "2022-10-18 00:00:00",
+    "categories": [
+      "Business",
+      "Data Management"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/google-spreadsheet-forms/",
+    "link": "https://formidableforms.com/downloads/google-sheets/",
+    "changelog": "<h4>v1.0.5 - June 18, 2025</h4>\n<ul>\n<li>New: You can now send form data to sheets in shared Google drives.</li>\n<li>New: Google sheet actions now support form action automation.</li>\n<li>New: Google Sheet options will now use autocomplete when there are over 50 options, and the sheet names are sorted alphabetically to make it easier to find the right sheet.</li>\n<li>Fix: Pagination checks have been added to help prevent issues where not all sheets were available as options.</li>\n<li>Fix: A column value will no longer be escaped by default when the action setting starts with an equals (=) sign. A new filter, frm_googlespreadsheet_escape_value, has also been added.</li>\n<li>Checks have been updated when handling redirects to help fix issues that would prevent successful authentication when setting up Google Sheets.</li>\n</ul>\n<h4>v1.0.4 - September 25, 2024</h4>\n<ul>\n<li>Fix: When inserting to Google Sheets, data would get inserted into the wrong column in cases where cells are empty. A GET request is now made to properly determine the last row to more accurately determine the insert position to improve accuracy. This may have performance costs. To opt out of this, a new frm_googlespreadsheet_should_check_for_first_empty_row filter has been added.</li>\n</ul>\n<h4>v1.0.3 - September 3, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>New: A fallback solution has been added to enable authentication on some sites where pop ups are disallowed.</li>\n<li>Extra spaces will be trimmed when adding Client ID and Client Secret values to help prevent errors related to copying extra whitespace.</li>\n</ul>\n",
+    "plugin": "formidable-googlespreadsheet/formidable-googlespreadsheet.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28158728": {
+    "title": "ACF Forms",
+    "name": "ACF Forms",
+    "display_name": "ACF Forms",
+    "slug": "acf-forms",
+    "version": "1.0.4",
+    "new_version": "1.0.4",
+    "location": [
+      "fp.strategy11.com/releases/acf/formidable-acf-1.0.4.zip"
+    ],
+    "excerpt": "Sync custom fields between Formidable and Advanced Custom Fields or ACF Pro.",
+    "id": 28158728,
+    "released": "2022-12-13 00:00:00",
+    "categories": [
+      "Business",
+      "Data Management"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/acf-form/",
+    "link": "https://formidableforms.com/downloads/acf-forms/",
+    "changelog": "<h4>v1.0.4 - December 18, 2025</h4>\n<ul>\n<li>Fix: The repeater is broken after saving the post with an ACF repeater linked to a Formidable repeater.</li>\n<li>Fix: PHP Notice: Function _load_textdomain_just_in_time was called incorrectly.</li>\n</ul>\n<h4>v1.0.3 - October 16, 2025</h4>\n<ul>\n<li>Fix: The submit field appears in the fields dropdown in the form action.</li>\n<li class=\"li1\">Fix: the issue when saving a post with the file upload inside a repeater.</li>\n<li class=\"li1\">Fix: translation error message.</li>\n</ul>\n<h4>v1.0.2 - August 13, 2024</h4>\n<ul>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>Fix: Values were not getting added to an ACF repeater when the setting to store Formidable entries is disabled.</li>\n</ul>\n",
+    "plugin": "formidable-acf/formidable-acf.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "advanced, custom fields"
+  },
+  "28189169": {
+    "title": "AI",
+    "name": "AI",
+    "display_name": "AI Forms",
+    "slug": "ai",
+    "version": "2.1",
+    "new_version": "2.1",
+    "location": [
+      "fp.strategy11.com/releases/ai/formidable-ai-2.1.zip"
+    ],
+    "excerpt": "Get back your time by autogenerating a response from ChatGPT and inserting it into a field.",
+    "id": 28189169,
+    "released": "2023-04-11 00:00:00",
+    "categories": [
+      "Automation",
+      "Business"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/form-ai/",
+    "link": "https://formidableforms.com/downloads/ai/",
+    "changelog": "<h4>v2.1 - September 9, 2025</h4>\n<ul>\n<li>New: Options for fields can now be generated with AI, helping to save time when working on forms.</li>\n<li>New: New AI models can be selected including gpt-4.1-nano and gemini-2-flash-lite.</li>\n</ul>\n<h4>v2.0.2 - May 7, 2025</h4>\n<ul>\n<li>Fix: The AI Prompt setting would get ignored after the previous release.</li>\n</ul>\n<h4>v2.0.1 - March 4, 2025</h4>\n<ul>\n<li>Fix: The submit button on the edit entry admin page would not work for forms with an AI field without updating the AI response.</li>\n<li>Fix: AI fields would not properly watch for changes in name fields.</li>\n<li>Fix: Shortcodes were not properly detected when no spaces were left in-between.</li>\n<li>Fix: A class FrmAIAppController not found fatal error has been fixed that would trigger when activating the AI add-on when Formidable Lite was not available.</li>\n</ul>\n",
+    "plugin": "formidable-ai/formidable-ai.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "chatgpt, openai, automate"
+  },
+  "28217763": {
+    "title": "Abandonment",
+    "name": "Abandonment",
+    "display_name": "Form Abandonment",
+    "slug": "abandonment",
+    "version": "1.1.6",
+    "new_version": "1.1.6",
+    "location": [
+      "fp.strategy11.com/releases/abandonment/formidable-abandonment-1.1.6.zip"
+    ],
+    "excerpt": "Capture form data before it's submitted to save more leads and optimize forms. Plus, auto save drafts and allow logged out editing.",
+    "id": 28217763,
+    "released": "2023-10-24 00:00:00",
+    "categories": [
+      "Business",
+      "Data Collection"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/form-abandonment/",
+    "link": "https://formidableforms.com/downloads/abandonment/",
+    "changelog": "<h4>v1.1.6 - March 26, 2025</h4>\n<ul>\n<li>Fix: Auto-saving would not work properly after changing pages when submitting with AJAX.</li>\n<li>Fix: No link would output when using the &#091;frm-signed-edit-link] shortcodes in some cases, like editing an entry after submitting.</li>\n<li>Fix: When the Require an email address or phone number before saving setting was enabled, changes would only get sent after the required field was changed. Now data will sync after other fields are changed as well, after the required fields have been filled.</li>\n<li>Fix: When clicking a link in Gmail, a Google cache bot would follow the link and submit the form. This could cause issues with empty form entries and \"You do not have permission to view this form\" errors for users who are not logged in. Google bots are now blocked by doing a reverse DNS lookup based on IP. To opt out of this, a new frm_abandonment_block_google_cache filter has been added.</li>\n</ul>\n<h4>v1.1.5 - March 11, 2025</h4>\n<ul>\n<li>New: In-progress entries will no longer get saved to the database for forms with GDPR fields when consent has not yet been granted.</li>\n</ul>\n<h4>v1.1.4 - December 18, 2024</h4>\n<ul>\n<li>New: Abandonment links will now automatically use a form's landing page when one is active.</li>\n<li>New: This plugin now includes translations for French, Spanish, Italian, German, Japanese and Brazilian Portuguese.</li>\n<li>Fix: The way &#091;auto_id] shortcode values is retrieved has been updated to improve compatibility with in-progress and abandoned entries. Auto IDs will now update when an in-progress or abandoned entry is submitted.</li>\n</ul>\n",
+    "plugin": "formidable-abandonment/formidable-abandonment.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "partial, save, continue"
+  },
+  "28248560": {
+    "title": "Charts",
+    "name": "Charts",
+    "display_name": "Charts",
+    "slug": "charts",
+    "version": "2.0.2",
+    "new_version": "2.0.2",
+    "location": [
+      "fp.strategy11.com/releases/charts/formidable-charts-2.0.2.zip"
+    ],
+    "excerpt": "Transform form data into insightful graphs with ease.",
+    "id": 28248560,
+    "released": "2024-01-09 00:00:00",
+    "categories": [
+      "Creator",
+      "Data Management"
+    ],
+    "docs": "https://formidableforms.com/knowledgebase/graphs/",
+    "link": "https://formidableforms.com/downloads/charts/",
+    "changelog": "<h4>v2.0.2 - August 25, 2026</h4>\n<ul>\n<li>\nSecurity: Improved the security of the graph image.\n</li>\n<li>\nFix: The graph image throws an error when there is no data.\n</li>\n<li>\nFix: Strings in the chart block are not translatable.\n</li>\n<li>\nFix: Some PHP 8 compatibility and deprecated notices.\n</li>\n</ul>\n<h4>v2.0.1 - December 17, 2025</h4>\n<ul>\n<li>New: Supported iframed Gutenberg.</li>\n<li>New: Updated some minor stylings to opt into the future WordPress blocks styling.</li>\n<li>Fix: JS warnings in the browser console.</li>\n<li>Fix: Secured REST endpoints.</li>\n<li>Fix: PHP warning when viewing the Chart block.</li>\n</ul>\n<h4>v2.0 - July 9, 2025</h4>\n<ul>\n<li>New: A new \"Format\" option is added to the Graph block to show the graph as image. The corresponding 'format=\"image\"' is also added to the graph shortcode. The new image format supports some new attributes: x_title_margin, y_title_margin, legend_columns.</li>\n<li>New: If a graph is included in PDF or email content, it will be converted to image format automatically.</li>\n<li>New: Single color picker options in the Graph block now contains the \"Clear\" button to clear the color.</li>\n<li>Fix: Can not add or edit graph colors.</li>\n<li>Fix: some PHP notices.</li>\n</ul>\n",
+    "plugin": "formidable-charts/formidable-charts.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": "graph"
+  },
+  "28286367": {
+    "title": "ConvertKit",
+    "name": "ConvertKit",
+    "display_name": "ConvertKit",
+    "slug": "convertkit",
+    "version": "1.0",
+    "new_version": "1.0",
+    "location": [
+      "fp.strategy11.com/releases/convertkit/formidable-convertkit-1.0.zip"
+    ],
+    "excerpt": "Bring automation into your email marketing plan for the power to say \"welcome\" to your subscribers the moment they opt-in to your list.",
+    "id": 28286367,
+    "released": "2024-07-09 00:00:00",
+    "categories": [
+      "Creator",
+      "Email &amp; SMS Marketing",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/convertkit-forms/",
+    "link": "https://formidableforms.com/downloads/convertkit/",
+    "changelog": "<p>No Changes Found</p>\n",
+    "plugin": "formidable-convertkit/formidable-convertkit.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28337572": {
+    "title": "Test Mode",
+    "name": "Test Mode",
+    "display_name": "Test Mode",
+    "slug": "test-mode",
+    "version": "1.0",
+    "new_version": "1.0",
+    "location": [
+      "fp.strategy11.com/releases/test-mode/formidable-test-mode-1.0.zip"
+    ],
+    "excerpt": "A comprehensive form testing toolkit. Bypass validation, test form actions, preview user role visibility and more.",
+    "id": 28337572,
+    "released": "2025-10-14 00:00:00",
+    "categories": [
+      "Add-on Category",
+      "Creator",
+      "Form Functionality",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/testing-mode/",
+    "link": "https://formidableforms.com/downloads/test-mode/",
+    "changelog": "<p>No Changes Found</p>\n",
+    "plugin": "formidable-test-mode/formidable-test-mode.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28339372": {
+    "title": "n8n",
+    "name": "n8n",
+    "display_name": "n8n",
+    "slug": "n8n",
+    "version": "0.1.0",
+    "new_version": "0.1.0",
+    "location": [
+      "fp.strategy11.com/releases/n8n/formidable-n8n-0.1.0.zip"
+    ],
+    "excerpt": "Integrates your forms with n8n by sending submissions to any webhook.",
+    "id": 28339372,
+    "released": "2025-12-09 00:00:00",
+    "categories": [
+      "Add-on Category",
+      "Automation",
+      "Business",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/n8n/",
+    "link": "https://formidableforms.com/downloads/n8n/",
+    "changelog": "<p>No Changes Found</p>\n",
+    "plugin": "formidable-n8n/formidable-n8n.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  },
+  "28340061": {
+    "title": "Coupons",
+    "name": "Coupons",
+    "display_name": "Coupons",
+    "slug": "coupons",
+    "version": "1.0.1",
+    "new_version": "1.0.1",
+    "location": [
+      "fp.strategy11.com/releases/coupons/formidable-coupons-1.0.1.zip"
+    ],
+    "excerpt": "Add coupons to apply discounts to products and calculations in Formidable Forms.",
+    "id": 28340061,
+    "released": "2026-01-13 00:00:00",
+    "categories": [
+      "Add-on Category",
+      "Business",
+      "Ecommerce",
+      "Form Functionality",
+      "Strategy11"
+    ],
+    "docs": "/knowledgebase/coupons/",
+    "link": "https://formidableforms.com/downloads/coupons/",
+    "changelog": "<p>No Changes Found</p>\n",
+    "plugin": "formidable-coupons/formidable-coupons.php",
+    "icons": {
+      "1x": "https://ps.w.org/formidable/assets/icon-256x256.png"
+    },
+    "banners": {
+      "high": "https://ps.w.org/formidable/assets/banner-1544x500.png",
+      "low": "https://ps.w.org/formidable/assets/banner-1544x500.png"
+    },
+    "search_terms": ""
+  }
+}
