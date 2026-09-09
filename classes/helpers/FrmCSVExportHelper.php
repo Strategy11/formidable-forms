@@ -256,7 +256,7 @@ class FrmCSVExportHelper {
 		self::$charset = get_option( 'blog_charset' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator;
+		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? FrmAppHelper::get_post_param( 'csv_col_sep', '', 'sanitize_text_field' ) : self::$column_separator;
 
 		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, $args );
 	}

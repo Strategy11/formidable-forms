@@ -151,8 +151,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$currency           = strtoupper( $atts['action']->post_content['currency'] );
-		$square_token       = sanitize_text_field( $_POST['square-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$verification_token = sanitize_text_field( $_POST['square-verification-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$square_token       = FrmAppHelper::get_post_param( 'square-token', '', 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$verification_token = FrmAppHelper::get_post_param( 'square-verification-token', '', 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$description        = FrmTransLiteAppHelper::process_shortcodes(
 			array(
 				'entry' => $atts['entry'],
@@ -219,8 +219,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$currency           = strtoupper( $atts['action']->post_content['currency'] );
-		$square_token       = sanitize_text_field( $_POST['square-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$verification_token = sanitize_text_field( $_POST['square-verification-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$square_token       = FrmAppHelper::get_post_param( 'square-token', '', 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$verification_token = FrmAppHelper::get_post_param( 'square-verification-token', '', 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		// We can put this all behind our API.
 		// It will require that we pass the customer info and the catalog info.
