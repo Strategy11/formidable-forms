@@ -66,6 +66,37 @@ jobs:
         if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps --include=dev
 
+      # Serve the form-templates API from a fixture instead of calling
+      # formidableforms.com on every run. The cache key is the UTC date, so
+      # the fixture is refreshed at most once a day and all four shards share
+      # the one copy - without this, each shard fetches it separately. If the
+      # fetch fails the committed fixture is used, so the suite still runs
+      # when the API is unreachable.
+      - name: Get current date
+        id: date
+        run: echo "date=$( date -u +%Y-%m-%d )" >> "$GITHUB_OUTPUT"
+
+      - name: Cache form templates API response
+        id: cache-templates
+        uses: actions/cache@v4
+        with:
+          path: tests/mu-plugins/form-templates-api.json
+          key: form-templates-${{ steps.date.outputs.date }}
+
+      - name: Refresh form templates fixture
+        if: steps.cache-templates.outputs.cache-hit != 'true'
+        run: |
+          # Write to a temp file first so a partial or failed response never
+          # clobbers the committed fallback.
+          if curl -fsS --max-time 40 -A 'formidable-e2e' \
+            'https://formidableforms.com/wp-json/form-templates/v1/list?l=RlJFRVRFTVBMQVRFUyEhIQ%3D%3D' \
+            -o /tmp/form-templates-api.json && [ -s /tmp/form-templates-api.json ]; then
+            mv /tmp/form-templates-api.json tests/mu-plugins/form-templates-api.json
+            echo "Refreshed the form templates fixture from the API."
+          else
+            echo "Could not reach the templates API; using the committed fixture."
+          fi
+
       - name: Set up WP environment
         run: npm run env start
 
