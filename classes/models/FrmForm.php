@@ -166,7 +166,7 @@ class FrmForm {
 	 * Switches field ID in fields.
 	 *
 	 * @since 5.3
-	 * @since x.x The description column is checked too, so a field id in a description survives a
+	 * @since 6.35 The description column is checked too, so a field id in a description survives a
 	 *            duplicate or import when the field it points at is created afterwards.
 	 *
 	 * @param int $form_id Form ID.

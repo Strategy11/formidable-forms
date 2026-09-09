@@ -24,6 +24,10 @@ check-file = false
 extend-glob = ["denylist/*.txt"]
 check-file = false
 
+[type.addons-api]
+extend-glob = ["*addons-api.json"]
+check-file = false
+
 [default]
 extend-ignore-re = [
     "/mis'",

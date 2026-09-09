@@ -926,7 +926,7 @@ BEFORE_HTML;
 			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
 			} elseif ( $code === 'entry_key' && ! empty( $_GET ) && isset( $_GET['entry'] ) ) {
-				$replace_with = FrmAppHelper::simple_get( 'entry' );
+				$replace_with = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
 			} else {
 				$replace_with = '';
 			}

@@ -369,7 +369,7 @@ class FrmTransLiteAppHelper {
 		 * This makes it possible for an add on to claim the payment for a user who isn't logged in yet,
 		 * for example when the same submission registers them.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param int $user_id The logged in user, or 0 for a guest.
 		 */

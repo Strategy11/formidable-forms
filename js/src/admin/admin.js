@@ -2446,25 +2446,33 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Claim the next batch of placeholders and ask the server to render them.
+	 *
+	 * Only the field ids go up. The server already has the fields, so sending their data back to
+	 * it would mean the whole form travelled down to the page and straight back up again.
+	 *
+	 * @param {HTMLElement} thisField The first placeholder in the batch.
+	 * @return {void}
+	 */
 	function loadFields( thisField ) {
-		const field = [];
-		const addHtmlToField = element => {
-			const frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
+		const fieldIds = [];
+		const claimField = element => {
 			element.classList.add( 'frm_load_now' );
-			if ( frmHiddenFdata !== null ) {
-				field.push( frmHiddenFdata.innerHTML );
+			if ( element.classList.contains( 'frm_field_loading' ) ) {
+				fieldIds.push( element.dataset.fid );
 			}
 		};
 
-		addHtmlToField( thisField );
+		claimField( thisField );
 
 		let nextField = getNextField( thisField );
-		while ( nextField && field.length < FIELD_LOAD_BATCH_SIZE ) {
-			addHtmlToField( nextField );
+		while ( nextField && fieldIds.length < FIELD_LOAD_BATCH_SIZE ) {
+			claimField( nextField );
 			nextField = getNextField( nextField );
 		}
 
-		if ( ! field.length ) {
+		if ( ! fieldIds.length ) {
 			// There is nothing to ask the server for. The fields are flagged either way, so the
 			// queue carries on past them instead of offering them up again.
 			return;
@@ -2478,11 +2486,11 @@ window.frmAdminBuildJS = function() {
 			url: ajaxurl,
 			data: {
 				action: 'frm_load_field',
-				field,
+				field_ids: fieldIds,
 				form_id: thisFormId,
 				nonce: frmGlobal.nonce
 			},
-			success: html => handleAjaxLoadFieldSuccess( html, field ),
+			success: handleAjaxLoadFieldSuccess,
 			complete: () => {
 				--activeFieldLoadRequests;
 				fillFieldLoadQueue();
@@ -2497,24 +2505,32 @@ window.frmAdminBuildJS = function() {
 		return field.parentNode?.closest( '.frm_field_box' )?.nextElementSibling?.querySelector( '.form-field' );
 	}
 
-	function handleAjaxLoadFieldSuccess( html, field ) {
+	/**
+	 * Swap the placeholders for the fields the server rendered.
+	 *
+	 * @param {string} response A json object of field id to { type, html }.
+	 * @return {void}
+	 */
+	function handleAjaxLoadFieldSuccess( response ) {
 		let key;
 
-		html = html.replace( /^\s+|\s+$/g, '' );
-		if ( html.indexOf( '{' ) !== 0 ) {
+		response = response.replace( /^\s+|\s+$/g, '' );
+		if ( response.indexOf( '{' ) !== 0 ) {
 			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
 			return;
 		}
 
-		html = JSON.parse( html );
-
+		const loadedFields = JSON.parse( response );
 		const newFields = [];
+		// Field ids and types for the listeners of frm_ajax_loaded_field.
+		const loadedFieldData = [];
 
-		for ( key in html ) {
-			if ( ! Object.hasOwn( html, key ) ) {
+		for ( key in loadedFields ) {
+			if ( ! Object.hasOwn( loadedFields, key ) ) {
 				continue;
 			}
-			jQuery( `#frm_field_id_${ key }` ).replaceWith( html[ key ] );
+			jQuery( `#frm_field_id_${ key }` ).replaceWith( loadedFields[ key ].html );
+			loadedFieldData.push( { id: key, type: loadedFields[ key ].type } );
 
 			const newReplacedField = document.getElementById( `frm_field_id_${ key }` );
 			if ( newReplacedField ) {
@@ -2538,7 +2554,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const loadedEvent = new Event( 'frm_ajax_loaded_field', { bubbles: false } );
-		loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
+		loadedEvent.frmFields = loadedFieldData;
 		document.dispatchEvent( loadedEvent );
 	}
 
@@ -3550,7 +3566,7 @@ window.frmAdminBuildJS = function() {
 	 * Nothing in Lite renders a calculation box, so Lite offers the extension point and
 	 * leaves the parts themselves to whichever plugin owns the calculation.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
 	 * @param {string}      fieldId ID of the field the popup was opened for.
@@ -3562,7 +3578,7 @@ window.frmAdminBuildJS = function() {
 		/**
 		 * Allows add-ons to add field part shortcodes to calculation popup.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param {Object}      hookArgs                      Arguments passed to the hook.
 		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
@@ -3576,7 +3592,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Adds a row to a calculation box's field shortcode list.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {HTMLElement} list      The 'ul' element that contains field shortcodes available for calculation.
 	 * @param {string}      fieldId   ID of the field the popup was opened for.
@@ -7317,7 +7333,7 @@ window.frmAdminBuildJS = function() {
 	 * Fields after the target field move into the new group as well, since the new row is
 	 * where they end up on reload too.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {HTMLElement} field The field that just had the frm_first class added to it.
 	 * @return {void}
@@ -7361,7 +7377,7 @@ window.frmAdminBuildJS = function() {
 	 * The field group controls are shared between every group and get appended to whichever
 	 * group is hovered, so only list items are included.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {HTMLElement} field The field to start from.
 	 * @return {Array.<HTMLElement>} The field and the fields after it.
@@ -7854,7 +7870,7 @@ window.frmAdminBuildJS = function() {
 	 * browser chrome around them. The first one takes a row to itself and the rest
 	 * share the row below it, scaled to keep their proportions.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {string} images Comma separated file names, relative to the images/upsell folder.
 	 * @param {string} alt    Name of the feature being previewed.

@@ -104,7 +104,7 @@ class FrmStrpLiteAppHelper {
 	 * @return void
 	 */
 	public static function fee_education( $content = 'tip', $gateway = false ) {
-		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
+		if ( ! FrmAddonsController::payment_fees_apply( 'stripe' ) ) {
 			return;
 		}
 

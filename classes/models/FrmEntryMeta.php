@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryMeta {
 
 	/**
-	 * @since x.x Added the $field parameter.
+	 * @since 6.35 Added the $field parameter.
 	 *
 	 * @param int           $entry_id
 	 * @param int           $field_id
@@ -46,7 +46,7 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * @since x.x Added the $field parameter.
+	 * @since 6.35 Added the $field parameter.
 	 *
 	 * @param int           $entry_id
 	 * @param int           $field_id
@@ -87,7 +87,7 @@ class FrmEntryMeta {
 
 	/**
 	 * @since 3.0
-	 * @since x.x Added the $field parameter.
+	 * @since 6.35 Added the $field parameter.
 	 *
 	 * @param array         $values
 	 * @param stdClass|null $field  The field for $values['field_id'], when the caller already has

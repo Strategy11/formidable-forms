@@ -315,7 +315,7 @@ DEFAULT_HTML;
 			 * required indicator above does. Anything echoed here lands inside
 			 * the label, so keep it inline and decorative.
 			 *
-			 * @since x.x
+			 * @since 6.35
 			 *
 			 * @param array $field The field settings, as prepared by
 			 *                     FrmFieldsHelper::setup_edit_vars().
