@@ -491,7 +491,9 @@ class FrmAddonsController {
 	/**
 	 * Determine the license status for payment fee decisions.
 	 *
-	 * Mirrors the API's determine_status_from_license_details logic.
+	 * Mirrors determine_status_from_license_details in the Stripe Connect service,
+	 * including its 2016-04-26 grandfathered cutoff. Square and PayPal Commerce use a
+	 * later cutoff, so read their fees through payment_fees_apply instead.
 	 *
 	 * @since 6.31
 	 *
@@ -506,14 +508,14 @@ class FrmAddonsController {
 
 		$error = $version_info['error'] ?? array();
 
-		if ( is_array( $error ) ) {
-			$code = $error['code'] ?? '';
+		if ( is_array( $error ) && 'expired' === ( $error['code'] ?? '' ) ) {
+			return 'expired';
+		}
 
-			if ( 'expired' === $code ) {
-				return 'expired';
-			}
+		if ( self::is_grandfathered_license() ) {
+			$expires = self::get_grandfathered_expiration( $version_info );
 
-			if ( 'grandfathered' === $code && isset( $error['expires'] ) && gmdate( 'Y-m-d', $error['expires'] ) < '2016-04-26' ) {
+			if ( $expires && gmdate( 'Y-m-d', $expires ) < '2016-04-26' ) {
 				return 'free';
 			}
 		}
@@ -523,6 +525,81 @@ class FrmAddonsController {
 		}
 
 		return 'free';
+	}
+
+	/**
+	 * Check if a connect service charges its per-transaction fee for this license.
+	 *
+	 * Square and PayPal Commerce launched long after lifetime licenses stopped being
+	 * sold, so their services charge every grandfathered license. Stripe's predates
+	 * them and exempts most of them, which get_payment_license_status mirrors.
+	 *
+	 * @since 6.34
+	 *
+	 * @param string $service The connect service: 'stripe', 'square', or 'paypal'.
+	 *
+	 * @return bool
+	 */
+	public static function payment_fees_apply( $service ) {
+		if ( 'active' !== self::get_payment_license_status() ) {
+			return true;
+		}
+
+		if ( in_array( $service, array( 'square', 'paypal' ), true ) ) {
+			return self::is_grandfathered_license();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the primary license is grandfathered.
+	 *
+	 * The API reports this on the Pro add-on itself, the same place
+	 * FrmProAddonsController::license_type reads it from. Older responses put it
+	 * in the top level error instead, so check both.
+	 *
+	 * @since 6.34
+	 *
+	 * @return bool
+	 */
+	public static function is_grandfathered_license() {
+		$version_info = self::get_primary_license_info();
+
+		if ( ! $version_info ) {
+			return false;
+		}
+
+		$error = $version_info['error'] ?? array();
+
+		if ( is_array( $error ) && 'grandfathered' === ( $error['code'] ?? '' ) ) {
+			return true;
+		}
+
+		$pro = self::get_pro_from_addons( $version_info );
+
+		return 'grandfathered' === ( $pro['code'] ?? '' );
+	}
+
+	/**
+	 * Get the expiration timestamp reported alongside a grandfathered license.
+	 *
+	 * @since 6.34
+	 *
+	 * @param array $version_info The license info from get_primary_license_info.
+	 *
+	 * @return int
+	 */
+	private static function get_grandfathered_expiration( $version_info ) {
+		$error = $version_info['error'] ?? array();
+
+		if ( is_array( $error ) && ! empty( $error['expires'] ) ) {
+			return (int) $error['expires'];
+		}
+
+		$pro = self::get_pro_from_addons( $version_info );
+
+		return (int) ( $pro['expires'] ?? 0 );
 	}
 
 	/**

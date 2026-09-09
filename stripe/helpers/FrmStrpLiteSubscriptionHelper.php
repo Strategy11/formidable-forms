@@ -147,7 +147,6 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @return mixed
 	 */
 	public static function maybe_create_plan( $plan ) {
-		FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' );
 		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'maybe_create_plan', $plan );
 	}
 

@@ -44,6 +44,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrictInArrayNeedle" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrcasecmp" />
 	<rule ref="Formidable.CodeAnalysis.PreferTruthyOverNotEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />

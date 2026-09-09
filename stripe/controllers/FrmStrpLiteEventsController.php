@@ -115,7 +115,7 @@ class FrmStrpLiteEventsController {
 	 * This is to avoid running actions twice by mistake, since a Stripe Link
 	 * return URL and a webhook event can both process the same payment.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int $payment_id The id of the payment to check.
 	 *

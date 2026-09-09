@@ -174,4 +174,34 @@ class test_FrmField extends FrmUnitTest {
 			$this->assertCount( $args['count'], $fields, 'An incorrect number of fields are retrieved with FrmField::get_all_for_form for ' . $test . '.' );
 		}
 	}
+
+	/**
+	 * @covers FrmField::destroy
+	 */
+	public function test_destroy() {
+		$form     = $this->factory->form->create_and_get();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+			)
+		);
+
+		$entry_data = $this->factory->field->generate_entry_array( $form );
+
+		$entry_data['item_meta'][ $field_id ] = 'Meta for deleted field';
+
+		$entry_id = $this->factory->entry->create( $entry_data );
+
+		$this->assertSame( 'Meta for deleted field', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ) );
+
+		FrmField::destroy( $field_id );
+
+		$this->assertNull( FrmField::getOne( $field_id ) );
+
+		global $wpdb;
+		$meta_value = $wpdb->get_var(
+			$wpdb->prepare( 'SELECT meta_value FROM %i WHERE item_id = %d AND field_id = %d', $wpdb->prefix . 'frm_item_metas', $entry_id, $field_id )
+		);
+		$this->assertNull( $meta_value );
+	}
 }
