@@ -20,7 +20,27 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'run e2e tests')
     runs-on: ubuntu-latest
 
-    name: Cypress
+    strategy:
+      # Report every shard's result. The default would cancel the sibling
+      # shards as soon as one spec fails, hiding failures we want to see in
+      # the same run.
+      fail-fast: false
+      matrix:
+        # Each shard is a separate runner with its own wp-env stack. The
+        # specs assert on global state (searchFunctionality.cy.js creates a
+        # form named "Test Form" and asserts the list count is exactly 1), so
+        # two Cypress processes must never share one WordPress instance -
+        # parallelism has to be at the runner level, not within a job.
+        #
+        # Each shard re-pays the fixed setup cost (npm ci + wp-env booting
+        # WordPress and MySQL), so raising this past ~6 buys little.
+        shard: [ 0, 1, 2, 3 ]
+
+    name: Cypress (shard ${{ matrix.shard }})
+
+    env:
+      SHARD_TOTAL: 4
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -50,4 +70,18 @@ jobs:
         run: npm run env start
 
       - name: Test
-        run: npm run e2e:githubrun
+        run: |
+          specs="$( ./tests/bin/split-specs.sh "$SHARD_TOTAL" "${{ matrix.shard }}" )"
+
+          # An empty shard only happens if there are fewer specs than shards.
+          # Bail out rather than calling Cypress with an empty --spec, which
+          # would silently fall back to running the whole suite.
+          if [ -z "$specs" ]; then
+            echo "No specs assigned to shard ${{ matrix.shard }}; nothing to run."
+            exit 0
+          fi
+
+          echo "Shard ${{ matrix.shard }} of $SHARD_TOTAL running:"
+          echo "$specs" | tr ',' '\n' | sed 's/^/  /'
+
+          npm run e2e:githubrun -- --spec "$specs"
