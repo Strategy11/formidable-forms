@@ -361,7 +361,7 @@ class FrmFormApi {
 	 * anything that changes what is stored -- a new license, a cleared cache, a fresh API response,
 	 * a test replacing the option -- is picked up on the very next read instead of being masked.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $value The cached JSON.
 	 *

@@ -160,7 +160,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * A Stripe Link subscription builds its subscription from the setup intent's customer,
 	 * so reusing that customer here avoids creating a duplicate customer for guests.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int|string $form_id
 	 *

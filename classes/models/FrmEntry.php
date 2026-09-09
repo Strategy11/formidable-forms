@@ -891,7 +891,7 @@ class FrmEntry {
 	 * updated_by is treated as a privilege signal when deciding how much HTML to strip from entry
 	 * values in FrmFieldType::should_strip_most_html().
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array      $values
 	 * @param string     $type    The create/update type. 'xml' for an import.
@@ -1043,7 +1043,7 @@ class FrmEntry {
 	 * An import is trusted to restore the values stored on each entry, including the columns that
 	 * are otherwise taken from the current request.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $type The create/update type. 'xml' for an import.
 	 *

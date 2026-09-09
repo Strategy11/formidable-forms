@@ -61,14 +61,14 @@ class FrmUsageController {
 	 * this run before the text domain loaded.
 	 *
 	 * @since 3.06.04
-	 * @deprecated x.x
+	 * @deprecated 6.35
 	 *
 	 * @param array $schedules Unused. The registered cron schedules, keyed by schedule name.
 	 *
 	 * @return array
 	 */
 	public static function add_schedules( $schedules = array() ) {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.35' );
 		return $schedules;
 	}
 

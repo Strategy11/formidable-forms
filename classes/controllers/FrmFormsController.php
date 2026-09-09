@@ -1855,7 +1855,7 @@ class FrmFormsController {
 	 * Adds a shortcode for each part of a multi-part field to the field shortcode list,
 	 * so a single part can be used on its own, like [25 show=first] for a Name field.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $atts Includes 'field'.
 	 *
@@ -1885,7 +1885,7 @@ class FrmFormsController {
 	/**
 	 * Gets the parts of a multi-part field that can be shown on their own with a show= shortcode option.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param stdClass $field
 	 *
@@ -1903,7 +1903,7 @@ class FrmFormsController {
 		/**
 		 * Allows add-ons to add the parts of their own multi-part fields.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param array    $parts Part labels keyed by the show= option value.
 		 * @param stdClass $field The field the parts belong to.
@@ -1915,7 +1915,7 @@ class FrmFormsController {
 	 * Gets the parts of a Name field that are in use. Only the parts included in the
 	 * selected name layout hold a value, so the rest would always show as blank.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param stdClass $field
 	 *
@@ -1950,7 +1950,7 @@ class FrmFormsController {
 	 * Gets the parts of an Address field that are in use. The address type decides which
 	 * parts are on the form, so the rest would always show as blank.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param stdClass $field
 	 *
