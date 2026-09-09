@@ -54,39 +54,21 @@ class FrmUsageController {
 	}
 
 	/**
-	 * Registers the filter that adds our custom cron schedule.
-	 *
-	 * The filter callback translates the schedule label, and 'cron_schedules' can be applied
-	 * at any point in the request, so this defers itself until the text domain has loaded.
-	 * Priority 0 keeps the schedule available to _wp_cron(), which runs on init at 10.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function add_schedules_filter() {
-		if ( ! did_action( 'init' ) ) {
-			add_action( 'init', self::class . '::add_schedules_filter', 0 );
-			return;
-		}
-
-		add_filter( 'cron_schedules', self::class . '::add_schedules' );
-	}
-
-	/**
 	 * Adds once weekly to the existing schedules.
 	 *
-	 * @since 3.06.04
+	 * WordPress core registers an identical 'weekly' schedule of its own, so this adds nothing.
+	 * The 'cron_schedules' registration is gone, and with it the translated label that made
+	 * this run before the text domain loaded.
 	 *
-	 * @param array $schedules Schedules.
+	 * @since 3.06.04
+	 * @deprecated x.x
+	 *
+	 * @param array $schedules Unused. The registered cron schedules, keyed by schedule name.
 	 *
 	 * @return array
 	 */
 	public static function add_schedules( $schedules = array() ) {
-		$schedules['weekly'] = array(
-			'interval' => DAY_IN_SECONDS * 7,
-			'display'  => __( 'Once Weekly', 'formidable' ),
-		);
+		_deprecated_function( __METHOD__, 'x.x' );
 		return $schedules;
 	}
 
