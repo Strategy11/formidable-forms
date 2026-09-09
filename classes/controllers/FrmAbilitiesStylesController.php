@@ -295,18 +295,42 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Load one style, by ID or as the default.
 	 *
+	 * Public because Pro's delete-style and assign-style-to-form abilities need
+	 * the same lookup, with the same post type guard.
+	 *
 	 * @since x.x
 	 *
 	 * @param int|string $id Style ID, or 'default' for the default style.
 	 *
 	 * @return stdClass|WP_Error|WP_Post
 	 */
-	private static function get_style( $id ) {
+	public static function get_style( $id ) {
 		$id        = sanitize_text_field( $id );
 		$frm_style = 'default' === $id ? new FrmStyle( 'default' ) : new FrmStyle( $id );
 		$style     = $frm_style->get_one();
 
-		return $style ? $style : self::get_invalid_style_error();
+		if ( ! $style || ! self::is_style_post( $style ) ) {
+			return self::get_invalid_style_error();
+		}
+
+		return $style;
+	}
+
+	/**
+	 * Check that a post loaded by ID is really a style.
+	 *
+	 * FrmStyle::get_one() reads the row with get_post(), which answers for any
+	 * post on the site. Without this guard an unrelated post ID reads back as a
+	 * style, and the write abilities act on that post.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass|WP_Post $style The post to check.
+	 *
+	 * @return bool
+	 */
+	public static function is_style_post( $style ) {
+		return isset( $style->post_type ) && FrmStylesController::$post_type === $style->post_type;
 	}
 
 	/**

@@ -527,14 +527,19 @@ class FrmStyle {
 	/**
 	 * Delete a style by its post ID.
 	 *
-	 * @param int $id
+	 * @param int|string $id The id of the style to delete. REST and MCP callers pass it as a string.
 	 *
 	 * @return false|WP_Post|null
 	 */
 	public function destroy( $id ) {
-		if ( $id === $this->get_default_style()->ID ) {
+		$default_style = $this->get_default_style();
+
+		// The ID arrives as a string from REST and MCP callers, so it is compared
+		// as an int. A site with no default style set has nothing to protect.
+		if ( $default_style && (int) $id === $default_style->ID ) {
 			return false;
 		}
+
 		return wp_delete_post( $id );
 	}
 
