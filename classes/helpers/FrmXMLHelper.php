@@ -637,7 +637,7 @@ class FrmXMLHelper {
 	 * Unserialize is tried as well as JSON so options written by an older
 	 * version are still read rather than thrown away.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param object $field Field element from the file.
 	 *

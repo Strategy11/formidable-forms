@@ -111,7 +111,7 @@ class FrmAddon {
 	/**
 	 * Cached for the request, since every add-on asks for the same values.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var array<string,string>|null
 	 */
@@ -127,7 +127,7 @@ class FrmAddon {
 	 * Values here are floors, never ceilings, so raising Lite's minimum still raises every
 	 * add-on's. Keys match the names WordPress uses, requires and requires_php.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var array<string,array<string,string>>
 	 */
@@ -272,7 +272,7 @@ class FrmAddon {
 	 *
 	 * Either the plugin file name or the plugin folder may be used as an add-on's slug.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $slug The requested slug.
 	 *
@@ -292,7 +292,7 @@ class FrmAddon {
 	 * has no way to tell whether an add-on has been tried with the WordPress release in use, or
 	 * whether the site meets what the add-on needs.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param mixed $transient The update_plugins site transient.
 	 *
@@ -340,7 +340,7 @@ class FrmAddon {
 	 * "Requires PHP" lines and the compatibility warnings in the plugin details modal. It is
 	 * separate from plugins_api_filter because that filter is only added when a license is set.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param mixed       $data   Plugin information from an earlier filter, or false if none.
 	 * @param string      $action The requested action.
@@ -387,7 +387,7 @@ class FrmAddon {
 	 * Lite's own values describe every add-on, apart from the few that bundle a library with a
 	 * higher floor of its own.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return array<string,string> Keyed by the names WordPress uses, tested, requires and requires_php.
 	 */
@@ -406,7 +406,7 @@ class FrmAddon {
 		/**
 		 * Filters the versions a single add-on reports to WordPress.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param array<string,string> $requirements Keyed by tested, requires and requires_php.
 		 * @param string               $plugin_slug  The add-on's slug, for example pdfs.
@@ -419,7 +419,7 @@ class FrmAddon {
 	/**
 	 * Gets the WordPress version the add-ons report as tested.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return string The tested version, or an empty string if the readme has none.
 	 */
@@ -433,7 +433,7 @@ class FrmAddon {
 	 * Read from Lite's readme, which is the same place wordpress.org reads them from, so the
 	 * add-ons report what Lite reports without anything being added to the API.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return array<string,string> Keyed by tested, requires and requires_php. Values may be empty.
 	 */
@@ -467,7 +467,7 @@ class FrmAddon {
 		/**
 		 * Filters the versions read from Lite's readme before the add-ons report them.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param array<string,string> $versions Keyed by tested, requires and requires_php.
 		 */
@@ -493,7 +493,7 @@ class FrmAddon {
 	 * plugin is untested when it is not. Only versions within the tested branch are expanded,
 	 * so a genuinely older tested version is still reported as older.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $tested The tested version from the readme.
 	 *
@@ -517,7 +517,7 @@ class FrmAddon {
 	/**
 	 * Reduces a version to its major.minor release branch.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $version A WordPress version.
 	 *

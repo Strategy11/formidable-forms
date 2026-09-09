@@ -3566,7 +3566,7 @@ window.frmAdminBuildJS = function() {
 	 * Nothing in Lite renders a calculation box, so Lite offers the extension point and
 	 * leaves the parts themselves to whichever plugin owns the calculation.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
 	 * @param {string}      fieldId ID of the field the popup was opened for.
@@ -3578,7 +3578,7 @@ window.frmAdminBuildJS = function() {
 		/**
 		 * Allows add-ons to add field part shortcodes to calculation popup.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param {Object}      hookArgs                      Arguments passed to the hook.
 		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
@@ -3592,7 +3592,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Adds a row to a calculation box's field shortcode list.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {HTMLElement} list      The 'ul' element that contains field shortcodes available for calculation.
 	 * @param {string}      fieldId   ID of the field the popup was opened for.
@@ -7333,7 +7333,7 @@ window.frmAdminBuildJS = function() {
 	 * Fields after the target field move into the new group as well, since the new row is
 	 * where they end up on reload too.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {HTMLElement} field The field that just had the frm_first class added to it.
 	 * @return {void}
@@ -7377,7 +7377,7 @@ window.frmAdminBuildJS = function() {
 	 * The field group controls are shared between every group and get appended to whichever
 	 * group is hovered, so only list items are included.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {HTMLElement} field The field to start from.
 	 * @return {Array.<HTMLElement>} The field and the fields after it.
@@ -7870,7 +7870,7 @@ window.frmAdminBuildJS = function() {
 	 * browser chrome around them. The first one takes a row to itself and the rest
 	 * share the row below it, scaled to keep their proportions.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {string} images Comma separated file names, relative to the images/upsell folder.
 	 * @param {string} alt    Name of the feature being previewed.
