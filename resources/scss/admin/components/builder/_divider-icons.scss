@@ -37,7 +37,7 @@
 	width: 8px;
 	height: 8px;
 	top: -6px;
-	border-color: var(--grey);
+	border-color: var(--grey-500);
 }
 
 .frm-page-break::after {
@@ -45,7 +45,7 @@
 }
 
 #frm-fake-page .frm-page-break {
-	border-color: var(--grey);
+	border-color: var(--grey-500);
 }
 
 #frm-fake-page {
