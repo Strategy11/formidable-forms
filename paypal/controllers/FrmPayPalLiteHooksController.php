@@ -50,6 +50,12 @@ class FrmPayPalLiteHooksController {
 			function ( $options ) {
 				// Make actions using the PayPal add-on use the same icon we use in Lite.
 				$options['classes'] = 'frmfont frm_paypal_icon';
+
+				// The PayPal add-on registers its own action for the 'paypal' id_base with a
+				// limit of 99. PayPal Commerce uses that id_base too, so set the limit back to
+				// one instead of inheriting the add-on's.
+				$options['limit'] = 1;
+
 				return $options;
 			}
 		);
