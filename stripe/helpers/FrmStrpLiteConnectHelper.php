@@ -108,8 +108,6 @@ class FrmStrpLiteConnectHelper {
 			'password'              => self::generate_client_password( $mode ),
 			'user_id'               => get_current_user_id(),
 			'frm_strp_connect_mode' => $mode,
-			// The Connect server sends this back when it verifies the site identifier.
-			'verify_token'          => FrmTransLiteConnectVerifyHelper::start_request( 'stripe' ),
 		);
 		$data            = self::post_to_connect_server( 'initialize', $additional_body );
 
