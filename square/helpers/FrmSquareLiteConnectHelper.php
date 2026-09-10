@@ -146,10 +146,10 @@ class FrmSquareLiteConnectHelper {
 			'password'            => self::generate_client_password( $mode ),
 			'user_id'             => get_current_user_id(),
 			'frm_square_api_mode' => $mode,
+			// The Connect server sends this back when it verifies the site identifier.
+			'verify_token'        => FrmTransLiteConnectVerifyHelper::start_request( 'square' ),
 		);
 
-		// Clear the transient so it doesn't fail.
-		delete_option( 'frm_square_lite_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
@@ -442,6 +442,12 @@ class FrmSquareLiteConnectHelper {
 
 	private static function redirect_oauth() {
 		$connected = self::check_server_for_oauth_merchant_id();
+
+		if ( $connected ) {
+			// Onboarding is done, so the verify endpoint can stop answering.
+			FrmTransLiteConnectVerifyHelper::clear_request( 'square' );
+		}
+
 		wp_safe_redirect( self::get_url_for_square_settings( $connected ) );
 		exit;
 	}
@@ -795,25 +801,13 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * Verify a site identifier is a match.
+	 *
+	 * @since x.x Moved the checks into FrmTransLiteConnectVerifyHelper.
+	 *
+	 * @return void
 	 */
 	public static function verify() {
-		$option_name  = 'frm_square_lite_last_verify_attempt';
-		$last_request = get_option( $option_name );
-
-		if ( $last_request && $last_request > strtotime( '-1 day' ) ) {
-			wp_send_json_error( 'Too many requests' );
-		}
-
-		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
-		$usage           = new FrmUsage();
-
-		update_option( $option_name, time() );
-
-		if ( $site_identifier === $usage->uuid() ) {
-			wp_send_json_success();
-		}
-
-		wp_send_json_error();
+		FrmTransLiteConnectVerifyHelper::handle_request( 'square' );
 	}
 
 	/**
