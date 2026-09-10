@@ -86,7 +86,11 @@ class FrmHooksController {
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
 		// Clear embed posts transient when posts are updated.
-		add_action( 'wp_insert_post', 'FrmFormsListHelper::maybe_clear_embed_posts_transient', 10, 2 );
+		add_action( 'wp_insert_post', 'FrmFormsListHelper::maybe_clear_embed_posts_transient', 10, 3 );
+		add_action( 'post_updated', 'FrmFormsListHelper::maybe_clear_embed_posts_transient_on_update', 10, 3 );
+		add_action( 'trashed_post', 'FrmFormsListHelper::clear_embed_posts_transient_for_post' );
+		add_action( 'untrashed_post', 'FrmFormsListHelper::clear_embed_posts_transient_for_post' );
+		add_action( 'deleted_post', 'FrmFormsListHelper::clear_embed_posts_transient_for_post', 10, 2 );
 
 		// Form Shortcodes.
 		add_shortcode( 'formidable', 'FrmFormsController::get_form_shortcode' );
@@ -100,7 +104,6 @@ class FrmHooksController {
 		// Simple Blocks Controller.
 		add_action( 'init', 'FrmSimpleBlocksController::register_simple_form_block' );
 
-		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
 
 		/**
@@ -172,6 +175,7 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
 		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
+		add_action( 'frm_field_code_tab', 'FrmFormsController::field_part_shortcodes' );
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields' );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );

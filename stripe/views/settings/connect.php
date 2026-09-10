@@ -18,16 +18,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php esc_html_e( 'Not connected!', 'formidable' ); ?>
 			</strong>
 			<br/><br/>
-			<a id="frm_reauth_stripe" class="button-primary frm-button-primary" href="#">
+			<a class="frm_reauth_stripe button-primary frm-button-primary" href="#">
 				<?php FrmStrpLiteConnectHelper::stripe_icon(); ?> &nbsp;
 				<?php esc_html_e( 'Finish Stripe Setup', 'formidable' ); ?>
 			</a>
 			or
 		<?php } ?>
-		<a id="frm_disconnect_stripe" href="#" style="font-size:13px"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
+		<a class="frm_disconnect_stripe" href="#" style="font-size:13px"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
 	<?php } else { ?>
 		<br/><br/>
-		<a id="frm_connect_with_oauth" class="button-primary frm-button-primary">
+		<a class="frm_connect_with_oauth button-primary frm-button-primary">
 			<?php FrmStrpLiteConnectHelper::stripe_icon(); ?> &nbsp;
 			<?php esc_html_e( 'Connect to Stripe', 'formidable' ); ?>
 		</a>

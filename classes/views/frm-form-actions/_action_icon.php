@@ -28,8 +28,21 @@ $single_action_attrs = array_merge(
 if ( 'paypal' === $action_control->id_base ) {
 	$action_control->name = 'PayPal Commerce';
 }
+
+// An action that needs a plan upgrade, as opposed to one this license can install with a single click.
+$is_locked = isset( $data['data-upgrade'] ) && ! isset( $data['data-oneclick'] );
+
+$li_classes = $group_class;
+
+if ( isset( $data['data-upgrade'] ) ) {
+	$li_classes .= ' frm-not-installed';
+}
+
+if ( $is_locked ) {
+	$li_classes .= ' frm-action-locked';
+}
 ?>
-<li class="frm-card-item frm-card-item--outlined frm-action<?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>" tabindex="0">
+<li class="frm-card-item frm-card-item--outlined frm-action<?php echo esc_attr( $li_classes ); ?>" tabindex="0">
 	<div class="frm-h-stack-xs frm-w-full">
 		<span class="frm-border-icon frm-shrink-0">
 			<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], FrmFormActionsController::get_action_icon_atts( $action_control ) ); ?>
@@ -38,7 +51,7 @@ if ( 'paypal' === $action_control->id_base ) {
 		<div class="frm-flex-col frm-min-w-0">
 			<h3 class="frm-h-stack-xs frm-capitalize">
 				<?php
-				if ( isset( $data['data-upgrade'] ) && ! isset( $data['data-oneclick'] ) ) {
+				if ( $is_locked ) {
 					FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon frm_svg15', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) );
 				}
 				?>
@@ -55,8 +68,12 @@ if ( 'paypal' === $action_control->id_base ) {
 		</div>
 
 		<a <?php FrmAppHelper::array_to_html_params( $single_action_attrs, true ); ?>>
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
-			<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
+			<?php if ( $is_locked ) { ?>
+				<span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span>
+			<?php } else { ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
+				<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
+			<?php } ?>
 		</a>
 
 		<?php if ( ! empty( $action_control->action_options['keywords'] ) ) { ?>
