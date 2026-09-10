@@ -80,15 +80,16 @@ class FrmPayPalLiteAppHelper {
 	/**
 	 * Add education about PayPal fees.
 	 *
-	 * @param string             $medium  Medium identifier for the tip (for example 'tip').
+	 * PayPal Commerce is not included in a grandfathered license, so its fees
+	 * always apply there even though Stripe fees do not.
+	 *
+	 * @param string             $content UTM Content for the admin upgrade link.
 	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
 	 *
 	 * @return void
 	 */
-	public static function fee_education( $medium = 'tip', $gateway = false ) {
-		$license_type = FrmAddonsController::license_type();
-
-		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+	public static function fee_education( $content = 'tip', $gateway = false ) {
+		if ( ! FrmAddonsController::payment_fees_apply( 'paypal' ) ) {
 			return;
 		}
 
@@ -101,8 +102,8 @@ class FrmPayPalLiteAppHelper {
 		FrmTipsHelper::show_tip(
 			array(
 				'link'  => array(
-					'content' => 'paypal-fee',
-					'medium'  => $medium,
+					'campaign' => 'paypal-fee',
+					'content'  => $content,
 				),
 				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + PayPal fees.',
 				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),

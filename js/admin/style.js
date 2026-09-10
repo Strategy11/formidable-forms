@@ -764,7 +764,7 @@
 	 * Waiting for the first open takes the script order out of it, since Pro has always registered the
 	 * filter by the time a card can be clicked.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {HTMLElement}  hamburgerMenu The dropdown trigger.
 	 * @param {HTMLElement}  dropdownMenu  The dropdown to add the options to.
@@ -793,7 +793,7 @@
 	/**
 	 * Get the options for a single style card dropdown.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {DOMStringMap} data       The dataset of the style card, or an object with the style ID on the edit page.
 	 * @param {boolean}      isTemplate Whether the card is for a style template.

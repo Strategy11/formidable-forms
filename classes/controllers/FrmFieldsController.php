@@ -67,7 +67,7 @@ class FrmFieldsController {
 	/**
 	 * Get a form's fields, as the form builder sees them, indexed by field id.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int $form_id
 	 *

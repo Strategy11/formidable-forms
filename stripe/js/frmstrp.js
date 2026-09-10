@@ -520,7 +520,7 @@
 	 * Get a callback that sends the current form values so the intent amount can be updated.
 	 * The call is skipped when the form has no intents to update.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {Element} field The price field that changed.
 	 * @return {Function} Callback for the debounce timer.
@@ -763,7 +763,7 @@
 	 * Create a temporary label element to determine the width of the Email label.
 	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param {Element} cardElement
 	 * @return {number} The label width in pixels.
@@ -1088,7 +1088,7 @@
 	/**
 	 * Handle frmPageChanged events.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return {void}
 	 */
@@ -1102,7 +1102,7 @@
 	 * When the payment fails, we run conditional logic.
 	 * Otherwise fields may be visible when they should be hidden.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return {void}
 	 */
