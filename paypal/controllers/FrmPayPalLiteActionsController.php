@@ -180,7 +180,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @param int|string $form_id The form the actions belong to.
 	 * @param stdClass   $entry   An entry object, either a real entry or one built from posted values.
 	 *
-	 * @return WP_Post|false The matching action, or false when conditional logic rules them all out.
+	 * @return false|WP_Post The matching action, or false when conditional logic rules them all out.
 	 */
 	public static function get_action_for_entry( $form_id, $entry ) {
 		$payment_actions = self::filter_actions_by_conditional_logic( self::get_actions_before_submit( $form_id ), $entry );
