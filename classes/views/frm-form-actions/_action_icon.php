@@ -5,11 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $limit = $action_control->action_options['limit'];
 
-if ( 'paypal' === $action_control->id_base ) {
-	// The PayPal add-on may overwrite this so change it back.
-	$limit = 1;
-}
-
 // Remove limit for Stripe action when Stripe add-on is active
 if ( 'stripe' === $action_control->id_base && class_exists( 'FrmStrpAppHelper' ) ) {
 	$limit = 99;
