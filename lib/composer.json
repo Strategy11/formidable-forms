@@ -1,0 +1,16 @@
+{
+	"name": "strategy11/formidable-forms-lib",
+	"description": "Autoloading for the Formidable Forms lib dependencies",
+	"type": "library",
+	"require": {
+		"wordpress/mcp-adapter": "0.6.1"
+	},
+	"config": {
+		"platform": {
+			"php": "7.4"
+		},
+		"allow-plugins": {
+			"automattic/jetpack-autoloader": false
+		}
+	}
+}

@@ -21,8 +21,52 @@ node_modules/*
 npm-debug.log
 
 # Composer
-vendor
+/vendor
 composer.lock
+/lib/composer.lock
+!lib/vendor
+
+# lib/vendor is committed because the MCP adapter has to ship inside the plugin
+# zip, but only the code the plugin loads belongs here. The vendored packages'
+# own CI, docs, tooling, and test suites are excluded from the release, so they
+# are not tracked either.
+#
+# Nothing below is autoloadable: composer maps only mcp-adapter/includes,
+# php-mcp-schema/src, and jetpack-autoloader/src. The jetpack autoloader is a
+# require of the adapter that nothing in it calls, so it is here to keep
+# composer install reproducible, never to be loaded.
+#
+# The depth is explicit on every rule so none of them can reach the plugin's own
+# .github, docs, or tests directories.
+lib/vendor/*/*/.github/
+lib/vendor/*/*/docs/
+lib/vendor/*/*/generator/
+lib/vendor/*/*/skill/
+lib/vendor/*/*/tests/
+
+# Each vendored package's own build tooling and manifests. Composer resolves
+# through lib/vendor/composer/, never these, and the zip already drops them. The
+# depth keeps the plugin's own composer.json tracked, since that is what
+# regenerates lib/vendor.
+lib/vendor/*/*/composer.json
+lib/vendor/*/*/composer.lock
+lib/vendor/*/*/package.json
+lib/vendor/*/*/package-lock.json
+lib/vendor/*/*/phpstan.neon.dist
+lib/vendor/*/*/phpunit.xml.dist
+lib/vendor/*/*/.phpcs.xml.dist
+lib/vendor/*/*/*.md
+lib/vendor/*/*/.editorconfig
+lib/vendor/*/*/.gitattributes
+lib/vendor/*/*/.npmrc
+lib/vendor/*/*/.nvmrc
+lib/vendor/*/*/.prettierignore
+lib/vendor/*/*/.prettierrc.js
+lib/vendor/*/*/.wp-env.json
+lib/vendor/*/*/.wp-env.test.json
+lib/vendor/*/*/readme.txt
+!lib/vendor/*/*/LICENSE.md
+!lib/vendor/*/*/LICENSE.txt
 
 # PHPUnit
 .phpunit.result.cache
