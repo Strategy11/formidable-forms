@@ -8,7 +8,7 @@ class FrmSettingsController {
 	/**
 	 * Icon for the API section, used whether the add-on is active or only a placeholder.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var string
 	 */
@@ -221,7 +221,7 @@ class FrmSettingsController {
 	 * an active plugin is left alone, so nothing stands in for a section that is
 	 * really there.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array<array> $sections Sections registered for the Global Settings page so far.
 	 *
@@ -244,7 +244,7 @@ class FrmSettingsController {
 	 * Assigning a new key lands the section at the end of the array, so the array
 	 * is rebuilt to put it where it belongs.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array<array> $sections Sections registered for the Global Settings page so far.
 	 * @param string       $after    Key of the section the new one follows. The new section goes last when this key is not there.
@@ -281,7 +281,7 @@ class FrmSettingsController {
 	 * the user to upgrade to it, on a gradient button that sets the upgrade
 	 * apart from a one click install.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return array
 	 */
