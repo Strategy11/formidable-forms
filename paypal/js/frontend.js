@@ -55,6 +55,16 @@
 	/** Elements that already have an attribute observer, so re-initializing does not stack observers. */
 	const observedElements = new WeakSet();
 
+	/**
+	 * True while conditional logic on the payment actions rules every one of them
+	 * out, so the form has no payment to collect. The server is what decides this,
+	 * the value is refreshed from the amount request.
+	 */
+	let noPaymentActionMatched = false;
+
+	/** The .frm-card-element PayPal renders into, so it can be hidden when no action applies. */
+	let cardElementContainer = null;
+
 	// ---- Constants ----
 
 	/**
@@ -126,6 +136,8 @@
 		if ( ! thisForm ) {
 			return;
 		}
+
+		cardElementContainer = cardElement;
 
 		const settings = getPayPalSettings()[ 0 ];
 		if ( ! settings ) {
@@ -231,9 +243,15 @@
 			checkPriceFieldsOnLoad();
 		}
 
-		// 8. Pre-fetch the amount for Apple Pay so it is available synchronously in the click handler.
-		if ( paymentMethods.has( 'apple_pay' ) ) {
+		// 8. Pre-fetch the amount. Apple Pay needs it synchronously in the click
+		// handler, and conditional logic on the payment actions needs it to know
+		// which action applies to the values on the form, since a change to a field
+		// used in that logic can switch the action, and with it the amount, or leave
+		// no action applying at all.
+		if ( paymentMethods.has( 'apple_pay' ) || actionsUseConditionalLogic() ) {
 			refreshCachedAmount();
+
+			// priceChanged already refreshes the amount when Pay Later messages are on.
 			if ( ! paymentMethods.has( 'paylater' ) ) {
 				jQuery( document ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
 			}
@@ -704,19 +722,20 @@
 	 * - Card: submit button visible (user fills card fields, clicks submit).
 	 * - Everything else: submit button hidden (PayPal SDK button handles submission).
 	 *
-	 * When conditional logic is hiding the payment field, every PayPal button is
-	 * hidden along with it, so the native submit button is the only way left to
-	 * submit. It gets restored and PayPal stops holding it disabled.
+	 * When there is no payment to collect, either because conditional logic is
+	 * hiding the payment field or because it rules out every payment action, the
+	 * PayPal buttons go away with it and the native submit button is the only way
+	 * left to submit. It gets restored and PayPal stops holding it disabled.
 	 *
 	 * @param {string} key The selected payment method key.
 	 */
 	function updateSubmitButtonVisibility( key ) {
-		const paymentIsHidden = paymentFieldIsConditionallyHidden( thisForm );
+		const paymentIsMissing = paymentIsUnavailable( thisForm );
 		const isCardMethod = key === 'card';
 		const submitIsConditionallyHidden = submitButtonIsConditionallyHidden( getFormIdForForm( thisForm ) );
 
 		getSubmitButtons( thisForm ).forEach( btn => {
-			if ( ! paymentIsHidden && ! isCardMethod ) {
+			if ( ! paymentIsMissing && ! isCardMethod ) {
 				// A PayPal button is handling submission, so the native submit
 				// button has to stay out of the way.
 				btn.style.display = 'none';
@@ -731,7 +750,7 @@
 			btn.style.display = '';
 		} );
 
-		if ( paymentIsHidden ) {
+		if ( paymentIsMissing ) {
 			// The form submits on its own now, so make sure PayPal is not leaving
 			// the button disabled from an earlier state.
 			enableSubmit();
@@ -812,7 +831,7 @@
 
 		// Incomplete card details only block submission while the payment field is
 		// actually on the form.
-		if ( cardFieldsValid || paymentFieldIsConditionallyHidden( thisForm ) ) {
+		if ( cardFieldsValid || paymentIsUnavailable( thisForm ) ) {
 			enableSubmit();
 			return;
 		}
@@ -1619,9 +1638,9 @@
 	 * @return {void}
 	 */
 	function disableSubmit( form ) {
-		if ( paymentFieldIsConditionallyHidden( form ) ) {
-			// There is nothing to pay with while the payment field is hidden, so
-			// PayPal has no reason to block the submit button.
+		if ( paymentIsUnavailable( form ) ) {
+			// There is nothing to pay with, so PayPal has no reason to block the
+			// submit button.
 			return;
 		}
 
@@ -1684,6 +1703,24 @@
 		// Section parent is conditionally hidden.
 		const parentSection = fieldContainer.closest( '.frm_section_heading' );
 		return Boolean( parentSection ) && 'none' === parentSection.style.display;
+	}
+
+	/**
+	 * Check if there is no payment for PayPal to collect right now.
+	 *
+	 * That happens either when conditional logic is hiding the payment field, or
+	 * when conditional logic on the payment actions rules every action out. Both
+	 * leave the form with nothing to pay for, so PayPal must not disable the submit
+	 * button or take over form submission.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 *
+	 * @return {boolean} True when PayPal has no payment to collect.
+	 */
+	function paymentIsUnavailable( form ) {
+		return noPaymentActionMatched || paymentFieldIsConditionallyHidden( form );
 	}
 
 	/**
@@ -1773,7 +1810,7 @@
 				return;
 			}
 
-			if ( paymentFieldIsConditionallyHidden( form ) ) {
+			if ( paymentIsUnavailable( form ) ) {
 				// Any PayPal request went away with the field, so there is nothing
 				// left for the submit button to wait on.
 				running = 0;
@@ -1805,7 +1842,7 @@
 		}
 
 		observeAttributeMutations( submitButton, mutation => {
-			if ( ! selectedMethod || paymentFieldIsConditionallyHidden( form ) ) {
+			if ( ! selectedMethod || paymentIsUnavailable( form ) ) {
 				// PayPal has no say over the submit button before it renders, or
 				// while the payment field is hidden.
 				return;
@@ -2140,9 +2177,10 @@
 			return;
 		}
 
-		// Conditional logic is hiding the payment field, so there is no payment to
-		// collect. Let the form submit the way it normally would.
-		if ( paymentFieldIsConditionallyHidden( thisForm ) ) {
+		// Conditional logic is hiding the payment field, or ruling out every payment
+		// action, so there is no payment to collect. Let the form submit the way it
+		// normally would.
+		if ( paymentIsUnavailable( thisForm ) ) {
 			return;
 		}
 
@@ -2308,18 +2346,57 @@
 	 */
 	function getPriceFields() {
 		const priceFields = [];
+
+		/**
+		 * @param {number|string} field A field ID or field key.
+		 *
+		 * @return {void}
+		 */
+		const addFieldToPriceFields = field => {
+			if ( isNaN( field ) ) {
+				priceFields.push( `field_${ field }` );
+			} else {
+				priceFields.push( field );
+			}
+		};
+
 		getPayPalSettings().forEach( function( setting ) {
 			if ( -1 !== setting.fields ) {
-				setting.fields.forEach( function( field ) {
-					if ( isNaN( field ) ) {
-						priceFields.push( `field_${ field }` );
-					} else {
-						priceFields.push( field );
-					}
-				} );
+				setting.fields.forEach( addFieldToPriceFields );
 			}
+
+			// A field used in an action's conditional logic changes the price too,
+			// because it decides which action, and so which amount, applies.
+			getLogicFields( setting ).forEach( addFieldToPriceFields );
 		} );
+
 		return priceFields;
+	}
+
+	/**
+	 * Get the IDs of the fields a payment action uses in its conditional logic.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object} setting A single entry from frmPayPalVars.settings.
+	 *
+	 * @return {Array} The field IDs, empty when the action has no conditional logic.
+	 */
+	function getLogicFields( setting ) {
+		return Array.isArray( setting.logic_fields ) ? setting.logic_fields : [];
+	}
+
+	/**
+	 * Check if any PayPal action on this form has conditional logic.
+	 * When one does, the applicable action, and the amount with it, can change as
+	 * the form is filled in, so the amount has to be refreshed on field changes.
+	 *
+	 * @since x.x
+	 *
+	 * @return {boolean} True when at least one action has conditional logic.
+	 */
+	function actionsUseConditionalLogic() {
+		return getPayPalSettings().some( setting => getLogicFields( setting ).length > 0 );
 	}
 
 	/**
@@ -2373,14 +2450,63 @@
 		} )
 			.then( response => response.json() )
 			.then( function( result ) {
-				if ( result.success && result.data?.amount ) {
-					cachedAmount = String( result.data.amount );
-					callback( result );
+				if ( ! result.success || ! result.data ) {
+					return;
 				}
+
+				// The server evaluates the conditional logic on every payment action
+				// and reports which one applies, sending an action ID of 0 when the
+				// current values rule all of them out.
+				if ( result.data.actionId !== undefined ) {
+					setPaymentActionMatched( 0 !== parseInt( result.data.actionId, 10 ) );
+				}
+
+				if ( ! result.data.amount ) {
+					return;
+				}
+
+				cachedAmount = String( result.data.amount );
+				callback( result );
 			} )
 			.catch( function( err ) {
 				console.error( 'Failed to get PayPal amount', err );
 			} );
+	}
+
+	/**
+	 * Record whether a payment action applies to the values on the form, and put
+	 * the payment methods and the submit button into the matching state.
+	 *
+	 * With no action applying there is no payment to collect, so PayPal hides its
+	 * payment methods and hands the form back to the native submit button.
+	 *
+	 * @since x.x
+	 *
+	 * @param {boolean} matched True when a payment action applies.
+	 *
+	 * @return {void}
+	 */
+	function setPaymentActionMatched( matched ) {
+		if ( noPaymentActionMatched === ! matched ) {
+			// Nothing changed, so there is no state to put back.
+			return;
+		}
+
+		noPaymentActionMatched = ! matched;
+
+		if ( cardElementContainer ) {
+			cardElementContainer.style.display = matched ? '' : 'none';
+		}
+
+		if ( noPaymentActionMatched ) {
+			// Any PayPal request went away with the action, so there is nothing left
+			// for the submit button to wait on.
+			running = 0;
+		}
+
+		if ( selectedMethod ) {
+			updateSubmitButtonVisibility( selectedMethod );
+		}
 	}
 
 	/**

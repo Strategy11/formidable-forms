@@ -100,6 +100,94 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Check if a payment action has conditional logic rules to evaluate.
+	 * Conditional logic on actions is a Pro feature, so an action never has any in Lite.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $payment_action The payment action to check.
+	 *
+	 * @return bool
+	 */
+	public static function action_has_conditional_logic( $payment_action ) {
+		return (bool) self::get_logic_field_ids( $payment_action );
+	}
+
+	/**
+	 * Get the IDs of the fields used in a payment action's conditional logic.
+	 * The front end watches these fields, since a change to one can switch which
+	 * action applies, and with it the amount and the payment settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $payment_action The payment action to read the conditions from.
+	 *
+	 * @return array
+	 */
+	public static function get_logic_field_ids( $payment_action ) {
+		if ( empty( $payment_action->post_content['conditions'] ) || ! is_array( $payment_action->post_content['conditions'] ) ) {
+			return array();
+		}
+
+		$field_ids = array();
+
+		foreach ( $payment_action->post_content['conditions'] as $key => $condition ) {
+			if ( ! is_numeric( $key ) || ! is_array( $condition ) || empty( $condition['hide_field'] ) ) {
+				// 'any_all' and 'send_stop' describe the group rather than a single condition.
+				continue;
+			}
+
+			$field_ids[] = $condition['hide_field'];
+		}
+
+		return array_values( array_unique( $field_ids ) );
+	}
+
+	/**
+	 * Filter payment actions down to the ones whose conditional logic is met.
+	 * An action without conditional logic always applies.
+	 *
+	 * @since x.x
+	 *
+	 * @param array    $payment_actions The payment actions to filter.
+	 * @param stdClass $entry           An entry object, either a real entry or one built from posted values.
+	 *
+	 * @return array
+	 */
+	public static function filter_actions_by_conditional_logic( $payment_actions, $entry ) {
+		foreach ( $payment_actions as $key => $payment_action ) {
+			if ( ! self::action_has_conditional_logic( $payment_action ) ) {
+				continue;
+			}
+
+			// action_conditions_met returns true when the action should be stopped.
+			if ( FrmFormAction::action_conditions_met( $payment_action, $entry ) ) {
+				unset( $payment_actions[ $key ] );
+			}
+		}
+
+		return $payment_actions;
+	}
+
+	/**
+	 * Get the PayPal action that applies to the values in an entry.
+	 * A form can have several PayPal actions, each with its own conditional logic,
+	 * so the amount and the payment settings have to come from the action that the
+	 * submitted values actually match, not from whichever action happens to be first.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $form_id The form the actions belong to.
+	 * @param stdClass   $entry   An entry object, either a real entry or one built from posted values.
+	 *
+	 * @return WP_Post|false The matching action, or false when conditional logic rules them all out.
+	 */
+	public static function get_action_for_entry( $form_id, $entry ) {
+		$payment_actions = self::filter_actions_by_conditional_logic( self::get_actions_before_submit( $form_id ), $entry );
+		return $payment_actions ? reset( $payment_actions ) : false;
+	}
+
+	/**
 	 * Trigger a PayPal payment after a form is submitted.
 	 * This is called for both one time and recurring payments.
 	 *
@@ -1214,6 +1302,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
 				$settings_for_action['paypalLayout']         = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				$settings_for_action['logic_fields']         = self::get_logic_field_ids( $payment_action );
 				return $settings_for_action;
 			},
 			10,
