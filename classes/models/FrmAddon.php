@@ -585,7 +585,9 @@ class FrmAddon {
 		if ( $license && ! $this->is_active() && ! $this->checked_recently( '1 day' ) ) {
 			$response = $this->activate_license( $license );
 
-			if ( ! $response['success'] ) {
+			// Drop the license only when the API reported on it. An unreachable API says
+			// nothing, so the defined license is kept and checked again later.
+			if ( ! $response['success'] && empty( $response['inconclusive'] ) ) {
 				$license = '';
 			}
 		}
@@ -655,12 +657,21 @@ class FrmAddon {
 	 * Don't save an invalid license.
 	 *
 	 * @since 6.8.3
+	 * @since x.x Added the $is_conclusive param.
 	 *
-	 * @param bool|string $is_valid If license activation was successful. May be a string 'valid'.
+	 * @param bool|string $is_valid      If license activation was successful. May be a string 'valid'.
+	 * @param bool        $is_conclusive Whether the API reported on the license. False when the
+	 *                                   check could not reach a verdict, such as a connection
+	 *                                   error, in which case the saved license is left alone.
 	 *
 	 * @return void
 	 */
-	protected function maybe_set_active( $is_valid ) {
+	protected function maybe_set_active( $is_valid, $is_conclusive = true ) {
+		if ( ! $is_valid && ! $is_conclusive ) {
+			// Nothing came back about this license, so don't discard what is saved.
+			return;
+		}
+
 		update_option( $this->option_name . 'active', $is_valid );
 
 		if ( $is_valid ) {
@@ -1002,6 +1013,12 @@ class FrmAddon {
 
 		$response = $this->get_license_status();
 
+		if ( ! empty( $response['inconclusive'] ) ) {
+			// The API did not report on this license, so there is nothing to act on. A
+			// license that activated before stays in place until the API says otherwise.
+			return;
+		}
+
 		if ( ! empty( $this->save_status['response_code'] ) && 429 === $this->save_status['response_code'] ) {
 			// If we got a rate limit response, don't clear the license.
 			return;
@@ -1169,7 +1186,7 @@ class FrmAddon {
 				$response['success'] = true;
 			}
 
-			$this->maybe_set_active( $is_valid );
+			$this->maybe_set_active( $is_valid, empty( $response['inconclusive'] ) );
 		}
 
 		$this->update_last_checked( (bool) $is_valid );
@@ -1197,14 +1214,46 @@ class FrmAddon {
 	}
 
 	/**
+	 * The statuses the API sends to describe the license itself.
+	 *
+	 * Anything else that comes back, a connection error message or an unreadable
+	 * body, says nothing about the license and must not be treated as an answer
+	 * about it. See the inconclusive handling in get_license_status.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	private function get_reported_license_statuses() {
+		return array(
+			'valid',
+			'invalid',
+			'expired',
+			'revoked',
+			'blocked',
+			'disabled',
+			'missing',
+			'inactive',
+			'site_inactive',
+			'no_activations_left',
+			'invalid_item_id',
+			'item_name_mismatch',
+		);
+	}
+
+	/**
+	 * @since x.x Added the inconclusive key, so a check that never reached the API
+	 *            can be told apart from one where the API reported on the license.
+	 *
 	 * @return array
 	 */
 	private function get_license_status() {
 		$this->set_running();
 
 		$response = array(
-			'status' => 'missing',
-			'error'  => true,
+			'status'       => 'missing',
+			'error'        => true,
+			'inconclusive' => false,
 		);
 
 		if ( ! $this->license ) {
@@ -1216,21 +1265,37 @@ class FrmAddon {
 
 		try {
 			$response['error'] = false;
-			$license_data      = $this->send_mothership_request( 'activate_license' );
+			// Until the response is read, nothing is known about the license. The default
+			// status above is only a placeholder, never an answer from the API.
+			$response['inconclusive'] = true;
+			$license_data             = $this->send_mothership_request( 'activate_license' );
+			$status                   = '';
 
-			// $license_data->license will be either "valid" or "invalid"
+			// $license_data['license'] will be a status such as "valid" or "invalid". A
+			// string response is an error message rather than a license status.
 			if ( is_array( $license_data ) ) {
-				if ( ! empty( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
-					$response['status']          = $license_data['license'];
-					$this->save_status['status'] = $license_data['license'];
-					$is_valid                    = 'valid' === $license_data['license'];
+				if ( ! empty( $license_data['license'] ) && is_string( $license_data['license'] ) ) {
+					$status = $license_data['license'];
 				}
-			} else {
-				$response['status'] = $license_data;
+			} elseif ( is_string( $license_data ) ) {
+				$status = $license_data;
+			}
+
+			if ( $status && in_array( $status, $this->get_reported_license_statuses(), true ) ) {
+				$response['status']       = $status;
+				$response['inconclusive'] = false;
+				$is_valid                 = 'valid' === $status;
+
+				if ( in_array( $status, array( 'valid', 'invalid' ), true ) ) {
+					$this->save_status['status'] = $status;
+				}
+			} elseif ( $status ) {
+				// Keep the message for display, but it is not a verdict on the license.
+				$response['status'] = $status;
 			}
 		} catch ( Exception $e ) {
 			$response['status'] = $e->getMessage();
-		}
+		}//end try
 
 		$this->update_last_checked( $is_valid );
 		$this->done_running();
@@ -1319,9 +1384,12 @@ class FrmAddon {
 	}
 
 	/**
-	 * @param string $action
+	 * @since x.x The return type covers the decoded body, which is an array when the
+	 *            API answers with JSON, and an error message string otherwise.
 	 *
-	 * @return string
+	 * @param string $action The request to send, such as activate_license.
+	 *
+	 * @return array|string
 	 */
 	public function send_mothership_request( $action ) {
 		$api_params = array(
