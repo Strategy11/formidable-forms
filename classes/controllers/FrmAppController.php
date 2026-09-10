@@ -1419,6 +1419,7 @@ class FrmAppController {
 			'cancel_classes'   => '',
 			'continue_url'     => '',
 			'continue_classes' => '',
+			'continue_target'  => '',
 			'icon'             => 'frm_lock_simple',
 		);
 

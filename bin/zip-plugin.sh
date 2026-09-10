@@ -99,8 +99,7 @@ zip -r $zipname $destination \
 	-x "*/*.stubs.php" \
 	-x "*/stubs.php" \
 	-x "*/stubs" \
-	-x "*/stubs-mcp-adapter" \
-	-x "*/stubs-wp-rest-controller" \
+	-x "*/stubs-*" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
@@ -147,7 +146,8 @@ zip -r $zipname $destination \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
-	-x "formidable-pro/resources/*"
+	-x "formidable-pro/resources/*" \
+	-x "formidable/lib/vendor/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
