@@ -404,6 +404,11 @@
 	 * Tag a KB link with UTM params, resolving utm_medium the same way the PHP call
 	 * sites in this same fix do (frmGlobal.utmMedium, localized from
 	 * FrmAppHelper::get_utm_medium()) so a Pro-connected site isn't tagged as Lite.
+	 *
+	 * @param {string} url      Base KB URL.
+	 * @param {string} campaign utm_campaign value.
+	 * @param {string} content  utm_content value.
+	 * @return {string} The tagged URL.
 	 */
 	function buildKbLink( url, campaign, content ) {
 		const urlObj = new URL( url );
