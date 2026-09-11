@@ -14,7 +14,9 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 		$gateway_classes .= ' frm_hidden';
 	}
 
-	$toggle_id = "frm_toggle_{$gateway_name}_settings";
+	// Include the action number so a form with more than one payment action doesn't repeat these ids.
+	// A duplicate id would point every label at the first action's radio buttons.
+	$toggle_id = $action_control->get_field_id( 'frm_toggle_' . $gateway_name . '_settings' );
 
 	$input_params = array(
 		'id'    => $toggle_id,
