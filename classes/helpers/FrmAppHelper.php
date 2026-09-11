@@ -1358,7 +1358,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.02
 	 *
-	 * @param string $class
+	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since x.x.
 	 * @param array  $atts
 	 *
 	 * @return string|null
@@ -1370,7 +1370,28 @@ class FrmAppHelper {
 			unset( $atts['echo'] );
 		}
 
-		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+		/**
+		 * An frmfont or frm_icon_font marker anywhere in the list means the icon is in the SVG
+		 * sprite. Each class is compared whole, so a class that merely starts with a marker name,
+		 * like frmfont-sm, is left alone, and the markers can appear in any position.
+		 */
+		$icon_classes = array();
+		$is_font_icon = true;
+
+		foreach ( preg_split( '/\s+/', $class, -1, PREG_SPLIT_NO_EMPTY ) as $single_class ) {
+			if ( 'frmfont' === $single_class || 'frm_icon_font' === $single_class ) {
+				$is_font_icon = false;
+				continue;
+			}
+
+			$icon_classes[] = $single_class;
+		}
+
+		$icon = implode( ' ', $icon_classes );
+
+		if ( $is_font_icon && $icon_classes ) {
+			_deprecated_argument( __METHOD__, 'x.x', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
+		}
 
 		// Replace icons that have been removed or renamed.
 		$deprecated = array(
@@ -1379,12 +1400,15 @@ class FrmAppHelper {
 			'frm_keyalt_solid_icon' => 'frm_key_solid_icon',
 		);
 
-		if ( isset( $deprecated[ $icon ] ) ) {
-			$icon  = $deprecated[ $icon ];
-			$class = str_replace( $icon, $deprecated[ $icon ], $class );
-		}
+		// The icon name is the first class in the list. Anything after it is extra styling.
+		$icon_name = $icon_classes ? $icon_classes[0] : '';
 
-		$is_font_icon = $icon === $class;
+		if ( isset( $deprecated[ $icon_name ] ) ) {
+			_deprecated_argument( __METHOD__, 'x.x', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
+
+			$class = str_replace( $icon_name, $deprecated[ $icon_name ], $class );
+			$icon  = str_replace( $icon_name, $deprecated[ $icon_name ], $icon );
+		}
 
 		if ( ! $is_font_icon ) {
 			$class = str_contains( $icon, ' ' ) ? ' ' . $icon : '';
