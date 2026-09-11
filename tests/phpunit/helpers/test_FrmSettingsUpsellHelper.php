@@ -20,5 +20,6 @@ class test_FrmSettingsUpsellHelper extends FrmUnitTest {
 		$this->assertStringEndsWith( '#kb-visibility', $atts['data-learn-more'] );
 		$this->assertStringContainsString( 'utm_source=', $atts['data-learn-more'] );
 		$this->assertStringContainsString( 'utm_campaign=field_visibility', $atts['data-learn-more'] );
+		$this->assertStringContainsString( 'utm_medium=' . $atts['data-medium'], $atts['data-learn-more'], 'data-medium and data-learn-more should report the same utm_medium' );
 	}
 }

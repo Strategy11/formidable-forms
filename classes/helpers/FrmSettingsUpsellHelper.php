@@ -83,7 +83,7 @@ class FrmSettingsUpsellHelper {
 		}
 
 		$atts['class']          .= ' frm_show_upgrade';
-		$atts['data-medium']     = 'lite';
+		$atts['data-medium']     = FrmAppHelper::get_utm_medium();
 		$atts['data-content']    = $utm_content;
 		$atts['data-upgrade']    = $upgrade_text;
 		$atts['data-learn-more'] = FrmAppHelper::get_doc_url( $kb_slug, $utm_content );

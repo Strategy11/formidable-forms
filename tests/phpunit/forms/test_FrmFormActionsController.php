@@ -29,6 +29,10 @@ class test_FrmFormActionsController extends FrmUnitTest {
 
 		$this->assertStringContainsString( 'utm_source=', $output );
 		$this->assertStringContainsString( 'utm_campaign=form-action-limit', $output );
-		$this->assertStringNotContainsString( 'formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-limit-of-form-actions<', $output, 'The raw URL should no longer be used as the visible anchor text' );
+		$this->assertStringContainsString(
+			'>' . esc_html__( 'Increase Limit of Form Actions', 'formidable' ) . '<',
+			$output,
+			'The visible anchor text should be the translated title, not the raw URL'
+		);
 	}
 }

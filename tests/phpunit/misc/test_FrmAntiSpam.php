@@ -98,11 +98,13 @@ class test_FrmAntiSpam extends FrmUnitTest {
 		$this->set_current_user_to_1();
 		grant_super_admin( get_current_user_id() );
 
-		$message = $this->run_private_method( array( $this->antispam, 'get_missing_token_message' ) );
+		try {
+			$message = $this->run_private_method( array( $this->antispam, 'get_missing_token_message' ) );
 
-		revoke_super_admin( get_current_user_id() );
-
-		$this->assertStringContainsString( 'utm_source=', $message );
-		$this->assertStringContainsString( 'utm_campaign=antispam-troubleshooting', $message );
+			$this->assertStringContainsString( 'utm_source=', $message );
+			$this->assertStringContainsString( 'utm_campaign=antispam-troubleshooting', $message );
+		} finally {
+			revoke_super_admin( get_current_user_id() );
+		}
 	}
 }

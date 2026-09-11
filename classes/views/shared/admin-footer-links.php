@@ -3,18 +3,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+$campaign = 'admin-footer-link';
+
 // Determine the support link based on lite vs pro.
 $support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/support/plugin/formidable/' : FrmAppHelper::maybe_add_missing_utm(
 	'https://formidableforms.com/new-topic/',
 	array(
-		'campaign' => 'admin-footer-link',
+		'campaign' => $campaign,
 		'content'  => 'footer-link-support',
 	)
 );
 
 $upgrade_link = FrmSalesApi::get_best_sale_value( 'footer_cta_link' );
 $utm          = array(
-	'campaign' => 'admin-footer-link',
+	'campaign' => $campaign,
 	'content'  => 'footer-link-upgrade',
 );
 
@@ -43,7 +45,7 @@ if ( $upgrade_link ) {
 		<span>/</span>
 		<?php
 		$docs_utm = array(
-			'campaign' => 'admin-footer-link',
+			'campaign' => $campaign,
 			'content'  => 'footer-link-docs',
 		);
 		?>
