@@ -124,8 +124,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		if ( ! self::paypal_is_configured() ) {
-			$response['error'] = __( 'PayPal still needs to be configured.', 'formidable' );
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal' );
+
+		if ( $connection_error ) {
+			$response['error'] = $connection_error;
 			return $response;
 		}
 
@@ -1100,15 +1102,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$status      = $atts['status'];
 
 		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
-	}
-
-	/**
-	 * Check if PayPal integration is enabled.
-	 *
-	 * @return bool true if PayPal is set up.
-	 */
-	private static function paypal_is_configured() {
-		return (bool) FrmPayPalLiteConnectHelper::get_merchant_id();
 	}
 
 	/**

@@ -795,16 +795,10 @@ class FrmPayPalLiteAppController {
 	 * @return true|WP_Error True if connected, WP_Error with message if not connected.
 	 */
 	private static function check_paypal_connection() {
-		$merchant_id = FrmPayPalLiteConnectHelper::get_merchant_id();
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal' );
 
-		if ( ! $merchant_id ) {
-			$message = __( 'PayPal is not connected. Please connect your PayPal account to process payments.', 'formidable' );
-
-			if ( current_user_can( 'frm_change_settings' ) ) {
-				$message .= ' ' . __( 'You can connect PayPal in Global Settings, under the Payments section.', 'formidable' );
-			}
-
-			return new WP_Error( 'paypal_not_connected', $message );
+		if ( $connection_error ) {
+			return new WP_Error( 'paypal_not_connected', $connection_error );
 		}
 
 		return true;

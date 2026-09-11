@@ -123,8 +123,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		if ( ! self::stripe_is_configured() ) {
-			$response['error'] = __( 'Stripe still needs to be configured.', 'formidable' );
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'stripe' );
+
+		if ( $connection_error ) {
+			$response['error'] = $connection_error;
 			return $response;
 		}
 
@@ -144,15 +146,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$response['show_errors'] = false;
 		return $response;
-	}
-
-	/**
-	 * Check if either Stripe integration is enabled.
-	 *
-	 * @return bool true if Stripe Connect is set up.
-	 */
-	private static function stripe_is_configured() {
-		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' );
 	}
 
 	/**
