@@ -41,25 +41,40 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 			</span>
 			<?php
 		} else {
-			FrmAddonsController::show_conditional_action_button(
-				array(
-					'addon'         => $addon,
-					'license_type'  => ! empty( $license_type ) ? $license_type : false,
-					'plan_required' => 'plan_required',
-					'upgrade_link'  => $pricing,
-				)
-			);
+			$toggle_classes = 'with_frm_style frm_toggle frm-ml-auto';
+
+			if ( FrmAddonsHelper::is_built_in() ) {
+				// The wrapper carries the layout class and explains the always-on toggle.
+				$toggle_classes = 'with_frm_style frm_toggle';
+				?>
+				<span class="frm-ml-auto frm_help" title="<?php esc_attr_e( 'This payment gateway is built into Formidable and is always on.', 'formidable' ); ?>">
+				<?php
+			} else {
+				FrmAddonsController::show_conditional_action_button(
+					array(
+						'addon'         => $addon,
+						'license_type'  => ! empty( $license_type ) ? $license_type : false,
+						'plan_required' => 'plan_required',
+						'upgrade_link'  => $pricing,
+					)
+				);
+			}
+
 			FrmHtmlHelper::toggle(
 				'frm-' . $addon['slug'],
 				'frm-' . $addon['slug'],
 				array(
-					'div_class'       => 'with_frm_style frm_toggle frm-ml-auto',
+					'div_class'       => $toggle_classes,
 					'checked'         => $addon['status']['type'] === 'active',
-					'disabled'        => $addon['slug'] === 'formidable-pro',
+					'disabled'        => $addon['slug'] === 'formidable-pro' || FrmAddonsHelper::is_built_in(),
 					'echo'            => true,
 					'aria-label-attr' => $addon['title'],
 				)
 			);
+
+			if ( FrmAddonsHelper::is_built_in() ) {
+				echo '</span>';
+			}
 		}//end if
 		?>
 	</div>
@@ -72,7 +87,17 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 
 	<div class="frm-flex frm-items-center frm-justify-between">
 		<?php
-		if ( ! empty( $addon['docs'] ) && ! FrmAddonsHelper::get_plan() ) {
+		if ( FrmAddonsHelper::is_built_in() ) {
+			if ( ! empty( $addon['docs'] ) ) {
+				$docs_label = ! empty( $addon['docs_label'] ) ? $addon['docs_label'] : __( 'View Docs', 'formidable' );
+				?>
+				<a class="frm-link-with-external-icon" href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php echo esc_attr( $docs_label ); ?>">
+					<?php echo esc_html( $docs_label ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup8_icon' ); ?>
+				</a>
+				<?php
+			}
+		} elseif ( ! empty( $addon['docs'] ) && ! FrmAddonsHelper::get_plan() ) {
 			$docs_label = ! empty( $addon['docs_label'] ) ? $addon['docs_label'] : __( 'View Docs', 'formidable' );
 			?>
 			<a class="frm-link-with-external-icon" href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php echo esc_attr( $docs_label ); ?>">
@@ -87,7 +112,7 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 				<?php FrmAddonsController::addon_upgrade_link( $addon, $pricing ); ?>
 			</div>
 			<?php
-		}
+		}//end if
 		?>
 	</div>
 </li>
