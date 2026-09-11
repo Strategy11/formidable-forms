@@ -170,6 +170,10 @@ describe( 'Run some accessibility tests', function() {
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.injectAxe();
 		cy.configureAxe( { rules: [ { id: 'color-contrast', enabled: true } ] } );
+		// The footer starts `frm_hidden` (display: none) until JS un-hides it;
+		// axe silently skips hidden nodes for color-contrast, so assert
+		// visibility first or a regression here would pass vacuously.
+		cy.get( '.frm-admin-footer-links' ).should( 'be.visible' );
 		cy.checkA11y( '.frm-admin-footer-links', null, logViolations );
 	} );
 } );
