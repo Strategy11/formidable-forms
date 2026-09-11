@@ -50,7 +50,14 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 		}
 	}
 
-	FrmFormsHelper::show_errors( compact( 'img', 'errors', 'form' ) );
+	$error_args = compact( 'img', 'errors', 'form' );
+
+	if ( isset( $values['fields'] ) ) {
+		// Reuse the fields already prepared for this form so the summary needs no extra query.
+		$error_args['fields'] = $values['fields'];
+	}
+
+	FrmFormsHelper::show_errors( $error_args );
 
 	?>
 </div>

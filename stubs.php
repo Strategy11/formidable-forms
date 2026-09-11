@@ -316,6 +316,13 @@ namespace {
 		 */
 		public static function is_field_visible_to_user( $field ) {
 		}
+		/**
+		 * @param array|int|object $field
+		 *
+		 * @return bool
+		 */
+		public static function field_on_current_page( $field ) {
+		}
 	}
 	class FrmViewsAppHelper {
 		/**

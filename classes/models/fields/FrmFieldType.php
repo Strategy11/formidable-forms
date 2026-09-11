@@ -1176,7 +1176,24 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
-		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->get_error_key_id( $args ) ] ) ? 'true' : 'false';
+	}
+
+	/**
+	 * Get the field ID that error keys are indexed by while this field is being rendered.
+	 *
+	 * A field in a repeater row is rendered with an ID of '{field_id}-{section_id}-{row}', and
+	 * validation keys its errors by that same ID. The field object only knows the plain field ID,
+	 * which matches no error key inside a repeater, so prefer the ID the row is rendering with.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args Rendering context. May include `field_id`.
+	 *
+	 * @return int|string
+	 */
+	protected function get_error_key_id( $args ) {
+		return ! empty( $args['field_id'] ) ? $args['field_id'] : $this->field_id;
 	}
 
 	/**
