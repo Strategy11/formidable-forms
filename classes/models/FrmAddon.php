@@ -1175,9 +1175,9 @@ class FrmAddon {
 		$this->update_last_checked( (bool) $is_valid );
 
 		if ( $is_valid ) {
-            // Setting the license active clears the license caches, so the new license details are available here.
-            return $this->add_activation_response_data( $response );
-        }
+			// Setting the license active clears the license caches, so the new license details are available here.
+			return $this->add_activation_response_data( $response );
+		}
 
 		return $response;
 	}
