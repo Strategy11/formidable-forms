@@ -423,11 +423,16 @@ endif;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul{
-	list-style: inside<?php echo esc_html( $important ); ?>;
+	list-style: disc outside !important;
 	color: var(--error-text)<?php echo esc_html( $important ); ?>;
-	margin-bottom: 0<?php echo esc_html( $important ); ?>;
-	margin-left: 0;
-	list-style-position: outside;
+	margin: 0 !important;
+	padding: 0 !important;
+	padding-inline-start: 1.25em !important;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li{
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a{
