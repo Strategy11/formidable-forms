@@ -1378,7 +1378,14 @@ class FrmAppHelper {
 		$icon_classes = array();
 		$is_font_icon = true;
 
-		foreach ( preg_split( '/\s+/', $class, -1, PREG_SPLIT_NO_EMPTY ) as $single_class ) {
+		$single_classes = preg_split( '/\s+/', $class, -1, PREG_SPLIT_NO_EMPTY );
+
+		if ( ! $single_classes ) {
+			// preg_split returns false if $class is not a string.
+			$single_classes = array();
+		}
+
+		foreach ( $single_classes as $single_class ) {
 			if ( 'frmfont' === $single_class || 'frm_icon_font' === $single_class ) {
 				$is_font_icon = false;
 				continue;

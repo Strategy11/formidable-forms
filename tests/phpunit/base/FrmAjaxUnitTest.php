@@ -10,6 +10,14 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	protected $is_pro_active    = false;
 	protected $contact_form_key = 'contact-with-email';
 
+	/**
+	 * Narrows the inherited property to the Formidable factory so static analysis
+	 * can resolve $this->factory->form, ->field and ->entry.
+	 *
+	 * @var FrmUnitTestFactory
+	 */
+	protected $factory;
+
 	public static function wpSetUpBeforeClass( $factory ) {
 		$_POST = array();
 		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );

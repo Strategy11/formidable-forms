@@ -23,6 +23,14 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $is_pro_active = false;
 
 	/**
+	 * Narrows the inherited property to the Formidable factory so static analysis
+	 * can resolve $this->factory->form, ->field and ->entry.
+	 *
+	 * @var FrmUnitTestFactory
+	 */
+	protected $factory;
+
+	/**
 	 * @var FrmUnitTest
 	 */
 	protected static $instance;
