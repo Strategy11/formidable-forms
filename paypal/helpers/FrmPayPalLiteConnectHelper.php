@@ -796,7 +796,19 @@ class FrmPayPalLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$body = array_merge( self::get_standard_authenticated_body(), $additional_body );
+
+		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'paypal', $body['frm_paypal_api_mode'] ) ) {
+			// There are no credentials for this mode, so the connect server would reject the request
+			// with an error about the signature. Report the missing connection instead.
+			self::$latest_error_from_paypal_api    = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal', $body['frm_paypal_api_mode'] );
+			self::$latest_debug_id_from_paypal_api = '';
+
+			FrmTransLiteLog::log_message( 'PayPal API Error', self::$latest_error_from_paypal_api );
+
+			return false;
+		}
+
 		$response = self::post_to_connect_server( $action, $body );
 
 		if ( is_object( $response ) ) {
