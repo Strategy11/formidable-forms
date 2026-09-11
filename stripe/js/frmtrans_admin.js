@@ -51,6 +51,10 @@
 			}
 		);
 
+		settings.get( 0 ).querySelectorAll( '[role="tab"]' ).forEach(
+			tab => tab.setAttribute( 'aria-selected', tab.htmlFor === this.id ? 'true' : 'false' )
+		);
+
 		wp.hooks.doAction( 'frm_trans_toggled_gateway', { gateway, checked, settings } );
 
 		document.querySelectorAll( '.frm-billing-section-heading' ).forEach( function( el ) {
