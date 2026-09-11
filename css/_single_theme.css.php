@@ -426,6 +426,7 @@ endif;
 	list-style: disc outside !important;
 	color: var(--error-text)<?php echo esc_html( $important ); ?>;
 	margin: 0 !important;
+	margin-block-start: 0.25em !important;
 	padding: 0 !important;
 	padding-inline-start: 1.25em !important;
 }
@@ -435,12 +436,21 @@ endif;
 	padding: 0 !important;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li + li{
+	margin-block-start: 0.25em !important;
+}
+
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a{
 	color: var(--error-text)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:hover{
 	text-decoration: underline<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:focus-visible{
+	outline: 2px solid var(--error-text) !important;
+	outline-offset: 2px !important;
 }
 
 <?php if ( $pro_is_installed ) { ?>
