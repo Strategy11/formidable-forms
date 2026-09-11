@@ -90,4 +90,19 @@ class test_FrmAntiSpam extends FrmUnitTest {
 		$valid_token  = reset( $valid_tokens );
 		$this->assertTrue( $this->run_private_method( array( $this->antispam, 'verify' ), array( $valid_token ) ) );
 	}
+
+	/**
+	 * @covers FrmAntiSpam::get_missing_token_message
+	 */
+	public function test_missing_token_message_tags_the_troubleshooting_link_for_a_super_admin() {
+		$this->set_current_user_to_1();
+		grant_super_admin( get_current_user_id() );
+
+		$message = $this->run_private_method( array( $this->antispam, 'get_missing_token_message' ) );
+
+		revoke_super_admin( get_current_user_id() );
+
+		$this->assertStringContainsString( 'utm_source=', $message );
+		$this->assertStringContainsString( 'utm_campaign=antispam-troubleshooting', $message );
+	}
 }

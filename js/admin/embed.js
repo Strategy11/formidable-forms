@@ -385,7 +385,7 @@
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
 				example: `[formidable id=${ formId }]`,
-				link: 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually',
+				link: 'https://formidableforms.com/knowledgebase/publish-a-form/?utm_source=plugin&utm_medium=lite&utm_campaign=embed-modal&utm_content=shortcode-docs#kb-insert-the-shortcode-manually',
 				linkLabel: __( 'How to use shortcodes in WordPress', 'formidable' )
 			},
 			{

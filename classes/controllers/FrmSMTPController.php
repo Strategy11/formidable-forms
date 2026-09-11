@@ -80,7 +80,8 @@ class FrmSMTPController {
 	 */
 	public function link( $link ) {
 		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
-		return str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
+		$link     = str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
+		return FrmAppHelper::maybe_add_missing_utm( $link, array( 'campaign' => 'wp-mail-smtp-upsell' ) );
 	}
 
 	/**

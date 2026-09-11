@@ -48,7 +48,7 @@ class FrmXMLHelper {
 			$error_message = sprintf(
 				/* translators: 1: Documentation link */
 				__( 'In order to install XML, your server must have DOMDocument installed. Follow our documentation on %1$s to ensure DOMDocument is properly set up and XML support is enabled.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-				'<a href="https://formidableforms.com/knowledgebase/import-forms-entries-and-views/#kb-your-server-does-not-have-xml-enabled" target="_blank">Importing Forms, Entries, and Views</a>' // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				'<a href="' . esc_url( FrmAppHelper::get_doc_url( 'import-forms-entries-and-views/#kb-your-server-does-not-have-xml-enabled', 'dom-document-missing' ) ) . '" target="_blank">Importing Forms, Entries, and Views</a>' // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			);
 
 			return new WP_Error( 'SimpleXML_parse_error', $error_message, libxml_get_errors() );

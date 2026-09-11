@@ -86,7 +86,7 @@ class FrmSettingsUpsellHelper {
 		$atts['data-medium']     = 'lite';
 		$atts['data-content']    = $utm_content;
 		$atts['data-upgrade']    = $upgrade_text;
-		$atts['data-learn-more'] = 'https://formidableforms.com/knowledgebase' . $kb_slug;
+		$atts['data-learn-more'] = FrmAppHelper::get_doc_url( $kb_slug, $utm_content );
 
 		return $atts;
 	}
