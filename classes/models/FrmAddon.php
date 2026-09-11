@@ -1174,6 +1174,26 @@ class FrmAddon {
 
 		$this->update_last_checked( (bool) $is_valid );
 
+		if ( $is_valid ) {
+			// Setting the license active clears the license caches, so the new license details are available here.
+			$response = $this->add_activation_response_data( $response );
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Add extra details to the response for a license that just activated.
+	 * Pro overrides this to include the license type, so the license message
+	 * can be updated without reloading the page.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $response The activation response.
+	 *
+	 * @return array
+	 */
+	protected function add_activation_response_data( $response ) {
 		return $response;
 	}
 
