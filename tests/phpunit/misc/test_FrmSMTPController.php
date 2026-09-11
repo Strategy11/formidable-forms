@@ -18,10 +18,8 @@ class test_FrmSMTPController extends FrmUnitTest {
 	}
 
 	/**
-	 * wp-mail-smtp-pro's own Core::get_upgrade_link() already tags the link with its own
-	 * utm_* params before this filter ever runs (verified against the vendored
-	 * wp-mail-smtp-pro\Core::get_utm_url()) — this reproduces that real input shape to make
-	 * sure our own campaign attribution actually overrides it instead of being skipped.
+	 * Reproduces the real input shape: wp-mail-smtp-pro's own Core::get_upgrade_link() already
+	 * tags the link before this filter runs, so a naive fill-the-gaps re-tag would be a no-op.
 	 *
 	 * @covers FrmSMTPController::link
 	 */
@@ -32,6 +30,7 @@ class test_FrmSMTPController extends FrmUnitTest {
 
 		$this->assertStringContainsString( 'formidableforms.com/go-wp-mail-smtp/', $link );
 		$this->assertStringContainsString( 'utm_campaign=wp-mail-smtp-upsell', $link );
-		$this->assertStringNotContainsString( 'utm_campaign=liteplugin', $link, 'Our own campaign should override wp-mail-smtp\'s pre-existing one' );
+		$this->assertStringNotContainsString( 'utm_campaign=liteplugin', $link, 'Our own campaign should override the pre-existing one' );
+		$this->assertStringContainsString( 'urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade', $link, 'The hand-obfuscated redirect target must survive the utm re-tagging untouched' );
 	}
 }
