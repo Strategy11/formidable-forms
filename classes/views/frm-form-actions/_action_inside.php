@@ -8,6 +8,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
 <?php
+if ( FrmFormActionsController::should_show_notice_about_using_the_same_to_from_email( $form_action ) ) {
+	?>
+	<div class="frm_no_p_margin frm_default_email_message frm-flex frm-gap-sm">
+		<p>
+			<b style="color:var(--grey-800);"><?php esc_html_e( 'Heads up!', 'formidable' ); ?></b>
+			<span><?php esc_html_e( 'Using the same \'To\' and \'From\' email address can sometimes cause delivery issues. We recommend updating your default email addresses to maximize deliverability.', 'formidable' ); ?></span>
+		</p>
+		<p class="frm-flex-box frm-flex-center" style="white-space:nowrap;">
+			<a href="#" class="frm_dismiss_default_email_message button frm-button-secondary"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings' ) ); ?>" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
+		</p>
+	</div>
+	<?php
+}
+
 /**
  * @since 6.25
  *
