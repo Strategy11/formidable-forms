@@ -8705,7 +8705,7 @@ window.frmAdminBuildJS = function() {
 	function fillDyncontent() {
 		/*jshint validthis:true */
 		const selectedValue = jQuery( this ).val();
-		const $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
+		const $dyn = jQuery( document.getElementById( 'frm_post_action_custom_content' ) );
 		if ( '' === selectedValue || 'new' === selectedValue ) {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
