@@ -169,7 +169,10 @@ describe( 'Run some accessibility tests', function() {
 	it( 'Check the admin footer links meet WCAG color-contrast', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.injectAxe();
-		cy.configureAxe( { rules: [ { id: 'color-contrast', enabled: true } ] } );
+		configureAxeWithIgnoredRuleset( [
+			...baselineRules.filter( rule => rule.id !== 'color-contrast' ),
+			{ id: 'color-contrast', enabled: true }
+		] );
 		// The footer starts `frm_hidden` (display: none) until JS un-hides it;
 		// axe silently skips hidden nodes for color-contrast, so assert
 		// visibility first or a regression here would pass vacuously.
