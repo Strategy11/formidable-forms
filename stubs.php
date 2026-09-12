@@ -544,13 +544,20 @@ namespace {
 	 */
 	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
 		/**
-		 * FrmUnitTest::setUp() actually replaces this with a FrmUnitTestFactory, but that class
-		 * lives under tests/, which phpstan.neon excludes from the analysis paths - PHPStan would
-		 * report "unknown class" for a type it can never load. WP_UnitTest_Factory is the real
-		 * base type and is declared below, so it resolves.
+		 * FrmUnitTest::setUp() replaces this with a FrmUnitTestFactory, which is what every
+		 * plugin test actually sees and calls ->field/->entry/->form on, so it is typed as that
+		 * rather than the base WP_UnitTest_Factory - DeepSource and mago both scan tests/ and
+		 * resolve FrmUnitTestFactory fine. Redeclaring ->field/->entry/->form directly on
+		 * WP_UnitTest_Factory instead was tried and reverted: mago requires a redeclared
+		 * property's docblock type to match its parent exactly, and that broke the REAL
+		 * FrmUnitTestFactory in tests/phpunit/base/frm_factory.php, which types them more
+		 * specifically (Field_Factory|null, etc). PHPStan can't load FrmUnitTestFactory itself,
+		 * since phpstan.neon excludes tests/ from its analysis paths - that single-line ignore
+		 * is scoped here rather than added to phpstan.neon.
 		 *
-		 * @var WP_UnitTest_Factory
+		 * @var FrmUnitTestFactory
 		 */
+		// @phpstan-ignore class.notFound
 		protected $factory;
 
 		/**
