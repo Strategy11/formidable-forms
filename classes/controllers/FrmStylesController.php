@@ -1018,10 +1018,11 @@ class FrmStylesController {
 
 	/**
 	 * Handle AJAX routing for frm_settings_reset for resetting styles to the default settings.
-	 * From the edit view, it will return default styles and not actually update the style.
-	 * On the list view, it does update the style immediately, and returns the default card style attributes so the style card can be reset as well.
+	 * From the edit view, it returns the style's own default values without persisting them, so the inputs can be updated with JavaScript.
+	 * From the list view, it persists the reset immediately, and returns the default card style attributes so the style card can be reset as well.
 	 *
 	 * @since 6.0 When a style_id is passed to this action, the style will actually be reset.
+	 * @since x.x A style_id is now always expected, so the edit view can look up that style's own default template instead of the generic defaults. The list view now also sends persist=1 to trigger the actual database update.
 	 *
 	 * @return void
 	 */
@@ -1032,8 +1033,7 @@ class FrmStylesController {
 		$style_id = FrmAppHelper::get_post_param( 'style_id', '', 'absint' );
 
 		if ( ! $style_id ) {
-			// A style ID is not sent when resetting on the edit page.
-			// Instead of resetting the style, send the defaults back so the inputs can be updated with JavaScript.
+			// No style is known yet (for example, a style that has not been created). Send generic defaults so the inputs can be updated with JavaScript.
 			$frm_style = new FrmStyle();
 			echo json_encode( $frm_style->get_defaults() );
 			wp_die();
@@ -1041,7 +1041,14 @@ class FrmStylesController {
 
 		$frm_style              = new FrmStyle();
 		$default_template_style = $frm_style->get_default_template_style( $style_id );
-		$where                  = array(
+
+		if ( ! FrmAppHelper::get_post_param( 'persist', '', 'absint' ) ) {
+			// Resetting from the edit view. Send this style's own default values back without persisting them.
+			echo json_encode( json_decode( $default_template_style, true ) );
+			wp_die();
+		}
+
+		$where = array(
 			'ID'        => $style_id,
 			'post_type' => self::$post_type,
 		);
