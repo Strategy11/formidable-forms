@@ -161,4 +161,22 @@ describe( 'Run some accessibility tests', function() {
 		] );
 		cy.checkA11y( null, null, logViolations );
 	} );
+
+	// Regression test for issue Strategy11/formidable-pro#6586: color-contrast
+	// is disabled in baselineRules above, so it's re-enabled here, scoped to
+	// just the admin footer, to guard the fix without surfacing every other
+	// pre-existing color-contrast finding on this page.
+	it( 'Check the admin footer links meet WCAG color-contrast', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.injectAxe();
+		configureAxeWithIgnoredRuleset( [
+			...baselineRules.filter( rule => rule.id !== 'color-contrast' ),
+			{ id: 'color-contrast', enabled: true }
+		] );
+		// The footer starts `frm_hidden` (display: none) until JS un-hides it;
+		// axe silently skips hidden nodes for color-contrast, so assert
+		// visibility first or a regression here would pass vacuously.
+		cy.get( '.frm-admin-footer-links' ).should( 'be.visible' );
+		cy.checkA11y( '.frm-admin-footer-links', null, logViolations );
+	} );
 } );
