@@ -762,6 +762,7 @@ class FrmFormActionsController {
 			'twilio',
 			'zapier',
 		);
+
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
@@ -774,7 +775,7 @@ class FrmFormActionsController {
 	 */
 	public static function should_show_notice_about_using_the_same_to_from_email( $form_action ) {
 		$settings = new FrmSettings();
-		if ( ! empty( $settings->default_email ) && $settings->default_email !== $settings->from_email ) {
+		if ( ! empty( $settings->default_email ) && $settings->default_email !== FrmEmailHelper::get_default_from_email() ) {
 			return false;
 		}
 
