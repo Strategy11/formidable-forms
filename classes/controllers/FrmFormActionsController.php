@@ -777,6 +777,7 @@ class FrmFormActionsController {
 		if ( ! empty( $settings->default_email ) && $settings->default_email !== $settings->from_email ) {
 			return false;
 		}
+
 		return $form_action->post_excerpt === 'email' && ! get_user_meta( wp_get_current_user()->ID, 'frm_dismiss_default_email_message', true );
 	}
 
