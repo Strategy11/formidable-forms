@@ -96,4 +96,41 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			$this->assertSame( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
 		}
 	}
+
+	/**
+	 * @covers FrmFormsController::build_new_form
+	 * with ajax
+	 */
+	public function test_build_new_form_applies_frm_setup_new_form_vars_filter() {
+		add_filter( 'frm_setup_new_form_vars', array( $this, '_set_custom_before_html' ) );
+
+		$form_key = 'vivi-test-2176-' . wp_generate_password( 6, false );
+
+		$_POST = array(
+			'action' => 'frm_install_form',
+			'nonce'  => wp_create_nonce( 'frm_ajax' ),
+			'name'   => $form_key,
+			'desc'   => '',
+		);
+		$_REQUEST = $_POST;
+
+		try {
+			$this->_handleAjax( 'frm_install_form' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		} catch ( WPAjaxDieStopException $e ) {
+			unset( $e );
+		}
+
+		remove_filter( 'frm_setup_new_form_vars', array( $this, '_set_custom_before_html' ) );
+
+		$form = FrmForm::getOne( $form_key );
+		$this->assertNotEmpty( $form, 'Form not found with key ' . $form_key );
+		$this->assertSame( 'VIVI_TEST_MARKER', $form->options['before_html'], 'frm_setup_new_form_vars did not affect the created form.' );
+	}
+
+	public function _set_custom_before_html( $values ) {
+		$values['before_html'] = 'VIVI_TEST_MARKER';
+		return $values;
+	}
 }

@@ -1066,6 +1066,22 @@ class FrmFormsController {
 		 */
 		$new_values = apply_filters( 'frm_new_form_values', $new_values );
 
+		/**
+		 * Allows overriding a new form's default option values (before_html,
+		 * submit_html, etc). This modal is the only form-creation entry point
+		 * now, so this documented filter is applied here for it to keep working.
+		 *
+		 * @param array $values Form values.
+		 */
+		$new_values = apply_filters( 'frm_setup_new_form_vars', $new_values );
+
+		foreach ( FrmFormsHelper::get_default_opts() as $var => $default ) {
+			if ( isset( $new_values[ $var ] ) ) {
+				$new_values['options'][ $var ] = $new_values[ $var ];
+			}
+			unset( $var, $default );
+		}
+
 		$form_id = FrmForm::create( $new_values );
 		/**
 		 * @since 5.3
