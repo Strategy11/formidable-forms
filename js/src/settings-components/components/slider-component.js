@@ -41,6 +41,8 @@ export default class frmSliderComponent {
 				element,
 				index,
 				steps,
+				// Group membership never changes mid-drag, so this is looked up once here rather than on every drag tick.
+				groupItems: this.getSliderGroupItems( element ),
 				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
 			} );
 		} );
@@ -78,7 +80,7 @@ export default class frmSliderComponent {
 				const value = this.getRangeValue( rangeInput, index );
 				valueInput.value = value;
 				this.refreshRange( rangeInput, element, value );
-				this.syncGroupSliders( element, value );
+				this.syncGroupSliders( element, value, index );
 			} );
 
 			// Commit value to hidden input on release.
@@ -91,14 +93,17 @@ export default class frmSliderComponent {
 			// Sync text input changes back to the range.
 			valueInput.addEventListener( 'change', event => {
 				const unit = frmSliderComponent.getUnit( element );
+				const newValue = parseFloat( event.target.value );
 
-				if ( parseFloat( rangeInput.max ) < parseFloat( event.target.value ) ) {
+				// An empty/non-numeric value falls through the max check below as NaN comparisons are
+				// always false - reject it explicitly rather than committing a number-less value.
+				if ( isNaN( newValue ) || parseFloat( rangeInput.max ) < newValue ) {
 					return;
 				}
 
-				this.setRangeValue( rangeInput, index, valueInput.value );
-				this.refreshRange( rangeInput, element, valueInput.value );
-				this.options[ index ].fullValue = this.updateValue( element, valueInput.value + unit );
+				this.setRangeValue( rangeInput, index, newValue );
+				this.refreshRange( rangeInput, element, newValue );
+				this.options[ index ].fullValue = this.updateValue( element, newValue + unit );
 				this.triggerValueChange( index );
 			} );
 
@@ -293,16 +298,17 @@ export default class frmSliderComponent {
 	 *
 	 * @param {HTMLElement}   element - The parent slider component element.
 	 * @param {number|string} value   - The new numeric value (without unit).
+	 * @param {number}        index   - The index of the dragged slider in the options array.
 	 * @return {void}
 	 */
-	syncGroupSliders( element, value ) {
+	syncGroupSliders( element, value, index ) {
 		if ( ! element.classList.contains( 'frm-has-multiple-values' ) && ! element.classList.contains( 'frm-has-independent-fields' ) ) {
 			return;
 		}
 
 		const childSliders = element.classList.contains( 'frm-has-independent-fields' )
 			? element.querySelectorAll( '.frm-independent-slider-field' )
-			: this.getSliderGroupItems( element );
+			: this.options[ index ].groupItems;
 
 		childSliders.forEach( child => {
 			const childRange = child.querySelector( '.frm-slider' );
@@ -378,7 +384,12 @@ export default class frmSliderComponent {
 			rangeInput.disabled = false;
 
 			if ( ! this.options[ index ].steps ) {
-				rangeInput.max = this.getMaxValue( unit, index );
+				// A value already saved above the plain unit max still has to stay reachable, otherwise the
+				// range would clamp it down just from the unit being touched (mirrors get_max_for_unit() in
+				// FrmSliderStyleComponent.php).
+				const currentValue = this.getRangeValue( rangeInput, index );
+				const plainMax = this.getMaxValue( unit, index );
+				rangeInput.max = currentValue > plainMax ? Math.ceil( currentValue ) : plainMax;
 			}
 
 			// Lowering the max makes the browser clamp the range, so read the value back rather than
