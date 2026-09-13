@@ -104,28 +104,23 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 	public function test_build_new_form_applies_frm_setup_new_form_vars_filter() {
 		add_filter( 'frm_setup_new_form_vars', array( $this, '_set_custom_before_html' ) );
 
-		$form_key = 'vivi-test-2176-' . wp_generate_password( 6, false );
-
 		$_POST = array(
 			'action' => 'frm_install_form',
 			'nonce'  => wp_create_nonce( 'frm_ajax' ),
-			'name'   => $form_key,
+			'name'   => 'Vivi Setup New Form Vars Test',
 			'desc'   => '',
 		);
 		$_REQUEST = $_POST;
 
-		try {
-			$this->_handleAjax( 'frm_install_form' );
-		} catch ( WPAjaxDieContinueException $e ) {
-			unset( $e );
-		} catch ( WPAjaxDieStopException $e ) {
-			unset( $e );
-		}
+		$response = json_decode( $this->trigger_action( 'frm_install_form' ), true );
 
 		remove_filter( 'frm_setup_new_form_vars', array( $this, '_set_custom_before_html' ) );
 
-		$form = FrmForm::getOne( $form_key );
-		$this->assertNotEmpty( $form, 'Form not found with key ' . $form_key );
+		$this->assertNotEmpty( $response['redirect'] ?? '', 'build_new_form did not return a redirect URL.' );
+		parse_str( (string) wp_parse_url( $response['redirect'], PHP_URL_QUERY ), $redirect_args );
+
+		$form = FrmForm::getOne( $redirect_args['id'] );
+		$this->assertNotEmpty( $form, 'Form not found with id ' . $redirect_args['id'] );
 		$this->assertSame( 'VIVI_TEST_MARKER', $form->options['before_html'], 'frm_setup_new_form_vars did not affect the created form.' );
 	}
 
