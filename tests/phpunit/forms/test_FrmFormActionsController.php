@@ -30,15 +30,15 @@ class test_FrmFormActionsController extends FrmUnitTest {
 	public function test_should_show_notice_when_from_email_is_unset() {
 		delete_option( 'frm_options' );
 
-		$form_action              = new stdClass();
+		$form_action               = new stdClass();
 		$form_action->post_excerpt = 'email';
 
 		$this->assertTrue( FrmFormActionsController::should_show_notice_about_using_the_same_to_from_email( $form_action ) );
 	}
 
 	/**
-	 * from_email explicitly set to a different address than default_email —
-	 * the notice should not show.
+	 * When from_email is explicitly set to a different address than
+	 * default_email, the notice should not show.
 	 */
 	public function test_should_not_show_notice_when_from_email_differs() {
 		$settings = FrmAppHelper::get_settings();
@@ -46,7 +46,7 @@ class test_FrmFormActionsController extends FrmUnitTest {
 		$settings->update_setting( 'from_email', 'from@example.com', 'sanitize_email' );
 		$settings->store();
 
-		$form_action              = new stdClass();
+		$form_action               = new stdClass();
 		$form_action->post_excerpt = 'email';
 
 		$this->assertFalse( FrmFormActionsController::should_show_notice_about_using_the_same_to_from_email( $form_action ) );
@@ -60,7 +60,7 @@ class test_FrmFormActionsController extends FrmUnitTest {
 		$admin_id = $this->set_user_by_role( 'administrator' );
 		update_user_meta( $admin_id, 'frm_dismiss_default_email_message', 1 );
 
-		$form_action              = new stdClass();
+		$form_action               = new stdClass();
 		$form_action->post_excerpt = 'email';
 
 		$this->assertFalse( FrmFormActionsController::should_show_notice_about_using_the_same_to_from_email( $form_action ) );

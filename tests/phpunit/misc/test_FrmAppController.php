@@ -200,4 +200,22 @@ class test_FrmAppController extends FrmUnitTest {
 		FrmAppController::network_upgrade_site();
 		$this->addToAssertionCount( 1 );
 	}
+
+	/**
+	 * settings.js reads `frmDom` from the `formidable_dom` script at parse time,
+	 * so formidable_settings should declare that dependency explicitly rather
+	 * than rely on formidable_admin (enqueued separately) to pull it in first.
+	 *
+	 * @covers FrmAppController::admin_js
+	 */
+	public function test_settings_script_depends_on_dom_script() {
+		FrmAppController::admin_js();
+
+		$settings_script = wp_scripts()->registered['formidable_settings'];
+		$this->assertContains(
+			'formidable_dom',
+			$settings_script->deps,
+			'formidable_settings must depend on formidable_dom or frmDom is undefined when only formidable_settings is enqueued on the Settings page'
+		);
+	}
 }
