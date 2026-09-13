@@ -192,6 +192,16 @@ describe( 'Add-Ons page', () => {
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
 		} );
 
+		cy.log( 'Stripe built-in card and Stripe Pro card share the same icon' );
+		cy.get( 'li[data-slug="stripe-payments"]' ).within( () => {
+			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Stripe' );
+			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_stripealt_icon' );
+		} );
+		cy.get( 'li[data-slug="stripe"]' ).within( () => {
+			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Stripe Pro' );
+			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_stripealt_icon' );
+		} );
+
 		cy.log( 'Formidable API card' );
 		cy.get( 'li[data-slug="formidable-api"]' ).within( () => {
 			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Formidable API' );

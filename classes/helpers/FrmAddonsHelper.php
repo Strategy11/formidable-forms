@@ -181,7 +181,7 @@ class FrmAddonsHelper {
 			'paypal-standard'                 => 'paypal',
 			'polylang'                        => 'polylang',
 			'square-payments'                 => 'square',
-			'stripe-payments'                 => 'stripe',
+			'stripe-payments'                 => 'stripealt',
 			'salesforce'                      => 'salesforcealt',
 			'stripe'                          => 'stripealt',
 			'twilio'                          => 'twilio',
