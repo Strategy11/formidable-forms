@@ -2080,6 +2080,7 @@ class FrmFormsController {
 		}
 
 		$is_ajax_on = FrmForm::is_ajax_on( $form );
+
 		if ( $is_ajax_on ) {
 			echo ' frm_ajax_submit ';
 		}
