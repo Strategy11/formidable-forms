@@ -128,4 +128,37 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 		$values['before_html'] = 'VIVI_TEST_MARKER';
 		return $values;
 	}
+
+	/**
+	 * @covers FrmFormsController::build_new_form
+	 * with ajax
+	 */
+	public function test_build_new_form_frm_setup_new_form_vars_callback_can_read_existing_key() {
+		add_filter( 'frm_setup_new_form_vars', array( $this, '_append_to_before_html' ) );
+
+		$_POST = array(
+			'action' => 'frm_install_form',
+			'nonce'  => wp_create_nonce( 'frm_ajax' ),
+			'name'   => 'Vivi Append Before Html Test',
+			'desc'   => '',
+		);
+		$_REQUEST = $_POST;
+
+		$response = json_decode( $this->trigger_action( 'frm_install_form' ), true );
+
+		remove_filter( 'frm_setup_new_form_vars', array( $this, '_append_to_before_html' ) );
+
+		$this->assertNotEmpty( $response['redirect'] ?? '', 'build_new_form did not return a redirect URL.' );
+		parse_str( (string) wp_parse_url( $response['redirect'], PHP_URL_QUERY ), $redirect_args );
+
+		$form = FrmForm::getOne( $redirect_args['id'] );
+		$this->assertNotEmpty( $form, 'Form not found with id ' . $redirect_args['id'] );
+		$expected = FrmFormsHelper::get_default_html( 'before' ) . '_APPENDED';
+		$this->assertSame( $expected, $form->options['before_html'], 'Callback could not read the existing before_html default.' );
+	}
+
+	public function _append_to_before_html( $values ) {
+		$values['before_html'] .= '_APPENDED';
+		return $values;
+	}
 }
