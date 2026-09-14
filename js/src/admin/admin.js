@@ -9604,11 +9604,6 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
-		if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
-			// Don't run when in the sidebar.
-			return;
-		}
-
 		box.style.display = 'none';
 
 		const closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
