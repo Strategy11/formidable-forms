@@ -164,6 +164,7 @@ class FrmAddonsController {
 			),
 		);
 		$addons = $pro + self::get_built_in_addons() + $addons;
+		$addons = self::move_addon_after( $addons, 'stripe', 'stripe-payments' );
 		self::prepare_addons( $addons );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
@@ -211,6 +212,76 @@ class FrmAddonsController {
 				'excerpt'    => 'Collect instant payments and recurring payments with PayPal Commerce on any Formidable form.',
 			),
 		);
+	}
+
+	/**
+	 * Move an add-on to display immediately after another one.
+	 *
+	 * Used to keep "Stripe Pro" next to the always-on "Stripe" card, since
+	 * the API add-ons are otherwise appended after all built-in gateways.
+	 * Add-ons are matched by their normalized slug rather than their array
+	 * key, because API-sourced add-ons are keyed by a numeric download id
+	 * with the real slug in their `slug` field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<int|string,array<string,mixed>> $addons     The full addons array, keyed by slug or id.
+	 * @param string                                $slug       Normalized slug of the add-on to move.
+	 * @param string                                $after_slug Normalized slug of the add-on it should follow.
+	 *
+	 * @return array<int|string,array<string,mixed>>
+	 */
+	protected static function move_addon_after( $addons, $slug, $after_slug ) {
+		$target_id = self::find_addon_id_by_slug( $addons, $slug );
+		$after_id  = self::find_addon_id_by_slug( $addons, $after_slug );
+
+		if ( null === $target_id || null === $after_id ) {
+			return $addons;
+		}
+
+		$addon = $addons[ $target_id ];
+		unset( $addons[ $target_id ] );
+
+		$reordered = array();
+
+		foreach ( $addons as $id => $value ) {
+			$reordered[ $id ] = $value;
+
+			if ( $id === $after_id ) {
+				$reordered[ $target_id ] = $addon;
+			}
+		}
+
+		return $reordered;
+	}
+
+	/**
+	 * Find an add-on's array key by its normalized slug.
+	 *
+	 * Mirrors the slug derivation in prepare_addons(): a numeric key names
+	 * an API-sourced add-on whose real slug lives in its `slug` field,
+	 * while a string key (built-in gateways, the fallback list) already is
+	 * the slug.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<int|string,array<string,mixed>> $addons The full addons array, keyed by slug or id.
+	 * @param string                                $slug   Normalized slug to find.
+	 *
+	 * @return int|string|null
+	 */
+	protected static function find_addon_id_by_slug( $addons, $slug ) {
+		foreach ( $addons as $id => $addon ) {
+			$addon_slug = is_numeric( $id )
+			? str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] )
+			: $id;
+
+			if ( $addon_slug === $slug ) {
+				return $id;
+			}
+		}
+
+		return null;
 	}
 
 	/**
