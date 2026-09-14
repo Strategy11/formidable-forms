@@ -102,7 +102,7 @@ export default class frmSliderComponent {
 				// bound, not a real value bound - validate against the actual allowed values instead.
 				const isValid = steps && steps.length > 0
 					? steps.map( Number ).includes( newValue )
-					: parseFloat( rangeInput.max ) >= newValue;
+					: newValue >= parseFloat( rangeInput.min || 0 ) && parseFloat( rangeInput.max ) >= newValue;
 
 				// An empty/non-numeric value falls through the check above as NaN comparisons are
 				// always false - reject it and resync the text box to the last committed value instead
