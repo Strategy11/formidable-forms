@@ -22,6 +22,17 @@
 body.frm-white-body:not(.frm-full-screen) .mce-fullscreen {
 	top: 32px;
 	left: 160px;
+	width: calc(100% - 160px);
+	height: calc(100% - 32px);
+}
+
+// A dialog (e.g. the Views builder's box content editor) already sits above the admin bar and
+// menu with its own high z-index, so there's no WP chrome left for the offset above to avoid.
+body.frm-white-body:not(.frm-full-screen) .ui-dialog .mce-fullscreen {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 .frm-full-screen #wpbody-content,
