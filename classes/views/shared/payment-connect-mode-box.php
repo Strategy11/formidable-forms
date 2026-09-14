@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Shared view for a payment gateway connect mode box (Live / Test).
  *
  * Required variables:
+ *
  * @var string        $mode                   'live' or 'test'.
  * @var bool          $connected              Whether the gateway is connected for this mode.
  * @var string        $column_class           CSS grid column class (e.g. 'frm4', 'frm6').
