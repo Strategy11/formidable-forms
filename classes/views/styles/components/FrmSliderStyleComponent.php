@@ -37,7 +37,8 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
-		$this->data['value_label']         = $this->detect_unit_measurement() ? (float) $field_value : $field_value;
+		// A keyword value like 'auto' has no number to cast - only an actual measurement unit does.
+		$this->data['value_label']         = in_array( $this->data['unit_measurement'], array( 'px', 'em', '%' ), true ) ? (float) $field_value : $field_value;
 
 		$this->init_defaults();
 		$this->init_icon();
@@ -275,7 +276,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 	/**
 	 * Detect the unit measurement from the value.
-	 * Possible values are: "px", "%", "em" or empty ""
+	 * Possible values are: "px", "%", "em", "auto" or empty ""
 	 *
 	 * @since 6.14
 	 *
@@ -286,6 +287,12 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	private function detect_unit_measurement( $value = null ) {
 		if ( null === $value ) {
 			$value = $this->field_value;
+		}
+
+		// 'auto' has its own option in the unit dropdown where that keyword is offered, so it can
+		// be selected (and announced) on load instead of always falling through to the blank option.
+		if ( 'auto' === $value ) {
+			return 'auto';
 		}
 
 		if ( preg_match( '/%$/', $value ) ) {

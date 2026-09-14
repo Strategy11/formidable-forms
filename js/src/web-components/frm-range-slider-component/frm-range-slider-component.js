@@ -482,7 +482,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		const valueContainer = frmRangeSliderComponent.createSliderValueAndUnitSelection( value, ariaLabel, units, baseId );
 
 		if ( addHiddenInputValue ) {
-			valueContainer.append( this.createSliderHiddenInputValue( options ) );
+			valueContainer.append( this.createSliderHiddenInputValue( `${ value.value }${ value.unit || '' }` ) );
 		}
 
 		flexContainer.append( valueContainer );

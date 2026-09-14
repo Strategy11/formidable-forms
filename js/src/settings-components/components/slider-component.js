@@ -277,6 +277,13 @@ export default class frmSliderComponent {
 		frmSliderComponent.updateFill( rangeInput );
 
 		const unit = frmSliderComponent.getUnit( element );
+
+		// 'auto' has no position on the track, so announce the keyword instead of the value.
+		if ( 'auto' === unit ) {
+			rangeInput.setAttribute( 'aria-valuetext', unit );
+			return;
+		}
+
 		const suffix = MEASUREMENT_UNITS.includes( unit ) ? unit : '';
 		rangeInput.setAttribute( 'aria-valuetext', `${ value }${ suffix }` );
 	}
