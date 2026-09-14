@@ -717,7 +717,18 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$body = array_merge( self::get_standard_authenticated_body(), $additional_body );
+
+		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'stripe', $body['frm_strp_connect_mode'] ) ) {
+			// There are no credentials for this mode, so the connect server would reject the request
+			// with an error about the signature. Report the missing connection instead.
+			// An account that has credentials but never finished onboarding is not blocked here,
+			// since the account status check is what moves it out of that state.
+			self::$latest_error_from_stripe_connect = FrmTransLiteAppHelper::get_gateway_connection_error( 'stripe', $body['frm_strp_connect_mode'] );
+			FrmTransLiteLog::log_message( 'Stripe Connect Error', self::$latest_error_from_stripe_connect );
+			return false;
+		}
+
 		$response = self::post_to_connect_server( $action, $body );
 
 		if ( is_object( $response ) ) {
