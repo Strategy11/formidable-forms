@@ -77,6 +77,141 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	}
 
 	/**
+	 * Get the highest value a slider may be dragged to.
+	 * A percentage runs from 0 to 100 whatever pixel maximum the component was given. A value that
+	 * was already saved above the maximum still has to be reachable, otherwise the slider would sit
+	 * at a different value than the one shown in the text box beside it.
+	 *
+	 * @since x.x
+	 *
+	 * @param string     $unit   The unit of measurement, for instance 'px', 'em' or '%'.
+	 * @param float|null $number The value about to be shown, or null when the value is not a number.
+	 *
+	 * @return float
+	 */
+	private function get_max_for_unit( $unit, $number ) {
+		$max = '%' === $unit ? 100.0 : (float) $this->data['max_value'];
+
+		if ( null !== $number && $number > $max ) {
+			return ceil( $number );
+		}
+
+		return $max;
+	}
+
+	/**
+	 * Print a number the way an HTML attribute needs it, without a trailing run of zeros.
+	 *
+	 * @since x.x
+	 *
+	 * @param float $number The number to print.
+	 *
+	 * @return string
+	 */
+	private static function format_number( $number ) {
+		return rtrim( rtrim( sprintf( '%.4F', $number ), '0' ), '.' );
+	}
+
+	/**
+	 * Get the step a range input needs in order to hold the given value exactly.
+	 * A range snaps its value to the step, so '1.5em' on the default step of 1 would move the
+	 * handle to 2. Whole numbers keep stepping by one so the arrow keys stay useful.
+	 *
+	 * @since x.x
+	 *
+	 * @param float $number The value about to be shown.
+	 *
+	 * @return string
+	 */
+	private static function get_step_for_value( $number ) {
+		$printed = self::format_number( $number );
+		$dot     = strpos( $printed, '.' );
+
+		if ( false === $dot ) {
+			return '1';
+		}
+
+		$decimals = strlen( $printed ) - $dot - 1;
+		return '0.' . str_repeat( '0', $decimals - 1 ) . '1';
+	}
+
+	/**
+	 * Get the number at the start of a style value.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $value The value to read, for instance '10px', 12.5 or 'auto'.
+	 *
+	 * @return float|null The number found, or null when the value has none.
+	 */
+	private static function get_numeric_value( $value ) {
+		if ( ! preg_match( '/^\s*-?\d+(?:\.\d+)?/', (string) $value, $matches ) ) {
+			return null;
+		}
+
+		return (float) $matches[0];
+	}
+
+	/**
+	 * Get the accessible label describing one part of a multi part slider.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $type The slider part, for instance 'top' or 'left'.
+	 *
+	 * @return string
+	 */
+	protected function get_label_for_type( $type ) {
+		$labels = array(
+			'vertical'   => __( 'Vertical value', 'formidable' ),
+			'horizontal' => __( 'Horizontal value', 'formidable' ),
+			'top'        => __( 'Top value', 'formidable' ),
+			'bottom'     => __( 'Bottom value', 'formidable' ),
+			'left'       => __( 'Left value', 'formidable' ),
+			'right'      => __( 'Right value', 'formidable' ),
+		);
+
+		return $labels[ $type ] ?? __( 'Field value', 'formidable' );
+	}
+
+	/**
+	 * Print the range input a user drags to change a slider value.
+	 * The max, the printed value and the disabled state all follow the unit that is currently selected,
+	 * so the range never offers a value the unit does not allow.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $label Accessible label describing what this slider controls.
+	 * @param mixed  $value The current value. It may carry a unit ('10px') or be a keyword ('auto').
+	 * @param string $unit  The unit of measurement selected for this slider.
+	 *
+	 * @return void
+	 */
+	protected function print_range_input( $label, $value, $unit ) {
+		$number = self::get_numeric_value( $value );
+
+		// A value like 'auto' has no position on the track, so the range is shown at zero and switched off.
+		$is_disabled = null === $number;
+
+		if ( $is_disabled || $number < 0 ) {
+			$number = 0;
+		}
+
+		$max = $this->get_max_for_unit( $unit, $number );
+
+		/*
+		 * The coloured part of the track is drawn from this ratio, so print it here rather than wait
+		 * for the script to fill it in. The track is then right on the first paint, with no flash of
+		 * an empty track and nothing to go wrong if the script is stale or fails to run.
+		 */
+		$fill = $max > 0 ? $number / $max : 0;
+
+		?>
+		<input type="range" class="frm-slider" min="0" max="<?php echo esc_attr( self::format_number( $max ) ); ?>" step="<?php echo esc_attr( self::get_step_for_value( $number ) ); ?>" value="<?php echo esc_attr( self::format_number( $number ) ); ?>" style="--frm-fill:<?php echo esc_attr( round( $fill, 6 ) ); ?>" aria-label="<?php echo esc_attr( $label ); ?>" <?php disabled( $is_disabled ); ?> />
+		<?php
+	}
+
+	/**
 	 * Init the slider multiple values data. It works with sliders which has multiple values only: top&bottom and left&right.
 	 * This is used for cases when there are 4 sliders in the same field.
 	 *
