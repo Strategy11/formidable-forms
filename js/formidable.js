@@ -1168,7 +1168,10 @@ function frmFrontFormJS() {
 			frmThemeOverride_frmPlaceError( key, jsErrors );
 		} else {
 			let errorHtml;
-			if ( jsErrors[ key ].includes( '<div' ) ) {
+			// Check for the data-error-html template rather than sniffing jsErrors[ key ] for "<div" —
+			// a required-field message can legitimately contain "<div" from an HTML field label
+			// substituted into [field_name], which isn't a signal the message is pre-wrapped.
+			if ( inputs[ 0 ] && inputs[ 0 ].hasAttribute( 'data-error-html' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
 				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
