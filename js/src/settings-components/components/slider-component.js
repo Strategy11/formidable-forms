@@ -96,11 +96,18 @@ export default class frmSliderComponent {
 			valueInput.addEventListener( 'change', event => {
 				const unit = frmSliderComponent.getUnit( element );
 				const newValue = parseFloat( event.target.value );
+				const { steps } = this.options[ index ];
 
-				// An empty/non-numeric value falls through the max check below as NaN comparisons are
+				// With a stepped slider, initSteps() repurposes rangeInput.max to hold the index
+				// bound, not a real value bound - validate against the actual allowed values instead.
+				const isValid = steps && steps.length > 0
+					? steps.map( Number ).includes( newValue )
+					: parseFloat( rangeInput.max ) >= newValue;
+
+				// An empty/non-numeric value falls through the check above as NaN comparisons are
 				// always false - reject it and resync the text box to the last committed value instead
 				// of leaving it showing the rejected input while the range stays unchanged.
-				if ( isNaN( newValue ) || parseFloat( rangeInput.max ) < newValue ) {
+				if ( isNaN( newValue ) || ! isValid ) {
 					valueInput.value = this.getRangeValue( rangeInput, index );
 					return;
 				}
