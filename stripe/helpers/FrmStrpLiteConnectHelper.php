@@ -409,10 +409,15 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function handle_oauth() {
-		$response_data = array(
-			'redirect_url' => self::get_oauth_redirect_url(),
-		);
-		wp_send_json_success( $response_data );
+		$redirect_url = self::get_oauth_redirect_url();
+
+		if ( false === $redirect_url ) {
+			// Nothing to redirect to — let the button re-render instead of sending a
+			// falsy redirect_url the frontend would otherwise navigate to as a string.
+			wp_send_json_success();
+		}
+
+		wp_send_json_success( array( 'redirect_url' => $redirect_url ) );
 	}
 
 	/**
