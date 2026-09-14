@@ -807,12 +807,20 @@ function frmFrontFormJS() {
 	}
 
 	/**
+	 * @param {HTMLElement} field
+	 * @return {?string} The field's custom error-html template, or null if it doesn't have one.
+	 */
+	function getErrorHtmlTemplate( field ) {
+		return field ? field.getAttribute( 'data-error-html' ) : null;
+	}
+
+	/**
 	 * @param {string}      msg
 	 * @param {HTMLElement} field
 	 * @return {string} The error HTML to use.
 	 */
 	function wrapErrorHtml( msg, field ) {
-		let errorHtml = field.getAttribute( 'data-error-html' );
+		let errorHtml = getErrorHtmlTemplate( field );
 		if ( null === errorHtml ) {
 			return msg;
 		}
@@ -1171,7 +1179,7 @@ function frmFrontFormJS() {
 			// Check for the data-error-html template rather than sniffing jsErrors[ key ] for "<div" —
 			// a required-field message can legitimately contain "<div" from an HTML field label
 			// substituted into [field_name], which isn't a signal the message is pre-wrapped.
-			if ( inputs[ 0 ] && inputs[ 0 ].hasAttribute( 'data-error-html' ) ) {
+			if ( null !== getErrorHtmlTemplate( inputs[ 0 ] ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
 				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';

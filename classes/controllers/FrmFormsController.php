@@ -2077,11 +2077,18 @@ class FrmFormsController {
 
 		if ( ! empty( $form->options['js_validate'] ) ) {
 			echo ' frm_js_validate ';
-			self::add_js_validate_form_to_global_vars( $form );
 		}
 
-		if ( FrmForm::is_ajax_on( $form ) ) {
+		$is_ajax_on = FrmForm::is_ajax_on( $form );
+		if ( $is_ajax_on ) {
 			echo ' frm_ajax_submit ';
+		}
+
+		if ( ! empty( $form->options['js_validate'] ) || $is_ajax_on ) {
+			// The AJAX-submit response can also return pre-wrapped custom error HTML
+			// (FrmEntriesAJAXSubmitController::maybe_modify_ajax_error()), independent of
+			// whether JS validation is on, so data-error-html needs to render for either.
+			self::add_js_validate_form_to_global_vars( $form );
 		}
 	}
 
