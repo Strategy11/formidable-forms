@@ -155,7 +155,11 @@
 		}
 
 		// 2. Build the radio selector UI, then render marks after it's in the DOM.
+		// Hide the radio group if there's only one payment method available.
 		const radioGroup = buildRadioGroup();
+		if ( paymentMethods.size === 1 ) {
+			radioGroup.style.display = 'none';
+		}
 		cardElement.append( radioGroup );
 		renderMarks();
 
@@ -219,7 +223,8 @@
 		const { cardFieldsAreSupported, buttonsAreEnabled, isRecurring } = opts;
 
 		// --- Card Fields ---
-		if ( cardFieldsAreSupported ) {
+		// Card fields are not supported for recurring payments
+		if ( cardFieldsAreSupported && ! isRecurring ) {
 			const cardFields = createCardFieldsSDKInstance();
 			if ( cardFields?.isEligible() ) {
 				cardFieldsInstance = cardFields;
@@ -298,19 +303,21 @@
 			return;
 		}
 
-		// Skip (and avoid the SDK wait) when Google Pay / Apple Pay were not enqueued
-		// server-side, e.g. via the frm_include_google_pay_apple_pay filter or non-SSL.
-		if ( ! frmPayPalVars.includeGooglePayApplePay ) {
+		// Skip (and avoid the SDK wait) when neither wallet was enqueued server-side,
+		// e.g. via the frm_include_google_pay_apple_pay filter or non-SSL.
+		if ( ! frmPayPalVars.includeGooglePay && ! frmPayPalVars.includeApplePay ) {
 			return;
 		}
 
 		// Resolve both eligibility checks in parallel so the combined wait is bounded by
 		// the slower of the two, then register them in a fixed order (Google Pay, then
 		// Apple Pay). Registration happens before the selector is built, so they render
-		// together with the other methods.
+		// together with the other methods. A wallet turned off server-side, e.g. via
+		// frm_paypal_commerce_include_google_pay or frm_paypal_commerce_include_apple_pay,
+		// skips its check so it never waits on an SDK that was never enqueued.
 		const [ googlePayEligible, applePayEligible ] = await Promise.all( [
-			resolveGooglePayEligibility(),
-			resolveApplePayEligibility()
+			frmPayPalVars.includeGooglePay ? resolveGooglePayEligibility() : false,
+			frmPayPalVars.includeApplePay ? resolveApplePayEligibility() : false
 		] );
 
 		if ( googlePayEligible ) {
@@ -703,6 +710,11 @@
 	 * @return {Object|null} The card fields instance.
 	 */
 	function createCardFieldsSDKInstance() {
+		if ( isRecurring ) {
+			// Credit cards are only supported for one time payments.
+			return null;
+		}
+
 		try {
 			const config = {
 				onError,
@@ -712,13 +724,8 @@
 				}
 			};
 
-			if ( isRecurring ) {
-				config.createVaultSetupToken = createVaultSetupToken;
-				config.onApprove = onVaultApprove;
-			} else {
-				config.createOrder = createOrder;
-				config.onApprove = onApprove;
-			}
+			config.createOrder = createOrder;
+			config.onApprove = onApprove;
 
 			return window.paypal.CardFields( config );
 		} catch ( err ) {
@@ -915,7 +922,7 @@
 	 */
 	function getGooglePaymentsClient() {
 		return new google.payments.api.PaymentsClient( {
-			environment: 'TEST',
+			environment: frmPayPalVars.mode === 'test' ? 'TEST' : 'PRODUCTION',
 			paymentDataCallbacks: {
 				onPaymentAuthorized
 			}
@@ -1192,6 +1199,12 @@
 					await applePayInstance.initiatePayerAction( { orderId } );
 				}
 
+				if ( approvalStatus !== 'APPROVED' && approvalStatus !== 'COMPLETED' ) {
+					session.completePayment( ApplePaySession.STATUS_FAILURE );
+					sessionCompleted = true;
+					return;
+				}
+
 				session.completePayment( ApplePaySession.STATUS_SUCCESS );
 				sessionCompleted = true;
 
@@ -1354,69 +1367,7 @@
 		return orderData.data.orderID;
 	}
 
-	async function createVaultSetupToken() {
-		const formData = new FormData( thisForm );
-		formData.append( 'action', 'frm_paypal_create_vault_setup_token' );
-		formData.append( 'nonce', frmPayPalVars.nonce );
-		formData.append( 'payment_source', 'card' );
-
-		formData.delete( 'frm_action' );
-		formData.delete( 'form_key' );
-		formData.delete( 'item_key' );
-
-		const response = await fetch( frmPayPalVars.ajax, {
-			method: 'POST',
-			body: formData
-		} );
-
-		if ( ! response.ok ) {
-			throw new Error( 'Failed to create PayPal vault setup token' );
-		}
-
-		const tokenData = await response.json();
-
-		if ( ! tokenData.success || ! tokenData.data.token ) {
-			console.error( 'Vault setup token response:', tokenData );
-			throwServerError( tokenData.data, 'Failed to create PayPal vault setup token', 'create_vault_token' );
-		}
-
-		return tokenData.data.token;
-	}
-
 	// ---- Payment Callbacks ----
-
-	/**
-	 * Handle vault approval for card field subscriptions.
-	 * Receives the vaultSetupToken, sends it to the server to create
-	 * a payment token and subscription, then submits the form.
-	 *
-	 * @param {Object} data The approval data containing vaultSetupToken.
-	 */
-	async function onVaultApprove( data ) {
-		if ( 'NO' === data.liabilityShift || 'UNKNOWN' === data.liabilityShift ) {
-			onError( new Error( 'This payment was flagged as possible fraud and has been rejected.' ) );
-			return;
-		}
-
-		try {
-			let vaultInput = thisForm.querySelector( 'input[name="vault_setup_token"]' );
-			if ( ! vaultInput ) {
-				vaultInput = document.createElement( 'input' );
-				vaultInput.type = 'hidden';
-				vaultInput.name = 'vault_setup_token';
-				thisForm.append( vaultInput );
-			}
-			vaultInput.value = data.vaultSetupToken;
-
-			const subscriptionID = await createSubscription( data );
-			await onApprove( {
-				subscriptionID,
-				paymentSource: 'card'
-			} );
-		} catch ( err ) {
-			onError( err );
-		}
-	}
 
 	/**
 	 * Handle approved payment.
@@ -1619,7 +1570,11 @@
 		}
 
 		if ( 'string' === typeof err ) {
-			return parsePayPalErrorString( err ) || err;
+			const parsed = parsePayPalErrorString( err );
+			if ( parsed ) {
+				return parsed;
+			}
+			return mapPayPalErrorCode( err ) || err;
 		}
 
 		// PayPal SDK sometimes nests the payload under `err.data` or `err.response`.
@@ -1632,10 +1587,31 @@
 		}
 
 		if ( err.message ) {
-			return parsePayPalErrorString( err.message ) || err.message;
+			const parsed = parsePayPalErrorString( err.message );
+			if ( parsed ) {
+				return parsed;
+			}
+			return mapPayPalErrorCode( err.message ) || err.message;
 		}
 
 		return fallback;
+	}
+
+	/**
+	 * Map PayPal error codes to user-friendly messages.
+	 *
+	 * @param {string} code The PayPal error code (e.g. INVALID_CVV).
+	 * @return {string} The user-friendly message, or empty string if not mapped.
+	 */
+	function mapPayPalErrorCode( code ) {
+		const codeMap = {
+			INVALID_CVV: 'Please enter a valid CVV code.',
+			INVALID_CARD_NUMBER: 'Please enter a valid card number.',
+			INVALID_EXPIRY: 'Please enter a valid expiry date.',
+		};
+
+		const upperCode = code.toUpperCase();
+		return codeMap[ upperCode ] || '';
 	}
 
 	/**
@@ -1804,19 +1780,11 @@
 			submitArgs.cardholderName = meta.name;
 		}
 
-		/*
-		TODO Add the billing address here as well.
-		Stripe calls a window.frmProForm.addAddressMeta function.
-		That's included in frmstrp.js though, so we need to add a script in Pro for PayPal as well.
+		const billingAddress = getBillingAddress();
 
-		billingAddress: {
-			addressLine1: '555 Billing Ave',
-			adminArea1: 'NY',
-			adminArea2: 'New York',
-			postalCode: '10001',
-			countryCode: 'US'
+		if ( billingAddress ) {
+			submitArgs.billingAddress = billingAddress;
 		}
-		*/
 
 		try {
 			await cardFieldsInstance.submit( submitArgs );
@@ -1828,6 +1796,99 @@
 			}
 			reportErrorToServer( err, 'card_submit' );
 		}
+	}
+
+	/**
+	 * Build the billing address for the card fields from the address field mapped in the payment action.
+	 *
+	 * @since 6.34
+	 *
+	 * @return {Object|null} Billing address for the card fields submit args, or null when no address is available.
+	 */
+	function getBillingAddress() {
+		let addressID = '';
+
+		getPayPalSettings().forEach( function( setting ) {
+			if ( setting.address ) {
+				addressID = setting.address;
+			}
+		} );
+
+		if ( '' === addressID ) {
+			return null;
+		}
+
+		let prefix = '';
+		let addressContainer = document.querySelector( `#frm_field_${ addressID }_container, .frm_field_${ addressID }_container` );
+
+		if ( ! addressContainer ) {
+			const line1Input = document.querySelector( `input[name="item_meta[${ addressID }][line1]"]` );
+			if ( line1Input ) {
+				prefix = `${ addressID }][`;
+				addressContainer = line1Input.parentNode;
+			}
+		}
+
+		if ( ! addressContainer ) {
+			return null;
+		}
+
+		const getSubFieldValue = function( name ) {
+			const input = addressContainer.querySelector( `input[name$="[${ prefix }${ name }]"], select[name$="[${ prefix }${ name }]"]` );
+			return input?.value ? input.value : '';
+		};
+
+		const subFieldMapping = {
+			line1: 'addressLine1',
+			line2: 'addressLine2',
+			city: 'adminArea2',
+			state: 'adminArea1',
+			zip: 'postalCode'
+		};
+
+		const billingAddress = {};
+
+		Object.keys( subFieldMapping ).forEach( function( name ) {
+			const value = getSubFieldValue( name );
+			if ( value ) {
+				billingAddress[ subFieldMapping[ name ] ] = value;
+			}
+		} );
+
+		if ( ! billingAddress.addressLine1 ) {
+			return null;
+		}
+
+		const countryCode = getCountryCode( addressContainer, prefix );
+
+		if ( countryCode ) {
+			billingAddress.countryCode = countryCode;
+		}
+
+		return billingAddress;
+	}
+
+	/**
+	 * Get the two letter country code for the filled address.
+	 * The country dropdown holds the code in a data-code attribute.
+	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {Element} addressContainer
+	 * @param {string}  prefix
+	 * @return {string} Country code, or an empty string when the country is unknown.
+	 */
+	function getCountryCode( addressContainer, prefix ) {
+		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
+
+		if ( countryDropdown ) {
+			const countryOption = countryDropdown.querySelector( `option[value="${ countryDropdown.value }"]` );
+			return countryOption?.getAttribute( 'data-code' ) || '';
+		}
+
+		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
+		return stateDropdown ? 'US' : '';
 	}
 
 	// ---- Price / Pay Later ----

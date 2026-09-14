@@ -307,6 +307,21 @@ DEFAULT_HTML;
 			<span class="frm-sub-label frm-collapsed-label">
 				<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
 			</span>
+			<?php
+			/**
+			 * Fires at the end of a field's label in the form builder.
+			 *
+			 * Use this to add a marker beside the field name, the way the
+			 * required indicator above does. Anything echoed here lands inside
+			 * the label, so keep it inline and decorative.
+			 *
+			 * @since 6.35
+			 *
+			 * @param array $field The field settings, as prepared by
+			 *                     FrmFieldsHelper::setup_edit_vars().
+			 */
+			do_action( 'frm_builder_after_field_label', $field );
+			?>
 		</label>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
@@ -1782,6 +1797,8 @@ DEFAULT_HTML;
 
 		$value = $this->prepare_display_value( $value, $atts );
 
+		FrmAppHelper::sanitize_value( 'FrmHtmlSanitizer::sanitize_url_attributes', $value );
+
 		if ( ! is_array( $value ) ) {
 			return $value;
 		}
@@ -2081,17 +2098,6 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	public function filter_value_for_table_html( $value ) {
-		return wp_kses_post( $value );
-	}
-
-	/**
-	 * @since 4.04
-	 * @deprecated 6.24
-	 *
-	 * @return string
-	 */
-	protected function get_add_option_string() {
-		_deprecated_function( __METHOD__, '6.24' );
-		return __( 'Add Option', 'formidable' );
+		return FrmHtmlSanitizer::sanitize_url_attributes( wp_kses_post( $value ) );
 	}
 }

@@ -39,10 +39,37 @@
 	opacity: 0.5;
 }
 
-.frm_code_list.frm-full-hover a span {
+/**
+ * A row pairs a label with the shortcode it inserts: the label is the first span and the
+ * code is the last. The code is what tells two rows apart - the same field name repeats
+ * once per show= option - so it keeps its full width and the label takes what is left
+ * over and ellipsis.
+ */
+.frm_code_list.frm-full-hover a {
+
+	.frmsvg {
+		flex: none;
+	}
+
+	span:first-of-type {
+		flex: 0 1 auto;
+		min-width: 0;
+		margin: 0;
+	}
+
+	span:last-of-type {
+		flex: none;
+		margin: 0 0 0 auto;
+	}
+}
+
+/**
+ * Rows built by insert_code_html have a single span for the code and leave the label as a
+ * bare text node, which can't ellipsis on its own, so the code stays capped there.
+ */
+.frm_code_list.frm-full-hover a span:only-of-type {
 	max-width: 83px;
 	margin-right: var(--gap-xs);
-	margin-left: auto;
 }
 
 .frm_code_list.frm-full-hover a {
@@ -156,17 +183,9 @@
 			color: var(--grey-900);
 			padding: var(--gap-xs) 12px;
 
-			span {
-				margin: 0;
-
-				&:first-child {
-					max-width: 130px;
-				}
-
-				&:last-child {
-					max-width: 120px;
-					margin-left: auto;
-				}
+			span:only-of-type {
+				max-width: 120px;
+				margin: 0 0 0 auto;
 			}
 
 			&:hover {

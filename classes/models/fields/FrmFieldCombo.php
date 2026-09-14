@@ -435,10 +435,6 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( class_exists( 'FrmProFieldsHelper' ) && ! FrmProFieldsHelper::is_field_visible_to_user( $this->field ) ) {
-			return $errors;
-		}
-
 		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		$sub_fields = $this->get_processed_sub_fields();
 
@@ -462,13 +458,13 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	public function get_export_headings() {
 		$headings   = array();
-		$field_id   = $this->field->id ?? $this->field['id'];
-		$field_name = $this->field->name ?? $this->field['name'];
-		$field_key  = $this->field->field_key ?? $this->field['field_key'];
+		$field_id   = is_object( $this->field ) ? $this->field->id : $this->field['id'];
+		$field_name = is_object( $this->field ) ? $this->field->name : $this->field['name'];
 		$sub_fields = $this->get_processed_sub_fields();
 
+		// Include sub-field headings.
 		foreach ( $sub_fields as $name => $sub_field ) {
-			$headings[ $field_id . '_' . $name ] = $field_name . ' (' . $field_key . ') - ' . $sub_field['label'];
+			$headings[ $field_id . '_' . $name ] = $field_name . ' - ' . $sub_field['label'];
 		}
 
 		return $headings;
@@ -508,7 +504,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @return array
 	 */
-	protected function get_inputs_container_attrs() {
+	public function get_inputs_container_attrs() {
 		return array(
 			'class' => 'frm_combo_inputs_container',
 			'id'    => 'frm_combo_inputs_container_' . $this->field_id,

@@ -25,12 +25,18 @@ class FrmMigrate {
 	 */
 	public $entry_metas;
 
+	/**
+	 * @var string
+	 */
+	public $gated_tokens;
+
 	public function __construct() {
 		global $wpdb;
-		$this->fields      = $wpdb->prefix . 'frm_fields';
-		$this->forms       = $wpdb->prefix . 'frm_forms';
-		$this->entries     = $wpdb->prefix . 'frm_items';
-		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
+		$this->fields       = $wpdb->prefix . 'frm_fields';
+		$this->forms        = $wpdb->prefix . 'frm_forms';
+		$this->entries      = $wpdb->prefix . 'frm_items';
+		$this->entry_metas  = $wpdb->prefix . 'frm_item_metas';
+		$this->gated_tokens = $wpdb->prefix . 'frm_gated_tokens';
 	}
 
 	/**
@@ -154,8 +160,8 @@ class FrmMigrate {
 		$message = array(
 			'key'     => 'failed-to-create-tables',
 			'subject' => 'Something went wrong setting up the database',
-			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">Learn More</a>',
+			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener">Learn More</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'type'    => 'error',
 		);
 
@@ -248,6 +254,23 @@ class FrmMigrate {
                 PRIMARY KEY  (id),
                 KEY field_id (field_id),
                 KEY item_id (item_id)
+        )';
+
+		/* Create/Upgrade Gated Tokens Table */
+		$sql[] = 'CREATE TABLE ' . $this->gated_tokens . ' (
+				id BIGINT UNSIGNED NOT NULL auto_increment,
+				token_hash varchar(64) NOT NULL,
+				action_id BIGINT UNSIGNED NOT NULL,
+				entry_id BIGINT UNSIGNED NOT NULL,
+				user_id BIGINT UNSIGNED default NULL,
+				ip_address varchar(255) default NULL,
+				created_at int UNSIGNED NOT NULL,
+				expired_at int UNSIGNED default NULL,
+				PRIMARY KEY  (id),
+				UNIQUE KEY token_hash (token_hash),
+				KEY action_id (action_id),
+				KEY user_id (user_id),
+				KEY expired_at (expired_at)
         )';
 
 		foreach ( $sql as $q ) {
@@ -409,6 +432,7 @@ class FrmMigrate {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->gated_tokens ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );

@@ -59,7 +59,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 										<?php endif; ?>
 									</div>
 									<p><?php echo wp_kses_post( $message['message'] ); ?></p>
-									<?php echo wp_kses( $message['cta'], array( 'a' => array( 'href' => true ) ) ); ?>
+									<?php
+									$cta_allowed_html = array(
+										'a' => array(
+											'href'   => true,
+											'target' => true,
+											'rel'    => true,
+										),
+									);
+									echo wp_kses( $message['cta'], $cta_allowed_html );
+									?>
 								</div>
 							<?php endforeach; ?>
 

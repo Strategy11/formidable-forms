@@ -1012,6 +1012,7 @@ class FrmFormAction {
 			'class'        => 'frm-h-stack-xs frm-bt-200 frm-py-md frm_show_upgrade',
 			'data-upgrade' => $this->get_upgrade_text(),
 			'data-medium'  => 'conditional-' . $this->id_base,
+			'data-content' => 'conditional-logic',
 		);
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>

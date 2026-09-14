@@ -1,0 +1,33 @@
+/**
+ * No Payments Page styles
+ */
+
+.frm-no-payments-placeholder {
+	padding: 35px 0 60px;
+	text-align: center;
+}
+
+.frm-no-payments-content {
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+.frm-no-payments-image {
+	width: 173px;
+	height: 140px;
+	margin-bottom: 24px;
+}
+
+.frm-no-payments-title {
+	font-size: 24px;
+	font-weight: 600;
+	margin-bottom: 12px;
+	color: var(--grey-900);
+}
+
+.frm-no-payments-description {
+	font-size: 14px;
+	line-height: var(--leading);
+	color: var(--grey-600);
+	margin-bottom: 24px;
+}

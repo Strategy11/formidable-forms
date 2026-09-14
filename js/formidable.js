@@ -1176,7 +1176,7 @@ function frmFrontFormJS() {
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
 			inputs.forEach( input => {
-				describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+				describedBy = input.getAttribute( 'aria-describedby' );
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
