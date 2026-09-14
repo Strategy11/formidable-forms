@@ -38,7 +38,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
 		// A keyword value like 'auto' has no number to cast - only an actual measurement unit does.
-		$this->data['value_label']         = in_array( $this->data['unit_measurement'], array( 'px', 'em', '%' ), true ) ? (float) $field_value : $field_value;
+		$this->data['value_label']         = self::is_measured_unit( $this->data['unit_measurement'] ) ? (float) $field_value : $field_value;
 
 		$this->init_defaults();
 		$this->init_icon();
@@ -233,33 +233,47 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$this->data['vertical'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => $this->detect_unit_measurement( $top ) ? (float) $top : $top,
+			'value' => self::is_measured_unit( $this->detect_unit_measurement( $top ) ) ? (float) $top : $top,
 		);
 
 		$this->data['horizontal'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => $this->detect_unit_measurement( $right ) ? (float) $right : $right,
+			'value' => self::is_measured_unit( $this->detect_unit_measurement( $right ) ) ? (float) $right : $right,
 		);
 
 		$this->data['top'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => $this->detect_unit_measurement( $top ) ? (float) $top : $top,
+			'value' => self::is_measured_unit( $this->detect_unit_measurement( $top ) ) ? (float) $top : $top,
 		);
 
 		$this->data['bottom'] = array(
 			'unit'  => $this->detect_unit_measurement( $bottom ),
-			'value' => $this->detect_unit_measurement( $bottom ) ? (float) $bottom : $bottom,
+			'value' => self::is_measured_unit( $this->detect_unit_measurement( $bottom ) ) ? (float) $bottom : $bottom,
 		);
 
 		$this->data['left'] = array(
 			'unit'  => $this->detect_unit_measurement( $left ),
-			'value' => $this->detect_unit_measurement( $left ) ? (float) $left : $left,
+			'value' => self::is_measured_unit( $this->detect_unit_measurement( $left ) ) ? (float) $left : $left,
 		);
 
 		$this->data['right'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => $this->detect_unit_measurement( $right ) ? (float) $right : $right,
+			'value' => self::is_measured_unit( $this->detect_unit_measurement( $right ) ) ? (float) $right : $right,
 		);
+	}
+
+	/**
+	 * Whether a unit represents an actual measurement (has a numeric position on the track),
+	 * as opposed to a keyword like 'auto' or the unset "" state.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $unit The unit to check.
+	 *
+	 * @return bool
+	 */
+	private static function is_measured_unit( $unit ) {
+		return in_array( $unit, array( 'px', 'em', '%' ), true );
 	}
 
 	/**
