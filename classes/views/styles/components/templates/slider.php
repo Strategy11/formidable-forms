@@ -29,7 +29,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 					<input aria-label="<?php esc_attr_e( 'Vertical value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['vertical']['value'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['vertical']['unit'] ) ); ?> />
 					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
-							<option <?php selected( $component['vertical']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+							<option <?php selected( $component['vertical']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -45,7 +45,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 					<input aria-label="<?php esc_attr_e( 'Top value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['top']['value'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['top']['unit'] ) ); ?> />
 					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
-							<option <?php selected( $component['top']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+							<option <?php selected( $component['top']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -61,7 +61,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 					<input aria-label="<?php esc_attr_e( 'Bottom value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['bottom']['value'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['bottom']['unit'] ) ); ?> />
 					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
-							<option <?php selected( $component['bottom']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+							<option <?php selected( $component['bottom']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -77,7 +77,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 					<input aria-label="<?php esc_attr_e( 'Horizontal value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['horizontal']['value'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['horizontal']['unit'] ) ); ?> />
 					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
-							<option <?php selected( $component['horizontal']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+							<option <?php selected( $component['horizontal']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -93,7 +93,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 					<input aria-label="<?php esc_attr_e( 'Left value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['left']['value'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['left']['unit'] ) ); ?> />
 					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
-							<option <?php selected( $component['left']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+							<option <?php selected( $component['left']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -109,7 +109,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 					<input aria-label="<?php esc_attr_e( 'Right value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['right']['value'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['right']['unit'] ) ); ?> />
 					<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 						<?php foreach ( $component['units'] as $unit ) : ?>
-							<option <?php selected( $component['right']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+							<option <?php selected( $component['right']['unit'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -133,7 +133,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 						<input type="hidden" <?php echo esc_attr( $field_name ); ?> value="<?php echo esc_attr( $field_value ); ?>" id="<?php echo esc_attr( $component['id'] ); ?>" />
 						<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 							<?php foreach ( $component['units'] as $unit ) : ?>
-								<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+								<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</div>
@@ -151,7 +151,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 							<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['unit_measurement'] ) ); ?> />
 							<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 								<?php foreach ( $component['units'] as $unit ) : ?>
-									<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+									<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
@@ -173,7 +173,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 									<input type="hidden" name="<?php echo esc_attr( $field['name'] ); ?>" value="<?php echo esc_attr( $field['value'] ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>" />
 									<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 										<?php foreach ( $component['units'] as $unit ) : ?>
-											<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>"><?php echo esc_html( $unit ); ?></option>
+											<option <?php selected( $component['unit_measurement'], $unit ); ?> value="<?php echo esc_attr( $unit ); ?>" aria-label="<?php echo esc_attr( $this->unit_label( $unit ) ); ?>"><?php echo esc_html( $unit ); ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>

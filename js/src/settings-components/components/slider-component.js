@@ -3,6 +3,7 @@
  */
 import { HIDDEN_CLASS } from 'core/constants';
 import frmDependentUpdaterComponent from '../../admin/components/dependent-updater-component';
+import { __ } from '@wordpress/i18n';
 
 // Units that describe a length and can be announced next to the number.
 const MEASUREMENT_UNITS = [ 'px', 'em', '%' ];
@@ -281,6 +282,12 @@ export default class frmSliderComponent {
 		// 'auto' has no position on the track, so announce the keyword instead of the value.
 		if ( 'auto' === unit ) {
 			rangeInput.setAttribute( 'aria-valuetext', unit );
+			return;
+		}
+
+		// A blank unit means nothing is set - announce that instead of a bare, misleading number.
+		if ( '' === unit ) {
+			rangeInput.setAttribute( 'aria-valuetext', __( 'Not set', 'formidable' ) );
 			return;
 		}
 

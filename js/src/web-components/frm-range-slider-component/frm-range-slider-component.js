@@ -419,6 +419,9 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to create the dropdown option. This method is used to create the dropdown option.
+	 * The blank unit has no word of its own the way 'auto' does, and stays visually blank on
+	 * purpose (this field is only ever icon-width) - so it gets an aria-label instead of visible
+	 * text, otherwise it is entirely silent to a screen reader landing on it.
 	 *
 	 * @param {string}  value    - The value of the option.
 	 * @param {string}  label    - The label of the option.
@@ -430,6 +433,11 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		option.value = value;
 		option.textContent = label;
 		option.selected = selected;
+
+		if ( '' === label ) {
+			option.setAttribute( 'aria-label', __( 'Not set', 'formidable' ) );
+		}
+
 		return option;
 	}
 

@@ -152,10 +152,18 @@ describe( 'Slider style component', () => {
 		quickSettingsSlider().find( 'input[type="range"]' ).should( 'be.disabled' );
 		quickSettingsSlider().find( '.frm-slider-value input[type="text"]' ).should( 'be.disabled' ).and( 'have.value', '' );
 
+		cy.log( 'The unset state is announced, not silent, while staying visually blank (the option keeps empty text and carries the announcement via aria-label instead)' );
+		quickSettingsSlider().find( 'select option:selected' ).should( 'have.text', '' ).and( 'have.attr', 'aria-label', 'Not set' );
+		quickSettingsSlider().find( 'input[type="range"]' ).should( 'have.attr', 'aria-valuetext', 'Not set' );
+
 		cy.log( 'The cleared value survives a save, rather than silently reverting to the last numeric value' );
 		cy.get( '#frm_submit_side_top' ).click( { force: true } );
 		realInput().should( 'have.value', '' );
 		quickSettingsSlider().should( 'have.class', 'frm-disabled' ).and( 'have.class', 'frm-empty' );
+
+		cy.log( 'The blank-but-announced state is server-rendered on reload too, not only applied live by JS' );
+		quickSettingsSlider().find( 'select option:selected' ).should( 'have.text', '' ).and( 'have.attr', 'aria-label', 'Not set' );
+		quickSettingsSlider().find( 'input[type="range"]' ).should( 'have.attr', 'aria-valuetext', 'Not set' );
 
 		cy.log( 'Restore a real value so the style is left in a usable state' );
 		quickSettingsSlider().within( () => {

@@ -313,6 +313,23 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	}
 
 	/**
+	 * Get the accessible name for a unit dropdown option.
+	 * The blank "" unit has no word of its own the way 'auto' does, and the option stays visually
+	 * blank on purpose (the field this sits in is only ever icon-width) - so the announced name is
+	 * set via aria-label instead of the option's own text, which is otherwise silent to a screen
+	 * reader landing on it.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $unit The unit of measurement, e.g. 'px' or ''.
+	 *
+	 * @return string
+	 */
+	protected static function unit_label( $unit ) {
+		return '' === $unit ? __( 'Not set', 'formidable' ) : $unit;
+	}
+
+	/**
 	 * Split the field value by space from string to an array.
 	 * For instance: '10px 20px 30px 40px' will be converted to array( '10px', '20px', '30px', '40px' ).
 	 *
