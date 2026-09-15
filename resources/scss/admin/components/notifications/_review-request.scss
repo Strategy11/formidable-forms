@@ -96,6 +96,12 @@
 	cursor: pointer;
 }
 
+/* White text on primary-500 is ~2.9:1, below WCAG AA's 4.5:1 -- primary-700 clears it. */
+.frm-review-notice .frm-button-primary {
+	background-color: var(--primary-700) !important;
+	border-color: var(--primary-700) !important;
+}
+
 .frm-review-notice #frmapi-feedback .frm_button_submit:hover,
 .frm-review-notice #frmapi-feedback .frm_button_submit:focus {
 	color: #fff;

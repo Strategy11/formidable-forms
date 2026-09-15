@@ -39,3 +39,9 @@ body.frm-hidden-overflow {
 .frm-admin-footer-links-socials a {
 	color: var(--grey-400);
 }
+
+/* grey-400 on white is ~2.6:1, below WCAG AA's 4.5:1 -- grey-600 clears it. */
+.frm-white-body .frm-admin-footer-links,
+.frm-white-body .frm-admin-footer-links-nav a {
+	color: var(--grey-600);
+}
