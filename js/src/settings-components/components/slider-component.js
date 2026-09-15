@@ -386,6 +386,14 @@ export default class frmSliderComponent {
 
 				// Drop the old unit from what is announced, the value no longer carries one.
 				frmSliderComponent.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
+
+				// Commit the unset state, otherwise the old "<number><unit>" is left standing in the
+				// hidden input and a save silently keeps the previous value instead of clearing it.
+				// fullValue has to be kept in sync too - a dependency-updater component (e.g. the
+				// Quick Settings sliders) propagates from fullValue, not from the hidden input directly.
+				this.options[ index ].fullValue = this.updateValue( element, '' );
+				this.triggerValueChange( index );
+
 				return;
 			}
 
@@ -400,7 +408,7 @@ export default class frmSliderComponent {
 
 				// The slider no longer stands for a number, so announce the keyword that replaced it.
 				rangeInput.setAttribute( 'aria-valuetext', unit );
-				this.updateValue( element, 'auto' );
+				this.options[ index ].fullValue = this.updateValue( element, 'auto' );
 				this.triggerValueChange( index );
 
 				return;

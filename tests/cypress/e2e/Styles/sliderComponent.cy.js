@@ -133,6 +133,39 @@ describe( 'Slider style component', () => {
 		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( '.frm-slider-value input[type="text"]' ).should( 'be.disabled' ).and( 'have.value', '' );
 	} );
 
+	it( 'Clearing a dependency-updater slider (Quick Settings) propagates the unset value to the real field and persists it', () => {
+		// Quick Settings sliders have no name of their own - they write into another field elsewhere
+		// on the page via a "will-change" propagation, e.g. Corner Radius here targets border_radius.
+		const realInput = () => cy.get( 'input[name="frm_style_setting[post_content][border_radius]"]' );
+		const quickSettingsSlider = () => cy.get( '[data-will-change*="border_radius"]' );
+
+		cy.log( 'Start from a known, measured value' );
+		quickSettingsSlider().within( () => {
+			cy.get( 'select' ).select( 'px' );
+			cy.get( '.frm-slider-value input[type="text"]' ).clear().type( '8' ).blur();
+		} );
+		realInput().should( 'have.value', '8px' );
+
+		cy.log( 'Clearing the unit propagates the unset value to the real field, not just this slider\'s own (unsubmitted) hidden input' );
+		quickSettingsSlider().find( 'select' ).select( '' );
+		realInput().should( 'have.value', '' );
+		quickSettingsSlider().find( 'input[type="range"]' ).should( 'be.disabled' );
+		quickSettingsSlider().find( '.frm-slider-value input[type="text"]' ).should( 'be.disabled' ).and( 'have.value', '' );
+
+		cy.log( 'The cleared value survives a save, rather than silently reverting to the last numeric value' );
+		cy.get( '#frm_submit_side_top' ).click( { force: true } );
+		realInput().should( 'have.value', '' );
+		quickSettingsSlider().should( 'have.class', 'frm-disabled' ).and( 'have.class', 'frm-empty' );
+
+		cy.log( 'Restore a real value so the style is left in a usable state' );
+		quickSettingsSlider().within( () => {
+			cy.get( 'select' ).select( 'px' );
+			cy.get( '.frm-slider-value input[type="text"]' ).clear().type( '8' ).blur();
+		} );
+		cy.get( '#frm_submit_side_top' ).click( { force: true } );
+		realInput().should( 'have.value', '8px' );
+	} );
+
 	it( 'Slider components in the General section have no accessibility violations', () => {
 		cy.injectAxe();
 		cy.configureAxe( {
