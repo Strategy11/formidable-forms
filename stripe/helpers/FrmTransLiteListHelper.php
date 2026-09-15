@@ -173,6 +173,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'sub_id'         => 'sub_id',
 			'begin_date'     => 'begin_date',
 			'expire_date'    => 'expire_date',
+			'paysys'         => 'paysys',
 			'status'         => 'status',
 			'next_bill_date' => 'next_bill_date',
 		);

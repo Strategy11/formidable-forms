@@ -24,4 +24,13 @@ class test_FrmDb extends FrmUnitTest {
 			$this->assertSame( $expected, $actual );
 		}
 	}
+
+	/**
+	 * @covers FrmDb::db_column_exists
+	 */
+	public function test_db_column_exists() {
+		$this->assertTrue( FrmDb::db_column_exists( 'frm_fields', 'field_key' ) );
+		$this->assertTrue( FrmDb::db_column_exists( 'frm_items', 'is_draft' ) );
+		$this->assertFalse( FrmDb::db_column_exists( 'frm_fields', 'missing_column' ) );
+	}
 }

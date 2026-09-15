@@ -29,6 +29,20 @@
 		initListPage();
 	}
 
+	/**
+	 * The "Quick Settings" swatches (Primary, Field Text, Field Border, Button Text) each summarize a single
+	 * underlying setting, but have no name attribute of their own, so they can't be found and updated by the
+	 * main reset loop in syncEditPageAfterResetAction(). This maps the setting key to that swatch's fixed id.
+	 *
+	 * @type {Object<string, string>}
+	 */
+	const QUICK_SETTINGS_SWATCH_IDS = {
+		submit_bg_color: 'frm_style_qsettings_submit_bg_color',
+		text_color: 'frm_style_qsettings_text_color',
+		border_color: 'frm_style_qsettings_border_color',
+		submit_text_color: 'frm_style_qsettings_submit_text_color'
+	};
+
 	initCommonEventListeners();
 	initPreview();
 	fixWpAuthModal();
@@ -184,9 +198,8 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		// Add a timeout so Pro has a chance to add a filter first.
-		// 0 does not always work in Google Chrome, so use 1.
-		setTimeout( addHamburgerMenusToCards, 1 );
+		// The dropdown options are added on the first open, so there is no longer a filter from Pro to wait for here.
+		addHamburgerMenusToCards();
 		initDatepickerSample();
 
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
@@ -728,6 +741,84 @@
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
 		const isTemplate = data.templateKey !== undefined;
+
+		const dropdownMenu = div( {
+			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
+			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1'
+		} );
+
+		const isRtl = document.body.classList.contains( 'rtl' );
+		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
+
+		dropdownMenu.setAttribute( 'role', 'menu' );
+
+		// Static display has no flip of its own, so open upwards when the menu would
+		// otherwise run past the bottom of the panel it scrolls in.
+		hamburgerMenu.addEventListener( 'shown.bs.dropdown', () => {
+			const scroller = hamburgerMenu.closest( '#frm_style_sidebar' ) || document.documentElement;
+
+			// Measure from the default downward position. The class survives the close,
+			// so leaving it on would measure the already-corrected menu, conclude it
+			// fits, and drop it back below — every second open would be wrong.
+			dropdownMenu.classList.remove( 'frm-dropdown-menu-above' );
+
+			const overflowsBelow = dropdownMenu.getBoundingClientRect().bottom > scroller.getBoundingClientRect().bottom;
+			dropdownMenu.classList.toggle( 'frm-dropdown-menu-above', overflowsBelow );
+		} );
+
+		fillDropdownMenuOnFirstOpen( hamburgerMenu, dropdownMenu, data, isTemplate );
+
+		return div( {
+			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
+			children: [ hamburgerMenu, dropdownMenu ]
+		} );
+	}
+
+	/**
+	 * Add the options to a style card dropdown the first time that dropdown is opened.
+	 *
+	 * The options are built through the frm_style_card_dropdown_options filter, and Pro registers its
+	 * callback while its own script file runs. Adding the options while the page loads raced that file,
+	 * so a request for it that was slow to come back left every card holding the Lite only options.
+	 * Waiting for the first open takes the script order out of it, since Pro has always registered the
+	 * filter by the time a card can be clicked.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {HTMLElement}  hamburgerMenu The dropdown trigger.
+	 * @param {HTMLElement}  dropdownMenu  The dropdown to add the options to.
+	 * @param {DOMStringMap} data          The dataset of the style card, or an object with the style ID on the edit page.
+	 * @param {boolean}      isTemplate    Whether the card is for a style template.
+	 * @return {void}
+	 */
+	function fillDropdownMenuOnFirstOpen( hamburgerMenu, dropdownMenu, data, isTemplate ) {
+		const fillDropdownMenu = () => {
+			if ( dropdownMenu.children.length ) {
+				return;
+			}
+
+			const options = getDropdownMenuOptions( data, isTemplate );
+			dropdownMenu.append( ...options.map( wrapDropdownItem ) );
+		};
+
+		// Bootstrap fires this on the trigger before it measures and positions the dropdown.
+		hamburgerMenu.addEventListener( 'show.bs.dropdown', fillDropdownMenu );
+
+		// Fall back to the click in case the dropdown is ever opened without Bootstrap. Listen in the
+		// capture phase so the options are in place before Bootstrap's own delegated handler runs.
+		hamburgerMenu.addEventListener( 'click', fillDropdownMenu, true );
+	}
+
+	/**
+	 * Get the options for a single style card dropdown.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {DOMStringMap} data       The dataset of the style card, or an object with the style ID on the edit page.
+	 * @param {boolean}      isTemplate Whether the card is for a style template.
+	 * @return {Array} The dropdown options, each an object with an anchor and a type.
+	 */
+	function getDropdownMenuOptions( data, isTemplate ) {
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
@@ -770,35 +861,7 @@
 			maybeAddDuplicateUpsell( dropdownMenuOptions );
 		}
 
-		const dropdownMenu = div( {
-			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
-			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1',
-			children: dropdownMenuOptions.map( wrapDropdownItem )
-		} );
-
-		const isRtl = document.body.classList.contains( 'rtl' );
-		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
-
-		dropdownMenu.setAttribute( 'role', 'menu' );
-
-		// Static display has no flip of its own, so open upwards when the menu would
-		// otherwise run past the bottom of the panel it scrolls in.
-		hamburgerMenu.addEventListener( 'shown.bs.dropdown', () => {
-			const scroller = hamburgerMenu.closest( '#frm_style_sidebar' ) || document.documentElement;
-
-			// Measure from the default downward position. The class survives the close,
-			// so leaving it on would measure the already-corrected menu, conclude it
-			// fits, and drop it back below — every second open would be wrong.
-			dropdownMenu.classList.remove( 'frm-dropdown-menu-above' );
-
-			const overflowsBelow = dropdownMenu.getBoundingClientRect().bottom > scroller.getBoundingClientRect().bottom;
-			dropdownMenu.classList.toggle( 'frm-dropdown-menu-above', overflowsBelow );
-		} );
-
-		return div( {
-			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
-			children: [ hamburgerMenu, dropdownMenu ]
-		} );
+		return dropdownMenuOptions;
 	}
 
 	/**
@@ -1113,7 +1176,7 @@
 			resetStyleOnListPage( styleId );
 			return;
 		}
-		resetStyleOnEditPage();
+		resetStyleOnEditPage( styleId );
 	}
 
 	/**
@@ -1125,6 +1188,7 @@
 	function resetStyleOnListPage( styleId ) {
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
+		formData.append( 'persist', '1' );
 		doJsonPost( 'settings_reset', formData ).then(
 			response => {
 				const card = getCardByStyleId( styleId );
@@ -1145,15 +1209,17 @@
 	/**
 	 * Reset the style in-page (without actually updating it).
 	 *
+	 * @param {string} styleId
 	 * @return {void}
 	 */
-	function resetStyleOnEditPage() {
+	function resetStyleOnEditPage( styleId ) {
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_settings_reset',
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				style_id: styleId
 			},
 			success: syncEditPageAfterResetAction
 		} );
@@ -1196,12 +1262,47 @@
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
 				jQuery( targetInput ).trigger( 'change' );
 			}
+
+			syncQuickSettingsSwatch( key, defaultValues[ key ] );
 		}
 
 		resetCustomCSSEditor();
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
+	}
+
+	/**
+	 * Sync a "Quick Settings" summary swatch (see QUICK_SETTINGS_SWATCH_IDS) to a reset setting's new value.
+	 * Without this, a swatch keeps showing its pre-reset color even though the underlying setting did reset.
+	 *
+	 * @param {string} key
+	 * @param {string} value
+	 * @return {void}
+	 */
+	function syncQuickSettingsSwatch( key, value ) {
+		const swatchId = QUICK_SETTINGS_SWATCH_IDS[ key ];
+		if ( ! swatchId ) {
+			return;
+		}
+
+		const swatch = document.getElementById( swatchId );
+		if ( ! swatch ) {
+			return;
+		}
+
+		// Stored hex colors have no leading '#'. PHP adds it at render time (FrmStylesHelper::get_color_output()); match that here.
+		const color = /^[0-9a-f]{3,8}$/i.test( value ) ? `#${ value }` : value;
+
+		// Keeps Iris's own internal color state correct for if the picker is opened again.
+		jQuery( swatch ).wpColorPicker( 'color', color );
+
+		// The swatch button's own background is blanked out by CSS in this UI (see .frm-style-component .wp-picker-container button),
+		// so its text label is the only part actually visible, and it needs to be updated directly.
+		const resultText = swatch.closest( '.wp-picker-container' )?.querySelector( '.wp-color-result-text' );
+		if ( resultText ) {
+			resultText.textContent = color;
+		}
 	}
 
 	/**

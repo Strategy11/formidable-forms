@@ -866,7 +866,7 @@ class FrmEntry {
 			'user_id'        => self::get_entry_user_id( $values, $type ),
 		);
 
-		$new_values['updated_by'] = $values['updated_by'] ?? $new_values['user_id'];
+		$new_values['updated_by'] = self::get_updated_by( $values, $type, $new_values['user_id'] );
 
 		return $new_values;
 	}
@@ -880,6 +880,31 @@ class FrmEntry {
 	 */
 	private static function get_entry_value( $values, $name, $default ) {
 		return $values[ $name ] ?? $default;
+	}
+
+	/**
+	 * Get the updated_by value for an entry.
+	 *
+	 * The submitted value is only used during a trusted import, which restores the user who last
+	 * edited each entry. Every other save is being made by the current user, so a submitted
+	 * updated_by is ignored and cannot be pointed at another account. This matters because
+	 * updated_by is treated as a privilege signal when deciding how much HTML to strip from entry
+	 * values in FrmFieldType::should_strip_most_html().
+	 *
+	 * @since 6.35
+	 *
+	 * @param array      $values
+	 * @param string     $type    The create/update type. 'xml' for an import.
+	 * @param int|string $default The value to use when an import doesn't include updated_by.
+	 *
+	 * @return int
+	 */
+	private static function get_updated_by( $values, $type, $default ) {
+		if ( self::is_trusted_import( $type ) ) {
+			return absint( self::get_entry_value( $values, 'updated_by', $default ) );
+		}
+
+		return get_current_user_id();
 	}
 
 	/**
@@ -1005,11 +1030,27 @@ class FrmEntry {
 	 * @return bool
 	 */
 	private static function can_set_entry_user_id_from_values( $type = 'standard' ) {
-		if ( 'xml' === $type || ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) ) {
+		if ( self::is_trusted_import( $type ) ) {
 			return true;
 		}
 
 		return current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' );
+	}
+
+	/**
+	 * Whether an entry is being saved by an import rather than by a normal request.
+	 *
+	 * An import is trusted to restore the values stored on each entry, including the columns that
+	 * are otherwise taken from the current request.
+	 *
+	 * @since 6.35
+	 *
+	 * @param string $type The create/update type. 'xml' for an import.
+	 *
+	 * @return bool
+	 */
+	private static function is_trusted_import( $type = 'standard' ) {
+		return 'xml' === $type || ( defined( 'WP_IMPORTING' ) && WP_IMPORTING );
 	}
 
 	/**
@@ -1207,7 +1248,7 @@ class FrmEntry {
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
 			'is_draft'   => self::get_is_draft_value( $values ),
 			'updated_at' => current_time( 'mysql', 1 ),
-			'updated_by' => $values['updated_by'] ?? get_current_user_id(),
+			'updated_by' => self::get_updated_by( $values, $update_type, get_current_user_id() ),
 		);
 
 		if ( isset( $values['post_id'] ) ) {

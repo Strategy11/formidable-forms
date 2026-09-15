@@ -23,6 +23,14 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $is_pro_active = false;
 
 	/**
+	 * Narrows the inherited property to the Formidable factory so static analysis
+	 * can resolve $this->factory->form, ->field and ->entry.
+	 *
+	 * @var FrmUnitTestFactory
+	 */
+	protected $factory;
+
+	/**
 	 * @var FrmUnitTest
 	 */
 	protected static $instance;
@@ -179,7 +187,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * that, and both are redirected here rather than skipped, so the code under test still
 	 * runs the same path it runs in production.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return void
 	 */
@@ -199,7 +207,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * server that cannot be trusted with the file and deletes the plugin's .htaccess, which
 	 * is tracked in the repository. Requests to anywhere else are left alone.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array|false|WP_Error $response A preemptive response, or false to let the request run.
 	 * @param array                $args     Request arguments.
