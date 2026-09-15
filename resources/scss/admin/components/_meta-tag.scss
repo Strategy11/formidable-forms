@@ -27,6 +27,7 @@
 .frm-meta-tag.frm-orange-tag,
 .frm-meta-tag.frm-orange-tag:hover {
 	background-color: #fef7f4;
+
 	/* var(--orange) here is 3.18:1, failing WCAG AA; this clears 4.5:1. Scoped
 	here rather than the shared token, which other rules also rely on. */
 	color: #b54708;
@@ -35,6 +36,7 @@
 .frm-meta-tag.frm-green-tag,
 .frm-meta-tag.frm-green-tag:hover {
 	background-color: var(--success-500);
+
 	/* White is 2.62:1, failing WCAG AA; no success-family shade clears 4.5:1
 	against this background either, so this reuses the grey tag's near-black. */
 	color: var(--grey-900);
