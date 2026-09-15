@@ -33,6 +33,19 @@ const DIM_ABOVE_TRAVEL = 200;
 const ANIMATING_GRACE = 60;
 
 /**
+ * Whether the visitor asked for reduced motion.
+ *
+ * Checked live rather than cached, since the CSS media query it mirrors can change mid-session.
+ *
+ * @since x.x
+ *
+ * @return {boolean} True if reduced motion is preferred.
+ */
+function prefersReducedMotion() {
+	return window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+}
+
+/**
  * Adds the sliding hover pill to every Add Fields list.
  *
  * Basic, Pricing and Advanced are separate lists, and each needs its own pill because positions
@@ -110,7 +123,7 @@ function addPillTo( list ) {
 
 		pill.classList.remove( 'frm_hidden' );
 
-		if ( isFirstShow || travel < DIM_ABOVE_TRAVEL ) {
+		if ( isFirstShow || travel < DIM_ABOVE_TRAVEL || prefersReducedMotion() ) {
 			settle();
 			return;
 		}
@@ -141,7 +154,14 @@ function addPillTo( list ) {
 	list.addEventListener( 'mouseover', event => {
 		const button = event.target.closest( 'li.frmbutton > a' );
 
-		if ( ! button || button.classList.contains( 'disabled' ) ) {
+		if ( ! button ) {
+			// The ~10px grid gap between buttons belongs to the list, not to any button. Leaving
+			// the pill where it is (rather than hiding) keeps position tracking intact while the
+			// pointer crosses that gap between two adjacent buttons.
+			return;
+		}
+
+		if ( button.classList.contains( 'disabled' ) || button.closest( '.frmbutton' ).classList.contains( 'frm_at_limit' ) ) {
 			hide();
 			return;
 		}
@@ -152,5 +172,25 @@ function addPillTo( list ) {
 	list.addEventListener( 'mouseleave', hide );
 
 	// Dragging a field lifts it away from the cursor, leaving the pill with nothing to sit under.
-	list.addEventListener( 'mousedown', hide );
+	// A plain click never moves the pointer, so wait for real movement (matching jQuery UI
+	// draggable's own distance threshold) instead of hiding on every mousedown.
+	list.addEventListener( 'mousedown', event => {
+		const startX = event.clientX;
+		const startY = event.clientY;
+
+		const onMove = moveEvent => {
+			if ( Math.hypot( moveEvent.clientX - startX, moveEvent.clientY - startY ) > 1 ) {
+				hide();
+				cleanup();
+			}
+		};
+
+		const cleanup = () => {
+			document.removeEventListener( 'mousemove', onMove );
+			document.removeEventListener( 'mouseup', cleanup );
+		};
+
+		document.addEventListener( 'mousemove', onMove );
+		document.addEventListener( 'mouseup', cleanup );
+	} );
 }

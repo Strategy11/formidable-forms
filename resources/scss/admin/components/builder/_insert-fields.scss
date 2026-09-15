@@ -277,14 +277,15 @@ input[disabled] {
 	opacity: 0.45;
 }
 
-.field_type_list.frm-has-hover-pill {
+#frm-insert-fields .field_type_list.frm-has-hover-pill {
 
 	li.frmbutton a {
 		position: relative;
 		z-index: 1;
 	}
 
-	/* The pill paints the hover state now, so the button stops painting its own. */
+	/* The pill paints the hover state now, so the button stops painting its own. Needs the
+	   #frm-insert-fields prefix above to outrank the fallback hover rule's own ID specificity. */
 	li.frmbutton a:not(.disabled):hover {
 		background: transparent;
 		box-shadow: none;
