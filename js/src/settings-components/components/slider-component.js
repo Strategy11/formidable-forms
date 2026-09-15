@@ -118,7 +118,7 @@ export default class frmSliderComponent {
 				this.triggerValueChange( index );
 			} );
 
-			this.expandSliderGroup( element );
+			frmSliderComponent.expandSliderGroup( element );
 			this.updateOnUnitChange( element, rangeInput, valueInput, index );
 			frmSliderComponent.maybeDisableUnitDropdown( element );
 		} );
@@ -343,7 +343,7 @@ export default class frmSliderComponent {
 		} );
 	}
 
-	expandSliderGroup( element ) {
+	static expandSliderGroup( element ) {
 		const svgIcon = element.querySelector( '.frmsvg' );
 
 		if ( element.dataset.displaySliders === undefined || null === svgIcon ) {
