@@ -81,7 +81,7 @@ export default class frmSliderComponent {
 			rangeInput.addEventListener( 'input', () => {
 				const value = this.getRangeValue( rangeInput, index );
 				valueInput.value = value;
-				this.refreshRange( rangeInput, element, value );
+				frmSliderComponent.refreshRange( rangeInput, element, value );
 				this.syncGroupSliders( element, value );
 			} );
 
@@ -113,7 +113,7 @@ export default class frmSliderComponent {
 				}
 
 				this.setRangeValue( rangeInput, index, newValue );
-				this.refreshRange( rangeInput, element, newValue );
+				frmSliderComponent.refreshRange( rangeInput, element, newValue );
 				this.options[ index ].fullValue = this.updateValue( element, newValue + unit );
 				this.triggerValueChange( index );
 			} );
@@ -136,7 +136,7 @@ export default class frmSliderComponent {
 
 			const value = this.getRangeValue( rangeInput, index );
 			this.options[ index ].fullValue = value + frmSliderComponent.getUnit( element );
-			this.refreshRange( rangeInput, element, value );
+			frmSliderComponent.refreshRange( rangeInput, element, value );
 		} );
 	}
 
@@ -273,7 +273,7 @@ export default class frmSliderComponent {
 	 * @param {number|string}    value      - The value the slider now represents.
 	 * @return {void}
 	 */
-	refreshRange( rangeInput, element, value ) {
+	static refreshRange( rangeInput, element, value ) {
 		frmSliderComponent.updateFill( rangeInput );
 
 		const unit = frmSliderComponent.getUnit( element );
@@ -325,7 +325,7 @@ export default class frmSliderComponent {
 
 		const childSliders = element.classList.contains( 'frm-has-independent-fields' )
 			? element.querySelectorAll( '.frm-independent-slider-field' )
-			: this.getSliderGroupItems( element );
+			: frmSliderComponent.getSliderGroupItems( element );
 
 		childSliders.forEach( child => {
 			const childRange = child.querySelector( '.frm-slider' );
@@ -334,7 +334,7 @@ export default class frmSliderComponent {
 
 			if ( childRange && -1 !== childIndex ) {
 				this.setRangeValue( childRange, childIndex, value );
-				this.refreshRange( childRange, child, value );
+				frmSliderComponent.refreshRange( childRange, child, value );
 			}
 
 			if ( childText ) {
@@ -350,7 +350,7 @@ export default class frmSliderComponent {
 			return;
 		}
 
-		const sliderGroupItems = this.getSliderGroupItems( element );
+		const sliderGroupItems = frmSliderComponent.getSliderGroupItems( element );
 		svgIcon.addEventListener( 'click', () => {
 			sliderGroupItems.forEach( item => {
 				item.classList.toggle( HIDDEN_CLASS );
@@ -381,7 +381,7 @@ export default class frmSliderComponent {
 				rangeInput.disabled = true;
 
 				// Drop the old unit from what is announced, the value no longer carries one.
-				this.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
+				frmSliderComponent.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
 				return;
 			}
 
@@ -411,7 +411,7 @@ export default class frmSliderComponent {
 
 			this.options[ index ].fullValue = value + unit;
 			this.updateValue( element, this.options[ index ].fullValue );
-			this.refreshRange( rangeInput, element, value );
+			frmSliderComponent.refreshRange( rangeInput, element, value );
 			this.triggerValueChange( index );
 		} );
 	}
@@ -440,7 +440,7 @@ export default class frmSliderComponent {
 	 * @param {HTMLElement} element - The element to retrieve slider group items from.
 	 * @return {NodeList} - An array-like object containing the slider group items.
 	 */
-	getSliderGroupItems( element ) {
+	static getSliderGroupItems( element ) {
 		if ( groupItemsCache.has( element ) ) {
 			return groupItemsCache.get( element );
 		}
@@ -576,7 +576,7 @@ export default class frmSliderComponent {
 			const newValue = inputValue.join( ' ' );
 			input.value = newValue;
 
-			const childSlidersGroup = this.getSliderGroupItems( element );
+			const childSlidersGroup = frmSliderComponent.getSliderGroupItems( element );
 			childSlidersGroup.forEach( slider => {
 				const unitMeasure = this.getUnitMeasureFromValue( value );
 				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseFloat( value );

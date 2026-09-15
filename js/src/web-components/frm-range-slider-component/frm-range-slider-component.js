@@ -207,6 +207,12 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			return defaultValue;
 		}
 
+		// 'auto' is a keyword, not a measurement - keep it numeric-safe (0) so callers doing
+		// arithmetic on .value don't have to special-case it, same as print_range_input() on the PHP side.
+		if ( 'auto' === valueStr ) {
+			return { value: 0, unit: 'auto' };
+		}
+
 		// Lengths are not always whole numbers, '1.5em' has to survive the round trip.
 		const match = String( valueStr ).match( /^(\d+(?:\.\d+)?)(px|em|%|\s)?$/ );
 		if ( ! match ) {
@@ -461,6 +467,12 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			sliderWrapper.setAttribute( 'data-type', type );
 		}
 
+		// A keyword value like 'auto' has no position on the track, same as print_range_input()'s
+		// PHP counterpart - show it disabled at zero instead of coercing it into a number.
+		if ( 'auto' === value.unit ) {
+			sliderWrapper.classList.add( 'frm-disabled' );
+		}
+
 		const flexContainer = document.createElement( 'div' );
 		flexContainer.classList.add( 'frm-flex-justify' );
 
@@ -474,7 +486,9 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		}
 
 		// Slider track
-		sliderContainer.append( frmRangeSliderComponent.createSliderTrack( value, maxValue, ariaLabel ) );
+		const rangeInput = frmRangeSliderComponent.createSliderTrack( value, maxValue, ariaLabel );
+		rangeInput.disabled = 'auto' === value.unit;
+		sliderContainer.append( rangeInput );
 		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
