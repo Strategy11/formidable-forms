@@ -59,6 +59,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	color: var(--grey-500);
 }
 
+/* Paired with the rule above so the ID selector cannot outrank the hover. */
+.frm-style-card:not(.frm-dark-style) .frm-dropdown-toggle:hover svg,
+#frm_styling_form .frm-dropdown-toggle:hover svg {
+	color: var(--grey-900);
+}
+
 .frm-style-card.frm-currently-set-style-card .frm-style-card-title-wrapper svg {
 
 	/* The checkmark circle should be blue. */

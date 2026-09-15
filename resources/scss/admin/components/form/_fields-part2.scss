@@ -27,6 +27,67 @@
 	}
 }
 
+/**
+ * Checkbox and radio hover
+ *
+ * A stronger mix than text inputs: a 16px box has roughly a tenth of their perimeter, so 30%
+ * would not register. Hovering the label lights the box, since the label is part of the target.
+ */
+:is(.frm_wrap, .frm-white-body, .field-group) {
+
+	:is(input[type="checkbox"], input[type="radio"]) {
+		transition:
+			0.12s border-color ease,
+			0.12s box-shadow ease,
+			0.12s background-color ease;
+	}
+
+	:is(input[type="checkbox"], input[type="radio"]):hover:not(:disabled):not([readonly]):not(:focus),
+	label:hover > :is(input[type="checkbox"], input[type="radio"]):not(:disabled):not([readonly]):not(:focus) {
+		border-color: var(--grey-300);
+		border-color: color-mix(in oklab, var(--grey-400) 45%, var(--grey-300));
+		box-shadow: var(--box-shadow-md);
+	}
+
+	/* A checked box is a filled swatch with no grey stroke left to warm, so deepen the fill.
+	   !important beats the checked rule, which uses it. */
+	input[type="checkbox"]:checked:hover:not(:disabled):not([readonly]):not(:focus),
+	label:hover > input[type="checkbox"]:checked:not(:disabled):not([readonly]):not(:focus) {
+		background-color: var(--primary-700) !important;
+		border-color: var(--primary-700) !important;
+	}
+}
+
+/**
+ * Checkbox and radio hit area
+ *
+ * Grown vertically only: these sit beside labels and text inputs, and a target that grew sideways
+ * would swallow clicks meant for the control next to it.
+ */
+:is(.frm_wrap, .frm-white-body, .field-group) {
+
+	/* Padding the wrapping label was tried and reverted: stacked lists pay it on every row. */
+	:is(input[type="checkbox"], input[type="radio"]) {
+		position: relative;
+
+		&::after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: 0;
+			width: 100%;
+			height: 40px;
+			transform: translateY(-50%);
+		}
+	}
+
+	/* Option rows are barely taller than the target, so an extended box would reach into the
+	   rows above and below. */
+	.frm_single_option :is(input[type="checkbox"], input[type="radio"])::after {
+		content: none;
+	}
+}
+
 .frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"],
 .frm_wrap input[type="checkbox"],
 .frm-white-body input[type="checkbox"],
