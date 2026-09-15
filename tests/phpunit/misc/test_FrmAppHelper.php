@@ -835,4 +835,59 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$this->assertSame( $test_case['expected'], $result );
 		}
 	}
+
+	/**
+	 * The Surveys/Quizzes admin scripts are only ever enqueued on the form
+	 * builder page, so dequeuing them there breaks Likert row controls
+	 * whenever something else (the welcome checklist) also runs this method.
+	 *
+	 * @covers FrmAppHelper::dequeue_extra_global_scripts
+	 */
+	public function test_dequeue_extra_global_scripts_keeps_scripts_on_form_builder_page() {
+		global $pagenow;
+		$original_pagenow = $pagenow;
+		$pagenow          = 'admin.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$_GET['page']       = 'formidable';
+		$_GET['frm_action'] = 'edit';
+
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), false, true );
+		wp_enqueue_script( 'frm-surveys-admin' );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), false, true );
+		wp_enqueue_script( 'frm-quizzes-form-action' );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+
+		$this->assertTrue( wp_script_is( 'frm-surveys-admin', 'enqueued' ), 'Surveys admin script should stay enqueued on the form builder page.' );
+		$this->assertTrue( wp_script_is( 'frm-quizzes-form-action', 'enqueued' ), 'Quizzes form action script should stay enqueued on the form builder page.' );
+
+		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['page'], $_GET['frm_action'] );
+		wp_dequeue_script( 'frm-surveys-admin' );
+		wp_dequeue_script( 'frm-quizzes-form-action' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::dequeue_extra_global_scripts
+	 */
+	public function test_dequeue_extra_global_scripts_elsewhere() {
+		global $pagenow;
+		$original_pagenow = $pagenow;
+		$pagenow          = 'admin.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$_GET['page'] = 'formidable-addons';
+
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), false, true );
+		wp_enqueue_script( 'frm-surveys-admin' );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), false, true );
+		wp_enqueue_script( 'frm-quizzes-form-action' );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+
+		$this->assertFalse( wp_script_is( 'frm-surveys-admin', 'enqueued' ) );
+		$this->assertFalse( wp_script_is( 'frm-quizzes-form-action', 'enqueued' ) );
+
+		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['page'] );
+	}
 }
