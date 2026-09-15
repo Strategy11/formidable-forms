@@ -163,7 +163,8 @@ class FrmAddonsController {
 				'excerpt'    => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
 			),
 		);
-		$addons = $pro + $addons;
+		$addons = $pro + self::get_built_in_addons() + $addons;
+		$addons = self::move_addon_after( $addons, 'stripe', 'stripe-payments' );
 		self::prepare_addons( $addons );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
@@ -172,6 +173,144 @@ class FrmAddonsController {
 		$categories = self::$categories;
 
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Get the payment gateways that ship inside Lite so they render as active add-on cards.
+	 *
+	 * These are not installable plugins. The `built_in` flag gives them an active
+	 * status, keeps them unlocked, and limits the card footer to the docs link.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,array<string,mixed>>
+	 */
+	protected static function get_built_in_addons() {
+		return array(
+			'stripe-payments' => array(
+				'slug'       => 'stripe-payments',
+				'title'      => 'Stripe',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/stripe/',
+				'excerpt'    => 'Any Formidable forms on your site can accept credit card payments without users ever leaving your site.',
+			),
+			'square-payments' => array(
+				'slug'       => 'square-payments',
+				'title'      => 'Square',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/square/',
+				'excerpt'    => 'Take one-time payments with Square, with support for Apple Pay and Google Pay.',
+			),
+			'paypal-commerce' => array(
+				'slug'       => 'paypal-commerce',
+				'title'      => 'PayPal Commerce',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/formidable-paypal/',
+				'excerpt'    => 'Collect instant payments and recurring payments with PayPal Commerce on any Formidable form.',
+			),
+		);
+	}
+
+	/**
+	 * Move an add-on to display immediately after another one.
+	 *
+	 * Used to keep "Stripe Pro" next to the always-on "Stripe" card, since
+	 * the API add-ons are otherwise appended after all built-in gateways.
+	 * Add-ons are matched by their normalized slug rather than their array
+	 * key, because API-sourced add-ons are keyed by a numeric download id
+	 * with the real slug in their `slug` field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<int|string,array<string,mixed>> $addons     The full addons array, keyed by slug or id.
+	 * @param string                                $slug       Normalized slug of the add-on to move.
+	 * @param string                                $after_slug Normalized slug of the add-on it should follow.
+	 *
+	 * @return array<int|string,array<string,mixed>>
+	 */
+	protected static function move_addon_after( $addons, $slug, $after_slug ) {
+		$target_id = self::find_addon_id_by_slug( $addons, $slug );
+		$after_id  = self::find_addon_id_by_slug( $addons, $after_slug );
+
+		if ( null === $target_id || null === $after_id ) {
+			return $addons;
+		}
+
+		$addon = $addons[ $target_id ];
+		unset( $addons[ $target_id ] );
+
+		$reordered = array();
+
+		foreach ( $addons as $id => $value ) {
+			$reordered[ $id ] = $value;
+
+			if ( $id === $after_id ) {
+				$reordered[ $target_id ] = $addon;
+			}
+		}
+
+		return $reordered;
+	}
+
+	/**
+	 * Find an add-on's array key by its normalized slug.
+	 *
+	 * Mirrors the slug derivation in prepare_addons(): a numeric key names
+	 * an API-sourced add-on whose real slug lives in its `slug` field,
+	 * while a string key (built-in gateways, the fallback list) already is
+	 * the slug.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<int|string,array<string,mixed>> $addons The full addons array, keyed by slug or id.
+	 * @param string                                $slug   Normalized slug to find.
+	 *
+	 * @return int|string|null
+	 */
+	protected static function find_addon_id_by_slug( $addons, $slug ) {
+		foreach ( $addons as $id => $addon ) {
+			$addon_slug = is_numeric( $id )
+			? str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] )
+			: $id;
+
+			if ( $addon_slug === $slug ) {
+				return $id;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Override how an add-on is presented on the Add-Ons page.
+	 *
+	 * The built-in gateways cover base payment processing, so the add-ons that
+	 * extend them are presented as their Pro/Legacy tiers until the API reflects
+	 * it. Names only — the add-ons keep their original excerpts.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $addon The addon array that will be modified by reference.
+	 * @param string $slug  The addon slug.
+	 *
+	 * @return void
+	 */
+	protected static function override_addon_display( &$addon, $slug ) {
+		$overrides = array(
+			'stripe'          => array(
+				'display_name' => 'Stripe Pro',
+			),
+			'paypal-standard' => array(
+				'display_name' => 'PayPal Legacy',
+			),
+		);
+
+		if ( isset( $overrides[ $slug ] ) ) {
+			$addon = array_merge( $addon, $overrides[ $slug ] );
+		}
 	}
 
 	/**
@@ -491,7 +630,9 @@ class FrmAddonsController {
 	/**
 	 * Determine the license status for payment fee decisions.
 	 *
-	 * Mirrors the API's determine_status_from_license_details logic.
+	 * Mirrors determine_status_from_license_details in the Stripe Connect service,
+	 * including its 2016-04-26 grandfathered cutoff. Square and PayPal Commerce use a
+	 * later cutoff, so read their fees through payment_fees_apply instead.
 	 *
 	 * @since 6.31
 	 *
@@ -506,14 +647,14 @@ class FrmAddonsController {
 
 		$error = $version_info['error'] ?? array();
 
-		if ( is_array( $error ) ) {
-			$code = $error['code'] ?? '';
+		if ( is_array( $error ) && 'expired' === ( $error['code'] ?? '' ) ) {
+			return 'expired';
+		}
 
-			if ( 'expired' === $code ) {
-				return 'expired';
-			}
+		if ( self::is_grandfathered_license() ) {
+			$expires = self::get_grandfathered_expiration( $version_info );
 
-			if ( 'grandfathered' === $code && isset( $error['expires'] ) && gmdate( 'Y-m-d', $error['expires'] ) < '2016-04-26' ) {
+			if ( $expires && gmdate( 'Y-m-d', $expires ) < '2016-04-26' ) {
 				return 'free';
 			}
 		}
@@ -523,6 +664,81 @@ class FrmAddonsController {
 		}
 
 		return 'free';
+	}
+
+	/**
+	 * Check if a connect service charges its per-transaction fee for this license.
+	 *
+	 * Square and PayPal Commerce launched long after lifetime licenses stopped being
+	 * sold, so their services charge every grandfathered license. Stripe's predates
+	 * them and exempts most of them, which get_payment_license_status mirrors.
+	 *
+	 * @since 6.34
+	 *
+	 * @param string $service The connect service: 'stripe', 'square', or 'paypal'.
+	 *
+	 * @return bool
+	 */
+	public static function payment_fees_apply( $service ) {
+		if ( 'active' !== self::get_payment_license_status() ) {
+			return true;
+		}
+
+		if ( in_array( $service, array( 'square', 'paypal' ), true ) ) {
+			return self::is_grandfathered_license();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the primary license is grandfathered.
+	 *
+	 * The API reports this on the Pro add-on itself, the same place
+	 * FrmProAddonsController::license_type reads it from. Older responses put it
+	 * in the top level error instead, so check both.
+	 *
+	 * @since 6.34
+	 *
+	 * @return bool
+	 */
+	public static function is_grandfathered_license() {
+		$version_info = self::get_primary_license_info();
+
+		if ( ! $version_info ) {
+			return false;
+		}
+
+		$error = $version_info['error'] ?? array();
+
+		if ( is_array( $error ) && 'grandfathered' === ( $error['code'] ?? '' ) ) {
+			return true;
+		}
+
+		$pro = self::get_pro_from_addons( $version_info );
+
+		return 'grandfathered' === ( $pro['code'] ?? '' );
+	}
+
+	/**
+	 * Get the expiration timestamp reported alongside a grandfathered license.
+	 *
+	 * @since 6.34
+	 *
+	 * @param array $version_info The license info from get_primary_license_info.
+	 *
+	 * @return int
+	 */
+	private static function get_grandfathered_expiration( $version_info ) {
+		$error = $version_info['error'] ?? array();
+
+		if ( is_array( $error ) && ! empty( $error['expires'] ) ) {
+			return (int) $error['expires'];
+		}
+
+		$pro = self::get_pro_from_addons( $version_info );
+
+		return (int) ( $pro['expires'] ?? 0 );
 	}
 
 	/**
@@ -899,6 +1115,8 @@ class FrmAddonsController {
 				}
 			}
 
+			self::override_addon_display( $addon, $slug );
+
 			$addon['installed'] = self::is_installed( $file_name );
 
 			if ( 'highrise' === $slug && ! $addon['installed'] ) {
@@ -1001,7 +1219,12 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function set_addon_status( &$addon ) {
-		if ( ! empty( $addon['activate_url'] ) ) {
+		if ( ! empty( $addon['built_in'] ) ) {
+			$addon['status'] = array(
+				'type'  => 'active',
+				'label' => __( 'Active', 'formidable' ),
+			);
+		} elseif ( ! empty( $addon['activate_url'] ) ) {
 			$addon['status'] = array(
 				'type'  => 'installed',
 				'label' => __( 'Installed', 'formidable' ),
@@ -1016,7 +1239,7 @@ class FrmAddonsController {
 				'type'  => 'not-installed',
 				'label' => __( 'Not Installed', 'formidable' ),
 			);
-		}
+		}//end if
 	}
 
 	/**

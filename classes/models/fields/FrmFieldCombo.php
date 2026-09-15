@@ -90,8 +90,10 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return void
 	 */
 	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		$error_key_id = $this->get_error_key_id( $args );
+
 		foreach ( $this->get_sub_fields() as $sub_field ) {
-			$shortcode_atts[ 'aria-invalid-' . $sub_field['name'] ] = isset( $args['errors'][ 'field' . $this->field_id . '-' . $sub_field['name'] ] ) ? 'true' : 'false';
+			$shortcode_atts[ 'aria-invalid-' . $sub_field['name'] ] = isset( $args['errors'][ 'field' . $error_key_id . '-' . $sub_field['name'] ] ) ? 'true' : 'false';
 		}
 	}
 

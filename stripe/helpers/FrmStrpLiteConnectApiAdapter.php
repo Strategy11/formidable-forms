@@ -42,7 +42,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 * Use this when there is no logged in user, like when a webhook event is processed.
 	 * The customer check in self::cancel_subscription would always fail there because the current user ID is 0.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $sub_id
 	 *

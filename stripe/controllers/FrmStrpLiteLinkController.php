@@ -162,7 +162,7 @@ class FrmStrpLiteLinkController {
 	 * Check that the payment status has not been updated by another request already.
 	 * This is to avoid running the payment actions twice.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int    $payment_id The id of the payment to check.
 	 * @param string $status     The status the payment is about to be updated to.
