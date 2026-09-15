@@ -38,7 +38,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
 		// A keyword value like 'auto' has no number to cast - only an actual measurement unit does.
-		$this->data['value_label']         = self::is_measured_unit( $this->data['unit_measurement'] ) ? (float) $field_value : $field_value;
+		$this->data['value_label'] = self::is_measured_unit( $this->data['unit_measurement'] ) ? (float) $field_value : $field_value;
 
 		$this->init_defaults();
 		$this->init_icon();
