@@ -245,7 +245,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 *
 	 * @return array
 	 */
-	protected function get_inputs_container_attrs() {
+	public function get_inputs_container_attrs() {
 		$attrs = parent::get_inputs_container_attrs();
 
 		$attrs['data-name-layout'] = $this->get_name_layout();

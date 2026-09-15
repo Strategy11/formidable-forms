@@ -868,9 +868,6 @@ class FrmStylesHelper {
 
 		if ( ! $color ) {
 			$color = $default;
-		} elseif ( str_contains( $color, 'rgb(' ) ) {
-			$color = str_replace( 'rgb(', 'rgba(', $color );
-			$color = str_replace( ')', ',1)', $color );
 		} elseif ( ! str_contains( $color, '#' ) && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
@@ -888,6 +885,7 @@ class FrmStylesHelper {
 	 */
 	private static function is_hex( $color ) {
 		$non_hex_substrings = array(
+			'rgb(',
 			'rgba(',
 			'hsl(',
 			'hsla(',
@@ -926,6 +924,22 @@ class FrmStylesHelper {
 		}
 
 		return $change_margin;
+	}
+
+	/**
+	 * Get the raw alignment value stored in the active style for a radio or checkbox field.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array|int $field The 'field' array.
+	 *
+	 * @return string
+	 */
+	public static function get_align_from_active_style( $field ) {
+		$field_type = FrmField::is_checkbox( $field ) ? 'checkbox' : 'radio';
+		$key        = FrmStylesController::get_align_key_for_style_settings( $field_type );
+
+		return FrmStylesController::get_active_style( $field )->post_content[ $key ] ?? '';
 	}
 
 	/**

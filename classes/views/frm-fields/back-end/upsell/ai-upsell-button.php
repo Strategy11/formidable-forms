@@ -1,4 +1,12 @@
 <?php
+/**
+ * AI generate options upsell button.
+ *
+ * @package Formidable
+ *
+ * @since 6.31
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

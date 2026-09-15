@@ -7,6 +7,19 @@
 	#frm_top_bar h1 {
 		min-width: 0; /* Reset the min-width to prevent menu items from stacking vertically */
 	}
+
+	#frm_email_addon_menu {
+
+		> :first-child.frm-h-stack {
+			flex-direction: column;
+			align-items: stretch;
+			gap: var(--gap-sm);
+		}
+
+		.frm-search {
+			max-width: unset;
+		}
+	}
 }
 
 @media only screen and (max-width: 1050px) {
@@ -18,10 +31,6 @@
 
 	#form_settings_page .columns-2 {
 		margin: 0;
-	}
-
-	.frm_actions_list {
-		margin-left: 0;
 	}
 
 	#frm_bs_dropdown .frm_bstooltip {

@@ -1,4 +1,15 @@
 <?php
+/**
+ * Entry show page.
+ *
+ * @package Formidable
+ *
+ * @var stdClass $form   Form object.
+ * @var stdClass $entry  Entry object.
+ * @var array    $fields Field objects for the entry.
+ * @var int      $id     Entry ID.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -76,6 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 * @param array $show_args The arguments.
 					 * @param array $args      Includes `form`.
 					 */
+					// skipcq: PHP-W1020
 					$show_args = apply_filters( 'frm_entries_show_args', $show_args, compact( 'form' ) );
 
 					echo FrmEntriesController::show_entry_shortcode( $show_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

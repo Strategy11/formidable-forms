@@ -154,13 +154,13 @@ describe( 'Add-Ons page', () => {
 			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Formidable Forms Pro' );
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.' );
-			cy.get( 'a[aria-label="View Docs"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/?utm_source=plugin&utm_medium=lite&utm_campaign=addons' )
+			cy.get( 'a[aria-label="Why Upgrade"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/what-is-the-difference-between-the-lite-free-and-pro-version/?utm_source=plugin&utm_medium=lite&utm_campaign=addons' )
 				.and( 'have.attr', 'target', '_blank' )
 				.invoke( 'removeAttr', 'target' ).click();
 		} );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1' ).should( 'have.text', 'Docs & Support' );
+			cy.get( 'h1' ).should( 'contain.text', 'What is the difference between the Lite' );
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-addons' );
@@ -180,9 +180,9 @@ describe( 'Add-Ons page', () => {
 				.and( 'include', 'https://formidableforms.com/lite-upgrade/' );
 		} );
 
-		cy.log( 'PayPal Standard card' );
+		cy.log( 'PayPal Legacy card' );
 		cy.get( 'li[data-slug="paypal-standard"]' ).within( () => {
-			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'PayPal Standard' );
+			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'PayPal Legacy' );
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_paypal_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Collect instant payments and recurring payments to automate your online business. Calculate a total and send customers on to PayPal.' );
 			cy.contains( 'Plan required:' ).within( () => {
@@ -190,6 +190,16 @@ describe( 'Add-Ons page', () => {
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
+		} );
+
+		cy.log( 'Stripe built-in card and Stripe Pro card share the same icon' );
+		cy.get( 'li[data-slug="stripe-payments"]' ).within( () => {
+			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Stripe' );
+			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_stripealt_icon' );
+		} );
+		cy.get( 'li[data-slug="stripe"]' ).within( () => {
+			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Stripe Pro' );
+			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'href', '#frm_stripealt_icon' );
 		} );
 
 		cy.log( 'Formidable API card' );
@@ -647,7 +657,7 @@ describe( 'Add-Ons page', () => {
 	it( 'should search for add-ons', () => {
 		cy.log( 'Search for valid add-ons by name' );
 		cy.get( '#addon-search-input' ).type( 'PayPal Standard' );
-		cy.get( '.plugin-card-paypal-standard' ).should( 'contain', 'PayPal Standard' );
+		cy.get( '.plugin-card-paypal-standard' ).should( 'contain', 'PayPal Legacy' );
 
 		cy.log( 'Search for valid add-ons by description' );
 		cy.get( '#addon-search-input' ).clear().type( 'Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.' );

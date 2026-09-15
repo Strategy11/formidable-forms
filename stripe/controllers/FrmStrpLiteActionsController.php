@@ -123,12 +123,14 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		if ( ! self::stripe_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Stripe. Please try again.', 'formidable' );
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'stripe' );
+
+		if ( $connection_error ) {
+			$response['error'] = $connection_error;
 			return $response;
 		}
 
-		$customer = self::set_customer_with_token( $atts );
+		$customer = self::set_customer_with_token( $atts, self::get_customer_id_from_posted_setup_intents( $form->id ) );
 
 		if ( ! is_object( $customer ) ) {
 			$response['error'] = $customer;
@@ -147,22 +149,54 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Check if either Stripe integration is enabled.
+	 * Get the customer id from a setup intent that was created for this submission.
+	 * A Stripe Link subscription builds its subscription from the setup intent's customer,
+	 * so reusing that customer here avoids creating a duplicate customer for guests.
 	 *
-	 * @return bool true if Stripe Connect is set up.
+	 * @since 6.35
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return false|string The Stripe customer id, or false if it can't be found.
 	 */
-	private static function stripe_is_configured() {
-		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' );
+	public static function get_customer_id_from_posted_setup_intents( $form_id ) {
+		$posted_intents = FrmStrpLiteAuth::get_payment_intents( 'frmintent' . $form_id );
+
+		if ( ! is_array( $posted_intents ) || ! $posted_intents ) {
+			return false;
+		}
+
+		$setup_intent_ids = array_filter(
+			$posted_intents,
+			function ( $intent_id ) {
+				return str_starts_with( $intent_id, 'seti_' );
+			}
+		);
+
+		if ( ! $setup_intent_ids ) {
+			return false;
+		}
+
+		$first_setup_intent_id = reset( $setup_intent_ids );
+		$first_setup_intent_id = explode( '_secret_', $first_setup_intent_id )[0];
+		$setup_intent          = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_setup_intent', $first_setup_intent_id );
+
+		if ( ! is_object( $setup_intent ) || empty( $setup_intent->customer ) ) {
+			return false;
+		}
+
+		return $setup_intent->customer;
 	}
 
 	/**
 	 * Set a customer object to $_POST['customer'] to use later.
 	 *
-	 * @param array $atts
+	 * @param array        $atts        The action, entry, and form for the payment.
+	 * @param false|string $customer_id The Stripe customer id when it is already known.
 	 *
 	 * @return object|string
 	 */
-	private static function set_customer_with_token( $atts ) {
+	private static function set_customer_with_token( $atts, $customer_id = false ) {
 		if ( isset( self::$customer ) ) {
 			// It's an object if this isn't the first Stripe action running.
 			return self::$customer;
@@ -171,6 +205,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$payment_info = array(
 			'user_id' => FrmTransLiteAppHelper::get_user_id_for_current_payment(),
 		);
+
+		if ( $customer_id ) {
+			$payment_info['customer_id'] = $customer_id;
+		}
 
 		if ( ! empty( $atts['action']->post_content['email'] ) ) {
 			$payment_info['email'] = apply_filters( 'frm_content', $atts['action']->post_content['email'], $atts['form'], $atts['entry'] );
@@ -286,9 +324,15 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function add_action_defaults( $defaults ) {
+		// Stripe action options.
 		$defaults['plan_id']     = '';
 		$defaults['capture']     = '';
 		$defaults['stripe_link'] = '';
+
+		// PayPal action options.
+		$defaults['product_name'] = '';
+		$defaults['pay_later']    = '';
+
 		return $defaults;
 	}
 
@@ -317,7 +361,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$settings['currency'] = strtolower( $settings['currency'] );
 
 		// Gateway is a radio button but it should always be an array in the database for
-		// compatibility with the payments submodule where it is a checkbox.
+		// compatibility with the payments submodule where it is a checkbox (when Authorize.Net is active).
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
@@ -365,7 +409,19 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function create_plan_id( $settings ) {
 		$amount = self::prepare_amount( $settings['amount'], $settings );
-		return sanitize_title_with_dashes( $settings['description'] ) . '_' . $amount . '_' . $settings['interval_count'] . $settings['interval'] . '_' . $settings['currency'];
+		$parts  = array(
+			sanitize_title_with_dashes( $settings['description'] ),
+			$amount,
+			$settings['interval_count'] . $settings['interval'],
+			$settings['currency'],
+		);
+
+		if ( isset( $settings['trial_interval_count'] ) && '' !== $settings['trial_interval_count'] ) {
+			// Include the trial so two actions that differ only by trial length don't share a plan.
+			$parts[] = $settings['trial_interval_count'];
+		}
+
+		return implode( '_', $parts );
 	}
 
 	/**
@@ -462,14 +518,18 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$found_gateway   = false;
 
-		foreach ( $action_settings as $action ) {
+		foreach ( $action_settings as &$action ) {
 			$gateways = $action['gateways'];
 
 			if ( ! $gateways || in_array( 'stripe', (array) $gateways, true ) ) {
 				$found_gateway = true;
-				break;
+			}
+
+			if ( ! empty( $action['layout'] ) && ! in_array( $action['layout'], array( 'accordion', 'tabs' ), true ) ) {
+				$action['layout'] = '';
 			}
 		}
+		unset( $action );
 
 		if ( ! $found_gateway ) {
 			return;
@@ -658,16 +718,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = $field->temp_id ?? $field->id;
-
-		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
-			unset( $errors[ 'field' . $field_id . '-cc' ] );
-		}
-
-		if ( isset( $errors[ 'field' . $field_id ] ) ) {
-			unset( $errors[ 'field' . $field_id ] );
-		}
-
-		return $errors;
+		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
 	}
 }

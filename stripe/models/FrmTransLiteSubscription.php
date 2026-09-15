@@ -92,4 +92,21 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 			)
 		);
 	}
+
+	/**
+	 * Get all active or future_cancel subscriptions without next_bill_date check.
+	 *
+	 * @since 6.32
+	 *
+	 * @return array
+	 */
+	public function get_active_subscriptions() {
+		global $wpdb;
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM %i WHERE (status = 'active' OR status = 'future_cancel')",
+				$wpdb->prefix . 'frm_subscriptions'
+			)
+		);
+	}
 }

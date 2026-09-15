@@ -1,4 +1,12 @@
 <?php
+/**
+ * Inline modal wrapper used inside field settings.
+ *
+ * @package Formidable
+ *
+ * @var array $args Modal arguments: dismiss-icon (bool), show (bool), class (string), id (string), title (string), inside_class (string), callback (callable), args (mixed).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

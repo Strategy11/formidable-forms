@@ -2,11 +2,68 @@
 	const hookNamespace = 'formidable-square';
 	wp.hooks.addAction( 'frm_trans_toggled_gateway', hookNamespace, onGatewayToggle );
 	wp.hooks.addAction( 'frm_filled_form_action', hookNamespace, onFilledFormAction );
+	wp.hooks.addAction( 'frm_added_form_action', hookNamespace, onAddedFormAction );
 
 	const actions = document.getElementById( 'frm_notification_settings' );
 	jQuery( actions ).on( 'change', '.frm_trans_type', onToggleSub );
 
 	const { __ } = wp.i18n;
+
+	function updateGatewaySettingsVisibility( settings ) {
+		const typeDropdown = settings.querySelector( 'select.frm_trans_type' );
+		if ( ! typeDropdown ) {
+			return;
+		}
+
+		if ( 'recurring' === typeDropdown.value ) {
+			const activeGateways = Array.from( settings.querySelectorAll( '[name*="[post_content][gateway]"]:checked' ) ).map( function( el ) {
+				return el.value;
+			} );
+
+			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
+				function( subOpts ) {
+					// Check if this setting has a show_* class for any active gateway
+					const hasActiveGatewayClass = Array.from( subOpts.classList ).some( function( className ) {
+						return activeGateways.some( function( gateway ) {
+							return className === `show_${ gateway }`;
+						} );
+					} );
+
+					if ( hasActiveGatewayClass ) {
+						subOpts.classList.remove( 'frm_hidden' );
+						if ( subOpts.classList.contains( 'frm_grid_container' ) ) {
+							subOpts.style.display = 'grid';
+						}
+					} else {
+						// Check if it has any show_* class for a different gateway
+						const hasAnyGatewayClass = Array.from( subOpts.classList ).some( function( className ) {
+							return className.startsWith( 'show_' );
+						} );
+
+						if ( hasAnyGatewayClass ) {
+							// Hide if it has a show_* class but not for any active gateway
+							subOpts.classList.add( 'frm_hidden' );
+							subOpts.style.display = 'none';
+						} else {
+							// Show if it has no show_* class (shared setting)
+							subOpts.classList.remove( 'frm_hidden' );
+							if ( subOpts.classList.contains( 'frm_grid_container' ) ) {
+								subOpts.style.display = 'grid';
+							}
+						}
+					}
+				}
+			);
+			return;
+		}
+
+		settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
+			function( subOpts ) {
+				subOpts.classList.add( 'frm_hidden' );
+				subOpts.style.display = 'none';
+			}
+		);
+	}
 
 	function onGatewayToggle( { gateway, settings, checked } ) {
 		if ( 'square' === gateway && checked ) {
@@ -15,14 +72,7 @@
 
 		syncCurrency( gateway, settings.get( 0 ) );
 
-		const typeDropdown = settings.get( 0 ).querySelector( 'select.frm_trans_type' );
-		if ( typeDropdown && 'recurring' !== typeDropdown.value ) {
-			settings.get( 0 ).querySelectorAll( '.frm_trans_sub_opts' ).forEach(
-				function( subOpts ) {
-					subOpts.style.display = 'none';
-				}
-			);
-		}
+		updateGatewaySettingsVisibility( settings.get( 0 ) );
 
 		const captureSetting = settings.get( 0 ).querySelector( '[name*="[post_content][capture]"]' );
 		if ( captureSetting ) {
@@ -30,16 +80,27 @@
 			if ( wrapper ) {
 				if ( 'square' === gateway ) {
 					wrapper.style.display = 'none';
-				} else if ( 'recurring' !== typeDropdown.value ) {
-					// Capture appearing with Stripe selected and recurring selected.
-					wrapper.style.removeProperty( 'display' );
 				}
 			}
 		}
 	}
 
 	function onFilledFormAction( $container ) {
-		const settings = $container.get( 0 ).closest( '.frm_form_action_settings' );
+		initPaymentSettings( $container.get( 0 ).closest( '.frm_form_action_settings' ) );
+	}
+
+	/**
+	 * A new action is added with its settings already rendered, so it never goes through
+	 * frm_filled_form_action and needs the same setup.
+	 *
+	 * @param {HTMLElement} newAction The form action element that was just added.
+	 * @return {void}
+	 */
+	function onAddedFormAction( newAction ) {
+		initPaymentSettings( newAction );
+	}
+
+	function initPaymentSettings( settings ) {
 		if ( ! settings || ! settings.classList.contains( 'frm_single_payment_settings' ) ) {
 			return;
 		}
@@ -48,21 +109,15 @@
 		if ( squareGatewayOption?.checked ) {
 			syncRepeat( settings );
 		}
+
+		updateGatewaySettingsVisibility( settings );
 	}
 
 	function onToggleSub() {
 		const target = this;
 		setTimeout( function() {
 			const settings = target.closest( '.frm_form_action_settings' );
-			const squareIsActive = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' ).checked;
-
-			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
-				function( subOpts ) {
-					if ( subOpts.classList.contains( 'show_stripe' ) && ! subOpts.classList.contains( 'show_square' ) && squareIsActive ) {
-						subOpts.style.display = 'none';
-					}
-				}
-			);
+			updateGatewaySettingsVisibility( settings );
 		}, 0 );
 	}
 
@@ -132,13 +187,14 @@
 		}
 
 		newDropdown.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_square' );
+		newDropdown.closest( '.frm_trans_sub_opts' )?.classList.remove( 'frm_hidden' );
 
 		const stripeLabel = intervalCount.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
 		if ( stripeLabel?.textContent.includes( 'Repeat Every' ) ) {
 			stripeLabel.textContent = 'Repeat';
 		}
 
-		intervalCount.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_stripe', 'frm_hidden' );
+		intervalCount.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_stripe', 'show_paypal', 'frm_hidden' );
 	}
 
 	function syncCurrency( gateway, settings ) {

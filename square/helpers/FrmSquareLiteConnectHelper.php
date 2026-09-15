@@ -69,56 +69,12 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function render_settings_for_mode( $mode ) {
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<div class="frm-card-item frm4">
-			<div class="frm-flex-col">
-				<div>
-					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
-						<?php
-						echo $mode === 'test' ? esc_html__( 'Test', 'formidable' ) : esc_html__( 'Live', 'formidable' );
-						?>
-					</span>
-					<?php
-
-					$connected   = (bool) self::get_merchant_id( $mode );
-					$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
-					?>
-					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
-						<?php
-						if ( $connected ) {
-							FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
-							echo 'Connected';
-						} else {
-							echo 'Not configured';
-						}
-						?>
-					</div>
-				</div>
-				<div style="margin-top: 5px; flex: 1;">
-					<?php
-					if ( 'live' === $mode ) {
-						esc_html_e( 'Live version to process real customer transactions', 'formidable' );
-					} else {
-						esc_html_e( 'Simulate payments and ensure everything works smoothly before going live.', 'formidable' );
-					}
-					?>
-				</div>
-				<div class="frm-card-bottom">
-					<?php if ( $connected ) { ?>
-						<a id="frm_disconnect_square_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
-							<?php esc_html_e( 'Disconnect', 'formidable' ); ?>
-						</a>
-					<?php } else { ?>
-						<a class="frm-connect-square-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
-							<?php esc_html_e( 'Connect', 'formidable' ); ?>
-						</a>
-					<?php } ?>
-				</div>
-			</div>
-		</div>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		$connected              = (bool) self::get_merchant_id( $mode );
+		$column_class           = 'frm4';
+		$gateway_slug           = 'square';
+		$icon_font_class        = 'frmfont';
+		$extra_content_callback = null;
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/payment-connect-mode-box.php';
 	}
 
 	/**
@@ -135,7 +91,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|string
 	 */
 	public static function get_oauth_redirect_url() {
-		$mode = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
+		$mode = self::get_mode_value_from_post();
 
 		if ( self::get_merchant_id( $mode ) ) {
 			// Do not allow for initialize if there is already a configured account id.
@@ -181,10 +137,6 @@ class FrmSquareLiteConnectHelper {
 		$body    = array_merge( $body, $additional_body );
 		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
-
-		if ( ! $headers ) {
-			return 'Unable to build headers for post. Is your pro license configured properly?';
-		}
 
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;
@@ -528,7 +480,16 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$body = array_merge( self::get_standard_authenticated_body(), $additional_body );
+
+		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'square', $body['frm_square_api_mode'] ) ) {
+			// There are no credentials for this mode, so the connect server would reject the request
+			// with an error about the signature. Report the missing connection instead.
+			self::$latest_error_from_square_api = FrmTransLiteAppHelper::get_gateway_connection_error( 'square', $body['frm_square_api_mode'] );
+			FrmTransLiteLog::log_message( 'Square API Error', self::$latest_error_from_square_api );
+			return false;
+		}
+
 		$response = self::post_to_connect_server( $action, $body );
 
 		if ( is_object( $response ) ) {
@@ -555,27 +516,47 @@ class FrmSquareLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
-		return array(
-			'merchant_id'     => get_option( self::get_merchant_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
-		);
+		return self::get_body_for_mode( FrmSquareLiteAppHelper::active_mode() );
 	}
 
 	/**
-	 * Check $_POST for live or test mode value as it can be updated in real time from Stripe Settings and can be configured before the update is saved.
+	 * Check $_POST for live or test mode value as it can be updated in real time from Square Settings and can be configured before the update is saved.
+	 * The connect request sends a 'mode' string, and the disconnect request sends a 'testMode' flag, so check for both.
 	 *
 	 * @return string 'test' or 'live'
 	 */
 	private static function get_mode_value_from_post() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
-			return FrmSquareLiteAppHelper::active_mode();
+		if ( array_key_exists( 'mode', $_POST ) ) {
+			$mode = FrmAppHelper::get_post_param( 'mode', '', 'sanitize_text_field' );
+			return 'test' === $mode ? 'test' : 'live';
 		}
 
-		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
-		return $test_mode ? 'test' : 'live';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( array_key_exists( 'testMode', $_POST ) ) {
+			$test_mode = FrmAppHelper::get_post_param( 'testMode', '', 'absint' );
+			return $test_mode ? 'test' : 'live';
+		}
+
+		return FrmSquareLiteAppHelper::active_mode();
+	}
+
+	/**
+	 * Get the standard body with account id, mode, and passwords to send to the connect server.
+	 *
+	 * @since 6.32.1
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return array
+	 */
+	private static function get_body_for_mode( $mode ) {
+		return array(
+			'merchant_id'         => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_square_api_mode' => $mode,
+		);
 	}
 
 	/**
@@ -622,8 +603,7 @@ class FrmSquareLiteConnectHelper {
 		$request_body = array();
 
 		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
+			$request_body = self::get_body_for_mode( $mode );
 		}
 
 		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
@@ -711,6 +691,7 @@ class FrmSquareLiteConnectHelper {
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_square_api_integration();
+		FrmTransLiteAppHelper::trigger_gateway_disconnected_hook( 'square', self::get_mode_value_from_post() );
 		wp_send_json_success();
 	}
 
@@ -718,9 +699,8 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function disconnect() {
-		$additional_body = array(
-			'frm_square_api_mode' => self::get_mode_value_from_post(),
-		);
+		$mode            = self::get_mode_value_from_post();
+		$additional_body = self::get_body_for_mode( $mode );
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
@@ -756,8 +736,7 @@ class FrmSquareLiteConnectHelper {
 		$request_body = array();
 
 		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
+			$request_body = self::get_body_for_mode( $mode );
 		}
 
 		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );

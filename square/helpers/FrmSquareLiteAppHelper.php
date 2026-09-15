@@ -51,7 +51,10 @@ class FrmSquareLiteAppHelper {
 	}
 
 	/**
-	 * Add education about Stripe fees.
+	 * Add education about Square fees.
+	 *
+	 * Square is not included in a grandfathered license, so its fees always apply
+	 * there even though Stripe fees do not.
 	 *
 	 * @param string             $content UTM Content for the admin upgrade link.
 	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
@@ -59,9 +62,7 @@ class FrmSquareLiteAppHelper {
 	 * @return void
 	 */
 	public static function fee_education( $content = 'tip', $gateway = false ) {
-		$license_type = FrmAddonsController::license_type();
-
-		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+		if ( ! FrmAddonsController::payment_fees_apply( 'square' ) ) {
 			return;
 		}
 

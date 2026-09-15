@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'content'  => 'view-demos-button',
 		);
 		?>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $demo_link_args, 'demos/' ) ); ?>" class="frm-mb-md frm-ml-xs frm-button-secondary"><?php esc_html_e( 'View Demos', 'formidable' ); ?></a>
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $demo_link_args, 'demos/' ) ); ?>" class="frm-mb-md frm-ml-xs frm-button-secondary" target="_blank" rel="noopener"><?php esc_html_e( 'View Demos', 'formidable' ); ?></a>
 
 		<div class="frm-views-features frm_grid_container">
 			<div class="frm4">
@@ -116,7 +116,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="frm-views-learn-more">
 					<h3><?php esc_html_e( 'Learn more', 'formidable' ); ?></h3>
 					<p style="margin-bottom: var(--gap-md);"><?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?></p>
-					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $learn_more_utm, 'features/display-form-data-views/' ) ); ?>" class="frm-button-secondary"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $learn_more_utm, 'features/display-form-data-views/' ) ); ?>" class="frm-button-secondary" target="_blank" rel="noopener"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
 				</div>
 			</div>
 			<div class="frm6">

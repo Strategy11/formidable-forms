@@ -84,7 +84,7 @@ class CommentSpacingSniff implements Sniff {
 			&& ! $isSingleWord
 			&& ! $startsWithSpecialWord
 			&& ! $isContinuationComment
-			&& ! preg_match( '/^(end\b|phpcs:|eslint|TODO|FIXME|translators:|e\.g\.|i\.e\.|etc\.|iDeal)/i', $trimmedText );
+			&& ! preg_match( '/^(end\b|phpcs:|skipcq:|eslint|TODO|FIXME|translators:|e\.g\.|i\.e\.|etc\.|iDeal)/i', $trimmedText );
 
 		if ( ! $hasSpaceAfterSlash ) {
 			$fix = $phpcsFile->addFixableError(
@@ -97,7 +97,7 @@ class CommentSpacingSniff implements Sniff {
 				$newText = $trimmedText;
 
 				// Also capitalize if needed (but not for code-like comments, single words, underscore/hyphen words, abbreviations, or continuation comments).
-				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! $startsWithSpecialWord && ! $isContinuationComment && ! preg_match( '/^(end\b|phpcs:|eslint|translators:|e\.g\.|i\.e\.|etc\.|iDeal)/i', $trimmedText ) ) {
+				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! $startsWithSpecialWord && ! $isContinuationComment && ! preg_match( '/^(end\b|phpcs:|skipcq:|eslint|translators:|e\.g\.|i\.e\.|etc\.|iDeal)/i', $trimmedText ) ) {
 					$newText = ucfirst( $trimmedText );
 				}
 

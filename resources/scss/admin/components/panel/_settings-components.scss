@@ -2,11 +2,6 @@
  * Component: Settings and Panel
  */
 
-/* Form Settings Tabs */
-.frm-form-setting-tabs {
-	margin-top: var(--gap-sm) !important;
-}
-
 .frm-right-panel > .postbox {
 	background-color: transparent;
 	border: none;
@@ -27,17 +22,31 @@
 	position: relative;
 }
 
-.frm-right-panel .inside a,
-.frm-form-setting-tabs a {
+.frm-right-panel .inside a {
 	font-size: var(--text-md);
 	color: var(--grey-700);
 	padding: var(--gap-sm);
 	display: block;
 }
 
-.frm-form-setting-tabs a {
-	color: var(--grey-900);
-	padding: var(--gap-sm) var(--gap-md);
+.frm-form-setting-tabs {
+	margin-top: 19px !important;
+
+	a {
+		font-size: var(--text-md);
+		color: var(--grey-900);
+		border-radius: var(--small-radius);
+		padding: 13px var(--gap-sm);
+		margin-left: var(--gap-xs);
+		margin-right: var(--gap-xs);
+		transition: background-color 0.2s ease-out;
+
+		&:hover {
+			color: var(--grey-900);
+			background: var(--grey-100);
+		}
+	}
+
 }
 
 .frm-right-panel .inside a {
@@ -50,14 +59,7 @@
 	color: var(--primary-700);
 }
 
-.frm-form-setting-tabs a:hover {
-	background: var(--sidebar-hover);
-	color: var(--grey-900);
-}
-
-.frm-right-panel .inside i,
-.frm-form-setting-tabs a i,
-.frm-form-setting-tabs a .frmsvg {
+.frm-right-panel .inside i {
 	margin: 0 5px;
 	display: inline-block;
 	width: 20px;
@@ -65,14 +67,8 @@
 	color: var(--grey-500);
 }
 
-.frm-form-setting-tabs a .frmsvg {
-	margin: 0;
-}
-
 .frm-right-panel .inside a:hover i,
-.frm-right-panel .inside a:hover .frmsvg,
-.frm-form-setting-tabs a:hover .frmsvg,
-.frm-form-setting-tabs a:hover span {
+.frm-right-panel .inside a:hover .frmsvg {
 	color: var(--grey-700);
 }
 
@@ -92,18 +88,6 @@
 	padding: 0;
 	border: none;
 	background: transparent;
-}
-
-select.frm_cancelnew,
-input.frm_enternew {
-	width: 175px;
-}
-
-.frm_posttax_opt_list {
-	border: 1px solid var(--grey-300);
-	padding: var(--gap-md);
-	border-radius: var(--small-radius);
-	margin: 5px 0 5px var(--gap-md);
 }
 
 /* Color picker CSS */

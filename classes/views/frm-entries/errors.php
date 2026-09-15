@@ -1,4 +1,15 @@
 <?php
+/**
+ * Form errors and success message wrapper.
+ *
+ * @package Formidable
+ *
+ * @var stdClass|null $form                    Form object when available.
+ * @var string|null   $message                 Success message HTML.
+ * @var array|null    $errors                  Field errors keyed by field id.
+ * @var string|null   $include_extra_container Optional CSS class for a wrapping container.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -39,7 +50,14 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 		}
 	}
 
-	FrmFormsHelper::show_errors( compact( 'img', 'errors', 'form' ) );
+	$error_args = compact( 'img', 'errors', 'form' );
+
+	if ( isset( $values['fields'] ) ) {
+		// Reuse the fields already prepared for this form so the summary needs no extra query.
+		$error_args['fields'] = $values['fields'];
+	}
+
+	FrmFormsHelper::show_errors( $error_args );
 
 	?>
 </div>

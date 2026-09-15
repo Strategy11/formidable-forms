@@ -8,6 +8,13 @@ on:
     types: [ opened, labeled, synchronize ]
 
 name: PHP Syntax Check
+# Cancel superseded runs for the same branch. The group is named explicitly
+# rather than derived from github.workflow: several files share the workflow
+# name `Inspections` and would otherwise cancel each other.
+concurrency:
+  group: formidable-syntax-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   runPHPSyntaxCheck:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')

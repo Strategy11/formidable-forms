@@ -1,4 +1,12 @@
 <?php
+/**
+ * Smart values upsell panel.
+ *
+ * @package Formidable
+ *
+ * @var array|string $upgrade_link Arguments or URL used to build the upgrade link.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

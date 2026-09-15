@@ -70,6 +70,27 @@ class test_FrmForm extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmForm::set_status
+	 */
+	public function test_set_status() {
+		$form_id_1 = $this->factory->form->create();
+		$form_id_2 = $this->factory->form->create();
+
+		FrmForm::set_status( $form_id_1, 'draft' );
+		FrmForm::set_status( $form_id_2, 'draft' );
+
+		$this->assertEquals( 'draft', FrmForm::getOne( $form_id_1 )->status );
+		$this->assertEquals( 'draft', FrmForm::getOne( $form_id_2 )->status );
+
+		// An array of ids runs a single prepared query.
+		$result = FrmForm::set_status( array( $form_id_1, $form_id_2 ), 'published' );
+
+		$this->assertNotFalse( $result );
+		$this->assertEquals( 'published', FrmForm::getOne( $form_id_1 )->status );
+		$this->assertEquals( 'published', FrmForm::getOne( $form_id_2 )->status );
+	}
+
+	/**
 	 * @group visibility
 	 *
 	 * @covers FrmForm::is_visible_to_user

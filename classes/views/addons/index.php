@@ -3,6 +3,16 @@
  * Add-Ons Page.
  *
  * @package Formidable
+ *
+ * @var string               $view_path         Absolute path to the views/addons/ directory, with trailing slash.
+ * @var array                $installed_addons  Installed add-on plugins keyed by slug.
+ * @var array<string, array> $addons            Available add-ons keyed by slug.
+ * @var array                $errors            API errors, if any.
+ * @var string               $license_type      Current license type or empty string.
+ * @var string               $request_addon_url URL for requesting a new add-on.
+ * @var array                $pro               Pro add-on entry prepended to $addons.
+ * @var string               $pricing           Upgrade URL used for CTAs.
+ * @var array<string, array> $categories        Add-on categories keyed by slug, each with 'name' and 'count'.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -24,6 +24,46 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+/**
+ * Dismiss every inbox banner message so the admin header is predictable.
+ *
+ * The inbox banner, the sale banner and the Lite upgrade bar share a single header slot, and
+ * FrmAppHelper::print_admin_banner() gives the inbox banner priority. Since inbox messages come
+ * from the live API, an unrelated announcement hides the upgrade bar for as long as it runs.
+ *
+ * @param {number} remainingAttempts Guards against looping when a message refuses to dismiss.
+ */
+Cypress.Commands.add( 'dismissInboxBanners', ( remainingAttempts = 5 ) => {
+	if ( remainingAttempts < 1 ) {
+		return;
+	}
+
+	cy.get( 'body' ).then( $body => {
+		const banner = $body.find( '#frm_banner' );
+
+		if ( ! banner.length ) {
+			return;
+		}
+
+		cy.log( `Dismiss inbox banner: ${ banner.attr( 'data-key' ) }` );
+		cy.window().then( win => {
+			cy.request( {
+				method: 'POST',
+				url: '/wp-admin/admin-ajax.php',
+				form: true,
+				body: {
+					action: 'frm_inbox_dismiss',
+					key: banner.attr( 'data-key' ),
+					nonce: win.frmGlobal.nonce
+				}
+			} );
+		} );
+
+		cy.reload();
+		cy.dismissInboxBanners( remainingAttempts - 1 );
+	} );
+} );
+
 Cypress.Commands.add( 'createNewForm', () => {
 	cy.log( 'Create a blank form' );
 	cy.contains( '.frm_nav_bar .button-primary', 'Add New' ).click();

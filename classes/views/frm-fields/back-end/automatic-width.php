@@ -1,4 +1,12 @@
 <?php
+/**
+ * Automatic width setting for select-like fields.
+ *
+ * @package Formidable
+ *
+ * @var array $field Field data including 'id' and 'size'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

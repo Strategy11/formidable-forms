@@ -144,11 +144,18 @@ describe( 'Entries submitted from a form', () => {
 
 		cy.log( 'Check for entry actions elements' );
 		cy.get( '.frm_no_print > h3' ).should( 'contain', 'Entry Actions' );
-		cy.get( '.frm_no_print > .inside > :nth-child(1)' ).should( 'contain', 'Delete Entry' );
-		cy.get( '.frm_no_print > .inside > :nth-child(2)' ).should( 'contain', 'Print Entry' );
-		cy.get( '.frm_no_print > .inside > :nth-child(3)' ).should( 'contain', 'Resend Emails' );
-		cy.get( '.frm_no_print > .inside > :nth-child(4)' ).should( 'contain', 'Download as PDF' );
-		cy.get( '.inside > :nth-child(5)' ).should( 'contain', 'Edit Entry' );
+
+		const entryActions = [
+			'Edit Entry',
+			'Print Entry',
+			'Download as PDF',
+			'Resend Emails',
+			'Delete Entry',
+		];
+		cy.get( '.frm_no_print > .inside > .misc-pub-section' ).should( 'have.length', entryActions.length );
+		entryActions.forEach( ( label, index ) => {
+			cy.get( '.frm_no_print > .inside > .misc-pub-section' ).eq( index ).should( 'contain', label );
+		} );
 
 		cy.log( 'Verify for entry details' );
 		cy.get( ':nth-child(2) > h3' ).should( 'contain', 'Entry Details' );

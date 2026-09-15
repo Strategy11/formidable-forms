@@ -23,23 +23,6 @@
 }
 
 /* Card */
-#frm-addons-page .frm-card-item {
-	padding: var(--gap-sm) var(--gap-md);
-	gap: 12px;
-	border-color: var(--grey-300);
-	box-shadow: var(--box-shadow-sm);
-	transition: box-shadow 200ms ease-in-out;
-}
-
-#frm-addons-page .frm-card-item:hover {
-	box-shadow: var(--box-shadow-md);
-}
-
-.frm-card-item p,
-.frm-card-item h3 {
-	margin: 0;
-}
-
 .frm-border-icon > svg {
 	width: 24px;
 }

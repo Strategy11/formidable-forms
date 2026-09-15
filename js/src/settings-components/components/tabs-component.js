@@ -1,4 +1,4 @@
-import { frmTabsNavigator } from '../../components/class-tabs-navigator';
+import { frmTabsNavigator } from '../../components/tabs/class-tabs-navigator';
 /**
  * Represents a Tabs Component.
  *

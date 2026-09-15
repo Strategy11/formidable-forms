@@ -1,6 +1,13 @@
 on: [push]
 
 name: PHPStan Code Analysis
+# Cancel superseded runs for the same branch. The group is named explicitly
+# rather than derived from github.workflow: several files share the workflow
+# name `Inspections` and would otherwise cancel each other.
+concurrency:
+  group: formidable-phpstan-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   phpstan:
     name: PHPStan
@@ -14,13 +21,45 @@ jobs:
       - name: "💽  Installing PHP, Composer, CS2PR"
         uses: shivammathur/setup-php@2.30.2
         with:
-          php-version: 8.0
+          php-version: 8.1
           coverage: none
           ini-values: display_errors = on, error_reporting = E_ALL
           tools: composer
 
-      - name: "💽  Installing Composer Packages"
-        run: composer install
+      # Install only what this job runs, instead of every require-dev package.
+      # phpstan.neon bootstraps vendor/php-stubs/wordpress-stubs and stubs.php, and
+      # stubs.php references PHPUnit\Framework\TestCase - without phpunit-polyfills
+      # the run dies while loading the bootstrap file.
+      # The guard fails the job if a package is renamed or dropped from
+      # composer.json, rather than silently narrowing to nothing.
+      - name: Install PHPStan
+        run: |
+          NEED='phpstan/phpstan phpstan/extension-installer phpstan/phpstan-strict-rules php-stubs/wordpress-stubs yoast/phpunit-polyfills'
+          for pkg in $NEED; do
+            jq -e --arg pkg "$pkg" '."require-dev" | has($pkg)' composer.json > /dev/null \
+              || { echo "::error::composer.json has no require-dev entry for $pkg"; exit 1; }
+          done
+          jq '{require, autoload, config, "require-dev": (."require-dev" | with_entries(select(.key as $k | $ARGS.positional | index($k))))}' \
+            composer.json --args $NEED > composer.ci.json
+          COMPOSER=composer.ci.json composer install --prefer-dist --no-progress
+
+      # PHPStan's result cache means only changed files get re-analysed.
+      # /tmp/phpstan is where it lands by default (sys_get_temp_dir() +
+      # '/phpstan'); this PHPStan build has no flag to relocate it, and pointing
+      # tmpDir into the working tree would make `analyze ./` walk its own
+      # cache. PHPStan
+      # validates the cache against its own version and the config, so a stale
+      # restore degrades to a full analysis rather than a wrong result. The sha
+      # suffix is needed because cache entries are immutable - without it the
+      # first entry would win forever and the cache would never advance.
+      - name: Cache PHPStan results
+        uses: actions/cache@v4
+        with:
+          path: /tmp/phpstan
+          key: formidable-phpstan-${{ hashFiles('composer.json', 'phpstan.neon') }}-${{ github.sha }}
+          restore-keys: |
+            formidable-phpstan-${{ hashFiles('composer.json', 'phpstan.neon') }}-
+            formidable-phpstan-
 
       - name: "🧪 Test"
         run: vendor/bin/phpstan analyze ./ --memory-limit=2G

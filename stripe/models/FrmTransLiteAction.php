@@ -14,7 +14,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			// After user registration.
 			'priority' => 45,
 			'event'    => array( 'create' ),
-			'color'    => 'var(--green)',
+			'color'    => '#3fac25',
 		);
 
 		$this->FrmFormAction( 'payment', __( 'Collect a Payment', 'formidable' ), $action_ops );
@@ -87,6 +87,12 @@ class FrmTransLiteAction extends FrmFormAction {
 			'credit_card'          => '',
 			'billing_first_name'   => '',
 			'billing_last_name'    => '',
+			'billing_address'      => '',
+			'shipping_email'       => '',
+			'shipping_first_name'  => '',
+			'shipping_last_name'   => '',
+			'shipping_address'     => '',
+			'entry_data_sync'      => 'overwrite',
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
@@ -206,12 +212,14 @@ class FrmTransLiteAction extends FrmFormAction {
 					if ( 'name' === $field->type && isset( $field_atts['name'] ) ) {
 						switch ( $field_atts['name'] ) {
 							case 'billing_first_name':
+							case 'shipping_first_name':
 								echo ' (';
 								esc_html_e( 'First', 'formidable' );
 								echo ')';
 								break;
 
 							case 'billing_last_name':
+							case 'shipping_last_name':
 								echo ' (';
 								esc_html_e( 'Last', 'formidable' );
 								echo ')';

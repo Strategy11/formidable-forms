@@ -288,9 +288,208 @@ class FrmFormsHelper {
 			$settings_args['current_form'] = $args['form']->id;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-		$invalid_msg  = do_shortcode( $frm_settings->invalid_msg );
+		$frm_settings         = FrmAppHelper::get_settings( $settings_args );
+		$field_error_messages = self::get_clickable_field_error_messages( $args );
+		$invalid_msg          = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+
+		if ( $field_error_messages ) {
+			$invalid_msg .= "<ul>$field_error_messages</ul>";
+		}
+
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
+	}
+
+	/**
+	 * Get clickable field error messages.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	private static function get_clickable_field_error_messages( $args ) {
+		if ( empty( $args['errors'] ) ) {
+			return '';
+		}
+
+		/**
+		 * Allows the list of clickable field errors to be turned off, leaving only the invalid
+		 * message on its own. Return false to opt a site, or a single form, out of the summary.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  $show_summary Whether to list each field that failed validation.
+		 * @param array $args         Includes 'form' and 'errors'.
+		 */
+		if ( ! apply_filters( 'frm_show_clickable_field_errors', true, $args ) ) {
+			return '';
+		}
+
+		// Parse each error key once into its field ID and container ID, skipping
+		// non-field errors like 'form' or 'spam' that have no input to link to.
+		$parsed_errors = array();
+		$field_ids     = array();
+
+		foreach ( $args['errors'] as $field_plus_id => $error ) {
+			if ( ! str_starts_with( $field_plus_id, 'field' ) ) {
+				continue;
+			}
+
+			if ( ! is_string( $error ) || '' === trim( $error ) ) {
+				// A combo field flags a sub field that failed with an empty error, which is a marker
+				// for the input rather than a message. Listing it would add an empty link.
+				continue;
+			}
+
+			// Everything after the 'field' prefix identifies the field in the DOM. It is the field
+			// ID on its own, plus a '-{sub_field}' suffix for a combo sub field such as a name or
+			// address line, a '-{section_id}-{row}' suffix for a field in a repeater row, or both.
+			$key_parts = explode( '-', substr( $field_plus_id, strlen( 'field' ) ) );
+			$field_id  = $key_parts[0];
+
+			if ( ! is_numeric( $field_id ) ) {
+				continue;
+			}
+
+			if ( count( $key_parts ) > 3 ) {
+				// A combo sub field inside a repeater row has no container of its own, so link to
+				// the row's container for the whole field. The front end script picks the sub input
+				// that failed out of it.
+				$key_parts = array_slice( $key_parts, 0, 3 );
+			}
+
+			// Link to the field container rather than to an input. Every field type renders one,
+			// with the same suffixes the error key carries, while the ID of the input inside it
+			// differs per field type, and several types have no input matching the field key at
+			// all. The container is also what the front end script uses to find the input to
+			// focus, so this stays correct for field types this file knows nothing about.
+			$container_id = 'frm_field_' . implode( '-', $key_parts ) . '_container';
+
+			$field_ids[]     = (int) $field_id;
+			$parsed_errors[] = compact( 'field_id', 'container_id', 'error' );
+		}//end foreach
+
+		if ( ! $field_ids ) {
+			return '';
+		}
+
+		$fields_by_id = self::get_error_fields_by_id( $args, $field_ids );
+
+		// Error messages are admin configured and may include shortcodes, so allow the same
+		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
+		// are intentionally excluded so a message link cannot nest inside the summary link.
+		$allowed_tags         = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
+		$field_error_messages = '';
+
+		foreach ( $parsed_errors as $parsed_error ) {
+			$field_id = (int) $parsed_error['field_id'];
+
+			if ( ! isset( $fields_by_id[ $field_id ] ) ) {
+				continue;
+			}
+
+			$field = $fields_by_id[ $field_id ];
+			$error = FrmAppHelper::kses( $parsed_error['error'], $allowed_tags );
+
+			if ( ! self::error_field_is_linkable( $field ) ) {
+				// The field has no focusable input on the page being shown (a hidden field, or a
+				// field on another page of a multi-page form), so list the error as plain text
+				// rather than a link that would go nowhere when clicked.
+				$field_error_messages .= '<li>' . $error . '</li>';
+				continue;
+			}
+
+			// The frm_error_link class is the hook the front end script uses to move focus into the
+			// field. Without JavaScript the browser still jumps to the container the link targets.
+			$field_error_messages .= '<li><a class="frm_error_link" href="#' . esc_attr( $parsed_error['container_id'] ) . '">' . $error . '</a></li>';
+		}//end foreach
+
+		return $field_error_messages;
+	}
+
+	/**
+	 * Map the errored field IDs to field data.
+	 *
+	 * The fields for the form have already been loaded to render or validate the submission,
+	 * so this reuses them (threaded down in $args, or the per-field cache warmed while
+	 * validating the entry) and only queries for any field it still cannot resolve, keeping
+	 * the error summary from adding a database round trip in the normal flow.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args      Includes optional 'fields'.
+	 * @param int[] $field_ids Field IDs referenced by the current errors.
+	 *
+	 * @return array Field objects keyed by field ID.
+	 */
+	private static function get_error_fields_by_id( $args, $field_ids ) {
+		$fields_by_id = array();
+
+		// Prefer the fields already prepared for the form being shown, threaded down in $args.
+		if ( ! empty( $args['fields'] ) && is_array( $args['fields'] ) ) {
+			foreach ( $args['fields'] as $field ) {
+				// Display fields arrive as arrays; normalize to the object shape used below.
+				$field = (object) $field;
+
+				if ( isset( $field->id ) ) {
+					$fields_by_id[ (int) $field->id ] = $field;
+				}
+			}
+		}
+
+		// Next, the per-field cache warmed while validating the entry (getAll caches every
+		// field by id), so an AJAX submit resolves its errored fields without a query.
+		foreach ( array_diff( $field_ids, array_keys( $fields_by_id ) ) as $field_id ) {
+			$cached = FrmDb::check_cache( $field_id, 'frm_field' );
+
+			if ( is_object( $cached ) ) {
+				$fields_by_id[ $field_id ] = $cached;
+			}
+		}
+
+		// Only touch the database for fields that are still unresolved.
+		$missing = array_diff( $field_ids, array_keys( $fields_by_id ) );
+
+		if ( ! $missing ) {
+			return $fields_by_id;
+		}
+
+		$fields = FrmDb::get_results( 'frm_fields', array( 'id' => array_values( $missing ) ), 'id,field_key,type,field_order,form_id' );
+
+		foreach ( $fields as $field ) {
+			$fields_by_id[ (int) $field->id ] = $field;
+		}
+
+		return $fields_by_id;
+	}
+
+	/**
+	 * Whether an error summary should link to the field, or just list its message as plain text.
+	 *
+	 * A link is only useful when the field renders a focusable input that is actually on the page
+	 * being shown. Hidden and user ID fields render as hidden inputs that cannot receive focus, and
+	 * a field on another page of a multi-page form is not visible, so neither should be linked.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field Field row with at least type, field_order and form_id.
+	 *
+	 * @return bool
+	 */
+	private static function error_field_is_linkable( $field ) {
+		if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
+			// Hidden inputs cannot receive focus, so there is nothing to link to.
+			return false;
+		}
+
+		if ( ! is_callable( 'FrmProFieldsHelper::field_on_current_page' ) ) {
+			// Multi-page forms are a Pro feature; in Lite every field is on the only page.
+			return true;
+		}
+
+		// On a multi-page form, do not link a field that is on a page other than the one being shown.
+		return FrmProFieldsHelper::field_on_current_page( $field );
 	}
 
 	/**
@@ -301,6 +500,9 @@ class FrmFormsHelper {
 	 *     @type stdClass $form
 	 *     @type int      $entry_id
 	 *     @type string   $class
+	 *     @type string   $role  Optional. ARIA live region role for the wrapper. Defaults to 'status'.
+	 *                           Pass 'alert' when the message reports a validation error so it is
+	 *                           announced assertively, matching the non-ajax error wrapper.
 	 * }
 	 *
 	 * @return string
@@ -328,7 +530,9 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
+		$role    = $atts['role'] ?? 'status';
+
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
 	}
 
 	/**
@@ -674,7 +878,10 @@ BEFORE_HTML;
 	/**
 	 * @since 4.0
 	 *
-	 * @param array $args
+	 * @param array $args Includes 'id', 'key', 'name', 'type' and 'class'. Optionally 'id_label'
+	 *                    and 'key_label' to show something other than the id or key, and
+	 *                    'name_suffix'/'key_suffix' for text appended after the name or key is
+	 *                    truncated, so a shortcode option like ' show=first' survives the truncation.
 	 *
 	 * @return void
 	 */
@@ -699,7 +906,8 @@ BEFORE_HTML;
 			$class .= ' frm_insert_url';
 		}
 
-		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
+		$full_name      = $args['name'] . ( $args['name_suffix'] ?? '' );
+		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 ) . ( $args['name_suffix'] ?? '' );
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
@@ -710,7 +918,11 @@ BEFORE_HTML;
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
-				echo esc_html( $truncated_name );
+				printf(
+					'<span title="%s">%s</span>',
+					esc_attr( $full_name ),
+					esc_html( $truncated_name )
+				);
 				?>
 				<span>[<?php echo esc_html( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>
@@ -720,9 +932,13 @@ BEFORE_HTML;
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
-				echo esc_html( $truncated_name );
+				printf(
+					'<span title="%s">%s</span>',
+					esc_attr( $full_name ),
+					esc_html( $truncated_name )
+				);
 				?>
-				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_html( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) . ( $args['key_suffix'] ?? '' ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
@@ -914,7 +1130,7 @@ BEFORE_HTML;
 			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
 			} elseif ( $code === 'entry_key' && ! empty( $_GET ) && isset( $_GET['entry'] ) ) {
-				$replace_with = FrmAppHelper::simple_get( 'entry' );
+				$replace_with = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
 			} else {
 				$replace_with = '';
 			}
@@ -1248,7 +1464,7 @@ BEFORE_HTML;
 			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
-					'label' => __( 'Duplicate Form', 'formidable' ),
+					'label' => __( 'Duplicate', 'formidable' ),
 					'icon'  => 'frmfont frm_clone_icon',
 				);
 			}

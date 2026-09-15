@@ -29,7 +29,7 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).first().type( 'Entry test' );
 		cy.get( '[id^="field_"][id$="_first"]' ).type( 'Name' );
 		cy.get( '[id^="field_"][id$="_last"]' ).type( 'Surname' );
-		cy.get( '[id^="frm_checkbox_"]' ).eq( 0 ).click();
+		cy.get( '[id^="frm_checkbox_"]' ).eq( 0 ).find( 'label' ).click();
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 5 ).type( 'test@test.com' );
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 6 ).type( '+1111111111' );
 		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
@@ -45,7 +45,7 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( ':nth-child(2) > th' ).should( 'contain', 'Name' );
 		cy.get( ':nth-child(2) > td' ).should( 'contain', 'Name Surname' );
 		cy.get( ':nth-child(3) > th' ).should( 'contain', 'Checkboxes' );
-		cy.get( ':nth-child(3) > td' ).should( 'contain', 'Option 1' );
+		cy.contains( 'th', 'Checkboxes' ).siblings( 'td' ).should( 'contain', 'Option 1' );
 		cy.get( ':nth-child(4) > th' ).should( 'contain', 'Email' );
 		cy.get( ':nth-child(4) > td' ).should( 'contain', 'test@test.com' );
 		cy.get( ':nth-child(5) > th' ).should( 'contain', 'Phone' );

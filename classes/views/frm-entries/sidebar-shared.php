@@ -1,4 +1,15 @@
 <?php
+/**
+ * Shared entry sidebar.
+ *
+ * @package Formidable
+ *
+ * @var string       $id      Entry ID.
+ * @var stdClass     $entry   Entry object.
+ * @var string|null  $browser Browser info string if available.
+ * @var array|null   $data    Additional entry meta data (referrer, user_journey, etc.).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

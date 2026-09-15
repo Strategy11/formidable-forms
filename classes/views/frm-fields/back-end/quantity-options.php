@@ -1,4 +1,12 @@
 <?php
+/**
+ * Quantity field product association setting.
+ *
+ * @package Formidable
+ *
+ * @var array $field Field data including 'id' and 'product_field'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

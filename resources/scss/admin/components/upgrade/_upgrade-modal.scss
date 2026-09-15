@@ -14,9 +14,20 @@
 		gap: var(--gap-sm);
 	}
 
-	.frm-upgrade-message img {
-		width: 100%;
-		margin: var(--gap-sm) 0 10px;
+	.frm-upgrade-message {
+
+		&[style*="display: none"] {
+
+			~ .frm-addon-status,
+			~ a.button {
+				margin-top: var(--gap-sm);
+			}
+		}
+
+		img {
+			width: 100%;
+			margin: var(--gap-sm) 0 10px;
+		}
 	}
 
 	.frm-oneclick.frm_hidden {

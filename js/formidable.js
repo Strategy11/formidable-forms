@@ -5,6 +5,9 @@ function frmFrontFormJS() {
 
 	let jsErrors = [];
 
+	// Controls a field can hand focus to when an error summary link is clicked.
+	const FOCUSABLE_FIELD_SELECTOR = 'input:not([type="hidden"]), select, textarea, button, [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
 	/**
 	 * Triggers custom JS event.
 	 *
@@ -282,9 +285,12 @@ function frmFrontFormJS() {
 			maybeAddHttpsToUrl( field );
 		}
 		const form = field.closest( 'form' );
-		if ( form && hasClass( form, 'frm_js_validate' ) ) {
-			validateField( field );
+		if ( ! form ) {
+			return;
 		}
+
+		// Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+		validateField( field, hasClass( form, 'frm_js_validate' ) );
 	}
 
 	/**
@@ -301,11 +307,16 @@ function frmFrontFormJS() {
 	/**
 	 * Validate a field with JS.
 	 *
+	 * Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+	 *
+	 * @since 6.32 Added the `addErrors` parameter.
+	 *
 	 * @param {HTMLElement} field
+	 * @param {boolean}     addErrors Whether to add new errors. Defaults to `true`.
 	 *
 	 * @return {void}
 	 */
-	function validateField( field ) {
+	function validateField( field, addErrors = true ) {
 		let errors;
 		let key;
 
@@ -325,11 +336,18 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
-		removeFieldError( fieldContainer );
-		if ( Object.keys( errors ).length > 0 ) {
-			for ( key in errors ) {
-				addFieldError( fieldContainer, key, errors );
+		const hasErrors = Object.keys( errors ).length > 0;
+
+		if ( addErrors ) {
+			removeFieldError( fieldContainer );
+			if ( hasErrors ) {
+				for ( key in errors ) {
+					addFieldError( fieldContainer, key, errors );
+				}
 			}
+		} else if ( ! hasErrors ) {
+			// JS validation is off, so only remove existing errors once the field passes validation.
+			removeFieldError( fieldContainer );
 		}
 	}
 
@@ -883,6 +901,8 @@ function frmFrontFormJS() {
 				}
 			}
 
+			let willRedirect = false;
+
 			if ( response.redirect !== undefined ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
@@ -896,6 +916,8 @@ function frmFrontFormJS() {
 				} else {
 					doRedirect( response );
 				}
+
+				willRedirect = true;
 			}
 
 			if ( 'string' === typeof response.content && response.content !== '' ) {
@@ -940,7 +962,7 @@ function frmFrontFormJS() {
 					},
 					delay
 				);
-			} else if ( Object.keys( response.errors ).length ) {
+			} else if ( response.errors !== undefined && Object.keys( response.errors ).length ) {
 				// errors were returned
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
@@ -1007,8 +1029,8 @@ function frmFrontFormJS() {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
-			} else {
-				// there may have been a plugin conflict, or the form is not set to submit with ajax
+			} else if ( ! willRedirect ) { // Avoid double submission if redirecting to a page.
+				// There may have been a plugin conflict, or the form is not set to submit with ajax.
 
 				showFileLoading( object );
 
@@ -1140,10 +1162,10 @@ function frmFrontFormJS() {
 		}
 
 		container.classList.add( 'frm_blank_field' );
-		const input = container.querySelector( 'input, select, textarea' );
-		const id = getErrorElementId( key, input );
+		const inputs = container.querySelectorAll( 'input, select, textarea' );
+		const id = getErrorElementId( key, inputs[ 0 ] );
 
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		let describedBy;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1156,8 +1178,8 @@ function frmFrontFormJS() {
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
-
-			if ( input ) {
+			inputs.forEach( input => {
+				describedBy = input.getAttribute( 'aria-describedby' );
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
@@ -1169,10 +1191,10 @@ function frmFrontFormJS() {
 					}
 				}
 				input.setAttribute( 'aria-describedby', describedBy );
-			}
+			} );
 		}
 
-		if ( input ) {
+		inputs.forEach( input => {
 			if ( [ 'radio', 'checkbox' ].includes( input.type ) ) {
 				const group = input.closest( '[role="radiogroup"], [role="group"]' );
 				if ( group ) {
@@ -1181,7 +1203,7 @@ function frmFrontFormJS() {
 			} else {
 				input.setAttribute( 'aria-invalid', 'true' );
 			}
-		}
+		} );
 
 		jQuery( document ).trigger( 'frmAddFieldError', [ jQuery( container ), key, jsErrors ] );
 	}
@@ -1215,9 +1237,7 @@ function frmFrontFormJS() {
 		}
 
 		const errorMessage = container.querySelector( '.frm_error' );
-		const errorId = errorMessage ? errorMessage.id : '';
 		const input = container.querySelector( 'input, select, textarea' );
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
 
@@ -1233,25 +1253,43 @@ function frmFrontFormJS() {
 		}
 
 		if ( errorMessage ) {
+			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
 		}
+	}
 
-		if ( input ) {
-			input.removeAttribute( 'aria-describedby' );
-			if ( describedBy ) {
-				describedBy = describedBy.replace( errorId, '' ).trim();
-				if ( describedBy ) {
-					input.setAttribute( 'aria-describedby', describedBy );
-				}
+	/**
+	 * Updates the aria-describedby attribute, removing the target element ID.
+	 *
+	 * @since 6.32
+	 *
+	 * @param {HTMLElement} el The target element that is removed from the aria-describedby data.
+	 * @return {void}
+	 */
+	function removeElementFromInputDescribedBy( el ) {
+		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
+			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
+			ariaDescribedBy = ariaDescribedBy.filter( value => {
+				const trimmedValue = value.trim();
+				return trimmedValue && trimmedValue !== el.id;
+			} );
+
+			if ( ariaDescribedBy.length ) {
+				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
+				return;
 			}
-		}
+			input.removeAttribute( 'aria-describedby' );
+		} );
 	}
 
 	function removeAllErrors() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( error => error.remove() );
+		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+			removeElementFromInputDescribedBy( el );
+			el.remove();
+		} );
 		document.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
 	}
 
@@ -1460,6 +1498,122 @@ function frmFrontFormJS() {
 		} else {
 			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input } );
 		}
+	}
+
+	/**
+	 * Move focus into the field that an error summary link points at.
+	 *
+	 * The link targets the field container, not an input, because the ID of the input inside it
+	 * varies by field type. Several types render no input matching the field key at all (name,
+	 * address, time, star, scale, GDPR, ranking), and others render one that cannot take focus
+	 * (the file field hides its input behind a dropzone, NPS and Likert use the field key on a
+	 * wrapping div). Resolving the input here keeps every field type working, including types
+	 * that come from add-ons.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event Click event on the summary link.
+	 * @return {void}
+	 */
+	function focusFieldFromErrorLink( event ) {
+		const href = this.getAttribute( 'href' );
+
+		if ( ! href || ! href.startsWith( '#' ) ) {
+			return;
+		}
+
+		const container = document.getElementById( href.substring( 1 ) );
+
+		if ( ! container ) {
+			return;
+		}
+
+		event.preventDefault();
+		container.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+
+		const input = getFocusableInputInField( container );
+
+		if ( input ) {
+			focusInput( input );
+			return;
+		}
+
+		// Nothing inside can take focus, so focus the container instead. Its label is read out,
+		// which is still better than leaving focus on the summary link.
+		container.setAttribute( 'tabindex', '-1' );
+		focusInput( container );
+	}
+
+	/**
+	 * Get the input an error summary link should move focus to.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} container Field container.
+	 * @return {HTMLElement|null} The input to focus, or null when the field has none.
+	 */
+	function getFocusableInputInField( container ) {
+		const inputs = Array.from( container.querySelectorAll( FOCUSABLE_FIELD_SELECTOR ) ).filter( inputCanTakeFocus );
+
+		if ( ! inputs.length ) {
+			return null;
+		}
+
+		// A combo field such as name or address marks the sub field that failed validation, so
+		// prefer it over the first sub field.
+		const invalidInput = inputs.find( input => 'true' === input.getAttribute( 'aria-invalid' ) );
+
+		if ( invalidInput ) {
+			return invalidInput;
+		}
+
+		// Nothing is flagged, which is what a required field with several inputs looks like when
+		// only some of them were filled in. Focus the first one still waiting on a value rather
+		// than the first input of the field, which the user has usually already completed.
+		return inputs.find( fieldInputIsEmpty ) || inputs[ 0 ];
+	}
+
+	/**
+	 * Check if an input is still waiting on a value.
+	 *
+	 * Only inputs that carry their own value count. A checkbox or radio is empty until the group
+	 * as a whole is answered, so the first one in a group is no more blank than the rest of it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when the input has no value yet.
+	 */
+	function fieldInputIsEmpty( input ) {
+		if ( 'BUTTON' === input.nodeName || [ 'button', 'checkbox', 'file', 'radio', 'submit' ].includes( input.type ) ) {
+			return false;
+		}
+
+		return '' === String( input.value || '' ).trim();
+	}
+
+	/**
+	 * Check that an input is able to receive focus, so a summary link never focuses something
+	 * the user cannot see. A hidden or zero sized input is skipped in favour of the visible
+	 * control that stands in for it, for example the dropzone button of a file field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when focusing the input would put the cursor somewhere visible.
+	 */
+	function inputCanTakeFocus( input ) {
+		if ( input.disabled || 'hidden' === input.type ) {
+			return false;
+		}
+
+		const rect = input.getBoundingClientRect();
+
+		if ( ! rect.width && ! rect.height ) {
+			return false;
+		}
+
+		return 'hidden' !== getComputedStyle( input ).visibility;
 	}
 
 	/**
@@ -2170,6 +2324,9 @@ function frmFrontFormJS() {
 
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
+
+			// Move focus into the field when an error summary link is clicked.
+			documentOn( 'click', '.frm_error_link', focusFieldFromErrorLink );
 
 			initFloatingLabels();
 			maybeShowNewTabFallbackMessage();

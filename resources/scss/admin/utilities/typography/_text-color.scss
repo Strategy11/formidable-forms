@@ -27,7 +27,7 @@
 }
 
 .frm-text-grey-800 {
-	color: var(--grey-800);
+	color: var(--grey-800) !important;
 }
 
 .frm-text-grey-900 {
@@ -40,4 +40,8 @@
 
 .frm-text-warning-500 {
 	color: var(--warning-500);
+}
+
+.frm-text-primary-700 {
+	color: var(--primary-700);
 }

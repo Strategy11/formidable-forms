@@ -110,6 +110,7 @@
 	<rule ref="SlevomatCodingStandard.Files.LineLength">
 		<properties>
 			<property name="lineLengthLimit" value="180" />
+			<property name="ignoreComments" value="true"/>
 		</properties>
 		<exclude-pattern>views/*</exclude-pattern>
 		<exclude-pattern>css/*</exclude-pattern>
@@ -164,6 +165,9 @@
 		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
 		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntryFormatter.php</exclude-pattern>
+		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
+		<exclude-pattern>paypal/controllers/FrmPayPalLiteActionsController.php</exclude-pattern>
+		<exclude-pattern>paypal/helpers/FrmPayPalLiteConnectHelper.php</exclude-pattern>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">

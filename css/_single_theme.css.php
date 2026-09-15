@@ -109,10 +109,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	grid-template-columns: auto <?php echo esc_html( $width ); ?>;
 }
 
-.frm_form_field.frm_right_container{
-	grid-template-columns: auto 25%;
-}
-
 .<?php echo esc_html( $style_class ); ?> .frm_inline_container.frm_dynamic_select_container .frm_data_container,
 .<?php echo esc_html( $style_class ); ?> .frm_inline_container.frm_dynamic_select_container .frm_opt_container{
 	display:inline<?php echo esc_html( $important ); ?>;
@@ -315,6 +311,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 			max-width:var(--submit-width)<?php echo esc_html( $important ); ?>;
 		<?php } ?>
 }
+.<?php echo esc_html( $style_class ); ?> input[type=submit][disabled],
+.<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button][disabled],
+.<?php echo esc_html( $style_class ); ?> .frm_submit button[disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
 		<?php
 	}//end if
 }//end if
@@ -414,6 +416,41 @@ endif;
 	font-size:var(--error-font-size)<?php echo esc_html( $important ); ?>;
 	margin:0;
 	margin-bottom:var(--field-margin);
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style span{
+	font-weight: bold<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul{
+	list-style: disc outside !important;
+	color: var(--error-text)<?php echo esc_html( $important ); ?>;
+	margin: 0 !important;
+	margin-block-start: 0.25em !important;
+	padding: 0 !important;
+	padding-inline-start: 1.25em !important;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li{
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li + li{
+	margin-block-start: 0.25em !important;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a{
+	color: var(--error-text)<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:hover{
+	text-decoration: underline<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:focus-visible{
+	outline: 2px solid var(--error-text) !important;
+	outline-offset: 2px !important;
 }
 
 <?php if ( $pro_is_installed ) { ?>

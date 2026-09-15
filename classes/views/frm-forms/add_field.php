@@ -63,7 +63,18 @@ do_action( 'frm_extra_field_actions', $field['id'] );
 	<?php } ?>
 </div>
 <?php
-if ( $display['conf_field'] ) {
+/**
+ * Fires after a field's box in the form builder, before the field settings.
+ *
+ * @since 6.32
+ *
+ * @param array{field:array, display:array} $args Contains the `field` and `display` arrays.
+ */
+do_action( 'frm_builder_preview_after_field', compact( 'field', 'display' ) );
+
+if ( $display['conf_field'] && ! is_callable( 'FrmProFieldsController::add_confirmation_field_preview' ) ) {
+	// Backward compatibility for Pro versions that render the confirmation field
+	// preview from here instead of via the frm_builder_preview_after_field hook.
 	$input_html = sprintf(
 		'<input type="text" id="conf_field_%1$s" name="field_options[conf_input_%2$s]" placeholder="%3$s" class="dyn_default_value" />',
 		esc_attr( $field['field_key'] ),

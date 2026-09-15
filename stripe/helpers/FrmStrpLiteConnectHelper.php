@@ -154,10 +154,6 @@ class FrmStrpLiteConnectHelper {
 		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
 
-		if ( ! $headers ) {
-			return 'Unable to build headers for post. Is your pro license configured properly?';
-		}
-
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;
 
@@ -267,7 +263,7 @@ class FrmStrpLiteConnectHelper {
 	private static function handle_disconnect() {
 		self::disconnect();
 		self::reset_stripe_connect_integration();
-		self::maybe_unschedule_crons();
+		FrmTransLiteAppHelper::trigger_gateway_disconnected_hook( 'stripe', self::get_mode_value_from_post() );
 		wp_send_json_success();
 	}
 
@@ -288,31 +284,9 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function disconnect() {
-		$additional_body = array(
-			'frm_strp_connect_mode' => self::get_mode_value_from_post(),
-		);
+		$mode            = self::get_mode_value_from_post();
+		$additional_body = self::get_body_for_mode( $mode );
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
-	}
-
-	/**
-	 * Stop the payment cron once all Stripe connections have been disconnected.
-	 *
-	 * @since 6.5
-	 *
-	 * @return void
-	 */
-	private static function maybe_unschedule_crons() {
-		if ( self::at_least_one_mode_is_setup() ) {
-			// Don't unschedule if a mode is still on.
-			return;
-		}
-
-		$event     = 'frm_payment_cron';
-		$timestamp = wp_next_scheduled( $event );
-
-		if ( false !== $timestamp ) {
-			wp_unschedule_event( $timestamp, $event );
-		}
 	}
 
 	/**
@@ -328,14 +302,13 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function handle_reauth() {
-		$additional_body = array(
-			'frm_strp_connect_mode' => self::get_mode_value_from_post(),
-		);
+		$mode            = self::get_mode_value_from_post();
+		$additional_body = self::get_body_for_mode( $mode );
 		$data            = self::post_with_authenticated_body( 'reauth', $additional_body );
 
 		if ( false === $data ) {
 			// Check account status.
-			if ( self::check_server_for_connected_account_status() ) {
+			if ( self::check_server_for_connected_account_status( $mode ) ) {
 				wp_send_json_success();
 			}
 
@@ -352,11 +325,24 @@ class FrmStrpLiteConnectHelper {
 	 * @return array
 	 */
 	private static function get_standard_authenticated_body() {
-		$mode = self::get_mode_value_from_post();
+		return self::get_body_for_mode( FrmStrpLiteAppHelper::active_mode() );
+	}
+
+	/**
+	 * Get the standard body with account id, mode, and passwords to send to the connect server.
+	 *
+	 * @since 6.32.1
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return array
+	 */
+	private static function get_body_for_mode( $mode ) {
 		return array(
-			'account_id'      => get_option( self::get_account_id_option_name( $mode ) ),
-			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'account_id'            => get_option( self::get_account_id_option_name( $mode ) ),
+			'server_password'       => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'       => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_strp_connect_mode' => $mode,
 		);
 	}
 
@@ -423,10 +409,15 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function handle_oauth() {
-		$response_data = array(
-			'redirect_url' => self::get_oauth_redirect_url(),
-		);
-		wp_send_json_success( $response_data );
+		$redirect_url = self::get_oauth_redirect_url();
+
+		if ( false === $redirect_url ) {
+			// Nothing to redirect to — let the button re-render instead of sending a
+			// falsy redirect_url the frontend would otherwise navigate to as a string.
+			wp_send_json_success();
+		}
+
+		wp_send_json_success( array( 'redirect_url' => $redirect_url ) );
 	}
 
 	/**
@@ -466,18 +457,24 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
+	 * @param string $mode
+	 *
 	 * @return bool true if our account is onboarded
 	 */
-	public static function check_server_for_connected_account_status() {
-		$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
+	public static function check_server_for_connected_account_status( $mode = 'check_get' ) {
+		if ( 'check_get' === $mode ) {
+			$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
 
-		if ( 'live' !== $mode ) {
-			$mode = 'test';
+			if ( 'live' !== $mode ) {
+				$mode = 'test';
+			}
 		}
 
-		$additional_body = array(
-			'frm_strp_connect_mode' => $mode,
-		);
+		if ( self::stripe_connect_is_setup( $mode ) ) {
+			return false;
+		}
+
+		$additional_body = self::get_body_for_mode( $mode );
 		$data            = self::post_with_authenticated_body( 'account_status', $additional_body );
 		$success         = false !== $data && ! empty( $data->details_submitted );
 
@@ -725,7 +722,18 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$body = array_merge( self::get_standard_authenticated_body(), $additional_body );
+
+		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'stripe', $body['frm_strp_connect_mode'] ) ) {
+			// There are no credentials for this mode, so the connect server would reject the request
+			// with an error about the signature. Report the missing connection instead.
+			// An account that has credentials but never finished onboarding is not blocked here,
+			// since the account status check is what moves it out of that state.
+			self::$latest_error_from_stripe_connect = FrmTransLiteAppHelper::get_gateway_connection_error( 'stripe', $body['frm_strp_connect_mode'] );
+			FrmTransLiteLog::log_message( 'Stripe Connect Error', self::$latest_error_from_stripe_connect );
+			return false;
+		}
+
 		$response = self::post_to_connect_server( $action, $body );
 
 		if ( is_object( $response ) ) {
