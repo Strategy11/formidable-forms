@@ -5,6 +5,9 @@ function frmFrontFormJS() {
 
 	let jsErrors = [];
 
+	// Controls a field can hand focus to when an error summary link is clicked.
+	const FOCUSABLE_FIELD_SELECTOR = 'input:not([type="hidden"]), select, textarea, button, [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
 	/**
 	 * Triggers custom JS event.
 	 *
@@ -1498,6 +1501,122 @@ function frmFrontFormJS() {
 	}
 
 	/**
+	 * Move focus into the field that an error summary link points at.
+	 *
+	 * The link targets the field container, not an input, because the ID of the input inside it
+	 * varies by field type. Several types render no input matching the field key at all (name,
+	 * address, time, star, scale, GDPR, ranking), and others render one that cannot take focus
+	 * (the file field hides its input behind a dropzone, NPS and Likert use the field key on a
+	 * wrapping div). Resolving the input here keeps every field type working, including types
+	 * that come from add-ons.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event Click event on the summary link.
+	 * @return {void}
+	 */
+	function focusFieldFromErrorLink( event ) {
+		const href = this.getAttribute( 'href' );
+
+		if ( ! href || ! href.startsWith( '#' ) ) {
+			return;
+		}
+
+		const container = document.getElementById( href.substring( 1 ) );
+
+		if ( ! container ) {
+			return;
+		}
+
+		event.preventDefault();
+		container.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+
+		const input = getFocusableInputInField( container );
+
+		if ( input ) {
+			focusInput( input );
+			return;
+		}
+
+		// Nothing inside can take focus, so focus the container instead. Its label is read out,
+		// which is still better than leaving focus on the summary link.
+		container.setAttribute( 'tabindex', '-1' );
+		focusInput( container );
+	}
+
+	/**
+	 * Get the input an error summary link should move focus to.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} container Field container.
+	 * @return {HTMLElement|null} The input to focus, or null when the field has none.
+	 */
+	function getFocusableInputInField( container ) {
+		const inputs = Array.from( container.querySelectorAll( FOCUSABLE_FIELD_SELECTOR ) ).filter( inputCanTakeFocus );
+
+		if ( ! inputs.length ) {
+			return null;
+		}
+
+		// A combo field such as name or address marks the sub field that failed validation, so
+		// prefer it over the first sub field.
+		const invalidInput = inputs.find( input => 'true' === input.getAttribute( 'aria-invalid' ) );
+
+		if ( invalidInput ) {
+			return invalidInput;
+		}
+
+		// Nothing is flagged, which is what a required field with several inputs looks like when
+		// only some of them were filled in. Focus the first one still waiting on a value rather
+		// than the first input of the field, which the user has usually already completed.
+		return inputs.find( fieldInputIsEmpty ) || inputs[ 0 ];
+	}
+
+	/**
+	 * Check if an input is still waiting on a value.
+	 *
+	 * Only inputs that carry their own value count. A checkbox or radio is empty until the group
+	 * as a whole is answered, so the first one in a group is no more blank than the rest of it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when the input has no value yet.
+	 */
+	function fieldInputIsEmpty( input ) {
+		if ( 'BUTTON' === input.nodeName || [ 'button', 'checkbox', 'file', 'radio', 'submit' ].includes( input.type ) ) {
+			return false;
+		}
+
+		return '' === String( input.value || '' ).trim();
+	}
+
+	/**
+	 * Check that an input is able to receive focus, so a summary link never focuses something
+	 * the user cannot see. A hidden or zero sized input is skipped in favour of the visible
+	 * control that stands in for it, for example the dropzone button of a file field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when focusing the input would put the cursor somewhere visible.
+	 */
+	function inputCanTakeFocus( input ) {
+		if ( input.disabled || 'hidden' === input.type ) {
+			return false;
+		}
+
+		const rect = input.getBoundingClientRect();
+
+		if ( ! rect.width && ! rect.height ) {
+			return false;
+		}
+
+		return 'hidden' !== getComputedStyle( input ).visibility;
+	}
+
+	/**
 	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
 	 *
 	 * @since 5.4
@@ -2205,6 +2324,9 @@ function frmFrontFormJS() {
 
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
+
+			// Move focus into the field when an error summary link is clicked.
+			documentOn( 'click', '.frm_error_link', focusFieldFromErrorLink );
 
 			initFloatingLabels();
 			maybeShowNewTabFallbackMessage();

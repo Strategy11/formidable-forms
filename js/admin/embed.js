@@ -385,7 +385,7 @@
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
 				example: `[formidable id=${ formId }]`,
-				link: 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually',
+				link: buildKbLink( 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually', 'embed-modal', 'shortcode-docs' ),
 				linkLabel: __( 'How to use shortcodes in WordPress', 'formidable' )
 			},
 			{
@@ -398,6 +398,29 @@
 		examples = wp.hooks.applyFilters( 'frmEmbedFormExamples', examples, filterArgs );
 
 		return examples;
+	}
+
+	/**
+	 * Tag a KB link with UTM params, resolving utm_medium the same way the PHP call
+	 * sites in this same fix do (frmGlobal.utmMedium, localized from
+	 * FrmAppHelper::get_utm_medium()) so a Pro-connected site isn't tagged as Lite.
+	 *
+	 * @param {string} url      Base KB URL.
+	 * @param {string} campaign utm_campaign value.
+	 * @param {string} content  utm_content value.
+	 * @return {string} The tagged URL.
+	 */
+	function buildKbLink( url, campaign, content ) {
+		const urlObj = new URL( url );
+		const searchParams = new URLSearchParams( urlObj.search );
+
+		searchParams.set( 'utm_source', 'plugin' );
+		searchParams.set( 'utm_medium', frmGlobal.utmMedium );
+		searchParams.set( 'utm_campaign', campaign );
+		searchParams.set( 'utm_content', content );
+
+		urlObj.search = searchParams.toString();
+		return urlObj.toString();
 	}
 
 	function getEmbedExample( { label, example, link, linkLabel } ) {

@@ -29,6 +29,20 @@
 		initListPage();
 	}
 
+	/**
+	 * The "Quick Settings" swatches (Primary, Field Text, Field Border, Button Text) each summarize a single
+	 * underlying setting, but have no name attribute of their own, so they can't be found and updated by the
+	 * main reset loop in syncEditPageAfterResetAction(). This maps the setting key to that swatch's fixed id.
+	 *
+	 * @type {Object<string, string>}
+	 */
+	const QUICK_SETTINGS_SWATCH_IDS = {
+		submit_bg_color: 'frm_style_qsettings_submit_bg_color',
+		text_color: 'frm_style_qsettings_text_color',
+		border_color: 'frm_style_qsettings_border_color',
+		submit_text_color: 'frm_style_qsettings_submit_text_color'
+	};
+
 	initCommonEventListeners();
 	initPreview();
 	fixWpAuthModal();
@@ -717,8 +731,13 @@
 			child: svg( { href: '#frm_thick_more_vert_icon' } )
 		} );
 		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
-		hamburgerMenu.setAttribute( 'data-bs-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
+
+		// Style cards sit inside several overflow: hidden ancestors, which Popper treats
+		// as clipping parents and then positions from a broken rectangle. Static display
+		// opts out of Popper so the menu is placed by CSS, matching the More Options
+		// dropdown in admin.js.
+		hamburgerMenu.setAttribute( 'data-bs-display', 'static' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
 		const isTemplate = data.templateKey !== undefined;
@@ -732,6 +751,20 @@
 		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
+
+		// Static display has no flip of its own, so open upwards when the menu would
+		// otherwise run past the bottom of the panel it scrolls in.
+		hamburgerMenu.addEventListener( 'shown.bs.dropdown', () => {
+			const scroller = hamburgerMenu.closest( '#frm_style_sidebar' ) || document.documentElement;
+
+			// Measure from the default downward position. The class survives the close,
+			// so leaving it on would measure the already-corrected menu, conclude it
+			// fits, and drop it back below — every second open would be wrong.
+			dropdownMenu.classList.remove( 'frm-dropdown-menu-above' );
+
+			const overflowsBelow = dropdownMenu.getBoundingClientRect().bottom > scroller.getBoundingClientRect().bottom;
+			dropdownMenu.classList.toggle( 'frm-dropdown-menu-above', overflowsBelow );
+		} );
 
 		fillDropdownMenuOnFirstOpen( hamburgerMenu, dropdownMenu, data, isTemplate );
 
@@ -1143,7 +1176,7 @@
 			resetStyleOnListPage( styleId );
 			return;
 		}
-		resetStyleOnEditPage();
+		resetStyleOnEditPage( styleId );
 	}
 
 	/**
@@ -1155,6 +1188,7 @@
 	function resetStyleOnListPage( styleId ) {
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
+		formData.append( 'persist', '1' );
 		doJsonPost( 'settings_reset', formData ).then(
 			response => {
 				const card = getCardByStyleId( styleId );
@@ -1175,15 +1209,17 @@
 	/**
 	 * Reset the style in-page (without actually updating it).
 	 *
+	 * @param {string} styleId
 	 * @return {void}
 	 */
-	function resetStyleOnEditPage() {
+	function resetStyleOnEditPage( styleId ) {
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_settings_reset',
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				style_id: styleId
 			},
 			success: syncEditPageAfterResetAction
 		} );
@@ -1226,12 +1262,47 @@
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
 				jQuery( targetInput ).trigger( 'change' );
 			}
+
+			syncQuickSettingsSwatch( key, defaultValues[ key ] );
 		}
 
 		resetCustomCSSEditor();
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
+	}
+
+	/**
+	 * Sync a "Quick Settings" summary swatch (see QUICK_SETTINGS_SWATCH_IDS) to a reset setting's new value.
+	 * Without this, a swatch keeps showing its pre-reset color even though the underlying setting did reset.
+	 *
+	 * @param {string} key
+	 * @param {string} value
+	 * @return {void}
+	 */
+	function syncQuickSettingsSwatch( key, value ) {
+		const swatchId = QUICK_SETTINGS_SWATCH_IDS[ key ];
+		if ( ! swatchId ) {
+			return;
+		}
+
+		const swatch = document.getElementById( swatchId );
+		if ( ! swatch ) {
+			return;
+		}
+
+		// Stored hex colors have no leading '#'. PHP adds it at render time (FrmStylesHelper::get_color_output()); match that here.
+		const color = /^[0-9a-f]{3,8}$/i.test( value ) ? `#${ value }` : value;
+
+		// Keeps Iris's own internal color state correct for if the picker is opened again.
+		jQuery( swatch ).wpColorPicker( 'color', color );
+
+		// The swatch button's own background is blanked out by CSS in this UI (see .frm-style-component .wp-picker-container button),
+		// so its text label is the only part actually visible, and it needs to be updated directly.
+		const resultText = swatch.closest( '.wp-picker-container' )?.querySelector( '.wp-color-result-text' );
+		if ( resultText ) {
+			resultText.textContent = color;
+		}
 	}
 
 	/**
