@@ -5065,11 +5065,19 @@ class FrmAppHelper {
 	/**
 	 * Removes scripts that are unnecessarily loaded across the pages!
 	 *
+	 * Both scripts are only ever enqueued on the form builder page (Surveys'
+	 * Likert row controls, Quizzes' form action settings), so skip on that
+	 * page or this dequeues scripts the page itself actually needs.
+	 *
 	 * @since 6.9
 	 *
 	 * @return void
 	 */
 	public static function dequeue_extra_global_scripts() {
+		if ( self::is_form_builder_page() ) {
+			return;
+		}
+
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
