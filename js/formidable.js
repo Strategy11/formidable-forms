@@ -1192,6 +1192,24 @@ function frmFrontFormJS() {
 		return formEl.frmErrorConfigCache;
 	}
 
+	/**
+	 * Inserts error HTML into a field's container, tagging every inserted top-level
+	 * element with a data-frm-error attribute. removeFieldError()/removeAllErrors() rely
+	 * on that attribute (rather than the frm_error class) to find and remove it again,
+	 * since a site's own custom field HTML template can render the [error] placeholder
+	 * without a frm_error class or id, and errors that can't be found never get removed.
+	 *
+	 * @param {HTMLElement} container
+	 * @param {string}      errorHtml
+	 * @return {void}
+	 */
+	function insertErrorHtml( container, errorHtml ) {
+		const template = document.createElement( 'template' );
+		template.innerHTML = errorHtml;
+		Array.from( template.content.children ).forEach( el => el.setAttribute( 'data-frm-error', '' ) );
+		container.append( template.content );
+	}
+
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
@@ -1216,7 +1234,7 @@ function frmFrontFormJS() {
 				const roleString = config.includeAlertRole ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
-			container.insertAdjacentHTML( 'beforeend', errorHtml );
+			insertErrorHtml( container, errorHtml );
 			inputs.forEach( input => {
 				describedBy = input.getAttribute( 'aria-describedby' );
 				if ( ! describedBy ) {
@@ -1275,7 +1293,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const errorMessage = container.querySelector( '.frm_error' );
+		const errorMessage = container.querySelector( '.frm_error, [data-frm-error]' );
 		const input = container.querySelector( 'input, select, textarea' );
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
@@ -1325,7 +1343,7 @@ function frmFrontFormJS() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+		document.querySelectorAll( '.form-field .frm_error, .form-field [data-frm-error]' ).forEach( el => {
 			removeElementFromInputDescribedBy( el );
 			el.remove();
 		} );
@@ -1473,7 +1491,7 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error, .frm_form_field [data-frm-error]' );
 		if ( ! errors.length ) {
 			return;
 		}
