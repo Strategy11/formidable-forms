@@ -115,8 +115,10 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		if ( ! self::square_is_configured() ) {
-			$response['error'] = __( 'Square still needs to be configured.', 'formidable' );
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'square' );
+
+		if ( $connection_error ) {
+			$response['error'] = $connection_error;
 			return $response;
 		}
 
@@ -391,15 +393,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			default:
 				return 'day';
 		}//end switch
-	}
-
-	/**
-	 * Check if Square integration is enabled.
-	 *
-	 * @return bool true if Square is set up.
-	 */
-	private static function square_is_configured() {
-		return (bool) FrmSquareLiteConnectHelper::get_merchant_id();
 	}
 
 	/**
