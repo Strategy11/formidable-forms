@@ -100,29 +100,37 @@ describe( 'Slider style component', () => {
 
 		const slider = getSingleSlider( '#frm_submit_width' );
 
-		cy.log( 'Force the unit to "auto" and confirm the range is disabled and announces the keyword' );
+		cy.log( 'Force the unit to "auto" and confirm the range and text box are both disabled, with no duplicated "auto" text' );
 		slider.select.select( 'auto' );
 		slider.range.should( 'be.disabled' );
 		slider.range.should( 'have.attr', 'aria-valuetext', 'auto' );
+		slider.text.should( 'be.disabled' ).and( 'have.value', '' );
 		slider.hidden.should( 'have.value', 'auto' );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).should( 'have.class', 'frm-disabled' );
 
-		cy.log( 'Switching to a measured unit re-enables the range and drops the "auto" value' );
+		cy.log( 'Switching to a measured unit re-enables both the range and the text box' );
 		slider.select.select( 'px' );
 		slider.range.should( 'not.be.disabled' );
+		slider.text.should( 'not.be.disabled' );
 		slider.hidden.invoke( 'val' ).should( 'match', /^\d+px$/ );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).should( 'not.have.class', 'frm-disabled' );
 
 		cy.log( 'The numeric value survives a save' );
 		cy.get( '#frm_submit_side_top' ).click( { force: true } );
 		cy.get( '#frm_submit_width' ).invoke( 'val' ).should( 'match', /^\d+px$/ );
 		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( 'input[type="range"]' ).should( 'not.be.disabled' );
 
-		cy.log( 'Switching back to "auto" and saving persists the disabled, unmeasured state too' );
+		cy.log( 'Switching back to "auto" and saving persists the disabled, blank, unmeasured state too' );
 		cy.get( '#buttons-style button[aria-label="Buttons"]' ).click();
 		cy.get( '#frm_style_section_buttons-style' ).should( 'be.visible' );
 		getSingleSlider( '#frm_submit_width' ).select.select( 'auto' );
 		cy.get( '#frm_submit_side_top' ).click( { force: true } );
 		cy.get( '#frm_submit_width' ).should( 'have.value', 'auto' );
+
+		cy.log( 'Reloading confirms the disabled, blank state is server-rendered on the very first paint, not just applied live by JS' );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).should( 'have.class', 'frm-disabled' );
 		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( 'input[type="range"]' ).should( 'be.disabled' );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( '.frm-slider-value input[type="text"]' ).should( 'be.disabled' ).and( 'have.value', '' );
 	} );
 
 	it( 'Slider components in the General section have no accessibility violations', () => {

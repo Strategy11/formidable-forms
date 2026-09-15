@@ -37,8 +37,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
-		// A keyword value like 'auto' has no number to cast - only an actual measurement unit does.
-		$this->data['value_label'] = self::is_measured_unit( $this->data['unit_measurement'] ) ? (float) $field_value : $field_value;
+		$this->data['value_label']         = self::measured_value( $field_value, $this->data['unit_measurement'] );
 
 		$this->init_defaults();
 		$this->init_icon();
@@ -233,32 +232,32 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$this->data['vertical'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => self::is_measured_unit( $this->detect_unit_measurement( $top ) ) ? (float) $top : $top,
+			'value' => self::measured_value( $top, $this->detect_unit_measurement( $top ) ),
 		);
 
 		$this->data['horizontal'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => self::is_measured_unit( $this->detect_unit_measurement( $right ) ) ? (float) $right : $right,
+			'value' => self::measured_value( $right, $this->detect_unit_measurement( $right ) ),
 		);
 
 		$this->data['top'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => self::is_measured_unit( $this->detect_unit_measurement( $top ) ) ? (float) $top : $top,
+			'value' => self::measured_value( $top, $this->detect_unit_measurement( $top ) ),
 		);
 
 		$this->data['bottom'] = array(
 			'unit'  => $this->detect_unit_measurement( $bottom ),
-			'value' => self::is_measured_unit( $this->detect_unit_measurement( $bottom ) ) ? (float) $bottom : $bottom,
+			'value' => self::measured_value( $bottom, $this->detect_unit_measurement( $bottom ) ),
 		);
 
 		$this->data['left'] = array(
 			'unit'  => $this->detect_unit_measurement( $left ),
-			'value' => self::is_measured_unit( $this->detect_unit_measurement( $left ) ) ? (float) $left : $left,
+			'value' => self::measured_value( $left, $this->detect_unit_measurement( $left ) ),
 		);
 
 		$this->data['right'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => self::is_measured_unit( $this->detect_unit_measurement( $right ) ) ? (float) $right : $right,
+			'value' => self::measured_value( $right, $this->detect_unit_measurement( $right ) ),
 		);
 	}
 
@@ -272,8 +271,45 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @return bool
 	 */
-	private static function is_measured_unit( $unit ) {
+	protected static function is_measured_unit( $unit ) {
 		return in_array( $unit, array( 'px', 'em', '%' ), true );
+	}
+
+	/**
+	 * Get the value to display in a slider's text box.
+	 * A keyword value like 'auto' (or the unset "" unit) has no number to show - the unit dropdown
+	 * already says so, and the text box is disabled alongside the range, so it is left blank rather
+	 * than echoing the keyword or coercing it into a misleading 0.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed  $value The raw value, for instance '10px', 12.5 or 'auto'.
+	 * @param string $unit  The unit of measurement this value was detected to have.
+	 *
+	 * @return float|string
+	 */
+	private static function measured_value( $value, $unit ) {
+		return self::is_measured_unit( $unit ) ? (float) $value : '';
+	}
+
+	/**
+	 * Get the class names that grey out a slider on the very first paint when it has no numeric
+	 * value to show. Without this, a slider that starts as 'auto' or unset renders looking fully
+	 * enabled - a draggable-looking track a visitor cannot actually drag - until the unit dropdown
+	 * is touched once and the matching JS handler adds these same classes itself.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $unit The unit of measurement.
+	 *
+	 * @return string
+	 */
+	protected static function disabled_class( $unit ) {
+		if ( self::is_measured_unit( $unit ) ) {
+			return '';
+		}
+
+		return '' === $unit ? ' frm-disabled frm-empty' : ' frm-disabled';
 	}
 
 	/**

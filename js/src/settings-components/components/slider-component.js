@@ -380,6 +380,10 @@ export default class frmSliderComponent {
 				element.classList.add( 'frm-disabled', 'frm-empty' );
 				rangeInput.disabled = true;
 
+				// There is no number to show or edit once the unit itself is unset.
+				valueInput.value = '';
+				valueInput.disabled = true;
+
 				// Drop the old unit from what is announced, the value no longer carries one.
 				frmSliderComponent.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
 				return;
@@ -388,6 +392,11 @@ export default class frmSliderComponent {
 			if ( 'auto' === unit ) {
 				element.classList.add( 'frm-disabled' );
 				rangeInput.disabled = true;
+
+				// 'auto' is a keyword, not a measurement - the unit dropdown already says so, so leave
+				// the text box blank rather than duplicating the word or coercing it into a number.
+				valueInput.value = '';
+				valueInput.disabled = true;
 
 				// The slider no longer stands for a number, so announce the keyword that replaced it.
 				rangeInput.setAttribute( 'aria-valuetext', unit );
@@ -399,6 +408,7 @@ export default class frmSliderComponent {
 
 			element.classList.remove( 'frm-disabled', 'frm-empty' );
 			rangeInput.disabled = false;
+			valueInput.disabled = false;
 
 			if ( ! this.options[ index ].steps ) {
 				rangeInput.max = this.getMaxValue( unit, index, this.getRangeValue( rangeInput, index ) );

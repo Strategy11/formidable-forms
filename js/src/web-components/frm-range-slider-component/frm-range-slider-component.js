@@ -389,7 +389,14 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 		const valueInput = document.createElement( 'input' );
 		valueInput.type = 'text';
-		valueInput.value = value.value.toString();
+
+		// 'auto' is a keyword, not a measurement - the unit dropdown already says so, so leave the
+		// text box blank and disabled rather than duplicating the word or showing a misleading 0.
+		if ( 'auto' === value.unit ) {
+			valueInput.disabled = true;
+		} else {
+			valueInput.value = value.value.toString();
+		}
 
 		if ( ariaLabel ) {
 			valueInput.setAttribute( 'aria-label', ariaLabel );
