@@ -39,6 +39,11 @@ button.frm_choose_image_box,
 	line-height: var(--leading);
 }
 
+// WP core reserves 24px on the right for its native select arrow; don't let the shared padding above claw that back.
+.frm-white-body .wrap select {
+	padding-right: 24px;
+}
+
 .frm_input_with_suffix {
 	border-radius: var(--small-radius);
 	border: 1px solid var(--grey-300);
