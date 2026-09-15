@@ -3,6 +3,14 @@
  */
 import { HIDDEN_CLASS } from 'core/constants';
 import frmDependentUpdaterComponent from '../../admin/components/dependent-updater-component';
+import { __ } from '@wordpress/i18n';
+
+// Units that describe a length and can be announced next to the number.
+const MEASUREMENT_UNITS = [ 'px', 'em', '%' ];
+
+// Group membership never changes after setup, so getSliderGroupItems() below memoizes per
+// element here rather than re-running querySelectorAll on every caller, including drag ticks.
+const groupItemsCache = new WeakMap();
 
 /**
  * Represents a slider component.
@@ -19,13 +27,7 @@ export default class frmSliderComponent {
 			return;
 		}
 
-		// The slider bullet point width in pixels. Used in value calculation on drag event.
-		this.sliderBulletWidth = 16;
-		this.sliderMarginRight = 5;
 		this.eventsChange = [];
-
-		const { debounce } = frmDom.util;
-		this.valueChangeDebouncer = debounce( index => this.triggerValueChange( index ), 25 );
 
 		this.initOptions();
 		this.init();
@@ -40,13 +42,9 @@ export default class frmSliderComponent {
 			const parentWrapper = element.classList.contains( 'frm-has-multiple-values' ) ? element.closest( '.frm-style-component' ) : element;
 			const steps = this.settings.steps || ( element.dataset.steps ? JSON.parse( element.dataset.steps ) : null );
 			this.options.push( {
-				dragging: false,
-				startX: 0,
-				translateX: 0,
 				maxValue: parseInt( element.dataset.maxValue, 10 ),
 				element,
 				index,
-				value: 0,
 				steps,
 				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
 			} );
@@ -57,75 +55,309 @@ export default class frmSliderComponent {
 	 * Initializes the slider component.
 	 */
 	init() {
-		this.initDraggable();
-
-		if ( this.loadedByWebComponent ) {
-			this.initSlidersPositionInsideWebComponent();
-			return;
-		}
-
-		this.initSlidersPosition();
+		this.initListeners();
+		this.initFill();
 	}
 
 	/**
-	 * Initializes the draggable functionality for the slider component.
+	 * Attaches event listeners to each slider element.
 	 */
-	initDraggable() {
+	initListeners() {
 		this.sliderElements.forEach( ( element, index ) => {
 			this.eventsChange[ index ] = new Event( 'change', {
 				bubbles: true,
 				cancelable: true
 			} );
-			const draggableBullet = element.querySelector( '.frm-slider-bullet' );
+
+			const rangeInput = element.querySelector( '.frm-slider' );
 			const valueInput = element.querySelector( '.frm-slider-value input[type="text"]' );
 
-			valueInput.addEventListener( 'change', event => {
-				const unit = element.querySelector( 'select' ).value;
+			if ( ! rangeInput || ! valueInput ) {
+				return;
+			}
 
-				if ( this.getMaxValue( unit, index ) < parseInt( event.target.value, 10 ) ) {
-					return;
-				}
+			this.initSteps( rangeInput, index );
 
-				this.initSliderWidth( element );
-				this.options[ index ].fullValue = this.updateValue( element, valueInput.value + unit );
+			// Update display while dragging.
+			rangeInput.addEventListener( 'input', () => {
+				const value = this.getRangeValue( rangeInput, index );
+				valueInput.value = value;
+				frmSliderComponent.refreshRange( rangeInput, element, value );
+				this.syncGroupSliders( element, value );
+			} );
+
+			// Commit value to hidden input on release.
+			rangeInput.addEventListener( 'change', () => {
+				const value = this.getRangeValue( rangeInput, index );
+				this.options[ index ].fullValue = this.updateValue( element, value + frmSliderComponent.getUnit( element ) );
 				this.triggerValueChange( index );
 			} );
 
-			this.expandSliderGroup( element );
-			this.updateOnUnitChange( element, valueInput, index );
-			this.changeSliderPositionOnClick( element, valueInput, index );
-			frmSliderComponent.maybeDisableUnitDropdown( element );
+			// Sync text input changes back to the range.
+			valueInput.addEventListener( 'change', event => {
+				const unit = frmSliderComponent.getUnit( element );
+				const newValue = parseFloat( event.target.value );
+				const { steps } = this.options[ index ];
 
-			draggableBullet.addEventListener( 'mousedown', event => {
-				event.preventDefault();
-				event.stopPropagation();
-				if ( element.classList.contains( 'frm-disabled' ) ) {
+				// With a stepped slider, initSteps() repurposes rangeInput.max to hold the index
+				// bound, not a real value bound - validate against the actual allowed values instead.
+				const isValid = steps && steps.length > 0
+					? steps.map( Number ).includes( newValue )
+					: newValue >= parseFloat( rangeInput.min || 0 ) && parseFloat( rangeInput.max ) >= newValue;
+
+				// An empty/non-numeric value falls through the check above as NaN comparisons are
+				// always false - reject it and resync the text box to the last committed value instead
+				// of leaving it showing the rejected input while the range stays unchanged.
+				if ( isNaN( newValue ) || ! isValid ) {
+					valueInput.value = this.getRangeValue( rangeInput, index );
 					return;
 				}
-				this.enableDragging( event, index );
 
-				const onMouseMove = moveEvent => this.moveTracker( moveEvent, index );
-
-				const onMouseUp = () => {
-					this.disableDragging( index );
-					document.removeEventListener( 'mousemove', onMouseMove );
-					document.removeEventListener( 'mouseup', onMouseUp );
-				};
-
-				document.addEventListener( 'mousemove', onMouseMove );
-				document.addEventListener( 'mouseup', onMouseUp );
+				this.setRangeValue( rangeInput, index, newValue );
+				frmSliderComponent.refreshRange( rangeInput, element, newValue );
+				this.options[ index ].fullValue = this.updateValue( element, newValue + unit );
+				this.triggerValueChange( index );
 			} );
+
+			frmSliderComponent.expandSliderGroup( element );
+			this.updateOnUnitChange( element, rangeInput, valueInput, index );
+			frmSliderComponent.maybeDisableUnitDropdown( element );
 		} );
 	}
 
-	expandSliderGroup( element ) {
+	/**
+	 * Sets the initial fill position for all sliders.
+	 */
+	initFill() {
+		this.sliderElements.forEach( ( element, index ) => {
+			const rangeInput = element.querySelector( '.frm-slider' );
+			if ( ! rangeInput ) {
+				return;
+			}
+
+			const value = this.getRangeValue( rangeInput, index );
+			this.options[ index ].fullValue = value + frmSliderComponent.getUnit( element );
+			frmSliderComponent.refreshRange( rangeInput, element, value );
+		} );
+	}
+
+	/**
+	 * Reads the unit currently selected for a slider.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element - The slider component element.
+	 * @return {string} The selected unit, or an empty string when the slider has no unit dropdown.
+	 */
+	static getUnit( element ) {
+		const select = element.querySelector( 'select' );
+		return select ? select.value : '';
+	}
+
+	/**
+	 * Switches a stepped slider over to index positions.
+	 *
+	 * A range input can only step by a fixed amount, so a slider limited to an uneven list of values
+	 * (for instance 1, 2, 3, 4, 6, 12 grid columns) is driven by the position in that list instead.
+	 * Every arrow key press then lands on an allowed value.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @return {void}
+	 */
+	initSteps( rangeInput, index ) {
+		const { steps } = this.options[ index ];
+
+		if ( ! steps || 0 === steps.length ) {
+			return;
+		}
+
+		const currentValue = parseFloat( rangeInput.value );
+
+		rangeInput.min = '0';
+		rangeInput.max = String( steps.length - 1 );
+		rangeInput.step = '1';
+		rangeInput.value = String( frmSliderComponent.getClosestStepIndex( currentValue, steps ) );
+	}
+
+	/**
+	 * Finds the position in the steps array holding the value closest to the one given.
+	 *
+	 * @since x.x
+	 *
+	 * @param {number} value - The value to look for.
+	 * @param {Array}  steps - The list of values the slider is allowed to take.
+	 * @return {number} The index of the closest step.
+	 */
+	static getClosestStepIndex( value, steps ) {
+		let closest = 0;
+		let smallestDiff = Math.abs( value - steps[ 0 ] );
+
+		for ( let i = 1; i < steps.length; i++ ) {
+			const diff = Math.abs( value - steps[ i ] );
+			if ( diff < smallestDiff ) {
+				smallestDiff = diff;
+				closest = i;
+			}
+		}
+
+		return closest;
+	}
+
+	/**
+	 * Reads the value a slider represents, resolving the step list when there is one.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @return {number} The current value.
+	 */
+	getRangeValue( rangeInput, index ) {
+		const { steps } = this.options[ index ];
+
+		if ( steps && steps.length > 0 ) {
+			return steps[ parseInt( rangeInput.value, 10 ) ];
+		}
+
+		return parseFloat( rangeInput.value );
+	}
+
+	/**
+	 * Moves a slider to the position representing the given value.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @param {number|string}    value      - The value to move to.
+	 * @return {void}
+	 */
+	setRangeValue( rangeInput, index, value ) {
+		const { steps } = this.options[ index ];
+
+		if ( steps && steps.length > 0 ) {
+			rangeInput.value = String( frmSliderComponent.getClosestStepIndex( parseFloat( value ), steps ) );
+			return;
+		}
+
+		frmSliderComponent.applyStep( rangeInput, value );
+		rangeInput.value = value;
+	}
+
+	/**
+	 * Makes sure the range can hold the given value exactly.
+	 *
+	 * A range snaps its value to the step, so a fractional value needs a step fine enough to land
+	 * on. Whole numbers keep stepping by one so the arrow keys stay useful.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number|string}    value      - The value about to be set.
+	 * @return {void}
+	 */
+	static applyStep( rangeInput, value ) {
+		const decimals = ( String( value ).split( '.' )[ 1 ] || '' ).length;
+		rangeInput.step = decimals > 0 ? `0.${ '0'.repeat( decimals - 1 ) }1` : '1';
+	}
+
+	/**
+	 * Updates the track fill and the value screen readers announce.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {HTMLElement}      element    - The slider component element.
+	 * @param {number|string}    value      - The value the slider now represents.
+	 * @return {void}
+	 */
+	static refreshRange( rangeInput, element, value ) {
+		frmSliderComponent.updateFill( rangeInput );
+
+		const unit = frmSliderComponent.getUnit( element );
+
+		// 'auto' has no position on the track, so announce the keyword instead of the value.
+		if ( 'auto' === unit ) {
+			rangeInput.setAttribute( 'aria-valuetext', unit );
+			return;
+		}
+
+		// A blank unit means nothing is set - announce that instead of a bare, misleading number.
+		if ( '' === unit ) {
+			rangeInput.setAttribute( 'aria-valuetext', __( 'Not set', 'formidable' ) );
+			return;
+		}
+
+		const suffix = MEASUREMENT_UNITS.includes( unit ) ? unit : '';
+		rangeInput.setAttribute( 'aria-valuetext', `${ value }${ suffix }` );
+	}
+
+	/**
+	 * Updates the CSS custom property that drives the active-track fill colour.
+	 *
+	 * The ratio is read back from the range input itself so the fill can never disagree
+	 * with where the browser paints the thumb.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @return {void}
+	 */
+	static updateFill( rangeInput ) {
+		const min = parseFloat( rangeInput.min ) || 0;
+		const max = parseFloat( rangeInput.max );
+		const value = parseFloat( rangeInput.value );
+		const span = max - min;
+		const ratio = span > 0 ? Math.min( Math.max( ( value - min ) / span, 0 ), 1 ) : 0;
+
+		rangeInput.style.setProperty( '--frm-fill', ratio );
+	}
+
+	/**
+	 * Syncs grouped child sliders (top/bottom or left/right) to the parent group value.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}   element - The parent slider component element.
+	 * @param {number|string} value   - The new numeric value (without unit).
+	 * @return {void}
+	 */
+	syncGroupSliders( element, value ) {
+		if ( ! element.classList.contains( 'frm-has-multiple-values' ) && ! element.classList.contains( 'frm-has-independent-fields' ) ) {
+			return;
+		}
+
+		const childSliders = element.classList.contains( 'frm-has-independent-fields' )
+			? element.querySelectorAll( '.frm-independent-slider-field' )
+			: frmSliderComponent.getSliderGroupItems( element );
+
+		childSliders.forEach( child => {
+			const childRange = child.querySelector( '.frm-slider' );
+			const childText = child.querySelector( '.frm-slider-value input[type="text"]' );
+			const childIndex = this.getSliderIndex( child );
+
+			if ( childRange && -1 !== childIndex ) {
+				this.setRangeValue( childRange, childIndex, value );
+				frmSliderComponent.refreshRange( childRange, child, value );
+			}
+
+			if ( childText ) {
+				childText.value = value;
+			}
+		} );
+	}
+
+	static expandSliderGroup( element ) {
 		const svgIcon = element.querySelector( '.frmsvg' );
 
 		if ( element.dataset.displaySliders === undefined || null === svgIcon ) {
 			return;
 		}
 
-		const sliderGroupItems = this.getSliderGroupItems( element );
+		const sliderGroupItems = frmSliderComponent.getSliderGroupItems( element );
 		svgIcon.addEventListener( 'click', () => {
 			sliderGroupItems.forEach( item => {
 				item.classList.toggle( HIDDEN_CLASS );
@@ -133,64 +365,79 @@ export default class frmSliderComponent {
 		} );
 	}
 
-	updateOnUnitChange( element, valueInput, index ) {
-		element.querySelector( 'select' ).addEventListener( 'change', event => {
+	/**
+	 * Updates the range max, fill, and hidden input when the unit dropdown changes.
+	 *
+	 * @param {HTMLElement}      element    - The slider component element.
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {HTMLInputElement} valueInput - The visible text input.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 */
+	updateOnUnitChange( element, rangeInput, valueInput, index ) {
+		const select = element.querySelector( 'select' );
+
+		if ( ! select ) {
+			return;
+		}
+
+		select.addEventListener( 'change', event => {
 			const unit = event.target.value.toLowerCase();
 
 			if ( '' === unit ) {
 				element.classList.add( 'frm-disabled', 'frm-empty' );
+				rangeInput.disabled = true;
+
+				// There is no number to show or edit once the unit itself is unset.
+				valueInput.value = '';
+				valueInput.disabled = true;
+
+				// Drop the old unit from what is announced, the value no longer carries one.
+				frmSliderComponent.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
+
+				// Commit the unset state, otherwise the old "<number><unit>" is left standing in the
+				// hidden input and a save silently keeps the previous value instead of clearing it.
+				// fullValue has to be kept in sync too - a dependency-updater component (e.g. the
+				// Quick Settings sliders) propagates from fullValue, not from the hidden input directly.
+				this.options[ index ].fullValue = this.updateValue( element, '' );
+				this.triggerValueChange( index );
+
 				return;
 			}
 
 			if ( 'auto' === unit ) {
 				element.classList.add( 'frm-disabled' );
-				this.updateValue( element, 'auto' );
+				rangeInput.disabled = true;
+
+				// 'auto' is a keyword, not a measurement - the unit dropdown already says so, so leave
+				// the text box blank rather than duplicating the word or coercing it into a number.
+				valueInput.value = '';
+				valueInput.disabled = true;
+
+				// The slider no longer stands for a number, so announce the keyword that replaced it.
+				rangeInput.setAttribute( 'aria-valuetext', unit );
+				this.options[ index ].fullValue = this.updateValue( element, 'auto' );
 				this.triggerValueChange( index );
 
 				return;
 			}
 
 			element.classList.remove( 'frm-disabled', 'frm-empty' );
-			this.options[ index ].fullValue = valueInput.value + unit;
-			this.updateValue( element, this.options[ index ].fullValue );
-			this.triggerValueChange( index );
-		} );
-	}
+			rangeInput.disabled = false;
+			valueInput.disabled = false;
 
-	changeSliderPositionOnClick( element, valueInput, index ) {
-		const frmSlider = element.querySelector( '.frm-slider' );
-		const customEvent = new Event( 'change', {
-			bubbles: true,
-			cancelable: true
-		} );
-
-		frmSlider.addEventListener( 'click', event => {
-			if ( element.classList.contains( 'frm-disabled' ) ) {
-				return;
+			if ( ! this.options[ index ].steps ) {
+				rangeInput.max = this.getMaxValue( unit, index, this.getRangeValue( rangeInput, index ) );
 			}
 
-			event.preventDefault();
-			event.stopPropagation();
-
-			if ( ! event.target.classList.contains( 'frm-slider' ) && ! event.target.classList.contains( 'frm-slider-active-track' ) ) {
-				return;
-			}
-
-			const sliderWidth = frmSlider.offsetWidth - this.sliderBulletWidth;
-			const sliderRect = frmSlider.getBoundingClientRect();
-			const deltaX = event.clientX - sliderRect.left - this.sliderBulletWidth;
-			const unit = element.querySelector( 'select' ).value;
-			const value = frmSliderComponent.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
-
-			if ( value < 0 ) {
-				return;
-			}
-
-			this.options[ index ].fullValue = this.updateValue( element, value + unit );
-			this.initChildSlidersWidth( element, deltaX, index, value + unit );
-
+			// Lowering the max makes the browser clamp the range, so read the value back rather than
+			// trusting the text input, which would otherwise save a number the new unit does not allow.
+			const value = this.getRangeValue( rangeInput, index );
 			valueInput.value = value;
-			valueInput.dispatchEvent( customEvent );
+
+			this.options[ index ].fullValue = value + unit;
+			this.updateValue( element, this.options[ index ].fullValue );
+			frmSliderComponent.refreshRange( rangeInput, element, value );
+			this.triggerValueChange( index );
 		} );
 	}
 
@@ -218,245 +465,59 @@ export default class frmSliderComponent {
 	 * @param {HTMLElement} element - The element to retrieve slider group items from.
 	 * @return {NodeList} - An array-like object containing the slider group items.
 	 */
-	getSliderGroupItems( element ) {
+	static getSliderGroupItems( element ) {
+		if ( groupItemsCache.has( element ) ) {
+			return groupItemsCache.get( element );
+		}
+
 		if ( element.dataset.displaySliders === undefined ) {
 			return [];
 		}
+
+		// A slider is not always inside a style component, and throwing here would abandon the
+		// setup of every slider that comes after this one.
+		const wrapper = element.closest( '.frm-style-component' );
+		if ( ! wrapper ) {
+			return [];
+		}
+
 		const slidersGroup = element.dataset.displaySliders.split( ',' );
 		const query = slidersGroup.map( item => {
 			return `.frm-slider-component[data-type="${ item }"]`;
 		} ).join( ', ' );
 
-		return element.closest( '.frm-style-component' ).querySelectorAll( query );
-	}
-
-	initSlidersPositionInsideWebComponent() {
-		this.sliderElements.forEach( ( element, index ) => {
-			this.initSliderWidth( element, index );
-		} );
-	}
-
-	/**
-	 * Initializes the position of sliders when a accordion section is opened.
-	 */
-	initSlidersPosition() {
-		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
-		const quickSettings = document.querySelector( '.frm-quick-settings' );
-		const openedAccordion = document.querySelector( '.accordion-section.open' );
-
-		// Detect if upload background image upload has triggered and initialize the "Image Opacity" slider width.
-		wp.hooks.addAction( 'frm_pro_on_bg_image_upload', 'formidable', event => {
-			const imageBackgroundOpacitySlider = event.closest( '.accordion-section-content' ).querySelector( '#frm-bg-image-opacity-slider' );
-			this.initSlidersWidth( imageBackgroundOpacitySlider );
-		} );
-
-		// init the sliders width from "Quick Settings" page.
-		if ( quickSettings ) {
-			this.initSlidersWidth( quickSettings );
-		}
-
-		// Init the sliders width in opened accordion section from "Advanced Settings" page.
-		if ( openedAccordion ) {
-			this.initSlidersWidth( openedAccordion );
-		}
-
-		// init the sliders width everytime when an accordion section is opened from "Advanced Settings" page.
-		accordionitems.forEach( item => {
-			item.addEventListener( 'click', event => {
-				this.initSlidersWidth( event.target.closest( '.accordion-section' ) );
-			} );
-		} );
-
-		this.initSliderPositionOnFieldShapeChange();
-	}
-
-	/**
-	 * Initializes the width of "Corner Radius" slider that is dynamically is displayed on "Field Shape" option change from "Quick Settings".
-	 *
-	 * @return {void}
-	 */
-	initSliderPositionOnFieldShapeChange() {
-		const fieldShapeType = document.querySelector( '.frm-style-component.frm-field-shape' );
-
-		if ( ! fieldShapeType ) {
-			return;
-		}
-
-		const radioButtons = fieldShapeType.querySelectorAll( 'input[type="radio"]' );
-		radioButtons.forEach( radio => {
-			radio.addEventListener( 'change', event => {
-				if ( event.target.checked && 'rounded-corner' === event.target.value ) {
-					const slider = document.querySelector( 'div[data-frm-element="field-shape-corner-radius"] .frm-slider-component' );
-					this.initSliderWidth( slider );
-				}
-			} );
-		} );
-	}
-
-	/**
-	 * Initializes the width of sliders within a given section.
-	 *
-	 * @param {HTMLElement} section - The section containing the sliders.
-	 * @return {void}
-	 */
-	initSlidersWidth( section ) {
-		const sliders = section.querySelectorAll( '.frm-slider-component' );
-		sliders.forEach( slider => {
-			setTimeout( () => {
-				this.initSliderWidth( slider );
-			}, 100 );
-		} );
-	}
-
-	/**
-	 * Initializes the width of a slider.
-	 *
-	 * @param {HTMLElement} slider      - The slider element.
-	 * @param {number}      sliderIndex - The index of the slider.
-	 * @return {void}
-	 */
-	initSliderWidth( slider, sliderIndex = null ) {
-		if ( slider.classList.contains( 'frm-disabled' ) ) {
-			return;
-		}
-		const index = sliderIndex !== null ? sliderIndex : this.getSliderIndex( slider );
-		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
-		const value = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
-		const unit = slider.querySelector( 'select' ).value;
-		const { steps } = this.options[ index ];
-		let deltaX = Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
-
-		if ( '%' === unit ) {
-			deltaX = Math.round( sliderWidth * value / 100 );
-		} else if ( steps && steps.length > 0 ) {
-			deltaX = frmSliderComponent.calculateDeltaXFromSteps( value, steps, sliderWidth );
-		}
-
-		slider.querySelector( '.frm-slider-active-track' ).style.width = `${ deltaX }px`;
-		this.options[ index ].translateX = deltaX;
-		this.options[ index ].value = value + unit;
-	}
-
-	/**
-	 * Calculates the deltaX position based on a value and steps array.
-	 *
-	 * @param {number} value       - The current value.
-	 * @param {Array}  steps       - Array of step values.
-	 * @param {number} sliderWidth - The width of the slider.
-	 * @return {number} - The calculated deltaX position.
-	 */
-	static calculateDeltaXFromSteps( value, steps, sliderWidth ) {
-		const stepIndex = steps.indexOf( value );
-		if ( -1 === stepIndex ) {
-			// If value not in steps, find closest and use its position
-			const closestValue = frmSliderComponent.snapToStep( value, steps );
-			const closestIndex = steps.indexOf( closestValue );
-			return Math.round( ( closestIndex / ( steps.length - 1 ) ) * sliderWidth );
-		}
-		return Math.round( ( stepIndex / ( steps.length - 1 ) ) * sliderWidth );
-	}
-
-	/**
-	 * Initializes the width of child sliders.
-	 *
-	 * @param {HTMLElement} slider - The parent slider element.
-	 * @param {number}      width  - The width to set for the child sliders.
-	 * @param {number}      index  - The starting index for the child sliders.
-	 * @param {number}      value  - The value to set for the child sliders.
-	 */
-	initChildSlidersWidth( slider, width, index, value ) {
-		if ( ! slider.classList.contains( 'frm-has-independent-fields' ) && ! slider.classList.contains( 'frm-has-multiple-values' ) ) {
-			return;
-		}
-		const childSliders = slider.classList.contains( 'frm-has-independent-fields' ) ? slider.querySelectorAll( '.frm-independent-slider-field' ) : this.getSliderGroupItems( slider );
-
-		childSliders.forEach( ( item, childIndex ) => {
-			item.querySelector( '.frm-slider-active-track' ).style.width = `${ width }px`;
-			this.options[ index + childIndex + 1 ].translateX = width;
-			this.options[ index + childIndex + 1 ].value = value;
-		} );
+		const items = wrapper.querySelectorAll( query );
+		groupItemsCache.set( element, items );
+		return items;
 	}
 
 	/**
 	 * Returns the index of the specified slider element.
 	 *
+	 * @since x.x
+	 *
 	 * @param {HTMLElement} slider - The slider element.
-	 * @return {number} The index of the slider element.
+	 * @return {number} The index of the slider element, or -1 when it is not tracked.
 	 */
 	getSliderIndex( slider ) {
-		return this.options.filter( option => {
-			return option.element === slider;
-		} )[ 0 ].index;
-	}
-
-	/**
-	 * Handles the movement of the slider tracker.
-	 *
-	 * @param {Event}  event - The event object representing the mouse movement.
-	 * @param {number} index - The index of the slider element.
-	 * @return {void}
-	 */
-	moveTracker( event, index ) {
-		if ( ! this.options[ index ].dragging ) {
-			return;
-		}
-		let deltaX = event.clientX - this.options[ index ].startX;
-		const element = this.sliderElements[ index ];
-		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
-
-		// Clamp deltaX within valid range
-		deltaX = Math.max( deltaX, 0 );
-		deltaX = Math.min( deltaX, sliderWidth );
-		const unit = element.querySelector( 'select' ).value;
-		const value = frmSliderComponent.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ), this.options[ index ].steps );
-
-		element.querySelector( '.frm-slider-value input[type="text"]' ).value = value;
-		element.querySelector( '.frm-slider-bullet .frm-slider-value-label' ).innerText = value;
-		element.querySelector( '.frm-slider-active-track' ).style.width = `${ deltaX }px`;
-		this.initChildSlidersWidth( element, deltaX, index, value + unit );
-
-		this.options[ index ].translateX = deltaX;
-		this.options[ index ].value = value + unit;
-		this.options[ index ].fullValue = this.updateValue( element, this.options[ index ].value );
-		this.valueChangeDebouncer( index );
+		const option = this.options.find( item => item.element === slider );
+		return option ? option.index : -1;
 	}
 
 	/**
 	 * Get the maximum value based on the unit and index.
+	 * A value already saved above the plain unit max still has to stay reachable, otherwise the
+	 * range would clamp it down just from the unit being touched (mirrors get_max_for_unit() in
+	 * FrmSliderStyleComponent.php).
 	 *
-	 * @param {string} unit  - The unit of measurement.
-	 * @param {number} index - The index of the option.
+	 * @param {string}      unit         - The unit of measurement.
+	 * @param {number}      index        - The index of the option.
+	 * @param {number|null} currentValue - The value currently on the slider, if checking whether it still fits. Defaults to null (plain max only).
 	 * @return {number} The maximum value.
 	 */
-	getMaxValue( unit, index ) {
-		return '%' === unit ? 100 : this.options[ index ].maxValue;
-	}
-
-	/**
-	 * Enables dragging for the slider component.
-	 *
-	 * @param {Event}  event - The event object.
-	 * @param {number} index - The index of the option being dragged.
-	 */
-	enableDragging( event, index ) {
-		event.target.classList.add( 'frm-dragging' );
-		this.options[ index ].dragging = true;
-		this.options[ index ].startX = event.clientX - this.options[ index ].translateX;
-	}
-
-	/**
-	 * Disables dragging for a specific index.
-	 *
-	 * @param {number} index - The index of the option to disable dragging for.
-	 */
-	disableDragging( index ) {
-		if ( false === this.options[ index ].dragging ) {
-			return;
-		}
-		const draggableBullet = this.sliderElements[ index ].querySelector( '.frm-slider-bullet' );
-		draggableBullet.classList.remove( 'frm-dragging' );
-		this.options[ index ].dragging = false;
-		this.triggerValueChange( index );
+	getMaxValue( unit, index, currentValue = null ) {
+		const plainMax = '%' === unit ? 100 : this.options[ index ].maxValue;
+		return null !== currentValue && currentValue > plainMax ? Math.ceil( currentValue ) : plainMax;
 	}
 
 	/**
@@ -478,52 +539,6 @@ export default class frmSliderComponent {
 			return;
 		}
 		input.dispatchEvent( this.eventsChange[ index ] );
-	}
-
-	/**
-	 * Calculates the value based on the width, deltaX, and maxValue.
-	 *
-	 * @param {number}     width    - The width of the slider.
-	 * @param {number}     deltaX   - The change in x-coordinate.
-	 * @param {number}     maxValue - The maximum value.
-	 * @param {Array|null} steps    - Optional array of step values to snap to.
-	 * @return {number} - The calculated value.
-	 */
-	static calculateValue( width, deltaX, maxValue, steps = null ) {
-		if ( steps && steps.length > 0 ) {
-			// For stepped sliders, map position directly to step index
-			const position = deltaX / width;
-			const stepIndex = Math.round( position * ( steps.length - 1 ) );
-			const clampedIndex = Math.max( 0, Math.min( stepIndex, steps.length - 1 ) );
-			return steps[ clampedIndex ];
-		}
-
-		// Calculate value as a simple proportion of the slider position
-		const value = Math.round( ( deltaX / width ) * maxValue );
-
-		return Math.min( value, maxValue );
-	}
-
-	/**
-	 * Snaps a value to the nearest step in the steps array.
-	 *
-	 * @param {number} value - The value to snap.
-	 * @param {Array}  steps - Array of step values to snap to.
-	 * @return {number} - The nearest step value.
-	 */
-	static snapToStep( value, steps ) {
-		let nearest = steps[ 0 ];
-		let minDiff = Math.abs( value - nearest );
-
-		for ( let i = 1; i < steps.length; i++ ) {
-			const diff = Math.abs( value - steps[ i ] );
-			if ( diff < minDiff ) {
-				minDiff = diff;
-				nearest = steps[ i ];
-			}
-		}
-
-		return nearest;
 	}
 
 	/**
@@ -586,10 +601,10 @@ export default class frmSliderComponent {
 			const newValue = inputValue.join( ' ' );
 			input.value = newValue;
 
-			const childSlidersGroup = this.getSliderGroupItems( element );
+			const childSlidersGroup = frmSliderComponent.getSliderGroupItems( element );
 			childSlidersGroup.forEach( slider => {
 				const unitMeasure = this.getUnitMeasureFromValue( value );
-				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseInt( value, 10 );
+				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseFloat( value );
 				slider.querySelector( 'select' ).value = unitMeasure;
 			} );
 
@@ -601,7 +616,7 @@ export default class frmSliderComponent {
 			const visibleValues = element.querySelectorAll( '.frm-slider-value input[type="text"]' );
 			inputValues.forEach( ( input, index ) => {
 				input.value = value;
-				visibleValues[ index + 1 ].value = parseInt( value, 10 );
+				visibleValues[ index + 1 ].value = parseFloat( value );
 			} );
 
 			return value;
@@ -618,6 +633,6 @@ export default class frmSliderComponent {
 	 * @return {string} The unit of measurement ('%', 'px', 'em') found in the value, or an empty string if none is found.
 	 */
 	getUnitMeasureFromValue( value ) {
-		return [ '%', 'px', 'em' ].find( unit => value.includes( unit ) ) || '';
+		return MEASUREMENT_UNITS.find( unit => value.includes( unit ) ) || '';
 	}
 }
