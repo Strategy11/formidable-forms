@@ -28,11 +28,15 @@ describe( 'Run some accessibility tests', function() {
 
 	const baselineRules = [
 		{ id: 'color-contrast', enabled: false },
-		{ id: 'aria-allowed-role', enabled: false },
 		{ id: 'link-name', enabled: false },
 		{ id: 'link-in-text-block', enabled: false },
 		{ id: 'region', enabled: false },
 	];
+
+	// #wpadminbar is WordPress core markup Formidable doesn't own or render (e.g. its
+	// <li role="group"> items fail aria-allowed-role); exclude it so these tests only
+	// assert on Formidable's own admin pages.
+	const excludeAdminBar = { exclude: [ [ '#wpadminbar' ] ] };
 
 	it( 'Check the dashboard page is accessible', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable-dashboard' );
@@ -47,7 +51,7 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules,
 			{ id: 'heading-order', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the form list is accessible', () => {
@@ -57,7 +61,7 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules,
 			{ id: 'empty-table-header', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the entries page is accessible', () => {
@@ -67,21 +71,20 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules,
 			{ id: 'empty-table-header', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the styles page is accessible', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
 		cy.injectAxe();
 		configureAxeWithIgnoredRuleset( [
-			{ id: 'aria-allowed-role', enabled: false },
 			{ id: 'link-name', enabled: false },
 			{ id: 'label', enabled: false },
 			{ id: 'label-title-only', enabled: false },
 			{ id: 'heading-order', enabled: false },
 			{ id: 'empty-heading', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the applications page is accessible', () => {
@@ -92,7 +95,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'image-alt', enabled: false },
 			{ id: 'heading-order', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the form templates page is accessible', () => {
@@ -106,11 +109,10 @@ describe( 'Run some accessibility tests', function() {
 		} );
 		configureAxeWithIgnoredRuleset( [
 			{ id: 'color-contrast', enabled: false },
-			{ id: 'aria-allowed-role', enabled: false },
 			{ id: 'link-name', enabled: false },
 			{ id: 'heading-order', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the import/export page is accessible', () => {
@@ -120,7 +122,7 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules,
 			{ id: 'heading-order', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the global settings page is accessible', () => {
@@ -129,7 +131,7 @@ describe( 'Run some accessibility tests', function() {
 		configureAxeWithIgnoredRuleset( [
 			...baselineRules
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the Add-Ons page is accessible', () => {
@@ -139,7 +141,7 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules,
 			{ id: 'heading-order', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the SMTP page is accessible', () => {
@@ -150,7 +152,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'landmark-unique', enabled: false },
 			{ id: 'landmark-complementary-is-top-level', enabled: false }
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 
 	it( 'Check the list of deleted forms is accessible', () => {
@@ -159,6 +161,6 @@ describe( 'Run some accessibility tests', function() {
 		configureAxeWithIgnoredRuleset( [
 			...baselineRules
 		] );
-		cy.checkA11y( null, null, logViolations );
+		cy.checkA11y( excludeAdminBar, null, logViolations );
 	} );
 } );
