@@ -5184,6 +5184,19 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		// A row's own ul.frm_sorting is nested inside the outer form-wide one (and, for a
+		// Section, inside that too), so this delegated handler runs once per matching
+		// ancestor for a single click; without this guard the outer ul's run re-toggles
+		// the same (by then already-mutated) hover target and undoes it. `e` is the same
+		// jQuery event object across every delegated invocation of this one click, so a
+		// property set here survives to the next. Not e.stopPropagation() — that would
+		// also block the unrelated document-level "close open field dropdown" click
+		// handler this same click still needs to reach.
+		if ( e.frmFieldGroupClickHandled ) {
+			return;
+		}
+		e.frmFieldGroupClickHandled = true;
+
 		const ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		const shiftKeyIsDown = e.shiftKey;
 		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
