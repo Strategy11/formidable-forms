@@ -46,18 +46,55 @@ class test_FrmFieldsController extends FrmUnitTest {
 		// and renders as selected by default (formidable-pro#3385).
 		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree" );
 
-		$this->assertSame( array( 'One', 'Two', 'Three' ), array_values( $opts ) );
+		$this->assertSame( array( 'One', 'Two', 'Three' ), $opts );
 	}
 
 	public function test_parse_bulk_edit_opts_keeps_zero_value() {
 		// '0' is falsy but a valid option value - only truly blank lines drop.
 		$opts = $this->parse_bulk_edit_opts( "0\nOne" );
 
-		$this->assertSame( array( '0', 'One' ), array_values( $opts ) );
+		$this->assertSame( array( '0', 'One' ), $opts );
 	}
 
 	private function parse_bulk_edit_opts( $opts ) {
 		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::remove_blank_separated_values
+	 */
+	public function test_remove_blank_separated_values_drops_blank_value() {
+		// A "label|" line with nothing after the separator produces a
+		// blank value half, the same collision as a blank textarea line
+		// (formidable-pro#3385), just reached via separate-value mode.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => 'Blank',
+					'value' => '',
+				),
+				'Two',
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				'Two',
+			),
+			$opts
+		);
+	}
+
+	private function remove_blank_separated_values( $opts ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'remove_blank_separated_values' ), array( $opts ) );
 	}
 
 	/**

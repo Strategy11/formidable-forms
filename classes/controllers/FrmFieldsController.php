@@ -368,6 +368,8 @@ class FrmFieldsController {
 				}
 				unset( $opt_key, $opt );
 			}
+
+			$opts = self::remove_blank_separated_values( $opts );
 		}
 
 		// Keep other options after bulk update.
@@ -407,10 +409,32 @@ class FrmFieldsController {
 	 * @return array
 	 */
 	private static function parse_bulk_edit_opts( $opts ) {
-		$opts = explode( "\n", rtrim( $opts, "\n" ) );
-		$opts = array_map( 'trim', $opts );
+		$opts = array_map( 'trim', explode( "\n", $opts ) );
 
-		return array_filter( $opts, 'strlen' );
+		return array_values( array_filter( $opts, 'strlen' ) );
+	}
+
+	/**
+	 * Drops a separate-value bulk-edit option ("label|value") whose value
+	 * half is blank - same collision as parse_bulk_edit_opts() above, just
+	 * reached via the separate-value split instead of a blank textarea line
+	 * (formidable-pro#3385).
+	 *
+	 * @since 6.36
+	 *
+	 * @param array $opts
+	 *
+	 * @return array
+	 */
+	private static function remove_blank_separated_values( $opts ) {
+		return array_values(
+			array_filter(
+				$opts,
+				function ( $opt ) {
+					return ! is_array( $opt ) || '' !== $opt['value'];
+				}
+			)
+		);
 	}
 
 	/**
