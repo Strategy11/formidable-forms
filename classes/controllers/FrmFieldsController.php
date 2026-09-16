@@ -351,8 +351,7 @@ class FrmFieldsController {
 		$field = FrmFieldsHelper::setup_edit_vars( $field );
 
 		$opts = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
-		$opts = explode( "\n", rtrim( $opts, "\n" ) );
-		$opts = array_map( 'trim', $opts );
+		$opts = self::parse_bulk_edit_opts( $opts );
 
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = $separate === 'true';
@@ -392,6 +391,26 @@ class FrmFieldsController {
 		FrmFieldsHelper::show_single_option( $field );
 
 		wp_die();
+	}
+
+	/**
+	 * Splits raw Bulk Edit Options textarea content into trimmed option
+	 * strings, dropping blank lines. A blank line left in as an option with
+	 * an empty string value collides with an unset field value in
+	 * FrmAppHelper::check_selected(), making that blank option render as
+	 * selected by default (formidable-pro#3385).
+	 *
+	 * @since 6.36
+	 *
+	 * @param string $opts
+	 *
+	 * @return array
+	 */
+	private static function parse_bulk_edit_opts( $opts ) {
+		$opts = explode( "\n", rtrim( $opts, "\n" ) );
+		$opts = array_map( 'trim', $opts );
+
+		return array_filter( $opts, 'strlen' );
 	}
 
 	/**
