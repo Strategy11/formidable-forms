@@ -851,9 +851,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$_GET['page']       = 'formidable';
 		$_GET['frm_action'] = 'edit';
 
-		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), false, true );
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), '1.0', true );
 		wp_enqueue_script( 'frm-surveys-admin' );
-		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), false, true );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), '1.0', true );
 		wp_enqueue_script( 'frm-quizzes-form-action' );
 
 		FrmAppHelper::dequeue_extra_global_scripts();
@@ -877,9 +877,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$_GET['page'] = 'formidable-addons';
 
-		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), false, true );
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), '1.0', true );
 		wp_enqueue_script( 'frm-surveys-admin' );
-		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), false, true );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), '1.0', true );
 		wp_enqueue_script( 'frm-quizzes-form-action' );
 
 		FrmAppHelper::dequeue_extra_global_scripts();
