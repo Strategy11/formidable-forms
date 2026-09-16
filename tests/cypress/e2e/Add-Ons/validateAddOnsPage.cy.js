@@ -635,13 +635,6 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
 		} );
-
-		cy.get( 'div.frm-addons-request-addon' ).should( 'exist' ).within( () => {
-			cy.get( 'span' ).should( 'have.text', 'Not finding what you need?' );
-			cy.get( 'a.frm-font-semibold' ).should( 'have.text', 'Request Add-On' )
-				.and( 'have.attr', 'href', 'https://connect.formidableforms.com/add-on-request/' )
-				.and( 'have.attr', 'target', '_blank' );
-		} );
 	} );
 
 	it( 'should search for add-ons', () => {
@@ -658,6 +651,6 @@ describe( 'Add-Ons page', () => {
 		cy.get( '#frm-page-skeleton-empty-state > img' ).should( 'exist' );
 		cy.get( '.frm-page-skeleton-title' ).should( 'contain', 'No add-ons found' );
 		cy.get( '.frm-page-skeleton-text' ).should( 'contain', "Sorry, we didn't find any add-ons that match your criteria." );
-		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'contain', 'Request Add-On' ).click();
+		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'not.be.visible' );
 	} );
 } );
