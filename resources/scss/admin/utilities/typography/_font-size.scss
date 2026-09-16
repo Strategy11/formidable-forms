@@ -6,13 +6,6 @@
 	font-size: var(--text-xs) !important;
 }
 
-// Small help text often relies on a slightly muted color for its links, which
-// can fall below the contrast ratio color alone needs against the surrounding
-// text -- underline them so the link doesn't rely on color as its only cue.
-.frm-text-xs a {
-	text-decoration: underline;
-}
-
 .frm-text-sm {
 	font-size: var(--text-sm) !important;
 }
