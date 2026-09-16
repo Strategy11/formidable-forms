@@ -467,7 +467,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 				}
 				break;
 			case 'post_id':
-				$val = FrmAppHelper::post_edit_link( $item->post_id );
+				if ( $is_action_col ) {
+					// Same reasoning as the form_id case above: post_edit_link() builds its
+					// own nested <a>, which breaks the outer row-title link when this column
+					// is the action column.
+					$post = get_post( $item->post_id );
+					$val  = $post ? FrmAppHelper::truncate( $post->post_title, 50 ) : FrmFormsHelper::get_no_title_text();
+				} else {
+					$val = FrmAppHelper::post_edit_link( $item->post_id );
+				}
 				break;
 			case 'user_id':
 				$user = get_userdata( $item->user_id );

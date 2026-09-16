@@ -91,6 +91,49 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * Same bug class as the form_id case above, on the Post column shown
+	 * when a form has a create-post action: post_edit_link() builds its own
+	 * nested <a>, which must be dropped in favor of a plain label when this
+	 * column is the row's action column.
+	 *
+	 * @covers FrmEntriesListHelper::column_value
+	 */
+	public function test_column_value_post_id_as_action_col_has_no_nested_link() {
+		FrmAppHelper::set_current_screen_and_hook_suffix();
+
+		$item          = new stdClass();
+		$item->post_id = $this->factory->post->create( array( 'post_title' => 'My Post' ) );
+
+		// Not the action column: existing behavior, links to the post itself.
+		$column_value = $this->column_value( $item, 'post_id', false );
+		$this->assertStringContainsString( '<a ', $column_value );
+		$this->assertStringContainsString( 'My Post', $column_value );
+
+		// As the action column: no nested <a>, plain label only.
+		$column_value = $this->column_value( $item, 'post_id', true );
+		$this->assertStringNotContainsString( '<a ', $column_value );
+		$this->assertSame( 'My Post', $column_value );
+	}
+
+	/**
+	 * An entry whose linked post no longer exists must still render
+	 * non-empty fallback text as the action column, not an empty
+	 * row-title link.
+	 *
+	 * @covers FrmEntriesListHelper::column_value
+	 */
+	public function test_column_value_post_id_as_action_col_missing_post_falls_back() {
+		FrmAppHelper::set_current_screen_and_hook_suffix();
+
+		$item          = new stdClass();
+		$item->post_id = 999999999;
+
+		$column_value = $this->column_value( $item, 'post_id', true );
+		$this->assertNotEmpty( $column_value );
+		$this->assertStringNotContainsString( '<a ', $column_value );
+	}
+
+	/**
 	 * @param stdClass $item
 	 * @param string   $column_name
 	 * @param bool     $is_action_col
