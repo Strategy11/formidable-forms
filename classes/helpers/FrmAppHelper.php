@@ -211,7 +211,7 @@ class FrmAppHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_utm_medium() {
+	public static function get_utm_medium() {
 		return self::pro_is_connected() ? 'pro' : 'lite';
 	}
 
@@ -3926,6 +3926,7 @@ class FrmAppHelper {
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
 			'inboxSlideIn'                  => FrmInbox::get_inbox_slide_in_value_for_js(),
+			'utmMedium'                     => self::get_utm_medium(),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 

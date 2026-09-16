@@ -672,4 +672,215 @@ class FrmTransLiteAppHelper {
 		 */
 		do_action( 'frm_disconnected_gateway', $gateway, $mode );
 	}
+
+	/**
+	 * Get the connection state of a payment gateway for a single mode.
+	 *
+	 * Every gateway stores its credentials per mode, so a site can be connected in test mode
+	 * and disconnected in live mode at the same time.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode    'auto', 'test', or 'live'. 'auto' uses the mode the gateway is currently set to.
+	 *
+	 * @return string 'connected' when the gateway can take a payment in this mode, 'incomplete' when the
+	 *                account was created but never finished onboarding, 'disconnected' when there are no
+	 *                credentials at all. An unknown gateway is reported as 'connected' so nothing is blocked.
+	 */
+	public static function get_gateway_connection_state( $gateway, $mode = 'auto' ) {
+		switch ( $gateway ) {
+			case 'stripe':
+				if ( FrmStrpLiteConnectHelper::stripe_connect_is_setup( $mode ) ) {
+					return 'connected';
+				}
+
+				return FrmStrpLiteConnectHelper::get_account_id( $mode ) ? 'incomplete' : 'disconnected';
+
+			case 'square':
+				return FrmSquareLiteConnectHelper::get_merchant_id( $mode ) ? 'connected' : 'disconnected';
+
+			case 'paypal':
+				return FrmPayPalLiteConnectHelper::get_merchant_id( $mode ) ? 'connected' : 'disconnected';
+		}
+
+		return 'connected';
+	}
+
+	/**
+	 * Explain why a gateway cannot take a payment right now.
+	 *
+	 * This is used both before sending anything to the connect server and when a payment action runs,
+	 * so an unconnected site gets a message about the connection instead of an unrelated API error.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode    'auto', 'test', or 'live'. 'auto' uses the mode the gateway is currently set to.
+	 *
+	 * @return string An empty string when the gateway is connected in this mode.
+	 */
+	public static function get_gateway_connection_error( $gateway, $mode = 'auto' ) {
+		$mode  = self::get_gateway_mode( $gateway, $mode );
+		$state = self::get_gateway_connection_state( $gateway, $mode );
+
+		if ( 'connected' === $state ) {
+			return '';
+		}
+
+		$label = self::get_gateway_label( $gateway );
+
+		if ( 'incomplete' === $state ) {
+			return self::add_settings_hint( self::get_incomplete_connection_message( $label, $mode ), $label, false );
+		}
+
+		$other_mode = 'test' === $mode ? 'live' : 'test';
+
+		if ( 'connected' === self::get_gateway_connection_state( $gateway, $other_mode ) ) {
+			return self::add_settings_hint( self::get_wrong_mode_message( $label, $mode ), $label, false );
+		}
+
+		$message = sprintf(
+			/* translators: %1$s: The payment gateway name, for example Stripe */
+			__( '%1$s is not connected. Please connect your %1$s account to process payments.', 'formidable' ),
+			$label
+		);
+
+		return self::add_settings_hint( $message, $label, true );
+	}
+
+	/**
+	 * Get the message for a gateway that is connected in the mode it is not currently using.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $label The gateway name, for example 'Stripe'.
+	 * @param string $mode  The mode the gateway is currently set to, either 'test' or 'live'.
+	 *
+	 * @return string
+	 */
+	private static function get_wrong_mode_message( $label, $mode ) {
+		if ( 'test' === $mode ) {
+			return sprintf(
+				/* translators: %1$s: The payment gateway name, for example Stripe */
+				__( '%1$s is set to test mode, but it is only connected in live mode. Connect %1$s in test mode, or turn off test mode to use the live connection.', 'formidable' ),
+				$label
+			);
+		}
+
+		return sprintf(
+			/* translators: %1$s: The payment gateway name, for example Stripe */
+			__( '%1$s is set to live mode, but it is only connected in test mode. Connect %1$s in live mode, or turn on test mode to use the test connection.', 'formidable' ),
+			$label
+		);
+	}
+
+	/**
+	 * Get the message for a gateway with credentials that never finished onboarding.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $label The gateway name, for example 'Stripe'.
+	 * @param string $mode  The mode the gateway is currently set to, either 'test' or 'live'.
+	 *
+	 * @return string
+	 */
+	private static function get_incomplete_connection_message( $label, $mode ) {
+		if ( 'test' === $mode ) {
+			return sprintf(
+				/* translators: %s: The payment gateway name, for example Stripe */
+				__( 'The %s connection for test mode was started but never finished. Complete the connection to process payments.', 'formidable' ),
+				$label
+			);
+		}
+
+		return sprintf(
+			/* translators: %s: The payment gateway name, for example Stripe */
+			__( 'The %s connection for live mode was started but never finished. Complete the connection to process payments.', 'formidable' ),
+			$label
+		);
+	}
+
+	/**
+	 * Tell users who can change settings where to fix the connection.
+	 *
+	 * Everyone else gets the reason without the pointer to an admin page they cannot open.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $message       The message explaining the connection problem.
+	 * @param string $label         The gateway name, for example 'Stripe'.
+	 * @param bool   $needs_connect True to point at connecting the account, false to point at the existing settings.
+	 *
+	 * @return string
+	 */
+	private static function add_settings_hint( $message, $label, $needs_connect ) {
+		if ( ! current_user_can( 'frm_change_settings' ) ) {
+			return $message;
+		}
+
+		if ( $needs_connect ) {
+			$hint = sprintf(
+				/* translators: %s: The payment gateway name, for example Stripe */
+				__( 'You can connect %s in Global Settings, under the Payments section.', 'formidable' ),
+				$label
+			);
+		} else {
+			$hint = sprintf(
+				/* translators: %s: The payment gateway name, for example Stripe */
+				__( 'You can update the %s connection in Global Settings, under the Payments section.', 'formidable' ),
+				$label
+			);
+		}
+
+		return $message . ' ' . $hint;
+	}
+
+	/**
+	 * Get the mode a gateway is currently set to use.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode    'auto', 'test', or 'live'.
+	 *
+	 * @return string Either 'test' or 'live'.
+	 */
+	private static function get_gateway_mode( $gateway, $mode ) {
+		if ( 'auto' !== $mode ) {
+			return 'test' === $mode ? 'test' : 'live';
+		}
+
+		switch ( $gateway ) {
+			case 'stripe':
+				return FrmStrpLiteAppHelper::active_mode();
+
+			case 'square':
+				return FrmSquareLiteAppHelper::active_mode();
+
+			case 'paypal':
+				return FrmPayPalLiteAppHelper::active_mode();
+		}
+
+		return 'live';
+	}
+
+	/**
+	 * Get the display name for a gateway.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 *
+	 * @return string
+	 */
+	private static function get_gateway_label( $gateway ) {
+		$labels = array(
+			'stripe' => 'Stripe',
+			'square' => 'Square',
+			'paypal' => 'PayPal',
+		);
+
+		return $labels[ $gateway ] ?? ucfirst( $gateway );
+	}
 }

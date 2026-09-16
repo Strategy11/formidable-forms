@@ -363,4 +363,79 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertStringContainsString( 'name="item_meta[' . $field->id . ']"', $html );
 		$this->assertStringContainsString( 'id="field_' . $field->field_key . '"', $html );
 	}
+	/**
+	 * A field in a repeater row is rendered with an id of '{field_id}-{section_id}-{row}', and its
+	 * errors are keyed by that same id, so the plain field id matches nothing inside a repeater.
+	 *
+	 * @covers FrmFieldType::set_aria_invalid_error
+	 */
+	public function test_set_aria_invalid_error_in_repeater() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'text',
+				'form_id' => $form_id,
+			)
+		);
+
+		$field_obj      = FrmFieldFactory::get_field_object( $field->id );
+		$row_field_id   = $field->id . '-99-0';
+		$shortcode_atts = array();
+
+		$field_obj->set_aria_invalid_error(
+			$shortcode_atts,
+			array(
+				'field_id' => $row_field_id,
+				'errors'   => array( 'field' . $row_field_id => 'This field cannot be blank.' ),
+			)
+		);
+
+		$this->assertSame( 'true', $shortcode_atts['aria-invalid'] );
+
+		$shortcode_atts = array();
+
+		$field_obj->set_aria_invalid_error(
+			$shortcode_atts,
+			array(
+				'field_id' => $field->id . '-99-1',
+				'errors'   => array( 'field' . $row_field_id => 'This field cannot be blank.' ),
+			)
+		);
+
+		$this->assertSame( 'false', $shortcode_atts['aria-invalid'], 'Only the row that failed validation is invalid.' );
+	}
+
+	/**
+	 * The sub field of a combo field that failed validation is what an error summary link focuses,
+	 * so it needs to be flagged in a repeater row too.
+	 *
+	 * @covers FrmFieldCombo::set_aria_invalid_error
+	 */
+	public function test_set_aria_invalid_error_for_combo_field_in_repeater() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'name',
+				'form_id' => $form_id,
+			)
+		);
+
+		$field_obj      = FrmFieldFactory::get_field_object( $field->id );
+		$row_field_id   = $field->id . '-99-0';
+		$shortcode_atts = array();
+
+		$field_obj->set_aria_invalid_error(
+			$shortcode_atts,
+			array(
+				'field_id' => $row_field_id,
+				'errors'   => array(
+					'field' . $row_field_id           => 'Name cannot be blank.',
+					'field' . $row_field_id . '-last' => '',
+				),
+			)
+		);
+
+		$this->assertSame( 'false', $shortcode_atts['aria-invalid-first'] );
+		$this->assertSame( 'true', $shortcode_atts['aria-invalid-last'] );
+	}
 }
