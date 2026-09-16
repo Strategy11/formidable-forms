@@ -37,6 +37,30 @@ class test_FrmFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmFieldsController::parse_bulk_edit_opts
+	 */
+	public function test_parse_bulk_edit_opts_drops_blank_lines() {
+		// A blank line (or one that is only whitespace) must be dropped, not
+		// kept as an option with an empty string value - an empty value
+		// collides with an unset field value in FrmAppHelper::check_selected()
+		// and renders as selected by default (formidable-pro#3385).
+		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree" );
+
+		$this->assertSame( array( 'One', 'Two', 'Three' ), array_values( $opts ) );
+	}
+
+	public function test_parse_bulk_edit_opts_keeps_zero_value() {
+		// '0' is falsy but a valid option value - only truly blank lines drop.
+		$opts = $this->parse_bulk_edit_opts( "0\nOne" );
+
+		$this->assertSame( array( '0', 'One' ), array_values( $opts ) );
+	}
+
+	private function parse_bulk_edit_opts( $opts ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts ) );
+	}
+
+	/**
 	 * @covers FrmFieldsController::pull_custom_error_body_from_custom_html
 	 */
 	public function test_pull_custom_error_body_from_custom_html() {
