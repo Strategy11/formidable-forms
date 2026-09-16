@@ -55,6 +55,7 @@ class FrmFormActionsController {
 		$action_classes = array(
 			'on_submit'         => 'FrmOnSubmitAction',
 			'email'             => 'FrmEmailAction',
+			'gated_content'     => 'FrmGatedContentAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'stripe'            => 'FrmStripeLiteAction',
@@ -134,6 +135,7 @@ class FrmFormActionsController {
 			'api'               => __( 'System integration', 'formidable' ),
 			'googlespreadsheet' => __( 'Spreadsheet sync', 'formidable' ),
 			'convertkit'        => __( 'Broadcast publishing', 'formidable' ),
+			'gated_content'     => __( 'Access control', 'formidable' ),
 		);
 
 		foreach ( self::$registered_actions->actions as $action ) {
@@ -627,15 +629,15 @@ class FrmFormActionsController {
 			return;
 		}
 
-		$documentation_url = 'https://formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-limit-of-form-actions';
+		$documentation_url = FrmAppHelper::get_doc_url( 'frm_form_action_limit/#kb-increase-limit-of-form-actions', 'form-action-limit' );
 
 		echo '<div class="frm_warning_style">';
 		FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon' );
 		echo '&nbsp;';
 		printf(
-			// translators: %s: URL to documentation
+			// translators: %s: Link to documentation
 			esc_html__( 'You have reached your form action limit. To increase this limit, you will require additional code. Visit our documentation at %s.', 'formidable' ),
-			'<a href="' . esc_url( $documentation_url ) . '" target="_blank">' . esc_html( $documentation_url ) . '</a>'
+			'<a href="' . esc_url( $documentation_url ) . '" target="_blank">' . esc_html__( 'Increase Limit of Form Actions', 'formidable' ) . '</a>'
 		);
 		echo '</div>';
 	}
@@ -1126,7 +1128,7 @@ class FrmFormActionsController {
 	 * @return string[]
 	 */
 	public static function get_lite_actions() {
-		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment', 'stripe', 'square', 'paypal' ) );
+		return apply_filters( 'frm_lite_form_actions', array( 'on_submit', 'email', 'payment', 'stripe', 'square', 'paypal', 'gated_content' ) );
 	}
 
 	/**

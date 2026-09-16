@@ -87,7 +87,7 @@
 	 * Update the 'mode' query param in the current URL based on the show description toggle.
 	 * The screen-options redirect uses HTTP_REFERER, so the updated URL is preserved after submit.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return {void}
 	 */
@@ -239,7 +239,7 @@
 
 						const leftChildren = [
 							postLink,
-							post.post_title && post.post_name && post.post_name !== '' ? frmDom.span( {
+							post.post_title && post.post_name ? frmDom.span( {
 								text: `/${ post.post_name }`
 							} ) : undefined
 						].filter( Boolean );

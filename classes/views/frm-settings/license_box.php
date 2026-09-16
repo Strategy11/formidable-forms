@@ -41,7 +41,7 @@ if ( $unlock_more_upgrade_link ) {
 ?>
 <div id="frm_license_top" class="frm_unauthorized_box">
 	<p id="frm-connect-btns" class="frm-show-unauthorized">
-		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary frm-button-sm">
+		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary frm-button-sm" target="_blank" rel="noopener">
 			<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
 		</a>
 		<?php esc_html_e( 'or', 'formidable' ); ?>
@@ -59,7 +59,7 @@ if ( $unlock_more_upgrade_link ) {
 			printf(
 				/* translators: %1$s: Start link HTML, %2$s: CTA Text (Default is "upgrading to PRO"), %3$s: End link HTML */
 				esc_html__( 'To unlock more features consider %1$s%2$s%3$s.', 'formidable' ),
-				'<a href="' . esc_url( $unlock_more_upgrade_link ) . '">',
+				'<a href="' . esc_url( $unlock_more_upgrade_link ) . '" target="_blank" rel="noopener">',
 				esc_html( $unlock_more_upgrade_text ),
 				'</a>'
 			);

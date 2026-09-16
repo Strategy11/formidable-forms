@@ -33,6 +33,9 @@ class FrmPayPalLiteHooksController {
 		add_filter( 'frm_add_settings_section', 'FrmPayPalLiteSettingsController::add_settings_section', 99 );
 		add_action( 'frm_update_settings', 'FrmPayPalLiteSettingsController::process_form' );
 
+		// Hook into update_option to preserve test_mode when add-on saves
+		add_action( 'update_option_frm_paypal_options', 'FrmPayPalLiteSettingsController::preserve_test_mode_on_update', 10, 2 );
+
 		add_filter( 'frm_before_save_payment_action', 'FrmPayPalLiteActionsController::before_save_settings', 20, 2 );
 
 		// Hook into after payment type to render Product Name and Product Type fields.
@@ -47,7 +50,12 @@ class FrmPayPalLiteHooksController {
 			function ( $options ) {
 				// Make actions using the PayPal add-on use the same icon we use in Lite.
 				$options['classes'] = 'frmfont frm_paypal_icon';
-				$options['is_beta'] = true;
+
+				// The PayPal add-on registers its own action for the 'paypal' id_base with a
+				// limit of 99. PayPal Commerce uses that id_base too, so set the limit back to
+				// one instead of inheriting the add-on's.
+				$options['limit'] = 1;
+
 				return $options;
 			}
 		);
@@ -81,9 +89,6 @@ class FrmPayPalLiteHooksController {
 
 		add_action( 'wp_ajax_frm_paypal_create_subscription', 'FrmPayPalLiteAppController::create_subscription' );
 		add_action( 'wp_ajax_nopriv_frm_paypal_create_subscription', 'FrmPayPalLiteAppController::create_subscription' );
-
-		add_action( 'wp_ajax_frm_paypal_create_vault_setup_token', 'FrmPayPalLiteAppController::create_vault_setup_token' );
-		add_action( 'wp_ajax_nopriv_frm_paypal_create_vault_setup_token', 'FrmPayPalLiteAppController::create_vault_setup_token' );
 
 		add_action( 'wp_ajax_frm_paypal_report_error', 'FrmPayPalLiteAppController::report_error' );
 		add_action( 'wp_ajax_nopriv_frm_paypal_report_error', 'FrmPayPalLiteAppController::report_error' );

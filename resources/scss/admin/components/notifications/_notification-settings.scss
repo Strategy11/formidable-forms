@@ -71,7 +71,7 @@ table td,
 
 #frm_notification_settings .frm_email_buttons {
 	padding: var(--gap-2xs);
-	background: var(--light-blue);
+	background: var(--primary-25);
 	color: var(--primary-700);
 	border-radius: var(--small-radius);
 	border-color: var(--blue-border);
@@ -80,6 +80,31 @@ table td,
 	min-height: 12px;
 	font-size: var(--text-xs);
 	box-shadow: none;
+	transition:
+		0.12s background-color ease,
+		0.12s transform ease;
+
+	/* These carry WordPress's .button class, so without this they take its grey hover. */
+	&:hover {
+		background: var(--primary-100);
+		color: var(--primary-700);
+		border-color: var(--blue-border);
+	}
+
+	&:active {
+		transform: scale(0.96);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	#frm_notification_settings .frm_email_buttons {
+		transition: none;
+
+		&:active {
+			transform: none;
+		}
+	}
 }
 
 p.frm_bcc_cc_container,

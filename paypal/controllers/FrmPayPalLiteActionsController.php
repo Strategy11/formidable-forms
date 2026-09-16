@@ -100,6 +100,94 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Check if a payment action has conditional logic rules to evaluate.
+	 * Conditional logic on actions is a Pro feature, so an action never has any in Lite.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $payment_action The payment action to check.
+	 *
+	 * @return bool
+	 */
+	public static function action_has_conditional_logic( $payment_action ) {
+		return (bool) self::get_logic_field_ids( $payment_action );
+	}
+
+	/**
+	 * Get the IDs of the fields used in a payment action's conditional logic.
+	 * The front end watches these fields, since a change to one can switch which
+	 * action applies, and with it the amount and the payment settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $payment_action The payment action to read the conditions from.
+	 *
+	 * @return array
+	 */
+	public static function get_logic_field_ids( $payment_action ) {
+		if ( empty( $payment_action->post_content['conditions'] ) || ! is_array( $payment_action->post_content['conditions'] ) ) {
+			return array();
+		}
+
+		$field_ids = array();
+
+		foreach ( $payment_action->post_content['conditions'] as $key => $condition ) {
+			if ( ! is_numeric( $key ) || ! is_array( $condition ) || empty( $condition['hide_field'] ) ) {
+				// 'any_all' and 'send_stop' describe the group rather than a single condition.
+				continue;
+			}
+
+			$field_ids[] = $condition['hide_field'];
+		}
+
+		return array_values( array_unique( $field_ids ) );
+	}
+
+	/**
+	 * Filter payment actions down to the ones whose conditional logic is met.
+	 * An action without conditional logic always applies.
+	 *
+	 * @since x.x
+	 *
+	 * @param array    $payment_actions The payment actions to filter.
+	 * @param stdClass $entry           An entry object, either a real entry or one built from posted values.
+	 *
+	 * @return array
+	 */
+	public static function filter_actions_by_conditional_logic( $payment_actions, $entry ) {
+		foreach ( $payment_actions as $key => $payment_action ) {
+			if ( ! self::action_has_conditional_logic( $payment_action ) ) {
+				continue;
+			}
+
+			// action_conditions_met returns true when the action should be stopped.
+			if ( FrmFormAction::action_conditions_met( $payment_action, $entry ) ) {
+				unset( $payment_actions[ $key ] );
+			}
+		}
+
+		return $payment_actions;
+	}
+
+	/**
+	 * Get the PayPal action that applies to the values in an entry.
+	 * A form can have several PayPal actions, each with its own conditional logic,
+	 * so the amount and the payment settings have to come from the action that the
+	 * submitted values actually match, not from whichever action happens to be first.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $form_id The form the actions belong to.
+	 * @param stdClass   $entry   An entry object, either a real entry or one built from posted values.
+	 *
+	 * @return false|WP_Post The matching action, or false when conditional logic rules them all out.
+	 */
+	public static function get_action_for_entry( $form_id, $entry ) {
+		$payment_actions = self::filter_actions_by_conditional_logic( self::get_actions_before_submit( $form_id ), $entry );
+		return $payment_actions ? reset( $payment_actions ) : false;
+	}
+
+	/**
 	 * Trigger a PayPal payment after a form is submitted.
 	 * This is called for both one time and recurring payments.
 	 *
@@ -124,8 +212,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		if ( ! self::paypal_is_configured() ) {
-			$response['error'] = __( 'PayPal still needs to be configured.', 'formidable' );
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal' );
+
+		if ( $connection_error ) {
+			$response['error'] = $connection_error;
 			return $response;
 		}
 
@@ -615,7 +705,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return false;
 		}
 
-		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED', 'APPROVAL_PENDING' ), true );
+		return in_array( $subscription->status, array( 'ACTIVE', 'APPROVED' ), true );
 	}
 
 	/**
@@ -629,11 +719,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool
 	 */
 	private static function validate_subscription_amount( $subscription, $expected_amount ) {
-		// Vault-created subscriptions in APPROVAL_PENDING have no billing details yet.
-		if ( isset( $subscription->status ) && 'APPROVAL_PENDING' === $subscription->status ) {
-			return true;
-		}
-
 		$subscription_amount = $subscription->billing_info->last_payment->amount->value ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value ?? '';
 
 		if ( ! $subscription_amount ) {
@@ -1108,15 +1193,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Check if PayPal integration is enabled.
-	 *
-	 * @return bool true if PayPal is set up.
-	 */
-	private static function paypal_is_configured() {
-		return (bool) FrmPayPalLiteConnectHelper::get_merchant_id();
-	}
-
-	/**
 	 * Convert the amount from 10.00 to 1000.
 	 *
 	 * @param mixed $amount
@@ -1219,6 +1295,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			function ( $settings_for_action, $payment_action ) use ( &$payment_action_by_id ) {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
 				$settings_for_action['paypalLayout']         = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				$settings_for_action['logic_fields']         = self::get_logic_field_ids( $payment_action );
 				return $settings_for_action;
 			},
 			10,
@@ -1264,24 +1341,31 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			$query_args['vault'] = 'true';
 		}
 
-		$include_buttons     = false;
-		$include_card_fields = false;
-		$include_messages    = true;
+		if ( 'subscription' === $intent ) {
+			$include_buttons     = true;
+			$include_card_fields = false;
+		} else {
+			// One time payments.
+			$include_buttons     = false;
+			$include_card_fields = false;
 
-		switch ( $action->post_content['paypal_layout'] ?? 'card_and_checkout' ) {
-			case 'card_only':
-				$include_card_fields = true;
-				break;
+			switch ( $action->post_content['paypal_layout'] ?? 'card_and_checkout' ) {
+				case 'card_only':
+					$include_card_fields = true;
+					break;
 
-			case 'checkout_only':
-				$include_buttons = true;
-				break;
+				case 'checkout_only':
+					$include_buttons = true;
+					break;
 
-			default:
-				$include_buttons     = true;
-				$include_card_fields = true;
-				break;
-		}
+				default:
+					$include_buttons     = true;
+					$include_card_fields = true;
+					break;
+			}
+		}//end if
+
+		$include_messages = true;
 
 		switch ( $action->post_content['pay_later'] ?? 'auto' ) {
 			case 'off':
@@ -1294,14 +1378,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				break;
 		}
 
-		$components               = array();
-		$include_google_apple_pay = $include_buttons && is_ssl() && self::include_google_pay_apple_pay();
+		$components              = array();
+		$supports_wallet_buttons = $include_buttons && 'subscription' !== $intent && is_ssl() && self::include_google_pay_apple_pay();
+		$include_google_pay      = $supports_wallet_buttons && self::include_google_pay();
+		$include_apple_pay       = $supports_wallet_buttons && self::include_apple_pay();
 
 		if ( $include_buttons ) {
 			$components[] = 'buttons';
 
-			if ( $include_google_apple_pay ) {
+			if ( $include_google_pay ) {
 				$components[] = 'googlepay';
+			}
+
+			if ( $include_apple_pay ) {
 				$components[] = 'applepay';
 			}
 		}
@@ -1341,7 +1430,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		wp_register_script( 'paypal-sdk', $sdk_url, array(), null, false );
 
-		if ( $include_google_apple_pay ) {
+		if ( $include_apple_pay ) {
 			wp_register_script( 'apple-pay-sdk', 'https://applepay.cdn-apple.com/jsapi/1.latest/apple-pay-sdk.js', array(), null, false );
 		}
 
@@ -1384,7 +1473,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$dependencies = array( 'paypal-sdk', 'formidable' );
 
-		if ( $include_google_apple_pay ) {
+		if ( $include_apple_pay ) {
 			$dependencies[] = 'apple-pay-sdk';
 		}
 
@@ -1398,7 +1487,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		if ( $include_google_apple_pay ) {
+		if ( $include_google_pay ) {
 			wp_enqueue_script(
 				'google-pay',
 				'https://pay.google.com/gp/p/js/pay.js',
@@ -1416,13 +1505,21 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'style'                    => self::get_style_for_js( $form_id ),
 			'buttonStyle'              => self::get_button_style_for_js( $action ),
 			'imagesUrl'                => FrmPayPalLiteAppHelper::plugin_url() . 'images/',
-			'includeGooglePayApplePay' => $include_google_apple_pay,
+			'includeGooglePay'         => $include_google_pay,
+			'includeApplePay'          => $include_apple_pay,
+			'includeGooglePayApplePay' => $include_google_pay || $include_apple_pay,
+			'mode'                     => FrmPayPalLiteAppHelper::active_mode(),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
 	}
 
 	/**
+	 * Check if the Google Pay and Apple Pay wallet buttons are allowed at all.
+	 *
+	 * This gates both wallets together. To turn off just one of them, use
+	 * frm_paypal_commerce_include_google_pay or frm_paypal_commerce_include_apple_pay instead.
+	 *
 	 * @since 6.31
 	 *
 	 * @return bool
@@ -1434,6 +1531,44 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		 * @param bool $include_google_pay_apple_pay
 		 */
 		return (bool) apply_filters( 'frm_include_google_pay_apple_pay', true );
+	}
+
+	/**
+	 * Check if the Google Pay wallet button is allowed for PayPal Commerce.
+	 *
+	 * Only called when frm_include_google_pay_apple_pay allows the wallets, so this
+	 * filter turns off Google Pay without affecting Apple Pay.
+	 *
+	 * @since 6.34
+	 *
+	 * @return bool
+	 */
+	private static function include_google_pay() {
+		/**
+		 * @since 6.34
+		 *
+		 * @param bool $include_google_pay
+		 */
+		return (bool) apply_filters( 'frm_paypal_commerce_include_google_pay', true );
+	}
+
+	/**
+	 * Check if the Apple Pay wallet button is allowed for PayPal Commerce.
+	 *
+	 * Only called when frm_include_google_pay_apple_pay allows the wallets, so this
+	 * filter turns off Apple Pay without affecting Google Pay.
+	 *
+	 * @since 6.34
+	 *
+	 * @return bool
+	 */
+	private static function include_apple_pay() {
+		/**
+		 * @since 6.34
+		 *
+		 * @param bool $include_apple_pay
+		 */
+		return (bool) apply_filters( 'frm_paypal_commerce_include_apple_pay', true );
 	}
 
 	/**

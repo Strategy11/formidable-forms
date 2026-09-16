@@ -32,6 +32,13 @@
 
 		const card = await payments.card();
 		const cardStyle = frmSquareVars.style;
+
+		// Never attach while the card element is hidden (e.g. by conditional
+		// logic). Square measures the container on attach, and a hidden
+		// container measures as zero-size, so the card form renders with the
+		// wrong height. Wait until the element is visible before attaching.
+		await waitForVisibleCardElement( cardElement );
+
 		await card.attach( '.frm-card-element' );
 
 		card.configure( { style: cardStyle } );
@@ -60,6 +67,12 @@
 				if ( squareCardElementIsComplete ) {
 					enableSubmit();
 				} else {
+					if ( squareIsConditionallyDisabled( thisForm ) ) {
+						running = 0;
+						enableSubmit();
+						return;
+					}
+
 					disableSubmit( thisForm );
 				}
 			}
@@ -80,7 +93,7 @@
 			} else {
 				cardFields.postalCode = false;
 				squareCardElementIsComplete = false;
-				disableSubmit();
+				disableSubmit( thisForm );
 			}
 		} );
 
@@ -88,10 +101,97 @@
 	}
 
 	/**
+	 * Resolve once the card element is visible (has a layout box).
+	 * A width of zero means the element or one of its ancestors is hidden,
+	 * usually by conditional logic setting display: none.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {HTMLElement} cardElement
+	 * @return {Promise<void>}
+	 */
+	function waitForVisibleCardElement( cardElement ) {
+		return new Promise( resolve => {
+			if ( cardElement.getBoundingClientRect().width > 0 ) {
+				resolve();
+				return;
+			}
+
+			const form = cardElement.closest( 'form' );
+			const observer = new MutationObserver( () => {
+				if ( cardElement.getBoundingClientRect().width > 0 ) {
+					observer.disconnect();
+					resolve();
+				}
+			} );
+
+			// Conditional logic toggles inline styles on field and section
+			// containers, so watch the whole form for attribute changes and
+			// re-check the card element's visibility on each change.
+			observer.observe( form || document.body, {
+				attributes: true,
+				attributeFilter: [ 'style', 'class' ],
+				subtree: true
+			} );
+		} );
+	}
+
+	/**
+	 * Check if a Square card element is conditionally hidden.
+	 * If it is, we should not be disabling the submit button.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {HTMLElement} form
+	 *
+	 * @return {boolean} True if the field is conditionally hidden, false otherwise.
+	 */
+	function squareIsConditionallyDisabled( form ) {
+		const fieldContainer = getPaymentElementFieldContainer( form );
+		if ( ! fieldContainer ) {
+			return false;
+		}
+
+		// Field is conditionally hidden.
+		if ( 'none' === fieldContainer.style.display ) {
+			return true;
+		}
+
+		// Section parent is conditionally hidden.
+		const parentSection = fieldContainer.closest( '.frm_section_heading' );
+		return parentSection && 'none' === parentSection.style.display;
+	}
+
+	/**
+	 * Try to get the field container for a Square card payment element.
+	 * The field container is checked to determine if the field is conditionally hidden or not.
+	 *
+	 * @param {HTMLElement} form
+	 *
+	 * @return {HTMLElement|null} The field container element or null if not found.
+	 */
+	function getPaymentElementFieldContainer( form ) {
+		const paymentElement = form.querySelector( '.frm-card-element' );
+		if ( ! paymentElement ) {
+			return null;
+		}
+		return paymentElement.parentElement.closest( '.frm_form_field' );
+	}
+
+	/**
 	 * Enable the submit button for the form.
+	 *
+	 * Square being ready is only half of what enables the button. When the submit
+	 * button has conditional logic of its own that is not satisfied, it stays
+	 * disabled no matter what state the card is in, so every caller is checked
+	 * here rather than at the individual call sites.
 	 */
 	function enableSubmit() {
 		if ( running > 0 ) {
+			return;
+		}
+
+		if ( submitButtonIsConditionallyDisabled( getFormIdForForm( thisForm ) ) ) {
 			return;
 		}
 
@@ -222,11 +322,20 @@
 		if ( cardContainer ) {
 			thisForm = cardContainer.closest( 'form' );
 			if ( thisForm ) {
-				// Initially disable the submit button until card is valid
-				disableSubmit( thisForm );
+				listenForFieldMutations( thisForm );
+				listenForSubmitButtonMutations( thisForm );
+
+				if ( ! squareIsConditionallyDisabled( thisForm ) ) {
+					// Initially disable the submit button until card is valid
+					disableSubmit( thisForm );
+				}
 
 				// Add event listener for form submission
 				thisForm.addEventListener( 'submit', function( event ) {
+					if ( squareIsConditionallyDisabled( thisForm ) ) {
+						return;
+					}
+
 					event.preventDefault();
 					event.stopPropagation();
 
@@ -314,6 +423,173 @@
 				displayPaymentFailure( e.message );
 			}
 		}
+	}
+
+	/**
+	 * Possibly toggle on and off the submit button when a Stripe Link payment field is conditionally shown or hidden.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {HTMLElement} form
+	 * @return {void}
+	 */
+	function listenForFieldMutations( form ) {
+		const fieldContainer = getPaymentElementFieldContainer( form );
+		if ( ! fieldContainer ) {
+			return;
+		}
+
+		observeAttributeMutations( fieldContainer, handleMutation );
+
+		const section = fieldContainer.closest( '.frm_section_heading' );
+		if ( section ) {
+			observeAttributeMutations( section, handleMutation );
+		}
+
+		/**
+		 * Handle a style attribute change for either a payment field container
+		 * or the field container of its parent section.
+		 *
+		 * @param {MutationRecord} mutation
+		 * @return {void}
+		 */
+		function handleMutation( mutation ) {
+			if ( mutation.attributeName !== 'style' ) {
+				return;
+			}
+
+			const isFieldVisible = 'none' !== mutation.target.style.display;
+
+			// If field is hidden, enable submit (field is conditionally not required)
+			if ( ! isFieldVisible ) {
+				thisForm = form;
+				running = 0;
+				enableSubmit();
+				return;
+			}
+
+			// Field is now visible, recalculate size and check validation
+			if ( cardGlobal ) {
+				cardGlobal.recalculateSize();
+			}
+
+			const shouldEnable = squareCardElementIsComplete || squareIsConditionallyDisabled( form );
+			if ( ! shouldEnable ) {
+				disableSubmit( form );
+				return;
+			}
+
+			thisForm = form;
+			running = 0;
+			enableSubmit();
+		}
+	}
+
+	/**
+	 * Keep the submit button disabled while the Square card is not ready.
+	 *
+	 * Conditional logic on the submit button enables it as soon as its own
+	 * conditions are met, with no knowledge of the payment field. Watch for that
+	 * and disable it again until the card details are complete.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {HTMLElement} form
+	 * @return {void}
+	 */
+	function listenForSubmitButtonMutations( form ) {
+		const submitButton = form.querySelector( '.frm_final_submit' );
+		if ( ! submitButton ) {
+			return;
+		}
+
+		observeAttributeMutations( submitButton, mutation => {
+			if ( mutation.attributeName !== 'disabled' || submitButton.disabled ) {
+				return;
+			}
+
+			if ( squareCardElementIsComplete || squareIsConditionallyDisabled( form ) ) {
+				// Either the card is filled in or it is conditionally hidden, so
+				// there is nothing left for Square to wait on.
+				return;
+			}
+
+			disableSubmit( form );
+		} );
+	}
+
+	/**
+	 * @param {HTMLElement} element
+	 * @param {Function}    mutationHandler
+	 *
+	 * @return {void}
+	 */
+	function observeAttributeMutations( element, mutationHandler ) {
+		const observer = new MutationObserver(
+			mutations => {
+				mutations.forEach( mutationHandler );
+			}
+		);
+		observer.observe(
+			element,
+			{ attributes: true }
+		);
+	}
+
+	/**
+	 * Check if the submit button is conditionally disabled.
+	 * This is required for Stripe link so the button does not get enabled at the wrong time after completing the Stripe elements.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {string} formId
+	 *
+	 * @return {boolean} True if the submit button is conditionally disabled, false otherwise.
+	 */
+	function submitButtonIsConditionallyDisabled( formId ) {
+		if ( ! submitButtonIsConditionallyNotAvailable( formId ) ) {
+			return false;
+		}
+
+		// __FRMRULES is only defined when conditional logic is on the page.
+		const submitRules = typeof __FRMRULES === 'undefined' ? undefined : __FRMRULES[ `submit_${ formId }` ];
+
+		return Boolean( submitRules ) && 'disable' === submitRules.hideDisable;
+	}
+
+	/**
+	 * Check submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {string} formId
+	 *
+	 * @return {boolean} True if the submit button is conditionally not available, false otherwise.
+	 */
+	function submitButtonIsConditionallyNotAvailable( formId ) {
+		const hideFields = document.getElementById( `frm_hide_fields_${ formId }` );
+		if ( ! hideFields ) {
+			return false;
+		}
+
+		// The value is a JSON array of every container conditional logic has
+		// hidden, for example ["frm_field_25_container","frm_form_16_container
+		// .frm_final_submit"], so match the quoted entry anywhere in it. Matching
+		// the array brackets too would only find the submit button when it is the
+		// single hidden entry, and it never is once the payment field has
+		// conditional logic of its own.
+		return hideFields.value.includes( `"frm_form_${ formId }_container .frm_final_submit"` );
+	}
+
+	/**
+	 * Check a form's form_id input for a form ID value.
+	 *
+	 * @param {HTMLElement} form
+	 *
+	 * @return {number} The form ID.
+	 */
+	function getFormIdForForm( form ) {
+		return parseInt( form.querySelector( '[name="form_id"]' ).value );
 	}
 
 	document.addEventListener( 'DOMContentLoaded', async function() {

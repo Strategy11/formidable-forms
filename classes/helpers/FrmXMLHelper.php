@@ -48,7 +48,7 @@ class FrmXMLHelper {
 			$error_message = sprintf(
 				/* translators: 1: Documentation link */
 				__( 'In order to install XML, your server must have DOMDocument installed. Follow our documentation on %1$s to ensure DOMDocument is properly set up and XML support is enabled.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-				'<a href="https://formidableforms.com/knowledgebase/import-forms-entries-and-views/#kb-your-server-does-not-have-xml-enabled" target="_blank">Importing Forms, Entries, and Views</a>' // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				'<a href="' . esc_url( FrmAppHelper::get_doc_url( 'import-forms-entries-and-views/#kb-your-server-does-not-have-xml-enabled', 'dom-document-missing' ) ) . '" target="_blank">Importing Forms, Entries, and Views</a>' // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			);
 
 			return new WP_Error( 'SimpleXML_parse_error', $error_message, libxml_get_errors() );
@@ -620,8 +620,35 @@ class FrmXMLHelper {
 			'form_id'       => (int) $form_id,
 			'required'      => (int) $field->required,
 			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
-			'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
+			'field_options' => self::fill_field_options( $field ),
 		);
+	}
+
+	/**
+	 * Reads a field's options out of the file as an array.
+	 *
+	 * Field options are a settings map, and every step of the import reads them
+	 * as one. A file whose value there cannot be read, because it is empty or
+	 * was written by something other than an export, used to end the whole
+	 * import with a fatal error on the first field it reached. An empty set of
+	 * options is recoverable, since the defaults for the field type fill the
+	 * gaps, so prefer that over stopping.
+	 *
+	 * Unserialize is tried as well as JSON so options written by an older
+	 * version are still read rather than thrown away.
+	 *
+	 * @since 6.35
+	 *
+	 * @param object $field Field element from the file.
+	 *
+	 * @return array
+	 */
+	private static function fill_field_options( $field ) {
+		$options = (string) $field->field_options;
+
+		FrmAppHelper::unserialize_or_decode( $options );
+
+		return is_array( $options ) ? $options : array();
 	}
 
 	/**

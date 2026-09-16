@@ -411,6 +411,7 @@ class FrmTransLiteActionsController {
 				'id'         => $payment_action->ID,
 				'first_name' => $payment_action->post_content['billing_first_name'],
 				'last_name'  => $payment_action->post_content['billing_last_name'],
+				'address'    => $payment_action->post_content['billing_address'] ?? '',
 				'gateways'   => $payment_action->post_content['gateway'],
 				'fields'     => self::get_fields_for_price( $payment_action ),
 				'one'        => $payment_action->post_content['type'],
@@ -470,6 +471,12 @@ class FrmTransLiteActionsController {
 	 */
 	public static function hide_gateway_field_on_front_end( $values, $field ) {
 		if ( $field->type !== 'gateway' ) {
+			return $values;
+		}
+
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			// The hooks this uses can get called in the form builder and settings pages.
+			// But we do not need the script in this case.
 			return $values;
 		}
 
@@ -587,6 +594,12 @@ class FrmTransLiteActionsController {
 			if ( $credit_card_field_id ) {
 				$settings['credit_card'] = $credit_card_field_id;
 			}
+		}
+
+		if ( ! in_array( 'stripe', $settings['gateway'], true ) ) {
+			// We only need a gateway field for Stripe add-on compatibility,
+			// so unless Stripe is selected, we can return early.
+			return $settings;
 		}
 
 		$gateway_field_id = FrmDb::get_var(

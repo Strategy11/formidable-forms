@@ -3,19 +3,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+$campaign = 'admin-footer-link';
+
 // Determine the support link based on lite vs pro.
-$support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/support/plugin/formidable/' : 'https://formidableforms.com/new-topic/';
+$support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/support/plugin/formidable/' : FrmAppHelper::maybe_add_missing_utm(
+	'https://formidableforms.com/new-topic/',
+	array(
+		'campaign' => $campaign,
+		'content'  => 'footer-link-support',
+	)
+);
 
 $upgrade_link = FrmSalesApi::get_best_sale_value( 'footer_cta_link' );
 $utm          = array(
-	'campaign' => 'admin-footer-link',
+	'campaign' => $campaign,
 	'content'  => 'footer-link-upgrade',
 );
 
 if ( $upgrade_link ) {
 	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
 } elseif ( FrmAppHelper::pro_is_installed() ) {
-	$upgrade_link = 'https://formidableforms.com/account/downloads/';
+	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/account/downloads/', $utm );
 } else {
 	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
 }
@@ -37,7 +45,7 @@ if ( $upgrade_link ) {
 		<span>/</span>
 		<?php
 		$docs_utm = array(
-			'campaign' => 'admin-footer-link',
+			'campaign' => $campaign,
 			'content'  => 'footer-link-docs',
 		);
 		?>

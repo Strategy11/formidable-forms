@@ -96,7 +96,7 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	/**
 	 * Get all active or future_cancel subscriptions without next_bill_date check.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return array
 	 */

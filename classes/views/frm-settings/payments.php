@@ -38,7 +38,6 @@ foreach ( $payment_sections as $key => $section ) {
 		'for'           => "frm_toggle_{$key}_settings",
 		'class'         => 'frm_payment_settings_tab',
 		'tabindex'      => '0',
-		'role'          => 'tab',
 		'aria-selected' => $is_active ? 'true' : 'false',
 	);
 	?>

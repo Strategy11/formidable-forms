@@ -68,7 +68,7 @@ class FrmStylesPreviewHelper {
 	 * setting is updated in the styler preview. Fields with their own alignment
 	 * override are left untouched.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return void
 	 */

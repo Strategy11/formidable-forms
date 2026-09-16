@@ -85,10 +85,28 @@ class FrmPayPalLiteAppController {
 			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
 		}
 
-		$action = reset( $actions );
+		$action = FrmPayPalLiteActionsController::get_action_for_entry( $form_id, self::generate_false_entry() );
+
+		if ( ! $action ) {
+			// Conditional logic rules out every PayPal action for these values, so
+			// there is nothing to collect. The front end hides the payment methods
+			// and lets the form submit on its own when it sees an action ID of 0.
+			wp_send_json_success(
+				array(
+					'amount'   => 0,
+					'actionId' => 0,
+				)
+			);
+		}
+
 		$amount = self::get_amount_value_for_verification( $action );
 
-		wp_send_json_success( array( 'amount' => $amount ) );
+		wp_send_json_success(
+			array(
+				'amount'   => $amount,
+				'actionId' => $action->ID,
+			)
+		);
 	}
 
 	/**
@@ -225,7 +243,12 @@ class FrmPayPalLiteAppController {
 			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
 		}
 
-		$action              = reset( $actions );
+		$action = FrmPayPalLiteActionsController::get_action_for_entry( $form_id, self::generate_false_entry() );
+
+		if ( ! $action ) {
+			wp_send_json_error( __( 'No PayPal action applies to the values in this form', 'formidable' ) );
+		}
+
 		$amount              = self::get_amount_value_for_verification( $action );
 		$payer               = self::get_payer_data_from_posted_values( $action );
 		$shipping            = self::get_shipping_data_from_posted_values( $action );
@@ -399,7 +422,7 @@ class FrmPayPalLiteAppController {
 	 * @return array|false The formatted address array, or false if invalid.
 	 */
 	private static function format_address_for_paypal( $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) ) {
 			return false;
 		}
 
@@ -412,7 +435,7 @@ class FrmPayPalLiteAppController {
 		if ( 'us' === $address_field->field_options['address_type'] ) {
 			$country_code = 'US';
 		} else {
-			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+			$country_code = FrmAddressesController::get_country_code( $address['country'] );
 		}
 
 		if ( ! $address['line1'] || ! $address['city'] || ! $address['state'] || ! $address['zip'] || ! $country_code ) {
@@ -462,7 +485,7 @@ class FrmPayPalLiteAppController {
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$payer, $address, $address_field_id ) {
-		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
+		if ( ! is_array( $address ) || ! isset( $address['line1'] ) ) {
 			return;
 		}
 
@@ -475,7 +498,7 @@ class FrmPayPalLiteAppController {
 		if ( 'us' === $address_field->field_options['address_type'] ) {
 			$country_code = 'US';
 		} else {
-			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+			$country_code = FrmAddressesController::get_country_code( $address['country'] );
 		}
 
 		if ( ! $address['line1'] || ! $address['city'] || ! $address['state'] || ! $address['zip'] || ! $country_code ) {
@@ -616,7 +639,12 @@ class FrmPayPalLiteAppController {
 			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
 		}
 
-		$action = reset( $actions );
+		$action = FrmPayPalLiteActionsController::get_action_for_entry( $form_id, self::generate_false_entry() );
+
+		if ( ! $action ) {
+			wp_send_json_error( __( 'No PayPal action applies to the values in this form', 'formidable' ) );
+		}
+
 		$amount = self::get_amount_value_for_verification( $action );
 
 		// PayPal expects the amount in a format like 10.00, so format it.
@@ -660,12 +688,6 @@ class FrmPayPalLiteAppController {
 			'description'         => $description,
 		);
 
-		$vault_setup_token = FrmAppHelper::get_post_param( 'vault_setup_token', '', 'sanitize_text_field' );
-
-		if ( $vault_setup_token ) {
-			$data['vault_setup_token'] = $vault_setup_token;
-		}
-
 		$response = FrmPayPalLiteConnectHelper::create_subscription( $data );
 
 		if ( false === $response ) {
@@ -683,28 +705,6 @@ class FrmPayPalLiteAppController {
 		}
 
 		wp_send_json_success( array( 'subscriptionID' => $response->subscription_id ) );
-	}
-
-	public static function create_vault_setup_token() {
-		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
-
-		$payment_source = FrmAppHelper::get_post_param( 'payment_source', 'card', 'sanitize_text_field' );
-
-		$data = array(
-			'payment_source' => $payment_source,
-		);
-
-		$response = FrmPayPalLiteConnectHelper::create_vault_setup_token( $data );
-
-		if ( false === $response ) {
-			wp_send_json_error( 'Failed to create PayPal vault setup token' );
-		}
-
-		if ( ! isset( $response->token ) ) {
-			wp_send_json_error( 'Failed to create PayPal vault setup token' );
-		}
-
-		wp_send_json_success( array( 'token' => $response->token ) );
 	}
 
 	/**
@@ -823,16 +823,10 @@ class FrmPayPalLiteAppController {
 	 * @return true|WP_Error True if connected, WP_Error with message if not connected.
 	 */
 	private static function check_paypal_connection() {
-		$merchant_id = FrmPayPalLiteConnectHelper::get_merchant_id();
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal' );
 
-		if ( ! $merchant_id ) {
-			$message = __( 'PayPal is not connected. Please connect your PayPal account to process payments.', 'formidable' );
-
-			if ( current_user_can( 'frm_change_settings' ) ) {
-				$message .= ' ' . __( 'You can connect PayPal in Global Settings, under the Payments section.', 'formidable' );
-			}
-
-			return new WP_Error( 'paypal_not_connected', $message );
+		if ( $connection_error ) {
+			return new WP_Error( 'paypal_not_connected', $connection_error );
 		}
 
 		return true;
@@ -874,5 +868,13 @@ class FrmPayPalLiteAppController {
 			'message'  => $clean_message ? $clean_message : $fallback,
 			'debug_id' => $matches[1],
 		);
+	}
+
+	/**
+	 * @deprecated 6.32.1
+	 */
+	public static function create_vault_setup_token() {
+		_deprecated_function( __METHOD__, '6.32.1' );
+		wp_send_json_error( 'This API endpoint is no longer in use.' );
 	}
 }

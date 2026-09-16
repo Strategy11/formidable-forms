@@ -85,14 +85,15 @@ class FrmPayPalLiteSettings {
 	 */
 	public function update( $params ) {
 		$settings = $this->default_options();
+		$param    = $this->param();
 
 		foreach ( $settings as $setting => $default ) {
-			if ( isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
-				$this->settings->{$setting} = sanitize_text_field( $params[ 'frm_' . $this->param() . '_' . $setting ] );
+			if ( isset( $params[ 'frm_' . $param . '_' . $setting ] ) ) {
+				$this->settings->{$setting} = sanitize_text_field( $params[ 'frm_' . $param . '_' . $setting ] );
 			}
 		}
 
-		$this->settings->test_mode = isset( $params[ 'frm_' . $this->param() . '_test_mode' ] ) ? absint( $params[ 'frm_' . $this->param() . '_test_mode' ] ) : 0;
+		$this->settings->test_mode = isset( $params[ 'frm_' . $param . '_test_mode' ] ) ? absint( $params[ 'frm_' . $param . '_test_mode' ] ) : 0;
 	}
 
 	/**

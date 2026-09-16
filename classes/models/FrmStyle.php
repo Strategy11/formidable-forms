@@ -424,7 +424,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return array
 	 */
@@ -443,7 +443,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @param bool $add_css_to_uploads_dir
 	 *
@@ -459,13 +459,13 @@ class FrmStyle {
 	/**
 	 * Returns true if generated css file should be saved in the uploads directory.
 	 *
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return bool
 	 */
 	public static function add_css_to_uploads_dir() {
 		/**
-		 * @since x.x
+		 * @since 6.32
 		 *
 		 * @param bool $add_css_to_uploads_dir
 		 */
@@ -473,7 +473,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return string
 	 */
@@ -482,7 +482,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.32
 	 *
 	 * @return string
 	 */
@@ -682,12 +682,26 @@ class FrmStyle {
 		}
 
 		if ( ! isset( $settings['submit_hover_bg_color'] ) && isset( $settings['submit_bg_color'] ) ) {
-			$settings['submit_hover_bg_color']     = $settings['submit_bg_color'];
-			$settings['submit_hover_color']        = $settings['submit_text_color'];
-			$settings['submit_hover_border_color'] = $settings['submit_border_color'];
+			$settings['submit_hover_bg_color'] = $settings['submit_bg_color'];
+		}
 
-			$settings['submit_active_bg_color']     = $settings['submit_bg_color'];
-			$settings['submit_active_color']        = $settings['submit_text_color'];
+		if ( ! isset( $settings['submit_hover_color'] ) && isset( $settings['submit_text_color'] ) ) {
+			$settings['submit_hover_color'] = $settings['submit_text_color'];
+		}
+
+		if ( ! isset( $settings['submit_hover_border_color'] ) && isset( $settings['submit_border_color'] ) ) {
+			$settings['submit_hover_border_color'] = $settings['submit_border_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_bg_color'] ) && isset( $settings['submit_bg_color'] ) ) {
+			$settings['submit_active_bg_color'] = $settings['submit_bg_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_color'] ) && isset( $settings['submit_text_color'] ) ) {
+			$settings['submit_active_color'] = $settings['submit_text_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_border_color'] ) && isset( $settings['submit_border_color'] ) ) {
 			$settings['submit_active_border_color'] = $settings['submit_border_color'];
 		}
 

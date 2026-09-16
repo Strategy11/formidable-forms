@@ -374,7 +374,9 @@ class FrmAppController {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			if ( FrmAddonsController::is_license_expired() ) {
+			$is_expired = FrmAddonsController::is_license_expired();
+
+			if ( $is_expired ) {
 				$label = __( 'Renew', 'formidable' );
 			} else {
 				$label = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_text' );
@@ -384,12 +386,18 @@ class FrmAppController {
 				}
 			}
 
-			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
+			$upgrade_content = $is_expired ? 'renew' : 'upgrade';
+			$upgrade_link    = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
+
+			$utm = array(
+				'campaign' => 'plugin-row',
+				'content'  => $upgrade_content,
+			);
 
 			if ( $upgrade_link ) {
-				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, array( 'medium' => 'plugin-row' ) );
+				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
 			} else {
-				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
+				$upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
 			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
@@ -1322,14 +1330,18 @@ class FrmAppController {
 
 	/**
 	 * The payment cron is unscheduled when Formidable is deactivated.
-	 * We need to add it back again on activation if Stripe is configured.
+	 * We need to add it back again on activation if any payment gateway is configured.
 	 *
 	 * @since 6.5
 	 *
 	 * @return void
 	 */
 	private static function maybe_activate_payment_cron() {
-		if ( ! FrmStrpLiteConnectHelper::stripe_connect_is_setup() ) {
+		$stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+		$square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+		$paypal_connected = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
+
+		if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 			return;
 		}
 
@@ -1407,6 +1419,7 @@ class FrmAppController {
 			'cancel_classes'   => '',
 			'continue_url'     => '',
 			'continue_classes' => '',
+			'continue_target'  => '',
 			'icon'             => 'frm_lock_simple',
 		);
 

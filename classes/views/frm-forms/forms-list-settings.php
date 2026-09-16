@@ -2,7 +2,7 @@
 /**
  * Template for the forms list settings
  *
- * @since x.x
+ * @since 6.32
  *
  * @package Formidable
  *

@@ -79,6 +79,15 @@ class FrmSMTPController {
 	 * @return string
 	 */
 	public function link( $link ) {
+		// wp-mail-smtp-pro's own Core::get_upgrade_link() already tags $link with its own
+		// utm_* params before this filter runs, so maybe_add_missing_utm()'s fill-the-gaps
+		// behavior would leave those in place instead of applying our own attribution. Strip
+		// and retag before splicing in the hand-obfuscated `urllink` value below — running
+		// that value itself through add_query_arg() (inside maybe_add_missing_utm()) would
+		// url-decode/re-encode it and undo the obfuscation.
+		$link = remove_query_arg( array( 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_locale' ), $link );
+		$link = FrmAppHelper::maybe_add_missing_utm( $link, array( 'campaign' => 'wp-mail-smtp-upsell' ) );
+
 		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
 		return str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
 	}
