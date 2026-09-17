@@ -9,8 +9,7 @@
 		"**/frm-legacy-paypal.css",
 		"**/font_icons.css",
 		"**/frm_testing_mode.css",
-		"**/welcome-tour.css",
-		"**/css/formidableforms.css"
+		"**/welcome-tour.css"
 	],
 	"rules": {
 		"no-descending-specificity": null,
