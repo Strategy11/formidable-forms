@@ -22,6 +22,15 @@ class test_FrmStylesController extends FrmUnitTest {
 		ob_start();
 		wp_head();
 		$styles = ob_get_clean();
+
+		// wp_maybe_inline_styles() (WP core, unrelated to anything Formidable enqueues)
+		// flags a core stylesheet's dist asset as unreadable whenever this environment's
+		// WP checkout doesn't have its built dist/ files on disk - a property of the
+		// checkout, not the WP version under test, so a released-branch job may never
+		// see it while an unbuilt trunk checkout always does. Discard it either way
+		// rather than requiring it to fire.
+		unset( $this->caught_doing_it_wrong['wp_maybe_inline_styles'] );
+
 		$this->assertNotEmpty( $styles );
 
 		$frm_settings    = FrmAppHelper::get_settings();
