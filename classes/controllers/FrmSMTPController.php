@@ -239,7 +239,7 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-install">
-				<aside class="num">
+				<aside class="num" aria-label="%8$s">
 					%1$s
 					<i class="loader hidden"></i>
 				</aside>
@@ -255,7 +255,8 @@ class FrmSMTPController {
 			esc_attr( $step['plugin'] ),
 			esc_attr( $step['button_class'] ),
 			esc_attr( $step['button_action'] ),
-			esc_html( $step['button_text'] )
+			esc_html( $step['button_text'] ),
+			esc_attr__( 'Step 1', 'formidable' )
 		);
 	}
 
@@ -284,7 +285,7 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-setup %1$s">
-				<aside class="num">
+				<aside class="num" aria-label="%8$s">
 					%2$s
 					<i class="loader hidden"></i>
 				</aside>
@@ -300,7 +301,8 @@ class FrmSMTPController {
 			esc_html__( 'Select and configure your mailer.', 'formidable' ),
 			esc_url( admin_url( $this->config['smtp_settings'] ) ),
 			esc_attr( $step['button_class'] ),
-			esc_html( $step['button_text'] )
+			esc_html( $step['button_text'] ),
+			esc_attr__( 'Step 2', 'formidable' )
 		);
 	}
 
