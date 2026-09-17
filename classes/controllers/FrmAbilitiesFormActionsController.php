@@ -419,12 +419,22 @@ class FrmAbilitiesFormActionsController {
 			'menu_order'  => (int) $form->id,
 		);
 
-		if ( $type && 'all' !== $type ) {
-			$args['post_excerpt'] = $type;
+		$filter_by_type = $type && 'all' !== $type;
+
+		if ( $filter_by_type ) {
+			global $frm_vars;
+			$frm_vars['action_type']  = sanitize_title( $type );
+			$args['suppress_filters'] = false;
+			add_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 		}
 
 		$actions = get_posts( $args );
-		$data    = array();
+
+		if ( $filter_by_type ) {
+			remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
+		}
+
+		$data = array();
 
 		foreach ( $actions as $action ) {
 			$data[ $action->ID ] = self::prepare_action_for_response( $action );

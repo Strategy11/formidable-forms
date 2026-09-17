@@ -92,6 +92,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 
 	/**
 	 * @covers FrmAbilitiesController::register_abilities
+	 *
 	 * @return void
 	 */
 	public function test_abilities_are_registered() {
@@ -132,6 +133,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	 *
 	 * @covers FrmAbilitiesController::owns
 	 * @covers FrmAbilitiesController::domains
+	 *
 	 * @return void
 	 */
 	public function test_owns_reflects_every_domain_formidable_registers() {
@@ -149,6 +151,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	 *
 	 * @covers FrmAbilitiesController::owns
 	 * @covers FrmAbilitiesController::is_active
+	 *
 	 * @return void
 	 */
 	public function test_owns_is_false_for_every_domain_while_mcp_is_off() {
@@ -174,6 +177,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	 * registers while it is off.
 	 *
 	 * @covers FrmAbilitiesController::register_abilities
+	 *
 	 * @return void
 	 */
 	public function test_nothing_registers_while_mcp_is_off() {
@@ -306,8 +310,8 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 		foreach ( $this->get_formidable_abilities() as $name => $ability ) {
 			$meta = $ability->get_meta();
 
-			$this->assertTrue( ! empty( $meta['show_in_rest'] ), $name . ' should be exposed in wp-abilities/v1.' );
-			$this->assertTrue( ! empty( $meta['mcp']['public'] ), $name . ' should be public to the MCP server.' );
+			$this->assertNotEmpty( $meta['show_in_rest'], $name . ' should be exposed in wp-abilities/v1.' );
+			$this->assertNotEmpty( $meta['mcp']['public'], $name . ' should be public to the MCP server.' );
 		}
 	}
 
@@ -375,6 +379,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	 * (or a unit test directly against AbilityArgumentNormalizer) to cover.
 	 *
 	 * @covers FrmAbilitiesFormsController::execute_list_forms
+	 *
 	 * @return void
 	 */
 	public function test_list_forms_succeeds_with_no_parameters() {
@@ -415,6 +420,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	 *
 	 * @covers FrmAbilitiesStylesController::get_style
 	 * @covers FrmAbilitiesStylesController::is_style_post
+	 *
 	 * @return void
 	 */
 	public function test_get_style_refuses_a_post_that_is_not_a_style() {

@@ -309,11 +309,41 @@ class FrmAbilitiesStylesController {
 		$frm_style = 'default' === $id ? new FrmStyle( 'default' ) : new FrmStyle( $id );
 		$style     = $frm_style->get_one();
 
+		if ( ( ! $style || ! self::is_style_post( $style ) ) && 'default' !== $id ) {
+			// FrmStyle::get_one() resolves only a numeric ID, but the input
+			// schema documents post_name as an accepted id too.
+			$style = self::get_style_by_post_name( $id );
+		}
+
 		if ( ! $style || ! self::is_style_post( $style ) ) {
 			return self::get_invalid_style_error();
 		}
 
 		return $style;
+	}
+
+	/**
+	 * Load one style by its post_name.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $post_name The style's post_name.
+	 *
+	 * @return WP_Post|null
+	 */
+	private static function get_style_by_post_name( $post_name ) {
+		$styles = get_posts(
+			array(
+				'name'        => $post_name,
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'publish',
+				'numberposts' => 1,
+			)
+		);
+
+		$style = $styles ? reset( $styles ) : null;
+
+		return $style instanceof WP_Post ? $style : null;
 	}
 
 	/**

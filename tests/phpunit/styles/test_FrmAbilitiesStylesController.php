@@ -56,7 +56,7 @@ class test_FrmAbilitiesStylesController extends FrmUnitTest {
 	private function execute( $slug, $input = array() ) {
 		$ability = wp_get_ability( 'formidable-forms/' . $slug );
 
-		$this->assertNotNull( $ability, 'The ' . $slug . ' ability should be registered.' );
+		$this->assertInstanceOf( \WP_Ability::class, $ability, 'The ' . $slug . ' ability should be registered.' );
 
 		return $ability->execute( $input );
 	}
