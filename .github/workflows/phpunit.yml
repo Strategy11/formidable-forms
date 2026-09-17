@@ -25,10 +25,10 @@ jobs:
       matrix:
         include:
           - php: 7.4
-            wordpress: 6.9
+            wordpress: trunk
             multisite: 0
           - php: 8.0
-            wordpress: 6.9
+            wordpress: trunk
             multisite: 0
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
@@ -53,6 +53,19 @@ jobs:
           sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
           sed -i "s/yourusernamehere/root/" wp-tests-config.php
           sed -i "s/yourpasswordhere/root/" wp-tests-config.php
+
+      - name: Set up Node.js for WP core assets
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: /tmp/wordpress/.nvmrc
+
+      - name: Building WP core assets
+        # Core's dist JS/CSS isn't checked into git; missing it fails wp_head()'s
+        # wp_maybe_inline_styles() check (test_front_head).
+        run: |
+          cd /tmp/wordpress
+          npm ci
+          npm run build:dev
       - name: Creating database
         run: |
           sudo /etc/init.d/mysql start
