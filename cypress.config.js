@@ -1,5 +1,6 @@
 const { defineConfig } = require( "cypress" );
 const htmlvalidate = require( "cypress-html-validate/plugin" );
+const { lighthouse, prepareAudit } = require( "cypress-audit" );
 
 module.exports = defineConfig({
   fixturesFolder: "tests/cypress/fixtures",
@@ -24,6 +25,17 @@ module.exports = defineConfig({
         }
       });
       htmlvalidate.install( on );
+      on( 'before:browser:launch', ( browser, launchOptions ) => {
+        prepareAudit( launchOptions );
+        return launchOptions;
+      } );
+      on( 'task', {
+        lighthouse: lighthouse( results => {
+          // Printed so the CI log carries the raw scores even when a test
+          // passes - the only place to see them without recording a video.
+          console.log( JSON.stringify( results.lhr.categories ) );
+        } ),
+      } );
     },
     experimentalRunAllSpecs: true
   },
