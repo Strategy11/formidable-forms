@@ -881,6 +881,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <form> elements' );
 
 		$labels = array();
+
 		foreach ( $matches[0] as $form_tag ) {
 			preg_match( '/aria-label="([^"]*)"/', $form_tag, $label_match );
 			$labels[] = $label_match[1] ?? '';
