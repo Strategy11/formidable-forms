@@ -757,6 +757,24 @@ function frmFrontFormJS() {
 		grecaptcha.execute( recaptchaID );
 	}
 
+	/**
+	 * The invisible reCAPTCHA widget has no error/expired callback wired up, so a
+	 * stalled or failed check would otherwise leave the submit button disabled
+	 * with no way to retry. Only re-enable if the check itself never resolved -
+	 * once it has, the form is submitting for real and its own ajax lifecycle
+	 * owns the button state.
+	 *
+	 * @param {HTMLElement} object Form object.
+	 * @return {void}
+	 */
+	function reenableSubmitIfRecaptchaStalls( object ) {
+		setTimeout( function() {
+			if ( object.classList.contains( 'frm_loading_form' ) && hasInvisibleRecaptcha( object ) ) {
+				removeSubmitLoading( jQuery( object ), 'enable' );
+			}
+		}, 10000 );
+	}
+
 	function validateRecaptcha( form, errors ) {
 		const formEl = form instanceof jQuery ? form.get( 0 ) : form;
 		if ( ! formEl ) {
@@ -2434,12 +2452,12 @@ function frmFrontFormJS() {
 
 			const invisibleRecaptcha = hasInvisibleRecaptcha( object );
 
-			if ( invisibleRecaptcha ) {
-				showLoadingIndicator( jQuery( object ) );
-				executeInvisibleRecaptcha( invisibleRecaptcha );
-			} else {
-				showSubmitLoading( jQuery( object ) );
+			showSubmitLoading( jQuery( object ) );
 
+			if ( invisibleRecaptcha ) {
+				executeInvisibleRecaptcha( invisibleRecaptcha );
+				reenableSubmitIfRecaptchaStalls( object );
+			} else {
 				frmFrontForm.submitFormNow( object );
 			}
 		},
