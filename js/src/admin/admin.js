@@ -5,6 +5,8 @@
  */
 const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
+const { initFieldListHoverPill } = require( './fieldListHoverPill' );
+const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -119,6 +121,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 
 			if ( msg.success === true ) {
 				app.showAuthorized( true );
+				app.showLicenseType( msg );
 				app.showInlineSuccess();
 
 				/**
@@ -155,6 +158,35 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 					box.className = box.className.replace( `frm_${ from }_box`, `frm_${ to }_box` );
 				} );
 			}
+		},
+
+		/**
+		 * Update the license type message with the license that was just activated.
+		 * The message is printed before the license is known, so it would otherwise
+		 * keep showing the Lite copy until the page is reloaded.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object} msg The response from the authorize request.
+		 * @return {void}
+		 */
+		showLicenseType( msg ) {
+			if ( ! msg.license_type_info ) {
+				return;
+			}
+
+			document.querySelectorAll( '.frm_license_type_info' ).forEach( function( element ) {
+				element.textContent = msg.license_type_info;
+			} );
+
+			if ( msg.license_type !== 'Elite' ) {
+				return;
+			}
+
+			// There is nothing left to upgrade to.
+			document.querySelectorAll( '.frm_license_upgrade_cta' ).forEach( function( element ) {
+				element.remove();
+			} );
 		},
 
 		/**
@@ -8675,7 +8707,13 @@ window.frmAdminBuildJS = function() {
 	function fillDyncontent() {
 		/*jshint validthis:true */
 		const selectedValue = jQuery( this ).val();
-		const $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
+		// formidable-views renamed this id from frm_dyncontent to
+		// frm_post_action_custom_content in 2021 (formidable-views@70cde392).
+		// Older Views installs still render the old id, so check both.
+		const $dyn = jQuery(
+			document.getElementById( 'frm_post_action_custom_content' ) ||
+			document.getElementById( 'frm_dyncontent' )
+		);
 		if ( '' === selectedValue || 'new' === selectedValue ) {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
@@ -11310,6 +11348,7 @@ window.frmAdminBuildJS = function() {
 			setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
+			initFieldListHoverPill();
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
@@ -12081,6 +12120,8 @@ window.frmAdminBuild = frmAdminBuildJS();
 jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
+
+		initShowBoxIconSwap();
 
 		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
 		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );

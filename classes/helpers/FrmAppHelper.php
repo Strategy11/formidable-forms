@@ -211,7 +211,7 @@ class FrmAppHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_utm_medium() {
+	public static function get_utm_medium() {
 		return self::pro_is_connected() ? 'pro' : 'lite';
 	}
 
@@ -1358,7 +1358,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.02
 	 *
-	 * @param string $class
+	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since x.x.
 	 * @param array  $atts
 	 *
 	 * @return string|null
@@ -1370,7 +1370,35 @@ class FrmAppHelper {
 			unset( $atts['echo'] );
 		}
 
-		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+		/**
+		 * An frmfont or frm_icon_font marker anywhere in the list means the icon is in the SVG
+		 * sprite. Each class is compared whole, so a class that merely starts with a marker name,
+		 * like frmfont-sm, is left alone, and the markers can appear in any position.
+		 */
+		$icon_classes = array();
+		$is_font_icon = true;
+
+		$single_classes = preg_split( '/\s+/', $class, -1, PREG_SPLIT_NO_EMPTY );
+
+		if ( ! $single_classes ) {
+			// preg_split returns false if $class is not a string.
+			$single_classes = array();
+		}
+
+		foreach ( $single_classes as $single_class ) {
+			if ( 'frmfont' === $single_class || 'frm_icon_font' === $single_class ) {
+				$is_font_icon = false;
+				continue;
+			}
+
+			$icon_classes[] = $single_class;
+		}
+
+		$icon = implode( ' ', $icon_classes );
+
+		if ( $is_font_icon && $icon_classes ) {
+			_deprecated_argument( __METHOD__, 'x.x', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
+		}
 
 		// Replace icons that have been removed or renamed.
 		$deprecated = array(
@@ -1379,12 +1407,15 @@ class FrmAppHelper {
 			'frm_keyalt_solid_icon' => 'frm_key_solid_icon',
 		);
 
-		if ( isset( $deprecated[ $icon ] ) ) {
-			$icon  = $deprecated[ $icon ];
-			$class = str_replace( $icon, $deprecated[ $icon ], $class );
-		}
+		// The icon name is the first class in the list. Anything after it is extra styling.
+		$icon_name = $icon_classes ? $icon_classes[0] : '';
 
-		$is_font_icon = $icon === $class;
+		if ( isset( $deprecated[ $icon_name ] ) ) {
+			_deprecated_argument( __METHOD__, 'x.x', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
+
+			$class = str_replace( $icon_name, $deprecated[ $icon_name ], $class );
+			$icon  = str_replace( $icon_name, $deprecated[ $icon_name ], $icon );
+		}
 
 		if ( ! $is_font_icon ) {
 			$class = str_contains( $icon, ' ' ) ? ' ' . $icon : '';
@@ -3895,6 +3926,7 @@ class FrmAppHelper {
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
 			'inboxSlideIn'                  => FrmInbox::get_inbox_slide_in_value_for_js(),
+			'utmMedium'                     => self::get_utm_medium(),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
@@ -5033,11 +5065,19 @@ class FrmAppHelper {
 	/**
 	 * Removes scripts that are unnecessarily loaded across the pages!
 	 *
+	 * Both scripts are only ever enqueued on the form builder page (Surveys'
+	 * Likert row controls, Quizzes' form action settings), so skip on that
+	 * page or this dequeues scripts the page itself actually needs.
+	 *
 	 * @since 6.9
 	 *
 	 * @return void
 	 */
 	public static function dequeue_extra_global_scripts() {
+		if ( self::is_form_builder_page() ) {
+			return;
+		}
+
 		wp_dequeue_script( 'frm-surveys-admin' );
 		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
