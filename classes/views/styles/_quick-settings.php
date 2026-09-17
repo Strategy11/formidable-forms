@@ -194,9 +194,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	new FrmFieldShapeStyleComponent(
 		$frm_style->get_field_name( 'field_shape_type' ),
 		$style->post_content['field_shape_type'],
-		array(
-			'id' => 'frm_field_shape',
-		)
+		array()
 	);
 	?>
 </div>
