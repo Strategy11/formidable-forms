@@ -36,11 +36,11 @@ class test_FrmXMLController extends FrmUnitTest {
 
 		$thead = substr( $html, strpos( $html, '<thead>' ), strpos( $html, '</thead>' ) - strpos( $html, '<thead>' ) );
 
-		$this->assertMatchesRegularExpression(
-			'/<th scope="col" class="column-cb check-column">/',
+		$this->assertStringContainsString(
+			'<th scope="col" class="column-cb check-column">',
 			$thead,
 			'The Export table\'s cb column header cell must be a real <th scope="col">, not a <td>, for IBM table_headers_exists.'
 		);
-		$this->assertDoesNotMatchRegularExpression( '/<td/', $thead );
+		$this->assertStringNotContainsString( '<td', $thead );
 	}
 }

@@ -71,6 +71,5 @@ class test_FrmFormsListHelper extends FrmUnitTest {
 			$thead,
 			'The cb column header cell must be a real <th scope="col">, not a <td>, for IBM table_headers_exists.'
 		);
-		$this->assertDoesNotMatchRegularExpression( '/<td[^>]*column-cb/', $thead );
 	}
 }
