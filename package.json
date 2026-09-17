@@ -24,7 +24,7 @@
 		"env": "wp-env",
 		"start": "wp-scripts start assets/js/scripts.js --webpack-no-externals --output-path=dist",
 		"e2e:run": "cypress run --config-file cypress.config.js",
-		"e2e:githubrun": "cypress run --config-file cypress.config.js --env FORMIDABLE_FOLDER=formidable-forms"
+		"e2e:githubrun": "cypress run --config-file cypress.config.js --env FORMIDABLE_FOLDER=formidable-forms --browser chrome"
 	},
 	"engines": {
 		"node": ">=20.10.0",
@@ -75,6 +75,7 @@
 		"css-loader": "6.2.0",
 		"css-unicode-loader": "^1.0.3",
 		"cypress": "^15.17.0",
+		"cypress-audit": "^1.1.0",
 		"cypress-axe": "^1.5.0",
 		"cypress-html-validate": "^9.0.0",
 		"cypress-xpath": "^2.0.1",
@@ -93,6 +94,7 @@
 		"eslint-plugin-unicorn": "^63.0.0",
 		"globals": "^15.14.0",
 		"html-validate": "^8.20.0",
+		"lighthouse": "^13.4.1",
 		"mini-css-extract-plugin": "^2.9.2",
 		"oxlint": "^1.59.0",
 		"prompts": "^2.4.2",

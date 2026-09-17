@@ -20,6 +20,7 @@ import './commands';
 // require('./commands')
 
 import '@10up/cypress-wp-utils';
+import 'cypress-audit/commands';
 import 'cypress-axe';
 
 import 'cypress-html-validate/commands';
