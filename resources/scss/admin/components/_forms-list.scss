@@ -106,6 +106,18 @@
 	}
 }
 
+// FrmListHelper::print_column_headers() renders the cb column header as a real <th> (for a11y - see
+// table_headers_exists), unlike WP core's own list tables, which leave it a <td>. Core's check-column
+// padding is keyed off that td, so restate it for th here to keep the cell's layout unchanged.
+.wp-list-table {
+
+	thead th.check-column,
+	tfoot th.check-column {
+		padding: 4px 0 0 3px;
+		vertical-align: middle;
+	}
+}
+
 // Collapsible box
 .frm-collapsible-box {
 

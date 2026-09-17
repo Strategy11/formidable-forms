@@ -138,15 +138,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<table class="widefat striped frm-border frm-mt-0">
 					<thead>
 						<tr>
-							<td class="column-cb check-column">
+							<th scope="col" class="column-cb check-column">
 								<label class="screen-reader-text" for="frm-export-select-all"><?php esc_html_e( 'Select All', 'formidable' ); ?></label>
 								<input id="frm-export-select-all" type="checkbox">
-							</td>
-							<td><?php esc_html_e( 'Form Title', 'formidable' ); ?></td>
-							<td><?php esc_html_e( 'ID / Form Key', 'formidable' ); ?></td>
-							<td><?php esc_html_e( 'Type', 'formidable' ); ?></td>
-							<td class="column-entries"><?php esc_html_e( 'Entries', 'formidable' ); ?></td>
-							<td class="column-entries"><?php esc_html_e( 'Style', 'formidable' ); ?></td>
+							</th>
+							<th scope="col"><?php esc_html_e( 'Form Title', 'formidable' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'ID / Form Key', 'formidable' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Type', 'formidable' ); ?></th>
+							<th scope="col" class="column-entries"><?php esc_html_e( 'Entries', 'formidable' ); ?></th>
+							<th scope="col" class="column-entries"><?php esc_html_e( 'Style', 'formidable' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
