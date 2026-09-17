@@ -75,6 +75,7 @@
 		"css-loader": "6.2.0",
 		"css-unicode-loader": "^1.0.3",
 		"cypress": "^15.17.0",
+		"cypress-accessibility-checker": "^4.0.34",
 		"cypress-axe": "^1.5.0",
 		"cypress-html-validate": "^9.0.0",
 		"cypress-xpath": "^2.0.1",

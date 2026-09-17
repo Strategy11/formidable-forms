@@ -21,6 +21,7 @@ import './commands';
 
 import '@10up/cypress-wp-utils';
 import 'cypress-axe';
+import 'cypress-accessibility-checker';
 
 import 'cypress-html-validate/commands';
 

@@ -52,6 +52,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-dashboard' );
 	} );
 
 	it( 'Check the form list is accessible', () => {
@@ -62,6 +63,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'empty-table-header', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-form-list' );
 	} );
 
 	it( 'Check the entries page is accessible', () => {
@@ -72,6 +74,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'empty-table-header', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-entries' );
 	} );
 
 	it( 'Check the styles page is accessible', () => {
@@ -85,6 +88,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'empty-heading', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-styles' );
 	} );
 
 	it( 'Check the applications page is accessible', () => {
@@ -96,6 +100,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-applications' );
 	} );
 
 	it( 'Check the form templates page is accessible', () => {
@@ -113,6 +118,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-form-templates' );
 	} );
 
 	it( 'Check the import/export page is accessible', () => {
@@ -123,6 +129,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-import' );
 	} );
 
 	it( 'Check the global settings page is accessible', () => {
@@ -132,6 +139,7 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-settings' );
 	} );
 
 	it( 'Check the Add-Ons page is accessible', () => {
@@ -142,6 +150,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-addons' );
 	} );
 
 	it( 'Check the SMTP page is accessible', () => {
@@ -153,6 +162,7 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'landmark-complementary-is-top-level', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-smtp' );
 	} );
 
 	it( 'Check the list of deleted forms is accessible', () => {
@@ -162,5 +172,6 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules
 		] );
 		cy.checkA11y( excludeAdminBar, null, logViolations );
+		cy.checkIbmAccessibility( 'formidable-trash' );
 	} );
 } );
