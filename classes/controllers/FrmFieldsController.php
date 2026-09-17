@@ -348,10 +348,11 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_type = $field->type;
+		$field      = FrmFieldsHelper::setup_edit_vars( $field );
 
 		$opts = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
-		$opts = self::parse_bulk_edit_opts( $opts );
+		$opts = self::parse_bulk_edit_opts( $opts, $field_type );
 
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = $separate === 'true';
@@ -402,23 +403,39 @@ class FrmFieldsController {
 	 * FrmAppHelper::check_selected(), making that blank option render as
 	 * selected by default (formidable-pro#3385).
 	 *
+	 * A leading blank line on a select field is left in place: it's a
+	 * renderer-supported way to give the dropdown a blank first option when
+	 * no placeholder is set (dropdown-field.php's own $placeholder/$skipped
+	 * handling), and select's own default-selection behavior doesn't have
+	 * the radio/checkbox "nothing visibly checked" collision this drops
+	 * blanks for elsewhere.
+	 *
 	 * @since 6.36
 	 *
 	 * @param string $opts
+	 * @param string $field_type
 	 *
 	 * @return array
 	 */
-	private static function parse_bulk_edit_opts( $opts ) {
+	private static function parse_bulk_edit_opts( $opts, $field_type ) {
 		$opts = array_map( 'trim', explode( "\n", $opts ) );
 
-		return array_values( array_filter( $opts, 'strlen' ) );
+		$keep_leading_blank = 'select' === $field_type && isset( $opts[0] ) && '' === $opts[0];
+
+		$opts = array_values( array_filter( $opts, 'strlen' ) );
+
+		if ( $keep_leading_blank ) {
+			array_unshift( $opts, '' );
+		}
+
+		return $opts;
 	}
 
 	/**
-	 * Drops a separate-value bulk-edit option ("label|value") whose value
-	 * half is blank - same collision as parse_bulk_edit_opts() above, just
-	 * reached via the separate-value split instead of a blank textarea line
-	 * (formidable-pro#3385).
+	 * Drops a separate-value bulk-edit option ("label|value") whose label or
+	 * value half is blank - same collision as parse_bulk_edit_opts() above,
+	 * just reached via the separate-value split instead of a blank textarea
+	 * line (formidable-pro#3385).
 	 *
 	 * @since 6.36
 	 *
@@ -431,7 +448,7 @@ class FrmFieldsController {
 			array_filter(
 				$opts,
 				function ( $opt ) {
-					return ! is_array( $opt ) || '' !== $opt['value'];
+					return ! is_array( $opt ) || ( '' !== $opt['value'] && '' !== $opt['label'] );
 				}
 			)
 		);

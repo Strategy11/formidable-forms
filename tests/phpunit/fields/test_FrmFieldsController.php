@@ -44,20 +44,38 @@ class test_FrmFieldsController extends FrmUnitTest {
 		// kept as an option with an empty string value - an empty value
 		// collides with an unset field value in FrmAppHelper::check_selected()
 		// and renders as selected by default (formidable-pro#3385).
-		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree" );
+		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree", 'radio' );
 
 		$this->assertSame( array( 'One', 'Two', 'Three' ), $opts );
 	}
 
 	public function test_parse_bulk_edit_opts_keeps_zero_value() {
 		// '0' is falsy but a valid option value - only truly blank lines drop.
-		$opts = $this->parse_bulk_edit_opts( "0\nOne" );
+		$opts = $this->parse_bulk_edit_opts( "0\nOne", 'checkbox' );
 
 		$this->assertSame( array( '0', 'One' ), $opts );
 	}
 
-	private function parse_bulk_edit_opts( $opts ) {
-		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts ) );
+	public function test_parse_bulk_edit_opts_keeps_leading_blank_for_select() {
+		// A blank first line is a legitimate manual placeholder option on a
+		// select field (dropdown-field.php's own placeholder/skip handling),
+		// unlike radio/checkbox where a blank option is always a bug.
+		$opts = $this->parse_bulk_edit_opts( "\nOne\n\nTwo", 'select' );
+
+		$this->assertSame( array( '', 'One', 'Two' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_drops_leading_blank_for_radio() {
+		$opts = $this->parse_bulk_edit_opts( "\nOne\nTwo", 'radio' );
+		$this->assertSame( array( 'One', 'Two' ), $opts );
+	}
+
+	/**
+	 * @param string $opts
+	 * @param string $field_type
+	 */
+	private function parse_bulk_edit_opts( $opts, $field_type ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts, $field_type ) );
 	}
 
 	/**
@@ -93,6 +111,36 @@ class test_FrmFieldsController extends FrmUnitTest {
 		);
 	}
 
+	public function test_remove_blank_separated_values_drops_blank_label() {
+		// A "|value" line with nothing before the separator produces a
+		// blank label half - equally droppable as a blank value half.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => '',
+					'value' => 'no-label',
+				),
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+			),
+			$opts
+		);
+	}
+
+	/**
+	 * @param array $opts
+	 */
 	private function remove_blank_separated_values( $opts ) {
 		return $this->run_private_method( array( 'FrmFieldsController', 'remove_blank_separated_values' ), array( $opts ) );
 	}
