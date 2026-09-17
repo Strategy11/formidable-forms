@@ -71,6 +71,6 @@ if ( $upgrade_link ) {
 		<!-- Twitter link -->
 		<a href="https://twitter.com/formidableforms/" target="_blank" aria-label="<?php esc_attr_e( 'Formidable on Twitter', 'formidable' ); ?>"><span class="dashicons dashicons-twitter"></span></a>
 		<!-- Youtube link -->
-		<a href="https://www.youtube.com/c/FormidableFormsPlugin/" target="_blank" aria-label="<?php esc_attr_e( 'Formidable on Youtube', 'formidable' ); ?>"><span class="dashicons dashicons-youtube"></span></a>
+		<a href="https://www.youtube.com/c/FormidableFormsPlugin/" target="_blank" aria-label="<?php esc_attr_e( 'Formidable on YouTube', 'formidable' ); ?>"><span class="dashicons dashicons-youtube"></span></a>
 	</div><!-- .frm-admin-footer-links-socials -->
 </div><!-- .frm-admin-footer-links -->
