@@ -8,6 +8,15 @@ a.frm-link-secondary {
 	text-decoration: underline;
 }
 
+// Small (.frm-text-xs) help text often relies on a slightly muted color for
+// its inline links, which can fall below the contrast ratio color alone
+// needs against the surrounding text -- underline them so the link doesn't
+// rely on color as its only cue. Excludes icon+text CTA links (e.g. "Connect
+// Account"), which already have their own distinct treatment.
+.frm-text-xs a:not(.frm-link-with-external-icon) {
+	text-decoration: underline;
+}
+
 .field_type_list li.button.frm_noallow,
 .field_type_list li.button.frm_noallow:hover,
 .button.frm_noallow,
