@@ -24,7 +24,7 @@
 		"env": "wp-env",
 		"start": "wp-scripts start assets/js/scripts.js --webpack-no-externals --output-path=dist",
 		"e2e:run": "cypress run --config-file cypress.config.js",
-		"e2e:githubrun": "cypress run --config-file cypress.config.js --env FORMIDABLE_FOLDER=formidable-forms"
+		"e2e:githubrun": "cypress run --config-file cypress.config.js --env FORMIDABLE_FOLDER=formidable-forms --browser chrome"
 	},
 	"engines": {
 		"node": ">=20.10.0",
