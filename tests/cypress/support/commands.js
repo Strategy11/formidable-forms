@@ -140,14 +140,20 @@ Cypress.Commands.add( 'checkIbmAccessibility', label => {
 	cy.getCompliance( label ).then( report => {
 		const violations = report.results.filter( result => result.level !== 'pass' );
 
-		if ( violations.length ) {
-			cy.task(
-				'log',
-				`${ violations.length } IBM Equal Access violation${ violations.length === 1 ? '' : 's' } detected (${ label })`
-			);
-			cy.task( 'table', violations.map( ( { ruleId, level, message } ) => ( { ruleId, level, message } ) ) );
+		if ( ! violations.length ) {
+			return report;
 		}
 
-		return report;
+		// Chain the logging tasks and resolve back to `report` at the end, rather than
+		// invoking cy commands and then returning `report` synchronously - Cypress
+		// treats mixing queued async commands with a sync return in the same callback
+		// as an error, which aborted the scan and (since retries are enabled) caused a
+		// same-labeled retry to collide with this scan's already-recorded label.
+		cy.task(
+			'log',
+			`${ violations.length } IBM Equal Access violation${ violations.length === 1 ? '' : 's' } detected (${ label })`
+		);
+
+		return cy.task( 'table', violations.map( ( { ruleId, level, message } ) => ( { ruleId, level, message } ) ) ).then( () => report );
 	} ).assertCompliance( false );
 } );
