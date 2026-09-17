@@ -33,4 +33,20 @@ class test_FrmSMTPController extends FrmUnitTest {
 		$this->assertStringNotContainsString( 'utm_campaign=liteplugin', $link, 'Our own campaign should override the pre-existing one' );
 		$this->assertStringContainsString( 'urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade', $link, 'The hand-obfuscated redirect target must survive the utm re-tagging untouched' );
 	}
+
+	/**
+	 * The SMTP page renders two step-number <aside> badges (Install, Setup). Both need a
+	 * non-empty accessible name or they violate the aria_complementary_labelled a11y rule.
+	 *
+	 * @covers FrmSMTPController::output
+	 */
+	public function test_output_has_labelled_complementary_landmarks() {
+		$controller = new FrmSMTPController();
+
+		ob_start();
+		$controller->output();
+		$html = ob_get_clean();
+
+		$this->assert_complementary_landmarks_are_labelled( $html, 2 );
+	}
 }
