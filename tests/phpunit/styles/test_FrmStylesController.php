@@ -95,6 +95,41 @@ class test_FrmStylesController extends FrmUnitTest {
 	}
 
 	/**
+	 * The styler edit view renders two <form> elements on the same page: the style
+	 * settings sidebar form, and the live form preview. Both need distinct
+	 * accessible names or they violate the aria_landmark_name_unique a11y rule.
+	 *
+	 * @covers FrmStylesController::render_style_page
+	 */
+	public function test_render_style_page_has_unique_landmark_names_for_both_forms() {
+		$this->set_current_user_to_1();
+
+		$form_id      = $this->factory->form->create();
+		$form         = FrmForm::getOne( $form_id );
+		$frm_style    = new FrmStyle( 'default' );
+		$active_style = $frm_style->get_one();
+
+		ob_start();
+		$this->run_private_method(
+			array( 'FrmStylesController', 'render_style_page' ),
+			array( $active_style, $form, $active_style )
+		);
+		$html = ob_get_clean();
+
+		preg_match_all( '/<form\b[^>]*>/', $html, $matches );
+		$this->assertCount( 2, $matches[0], 'Expected exactly two <form> elements on the styler edit page' );
+
+		$labels = array();
+		foreach ( $matches[0] as $form_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $form_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
+		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
+	}
+
+	/**
 	 * @covers FrmStylesController::save_style
 	 * @covers FrmStyle::update
 	 */

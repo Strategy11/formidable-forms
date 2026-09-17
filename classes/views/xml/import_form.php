@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</p>
 		<br/>
-		<form enctype="multipart/form-data" method="post" class="frm-fields">
+		<form enctype="multipart/form-data" method="post" class="frm-fields" aria-label="<?php esc_attr_e( 'Import', 'formidable' ); ?>">
 			<input type="hidden" name="frm_action" value="import_xml" />
 			<?php wp_nonce_field( 'import-xml-nonce', 'import-xml' ); ?>
 			<p>
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p class="howto">
 			<?php esc_html_e( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ); ?>
 		</p>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml" class="frm-fields frm_grid_container">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml" class="frm-fields frm_grid_container" aria-label="<?php esc_attr_e( 'Export', 'formidable' ); ?>">
 			<input type="hidden" name="action" value="frm_export_xml" />
 			<?php wp_nonce_field( 'export-xml-nonce', 'export-xml' ); ?>
 
