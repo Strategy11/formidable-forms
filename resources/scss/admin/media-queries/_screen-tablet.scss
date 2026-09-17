@@ -147,9 +147,10 @@
 	}
 
 	// Matches core's own td.check-column padding-top at this breakpoint (list-tables.css) -
-	// see the desktop override in _widefat.scss for why this cell is a <th> here, not core's <td>.
-	.wp-list-table thead th.check-column,
-	.wp-list-table tfoot th.check-column {
+	// see the desktop override in _widefat.scss for why this cell is a <th> here, not core's
+	// <td>, and for why this is scoped to table.widefat rather than .wp-list-table.
+	table.widefat thead th.check-column,
+	table.widefat tfoot th.check-column {
 		padding-top: 10px;
 	}
 }
