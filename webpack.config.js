@@ -49,6 +49,7 @@ const entries = {
     'formidable-settings-components': './js/src/settings-components/index.js',
     'formidable-web-components': './js/src/web-components/index.js',
     'welcome-tour': './js/src/welcome-tour',
+    'plugin-feedback': './js/src/plugin-feedback/index.js',
   },
   // SCSS entries
   scss: {
