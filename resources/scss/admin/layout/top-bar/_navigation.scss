@@ -29,7 +29,11 @@
 ul.frm_form_nav {
 	margin: 0 auto;
 	padding-top: 18px;
-	display: block;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--gap-xs) 12px;
 	min-width: 240px;
 }
 
@@ -38,8 +42,8 @@ ul.frm_form_nav {
 }
 
 ul.frm_form_nav > li {
-	margin: 0 min(3.5%, 32px) 0 0;
-	display: inline-block;
+	margin: 0;
+	display: block;
 }
 
 .post-type-frm_display #advanced-sortables h2.hndle,
@@ -69,13 +73,29 @@ ul.frm_form_nav > li {
 }
 
 .frm_form_nav > li > a {
+	padding: 6px 10px;
+	border-bottom: 0;
+	border-radius: var(--small-radius);
+	background: transparent;
 	font-size: var(--text-md);
 	font-weight: 400;
+	line-height: var(--leading);
 	color: var(--grey-500);
+	text-align: center;
+	white-space: nowrap;
+	transition-property: background-color, color;
+	transition-duration: 150ms;
+	transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 
 .frm_form_nav > li > a:hover {
-	border-color: var(--primary-700);
+	background: var(--grey-50);
+	color: var(--grey-700);
+}
+
+.frm_form_nav > li > a:focus-visible {
+	outline: 2px solid var(--primary-700);
+	outline-offset: -2px;
 }
 
 .frm_form_nav .frm-dropdown-menu a:hover {
@@ -85,9 +105,16 @@ ul.frm_form_nav > li {
 .post-type-frm_display .frm_form_nav .nav-tab-active,
 .post-type-frm_display .frm_form_nav .nav-tab-active:hover,
 .frm_form_nav > li a.current_page {
-	color: var(--primary-500);
-	border-color: var(--primary-500);
-	background: transparent;
+	color: var(--grey-900);
+	border-color: transparent;
+	background: var(--grey-100);
 	opacity: 1;
 	font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm_form_nav > li > a {
+		transition: none;
+	}
 }

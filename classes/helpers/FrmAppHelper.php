@@ -3669,7 +3669,7 @@ class FrmAppHelper {
 		}
 
 		if ( ! $action || ( $frm_action && in_array( $frm_action, $action, true ) ) ) {
-			echo ' class="current_page"';
+			echo ' class="current_page" aria-current="page"';
 		}
 	}
 
