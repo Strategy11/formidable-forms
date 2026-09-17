@@ -1044,7 +1044,7 @@ class FrmListHelper {
 			// The cb column's row cells are already `<th scope="row">` (see column_cb()), so make its header cell
 			// a matching `<th scope="col">` instead of a headerless `<td>` (IBM table_headers_exists). A `scope`
 			// attribute on a `<td>` isn't recognized as a header by assistive tech, so this needs a real `<th>` -
-			// see _forms-list.scss for the matching CSS to keep the cell's layout unchanged.
+			// see _widefat.scss for the matching CSS to keep the cell's layout unchanged.
 			$tag   = 'th';
 			$scope = 'scope="col"';
 			$id    = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
