@@ -54,10 +54,14 @@ jobs:
           sed -i "s/yourusernamehere/root/" wp-tests-config.php
           sed -i "s/yourpasswordhere/root/" wp-tests-config.php
 
+      - name: Read WP core's required Node version
+        id: wp-node
+        run: echo "version=$(cat /tmp/wordpress/.nvmrc)" >> "$GITHUB_OUTPUT"
+
       - name: Set up Node.js for WP core assets
         uses: actions/setup-node@v5
         with:
-          node-version-file: /tmp/wordpress/.nvmrc
+          node-version: ${{ steps.wp-node.outputs.version }}
 
       - name: Building WP core assets
         # Core's dist JS/CSS isn't checked into git; missing it fails wp_head()'s
