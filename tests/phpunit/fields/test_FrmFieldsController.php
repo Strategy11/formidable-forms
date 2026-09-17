@@ -111,9 +111,12 @@ class test_FrmFieldsController extends FrmUnitTest {
 		);
 	}
 
-	public function test_remove_blank_separated_values_drops_blank_label() {
-		// A "|value" line with nothing before the separator produces a
-		// blank label half - equally droppable as a blank value half.
+	public function test_remove_blank_separated_values_keeps_blank_label_with_real_value() {
+		// A "|value" line with nothing before the separator has a blank
+		// label but a real value - no collision with an unset field value
+		// (FrmAppHelper::check_selected() only ever compares the value
+		// half), and dropdown-field.php renders a blank label as a real,
+		// selectable option, so this is left alone.
 		$opts = $this->remove_blank_separated_values(
 			array(
 				array(
@@ -132,6 +135,10 @@ class test_FrmFieldsController extends FrmUnitTest {
 				array(
 					'label' => 'One',
 					'value' => '1',
+				),
+				array(
+					'label' => '',
+					'value' => 'no-label',
 				),
 			),
 			$opts

@@ -420,7 +420,7 @@ class FrmFieldsController {
 	private static function parse_bulk_edit_opts( $opts, $field_type ) {
 		$opts = array_map( 'trim', explode( "\n", $opts ) );
 
-		$keep_leading_blank = 'select' === $field_type && isset( $opts[0] ) && '' === $opts[0];
+		$keep_leading_blank = 'select' === $field_type && '' === $opts[0];
 
 		$opts = array_values( array_filter( $opts, 'strlen' ) );
 
@@ -432,10 +432,13 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Drops a separate-value bulk-edit option ("label|value") whose label or
-	 * value half is blank - same collision as parse_bulk_edit_opts() above,
-	 * just reached via the separate-value split instead of a blank textarea
-	 * line (formidable-pro#3385).
+	 * Drops a separate-value bulk-edit option ("label|value") whose value
+	 * half is blank - same collision as parse_bulk_edit_opts() above, just
+	 * reached via the separate-value split instead of a blank textarea line
+	 * (formidable-pro#3385). A blank label with a real value is left alone:
+	 * FrmAppHelper::check_selected() only ever compares against the value
+	 * half, and dropdown-field.php explicitly supports rendering a
+	 * blank-label option as a real, selectable choice.
 	 *
 	 * @since 6.36
 	 *
@@ -448,7 +451,7 @@ class FrmFieldsController {
 			array_filter(
 				$opts,
 				function ( $opt ) {
-					return ! is_array( $opt ) || ( '' !== $opt['value'] && '' !== $opt['label'] );
+					return ! is_array( $opt ) || '' !== $opt['value'];
 				}
 			)
 		);

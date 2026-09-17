@@ -148,7 +148,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	/**
 	 * @covers FrmFieldsController::import_options
 	 */
-	public function test_import_options_separate_value_drops_blank_half_without_disturbing_other_key() {
+	public function test_import_options_separate_value_drops_blank_value_but_keeps_blank_label() {
 		$field = $this->factory->field->create_and_get(
 			array(
 				'form_id'       => $this->form_id,
@@ -168,6 +168,8 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			'action'   => 'frm_import_options',
 			'nonce'    => wp_create_nonce( 'frm_ajax' ),
 			'field_id' => $field->id,
+			// "Blank|" (blank value) drops; "|no-label" (blank label, real
+			// value) survives - it's a legitimate option, not a collision.
 			'opts'     => "One|1\nBlank|\n|no-label\nTwo|2",
 			'separate' => 'true',
 		);
@@ -175,7 +177,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$response = $this->trigger_action( 'frm_import_options' );
 
 		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
-		$this->assertSame( array( 'One', 'Two' ), array_slice( $matches[1], 1 ) );
+		$this->assertSame( array( 'One', '', 'Two' ), array_slice( $matches[1], 1 ) );
 	}
 
 	/**
