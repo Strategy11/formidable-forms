@@ -69,6 +69,17 @@ jobs:
       # build), but with the `:dev` variant so the output lands in `src/` (Gruntfile's
       # WORKING_DIR under `--dev`) where WP_DEVELOP_DIR points, instead of the plain
       # build's separate `build/` package directory.
+      #
+      # Node version comes from the WP core checkout's own `.nvmrc`, not this
+      # runner's default - core's `engines.node` requirement moves with trunk and the
+      # runner default (Node 22 as of this writing) already trails it (WordPress#7.2.0
+      # requires >=24.18.0).
+      - name: Set up Node for WP core's build (trunk only)
+        if: matrix.wordpress == 'trunk'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: /tmp/wordpress/.nvmrc
+
       - name: Build WP core assets (trunk only - release branches ship these pre-built)
         if: matrix.wordpress == 'trunk'
         timeout-minutes: 5
