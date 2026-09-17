@@ -22,6 +22,10 @@ jobs:
     env:
       WP_MULTISITE: ${{ matrix.multisite }}
     strategy:
+      # Report every matrix leg's own result rather than the default fail-fast
+      # cancelling the others as soon as one fails - same reasoning as cypress.yml's
+      # `fail-fast: false`.
+      fail-fast: false
       matrix:
         include:
           - php: 7.4
@@ -56,6 +60,22 @@ jobs:
           sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
           sed -i "s/yourusernamehere/root/" wp-tests-config.php
           sed -i "s/yourpasswordhere/root/" wp-tests-config.php
+
+      # A release branch (e.g. 6.9) ships pre-built dist/minified assets under `src/`;
+      # a raw `trunk` checkout doesn't, so it hits unrelated core code paths that
+      # expect them to already exist (wp_maybe_inline_styles's dist stylesheet check,
+      # wp-admin CSS minification for e.g. view-transitions.min.css). Build them the
+      # same way core's own CI does (reusable-build-package.yml: npm ci && npm run
+      # build), but with the `:dev` variant so the output lands in `src/` (Gruntfile's
+      # WORKING_DIR under `--dev`) where WP_DEVELOP_DIR points, instead of the plain
+      # build's separate `build/` package directory.
+      - name: Build WP core assets (trunk only - release branches ship these pre-built)
+        if: matrix.wordpress == 'trunk'
+        timeout-minutes: 5
+        run: |
+          cd /tmp/wordpress
+          npm ci
+          npm run build:dev
       - name: Creating database
         run: |
           sudo /etc/init.d/mysql start
