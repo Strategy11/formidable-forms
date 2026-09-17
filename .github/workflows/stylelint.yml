@@ -47,12 +47,10 @@ jobs:
         run: npm run env start
 
       # css/formidableforms.css is a runtime-rendered stylesheet (see
-      # FrmStylesController::load_css()), not a build artifact, so there's
-      # nothing on disk for stylelint to check without this. Generated via
-      # `wp eval-file` (a CLI request) rather than admin-ajax.php so it never
-      # hits the plugin's one-time onboarding-wizard admin_init redirect.
+      # FrmStyle::save_settings()), not a build artifact, so there's nothing
+      # on disk for stylelint to check without this.
       - name: Generate default stylesheet for lint coverage
-        run: npx wp-env run cli wp eval-file tests/bin/generate-default-stylesheet.php
+        run: npx wp-env run cli wp eval-file bin/generate-default-stylesheet.php
 
       - name: Run Stylelint
         run: npx stylelint "**/*.{css,scss}"
