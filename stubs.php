@@ -1012,6 +1012,13 @@ namespace {
 	 */
 	function wp_get_ability_category( $slug ) {
 	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_unregister_ability( $name ) {
+	}
 }
 
 /**
