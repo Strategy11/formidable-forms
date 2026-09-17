@@ -116,17 +116,7 @@ class test_FrmStylesController extends FrmUnitTest {
 		);
 		$html = ob_get_clean();
 
-		preg_match_all( '/<form\b[^>]*>/', $html, $matches );
-		$this->assertCount( 2, $matches[0], 'Expected exactly two <form> elements on the styler edit page' );
-
-		$labels = array();
-		foreach ( $matches[0] as $form_tag ) {
-			preg_match( '/aria-label="([^"]*)"/', $form_tag, $label_match );
-			$labels[] = $label_match[1] ?? '';
-		}
-
-		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
-		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
+		$this->assert_form_landmarks_have_unique_names( $html, 2 );
 	}
 
 	/**
