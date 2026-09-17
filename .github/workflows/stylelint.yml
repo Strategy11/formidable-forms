@@ -50,7 +50,7 @@ jobs:
       # FrmStyle::save_settings()), not a build artifact, so there's nothing
       # on disk for stylelint to check without this.
       - name: Generate default stylesheet for lint coverage
-        run: npx wp-env run cli wp eval-file bin/generate-default-stylesheet.php
+        run: npx wp-env run cli wp eval 'require FrmAppHelper::plugin_path() . "/bin/generate-default-stylesheet.php";'
 
       - name: Run Stylelint
         run: npx stylelint "**/*.{css,scss}"
