@@ -11,6 +11,7 @@ describe( 'Run a Lighthouse performance audit', function() {
 	};
 
 	it( 'Check the front-end form preview page', () => {
+		cy.login();
 		cy.visit( '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form' );
 		cy.lighthouse( thresholds );
 	} );
