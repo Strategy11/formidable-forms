@@ -104,6 +104,10 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_render_style_page_has_unique_landmark_names_for_both_forms() {
 		$this->set_current_user_to_1();
 
+		// render_style_page() reads $_GET to decide the view ('edit' vs 'list'); a leftover
+		// 'form'/'style_id' from another test would silently switch this to the list view.
+		$_GET = array();
+
 		$form_id      = $this->factory->form->create();
 		$form         = FrmForm::getOne( $form_id );
 		$frm_style    = new FrmStyle( 'default' );
