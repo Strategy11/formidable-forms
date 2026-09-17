@@ -18,5 +18,6 @@ describe( 'Run some accessibility tests', function() {
 		cy.injectAxe();
 		configureAxeWithBaselineIgnoredRuleset();
 		cy.checkA11y();
+		cy.checkIbmAccessibility( 'form-preview' );
 	} );
 } );

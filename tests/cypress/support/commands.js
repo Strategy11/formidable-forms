@@ -132,3 +132,28 @@ Cypress.Commands.add( 'emptyTrash', () => {
 		}
 	} );
 } );
+
+// Runs the IBM Equal Access scan alongside the existing cypress-axe checks. Doesn't
+// fail the build yet (assertCompliance(false)) since the current admin/preview
+// markup hasn't been triaged against this rule set - see formidable-forms#3356.
+Cypress.Commands.add( 'checkIbmAccessibility', label => {
+	cy.getCompliance( label ).then( report => {
+		const violations = report.results.filter( result => result.level !== 'pass' );
+
+		if ( ! violations.length ) {
+			return report;
+		}
+
+		// Chain the logging tasks and resolve back to `report` at the end, rather than
+		// invoking cy commands and then returning `report` synchronously - Cypress
+		// treats mixing queued async commands with a sync return in the same callback
+		// as an error, which aborted the scan and (since retries are enabled) caused a
+		// same-labeled retry to collide with this scan's already-recorded label.
+		cy.task(
+			'log',
+			`${ violations.length } IBM Equal Access violation${ violations.length === 1 ? '' : 's' } detected (${ label })`
+		);
+
+		return cy.task( 'table', violations.map( ( { ruleId, level, message } ) => ( { ruleId, level, message } ) ) ).then( () => report );
+	} ).assertCompliance( false );
+} );
