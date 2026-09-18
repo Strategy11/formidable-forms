@@ -70,8 +70,11 @@ if ( $use_container ) {
 		/>
 
 		<span class="frm_toggle" tabindex="0" role="switch"
-			<?php echo ! empty( $args['aria-label-attr'] ) ? 'aria-label="' . esc_attr( $args['aria-label-attr'] ) . '"' : ''; ?>
-			aria-labelledby="<?php echo esc_attr( $id ); ?>_label"
+			<?php if ( ! empty( $args['aria-label-attr'] ) ) { ?>
+				aria-label="<?php echo esc_attr( $args['aria-label-attr'] ); ?>"
+			<?php } else { ?>
+				aria-labelledby="<?php echo esc_attr( $id ); ?>_label"
+			<?php } ?>
 			aria-checked="<?php echo esc_attr( $aria_checked ); ?>"
 		>
 			<span class="frm_toggle_slider"></span>
