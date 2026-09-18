@@ -37,10 +37,11 @@ describe( 'Run some basic Formidale tests', function() {
 			cy.get( '#frm_form_key' ).invoke( 'val' ).then( formKey => {
 				cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
 				cy.get( '.frm_button_submit' ).should( 'contain.text', 'Submit' ).click();
-				cy.get( '.frm_message' ).should( 'contain.text', 'Your responses were successfully submitted. Thank you!' );
 
 				// Focus should move to the success message so screen reader users are notified it appeared.
-				cy.focused().should( 'have.class', 'frm_message' );
+				cy.get( '.frm_message' )
+					.should( 'contain.text', 'Your responses were successfully submitted. Thank you!' )
+					.and( 'be.focused' );
 			} );
 		} );
 	} );
