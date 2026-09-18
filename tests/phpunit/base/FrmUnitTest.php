@@ -843,4 +843,23 @@ class FrmUnitTest extends WP_UnitTestCase {
 				break;
 		}
 	}
+
+	/**
+	 * Assert that none of the given HTML element ids appears more than once in some
+	 * rendered HTML (aria_id_unique — a duplicate id breaks any ARIA property that
+	 * references it, since the reference can no longer resolve to a single element).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param array  $ids
+	 *
+	 * @return void
+	 */
+	protected function assert_no_duplicate_element_ids( $html, $ids ) {
+		foreach ( $ids as $id ) {
+			$count = preg_match_all( '/\bid=["\']' . preg_quote( $id, '/' ) . '["\']/', $html );
+			$this->assertSame( 1, $count, 'Expected exactly one element with id "' . $id . '"' );
+		}
+	}
 }

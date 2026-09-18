@@ -49,6 +49,52 @@ class test_FrmStylesController extends FrmUnitTest {
 	}
 
 	/**
+	 * The styler edit page's "Quick Settings" panel and its "Advanced Settings"
+	 * accordion sections both render into the DOM unconditionally (only one is
+	 * shown at a time via CSS), so an id reused between a quick-settings control
+	 * and its advanced-settings equivalent collides and breaks any ARIA property
+	 * that references it (aria_id_unique).
+	 *
+	 * @covers FrmStylesController::render_style_page
+	 */
+	public function test_render_style_page_has_no_duplicate_ids() {
+		$this->set_current_user_to_1();
+
+		// render_style_page() reads $_GET to decide the view ('edit' vs 'list'); a leftover
+		// 'form'/'style_id' from another test would silently switch this to the list view.
+		$_GET = array();
+
+		$form_id      = $this->factory->form->create();
+		$form         = FrmForm::getOne( $form_id );
+		$frm_style    = new FrmStyle( 'default' );
+		$active_style = $frm_style->get_one();
+
+		ob_start();
+		$this->run_private_method(
+			array( 'FrmStylesController', 'render_style_page' ),
+			array( $active_style, $form, $active_style )
+		);
+		$html = ob_get_clean();
+
+		$this->assert_no_duplicate_element_ids(
+			$html,
+			array(
+				'frm_field_pad',
+				'frm_field_margin',
+				'frm_border_radius',
+				'frm_fieldset_color',
+				// The renamed quick-settings/form-title ids themselves, so a future edit that
+				// deletes one of these elements (instead of just re-duplicating its id) still
+				// fails loudly here.
+				'frm_style_qsettings_field_pad',
+				'frm_style_qsettings_field_margin',
+				'frm_style_qsettings_border_radius',
+				'frm_title_color',
+			)
+		);
+	}
+
+	/**
 	 * @covers FrmStylesController::save_style
 	 * @covers FrmStyle::update
 	 */
