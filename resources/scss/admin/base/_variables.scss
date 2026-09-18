@@ -17,7 +17,12 @@
 	--grey-50: #f9fafb;
 	--grey-25: #fcfcfd;
 	--dark-grey: var(--grey-700); /* Deprecated */
-	--medium-grey: rgba(40, 47, 54, 0.65);
+
+	/* 0.65 composited to #73787c, 4.46:1 on white — just under. 0.70 lands at
+	   #696d72 and 5.21:1, which clears it without changing the token's nature:
+	   still translucent, so it keeps working over the varied surfaces its three
+	   callers and the Stripe LIVE/TEST labels sit on. */
+	--medium-grey: rgba(40, 47, 54, 0.7);
 	--grey: var(--grey-500); /* Deprecated */
 	--grey-border: var(--grey-300); /* Deprecated */
 	--lightest-grey: rgb(250, 250, 250);
