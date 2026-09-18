@@ -958,7 +958,7 @@ function frmFrontFormJS() {
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
 
-						afterFormSubmitted( object, response );
+						afterFormSubmitted( object, response, formID );
 					},
 					delay
 				);
@@ -1070,7 +1070,7 @@ function frmFrontFormJS() {
 		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
 	}
 
-	function afterFormSubmitted( object, response ) {
+	function afterFormSubmitted( object, response, formID ) {
 		const tempDiv = document.createElement( 'div' );
 		tempDiv.innerHTML = response.content;
 		const formCompleted = tempDiv.querySelector( '.frm_message' );
@@ -1078,7 +1078,37 @@ function frmFrontFormJS() {
 			jQuery( document ).trigger( 'frmFormComplete', [ object, response ] );
 		} else {
 			jQuery( document ).trigger( 'frmPageChanged', [ object, response ] );
+			focusPageHeading( formID );
 		}
+	}
+
+	/**
+	 * Move focus to the new page's heading after multi-page form navigation,
+	 * so screen reader users are told a new page loaded.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} formID
+	 * @return {void}
+	 */
+	function focusPageHeading( formID ) {
+		const container = document.getElementById( `frm_form_${ formID }_container` );
+		if ( ! container ) {
+			return;
+		}
+
+		// Prefer an actual heading on the new page. Fall back to the Pro
+		// rootline/progress bar's current step title, which isn't a heading tag.
+		const heading = container.querySelector( 'h1, h2, h3, h4, h5, h6' ) ||
+			container.querySelector( '.frm_current_page .frm_rootline_title' );
+		if ( ! heading ) {
+			return;
+		}
+
+		if ( ! heading.hasAttribute( 'tabindex' ) ) {
+			heading.setAttribute( 'tabindex', '-1' );
+		}
+		heading.focus();
 	}
 
 	/**
