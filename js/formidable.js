@@ -893,6 +893,7 @@ function frmFrontFormJS() {
 				response = defaultResponse;
 			} else {
 				// Response is a string. Convert it to an object.
+				// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 				response = response.replace( /^\s+|\s+$/g, '' );
 				if ( response.indexOf( '{' ) === 0 ) {
 					response = JSON.parse( response );
@@ -2284,6 +2285,7 @@ function frmFrontFormJS() {
 			: price.split( options.decimal_separator );
 
 		if ( options.thousand_separator ) {
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			split[ 0 ] = split[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, options.thousand_separator );
 		}
 

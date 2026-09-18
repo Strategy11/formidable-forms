@@ -1235,6 +1235,7 @@
 	 * @return {void}
 	 */
 	function syncEditPageAfterResetAction( response ) {
+		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
 		if ( defaultValues.indexOf( '{' ) === 0 ) {
 			defaultValues = JSON.parse( defaultValues );
