@@ -341,8 +341,8 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	setCSSVariables() {
-		const hoverColor = this.options?.hoverColor ? this.options.hoverColor : '#4199FD';
-		const bgHoverColor = this.options?.bgHoverColor ? this.options.bgHoverColor : '#F5FAFF';
+		const hoverColor = this.options?.hoverColor ? this.options.hoverColor : '#026EE8';
+		const bgHoverColor = this.options?.bgHoverColor ? this.options.bgHoverColor : '#F6FAFF';
 
 		// Set the CSS variables on the wrapper element
 		this.wrapperElement.style.setProperty( '--floating-links-hover-color', hoverColor );

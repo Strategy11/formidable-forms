@@ -82,7 +82,7 @@
 	box-sizing: border-box;
 	position: relative;
 	overflow: hidden;
-	background: #4199fd;
+	background: var(--primary-500);
 	border-radius: var(--small-radius);
 }
 
@@ -145,7 +145,7 @@
 	width: 628px;
 	height: 628px;
 	border-radius: 628px;
-	background: #4199fd;
+	background: var(--primary-500);
 	filter: blur(50px);
 	position: absolute;
 	bottom: 0;

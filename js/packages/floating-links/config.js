@@ -87,8 +87,8 @@
 	 * Define options
 	 */
 	frmFloatingLinksConfig.options = {
-		hoverColor: '#4199FD',
-		bgHoverColor: '#F5FAFF',
+		hoverColor: '#026EE8',
+		bgHoverColor: '#F6FAFF',
 		logoIcon: `
 			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 40 40">
 				<g clip-path="url(#floatingLinksClipPath)">
