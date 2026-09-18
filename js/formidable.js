@@ -939,12 +939,14 @@ function frmFrontFormJS() {
 				const replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
 				removeAddedScripts( replaceContent, formID );
 				const delay = maybeSlideOut( replaceContent, response.content );
+				const formParent = replaceContent.parent();
 
 				setTimeout(
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
 						replaceContent.replaceWith( response.content );
+						focusFormMessage( formParent );
 
 						addUrlParam( response );
 
@@ -1068,6 +1070,25 @@ function frmFrontFormJS() {
 		}
 
 		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
+	}
+
+	/**
+	 * Move focus to the top-level success message after an AJAX submit, so screen reader
+	 * users are notified it appeared. `replaceContent` (the old `.frm_forms` wrapper) is
+	 * already detached from the document by the time this runs, so the message has to be
+	 * looked up fresh from `formParent` (still live in the document) rather than from the
+	 * replaced-away subtree or from a detached `tempDiv` copy of `response.content`.
+	 *
+	 * @since x.x
+	 *
+	 * @param {jQuery} formParent The element that contained the form before it was replaced.
+	 * @return {void}
+	 */
+	function focusFormMessage( formParent ) {
+		const message = formParent[ 0 ] && formParent[ 0 ].querySelector( '.frm_message' );
+		if ( message ) {
+			message.focus();
+		}
 	}
 
 	function afterFormSubmitted( object, response ) {
