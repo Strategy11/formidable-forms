@@ -1,7 +1,6 @@
 describe( 'Slider style component', () => {
 	beforeEach( () => {
 		cy.login();
-		cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
 		cy.viewport( 1280, 1600 );
 	} );
 
@@ -24,6 +23,7 @@ describe( 'Slider style component', () => {
 	};
 
 	it( 'Can drag a single slider with the text input, and the change persists after saving', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
 		cy.get( '#general-style' ).should( 'have.class', 'open' );
 
 		// Border Width lives directly in the General section, open by default.
@@ -46,6 +46,7 @@ describe( 'Slider style component', () => {
 	} );
 
 	it( 'Rejects an out of range or negative value typed into the text input', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
 		const slider = getSingleSlider( '#frm_fieldset' );
 
 		// Max value for Border Width is 25 - start from a known, valid value.
@@ -64,6 +65,7 @@ describe( 'Slider style component', () => {
 	} );
 
 	it( 'Expands a multi-value slider group and lets an individual slider be adjusted independently', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
 		const wrapper = () => cy.get( '#frm_fieldset_padding' ).parent();
 
 		wrapper().find( '.frm-slider-component[data-type="top"]' ).should( 'have.class', 'frm_hidden' );
@@ -94,6 +96,8 @@ describe( 'Slider style component', () => {
 	} );
 
 	it( 'Switches a slider between the "auto" keyword and a measured unit, disabling the range for "auto"', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+
 		cy.log( 'Open the Buttons section, collapsed by default' );
 		cy.get( '#buttons-style button[aria-label="Buttons"]' ).click();
 		cy.get( '#frm_style_section_buttons-style' ).should( 'be.visible' );
@@ -134,6 +138,8 @@ describe( 'Slider style component', () => {
 	} );
 
 	it( 'Clearing a dependency-updater slider (Quick Settings) propagates the unset value to the real field and persists it', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
+
 		// Quick Settings sliders have no name of their own - they write into another field elsewhere
 		// on the page via a "will-change" propagation, e.g. Corner Radius here targets border_radius.
 		const realInput = () => cy.get( 'input[name="frm_style_setting[post_content][border_radius]"]' );
@@ -175,6 +181,7 @@ describe( 'Slider style component', () => {
 	} );
 
 	it( 'Slider components in the General section have no accessibility violations', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
 		cy.injectAxe();
 		cy.configureAxe( {
 			rules: [
