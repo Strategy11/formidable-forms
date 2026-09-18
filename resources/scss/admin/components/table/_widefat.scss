@@ -18,6 +18,19 @@
 	font-size: var(--text-md);
 }
 
+// FrmListHelper::print_column_headers() (Forms/Entries lists) and the Export table
+// (classes/views/xml/import_form.php) both render their cb column header as a <th>, not
+// core's <td>; the .frm-white-body rule above would otherwise grow it past core's
+// check-column sizing, so restate core's font-size/padding here to keep that cell's layout
+// unchanged. Scoped to table.widefat (shared by both tables) rather than .wp-list-table,
+// which the Export table's own <table> doesn't carry.
+table.widefat thead th.check-column,
+table.widefat tfoot th.check-column {
+	font-size: var(--text-sm);
+	padding: 4px 0 0 3px;
+	vertical-align: middle;
+}
+
 .frm-white-body table.widefat th a {
 	color: var(--grey-700);
 }

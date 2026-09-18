@@ -23,4 +23,24 @@ class test_FrmXMLController extends FrmUnitTest {
 	private function validate_xml_url( $url ) {
 		return $this->run_private_method( array( 'FrmXMLController', 'validate_xml_url' ), array( $url ) );
 	}
+
+	/**
+	 * @covers FrmXMLController::form
+	 */
+	public function test_export_table_headers_are_th() {
+		$this->set_user_by_role( 'administrator' );
+
+		ob_start();
+		FrmXMLController::form();
+		$html = ob_get_clean();
+
+		$thead = substr( $html, strpos( $html, '<thead>' ), strpos( $html, '</thead>' ) - strpos( $html, '<thead>' ) );
+
+		$this->assertStringContainsString(
+			'<th scope="col" class="column-cb check-column">',
+			$thead,
+			'The Export table\'s cb column header cell must be a real <th scope="col">, not a <td>, for IBM table_headers_exists.'
+		);
+		$this->assertStringNotContainsString( '<td', $thead );
+	}
 }

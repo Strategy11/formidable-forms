@@ -1041,8 +1041,12 @@ class FrmListHelper {
 				);
 			}//end if
 
-			$tag   = 'cb' === $column_key ? 'td' : 'th';
-			$scope = 'th' === $tag ? 'scope="col"' : '';
+			// The cb column's row cells are already `<th scope="row">` (see column_cb()), so make its header cell
+			// a matching `<th scope="col">` instead of a headerless `<td>` (IBM table_headers_exists). A `scope`
+			// attribute on a `<td>` isn't recognized as a header by assistive tech, so this needs a real `<th>` -
+			// see _widefat.scss for the matching CSS to keep the cell's layout unchanged.
+			$tag   = 'th';
+			$scope = 'scope="col"';
 			$id    = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
 
 			if ( $class ) {
@@ -1078,11 +1082,12 @@ class FrmListHelper {
 			$this->display_tablenav( 'top' );
 		}
 		$this->screen->render_screen_reader_content( 'heading_list' );
+		$has_headers = $this->has_min_items( 1 );
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
-			<?php if ( $this->has_min_items( 1 ) ) { ?>
+		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>"<?php echo $has_headers ? '' : ' role="presentation"'; ?>>
+			<?php if ( $has_headers ) { ?>
 			<thead>
 				<tr>
 					<?php $this->print_column_headers(); ?>
@@ -1094,7 +1099,7 @@ class FrmListHelper {
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
-			<?php if ( $this->has_min_items( 1 ) && $this->should_display( $args, 'display-bottom-headers' ) ) { ?>
+			<?php if ( $has_headers && $this->should_display( $args, 'display-bottom-headers' ) ) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
