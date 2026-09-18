@@ -475,9 +475,18 @@
 	position: relative;
 }
 
+/* The timestamp and the Dismiss link are both text, so 4.5:1 applies. 400 reads
+   at 2.58:1 on white; 500 is the lightest stop that clears it. */
 .frm-inbox-wrapper .frm-inbox-message-heading a.frm_inbox_dismiss,
 .frm-inbox-wrapper .frm-inbox-message-heading span {
-	color: var(--grey-400);
+	color: var(--grey-500);
+}
+
+/* The rule above is (0,3,1) and outranks .frm_wrap a:hover, so Dismiss had no
+   hover feedback. Matching that selector and adding the pseudo-class settles it. */
+.frm-inbox-wrapper .frm-inbox-message-heading a.frm_inbox_dismiss:hover,
+.frm-inbox-wrapper .frm-inbox-message-heading a.frm_inbox_dismiss:focus-visible {
+	color: var(--grey-600);
 }
 
 .frm-inbox-message-container {
