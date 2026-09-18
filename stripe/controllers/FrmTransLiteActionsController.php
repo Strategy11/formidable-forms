@@ -317,7 +317,6 @@ class FrmTransLiteActionsController {
 
 		foreach ( (array) $amount as $a ) {
 			$this_amount = self::get_amount_from_string( $a );
-			self::maybe_use_decimal( $this_amount, $currency );
 			self::normalize_number( $this_amount, $currency );
 
 			$total += $this_amount;
@@ -364,66 +363,68 @@ class FrmTransLiteActionsController {
 	 *
 	 * @return void
 	 */
-	private static function maybe_use_decimal( &$amount, $currency ) {
-		// When both '.' and ',' are present, normalize_number() determines the real decimal
-		// separator from the string itself instead of trusting the currency's configured
-		// separator -- doing the swap here first would collide it with the other separator.
-		if ( self::has_conflicting_separators( $amount ) ) {
-			return;
+	private static function normalize_number( &$amount, $currency ) {
+		$decimal_position = self::find_decimal_position( $amount, $currency );
+
+		if ( false === $decimal_position ) {
+			$amount = str_replace( array( '.', ',' ), '', $amount );
+		} else {
+			$integer_part    = str_replace( array( '.', ',' ), '', substr( $amount, 0, $decimal_position ) );
+			$fractional_part = str_replace( array( '.', ',' ), '', substr( $amount, $decimal_position + 1 ) );
+			$amount          = $integer_part . '.' . $fractional_part;
 		}
 
-		if ( $currency['thousand_separator'] !== '.' ) {
-			return;
-		}
-
-		$amount_parts = explode( '.', $amount );
-
-		if ( 2 !== count( $amount_parts ) ) {
-			return;
-		}
-
-		$strlen           = strlen( $amount_parts[1] );
-		$used_for_decimal = $strlen === 1 || $strlen === 2;
-
-		if ( $used_for_decimal ) {
-			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
-		}
+		$amount = number_format( (float) $amount, $currency['decimals'], '.', '' );
 	}
 
 	/**
-	 * @param string $amount
+	 * Find the position of the amount's real decimal separator, or false if it has none (a
+	 * whole-number amount, possibly with thousands grouping).
 	 *
-	 * @return bool
-	 */
-	private static function has_conflicting_separators( $amount ) {
-		return strpos( $amount, '.' ) !== false && strpos( $amount, ',' ) !== false;
-	}
-
-	/**
+	 * A user can type an amount in a different locale's format than the form's configured
+	 * currency expects (e.g. US-style "1,030.21" on a form whose currency configures '.' as
+	 * the thousand separator). Trusting the currency's configured separator in that case --
+	 * and blindly replacing every occurrence of it -- is what let this silently truncate:
+	 * when both '.' and ',' appear, or the same character repeats, only the rightmost
+	 * occurrence is ever the real decimal point; everything else gets stripped as grouping
+	 * noise by the caller.
+	 *
 	 * @param string $amount
 	 * @param array  $currency
 	 *
-	 * @return void
+	 * @return int|false
 	 */
-	private static function normalize_number( &$amount, $currency ) {
-		if ( self::has_conflicting_separators( $amount ) ) {
-			// A user can type an amount in a different locale's format than the form's
-			// configured currency expects (e.g. US-style "1,030.21" on a form whose currency
-			// configures '.' as the thousand separator). Trusting the currency's separators
-			// blindly in that case treats the amount's real decimal point as the thousand
-			// separator and vice versa, colliding both into one and truncating the value by
-			// orders of magnitude. Whichever separator appears last in the string is
-			// unambiguously the real decimal point.
-			$decimal_separator  = strrpos( $amount, '.' ) > strrpos( $amount, ',' ) ? '.' : ',';
-			$thousand_separator = '.' === $decimal_separator ? ',' : '.';
-		} else {
-			$decimal_separator  = $currency['decimal_separator'];
-			$thousand_separator = $currency['thousand_separator'];
+	private static function find_decimal_position( $amount, $currency ) {
+		$last_dot   = strrpos( $amount, '.' );
+		$last_comma = strrpos( $amount, ',' );
+
+		if ( false !== $last_dot && false !== $last_comma ) {
+			return max( $last_dot, $last_comma );
 		}
 
-		$amount = str_replace( $thousand_separator, '', $amount );
-		$amount = str_replace( $decimal_separator, '.', $amount );
-		$amount = number_format( (float) $amount, $currency['decimals'], '.', '' );
+		if ( false === $last_dot && false === $last_comma ) {
+			return false;
+		}
+
+		$present  = false !== $last_dot ? '.' : ',';
+		$position = false !== $last_dot ? $last_dot : $last_comma;
+
+		if ( $present === $currency['decimal_separator'] ) {
+			return $position;
+		}
+
+		// The lone separator matches the currency's thousand separator instead. A dot in a
+		// comma-decimal currency is ambiguous -- a single occurrence with a 1-2 digit tail
+		// still reads as a decimal point even though the currency expects '.' as its thousand
+		// separator. A comma in a dot-decimal currency is never ambiguous this way: it's
+		// always thousands grouping (e.g. "1,23" on a GBP form is 123, not 1.23).
+		if ( '.' !== $present || 1 !== substr_count( $amount, $present ) ) {
+			return false;
+		}
+
+		$tail_length = strlen( $amount ) - $position - 1;
+
+		return in_array( $tail_length, array( 1, 2 ), true ) ? $position : false;
 	}
 
 	/**
