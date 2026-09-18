@@ -37,6 +37,122 @@ class test_FrmFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmFieldsController::parse_bulk_edit_opts
+	 */
+	public function test_parse_bulk_edit_opts_drops_blank_lines() {
+		// A blank line (or one that is only whitespace) must be dropped, not
+		// kept as an option with an empty string value - an empty value
+		// collides with an unset field value in FrmAppHelper::check_selected()
+		// and renders as selected by default (formidable-pro#3385).
+		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree", 'radio' );
+
+		$this->assertSame( array( 'One', 'Two', 'Three' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_keeps_zero_value() {
+		// '0' is falsy but a valid option value - only truly blank lines drop.
+		$opts = $this->parse_bulk_edit_opts( "0\nOne", 'checkbox' );
+
+		$this->assertSame( array( '0', 'One' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_keeps_leading_blank_for_select() {
+		// A blank first line is a legitimate manual placeholder option on a
+		// select field (dropdown-field.php's own placeholder/skip handling),
+		// unlike radio/checkbox where a blank option is always a bug.
+		$opts = $this->parse_bulk_edit_opts( "\nOne\n\nTwo", 'select' );
+
+		$this->assertSame( array( '', 'One', 'Two' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_drops_leading_blank_for_radio() {
+		$opts = $this->parse_bulk_edit_opts( "\nOne\nTwo", 'radio' );
+		$this->assertSame( array( 'One', 'Two' ), $opts );
+	}
+
+	/**
+	 * @param string $opts
+	 * @param string $field_type
+	 */
+	private function parse_bulk_edit_opts( $opts, $field_type ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts, $field_type ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::remove_blank_separated_values
+	 */
+	public function test_remove_blank_separated_values_drops_blank_value() {
+		// A "label|" line with nothing after the separator produces a
+		// blank value half, the same collision as a blank textarea line
+		// (formidable-pro#3385), just reached via separate-value mode.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => 'Blank',
+					'value' => '',
+				),
+				'Two',
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				'Two',
+			),
+			$opts
+		);
+	}
+
+	public function test_remove_blank_separated_values_keeps_blank_label_with_real_value() {
+		// A "|value" line with nothing before the separator has a blank
+		// label but a real value - no collision with an unset field value
+		// (FrmAppHelper::check_selected() only ever compares the value
+		// half), and dropdown-field.php renders a blank label as a real,
+		// selectable option, so this is left alone.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => '',
+					'value' => 'no-label',
+				),
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => '',
+					'value' => 'no-label',
+				),
+			),
+			$opts
+		);
+	}
+
+	/**
+	 * @param array $opts
+	 */
+	private function remove_blank_separated_values( $opts ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'remove_blank_separated_values' ), array( $opts ) );
+	}
+
+	/**
 	 * @covers FrmFieldsController::pull_custom_error_body_from_custom_html
 	 */
 	public function test_pull_custom_error_body_from_custom_html() {
