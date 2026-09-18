@@ -390,11 +390,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 			if ( $this->column_name === 'cb' ) {
 				$r .= "<th scope='row' class='check-column'>$checkbox</th>";
 			} else {
-				$val = in_array( $column_name, $hidden, true ) ? '' : $this->column_value( $item );
-				$r  .= "<td $attributes>";
-
 				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $column_name == $action_col ) {
+				$is_action_col = $column_name == $action_col;
+				$val           = in_array( $column_name, $hidden, true ) ? '' : $this->column_value( $item, $is_action_col );
+				$r            .= "<td $attributes>";
+
+				if ( $is_action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
 					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
 					$r        .= $action_links;
@@ -420,10 +421,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 * @param bool   $is_action_col Whether this column is the row's primary/action column
+	 *                              (wrapped in the row-title link by the caller).
 	 *
 	 * @return mixed
 	 */
-	private function column_value( $item ) {
+	private function column_value( $item, $is_action_col = false ) {
 		$col_name = $this->maybe_fix_column_name( $this->column_name );
 
 		switch ( $col_name ) {
@@ -452,14 +455,27 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$form_id             = $item->form_id;
 				$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
 
-				if ( $user_can_edit_forms ) {
+				if ( $user_can_edit_forms && ! $is_action_col ) {
+					// When this column is the row's own action column, the caller already
+					// wraps it in a row-title link to the entry -- nesting a second <a> here
+					// (to the form itself) produces invalid, empty-named markup once the
+					// browser closes the outer anchor early. Fall back to the plain label,
+					// same as when the user can't edit forms.
 					$val = FrmFormsHelper::edit_form_link( $form_id );
 				} else {
 					$val = FrmFormsHelper::edit_form_link_label( $form_id );
 				}
 				break;
 			case 'post_id':
-				$val = FrmAppHelper::post_edit_link( $item->post_id );
+				if ( $is_action_col ) {
+					// Same reasoning as the form_id case above: post_edit_link() builds its
+					// own nested <a>, which breaks the outer row-title link when this column
+					// is the action column.
+					$post = get_post( $item->post_id );
+					$val  = $post ? FrmAppHelper::truncate( $post->post_title, 50 ) : FrmFormsHelper::get_no_title_text();
+				} else {
+					$val = FrmAppHelper::post_edit_link( $item->post_id );
+				}
 				break;
 			case 'user_id':
 				$user = get_userdata( $item->user_id );
