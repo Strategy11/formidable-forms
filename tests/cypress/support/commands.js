@@ -77,15 +77,42 @@ Cypress.Commands.add( 'createNewForm', () => {
 } );
 
 /**
- * Ensure the "Contact Us" template form (frm_key `contact-form`) exists, creating it if needed.
+ * Ensure the "Contact Us" template form (frm_key `contact-us`) exists and is previewable,
+ * creating and/or restoring it as needed.
  *
  * Several specs preview this form directly by key without creating it themselves, relying on
  * `Form Templates/FormTemplates.cy.js` having already created it in the same wp-env instance.
  * That only holds when both specs land in the same CI shard, which isn't guaranteed - shards are
  * bin-packed by spec file line count (see tests/bin/split-specs.sh), so adding or resizing any
  * spec file can split them apart. Call this instead of assuming the fixture is already there.
+ *
+ * The remote template (fetched from S3 by "Use Template") ships with `status=trash` baked into
+ * its own XML, so a freshly installed copy lands in the Trash and isn't previewable until it's
+ * restored - and re-running "Use Template" against an already-trashed copy just creates another
+ * trashed one with a suffixed key (`contact-us2`, `contact-us3`, ...) instead of reusing it. Check
+ * Trash before creating, and restore whatever copy ends up there instead of leaving it stuck.
  */
 Cypress.Commands.add( 'ensureContactUsFormExists', () => {
+	const RESTORE_LINK_SELECTOR = '#the-list tr:contains("Contact Us") a.frm-trash-link[href*="frm_action=untrash"]';
+
+	// Split the "is it there" check from the "click to restore" step - a .then() callback that
+	// queues cy commands (the click) can't also return a plain sync value (the found/not-found
+	// boolean) in the same callback, so each concern gets its own .then().
+	const restoreFromTrash = () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable&form_type=trash' );
+		return cy.get( 'body' )
+			.then( $trashBody => 0 < $trashBody.find( RESTORE_LINK_SELECTOR ).length )
+			.then( found => {
+				if ( ! found ) {
+					return cy.wrap( false );
+				}
+
+				cy.log( 'Restore the Contact Us form out of Trash instead of leaving it stuck there' );
+				cy.get( RESTORE_LINK_SELECTOR ).first().click( { force: true } );
+				return cy.wrap( true );
+			} );
+	};
+
 	cy.visit( '/wp-admin/admin.php?page=formidable' );
 	cy.get( 'body' ).then( $body => {
 		if ( $body.find( '#the-list tr:contains("Contact Us")' ).length > 0 ) {
@@ -93,16 +120,24 @@ Cypress.Commands.add( 'ensureContactUsFormExists', () => {
 			return;
 		}
 
-		cy.log( 'Create the Contact Us form from its template' );
-		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
-		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
-			.first()
-			.trigger( 'mouseover', { force: true } )
-			.find( '.frm-form-templates-use-template-button' )
-			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+		restoreFromTrash().then( restored => {
+			if ( restored ) {
+				return;
+			}
 
-		cy.get( "svg[aria-label='Close']", { timeout: 7000 } ).click( { force: true } );
+			cy.log( 'Create the Contact Us form from its template' );
+			cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
+			cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
+				.first()
+				.trigger( 'mouseover', { force: true } )
+				.find( '.frm-form-templates-use-template-button' )
+				.should( 'contain', 'Use Template' )
+				.click( { force: true } );
+
+			cy.get( "svg[aria-label='Close']", { timeout: 7000 } ).click( { force: true } );
+
+			restoreFromTrash();
+		} );
 	} );
 } );
 
