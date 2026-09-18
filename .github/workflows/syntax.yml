@@ -32,4 +32,10 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
       - name: Check PHP ${{ matrix.multisite }} syntax
-        run: find -L .  -path ./vendor -prune -o -path ./tests -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+        # lib/vendor is pruned as well as vendor: the vendored MCP adapter and
+        # schema packages use PHP 7.4 syntax, so they do not parse on the 7.0
+        # leg of this matrix. That is expected rather than a defect — Formidable
+        # itself still supports 7.0, and FrmMcpCompat refuses to load the
+        # adapter below PHP 7.4 (FrmMcpCompat::MIN_PHP_ID), so none of those
+        # files is ever parsed on a PHP that cannot read them.
+        run: find -L .  -path ./vendor -prune -o -path ./lib/vendor -prune -o -path ./tests -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l

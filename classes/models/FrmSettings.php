@@ -243,6 +243,21 @@ class FrmSettings {
 	public $allowed_words;
 
 	/**
+	 * Whether the Formidable MCP server and the Formidable abilities are registered.
+	 *
+	 * Deliberately absent from default_options(), because "off" and "never set"
+	 * have to stay distinguishable. Until the MCP section is saved once this
+	 * stays null, and FrmMcpController::is_enabled() falls back to the API
+	 * add-on's own toggle so a site that already turned MCP on there keeps it
+	 * on. With no add-on setting to inherit either, MCP is off.
+	 *
+	 * @since x.x
+	 *
+	 * @var int|null 1 for enabled, 0 for disabled, null when never saved.
+	 */
+	public $mcp;
+
+	/**
 	 * @param array $args
 	 */
 	public function __construct( $args = array() ) {
@@ -600,6 +615,16 @@ class FrmSettings {
 
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
+		}
+
+		// The MCP toggle is kept out of the loop above on purpose. That loop turns
+		// every checkbox it does not find in $params off, and the MCP section is
+		// not always on screen: it is hidden entirely while the API add-on still
+		// owns the toggle. Saving any other section would switch MCP off. The
+		// section renders a marker field, so the value only moves when the toggle
+		// was really there to move it.
+		if ( ! empty( $params['frm_mcp_settings_shown'] ) ) {
+			$this->mcp = empty( $params['frm_mcp'] ) ? 0 : 1;
 		}
 	}
 
