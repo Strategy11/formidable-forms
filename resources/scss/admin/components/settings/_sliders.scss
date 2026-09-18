@@ -18,7 +18,7 @@
 }
 
 .frm-style-component .frm-group-sliders .frm-slider-container svg.frmsvg:hover {
-	color: rgba(65, 153, 253, 1);
+	color: var(--primary-500);
 	cursor: pointer;
 }
 
@@ -31,7 +31,7 @@
 
 	&,
 	.frm-slider-bullet {
-		background: rgba(65, 153, 253, 1);
+		background: var(--primary-500);
 		box-shadow: 0 1.88px 4px -1px rgba(16, 24, 40, 0.03), 0 6px 8px -2px rgba(16, 24, 40, 0.08);
 	}
 
@@ -85,7 +85,7 @@
 		left: 0;
 		top: 0;
 		transform: translate(-5px, -5px) scale3d(0.7, 0.7, 1);
-		border: 4px solid rgba(65, 153, 253, 1);
+		border: 4px solid var(--primary-500);
 		opacity: 0;
 		transition: 0.3s opacity, 0.35s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
