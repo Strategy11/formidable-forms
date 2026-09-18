@@ -25,6 +25,14 @@ $aria_checked  = $checked ? 'true' : 'false';
 $input_html    = $args['input_html'] ?? array();
 $use_container = false;
 
+$aria_attrs = array();
+if ( ! empty( $args['aria-label-attr'] ) ) {
+	$aria_attrs['aria-label'] = $args['aria-label-attr'];
+} else {
+	$aria_attrs['aria-labelledby'] = $id . '_label';
+}
+$aria_attrs['aria-checked'] = $aria_checked;
+
 $div_params = array(
 	// This is important when the default style is !important as Pro styling may cause conflicts.
 	// It uses --toggle-on-color so just set the variable.
@@ -70,9 +78,7 @@ if ( $use_container ) {
 		/>
 
 		<span class="frm_toggle" tabindex="0" role="switch"
-			<?php echo ! empty( $args['aria-label-attr'] ) ? 'aria-label="' . esc_attr( $args['aria-label-attr'] ) . '"' : ''; ?>
-			aria-labelledby="<?php echo esc_attr( $id ); ?>_label"
-			aria-checked="<?php echo esc_attr( $aria_checked ); ?>"
+			<?php FrmAppHelper::array_to_html_params( $aria_attrs, true ); ?>
 		>
 			<span class="frm_toggle_slider"></span>
 		</span>
