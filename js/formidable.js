@@ -944,7 +944,9 @@ function frmFrontFormJS() {
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
-						replaceContent.replaceWith( response.content );
+						const insertedContent = jQuery( response.content );
+						replaceContent.replaceWith( insertedContent );
+						focusFormMessage( insertedContent );
 
 						addUrlParam( response );
 
@@ -1068,6 +1070,24 @@ function frmFrontFormJS() {
 		}
 
 		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
+	}
+
+	/**
+	 * Move focus to the top-level success message after an AJAX submit, so screen reader
+	 * users are notified it appeared. Scoped to `insertedContent` (the markup that just
+	 * replaced the form) rather than a wider ancestor, so an unrelated `.frm_message`-classed
+	 * element elsewhere on the page can never be focused instead.
+	 *
+	 * @since x.x
+	 *
+	 * @param {jQuery} insertedContent The markup that just replaced the form.
+	 * @return {void}
+	 */
+	function focusFormMessage( insertedContent ) {
+		const message = insertedContent.filter( '.frm_message' ).add( insertedContent.find( '.frm_message' ) ).get( 0 );
+		if ( message ) {
+			focusInput( message );
+		}
 	}
 
 	function afterFormSubmitted( object, response ) {

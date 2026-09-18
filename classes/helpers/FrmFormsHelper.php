@@ -532,7 +532,10 @@ class FrmFormsHelper {
 		$message = do_shortcode( $message );
 		$role    = $atts['role'] ?? 'status';
 
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
+		// tabindex="-1" makes the success message programmatically focusable without adding it
+		// to the tab order, so js/formidable.js can focus it after an AJAX submit without a
+		// screen reader user having to tab to it.
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '" tabindex="-1">' . $message . '</div>';
 	}
 
 	/**
