@@ -1293,7 +1293,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const errorMessage = container.querySelector( '.frm_error, [data-frm-error]' );
+		const errorMessages = container.querySelectorAll( '.frm_error, [data-frm-error]' );
 		const input = container.querySelector( 'input, select, textarea' );
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
@@ -1309,10 +1309,10 @@ function frmFrontFormJS() {
 			}
 		}
 
-		if ( errorMessage ) {
+		errorMessages.forEach( errorMessage => {
 			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
-		}
+		} );
 	}
 
 	/**
