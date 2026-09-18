@@ -3,6 +3,6 @@ describe( 'Run some HTML validation', function() {
 		cy.login();
 		cy.ensureContactUsFormExists();
 		cy.visit( '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form' );
-		cy.get( '#form_contact-us' ).htmlvalidate();
+		cy.get( '#form_contact-form' ).htmlvalidate();
 	} );
 } );
