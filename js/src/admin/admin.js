@@ -5736,8 +5736,7 @@ window.frmAdminBuildJS = function() {
 				form_id: formId,
 				field_id: id,
 				nonce: frmGlobal.nonce,
-				meta_name: getNewRowId( logicRows, `frm_logic_${ id }_` ),
-				fields: getFieldList()
+				meta_name: getNewRowId( logicRows, `frm_logic_${ id }_` )
 			},
 			success( html ) {
 				jQuery( document.getElementById( `logic_${ id }` ) ).fadeOut( 'fast', function() {
