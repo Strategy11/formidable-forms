@@ -4,6 +4,16 @@ describe( 'Slider style component', () => {
 		cy.viewport( 1280, 1600 );
 	} );
 
+	// Every change the tests below make gets committed to the hidden input by a "change" handler
+	// that runs immediately - but the style editor also fires an admin-ajax live-preview request
+	// on the same change, and re-normalizes the hidden input's value (e.g. adding back the unit)
+	// once that request resolves. Firing several slider changes back to back without giving that
+	// request a moment to resolve backs its queue up, so the value/disabled-state assertions that
+	// follow can outlast Cypress's default 4000ms retry window - not because the value is wrong,
+	// but because it hasn't settled yet. Call this after every blur()/select() on a slider.
+	const SLIDER_TIMEOUT = 10000;
+	const settleSliderChange = () => cy.wait( 500 );
+
 	/**
 	 * Locates a single (non multi-value) slider's range input, visible text input, unit select
 	 * and hidden "real" input from the id on its hidden input.
@@ -12,13 +22,13 @@ describe( 'Slider style component', () => {
 	 * @return {Object} References to the range, text, select and hidden inputs.
 	 */
 	const getSingleSlider = hiddenId => {
-		const wrapper = cy.get( hiddenId ).closest( '.frm-slider-component' );
+		const wrapper = () => cy.get( hiddenId, { timeout: SLIDER_TIMEOUT } ).closest( '.frm-slider-component' );
 
 		return {
-			range: wrapper.find( 'input[type="range"]' ),
-			text: wrapper.find( '.frm-slider-value input[type="text"]' ),
-			select: wrapper.find( '.frm-slider-value select' ),
-			hidden: cy.get( hiddenId )
+			range: wrapper().find( 'input[type="range"]' ),
+			text: wrapper().find( '.frm-slider-value input[type="text"]' ),
+			select: wrapper().find( '.frm-slider-value select' ),
+			hidden: cy.get( hiddenId, { timeout: SLIDER_TIMEOUT } )
 		};
 	};
 
@@ -51,15 +61,18 @@ describe( 'Slider style component', () => {
 
 		// Max value for Border Width is 25 - start from a known, valid value.
 		slider.text.clear().type( '10' ).blur();
+		settleSliderChange();
 		slider.hidden.should( 'have.value', '10px' );
 
 		cy.log( 'A value above the max is rejected and the text box resyncs to the current range value' );
 		slider.text.clear().type( '999' ).blur();
+		settleSliderChange();
 		slider.text.should( 'have.value', '10' );
 		slider.hidden.should( 'have.value', '10px' );
 
 		cy.log( 'A negative value is rejected the same way' );
 		slider.text.clear().type( '-5' ).blur();
+		settleSliderChange();
 		slider.text.should( 'have.value', '10' );
 		slider.hidden.should( 'have.value', '10px' );
 	} );
@@ -106,6 +119,7 @@ describe( 'Slider style component', () => {
 
 		cy.log( 'Force the unit to "auto" and confirm the range and text box are both disabled, with no duplicated "auto" text' );
 		slider.select.select( 'auto' );
+		settleSliderChange();
 		slider.range.should( 'be.disabled' );
 		slider.range.should( 'have.attr', 'aria-valuetext', 'auto' );
 		slider.text.should( 'be.disabled' ).and( 'have.value', '' );
@@ -114,6 +128,7 @@ describe( 'Slider style component', () => {
 
 		cy.log( 'Switching to a measured unit re-enables both the range and the text box' );
 		slider.select.select( 'px' );
+		settleSliderChange();
 		slider.range.should( 'not.be.disabled' );
 		slider.text.should( 'not.be.disabled' );
 		slider.hidden.invoke( 'val' ).should( 'match', /^\d+px$/ );
@@ -128,6 +143,7 @@ describe( 'Slider style component', () => {
 		cy.get( '#buttons-style button[aria-label="Buttons"]' ).click();
 		cy.get( '#frm_style_section_buttons-style' ).should( 'be.visible' );
 		getSingleSlider( '#frm_submit_width' ).select.select( 'auto' );
+		settleSliderChange();
 		cy.get( '#frm_submit_side_top' ).click( { force: true } );
 		cy.get( '#frm_submit_width' ).should( 'have.value', 'auto' );
 
