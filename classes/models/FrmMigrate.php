@@ -302,28 +302,28 @@ class FrmMigrate {
 		$index_name = 'idx_is_draft_created_at';
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
-			$wpdb->query( "CREATE INDEX idx_is_draft_created_at ON `{$wpdb->prefix}frm_items` (is_draft, created_at)" );
+			$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_is_draft_created_at ON %i (is_draft, created_at)', $table_name ) );
 		}
 
 		$table_name = "{$wpdb->prefix}frm_item_metas";
 		$index_name = 'idx_field_id_item_id';
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
-			$wpdb->query( "CREATE INDEX idx_field_id_item_id ON `{$wpdb->prefix}frm_item_metas` (field_id, item_id)" );
+			$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_field_id_item_id ON %i (field_id, item_id)', $table_name ) );
 		}
 
 		$table_name = "{$wpdb->prefix}frm_items";
 		$index_name = 'idx_form_id_is_draft';
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
-			$wpdb->query( "CREATE INDEX idx_form_id_is_draft ON `{$wpdb->prefix}frm_items` (form_id, is_draft)" );
+			$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_form_id_is_draft ON %i (form_id, is_draft)', $table_name ) );
 		}
 
 		$table_name = "{$wpdb->prefix}frm_fields";
 		$index_name = 'idx_form_id_type';
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
-			$wpdb->query( "CREATE INDEX idx_form_id_type ON `{$wpdb->prefix}frm_fields` (form_id, type(30))" );
+			$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_form_id_type ON %i (form_id, type(30))', $table_name ) );
 		}
 	}
 
@@ -428,11 +428,11 @@ class FrmMigrate {
 
 		global $wpdb, $wp_roles;
 
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->gated_tokens ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $this->fields ) );
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $this->forms ) );
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $this->entries ) );
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $this->entry_metas ) );
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $this->gated_tokens ) );
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );
@@ -463,7 +463,7 @@ class FrmMigrate {
 		remove_action( 'before_delete_post', 'FrmProDisplaysController::before_delete_post' );
 		remove_action( 'deleted_post', 'FrmProEntriesController::delete_entry' );
 
-		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM %i WHERE post_type in (%s, %s, %s)', $wpdb->posts, FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		foreach ( $post_ids as $post_id ) {
 			// Delete's each post.
@@ -477,7 +477,7 @@ class FrmMigrate {
 		delete_transient( 'frmpro_options' );
 		delete_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE option_name LIKE %s OR option_name LIKE %s', $wpdb->options, '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		do_action( 'frm_after_uninstall' );
 
@@ -759,10 +759,10 @@ class FrmMigrate {
 	 */
 	private function migrate_to_23() {
 		global $wpdb;
-		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$exists = $wpdb->get_row( $wpdb->prepare( 'SHOW COLUMNS FROM %i LIKE %s', $this->forms, 'parent_form_id' ) );
 
 		if ( ! $exists ) {
-			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( $wpdb->prepare( 'ALTER TABLE %i ADD parent_form_id int(11) default 0', $this->forms ) );
 		}
 	}
 
