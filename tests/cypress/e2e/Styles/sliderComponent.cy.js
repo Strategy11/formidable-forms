@@ -63,7 +63,14 @@ describe( 'Slider style component', () => {
 		cy.get( '#frm_fieldset' ).should( 'have.value', '12px' );
 
 		cy.log( 'Save the style and confirm the value survived the round trip through the server' );
-		cy.get( '#frm_submit_side_top' ).click( { force: true } );
+		// #frm_submit_side_top is a .frm-button-primary, whose CSS `:active` scale-transform
+		// (see resources/scss/admin/components/button/_button.scss) starts moving the element the
+		// instant the click's mousedown lands, which trips Cypress's own animation-stability check
+		// (default animationDistanceThreshold: 5px) even though the button is visible, enabled and
+		// unobstructed - verified independently via Playwright, which hits the same "not stable"
+		// failure on this exact button (see the dev-site skill notes). Raise the threshold instead
+		// of forcing, so every other actionability check still runs.
+		cy.get( '#frm_submit_side_top' ).click( { animationDistanceThreshold: 100 } );
 		cy.get( '#frm_fieldset' ).should( 'have.value', '12px' );
 		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).find( 'input[type="range"]' ).should( 'have.value', '12' );
 	} );
@@ -87,7 +94,9 @@ describe( 'Slider style component', () => {
 		slider.text().clear().type( '-5' ).blur();
 		settleSliderChange();
 		slider.text().should( 'have.value', '10' );
-		slider.hidden().should( 'have.value', '10px' );
+		// A direct cy.get() (rather than through the slider.hidden() helper) so the assertion is
+		// visible to static analysis - functionally identical to the checks above.
+		cy.get( '#frm_fieldset', { timeout: SLIDER_TIMEOUT } ).should( 'have.value', '10px' );
 	} );
 
 	it( 'Expands a multi-value slider group and lets an individual slider be adjusted independently', () => {
@@ -115,7 +124,8 @@ describe( 'Slider style component', () => {
 		} );
 
 		cy.log( 'Save the style and confirm the combined value survived the round trip through the server' );
-		cy.get( '#frm_submit_side_top' ).click( { force: true } );
+		// Same click-triggered :active transform as above - raise the threshold instead of forcing.
+		cy.get( '#frm_submit_side_top' ).click( { animationDistanceThreshold: 100 } );
 		cy.get( '#frm_fieldset_padding' ).invoke( 'val' ).then( value => {
 			expect( value.split( ' ' )[ 2 ] ).to.eq( '22px' );
 		} );
@@ -149,7 +159,8 @@ describe( 'Slider style component', () => {
 		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).should( 'not.have.class', 'frm-disabled' );
 
 		cy.log( 'The numeric value survives a save' );
-		cy.get( '#frm_submit_side_top' ).click( { force: true } );
+		// Same click-triggered :active transform as above - raise the threshold instead of forcing.
+		cy.get( '#frm_submit_side_top' ).click( { animationDistanceThreshold: 100 } );
 		cy.get( '#frm_submit_width' ).invoke( 'val' ).should( 'match', /^\d+px$/ );
 		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( 'input[type="range"]' ).should( 'not.be.disabled' );
 
@@ -157,7 +168,8 @@ describe( 'Slider style component', () => {
 		cy.get( '#buttons-style button[aria-label="Buttons"]' ).click();
 		cy.get( '#frm_style_section_buttons-style' ).should( 'be.visible' );
 		getSingleSlider( '#frm_submit_width' ).select().select( 'auto' );
-		cy.get( '#frm_submit_side_top' ).click( { force: true } );
+		// Same click-triggered :active transform as above - raise the threshold instead of forcing.
+		cy.get( '#frm_submit_side_top' ).click( { animationDistanceThreshold: 100 } );
 		cy.get( '#frm_submit_width' ).should( 'have.value', 'auto' );
 
 		cy.log( 'Reloading confirms the disabled, blank state is server-rendered on the very first paint, not just applied live by JS' );
@@ -192,7 +204,8 @@ describe( 'Slider style component', () => {
 		quickSettingsSlider().find( 'input[type="range"]' ).should( 'have.attr', 'aria-valuetext', 'Not set' );
 
 		cy.log( 'The cleared value survives a save, rather than silently reverting to the last numeric value' );
-		cy.get( '#frm_submit_side_top' ).click( { force: true } );
+		// Same click-triggered :active transform as above - raise the threshold instead of forcing.
+		cy.get( '#frm_submit_side_top' ).click( { animationDistanceThreshold: 100 } );
 		realInput().should( 'have.value', '' );
 		quickSettingsSlider().should( 'have.class', 'frm-disabled' ).and( 'have.class', 'frm-empty' );
 
@@ -205,8 +218,11 @@ describe( 'Slider style component', () => {
 			cy.get( 'select' ).select( 'px' );
 			cy.get( '.frm-slider-value input[type="text"]' ).clear().type( '8' ).blur();
 		} );
-		cy.get( '#frm_submit_side_top' ).click( { force: true } );
-		realInput().should( 'have.value', '8px' );
+		// Same click-triggered :active transform as above - raise the threshold instead of forcing.
+		cy.get( '#frm_submit_side_top' ).click( { animationDistanceThreshold: 100 } );
+		// A direct cy.get() (rather than through the realInput() helper) so the assertion is
+		// visible to static analysis - functionally identical to the checks above.
+		cy.get( 'input[name="frm_style_setting[post_content][border_radius]"]' ).should( 'have.value', '8px' );
 	} );
 
 	it( 'Slider components in the General section have no accessibility violations', () => {
@@ -219,6 +235,7 @@ describe( 'Slider style component', () => {
 		} );
 		cy.checkA11y( '#general-style .frm-slider-component', null, violations => {
 			cy.task( 'table', violations.map( ( { id, impact, description, nodes } ) => ( { id, impact, description, nodes: nodes.length } ) ) );
+			expect( violations ).to.have.lengthOf( 0 );
 		} );
 	} );
 } );

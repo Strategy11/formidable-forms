@@ -63,8 +63,10 @@ describe( 'Deleting forms', () => {
 		cy.get( '#bulk-action-selector-top' ).should( 'contain', 'Bulk Actions' ).select( 'bulk_delete' );
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
 		cy.get( '.frm-confirm-msg' ).should( 'contain', 'ALL selected forms and their entries will be permanently deleted. Want to proceed?' );
-		cy.contains( 'a.button-secondary', 'Cancel' )
-			.click( { force: true } );
+		// cy.contains() (not cy.get()) is required here - two confirm banners with their own
+		// `a.button-secondary` Cancel link both exist in the DOM at once, so a plain cy.get()
+		// matches 2 elements and cy.click() rejects a multi-element subject.
+		cy.contains( 'a.button-secondary', 'Cancel' ).should( 'be.visible' ).click();
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
 		cy.get( '#frm-confirmed-click' ).should( 'contain', 'Confirm' ).click();
 		cy.get( '.trash > a' ).should( 'contain.text', 'Trash' )

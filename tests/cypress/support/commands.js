@@ -108,7 +108,19 @@ Cypress.Commands.add( 'ensureContactUsFormExists', () => {
 				}
 
 				cy.log( 'Restore the Contact Us form out of Trash instead of leaving it stuck there' );
-				cy.get( RESTORE_LINK_SELECTOR ).first().click( { force: true } );
+				// WP core only reveals row-actions on a real CSS `:hover` - the OFFSET is on the
+				// `.row-actions` wrapper itself (`position: relative; left: -9999em` until
+				// `tr:hover .row-actions { position: static }`, verified in
+				// wp-admin/css/list-tables.css), not on the link. The link is already `position:
+				// static` by browser default, so invoking that on the link alone is a no-op; the
+				// wrapper is what has to be reset. Cypress can't simulate the real hover before its
+				// own pre-click check, so reset the wrapper the same way the real hover would, then
+				// click the link normally.
+				cy.get( '#the-list tr:contains("Contact Us") .row-actions' )
+					.invoke( 'css', 'position', 'static' )
+					.find( 'a.frm-trash-link[href*="frm_action=untrash"]' )
+					.first()
+					.click();
 				return cy.wrap( true );
 			} );
 	};
@@ -129,12 +141,16 @@ Cypress.Commands.add( 'ensureContactUsFormExists', () => {
 			cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 			cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
 				.first()
-				.trigger( 'mouseover', { force: true } )
+				// Wait for the template card itself to be visible before triggering the hover -
+				// the templates grid populates async, and triggering on a not-yet-rendered card
+				// was the actual reason force was needed here, not the hover-only child button.
+				.should( 'be.visible' )
+				.trigger( 'mouseover' )
 				.find( '.frm-form-templates-use-template-button' )
 				.should( 'contain', 'Use Template' )
-				.click( { force: true } );
+				.click();
 
-			cy.get( "svg[aria-label='Close']", { timeout: 7000 } ).click( { force: true } );
+			cy.get( "svg[aria-label='Close']", { timeout: 7000 } ).should( 'be.visible' ).click();
 
 			restoreFromTrash();
 		} );
@@ -146,12 +162,21 @@ Cypress.Commands.add( 'deleteForm', () => {
 	cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
 		console.log( 'Hovered Row:', $row );
 		cy.wrap( $row ).within( () => {
-			cy.get( '.row-actions .trash .frm-trash-link' ).should( 'be.visible' ).click( { force: true } );
+			// Same real CSS `:hover` reveal as RESTORE_LINK_SELECTOR above - the offset lives on the
+			// `.row-actions` wrapper itself, not the link, so reset the wrapper's position before
+			// clicking the link.
+			cy.get( '.row-actions' )
+				.invoke( 'css', 'position', 'static' )
+				.find( '.trash .frm-trash-link' )
+				.click();
 		} );
 		cy.get( 'body' ).then( $body => {
 			if ( $body.find( "div[role='dialog']" ).length ) {
 				cy.get( "div[role='dialog']" ).should( 'be.visible' ).and( 'contain.text', 'Do you want to move this form to the trash?' );
-				cy.xpath( "//a[@id='frm-confirmed-click']" ).should( 'contain.text', 'Confirm' ).click( { force: true } );
+				// Use cy.get() (an id is unique) rather than cy.xpath() - the xpath-resolved
+				// element doesn't re-query the same way on Cypress's retry, which is what forced
+				// force here. Plain cy.get() on this id works unforced elsewhere in the suite.
+				cy.get( '#frm-confirmed-click' ).should( 'contain.text', 'Confirm' ).click();
 			} else {
 				cy.log( 'Dialog not found' );
 			}
@@ -165,7 +190,10 @@ Cypress.Commands.add( 'openForm', () => {
 		cy.wrap( $row ).within( () => {
 			cy.get( '.column-name .row-title' ).should( 'exist' ).and( 'be.visible' ).then( $elem => {
 				console.log( 'Element is:', $elem );
-				cy.wrap( $elem ).click( { force: true } );
+				// Plain click - the link is the topmost element at its own coordinates (verified via
+				// document.elementFromPoint(), not covered by the row-actions block below it), so no
+				// force is needed.
+				cy.wrap( $elem ).click();
 			} );
 		} );
 	} );

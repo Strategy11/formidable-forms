@@ -2,7 +2,7 @@
 /**
  * Protect the files wp-env shares with a real dev site from e2e test runs.
  *
- * wp-env's "plugins": ["."] mapping bind-mounts the plugin's actual working directory into the
+ * Wp-env's "plugins": ["."] mapping bind-mounts the plugin's actual working directory into the
  * container rather than a disposable copy, the same as a symlinked PHPUnit checkout, so anything
  * the container writes under wp-content/plugins/formidable lands in the real working tree too:
  *
@@ -26,7 +26,7 @@ add_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
 add_filter(
 	'pre_http_request',
 	function ( $response, $args, $url ) {
-		if ( ! str_starts_with( $url, FrmAppHelper::plugin_url() . '/' ) ) {
+		if ( ! class_exists( 'FrmAppHelper' ) || ! str_starts_with( $url, FrmAppHelper::plugin_url() . '/' ) ) {
 			return $response;
 		}
 

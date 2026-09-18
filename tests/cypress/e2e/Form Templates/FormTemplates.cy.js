@@ -261,11 +261,16 @@ describe( 'Form Templates page', () => {
 
 	it( 'add templates as favorites, view demo and use templates', () => {
 		cy.log( 'Add contact us template as favorite' );
+		// Verified via Playwright: `.frm-form-templates-item-favorite-button` is `display: none`
+		// until the card is hovered (a real CSS `:hover`, which Cypress can't simulate before its
+		// own pre-click check) - make it actionable the way the real hover would, then click
+		// normally.
 		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
 			.first()
-			.trigger( 'mouseover', { force: true } )
+			.should( 'be.visible' )
 			.find( '.frm-form-templates-item-favorite-button' )
-			.click( { force: true } );
+			.invoke( 'css', 'display', 'flex' )
+			.click();
 
 		cy.get( '[data-category="favorites"] > .frm-page-skeleton-cat-count' ).should( 'contain.text', '1' );
 		cy.get( '[data-category="favorites"]' ).click();
@@ -278,13 +283,20 @@ describe( 'Form Templates page', () => {
 		cy.get( '[data-category="all-items"]' ).should( 'contain', 'All Templates' ).click();
 
 		cy.log( 'View demo of the contact us template' );
+		// Verified via Playwright: the button row (`.frm-form-templates-item-buttons`) is
+		// `display: none` until the card is hovered - make it actionable the way the real hover
+		// would, then click normally.
 		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
 			.first()
-			.trigger( 'mouseover', { force: true } )
+			.should( 'be.visible' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' );
+		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
+			.first()
 			.find( '.frm-button-secondary' )
 			.invoke( 'removeAttr', 'target' )
 			.should( 'contain', 'View Demo' )
-			.click( { force: true } );
+			.click();
 
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Contact Us Form Template' );
@@ -292,33 +304,38 @@ describe( 'Form Templates page', () => {
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 
-		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
-			.first()
-			.trigger( 'mouseover', { force: true } )
-			.find( '.frm-form-templates-use-template-button' )
-			.should( 'contain', 'Use Template' );
-
 		// cy.log( 'Try to use available templates' );
 		// cy.get( '[data-category="available-templates"]' ).should( 'contain', 'Available Templates' ).click();
 		// cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'Available Templates' );
 
+		// Invoke display:flex and click in one continuous chain, right before the click - a
+		// separate cy.contains() re-query for the click (as this used to do) leaves a window where
+		// a React re-render of this list can restore its own controlled style and re-hide the
+		// button before the click actually lands.
 		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
 			.first()
-			.trigger( 'mouseover', { force: true } )
+			.should( 'be.visible' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' )
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+			.click();
 
-		cy.get( 'svg[aria-label="Close"]' ).click( { force: true } );
+		cy.get( 'svg[aria-label="Close"]' ).should( 'be.visible' ).click();
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 
+		// Same real CSS `:hover` reveal on the template card as above - make it actionable the
+		// way the real hover would, then click normally.
 		cy.get( '[frm-search-text="user registration"]' )
 			.first()
-			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' );
+		cy.get( '[frm-search-text="user registration"]' )
+			.first()
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( '#frm-form-upgrade-modal > .frm_modal_top > .frm-modal-title > h2' ).should( 'contain', 'User Registration is a PRO Template' );
 		cy.get( '#frm-form-upgrade-modal > .inside > :nth-child(1)' ).should( 'contain', 'The User Registration is not available on your plan. Please upgrade to unlock this and more awesome templates.' );
@@ -331,12 +348,14 @@ describe( 'Form Templates page', () => {
 	} );
 
 	it( 'create a new custom template and delete it', () => {
+		// Plain, always-visible button - no force needed (an identical unforced click on this
+		// selector works in commands.js's createNewForm()); Cypress auto-scrolls into view.
 		cy.get( '#frm-form-templates-create-form' )
 			.should( 'contain', 'Create a blank form' )
-			.scrollIntoView()
-			.click( { force: true } );
+			.click();
 
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Save' ).click( { force: true } );
+		// Plain #frm_submit_side_top "Save" click - no force needed, see the note above.
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Save' ).click();
 
 		cy.log( 'Ensure the modal for saving form is visible' );
 		cy.get( '#frm-form-templates-modal' ).should( 'be.visible' );
@@ -355,10 +374,11 @@ describe( 'Form Templates page', () => {
 			.should( 'contain.text', 'Cancel' );
 
 		cy.get( '#frm_new_form_name_input' ).type( 'Form Template Test' );
-		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click( { force: true } );
+		// Plain #frm-save-form-name-button click - no force needed (see commands.js's createNewForm()).
+		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
 			.should( 'be.visible' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
@@ -366,20 +386,20 @@ describe( 'Form Templates page', () => {
 		cy.log( 'Validate that there are no custom templates yet' );
 		cy.get( '.frmcenter > .frm-page-skeleton-title' ).should( 'contain', 'You currently have no templates.' );
 		cy.get( '.frm-page-skeleton-text' ).should( 'contain', "You haven't created any form templates. Begin now to simplify your workflow and save time." );
-		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'contain', 'Create Template' ).click( { force: true } );
+		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'be.visible' ).and( 'contain', 'Create Template' ).click();
 		cy.get( '#frm-create-template-modal > .frm_modal_footer > .button-secondary' ).should( 'contain', 'Cancel' ).click();
 
 		cy.log( 'Create a new template' );
-		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'contain', 'Create Template' ).click( { force: true } );
+		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'be.visible' ).and( 'contain', 'Create Template' ).click();
 		cy.get( '#frm-create-template-modal > .frm_modal_top > .frm-modal-title > h2' ).should( 'contain', 'Create New Template' );
 		cy.get( '.inside > :nth-child(1) > label' ).should( 'contain', 'Select form for a new template' );
 		cy.get( '#frm-create-template-modal-forms-select' ).select( 'Form Template Test' );
 		cy.get( ':nth-child(3) > label' ).should( 'contain', 'Description' );
 		cy.get( '#frm_create_template_description' ).type( 'Test description' );
-		cy.get( '#frm-create-template-button' ).should( 'contain', 'Create Template' ).click( { force: true } );
+		cy.get( '#frm-create-template-button' ).should( 'be.visible' ).and( 'contain', 'Create Template' ).click();
 		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
 			.should( 'be.visible' )
-			.click( { force: true } );
+			.click();
 		cy.get( '.row-title' ).should( 'contain', 'Form Template Test Template' );
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
@@ -392,43 +412,52 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Test description' );
 
 		cy.log( 'Edit template' );
+		// Same button-row `display: none` -> hover reveal as above - make it actionable the way
+		// the real hover would, then click normally.
 		cy.get( 'li[frm-search-text="form template test template"]' )
-			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' );
+		cy.get( 'li[frm-search-text="form template test template"]' )
 			.find( '.frm-button-secondary' )
 			.should( 'contain', 'Edit' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
 			.should( 'be.visible' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
 
 		cy.log( 'Click on the use template button' );
+		// Same button-row `display: none` -> hover reveal as above.
 		cy.get( 'li[frm-search-text="form template test template"]' )
-			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' );
+		cy.get( 'li[frm-search-text="form template test template"]' )
 			.find( '.frm-button-primary' )
 			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
 			.should( 'be.visible' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
 
 		cy.log( 'Delete template' );
+		// This button is `display: none` until the card is hovered - make it actionable the way
+		// the real hover would, then click normally.
 		cy.get( 'li[frm-search-text="form template test template"]' )
-			.trigger( 'mouseover' )
 			.find( '.frm-form-templates-custom-item-trash-button' )
-			.click( { force: true } );
+			.invoke( 'css', 'display', 'flex' )
+			.click();
 		cy.get( '.cta-inside > .frm-flex-box > .button-secondary' ).should( 'contain', 'Cancel' ).click();
 		cy.get( 'li[frm-search-text="form template test template"]' )
-			.trigger( 'mouseover' )
 			.find( '.frm-form-templates-custom-item-trash-button' )
-			.click( { force: true } );
+			.invoke( 'css', 'display', 'flex' )
+			.click();
 		cy.get( '.frm-confirm-msg' ).should( 'contain', 'Do you want to move this form template to the trash?' );
 		cy.get( '#frm-confirmed-click' ).should( 'contain', 'Confirm' ).click();
 
@@ -442,11 +471,14 @@ describe( 'Form Templates page', () => {
 		cy.log( 'Get free templates by clicking Use Template' );
 		cy.get( '[data-category="all-items"]' ).should( 'contain', 'All Templates' ).click();
 		cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'All Templates' );
+		// Same button-row `display: none` -> hover reveal as above.
 		cy.get( '[frm-search-text="grade book"]' )
-			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' );
+		cy.get( '[frm-search-text="grade book"]' )
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( '#frm-leave-email-modal' ).should( 'be.visible' );
 		cy.get( '#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2' ).should( 'contain', 'Get 30+ Free Form Templates' );
@@ -458,10 +490,12 @@ describe( 'Form Templates page', () => {
 		cy.get( '#frm-leave-email-modal > .frm_modal_footer > .button-secondary' ).click();
 
 		cy.get( '[frm-search-text="grade book"]' )
-			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' );
+		cy.get( '[frm-search-text="grade book"]' )
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( 'a#frm-get-code-button' ).click();
 
@@ -470,10 +504,13 @@ describe( 'Form Templates page', () => {
 		cy.log( 'Try to use free templates' );
 		cy.get( '[frm-search-text="employee referral"]' )
 			.first()
-			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-item-buttons' )
+			.invoke( 'css', 'display', 'flex' );
+		cy.get( '[frm-search-text="employee referral"]' )
+			.first()
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+			.click();
 
 		cy.get( 'span[title]' ).should( 'contain', 'Employee Referral' );
 		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click();
@@ -481,12 +518,21 @@ describe( 'Form Templates page', () => {
 		cy.contains( '#the-list tr', 'Employee Referral' ).trigger( 'mouseover' ).then( $row => {
 			console.log( 'Hovered Row:', $row );
 			cy.wrap( $row ).within( () => {
-				cy.get( '.row-actions .trash .frm-trash-link' ).should( 'be.visible' ).click( { force: true } );
+				// WP hides row-actions until a real CSS `:hover` - make it actionable the way the real
+				// hover would, then click normally. Chained in one continuous command so there's no
+				// window between the reset and the click for a re-render to undo it.
+				cy.get( '.row-actions' )
+					.invoke( 'css', 'position', 'static' )
+					.find( '.trash .frm-trash-link' )
+					.should( 'be.visible' )
+					.click();
 			} );
 			cy.get( 'body' ).then( $body => {
 				if ( $body.find( "div[role='dialog']" ).length ) {
 					cy.get( "div[role='dialog']" ).should( 'be.visible' ).and( 'contain.text', 'Do you want to move this form to the trash?' );
-					cy.xpath( "//a[@id='frm-confirmed-click']" ).should( 'contain.text', 'Confirm' ).click( { force: true } );
+					// Plain cy.get() by id rather than cy.xpath() - the xpath-resolved element doesn't
+					// re-query the same way on Cypress's retry; plain cy.get() works unforced elsewhere.
+					cy.get( '#frm-confirmed-click' ).should( 'contain.text', 'Confirm' ).click();
 				} else {
 					cy.log( 'Dialog not found' );
 				}

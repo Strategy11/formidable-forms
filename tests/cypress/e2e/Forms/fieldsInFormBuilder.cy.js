@@ -6,12 +6,32 @@ describe( 'Fields in the form builder', () => {
 		cy.viewport( 1280, 720 );
 	} );
 
+	// Shared by the tests below - the "Add Fields" sidebar icon is a plain, always-visible link
+	// with no hover gating, so a simple visibility wait is enough (no force needed).
+	const createField = ( fieldId, fieldType ) => {
+		cy.log( `Create a ${ fieldType } field` );
+		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
+	};
+
 	it( 'should create, duplicate a field from each type and delete them', () => {
 		const createAndDuplicateField = ( fieldId, fieldType ) => {
 			cy.log( `Create a ${ fieldType } field and duplicate it` );
 			cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).click();
-			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 } ).click( { force: true } );
-			cy.get( `li[data-ftype="${ fieldId }"] .frm_clone_field > span` ).should( 'contain', 'Duplicate' ).click( { force: true } );
+			// .frm-field-action-icons is also .frm-show-hover (opacity: 0 by default; see
+			// resources/scss/admin/components/sorting/_sorting-display.scss), only revealed on a
+			// real CSS :hover of the field row or when the field is .selected - it's still genuinely
+			// clickable underneath, so reveal it the same way the row-actions helpers in commands.js
+			// do, instead of forcing through the opacity check.
+			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
+				.invoke( 'css', 'opacity', 1 )
+				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
+				.first()
+				.should( 'be.visible' )
+				.click();
+			// The dropdown menu opens via a Bootstrap JS toggle (a real click, not hover-gated), so
+			// once it's open the item is genuinely clickable - wait for it to be visible instead of
+			// forcing through the open transition.
+			cy.get( `li[data-ftype="${ fieldId }"] .frm_clone_field > span` ).should( 'be.visible' ).and( 'contain', 'Duplicate' ).click();
 
 			cy.get( `li[data-type="${ fieldId }"]` ).should( 'have.length', 2 );
 			const originalField = cy.get( `li[data-type="${ fieldId }"]:first` );
@@ -21,21 +41,30 @@ describe( 'Fields in the form builder', () => {
 
 		const removeField = field => {
 			field.within( () => {
-				cy.get( '.frm-field-action-icons .dropdown' )
-					.trigger( 'mouseover' );
+				// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
+				cy.get( '.frm-field-action-icons' )
+					.invoke( 'css', 'opacity', 1 )
+					.find( '.dropdown .frm-hover-icon .frmsvg' )
+					.first()
+					.should( 'be.visible' )
+					.click();
 
-				cy.get( '.frm-field-action-icons .dropdown .frm-hover-icon .frmsvg' )
-					.click( { force: true } );
-
+				// The menu is open via the click above (not hover-gated), so wait for the item to
+				// be visible instead of forcing through the open transition.
 				cy.get( '.frm-dropdown-menu .frm_delete_field' )
-					.should( 'contain', 'Delete' )
-					.click( { force: true } );
+					.should( 'be.visible' )
+					.and( 'contain', 'Delete' )
+					.click();
 			} );
 
-			cy.get( '.postbox a[id="frm-confirmed-click"]' )
-				.contains( 'Confirm' )
+			// Plain cy.get() by id (an id is unique) rather than cy.get().contains() - the latter
+			// can resolve to a narrower descendant node than the clickable link itself, which is
+			// what forced force here. Plain cy.get() on this id works unforced elsewhere in the
+			// suite.
+			cy.get( '#frm-confirmed-click' )
 				.should( 'be.visible' )
-				.click( { force: true } );
+				.and( 'contain', 'Confirm' )
+				.click();
 
 			cy.get( `li[data-type="${ field }"]` ).should( 'not.exist' );
 		};
@@ -43,7 +72,9 @@ describe( 'Fields in the form builder', () => {
 		cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
 			cy.wrap( $row ).within( () => {
 				cy.get( '.column-name .row-title' ).should( 'exist' ).and( 'be.visible' ).then( $elem => {
-					cy.wrap( $elem ).click( { force: true } );
+					// Plain click - verified via document.elementFromPoint() that the link is the
+					// topmost element at its own coordinates, not covered by anything. No force needed.
+					cy.wrap( $elem ).click();
 				} );
 			} );
 		} );
@@ -80,16 +111,20 @@ describe( 'Fields in the form builder', () => {
 	} );
 
 	it( 'should rename a field from each type', () => {
-		const createField = ( fieldId, fieldType ) => {
-			cy.log( `Create a ${ fieldType } field` );
-			cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).click( { force: true } );
-		};
-
 		const renameField = ( fieldId, fieldType, fieldValue ) => {
 			cy.log( `Rename a ${ fieldType } field` );
-			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 } ).click( { force: true } );
-			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'contain', 'Field Settings' ).click( { force: true } );
-			cy.get( `div[id^="frm-single-settings-"] input[value="${ fieldValue }"]`, { timeout: 10000 } ).should( 'be.visible' ).clear( { force: true } ).type( `${ fieldType } Updated`, { force: true } );
+			// See the .frm-show-hover opacity note on the field-row "more options" toggle above.
+			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
+				.invoke( 'css', 'opacity', 1 )
+				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
+				.first()
+				.should( 'be.visible' )
+				.click();
+			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
+			// The settings panel opens via a bounded jQuery slideDown() (admin.js) - wait for the
+			// input to be visible (Cypress retries until it has settled into the flow), then interact
+			// normally.
+			cy.get( `div[id^="frm-single-settings-"] input[value="${ fieldValue }"]`, { timeout: 10000 } ).should( 'be.visible' ).clear().type( `${ fieldType } Updated` );
 		};
 
 		cy.openForm();
@@ -121,16 +156,18 @@ describe( 'Fields in the form builder', () => {
 	it( 'should set fields as required and validate them in frontend', () => {
 		const fieldTypes = [ 'Text', 'Paragraph', 'Checkboxes', 'Radio Buttons', 'Dropdown', 'Email', 'Website/URL', 'Number', 'Name', 'Phone' ];
 
-		const createField = ( fieldId, fieldType ) => {
-			cy.log( `Create a ${ fieldType } field` );
-			cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).click( { force: true } );
-		};
-
 		const requiredField = ( fieldId, fieldType ) => {
 			cy.log( `Set ${ fieldType } field as require` );
-			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 } ).click( { force: true } );
-			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'contain', 'Field Settings' ).click( { force: true } );
-			cy.get( 'input.frm_req_field[type="checkbox"]' ).check( { force: true } );
+			// See the .frm-show-hover opacity note on the field-row "more options" toggle above.
+			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
+				.invoke( 'css', 'opacity', 1 )
+				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
+				.first()
+				.should( 'be.visible' )
+				.click();
+			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
+			// Same slideDown()-driven settings panel as elsewhere in this file.
+			cy.get( 'input.frm_req_field[type="checkbox"]' ).should( 'be.visible' ).check();
 		};
 
 		cy.openForm();
@@ -154,7 +191,9 @@ describe( 'Fields in the form builder', () => {
 		} );
 
 		cy.log( 'Update form' );
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
+		// Plain #frm_submit_side_top "Update" click - no force needed here (see the identical
+		// unforced click used for this same button elsewhere in the suite, e.g. formsSettings.cy.js).
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
 		cy.log( 'Click on Preview - Blank Page' );
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
@@ -190,23 +229,36 @@ describe( 'Fields in the form builder', () => {
 	it( 'should validate forms with javascript setting', () => {
 		cy.openForm();
 		cy.log( `Create a text field and set it as required` );
-		cy.get( `li[id="text"] a[title="Text"]` ).click( { force: true } );
-		cy.get( `li[data-ftype="text"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 } ).click( { force: true } );
-		cy.get( `li[data-ftype="text"] .frm_select_field > span` ).should( 'contain', 'Field Settings' ).click( { force: true } );
-		cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 } ).check( { force: true } );
+		// Plain, always-visible sidebar link - see the identical unforced click elsewhere in this file.
+		cy.get( `li[id="text"] a[title="Text"]` ).should( 'be.visible' ).click();
+		// See the .frm-show-hover opacity note on the field-row "more options" toggle elsewhere in
+		// this file.
+		cy.get( `li[data-ftype="text"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
+			.invoke( 'css', 'opacity', 1 )
+			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
+			.first()
+			.should( 'be.visible' )
+			.click();
+		cy.get( `li[data-ftype="text"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
+		// Same slideDown()-driven settings panel as elsewhere in this file.
+		cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 } ).should( 'be.visible' ).check();
 
 		cy.log( 'Create a phone and email field' );
-		cy.get( `li[id="email"] a[title="Email"]` ).click( { force: true } );
-		cy.get( `li[id="phone"] a[title="Phone"]` ).click( { force: true } );
+		cy.get( `li[id="email"] a[title="Email"]` ).should( 'be.visible' ).click();
+		cy.get( `li[id="phone"] a[title="Phone"]` ).should( 'be.visible' ).click();
 
 		cy.log( 'Update form' );
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
+		// Plain #frm_submit_side_top "Update" click - no force needed, see the note above.
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
 		cy.log( "Enabling the 'Validate this form with javascript' setting" );
 		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
 		cy.get( ':nth-child(3) > td > .frm_inline_block', { timeout: 5000 } ).should( 'contain', 'Validate this form with javascript' );
-		cy.get( '#js_validate' ).click( { force: true } );
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
+		// This checkbox's own <label> text sits in the same clickable row and is a plain,
+		// always-visible control on the Settings tab (no field-settings animation involved here) -
+		// wait for it to be visible instead of forcing.
+		cy.get( '#js_validate' ).should( 'be.visible' ).click();
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
 		cy.log( 'Click on Preview - Blank Page' );
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
@@ -253,7 +305,7 @@ describe( 'Fields in the form builder', () => {
 
 	afterEach( () => {
 		cy.log( 'Teardown - Save the form and delete it' );
-		cy.get( "a[aria-label='Close']", { timeout: 10000 } ).click( { force: true } );
+		cy.get( "a[aria-label='Close']", { timeout: 10000 } ).should( 'be.visible' ).click();
 		cy.deleteForm();
 	} );
 } );
