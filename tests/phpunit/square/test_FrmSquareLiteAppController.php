@@ -145,6 +145,14 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 		// a shopper typing a European style amount into a GBP form is read as 123 pounds.
 		yield 'GBP comma is never a decimal' => array( 'gbp', '1,23', '123.00', '12300' );
 
+		// A shopper can type in a different locale's format than the form's configured
+		// currency expects. Both separators appearing together is unambiguous regardless of
+		// currency -- whichever one appears last is the real decimal point. Trusting the
+		// currency's configured separators here used to collide the two into one, silently
+		// truncating "1,030.21" to 1.03 (formidable-forms#3379).
+		yield 'EUR form with a US-style amount' => array( 'eur', '€1,030.21', '1030.21', '103021' );
+		yield 'GBP form with a EU-style amount' => array( 'gbp', '£1.030,21', '1030.21', '103021' );
+
 		// A currency with no fractional unit keeps the two paths identical, and rounds.
 		yield 'JPY with a thousands comma' => array( 'jpy', '1,234', '1234', '1234' );
 		yield 'JPY rounds away a decimal' => array( 'jpy', '1234.56', '1235', '1235' );

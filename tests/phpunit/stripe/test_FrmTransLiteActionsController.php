@@ -67,6 +67,14 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		$amount = '111.500';
 		$this->maybe_use_decimal( $amount, $currency );
 		$this->assertSame( '111.500', $amount );
+
+		// A string already carrying both separators is a different locale's format (e.g. a
+		// US-style "1,111.50" typed into a form with this dot-thousands currency), not a
+		// misplaced decimal point -- leave it alone for normalize_number to resolve instead
+		// of colliding it with the currency's own decimal_separator.
+		$amount = '1,111.50';
+		$this->maybe_use_decimal( $amount, $currency );
+		$this->assertSame( '1,111.50', $amount );
 	}
 
 	/**

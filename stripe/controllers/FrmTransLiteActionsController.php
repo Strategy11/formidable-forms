@@ -365,6 +365,13 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	private static function maybe_use_decimal( &$amount, $currency ) {
+		// When both '.' and ',' are present, normalize_number() determines the real decimal
+		// separator from the string itself instead of trusting the currency's configured
+		// separator -- doing the swap here first would collide it with the other separator.
+		if ( self::has_conflicting_separators( $amount ) ) {
+			return;
+		}
+
 		if ( $currency['thousand_separator'] !== '.' ) {
 			return;
 		}
@@ -385,13 +392,37 @@ class FrmTransLiteActionsController {
 
 	/**
 	 * @param string $amount
+	 *
+	 * @return bool
+	 */
+	private static function has_conflicting_separators( $amount ) {
+		return strpos( $amount, '.' ) !== false && strpos( $amount, ',' ) !== false;
+	}
+
+	/**
+	 * @param string $amount
 	 * @param array  $currency
 	 *
 	 * @return void
 	 */
 	private static function normalize_number( &$amount, $currency ) {
-		$amount = str_replace( $currency['thousand_separator'], '', $amount );
-		$amount = str_replace( $currency['decimal_separator'], '.', $amount );
+		if ( self::has_conflicting_separators( $amount ) ) {
+			// A user can type an amount in a different locale's format than the form's
+			// configured currency expects (e.g. US-style "1,030.21" on a form whose currency
+			// configures '.' as the thousand separator). Trusting the currency's separators
+			// blindly in that case treats the amount's real decimal point as the thousand
+			// separator and vice versa, colliding both into one and truncating the value by
+			// orders of magnitude. Whichever separator appears last in the string is
+			// unambiguously the real decimal point.
+			$decimal_separator  = strrpos( $amount, '.' ) > strrpos( $amount, ',' ) ? '.' : ',';
+			$thousand_separator = '.' === $decimal_separator ? ',' : '.';
+		} else {
+			$decimal_separator  = $currency['decimal_separator'];
+			$thousand_separator = $currency['thousand_separator'];
+		}
+
+		$amount = str_replace( $thousand_separator, '', $amount );
+		$amount = str_replace( $decimal_separator, '.', $amount );
 		$amount = number_format( (float) $amount, $currency['decimals'], '.', '' );
 	}
 
