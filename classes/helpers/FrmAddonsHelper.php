@@ -334,12 +334,15 @@ class FrmAddonsHelper {
 	 *
 	 * @since 6.17
 	 *
+	 * @param string $alt Accessible name for the icon. Leave blank when adjacent text already
+	 *                    describes the guarantee, so the icon stays decorative.
+	 *
 	 * @return void
 	 */
-	public static function guarantee_icon() {
+	public static function guarantee_icon( $alt = '' ) {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="" />
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="<?php echo esc_attr( $alt ); ?>" />
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
