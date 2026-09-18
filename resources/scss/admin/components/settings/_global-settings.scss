@@ -52,6 +52,27 @@ label.frm-example-icon {
 	display: none;
 }
 
+// Scoped to .frm_captchas, not the shared rule above - unlike the payment gateway
+// tablists sharing this class, its labels have no role="tab"/tabindex of their own,
+// so hiding the input entirely removed the only focusable element from the tab order.
+.frm_captchas.frm-long-icon-buttons input[type="radio"] {
+	display: block;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.frm_captchas.frm-long-icon-buttons input[type="radio"]:focus-visible + label {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
+}
+
 .frm-long-icon-buttons input[type="radio"]:checked + label {
 	border-color: var(--primary-500);
 	box-shadow: 0 0 0 1px var(--primary-color);
