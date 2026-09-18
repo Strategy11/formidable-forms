@@ -944,6 +944,8 @@ function frmFrontFormJS() {
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
+						const replacedParent = replaceContent.parent()[ 0 ]; // eslint-disable-line no-jquery/no-parent
+
 						replaceContent.replaceWith( response.content );
 
 						addUrlParam( response );
@@ -958,7 +960,7 @@ function frmFrontFormJS() {
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
 
-						afterFormSubmitted( object, response );
+						afterFormSubmitted( object, response, replacedParent );
 					},
 					delay
 				);
@@ -1070,7 +1072,7 @@ function frmFrontFormJS() {
 		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
 	}
 
-	function afterFormSubmitted( object, response ) {
+	function afterFormSubmitted( object, response, container ) {
 		const tempDiv = document.createElement( 'div' );
 		tempDiv.innerHTML = response.content;
 		const formCompleted = tempDiv.querySelector( '.frm_message' );
@@ -1079,6 +1081,23 @@ function frmFrontFormJS() {
 		} else {
 			jQuery( document ).trigger( 'frmPageChanged', [ object, response ] );
 		}
+		focusSubmitMessage( container );
+	}
+
+	/**
+	 * Focus the top-level success/failure message for screen reader accessibility.
+	 * No-op on a real page change, since neither class is present on the new page.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} container Live element now holding the replaced form content.
+	 * @return {void}
+	 */
+	function focusSubmitMessage( container ) {
+		if ( ! container ) {
+			return;
+		}
+		container.querySelector( '.frm_message, .frm_error_style' )?.focus();
 	}
 
 	/**

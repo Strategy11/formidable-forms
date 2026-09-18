@@ -532,7 +532,8 @@ class FrmFormsHelper {
 		$message = do_shortcode( $message );
 		$role    = $atts['role'] ?? 'status';
 
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
+		// tabindex="-1" lets this be focused programmatically after submit without adding it to tab order.
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '" tabindex="-1">' . $message . '</div>';
 	}
 
 	/**
