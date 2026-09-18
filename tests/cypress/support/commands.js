@@ -76,6 +76,36 @@ Cypress.Commands.add( 'createNewForm', () => {
 	cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
 } );
 
+/**
+ * Ensure the "Contact Us" template form (frm_key `contact-form`) exists, creating it if needed.
+ *
+ * Several specs preview this form directly by key without creating it themselves, relying on
+ * `Form Templates/FormTemplates.cy.js` having already created it in the same wp-env instance.
+ * That only holds when both specs land in the same CI shard, which isn't guaranteed - shards are
+ * bin-packed by spec file line count (see tests/bin/split-specs.sh), so adding or resizing any
+ * spec file can split them apart. Call this instead of assuming the fixture is already there.
+ */
+Cypress.Commands.add( 'ensureContactUsFormExists', () => {
+	cy.visit( '/wp-admin/admin.php?page=formidable' );
+	cy.get( 'body' ).then( $body => {
+		if ( $body.find( '#the-list tr:contains("Contact Us")' ).length > 0 ) {
+			cy.log( 'Contact Us form already exists' );
+			return;
+		}
+
+		cy.log( 'Create the Contact Us form from its template' );
+		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
+		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
+			.first()
+			.trigger( 'mouseover', { force: true } )
+			.find( '.frm-form-templates-use-template-button' )
+			.should( 'contain', 'Use Template' )
+			.click( { force: true } );
+
+		cy.get( "svg[aria-label='Close']", { timeout: 7000 } ).click( { force: true } );
+	} );
+} );
+
 Cypress.Commands.add( 'deleteForm', () => {
 	cy.log( 'Delete Form' );
 	cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
@@ -131,4 +161,29 @@ Cypress.Commands.add( 'emptyTrash', () => {
 			cy.log( 'No forms in the Trash.' );
 		}
 	} );
+} );
+
+// Runs the IBM Equal Access scan alongside the existing cypress-axe checks. Doesn't
+// fail the build yet (assertCompliance(false)) since the current admin/preview
+// markup hasn't been triaged against this rule set - see formidable-forms#3356.
+Cypress.Commands.add( 'checkIbmAccessibility', label => {
+	cy.getCompliance( label ).then( report => {
+		const violations = report.results.filter( result => result.level !== 'pass' );
+
+		if ( ! violations.length ) {
+			return report;
+		}
+
+		// Chain the logging tasks and resolve back to `report` at the end, rather than
+		// invoking cy commands and then returning `report` synchronously - Cypress
+		// treats mixing queued async commands with a sync return in the same callback
+		// as an error, which aborted the scan and (since retries are enabled) caused a
+		// same-labeled retry to collide with this scan's already-recorded label.
+		cy.task(
+			'log',
+			`${ violations.length } IBM Equal Access violation${ violations.length === 1 ? '' : 's' } detected (${ label })`
+		);
+
+		return cy.task( 'table', violations.map( ( { ruleId, level, message } ) => ( { ruleId, level, message } ) ) ).then( () => report );
+	} ).assertCompliance( false );
 } );

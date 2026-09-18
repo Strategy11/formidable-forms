@@ -14,9 +14,11 @@ describe( 'Run some accessibility tests', function() {
 
 	it( 'Check the form list has valid HTML', () => {
 		cy.login();
+		cy.ensureContactUsFormExists();
 		cy.visit( '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form' );
 		cy.injectAxe();
 		configureAxeWithBaselineIgnoredRuleset();
 		cy.checkA11y();
+		cy.checkIbmAccessibility( 'form-preview' );
 	} );
 } );
