@@ -92,6 +92,126 @@ class test_FrmAddon extends FrmUnitTest {
 	}
 
 	/**
+	 * Builds an add-on with a saved license whose API request comes back with the
+	 * given payload, so the license checks can run without a request leaving the
+	 * machine.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $payload What the API request should come back with.
+	 *
+	 * @return PHPUnit\Framework\MockObject\MockObject
+	 */
+	private function get_licensed_addon( $payload ) {
+		$addon = $this->getMockBuilder( 'FrmTestAddon' )
+						->disableOriginalConstructor()
+						->setMethods( array( 'send_mothership_request', 'clear_license' ) )
+						->getMock();
+
+		$addon->method( 'send_mothership_request' )->willReturn( $payload );
+
+		$addon->plugin_file = FrmAppHelper::plugin_path() . '/formidable.php';
+		$addon->plugin_slug = 'test_license';
+		$addon->option_name = 'edd_test_license_license_';
+		$addon->license     = 'TEST-LICENSE-KEY';
+
+		// Clear the weekly throttle so the check under test actually runs.
+		$key = $this->run_private_method( array( $addon, 'transient_key' ) );
+		delete_option( $key );
+		delete_site_option( $key );
+
+		return $addon;
+	}
+
+	/**
+	 * A check that never got an answer about the license must report itself as
+	 * inconclusive, so nothing downstream treats it as a verdict.
+	 *
+	 * @since x.x
+	 *
+	 * @covers FrmAddon::get_license_status
+	 *
+	 * @dataProvider license_status_provider
+	 *
+	 * @param mixed  $payload         What the API request comes back with.
+	 * @param bool   $is_inconclusive Whether the check should report no verdict.
+	 * @param string $status          The status the check should report.
+	 *
+	 * @return void
+	 */
+	public function test_get_license_status_only_reports_a_verdict_from_the_api( $payload, $is_inconclusive, $status ) {
+		$addon    = $this->get_licensed_addon( $payload );
+		$response = $this->run_private_method( array( $addon, 'get_license_status' ) );
+
+		$this->assertSame( $is_inconclusive, ! empty( $response['inconclusive'] ) );
+		$this->assertSame( $status, $response['status'] );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void mixed>, mixed>>
+	 */
+	public function license_status_provider(): \Iterator {
+		// The API reported on the license, so the status is a verdict.
+		yield 'valid' => array( array( 'license' => 'valid' ), false, 'valid' );
+		yield 'invalid' => array( array( 'license' => 'invalid' ), false, 'invalid' );
+		yield 'revoked' => array( array( 'license' => 'revoked' ), false, 'revoked' );
+		yield 'disabled' => array( array( 'license' => 'disabled' ), false, 'disabled' );
+		yield 'expired' => array( array( 'license' => 'expired' ), false, 'expired' );
+		yield 'no_activations_left' => array( array( 'license' => 'no_activations_left' ), false, 'no_activations_left' );
+		// Nothing came back about the license, so there is no verdict to report.
+		yield 'error payload' => array( array( 'code' => 500 ), true, 'missing' );
+		yield 'empty payload' => array( array(), true, 'missing' );
+		yield 'connection error' => array( 'You had an error communicating with the Formidable API.', true, 'You had an error communicating with the Formidable API.' );
+		yield 'no body' => array( null, true, 'missing' );
+	}
+
+	/**
+	 * A license that activated before stays in place until the API says otherwise.
+	 * Losing the connection is not a revocation.
+	 *
+	 * @since x.x
+	 *
+	 * @covers FrmAddon::is_license_revoked
+	 *
+	 * @dataProvider revoked_license_provider
+	 *
+	 * @param mixed $payload      What the API request comes back with.
+	 * @param bool  $should_clear Whether the saved license should be dropped.
+	 *
+	 * @return void
+	 */
+	public function test_is_license_revoked_only_clears_on_a_reported_revocation( $payload, $should_clear ) {
+		$addon = $this->get_licensed_addon( $payload );
+
+		$addon->expects( $should_clear ? $this->once() : $this->never() )->method( 'clear_license' );
+
+		$this->run_private_method( array( $addon, 'is_license_revoked' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void mixed>, mixed>>
+	 */
+	public function revoked_license_provider(): \Iterator {
+		// The API reported the license is no longer usable.
+		yield 'revoked' => array( array( 'license' => 'revoked' ), true );
+		yield 'blocked' => array( array( 'license' => 'blocked' ), true );
+		yield 'disabled' => array( array( 'license' => 'disabled' ), true );
+		yield 'missing' => array( array( 'license' => 'missing' ), true );
+		// The license is still usable, or nothing came back about it.
+		yield 'valid' => array( array( 'license' => 'valid' ), false );
+		yield 'invalid' => array( array( 'license' => 'invalid' ), false );
+		yield 'expired' => array( array( 'license' => 'expired' ), false );
+		yield 'error payload' => array( array( 'code' => 500 ), false );
+		yield 'empty payload' => array( array(), false );
+		yield 'connection error' => array( 'You had an HTTP error connecting to the Formidable API', false );
+		yield 'no body' => array( null, false );
+	}
+
+	/**
 	 * @covers FrmAddon::update_pro_capabilities
 	 */
 	public function test_update_pro_capabilities() {
