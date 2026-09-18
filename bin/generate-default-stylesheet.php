@@ -27,4 +27,20 @@ if ( ! is_file( $target ) || ! filesize( $target ) ) {
 	WP_CLI::error( "No stylesheet generated at $target" );
 }
 
+// Several of the style templates gate a selector's only declarations behind
+// a single `! empty( $defaults[...] )` check with no fallback (e.g. a
+// font-family rule that only prints when a custom font is set) - under the
+// stock defaults that selector renders with nothing between its braces.
+// That's inert in real output either way, but stylelint's block-no-empty
+// has no way to tell "false setting produced this on purpose" from "typo'd
+// selector" without evaluating the template's PHP, so strip empty rules
+// (including any block left empty once its only content is removed, e.g. a
+// media query whose sole rule was itself emptied) before lint sees the file.
+$css = file_get_contents( $target );
+do {
+	$before = $css;
+	$css    = preg_replace( '/[^{}]*\{\}/', '', $css );
+} while ( $css !== $before );
+file_put_contents( $target, $css );
+
 WP_CLI::success( "Generated $target" );
