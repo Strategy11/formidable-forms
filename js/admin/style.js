@@ -716,6 +716,19 @@
 	}
 
 	/**
+	 * @param {string} [styleName] The style's own name, when known.
+	 * @return {string} The dropdown toggle's accessible name for a style card.
+	 */
+	function getStyleOptionsLabel( styleName ) {
+		if ( ! styleName ) {
+			return __( 'Style Options', 'formidable' );
+		}
+
+		/* translators: %s: The style's name. */
+		return sprintf( __( 'Style options for %s', 'formidable' ), styleName );
+	}
+
+	/**
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
 	 * @param {DOMStringMap} data        {
@@ -729,8 +742,7 @@
 	 * @return {HTMLElement} The hamburger menu element.
 	 */
 	function getHamburgerMenu( data, styleName ) {
-		/* translators: %s: The style's name. */
-		const label = styleName ? sprintf( __( 'Style options for %s', 'formidable' ), styleName ) : __( 'Style Options', 'formidable' );
+		const label = getStyleOptionsLabel( styleName );
 		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
 			children: [
@@ -1106,6 +1118,11 @@
 		const card = getCardByStyleId( styleId );
 		const titleElement = card.querySelector( '.frm-style-card-title' );
 		titleElement.textContent = newStyleName;
+
+		const toggleLabel = card.querySelector( '.frm-dropdown-toggle .screen-reader-text' );
+		if ( toggleLabel ) {
+			toggleLabel.textContent = getStyleOptionsLabel( newStyleName );
+		}
 	}
 
 	/**
