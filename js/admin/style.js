@@ -728,7 +728,10 @@
 	function getHamburgerMenu( data ) {
 		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
-			child: svg( { href: '#frm_thick_more_vert_icon' } )
+			children: [
+				svg( { href: '#frm_thick_more_vert_icon' } ),
+				span( { className: 'screen-reader-text', text: __( 'Style Options', 'formidable' ) } )
+			]
 		} );
 		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
