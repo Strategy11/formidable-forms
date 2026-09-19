@@ -36,6 +36,13 @@ class test_FrmXMLController extends FrmUnitTest {
 		FrmXMLController::form();
 		$html = ob_get_clean();
 
-		$this->assert_form_landmarks_have_unique_names( $html, 2 );
+		// Assert the two specific labels directly rather than a bare form count — a hook fired inside
+		// FrmXMLController::form() (e.g. frm_import_settings) adding its own <form> is a real extension
+		// point other add-ons already use here, and shouldn't fail this test as long as Import/Export
+		// themselves still have distinct, non-empty accessible names.
+		preg_match_all( '/<form\b[^>]*aria-label="([^"]*)"[^>]*>/', $html, $matches );
+		$this->assertContains( 'Import', $matches[1], 'Import form is missing its aria-label' );
+		$this->assertContains( 'Export', $matches[1], 'Export form is missing its aria-label' );
+		$this->assertSame( array_unique( $matches[1] ), $matches[1], 'Form landmarks must have distinct accessible names' );
 	}
 }

@@ -212,22 +212,24 @@ class FrmStylesPreviewHelper {
 		// needs a distinct name to avoid tripping the aria_landmark_name_unique a11y rule.
 		add_filter( 'frm_form_attributes', array( $this, 'add_preview_landmark_label' ) );
 
-		$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
+		try {
+			$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
 
-		$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
+			$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
 
-		if ( $this->form_includes_captcha ) {
-			// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
-			wp_dequeue_script( 'captcha-api' );
+			if ( $this->form_includes_captcha ) {
+				// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
+				wp_dequeue_script( 'captcha-api' );
+			}
+
+			return $target_form_preview_html;
+		} finally {
+			remove_filter( 'frm_form_attributes', array( $this, 'add_preview_landmark_label' ) );
+
+			// Return the is_admin status.
+			// Otherwise success messages won't use the proper mark up and will appear without the green background and padding.
+			remove_filter( 'frm_is_admin', '__return_false' );
 		}
-
-		remove_filter( 'frm_form_attributes', array( $this, 'add_preview_landmark_label' ) );
-
-		// Return the is_admin status.
-		// Otherwise success messages won't use the proper mark up and will appear without the green background and padding.
-		remove_filter( 'frm_is_admin', '__return_false' );
-
-		return $target_form_preview_html;
 	}
 
 	/**
