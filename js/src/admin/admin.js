@@ -11385,7 +11385,7 @@ window.frmAdminBuildJS = function() {
 			// Checked at click time, not here at setup time, since Pro's script may not have run yet.
 			$builderForm.on( 'click', '.frm_add_logic_row', function() {
 				if ( wp.hooks.applyFilters( 'frm_should_add_logic_row_in_lite', true ) ) {
-					addFieldLogicRow.call( this );
+					return addFieldLogicRow.call( this );
 				}
 			} );
 
