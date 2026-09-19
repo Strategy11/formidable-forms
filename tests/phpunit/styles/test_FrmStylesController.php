@@ -149,7 +149,6 @@ class test_FrmStylesController extends FrmUnitTest {
 			array( $active_style, $form, $active_style )
 		);
 		$html = ob_get_clean();
-
 		$_GET = array();
 
 		$this->assert_form_landmarks_have_unique_names( $html, 2 );
