@@ -14,8 +14,10 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Add some fields` );
-		// Plain, always-visible sidebar links - no hover gating involved.
-		cy.get( 'li[id="text"] a[title="Text"]' ).should( 'be.visible' ).click();
+		// Plain, always-visible sidebar links - no hover gating involved. The first one can still
+		// race the builder's own JS mounting into #wpbody-content right after the save-name
+		// navigation, longer than the default 4s command timeout - the rest land once that's settled.
+		cy.get( 'li[id="text"] a[title="Text"]', { timeout: 10000 } ).should( 'be.visible' ).click();
 		cy.get( 'li[id="name"] a[title="Name"]' ).should( 'be.visible' ).click();
 		cy.get( 'li[id="checkbox"] a[title="Checkboxes"]' ).should( 'be.visible' ).click();
 		cy.get( 'li[id="email"] a[title="Email"]' ).should( 'be.visible' ).click();

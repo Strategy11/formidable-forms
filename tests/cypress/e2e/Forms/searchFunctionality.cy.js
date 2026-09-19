@@ -9,7 +9,8 @@ describe( 'Search functionality', () => {
 		cy.createNewForm();
 
 		cy.log( 'Search the newly created form by using enter' );
-		cy.get( '#entry-search-input' ).type( 'Test Form {enter}' );
+		// createNewForm()'s builder-close navigation can still be settling when this runs next.
+		cy.get( '#entry-search-input' ).type( 'Test Form {enter}', { timeout: 10000 } );
 		cy.get( '.current > .count' ).should( 'contain', '1' );
 
 		cy.log( 'Search the newly created form by using the submit button' );
