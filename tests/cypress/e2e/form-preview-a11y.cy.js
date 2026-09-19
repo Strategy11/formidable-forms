@@ -18,7 +18,9 @@ describe( 'Run some accessibility tests', function() {
 		cy.visit( '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form' );
 		cy.injectAxe();
 		configureAxeWithBaselineIgnoredRuleset();
-		cy.checkA11y();
+		cy.checkA11y( null, null, violations => {
+			expect( violations ).to.have.lengthOf( 0 );
+		} );
 		cy.checkIbmAccessibility( 'form-preview' );
 	} );
 } );

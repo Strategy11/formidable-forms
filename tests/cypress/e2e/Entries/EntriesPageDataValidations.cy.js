@@ -14,7 +14,8 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Create a text field` );
-		cy.get( `li[id="text"] a[title="Text"]` ).click( { force: true } );
+		// Plain, always-visible sidebar link - no hover gating involved.
+		cy.get( `li[id="text"] a[title="Text"]` ).should( 'be.visible' ).click();
 
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
@@ -74,7 +75,7 @@ describe( 'Entries submitted from a form', () => {
 			} );
 
 		cy.get( '.frm_form_nav > :nth-child(1) > a' ).should( 'contain', 'Build' ).click();
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click( { force: true } );
+		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
 		cy.log( 'Verify that entries are not allowed from the forms list' );
 		cy.get( 'td[data-colname="Entries"] svg[title="Saving entries is disabled for this form"]' ).should( 'exist' );
 	} );
@@ -88,7 +89,8 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Create a text field` );
-		cy.get( `li[id="text"] a[title="Text"]` ).click( { force: true } );
+		// Plain, always-visible sidebar link - no hover gating involved.
+		cy.get( `li[id="text"] a[title="Text"]` ).should( 'be.visible' ).click();
 
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
@@ -130,9 +132,15 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( 'td[data-colname="IP"]' ).should( 'exist' );
 
 		cy.log( 'Click on View' );
-		cy.get( 'tr div.row-actions span.view a', { timeout: 5000 } )
+		// WP core only reveals row-actions on a real CSS `:hover` (`.row-actions` is
+		// `position: relative; left: -9999em` until `tr:hover`) - make it actionable the way the
+		// real hover would, then click normally. Chained in one continuous command so there's no
+		// window between the reset and the click for a re-render to undo it.
+		cy.get( 'tr div.row-actions', { timeout: 5000 } )
+			.invoke( 'css', 'position', 'static' )
+			.find( 'span.view a' )
 			.should( 'contain', 'View' )
-			.click( { force: true } );
+			.click();
 
 		cy.url().should( 'include', 'frm_action=show&id=' );
 
@@ -188,7 +196,7 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '.frm_no_entries_header' ).should( 'contain', 'No Entries for form: Test Form' );
 
 		cy.get( '.frm_form_nav > :nth-child(1) > a' ).should( 'contain', 'Build' ).click();
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click( { force: true } );
+		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
 	} );
 
 	afterEach( () => {
