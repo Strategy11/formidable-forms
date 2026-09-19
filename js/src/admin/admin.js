@@ -11378,7 +11378,13 @@ window.frmAdminBuildJS = function() {
 
 			const $builderForm = jQuery( builderForm );
 			const builderArea = document.getElementById( 'frm_form_editor_container' );
-			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
+
+			// Formidable Pro can take over adding a condition row itself (see its builder.js) once
+			// it no longer needs this fallback for sites running an older, incompatible Pro version.
+			if ( wp.hooks.applyFilters( 'frm_should_add_logic_row_in_lite', true ) ) {
+				$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
+			}
+
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
