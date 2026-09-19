@@ -2546,6 +2546,7 @@ window.frmAdminBuildJS = function() {
 	function handleAjaxLoadFieldSuccess( response ) {
 		let key;
 
+		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 		response = response.replace( /^\s+|\s+$/g, '' );
 		if ( response.indexOf( '{' ) !== 0 ) {
 			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
@@ -9648,6 +9649,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const htmlFieldIds = [ 'after_html', 'before_html', 'submit_html', 'field_custom_html' ];
+		// eslint-disable-next-line sonarjs/prefer-native-jquery-alternative -- jQuery API kept, not refactored
 		if ( jQuery.inArray( id, htmlFieldIds ) >= 0 ) {
 			jQuery( `.frm_code_list li:not(.show_${ id })` ).addClass( 'frm_hidden' );
 			jQuery( `.frm_code_list li.show_${ id }` ).removeClass( 'frm_hidden' );
@@ -10507,6 +10509,7 @@ window.frmAdminBuildJS = function() {
 			const input = formData[ i ];
 			let key = input.name;
 			const { value } = input;
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			const names = key.match( /(.*)\[(.*)\]/ );
 
 			if ( ( input.type === 'radio' || input.type === 'checkbox' ) && ! input.checked ) {

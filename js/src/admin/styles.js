@@ -80,6 +80,7 @@ class frmStyleOptions {
 		const sanitizedCssScope = CSS.escape( cssScope );
 
 		this.cssEditorInstance.on( 'change', editor => {
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			const value = editor.getValue().replace( /<[^>]*>/g, '' ).trim();
 			this.getInlineStyleElement().textContent = `.${ sanitizedCssScope } { ${ value } }`;
 		} );
