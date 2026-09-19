@@ -135,7 +135,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 		yield 'BRL with a thousands dot' => array( 'brl', 'R$1.234,50', '1234.50', '123450' );
 
 		// A dot in a comma decimal currency is ambiguous. One or two trailing digits are
-		// read as a decimal, three are read as thousands. See maybe_use_decimal.
+		// read as a decimal, three are read as thousands. See find_decimal_position.
 		yield 'EUR dot with two digits is a decimal' => array( 'eur', '€20.00', '20.00', '2000' );
 		yield 'EUR dot with one digit is a decimal' => array( 'eur', '€1.5', '1.50', '150' );
 		yield 'EUR dot with three digits is thousands' => array( 'eur', '€1.234', '1234.00', '123400' );
@@ -144,6 +144,20 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 		// The mirror image. A comma in a dot decimal currency is always thousands, so
 		// a shopper typing a European style amount into a GBP form is read as 123 pounds.
 		yield 'GBP comma is never a decimal' => array( 'gbp', '1,23', '123.00', '12300' );
+
+		// A shopper can type in a different locale's format than the form's configured
+		// currency expects. Both separators appearing together is unambiguous regardless of
+		// currency -- whichever one appears last is the real decimal point. Trusting the
+		// currency's configured separators here used to collide the two into one, silently
+		// truncating "1,030.21" to 1.03 (formidable-forms#3379).
+		yield 'EUR form with a US-style amount' => array( 'eur', '€1,030.21', '1030.21', '103021' );
+		yield 'GBP form with a EU-style amount' => array( 'gbp', '£1.030,21', '1030.21', '103021' );
+
+		// A repeated occurrence of whichever character turns out to be the decimal separator
+		// used to get blanket-replaced entirely, colliding into a second decimal point and
+		// truncating the value again just like the original bug -- only the rightmost
+		// occurrence is ever the real decimal point; earlier ones are grouping noise.
+		yield 'repeated decimal-separator character is still just noise' => array( 'eur', '1,234.567,89', '1234567.89', '123456789' );
 
 		// A currency with no fractional unit keeps the two paths identical, and rounds.
 		yield 'JPY with a thousands comma' => array( 'jpy', '1,234', '1234', '1234' );
