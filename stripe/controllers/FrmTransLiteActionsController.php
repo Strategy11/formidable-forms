@@ -402,12 +402,15 @@ class FrmTransLiteActionsController {
 			return max( $last_dot, $last_comma );
 		}
 
-		if ( false === $last_dot && false === $last_comma ) {
+		if ( false !== $last_dot ) {
+			$present  = '.';
+			$position = $last_dot;
+		} elseif ( false !== $last_comma ) {
+			$present  = ',';
+			$position = $last_comma;
+		} else {
 			return false;
 		}
-
-		$present  = false !== $last_dot ? '.' : ',';
-		$position = false !== $last_dot ? $last_dot : $last_comma;
 
 		if ( $present === $currency['decimal_separator'] ) {
 			return $position;
