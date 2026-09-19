@@ -14,12 +14,16 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Add some fields` );
-		// Plain, always-visible sidebar links - no hover gating involved.
-		cy.get( 'li[id="text"] a[title="Text"]' ).should( 'be.visible' ).click();
-		cy.get( 'li[id="name"] a[title="Name"]' ).should( 'be.visible' ).click();
-		cy.get( 'li[id="checkbox"] a[title="Checkboxes"]' ).should( 'be.visible' ).click();
-		cy.get( 'li[id="email"] a[title="Email"]' ).should( 'be.visible' ).click();
-		cy.get( 'li[id="phone"] a[title="Phone"]' ).should( 'be.visible' ).click();
+		// Plain, always-visible sidebar links - no hover gating involved. Adding a field can leave
+		// the scrollable field-type panel (.frm-right-panel) scrolled to wherever the previous click
+		// left it, so a later link in the list can sit outside its own panel's visible scroll area -
+		// not a render-timing race (a longer timeout never resolves it), so scroll each one into view
+		// within its own panel before asserting visible.
+		cy.get( 'li[id="text"] a[title="Text"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="name"] a[title="Name"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="checkbox"] a[title="Checkboxes"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="email"] a[title="Email"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="phone"] a[title="Phone"]' ).scrollIntoView().should( 'be.visible' ).click();
 
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
