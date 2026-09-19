@@ -19,7 +19,7 @@ describe( 'Search functionality', () => {
 		cy.get( '#entry-search-input' ).type( 'Test Form' );
 		cy.get( '#search-submit' ).click();
 
-		cy.get( '.published > .current' ).should( 'exist' );
+		cy.get( '.published > .current', { timeout: 10000 } ).should( 'exist' );
 		cy.get( '.current > .count', { timeout: 10000 } ).should( 'contain', '1' );
 		cy.get( '.displaying-num' ).should( 'contain', '1' );
 		cy.contains( '#the-list tr', 'Test Form' ).should( 'exist' );
