@@ -178,8 +178,7 @@ new FrmBackgroundImageStyleComponent(
 		?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_style_class"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-style-component">
