@@ -718,14 +718,14 @@
 	/**
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
-	 * @param {DOMStringMap} data {
+	 * @param {DOMStringMap} data        {
 	 *     @type {string} editUrl
 	 *     @type {string} styleId
 	 *     @type {string} labelPosition
 	 *     @type {string} classname
 	 * }
-	 * @param {string} [styleName] The style's own name, when known, so the trigger's
-	 *                             accessible name distinguishes it from other cards' triggers.
+	 * @param {string}       [styleName] The style's own name, when known, so the trigger's
+	 *                                   accessible name distinguishes it from other cards' triggers.
 	 * @return {HTMLElement} The hamburger menu element.
 	 */
 	function getHamburgerMenu( data, styleName ) {
