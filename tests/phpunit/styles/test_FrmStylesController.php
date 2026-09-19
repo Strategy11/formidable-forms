@@ -124,6 +124,38 @@ class test_FrmStylesController extends FrmUnitTest {
 	}
 
 	/**
+	 * The styler list view (reached whenever a 'form'/'style_id' param is present without
+	 * 'frm_action') renders two <form> elements as well: the style-assign form, and the live
+	 * form preview. Both need distinct accessible names or they violate the
+	 * aria_landmark_name_unique a11y rule the same way the edit view does above.
+	 *
+	 * @covers FrmStylesController::render_style_page
+	 */
+	public function test_render_style_page_has_unique_landmark_names_for_list_view() {
+		$this->set_current_user_to_1();
+
+		$form_id = $this->factory->form->create();
+
+		// A 'form' param with no 'frm_action' is what forces the list view (see comment above).
+		$_GET = array( 'form' => $form_id );
+
+		$form         = FrmForm::getOne( $form_id );
+		$frm_style    = new FrmStyle( 'default' );
+		$active_style = $frm_style->get_one();
+
+		ob_start();
+		$this->run_private_method(
+			array( 'FrmStylesController', 'render_style_page' ),
+			array( $active_style, $form, $active_style )
+		);
+		$html = ob_get_clean();
+
+		$_GET = array();
+
+		$this->assert_form_landmarks_have_unique_names( $html, 2 );
+	}
+
+	/**
 	 * @covers FrmStylesController::save_style
 	 * @covers FrmStyle::update
 	 */
