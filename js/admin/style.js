@@ -685,7 +685,8 @@
 			return;
 		}
 
-		card.append( getHamburgerMenu( card.dataset ) );
+		const styleName = card.querySelector( '.frm-style-card-title' )?.textContent;
+		card.append( getHamburgerMenu( card.dataset, styleName ) );
 	}
 
 	/**
@@ -723,14 +724,18 @@
 	 *     @type {string} labelPosition
 	 *     @type {string} classname
 	 * }
+	 * @param {string} [styleName] The style's own name, when known, so the trigger's
+	 *                             accessible name distinguishes it from other cards' triggers.
 	 * @return {HTMLElement} The hamburger menu element.
 	 */
-	function getHamburgerMenu( data ) {
+	function getHamburgerMenu( data, styleName ) {
+		/* translators: %s: The style's name. */
+		const label = styleName ? sprintf( __( 'Style options for %s', 'formidable' ), styleName ) : __( 'Style Options', 'formidable' );
 		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
 			children: [
 				svg( { href: '#frm_thick_more_vert_icon' } ),
-				span( { className: 'screen-reader-text', text: __( 'Style Options', 'formidable' ) } )
+				span( { className: 'screen-reader-text', text: label } )
 			]
 		} );
 		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
