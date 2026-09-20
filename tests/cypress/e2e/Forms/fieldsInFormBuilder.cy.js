@@ -317,8 +317,14 @@ describe( 'Fields in the form builder', () => {
 	} );
 
 	afterEach( () => {
-		cy.log( 'Teardown - Save the form and delete it' );
-		cy.get( "a[aria-label='Close']", { timeout: 10000 } ).should( 'be.visible' ).click();
+		// Navigate to the list directly rather than clicking the builder's own "Close" link - a
+		// test that failed mid-way can leave the builder in a state where that link isn't
+		// reachable, which skips deleteForm() too and leaks this test's "Test Form" into whatever
+		// spec runs next on the same wp-env (formidable-forms#3400: this leak was the actual cause
+		// of an unrelated redirect test failing downstream in the same CI shard, not a product
+		// bug - same class of fix as duplicateForm.cy.js's own afterEach hardening).
+		cy.log( 'Teardown - delete the form' );
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.deleteForm();
 	} );
 } );
