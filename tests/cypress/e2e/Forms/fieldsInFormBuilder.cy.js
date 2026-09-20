@@ -6,10 +6,16 @@ describe( 'Fields in the form builder', () => {
 		cy.viewport( 1280, 720 );
 	} );
 
-	// Shared by the tests below - the "Add Fields" sidebar icon is a plain, always-visible link
-	// with no hover gating, so a simple visibility wait is enough (no force needed).
+	// Shared by the tests below - the sidebar's "Add Fields" tab is only one of two tabs
+	// (the other, "Field Options", takes over after opening a field's settings), so a field
+	// link here is only genuinely visible once that tab is active again - not a render-timing
+	// race (a longer timeout never resolves it if "Field Options" is still showing).
 	const createField = ( fieldId, fieldType ) => {
 		cy.log( `Create a ${ fieldType } field` );
+		// Plain #frm_insert_fields_tab is ambiguous - a second, hidden (mobile-dropdown) element
+		// shares the same id, and a bare id selector can resolve to that one instead. Scope to the
+		// real sidebar tab list (.frm-tabs-navs) to avoid it.
+		cy.get( '.frm-tabs-navs #frm_insert_fields_tab' ).click();
 		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
 	};
 
@@ -166,8 +172,13 @@ describe( 'Fields in the form builder', () => {
 				.should( 'be.visible' )
 				.click();
 			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
-			// Same slideDown()-driven settings panel as elsewhere in this file.
-			cy.get( 'input.frm_req_field[type="checkbox"]' ).should( 'be.visible' ).check();
+			// Same slideDown()-driven settings panel as elsewhere in this file - scope by the
+			// field's own numeric id (from the field row's data-fid) so this matches only the
+			// panel that was just opened, not every previously-opened (now hidden) one, and wait
+			// for the slideDown to finish the same way the "rename" test above does.
+			cy.get( `li[data-ftype="${ fieldId }"]` ).invoke( 'data', 'fid' ).then( fieldNumericId => {
+				cy.get( `#frm-single-settings-${ fieldNumericId } input.frm_req_field[type="checkbox"]`, { timeout: 10000 } ).should( 'be.visible' ).check();
+			} );
 		};
 
 		cy.openForm();
@@ -240,12 +251,14 @@ describe( 'Fields in the form builder', () => {
 			.should( 'be.visible' )
 			.click();
 		cy.get( `li[data-ftype="text"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
-		// Same slideDown()-driven settings panel as elsewhere in this file.
-		cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 } ).should( 'be.visible' ).check();
+		// Same slideDown()-driven settings panel as elsewhere in this file. Target the "Required"
+		// checkbox by its own class rather than "first checkbox in the panel" - that generic
+		// selector can resolve to the Pro-gated "Unique fields" checkbox instead, which is
+		// disabled in a Lite-only environment.
+		cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_req_field', { timeout: 10000 } ).should( 'be.visible' ).check();
 
-		cy.log( 'Create a phone and email field' );
-		cy.get( `li[id="email"] a[title="Email"]` ).should( 'be.visible' ).click();
-		cy.get( `li[id="phone"] a[title="Phone"]` ).should( 'be.visible' ).click();
+		createField( 'email', 'Email' );
+		createField( 'phone', 'Phone' );
 
 		cy.log( 'Update form' );
 		// Plain #frm_submit_side_top "Update" click - no force needed, see the note above.
@@ -254,10 +267,10 @@ describe( 'Fields in the form builder', () => {
 		cy.log( "Enabling the 'Validate this form with javascript' setting" );
 		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
 		cy.get( ':nth-child(3) > td > .frm_inline_block', { timeout: 5000 } ).should( 'contain', 'Validate this form with javascript' );
-		// This checkbox's own <label> text sits in the same clickable row and is a plain,
-		// always-visible control on the Settings tab (no field-settings animation involved here) -
-		// wait for it to be visible instead of forcing.
-		cy.get( '#js_validate' ).should( 'be.visible' ).click();
+		// A bare .should('be.visible') times out here - #wpbody-content measures 1280x0 even
+		// with a 10s timeout, so it doesn't self-resolve. .scrollIntoView() first reliably
+		// clears it (verified red/green, 3 runs); exact mechanism unconfirmed.
+		cy.get( '#js_validate' ).scrollIntoView().should( 'be.visible' ).click();
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
 		cy.log( 'Click on Preview - Blank Page' );
@@ -304,8 +317,14 @@ describe( 'Fields in the form builder', () => {
 	} );
 
 	afterEach( () => {
-		cy.log( 'Teardown - Save the form and delete it' );
-		cy.get( "a[aria-label='Close']", { timeout: 10000 } ).should( 'be.visible' ).click();
+		// Navigate to the list directly rather than clicking the builder's own "Close" link - a
+		// test that failed mid-way can leave the builder in a state where that link isn't
+		// reachable, which skips deleteForm() too and leaks this test's "Test Form" into whatever
+		// spec runs next on the same wp-env (formidable-forms#3400: this leak was the actual cause
+		// of an unrelated redirect test failing downstream in the same CI shard, not a product
+		// bug - same class of fix as duplicateForm.cy.js's own afterEach hardening).
+		cy.log( 'Teardown - delete the form' );
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.deleteForm();
 	} );
 } );
