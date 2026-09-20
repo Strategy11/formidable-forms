@@ -6,10 +6,16 @@ describe( 'Fields in the form builder', () => {
 		cy.viewport( 1280, 720 );
 	} );
 
-	// Shared by the tests below - the "Add Fields" sidebar icon is a plain, always-visible link
-	// with no hover gating, so a simple visibility wait is enough (no force needed).
+	// Shared by the tests below - the sidebar's "Add Fields" tab is only one of two tabs
+	// (the other, "Field Options", takes over after opening a field's settings), so a field
+	// link here is only genuinely visible once that tab is active again - not a render-timing
+	// race (a longer timeout never resolves it if "Field Options" is still showing).
 	const createField = ( fieldId, fieldType ) => {
 		cy.log( `Create a ${ fieldType } field` );
+		// Plain #frm_insert_fields_tab is ambiguous - a second, hidden (mobile-dropdown) element
+		// shares the same id, and a bare id selector can resolve to that one instead. Scope to the
+		// real sidebar tab list (.frm-tabs-navs) to avoid it.
+		cy.get( '.frm-tabs-navs #frm_insert_fields_tab' ).click();
 		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
 	};
 
@@ -240,12 +246,14 @@ describe( 'Fields in the form builder', () => {
 			.should( 'be.visible' )
 			.click();
 		cy.get( `li[data-ftype="text"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
-		// Same slideDown()-driven settings panel as elsewhere in this file.
-		cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 } ).should( 'be.visible' ).check();
+		// Same slideDown()-driven settings panel as elsewhere in this file. Target the "Required"
+		// checkbox by its own class rather than "first checkbox in the panel" - that generic
+		// selector can resolve to the Pro-gated "Unique fields" checkbox instead, which is
+		// disabled in a Lite-only environment.
+		cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_req_field', { timeout: 10000 } ).should( 'be.visible' ).check();
 
-		cy.log( 'Create a phone and email field' );
-		cy.get( `li[id="email"] a[title="Email"]` ).should( 'be.visible' ).click();
-		cy.get( `li[id="phone"] a[title="Phone"]` ).should( 'be.visible' ).click();
+		createField( 'email', 'Email' );
+		createField( 'phone', 'Phone' );
 
 		cy.log( 'Update form' );
 		// Plain #frm_submit_side_top "Update" click - no force needed, see the note above.
