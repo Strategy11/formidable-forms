@@ -422,7 +422,14 @@ class FrmFieldsController {
 
 		$keep_leading_blank = 'select' === $field_type && '' === $opts[0];
 
-		$opts = array_values( array_filter( $opts, 'strlen' ) );
+		$opts = array_values(
+			array_filter(
+				$opts,
+				static function ( $value ) {
+					return '' !== $value;
+				}
+			)
+		);
 
 		if ( $keep_leading_blank ) {
 			array_unshift( $opts, '' );
