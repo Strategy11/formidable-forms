@@ -57,10 +57,7 @@ class test_FrmFieldsController extends FrmUnitTest {
 	}
 
 	public function test_parse_bulk_edit_opts_keeps_leading_blank_when_flagged() {
-		// $keep_leading_blank is the caller's decision (select field with a
-		// placeholder configured - see select_has_placeholder()) that a
-		// blank first line is a legitimate manual placeholder option rather
-		// than the bug this method otherwise drops blank lines for.
+		// $keep_leading_blank is the caller's decision - see this method's docblock.
 		$opts = $this->parse_bulk_edit_opts( "\nOne\n\nTwo", true );
 
 		$this->assertSame( array( '', 'One', 'Two' ), $opts );
@@ -69,6 +66,14 @@ class test_FrmFieldsController extends FrmUnitTest {
 	public function test_parse_bulk_edit_opts_drops_leading_blank_when_not_flagged() {
 		$opts = $this->parse_bulk_edit_opts( "\nOne\nTwo", false );
 		$this->assertSame( array( 'One', 'Two' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_wholly_blank_keeps_nothing_even_when_flagged() {
+		// A wholly-cleared textarea saves zero options, not a single
+		// leftover blank one - the leading blank only makes sense as the
+		// first row of a real list.
+		$opts = $this->parse_bulk_edit_opts( "\n\n", true );
+		$this->assertSame( array(), $opts );
 	}
 
 	/**
@@ -147,9 +152,7 @@ class test_FrmFieldsController extends FrmUnitTest {
 	}
 
 	public function test_remove_blank_separated_values_keeps_leading_blank_pair_when_flagged() {
-		// A "|" line (blank label and blank value) at position 0 is the
-		// separate-value equivalent of parse_bulk_edit_opts()'s leading
-		// blank line - kept only when $keep_leading_blank says so.
+		// $keep_leading_blank is the caller's decision - see this method's docblock.
 		$opts = $this->remove_blank_separated_values(
 			array(
 				array(
@@ -202,6 +205,23 @@ class test_FrmFieldsController extends FrmUnitTest {
 			),
 			$opts
 		);
+	}
+
+	public function test_remove_blank_separated_values_wholly_blank_keeps_nothing_even_when_flagged() {
+		// Same reasoning as parse_bulk_edit_opts()'s wholly-blank case: a
+		// lone "|" line with nothing else isn't a real option list with a
+		// placeholder row, so it doesn't get to keep the placeholder either.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+			),
+			true
+		);
+
+		$this->assertSame( array(), $opts );
 	}
 
 	/**

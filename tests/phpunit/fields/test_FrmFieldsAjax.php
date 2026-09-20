@@ -184,11 +184,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 * @covers FrmFieldsController::import_options
 	 */
 	public function test_import_options_drops_leading_blank_for_select_without_placeholder() {
-		// With no placeholder configured, dropdown-field.php's own skip
-		// logic never fires (it only skips when $placeholder is truthy), so
-		// a kept leading blank option would render for real and reproduce
-		// the exact check_selected() collision this PR fixes (formidable-pro#3385) -
-		// same as any other blank line, it has to drop.
+		// No placeholder configured - see select_has_placeholder()'s docblock.
 		$field = $this->factory->field->create_and_get(
 			array(
 				'form_id' => $this->form_id,
@@ -196,27 +192,16 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			)
 		);
 
-		$_POST = array(
-			'action'   => 'frm_import_options',
-			'nonce'    => wp_create_nonce( 'frm_ajax' ),
-			'field_id' => $field->id,
-			'opts'     => "\nOne\nTwo",
-			'separate' => 'false',
-		);
+		$labels = $this->import_options_labels( $field->id, "\nOne\nTwo", 'false' );
 
-		$response = $this->trigger_action( 'frm_import_options' );
-
-		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
-		$this->assertSame( array( 'One', 'Two' ), array_slice( $matches[1], 1 ) );
+		$this->assertSame( array( 'One', 'Two' ), $labels );
 	}
 
 	/**
 	 * @covers FrmFieldsController::import_options
 	 */
 	public function test_import_options_keeps_leading_blank_for_select_with_placeholder() {
-		// With a placeholder configured, dropdown-field.php's own
-		// $placeholder/$skipped handling absorbs this option into the
-		// placeholder it already renders, so keeping it here is harmless.
+		// Placeholder configured - see select_has_placeholder()'s docblock.
 		$field = $this->factory->field->create_and_get(
 			array(
 				'form_id'       => $this->form_id,
@@ -225,27 +210,18 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			)
 		);
 
-		$_POST = array(
-			'action'   => 'frm_import_options',
-			'nonce'    => wp_create_nonce( 'frm_ajax' ),
-			'field_id' => $field->id,
-			'opts'     => "\nOne\nTwo",
-			'separate' => 'false',
-		);
+		$labels = $this->import_options_labels( $field->id, "\nOne\nTwo", 'false' );
 
-		$response = $this->trigger_action( 'frm_import_options' );
-
-		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
-		$this->assertSame( array( '', 'One', 'Two' ), array_slice( $matches[1], 1 ) );
+		$this->assertSame( array( '', 'One', 'Two' ), $labels );
 	}
 
 	/**
 	 * @covers FrmFieldsController::import_options
 	 */
 	public function test_import_options_keeps_leading_blank_pair_for_separate_value_select_with_placeholder() {
-		// The separate-value equivalent of the plain-line case above: a
-		// leading "|" (blank label, blank value) is the placeholder row and
-		// has to survive the label|value split the same way.
+		// Separate-value equivalent of the plain-line case above - a leading
+		// "|" (blank label, blank value) is the same placeholder row, see
+		// remove_blank_separated_values()'s docblock.
 		$field = $this->factory->field->create_and_get(
 			array(
 				'form_id'       => $this->form_id,
@@ -254,18 +230,35 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			)
 		);
 
+		$labels = $this->import_options_labels( $field->id, "|\nYes|1\nNo|0", 'true' );
+
+		$this->assertSame( array( '', 'Yes', 'No' ), $labels );
+	}
+
+	/**
+	 * Runs frm_import_options for a field and returns the rendered option
+	 * labels, dropping the hidden "New Option" template row.
+	 *
+	 * @param int    $field_id
+	 * @param string $opts
+	 * @param string $separate
+	 *
+	 * @return array
+	 */
+	private function import_options_labels( $field_id, $opts, $separate ) {
 		$_POST = array(
 			'action'   => 'frm_import_options',
 			'nonce'    => wp_create_nonce( 'frm_ajax' ),
-			'field_id' => $field->id,
-			'opts'     => "|\nYes|1\nNo|0",
-			'separate' => 'true',
+			'field_id' => $field_id,
+			'opts'     => $opts,
+			'separate' => $separate,
 		);
 
 		$response = $this->trigger_action( 'frm_import_options' );
 
 		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
-		$this->assertSame( array( '', 'Yes', 'No' ), array_slice( $matches[1], 1 ) );
+
+		return array_slice( $matches[1], 1 );
 	}
 
 	/**
