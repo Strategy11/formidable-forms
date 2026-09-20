@@ -267,10 +267,11 @@ describe( 'Fields in the form builder', () => {
 		cy.log( "Enabling the 'Validate this form with javascript' setting" );
 		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
 		cy.get( ':nth-child(3) > td > .frm_inline_block', { timeout: 5000 } ).should( 'contain', 'Validate this form with javascript' );
-		// This checkbox's own <label> text sits in the same clickable row and is a plain,
-		// always-visible control on the Settings tab (no field-settings animation involved here) -
-		// wait for it to be visible instead of forcing.
-		cy.get( '#js_validate' ).should( 'be.visible' ).click();
+		// #js_validate sits in the "AJAX" section near the bottom of the General settings page,
+		// below the viewport on load - Cypress's visibility check doesn't auto-scroll the way a
+		// .click() does, so it reports the element (and its ancestor) as a zero-height 0x0 box
+		// until scrolled into view explicitly.
+		cy.get( '#js_validate' ).scrollIntoView().should( 'be.visible' ).click();
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
 		cy.log( 'Click on Preview - Blank Page' );
