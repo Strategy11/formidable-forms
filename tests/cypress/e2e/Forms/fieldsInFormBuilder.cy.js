@@ -267,10 +267,9 @@ describe( 'Fields in the form builder', () => {
 		cy.log( "Enabling the 'Validate this form with javascript' setting" );
 		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
 		cy.get( ':nth-child(3) > td > .frm_inline_block', { timeout: 5000 } ).should( 'contain', 'Validate this form with javascript' );
-		// #js_validate sits in the "AJAX" section near the bottom of the General settings page,
-		// below the viewport on load - Cypress's visibility check doesn't auto-scroll the way a
-		// .click() does, so it reports the element (and its ancestor) as a zero-height 0x0 box
-		// until scrolled into view explicitly.
+		// A bare .should('be.visible') times out here - #wpbody-content measures 1280x0 even
+		// with a 10s timeout, so it doesn't self-resolve. .scrollIntoView() first reliably
+		// clears it (verified red/green, 3 runs); exact mechanism unconfirmed.
 		cy.get( '#js_validate' ).scrollIntoView().should( 'be.visible' ).click();
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
