@@ -172,8 +172,13 @@ describe( 'Fields in the form builder', () => {
 				.should( 'be.visible' )
 				.click();
 			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
-			// Same slideDown()-driven settings panel as elsewhere in this file.
-			cy.get( 'input.frm_req_field[type="checkbox"]' ).should( 'be.visible' ).check();
+			// Same slideDown()-driven settings panel as elsewhere in this file - scope by the
+			// field's own numeric id (from the field row's data-fid) so this matches only the
+			// panel that was just opened, not every previously-opened (now hidden) one, and wait
+			// for the slideDown to finish the same way the "rename" test above does.
+			cy.get( `li[data-ftype="${ fieldId }"]` ).invoke( 'data', 'fid' ).then( fieldNumericId => {
+				cy.get( `#frm-single-settings-${ fieldNumericId } input.frm_req_field[type="checkbox"]`, { timeout: 10000 } ).should( 'be.visible' ).check();
+			} );
 		};
 
 		cy.openForm();
