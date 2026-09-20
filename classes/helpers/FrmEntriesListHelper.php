@@ -485,6 +485,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = $item->parent_item_id;
 				break;
 			default:
+				// Note: $is_action_col isn't passed to these filters, so a custom column that
+				// builds its own <a> here can hit the same nested-anchor bug as form_id/post_id
+				// above if it ever becomes the row's action column.
 				$val = apply_filters( 'frm_entries_' . $col_name . '_column', false, compact( 'item' ) );
 
 				if ( $val === false ) {
