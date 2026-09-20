@@ -770,7 +770,10 @@ function frmFrontFormJS() {
 	function reenableSubmitIfRecaptchaStalls( object ) {
 		setTimeout( function() {
 			if ( object.classList.contains( 'frm_loading_form' ) && hasInvisibleRecaptcha( object ) ) {
-				removeSubmitLoading( jQuery( object ), 'enable' );
+				object.classList.remove( 'frm_loading_form', 'frm_loading_prev' );
+				jQuery( object ).trigger( 'frmEndFormLoading' );
+				enableSubmitButton( object );
+				enableSaveDraft( object );
 			}
 		}, 10000 );
 	}
