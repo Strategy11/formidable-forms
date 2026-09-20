@@ -28,10 +28,14 @@ describe( 'Fields in the form builder', () => {
 			// real CSS :hover of the field row or when the field is .selected - it's still genuinely
 			// clickable underneath, so reveal it the same way the row-actions helpers in commands.js
 			// do, instead of forcing through the opacity check.
+			// A bare .should('be.visible') can time out here - #wpbody-content intermittently
+			// measures 1280x0 (formidable-forms#3399), same shape as the #js_validate race below.
+			// .scrollIntoView() first reliably clears it.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
 				.invoke( 'css', 'opacity', 1 )
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 				.first()
+				.scrollIntoView()
 				.should( 'be.visible' )
 				.click();
 			// The dropdown menu opens via a Bootstrap JS toggle (a real click, not hover-gated), so
@@ -165,10 +169,14 @@ describe( 'Fields in the form builder', () => {
 		const requiredField = ( fieldId, fieldType ) => {
 			cy.log( `Set ${ fieldType } field as require` );
 			// See the .frm-show-hover opacity note on the field-row "more options" toggle above.
+			// A bare .should('be.visible') can time out here - #wpbody-content intermittently
+			// measures 1280x0 (formidable-forms#3397), same shape as the #js_validate race below.
+			// .scrollIntoView() first reliably clears it.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
 				.invoke( 'css', 'opacity', 1 )
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 				.first()
+				.scrollIntoView()
 				.should( 'be.visible' )
 				.click();
 			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
@@ -235,6 +243,12 @@ describe( 'Fields in the form builder', () => {
 
 		cy.log( 'Navigate back to the formidable form page' );
 		cy.go( -2 );
+		// Unlike the first cy.go(-2) above, nothing after this one asserts the builder page
+		// actually finished loading before the test ends - the very next thing to run is
+		// afterEach's own cy.visit(), which can otherwise race the still-settling history
+		// navigation and land back on this edit page instead (formidable-forms#3397: seen
+		// as afterEach's own "Test Form" lookup timing out on this page's non-list markup).
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' );
 	} );
 
 	it( 'should validate forms with javascript setting', () => {
@@ -314,6 +328,8 @@ describe( 'Fields in the form builder', () => {
 
 		cy.log( 'Navigate back to the formidable form page' );
 		cy.go( 'back' );
+		// Same settle-before-teardown guard as the required-field test above.
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' );
 	} );
 
 	afterEach( () => {
