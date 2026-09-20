@@ -44,38 +44,39 @@ class test_FrmFieldsController extends FrmUnitTest {
 		// kept as an option with an empty string value - an empty value
 		// collides with an unset field value in FrmAppHelper::check_selected()
 		// and renders as selected by default (formidable-pro#3385).
-		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree", 'radio' );
+		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree", false );
 
 		$this->assertSame( array( 'One', 'Two', 'Three' ), $opts );
 	}
 
 	public function test_parse_bulk_edit_opts_keeps_zero_value() {
 		// '0' is falsy but a valid option value - only truly blank lines drop.
-		$opts = $this->parse_bulk_edit_opts( "0\nOne", 'checkbox' );
+		$opts = $this->parse_bulk_edit_opts( "0\nOne", false );
 
 		$this->assertSame( array( '0', 'One' ), $opts );
 	}
 
-	public function test_parse_bulk_edit_opts_keeps_leading_blank_for_select() {
-		// A blank first line is a legitimate manual placeholder option on a
-		// select field (dropdown-field.php's own placeholder/skip handling),
-		// unlike radio/checkbox where a blank option is always a bug.
-		$opts = $this->parse_bulk_edit_opts( "\nOne\n\nTwo", 'select' );
+	public function test_parse_bulk_edit_opts_keeps_leading_blank_when_flagged() {
+		// $keep_leading_blank is the caller's decision (select field with a
+		// placeholder configured - see select_has_placeholder()) that a
+		// blank first line is a legitimate manual placeholder option rather
+		// than the bug this method otherwise drops blank lines for.
+		$opts = $this->parse_bulk_edit_opts( "\nOne\n\nTwo", true );
 
 		$this->assertSame( array( '', 'One', 'Two' ), $opts );
 	}
 
-	public function test_parse_bulk_edit_opts_drops_leading_blank_for_radio() {
-		$opts = $this->parse_bulk_edit_opts( "\nOne\nTwo", 'radio' );
+	public function test_parse_bulk_edit_opts_drops_leading_blank_when_not_flagged() {
+		$opts = $this->parse_bulk_edit_opts( "\nOne\nTwo", false );
 		$this->assertSame( array( 'One', 'Two' ), $opts );
 	}
 
 	/**
 	 * @param string $opts
-	 * @param string $field_type
+	 * @param bool   $keep_leading_blank
 	 */
-	private function parse_bulk_edit_opts( $opts, $field_type ) {
-		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts, $field_type ) );
+	private function parse_bulk_edit_opts( $opts, $keep_leading_blank ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts, $keep_leading_blank ) );
 	}
 
 	/**
@@ -145,11 +146,88 @@ class test_FrmFieldsController extends FrmUnitTest {
 		);
 	}
 
+	public function test_remove_blank_separated_values_keeps_leading_blank_pair_when_flagged() {
+		// A "|" line (blank label and blank value) at position 0 is the
+		// separate-value equivalent of parse_bulk_edit_opts()'s leading
+		// blank line - kept only when $keep_leading_blank says so.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			),
+			true
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			),
+			$opts
+		);
+	}
+
+	public function test_remove_blank_separated_values_drops_leading_blank_pair_when_not_flagged() {
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			),
+			$opts
+		);
+	}
+
 	/**
 	 * @param array $opts
+	 * @param bool  $keep_leading_blank
 	 */
-	private function remove_blank_separated_values( $opts ) {
-		return $this->run_private_method( array( 'FrmFieldsController', 'remove_blank_separated_values' ), array( $opts ) );
+	private function remove_blank_separated_values( $opts, $keep_leading_blank = false ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'remove_blank_separated_values' ), array( $opts, $keep_leading_blank ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::select_has_placeholder
+	 */
+	public function test_select_has_placeholder_true_when_placeholder_set() {
+		$this->assertTrue( $this->select_has_placeholder( array( 'placeholder' => 'Choose one' ) ) );
+	}
+
+	public function test_select_has_placeholder_false_when_no_placeholder() {
+		$this->assertFalse( $this->select_has_placeholder( array( 'placeholder' => '' ) ) );
+	}
+
+	/**
+	 * @param array $field
+	 */
+	private function select_has_placeholder( $field ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'select_has_placeholder' ), array( $field ) );
 	}
 
 	/**

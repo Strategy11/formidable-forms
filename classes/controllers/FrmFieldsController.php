@@ -348,11 +348,12 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field_type = $field->type;
-		$field      = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_type         = $field->type;
+		$field              = FrmFieldsHelper::setup_edit_vars( $field );
+		$keep_leading_blank = 'select' === $field_type && self::select_has_placeholder( $field );
 
 		$opts = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
-		$opts = self::parse_bulk_edit_opts( $opts, $field_type );
+		$opts = self::parse_bulk_edit_opts( $opts, $keep_leading_blank );
 
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = $separate === 'true';
@@ -370,7 +371,7 @@ class FrmFieldsController {
 				unset( $opt_key, $opt );
 			}
 
-			$opts = self::remove_blank_separated_values( $opts );
+			$opts = self::remove_blank_separated_values( $opts, $keep_leading_blank );
 		}
 
 		// Keep other options after bulk update.
@@ -403,24 +404,24 @@ class FrmFieldsController {
 	 * FrmAppHelper::check_selected(), making that blank option render as
 	 * selected by default (formidable-pro#3385).
 	 *
-	 * A leading blank line on a select field is left in place: it's a
-	 * renderer-supported way to give the dropdown a blank first option when
-	 * no placeholder is set (dropdown-field.php's own $placeholder/$skipped
-	 * handling), and select's own default-selection behavior doesn't have
-	 * the radio/checkbox "nothing visibly checked" collision this drops
-	 * blanks for elsewhere.
+	 * A leading blank line is only kept when $keep_leading_blank says so
+	 * (select field, placeholder configured - see select_has_placeholder()).
+	 * With a placeholder, dropdown-field.php's own $placeholder/$skipped
+	 * handling absorbs this option into the placeholder it already renders,
+	 * so keeping it is harmless. Without one, nothing skips it - it would
+	 * render for real and reproduce the exact collision this method exists
+	 * to prevent, so it's dropped like any other blank line.
 	 *
 	 * @since 6.36
 	 *
 	 * @param string $opts
-	 * @param string $field_type
+	 * @param bool   $keep_leading_blank
 	 *
 	 * @return array
 	 */
-	private static function parse_bulk_edit_opts( $opts, $field_type ) {
-		$opts = array_map( 'trim', explode( "\n", $opts ) );
-
-		$keep_leading_blank = 'select' === $field_type && '' === $opts[0];
+	private static function parse_bulk_edit_opts( $opts, $keep_leading_blank ) {
+		$opts               = array_map( 'trim', explode( "\n", $opts ) );
+		$keep_leading_blank = $keep_leading_blank && '' === $opts[0];
 
 		$opts = array_values(
 			array_filter(
@@ -447,21 +448,52 @@ class FrmFieldsController {
 	 * half, and dropdown-field.php explicitly supports rendering a
 	 * blank-label option as a real, selectable choice.
 	 *
+	 * A leading "|" line (blank label and blank value) is the separate-value
+	 * equivalent of parse_bulk_edit_opts()'s leading blank line, and is kept
+	 * on the same $keep_leading_blank condition for the same reason.
+	 *
 	 * @since 6.36
 	 *
 	 * @param array $opts
+	 * @param bool  $keep_leading_blank
 	 *
 	 * @return array
 	 */
-	private static function remove_blank_separated_values( $opts ) {
+	private static function remove_blank_separated_values( $opts, $keep_leading_blank ) {
 		return array_values(
 			array_filter(
 				$opts,
-				function ( $opt ) {
+				function ( $opt, $key ) use ( $keep_leading_blank ) {
+					if ( $keep_leading_blank && 0 === $key && is_array( $opt ) && '' === $opt['label'] && '' === $opt['value'] ) {
+						return true;
+					}
+
 					return ! is_array( $opt ) || '' !== $opt['value'];
-				}
+				},
+				ARRAY_FILTER_USE_BOTH
 			)
 		);
+	}
+
+	/**
+	 * Whether a select field would render its own placeholder option, per
+	 * add_placeholder_to_select()'s own truthy check - called directly since
+	 * that method's job is echoing markup, not answering this.
+	 *
+	 * @since 6.36
+	 *
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	private static function select_has_placeholder( $field ) {
+		$placeholder = FrmField::get_option( $field, 'placeholder' );
+
+		if ( ! $placeholder ) {
+			$placeholder = self::get_default_value_from_name( $field );
+		}
+
+		return '' !== $placeholder;
 	}
 
 	/**

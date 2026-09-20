@@ -183,7 +183,12 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	/**
 	 * @covers FrmFieldsController::import_options
 	 */
-	public function test_import_options_keeps_leading_blank_for_select() {
+	public function test_import_options_drops_leading_blank_for_select_without_placeholder() {
+		// With no placeholder configured, dropdown-field.php's own skip
+		// logic never fires (it only skips when $placeholder is truthy), so
+		// a kept leading blank option would render for real and reproduce
+		// the exact check_selected() collision this PR fixes (formidable-pro#3385) -
+		// same as any other blank line, it has to drop.
 		$field = $this->factory->field->create_and_get(
 			array(
 				'form_id' => $this->form_id,
@@ -202,7 +207,65 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$response = $this->trigger_action( 'frm_import_options' );
 
 		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
+		$this->assertSame( array( 'One', 'Two' ), array_slice( $matches[1], 1 ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::import_options
+	 */
+	public function test_import_options_keeps_leading_blank_for_select_with_placeholder() {
+		// With a placeholder configured, dropdown-field.php's own
+		// $placeholder/$skipped handling absorbs this option into the
+		// placeholder it already renders, so keeping it here is harmless.
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => 'select',
+				'field_options' => array( 'placeholder' => 'Choose one' ),
+			)
+		);
+
+		$_POST = array(
+			'action'   => 'frm_import_options',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field->id,
+			'opts'     => "\nOne\nTwo",
+			'separate' => 'false',
+		);
+
+		$response = $this->trigger_action( 'frm_import_options' );
+
+		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
 		$this->assertSame( array( '', 'One', 'Two' ), array_slice( $matches[1], 1 ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::import_options
+	 */
+	public function test_import_options_keeps_leading_blank_pair_for_separate_value_select_with_placeholder() {
+		// The separate-value equivalent of the plain-line case above: a
+		// leading "|" (blank label, blank value) is the placeholder row and
+		// has to survive the label|value split the same way.
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => 'select',
+				'field_options' => array( 'placeholder' => 'Choose one' ),
+			)
+		);
+
+		$_POST = array(
+			'action'   => 'frm_import_options',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field->id,
+			'opts'     => "|\nYes|1\nNo|0",
+			'separate' => 'true',
+		);
+
+		$response = $this->trigger_action( 'frm_import_options' );
+
+		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
+		$this->assertSame( array( '', 'Yes', 'No' ), array_slice( $matches[1], 1 ) );
 	}
 
 	/**
