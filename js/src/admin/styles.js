@@ -27,7 +27,94 @@ class frmStyleOptions {
 	init() {
 		this.initColorPickerDependentUpdaterComponents();
 		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
+		this.initStyleClassRename();
 		this.toggleVisibilityOfCustomCSSEditor();
+	}
+
+	/**
+	 * Initializes renaming of the style class.
+	 * The class is read only until the rename button is used, so it isn't changed by accident.
+	 * The new name is mirrored into every class label on the page while it is typed.
+	 *
+	 * @return {void}
+	 */
+	initStyleClassRename() {
+		const component = document.querySelector( '.frm-style-class-component' );
+		if ( ! component ) {
+			return;
+		}
+
+		const button = component.querySelector( '.frm-style-class-rename' );
+		const editor = component.querySelector( '.frm-style-class-editor' );
+		const description = component.querySelector( '.frm-style-class-description' );
+		const input = component.querySelector( '#frm_style_class' );
+		const value = component.querySelector( '.frm-style-class-value' );
+
+		if ( ! button || ! editor || ! input || ! value ) {
+			return;
+		}
+
+		const originalName = input.value;
+
+		const closeEditor = () => {
+			editor.classList.add( 'frm_hidden' );
+			description?.classList.add( 'frm_hidden' );
+			value.classList.remove( 'frm_hidden' );
+			button.setAttribute( 'aria-expanded', 'false' );
+			button.focus();
+		};
+
+		button.addEventListener( 'click', () => {
+			value.classList.add( 'frm_hidden' );
+			editor.classList.remove( 'frm_hidden' );
+			description?.classList.remove( 'frm_hidden' );
+			button.setAttribute( 'aria-expanded', 'true' );
+			input.focus();
+			input.select();
+		} );
+
+		input.addEventListener( 'input', () => {
+			input.value = this.sanitizeStyleClassName( input.value );
+			this.updateStyleClassLabels( input.value );
+		} );
+
+		input.addEventListener( 'keydown', event => {
+			if ( 'Escape' === event.key ) {
+				input.value = originalName;
+				this.updateStyleClassLabels( originalName );
+				closeEditor();
+				return;
+			}
+
+			if ( 'Enter' === event.key ) {
+				// Don't submit the whole style form from this input.
+				event.preventDefault();
+				closeEditor();
+			}
+		} );
+	}
+
+	/**
+	 * Reduces a typed value to the characters WordPress keeps in a post slug.
+	 *
+	 * @param {string} name The typed class name.
+	 * @return {string} The sanitized class name.
+	 */
+	sanitizeStyleClassName( name ) {
+		return name.toLowerCase().replace( /[^a-z0-9_-]+/g, '-' );
+	}
+
+	/**
+	 * Mirrors the class name into every label that shows it.
+	 * Both the quick settings and the advanced settings render one.
+	 *
+	 * @param {string} name The class name to show.
+	 * @return {void}
+	 */
+	updateStyleClassLabels( name ) {
+		document.querySelectorAll( '.frm-style-class-name' ).forEach( label => {
+			label.textContent = name;
+		} );
 	}
 
 	/**
