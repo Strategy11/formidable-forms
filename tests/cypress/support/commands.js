@@ -229,9 +229,19 @@ Cypress.Commands.add( 'emptyTrash', () => {
 // Runs the IBM Equal Access scan alongside the existing cypress-axe checks. Doesn't
 // fail the build yet (assertCompliance(false)) since the current admin/preview
 // markup hasn't been triaged against this rule set - see formidable-forms#3356.
+// WP core's own admin-menu collapse button (wp-admin/menu-header.php) sets
+// aria-label="Collapse Main Menu" against visible text "Collapse Menu" - a
+// real label_name_visible mismatch, but core markup Formidable doesn't own
+// or render, same category as admin-a11y.cy.js's #wpadminbar exclusion from
+// its axe check.
+const isCoreCollapseButtonLabelMismatch = result =>
+	'label_name_visible' === result.ruleId && result.snippet && result.snippet.includes( 'id="collapse-button"' );
+
 Cypress.Commands.add( 'checkIbmAccessibility', label => {
 	cy.getCompliance( label ).then( report => {
-		const violations = report.results.filter( result => result.level !== 'pass' );
+		const violations = report.results
+			.filter( result => result.level !== 'pass' )
+			.filter( result => ! isCoreCollapseButtonLabelMismatch( result ) );
 
 		if ( ! violations.length ) {
 			return report;
