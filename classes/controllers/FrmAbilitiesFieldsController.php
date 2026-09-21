@@ -81,8 +81,8 @@ class FrmAbilitiesFieldsController {
 							),
 							'options'       => array(
 								'type'        => 'array',
-								'description' => __( 'Array of choice options for radio, dropdown, or checkbox fields', 'formidable' ),
-								'items'       => array( 'type' => 'string' ),
+								'description' => __( 'Array of choice options for radio, dropdown, or checkbox fields. Each option is a string, or a {"label", "value"} object when separate values are enabled.', 'formidable' ),
+								'items'       => array( 'type' => array( 'string', 'object' ) ),
 							),
 							'field_order'   => array(
 								'type'        => 'integer',
