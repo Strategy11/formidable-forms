@@ -890,4 +890,114 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		unset( $_GET['page'] );
 	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_first_error
+	 */
+	public function test_should_focus_first_error_defaults_true_without_a_form() {
+		$this->assertTrue( FrmAppHelper::should_focus_first_error() );
+	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_first_error
+	 * @covers FrmAppHelper::should_focus_error_summary
+	 * @covers FrmAppHelper::should_include_alert_role_on_field_errors
+	 */
+	public function test_error_focus_and_alert_role_defaults_when_summary_is_active() {
+		$form = $this->factory->form->create_and_get();
+
+		// The clickable summary is on by default, so it should own both focus and the
+		// alert announcement, and the old per-field mechanisms should stand down.
+		$this->assertTrue( FrmAppHelper::should_focus_error_summary( $form ) );
+		$this->assertFalse( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertFalse( FrmAppHelper::should_include_alert_role_on_field_errors( $form ) );
+	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_first_error
+	 * @covers FrmAppHelper::should_focus_error_summary
+	 * @covers FrmAppHelper::should_include_alert_role_on_field_errors
+	 */
+	public function test_error_focus_and_alert_role_defaults_when_summary_is_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+
+		$this->assertFalse( FrmAppHelper::should_focus_error_summary( $form ) );
+		$this->assertTrue( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertTrue( FrmAppHelper::should_include_alert_role_on_field_errors( $form ) );
+
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_error_summary
+	 */
+	public function test_should_focus_error_summary_can_be_filtered_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_focus_error_summary', '__return_false' );
+		$this->assertFalse( FrmAppHelper::should_focus_error_summary( $form ) );
+		remove_filter( 'frm_focus_error_summary', '__return_false' );
+	}
+
+	/**
+	 * Filtering the summary's own focus off must fall back to focusing the first field —
+	 * not leave both resolving false, which would leave focus going nowhere.
+	 *
+	 * @covers FrmAppHelper::should_focus_first_error
+	 * @covers FrmAppHelper::resolve_error_focus_target
+	 */
+	public function test_focus_falls_back_to_first_error_when_summary_focus_is_filtered_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_focus_error_summary', '__return_false' );
+
+		$this->assertTrue( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertSame(
+			array(
+				'focus_first_error'   => true,
+				'focus_error_summary' => false,
+			),
+			FrmAppHelper::resolve_error_focus_target( $form )
+		);
+
+		remove_filter( 'frm_focus_error_summary', '__return_false' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::resolve_error_focus_target
+	 */
+	public function test_resolve_error_focus_target_prioritizes_summary_when_both_resolve_true() {
+		$form = $this->factory->form->create_and_get();
+
+		// Force the old mechanism back on even though the summary auto-resolved it off.
+		add_filter( 'frm_focus_first_error', '__return_true' );
+
+		$this->setExpectedIncorrectUsage( 'FrmAppHelper::resolve_error_focus_target' );
+
+		$target = FrmAppHelper::resolve_error_focus_target( $form );
+
+		$this->assertTrue( $target['focus_error_summary'] );
+		$this->assertFalse( $target['focus_first_error'] );
+
+		remove_filter( 'frm_focus_first_error', '__return_true' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::resolve_error_focus_target
+	 */
+	public function test_resolve_error_focus_target_without_conflict() {
+		$form = $this->factory->form->create_and_get();
+
+		$target = FrmAppHelper::resolve_error_focus_target( $form );
+
+		$this->assertSame(
+			array(
+				'focus_first_error'   => false,
+				'focus_error_summary' => true,
+			),
+			$target
+		);
+	}
 }

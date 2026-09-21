@@ -522,4 +522,74 @@ class test_FrmFormsHelper extends FrmUnitTest {
 			)
 		);
 	}
+
+	/**
+	 * @covers FrmFormsHelper::is_error_summary_active_for_form
+	 */
+	public function test_is_error_summary_active_for_form() {
+		$form = $this->factory->form->create_and_get();
+
+		$this->assertTrue( FrmFormsHelper::is_error_summary_active_for_form( $form ) );
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+		$this->assertFalse( FrmFormsHelper::is_error_summary_active_for_form( $form ) );
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+	}
+
+	/**
+	 * @covers FrmFormsHelper::get_error_config_for_form
+	 */
+	public function test_get_error_config_for_form_matches_active_summary() {
+		$form = $this->factory->form->create_and_get();
+
+		$this->assertSame(
+			array(
+				'includeAlertRole'  => false,
+				'focusFirstError'   => false,
+				'focusErrorSummary' => true,
+			),
+			FrmFormsHelper::get_error_config_for_form( $form )
+		);
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+
+		$this->assertSame(
+			array(
+				'includeAlertRole'  => true,
+				'focusFirstError'   => true,
+				'focusErrorSummary' => false,
+			),
+			FrmFormsHelper::get_error_config_for_form( $form )
+		);
+
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+	}
+
+	/**
+	 * @covers FrmFormsHelper::get_success_message
+	 */
+	public function test_get_success_message_adds_tabindex_only_for_alert_role() {
+		$form = $this->factory->form->create_and_get();
+
+		$alert_html = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Oops',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => 'frm_error_style',
+				'role'     => 'alert',
+			)
+		);
+		$this->assertStringContainsString( 'tabindex="-1"', $alert_html );
+
+		$status_html = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Thanks',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => 'frm_message',
+			)
+		);
+		$this->assertStringNotContainsString( 'tabindex="-1"', $status_html );
+	}
 }
