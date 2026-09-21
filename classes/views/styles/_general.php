@@ -185,7 +185,10 @@ new FrmBackgroundImageStyleComponent(
 	<span class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></span>
 </div>
 <div class="frm7 frm_form_field frm-style-component">
-	<label class="frm-copy-text">.frm_style_<span class="frm-style-class-name"><?php
+	<label
+		class="frm-copy-text frm-copy-tip"
+		data-frm-tip="<?php esc_attr_e( 'Copy class', 'formidable' ); ?>"
+		data-frm-copied-tip="<?php esc_attr_e( 'Class copied', 'formidable' ); ?>">.frm_style_<span class="frm-style-class-name"><?php
 		echo esc_html( $style->post_name );
 	?></span><?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' ); ?></label>
 </div>

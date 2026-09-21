@@ -289,8 +289,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			autocomplete="off"
 			spellcheck="false"
 			aria-describedby="frm_style_class_description" />
-		<button type="button" class="frm-style-class-copy">
-			<span class="screen-reader-text"><?php esc_html_e( 'Copy style class', 'formidable' ); ?></span>
+		<button
+			type="button"
+			class="frm-style-class-copy frm-copy-tip"
+			aria-label="<?php esc_attr_e( 'Copy style class', 'formidable' ); ?>"
+			data-frm-tip="<?php esc_attr_e( 'Copy class', 'formidable' ); ?>"
+			data-frm-copied-tip="<?php esc_attr_e( 'Class copied', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' ); ?>
 		</button>
 	</div>

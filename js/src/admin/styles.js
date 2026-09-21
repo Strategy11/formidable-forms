@@ -1,4 +1,3 @@
-import { __ } from '@wordpress/i18n';
 import frmStyleDependentUpdaterComponent from './components/dependent-updater-component';
 
 /**
@@ -7,15 +6,20 @@ import frmStyleDependentUpdaterComponent from './components/dependent-updater-co
  * @class
  */
 class frmStyleOptions {
+	cssEditorInstance = null;
+
+	cssInlineStyleElement = null;
+
+	cssEditorOptions = {
+		retryLimit: 5, // Stop after 5 retries.
+		retryInterval: 500, // Retry every 500ms.
+		retryCount: 0, // Count the number of retries.
+	};
+
+	// Keyed by control, so copying from one doesn't cancel another's reset.
+	copyFeedbackTimeouts = new WeakMap();
+
 	constructor() {
-		this.success = frmDom.success;
-		this.cssEditorInstance = null;
-		this.cssInlineStyleElement = null;
-		this.cssEditorOptions = {
-			retryLimit: 5, // Stop after 5 retries.
-			retryInterval: 500, // Retry every 500ms.
-			retryCount: 0, // Count the number of retries.
-		};
 		this.init();
 		this.initHover();
 		this.initCustomCSSEditorInstance();
@@ -25,12 +29,25 @@ class frmStyleOptions {
 	 * Init the dependent
 	 */
 	init() {
-		const copiedMessage = __( 'The class name has been copied.', 'formidable' );
-
+		this.initCopyStatus();
 		this.initColorPickerDependentUpdaterComponents();
-		this.initStyleClassCopyToClipboard( copiedMessage );
-		this.initStyleClassRename( copiedMessage );
+		this.initStyleClassCopyToClipboard();
+		this.initStyleClassRename();
 		this.toggleVisibilityOfCustomCSSEditor();
+	}
+
+	/**
+	 * Creates the live region that announces a copy.
+	 * The tooltip is drawn with a pseudo element, which screen readers don't read, and the region
+	 * has to be in the document before its text changes for the change to be announced.
+	 *
+	 * @return {void}
+	 */
+	initCopyStatus() {
+		this.copyStatus = document.createElement( 'span' );
+		this.copyStatus.className = 'screen-reader-text';
+		this.copyStatus.setAttribute( 'role', 'status' );
+		document.body.append( this.copyStatus );
 	}
 
 	/**
@@ -38,10 +55,9 @@ class frmStyleOptions {
 	 * The name is edited in place, and mirrored into the read only label in the advanced
 	 * settings while it is typed. The warning only appears once the name actually changes.
 	 *
-	 * @param {string} successMessage The message to show once the class name is copied.
 	 * @return {void}
 	 */
-	initStyleClassRename( successMessage ) {
+	initStyleClassRename() {
 		const component = document.querySelector( '.frm-style-class-component' );
 		if ( ! component ) {
 			return;
@@ -78,7 +94,11 @@ class frmStyleOptions {
 		} );
 
 		copyButton?.addEventListener( 'click', () => {
-			this.copyToClipboard( `.frm_style_${ input.value }`, copyButton, successMessage );
+			this.copyToClipboard(
+				`.frm_style_${ input.value }`,
+				copyButton,
+				() => this.showCopyFeedback( copyButton )
+			);
 		} );
 	}
 
@@ -237,37 +257,65 @@ class frmStyleOptions {
 	 * Adds a click event listener to the copyLabel element.
 	 * Copies the class name to the clipboard and displays a success message.
 	 *
-	 * @param {string} successMessage The success message to display.
 	 * @return {void} Initializes the copy to clipboard functionality for style classes.
 	 */
-	initStyleClassCopyToClipboard( successMessage ) {
+	initStyleClassCopyToClipboard() {
 		const labels = document.querySelectorAll( '.frm-copy-text' );
 		labels.forEach( label => {
-			label.addEventListener( 'click', event => {
-				this.copyToClipboard( event.currentTarget.innerText, event.currentTarget, successMessage );
+			label.addEventListener( 'click', () => {
+				const name = label.querySelector( '.frm-style-class-name' );
+				// Read the name from its own element, so generated tooltip text can never creep in.
+				const text = name ? `.frm_style_${ name.textContent }` : label.innerText;
+
+				this.copyToClipboard( text, label, () => this.showCopyFeedback( label ) );
 			} );
 		} );
 	}
 
 	/**
-	 * Copies text to the clipboard and reports it, falling back when the Clipboard API is missing.
+	 * Copies text to the clipboard, falling back when the Clipboard API is missing.
 	 *
-	 * @param {string}      text           The text to copy.
-	 * @param {HTMLElement} element        Used to position the fallback input element.
-	 * @param {string}      successMessage The message to show once the text is copied.
+	 * @param {string}      text      The text to copy.
+	 * @param {HTMLElement} element   Used to position the fallback input element.
+	 * @param {Function}    onSuccess Called once the text is on the clipboard.
 	 * @return {void}
 	 */
-	copyToClipboard( text, element, successMessage ) {
+	copyToClipboard( text, element, onSuccess ) {
 		if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
 			if ( true === this.fallbackCopyToClipboard( text, element ) ) {
-				this.success( successMessage );
+				onSuccess();
 			}
 			return;
 		}
 
-		navigator.clipboard.writeText( text ).then( () => {
-			this.success( successMessage );
-		} );
+		navigator.clipboard.writeText( text ).then( onSuccess );
+	}
+
+	/**
+	 * Confirms a copy on the control that was clicked, then puts its tooltip back.
+	 *
+	 * @param {HTMLElement} element The copy control.
+	 * @return {void}
+	 */
+	showCopyFeedback( element ) {
+		const copiedTip = element.dataset.frmCopiedTip;
+
+		// Stash the resting label once. Copying again before the reset runs would otherwise
+		// read the confirmation back as the label, and leave it saying "copied" for good.
+		if ( ! element.dataset.frmDefaultTip ) {
+			element.dataset.frmDefaultTip = element.dataset.frmTip;
+		}
+
+		element.dataset.frmTip = copiedTip;
+		element.classList.add( 'frm-copied' );
+		this.copyStatus.textContent = copiedTip;
+
+		clearTimeout( this.copyFeedbackTimeouts.get( element ) );
+		this.copyFeedbackTimeouts.set( element, setTimeout( () => {
+			element.classList.remove( 'frm-copied' );
+			element.dataset.frmTip = element.dataset.frmDefaultTip;
+			this.copyStatus.textContent = '';
+		}, 2000 ) );
 	}
 
 	/**
