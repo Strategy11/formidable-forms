@@ -7,7 +7,7 @@
 	.frm-radio-container {
 		max-width: 216px;
 		height: 36px;
-		background: rgba(242, 244, 247, 1);
+		background: var(--grey-100);
 		gap: var(--small-gap);
 		padding: var(--gap-2xs);
 		box-sizing: border-box;
@@ -87,7 +87,7 @@
 
 .frm-style-tabs-wrapper .frm-tabs-navs ul > li:not(.frm-active):hover,
 .frm-style-component .frm-radio-container input:not(:checked) + label:hover {
-	background: rgba(234, 236, 240, 1);
+	background: var(--grey-200);
 	border-radius: var(--small-radius);
 	box-shadow: var(--button-shadow);
 }

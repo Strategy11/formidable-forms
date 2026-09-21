@@ -6,7 +6,7 @@
 	width: calc(100% - 91px);
 	display: flex;
 	align-items: center;
-	color: rgba(29, 41, 57, 1);
+	color: var(--grey-800);
 
 	svg.frmsvg {
 		color: currentColor;
@@ -44,7 +44,7 @@
 			min-height: 34px; // Reduce the min-height, as other CSS might set this to 40px.
 			padding: 0;
 			font-size: var(--text-sm);
-			color: rgba(16, 24, 40, 1);
+			color: var(--grey-900);
 			padding-left: 12px;
 			box-sizing: border-box;
 		}
@@ -54,7 +54,7 @@
 			min-height: 0;
 			padding: 0;
 			font-size: var(--text-sm);
-			color: rgba(102, 112, 133, 1);
+			color: var(--grey-500);
 			width: 44px;
 			background: url("../../images/style/small-arrow.svg") no-repeat;
 			background-position: center right 12px;
