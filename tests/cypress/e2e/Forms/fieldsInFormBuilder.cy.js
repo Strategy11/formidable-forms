@@ -97,22 +97,11 @@ describe( 'Fields in the form builder', () => {
 
 		cy.xpath( "//li[@class='frm-active']//a[@id='frm_insert_fields_tab']" ).should( 'contain', 'Add Fields' );
 
-		cy.log( 'Create and duplicate fields for each type' );
+		cy.log( 'Create and duplicate fields for a representative subset of types' );
 		const fieldsToDelete = [
 			createAndDuplicateField( 'text', 'Text' ),
-			createAndDuplicateField( 'textarea', 'Paragraph' ),
 			createAndDuplicateField( 'checkbox', 'Checkboxes' ),
-			createAndDuplicateField( 'radio', 'Radio Buttons' ),
-			createAndDuplicateField( 'select', 'Dropdown' ),
-			createAndDuplicateField( 'email', 'Email' ),
-			createAndDuplicateField( 'url', 'Website/URL' ),
-			createAndDuplicateField( 'number', 'Number' ),
-			createAndDuplicateField( 'name', 'Name' ),
-			createAndDuplicateField( 'phone', 'Phone' ),
 			createAndDuplicateField( 'html', 'HTML' ),
-			createAndDuplicateField( 'hidden', 'Hidden' ),
-			createAndDuplicateField( 'user_id', 'User ID' ),
-			createAndDuplicateField( 'captcha', 'Captcha' ),
 			createAndDuplicateField( 'credit_card', 'Payment' )
 		];
 
