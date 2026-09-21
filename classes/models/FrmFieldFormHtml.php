@@ -323,7 +323,7 @@ class FrmFieldFormHtml {
 	 * carries no frm_error class or id (e.g. `[if error]<div>[error]</div>[/if error]`).
 	 * Mirrors insertErrorHtml() tagging every top-level element client-side.
 	 *
-	 * @since 6.36
+	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -345,10 +345,10 @@ class FrmFieldFormHtml {
 
 	/**
 	 * Add a data-frm-error attribute to every element at the top level of an HTML
-	 * fragment (direct children only, not nested descendants) by tracking tag depth
-	 * through a single scan, rather than a full DOM parse.
+	 * fragment (direct children only, not nested descendants) by tracking open tags
+	 * on a stack through a single scan, rather than a full DOM parse.
 	 *
-	 * @since 6.36
+	 * @since x.x
 	 *
 	 * @param string $html
 	 *
@@ -356,10 +356,9 @@ class FrmFieldFormHtml {
 	 */
 	private static function tag_top_level_elements( $html ) {
 		$void_elements = array( 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' );
-
-		$depth  = 0;
-		$offset = 0;
-		$result = '';
+		$open_tags     = array();
+		$offset        = 0;
+		$result        = '';
 
 		while ( preg_match( '/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*?)(\/?)>/', $html, $match, PREG_OFFSET_CAPTURE, $offset ) ) {
 			$full_tag   = $match[0][0];
@@ -372,30 +371,29 @@ class FrmFieldFormHtml {
 			$result .= substr( $html, $offset, $tag_start - $offset );
 
 			if ( $is_closing ) {
-				if ( $depth > 0 ) {
-					$depth = $depth - 1;
+				if ( $open_tags ) {
+					array_pop( $open_tags );
 				}
+
 				$result .= $full_tag;
-			} elseif ( 0 === $depth ) {
+			} elseif ( ! $open_tags ) {
 				$result .= '<' . $match[2][0] . $attrs . ' data-frm-error' . ( $self_close ? ' />' : '>' );
 
 				if ( ! $self_close ) {
-					$depth = $depth + 1;
+					$open_tags[] = $tag_name;
 				}
 			} else {
 				$result .= $full_tag;
 
 				if ( ! $self_close ) {
-					$depth = $depth + 1;
+					$open_tags[] = $tag_name;
 				}
 			}
 
 			$offset = $tag_start + strlen( $full_tag );
-		}
+		}//end while
 
-		$result .= substr( $html, $offset );
-
-		return $result;
+		return $result . substr( $html, $offset );
 	}
 
 	/**
