@@ -80,11 +80,13 @@ class FrmAbilitiesController {
 	 */
 	public static function domains() {
 		$domains = array(
-			'forms'        => 'FrmAbilitiesFormsController',
-			'fields'       => 'FrmAbilitiesFieldsController',
-			'entries'      => 'FrmAbilitiesEntriesController',
-			'styles'       => 'FrmAbilitiesStylesController',
-			'form-actions' => 'FrmAbilitiesFormActionsController',
+			'forms'         => 'FrmAbilitiesFormsController',
+			'fields'        => 'FrmAbilitiesFieldsController',
+			'entries'       => 'FrmAbilitiesEntriesController',
+			'styles'        => 'FrmAbilitiesStylesController',
+			'form-actions'  => 'FrmAbilitiesFormActionsController',
+			'payments'      => 'FrmAbilitiesPaymentsController',
+			'subscriptions' => 'FrmAbilitiesSubscriptionsController',
 		);
 
 		/**
@@ -187,5 +189,7 @@ class FrmAbilitiesController {
 		FrmAbilitiesEntriesController::register_abilities();
 		FrmAbilitiesStylesController::register_abilities();
 		FrmAbilitiesFormActionsController::register_abilities();
+		FrmAbilitiesPaymentsController::register_abilities();
+		FrmAbilitiesSubscriptionsController::register_abilities();
 	}
 }

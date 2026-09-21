@@ -2,9 +2,9 @@
 
 /**
  * Contract tests that run across every ability Formidable itself owns
- * (forms, fields, entries, styles, form-actions).
+ * (forms, fields, entries, styles, form-actions, payments, subscriptions).
  *
- * Formidable is the owner plugin for these five domains, not an add-on
+ * Formidable is the owner plugin for these domains, not an add-on
  * deferring to someone else, so unlike the sibling contract tests in Views,
  * Coupons, and Landing, this file does not test an MCP-off deferral gate for
  * abilities that already exist elsewhere. It does test the one piece every
@@ -18,7 +18,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	/**
 	 * @var array<string>
 	 */
-	private static $owned_domains = array( 'forms', 'fields', 'entries', 'styles', 'form-actions' );
+	private static $owned_domains = array( 'forms', 'fields', 'entries', 'styles', 'form-actions', 'payments', 'subscriptions' );
 
 	/**
 	 * Abilities that legitimately take no required input.
@@ -40,6 +40,8 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 		if ( ! function_exists( 'wp_get_abilities' ) ) {
 			$this->markTestSkipped( 'The Abilities API is not available in this WordPress install.' );
 		}
+
+		( new FrmTransLiteDb() )->upgrade();
 
 		$this->set_current_user_to_1();
 		$this->enable_abilities();
@@ -119,6 +121,14 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 			'create-form-action',
 			'update-form-action',
 			'delete-form-action',
+			'list-payments',
+			'get-payment',
+			'delete-payment',
+			'refund-payment',
+			'list-subscriptions',
+			'get-subscription',
+			'delete-subscription',
+			'cancel-subscription',
 		);
 
 		foreach ( $expected as $slug ) {
@@ -335,10 +345,12 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 		$missing_id = 99999999;
 
 		$cases = array(
-			'formidable-forms/get-form'        => array( 'id' => $missing_id ),
-			'formidable-forms/get-entry'       => array( 'id' => $missing_id ),
-			'formidable-forms/get-style'       => array( 'id' => $missing_id ),
-			'formidable-forms/get-form-action' => array( 'id' => $missing_id ),
+			'formidable-forms/get-form'         => array( 'id' => $missing_id ),
+			'formidable-forms/get-entry'        => array( 'id' => $missing_id ),
+			'formidable-forms/get-style'        => array( 'id' => $missing_id ),
+			'formidable-forms/get-form-action'  => array( 'id' => $missing_id ),
+			'formidable-forms/get-payment'      => array( 'id' => $missing_id ),
+			'formidable-forms/get-subscription' => array( 'id' => $missing_id ),
 		);
 
 		$abilities = $this->get_formidable_abilities();
