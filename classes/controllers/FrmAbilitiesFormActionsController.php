@@ -413,7 +413,7 @@ class FrmAbilitiesFormActionsController {
 			// Draft actions are disabled but still configured on the form, so
 			// list them alongside published ones unless a status filter is set.
 			'post_status' => '' !== $status ? $status : array( 'publish', 'draft' ),
-			'numberposts' => -1,
+			'numberposts' => 200,
 			'orderby'     => 'menu_order',
 			'order'       => 'ASC',
 			'menu_order'  => (int) $form->id,
