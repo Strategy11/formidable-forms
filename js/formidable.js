@@ -1515,6 +1515,9 @@ function frmFrontFormJS() {
 		let timeoutCallback;
 		do {
 			element = element.previousSibling;
+			if ( ! element ) {
+				break;
+			}
 			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
 				break;

@@ -311,7 +311,89 @@ class FrmFieldFormHtml {
 			$this->html = str_replace( 'role="alert"', '', $this->html );
 		}
 
+		$this->add_data_frm_error_attribute();
+
 		FrmShortcodeHelper::remove_inline_conditions( true, 'error', $error, $this->html );
+	}
+
+	/**
+	 * Tag every top-level element in the [if error] block with a data-frm-error
+	 * attribute, so js/formidable.js's removeFieldError()/removeAllErrors() can find
+	 * and remove it on revalidation even when a custom field template's error markup
+	 * carries no frm_error class or id (e.g. `[if error]<div>[error]</div>[/if error]`).
+	 * Mirrors insertErrorHtml() tagging every top-level element client-side.
+	 *
+	 * @since 6.36
+	 *
+	 * @return void
+	 */
+	private function add_data_frm_error_attribute() {
+		$error_body = self::get_error_body( $this->html );
+
+		if ( ! is_string( $error_body ) || '' === trim( $error_body ) ) {
+			return;
+		}
+
+		$tagged_body = self::tag_top_level_elements( $error_body );
+
+		if ( $tagged_body === $error_body ) {
+			return;
+		}
+
+		$this->html = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $tagged_body . '[/if error]', $this->html );
+	}
+
+	/**
+	 * Add a data-frm-error attribute to every element at the top level of an HTML
+	 * fragment (direct children only, not nested descendants) by tracking tag depth
+	 * through a single scan, rather than a full DOM parse.
+	 *
+	 * @since 6.36
+	 *
+	 * @param string $html
+	 *
+	 * @return string
+	 */
+	private static function tag_top_level_elements( $html ) {
+		$void_elements = array( 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' );
+
+		$depth  = 0;
+		$offset = 0;
+		$result = '';
+
+		while ( preg_match( '/<(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^>]*?)(\/?)>/', $html, $match, PREG_OFFSET_CAPTURE, $offset ) ) {
+			$full_tag   = $match[0][0];
+			$tag_start  = $match[0][1];
+			$is_closing = '' !== $match[1][0];
+			$tag_name   = strtolower( $match[2][0] );
+			$attrs      = $match[3][0];
+			$self_close = '' !== $match[4][0] || in_array( $tag_name, $void_elements, true );
+
+			$result .= substr( $html, $offset, $tag_start - $offset );
+
+			if ( $is_closing ) {
+				if ( $depth > 0 ) {
+					--$depth;
+				}
+				$result .= $full_tag;
+			} elseif ( 0 === $depth ) {
+				$result .= '<' . $match[2][0] . $attrs . ' data-frm-error' . ( $self_close ? ' />' : '>' );
+				if ( ! $self_close ) {
+					++$depth;
+				}
+			} else {
+				$result .= $full_tag;
+				if ( ! $self_close ) {
+					++$depth;
+				}
+			}
+
+			$offset = $tag_start + strlen( $full_tag );
+		}
+
+		$result .= substr( $html, $offset );
+
+		return $result;
 	}
 
 	/**
