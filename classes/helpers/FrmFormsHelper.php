@@ -578,7 +578,7 @@ class FrmFormsHelper {
 		// filterable wrapper class, lets JS move focus onto the error summary instead of
 		// the first field, when should_focus_error_summary() resolves true.
 		$is_error_summary = 'alert' === $role;
-		$tabindex         = 'tabindex="-1"';
+		$tabindex         = ' tabindex="-1"';
 		$summary_marker   = $is_error_summary ? ' data-frm-error-summary="1"' : '';
 
 		// tabindex="-1" makes the success message programmatically focusable without adding it
