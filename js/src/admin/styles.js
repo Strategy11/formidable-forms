@@ -1,6 +1,27 @@
 import frmStyleDependentUpdaterComponent from './components/dependent-updater-component';
 
 /**
+ * Reduces a typed value to the characters WordPress keeps in a post slug.
+ *
+ * @param {string} name The typed class name.
+ * @return {string} The sanitized class name.
+ */
+const sanitizeStyleClassName = name => name.toLowerCase().replace( /[^a-z0-9_-]+/g, '-' );
+
+/**
+ * Mirrors the class name into every label that shows it.
+ * Both the quick settings and the advanced settings render one.
+ *
+ * @param {string} name The class name to show.
+ * @return {void}
+ */
+const updateStyleClassLabels = name => {
+	document.querySelectorAll( '.frm-style-class-name' ).forEach( label => {
+		label.textContent = name;
+	} );
+};
+
+/**
  * Represents the frmStyleOptions class.
  *
  * @class
@@ -71,15 +92,15 @@ class frmStyleOptions {
 		const originalName = input.value;
 
 		input.addEventListener( 'input', () => {
-			input.value = this.sanitizeStyleClassName( input.value );
-			this.updateStyleClassLabels( input.value );
+			input.value = sanitizeStyleClassName( input.value );
+			updateStyleClassLabels( input.value );
 			description?.classList.toggle( 'frm_hidden', input.value === originalName );
 		} );
 
 		input.addEventListener( 'keydown', event => {
 			if ( 'Escape' === event.key ) {
 				input.value = originalName;
-				this.updateStyleClassLabels( originalName );
+				updateStyleClassLabels( originalName );
 				description?.classList.add( 'frm_hidden' );
 				return;
 			}
@@ -94,29 +115,6 @@ class frmStyleOptions {
 
 		copyButton?.addEventListener( 'click', () => {
 			this.copyToClipboard( `.frm_style_${ input.value }`, copyButton, confirmCopy );
-		} );
-	}
-
-	/**
-	 * Reduces a typed value to the characters WordPress keeps in a post slug.
-	 *
-	 * @param {string} name The typed class name.
-	 * @return {string} The sanitized class name.
-	 */
-	sanitizeStyleClassName( name ) {
-		return name.toLowerCase().replace( /[^a-z0-9_-]+/g, '-' );
-	}
-
-	/**
-	 * Mirrors the class name into every label that shows it.
-	 * Both the quick settings and the advanced settings render one.
-	 *
-	 * @param {string} name The class name to show.
-	 * @return {void}
-	 */
-	updateStyleClassLabels( name ) {
-		document.querySelectorAll( '.frm-style-class-name' ).forEach( label => {
-			label.textContent = name;
 		} );
 	}
 

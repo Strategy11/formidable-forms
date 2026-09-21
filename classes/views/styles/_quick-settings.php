@@ -1,4 +1,13 @@
 <?php
+/**
+ * Quick settings in the visual styler sidebar.
+ *
+ * @package Formidable
+ *
+ * @var stdClass|WP_Post $style     The style being edited.
+ * @var FrmStyle         $frm_style Used to build the setting field names.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
