@@ -29,6 +29,9 @@ describe( 'Run some basic Formidale tests', function() {
 
 			// Update the form settings. Give the form a name.
 			cy.get( '#frm_form_name' ).type( 'My form' );
+			// Turn on AJAX submit so the success message is inserted via JS (rather than a
+			// full page reload) and this form actually exercises the focus-after-submit code.
+			cy.get( '#ajax_submit' ).check();
 			cy.get( '#frm_submit_side_top' ).click();
 			cy.get( '.frm_updated_message' ).should( 'contain.text', 'Settings Successfully Updated' );
 

@@ -1085,7 +1085,16 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function focusFormMessage( insertedContent ) {
-		const message = insertedContent.filter( '.frm_message' ).add( insertedContent.find( '.frm_message' ) ).get( 0 );
+		let message;
+		for ( const node of insertedContent.get() ) {
+			if ( node.nodeType !== 1 ) {
+				continue;
+			}
+			message = node.matches( '.frm_message' ) ? node : node.querySelector( '.frm_message' );
+			if ( message ) {
+				break;
+			}
+		}
 		if ( message ) {
 			focusInput( message );
 		}
