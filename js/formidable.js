@@ -1195,9 +1195,11 @@ function frmFrontFormJS() {
 	/**
 	 * Inserts error HTML into a field's container, tagging every inserted top-level
 	 * element with a data-frm-error attribute. removeFieldError()/removeAllErrors() rely
-	 * on that attribute (rather than the frm_error class) to find and remove it again,
-	 * since a site's own custom field HTML template can render the [error] placeholder
-	 * without a frm_error class or id, and errors that can't be found never get removed.
+	 * on that attribute (rather than the frm_error class) to find and remove the visible
+	 * error element again, since a site's own custom field HTML template can render the
+	 * [error] placeholder without a frm_error class or id. This only covers the visible
+	 * element — aria-describedby cleanup still depends on an id, which custom markup may
+	 * not have.
 	 *
 	 * @param {HTMLElement} container
 	 * @param {string}      errorHtml
