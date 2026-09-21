@@ -8316,6 +8316,7 @@ window.frmAdminBuildJS = function() {
 		} );
 
 		singleField.classList.remove( 'frm_hidden' );
+		initiateMultiselect( singleField );
 
 		// Cancel slide animation on expanded sections so screen readers
 		// can immediately access inputs after DOM re-insertion.
@@ -10015,9 +10016,12 @@ window.frmAdminBuildJS = function() {
 	 *                                           instead of every multiselect in the page.
 	 */
 	function initiateMultiselect( container ) {
-		const $multiselect = container
-			? jQuery( container ).find( '.frm_multiselect' )
-			: jQuery( '.frm_multiselect' );
+		// A field's own settings panel (.frm-single-settings) stays hidden until it's clicked, so a
+		// still-hidden panel's multiselect is skipped here and initiated later, when its panel is
+		// shown (showFieldOptions) - regardless of whether this run is scoped to a container (e.g.
+		// newly ajax-loaded fields) or the whole page.
+		const $multiselect = ( container ? jQuery( container ).find( '.frm_multiselect' ) : jQuery( '.frm_multiselect' ) )
+			.not( '.frm-single-settings.frm_hidden .frm_multiselect' );
 
 		$multiselect.hide().each( frmDom.bootstrap.multiselect.init );
 	}
