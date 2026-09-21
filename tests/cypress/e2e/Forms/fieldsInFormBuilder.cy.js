@@ -52,10 +52,13 @@ describe( 'Fields in the form builder', () => {
 		const removeField = field => {
 			field.within( () => {
 				// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
+				// Same #wpbody-content 1280x0 race as createAndDuplicateField above
+				// (formidable-forms#3399) - .scrollIntoView() first reliably clears it.
 				cy.get( '.frm-field-action-icons' )
 					.invoke( 'css', 'opacity', 1 )
 					.find( '.dropdown .frm-hover-icon .frmsvg' )
 					.first()
+					.scrollIntoView()
 					.should( 'be.visible' )
 					.click();
 
