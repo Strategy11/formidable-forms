@@ -893,6 +893,7 @@ function frmFrontFormJS() {
 				response = defaultResponse;
 			} else {
 				// Response is a string. Convert it to an object.
+				// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 				response = response.replace( /^\s+|\s+$/g, '' );
 				if ( response.indexOf( '{' ) === 0 ) {
 					response = JSON.parse( response );
@@ -1174,6 +1175,43 @@ function frmFrontFormJS() {
 		return kvp.join( '&' );
 	}
 
+	/**
+	 * Resolve the per-form error-announcement config rendered by
+	 * FrmFormsHelper::get_error_config_for_form() onto the form's `data-frm-error-config`
+	 * attribute. Falls back to the page-global frm_js defaults (and no summary focus) when
+	 * a form element isn't available, e.g. a `frm-show-form` div rendered without a `form`
+	 * tag around it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement|null} formEl
+	 * @return {{includeAlertRole: boolean, focusFirstError: boolean, focusErrorSummary: boolean}} The resolved config.
+	 */
+	function getErrorConfigForForm( formEl ) {
+		const fallback = {
+			includeAlertRole: !! frm_js.include_alert_role,
+			focusFirstError: !! frm_js.focus_first_error,
+			focusErrorSummary: false,
+		};
+
+		if ( ! formEl || ! formEl.dataset.frmErrorConfig ) {
+			return fallback;
+		}
+
+		// The config is static for the life of the page, so cache it on the form element
+		// instead of re-parsing on every field error (submit, and every change-event
+		// validation while the user is filling out the form).
+		if ( ! formEl.frmErrorConfigCache ) {
+			try {
+				formEl.frmErrorConfigCache = JSON.parse( formEl.dataset.frmErrorConfig );
+			} catch ( e ) {
+				formEl.frmErrorConfigCache = fallback;
+			}
+		}
+
+		return formEl.frmErrorConfigCache;
+	}
+
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
@@ -1194,7 +1232,8 @@ function frmFrontFormJS() {
 			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+				const config = getErrorConfigForForm( container.closest( '.frm-show-form' ) );
+				const roleString = config.includeAlertRole ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
@@ -1454,12 +1493,23 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		if ( ! frm_js.focus_first_error ) {
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		if ( ! errors.length ) {
 			return;
 		}
 
-		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
-		if ( ! errors.length ) {
+		const formContainer = errors[ 0 ].closest( '.frm-show-form' );
+		const config = getErrorConfigForForm( formContainer );
+
+		if ( config.focusErrorSummary ) {
+			const summary = formContainer ? formContainer.querySelector( '[data-frm-error-summary]' ) : null;
+			if ( summary ) {
+				summary.focus();
+				return;
+			}
+		}
+
+		if ( ! config.focusFirstError ) {
 			return;
 		}
 
@@ -2304,6 +2354,7 @@ function frmFrontFormJS() {
 			: price.split( options.decimal_separator );
 
 		if ( options.thousand_separator ) {
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			split[ 0 ] = split[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, options.thousand_separator );
 		}
 

@@ -23,4 +23,26 @@ class test_FrmXMLController extends FrmUnitTest {
 	private function validate_xml_url( $url ) {
 		return $this->run_private_method( array( 'FrmXMLController', 'validate_xml_url' ), array( $url ) );
 	}
+
+	/**
+	 * The Import/Export page renders two <form> elements (Import, Export). Both
+	 * need distinct accessible names or they violate the aria_landmark_name_unique
+	 * a11y rule.
+	 *
+	 * @covers FrmXMLController::form
+	 */
+	public function test_form_has_unique_landmark_names_for_import_and_export_forms() {
+		ob_start();
+		FrmXMLController::form();
+		$html = ob_get_clean();
+
+		// Assert the two specific labels directly rather than a bare form count — a hook fired inside
+		// FrmXMLController::form() (e.g. frm_import_settings) adding its own <form> is a real extension
+		// point other add-ons already use here, and shouldn't fail this test as long as Import/Export
+		// themselves still have distinct, non-empty accessible names.
+		preg_match_all( '/<form\b[^>]*aria-label="([^"]*)"[^>]*>/', $html, $matches );
+		$this->assertContains( 'Import', $matches[1], 'Import form is missing its aria-label' );
+		$this->assertContains( 'Export', $matches[1], 'Export form is missing its aria-label' );
+		$this->assertSame( array_unique( $matches[1] ), $matches[1], 'Form landmarks must have distinct accessible names' );
+	}
 }

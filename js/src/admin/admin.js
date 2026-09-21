@@ -2546,6 +2546,7 @@ window.frmAdminBuildJS = function() {
 	function handleAjaxLoadFieldSuccess( response ) {
 		let key;
 
+		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 		response = response.replace( /^\s+|\s+$/g, '' );
 		if ( response.indexOf( '{' ) !== 0 ) {
 			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
@@ -9649,6 +9650,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const htmlFieldIds = [ 'after_html', 'before_html', 'submit_html', 'field_custom_html' ];
+		// eslint-disable-next-line sonarjs/prefer-native-jquery-alternative -- jQuery API kept, not refactored
 		if ( jQuery.inArray( id, htmlFieldIds ) >= 0 ) {
 			jQuery( `.frm_code_list li:not(.show_${ id })` ).addClass( 'frm_hidden' );
 			jQuery( `.frm_code_list li.show_${ id }` ).removeClass( 'frm_hidden' );
@@ -10508,6 +10510,7 @@ window.frmAdminBuildJS = function() {
 			const input = formData[ i ];
 			let key = input.name;
 			const { value } = input;
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			const names = key.match( /(.*)\[(.*)\]/ );
 
 			if ( ( input.type === 'radio' || input.type === 'checkbox' ) && ! input.checked ) {
@@ -11376,7 +11379,16 @@ window.frmAdminBuildJS = function() {
 
 			const $builderForm = jQuery( builderForm );
 			const builderArea = document.getElementById( 'frm_form_editor_container' );
-			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
+
+			// Formidable Pro can take over adding a condition row itself (see its builder.js) once
+			// it no longer needs this fallback for sites running an older, incompatible Pro version.
+			// Checked at click time, not here at setup time, since Pro's script may not have run yet.
+			$builderForm.on( 'click', '.frm_add_logic_row', function() {
+				if ( wp.hooks.applyFilters( 'frm_should_add_logic_row_in_lite', true ) ) {
+					return addFieldLogicRow.call( this );
+				}
+			} );
+
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
