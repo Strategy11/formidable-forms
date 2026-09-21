@@ -16,9 +16,6 @@ class frmStyleOptions {
 		retryCount: 0, // Count the number of retries.
 	};
 
-	// Keyed by control, so copying from one doesn't cancel another's reset.
-	copyFeedbackTimeouts = new WeakMap();
-
 	constructor() {
 		this.init();
 		this.initHover();
@@ -93,12 +90,10 @@ class frmStyleOptions {
 			}
 		} );
 
+		const confirmCopy = this.initCopyTooltip( copyButton );
+
 		copyButton?.addEventListener( 'click', () => {
-			this.copyToClipboard(
-				`.frm_style_${ input.value }`,
-				copyButton,
-				() => this.showCopyFeedback( copyButton )
-			);
+			this.copyToClipboard( `.frm_style_${ input.value }`, copyButton, confirmCopy );
 		} );
 	}
 
@@ -262,14 +257,70 @@ class frmStyleOptions {
 	initStyleClassCopyToClipboard() {
 		const labels = document.querySelectorAll( '.frm-copy-text' );
 		labels.forEach( label => {
+			const confirmCopy = this.initCopyTooltip( label );
+
 			label.addEventListener( 'click', () => {
 				const name = label.querySelector( '.frm-style-class-name' );
-				// Read the name from its own element, so generated tooltip text can never creep in.
+				// Read the name from its own element, so nothing else in the label creeps in.
 				const text = name ? `.frm_style_${ name.textContent }` : label.innerText;
 
-				this.copyToClipboard( text, label, () => this.showCopyFeedback( label ) );
+				this.copyToClipboard( text, label, confirmCopy );
 			} );
 		} );
+	}
+
+	/**
+	 * Sets up the tooltip on a copy control, and returns a function that confirms a copy in it.
+	 *
+	 * These are the same Bootstrap tooltips the rest of the admin uses. They render against the
+	 * body, so the sidebar can neither clip them nor paint over them, which a tooltip built out
+	 * of a pseudo element on the control cannot avoid.
+	 *
+	 * @param {HTMLElement} element The copy control.
+	 * @return {Function} Call it to confirm a copy on that control.
+	 */
+	initCopyTooltip( element ) {
+		const copiedTitle = element?.dataset.frmCopiedTip || '';
+		const announce = text => {
+			this.copyStatus.textContent = text;
+		};
+
+		if ( ! element || 'undefined' === typeof bootstrap ) {
+			return () => announce( copiedTitle );
+		}
+
+		// Read this before Bootstrap moves it to data-bs-original-title.
+		const defaultTitle = element.getAttribute( 'title' );
+		const options = { container: 'body', placement: 'top', trigger: 'hover focus' };
+		let tooltip = new bootstrap.Tooltip( element, options );
+		let showingCopied = false;
+
+		// Bootstrap 5.0 reads the title when the tooltip is built and has no setContent, so the
+		// wording is changed by replacing the instance rather than by updating it in place.
+		const retitle = title => {
+			tooltip.dispose();
+			element.setAttribute( 'title', title );
+			tooltip = new bootstrap.Tooltip( element, options );
+		};
+
+		const reset = () => {
+			if ( ! showingCopied ) {
+				return;
+			}
+			showingCopied = false;
+			retitle( defaultTitle );
+			announce( '' );
+		};
+
+		element.addEventListener( 'mouseleave', reset );
+		element.addEventListener( 'blur', reset );
+
+		return () => {
+			showingCopied = true;
+			retitle( copiedTitle );
+			tooltip.show();
+			announce( copiedTitle );
+		};
 	}
 
 	/**
@@ -289,33 +340,6 @@ class frmStyleOptions {
 		}
 
 		navigator.clipboard.writeText( text ).then( onSuccess );
-	}
-
-	/**
-	 * Confirms a copy on the control that was clicked, then puts its tooltip back.
-	 *
-	 * @param {HTMLElement} element The copy control.
-	 * @return {void}
-	 */
-	showCopyFeedback( element ) {
-		const copiedTip = element.dataset.frmCopiedTip;
-
-		// Stash the resting label once. Copying again before the reset runs would otherwise
-		// read the confirmation back as the label, and leave it saying "copied" for good.
-		if ( ! element.dataset.frmDefaultTip ) {
-			element.dataset.frmDefaultTip = element.dataset.frmTip;
-		}
-
-		element.dataset.frmTip = copiedTip;
-		element.classList.add( 'frm-copied' );
-		this.copyStatus.textContent = copiedTip;
-
-		clearTimeout( this.copyFeedbackTimeouts.get( element ) );
-		this.copyFeedbackTimeouts.set( element, setTimeout( () => {
-			element.classList.remove( 'frm-copied' );
-			element.dataset.frmTip = element.dataset.frmDefaultTip;
-			this.copyStatus.textContent = '';
-		}, 2000 ) );
 	}
 
 	/**

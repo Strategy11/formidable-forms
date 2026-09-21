@@ -291,9 +291,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			aria-describedby="frm_style_class_description" />
 		<button
 			type="button"
-			class="frm-style-class-copy frm-copy-tip"
+			class="frm-style-class-copy"
 			aria-label="<?php esc_attr_e( 'Copy style class', 'formidable' ); ?>"
-			data-frm-tip="<?php esc_attr_e( 'Copy class', 'formidable' ); ?>"
+			title="<?php esc_attr_e( 'Copy class', 'formidable' ); ?>"
 			data-frm-copied-tip="<?php esc_attr_e( 'Class copied', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' ); ?>
 		</button>
