@@ -373,18 +373,20 @@ class FrmFieldFormHtml {
 
 			if ( $is_closing ) {
 				if ( $depth > 0 ) {
-					--$depth;
+					$depth = $depth - 1;
 				}
 				$result .= $full_tag;
 			} elseif ( 0 === $depth ) {
 				$result .= '<' . $match[2][0] . $attrs . ' data-frm-error' . ( $self_close ? ' />' : '>' );
+
 				if ( ! $self_close ) {
-					++$depth;
+					$depth = $depth + 1;
 				}
 			} else {
 				$result .= $full_tag;
+
 				if ( ! $self_close ) {
-					++$depth;
+					$depth = $depth + 1;
 				}
 			}
 
