@@ -926,7 +926,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( FrmAppHelper::should_focus_error_summary( $form ) );
 		$this->assertTrue( FrmAppHelper::should_focus_first_error( $form ) );
 		$this->assertTrue( FrmAppHelper::should_include_alert_role_on_field_errors( $form ) );
-
 		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
 	}
 
@@ -961,7 +960,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 			),
 			FrmAppHelper::resolve_error_focus_target( $form )
 		);
-
 		remove_filter( 'frm_focus_error_summary', '__return_false' );
 	}
 
@@ -988,8 +986,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::resolve_error_focus_target
 	 */
 	public function test_resolve_error_focus_target_without_conflict() {
-		$form = $this->factory->form->create_and_get();
-
+		$form   = $this->factory->form->create_and_get();
 		$target = FrmAppHelper::resolve_error_focus_target( $form );
 
 		$this->assertSame(

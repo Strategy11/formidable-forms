@@ -1165,7 +1165,7 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement|null} formEl
-	 * @return {{includeAlertRole: boolean, focusFirstError: boolean, focusErrorSummary: boolean}}
+	 * @return {{includeAlertRole: boolean, focusFirstError: boolean, focusErrorSummary: boolean}} The resolved config.
 	 */
 	function getErrorConfigForForm( formEl ) {
 		const fallback = {
@@ -1212,7 +1212,7 @@ function frmFrontFormJS() {
 			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				const config     = getErrorConfigForForm( container.closest( '.frm-show-form' ) );
+				const config = getErrorConfigForForm( container.closest( '.frm-show-form' ) );
 				const roleString = config.includeAlertRole ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
@@ -1479,7 +1479,7 @@ function frmFrontFormJS() {
 		}
 
 		const formContainer = errors[ 0 ].closest( '.frm-show-form' );
-		const config        = getErrorConfigForForm( formContainer );
+		const config = getErrorConfigForForm( formContainer );
 
 		if ( config.focusErrorSummary ) {
 			const summary = formContainer ? formContainer.querySelector( '[data-frm-error-summary]' ) : null;

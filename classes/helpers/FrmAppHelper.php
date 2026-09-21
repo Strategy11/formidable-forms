@@ -4176,7 +4176,7 @@ class FrmAppHelper {
 		// Keyed off whether the summary will actually take focus, not merely whether it's
 		// active — otherwise filtering frm_focus_error_summary off leaves focus going
 		// nowhere instead of falling back to the first field.
-		$default = ( $form && self::should_focus_error_summary( $form ) ) ? false : true;
+		$default = $form && self::should_focus_error_summary( $form ) ? false : true;
 
 		return (bool) apply_filters( 'frm_focus_first_error', $default, $form );
 	}
@@ -4244,8 +4244,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function should_include_alert_role_on_field_errors( $form = null ) {
-		$default = ( $form && FrmFormsHelper::is_error_summary_active_for_form( $form ) ) ? false : true;
-
+		$default = $form && FrmFormsHelper::is_error_summary_active_for_form( $form ) ? false : true;
 		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', $default, $form );
 	}
 
