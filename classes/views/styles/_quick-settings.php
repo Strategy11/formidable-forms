@@ -279,16 +279,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-style-component frm-style-class-component" id="frm_style_class_custom_css" data-css-scope="<?php echo esc_attr( 'frm_style_' . $style->post_name ); ?>">
-	<div class="frm-style-class-value">
-		<label class="frm-copy-text">.frm_style_<span class="frm-style-class-name"><?php
-			echo esc_html( $style->post_name );
-		?></span><?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' ); ?></label>
-		<button type="button" class="frm-style-class-rename" aria-controls="frm_style_class" aria-expanded="false">
-			<span class="screen-reader-text"><?php esc_html_e( 'Rename style class', 'formidable' ); ?></span>
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon' ); ?>
-		</button>
-	</div>
-	<div class="frm-style-class-editor frm_hidden">
+	<div class="frm-style-class-editor">
 		<span class="frm-style-class-prefix" aria-hidden="true">.frm_style_</span>
 		<input
 			type="text"
@@ -298,6 +289,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			autocomplete="off"
 			spellcheck="false"
 			aria-describedby="frm_style_class_description" />
+		<button type="button" class="frm-style-class-copy">
+			<span class="screen-reader-text"><?php esc_html_e( 'Copy style class', 'formidable' ); ?></span>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' ); ?>
+		</button>
 	</div>
 	<p id="frm_style_class_description" class="frm-style-class-description frm_hidden"><?php
 		esc_html_e( 'Renaming changes the class on your forms. Update any custom CSS that targets the old class.', 'formidable' );

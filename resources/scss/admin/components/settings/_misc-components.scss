@@ -8,44 +8,8 @@
 	white-space: nowrap;
 }
 
-/* The style class row, which can be renamed in place. */
+/* The style class row. The name is edited in place, with copy to clipboard inside the field. */
 .frm-style-class-component {
-	.frm-style-class-value {
-		display: flex;
-		align-items: center;
-		gap: var(--gap-xs);
-
-		/* This beats the display:flex above, which outranks the .frm_hidden utility on its own. */
-		&.frm_hidden {
-			display: none;
-		}
-	}
-
-	.frm-style-class-rename {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 24px;
-		height: 24px;
-		padding: 0;
-		border: 0;
-		border-radius: var(--small-radius);
-		background: transparent;
-		color: var(--grey-500);
-		cursor: pointer;
-
-		&:hover,
-		&:focus-visible {
-			background: var(--grey-100);
-			color: var(--grey-900);
-		}
-
-		svg {
-			width: 16px;
-			height: 16px;
-		}
-	}
-
 	.frm-style-class-editor {
 		display: flex;
 		align-items: center;
@@ -58,11 +22,6 @@
 
 		&:focus-within {
 			border-color: var(--primary-500);
-		}
-
-		/* This beats the display:flex above, which outranks the .frm_hidden utility on its own. */
-		&.frm_hidden {
-			display: none;
 		}
 	}
 
@@ -78,7 +37,7 @@
 		height: 100%;
 		min-height: 0;
 		margin: 0;
-		padding: 0 12px 0 0;
+		padding: 0;
 		font-size: var(--text-sm);
 		color: var(--grey-900);
 		background: transparent;
@@ -88,6 +47,31 @@
 		&:focus {
 			outline: none;
 			box-shadow: none;
+		}
+	}
+
+	.frm-style-class-copy {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 34px;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		border-radius: 0 var(--small-radius) var(--small-radius) 0;
+		background: transparent;
+		color: var(--grey-500);
+		cursor: pointer;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--grey-900);
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
 		}
 	}
 

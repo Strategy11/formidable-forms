@@ -25,72 +25,60 @@ class frmStyleOptions {
 	 * Init the dependent
 	 */
 	init() {
+		const copiedMessage = __( 'The class name has been copied.', 'formidable' );
+
 		this.initColorPickerDependentUpdaterComponents();
-		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
-		this.initStyleClassRename();
+		this.initStyleClassCopyToClipboard( copiedMessage );
+		this.initStyleClassRename( copiedMessage );
 		this.toggleVisibilityOfCustomCSSEditor();
 	}
 
 	/**
 	 * Initializes renaming of the style class.
-	 * The class is read only until the rename button is used, so it isn't changed by accident.
-	 * The new name is mirrored into every class label on the page while it is typed.
+	 * The name is edited in place, and mirrored into the read only label in the advanced
+	 * settings while it is typed. The warning only appears once the name actually changes.
 	 *
+	 * @param {string} successMessage The message to show once the class name is copied.
 	 * @return {void}
 	 */
-	initStyleClassRename() {
+	initStyleClassRename( successMessage ) {
 		const component = document.querySelector( '.frm-style-class-component' );
 		if ( ! component ) {
 			return;
 		}
 
-		const button = component.querySelector( '.frm-style-class-rename' );
-		const editor = component.querySelector( '.frm-style-class-editor' );
+		const copyButton = component.querySelector( '.frm-style-class-copy' );
 		const description = component.querySelector( '.frm-style-class-description' );
 		const input = component.querySelector( '#frm_style_class' );
-		const value = component.querySelector( '.frm-style-class-value' );
 
-		if ( ! button || ! editor || ! input || ! value ) {
+		if ( ! input ) {
 			return;
 		}
 
 		const originalName = input.value;
 
-		const closeEditor = () => {
-			editor.classList.add( 'frm_hidden' );
-			description?.classList.add( 'frm_hidden' );
-			value.classList.remove( 'frm_hidden' );
-			button.setAttribute( 'aria-expanded', 'false' );
-			button.focus();
-		};
-
-		button.addEventListener( 'click', () => {
-			value.classList.add( 'frm_hidden' );
-			editor.classList.remove( 'frm_hidden' );
-			description?.classList.remove( 'frm_hidden' );
-			button.setAttribute( 'aria-expanded', 'true' );
-			input.focus();
-			input.select();
-		} );
-
 		input.addEventListener( 'input', () => {
 			input.value = this.sanitizeStyleClassName( input.value );
 			this.updateStyleClassLabels( input.value );
+			description?.classList.toggle( 'frm_hidden', input.value === originalName );
 		} );
 
 		input.addEventListener( 'keydown', event => {
 			if ( 'Escape' === event.key ) {
 				input.value = originalName;
 				this.updateStyleClassLabels( originalName );
-				closeEditor();
+				description?.classList.add( 'frm_hidden' );
 				return;
 			}
 
 			if ( 'Enter' === event.key ) {
 				// Don't submit the whole style form from this input.
 				event.preventDefault();
-				closeEditor();
 			}
+		} );
+
+		copyButton?.addEventListener( 'click', () => {
+			this.copyToClipboard( `.frm_style_${ input.value }`, copyButton, successMessage );
 		} );
 	}
 
@@ -256,19 +244,29 @@ class frmStyleOptions {
 		const labels = document.querySelectorAll( '.frm-copy-text' );
 		labels.forEach( label => {
 			label.addEventListener( 'click', event => {
-				const className = event.currentTarget.innerText;
-
-				if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
-					if ( true === this.fallbackCopyToClipboard( className, event.currentTarget ) ) {
-						this.success( successMessage );
-					}
-					return;
-				}
-
-				navigator.clipboard.writeText( className ).then( () => {
-					this.success( successMessage );
-				} );
+				this.copyToClipboard( event.currentTarget.innerText, event.currentTarget, successMessage );
 			} );
+		} );
+	}
+
+	/**
+	 * Copies text to the clipboard and reports it, falling back when the Clipboard API is missing.
+	 *
+	 * @param {string}      text           The text to copy.
+	 * @param {HTMLElement} element        Used to position the fallback input element.
+	 * @param {string}      successMessage The message to show once the text is copied.
+	 * @return {void}
+	 */
+	copyToClipboard( text, element, successMessage ) {
+		if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
+			if ( true === this.fallbackCopyToClipboard( text, element ) ) {
+				this.success( successMessage );
+			}
+			return;
+		}
+
+		navigator.clipboard.writeText( text ).then( () => {
+			this.success( successMessage );
 		} );
 	}
 
