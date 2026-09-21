@@ -57,6 +57,14 @@ class FrmAbilitiesFormActionsController {
 							'description' => __( 'Filter by post status. By default both publish and draft actions are listed.', 'formidable' ),
 							'enum'        => array( 'publish', 'draft' ),
 						),
+						'page'        => array(
+							'type'        => 'integer',
+							'description' => __( 'Page number. Default 1.', 'formidable' ),
+						),
+						'page_size'   => array(
+							'type'        => 'integer',
+							'description' => __( 'Results per page, capped at 200. Default 200.', 'formidable' ),
+						),
 					),
 				),
 				'output_schema'       => array(
@@ -408,12 +416,17 @@ class FrmAbilitiesFormActionsController {
 		$status = isset( $input['post_status'] ) ? (string) $input['post_status'] : '';
 		$type   = $input['type'] ?? '';
 
+		$page      = ! empty( $input['page'] ) ? max( 1, absint( $input['page'] ) ) : 1;
+		$page_size = ! empty( $input['page_size'] ) ? absint( $input['page_size'] ) : 200;
+		$page_size = min( max( $page_size, 1 ), 200 );
+
 		$args = array(
 			'post_type'   => FrmFormActionsController::$action_post_type,
 			// Draft actions are disabled but still configured on the form, so
 			// list them alongside published ones unless a status filter is set.
 			'post_status' => '' !== $status ? $status : array( 'publish', 'draft' ),
-			'numberposts' => 200,
+			'numberposts' => $page_size,
+			'offset'      => $page_size * ( $page - 1 ),
 			'orderby'     => 'menu_order',
 			'order'       => 'ASC',
 			'menu_order'  => (int) $form->id,

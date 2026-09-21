@@ -244,6 +244,58 @@ class test_FrmAbilitiesFormActionsController extends FrmUnitTest {
 	}
 
 	/**
+	 * The list-form-actions ability used to hard-code numberposts => 200 with
+	 * no way to page past it. Confirm page/page_size now windows the results.
+	 *
+	 * @return void
+	 */
+	public function test_list_form_actions_paginates_with_page_and_page_size() {
+		$first  = $this->execute(
+			'create-form-action',
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'email',
+			)
+		);
+		$second = $this->execute(
+			'create-form-action',
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'api',
+			)
+		);
+		$this->assertNotWPError( $first );
+		$this->assertNotWPError( $second );
+
+		$page_one = $this->execute(
+			'list-form-actions',
+			array(
+				'form_id'   => $this->form->id,
+				'page_size' => 1,
+				'page'      => 1,
+			)
+		);
+		$page_two = $this->execute(
+			'list-form-actions',
+			array(
+				'form_id'   => $this->form->id,
+				'page_size' => 1,
+				'page'      => 2,
+			)
+		);
+
+		$this->assertNotWPError( $page_one );
+		$this->assertNotWPError( $page_two );
+		$this->assertCount( 1, $page_one, 'page_size should limit the results returned.' );
+		$this->assertCount( 1, $page_two, 'page_size should limit the results returned.' );
+		$this->assertNotEquals(
+			array_keys( $page_one ),
+			array_keys( $page_two ),
+			'page 2 should return a different action than page 1, not repeat it.'
+		);
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_permission_follows_the_frm_view_and_edit_and_delete_forms_capabilities() {
