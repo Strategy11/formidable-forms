@@ -14,7 +14,6 @@
 		display: flex;
 		align-items: center;
 		height: 36px;
-		padding-left: 12px;
 		box-sizing: border-box;
 		background: #fff;
 		border: 1px solid var(--grey-300);
@@ -25,10 +24,22 @@
 		}
 	}
 
+	/* A fixed addon rather than part of the value, so it reads as the part you can't edit. */
 	.frm-style-class-prefix {
+		display: flex;
+		align-items: center;
+		flex: 0 0 auto;
+		height: 100%;
+		padding: 0 var(--gap-xs);
 		font-size: var(--text-sm);
-		color: var(--grey-500);
+		color: var(--grey-600);
 		white-space: nowrap;
+		background: var(--grey-100);
+		border-right: 1px solid var(--grey-300);
+		/* One less than the field, so the corners stay concentric inside its border. */
+		border-radius: calc(var(--small-radius) - 1px) 0 0 calc(var(--small-radius) - 1px);
+		cursor: default;
+		user-select: none;
 	}
 
 	input#frm_style_class {
@@ -37,7 +48,7 @@
 		height: 100%;
 		min-height: 0;
 		margin: 0;
-		padding: 0;
+		padding: 0 0 0 var(--gap-xs);
 		font-size: var(--text-sm);
 		color: var(--grey-900);
 		background: transparent;
