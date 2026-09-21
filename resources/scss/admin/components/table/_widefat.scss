@@ -22,6 +22,15 @@
 	color: var(--grey-700);
 }
 
+/* 500 is the ramp's stop for links; 700 is where they go on hover. This sat at
+   700 at rest, so a form name in the list read a shade darker than the same
+   link on every other screen, and outranked .frm_wrap a:hover on specificity,
+   which left it with no hover feedback at all. */
 .frm-white-body table.widefat strong a {
+	color: var(--primary-500);
+}
+
+.frm-white-body table.widefat strong a:hover,
+.frm-white-body table.widefat strong a:active {
 	color: var(--primary-700);
 }

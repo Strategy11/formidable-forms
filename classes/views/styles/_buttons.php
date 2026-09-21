@@ -119,6 +119,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							array(
 								'id'        => 'frm_submit_height',
 								'max_value' => 300,
+								'units'     => array( 'auto', 'px', 'em', '%' ),
 							)
 						);
 						?>

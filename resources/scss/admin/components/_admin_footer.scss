@@ -19,7 +19,10 @@
 	text-align: center;
 	padding: var(--gap-xl) 0 var(--gap-lg);
 	font-size: var(--text-xs);
-	color: var(--grey-400);
+
+	/* 12px is normal text, so 4.5:1 applies — 400 sits at 2.58:1 on the white
+	   admin body. 500 is the lightest stop that clears it, at 4.97:1. */
+	color: var(--grey-500);
 }
 
 body.frm-hidden-overflow {
@@ -37,5 +40,14 @@ body.frm-hidden-overflow {
 }
 
 .frm-admin-footer-links-socials a {
-	color: var(--grey-400);
+	color: var(--grey-500);
+}
+
+/* The resting rule above and .frm_wrap a:hover are both (0,2,1), and this file
+   loads later, so the grey won and the icons had no hover feedback at all. The
+   added pseudo-class puts this at (0,2,2), which settles it. :focus-visible
+   rides along so the affordance is not mouse-only. */
+.frm-admin-footer-links-socials a:hover,
+.frm-admin-footer-links-socials a:focus-visible {
+	color: var(--grey-600);
 }

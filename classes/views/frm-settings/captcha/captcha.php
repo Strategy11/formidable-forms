@@ -3,10 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<p class="frm_primary_label">
+<p class="frm_primary_label" id="frm_captcha_type_label">
 	<?php esc_html_e( 'Select Captcha Type', 'formidable' ); ?>
 </p>
-<div class="frm_captchas frm-long-icon-buttons">
+<div class="frm_captchas frm-long-icon-buttons" role="radiogroup" aria-labelledby="frm_captcha_type_label">
 	<input type="radio" name="frm_active_captcha" id="frm-recaptcha" value="recaptcha" data-frmhide="#hcaptcha_settings,#turnstile_settings" data-frmshow="#recaptcha_settings" <?php checked( $frm_settings->active_captcha, 'recaptcha' ); ?> />
 	<label for="frm-recaptcha">
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38"><path fill="#1C3AA9" d="M38.6 19a19.8 19.8 0 0 0 0-.7V2.8L34.3 7a19.1 19.1 0 0 0-30.1.6l7 7a9.3 9.3 0 0 1 2.9-3.1c1.2-1 3-1.8 5.3-1.8l.7.1a9.3 9.3 0 0 1 7.1 4.3l-5 5h16.4"/><path fill="#4285F4" d="M19.3 0H3l4.3 4.3a19.1 19.1 0 0 0 .5 30l7.1-7a9.3 9.3 0 0 1-3.2-2.8c-1-1.2-1.7-3-1.7-5.4v-.6a9.3 9.3 0 0 1 4.4-7.1l5 5V0"/><path fill="#ABABAB" d="M.3 19.1v16.4l4.3-4.3a19.1 19.1 0 0 0 30-.5l-7-7.2a9.3 9.3 0 0 1-2.8 3.2c-1.3 1-3 1.8-5.4 1.8a2 2 0 0 1-.7-.1 9.3 9.3 0 0 1-7-4.3l4.9-5H.3"/></svg>

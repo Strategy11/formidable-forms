@@ -843,4 +843,51 @@ class FrmUnitTest extends WP_UnitTestCase {
 				break;
 		}
 	}
+
+	/**
+	 * Assert that none of the given HTML element ids appears more than once in some
+	 * rendered HTML (aria_id_unique — a duplicate id breaks any ARIA property that
+	 * references it, since the reference can no longer resolve to a single element).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param array  $ids
+	 *
+	 * @return void
+	 */
+	protected function assert_no_duplicate_element_ids( $html, $ids ) {
+		foreach ( $ids as $id ) {
+			$count = preg_match_all( '/\bid=["\']' . preg_quote( $id, '/' ) . '["\']/', $html );
+			$this->assertSame( 1, $count, 'Expected exactly one element with id "' . $id . '"' );
+		}
+	}
+
+	/**
+	 * Assert that every <form> tag in some rendered HTML has a non-empty aria-label,
+	 * and that no two forms share the same one (aria_landmark_name_unique).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
+	 *                               passing vacuously (assertNotContains/assertSame both pass on an
+	 *                               empty array).
+	 *
+	 * @return void
+	 */
+	protected function assert_form_landmarks_have_unique_names( $html, $expected_count ) {
+		preg_match_all( '/<form\b[^>]*>/', $html, $matches );
+		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <form> elements' );
+
+		$labels = array();
+
+		foreach ( $matches[0] as $form_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $form_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
+		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
+	}
 }

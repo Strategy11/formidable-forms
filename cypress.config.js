@@ -21,7 +21,8 @@ module.exports = defineConfig({
         table(message) {
           console.table(message)
           return null
-        }
+        },
+        accessibilityChecker: require('cypress-accessibility-checker/plugin')
       });
       htmlvalidate.install( on );
     },
