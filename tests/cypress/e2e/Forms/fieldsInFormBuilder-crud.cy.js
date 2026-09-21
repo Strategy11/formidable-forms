@@ -29,8 +29,8 @@ describe( 'Fields in the form builder', () => {
 			// clickable underneath, so reveal it the same way the row-actions helpers in commands.js
 			// do, instead of forcing through the opacity check.
 			// A bare .should('be.visible') can time out here - #wpbody-content intermittently
-			// measures 1280x0 (formidable-forms#3399), same shape as the #js_validate race below.
-			// .scrollIntoView() first reliably clears it.
+			// measures 1280x0 (formidable-forms#3399), same shape as the #js_validate race in
+			// fieldsInFormBuilder-validation.cy.js. .scrollIntoView() first reliably clears it.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
 				.invoke( 'css', 'opacity', 1 )
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )

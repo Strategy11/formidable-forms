@@ -24,8 +24,9 @@ describe( 'Fields in the form builder', () => {
 
 		const requiredField = ( fieldId, fieldType ) => {
 			cy.log( `Set ${ fieldType } field as require` );
-			// See the .frm-show-hover opacity note on the field-row "more options" toggle above.
-			// A bare .should('be.visible') can time out here - #wpbody-content intermittently
+			// See the .frm-show-hover opacity note on the field-row "more options" toggle in
+			// fieldsInFormBuilder-crud.cy.js. A bare .should('be.visible') can time out here -
+			// #wpbody-content intermittently
 			// measures 1280x0 (formidable-forms#3397), same shape as the #js_validate race below.
 			// .scrollIntoView() first reliably clears it.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
@@ -39,7 +40,8 @@ describe( 'Fields in the form builder', () => {
 			// Same slideDown()-driven settings panel as elsewhere in this file - scope by the
 			// field's own numeric id (from the field row's data-fid) so this matches only the
 			// panel that was just opened, not every previously-opened (now hidden) one, and wait
-			// for the slideDown to finish the same way the "rename" test above does.
+			// for the slideDown to finish the same way the "rename" test in
+			// fieldsInFormBuilder-crud.cy.js does.
 			cy.get( `li[data-ftype="${ fieldId }"]` ).invoke( 'data', 'fid' ).then( fieldNumericId => {
 				cy.get( `#frm-single-settings-${ fieldNumericId } input.frm_req_field[type="checkbox"]`, { timeout: 10000 } ).should( 'be.visible' ).check();
 			} );
