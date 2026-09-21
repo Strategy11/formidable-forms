@@ -293,8 +293,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input
 			type="text"
 			id="frm_style_class"
-			name="<?php echo esc_attr( $frm_style->get_field_name( 'post_name', '' ) ); ?>"
-			value="<?php echo esc_attr( $style->post_name ); ?>"
+			name="<?php
+				// skipcq: PHP-E1002
+				echo esc_attr( $frm_style->get_field_name( 'post_name', '' ) );
+			?>"
+			value="<?php
+				// skipcq: PHP-E1002
+				echo esc_attr( $style->post_name );
+			?>"
 			autocomplete="off"
 			spellcheck="false"
 			aria-describedby="frm_style_class_description" />

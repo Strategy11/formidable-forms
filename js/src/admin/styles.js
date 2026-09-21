@@ -337,7 +337,14 @@ class frmStyleOptions {
 			return;
 		}
 
-		navigator.clipboard.writeText( text ).then( onSuccess );
+		navigator.clipboard.writeText( text ).then(
+			onSuccess,
+			() => {
+				if ( true === this.fallbackCopyToClipboard( text, element ) ) {
+					onSuccess();
+				}
+			}
+		);
 	}
 
 	/**
