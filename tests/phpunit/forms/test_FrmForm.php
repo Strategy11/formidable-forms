@@ -110,14 +110,12 @@ class test_FrmForm extends FrmUnitTest {
 		add_filter( 'frm_before_destroy_form', $callback );
 
 		$last_form_id = $this->factory->form->create();
-
-		$result = FrmForm::destroy( $last_form_id );
+		$result       = FrmForm::destroy( $last_form_id );
 		$this->assertFalse( $result, 'The last remaining form should not be destroyed while the filter is hooked.' );
 		$this->assertInstanceOf( \stdClass::class, FrmForm::getOne( $last_form_id ) );
 
 		$second_form_id = $this->factory->form->create();
-
-		$result = FrmForm::destroy( $second_form_id );
+		$result         = FrmForm::destroy( $second_form_id );
 		$this->assertNotFalse( $result, 'A form should still be destroyable while a second form exists.' );
 		$this->assertNotInstanceOf( \stdClass::class, FrmForm::getOne( $second_form_id ) );
 
@@ -145,8 +143,7 @@ class test_FrmForm extends FrmUnitTest {
 		add_filter( 'frm_before_destroy_form', $callback );
 
 		$surviving_form_id = $this->factory->form->create();
-
-		$trashed_form_ids = array();
+		$trashed_form_ids  = array();
 
 		for ( $i = 0; $i < 3; $i++ ) {
 			$trashed_form_ids[] = $this->factory->form->create();
