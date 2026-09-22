@@ -300,6 +300,49 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * Whether the clickable error summary is enabled for a form, independent of whether
+	 * that form currently has any validation errors. Used to resolve the per-form focus/
+	 * alert-role defaults in FrmAppHelper before a submission has happened.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 *
+	 * @return bool
+	 */
+	public static function is_error_summary_active_for_form( $form ) {
+		return (bool) apply_filters(
+			'frm_show_clickable_field_errors',
+			true,
+			array(
+				'form'   => $form,
+				'errors' => array(),
+			)
+		);
+	}
+
+	/**
+	 * Per-form error-announcement config rendered onto the form's own markup, so front-end
+	 * JS can resolve focus/alert-role behavior for a form without reading page-global
+	 * defaults that don't account for that form's own summary state.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 *
+	 * @return array{includeAlertRole: bool, focusFirstError: bool, focusErrorSummary: bool}
+	 */
+	public static function get_error_config_for_form( $form ) {
+		$focus = FrmAppHelper::resolve_error_focus_target( $form );
+
+		return array(
+			'includeAlertRole'  => FrmAppHelper::should_include_alert_role_on_field_errors( $form ),
+			'focusFirstError'   => $focus['focus_first_error'],
+			'focusErrorSummary' => $focus['focus_error_summary'],
+		);
+	}
+
+	/**
 	 * Get clickable field error messages.
 	 *
 	 * @since x.x
@@ -531,8 +574,14 @@ class FrmFormsHelper {
 
 		$message = do_shortcode( $message );
 		$role    = $atts['role'] ?? 'status';
+		// A focusable tabindex, plus a stable marker JS can select on regardless of the
+		// filterable wrapper class, lets JS move focus onto the error summary instead of
+		// the first field, when should_focus_error_summary() resolves true.
+		$is_error_summary = 'alert' === $role;
+		$tabindex         = $is_error_summary ? ' tabindex="-1"' : '';
+		$summary_marker   = $is_error_summary ? ' data-frm-error-summary="1"' : '';
 
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '">' . $message . '</div>';
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '"' . $tabindex . $summary_marker . '>' . $message . '</div>';
 	}
 
 	/**

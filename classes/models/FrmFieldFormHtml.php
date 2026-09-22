@@ -297,7 +297,7 @@ class FrmFieldFormHtml {
 			return;
 		}
 
-		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
+		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors( $this->form );
 		$has_alert_role                     = str_contains( $this->html, 'role="alert"' );
 
 		if ( ! $has_alert_role && $include_alert_role_on_field_errors ) {
