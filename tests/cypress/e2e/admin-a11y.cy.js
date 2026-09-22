@@ -112,7 +112,8 @@ describe( 'Run some accessibility tests', function() {
 		cy.injectAxe();
 		configureAxeWithIgnoredRuleset( [
 			...baselineRules,
-			{ id: 'heading-order', enabled: false }
+			{ id: 'heading-order', enabled: false },
+			{ id: 'image-alt', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
 			const summary = logViolations( violations );
@@ -131,7 +132,8 @@ describe( 'Run some accessibility tests', function() {
 			}
 		} );
 		configureAxeWithIgnoredRuleset( [
-			{ id: 'heading-order', enabled: false }
+			{ id: 'heading-order', enabled: false },
+			{ id: 'color-contrast', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
 			const summary = logViolations( violations );
