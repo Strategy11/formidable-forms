@@ -19,7 +19,7 @@ describe( 'Fields in the form builder', () => {
 		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
 	};
 
-	it( 'should create, duplicate a field from each type and delete them', () => {
+	it( 'should create, duplicate a representative subset of field types and delete them', () => {
 		const createAndDuplicateField = ( fieldId, fieldType ) => {
 			cy.log( `Create a ${ fieldType } field and duplicate it` );
 			cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).click();
