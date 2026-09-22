@@ -5,8 +5,8 @@ describe( 'Invisible reCAPTCHA submit button state', () => {
 	const stubGrecaptcha = win => {
 		win.grecaptcha = {
 			getResponse: () => '',
-			execute: () => {},
-			reset: () => {}
+			execute: () => {}, // skipcq: JS-0057 -- intentional no-op stub, formidable.js doesn't use execute()'s return value
+			reset: () => {} // skipcq: JS-0057 -- intentional no-op stub, nothing reads reset()'s return value
 		};
 	};
 
@@ -111,8 +111,8 @@ describe( 'Invisible reCAPTCHA submit button state', () => {
 			const otherButton = doc.createElement( 'button' );
 			otherButton.type = 'submit';
 			otherButton.disabled = true;
-			otherForm.appendChild( otherButton );
-			doc.body.appendChild( otherForm );
+			otherForm.append( otherButton );
+			doc.body.append( otherForm );
 		} );
 
 		submitInvisibleRecaptchaForm();
