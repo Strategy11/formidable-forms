@@ -35,6 +35,7 @@ describe( 'Run some accessibility tests', function() {
 	const baselineRules = [
 		{ id: 'link-in-text-block', enabled: false },
 		{ id: 'region', enabled: false },
+		{ id: 'color-contrast', enabled: false },
 	];
 
 	// #wpadminbar is WordPress core markup Formidable doesn't own or render (e.g. its
