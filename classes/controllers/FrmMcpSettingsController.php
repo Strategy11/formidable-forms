@@ -82,7 +82,7 @@ class FrmMcpSettingsController {
 			// form, since the two tabs are two faces of the same feature.
 			// frm_bolt_icon was here before and is not in images/icons.svg, so the
 			// tab rendered with no glyph at all.
-			'icon'     => 'frmfont frm_cloud_icon',
+			'icon'     => 'frmfont frm_mcp_icon',
 		);
 
 		return $sections;
