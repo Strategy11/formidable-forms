@@ -1,6 +1,7 @@
-// Coverage for the invisible-reCAPTCHA submit-button behavior added in #3368/#3343 -
-// see formidable-forms#3395. No live Google dependency is needed: grecaptcha is stubbed
-// and the real widget script is blocked so the test only exercises Formidable's own JS.
+// Coverage for the invisible-reCAPTCHA submit-button behavior: the submit button disables
+// while the check runs, and re-enables after a 10s stall without touching other in-flight forms.
+// No live Google dependency is needed: grecaptcha is stubbed and the real widget script is
+// blocked so the test only exercises Formidable's own JS.
 describe( 'Invisible reCAPTCHA submit button state', () => {
 	const stubGrecaptcha = win => {
 		win.grecaptcha = {
