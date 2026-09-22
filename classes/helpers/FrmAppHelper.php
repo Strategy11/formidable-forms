@@ -5194,24 +5194,30 @@ class FrmAppHelper {
 	/**
 	 * Builds the attribute(s) a tooltip trigger needs for its text.
 	 *
-	 * On the form builder page (including the ajax field-loading requests that render into it),
-	 * the text is deferred to `frm_admin_js.tooltips` and only a lookup key is printed inline,
-	 * instead of baking every field's translated tooltip text into the page/ajax payload.
-	 * `print_deferred_tooltips()` prints the collected strings; `admin.js`'s `loadTooltip()`
-	 * resolves the key back into a `title` attribute on hover, before the text is ever needed.
+	 * On the initial form builder page load, the text is deferred to `frm_admin_js.tooltips`
+	 * and only a lookup key is printed inline, instead of baking every field's translated
+	 * tooltip text into the page. `print_deferred_tooltips()` (hooked to `admin_footer`, which
+	 * never fires on an ajax request) prints the collected strings; `admin.js`'s
+	 * `loadTooltip()` resolves the key back into a `title` attribute on hover, before the text
+	 * is ever needed. `is_form_builder_page()` also returns true for the `frm_load_field` ajax
+	 * batch field-loading request (it treats admin-ajax.php as the builder page), but that
+	 * request never sends `frm_action`, which this same check also requires - so in practice a
+	 * field loaded that way still gets the normal `title` text, unaffected by this deferral.
 	 *
 	 * @since 6.35
 	 *
 	 * @param string $tooltip_text Tooltip text.
 	 *
-	 * @return array<string,string> One of `title` (normal pages) or `data-tip-key` (builder page).
+	 * @return array<string,string> One of `title` (normal pages, and the ajax field-load path)
+	 *                              or `data-tip-key` (a field rendered into the initial builder
+	 *                              page load).
 	 */
 	public static function get_tooltip_attr( $tooltip_text ) {
 		if ( ! self::is_form_builder_page() ) {
 			return array( 'title' => $tooltip_text );
 		}
 
-		$key                              = 't' . count( self::$deferred_tooltips );
+		$key                             = 't' . count( self::$deferred_tooltips );
 		self::$deferred_tooltips[ $key ] = $tooltip_text;
 
 		return array( 'data-tip-key' => $key );
