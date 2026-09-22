@@ -3600,7 +3600,8 @@ class FrmFormsController {
 			$class   = FrmFormsHelper::form_error_class();
 		}
 
-		$message = FrmFormsHelper::get_success_message( compact( 'message', 'form', 'entry_id', 'class' ) );
+		$focusable = ! empty( $args['ajax'] );
+		$message   = FrmFormsHelper::get_success_message( compact( 'message', 'form', 'entry_id', 'class', 'focusable' ) );
 
 		return apply_filters( 'frm_main_feedback', $message, $form, $entry_id );
 	}

@@ -945,7 +945,7 @@ function frmFrontFormJS() {
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
-						const insertedContent = jQuery( response.content );
+						const insertedContent = jQuery( jQuery.parseHTML( response.content ) );
 						replaceContent.replaceWith( insertedContent );
 						focusFormMessage( insertedContent );
 
