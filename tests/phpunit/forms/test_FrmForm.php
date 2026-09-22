@@ -147,9 +147,11 @@ class test_FrmForm extends FrmUnitTest {
 		$surviving_form_id = $this->factory->form->create();
 
 		$trashed_form_ids = array();
+
 		for ( $i = 0; $i < 3; $i++ ) {
 			$trashed_form_ids[] = $this->factory->form->create();
 		}
+
 		foreach ( $trashed_form_ids as $trashed_form_id ) {
 			FrmForm::trash( $trashed_form_id );
 		}
