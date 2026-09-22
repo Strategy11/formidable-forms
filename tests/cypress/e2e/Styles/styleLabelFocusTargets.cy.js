@@ -9,7 +9,9 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 
 		// "Primary" in Quick Settings - the label wraps a color picker whose original text
 		// input gets hidden by wpColorPicker() in favor of a `.wp-color-result` button.
-		cy.get( 'label[for="frm_style_qsettings_submit_bg_color"]' ).click();
+		// style.js repoints the label's `for` to `{id}_visible` once wpColorPicker() inits,
+		// which happens before this query runs - so the selector must target the post-init id.
+		cy.get( 'label[for="frm_style_qsettings_submit_bg_color_visible"]' ).click();
 		cy.get( '#frm_style_qsettings_submit_bg_color' ).should( 'not.be.visible' );
 		cy.focused().should( 'have.class', 'wp-color-result' );
 	} );
