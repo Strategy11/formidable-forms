@@ -289,6 +289,7 @@ window.frmAdminBuildJS = function() {
 	let autoId = 0;
 	const optionMap = {};
 	let lastNewActionIdReturned = 0;
+	let fieldGroupMessageDismissed = false;
 
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
@@ -5286,7 +5287,7 @@ window.frmAdminBuildJS = function() {
 		let fieldGroupMessage = document.getElementById( 'frm-field-group-message' );
 		const rows = document.querySelectorAll( '.edit_form_item:not(.edit_field_type_end_divider)' );
 
-		if ( rows.length < 2 ) {
+		if ( rows.length < 2 || fieldGroupMessageDismissed ) {
 			hideFieldGroupMessage( fieldGroupMessage );
 			return;
 		}
@@ -5317,6 +5318,7 @@ window.frmAdminBuildJS = function() {
 
 		// Set up a click event listener
 		document.getElementById( 'frm-field-group-message-dismiss' ).addEventListener( 'click', () => {
+			fieldGroupMessageDismissed = true;
 			hideFieldGroupMessage( document.getElementById( 'frm-field-group-message' ) );
 		} );
 	}
