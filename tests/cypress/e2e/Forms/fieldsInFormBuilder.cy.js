@@ -46,10 +46,10 @@ describe( 'Fields in the form builder', () => {
 			cy.get( `li[data-type="${ fieldId }"]` ).should( 'have.length', 2 );
 			const originalField = cy.get( `li[data-type="${ fieldId }"]:first` );
 			const duplicateField = cy.get( `li[data-type="${ fieldId }"]:last` );
-			return { originalField, duplicateField };
+			return { fieldId, originalField, duplicateField };
 		};
 
-		const removeField = field => {
+		const removeField = ( fieldId, field, remainingCount ) => {
 			field.within( () => {
 				// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
 				// Same #wpbody-content 1280x0 race as createAndDuplicateField above
@@ -79,7 +79,10 @@ describe( 'Fields in the form builder', () => {
 				.and( 'contain', 'Confirm' )
 				.click();
 
-			cy.get( `li[data-type="${ field }"]` ).should( 'not.exist' );
+			// originalField and duplicateField share the same data-type - one instance still
+			// remains after the first delete, so this has to check the remaining count rather
+			// than assert not.exist after every call.
+			cy.get( `li[data-type="${ fieldId }"]` ).should( 'have.length', remainingCount );
 		};
 
 		cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
@@ -118,8 +121,8 @@ describe( 'Fields in the form builder', () => {
 
 		cy.log( 'Sequentially delete each field along with its duplicate' );
 		fieldsToDelete.forEach( fields => {
-			removeField( fields.originalField );
-			removeField( fields.duplicateField );
+			removeField( fields.fieldId, fields.originalField, 1 );
+			removeField( fields.fieldId, fields.duplicateField, 0 );
 		} );
 	} );
 
