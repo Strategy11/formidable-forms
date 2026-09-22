@@ -20,6 +20,12 @@ describe( 'Run some accessibility tests', function() {
 		);
 
 		cy.task( 'table', violationData );
+
+		// cy.task output doesn't reach the GitHub Actions log, so build the same
+		// summary into the assertion message below, which does.
+		return violationData
+			.map( ( { id, impact, description, nodes } ) => `${ id } (${ impact }): ${ description } - ${ nodes } node(s)` )
+			.join( '\n' );
 	};
 
 	const configureAxeWithIgnoredRuleset = rules => {
@@ -27,10 +33,9 @@ describe( 'Run some accessibility tests', function() {
 	};
 
 	const baselineRules = [
-		{ id: 'color-contrast', enabled: false },
-		{ id: 'link-name', enabled: false },
 		{ id: 'link-in-text-block', enabled: false },
 		{ id: 'region', enabled: false },
+		{ id: 'color-contrast', enabled: false },
 	];
 
 	// #wpadminbar is WordPress core markup Formidable doesn't own or render (e.g. its
@@ -52,8 +57,8 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-dashboard' );
 	} );
@@ -66,8 +71,8 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'empty-table-header', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-form-list' );
 	} );
@@ -80,8 +85,8 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'empty-table-header', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-entries' );
 	} );
@@ -90,15 +95,14 @@ describe( 'Run some accessibility tests', function() {
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
 		cy.injectAxe();
 		configureAxeWithIgnoredRuleset( [
-			{ id: 'link-name', enabled: false },
 			{ id: 'label', enabled: false },
 			{ id: 'label-title-only', enabled: false },
 			{ id: 'heading-order', enabled: false },
 			{ id: 'empty-heading', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-styles' );
 	} );
@@ -108,12 +112,12 @@ describe( 'Run some accessibility tests', function() {
 		cy.injectAxe();
 		configureAxeWithIgnoredRuleset( [
 			...baselineRules,
-			{ id: 'image-alt', enabled: false },
-			{ id: 'heading-order', enabled: false }
+			{ id: 'heading-order', enabled: false },
+			{ id: 'image-alt', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-applications' );
 	} );
@@ -128,13 +132,12 @@ describe( 'Run some accessibility tests', function() {
 			}
 		} );
 		configureAxeWithIgnoredRuleset( [
-			{ id: 'color-contrast', enabled: false },
-			{ id: 'link-name', enabled: false },
-			{ id: 'heading-order', enabled: false }
+			{ id: 'heading-order', enabled: false },
+			{ id: 'color-contrast', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-form-templates' );
 	} );
@@ -147,8 +150,8 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-import' );
 	} );
@@ -160,8 +163,8 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-settings' );
 	} );
@@ -174,8 +177,8 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-addons' );
 	} );
@@ -189,8 +192,8 @@ describe( 'Run some accessibility tests', function() {
 			{ id: 'landmark-complementary-is-top-level', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-smtp' );
 	} );
@@ -202,8 +205,8 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
-			logViolations( violations );
-			expect( violations ).to.have.lengthOf( 0 );
+			const summary = logViolations( violations );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'formidable-trash' );
 	} );
