@@ -7,6 +7,13 @@ describe( 'Run some HTML validation', function() {
 	// eslint-disable-next-line sonarjs/assertions-in-tests
 	it( 'Check the form list has valid HTML', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
+
+		// Guarantee >=1 form exists first - a 0-form list drops its own submit button
+		// (FrmListHelper::search_box()/display_tablenav()), and whether the list starts
+		// empty depends on shard order (formidable-forms#3416). createNewForm() ends back
+		// on this page, so no extra cy.visit() is needed after it.
+		cy.createNewForm();
+
 		cy.get( '#wpbody-content' ).htmlvalidate( {
 			rules: {
 				'prefer-button': 'off',
