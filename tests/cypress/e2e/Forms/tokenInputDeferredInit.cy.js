@@ -3,6 +3,12 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.createNewForm();
+		// createNewForm() ends back on the forms list (its naming modal's own save triggers an
+		// async publish that lands there, confirmed via a throwaway diagnostic dump against real
+		// CI - deleteForms.cy.js/duplicateForm.cy.js/searchFunctionality.cy.js all rely on this
+		// same end state). openForm() is the real, deliberate navigation into the builder for the
+		// form it just created - not a race to win against that redirect.
+		cy.openForm();
 		cy.viewport( 1280, 720 );
 	} );
 
