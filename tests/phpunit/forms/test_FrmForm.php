@@ -70,6 +70,39 @@ class test_FrmForm extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmForm::destroy
+	 */
+	public function test_destroy_is_blocked_by_frm_before_destroy_form_filter() {
+		$callback = function ( $allow_destroy ) {
+			return $allow_destroy && FrmForm::get_forms_count() > 1;
+		};
+		add_filter( 'frm_before_destroy_form', $callback );
+
+		foreach ( FrmForm::getAll( array( 'is_template' => 0 ) ) as $form ) {
+			FrmForm::destroy( $form->id );
+		}
+
+		$last_form_id = $this->factory->form->create();
+		$this->assertSame( 1, FrmForm::get_forms_count() );
+
+		$result = FrmForm::destroy( $last_form_id );
+		$this->assertFalse( $result, 'The last remaining form should not be destroyed while the filter is hooked.' );
+		$this->assertInstanceOf( \stdClass::class, FrmForm::getOne( $last_form_id ) );
+
+		$second_form_id = $this->factory->form->create();
+		$this->assertSame( 2, FrmForm::get_forms_count() );
+
+		$result = FrmForm::destroy( $second_form_id );
+		$this->assertNotFalse( $result, 'A form should still be destroyable while a second form exists.' );
+		$this->assertNotInstanceOf( \stdClass::class, FrmForm::getOne( $second_form_id ) );
+
+		remove_filter( 'frm_before_destroy_form', $callback );
+
+		$result = FrmForm::destroy( $last_form_id );
+		$this->assertNotFalse( $result, 'The last form should be destroyable once the filter is removed.' );
+	}
+
+	/**
 	 * @covers FrmForm::set_status
 	 */
 	public function test_set_status() {
