@@ -332,7 +332,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 
 		$uploads_dir = wp_upload_dir()['basedir'] . '/formidable/';
-		$test        = new FrmUnitTest();
+		$test        = new FrmUnitTest( __FUNCTION__ );
 
 		foreach ( $file_urls as $values ) {
 			$vals      = (array) $values['val'];
