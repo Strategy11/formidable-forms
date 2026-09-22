@@ -27,7 +27,7 @@ jobs:
           - php: 7.4
             wordpress: trunk
             multisite: 0
-          - php: 8.0
+          - php: 8.4
             wordpress: trunk
             multisite: 0
 
