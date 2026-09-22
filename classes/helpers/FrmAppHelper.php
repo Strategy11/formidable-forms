@@ -371,6 +371,14 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
+
+		// Every caller wraps this in a link that already carries its own accessible
+		// text (see admin-header.php / applications/header.php), so the icon itself
+		// is decorative and shouldn't need its own accessible name.
+		if ( str_starts_with( $icon, '<svg' ) ) {
+			$icon = str_replace( '<svg ', '<svg aria-hidden="true" ', $icon );
+		}
+
 		self::kses_echo( $icon, 'all' );
 	}
 
