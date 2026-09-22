@@ -234,8 +234,15 @@ describe( 'Slider style component', () => {
 			]
 		} );
 		cy.checkA11y( '#general-style .frm-slider-component', null, violations => {
-			cy.task( 'table', violations.map( ( { id, impact, description, nodes } ) => ( { id, impact, description, nodes: nodes.length } ) ) );
-			expect( violations ).to.have.lengthOf( 0 );
+			const violationData = violations.map( ( { id, impact, description, nodes } ) => ( { id, impact, description, nodes: nodes.length } ) );
+			cy.task( 'table', violationData );
+
+			// cy.task output doesn't reach the GitHub Actions log, so build the same
+			// summary into the assertion message below, which does.
+			const summary = violationData
+				.map( ( { id, impact, description, nodes } ) => `${ id } (${ impact }): ${ description } - ${ nodes } node(s)` )
+				.join( '\n' );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 	} );
 } );
