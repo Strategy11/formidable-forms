@@ -574,6 +574,8 @@ window.frmAdminBuildJS = function() {
 	function loadTooltip( element, show = false ) {
 		let tooltipTarget = element;
 
+		resolveDeferredTooltip( tooltipTarget );
+
 		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
 		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
 			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
@@ -588,6 +590,28 @@ window.frmAdminBuildJS = function() {
 		if ( show ) {
 			deleteTooltips();
 			tooltip.show();
+		}
+	}
+
+	/**
+	 * Resolves a `data-tip-key` (set by `FrmAppHelper::get_tooltip_attr()` on the form builder
+	 * page) into the element's real `title` attribute, looked up from `frm_admin_js.tooltips`.
+	 * No-op for an element that already carries its own `title` (every other admin page).
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function resolveDeferredTooltip( element ) {
+		if ( ! element.hasAttribute( 'data-tip-key' ) ) {
+			return;
+		}
+
+		const key = element.getAttribute( 'data-tip-key' );
+		element.removeAttribute( 'data-tip-key' );
+
+		const text = window.frm_admin_js && frm_admin_js.tooltips && frm_admin_js.tooltips[ key ];
+		if ( text ) {
+			element.setAttribute( 'title', text );
 		}
 	}
 

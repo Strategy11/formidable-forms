@@ -5156,6 +5156,15 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Tooltip strings deferred on the form builder page, keyed for `frm_admin_js.tooltips`.
+	 *
+	 * @since 6.35
+	 *
+	 * @var array<string,string>
+	 */
+	private static $deferred_tooltips = array();
+
+	/**
 	 * Shows tooltip icon.
 	 *
 	 * @since 6.12
@@ -5166,7 +5175,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function tooltip_icon( $tooltip_text, $atts = array() ) {
-		$atts['title'] = $tooltip_text;
+		$atts = array_merge( $atts, self::get_tooltip_attr( $tooltip_text ) );
 
 		if ( isset( $atts['class'] ) ) {
 			$atts['class'] .= ' frm_help';
@@ -5180,6 +5189,49 @@ class FrmAppHelper {
 		</span>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Builds the attribute(s) a tooltip trigger needs for its text.
+	 *
+	 * On the form builder page (including the ajax field-loading requests that render into it),
+	 * the text is deferred to `frm_admin_js.tooltips` and only a lookup key is printed inline,
+	 * instead of baking every field's translated tooltip text into the page/ajax payload.
+	 * `print_deferred_tooltips()` prints the collected strings; `admin.js`'s `loadTooltip()`
+	 * resolves the key back into a `title` attribute on hover, before the text is ever needed.
+	 *
+	 * @since 6.35
+	 *
+	 * @param string $tooltip_text Tooltip text.
+	 *
+	 * @return array<string,string> One of `title` (normal pages) or `data-tip-key` (builder page).
+	 */
+	public static function get_tooltip_attr( $tooltip_text ) {
+		if ( ! self::is_form_builder_page() ) {
+			return array( 'title' => $tooltip_text );
+		}
+
+		$key                              = 't' . count( self::$deferred_tooltips );
+		self::$deferred_tooltips[ $key ] = $tooltip_text;
+
+		return array( 'data-tip-key' => $key );
+	}
+
+	/**
+	 * Prints the tooltip strings collected by `get_tooltip_attr()` during this page's render,
+	 * merged into the already-localized `frm_admin_js.tooltips` object.
+	 *
+	 * @since 6.35
+	 *
+	 * @return void
+	 */
+	public static function print_deferred_tooltips() {
+		if ( ! self::$deferred_tooltips ) {
+			return;
+		}
+
+		$js = 'window.frm_admin_js && ( window.frm_admin_js.tooltips = Object.assign( window.frm_admin_js.tooltips || {}, ' . wp_json_encode( self::$deferred_tooltips ) . ' ) );';
+		wp_add_inline_script( 'formidable_admin', $js, 'after' );
 	}
 
 	/**
