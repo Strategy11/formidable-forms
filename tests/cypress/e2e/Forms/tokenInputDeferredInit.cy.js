@@ -58,4 +58,14 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 		cy.get( 'div[id^="frm-single-settings-"]:visible', { timeout: 10000 } ).find( '.frm-token-container' ).should( 'exist' );
 		cy.get( '.frm-token-container' ).should( 'have.length', 2 );
 	} );
+
+	afterEach( () => {
+		// Navigate to the list directly rather than relying on the builder's own "Close" link - same
+		// hardening as fieldsInFormBuilder.cy.js's afterEach (formidable-forms#3400: a leaked "Test
+		// Form" here previously broke an unrelated downstream spec in the same CI shard once bin-
+		// packing put it next to another spec that searches by that exact name).
+		cy.log( 'Teardown - delete the form' );
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.deleteForm();
+	} );
 } );
