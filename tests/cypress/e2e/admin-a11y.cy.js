@@ -33,10 +33,9 @@ describe( 'Run some accessibility tests', function() {
 	};
 
 	const baselineRules = [
-		{ id: 'color-contrast', enabled: false },
-		{ id: 'link-name', enabled: false },
 		{ id: 'link-in-text-block', enabled: false },
 		{ id: 'region', enabled: false },
+		{ id: 'color-contrast', enabled: false },
 	];
 
 	// #wpadminbar is WordPress core markup Formidable doesn't own or render (e.g. its
@@ -96,7 +95,6 @@ describe( 'Run some accessibility tests', function() {
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
 		cy.injectAxe();
 		configureAxeWithIgnoredRuleset( [
-			{ id: 'link-name', enabled: false },
 			{ id: 'label', enabled: false },
 			{ id: 'label-title-only', enabled: false },
 			{ id: 'heading-order', enabled: false },
@@ -114,8 +112,8 @@ describe( 'Run some accessibility tests', function() {
 		cy.injectAxe();
 		configureAxeWithIgnoredRuleset( [
 			...baselineRules,
-			{ id: 'image-alt', enabled: false },
-			{ id: 'heading-order', enabled: false }
+			{ id: 'heading-order', enabled: false },
+			{ id: 'image-alt', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
 			const summary = logViolations( violations );
@@ -134,9 +132,8 @@ describe( 'Run some accessibility tests', function() {
 			}
 		} );
 		configureAxeWithIgnoredRuleset( [
-			{ id: 'color-contrast', enabled: false },
-			{ id: 'link-name', enabled: false },
-			{ id: 'heading-order', enabled: false }
+			{ id: 'heading-order', enabled: false },
+			{ id: 'color-contrast', enabled: false }
 		] );
 		cy.checkA11y( excludeAdminBar, null, violations => {
 			const summary = logViolations( violations );
