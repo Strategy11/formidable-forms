@@ -230,6 +230,7 @@ class test_FrmForm extends FrmUnitTest {
 
 		$form->logged_in                 = 1;
 		$form->options['logged_in_role'] = $visibility;
+
 		return FrmForm::is_visible_to_user( $form );
 	}
 
@@ -373,6 +374,7 @@ class test_FrmForm extends FrmUnitTest {
 			)
 		);
 		FrmForm::clear_form_cache();
+
 		return $form_id;
 	}
 }
