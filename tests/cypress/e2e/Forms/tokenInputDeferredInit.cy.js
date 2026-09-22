@@ -4,6 +4,13 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.createNewForm();
 		cy.viewport( 1280, 720 );
+		// TEMP diagnostic for the recurring beforeEach race - dump real DOM/URL state instead of
+		// guessing further. Remove once the actual cause is confirmed.
+		cy.location( 'href' ).then( href => cy.task( 'log', `DIAG href=${ href }` ) );
+		cy.document().then( doc => cy.task( 'log', `DIAG readyState=${ doc.readyState } title=${ doc.title }` ) );
+		cy.get( 'body' ).then( $body => {
+			cy.task( 'log', `DIAG current_page count=${ $body.find( '.current_page' ).length } frm_submit_side_top count=${ $body.find( '#frm_submit_side_top' ).length } frm_loading_form=${ $body.find( '.frm_loading_form' ).length } builder_page=${ $body.find( '#frm_builder_page' ).length }` );
+		} );
 		// Same readiness check cy.openForm() uses before interacting with the builder - guards
 		// against a race right after createNewForm()'s modal close, seen when this spec runs
 		// immediately after another spec that leaves the forms list mid-transition.
