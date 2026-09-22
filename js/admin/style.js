@@ -1494,6 +1494,22 @@
 
 				debouncedPreviewUpdate();
 			}
+		} ).each( function() {
+			// wpColorPicker() hides the original input and shows a `.wp-color-result` button
+			// instead - repoint any label pointing at this input's id so clicking/focusing it
+			// reaches the visible, interactive button rather than a hidden input.
+			const label = this.id ? document.querySelector( `label[for="${ this.id }"]` ) : null;
+			if ( ! label ) {
+				return;
+			}
+
+			const result = this.closest( '.wp-picker-container' )?.querySelector( '.wp-color-result' );
+			if ( ! result ) {
+				return;
+			}
+
+			result.id = `${ this.id }_visible`;
+			label.setAttribute( 'for', result.id );
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 			const container = jQuery( this ).closest( '.wp-picker-container' );

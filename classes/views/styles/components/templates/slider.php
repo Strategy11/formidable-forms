@@ -129,7 +129,7 @@ if ( ! empty( $component['has-multiple-values'] ) ) : ?>
 						<?php $this->print_range_input( __( 'Field value', 'formidable' ), $component['value_label'], $component['unit_measurement'] ); ?>
 					</div>
 					<div class="frm-slider-value">
-						<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" value="<?php echo esc_attr( $component['value_label'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['unit_measurement'] ) ); ?> />
+						<input aria-label="<?php esc_attr_e( 'Field value', 'formidable' ); ?>" type="text" id="<?php echo esc_attr( $component['id'] ); ?>-value" value="<?php echo esc_attr( $component['value_label'] ); ?>" <?php disabled( ! $this->is_measured_unit( $component['unit_measurement'] ) ); ?> />
 						<input type="hidden" <?php echo esc_attr( $field_name ); ?> value="<?php echo esc_attr( $field_value ); ?>" id="<?php echo esc_attr( $component['id'] ); ?>" />
 						<select aria-label="<?php esc_attr_e( 'Value unit', 'formidable' ); ?>">
 							<?php foreach ( $component['units'] as $unit ) : ?>
