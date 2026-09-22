@@ -37,6 +37,15 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 		createField( 'text', 'Text' );
 		createField( 'textarea', 'Paragraph' );
 
+		// frm_added_field's own listener already initializes a just-added field's token input
+		// immediately - the issue deliberately leaves that listener as-is. Re-enter the builder via
+		// a fresh page load so both fields are pre-existing on load instead of just-added this
+		// session, which is the actual scenario the deferred-init fix targets.
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.openForm();
+		cy.get( 'li[data-ftype="text"]' ).should( 'exist' );
+		cy.get( 'li[data-ftype="textarea"]' ).should( 'exist' );
+
 		cy.log( 'Neither field\'s CSS Layout Classes input is tokenized before any settings panel has been opened' );
 		cy.get( '.frm-token-container' ).should( 'not.exist' );
 
