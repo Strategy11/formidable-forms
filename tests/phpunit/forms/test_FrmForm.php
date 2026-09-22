@@ -73,14 +73,15 @@ class test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::destroy
 	 */
 	public function test_destroy_is_blocked_by_frm_before_destroy_form_filter() {
+		// Clear any pre-existing forms before the filter is hooked, so it can't block this cleanup.
+		foreach ( FrmForm::getAll( array( 'is_template' => 0 ) ) as $form ) {
+			FrmForm::destroy( $form->id );
+		}
+
 		$callback = function ( $allow_destroy ) {
 			return $allow_destroy && FrmForm::get_forms_count() > 1;
 		};
 		add_filter( 'frm_before_destroy_form', $callback );
-
-		foreach ( FrmForm::getAll( array( 'is_template' => 0 ) ) as $form ) {
-			FrmForm::destroy( $form->id );
-		}
 
 		$last_form_id = $this->factory->form->create();
 		$this->assertSame( 1, FrmForm::get_forms_count() );
