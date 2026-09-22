@@ -2,11 +2,17 @@ import frmStyleDependentUpdaterComponent from './components/dependent-updater-co
 
 /**
  * Reduces a typed value to the characters WordPress keeps in a post slug.
+ * Strips accents first so it agrees with PHP's sanitize_title(), which
+ * transliterates them (é to e) instead of dropping the letter outright.
  *
  * @param {string} name The typed class name.
  * @return {string} The sanitized class name.
  */
-const sanitizeStyleClassName = name => name.toLowerCase().replace( /[^a-z0-9_-]+/g, '-' );
+const sanitizeStyleClassName = name => name
+	.normalize( 'NFD' )
+	.replace( /[̀-ͯ]/g, '' )
+	.toLowerCase()
+	.replace( /[^a-z0-9_-]+/g, '-' );
 
 /**
  * Mirrors the class name into every label that shows it.
@@ -92,7 +98,9 @@ class frmStyleOptions {
 		const originalName = input.value;
 
 		input.addEventListener( 'input', () => {
-			input.value = sanitizeStyleClassName( input.value );
+			// An empty sanitized value saves as the unchanged original slug (get_post_name_to_save()),
+			// so keep the field showing that instead of a blank value nothing will actually save as.
+			input.value = sanitizeStyleClassName( input.value ) || originalName;
 			updateStyleClassLabels( input.value );
 			description?.classList.toggle( 'frm_hidden', input.value === originalName );
 		} );

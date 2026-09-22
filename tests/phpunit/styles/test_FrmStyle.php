@@ -238,6 +238,35 @@ class test_FrmStyle extends FrmUnitTest {
 	}
 
 	/**
+	 * A duplicated style shares its source style's title, so its title-derived slug collides too.
+	 *
+	 * @covers FrmStyle::get_post_name_to_save
+	 */
+	public function test_get_post_name_to_save_new_style_resolves_slug_collision() {
+		$other_style_id = wp_insert_post(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'publish',
+				'post_title'  => 'Brand New Style!',
+				'post_name'   => 'brand-new-style',
+			)
+		);
+
+		$frm_style    = new FrmStyle( 0 );
+		$new_instance = array(
+			'post_title'  => 'Brand New Style!',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$post_name = $this->get_post_name_to_save( $frm_style, $new_instance, false );
+
+		$this->assertNotSame( 'brand-new-style', $post_name, 'A title-derived slug that collides with another style must be resolved to a unique one.' );
+
+		wp_delete_post( $other_style_id, true );
+	}
+
+	/**
 	 * @param FrmStyle $frm_style
 	 * @param array    $new_instance
 	 * @param bool     $is_existing
