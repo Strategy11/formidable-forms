@@ -4,6 +4,10 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.createNewForm();
 		cy.viewport( 1280, 720 );
+		// Same readiness check cy.openForm() uses before interacting with the builder - guards
+		// against a race right after createNewForm()'s modal close, seen when this spec runs
+		// immediately after another spec that leaves the forms list mid-transition.
+		cy.get( '.current_page' ).should( 'contain', 'Build' );
 	} );
 
 	// Same selectors/interaction sequence as fieldsInFormBuilder.cy.js's createField/renameField
