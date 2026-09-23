@@ -677,6 +677,12 @@ window.frmAdminBuildJS = function() {
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 		bindFormActionsKeyboardHandlers( wrapClass );
 
+		// Resolve every tooltip trigger already in the DOM now, so an SVG-only icon carries a
+		// real accessible name from page-ready instead of only from the first mouse hover.
+		wrapClass.find( '[data-tip-key]' ).each( function() {
+			resolveDeferredTooltip( this );
+		} );
+
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
 			loadTooltip( this, true );

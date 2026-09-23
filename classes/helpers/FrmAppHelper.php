@@ -5198,8 +5198,10 @@ class FrmAppHelper {
 	 * and only a lookup key is printed inline, instead of baking every field's translated
 	 * tooltip text into the page. `print_deferred_tooltips()` (hooked to `admin_footer`, which
 	 * never fires on an ajax request) prints the collected strings; `admin.js`'s
-	 * `loadTooltip()` resolves the key back into a `title` attribute on hover, before the text
-	 * is ever needed. `is_form_builder_page()` also returns true for the `frm_load_field` ajax
+	 * `loadTooltips()` resolves every already-rendered key back into its real `title` as soon
+	 * as the page is ready (so the icon carries a real accessible name from the start, not only
+	 * after a mouse hover), and `loadTooltip()`'s own lazy resolve still covers anything added
+	 * later by the ajax field-load flow. `is_form_builder_page()` also returns true for the `frm_load_field` ajax
 	 * batch field-loading request (it treats admin-ajax.php as the builder page), but that
 	 * request never sends `frm_action`, which this same check also requires - so in practice a
 	 * field loaded that way still gets the normal `title` text, unaffected by this deferral.
