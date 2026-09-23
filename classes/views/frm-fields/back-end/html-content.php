@@ -19,6 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$e_args  = array(
 		'textarea_name' => 'field_options[description_' . absint( $field['id'] ) . ']',
 		'textarea_rows' => 7,
+		// wp_skip_init keeps the markup/quicktags scaffolding but stops core's own page-load init loop from
+		// booting TinyMCE here; js/admin/dom.js lazily boots it the first time the field's panel is opened.
+		'tinymce'       => array(
+			'wp_skip_init' => true,
+		),
 	);
 	$html_id = 'frm_description_' . absint( $field['id'] );
 	wp_editor( $field['description'], $html_id, $e_args );
