@@ -381,7 +381,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::show_header_logo
 	 */
-	public function test_show_header_logo_does_not_duplicate_aria_hidden() {
+	public function test_show_header_logo_is_decorative() {
 		ob_start();
 		FrmAppHelper::show_header_logo();
 		$output = ob_get_clean();
