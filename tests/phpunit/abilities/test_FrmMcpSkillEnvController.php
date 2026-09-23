@@ -66,6 +66,39 @@ class test_FrmMcpSkillEnvController extends FrmUnitTest {
 		$this->assertWPError( $denied );
 		$this->assertSame( 403, $denied->get_error_data()['status'] );
 
+		$mcp_request->set_body(
+			wp_json_encode(
+				array(
+					'method' => 'tools/call',
+					'params' => array( 'name' => 'mcp-adapter-discover-abilities' ),
+				)
+			)
+		);
+		$this->assertWPError( FrmMcpSkillEnvController::restrict_rest_route( null, rest_get_server(), $mcp_request ) );
+
+		$mcp_request->set_body(
+			wp_json_encode(
+				array(
+					'method' => 'tools/call',
+					'params' => array(
+						'name'      => 'mcp-adapter-execute-ability',
+						'arguments' => array( 'ability_name' => 'formidable-forms/list-forms' ),
+					),
+				)
+			)
+		);
+		$this->assertNull( FrmMcpSkillEnvController::restrict_rest_route( null, rest_get_server(), $mcp_request ) );
+
+		$mcp_request->set_body(
+			wp_json_encode(
+				array(
+					'method' => 'resources/read',
+					'params' => array( 'uri' => 'other-plugin://resource' ),
+				)
+			)
+		);
+		$this->assertWPError( FrmMcpSkillEnvController::restrict_rest_route( null, rest_get_server(), $mcp_request ) );
+
 		$passwords = FrmMcpSkillEnvController::get_passwords( $user_id );
 		$this->assertCount( 1, $passwords );
 		$this->assertArrayNotHasKey( 'password', $passwords[0] );

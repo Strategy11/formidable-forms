@@ -196,7 +196,7 @@ class FrmMcpSkillEnvController {
 	 * @return mixed
 	 */
 	public static function restrict_rest_route( $result, $server, $request ) {
-		if ( null !== $result || ! function_exists( 'rest_get_authenticated_app_password' ) ) {
+		if ( ! function_exists( 'rest_get_authenticated_app_password' ) ) {
 			return $result;
 		}
 
@@ -220,7 +220,7 @@ class FrmMcpSkillEnvController {
 	}
 
 	/**
-	 * Prevent the shared adapter tools from reaching another plugin's ability.
+	 * Allow protocol setup and Formidable ability calls for a scoped password.
 	 *
 	 * @since x.x
 	 *
@@ -230,23 +230,31 @@ class FrmMcpSkillEnvController {
 	 */
 	private static function requests_other_ability( $body ) {
 		if ( ! is_array( $body ) ) {
-			return false;
+			return true;
 		}
 
 		if ( isset( $body['method'] ) ) {
-			if ( 'tools/call' !== $body['method'] ) {
+			if ( in_array( $body['method'], array( 'initialize', 'notifications/initialized', 'ping', 'tools/list' ), true ) ) {
 				return false;
+			}
+
+			if ( 'tools/call' !== $body['method'] ) {
+				return true;
 			}
 
 			$params = isset( $body['params'] ) && is_array( $body['params'] ) ? $body['params'] : array();
 			$tool   = $params['name'] ?? '';
 
 			if ( ! in_array( $tool, array( 'mcp-adapter-execute-ability', 'mcp-adapter-get-ability-info' ), true ) ) {
-				return false;
+				return true;
 			}
 
 			$name = $params['arguments']['ability_name'] ?? '';
-			return is_string( $name ) && ! FrmMcpConnection::is_formidable_ability( $name );
+			return ! is_string( $name ) || ! FrmMcpConnection::is_formidable_ability( $name );
+		}
+
+		if ( ! $body ) {
+			return true;
 		}
 
 		foreach ( $body as $message ) {
