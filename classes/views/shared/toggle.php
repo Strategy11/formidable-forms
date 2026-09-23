@@ -39,9 +39,11 @@ if ( ! empty( $args['aria-label-attr'] ) ) {
 	// visible label span(s), point at those instead so the accessible name actually
 	// resolves to the visible text, rather than a dangling reference to nothing.
 	$labelledby = array();
+
 	if ( $off_label_shown ) {
 		$labelledby[] = $id . '_off_label';
 	}
+
 	if ( $on_label_shown ) {
 		$labelledby[] = $id . '_on_label';
 	}
@@ -50,8 +52,7 @@ if ( ! empty( $args['aria-label-attr'] ) ) {
 	$aria_attrs['aria-labelledby'] = $id . '_label';
 }
 $aria_attrs['aria-checked'] = $aria_checked;
-
-$label_aria_attrs = $aria_attrs;
+$label_aria_attrs           = $aria_attrs;
 unset( $label_aria_attrs['aria-checked'] );
 
 $div_params = array(
