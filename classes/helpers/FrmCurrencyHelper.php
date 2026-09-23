@@ -106,14 +106,15 @@ class FrmCurrencyHelper {
 			return 0;
 		}
 
-		$decimal_position = self::find_decimal_position( $price, $currency );
+		$separators        = array( '.', ',' );
+		$decimal_position  = self::find_decimal_position( $price, $currency );
 
 		if ( false === $decimal_position ) {
-			return str_replace( array( '.', ',' ), '', $price );
+			return str_replace( $separators, '', $price );
 		}
 
-		$integer_part    = str_replace( array( '.', ',' ), '', substr( $price, 0, $decimal_position ) );
-		$fractional_part = str_replace( array( '.', ',' ), '', substr( $price, $decimal_position + 1 ) );
+		$integer_part    = str_replace( $separators, '', substr( $price, 0, $decimal_position ) );
+		$fractional_part = str_replace( $separators, '', substr( $price, $decimal_position + 1 ) );
 
 		return $integer_part . '.' . $fractional_part;
 	}
@@ -129,7 +130,7 @@ class FrmCurrencyHelper {
 	 * when both '.' and ',' appear, or the same character repeats, only the rightmost
 	 * occurrence is ever the real decimal point; everything else is grouping noise.
 	 *
-	 * @since 6.30
+	 * @since 6.35
 	 *
 	 * @param string $amount
 	 * @param array  $currency
@@ -144,15 +145,12 @@ class FrmCurrencyHelper {
 			return max( $last_dot, $last_comma );
 		}
 
-		if ( false !== $last_dot ) {
-			$present  = '.';
-			$position = $last_dot;
-		} elseif ( false !== $last_comma ) {
-			$present  = ',';
-			$position = $last_comma;
-		} else {
+		if ( false === $last_dot && false === $last_comma ) {
 			return false;
 		}
+
+		$present  = false !== $last_dot ? '.' : ',';
+		$position = false !== $last_dot ? $last_dot : $last_comma;
 
 		if ( $present === $currency['decimal_separator'] ) {
 			return $position;
