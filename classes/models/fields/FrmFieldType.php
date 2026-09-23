@@ -1260,6 +1260,7 @@ DEFAULT_HTML;
 
 				$atts = $matches[2];
 				$this->add_aria_description( $args, $atts );
+				$this->maybe_add_aria_labelledby_for_hidden_label( $args, $atts );
 
 				return '<' . $matches[1] . $atts . $matches[3] . '>';
 			},
@@ -1678,6 +1679,34 @@ DEFAULT_HTML;
 		}
 
 		$this->aria_description_added = true;
+	}
+
+	/**
+	 * A "Hidden" label position still renders a real <label for>, only
+	 * visually hidden (visibility:hidden, to keep a sibling field's label
+	 * the same row height) - that also drops it from the accessibility
+	 * tree, so the input needs an explicit aria-labelledby (IBM Equal
+	 * Access input_label_exists). Skipped for field types with no
+	 * `for`-associated label (`$has_for_label = false`), which already get
+	 * an equivalent aria-labelledby from multiple_input_html()'s wrapper.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $args Rendering context. May include `html_id`.
+	 * @param string $input_html Attributes string of a single input/select/textarea tag, passed by reference.
+	 *
+	 * @return void
+	 */
+	protected function maybe_add_aria_labelledby_for_hidden_label( $args, &$input_html ) {
+		if ( ! $this->has_for_label || 'hidden' !== $this->get_field_column( 'label' ) ) {
+			return;
+		}
+
+		if ( preg_match( '/aria-labelledby=/', $input_html ) ) {
+			return;
+		}
+
+		$input_html .= ' aria-labelledby="' . esc_attr( $args['html_id'] ) . '_label"';
 	}
 
 	/**

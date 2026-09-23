@@ -283,6 +283,38 @@ class test_FrmFieldType extends FrmUnitTest {
 	}
 
 	/**
+	 * A field with its label position set to "Hidden" still renders a real
+	 * <label for="...">, but only visually hides it - the input still needs
+	 * an explicit aria-labelledby pointing at that label's id, since the
+	 * visual hiding technique also drops the label out of the accessibility
+	 * tree (IBM Equal Access input_label_exists, formidable-pro#6757).
+	 *
+	 * @covers FrmFieldType::add_aria_description_to_inputs
+	 */
+	public function test_prepare_field_html_with_hidden_label() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'          => 'text',
+				'form_id'       => $form_id,
+				'field_options' => array( 'label' => 'hidden' ),
+			)
+		);
+
+		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
+
+		$args = array(
+			'errors' => array(),
+			'form'   => FrmForm::getOne( $form_id ),
+		);
+		$html = $field_object->prepare_field_html( $args );
+
+		$this->assertStringContainsString( 'id="field_' . $field->field_key . '_label"', $html );
+		$this->assertStringContainsString( 'aria-labelledby="field_' . $field->field_key . '_label"', $html );
+	}
+
+	/**
 	 * @covers FrmFieldType::prepare_field_html
 	 */
 	public function test_prepare_field_html() {
