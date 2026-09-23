@@ -34,6 +34,9 @@ if ( ! empty( $args['aria-label-attr'] ) ) {
 }
 $aria_attrs['aria-checked'] = $aria_checked;
 
+$label_aria_attrs = $aria_attrs;
+unset( $label_aria_attrs['aria-checked'] );
+
 $div_params = array(
 	// This is important when the default style is !important as Pro styling may cause conflicts.
 	// It uses --toggle-on-color so just set the variable.
@@ -56,7 +59,7 @@ if ( $use_container ) {
 	$div_params = array();
 }
 ?>
-	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
+	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $label_aria_attrs, true ); ?> <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
 		<?php if ( $show_labels && $off_label ) { ?>
 			<span class="frm_off_label frm_toggle_opt frm-leading-none"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
