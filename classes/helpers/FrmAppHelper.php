@@ -5158,7 +5158,7 @@ class FrmAppHelper {
 	/**
 	 * Tooltip strings deferred on the form builder page, keyed for `frm_admin_js.tooltips`.
 	 *
-	 * @since 6.35
+	 * @since x.x
 	 *
 	 * @var array<string,string>
 	 */
@@ -5206,7 +5206,7 @@ class FrmAppHelper {
 	 * request never sends `frm_action`, which this same check also requires - so in practice a
 	 * field loaded that way still gets the normal `title` text, unaffected by this deferral.
 	 *
-	 * @since 6.35
+	 * @since x.x
 	 *
 	 * @param string $tooltip_text Tooltip text.
 	 *
@@ -5229,7 +5229,7 @@ class FrmAppHelper {
 	 * Prints the tooltip strings collected by `get_tooltip_attr()` during this page's render,
 	 * merged into the already-localized `frm_admin_js.tooltips` object.
 	 *
-	 * @since 6.35
+	 * @since x.x
 	 *
 	 * @return void
 	 */
