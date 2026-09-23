@@ -150,12 +150,11 @@ class FrmMcpSettingsController {
 		$admin_post_url  = admin_url( 'admin-post.php' );
 		$options_class   = $mcp_enabled ? 'frm_mcp_options' : 'frm_mcp_options frm_hidden';
 		$claude_commands = array(
-			'/plugin marketplace add Strategy11/formidable-mcp-skill',
+			'/plugin marketplace add https://github.com/Strategy11/formidable-mcp-skill.git',
 			'/plugin install formidable-mcp@formidable',
 		);
 
 		$skill_repository_path = 'https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp';
-		$setup_command         = 'scripts/frm-mcp-setup';
 		$skill_status          = self::get_skill_status( $skill_release, $skill_download, $skill_is_stale );
 		$docs_urls             = array(
 			'overview' => add_query_arg(
@@ -178,6 +177,45 @@ class FrmMcpSettingsController {
 				'mcp-env-download',
 				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' )
 			) . '#kb-connect-a-remote-site-through-http',
+		);
+		$prompt_shared_parts   = array(
+			sprintf(
+				/* translators: %s: The WordPress site URL to connect to Formidable MCP. */
+				__( 'Use the Formidable MCP skill for my site at %s.', 'formidable' ),
+				home_url()
+			),
+			__( 'Find the skill scripts/frm-mcp helper and help me put my downloaded frm-mcp.env file beside it.', 'formidable' ),
+			__( 'Do not open, print, or paste the env file or its credentials into chat.', 'formidable' ),
+			__( 'Run the adjacent frm-mcp-setup first, then use the helper for Formidable requests.', 'formidable' ),
+		);
+		$connection_prompts    = array(
+			'claude' => implode(
+				' ',
+				array_merge(
+					array(
+						sprintf(
+							/* translators: 1: Claude Code command to add the marketplace; 2: Claude Code command to install the plugin. */
+							__( 'If the skill is not installed, tell me to run %1$s and then %2$s in Claude Code.', 'formidable' ),
+							$claude_commands[0],
+							$claude_commands[1]
+						),
+					),
+					$prompt_shared_parts
+				)
+			),
+			'codex'  => implode(
+				' ',
+				array_merge(
+					array(
+						sprintf(
+							/* translators: %s: URL of the Formidable MCP skill directory. */
+							__( 'If the skill is not installed, install it from %s.', 'formidable' ),
+							$skill_repository_path
+						),
+					),
+					$prompt_shared_parts
+				)
+			),
 		);
 
 		foreach ( $skill_passwords as $index => $skill_password ) {

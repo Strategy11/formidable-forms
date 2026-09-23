@@ -128,6 +128,10 @@ label.frm-example-icon {
 	margin-bottom: 0;
 }
 
+.frm-mcp-configured-skill > div > .frm-mcp-prompt-label {
+	margin: var(--gap-md) 0 var(--gap-sm);
+}
+
 .frm-mcp-credentials-heading {
 	margin-top: var(--gap-md);
 	padding-top: var(--gap-md);
@@ -154,6 +158,16 @@ label.frm-example-icon {
 	background: transparent;
 	white-space: normal;
 	overflow-wrap: anywhere;
+}
+
+.frm-mcp-prompt-text {
+	min-width: 0;
+	color: var(--grey-900);
+	overflow-wrap: anywhere;
+}
+
+.frm-mcp-prompt-row {
+	align-items: flex-start;
 }
 
 .frm-mcp-copy-button {

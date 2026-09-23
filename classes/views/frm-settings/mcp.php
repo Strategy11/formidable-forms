@@ -16,7 +16,7 @@
  * @var string      $options_class   Classes for the settings shown when MCP is enabled.
  * @var array       $claude_commands Claude Code commands to copy.
  * @var string      $skill_repository_path Codex skill repository path.
- * @var string      $setup_command   Skill setup command to copy.
+ * @var array       $connection_prompts Prompts for each AI client to finish setup.
  * @var string      $skill_status    Escaped release summary HTML.
  * @var array       $docs_urls       MCP documentation URLs for this page.
  */
@@ -103,12 +103,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'What tool are you trying to connect?', 'formidable' ); ?>
 	</p>
 	<div class="frm_captchas frm-long-icon-buttons" role="radiogroup" aria-labelledby="frm_mcp_client_label">
-		<input type="radio" name="frm_mcp_client_view" id="frm-mcp-client-claude" value="claude" data-frmhide="#frm_mcp_codex_instructions" data-frmshow="#frm_mcp_claude_instructions" checked="checked" />
+		<input type="radio" name="frm_mcp_client_view" id="frm-mcp-client-claude" value="claude" data-frmhide="#frm_mcp_codex_instructions,#frm_mcp_prompt_client_codex" data-frmshow="#frm_mcp_claude_instructions,#frm_mcp_prompt_client_claude" checked="checked" />
 		<label for="frm-mcp-client-claude">
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/mcp-claude.svg' ); ?>" width="21" height="21" alt="" />
 			<?php esc_html_e( 'Claude Code', 'formidable' ); ?>
 		</label>
-		<input type="radio" name="frm_mcp_client_view" id="frm-mcp-client-codex" value="codex" data-frmhide="#frm_mcp_claude_instructions" data-frmshow="#frm_mcp_codex_instructions" />
+		<input type="radio" name="frm_mcp_client_view" id="frm-mcp-client-codex" value="codex" data-frmhide="#frm_mcp_claude_instructions,#frm_mcp_prompt_client_claude" data-frmshow="#frm_mcp_codex_instructions,#frm_mcp_prompt_client_codex" />
 		<label for="frm-mcp-client-codex">
 			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/mcp-codex.svg' ); ?>" width="21" height="21" alt="" />
 			<?php esc_html_e( 'Codex', 'formidable' ); ?>
@@ -171,28 +171,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-mcp-configured-skill frm-mb-lg">
 		<h3><?php esc_html_e( 'Connect the skill to this site', 'formidable' ); ?></h3>
 		<p class="description">
-			<?php esc_html_e( 'For the Formidable Skill HTTP helper, download a file containing this site URL, your WordPress username, and a new Application Password. Place it at scripts/frm-mcp.env inside the installed skill, then run scripts/frm-mcp-setup.', 'formidable' ); ?>
+			<?php esc_html_e( 'Download a file with this site URL, your WordPress username, and a new Application Password for the Formidable Skill HTTP helper. Keep the file private, then ask your AI client to help finish setup.', 'formidable' ); ?>
 		</p>
-		<div class="frm-mcp-copy-row">
-			<code><?php echo esc_html( $setup_command ); ?></code>
-			<button type="button" class="frm-mcp-copy-button js-frm-mcp-copy" data-frm-copy="<?php echo esc_attr( $setup_command ); ?>" aria-label="<?php esc_attr_e( 'Copy setup command', 'formidable' ); ?>" data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>">
-				<svg class="frmsvg frm_svg20" aria-hidden="true" focusable="false"><use href="#frm_clone_icon"></use></svg>
+		<?php if ( $env_available ) { ?>
+			<?php wp_nonce_field( FrmMcpSkillEnvController::DOWNLOAD_ACTION, FrmMcpSkillEnvController::DOWNLOAD_ACTION . '_nonce' ); ?>
+			<button type="submit" class="button frm-button-secondary" formaction="<?php echo esc_url( $admin_post_url ); ?>" formmethod="post" name="action" value="<?php echo esc_attr( FrmMcpSkillEnvController::DOWNLOAD_ACTION ); ?>">
+				<?php esc_html_e( 'Download frm-mcp.env file with new generated application password', 'formidable' ); ?>
 			</button>
+			<p class="description frm-mcp-credential-note"><?php esc_html_e( 'Each download creates a new credential. Keep the file private and out of version control. This password is restricted to Formidable MCP while the plugin is active. Revoke it before deactivating Formidable.', 'formidable' ); ?></p>
+		<?php } else { ?>
+			<p class="description"><?php esc_html_e( 'Application Passwords must be available for your account, and public sites must use HTTPS, to create this file.', 'formidable' ); ?></p>
+		<?php } ?>
+		<div id="frm_mcp_prompt_client_claude">
+			<p class="description frm-mcp-prompt-label"><?php esc_html_e( 'Copy this prompt into Claude Code:', 'formidable' ); ?></p>
+			<div class="frm-mcp-copy-row frm-mcp-prompt-row">
+				<span class="frm-mcp-prompt-text"><?php echo esc_html( $connection_prompts['claude'] ); ?></span>
+				<button type="button" class="frm-mcp-copy-button js-frm-mcp-copy" data-frm-copy="<?php echo esc_attr( $connection_prompts['claude'] ); ?>" aria-label="<?php esc_attr_e( 'Copy connection prompt', 'formidable' ); ?>" data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>">
+					<svg class="frmsvg frm_svg20" aria-hidden="true" focusable="false"><use href="#frm_clone_icon"></use></svg>
+				</button>
+			</div>
+		</div>
+		<div id="frm_mcp_prompt_client_codex" class="frm_hidden">
+			<p class="description frm-mcp-prompt-label"><?php esc_html_e( 'Copy this prompt into Codex:', 'formidable' ); ?></p>
+			<div class="frm-mcp-copy-row frm-mcp-prompt-row">
+				<span class="frm-mcp-prompt-text"><?php echo esc_html( $connection_prompts['codex'] ); ?></span>
+				<button type="button" class="frm-mcp-copy-button js-frm-mcp-copy" data-frm-copy="<?php echo esc_attr( $connection_prompts['codex'] ); ?>" aria-label="<?php esc_attr_e( 'Copy connection prompt', 'formidable' ); ?>" data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>">
+					<svg class="frmsvg frm_svg20" aria-hidden="true" focusable="false"><use href="#frm_clone_icon"></use></svg>
+				</button>
+			</div>
 		</div>
 		<p class="description">
 			<a href="<?php echo esc_url( $docs_urls['env'] ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php esc_html_e( 'Formidable guide: Connect with the skill HTTP helper', 'formidable' ); ?>
 			</a>
 		</p>
-		<?php if ( $env_available ) { ?>
-			<?php wp_nonce_field( FrmMcpSkillEnvController::DOWNLOAD_ACTION, FrmMcpSkillEnvController::DOWNLOAD_ACTION . '_nonce' ); ?>
-			<button type="submit" class="button frm-button-secondary" formaction="<?php echo esc_url( $admin_post_url ); ?>" formmethod="post" name="action" value="<?php echo esc_attr( FrmMcpSkillEnvController::DOWNLOAD_ACTION ); ?>">
-				<?php esc_html_e( 'Generate Application Password and download frm-mcp.env', 'formidable' ); ?>
-			</button>
-			<p class="description frm-mcp-credential-note"><?php esc_html_e( 'Each download creates a new credential. Keep the file private and out of version control. This password is restricted to Formidable MCP while the plugin is active. Revoke it before deactivating Formidable.', 'formidable' ); ?></p>
-		<?php } else { ?>
-			<p class="description"><?php esc_html_e( 'Application Passwords must be available for your account, and public sites must use HTTPS, to create this file.', 'formidable' ); ?></p>
-		<?php } ?>
 		<?php if ( $skill_passwords ) { ?>
 			<?php wp_nonce_field( FrmMcpSkillEnvController::REVOKE_ACTION, FrmMcpSkillEnvController::REVOKE_ACTION . '_nonce' ); ?>
 			<h4 class="frm-text-md frm-mb-sm frm-mcp-credentials-heading"><?php esc_html_e( 'Downloaded skill credentials', 'formidable' ); ?></h4>
