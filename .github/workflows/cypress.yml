@@ -116,6 +116,9 @@ jobs:
       - name: Set up WP environment
         run: npm run env start
 
+      - name: Ensure default Formidable install has run
+        run: npx wp-env run tests-cli wp eval 'FrmAppController::api_install();'
+
       - name: Test
         run: |
           specs="$( ./tests/bin/split-specs.sh "$SHARD_TOTAL" "${{ matrix.shard }}" )"
