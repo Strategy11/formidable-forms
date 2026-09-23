@@ -27,15 +27,6 @@ class test_FrmFieldCheckbox extends FrmUnitTest {
 			)
 		);
 
-		$this->assertMatchesRegularExpression(
-			'/<label[^>]*>\s*<input type="checkbox"/',
-			$html,
-			'Expected the option label to wrap the checkbox input'
-		);
-		$this->assertDoesNotMatchRegularExpression(
-			'/<label[^>]*\sfor="[^"]*"[^>]*>\s*<input type="checkbox"/',
-			$html,
-			'Label should not also carry a for attribute when it already wraps the input -- Safari VoiceOver double-announces it'
-		);
+		$this->assert_label_wraps_input_without_for( $html, 'checkbox option' );
 	}
 }

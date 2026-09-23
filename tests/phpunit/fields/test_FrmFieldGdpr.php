@@ -34,15 +34,6 @@ class test_FrmFieldGdpr extends FrmUnitTest {
 			$frm_settings->enable_gdpr = $original_enable_gdpr;
 		}
 
-		$this->assertMatchesRegularExpression(
-			'/<label[^>]*>\s*<input type="checkbox"/',
-			$html,
-			'Expected the GDPR label to wrap the checkbox input'
-		);
-		$this->assertDoesNotMatchRegularExpression(
-			'/<label[^>]*\sfor="[^"]*"[^>]*>\s*<input type="checkbox"/',
-			$html,
-			'Label should not also carry a for attribute when it already wraps the input -- Safari VoiceOver double-announces it'
-		);
+		$this->assert_label_wraps_input_without_for( $html, 'GDPR' );
 	}
 }
