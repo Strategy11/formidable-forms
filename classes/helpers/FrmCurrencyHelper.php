@@ -106,31 +106,70 @@ class FrmCurrencyHelper {
 			return 0;
 		}
 
-		$price = self::maybe_use_decimal( $price, $currency );
-		return str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
+		$decimal_position = self::find_decimal_position( $price, $currency );
+
+		if ( false === $decimal_position ) {
+			return str_replace( array( '.', ',' ), '', $price );
+		}
+
+		$integer_part    = str_replace( array( '.', ',' ), '', substr( $price, 0, $decimal_position ) );
+		$fractional_part = str_replace( array( '.', ',' ), '', substr( $price, $decimal_position + 1 ) );
+
+		return $integer_part . '.' . $fractional_part;
 	}
 
 	/**
+	 * Find the position of the price's real decimal separator, or false if it has none (a
+	 * whole-number amount, possibly with thousands grouping).
+	 *
+	 * A user can type an amount in a different locale's format than the form's configured
+	 * currency expects (e.g. US-style "1,030.21" on a form whose currency configures '.' as
+	 * the thousand separator). Trusting the currency's configured separator in that case --
+	 * and blindly replacing every occurrence of it -- is what let this silently truncate:
+	 * when both '.' and ',' appear, or the same character repeats, only the rightmost
+	 * occurrence is ever the real decimal point; everything else is grouping noise.
+	 *
 	 * @since 6.30
 	 *
 	 * @param string $amount
 	 * @param array  $currency
 	 *
-	 * @return string
+	 * @return false|int
 	 */
-	private static function maybe_use_decimal( $amount, $currency ) {
-		if ( $currency['thousand_separator'] !== '.' ) {
-			return $amount;
+	private static function find_decimal_position( $amount, $currency ) {
+		$last_dot   = strrpos( $amount, '.' );
+		$last_comma = strrpos( $amount, ',' );
+
+		if ( false !== $last_dot && false !== $last_comma ) {
+			return max( $last_dot, $last_comma );
 		}
 
-		$amount_parts     = explode( '.', $amount );
-		$used_for_decimal = count( $amount_parts ) === 2 && in_array( strlen( $amount_parts[1] ), array( 1, 2 ), true );
-
-		if ( $used_for_decimal ) {
-			return str_replace( '.', $currency['decimal_separator'], $amount );
+		if ( false !== $last_dot ) {
+			$present  = '.';
+			$position = $last_dot;
+		} elseif ( false !== $last_comma ) {
+			$present  = ',';
+			$position = $last_comma;
+		} else {
+			return false;
 		}
 
-		return $amount;
+		if ( $present === $currency['decimal_separator'] ) {
+			return $position;
+		}
+
+		// The lone separator matches the currency's thousand separator instead. A dot in a
+		// comma-decimal currency is ambiguous -- a single occurrence with a 1-2 digit tail
+		// still reads as a decimal point even though the currency expects '.' as its thousand
+		// separator. A comma in a dot-decimal currency is never ambiguous this way: it's
+		// always thousands grouping (e.g. "1,23" on a GBP form is 123, not 1.23).
+		if ( '.' !== $present || 1 !== substr_count( $amount, $present ) ) {
+			return false;
+		}
+
+		$tail_length = strlen( $amount ) - $position - 1;
+
+		return in_array( $tail_length, array( 1, 2 ), true ) ? $position : false;
 	}
 
 	/**
