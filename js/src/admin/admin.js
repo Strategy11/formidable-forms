@@ -5284,10 +5284,14 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function maybeShowFieldGroupMessage() {
+		if ( fieldGroupMessageDismissed ) {
+			return;
+		}
+
 		let fieldGroupMessage = document.getElementById( 'frm-field-group-message' );
 		const rows = document.querySelectorAll( '.edit_form_item:not(.edit_field_type_end_divider)' );
 
-		if ( rows.length < 2 || fieldGroupMessageDismissed ) {
+		if ( rows.length < 2 ) {
 			hideFieldGroupMessage( fieldGroupMessage );
 			return;
 		}
