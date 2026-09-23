@@ -106,8 +106,8 @@ class FrmCurrencyHelper {
 			return 0;
 		}
 
-		$separators        = array( '.', ',' );
-		$decimal_position  = self::find_decimal_position( $price, $currency );
+		$separators       = array( '.', ',' );
+		$decimal_position = self::find_decimal_position( $price, $currency );
 
 		if ( false === $decimal_position ) {
 			return str_replace( $separators, '', $price );
