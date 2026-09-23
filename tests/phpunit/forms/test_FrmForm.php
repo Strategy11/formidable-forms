@@ -70,31 +70,15 @@ class test_FrmForm extends FrmUnitTest {
 	}
 
 	/**
-	 * Same total-form-count logic as tests/mu-plugins/frm-protect-last-form.php, kept in sync by
-	 * hand since the mu-plugin isn't loaded for a PHPUnit run.
+	 * Same callback tests/mu-plugins/frm-protect-last-form.php hooks in the e2e suite - shared from
+	 * tests/frm-last-form-guard-callback.php so there's nothing to keep in sync by hand.
 	 *
 	 * @return callable
 	 */
 	protected function last_form_guard_callback() {
-		return function ( $allow_destroy ) {
-			if ( ! $allow_destroy ) {
-				return $allow_destroy;
-			}
+		require_once __DIR__ . '/../../frm-last-form-guard-callback.php';
 
-			$total_forms = FrmDb::get_count(
-				'frm_forms',
-				array(
-					array(
-						'or'               => 1,
-						'parent_form_id'   => null,
-						'parent_form_id <' => 1,
-					),
-					'is_template' => 0,
-				)
-			);
-
-			return $total_forms > 1;
-		};
+		return frm_last_form_guard_callback();
 	}
 
 	/**
