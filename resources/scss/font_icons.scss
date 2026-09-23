@@ -10,7 +10,10 @@
 }
 
 .frm-submenu-highlight {
-	background: #1da867;
+	/* White text at 3.07:1 on the previous #1da867 failed WCAG AA (4.5:1
+	   minimum); same value as --success-800 (defined in a separate webpack
+	   entry, not guaranteed loaded here) clears it at 7.68:1. */
+	background: #065f46;
 }
 
 .frm-submenu-highlight a span {
