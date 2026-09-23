@@ -37,6 +37,10 @@ class FrmFieldsHelper {
 		$values['form_id']     = $form_id;
 		$values['field_order'] = $field_count + 1;
 
+		if ( ! is_array( $values['field_options'] ) ) {
+			$values['field_options'] = array();
+		}
+
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
 		if ( ! empty( $setting ) ) {
