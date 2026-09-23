@@ -378,7 +378,7 @@ class FrmAppHelper {
 		// text (see admin-header.php / applications/header.php), so the icon itself
 		// is decorative and shouldn't need its own accessible name. svg_logo() already
 		// adds aria-hidden, but a filtered $new_icon from a third party may not.
-		if ( str_starts_with( $icon, '<svg' ) && ! str_contains( $icon, 'aria-hidden' ) ) {
+		if ( str_starts_with( $icon, '<svg' ) && ! preg_match( '/^<svg\b[^>]*\baria-hidden\b/', $icon ) ) {
 			$icon = str_replace( '<svg ', '<svg aria-hidden="true" ', $icon );
 		}
 
