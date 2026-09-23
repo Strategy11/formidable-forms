@@ -11636,13 +11636,16 @@ window.frmAdminBuildJS = function() {
 				} );
 			} );
 
-			// Handle Captcha checkbox toggle to show/hide warnings
-			const captchaCheckbox = document.getElementById( 'frm_include_captcha' );
-			if ( captchaCheckbox ) {
-				const initialState = captchaCheckbox.checked;
-				captchaCheckbox.addEventListener( 'change', function() {
-					const addWarning = document.getElementById( 'frm_captcha_add_warning' );
-					const removeWarning = document.getElementById( 'frm_captcha_remove_warning' );
+			// Handle Captcha and GDPR checkbox toggles to show/hide warnings
+			[ 'captcha', 'gdpr' ].forEach( function( fieldType ) {
+				const includeCheckbox = document.getElementById( `frm_include_${ fieldType }` );
+				if ( ! includeCheckbox ) {
+					return;
+				}
+				const initialState = includeCheckbox.checked;
+				includeCheckbox.addEventListener( 'change', function() {
+					const addWarning = document.getElementById( `frm_${ fieldType }_add_warning` );
+					const removeWarning = document.getElementById( `frm_${ fieldType }_remove_warning` );
 					if ( addWarning && removeWarning ) {
 						// Only show warning if current state differs from initial state
 						if ( this.checked !== initialState ) {
@@ -11660,7 +11663,7 @@ window.frmAdminBuildJS = function() {
 						}
 					}
 				} );
-			}
+			} );
 
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
