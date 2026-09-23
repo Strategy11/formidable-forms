@@ -11,8 +11,12 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 		// input gets hidden by wpColorPicker() in favor of a `.wp-color-result` button.
 		// style.js repoints the label's `for` to `{id}_visible` once wpColorPicker() inits,
 		// which happens before this query runs - so the selector must target the post-init id.
-		cy.get( 'label[for="frm_style_qsettings_submit_bg_color_visible"]' ).click();
+		// Confirm the original input is hidden *before* interacting with it - clicking the
+		// swatch button intentionally reveals it again afterward as WP core's own manual hex
+		// entry field (color-picker.js `open()` un-hides `.wp-picker-input-wrap`), so asserting
+		// it stays hidden post-click would fail against WP's own by-design behavior.
 		cy.get( '#frm_style_qsettings_submit_bg_color' ).should( 'not.be.visible' );
+		cy.get( 'label[for="frm_style_qsettings_submit_bg_color_visible"]' ).click();
 		cy.focused().should( 'have.class', 'wp-color-result' );
 	} );
 
