@@ -161,7 +161,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_base_font_size"
+		for="frm_base_font_size-value"
 		class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -207,7 +207,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
 	<label
-		for="frm_style_qsettings_border_radius"
+		for="frm_style_qsettings_border_radius-value"
 		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">

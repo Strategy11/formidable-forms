@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_font_size"
+							for="frm_submit_font_size-value"
 							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -89,7 +89,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_width"
+							data-slider-label-for="frm_submit_width-value"
+							<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['submit_width'] ) ? 'for="frm_submit_width-value"' : ''; ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -108,7 +109,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_height"
+							data-slider-label-for="frm_submit_height-value"
+							<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['submit_height'] ) ? 'for="frm_submit_height-value"' : ''; ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Height', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -145,7 +147,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_border_width"
+							for="frm_submit_border_width-value"
 							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -181,7 +183,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_border_radius"
+							for="frm_submit_border_radius-value"
 							class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">

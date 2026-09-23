@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_field_font_size"
+		for="frm_field_font_size-value"
 		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_field_height"
+		for="frm_field_height-value"
 		class="frm-style-item-heading"><?php esc_html_e( 'Height', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_field_width"
+		for="frm_field_width-value"
 		class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -111,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_border_radius"
+		for="frm_border_radius-value"
 		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
