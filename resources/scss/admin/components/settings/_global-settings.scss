@@ -95,6 +95,91 @@ label.frm-example-icon {
 	display: none;
 }
 
+.frm-mcp-configured-skill {
+	max-width: 960px;
+	padding: var(--gap-md);
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	background: var(--grey-50);
+}
+
+#poststuff .frm_settings_form .frm-mcp-configured-skill > h3,
+#form_global_settings .frm-mcp-configured-skill > h3,
+.frm_settings_form .frm-mcp-configured-skill > h3 {
+	margin: 0 0 var(--gap-sm);
+	padding: 0;
+	border: 0;
+}
+
+.frm-mcp-configured-skill > p {
+	margin: 0 0 var(--gap-sm);
+}
+
+.frm-mcp-configured-skill > .frm-mcp-copy-row {
+	margin-bottom: var(--gap-sm);
+}
+
+.frm-mcp-configured-skill > button {
+	margin-top: var(--gap-xs);
+}
+
+.frm-mcp-configured-skill > .frm-mcp-credential-note {
+	margin-top: var(--gap-sm);
+	margin-bottom: 0;
+}
+
+.frm-mcp-credentials-heading {
+	margin-top: var(--gap-md);
+	padding-top: var(--gap-md);
+	border-top: 1px solid var(--grey-200);
+}
+
+.frm-mcp-copy-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--gap-sm);
+	max-width: 840px;
+	margin: var(--gap-xs) 0;
+	padding: var(--gap-xs) var(--gap-sm);
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	background: var(--grey-25);
+}
+
+.frm-mcp-copy-row code {
+	min-width: 0;
+	padding: 0;
+	color: var(--grey-900);
+	background: transparent;
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
+.frm-mcp-copy-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	padding: var(--gap-2xs);
+	color: var(--grey-500);
+	background: transparent;
+	border: 0;
+	border-radius: var(--x-small-radius);
+	cursor: pointer;
+}
+
+.frm-mcp-copy-button:hover,
+.frm-mcp-copy-button:focus-visible {
+	color: var(--primary-500);
+	background: var(--primary-25);
+}
+
+.frm-mcp-copy-button:focus-visible {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
+}
+
 /* Empty List */
 
 .frm_no_items {

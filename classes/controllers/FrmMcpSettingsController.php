@@ -148,8 +148,91 @@ class FrmMcpSettingsController {
 		&& current_user_can( 'create_app_password', get_current_user_id() )
 		&& ( 'https' === wp_parse_url( home_url(), PHP_URL_SCHEME ) || 'local' === wp_get_environment_type() );
 		$admin_post_url  = admin_url( 'admin-post.php' );
+		$options_class   = $mcp_enabled ? 'frm_mcp_options' : 'frm_mcp_options frm_hidden';
+		$claude_commands = array(
+			'/plugin marketplace add Strategy11/formidable-mcp-skill',
+			'/plugin install formidable-mcp@formidable',
+		);
+
+		$skill_repository_path = 'https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp';
+		$setup_command         = 'scripts/frm-mcp-setup';
+		$skill_status          = self::get_skill_status( $skill_release, $skill_download, $skill_is_stale );
+		$docs_urls             = array(
+			'overview' => add_query_arg(
+				'utm_content',
+				'mcp-overview',
+				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' )
+			),
+			'claude'   => add_query_arg(
+				'utm_content',
+				'mcp-claude-code-skill',
+				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-claude-settings' )
+			) . '#kb-install-in-claude-code',
+			'codex'    => add_query_arg(
+				'utm_content',
+				'mcp-codex-skill',
+				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-codex-settings' )
+			) . '#kb-install-in-codex',
+			'env'      => add_query_arg(
+				'utm_content',
+				'mcp-env-download',
+				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' )
+			) . '#kb-connect-a-remote-site-through-http',
+		);
+
+		foreach ( $skill_passwords as $index => $skill_password ) {
+			$skill_passwords[ $index ]['created_at'] = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $skill_password['created'] );
+		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/mcp.php';
+	}
+
+	/**
+	 * Build the short release summary displayed beside the skill download.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|false $release  The latest skill release.
+	 * @param array|false $download The current user's last skill download.
+	 * @param bool        $is_stale Whether the available release differs from the download.
+	 *
+	 * @return string Escaped HTML for the release summary.
+	 */
+	private static function get_skill_status( $release, $download, $is_stale ) {
+		if ( ! $release && ! $download ) {
+			return '';
+		}
+
+		$released_date   = $release ? self::relative_skill_date( $release['published'] ) : '';
+		$downloaded_date = $download ? self::relative_skill_date( $download['time'] ) : '';
+		$your_version    = $download ? $download['version'] : '';
+		$version         = $release ? esc_html( $release['version'] ) : esc_html( $your_version );
+
+		if ( $release && $release['url'] ) {
+			$version = '<a href="' . esc_url( $release['url'] ) . '" target="_blank" rel="noopener">' . $version . '</a>';
+		}
+
+		if ( $is_stale && $released_date ) {
+			/* translators: %1$s: The version of the skill that is available. %2$s: How long ago it was released, like "today". %3$s: The version this user downloaded. */
+			return sprintf( __( '%1$s released %2$s — you have %3$s', 'formidable' ), $version, esc_html( $released_date ), esc_html( $your_version ) );
+		}
+
+		if ( $is_stale ) {
+			/* translators: %1$s: The version of the skill that is available. %2$s: The version this user downloaded. */
+			return sprintf( __( '%1$s available — you have %2$s', 'formidable' ), $version, esc_html( $your_version ) );
+		}
+
+		if ( $version && $downloaded_date ) {
+			/* translators: %1$s: The version of the skill. %2$s: How long ago this user downloaded it, like "today". */
+			return sprintf( __( '%1$s — downloaded %2$s', 'formidable' ), $version, esc_html( $downloaded_date ) );
+		}
+
+		if ( $version && $released_date ) {
+			/* translators: %1$s: The version of the skill. %2$s: How long ago it was released, like "today". */
+			return sprintf( __( '%1$s released %2$s', 'formidable' ), $version, esc_html( $released_date ) );
+		}
+
+		return $version;
 	}
 
 	/**

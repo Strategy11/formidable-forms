@@ -34,6 +34,12 @@
 	}
 
 	function handleClickEvent( e ) {
+		const copyButton = e.target.closest( '.js-frm-mcp-copy' );
+		if ( copyButton ) {
+			copyMcpInstruction( copyButton );
+			return;
+		}
+
 		if ( 'BUTTON' === e.target.nodeName && 'choose' === e.target.dataset.action && e.target.closest( '.frm-email-style' ) ) {
 			handleClickChooseEmailStyle( e );
 			return;
@@ -47,6 +53,51 @@
 		if ( 'frm-send-test-email-btn' === e.target.id ) {
 			handleClickSendTestEmailBtn();
 		}
+	}
+
+	/**
+	 * Copy an MCP setup instruction and confirm the result on its button.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLButtonElement} button Copy button.
+	 * @return {void}
+	 */
+	async function copyMcpInstruction( button ) {
+		const originalLabel = button.getAttribute( 'aria-label' );
+		const text = button.dataset.frmCopy;
+		let copied = false;
+
+		if ( navigator.clipboard?.writeText ) {
+			try {
+				await navigator.clipboard.writeText( text );
+				copied = true;
+			} catch ( error ) {
+				// Use the fallback when clipboard access is denied.
+			}
+		}
+
+		if ( ! copied ) {
+			const input = frmDom.tag( 'textarea' );
+			input.value = text;
+			input.style.cssText = 'position:fixed;opacity:0;';
+			button.after( input );
+			input.select();
+			copied = document.execCommand( 'copy' );
+			input.remove();
+		}
+
+		if ( ! copied ) {
+			return;
+		}
+
+		button.setAttribute( 'aria-label', button.dataset.copiedLabel );
+		const icon = button.querySelector( 'use' );
+		icon.setAttribute( 'href', '#frm_checkmark_icon' );
+		setTimeout( () => {
+			button.setAttribute( 'aria-label', originalLabel );
+			icon.setAttribute( 'href', '#frm_clone_icon' );
+		}, 1600 );
 	}
 
 	function handleClickChooseEmailStyle( e ) {

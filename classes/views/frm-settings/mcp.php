@@ -9,12 +9,16 @@
  * @var string      $blocked_reason Why the adapter cannot run, or an empty string when nothing blocks it.
  * @var bool        $is_inherited   Whether the toggle is showing a value inherited from the API add-on.
  * @var string      $skill_url      Link the Download Skill button points at, nonced through admin-post.php.
- * @var array|false $skill_release  Version, publish date, and release page URL of the current skill release, or false when it cannot be read.
- * @var array|false $skill_download Time and version of this user's last skill download, or false when they have never downloaded it.
  * @var bool        $skill_is_stale Whether a release has come out since this user last downloaded the skill.
- * @var array       $skill_passwords Application passwords created for this user's MCP skill downloads.
+ * @var array       $skill_passwords Application passwords created for this user's MCP skill downloads, with formatted creation dates.
  * @var bool        $env_available   Whether this user can create an Application Password.
  * @var string      $admin_post_url  WordPress handler URL for the env download and revocation buttons.
+ * @var string      $options_class   Classes for the settings shown when MCP is enabled.
+ * @var array       $claude_commands Claude Code commands to copy.
+ * @var string      $skill_repository_path Codex skill repository path.
+ * @var string      $setup_command   Skill setup command to copy.
+ * @var string      $skill_status    Escaped release summary HTML.
+ * @var array       $docs_urls       MCP documentation URLs for this page.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <p>
 	<?php esc_html_e( 'Connect an AI assistant to this site so it can build and manage your forms, entries, and styles.', 'formidable' ); ?>
-	<a href="<?php echo esc_url( add_query_arg( 'utm_content', 'mcp-overview', FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' ) ) ); ?>" target="_blank" rel="noopener">
+	<a href="<?php echo esc_url( $docs_urls['overview'] ); ?>" target="_blank" rel="noopener">
 		<?php esc_html_e( 'Learn more', 'formidable' ); ?>
 	</a>
 </p>
@@ -94,13 +98,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 <?php } ?>
 
-<?php
-$options_class = 'frm_mcp_options';
-
-if ( ! $mcp_enabled ) {
-	$options_class .= ' frm_hidden';
-}
-?>
 <div class="<?php echo esc_attr( $options_class ); ?>">
 	<p class="frm_primary_label" id="frm_mcp_client_label">
 		<?php esc_html_e( 'What tool are you trying to connect?', 'formidable' ); ?>
@@ -121,10 +118,16 @@ if ( ! $mcp_enabled ) {
 	<div id="frm_mcp_claude_instructions" class="frm-mb-md">
 		<h3><?php esc_html_e( 'Install the Formidable Skill in Claude Code', 'formidable' ); ?></h3>
 		<p class="description"><?php esc_html_e( 'In Claude Code, install the skill with these commands:', 'formidable' ); ?></p>
-		<p><code>/plugin marketplace add Strategy11/formidable-mcp-skill</code></p>
-		<p><code>/plugin install formidable-mcp@formidable</code></p>
+		<?php foreach ( $claude_commands as $command ) { ?>
+			<div class="frm-mcp-copy-row">
+				<code><?php echo esc_html( $command ); ?></code>
+				<button type="button" class="frm-mcp-copy-button js-frm-mcp-copy" data-frm-copy="<?php echo esc_attr( $command ); ?>" aria-label="<?php esc_attr_e( 'Copy command', 'formidable' ); ?>" data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>">
+					<svg class="frmsvg frm_svg20" aria-hidden="true" focusable="false"><use href="#frm_clone_icon"></use></svg>
+				</button>
+			</div>
+		<?php } ?>
 		<p class="description">
-			<a href="<?php echo esc_url( add_query_arg( 'utm_content', 'mcp-claude-code-skill', FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-claude-settings' ) ) . '#kb-install-in-claude-code' ); ?>" target="_blank" rel="noopener noreferrer">
+			<a href="<?php echo esc_url( $docs_urls['claude'] ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php esc_html_e( 'Formidable guide: Install the skill in Claude Code', 'formidable' ); ?>
 			</a>
 		</p>
@@ -133,9 +136,14 @@ if ( ! $mcp_enabled ) {
 	<div id="frm_mcp_codex_instructions" class="frm-mb-md frm_hidden">
 		<h3><?php esc_html_e( 'Install the Formidable Skill in Codex', 'formidable' ); ?></h3>
 		<p class="description"><?php esc_html_e( 'Ask Codex to install the skill from this repository path:', 'formidable' ); ?></p>
-		<p><code>https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp</code></p>
+		<div class="frm-mcp-copy-row">
+			<code><?php echo esc_html( $skill_repository_path ); ?></code>
+			<button type="button" class="frm-mcp-copy-button js-frm-mcp-copy" data-frm-copy="<?php echo esc_attr( $skill_repository_path ); ?>" aria-label="<?php esc_attr_e( 'Copy repository path', 'formidable' ); ?>" data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>">
+				<svg class="frmsvg frm_svg20" aria-hidden="true" focusable="false"><use href="#frm_clone_icon"></use></svg>
+			</button>
+		</div>
 		<p class="description">
-			<a href="<?php echo esc_url( add_query_arg( 'utm_content', 'mcp-codex-skill', FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-codex-settings' ) ) . '#kb-install-in-codex' ); ?>" target="_blank" rel="noopener noreferrer">
+			<a href="<?php echo esc_url( $docs_urls['codex'] ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php esc_html_e( 'Formidable guide: Install the skill in Codex', 'formidable' ); ?>
 			</a>
 		</p>
@@ -153,91 +161,43 @@ if ( ! $mcp_enabled ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_download_icon frm_svg15', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php echo $skill_is_stale ? esc_html__( 'Download Update', 'formidable' ) : esc_html__( 'Download Skill', 'formidable' ); ?>
 			</a>
-			<?php if ( $skill_release || $skill_download ) { ?>
+			<?php if ( $skill_status ) { ?>
 				<span class="frm-text-xs frm-text-grey-500">
-					<?php
-					$released_date   = $skill_release ? FrmMcpSettingsController::relative_skill_date( $skill_release['published'] ) : '';
-					$downloaded_date = $skill_download ? FrmMcpSettingsController::relative_skill_date( $skill_download['time'] ) : '';
-					$your_version    = $skill_download ? $skill_download['version'] : '';
-
-					// The line leads with the release, linked to its notes. With no
-					// release to name, the version already downloaded leads instead.
-					if ( $skill_release ) {
-						$version = esc_html( $skill_release['version'] );
-
-						if ( $skill_release['url'] ) {
-							$version = '<a href="' . esc_url( $skill_release['url'] ) . '" target="_blank" rel="noopener">' . $version . '</a>';
-						}
-					} else {
-						$version = esc_html( $your_version );
-					}
-
-					// The version carries a link, so it is escaped as post HTML while the
-					// rest of the line is escaped as text.
-					if ( $skill_is_stale && $released_date ) {
-						printf(
-							/* translators: %1$s: The version of the skill that is available. %2$s: How long ago it was released, like "today". %3$s: The version this user downloaded. */
-							esc_html__( '%1$s released %2$s — you have %3$s', 'formidable' ),
-							wp_kses_post( $version ),
-							esc_html( $released_date ),
-							esc_html( $your_version )
-						);
-					} elseif ( $skill_is_stale ) {
-						printf(
-							/* translators: %1$s: The version of the skill that is available. %2$s: The version this user downloaded. */
-							esc_html__( '%1$s available — you have %2$s', 'formidable' ),
-							wp_kses_post( $version ),
-							esc_html( $your_version )
-						);
-					} elseif ( $version && $downloaded_date ) {
-						printf(
-							/* translators: %1$s: The version of the skill. %2$s: How long ago this user downloaded it, like "today". */
-							esc_html__( '%1$s — downloaded %2$s', 'formidable' ),
-							wp_kses_post( $version ),
-							esc_html( $downloaded_date )
-						);
-					} elseif ( $version && $released_date ) {
-						printf(
-							/* translators: %1$s: The version of the skill. %2$s: How long ago it was released, like "today". */
-							esc_html__( '%1$s released %2$s', 'formidable' ),
-							wp_kses_post( $version ),
-							esc_html( $released_date )
-						);
-					} else {
-						echo wp_kses_post( $version );
-					}//end if
-					?>
+					<?php echo wp_kses_post( $skill_status ); ?>
 				</span>
-			<?php
-			}//end if
- ?>
+			<?php } ?>
 		</div>
 	</div>
-	<div class="frm-mb-md">
-		<h3><?php esc_html_e( 'Download a configured skill file', 'formidable' ); ?></h3>
+	<div class="frm-mcp-configured-skill frm-mb-lg">
+		<h3><?php esc_html_e( 'Connect the skill to this site', 'formidable' ); ?></h3>
 		<p class="description">
 			<?php esc_html_e( 'For the Formidable Skill HTTP helper, download a file containing this site URL, your WordPress username, and a new Application Password. Place it at scripts/frm-mcp.env inside the installed skill, then run scripts/frm-mcp-setup.', 'formidable' ); ?>
 		</p>
+		<div class="frm-mcp-copy-row">
+			<code><?php echo esc_html( $setup_command ); ?></code>
+			<button type="button" class="frm-mcp-copy-button js-frm-mcp-copy" data-frm-copy="<?php echo esc_attr( $setup_command ); ?>" aria-label="<?php esc_attr_e( 'Copy setup command', 'formidable' ); ?>" data-copied-label="<?php esc_attr_e( 'Copied!', 'formidable' ); ?>">
+				<svg class="frmsvg frm_svg20" aria-hidden="true" focusable="false"><use href="#frm_clone_icon"></use></svg>
+			</button>
+		</div>
 		<p class="description">
-			<a href="<?php echo esc_url( add_query_arg( 'utm_content', 'mcp-env-download', FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' ) ) . '#kb-connect-a-remote-site-through-http' ); ?>" target="_blank" rel="noopener noreferrer">
+			<a href="<?php echo esc_url( $docs_urls['env'] ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php esc_html_e( 'Formidable guide: Connect with the skill HTTP helper', 'formidable' ); ?>
 			</a>
 		</p>
 		<?php if ( $env_available ) { ?>
 			<?php wp_nonce_field( FrmMcpSkillEnvController::DOWNLOAD_ACTION, FrmMcpSkillEnvController::DOWNLOAD_ACTION . '_nonce' ); ?>
 			<button type="submit" class="button frm-button-secondary" formaction="<?php echo esc_url( $admin_post_url ); ?>" formmethod="post" name="action" value="<?php echo esc_attr( FrmMcpSkillEnvController::DOWNLOAD_ACTION ); ?>">
-				<?php esc_html_e( 'Download configured frm-mcp.env', 'formidable' ); ?>
+				<?php esc_html_e( 'Generate Application Password and download frm-mcp.env', 'formidable' ); ?>
 			</button>
-			<p class="description"><?php esc_html_e( 'Each download creates a new credential. Keep the file private and out of version control. This password is restricted to Formidable MCP while the plugin is active. Revoke it before deactivating Formidable.', 'formidable' ); ?></p>
+			<p class="description frm-mcp-credential-note"><?php esc_html_e( 'Each download creates a new credential. Keep the file private and out of version control. This password is restricted to Formidable MCP while the plugin is active. Revoke it before deactivating Formidable.', 'formidable' ); ?></p>
 		<?php } else { ?>
 			<p class="description"><?php esc_html_e( 'Application Passwords must be available for your account, and public sites must use HTTPS, to create this file.', 'formidable' ); ?></p>
 		<?php } ?>
 		<?php if ( $skill_passwords ) { ?>
 			<?php wp_nonce_field( FrmMcpSkillEnvController::REVOKE_ACTION, FrmMcpSkillEnvController::REVOKE_ACTION . '_nonce' ); ?>
-			<h4 class="frm-text-md frm-mb-sm"><?php esc_html_e( 'Downloaded skill credentials', 'formidable' ); ?></h4>
-			<div class="frm-border-b">
+			<h4 class="frm-text-md frm-mb-sm frm-mcp-credentials-heading"><?php esc_html_e( 'Downloaded skill credentials', 'formidable' ); ?></h4>
+			<div>
 				<?php foreach ( $skill_passwords as $skill_password ) { ?>
-					<?php $created_at = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $skill_password['created'] ); ?>
 					<div class="frm-flex frm-flex-wrap frm-items-center frm-justify-between frm-gap-sm frm-p-sm frm-bt-200">
 						<div class="frm-flex-col frm-gap-2xs frm-flex-full frm-min-w-0">
 							<strong class="frm-text-sm"><?php esc_html_e( 'Formidable MCP skill', 'formidable' ); ?></strong>
@@ -246,7 +206,7 @@ if ( ! $mcp_enabled ) {
 								printf(
 									/* translators: %s: Date and time the skill credential was created. */
 									esc_html__( 'Created %s', 'formidable' ),
-									esc_html( $created_at )
+									esc_html( $skill_password['created_at'] )
 								);
 								?>
 								<span aria-hidden="true"> · </span>
@@ -270,7 +230,7 @@ if ( ! $mcp_enabled ) {
 								printf(
 									/* translators: %s: Date and time the skill credential was created. */
 									esc_html__( 'skill credential created %s', 'formidable' ),
-									esc_html( $created_at )
+									esc_html( $skill_password['created_at'] )
 								);
 								?>
 							</span>
