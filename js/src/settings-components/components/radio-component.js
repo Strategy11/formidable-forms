@@ -108,7 +108,41 @@ export default class frmRadioComponent {
 			radio.addEventListener( 'change', event => {
 				this.onRadioChange( event.target );
 			} );
+
+			const span = this.getRadioSpan( radio );
+			if ( span ) {
+				span.addEventListener( 'keydown', event => this.onSpanKeydown( event, radio ) );
+			}
 		} );
+	}
+
+	/**
+	 * Gets the ARIA `role="radio"` span associated with a native radio input, if the input's label wraps one.
+	 *
+	 * @param {HTMLInputElement} radio - The native radio input.
+	 * @return {HTMLElement|null} The associated span, or null if the label doesn't wrap one.
+	 */
+	getRadioSpan( radio ) {
+		const label = radio.labels && radio.labels[ 0 ];
+		return label ? label.querySelector( '[role="radio"]' ) : null;
+	}
+
+	/**
+	 * Forwards Enter/Space activation on an ARIA radio span to its native input — the span itself isn't a native
+	 * form control, so it needs its own keyboard handling to match what its role="radio" announces.
+	 *
+	 * @param {KeyboardEvent}    event - The keydown event.
+	 * @param {HTMLInputElement} radio - The native radio input to activate.
+	 */
+	onSpanKeydown( event, radio ) {
+		if ( 'Enter' !== event.key && ' ' !== event.key && 'Spacebar' !== event.key ) {
+			return;
+		}
+		event.preventDefault();
+		if ( ! radio.checked ) {
+			radio.checked = true;
+			radio.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+		}
 	}
 
 	/**
@@ -127,6 +161,22 @@ export default class frmRadioComponent {
 		this.moveTracker( activeItem, wrapper );
 		this.hideExtraElements( target );
 		this.maybeShowExtraElements( target );
+		this.syncAriaChecked( wrapper );
+	}
+
+	/**
+	 * Keeps each radio span's `aria-checked` in sync with its input's checked state — the value is only ever
+	 * rendered once at PHP render time, so it goes stale the moment the user picks a different option.
+	 *
+	 * @param {HTMLElement} wrapper - The radio component wrapper.
+	 */
+	syncAriaChecked( wrapper ) {
+		wrapper.querySelectorAll( 'input[type="radio"]' ).forEach( radio => {
+			const span = this.getRadioSpan( radio );
+			if ( span ) {
+				span.setAttribute( 'aria-checked', radio.checked ? 'true' : 'false' );
+			}
+		} );
 	}
 
 	/**
