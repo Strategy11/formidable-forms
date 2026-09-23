@@ -34,10 +34,12 @@ $aria_attrs = array();
 if ( ! empty( $args['aria-label-attr'] ) ) {
 	$aria_attrs['aria-label'] = $args['aria-label-attr'];
 } elseif ( $off_label_shown || $on_label_shown ) {
-	// The default `{$id}_label` fallback below assumes some other element on the page
-	// carries that id (e.g. an external <label for>) -- when this view renders its own
-	// visible label span(s), point at those instead so the accessible name actually
-	// resolves to the visible text, rather than a dangling reference to nothing.
+	// When this view renders its own visible label span(s), point at those
+	// instead of the `{$id}_label` fallback below, so the accessible name
+	// resolves to the visible text. The fallback only resolves for callers that
+	// render their own external element with that id -- most callers of this
+	// view don't, so it stays a dangling reference for them (tracked separately,
+	// not fixed by this change -- see the PR description).
 	$labelledby = array();
 	if ( $off_label_shown ) {
 		$labelledby[] = $id . '_off_label';
