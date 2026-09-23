@@ -1690,7 +1690,7 @@ DEFAULT_HTML;
 	 * `for`-associated label (`$has_for_label = false`), which already get
 	 * an equivalent aria-labelledby from multiple_input_html()'s wrapper.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array  $args Rendering context. May include `html_id`.
 	 * @param string $input_html Attributes string of a single input/select/textarea tag, passed by reference.
