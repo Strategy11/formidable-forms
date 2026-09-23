@@ -390,6 +390,7 @@ export default class frmSliderComponent {
 				// There is no number to show or edit once the unit itself is unset.
 				valueInput.value = '';
 				valueInput.disabled = true;
+				frmSliderComponent.updateLabelFocusTarget( valueInput, false );
 
 				// Drop the old unit from what is announced, the value no longer carries one.
 				frmSliderComponent.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
@@ -412,6 +413,7 @@ export default class frmSliderComponent {
 				// the text box blank rather than duplicating the word or coercing it into a number.
 				valueInput.value = '';
 				valueInput.disabled = true;
+				frmSliderComponent.updateLabelFocusTarget( valueInput, false );
 
 				// The slider no longer stands for a number, so announce the keyword that replaced it.
 				rangeInput.setAttribute( 'aria-valuetext', unit );
@@ -424,6 +426,7 @@ export default class frmSliderComponent {
 			element.classList.remove( 'frm-disabled', 'frm-empty' );
 			rangeInput.disabled = false;
 			valueInput.disabled = false;
+			frmSliderComponent.updateLabelFocusTarget( valueInput, true );
 
 			if ( ! this.options[ index ].steps ) {
 				rangeInput.max = this.getMaxValue( unit, index, this.getRangeValue( rangeInput, index ) );
@@ -439,6 +442,36 @@ export default class frmSliderComponent {
 			frmSliderComponent.refreshRange( rangeInput, element, value );
 			this.triggerValueChange( index );
 		} );
+	}
+
+	/**
+	 * Keeps a value input's <label for="..."> pointed at it only while it is enabled - a label
+	 * click never focuses a disabled control, so leaving `for` set while the unit is non-measured
+	 * ('auto' or unset) makes the label a permanent no-op instead of clearing on the initial PHP
+	 * render alone (see `_buttons.php`'s `data-slider-label-for`, which templates use to mark the
+	 * label without committing to a `for` that may start out invalid).
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLInputElement} valueInput - The visible text input the label may target.
+	 * @param {boolean}          isMeasured - Whether the input is now enabled (a measured unit).
+	 * @return {void}
+	 */
+	static updateLabelFocusTarget( valueInput, isMeasured ) {
+		if ( ! valueInput.id ) {
+			return;
+		}
+
+		const label = document.querySelector( `[data-slider-label-for="${ valueInput.id }"]` );
+		if ( ! label ) {
+			return;
+		}
+
+		if ( isMeasured ) {
+			label.setAttribute( 'for', valueInput.id );
+		} else {
+			label.removeAttribute( 'for' );
+		}
 	}
 
 	/**

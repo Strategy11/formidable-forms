@@ -29,4 +29,33 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 		cy.get( '#frm_fieldset' ).should( 'not.be.visible' );
 		cy.focused().should( 'have.id', 'frm_fieldset-value' );
 	} );
+
+	it( 'A "Width"/"Height" label targets nothing while its unit defaults to "auto", and gets a working focus target once a measured unit is chosen', () => {
+		cy.intercept( 'POST', '**/admin-ajax.php', req => {
+			if ( req.body?.includes( 'action=frm_change_styling' ) ) {
+				req.alias = 'changeStyling';
+			}
+		} );
+
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#buttons-style button[aria-label="Buttons"]' ).click();
+		cy.get( '#frm_style_section_buttons-style' ).should( 'be.visible' );
+
+		cy.log( 'Width defaults to "auto" out of the box (FrmStyle.php), rendering the value input disabled' );
+		cy.get( '#frm_submit_width' ).should( 'have.value', 'auto' );
+		cy.get( '#frm_submit_width-value' ).should( 'be.disabled' );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).should( 'not.have.attr', 'for' );
+
+		cy.log( 'Choosing a measured unit re-associates the label with the now-enabled input' );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( 'px' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).should( 'have.attr', 'for', 'frm_submit_width-value' );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).click();
+		cy.focused().should( 'have.id', 'frm_submit_width-value' );
+
+		cy.log( 'Switching back to "auto" removes the focus target again, live, not just on the next server render' );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( 'auto' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).should( 'not.have.attr', 'for' );
+	} );
 } );
