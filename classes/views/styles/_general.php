@@ -29,8 +29,7 @@ new FrmBackgroundImageStyleComponent(
 ?>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_form_align"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Alignment', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -38,9 +37,7 @@ new FrmBackgroundImageStyleComponent(
 	new FrmAlignStyleComponent(
 		$frm_style->get_field_name( 'form_align' ),
 		$style->post_content['form_align'],
-		array(
-			'id' => 'frm_form_align',
-		)
+		array()
 	);
 	?>
 </div>
@@ -64,8 +61,7 @@ new FrmBackgroundImageStyleComponent(
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_fieldset"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -82,8 +78,7 @@ new FrmBackgroundImageStyleComponent(
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_fieldset_padding"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -101,8 +96,7 @@ new FrmBackgroundImageStyleComponent(
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_form_width"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Form Width', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -119,8 +113,7 @@ new FrmBackgroundImageStyleComponent(
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_direction"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Direction', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -128,9 +121,7 @@ new FrmBackgroundImageStyleComponent(
 	new FrmDirectionStyleComponent(
 		$frm_style->get_field_name( 'direction' ),
 		$style->post_content['direction'],
-		array(
-			'id' => 'frm_direction',
-		)
+		array()
 	);
 	?>
 </div>
