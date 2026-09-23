@@ -289,6 +289,7 @@ window.frmAdminBuildJS = function() {
 	let autoId = 0;
 	const optionMap = {};
 	let lastNewActionIdReturned = 0;
+	const sortableInitializedFieldIds = new Set();
 
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
@@ -1877,6 +1878,20 @@ window.frmAdminBuildJS = function() {
 			}
 		};
 		jQuery( sort ).sortable( opts );
+	}
+
+	// Scope sortable init to the one field whose panel just opened, instead of the whole
+	// builder, so jQuery UI's mousedown item scan only covers that field's own option list.
+	function setupFieldOptionSortingForPanel( fieldId, fieldSettingsEl ) {
+		if ( sortableInitializedFieldIds.has( fieldId ) ) {
+			return;
+		}
+		const fieldOpts = fieldSettingsEl.querySelector( '.frm_sortable_field_opts' );
+		if ( ! fieldOpts ) {
+			return;
+		}
+		sortableInitializedFieldIds.add( fieldId );
+		setupFieldOptionSorting( fieldOpts );
 	}
 
 	// Get the section where a field is dropped
@@ -11348,12 +11363,6 @@ window.frmAdminBuildJS = function() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			// Once is enough for the life of the page. This always ran against the whole builder,
-			// so calling it from setupSortable meant repeating it for every field that loaded, and
-			// sortable picks up options added later on its own: it refreshes its item list on mouse
-			// down rather than at set up time.
-			setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
-
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 			initFieldListHoverPill();
 
@@ -11532,6 +11541,7 @@ window.frmAdminBuildJS = function() {
 			} );
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
+				setupFieldOptionSortingForPanel( fieldSettingsEl.id.replace( 'frm-single-settings-', '' ), fieldSettingsEl );
 			}, 9999 );
 
 			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
