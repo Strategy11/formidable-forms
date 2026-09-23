@@ -371,6 +371,25 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmAppHelper::svg_logo
+	 */
+	public function test_svg_logo_is_decorative() {
+		$icon = FrmAppHelper::svg_logo();
+		$this->assertStringContainsString( 'aria-hidden="true"', $icon );
+	}
+
+	/**
+	 * @covers FrmAppHelper::show_header_logo
+	 */
+	public function test_show_header_logo_does_not_duplicate_aria_hidden() {
+		ob_start();
+		FrmAppHelper::show_header_logo();
+		$output = ob_get_clean();
+
+		$this->assertSame( 1, substr_count( $output, 'aria-hidden' ) );
+	}
+
+	/**
 	 * @covers FrmAppHelper::is_a_valid_color
 	 */
 	public function test_is_a_valid_color() {
