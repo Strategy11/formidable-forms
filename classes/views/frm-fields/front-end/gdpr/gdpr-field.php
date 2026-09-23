@@ -17,8 +17,9 @@ $label_id       = 'frm-gdpr-accept-' . $field_id;
 
 <?php if ( ! FrmFieldGdprHelper::hide_gdpr_field() ) : ?>
 <div class="frm_checkbox" role="group" aria-labelledby="<?php echo esc_attr( $label_id ); ?>">
-	<label for="<?php echo esc_attr( $label_id ); ?>">
-		<input type="checkbox" aria-required="true" name="item_meta[<?php echo esc_attr( $field_id ); ?>]" id="<?php echo esc_attr( $label_id ); ?>" value="1" 
+	<?php // No `for` attribute -- the label already wraps the input below, so adding one too makes Safari VoiceOver announce it twice. ?>
+	<label>
+		<input type="checkbox" aria-required="true" name="item_meta[<?php echo esc_attr( $field_id ); ?>]" id="<?php echo esc_attr( $label_id ); ?>" value="1"
 		<?php echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php do_action( 'frm_field_input_html', $field ); ?>
 		/>
