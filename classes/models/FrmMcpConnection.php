@@ -168,12 +168,12 @@ class FrmMcpConnection {
 	 *
 	 * @return bool
 	 */
-	private static function is_formidable_ability( $ability_name ) {
+	public static function is_formidable_ability( $ability_name ) {
 		if ( '' === $ability_name ) {
 			return false;
 		}
 
-		if ( function_exists( 'wp_get_ability' ) ) {
+		if ( function_exists( 'wp_get_ability' ) && wp_has_ability( $ability_name ) ) {
 			$ability = wp_get_ability( $ability_name );
 
 			if ( $ability && is_callable( array( $ability, 'get_category' ) ) ) {

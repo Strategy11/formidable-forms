@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since x.x
  */
 class FrmMcpSettingsController {
+	const TAB_ANCHOR = 'mcp_settings';
 
 	/**
 	 * Transient holding the latest skill release read from the GitHub API.
@@ -78,6 +79,7 @@ class FrmMcpSettingsController {
 			'class'    => 'FrmMcpSettingsController',
 			'function' => 'route',
 			'name'     => __( 'MCP', 'formidable' ),
+			'anchor'   => self::TAB_ANCHOR,
 			// The same cloud the API section uses, in both its real and placeholder
 			// form, since the two tabs are two faces of the same feature.
 			// frm_bolt_icon was here before and is not in images/icons.svg, so the
@@ -133,14 +135,19 @@ class FrmMcpSettingsController {
 	 * @return void
 	 */
 	public static function route() {
-		$mcp_enabled    = FrmMcpController::is_enabled();
-		$connections    = FrmMcpCompat::is_usable() ? FrmMcpConnection::get_connections() : null;
-		$blocked_reason = $mcp_enabled ? FrmMcpCompat::unsupported_reason() : '';
-		$is_inherited   = self::inherited_from_api_addon();
-		$skill_url      = self::get_skill_download_url();
-		$skill_release  = self::get_skill_release();
-		$skill_download = self::get_skill_download();
-		$skill_is_stale = self::skill_update_available( $skill_release, $skill_download );
+		$mcp_enabled     = FrmMcpController::is_enabled();
+		$connections     = FrmMcpCompat::is_usable() ? FrmMcpConnection::get_connections() : null;
+		$blocked_reason  = $mcp_enabled ? FrmMcpCompat::unsupported_reason() : '';
+		$is_inherited    = self::inherited_from_api_addon();
+		$skill_url       = self::get_skill_download_url();
+		$skill_release   = self::get_skill_release();
+		$skill_download  = self::get_skill_download();
+		$skill_is_stale  = self::skill_update_available( $skill_release, $skill_download );
+		$skill_passwords = FrmMcpSkillEnvController::get_passwords( get_current_user_id() );
+		$env_available   = wp_is_application_passwords_available_for_user( get_current_user_id() )
+		&& current_user_can( 'create_app_password', get_current_user_id() )
+		&& ( 'https' === wp_parse_url( home_url(), PHP_URL_SCHEME ) || 'local' === wp_get_environment_type() );
+		$admin_post_url  = admin_url( 'admin-post.php' );
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/mcp.php';
 	}
