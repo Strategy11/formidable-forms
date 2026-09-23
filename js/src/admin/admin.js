@@ -1856,7 +1856,17 @@ window.frmAdminBuildJS = function() {
 		return [ 'frm_full', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm1', 'frm2', 'frm3', 'frm4', 'frm5', 'frm6', 'frm7', 'frm8', 'frm9', 'frm10', 'frm11', 'frm12' ];
 	}
 
-	function setupFieldOptionSorting( sort ) {
+	// Scope sortable init to the one field whose panel just opened, instead of the whole
+	// builder, so jQuery UI's mousedown item scan only covers that field's own option list.
+	// Sortable's `items` option is matched against the whole document then filtered to
+	// descendants of the element passed to .sortable() - that element itself must be an
+	// ancestor of the '.frm_sortable_field_opts li' matches, not the list, so this takes
+	// fieldSettingsEl rather than the field's own option list. Guards against double-init
+	// since sortable's own item list is refreshed lazily, not just at setup time.
+	function setupFieldOptionSorting( fieldSettingsEl ) {
+		if ( fieldSettingsEl.classList.contains( 'ui-sortable' ) || ! fieldSettingsEl.querySelector( '.frm_sortable_field_opts' ) ) {
+			return;
+		}
 		const opts = {
 			items: '.frm_sortable_field_opts li',
 			axis: 'y',
@@ -1876,20 +1886,7 @@ window.frmAdminBuildJS = function() {
 				fieldUpdated();
 			}
 		};
-		jQuery( sort ).sortable( opts );
-	}
-
-	// Scope sortable init to the one field whose panel just opened, instead of the whole
-	// builder, so jQuery UI's mousedown item scan only covers that field's own option list.
-	// Sortable's `items` option is matched against the whole document then filtered to
-	// descendants of the element passed to .sortable() - that element itself must be an
-	// ancestor of the '.frm_sortable_field_opts li' matches, not the list, so this passes
-	// fieldSettingsEl rather than the field's own option list.
-	function setupFieldOptionSortingForPanel( fieldSettingsEl ) {
-		if ( fieldSettingsEl.classList.contains( 'ui-sortable' ) || ! fieldSettingsEl.querySelector( '.frm_sortable_field_opts' ) ) {
-			return;
-		}
-		setupFieldOptionSorting( fieldSettingsEl );
+		jQuery( fieldSettingsEl ).sortable( opts );
 	}
 
 	// Get the section where a field is dropped
@@ -11539,7 +11536,7 @@ window.frmAdminBuildJS = function() {
 			} );
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
-				setupFieldOptionSortingForPanel( fieldSettingsEl );
+				setupFieldOptionSorting( fieldSettingsEl );
 			}, 9999 );
 
 			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
