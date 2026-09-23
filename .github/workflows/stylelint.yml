@@ -1,9 +1,6 @@
 name: Stylelint
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types: [opened, labeled, synchronize]
 
