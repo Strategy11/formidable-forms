@@ -289,6 +289,7 @@ window.frmAdminBuildJS = function() {
 	let autoId = 0;
 	const optionMap = {};
 	let lastNewActionIdReturned = 0;
+	let fieldGroupMessageDismissed = false;
 
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
@@ -1856,7 +1857,17 @@ window.frmAdminBuildJS = function() {
 		return [ 'frm_full', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm1', 'frm2', 'frm3', 'frm4', 'frm5', 'frm6', 'frm7', 'frm8', 'frm9', 'frm10', 'frm11', 'frm12' ];
 	}
 
-	function setupFieldOptionSorting( sort ) {
+	// Scope sortable init to the one field whose panel just opened, instead of the whole
+	// builder, so jQuery UI's mousedown item scan only covers that field's own option list.
+	// Sortable's `items` option is matched against the whole document then filtered to
+	// descendants of the element passed to .sortable() - that element itself must be an
+	// ancestor of the '.frm_sortable_field_opts li' matches, not the list, so this takes
+	// fieldSettingsEl rather than the field's own option list. Guards against double-init
+	// since sortable's own item list is refreshed lazily, not just at setup time.
+	function setupFieldOptionSorting( fieldSettingsEl ) {
+		if ( fieldSettingsEl.classList.contains( 'ui-sortable' ) || ! fieldSettingsEl.querySelector( '.frm_sortable_field_opts' ) ) {
+			return;
+		}
 		const opts = {
 			items: '.frm_sortable_field_opts li',
 			axis: 'y',
@@ -1876,7 +1887,7 @@ window.frmAdminBuildJS = function() {
 				fieldUpdated();
 			}
 		};
-		jQuery( sort ).sortable( opts );
+		jQuery( fieldSettingsEl ).sortable( opts );
 	}
 
 	// Get the section where a field is dropped
@@ -5283,6 +5294,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function maybeShowFieldGroupMessage() {
+		if ( fieldGroupMessageDismissed ) {
+			return;
+		}
+
 		let fieldGroupMessage = document.getElementById( 'frm-field-group-message' );
 		const rows = document.querySelectorAll( '.edit_form_item:not(.edit_field_type_end_divider)' );
 
@@ -5317,6 +5332,7 @@ window.frmAdminBuildJS = function() {
 
 		// Set up a click event listener
 		document.getElementById( 'frm-field-group-message-dismiss' ).addEventListener( 'click', () => {
+			fieldGroupMessageDismissed = true;
 			hideFieldGroupMessage( document.getElementById( 'frm-field-group-message' ) );
 		} );
 	}
@@ -8316,6 +8332,7 @@ window.frmAdminBuildJS = function() {
 		} );
 
 		singleField.classList.remove( 'frm_hidden' );
+		initiateMultiselect( singleField );
 
 		// Cancel slide animation on expanded sections so screen readers
 		// can immediately access inputs after DOM re-insertion.
@@ -10015,9 +10032,12 @@ window.frmAdminBuildJS = function() {
 	 *                                           instead of every multiselect in the page.
 	 */
 	function initiateMultiselect( container ) {
-		const $multiselect = container
-			? jQuery( container ).find( '.frm_multiselect' )
-			: jQuery( '.frm_multiselect' );
+		// A field's own settings panel (.frm-single-settings) stays hidden until it's clicked, so a
+		// still-hidden panel's multiselect is skipped here and initiated later, when its panel is
+		// shown (showFieldOptions) - regardless of whether this run is scoped to a container (e.g.
+		// newly ajax-loaded fields) or the whole page.
+		const $multiselect = ( container ? jQuery( container ).find( '.frm_multiselect' ) : jQuery( '.frm_multiselect' ) )
+			.not( '.frm-single-settings.frm_hidden .frm_multiselect' );
 
 		$multiselect.hide().each( frmDom.bootstrap.multiselect.init );
 	}
@@ -11344,12 +11364,6 @@ window.frmAdminBuildJS = function() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			// Once is enough for the life of the page. This always ran against the whole builder,
-			// so calling it from setupSortable meant repeating it for every field that loaded, and
-			// sortable picks up options added later on its own: it refreshes its item list on mouse
-			// down rather than at set up time.
-			setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
-
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 			initFieldListHoverPill();
 
@@ -11528,6 +11542,7 @@ window.frmAdminBuildJS = function() {
 			} );
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
+				setupFieldOptionSorting( fieldSettingsEl );
 			}, 9999 );
 
 			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {

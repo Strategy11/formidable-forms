@@ -19,7 +19,12 @@ describe( 'Run some accessibility tests', function() {
 		cy.injectAxe();
 		configureAxeWithBaselineIgnoredRuleset();
 		cy.checkA11y( null, null, violations => {
-			expect( violations ).to.have.lengthOf( 0 );
+			// cy.task output doesn't reach the GitHub Actions log, so build the same
+			// summary into the assertion message below, which does.
+			const summary = violations
+				.map( ( { id, impact, description, nodes } ) => `${ id } (${ impact }): ${ description } - ${ nodes.length } node(s)` )
+				.join( '\n' );
+			expect( violations, summary ).to.have.lengthOf( 0 );
 		} );
 		cy.checkIbmAccessibility( 'form-preview' );
 	} );
