@@ -164,7 +164,7 @@ class FrmCurrencyHelper {
 		// still reads as a decimal point even though the currency expects '.' as its thousand
 		// separator. A comma in a dot-decimal currency is never ambiguous this way: it's
 		// always thousands grouping (e.g. "1,23" on a GBP form is 123, not 1.23).
-		if ( '.' !== $present || 1 !== substr_count( $amount, $present ) ) {
+		if ( '.' !== $present || ',' !== $currency['decimal_separator'] || 1 !== substr_count( $amount, $present ) ) {
 			return false;
 		}
 
