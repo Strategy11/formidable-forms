@@ -16,7 +16,9 @@ concurrency:
 
 jobs:
   runStylelintInspection:
-    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'run analysis')
+      && (github.event.action != 'labeled' || github.event.label.name == 'run analysis')
     name: Run Stylelint
     runs-on: ubuntu-latest
     steps:
