@@ -27,8 +27,7 @@ class test_FrmFieldHTML extends FrmUnitTest {
 		// The actual tinyMCEPreInit.mceInit assignment is only printed by
 		// _WP_Editors::editor_js(), normally called from the admin footer.
 		_WP_Editors::editor_js();
-		$output = ob_get_clean();
-
+		$output         = ob_get_clean();
 		$mce_init_start = strpos( $output, 'mceInit: {' );
 		$qt_init_start  = strpos( $output, 'qtInit: {' );
 		$this->assertNotFalse( $mce_init_start, 'Expected _WP_Editors::editor_js() to print a mceInit block' );
