@@ -408,13 +408,8 @@ class FrmFieldsController {
 		$display   = $atts['display'];
 		unset( $atts );
 
-		if ( ! isset( $field['unique'] ) ) {
-			$field['unique'] = false;
-		}
-
-		if ( ! isset( $field['read_only'] ) ) {
-			$field['read_only'] = false;
-		}
+		$field['unique']    = $field['unique'] ?? false;
+		$field['read_only'] = $field['read_only'] ?? false;
 
 		$field_selection_data = self::maybe_define_field_selection_data();
 		$all_field_types      = $field_selection_data->all_field_types;
