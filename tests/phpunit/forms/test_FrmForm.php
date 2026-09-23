@@ -70,85 +70,6 @@ class test_FrmForm extends FrmUnitTest {
 	}
 
 	/**
-	 * Same callback tests/mu-plugins/frm-protect-last-form.php hooks in the e2e suite - shared from
-	 * tests/frm-last-form-guard-callback.php so there's nothing to keep in sync by hand.
-	 *
-	 * @return callable
-	 */
-	protected function last_form_guard_callback() {
-		require_once __DIR__ . '/../../frm-last-form-guard-callback.php';
-
-		return frm_last_form_guard_callback();
-	}
-
-	/**
-	 * @covers FrmForm::destroy
-	 */
-	public function test_destroy_is_blocked_by_frm_before_destroy_form_filter() {
-		// Clear any pre-existing forms before the filter is hooked, so it can't block this cleanup.
-		foreach ( FrmForm::getAll( array( 'is_template' => 0 ) ) as $form ) {
-			FrmForm::destroy( $form->id );
-		}
-
-		$callback = $this->last_form_guard_callback();
-		add_filter( 'frm_before_destroy_form', $callback );
-
-		$last_form_id = $this->factory->form->create();
-		$result       = FrmForm::destroy( $last_form_id );
-		$this->assertFalse( $result, 'The last remaining form should not be destroyed while the filter is hooked.' );
-		$this->assertInstanceOf( \stdClass::class, FrmForm::getOne( $last_form_id ) );
-
-		$second_form_id = $this->factory->form->create();
-		$result         = FrmForm::destroy( $second_form_id );
-		$this->assertNotFalse( $result, 'A form should still be destroyable while a second form exists.' );
-		$this->assertNotInstanceOf( \stdClass::class, FrmForm::getOne( $second_form_id ) );
-
-		remove_filter( 'frm_before_destroy_form', $callback );
-
-		$result = FrmForm::destroy( $last_form_id );
-		$this->assertNotFalse( $result, 'The last form should be destroyable once the filter is removed.' );
-	}
-
-	/**
-	 * Regression test for the Empty Trash flow (Forms/deleteForms.cy.js): one non-trashed form
-	 * plus several trashed ones. Every trashed form must still be permanently destroyable one at a
-	 * time, since none of them is individually "the last form" while the non-trashed one survives -
-	 * a non-trashed-only count would wrongly see each of them as the last form and block all of
-	 * them.
-	 *
-	 * @covers FrmForm::destroy
-	 */
-	public function test_destroy_allows_emptying_trash_while_one_form_remains() {
-		foreach ( FrmForm::getAll( array( 'is_template' => 0 ) ) as $form ) {
-			FrmForm::destroy( $form->id );
-		}
-
-		$callback = $this->last_form_guard_callback();
-		add_filter( 'frm_before_destroy_form', $callback );
-
-		$surviving_form_id = $this->factory->form->create();
-		$trashed_form_ids  = array();
-
-		for ( $i = 0; $i < 3; $i++ ) {
-			$trashed_form_ids[] = $this->factory->form->create();
-		}
-
-		foreach ( $trashed_form_ids as $trashed_form_id ) {
-			FrmForm::trash( $trashed_form_id );
-		}
-
-		foreach ( $trashed_form_ids as $trashed_form_id ) {
-			$result = FrmForm::destroy( $trashed_form_id );
-			$this->assertNotFalse( $result, 'A trashed form should be destroyable while a non-trashed form survives (Empty Trash flow).' );
-			$this->assertNotInstanceOf( \stdClass::class, FrmForm::getOne( $trashed_form_id ) );
-		}
-
-		$this->assertInstanceOf( \stdClass::class, FrmForm::getOne( $surviving_form_id ), 'The one non-trashed form should be untouched by emptying the trash.' );
-
-		remove_filter( 'frm_before_destroy_form', $callback );
-	}
-
-	/**
 	 * @covers FrmForm::set_status
 	 */
 	public function test_set_status() {
@@ -213,7 +134,6 @@ class test_FrmForm extends FrmUnitTest {
 
 		$form->logged_in                 = 1;
 		$form->options['logged_in_role'] = $visibility;
-
 		return FrmForm::is_visible_to_user( $form );
 	}
 
@@ -357,7 +277,6 @@ class test_FrmForm extends FrmUnitTest {
 			)
 		);
 		FrmForm::clear_form_cache();
-
 		return $form_id;
 	}
 }

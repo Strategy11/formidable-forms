@@ -722,11 +722,6 @@ class FrmForm {
 
 		$id = $form->id;
 
-		// No callback is registered by default; the e2e test suite is the only caller that hooks this.
-		if ( ! apply_filters( 'frm_before_destroy_form', true, $id ) ) {
-			return false;
-		}
-
 		// Disconnect the entries from this form
 		$entries = FrmDb::get_col( 'frm_items', array( 'form_id' => $id ) );
 

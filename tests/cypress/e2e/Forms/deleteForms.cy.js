@@ -20,6 +20,9 @@ describe( 'Deleting forms', () => {
 	it( 'should create multiple forms and bulk delete them', () => {
 		cy.emptyTrash();
 
+		cy.log( 'Create a form this test never selects for delete, so the list can never hit 0 forms - a shard-order flake between this spec and the HTML-validation spec, not a real product constraint' );
+		cy.createNewForm( 'Keep Alive Form' );
+
 		cy.log( 'Record the published form count so later assertions allow for forms this test did not create, like the default Contact Us form' );
 		let baselinePublishedCount = '(0)';
 		cy.get( '.published > a .count' ).invoke( 'text' ).then( text => {
