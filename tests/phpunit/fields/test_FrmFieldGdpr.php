@@ -75,6 +75,10 @@ class test_FrmFieldGdpr extends FrmUnitTest {
 		}
 
 		$this->assertStringContainsString( 'GDPR field is disabled', $html, 'Expected the disabled-notice branch to render' );
-		$this->assertDoesNotMatchRegularExpression( '/<label[^>]*\bfor=/', $html, 'The disabled-notice label has no input to associate with, so it should not carry a for attribute' );
+		$this->assertDoesNotMatchRegularExpression(
+			'/<label[^>]*\bfor=/',
+			$html,
+			'The disabled-notice label has no input to associate with, so it should not carry a for attribute'
+		);
 	}
 }
