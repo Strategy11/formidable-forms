@@ -2730,6 +2730,11 @@ window.frmAdminBuildJS = function() {
 			if ( ! Object.hasOwn( loadedFields, key ) ) {
 				continue;
 			}
+			const oldField = document.getElementById( `frm_field_id_${ key }` );
+			if ( oldField ) {
+				dragDropObserver.unobserve( oldField );
+				dragDropAttachers.delete( oldField );
+			}
 			jQuery( `#frm_field_id_${ key }` ).replaceWith( loadedFields[ key ].html );
 			loadedFieldData.push( { id: key, type: loadedFields[ key ].type } );
 
