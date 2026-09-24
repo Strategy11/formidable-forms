@@ -5243,7 +5243,7 @@ class FrmAppHelper {
 			return 'frm_load_field' === self::get_post_param( 'action', '', 'sanitize_text_field' );
 		}
 
-		return self::is_form_builder_page();
+		return self::is_form_builder_page( false );
 	}
 
 	/**
