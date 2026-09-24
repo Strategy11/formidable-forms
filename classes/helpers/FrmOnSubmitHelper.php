@@ -66,7 +66,7 @@ class FrmOnSubmitHelper {
 				)
 			);
 			?>
-			<label for="<?php echo esc_attr( $id_attr ); ?>">
+			<label for="<?php echo esc_attr( $id_attr ); ?>" id="<?php echo esc_attr( $id_attr ); ?>_label">
 				<?php esc_html_e( 'Show the form with the confirmation message', 'formidable' ); ?>
 			</label>
 		</div>

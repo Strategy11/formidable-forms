@@ -1,9 +1,6 @@
 name: Stylelint
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types: [opened, labeled, synchronize]
 
@@ -11,12 +8,14 @@ on:
 # rather than derived from github.workflow: several files share the workflow
 # name `Inspections` and would otherwise cancel each other.
 concurrency:
-  group: formidable-stylelint-${{ github.ref }}
+  group: formidable-stylelint-${{ github.ref }}-${{ ((contains(github.event.pull_request.labels.*.name, 'run analysis') || contains(github.event.pull_request.labels.*.name, 'full automated qa')) && (github.event.action != 'labeled' || github.event.label.name == 'run analysis' || github.event.label.name == 'full automated qa')) && 'active' || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   runStylelintInspection:
-    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
+    if: >-
+      (contains(github.event.pull_request.labels.*.name, 'run analysis') || contains(github.event.pull_request.labels.*.name, 'full automated qa'))
+      && (github.event.action != 'labeled' || github.event.label.name == 'run analysis' || github.event.label.name == 'full automated qa')
     name: Run Stylelint
     runs-on: ubuntu-latest
     steps:
@@ -42,6 +41,15 @@ jobs:
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --include=dev --legacy-peer-deps
+
+      - name: Set up WP environment
+        run: npm run env start
+
+      # css/formidableforms.css is a runtime-rendered stylesheet (see
+      # FrmStyle::save_settings()), not a build artifact, so there's nothing
+      # on disk for stylelint to check without this.
+      - name: Generate default stylesheet for lint coverage
+        run: npx wp-env run cli wp eval 'require FrmAppHelper::plugin_path() . "/bin/generate-default-stylesheet.php";'
 
       - name: Run Stylelint
         run: npx stylelint "**/*.{css,scss}"

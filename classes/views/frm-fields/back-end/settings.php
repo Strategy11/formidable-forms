@@ -381,7 +381,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		<?php if ( $display['captcha_size'] ) { ?>
 			<p class="frm6 frm_first frm_form_field">
-				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>">
+				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" <?php FrmAppHelper::array_to_html_params( FrmAppHelper::get_tooltip_attr( __( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ), true ); ?>>
 					<?php esc_html_e( 'Captcha Size', 'formidable' ); ?>
 				</label>
 				<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>">
@@ -465,7 +465,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		?>
 
 		<p class="frm6 frm_form_field">
-			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
+			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" <?php FrmAppHelper::array_to_html_params( FrmAppHelper::get_tooltip_attr( __( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ), true ); ?>>
 				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
 			</label>
 			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>

@@ -160,8 +160,8 @@ class FrmMigrate {
 		$message = array(
 			'key'     => 'failed-to-create-tables',
 			'subject' => 'Something went wrong setting up the database',
-			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables" target="_blank" rel="noopener">Learn More</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			'message' => 'For steps to continue, see our <a href="' . esc_url( FrmAppHelper::get_doc_url( 'install-formidable-forms/#kb-missing-database-tables', 'missing-tables-inbox-message' ) ) . '" target="_blank" rel="noopener">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			'cta'     => '<a href="' . esc_url( FrmAppHelper::get_doc_url( 'install-formidable-forms/#kb-missing-database-tables', 'missing-tables-inbox-cta' ) ) . '" target="_blank" rel="noopener">Learn More</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'type'    => 'error',
 		);
 
@@ -283,11 +283,11 @@ class FrmMigrate {
 			unset( $q );
 		}
 
-		$this->add_composite_indexes_for_entries();
+		$this->add_composite_indexes();
 	}
 
 	/**
-	 * These indexes help optimize database queries for entries.
+	 * These indexes help optimize database queries.
 	 *
 	 * @since 6.6
 	 * @since 6.16.3 idx_form_id_is_draft was also added to frm_items.
@@ -295,7 +295,7 @@ class FrmMigrate {
 	 *
 	 * @return void
 	 */
-	private function add_composite_indexes_for_entries() {
+	private function add_composite_indexes() {
 		global $wpdb;
 
 		$table_name = "{$wpdb->prefix}frm_items";
@@ -324,6 +324,13 @@ class FrmMigrate {
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
 			$wpdb->query( "CREATE INDEX idx_form_id_type ON `{$wpdb->prefix}frm_fields` (form_id, type(30))" );
+		}
+
+		$table_name = "{$wpdb->prefix}frm_forms";
+		$index_name = 'frm_forms_template_status';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX frm_forms_template_status ON `{$wpdb->prefix}frm_forms` (is_template, status, parent_form_id)" );
 		}
 	}
 

@@ -5,6 +5,8 @@
  */
 const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
+const { initFieldListHoverPill } = require( './fieldListHoverPill' );
+const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -119,6 +121,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 
 			if ( msg.success === true ) {
 				app.showAuthorized( true );
+				app.showLicenseType( msg );
 				app.showInlineSuccess();
 
 				/**
@@ -155,6 +158,35 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 					box.className = box.className.replace( `frm_${ from }_box`, `frm_${ to }_box` );
 				} );
 			}
+		},
+
+		/**
+		 * Update the license type message with the license that was just activated.
+		 * The message is printed before the license is known, so it would otherwise
+		 * keep showing the Lite copy until the page is reloaded.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object} msg The response from the authorize request.
+		 * @return {void}
+		 */
+		showLicenseType( msg ) {
+			if ( ! msg.license_type_info ) {
+				return;
+			}
+
+			document.querySelectorAll( '.frm_license_type_info' ).forEach( function( element ) {
+				element.textContent = msg.license_type_info;
+			} );
+
+			if ( msg.license_type !== 'Elite' ) {
+				return;
+			}
+
+			// There is nothing left to upgrade to.
+			document.querySelectorAll( '.frm_license_upgrade_cta' ).forEach( function( element ) {
+				element.remove();
+			} );
 		},
 
 		/**
@@ -257,6 +289,7 @@ window.frmAdminBuildJS = function() {
 	let autoId = 0;
 	const optionMap = {};
 	let lastNewActionIdReturned = 0;
+	let fieldGroupMessageDismissed = false;
 
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
@@ -542,6 +575,8 @@ window.frmAdminBuildJS = function() {
 	function loadTooltip( element, show = false ) {
 		let tooltipTarget = element;
 
+		resolveDeferredTooltip( tooltipTarget );
+
 		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
 		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
 			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
@@ -556,6 +591,28 @@ window.frmAdminBuildJS = function() {
 		if ( show ) {
 			deleteTooltips();
 			tooltip.show();
+		}
+	}
+
+	/**
+	 * Resolves a `data-tip-key` (set by `FrmAppHelper::get_tooltip_attr()` on the form builder
+	 * page) into the element's real `title` attribute, looked up from `frm_admin_js.tooltips`.
+	 * No-op for an element that already carries its own `title` (every other admin page).
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function resolveDeferredTooltip( element ) {
+		if ( ! element.hasAttribute( 'data-tip-key' ) ) {
+			return;
+		}
+
+		const key = element.getAttribute( 'data-tip-key' );
+		element.removeAttribute( 'data-tip-key' );
+
+		const text = window.frm_admin_js && frm_admin_js.tooltips && frm_admin_js.tooltips[ key ];
+		if ( text ) {
+			element.setAttribute( 'title', text );
 		}
 	}
 
@@ -620,6 +677,12 @@ window.frmAdminBuildJS = function() {
 		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 		bindFormActionsKeyboardHandlers( wrapClass );
+
+		// Resolve every tooltip trigger already in the DOM now, so an SVG-only icon carries a
+		// real accessible name from page-ready instead of only from the first mouse hover.
+		wrapClass.find( '[data-tip-key]' ).each( function() {
+			resolveDeferredTooltip( this );
+		} );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
@@ -1824,7 +1887,17 @@ window.frmAdminBuildJS = function() {
 		return [ 'frm_full', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm1', 'frm2', 'frm3', 'frm4', 'frm5', 'frm6', 'frm7', 'frm8', 'frm9', 'frm10', 'frm11', 'frm12' ];
 	}
 
-	function setupFieldOptionSorting( sort ) {
+	// Scope sortable init to the one field whose panel just opened, instead of the whole
+	// builder, so jQuery UI's mousedown item scan only covers that field's own option list.
+	// Sortable's `items` option is matched against the whole document then filtered to
+	// descendants of the element passed to .sortable() - that element itself must be an
+	// ancestor of the '.frm_sortable_field_opts li' matches, not the list, so this takes
+	// fieldSettingsEl rather than the field's own option list. Guards against double-init
+	// since sortable's own item list is refreshed lazily, not just at setup time.
+	function setupFieldOptionSorting( fieldSettingsEl ) {
+		if ( fieldSettingsEl.classList.contains( 'ui-sortable' ) || ! fieldSettingsEl.querySelector( '.frm_sortable_field_opts' ) ) {
+			return;
+		}
 		const opts = {
 			items: '.frm_sortable_field_opts li',
 			axis: 'y',
@@ -1844,7 +1917,7 @@ window.frmAdminBuildJS = function() {
 				fieldUpdated();
 			}
 		};
-		jQuery( sort ).sortable( opts );
+		jQuery( fieldSettingsEl ).sortable( opts );
 	}
 
 	// Get the section where a field is dropped
@@ -2508,20 +2581,28 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Swap the placeholders for the fields the server rendered.
 	 *
-	 * @param {string} response A json object of field id to { type, html }.
+	 * @param {string} response A json object of field id to { type, html }, plus a tooltips map of
+	 *                          data-tip-key to text for the tooltips in those fields.
 	 * @return {void}
 	 */
 	function handleAjaxLoadFieldSuccess( response ) {
 		let key;
 
+		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 		response = response.replace( /^\s+|\s+$/g, '' );
 		if ( response.indexOf( '{' ) !== 0 ) {
 			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
 			return;
 		}
 
-		const loadedFields = JSON.parse( response );
+		const { tooltips, ...loadedFields } = JSON.parse( response );
 		const newFields = [];
+
+		// The text behind each data-tip-key in this batch. Keys are hashes of the text, so merging
+		// a batch on top of what the page already has can only ever re-add the same strings.
+		if ( tooltips && window.frm_admin_js ) {
+			frm_admin_js.tooltips = { ...frm_admin_js.tooltips, ...tooltips };
+		}
 		// Field ids and types for the listeners of frm_ajax_loaded_field.
 		const loadedFieldData = [];
 
@@ -2537,6 +2618,7 @@ window.frmAdminBuildJS = function() {
 				newFields.push( newReplacedField );
 				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+				newReplacedField.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
 			}
 
 			setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
@@ -5250,6 +5332,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function maybeShowFieldGroupMessage() {
+		if ( fieldGroupMessageDismissed ) {
+			return;
+		}
+
 		let fieldGroupMessage = document.getElementById( 'frm-field-group-message' );
 		const rows = document.querySelectorAll( '.edit_form_item:not(.edit_field_type_end_divider)' );
 
@@ -5284,6 +5370,7 @@ window.frmAdminBuildJS = function() {
 
 		// Set up a click event listener
 		document.getElementById( 'frm-field-group-message-dismiss' ).addEventListener( 'click', () => {
+			fieldGroupMessageDismissed = true;
 			hideFieldGroupMessage( document.getElementById( 'frm-field-group-message' ) );
 		} );
 	}
@@ -8283,6 +8370,7 @@ window.frmAdminBuildJS = function() {
 		} );
 
 		singleField.classList.remove( 'frm_hidden' );
+		initiateMultiselect( singleField );
 
 		// Cancel slide animation on expanded sections so screen readers
 		// can immediately access inputs after DOM re-insertion.
@@ -8675,7 +8763,13 @@ window.frmAdminBuildJS = function() {
 	function fillDyncontent() {
 		/*jshint validthis:true */
 		const selectedValue = jQuery( this ).val();
-		const $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
+		// formidable-views renamed this id from frm_dyncontent to
+		// frm_post_action_custom_content in 2021 (formidable-views@70cde392).
+		// Older Views installs still render the old id, so check both.
+		const $dyn = jQuery(
+			document.getElementById( 'frm_post_action_custom_content' ) ||
+			document.getElementById( 'frm_dyncontent' )
+		);
 		if ( '' === selectedValue || 'new' === selectedValue ) {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
@@ -9611,6 +9705,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const htmlFieldIds = [ 'after_html', 'before_html', 'submit_html', 'field_custom_html' ];
+		// eslint-disable-next-line sonarjs/prefer-native-jquery-alternative -- jQuery API kept, not refactored
 		if ( jQuery.inArray( id, htmlFieldIds ) >= 0 ) {
 			jQuery( `.frm_code_list li:not(.show_${ id })` ).addClass( 'frm_hidden' );
 			jQuery( `.frm_code_list li.show_${ id }` ).removeClass( 'frm_hidden' );
@@ -9975,9 +10070,12 @@ window.frmAdminBuildJS = function() {
 	 *                                           instead of every multiselect in the page.
 	 */
 	function initiateMultiselect( container ) {
-		const $multiselect = container
-			? jQuery( container ).find( '.frm_multiselect' )
-			: jQuery( '.frm_multiselect' );
+		// A field's own settings panel (.frm-single-settings) stays hidden until it's clicked, so a
+		// still-hidden panel's multiselect is skipped here and initiated later, when its panel is
+		// shown (showFieldOptions) - regardless of whether this run is scoped to a container (e.g.
+		// newly ajax-loaded fields) or the whole page.
+		const $multiselect = ( container ? jQuery( container ).find( '.frm_multiselect' ) : jQuery( '.frm_multiselect' ) )
+			.not( '.frm-single-settings.frm_hidden .frm_multiselect' );
 
 		$multiselect.hide().each( frmDom.bootstrap.multiselect.init );
 	}
@@ -10470,6 +10568,7 @@ window.frmAdminBuildJS = function() {
 			const input = formData[ i ];
 			let key = input.name;
 			const { value } = input;
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			const names = key.match( /(.*)\[(.*)\]/ );
 
 			if ( ( input.type === 'radio' || input.type === 'checkbox' ) && ! input.checked ) {
@@ -11303,13 +11402,8 @@ window.frmAdminBuildJS = function() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			// Once is enough for the life of the page. This always ran against the whole builder,
-			// so calling it from setupSortable meant repeating it for every field that loaded, and
-			// sortable picks up options added later on its own: it refreshes its item list on mouse
-			// down rather than at set up time.
-			setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
-
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
+			initFieldListHoverPill();
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
@@ -11337,7 +11431,16 @@ window.frmAdminBuildJS = function() {
 
 			const $builderForm = jQuery( builderForm );
 			const builderArea = document.getElementById( 'frm_form_editor_container' );
-			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
+
+			// Formidable Pro can take over adding a condition row itself (see its builder.js) once
+			// it no longer needs this fallback for sites running an older, incompatible Pro version.
+			// Checked at click time, not here at setup time, since Pro's script may not have run yet.
+			$builderForm.on( 'click', '.frm_add_logic_row', function() {
+				if ( wp.hooks.applyFilters( 'frm_should_add_logic_row_in_lite', true ) ) {
+					return addFieldLogicRow.call( this );
+				}
+			} );
+
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
@@ -11477,6 +11580,7 @@ window.frmAdminBuildJS = function() {
 			} );
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
+				setupFieldOptionSorting( fieldSettingsEl );
 			}, 9999 );
 
 			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
@@ -12081,6 +12185,8 @@ window.frmAdminBuild = frmAdminBuildJS();
 jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
+
+		initShowBoxIconSwap();
 
 		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
 		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );

@@ -5,6 +5,9 @@ function frmFrontFormJS() {
 
 	let jsErrors = [];
 
+	// Controls a field can hand focus to when an error summary link is clicked.
+	const FOCUSABLE_FIELD_SELECTOR = 'input:not([type="hidden"]), select, textarea, button, [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
 	/**
 	 * Triggers custom JS event.
 	 *
@@ -890,6 +893,7 @@ function frmFrontFormJS() {
 				response = defaultResponse;
 			} else {
 				// Response is a string. Convert it to an object.
+				// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 				response = response.replace( /^\s+|\s+$/g, '' );
 				if ( response.indexOf( '{' ) === 0 ) {
 					response = JSON.parse( response );
@@ -1151,6 +1155,43 @@ function frmFrontFormJS() {
 		return kvp.join( '&' );
 	}
 
+	/**
+	 * Resolve the per-form error-announcement config rendered by
+	 * FrmFormsHelper::get_error_config_for_form() onto the form's `data-frm-error-config`
+	 * attribute. Falls back to the page-global frm_js defaults (and no summary focus) when
+	 * a form element isn't available, e.g. a `frm-show-form` div rendered without a `form`
+	 * tag around it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement|null} formEl
+	 * @return {{includeAlertRole: boolean, focusFirstError: boolean, focusErrorSummary: boolean}} The resolved config.
+	 */
+	function getErrorConfigForForm( formEl ) {
+		const fallback = {
+			includeAlertRole: !! frm_js.include_alert_role,
+			focusFirstError: !! frm_js.focus_first_error,
+			focusErrorSummary: false,
+		};
+
+		if ( ! formEl || ! formEl.dataset.frmErrorConfig ) {
+			return fallback;
+		}
+
+		// The config is static for the life of the page, so cache it on the form element
+		// instead of re-parsing on every field error (submit, and every change-event
+		// validation while the user is filling out the form).
+		if ( ! formEl.frmErrorConfigCache ) {
+			try {
+				formEl.frmErrorConfigCache = JSON.parse( formEl.dataset.frmErrorConfig );
+			} catch ( e ) {
+				formEl.frmErrorConfigCache = fallback;
+			}
+		}
+
+		return formEl.frmErrorConfigCache;
+	}
+
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
@@ -1171,7 +1212,8 @@ function frmFrontFormJS() {
 			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+				const config = getErrorConfigForForm( container.closest( '.frm-show-form' ) );
+				const roleString = config.includeAlertRole ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
@@ -1431,12 +1473,23 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		if ( ! frm_js.focus_first_error ) {
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		if ( ! errors.length ) {
 			return;
 		}
 
-		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
-		if ( ! errors.length ) {
+		const formContainer = errors[ 0 ].closest( '.frm-show-form' );
+		const config = getErrorConfigForForm( formContainer );
+
+		if ( config.focusErrorSummary ) {
+			const summary = formContainer ? formContainer.querySelector( '[data-frm-error-summary]' ) : null;
+			if ( summary ) {
+				summary.focus();
+				return;
+			}
+		}
+
+		if ( ! config.focusFirstError ) {
 			return;
 		}
 
@@ -1495,6 +1548,122 @@ function frmFrontFormJS() {
 		} else {
 			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input } );
 		}
+	}
+
+	/**
+	 * Move focus into the field that an error summary link points at.
+	 *
+	 * The link targets the field container, not an input, because the ID of the input inside it
+	 * varies by field type. Several types render no input matching the field key at all (name,
+	 * address, time, star, scale, GDPR, ranking), and others render one that cannot take focus
+	 * (the file field hides its input behind a dropzone, NPS and Likert use the field key on a
+	 * wrapping div). Resolving the input here keeps every field type working, including types
+	 * that come from add-ons.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event Click event on the summary link.
+	 * @return {void}
+	 */
+	function focusFieldFromErrorLink( event ) {
+		const href = this.getAttribute( 'href' );
+
+		if ( ! href || ! href.startsWith( '#' ) ) {
+			return;
+		}
+
+		const container = document.getElementById( href.substring( 1 ) );
+
+		if ( ! container ) {
+			return;
+		}
+
+		event.preventDefault();
+		container.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+
+		const input = getFocusableInputInField( container );
+
+		if ( input ) {
+			focusInput( input );
+			return;
+		}
+
+		// Nothing inside can take focus, so focus the container instead. Its label is read out,
+		// which is still better than leaving focus on the summary link.
+		container.setAttribute( 'tabindex', '-1' );
+		focusInput( container );
+	}
+
+	/**
+	 * Get the input an error summary link should move focus to.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} container Field container.
+	 * @return {HTMLElement|null} The input to focus, or null when the field has none.
+	 */
+	function getFocusableInputInField( container ) {
+		const inputs = Array.from( container.querySelectorAll( FOCUSABLE_FIELD_SELECTOR ) ).filter( inputCanTakeFocus );
+
+		if ( ! inputs.length ) {
+			return null;
+		}
+
+		// A combo field such as name or address marks the sub field that failed validation, so
+		// prefer it over the first sub field.
+		const invalidInput = inputs.find( input => 'true' === input.getAttribute( 'aria-invalid' ) );
+
+		if ( invalidInput ) {
+			return invalidInput;
+		}
+
+		// Nothing is flagged, which is what a required field with several inputs looks like when
+		// only some of them were filled in. Focus the first one still waiting on a value rather
+		// than the first input of the field, which the user has usually already completed.
+		return inputs.find( fieldInputIsEmpty ) || inputs[ 0 ];
+	}
+
+	/**
+	 * Check if an input is still waiting on a value.
+	 *
+	 * Only inputs that carry their own value count. A checkbox or radio is empty until the group
+	 * as a whole is answered, so the first one in a group is no more blank than the rest of it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when the input has no value yet.
+	 */
+	function fieldInputIsEmpty( input ) {
+		if ( 'BUTTON' === input.nodeName || [ 'button', 'checkbox', 'file', 'radio', 'submit' ].includes( input.type ) ) {
+			return false;
+		}
+
+		return '' === String( input.value || '' ).trim();
+	}
+
+	/**
+	 * Check that an input is able to receive focus, so a summary link never focuses something
+	 * the user cannot see. A hidden or zero sized input is skipped in favour of the visible
+	 * control that stands in for it, for example the dropzone button of a file field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when focusing the input would put the cursor somewhere visible.
+	 */
+	function inputCanTakeFocus( input ) {
+		if ( input.disabled || 'hidden' === input.type ) {
+			return false;
+		}
+
+		const rect = input.getBoundingClientRect();
+
+		if ( ! rect.width && ! rect.height ) {
+			return false;
+		}
+
+		return 'hidden' !== getComputedStyle( input ).visibility;
 	}
 
 	/**
@@ -2165,6 +2334,7 @@ function frmFrontFormJS() {
 			: price.split( options.decimal_separator );
 
 		if ( options.thousand_separator ) {
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			split[ 0 ] = split[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, options.thousand_separator );
 		}
 
@@ -2205,6 +2375,9 @@ function frmFrontFormJS() {
 
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
+
+			// Move focus into the field when an error summary link is clicked.
+			documentOn( 'click', '.frm_error_link', focusFieldFromErrorLink );
 
 			initFloatingLabels();
 			maybeShowNewTabFallbackMessage();

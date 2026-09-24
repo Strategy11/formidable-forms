@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
-	<label for="frm_format_<?php echo esc_attr( absint( $field['id'] ) ); ?>" class="frm_help" title="<?php esc_attr_e( 'Insert the format you would like to accept. Use a regular expression starting with ^ or an exact format like (999)999-9999.', 'formidable' ); ?>">
+	<label for="frm_format_<?php echo esc_attr( absint( $field['id'] ) ); ?>" class="frm_help" <?php FrmAppHelper::array_to_html_params( FrmAppHelper::get_tooltip_attr( __( 'Insert the format you would like to accept. Use a regular expression starting with ^ or an exact format like (999)999-9999.', 'formidable' ) ), true ); ?>>
 		<?php esc_html_e( 'Format', 'formidable' ); ?>
 	</label>
 	<span class="frm-with-right-icon frm-block">

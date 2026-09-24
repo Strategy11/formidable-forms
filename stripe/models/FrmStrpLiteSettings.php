@@ -116,10 +116,13 @@ class FrmStrpLiteSettings {
 	}
 
 	/**
+	 * @param string $mode 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
-	public function get_active_publishable_key() {
-		return $this->settings->test_mode ? $this->get_frm_publishable_test_key() : $this->get_frm_publishable_live_key();
+	public function get_active_publishable_key( $mode = 'auto' ) {
+		$resolved_mode = 'auto' === $mode ? ( $this->settings->test_mode ? 'test' : 'live' ) : $mode;
+		return 'test' === $resolved_mode ? $this->get_frm_publishable_test_key() : $this->get_frm_publishable_live_key();
 	}
 
 	/**

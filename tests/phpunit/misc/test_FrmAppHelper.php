@@ -835,4 +835,166 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$this->assertSame( $test_case['expected'], $result );
 		}
 	}
+
+	/**
+	 * The Surveys/Quizzes admin scripts are only ever enqueued on the form
+	 * builder page, so dequeuing them there breaks Likert row controls
+	 * whenever something else (the welcome checklist) also runs this method.
+	 *
+	 * @covers FrmAppHelper::dequeue_extra_global_scripts
+	 */
+	public function test_dequeue_extra_global_scripts_keeps_scripts_on_form_builder_page() {
+		global $pagenow;
+		$original_pagenow = $pagenow;
+		$pagenow          = 'admin.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$_GET['page']       = 'formidable';
+		$_GET['frm_action'] = 'edit';
+
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-surveys-admin' );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-quizzes-form-action' );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+
+		$this->assertTrue( wp_script_is( 'frm-surveys-admin', 'enqueued' ), 'Surveys admin script should stay enqueued on the form builder page.' );
+		$this->assertTrue( wp_script_is( 'frm-quizzes-form-action', 'enqueued' ), 'Quizzes form action script should stay enqueued on the form builder page.' );
+
+		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['page'], $_GET['frm_action'] );
+		wp_dequeue_script( 'frm-surveys-admin' );
+		wp_dequeue_script( 'frm-quizzes-form-action' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::dequeue_extra_global_scripts
+	 */
+	public function test_dequeue_extra_global_scripts_elsewhere() {
+		global $pagenow;
+		$original_pagenow = $pagenow;
+		$pagenow          = 'admin.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$_GET['page'] = 'formidable-addons';
+
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-surveys-admin' );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-quizzes-form-action' );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+
+		$this->assertFalse( wp_script_is( 'frm-surveys-admin', 'enqueued' ) );
+		$this->assertFalse( wp_script_is( 'frm-quizzes-form-action', 'enqueued' ) );
+
+		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['page'] );
+	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_first_error
+	 */
+	public function test_should_focus_first_error_defaults_true_without_a_form() {
+		$this->assertTrue( FrmAppHelper::should_focus_first_error() );
+	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_first_error
+	 * @covers FrmAppHelper::should_focus_error_summary
+	 * @covers FrmAppHelper::should_include_alert_role_on_field_errors
+	 */
+	public function test_error_focus_and_alert_role_defaults_when_summary_is_active() {
+		$form = $this->factory->form->create_and_get();
+
+		// The clickable summary is on by default, so it should own both focus and the
+		// alert announcement, and the old per-field mechanisms should stand down.
+		$this->assertTrue( FrmAppHelper::should_focus_error_summary( $form ) );
+		$this->assertFalse( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertFalse( FrmAppHelper::should_include_alert_role_on_field_errors( $form ) );
+	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_first_error
+	 * @covers FrmAppHelper::should_focus_error_summary
+	 * @covers FrmAppHelper::should_include_alert_role_on_field_errors
+	 */
+	public function test_error_focus_and_alert_role_defaults_when_summary_is_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+
+		$this->assertFalse( FrmAppHelper::should_focus_error_summary( $form ) );
+		$this->assertTrue( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertTrue( FrmAppHelper::should_include_alert_role_on_field_errors( $form ) );
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::should_focus_error_summary
+	 */
+	public function test_should_focus_error_summary_can_be_filtered_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_focus_error_summary', '__return_false' );
+		$this->assertFalse( FrmAppHelper::should_focus_error_summary( $form ) );
+		remove_filter( 'frm_focus_error_summary', '__return_false' );
+	}
+
+	/**
+	 * Filtering the summary's own focus off must fall back to focusing the first field —
+	 * not leave both resolving false, which would leave focus going nowhere.
+	 *
+	 * @covers FrmAppHelper::should_focus_first_error
+	 * @covers FrmAppHelper::resolve_error_focus_target
+	 */
+	public function test_focus_falls_back_to_first_error_when_summary_focus_is_filtered_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_focus_error_summary', '__return_false' );
+
+		$this->assertTrue( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertSame(
+			array(
+				'focus_first_error'   => true,
+				'focus_error_summary' => false,
+			),
+			FrmAppHelper::resolve_error_focus_target( $form )
+		);
+		remove_filter( 'frm_focus_error_summary', '__return_false' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::resolve_error_focus_target
+	 */
+	public function test_resolve_error_focus_target_prioritizes_summary_when_both_resolve_true() {
+		$form = $this->factory->form->create_and_get();
+
+		// Force the old mechanism back on even though the summary auto-resolved it off.
+		add_filter( 'frm_focus_first_error', '__return_true' );
+
+		$this->setExpectedIncorrectUsage( 'FrmAppHelper::resolve_error_focus_target' );
+
+		$target = FrmAppHelper::resolve_error_focus_target( $form );
+
+		$this->assertTrue( $target['focus_error_summary'] );
+		$this->assertFalse( $target['focus_first_error'] );
+
+		remove_filter( 'frm_focus_first_error', '__return_true' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::resolve_error_focus_target
+	 */
+	public function test_resolve_error_focus_target_without_conflict() {
+		$form   = $this->factory->form->create_and_get();
+		$target = FrmAppHelper::resolve_error_focus_target( $form );
+
+		$this->assertSame(
+			array(
+				'focus_first_error'   => false,
+				'focus_error_summary' => true,
+			),
+			$target
+		);
+	}
 }

@@ -1,9 +1,4 @@
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
-  push:
-    branches:
-      - master
   pull_request:
     types: [ opened, labeled, synchronize ]
 
@@ -12,12 +7,14 @@ name: PHPUnit
 # rather than derived from github.workflow: several files share the workflow
 # name `Inspections` and would otherwise cancel each other.
 concurrency:
-  group: formidable-phpunit-${{ github.ref }}
+  group: formidable-phpunit-${{ github.ref }}-${{ ((contains(github.event.pull_request.labels.*.name, 'run tests') || contains(github.event.pull_request.labels.*.name, 'full automated qa')) && (github.event.action != 'labeled' || github.event.label.name == 'run tests' || github.event.label.name == 'full automated qa')) && 'active' || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   build-test:
-    if: contains(github.event.pull_request.labels.*.name, 'run tests')
+    if: >-
+      (contains(github.event.pull_request.labels.*.name, 'run tests') || contains(github.event.pull_request.labels.*.name, 'full automated qa'))
+      && (github.event.action != 'labeled' || github.event.label.name == 'run tests' || github.event.label.name == 'full automated qa')
     runs-on: ubuntu-latest
     env:
       WP_MULTISITE: ${{ matrix.multisite }}
@@ -25,10 +22,10 @@ jobs:
       matrix:
         include:
           - php: 7.4
-            wordpress: 6.9
+            wordpress: trunk
             multisite: 0
           - php: 8.0
-            wordpress: 6.9
+            wordpress: trunk
             multisite: 0
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
@@ -53,6 +50,23 @@ jobs:
           sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
           sed -i "s/yourusernamehere/root/" wp-tests-config.php
           sed -i "s/yourpasswordhere/root/" wp-tests-config.php
+
+      - name: Read WP core's required Node version
+        id: wp-node
+        run: echo "version=$(cat /tmp/wordpress/.nvmrc)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js for WP core assets
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ steps.wp-node.outputs.version }}
+
+      - name: Building WP core assets
+        # Core's dist JS/CSS isn't checked into git; missing it fails wp_head()'s
+        # wp_maybe_inline_styles() check (test_front_head).
+        run: |
+          cd /tmp/wordpress
+          npm ci
+          npm run build:dev
       - name: Creating database
         run: |
           sudo /etc/init.d/mysql start
