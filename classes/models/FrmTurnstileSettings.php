@@ -87,4 +87,37 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	public function get_class_prefix( $allow_multiple ) {
 		return 'frm-';
 	}
+
+	/**
+	 * Add the error codes that are specific to Turnstile.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,string>
+	 */
+	public function get_error_code_messages() {
+		return array_merge(
+			parent::get_error_code_messages(),
+			array(
+				'invalid-widget-id'     => __( 'The site key in the global CAPTCHA settings does not match a Turnstile widget.', 'formidable' ),
+				'invalid-parsed-secret' => __( 'The secret key in the global CAPTCHA settings is not valid.', 'formidable' ),
+				'missing-input'         => __( 'The verification request was missing the secret key or the CAPTCHA response.', 'formidable' ),
+			)
+		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array<int,string>
+	 */
+	public function get_configuration_error_codes() {
+		return array_merge(
+			parent::get_configuration_error_codes(),
+			array(
+				'invalid-widget-id',
+				'invalid-parsed-secret',
+			)
+		);
+	}
 }

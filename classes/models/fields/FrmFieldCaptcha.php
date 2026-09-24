@@ -308,12 +308,17 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$error_string                     = $resp->get_error_message();
 			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your captcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
+
+			$this->log_failure( $error_string, array() );
+
 			return $errors;
 		}
 
 		if ( ! is_array( $response ) ) {
 			return $errors;
 		}
+
+		$reason = '';
 
 		if ( $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
 			$threshold = floatval( $frm_settings->re_threshold );
@@ -323,6 +328,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 			if ( $score < $threshold ) {
 				$response['success'] = false;
+				$reason              = sprintf(
+					/* translators: %1$s: the score returned by reCAPTCHA, %2$s: the score threshold from global settings */
+					__( 'The reCAPTCHA v3 score of %1$s is below the threshold of %2$s.', 'formidable' ),
+					$score,
+					$threshold
+				);
 			}
 		}
 
@@ -330,16 +341,189 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		// What happens when the CAPTCHA was entered incorrectly
-		$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+		$error_codes = $this->get_error_codes( $response );
 
-		if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
-			$invalid_message = '';
+		if ( '' === $reason ) {
+			$reason = $this->get_failure_reason( $error_codes );
 		}
 
-		$errors[ 'field' . $args['id'] ] = $invalid_message === '' ? $frm_settings->re_msg : $invalid_message;
+		$this->log_failure( $reason, $error_codes );
+
+		$errors[ 'field' . $args['id'] ] = $this->get_invalid_message( $error_codes, $reason );
 
 		return $errors;
+	}
+
+	/**
+	 * Pull the "error-codes" array out of a siteverify response.
+	 * Every service we support uses this key, but it is left out when the service does not
+	 * explain the failure, so an empty array is a normal result.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $response The decoded siteverify response.
+	 *
+	 * @return array<int,string>
+	 */
+	private function get_error_codes( $response ) {
+		if ( empty( $response['error-codes'] ) || ! is_array( $response['error-codes'] ) ) {
+			return array();
+		}
+
+		$error_codes = array();
+
+		foreach ( $response['error-codes'] as $error_code ) {
+			$error_codes[] = sanitize_text_field( (string) $error_code );
+		}
+
+		return $error_codes;
+	}
+
+	/**
+	 * Turn the error codes from the CAPTCHA service into a readable explanation.
+	 * Codes we do not have a translation for are passed through as is so the raw code
+	 * still reaches the log instead of being dropped.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $error_codes The error codes returned by the CAPTCHA service.
+	 *
+	 * @return string
+	 */
+	private function get_failure_reason( $error_codes ) {
+		if ( ! $error_codes ) {
+			return __( 'The CAPTCHA service rejected the response without giving a reason.', 'formidable' );
+		}
+
+		$messages     = FrmCaptchaFactory::get_settings_object()->get_error_code_messages();
+		$explanations = array();
+
+		foreach ( $error_codes as $error_code ) {
+			$explanations[] = isset( $messages[ $error_code ] ) ? $messages[ $error_code ] : $error_code;
+		}
+
+		return implode( ' ', $explanations );
+	}
+
+	/**
+	 * Check if the failure was caused by the site's own CAPTCHA settings rather than by
+	 * the person filling out the form.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $error_codes The error codes returned by the CAPTCHA service.
+	 *
+	 * @return bool
+	 */
+	private function is_configuration_error( $error_codes ) {
+		$configuration_codes = FrmCaptchaFactory::get_settings_object()->get_configuration_error_codes();
+		return array() !== array_intersect( $error_codes, $configuration_codes );
+	}
+
+	/**
+	 * Get the message to show on the front end when a CAPTCHA fails.
+	 *
+	 * The reason is deliberately left out of the default message. Telling a bot exactly why
+	 * it was rejected helps it get past the next attempt, so the detail goes to the log and
+	 * to the frm_captcha_error_message filter instead. The one exception is a site
+	 * misconfiguration, where retrying cannot help and a real visitor needs to know that.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+	 * @param string $reason      The readable explanation for the failure.
+	 *
+	 * @return string
+	 */
+	private function get_invalid_message( $error_codes, $reason ) {
+		if ( $this->is_configuration_error( $error_codes ) ) {
+			$message = __( 'The CAPTCHA on this form is not set up correctly. Please contact the site administrator.', 'formidable' );
+		} else {
+			// What happens when the CAPTCHA was entered incorrectly
+			$frm_settings    = FrmAppHelper::get_settings();
+			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+
+			if ( __( 'The reCAPTCHA was not entered correctly', 'formidable' ) === $invalid_message ) {
+				$invalid_message = '';
+			}
+
+			$message = '' === $invalid_message ? $frm_settings->re_msg : $invalid_message;
+		}
+
+		/**
+		 * Filter the message shown when a CAPTCHA fails validation.
+		 * Use this to show the reason on the front end, keeping in mind that the reason is
+		 * also useful to whatever is trying to get past the CAPTCHA.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $message     The message shown to the person submitting the form.
+		 * @param string $reason      The readable explanation for the failure.
+		 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+		 * @param array  $field       The CAPTCHA field.
+		 */
+		return apply_filters( 'frm_captcha_error_message', $message, $reason, $error_codes, $this->field );
+	}
+
+	/**
+	 * Report why a CAPTCHA failed so it does not disappear silently.
+	 * The reason never reaches the front end by default, so this action and the log are how
+	 * a site owner finds out that, for example, their secret key is wrong.
+	 * Logging requires the logging add-on. Without it there is nowhere to write to, so the
+	 * action is still fired and nothing else happens.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $reason      The readable explanation for the failure.
+	 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+	 *
+	 * @return void
+	 */
+	private function log_failure( $reason, $error_codes ) {
+		$form_id = $this->get_form_id();
+
+		/**
+		 * Fires when a CAPTCHA fails validation, with the reason the service gave.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $reason      The readable explanation for the failure.
+		 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+		 * @param int    $form_id     The ID of the form being submitted.
+		 * @param array  $field       The CAPTCHA field.
+		 */
+		do_action( 'frm_captcha_validation_failed', $reason, $error_codes, $form_id, $this->field );
+
+		if ( ! class_exists( 'FrmLog' ) ) {
+			return;
+		}
+
+		// The form id is an int so the log list's "filter by form" meta query matches it.
+		$fields = array( 'form' => $form_id );
+
+		if ( $error_codes ) {
+			$fields['code'] = implode( ', ', $error_codes );
+		}
+
+		$log = new FrmLog();
+		$log->add(
+			array(
+				'title'   => FrmCaptchaFactory::get_settings_object()->get_name() . ' validation failed',
+				'content' => $reason,
+				'fields'  => $fields,
+			)
+		);
+	}
+
+	/**
+	 * Get the ID of the form the CAPTCHA field belongs to.
+	 *
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	private function get_form_id() {
+		return (int) ( is_object( $this->field ) ? $this->field->form_id : $this->field['form_id'] );
 	}
 
 	/**
@@ -354,7 +538,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$frm_vars['captcha_scores'] = array();
 		}
 
-		$form_id = is_object( $this->field ) ? $this->field->form_id : $this->field['form_id'];
+		$form_id = $this->get_form_id();
 
 		if ( ! isset( $frm_vars['captcha_scores'][ $form_id ] ) ) {
 			$frm_vars['captcha_scores'][ $form_id ] = $score;
@@ -374,10 +558,31 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$missing_token = ! self::post_data_includes_token();
 
 		if ( $missing_token ) {
+			$this->report_missing_token();
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
 
 		return $this->validate_against_api( $args );
+	}
+
+	/**
+	 * Report a submission that arrived without a CAPTCHA token.
+	 *
+	 * Nothing was sent to the service, so there is no response to explain this one. The
+	 * services use missing-input-response for the same situation, so that code is reused.
+	 *
+	 * Pro overrides validate() and does not call the version above, so it calls this
+	 * directly. Keeping it here keeps the reason string in one place and one text domain.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	protected function report_missing_token() {
+		$this->log_failure(
+			__( 'No CAPTCHA response was submitted. The form may have been submitted before the CAPTCHA loaded, or it failed to load.', 'formidable' ),
+			array( 'missing-input-response' )
+		);
 	}
 
 	/**
