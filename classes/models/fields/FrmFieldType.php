@@ -1212,6 +1212,7 @@ DEFAULT_HTML;
 		}
 
 		$this->add_aria_description_to_inputs( $args, $input );
+		$this->maybe_add_aria_labelledby_for_hidden_label( $args, $input );
 		$this->load_field_scripts( $args );
 
 		return $input;
@@ -1260,7 +1261,6 @@ DEFAULT_HTML;
 
 				$atts = $matches[2];
 				$this->add_aria_description( $args, $atts );
-				$this->maybe_add_aria_labelledby_for_hidden_label( $args, $atts );
 
 				return '<' . $matches[1] . $atts . $matches[3] . '>';
 			},
@@ -1690,23 +1690,46 @@ DEFAULT_HTML;
 	 * `for`-associated label (`$has_for_label = false`), which already get
 	 * an equivalent aria-labelledby from multiple_input_html()'s wrapper.
 	 *
+	 * Called unconditionally from include_front_field_input() rather than
+	 * nested inside add_aria_description_to_inputs()'s own callback, since
+	 * that method is designed to be skippable by an overriding field type
+	 * (e.g. Pro's FrmProFieldText::front_field_input() already calling
+	 * add_aria_description() itself and setting aria_description_added,
+	 * which short-circuits add_aria_description_to_inputs() entirely).
+	 *
 	 * @since 6.35
 	 *
 	 * @param array  $args Rendering context. May include `html_id`.
-	 * @param string $input_html Attributes string of a single input/select/textarea tag, passed by reference.
+	 * @param string $input_html Full field HTML, passed by reference.
 	 *
 	 * @return void
 	 */
 	protected function maybe_add_aria_labelledby_for_hidden_label( $args, &$input_html ) {
-		if ( ! $this->has_for_label || 'hidden' !== $this->get_field_column( 'label' ) ) {
+		if ( '' === $input_html || ! $this->has_for_label || 'hidden' !== $this->get_field_column( 'label' ) ) {
 			return;
 		}
 
-		if ( preg_match( '/aria-labelledby=/', $input_html ) ) {
-			return;
+		if ( empty( $args['html_id'] ) ) {
+			$args['html_id'] = FrmFieldsHelper::get_html_id( $this->field );
 		}
 
-		$input_html .= ' aria-labelledby="' . esc_attr( $args['html_id'] ) . '_label"';
+		$html_id = $args['html_id'];
+
+		$input_html = preg_replace_callback(
+			'/<(input|select|textarea)\b([^>]*?)(\s*\/?)>/i',
+			function ( $matches ) use ( $html_id ) {
+				if ( 'input' === strtolower( $matches[1] ) && preg_match( '/type\s*=\s*["\']hidden["\']/i', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				if ( preg_match( '/aria-labelledby=/', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				return '<' . $matches[1] . $matches[2] . ' aria-labelledby="' . esc_attr( $html_id ) . '_label"' . $matches[3] . '>';
+			},
+			$input_html
+		);
 	}
 
 	/**
