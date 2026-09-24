@@ -400,7 +400,7 @@ class FrmAppController {
 				$upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
-			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
+			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#065f46;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}//end if
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . esc_html__( 'Build a Form', 'formidable' ) . '</a>';
