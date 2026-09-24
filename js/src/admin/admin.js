@@ -303,6 +303,13 @@ window.frmAdminBuildJS = function() {
 		submitButtonRow: null
 	};
 
+	// How far past the visible field list a field gets its drag and drop widget. A full screen
+	// either way keeps the widgets ahead of the auto scroll while a field is being dragged.
+	const DRAG_DROP_ROOT_MARGIN = '100% 0px';
+	let dragDropObserver;
+	const dragDropAttachers = new WeakMap();
+	const dragDropDeferredDetach = new Set();
+
 	if ( thisForm ) {
 		thisFormId = thisForm.value;
 	}
@@ -1044,15 +1051,163 @@ window.frmAdminBuildJS = function() {
 	function setupSortable( sortableSelector ) {
 		document.querySelectorAll( sortableSelector ).forEach(
 			list => {
-				makeDroppable( list );
-				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) );
+				lazyMakeDroppable( list );
+				Array.from( list.children ).forEach( child => lazyMakeDraggable( child, '.frm-move' ) );
 
 				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
 				if ( $sectionTitle.length ) {
-					makeDroppable( $sectionTitle );
+					lazyMakeDroppable( $sectionTitle.get( 0 ) );
 				}
 			}
 		);
+	}
+
+	/**
+	 * Make a list droppable once it scrolls near the visible part of the builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} list The list that accepts dropped fields.
+	 * @return {void}
+	 */
+	function lazyMakeDroppable( list ) {
+		observeDragDropElement( list, () => makeDroppable( list ) );
+	}
+
+	/**
+	 * Make a field or field group draggable once it scrolls near the visible part of the builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}      draggable The field or field group to drag.
+	 * @param {string|undefined} handle    The selector for the drag handle, if the whole element should not start a drag.
+	 * @return {void}
+	 */
+	function lazyMakeDraggable( draggable, handle ) {
+		observeDragDropElement( draggable, () => makeDraggable( draggable, handle ) );
+	}
+
+	/**
+	 * Every jQuery UI draggable and droppable is a live widget, and jQuery UI walks all of the
+	 * droppables when a drag starts. On a form with a thousand fields, standing them all up at
+	 * page load is thousands of widgets before anyone drags anything. The widget is attached
+	 * as its element comes within a screen of the visible field list instead, and destroyed
+	 * again once it scrolls away, so the widget count follows what is on screen.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element The element to make draggable or droppable.
+	 * @param {Function}    attach  Attaches the widget to the element.
+	 * @return {void}
+	 */
+	function observeDragDropElement( element, attach ) {
+		if ( ! element ) {
+			return;
+		}
+
+		if ( ! dragDropObserver ) {
+			dragDropObserver = new IntersectionObserver(
+				handleDragDropIntersections,
+				{
+					root: postBodyContent,
+					rootMargin: DRAG_DROP_ROOT_MARGIN
+				}
+			);
+		}
+
+		dragDropAttachers.set( element, attach );
+		dragDropObserver.observe( element );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {IntersectionObserverEntry[]} entries The elements that moved into or out of range.
+	 * @return {void}
+	 */
+	function handleDragDropIntersections( entries ) {
+		let attachedDuringDrag = false;
+
+		entries.forEach(
+			( { target, isIntersecting } ) => {
+				if ( ! target.isConnected ) {
+					// The element was replaced or deleted, and jQuery removed its widget with it.
+					dragDropObserver.unobserve( target );
+					dragDropAttachers.delete( target );
+					return;
+				}
+
+				if ( isIntersecting ) {
+					if ( ! hasDragDropWidget( target ) ) {
+						dragDropAttachers.get( target )?.();
+						attachedDuringDrag = dragState.dragging;
+					}
+					return;
+				}
+
+				if ( ! hasDragDropWidget( target ) ) {
+					return;
+				}
+
+				if ( document.body.classList.contains( 'frm-dragging' ) ) {
+					// Pulling a widget out from under a drag leaves its hover state behind, so wait for the drop.
+					dragDropDeferredDetach.add( target );
+					return;
+				}
+
+				destroyDragDropWidget( target );
+			}
+		);
+
+		if ( attachedDuringDrag ) {
+			// Scrolling while dragging brought new drop targets into range. jQuery UI skips them until they are measured.
+			refreshDroppableOffsets();
+		}
+	}
+
+	/**
+	 * Take another look at the widgets that scrolled out of range during a drag.
+	 * Observing an element again reports where it is now, so anything that scrolled back
+	 * into view keeps its widget.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function recheckDeferredDragDropWidgets() {
+		dragDropDeferredDetach.forEach(
+			element => {
+				dragDropObserver.unobserve( element );
+				dragDropObserver.observe( element );
+			}
+		);
+		dragDropDeferredDetach.clear();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {boolean} True if the element has a live draggable or droppable widget.
+	 */
+	function hasDragDropWidget( element ) {
+		return element.classList.contains( 'ui-draggable' ) || element.classList.contains( 'ui-droppable' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function destroyDragDropWidget( element ) {
+		const $element = jQuery( element );
+		if ( $element.draggable( 'instance' ) ) {
+			$element.draggable( 'destroy' );
+		}
+		if ( $element.droppable( 'instance' ) ) {
+			$element.droppable( 'destroy' );
+		}
 	}
 
 	function makeDroppable( list ) {
@@ -1191,6 +1346,8 @@ window.frmAdminBuildJS = function() {
 		if ( fade ) {
 			fade.classList.remove( 'frm-drag-fade' );
 		}
+
+		recheckDeferredDragDropWidgets();
 	}
 
 	function handleDrag( event, ui ) {
@@ -2573,6 +2730,11 @@ window.frmAdminBuildJS = function() {
 			if ( ! Object.hasOwn( loadedFields, key ) ) {
 				continue;
 			}
+			const oldField = document.getElementById( `frm_field_id_${ key }` );
+			if ( oldField ) {
+				dragDropObserver.unobserve( oldField );
+				dragDropAttachers.delete( oldField );
+			}
 			jQuery( `#frm_field_id_${ key }` ).replaceWith( loadedFields[ key ].html );
 			loadedFieldData.push( { id: key, type: loadedFields[ key ].type } );
 
@@ -2584,7 +2746,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
-			makeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
+			lazyMakeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
 		}
 
 		// Only the fields that just arrived need this. Doing it for the whole page once per batch
