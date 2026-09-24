@@ -47,7 +47,7 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	 * @return array|false|WP_Error
 	 */
 	public function mock_store_request( $response, $args, $url ) {
-		if ( 0 !== strpos( $url, 'https://formidableforms.com?l=' ) ) {
+		if ( ! str_starts_with( $url, 'https://formidableforms.com?l=' ) ) {
 			return $response;
 		}
 
