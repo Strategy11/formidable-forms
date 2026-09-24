@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 106;
+	public static $db_version = 107;
 
 	/**
 	 * Used by the API add-on.
@@ -371,6 +371,14 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
+
+		// Every caller wraps this in a link that already carries its own accessible
+		// text (see admin-header.php / applications/header.php), so the icon itself
+		// is decorative and shouldn't need its own accessible name.
+		if ( str_starts_with( $icon, '<svg' ) ) {
+			$icon = str_replace( '<svg ', '<svg aria-hidden="true" ', $icon );
+		}
+
 		self::kses_echo( $icon, 'all' );
 	}
 
@@ -4163,24 +4171,89 @@ class FrmAppHelper {
 
 	/**
 	 * Returns whether or not the first errored input should be auto-focused (default true).
+	 * Auto-resolves to false for a form with the clickable error summary active, since the
+	 * summary takes focus instead (see should_focus_error_summary()).
 	 *
 	 * @since 5.2.05
 	 *
+	 * @param stdClass|null $form
+	 *
 	 * @return bool
 	 */
-	private static function should_focus_first_error() {
-		return (bool) apply_filters( 'frm_focus_first_error', true );
+	public static function should_focus_first_error( $form = null ) {
+		// Keyed off whether the summary will actually take focus, not merely whether it's
+		// active — otherwise filtering frm_focus_error_summary off leaves focus going
+		// nowhere instead of falling back to the first field.
+		$default = $form && self::should_focus_error_summary( $form ) ? false : true;
+
+		return (bool) apply_filters( 'frm_focus_first_error', $default, $form );
+	}
+
+	/**
+	 * Returns whether or not the clickable error summary should receive focus when it's
+	 * active for a form (default true). No effect when the summary isn't active.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass|null $form
+	 *
+	 * @return bool
+	 */
+	public static function should_focus_error_summary( $form = null ) {
+		if ( ! $form || ! FrmFormsHelper::is_error_summary_active_for_form( $form ) ) {
+			return false;
+		}
+
+		return (bool) apply_filters( 'frm_focus_error_summary', true, $form );
+	}
+
+	/**
+	 * Resolves which element should receive focus after a failed submission for a form:
+	 * the error summary, the first errored field, or neither. If a filter forces both
+	 * `frm_focus_first_error` and `frm_focus_error_summary` true for the same form, the
+	 * summary wins and a _doing_it_wrong() notice is triggered rather than silently
+	 * picking one.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 *
+	 * @return array{focus_first_error: bool, focus_error_summary: bool}
+	 */
+	public static function resolve_error_focus_target( $form ) {
+		$focus_error_summary = self::should_focus_error_summary( $form );
+		$focus_first_error   = self::should_focus_first_error( $form );
+
+		if ( $focus_error_summary && $focus_first_error ) {
+			_doing_it_wrong(
+				__METHOD__,
+				esc_html__( 'frm_focus_first_error and frm_focus_error_summary cannot both resolve true for the same form. The error summary takes priority.', 'formidable' ),
+				'x.x'
+			);
+			$focus_first_error = false;
+		}
+
+		return array(
+			'focus_first_error'   => $focus_first_error,
+			'focus_error_summary' => $focus_error_summary,
+		);
 	}
 
 	/**
 	 * Returns whether or not field errors should include role="alert" (default true).
+	 * Auto-resolves to false for a form with the clickable error summary active, since the
+	 * summary already announces the same errors and a duplicate role="alert" on each field
+	 * would announce them twice.
 	 *
 	 * @since 5.2.05
 	 *
+	 * @param stdClass|null $form
+	 *
 	 * @return bool
 	 */
-	public static function should_include_alert_role_on_field_errors() {
-		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', true );
+	public static function should_include_alert_role_on_field_errors( $form = null ) {
+		$default = $form && FrmFormsHelper::is_error_summary_active_for_form( $form ) ? false : true;
+		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', $default, $form );
 	}
 
 	/**

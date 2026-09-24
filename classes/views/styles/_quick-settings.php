@@ -118,8 +118,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_margin"
+	<label
+		for="frm_style_qsettings_field_margin"
 		class="frm-style-item-heading"><?php esc_html_e( 'Vertical Spacing', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -128,7 +128,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		null,
 		$style->post_content['field_margin'],
 		array(
-			'id'          => 'frm_field_margin',
+			'id'          => 'frm_style_qsettings_field_margin',
 			'max_value'   => 100,
 			'will_change' => array(
 				$frm_style->get_field_name( 'field_margin' ),
@@ -139,8 +139,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_pad"
+	<label
+		for="frm_style_qsettings_field_pad"
 		class="frm-style-item-heading"><?php esc_html_e( 'Input Field Padding', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -149,7 +149,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		null,
 		$style->post_content['field_pad'],
 		array(
-			'id'          => 'frm_field_pad',
+			'id'          => 'frm_style_qsettings_field_pad',
 			'max_value'   => 100,
 			'will_change' => array(
 				$frm_style->get_field_name( 'field_pad' ),
@@ -206,8 +206,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
-	<label 
-		for="frm_border_radius"
+	<label
+		for="frm_style_qsettings_border_radius"
 		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">
@@ -216,7 +216,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		null,
 		$style->post_content['border_radius'],
 		array(
-			'id'          => 'frm_border_radius',
+			'id'          => 'frm_style_qsettings_border_radius',
 			'max_value'   => 50,
 			'will_change' => array(
 				$frm_style->get_field_name( 'border_radius' ),

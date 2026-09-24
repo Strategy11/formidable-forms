@@ -1,0 +1,10 @@
+ruleArchive: latest
+policies:
+  - IBM_Accessibility
+failLevels:
+  - violation
+reportLevels:
+  - violation
+  - potentialviolation
+outputFormat:
+  - disable

@@ -17,7 +17,9 @@ concurrency:
 
 jobs:
   runPHPSyntaxCheck:
-    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'run analysis')
+      && (github.event.action != 'labeled' || github.event.label.name == 'run analysis')
     name: Run PHP Syntax inspection
     runs-on: ubuntu-latest
     strategy:
