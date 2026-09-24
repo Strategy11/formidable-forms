@@ -655,9 +655,9 @@
 			} );
 
 			// jQuery UI points aria-labelledby at its own auto-generated .ui-dialog-title
-			// span by default, but that span lives in the .ui-dialog-titlebar this modal
-			// hides. Point it at the real visible title instead so the dialog has an
-			// accessible name.
+			// span by default, but that span is left empty since no `title` option is
+			// ever passed to .dialog(). Point it at the real visible title instead so
+			// the dialog has an accessible name.
 			$modal.dialog( 'widget' ).attr( 'aria-labelledby', `${ modal.id }-title` );
 		}
 
