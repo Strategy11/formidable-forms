@@ -6737,23 +6737,22 @@ window.frmAdminBuildJS = function() {
 		return options;
 	}
 
-	/**
-	 * Field types whose front-end template wraps the option input in its
-	 * label with no `for` attribute -- the wrap alone already associates
-	 * them, and a `for` pointing at the same id makes Safari VoiceOver
-	 * announce the label twice (radio-field.php, checkbox-field.php,
-	 * product-radio.php, the last covering both product data_types). Keep in
-	 * sync with those templates -- this preview template drifts silently
-	 * from the PHP output otherwise.
-	 */
-	const OPTION_LABEL_TYPES_WITHOUT_FOR = [ 'radio', 'checkbox' ];
-
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		let single = '';
 		const isOther = opt.key.includes( 'other' );
 		const id = `field_${ fieldKey }-${ opt.key }`;
 		const inputType = type === 'scale' ? 'radio' : type;
-		const labelFor = OPTION_LABEL_TYPES_WITHOUT_FOR.includes( type ) ? '' : ` for="${ id }"`;
+
+		/*
+		 * 'radio' and 'checkbox' wrap the option input in its label with no
+		 * `for` attribute -- the wrap alone already associates them, and a
+		 * `for` pointing at the same id makes Safari VoiceOver announce the
+		 * label twice (radio-field.php, checkbox-field.php,
+		 * product-radio.php, the last covering both product data_types).
+		 * Keep in sync with those templates -- this preview template drifts
+		 * silently from the PHP output otherwise.
+		 */
+		const labelFor = [ 'radio', 'checkbox' ].includes( type ) ? '' : ` for="${ id }"`;
 
 		const other = `<input type="text" id="field_${ fieldKey }-${ opt.key }-otext" class="frm_other_input frm_pos_none" name="item_meta[other][${ fieldId }][${ opt.key }]" value="" />`;
 
