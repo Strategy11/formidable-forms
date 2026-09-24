@@ -291,6 +291,9 @@ window.frmAdminBuildJS = function() {
 	let lastNewActionIdReturned = 0;
 	let fieldGroupMessageDismissed = false;
 
+	// Resolves once the Field Options tab is showing the selected field's settings. See showFieldOptionsTab.
+	let fieldOptionsTabShown = Promise.resolve();
+
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
 	let postBodyContent;
@@ -6314,13 +6317,14 @@ window.frmAdminBuildJS = function() {
 
 			fieldTypeName = normalizeFieldName( fieldTypeName );
 
-			setTimeout( function() {
+			// The setting can't take focus until its tab is showing.
+			setTimeout( () => fieldOptionsTabShown.then( () => {
 				if ( setting.value.toLowerCase() === fieldTypeName ) {
 					setting.select();
 				} else {
 					setting.focus();
 				}
-			}, 50 );
+			} ), 50 );
 		}
 	}
 
@@ -6328,10 +6332,10 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		const setting = document.querySelectorAll( `[data-changeme="${ this.id }"]` )[ 0 ];
 		if ( setting !== undefined ) {
-			setTimeout( function() {
+			setTimeout( () => fieldOptionsTabShown.then( () => {
 				setting.focus();
 				autoExpandSettings( setting );
-			}, 50 );
+			} ), 50 );
 		}
 	}
 
@@ -8378,11 +8382,10 @@ window.frmAdminBuildJS = function() {
 			section => section.style.animation = 'none'
 		);
 
-		document.getElementById( 'frm-options-panel-tab' ).click();
-
+		let editorReady = Promise.resolve();
 		const editor = singleField.querySelector( '.wp-editor-area' );
 		if ( editor ) {
-			frmDom.wysiwyg.init(
+			editorReady = frmDom.wysiwyg.init(
 				editor,
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
@@ -8390,6 +8393,49 @@ window.frmAdminBuildJS = function() {
 
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
+
+		showFieldOptionsTab( obj, singleField, editorReady );
+	}
+
+	/**
+	 * Switch the sidebar to the Field Options tab, which slides the settings panel into view.
+	 *
+	 * The panel's setup work (deferred inits, TinyMCE, frmShowedFieldSettings listeners) all runs
+	 * before this. Starting the slide during that work drops its frames and makes it look shaky,
+	 * so the switch waits for TinyMCE to boot and then starts on a fresh frame.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}   obj         The selected field element.
+	 * @param {HTMLElement}   singleField The field settings element.
+	 * @param {Promise<void>} editorReady Resolves once the field's rich text editor has booted.
+	 * @return {void}
+	 */
+	function showFieldOptionsTab( obj, singleField, editorReady ) {
+		const optionsTab = document.getElementById( 'frm-options-panel-tab' );
+
+		if ( optionsTab.parentElement.classList.contains( 'frm-active' ) ) {
+			// The tab is already open, so there is no slide to protect.
+			optionsTab.click();
+			fieldOptionsTabShown = Promise.resolve();
+			return;
+		}
+
+		// Never hold the panel back for long, even if TinyMCE's scripts are slow to load.
+		const MAX_EDITOR_WAIT = 300;
+		const maxWait = new Promise( resolve => setTimeout( resolve, MAX_EDITOR_WAIT ) );
+
+		fieldOptionsTabShown = Promise.race( [ editorReady, maxWait ] ).then(
+			() => new Promise( resolve => {
+				requestAnimationFrame( () => {
+					// Skip it if another field was selected, or the Add Fields tab was clicked, while waiting.
+					if ( obj.classList.contains( 'selected' ) && ! singleField.classList.contains( 'frm_hidden' ) ) {
+						optionsTab.click();
+					}
+					resolve();
+				} );
+			} )
+		);
 	}
 
 	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
