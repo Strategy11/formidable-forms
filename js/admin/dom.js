@@ -17,7 +17,8 @@
 				modal = createEmptyModal( id );
 
 				const titleElement = div( {
-					className: 'frm-modal-title'
+					className: 'frm-modal-title',
+					id: `${ id }-title`
 				} );
 
 				if ( 'string' === typeof title ) {
@@ -652,6 +653,15 @@
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				}
 			} );
+
+			// jQuery UI points aria-labelledby at its own auto-generated .ui-dialog-title
+			// span by default, but that span lives in the .ui-dialog-titlebar this modal
+			// hides. Point it at the real visible title instead so the dialog has an
+			// accessible name.
+			const titleElement = modal.querySelector( '.frm-modal-title' );
+			if ( titleElement ) {
+				$modal.dialog( 'widget' ).attr( 'aria-labelledby', titleElement.id );
+			}
 		}
 
 		document.body.classList.add( bodyWithModalClassName );
