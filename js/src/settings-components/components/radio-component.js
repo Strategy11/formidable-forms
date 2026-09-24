@@ -123,7 +123,7 @@ export default class frmRadioComponent {
 	 * @return {HTMLElement|null} The associated span, or null if the label doesn't wrap one.
 	 */
 	getRadioSpan( radio ) {
-		const label = radio.labels && radio.labels[ 0 ];
+		const label = radio.labels?.[ 0 ];
 		return label ? label.querySelector( '[role="radio"]' ) : null;
 	}
 
