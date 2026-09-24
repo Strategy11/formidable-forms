@@ -658,10 +658,7 @@
 			// span by default, but that span lives in the .ui-dialog-titlebar this modal
 			// hides. Point it at the real visible title instead so the dialog has an
 			// accessible name.
-			const titleElement = modal.querySelector( '.frm-modal-title' );
-			if ( titleElement ) {
-				$modal.dialog( 'widget' ).attr( 'aria-labelledby', titleElement.id );
-			}
+			$modal.dialog( 'widget' ).attr( 'aria-labelledby', `${ modal.id }-title` );
 		}
 
 		document.body.classList.add( bodyWithModalClassName );
