@@ -315,6 +315,45 @@ class test_FrmFieldType extends FrmUnitTest {
 	}
 
 	/**
+	 * A front_field_input() override that calls add_aria_description() itself
+	 * and sets aria_description_added = true before returning (what Pro's
+	 * FrmProFieldText does) used to skip the hidden-label aria-labelledby fix
+	 * entirely, since it was nested inside add_aria_description_to_inputs()'s
+	 * own callback - the exact method that override is designed to skip
+	 * (formidable-pro#6757).
+	 *
+	 * @covers FrmFieldType::maybe_add_aria_labelledby_for_hidden_label
+	 */
+	public function test_prepare_field_html_with_hidden_label_and_front_field_input_override() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'          => 'text',
+				'form_id'       => $form_id,
+				'field_options' => array( 'label' => 'hidden' ),
+			)
+		);
+
+		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_object = new class( $field_array, 'text' ) extends FrmFieldText {
+			public function front_field_input( $args, $shortcode_atts ) {
+				$input_html = parent::front_field_input( $args, $shortcode_atts );
+				$this->add_aria_description( $args, $input_html );
+				$this->aria_description_added = true;
+				return $input_html;
+			}
+		};
+
+		$args = array(
+			'errors' => array(),
+			'form'   => FrmForm::getOne( $form_id ),
+		);
+		$html = $field_object->prepare_field_html( $args );
+
+		$this->assertStringContainsString( 'aria-labelledby="field_' . $field->field_key . '_label"', $html );
+	}
+
+	/**
 	 * @covers FrmFieldType::prepare_field_html
 	 */
 	public function test_prepare_field_html() {

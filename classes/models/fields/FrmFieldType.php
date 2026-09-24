@@ -1709,8 +1709,9 @@ DEFAULT_HTML;
 			return;
 		}
 
+		// Match the label's own id, which is always derived via html_id() (the frm_field_get_html_id filter), not FrmFieldsHelper::get_html_id()'s frm_field_html_id filter.
 		if ( empty( $args['html_id'] ) ) {
-			$args['html_id'] = FrmFieldsHelper::get_html_id( $this->field );
+			$args['html_id'] = $this->html_id();
 		}
 
 		$html_id = $args['html_id'];
@@ -1722,7 +1723,8 @@ DEFAULT_HTML;
 					return $matches[0];
 				}
 
-				if ( preg_match( '/aria-labelledby=/', $matches[2] ) ) {
+				// aria-labelledby wins over aria-label per the accname spec - don't silently override an existing aria-label.
+				if ( preg_match( '/aria-label(?:ledby)?=/', $matches[2] ) ) {
 					return $matches[0];
 				}
 
