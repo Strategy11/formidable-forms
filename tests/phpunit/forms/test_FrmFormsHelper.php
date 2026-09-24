@@ -592,4 +592,26 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		);
 		$this->assertStringNotContainsString( 'tabindex="-1"', $status_html );
 	}
+
+	/**
+	 * A non-alert message also becomes focusable when the caller marks it via `focusable`
+	 * (the AJAX success path, so js/formidable.js can focus the message after submit) —
+	 * on top of, not instead of, the alert-role case above.
+	 *
+	 * @covers FrmFormsHelper::get_success_message
+	 */
+	public function test_get_success_message_adds_tabindex_when_focusable() {
+		$form = $this->factory->form->create_and_get();
+
+		$focusable_html = FrmFormsHelper::get_success_message(
+			array(
+				'message'   => 'Thanks',
+				'form'      => $form,
+				'entry_id'  => 0,
+				'class'     => 'frm_message',
+				'focusable' => true,
+			)
+		);
+		$this->assertStringContainsString( 'tabindex="-1"', $focusable_html );
+	}
 }

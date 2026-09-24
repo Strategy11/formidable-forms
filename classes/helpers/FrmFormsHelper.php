@@ -574,11 +574,16 @@ class FrmFormsHelper {
 
 		$message = do_shortcode( $message );
 		$role    = $atts['role'] ?? 'status';
-		// A focusable tabindex, plus a stable marker JS can select on regardless of the
-		// filterable wrapper class, lets JS move focus onto the error summary instead of
-		// the first field, when should_focus_error_summary() resolves true.
+		// A focusable tabindex lets js/formidable.js move focus onto the message after an
+		// AJAX submit without a screen reader user having to tab to it. An error summary
+		// (role="alert") is always focusable this way; any other message is only focusable
+		// when the caller marks it via $atts['focusable'] (the AJAX success path) — a
+		// plain page-rendered message is never focused, so it stays out of the tab order.
+		// The stable data-frm-error-summary marker additionally lets JS single out the
+		// error summary from any other focusable message on the page.
 		$is_error_summary = 'alert' === $role;
-		$tabindex         = $is_error_summary ? ' tabindex="-1"' : '';
+		$focusable        = $is_error_summary || ! empty( $atts['focusable'] );
+		$tabindex         = $focusable ? ' tabindex="-1"' : '';
 		$summary_marker   = $is_error_summary ? ' data-frm-error-summary="1"' : '';
 
 		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '"' . $tabindex . $summary_marker . '>' . $message . '</div>';
