@@ -1195,9 +1195,9 @@ class FrmAddon {
 
 		$this->maybe_set_active( $is_valid, ! $response['inconclusive'] );
 
-		if ( ! $response['inconclusive'] ) {
-			$this->update_last_checked( (bool) $is_valid );
-		}
+		// Record the check under the license now in place, even when the API gave no
+		// verdict. Otherwise a defined license is retried, and refused, on the next page load.
+		$this->update_last_checked( (bool) $is_valid );
 
 		if ( $is_valid ) {
 			// Setting the license active clears the license caches, so the new license details are available here.
