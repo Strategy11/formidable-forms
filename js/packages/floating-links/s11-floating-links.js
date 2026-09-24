@@ -213,6 +213,7 @@ class S11FloatingLinks {
 		this.iconButtonElement.setAttribute( 'role', 'button' );
 		this.iconButtonElement.setAttribute( 'tabindex', '0' );
 		this.iconButtonElement.setAttribute( 'aria-label', wp.i18n.__( 'Formidable support and links', 'formidable' ) );
+		this.iconButtonElement.setAttribute( 'aria-expanded', 'false' );
 		this.iconButtonElement.innerHTML = this.options.logoIcon.trim();
 
 		// Define close icon
@@ -260,7 +261,10 @@ class S11FloatingLinks {
 	switchIconButton( closeIcon ) {
 		this.iconButtonElement.classList.toggle( 's11-show-close-icon' );
 
-		if ( this.iconButtonElement.classList.contains( 's11-show-close-icon' ) ) {
+		const isOpen = this.iconButtonElement.classList.contains( 's11-show-close-icon' );
+		this.iconButtonElement.setAttribute( 'aria-expanded', isOpen ? 'true' : 'false' );
+
+		if ( isOpen ) {
 			this.iconButtonElement.innerHTML = closeIcon.trim();
 			return;
 		}

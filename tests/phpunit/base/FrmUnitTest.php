@@ -172,7 +172,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		self::empty_tables();
 
 		self::import_xml();
-		self::create_files();
+
+		do_action( 'frm_unit_test_install' );
+
 		self::$installed = true;
 	}
 
@@ -266,122 +268,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$form = FrmForm::getOne( 'contact-db12' );
 		self::assertSame( 'contact-db12', $form->form_key );
-	}
-
-	public static function create_files() {
-		if ( ! is_callable( 'FrmProFileImport::import_attachment' ) ) {
-			return;
-		}
-
-		add_filter( 'frm_should_import_files', '__return_true' );
-
-		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
-		$multi_file_upload_field  = FrmField::getOne( 'multi-file-upload-field' );
-
-		$file_urls = array(
-			array(
-				'val'   => 'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
-				'field' => $single_file_upload_field,
-				'entry' => 'jamie_entry_key',
-			),
-			array(
-				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
-				'field' => $single_file_upload_field,
-				'entry' => 'steph_entry_key',
-			),
-			array(
-				'val'   => array(
-					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
-					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/create-a-form_add-new.png',
-					'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
-				),
-				'field' => $multi_file_upload_field,
-				'entry' => 'jamie_entry_key',
-			),
-			array(
-				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
-				'field' => FrmField::getOne( 'file_upload_single' ),
-				'entry' => 'many_files_key',
-			),
-			array(
-				'val'   => array(
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-form.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-progress.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/09/new-graph-types1.png',
-				),
-				'field' => FrmField::getOne( 'file_upload_multiple' ),
-				'entry' => 'many_files_key',
-			),
-			array(
-				'val'   => array(
-					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/user-registration-multisite.jpeg',
-					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/lost-password-form.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/login-form.png',
-				),
-				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
-				'entry' => 'file-repeat-child-one',
-			),
-			array(
-				'val'   => array(
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/normal-section-job-history-1.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/repeating-section-job-history-1.png',
-				),
-				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
-				'entry' => 'file-repeat-child-two',
-			),
-		);
-
-		$uploads_dir = wp_upload_dir()['basedir'] . '/formidable/';
-		$test        = new FrmUnitTest( __FUNCTION__ );
-
-		foreach ( $file_urls as $values ) {
-			$vals      = (array) $values['val'];
-			$media_ids = false;
-
-			foreach ( $vals as $val ) {
-				$filename = basename( $val );
-				$path     = $uploads_dir . $filename;
-
-				if ( ! file_exists( $path ) && is_object( $values['field'] ) ) {
-					// File may be in formidable folder or it may be in the form_id folder so check the form as well.
-					$form_id_path = $uploads_dir . $values['field']->form_id . '/' . $filename;
-
-					if ( file_exists( $form_id_path ) ) {
-						copy( $form_id_path, $path );
-					}
-					unset( $form_id_path );
-				}
-
-				if ( ! file_exists( $path ) ) {
-					continue;
-				}
-
-				if ( ! is_array( $media_ids ) ) {
-					$media_ids = array();
-				}
-
-				$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
-			}
-
-			if ( is_array( $media_ids ) ) {
-				$media_ids = implode( ',', $media_ids );
-			}
-
-			if ( false === $media_ids ) {
-				$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
-			}
-
-			if ( is_array( $values['val'] ) ) {
-				$media_ids = explode( ',', $media_ids );
-			} else {
-				$is_file_val = is_numeric( $media_ids ) || strpos( $media_ids, ',' );
-				self::assertTrue( $is_file_val, 'The following file is not importing correctly: ' . $values['val'] );
-			}
-
-			// Insert into entries
-			$entry_id = FrmEntry::get_id_by_key( $values['entry'] );
-			FrmEntryMeta::add_entry_meta( $entry_id, $values['field']->id, null, $media_ids );
-		}
 	}
 
 	public function get_all_fields_for_form_key( $form_key ) {
@@ -889,5 +775,31 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
 		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
+	}
+
+	/**
+	 * Assert that a checkbox-type input's wrapping <label> does not also carry a
+	 * `for` attribute -- the wrap alone already associates label and input, so a
+	 * redundant `for`/id pair makes Safari VoiceOver announce the label twice
+	 * (label_name_visible / duplicate association).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param string $field_description Used only in the failure message, e.g. "checkbox option" or "GDPR".
+	 *
+	 * @return void
+	 */
+	protected function assert_label_wraps_input_without_for( $html, $field_description ) {
+		$this->assertMatchesRegularExpression(
+			'/<label[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"Expected the {$field_description} label to wrap the checkbox input"
+		);
+		$this->assertDoesNotMatchRegularExpression(
+			'/<label[^>]*\sfor="[^"]*"[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"The {$field_description} label should not also carry a for attribute when it already wraps the input -- Safari VoiceOver double-announces it"
+		);
 	}
 }
