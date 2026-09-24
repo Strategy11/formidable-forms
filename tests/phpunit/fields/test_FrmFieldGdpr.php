@@ -5,6 +5,22 @@
 class test_FrmFieldGdpr extends FrmUnitTest {
 
 	/**
+	 * @var bool
+	 */
+	private $original_enable_gdpr;
+
+	public function setUp(): void {
+		parent::setUp();
+		// $frm_settings is a process-wide global, not reset between tests by the DB rollback.
+		$this->original_enable_gdpr = FrmAppHelper::get_settings()->enable_gdpr;
+	}
+
+	public function tearDown(): void {
+		FrmAppHelper::get_settings()->enable_gdpr = $this->original_enable_gdpr;
+		parent::tearDown();
+	}
+
+	/**
 	 * @covers FrmFieldGdpr::include_front_form_file
 	 */
 	public function test_disabled_notice_has_no_dangling_aria_labelledby() {
