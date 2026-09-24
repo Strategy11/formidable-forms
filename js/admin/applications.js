@@ -439,7 +439,7 @@
 			);
 		}
 
-		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png`, alt: data.name } );
+		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png`, alt: '' } );
 		if ( placeholderImage.complete ) {
 			setTimeout( maybeCenterViewApplicationModal, 0 );
 		} else {
