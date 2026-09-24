@@ -59,6 +59,10 @@ class FrmFieldsController {
 			);
 		}//end foreach
 
+		// admin_footer never fires here, so the deferred tooltip text rides along with the html.
+		// Field ids are numeric, so this key can never collide with one.
+		$field_html['tooltips'] = FrmAppHelper::get_deferred_tooltips();
+
 		echo json_encode( $field_html );
 
 		wp_die();

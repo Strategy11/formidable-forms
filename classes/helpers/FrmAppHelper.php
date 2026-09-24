@@ -5156,7 +5156,8 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Tooltip strings deferred on the form builder page, keyed for `frm_admin_js.tooltips`.
+	 * Tooltip strings deferred on the form builder page and its ajax field-load request,
+	 * keyed for `frm_admin_js.tooltips`.
 	 *
 	 * @since x.x
 	 *
@@ -5194,35 +5195,66 @@ class FrmAppHelper {
 	/**
 	 * Builds the attribute(s) a tooltip trigger needs for its text.
 	 *
-	 * On the initial form builder page load, the text is deferred to `frm_admin_js.tooltips`
-	 * and only a lookup key is printed inline, instead of baking every field's translated
-	 * tooltip text into the page. `print_deferred_tooltips()` (hooked to `admin_footer`, which
-	 * never fires on an ajax request) prints the collected strings; `admin.js`'s
-	 * `loadTooltips()` resolves every already-rendered key back into its real `title` as soon
-	 * as the page is ready (so the icon carries a real accessible name from the start, not only
-	 * after a mouse hover), and `loadTooltip()`'s own lazy resolve still covers anything added
-	 * later by the ajax field-load flow. `is_form_builder_page()` also returns true for the `frm_load_field` ajax
-	 * batch field-loading request (it treats admin-ajax.php as the builder page), but that
-	 * request never sends `frm_action`, which this same check also requires - so in practice a
-	 * field loaded that way still gets the normal `title` text, unaffected by this deferral.
+	 * On the form builder page, and in the `frm_load_field` ajax request that fills in its
+	 * fields in batches, the text is deferred to `frm_admin_js.tooltips` and only a lookup key
+	 * is printed inline, instead of baking every field's translated tooltip text into the
+	 * markup. The initial page load prints the collected strings through
+	 * `print_deferred_tooltips()` on `admin_footer`. That hook never fires on admin-ajax.php,
+	 * so `FrmFieldsController::load_field()` sends them back with its JSON response instead.
+	 * `admin.js` merges either one into `frm_admin_js.tooltips` and resolves each key back into
+	 * a real `title`.
+	 *
+	 * The key is a hash of the text rather than a per-request counter. A counter restarts in
+	 * every request, so two batches could hand the same key to different text, and whichever
+	 * merged last would win. A hash gives identical text the same key everywhere, which makes
+	 * the client-side merge safe to repeat and dedupes repeated strings for free.
 	 *
 	 * @since x.x
 	 *
 	 * @param string $tooltip_text Tooltip text.
 	 *
-	 * @return array<string,string> One of `title` (normal pages, and the ajax field-load path)
-	 *                              or `data-tip-key` (a field rendered into the initial builder
-	 *                              page load).
+	 * @return array<string,string> Either `title` (everywhere else) or `data-tip-key` (the
+	 *                              builder page and its ajax field-load request).
 	 */
 	public static function get_tooltip_attr( $tooltip_text ) {
-		if ( ! self::is_form_builder_page() ) {
+		if ( ! self::should_defer_tooltips() ) {
 			return array( 'title' => $tooltip_text );
 		}
 
-		$key                             = 't' . count( self::$deferred_tooltips );
+		$key                             = 't' . substr( md5( $tooltip_text ), 0, 8 );
 		self::$deferred_tooltips[ $key ] = $tooltip_text;
 
 		return array( 'data-tip-key' => $key );
+	}
+
+	/**
+	 * Checks if this request can hand its tooltip strings to `frm_admin_js.tooltips`.
+	 *
+	 * `is_form_builder_page()` alone misses the `frm_load_field` ajax request because that
+	 * request never sends `frm_action`. Other builder ajax requests are left out on purpose
+	 * since nothing ships their collected strings to the page.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_defer_tooltips() {
+		if ( wp_doing_ajax() ) {
+			return 'frm_load_field' === self::get_post_param( 'action', '', 'sanitize_text_field' );
+		}
+
+		return self::is_form_builder_page();
+	}
+
+	/**
+	 * Gets the tooltip strings collected by `get_tooltip_attr()` so far in this request.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,string> Tooltip text keyed by its `data-tip-key`.
+	 */
+	public static function get_deferred_tooltips() {
+		return self::$deferred_tooltips;
 	}
 
 	/**
