@@ -1,9 +1,6 @@
 name: Inspections
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types: [opened, labeled, synchronize]
 
