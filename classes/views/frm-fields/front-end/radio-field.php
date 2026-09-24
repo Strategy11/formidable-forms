@@ -57,9 +57,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		$should_echo_disabled_att = FrmFieldsHelper::should_disable_choice( $opt_key, trim( $checked ) !== '', $field );
 
 		if ( empty( $hide_label ) ) {
-			$label_attributes = array(
-				'for' => $html_id . '-' . $opt_key,
-			);
+			// No `for` attribute -- the label already wraps the input below,
+			// so adding one too makes Safari VoiceOver announce it twice.
+			$label_attributes = array();
 
 			if ( $read_only || $should_echo_disabled_att ) {
 				$label_attributes['class'] = 'frm-label-disabled';
