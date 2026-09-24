@@ -5,7 +5,7 @@
 class test_FrmFieldGdpr extends FrmUnitTest {
 
 	/**
-	 * @var bool
+	 * @var int
 	 */
 	private $original_enable_gdpr;
 
