@@ -59,6 +59,10 @@ class FrmFieldsController {
 			);
 		}//end foreach
 
+		// admin_footer never fires here, so the deferred tooltip text rides along with the html.
+		// Field ids are numeric, so this key can never collide with one.
+		$field_html['tooltips'] = FrmAppHelper::get_deferred_tooltips();
+
 		echo json_encode( $field_html );
 
 		wp_die();
@@ -408,13 +412,8 @@ class FrmFieldsController {
 		$display   = $atts['display'];
 		unset( $atts );
 
-		if ( ! isset( $field['unique'] ) ) {
-			$field['unique'] = false;
-		}
-
-		if ( ! isset( $field['read_only'] ) ) {
-			$field['read_only'] = false;
-		}
+		$field['unique']    = $field['unique'] ?? false;
+		$field['read_only'] = $field['read_only'] ?? false;
 
 		$field_selection_data = self::maybe_define_field_selection_data();
 		$all_field_types      = $field_selection_data->all_field_types;
@@ -449,21 +448,27 @@ class FrmFieldsController {
 
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
 
-		$unique_values_label_atts = array(
-			'for'          => 'frm_uniq_field_' . $field['id'],
-			'class'        => 'frm_help frm-mb-0',
-			'title'        => __(
-				'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.',
-				'formidable'
+		$unique_values_label_atts = array_merge(
+			array(
+				'for'          => 'frm_uniq_field_' . $field['id'],
+				'class'        => 'frm_help frm-mb-0',
+				'data-trigger' => 'hover',
 			),
-			'data-trigger' => 'hover',
+			FrmAppHelper::get_tooltip_attr(
+				__(
+					'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.',
+					'formidable'
+				)
+			)
 		);
 
-		$read_only_label_atts = array(
-			'for'          => 'frm_read_only_field_' . $field['id'],
-			'class'        => 'frm_help frm-mb-0',
-			'title'        => __( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ),
-			'data-trigger' => 'hover',
+		$read_only_label_atts = array_merge(
+			array(
+				'for'          => 'frm_read_only_field_' . $field['id'],
+				'class'        => 'frm_help frm-mb-0',
+				'data-trigger' => 'hover',
+			),
+			FrmAppHelper::get_tooltip_attr( __( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ) )
 		);
 
 		if ( ! $pro_is_installed ) {

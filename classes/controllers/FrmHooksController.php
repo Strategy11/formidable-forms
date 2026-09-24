@@ -150,6 +150,7 @@ class FrmHooksController {
 		add_action( 'admin_notices', 'FrmAppController::pro_get_started_headline' );
 		add_action( 'admin_init', 'FrmAppController::admin_init', 11 );
 		add_action( 'admin_enqueue_scripts', 'FrmAppController::admin_enqueue_scripts' );
+		add_action( 'admin_footer', 'FrmAppHelper::print_deferred_tooltips' );
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );

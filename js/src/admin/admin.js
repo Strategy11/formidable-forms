@@ -575,6 +575,8 @@ window.frmAdminBuildJS = function() {
 	function loadTooltip( element, show = false ) {
 		let tooltipTarget = element;
 
+		resolveDeferredTooltip( tooltipTarget );
+
 		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
 		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
 			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
@@ -589,6 +591,28 @@ window.frmAdminBuildJS = function() {
 		if ( show ) {
 			deleteTooltips();
 			tooltip.show();
+		}
+	}
+
+	/**
+	 * Resolves a `data-tip-key` (set by `FrmAppHelper::get_tooltip_attr()` on the form builder
+	 * page) into the element's real `title` attribute, looked up from `frm_admin_js.tooltips`.
+	 * No-op for an element that already carries its own `title` (every other admin page).
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function resolveDeferredTooltip( element ) {
+		if ( ! element.hasAttribute( 'data-tip-key' ) ) {
+			return;
+		}
+
+		const key = element.getAttribute( 'data-tip-key' );
+		element.removeAttribute( 'data-tip-key' );
+
+		const text = window.frm_admin_js && frm_admin_js.tooltips && frm_admin_js.tooltips[ key ];
+		if ( text ) {
+			element.setAttribute( 'title', text );
 		}
 	}
 
@@ -653,6 +677,12 @@ window.frmAdminBuildJS = function() {
 		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 		bindFormActionsKeyboardHandlers( wrapClass );
+
+		// Resolve every tooltip trigger already in the DOM now, so an SVG-only icon carries a
+		// real accessible name from page-ready instead of only from the first mouse hover.
+		wrapClass.find( '[data-tip-key]' ).each( function() {
+			resolveDeferredTooltip( this );
+		} );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
@@ -2551,7 +2581,8 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Swap the placeholders for the fields the server rendered.
 	 *
-	 * @param {string} response A json object of field id to { type, html }.
+	 * @param {string} response A json object of field id to { type, html }, plus a tooltips map of
+	 *                          data-tip-key to text for the tooltips in those fields.
 	 * @return {void}
 	 */
 	function handleAjaxLoadFieldSuccess( response ) {
@@ -2564,8 +2595,14 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const loadedFields = JSON.parse( response );
+		const { tooltips, ...loadedFields } = JSON.parse( response );
 		const newFields = [];
+
+		// The text behind each data-tip-key in this batch. Keys are hashes of the text, so merging
+		// a batch on top of what the page already has can only ever re-add the same strings.
+		if ( tooltips && window.frm_admin_js ) {
+			frm_admin_js.tooltips = { ...frm_admin_js.tooltips, ...tooltips };
+		}
 		// Field ids and types for the listeners of frm_ajax_loaded_field.
 		const loadedFieldData = [];
 
@@ -2581,6 +2618,7 @@ window.frmAdminBuildJS = function() {
 				newFields.push( newReplacedField );
 				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+				newReplacedField.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
 			}
 
 			setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
