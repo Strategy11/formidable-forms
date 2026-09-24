@@ -1,4 +1,6 @@
-on: [push]
+on:
+  pull_request:
+    types: [ opened, labeled, synchronize ]
 
 name: PHPStan Code Analysis
 # Cancel superseded runs for the same branch. The group is named explicitly
@@ -10,6 +12,9 @@ concurrency:
 
 jobs:
   phpstan:
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'run analysis')
+      && (github.event.action != 'labeled' || github.event.label.name == 'run analysis')
     name: PHPStan
 
     runs-on: ubuntu-latest

@@ -776,4 +776,30 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
 		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
 	}
+
+	/**
+	 * Assert that a checkbox-type input's wrapping <label> does not also carry a
+	 * `for` attribute -- the wrap alone already associates label and input, so a
+	 * redundant `for`/id pair makes Safari VoiceOver announce the label twice
+	 * (label_name_visible / duplicate association).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param string $field_description Used only in the failure message, e.g. "checkbox option" or "GDPR".
+	 *
+	 * @return void
+	 */
+	protected function assert_label_wraps_input_without_for( $html, $field_description ) {
+		$this->assertMatchesRegularExpression(
+			'/<label[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"Expected the {$field_description} label to wrap the checkbox input"
+		);
+		$this->assertDoesNotMatchRegularExpression(
+			'/<label[^>]*\sfor="[^"]*"[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"The {$field_description} label should not also carry a for attribute when it already wraps the input -- Safari VoiceOver double-announces it"
+		);
+	}
 }
