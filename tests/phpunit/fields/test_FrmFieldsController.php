@@ -37,6 +37,220 @@ class test_FrmFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmFieldsController::parse_bulk_edit_opts
+	 */
+	public function test_parse_bulk_edit_opts_drops_blank_lines() {
+		// A blank line (or one that is only whitespace) must be dropped, not
+		// kept as an option with an empty string value - an empty value
+		// collides with an unset field value in FrmAppHelper::check_selected()
+		// and renders as selected by default (formidable-pro#3385).
+		$opts = $this->parse_bulk_edit_opts( "One\n\nTwo\n   \nThree", false );
+
+		$this->assertSame( array( 'One', 'Two', 'Three' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_keeps_zero_value() {
+		// '0' is falsy but a valid option value - only truly blank lines drop.
+		$opts = $this->parse_bulk_edit_opts( "0\nOne", false );
+
+		$this->assertSame( array( '0', 'One' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_keeps_leading_blank_when_flagged() {
+		// $keep_leading_blank is the caller's decision - see this method's docblock.
+		$opts = $this->parse_bulk_edit_opts( "\nOne\n\nTwo", true );
+
+		$this->assertSame( array( '', 'One', 'Two' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_drops_leading_blank_when_not_flagged() {
+		$opts = $this->parse_bulk_edit_opts( "\nOne\nTwo", false );
+		$this->assertSame( array( 'One', 'Two' ), $opts );
+	}
+
+	public function test_parse_bulk_edit_opts_wholly_blank_keeps_nothing_even_when_flagged() {
+		// A wholly-cleared textarea saves zero options, not a single
+		// leftover blank one - the leading blank only makes sense as the
+		// first row of a real list.
+		$opts = $this->parse_bulk_edit_opts( "\n\n", true );
+		$this->assertSame( array(), $opts );
+	}
+
+	/**
+	 * @param string $opts
+	 * @param bool   $keep_leading_blank
+	 */
+	private function parse_bulk_edit_opts( $opts, $keep_leading_blank ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'parse_bulk_edit_opts' ), array( $opts, $keep_leading_blank ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::remove_blank_separated_values
+	 */
+	public function test_remove_blank_separated_values_drops_blank_value() {
+		// A "label|" line with nothing after the separator produces a
+		// blank value half, the same collision as a blank textarea line
+		// (formidable-pro#3385), just reached via separate-value mode.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => 'Blank',
+					'value' => '',
+				),
+				'Two',
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				'Two',
+			),
+			$opts
+		);
+	}
+
+	public function test_remove_blank_separated_values_keeps_blank_label_with_real_value() {
+		// A "|value" line with nothing before the separator has a blank
+		// label but a real value - no collision with an unset field value
+		// (FrmAppHelper::check_selected() only ever compares the value
+		// half), and dropdown-field.php renders a blank label as a real,
+		// selectable option, so this is left alone.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => '',
+					'value' => 'no-label',
+				),
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'One',
+					'value' => '1',
+				),
+				array(
+					'label' => '',
+					'value' => 'no-label',
+				),
+			),
+			$opts
+		);
+	}
+
+	public function test_remove_blank_separated_values_keeps_leading_blank_pair_when_flagged() {
+		// $keep_leading_blank is the caller's decision - see this method's docblock.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			),
+			true
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			),
+			$opts
+		);
+	}
+
+	public function test_remove_blank_separated_values_drops_leading_blank_pair_when_not_flagged() {
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'label' => 'Yes',
+					'value' => '1',
+				),
+			),
+			$opts
+		);
+	}
+
+	public function test_remove_blank_separated_values_wholly_blank_keeps_nothing_even_when_flagged() {
+		// Same reasoning as parse_bulk_edit_opts()'s wholly-blank case: a
+		// lone "|" line with nothing else isn't a real option list with a
+		// placeholder row, so it doesn't get to keep the placeholder either.
+		$opts = $this->remove_blank_separated_values(
+			array(
+				array(
+					'label' => '',
+					'value' => '',
+				),
+			),
+			true
+		);
+
+		$this->assertSame( array(), $opts );
+	}
+
+	/**
+	 * @param array $opts
+	 * @param bool  $keep_leading_blank
+	 */
+	private function remove_blank_separated_values( $opts, $keep_leading_blank = false ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'remove_blank_separated_values' ), array( $opts, $keep_leading_blank ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::select_has_placeholder
+	 */
+	public function test_select_has_placeholder_true_when_placeholder_set() {
+		$this->assertTrue( $this->select_has_placeholder( array( 'placeholder' => 'Choose one' ) ) );
+	}
+
+	public function test_select_has_placeholder_false_when_no_placeholder() {
+		$this->assertFalse( $this->select_has_placeholder( array( 'placeholder' => '' ) ) );
+	}
+
+	/**
+	 * @param array $field
+	 */
+	private function select_has_placeholder( $field ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'select_has_placeholder' ), array( $field ) );
+	}
+
+	/**
 	 * @covers FrmFieldsController::pull_custom_error_body_from_custom_html
 	 */
 	public function test_pull_custom_error_body_from_custom_html() {

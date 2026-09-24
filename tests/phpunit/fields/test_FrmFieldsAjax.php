@@ -17,6 +17,11 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		wp_set_current_user( $this->user_id );
 		FrmAppHelper::maybe_add_permissions();
+		// maybe_add_permissions() grants the cap via a separate WP_User
+		// instance, which doesn't refresh the cached current user - add it
+		// directly so current_user_can() (used by import_options()'s own
+		// is_admin()/current_user_can() gate) sees it.
+		wp_get_current_user()->add_cap( 'frm_edit_forms' );
 
 		$form = $this->factory->form->create_and_get();
 		$this->assertNotEmpty( $form );
@@ -96,6 +101,164 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertSame( $format, $field->field_options['format'] );
 
 		self::check_in_section_variable( $field, 0 );
+	}
+
+	/**
+	 * @covers FrmFieldsController::import_options
+	 */
+	public function test_import_options_drops_blanks_without_disturbing_other_key() {
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => 'checkbox',
+				'field_options' => array( 'other' => '1' ),
+				'options'       => array(
+					array(
+						'label' => 'Existing',
+						'value' => 'existing-value',
+					),
+					'other_2' => 'Other',
+				),
+			)
+		);
+
+		$_POST = array(
+			'action'   => 'frm_import_options',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field->id,
+			'opts'     => "One\n\nTwo",
+			'separate' => 'false',
+		);
+
+		$response = $this->trigger_action( 'frm_import_options' );
+
+		// The merged-back "other_2" option renders via a Pro-only view
+		// (FrmProAppHelper's other-option.php), a no-op with Pro inactive
+		// here, so it never appears as its own row - but if blank-line
+		// filtering reindexed it into a plain integer key, it would leak
+		// through as a normal option labeled "Other" instead. Asserting
+		// its exact absence from a normal render is what proves the
+		// "other_" key survived the filtering intact.
+		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
+		// First match is always the hidden "New Option" template row
+		// (FrmFieldsHelper::hidden_field_option()), not a real option.
+		$this->assertSame( array( 'One', 'Two' ), array_slice( $matches[1], 1 ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::import_options
+	 */
+	public function test_import_options_separate_value_drops_blank_value_but_keeps_blank_label() {
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => 'radio',
+				'field_options' => array( 'other' => '1' ),
+				'options'       => array(
+					array(
+						'label' => 'Existing',
+						'value' => 'existing-value',
+					),
+					'other_2' => 'Other',
+				),
+			)
+		);
+
+		$_POST = array(
+			'action'   => 'frm_import_options',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field->id,
+			// "Blank|" (blank value) drops; "|no-label" (blank label, real
+			// value) survives - it's a legitimate option, not a collision.
+			'opts'     => "One|1\nBlank|\n|no-label\nTwo|2",
+			'separate' => 'true',
+		);
+
+		$response = $this->trigger_action( 'frm_import_options' );
+
+		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
+		$this->assertSame( array( 'One', '', 'Two' ), array_slice( $matches[1], 1 ) );
+	}
+
+	/**
+	 * @covers FrmFieldsController::import_options
+	 */
+	public function test_import_options_drops_leading_blank_for_select_without_placeholder() {
+		// No placeholder configured - see select_has_placeholder()'s docblock.
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form_id,
+				'type'    => 'select',
+			)
+		);
+
+		$labels = $this->import_options_labels( $field->id, "\nOne\nTwo", 'false' );
+
+		$this->assertSame( array( 'One', 'Two' ), $labels );
+	}
+
+	/**
+	 * @covers FrmFieldsController::import_options
+	 */
+	public function test_import_options_keeps_leading_blank_for_select_with_placeholder() {
+		// Placeholder configured - see select_has_placeholder()'s docblock.
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => 'select',
+				'field_options' => array( 'placeholder' => 'Choose one' ),
+			)
+		);
+
+		$labels = $this->import_options_labels( $field->id, "\nOne\nTwo", 'false' );
+
+		$this->assertSame( array( '', 'One', 'Two' ), $labels );
+	}
+
+	/**
+	 * @covers FrmFieldsController::import_options
+	 */
+	public function test_import_options_keeps_leading_blank_pair_for_separate_value_select_with_placeholder() {
+		// Separate-value equivalent of the plain-line case above - a leading
+		// "|" (blank label, blank value) is the same placeholder row, see
+		// remove_blank_separated_values()'s docblock.
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => 'select',
+				'field_options' => array( 'placeholder' => 'Choose one' ),
+			)
+		);
+
+		$labels = $this->import_options_labels( $field->id, "|\nYes|1\nNo|0", 'true' );
+
+		$this->assertSame( array( '', 'Yes', 'No' ), $labels );
+	}
+
+	/**
+	 * Runs frm_import_options for a field and returns the rendered option
+	 * labels, dropping the hidden "New Option" template row.
+	 *
+	 * @param int    $field_id
+	 * @param string $opts
+	 * @param string $separate
+	 *
+	 * @return array
+	 */
+	private function import_options_labels( $field_id, $opts, $separate ) {
+		$_POST = array(
+			'action'   => 'frm_import_options',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field_id,
+			'opts'     => $opts,
+			'separate' => $separate,
+		);
+
+		$response = $this->trigger_action( 'frm_import_options' );
+
+		preg_match_all( '/\[label\]" value="([^"]*)"/', $response, $matches );
+
+		return array_slice( $matches[1], 1 );
 	}
 
 	/**

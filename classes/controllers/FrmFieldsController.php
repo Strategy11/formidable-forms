@@ -348,11 +348,12 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_type         = $field->type;
+		$field              = FrmFieldsHelper::setup_edit_vars( $field );
+		$keep_leading_blank = 'select' === $field_type && self::select_has_placeholder( $field );
 
 		$opts = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
-		$opts = explode( "\n", rtrim( $opts, "\n" ) );
-		$opts = array_map( 'trim', $opts );
+		$opts = self::parse_bulk_edit_opts( $opts, $keep_leading_blank );
 
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = $separate === 'true';
@@ -369,6 +370,8 @@ class FrmFieldsController {
 				}
 				unset( $opt_key, $opt );
 			}
+
+			$opts = self::remove_blank_separated_values( $opts, $keep_leading_blank );
 		}
 
 		// Keep other options after bulk update.
@@ -392,6 +395,111 @@ class FrmFieldsController {
 		FrmFieldsHelper::show_single_option( $field );
 
 		wp_die();
+	}
+
+	/**
+	 * Splits raw Bulk Edit Options textarea content into trimmed option
+	 * strings, dropping blank lines. A blank line left in as an option with
+	 * an empty string value collides with an unset field value in
+	 * FrmAppHelper::check_selected(), making that blank option render as
+	 * selected by default (formidable-pro#3385).
+	 *
+	 * A leading blank line is only kept when $keep_leading_blank says so
+	 * (select field, placeholder configured - see select_has_placeholder()).
+	 * With a placeholder, dropdown-field.php's own $placeholder/$skipped
+	 * handling absorbs this option into the placeholder it already renders,
+	 * so keeping it is harmless. Without one, nothing skips it - it would
+	 * render for real and reproduce the exact collision this method exists
+	 * to prevent, so it's dropped like any other blank line.
+	 *
+	 * A wholly-blank textarea keeps nothing at all, even when
+	 * $keep_leading_blank is true - the leading blank only makes sense as
+	 * the first row of a real option list, not as the entire result.
+	 *
+	 * @since 6.36
+	 *
+	 * @param string $opts
+	 * @param bool   $keep_leading_blank
+	 *
+	 * @return array
+	 */
+	private static function parse_bulk_edit_opts( $opts, $keep_leading_blank ) {
+		$opts               = array_map( 'trim', explode( "\n", $opts ) );
+		$keep_leading_blank = $keep_leading_blank && '' === $opts[0];
+
+		$opts = array_values(
+			array_filter(
+				$opts,
+				static function ( $value ) {
+					return '' !== $value;
+				}
+			)
+		);
+
+		if ( $keep_leading_blank && $opts ) {
+			array_unshift( $opts, '' );
+		}
+
+		return $opts;
+	}
+
+	/**
+	 * Drops a separate-value bulk-edit option ("label|value") whose value
+	 * half is blank - same collision as parse_bulk_edit_opts() above, just
+	 * reached via the separate-value split instead of a blank textarea line
+	 * (formidable-pro#3385). A blank label with a real value is left alone:
+	 * FrmAppHelper::check_selected() only ever compares against the value
+	 * half, and dropdown-field.php explicitly supports rendering a
+	 * blank-label option as a real, selectable choice.
+	 *
+	 * A leading "|" line (blank label and blank value) is the separate-value
+	 * equivalent of parse_bulk_edit_opts()'s leading blank line, and is kept
+	 * on the same $keep_leading_blank condition for the same reason - unless
+	 * it's the only line, matching that method's wholly-blank case. $opts
+	 * here is whatever import_options() built from parse_bulk_edit_opts()'s
+	 * own output, so a caller passing $keep_leading_blank without that same
+	 * upstream filtering would need its own '' !== $opts[0] equivalent
+	 * check; there isn't one here because a raw "|" line already survives
+	 * parse_bulk_edit_opts() unfiltered (it isn't the empty string).
+	 *
+	 * @since 6.36
+	 *
+	 * @param array $opts
+	 * @param bool  $keep_leading_blank
+	 *
+	 * @return array
+	 */
+	private static function remove_blank_separated_values( $opts, $keep_leading_blank ) {
+		$keep_leading_blank = $keep_leading_blank && count( $opts ) > 1;
+
+		return array_values(
+			array_filter(
+				$opts,
+				function ( $opt, $key ) use ( $keep_leading_blank ) {
+					if ( $keep_leading_blank && 0 === $key && is_array( $opt ) && '' === $opt['label'] && '' === $opt['value'] ) {
+						return true;
+					}
+
+					return ! is_array( $opt ) || '' !== $opt['value'];
+				},
+				ARRAY_FILTER_USE_BOTH
+			)
+		);
+	}
+
+	/**
+	 * Whether a select field would render its own placeholder option, per
+	 * add_placeholder_to_select()'s own truthy check - called directly since
+	 * that method's job is echoing markup, not answering this.
+	 *
+	 * @since 6.36
+	 *
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	private static function select_has_placeholder( $field ) {
+		return '' !== self::get_select_placeholder( $field );
 	}
 
 	/**
@@ -865,6 +973,27 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Resolves a select field's own placeholder text, falling back to
+	 * get_default_value_from_name(). Shared between add_placeholder_to_select()
+	 * and select_has_placeholder() so the two can't drift.
+	 *
+	 * @since 6.36
+	 *
+	 * @param array|object $field
+	 *
+	 * @return string
+	 */
+	private static function get_select_placeholder( $field ) {
+		$placeholder = FrmField::get_option( $field, 'placeholder' );
+
+		if ( ! $placeholder ) {
+			$placeholder = self::get_default_value_from_name( $field );
+		}
+
+		return $placeholder;
+	}
+
+	/**
 	 * Maybe add a blank placeholder option before any options
 	 * in a dropdown.
 	 *
@@ -875,12 +1004,7 @@ class FrmFieldsController {
 	 * @return bool True if placeholder was added.
 	 */
 	public static function add_placeholder_to_select( $field ) {
-		$placeholder = FrmField::get_option( $field, 'placeholder' );
-
-		if ( ! $placeholder ) {
-			$placeholder = self::get_default_value_from_name( $field );
-		}
-
+		$placeholder     = self::get_select_placeholder( $field );
 		$use_placeholder = $placeholder;
 		$autocomplete    = FrmField::get_option( $field, 'autocom' );
 
