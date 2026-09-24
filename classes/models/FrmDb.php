@@ -823,8 +823,7 @@ class FrmDb {
 	public static function db_column_exists( $table, $column ) {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . $table . ' LIKE %s', $column ) );
+		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM %i LIKE %s', $wpdb->prefix . $table, $column ) );
 		return ! empty( $result );
 	}
 }

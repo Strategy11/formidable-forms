@@ -435,7 +435,7 @@ class FrmWelcomeTourController {
 	 */
 	private static function check_for_form_embeds() {
 		global $wpdb;
-		$result = $wpdb->get_var( "SELECT 1 FROM {$wpdb->posts} WHERE post_content LIKE '%[formidable %' LIMIT 1" );
+		$result = $wpdb->get_var( $wpdb->prepare( 'SELECT 1 FROM %i WHERE post_content LIKE %s LIMIT 1', $wpdb->posts, '%[formidable %' ) );
 		return '1' === $result;
 	}
 
