@@ -2,7 +2,8 @@
 	'use strict';
 
 	const globalVars = {
-		sendTestEmailModal: null
+		sendTestEmailModal: null,
+		mcpConnectionTimer: null
 	};
 
 	function addEventListeners() {
@@ -37,6 +38,13 @@
 		const copyButton = e.target.closest( '.js-frm-mcp-copy' );
 		if ( copyButton ) {
 			copyMcpInstruction( copyButton );
+			return;
+		}
+
+		if ( e.target.closest( '.js-frm-mcp-download-env' ) ) {
+			// The download does not reload the page, so the step is checked off here.
+			completeMcpStep( 'env' );
+			waitForMcpConnection();
 			return;
 		}
 
@@ -98,6 +106,89 @@
 			button.setAttribute( 'aria-label', originalLabel );
 			icon.setAttribute( 'href', '#frm_clone_icon' );
 		}, 1600 );
+	}
+
+	/**
+	 * Show the setup prompt for the checked assistant.
+	 *
+	 * Reads the checked radio rather than the event, so the prompt always matches
+	 * what is selected, however the selection happened.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function syncMcpClient() {
+		const placeholder = document.getElementById( 'frm_mcp_prompt_placeholder' );
+		if ( ! placeholder ) {
+			return;
+		}
+
+		const client = document.querySelector( 'input[name="frm_mcp_client_view"]:checked' )?.value;
+
+		placeholder.classList.toggle( 'frm_hidden', !! client );
+		[ 'claude', 'codex' ].forEach( name => {
+			document.getElementById( `frm_mcp_prompt_client_${ name }` ).classList.toggle( 'frm_hidden', name !== client );
+		} );
+	}
+
+	/**
+	 * Check off an MCP setup step.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} stepKey Step key, the suffix of the step's frm_mcp_step_ id.
+	 * @return {void}
+	 */
+	function completeMcpStep( stepKey ) {
+		const step = document.getElementById( `frm_mcp_step_${ stepKey }` );
+		if ( ! step ) {
+			return;
+		}
+
+		step.classList.add( 'frm-mcp-step-complete' );
+		step.querySelector( '.js-frm-mcp-step-state' ).textContent = document.getElementById( 'frm_mcp_steps' ).dataset.completeLabel;
+	}
+
+	/**
+	 * Poll until an assistant uses a downloaded env file, then check off the last MCP step.
+	 *
+	 * Stops after ten minutes, and skips checks while the tab is hidden.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function waitForMcpConnection() {
+		if ( globalVars.mcpConnectionTimer ) {
+			return;
+		}
+
+		const interval = 5000;
+		let checksLeft = 120;
+
+		globalVars.mcpConnectionTimer = setInterval( () => {
+			if ( document.hidden ) {
+				return;
+			}
+
+			checksLeft--;
+			if ( checksLeft < 0 ) {
+				clearInterval( globalVars.mcpConnectionTimer );
+				return;
+			}
+
+			frmDom.ajax.doJsonPost( 'mcp_connection_status', new FormData() ).then( response => {
+				document.getElementById( 'frm_mcp_connection_status' ).textContent = response.message;
+
+				if ( response.connected ) {
+					clearInterval( globalVars.mcpConnectionTimer );
+					completeMcpStep( 'connect' );
+				}
+			} ).catch( () => {
+				// A failed check is retried on the next tick.
+			} );
+		}, interval );
 	}
 
 	function handleClickChooseEmailStyle( e ) {
@@ -168,4 +259,17 @@
 	}
 
 	addEventListeners();
+
+	if ( document.getElementById( 'frm_mcp_steps' )?.dataset.waiting ) {
+		waitForMcpConnection();
+	}
+
+	// Listen on the group so the prompt follows the selection. pageshow also
+	// covers a page restored from the back/forward cache.
+	const mcpClientGroup = document.getElementById( 'frm-mcp-client-claude' )?.parentNode;
+	if ( mcpClientGroup ) {
+		mcpClientGroup.addEventListener( 'change', syncMcpClient );
+		window.addEventListener( 'pageshow', syncMcpClient );
+		syncMcpClient();
+	}
 }() );

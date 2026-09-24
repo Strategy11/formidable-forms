@@ -147,11 +147,16 @@ class FrmMcpSettingsController {
 		$env_available   = wp_is_application_passwords_available_for_user( get_current_user_id() )
 		&& current_user_can( 'create_app_password', get_current_user_id() )
 		&& ( 'https' === wp_parse_url( home_url(), PHP_URL_SCHEME ) || 'local' === wp_get_environment_type() );
+		$env_created     = (bool) $skill_passwords;
+		$last_used       = FrmMcpSkillEnvController::get_last_used( $skill_passwords );
+		$connection_text = FrmMcpSkillEnvController::get_connection_message( $last_used );
 		$admin_post_url  = admin_url( 'admin-post.php' );
 		$options_class   = $mcp_enabled ? 'frm_mcp_options' : 'frm_mcp_options frm_hidden';
+		// Run from the terminal rather than as /plugin slash commands, so the
+		// assistant can install the skill itself instead of asking the user to.
 		$claude_commands = array(
-			'/plugin marketplace add https://github.com/Strategy11/formidable-mcp-skill.git',
-			'/plugin install formidable-mcp@formidable',
+			'claude plugin marketplace add https://github.com/Strategy11/formidable-mcp-skill.git',
+			'claude plugin install formidable-mcp@formidable',
 		);
 
 		$skill_repository_path = 'https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp';
@@ -178,40 +183,44 @@ class FrmMcpSettingsController {
 				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' )
 			) . '#kb-connect-a-remote-site-through-http',
 		);
-		$prompt_shared_parts   = array(
-			sprintf(
-				/* translators: %s: The WordPress site URL to connect to Formidable MCP. */
-				__( 'Use the Formidable MCP skill for my site at %s.', 'formidable' ),
-				home_url()
-			),
-			__( 'Find the skill scripts/frm-mcp helper and help me put my downloaded frm-mcp.env file beside it.', 'formidable' ),
-			__( 'Do not open, print, or paste the env file or its credentials into chat.', 'formidable' ),
-			__( 'Run the adjacent frm-mcp-setup first, then use the helper for Formidable requests.', 'formidable' ),
+
+		$prompt_intro = sprintf(
+			/* translators: %s: The WordPress site URL to connect to Formidable MCP. */
+			__( 'Set up the Formidable MCP skill so you can manage the forms on my WordPress site at %s.', 'formidable' ),
+			home_url()
 		);
-		$connection_prompts    = array(
+		$prompt_restart      = __( 'If the skill only loads after a restart, tell me.', 'formidable' );
+		$prompt_shared_parts = array(
+			__( '2. Find the newest frm-mcp*.env file in my Downloads folder and move it beside the skill\'s scripts/frm-mcp helper, named frm-mcp.env.', 'formidable' )
+			. ' ' . __( 'Do not open, print, or paste the file or its credentials into chat.', 'formidable' ),
+			__( '3. Run the adjacent frm-mcp-setup script to confirm the connection, then use the helper for my Formidable requests.', 'formidable' ),
+		);
+		$connection_prompts  = array(
 			'claude' => implode(
-				' ',
+				"\n",
 				array_merge(
 					array(
+						$prompt_intro,
 						sprintf(
-							/* translators: 1: Claude Code command to add the marketplace; 2: Claude Code command to install the plugin. */
-							__( 'If the skill is not installed, tell me to run %1$s and then %2$s in Claude Code.', 'formidable' ),
+							/* translators: 1: Command that adds the skill marketplace. 2: Command that installs the skill. */
+							__( '1. If the formidable-mcp skill is not installed, run %1$s and then %2$s in the terminal.', 'formidable' ),
 							$claude_commands[0],
 							$claude_commands[1]
-						),
+						) . ' ' . $prompt_restart,
 					),
 					$prompt_shared_parts
 				)
 			),
 			'codex'  => implode(
-				' ',
+				"\n",
 				array_merge(
 					array(
+						$prompt_intro,
 						sprintf(
 							/* translators: %s: URL of the Formidable MCP skill directory. */
-							__( 'If the skill is not installed, install it from %s.', 'formidable' ),
+							__( '1. If the formidable-mcp skill is not installed, install it from %s.', 'formidable' ),
 							$skill_repository_path
-						),
+						) . ' ' . $prompt_restart,
 					),
 					$prompt_shared_parts
 				)

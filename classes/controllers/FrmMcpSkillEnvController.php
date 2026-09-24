@@ -13,6 +13,7 @@ class FrmMcpSkillEnvController {
 	 * Marks skill downloads so only their passwords get the MCP scope and revoke controls.
 	 *
 	 * @since x.x
+	 *
 	 * @var string
 	 */
 	const APP_ID          = '2ad44c9b-985f-4bf6-a473-1541da1d1bd9';
@@ -29,6 +30,7 @@ class FrmMcpSkillEnvController {
 	public static function load_hooks() {
 		add_action( 'admin_post_' . self::DOWNLOAD_ACTION, 'FrmMcpSkillEnvController::download' );
 		add_action( 'admin_post_' . self::REVOKE_ACTION, 'FrmMcpSkillEnvController::revoke' );
+		add_action( 'wp_ajax_frm_mcp_connection_status', 'FrmMcpSkillEnvController::ajax_connection_status' );
 		add_action( 'wp_authenticate_application_password_errors', 'FrmMcpSkillEnvController::restrict_password_use', 10, 4 );
 		add_filter( 'rest_pre_dispatch', 'FrmMcpSkillEnvController::restrict_rest_route', 4, 3 );
 	}
@@ -158,6 +160,71 @@ class FrmMcpSkillEnvController {
 		}
 
 		return $passwords;
+	}
+
+	/**
+	 * Get the most recent time any of the given skill passwords authenticated.
+	 *
+	 * WordPress records the first use of an Application Password right away, so
+	 * a value here means an assistant has reached the site with the env file.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<array> $passwords Skill passwords from get_passwords().
+	 *
+	 * @return int Timestamp of the latest use, or 0 when none has been used.
+	 */
+	public static function get_last_used( $passwords ) {
+		$last_used = 0;
+
+		foreach ( $passwords as $password ) {
+			$last_used = max( $last_used, (int) $password['last_used'] );
+		}
+
+		return $last_used;
+	}
+
+	/**
+	 * Describe whether an assistant has connected with a downloaded env file.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $last_used Timestamp of the latest skill password use, or 0.
+	 *
+	 * @return string
+	 */
+	public static function get_connection_message( $last_used ) {
+		if ( ! $last_used ) {
+			return __( 'Waiting for your assistant to connect. This step is checked off once it does.', 'formidable' );
+		}
+
+		return sprintf(
+			/* translators: %s: Human readable time difference, like "5 mins". */
+			__( 'Connected. Your assistant last reached this site %s ago.', 'formidable' ),
+			human_time_diff( $last_used )
+		);
+	}
+
+	/**
+	 * Report whether an assistant has connected, so the settings page can check off the last step.
+	 *
+	 * @since x.x
+	 * @see action hook wp_ajax_frm_mcp_connection_status
+	 *
+	 * @return void
+	 */
+	public static function ajax_connection_status() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$last_used = self::get_last_used( self::get_passwords( get_current_user_id() ) );
+
+		wp_send_json_success(
+			array(
+				'connected' => (bool) $last_used,
+				'message'   => self::get_connection_message( $last_used ),
+			)
+		);
 	}
 
 	/**

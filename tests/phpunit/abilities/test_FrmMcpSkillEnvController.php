@@ -21,6 +21,26 @@ class test_FrmMcpSkillEnvController extends FrmUnitTest {
 	}
 
 	/**
+	 * The last setup step is only checked off once a skill password has been used.
+	 *
+	 * @return void
+	 */
+	public function test_last_used_reports_the_latest_use() {
+		$this->assertSame( 0, FrmMcpSkillEnvController::get_last_used( array() ) );
+		$this->assertSame( 0, FrmMcpSkillEnvController::get_last_used( array( array( 'last_used' => null ) ) ) );
+
+		$passwords = array(
+			array( 'last_used' => 100 ),
+			array( 'last_used' => null ),
+			array( 'last_used' => 300 ),
+		);
+		$this->assertSame( 300, FrmMcpSkillEnvController::get_last_used( $passwords ) );
+
+		$this->assertStringStartsWith( 'Waiting', FrmMcpSkillEnvController::get_connection_message( 0 ) );
+		$this->assertStringStartsWith( 'Connected', FrmMcpSkillEnvController::get_connection_message( time() - HOUR_IN_SECONDS ) );
+	}
+
+	/**
 	 * The generated password cannot authenticate other REST routes or abilities.
 	 *
 	 * @return void

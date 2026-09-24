@@ -95,27 +95,127 @@ label.frm-example-icon {
 	display: none;
 }
 
-.frm-mcp-configured-skill {
+.frm-mcp-steps {
 	max-width: 960px;
-	padding: var(--gap-md);
+	margin: 0 0 var(--gap-lg);
+	padding: 0;
+	list-style: none;
 	border: 1px solid var(--grey-200);
 	border-radius: var(--small-radius);
-	background: var(--grey-50);
+	overflow: hidden;
 }
 
-#poststuff .frm_settings_form .frm-mcp-configured-skill > h3,
-#form_global_settings .frm-mcp-configured-skill > h3,
-.frm_settings_form .frm-mcp-configured-skill > h3 {
-	margin: 0 0 var(--gap-sm);
+.frm-mcp-step {
+	display: flex;
+	gap: var(--gap-md);
+	margin: 0;
+	padding: var(--gap-md);
+	border-top: 1px solid var(--grey-200);
+	background: #fff;
+	transition: background-color 200ms ease-out;
+}
+
+.frm-mcp-step:first-child {
+	border-top: 0;
+}
+
+.frm-mcp-step-complete {
+	background: var(--success-25);
+}
+
+.frm-mcp-step-marker {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	color: var(--grey-700);
+	font-size: var(--text-sm);
+	font-weight: 600;
+	border: 1px solid var(--grey-300);
+	border-radius: 50%;
+	background: #fff;
+}
+
+.frm-mcp-step-check {
+	display: none;
+	width: 14px;
+	height: 12px;
+}
+
+.frm-mcp-step-complete .frm-mcp-step-marker {
+	color: var(--success-500);
+	border-color: var(--success-200);
+	background: var(--success-50);
+}
+
+.frm-mcp-step-complete .frm-mcp-step-number {
+	display: none;
+}
+
+.frm-mcp-step-complete .frm-mcp-step-check {
+	display: block;
+}
+
+.frm-mcp-step-body {
+	flex: 1;
+	min-width: 0;
+}
+
+/* Beats the settings page's own h3 rules, which add a border, padding and uppercase. */
+#poststuff .frm_settings_form .frm-mcp-step-title,
+#form_global_settings .frm-mcp-step-title,
+.frm_settings_form .frm-mcp-step-title {
+	margin: 6px 0 var(--gap-2xs); /* Centers the first line on the 32px marker. */
 	padding: 0;
+	color: var(--grey-900);
+	font-size: var(--text-md);
+	font-weight: 600;
+	text-transform: none;
 	border: 0;
 }
 
-.frm-mcp-configured-skill > p {
+.frm-mcp-step-body > p,
+.frm-mcp-step-body > div > p {
 	margin: 0 0 var(--gap-sm);
 }
 
-.frm-mcp-configured-skill > .frm-mcp-copy-row {
+.frm-mcp-step-body .frm-long-icon-buttons {
+	margin-bottom: var(--gap-sm);
+}
+
+.frm-mcp-step-body > .frm-mcp-credential-note {
+	margin-top: var(--gap-sm);
+}
+
+.frm-mcp-credentials-heading {
+	margin-top: var(--gap-md);
+}
+
+.frm-mcp-connection-status {
+	font-weight: 500;
+}
+
+.frm-mcp-connection-status:empty {
+	display: none;
+}
+
+.frm-mcp-step-complete .frm-mcp-connection-status {
+	color: var(--success-800);
+}
+
+.frm-mcp-step-body > .frm-mcp-manual-skill {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--gap-xs);
+	margin: var(--gap-md) 0 0;
+	padding-top: var(--gap-sm);
+	border-top: 1px solid var(--grey-200);
+}
+
+.frm-mcp-copy-row {
 	margin-bottom: var(--gap-sm);
 }
 
@@ -162,6 +262,7 @@ label.frm-example-icon {
 
 .frm-mcp-prompt-text {
 	min-width: 0;
+	white-space: pre-line;
 	color: var(--grey-900);
 	overflow-wrap: anywhere;
 }
