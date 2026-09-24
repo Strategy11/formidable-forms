@@ -96,6 +96,15 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 		$this->assertSame( '1.5', FrmCurrencyHelper::prepare_price( '1.5', $eur ) );
 		$this->assertSame( '1234', FrmCurrencyHelper::prepare_price( '1.234', $eur ) );
 
+		// A currency whose decimal_separator is neither ',' nor '.' (e.g. JPY, 0 decimals)
+		// never treats a lone dot as ambiguous -- always thousands grouping.
+		$jpy = array(
+			'thousand_separator' => ',',
+			'decimal_separator'  => '',
+			'decimals'           => 0,
+		);
+		$this->assertSame( '123', FrmCurrencyHelper::prepare_price( '1.23', $jpy ) );
+
 		// A comma in a dot-decimal currency is never ambiguous -- always thousands grouping.
 		$this->assertSame( '123', FrmCurrencyHelper::prepare_price( '1,23', $gbp ) );
 
