@@ -288,6 +288,8 @@ class FrmFormsController {
 		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		self::handle_captcha_field( $id, $include_captcha );
 
+		self::maybe_handle_gdpr_field( $id );
+
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
 		self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
@@ -314,30 +316,68 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function handle_captcha_field( $form_id, $include_captcha ) {
+		self::toggle_field_in_form( $form_id, 'captcha', $include_captcha, __( 'Captcha', 'formidable' ) );
+	}
+
+	/**
+	 * Add or remove the GDPR field based on the "Include a GDPR agreement field" setting.
+	 * The field only works while GDPR is enabled globally, so it is left alone otherwise.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function maybe_handle_gdpr_field( $form_id ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_POST['frm_include_gdpr'] ) || FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return;
+		}
+
+		$include_gdpr = '1' === $_POST['frm_include_gdpr']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		self::toggle_field_in_form( $form_id, FrmFieldGdprHelper::FIELD_TYPE, $include_gdpr, __( 'GDPR', 'formidable' ) );
+	}
+
+	/**
+	 * Create a field of the given type just before the submit button, or delete it.
+	 *
+	 * @since x.x
+	 *
+	 * @param int    $form_id    Form ID.
+	 * @param string $field_type The field type to add or remove.
+	 * @param bool   $include    Whether the form should include the field.
+	 * @param string $field_name The name to give a newly created field.
+	 *
+	 * @return void
+	 */
+	private static function toggle_field_in_form( $form_id, $field_type, $include, $field_name ) {
 		$form_fields        = FrmField::get_all_for_form( $form_id, '', 'exclude' );
-		$captcha_field_id   = 0;
+		$existing_field_id  = 0;
 		$submit_field_order = 0;
+		$last_field_order   = 0;
 
 		foreach ( $form_fields as $field ) {
-			if ( 'captcha' === $field->type ) {
-				$captcha_field_id = $field->id;
+			if ( $field_type === $field->type ) {
+				$existing_field_id = $field->id;
 				break;
 			}
 
 			if ( 'submit' === $field->type ) {
 				$submit_field_order = $field->field_order;
 			}
+
+			$last_field_order = max( $last_field_order, (int) $field->field_order );
 		}
 
-		if ( $include_captcha && ! $captcha_field_id ) {
-			// Create captcha field just before submit button
-			$field_values                = FrmFieldsHelper::setup_new_vars( 'captcha', $form_id );
-			$field_values['name']        = __( 'Captcha', 'formidable' );
-			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : 0;
+		if ( $include && ! $existing_field_id ) {
+			// Create the field just before submit button, or after the last field when there is no submit button.
+			$field_values                = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+			$field_values['name']        = $field_name;
+			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : $last_field_order + 1;
 			FrmField::create( $field_values );
-		} elseif ( ! $include_captcha && $captcha_field_id ) {
-			// Delete captcha field
-			FrmField::destroy( $captcha_field_id );
+		} elseif ( ! $include && $existing_field_id ) {
+			FrmField::destroy( $existing_field_id );
 		}
 	}
 
@@ -1593,6 +1633,11 @@ class FrmFormsController {
 				'function' => array( self::class, 'spam_settings' ),
 				'icon'     => 'frmfont frm_shield_check2_icon',
 			),
+			'gdpr'        => array(
+				'name'     => __( 'GDPR', 'formidable' ),
+				'function' => array( self::class, 'gdpr_settings' ),
+				'icon'     => 'frmfont frm-gdpr-icon',
+			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
 				'icon'       => 'frmfont frm_lock_closed2_icon',
@@ -1720,6 +1765,17 @@ class FrmFormsController {
 	 */
 	public static function spam_settings( $values ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	public static function gdpr_settings( $values ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/gdpr-settings.php';
 	}
 
 	/**
