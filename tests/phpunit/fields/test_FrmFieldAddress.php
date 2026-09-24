@@ -372,7 +372,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * Test validate flags empty required sub-fields but not the optional line2.
+	 * Test validate names each empty required sub-field on its own when only some are missing.
 	 */
 	public function test_validate_required_flags_empty_sub_fields() {
 		$field_type = $this->create_address_field_type( 'international', 1 );
@@ -388,10 +388,45 @@ class test_FrmFieldAddress extends FrmUnitTest {
 
 		$this->assertArrayNotHasKey( 'field' . $field_id . '-line1', $errors, 'A filled sub-field should not be flagged.' );
 		$this->assertArrayNotHasKey( 'field' . $field_id . '-line2', $errors, 'The optional line2 sub-field should not be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id . '-city', $errors, 'An empty required city should be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id . '-state', $errors, 'An empty required state should be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id . '-zip', $errors, 'An empty required zip should be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id, $errors, 'The main field should get the blank message.' );
+		$this->assertStringContainsString( 'City', $errors[ 'field' . $field_id . '-city' ], 'An empty required city should be named in its own error.' );
+		$this->assertStringContainsString( 'State/Province', $errors[ 'field' . $field_id . '-state' ], 'An empty required state should be named in its own error.' );
+		$this->assertStringContainsString( 'Zip/Postal', $errors[ 'field' . $field_id . '-zip' ], 'An empty required zip should be named in its own error.' );
+		$this->assertArrayNotHasKey( 'field' . $field_id, $errors, 'The main field should not get an error when only some sub-fields are missing.' );
+	}
+
+	/**
+	 * Test validate shows one error for the whole field when every required sub-field is empty.
+	 */
+	public function test_validate_required_all_empty_shows_one_field_error() {
+		$field_type = $this->create_address_field_type( 'international', 1 );
+		$field_id   = $field_type->get_field()->id;
+
+		$errors = $field_type->validate(
+			array(
+				'errors' => array(),
+				'id'     => $field_id,
+				'value'  => array( 'line2' => 'Unit 4' ),
+			)
+		);
+
+		$this->assertSame( FrmFieldsHelper::get_error_msg( $field_type->get_field(), 'blank' ), $errors[ 'field' . $field_id ], 'The main field should get the blank message.' );
+		$this->assertSame( '', $errors[ 'field' . $field_id . '-line1' ], 'Each empty required sub-field should be flagged without a message.' );
+		$this->assertSame( '', $errors[ 'field' . $field_id . '-country' ], 'Each empty required sub-field should be flagged without a message.' );
+		$this->assertArrayNotHasKey( 'field' . $field_id . '-line2', $errors, 'The optional line2 sub-field should not be flagged.' );
+	}
+
+	/**
+	 * Test get_sub_field_label uses the sub-field description, or combines the labels without one.
+	 */
+	public function test_get_sub_field_label() {
+		$field_type = $this->create_address_field_type();
+
+		$this->assertSame( 'City', $field_type->get_sub_field_label( 'city' ), 'The description should be used when there is one.' );
+		$this->assertSame(
+			$field_type->get_field()->name . ' Line 1',
+			$field_type->get_sub_field_label( 'line1' ),
+			'The field label should be combined with the sub-field label without a description.'
+		);
 	}
 
 	/**

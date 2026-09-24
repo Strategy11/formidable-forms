@@ -391,6 +391,16 @@ endif;
 	border-style:var(--border-style-error)<?php echo esc_html( $important ); ?>;
 }
 
+/* A combo field error only marks the sub fields that failed, not optional or filled ones. */
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) input:not(:focus),
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) select:not(:focus) {
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
+	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
+	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
+	border-style:var(--field-border-style)<?php echo esc_html( $important ); ?>;
+}
+
 <?php
 // Only include this style when the signatures add-on is active
 if ( class_exists( 'FrmSigField' ) ) :
