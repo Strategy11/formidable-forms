@@ -8,7 +8,9 @@ class test_FrmFieldGdpr extends FrmUnitTest {
 	 * @covers FrmFieldGdpr::include_front_form_file
 	 */
 	public function test_disabled_notice_has_no_dangling_aria_labelledby() {
-		$this->set_current_user_to_1();
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+		wp_get_current_user()->add_cap( 'frm_edit_forms' );
 		FrmAppHelper::get_settings()->enable_gdpr = false;
 
 		$html = $this->render_gdpr_field( 543 );

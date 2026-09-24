@@ -26,7 +26,7 @@ $label_id       = 'frm-gdpr-accept-' . $field_id;
 	</label>
 </div>
 <?php elseif ( current_user_can( 'frm_edit_forms' ) ) : ?>
-	<div class="frm_checkbox" role="group" aria-labelledby="<?php echo esc_attr( $label_id ); ?>">
+	<div class="frm_checkbox" role="group">
 		<label for="<?php echo esc_attr( $label_id ); ?>">
 			<?php
 			/* translators: %1$s: Link HTML, %2$s: End link */
