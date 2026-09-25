@@ -178,14 +178,17 @@ new FrmBackgroundImageStyleComponent(
 		?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_style_class"
-		class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label>
+	<?php
+	// No "for" attribute here. The class is renamed from the quick settings, and pointing at that
+	// input would move focus into a section that is hidden while the advanced settings are open.
+	?>
+	<span class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></span>
 </div>
 <div class="frm7 frm_form_field frm-style-component">
-	<label class="frm-copy-text">.frm_style_<?php
+	<label
+		class="frm-copy-text"
+		title="<?php esc_attr_e( 'Copy class', 'formidable' ); ?>"
+		data-frm-copied-tip="<?php esc_attr_e( 'Class copied', 'formidable' ); ?>">.frm_style_<span class="frm-style-class-name"><?php
 		echo esc_html( $style->post_name );
-		FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' );
-	?>
-	</label>
+	?></span><?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' ); ?></label>
 </div>

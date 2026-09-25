@@ -8,6 +8,81 @@
 	white-space: nowrap;
 }
 
+/* The style class row. The name is edited in place, with copy to clipboard inside the field. */
+.frm-style-class-component {
+	.frm-style-class-editor {
+		display: flex;
+		align-items: center;
+		height: 36px;
+		padding-left: 12px;
+		box-sizing: border-box;
+		background: #fff;
+		border: 1px solid var(--grey-300);
+		border-radius: var(--small-radius);
+
+		&:focus-within {
+			border-color: var(--primary-500);
+		}
+	}
+
+	/* The muted/placeholder token, so the fixed part reads as not editable. */
+	.frm-style-class-prefix {
+		font-size: var(--text-sm);
+		color: var(--grey-400);
+		white-space: nowrap;
+	}
+
+	input#frm_style_class {
+		flex: 1;
+		min-width: 0;
+		height: 100%;
+		min-height: 0;
+		margin: 0;
+		padding: 0;
+		font-size: var(--text-sm);
+		color: var(--grey-900);
+		background: transparent;
+		border: 0;
+		box-shadow: none;
+
+		&:focus {
+			outline: none;
+			box-shadow: none;
+		}
+	}
+
+	.frm-style-class-copy {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 34px;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		border-radius: 0 var(--small-radius) var(--small-radius) 0;
+		background: transparent;
+		color: var(--grey-500);
+		cursor: pointer;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--grey-900);
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
+		}
+	}
+
+	.frm-style-class-description {
+		margin: var(--gap-xs) 0 0;
+		font-size: var(--text-xs);
+		color: var(--grey-500);
+	}
+}
+
 .frm-style-component .wp-picker-holder {
 	right: 0;
 }
