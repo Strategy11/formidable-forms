@@ -22,8 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_check_font_size"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
