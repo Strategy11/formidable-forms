@@ -1,3 +1,9 @@
+# Vendored third-party packages ship inside the plugin so the MCP adapter is
+# available in the release zip, but their spelling is not ours to correct and
+# editing them would be overwritten by the next composer install.
+[files]
+extend-exclude = ["lib/vendor/**"]
+
 [type.po]
 extend-glob = ["*.po"]
 check-file = false
