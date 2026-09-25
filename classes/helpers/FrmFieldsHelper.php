@@ -316,40 +316,24 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	public static function default_invalid_msg( $field = null ) {
-		$type = '';
-		if ( is_array( $field ) ) {
-			$type = $field['type'] ?? '';
-		} elseif ( is_object( $field ) ) {
-			$type = $field->type ?? '';
+		$type     = $field ? FrmField::get_field_type( $field ) : '';
+		$messages = array(
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'email'  => sprintf( __( '%s is invalid. Enter a valid email address, like name@example.com', 'formidable' ), '[field_name]' ),
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'url'    => sprintf( __( '%s is invalid. Enter a valid web address, like https://example.com', 'formidable' ), '[field_name]' ),
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'phone'  => sprintf( __( '%s is invalid. Enter a valid phone number', 'formidable' ), '[field_name]' ),
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'number' => sprintf( __( '%s is invalid. Enter a number', 'formidable' ), '[field_name]' ),
+		);
+
+		if ( isset( $messages[ $type ] ) ) {
+			return $messages[ $type ];
 		}
 
-		switch ( $type ) {
-			case 'email':
-				/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-				$message = __( '%s is invalid. Enter a valid email address, like name@example.com', 'formidable' );
-				break;
-
-			case 'url':
-				/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-				$message = __( '%s is invalid. Enter a valid web address, like https://example.com', 'formidable' );
-				break;
-
-			case 'phone':
-				/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-				$message = __( '%s is invalid. Enter a valid phone number', 'formidable' );
-				break;
-
-			case 'number':
-				/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-				$message = __( '%s is invalid. Enter a number', 'formidable' );
-				break;
-
-			default:
-				/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-				$message = __( '%s is invalid', 'formidable' );
-		}
-
-		return sprintf( $message, '[field_name]' );
+		/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+		return sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
 	}
 
 	/**
