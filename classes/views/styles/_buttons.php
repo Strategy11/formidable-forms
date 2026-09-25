@@ -53,7 +53,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_font_size"
 							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -89,7 +88,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_width"
 							class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -108,7 +106,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_height"
 							class="frm-style-item-heading"><?php esc_html_e( 'Height', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -145,7 +142,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_border_width"
 							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -181,7 +177,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_border_radius"
 							class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -199,7 +194,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_margin"
 							class="frm-style-item-heading">
 							<?php esc_html_e( 'Margin', 'formidable' ); ?>
 							<span class="frm_help frmfont frm_tooltip_icon" data-placement="right" data-container="body" data-original-title="<?php esc_attr_e( 'Used for navigation buttons too', 'formidable' ); ?>"></span>
@@ -221,7 +215,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_padding"
 							class="frm-style-item-heading">
 							<?php esc_html_e( 'Padding', 'formidable' ); ?>
 						</label>
