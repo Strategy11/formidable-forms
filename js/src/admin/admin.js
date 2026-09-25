@@ -6626,6 +6626,48 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Normalize a price string using the site's configured currency separators
+	 * before it's passed to Number(), mirroring FrmCurrencyHelper::prepare_price()'s
+	 * PHP-side logic so a comma-decimal locale (e.g. EUR) parses correctly instead
+	 * of producing NaN.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string|number} price Raw price value.
+	 * @param {Object} currency Currency settings object.
+	 * @return {string} Price string using '.' as the decimal separator, safe for Number().
+	 */
+	function normalizePriceString( price, currency ) {
+		price = String( price ).trim();
+		if ( ! price ) {
+			return '';
+		}
+
+		const matches = price.match( /[-]*[0-9,.]*\.?,?[0-9]+/g );
+		price = matches ? matches[ matches.length - 1 ] : '';
+		if ( ! price ) {
+			return '';
+		}
+
+		const thousandSep = currency.thousand_separator ?? ',';
+		const decimalSep = currency.decimal_separator ?? '.';
+
+		// A '.' used as the thousand separator is ambiguous with a plain decimal point;
+		// treat it as decimal when it trails exactly 1-2 digits, same as the PHP side.
+		if ( thousandSep === '.' ) {
+			const parts = price.split( '.' );
+			if ( parts.length === 2 && [ 1, 2 ].includes( parts[ 1 ].length ) ) {
+				price = parts.join( decimalSep );
+			}
+		}
+
+		if ( thousandSep ) {
+			price = price.split( thousandSep ).join( '' );
+		}
+		return price.split( decimalSep ).join( '.' );
+	}
+
+	/**
 	 * Format a product price value for display in the builder preview using the
 	 * currency settings from frm_admin_js. Mirrors the logic in FrmCurrencyHelper::format_price().
 	 *
@@ -6640,8 +6682,9 @@ window.frmAdminBuildJS = function() {
 			return String( price );
 		}
 
-		const num = Number( price );
-		if ( isNaN( num ) ) {
+		const normalized = normalizePriceString( price, currency );
+		const num = Number( normalized );
+		if ( ! normalized || isNaN( num ) ) {
 			return String( price );
 		}
 
