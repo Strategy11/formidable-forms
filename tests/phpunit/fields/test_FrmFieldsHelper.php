@@ -310,4 +310,53 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
 		$this->assertSame( 'My example field must be unique', $error_message );
 	}
+
+	/**
+	 * @covers FrmFieldsHelper::get_error_msg
+	 * @covers FrmFieldsHelper::default_invalid_msg
+	 */
+	public function test_get_error_msg_invalid_is_field_type_specific() {
+		$form_id = $this->factory->form->create();
+
+		// Email and number fields get their own corrective message when no custom one is set.
+		$email_field = $this->factory->field->create_and_get(
+			array(
+				'name'    => 'Email',
+				'form_id' => $form_id,
+				'type'    => 'email',
+			)
+		);
+
+		$error_message = FrmFieldsHelper::get_error_msg( $email_field, 'invalid' );
+		$this->assertSame( 'Email is invalid. Enter a valid email address, like name@example.com', $error_message );
+
+		$number_field = $this->factory->field->create_and_get(
+			array(
+				'name'    => 'Age',
+				'form_id' => $form_id,
+				'type'    => 'number',
+			)
+		);
+
+		$error_message = FrmFieldsHelper::get_error_msg( $number_field, 'invalid' );
+		$this->assertSame( 'Age is invalid. Enter a number', $error_message );
+
+		// Field types with no specific copy keep the original generic message.
+		$text_field = $this->factory->field->create_and_get(
+			array(
+				'name'    => 'Comment',
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+
+		$error_message = FrmFieldsHelper::get_error_msg( $text_field, 'invalid' );
+		$this->assertSame( 'Comment is invalid', $error_message );
+
+		// A custom message saved on the field is never overridden by the type-specific default.
+		$text_field->field_options['invalid'] = 'Please fix [field_name]';
+
+		$error_message = FrmFieldsHelper::get_error_msg( $text_field, 'invalid' );
+		$this->assertSame( 'Please fix Comment', $error_message );
+	}
 }
