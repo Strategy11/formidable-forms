@@ -404,7 +404,8 @@ class FrmFieldCombo extends FrmFieldType {
 		$field['default_value'] = '';
 
 		if ( ! empty( $sub_field['name'] ) ) {
-			$field['subfield_name'] = $sub_field['name'];
+			$field['subfield_name']  = $sub_field['name'];
+			$field['subfield_label'] = $this->get_sub_field_label( $sub_field['name'] );
 		}
 
 		do_action( 'frm_field_input_html', $field );
@@ -437,20 +438,95 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
-		$sub_fields = $this->get_processed_sub_fields();
+		$required_count = 0;
+		$missing        = array();
 
-		// Validate not empty.
-		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( ! empty( $sub_field['optional'] ) || ! empty( $args['value'][ $name ] ) ) {
+		foreach ( $this->get_processed_sub_fields() as $name => $sub_field ) {
+			if ( ! empty( $sub_field['optional'] ) ) {
 				continue;
 			}
 
-			$errors[ 'field' . $args['id'] . '-' . $name ] = '';
-			$errors[ 'field' . $args['id'] ]               = $blank_msg;
+			++$required_count;
+
+			if ( empty( $args['value'][ $name ] ) ) {
+				$missing[] = $name;
+			}
+		}
+
+		if ( ! $missing ) {
+			return $errors;
+		}
+
+		if ( count( $missing ) === $required_count ) {
+			// Nothing was filled in, so show one error for the whole field. The empty sub field
+			// errors flag each required input without repeating the message under every one.
+			foreach ( $missing as $name ) {
+				$errors[ 'field' . $args['id'] . '-' . $name ] = '';
+			}
+
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
+
+			return $errors;
+		}
+
+		// Only some sub fields are missing, so name each one in its own error.
+		foreach ( $missing as $name ) {
+			$errors[ 'field' . $args['id'] . '-' . $name ] = $this->get_sub_field_error_msg( $name, 'blank' );
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Gets the label a sub field is referred to by in its error messages.
+	 *
+	 * The sub field description is used when there is one, since that is the label shown under
+	 * the input. Otherwise the sub field label is combined with the field label, like "Address Line 1".
+	 *
+	 * @since x.x
+	 *
+	 * @param string $name Sub field name, like 'first' or 'line1'.
+	 *
+	 * @return string
+	 */
+	public function get_sub_field_label( $name ) {
+		$desc = FrmField::get_option( $this->field, $name . '_desc' );
+
+		if ( is_string( $desc ) && '' !== trim( $desc ) ) {
+			return $desc;
+		}
+
+		$label = $this->sub_fields[ $name ]['label'] ?? '';
+
+		if ( ! $label ) {
+			return (string) $this->get_field_column( 'name' );
+		}
+
+		/* translators: 1: Field label, 2: Sub field label */
+		return sprintf( __( '%1$s %2$s', 'formidable' ), $this->get_field_column( 'name' ), $label );
+	}
+
+	/**
+	 * Gets an error message for a single sub field, with the sub field label in place of the
+	 * field label.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $name  Sub field name, like 'first' or 'line1'.
+	 * @param string $error Error type, like 'blank'.
+	 *
+	 * @return string
+	 */
+	public function get_sub_field_error_msg( $name, $error ) {
+		$field = is_object( $this->field ) ? clone $this->field : $this->field;
+
+		if ( is_object( $field ) ) {
+			$field->name = $this->get_sub_field_label( $name );
+		} elseif ( is_array( $field ) ) {
+			$field['name'] = $this->get_sub_field_label( $name );
+		}
+
+		return FrmFieldsHelper::get_error_msg( $field, $error );
 	}
 
 	/**
@@ -507,10 +583,17 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array
 	 */
 	public function get_inputs_container_attrs() {
-		return array(
+		$attrs = array(
 			'class' => 'frm_combo_inputs_container',
 			'id'    => 'frm_combo_inputs_container_' . $this->field_id,
 		);
+
+		if ( $this->field && $this->get_field_column( 'required' ) ) {
+			// JS validation shows this for the whole field when every required sub field is empty.
+			$attrs['data-reqmsg'] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
+		}
+
+		return $attrs;
 	}
 
 	/**
