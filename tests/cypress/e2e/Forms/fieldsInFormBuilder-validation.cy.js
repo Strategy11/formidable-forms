@@ -180,6 +180,9 @@ describe( 'Fields in the form builder', () => {
 		cy.get( `[id^="frm_error_field_"]` ).eq( 0 ).should( 'contain', `Text cannot be blank.` );
 		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'not.exist' );
 		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'not.exist' );
+		// js_validate's client-side path never renders the error summary markup - focus must
+		// fall back to the first errored field instead of going nowhere (formidable-pro#6763).
+		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 0 ).should( 'have.focus' );
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 1 ).clear();
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 2 ).clear();
 		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
