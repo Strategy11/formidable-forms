@@ -1066,6 +1066,27 @@ class FrmFormsController {
 		 */
 		$new_values = apply_filters( 'frm_new_form_values', $new_values );
 
+		// Match the shape FrmFormsHelper::setup_new_vars() gives this filter, so a callback can
+		// safely read an existing key (e.g. before_html) before modifying it either way.
+		$new_values = FrmFormsHelper::fill_default_opts( $new_values, false, $new_values );
+
+		/**
+		 * Allows overriding a new form's default option values (before_html, submit_html, etc).
+		 *
+		 * @since 6.36
+		 *
+		 * @param array $values Form values.
+		 */
+		$new_values = apply_filters( 'frm_setup_new_form_vars', $new_values );
+
+		// FrmForm::create() reads default option values from $new_values['options'], not top level.
+		foreach ( FrmFormsHelper::get_default_opts() as $var => $default ) {
+			if ( isset( $new_values[ $var ] ) ) {
+				$new_values['options'][ $var ] = $new_values[ $var ];
+			}
+			unset( $var, $default );
+		}
+
 		$form_id = FrmForm::create( $new_values );
 		/**
 		 * @since 5.3
