@@ -310,4 +310,67 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
 		$this->assertSame( 'My example field must be unique', $error_message );
 	}
+
+	/**
+	 * @covers FrmFieldsHelper::get_error_msg
+	 * @covers FrmFieldsHelper::default_invalid_msg
+	 */
+	public function test_get_error_msg_invalid_is_field_type_specific() {
+		$form_id = $this->factory->form->create();
+
+		// Email, url, phone, number, and quantity fields get their own corrective message
+		// when no custom one is set; a type with no specific copy (text) keeps the
+		// original generic message.
+		$tests = array(
+			array(
+				'type'     => 'email',
+				'name'     => 'Email',
+				'expected' => 'Email is invalid. Enter a valid email address, like name@example.com',
+			),
+			array(
+				'type'     => 'url',
+				'name'     => 'Website',
+				'expected' => 'Website is invalid. Enter a valid web address, like https://example.com',
+			),
+			array(
+				'type'     => 'phone',
+				'name'     => 'Cell',
+				'expected' => 'Cell is invalid. Enter a valid phone number',
+			),
+			array(
+				'type'     => 'number',
+				'name'     => 'Age',
+				'expected' => 'Age is invalid. Enter a number',
+			),
+			array(
+				'type'     => 'quantity',
+				'name'     => 'Amount',
+				'expected' => 'Amount is invalid. Enter a number',
+			),
+			array(
+				'type'     => 'text',
+				'name'     => 'Comment',
+				'expected' => 'Comment is invalid',
+			),
+		);
+
+		foreach ( $tests as $test ) {
+			$field = $this->factory->field->create_and_get(
+				array(
+					'name'    => $test['name'],
+					'form_id' => $form_id,
+					'type'    => $test['type'],
+				)
+			);
+
+			$error_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
+			$this->assertSame( $test['expected'], $error_message );
+		}
+
+		// A custom message saved on the field is never overridden by the type-specific default.
+		$field->field_options['invalid'] = 'Please fix [field_name]';
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
+		$this->assertSame( 'Please fix Comment', $error_message );
+	}
 }

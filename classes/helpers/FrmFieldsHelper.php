@@ -293,7 +293,7 @@ class FrmFieldsHelper {
 				$frm_settings           = FrmAppHelper::get_settings();
 				$field_array['invalid'] = $frm_settings->re_msg;
 			} else {
-				$field_array['invalid'] = self::default_invalid_msg();
+				$field_array['invalid'] = self::default_invalid_msg( $field );
 			}
 		}
 
@@ -304,11 +304,36 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Default "invalid" validation message. Gives field-type-specific correction guidance
+	 * for field types where the format requirement isn't obvious from the label alone
+	 * (WCAG 3.3.1/3.3.3), and falls back to a generic message for every other type.
+	 *
 	 * @since 6.8.3
+	 * @since 6.35 Added the $field param for a type-specific message.
+	 *
+	 * @param array|object|null $field Optional. Field to check the type of.
 	 *
 	 * @return string
 	 */
-	public static function default_invalid_msg() {
+	public static function default_invalid_msg( $field = null ) {
+		$type     = $field ? FrmField::get_field_type( $field ) : '';
+		$messages = array(
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'email'  => sprintf( __( '%s is invalid. Enter a valid email address, like name@example.com', 'formidable' ), '[field_name]' ),
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'url'    => sprintf( __( '%s is invalid. Enter a valid web address, like https://example.com', 'formidable' ), '[field_name]' ),
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'phone'  => sprintf( __( '%s is invalid. Enter a valid phone number', 'formidable' ), '[field_name]' ),
+			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
+			'number' => sprintf( __( '%s is invalid. Enter a number', 'formidable' ), '[field_name]' ),
+		);
+		// Quantity validates identically to number (FrmFieldQuantity extends FrmFieldNumber) but is a distinct stored type.
+		$messages['quantity'] = $messages['number'];
+
+		if ( isset( $messages[ $type ] ) ) {
+			return $messages[ $type ];
+		}
+
 		/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
 		return sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
 	}
@@ -465,8 +490,7 @@ class FrmFieldsHelper {
 			),
 			'invalid'    => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
-				/* translators: %s: Field name */
-				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
+				'part' => self::default_invalid_msg( $field ),
 			),
 			'blank'      => array(
 				'full' => $frm_settings->blank_msg,
