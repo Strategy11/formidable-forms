@@ -53,8 +53,14 @@ describe( 'Fields in the form builder', () => {
 			// data-type holds the field's type slug (e.g. "text"), shared by the original and its
 			// duplicate - not unique enough to prove *this* field is gone. data-fid is the field's
 			// own database id, so capture it before deleting to assert against afterward.
-			field.invoke( 'attr', 'data-fid' ).then( fid => {
-				field.within( () => {
+			// Read via .then($field => ...) and scope every command to that jQuery element with
+			// cy.wrap() - re-deriving commands from the stored `field` chainable a second time here
+			// (after other fields' own removeField() calls have queued commands in between) doesn't
+			// reliably yield this field's own element.
+			field.then( $field => {
+				const fid = $field.attr( 'data-fid' );
+
+				cy.wrap( $field ).within( () => {
 					// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
 					// Same #wpbody-content 1280x0 race as createAndDuplicateField above
 					// (formidable-forms#3399) - .scrollIntoView() first reliably clears it.
