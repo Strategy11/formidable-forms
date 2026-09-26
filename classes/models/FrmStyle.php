@@ -122,13 +122,7 @@ class FrmStyle {
 			$new_instance['post_type']   = FrmStylesController::$post_type;
 			$new_instance['post_status'] = 'publish';
 
-			if ( ! $id ) {
-				// For a new style (including a duplicate), the post_name is derived from the title.
-				// Resolve slug uniqueness up front (WordPress appends -2, -3, etc. to duplicate slugs)
-				// so the CSS scope below matches the slug WordPress will actually store.
-				$slug                      = sanitize_title( $new_instance['post_title'] );
-				$new_instance['post_name'] = wp_unique_post_slug( $slug, 0, $new_instance['post_status'], $new_instance['post_type'], 0 );
-			}
+			$new_instance['post_name'] = $this->get_post_name_to_save( $new_instance, (bool) $id );
 
 			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
 				$css_scope = 'frm_style_' . $new_instance['post_name'];
@@ -164,6 +158,44 @@ class FrmStyle {
 		$this->save_settings();
 
 		return $action_ids;
+	}
+
+	/**
+	 * Get the slug to save, which doubles as the CSS class for the style.
+	 *
+	 * A new style takes its slug from the title. An existing style keeps the slug it has unless
+	 * the CSS class was renamed in the visual styler. Either way uniqueness is resolved up front,
+	 * because WordPress appends -2, -3, and so on to a duplicate slug, and the CSS scope that gets
+	 * nested into the custom CSS has to match the slug that actually gets stored.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $new_instance The style being saved.
+	 * @param bool  $is_existing  False for a new style, including a duplicate.
+	 *
+	 * @return string
+	 */
+	private function get_post_name_to_save( $new_instance, $is_existing ) {
+		if ( $is_existing ) {
+			// The nonce check happens in FrmStylesController::save_style before this is called.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ! isset( $_POST['frm_style_setting']['post_name'] ) ) {
+				return $new_instance['post_name'];
+			}
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$renamed = sanitize_title( wp_unslash( $_POST['frm_style_setting']['post_name'] ) );
+
+			if ( ! $renamed || $renamed === $new_instance['post_name'] ) {
+				return $new_instance['post_name'];
+			}
+
+			return wp_unique_post_slug( $renamed, $this->id, $new_instance['post_status'], $new_instance['post_type'], 0 );
+		}
+
+		$slug = sanitize_title( $new_instance['post_title'] );
+
+		return wp_unique_post_slug( $slug, 0, $new_instance['post_status'], $new_instance['post_type'], 0 );
 	}
 
 	/**
