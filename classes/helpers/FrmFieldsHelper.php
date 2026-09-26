@@ -327,6 +327,8 @@ class FrmFieldsHelper {
 			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
 			'number' => sprintf( __( '%s is invalid. Enter a number', 'formidable' ), '[field_name]' ),
 		);
+		// Quantity validates identically to number (FrmFieldQuantity extends FrmFieldNumber) but is a distinct stored type.
+		$messages['quantity'] = $messages['number'];
 
 		if ( isset( $messages[ $type ] ) ) {
 			return $messages[ $type ];

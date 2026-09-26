@@ -318,8 +318,9 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 	public function test_get_error_msg_invalid_is_field_type_specific() {
 		$form_id = $this->factory->form->create();
 
-		// Email and number fields get their own corrective message when no custom one is set;
-		// a type with no specific copy (text) keeps the original generic message.
+		// Email, url, phone, number, and quantity fields get their own corrective message
+		// when no custom one is set; a type with no specific copy (text) keeps the
+		// original generic message.
 		$tests = array(
 			array(
 				'type'     => 'email',
@@ -327,9 +328,24 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 				'expected' => 'Email is invalid. Enter a valid email address, like name@example.com',
 			),
 			array(
+				'type'     => 'url',
+				'name'     => 'Website',
+				'expected' => 'Website is invalid. Enter a valid web address, like https://example.com',
+			),
+			array(
+				'type'     => 'phone',
+				'name'     => 'Cell',
+				'expected' => 'Cell is invalid. Enter a valid phone number',
+			),
+			array(
 				'type'     => 'number',
 				'name'     => 'Age',
 				'expected' => 'Age is invalid. Enter a number',
+			),
+			array(
+				'type'     => 'quantity',
+				'name'     => 'Amount',
+				'expected' => 'Amount is invalid. Enter a number',
 			),
 			array(
 				'type'     => 'text',
