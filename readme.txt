@@ -6,7 +6,7 @@ Tested up to: 7.1.1
 Requires PHP: 7.0
 Stable tag: 6.35
 
-The drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and AI-built forms.
+The drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and AI-built web applications.
 
 == Description ==
 
