@@ -17,7 +17,7 @@ https://youtu.be/7X2BqhRsXcg
 [Watch the video overview for the Formidable form builder, calculator, and quiz maker](https://youtu.be/7X2BqhRsXcg)
 
 > <strong>Formidable Pro</strong><br />
-> This plugin is the free version of Formidable Pro, which adds email subscription forms, multi-page forms, file upload forms, quiz grading, and conditional logic. Add repeater fields, Stripe and PayPal payment integrations, cascading dropdowns, calculated fields, front-end editing, the AI form builder, and the web application builder. [Get Formidable Pro and unlock every premium form feature.](https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion)
+> This plugin is the free version of Formidable Pro, which adds email subscription forms, multi-page forms, file upload forms, quiz grading, and conditional logic. Add repeater fields, premium Stripe and PayPal payment integrations, cascading dropdowns, calculated fields, front-end editing, the AI form builder, and the web application builder. [Get Formidable Pro and unlock every premium form feature.](https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion)
 >
 > Start with the [Lite vs Pro comparison](https://formidableforms.com/knowledgebase/what-is-the-difference-between-the-lite-free-and-pro-version/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion).
 
@@ -25,17 +25,17 @@ https://youtu.be/7X2BqhRsXcg
 
 Start from one of 300+ pre-built form templates, build a custom form from scratch, or describe the form you need in plain English and let the AI form builder create it. A simple contact form takes minutes with this plugin. Layer in conditional logic, multi-step pages, and calculated fields, and the same plugin produces registration forms, quote forms, and price calculator forms. Every form is mobile-responsive by default, and this plugin includes unlimited forms in the free version.
 
-= AI Form Builder and MCP: Build Forms with Claude, ChatGPT, or Any AI Agent =
+= AI Form Builder and MCP: Build Forms with Claude, ChatGPT, Cursor, or Any AI Agent =
 
 Describe a contact form or quiz in a sentence and Formidable builds it. The AI form builder (Pro) turns a plain-text prompt into a complete, editable contact form, registration form, or quiz, with fields, validation, and layout already in place. Add an AI field inside any form to show a ChatGPT-generated response based on what a visitor typed, then reuse that text in confirmation messages, email notifications, or Formidable Views.
 
-For developers, the Formidable API add-on includes a Model Context Protocol (MCP) server. Claude, ChatGPT, Cursor, or any MCP-compatible client can create and edit real forms, fields, styles, and Views directly on your WordPress site from a chat prompt. No separate MCP adapter plugin or Composer setup is required.
+For those who want to build more advanced forms with AI, the Formidable API add-on includes a Model Context Protocol (MCP) server. Claude, ChatGPT, Cursor, or any MCP-compatible client can create and edit real forms, fields, styles, and Views directly on your WordPress site from a chat prompt. No separate MCP adapter plugin or Composer setup is required.
 
 = Payment Forms with Stripe, PayPal, Square, and More =
 
 Accept credit card payments, subscriptions, and donations directly through your WordPress forms. This plugin connects to Stripe, PayPal, Square, and Authorize.net. Set up a donation form, a product order form, an event payment form, or a service booking form in a few minutes.
 
-Stripe payment forms are available for free, with support for ACH, Cash App, Klarna, and iDeal. A transaction fee applies without a Pro license. For in-person events, payment forms can also be set to cash, manual recording, or on-site collection, so hybrid businesses aren't locked into a single workflow.
+Stripe and PayPal payment forms are available for free. Stripe supports ACH, Cash App, Klarna, and iDeal. A transaction fee applies without a Pro license. For in-person events, payment forms can also be set to cash, manual recording, or on-site collection, so hybrid businesses aren't locked into a single workflow.
 
 = Survey Forms, Quiz Forms, and Online Calculators =
 
