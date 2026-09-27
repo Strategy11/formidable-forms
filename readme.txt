@@ -6,7 +6,7 @@ Tested up to: 7.1.1
 Requires PHP: 7.0
 Stable tag: 6.35
 
-WordPress form builder for contact, payment, survey, quiz, and calculator forms, with an AI form builder you can run through MCP.
+The drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and AI-built forms.
 
 == Description ==
 
