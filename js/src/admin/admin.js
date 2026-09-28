@@ -1055,6 +1055,9 @@ window.frmAdminBuildJS = function() {
 
 		const targetEl = document.getElementById( targetId );
 		if ( targetEl ) {
+			if ( targetId === 'frm-adv-info-tab' ) {
+				hydrateDeferredCodeListIcons( targetEl );
+			}
 			showTabPanel( targetEl );
 		}
 
@@ -9747,6 +9750,7 @@ window.frmAdminBuildJS = function() {
 		if ( classes.includes( 'frm_close_icon' ) ) {
 			hideShortcodes( box );
 		} else {
+			hydrateDeferredCodeListIcons( box );
 			updateShortcodesPopupPosition( moreIcon );
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
@@ -9780,6 +9784,42 @@ window.frmAdminBuildJS = function() {
 			}
 			showOrHideContextualShortcodes( input );
 		}
+	}
+
+	/**
+	 * Add field shortcode icons when their code list is first shown.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} container The opened shortcode panel.
+	 * @return {void}
+	 */
+	function hydrateDeferredCodeListIcons( container ) {
+		const deprecatedIcons = {
+			frm_clone_solid_icon: 'frm_clone_icon',
+			frm_keyalt_icon: 'frm_key_icon',
+			frm_keyalt_solid_icon: 'frm_key_solid_icon'
+		};
+		container.querySelectorAll( '.frm_customize_field_list [data-frm-icon]' ).forEach( item => {
+			const iconClass = item.dataset.frmIcon;
+			const classNames = iconClass.split( /\s+/ ).filter( Boolean );
+			const isSvg = classNames.includes( 'frmfont' ) || classNames.includes( 'frm_icon_font' );
+			const iconClasses = classNames.filter( name => name !== 'frmfont' && name !== 'frm_icon_font' );
+			const iconName = deprecatedIcons[ iconClasses[ 0 ] ] || iconClasses[ 0 ];
+			if ( ! iconName ) {
+				item.removeAttribute( 'data-frm-icon' );
+				return;
+			}
+			iconClasses[ 0 ] = iconName;
+			item.querySelectorAll( ':scope > a.frm_insert_code' ).forEach( anchor => {
+				const icon = isSvg
+					? frmDom.svg( { href: `#${ iconName }`, classList: iconClasses.slice( 1 ) } )
+					: frmDom.tag( 'i', { className: iconClasses.join( ' ' ) } );
+				icon.setAttribute( 'aria-hidden', 'true' );
+				// eslint-disable-next-line formidable/prefer-document-fragment -- Each icon belongs to a different link.
+				anchor.prepend( icon );
+			} );
+			item.removeAttribute( 'data-frm-icon' );
+		} );
 	}
 
 	/**

@@ -1876,6 +1876,7 @@ class FrmFormsController {
 					'name_suffix' => ' (' . $label . ')',
 					'type'        => $field->type,
 					'class'       => 'frm-customize-list dropdown-item',
+					'defer_icon'  => ! empty( $atts['defer_icon'] ),
 				)
 			);
 			unset( $part, $label );

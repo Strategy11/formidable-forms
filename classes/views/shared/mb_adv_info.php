@@ -68,15 +68,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				FrmFormsHelper::insert_opt_html(
 					array(
-						'id'    => $f->id,
-						'key'   => $f->field_key,
-						'name'  => $f->name,
-						'type'  => $f->type,
-						'class' => 'frm-customize-list dropdown-item',
+						'id'         => $f->id,
+						'key'        => $f->field_key,
+						'name'       => $f->name,
+						'type'       => $f->type,
+						'class'      => 'frm-customize-list dropdown-item',
+						'defer_icon' => true,
 					)
 				);
 
-				do_action( 'frm_field_code_tab', array( 'field' => $f ) );
+				do_action( 'frm_field_code_tab', array( 'field' => $f, 'defer_icon' => true ) );
 
 				if ( $f->type === 'user_id' ) {
 					$uid = $f->id;

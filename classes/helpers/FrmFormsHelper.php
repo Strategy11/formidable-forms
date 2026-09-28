@@ -930,6 +930,7 @@ BEFORE_HTML;
 	 *                    and 'key_label' to show something other than the id or key, and
 	 *                    'name_suffix'/'key_suffix' for text appended after the name or key is
 	 *                    truncated, so a shortcode option like ' show=first' survives the truncation.
+	 *                    Set 'defer_icon' when the code list is hidden until opened.
 	 *
 	 * @return void
 	 */
@@ -959,10 +960,17 @@ BEFORE_HTML;
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<li class="<?php echo esc_attr( $class ); ?>">
+		<?php
+		$item_attrs = array( 'class' => $class );
+
+		if ( ! empty( $args['defer_icon'] ) ) {
+			$item_attrs['data-frm-icon'] = $field['icon'];
+		}
+		?>
+		<li<?php FrmAppHelper::array_to_html_params( $item_attrs, true ); ?>>
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
@@ -976,7 +984,7 @@ BEFORE_HTML;
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
