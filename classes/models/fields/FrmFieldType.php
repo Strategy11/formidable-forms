@@ -446,6 +446,7 @@ DEFAULT_HTML;
 			'format'            => false,
 			'show_image'        => false,
 			'default'           => true,
+			'autocomplete'      => false,
 		);
 	}
 
@@ -823,6 +824,35 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Get the autocomplete attribute values that can be selected for this field type.
+	 *
+	 * @since x.x This was moved from the FrmProFieldAutocompleteField trait.
+	 *
+	 * @return array<string,string>
+	 */
+	public function autocomplete_options() {
+		$options     = FrmFieldsHelper::get_autocomplete_options();
+		$filter_keys = $this->get_autocomplete_filter_keys();
+
+		if ( ! $filter_keys ) {
+			return $options;
+		}
+
+		return array_intersect_key( $options, array_flip( $filter_keys ) );
+	}
+
+	/**
+	 * Limit the autocomplete options to the values that make sense for this field type.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string> An empty array will include every key.
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array();
+	}
+
+	/**
 	 * @since 4.0
 	 *
 	 * @param mixed $default_value Default value passed by reference.
@@ -929,6 +959,7 @@ DEFAULT_HTML;
 			'format'             => '',
 			'placeholder'        => '',
 			'draft'              => 0,
+			'autocomplete'       => '',
 		);
 		$opts        = array_merge( $opts, $this->extra_field_opts() );
 		$filter_args = array(
