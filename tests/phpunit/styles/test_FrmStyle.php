@@ -310,4 +310,75 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertNotEmpty( $styles );
 		$this->assertSame( FrmStylesController::$post_type, reset( $styles )->post_type );
 	}
+
+	/**
+	 * Object Cache Pro's prefetch feature can't handle non-scalar values in a
+	 * custom cache group. The frm_styles group must only ever hold scalars.
+	 *
+	 * @covers FrmStyle::get_all
+	 */
+	public function test_get_all_caches_scalars_only() {
+		wp_cache_flush();
+
+		$frm_style = new FrmStyle();
+		$frm_style->get_all();
+
+		$cached_keys   = (array) wp_cache_get( 'cached_keys', 'frm_styles' );
+		$cached_values = array();
+
+		foreach ( $cached_keys as $cache_key ) {
+			$cached_value = wp_cache_get( $cache_key, 'frm_styles' );
+
+			if ( is_array( $cached_value ) ) {
+				$cached_values = array_merge( $cached_values, $cached_value );
+			}
+		}
+
+		$this->assertNotEmpty( $cached_values, 'No cached frm_styles values were actually inspected.' );
+
+		foreach ( $cached_values as $item ) {
+			$this->assertIsScalar( $item, 'frm_styles cache entries must be scalars, not objects.' );
+		}
+	}
+
+	/**
+	 * Same scalars-only requirement, but for the raw-SQL fallback path that
+	 * runs when the primary get_posts() query comes back empty.
+	 *
+	 * @covers FrmStyle::get_all
+	 */
+	public function test_get_all_fallback_path_caches_scalars_and_hydrates() {
+		$style_id = wp_insert_post(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'publish',
+				'post_title'  => 'Fallback Path Style',
+			)
+		);
+
+		$force_empty_query = function ( $query ) {
+			if ( FrmStylesController::$post_type === $query->get( 'post_type' ) ) {
+				$query->set( 'post__in', array( 0 ) );
+			}
+		};
+
+		add_action( 'pre_get_posts', $force_empty_query );
+		wp_cache_flush();
+
+		$frm_style = new FrmStyle();
+		$styles    = $frm_style->get_all();
+
+		remove_action( 'pre_get_posts', $force_empty_query );
+
+		$this->assertArrayHasKey( $style_id, $styles, 'The fallback query should still find the style once the primary get_posts() query is blocked.' );
+
+		$cached_keys = (array) wp_cache_get( 'cached_keys', 'frm_styles' );
+		$this->assertContains( 'frm_backup_style_check', $cached_keys, 'The fallback path should have actually run, not silently fallen through to the primary path.' );
+
+		foreach ( (array) wp_cache_get( 'frm_backup_style_check', 'frm_styles' ) as $item ) {
+			$this->assertIsScalar( $item, 'The fallback frm_styles cache entry must be scalars too.' );
+		}
+
+		wp_delete_post( $style_id, true );
+	}
 }
