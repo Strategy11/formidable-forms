@@ -41,9 +41,11 @@ if ( ! empty( $args['aria-label-attr'] ) ) {
 	// view don't, so it stays a dangling reference for them (tracked separately,
 	// not fixed by this change -- see the PR description).
 	$labelledby = array();
+
 	if ( $off_label_shown ) {
 		$labelledby[] = $id . '_off_label';
 	}
+
 	if ( $on_label_shown ) {
 		$labelledby[] = $id . '_on_label';
 	}
