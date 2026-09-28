@@ -25,7 +25,7 @@ $aria_checked  = $checked ? 'true' : 'false';
 $input_html    = $args['input_html'] ?? array();
 $use_container = false;
 
-$off_label_shown = $show_labels && $off_label;
+$off_label_shown = $show_labels && '' !== $off_label;
 // phpcs:ignore Universal.Operators.StrictComparisons
 $on_label_shown = $show_labels && $on_label != 1;
 
