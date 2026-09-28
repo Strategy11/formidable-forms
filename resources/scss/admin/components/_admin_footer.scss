@@ -21,8 +21,9 @@
 	font-size: var(--text-xs);
 
 	/* 12px is normal text, so 4.5:1 applies — 400 sits at 2.58:1 on the white
-	   admin body. 500 is the lightest stop that clears it, at 4.97:1. */
-	color: var(--grey-500);
+	   admin body. 500 clears white at 4.97:1 but only 4.37:1 on the #f0f0f0
+	   body some admin pages (e.g. SMTP) render against; 600 clears both. */
+	color: var(--grey-600);
 }
 
 body.frm-hidden-overflow {
