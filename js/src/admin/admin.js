@@ -2655,6 +2655,57 @@ window.frmAdminBuildJS = function() {
 
 	let activeFieldLoadRequests = 0;
 	let fieldLoadStarted = false;
+	let placeholderSpinnerObserver;
+
+	/**
+	 * Give each field placeholder its spinner only once it scrolls into view.
+	 *
+	 * A long form can have hundreds of placeholders, and most of them are swapped for the real
+	 * field before anyone scrolls to them, so a placeholder that is never seen never gets one.
+	 * The placeholder already holds the spinner's space, so adding it does not move anything.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function observeFieldPlaceholders() {
+		const placeholders = document.querySelectorAll( '#frm-show-fields .frm_field_loading' );
+		if ( ! placeholders.length ) {
+			return;
+		}
+
+		placeholderSpinnerObserver = new IntersectionObserver(
+			handlePlaceholderIntersections,
+			{ root: postBodyContent }
+		);
+		placeholders.forEach( placeholder => placeholderSpinnerObserver.observe( placeholder ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {IntersectionObserverEntry[]} entries The placeholders that moved into or out of view.
+	 * @return {void}
+	 */
+	function handlePlaceholderIntersections( entries ) {
+		entries.forEach(
+			( { target, isIntersecting } ) => {
+				if ( ! isIntersecting ) {
+					return;
+				}
+
+				placeholderSpinnerObserver.unobserve( target );
+
+				// A placeholder that failed to load shows an error message instead.
+				if ( target.hasChildNodes() ) {
+					return;
+				}
+
+				// eslint-disable-next-line formidable/prefer-document-fragment -- each spinner goes into a different placeholder
+				target.append( span( { className: 'frm-wait frm_visible_spinner' } ) );
+			}
+		);
+	}
 
 	/**
 	 * Start as many field load requests as the concurrency limit allows, and finish up once the
@@ -2772,6 +2823,7 @@ window.frmAdminBuildJS = function() {
 			}
 			const oldField = document.getElementById( `frm_field_id_${ key }` );
 			if ( oldField ) {
+				placeholderSpinnerObserver?.unobserve( oldField );
 				dragDropObserver.unobserve( oldField );
 				dragDropAttachers.delete( oldField );
 			}
@@ -2812,6 +2864,7 @@ window.frmAdminBuildJS = function() {
 	 * steadily growing page for a result only the last pass could get right.
 	 */
 	function afterAllFieldsLoad() {
+		placeholderSpinnerObserver?.disconnect();
 		renumberPageBreaks();
 		maybeHideQuantityProductFieldOption();
 	}
@@ -11663,6 +11716,7 @@ window.frmAdminBuildJS = function() {
 			postBodyContent = document.getElementById( 'post-body-content' );
 			$postBodyContent = jQuery( postBodyContent );
 
+			observeFieldPlaceholders();
 			fillFieldLoadQueue();
 
 			setupSortable( 'ul.frm_sorting' );
