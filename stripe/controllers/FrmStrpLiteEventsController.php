@@ -507,6 +507,7 @@ class FrmStrpLiteEventsController {
 
 			foreach ( $modes as $mode ) {
 				$this->event = FrmStrpLiteConnectHelper::get_event( $event_id, $mode );
+
 				if ( is_object( $this->event ) ) {
 					$event_mode = $mode;
 					break;

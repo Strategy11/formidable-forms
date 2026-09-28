@@ -104,7 +104,6 @@ class FrmStrpLiteAppHelper {
 		return apply_filters( 'frm_strp_active_mode', $mode );
 	}
 
-
 	/**
 	 * Add education about Stripe fees.
 	 *
