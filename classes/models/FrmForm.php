@@ -969,14 +969,55 @@ class FrmForm {
 	 * @return array|object Array of forms. A single form object is returned if $limit is set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
+		self::add_published_forms_where( $query, $inc_children );
+		return self::getAll( $query, 'name', $limit );
+	}
+
+	/**
+	 * Get only the id, name and key of published forms, for lightweight lists like the form switcher.
+	 * This skips loading and unserializing the options column for every form.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $query        Additional where conditions.
+	 * @param int    $limit        The maximum number of forms to return.
+	 * @param string $inc_children Set to 'exclude' to skip child forms.
+	 *
+	 * @return array Array of objects with id, name and form_key properties.
+	 */
+	public static function get_published_form_names( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
+		self::add_published_forms_where( $query, $inc_children );
+
+		$results = FrmDb::get_results(
+			'frm_forms',
+			$query,
+			'id, name, form_key',
+			array(
+				'order_by' => 'name',
+				'limit'    => $limit,
+			)
+		);
+
+		return wp_unslash( $results );
+	}
+
+	/**
+	 * Add the where conditions shared by all published form queries.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $query        Where conditions, modified by reference.
+	 * @param string $inc_children Set to 'exclude' to skip child forms.
+	 *
+	 * @return void
+	 */
+	private static function add_published_forms_where( &$query, $inc_children ) {
 		$query['is_template'] = 0;
 		$query['status']      = array( null, '', 'published' );
 
 		if ( $inc_children === 'exclude' ) {
 			$query['parent_form_id'] = array( null, 0 );
 		}
-
-		return self::getAll( $query, 'name', $limit );
 	}
 
 	/**

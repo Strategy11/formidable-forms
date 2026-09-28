@@ -108,7 +108,7 @@ class FrmFormsHelper {
 	 */
 	public static function form_switcher( $selected = false ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms = FrmForm::get_published_forms( $where );
+		$forms = FrmForm::get_published_form_names( $where );
 
 		$args = array(
 			'id'   => 0,
