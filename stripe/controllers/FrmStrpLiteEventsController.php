@@ -522,7 +522,7 @@ class FrmStrpLiteEventsController {
 			$this->handle_event();
 			$this->track_handled_event( $event_id );
 			FrmStrpLiteConnectHelper::process_event( $event_id, $event_mode );
-		}
+		}//end foreach
 	}
 
 	/**
