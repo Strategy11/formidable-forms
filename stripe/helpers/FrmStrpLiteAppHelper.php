@@ -95,8 +95,15 @@ class FrmStrpLiteAppHelper {
 	 * @psalm-return 'live'|'test'
 	 */
 	public static function active_mode() {
-		return self::get_settings()->settings->test_mode ? 'test' : 'live';
+		$mode = self::get_settings()->settings->test_mode ? 'test' : 'live';
+		/**
+		 * Filter the Stripe mode for the current request.
+		 *
+		 * @param string $mode The configured Stripe mode.
+		 */
+		return apply_filters( 'frm_strp_active_mode', $mode );
 	}
+
 
 	/**
 	 * Add education about Stripe fees.
