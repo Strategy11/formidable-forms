@@ -1507,9 +1507,8 @@ function frmFrontFormJS() {
 				summary.focus();
 				return;
 			}
-			// Summary was resolved active server-side but isn't in the DOM on this path (e.g.
-			// js_validate's client-only validation never renders it) - fall back to the first
-			// error field instead of leaving focus nowhere.
+			// No summary in the DOM (js_validate's client-side path never renders one): fall
+			// through to the first-errored-field focus below.
 		}
 
 		if ( ! config.focusFirstError && ! config.focusErrorSummary ) {
