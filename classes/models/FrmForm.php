@@ -979,7 +979,7 @@ class FrmForm {
 	 *
 	 * @since x.x
 	 *
-	 * @param array  $query Additional where conditions.
+	 * @param array $query Additional where conditions.
 	 *
 	 * @return array Array of objects with id, name and form_key properties.
 	 */
