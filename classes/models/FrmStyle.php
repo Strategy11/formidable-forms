@@ -635,16 +635,24 @@ class FrmStyle {
 				$new             = $this->save( (array) $new );
 				$this->update( 'default' );
 
-				$style_ids = is_wp_error( $new ) ? array() : array( $new );
+				$style_ids = $new && ! is_wp_error( $new ) ? array( $new ) : array();
 			}
 		}
 
 		// Hydrate by ID, not a second get_posts() call: a pre_get_posts filter that emptied the query above would empty this too.
-		// @phpstan-ignore-next-line argument.type (PHPCS's SimplifyArrayMapCallback sniff requires the bare 'get_post' string callback)
-		$temp_styles = array_filter( array_map( 'get_post', $style_ids ) );
+		$temp_styles = array();
+
+		foreach ( $style_ids as $style_id ) {
+			$style = get_post( $style_id );
+
+			if ( $style ) {
+				$temp_styles[ $style_id ] = $style;
+			}
+		}
 
 		if ( ! $temp_styles ) {
-			// A stale cached ID (e.g. a style deleted outside FrmStyle) hydrated to nothing.
+			// Every cached ID is stale; drop the group so the next call re-queries.
+			FrmDb::cache_delete_group( 'frm_styles' );
 			return array();
 		}
 
@@ -652,11 +660,7 @@ class FrmStyle {
 		$default_style  = false;
 		$styles         = array();
 
-		foreach ( $temp_styles as $style ) {
-			if ( ! $style ) {
-				continue;
-			}
-
+		foreach ( $temp_styles as $style_id => $style ) {
 			$this->id = $style->ID;
 
 			if ( $style->menu_order ) {
@@ -675,8 +679,7 @@ class FrmStyle {
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
-			// @phpstan-ignore-next-line cast.useless (Mago can't otherwise rule out $style->ID being used as a null array index)
-			$styles[ (int) $style->ID ] = $style;
+			$styles[ $style_id ] = $style;
 		}//end foreach
 
 		if ( ! $default_style ) {

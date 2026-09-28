@@ -381,4 +381,79 @@ class test_FrmStyle extends FrmUnitTest {
 
 		wp_delete_post( $style_id, true );
 	}
+
+	/**
+	 * @covers FrmStyle::get_all
+	 */
+	public function test_get_all_recovers_after_styles_deleted_outside_frmstyle() {
+		wp_cache_flush();
+
+		$frm_style = new FrmStyle();
+
+		foreach ( $frm_style->get_all() as $style ) {
+			// Bypasses FrmStyle, so the cached ID list goes stale.
+			wp_delete_post( $style->ID, true );
+		}
+
+		$frm_style->get_all();
+
+		$this->assertNotEmpty( $frm_style->get_all(), 'A stale cached ID list must not survive the next call.' );
+	}
+
+	/**
+	 * @covers FrmStyle::get_all
+	 *
+	 * @dataProvider provide_failed_style_saves
+	 *
+	 * @param mixed $save_result
+	 */
+	public function test_get_all_returns_empty_array_when_default_style_cannot_be_saved( $save_result ) {
+		foreach ( get_posts(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'any',
+				'numberposts' => 999,
+			)
+		) as $style_post ) {
+			wp_delete_post( $style_post->ID, true );
+		}
+
+		wp_cache_flush();
+
+		// get_post( 0 ) resolves to the global post, so a failed save must not reach it.
+		global $post;
+		$post = get_post( wp_insert_post( array( 'post_title' => 'Global post' ) ) ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$frm_style = new class( $save_result ) extends FrmStyle {
+
+			private $save_result;
+
+			public function __construct( $save_result ) {
+				$this->save_result = $save_result;
+			}
+
+			public function save( $settings ) {
+				return $this->save_result;
+			}
+
+			public function update( $id = 'default' ) {
+				return array();
+			}
+		};
+
+		$styles = $frm_style->get_all();
+		$post   = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$this->assertSame( array(), $styles );
+	}
+
+	/**
+	 * @return array<string, array<mixed>>
+	 */
+	public function provide_failed_style_saves() {
+		return array(
+			'WP_Error' => array( new WP_Error( 'frm_test', 'Save failed.' ) ),
+			'zero'     => array( 0 ),
+		);
+	}
 }
