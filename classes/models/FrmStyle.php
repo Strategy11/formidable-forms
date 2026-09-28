@@ -681,7 +681,8 @@ class FrmStyle {
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
-			$styles[ $style->ID ] = $style;
+			// @phpstan-ignore-next-line cast.useless (Mago can't otherwise rule out $style->ID being used as a null array index)
+			$styles[ (int) $style->ID ] = $style;
 		}//end foreach
 
 		if ( ! $default_style ) {
