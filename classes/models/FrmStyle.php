@@ -613,17 +613,18 @@ class FrmStyle {
 			'numberposts' => $limit,
 			'orderby'     => $orderby,
 			'order'       => $order,
+			'fields'      => 'ids', // Cache only scalar IDs in frm_styles; Object Cache Pro's prefetch can't handle objects in a custom cache group.
 		);
 
-		$temp_styles = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
+		$style_ids = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
 
-		if ( ! $temp_styles ) {
+		if ( ! $style_ids ) {
 			global $wpdb;
 			// Make sure there wasn't a conflict with the query
-			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
+			$query     = $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$style_ids = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_col' );
 
-			if ( ! $temp_styles ) {
+			if ( ! $style_ids ) {
 				// Create a new style if there are none
 				$new             = $this->get_new();
 				$new->post_title = __( 'Formidable Style', 'formidable' );
@@ -632,10 +633,13 @@ class FrmStyle {
 				$new             = $this->save( (array) $new );
 				$this->update( 'default' );
 
-				$post_atts['include'] = $new;
-				$temp_styles          = get_posts( $post_atts );
+				$style_ids = array( $new );
 			}
 		}
+
+		// Hydrate by ID directly instead of a second get_posts() query — a plugin's pre_get_posts
+		// filter that emptied the query above would just as easily empty a get_posts( include => ... ) rehydration.
+		$temp_styles = array_filter( array_map( 'get_post', $style_ids ) );
 
 		$default_values = $this->get_defaults();
 		$default_style  = false;
