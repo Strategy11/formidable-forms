@@ -189,7 +189,7 @@ class FrmFormsHelper {
 				'id'   => $form->id,
 				'name' => ! empty( $form->name ) ? $form->name : self::get_no_title_text(),
 				'key'  => $form->form_key,
-				'url'  => esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ),
+				'url'  => esc_url_raw( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ),
 			);
 		}
 		/* translators: %d: Form ID */
