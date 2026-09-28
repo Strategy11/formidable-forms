@@ -1,10 +1,28 @@
 describe( 'Single Product field live update in the form builder', () => {
+	// cy.wpCliEval() shells out with the eval-file command quoted as a single
+	// argument, which wp-env's own argv splitting doesn't handle - runs this
+	// unquoted instead so the currency reset actually executes.
+	const setCurrency = ( code ) => {
+		const fileName = `frm-currency-${ Date.now() }-${ Math.random().toString( 36 ).slice( 2 ) }.php`;
+		cy.writeFile( fileName, `<?php $s = new FrmSettings(); $s->currency = "${ code }"; update_option( $s->option_name, $s, true );` );
+		cy.exec( 'echo $(basename $(pwd))' ).then( ( result ) => {
+			const pluginName = result.stdout;
+			cy.exec( `npm --silent run env run tests-cli wp eval-file wp-content/plugins/${ pluginName }/${ fileName }` );
+		} );
+		cy.exec( `rm ${ fileName }` );
+	};
+
 	beforeEach( () => {
+		setCurrency( 'USD' );
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.createNewForm();
 		cy.viewport( 1280, 720 );
 		cy.openForm();
+	} );
+
+	afterEach( () => {
+		setCurrency( 'USD' );
 	} );
 
 	const addSingleProductField = () => {
@@ -17,7 +35,7 @@ describe( 'Single Product field live update in the form builder', () => {
 		cy.get( 'li[id="product"] a[title="Product"]' ).click( { force: true } );
 
 		return cy.get( 'li[data-ftype="product"]' ).invoke( 'attr', 'data-fid' ).then( fieldId => {
-			cy.get( `li[data-ftype="product"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 } ).click( { force: true } );
+			cy.get( `li[data-ftype="product"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 } ).first().click( { force: true } );
 			cy.get( 'li[data-ftype="product"] .frm_select_field > span' ).should( 'contain', 'Field Settings' ).click( { force: true } );
 			cy.get( `select[name="field_options[data_type_${ fieldId }]"]`, { timeout: 10000 } ).select( 'single' );
 
@@ -43,18 +61,17 @@ describe( 'Single Product field live update in the form builder', () => {
 	} );
 
 	it( 'formats a comma-decimal price correctly instead of NaN (EUR currency)', () => {
-		cy.wpCliEval( '<?php $s = new FrmSettings(); $s->currency = "EUR"; update_option( $s->option_name, $s, true );' );
+		setCurrency( 'EUR' );
 		cy.reload();
 
 		addSingleProductField().then( fieldId => {
-			editFirstOption( fieldId, 'Widget', '19,99' );
+			editFirstOption( fieldId, 'Widget', '1234,5' );
 
 			cy.get( `#field_${ fieldId }_inner_container .frm_single_product_label` )
-				.should( 'contain', '19,99' )
+				.should( 'contain', 'Widget' )
+				.and( 'contain', '1.234,50 €' )
 				.and( 'not.contain', 'NaN' )
 				.and( 'not.contain', 'undefined' );
 		} );
-
-		cy.wpCliEval( '<?php $s = new FrmSettings(); $s->currency = "USD"; update_option( $s->option_name, $s, true );' );
 	} );
 } );
