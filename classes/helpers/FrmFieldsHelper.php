@@ -3007,10 +3007,12 @@ class FrmFieldsHelper {
 	 *
 	 * @since x.x This was moved from FrmProFieldsHelper::get_autocomplete_options.
 	 *
+	 * @param array<string> $filter_keys Only include these keys. An empty array will include every key.
+	 *
 	 * @return array<string,string>
 	 */
-	public static function get_autocomplete_options() {
-		return array(
+	public static function get_autocomplete_options( $filter_keys = array() ) {
+		$options = array(
 			'on'                   => __( 'On', 'formidable' ),
 			'off'                  => __( 'Off', 'formidable' ),
 			'additional-name'      => __( 'Additional name', 'formidable' ),
@@ -3048,5 +3050,11 @@ class FrmFieldsHelper {
 			'url'                  => __( 'URL', 'formidable' ),
 			'username'             => __( 'Username', 'formidable' ),
 		);
+
+		if ( ! $filter_keys ) {
+			return $options;
+		}
+
+		return array_intersect_key( $options, array_flip( $filter_keys ) );
 	}
 }

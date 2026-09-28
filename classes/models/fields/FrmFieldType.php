@@ -831,14 +831,7 @@ DEFAULT_HTML;
 	 * @return array<string,string>
 	 */
 	public function autocomplete_options() {
-		$options     = FrmFieldsHelper::get_autocomplete_options();
-		$filter_keys = $this->get_autocomplete_filter_keys();
-
-		if ( ! $filter_keys ) {
-			return $options;
-		}
-
-		return array_intersect_key( $options, array_flip( $filter_keys ) );
+		return FrmFieldsHelper::get_autocomplete_options( $this->get_autocomplete_filter_keys() );
 	}
 
 	/**
