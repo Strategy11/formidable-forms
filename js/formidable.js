@@ -107,6 +107,14 @@ function frmFrontFormJS() {
 				fieldId = `${ fieldId }-${ nameParts[ 1 ].replace( '[', '' ) }`;
 			} else {
 				fieldId = `${ fieldId }-${ nameParts[ 0 ] }-${ nameParts[ 1 ].replace( '[', '' ) }`;
+
+				// Inside a repeating section, every sub field of the same combo field would
+				// otherwise collapse to this same key, since the sub field name is not part of
+				// it above. Add it so each sub field still gets its own distinct key/container.
+				const subFieldContainer = field.closest( '[data-sub-field-name]' );
+				if ( subFieldContainer ) {
+					fieldId += `-${ subFieldContainer.getAttribute( 'data-sub-field-name' ) }`;
+				}
 			}
 		}
 
@@ -455,16 +463,25 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Checks if a combo field is showing an error for the whole field, rather than for its sub fields.
+	 * Checks if a combo field, or any of its sub fields, is currently showing a required-field
+	 * error - either the combined error for the whole field, or a split-out error on one sub
+	 * field (see validateComboField).
 	 *
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
-	 * @return {boolean} True if the whole field has an error.
+	 * @return {boolean} True if the field or one of its sub fields has an error.
 	 */
 	function comboFieldHasFieldError( comboContainer ) {
 		const fieldContainer = comboContainer.closest( '.frm_form_field' );
-		return !! fieldContainer && hasClass( fieldContainer, 'frm_blank_field' ) && null !== fieldContainer.querySelector( ':scope > .frm_error' );
+		if ( fieldContainer && hasClass( fieldContainer, 'frm_blank_field' ) && null !== fieldContainer.querySelector( ':scope > .frm_error' ) ) {
+			return true;
+		}
+
+		// A sub field keeps its own frm_blank_field flag once the whole-field error has already
+		// been split into per sub field errors. Route through the combo-aware validation in that
+		// state too, so blurring another still-blank sub field does not wipe its error.
+		return null !== comboContainer.querySelector( '.frm_form_field.frm_blank_field' );
 	}
 
 	/**
@@ -511,9 +528,17 @@ function frmFrontFormJS() {
 			return;
 		}
 
+		// Resolve each sub field's real container straight from its input, instead of by id
+		// lookup - the id lookup can miss inside a repeating section, where a sub field
+		// container's id does not necessarily include the repeating row (see getFieldId()).
+		const subFieldContainers = {};
+		getRequiredComboSubInputs( comboContainer ).forEach( input => {
+			subFieldContainers[ getFieldId( input, true ) ] = input.closest( '.frm_form_field' );
+		} );
+
 		const form = fieldContainer.closest( 'form' );
 		Object.keys( errors ).forEach( key => {
-			const container = key === fieldKey ? fieldContainer : form?.querySelector( `#frm_field_${ key }_container` );
+			const container = key === fieldKey ? fieldContainer : ( subFieldContainers[ key ] || form?.querySelector( `#frm_field_${ key }_container` ) );
 			if ( container ) {
 				addFieldError( container, key, errors );
 			}
