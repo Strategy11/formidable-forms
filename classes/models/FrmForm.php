@@ -979,14 +979,12 @@ class FrmForm {
 	 *
 	 * @since x.x
 	 *
-	 * @param array  $query        Additional where conditions.
-	 * @param int    $limit        The maximum number of forms to return.
-	 * @param string $inc_children Set to 'exclude' to skip child forms.
+	 * @param array  $query Additional where conditions.
 	 *
 	 * @return array Array of objects with id, name and form_key properties.
 	 */
-	public static function get_published_form_names( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
-		self::add_published_forms_where( $query, $inc_children );
+	public static function get_published_form_names( $query = array() ) {
+		self::add_published_forms_where( $query, 'exclude' );
 
 		$results = FrmDb::get_results(
 			'frm_forms',
@@ -994,7 +992,6 @@ class FrmForm {
 			'id, name, form_key',
 			array(
 				'order_by' => 'name',
-				'limit'    => $limit,
 			)
 		);
 
