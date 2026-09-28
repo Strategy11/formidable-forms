@@ -674,8 +674,10 @@ class FrmStyle {
 		}//end foreach
 
 		if ( ! $default_style ) {
-			$default_style                            = reset( $styles );
-			$styles[ $default_style->ID ]->menu_order = 1;
+			$default_key = array_key_first( $styles );
+			if ( null !== $default_key ) {
+				$styles[ $default_key ]->menu_order = 1;
+			}
 		}
 
 		return $styles;
