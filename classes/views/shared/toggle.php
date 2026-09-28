@@ -52,7 +52,7 @@ if ( ! empty( $args['aria-label-attr'] ) ) {
 	$aria_attrs['aria-labelledby'] = implode( ' ', $labelledby );
 } else {
 	$aria_attrs['aria-labelledby'] = $id . '_label';
-}
+}//end if
 $aria_attrs['aria-checked'] = $aria_checked;
 
 $div_params = array(
