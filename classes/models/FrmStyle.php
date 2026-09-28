@@ -549,6 +549,7 @@ class FrmStyle {
 			'numberposts' => 99,
 			'orderby'     => 'title',
 			'order'       => 'ASC',
+			'fields'      => 'ids',
 		);
 
 		FrmDb::delete_cache_and_transient( json_encode( $default_post_atts ), 'frm_styles' );
@@ -607,13 +608,14 @@ class FrmStyle {
 	 * @return array
 	 */
 	public function get_all( $orderby = 'title', $order = 'ASC', $limit = 99 ) {
+		// Only scalar IDs may go in frm_styles; Object Cache Pro's prefetch can't handle cached objects.
 		$post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
 			'post_status' => 'publish',
 			'numberposts' => $limit,
 			'orderby'     => $orderby,
 			'order'       => $order,
-			'fields'      => 'ids', // Cache only scalar IDs in frm_styles; Object Cache Pro's prefetch can't handle objects in a custom cache group.
+			'fields'      => 'ids',
 		);
 
 		$style_ids = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
@@ -633,13 +635,17 @@ class FrmStyle {
 				$new             = $this->save( (array) $new );
 				$this->update( 'default' );
 
-				$style_ids = array( $new );
+				$style_ids = is_wp_error( $new ) ? array() : array( $new );
 			}
 		}
 
-		// Hydrate by ID directly instead of a second get_posts() query — a plugin's pre_get_posts
-		// filter that emptied the query above would just as easily empty a get_posts( include => ... ) rehydration.
+		// Hydrate by ID, not a second get_posts() call: a pre_get_posts filter that emptied the query above would empty this too.
 		$temp_styles = array_filter( array_map( 'get_post', $style_ids ) );
+
+		if ( ! $temp_styles ) {
+			// A stale cached ID (e.g. a style deleted outside FrmStyle) hydrated to nothing.
+			return array();
+		}
 
 		$default_values = $this->get_defaults();
 		$default_style  = false;
