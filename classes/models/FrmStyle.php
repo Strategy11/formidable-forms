@@ -652,6 +652,10 @@ class FrmStyle {
 		$styles         = array();
 
 		foreach ( $temp_styles as $style ) {
+			if ( ! $style ) {
+				continue;
+			}
+
 			$this->id = $style->ID;
 
 			if ( $style->menu_order ) {
@@ -670,7 +674,7 @@ class FrmStyle {
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
-			$styles[ $style->ID ] = $style;
+			$styles[ (int) $style->ID ] = $style;
 		}//end foreach
 
 		if ( ! $default_style ) {
