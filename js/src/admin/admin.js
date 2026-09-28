@@ -291,6 +291,9 @@ window.frmAdminBuildJS = function() {
 	let lastNewActionIdReturned = 0;
 	let fieldGroupMessageDismissed = false;
 
+	// Resolves once the Field Options tab is showing the selected field's settings. See showFieldOptionsTab.
+	let fieldOptionsTabShown = Promise.resolve();
+
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
 	let postBodyContent;
@@ -582,6 +585,8 @@ window.frmAdminBuildJS = function() {
 	function loadTooltip( element, show = false ) {
 		let tooltipTarget = element;
 
+		resolveDeferredTooltip( tooltipTarget );
+
 		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
 		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
 			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
@@ -596,6 +601,28 @@ window.frmAdminBuildJS = function() {
 		if ( show ) {
 			deleteTooltips();
 			tooltip.show();
+		}
+	}
+
+	/**
+	 * Resolves a `data-tip-key` (set by `FrmAppHelper::get_tooltip_attr()` on the form builder
+	 * page) into the element's real `title` attribute, looked up from `frm_admin_js.tooltips`.
+	 * No-op for an element that already carries its own `title` (every other admin page).
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function resolveDeferredTooltip( element ) {
+		if ( ! element.hasAttribute( 'data-tip-key' ) ) {
+			return;
+		}
+
+		const key = element.getAttribute( 'data-tip-key' );
+		element.removeAttribute( 'data-tip-key' );
+
+		const text = window.frm_admin_js && frm_admin_js.tooltips && frm_admin_js.tooltips[ key ];
+		if ( text ) {
+			element.setAttribute( 'title', text );
 		}
 	}
 
@@ -660,6 +687,12 @@ window.frmAdminBuildJS = function() {
 		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 		bindFormActionsKeyboardHandlers( wrapClass );
+
+		// Resolve every tooltip trigger already in the DOM now, so an SVG-only icon carries a
+		// real accessible name from page-ready instead of only from the first mouse hover.
+		wrapClass.find( '[data-tip-key]' ).each( function() {
+			resolveDeferredTooltip( this );
+		} );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
@@ -2708,7 +2741,8 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Swap the placeholders for the fields the server rendered.
 	 *
-	 * @param {string} response A json object of field id to { type, html }.
+	 * @param {string} response A json object of field id to { type, html }, plus a tooltips map of
+	 *                          data-tip-key to text for the tooltips in those fields.
 	 * @return {void}
 	 */
 	function handleAjaxLoadFieldSuccess( response ) {
@@ -2721,8 +2755,14 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const loadedFields = JSON.parse( response );
+		const { tooltips, ...loadedFields } = JSON.parse( response );
 		const newFields = [];
+
+		// The text behind each data-tip-key in this batch. Keys are hashes of the text, so merging
+		// a batch on top of what the page already has can only ever re-add the same strings.
+		if ( tooltips && window.frm_admin_js ) {
+			frm_admin_js.tooltips = { ...frm_admin_js.tooltips, ...tooltips };
+		}
 		// Field ids and types for the listeners of frm_ajax_loaded_field.
 		const loadedFieldData = [];
 
@@ -2743,6 +2783,7 @@ window.frmAdminBuildJS = function() {
 				newFields.push( newReplacedField );
 				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+				newReplacedField.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
 			}
 
 			setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
@@ -4528,12 +4569,69 @@ window.frmAdminBuildJS = function() {
 	 * Allow typing on form switcher click without an extra click to search.
 	 */
 	function focusSearchBox() {
+		populateFormSwitcher();
+
 		const searchBox = document.getElementById( 'dropform-search-input' );
 		if ( searchBox ) {
 			setTimeout( function() {
 				searchBox.focus();
 			}, 100 );
 		}
+	}
+
+	/**
+	 * Add switcher links after the menu is opened, yielding between batches.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function populateFormSwitcher() {
+		const menu = document.querySelector( '#frm_bs_dropdown .frm-dropdown-menu' );
+		const dataElement = document.getElementById( 'frm-form-switcher-data' );
+		if ( ! menu || ! dataElement ) {
+			return;
+		}
+
+		const forms = JSON.parse( dataElement.textContent );
+		dataElement.remove();
+
+		const searchBox = document.getElementById( 'dropform-search-input' );
+		const INITIAL_FORM_COUNT = 20;
+		const FORM_BATCH_SIZE = 200;
+		let index = 0;
+
+		function addBatch( batchSize ) {
+			const fragment = document.createDocumentFragment();
+			const end = Math.min( index + batchSize, forms.length );
+			const searchText = searchBox ? searchBox.value.toLowerCase() : '';
+
+			for ( ; index < end; index++ ) {
+				const form = forms[ index ];
+				const link = frmDom.a( {
+					className: 'frm-justify-between',
+					children: [
+						form.name,
+						frmDom.span( { text: menu.dataset.idLabel.replace( '%d', form.id ) } ),
+						frmDom.span( { className: 'frm_hidden', text: form.key } )
+					]
+				} );
+				link.href = form.url;
+				link.tabIndex = -1;
+				const item = frmDom.tag( 'li', { className: 'frm-dropdown-form', child: link } );
+				if ( searchText && ! item.textContent.toLowerCase().includes( searchText ) ) {
+					item.classList.add( 'frm_hidden' );
+				}
+				fragment.append( item );
+			}
+
+			menu.append( fragment );
+			if ( index < forms.length ) {
+				setTimeout( () => addBatch( FORM_BATCH_SIZE ), 0 );
+			}
+		}
+
+		addBatch( INITIAL_FORM_COUNT );
 	}
 
 	/**
@@ -6438,13 +6536,14 @@ window.frmAdminBuildJS = function() {
 
 			fieldTypeName = normalizeFieldName( fieldTypeName );
 
-			setTimeout( function() {
+			// The setting can't take focus until its tab is showing.
+			setTimeout( () => fieldOptionsTabShown.then( () => {
 				if ( setting.value.toLowerCase() === fieldTypeName ) {
 					setting.select();
 				} else {
 					setting.focus();
 				}
-			}, 50 );
+			} ), 50 );
 		}
 	}
 
@@ -6452,10 +6551,10 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		const setting = document.querySelectorAll( `[data-changeme="${ this.id }"]` )[ 0 ];
 		if ( setting !== undefined ) {
-			setTimeout( function() {
+			setTimeout( () => fieldOptionsTabShown.then( () => {
 				setting.focus();
 				autoExpandSettings( setting );
-			}, 50 );
+			} ), 50 );
 		}
 	}
 
@@ -8502,11 +8601,10 @@ window.frmAdminBuildJS = function() {
 			section => section.style.animation = 'none'
 		);
 
-		document.getElementById( 'frm-options-panel-tab' ).click();
-
+		let editorReady = Promise.resolve();
 		const editor = singleField.querySelector( '.wp-editor-area' );
 		if ( editor ) {
-			frmDom.wysiwyg.init(
+			editorReady = frmDom.wysiwyg.init(
 				editor,
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
@@ -8514,6 +8612,49 @@ window.frmAdminBuildJS = function() {
 
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
+
+		showFieldOptionsTab( obj, singleField, editorReady );
+	}
+
+	/**
+	 * Switch the sidebar to the Field Options tab, which slides the settings panel into view.
+	 *
+	 * The panel's setup work (deferred inits, TinyMCE, frmShowedFieldSettings listeners) all runs
+	 * before this. Starting the slide during that work drops its frames and makes it look shaky,
+	 * so the switch waits for TinyMCE to boot and then starts on a fresh frame.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}   obj         The selected field element.
+	 * @param {HTMLElement}   singleField The field settings element.
+	 * @param {Promise<void>} editorReady Resolves once the field's rich text editor has booted.
+	 * @return {void}
+	 */
+	function showFieldOptionsTab( obj, singleField, editorReady ) {
+		const optionsTab = document.getElementById( 'frm-options-panel-tab' );
+
+		if ( optionsTab.parentElement.classList.contains( 'frm-active' ) ) {
+			// The tab is already open, so there is no slide to protect.
+			optionsTab.click();
+			fieldOptionsTabShown = Promise.resolve();
+			return;
+		}
+
+		// Never hold the panel back for long, even if TinyMCE's scripts are slow to load.
+		const MAX_EDITOR_WAIT = 300;
+		const maxWait = new Promise( resolve => setTimeout( resolve, MAX_EDITOR_WAIT ) );
+
+		fieldOptionsTabShown = Promise.race( [ editorReady, maxWait ] ).then(
+			() => new Promise( resolve => {
+				requestAnimationFrame( () => {
+					// Skip it if another field was selected, or the Add Fields tab was clicked, while waiting.
+					if ( obj.classList.contains( 'selected' ) && ! singleField.classList.contains( 'frm_hidden' ) ) {
+						optionsTab.click();
+					}
+					resolve();
+				} );
+			} )
+		);
 	}
 
 	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {

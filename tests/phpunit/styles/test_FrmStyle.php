@@ -158,6 +158,126 @@ class test_FrmStyle extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmStyle::get_post_name_to_save
+	 */
+	public function test_get_post_name_to_save_no_rename() {
+		$frm_style    = new FrmStyle( 123 );
+		$new_instance = array(
+			'post_name'   => 'existing-slug',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		unset( $_POST['frm_style_setting'] );
+		$post_name = $this->get_post_name_to_save( $frm_style, $new_instance, true );
+
+		$this->assertSame( 'existing-slug', $post_name );
+	}
+
+	/**
+	 * @covers FrmStyle::get_post_name_to_save
+	 */
+	public function test_get_post_name_to_save_rename() {
+		$frm_style    = new FrmStyle( 123 );
+		$new_instance = array(
+			'post_name'   => 'existing-slug',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$_POST['frm_style_setting']['post_name'] = 'My Renamed Class';
+		$post_name                               = $this->get_post_name_to_save( $frm_style, $new_instance, true );
+		unset( $_POST['frm_style_setting'] );
+
+		$this->assertSame( 'my-renamed-class', $post_name );
+	}
+
+	/**
+	 * @covers FrmStyle::get_post_name_to_save
+	 */
+	public function test_get_post_name_to_save_rename_resolves_slug_collision() {
+		$other_style_id = wp_insert_post(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'publish',
+				'post_title'  => 'Another style',
+				'post_name'   => 'taken-slug',
+			)
+		);
+
+		$frm_style    = new FrmStyle( 123 );
+		$new_instance = array(
+			'post_name'   => 'existing-slug',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$_POST['frm_style_setting']['post_name'] = 'taken-slug';
+		$post_name                               = $this->get_post_name_to_save( $frm_style, $new_instance, true );
+		unset( $_POST['frm_style_setting'] );
+
+		$this->assertNotSame( 'taken-slug', $post_name, 'A renamed slug that collides with another style must be resolved to a unique one.' );
+
+		wp_delete_post( $other_style_id, true );
+	}
+
+	/**
+	 * @covers FrmStyle::get_post_name_to_save
+	 */
+	public function test_get_post_name_to_save_new_style_uses_title() {
+		$frm_style    = new FrmStyle( 0 );
+		$new_instance = array(
+			'post_title'  => 'Brand New Style!',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$post_name = $this->get_post_name_to_save( $frm_style, $new_instance, false );
+
+		$this->assertSame( 'brand-new-style', $post_name );
+	}
+
+	/**
+	 * A duplicated style shares its source style's title, so its title-derived slug collides too.
+	 *
+	 * @covers FrmStyle::get_post_name_to_save
+	 */
+	public function test_get_post_name_to_save_new_style_resolves_slug_collision() {
+		$other_style_id = wp_insert_post(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'publish',
+				'post_title'  => 'Brand New Style!',
+				'post_name'   => 'brand-new-style',
+			)
+		);
+
+		$frm_style    = new FrmStyle( 0 );
+		$new_instance = array(
+			'post_title'  => 'Brand New Style!',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$post_name = $this->get_post_name_to_save( $frm_style, $new_instance, false );
+
+		$this->assertNotSame( 'brand-new-style', $post_name, 'A title-derived slug that collides with another style must be resolved to a unique one.' );
+
+		wp_delete_post( $other_style_id, true );
+	}
+
+	/**
+	 * @param FrmStyle $frm_style
+	 * @param array    $new_instance
+	 * @param bool     $is_existing
+	 *
+	 * @return string
+	 */
+	private function get_post_name_to_save( $frm_style, $new_instance, $is_existing ) {
+		return $this->run_private_method( array( $frm_style, 'get_post_name_to_save' ), array( $new_instance, $is_existing ) );
+	}
+
+	/**
 	 * @covers FrmStyle::get_all
 	 */
 	public function test_get_all() {

@@ -5156,6 +5156,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Tooltip strings deferred on the form builder page and its ajax field-load request,
+	 * keyed for `frm_admin_js.tooltips`.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string,string>
+	 */
+	private static $deferred_tooltips = array();
+
+	/**
 	 * Shows tooltip icon.
 	 *
 	 * @since 6.12
@@ -5166,7 +5176,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function tooltip_icon( $tooltip_text, $atts = array() ) {
-		$atts['title'] = $tooltip_text;
+		$atts = array_merge( $atts, self::get_tooltip_attr( $tooltip_text ) );
 
 		if ( isset( $atts['class'] ) ) {
 			$atts['class'] .= ' frm_help';
@@ -5180,6 +5190,88 @@ class FrmAppHelper {
 		</span>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Builds the attribute(s) a tooltip trigger needs for its text.
+	 *
+	 * On the form builder page, and in the `frm_load_field` ajax request that fills in its
+	 * fields in batches, the text is deferred to `frm_admin_js.tooltips` and only a lookup key
+	 * is printed inline, instead of baking every field's translated tooltip text into the
+	 * markup. The initial page load prints the collected strings through
+	 * `print_deferred_tooltips()` on `admin_footer`. That hook never fires on admin-ajax.php,
+	 * so `FrmFieldsController::load_field()` sends them back with its JSON response instead.
+	 * `admin.js` merges either one into `frm_admin_js.tooltips` and resolves each key back into
+	 * a real `title`.
+	 *
+	 * The key is a hash of the text rather than a per-request counter. A counter restarts in
+	 * every request, so two batches could hand the same key to different text, and whichever
+	 * merged last would win. A hash gives identical text the same key everywhere, which makes
+	 * the client-side merge safe to repeat and dedupes repeated strings for free.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $tooltip_text Tooltip text.
+	 *
+	 * @return array<string,string> Either `title` (everywhere else) or `data-tip-key` (the
+	 *                              builder page and its ajax field-load request).
+	 */
+	public static function get_tooltip_attr( $tooltip_text ) {
+		if ( ! self::should_defer_tooltips() ) {
+			return array( 'title' => $tooltip_text );
+		}
+
+		$key                             = 't' . substr( md5( $tooltip_text ), 0, 8 );
+		self::$deferred_tooltips[ $key ] = $tooltip_text;
+
+		return array( 'data-tip-key' => $key );
+	}
+
+	/**
+	 * Checks if this request can hand its tooltip strings to `frm_admin_js.tooltips`.
+	 *
+	 * `is_form_builder_page()` alone misses the `frm_load_field` ajax request because that
+	 * request never sends `frm_action`. Other builder ajax requests are left out on purpose
+	 * since nothing ships their collected strings to the page.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_defer_tooltips() {
+		if ( wp_doing_ajax() ) {
+			return 'frm_load_field' === self::get_post_param( 'action', '', 'sanitize_text_field' );
+		}
+
+		return self::is_form_builder_page( false );
+	}
+
+	/**
+	 * Gets the tooltip strings collected by `get_tooltip_attr()` so far in this request.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,string> Tooltip text keyed by its `data-tip-key`.
+	 */
+	public static function get_deferred_tooltips() {
+		return self::$deferred_tooltips;
+	}
+
+	/**
+	 * Prints the tooltip strings collected by `get_tooltip_attr()` during this page's render,
+	 * merged into the already-localized `frm_admin_js.tooltips` object.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function print_deferred_tooltips() {
+		if ( ! self::$deferred_tooltips ) {
+			return;
+		}
+
+		$js = 'window.frm_admin_js && ( window.frm_admin_js.tooltips = Object.assign( window.frm_admin_js.tooltips || {}, ' . wp_json_encode( self::$deferred_tooltips ) . ' ) );';
+		wp_add_inline_script( 'formidable_admin', $js, 'after' );
 	}
 
 	/**

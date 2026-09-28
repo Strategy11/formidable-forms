@@ -620,38 +620,29 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	protected function create_users() {
-		$has_user = get_user_by( 'email', 'admin@mail.com' );
+		$roles = array(
+			'admin'      => 'administrator',
+			'editor'     => 'editor',
+			'subscriber' => 'subscriber',
+		);
 
-		if ( $has_user ) {
-			return;
+		foreach ( $roles as $login => $role ) {
+			// The WP test install already creates the admin user, and the factory
+			// throws when a login is taken, so only add the users that are missing.
+			if ( username_exists( $login ) ) {
+				continue;
+			}
+
+			$user_id = $this->factory->user->create_object(
+				array(
+					'user_login' => $login,
+					'user_email' => $login . '@mail.com',
+					'user_pass'  => $login,
+					'role'       => $role,
+				)
+			);
+			$this->assertNotEmpty( $user_id );
 		}
-
-		$admin_args = array(
-			'user_login' => 'admin',
-			'user_email' => 'admin@mail.com',
-			'user_pass'  => 'admin',
-			'role'       => 'administrator',
-		);
-		$admin      = $this->factory->user->create_object( $admin_args );
-		$this->assertNotEmpty( $admin );
-
-		$editor_args = array(
-			'user_login' => 'editor',
-			'user_email' => 'editor@mail.com',
-			'user_pass'  => 'editor',
-			'role'       => 'editor',
-		);
-		$editor      = $this->factory->user->create_object( $editor_args );
-		$this->assertNotEmpty( $editor );
-
-		$subscriber_args = array(
-			'user_login' => 'subscriber',
-			'user_email' => 'subscriber@mail.com',
-			'user_pass'  => 'subscriber',
-			'role'       => 'subscriber',
-		);
-		$subscriber      = $this->factory->user->create_object( $subscriber_args );
-		$this->assertNotEmpty( $subscriber );
 	}
 
 	/**
