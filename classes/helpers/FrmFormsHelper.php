@@ -169,6 +169,31 @@ class FrmFormsHelper {
 			<?php
 			return;
 		}
+
+		$switcher_forms = array();
+
+		foreach ( $forms as $form ) {
+			if ( $form->id === $form_id ) {
+				continue;
+			}
+
+			if ( isset( $args['id'] ) ) {
+				$args['id'] = $form->id;
+			}
+
+			if ( isset( $args['form'] ) ) {
+				$args['form'] = $form->id;
+			}
+
+			$switcher_forms[] = array(
+				'id'   => $form->id,
+				'name' => ! empty( $form->name ) ? $form->name : self::get_no_title_text(),
+				'key'  => $form->form_key,
+				'url'  => esc_url( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ),
+			);
+		}
+		/* translators: %d: Form ID */
+		$id_label = __( '(ID %d)', 'formidable' );
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'dropdown-menu-right' : 'dropdown-menu-left' ); ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
@@ -179,7 +204,9 @@ class FrmFormsHelper {
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
-			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
+			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover"
+				role="menu" aria-labelledby="frm-navbarDrop"
+				data-id-label="<?php echo esc_attr( $id_label ); ?>">
 				<?php if ( count( $forms ) > 8 ) { ?>
 				<li class="frm-with-search">
 					<?php
@@ -195,44 +222,16 @@ class FrmFormsHelper {
 					?>
 				</li>
 				<?php } ?>
-				<?php
-				foreach ( $forms as $form ) {
-					if ( $form->id === $form_id ) {
-						// Don't include the selected form in the switcher since it does nothing.
-						continue;
-					}
-
-					if ( isset( $args['id'] ) ) {
-						$args['id'] = $form->id;
-					}
-
-					if ( isset( $args['form'] ) ) {
-						$args['form'] = $form->id;
-					}
-
-					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = ! empty( $form->name ) ? $form->name : self::get_no_title_text();
-					?>
-					<li class="frm-dropdown-form">
-						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
-							<?php echo esc_html( $form_name ); ?>
-							<span>
-							<?php
-							printf(
-								/* translators: %d: Form ID */
-								esc_html__( '(ID %d)', 'formidable' ),
-								esc_attr( $form->id )
-							);
-							?>
-							</span>
-							<span class="frm_hidden"><?php echo esc_html( $form->form_key ); ?></span>
-						</a>
-					</li>
-					<?php
-					unset( $form );
-				}//end foreach
-				?>
 			</ul>
+			<?php
+			wp_print_inline_script_tag(
+				wp_json_encode( $switcher_forms, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
+				array(
+					'type' => 'application/json',
+					'id'   => 'frm-form-switcher-data',
+				)
+			);
+			?>
 		</div>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
