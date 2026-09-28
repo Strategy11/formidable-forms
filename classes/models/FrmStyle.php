@@ -640,14 +640,8 @@ class FrmStyle {
 		}
 
 		// Hydrate by ID, not a second get_posts() call: a pre_get_posts filter that emptied the query above would empty this too.
-		$temp_styles = array_filter(
-			array_map(
-				function ( $style_id ) {
-					return get_post( $style_id );
-				},
-				$style_ids
-			)
-		);
+		// @phpstan-ignore-next-line argument.type (PHPCS's SimplifyArrayMapCallback sniff requires the bare 'get_post' string callback)
+		$temp_styles = array_filter( array_map( 'get_post', $style_ids ) );
 
 		if ( ! $temp_styles ) {
 			// A stale cached ID (e.g. a style deleted outside FrmStyle) hydrated to nothing.
