@@ -640,7 +640,14 @@ class FrmStyle {
 		}
 
 		// Hydrate by ID, not a second get_posts() call: a pre_get_posts filter that emptied the query above would empty this too.
-		$temp_styles = array_filter( array_map( 'get_post', $style_ids ) );
+		$temp_styles = array_filter(
+			array_map(
+				function ( $style_id ) {
+					return get_post( $style_id );
+				},
+				$style_ids
+			)
+		);
 
 		if ( ! $temp_styles ) {
 			// A stale cached ID (e.g. a style deleted outside FrmStyle) hydrated to nothing.
@@ -674,11 +681,12 @@ class FrmStyle {
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
-			$styles[ (int) $style->ID ] = $style;
+			$styles[ $style->ID ] = $style;
 		}//end foreach
 
 		if ( ! $default_style ) {
 			$default_key = array_key_first( $styles );
+
 			if ( null !== $default_key ) {
 				$styles[ $default_key ]->menu_order = 1;
 			}
