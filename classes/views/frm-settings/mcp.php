@@ -5,7 +5,7 @@
  * @package Formidable
  *
  * @var bool        $mcp_enabled    Whether the MCP server and the Formidable abilities are turned on.
- * @var array|null  $connections    Recent MCP connections, or null when the adapter is unavailable.
+ * @var array|null  $connections    Recent MCP connections, one row per user and client, or null when the adapter is unavailable.
  * @var string      $blocked_reason Why the adapter cannot run, or an empty string when nothing blocks it.
  * @var bool        $is_inherited   Whether the toggle is showing a value inherited from the API add-on.
  * @var string      $skill_url      Link the Download Skill button points at, nonced through admin-post.php.
@@ -329,20 +329,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php } elseif ( ! $connections ) { ?>
 		<p><strong><?php esc_html_e( 'No connections yet', 'formidable' ); ?></strong></p>
 	<?php } else { ?>
-		<table class="widefat striped frm-mcp-connections">
+		<table class="widefat striped frm-border frm-mcp-connections">
 			<thead>
 				<tr>
+					<th scope="col"><?php esc_html_e( 'Client', 'formidable' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'User', 'formidable' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Last Active', 'formidable' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Recent Requests', 'formidable' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ( $connections as $connection ) { ?>
+				<?php
+				foreach ( $connections as $connection ) {
+					$client_label = '' === $connection['client'] ? __( 'N/A', 'formidable' ) : $connection['client'];
+					?>
 					<tr>
 						<td>
-							<?php echo esc_html( $connection['display_name'] ); ?>
-							<span class="description">(<?php echo esc_html( $connection['user_login'] ); ?>)</span>
+							<span class="frm-mcp-client">
+								<?php if ( $connection['client_icon'] ) { ?>
+									<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/mcp-' . $connection['client_icon'] . '.svg' ); ?>" width="20" height="20" alt="" />
+								<?php } else { ?>
+									<span class="frm-mcp-client-initial" aria-hidden="true"><?php echo esc_html( '' === $connection['client'] ? '?' : strtoupper( substr( $connection['client'], 0, 1 ) ) ); ?></span>
+								<?php } ?>
+								<?php echo esc_html( $client_label ); ?>
+							</span>
+						</td>
+						<td>
+							<span class="frm-mcp-user"><?php echo esc_html( $connection['display_name'] ); ?></span>
+							<?php if ( $connection['display_name'] !== $connection['user_login'] ) { ?>
+								<span class="description"><?php echo esc_html( $connection['user_login'] ); ?></span>
+							<?php } ?>
 						</td>
 						<td>
 							<span title="<?php echo esc_attr( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $connection['last_request'] ) ); ?>">
@@ -358,8 +374,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<td>
 							<?php if ( $connection['endpoints'] ) { ?>
 								<ul class="frm-mcp-endpoints">
-									<?php foreach ( array_slice( array_keys( $connection['endpoints'] ), 0, 3 ) as $endpoint ) { ?>
-										<li><?php echo esc_html( $endpoint ); ?></li>
+									<?php
+									foreach ( array_slice( array_keys( $connection['endpoints'] ), 0, 3 ) as $endpoint ) {
+										// The namespace is the same for nearly every ability, so the pill shows the
+										// ability's own name and the full name stays in the tooltip.
+										$endpoint_parts = explode( '/', (string) $endpoint );
+										?>
+										<li class="frm-meta-tag frm-grey-tag" title="<?php echo esc_attr( (string) $endpoint ); ?>"><?php echo esc_html( end( $endpoint_parts ) ); ?></li>
 									<?php } ?>
 								</ul>
 							<?php } else { ?>
@@ -367,9 +388,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php } ?>
 						</td>
 					</tr>
-				<?php
+					<?php
 				}//end foreach
- ?>
+				?>
 			</tbody>
 		</table>
 	<?php

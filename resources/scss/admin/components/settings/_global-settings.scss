@@ -278,6 +278,53 @@ label.frm-example-icon {
 	gap: var(--gap-xs) var(--gap-sm);
 }
 
+/* MCP Connections table: one row per user and client. */
+.frm-mcp-connections td {
+	vertical-align: middle;
+}
+
+.frm-mcp-client {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-xs);
+	color: var(--grey-900);
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+/* Stands in for the logo of a client Formidable has no icon for, at the logo's size. */
+.frm-mcp-client-initial {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: var(--grey-100);
+	color: var(--grey-700);
+	font-size: var(--text-xs);
+	font-weight: 600;
+}
+
+.frm-mcp-user {
+	display: block;
+	color: var(--grey-900);
+	font-weight: 500;
+}
+
+.frm-mcp-endpoints {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--gap-2xs);
+	margin: 0;
+}
+
+.frm-mcp-endpoints li {
+	margin: 0;
+	font-size: var(--text-xs);
+	font-weight: 500;
+}
+
 /* Progressive disclosure for secondary details: the prompt text, saved files and manual install. */
 .frm-mcp-disclosure {
 	margin-top: var(--gap-sm);
