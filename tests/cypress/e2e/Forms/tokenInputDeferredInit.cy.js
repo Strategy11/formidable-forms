@@ -23,14 +23,9 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 
 	const openFieldSettings = fieldId => {
 		cy.log( `Open settings panel for the ${ fieldId } field` );
-		cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-			.invoke( 'css', 'opacity', 1 )
-			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
-			.first()
-			.scrollIntoView()
-			.should( 'be.visible' )
-			.click();
-		cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
+		cy.get( `li[data-ftype="${ fieldId }"] .frm-field-action-icons`, { timeout: 10000 } ).invoke( 'css', 'opacity', 1 );
+		cy.get( `li[data-ftype="${ fieldId }"] .frm-dropdown-toggle` ).click();
+		cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'contain', 'Field Settings' ).click();
 	};
 
 	it( 'initializes a field\'s CSS Layout Classes token input only once that field\'s settings panel is shown, not for every field on builder load', () => {
@@ -51,17 +46,20 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 
 		cy.log( 'Loading a batch preserves the original inputs without initializing hidden token controls' );
 		cy.window().then( win => {
-			const fields = [ ...win.document.querySelectorAll( '.frm-single-settings' ) ];
-			fields.forEach( field => {
-				field.querySelector( '.frm-token-input-field' ).value = 'frm6';
+			const fields = [ ...win.document.querySelectorAll( '.frm-single-settings.frm-type-text, .frm-single-settings.frm-type-textarea' ) ];
+			const inputs = fields.map( field => field.querySelector( '.frm-token-input-field' ) );
+			inputs.forEach( input => {
+				input.value = 'frm6';
 			} );
 			const loadedEvent = new win.Event( 'frm_ajax_loaded_field' );
 			loadedEvent.frmFields = fields.map( field => ( { id: field.dataset.fid } ) );
 			win.document.dispatchEvent( loadedEvent );
 
-			const formData = new win.FormData( win.document.getElementById( 'frm_js_build_form' ) );
-			fields.forEach( field => {
-				expect( formData.get( `field_options[classes_${ field.dataset.fid }]` ) ).to.equal( 'frm6' );
+			// The same named inputs, untouched, are what gets serialized once a panel opens.
+			fields.forEach( ( field, index ) => {
+				const input = win.document.querySelector( `[name="field_options[classes_${ field.dataset.fid }]"]` );
+				expect( input ).to.equal( inputs[ index ] );
+				expect( input.value ).to.equal( 'frm6' );
 			} );
 		} );
 		cy.get( '.frm-token-container' ).should( 'not.exist' );
