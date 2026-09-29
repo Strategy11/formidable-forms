@@ -47,7 +47,7 @@ class FrmMcpSkillEnvController {
 		$user_id = get_current_user_id();
 
 		if ( ! FrmAppHelper::current_user_can( 'frm_change_settings' ) || ! current_user_can( 'create_app_password', $user_id ) ) {
-			wp_die( esc_html__( 'You do not have permission to create an MCP application password.', 'formidable' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to create a connection file.', 'formidable' ), '', array( 'response' => 403 ) );
 		}
 
 		self::verify_nonce( self::DOWNLOAD_ACTION );
@@ -58,7 +58,7 @@ class FrmMcpSkillEnvController {
 			! wp_is_application_passwords_available_for_user( $user_id ) ||
 			( 'https' !== wp_parse_url( home_url(), PHP_URL_SCHEME ) && 'local' !== wp_get_environment_type() )
 		) {
-			wp_die( esc_html__( 'Enable the Formidable MCP server and Application Passwords before downloading this file.', 'formidable' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Turn on the Formidable MCP server and Application Passwords, then download the file again.', 'formidable' ), '', array( 'response' => 403 ) );
 		}
 
 		$name    = 'Formidable MCP skill ' . gmdate( 'Y-m-d H:i:s' ) . ' ' . wp_generate_password( 4, false, false );
@@ -96,7 +96,7 @@ class FrmMcpSkillEnvController {
 		$user_id = get_current_user_id();
 
 		if ( ! FrmAppHelper::current_user_can( 'frm_change_settings' ) || ! current_user_can( 'delete_app_password', $user_id ) ) {
-			wp_die( esc_html__( 'You do not have permission to revoke an MCP application password.', 'formidable' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to revoke this connection file.', 'formidable' ), '', array( 'response' => 403 ) );
 		}
 
 		self::verify_nonce( self::REVOKE_ACTION );
@@ -104,7 +104,7 @@ class FrmMcpSkillEnvController {
 		$item = WP_Application_Passwords::get_user_application_password( $user_id, $uuid );
 
 		if ( ! $item || self::APP_ID !== $item['app_id'] ) {
-			wp_die( esc_html__( 'This MCP application password was not found.', 'formidable' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'This connection file no longer exists. It may already be revoked.', 'formidable' ), '', array( 'response' => 404 ) );
 		}
 
 		$deleted = WP_Application_Passwords::delete_application_password( $user_id, $uuid );
@@ -130,7 +130,7 @@ class FrmMcpSkillEnvController {
 		$nonce = FrmAppHelper::get_post_param( $action . '_nonce', '', 'sanitize_text_field' );
 
 		if ( ! wp_verify_nonce( $nonce, $action ) ) {
-			wp_die( esc_html__( 'The request expired. Please try again.', 'formidable' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'This page expired. Reload it and try again.', 'formidable' ), '', array( 'response' => 403 ) );
 		}
 	}
 
@@ -195,12 +195,12 @@ class FrmMcpSkillEnvController {
 	 */
 	public static function get_connection_message( $last_used ) {
 		if ( ! $last_used ) {
-			return __( 'Waiting for your assistant to connect. This step is checked off once it does.', 'formidable' );
+			return __( 'Waiting for your assistant to connect…', 'formidable' );
 		}
 
 		return sprintf(
 			/* translators: %s: Human readable time difference, like "5 mins". */
-			__( 'Connected. Your assistant last reached this site %s ago.', 'formidable' ),
+			__( 'Connected. Last active %s ago.', 'formidable' ),
 			human_time_diff( $last_used )
 		);
 	}

@@ -100,27 +100,42 @@ label.frm-example-icon {
 	margin: 0 0 var(--gap-lg);
 	padding: 0;
 	list-style: none;
-	border: 1px solid var(--grey-200);
-	border-radius: var(--small-radius);
-	overflow: hidden;
 }
 
+/* No card: the numbered headings separate the steps. */
 .frm-mcp-step {
-	display: flex;
-	gap: var(--gap-md);
 	margin: 0;
-	padding: var(--gap-md);
-	border-top: 1px solid var(--grey-200);
-	background: #fff;
-	transition: background-color 200ms ease-out;
+	padding: 0;
 }
 
 .frm-mcp-step:first-child {
-	border-top: 0;
+	padding-top: var(--gap-xs);
 }
 
-.frm-mcp-step-complete {
-	background: var(--success-25);
+.frm-mcp-step + .frm-mcp-step {
+	margin-top: var(--gap-lg);
+}
+
+/* The steps' bottom margin is the gap before the MCP Connections section. */
+.frm-mcp-steps + h3 {
+	margin-top: 0;
+}
+
+/* Staggered reveal on toggle-on, 100ms apart, reusing the form actions' keyframes. */
+@media (prefers-reduced-motion: no-preference) {
+
+	.frm-mcp-reveal .frm-mcp-step,
+	.frm-mcp-reveal > .frm-mcp-steps ~ * {
+		animation: frm-gc-row-enter 400ms cubic-bezier(0.2, 0, 0, 1) both;
+	}
+
+	.frm-mcp-reveal .frm-mcp-step:nth-child(2) {
+		animation-delay: 100ms;
+	}
+
+	.frm-mcp-reveal > .frm-mcp-steps ~ * {
+		animation-delay: 200ms;
+	}
 }
 
 .frm-mcp-step-marker {
@@ -128,50 +143,51 @@ label.frm-example-icon {
 	flex-shrink: 0;
 	align-items: center;
 	justify-content: center;
-	width: 32px;
-	height: 32px;
+	width: var(--h-xs);
+	height: var(--h-xs);
+	box-sizing: border-box;
 	color: var(--grey-700);
-	font-size: var(--text-sm);
+	font-size: var(--text-xs);
 	font-weight: 600;
 	border: 1px solid var(--grey-300);
 	border-radius: 50%;
 	background: #fff;
 }
 
-.frm-mcp-step-check {
+.frm-mcp-step-marker .frm-mcp-step-check {
 	display: none;
-	width: 14px;
+	width: 12px;
 	height: 12px;
 }
 
+/* A 20px green circle inside the 24px slot: 2px padding with a content-box background. */
 .frm-mcp-step-complete .frm-mcp-step-marker {
-	color: var(--success-500);
-	border-color: var(--success-200);
-	background: var(--success-50);
+	padding: 2px;
+	color: #fff;
+	border: 0;
+	background: var(--success-600) content-box;
 }
 
 .frm-mcp-step-complete .frm-mcp-step-number {
 	display: none;
 }
 
-.frm-mcp-step-complete .frm-mcp-step-check {
+.frm-mcp-step-complete .frm-mcp-step-marker .frm-mcp-step-check {
 	display: block;
-}
-
-.frm-mcp-step-body {
-	flex: 1;
-	min-width: 0;
 }
 
 /* Beats the settings page's own h3 rules, which add a border, padding and uppercase. */
 #poststuff .frm_settings_form .frm-mcp-step-title,
 #form_global_settings .frm-mcp-step-title,
 .frm_settings_form .frm-mcp-step-title {
-	margin: 6px 0 var(--gap-2xs); /* Centers the first line on the 32px marker. */
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
+	margin: 0 0 var(--gap-xs);
 	padding: 0;
 	color: var(--grey-900);
 	font-size: var(--text-md);
-	font-weight: 600;
+	font-weight: 500; /* One step lighter than SemiBold, so the steps sit under the MCP heading. */
 	text-transform: none;
 	border: 0;
 }
@@ -181,118 +197,234 @@ label.frm-example-icon {
 	margin: 0 0 var(--gap-sm);
 }
 
-.frm-mcp-step-body .frm-long-icon-buttons {
+/* Readable measure for prose: in Inter, 60ch is about 75 characters. */
+.frm-mcp-step-body p {
+	max-width: 60ch;
+	text-wrap: pretty;
+}
+
+/* A link inside prose wraps as one piece, never across two lines. */
+.frm-mcp-step-body p > a {
+	white-space: nowrap;
+}
+
+/* Tertiary text: notes, metadata and helper links under a step's main action. */
+.frm-mcp-note {
+	color: var(--grey-500);
+	font-size: var(--text-xs);
+	line-height: 1.5;
+}
+
+/* Assistant picker. The radios are visually hidden, not display:none, so they stay in the tab order. */
+.frm-mcp-clients {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--gap-xs);
 	margin-bottom: var(--gap-sm);
 }
 
-.frm-mcp-step-body > .frm-mcp-credential-note {
+.frm-mcp-clients input[type="radio"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.frm-mcp-clients label {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-xs);
+	min-height: 40px;
+	padding: 0 var(--gap-sm);
+	color: var(--grey-700);
+	font-weight: 500;
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+	background: #fff;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+.frm-mcp-clients label:hover {
+	border-color: var(--grey-400);
+	color: var(--grey-900);
+}
+
+.frm-mcp-clients input[type="radio"]:checked + label {
+	color: var(--primary-700);
+	border-color: var(--primary-500);
+	background: var(--primary-25);
+	box-shadow: inset 0 0 0 1px var(--primary-500);
+}
+
+.frm-mcp-clients input[type="radio"]:focus-visible + label {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
+}
+
+/* frm_checkmark_icon fills its box, so it is drawn at the copy glyph's size; the margin keeps the 20px slot. */
+.wp-core-ui .frm-mcp-copied.button svg {
+	width: 12px;
+	height: 12px;
+	margin: 0 4px;
+}
+
+.frm-mcp-prompt-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--gap-xs) var(--gap-sm);
+}
+
+/* Progressive disclosure for secondary details: the prompt text, saved files and manual install. */
+.frm-mcp-disclosure {
 	margin-top: var(--gap-sm);
 }
 
-.frm-mcp-credentials-heading {
-	margin-top: var(--gap-md);
+.frm-mcp-disclosure > summary {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-xs);
+	color: var(--grey-700);
+	font-weight: 500;
+	list-style: none;
+	cursor: pointer;
+	border-radius: var(--x-small-radius);
+}
+
+.frm-mcp-disclosure > summary::-webkit-details-marker {
+	display: none;
+}
+
+.frm-mcp-disclosure > summary:hover {
+	color: var(--grey-900);
+}
+
+.frm-mcp-disclosure > summary:focus-visible {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
+}
+
+/* Scoped to the summary so it outranks the generic .frmsvg size (18px). */
+.frm-mcp-disclosure > summary .frm-mcp-disclosure-chevron {
+	flex-shrink: 0;
+	width: 12px;
+	height: 12px;
+	transform: rotate(-90deg);
+}
+
+.frm-mcp-disclosure[open] > summary .frm-mcp-disclosure-chevron {
+	transform: none;
+}
+
+/* Disclosure content lines up with the summary label, not the chevron: 12px chevron + 8px gap. */
+.frm-mcp-disclosure > :not(summary) {
+	margin-inline-start: calc(12px + var(--gap-xs));
+}
+
+.frm-mcp-disclosure > .frm-mcp-note {
+	margin-top: var(--gap-xs);
+	margin-bottom: 0;
+}
+
+.frm-mcp-prompt-text {
+	max-width: 60ch;
+	margin: var(--gap-xs) 0 0;
+	padding: var(--gap-sm);
+	color: var(--grey-700);
+	font-family: inherit;
+	font-size: var(--text-sm);
+	line-height: 1.6;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	background: var(--grey-25);
+}
+
+.frm-mcp-credentials {
+	margin-top: var(--gap-sm);
+	margin-bottom: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.frm-mcp-credentials > li {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--gap-xs) var(--gap-sm);
+	margin: 0;
+	padding: var(--gap-xs) 0;
+	border-top: 1px solid var(--grey-200);
+}
+
+.frm-mcp-credentials > li > span {
+	display: flex;
+	flex-direction: column;
+	color: var(--grey-900);
 }
 
 .frm-mcp-connection-status {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
+	color: var(--grey-700);
 	font-weight: 500;
+}
+
+/* The status belongs to the whole step, not to the prompt disclosure above it. */
+.frm-mcp-step-body > .frm-mcp-connection-status {
+	margin-top: var(--gap-sm);
 }
 
 .frm-mcp-connection-status:empty {
 	display: none;
 }
 
-.frm-mcp-step-complete .frm-mcp-connection-status {
-	color: var(--success-800);
+/* A small spinner says the page is still listening, without a moving part once connected. */
+.frm-mcp-connection-status::before {
+	content: "";
+	flex-shrink: 0;
+	width: 12px;
+	height: 12px;
+	border: 2px solid var(--grey-300);
+	border-top-color: var(--primary-500);
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
 }
 
-.frm-mcp-step-body > .frm-mcp-manual-skill {
+/* Once connected, the spinner settles into a still green dot. The text stays gray so it keeps its contrast. */
+.frm-mcp-step-complete .frm-mcp-connection-status::before {
+	width: 8px;
+	height: 8px;
+	margin: 0 2px;
+	border: 0;
+	background: var(--success-500);
+	animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-mcp-connection-status::before {
+		animation: none;
+	}
+}
+
+/* Space, not a divider, sets the manual install apart; a line would read like a new step. */
+.frm-mcp-disclosure.frm-mcp-manual-skill {
+	margin-top: var(--gap-md);
+}
+
+.frm-mcp-manual-skill-row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: var(--gap-xs);
-	margin: var(--gap-md) 0 0;
-	padding-top: var(--gap-sm);
-	border-top: 1px solid var(--grey-200);
-}
-
-.frm-mcp-copy-row {
-	margin-bottom: var(--gap-sm);
-}
-
-.frm-mcp-configured-skill > button {
-	margin-top: var(--gap-xs);
-}
-
-.frm-mcp-configured-skill > .frm-mcp-credential-note {
-	margin-top: var(--gap-sm);
-	margin-bottom: 0;
-}
-
-.frm-mcp-configured-skill > div > .frm-mcp-prompt-label {
-	margin: var(--gap-md) 0 var(--gap-sm);
-}
-
-.frm-mcp-credentials-heading {
-	margin-top: var(--gap-md);
-	padding-top: var(--gap-md);
-	border-top: 1px solid var(--grey-200);
-}
-
-.frm-mcp-copy-row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: var(--gap-sm);
-	max-width: 840px;
-	margin: var(--gap-xs) 0;
-	padding: var(--gap-xs) var(--gap-sm);
-	border: 1px solid var(--grey-200);
-	border-radius: var(--small-radius);
-	background: var(--grey-25);
-}
-
-.frm-mcp-copy-row code {
-	min-width: 0;
-	padding: 0;
-	color: var(--grey-900);
-	background: transparent;
-	white-space: normal;
-	overflow-wrap: anywhere;
-}
-
-.frm-mcp-prompt-text {
-	min-width: 0;
-	white-space: pre-line;
-	color: var(--grey-900);
-	overflow-wrap: anywhere;
-}
-
-.frm-mcp-prompt-row {
-	align-items: flex-start;
-}
-
-.frm-mcp-copy-button {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	padding: var(--gap-2xs);
-	color: var(--grey-500);
-	background: transparent;
-	border: 0;
-	border-radius: var(--x-small-radius);
-	cursor: pointer;
-}
-
-.frm-mcp-copy-button:hover,
-.frm-mcp-copy-button:focus-visible {
-	color: var(--primary-500);
-	background: var(--primary-25);
-}
-
-.frm-mcp-copy-button:focus-visible {
-	outline: 2px solid var(--primary-500);
-	outline-offset: 2px;
+	gap: var(--gap-xs) var(--gap-sm);
+	margin: var(--gap-sm) 0 0;
 }
 
 /* Empty List */

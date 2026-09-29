@@ -41,9 +41,17 @@
 			return;
 		}
 
-		if ( e.target.closest( '.js-frm-mcp-download-env' ) ) {
-			// The download does not reload the page, so the step is checked off here.
+		const downloadButton = e.target.closest( '.js-frm-mcp-download-env' );
+		if ( downloadButton ) {
+			// The download does not reload the page, so the buttons and label are updated here.
 			completeMcpStep( 'env' );
+			const connected = document.getElementById( 'frm_mcp_step_connect' )?.classList.contains( 'frm-mcp-step-complete' );
+			document.querySelectorAll( '.js-frm-mcp-download-env, .js-frm-mcp-copy' ).forEach( button => {
+				const isPrimary = button.classList.contains( 'js-frm-mcp-copy' ) && ! connected;
+				button.classList.toggle( 'frm-button-primary', isPrimary );
+				button.classList.toggle( 'frm-button-secondary', ! isPrimary );
+			} );
+			downloadButton.querySelector( '.js-frm-mcp-download-label' ).textContent = downloadButton.dataset.newLabel;
 			waitForMcpConnection();
 			return;
 		}
@@ -72,7 +80,6 @@
 	 * @return {void}
 	 */
 	async function copyMcpInstruction( button ) {
-		const originalLabel = button.getAttribute( 'aria-label' );
 		const text = button.dataset.frmCopy;
 		let copied = false;
 
@@ -99,12 +106,17 @@
 			return;
 		}
 
-		button.setAttribute( 'aria-label', button.dataset.copiedLabel );
+		// Swap the visible label so the confirmation shows on the button itself.
+		const label = button.querySelector( '.js-frm-mcp-copy-label' );
+		const originalLabel = label.textContent;
 		const icon = button.querySelector( 'use' );
+		label.textContent = button.dataset.copiedLabel;
 		icon.setAttribute( 'href', '#frm_checkmark_icon' );
+		button.classList.add( 'frm-mcp-copied' );
 		setTimeout( () => {
-			button.setAttribute( 'aria-label', originalLabel );
-			icon.setAttribute( 'href', '#frm_clone_icon' );
+			label.textContent = originalLabel;
+			icon.setAttribute( 'href', '#frm-copy-icon' );
+			button.classList.remove( 'frm-mcp-copied' );
 		}, 1600 );
 	}
 
@@ -119,14 +131,8 @@
 	 * @return {void}
 	 */
 	function syncMcpClient() {
-		const placeholder = document.getElementById( 'frm_mcp_prompt_placeholder' );
-		if ( ! placeholder ) {
-			return;
-		}
-
 		const client = document.querySelector( 'input[name="frm_mcp_client_view"]:checked' )?.value;
 
-		placeholder.classList.toggle( 'frm_hidden', !! client );
 		[ 'claude', 'codex' ].forEach( name => {
 			document.getElementById( `frm_mcp_prompt_client_${ name }` ).classList.toggle( 'frm_hidden', name !== client );
 		} );
@@ -184,6 +190,10 @@
 				if ( response.connected ) {
 					clearInterval( globalVars.mcpConnectionTimer );
 					completeMcpStep( 'connect' );
+					// Setup is done, so nothing on the page stays primary.
+					document.querySelectorAll( '.js-frm-mcp-copy' ).forEach( button => {
+						button.classList.replace( 'frm-button-primary', 'frm-button-secondary' );
+					} );
 				}
 			} ).catch( () => {
 				// A failed check is retried on the next tick.
@@ -263,6 +273,18 @@
 	if ( document.getElementById( 'frm_mcp_steps' )?.dataset.waiting ) {
 		waitForMcpConnection();
 	}
+
+	// Replay the staggered reveal each time the server is switched on.
+	document.getElementById( 'frm_mcp' )?.addEventListener( 'change', e => {
+		const options = document.querySelector( '.frm_mcp_options' );
+		if ( ! options || ! e.target.checked ) {
+			return;
+		}
+
+		options.classList.remove( 'frm-mcp-reveal' );
+		options.getBoundingClientRect(); // Reflow, so the animation starts again.
+		options.classList.add( 'frm-mcp-reveal' );
+	} );
 
 	// Listen on the group so the prompt follows the selection. pageshow also
 	// covers a page restored from the back/forward cache.
