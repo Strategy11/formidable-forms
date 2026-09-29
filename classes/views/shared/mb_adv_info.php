@@ -93,6 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}//end if
 		?>
 		</ul>
+		<?php FrmFormsHelper::print_deferred_code_list_icons(); ?>
 	</div>
 
 	<?php

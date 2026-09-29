@@ -9791,10 +9791,25 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function hydrateDeferredCodeListIcons( container ) {
+		const template = container.querySelector( 'template.frm-code-list-icons' );
+		if ( ! template ) {
+			return;
+		}
+
+		// FrmFormsHelper::print_deferred_code_list_icons() prints each field type's icon once.
+		const icons = {};
+		template.content.querySelectorAll( '[data-frm-icon-key]' ).forEach( wrapper => {
+			icons[ wrapper.dataset.frmIconKey ] = wrapper.firstElementChild;
+		} );
+
 		container.querySelectorAll( '.frm_customize_field_list [data-frm-icon]' ).forEach( item => {
-			// The markup was built and sanitized by FrmAppHelper::icon_by_class().
-			const iconHtml = item.dataset.frmIcon;
-			item.querySelectorAll( ':scope > a.frm_insert_code' ).forEach( anchor => anchor.insertAdjacentHTML( 'afterbegin', iconHtml ) );
+			const icon = icons[ item.dataset.frmIcon ];
+			if ( icon ) {
+				item.querySelectorAll( ':scope > a.frm_insert_code' ).forEach( anchor => {
+					// eslint-disable-next-line formidable/prefer-document-fragment -- Each icon belongs to a different link.
+					anchor.prepend( icon.cloneNode( true ) );
+				} );
+			}
 			item.removeAttribute( 'data-frm-icon' );
 		} );
 	}
