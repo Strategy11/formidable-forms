@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since x.x
  */
 class FrmMcpSettingsController {
+	const TAB_ANCHOR = 'mcp_settings';
 
 	/**
 	 * Transient holding the latest skill release read from the GitHub API.
@@ -78,6 +79,7 @@ class FrmMcpSettingsController {
 			'class'    => 'FrmMcpSettingsController',
 			'function' => 'route',
 			'name'     => __( 'MCP', 'formidable' ),
+			'anchor'   => self::TAB_ANCHOR,
 			// The same cloud the API section uses, in both its real and placeholder
 			// form, since the two tabs are two faces of the same feature.
 			// frm_bolt_icon was here before and is not in images/icons.svg, so the
@@ -133,16 +135,209 @@ class FrmMcpSettingsController {
 	 * @return void
 	 */
 	public static function route() {
-		$mcp_enabled    = FrmMcpController::is_enabled();
-		$connections    = FrmMcpCompat::is_usable() ? FrmMcpConnection::get_connections() : null;
-		$blocked_reason = $mcp_enabled ? FrmMcpCompat::unsupported_reason() : '';
-		$is_inherited   = self::inherited_from_api_addon();
-		$skill_url      = self::get_skill_download_url();
-		$skill_release  = self::get_skill_release();
-		$skill_download = self::get_skill_download();
-		$skill_is_stale = self::skill_update_available( $skill_release, $skill_download );
+		$mcp_enabled        = FrmMcpController::is_enabled();
+		$connections        = FrmMcpCompat::is_usable() ? FrmMcpConnection::get_connections() : null;
+		$blocked_reason     = $mcp_enabled ? FrmMcpCompat::unsupported_reason() : '';
+		$is_inherited       = self::inherited_from_api_addon();
+		$skill_url          = self::get_skill_download_url();
+		$skill_release      = self::get_skill_release();
+		$skill_download     = self::get_skill_download();
+		$skill_is_stale     = self::skill_update_available( $skill_release, $skill_download );
+		$skill_status       = self::get_skill_status( $skill_release, $skill_download, $skill_is_stale );
+		$skill_passwords    = FrmMcpSkillEnvController::get_passwords( get_current_user_id() );
+		$env_available      = self::can_create_env_file();
+		$env_created        = (bool) $skill_passwords;
+		$last_used          = FrmMcpSkillEnvController::get_last_used( $skill_passwords );
+		$connection_text    = FrmMcpSkillEnvController::get_connection_message( $last_used );
+		$skill_passwords    = self::add_password_dates( $skill_passwords );
+		$admin_post_url     = admin_url( 'admin-post.php' );
+		$options_class      = $mcp_enabled ? 'frm_mcp_options' : 'frm_mcp_options frm_hidden';
+		$docs_urls          = self::get_docs_urls();
+		$connection_prompts = self::get_connection_prompts();
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/mcp.php';
+	}
+
+	/**
+	 * Check whether the current user can create a skill env file.
+	 *
+	 * The file holds an application password, so the site has to allow them for
+	 * this user and serve them over HTTPS, apart from a local environment.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function can_create_env_file() {
+		$user_id = get_current_user_id();
+
+		return wp_is_application_passwords_available_for_user( $user_id )
+		&& current_user_can( 'create_app_password', $user_id )
+		&& ( 'https' === wp_parse_url( home_url(), PHP_URL_SCHEME ) || 'local' === wp_get_environment_type() );
+	}
+
+	/**
+	 * Add a readable creation date to each skill application password.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<array> $skill_passwords Application passwords created for the skill env file.
+	 *
+	 * @return array<array>
+	 */
+	private static function add_password_dates( $skill_passwords ) {
+		$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+		foreach ( $skill_passwords as $index => $skill_password ) {
+			$skill_passwords[ $index ]['created_at'] = wp_date( $date_format, $skill_password['created'] );
+		}
+
+		return $skill_passwords;
+	}
+
+	/**
+	 * Get the documentation links shown in the MCP section.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string, string>
+	 */
+	private static function get_docs_urls() {
+		return array(
+			'overview' => self::get_mcp_doc_url( 'mcp-overview', 'mcp-global-settings' ),
+			'claude'   => self::get_mcp_doc_url( 'mcp-claude-code-skill', 'mcp-claude-settings', 'kb-install-in-claude-code' ),
+			'codex'    => self::get_mcp_doc_url( 'mcp-codex-skill', 'mcp-codex-settings', 'kb-install-in-codex' ),
+			'env'      => self::get_mcp_doc_url( 'mcp-env-download', 'mcp-global-settings', 'kb-connect-a-remote-site-through-http' ),
+		);
+	}
+
+	/**
+	 * Get a link to the MCP documentation page.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $utm_content  The utm_content value that names the link.
+	 * @param string $utm_campaign The campaign that names where on the page the link sits.
+	 * @param string $anchor       The heading to jump to on the documentation page, without the #.
+	 *
+	 * @return string
+	 */
+	private static function get_mcp_doc_url( $utm_content, $utm_campaign, $anchor = '' ) {
+		$url = add_query_arg(
+			'utm_content',
+			$utm_content,
+			FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', $utm_campaign )
+		);
+
+		if ( $anchor ) {
+			$url .= '#' . $anchor;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Get the prompts a user can paste into Claude Code or Codex to set up the skill.
+	 *
+	 * Only the first step differs between the two, since each installs the skill its own way.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string, string>
+	 */
+	private static function get_connection_prompts() {
+		// Run from the terminal rather than as /plugin slash commands, so the
+		// assistant can install the skill itself instead of asking the user to.
+		$claude_install = sprintf(
+			/* translators: 1: Command that adds the skill marketplace. 2: Command that installs the skill. */
+			__( '1. If the formidable-mcp skill is not installed, run %1$s and then %2$s in the terminal.', 'formidable' ),
+			'claude plugin marketplace add https://github.com/Strategy11/formidable-mcp-skill.git',
+			'claude plugin install formidable-mcp@formidable'
+		);
+
+		$codex_install = sprintf(
+			/* translators: %s: URL of the Formidable MCP skill directory. */
+			__( '1. If the formidable-mcp skill is not installed, install it from %s.', 'formidable' ),
+			'https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp'
+		);
+
+		return array(
+			'claude' => self::build_connection_prompt( $claude_install ),
+			'codex'  => self::build_connection_prompt( $codex_install ),
+		);
+	}
+
+	/**
+	 * Build a setup prompt around the step that installs the skill.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $install_step The numbered step that tells the assistant how to install the skill.
+	 *
+	 * @return string
+	 */
+	private static function build_connection_prompt( $install_step ) {
+		$lines = array(
+			sprintf(
+				/* translators: %s: The WordPress site URL to connect to Formidable MCP. */
+				__( 'Set up the Formidable MCP skill so you can manage the forms on my WordPress site at %s.', 'formidable' ),
+				home_url()
+			),
+			$install_step . ' ' . __( 'If the skill only loads after a restart, tell me.', 'formidable' ),
+			__( '2. Find the newest frm-mcp*.env file in my Downloads folder and move it beside the skill\'s scripts/frm-mcp helper, named frm-mcp.env.', 'formidable' )
+			. ' ' . __( 'Do not open, print, or paste the file or its credentials into chat.', 'formidable' ),
+			__( '3. Run the adjacent frm-mcp-setup script to confirm the connection, then use the helper for my Formidable requests.', 'formidable' ),
+		);
+
+		return implode( "\n", $lines );
+	}
+
+	/**
+	 * Build the short release summary displayed beside the skill download.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|false $release  The latest skill release.
+	 * @param array|false $download The current user's last skill download.
+	 * @param bool        $is_stale Whether the available release differs from the download.
+	 *
+	 * @return string Escaped HTML for the release summary.
+	 */
+	private static function get_skill_status( $release, $download, $is_stale ) {
+		if ( ! $release && ! $download ) {
+			return '';
+		}
+
+		$released_date   = $release ? self::relative_skill_date( $release['published'] ) : '';
+		$downloaded_date = $download ? self::relative_skill_date( $download['time'] ) : '';
+		$your_version    = $download ? $download['version'] : '';
+		$version         = $release ? esc_html( $release['version'] ) : esc_html( $your_version );
+
+		if ( $release && $release['url'] ) {
+			$version = '<a href="' . esc_url( $release['url'] ) . '" target="_blank" rel="noopener">' . $version . '</a>';
+		}
+
+		if ( $is_stale && $released_date ) {
+			/* translators: %1$s: The version of the skill that is available. %2$s: How long ago it was released, like "today". %3$s: The version this user downloaded. */
+			return sprintf( __( '%1$s released %2$s — you have %3$s', 'formidable' ), $version, esc_html( $released_date ), esc_html( $your_version ) );
+		}
+
+		if ( $is_stale ) {
+			/* translators: %1$s: The version of the skill that is available. %2$s: The version this user downloaded. */
+			return sprintf( __( '%1$s available — you have %2$s', 'formidable' ), $version, esc_html( $your_version ) );
+		}
+
+		if ( $version && $downloaded_date ) {
+			/* translators: %1$s: The version of the skill. %2$s: How long ago this user downloaded it, like "today". */
+			return sprintf( __( '%1$s — downloaded %2$s', 'formidable' ), $version, esc_html( $downloaded_date ) );
+		}
+
+		if ( $version && $released_date ) {
+			/* translators: %1$s: The version of the skill. %2$s: How long ago it was released, like "today". */
+			return sprintf( __( '%1$s released %2$s', 'formidable' ), $version, esc_html( $released_date ) );
+		}
+
+		return $version;
 	}
 
 	/**

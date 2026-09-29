@@ -820,7 +820,7 @@ namespace {
 }
 
 /**
- * The MCP adapter vendored in lib/vendor. Only what FrmMcpController calls is
+ * The MCP adapter vendored in lib/vendor. Only what FrmMcpController and FrmMcpConnection call is
  * stubbed: the adapter is loaded conditionally at runtime, so analysis cannot
  * see it, and FrmMcpCompat checks for the real thing before any of this is used.
  */
@@ -847,6 +847,19 @@ namespace WP\MCP\Core {
 		 * @return mixed True on success, or WP_Error on failure.
 		 */
 		public function create_server( $server_id, $server_route_namespace, $server_route, $server_name, $server_description, $server_version, $mcp_transports, $error_handler, $observability_handler = null, $tools = array() ) {
+		}
+	}
+}
+
+namespace WP\MCP\Transport\Infrastructure {
+	class SessionManager {
+		/**
+		 * @param int    $user_id    The user ID.
+		 * @param string $session_id The session ID.
+		 *
+		 * @return array|\WP_Error|false Session data on success, WP_Error on invalid input, false if not found or inactive.
+		 */
+		public static function get_session( int $user_id, string $session_id ) {
 		}
 	}
 }

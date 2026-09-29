@@ -51,6 +51,8 @@ class FrmMcpController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		FrmMcpSkillEnvController::load_hooks();
+
 		if ( self::api_addon_owns_mcp() ) {
 			// An API add-on that predates the move runs its own adapter, server,
 			// and abilities. Nothing here may register alongside it.
