@@ -7,6 +7,7 @@ const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
+const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -2806,7 +2807,10 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const { tooltips, ...loadedFields } = JSON.parse( response );
+		const { tooltips, selectOptions, ...loadedFields } = JSON.parse( response );
+		if ( selectOptions ) {
+			frm_admin_js.selectOptions = { ...frm_admin_js.selectOptions, ...selectOptions };
+		}
 		const newFields = [];
 
 		// The text behind each data-tip-key in this batch. Keys are hashes of the text, so merging
@@ -8633,6 +8637,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const singleField = document.getElementById( `frm-single-settings-${ fieldId }` );
+		hydrateBuilderSelectsIn( singleField );
 		moveFieldSettings( singleField );
 
 		if ( fieldType && 'quantity' === fieldType ) {
@@ -10427,6 +10432,7 @@ window.frmAdminBuildJS = function() {
 		const $multiselect = ( container ? jQuery( container ).find( '.frm_multiselect' ) : jQuery( '.frm_multiselect' ) )
 			.not( '.frm-single-settings.frm_hidden .frm_multiselect' );
 
+		$multiselect.toArray().forEach( hydrateBuilderSelect );
 		$multiselect.hide().each( frmDom.bootstrap.multiselect.init );
 	}
 
@@ -11742,6 +11748,11 @@ window.frmAdminBuildJS = function() {
 		},
 
 		buildInit() {
+			document.addEventListener( 'focusin', event => {
+				if ( event.target.matches( 'select[data-frm-options]' ) ) {
+					hydrateBuilderSelect( event.target );
+				}
+			} );
 			jQuery( '#frm_builder_page' ).on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
 
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
