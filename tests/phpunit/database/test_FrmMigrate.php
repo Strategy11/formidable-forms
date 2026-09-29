@@ -2,11 +2,15 @@
 
 /**
  * @group database
+ *
+ * @covers FrmMigrate
  */
+#[\PHPUnit\Framework\Attributes\Group( 'database' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmMigrate::class )]
 class test_FrmMigrate extends FrmUnitTest {
 
 	/**
-	 * @covers FrmMigrate::upgrade
+	 * @see FrmMigrate::upgrade
 	 *
 	 * @todo Check if style was created
 	 */
@@ -20,9 +24,6 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->assertSame( $new_version, FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
 	}
 
-	/**
-	 * @covers FrmMigrate::maybe_create_contact_form
-	 */
 	public function test_maybe_create_contact_form() {
 		delete_option( 'frm_db_version' );
 		$frmdb = new FrmMigrate();
@@ -43,8 +44,8 @@ class test_FrmMigrate extends FrmUnitTest {
 	/**
 	 * Test to make sure a migration isn't run again
 	 *
-	 * @covers FrmMigrate::migrate_data
-	 * @covers FrmMigrate::migrate_to_17
+	 * @see FrmMigrate::migrate_data
+	 * @see FrmMigrate::migrate_to_17
 	 */
 	public function test_migrate_to_17() {
 		$form_id = $this->factory->form->create();
@@ -93,9 +94,6 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->assertSame( $expected_size, $field->field_options['size'] );
 	}
 
-	/**
-	 * @covers FrmMigrate::migrate_to_86
-	 */
 	public function test_migrate_to_86() {
 		$form_id   = $this->factory->form->create();
 		$sizes     = array(
@@ -130,9 +128,6 @@ class test_FrmMigrate extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmMigrate::migrate_to_97
-	 */
 	public function test_migrate_to_97() {
 		$form_id  = $this->factory->form->create();
 		$settings = array(
@@ -297,9 +292,6 @@ class test_FrmMigrate extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmMigrate::collation
-	 */
 	public function test_collation() {
 		global $wpdb;
 
@@ -322,9 +314,6 @@ class test_FrmMigrate extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmMigrate::migrate_to_16
-	 */
 	public function test_migrate_from_12_to_current() {
 		self::frm_install();
 
@@ -370,9 +359,6 @@ class test_FrmMigrate extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmMigrate::uninstall
-	 */
 	public function test_uninstall() {
 		$this->set_user_by_role( 'administrator' );
 

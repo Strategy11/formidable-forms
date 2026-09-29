@@ -2,7 +2,11 @@
 
 /**
  * @group ajax
+ *
+ * @covers FrmFormsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'ajax' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormsController::class )]
 class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 	public function setUp(): void {
@@ -13,7 +17,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
-	 * @covers FrmFormsController::update
+	 * @see FrmFormsController::update
 	 * with ajax
 	 */
 	public function test_form_update_with_ajax() {

@@ -2,12 +2,13 @@
 
 /**
  * @group forms
+ *
+ * @covers FrmFormsListHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormsListHelper::class )]
 class test_FrmFormsListHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmFormsListHelper::get_posts_contain_form
-	 */
 	public function test_get_posts_contain_form() {
 		$form = $this->factory->form->create_and_get();
 

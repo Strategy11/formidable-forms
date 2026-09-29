@@ -2,7 +2,21 @@
 
 /**
  * @group fields
+ *
+ * @covers FrmEntryValidate
+ * @covers FrmFieldEmail
+ * @covers FrmFieldNumber
+ * @covers FrmFieldPhone
+ * @covers FrmFieldType
+ * @covers FrmFieldUrl
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryValidate::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldEmail::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldNumber::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldPhone::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldType::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldUrl::class )]
 class test_FrmFieldValidate extends FrmUnitTest {
 
 	protected $form;
@@ -33,9 +47,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		return array_diff( $fields, $exclude );
 	}
 
-	/**
-	 * @covers FrmEntryValidate::validate
-	 */
 	public function test_not_required_fields() {
 		$_POST = array(
 			'form_id'   => $this->form->id,
@@ -58,12 +69,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertEmpty( $errors, 'A field was required when it should not have been. ' . implode( ', ', $error_fields ) );
 	}
 
-	/**
-	 * @covers FrmFieldType::validate
-	 * @covers FrmFieldNumber::validate
-	 * @covers FrmFieldPhone::validate
-	 * @covers FrmFieldUrl::validate
-	 */
 	public function test_format_validation() {
 		$test_formats = $this->expected_format_errors();
 
@@ -123,9 +128,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmEntryValidate::validate
-	 */
 	public function test_empty_required_fields() {
 		$fields = $this->factory->field->get_fields_from_form( $this->form->id );
 		$this->set_required_fields( $fields );
@@ -171,7 +173,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	/**
 	 * When a url field is required, http:// should not pass
 	 *
-	 * @covers FrmFieldUrl::validate
+	 * @see FrmFieldUrl::validate
 	 */
 	public function test_url_value() {
 		$field = FrmField::getOne( $this->get_field_key( 'url' ) );
@@ -183,9 +185,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertArrayHasKey( 'field' . $field->id, $errors, 'http:// passed required validation ' . print_r( $errors, 1 ) );
 	}
 
-	/**
-	 * @covers FrmFieldEmail::validate
-	 */
 	public function test_email_value() {
 		$field = $this->factory->field->get_object_by_id( $this->get_field_key( 'email' ) );
 		$this->assertNotEmpty( $field );
@@ -201,9 +200,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'Properly formatted email did not pass validation ' . print_r( $errors, 1 ) );
 	}
 
-	/**
-	 * @covers FrmFieldNumber::validate
-	 */
 	public function test_number_validation() {
 		$field  = $this->factory->field->get_object_by_id( $this->get_field_key( 'number' ) );
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
@@ -275,9 +271,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		return FrmEntryValidate::validate( $_POST );
 	}
 
-	/**
-	 * @covers FrmEntryValidate::phone_format
-	 */
 	public function test_phone_format() {
 		$check_formats = array(
 			array(
@@ -315,9 +308,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmEntryValidate::create_regular_expression_from_format
-	 */
 	public function test_create_regular_expression_from_format() {
 		$formats = array(
 			'(999)999-2323' => '^\(\d\d\d\)\d\d\d-\d\d\d\d$',
@@ -333,9 +323,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmEntryValidate::is_akismet_enabled_for_user
-	 */
 	public function test_is_akismet_enabled_for_user() {
 		$this->assertEmpty( $this->form->options['akismet'] );
 		$enabled = $this->run_private_method( array( 'FrmEntryValidate', 'is_akismet_enabled_for_user' ), array( $this->form->id ) );
