@@ -252,18 +252,30 @@ class FrmMcpConnection {
 			);
 		}
 
+		// Name fragment => label and icon. Grok Build connects as grok-shell-{server},
+		// and there is no Grok icon without a license notice, so it gets none.
 		$products = array(
-			'claude' => 'Claude',
-			'codex'  => 'Codex',
-			'cursor' => 'Cursor',
+			'claude' => array(
+				'label' => 'Claude',
+				'icon'  => 'claude',
+			),
+			'codex'  => array(
+				'label' => 'Codex',
+				'icon'  => 'codex',
+			),
+			'cursor' => array(
+				'label' => 'Cursor',
+				'icon'  => 'cursor',
+			),
+			'grok'   => array(
+				'label' => 'Grok',
+				'icon'  => '',
+			),
 		);
 
-		foreach ( $products as $icon => $label ) {
-			if ( str_contains( $name, $icon ) ) {
-				return array(
-					'label' => $label,
-					'icon'  => $icon,
-				);
+		foreach ( $products as $fragment => $details ) {
+			if ( str_contains( $name, $fragment ) ) {
+				return $details;
 			}
 		}
 
