@@ -70,6 +70,7 @@ class FrmMcpController {
 		add_filter( 'rest_pre_dispatch', 'FrmMcpController::explain_disabled_mcp', 10, 3 );
 
 		FrmMcpConnection::load_hooks();
+		FrmMcpUsageController::load_hooks();
 
 		// Answers a client that asks for an ability belonging to an add-on this
 		// site does not have. Hooked here rather than alongside the abilities

@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * called most recently, and the clients (Claude Code, Codex, and so on) that
  * made them. The summary is shown on the MCP global settings page.
  *
- * The same requests fire the frm_mcp_request action, which is how the API
- * add-on feeds them into Formidable's usage tracking without this class having
- * to know the add-on exists.
+ * The same requests fire the frm_mcp_request action, which is how
+ * FrmMcpUsageController counts them in Formidable's usage tracking without
+ * this class having to know about it.
  *
  * @since x.x
  */
@@ -103,9 +103,10 @@ class FrmMcpConnection {
 		/**
 		 * Fires for every authenticated request to the Formidable MCP server.
 		 *
-		 * The API add-on hooks this to count the endpoint and the client in
-		 * Formidable's usage tracking, which is where this lived before the MCP
-		 * server moved into Formidable itself.
+		 * FrmMcpUsageController hooks this to count the endpoint and the client
+		 * in Formidable's usage tracking. The API add-on counted them before the
+		 * MCP server moved into Formidable, and a release of it that still does
+		 * is left to count them instead.
 		 *
 		 * @since x.x
 		 *
