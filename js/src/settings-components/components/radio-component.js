@@ -1,8 +1,8 @@
 /**
  * Internal dependencies
  */
-import { HIDDEN_CLASS } from 'core/constants';
-import { show, hide, isVisible } from 'core/utils';
+import { HIDDEN_CLASS, HOOKS } from 'core/constants';
+import { show, hide } from 'core/utils';
 
 /**
  * Represents a radio component.
@@ -11,30 +11,18 @@ import { show, hide, isVisible } from 'core/utils';
  */
 export default class frmRadioComponent {
 	constructor() {
-		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
+		this.radioElements = Array.from( document.querySelectorAll( '.frm-style-component.frm-radio-component' ) )
+			.filter( element => ! element.closest( '.frm-single-settings' ) );
 		this.observers = new Map();
+		this.initializedRadios = new WeakSet();
+		this.activeFieldSettings = null;
 		if ( 0 < this.radioElements.length ) {
 			this.init();
 		}
 
-		/**
-		 * Handles the addition of new fields.
-		 *
-		 * @param {Event}       event          The frm_added_field event.
-		 * @param {HTMLElement} event.frmField The added field object being destructured from the event.
-		 */
-		document.addEventListener( 'frm_added_field', ( { frmField } ) =>
-			this.discoverAndInitFieldRadios( frmField.dataset.fid )
-		);
-
-		/**
-		 * Handles the addition of new fields via AJAX.
-		 *
-		 * @param {Event}       event           The frm_ajax_loaded_field event.
-		 * @param {HTMLElement} event.frmFields The added field objects being destructured from the event.
-		 */
-		document.addEventListener( 'frm_ajax_loaded_field', ( { frmFields } ) =>
-			frmFields.forEach( field => this.discoverAndInitFieldRadios( field.id ) )
+		// Field settings, including newly added and batch-loaded fields, initialize on first use.
+		wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-radio-component', ( obj, fieldSettingsEl ) =>
+			this.discoverAndInitFieldRadios( fieldSettingsEl.dataset.fid )
 		);
 
 		// Cleanup observers when page unloads to prevent memory leaks
@@ -66,6 +54,14 @@ export default class frmRadioComponent {
 			throw new Error( `Field container not found for field ID: ${ fieldId }` );
 		}
 
+		// Keep style-editor observers, but stop observing the previous field's settings.
+		this.observers.forEach( ( observer, element ) => {
+			if ( this.activeFieldSettings?.contains( element ) ) {
+				observer.disconnect();
+				this.observers.delete( element );
+			}
+		} );
+		this.activeFieldSettings = fieldContainer;
 		this.radioElements = fieldContainer.querySelectorAll( '.frm-style-component.frm-radio-component' );
 		this.initRadio();
 	}
@@ -105,6 +101,10 @@ export default class frmRadioComponent {
 			if ( radio.checked ) {
 				this.onRadioChange( radio );
 			}
+			if ( this.initializedRadios.has( radio ) ) {
+				return;
+			}
+			this.initializedRadios.add( radio );
 			radio.addEventListener( 'change', event => {
 				this.onRadioChange( event.target );
 			} );
@@ -124,7 +124,9 @@ export default class frmRadioComponent {
 			return;
 		}
 
-		this.moveTracker( activeItem, wrapper );
+		if ( wrapper.getClientRects().length ) {
+			this.moveTracker( activeItem, wrapper );
+		}
 		this.hideExtraElements( target );
 		this.maybeShowExtraElements( target );
 	}
@@ -140,7 +142,8 @@ export default class frmRadioComponent {
 			return;
 		}
 
-		const elements = document.querySelectorAll( `div[data-frm-element="${ elementAttr }"]` );
+		const container = radio.closest( '.frm-single-settings' ) || document;
+		const elements = container.querySelectorAll( `div[data-frm-element="${ elementAttr }"]` );
 
 		if ( 0 === elements.length ) {
 			return;
@@ -163,9 +166,9 @@ export default class frmRadioComponent {
 		}
 		this.resizeTimeout = requestAnimationFrame( () => {
 			this.resizeTimeout = null;
-			document.querySelectorAll( '.frm-radio-component input[type="radio"]:checked' ).forEach( radio => {
-				const wrapper = radio.closest( '.frm-radio-component' );
-				if ( wrapper && wrapper.offsetWidth > 0 ) {
+			this.observers.forEach( ( observer, wrapper ) => {
+				const radio = wrapper.querySelector( 'input[type="radio"]:checked' );
+				if ( radio && wrapper.getClientRects().length ) {
 					this.onRadioChange( radio );
 				}
 			} );
@@ -185,7 +188,7 @@ export default class frmRadioComponent {
 
 		const observer = new MutationObserver( () => {
 			// Check if element is now visible
-			if ( isVisible( element ) ) {
+			if ( element.getClientRects().length ) {
 				const radio = element.querySelector( 'input[type="radio"]:checked' );
 				if ( radio ) {
 					this.onRadioChange( radio );
@@ -225,9 +228,12 @@ export default class frmRadioComponent {
 
 	/**
 	 * Hide the possible opepend extra elements.
+	 *
+	 * @param {HTMLElement} [target] The radio whose related settings are being updated.
 	 */
-	hideExtraElements() {
-		const elements = document.querySelectorAll( '.frm-element-is-visible' );
+	hideExtraElements( target ) {
+		const container = target?.closest( '.frm-single-settings' ) || document;
+		const elements = container.querySelectorAll( '.frm-element-is-visible' );
 		if ( 0 === elements.length ) {
 			return;
 		}
