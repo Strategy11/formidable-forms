@@ -73,11 +73,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'name'       => $f->name,
 						'type'       => $f->type,
 						'class'      => 'frm-customize-list dropdown-item',
-						'defer_icon' => true,
+						'defer_icon' => $defer_icon,
 					)
 				);
 
-				do_action( 'frm_field_code_tab', array( 'field' => $f, 'defer_icon' => true ) );
+				do_action(
+					'frm_field_code_tab',
+					array(
+						'field'      => $f,
+						'defer_icon' => $defer_icon,
+					)
+				);
 
 				if ( $f->type === 'user_id' ) {
 					$uid = $f->id;

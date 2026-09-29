@@ -1055,9 +1055,6 @@ window.frmAdminBuildJS = function() {
 
 		const targetEl = document.getElementById( targetId );
 		if ( targetEl ) {
-			if ( targetId === 'frm-adv-info-tab' ) {
-				hydrateDeferredCodeListIcons( targetEl );
-			}
 			showTabPanel( targetEl );
 		}
 
@@ -9794,30 +9791,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function hydrateDeferredCodeListIcons( container ) {
-		const deprecatedIcons = {
-			frm_clone_solid_icon: 'frm_clone_icon',
-			frm_keyalt_icon: 'frm_key_icon',
-			frm_keyalt_solid_icon: 'frm_key_solid_icon'
-		};
 		container.querySelectorAll( '.frm_customize_field_list [data-frm-icon]' ).forEach( item => {
-			const iconClass = item.dataset.frmIcon;
-			const classNames = iconClass.split( /\s+/ ).filter( Boolean );
-			const isSvg = classNames.includes( 'frmfont' ) || classNames.includes( 'frm_icon_font' );
-			const iconClasses = classNames.filter( name => name !== 'frmfont' && name !== 'frm_icon_font' );
-			const iconName = deprecatedIcons[ iconClasses[ 0 ] ] || iconClasses[ 0 ];
-			if ( ! iconName ) {
-				item.removeAttribute( 'data-frm-icon' );
-				return;
-			}
-			iconClasses[ 0 ] = iconName;
-			item.querySelectorAll( ':scope > a.frm_insert_code' ).forEach( anchor => {
-				const icon = isSvg
-					? frmDom.svg( { href: `#${ iconName }`, classList: iconClasses.slice( 1 ) } )
-					: frmDom.tag( 'i', { className: iconClasses.join( ' ' ) } );
-				icon.setAttribute( 'aria-hidden', 'true' );
-				// eslint-disable-next-line formidable/prefer-document-fragment -- Each icon belongs to a different link.
-				anchor.prepend( icon );
-			} );
+			// The markup was built and sanitized by FrmAppHelper::icon_by_class().
+			const iconHtml = item.dataset.frmIcon;
+			item.querySelectorAll( ':scope > a.frm_insert_code' ).forEach( anchor => anchor.insertAdjacentHTML( 'afterbegin', iconHtml ) );
 			item.removeAttribute( 'data-frm-icon' );
 		} );
 	}

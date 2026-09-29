@@ -930,7 +930,8 @@ BEFORE_HTML;
 	 *                    and 'key_label' to show something other than the id or key, and
 	 *                    'name_suffix'/'key_suffix' for text appended after the name or key is
 	 *                    truncated, so a shortcode option like ' show=first' survives the truncation.
-	 *                    Set 'defer_icon' when the code list is hidden until opened.
+	 *                    Set 'defer_icon' when the code list is hidden until opened, so the icon
+	 *                    markup is stored in a data-frm-icon attribute for JS to add later.
 	 *
 	 * @return void
 	 */
@@ -964,7 +965,14 @@ BEFORE_HTML;
 		$item_attrs = array( 'class' => $class );
 
 		if ( ! empty( $args['defer_icon'] ) ) {
-			$item_attrs['data-frm-icon'] = $field['icon'];
+			// Resolve the icon here so JS only has to insert the finished markup.
+			$item_attrs['data-frm-icon'] = FrmAppHelper::icon_by_class(
+				$field['icon'],
+				array(
+					'aria-hidden' => 'true',
+					'echo'        => false,
+				)
+			);
 		}
 		?>
 		<li<?php FrmAppHelper::array_to_html_params( $item_attrs, true ); ?>>
