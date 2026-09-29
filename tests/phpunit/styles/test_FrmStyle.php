@@ -2,12 +2,13 @@
 
 /**
  * @group styles
+ *
+ * @covers FrmStyle
  */
+#[\PHPUnit\Framework\Attributes\Group( 'styles' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStyle::class )]
 class test_FrmStyle extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStyle::maybe_sanitize_rgba_value
-	 */
 	public function test_maybe_sanitize_rgba_value() {
 		$frm_style            = new FrmStyle();
 		$invalid_color_values = array(
@@ -37,10 +38,6 @@ class test_FrmStyle extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmStyle::sanitize_post_content
-	 * @covers FrmStyle::strip_invalid_characters
-	 */
 	public function test_sanitize_post_content() {
 		$post_content           = array(
 			'bg_color'             => '000',
@@ -80,9 +77,6 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertArrayNotHasKey( 'unsupported_key', $sanitized_post_content );
 	}
 
-	/**
-	 * @covers FrmStyle::strip_invalid_characters
-	 */
 	public function test_strip_invalid_characters() {
 		// Make sure that braces don't get added to sizes but removed instead.
 		$this->assertSame( '12px', $this->strip_invalid_characters( '12px(' ) );
@@ -115,9 +109,6 @@ class test_FrmStyle extends FrmUnitTest {
 		return $this->run_private_method( array( $frm_style, 'strip_invalid_characters' ), array( $input ) );
 	}
 
-	/**
-	 * @covers FrmStyle::force_balanced_quotation
-	 */
 	public function test_force_balanced_quotation() {
 		$frm_style = new FrmStyle();
 
@@ -157,9 +148,6 @@ class test_FrmStyle extends FrmUnitTest {
 		return $this->run_private_method( array( $frm_style, 'trim_braces' ), array( $value ) );
 	}
 
-	/**
-	 * @covers FrmStyle::get_post_name_to_save
-	 */
 	public function test_get_post_name_to_save_no_rename() {
 		$frm_style    = new FrmStyle( 123 );
 		$new_instance = array(
@@ -174,9 +162,6 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertSame( 'existing-slug', $post_name );
 	}
 
-	/**
-	 * @covers FrmStyle::get_post_name_to_save
-	 */
 	public function test_get_post_name_to_save_rename() {
 		$frm_style    = new FrmStyle( 123 );
 		$new_instance = array(
@@ -192,9 +177,6 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertSame( 'my-renamed-class', $post_name );
 	}
 
-	/**
-	 * @covers FrmStyle::get_post_name_to_save
-	 */
 	public function test_get_post_name_to_save_rename_resolves_slug_collision() {
 		$other_style_id = wp_insert_post(
 			array(
@@ -221,9 +203,6 @@ class test_FrmStyle extends FrmUnitTest {
 		wp_delete_post( $other_style_id, true );
 	}
 
-	/**
-	 * @covers FrmStyle::get_post_name_to_save
-	 */
 	public function test_get_post_name_to_save_new_style_uses_title() {
 		$frm_style    = new FrmStyle( 0 );
 		$new_instance = array(
@@ -240,7 +219,7 @@ class test_FrmStyle extends FrmUnitTest {
 	/**
 	 * A duplicated style shares its source style's title, so its title-derived slug collides too.
 	 *
-	 * @covers FrmStyle::get_post_name_to_save
+	 * @see FrmStyle::get_post_name_to_save
 	 */
 	public function test_get_post_name_to_save_new_style_resolves_slug_collision() {
 		$other_style_id = wp_insert_post(
@@ -277,9 +256,6 @@ class test_FrmStyle extends FrmUnitTest {
 		return $this->run_private_method( array( $frm_style, 'get_post_name_to_save' ), array( $new_instance, $is_existing ) );
 	}
 
-	/**
-	 * @covers FrmStyle::get_all
-	 */
 	public function test_get_all() {
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all();

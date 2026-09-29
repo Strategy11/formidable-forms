@@ -2,12 +2,13 @@
 
 /**
  * @group fields
+ *
+ * @covers FrmFieldsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmFieldsController::prepare_placeholder
-	 */
 	public function test_prepare_placeholder() {
 		$name        = 'Number';
 		$field       = array(
@@ -36,9 +37,6 @@ class test_FrmFieldsController extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmFieldsController', 'prepare_placeholder' ), array( $field ) );
 	}
 
-	/**
-	 * @covers FrmFieldsController::pull_custom_error_body_from_custom_html
-	 */
 	public function test_pull_custom_error_body_from_custom_html() {
 		$form       = $this->factory->form->create_and_get();
 		$field      = $this->factory->field->create_and_get(
@@ -68,9 +66,6 @@ class test_FrmFieldsController extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmFieldsController::include_new_field
-	 */
 	public function test_include_new_field() {
 		$form_id = $this->factory->form->create();
 		ob_start();
@@ -91,9 +86,6 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$this->assertSame( 1, $new_field['draft'] );
 	}
 
-	/**
-	 * @covers FrmFieldsController::add_validation_messages
-	 */
 	public function test_add_validation_messages() {
 		$form_id  = $this->factory->form->create();
 		$field    = $this->factory->field->create_and_get(

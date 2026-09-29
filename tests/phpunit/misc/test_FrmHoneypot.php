@@ -2,7 +2,11 @@
 
 /**
  * @group spam
+ *
+ * @covers FrmHoneypot
  */
+#[\PHPUnit\Framework\Attributes\Group( 'spam' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmHoneypot::class )]
 class test_FrmHoneypot extends FrmUnitTest {
 
 	private $form_id;
@@ -37,9 +41,6 @@ class test_FrmHoneypot extends FrmUnitTest {
 		$state_class::set_initial_value( 'honeypot_field_id', $max_field_id ? $max_field_id + 1 : 1 );
 	}
 
-	/**
-	 * @covers FrmHoneypot::validate
-	 */
 	public function test_validate() {
 		$honeypot_field_id = $this->run_private_method( array( $this->honeypot, 'get_honeypot_field_id' ) );
 
@@ -50,9 +51,6 @@ class test_FrmHoneypot extends FrmUnitTest {
 		$this->assertFalse( $this->honeypot->validate() );
 	}
 
-	/**
-	 * @covers FrmHoneypot::is_honeypot_spam
-	 */
 	public function test_is_honeypot_spam() {
 		$honeypot_field_id = $this->run_private_method( array( $this->honeypot, 'get_honeypot_field_id' ) );
 
@@ -67,9 +65,6 @@ class test_FrmHoneypot extends FrmUnitTest {
 		return $this->run_private_method( array( $this->honeypot, 'is_honeypot_spam' ) );
 	}
 
-	/**
-	 * @covers FrmHoneypot::is_option_on
-	 */
 	public function test_is_option_on() {
 		$this->assertTrue( $this->is_option_on(), 'Honeypot should be on by default' );
 

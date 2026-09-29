@@ -2,7 +2,8 @@
 /**
  * @group ajax
  */
-class Tests_Frm_Ajax extends FrmAjaxUnitTest {
+#[\PHPUnit\Framework\Attributes\Group( 'ajax' )]
+class test_FrmAjax extends FrmAjaxUnitTest {
 
 	public function test_plugin_activated() {
 		$this->assertTrue( is_plugin_active( 'formidable/formidable.php' ) );
