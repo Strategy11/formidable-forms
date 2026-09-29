@@ -135,103 +135,161 @@ class FrmMcpSettingsController {
 	 * @return void
 	 */
 	public static function route() {
-		$mcp_enabled     = FrmMcpController::is_enabled();
-		$connections     = FrmMcpCompat::is_usable() ? FrmMcpConnection::get_connections() : null;
-		$blocked_reason  = $mcp_enabled ? FrmMcpCompat::unsupported_reason() : '';
-		$is_inherited    = self::inherited_from_api_addon();
-		$skill_url       = self::get_skill_download_url();
-		$skill_release   = self::get_skill_release();
-		$skill_download  = self::get_skill_download();
-		$skill_is_stale  = self::skill_update_available( $skill_release, $skill_download );
-		$skill_passwords = FrmMcpSkillEnvController::get_passwords( get_current_user_id() );
-		$env_available   = wp_is_application_passwords_available_for_user( get_current_user_id() )
-		&& current_user_can( 'create_app_password', get_current_user_id() )
+		$mcp_enabled        = FrmMcpController::is_enabled();
+		$connections        = FrmMcpCompat::is_usable() ? FrmMcpConnection::get_connections() : null;
+		$blocked_reason     = $mcp_enabled ? FrmMcpCompat::unsupported_reason() : '';
+		$is_inherited       = self::inherited_from_api_addon();
+		$skill_url          = self::get_skill_download_url();
+		$skill_release      = self::get_skill_release();
+		$skill_download     = self::get_skill_download();
+		$skill_is_stale     = self::skill_update_available( $skill_release, $skill_download );
+		$skill_status       = self::get_skill_status( $skill_release, $skill_download, $skill_is_stale );
+		$skill_passwords    = FrmMcpSkillEnvController::get_passwords( get_current_user_id() );
+		$env_available      = self::can_create_env_file();
+		$env_created        = (bool) $skill_passwords;
+		$last_used          = FrmMcpSkillEnvController::get_last_used( $skill_passwords );
+		$connection_text    = FrmMcpSkillEnvController::get_connection_message( $last_used );
+		$skill_passwords    = self::add_password_dates( $skill_passwords );
+		$admin_post_url     = admin_url( 'admin-post.php' );
+		$options_class      = $mcp_enabled ? 'frm_mcp_options' : 'frm_mcp_options frm_hidden';
+		$docs_urls          = self::get_docs_urls();
+		$connection_prompts = self::get_connection_prompts();
+
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/mcp.php';
+	}
+
+	/**
+	 * Check whether the current user can create a skill env file.
+	 *
+	 * The file holds an application password, so the site has to allow them for
+	 * this user and serve them over HTTPS, apart from a local environment.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function can_create_env_file() {
+		$user_id = get_current_user_id();
+
+		return wp_is_application_passwords_available_for_user( $user_id )
+		&& current_user_can( 'create_app_password', $user_id )
 		&& ( 'https' === wp_parse_url( home_url(), PHP_URL_SCHEME ) || 'local' === wp_get_environment_type() );
-		$env_created     = (bool) $skill_passwords;
-		$last_used       = FrmMcpSkillEnvController::get_last_used( $skill_passwords );
-		$connection_text = FrmMcpSkillEnvController::get_connection_message( $last_used );
-		$admin_post_url  = admin_url( 'admin-post.php' );
-		$options_class   = $mcp_enabled ? 'frm_mcp_options' : 'frm_mcp_options frm_hidden';
+	}
+
+	/**
+	 * Add a readable creation date to each skill application password.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<array> $skill_passwords Application passwords created for the skill env file.
+	 *
+	 * @return array<array>
+	 */
+	private static function add_password_dates( $skill_passwords ) {
+		$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+		foreach ( $skill_passwords as $index => $skill_password ) {
+			$skill_passwords[ $index ]['created_at'] = wp_date( $date_format, $skill_password['created'] );
+		}
+
+		return $skill_passwords;
+	}
+
+	/**
+	 * Get the documentation links shown in the MCP section.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string, string>
+	 */
+	private static function get_docs_urls() {
+		return array(
+			'overview' => self::get_mcp_doc_url( 'mcp-overview', 'mcp-global-settings' ),
+			'claude'   => self::get_mcp_doc_url( 'mcp-claude-code-skill', 'mcp-claude-settings', 'kb-install-in-claude-code' ),
+			'codex'    => self::get_mcp_doc_url( 'mcp-codex-skill', 'mcp-codex-settings', 'kb-install-in-codex' ),
+			'env'      => self::get_mcp_doc_url( 'mcp-env-download', 'mcp-global-settings', 'kb-connect-a-remote-site-through-http' ),
+		);
+	}
+
+	/**
+	 * Get a link to the MCP documentation page.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $utm_content  The utm_content value that names the link.
+	 * @param string $utm_campaign The campaign that names where on the page the link sits.
+	 * @param string $anchor       The heading to jump to on the documentation page, without the #.
+	 *
+	 * @return string
+	 */
+	private static function get_mcp_doc_url( $utm_content, $utm_campaign, $anchor = '' ) {
+		$url = add_query_arg(
+			'utm_content',
+			$utm_content,
+			FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', $utm_campaign )
+		);
+
+		if ( $anchor ) {
+			$url .= '#' . $anchor;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Get the prompts a user can paste into Claude Code or Codex to set up the skill.
+	 *
+	 * Only the first step differs between the two, since each installs the skill its own way.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string, string>
+	 */
+	private static function get_connection_prompts() {
 		// Run from the terminal rather than as /plugin slash commands, so the
 		// assistant can install the skill itself instead of asking the user to.
-		$claude_commands = array(
+		$claude_install = sprintf(
+			/* translators: 1: Command that adds the skill marketplace. 2: Command that installs the skill. */
+			__( '1. If the formidable-mcp skill is not installed, run %1$s and then %2$s in the terminal.', 'formidable' ),
 			'claude plugin marketplace add https://github.com/Strategy11/formidable-mcp-skill.git',
-			'claude plugin install formidable-mcp@formidable',
+			'claude plugin install formidable-mcp@formidable'
 		);
 
-		$skill_repository_path = 'https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp';
-		$skill_status          = self::get_skill_status( $skill_release, $skill_download, $skill_is_stale );
-		$docs_urls             = array(
-			'overview' => add_query_arg(
-				'utm_content',
-				'mcp-overview',
-				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' )
+		$codex_install = sprintf(
+			/* translators: %s: URL of the Formidable MCP skill directory. */
+			__( '1. If the formidable-mcp skill is not installed, install it from %s.', 'formidable' ),
+			'https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp'
+		);
+
+		return array(
+			'claude' => self::build_connection_prompt( $claude_install ),
+			'codex'  => self::build_connection_prompt( $codex_install ),
+		);
+	}
+
+	/**
+	 * Build a setup prompt around the step that installs the skill.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $install_step The numbered step that tells the assistant how to install the skill.
+	 *
+	 * @return string
+	 */
+	private static function build_connection_prompt( $install_step ) {
+		$lines = array(
+			sprintf(
+				/* translators: %s: The WordPress site URL to connect to Formidable MCP. */
+				__( 'Set up the Formidable MCP skill so you can manage the forms on my WordPress site at %s.', 'formidable' ),
+				home_url()
 			),
-			'claude'   => add_query_arg(
-				'utm_content',
-				'mcp-claude-code-skill',
-				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-claude-settings' )
-			) . '#kb-install-in-claude-code',
-			'codex'    => add_query_arg(
-				'utm_content',
-				'mcp-codex-skill',
-				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-codex-settings' )
-			) . '#kb-install-in-codex',
-			'env'      => add_query_arg(
-				'utm_content',
-				'mcp-env-download',
-				FrmAppHelper::get_doc_url( 'connect-formidable-forms-to-your-ai-agent-with-mcp', 'mcp-global-settings' )
-			) . '#kb-connect-a-remote-site-through-http',
-		);
-
-		$prompt_intro = sprintf(
-			/* translators: %s: The WordPress site URL to connect to Formidable MCP. */
-			__( 'Set up the Formidable MCP skill so you can manage the forms on my WordPress site at %s.', 'formidable' ),
-			home_url()
-		);
-		$prompt_restart      = __( 'If the skill only loads after a restart, tell me.', 'formidable' );
-		$prompt_shared_parts = array(
+			$install_step . ' ' . __( 'If the skill only loads after a restart, tell me.', 'formidable' ),
 			__( '2. Find the newest frm-mcp*.env file in my Downloads folder and move it beside the skill\'s scripts/frm-mcp helper, named frm-mcp.env.', 'formidable' )
 			. ' ' . __( 'Do not open, print, or paste the file or its credentials into chat.', 'formidable' ),
 			__( '3. Run the adjacent frm-mcp-setup script to confirm the connection, then use the helper for my Formidable requests.', 'formidable' ),
 		);
-		$connection_prompts  = array(
-			'claude' => implode(
-				"\n",
-				array_merge(
-					array(
-						$prompt_intro,
-						sprintf(
-							/* translators: 1: Command that adds the skill marketplace. 2: Command that installs the skill. */
-							__( '1. If the formidable-mcp skill is not installed, run %1$s and then %2$s in the terminal.', 'formidable' ),
-							$claude_commands[0],
-							$claude_commands[1]
-						) . ' ' . $prompt_restart,
-					),
-					$prompt_shared_parts
-				)
-			),
-			'codex'  => implode(
-				"\n",
-				array_merge(
-					array(
-						$prompt_intro,
-						sprintf(
-							/* translators: %s: URL of the Formidable MCP skill directory. */
-							__( '1. If the formidable-mcp skill is not installed, install it from %s.', 'formidable' ),
-							$skill_repository_path
-						) . ' ' . $prompt_restart,
-					),
-					$prompt_shared_parts
-				)
-			),
-		);
 
-		foreach ( $skill_passwords as $index => $skill_password ) {
-			$skill_passwords[ $index ]['created_at'] = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $skill_password['created'] );
-		}
-
-		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/mcp.php';
+		return implode( "\n", $lines );
 	}
 
 	/**
