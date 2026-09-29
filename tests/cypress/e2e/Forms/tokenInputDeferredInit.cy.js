@@ -49,14 +49,42 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 		cy.log( 'Neither field\'s CSS Layout Classes input is tokenized before any settings panel has been opened' );
 		cy.get( '.frm-token-container' ).should( 'not.exist' );
 
+		cy.log( 'Loading a batch preserves the original inputs without initializing hidden token controls' );
+		cy.window().then( win => {
+			const fields = [ ...win.document.querySelectorAll( '.frm-single-settings' ) ];
+			fields.forEach( field => {
+				field.querySelector( '.frm-token-input-field' ).value = 'frm6';
+			} );
+			const loadedEvent = new win.Event( 'frm_ajax_loaded_field' );
+			loadedEvent.frmFields = fields.map( field => ( { id: field.dataset.fid } ) );
+			win.document.dispatchEvent( loadedEvent );
+
+			const formData = new win.FormData( win.document.getElementById( 'frm_js_build_form' ) );
+			fields.forEach( field => {
+				expect( formData.get( `field_options[classes_${ field.dataset.fid }]` ) ).to.equal( 'frm6' );
+			} );
+		} );
+		cy.get( '.frm-token-container' ).should( 'not.exist' );
+
 		openFieldSettings( 'text' );
 		cy.get( 'div[id^="frm-single-settings-"]:visible', { timeout: 10000 } ).find( '.frm-token-container' ).should( 'exist' );
 		cy.log( 'Only the opened field\'s token input is initialized - the other field\'s is still untouched' );
 		cy.get( '.frm-token-container' ).should( 'have.length', 1 );
+		cy.get( '.frm-type-text .frm-token-value' ).should( 'have.text', 'frm6' );
+		cy.get( '.frm-type-text .frm-token-proxy-input' ).invoke( 'attr', 'style' ).as( 'textProxyStyle', { type: 'static' } );
 
 		openFieldSettings( 'textarea' );
 		cy.get( 'div[id^="frm-single-settings-"]:visible', { timeout: 10000 } ).find( '.frm-token-container' ).should( 'exist' );
 		cy.get( '.frm-token-container' ).should( 'have.length', 2 );
+		cy.get( '@textProxyStyle' ).then( style => {
+			cy.get( '.frm-type-text .frm-token-proxy-input' ).should( 'have.attr', 'style', style );
+		} );
+
+		openFieldSettings( 'text' );
+		cy.get( '.frm-token-container' ).should( 'have.length', 2 );
+		cy.get( '.frm-type-text .frm-token-proxy-input' ).type( 'custom-class{enter}' );
+		cy.get( '.frm-type-text .frm-token-input-field' ).should( 'have.value', 'frm6 custom-class' );
+		cy.get( '.frm-type-text .frm-token' ).should( 'have.length', 2 );
 	} );
 
 	afterEach( () => {
