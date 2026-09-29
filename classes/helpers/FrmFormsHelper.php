@@ -15,6 +15,15 @@ class FrmFormsHelper {
 	private static $field_type_data_for_insert_opt_html;
 
 	/**
+	 * Icon classes for deferred code list items, keyed by field type, printed once each by print_deferred_code_list_icons().
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string, string>
+	 */
+	private static $deferred_code_list_icons = array();
+
+	/**
 	 * @since 2.2.10
 	 *
 	 * @return string
@@ -930,6 +939,9 @@ BEFORE_HTML;
 	 *                    and 'key_label' to show something other than the id or key, and
 	 *                    'name_suffix'/'key_suffix' for text appended after the name or key is
 	 *                    truncated, so a shortcode option like ' show=first' survives the truncation.
+	 *                    Set 'defer_icon' when the code list is hidden until opened, so the item
+	 *                    only names its field type and JS copies the icon in when the list opens.
+	 *                    Call print_deferred_code_list_icons() after the list when deferring.
 	 *
 	 * @return void
 	 */
@@ -959,10 +971,19 @@ BEFORE_HTML;
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<li class="<?php echo esc_attr( $class ); ?>">
+		<?php
+		$item_attrs = array( 'class' => $class );
+
+		if ( ! empty( $args['defer_icon'] ) ) {
+			// Only the field type goes on the item. Its icon is printed once in print_deferred_code_list_icons().
+			self::$deferred_code_list_icons[ $args['type'] ] = $field['icon'];
+			$item_attrs['data-frm-icon']                     = $args['type'];
+		}
+		?>
+		<li<?php FrmAppHelper::array_to_html_params( $item_attrs, true ); ?>>
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
@@ -976,7 +997,7 @@ BEFORE_HTML;
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
@@ -991,6 +1012,28 @@ BEFORE_HTML;
 		</li>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Prints one hidden copy of each icon used by deferred code list items, for JS to copy into the list when it opens.
+	 * This keeps the markup for a form with many fields down to a field type per item.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function print_deferred_code_list_icons() {
+		if ( ! self::$deferred_code_list_icons ) {
+			return;
+		}
+		?>
+		<template class="frm-code-list-icons">
+		<?php foreach ( self::$deferred_code_list_icons as $type => $icon ) { ?>
+			<span data-frm-icon-key="<?php echo esc_attr( $type ); ?>"><?php FrmAppHelper::icon_by_class( $icon, array( 'aria-hidden' => 'true' ) ); ?></span>
+		<?php } ?>
+		</template>
+		<?php
+		self::$deferred_code_list_icons = array();
 	}
 
 	/**
