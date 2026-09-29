@@ -8,6 +8,7 @@ const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSettin
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
+const { processFieldLoadBatch } = require( './fieldLoadBatch' );
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -2647,7 +2648,7 @@ window.frmAdminBuildJS = function() {
 	const FIELD_LOAD_BATCH_SIZE = 40;
 
 	/**
-	 * How many frm_load_field requests may be in flight at once.
+	 * How many field batches may be downloading or rendering at once.
 	 *
 	 * Responses are safe to arrive in any order because every field replaces its own placeholder by
 	 * id, and the placeholders are already sitting in the page in the right order.
@@ -2775,10 +2776,16 @@ window.frmAdminBuildJS = function() {
 				form_id: thisFormId,
 				nonce: frmGlobal.nonce
 			},
-			success: handleAjaxLoadFieldSuccess,
-			complete: () => {
-				--activeFieldLoadRequests;
-				fillFieldLoadQueue();
+			success: async response => {
+				try {
+					await handleAjaxLoadFieldSuccess( response, fieldIds );
+				} finally {
+					completeFieldLoadRequest();
+				}
+			},
+			error: () => {
+				showFieldLoadError( fieldIds );
+				completeFieldLoadRequest();
 			}
 		} );
 	}
@@ -2791,73 +2798,117 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Swap the placeholders for the fields the server rendered.
+	 * Release a queue slot only after its fields and their controls are ready.
 	 *
-	 * @param {string} response A json object of field id to { type, html }, plus a tooltips map of
-	 *                          data-tip-key to text for the tooltips in those fields.
+	 * @since x.x
 	 * @return {void}
 	 */
-	function handleAjaxLoadFieldSuccess( response ) {
-		let key;
+	function completeFieldLoadRequest() {
+		--activeFieldLoadRequests;
+		fillFieldLoadQueue();
+	}
 
-		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
-		response = response.replace( /^\s+|\s+$/g, '' );
-		if ( response.indexOf( '{' ) !== 0 ) {
-			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
+	/**
+	 * Keep failed placeholders claimed so they are not automatically requested again.
+	 *
+	 * @since x.x
+	 * @param {string[]} fieldIds The fields belonging to the failed request.
+	 * @return {void}
+	 */
+	function showFieldLoadError( fieldIds ) {
+		fieldIds.forEach( fieldId => {
+			const field = document.getElementById( `frm_field_id_${ fieldId }` );
+			if ( field?.classList.contains( 'frm_field_loading' ) ) {
+				field.textContent = __( 'Unable to load field.', 'formidable' );
+			}
+		} );
+	}
+
+	/**
+	 * Swap placeholders in short slices while keeping each slice's controls ready for input.
+	 *
+	 * @param {string}   response A JSON object of field HTML and shared option and tooltip maps.
+	 * @param {string[]} fieldIds The fields requested in this batch.
+	 * @return {Promise<void>|void} Resolves after the last slice has initialized.
+	 */
+	function handleAjaxLoadFieldSuccess( response, fieldIds ) {
+		let data;
+		try {
+			data = JSON.parse( response );
+		} catch {
+			showFieldLoadError( fieldIds );
+			return;
+		}
+		if ( ! data || typeof data !== 'object' || Array.isArray( data ) ) {
+			showFieldLoadError( fieldIds );
 			return;
 		}
 
-		const { tooltips, selectOptions, ...loadedFields } = JSON.parse( response );
+		const { tooltips, selectOptions, ...loadedFields } = data;
 		if ( selectOptions ) {
 			frm_admin_js.selectOptions = { ...frm_admin_js.selectOptions, ...selectOptions };
 		}
-		const newFields = [];
-
-		// The text behind each data-tip-key in this batch. Keys are hashes of the text, so merging
-		// a batch on top of what the page already has can only ever re-add the same strings.
 		if ( tooltips && window.frm_admin_js ) {
 			frm_admin_js.tooltips = { ...frm_admin_js.tooltips, ...tooltips };
 		}
-		// Field ids and types for the listeners of frm_ajax_loaded_field.
-		const loadedFieldData = [];
 
-		for ( key in loadedFields ) {
-			if ( ! Object.hasOwn( loadedFields, key ) ) {
-				continue;
-			}
-			const oldField = document.getElementById( `frm_field_id_${ key }` );
-			if ( oldField ) {
-				placeholderSpinnerObserver?.unobserve( oldField );
-				dragDropObserver.unobserve( oldField );
-				dragDropAttachers.delete( oldField );
-			}
-			jQuery( `#frm_field_id_${ key }` ).replaceWith( loadedFields[ key ].html );
-			loadedFieldData.push( { id: key, type: loadedFields[ key ].type } );
+		return processFieldLoadBatch(
+			Object.entries( loadedFields ),
+			renderLoadedField,
+			initializeLoadedFieldSlice
+		);
+	}
 
-			const newReplacedField = document.getElementById( `frm_field_id_${ key }` );
-			if ( newReplacedField ) {
-				newFields.push( newReplacedField );
-				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
-				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
-				newReplacedField.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
-			}
-
-			setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
-			lazyMakeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
+	/**
+	 * Replace one placeholder and prepare its builder interactions.
+	 *
+	 * @since x.x
+	 * @param {Array} entry The field ID and its rendered HTML and type.
+	 * @return {Object|null} The inserted field, or null if its placeholder was deleted.
+	 */
+	function renderLoadedField( entry ) {
+		const [ key, field ] = entry;
+		const oldField = document.getElementById( `frm_field_id_${ key }` );
+		if ( ! oldField ) {
+			return null;
 		}
+		placeholderSpinnerObserver?.unobserve( oldField );
+		dragDropObserver.unobserve( oldField );
+		dragDropAttachers.delete( oldField );
+		jQuery( oldField ).replaceWith( field.html );
 
-		// Only the fields that just arrived need this. Doing it for the whole page once per batch
-		// re-initializes every field loaded so far, which turns into quadratic work on a long form.
-		initiateMultiselect( newFields );
+		const element = document.getElementById( `frm_field_id_${ key }` );
+		if ( ! element ) {
+			return null;
+		}
+		element.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+		element.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+		element.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
+		setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
+		lazyMakeDraggable( element );
+		return { id: key, type: field.type, element };
+	}
+
+	/**
+	 * Initialize only the fields inserted in this slice before yielding to user input.
+	 *
+	 * @since x.x
+	 * @param {Array} fields The inserted fields, including null for deleted placeholders.
+	 * @return {void}
+	 */
+	function initializeLoadedFieldSlice( fields ) {
+		const loadedFields = fields.filter( Boolean );
+		if ( ! loadedFields.length ) {
+			return;
+		}
+		initiateMultiselect( loadedFields.map( field => field.element ) );
 
 		if ( dragState.dragging ) {
-			// A batch replaces placeholders with the real fields, so everything below it moves.
-			// The drag is not re-measuring on its own, so tell it the rows have shifted.
 			refreshDroppableOffsets();
 		}
 
 		const loadedEvent = new Event( 'frm_ajax_loaded_field', { bubbles: false } );
-		loadedEvent.frmFields = loadedFieldData;
+		loadedEvent.frmFields = loadedFields.map( ( { id, type } ) => ( { id, type } ) );
 		document.dispatchEvent( loadedEvent );
 	}
 
