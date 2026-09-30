@@ -2,12 +2,17 @@
 
 /**
  * @group fields
+ *
+ * @covers FrmFieldCombo
+ * @covers FrmFieldNumber
+ * @covers FrmFieldType
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldCombo::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldNumber::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldType::class )]
 class test_FrmFieldType extends FrmUnitTest {
 
-	/**
-	 * @covers FrmFieldNumber::add_min_max
-	 */
 	public function test_html_min_number() {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
@@ -33,9 +38,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertStringContainsString( ' step="any"', $form );
 	}
 
-	/**
-	 * @covers FrmFieldType::sanitize_value
-	 */
 	public function test_sanitize_value() {
 		$this->set_current_user_to_1();
 		$frm_field_type = new FrmFieldDefault();
@@ -163,9 +165,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmFieldType::get_import_value
-	 */
 	public function test_get_import_value() {
 		$field          = new stdClass();
 		$field->type    = 'checkbox';
@@ -203,9 +202,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertSame( 'a,b,c', $checkbox->get_import_value( 'a,b,c' ) );
 	}
 
-	/**
-	 * @covers FrmFieldType::is_not_unique
-	 */
 	public function test_is_not_unique() {
 		$form_id = $this->factory->form->create();
 		$field1  = $this->factory->field->create_and_get(
@@ -241,9 +237,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertFalse( $field_object3->is_not_unique( 'First', $entry_id ), 'a field object for another field should not flag a duplicate' );
 	}
 
-	/**
-	 * @covers FrmFieldType::add_aria_description
-	 */
 	public function test_add_aria_description() {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
@@ -266,14 +259,14 @@ class test_FrmFieldType extends FrmUnitTest {
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby" aria-invalid="true" ' =>
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_field_' . $field->field_key . ' my_custom_aria_describedby frm_desc_field_' . $field->field_key . '" aria-invalid="true" ', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' => // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' => // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			// Make sure that a duplicate description ID is not added.
-			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		// Make sure that a duplicate description ID is not added.
+		'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {
@@ -282,9 +275,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmFieldType::prepare_field_html
-	 */
 	public function test_prepare_field_html() {
 		$form    = $this->factory->form->create_and_get();
 		$form_id = $form->id;
@@ -367,7 +357,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * A field in a repeater row is rendered with an id of '{field_id}-{section_id}-{row}', and its
 	 * errors are keyed by that same id, so the plain field id matches nothing inside a repeater.
 	 *
-	 * @covers FrmFieldType::set_aria_invalid_error
+	 * @see FrmFieldType::set_aria_invalid_error
 	 */
 	public function test_set_aria_invalid_error_in_repeater() {
 		$form_id = $this->factory->form->create();
@@ -409,7 +399,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * The sub field of a combo field that failed validation is what an error summary link focuses,
 	 * so it needs to be flagged in a repeater row too.
 	 *
-	 * @covers FrmFieldCombo::set_aria_invalid_error
+	 * @see FrmFieldCombo::set_aria_invalid_error
 	 */
 	public function test_set_aria_invalid_error_for_combo_field_in_repeater() {
 		$form_id = $this->factory->form->create();

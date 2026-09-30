@@ -2,12 +2,13 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmStrpLiteEventsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStrpLiteEventsController::class )]
 class test_FrmStrpLiteEventsController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStrpLiteEventsController::reset_customer
-	 */
 	public function test_reset_customer() {
 		$user_id = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 

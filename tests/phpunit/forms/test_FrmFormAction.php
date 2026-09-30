@@ -2,12 +2,13 @@
 
 /**
  * @group forms
+ *
+ * @covers FrmFormAction
  */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormAction::class )]
 class test_FrmFormAction extends FrmUnitTest {
 
-	/**
-	 * @covers FrmFormAction::update_callback
-	 */
 	public function test_update_callback() {
 		$form_id               = $this->factory->form->create();
 		$id_base               = 'email';

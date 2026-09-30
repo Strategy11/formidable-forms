@@ -4,13 +4,19 @@
  * @group fields
  * @group conditional-logic
  * @group value-meets-condition
+ *
+ * @covers FrmFieldsHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\Group( 'conditional-logic' )]
+#[\PHPUnit\Framework\Attributes\Group( 'value-meets-condition' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsHelper::class )]
 class test_FrmFieldsHelper extends FrmUnitTest {
 
 	/**
 	 * Tests where $observed_value is a single value, not an array.
 	 *
-	 * @covers FrmFieldsHelper::value_meets_condition
+	 * @see FrmFieldsHelper::value_meets_condition
 	 */
 	public function test_value_meets_condition() {
 		$tests = array(
@@ -230,7 +236,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 	/**
 	 * Test the "sep" option for checkbox field shortcodes.
 	 *
-	 * @covers FrmFieldsHelper::replace_content_shortcodes
+	 * @see FrmFieldsHelper::replace_content_shortcodes
 	 */
 	public function test_sep_option() {
 		$form           = $this->factory->form->create_and_get();
@@ -266,9 +272,6 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmFieldsHelper::get_error_msg
-	 */
 	public function test_get_error_msg() {
 		$form_id = $this->factory->form->create();
 
