@@ -480,8 +480,8 @@ class FrmFieldCombo extends FrmFieldType {
 	/**
 	 * Gets the label a sub field is referred to by in its error messages.
 	 *
-	 * The sub field description is used when there is one, since that is the label shown under
-	 * the input. Otherwise the sub field label is combined with the field label, like "Address Line 1".
+	 * The sub field description is used when it is a short phrase, since that is the label shown
+	 * under the input. Otherwise the sub field label is combined with the field label, like "Address Line 1".
 	 *
 	 * @since x.x
 	 *
@@ -492,7 +492,7 @@ class FrmFieldCombo extends FrmFieldType {
 	public function get_sub_field_label( $name ) {
 		$desc = FrmField::get_option( $this->field, $name . '_desc' );
 
-		if ( is_string( $desc ) && '' !== trim( $desc ) ) {
+		if ( is_string( $desc ) && $this->is_short_phrase( $desc ) ) {
 			return $desc;
 		}
 
@@ -507,6 +507,22 @@ class FrmFieldCombo extends FrmFieldType {
 	}
 
 	/**
+	 * Checks if text reads as a label, so it can be the subject of an error message. A sentence
+	 * would not.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $text
+	 *
+	 * @return bool
+	 */
+	private function is_short_phrase( $text ) {
+		$text = trim( $text );
+
+		return '' !== $text && count( preg_split( '/\s+/', $text ) ) <= 4 && ! preg_match( '/[.!?:;]$/', $text );
+	}
+
+	/**
 	 * Gets an error message for a single sub field, with the sub field label in place of the
 	 * field label.
 	 *
@@ -518,15 +534,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return string
 	 */
 	public function get_sub_field_error_msg( $name, $error ) {
-		$field = is_object( $this->field ) ? clone $this->field : $this->field;
-
-		if ( is_object( $field ) ) {
-			$field->name = $this->get_sub_field_label( $name );
-		} elseif ( is_array( $field ) ) {
-			$field['name'] = $this->get_sub_field_label( $name );
-		}
-
-		return FrmFieldsHelper::get_error_msg( $field, $error );
+		return FrmFieldsHelper::get_error_msg_for_name( $this->field, $error, $this->get_sub_field_label( $name ) );
 	}
 
 	/**

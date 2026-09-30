@@ -171,6 +171,18 @@ class FrmEntriesAJAXSubmitController {
 	 * @return string
 	 */
 	private static function maybe_modify_ajax_error( $error, $field_id, $form, $errors ) {
+		$sub_field = '';
+
+		if ( ! is_numeric( $field_id ) && preg_match( '/^(\d+)-(\w+)$/', $field_id, $matches ) ) {
+			// An error for a combo sub field, like 12-first. An empty one only flags the sub field.
+			if ( '' === $error ) {
+				return $error;
+			}
+
+			$field_id  = $matches[1];
+			$sub_field = $matches[2];
+		}
+
 		if ( ! is_numeric( $field_id ) ) {
 			return $error;
 		}
@@ -186,7 +198,7 @@ class FrmEntriesAJAXSubmitController {
 
 		if ( false !== $error_body ) {
 			$error = str_replace( '[error]', $error, $error_body );
-			$error = str_replace( '[key]', $use_field['field_key'], $error );
+			$error = str_replace( '[key]', $use_field['field_key'] . ( $sub_field ? '_' . $sub_field : '' ), $error );
 		}
 
 		return $error;

@@ -69,4 +69,27 @@ class test_FrmFieldName extends FrmUnitTest {
 		$this->assertSame( '', $errors[ $error_key . '-first' ] );
 		$this->assertSame( '', $errors[ $error_key . '-last' ] );
 	}
+
+	/**
+	 * A sub field description that reads as a sentence is not used to name the sub field.
+	 *
+	 * @covers FrmFieldCombo::get_sub_field_label
+	 */
+	public function test_get_sub_field_label_ignores_sentence_description() {
+		$field = $this->factory->field->create_and_get(
+			array(
+				'type'          => 'name',
+				'form_id'       => 1,
+				'field_options' => array(
+					'first_desc' => 'We use this to personalize your emails.',
+					'last_desc'  => 'Surname',
+				),
+			)
+		);
+
+		$name_field = new FrmFieldName( $field );
+
+		$this->assertSame( 'Surname', $name_field->get_sub_field_label( 'last' ) );
+		$this->assertStringNotContainsString( 'personalize', $name_field->get_sub_field_label( 'first' ) );
+	}
 }
