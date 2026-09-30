@@ -1697,7 +1697,7 @@ DEFAULT_HTML;
 	 * add_aria_description() itself and setting aria_description_added,
 	 * which short-circuits add_aria_description_to_inputs() entirely).
 	 *
-	 * @since 6.35
+	 * @since x.x
 	 *
 	 * @param array  $args Rendering context. May include `html_id`.
 	 * @param string $input_html Full field HTML, passed by reference.
