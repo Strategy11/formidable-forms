@@ -6966,8 +6966,8 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {string|number} price Raw price value.
-	 * @param {Object} currency Currency settings object.
+	 * @param {string|number} price    Raw price value.
+	 * @param {Object}        currency Currency settings object.
 	 * @return {string} Price string using '.' as the decimal separator, safe for Number().
 	 */
 	function normalizePriceString( price, currency ) {
@@ -6976,8 +6976,11 @@ window.frmAdminBuildJS = function() {
 			return '';
 		}
 
-		const matches = price.match( /[-]*[0-9,.]*\.?,?[0-9]+/g );
+		const matches = price.match( /-?[\d.,]+/g );
 		price = matches ? matches[ matches.length - 1 ] : '';
+		while ( /[.,]$/.test( price ) ) {
+			price = price.slice( 0, -1 );
+		}
 		if ( ! price ) {
 			return '';
 		}
@@ -7025,13 +7028,17 @@ window.frmAdminBuildJS = function() {
 		const decimalSep = currency.decimal_separator ?? '.';
 		const thousandSep = currency.thousand_separator ?? ',';
 
-		let formatted = num.toFixed( decimals ).replace( '.', decimalSep );
+		let formatted = Math.abs( num ).toFixed( decimals ).replace( '.', decimalSep );
 
 		const parts = decimals > 0 ? formatted.split( decimalSep ) : [ formatted ];
 		if ( thousandSep ) {
-			parts[ 0 ] = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, thousandSep );
+			let grouped = '';
+			for ( let end = parts[ 0 ].length; end > 0; end -= 3 ) {
+				grouped = parts[ 0 ].slice( Math.max( 0, end - 3 ), end ) + ( grouped ? thousandSep + grouped : '' );
+			}
+			parts[ 0 ] = grouped;
 		}
-		formatted = parts.join( decimalSep );
+		formatted = ( num < 0 ? '-' : '' ) + parts.join( decimalSep );
 
 		const symbolPadding = currency.symbol_padding ?? '';
 		const leftSymbol = currency.symbol_left ? ( currency.symbol_left + symbolPadding ) : '';

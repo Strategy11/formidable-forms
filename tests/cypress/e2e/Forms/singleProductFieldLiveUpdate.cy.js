@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-forced-browser-interaction -- the builder's field icons and option inputs are only visible on hover/inside collapsed panels. */
 describe( 'Single Product field live update in the form builder', () => {
 	// cy.wpCliEval() shells out with the eval-file command quoted as a single
 	// argument, which wp-env's own argv splitting doesn't handle - runs this
@@ -5,11 +6,11 @@ describe( 'Single Product field live update in the form builder', () => {
 	// ("cli") and tests ("tests-cli") sites are separate WordPress installs with
 	// separate databases, and which one baseUrl points at depends on how Cypress is
 	// launched, so the setting is written to both.
-	const setCurrency = ( code ) => {
-		const fileName = `frm-currency-${ Date.now() }-${ Math.random().toString( 36 ).slice( 2 ) }.php`;
+	const setCurrency = code => {
+		const fileName = `frm-currency-${ Date.now() }-${ Cypress._.uniqueId() }.php`;
 		cy.writeFile( fileName, `<?php $s = new FrmSettings(); $s->currency = "${ code }"; update_option( $s->option_name, $s, true );` );
 		const pluginName = Cypress.config( 'projectRoot' ).split( '/' ).pop();
-		[ 'cli', 'tests-cli' ].forEach( ( container ) => {
+		[ 'cli', 'tests-cli' ].forEach( container => {
 			cy.exec( `npm --silent run env run ${ container } wp eval-file wp-content/plugins/${ pluginName }/${ fileName }` );
 		} );
 		cy.exec( `rm ${ fileName }` );
