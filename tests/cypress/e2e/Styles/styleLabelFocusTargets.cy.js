@@ -1,4 +1,7 @@
 describe( 'Style builder labels focus their visible/interactive control', () => {
+	// The Styles page is slow to render on a cold CI run, longer than the 4s default.
+	const STYLES_PAGE_TIMEOUT = 10000;
+
 	beforeEach( () => {
 		cy.login();
 		cy.viewport( 1280, 1600 );
@@ -15,14 +18,14 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 		// swatch button intentionally reveals it again afterward as WP core's own manual hex
 		// entry field (color-picker.js `open()` un-hides `.wp-picker-input-wrap`), so asserting
 		// it stays hidden post-click would fail against WP's own by-design behavior.
-		cy.get( '#frm_style_qsettings_submit_bg_color' ).should( 'not.be.visible' );
+		cy.get( '#frm_style_qsettings_submit_bg_color', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'not.be.visible' );
 		cy.get( 'label[for="frm_style_qsettings_submit_bg_color_visible"]' ).click();
 		cy.focused().should( 'have.class', 'wp-color-result' );
 	} );
 
 	it( 'Clicking a single-value slider\'s own label focuses the visible number input, not the hidden real input', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
-		cy.get( '#general-style' ).should( 'have.class', 'open' );
+		cy.get( '#general-style', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'have.class', 'open' );
 
 		// "Border Width" lives directly in the General section, open by default.
 		cy.get( 'label[for="frm_fieldset-value"]' ).click();
@@ -38,7 +41,7 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
-		cy.get( '#general-style' ).should( 'have.class', 'open' );
+		cy.get( '#general-style', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'have.class', 'open' );
 
 		cy.log( '"Border Width" (frm_fieldset) ships with a measured default, so the label starts wired up' );
 		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'have.attr', 'for', 'frm_fieldset-value' );
@@ -65,7 +68,7 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
-		cy.get( '#buttons-style button[aria-label="Buttons"]' ).click();
+		cy.get( '#buttons-style button[aria-label="Buttons"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
 		cy.get( '#frm_style_section_buttons-style' ).should( 'be.visible' );
 
 		cy.log( 'Width defaults to "auto" out of the box (FrmStyle.php), rendering the value input disabled' );
