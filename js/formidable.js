@@ -1495,8 +1495,9 @@ function frmFrontFormJS() {
 
 		container.classList.add( 'frm_blank_field' );
 		const allInputs = container.querySelectorAll( 'input, select, textarea' );
-		const isComboField = key === getFieldContainerErrorKey( container ) && null !== container.querySelector( '.frm_combo_inputs_container' );
-		const id = isComboField ? `frm_error_field_${ getComboFieldErrorKey( allInputs[ 0 ] ) }` : getErrorElementId( key, allInputs[ 0 ] );
+		// Custom error HTML carries its own ID, so use that one for aria-describedby.
+		const htmlId = 'string' === typeof jsErrors[ key ] && jsErrors[ key ].includes( '<div' ) ? jsErrors[ key ].match( /\bid="([^"]+)"/ ) : null;
+		const id = htmlId ? htmlId[ 1 ] : getErrorElementId( key, allInputs[ 0 ] );
 		// An error for a whole combo field, such as an address, does not apply to its optional sub fields.
 		const inputs = Array.from( allInputs ).filter(
 			input => ! hasClass( input, 'frm_optional' ) || input.closest( '.frm_form_field' ) === container
