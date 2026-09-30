@@ -196,7 +196,7 @@ class FrmAbilitiesFormActionsController {
 			array(
 				'label'               => __( 'Create Form Action', 'formidable' ),
 				'description'         => __(
-					'Create an action on a form. Use list-forms for the form_id. Types include email, quiz, api, wppost, register, payment, and the marketing integrations.',
+					'Create an action on a form. Use list-forms for the form_id. Types include on_submit (confirmation), email, quiz, api, wppost, register, payment, and more.',
 					'formidable'
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
@@ -211,7 +211,7 @@ class FrmAbilitiesFormActionsController {
 						'type'         => array(
 							'type'        => 'string',
 							'description' => __(
-								'Action type. Required. Common types: email, quiz, quiz_outcome, api, wppost, register, payment, stripe, paypal, mailchimp, zapier, n8n.',
+								'Action type id. Required. Common types: on_submit (Confirmation), email, quiz, quiz_outcome, api, wppost, register, payment, stripe, paypal.',
 								'formidable'
 							),
 						),
@@ -696,10 +696,38 @@ class FrmAbilitiesFormActionsController {
 		}
 
 		if ( ! $action_control instanceof FrmFormAction ) {
-			return new WP_Error( 'frm_form_actions_invalid_type', __( 'Invalid action type.', 'formidable' ), array( 'status' => 400 ) );
+			return self::invalid_type_error( $type );
 		}
 
 		return $action_control;
+	}
+
+	/**
+	 * Build the error for an unregistered action type.
+	 *
+	 * The message names the registered type ids so the caller can correct the
+	 * request without another round trip. Admin UI labels are a common wrong
+	 * guess, so "confirmation" and similar labels point to on_submit.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $type The sanitized action type that did not match.
+	 *
+	 * @return WP_Error
+	 */
+	private static function invalid_type_error( $type ) {
+		$valid_types = array_keys( FrmFormActionsController::get_form_actions() );
+		$message     = sprintf(
+			/* translators: %s: Comma separated list of action type ids. */
+			__( 'Invalid action type. Use one of: %s.', 'formidable' ),
+			implode( ', ', $valid_types )
+		);
+
+		if ( in_array( $type, array( 'confirmation', 'success', 'success_message', 'redirect', 'message' ), true ) ) {
+			$message .= ' ' . __( 'Success messages, redirects, and page content use the on_submit type.', 'formidable' );
+		}
+
+		return new WP_Error( 'frm_form_actions_invalid_type', $message, array( 'status' => 400 ) );
 	}
 
 	/**
