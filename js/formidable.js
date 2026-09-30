@@ -341,7 +341,7 @@ function frmFrontFormJS() {
 		}
 
 		const comboContainer = field.closest( '.frm_combo_inputs_container' );
-		if ( comboContainer && comboFieldHasFieldError( comboContainer ) ) {
+		if ( comboContainer && ( isRequiredComboField( comboContainer ) || comboFieldHasFieldError( comboContainer ) ) ) {
 			validateComboField( comboContainer, field, addErrors );
 			return;
 		}
@@ -367,6 +367,31 @@ function frmFrontFormJS() {
 			// JS validation is off, so only remove existing errors once the field passes validation.
 			removeFieldError( fieldContainer );
 		}
+	}
+
+	/**
+	 * Gets the container to show the error for a key in.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 * @param {string}      key
+	 * @return {HTMLElement|null} The container, or null if there is none.
+	 */
+	function getFieldContainerForErrorKey( form, key ) {
+		const container = form.querySelector( `#frm_field_${ key }_container` );
+		if ( container ) {
+			return container;
+		}
+
+		// A sub field container in a repeater does not have an ID that matches its key, so look it up from its input.
+		for ( const comboContainer of form.querySelectorAll( '.frm_combo_inputs_container' ) ) {
+			const input = getRequiredComboSubInputs( comboContainer ).find( subInput => key === getFieldId( subInput, true ) );
+			if ( input ) {
+				return input.closest( '.frm_form_field' );
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -402,17 +427,17 @@ function frmFrontFormJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
-	 * @param {Object}      errors         Errors keyed by field container key. Updated in place.
+	 * @param {Object}      errors         Errors keyed by field container key, including the required errors of the sub fields. Updated in place.
+	 * @param {HTMLElement[]} inputs       Optional. The required sub inputs. Defaults to a query of the combo field.
 	 * @return {void}
 	 */
-	function maybeCombineComboFieldErrors( comboContainer, errors ) {
+	function maybeCombineComboFieldErrors( comboContainer, errors, inputs = getRequiredComboSubInputs( comboContainer ) ) {
 		const fieldContainer = comboContainer.closest( '.frm_form_field' );
-		if ( ! fieldContainer || ! hasClass( fieldContainer, 'frm_required_field' ) ) {
+		if ( ! isRequiredComboField( comboContainer ) ) {
 			return;
 		}
 
-		const inputs = getRequiredComboSubInputs( comboContainer );
-		const allEmpty = inputs.length && inputs.every( input => Object.keys( checkRequiredField( input, {} ) ).length );
+		const allEmpty = inputs.length && inputs.every( input => getFieldId( input, true ) in errors );
 		if ( ! allEmpty ) {
 			return;
 		}
@@ -427,7 +452,6 @@ function frmFrontFormJS() {
 				message = errors[ key ];
 			}
 			// An empty error still flags the sub field, without repeating the message under it.
-			// In a repeater the sub fields share the field key, so this is replaced below.
 			errors[ key ] = '';
 		} );
 
@@ -450,16 +474,37 @@ function frmFrontFormJS() {
 			return '';
 		}
 
+		return wrapErrorHtml( message, subInput, getComboFieldErrorKey( subInput ) );
+	}
+
+	/**
+	 * Gets the key used in the error element ID for the whole combo field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} subInput A sub field input of the combo field.
+	 * @return {string} The field HTML ID without its 'field_' prefix.
+	 */
+	function getComboFieldErrorKey( subInput ) {
 		const subFieldContainer = subInput.closest( '[data-sub-field-name]' );
 		const subFieldName = subFieldContainer ? subFieldContainer.getAttribute( 'data-sub-field-name' ) : '';
-		// The sub input ID is the field HTML ID plus '_{sub field name}'. The error for the whole
-		// field is keyed by the field HTML ID without its 'field_' prefix.
+		// The sub input ID is the field HTML ID plus '_{sub field name}'.
 		let errorKey = subInput.id.replace( /^field_/, '' );
 		if ( subFieldName && errorKey.endsWith( `_${ subFieldName }` ) ) {
 			errorKey = errorKey.slice( 0, -( subFieldName.length + 1 ) );
 		}
+		return errorKey;
+	}
 
-		return wrapErrorHtml( message, subInput, errorKey );
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
+	 * @return {boolean} True if the combo field is required.
+	 */
+	function isRequiredComboField( comboContainer ) {
+		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		return null !== fieldContainer && hasClass( fieldContainer, 'frm_required_field' );
 	}
 
 	/**
@@ -497,13 +542,15 @@ function frmFrontFormJS() {
 	 */
 	function validateComboField( comboContainer, field, addErrors ) {
 		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		const hadError = comboFieldHasFieldError( comboContainer );
+		const inputs = getRequiredComboSubInputs( comboContainer );
 		let errors = {};
 
-		if ( hasClass( fieldContainer, 'frm_required_field' ) ) {
-			getRequiredComboSubInputs( comboContainer ).forEach( input => {
+		if ( isRequiredComboField( comboContainer ) ) {
+			inputs.forEach( input => {
 				errors = checkRequiredField( input, errors );
 			} );
-			maybeCombineComboFieldErrors( comboContainer, errors );
+			maybeCombineComboFieldErrors( comboContainer, errors, inputs );
 		}
 
 		if ( ! ( getFieldId( field, true ) in errors ) ) {
@@ -519,6 +566,16 @@ function frmFrontFormJS() {
 			if ( subFieldContainer !== fieldContainer && ! ( fieldKey in errors ) && ! ( getFieldId( field, true ) in errors ) ) {
 				removeFieldError( subFieldContainer );
 			}
+
+			if ( ! ( fieldKey in errors ) && hasClass( fieldContainer, 'frm_blank_field' ) ) {
+				// The error for the whole field no longer applies. Keep the flags on the sub fields that still fail.
+				const failing = inputs.filter( input => getFieldId( input, true ) in errors );
+				removeComboFieldErrors( comboContainer );
+				failing.forEach( input => {
+					input.closest( '.frm_form_field' ).classList.add( 'frm_blank_field' );
+					input.setAttribute( 'aria-invalid', 'true' );
+				} );
+			}
 			return;
 		}
 
@@ -532,13 +589,18 @@ function frmFrontFormJS() {
 		// lookup - the id lookup can miss inside a repeating section, where a sub field
 		// container's id does not necessarily include the repeating row (see getFieldId()).
 		const subFieldContainers = {};
-		getRequiredComboSubInputs( comboContainer ).forEach( input => {
+		inputs.forEach( input => {
 			subFieldContainers[ getFieldId( input, true ) ] = input.closest( '.frm_form_field' );
 		} );
 
+		// The first time a combo field is validated, only flag the sub field that changed, not the
+		// ones the person has not reached yet.
+		const changedKey = getFieldId( field, true );
+		const keys = Object.keys( errors ).filter( key => hadError || key === changedKey || key === fieldKey );
+
 		const form = fieldContainer.closest( 'form' );
-		Object.keys( errors ).forEach( key => {
-			const container = key === fieldKey ? fieldContainer : ( subFieldContainers[ key ] || form?.querySelector( `#frm_field_${ key }_container` ) );
+		keys.forEach( key => {
+			const container = key === fieldKey ? fieldContainer : ( subFieldContainers[ key ] || ( form && getFieldContainerForErrorKey( form, key ) ) );
 			if ( container ) {
 				addFieldError( container, key, errors );
 			}
@@ -557,11 +619,7 @@ function frmFrontFormJS() {
 		const fieldContainer = comboContainer.closest( '.frm_form_field' );
 
 		comboContainer.querySelectorAll( '.frm_form_field' ).forEach( removeFieldError );
-		fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
-		fieldContainer.querySelectorAll( ':scope > .frm_error' ).forEach( errorMessage => {
-			removeElementFromInputDescribedBy( errorMessage );
-			errorMessage.remove();
-		} );
+		removeFieldError( fieldContainer );
 		comboContainer.querySelectorAll( '[aria-invalid="true"]' ).forEach( input => input.setAttribute( 'aria-invalid', 'false' ) );
 	}
 
@@ -1441,7 +1499,8 @@ function frmFrontFormJS() {
 
 		container.classList.add( 'frm_blank_field' );
 		const allInputs = container.querySelectorAll( 'input, select, textarea' );
-		const id = getErrorElementId( key, allInputs[ 0 ] );
+		const isComboField = key === getFieldContainerErrorKey( container ) && null !== container.querySelector( '.frm_combo_inputs_container' );
+		const id = isComboField ? `frm_error_field_${ getComboFieldErrorKey( allInputs[ 0 ] ) }` : getErrorElementId( key, allInputs[ 0 ] );
 		// An error for a whole combo field, such as an address, does not apply to its optional sub fields.
 		const inputs = Array.from( allInputs ).filter(
 			input => ! hasClass( input, 'frm_optional' ) || input.closest( '.frm_form_field' ) === container
@@ -2845,7 +2904,7 @@ function frmFrontFormJS() {
 			removeAllErrors();
 
 			for ( key in jsErrors ) {
-				const fieldCont = form ? form.querySelector( `#frm_field_${ key }_container` ) : null;
+				const fieldCont = form ? getFieldContainerForErrorKey( form, key ) : null;
 
 				if ( fieldCont ) {
 					addFieldError( fieldCont, key, jsErrors );
