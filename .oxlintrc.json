@@ -203,5 +203,13 @@
 		"eslint-rules/**",
 		"build/**",
 		"coverage/**"
+	],
+	"overrides": [
+		{
+			"files": ["tests/lighthouse/report.mjs"],
+			"rules": {
+				"import/no-nodejs-modules": ["error", {"allow": ["node:fs", "node:path"]}]
+			}
+		}
 	]
 }

@@ -1,6 +1,5 @@
 const { defineConfig } = require( "cypress" );
 const htmlvalidate = require( "cypress-html-validate/plugin" );
-const { lighthouse, prepareAudit } = require( "cypress-audit" );
 
 module.exports = defineConfig({
   fixturesFolder: "tests/cypress/fixtures",
@@ -13,7 +12,10 @@ module.exports = defineConfig({
     retries: {
       runMode: 1,
     },
-    setupNodeEvents(on) {
+    async setupNodeEvents(on) {
+      const { reportLighthouse } = await import( './tests/lighthouse/report.mjs' );
+      const { default: lighthouse, desktopConfig } = await import( 'lighthouse' );
+      let lighthousePort;
       on('task', {
         log(message) {
           console.log(message)
@@ -27,15 +29,19 @@ module.exports = defineConfig({
       });
       htmlvalidate.install( on );
       on( 'before:browser:launch', ( browser, launchOptions ) => {
-        prepareAudit( launchOptions );
+        const debugging = launchOptions.args.find( arg => arg.startsWith( '--remote-debugging-port=' ) );
+        lighthousePort = debugging ? Number( debugging.split( '=' )[ 1 ] ) : undefined;
         return launchOptions;
       } );
       on( 'task', {
-        lighthouse: lighthouse( results => {
-          // Printed so the CI log carries the raw scores even when a test
-          // passes - the only place to see them without recording a video.
-          console.log( JSON.stringify( results.lhr.categories ) );
-        } ),
+        async lighthouse( { url, opts } ) {
+          if ( ! lighthousePort ) {
+            throw new Error( 'Lighthouse requires a Chromium remote debugging port.' );
+          }
+          const results = await lighthouse( url, { ...opts, port: lighthousePort }, desktopConfig );
+          reportLighthouse( results );
+          return null;
+        },
       } );
     },
     experimentalRunAllSpecs: true

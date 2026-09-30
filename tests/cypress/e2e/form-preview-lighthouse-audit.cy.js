@@ -1,18 +1,27 @@
-describe( 'Run a Lighthouse performance audit', function() {
-	// Permissive on purpose - this run establishes the baseline. The
-	// `lighthouse` task in cypress.config.js logs the raw category scores to
-	// the CI log; ratchet these thresholds up to that baseline once it's
-	// measured.
-	const thresholds = {
-		performance: 0,
-		accessibility: 0,
-		'best-practices': 0,
-		seo: 0
-	};
+import { auditOptions, requireAuditBrowser } from '../../lighthouse/options';
 
-	it( 'Check the front-end form preview page', () => {
+describe( 'Lighthouse form preview baseline', {
+	retries: 0,
+	responseTimeout: 120000,
+	pageLoadTimeout: 120000,
+	taskTimeout: 120000,
+}, () => {
+	before( requireAuditBrowser );
+
+	it( 'Audits the Contact Us form preview', () => {
 		cy.login();
-		cy.visit( '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form' );
-		cy.lighthouse( thresholds );
+		cy.ensureContactUsFormExists();
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.contains( '#the-list tr', 'Contact Us' ).find( '.view a' )
+			.invoke( 'attr', 'href' ).then( href => {
+				expect( new URL( href ).searchParams.get( 'action' ) ).to.equal( 'frm_forms_preview' );
+				// End admin view transitions before navigating into the standalone preview.
+				cy.document().then( document => {
+					document.querySelector( '#wp-view-transitions-admin-inline-css' )?.remove();
+				} );
+				cy.visit( href );
+				cy.get( '.frm_forms form' ).should( 'be.visible' );
+				cy.url().then( url => cy.task( 'lighthouse', { url, opts: auditOptions } ) );
+			} );
 	} );
 } );

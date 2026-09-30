@@ -1,0 +1,93 @@
+{
+	"lighthouseVersion": "13.4.1",
+	"pages": {
+		"dashboard": {
+			"bf-cache": "WordPress admin no-store headers and embedded video prevent back/forward caching.",
+			"bootup-time": "Existing WordPress and YouTube JavaScript execution costs exceed the audit budget.",
+			"cache-insight": "Existing local static assets and third-party resources have short cache lifetimes.",
+			"color-contrast": "Dashboard Upgrade menu uses white on #1da867. Preview Submit uses white on #4199fd. Both miss 4.5:1.",
+			"document-latency-insight": "Observed dashboard document latency exceeds the audit budget in wp-env.",
+			"font-display-insight": "The Formidable Inter face lacks font-display. Third-party video fonts also contribute.",
+			"forced-reflow-insight": "Existing dashboard and third-party scripts trigger forced layout work.",
+			"heading-order": "The dashboard welcome banner skips from the page heading to h4.",
+			"inspector-issues": "The YouTube player triggers cookie issues in Chrome DevTools.",
+			"label-content-name-mismatch": "The WordPress core Collapse Menu button has aria-label Collapse Main menu, which does not include the visible text verbatim.",
+			"lcp-breakdown-insight": "Existing dashboard largest-contentful-paint phases exceed the insight budget.",
+			"lcp-discovery-insight": "The empty entries placeholder loads a CSS background image that is not discoverable in initial HTML.",
+			"link-in-text-block": "The existing dashboard inbox usage-data message has Global Settings and documentation links distinguished only by color, with 1.04:1 contrast against surrounding text.",
+			"link-text": "Dashboard Learn More links fail the descriptive text audit.",
+			"mainthread-work-breakdown": "Existing admin scripts, rendering and embedded video exceed the main-thread budget.",
+			"meta-description": "The admin dashboard and standalone preview do not supply SEO descriptions.",
+			"modern-http-insight": "Third-party dashboard resources were observed using older HTTP transport through Cypress.",
+			"network-dependency-tree-insight": "Existing styles, scripts, fonts and dashboard video form critical request chains.",
+			"render-blocking-insight": "Existing WordPress and Formidable styles and scripts block initial rendering.",
+			"robots-txt": "Lighthouse cannot download robots.txt from this wp-env test site.",
+			"server-response-time": "Observed dashboard server response time exceeds the audit budget in wp-env.",
+			"third-party-cookies": "The dashboard embeds YouTube, which sets third-party cookies.",
+			"unminified-javascript": "The WordPress inline emoji loader is not minified.",
+			"unsized-images": "The Get free templates banner image has width=100 but no height attribute.",
+			"unused-css-rules": "Existing WordPress and Formidable admin styles plus embedded video assets contain unused CSS.",
+			"unused-javascript": "Existing WordPress editor and component bundles plus YouTube load code unused by the dashboard.",
+			"valid-source-maps": "WordPress core bundles and third-party scripts are missing usable source maps."
+		},
+		"form-preview": {
+			"cache-insight": "Existing local static assets and third-party resources have short cache lifetimes.",
+			"color-contrast": "Dashboard Upgrade menu uses white on #1da867. Preview Submit uses white on #4199fd. Both miss 4.5:1.",
+			"document-latency-insight": "Repeated preview audit observed document latency above the budget in wp-env.",
+			"font-display-insight": "Repeated preview audit observed the active Twenty Twenty-Five theme Manrope font blocking text display.",
+			"is-crawlable": "The standalone preview deliberately sends x-robots-tag: noindex.",
+			"label": "The existing imported Contact Us copy has a Last name input whose explicit label is hidden. Lighthouse 13 reproduces this. The fresh starter form passes this audit.",
+			"landmark-one-main": "The standalone preview wraps its form in a div and has no main landmark.",
+			"lcp-breakdown-insight": "Repeated preview audit observed LCP phase delays while loading the document and theme fonts.",
+			"meta-description": "The admin dashboard and standalone preview do not supply SEO descriptions.",
+			"network-dependency-tree-insight": "Existing styles, scripts, fonts and dashboard video form critical request chains.",
+			"render-blocking-insight": "Existing WordPress and Formidable styles and scripts block initial rendering.",
+			"robots-txt": "Lighthouse cannot download robots.txt from this wp-env test site.",
+			"server-response-time": "Repeated preview audit observed a 2002 ms server response in wp-env."
+		}
+	},
+	"informationalAudits": {
+		"first-contentful-paint": "Timing measurements vary with runner hardware, browser load and third-party response times. Report these while measuring CI variance.",
+		"largest-contentful-paint": "Timing measurements vary with runner hardware, browser load and third-party response times. Report these while measuring CI variance.",
+		"speed-index": "Timing measurements vary with runner hardware, browser load and third-party response times. Report these while measuring CI variance.",
+		"total-blocking-time": "Timing measurements vary with runner hardware, browser load and third-party response times. Report these while measuring CI variance.",
+		"interactive": "Timing measurements vary with runner hardware, browser load and third-party response times. Report these while measuring CI variance.",
+		"max-potential-fid": "Timing measurements vary with runner hardware, browser load and third-party response times. Report these while measuring CI variance."
+	},
+	"measuredAt": "2026-09-30",
+	"environment": {
+		"wordpress": "7.1.2",
+		"browser": "Chrome 154 headless",
+		"node": "22.22.2",
+		"viewport": "desktop 1350 x 940",
+		"pluginState": "Lite only, fresh wp-env"
+	},
+	"categoryScores": {
+		"dashboard": {
+			"performance": "48-53",
+			"accessibility": 96,
+			"best-practices": 77,
+			"seo": 77
+		},
+		"form-preview": {
+			"performance": "98-100",
+			"accessibility": 92,
+			"best-practices": 100,
+			"seo": 45
+		}
+	},
+	"existingEnvironmentCategoryScores": {
+		"form-preview": {
+			"performance": 100,
+			"accessibility": 84,
+			"best-practices": 100,
+			"seo": 45
+		},
+		"dashboard": {
+			"performance": "66-73",
+			"accessibility": 92,
+			"best-practices": 77,
+			"seo": 77
+		}
+	}
+}

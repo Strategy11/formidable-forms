@@ -1,19 +1,12 @@
-describe( 'Run a Lighthouse performance audit', function() {
-	beforeEach( cy.login );
+import { auditOptions, requireAuditBrowser } from '../../lighthouse/options';
 
-	// Permissive on purpose - this run establishes the baseline. The
-	// `lighthouse` task in cypress.config.js logs the raw category scores to
-	// the CI log; ratchet these thresholds up to that baseline once it's
-	// measured.
-	const thresholds = {
-		performance: 0,
-		accessibility: 0,
-		'best-practices': 0,
-		seo: 0
-	};
+describe( 'Lighthouse dashboard baseline', { retries: 0, responseTimeout: 120000, pageLoadTimeout: 120000, taskTimeout: 120000 }, () => {
+	before( requireAuditBrowser );
 
-	it( 'Check the dashboard page', () => {
+	it( 'Audits the Formidable dashboard', () => {
+		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable-dashboard' );
-		cy.lighthouse( thresholds );
+		cy.get( '#frm_top_bar' ).should( 'be.visible' );
+		cy.url().then( url => cy.task( 'lighthouse', { url, opts: auditOptions } ) );
 	} );
 } );
