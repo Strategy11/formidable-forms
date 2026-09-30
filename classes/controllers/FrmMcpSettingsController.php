@@ -135,7 +135,15 @@ class FrmMcpSettingsController {
 	 * @return void
 	 */
 	public static function route() {
-		$mcp_enabled        = FrmMcpController::is_enabled();
+		$mcp_enabled = FrmMcpController::is_enabled();
+
+		// The save that turns MCP on runs after init, where the adapter was
+		// skipped because MCP was still off. Load it now so the checks below
+		// see the adapter instead of reporting it missing until the next load.
+		if ( $mcp_enabled ) {
+			FrmMcpCompat::load_adapter();
+		}
+
 		$connections        = FrmMcpCompat::is_usable() ? FrmMcpConnection::get_connections() : null;
 		$blocked_reason     = $mcp_enabled ? FrmMcpCompat::unsupported_reason() : '';
 		$is_inherited       = self::inherited_from_api_addon();
