@@ -73,8 +73,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'frm-forms-list-show-desc',
 			'frm_forms_show_desc',
 			array(
-				'echo'    => true,
-				'checked' => 'excerpt' === FrmAppHelper::simple_get( 'mode', 'sanitize_title' ),
+				'echo'            => true,
+				'checked'         => 'excerpt' === FrmAppHelper::simple_get( 'mode', 'sanitize_title' ),
+				'aria-label-attr' => __( 'Description Excerpt', 'formidable' ),
 			)
 		);
 		?>

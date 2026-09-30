@@ -373,7 +373,10 @@ class FrmFormsListHelper extends FrmListHelper {
 			! empty( $item->name ) ? $item->name : FrmFormsHelper::get_no_title_text()
 		);
 
-		return $checkbox . '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
+		$label  = '<label for="cb-item-action-' . absint( $item->id ) . '" aria-label="' . esc_attr( $checkbox_label_text ) . '">';
+		$label .= '<span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
+
+		return $checkbox . $label;
 	}
 
 	/**

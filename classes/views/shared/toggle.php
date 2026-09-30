@@ -25,14 +25,35 @@ $aria_checked  = $checked ? 'true' : 'false';
 $input_html    = $args['input_html'] ?? array();
 $use_container = false;
 
+$off_label_shown = $show_labels && $off_label;
+// phpcs:ignore Universal.Operators.StrictComparisons
+$on_label_shown = $show_labels && $on_label != 1;
+
 $aria_attrs = array();
 
 if ( isset( $args['aria-label-attr'] ) && '' !== $args['aria-label-attr'] ) {
 	$aria_attrs['aria-label'] = $args['aria-label-attr'];
+} elseif ( $off_label_shown || $on_label_shown ) {
+	// The default `{$id}_label` fallback below assumes some other element on the page
+	// carries that id (e.g. an external <label for>) -- when this view renders its own
+	// visible label span(s), point at those instead so the accessible name actually
+	// resolves to the visible text, rather than a dangling reference to nothing.
+	$labelledby = array();
+
+	if ( $off_label_shown ) {
+		$labelledby[] = $id . '_off_label';
+	}
+
+	if ( $on_label_shown ) {
+		$labelledby[] = $id . '_on_label';
+	}
+	$aria_attrs['aria-labelledby'] = implode( ' ', $labelledby );
 } else {
 	$aria_attrs['aria-labelledby'] = $id . '_label';
 }
 $aria_attrs['aria-checked'] = $aria_checked;
+$label_aria_attrs           = $aria_attrs;
+unset( $label_aria_attrs['aria-checked'] );
 
 $div_params = array(
 	// This is important when the default style is !important as Pro styling may cause conflicts.
@@ -56,14 +77,14 @@ if ( $use_container ) {
 	$div_params = array();
 }
 ?>
-	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
-		<?php if ( $show_labels && $off_label ) { ?>
-			<span class="frm_off_label frm_toggle_opt frm-leading-none"><?php echo esc_html( $off_label ); ?></span>
+	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $label_aria_attrs, true ); ?> <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
+		<?php if ( $off_label_shown ) { ?>
+			<span id="<?php echo esc_attr( $id ); ?>_off_label" class="frm_off_label frm_toggle_opt frm-leading-none"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
 
 		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
 			<?php checked( $checked, true ); ?>
-			<?php if ( $show_labels && $off_label ) { ?>
+			<?php if ( $off_label_shown ) { ?>
 				data-off="<?php echo esc_attr( $off_label ); ?>"
 			<?php } ?>
 			<?php if ( $disabled ) { ?>
@@ -84,9 +105,8 @@ if ( $use_container ) {
 			<span class="frm_toggle_slider"></span>
 		</span>
 
-		<?php // phpcs:ignore Universal.Operators.StrictComparisons ?>
-		<?php if ( $show_labels && $on_label != 1 ) { ?>
-			<span class="frm_on_label frm_toggle_opt frm-leading-none"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
+		<?php if ( $on_label_shown ) { ?>
+			<span id="<?php echo esc_attr( $id ); ?>_on_label" class="frm_on_label frm_toggle_opt frm-leading-none"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
 		<?php } ?>
 	</label>
 <?php if ( $use_container ) { ?>
