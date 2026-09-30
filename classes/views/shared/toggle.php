@@ -26,7 +26,8 @@ $input_html    = $args['input_html'] ?? array();
 $use_container = false;
 
 $aria_attrs = array();
-if ( ! empty( $args['aria-label-attr'] ) ) {
+
+if ( isset( $args['aria-label-attr'] ) && '' !== $args['aria-label-attr'] ) {
 	$aria_attrs['aria-label'] = $args['aria-label-attr'];
 } else {
 	$aria_attrs['aria-labelledby'] = $id . '_label';

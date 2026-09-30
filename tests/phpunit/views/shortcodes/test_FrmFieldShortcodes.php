@@ -5,6 +5,10 @@
  * @group shortcodes
  * @group field-shortcodes
  */
+#[\PHPUnit\Framework\Attributes\Group( 'free' )]
+#[\PHPUnit\Framework\Attributes\Group( 'views' )]
+#[\PHPUnit\Framework\Attributes\Group( 'shortcodes' )]
+#[\PHPUnit\Framework\Attributes\Group( 'field-shortcodes' )]
 class test_FrmFieldShortcodes extends FrmUnitTest {
 
 	protected $test_form;

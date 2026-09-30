@@ -37,6 +37,10 @@ class FrmFieldsHelper {
 		$values['form_id']     = $form_id;
 		$values['field_order'] = $field_count + 1;
 
+		if ( ! is_array( $values['field_options'] ) ) {
+			$values['field_options'] = array();
+		}
+
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
 		if ( ! empty( $setting ) ) {
@@ -2996,5 +3000,61 @@ class FrmFieldsHelper {
 		 * @param string $choice_key The option key.
 		 */
 		do_action( 'frm_after_choice_input', $field, $choice_key );
+	}
+
+	/**
+	 * Get the values available for the autocomplete HTML attribute.
+	 *
+	 * @since x.x This was moved from FrmProFieldsHelper::get_autocomplete_options.
+	 *
+	 * @param array<string> $filter_keys Only include these keys. An empty array will include every key.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function get_autocomplete_options( $filter_keys = array() ) {
+		$options = array(
+			'on'                   => __( 'On', 'formidable' ),
+			'off'                  => __( 'Off', 'formidable' ),
+			'additional-name'      => __( 'Additional name', 'formidable' ),
+			'bday'                 => __( 'Birthday', 'formidable' ),
+			'bday-day'             => __( 'Birthday day', 'formidable' ),
+			'bday-month'           => __( 'Birthday month', 'formidable' ),
+			'bday-year'            => __( 'Birthday year', 'formidable' ),
+			'country'              => __( 'Country', 'formidable' ),
+			'country-name'         => __( 'Country name', 'formidable' ),
+			'current-password'     => __( 'Current password', 'formidable' ),
+			'email'                => __( 'Email', 'formidable' ),
+			'family-name'          => __( 'Family name', 'formidable' ),
+			'given-name'           => __( 'Given name', 'formidable' ),
+			'honorific-prefix'     => __( 'Honorific prefix', 'formidable' ),
+			'honorific-suffix'     => __( 'Honorific suffix', 'formidable' ),
+			'impp'                 => __( 'IMPP', 'formidable' ),
+			'language'             => __( 'Language', 'formidable' ),
+			'name'                 => __( 'Name', 'formidable' ),
+			'new-password'         => __( 'New password', 'formidable' ),
+			'one-time-code'        => __( 'One time code', 'formidable' ),
+			'organization'         => __( 'Organization', 'formidable' ),
+			'organization-title'   => __( 'Organization title', 'formidable' ),
+			'photo'                => __( 'Photo', 'formidable' ),
+			'postal-code'          => __( 'Postal Code', 'formidable' ),
+			'sex'                  => __( 'Sex', 'formidable' ),
+			'street-address'       => __( 'Street address', 'formidable' ),
+			'tel'                  => __( 'Tel', 'formidable' ),
+			'tel-area-code'        => __( 'Tel area code', 'formidable' ),
+			'tel-country-code'     => __( 'Tel country code', 'formidable' ),
+			'tel-extension'        => __( 'Tel extension', 'formidable' ),
+			'tel-local'            => __( 'Tel local', 'formidable' ),
+			'tel-national'         => __( 'Tel national', 'formidable' ),
+			'transaction-amount'   => __( 'Transaction amount', 'formidable' ),
+			'transaction-currency' => __( 'Transaction currency', 'formidable' ),
+			'url'                  => __( 'URL', 'formidable' ),
+			'username'             => __( 'Username', 'formidable' ),
+		);
+
+		if ( ! $filter_keys ) {
+			return $options;
+		}
+
+		return array_intersect_key( $options, array_flip( $filter_keys ) );
 	}
 }

@@ -1155,6 +1155,63 @@ function frmFrontFormJS() {
 		return kvp.join( '&' );
 	}
 
+	/**
+	 * Resolve the per-form error-announcement config rendered by
+	 * FrmFormsHelper::get_error_config_for_form() onto the form's `data-frm-error-config`
+	 * attribute. Falls back to the page-global frm_js defaults (and no summary focus) when
+	 * a form element isn't available, e.g. a `frm-show-form` div rendered without a `form`
+	 * tag around it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement|null} formEl
+	 * @return {{includeAlertRole: boolean, focusFirstError: boolean, focusErrorSummary: boolean}} The resolved config.
+	 */
+	function getErrorConfigForForm( formEl ) {
+		const fallback = {
+			includeAlertRole: !! frm_js.include_alert_role,
+			focusFirstError: !! frm_js.focus_first_error,
+			focusErrorSummary: false,
+		};
+
+		if ( ! formEl || ! formEl.dataset.frmErrorConfig ) {
+			return fallback;
+		}
+
+		// The config is static for the life of the page, so cache it on the form element
+		// instead of re-parsing on every field error (submit, and every change-event
+		// validation while the user is filling out the form).
+		if ( ! formEl.frmErrorConfigCache ) {
+			try {
+				formEl.frmErrorConfigCache = JSON.parse( formEl.dataset.frmErrorConfig );
+			} catch ( e ) {
+				formEl.frmErrorConfigCache = fallback;
+			}
+		}
+
+		return formEl.frmErrorConfigCache;
+	}
+
+	/**
+	 * Inserts error HTML into a field's container, tagging every inserted top-level
+	 * element with a data-frm-error attribute. removeFieldError()/removeAllErrors() rely
+	 * on that attribute (rather than the frm_error class) to find and remove the visible
+	 * error element again, since a site's own custom field HTML template can render the
+	 * [error] placeholder without a frm_error class or id. This only covers the visible
+	 * element — aria-describedby cleanup still depends on an id, which custom markup may
+	 * not have.
+	 *
+	 * @param {HTMLElement} container
+	 * @param {string}      errorHtml
+	 * @return {void}
+	 */
+	function insertErrorHtml( container, errorHtml ) {
+		const template = document.createElement( 'template' );
+		template.innerHTML = errorHtml;
+		Array.from( template.content.children ).forEach( el => el.setAttribute( 'data-frm-error', '' ) );
+		container.append( template.content );
+	}
+
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
@@ -1175,10 +1232,11 @@ function frmFrontFormJS() {
 			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+				const config = getErrorConfigForForm( container.closest( '.frm-show-form' ) );
+				const roleString = config.includeAlertRole ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
-			container.insertAdjacentHTML( 'beforeend', errorHtml );
+			insertErrorHtml( container, errorHtml );
 			inputs.forEach( input => {
 				describedBy = input.getAttribute( 'aria-describedby' );
 				if ( ! describedBy ) {
@@ -1237,7 +1295,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const errorMessage = container.querySelector( '.frm_error' );
+		const errorMessages = container.querySelectorAll( '.frm_error, [data-frm-error]' );
 		const input = container.querySelector( 'input, select, textarea' );
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
@@ -1253,10 +1311,10 @@ function frmFrontFormJS() {
 			}
 		}
 
-		if ( errorMessage ) {
+		errorMessages.forEach( errorMessage => {
 			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
-		}
+		} );
 	}
 
 	/**
@@ -1287,7 +1345,7 @@ function frmFrontFormJS() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+		document.querySelectorAll( '.form-field .frm_error, .form-field [data-frm-error]' ).forEach( el => {
 			removeElementFromInputDescribedBy( el );
 			el.remove();
 		} );
@@ -1435,12 +1493,25 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		if ( ! frm_js.focus_first_error ) {
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error, .frm_form_field [data-frm-error]' );
+		if ( ! errors.length ) {
 			return;
 		}
 
-		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
-		if ( ! errors.length ) {
+		const formContainer = errors[ 0 ].closest( '.frm-show-form' );
+		const config = getErrorConfigForForm( formContainer );
+
+		if ( config.focusErrorSummary ) {
+			const summary = formContainer ? formContainer.querySelector( '[data-frm-error-summary]' ) : null;
+			if ( summary ) {
+				summary.focus();
+				return;
+			}
+			// No summary in the DOM (js_validate's client-side path never renders one): fall
+			// through to the first-errored-field focus below.
+		}
+
+		if ( ! config.focusFirstError && ! config.focusErrorSummary ) {
 			return;
 		}
 
@@ -1448,6 +1519,9 @@ function frmFrontFormJS() {
 		let timeoutCallback;
 		do {
 			element = element.previousSibling;
+			if ( ! element ) {
+				break;
+			}
 			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
 				break;

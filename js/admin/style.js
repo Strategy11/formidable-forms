@@ -685,7 +685,8 @@
 			return;
 		}
 
-		card.append( getHamburgerMenu( card.dataset ) );
+		const styleName = card.querySelector( '.frm-style-card-title' )?.textContent;
+		card.append( getHamburgerMenu( card.dataset, styleName ) );
 	}
 
 	/**
@@ -715,20 +716,39 @@
 	}
 
 	/**
+	 * @param {string} [styleName] The style's own name, when known.
+	 * @return {string} The dropdown toggle's accessible name for a style card.
+	 */
+	function getStyleOptionsLabel( styleName ) {
+		if ( ! styleName ) {
+			return __( 'Style Options', 'formidable' );
+		}
+
+		/* translators: %s: The style's name. */
+		return sprintf( __( 'Style options for %s', 'formidable' ), styleName );
+	}
+
+	/**
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
-	 * @param {DOMStringMap} data {
+	 * @param {DOMStringMap} data        {
 	 *     @type {string} editUrl
 	 *     @type {string} styleId
 	 *     @type {string} labelPosition
 	 *     @type {string} classname
 	 * }
+	 * @param {string}       [styleName] The style's own name, when known, so the trigger's
+	 *                                   accessible name distinguishes it from other cards' triggers.
 	 * @return {HTMLElement} The hamburger menu element.
 	 */
-	function getHamburgerMenu( data ) {
+	function getHamburgerMenu( data, styleName ) {
+		const label = getStyleOptionsLabel( styleName );
 		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
-			child: svg( { href: '#frm_thick_more_vert_icon' } )
+			children: [
+				svg( { href: '#frm_thick_more_vert_icon' } ),
+				span( { className: 'screen-reader-text', text: label } )
+			]
 		} );
 		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
@@ -1098,6 +1118,11 @@
 		const card = getCardByStyleId( styleId );
 		const titleElement = card.querySelector( '.frm-style-card-title' );
 		titleElement.textContent = newStyleName;
+
+		const toggleLabel = card.querySelector( '.frm-dropdown-toggle .screen-reader-text' );
+		if ( toggleLabel ) {
+			toggleLabel.textContent = getStyleOptionsLabel( newStyleName );
+		}
 	}
 
 	/**

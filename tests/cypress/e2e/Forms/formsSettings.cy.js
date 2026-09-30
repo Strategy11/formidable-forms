@@ -14,7 +14,8 @@ describe( 'Updating form settings', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Create a text field` );
-		cy.get( `li[id="text"] a[title="Text"]` ).click( { force: true } );
+		// Plain, always-visible sidebar link - no hover gating involved.
+		cy.get( `li[id="text"] a[title="Text"]` ).should( 'be.visible' ).click();
 
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
@@ -71,7 +72,7 @@ describe( 'Updating form settings', () => {
 		cy.get( '.frm_form_title' ).should( 'not.exist' );
 		cy.get( '.frm_description > p' ).should( 'not.exist' );
 		cy.go( 'back' );
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click( { force: true } );
+		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
 
 		cy.log( 'Teardown - Delete form' );
 		cy.deleteForm();
@@ -88,10 +89,13 @@ describe( 'Updating form settings', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Create a text field` );
-		cy.get( 'li[id="text"] a[title="Text"]', { timeout: 5000 } ).click( { force: true } );
+		// Plain, always-visible sidebar link - no hover gating involved.
+		cy.get( 'li[id="text"] a[title="Text"]', { timeout: 5000 } ).should( 'be.visible' ).click();
 
 		cy.log( 'Update form' );
-		cy.contains( '#frm_submit_side_top', 'Update' ).click( { force: true } );
+		// Plain cy.get() rather than cy.contains() works unforced elsewhere in the suite for this
+		// same button (e.g. line 20 above).
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
 		cy.log( 'Go to Settings tab' );
 		cy.get( '.frm_form_nav', { timeout: 5000 } ).should( 'be.visible' );
