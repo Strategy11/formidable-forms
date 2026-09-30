@@ -2,7 +2,7 @@
 Contributors: formidableforms, sswells, srwells
 Tags: form builder, contact form, custom form, payment form, forms
 Requires at least: 6.3
-Tested up to: 7.1.1
+Tested up to: 7.1
 Requires PHP: 7.0
 Stable tag: 6.35
 
@@ -45,7 +45,7 @@ Calculator forms cover mortgage calculators, loan calculators, BMI calculators, 
 
 = Build Directories, Listings, and Web Applications with Formidable Views =
 
-Formidable is a web application builder as much as a form plugin. Formidable Views turns submitted registration form and entry data into front-end pages: searchable directories, job boards, real estate listings, member directories, event calendars, and timeline views. No additional plugin is required. This plugin's forms and Views work together, so a form's data can become a full web application without leaving WordPress, with more built-in depth than Ninja Forms reaches through its own add-ons.
+Formidable is a web application builder as much as a form plugin. Formidable Views turns submitted registration form and entry data into a searchable database you can present as front-end pages: searchable directories, job boards, real estate listings, member directories, event calendars, and timeline views. No additional plugin is required. This plugin's forms and Views work together, so a form's data can become a full web application without leaving WordPress, with more built-in depth than Ninja Forms reaches through its own add-ons.
 
 = Registration Forms, User Profiles, and Entry Management =
 
@@ -94,7 +94,7 @@ From contact forms and registration forms to calculators and quizzes:
 * [Payment Forms](https://formidableforms.com/payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Stripe, PayPal, Square, and Authorize.net, online and in-person
 * [WooCommerce Form Builder](https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Custom product forms with dynamic pricing
 * [Formidable Views](https://formidableforms.com/features/display-form-data-views/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Display form data as directories, job boards, and listings
-* [Directories](https://formidableforms.com/wordpress-directory-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Searchable, front-end member and business directories
+* [Directories](https://formidableforms.com/wordpress-directory-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Turn entries into a searchable database presented as member and business directories
 * [Real Estate Listings](https://formidableforms.com/real-estate-listings/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Property listing pages built from form entries
 * [Calendar Views](https://formidableforms.com/calendar-views/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Display entries as an event calendar
 * [Timeline Views](https://formidableforms.com/timeline-views/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion) - Display entries as a chronological timeline
@@ -397,86 +397,6 @@ See all Formidable Zapier Integrations (https://zapier.com/apps/formidable/integ
 
 = 6.33.1 =
 * Fix: Text field lookup requests for text fields that watch lookup fields would incorrectly fail validation and get blocked.
-
-= 6.33 =
-* Security: Additional validation has been added to block requests for dynamic and lookup fields if the current user cannot access the form.
-* Security: Uploaded SVG files are now filtered to remove unsafe HTML on upload, and protected file URLs will now download the SVG instead of displaying it a new tab to prevent scripts from running.
-* New: Support has been added for accessing uploaded files using gated content actions.
-* Fix: A html_entity_decode(): Passing null to parameter #1 ($string) of type string deprecated message has been fixed.
-
-= 6.32 =
-* New: A new Style column has been added to the form list table. This includes a new dropdown for quickly updating the style for a form directly from the form list.
-* New: Checkbox and radio button alignment settings in form styles now include Two, Three, and Four column options.
-* New: Field labels for confirmation fields are now shown by default to improve user experience. A new "Show confirmation field label" field setting has been added to revert to hiding the field label.
-* New: Visible focus styling has been added to collapsible section headers, file uploads, star ratings, slider fields, and rootline elements, to help improve user experience.
-
-= 6.31 =
-* New: Support for handling multiple pages when using the new PayPal Commerce integration introduced in Formidable Lite v6.31.
-* New: New updates have been made to reflect the new form action settings changes introduced in Formidable Lite v6.31.
-* Fix: A check has been added to prevent issues when a repeater has no end divider field.
-* Fix: Error messages for fields with custom currency formats would disappear on page load.
-
-= 6.30.2 =
-* Fix: Changing read and write permissions for uploaded files would no longer work in WP 7.0, where the WordPress chmod function no longer properly changes file permissions, causing some files to get stuck in a write only state.
-* Fix: Virtual fields would not correctly save [get] param shortcodes in multiple page forms with submitting with AJAX enabled.
-* Fix: File resizing before upload was not working correctly after an update in v6.27 that fixed issues with uploading files from mobile devices.
-* Fix: Inline repeater buttons are now more responsive, preventing issues where the repeater buttons would get cut off on some screen widths.
-* Fix: The message that all field options are disabled would appear in cases where a field has no options but option limiting was not enabled, causing issues with implementations that add custom options.
-* Fix: When an address field had no line1 data, none of the saved address data would appear on display.
-* Fix: A "Using null as an array offset is deprecated" deprecated message when using PHP 8.5 on new sites without a date format setting set, has been fixed.
-
-= 6.30.1 =
-* Fix: Total fields would show errors and block form submissions in some cases due to rounding issues when validating.
-* Fix: Coupon fields would fail to validate when a total field's value was set to 0 when using a coupon code for 100% off.
-
-= 6.30 =
-* New: Product fields now include Display format settings with Simple and Images options, allowing you to add images to product options.
-* New: Global custom CSS is now scoped to only style form previews on the edit/new entry admin pages to prevent custom CSS from changing the appearance of other elements on the page.
-* New: Product field shortcodes now support a show=price option.
-* Performance: Database queries to determine [auto_id] shortcode values have been optimized, to significantly reduce page load times in forms with many entries.
-* Performance: Database queries to detect unique values when validating has been optimized to improve the take it takes to process a form with a lot of entries.
-* Performance: The way calculation buttons are rendered has been optimized to require less HTML on page load. In forms with a lot of fields, this should help with page performance and load times.
-* Fix: Number values used as default values would not properly appear selected in dropdowns using autocomplete when conditionally shown.
-* Fix: An "Only variable references should be returned by reference" PHP Notice has been fixed.
-* Fix: A "($separator) cannot be empty" fatal error has been fixed.
-
-= 6.29 =
-* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
-* Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
-* Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
-* Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
-* Fix: The field options dropdown for the far left field would render underneath the field settings sidebar in rows with a lot of fields.
-* Fix: An Undefined array key "slug" PHP Warning has been fixed.
-* Fix: When a missing payment field is automatically added to a form with a payment action, the new field would incorrectly appear below the submit button.
-* Breaking: The deprecated FrmDb constructor method has been removed.
-
-= 6.28 =
-* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
-* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
-
-= 6.27 =
-* New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
-* New: A new coupons tab is available on the payments page.
-* New: Required updates to support a new View-Specific CSS setting in the Visual Views add-on.
-* New: The submit button will now be enabled when a Square postal code is successfully completed. This fixes issues where the submit button would never get enabled when a Square card field was auto-filled.
-* New: Many references to old font icons have been removed, removing about 10KB of data from admin CSS.
-* New: Several styles have been optimized in the generated formidableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
-* Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
-* Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
-* Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.
-* Fix: A PHP warning would get logged when checking data for a ranking field as spam.
-* Fix: Add-on category counts were not always correct.
-* Breaking: Many modern PHP functions are now being used including str_contains, str_starts_with, str_ends_with, array_key_last, and array_key_first. If you are using both a WordPress version older than 5.9, and a PHP version lower than 8.0, this will introduce fatal errors. Note that the minimum required WordPress version is already set to 6.3.
-* Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
-* Breaking: The deprecated FrmFormsHelper::actions_dropdown function and actions-dropdown.php view file have been removed.
-* An unused FrmTransLiteSubscriptionsController::list_subscriptions_shortcode function and its related view file have been deprecated.
-
-= 6.26.1 =
-* New: The cached data for license checks is now set to autoload to help reduce calls to the database, and an option check for a request lock has been moved so it only happens when the option data has expired. These changes should help with performance.
-* New: SVG icon updates have been made to avoid use of the deprecated xlink:href attribute.
-* Fix: Field step settings were changed to only accept numbers in last release, causing issues with "any" as a value.
-* Fix: Bootstrap dropdowns would not properly initialize for fields loaded with AJAX in long forms, preventing access to the more options dropdown, hiding the option to delete a field.
-* Breaking: Old logic that would trigger blur events for inputs with no value set with the onblur attribute has been removed.
 
 See changelog for all versions (https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
