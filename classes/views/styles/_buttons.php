@@ -204,7 +204,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_margin"
 							class="frm-style-item-heading">
 							<?php esc_html_e( 'Margin', 'formidable' ); ?>
 							<span class="frm_help frmfont frm_tooltip_icon" data-placement="right" data-container="body" data-original-title="<?php esc_attr_e( 'Used for navigation buttons too', 'formidable' ); ?>"></span>
@@ -226,7 +225,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_submit_padding"
 							class="frm-style-item-heading">
 							<?php esc_html_e( 'Padding', 'formidable' ); ?>
 						</label>

@@ -1776,14 +1776,16 @@ class FrmFormsController {
 
 	/**
 	 * @since 6.27 Added $template_path parameter.
+	 * @since x.x Added $defer_icon parameter.
 	 *
 	 * @param int|string $form_id
 	 * @param string     $class
 	 * @param string     $template_path The path to a template file to use instead of the default.
+	 * @param bool       $defer_icon    True to leave the field icons out until JS adds them, for a list that is hidden until opened.
 	 *
 	 * @return void
 	 */
-	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default' ) {
+	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default', $defer_icon = false ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		/**
@@ -1876,6 +1878,7 @@ class FrmFormsController {
 					'name_suffix' => ' (' . $label . ')',
 					'type'        => $field->type,
 					'class'       => 'frm-customize-list dropdown-item',
+					'defer_icon'  => ! empty( $atts['defer_icon'] ),
 				)
 			);
 			unset( $part, $label );

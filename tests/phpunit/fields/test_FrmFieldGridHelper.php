@@ -2,7 +2,11 @@
 
 /**
  * @group fields
+ *
+ * @covers FrmFieldGridHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldGridHelper::class )]
 class test_FrmFieldGridHelper extends FrmUnitTest {
 
 	private $form_id;
@@ -11,9 +15,6 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 
 	private $section_helper;
 
-	/**
-	 * @covers FrmFieldGridHelper::get_size_of_class
-	 */
 	public function test_get_size_of_class() {
 		$this->assertSame( 1, $this->get_size_of_class( 'frm1' ) );
 		$this->assertSame( 6, $this->get_size_of_class( 'frm6' ) );
@@ -161,9 +162,6 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		ob_end_clean();
 	}
 
-	/**
-	 * @covers FrmFieldGridHelper::get_size_of_class
-	 */
 	public function test_get_size_of_class_handles_every_named_class() {
 		$this->assertSame( 2, $this->get_size_of_class( 'frm_sixth' ) );
 		$this->assertSame( 3, $this->get_size_of_class( 'frm_fourth' ) );
@@ -177,7 +175,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	/**
 	 * Anything the helper cannot read a width from takes up a full row.
 	 *
-	 * @covers FrmFieldGridHelper::get_size_of_class
+	 * @see FrmFieldGridHelper::get_size_of_class
 	 */
 	public function test_get_size_of_class_falls_back_to_full_width() {
 		$this->assertSame( 12, $this->get_size_of_class( '' ), 'A field with no layout class should fill the row.' );
@@ -186,9 +184,6 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$this->assertSame( 12, $this->get_size_of_class( 'frm' ) );
 	}
 
-	/**
-	 * @covers FrmFieldGridHelper::get_field_layout_class
-	 */
 	public function test_get_field_layout_class_reads_the_width_from_the_field_classes() {
 		$this->assertSame( 'frm_half', $this->get_layout_class_for( 'frm_half' ) );
 		$this->assertSame( 'frm4', $this->get_layout_class_for( 'frm4' ) );
@@ -196,9 +191,6 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$this->assertSame( 'frm_third', $this->get_layout_class_for( 'my_custom_class frm_third' ), 'Unrelated classes should be ignored.' );
 	}
 
-	/**
-	 * @covers FrmFieldGridHelper::get_field_layout_class
-	 */
 	public function test_get_field_layout_class_returns_an_empty_string_without_a_width() {
 		$this->assertSame( '', $this->get_layout_class_for( '' ) );
 		$this->assertSame( '', $this->get_layout_class_for( 'my_custom_class' ) );
@@ -207,16 +199,13 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	/**
 	 * A field carrying two width classes resolves in the order the helper lists them, not the order they appear on the field.
 	 *
-	 * @covers FrmFieldGridHelper::get_field_layout_class
+	 * @see FrmFieldGridHelper::get_field_layout_class
 	 */
 	public function test_get_field_layout_class_uses_the_helper_class_order() {
 		$this->assertSame( 'frm_half', $this->get_layout_class_for( 'frm6 frm_half' ) );
 		$this->assertSame( 'frm_half', $this->get_layout_class_for( 'frm_half frm6' ) );
 	}
 
-	/**
-	 * @covers FrmFieldGridHelper::get_field_layout_class
-	 */
 	public function test_get_field_layout_class_flags_frm_first() {
 		$this->assertTrue( $this->is_frm_first_for( 'frm_half frm_first' ) );
 		$this->assertFalse( $this->is_frm_first_for( 'frm_half' ) );

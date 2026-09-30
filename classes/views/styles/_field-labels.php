@@ -92,7 +92,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_label_align"
 							class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field frm-sm-z-index">
@@ -101,7 +100,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$frm_style->get_field_name( 'align' ),
 							$style->post_content['align'],
 							array(
-								'id'      => 'frm_label_align',
 								'options' => array( 'left', 'right' ),
 							)
 						);
@@ -129,7 +127,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_label_padding"
 							class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">

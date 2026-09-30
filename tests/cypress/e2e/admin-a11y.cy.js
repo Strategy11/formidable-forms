@@ -15,7 +15,8 @@ describe( 'Run some accessibility tests', function() {
 				id,
 				impact,
 				description,
-				nodes: nodes.length
+				nodes: nodes.length,
+				targets: nodes.map( node => node.target.join( ' ' ) ).join( '; ' )
 			} )
 		);
 
@@ -24,7 +25,7 @@ describe( 'Run some accessibility tests', function() {
 		// cy.task output doesn't reach the GitHub Actions log, so build the same
 		// summary into the assertion message below, which does.
 		return violationData
-			.map( ( { id, impact, description, nodes } ) => `${ id } (${ impact }): ${ description } - ${ nodes } node(s)` )
+			.map( ( { id, impact, description, nodes, targets } ) => `${ id } (${ impact }): ${ description } - ${ nodes } node(s): ${ targets }` )
 			.join( '\n' );
 	};
 

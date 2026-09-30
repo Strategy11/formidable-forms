@@ -321,7 +321,8 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Use Template' )
 			.click();
 
-		cy.get( 'svg[aria-label="Close"]' ).should( 'be.visible' ).click();
+		cy.location( 'search', { timeout: 10000 } ).should( 'include', 'frm_action=edit' );
+		cy.get( '#frm_form_editor_container' ).should( 'be.visible' );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 

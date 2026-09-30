@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
+	<label
 		data-slider-label-for="frm_check_font_size-value"
 		<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['check_font_size'] ) ? 'for="frm_check_font_size-value"' : ''; ?>
 		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>

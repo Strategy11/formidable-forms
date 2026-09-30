@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
+	<label
 		data-slider-label-for="frm_description_font_size-value"
 		<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['description_font_size'] ) ? 'for="frm_description_font_size-value"' : ''; ?>
 		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
@@ -80,8 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_description_align"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-sm-z-index">
@@ -90,7 +89,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'description_align' ),
 		$style->post_content['description_align'],
 		array(
-			'id'      => 'frm_description_align',
 			'options' => array( 'left', 'right' ),
 		)
 	);
@@ -98,8 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_description_margin"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-md-z-index">

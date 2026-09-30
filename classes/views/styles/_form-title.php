@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
+	<label
 		data-slider-label-for="frm_title_size-value"
 		<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['title_size'] ) ? 'for="frm_title_size-value"' : ''; ?>
 		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
@@ -41,8 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_title_margins"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">

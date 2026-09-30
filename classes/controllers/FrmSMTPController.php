@@ -246,15 +246,14 @@ class FrmSMTPController {
 				<div>
 					<h2>%2$s</h2>
 					<p>%3$s</p>
-					<span><a rel="%4$s" class="button button-primary frm-button-primary %5$s" aria-label="%6$s">%7$s</a></span>
-				</div>		
+					<span><a rel="%4$s" class="button button-primary frm-button-primary %5$s">%6$s</a></span>
+				</div>
 			</section>',
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html( $label ),
 			esc_html__( 'Install WP Mail SMTP from the WordPress.org plugin repository.', 'formidable' ),
 			esc_attr( $step['plugin'] ),
 			esc_attr( $step['button_class'] ),
-			esc_attr( $step['button_action'] ),
 			esc_html( $step['button_text'] )
 		);
 	}
@@ -321,18 +320,16 @@ class FrmSMTPController {
 		$this->output_data['plugin_setup']         = false;
 
 		$step = array(
-			'icon'          => 'frm_step1_icon',
-			'button_action' => '',
+			'icon' => 'frm_step1_icon',
 		);
 
 		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];
 
 		if ( ! $is_installed ) {
 			// Return the download url.
-			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );
-			$step['button_class']  = 'frm-install-addon';
-			$step['button_action'] = __( 'Install', 'formidable' );
-			$step['plugin']        = $this->config['lite_download_url'];
+			$step['button_text']  = __( 'Install WP Mail SMTP', 'formidable' );
+			$step['button_class'] = 'frm-install-addon';
+			$step['plugin']       = $this->config['lite_download_url'];
 			return $step;
 		}
 
@@ -346,9 +343,8 @@ class FrmSMTPController {
 			$step['button_text']  = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
 			$step['button_class'] = 'grey disabled';
 		} else {
-			$step['button_text']   = __( 'Activate WP Mail SMTP', 'formidable' );
-			$step['button_class']  = 'frm-activate-addon';
-			$step['button_action'] = __( 'Activate', 'formidable' );
+			$step['button_text']  = __( 'Activate WP Mail SMTP', 'formidable' );
+			$step['button_class'] = 'frm-activate-addon';
 		}
 
 		return $step;

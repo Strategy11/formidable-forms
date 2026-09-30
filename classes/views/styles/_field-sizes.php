@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm5 frm_form_field">
-	<label 
+	<label
 		data-slider-label-for="frm_field_font_size-value"
 		<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['field_font_size'] ) ? 'for="frm_field_font_size-value"' : ''; ?>
 		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
+	<label
 		data-slider-label-for="frm_field_height-value"
 		<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['field_height'] ) ? 'for="frm_field_height-value"' : ''; ?>
 		class="frm-style-item-heading"><?php esc_html_e( 'Height', 'formidable' ); ?></label>
@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
+	<label
 		data-slider-label-for="frm_field_width-value"
 		<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['field_width'] ) ? 'for="frm_field_width-value"' : ''; ?>
 		class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
@@ -77,8 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_pad"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -95,8 +94,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_margin"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -113,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
+	<label
 		data-slider-label-for="frm_border_radius-value"
 		<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['border_radius'] ) ? 'for="frm_border_radius-value"' : ''; ?>
 		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
@@ -134,6 +132,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm5 frm_form_field">
 	<label 
 		for="frm_auto_dropdowns_width"
+		id="frm_auto_dropdowns_width_label"
 		class="frm-style-item-heading"><?php esc_html_e( 'Auto Drop-downs Width', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-style-component">
