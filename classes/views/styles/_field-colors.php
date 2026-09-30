@@ -75,7 +75,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_field_border_width-value"
+							data-slider-label-for="frm_field_border_width-value"
+							<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['field_border_width'] ) ? 'for="frm_field_border_width-value"' : ''; ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -309,7 +310,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_border_width_error-value"
+							data-slider-label-for="frm_border_width_error-value"
+							<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['border_width_error'] ) ? 'for="frm_border_width_error-value"' : ''; ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">

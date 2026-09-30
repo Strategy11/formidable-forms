@@ -30,6 +30,33 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 		cy.focused().should( 'have.id', 'frm_fieldset-value' );
 	} );
 
+	it( 'A slider label outside Width/Height also drops its focus target once its unit is cleared to "Not set"', () => {
+		cy.intercept( 'POST', '**/admin-ajax.php', req => {
+			if ( req.body?.includes( 'action=frm_change_styling' ) ) {
+				req.alias = 'changeStyling';
+			}
+		} );
+
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#general-style' ).should( 'have.class', 'open' );
+
+		cy.log( '"Border Width" (frm_fieldset) ships with a measured default, so the label starts wired up' );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'have.attr', 'for', 'frm_fieldset-value' );
+
+		cy.log( 'Clearing the unit to "Not set" disables the value input and drops the label\'s focus target' );
+		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( '' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '#frm_fieldset-value' ).should( 'be.disabled' );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'not.have.attr', 'for' );
+
+		cy.log( 'Choosing a measured unit again re-associates the label with the now-enabled input' );
+		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( 'px' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'have.attr', 'for', 'frm_fieldset-value' );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).click();
+		cy.focused().should( 'have.id', 'frm_fieldset-value' );
+	} );
+
 	it( 'A "Width"/"Height" label targets nothing while its unit defaults to "auto", and gets a working focus target once a measured unit is chosen', () => {
 		cy.intercept( 'POST', '**/admin-ajax.php', req => {
 			if ( req.body?.includes( 'action=frm_change_styling' ) ) {
