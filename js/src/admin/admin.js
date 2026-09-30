@@ -6788,8 +6788,8 @@ window.frmAdminBuildJS = function() {
 	 * @param {string|number} fieldId
 	 */
 	function updateSingleProductLabel( fieldId ) {
-		const labelEl = document.querySelector( `#field_${ fieldId }_inner_container .frm_single_product_label` );
-		if ( ! labelEl ) {
+		const container = document.querySelector( `#field_${ fieldId }_inner_container > .frm_form_fields` );
+		if ( ! container ) {
 			return;
 		}
 
@@ -6807,6 +6807,34 @@ window.frmAdminBuildJS = function() {
 		const label = optWrapper.querySelector( `.field_${ fieldId }_option:not(.frm_product_price)` )?.value ?? '';
 		const price = optWrapper.querySelector( '.frm_product_price' )?.value ?? '';
 
+		let labelEl = container.querySelector( '.frm_single_product_label' );
+		let hiddenInput = container.querySelector( 'input[type="hidden"][data-frmprice]' );
+
+		if ( ! labelEl || ! hiddenInput ) {
+			// The preview still shows the markup for whatever data type this field had when
+			// it was last rendered server-side (e.g. the default dropdown) - switching the
+			// "Product Type" setting to Single Product doesn't request a fresh render, so build
+			// the single-product preview markup here instead, mirroring product-single.php.
+			const existingInput = container.querySelector( `[name^="item_meta[${ fieldId }]"]` );
+			const fieldName = existingInput?.getAttribute( 'name' ) ?? `item_meta[${ fieldId }]`;
+			const htmlId = existingInput?.getAttribute( 'id' ) ?? `field_${ fieldId }`;
+			const fieldVal = existingInput?.value ?? '';
+
+			// Not existingInput.cloneNode(true): the stale markup being replaced here is often
+			// a <select> (a fresh field's server-rendered default data type), whose children
+			// and tag semantics don't carry over to the hidden input product-single.php expects.
+			labelEl = document.createElement( 'p' );
+			labelEl.className = 'frm_single_product_label';
+
+			hiddenInput = document.createElement( 'input' );
+			hiddenInput.type = 'hidden';
+			hiddenInput.name = fieldName;
+			hiddenInput.id = htmlId;
+			hiddenInput.value = fieldVal;
+
+			container.replaceChildren( labelEl, hiddenInput );
+		}
+
 		const parts = [];
 		if ( label ) {
 			parts.push( label );
@@ -6815,12 +6843,7 @@ window.frmAdminBuildJS = function() {
 			parts.push( formatProductPrice( price ) );
 		}
 		labelEl.innerHTML = purifyHtml( parts.join( ': ' ) );
-
-		const previewContainer = document.getElementById( `field_${ fieldId }_inner_container` );
-		const hiddenInput = previewContainer ? previewContainer.querySelector( 'input[type="hidden"][data-frmprice]' ) : null;
-		if ( hiddenInput ) {
-			hiddenInput.dataset.frmprice = price;
-		}
+		hiddenInput.dataset.frmprice = price;
 	}
 
 	/**
@@ -10723,6 +10746,12 @@ window.frmAdminBuildJS = function() {
 
 		if ( 'single' === currentVal ) {
 			container.addClass( 'frm_prod_type_single' );
+
+			// Build the single-product preview right away instead of waiting for the user to
+			// also edit an option's label/price - the settings panel's option rows (and their
+			// current label/price values) already exist regardless of this setting's value.
+			const fieldId = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
+			updateSingleProductLabel( fieldId );
 		} else if ( 'user_def' === currentVal ) {
 			container.addClass( 'frm_prod_type_user_def' );
 			heading.addClass( 'frm_prod_user_def' );
