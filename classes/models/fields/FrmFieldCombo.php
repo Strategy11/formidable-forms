@@ -519,7 +519,7 @@ class FrmFieldCombo extends FrmFieldType {
 	private function is_short_phrase( $text ) {
 		$text = trim( $text );
 
-		return '' !== $text && count( preg_split( '/\s+/', $text ) ) <= 4 && ! preg_match( '/[.!?:;]$/', $text );
+		return '' !== $text && count( (array) preg_split( '/\s+/', $text ) ) <= 4 && ! preg_match( '/[.!?:;]$/', $text );
 	}
 
 	/**
