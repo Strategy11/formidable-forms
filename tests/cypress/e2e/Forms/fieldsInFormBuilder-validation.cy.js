@@ -201,6 +201,22 @@ describe( 'Fields in the form builder', () => {
 		cy.get( 'li[id="text"] a[title="Text"]' ).should( 'be.visible' ).click();
 		cy.get( 'li[id="url"] a[title="Website/URL"]' ).should( 'be.visible' ).click();
 
+		cy.log( 'Allow international domain names on the Website/URL field' );
+		// Same field-row "more options" toggle as the required-field test above.
+		cy.get( 'li[data-ftype="url"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons', { timeout: 10000 } )
+			.invoke( 'css', 'opacity', 1 )
+			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
+			.first()
+			.scrollIntoView()
+			.should( 'be.visible' )
+			.click();
+		cy.get( 'li[data-ftype="url"] .frm_select_field > span' ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
+		// The setting lives in the Advanced section, which starts collapsed.
+		cy.get( 'li[data-ftype="url"]' ).invoke( 'data', 'fid' ).then( fieldNumericId => {
+			cy.get( `#frm-single-settings-${ fieldNumericId } h3[aria-label="Collapsible Advanced Settings"]`, { timeout: 10000 } ).scrollIntoView().click();
+			cy.get( `#frm_allow_intl_domains_${ fieldNumericId }` ).scrollIntoView().should( 'be.visible' ).and( 'not.be.checked' ).check();
+		} );
+
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
@@ -224,7 +240,7 @@ describe( 'Fields in the form builder', () => {
 		cy.get( '[id^="frm_error_field_"]' ).should( 'exist' );
 
 		/**
-		 * An accented host must be accepted. The regex runs out of the committed js/formidable.min.js,
+		 * An accented host must be accepted now that the field allows it. The regex runs out of the committed js/formidable.min.js,
 		 * which is rebuilt into js/frm.min.js when the plugin is activated, so a stale minified
 		 * artifact fails right here.
 		 */
