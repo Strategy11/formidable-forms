@@ -385,13 +385,9 @@ function frmFrontFormJS() {
 		}
 
 		// A sub field container in a repeater does not have an ID that matches its key, so look it up from its input.
-		for ( const comboContainer of form.querySelectorAll( '.frm_combo_inputs_container' ) ) {
-			const input = getRequiredComboSubInputs( comboContainer ).find( subInput => key === getFieldId( subInput, true ) );
-			if ( input ) {
-				return input.closest( '.frm_form_field' );
-			}
-		}
-		return null;
+		const inputs = Array.from( form.querySelectorAll( '.frm_combo_inputs_container' ) ).flatMap( getRequiredComboSubInputs );
+		const input = inputs.find( subInput => key === getFieldId( subInput, true ) );
+		return input ? input.closest( '.frm_form_field' ) : null;
 	}
 
 	/**
