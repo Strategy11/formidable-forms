@@ -422,9 +422,9 @@ function frmFrontFormJS() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
-	 * @param {Object}      errors         Errors keyed by field container key, including the required errors of the sub fields. Updated in place.
-	 * @param {HTMLElement[]} inputs       Optional. The required sub inputs. Defaults to a query of the combo field.
+	 * @param {HTMLElement}   comboContainer The .frm_combo_inputs_container element.
+	 * @param {Object}        errors         Errors keyed by field container key, including the required errors of the sub fields. Updated in place.
+	 * @param {HTMLElement[]} inputs         Optional. The required sub inputs. Defaults to a query of the combo field.
 	 * @return {void}
 	 */
 	function maybeCombineComboFieldErrors( comboContainer, errors, inputs = getRequiredComboSubInputs( comboContainer ) ) {
