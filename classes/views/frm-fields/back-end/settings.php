@@ -17,7 +17,7 @@
  * @var bool|null    $show_upsell_for_unique_value Whether to show upsell for Unique.
  * @var bool|null    $show_upsell_for_read_only    Whether to show upsell for Read Only.
  * @var bool|null    $show_upsell_for_before_after_contents Whether to show upsell for before/after contents.
- * @var bool|null    $show_upsell_for_autocomplete Whether to show upsell for autocomplete.
+ * @var bool         $pro_is_installed             Whether Pro is installed.
  * @var bool|null    $show_upsell_for_visibility   Whether to show upsell for visibility.
  */
 
@@ -361,8 +361,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/before-after-contents.php';
 		}
 
-		if ( ! empty( $show_upsell_for_autocomplete ) ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/autocomplete.php';
+		// Pro shows this setting with its other advanced options. Pro versions that predate this one use their own copy.
+		if ( ! empty( $display['autocomplete'] ) && ! $pro_is_installed ) {
+			FrmFieldsController::show_autocomplete_option( $field );
 		}
 
 		if ( ! empty( $show_upsell_for_visibility ) ) {
@@ -381,7 +382,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		<?php if ( $display['captcha_size'] ) { ?>
 			<p class="frm6 frm_first frm_form_field">
-				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>">
+				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" <?php FrmAppHelper::array_to_html_params( FrmAppHelper::get_tooltip_attr( __( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ), true ); ?>>
 					<?php esc_html_e( 'Captcha Size', 'formidable' ); ?>
 				</label>
 				<select name="field_options[captcha_size_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>">
@@ -465,7 +466,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		?>
 
 		<p class="frm6 frm_form_field">
-			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
+			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" <?php FrmAppHelper::array_to_html_params( FrmAppHelper::get_tooltip_attr( __( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ) ), true ); ?>>
 				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
 			</label>
 			<input type="text" name="field_options[field_key_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['field_key'] ); ?>" id="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>"/>

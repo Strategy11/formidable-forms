@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @covers FrmAppHelper
+ * @covers FrmXMLHelper
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAppHelper::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmXMLHelper::class )]
 class test_FrmXMLHelper extends FrmUnitTest {
 
 	public function test_remove_defaults() {
@@ -83,9 +89,6 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmXMLHelper::populate_postmeta
-	 */
 	public function test_populate_postmeta() {
 		/**
 		 * Set the duplicate IDs this test relies on.
@@ -132,9 +135,6 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->run_private_method( array( 'FrmXMLHelper', 'populate_postmeta' ), array( &$post, $meta, $imported ) );
 	}
 
-	/**
-	 * @covers FrmXMLHelper::maybe_fix_xml
-	 */
 	public function test_maybe_fix_xml() {
 		$wp_comment        = '<!-- generator="WordPress/5.2.4" created="2019-10-23 19:33" -->';
 		$simple_xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . '<channel></channel>';
@@ -154,10 +154,6 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->run_private_method( array( 'FrmXMLHelper', 'maybe_fix_xml' ), array( &$xml_string ) );
 	}
 
-	/**
-	 * @covers FrmXMLHelper::cdata
-	 * @covers FrmAppHelper::maybe_utf8_encode
-	 */
 	public function test_cdata() {
 		$this->assertSame( '<![CDATA[Name]]>', FrmXMLHelper::cdata( 'Name' ) );
 		$this->assertSame( '<![CDATA[29yf4d]]>', FrmXMLHelper::cdata( '29yf4d' ) );
@@ -189,7 +185,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	 * with a fatal error on the first field it reached, so anything unreadable
 	 * becomes an empty set of options and the field type's defaults fill the gaps.
 	 *
-	 * @covers FrmXMLHelper::fill_field_options
+	 * @see FrmXMLHelper::fill_field_options
 	 *
 	 * @dataProvider unreadable_field_options_provider
 	 *
@@ -197,6 +193,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	 *
 	 * @return void
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'unreadable_field_options_provider' )]
 	public function test_fill_field_options_always_returns_an_array( $stored ) {
 		$field   = new SimpleXMLElement( '<field><field_options>' . $stored . '</field_options></field>' );
 		$options = $this->run_private_method( array( 'FrmXMLHelper', 'fill_field_options' ), array( $field ) );
@@ -207,7 +204,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	/**
 	 * @return void array<string>>
 	 */
-	public function unreadable_field_options_provider(): \Iterator {
+	public static function unreadable_field_options_provider(): \Iterator {
 		yield 'serialized null' => array( 'N;' );
 		yield 'empty' => array( '' );
 		yield 'not json' => array( 'not json' );
@@ -218,7 +215,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	 * Options written by an older version are serialized rather than JSON, so
 	 * they are read rather than thrown away for not being JSON.
 	 *
-	 * @covers FrmXMLHelper::fill_field_options
+	 * @see FrmXMLHelper::fill_field_options
 	 *
 	 * @return void
 	 */
@@ -234,7 +231,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	/**
 	 * JSON options, which is what an export writes today.
 	 *
-	 * @covers FrmXMLHelper::fill_field_options
+	 * @see FrmXMLHelper::fill_field_options
 	 *
 	 * @return void
 	 */

@@ -17,7 +17,8 @@
 				modal = createEmptyModal( id );
 
 				const titleElement = div( {
-					className: 'frm-modal-title'
+					className: 'frm-modal-title',
+					id: `${ id }-title`
 				} );
 
 				if ( 'string' === typeof title ) {
@@ -479,11 +480,21 @@
 	};
 
 	const wysiwyg = {
+		/**
+		 * @param {HTMLElement} editor                 The editor textarea.
+		 * @param {Object}      options
+		 * @param {Function}    options.setupCallback  Called with the TinyMCE editor when it is set up.
+		 * @param {number}      options.height         The TinyMCE editor height.
+		 * @param {boolean}     options.addFocusEvents Whether to trigger focusin on the textarea when TinyMCE gets focus.
+		 * @return {Promise<void>} Resolves once TinyMCE has finished booting, or right away when the text tab is active.
+		 */
 		init( editor, { setupCallback, height, addFocusEvents } = {} ) {
+			let ready;
 			if ( isTinyMceActive() ) {
-				setTimeout( resetTinyMce, 0 );
+				ready = new Promise( resolve => setTimeout( () => resolve( resetTinyMce() ), 0 ) );
 			} else {
 				initQuickTagsButtons();
+				ready = Promise.resolve();
 			}
 
 			setUpTinyMceVisualButtonListener();
@@ -540,7 +551,7 @@
 					settings.height = height;
 				}
 
-				tinymce.init( settings );
+				return tinymce.init( settings );
 			}
 
 			function removeRichText() {
@@ -549,7 +560,7 @@
 
 			function resetTinyMce() {
 				removeRichText();
-				initRichText();
+				return initRichText();
 			}
 
 			function isTinyMceActive() {
@@ -583,6 +594,8 @@
 				wrap.classList.add( 'tmce-active' );
 				wrap.classList.remove( 'html-active' );
 			}
+
+			return ready;
 		}
 	};
 
@@ -652,6 +665,12 @@
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				}
 			} );
+
+			// jQuery UI points aria-labelledby at its own auto-generated .ui-dialog-title
+			// span by default, but that span is left empty since no `title` option is
+			// ever passed to .dialog(). Point it at the real visible title instead so
+			// the dialog has an accessible name.
+			$modal.dialog( 'widget' ).attr( 'aria-labelledby', `${ modal.id }-title` );
 		}
 
 		document.body.classList.add( bodyWithModalClassName );

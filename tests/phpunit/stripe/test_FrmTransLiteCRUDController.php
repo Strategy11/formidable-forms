@@ -2,12 +2,13 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmTransLiteCRUDController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteCRUDController::class )]
 class test_FrmTransLiteCRUDController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmTransLiteCRUDController::get_payment_row
-	 */
 	public function test_get_payment_row() {
 		( new FrmTransLiteDb() )->upgrade();
 
