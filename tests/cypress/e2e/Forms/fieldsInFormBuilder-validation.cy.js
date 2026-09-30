@@ -214,7 +214,15 @@ describe( 'Fields in the form builder', () => {
 		// The setting lives in the Advanced section, which starts collapsed.
 		cy.get( 'li[data-ftype="url"]' ).invoke( 'data', 'fid' ).then( fieldNumericId => {
 			cy.get( `#frm-single-settings-${ fieldNumericId } h3[aria-label="Collapsible Advanced Settings"]`, { timeout: 10000 } ).scrollIntoView().click();
-			cy.get( `#frm_allow_intl_domains_${ fieldNumericId }` ).scrollIntoView().should( 'be.visible' ).and( 'not.be.checked' ).check();
+			// Disable the expansion animation before scrolling to the lower settings.
+			cy.get( `#frm-single-settings-${ fieldNumericId } h3[aria-label="Collapsible Advanced Settings"]` )
+				.should( 'have.attr', 'aria-expanded', 'true' )
+				.next().invoke( 'css', 'animation', 'none' );
+			// The fixed builder layout leaves the WordPress containers at zero height.
+			// Remove their clipping while checking this setting so Cypress can interact normally.
+			cy.get( '#wpbody-content, #wpbody, #wpcontent' ).invoke( 'css', 'overflow', 'visible' );
+			cy.get( `#frm_allow_intl_domains_${ fieldNumericId }` ).scrollIntoView().should( 'be.visible' ).and( 'not.be.checked' ).check().should( 'be.checked' );
+			cy.get( '#wpbody-content, #wpbody, #wpcontent' ).invoke( 'css', 'overflow', '' );
 		} );
 
 		cy.log( 'Update form' );
