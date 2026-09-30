@@ -113,7 +113,7 @@ class FrmFieldUrl extends FrmFieldType {
 	}
 
 	/**
-	 * Checks if the field accepts internationalized domain names, like https://ernährung.ch.
+	 * Checks if the field accepts internationalized domain names.
 	 *
 	 * @since x.x
 	 *
