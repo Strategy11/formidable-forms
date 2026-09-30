@@ -1507,9 +1507,11 @@ function frmFrontFormJS() {
 				summary.focus();
 				return;
 			}
+			// No summary in the DOM (js_validate's client-side path never renders one): fall
+			// through to the first-errored-field focus below.
 		}
 
-		if ( ! config.focusFirstError ) {
+		if ( ! config.focusFirstError && ! config.focusErrorSummary ) {
 			return;
 		}
 

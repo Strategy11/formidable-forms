@@ -306,6 +306,13 @@ window.frmAdminBuildJS = function() {
 		submitButtonRow: null
 	};
 
+	// How far past the visible field list a field gets its drag and drop widget. A full screen
+	// either way keeps the widgets ahead of the auto scroll while a field is being dragged.
+	const DRAG_DROP_ROOT_MARGIN = '100% 0px';
+	let dragDropObserver;
+	const dragDropAttachers = new WeakMap();
+	const dragDropDeferredDetach = new Set();
+
 	if ( thisForm ) {
 		thisFormId = thisForm.value;
 	}
@@ -1077,15 +1084,163 @@ window.frmAdminBuildJS = function() {
 	function setupSortable( sortableSelector ) {
 		document.querySelectorAll( sortableSelector ).forEach(
 			list => {
-				makeDroppable( list );
-				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) );
+				lazyMakeDroppable( list );
+				Array.from( list.children ).forEach( child => lazyMakeDraggable( child, '.frm-move' ) );
 
 				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
 				if ( $sectionTitle.length ) {
-					makeDroppable( $sectionTitle );
+					lazyMakeDroppable( $sectionTitle.get( 0 ) );
 				}
 			}
 		);
+	}
+
+	/**
+	 * Make a list droppable once it scrolls near the visible part of the builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} list The list that accepts dropped fields.
+	 * @return {void}
+	 */
+	function lazyMakeDroppable( list ) {
+		observeDragDropElement( list, () => makeDroppable( list ) );
+	}
+
+	/**
+	 * Make a field or field group draggable once it scrolls near the visible part of the builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}      draggable The field or field group to drag.
+	 * @param {string|undefined} handle    The selector for the drag handle, if the whole element should not start a drag.
+	 * @return {void}
+	 */
+	function lazyMakeDraggable( draggable, handle ) {
+		observeDragDropElement( draggable, () => makeDraggable( draggable, handle ) );
+	}
+
+	/**
+	 * Every jQuery UI draggable and droppable is a live widget, and jQuery UI walks all of the
+	 * droppables when a drag starts. On a form with a thousand fields, standing them all up at
+	 * page load is thousands of widgets before anyone drags anything. The widget is attached
+	 * as its element comes within a screen of the visible field list instead, and destroyed
+	 * again once it scrolls away, so the widget count follows what is on screen.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element The element to make draggable or droppable.
+	 * @param {Function}    attach  Attaches the widget to the element.
+	 * @return {void}
+	 */
+	function observeDragDropElement( element, attach ) {
+		if ( ! element ) {
+			return;
+		}
+
+		if ( ! dragDropObserver ) {
+			dragDropObserver = new IntersectionObserver(
+				handleDragDropIntersections,
+				{
+					root: postBodyContent,
+					rootMargin: DRAG_DROP_ROOT_MARGIN
+				}
+			);
+		}
+
+		dragDropAttachers.set( element, attach );
+		dragDropObserver.observe( element );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {IntersectionObserverEntry[]} entries The elements that moved into or out of range.
+	 * @return {void}
+	 */
+	function handleDragDropIntersections( entries ) {
+		let attachedDuringDrag = false;
+
+		entries.forEach(
+			( { target, isIntersecting } ) => {
+				if ( ! target.isConnected ) {
+					// The element was replaced or deleted, and jQuery removed its widget with it.
+					dragDropObserver.unobserve( target );
+					dragDropAttachers.delete( target );
+					return;
+				}
+
+				if ( isIntersecting ) {
+					if ( ! hasDragDropWidget( target ) ) {
+						dragDropAttachers.get( target )?.();
+						attachedDuringDrag = dragState.dragging;
+					}
+					return;
+				}
+
+				if ( ! hasDragDropWidget( target ) ) {
+					return;
+				}
+
+				if ( document.body.classList.contains( 'frm-dragging' ) ) {
+					// Pulling a widget out from under a drag leaves its hover state behind, so wait for the drop.
+					dragDropDeferredDetach.add( target );
+					return;
+				}
+
+				destroyDragDropWidget( target );
+			}
+		);
+
+		if ( attachedDuringDrag ) {
+			// Scrolling while dragging brought new drop targets into range. jQuery UI skips them until they are measured.
+			refreshDroppableOffsets();
+		}
+	}
+
+	/**
+	 * Take another look at the widgets that scrolled out of range during a drag.
+	 * Observing an element again reports where it is now, so anything that scrolled back
+	 * into view keeps its widget.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function recheckDeferredDragDropWidgets() {
+		dragDropDeferredDetach.forEach(
+			element => {
+				dragDropObserver.unobserve( element );
+				dragDropObserver.observe( element );
+			}
+		);
+		dragDropDeferredDetach.clear();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {boolean} True if the element has a live draggable or droppable widget.
+	 */
+	function hasDragDropWidget( element ) {
+		return element.classList.contains( 'ui-draggable' ) || element.classList.contains( 'ui-droppable' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function destroyDragDropWidget( element ) {
+		const $element = jQuery( element );
+		if ( $element.draggable( 'instance' ) ) {
+			$element.draggable( 'destroy' );
+		}
+		if ( $element.droppable( 'instance' ) ) {
+			$element.droppable( 'destroy' );
+		}
 	}
 
 	function makeDroppable( list ) {
@@ -1224,6 +1379,8 @@ window.frmAdminBuildJS = function() {
 		if ( fade ) {
 			fade.classList.remove( 'frm-drag-fade' );
 		}
+
+		recheckDeferredDragDropWidgets();
 	}
 
 	function handleDrag( event, ui ) {
@@ -2498,6 +2655,57 @@ window.frmAdminBuildJS = function() {
 
 	let activeFieldLoadRequests = 0;
 	let fieldLoadStarted = false;
+	let placeholderSpinnerObserver;
+
+	/**
+	 * Give each field placeholder its spinner only once it scrolls into view.
+	 *
+	 * A long form can have hundreds of placeholders, and most of them are swapped for the real
+	 * field before anyone scrolls to them, so a placeholder that is never seen never gets one.
+	 * The placeholder already holds the spinner's space, so adding it does not move anything.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function observeFieldPlaceholders() {
+		const placeholders = document.querySelectorAll( '#frm-show-fields .frm_field_loading' );
+		if ( ! placeholders.length ) {
+			return;
+		}
+
+		placeholderSpinnerObserver = new IntersectionObserver(
+			handlePlaceholderIntersections,
+			{ root: postBodyContent }
+		);
+		placeholders.forEach( placeholder => placeholderSpinnerObserver.observe( placeholder ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {IntersectionObserverEntry[]} entries The placeholders that moved into or out of view.
+	 * @return {void}
+	 */
+	function handlePlaceholderIntersections( entries ) {
+		entries.forEach(
+			( { target, isIntersecting } ) => {
+				if ( ! isIntersecting ) {
+					return;
+				}
+
+				placeholderSpinnerObserver.unobserve( target );
+
+				// A placeholder that failed to load shows an error message instead.
+				if ( target.hasChildNodes() ) {
+					return;
+				}
+
+				// eslint-disable-next-line formidable/prefer-document-fragment -- each spinner goes into a different placeholder
+				target.append( span( { className: 'frm-wait frm_visible_spinner' } ) );
+			}
+		);
+	}
 
 	/**
 	 * Start as many field load requests as the concurrency limit allows, and finish up once the
@@ -2613,6 +2821,12 @@ window.frmAdminBuildJS = function() {
 			if ( ! Object.hasOwn( loadedFields, key ) ) {
 				continue;
 			}
+			const oldField = document.getElementById( `frm_field_id_${ key }` );
+			if ( oldField ) {
+				placeholderSpinnerObserver?.unobserve( oldField );
+				dragDropObserver.unobserve( oldField );
+				dragDropAttachers.delete( oldField );
+			}
 			jQuery( `#frm_field_id_${ key }` ).replaceWith( loadedFields[ key ].html );
 			loadedFieldData.push( { id: key, type: loadedFields[ key ].type } );
 
@@ -2625,7 +2839,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
-			makeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
+			lazyMakeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
 		}
 
 		// Only the fields that just arrived need this. Doing it for the whole page once per batch
@@ -2650,6 +2864,7 @@ window.frmAdminBuildJS = function() {
 	 * steadily growing page for a result only the last pass could get right.
 	 */
 	function afterAllFieldsLoad() {
+		placeholderSpinnerObserver?.disconnect();
 		renumberPageBreaks();
 		maybeHideQuantityProductFieldOption();
 	}
@@ -4407,12 +4622,69 @@ window.frmAdminBuildJS = function() {
 	 * Allow typing on form switcher click without an extra click to search.
 	 */
 	function focusSearchBox() {
+		populateFormSwitcher();
+
 		const searchBox = document.getElementById( 'dropform-search-input' );
 		if ( searchBox ) {
 			setTimeout( function() {
 				searchBox.focus();
 			}, 100 );
 		}
+	}
+
+	/**
+	 * Add switcher links after the menu is opened, yielding between batches.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function populateFormSwitcher() {
+		const menu = document.querySelector( '#frm_bs_dropdown .frm-dropdown-menu' );
+		const dataElement = document.getElementById( 'frm-form-switcher-data' );
+		if ( ! menu || ! dataElement ) {
+			return;
+		}
+
+		const forms = JSON.parse( dataElement.textContent );
+		dataElement.remove();
+
+		const searchBox = document.getElementById( 'dropform-search-input' );
+		const INITIAL_FORM_COUNT = 20;
+		const FORM_BATCH_SIZE = 200;
+		let index = 0;
+
+		function addBatch( batchSize ) {
+			const fragment = document.createDocumentFragment();
+			const end = Math.min( index + batchSize, forms.length );
+			const searchText = searchBox ? searchBox.value.toLowerCase() : '';
+
+			for ( ; index < end; index++ ) {
+				const form = forms[ index ];
+				const link = frmDom.a( {
+					className: 'frm-justify-between',
+					children: [
+						form.name,
+						frmDom.span( { text: menu.dataset.idLabel.replace( '%d', form.id ) } ),
+						frmDom.span( { className: 'frm_hidden', text: form.key } )
+					]
+				} );
+				link.href = form.url;
+				link.tabIndex = -1;
+				const item = frmDom.tag( 'li', { className: 'frm-dropdown-form', child: link } );
+				if ( searchText && ! item.textContent.toLowerCase().includes( searchText ) ) {
+					item.classList.add( 'frm_hidden' );
+				}
+				fragment.append( item );
+			}
+
+			menu.append( fragment );
+			if ( index < forms.length ) {
+				setTimeout( () => addBatch( FORM_BATCH_SIZE ), 0 );
+			}
+		}
+
+		addBatch( INITIAL_FORM_COUNT );
 	}
 
 	/**
@@ -9641,6 +9913,7 @@ window.frmAdminBuildJS = function() {
 		if ( classes.includes( 'frm_close_icon' ) ) {
 			hideShortcodes( box );
 		} else {
+			hydrateDeferredCodeListIcons( box );
 			updateShortcodesPopupPosition( moreIcon );
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
@@ -9674,6 +9947,37 @@ window.frmAdminBuildJS = function() {
 			}
 			showOrHideContextualShortcodes( input );
 		}
+	}
+
+	/**
+	 * Add field shortcode icons when their code list is first shown.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} container The opened shortcode panel.
+	 * @return {void}
+	 */
+	function hydrateDeferredCodeListIcons( container ) {
+		const template = container.querySelector( 'template.frm-code-list-icons' );
+		if ( ! template ) {
+			return;
+		}
+
+		// FrmFormsHelper::print_deferred_code_list_icons() prints each field type's icon once.
+		const icons = {};
+		template.content.querySelectorAll( '[data-frm-icon-key]' ).forEach( wrapper => {
+			icons[ wrapper.dataset.frmIconKey ] = wrapper.firstElementChild;
+		} );
+
+		container.querySelectorAll( '.frm_customize_field_list [data-frm-icon]' ).forEach( item => {
+			const icon = icons[ item.dataset.frmIcon ];
+			if ( icon ) {
+				item.querySelectorAll( ':scope > a.frm_insert_code' ).forEach( anchor => {
+					// eslint-disable-next-line formidable/prefer-document-fragment -- Each icon belongs to a different link.
+					anchor.prepend( icon.cloneNode( true ) );
+				} );
+			}
+			item.removeAttribute( 'data-frm-icon' );
+		} );
 	}
 
 	/**
@@ -11616,6 +11920,7 @@ window.frmAdminBuildJS = function() {
 			postBodyContent = document.getElementById( 'post-body-content' );
 			$postBodyContent = jQuery( postBodyContent );
 
+			observeFieldPlaceholders();
 			fillFieldLoadQueue();
 
 			setupSortable( 'ul.frm_sorting' );

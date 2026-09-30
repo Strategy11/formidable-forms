@@ -1,10 +1,11 @@
 <?php
 
+/**
+ * @covers FrmFormApi
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormApi::class )]
 class test_FrmFormApi extends FrmUnitTest {
 
-	/**
-	 * @covers FrmFormApi::get_error_from_response
-	 */
 	public function test_get_error_from_response() {
 		$api = new FrmFormApi();
 

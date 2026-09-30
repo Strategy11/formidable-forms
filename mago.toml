@@ -16,6 +16,7 @@ paths = [
 includes = [
     "vendor/php-stubs/wordpress-stubs/wordpress-stubs.php",
     "stubs.php",
+    "tests/phpunit/phpunit-attributes-stubs.php",
 ]
 excludes = ["node_modules"]
 extensions = ["php"]
