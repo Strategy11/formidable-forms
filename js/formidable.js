@@ -566,7 +566,7 @@ function frmFrontFormJS() {
 			if ( ! ( fieldKey in errors ) && hasClass( fieldContainer, 'frm_blank_field' ) ) {
 				// The error for the whole field no longer applies. Keep the flags on the sub fields that still fail.
 				const failing = inputs.filter( input => getFieldId( input, true ) in errors );
-				removeComboFieldErrors( comboContainer );
+				removeComboFieldErrors( comboContainer, field, inputs, errors );
 				failing.forEach( input => {
 					input.closest( '.frm_form_field' ).classList.add( 'frm_blank_field' );
 					input.setAttribute( 'aria-invalid', 'true' );
@@ -575,7 +575,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		removeComboFieldErrors( comboContainer );
+		removeComboFieldErrors( comboContainer, field, inputs, errors );
 
 		if ( ! addErrors ) {
 			return;
@@ -604,19 +604,42 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Removes the error for a whole combo field and the errors for each of its sub fields.
+	 * Removes the errors a combo field validation is about to recompute: the error for the whole
+	 * field, the error of the sub field that changed, and the error of any sub field that still
+	 * fails. Other sub fields keep their errors, like a server error the client cannot recompute.
 	 *
 	 * @since x.x
 	 *
-	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
+	 * @param {HTMLElement}   comboContainer The .frm_combo_inputs_container element.
+	 * @param {HTMLElement}   field          The sub field input that changed.
+	 * @param {HTMLElement[]} inputs         The required sub inputs.
+	 * @param {Object}        errors         Errors keyed by field container key.
 	 * @return {void}
 	 */
-	function removeComboFieldErrors( comboContainer ) {
+	function removeComboFieldErrors( comboContainer, field, inputs, errors ) {
 		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		const subFieldContainers = [ field.closest( '.frm_form_field' ) ];
 
-		comboContainer.querySelectorAll( '.frm_form_field' ).forEach( removeFieldError );
-		removeFieldError( fieldContainer );
-		comboContainer.querySelectorAll( '[aria-invalid="true"]' ).forEach( input => input.setAttribute( 'aria-invalid', 'false' ) );
+		inputs.forEach( input => {
+			if ( getFieldId( input, true ) in errors ) {
+				subFieldContainers.push( input.closest( '.frm_form_field' ) );
+			}
+		} );
+		subFieldContainers.filter( container => container && container !== fieldContainer ).forEach( removeFieldError );
+
+		// Only the error placed on the field itself. The sub field errors inside it are handled above.
+		fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
+		fieldContainer.querySelectorAll( ':scope > .frm_error, :scope > [data-frm-error]' ).forEach( errorMessage => {
+			removeElementFromInputDescribedBy( errorMessage );
+			errorMessage.remove();
+		} );
+
+		// The error for the whole field flags every input, so unflag the ones without an error of their own.
+		comboContainer.querySelectorAll( '[aria-invalid="true"]' ).forEach( input => {
+			if ( null === input.closest( '.frm_form_field.frm_blank_field' ) ) {
+				input.setAttribute( 'aria-invalid', 'false' );
+			}
+		} );
 	}
 
 	/**
