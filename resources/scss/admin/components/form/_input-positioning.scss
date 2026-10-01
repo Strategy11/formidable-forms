@@ -12,9 +12,8 @@
 	padding-right: var(--gap-md);
 }
 
-/* Button is 26px wide plus margins. */
-.frm_wrap .frm-with-right-icon input:has(~ .frm-show-inline-modal) {
-	padding-inline-end: 40px;
+.frm_wrap .frm-with-right-icon :is(input, textarea):has(~ .frm-show-inline-modal) {
+	padding-inline-end: var(--gap-xl);
 }
 
 #frm-show-fields .frm-with-left-icon .frmsvg,
