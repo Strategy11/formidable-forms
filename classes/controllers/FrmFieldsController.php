@@ -482,13 +482,6 @@ class FrmFieldsController {
 				'/field-options/#kb-visibility'
 			);
 
-			$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
-				array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
-				'autocomplete',
-				__( 'Autocomplete options', 'formidable' ),
-				'/email-address/#kb-autocomplete-attribute'
-			);
-
 			$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
 				array(
 					'type'     => 'text',
@@ -506,7 +499,6 @@ class FrmFieldsController {
 			);
 			$show_upsell_for_read_only             = in_array( $field['type'], array( 'address', 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
 			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'quantity', 'select', 'tag', 'text', 'total', 'url' ), true );
-			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
 			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
 
 			$unique_values_label_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
@@ -524,6 +516,19 @@ class FrmFieldsController {
 		}//end if
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
+	}
+
+	/**
+	 * Display the autocomplete attribute setting.
+	 *
+	 * @since x.x This was moved from FrmProFieldsController::show_autocomplete_option.
+	 *
+	 * @param array $field The field settings.
+	 *
+	 * @return void
+	 */
+	public static function show_autocomplete_option( $field ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/autocomplete.php';
 	}
 
 	/**
@@ -690,6 +695,7 @@ class FrmFieldsController {
 		self::add_shortcodes_to_html( $field, $add_html );
 		self::add_pattern_attribute( $field, $add_html );
 		self::add_currency_field_attributes( $field, $add_html );
+		self::add_html_autocomplete( $field, $add_html );
 
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
@@ -1117,6 +1123,25 @@ class FrmFieldsController {
 		}
 
 		$add_html['aria-required'] = 'aria-required="true"';
+	}
+
+	/**
+	 * Add the autocomplete attribute to the field HTML.
+	 * Older versions of Pro add this attribute themselves, so it is skipped while Pro is active.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field    The field settings.
+	 * @param array $add_html The HTML attributes, keyed by attribute name.
+	 *
+	 * @return void
+	 */
+	private static function add_html_autocomplete( $field, array &$add_html ) {
+		if ( empty( $field['autocomplete'] ) || FrmAppHelper::pro_is_installed() || FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return;
+		}
+
+		$add_html['autocomplete'] = 'autocomplete="' . esc_attr( $field['autocomplete'] ) . '"';
 	}
 
 	/**

@@ -141,16 +141,20 @@ Cypress.Commands.add( 'ensureContactUsFormExists', () => {
 			cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 			cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
 				.first()
-				// Wait for the template card itself to be visible before triggering the hover -
-				// the templates grid populates async, and triggering on a not-yet-rendered card
-				// was the actual reason force was needed here, not the hover-only child button.
+				// Wait for the template card itself to be visible first - the templates grid
+				// populates async. The button row is `display: none` until a real CSS `:hover`,
+				// which trigger( 'mouseover' ) can't produce, so reveal it the way the hover
+				// would (same as FormTemplates.cy.js), then click normally.
 				.should( 'be.visible' )
-				.trigger( 'mouseover' )
+				.find( '.frm-form-templates-item-buttons' )
+				.invoke( 'css', 'display', 'flex' )
 				.find( '.frm-form-templates-use-template-button' )
 				.should( 'contain', 'Use Template' )
 				.click();
 
-			cy.get( "svg[aria-label='Close']", { timeout: 7000 } ).should( 'be.visible' ).click();
+			// A successful install opens the new form in the builder, same as FormTemplates.cy.js.
+			cy.location( 'search', { timeout: 10000 } ).should( 'include', 'frm_action=edit' );
+			cy.get( '#frm_form_editor_container' ).should( 'be.visible' );
 
 			restoreFromTrash();
 		} );

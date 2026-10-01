@@ -2,12 +2,13 @@
 
 /**
  * @group styles
+ *
+ * @covers FrmStylesHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'styles' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStylesHelper::class )]
 class test_FrmStylesHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStylesHelper::get_upload_base
-	 */
 	public function test_get_upload_base() {
 		$base = FrmStylesHelper::get_upload_base();
 		$this->assertArrayHasKey( 'baseurl', $base );
@@ -18,9 +19,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertStringContainsString( 'https://', $base['baseurl'] );
 	}
 
-	/**
-	 * @covers FrmStylesHelper::get_settings_for_output
-	 */
 	public function test_get_settings_for_output() {
 		$frm_style = new FrmStyle( 'default' );
 		$style     = $frm_style->get_one();
@@ -56,9 +54,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertSame( 1, $css_contains, 'Multiple or no occurrences of style found' );
 	}
 
-	/**
-	 * @covers FrmStylesHelper::hex2rgb
-	 */
 	public function test_hex2rgb() {
 		$colors = array(
 			'ffffff'            => '255,255,255',
@@ -73,9 +68,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmStylesHelper::adjust_brightness
-	 */
 	public function test_adjust_brightness() {
 		$colors = array(
 			array(
@@ -101,9 +93,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmStylesHelper::get_form_count_for_style
-	 */
 	public function test_get_form_count_for_style() {
 		$new_style_id = $this->factory->post->create(
 			array( 'post_type' => FrmStylesController::$post_type )
@@ -180,9 +169,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertSame( 2, FrmStylesHelper::get_form_count_for_style( $conversational_style_id, true ) );
 	}
 
-	/**
-	 * @covers FrmStylesHelper::get_color_brightness
-	 */
 	public function test_get_color_brightness() {
 		$white_brightness = 255;
 		$black_brightness = 0;
@@ -236,9 +222,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assertSame( $expected, FrmStylesHelper::get_color_brightness( $color ) );
 	}
 
-	/**
-	 * @covers FrmStylesHelper::get_bottom_value
-	 */
 	public function test_get_bottom_value() {
 		$expected = array(
 			''                   => '',

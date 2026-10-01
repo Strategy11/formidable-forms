@@ -2,12 +2,13 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntriesListHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntriesListHelper::class )]
 class test_FrmEntriesListHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmEntriesListHelper::column_value
-	 */
 	public function test_column_value() {
 		FrmAppHelper::set_current_screen_and_hook_suffix();
 

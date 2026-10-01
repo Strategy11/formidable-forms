@@ -1,4 +1,13 @@
 <?php
+/**
+ * Quick settings in the visual styler sidebar.
+ *
+ * @package Formidable
+ *
+ * @var stdClass|WP_Post $style     The style being edited.
+ * @var FrmStyle         $frm_style Used to build the setting field names.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -119,7 +128,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field">
 	<label
-		for="frm_style_qsettings_field_margin"
 		class="frm-style-item-heading"><?php esc_html_e( 'Vertical Spacing', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -140,7 +148,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field">
 	<label
-		for="frm_style_qsettings_field_pad"
 		class="frm-style-item-heading"><?php esc_html_e( 'Input Field Padding', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -160,8 +167,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <hr class="frm12"/>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_base_font_size"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -189,8 +195,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_shape"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Field Shape', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-sm-z-index">
@@ -198,16 +203,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	new FrmFieldShapeStyleComponent(
 		$frm_style->get_field_name( 'field_shape_type' ),
 		$style->post_content['field_shape_type'],
-		array(
-			'id' => 'frm_field_shape',
-		)
+		array()
 	);
 	?>
 </div>
 
 <div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
 	<label
-		for="frm_style_qsettings_border_radius"
 		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">
@@ -273,17 +275,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 	?>
 </div>
-<div class="frm3 frm_form_field">
-	<label 
+<div class="frm5 frm_form_field">
+	<label
 		for="frm_style_class"
 		class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label>
 </div>
-<div class="frm9 frm_form_field frm-style-component" id="frm_style_class_custom_css" data-css-scope="<?php echo esc_attr( 'frm_style_' . $style->post_name ); ?>">
-	<label class="frm-copy-text">.frm_style_<?php
-		echo esc_html( $style->post_name );
-		FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' );
-	?>
-	</label>
+<div class="frm7 frm_form_field frm-style-component frm-style-class-component" id="frm_style_class_custom_css" data-css-scope="<?php echo esc_attr( 'frm_style_' . $style->post_name ); ?>">
+	<div class="frm-style-class-editor">
+		<span class="frm-style-class-prefix" aria-hidden="true">.frm_style_</span>
+		<input
+			type="text"
+			id="frm_style_class"
+			name="<?php
+				// skipcq: PHP-E1002
+				echo esc_attr( $frm_style->get_field_name( 'post_name', '' ) );
+			?>"
+			value="<?php
+				// skipcq: PHP-E1002
+				echo esc_attr( $style->post_name );
+			?>"
+			autocomplete="off"
+			spellcheck="false"
+			aria-describedby="frm_style_class_description" />
+		<button
+			type="button"
+			class="frm-style-class-copy"
+			aria-label="<?php esc_attr_e( 'Copy style class', 'formidable' ); ?>"
+			title="<?php esc_attr_e( 'Copy class', 'formidable' ); ?>"
+			data-frm-copied-tip="<?php esc_attr_e( 'Class copied', 'formidable' ); ?>">
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' ); ?>
+		</button>
+	</div>
+	<p id="frm_style_class_description" class="frm-style-class-description frm_hidden"><?php
+		esc_html_e( 'Renaming changes the class on your forms. Update any custom CSS that targets the old class.', 'formidable' );
+	?></p>
 </div>
 
 <hr class="frm12"/>

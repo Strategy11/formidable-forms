@@ -2,7 +2,11 @@
 
 /**
  * @group form-templates
+ *
+ * @covers FrmFormTemplatesController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'form-templates' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormTemplatesController::class )]
 class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 
 	private $controller;
@@ -17,9 +21,6 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		$this->controller = 'FrmFormTemplatesController';
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::ajax_add_or_remove_favorite
-	 */
 	public function test_ajax_add_or_remove_favorite() {
 		$_POST    = array(
 			'action'             => 'frm_add_or_remove_favorite_template',
@@ -40,9 +41,6 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		$this->assertSame( $current_favorites, $response_favorites, 'The favorite templates from AJAX response should match the current state.' );
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::ajax_create_template
-	 */
 	public function test_ajax_create_template() {
 		$_POST    = array(
 			'action' => 'frm_create_template',

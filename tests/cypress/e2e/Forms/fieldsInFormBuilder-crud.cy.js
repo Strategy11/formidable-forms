@@ -50,36 +50,47 @@ describe( 'Fields in the form builder', () => {
 		};
 
 		const removeField = field => {
-			field.within( () => {
-				// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
-				// Same #wpbody-content 1280x0 race as createAndDuplicateField above
-				// (formidable-forms#3399) - .scrollIntoView() first reliably clears it.
-				cy.get( '.frm-field-action-icons' )
-					.invoke( 'css', 'opacity', 1 )
-					.find( '.dropdown .frm-hover-icon .frmsvg' )
-					.first()
-					.scrollIntoView()
+			// data-type holds the field's type slug (e.g. "text"), shared by the original and its
+			// duplicate - not unique enough to prove *this* field is gone. data-fid is the field's
+			// own database id, so capture it before deleting to assert against afterward.
+			// Read via .then($field => ...) and scope every command to that jQuery element with
+			// cy.wrap() - re-deriving commands from the stored `field` chainable a second time here
+			// (after other fields' own removeField() calls have queued commands in between) doesn't
+			// reliably yield this field's own element.
+			field.then( $field => {
+				const fid = $field.attr( 'data-fid' );
+
+				cy.wrap( $field ).within( () => {
+					// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
+					// Same #wpbody-content 1280x0 race as createAndDuplicateField above
+					// (formidable-forms#3399) - .scrollIntoView() first reliably clears it.
+					cy.get( '.frm-field-action-icons' )
+						.invoke( 'css', 'opacity', 1 )
+						.find( '.dropdown .frm-hover-icon .frmsvg' )
+						.first()
+						.scrollIntoView()
+						.should( 'be.visible' )
+						.click();
+
+					// The menu is open via the click above (not hover-gated), so wait for the item to
+					// be visible instead of forcing through the open transition.
+					cy.get( '.frm-dropdown-menu .frm_delete_field' )
+						.should( 'be.visible' )
+						.and( 'contain', 'Delete' )
+						.click();
+				} );
+
+				// Plain cy.get() by id (an id is unique) rather than cy.get().contains() - the latter
+				// can resolve to a narrower descendant node than the clickable link itself, which is
+				// what forced force here. Plain cy.get() on this id works unforced elsewhere in the
+				// suite.
+				cy.get( '#frm-confirmed-click' )
 					.should( 'be.visible' )
+					.and( 'contain', 'Confirm' )
 					.click();
 
-				// The menu is open via the click above (not hover-gated), so wait for the item to
-				// be visible instead of forcing through the open transition.
-				cy.get( '.frm-dropdown-menu .frm_delete_field' )
-					.should( 'be.visible' )
-					.and( 'contain', 'Delete' )
-					.click();
+				cy.get( `li[data-fid="${ fid }"]` ).should( 'not.exist' );
 			} );
-
-			// Plain cy.get() by id (an id is unique) rather than cy.get().contains() - the latter
-			// can resolve to a narrower descendant node than the clickable link itself, which is
-			// what forced force here. Plain cy.get() on this id works unforced elsewhere in the
-			// suite.
-			cy.get( '#frm-confirmed-click' )
-				.should( 'be.visible' )
-				.and( 'contain', 'Confirm' )
-				.click();
-
-			cy.get( `li[data-type="${ field }"]` ).should( 'not.exist' );
 		};
 
 		cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
