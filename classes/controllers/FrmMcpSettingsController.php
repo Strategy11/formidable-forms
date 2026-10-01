@@ -248,6 +248,7 @@ class FrmMcpSettingsController {
 	 * Get the prompts a user can paste into Claude Code or Codex to set up the skill.
 	 *
 	 * Only the first step differs between the two, since each installs the skill its own way.
+	 * Both install from the same repository, which each CLI reads as a plugin marketplace.
 	 *
 	 * @since x.x
 	 *
@@ -256,22 +257,57 @@ class FrmMcpSettingsController {
 	private static function get_connection_prompts() {
 		// Run from the terminal rather than as /plugin slash commands, so the
 		// assistant can install the skill itself instead of asking the user to.
-		$claude_install = sprintf(
-			/* translators: 1: Command that adds the skill marketplace. 2: Command that installs the skill. */
-			__( '1. If the formidable-mcp skill is not installed, run %1$s and then %2$s in the terminal.', 'formidable' ),
-			'claude plugin marketplace add https://github.com/Strategy11/formidable-mcp-skill.git',
-			'claude plugin install formidable-mcp@formidable'
+		// An installed skill is updated too, since older releases do not read
+		// the connection file from the location step 2 moves it to.
+		$claude_install = self::build_install_step(
+			array(
+				'claude plugin marketplace add https://github.com/Strategy11/formidable-mcp-skill.git',
+				'claude plugin install formidable-mcp@formidable',
+			),
+			array(
+				'claude plugin marketplace update formidable',
+				'claude plugin update formidable-mcp@formidable',
+			)
 		);
 
-		$codex_install = sprintf(
-			/* translators: %s: URL of the Formidable MCP skill directory. */
-			__( '1. If the formidable-mcp skill is not installed, install it from %s.', 'formidable' ),
-			'https://github.com/Strategy11/formidable-mcp-skill/tree/main/skills/formidable-mcp'
+		$codex_install = self::build_install_step(
+			array(
+				'codex plugin marketplace add Strategy11/formidable-mcp-skill',
+				'codex plugin add formidable-mcp@formidable',
+			),
+			array(
+				'codex plugin marketplace upgrade formidable',
+				'codex plugin add formidable-mcp@formidable',
+			)
 		);
 
 		return array(
 			'claude' => self::build_connection_prompt( $claude_install ),
 			'codex'  => self::build_connection_prompt( $codex_install ),
+		);
+	}
+
+	/**
+	 * Build the numbered step that installs or updates the skill.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<string> $install The two terminal commands that install the skill.
+	 * @param array<string> $update  The two terminal commands that update an installed skill.
+	 *
+	 * @return string
+	 */
+	private static function build_install_step( $install, $update ) {
+		return sprintf(
+			/* translators: 1: Command that adds the skill marketplace. 2: Command that installs the skill. */
+			__( '1. If the formidable-mcp skill is not installed, run %1$s and then %2$s in the terminal.', 'formidable' ),
+			$install[0],
+			$install[1]
+		) . ' ' . sprintf(
+			/* translators: 1: Command that refreshes the skill marketplace. 2: Command that updates the skill. */
+			__( 'If it is installed, update it with %1$s and then %2$s.', 'formidable' ),
+			$update[0],
+			$update[1]
 		);
 	}
 
@@ -292,9 +328,13 @@ class FrmMcpSettingsController {
 				home_url()
 			),
 			$install_step . ' ' . __( 'If the skill only loads after a restart, tell me.', 'formidable' ),
-			__( '2. Find the newest frm-mcp*.env file in my Downloads folder and move it beside the skill\'s scripts/frm-mcp helper, named frm-mcp.env.', 'formidable' )
+			// The config directory, not the skill's scripts directory: a plugin
+			// install keeps scripts in a versioned cache that every update replaces.
+			__( '2. Find the newest frm-mcp*.env file in my Downloads folder and move it to ~/.config/formidable-mcp/frm-mcp.env.', 'formidable' )
+			. ' ' . __( 'Create the folder if needed, and replace any older file there.', 'formidable' )
 			. ' ' . __( 'Do not open, print, or paste the file or its credentials into chat.', 'formidable' ),
-			__( '3. Run the adjacent frm-mcp-setup script to confirm the connection, then use the helper for my Formidable requests.', 'formidable' ),
+			__( '3. Run the skill\'s scripts/frm-mcp-setup script to confirm the connection, then use the scripts/frm-mcp helper for my Formidable requests.', 'formidable' )
+			. ' ' . __( 'Once it connects, remind me that I can revoke older connection files in Formidable > Settings > MCP.', 'formidable' ),
 		);
 
 		return implode( "\n", $lines );
