@@ -752,8 +752,9 @@
 			requiredIndicator.style.position = 'absolute';
 			requiredIndicator.style.fontSize = 'var(--font-size)';
 			requiredIndicator.style.top = '-4px';
-			requiredIndicator.style.left = `${ getEmailAsteriskOffset( cardElement ) }px`;
+			requiredIndicator.style.left = `${ getEmailAsteriskOffset() }px`;
 			requiredIndicator.style.padding = 'var(--label-padding)';
+			requiredIndicator.style.paddingLeft = '0';
 			requiredIndicator.setAttribute( 'aria-hidden', 'true' );
 			authenticationMountTarget.append( requiredIndicator );
 		} );
@@ -762,44 +763,35 @@
 	/**
 	 * Create a temporary label element to determine the width of the Email label.
 	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
+	 * The label is styled from the same appearance rules that Stripe uses, so it does not inherit page styles.
 	 *
 	 * @since 6.35
 	 *
-	 * @param {Element} cardElement
 	 * @return {number} The label width in pixels.
 	 */
-	function getEmailAsteriskOffset( cardElement ) {
-		const label = document.createElement( 'label' );
-		label.classList.add( 'frm_primary_label', 'form-label' );
-		label.textContent = 'Email';
-		label.innerHTML += '&nbsp;';
+	function getEmailAsteriskOffset() {
+		const rules = frm_stripe_vars.appearanceRules[ '.Label' ] || {};
+		const label = document.createElement( 'span' );
+		label.innerHTML = 'Email&nbsp;';
 
-		const tempContainer = document.createElement( 'div' );
-		tempContainer.classList.add( 'with_frm_style' );
-		tempContainer.style.position = 'absolute';
-		tempContainer.style.visibility = 'hidden';
-		tempContainer.style.height = '0';
-		tempContainer.style.overflow = 'hidden';
+		Object.assign(
+			label.style,
+			{
+				position: 'absolute',
+				visibility: 'hidden',
+				whiteSpace: 'nowrap',
+				fontFamily: rules.fontFamily || 'inherit',
+				fontSize: rules.fontSize,
+				fontWeight: rules.fontWeight,
+				padding: rules.padding,
+				letterSpacing: 'normal',
+				textTransform: 'none'
+			}
+		);
 
-		const formContainer = cardElement.closest( '.with_frm_style' );
-		if ( formContainer ) {
-			each(
-				formContainer.classList,
-				function( className ) {
-					if ( className.startsWith( 'frm_style_' ) ) {
-						tempContainer.classList.add( className );
-						return false;
-					}
-				}
-			);
-		}
-
-		tempContainer.append( label );
-		document.body.append( tempContainer );
-
+		document.body.append( label );
 		const labelWidth = label.getBoundingClientRect().width;
-
-		tempContainer.remove();
+		label.remove();
 
 		return labelWidth;
 	}
