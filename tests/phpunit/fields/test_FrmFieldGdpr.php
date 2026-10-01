@@ -1,7 +1,11 @@
 <?php
 /**
  * @group fields
+ *
+ * @covers FrmFieldGdpr
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldGdpr::class )]
 class test_FrmFieldGdpr extends FrmUnitTest {
 
 	/**
@@ -20,9 +24,6 @@ class test_FrmFieldGdpr extends FrmUnitTest {
 		parent::tearDown();
 	}
 
-	/**
-	 * @covers FrmFieldGdpr
-	 */
 	public function test_label_does_not_duplicate_for_attribute_when_wrapping_input() {
 		$frm_settings              = FrmAppHelper::get_settings();
 		$original_enable_gdpr      = $frm_settings->enable_gdpr;
@@ -53,9 +54,6 @@ class test_FrmFieldGdpr extends FrmUnitTest {
 		$this->assert_label_wraps_input_without_for( $html, 'GDPR' );
 	}
 
-	/**
-	 * @covers FrmFieldGdpr
-	 */
 	public function test_disabled_notice_label_has_no_dangling_for_attribute() {
 		$frm_settings              = FrmAppHelper::get_settings();
 		$original_enable_gdpr      = $frm_settings->enable_gdpr;

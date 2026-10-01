@@ -1,12 +1,13 @@
 <?php
 /**
  * @group fields
+ *
+ * @covers FrmFieldCheckbox
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldCheckbox::class )]
 class test_FrmFieldCheckbox extends FrmUnitTest {
 
-	/**
-	 * @covers FrmFieldCheckbox
-	 */
 	public function test_option_label_does_not_duplicate_for_attribute_when_wrapping_input() {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(

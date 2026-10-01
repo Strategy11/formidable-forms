@@ -3,6 +3,7 @@
 /**
  * @group fields
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
 class test_FrmFieldAddress extends FrmUnitTest {
 
 	/**
@@ -268,6 +269,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @dataProvider address_type_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'address_type_provider' )]
 	public function test_get_sub_fields_for_different_address_types( $address_type, $expected_keys ) {
 		$field = array(
 			'id'           => 10,
@@ -289,7 +291,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array<string> | string)>>
 	 */
-	public function address_type_provider() {
+	public static function address_type_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
 		yield 'us' => array( 'us', array( 'line1', 'line2', 'city', 'state', 'zip' ) );
 		yield 'europe' => array( 'europe', array( 'line1', 'line2', 'city', 'zip', 'country' ) );
@@ -323,6 +325,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider us_zip_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'us_zip_provider' )]
 	public function test_validate_checks_us_zip_format( $zip, $is_valid ) {
 		$field_type = $this->create_address_field_type( 'us' );
 		$field_id   = $field_type->get_field()->id;
@@ -345,7 +348,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array<string> | string)>>
 	 */
-	public function us_zip_provider() {
+	public static function us_zip_provider() {
 		yield 'five digits' => array( '62704', true );
 		yield 'zip plus four' => array( '62704-1234', true );
 		yield 'too short' => array( '1234', false );
@@ -529,6 +532,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider address_string_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'address_string_provider' )]
 	public function test_address_string_to_array( $value, $expected ) {
 		$field_type = new FrmFieldAddress(
 			array(
@@ -544,7 +548,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array | string)>>
 	 */
-	public function address_string_provider() {
+	public static function address_string_provider() {
 		yield 'six parts map in order' => array(
 			'123 Main St, Apt 2, Springfield, IL, 62704, United States',
 			array(
@@ -600,6 +604,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider import_value_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'import_value_provider' )]
 	public function test_prepare_import_value( $value, $expected ) {
 		$field_type = new FrmFieldAddress(
 			array(
@@ -617,7 +622,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array | string)>>
 	 */
-	public function import_value_provider() {
+	public static function import_value_provider() {
 		yield 'six parts include line2 and country' => array(
 			'123 Main St, Apt 2, Springfield, IL, 62704, United States',
 			array(
@@ -698,6 +703,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider processed_sub_fields_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'processed_sub_fields_provider' )]
 	public function test_get_processed_sub_fields_per_address_type( $address_type, $expected_order ) {
 		$field_type = new FrmFieldAddress(
 			array(
@@ -716,7 +722,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array<string> | string)>>
 	 */
-	public function processed_sub_fields_provider() {
+	public static function processed_sub_fields_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
 		yield 'us' => array( 'us', array( 'line1', 'line2', 'city', 'state', 'zip' ) );
 		yield 'europe' => array( 'europe', array( 'line1', 'line2', 'zip', 'city', 'country' ) );
