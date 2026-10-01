@@ -445,11 +445,8 @@ export default class frmSliderComponent {
 	}
 
 	/**
-	 * Keeps a value input's <label for="..."> pointed at it only while it is enabled - a label
-	 * click never focuses a disabled control, so leaving `for` set while the unit is non-measured
-	 * ('auto' or unset) makes the label a permanent no-op instead of clearing on the initial PHP
-	 * render alone (see `_buttons.php`'s `data-slider-label-for`, which templates use to mark the
-	 * label without committing to a `for` that may start out invalid).
+	 * Keep a slider label's `for` on its value input only while the input is enabled, since a label click never focuses a disabled control.
+	 * The label is found by `data-slider-label-for`, printed by `FrmSliderStyleComponent::echo_label_attributes()`.
 	 *
 	 * @since x.x
 	 *

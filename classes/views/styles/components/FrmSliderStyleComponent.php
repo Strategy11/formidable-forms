@@ -385,25 +385,6 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	}
 
 	/**
-	 * Print a label's for attribute when its slider value input is enabled.
-	 *
-	 * @since x.x
-	 *
-	 * @param object $style    The style containing the saved values in post_content.
-	 * @param string $key      The style setting key.
-	 * @param string $input_id The slider value input ID.
-	 *
-	 * @return void
-	 */
-	public static function maybe_echo_for( $style, $key, $input_id ) {
-		if ( ! self::is_value_measured( $style->post_content[ $key ] ) ) {
-			return;
-		}
-
-		FrmAppHelper::array_to_html_params( array( 'for' => $input_id ), true );
-	}
-
-	/**
 	 * Print a slider label's target attributes, linking enabled value inputs.
 	 *
 	 * @since x.x
