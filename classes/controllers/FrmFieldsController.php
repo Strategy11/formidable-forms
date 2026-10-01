@@ -61,7 +61,8 @@ class FrmFieldsController {
 
 		// admin_footer never fires here, so the deferred tooltip text rides along with the html.
 		// Field ids are numeric, so this key can never collide with one.
-		$field_html['tooltips'] = FrmAppHelper::get_deferred_tooltips();
+		$field_html['tooltips']      = FrmAppHelper::get_deferred_tooltips();
+		$field_html['selectOptions'] = FrmBuilderSelectHelper::get_templates();
 
 		echo json_encode( $field_html );
 

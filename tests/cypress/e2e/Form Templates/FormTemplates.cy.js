@@ -463,7 +463,13 @@ describe( 'Form Templates page', () => {
 		cy.get( '#frm-confirmed-click' ).should( 'contain', 'Confirm' ).click();
 
 		cy.log( 'Delete forms' );
-		cy.get( '#cb-select-all-1' ).click();
+		// Skip the default contact-form rather than using the header "select all" checkbox. Specs
+		// later in the same shard preview it by key, and deleteForms.cy.js empties the Trash, so
+		// trashing it here deletes it for good.
+		cy.get( '#the-list tr' )
+			.filter( ( index, element ) => Cypress.$( element ).find( '.column-form_key' ).text().trim() !== 'contact-form' )
+			.find( '.check-column input[type="checkbox"]' )
+			.check();
 		cy.get( '#bulk-action-selector-top' ).select( 'Move to Trash' );
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
 	} );

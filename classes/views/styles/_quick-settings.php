@@ -128,7 +128,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field">
 	<label
-		for="frm_style_qsettings_field_margin"
 		class="frm-style-item-heading"><?php esc_html_e( 'Vertical Spacing', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -149,7 +148,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm5 frm_form_field">
 	<label
-		for="frm_style_qsettings_field_pad"
 		class="frm-style-item-heading"><?php esc_html_e( 'Input Field Padding', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -169,8 +167,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <hr class="frm12"/>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_base_font_size"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -198,8 +195,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_shape"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Field Shape', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-sm-z-index">
@@ -207,16 +203,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	new FrmFieldShapeStyleComponent(
 		$frm_style->get_field_name( 'field_shape_type' ),
 		$style->post_content['field_shape_type'],
-		array(
-			'id' => 'frm_field_shape',
-		)
+		array()
 	);
 	?>
 </div>
 
 <div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
 	<label
-		for="frm_style_qsettings_border_radius"
 		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">
