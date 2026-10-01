@@ -318,24 +318,16 @@ class FrmFieldsHelper {
 	public static function default_invalid_msg( $field = null ) {
 		$type     = $field ? FrmField::get_field_type( $field ) : '';
 		$messages = array(
-			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-			'email'  => sprintf( __( '%s is invalid. Enter a valid email address, like name@example.com', 'formidable' ), '[field_name]' ),
-			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-			'url'    => sprintf( __( '%s is invalid. Enter a valid web address, like https://example.com', 'formidable' ), '[field_name]' ),
-			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-			'phone'  => sprintf( __( '%s is invalid. Enter a valid phone number', 'formidable' ), '[field_name]' ),
-			/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-			'number' => sprintf( __( '%s is invalid. Enter a number', 'formidable' ), '[field_name]' ),
+			'email'  => __( 'Enter a valid email address, like name@example.com', 'formidable' ),
+			'url'    => __( 'Enter a valid web address, like https://example.com', 'formidable' ),
+			'phone'  => __( 'Enter a valid phone number', 'formidable' ),
+			'number' => __( 'Enter a number', 'formidable' ),
 		);
 		// Quantity validates identically to number (FrmFieldQuantity extends FrmFieldNumber) but is a distinct stored type.
 		$messages['quantity'] = $messages['number'];
 
-		if ( isset( $messages[ $type ] ) ) {
-			return $messages[ $type ];
-		}
-
 		/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-		return sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
+		return $messages[ $type ] ?? sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
 	}
 
 	/**

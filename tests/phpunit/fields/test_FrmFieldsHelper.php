@@ -325,27 +325,27 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 			array(
 				'type'     => 'email',
 				'name'     => 'Email',
-				'expected' => 'Email is invalid. Enter a valid email address, like name@example.com',
+				'expected' => 'Enter a valid email address, like name@example.com',
 			),
 			array(
 				'type'     => 'url',
 				'name'     => 'Website',
-				'expected' => 'Website is invalid. Enter a valid web address, like https://example.com',
+				'expected' => 'Enter a valid web address, like https://example.com',
 			),
 			array(
 				'type'     => 'phone',
 				'name'     => 'Cell',
-				'expected' => 'Cell is invalid. Enter a valid phone number',
+				'expected' => 'Enter a valid phone number',
 			),
 			array(
 				'type'     => 'number',
 				'name'     => 'Age',
-				'expected' => 'Age is invalid. Enter a number',
+				'expected' => 'Enter a number',
 			),
 			array(
 				'type'     => 'quantity',
 				'name'     => 'Amount',
-				'expected' => 'Amount is invalid. Enter a number',
+				'expected' => 'Enter a number',
 			),
 			array(
 				'type'     => 'text',
