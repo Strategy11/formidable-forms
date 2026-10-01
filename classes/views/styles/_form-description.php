@@ -5,10 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'form_desc_size', 'frm_form_desc_size-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?>
-	</label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'form_desc_size', 'frm_form_desc_size-value', __( 'Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php

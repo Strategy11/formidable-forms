@@ -74,9 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'field_border_width', 'frm_field_border_width-value' ); ?>
-							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_border_width', 'frm_field_border_width-value', __( 'Border Width', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -309,9 +307,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'border_width_error', 'frm_border_width_error-value' ); ?>
-							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'border_width_error', 'frm_border_width_error-value', __( 'Border Width', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php

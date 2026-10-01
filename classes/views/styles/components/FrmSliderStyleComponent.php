@@ -425,6 +425,24 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	}
 
 	/**
+	 * Print a style item heading for a slider value input.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $style    The style containing the saved values in post_content.
+	 * @param string $key      The style setting key.
+	 * @param string $input_id The slider value input ID.
+	 * @param string $label    The translated heading text.
+	 *
+	 * @return void
+	 */
+	public static function style_item_heading( $style, $key, $input_id, $label ) {
+		echo '<label class="frm-style-item-heading"';
+		self::echo_label_attributes( $style, $key, $input_id );
+		echo '>', esc_html( $label ), '</label>';
+	}
+
+	/**
 	 * Init the field icon
 	 *
 	 * @since 6.14

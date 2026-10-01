@@ -167,9 +167,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <hr class="frm12"/>
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'base_font_size', 'frm_base_font_size-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'base_font_size', 'frm_base_font_size-value', __( 'Base Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -210,9 +208,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'border_radius', 'frm_style_qsettings_border_radius-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'border_radius', 'frm_style_qsettings_border_radius-value', __( 'Corner Radius', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">
 	<?php

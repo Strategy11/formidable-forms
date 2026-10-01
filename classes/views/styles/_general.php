@@ -64,9 +64,7 @@ new FrmBackgroundImageStyleComponent(
 </div>
 
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'fieldset', 'frm_fieldset-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'fieldset', 'frm_fieldset-value', __( 'Border Width', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -101,9 +99,7 @@ new FrmBackgroundImageStyleComponent(
 </div>
 
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'form_width', 'frm_form_width-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Form Width', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'form_width', 'frm_form_width-value', __( 'Form Width', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php

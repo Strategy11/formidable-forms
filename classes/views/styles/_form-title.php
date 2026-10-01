@@ -22,9 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'title_size', 'frm_title_size-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'title_size', 'frm_title_size-value', __( 'Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php

@@ -4,9 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'field_font_size', 'frm_field_font_size-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_font_size', 'frm_field_font_size-value', __( 'Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -40,9 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'field_height', 'frm_field_height-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Height', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_height', 'frm_field_height-value', __( 'Height', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -57,9 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'field_width', 'frm_field_width-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_width', 'frm_field_width-value', __( 'Width', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -108,9 +102,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label
-		<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'border_radius', 'frm_border_radius-value' ); ?>
-		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'border_radius', 'frm_border_radius-value', __( 'Corner Radius', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
