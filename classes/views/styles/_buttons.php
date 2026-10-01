@@ -53,8 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							data-slider-label-for="frm_submit_font_size-value"
-							<?php FrmSliderStyleComponent::maybe_echo_for( $style, 'submit_font_size', 'frm_submit_font_size-value' ); ?>
+							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'submit_font_size', 'frm_submit_font_size-value' ); ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -90,8 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							data-slider-label-for="frm_submit_width-value"
-							<?php FrmSliderStyleComponent::maybe_echo_for( $style, 'submit_width', 'frm_submit_width-value' ); ?>
+							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'submit_width', 'frm_submit_width-value' ); ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -110,8 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							data-slider-label-for="frm_submit_height-value"
-							<?php FrmSliderStyleComponent::maybe_echo_for( $style, 'submit_height', 'frm_submit_height-value' ); ?>
+							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'submit_height', 'frm_submit_height-value' ); ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Height', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -148,8 +145,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							data-slider-label-for="frm_submit_border_width-value"
-							<?php FrmSliderStyleComponent::maybe_echo_for( $style, 'submit_border_width', 'frm_submit_border_width-value' ); ?>
+							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'submit_border_width', 'frm_submit_border_width-value' ); ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -185,8 +181,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							data-slider-label-for="frm_submit_border_radius-value"
-							<?php FrmSliderStyleComponent::maybe_echo_for( $style, 'submit_border_radius', 'frm_submit_border_radius-value' ); ?>
+							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'submit_border_radius', 'frm_submit_border_radius-value' ); ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
