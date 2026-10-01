@@ -189,6 +189,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
+							<?php FrmSliderStyleComponent::echo_label_attributes( $style, 'submit_margin', 'frm_submit_margin-value' ); ?>
 							class="frm-style-item-heading">
 							<?php esc_html_e( 'Margin', 'formidable' ); ?>
 							<span class="frm_help frmfont frm_tooltip_icon" data-placement="right" data-container="body" data-original-title="<?php esc_attr_e( 'Used for navigation buttons too', 'formidable' ); ?>"></span>
@@ -209,10 +210,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							class="frm-style-item-heading">
-							<?php esc_html_e( 'Padding', 'formidable' ); ?>
-						</label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'submit_padding', 'frm_submit_padding-value', __( 'Padding', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php

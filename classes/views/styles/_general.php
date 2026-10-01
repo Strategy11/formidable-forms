@@ -80,9 +80,7 @@ new FrmBackgroundImageStyleComponent(
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_fieldset_padding"
-		class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'fieldset_padding', 'frm_fieldset_padding-value', __( 'Padding', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php

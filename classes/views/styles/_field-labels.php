@@ -120,8 +120,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'label_padding', 'frm_label_padding-value', __( 'Padding', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php

@@ -416,8 +416,9 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 */
 	public static function echo_label_attributes( $style, $key, $input_id ) {
 		$attributes = array( 'data-slider-label-for' => $input_id );
+		$values     = explode( ' ', $style->post_content[ $key ] );
 
-		if ( self::is_value_measured( $style->post_content[ $key ] ) ) {
+		if ( self::is_value_measured( $values[0] ) ) {
 			$attributes['for'] = $input_id;
 		}
 
@@ -439,7 +440,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	public static function style_item_heading( $style, $key, $input_id, $label ) {
 		echo '<label class="frm-style-item-heading"';
 		self::echo_label_attributes( $style, $key, $input_id );
-		echo '>', esc_html( $label ), '</label>';
+		echo '>' . esc_html( $label ) . '</label>';
 	}
 
 	/**

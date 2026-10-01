@@ -127,8 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
-	<label
-		class="frm-style-item-heading"><?php esc_html_e( 'Vertical Spacing', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_margin', 'frm_style_qsettings_field_margin-value', __( 'Vertical Spacing', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -147,8 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label
-		class="frm-style-item-heading"><?php esc_html_e( 'Input Field Padding', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_pad', 'frm_style_qsettings_field_pad-value', __( 'Input Field Padding', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php

@@ -93,8 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label
-		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'description_margin', 'frm_description_margin-value', __( 'Margin', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field frm-md-z-index">
 	<?php
