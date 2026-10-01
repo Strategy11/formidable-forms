@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm5 frm_form_field">
 						<label
 							data-slider-label-for="frm_font_size-value"
-							<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['font_size'] ) ? 'for="frm_font_size-value"' : ''; ?>
+							<?php FrmSliderStyleComponent::maybe_echo_for( $style, 'font_size', 'frm_font_size-value' ); ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -109,7 +109,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm5 frm_form_field">
 						<label
 							data-slider-label-for="frm_width-value"
-							<?php echo FrmSliderStyleComponent::is_value_measured( $style->post_content['width'] ) ? 'for="frm_width-value"' : ''; ?>
+							<?php FrmSliderStyleComponent::maybe_echo_for( $style, 'width', 'frm_width-value' ); ?>
 							class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field frm-md-z-index">
