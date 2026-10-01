@@ -2,12 +2,13 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmStrpLiteAuth
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStrpLiteAuth::class )]
 class test_FrmStrpLiteAuth extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStrpLiteAuth::get_statement_descriptor
-	 */
 	public function test_get_statement_descriptor() {
 		$this->assertSame( get_bloginfo( 'name' ), $this->get_statement_descriptor() );
 
@@ -26,9 +27,6 @@ class test_FrmStrpLiteAuth extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmStrpLiteAuth', 'get_statement_descriptor' ) );
 	}
 
-	/**
-	 * @covers FrmStrpLiteAuth::maybe_add_statement_descriptor
-	 */
 	public function test_maybe_add_statement_descriptor() {
 		$this->assertSame(
 			array(

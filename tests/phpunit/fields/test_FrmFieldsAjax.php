@@ -3,7 +3,16 @@
 /**
  * @group ajax
  * @group free
+ *
+ * @covers FrmAppHelper
+ * @covers FrmField
+ * @covers FrmFieldsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'ajax' )]
+#[\PHPUnit\Framework\Attributes\Group( 'free' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAppHelper::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmField::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	protected $form_id = 0;
@@ -24,9 +33,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertIsNumeric( $this->form_id );
 	}
 
-	/**
-	 * @covers FrmFieldsController::create
-	 */
 	public function test_create() {
 		$_POST = array(
 			'action'     => 'frm_insert_field',
@@ -55,8 +61,8 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	/**
 	 * Test duplicating a text field
 	 *
-	 * @covers FrmFieldsController::duplicate
-	 * @covers FrmField::duplicate
+	 * @see FrmFieldsController::duplicate
+	 * @see FrmField::duplicate
 	 */
 	public function test_duplicating_text_field() {
 		$this->assertTrue( current_user_can( 'frm_edit_forms' ), 'User does not have permission' );
@@ -102,8 +108,8 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 * The batch field load defers tooltip text and ships it in its own JSON response,
 	 * since admin_footer never runs to print it on admin-ajax.php.
 	 *
-	 * @covers FrmFieldsController::load_field
-	 * @covers FrmAppHelper::get_tooltip_attr
+	 * @see FrmFieldsController::load_field
+	 * @see FrmAppHelper::get_tooltip_attr
 	 */
 	public function test_load_field_defers_tooltips() {
 		$field_ids = array(
@@ -159,7 +165,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	/**
 	 * Other builder ajax requests have nothing to ship deferred text with, so they keep the title.
 	 *
-	 * @covers FrmAppHelper::get_tooltip_attr
+	 * @see FrmAppHelper::get_tooltip_attr
 	 */
 	public function test_insert_field_keeps_tooltip_title() {
 		$_POST = array(

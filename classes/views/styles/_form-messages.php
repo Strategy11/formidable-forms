@@ -73,7 +73,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_success_font_size"
 							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -149,7 +148,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_error_font_size"
 							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">

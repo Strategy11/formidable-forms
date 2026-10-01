@@ -2,6 +2,8 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
+	use FrmPHPUnitCompatibility;
+
 	/**
 	 * Track if an install has happened to avoid installing too often.
 	 *
@@ -40,6 +42,20 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function wpTearDownAfterClass() {
+	}
+
+	/**
+	 * Keep WordPress deprecation assertions working after PHPUnit 9.
+	 *
+	 * @return void
+	 */
+	public function expectDeprecated() {
+		if ( version_compare( \PHPUnit\Runner\Version::id(), '10.0', '<' ) ) {
+			parent::expectDeprecated();
+			return;
+		}
+
+		$this->set_up_deprecation_expectations();
 	}
 
 	public function setUp(): void {
@@ -108,9 +124,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-	/**
-	 * @covers FrmAppController::install()
-	 */
 	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			// Set this to false so all our tests won't be done with this active

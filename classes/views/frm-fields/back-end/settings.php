@@ -380,6 +380,15 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 		<?php } ?>
 
+		<?php if ( ! empty( $display['allow_intl_domains'] ) ) { ?>
+			<p class="frm_form_field">
+				<label class="frm-force-flex frm-gap-xs" for="frm_allow_intl_domains_<?php echo esc_attr( $field['id'] ); ?>">
+					<input class="frm-m-0" type="checkbox" id="frm_allow_intl_domains_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[allow_intl_domains_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['allow_intl_domains'], 1 ); ?> />
+					<span class="-frm-mt-2xs"><?php esc_html_e( 'Allow international domain names with accented or non-Latin characters.', 'formidable' ); ?></span>
+				</label>
+			</p>
+		<?php } ?>
+
 		<?php if ( $display['captcha_size'] ) { ?>
 			<p class="frm6 frm_first frm_form_field">
 				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" <?php FrmAppHelper::array_to_html_params( FrmAppHelper::get_tooltip_attr( __( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ) ), true ); ?>>
