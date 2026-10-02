@@ -2774,6 +2774,9 @@ window.frmAdminBuildJS = function() {
 				action: 'frm_load_field',
 				field_ids: fieldIds,
 				form_id: thisFormId,
+				// Only acknowledge received definitions so concurrent batches remain independent.
+				known_tooltips: Object.keys( frm_admin_js.tooltips || {} ).join( ',' ),
+				known_select_options: Object.keys( frm_admin_js.selectOptions || {} ).join( ',' ),
 				nonce: frmGlobal.nonce
 			},
 			success: async response => {
@@ -2922,6 +2925,7 @@ window.frmAdminBuildJS = function() {
 		placeholderSpinnerObserver?.disconnect();
 		renumberPageBreaks();
 		maybeHideQuantityProductFieldOption();
+		scheduleBulkOptionsOverlay();
 	}
 
 	function addFieldClick() {
@@ -4347,17 +4351,59 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function initBulkOptionsOverlay() {
-		/*jshint validthis:true */
-		const $info = initModal( '#frm-bulk-modal', '700px' );
-		if ( $info === false ) {
+	let bulkOptionsOverlay;
+	let bulkOptionsOverlayScheduled = false;
+
+	/**
+	 * Create the dialog once, either during idle time or on its first click.
+	 *
+	 * @since x.x
+	 * @return {jQuery|boolean} The dialog, or false when its markup is absent.
+	 */
+	function initializeBulkOptionsOverlay() {
+		if ( bulkOptionsOverlay === undefined ) {
+			bulkOptionsOverlay = initModal( '#frm-bulk-modal', '700px' );
+		}
+		return bulkOptionsOverlay;
+	}
+
+	/**
+	 * Wait for page assets and field rendering before scheduling optional dialog work.
+	 *
+	 * @since x.x
+	 * @return {void}
+	 */
+	function scheduleBulkOptionsOverlay() {
+		if ( bulkOptionsOverlayScheduled ) {
 			return;
 		}
+		bulkOptionsOverlayScheduled = true;
+
+		const schedule = () => {
+			if ( window.requestIdleCallback ) {
+				window.requestIdleCallback( initializeBulkOptionsOverlay );
+			} else {
+				setTimeout( initializeBulkOptionsOverlay, 0 );
+			}
+		};
+		if ( document.readyState === 'complete' ) {
+			schedule();
+		} else {
+			window.addEventListener( 'load', schedule, { once: true } );
+		}
+	}
+
+	function initBulkOptionsOverlay() {
+		/*jshint validthis:true */
 
 		jQuery( '.frm-insert-preset' ).on( 'click', insertBulkPreset );
 
 		jQuery( builderForm ).on( 'click', 'a.frm-bulk-edit-link', function( event ) {
 			event.preventDefault();
+			const $info = initializeBulkOptionsOverlay();
+			if ( $info === false ) {
+				return;
+			}
 			let content = '';
 			const fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' );
 			const separate = usingSeparateValues( fieldId );
@@ -4408,7 +4454,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			this.classList.add( 'frm_loading_button' );
-			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
+			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, initializeBulkOptionsOverlay() );
 			fieldUpdated();
 		} );
 	}
@@ -12009,6 +12055,10 @@ window.frmAdminBuildJS = function() {
 
 			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
 				infoModal( frm_admin_js.pricingFieldsModal, '550px' );
+			}
+
+			if ( ! activeFieldLoadRequests ) {
+				scheduleBulkOptionsOverlay();
 			}
 		},
 

@@ -9,6 +9,53 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsController extends FrmUnitTest {
 
+	public function test_builder_batches_omit_only_received_definitions() {
+		$definitions                   = array(
+			'known' => array( 'value' => 'Saved option' ),
+			'new'   => array( 'value' => 'New option' ),
+		);
+		$_POST['known_select_options'] = 'known,unknown,known';
+		$_POST['known_tooltips']       = 'new';
+
+		try {
+			$this->assertSame(
+				array( 'new' => $definitions['new'] ),
+				$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_select_options' ) )
+			);
+			$this->assertSame(
+				array( 'known' => $definitions['known'] ),
+				$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_tooltips' ) )
+			);
+		} finally {
+			unset( $_POST['known_select_options'], $_POST['known_tooltips'] );
+		}
+	}
+
+	public function test_builder_batches_keep_definitions_for_older_or_malformed_requests() {
+		$definitions = array( 'known' => 'Tooltip text' );
+		unset( $_POST['known_tooltips'] );
+
+		try {
+			foreach ( array( null, '', array( 'known' ) ) as $known_keys ) {
+				if ( null !== $known_keys ) {
+					$_POST['known_tooltips'] = $known_keys;
+				}
+				$this->assertSame(
+					$definitions,
+					$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_tooltips' ) )
+				);
+			}
+
+			$_POST['known_tooltips'] = 'known';
+			$this->assertSame(
+				array(),
+				$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_tooltips' ) )
+			);
+		} finally {
+			unset( $_POST['known_tooltips'] );
+		}
+	}
+
 	public function test_prepare_placeholder() {
 		$name        = 'Number';
 		$field       = array(
