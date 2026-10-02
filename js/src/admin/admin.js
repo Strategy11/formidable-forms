@@ -10648,6 +10648,61 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Syncs aria-selected and the roving tabindex of a radio-backed tablist with its checked radio.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function syncTablistState( tablist ) {
+		tablist.querySelectorAll( 'label[role="tab"]' ).forEach( label => {
+			label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
+			label.setAttribute( 'tabindex', label.control.checked ? '0' : '-1' );
+		} );
+	}
+
+	/**
+	 * Adds Enter, Space, arrow, Home and End key support to a tablist of radio labels.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function initTablistKeyboard( tablist ) {
+		tablist.addEventListener( 'keydown', function( event ) {
+			const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]' ) );
+			const index = tabs.indexOf( event.target.closest( 'label' ) );
+			if ( -1 === index ) {
+				return;
+			}
+
+			let target;
+			switch ( event.key ) {
+				case 'Enter':
+				case ' ':
+					target = tabs[ index ];
+					break;
+				case 'ArrowRight':
+					target = tabs[ ( index + 1 ) % tabs.length ];
+					break;
+				case 'ArrowLeft':
+					target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
+					break;
+				case 'Home':
+					target = tabs[ 0 ];
+					break;
+				case 'End':
+					target = tabs[ tabs.length - 1 ];
+					break;
+				default:
+					return;
+			}
+
+			event.preventDefault();
+			target.focus();
+			target.click();
+		} );
+	}
+
 	function trashTemplate( e ) {
 		/*jshint validthis:true */
 		const id = this.getAttribute( 'data-id' );
@@ -12393,45 +12448,9 @@ window.frmAdminBuildJS = function() {
 				const showNote = event.target.value !== captchaValueOnLoad;
 				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden', ! showNote );
 
-				captchas.querySelectorAll( 'label' ).forEach( label => {
-					label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
-					label.setAttribute( 'tabindex', label.control.checked ? '0' : '-1' );
-				} );
+				syncTablistState( captchas );
 			} );
-
-			captchas.addEventListener( 'keydown', function( event ) {
-				const tabs = Array.from( captchas.querySelectorAll( 'label' ) );
-				const index = tabs.indexOf( event.target.closest( 'label' ) );
-				if ( -1 === index ) {
-					return;
-				}
-
-				let target;
-				switch ( event.key ) {
-					case 'Enter':
-					case ' ':
-						target = tabs[ index ];
-						break;
-					case 'ArrowRight':
-						target = tabs[ ( index + 1 ) % tabs.length ];
-						break;
-					case 'ArrowLeft':
-						target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
-						break;
-					case 'Home':
-						target = tabs[ 0 ];
-						break;
-					case 'End':
-						target = tabs[ tabs.length - 1 ];
-						break;
-					default:
-						return;
-				}
-
-				event.preventDefault();
-				target.focus();
-				target.click();
-			} );
+			initTablistKeyboard( captchas );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
@@ -12455,34 +12474,12 @@ window.frmAdminBuildJS = function() {
 
 			const paymentsSettings = document.getElementById( 'payments_settings' );
 			const paymentSettingsTabs = paymentsSettings?.querySelectorAll( '[name="frm_payment_section"]' );
-			if ( paymentSettingsTabs ) {
+			if ( paymentSettingsTabs?.length ) {
+				const paymentTablist = paymentSettingsTabs[ 0 ].closest( '[role="tablist"]' );
 				paymentSettingsTabs.forEach(
-					element => {
-						element.addEventListener( 'change', () => {
-							if ( ! element.checked ) {
-								return;
-							}
-
-							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
-							if ( label ) {
-								label.setAttribute( 'aria-selected', 'true' );
-							}
-
-							paymentSettingsTabs.forEach(
-								tab => {
-									if ( tab === element ) {
-										return;
-									}
-
-									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
-									if ( label ) {
-										label.setAttribute( 'aria-selected', 'false' );
-									}
-								}
-							);
-						} );
-					}
+					element => element.addEventListener( 'change', () => syncTablistState( paymentTablist ) )
 				);
+				initTablistKeyboard( paymentTablist );
 			}
 		},
 
