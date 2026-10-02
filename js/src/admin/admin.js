@@ -10650,14 +10650,19 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Syncs aria-selected and the roving tabindex of a radio-backed tablist with its checked radio.
+	 * The Tab stop is the checked tab, or the first visible tab when the checked one is hidden.
 	 *
 	 * @param {HTMLElement} tablist
 	 * @return {void}
 	 */
 	function syncTablistState( tablist ) {
-		tablist.querySelectorAll( 'label[role="tab"]' ).forEach( label => {
+		const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]' ) );
+		const visibleTabs = tabs.filter( label => ! label.classList.contains( 'frm_hidden' ) );
+		const tabStop = visibleTabs.find( label => label.control.checked ) || visibleTabs[ 0 ];
+
+		tabs.forEach( label => {
 			label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
-			label.setAttribute( 'tabindex', label.control.checked ? '0' : '-1' );
+			label.setAttribute( 'tabindex', label === tabStop ? '0' : '-1' );
 		} );
 	}
 

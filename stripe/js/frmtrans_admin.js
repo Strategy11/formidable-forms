@@ -4,6 +4,12 @@
 		const show = val === 'recurring';
 		slideOpts( this, show, '.frm_trans_sub_opts' );
 		toggleOpts( this, ! show, '.frm_gateway_no_recur' );
+
+		// Hiding the selected gateway would leave the tablist without a Tab stop.
+		const tablist = this.closest( '.frm_form_action_settings' ).querySelector( '.frm-long-icon-buttons[role="tablist"]' );
+		if ( tablist ) {
+			frmAdminBuild.syncTablistState( tablist );
+		}
 	}
 
 	function slideOpts( opt, show, c ) {

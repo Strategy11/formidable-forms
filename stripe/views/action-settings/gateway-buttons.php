@@ -3,9 +3,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-// Roving tabindex: only one label is a Tab stop. Fall back to the first gateway when none is selected yet.
-$selected_gateways = array_intersect( array_keys( $gateways ), (array) $form_action->post_content['gateway'] );
-$tab_stop          = $selected_gateways ? reset( $selected_gateways ) : current( array_keys( $gateways ) );
+// Roving tabindex: only one label is a Tab stop, and it can't be a hidden one. Fall back to the first visible gateway when none is selected yet.
+$visible_gateways  = array_filter(
+	$gateways,
+	function ( $gateway ) use ( $form_action ) {
+		return $gateway['recurring'] || 'recurring' !== $form_action->post_content['type'];
+	}
+);
+$selected_gateways = array_intersect( array_keys( $visible_gateways ), (array) $form_action->post_content['gateway'] );
+$tab_stop          = $selected_gateways ? reset( $selected_gateways ) : (string) key( $visible_gateways );
 ?>
 <div class="frm-long-icon-buttons" role="tablist">
 <?php
