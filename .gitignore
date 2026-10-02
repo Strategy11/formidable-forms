@@ -39,3 +39,7 @@ report-task.txt
 bin/mago
 
 .phpunit.cache/
+
+# E2E audit artifacts
+artifacts/lighthouse/
+cypress/screenshots/

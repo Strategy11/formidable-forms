@@ -12,7 +12,10 @@ module.exports = defineConfig({
     retries: {
       runMode: 1,
     },
-    setupNodeEvents(on) {
+    async setupNodeEvents(on) {
+      const { reportLighthouse } = await import( './tests/lighthouse/report.mjs' );
+      const { default: lighthouse, desktopConfig } = await import( 'lighthouse' );
+      let lighthousePort;
       on('task', {
         log(message) {
           console.log(message)
@@ -25,6 +28,21 @@ module.exports = defineConfig({
         accessibilityChecker: require('cypress-accessibility-checker/plugin')
       });
       htmlvalidate.install( on );
+      on( 'before:browser:launch', ( browser, launchOptions ) => {
+        const debugging = launchOptions.args.find( arg => arg.startsWith( '--remote-debugging-port=' ) );
+        lighthousePort = debugging ? Number( debugging.split( '=' )[ 1 ] ) : undefined;
+        return launchOptions;
+      } );
+      on( 'task', {
+        async lighthouse( { url, opts } ) {
+          if ( ! lighthousePort ) {
+            throw new Error( 'Lighthouse requires a Chromium remote debugging port.' );
+          }
+          const results = await lighthouse( url, { ...opts, port: lighthousePort }, desktopConfig );
+          reportLighthouse( results );
+          return null;
+        },
+      } );
     },
     experimentalRunAllSpecs: true
   },

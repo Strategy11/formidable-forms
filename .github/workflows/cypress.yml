@@ -132,3 +132,12 @@ jobs:
           echo "$specs" | tr ',' '\n' | sed 's/^/  /'
 
           npm run e2e:githubrun -- --spec "$specs"
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-shard-${{ matrix.shard }}
+          path: artifacts/lighthouse/
+          if-no-files-found: ignore
+          retention-days: 14
