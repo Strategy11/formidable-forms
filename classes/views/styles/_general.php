@@ -30,7 +30,7 @@ new FrmBackgroundImageStyleComponent(
 
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_form_align"
+		for="frm_form_align-left"
 		class="frm-style-item-heading"><?php esc_html_e( 'Alignment', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -114,7 +114,7 @@ new FrmBackgroundImageStyleComponent(
 
 <div class="frm5 frm_form_field">
 	<label 
-		for="frm_direction"
+		for="frm_direction-left"
 		class="frm-style-item-heading"><?php esc_html_e( 'Direction', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">

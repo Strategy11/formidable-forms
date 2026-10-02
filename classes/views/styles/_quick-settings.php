@@ -164,35 +164,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <hr class="frm12"/>
+<?php if ( ! FrmStylesHelper::is_advanced_settings() ) : ?>
 <div class="frm5 frm_form_field">
 	<?php FrmSliderStyleComponent::style_item_heading( $style, 'base_font_size', 'frm_base_font_size-value', __( 'Base Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
-	if ( ! FrmStylesHelper::is_advanced_settings() ) {
-		// This is displayed only in "Quick Settings" and has a default value of "false." It is updated via JavaScript when the Base Font Size slider is adjusted.
-		// When set to false, the sizes in "Advanced Settings" will not be modified.
-		?>
-		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'use_base_font_size' ) ); ?>" value="false" />
-	<?php } ?>
+	// Updated via JavaScript when Base Font Size changes. Otherwise, preserve the font sizes in Advanced Settings.
+	?>
+	<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'use_base_font_size' ) ); ?>" value="false" />
 	<?php
 	new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'base_font_size' ),
 		$style->post_content['base_font_size'],
 		array(
-			'id'          => 'frm_base_font_size',
-			'max_value'   => 100,
-			'not_show_in' => 'advanced-settings',
-			'classname'   => 'frm-base-font-size',
+			'id'        => 'frm_base_font_size',
+			'max_value' => 100,
+			'classname' => 'frm-base-font-size',
 		)
 	);
 	?>
 </div>
 
+<?php endif; ?>
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
 	<label
+		for="frm-field-shape-regular"
 		class="frm-style-item-heading"><?php esc_html_e( 'Field Shape', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-sm-z-index">

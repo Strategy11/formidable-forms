@@ -30,6 +30,37 @@
 	}
 
 	/**
+	 * Focus the visible control when a styler heading labels a hidden toggle or radio input.
+	 * Radio headings focus the selected option without changing the setting.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function initLabelFocus() {
+		document.getElementById( 'frm_style_sidebar' ).addEventListener( 'click', event => {
+			const label = event.target.closest( 'label.frm-style-item-heading' );
+			const input = label?.control;
+			if ( ! input || input.disabled || ! [ 'radio', 'checkbox' ].includes( input.type ) ) {
+				return;
+			}
+
+			let target;
+			if ( 'checkbox' === input.type ) {
+				target = input.parentElement.querySelector( '[role="switch"]' );
+			} else {
+				const component = input.closest( '.frm-radio-component' );
+				const radio = component?.querySelector( 'input:checked' ) || input;
+				const option = radio.nextElementSibling;
+				target = option.querySelector( '[role="radio"]' ) || option;
+				event.preventDefault();
+			}
+
+			target?.focus();
+		} );
+	}
+
+	/**
 	 * The "Quick Settings" swatches (Primary, Field Text, Field Border, Button Text) each summarize a single
 	 * underlying setting, but have no name attribute of their own, so they can't be found and updated by the
 	 * main reset loop in syncEditPageAfterResetAction(). This maps the setting key to that swatch's fixed id.
@@ -44,6 +75,7 @@
 	};
 
 	initCommonEventListeners();
+	initLabelFocus();
 	initPreview();
 	fixWpAuthModal();
 

@@ -3,10 +3,10 @@
 /**
  * @group styles
  *
- * @covers FrmSliderStyleComponent
+ * @coversNothing
  */
 #[\PHPUnit\Framework\Attributes\Group( 'styles' )]
-#[\PHPUnit\Framework\Attributes\CoversClass( FrmSliderStyleComponent::class )]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 class test_FrmSliderStyleComponent extends FrmUnitTest {
 
 	/**
@@ -22,12 +22,12 @@ class test_FrmSliderStyleComponent extends FrmUnitTest {
 
 	public static function is_value_measured_provider() {
 		return array(
-			'px'        => array( '10px', true ),
-			'em'        => array( '1.5em', true ),
-			'percent'   => array( '50%', true ),
-			'unitless'  => array( '12.5', false ),
-			'auto'      => array( 'auto', false ),
-			'empty'     => array( '', false ),
+			'px'       => array( '10px', true ),
+			'em'       => array( '1.5em', true ),
+			'percent'  => array( '50%', true ),
+			'unitless' => array( '12.5', false ),
+			'auto'     => array( 'auto', false ),
+			'empty'    => array( '', false ),
 		);
 	}
 

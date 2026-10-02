@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_required_weight"
+							for="frm_weight"
 							class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$frm_style->get_field_name( 'weight' ),
 							$style->post_content['weight'],
 							array(
-								'id'      => 'frm_required_weight',
+								'id'      => 'frm_weight',
 								'options' => FrmStyle::get_bold_options(),
 							)
 						);
@@ -89,6 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
+							for="frm_align-left"
 							class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field frm-sm-z-index">
@@ -97,6 +98,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$frm_style->get_field_name( 'align' ),
 							$style->post_content['align'],
 							array(
+								'id'      => 'frm_align',
 								'options' => array( 'left', 'right' ),
 							)
 						);

@@ -88,4 +88,30 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 		cy.wait( '@changeStyling', { timeout: 10000 } );
 		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).should( 'not.have.attr', 'for' );
 	} );
+	it( 'Background labels focus their color swatch', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( 'label[for="frm_fieldset_bg_color_visible"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.focused().should( 'have.id', 'frm_fieldset_bg_color_visible' );
+	} );
+
+	it( 'Radio headings focus the selected option without changing it, and toggle headings focus the switch', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#general-style .frm-align-component label[for="frm_form_align-right"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.contains( '#general-style .frm-style-item-heading', 'Alignment' ).click();
+		cy.focused().prev().should( 'have.value', 'right' ).and( 'be.checked' );
+		cy.get( '#general-style .frm-align-component input[value="right"]' ).should( 'be.checked' );
+		cy.get( 'label[for="frm_important_style"]' ).click();
+		cy.focused().should( 'have.attr', 'role', 'switch' ).and( 'have.attr', 'aria-label', 'Override Theme' );
+	} );
+
+	it( 'Required Indicator Weight focuses its own dropdown', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#field-labels-style button[aria-label="Field Labels"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.get( 'label[for="frm_weight"]' ).click();
+		cy.focused().should( 'have.id', 'frm_weight' );
+		cy.contains( '#field-labels-style .frm-tabs-navs li', 'Required Indicator' ).click();
+		cy.get( 'label[for="frm_required_weight"]' ).click();
+		cy.focused().should( 'have.id', 'frm_required_weight' );
+		cy.get( '[id="frm_required_weight"]' ).should( 'have.length', 1 );
+	} );
 } );
