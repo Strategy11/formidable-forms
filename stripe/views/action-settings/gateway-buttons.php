@@ -2,6 +2,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+// Roving tabindex: only one label is a Tab stop. Fall back to the first gateway when none is selected yet.
+$selected_gateways = array_intersect( array_keys( $gateways ), (array) $form_action->post_content['gateway'] );
+$tab_stop          = $selected_gateways ? reset( $selected_gateways ) : current( array_keys( $gateways ) );
 ?>
 <div class="frm-long-icon-buttons" role="tablist">
 <?php
@@ -32,7 +36,7 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 	$label_params = array(
 		'for'           => $toggle_id,
 		'class'         => trim( 'frm_payment_settings_tab frm_gateway_opt ' . $gateway_classes ),
-		'tabindex'      => '0',
+		'tabindex'      => $gateway_name === $tab_stop ? '0' : '-1',
 		'role'          => 'tab',
 		'aria-selected' => $is_active ? 'true' : 'false',
 	);

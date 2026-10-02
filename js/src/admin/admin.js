@@ -10669,7 +10669,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function initTablistKeyboard( tablist ) {
 		tablist.addEventListener( 'keydown', function( event ) {
-			const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]' ) );
+			const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]:not(.frm_hidden)' ) );
 			const index = tabs.indexOf( event.target.closest( 'label' ) );
 			if ( -1 === index ) {
 				return;
@@ -12616,6 +12616,8 @@ window.frmAdminBuildJS = function() {
 			},
 		},
 
+		syncTablistState,
+		initTablistKeyboard,
 		applyZebraStriping,
 		initModal,
 		infoModal,

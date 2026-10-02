@@ -51,9 +51,7 @@
 			}
 		);
 
-		settings.get( 0 ).querySelectorAll( '[role="tab"]' ).forEach(
-			tab => tab.setAttribute( 'aria-selected', tab.htmlFor === this.id ? 'true' : 'false' )
-		);
+		frmAdminBuild.syncTablistState( this.closest( '[role="tablist"]' ) );
 
 		wp.hooks.doAction( 'frm_trans_toggled_gateway', { gateway, checked, settings } );
 
@@ -62,11 +60,25 @@
 		} );
 	}
 
+	function initGatewayTablists( container ) {
+		container.querySelectorAll( '.frm-long-icon-buttons[role="tablist"]' ).forEach(
+			tablist => {
+				if ( ! tablist.dataset.frmKeyboard ) {
+					tablist.dataset.frmKeyboard = '1';
+					frmAdminBuild.initTablistKeyboard( tablist );
+				}
+			}
+		);
+	}
+
 	function frmTransLiteAdminJS() {
 		return {
 			init() {
 				const actions = document.getElementById( 'frm_notification_settings' );
 				if ( actions ) {
+					initGatewayTablists( actions );
+					wp.hooks.addAction( 'frm_filled_form_action', 'frmtrans', inside => initGatewayTablists( inside[ 0 ] ) );
+					wp.hooks.addAction( 'frm_added_form_action', 'frmtrans', newAction => initGatewayTablists( newAction ) );
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
 
 					document.addEventListener(
