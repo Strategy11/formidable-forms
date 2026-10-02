@@ -36,3 +36,10 @@ class CoversClass {
 	public function __construct( $className ) {
 	}
 }
+
+/**
+ * Marks tests whose target is outside the code coverage source directories.
+ */
+#[\Attribute( \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD )]
+class CoversNothing {
+}

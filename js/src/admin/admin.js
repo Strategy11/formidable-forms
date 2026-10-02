@@ -7112,6 +7112,17 @@ window.frmAdminBuildJS = function() {
 		const id = `field_${ fieldKey }-${ opt.key }`;
 		const inputType = type === 'scale' ? 'radio' : type;
 
+		/*
+		 * 'radio' and 'checkbox' wrap the option input in its label with no
+		 * `for` attribute -- the wrap alone already associates them, and a
+		 * `for` pointing at the same id makes Safari VoiceOver announce the
+		 * label twice (radio-field.php, checkbox-field.php,
+		 * product-radio.php, the last covering both product data_types).
+		 * Keep in sync with those templates -- this preview template drifts
+		 * silently from the PHP output otherwise.
+		 */
+		const labelFor = [ 'radio', 'checkbox' ].includes( type ) ? '' : ` for="${ id }"`;
+
 		const other = `<input type="text" id="field_${ fieldKey }-${ opt.key }-otext" class="frm_other_input frm_pos_none" name="item_meta[other][${ fieldId }][${ opt.key }]" value="" />`;
 
 		this.getSingle = function() {
@@ -7131,7 +7142,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			return `<div class="frm_${ type } ${ type } ${ classes }" id="frm_${ type }_${ fieldId }-${ opt.key }">
-					<label for="${ id }">
+					<label${ labelFor }>
 						<input type="${ inputType }" name="item_meta[${ fieldId }]${ type === 'checkbox' ? '[]' : '' }" value="${ purifyHtml( opt.saved ) }" id="${ id }"${ isProduct ? ` data-price="${ opt.price }"` : '' }${ opt.checked ? ' checked="checked"' : '' }>
 						${ purifyHtml( opt.label ) }
 					</label>
@@ -12376,10 +12387,50 @@ window.frmAdminBuildJS = function() {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
 
-			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function( event ) {
+			const captchas = document.querySelector( '.frm_captchas' );
+			captchas.addEventListener( 'change', function( event ) {
 				const captchaValueOnLoad = document.querySelector( '.frm_captchas input[checked="checked"]' )?.value;
 				const showNote = event.target.value !== captchaValueOnLoad;
 				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden', ! showNote );
+
+				captchas.querySelectorAll( 'label' ).forEach( label => {
+					label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
+					label.setAttribute( 'tabindex', label.control.checked ? '0' : '-1' );
+				} );
+			} );
+
+			captchas.addEventListener( 'keydown', function( event ) {
+				const tabs = Array.from( captchas.querySelectorAll( 'label' ) );
+				const index = tabs.indexOf( event.target.closest( 'label' ) );
+				if ( -1 === index ) {
+					return;
+				}
+
+				let target;
+				switch ( event.key ) {
+					case 'Enter':
+					case ' ':
+						target = tabs[ index ];
+						break;
+					case 'ArrowRight':
+						target = tabs[ ( index + 1 ) % tabs.length ];
+						break;
+					case 'ArrowLeft':
+						target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
+						break;
+					case 'Home':
+						target = tabs[ 0 ];
+						break;
+					case 'End':
+						target = tabs[ tabs.length - 1 ];
+						break;
+					default:
+						return;
+				}
+
+				event.preventDefault();
+				target.focus();
+				target.click();
 			} );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
