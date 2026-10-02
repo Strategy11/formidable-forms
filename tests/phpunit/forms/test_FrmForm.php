@@ -14,6 +14,42 @@ class test_FrmForm extends FrmUnitTest {
 		$this->create_users();
 	}
 
+	public function test_partial_builder_save_preserves_unsubmitted_field_settings() {
+		$form_id   = $this->factory->form->create();
+		$edited    = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+		$untouched = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $form_id,
+				'type'          => 'text',
+				'name'          => 'Untouched field',
+				'default_value' => 'Keep this default',
+				'field_options' => array(
+					'classes'     => 'frm_half',
+					'placeholder' => 'Keep this placeholder',
+				),
+			)
+		);
+		$before    = FrmField::getOne( $untouched->id );
+		FrmForm::update_fields(
+			$form_id,
+			array(
+				'frm_fields_submitted' => array( $edited->id ),
+				'field_options'        => array( 'name_' . $edited->id => 'Changed field' ),
+			)
+		);
+
+		$this->assertSame( 'Changed field', FrmField::getOne( $edited->id )->name );
+		$after = FrmField::getOne( $untouched->id );
+		$this->assertSame( $before->name, $after->name );
+		$this->assertSame( $before->default_value, $after->default_value );
+		$this->assertSame( $before->field_options, $after->field_options );
+	}
+
 	public function test_create() {
 		$values  = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
