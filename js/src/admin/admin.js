@@ -12387,10 +12387,50 @@ window.frmAdminBuildJS = function() {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
 
-			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function( event ) {
+			const captchas = document.querySelector( '.frm_captchas' );
+			captchas.addEventListener( 'change', function( event ) {
 				const captchaValueOnLoad = document.querySelector( '.frm_captchas input[checked="checked"]' )?.value;
 				const showNote = event.target.value !== captchaValueOnLoad;
 				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden', ! showNote );
+
+				captchas.querySelectorAll( 'label' ).forEach( label => {
+					label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
+					label.setAttribute( 'tabindex', label.control.checked ? '0' : '-1' );
+				} );
+			} );
+
+			captchas.addEventListener( 'keydown', function( event ) {
+				const tabs = Array.from( captchas.querySelectorAll( 'label' ) );
+				const index = tabs.indexOf( event.target.closest( 'label' ) );
+				if ( -1 === index ) {
+					return;
+				}
+
+				let target;
+				switch ( event.key ) {
+					case 'Enter':
+					case ' ':
+						target = tabs[ index ];
+						break;
+					case 'ArrowRight':
+						target = tabs[ ( index + 1 ) % tabs.length ];
+						break;
+					case 'ArrowLeft':
+						target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
+						break;
+					case 'Home':
+						target = tabs[ 0 ];
+						break;
+					case 'End':
+						target = tabs[ tabs.length - 1 ];
+						break;
+					default:
+						return;
+				}
+
+				event.preventDefault();
+				target.focus();
+				target.click();
 			} );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
