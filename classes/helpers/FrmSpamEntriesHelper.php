@@ -55,6 +55,46 @@ class FrmSpamEntriesHelper {
 	private static $flagged_forms = array();
 
 	/**
+	 * Get active add-ons that do not support the spam entry status.
+	 *
+	 * @since x.x
+	 *
+	 * @return string[] The add-on names that need an update.
+	 */
+	public static function get_incompatible_addons() {
+		$addons       = array(
+			'FrmProAppHelper'   => __( 'Formidable Pro', 'formidable' ),
+			'FrmViewsAppHelper' => __( 'Formidable Views', 'formidable' ),
+		);
+		$incompatible = array();
+
+		foreach ( $addons as $class => $name ) {
+			if ( ! class_exists( $class ) ) {
+				continue;
+			}
+
+			$support = $class . '::SPAM_ENTRIES_SUPPORTED';
+
+			if ( ! defined( $support ) || true !== constant( $support ) ) {
+				$incompatible[] = $name;
+			}
+		}
+
+		return $incompatible;
+	}
+
+	/**
+	 * Spam entries may only be stored when every active add-on supports them.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function can_store_spam() {
+		return ! self::get_incompatible_addons();
+	}
+
+	/**
 	 * Get the default handling for each spam check.
 	 *
 	 * Bot checks are rejected by default because bots can send a high volume of submissions.
@@ -160,6 +200,10 @@ class FrmSpamEntriesHelper {
 	 * @return bool
 	 */
 	public static function should_save( $source ) {
+		if ( ! self::can_store_spam() ) {
+			return false;
+		}
+
 		$frm_settings = FrmAppHelper::get_settings();
 		$handling     = self::sanitize_handling( $frm_settings->spam_handling );
 		$should_save  = isset( $handling[ $source ] ) && self::SAVE === $handling[ $source ];
@@ -284,7 +328,7 @@ class FrmSpamEntriesHelper {
 		$description = $entry->description ?? array();
 		FrmAppHelper::unserialize_or_decode( $description );
 
-		if ( ! is_array( $description ) || empty( $description['spam_source'] ) ) {
+		if ( ! is_array( $description ) || empty( $description['spam_source'] ) || ! is_string( $description['spam_source'] ) ) {
 			return '';
 		}
 
@@ -466,6 +510,10 @@ class FrmSpamEntriesHelper {
 	public static function mark_as_spam( $entry_id ) {
 		global $wpdb;
 
+		if ( ! self::can_store_spam() ) {
+			return false;
+		}
+
 		$entry = FrmEntry::getOne( $entry_id );
 
 		if ( ! $entry || FrmEntriesHelper::SUBMITTED_ENTRY_STATUS !== (int) $entry->is_draft ) {
@@ -508,12 +556,16 @@ class FrmSpamEntriesHelper {
 	 * @since x.x
 	 *
 	 * @param int|string $entry_id
-	 * @param int        $status
+	 * @param int|string $status
 	 *
 	 * @return void
 	 */
 	public static function set_status( $entry_id, $status ) {
 		global $wpdb;
+
+		if ( self::SPAM_ENTRY_STATUS === (int) $status && ! self::can_store_spam() ) {
+			return;
+		}
 
 		$entry_id = (int) $entry_id;
 

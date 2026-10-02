@@ -241,6 +241,23 @@ if ( 'turnstile' !== $frm_settings->active_captcha ) {
 <?php } ?>
 
 <h3><?php esc_html_e( 'Spam Entries', 'formidable' ); ?></h3>
+<?php
+$incompatible_addons = FrmSpamEntriesHelper::get_incompatible_addons();
+
+if ( $incompatible_addons ) {
+	?>
+	<div class="frm_warning_style" role="status">
+		<?php
+		printf(
+			/* translators: %s: Names of active Formidable add-ons that need an update. */
+			esc_html__( 'Update %s to enable spam entries. Until then, submissions flagged as spam will be rejected instead of saved.', 'formidable' ),
+			esc_html( implode( ', ', $incompatible_addons ) )
+		);
+		?>
+	</div>
+	<?php
+}
+?>
 <details class="frm-spam-disclosure frm-mb-sm">
 	<summary>
 		<svg class="frmsvg frm-spam-disclosure-chevron" aria-hidden="true" focusable="false"><use href="#frm_arrowdown6_icon"></use></svg>

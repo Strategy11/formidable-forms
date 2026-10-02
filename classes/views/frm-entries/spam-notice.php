@@ -30,7 +30,7 @@ if ( $open_modal ) {
 	$modal_attrs['data-open'] = '1';
 }
 ?>
-<div class="frm-with-margin">
+<div class="wrap frm-with-margin">
 	<div class="frm_warning_style frm-spam-entry-notice" role="status">
 		<p>
 			<?php

@@ -468,6 +468,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$date = FrmAppHelper::get_formatted_time( $item->{$col_name} );
 				$val  = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
 				break;
+			case 'spam_reason':
+				$source_label = FrmSpamEntriesHelper::get_source_label( $item );
+				$val          = esc_html( '' !== $source_label ? $source_label : __( 'Not recorded', 'formidable' ) );
+				break;
 			case 'is_draft':
 				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
 				$val          = sprintf(

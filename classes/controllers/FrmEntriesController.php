@@ -189,7 +189,12 @@ class FrmEntriesController {
 			$columns[ $form_id . '_user_id' ] = esc_html__( 'Created By', 'formidable' );
 		}
 
-		$columns[ $form_id . '_is_draft' ]   = esc_html__( 'Entry Status', 'formidable' );
+		if ( FrmSpamEntriesController::is_spam_tab() ) {
+			$columns[ $form_id . '_spam_reason' ] = esc_html__( 'Spam reason', 'formidable' );
+		} else {
+			$columns[ $form_id . '_is_draft' ] = esc_html__( 'Entry Status', 'formidable' );
+		}
+
 		$columns[ $form_id . '_created_at' ] = esc_html__( 'Entry creation date', 'formidable' );
 		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
@@ -597,6 +602,10 @@ class FrmEntriesController {
 		$i            = $atts['i'];
 
 		foreach ( $cols as $col_key => $col ) {
+			if ( $col_key === $atts['form_id'] . '_spam_reason' ) {
+				continue;
+			}
+
 			if ( $i <= $atts['max_columns'] ) {
 				break;
 			}

@@ -141,18 +141,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey' ), true ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample' ), true ) ) {
 				continue;
+			}
+			$label = ucfirst( str_replace( '-', ' ', $k ) );
+			$icon  = 'frmfont frm_attach_file_icon';
+
+			if ( 'spam_source' === $k ) {
+				$label = __( 'Spam reason', 'formidable' );
+				$icon  = 'frmfont frm_alert_icon';
+				$d     = FrmSpamEntriesHelper::get_source_label( (object) array( 'description' => array( 'spam_source' => $d ) ) );
+
+				if ( '' === $d ) {
+					$d = __( 'Not recorded', 'formidable' );
+				}
 			}
 			?>
 			<div class="misc-pub-section">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_attach_file_icon', array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?>:
+				<?php FrmAppHelper::icon_by_class( $icon, array( 'aria-hidden' => 'true' ) ); ?>
+				<?php echo esc_html( $label ); ?>:
 				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
 			</div>
 			<?php
 			unset( $k, $d );
-		}
+		}//end foreach
 		?>
 	</div>
 </div>

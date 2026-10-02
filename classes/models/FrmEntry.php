@@ -352,7 +352,12 @@ class FrmEntry {
 			return false;
 		}
 
-		$new_values    = self::package_entry_to_update( $id, $values, $update_type );
+		$new_values = self::package_entry_to_update( $id, $values, $update_type );
+
+		if ( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === (int) $new_values['is_draft'] && ! FrmSpamEntriesHelper::can_store_spam() ) {
+			return false;
+		}
+
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_items', $new_values, compact( 'id' ) );
 
 		self::after_update_entry( $query_results, $id, $values, $new_values );
@@ -802,6 +807,10 @@ class FrmEntry {
 	 * @return bool|int Entry ID.
 	 */
 	private static function continue_to_create_entry( $values, $new_values ) {
+		if ( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === (int) $new_values['is_draft'] && ! FrmSpamEntriesHelper::can_store_spam() ) {
+			return false;
+		}
+
 		$entry_id = self::insert_entry_into_database( $new_values );
 
 		if ( ! $entry_id ) {

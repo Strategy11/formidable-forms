@@ -236,7 +236,11 @@ class FrmSpamEntriesController {
 	 * @return bool
 	 */
 	private static function can_mark_as_spam( $entry ) {
-		return is_object( $entry ) && isset( $entry->is_draft ) && FrmEntriesHelper::SUBMITTED_ENTRY_STATUS === (int) $entry->is_draft && self::current_user_can_moderate();
+		if ( ! is_object( $entry ) || ! isset( $entry->is_draft ) || FrmEntriesHelper::SUBMITTED_ENTRY_STATUS !== (int) $entry->is_draft ) {
+			return false;
+		}
+
+		return self::current_user_can_moderate() && FrmSpamEntriesHelper::can_store_spam();
 	}
 
 	/**
