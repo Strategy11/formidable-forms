@@ -649,7 +649,7 @@
 				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor ),
 				fontSmooth: 'auto'
 			},
-			rules: frm_stripe_vars.appearanceRules
+			rules: getAppearanceRules()
 		};
 		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
@@ -761,6 +761,39 @@
 	}
 
 	/**
+	 * Get the appearance rules to send to Stripe.
+	 * The Label font is limited to families the Stripe iframe can render, so the page can measure the same text.
+	 *
+	 * @since 6.35
+	 *
+	 * @return {Object} Appearance rules.
+	 */
+	function getAppearanceRules() {
+		const rules = frm_stripe_vars.appearanceRules;
+		const label = rules[ '.Label' ];
+		if ( ! label || ! label.fontFamily ) {
+			return rules;
+		}
+		return Object.assign( {}, rules, { '.Label': Object.assign( {}, label, { fontFamily: removeWebFonts( label.fontFamily ) } ) } );
+	}
+
+	/**
+	 * Remove families that the page loads as web fonts from a font stack.
+	 * The Stripe iframe does not load them, so it falls back to the rest of the stack.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {string} fontFamily
+	 * @return {string} The font stack without web fonts.
+	 */
+	function removeWebFonts( fontFamily ) {
+		const unquote = family => family.trim().replace( /^['"]|['"]$/g, '' ).toLowerCase();
+		const webFonts = Array.from( document.fonts, font => unquote( font.family ) );
+		const families = fontFamily.split( ',' ).filter( family => family.trim() && ! webFonts.includes( unquote( family ) ) );
+		return families.length ? families.map( family => family.trim() ).join( ', ' ) : 'sans-serif';
+	}
+
+	/**
 	 * Create a temporary label element to determine the width of the Email label.
 	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
 	 * The label is styled from the same appearance rules that Stripe uses, so it does not inherit page styles.
@@ -770,7 +803,7 @@
 	 * @return {number} The label width in pixels.
 	 */
 	function getEmailAsteriskOffset() {
-		const rules = frm_stripe_vars.appearanceRules[ '.Label' ] || {};
+		const rules = getAppearanceRules()[ '.Label' ] || {};
 		const label = document.createElement( 'span' );
 		label.innerHTML = 'Email&nbsp;';
 
@@ -780,7 +813,7 @@
 				position: 'absolute',
 				visibility: 'hidden',
 				whiteSpace: 'nowrap',
-				fontFamily: rules.fontFamily || 'inherit',
+				fontFamily: rules.fontFamily || 'system-ui, sans-serif',
 				fontSize: rules.fontSize,
 				fontWeight: rules.fontWeight,
 				padding: rules.padding,
