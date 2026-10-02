@@ -1637,6 +1637,19 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Check if another plugin handles the text box for "Other" options.
+	 * Pro checks that this method exists to know the frm_prepare_other_input and
+	 * frm_include_other_input hooks are available.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function other_input_is_handled() {
+		return false !== has_filter( 'frm_prepare_other_input' ) && false !== has_action( 'frm_include_other_input' );
+	}
+
+	/**
 	 * Check if there is a saved value for the "Other" text field. If so, set it as the $other_val.
 	 * Intended for front-end use
 	 *
@@ -1653,6 +1666,32 @@ class FrmFieldsHelper {
 			'name'  => '',
 			'value' => '',
 		);
+
+		if ( self::other_input_is_handled() ) {
+			/**
+			 * Prepares the text box for an "Other" option, in place of the fallback below.
+			 *
+			 * @since x.x
+			 *
+			 * @param array $prepared {
+			 *     @type array       $other_args The name and value for the text box.
+			 *     @type bool        $other_opt  True when this is an "Other" option.
+			 *     @type bool|string $checked    The checked attribute for the option.
+			 * }
+			 * @param array $args Includes field, opt_key and field_name.
+			 */
+			$prepared = apply_filters( 'frm_prepare_other_input', compact( 'other_args', 'other_opt', 'checked' ), $args );
+
+			if ( is_array( $prepared ) && isset( $prepared['other_args'], $prepared['other_opt'] ) ) {
+				$other_opt = $prepared['other_opt'];
+				$checked   = $prepared['checked'] ?? $checked;
+
+				return $prepared['other_args'];
+			}
+		}//end if
+
+		// Fallback for when Pro is not active or is older than x.x. Remove the rest of this method,
+		// set_other_name() and set_other_value() once Pro is required for "Other" options.
 
 		// Check if this is an "Other" option.
 		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
@@ -1749,6 +1788,21 @@ class FrmFieldsHelper {
 		if ( ! $args['other_opt'] ) {
 			return;
 		}
+
+		if ( self::other_input_is_handled() ) {
+			/**
+			 * Shows the text box for an "Other" option, in place of the fallback below.
+			 *
+			 * @since x.x
+			 *
+			 * @param array $args Includes field, opt_key, html_id, name, value, checked and read_only.
+			 */
+			do_action( 'frm_include_other_input', $args );
+			return;
+		}
+
+		// Fallback for when Pro is not active or is older than x.x. Remove the rest of this method
+		// once Pro is required for "Other" options.
 
 		$classes = array( 'frm_other_input' );
 
