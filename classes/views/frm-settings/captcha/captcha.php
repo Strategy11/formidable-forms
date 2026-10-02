@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <p class="frm_primary_label" id="frm_captcha_type_label">
 	<?php esc_html_e( 'Select Captcha Type', 'formidable' ); ?>
+	<?php FrmAppHelper::tooltip_icon( __( 'Choose the captcha service used by captcha fields in your forms. Set up its site and secret keys below.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 </p>
 <div class="frm_captchas frm-long-icon-buttons" role="radiogroup" aria-labelledby="frm_captcha_type_label">
 	<input type="radio" name="frm_active_captcha" id="frm-recaptcha" value="recaptcha" data-frmhide="#hcaptcha_settings,#turnstile_settings" data-frmshow="#recaptcha_settings" <?php checked( $frm_settings->active_captcha, 'recaptcha' ); ?> />
@@ -29,77 +30,122 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<span><?php esc_html_e( 'Changing the captcha type here will replace it in all any forms where it is used.', 'formidable' ); ?></span>
 </div>
 
-<div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( 'recaptcha' === $frm_settings->active_captcha ? '' : 'frm_hidden' ); ?>">
-	<h3><?php esc_html_e( 'reCAPTCHA Settings', 'formidable' ); ?></h3>
-	<?php
-	$captcha = 'recaptcha';
-	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
-	?>
+<?php
+$captcha_settings_attrs = array( 'id' => 'recaptcha_settings' );
 
-	<p class="frm6 frm_form_field">
-		<label for="frm_re_type">
-			<?php esc_html_e( 'reCAPTCHA Type', 'formidable' ); ?>
-		</label>
-		<select name="frm_re_type" id="frm_re_type">
-			<option value="" <?php selected( $frm_settings->re_type, '' ); ?>>
-				<?php esc_html_e( 'Checkbox (V2)', 'formidable' ); ?>
-			</option>
-			<option value="invisible" <?php selected( $frm_settings->re_type, 'invisible' ); ?>>
-				<?php esc_html_e( 'Invisible', 'formidable' ); ?>
-			</option>
-			<option value="v3" <?php selected( $frm_settings->re_type, 'v3' ); ?>>
-				<?php esc_html_e( 'v3', 'formidable' ); ?>
-			</option>
-		</select>
-	</p>
+if ( 'recaptcha' !== $frm_settings->active_captcha ) {
+	$captcha_settings_attrs['class'] = 'frm_hidden';
+}
+?>
+<div<?php FrmAppHelper::array_to_html_params( $captcha_settings_attrs, true ); ?>>
+	<details class="frm-spam-disclosure frm-mb-sm">
+		<summary>
+			<svg class="frmsvg frm-spam-disclosure-chevron" aria-hidden="true" focusable="false"><use href="#frm_arrowdown6_icon"></use></svg>
+			<?php esc_html_e( 'reCAPTCHA Settings', 'formidable' ); ?>
+		</summary>
+		<div class="frm_grid_container">
+			<?php
+			$captcha = 'recaptcha';
+			require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
+			?>
 
-	<p class="frm6 frm_form_field">
-		<label for="frm_re_lang">
-			<?php esc_html_e( 'reCAPTCHA Language', 'formidable' ); ?>
-		</label>
-		<select name="frm_re_lang" id="frm_re_lang">
-			<option value="" <?php selected( $frm_settings->re_lang, '' ); ?>>
-				<?php esc_html_e( 'Browser Default', 'formidable' ); ?>
-			</option>
-			<?php foreach ( $captcha_lang as $lang => $lang_name ) { ?>
-				<option value="<?php echo esc_attr( $lang ); ?>" <?php selected( $frm_settings->re_lang, $lang ); ?>>
-					<?php echo esc_html( $lang_name ); ?>
-				</option>
-			<?php } ?>
-		</select>
-	</p>
+			<p class="frm6 frm_form_field">
+				<label for="frm_re_type">
+					<?php esc_html_e( 'reCAPTCHA Type', 'formidable' ); ?>
+					<?php FrmAppHelper::tooltip_icon( __( 'Choose a checkbox challenge, an invisible challenge, or score-based spam detection with v3.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+				</label>
+				<select name="frm_re_type" id="frm_re_type">
+					<option value="" <?php selected( $frm_settings->re_type, '' ); ?>>
+						<?php esc_html_e( 'Checkbox (V2)', 'formidable' ); ?>
+					</option>
+					<option value="invisible" <?php selected( $frm_settings->re_type, 'invisible' ); ?>>
+						<?php esc_html_e( 'Invisible', 'formidable' ); ?>
+					</option>
+					<option value="v3" <?php selected( $frm_settings->re_type, 'v3' ); ?>>
+						<?php esc_html_e( 'v3', 'formidable' ); ?>
+					</option>
+				</select>
+			</p>
 
-	<p id="frm_captcha_threshold_container" class="frm6 frm_form_field <?php echo 'v3' === $frm_settings->re_type ? '' : 'frm_hidden'; ?>">
-		<label for="frm_re_type">
-			<?php esc_html_e( 'reCAPTCHA Threshold', 'formidable' ); ?>
-		</label>
-		<input name="frm_re_threshold" id="frm_re_threshold" class="widefat" type="number" step="0.1" max="1" min="0" value="<?php echo esc_attr( $frm_settings->re_threshold ); ?>" />
-		<span style="font-size: var(--text-xs);"><?php esc_html_e( 'reCAPTCHA v3 returns a score (1.0 is very likely a human, 0.0 is very likely a bot). Default threshold is 0.5.', 'formidable' ); ?></span>
-	</p>
+			<p class="frm6 frm_form_field">
+				<label for="frm_re_lang">
+					<?php esc_html_e( 'reCAPTCHA Language', 'formidable' ); ?>
+					<?php FrmAppHelper::tooltip_icon( __( 'Choose the language shown by reCAPTCHA, or use the language from the visitor browser.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+				</label>
+				<select name="frm_re_lang" id="frm_re_lang">
+					<option value="" <?php selected( $frm_settings->re_lang, '' ); ?>>
+						<?php esc_html_e( 'Browser Default', 'formidable' ); ?>
+					</option>
+					<?php foreach ( $captcha_lang as $lang => $lang_name ) { ?>
+						<option value="<?php echo esc_attr( $lang ); ?>" <?php selected( $frm_settings->re_lang, $lang ); ?>>
+							<?php echo esc_html( $lang_name ); ?>
+						</option>
+					<?php } ?>
+				</select>
+			</p>
 
-	<p>
-		<label>
-			<input type="checkbox" name="frm_re_multi" id="frm_re_multi"
-			value="1" <?php checked( $frm_settings->re_multi, 1 ); ?> />
-			<?php esc_html_e( 'Allow multiple reCAPTCHAs to be used on a single page', 'formidable' ); ?>
-		</label>
-	</p>
+			<p id="frm_captcha_threshold_container" class="frm6 frm_form_field <?php echo 'v3' === $frm_settings->re_type ? '' : 'frm_hidden'; ?>">
+				<label for="frm_re_threshold">
+					<?php esc_html_e( 'reCAPTCHA Threshold', 'formidable' ); ?>
+					<?php FrmAppHelper::tooltip_icon( __( 'For reCAPTCHA v3, scores range from 0.0 for likely bots to 1.0 for likely humans. A higher threshold blocks more submissions. The default is 0.5.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+				</label>
+				<input name="frm_re_threshold" id="frm_re_threshold" class="widefat" type="number" step="0.1" max="1" min="0" value="<?php echo esc_attr( $frm_settings->re_threshold ); ?>" />
+			</p>
+
+			<p>
+				<label>
+					<input type="checkbox" name="frm_re_multi" id="frm_re_multi"
+					value="1" <?php checked( $frm_settings->re_multi, 1 ); ?> />
+					<?php esc_html_e( 'Allow multiple reCAPTCHAs to be used on a single page', 'formidable' ); ?>
+					<?php FrmAppHelper::tooltip_icon( __( 'Enable this when a page contains more than one form using reCAPTCHA.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+				</label>
+			</p>
+		</div>
+	</details>
 </div>
 
-<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( 'hcaptcha' === $frm_settings->active_captcha ? '' : 'frm_hidden' ); ?>">
-	<h3><?php esc_html_e( 'hCaptcha Settings', 'formidable' ); ?></h3>
-	<?php
-	$captcha = 'hcaptcha';
-	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
-	?>
+<?php
+$captcha_settings_attrs = array( 'id' => 'hcaptcha_settings' );
+
+if ( 'hcaptcha' !== $frm_settings->active_captcha ) {
+	$captcha_settings_attrs['class'] = 'frm_hidden';
+}
+?>
+<div<?php FrmAppHelper::array_to_html_params( $captcha_settings_attrs, true ); ?>>
+	<details class="frm-spam-disclosure frm-mb-sm">
+		<summary>
+			<svg class="frmsvg frm-spam-disclosure-chevron" aria-hidden="true" focusable="false"><use href="#frm_arrowdown6_icon"></use></svg>
+			<?php esc_html_e( 'hCaptcha Settings', 'formidable' ); ?>
+		</summary>
+		<div class="frm_grid_container">
+			<?php
+			$captcha = 'hcaptcha';
+			require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
+			?>
+		</div>
+	</details>
 </div>
 
-<div id="turnstile_settings" class="frm_grid_container <?php echo esc_attr( 'turnstile' === $frm_settings->active_captcha ? '' : 'frm_hidden' ); ?>">
-	<h3><?php esc_html_e( 'Turnstile Settings', 'formidable' ); ?></h3>
-	<?php
-	$captcha = 'turnstile';
-	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
-	?>
+<?php
+$captcha_settings_attrs = array( 'id' => 'turnstile_settings' );
+
+if ( 'turnstile' !== $frm_settings->active_captcha ) {
+	$captcha_settings_attrs['class'] = 'frm_hidden';
+}
+?>
+<div<?php FrmAppHelper::array_to_html_params( $captcha_settings_attrs, true ); ?>>
+	<details class="frm-spam-disclosure frm-mb-sm">
+		<summary>
+			<svg class="frmsvg frm-spam-disclosure-chevron" aria-hidden="true" focusable="false"><use href="#frm_arrowdown6_icon"></use></svg>
+			<?php esc_html_e( 'Turnstile Settings', 'formidable' ); ?>
+		</summary>
+		<div class="frm_grid_container">
+			<?php
+			$captcha = 'turnstile';
+			require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
+			?>
+		</div>
+	</details>
 </div>
 
 <h2 class="frm-h2"><?php esc_html_e( 'Spam', 'formidable' ); ?></h2>
@@ -116,6 +162,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label>
 		<input type="checkbox" name="frm_wp_spam_check" value="1" <?php checked( $frm_settings->wp_spam_check, 1 ); ?> />
 		<?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Match the submitter IP address, email, or website against recent WordPress comments marked as spam.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>
 
@@ -123,64 +170,126 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label>
 		<input type="checkbox" name="frm_denylist_check" data-toggleclass="frm-denylist-settings" value="1" <?php checked( $frm_settings->denylist_check, 1 ); ?> />
 		<?php esc_html_e( 'Check denylist data to validate for spam', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Check submitted text against the built-in list of spam words and your custom disallowed words.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>
 
 <div class="frm-denylist-settings <?php echo $frm_settings->denylist_check ? '' : 'frm_hidden'; ?>">
-	<p>
-		<label for="frm-disallowed-words">
-			<?php esc_html_e( 'Custom disallowed words', 'formidable' ); ?>
-			<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
-		</label>
-		<textarea id="frm-disallowed-words" name="frm_disallowed_words"><?php echo esc_textarea( $frm_settings->disallowed_words ); ?></textarea>
-	</p>
+	<details class="frm-spam-disclosure frm-mb-sm">
+		<summary>
+			<svg class="frmsvg frm-spam-disclosure-chevron" aria-hidden="true" focusable="false"><use href="#frm_arrowdown6_icon"></use></svg>
+			<?php esc_html_e( 'Customize denylist words', 'formidable' ); ?>
+		</summary>
+		<p>
+			<label for="frm-disallowed-words">
+				<?php esc_html_e( 'Custom disallowed words', 'formidable' ); ?>
+				<?php FrmAppHelper::tooltip_icon( __( 'Add words or phrases to the built-in denylist. Enter one per line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+			</label>
+			<textarea id="frm-disallowed-words" name="frm_disallowed_words"><?php echo esc_textarea( $frm_settings->disallowed_words ); ?></textarea>
+		</p>
 
-	<p>
-		<label for="frm-allowed-words">
-			<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
-			<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
-		</label>
-		<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
+		<p>
+			<label for="frm-allowed-words">
+				<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
+				<?php FrmAppHelper::tooltip_icon( __( 'Exclude these words from denylist matches. Enter one per line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+			</label>
+			<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
+		</p>
+
+		<?php
+		$transient = get_transient( 'frm_recent_spam_detected' );
+
+		if ( $transient ) {
+			?>
+			<div class="frm_note_style">
+				<strong><?php esc_html_e( 'Spam keywords detected recently:', 'formidable' ); ?></strong>
+				<i><?php echo esc_html( implode( ', ', $transient ) ); ?></i>
+			</div>
+			<?php
+		}
+		?>
+	</details>
+</div><!-- End .frm-denylist-settings -->
+
+<?php if ( function_exists( 'akismet_http_post' ) ) { ?>
+	<div class="frm-card frm-akismet-integration">
+		<div class="frm-akismet-integration-content">
+			<svg class="frmsvg" aria-hidden="true" focusable="false"><use href="#frm_shield_check2_icon"></use></svg>
+			<div>
+				<h3><?php esc_html_e( 'Akismet', 'formidable' ); ?></h3>
+				<p><?php esc_html_e( 'Formidable Forms works with Akismet to check submissions for spam. Enable it in the Spam settings for each form.', 'formidable' ); ?></p>
+			</div>
+		</div>
+		<a href="<?php echo esc_url( FrmAppHelper::get_doc_url( 'add-spam-protection', 'spam-settings' ) . '#kb-akismet' ); ?>" class="frm-with-icon" target="_blank" rel="noopener noreferrer">
+			<?php esc_html_e( 'View documentation', 'formidable' ); ?>
+			<span class="screen-reader-text"><?php esc_html_e( 'for Akismet (opens in a new tab)', 'formidable' ); ?></span>
+			<svg class="frmsvg" aria-hidden="true" focusable="false"><use href="#frm_external_link_icon"></use></svg>
+		</a>
+	</div>
+<?php } ?>
+
+<h3><?php esc_html_e( 'Spam Entries', 'formidable' ); ?></h3>
+<details class="frm-spam-disclosure frm-mb-sm">
+	<summary>
+		<svg class="frmsvg frm-spam-disclosure-chevron" aria-hidden="true" focusable="false"><use href="#frm_arrowdown6_icon"></use></svg>
+		<?php esc_html_e( 'Customize how spam submissions are handled', 'formidable' ); ?>
+	</summary>
+	<p class="howto">
+		<?php esc_html_e( 'Choose what happens when a spam check flags a new submission. Saved spam entries go to the Spam tab of the entries list. They never trigger form actions, and the submitter sees the normal success message.', 'formidable' ); ?>
 	</p>
 
 	<?php
-	$transient = get_transient( 'frm_recent_spam_detected' );
-
-	if ( $transient ) {
-		?>
-		<div class="frm_note_style">
-			<strong><?php esc_html_e( 'Spam keywords detected recently:', 'formidable' ); ?></strong>
-			<i><?php echo esc_html( implode( ', ', $transient ) ); ?></i>
-		</div>
-		<?php
-	}
+	$spam_handling        = FrmSpamEntriesHelper::sanitize_handling( $frm_settings->spam_handling );
+	$spam_source_tooltips = array(
+		'honeypot'            => __( 'Detect bots that fill out an invisible field meant to stay empty.', 'formidable' ),
+		'antispam'            => __( 'Detect submissions that fail the JavaScript anti-spam check, such as bots that do not run JavaScript.', 'formidable' ),
+		'no_ip'               => __( 'Choose how to handle submissions when the submitter IP address cannot be detected.', 'formidable' ),
+		'akismet'             => __( 'Akismet flagged this submission as spam, but it may be a false positive. Save it as a spam entry to review it later, or reject it with an error message.', 'formidable' ),
+		'akismet_discard'     => __( 'Akismet marked this submission as highly likely to be spam and recommended discarding it. Reject it with an error message without saving an entry, or save it as a spam entry if you prefer to review it.', 'formidable' ),
+		'denylist'            => __( 'Choose how to handle submissions containing words from the built-in denylist or your custom disallowed words.', 'formidable' ),
+		'wp_disallowed_words' => __( 'Choose how to handle submissions matching the Disallowed Comment Keys in WordPress Settings > Discussion.', 'formidable' ),
+		'wp_comments'         => __( 'Choose how to handle submissions matching IP addresses, emails, or websites from recent WordPress spam comments.', 'formidable' ),
+		'stopforumspam'       => __( 'Choose how to handle submissions with an IP address or email flagged by the StopForumSpam service.', 'formidable' ),
+	);
 	?>
-</div><!-- End .frm-denylist-settings -->
+	<div class="frm_grid_container frm-spam-handling-settings">
+		<?php foreach ( FrmSpamEntriesHelper::get_sources() as $spam_source => $spam_source_details ) { ?>
+			<?php
+			if ( in_array( $spam_source, array( 'akismet', 'akismet_discard' ), true ) && ! function_exists( 'akismet_http_post' ) ) {
+				?>
+				<input type="hidden" name="frm_spam_handling[<?php echo esc_attr( $spam_source ); ?>]" value="<?php echo esc_attr( $spam_handling[ $spam_source ] ); ?>" />
+				<?php
+				continue;
+			}
+			$select_id = 'frm_spam_handling_' . $spam_source;
+			?>
+			<p class="frm6 frm_form_field">
+				<label for="<?php echo esc_attr( $select_id ); ?>">
+					<?php
+					echo esc_html( $spam_source_details['label'] );
 
-<h3><?php esc_html_e( 'Spam Entries', 'formidable' ); ?></h3>
-<p class="howto">
-	<?php esc_html_e( 'Choose what happens when a spam check flags a new submission. Saved spam entries go to the Spam tab of the entries list. They never trigger form actions, and the submitter sees the normal success message.', 'formidable' ); ?>
-</p>
+					if ( isset( $spam_source_tooltips[ $spam_source ] ) ) {
+						FrmAppHelper::tooltip_icon( $spam_source_tooltips[ $spam_source ], array( 'data-container' => 'body' ) );
+					}
+					?>
+				</label>
+			</p>
+			<p class="frm6 frm_form_field">
+				<select id="<?php echo esc_attr( $select_id ); ?>" name="frm_spam_handling[<?php echo esc_attr( $spam_source ); ?>]">
+					<option value="<?php echo esc_attr( FrmSpamEntriesHelper::SAVE ); ?>" <?php selected( $spam_handling[ $spam_source ], FrmSpamEntriesHelper::SAVE ); ?>>
+						<?php esc_html_e( 'Save as a spam entry', 'formidable' ); ?>
+					</option>
+					<option value="<?php echo esc_attr( FrmSpamEntriesHelper::BLOCK ); ?>" <?php selected( $spam_handling[ $spam_source ], FrmSpamEntriesHelper::BLOCK ); ?>>
+						<?php esc_html_e( 'Reject with an error message', 'formidable' ); ?>
+					</option>
+				</select>
+			</p>
+		<?php
+		}//end foreach
+ ?>
+	</div>
 
-<?php $spam_handling = FrmSpamEntriesHelper::sanitize_handling( $frm_settings->spam_handling ); ?>
-<div class="frm_grid_container frm-spam-handling-settings">
-	<?php foreach ( FrmSpamEntriesHelper::get_sources() as $spam_source => $spam_source_details ) { ?>
-		<?php $select_id = 'frm_spam_handling_' . $spam_source; ?>
-		<p class="frm6 frm_form_field">
-			<label for="<?php echo esc_attr( $select_id ); ?>"><?php echo esc_html( $spam_source_details['label'] ); ?></label>
-		</p>
-		<p class="frm6 frm_form_field">
-			<select id="<?php echo esc_attr( $select_id ); ?>" name="frm_spam_handling[<?php echo esc_attr( $spam_source ); ?>]">
-				<option value="<?php echo esc_attr( FrmSpamEntriesHelper::SAVE ); ?>" <?php selected( $spam_handling[ $spam_source ], FrmSpamEntriesHelper::SAVE ); ?>>
-					<?php esc_html_e( 'Save as a spam entry', 'formidable' ); ?>
-				</option>
-				<option value="<?php echo esc_attr( FrmSpamEntriesHelper::BLOCK ); ?>" <?php selected( $spam_handling[ $spam_source ], FrmSpamEntriesHelper::BLOCK ); ?>>
-					<?php esc_html_e( 'Reject with an error message', 'formidable' ); ?>
-				</option>
-			</select>
-		</p>
-	<?php } ?>
-</div>
+</details>
 
 <?php
 if ( FrmAppHelper::pro_is_installed() ) {
@@ -206,6 +315,7 @@ $upgrade_attrs = array(
 	<p class="frm6 frm_form_field">
 		<label for="frm_spam_retention_days_upsell">
 			<?php esc_html_e( 'Delete spam entries automatically', 'formidable' ); ?>
+			<?php FrmAppHelper::tooltip_icon( __( 'Automatically delete saved spam entries after the selected number of days. This requires Formidable Pro.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 		</label>
 	</p>
 	<p class="frm6 frm_form_field">

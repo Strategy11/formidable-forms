@@ -28,6 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm6 frm_form_field">
 	<label for="frm_<?php echo esc_attr( $prefix ); ?>privkey">
 		<?php esc_html_e( 'Secret Key', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'The private key from your captcha provider, used to verify submissions on your server.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 	<input type="text" name="frm_<?php echo esc_html( $prefix ); ?>privkey" id="frm_<?php echo esc_html( $prefix ); ?>privkey" size="42" value="<?php echo esc_attr( $settings->secret ); ?>" />
 </p>

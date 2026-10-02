@@ -583,9 +583,11 @@ class FrmEntryValidate {
 			}
 		}
 
-		if ( ! isset( $errors['spam'] ) && ! self::form_is_in_progress( $values ) && self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
+		if (
+			! isset( $errors['spam'] ) && ! self::form_is_in_progress( $values ) &&
+			self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values, $spam_source )
+		) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
-			$spam_source    = 'akismet';
 		}
 
 		if ( $spam_source && self::is_new_submission( $values ) && FrmSpamEntriesHelper::maybe_flag_submission( $values['form_id'], $spam_source ) ) {
@@ -652,13 +654,21 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @param array $values
+	 * @param array  $values Entry values.
+	 * @param string $source The detected Akismet spam source.
 	 *
 	 * @return bool
 	 */
-	private static function is_akismet_spam( $values ) {
+	private static function is_akismet_spam( $values, &$source = '' ) {
 		global $wpcom_api_key;
-		return is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values );
+		$akismet_enabled = is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key );
+
+		if ( ! $akismet_enabled ) {
+			return false;
+		}
+
+		$source = self::get_akismet_spam_source( $values );
+		return '' !== $source;
 	}
 
 	/**
@@ -690,8 +700,21 @@ class FrmEntryValidate {
 	 * @return bool true if is spam
 	 */
 	public static function akismet( $values ) {
+		return '' !== self::get_akismet_spam_source( $values );
+	}
+
+	/**
+	 * Check Akismet and identify regular or blatant spam.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return string The spam source, or an empty string for a non-spam response.
+	 */
+	private static function get_akismet_spam_source( $values ) {
 		if ( empty( $values['item_meta'] ) ) {
-			return false;
+			return '';
 		}
 
 		$datas = array(
@@ -711,7 +734,34 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return is_array( $response ) && $response[1] === 'true';
+		return self::get_akismet_response_source( $response );
+	}
+
+	/**
+	 * Identify the spam source from an Akismet response.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $response Response headers and body returned by Akismet.
+	 *
+	 * @return string The spam source, or an empty string when Akismet did not flag spam.
+	 */
+	private static function get_akismet_response_source( $response ) {
+		if ( ! is_array( $response ) || 'true' !== ( $response[1] ?? '' ) ) {
+			return '';
+		}
+
+		$headers = $response[0] ?? array();
+
+		if ( is_array( $headers ) ) {
+			$headers = array_change_key_case( $headers, CASE_LOWER );
+		}
+
+		if ( ( is_array( $headers ) || $headers instanceof ArrayAccess ) && 'discard' === ( $headers['x-akismet-pro-tip'] ?? '' ) ) {
+			return 'akismet_discard';
+		}
+
+		return 'akismet';
 	}
 
 	/**

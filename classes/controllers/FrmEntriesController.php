@@ -100,7 +100,7 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
+		if ( in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate', 'mark_spam' ), true ) ) {
 			add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
 			return;
 		}
@@ -127,6 +127,10 @@ class FrmEntriesController {
 			case 'destroy':
 				return self::$action();
 
+			case 'mark_spam':
+				FrmSpamEntriesController::mark_spam();
+				return null;
+
 			case 'not_spam':
 				FrmSpamEntriesController::not_spam();
 				return null;
@@ -140,7 +144,7 @@ class FrmEntriesController {
 
 				self::display_list();
 				return null;
-		}
+		}//end switch
 	}
 
 	/**

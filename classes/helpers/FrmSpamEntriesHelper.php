@@ -71,6 +71,7 @@ class FrmSpamEntriesHelper {
 			'antispam'            => self::BLOCK,
 			'no_ip'               => self::BLOCK,
 			'akismet'             => self::SAVE,
+			'akismet_discard'     => self::BLOCK,
 			'denylist'            => self::SAVE,
 			'wp_disallowed_words' => self::SAVE,
 			'wp_comments'         => self::SAVE,
@@ -91,7 +92,8 @@ class FrmSpamEntriesHelper {
 			'honeypot'            => __( 'Honeypot', 'formidable' ),
 			'antispam'            => __( 'JavaScript anti-spam check', 'formidable' ),
 			'no_ip'               => __( 'Missing IP address', 'formidable' ),
-			'akismet'             => __( 'Akismet', 'formidable' ),
+			'akismet'             => __( 'Akismet spam', 'formidable' ),
+			'akismet_discard'     => __( 'Akismet blatant spam', 'formidable' ),
 			'denylist'            => __( 'Denylist', 'formidable' ),
 			'wp_disallowed_words' => __( 'WordPress disallowed words', 'formidable' ),
 			'wp_comments'         => __( 'WordPress spam comments', 'formidable' ),
@@ -286,6 +288,10 @@ class FrmSpamEntriesHelper {
 			return '';
 		}
 
+		if ( 'manual' === $description['spam_source'] ) {
+			return __( 'Manual review', 'formidable' );
+		}
+
 		$sources = self::get_sources();
 		$source  = $description['spam_source'];
 
@@ -430,6 +436,70 @@ class FrmSpamEntriesHelper {
 		}
 
 		return (int) FrmEntry::getRecordCount( $where );
+	}
+
+	/**
+	 * Check whether an entry was manually marked as spam.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $entry The entry to check.
+	 *
+	 * @return bool
+	 */
+	public static function is_manual_spam( $entry ) {
+		$description = $entry->description ?? array();
+		FrmAppHelper::unserialize_or_decode( $description );
+
+		return is_array( $description ) && 'manual' === ( $description['spam_source'] ?? '' );
+	}
+
+	/**
+	 * Move a submitted entry to spam without triggering form actions.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $entry_id The entry being moderated.
+	 *
+	 * @return bool Whether the entry was marked as spam.
+	 */
+	public static function mark_as_spam( $entry_id ) {
+		global $wpdb;
+
+		$entry = FrmEntry::getOne( $entry_id );
+
+		if ( ! $entry || FrmEntriesHelper::SUBMITTED_ENTRY_STATUS !== (int) $entry->is_draft ) {
+			return false;
+		}
+
+		$description = $entry->description;
+		FrmAppHelper::unserialize_or_decode( $description );
+
+		if ( ! is_array( $description ) ) {
+			$description = array();
+		}
+
+		$description['spam_source'] = 'manual';
+
+		$updated = $wpdb->update(
+			$wpdb->prefix . 'frm_items',
+			array(
+				'is_draft'    => self::SPAM_ENTRY_STATUS,
+				'description' => wp_json_encode( $description ),
+			),
+			array(
+				'id'       => $entry_id,
+				'is_draft' => FrmEntriesHelper::SUBMITTED_ENTRY_STATUS,
+			)
+		);
+
+		if ( ! $updated ) {
+			return false;
+		}
+
+		self::set_status( $entry_id, self::SPAM_ENTRY_STATUS );
+		do_action( 'frm_entry_marked_spam', $entry_id );
+		return true;
 	}
 
 	/**

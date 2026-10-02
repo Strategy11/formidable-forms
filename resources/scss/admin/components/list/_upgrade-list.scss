@@ -20,7 +20,60 @@
 /* End entry statuses */
 
 .frm-entries-tabs {
-	margin-top: var(--gap-md);
+	clear: both;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--gap-xs) var(--gap-md);
+	padding-top: var(--gap-xs);
+	margin-bottom: var(--gap-sm);
+	border-bottom: 1px solid var(--grey-300);
+}
+
+.frm-entries-tab-list {
+	display: flex;
+	gap: var(--gap-md);
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.frm-entries-tab-list > li {
+	margin: 0;
+}
+
+.frm-entries-tab {
+	display: block;
+	padding: var(--gap-xs) 0;
+	border-bottom: 2px solid transparent;
+	color: var(--grey-500);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.frm-entries-tab:hover,
+.frm-entries-tab[aria-current="page"] {
+	border-bottom-color: var(--primary-500);
+	color: var(--primary-500);
+}
+
+.frm-entries-tab[aria-current="page"] {
+	font-weight: 600;
+}
+
+.frm-entries-settings {
+	margin-inline-start: auto;
+	padding-block: var(--gap-xs);
+	color: var(--grey-500);
+	font-size: var(--text-sm);
+	text-decoration: none;
+}
+
+.frm-entries-tab:focus-visible,
+.frm-entries-settings:focus-visible {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
 }
 
 .frm-spam-entry-notice p:last-child {

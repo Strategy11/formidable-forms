@@ -27,43 +27,27 @@ $tabs = array(
 	),
 );
 ?>
-<div class="frm-payments-tabs frm-entries-tabs">
-	<div class="frm-payments-tab-filler"></div>
-	<?php foreach ( $tabs as $tab_key => $details ) : ?>
-		<?php
-		$is_active = $tab_key === $active_tab;
-		$classes   = 'frm-payments-tab';
+<nav class="frm-entries-tabs" aria-label="<?php esc_attr_e( 'Entry status', 'formidable' ); ?>">
+	<ul class="frm-entries-tab-list">
+		<?php foreach ( $tabs as $tab_key => $details ) : ?>
+			<?php
+			$link_attrs = array( 'class' => 'frm-entries-tab' );
 
-		if ( $is_active ) {
-			$classes .= ' frm-active';
-		}
-		?>
-		<div class="<?php echo esc_attr( $classes ); ?>">
-			<?php if ( $is_active ) : ?>
-				<span aria-current="page"><?php echo esc_html( $details['label'] ); ?></span>
-			<?php else : ?>
-				<a href="<?php echo esc_url( $details['url'] ); ?>">
+			if ( $tab_key === $active_tab ) {
+				$link_attrs['aria-current'] = 'page';
+			}
+			?>
+			<li>
+				<a href="<?php echo esc_url( $details['url'] ); ?>"<?php FrmAppHelper::array_to_html_params( $link_attrs, true ); ?>>
 					<?php echo esc_html( $details['label'] ); ?>
 				</a>
-			<?php endif; ?>
-		</div>
-		<?php
-		$filler_params = array(
-			'class' => 'frm-payments-tab-filler',
-		);
-
-		if ( 'spam' === $tab_key ) {
-			$filler_params['style'] = 'flex: 1;';
-		}
-		?>
-		<div <?php FrmAppHelper::array_to_html_params( $filler_params, true ); ?>></div>
-	<?php endforeach; ?>
+			</li>
+		<?php endforeach; ?>
+	</ul>
 	<?php if ( current_user_can( 'frm_change_settings' ) ) : ?>
-		<div class="frm-payments-settings-button">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings&t=captcha_settings' ) ); ?>" class="button button-secondary frm-button">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_small_settings_icon' ); ?>
-				<?php esc_html_e( 'Spam settings', 'formidable' ); ?>
-			</a>
-		</div>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings&t=captcha_settings' ) ); ?>" class="frm-entries-settings frm-with-icon">
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_small_settings_icon' ); ?>
+			<?php esc_html_e( 'Spam settings', 'formidable' ); ?>
+		</a>
 	<?php endif; ?>
-</div>
+</nav>

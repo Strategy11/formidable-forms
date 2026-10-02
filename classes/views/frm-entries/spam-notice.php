@@ -9,6 +9,7 @@
  * @var stdClass  $entry           The spam entry.
  * @var stdClass  $form            The entry's form.
  * @var string    $source_label    The spam check that flagged the entry. Empty when unknown.
+ * @var bool      $manual_spam     Whether the entry was manually marked as spam.
  * @var bool      $can_moderate    Whether the current user can mark the entry as not spam.
  * @var WP_Post[] $pending_actions Create actions that can run when the entry is marked as not spam.
  * @var bool|int  $open_modal      Whether the modal opens when the page loads.
@@ -33,7 +34,9 @@ if ( $open_modal ) {
 	<div class="frm_warning_style frm-spam-entry-notice" role="status">
 		<p>
 			<?php
-			if ( $source_label ) {
+			if ( $manual_spam ) {
+				esc_html_e( 'This entry was manually marked as spam. It is hidden from views and other entry lists. Form actions that already ran are not reversed.', 'formidable' );
+			} elseif ( $source_label ) {
 				printf(
 					/* translators: %s: The name of the spam check, like Akismet. */
 					esc_html__( 'This entry was marked as spam by %s. Form actions did not run, and it is hidden from views and other entry lists.', 'formidable' ),

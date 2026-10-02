@@ -111,6 +111,10 @@ class FrmSpamEntriesController {
 	 */
 	public static function row_actions( $actions, $item ) {
 		if ( ! FrmSpamEntriesHelper::is_spam( $item ) ) {
+			if ( self::can_mark_as_spam( $item ) ) {
+				$actions['mark_spam'] = '<a href="' . esc_url( self::get_mark_spam_url( $item ) ) . '">' . esc_html__( 'Mark as spam', 'formidable' ) . '</a>';
+			}
+
 			return $actions;
 		}
 
@@ -142,6 +146,14 @@ class FrmSpamEntriesController {
 		$entry = $args['entry'] ?? null;
 
 		if ( ! FrmSpamEntriesHelper::is_spam( $entry ) ) {
+			if ( self::can_mark_as_spam( $entry ) ) {
+				$actions['frm_mark_spam'] = array(
+					'url'   => self::get_mark_spam_url( $entry ),
+					'label' => __( 'Mark as spam', 'formidable' ),
+					'icon'  => 'frmfont frm_alert_icon',
+				);
+			}
+
 			return $actions;
 		}
 
@@ -182,10 +194,69 @@ class FrmSpamEntriesController {
 		$form            = $args['form'];
 		$source_label    = FrmSpamEntriesHelper::get_source_label( $entry );
 		$can_moderate    = self::current_user_can_moderate();
-		$pending_actions = $can_moderate ? self::get_pending_actions( $form ) : array();
+		$manual_spam     = FrmSpamEntriesHelper::is_manual_spam( $entry );
+		$pending_actions = $can_moderate && ! $manual_spam ? self::get_pending_actions( $form ) : array();
 		$open_modal      = $can_moderate && FrmAppHelper::simple_get( 'not_spam', 'absint' );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/spam-notice.php';
+	}
+
+	/**
+	 * Mark a submitted entry as spam after checking moderation permission and the nonce.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function mark_spam() {
+		$entry_id = FrmAppHelper::simple_get( 'id', 'absint' );
+		$nonce    = FrmAppHelper::simple_get( '_wpnonce', 'sanitize_text_field' );
+
+		if ( ! self::current_user_can_moderate() || ! wp_verify_nonce( $nonce, 'frm_mark_spam_' . $entry_id ) ) {
+			FrmAppController::show_error_modal(
+				array(
+					'title'      => __( 'Verification failed', 'formidable' ),
+					'body'       => __( 'Unable to verify your request. Please reload the page and try again.', 'formidable' ),
+					'cancel_url' => self::get_tab_url( false ),
+				)
+			);
+			return;
+		}
+
+		$marked  = FrmSpamEntriesHelper::mark_as_spam( $entry_id );
+		$message = $marked ? __( 'The entry was marked as spam.', 'formidable' ) : __( 'The entry could not be marked as spam.', 'formidable' );
+		FrmEntriesController::show( $entry_id, $message );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param object|null $entry The entry being moderated.
+	 *
+	 * @return bool
+	 */
+	private static function can_mark_as_spam( $entry ) {
+		return is_object( $entry ) && isset( $entry->is_draft ) && FrmEntriesHelper::SUBMITTED_ENTRY_STATUS === (int) $entry->is_draft && self::current_user_can_moderate();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param object $entry The entry being moderated.
+	 *
+	 * @return string
+	 */
+	private static function get_mark_spam_url( $entry ) {
+		$url = add_query_arg(
+			array(
+				'page'       => 'formidable-entries',
+				'frm_action' => 'mark_spam',
+				'id'         => $entry->id,
+			),
+			admin_url( 'admin.php' )
+		);
+
+		return wp_nonce_url( $url, 'frm_mark_spam_' . $entry->id );
 	}
 
 	/**
@@ -255,7 +326,7 @@ class FrmSpamEntriesController {
 
 		FrmSpamEntriesHelper::set_status( $entry_id, FrmEntriesHelper::SUBMITTED_ENTRY_STATUS );
 
-		$action_ids = self::get_selected_action_ids( $entry->form_id );
+		$action_ids = FrmSpamEntriesHelper::is_manual_spam( $entry ) ? array() : self::get_selected_action_ids( $entry->form_id );
 
 		if ( $action_ids ) {
 			self::trigger_selected_actions( $entry_id, $action_ids );
@@ -389,6 +460,6 @@ class FrmSpamEntriesController {
 	 * @return bool
 	 */
 	public static function current_user_can_moderate() {
-		return current_user_can( 'frm_delete_entries' );
+		return FrmAppHelper::current_user_can( 'frm_delete_entries' );
 	}
 }

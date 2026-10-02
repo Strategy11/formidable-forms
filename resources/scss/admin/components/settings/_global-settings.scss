@@ -121,5 +121,98 @@ label.frm-example-icon {
 	vertical-align: text-bottom;
 }
 
+.frm-akismet-integration {
+	width: auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--gap-sm);
+	margin-block: var(--gap-sm);
+	padding: var(--gap-sm);
+}
+
+.frm-akismet-integration-content {
+	display: flex;
+	flex: 1 1 260px;
+	align-items: center;
+	gap: var(--gap-sm);
+	min-width: 0;
+}
+
+.frm-akismet-integration-content > div {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.frm-akismet-integration > a {
+	max-width: 100%;
+	flex-wrap: wrap;
+}
+
+.frm-akismet-integration-content > .frmsvg {
+	flex-shrink: 0;
+	width: var(--gap-lg);
+	height: var(--gap-lg);
+	color: var(--grey-600);
+}
+
+#captcha_settings .frm-akismet-integration-content h3 {
+	border: none;
+	padding: 0;
+	margin: 0 0 var(--gap-xs);
+	text-transform: none;
+}
+
+.frm-akismet-integration-content p {
+	margin: 0;
+	color: var(--grey-600);
+}
+
+.frm-spam-disclosure {
+	margin-top: var(--gap-sm);
+}
+
+.frm-spam-disclosure > summary {
+	display: inline-flex;
+	align-items: center;
+	min-height: 24px;
+	gap: var(--gap-xs);
+	color: var(--grey-700);
+	font-weight: 500;
+	list-style: none;
+	cursor: pointer;
+	border-radius: var(--x-small-radius);
+}
+
+.frm-spam-disclosure > summary::-webkit-details-marker {
+	display: none;
+}
+
+.frm-spam-disclosure > summary:hover {
+	color: var(--grey-900);
+}
+
+.frm-spam-disclosure > summary:focus-visible {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
+}
+
+/* Scoped to the summary so it outranks the generic .frmsvg size (18px). */
+.frm-spam-disclosure > summary .frm-spam-disclosure-chevron {
+	flex-shrink: 0;
+	width: 12px;
+	height: 12px;
+	transform: rotate(-90deg);
+}
+
+.frm-spam-disclosure[open] > summary .frm-spam-disclosure-chevron {
+	transform: none;
+}
+
+/* Disclosure content lines up with the summary label, not the chevron: 12px chevron + 8px gap. */
+.frm-spam-disclosure > :not(summary) {
+	margin-inline-start: calc(12px + var(--gap-xs));
+}
+
 @import "global-payment-settings";
 @import "email-styles";
