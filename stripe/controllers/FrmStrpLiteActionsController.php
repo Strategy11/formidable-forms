@@ -636,6 +636,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			),
 		);
 
+		if ( '' === (string) $settings['font'] ) {
+			// Leave the font out so Stripe uses its default stack instead of an empty value.
+			unset( $rules['.Label']['fontFamily'] );
+		}
+
 		/*
 		 * Filters the appearance rules for Stripe elements.
 		 *

@@ -797,6 +797,7 @@
 	 * Create a temporary label element to determine the width of the Email label.
 	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
 	 * The label is styled from the same appearance rules that Stripe uses, so it does not inherit page styles.
+	 * The probe text is the English word, so the offset can be off when Stripe renders a localized label.
 	 *
 	 * @since 6.35
 	 *
