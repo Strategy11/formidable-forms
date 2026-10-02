@@ -1,3 +1,6 @@
+import ibmAccessibilityBaseline from '../fixtures/ibm-a11y-baseline.json';
+import { getIbmAccessibilityFailures } from './ibm-accessibility';
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -230,27 +233,21 @@ Cypress.Commands.add( 'emptyTrash', () => {
 	} );
 } );
 
-// Runs the IBM Equal Access scan alongside the existing cypress-axe checks. Doesn't
-// fail the build yet (assertCompliance(false)) since the current admin/preview
-// markup hasn't been triaged against this rule set - see formidable-forms#3356.
+// Scan every IBM rule. Only reviewed allowances for this page may pass.
 Cypress.Commands.add( 'checkIbmAccessibility', label => {
-	cy.getCompliance( label ).then( report => {
-		const violations = report.results.filter( result => result.level !== 'pass' );
+	// IBM's reporter requires a unique scan label on retries.
+	return cy.getCompliance( `${ label }-retry-${ Cypress.currentRetry }` ).then( report => {
+		const failures = getIbmAccessibilityFailures( label, report.results, ibmAccessibilityBaseline );
+		const findings = report.results.filter( result => result.level !== 'pass' );
+		const summary = failures.map( ( { ruleId, message, path } ) =>
+			`${ ruleId }: ${ message } - ${ path?.dom ?? 'Unknown DOM path' }`
+		).join( '\n' );
 
-		if ( ! violations.length ) {
-			return report;
-		}
-
-		// Chain the logging tasks and resolve back to `report` at the end, rather than
-		// invoking cy commands and then returning `report` synchronously - Cypress
-		// treats mixing queued async commands with a sync return in the same callback
-		// as an error, which aborted the scan and (since retries are enabled) caused a
-		// same-labeled retry to collide with this scan's already-recorded label.
-		cy.task(
-			'log',
-			`${ violations.length } IBM Equal Access violation${ violations.length === 1 ? '' : 's' } detected (${ label })`
-		);
-
-		return cy.task( 'table', violations.map( ( { ruleId, level, message } ) => ( { ruleId, level, message } ) ) ).then( () => report );
-	} ).assertCompliance( false );
+		// Persist all findings before asserting, including known and potential violations.
+		return cy.writeFile( `tests/cypress/reports/ibm-a11y/${ label }.json`, findings, { log: false } )
+			.then( () => {
+				expect( failures, `IBM accessibility failures (${ label }):\n${ summary }` ).to.have.lengthOf( 0 );
+				return report;
+			} );
+	} );
 } );
