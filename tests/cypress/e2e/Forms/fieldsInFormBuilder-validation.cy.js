@@ -158,8 +158,8 @@ describe( 'Fields in the form builder', () => {
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 1 ).click();
 
 		cy.get( `[id^="frm_error_field_"]` ).eq( 0 ).should( 'contain', `Text cannot be blank.` );
-		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'contain', `Email is invalid` );
-		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'contain', `Phone is invalid` );
+		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'contain', 'Enter a valid email address, like name@example.com' );
+		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'contain', 'Enter a valid phone number' );
 		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
 
 		cy.log( 'Navigate back to the formidable form page' );
