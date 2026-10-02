@@ -8,7 +8,7 @@ wp.domReady( () => {
 	/**
 	 * Internal dependencies
 	 */
-	const { applyZebraStriping } = window.frmAdminBuild;
+	const { applyZebraStriping, initModal } = window.frmAdminBuild;
 	const { onClickPreventDefault } = frmDom.util;
 
 	/**
@@ -24,6 +24,11 @@ wp.domReady( () => {
 	 * the zebra striping accordingly.
 	 */
 	manageShowEmptyFieldsButton();
+
+	/**
+	 * Opens the "Not spam" modal on a spam entry.
+	 */
+	manageNotSpamModal();
 
 	function manageShowEmptyFieldsButton() {
 		const showEmptyFieldsButton = document.getElementById( 'frm-entry-show-empty-fields' );
@@ -46,5 +51,27 @@ wp.domReady( () => {
 				applyZebraStriping( '.frm-alt-table', newShowState === 'true' ? '' : 'frm-empty-row' );
 			}, newShowState === 'true' ? 0 : 200 );
 		} );
+	}
+
+	function manageNotSpamModal() {
+		const modal = document.getElementById( 'frm-not-spam-modal' );
+
+		if ( ! modal ) {
+			return;
+		}
+
+		const $modal = initModal( '#frm-not-spam-modal', '440px' );
+
+		if ( ! $modal ) {
+			return;
+		}
+
+		document.querySelectorAll( '.frm-open-not-spam-modal' ).forEach( link => {
+			onClickPreventDefault( link, () => $modal.dialog( 'open' ) );
+		} );
+
+		if ( modal.dataset.open ) {
+			$modal.dialog( 'open' );
+		}
 	}
 } );

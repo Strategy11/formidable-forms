@@ -563,26 +563,48 @@ class FrmEntryValidate {
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
+		$spam_source    = '';
 
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
-		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
+			$spam_source    = 'antispam';
+		} elseif ( self::is_honeypot_spam( $values ) ) {
 			$errors['spam'] = $spam_msg;
+			$spam_source    = 'honeypot';
+		} elseif ( self::is_spam_bot() ) {
+			$errors['spam'] = $spam_msg;
+			$spam_source    = 'no_ip';
 		} else {
-			$is_spam = FrmAntiSpamController::is_spam( $values );
+			$detected = FrmAntiSpamController::detect_spam( $values );
 
-			if ( $is_spam ) {
-				$errors['spam'] = $is_spam;
+			if ( $detected ) {
+				$errors['spam'] = $detected['message'];
+				$spam_source    = $detected['source'];
 			}
 		}
 
-		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
-			return;
+		if ( ! isset( $errors['spam'] ) && ! self::form_is_in_progress( $values ) && self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
+			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+			$spam_source    = 'akismet';
 		}
 
-		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		if ( $spam_source && self::is_new_submission( $values ) && FrmSpamEntriesHelper::maybe_flag_submission( $values['form_id'], $spam_source ) ) {
+			// Save the entry as spam instead of showing an error, so the submitter sees the normal success response.
+			unset( $errors['spam'] );
 		}
+	}
+
+	/**
+	 * Spam is only saved as a spam entry when an entry is created. Edits keep showing the spam error.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values The submitted values.
+	 *
+	 * @return bool
+	 */
+	private static function is_new_submission( $values ) {
+		return empty( $values['id'] ) && 'update' !== ( $values['frm_action'] ?? '' );
 	}
 
 	/**

@@ -526,6 +526,25 @@ class FrmEntryMeta {
 	}
 
 	/**
+	 * Get the entry status to query when a numeric is_draft value is requested.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $is_draft
+	 *
+	 * @return int
+	 */
+	private static function get_numeric_draft_status( $is_draft ) {
+		$is_draft = absint( $is_draft );
+
+		if ( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === $is_draft || class_exists( 'FrmAbandonmentHooksController', false ) ) {
+			return $is_draft;
+		}
+
+		return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
+	}
+
+	/**
 	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
@@ -569,9 +588,10 @@ class FrmEntryMeta {
 			if ( ! $args['is_draft'] ) {
 				$where['e.is_draft'] = 0;
 			} elseif ( is_numeric( $args['is_draft'] ) ) {
-				$where['e.is_draft'] = class_exists( 'FrmAbandonmentHooksController', false ) ? absint( $args['is_draft'] ) : 1;
-			} elseif ( 'both' === $args['is_draft'] && class_exists( 'FrmAbandonmentHooksController', false ) ) {
-				$where['e.is_draft'] = array( 0, 1 );
+				$where['e.is_draft'] = self::get_numeric_draft_status( $args['is_draft'] );
+			} elseif ( 'both' === $args['is_draft'] ) {
+				// Submitted and draft entries. Spam is left out.
+				$where['e.is_draft'] = array( FrmEntriesHelper::SUBMITTED_ENTRY_STATUS, FrmEntriesHelper::DRAFT_ENTRY_STATUS );
 			} elseif ( str_contains( $args['is_draft'], ',' ) ) {
 				$is_draft = array_reduce(
 					explode( ',', $args['is_draft'] ),
@@ -607,8 +627,10 @@ class FrmEntryMeta {
 
 		if ( ! $args['is_draft'] ) {
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 0 );
-		} elseif ( $args['is_draft'] == 1 ) { // phpcs:ignore Universal.Operators.StrictComparisons
-			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 1 );
+		} elseif ( is_numeric( $args['is_draft'] ) ) {
+			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', self::get_numeric_draft_status( $args['is_draft'] ) );
+		} else {
+			$draft_where = $wpdb->prepare( ' AND ( e.is_draft!=%d OR e.is_draft IS NULL )', FrmSpamEntriesHelper::SPAM_ENTRY_STATUS );
 		}
 
 		if ( ! empty( $args['user_id'] ) ) {

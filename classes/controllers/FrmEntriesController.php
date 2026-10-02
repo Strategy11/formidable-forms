@@ -127,6 +127,10 @@ class FrmEntriesController {
 			case 'destroy':
 				return self::$action();
 
+			case 'not_spam':
+				FrmSpamEntriesController::not_spam();
+				return null;
+
 			default:
 				do_action( 'frm_entry_action_route', $action );
 
@@ -669,11 +673,14 @@ class FrmEntriesController {
 	/**
 	 * Back End CRUD.
 	 *
-	 * @param int $id
+	 * @since x.x Added the $message param.
+	 *
+	 * @param int    $id      The entry ID. The id param in the URL is used when empty.
+	 * @param string $message A success message shown above the entry.
 	 *
 	 * @return void
 	 */
-	public static function show( $id = 0 ) {
+	public static function show( $id = 0, $message = '' ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
 
 		if ( ! $id ) {

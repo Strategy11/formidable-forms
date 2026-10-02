@@ -963,7 +963,7 @@ class FrmEntriesHelper {
 			$extended_entry_status = array();
 		}
 
-		return array_replace( $default_entry_statuses, $extended_entry_status );
+		return array_replace( $default_entry_statuses, $extended_entry_status, FrmSpamEntriesHelper::get_entry_status() );
 	}
 
 	/**

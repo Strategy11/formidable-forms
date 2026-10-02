@@ -163,6 +163,11 @@ class FrmHooksController {
 		add_filter( 'update_user_metadata', 'FrmEntriesController::check_hidden_cols', 10, 5 );
 		add_action( 'updated_user_meta', 'FrmEntriesController::update_hidden_cols', 10, 4 );
 
+		// Spam Entries Controller.
+		add_filter( 'frm_row_actions', 'FrmSpamEntriesController::row_actions', 99, 2 );
+		add_filter( 'frm_entry_actions_dropdown', 'FrmSpamEntriesController::sidebar_actions', 99, 2 );
+		add_action( 'frm_show_entry_start_content', 'FrmSpamEntriesController::show_spam_notice', 5 );
+
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			add_action( 'frm_before_update_form_settings', 'FrmFormActionsController::update_settings' );

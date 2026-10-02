@@ -82,6 +82,9 @@ class FrmEntry {
 
 		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
+		// A spam entry should not block a real submission with the same values.
+		$check_val[] = FrmSpamEntriesHelper::get_exclude_spam_where( '' );
+
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
@@ -616,6 +619,7 @@ class FrmEntry {
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
 		global $wpdb;
 
+		$where     = FrmSpamEntriesHelper::exclude_spam( $where );
 		$limit     = FrmDb::esc_limit( $limit );
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit . $inc_form;
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
@@ -732,7 +736,9 @@ class FrmEntry {
 
 		if ( is_numeric( $where ) ) {
 			$table_join = 'frm_items';
-			$where      = array( 'form_id' => $where );
+			$where      = FrmSpamEntriesHelper::exclude_spam( array( 'form_id' => $where ), '' );
+		} else {
+			$where = FrmSpamEntriesHelper::exclude_spam( $where );
 		}
 
 		if ( is_array( $where ) ) {
@@ -941,11 +947,38 @@ class FrmEntry {
 	 * @return int
 	 */
 	private static function get_is_draft_value( $values ) {
+		if ( FrmSpamEntriesHelper::get_flagged_source( $values ) ) {
+			return FrmSpamEntriesHelper::SPAM_ENTRY_STATUS;
+		}
+
 		if ( isset( $values['frm_saving_draft'] ) && FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $values['frm_saving_draft'] ) {
 			return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
 		}
 
 		return isset( $values['is_draft'] ) ? absint( $values['is_draft'] ) : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+	}
+
+	/**
+	 * Get the is_draft value for an updated entry.
+	 * A spam entry keeps its status unless the new status is set explicitly.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $id
+	 * @param array      $values
+	 *
+	 * @return int
+	 */
+	private static function get_is_draft_value_for_update( $id, $values ) {
+		$is_draft = self::get_is_draft_value( $values );
+
+		if ( FrmEntriesHelper::SUBMITTED_ENTRY_STATUS !== $is_draft || isset( $values['is_draft'] ) ) {
+			return $is_draft;
+		}
+
+		$current_status = (int) FrmDb::get_var( 'frm_items', array( 'id' => $id ), 'is_draft' );
+
+		return FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === $current_status ? $current_status : $is_draft;
 	}
 
 	/**
@@ -988,12 +1021,18 @@ class FrmEntry {
 			return FrmAppHelper::maybe_json_encode( $values['description'] );
 		}
 
-		return json_encode(
-			array(
-				'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
-				'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
-			)
+		$description = array(
+			'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
+			'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
 		);
+
+		$spam_source = FrmSpamEntriesHelper::get_flagged_source( $values );
+
+		if ( $spam_source ) {
+			$description['spam_source'] = $spam_source;
+		}
+
+		return json_encode( $description );
 	}
 
 	/**
@@ -1246,7 +1285,7 @@ class FrmEntry {
 		$new_values = array(
 			'name'       => FrmAppHelper::truncate( self::get_new_entry_name( $values ), 255, 1, '', true ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
-			'is_draft'   => self::get_is_draft_value( $values ),
+			'is_draft'   => self::get_is_draft_value_for_update( $id, $values ),
 			'updated_at' => current_time( 'mysql', 1 ),
 			'updated_by' => self::get_updated_by( $values, $update_type, get_current_user_id() ),
 		);

@@ -156,3 +156,62 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 	?>
 </div><!-- End .frm-denylist-settings -->
+
+<h3><?php esc_html_e( 'Spam Entries', 'formidable' ); ?></h3>
+<p class="howto">
+	<?php esc_html_e( 'Choose what happens when a spam check flags a new submission. Saved spam entries go to the Spam tab of the entries list. They never trigger form actions, and the submitter sees the normal success message.', 'formidable' ); ?>
+</p>
+
+<?php $spam_handling = FrmSpamEntriesHelper::sanitize_handling( $frm_settings->spam_handling ); ?>
+<div class="frm_grid_container frm-spam-handling-settings">
+	<?php foreach ( FrmSpamEntriesHelper::get_sources() as $spam_source => $spam_source_details ) { ?>
+		<?php $select_id = 'frm_spam_handling_' . $spam_source; ?>
+		<p class="frm6 frm_form_field">
+			<label for="<?php echo esc_attr( $select_id ); ?>"><?php echo esc_html( $spam_source_details['label'] ); ?></label>
+		</p>
+		<p class="frm6 frm_form_field">
+			<select id="<?php echo esc_attr( $select_id ); ?>" name="frm_spam_handling[<?php echo esc_attr( $spam_source ); ?>]">
+				<option value="<?php echo esc_attr( FrmSpamEntriesHelper::SAVE ); ?>" <?php selected( $spam_handling[ $spam_source ], FrmSpamEntriesHelper::SAVE ); ?>>
+					<?php esc_html_e( 'Save as a spam entry', 'formidable' ); ?>
+				</option>
+				<option value="<?php echo esc_attr( FrmSpamEntriesHelper::BLOCK ); ?>" <?php selected( $spam_handling[ $spam_source ], FrmSpamEntriesHelper::BLOCK ); ?>>
+					<?php esc_html_e( 'Reject with an error message', 'formidable' ); ?>
+				</option>
+			</select>
+		</p>
+	<?php } ?>
+</div>
+
+<?php
+if ( FrmAppHelper::pro_is_installed() ) {
+	/**
+	 * Fires after the spam entries settings, so Pro can add the spam cleanup setting.
+	 *
+	 * @since x.x
+	 *
+	 * @param FrmSettings $frm_settings
+	 */
+	do_action( 'frm_spam_entries_settings', $frm_settings );
+	return;
+}
+
+$upgrade_attrs = array(
+	'data-upgrade' => __( 'Automatic spam cleanup', 'formidable' ),
+	'data-medium'  => 'spam-cleanup',
+	'class'        => 'frm_show_upgrade',
+	'style'        => 'position:absolute;top:0;right:0;bottom:0;left:0;cursor:pointer;',
+);
+?>
+<div class="frm_grid_container" style="position:relative;">
+	<p class="frm6 frm_form_field">
+		<label for="frm_spam_retention_days_upsell">
+			<?php esc_html_e( 'Delete spam entries automatically', 'formidable' ); ?>
+		</label>
+	</p>
+	<p class="frm6 frm_form_field">
+		<select id="frm_spam_retention_days_upsell" disabled>
+			<option><?php esc_html_e( 'After 30 days', 'formidable' ); ?></option>
+		</select>
+	</p>
+	<div <?php FrmAppHelper::array_to_html_params( $upgrade_attrs, true ); ?>></div>
+</div>

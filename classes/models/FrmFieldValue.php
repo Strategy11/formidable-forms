@@ -91,6 +91,10 @@ class FrmFieldValue {
 		}
 
 		$this->clean_saved_value();
+
+		if ( $this->field->type !== 'html' && FrmSpamEntriesHelper::is_spam( $entry ) ) {
+			$this->saved_value = FrmSpamEntriesHelper::escape_value( $this->saved_value );
+		}
 	}
 
 	/**

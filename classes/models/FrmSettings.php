@@ -226,6 +226,15 @@ class FrmSettings {
 	public $denylist_check;
 
 	/**
+	 * Whether submissions flagged by each spam check are saved as spam entries or rejected.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string, string>
+	 */
+	public $spam_handling;
+
+	/**
 	 * @since 6.25.1
 	 *
 	 * @var int|null 1 if installed after welcome tour update, null otherwise.
@@ -325,6 +334,7 @@ class FrmSettings {
 			'honeypot'                  => 1,
 			'wp_spam_check'             => 0,
 			'denylist_check'            => 0,
+			'spam_handling'             => FrmSpamEntriesHelper::get_default_handling(),
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
 			'email_style'               => 'classic',
@@ -581,6 +591,10 @@ class FrmSettings {
 		$this->default_email     = $params['frm_default_email'];
 		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
+
+		if ( isset( $params['frm_spam_handling'] ) ) {
+			$this->spam_handling = FrmSpamEntriesHelper::sanitize_handling( $params['frm_spam_handling'] );
+		}
 
 		$checkboxes = array(
 			'mu_menu',

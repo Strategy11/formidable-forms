@@ -12,7 +12,20 @@
 	background: #fff2d2;
 }
 
+.frm-entry-status-4 {
+	color: var(--error-700);
+	background: var(--error-100);
+}
+
 /* End entry statuses */
+
+.frm-entries-tabs {
+	margin-top: var(--gap-md);
+}
+
+.frm-spam-entry-notice p:last-child {
+	margin-bottom: 0;
+}
 
 #frm-create-footer {
 	padding: 15px 20px;

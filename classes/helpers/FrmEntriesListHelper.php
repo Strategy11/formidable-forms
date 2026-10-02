@@ -183,7 +183,26 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
 		}
 
+		$this->add_status_to_query( $s_query );
+
 		return apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
+	}
+
+	/**
+	 * Spam entries are only listed in the Spam tab.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $s_query
+	 *
+	 * @return void
+	 */
+	protected function add_status_to_query( &$s_query ) {
+		if ( FrmSpamEntriesController::is_spam_tab() ) {
+			$s_query['it.is_draft'] = FrmSpamEntriesHelper::SPAM_ENTRY_STATUS;
+		} else {
+			$s_query[] = FrmSpamEntriesHelper::get_exclude_spam_where();
+		}
 	}
 
 	/**
@@ -201,6 +220,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function no_items() {
+		if ( FrmSpamEntriesController::is_spam_tab() ) {
+			echo '<p>' . esc_html__( 'No spam entries found.', 'formidable' ) . '</p>';
+			return;
+		}
+
 		$s = self::get_param(
 			array(
 				'param'    => 's',
@@ -434,6 +458,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			case 'name':
 				$val = FrmAppHelper::truncate( strip_tags( $item->{$col_name} ), 100 );
+
+				if ( FrmSpamEntriesHelper::is_spam( $item ) ) {
+					$val = esc_html( $val );
+				}
 				break;
 			case 'created_at':
 			case 'updated_at':
@@ -566,7 +594,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			unset( $embedded_field_id );
 		}
 
-		$val = FrmEntriesHelper::prepare_display_value( $item, $field, $atts );
+		$val = FrmEntriesHelper::prepare_display_value( FrmSpamEntriesHelper::get_escaped_entry( $item ), $field, $atts );
 	}
 
 	/**

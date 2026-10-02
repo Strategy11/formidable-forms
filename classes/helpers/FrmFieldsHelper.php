@@ -1392,6 +1392,10 @@ class FrmFieldsHelper {
 	 * @return mixed
 	 */
 	public static function get_display_value( $value, $field, $atts = array() ) {
+		if ( isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ) {
+			$value = FrmSpamEntriesHelper::escape_value( $value );
+		}
+
 		$value = apply_filters( 'frm_get_' . $field->type . '_display_value', $value, $field, $atts );
 		$value = apply_filters( 'frm_get_display_value', $value, $field, $atts );
 		$value = self::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
