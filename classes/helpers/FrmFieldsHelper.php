@@ -1674,10 +1674,12 @@ class FrmFieldsHelper {
 			 * @since x.x
 			 *
 			 * @param array $prepared {
+			 *
 			 *     @type array       $other_args The name and value for the text box.
 			 *     @type bool        $other_opt  True when this is an "Other" option.
 			 *     @type bool|string $checked    The checked attribute for the option.
 			 * }
+			 *
 			 * @param array $args Includes field, opt_key and field_name.
 			 */
 			$prepared = apply_filters( 'frm_prepare_other_input', compact( 'other_args', 'other_opt', 'checked' ), $args );
