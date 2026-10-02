@@ -128,8 +128,12 @@ class FrmEntriesHelper {
 			self::get_posted_value( $field, $new_value, $args );
 		}
 
+		// A field with no default value has a null default_value, and a field type
+		// whose value is not posted back leaves it null too. str_replace() warns on
+		// a null subject in PHP 8.1+, so cast first: this keeps returning the empty
+		// string the caller already relied on.
 		if ( ! is_array( $new_value ) ) {
-			return str_replace( '"', '&quot;', $new_value );
+			return str_replace( '"', '&quot;', (string) $new_value );
 		}
 
 		return $new_value;
