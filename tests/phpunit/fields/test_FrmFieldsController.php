@@ -9,6 +9,55 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsController extends FrmUnitTest {
 
+	public function test_deferred_builder_settings_keep_preview_and_layout_inputs_available() {
+		$form_id = $this->factory->form->create();
+
+		foreach ( array( 'text', 'number', 'radio', 'select' ) as $type ) {
+			$field = $this->factory->field->create_and_get(
+				array(
+					'form_id'       => $form_id,
+					'type'          => $type,
+					'field_order'   => 12,
+					'field_options' => array( 'classes' => 'frm_half custom_class' ),
+				)
+			);
+			$settings = (object) array( 'html' => '' );
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'id'                => $form_id,
+					'doing_ajax'        => true,
+					'deferred_settings' => $settings,
+				)
+			);
+			$preview = ob_get_clean();
+
+			$this->assertStringContainsString( 'id="frm_field_id_' . $field->id . '"', $preview );
+			$this->assertStringNotContainsString( 'id="frm-single-settings-', $preview );
+			$this->assertStringNotContainsString( 'frm-deferred-settings-meta', $preview );
+			$this->assertSame( 12, (int) $settings->meta['order'] );
+			$this->assertSame( 'frm_half custom_class', $settings->meta['classes'] );
+			$this->assertSame( $field->name, $settings->meta['name'] );
+			$this->assertSame( $type, $settings->meta['type'] );
+			$this->assertSame( $field->field_key, $settings->meta['key'] );
+			$this->assertStringContainsString( 'id="frm-single-settings-' . $field->id . '"', $settings->html );
+			$this->assertStringContainsString( 'name="frm_fields_submitted[]"', $settings->html );
+			$this->assertStringContainsString( 'name="field_options[type_' . $field->id . ']"', $settings->html );
+		}
+	}
+
+	public function test_builder_settings_remain_inline_without_deferred_collector() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get( array( 'form_id' => $form_id ) );
+		ob_start();
+		FrmFieldsController::load_single_field( $field, array( 'doing_ajax' => true ) );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'id="frm-single-settings-' . $field->id . '"', $html );
+		$this->assertStringNotContainsString( 'frm-deferred-settings-meta', $html );
+	}
+
 	public function test_builder_placeholder_manifest_preserves_attributes_and_order() {
 		$form_id  = $this->factory->form->create();
 		$manifest = (object) array(

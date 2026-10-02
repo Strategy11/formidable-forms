@@ -10,6 +10,7 @@ const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
+const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
 
 // Footer scripts can restore placeholders before add-ons inspect the builder's fields.
 hydrateFieldPlaceholders();
@@ -2019,13 +2020,14 @@ window.frmAdminBuildJS = function() {
 			}
 
 			moveFieldSettings( document.getElementById( `frm-single-settings-${ fieldId }` ) );
-			const layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
+			let layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
 
 			if ( ! layoutClassesInput ) {
 				// not every field type has a layout class input.
 				return;
 			}
 
+			const previousClasses = layoutClassesInput.value;
 			if ( false === activeLayoutClass ) {
 				if ( '' !== currentClassToAdd ) {
 					layoutClassesInput.value = layoutClassesInput.value.concat( ` ${ currentClassToAdd }` );
@@ -2045,6 +2047,13 @@ window.frmAdminBuildJS = function() {
 				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
 			}
 
+			if ( layoutClassesInput.closest( '.frm-deferred-settings-meta' ) ) {
+				if ( previousClasses === layoutClassesInput.value ) {
+					return;
+				}
+				moveFieldSettings( ensureFieldSettings( fieldId ) );
+				layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
+			}
 			jQuery( layoutClassesInput ).trigger( 'change' );
 		};
 	}
@@ -2778,6 +2787,7 @@ window.frmAdminBuildJS = function() {
 				// Only acknowledge received definitions so concurrent batches remain independent.
 				known_tooltips: Object.keys( frm_admin_js.tooltips || {} ).join( ',' ),
 				known_select_options: Object.keys( frm_admin_js.selectOptions || {} ).join( ',' ),
+				defer_settings: 1,
 				nonce: frmGlobal.nonce
 			},
 			success: async response => {
@@ -2880,18 +2890,58 @@ window.frmAdminBuildJS = function() {
 		placeholderSpinnerObserver?.unobserve( oldField );
 		dragDropObserver.unobserve( oldField );
 		dragDropAttachers.delete( oldField );
+		cacheFieldSettings( key, field.settingsHtml );
 		jQuery( oldField ).replaceWith( field.html );
 
 		const element = document.getElementById( `frm_field_id_${ key }` );
 		if ( ! element ) {
 			return null;
 		}
-		element.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
-		element.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
-		element.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
+		if ( field.settingsMeta ) {
+			addFieldSettingsMetadata( element, key, field.settingsMeta );
+		}
+		prepareLoadedFieldMarkup( element );
 		setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
 		lazyMakeDraggable( element );
 		return { id: key, type: field.type, element };
+	}
+
+	/**
+	 * Prepare deferred settings before selection or another interaction reads their inputs.
+	 *
+	 * @since x.x
+	 * @param {string} fieldId Numeric field ID.
+	 * @return {HTMLElement|null} The field settings panel, if the field has loaded.
+	 */
+	function ensureFieldSettings( fieldId ) {
+		return materializeFieldSettings( fieldId, prepareLoadedFieldMarkup );
+	}
+
+	/**
+	 * Resolve shared markup attributes for a field preview or its newly inserted settings.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} element The inserted preview or settings panel.
+	 * @return {void}
+	 */
+	function prepareLoadedFieldMarkup( element ) {
+		element.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+		element.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+		element.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
+	}
+
+	/**
+	 * Prepare settings before delegated preview handlers read or modify them.
+	 *
+	 * @since x.x
+	 * @param {Event} event The preview interaction.
+	 * @return {void}
+	 */
+	function prepareInteractedFieldSettings( event ) {
+		const field = event.target.closest( '#frm-show-fields li.form-field' );
+		if ( field ) {
+			ensureFieldSettings( field.dataset.fid );
+		}
 	}
 
 	/**
@@ -3229,7 +3279,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
-		const originalSettings = document.getElementById( `frm-single-settings-${ originalFieldId }` );
+		const originalSettings = ensureFieldSettings( originalFieldId );
 		if ( ! originalSettings ) {
 			return;
 		}
@@ -3845,6 +3895,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function hasExcludedOption( field, excludedOpts ) {
+		ensureFieldSettings( field.fieldId );
 		let hasOption = false;
 		for ( let i = 0; i < excludedOpts.length; i++ ) {
 			const inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
@@ -4820,6 +4871,7 @@ window.frmAdminBuildJS = function() {
 	 * Delete a field option.
 	 */
 	function deleteFieldOption() {
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const parentLi = this.parentNode;
 		const parentUl = parentLi.parentNode;
 
@@ -6071,6 +6123,7 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success() {
+				forgetFieldSettings( fieldId );
 				const $thisField = jQuery( document.getElementById( `frm_field_id_${ fieldId }` ) );
 				const settings = jQuery( `#frm-single-settings-${ fieldId }` );
 
@@ -6381,6 +6434,7 @@ window.frmAdminBuildJS = function() {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const fieldIds = [];
 		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		const rowLength = rows.length;
@@ -7075,6 +7129,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		const rowLength = rows.length;
 
@@ -7132,6 +7187,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getFieldOptions( fieldId ) {
+		ensureFieldSettings( fieldId );
 		const options = [];
 		const optsContainer = document.getElementById( `frm_field_${ fieldId }_opts` );
 
@@ -7206,6 +7262,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 		const { sourceID } = atts;
+		ensureFieldSettings( sourceID );
 		const { placeholder } = atts;
 		const isProduct = isProductField( sourceID );
 		const showOther = atts.other;
@@ -7260,6 +7317,7 @@ window.frmAdminBuildJS = function() {
 	 * @param {boolean} showValueAsLabel Whether to show the value as label for empty labels.
 	 */
 	function getMultipleOpts( fieldId, showValueAsLabel = false ) {
+		ensureFieldSettings( fieldId );
 		let i;
 		let saved;
 		let labelName;
@@ -7632,12 +7690,12 @@ window.frmAdminBuildJS = function() {
 				field = self.getFieldOrderInputById( fieldId, fields[ i ] );
 
 				// get current field order, make sure we don't get the "field" reference as the "field" value will get updated later.
-				currentOrder = field ? Object.assign( {}, field.value )[ 0 ] : null;
+				currentOrder = field ? Number( field.value ) : null;
 				newOrder = i + 1;
 
 				if ( currentOrder != newOrder && null !== currentOrder ) {
 					field.value = newOrder;
-					singleField = fields[ i ].querySelector( `#frm-single-settings-${ fieldId }` );
+					singleField = ensureFieldSettings( fieldId );
 
 					// add field that needs to be moved to "updateFieldOrder.prototype.fieldSettingsForm"
 					moveFieldsClass.append( singleField );
@@ -8746,7 +8804,10 @@ window.frmAdminBuildJS = function() {
 			allFieldSettings[ i ].classList.add( 'frm_hidden' );
 		}
 
-		const singleField = document.getElementById( `frm-single-settings-${ fieldId }` );
+		const singleField = ensureFieldSettings( fieldId );
+		if ( ! singleField ) {
+			return;
+		}
 		hydrateBuilderSelectsIn( singleField );
 		moveFieldSettings( singleField );
 
@@ -11859,6 +11920,8 @@ window.frmAdminBuildJS = function() {
 
 		buildInit() {
 			hydrateFieldPlaceholders();
+			document.addEventListener( 'click', prepareInteractedFieldSettings, true );
+			document.addEventListener( 'focusin', prepareInteractedFieldSettings, true );
 
 			document.addEventListener( 'focusin', event => {
 				if ( event.target.matches( 'select[data-frm-options]' ) ) {

@@ -32,13 +32,14 @@ class FrmFieldsController {
 			wp_die();
 		}
 
-		$_GET['page'] = 'formidable';
-		$fields       = self::get_builder_fields_by_id( $form_id );
-		$values       = array(
+		$_GET['page']   = 'formidable';
+		$fields         = self::get_builder_fields_by_id( $form_id );
+		$values         = array(
 			'id'         => $form_id,
 			'doing_ajax' => true,
 		);
-		$field_html   = array();
+		$field_html     = array();
+		$defer_settings = FrmAppHelper::get_post_param( 'defer_settings', 0, 'absint' );
 
 		foreach ( $field_ids as $field_id ) {
 			if ( ! isset( $fields[ $field_id ] ) ) {
@@ -47,6 +48,16 @@ class FrmFieldsController {
 			}
 
 			$field = $fields[ $field_id ];
+			unset( $values['deferred_settings'] );
+
+			// Specialized and add-on fields keep their existing AJAX initialization contract.
+			if ( $defer_settings && in_array(
+				$field->type,
+				array( 'text', 'textarea', 'email', 'url', 'password', 'number', 'phone', 'date', 'time', 'checkbox', 'radio', 'select', 'hidden', 'html' ),
+				true
+			) ) {
+				$values['deferred_settings'] = (object) array( 'html' => '' );
+			}
 
 			ob_start();
 			self::load_single_field( $field, $values );
@@ -57,6 +68,13 @@ class FrmFieldsController {
 				'type' => $field->type,
 				'html' => ob_get_clean(),
 			);
+
+			if ( ! isset( $values['deferred_settings'] ) ) {
+				continue;
+			}
+
+			$field_html[ $field_id ]['settingsHtml'] = $values['deferred_settings']->html;
+			$field_html[ $field_id ]['settingsMeta'] = $values['deferred_settings']->meta;
 		}//end foreach
 
 		// admin_footer never fires here, so the deferred tooltip text rides along with the html.
