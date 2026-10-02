@@ -61,12 +61,32 @@ class FrmFieldsController {
 
 		// admin_footer never fires here, so the deferred tooltip text rides along with the html.
 		// Field ids are numeric, so this key can never collide with one.
-		$field_html['tooltips']      = FrmAppHelper::get_deferred_tooltips();
-		$field_html['selectOptions'] = FrmBuilderSelectHelper::get_templates();
+		$field_html['tooltips']      = self::get_missing_builder_definitions( FrmAppHelper::get_deferred_tooltips(), 'known_tooltips' );
+		$field_html['selectOptions'] = self::get_missing_builder_definitions( FrmBuilderSelectHelper::get_templates(), 'known_select_options' );
 
 		echo json_encode( $field_html );
 
 		wp_die();
+	}
+
+	/**
+	 * Omit definitions the browser has already received, including from the initial page.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $definitions Definitions keyed by their content hashes.
+	 * @param string $param       POST parameter containing comma-separated known hashes.
+	 *
+	 * @return array
+	 */
+	private static function get_missing_builder_definitions( $definitions, $param ) {
+		$known_keys = FrmAppHelper::get_post_param( $param, '', 'sanitize_text_field' );
+
+		if ( ! is_string( $known_keys ) || '' === $known_keys ) {
+			return $definitions;
+		}
+
+		return array_diff_key( $definitions, array_fill_keys( explode( ',', $known_keys ), true ) );
 	}
 
 	/**
