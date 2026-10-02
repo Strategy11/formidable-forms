@@ -12376,10 +12376,21 @@ window.frmAdminBuildJS = function() {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
 
-			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function( event ) {
+			const captchas = document.querySelector( '.frm_captchas' );
+			captchas.addEventListener( 'change', function( event ) {
 				const captchaValueOnLoad = document.querySelector( '.frm_captchas input[checked="checked"]' )?.value;
 				const showNote = event.target.value !== captchaValueOnLoad;
 				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden', ! showNote );
+
+				captchas.querySelectorAll( 'label' ).forEach( label => label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' ) );
+			} );
+
+			// A focused tab label doesn't select its radio on Enter or Space.
+			captchas.addEventListener( 'keydown', function( event ) {
+				if ( 'Enter' === event.key || ' ' === event.key ) {
+					event.preventDefault();
+					event.target.closest( 'label' )?.click();
+				}
 			} );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
