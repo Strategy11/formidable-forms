@@ -9,6 +9,86 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsController extends FrmUnitTest {
 
+	public function test_builder_placeholder_manifest_preserves_attributes_and_order() {
+		$form_id  = $this->factory->form->create();
+		$manifest = (object) array(
+			'definitions' => array(),
+			'fields'      => array(),
+		);
+		$expected = array();
+
+		foreach ( array( 'text', 'text', 'html' ) as $type ) {
+			$field = $this->factory->field->create_and_get(
+				array(
+					'form_id' => $form_id,
+					'type'    => $type,
+				)
+			);
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'ajax_load' => true,
+					'count'     => 11,
+				)
+			);
+			$legacy_html = ob_get_clean();
+
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'ajax_load'            => true,
+					'count'                => 11,
+					'placeholder_manifest' => $manifest,
+				)
+			);
+			$placeholder = ob_get_clean();
+			$index       = count( $expected );
+			$this->assertSame( '<li data-frm-placeholder="' . $index . '"></li>', $placeholder );
+			$this->assertSame( (int) $field->id, $manifest->fields[ $index ][0] );
+			$definition = $manifest->definitions[ $manifest->fields[ $index ][1] ];
+			$this->assertStringContainsString( 'class="' . esc_attr( $definition[0] ) . '"', $legacy_html );
+			$this->assertStringContainsString( 'data-formid="' . esc_attr( $definition[1] ) . '"', $legacy_html );
+			$this->assertStringContainsString( 'data-ftype="' . esc_attr( $definition[2] ) . '"', $legacy_html );
+			$expected[] = (int) $field->id;
+		}
+
+		$this->assertCount( 2, $manifest->definitions );
+		$this->assertSame( $expected, array_column( $manifest->fields, 0 ) );
+		$this->assertSame( $manifest->fields[0][1], $manifest->fields[1][1] );
+	}
+
+	public function test_builder_placeholder_manifest_keeps_initial_and_non_ajax_fields_rendered() {
+		$form_id  = $this->factory->form->create();
+		$field    = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+		$manifest = (object) array(
+			'definitions' => array(),
+			'fields'      => array(),
+		);
+
+		foreach ( array( array( true, 10 ), array( false, 11 ) ) as $settings ) {
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'ajax_load'            => $settings[0],
+					'count'                => $settings[1],
+					'placeholder_manifest' => $manifest,
+				)
+			);
+			$html = ob_get_clean();
+			$this->assertStringContainsString( 'id="frm_field_id_' . $field->id . '"', $html );
+			$this->assertStringNotContainsString( 'data-frm-placeholder=', $html );
+		}
+		$this->assertSame( array(), $manifest->fields );
+	}
+
 	public function test_builder_batches_omit_only_received_definitions() {
 		$definitions                   = array(
 			'known' => array( 'value' => 'Saved option' ),

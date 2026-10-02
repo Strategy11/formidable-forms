@@ -9,6 +9,10 @@ const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
+const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
+
+// Footer scripts can restore placeholders before add-ons inspect the builder's fields.
+hydrateFieldPlaceholders();
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -2660,11 +2664,12 @@ window.frmAdminBuildJS = function() {
 	let placeholderSpinnerObserver;
 
 	/**
-	 * Give each field placeholder its spinner only once it scrolls into view.
+	 * Give each field placeholder a spinner only while it is in the viewport.
 	 *
 	 * A long form can have hundreds of placeholders, and most of them are swapped for the real
 	 * field before anyone scrolls to them, so a placeholder that is never seen never gets one.
-	 * The placeholder already holds the spinner's space, so adding it does not move anything.
+	 * Remove spinners that leave the viewport so their animations do not keep running offscreen.
+	 * The placeholder holds the spinner's space, so adding or removing it does not move fields.
 	 *
 	 * @since x.x
 	 *
@@ -2676,10 +2681,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		placeholderSpinnerObserver = new IntersectionObserver(
-			handlePlaceholderIntersections,
-			{ root: postBodyContent }
-		);
+		placeholderSpinnerObserver = new IntersectionObserver( handlePlaceholderIntersections );
 		placeholders.forEach( placeholder => placeholderSpinnerObserver.observe( placeholder ) );
 	}
 
@@ -2693,10 +2695,9 @@ window.frmAdminBuildJS = function() {
 		entries.forEach(
 			( { target, isIntersecting } ) => {
 				if ( ! isIntersecting ) {
+					target.querySelector( '.frm_visible_spinner' )?.remove();
 					return;
 				}
-
-				placeholderSpinnerObserver.unobserve( target );
 
 				// A placeholder that failed to load shows an error message instead.
 				if ( target.hasChildNodes() ) {
@@ -2822,6 +2823,7 @@ window.frmAdminBuildJS = function() {
 		fieldIds.forEach( fieldId => {
 			const field = document.getElementById( `frm_field_id_${ fieldId }` );
 			if ( field?.classList.contains( 'frm_field_loading' ) ) {
+				placeholderSpinnerObserver?.unobserve( field );
 				field.textContent = __( 'Unable to load field.', 'formidable' );
 			}
 		} );
@@ -11856,6 +11858,8 @@ window.frmAdminBuildJS = function() {
 		},
 
 		buildInit() {
+			hydrateFieldPlaceholders();
+
 			document.addEventListener( 'focusin', event => {
 				if ( event.target.matches( 'select[data-frm-options]' ) ) {
 					hydrateBuilderSelect( event.target );

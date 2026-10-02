@@ -242,6 +242,12 @@ class FrmFieldsController {
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
+
+			if ( isset( $values['placeholder_manifest'] ) ) {
+				self::add_builder_placeholder_to_manifest( $field_object, $display, $li_classes, $values['placeholder_manifest'] );
+				return;
+			}
+
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php';
 			return;
 		}
@@ -269,6 +275,32 @@ class FrmFieldsController {
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+	}
+
+	/**
+	 * Record shared attributes and leave a minimal placeholder in its grid row.
+	 *
+	 * @since x.x
+	 *
+	 * @param object                                              $field      Field object with its id and owning form.
+	 * @param array                                               $display    Field display options, including the builder type.
+	 * @param string                                              $li_classes Classes used by the original placeholder.
+	 * @param object{definitions: array, fields: array}&\stdClass $manifest Shared attribute definitions and ordered field records.
+	 *
+	 * @return void
+	 */
+	private static function add_builder_placeholder_to_manifest( $field, array $display, $li_classes, $manifest ) {
+		$definition = array( $li_classes . ' frm_field_loading', (int) $field->form_id, $display['type'] );
+		$index      = array_search( $definition, $manifest->definitions, true );
+
+		if ( false === $index ) {
+			$index                   = count( $manifest->definitions );
+			$manifest->definitions[] = $definition;
+		}
+
+		$placeholder        = count( $manifest->fields );
+		$manifest->fields[] = array( (int) $field->id, $index );
+		echo '<li data-frm-placeholder="' . esc_attr( $placeholder ) . '"></li>';
 	}
 
 	/**
