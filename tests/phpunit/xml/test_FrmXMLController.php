@@ -1,10 +1,11 @@
 <?php
 
+/**
+ * @covers FrmXMLController
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmXMLController::class )]
 class test_FrmXMLController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmXMLController::validate_xml_url
-	 */
 	public function test_validate_xml_url() {
 		$example_access_key_id = 'ABC123';
 		$expires               = time();
@@ -29,7 +30,7 @@ class test_FrmXMLController extends FrmUnitTest {
 	 * need distinct accessible names or they violate the aria_landmark_name_unique
 	 * a11y rule.
 	 *
-	 * @covers FrmXMLController::form
+	 * @see FrmXMLController::form
 	 */
 	public function test_form_has_unique_landmark_names_for_import_and_export_forms() {
 		ob_start();

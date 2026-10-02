@@ -3,12 +3,14 @@
 /**
  * @group entries
  * @group free
+ *
+ * @covers FrmEntryValidate
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\Group( 'free' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryValidate::class )]
 class test_FrmEntryValidate extends FrmUnitTest {
 
-	/**
-	 * @covers FrmEntryValidate::validate
-	 */
 	public function test_validate() {
 		$add_a_custom_error = function ( $errors ) {
 			$errors['custom_error'] = 'Error message';
@@ -30,9 +32,6 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		remove_filter( 'frm_validate_entry', $add_a_custom_error );
 	}
 
-	/**
-	 * @covers FrmEntryValidate::get_spam_check_user_info
-	 */
 	public function test_get_spam_check_user_info() {
 		$made_up_name_field_id  = 4;
 		$made_up_email_field_id = 12;

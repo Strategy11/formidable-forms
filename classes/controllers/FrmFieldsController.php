@@ -59,6 +59,11 @@ class FrmFieldsController {
 			);
 		}//end foreach
 
+		// admin_footer never fires here, so the deferred tooltip text rides along with the html.
+		// Field ids are numeric, so this key can never collide with one.
+		$field_html['tooltips']      = FrmAppHelper::get_deferred_tooltips();
+		$field_html['selectOptions'] = FrmBuilderSelectHelper::get_templates();
+
 		echo json_encode( $field_html );
 
 		wp_die();
@@ -408,13 +413,8 @@ class FrmFieldsController {
 		$display   = $atts['display'];
 		unset( $atts );
 
-		if ( ! isset( $field['unique'] ) ) {
-			$field['unique'] = false;
-		}
-
-		if ( ! isset( $field['read_only'] ) ) {
-			$field['read_only'] = false;
-		}
+		$field['unique']    = $field['unique'] ?? false;
+		$field['read_only'] = $field['read_only'] ?? false;
 
 		$field_selection_data = self::maybe_define_field_selection_data();
 		$all_field_types      = $field_selection_data->all_field_types;
@@ -449,21 +449,27 @@ class FrmFieldsController {
 
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
 
-		$unique_values_label_atts = array(
-			'for'          => 'frm_uniq_field_' . $field['id'],
-			'class'        => 'frm_help frm-mb-0',
-			'title'        => __(
-				'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.',
-				'formidable'
+		$unique_values_label_atts = array_merge(
+			array(
+				'for'          => 'frm_uniq_field_' . $field['id'],
+				'class'        => 'frm_help frm-mb-0',
+				'data-trigger' => 'hover',
 			),
-			'data-trigger' => 'hover',
+			FrmAppHelper::get_tooltip_attr(
+				__(
+					'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.',
+					'formidable'
+				)
+			)
 		);
 
-		$read_only_label_atts = array(
-			'for'          => 'frm_read_only_field_' . $field['id'],
-			'class'        => 'frm_help frm-mb-0',
-			'title'        => __( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ),
-			'data-trigger' => 'hover',
+		$read_only_label_atts = array_merge(
+			array(
+				'for'          => 'frm_read_only_field_' . $field['id'],
+				'class'        => 'frm_help frm-mb-0',
+				'data-trigger' => 'hover',
+			),
+			FrmAppHelper::get_tooltip_attr( __( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ) )
 		);
 
 		if ( ! $pro_is_installed ) {
@@ -475,13 +481,6 @@ class FrmFieldsController {
 				'field_visibility',
 				__( 'Visibility options', 'formidable' ),
 				'/field-options/#kb-visibility'
-			);
-
-			$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
-				array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
-				'autocomplete',
-				__( 'Autocomplete options', 'formidable' ),
-				'/email-address/#kb-autocomplete-attribute'
 			);
 
 			$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
@@ -501,7 +500,6 @@ class FrmFieldsController {
 			);
 			$show_upsell_for_read_only             = in_array( $field['type'], array( 'address', 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
 			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'quantity', 'select', 'tag', 'text', 'total', 'url' ), true );
-			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
 			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
 
 			$unique_values_label_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
@@ -519,6 +517,19 @@ class FrmFieldsController {
 		}//end if
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
+	}
+
+	/**
+	 * Display the autocomplete attribute setting.
+	 *
+	 * @since x.x This was moved from FrmProFieldsController::show_autocomplete_option.
+	 *
+	 * @param array $field The field settings.
+	 *
+	 * @return void
+	 */
+	public static function show_autocomplete_option( $field ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/autocomplete.php';
 	}
 
 	/**
@@ -685,6 +696,7 @@ class FrmFieldsController {
 		self::add_shortcodes_to_html( $field, $add_html );
 		self::add_pattern_attribute( $field, $add_html );
 		self::add_currency_field_attributes( $field, $add_html );
+		self::add_html_autocomplete( $field, $add_html );
 
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
@@ -1112,6 +1124,25 @@ class FrmFieldsController {
 		}
 
 		$add_html['aria-required'] = 'aria-required="true"';
+	}
+
+	/**
+	 * Add the autocomplete attribute to the field HTML.
+	 * Older versions of Pro add this attribute themselves, so it is skipped while Pro is active.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field    The field settings.
+	 * @param array $add_html The HTML attributes, keyed by attribute name.
+	 *
+	 * @return void
+	 */
+	private static function add_html_autocomplete( $field, array &$add_html ) {
+		if ( empty( $field['autocomplete'] ) || FrmAppHelper::pro_is_installed() || FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return;
+		}
+
+		$add_html['autocomplete'] = 'autocomplete="' . esc_attr( $field['autocomplete'] ) . '"';
 	}
 
 	/**

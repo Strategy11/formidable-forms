@@ -74,8 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_pad"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -92,8 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_margin"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -110,8 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_border_radius"
+	<label
 		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -130,6 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm5 frm_form_field">
 	<label 
 		for="frm_auto_dropdowns_width"
+		id="frm_auto_dropdowns_width_label"
 		class="frm-style-item-heading"><?php esc_html_e( 'Auto Drop-downs Width', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-style-component">
