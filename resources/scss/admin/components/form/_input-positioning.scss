@@ -12,6 +12,10 @@
 	padding-right: var(--gap-md);
 }
 
+.frm_wrap .frm-with-right-icon :is(input, textarea):has(~ .frm-show-inline-modal) {
+	padding-inline-end: var(--gap-xl);
+}
+
 #frm-show-fields .frm-with-left-icon .frmsvg,
 #frm-show-fields .frm-with-left-icon i {
 	padding-top: 10px;
