@@ -121,6 +121,14 @@ class FrmComboFieldsController {
 			$atts['sub_field']['atts']['disabled'] = 'disabled';
 		}
 
+		// Lets FrmFieldsController::add_shortcodes_to_html() pick this sub field's own aria-invalid
+		// value, and name this sub field in its required message for JS validation.
+		$atts['field']['subfield_name'] = $atts['key'];
+
+		if ( $field_obj instanceof FrmFieldCombo ) {
+			$atts['field']['subfield_label'] = $field_obj->get_sub_field_label( $atts['key'] );
+		}
+
 		if ( ! empty( $atts['sub_field']['optional'] ) ) {
 			add_filter( 'frm_field_classes', 'FrmAddressesController::add_optional_class', 20, 2 );
 			do_action( 'frm_field_input_html', $atts['field'] );

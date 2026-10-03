@@ -1034,7 +1034,13 @@ class FrmFieldsController {
 		$field_validation_messages_status = self::get_validation_data_attribute_visibility_info( $field );
 
 		if ( FrmField::is_required( $field ) && ! empty( $field_validation_messages_status['data-reqmsg'] ) ) {
-			$required_message        = FrmFieldsHelper::get_error_msg( $field, 'blank' );
+			if ( empty( $field['subfield_label'] ) ) {
+				$required_message = FrmFieldsHelper::get_error_msg( $field, 'blank' );
+			} else {
+				// A combo sub field, like a first name, is named on its own in its required message.
+				$required_message = FrmFieldsHelper::get_error_msg_for_name( $field, 'blank', $field['subfield_label'] );
+			}
+
 			$add_html['data-reqmsg'] = 'data-reqmsg="' . esc_attr( $required_message ) . '"';
 			self::maybe_add_html_required( $field, $add_html );
 		}
