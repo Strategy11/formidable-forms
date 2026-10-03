@@ -493,6 +493,8 @@ class FrmStrpLiteEventsController {
 	 * @return void
 	 */
 	private function process_event_ids( $event_ids ) {
+		$modes = apply_filters( 'frm_strp_lookup_modes', array( FrmStrpLiteAppHelper::active_mode() ) );
+
 		foreach ( $event_ids as $event_id ) {
 			if ( $this->should_skip_event( $event_id ) ) {
 				continue;
@@ -500,7 +502,17 @@ class FrmStrpLiteEventsController {
 
 			set_transient( 'frm_last_process_' . $event_id, time(), 60 );
 
-			$this->event = FrmStrpLiteConnectHelper::get_event( $event_id );
+			$this->event = false;
+			$event_mode  = '';
+
+			foreach ( $modes as $mode ) {
+				$this->event = FrmStrpLiteConnectHelper::get_event( $event_id, $mode );
+
+				if ( is_object( $this->event ) ) {
+					$event_mode = $mode;
+					break;
+				}
+			}
 
 			if ( ! is_object( $this->event ) ) {
 				$this->count_failed_event( $event_id );
@@ -509,8 +521,8 @@ class FrmStrpLiteEventsController {
 
 			$this->handle_event();
 			$this->track_handled_event( $event_id );
-			FrmStrpLiteConnectHelper::process_event( $event_id );
-		}
+			FrmStrpLiteConnectHelper::process_event( $event_id, $event_mode );
+		}//end foreach
 	}
 
 	/**
