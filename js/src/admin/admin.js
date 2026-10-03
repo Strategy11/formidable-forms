@@ -2969,7 +2969,8 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function ignoreLoadingFieldMouseEvent( event ) {
-		if ( ! event.target.closest( '.frm_field_loading' ) ) {
+		// A drag helper lets the pointer reach placeholders, so let jQuery UI track the drag.
+		if ( document.body.classList.contains( 'frm-dragging' ) || ! event.target.closest( '.frm_field_loading' ) ) {
 			return;
 		}
 
@@ -11962,7 +11963,7 @@ window.frmAdminBuildJS = function() {
 
 		buildInit() {
 			hydrateFieldPlaceholders();
-			[ 'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
+			[ 'click', 'dblclick', 'mousedown', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
 				fieldsContainer.addEventListener( eventType, ignoreLoadingFieldMouseEvent, true );
 			} );
 			document.addEventListener( 'click', prepareInteractedFieldSettings, true );
