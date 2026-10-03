@@ -287,7 +287,8 @@ window.frmAdminBuildJS = function() {
 		drag: svg( { href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] } )
 	};
 
-	const $newFields = jQuery( document.getElementById( 'frm-show-fields' ) );
+	const fieldsContainer = document.getElementById( 'frm-show-fields' );
+	const $newFields = jQuery( fieldsContainer );
 	const builderForm = document.getElementById( 'new_fields' );
 	const thisForm = document.getElementById( 'form_id' );
 	let copyHelper = false;
@@ -1089,17 +1090,24 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function setupSortable( sortableSelector ) {
-		document.querySelectorAll( sortableSelector ).forEach(
-			list => {
-				lazyMakeDroppable( list );
-				Array.from( list.children ).forEach( child => lazyMakeDraggable( child, '.frm-move' ) );
+		document.querySelectorAll( sortableSelector ).forEach( setupSortableList );
+	}
 
-				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
-				if ( $sectionTitle.length ) {
-					lazyMakeDroppable( $sectionTitle.get( 0 ) );
-				}
-			}
-		);
+	/**
+	 * Prepare one sorting list without searching for it again in the document.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} list The list containing draggable fields or field groups.
+	 * @return {void}
+	 */
+	function setupSortableList( list ) {
+		lazyMakeDroppable( list );
+		Array.from( list.children ).forEach( child => lazyMakeDraggable( child, '.frm-move' ) );
+
+		const sectionTitle = list.querySelector( ':scope > [data-type="divider"] > .divider_section_only' );
+		if ( sectionTitle ) {
+			lazyMakeDroppable( sectionTitle );
+		}
 	}
 
 	/**
@@ -1493,9 +1501,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getDroppableTarget() {
-		let droppable = document.getElementById( 'frm-show-fields' );
-		while ( droppable.querySelector( '.frm-over-droppable' ) ) {
-			droppable = droppable.querySelector( '.frm-over-droppable' );
+		let droppable = fieldsContainer;
+		let nextDroppable = droppable.querySelector( '.frm-over-droppable' );
+		while ( nextDroppable ) {
+			droppable = nextDroppable;
+			nextDroppable = droppable.querySelector( '.frm-over-droppable' );
 		}
 		if ( 'frm-show-fields' === droppable.id && ! droppable.classList.contains( 'frm-over-droppable' ) ) {
 			droppable = false;
@@ -2690,7 +2700,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function observeFieldPlaceholders() {
-		const placeholders = document.querySelectorAll( '#frm-show-fields .frm_field_loading' );
+		const placeholders = fieldsContainer.querySelectorAll( '.frm_field_loading' );
 		if ( ! placeholders.length ) {
 			return;
 		}
@@ -2733,7 +2743,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function fillFieldLoadQueue() {
 		while ( activeFieldLoadRequests < FIELD_LOAD_CONCURRENCY ) {
-			const nextField = document.querySelector( '#frm-show-fields .frm_field_loading:not(.frm_load_now)' );
+			const nextField = fieldsContainer.querySelector( '.frm_field_loading:not(.frm_load_now)' );
 			if ( ! nextField ) {
 				break;
 			}
@@ -2906,7 +2916,9 @@ window.frmAdminBuildJS = function() {
 			addFieldSettingsMetadata( element, key, field.settingsMeta );
 		}
 		prepareLoadedFieldMarkup( element );
-		setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
+		if ( element.classList.contains( 'edit_field_type_divider' ) ) {
+			element.querySelectorAll( 'ul.frm_sorting' ).forEach( setupSortableList );
+		}
 		lazyMakeDraggable( element );
 		return { id: key, type: field.type, element };
 	}
@@ -2957,7 +2969,8 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function ignoreLoadingFieldMouseEvent( event ) {
-		if ( ! event.target.closest( '.frm_field_loading' ) ) {
+		// A drag helper lets the pointer reach placeholders, so let jQuery UI track the drag.
+		if ( document.body.classList.contains( 'frm-dragging' ) || ! event.target.closest( '.frm_field_loading' ) ) {
 			return;
 		}
 
@@ -3410,7 +3423,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		if ( null !== document.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
+		if ( null !== fieldsContainer.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
 			// do not set a hover target if a dropdown is open for the current hover target.
 			return;
 		}
@@ -3442,7 +3455,7 @@ window.frmAdminBuildJS = function() {
 			controls.style.display = 'none';
 		}
 
-		const previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const previousHoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! previousHoverTarget ) {
 			return false;
 		}
@@ -3675,7 +3688,7 @@ window.frmAdminBuildJS = function() {
 		deselectFields();
 		initiateMultiselect();
 
-		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+		fieldsContainer.classList.remove( 'frm-over-droppable' );
 
 		maybeDisableFieldButtonAtLimit( type );
 
@@ -5022,7 +5035,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickDeleteFieldGroup() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -5036,7 +5049,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function duplicateFieldGroup() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -5111,7 +5124,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickFieldGroupLayout() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 
 		if ( ! hoverTarget ) {
 			return;
@@ -5416,7 +5429,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleFieldGroupLayoutOptionClick() {
-		const row = document.querySelector( '.frm-field-group-hover-target' );
+		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! row ) {
 			// The field group layout options also get clicked when merging multiple rows.
 			// The following code isn't required for multiple rows though so just exit early.
@@ -5609,7 +5622,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function breakFieldGroupClick() {
-		const row = document.querySelector( '.frm-field-group-hover-target' );
+		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		breakRow( row );
 		destroyFieldGroupPopup();
 	}
@@ -5671,7 +5684,7 @@ window.frmAdminBuildJS = function() {
 		const $controls = jQuery( document.getElementById( 'frm_field_group_controls' ) );
 
 		if ( $controls.length && 'none' !== $controls.get( 0 ).style.display ) {
-			syncLayoutClasses( getFieldsInRow( jQuery( document.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
+			syncLayoutClasses( getFieldsInRow( jQuery( fieldsContainer.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
 		} else {
 			const $ul = mergeSelectedFieldGroups();
 			syncLayoutClasses( getFieldsInRow( $ul ).first(), syncDetails );
@@ -5689,7 +5702,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -5870,7 +5883,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getSelectedField() {
-		return document.getElementById( 'frm-show-fields' ).querySelector( 'li.form-field.selected' );
+		return fieldsContainer.querySelector( 'li.form-field.selected' );
 	}
 
 	function getSelectedFieldGroups() {
@@ -6237,7 +6250,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function countFieldTypeInForm( type ) {
-		return document.getElementById( 'frm-show-fields' ).querySelectorAll( `li.form-field[data-ftype="${ type }"]` ).length;
+		return fieldsContainer.querySelectorAll( `li.form-field[data-ftype="${ type }"]` ).length;
 	}
 
 	function addFieldLogicRow() {
@@ -6646,7 +6659,7 @@ window.frmAdminBuildJS = function() {
 
 	function toggleCollapseFakePage() {
 		const topLevel = document.getElementById( 'frm-fake-page' );
-		const firstField = document.getElementById( 'frm-show-fields' ).firstElementChild;
+		const firstField = fieldsContainer.firstElementChild;
 		const toCollapse = getAllFieldsForPage( firstField );
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
@@ -8922,14 +8935,13 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const fieldSettingsSelector = `#frm-single-settings-${ fieldId }`;
-		if ( document.querySelector( `${ fieldSettingsSelector } .frm-show-box` ) ) {
+		if ( singleField.querySelector( '.frm-show-box' ) ) {
 			return;
 		}
 		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textareas = document.querySelectorAll( `${ fieldSettingsSelector } .frm_has_shortcodes textarea` );
+			const textareas = singleField.querySelectorAll( '.frm_has_shortcodes textarea' );
 			textareas.forEach( textarea => {
 				const wrapperSpan = span( { className: 'frm-with-right-icon' } );
 				textarea.parentNode.insertBefore( wrapperSpan, textarea );
@@ -11951,8 +11963,7 @@ window.frmAdminBuildJS = function() {
 
 		buildInit() {
 			hydrateFieldPlaceholders();
-			const fieldsContainer = document.getElementById( 'frm-show-fields' );
-			[ 'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
+			[ 'click', 'dblclick', 'mousedown', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
 				fieldsContainer.addEventListener( eventType, ignoreLoadingFieldMouseEvent, true );
 			} );
 			document.addEventListener( 'click', prepareInteractedFieldSettings, true );
