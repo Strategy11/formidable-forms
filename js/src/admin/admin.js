@@ -1900,6 +1900,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function updateFieldGroupControls( $row, count ) {
+		const row = $row.get( 0 );
+		if ( ! row || row.querySelector( ':scope > .frm_field_loading' ) ) {
+			return;
+		}
+
 		const rowOffset = $row.offset();
 
 		if ( rowOffset === undefined ) {
@@ -2939,9 +2944,30 @@ window.frmAdminBuildJS = function() {
 	 */
 	function prepareInteractedFieldSettings( event ) {
 		const field = event.target.closest( '#frm-show-fields li.form-field' );
-		if ( field ) {
+		if ( field && ! field.classList.contains( 'frm_field_loading' ) ) {
 			ensureFieldSettings( field.dataset.fid );
 		}
+	}
+
+	/**
+	 * Stop placeholder mouse events before delegated selection and hover handlers run.
+	 *
+	 * @since x.x
+	 * @param {MouseEvent} event The interaction inside the builder fields container.
+	 * @return {void}
+	 */
+	function ignoreLoadingFieldMouseEvent( event ) {
+		if ( ! event.target.closest( '.frm_field_loading' ) ) {
+			return;
+		}
+
+		// Clear the previous row before stopping the delegated hover cleanup.
+		if ( false !== maybeRemoveGroupHoverTarget() ) {
+			deleteTooltips();
+		}
+
+		event.preventDefault();
+		event.stopImmediatePropagation();
 	}
 
 	/**
@@ -3394,6 +3420,11 @@ window.frmAdminBuildJS = function() {
 			const list = elementFromPoint.closest( 'ul.frm_sorting' );
 
 			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
+				if ( list.querySelector( ':scope > .frm_field_loading' ) ) {
+					maybeRemoveGroupHoverTarget();
+					return;
+				}
+
 				const previousHoverTarget = maybeRemoveGroupHoverTarget();
 				if ( false !== previousHoverTarget && ! jQuery( previousHoverTarget ).is( list ) ) {
 					destroyFieldGroupPopup();
@@ -11920,6 +11951,10 @@ window.frmAdminBuildJS = function() {
 
 		buildInit() {
 			hydrateFieldPlaceholders();
+			const fieldsContainer = document.getElementById( 'frm-show-fields' );
+			[ 'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
+				fieldsContainer.addEventListener( eventType, ignoreLoadingFieldMouseEvent, true );
+			} );
 			document.addEventListener( 'click', prepareInteractedFieldSettings, true );
 			document.addEventListener( 'focusin', prepareInteractedFieldSettings, true );
 
