@@ -1900,7 +1900,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function updateFieldGroupControls( $row, count ) {
-		if ( $row.get( 0 ).querySelector( ':scope > .frm_field_loading' ) ) {
+		const row = $row.get( 0 );
+		if ( ! row || row.querySelector( ':scope > .frm_field_loading' ) ) {
 			return;
 		}
 
@@ -2958,6 +2959,11 @@ window.frmAdminBuildJS = function() {
 	function ignoreLoadingFieldMouseEvent( event ) {
 		if ( ! event.target.closest( '.frm_field_loading' ) ) {
 			return;
+		}
+
+		// Clear the previous row before stopping the delegated hover cleanup.
+		if ( false !== maybeRemoveGroupHoverTarget() ) {
+			deleteTooltips();
 		}
 
 		event.preventDefault();
