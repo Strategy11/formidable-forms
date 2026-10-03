@@ -549,6 +549,7 @@ class FrmStyle {
 			'numberposts' => 99,
 			'orderby'     => 'title',
 			'order'       => 'ASC',
+			'fields'      => 'ids',
 		);
 
 		FrmDb::delete_cache_and_transient( json_encode( $default_post_atts ), 'frm_styles' );
@@ -607,23 +608,25 @@ class FrmStyle {
 	 * @return array
 	 */
 	public function get_all( $orderby = 'title', $order = 'ASC', $limit = 99 ) {
+		// Only scalar IDs may go in frm_styles; Object Cache Pro's prefetch can't handle cached objects.
 		$post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
 			'post_status' => 'publish',
 			'numberposts' => $limit,
 			'orderby'     => $orderby,
 			'order'       => $order,
+			'fields'      => 'ids',
 		);
 
-		$temp_styles = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
+		$style_ids = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
 
-		if ( ! $temp_styles ) {
+		if ( ! $style_ids ) {
 			global $wpdb;
 			// Make sure there wasn't a conflict with the query
-			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
+			$query     = $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$style_ids = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_col' );
 
-			if ( ! $temp_styles ) {
+			if ( ! $style_ids ) {
 				// Create a new style if there are none
 				$new             = $this->get_new();
 				$new->post_title = __( 'Formidable Style', 'formidable' );
@@ -632,16 +635,32 @@ class FrmStyle {
 				$new             = $this->save( (array) $new );
 				$this->update( 'default' );
 
-				$post_atts['include'] = $new;
-				$temp_styles          = get_posts( $post_atts );
+				$style_ids = $new && ! is_wp_error( $new ) ? array( $new ) : array();
 			}
+		}
+
+		// Hydrate by ID, not a second get_posts() call: a pre_get_posts filter that emptied the query above would empty this too.
+		$temp_styles = array();
+
+		foreach ( $style_ids as $style_id ) {
+			$style = get_post( $style_id );
+
+			if ( $style ) {
+				$temp_styles[ $style_id ] = $style;
+			}
+		}
+
+		if ( ! $temp_styles ) {
+			// Every cached ID is stale; drop the group so the next call re-queries.
+			FrmDb::cache_delete_group( 'frm_styles' );
+			return array();
 		}
 
 		$default_values = $this->get_defaults();
 		$default_style  = false;
 		$styles         = array();
 
-		foreach ( $temp_styles as $style ) {
+		foreach ( $temp_styles as $style_id => $style ) {
 			$this->id = $style->ID;
 
 			if ( $style->menu_order ) {
@@ -660,12 +679,15 @@ class FrmStyle {
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
-			$styles[ $style->ID ] = $style;
+			$styles[ $style_id ] = $style;
 		}//end foreach
 
 		if ( ! $default_style ) {
-			$default_style                            = reset( $styles );
-			$styles[ $default_style->ID ]->menu_order = 1;
+			$default_key = array_key_first( $styles );
+
+			if ( null !== $default_key ) {
+				$styles[ $default_key ]->menu_order = 1;
+			}
 		}
 
 		return $styles;
