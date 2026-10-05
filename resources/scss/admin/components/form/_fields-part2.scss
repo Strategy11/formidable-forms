@@ -43,6 +43,7 @@
 	}
 
 	:is(input[type="checkbox"], input[type="radio"]):hover:not(:disabled):not([readonly]):not(:focus),
+	:is(input[type="checkbox"], input[type="radio"]):has(+ label:hover):not(:disabled):not([readonly]):not(:focus),
 	label:hover > :is(input[type="checkbox"], input[type="radio"]):not(:disabled):not([readonly]):not(:focus) {
 		border-color: var(--grey-300);
 		border-color: color-mix(in oklab, var(--grey-400) 45%, var(--grey-300));
@@ -52,9 +53,17 @@
 	/* A checked box is a filled swatch with no grey stroke left to warm, so deepen the fill.
 	   !important beats the checked rule, which uses it. */
 	input[type="checkbox"]:checked:hover:not(:disabled):not([readonly]):not(:focus),
+	input[type="checkbox"]:checked:has(+ label:hover):not(:disabled):not([readonly]):not(:focus),
 	label:hover > input[type="checkbox"]:checked:not(:disabled):not([readonly]):not(:focus) {
 		background-color: var(--primary-700) !important;
 		border-color: var(--primary-700) !important;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	:is(.frm_wrap, .frm-white-body, .field-group) :is(input[type="checkbox"], input[type="radio"]) {
+		transition: none;
 	}
 }
 

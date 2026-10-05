@@ -97,6 +97,8 @@
 		0.12s background-color ease,
 		0.12s transform ease;
 
+	@include focus-outline($radius: 4px);
+
 	.frmsvg {
 		width: 16px;
 		height: 16px;

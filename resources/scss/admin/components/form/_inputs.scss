@@ -132,6 +132,7 @@ button.frm_choose_image_box {
 }
 
 #frm-show-fields :is( input[type="checkbox"], input[type="radio"] ):hover:not(:disabled):not([readonly]):not(:focus),
+#frm-show-fields :is( input[type="checkbox"], input[type="radio"] ):has(+ label:hover):not(:disabled):not([readonly]):not(:focus),
 #frm-show-fields label:hover > :is( input[type="checkbox"], input[type="radio"] ):not(:disabled):not([readonly]):not(:focus) {
 	border-color: var(--grey-300);
 	box-shadow: var(--box-shadow-sm);
@@ -139,9 +140,24 @@ button.frm_choose_image_box {
 
 /* Matching !important, because the checked hover it is cancelling carries one. */
 #frm-show-fields input[type="checkbox"]:checked:hover:not(:disabled):not([readonly]):not(:focus),
+#frm-show-fields input[type="checkbox"]:checked:has(+ label:hover):not(:disabled):not([readonly]):not(:focus),
 #frm-show-fields label:hover > input[type="checkbox"]:checked:not(:disabled):not([readonly]):not(:focus) {
 	background-color: var(--border-color-active, var(--primary-500)) !important;
 	border-color: var(--border-color-active, var(--primary-500)) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm_wrap :is(input[type], textarea, select),
+	.frm-white-body .wrap :is(input[type], textarea, select),
+	.field-group :is(input[type="text"], textarea, select),
+	.frm-fields .frm-input-field,
+	.frm_wrap .frm-slider-value,
+	.frm_wrap .wp-picker-container .wp-color-result,
+	.frm-btn-group .multiselect.dropdown-toggle,
+	button.frm_choose_image_box {
+		transition: none;
+	}
 }
 
 .frm_input_with_suffix {

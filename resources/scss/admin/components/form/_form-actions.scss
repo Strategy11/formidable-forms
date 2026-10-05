@@ -417,6 +417,10 @@
 				color: var(--grey-900) !important;
 			}
 		}
+
+		&:active {
+			background-color: var(--surface-active-compact);
+		}
 	}
 
 	&:hover,

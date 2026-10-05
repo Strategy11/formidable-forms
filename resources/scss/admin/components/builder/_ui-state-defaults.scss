@@ -98,6 +98,9 @@
  * design shows and what stops them overlapping a long field label.
  */
 #frm-show-fields li.ui-state-default.frm_not_divider {
+
+	/* Flex content must not set the minimum width of a narrow grid column. */
+	min-width: 0;
 	padding: 10px 10px 0;
 
 	> .frm_inner_field_container {
@@ -121,7 +124,9 @@
 			order: 2;
 			position: static;
 			display: flex;
+			flex-wrap: wrap;
 			align-items: center;
+			min-width: 0;
 			margin-left: auto;
 
 			/* 6px between the icons; the ID adds 2px more to reach the 8px the design has. */
@@ -146,6 +151,7 @@
 		}
 
 		> .frm_form_fields {
+			min-width: 0;
 			margin-top: 6px;
 		}
 	}
@@ -189,6 +195,8 @@
 		height: 20px;
 		border-radius: 4px;
 		transition: 0.12s background-color ease;
+
+		@include focus-outline($radius: 4px);
 
 		&:hover {
 			background-color: var(--surface-hover-compact);
@@ -249,6 +257,10 @@
 
 @media (prefers-reduced-motion: reduce) {
 
+	.frm_sorting li.ui-state-default.frm_not_divider,
+	.frm_sorting li.ui-state-default.frm_not_divider:not(.selected):hover,
+	.frm_sorting li.ui-state-default.frm_not_divider.selected,
+	#frm-show-fields li.ui-state-default.frm_not_divider > .frm_inner_field_container > .frm_primary_label,
 	#frm-show-fields .frm-field-action-icons > a,
 	#frm-show-fields .frm-field-action-icons .dropdown > a {
 		transition: none;

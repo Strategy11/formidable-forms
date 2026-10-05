@@ -13,7 +13,7 @@ class test_FrmFieldsController extends FrmUnitTest {
 		$form_id = $this->factory->form->create();
 
 		foreach ( array( 'text', 'number', 'radio', 'select' ) as $type ) {
-			$field = $this->factory->field->create_and_get(
+			$field    = $this->factory->field->create_and_get(
 				array(
 					'form_id'       => $form_id,
 					'type'          => $type,
