@@ -3,7 +3,16 @@
 /**
  * @group ajax
  * @group free
+ *
+ * @covers FrmAppHelper
+ * @covers FrmField
+ * @covers FrmFieldsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'ajax' )]
+#[\PHPUnit\Framework\Attributes\Group( 'free' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAppHelper::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmField::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	protected $form_id = 0;
@@ -29,9 +38,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertIsNumeric( $this->form_id );
 	}
 
-	/**
-	 * @covers FrmFieldsController::create
-	 */
 	public function test_create() {
 		$_POST = array(
 			'action'     => 'frm_insert_field',
@@ -60,8 +66,8 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	/**
 	 * Test duplicating a text field
 	 *
-	 * @covers FrmFieldsController::duplicate
-	 * @covers FrmField::duplicate
+	 * @see FrmFieldsController::duplicate
+	 * @see FrmField::duplicate
 	 */
 	public function test_duplicating_text_field() {
 		$this->assertTrue( current_user_can( 'frm_edit_forms' ), 'User does not have permission' );
@@ -103,9 +109,122 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		self::check_in_section_variable( $field, 0 );
 	}
 
+	public function test_load_field_separates_settings_only_for_supported_fields_when_requested() {
+		$field_ids = array();
+
+		foreach ( array( 'text', 'submit', 'textarea' ) as $type ) {
+			$field_ids[ $type ] = $this->factory->field->create(
+				array(
+					'form_id' => $this->form_id,
+					'type'    => $type,
+				)
+			);
+		}
+
+		$_POST    = array(
+			'action'         => 'frm_load_field',
+			'nonce'          => wp_create_nonce( 'frm_ajax' ),
+			'form_id'        => $this->form_id,
+			'field_ids'      => array_values( $field_ids ),
+			'defer_settings' => 1,
+		);
+		$response = json_decode( $this->trigger_action( 'frm_load_field' ), true );
+		$this->assertIsArray( $response );
+
+		foreach ( $field_ids as $type => $field_id ) {
+			$loaded = $response[ $field_id ];
+			$this->assertSame( $type, $loaded['type'] );
+
+			if ( 'submit' === $type ) {
+				$this->assertArrayNotHasKey( 'settingsHtml', $loaded );
+				$this->assertStringContainsString( 'id="frm-single-settings-' . $field_id . '"', $loaded['html'] );
+				continue;
+			}
+			$this->assertStringNotContainsString( 'id="frm-single-settings-', $loaded['html'] );
+			$this->assertStringContainsString( 'id="frm-single-settings-' . $field_id . '"', $loaded['settingsHtml'] );
+			$this->assertStringNotContainsString( 'frm-deferred-settings-meta', $loaded['html'] );
+			$this->assertSame( $type, $loaded['settingsMeta']['type'] );
+		}
+	}
+
 	/**
-	 * @covers FrmFieldsController::import_options
+	 * The batch field load defers tooltip text and ships it in its own JSON response,
+	 * since admin_footer never runs to print it on admin-ajax.php.
+	 *
+	 * @see FrmFieldsController::load_field
+	 * @see FrmAppHelper::get_tooltip_attr
 	 */
+	public function test_load_field_defers_tooltips() {
+		$field_ids = array(
+			$this->factory->field->create(
+				array(
+					'form_id' => $this->form_id,
+					'type'    => 'text',
+				)
+			),
+			$this->factory->field->create(
+				array(
+					'form_id' => $this->form_id,
+					'type'    => 'text',
+				)
+			),
+		);
+
+		$_POST = array(
+			'action'    => 'frm_load_field',
+			'nonce'     => wp_create_nonce( 'frm_ajax' ),
+			'form_id'   => $this->form_id,
+			'field_ids' => $field_ids,
+		);
+
+		$response = json_decode( $this->trigger_action( 'frm_load_field' ), true );
+		$this->assertIsArray( $response );
+		$this->assertArrayHasKey( 'tooltips', $response );
+		$this->assertNotEmpty( $response['tooltips'] );
+
+		foreach ( $response['tooltips'] as $key => $text ) {
+			$this->assertMatchesRegularExpression( '/^t[0-9a-f]{8}$/', $key );
+			$this->assertSame( 't' . substr( md5( $text ), 0, 8 ), $key, 'The key must be a hash of the text so batches never collide.' );
+		}
+
+		$keys_per_field = array();
+
+		foreach ( $field_ids as $field_id ) {
+			$html = $response[ $field_id ]['html'];
+			$this->assertArrayNotHasKey( 'settingsHtml', $response[ $field_id ] );
+			$this->assertStringContainsString( 'id="frm-single-settings-' . $field_id . '"', $html );
+			preg_match_all( '/data-tip-key="([^"]+)"/', $html, $matches );
+			$this->assertNotEmpty( $matches[1], 'Field ' . $field_id . ' has no deferred tooltips.' );
+
+			foreach ( $matches[1] as $key ) {
+				$this->assertArrayHasKey( $key, $response['tooltips'], 'The response is missing the text for ' . $key . '.' );
+			}
+
+			$keys_per_field[] = $matches[1];
+		}
+
+		// Two fields of the same type carry the same tooltips, so they share every key.
+		$this->assertSame( $keys_per_field[0], $keys_per_field[1] );
+	}
+
+	/**
+	 * Other builder ajax requests have nothing to ship deferred text with, so they keep the title.
+	 *
+	 * @see FrmAppHelper::get_tooltip_attr
+	 */
+	public function test_insert_field_keeps_tooltip_title() {
+		$_POST = array(
+			'action'     => 'frm_insert_field',
+			'nonce'      => wp_create_nonce( 'frm_ajax' ),
+			'form_id'    => $this->form_id,
+			'field_type' => 'text',
+		);
+
+		$response = $this->trigger_action( 'frm_insert_field' );
+		$this->assertStringContainsString( 'frm_help', $response );
+		$this->assertStringNotContainsString( 'data-tip-key', $response );
+	}
+
 	public function test_import_options_drops_blanks_without_disturbing_other_key() {
 		$field = $this->factory->field->create_and_get(
 			array(
@@ -145,9 +264,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertSame( array( 'One', 'Two' ), array_slice( $matches[1], 1 ) );
 	}
 
-	/**
-	 * @covers FrmFieldsController::import_options
-	 */
 	public function test_import_options_separate_value_drops_blank_value_but_keeps_blank_label() {
 		$field = $this->factory->field->create_and_get(
 			array(
@@ -180,9 +296,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertSame( array( 'One', '', 'Two' ), array_slice( $matches[1], 1 ) );
 	}
 
-	/**
-	 * @covers FrmFieldsController::import_options
-	 */
 	public function test_import_options_drops_leading_blank_for_select_without_placeholder() {
 		// No placeholder configured - see select_has_placeholder()'s docblock.
 		$field = $this->factory->field->create_and_get(
@@ -197,9 +310,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertSame( array( 'One', 'Two' ), $labels );
 	}
 
-	/**
-	 * @covers FrmFieldsController::import_options
-	 */
 	public function test_import_options_keeps_leading_blank_for_select_with_placeholder() {
 		// Placeholder configured - see select_has_placeholder()'s docblock.
 		$field = $this->factory->field->create_and_get(
@@ -215,9 +325,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertSame( array( '', 'One', 'Two' ), $labels );
 	}
 
-	/**
-	 * @covers FrmFieldsController::import_options
-	 */
 	public function test_import_options_keeps_leading_blank_pair_for_separate_value_select_with_placeholder() {
 		// Separate-value equivalent of the plain-line case above - a leading
 		// "|" (blank label, blank value) is the same placeholder row, see

@@ -2,12 +2,13 @@
 
 /**
  * @group styles
+ *
+ * @covers FrmStylesCardHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'styles' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStylesCardHelper::class )]
 class test_FrmStylesCardHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStylesCardHelper::has_dark_background
-	 */
 	public function test_has_dark_background() {
 		$this->assert_bg_is_dark( '000000' );
 		$this->assert_bg_is_dark( '000' );

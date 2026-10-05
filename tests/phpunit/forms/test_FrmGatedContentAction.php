@@ -2,7 +2,11 @@
 
 /**
  * @group gated-content
+ *
+ * @covers FrmGatedContentAction
  */
+#[\PHPUnit\Framework\Attributes\Group( 'gated-content' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmGatedContentAction::class )]
 class test_FrmGatedContentAction extends FrmUnitTest {
 
 	// ── get_posts() ───────────────────────────────────────────────────────── //
@@ -11,7 +15,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * Plain published posts are publicly accessible and must not appear in the
 	 * selector — no token is needed to view them.
 	 *
-	 * @covers FrmGatedContentAction::get_posts
+	 * @see FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_excludes_plain_published_post() {
 		$post    = $this->factory->post->create_and_get( array( 'post_status' => 'publish' ) );
@@ -28,7 +32,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * Private posts require a capability check that a token can satisfy — they
 	 * must appear under their post-type key so admins can select them.
 	 *
-	 * @covers FrmGatedContentAction::get_posts
+	 * @see FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_includes_private_post() {
 		$post    = $this->factory->post->create_and_get( array( 'post_status' => 'private' ) );
@@ -47,7 +51,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * Password-protected posts are published but block access via a password
 	 * form — a token must be able to bypass that gate, so they must be selectable.
 	 *
-	 * @covers FrmGatedContentAction::get_posts
+	 * @see FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_includes_password_protected_post() {
 		$post    = $this->factory->post->create_and_get(
@@ -71,7 +75,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * Posts and pages must land under the correct type key and not bleed into
 	 * each other's bucket.
 	 *
-	 * @covers FrmGatedContentAction::get_posts
+	 * @see FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_groups_results_by_post_type() {
 		$post     = $this->factory->post->create_and_get(
@@ -100,7 +104,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * Disabled types (frm_file, frm_pdf) are not registered post types — they
 	 * must not appear as keys in the result.
 	 *
-	 * @covers FrmGatedContentAction::get_posts
+	 * @see FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_omits_disabled_types() {
 		$grouped = FrmGatedContentAction::get_posts();
@@ -113,7 +117,7 @@ class test_FrmGatedContentAction extends FrmUnitTest {
 	 * When no enabled post types exist, get_posts() must return an empty array
 	 * rather than querying the DB or returning a partial structure.
 	 *
-	 * @covers FrmGatedContentAction::get_posts
+	 * @see FrmGatedContentAction::get_posts
 	 */
 	public function test_get_posts_returns_empty_when_no_enabled_types() {
 		add_filter(

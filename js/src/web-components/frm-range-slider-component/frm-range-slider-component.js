@@ -3,6 +3,27 @@ import frmSliderComponent from '../../settings-components/components/slider-comp
 import style from './frm-range-slider-component.css';
 import { __ } from '@wordpress/i18n';
 
+/**
+ * Accessible labels for each part of a multi part slider.
+ *
+ * @since x.x
+ *
+ * @param {string} type - The slider part, for instance 'top' or 'left'.
+ * @return {string} The label describing that part.
+ */
+const getLabelForType = type => {
+	const labels = {
+		vertical: __( 'Vertical value', 'formidable' ),
+		horizontal: __( 'Horizontal value', 'formidable' ),
+		top: __( 'Top value', 'formidable' ),
+		bottom: __( 'Bottom value', 'formidable' ),
+		left: __( 'Left value', 'formidable' ),
+		right: __( 'Right value', 'formidable' )
+	};
+
+	return labels[ type ] || __( 'Field value', 'formidable' );
+};
+
 export class frmRangeSliderComponent extends frmWebComponent {
 	#onChange = () => {};
 	#sliderDefaultValue = '0px';
@@ -186,12 +207,19 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			return defaultValue;
 		}
 
-		const match = valueStr.match( /^(\d+)(px|em|%|\s)?$/ );
+		// 'auto' is a keyword, not a measurement - keep it numeric-safe (0) so callers doing
+		// arithmetic on .value don't have to special-case it, same as print_range_input() on the PHP side.
+		if ( 'auto' === valueStr ) {
+			return { value: 0, unit: 'auto' };
+		}
+
+		// Lengths are not always whole numbers, '1.5em' has to survive the round trip.
+		const match = String( valueStr ).match( /^(\d+(?:\.\d+)?)(px|em|%|\s)?$/ );
 		if ( ! match ) {
 			return defaultValue;
 		}
 		return {
-			value: parseInt( match[ 1 ], 10 ),
+			value: parseFloat( match[ 1 ] ),
 			unit: match[ 2 ] || 'px'
 		};
 	}
@@ -219,14 +247,14 @@ export class frmRangeSliderComponent extends frmWebComponent {
 				type: 'vertical',
 				displaySliders: 'top,bottom',
 				iconSvgId: 'frm-margin-top-bottom',
-				ariaLabel: 'Vertical value',
+				ariaLabel: getLabelForType( 'vertical' ),
 				defaultValues: defaultValues.vertical,
 			},
 			{
 				type: 'horizontal',
 				displaySliders: 'left,right',
 				iconSvgId: 'frm-margin-left-right',
-				ariaLabel: 'Horizontal value',
+				ariaLabel: getLabelForType( 'horizontal' ),
 				defaultValues: defaultValues.horizontal,
 			}
 		];
@@ -304,7 +332,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 				units: options.units,
 				value: options.defaultValues[ item ],
 				iconSvgId: `frm-margin-${ item }`,
-				ariaLabel: `${ item } value`,
+				ariaLabel: getLabelForType( item ),
 				hidden: true,
 				addHiddenInputValue: false
 			} ) );
@@ -316,27 +344,32 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to create the slider track. This method is used to create the slider track.
 	 *
-	 * @param {Object} value - The value of the slider.
+	 * @param {Object} value     - The value of the slider.
+	 * @param {number} maxValue  - The maximum value of the slider.
+	 * @param {string} ariaLabel - The accessible label describing what the slider controls.
 	 * @return {Element} - The slider track element.
 	 */
-	static createSliderTrack( value ) {
-		const slider = document.createElement( 'span' );
+	static createSliderTrack( value, maxValue, ariaLabel ) {
+		const slider = document.createElement( 'input' );
+		slider.type = 'range';
 		slider.classList.add( 'frm-slider' );
-		slider.setAttribute( 'tabindex', '0' );
+		slider.min = '0';
 
-		const activeTrack = document.createElement( 'span' );
-		activeTrack.classList.add( 'frm-slider-active-track' );
+		// A percentage runs to 100 whatever maximum the component was given, but a value already
+		// saved above the maximum still has to be reachable or the handle would sit somewhere else.
+		const unitMax = '%' === value.unit ? 100 : parseFloat( maxValue );
+		slider.max = String( Math.max( unitMax, Math.ceil( value.value ) ) );
 
-		const bullet = document.createElement( 'span' );
-		bullet.classList.add( 'frm-slider-bullet' );
+		// Set the step before the value, since a range snaps whatever it is given to its step.
+		frmSliderComponent.applyStep( slider, value.value );
+		slider.value = value.value.toString();
 
-		const valueLabel = document.createElement( 'span' );
-		valueLabel.classList.add( 'frm-slider-value-label' );
-		valueLabel.textContent = value.value.toString();
+		// Colour the track straight away so it is right before anything else touches the slider.
+		frmSliderComponent.updateFill( slider );
 
-		bullet.append( valueLabel );
-		activeTrack.append( bullet );
-		slider.append( activeTrack );
+		if ( ariaLabel ) {
+			slider.setAttribute( 'aria-label', ariaLabel );
+		}
 
 		return slider;
 	}
@@ -356,7 +389,14 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 		const valueInput = document.createElement( 'input' );
 		valueInput.type = 'text';
-		valueInput.value = value.value.toString();
+
+		// 'auto' is a keyword, not a measurement - the unit dropdown already says so, so leave the
+		// text box blank and disabled rather than duplicating the word or showing a misleading 0.
+		if ( 'auto' === value.unit ) {
+			valueInput.disabled = true;
+		} else {
+			valueInput.value = value.value.toString();
+		}
 
 		if ( ariaLabel ) {
 			valueInput.setAttribute( 'aria-label', ariaLabel );
@@ -379,6 +419,9 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to create the dropdown option. This method is used to create the dropdown option.
+	 * The blank unit has no word of its own the way 'auto' does, and stays visually blank on
+	 * purpose (this field is only ever icon-width) - so it gets an aria-label instead of visible
+	 * text, otherwise it is entirely silent to a screen reader landing on it.
 	 *
 	 * @param {string}  value    - The value of the option.
 	 * @param {string}  label    - The label of the option.
@@ -390,6 +433,11 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		option.value = value;
 		option.textContent = label;
 		option.selected = selected;
+
+		if ( '' === label ) {
+			option.setAttribute( 'aria-label', __( 'Not set', 'formidable' ) );
+		}
+
 		return option;
 	}
 
@@ -417,7 +465,10 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * @return {Element} - The slider element.
 	 */
 	createSlider( options ) {
-		const { type, maxValue, units, value, iconSvgId, ariaLabel, hidden, addHiddenInputValue } = options;
+		const { type, maxValue, units, value, iconSvgId, hidden, addHiddenInputValue } = options;
+
+		// Fall back to the component's own label so a single slider is still named for screen readers.
+		const ariaLabel = options.ariaLabel || this._labelText || '';
 
 		const sliderWrapper = document.createElement( 'div' );
 		sliderWrapper.classList.add( 'frm-slider-component' );
@@ -429,6 +480,12 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 		if ( type ) {
 			sliderWrapper.setAttribute( 'data-type', type );
+		}
+
+		// A keyword value like 'auto' has no position on the track, same as print_range_input()'s
+		// PHP counterpart - show it disabled at zero instead of coercing it into a number.
+		if ( 'auto' === value.unit ) {
+			sliderWrapper.classList.add( 'frm-disabled' );
 		}
 
 		const flexContainer = document.createElement( 'div' );
@@ -444,7 +501,9 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		}
 
 		// Slider track
-		sliderContainer.append( frmRangeSliderComponent.createSliderTrack( value ) );
+		const rangeInput = frmRangeSliderComponent.createSliderTrack( value, maxValue, ariaLabel );
+		rangeInput.disabled = 'auto' === value.unit;
+		sliderContainer.append( rangeInput );
 		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
@@ -452,7 +511,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		const valueContainer = frmRangeSliderComponent.createSliderValueAndUnitSelection( value, ariaLabel, units, baseId );
 
 		if ( addHiddenInputValue ) {
-			valueContainer.append( this.createSliderHiddenInputValue( options ) );
+			valueContainer.append( this.createSliderHiddenInputValue( `${ value.value }${ value.unit || '' }` ) );
 		}
 
 		flexContainer.append( valueContainer );

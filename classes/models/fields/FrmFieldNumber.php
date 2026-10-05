@@ -29,11 +29,21 @@ class FrmFieldNumber extends FrmFieldType {
 			'clear_on_focus' => true,
 			'invalid'        => true,
 			'range'          => true,
+			'autocomplete'   => true,
 		);
 
 		$settings['max'] = false;
 
 		return $settings;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array( 'on', 'off', 'bday-day', 'bday-year', 'postal-code', 'transaction-amount', 'tel-extension' );
 	}
 
 	/**

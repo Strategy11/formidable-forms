@@ -1,11 +1,13 @@
 <?php
 
+/**
+ * @covers FrmAntiSpamController
+ * @covers FrmEntryValidate
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAntiSpamController::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryValidate::class )]
 class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 
-	/**
-	 * @covers FrmEntryValidate::blacklist_check
-	 * @covers FrmAntiSpamController::contains_wp_disallowed_words
-	 */
 	public function test_check() {
 		$values = array(
 			'item_meta'      => array(
