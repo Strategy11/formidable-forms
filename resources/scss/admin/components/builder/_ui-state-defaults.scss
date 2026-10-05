@@ -104,6 +104,7 @@
 	padding: 10px 10px 0;
 
 	> .frm_inner_field_container {
+		position: relative;
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
@@ -112,22 +113,23 @@
 			order: 1;
 			transition: 0.15s color ease;
 
-			/* Basis 0, not auto. The label is a block element filling the row, so an auto
-			   basis resolved to the container's full width and the icons wrapped to a second
-			   line at every card size — not just narrow ones. */
-			flex: 1 1 0%;
+			/* Hidden actions leave the entire first row available to the field name. */
+			flex: 1 1 100%;
 			min-width: 0;
 			margin-bottom: 0;
 		}
 
 		> .frm-field-action-icons {
 			order: 2;
-			position: static;
+			position: absolute;
+			top: 0;
+			right: 0;
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
 			min-width: 0;
 			margin-left: auto;
+			pointer-events: none;
 
 			/* 6px between the icons; the ID adds 2px more to reach the 8px the design has. */
 			gap: 6px;
@@ -154,6 +156,19 @@
 			min-width: 0;
 			margin-top: 6px;
 		}
+	}
+}
+
+/* Invisible actions stay out of the label row while remaining reachable by keyboard. */
+#frm-show-fields li.ui-state-default.frm_not_divider:is(:hover, .selected, :focus-within) > .frm_inner_field_container {
+
+	> .frm_primary_label {
+		flex-basis: 0%;
+	}
+
+	> .frm-field-action-icons {
+		position: static;
+		pointer-events: auto;
 	}
 }
 
