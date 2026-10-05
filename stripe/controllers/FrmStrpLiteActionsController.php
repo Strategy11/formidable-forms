@@ -624,6 +624,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'backgroundColor' => $settings['bg_color_active'],
 			),
 			'.Label'              => array(
+				'fontFamily'   => $settings['font'],
 				'color'        => $settings['label_color'],
 				'fontSize'     => $settings['font_size'],
 				'fontWeight'   => $settings['weight'],
@@ -634,6 +635,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'color' => $settings['border_color_error'],
 			),
 		);
+
+		if ( '' === (string) $settings['font'] ) {
+			// Leave the font out so Stripe uses its default stack instead of an empty value.
+			unset( $rules['.Label']['fontFamily'] );
+		}
 
 		/*
 		 * Filters the appearance rules for Stripe elements.
