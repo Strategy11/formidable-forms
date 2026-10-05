@@ -36,6 +36,7 @@ class FrmFieldText extends FrmFieldType {
 			'clear_on_focus' => true,
 			'format'         => true,
 			'invalid'        => true,
+			'autocomplete'   => true,
 		);
 	}
 

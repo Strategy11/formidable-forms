@@ -2,12 +2,13 @@
 
 /**
  * @group applications
+ *
+ * @covers FrmApplicationApi
  */
+#[\PHPUnit\Framework\Attributes\Group( 'applications' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmApplicationApi::class )]
 class test_FrmApplicationApi extends FrmUnitTest {
 
-	/**
-	 * @covers FrmApplicationApi::get_api_info
-	 */
 	public function test_get_api_info() {
 		$api          = new FrmApplicationApi();
 		$applications = $api->get_api_info();

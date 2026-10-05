@@ -2,12 +2,13 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntriesAJAXSubmitController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntriesAJAXSubmitController::class )]
 class test_FrmEntriesAJAXSubmitController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmEntriesAJAXSubmitController::maybe_modify_ajax_error
-	 */
 	public function test_maybe_modify_ajax_error() {
 		$error    = 'This field cannot be blank.';
 		$form     = $this->factory->form->create_and_get();

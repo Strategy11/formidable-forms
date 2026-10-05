@@ -35,7 +35,28 @@ class FrmFieldEmail extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
+			'autocomplete'   => true,
 		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array( 'on', 'off', 'email' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_new_field_defaults() {
+		$field                                  = parent::get_new_field_defaults();
+		$field['field_options']['autocomplete'] = 'email';
+		return $field;
 	}
 
 	/**

@@ -2,12 +2,13 @@
 
 /**
  * @group database
+ *
+ * @covers FrmDb
  */
+#[\PHPUnit\Framework\Attributes\Group( 'database' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmDb::class )]
 class test_FrmDb extends FrmUnitTest {
 
-	/**
-	 * @covers FrmDb::esc_order
-	 */
 	public function test_esc_order() {
 		$orders = array(
 			'it.created_at ASC'          => ' ORDER BY it.created_at asc',
@@ -25,9 +26,6 @@ class test_FrmDb extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmDb::db_column_exists
-	 */
 	public function test_db_column_exists() {
 		$this->assertTrue( FrmDb::db_column_exists( 'frm_fields', 'field_key' ) );
 		$this->assertTrue( FrmDb::db_column_exists( 'frm_items', 'is_draft' ) );

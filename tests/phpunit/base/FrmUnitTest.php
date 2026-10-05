@@ -2,6 +2,8 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
+	use FrmPHPUnitCompatibility;
+
 	/**
 	 * Track if an install has happened to avoid installing too often.
 	 *
@@ -40,6 +42,20 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function wpTearDownAfterClass() {
+	}
+
+	/**
+	 * Keep WordPress deprecation assertions working after PHPUnit 9.
+	 *
+	 * @return void
+	 */
+	public function expectDeprecated() {
+		if ( version_compare( \PHPUnit\Runner\Version::id(), '10.0', '<' ) ) {
+			parent::expectDeprecated();
+			return;
+		}
+
+		$this->set_up_deprecation_expectations();
 	}
 
 	public function setUp(): void {
@@ -108,9 +124,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-	/**
-	 * @covers FrmAppController::install()
-	 */
 	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			// Set this to false so all our tests won't be done with this active
@@ -620,38 +633,29 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	protected function create_users() {
-		$has_user = get_user_by( 'email', 'admin@mail.com' );
+		$roles = array(
+			'admin'      => 'administrator',
+			'editor'     => 'editor',
+			'subscriber' => 'subscriber',
+		);
 
-		if ( $has_user ) {
-			return;
+		foreach ( $roles as $login => $role ) {
+			// The WP test install already creates the admin user, and the factory
+			// throws when a login is taken, so only add the users that are missing.
+			if ( username_exists( $login ) ) {
+				continue;
+			}
+
+			$user_id = $this->factory->user->create_object(
+				array(
+					'user_login' => $login,
+					'user_email' => $login . '@mail.com',
+					'user_pass'  => $login,
+					'role'       => $role,
+				)
+			);
+			$this->assertNotEmpty( $user_id );
 		}
-
-		$admin_args = array(
-			'user_login' => 'admin',
-			'user_email' => 'admin@mail.com',
-			'user_pass'  => 'admin',
-			'role'       => 'administrator',
-		);
-		$admin      = $this->factory->user->create_object( $admin_args );
-		$this->assertNotEmpty( $admin );
-
-		$editor_args = array(
-			'user_login' => 'editor',
-			'user_email' => 'editor@mail.com',
-			'user_pass'  => 'editor',
-			'role'       => 'editor',
-		);
-		$editor      = $this->factory->user->create_object( $editor_args );
-		$this->assertNotEmpty( $editor );
-
-		$subscriber_args = array(
-			'user_login' => 'subscriber',
-			'user_email' => 'subscriber@mail.com',
-			'user_pass'  => 'subscriber',
-			'role'       => 'subscriber',
-		);
-		$subscriber      = $this->factory->user->create_object( $subscriber_args );
-		$this->assertNotEmpty( $subscriber );
 	}
 
 	/**
@@ -775,5 +779,31 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
 		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
+	}
+
+	/**
+	 * Assert that a checkbox-type input's wrapping <label> does not also carry a
+	 * `for` attribute -- the wrap alone already associates label and input, so a
+	 * redundant `for`/id pair makes Safari VoiceOver announce the label twice
+	 * (label_name_visible / duplicate association).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param string $field_description Used only in the failure message, e.g. "checkbox option" or "GDPR".
+	 *
+	 * @return void
+	 */
+	protected function assert_label_wraps_input_without_for( $html, $field_description ) {
+		$this->assertMatchesRegularExpression(
+			'/<label[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"Expected the {$field_description} label to wrap the checkbox input"
+		);
+		$this->assertDoesNotMatchRegularExpression(
+			'/<label[^>]*\sfor="[^"]*"[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"The {$field_description} label should not also carry a for attribute when it already wraps the input -- Safari VoiceOver double-announces it"
+		);
 	}
 }

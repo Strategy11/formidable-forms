@@ -31,7 +31,7 @@ $on_label_shown = $show_labels && $on_label != 1;
 
 $aria_attrs = array();
 
-if ( ! empty( $args['aria-label-attr'] ) ) {
+if ( isset( $args['aria-label-attr'] ) && '' !== $args['aria-label-attr'] ) {
 	$aria_attrs['aria-label'] = $args['aria-label-attr'];
 } elseif ( $off_label_shown || $on_label_shown ) {
 	// When this view renders its own visible label span(s), point at those

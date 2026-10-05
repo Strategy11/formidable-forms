@@ -2,7 +2,11 @@
 
 /**
  * @group forms
+ *
+ * @covers FrmForm
  */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmForm::class )]
 class test_FrmForm extends FrmUnitTest {
 
 	public function setUp(): void {
@@ -10,9 +14,42 @@ class test_FrmForm extends FrmUnitTest {
 		$this->create_users();
 	}
 
-	/**
-	 * @covers FrmForm::create
-	 */
+	public function test_partial_builder_save_preserves_unsubmitted_field_settings() {
+		$form_id   = $this->factory->form->create();
+		$edited    = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+		$untouched = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $form_id,
+				'type'          => 'text',
+				'name'          => 'Untouched field',
+				'default_value' => 'Keep this default',
+				'field_options' => array(
+					'classes'     => 'frm_half',
+					'placeholder' => 'Keep this placeholder',
+				),
+			)
+		);
+		$before    = FrmField::getOne( $untouched->id );
+		FrmForm::update_fields(
+			$form_id,
+			array(
+				'frm_fields_submitted' => array( $edited->id ),
+				'field_options'        => array( 'name_' . $edited->id => 'Changed field' ),
+			)
+		);
+
+		$this->assertSame( 'Changed field', FrmField::getOne( $edited->id )->name );
+		$after = FrmField::getOne( $untouched->id );
+		$this->assertSame( $before->name, $after->name );
+		$this->assertSame( $before->default_value, $after->default_value );
+		$this->assertSame( $before->field_options, $after->field_options );
+	}
+
 	public function test_create() {
 		$values  = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
@@ -20,9 +57,6 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertNotEmpty( $form_id );
 	}
 
-	/**
-	 * @covers FrmForm::duplicate
-	 */
 	public function test_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->all_fields_form_key );
 		$id   = FrmForm::duplicate( $form->id );
@@ -48,9 +82,6 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertCount( count( $old_child_form_fields ), $new_child_form_fields, 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
-	/**
-	 * @covers FrmForm::destroy
-	 */
 	public function test_destroy() {
 		$forms = FrmForm::getAll();
 		$this->assertNotEmpty( count( $forms ) );
@@ -69,9 +100,6 @@ class test_FrmForm extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmForm::set_status
-	 */
 	public function test_set_status() {
 		$form_id_1 = $this->factory->form->create();
 		$form_id_2 = $this->factory->form->create();
@@ -93,8 +121,9 @@ class test_FrmForm extends FrmUnitTest {
 	/**
 	 * @group visibility
 	 *
-	 * @covers FrmForm::is_visible_to_user
+	 * @see FrmForm::is_visible_to_user
 	 */
+	#[\PHPUnit\Framework\Attributes\Group( 'visibility' )]
 	public function test_is_form_visible_to_user() {
 		$this->assert_form_is_visible( 'administrator', 'editor', 'Administrator can view a form set to editor' );
 		$this->assert_form_is_hidden( 'editor', 'administrator', 'Editor cannot view form set to administrator' );
@@ -155,9 +184,6 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertFalse( $this->form_is_visible( $capability, $visibility ), $message );
 	}
 
-	/**
-	 * @covers FrmForm::sanitize_field_opt
-	 */
 	public function test_sanitize_field_opt() {
 		$this->assert_sanitize_field_opt_calc( '', '<div></div>', 'HTML should be stripped from calculations' );
 
@@ -211,9 +237,6 @@ class test_FrmForm extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmForm::normalize_calc_spaces
-	 */
 	public function test_normalize_calc_spaces() {
 		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
 		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
@@ -232,9 +255,6 @@ class test_FrmForm extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
 	}
 
-	/**
-	 * @covers FrmForm::getName
-	 */
 	public function test_getName() {
 		$form_name = 'Test form';
 		$form_id   = $this->factory->form->create( array( 'name' => $form_name ) );
@@ -242,10 +262,6 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertSame( $form_name, $name );
 	}
 
-	/**
-	 * @covers FrmForm::getOne
-	 * @covers FrmForm::prepare_form_row_data
-	 */
 	public function test_getOne() {
 		// Test to make sure a form with no options column value still has an array $form->options value.
 		$form_id = $this->create_a_form_with_an_empty_options_column();
