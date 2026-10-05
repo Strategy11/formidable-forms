@@ -14,11 +14,16 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Add some fields` );
-		cy.get( 'li[id="text"] a[title="Text"]' ).click( { force: true } );
-		cy.get( 'li[id="name"] a[title="Name"]' ).click( { force: true } );
-		cy.get( 'li[id="checkbox"] a[title="Checkboxes"]' ).click( { force: true } );
-		cy.get( 'li[id="email"] a[title="Email"]' ).click( { force: true } );
-		cy.get( 'li[id="phone"] a[title="Phone"]' ).click( { force: true } );
+		// Plain, always-visible sidebar links - no hover gating involved. Adding a field can leave
+		// the scrollable field-type panel (.frm-right-panel) scrolled to wherever the previous click
+		// left it, so a later link in the list can sit outside its own panel's visible scroll area -
+		// not a render-timing race (a longer timeout never resolves it), so scroll each one into view
+		// within its own panel before asserting visible.
+		cy.get( 'li[id="text"] a[title="Text"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="name"] a[title="Name"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="checkbox"] a[title="Checkboxes"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="email"] a[title="Email"]' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( 'li[id="phone"] a[title="Phone"]' ).scrollIntoView().should( 'be.visible' ).click();
 
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
@@ -55,7 +60,15 @@ describe( 'Entries submitted from a form', () => {
 		cy.go( 'back' );
 		cy.contains( '#the-list tr', 'Entry test' ).trigger( 'mouseover' ).then( $row => {
 			cy.wrap( $row ).within( () => {
-				cy.get( '.row-actions .delete .submitdelete' ).should( 'be.visible' ).click( { force: true } );
+				// WP core only reveals row-actions on a real CSS `:hover` (`.row-actions` is
+				// `position: relative; left: -9999em` until `tr:hover`) - make it actionable the
+				// way the real hover would, then click normally. Chained in one continuous command
+				// so there's no window between the reset and the click for a re-render to undo it.
+				cy.get( '.row-actions' )
+					.invoke( 'css', 'position', 'static' )
+					.find( '.delete .submitdelete' )
+					.should( 'be.visible' )
+					.click();
 			} );
 		} );
 		cy.contains( '.frm-confirm-msg', 'Permanently delete this entry?' );
@@ -63,7 +76,7 @@ describe( 'Entries submitted from a form', () => {
 
 		cy.log( 'Teardown - Close and delete form' );
 		cy.get( '.frm_form_nav > :nth-child(1) > a' ).should( 'contain', 'Build' ).click();
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click( { force: true } );
+		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
 		cy.deleteForm();
 	} );
 } );

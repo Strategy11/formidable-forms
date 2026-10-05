@@ -2,7 +2,11 @@
 
 /**
  * @group forms
+ *
+ * @covers FrmFormsHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormsHelper::class )]
 class test_FrmFormsHelper extends FrmUnitTest {
 
 	/**
@@ -10,9 +14,6 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 */
 	private $form;
 
-	/**
-	 * @covers FrmFormsHelper::maybe_add_sanitize_url_attr
-	 */
 	public function test_maybe_add_sanitize_url_attr() {
 		$this->form = $this->factory->form->create_and_get();
 		$field_id   = $this->factory->field->create(
@@ -73,9 +74,6 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertSame( $expected, FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $this->form->id ), $message );
 	}
 
-	/**
-	 * @covers FrmFormsHelper::get_plan_required
-	 */
 	public function test_get_plan_required() {
 		$this->assert_get_plan_required( 'free', array( 'Category1', 'free' ) );
 		$this->assert_get_plan_required( 'Elite', array( 'Category1', 'Elite', 'Category2' ) );
@@ -92,9 +90,6 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertSame( $expected, FrmFormsHelper::get_plan_required( $link ) );
 	}
 
-	/**
-	 * @covers FrmFormsHelper::get_form_style
-	 */
 	public function test_get_form_style() {
 		// Test null and 'default' form values.
 		$this->assertSame( 1, FrmFormsHelper::get_form_style( null ) );
@@ -150,7 +145,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	/**
 	 * The invalid error message should include a list of links that jump to each field that failed validation.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_builds_clickable_field_links() {
 		$this->form = $this->factory->form->create_and_get();
@@ -187,7 +182,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * Field types that render no input matching the field key, or an input that cannot take focus,
 	 * used to produce a link that went nowhere. Every type links to its container instead.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_links_every_field_type() {
 		$this->form = $this->factory->form->create_and_get();
@@ -227,7 +222,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * A combo field such as name or address reports an error per sub field, keyed
 	 * field{id}-{sub_field}. Those keys have their own container to link to.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_handles_combo_sub_field_keys() {
 		$this->form = $this->factory->form->create_and_get();
@@ -257,7 +252,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * A combo sub field inside a repeater row (field{id}-{section_id}-{row}-{sub_field}) has no
 	 * container of its own in the markup, so the link falls back to the row's field container.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_handles_combo_sub_fields_in_repeater_rows() {
 		$this->form = $this->factory->form->create_and_get();
@@ -287,7 +282,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * A combo field flags the sub field that failed with an empty error, as a marker for the input
 	 * rather than a message to show. Those must not become empty links in the summary.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_skips_errors_with_no_message() {
 		$this->form = $this->factory->form->create_and_get();
@@ -312,7 +307,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	/**
 	 * The summary can be turned off entirely with a filter, leaving just the invalid message.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_summary_can_be_filtered_off() {
 		$this->form = $this->factory->form->create_and_get();
@@ -338,7 +333,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	/**
 	 * Non-field errors such as 'form' or 'spam' have no input to link to and should be skipped.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_skips_non_field_errors() {
 		$this->form = $this->factory->form->create_and_get();
@@ -364,7 +359,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	/**
 	 * With no field errors there should be no list at all, only the base message.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_without_errors_has_no_list() {
 		$this->form = $this->factory->form->create_and_get();
@@ -379,7 +374,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * Error messages may contain admin HTML, so unsafe markup is stripped while safe inline
 	 * formatting is kept, and anchors are removed so they cannot nest inside the summary link.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_sanitizes_error_html() {
 		$this->form = $this->factory->form->create_and_get();
@@ -408,7 +403,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * Hidden and user ID fields render as hidden inputs that cannot receive focus, so their
 	 * errors should be listed as plain text instead of a link that would go nowhere.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_does_not_link_hidden_fields() {
 		$this->form = $this->factory->form->create_and_get();
@@ -442,7 +437,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * A repeater style error key (field{id}-{section_id}-{row}) should link to the field in the
 	 * correct row. A repeater row container carries the same suffix the error key does.
 	 *
-	 * @covers FrmFormsHelper::get_invalid_error_message
+	 * @see FrmFormsHelper::get_invalid_error_message
 	 */
 	public function test_get_invalid_error_message_handles_repeater_row_keys() {
 		$this->form = $this->factory->form->create_and_get();
@@ -467,7 +462,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * The message wrapper defaults to role="status" but can be switched to role="alert" for errors,
 	 * so the ajax error summary is announced the same way as the non-ajax one.
 	 *
-	 * @covers FrmFormsHelper::get_success_message
+	 * @see FrmFormsHelper::get_success_message
 	 */
 	public function test_get_success_message_role() {
 		$form = $this->factory->form->create_and_get();
@@ -521,5 +516,66 @@ class test_FrmFormsHelper extends FrmUnitTest {
 				'field_key' => $field_key,
 			)
 		);
+	}
+
+	public function test_is_error_summary_active_for_form() {
+		$form = $this->factory->form->create_and_get();
+
+		$this->assertTrue( FrmFormsHelper::is_error_summary_active_for_form( $form ) );
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+		$this->assertFalse( FrmFormsHelper::is_error_summary_active_for_form( $form ) );
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+	}
+
+	public function test_get_error_config_for_form_matches_active_summary() {
+		$form = $this->factory->form->create_and_get();
+
+		$this->assertSame(
+			array(
+				'includeAlertRole'  => false,
+				'focusFirstError'   => false,
+				'focusErrorSummary' => true,
+			),
+			FrmFormsHelper::get_error_config_for_form( $form )
+		);
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+
+		$this->assertSame(
+			array(
+				'includeAlertRole'  => true,
+				'focusFirstError'   => true,
+				'focusErrorSummary' => false,
+			),
+			FrmFormsHelper::get_error_config_for_form( $form )
+		);
+
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+	}
+
+	public function test_get_success_message_adds_tabindex_only_for_alert_role() {
+		$form = $this->factory->form->create_and_get();
+
+		$alert_html = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Oops',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => 'frm_error_style',
+				'role'     => 'alert',
+			)
+		);
+		$this->assertStringContainsString( 'tabindex="-1"', $alert_html );
+
+		$status_html = FrmFormsHelper::get_success_message(
+			array(
+				'message'  => 'Thanks',
+				'form'     => $form,
+				'entry_id' => 0,
+				'class'    => 'frm_message',
+			)
+		);
+		$this->assertStringNotContainsString( 'tabindex="-1"', $status_html );
 	}
 }

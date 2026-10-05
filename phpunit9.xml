@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" backupStaticAttributes="false" bootstrap="tests/phpunit/bootstrap.php" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" verbose="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage ignoreDeprecatedCodeUnits="true" processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./classes</directory>
+      <directory suffix=".php">./paypal</directory>
+      <directory suffix=".php">./square</directory>
+      <directory suffix=".php">./stripe</directory>
+      <file>formidable.php</file>
+    </include>
+    <exclude>
+      <directory suffix=".php">./classes/views</directory>
+      <directory suffix=".php">./paypal/views</directory>
+      <directory suffix=".php">./square/views</directory>
+      <directory suffix=".php">./stripe/views</directory>
+      <directory suffix=".php">./deprecated</directory>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="default">
+      <directory prefix="test_" suffix=".php">./tests/phpunit</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
