@@ -198,7 +198,8 @@ class FrmStylesHelper {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
-			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
+			<button id="frm_<?php echo esc_attr( $name ); ?>_button"
+				class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
 				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '+', $type ) ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ); ?>
 				<b class="caret"></b>

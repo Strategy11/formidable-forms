@@ -67,7 +67,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<hr />
 
 	<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm frm-pt-2xs">
-		<label for="frm-forms-list-show-desc"><?php esc_html_e( 'Description Excerpt', 'formidable' ); ?></label>
+		<label for="frm-forms-list-show-desc" id="frm-forms-list-show-desc_label"><?php esc_html_e( 'Description Excerpt', 'formidable' ); ?></label>
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm-forms-list-show-desc',

@@ -2,12 +2,13 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmTransLiteAppHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteAppHelper::class )]
 class test_FrmTransLiteAppHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmTransLiteAppHelper::get_user_id_for_current_payment
-	 */
 	public function test_get_user_id_for_current_payment_uses_the_logged_in_user() {
 		$this->set_current_user_to_1();
 		$this->assertSame( get_current_user_id(), FrmTransLiteAppHelper::get_user_id_for_current_payment() );
@@ -19,7 +20,7 @@ class test_FrmTransLiteAppHelper extends FrmUnitTest {
 	/**
 	 * An add on should be able to claim the payment for a user who isn't logged in yet.
 	 *
-	 * @covers FrmTransLiteAppHelper::get_user_id_for_current_payment
+	 * @see FrmTransLiteAppHelper::get_user_id_for_current_payment
 	 */
 	public function test_frm_payment_user_id_filter() {
 		$this->use_frm_role( 'loggedout' );
@@ -63,7 +64,7 @@ class test_FrmTransLiteAppHelper extends FrmUnitTest {
 	/**
 	 * A gateway is connected per mode, so the state has to be read per mode as well.
 	 *
-	 * @covers FrmTransLiteAppHelper::get_gateway_connection_state
+	 * @see FrmTransLiteAppHelper::get_gateway_connection_state
 	 */
 	public function test_get_gateway_connection_state_reads_each_mode_separately() {
 		$this->connect_gateway( 'square', 'test' );
@@ -77,7 +78,7 @@ class test_FrmTransLiteAppHelper extends FrmUnitTest {
 	 * The account status request is the thing that finishes onboarding, so 'incomplete' must not be
 	 * treated the same as 'disconnected' or that request would never be sent.
 	 *
-	 * @covers FrmTransLiteAppHelper::get_gateway_connection_state
+	 * @see FrmTransLiteAppHelper::get_gateway_connection_state
 	 */
 	public function test_get_gateway_connection_state_separates_an_unfinished_stripe_connection() {
 		$this->assertSame( 'disconnected', FrmTransLiteAppHelper::get_gateway_connection_state( 'stripe', 'live' ) );
@@ -93,15 +94,12 @@ class test_FrmTransLiteAppHelper extends FrmUnitTest {
 	 * An unknown gateway must not be reported as broken, or an add on gateway would be blocked
 	 * from taking payments by a check that knows nothing about it.
 	 *
-	 * @covers FrmTransLiteAppHelper::get_gateway_connection_state
+	 * @see FrmTransLiteAppHelper::get_gateway_connection_state
 	 */
 	public function test_get_gateway_connection_state_allows_an_unknown_gateway() {
 		$this->assertSame( 'connected', FrmTransLiteAppHelper::get_gateway_connection_state( 'authorize_net', 'live' ) );
 	}
 
-	/**
-	 * @covers FrmTransLiteAppHelper::get_gateway_connection_error
-	 */
 	public function test_get_gateway_connection_error_is_empty_when_connected() {
 		$this->connect_gateway( 'paypal', 'live' );
 		$this->assertSame( '', FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal', 'live' ) );
@@ -111,7 +109,7 @@ class test_FrmTransLiteAppHelper extends FrmUnitTest {
 	 * Connecting test mode and then switching to live is the most common reason a payment stops
 	 * working, and the API error for it says nothing about the mode. The message has to.
 	 *
-	 * @covers FrmTransLiteAppHelper::get_gateway_connection_error
+	 * @see FrmTransLiteAppHelper::get_gateway_connection_error
 	 */
 	public function test_get_gateway_connection_error_names_the_mode_that_is_connected() {
 		$this->connect_gateway( 'square', 'test' );
@@ -122,9 +120,6 @@ class test_FrmTransLiteAppHelper extends FrmUnitTest {
 		$this->assertStringContainsString( 'only connected in test mode', $error );
 	}
 
-	/**
-	 * @covers FrmTransLiteAppHelper::get_gateway_connection_error
-	 */
 	public function test_get_gateway_connection_error_when_no_mode_is_connected() {
 		$error = FrmTransLiteAppHelper::get_gateway_connection_error( 'square', 'live' );
 
@@ -135,7 +130,7 @@ class test_FrmTransLiteAppHelper extends FrmUnitTest {
 	/**
 	 * Only a user who can open the settings page should be told to go there.
 	 *
-	 * @covers FrmTransLiteAppHelper::get_gateway_connection_error
+	 * @see FrmTransLiteAppHelper::get_gateway_connection_error
 	 */
 	public function test_get_gateway_connection_error_only_points_admins_at_the_settings() {
 		$this->set_current_user_to_1();
