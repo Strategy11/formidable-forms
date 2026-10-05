@@ -1069,7 +1069,7 @@ class FrmFieldsController {
 		$placeholder = FrmField::get_option( $field, 'placeholder' );
 
 		if ( ! $placeholder ) {
-			$placeholder = self::get_default_value_from_name( $field );
+			return self::get_default_value_from_name( $field );
 		}
 
 		return $placeholder;
