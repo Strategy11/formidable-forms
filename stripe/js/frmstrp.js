@@ -649,7 +649,7 @@
 				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor ),
 				fontSmooth: 'auto'
 			},
-			rules: frm_stripe_vars.appearanceRules
+			rules: getAppearanceRules()
 		};
 		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
@@ -752,54 +752,80 @@
 			requiredIndicator.style.position = 'absolute';
 			requiredIndicator.style.fontSize = 'var(--font-size)';
 			requiredIndicator.style.top = '-4px';
-			requiredIndicator.style.left = `${ getEmailAsteriskOffset( cardElement ) }px`;
+			requiredIndicator.style.left = `${ getEmailAsteriskOffset() }px`;
 			requiredIndicator.style.padding = 'var(--label-padding)';
+			requiredIndicator.style.paddingLeft = '0';
 			requiredIndicator.setAttribute( 'aria-hidden', 'true' );
 			authenticationMountTarget.append( requiredIndicator );
 		} );
 	}
 
 	/**
-	 * Create a temporary label element to determine the width of the Email label.
-	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
+	 * Get the appearance rules to send to Stripe.
+	 * The Label font is limited to families the Stripe iframe can render, so the page can measure the same text.
 	 *
 	 * @since 6.35
 	 *
-	 * @param {Element} cardElement
+	 * @return {Object} Appearance rules.
+	 */
+	function getAppearanceRules() {
+		const rules = frm_stripe_vars.appearanceRules;
+		const label = rules[ '.Label' ];
+		if ( ! label || ! label.fontFamily ) {
+			return rules;
+		}
+		return Object.assign( {}, rules, { '.Label': Object.assign( {}, label, { fontFamily: removeWebFonts( label.fontFamily ) } ) } );
+	}
+
+	/**
+	 * Remove families that the page loads as web fonts from a font stack.
+	 * The Stripe iframe does not load them, so it falls back to the rest of the stack.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {string} fontFamily
+	 * @return {string} The font stack without web fonts.
+	 */
+	function removeWebFonts( fontFamily ) {
+		const unquote = family => family.trim().replace( /^['"]|['"]$/g, '' ).toLowerCase();
+		const webFonts = Array.from( document.fonts, font => unquote( font.family ) );
+		const families = fontFamily.split( ',' ).filter( family => family.trim() && ! webFonts.includes( unquote( family ) ) );
+		return families.length ? families.map( family => family.trim() ).join( ', ' ) : 'sans-serif';
+	}
+
+	/**
+	 * Create a temporary label element to determine the width of the Email label.
+	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
+	 * The label is styled from the same appearance rules that Stripe uses, so it does not inherit page styles.
+	 * The probe text is the English word, so the offset can be off when Stripe renders a localized label.
+	 *
+	 * @since 6.35
+	 *
 	 * @return {number} The label width in pixels.
 	 */
-	function getEmailAsteriskOffset( cardElement ) {
-		const label = document.createElement( 'label' );
-		label.classList.add( 'frm_primary_label', 'form-label' );
-		label.textContent = 'Email';
-		label.innerHTML += '&nbsp;';
+	function getEmailAsteriskOffset() {
+		const rules = getAppearanceRules()[ '.Label' ] || {};
+		const label = document.createElement( 'span' );
+		label.innerHTML = 'Email&nbsp;';
 
-		const tempContainer = document.createElement( 'div' );
-		tempContainer.classList.add( 'with_frm_style' );
-		tempContainer.style.position = 'absolute';
-		tempContainer.style.visibility = 'hidden';
-		tempContainer.style.height = '0';
-		tempContainer.style.overflow = 'hidden';
+		Object.assign(
+			label.style,
+			{
+				position: 'absolute',
+				visibility: 'hidden',
+				whiteSpace: 'nowrap',
+				fontFamily: rules.fontFamily || 'system-ui, sans-serif',
+				fontSize: rules.fontSize,
+				fontWeight: rules.fontWeight,
+				padding: rules.padding,
+				letterSpacing: 'normal',
+				textTransform: 'none'
+			}
+		);
 
-		const formContainer = cardElement.closest( '.with_frm_style' );
-		if ( formContainer ) {
-			each(
-				formContainer.classList,
-				function( className ) {
-					if ( className.startsWith( 'frm_style_' ) ) {
-						tempContainer.classList.add( className );
-						return false;
-					}
-				}
-			);
-		}
-
-		tempContainer.append( label );
-		document.body.append( tempContainer );
-
+		document.body.append( label );
 		const labelWidth = label.getBoundingClientRect().width;
-
-		tempContainer.remove();
+		label.remove();
 
 		return labelWidth;
 	}
