@@ -36,8 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'font_size', 'frm_font_size-value', __( 'Font Size', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -54,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
-							for="frm_required_weight"
+							for="frm_weight"
 							class="frm-style-item-heading"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field">
@@ -63,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$frm_style->get_field_name( 'weight' ),
 							$style->post_content['weight'],
 							array(
-								'id'      => 'frm_required_weight',
+								'id'      => 'frm_weight',
 								'options' => FrmStyle::get_bold_options(),
 							)
 						);
@@ -90,6 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="frm5 frm_form_field">
 						<label
+							for="frm_align-left"
 							class="frm-style-item-heading"><?php esc_html_e( 'Align', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field frm-sm-z-index">
@@ -98,6 +98,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$frm_style->get_field_name( 'align' ),
 							$style->post_content['align'],
 							array(
+								'id'      => 'frm_align',
 								'options' => array( 'left', 'right' ),
 							)
 						);
@@ -105,8 +106,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							class="frm-style-item-heading"><?php esc_html_e( 'Width', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'width', 'frm_width-value', __( 'Width', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field frm-md-z-index">
 						<?php
@@ -122,8 +122,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'label_padding', 'frm_label_padding-value', __( 'Padding', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
