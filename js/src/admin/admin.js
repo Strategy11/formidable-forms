@@ -5709,21 +5709,14 @@ window.frmAdminBuildJS = function() {
 
 		const ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		const shiftKeyIsDown = e.shiftKey;
-		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
+		// Get the selected groups first so the selected field's group is included when checking if the clicked group is active.
 		const $selectedFieldGroups = getSelectedFieldGroups();
+		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
 
 		let numberOfSelectedGroups = $selectedFieldGroups.length;
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
-
-			const selectedField = getSelectedField();
-			if ( null !== selectedField && ! jQuery( selectedField ).siblings( 'li.form-field' ).length ) {
-				// count a selected field on its own as a selected field group when multiselecting.
-				selectedField.parentNode.classList.add( 'frm-selected-field-group' );
-				++numberOfSelectedGroups;
-			}
-
 			if ( ctrlOrCmdKeyIsDown ) {
 				if ( groupIsActive ) {
 					// unselect if holding ctrl or cmd and the group was already active.
@@ -5894,9 +5887,9 @@ window.frmAdminBuildJS = function() {
 
 		const selectedField = getSelectedField();
 		if ( selectedField ) {
-			// If there is only one field in a group and the field is selected, consider the field's group as selected for multi-select.
+			// When a field is selected, consider the field's group as selected for multi-select.
 			const selectedFieldGroup = selectedField.closest( 'ul' );
-			if ( selectedFieldGroup && 1 === getFieldsInRow( jQuery( selectedFieldGroup ) ).length ) {
+			if ( selectedFieldGroup ) {
 				selectedFieldGroup.classList.add( 'frm-selected-field-group' );
 				return jQuery( selectedFieldGroup );
 			}
