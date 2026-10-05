@@ -68,15 +68,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				FrmFormsHelper::insert_opt_html(
 					array(
-						'id'    => $f->id,
-						'key'   => $f->field_key,
-						'name'  => $f->name,
-						'type'  => $f->type,
-						'class' => 'frm-customize-list dropdown-item',
+						'id'         => $f->id,
+						'key'        => $f->field_key,
+						'name'       => $f->name,
+						'type'       => $f->type,
+						'class'      => 'frm-customize-list dropdown-item',
+						'defer_icon' => $defer_icon,
 					)
 				);
 
-				do_action( 'frm_field_code_tab', array( 'field' => $f ) );
+				do_action(
+					'frm_field_code_tab',
+					array(
+						'field'      => $f,
+						'defer_icon' => $defer_icon,
+					)
+				);
 
 				if ( $f->type === 'user_id' ) {
 					$uid = $f->id;
@@ -86,6 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}//end if
 		?>
 		</ul>
+		<?php FrmFormsHelper::print_deferred_code_list_icons(); ?>
 	</div>
 
 	<?php

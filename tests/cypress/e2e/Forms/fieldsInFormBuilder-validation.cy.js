@@ -158,8 +158,8 @@ describe( 'Fields in the form builder', () => {
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 1 ).click();
 
 		cy.get( `[id^="frm_error_field_"]` ).eq( 0 ).should( 'contain', `Text cannot be blank.` );
-		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'contain', `Email is invalid` );
-		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'contain', `Phone is invalid` );
+		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'contain', 'Enter a valid email address, like name@example.com' );
+		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'contain', 'Enter a valid phone number' );
 		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
 
 		cy.log( 'Navigate back to the formidable form page' );
@@ -180,9 +180,82 @@ describe( 'Fields in the form builder', () => {
 		cy.get( `[id^="frm_error_field_"]` ).eq( 0 ).should( 'contain', `Text cannot be blank.` );
 		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'not.exist' );
 		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'not.exist' );
+		// js_validate's client-side path never renders the error summary markup, so focus
+		// must fall back to the first errored field.
+		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 0 ).should( 'have.focus' );
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 1 ).clear();
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 2 ).clear();
 		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
+
+		cy.log( 'Navigate back to the formidable form page' );
+		cy.go( 'back' );
+		// Same settle-before-teardown guard as the required-field test above.
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' );
+	} );
+
+	it( 'should accept an internationalized domain name in a Website/URL field', () => {
+		cy.openForm();
+
+		cy.log( 'Create a text field and a Website/URL field' );
+		// Plain, always-visible sidebar links - see the identical unforced click elsewhere in this file.
+		cy.get( 'li[id="text"] a[title="Text"]' ).should( 'be.visible' ).click();
+		cy.get( 'li[id="url"] a[title="Website/URL"]' ).should( 'be.visible' ).click();
+
+		cy.log( 'Allow international domain names on the Website/URL field' );
+		// Same field-row "more options" toggle as the required-field test above.
+		cy.get( 'li[data-ftype="url"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons', { timeout: 10000 } )
+			.invoke( 'css', 'opacity', 1 )
+			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
+			.first()
+			.scrollIntoView()
+			.should( 'be.visible' )
+			.click();
+		cy.get( 'li[data-ftype="url"] .frm_select_field > span' ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
+		// The setting lives in the Advanced section, which starts collapsed.
+		cy.get( 'li[data-ftype="url"]' ).invoke( 'data', 'fid' ).then( fieldNumericId => {
+			cy.get( `#frm-single-settings-${ fieldNumericId } h3[aria-label="Collapsible Advanced Settings"]`, { timeout: 10000 } ).scrollIntoView().click();
+			// Disable the expansion animation before scrolling to the lower settings.
+			cy.get( `#frm-single-settings-${ fieldNumericId } h3[aria-label="Collapsible Advanced Settings"]` )
+				.should( 'have.attr', 'aria-expanded', 'true' )
+				.next().invoke( 'css', 'animation', 'none' );
+			// The fixed builder layout leaves the WordPress containers at zero height.
+			// Remove their clipping while checking this setting so Cypress can interact normally.
+			cy.get( '#wpbody-content, #wpbody, #wpcontent' ).invoke( 'css', 'overflow', 'visible' );
+			cy.get( `#frm_allow_intl_domains_${ fieldNumericId }` ).scrollIntoView().should( 'be.visible' ).and( 'not.be.checked' ).check().should( 'be.checked' );
+			cy.get( '#wpbody-content, #wpbody, #wpcontent' ).invoke( 'css', 'overflow', '' );
+		} );
+
+		cy.log( 'Update form' );
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
+
+		cy.log( "Enabling the 'Validate this form with javascript' setting" );
+		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
+		// Same #wpbody-content visibility workaround as the javascript setting test above.
+		cy.get( '#js_validate' ).scrollIntoView().should( 'be.visible' ).click();
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
+
+		cy.log( 'Click on Preview - Blank Page' );
+		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
+		cy.get( '.preview > .frm-dropdown-menu > :nth-child(1) > a' ).should( 'contain', 'On Blank Page' ).invoke( 'removeAttr', 'target' ).click();
+
+		/**
+		 * A host with no dot must still be rejected. This proves the javascript validator really is
+		 * running on this field, so the assertion further down cannot pass for the wrong reason.
+		 */
+		cy.log( 'A host with no dot is still rejected' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 1 ).type( 'münchen' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 0 ).click();
+		cy.get( '[id^="frm_error_field_"]' ).should( 'exist' );
+
+		/**
+		 * An accented host must be accepted now that the field allows it. The regex runs out of the committed js/formidable.min.js,
+		 * which is rebuilt into js/frm.min.js when the plugin is activated, so a stale minified
+		 * artifact fails right here.
+		 */
+		cy.log( 'An internationalized domain name is accepted' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 1 ).clear().type( 'https://ernährung.ch' );
+		cy.get( '[id^="field_"]' ).filter( 'input' ).eq( 0 ).click();
+		cy.get( '[id^="frm_error_field_"]' ).should( 'not.exist' );
 
 		cy.log( 'Navigate back to the formidable form page' );
 		cy.go( 'back' );

@@ -34,7 +34,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 			return;
 		}
 
-		$this->data['unit_measurement']    = $this->detect_unit_measurement();
+		$this->data['unit_measurement']    = self::detect_unit_measurement( $this->field_value );
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
 		$this->data['value_label']         = self::measured_value( $field_value, $this->data['unit_measurement'] );
@@ -231,33 +231,33 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$right  = $values[1];
 
 		$this->data['vertical'] = array(
-			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => self::measured_value( $top, $this->detect_unit_measurement( $top ) ),
+			'unit'  => self::detect_unit_measurement( $top ),
+			'value' => self::measured_value( $top, self::detect_unit_measurement( $top ) ),
 		);
 
 		$this->data['horizontal'] = array(
-			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => self::measured_value( $right, $this->detect_unit_measurement( $right ) ),
+			'unit'  => self::detect_unit_measurement( $right ),
+			'value' => self::measured_value( $right, self::detect_unit_measurement( $right ) ),
 		);
 
 		$this->data['top'] = array(
-			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => self::measured_value( $top, $this->detect_unit_measurement( $top ) ),
+			'unit'  => self::detect_unit_measurement( $top ),
+			'value' => self::measured_value( $top, self::detect_unit_measurement( $top ) ),
 		);
 
 		$this->data['bottom'] = array(
-			'unit'  => $this->detect_unit_measurement( $bottom ),
-			'value' => self::measured_value( $bottom, $this->detect_unit_measurement( $bottom ) ),
+			'unit'  => self::detect_unit_measurement( $bottom ),
+			'value' => self::measured_value( $bottom, self::detect_unit_measurement( $bottom ) ),
 		);
 
 		$this->data['left'] = array(
-			'unit'  => $this->detect_unit_measurement( $left ),
-			'value' => self::measured_value( $left, $this->detect_unit_measurement( $left ) ),
+			'unit'  => self::detect_unit_measurement( $left ),
+			'value' => self::measured_value( $left, self::detect_unit_measurement( $left ) ),
 		);
 
 		$this->data['right'] = array(
-			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => self::measured_value( $right, $this->detect_unit_measurement( $right ) ),
+			'unit'  => self::detect_unit_measurement( $right ),
+			'value' => self::measured_value( $right, self::detect_unit_measurement( $right ) ),
 		);
 	}
 
@@ -347,15 +347,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @param string|null $value
+	 * @param string $value
 	 *
 	 * @return string
 	 */
-	private function detect_unit_measurement( $value = null ) {
-		if ( null === $value ) {
-			$value = $this->field_value;
-		}
-
+	private static function detect_unit_measurement( $value ) {
 		// 'auto' has its own option in the unit dropdown where that keyword is offered, so it can
 		// be selected (and announced) on load instead of always falling through to the blank option.
 		if ( 'auto' === $value ) {
@@ -371,6 +367,61 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		}
 
 		return preg_match( '/px$/', $value ) ? 'px' : '';
+	}
+
+	/**
+	 * Whether a slider's raw saved value renders its value input enabled - a disabled input can
+	 * never receive focus, so a template deciding whether a <label for="..."> is safe to point at
+	 * it needs this rather than assuming the field always has a live value.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $value Raw field value, e.g. '10px', '12.5' or 'auto'.
+	 *
+	 * @return bool
+	 */
+	public static function is_value_measured( $value ) {
+		return self::is_measured_unit( self::detect_unit_measurement( $value ) );
+	}
+
+	/**
+	 * Print a slider label's target attributes, linking enabled value inputs.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $style    The style containing the saved values in post_content.
+	 * @param string $key      The style setting key.
+	 * @param string $input_id The slider value input ID.
+	 *
+	 * @return void
+	 */
+	public static function echo_label_attributes( $style, $key, $input_id ) {
+		$attributes = array( 'data-slider-label-for' => $input_id );
+		$values     = explode( ' ', $style->post_content[ $key ] );
+
+		if ( self::is_value_measured( $values[0] ) ) {
+			$attributes['for'] = $input_id;
+		}
+
+		FrmAppHelper::array_to_html_params( $attributes, true );
+	}
+
+	/**
+	 * Print a style item heading for a slider value input.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $style    The style containing the saved values in post_content.
+	 * @param string $key      The style setting key.
+	 * @param string $input_id The slider value input ID.
+	 * @param string $label    The translated heading text.
+	 *
+	 * @return void
+	 */
+	public static function style_item_heading( $style, $key, $input_id, $label ) {
+		echo '<label class="frm-style-item-heading"';
+		self::echo_label_attributes( $style, $key, $input_id );
+		echo '>' . esc_html( $label ) . '</label>';
 	}
 
 	/**
