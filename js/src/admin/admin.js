@@ -7095,23 +7095,32 @@ window.frmAdminBuildJS = function() {
 			// "Product Type" setting to Single Product doesn't request a fresh render, so build
 			// the single-product preview markup here instead, mirroring product-single.php.
 			const existingInput = container.querySelector( `[name^="item_meta[${ fieldId }]"]` );
-			const fieldName = existingInput?.getAttribute( 'name' ) ?? `item_meta[${ fieldId }]`;
-			const htmlId = existingInput?.getAttribute( 'id' ) ?? `field_${ fieldId }`;
+			// Radio and checkbox inputs carry an option suffix in their id, and checkboxes a [] in their name.
+			const fieldName = `item_meta[${ fieldId }]`;
+			const fieldKey = document.getElementById( `frm_field_${ fieldId }_opts` )?.dataset.key;
+			const htmlId = fieldKey ? `field_${ fieldKey }` : ( existingInput?.getAttribute( 'id' ) ?? `field_${ fieldId }` );
 			const fieldVal = existingInput?.value ?? '';
 
 			// Not existingInput.cloneNode(true): the stale markup being replaced here is often
 			// a <select> (a fresh field's server-rendered default data type), whose children
 			// and tag semantics don't carry over to the hidden input product-single.php expects.
-			labelEl = document.createElement( 'p' );
-			labelEl.className = 'frm_single_product_label';
+			labelEl = tag( 'p', { className: 'frm_single_product_label' } );
 
-			hiddenInput = document.createElement( 'input' );
-			hiddenInput.type = 'hidden';
-			hiddenInput.name = fieldName;
-			hiddenInput.id = htmlId;
-			hiddenInput.value = fieldVal;
+			hiddenInput = tag( 'input', { id: htmlId } );
+			frmDom.setAttributes( hiddenInput, {
+				type: 'hidden',
+				name: fieldName,
+				value: fieldVal
+			} );
 
-			container.replaceChildren( labelEl, hiddenInput );
+			// Pro renders this wrapper in product-single.php, and its frm_custom_reset_displayed_opts
+			// handler skips the preview update when the wrapper is missing.
+			container.replaceChildren(
+				div( {
+					className: 'frm_single_product_wrap',
+					children: [ labelEl, hiddenInput ]
+				} )
+			);
 		}
 
 		const parts = [];
@@ -7123,6 +7132,39 @@ window.frmAdminBuildJS = function() {
 		}
 		labelEl.innerHTML = purifyHtml( parts.join( ': ' ) );
 		hiddenInput.dataset.frmprice = price;
+	}
+
+	/**
+	 * When a product field switches away from Single Product, swap the single product preview
+	 * for an input of the new type so resetDisplayedOpts rebuilds the options preview.
+	 * Without this, the leftover hidden input has no data-field-type and the preview breaks.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldId
+	 * @param {string} productType The new product type: select, radio or checkbox.
+	 */
+	function maybeReplaceSingleProductPreview( fieldId, productType ) {
+		const container = document.querySelector( `#field_${ fieldId }_inner_container > .frm_form_fields` );
+		const singleInput = container?.querySelector( 'input[type="hidden"][data-frmprice]' );
+		if ( ! singleInput ) {
+			return;
+		}
+
+		let input;
+		if ( 'select' === productType ) {
+			input = tag( 'select', { id: singleInput.id } );
+		} else {
+			input = tag( 'input', { id: singleInput.id } );
+			frmDom.setAttributes( input, {
+				type: 'hidden',
+				'data-field-type': productType
+			} );
+		}
+		input.setAttribute( 'name', singleInput.getAttribute( 'name' ) );
+
+		container.replaceChildren( input );
+		resetDisplayedOpts( fieldId );
 	}
 
 	/**
@@ -11046,6 +11088,7 @@ window.frmAdminBuildJS = function() {
 		const container = settings.find( '.frmjs_product_choices' );
 		const heading = settings.find( '.frm_prod_options_heading' );
 		const currentVal = this.options[ this.selectedIndex ].value;
+		const fieldId = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
 		const displayFormatOptions = settings[ 0 ].querySelector( '.frm_display_format_options' );
 		if ( displayFormatOptions ) {
@@ -11061,11 +11104,12 @@ window.frmAdminBuildJS = function() {
 			// Build the single-product preview right away instead of waiting for the user to
 			// also edit an option's label/price - the settings panel's option rows (and their
 			// current label/price values) already exist regardless of this setting's value.
-			const fieldId = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 			updateSingleProductLabel( fieldId );
 		} else if ( 'user_def' === currentVal ) {
 			container.addClass( 'frm_prod_type_user_def' );
 			heading.addClass( 'frm_prod_user_def' );
+		} else {
+			maybeReplaceSingleProductPreview( fieldId, currentVal );
 		}
 
 		wp.hooks.doAction( 'frm_product_type_toggled', currentVal, settings[ 0 ] );
