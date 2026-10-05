@@ -72,8 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'success_font_size', 'frm_success_font_size-value', __( 'Font Size', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -147,8 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'error_font_size', 'frm_error_font_size-value', __( 'Font Size', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
