@@ -5697,8 +5697,8 @@ window.frmAdminBuildJS = function() {
 	function fieldGroupClick( e ) {
 		maybeShowFieldGroupMessage();
 
-		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
-			// only continue if the group itself was clicked / ignore when a field is clicked.
+		if ( e.target !== e.currentTarget ) {
+			// only continue if the group itself was clicked / ignore when a field or a nested group is clicked.
 			return;
 		}
 
