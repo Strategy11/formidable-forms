@@ -18,6 +18,20 @@
 	font-size: var(--text-md);
 }
 
+// Header cells are <th>, not core's <td>, so the rule above would otherwise grow them past core's sizing.
+// Scoped to table.widefat rather than .wp-list-table: the Export table doesn't carry that class.
+table.widefat thead th.check-column,
+table.widefat tfoot th.check-column {
+	font-size: var(--text-sm);
+	padding: 4px 0 0 3px;
+	vertical-align: middle;
+}
+
+.frm-white-body table.widefat.frm-export-table thead th:not(.check-column) {
+	font-size: var(--text-sm);
+	vertical-align: top;
+}
+
 .frm-white-body table.widefat th a {
 	color: var(--grey-700);
 }

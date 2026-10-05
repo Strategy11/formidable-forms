@@ -145,6 +145,12 @@
 		width: 1.2rem;
 		height: 1.2rem;
 	}
+
+	// Core's td.check-column padding-top at this breakpoint; see _widefat.scss.
+	table.widefat thead th.check-column,
+	table.widefat tfoot th.check-column {
+		padding-top: 10px;
+	}
 }
 
 @media only screen and (max-width: 700px) {

@@ -1041,9 +1041,8 @@ class FrmListHelper {
 				);
 			}//end if
 
-			$tag   = 'cb' === $column_key ? 'td' : 'th';
-			$scope = 'th' === $tag ? 'scope="col"' : '';
-			$id    = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
+			// The cb column's row cells are `<th scope="row">`, so its header must be a real `<th>` too (IBM table_headers_exists).
+			$id = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
 
 			if ( $class ) {
 				$class = "class='" . esc_attr( implode( ' ', $class ) ) . "'";
@@ -1053,7 +1052,7 @@ class FrmListHelper {
 				// Hide the labels but show the border.
 				$column_display_name = '';
 			}
-			echo "<$tag $scope $id $class $aria_sort_attr>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo "<th scope=\"col\" $id $class $aria_sort_attr>$column_display_name</th>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}//end foreach
 	}
 
@@ -1078,11 +1077,12 @@ class FrmListHelper {
 			$this->display_tablenav( 'top' );
 		}
 		$this->screen->render_screen_reader_content( 'heading_list' );
+		$has_headers = $this->has_min_items( 1 );
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
-			<?php if ( $this->has_min_items( 1 ) ) { ?>
+		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>"<?php echo $has_headers ? '' : ' role="presentation"'; ?>>
+			<?php if ( $has_headers ) { ?>
 			<thead>
 				<tr>
 					<?php $this->print_column_headers(); ?>
@@ -1094,7 +1094,7 @@ class FrmListHelper {
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
-			<?php if ( $this->has_min_items( 1 ) && $this->should_display( $args, 'display-bottom-headers' ) ) { ?>
+			<?php if ( $has_headers && $this->should_display( $args, 'display-bottom-headers' ) ) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
