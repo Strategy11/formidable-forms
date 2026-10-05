@@ -17,7 +17,7 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * Persist an invalidation before changing the source, including when Pro is inactive.
+	 * Notify integrations before changing entry metadata.
 	 *
 	 * @since x.x
 	 *
@@ -28,12 +28,6 @@ class FrmEntryMeta {
 	 */
 	private static function before_meta_change( $entry_id, $field_id ) {
 		do_action( 'frm_before_entry_meta_change', $entry_id, $field_id );
-
-		$fields = (array) get_option( 'frmpro_meta_index_fields', array() );
-
-		if ( isset( $fields[ $field_id ] ) || false !== get_option( 'frmpro_meta_index_' . absint( $field_id ) ) ) {
-			update_option( 'frmpro_meta_index_dirty_' . absint( $field_id ), true, false );
-		}
 	}
 
 	/**
