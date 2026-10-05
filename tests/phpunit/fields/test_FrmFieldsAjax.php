@@ -116,7 +116,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			);
 		}
 
-		$_POST = array(
+		$_POST    = array(
 			'action'         => 'frm_load_field',
 			'nonce'          => wp_create_nonce( 'frm_ajax' ),
 			'form_id'        => $this->form_id,
