@@ -2,12 +2,13 @@
 
 /**
  * @group shortcodes
+ *
+ * @covers FrmShortcodeHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'shortcodes' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmShortcodeHelper::class )]
 class test_FrmShortcodeHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmShortcodeHelper::get_shortcode_attribute_array
-	 */
 	public function test_get_shortcode_attribute_array() {
 		$shortcodes = array(
 			' id="x" minimize=1' => array(
@@ -24,9 +25,6 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmShortcodeHelper::get_shortcode_tag
-	 */
 	public function test_get_shortcode_tag() {
 		$shortcodes = array(
 			'[25]',
@@ -52,9 +50,6 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmShortcodeHelper::remove_inline_conditions
-	 */
 	public function test_remove_inline_conditions() {
 		$title = 'Testing';
 		$codes = array(

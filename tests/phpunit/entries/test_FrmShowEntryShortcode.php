@@ -7,7 +7,14 @@
  * @group entries
  * @group show-entry-shortcode
  * @group free
+ *
+ * @covers FrmEntriesController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'shortcodes' )]
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\Group( 'show-entry-shortcode' )]
+#[\PHPUnit\Framework\Attributes\Group( 'free' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntriesController::class )]
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	public static function wpSetUpBeforeClass() {
@@ -37,8 +44,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no entry or id passed
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_no_entry_or_id_passed() {
@@ -56,8 +62,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no id passed
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_no_id_passed() {
@@ -78,8 +83,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests fake id passed
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_fake_id_passed() {
@@ -98,8 +102,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no entry passed
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_no_entry_passed() {
@@ -121,8 +124,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests no meta passed
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_no_meta_passed() {
@@ -145,8 +147,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_basic_default_message_parameters_all_field_types() {
@@ -168,8 +169,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_extras="html"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_extras_included() {
@@ -194,8 +194,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_fields="x,y,z"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_specific_field_ids_included() {
@@ -220,8 +219,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_fields="x,y,z"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_specific_field_keys_included() {
@@ -246,8 +244,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message fields="x,y,z"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_old_fields_parameter() {
@@ -276,8 +273,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message fields="x,y,z"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_old_fields_parameter_single_field() {
@@ -302,8 +298,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message exclude_fields="x,y,z"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_specific_field_ids_excluded() {
@@ -328,8 +323,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message exclude_fields="x,y,z"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_specific_field_keys_excluded() {
@@ -354,8 +348,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message include_fields="x,y,z"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_specific_field_ids_included_and_include_extras() {
@@ -382,8 +375,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message font_size, text_color, border_width, border_color, bg_color]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_styling_changes() {
@@ -418,8 +410,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message inline_style=0]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_inline_style_off() {
@@ -445,8 +436,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message user_info=1]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_user_info() {
@@ -468,8 +458,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message plain_text=1]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_plain_text() {
@@ -491,8 +480,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message plain_text=1 include_extras="page,section,html"]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_plain_text_and_include_extras() {
@@ -516,8 +504,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests [default-message direction=rtl]
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_message_with_rtl_direction() {
@@ -542,8 +529,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests Default HTML for emails
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_html_for_email() {
@@ -564,8 +550,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests Default HTML for emails
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.04
 	 */
 	public function test_default_plain_for_email() {
@@ -586,8 +571,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets entry data
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_array_format_for_api() {
@@ -609,8 +593,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets the default HTML
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_default_array_for_api() {
@@ -632,8 +615,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way an API action gets entry data
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_api_entry_retrieval() {
@@ -656,8 +638,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the way Zapier gets entry data
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_array_format_for_zapier() {
@@ -680,8 +661,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * Tests the json format
 	 *
-	 * @covers FrmEntriesController::show_entry_shortcode
-	 *
+	 * @see FrmEntriesController::show_entry_shortcode
 	 * @since 2.05
 	 */
 	public function test_json_format() {

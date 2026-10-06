@@ -8,6 +8,12 @@ a.frm-link-secondary {
 	text-decoration: underline;
 }
 
+// Underline small links so they don't rely on color alone (WCAG 1.4.1).
+.frm-text-xs a:not(.frm-link-with-external-icon),
+a.frm-text-xs:not(.frm-link-with-external-icon) {
+	text-decoration: underline;
+}
+
 .field_type_list li.button.frm_noallow,
 .field_type_list li.button.frm_noallow:hover,
 .button.frm_noallow,

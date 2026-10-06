@@ -1,7 +1,11 @@
 <?php
 /**
  * @group app
+ *
+ * @covers FrmAppHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'app' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAppHelper::class )]
 class test_FrmAppHelper extends FrmUnitTest {
 
 	public function setUp(): void {
@@ -9,9 +13,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->create_users();
 	}
 
-	/**
-	 * @covers FrmAppHelper::plugin_version
-	 */
 	public function test_plugin_version() {
 		$version = FrmAppHelper::plugin_version();
 		$this->assertNotEmpty( $version );
@@ -21,18 +22,12 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $version, $expected_version );
 	}
 
-	/**
-	 * @covers FrmAppHelper::plugin_folder
-	 */
 	public function test_plugin_folder() {
 		$folder   = FrmAppHelper::plugin_folder();
 		$expected = array( 'formidable', 'formidable-forms' );
 		$this->assertContains( $folder, $expected );
 	}
 
-	/**
-	 * @covers FrmAppHelper::plugin_path
-	 */
 	public function test_plugin_path() {
 		$path          = FrmAppHelper::plugin_path();
 		$expected_file = $path . '/formidable.php';
@@ -42,32 +37,23 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * The path is relative if it starts with /
 	 *
-	 * @covers FrmAppHelper::relative_plugin_url
+	 * @see FrmAppHelper::relative_plugin_url
 	 */
 	public function test_relative_plugin_url() {
 		$path = FrmAppHelper::relative_plugin_url();
 		$this->assertSame( 0, strpos( $path, '/' ) );
 	}
 
-	/**
-	 * @covers FrmAppHelper::site_url
-	 */
 	public function test_site_url() {
 		$url = FrmAppHelper::site_url();
 		$this->assertSame( 'http://example.org', $url );
 	}
 
-	/**
-	 * @covers FrmAppHelper::plugin_url
-	 */
 	public function test_plugin_url() {
 		$url = FrmAppHelper::plugin_url();
 		$this->assertNotEmpty( $url );
 	}
 
-	/**
-	 * @covers FrmAppHelper::make_affiliate_url
-	 */
 	public function test_make_affiliate_url() {
 		add_filter( 'frm_affiliate_id', '__return_false' );
 		$urls = array( 'http://site.com', 'https://site.com/page/' );
@@ -90,9 +76,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_settings
-	 */
 	public function test_get_settings() {
 		$settings = FrmAppHelper::get_settings();
 		$this->assertNotEmpty( $settings );
@@ -100,9 +83,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertNotEmpty( $settings->success_msg );
 	}
 
-	/**
-	 * @covers FrmAppHelper::pro_is_installed
-	 */
 	public function test_pro_is_installed() {
 		$active = FrmAppHelper::pro_is_installed();
 
@@ -113,9 +93,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppHelper::is_formidable_admin
-	 */
 	public function test_is_formidable_admin() {
 		$page_names = array(
 			'nope'               => false,
@@ -149,9 +126,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppHelper::is_empty_value
-	 */
 	public function test_is_empty_value() {
 		$empty_value = FrmAppHelper::is_empty_value( '' );
 		$this->assertTrue( $empty_value );
@@ -166,9 +140,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( $not_empty_value );
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_server_value
-	 */
 	public function test_get_server_value() {
 		$url = FrmAppHelper::get_server_value( 'HTTP_HOST' );
 		$this->assertSame( 'example.org', $url );
@@ -178,9 +149,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( 'example.org', $url );
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_param
-	 */
 	public function test_get_param() {
 		$set_value              = '<script></script>test';
 		$expected_value         = 'test';
@@ -198,10 +166,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $result, $expected_value );
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_post_param
-	 * @covers FrmAppHelper::get_simple_request
-	 */
 	public function test_get_post_param() {
 		$set_value      = '<script></script>test';
 		$expected_value = 'test';
@@ -210,9 +174,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $result, $expected_value );
 	}
 
-	/**
-	 * @covers FrmAppHelper::sanitize_value
-	 */
 	public function test_sanitize_value() {
 		$values = array(
 			array(
@@ -237,10 +198,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppHelper::simple_get
-	 * @covers FrmAppHelper::get_simple_request
-	 */
 	public function test_simple_get() {
 		$set_value      = '<script></script>test';
 		$expected_value = 'test';
@@ -249,9 +206,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $result, $expected_value );
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_simple_request
-	 */
 	public function test_get_simple_request() {
 		$result = FrmAppHelper::get_simple_request(
 			array(
@@ -274,9 +228,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $expected, $result );
 	}
 
-	/**
-	 * @covers FrmAppHelper::sanitize_request
-	 */
 	public function test_sanitize_request() {
 		$values = array(
 			'form_id'    => '<script></script>12',
@@ -300,9 +251,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $values['content'], wp_kses_post( $values['content'] ) );
 	}
 
-	/**
-	 * @covers FrmAppHelper::kses
-	 */
 	public function test_kses() {
 		$start_value    = '<script><script>';
 		$safe_value     = 'Hello, <a href="/test">click here</a>';
@@ -314,9 +262,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $stripped_value, $safe_value );
 	}
 
-	/**
-	 * @covers FrmAppHelper::kses_submit_button
-	 */
 	public function test_kses_submit_button() {
 		$default_submit_button_html = '<div class="frm_submit">
 [if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
@@ -350,9 +295,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmAppHelper::kses_icon
-	 */
 	public function test_kses_icon() {
 		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:var(--purple)"><use href="#frm_zapier_icon" /></svg>';
 		$this->assertSame( $icon, FrmAppHelper::kses_icon( $icon ) );
@@ -370,9 +312,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $icon, FrmAppHelper::kses_icon( $icon ) );
 	}
 
-	/**
-	 * @covers FrmAppHelper::is_a_valid_color
-	 */
 	public function test_is_a_valid_color() {
 		$this->assertTrue( $this->is_a_valid_color( 'rgb(49, 119, 199)' ) );
 		$this->assertTrue( $this->is_a_valid_color( 'rgba(49, 119, 199, .5)' ) );
@@ -389,9 +328,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
 	}
 
-	/**
-	 * @covers FrmAppHelper::remove_get_action
-	 */
 	public function test_remove_get_action() {
 		$_GET['action']         = 'bulk_trash';
 		$start_url              = admin_url( 'admin.php?page=formidable&action=bulk_trash' );
@@ -401,18 +337,12 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertNotSame( $new_url, $start_url );
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_query_var
-	 */
 	public function test_get_query_var() {
 		$new_post_id = $this->go_to_new_post(); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 		$get_post_id = FrmAppHelper::get_query_var( '', 'p' );
 		$this->assertSame( $new_post_id, $get_post_id );
 	}
 
-	/**
-	 * @covers FrmAppHelper::allowed_html
-	 */
 	public function test_allowed_html() {
 		$safe_html = $this->run_private_method( array( 'FrmAppHelper', 'safe_html' ), array() );
 		$tests     = array(
@@ -441,9 +371,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppHelper::maybe_add_permissions
-	 */
 	public function test_maybe_add_permissions() {
 		$this->set_user_by_role( 'subscriber' );
 		$this->assertFalse( current_user_can( 'frm_view_forms' ), 'Subscriber can frm_view_forms' );
@@ -476,8 +403,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @group visibility
 	 *
-	 * @covers FrmAppHelper::wp_roles_dropdown (single)
+	 * @see FrmAppHelper::wp_roles_dropdown (single)
 	 */
+	#[\PHPUnit\Framework\Attributes\Group( 'visibility' )]
 	public function test_wp_roles_dropdown() {
 		ob_start();
 		FrmAppHelper::wp_roles_dropdown( 'field_options', 'administrator' );
@@ -492,8 +420,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @group visibility
 	 *
-	 * @covers FrmAppHelper::roles_options ($public = 'private')
+	 * @see FrmAppHelper::roles_options ($public = 'private')
 	 */
+	#[\PHPUnit\Framework\Attributes\Group( 'visibility' )]
 	public function test_roles_options() {
 		ob_start();
 		FrmAppHelper::roles_options( 'editor' );
@@ -509,8 +438,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @group visibility
 	 *
-	 * @covers FrmAppHelper::roles_options
+	 * @see FrmAppHelper::roles_options
 	 */
+	#[\PHPUnit\Framework\Attributes\Group( 'visibility' )]
 	public function test_roles_options_empty_string_option() {
 		ob_start();
 		FrmAppHelper::roles_options( '' );
@@ -538,9 +468,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertStringNotContainsString( $substring, $output, $message );
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_unique_key
-	 */
 	public function test_get_unique_key() {
 		// Test field keys
 		$table_name = 'frm_fields';
@@ -605,9 +532,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		return '___';
 	}
 
-	/**
-	 * @covers FrmAppHelper::ctype_xdigit
-	 */
 	public function test_ctype_xdigit() {
 		$this->assertTrue( FrmAppHelper::ctype_xdigit( 'fff' ) );
 		$this->assertTrue( FrmAppHelper::ctype_xdigit( 'a1a1a1' ) );
@@ -628,9 +552,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( 3, FrmAppHelper::count_decimals( '13.123' ) );
 	}
 
-	/**
-	 * @covers FrmAppHelper::get_ip_address
-	 */
 	public function test_get_ip_address() {
 		$this->assertSame( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address() );
 
@@ -641,9 +562,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( '1.2.3.4', FrmAppHelper::get_ip_address(), 'When custom header IPs are enabled, we should check for headers like HTTP_X_FORWARDED_FOR' );
 	}
 
-	/**
-	 * @covers FrmAppHelper::human_time_diff
-	 */
 	public function test_human_time_diff() {
 		$difference = FrmAppHelper::human_time_diff( 0, 0 );
 		$this->assertSame( '0 seconds', $difference );
@@ -661,9 +579,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( '2 days', $difference );
 	}
 
-	/**
-	 * @covers FrmAppHelper::unserialize_or_decode
-	 */
 	public function test_unserialize_or_decode() {
 		$json_encoded_string = '{"key":"value"}';
 		FrmAppHelper::unserialize_or_decode( $json_encoded_string );
@@ -678,9 +593,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( 'value', $serialized_string['key'] );
 	}
 
-	/**
-	 * @covers FrmAppHelper::maybe_unserialize_array
-	 */
 	public function test_maybe_unserialize_array() {
 		$serialized_string  = 'a:1:{s:3:"key";s:5:"value";}';
 		$unserialized_array = FrmAppHelper::maybe_unserialize_array( $serialized_string );
@@ -694,9 +606,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
 	}
 
-	/**
-	 * @covers FrmAppHelper::clip
-	 */
 	public function test_clip() {
 		// Test a function.
 		$echo_function = function () {
@@ -726,9 +635,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		echo '<div>My echo function content</div>';
 	}
 
-	/**
-	 * @covers FrmAppHelper::add_dismissable_warning_message
-	 */
 	public function test_add_dismissable_warning_message() {
 		// Test with missing message and option parameters.
 		FrmAppHelper::add_dismissable_warning_message();
@@ -752,9 +658,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEmpty( $messages );
 	}
 
-	/**
-	 * @covers FrmAppHelper::truncate
-	 */
 	public function test_truncate() {
 		$assertions = array(
 			array(
@@ -775,9 +678,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppHelper::truncate
-	 */
 	public function test_truncate_with_force_length_limit() {
 		// Test force_length_limit=false (default - can exceed limit slightly)
 		$result = FrmAppHelper::truncate( 'This is a test string that is quite long', 10, 3, '...', false );
@@ -808,9 +708,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( 'Short', $result, 'Short string should not be modified' );
 	}
 
-	/**
-	 * @covers FrmAppHelper::recursive_function_map
-	 */
 	public function test_recursive_function_map() {
 		$test_cases = array(
 			array(
@@ -834,5 +731,142 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$result = FrmAppHelper::recursive_function_map( $test_case['input'], $test_case['function'] );
 			$this->assertSame( $test_case['expected'], $result );
 		}
+	}
+
+	/**
+	 * The Surveys/Quizzes admin scripts are only ever enqueued on the form
+	 * builder page, so dequeuing them there breaks Likert row controls
+	 * whenever something else (the welcome checklist) also runs this method.
+	 *
+	 * @see FrmAppHelper::dequeue_extra_global_scripts
+	 */
+	public function test_dequeue_extra_global_scripts_keeps_scripts_on_form_builder_page() {
+		global $pagenow;
+		$original_pagenow = $pagenow;
+		$pagenow          = 'admin.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$_GET['page']       = 'formidable';
+		$_GET['frm_action'] = 'edit';
+
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-surveys-admin' );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-quizzes-form-action' );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+
+		$this->assertTrue( wp_script_is( 'frm-surveys-admin', 'enqueued' ), 'Surveys admin script should stay enqueued on the form builder page.' );
+		$this->assertTrue( wp_script_is( 'frm-quizzes-form-action', 'enqueued' ), 'Quizzes form action script should stay enqueued on the form builder page.' );
+
+		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['page'], $_GET['frm_action'] );
+		wp_dequeue_script( 'frm-surveys-admin' );
+		wp_dequeue_script( 'frm-quizzes-form-action' );
+	}
+
+	public function test_dequeue_extra_global_scripts_elsewhere() {
+		global $pagenow;
+		$original_pagenow = $pagenow;
+		$pagenow          = 'admin.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$_GET['page'] = 'formidable-addons';
+
+		wp_register_script( 'frm-surveys-admin', 'frm-surveys-admin.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-surveys-admin' );
+		wp_register_script( 'frm-quizzes-form-action', 'frm-quizzes-form-action.js', array(), '1.0', true );
+		wp_enqueue_script( 'frm-quizzes-form-action' );
+
+		FrmAppHelper::dequeue_extra_global_scripts();
+
+		$this->assertFalse( wp_script_is( 'frm-surveys-admin', 'enqueued' ) );
+		$this->assertFalse( wp_script_is( 'frm-quizzes-form-action', 'enqueued' ) );
+
+		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['page'] );
+	}
+
+	public function test_should_focus_first_error_defaults_true_without_a_form() {
+		$this->assertTrue( FrmAppHelper::should_focus_first_error() );
+	}
+
+	public function test_error_focus_and_alert_role_defaults_when_summary_is_active() {
+		$form = $this->factory->form->create_and_get();
+
+		// The clickable summary is on by default, so it should own both focus and the
+		// alert announcement, and the old per-field mechanisms should stand down.
+		$this->assertTrue( FrmAppHelper::should_focus_error_summary( $form ) );
+		$this->assertFalse( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertFalse( FrmAppHelper::should_include_alert_role_on_field_errors( $form ) );
+	}
+
+	public function test_error_focus_and_alert_role_defaults_when_summary_is_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_show_clickable_field_errors', '__return_false' );
+
+		$this->assertFalse( FrmAppHelper::should_focus_error_summary( $form ) );
+		$this->assertTrue( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertTrue( FrmAppHelper::should_include_alert_role_on_field_errors( $form ) );
+		remove_filter( 'frm_show_clickable_field_errors', '__return_false' );
+	}
+
+	public function test_should_focus_error_summary_can_be_filtered_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_focus_error_summary', '__return_false' );
+		$this->assertFalse( FrmAppHelper::should_focus_error_summary( $form ) );
+		remove_filter( 'frm_focus_error_summary', '__return_false' );
+	}
+
+	/**
+	 * Filtering the summary's own focus off must fall back to focusing the first field —
+	 * not leave both resolving false, which would leave focus going nowhere.
+	 *
+	 * @see FrmAppHelper::should_focus_first_error
+	 * @see FrmAppHelper::resolve_error_focus_target
+	 */
+	public function test_focus_falls_back_to_first_error_when_summary_focus_is_filtered_off() {
+		$form = $this->factory->form->create_and_get();
+
+		add_filter( 'frm_focus_error_summary', '__return_false' );
+
+		$this->assertTrue( FrmAppHelper::should_focus_first_error( $form ) );
+		$this->assertSame(
+			array(
+				'focus_first_error'   => true,
+				'focus_error_summary' => false,
+			),
+			FrmAppHelper::resolve_error_focus_target( $form )
+		);
+		remove_filter( 'frm_focus_error_summary', '__return_false' );
+	}
+
+	public function test_resolve_error_focus_target_prioritizes_summary_when_both_resolve_true() {
+		$form = $this->factory->form->create_and_get();
+
+		// Force the old mechanism back on even though the summary auto-resolved it off.
+		add_filter( 'frm_focus_first_error', '__return_true' );
+
+		$this->setExpectedIncorrectUsage( 'FrmAppHelper::resolve_error_focus_target' );
+
+		$target = FrmAppHelper::resolve_error_focus_target( $form );
+
+		$this->assertTrue( $target['focus_error_summary'] );
+		$this->assertFalse( $target['focus_first_error'] );
+
+		remove_filter( 'frm_focus_first_error', '__return_true' );
+	}
+
+	public function test_resolve_error_focus_target_without_conflict() {
+		$form   = $this->factory->form->create_and_get();
+		$target = FrmAppHelper::resolve_error_focus_target( $form );
+
+		$this->assertSame(
+			array(
+				'focus_first_error'   => false,
+				'focus_error_summary' => true,
+			),
+			$target
+		);
 	}
 }

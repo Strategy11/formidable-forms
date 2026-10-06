@@ -30,6 +30,37 @@
 	}
 
 	/**
+	 * Focus the visible control when a styler heading labels a hidden toggle or radio input.
+	 * Radio headings focus the selected option without changing the setting.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function initLabelFocus() {
+		document.getElementById( 'frm_style_sidebar' ).addEventListener( 'click', event => {
+			const label = event.target.closest( 'label.frm-style-item-heading' );
+			const input = label?.control;
+			if ( ! input || input.disabled || ! [ 'radio', 'checkbox' ].includes( input.type ) ) {
+				return;
+			}
+
+			let target;
+			if ( 'checkbox' === input.type ) {
+				target = input.parentElement.querySelector( '[role="switch"]' );
+			} else {
+				const component = input.closest( '.frm-radio-component' );
+				const radio = component?.querySelector( 'input:checked' ) || input;
+				const option = radio.nextElementSibling;
+				target = option.querySelector( '[role="radio"]' ) || option;
+				event.preventDefault();
+			}
+
+			target?.focus();
+		} );
+	}
+
+	/**
 	 * The "Quick Settings" swatches (Primary, Field Text, Field Border, Button Text) each summarize a single
 	 * underlying setting, but have no name attribute of their own, so they can't be found and updated by the
 	 * main reset loop in syncEditPageAfterResetAction(). This maps the setting key to that swatch's fixed id.
@@ -44,6 +75,7 @@
 	};
 
 	initCommonEventListeners();
+	initLabelFocus();
 	initPreview();
 	fixWpAuthModal();
 
@@ -685,7 +717,8 @@
 			return;
 		}
 
-		card.append( getHamburgerMenu( card.dataset ) );
+		const styleName = card.querySelector( '.frm-style-card-title' )?.textContent;
+		card.append( getHamburgerMenu( card.dataset, styleName ) );
 	}
 
 	/**
@@ -715,20 +748,39 @@
 	}
 
 	/**
+	 * @param {string} [styleName] The style's own name, when known.
+	 * @return {string} The dropdown toggle's accessible name for a style card.
+	 */
+	function getStyleOptionsLabel( styleName ) {
+		if ( ! styleName ) {
+			return __( 'Style Options', 'formidable' );
+		}
+
+		/* translators: %s: The style's name. */
+		return sprintf( __( 'Style options for %s', 'formidable' ), styleName );
+	}
+
+	/**
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
-	 * @param {DOMStringMap} data {
+	 * @param {DOMStringMap} data        {
 	 *     @type {string} editUrl
 	 *     @type {string} styleId
 	 *     @type {string} labelPosition
 	 *     @type {string} classname
 	 * }
+	 * @param {string}       [styleName] The style's own name, when known, so the trigger's
+	 *                                   accessible name distinguishes it from other cards' triggers.
 	 * @return {HTMLElement} The hamburger menu element.
 	 */
-	function getHamburgerMenu( data ) {
+	function getHamburgerMenu( data, styleName ) {
+		const label = getStyleOptionsLabel( styleName );
 		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
-			child: svg( { href: '#frm_thick_more_vert_icon' } )
+			children: [
+				svg( { href: '#frm_thick_more_vert_icon' } ),
+				span( { className: 'screen-reader-text', text: label } )
+			]
 		} );
 		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
@@ -1098,6 +1150,11 @@
 		const card = getCardByStyleId( styleId );
 		const titleElement = card.querySelector( '.frm-style-card-title' );
 		titleElement.textContent = newStyleName;
+
+		const toggleLabel = card.querySelector( '.frm-dropdown-toggle .screen-reader-text' );
+		if ( toggleLabel ) {
+			toggleLabel.textContent = getStyleOptionsLabel( newStyleName );
+		}
 	}
 
 	/**
@@ -1235,6 +1292,7 @@
 	 * @return {void}
 	 */
 	function syncEditPageAfterResetAction( response ) {
+		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
 		if ( defaultValues.indexOf( '{' ) === 0 ) {
 			defaultValues = JSON.parse( defaultValues );
@@ -1468,6 +1526,22 @@
 
 				debouncedPreviewUpdate();
 			}
+		} ).each( function() {
+			// wpColorPicker() hides the original input and shows a `.wp-color-result` button
+			// instead - repoint any label pointing at this input's id so clicking/focusing it
+			// reaches the visible, interactive button rather than a hidden input.
+			const label = this.id ? document.querySelector( `label[for="${ this.id }"]` ) : null;
+			if ( ! label ) {
+				return;
+			}
+
+			const result = this.closest( '.wp-picker-container' )?.querySelector( '.wp-color-result' );
+			if ( ! result ) {
+				return;
+			}
+
+			result.id = `${ this.id }_visible`;
+			label.setAttribute( 'for', result.id );
 		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 			const container = jQuery( this ).closest( '.wp-picker-container' );
