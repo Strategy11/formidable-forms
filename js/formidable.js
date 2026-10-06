@@ -744,6 +744,11 @@ function frmFrontFormJS() {
 		const recaptcha = form.querySelector( '.frm-g-recaptcha[data-size="invisible"], .g-recaptcha[data-size="invisible"]' );
 		if ( recaptcha ) {
 			const recaptchaID = recaptcha.dataset.rid;
+			if ( recaptcha.dataset.saveAsSpam === '1' &&
+				( typeof grecaptcha === 'undefined' || recaptchaID === undefined ) ) {
+				return false;
+			}
+
 			const alreadyChecked = grecaptcha.getResponse( recaptchaID );
 			if ( alreadyChecked.length === 0 ) {
 				return recaptcha;
@@ -771,7 +776,7 @@ function frmFrontFormJS() {
 		}
 
 		const recaptcha = formEl.querySelector( '.frm-g-recaptcha' );
-		if ( ! recaptcha ) {
+		if ( ! recaptcha || recaptcha.dataset.saveAsSpam === '1' ) {
 			return errors;
 		}
 

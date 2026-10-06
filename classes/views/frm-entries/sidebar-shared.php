@@ -141,7 +141,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample' ), true ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample', 'spam_reason' ), true ) ) {
 				continue;
 			}
 			$label = ucfirst( str_replace( '-', ' ', $k ) );
@@ -150,7 +150,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( 'spam_source' === $k ) {
 				$label = __( 'Spam reason', 'formidable' );
 				$icon  = 'frmfont frm_alert_icon';
-				$d     = FrmSpamEntriesHelper::get_source_label( (object) array( 'description' => array( 'spam_source' => $d ) ) );
+				$d     = FrmSpamEntriesHelper::get_source_label( (object) array( 'description' => $data ) );
 
 				if ( '' === $d ) {
 					$d = __( 'Not recorded', 'formidable' );

@@ -1026,19 +1026,29 @@ class FrmEntry {
 	 * @return string
 	 */
 	private static function get_entry_description( $values ) {
-		if ( ! empty( $values['description'] ) ) {
+		$spam_source = FrmSpamEntriesHelper::get_flagged_source( $values );
+
+		if ( ! empty( $values['description'] ) && ! $spam_source ) {
 			return FrmAppHelper::maybe_json_encode( $values['description'] );
 		}
 
-		$description = array(
-			'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
-			'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
-		);
+		$description = $values['description'] ?? array();
+		FrmAppHelper::unserialize_or_decode( $description );
 
-		$spam_source = FrmSpamEntriesHelper::get_flagged_source( $values );
+		if ( ! is_array( $description ) || ! $description ) {
+			$description = array(
+				'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
+				'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
+			);
+		}
 
 		if ( $spam_source ) {
 			$description['spam_source'] = $spam_source;
+			$spam_reason                = FrmSpamEntriesHelper::get_flagged_reason( $values );
+
+			if ( '' !== $spam_reason ) {
+				$description['spam_reason'] = $spam_reason;
+			}
 		}
 
 		return json_encode( $description );

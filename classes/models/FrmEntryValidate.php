@@ -177,7 +177,7 @@ class FrmEntryValidate {
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
 
 		self::validate_options( $errors, $posted_field, $value, $args );
-		self::validate_field_types( $errors, $posted_field, $value, $args );
+		self::validate_field_types( $errors, $posted_field, $value, array_merge( $args, array( 'is_new_submission' => self::is_new_submission( $values ) ) ) );
 
 		// Field might want to modify value before other parts of the system
 		// e.g. trim off excess values like in the case of fields with limit.
@@ -441,6 +441,19 @@ class FrmEntryValidate {
 		$args['errors'] = $errors;
 
 		$new_errors = $field_obj->validate( $args );
+
+		if ( $new_errors && $field_obj instanceof FrmFieldCaptcha && ! empty( $args['is_new_submission'] ) ) {
+			$error_key = 'field' . $args['id'];
+			$reason    = $field_obj->get_validation_failure_reason();
+
+			if ( '' === $reason ) {
+				$reason = $new_errors[ $error_key ] ?? '';
+			}
+
+			if ( isset( $new_errors[ $error_key ] ) && FrmSpamEntriesHelper::maybe_flag_submission( $posted_field->form_id, 'captcha', $reason ) ) {
+				unset( $new_errors[ $error_key ] );
+			}
+		}
 
 		if ( $new_errors ) {
 			$errors = array_merge( $errors, $new_errors );

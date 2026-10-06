@@ -55,6 +55,15 @@ class FrmSpamEntriesHelper {
 	private static $flagged_forms = array();
 
 	/**
+	 * Detailed spam reasons for forms flagged in this request.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<int, string>
+	 */
+	private static $flagged_reasons = array();
+
+	/**
 	 * Get active add-ons that do not support the spam entry status.
 	 *
 	 * @since x.x
@@ -107,6 +116,7 @@ class FrmSpamEntriesHelper {
 	 */
 	public static function get_default_handling() {
 		return array(
+			'captcha'             => self::BLOCK,
 			'honeypot'            => self::BLOCK,
 			'antispam'            => self::BLOCK,
 			'no_ip'               => self::BLOCK,
@@ -129,6 +139,7 @@ class FrmSpamEntriesHelper {
 	 */
 	public static function get_sources() {
 		$labels   = array(
+			'captcha'             => __( 'CAPTCHA errors', 'formidable' ),
 			'honeypot'            => __( 'Honeypot', 'formidable' ),
 			'antispam'            => __( 'JavaScript anti-spam check', 'formidable' ),
 			'no_ip'               => __( 'Missing IP address', 'formidable' ),
@@ -226,15 +237,19 @@ class FrmSpamEntriesHelper {
 	 *
 	 * @param int|string $form_id The submitted form ID.
 	 * @param string     $source  The spam source key.
+	 * @param string     $reason  Optional details explaining the failure.
 	 *
 	 * @return bool True when the submission was flagged. False when it should be rejected instead.
 	 */
-	public static function maybe_flag_submission( $form_id, $source ) {
+	public static function maybe_flag_submission( $form_id, $source, $reason = '' ) {
 		if ( ! self::should_save( $source ) ) {
 			return false;
 		}
 
-		self::$flagged_forms[ (int) $form_id ] = $source;
+		if ( ! isset( self::$flagged_forms[ (int) $form_id ] ) ) {
+			self::$flagged_forms[ (int) $form_id ]   = $source;
+			self::$flagged_reasons[ (int) $form_id ] = sanitize_text_field( $reason );
+		}
 
 		return true;
 	}
@@ -262,6 +277,27 @@ class FrmSpamEntriesHelper {
 	}
 
 	/**
+	 * Get the detailed reason for a flagged entry, including inherited parent flags.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values The values for the entry being created.
+	 *
+	 * @return string
+	 */
+	public static function get_flagged_reason( $values ) {
+		foreach ( array( 'form_id', 'parent_form_id' ) as $key ) {
+			$form_id = isset( $values[ $key ] ) ? (int) $values[ $key ] : 0;
+
+			if ( $form_id && isset( self::$flagged_forms[ $form_id ] ) ) {
+				return self::$flagged_reasons[ $form_id ] ?? '';
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Clear the spam flags for this request.
 	 *
 	 * @since x.x
@@ -269,7 +305,8 @@ class FrmSpamEntriesHelper {
 	 * @return void
 	 */
 	public static function reset_flags() {
-		self::$flagged_forms = array();
+		self::$flagged_forms   = array();
+		self::$flagged_reasons = array();
 	}
 
 	/**
@@ -338,8 +375,13 @@ class FrmSpamEntriesHelper {
 
 		$sources = self::get_sources();
 		$source  = $description['spam_source'];
+		$label   = isset( $sources[ $source ]['label'] ) && is_string( $sources[ $source ]['label'] ) ? $sources[ $source ]['label'] : '';
 
-		return isset( $sources[ $source ]['label'] ) && is_string( $sources[ $source ]['label'] ) ? $sources[ $source ]['label'] : '';
+		if ( '' !== $label && ! empty( $description['spam_reason'] ) && is_string( $description['spam_reason'] ) ) {
+			$label .= ': ' . $description['spam_reason'];
+		}
+
+		return $label;
 	}
 
 	/**
