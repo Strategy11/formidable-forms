@@ -17,21 +17,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 $div_class     = $args['div_class'] ?? false;
 $show_labels   = $args['show_labels'] ?? false;
 $off_label     = $args['off_label'] ?? '';
-$on_label      = $args['on_label'] ?? 1;
-$value         = $args['value'] ?? $on_label;
+$on_label      = $args['on_label'] ?? '';
+$value         = $args['value'] ?? $args['on_label'] ?? 1;
 $checked       = isset( $args['checked'] ) && ( true === $args['checked'] || str_contains( $args['checked'], 'checked="checked"' ) );
 $disabled      = ! empty( $args['disabled'] );
 $aria_checked  = $checked ? 'true' : 'false';
 $input_html    = $args['input_html'] ?? array();
 $use_container = false;
 
+$off_label_shown = $show_labels && '' !== $off_label;
+$on_label_shown  = $show_labels && '' !== $on_label;
+
 $aria_attrs = array();
 
-if ( ! empty( $args['aria-label-attr'] ) ) {
+if ( isset( $args['aria-label-attr'] ) && '' !== $args['aria-label-attr'] ) {
 	$aria_attrs['aria-label'] = $args['aria-label-attr'];
+} elseif ( $off_label_shown || $on_label_shown ) {
+	// Use the visible labels for the accessible name when this view renders them.
+	$labelledby = array();
+
+	if ( $off_label_shown ) {
+		$labelledby[] = $id . '_off_label';
+	}
+
+	if ( $on_label_shown ) {
+		$labelledby[] = $id . '_on_label';
+	}
+	$aria_attrs['aria-labelledby'] = implode( ' ', $labelledby );
 } else {
 	$aria_attrs['aria-labelledby'] = $id . '_label';
-}
+}//end if
 $aria_attrs['aria-checked'] = $aria_checked;
 
 $div_params = array(
@@ -57,13 +72,13 @@ if ( $use_container ) {
 }
 ?>
 	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
-		<?php if ( $show_labels && $off_label ) { ?>
-			<span class="frm_off_label frm_toggle_opt frm-leading-none"><?php echo esc_html( $off_label ); ?></span>
+		<?php if ( $off_label_shown ) { ?>
+			<span id="<?php echo esc_attr( $id ); ?>_off_label" class="frm_off_label frm_toggle_opt frm-leading-none"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
 
 		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
 			<?php checked( $checked, true ); ?>
-			<?php if ( $show_labels && $off_label ) { ?>
+			<?php if ( $off_label_shown ) { ?>
 				data-off="<?php echo esc_attr( $off_label ); ?>"
 			<?php } ?>
 			<?php if ( $disabled ) { ?>
@@ -84,9 +99,8 @@ if ( $use_container ) {
 			<span class="frm_toggle_slider"></span>
 		</span>
 
-		<?php // phpcs:ignore Universal.Operators.StrictComparisons ?>
-		<?php if ( $show_labels && $on_label != 1 ) { ?>
-			<span class="frm_on_label frm_toggle_opt frm-leading-none"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
+		<?php if ( $on_label_shown ) { ?>
+			<span id="<?php echo esc_attr( $id ); ?>_on_label" class="frm_on_label frm_toggle_opt frm-leading-none"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
 		<?php } ?>
 	</label>
 <?php if ( $use_container ) { ?>

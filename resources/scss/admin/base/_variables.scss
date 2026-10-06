@@ -29,6 +29,18 @@
 	--sidebar-color: var(--grey-50);
 	--sidebar-hover: var(--grey-200);
 
+	/**
+	 * Interaction surfaces. Opaque rather than translucent: translucency pays off when the
+	 * background varies — dark mode, tinted rows — and this admin is a single light theme, so a
+	 * fixed value gives exact control of the hue instead.
+	 *
+	 * Compact is a step darker, because the same value over an icon-sized target reads as nothing.
+	 */
+	--surface-hover: var(--grey-50);
+	--surface-active: var(--grey-100);
+	--surface-hover-compact: var(--grey-100);
+	--surface-active-compact: var(--grey-200);
+
 	/* One hue (OKLCh 257.6) held across the ramp, lightness stepping evenly in
 	   perceived terms and chroma peaking at 500. The stops run 25 to 900, the
 	   same set the grey ramp above carries, so a primary and a grey at the same

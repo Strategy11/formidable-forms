@@ -2,7 +2,11 @@
 
 /**
  * @group spam
+ *
+ * @covers FrmAntiSpam
  */
+#[\PHPUnit\Framework\Attributes\Group( 'spam' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAntiSpam::class )]
 class test_FrmAntiSpam extends FrmUnitTest {
 
 	private $antispam;
@@ -18,10 +22,6 @@ class test_FrmAntiSpam extends FrmUnitTest {
 		parent::tearDown();
 	}
 
-	/**
-	 * @covers FrmAntiSpam::init
-	 * @covers FrmAntiSpam::add_token_to_form
-	 */
 	public function test_init_only_adds_token_filters_once() {
 		$this->set_private_property( 'FrmAntiSpam', 'filters_added', false );
 		remove_filter( 'frm_run_antispam', '__return_false' );
@@ -37,9 +37,6 @@ class test_FrmAntiSpam extends FrmUnitTest {
 		$this->assertSame( 1, substr_count( apply_filters( 'frm_form_div_attributes', '', $second_form ), 'data-token=' ) );
 	}
 
-	/**
-	 * @covers FrmAntiSpam::add_token_to_form
-	 */
 	public function test_token_is_not_added_to_forms_without_antispam() {
 		$this->set_private_property( 'FrmAntiSpam', 'filters_added', false );
 		remove_filter( 'frm_run_antispam', '__return_false' );
@@ -55,45 +52,30 @@ class test_FrmAntiSpam extends FrmUnitTest {
 		$this->assertSame( 1, substr_count( apply_filters( 'frm_form_attributes', '', $antispam_form ), 'data-token=' ) );
 	}
 
-	/**
-	 * @covers FrmAntiSpam::get
-	 */
 	public function test_get() {
 		$token_string = $this->run_private_method( array( $this->antispam, 'get' ) );
 		$this->assertIsString( $token_string );
 		$this->assertGreaterThanOrEqual( 32, strlen( $token_string ) );
 	}
 
-	/**
-	 * @covers FrmAntiSpam::get_antispam_secret_key
-	 */
 	public function test_get_antispam_secret_key() {
 		$secret_key = $this->run_private_method( array( $this->antispam, 'get_antispam_secret_key' ) );
 		$this->assertIsString( $secret_key );
 		$this->assertGreaterThanOrEqual( 32, strlen( $secret_key ) );
 	}
 
-	/**
-	 * @covers FrmAntiSpam::get_valid_tokens
-	 */
 	public function test_get_valid_tokens() {
 		$valid_tokens = $this->run_private_method( array( $this->antispam, 'get_valid_tokens' ) );
 		$this->assertIsArray( $valid_tokens );
 		$this->assertGreaterThanOrEqual( 1, count( $valid_tokens ) );
 	}
 
-	/**
-	 * @covers FrmAntiSpam::verify
-	 */
 	public function test_verify() {
 		$valid_tokens = $this->run_private_method( array( $this->antispam, 'get_valid_tokens' ) );
 		$valid_token  = reset( $valid_tokens );
 		$this->assertTrue( $this->run_private_method( array( $this->antispam, 'verify' ), array( $valid_token ) ) );
 	}
 
-	/**
-	 * @covers FrmAntiSpam::get_missing_token_message
-	 */
 	public function test_missing_token_message_tags_the_troubleshooting_link_for_a_super_admin() {
 		$this->set_current_user_to_1();
 		grant_super_admin( get_current_user_id() );

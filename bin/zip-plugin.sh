@@ -49,6 +49,7 @@ zip -r $zipname $destination \
 	-x "*/.windsurf/*" \
 	-x "*/.devin/*" \
 	-x "*/.vscode/*" \
+	-x "*/.achecker.yml" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \

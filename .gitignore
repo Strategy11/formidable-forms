@@ -82,3 +82,5 @@ report-task.txt
 
 # Mago
 bin/mago
+
+.phpunit.cache/

@@ -1,15 +1,20 @@
-on: [push]
+on:
+  pull_request:
+    types: [ opened, labeled, synchronize ]
 
 name: PHPStan Code Analysis
 # Cancel superseded runs for the same branch. The group is named explicitly
 # rather than derived from github.workflow: several files share the workflow
 # name `Inspections` and would otherwise cancel each other.
 concurrency:
-  group: formidable-phpstan-${{ github.ref }}
+  group: formidable-phpstan-${{ github.ref }}-${{ ((contains(github.event.pull_request.labels.*.name, 'run analysis') || contains(github.event.pull_request.labels.*.name, 'full automated qa')) && (github.event.action != 'labeled' || github.event.label.name == 'run analysis' || github.event.label.name == 'full automated qa')) && 'active' || github.run_id }}
   cancel-in-progress: true
 
 jobs:
   phpstan:
+    if: >-
+      (contains(github.event.pull_request.labels.*.name, 'run analysis') || contains(github.event.pull_request.labels.*.name, 'full automated qa'))
+      && (github.event.action != 'labeled' || github.event.label.name == 'run analysis' || github.event.label.name == 'full automated qa')
     name: PHPStan
 
     runs-on: ubuntu-latest
