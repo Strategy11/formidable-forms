@@ -236,22 +236,18 @@
 	}
 
 	/**
-	 * The dropdown glyph ships at #9ea9b8 while the move glyph is --grey-500, so on hover the two
-	 * travelled different distances to the same colour and only one appeared to react.
-	 */
-	.frm-dropdown-toggle .frmsvg {
-		color: var(--grey-500);
-	}
-
-	/**
 	 * The move symbol used to hardcode stroke="#9EA9B8" while every other icon uses currentColor,
 	 * so it was the one glyph that ignored colour. Fixed in images/icons.svg — CSS cannot reach
 	 * inside a <use> shadow tree, so it could not be corrected from here.
 	 */
 
-	/* Inline-block adds a line box, which made the label row 24px instead of the design's 21px. */
+	/**
+	 * Inline-block adds a line box, which made the label row 24px instead of the design's 21px.
+	 * Inline-flex rather than flex: the field card's flex row blockifies it anyway, but a section's
+	 * icon row is a plain block, where flex pushed the menu onto a line of its own.
+	 */
 	.dropdown {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 	}
 

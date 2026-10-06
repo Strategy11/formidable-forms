@@ -191,6 +191,21 @@ Cypress.Commands.add( 'deleteForm', () => {
 	} );
 } );
 
+/**
+ * Reveal a builder field's action icons (Move, More Options) before clicking one.
+ *
+ * Until the row is hovered, selected or focused, the icons are transparent, positioned out of the
+ * label row, and `pointer-events: none` (see
+ * resources/scss/admin/components/builder/_ui-state-defaults.scss). Cypress can't produce a real
+ * `:hover`, so focus the More Options toggle instead. That applies the same reveal through the
+ * keyboard `:focus-within` rule. Forcing the styles inline is not enough: the row layout still
+ * changes on mousedown, when the toggle takes focus, and the click then lands on the container.
+ */
+Cypress.Commands.add( 'revealFieldActions', { prevSubject: 'element' }, subject => {
+	cy.wrap( subject ).find( '.frm-dropdown-toggle' ).focus();
+	return cy.wrap( subject );
+} );
+
 Cypress.Commands.add( 'openForm', () => {
 	cy.log( 'Click on the created form' );
 	cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
