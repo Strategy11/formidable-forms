@@ -14,10 +14,6 @@
 		}
 	},
 	"formidable-form-list": {
-		"input_label_exists": {
-			"reason": "The search input, bulk-action selector and select-all checkbox have no associated labels.",
-			"maxViolations": 3
-		},
 		"label_content_exists": {
 			"reason": "Form-row checkbox labels have no descriptive text. The number depends on the forms in the list.",
 			"observedViolations": 1
@@ -124,10 +120,6 @@
 		}
 	},
 	"formidable-import": {
-		"input_label_exists": {
-			"reason": "The export select-all checkbox has no associated label.",
-			"maxViolations": 1
-		},
 		"label_name_visible": {
 			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
 			"maxViolations": 1

@@ -407,7 +407,7 @@ class FrmListHelper {
 		}
 
 		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_html__( 'Select bulk action', 'formidable' ) . '</label>';
-		echo "<select name='action" . esc_attr( $two ) . "' id='bulk-action-selector-" . esc_attr( $which ) . "'>\n";
+		echo "<select name='action" . esc_attr( $two ) . "' id='bulk-action-selector-" . esc_attr( $which ) . "' aria-label='" . esc_attr__( 'Select bulk action', 'formidable' ) . "'>\n";
 		echo "<option value='-1' selected='selected'>" . esc_html__( 'Bulk Actions', 'formidable' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
@@ -970,7 +970,7 @@ class FrmListHelper {
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
 			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', 'formidable' ) . '</label>';
-			$columns['cb']    .= '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" />';
+			$columns['cb']    .= '<input id="cb-select-all-' . esc_attr( $cb_counter ) . '" type="checkbox" aria-label="' . esc_attr__( 'Select All', 'formidable' ) . '" />';
 			++$cb_counter;
 		}
 
