@@ -249,9 +249,13 @@
 	 * inside a <use> shadow tree, so it could not be corrected from here.
 	 */
 
-	/* Inline-block adds a line box, which made the label row 24px instead of the design's 21px. */
+	/**
+	 * Inline-block adds a line box, which made the label row 24px instead of the design's 21px.
+	 * Inline-flex rather than flex: the field card's flex row blockifies it anyway, but a section's
+	 * icon row is a plain block, where flex pushed the menu onto a line of its own.
+	 */
 	.dropdown {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 	}
 
