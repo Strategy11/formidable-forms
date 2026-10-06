@@ -61,6 +61,10 @@ class FrmFieldFactory {
 			$field = FrmField::getOne( $field );
 		}
 
+		if ( ! is_object( $field ) ) {
+			return self::get_field_type( '', $field );
+		}
+
 		return self::get_field_type( $field->type, $field );
 	}
 
@@ -102,6 +106,7 @@ class FrmFieldFactory {
 			'captcha'                      => 'FrmFieldCaptcha',
 			'name'                         => 'FrmFieldName',
 			'credit_card'                  => 'FrmFieldCreditCard',
+			'address'                      => 'FrmFieldAddress',
 			// Submit button field.
 			FrmSubmitHelper::FIELD_TYPE    => 'FrmFieldSubmit',
 			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),

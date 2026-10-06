@@ -6,14 +6,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryMeta {
 
 	/**
-	 * @param int    $entry_id
-	 * @param int    $field_id
-	 * @param string $meta_key usually set to '' as this parameter is no longer used.
-	 * @param mixed  $meta_value
+	 * Whether every entry meta write exposes the synchronization hooks.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function supports_entry_meta_change_hooks() {
+		return true;
+	}
+
+	/**
+	 * Notify integrations before changing entry metadata.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $entry_id Entry ID.
+	 * @param int $field_id Field ID.
+	 *
+	 * @return void
+	 */
+	private static function before_meta_change( $entry_id, $field_id ) {
+		do_action( 'frm_before_entry_meta_change', $entry_id, $field_id );
+	}
+
+	/**
+	 * @since 6.35 Added the $field parameter.
+	 *
+	 * @param int           $entry_id
+	 * @param int           $field_id
+	 * @param string        $meta_key   usually set to '' as this parameter is no longer used.
+	 * @param mixed         $meta_value
+	 * @param stdClass|null $field      The field $field_id belongs to, when the caller already has
+	 *                                  it loaded. Looked up here when it is not passed.
 	 *
 	 * @return int
 	 */
-	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
+	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value, $field = null ) {
 		global $wpdb;
 
 		if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
@@ -28,28 +57,46 @@ class FrmEntryMeta {
 			'created_at' => current_time( 'mysql', 1 ),
 		);
 
-		self::set_value_before_save( $new_values );
-		$new_values    = apply_filters( 'frm_add_entry_meta', $new_values );
+		self::set_value_before_save( $new_values, $field );
+		$new_values = apply_filters( 'frm_add_entry_meta', $new_values );
+		$entry_id   = $new_values['item_id'];
+		$field_id   = $new_values['field_id'];
+		self::before_meta_change( $entry_id, $field_id );
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_item_metas', $new_values );
 
 		if ( $query_results ) {
+			$meta_id = $wpdb->insert_id;
 			self::clear_cache();
 			wp_cache_delete( $entry_id, 'frm_entry' );
-			return $wpdb->insert_id;
+			/**
+			 * Fires after an entry meta value is inserted, updated, or deleted.
+			 *
+			 * @since x.x
+			 *
+			 * @param int $entry_id Entry ID.
+			 * @param int $field_id Field ID.
+			 */
+			do_action( 'frm_after_entry_meta_change', $entry_id, $field_id );
+			return $meta_id;
 		}
 
+		do_action( 'frm_entry_meta_write_failed', $entry_id, $field_id );
 		return 0;
 	}
 
 	/**
-	 * @param int          $entry_id
-	 * @param int          $field_id
-	 * @param string       $meta_key   Deprecated.
-	 * @param array|string $meta_value
+	 * @since 6.35 Added the $field parameter.
+	 *
+	 * @param int           $entry_id
+	 * @param int           $field_id
+	 * @param string        $meta_key   Deprecated.
+	 * @param array|string  $meta_value
+	 * @param stdClass|null $field      The field $field_id belongs to, when the caller already has
+	 *                                  it loaded. Looked up here when it is not passed.
 	 *
 	 * @return bool|int
 	 */
-	public static function update_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
+	public static function update_entry_meta( $entry_id, $field_id, $meta_key, $meta_value, $field = null ) {
 		if ( ! $field_id ) {
 			return false;
 		}
@@ -62,7 +109,7 @@ class FrmEntryMeta {
 		);
 		$where_values         = $values;
 		$values['meta_value'] = $meta_value;
-		self::set_value_before_save( $values );
+		self::set_value_before_save( $values, $field );
 		$values = apply_filters( 'frm_update_entry_meta', $values );
 
 		if ( is_array( $values['meta_value'] ) ) {
@@ -74,18 +121,32 @@ class FrmEntryMeta {
 		wp_cache_delete( $entry_id, 'frm_entry' );
 		self::clear_cache();
 
-		return $wpdb->update( $wpdb->prefix . 'frm_item_metas', array( 'meta_value' => $meta_value ), $where_values );
+		self::before_meta_change( $entry_id, $field_id );
+		$result = $wpdb->update( $wpdb->prefix . 'frm_item_metas', array( 'meta_value' => $meta_value ), $where_values );
+
+		if ( false === $result ) {
+			do_action( 'frm_entry_meta_write_failed', $entry_id, $field_id );
+		} else {
+			do_action( 'frm_after_entry_meta_change', $entry_id, $field_id );
+		}
+
+		return $result;
 	}
 
 	/**
 	 * @since 3.0
+	 * @since 6.35 Added the $field parameter.
 	 *
-	 * @param array $values
+	 * @param array         $values
+	 * @param stdClass|null $field  The field for $values['field_id'], when the caller already has
+	 *                              it loaded. Looked up here when it is not passed.
 	 *
 	 * @return void
 	 */
-	private static function set_value_before_save( &$values ) {
-		$field = FrmField::getOne( $values['field_id'] );
+	private static function set_value_before_save( &$values, $field = null ) {
+		if ( ! is_object( $field ) ) {
+			$field = FrmField::getOne( $values['field_id'] );
+		}
 
 		if ( ! $field ) {
 			return;
@@ -156,7 +217,7 @@ class FrmEntryMeta {
 
 			if ( ! $previous_field_ids || ! in_array( $field_id, $previous_field_ids, true ) ) {
 				// If value does not exist, then create it
-				self::add_entry_meta( $entry_id, $field_id, '', $meta_value );
+				self::add_entry_meta( $entry_id, $field_id, '', $meta_value, $field );
 				continue;
 			}
 
@@ -165,7 +226,7 @@ class FrmEntryMeta {
 				unset( $values_indexed_by_field_id[ $field_id ] );
 			} else {
 				// If value exists, then update it
-				self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
+				self::update_entry_meta( $entry_id, $field_id, '', $meta_value, $field );
 			}
 		}//end foreach
 
@@ -186,9 +247,17 @@ class FrmEntryMeta {
 		);
 		FrmDb::get_where_clause_and_values( $where );
 
+		foreach ( $field_ids_to_remove as $field_id ) {
+			self::before_meta_change( $entry_id, $field_id );
+		}
+
 		// Delete any leftovers
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		self::clear_cache();
+
+		foreach ( $field_ids_to_remove as $field_id ) {
+			do_action( 'frm_after_entry_meta_change', $entry_id, $field_id );
+		}
 	}
 
 	/**
@@ -226,7 +295,16 @@ class FrmEntryMeta {
 		global $wpdb;
 		self::clear_cache();
 
-		return $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_item_metas WHERE field_id=%d AND item_id=%d", $field_id, $entry_id ) );
+		self::before_meta_change( $entry_id, $field_id );
+		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE field_id = %d AND item_id = %d', $wpdb->prefix . 'frm_item_metas', $field_id, $entry_id ) );
+
+		if ( false === $result ) {
+			do_action( 'frm_entry_meta_write_failed', $entry_id, $field_id );
+		} else {
+			do_action( 'frm_after_entry_meta_change', $entry_id, $field_id );
+		}
+
+		return $result;
 	}
 
 	/**

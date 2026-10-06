@@ -9,6 +9,13 @@ on:
       - master
 
 name: Typo Checks
+# Cancel superseded runs for the same branch. The group is named explicitly
+# rather than derived from github.workflow: several files share the workflow
+# name `Inspections` and would otherwise cancel each other.
+concurrency:
+  group: formidable-typos-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run:
     name: Spell Check with Typos
@@ -18,4 +25,4 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Check spelling of file.txt
-      uses: crate-ci/typos@master
+      uses: crate-ci/typos@main

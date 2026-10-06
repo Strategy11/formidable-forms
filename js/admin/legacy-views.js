@@ -395,9 +395,11 @@
 			'dyn_default_value'
 		];
 
+		// eslint-disable-next-line sonarjs/prefer-native-jquery-alternative -- jQuery API kept, not refactored
 		if ( jQuery.inArray( id, a ) >= 0 ) {
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 			jQuery( `.frm_code_list a.hide_${ id }` ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+		// eslint-disable-next-line sonarjs/prefer-native-jquery-alternative -- jQuery API kept, not refactored
 		} else if ( jQuery.inArray( id, b ) >= 0 ) {
 			jQuery( `.frm_code_list:not(.frm-dropdown-menu) a:not(.show_${ id })` ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 			jQuery( `.frm_code_list a.show_${ id }` ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );

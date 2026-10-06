@@ -177,24 +177,13 @@ class FrmGatedContentAction extends FrmFormAction {
 	}
 
 	/**
-	 * Get posts for the "post" item type selector.
-	 *
-	 * Applies the `frm_gated_content_posts_query` filter so callers can extend
-	 * the post types or change any other WP_Query argument, then narrows the
-	 * result to posts that actually require a token: private posts and
-	 * password-protected posts. Plain published posts are publicly accessible
-	 * and should not appear as selectable gated content items.
-	 *
-	 * @return WP_Post[]
-	 */
-	/**
 	 * Get posts for all post-type-backed gated content item type selectors.
 	 *
-	 * Runs one query covering all enabled post types derived from get_types(), then
-	 * groups the results by type key. Only private and password-protected posts are
-	 * included — plain published posts are publicly accessible and not selectable.
+	 * Runs one query covering all enabled post types, then groups results by type key.
+	 * Only private and password-protected posts are included — plain published posts
+	 * are publicly accessible and should not appear as selectable gated content items.
 	 *
-	 * @return array<string, WP_Post[]> Posts keyed by item type slug (e.g. 'page', 'post').
+	 * @return array<string, list<object>> Posts keyed by item type slug (e.g. 'page', 'post').
 	 */
 	public static function get_posts() {
 		$post_types = array();
@@ -209,32 +198,19 @@ class FrmGatedContentAction extends FrmFormAction {
 			return array();
 		}
 
-		/**
-		 * Filter the get_posts() arguments used to build the gated content item selectors.
-		 *
-		 * The filtered list is then narrowed to private and password-protected posts only.
-		 *
-		 * @since 6.33
-		 *
-		 * @param array $query_args get_posts() argument array.
-		 */
-		$query_args = (array) apply_filters(
-			'frm_gated_content_posts_query',
+		/** @var object[] $raw_posts */
+		$raw_posts = FrmDb::get_results(
+			'posts',
 			array(
-				'post_type'              => $post_types,
-				'post_status'            => array( 'publish', 'private' ),
-				'orderby'                => 'title',
-				'order'                  => 'ASC',
-				'numberposts'            => -1,
-				'update_post_meta_cache' => false,
-				'update_post_term_cache' => false,
-			)
+				'post_type'   => $post_types,
+				'post_status' => array( 'publish', 'private' ),
+			),
+			'ID, post_title, post_password, post_status, post_type',
+			array( 'order_by' => 'post_title ASC' )
 		);
 
-		$raw_posts = get_posts( $query_args );
-		$raw_posts = is_array( $raw_posts ) ? $raw_posts : array();
-
 		// Initialise empty buckets in get_types() order.
+		/** @var array<string, list<object>> $grouped */
 		$grouped = array_fill_keys( $post_types, array() );
 
 		foreach ( $raw_posts as $post ) {
@@ -243,12 +219,13 @@ class FrmGatedContentAction extends FrmFormAction {
 				continue;
 			}
 
-			if ( isset( $grouped[ $post->post_type ] ) ) {
-				$grouped[ $post->post_type ][] = $post;
+			$post_type = (string) $post->post_type;
+
+			if ( isset( $grouped[ $post_type ] ) ) {
+				$grouped[ $post_type ][] = $post;
 			}
 		}
 
-		/** @var array<string, WP_Post[]> */
 		return $grouped;
 	}
 
@@ -259,7 +236,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 * jQuery UI autocomplete widget. Each entry has a `value` (post ID string) and
 	 * a `label` (post title).
 	 *
-	 * @param WP_Post[] $posts Posts returned by get_posts().
+	 * @param object[] $posts Posts returned by get_posts().
 	 *
 	 * @return string JSON-encoded array, or an empty string on encoding failure.
 	 */

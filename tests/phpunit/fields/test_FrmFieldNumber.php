@@ -3,6 +3,7 @@
 /**
  * @group fields
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
 class test_FrmFieldNumber extends FrmUnitTest {
 	public function test_check_value_is_valid_with_step() {
 		$number_field = new FrmFieldNumber();

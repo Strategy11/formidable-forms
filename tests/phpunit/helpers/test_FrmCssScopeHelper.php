@@ -3,6 +3,7 @@
 /**
  * @group helpers
  */
+#[\PHPUnit\Framework\Attributes\Group( 'helpers' )]
 class test_FrmCssScopeHelper extends FrmUnitTest {
 
 	/**

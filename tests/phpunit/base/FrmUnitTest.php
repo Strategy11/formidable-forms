@@ -2,6 +2,8 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
+	use FrmPHPUnitCompatibility;
+
 	/**
 	 * Track if an install has happened to avoid installing too often.
 	 *
@@ -23,6 +25,14 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $is_pro_active = false;
 
 	/**
+	 * Narrows the inherited property to the Formidable factory so static analysis
+	 * can resolve $this->factory->form, ->field and ->entry.
+	 *
+	 * @var FrmUnitTestFactory
+	 */
+	protected $factory;
+
+	/**
 	 * @var FrmUnitTest
 	 */
 	protected static $instance;
@@ -34,9 +44,25 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public static function wpTearDownAfterClass() {
 	}
 
+	/**
+	 * Keep WordPress deprecation assertions working after PHPUnit 9.
+	 *
+	 * @return void
+	 */
+	public function expectDeprecated() {
+		if ( version_compare( \PHPUnit\Runner\Version::id(), '10.0', '<' ) ) {
+			parent::expectDeprecated();
+			return;
+		}
+
+		$this->set_up_deprecation_expectations();
+	}
+
 	public function setUp(): void {
 		self::$instance = $this;
 		parent::setUp();
+
+		self::reset_shared_state();
 
 		// The JavaScript antispam check doesn't work with unit tests so turn it off.
 		add_filter( 'frm_run_antispam', '__return_false' );
@@ -57,6 +83,32 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Clear state that outlives a single test.
+	 *
+	 * PHPUnit gives each test its own database transaction, but globals and singletons live
+	 * for the whole process, so one test can leave another reading values it never set. A
+	 * test that needs any of this state should set it up itself; anything that passes only
+	 * because a previous test set it up is relying on the suite's ordering.
+	 *
+	 * @return void
+	 */
+	public static function reset_shared_state() {
+		// Read by FrmXMLHelper::populate_postmeta(), which takes a different code path when set.
+		$GLOBALS['frm_duplicate_ids'] = array();
+
+		// Populated in production only when a form renders, via FrmHoneypot::maybe_render_field().
+		foreach ( array( 'FrmFormState', 'FrmProFormState' ) as $state_class ) {
+			if ( ! class_exists( $state_class ) ) {
+				continue;
+			}
+
+			$instance = new ReflectionProperty( $state_class, 'instance' );
+			$instance->setAccessible( true );
+			$instance->setValue( null, null );
+		}
+	}
+
+	/**
 	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
 	 * This is a temporary workaround until we review FrmDb tests in detail.
 	 */
@@ -72,9 +124,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-	/**
-	 * @covers FrmAppController::install()
-	 */
 	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			// Set this to false so all our tests won't be done with this active
@@ -82,6 +131,17 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		if ( self::$installed ) {
+			/**
+			 * Empty the tables before re-importing.
+			 *
+			 * Importing over forms that already exist updates those forms but skips their
+			 * entries, so a re-import on its own leaves the fixture set with forms and no
+			 * entries. Every class that runs later in the same process then inherits that,
+			 * and which classes those are depends on how the suite happens to be ordered.
+			 * Truncating first makes the re-import restore entries too, so a class gets the
+			 * same fixture data no matter what ran before it.
+			 */
+			self::empty_tables();
 			self::import_xml();
 			return;
 		}
@@ -106,12 +166,85 @@ class FrmUnitTest extends WP_UnitTestCase {
 		 */
 		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 
+		self::isolate_install_from_plugin_folder();
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
+
+		/**
+		 * Start from empty tables even on the first install of the process.
+		 *
+		 * WordPress' install.php drops and recreates the tables it knows about on every process,
+		 * but Formidable's tables are not among them, so rows from a previous run survive. The
+		 * import below would then update the existing forms and skip their entries, leaving a
+		 * fixture set with forms and no entries. That is what makes a re-used database produce
+		 * failures unrelated to the code under test, and what breaks a parallel run as soon as
+		 * one worker runs a second process.
+		 */
+		self::empty_tables();
+
 		self::import_xml();
-		self::create_files();
+
+		do_action( 'frm_unit_test_install' );
+
 		self::$installed = true;
+	}
+
+	/**
+	 * Keep the install from writing into the plugin folder or reaching for the network.
+	 *
+	 * FrmAppHelper::plugin_path() and plugin_url() are derived from __DIR__, which PHP
+	 * resolves through symlinks, so they point at the real plugin folder rather than the
+	 * copy inside the wordpress-develop checkout the tests run against. Everything the
+	 * install writes relative to those therefore lands in the working tree of whoever is
+	 * running the suite, and is picked up by the site they develop against. Two writes do
+	 * that, and both are redirected here rather than skipped, so the code under test still
+	 * runs the same path it runs in production.
+	 *
+	 * @since 6.35
+	 *
+	 * @return void
+	 */
+	private static function isolate_install_from_plugin_folder() {
+		// Generate the stylesheet under uploads, which is disposable, instead of over css/formidableforms.css.
+		add_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
+
+		// Answer the request FrmMigrate makes before deciding to delete the plugin's .htaccess.
+		add_filter( 'pre_http_request', 'FrmUnitTest::respond_to_plugin_asset_request', 10, 3 );
+	}
+
+	/**
+	 * Serve requests for the plugin's own assets from here instead of over HTTP.
+	 *
+	 * A test run has no web server able to serve the plugin, so a request for one of its
+	 * files can only fail. FrmMigrate::maybe_delete_htaccess_file() reads that failure as a
+	 * server that cannot be trusted with the file and deletes the plugin's .htaccess, which
+	 * is tracked in the repository. Requests to anywhere else are left alone.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array|false|WP_Error $response A preemptive response, or false to let the request run.
+	 * @param array                $args     Request arguments.
+	 * @param string               $url      The request URL.
+	 *
+	 * @return array|false|WP_Error
+	 */
+	public static function respond_to_plugin_asset_request( $response, $args, $url ) {
+		if ( ! str_starts_with( $url, FrmAppHelper::plugin_url() . '/' ) ) {
+			return $response;
+		}
+
+		return array(
+			'headers'  => array(),
+			'body'     => '',
+			'response' => array(
+				'code'    => 200,
+				'message' => 'OK',
+			),
+			'cookies'  => array(),
+			'filename' => null,
+		);
 	}
 
 	public static function get_table_names() {
@@ -148,122 +281,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		$form = FrmForm::getOne( 'contact-db12' );
 		self::assertSame( 'contact-db12', $form->form_key );
-	}
-
-	public static function create_files() {
-		if ( ! is_callable( 'FrmProFileImport::import_attachment' ) ) {
-			return;
-		}
-
-		add_filter( 'frm_should_import_files', '__return_true' );
-
-		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
-		$multi_file_upload_field  = FrmField::getOne( 'multi-file-upload-field' );
-
-		$file_urls = array(
-			array(
-				'val'   => 'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
-				'field' => $single_file_upload_field,
-				'entry' => 'jamie_entry_key',
-			),
-			array(
-				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
-				'field' => $single_file_upload_field,
-				'entry' => 'steph_entry_key',
-			),
-			array(
-				'val'   => array(
-					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/global-settings_enter-license1.png',
-					'https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/create-a-form_add-new.png',
-					'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
-				),
-				'field' => $multi_file_upload_field,
-				'entry' => 'jamie_entry_key',
-			),
-			array(
-				'val'   => 'https://formidableforms.com/wp-content/uploads/formidable/formidablepro.real_estate_listings.2015-08-10.xml',
-				'field' => FrmField::getOne( 'file_upload_single' ),
-				'entry' => 'many_files_key',
-			),
-			array(
-				'val'   => array(
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-form.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/goal-progress.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/09/new-graph-types1.png',
-				),
-				'field' => FrmField::getOne( 'file_upload_multiple' ),
-				'entry' => 'many_files_key',
-			),
-			array(
-				'val'   => array(
-					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/user-registration-multisite.jpeg',
-					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/lost-password-form.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2017/07/login-form.png',
-				),
-				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
-				'entry' => 'file-repeat-child-one',
-			),
-			array(
-				'val'   => array(
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/normal-section-job-history-1.png',
-					'https://cdn.formidableforms.com/wp-content/uploads/2016/11/repeating-section-job-history-1.png',
-				),
-				'field' => FrmField::getOne( 'file_upload_multiple_repeating' ),
-				'entry' => 'file-repeat-child-two',
-			),
-		);
-
-		$uploads_dir = wp_upload_dir()['basedir'] . '/formidable/';
-		$test        = new FrmUnitTest();
-
-		foreach ( $file_urls as $values ) {
-			$vals      = (array) $values['val'];
-			$media_ids = false;
-
-			foreach ( $vals as $val ) {
-				$filename = basename( $val );
-				$path     = $uploads_dir . $filename;
-
-				if ( ! file_exists( $path ) && is_object( $values['field'] ) ) {
-					// File may be in formidable folder or it may be in the form_id folder so check the form as well.
-					$form_id_path = $uploads_dir . $values['field']->form_id . '/' . $filename;
-
-					if ( file_exists( $form_id_path ) ) {
-						copy( $form_id_path, $path );
-					}
-					unset( $form_id_path );
-				}
-
-				if ( ! file_exists( $path ) ) {
-					continue;
-				}
-
-				if ( ! is_array( $media_ids ) ) {
-					$media_ids = array();
-				}
-
-				$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
-			}
-
-			if ( is_array( $media_ids ) ) {
-				$media_ids = implode( ',', $media_ids );
-			}
-
-			if ( false === $media_ids ) {
-				$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
-			}
-
-			if ( is_array( $values['val'] ) ) {
-				$media_ids = explode( ',', $media_ids );
-			} else {
-				$is_file_val = is_numeric( $media_ids ) || strpos( $media_ids, ',' );
-				self::assertTrue( $is_file_val, 'The following file is not importing correctly: ' . $values['val'] );
-			}
-
-			// Insert into entries
-			$entry_id = FrmEntry::get_id_by_key( $values['entry'] );
-			FrmEntryMeta::add_entry_meta( $entry_id, $values['field']->id, null, $media_ids );
-		}
 	}
 
 	public function get_all_fields_for_form_key( $form_key ) {
@@ -616,38 +633,29 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	protected function create_users() {
-		$has_user = get_user_by( 'email', 'admin@mail.com' );
+		$roles = array(
+			'admin'      => 'administrator',
+			'editor'     => 'editor',
+			'subscriber' => 'subscriber',
+		);
 
-		if ( $has_user ) {
-			return;
+		foreach ( $roles as $login => $role ) {
+			// The WP test install already creates the admin user, and the factory
+			// throws when a login is taken, so only add the users that are missing.
+			if ( username_exists( $login ) ) {
+				continue;
+			}
+
+			$user_id = $this->factory->user->create_object(
+				array(
+					'user_login' => $login,
+					'user_email' => $login . '@mail.com',
+					'user_pass'  => $login,
+					'role'       => $role,
+				)
+			);
+			$this->assertNotEmpty( $user_id );
 		}
-
-		$admin_args = array(
-			'user_login' => 'admin',
-			'user_email' => 'admin@mail.com',
-			'user_pass'  => 'admin',
-			'role'       => 'administrator',
-		);
-		$admin      = $this->factory->user->create_object( $admin_args );
-		$this->assertNotEmpty( $admin );
-
-		$editor_args = array(
-			'user_login' => 'editor',
-			'user_email' => 'editor@mail.com',
-			'user_pass'  => 'editor',
-			'role'       => 'editor',
-		);
-		$editor      = $this->factory->user->create_object( $editor_args );
-		$this->assertNotEmpty( $editor );
-
-		$subscriber_args = array(
-			'user_login' => 'subscriber',
-			'user_email' => 'subscriber@mail.com',
-			'user_pass'  => 'subscriber',
-			'role'       => 'subscriber',
-		);
-		$subscriber      = $this->factory->user->create_object( $subscriber_args );
-		$this->assertNotEmpty( $subscriber );
 	}
 
 	/**
@@ -724,5 +732,105 @@ class FrmUnitTest extends WP_UnitTestCase {
 				$this->set_user_by_role( $role );
 				break;
 		}
+	}
+
+	/**
+	 * Assert that every <aside> tag in some rendered HTML has a non-empty aria-label.
+	 * <aside> carries an implicit role="complementary", which the IBM Equal Access
+	 * checker flags as unlabelled complementary content otherwise (aria_complementary_labelled).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
+	 *                               passing vacuously (assertNotContains passes on an empty array).
+	 *
+	 * @return void
+	 */
+	protected function assert_complementary_landmarks_are_labelled( $html, $expected_count ) {
+		preg_match_all( '/<aside\b[^>]*>/', $html, $matches );
+		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <aside> elements' );
+
+		$labels = array();
+
+		foreach ( $matches[0] as $aside_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $aside_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every complementary landmark needs a non-empty accessible name' );
+	}
+
+	/**
+	 * Assert that none of the given HTML element ids appears more than once in some
+	 * rendered HTML (aria_id_unique — a duplicate id breaks any ARIA property that
+	 * references it, since the reference can no longer resolve to a single element).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param array  $ids
+	 *
+	 * @return void
+	 */
+	protected function assert_no_duplicate_element_ids( $html, $ids ) {
+		foreach ( $ids as $id ) {
+			$count = preg_match_all( '/\bid=["\']' . preg_quote( $id, '/' ) . '["\']/', $html );
+			$this->assertSame( 1, $count, 'Expected exactly one element with id "' . $id . '"' );
+		}
+	}
+
+	/**
+	 * Assert that every <form> tag in some rendered HTML has a non-empty aria-label,
+	 * and that no two forms share the same one (aria_landmark_name_unique).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
+	 *                               passing vacuously (assertNotContains/assertSame both pass on an
+	 *                               empty array).
+	 *
+	 * @return void
+	 */
+	protected function assert_form_landmarks_have_unique_names( $html, $expected_count ) {
+		preg_match_all( '/<form\b[^>]*>/', $html, $matches );
+		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <form> elements' );
+
+		$labels = array();
+
+		foreach ( $matches[0] as $form_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $form_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
+		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
+	}
+
+	/**
+	 * Assert that a checkbox-type input's wrapping <label> does not also carry a
+	 * `for` attribute -- the wrap alone already associates label and input, so a
+	 * redundant `for`/id pair makes Safari VoiceOver announce the label twice
+	 * (label_name_visible / duplicate association).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param string $field_description Used only in the failure message, e.g. "checkbox option" or "GDPR".
+	 *
+	 * @return void
+	 */
+	protected function assert_label_wraps_input_without_for( $html, $field_description ) {
+		$this->assertMatchesRegularExpression(
+			'/<label[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"Expected the {$field_description} label to wrap the checkbox input"
+		);
+		$this->assertDoesNotMatchRegularExpression(
+			'/<label[^>]*\sfor="[^"]*"[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"The {$field_description} label should not also carry a for attribute when it already wraps the input -- Safari VoiceOver double-announces it"
+		);
 	}
 }

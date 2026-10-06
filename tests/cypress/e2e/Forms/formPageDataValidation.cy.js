@@ -5,6 +5,7 @@ describe( 'Forms page', () => {
 	beforeEach( () => {
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.dismissInboxBanners();
 		cy.createNewForm( formTitle );
 		cy.viewport( 1280, 720 );
 	} );

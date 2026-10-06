@@ -25,10 +25,11 @@ class FrmFieldUrl extends FrmFieldType {
 	 */
 	protected function field_settings_for_type() {
 		return array(
-			'size'           => true,
-			'clear_on_focus' => true,
-			'invalid'        => true,
-			'show_image'     => true,
+			'size'               => true,
+			'clear_on_focus'     => true,
+			'invalid'            => true,
+			'show_image'         => true,
+			'allow_intl_domains' => true,
 		);
 	}
 
@@ -37,7 +38,8 @@ class FrmFieldUrl extends FrmFieldType {
 	 */
 	protected function extra_field_opts() {
 		return array(
-			'show_image' => 0,
+			'show_image'         => 0,
+			'allow_intl_domains' => 0,
 		);
 	}
 
@@ -82,14 +84,59 @@ class FrmFieldUrl extends FrmFieldType {
 
 		$errors = array();
 
-		// Validate the url format
-		if ( $value && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
+		// Validate the url format.
+		if ( $value && ! preg_match( $this->get_url_pattern(), $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
+			// skipcq: PHP-W1067 -- $this->field is always a field object by the time validate() runs; FrmFieldType's constructor just accepts array|int|object for lazy construction elsewhere.
 		} elseif ( $this->field->required == '1' && ! $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Gets the regular expression used to validate the url format.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private function get_url_pattern() {
+		if ( ! $this->allows_intl_domains() ) {
+			return '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i';
+		}
+
+		// The host class allows \x80-\xff so internationalized domain names pass.
+		// Byte range by design, and no /u modifier: with /u, preg_match() returns false on invalid UTF-8.
+		return '/^http(s)?:\/\/(?:localhost|(?:[\da-z\x80-\xff\.-]+\.[\da-z\x80-\xff\.-]+))/i';
+	}
+
+	/**
+	 * Checks if the field accepts internationalized domain names.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function allows_intl_domains() {
+		return (bool) FrmField::get_option( $this->field, 'allow_intl_domains' );
+	}
+
+	/**
+	 * Flags the input so the javascript validation accepts internationalized domain names too.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $args       Field arguments.
+	 * @param string $input_html The HTML attributes for the input.
+	 *
+	 * @return void
+	 */
+	protected function add_extra_html_atts( $args, &$input_html ) {
+		if ( $this->allows_intl_domains() ) {
+			$input_html .= ' data-intl-domains="1"';
+		}
 	}
 
 	protected function prepare_display_value( $value, $atts ) {

@@ -1,3 +1,6 @@
+import ibmAccessibilityBaseline from '../fixtures/ibm-a11y-baseline.json';
+import { getIbmAccessibilityFailures } from './ibm-accessibility';
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -24,6 +27,46 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+/**
+ * Dismiss every inbox banner message so the admin header is predictable.
+ *
+ * The inbox banner, the sale banner and the Lite upgrade bar share a single header slot, and
+ * FrmAppHelper::print_admin_banner() gives the inbox banner priority. Since inbox messages come
+ * from the live API, an unrelated announcement hides the upgrade bar for as long as it runs.
+ *
+ * @param {number} remainingAttempts Guards against looping when a message refuses to dismiss.
+ */
+Cypress.Commands.add( 'dismissInboxBanners', ( remainingAttempts = 5 ) => {
+	if ( remainingAttempts < 1 ) {
+		return;
+	}
+
+	cy.get( 'body' ).then( $body => {
+		const banner = $body.find( '#frm_banner' );
+
+		if ( ! banner.length ) {
+			return;
+		}
+
+		cy.log( `Dismiss inbox banner: ${ banner.attr( 'data-key' ) }` );
+		cy.window().then( win => {
+			cy.request( {
+				method: 'POST',
+				url: '/wp-admin/admin-ajax.php',
+				form: true,
+				body: {
+					action: 'frm_inbox_dismiss',
+					key: banner.attr( 'data-key' ),
+					nonce: win.frmGlobal.nonce
+				}
+			} );
+		} );
+
+		cy.reload();
+		cy.dismissInboxBanners( remainingAttempts - 1 );
+	} );
+} );
+
 Cypress.Commands.add( 'createNewForm', () => {
 	cy.log( 'Create a blank form' );
 	cy.contains( '.frm_nav_bar .button-primary', 'Add New' ).click();
@@ -36,22 +79,131 @@ Cypress.Commands.add( 'createNewForm', () => {
 	cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
 } );
 
+/**
+ * Ensure the "Contact Us" template form (frm_key `contact-us`) exists and is previewable,
+ * creating and/or restoring it as needed.
+ *
+ * Several specs preview this form directly by key without creating it themselves, relying on
+ * `Form Templates/FormTemplates.cy.js` having already created it in the same wp-env instance.
+ * That only holds when both specs land in the same CI shard, which isn't guaranteed - shards are
+ * bin-packed by spec file line count (see tests/bin/split-specs.sh), so adding or resizing any
+ * spec file can split them apart. Call this instead of assuming the fixture is already there.
+ *
+ * The remote template (fetched from S3 by "Use Template") ships with `status=trash` baked into
+ * its own XML, so a freshly installed copy lands in the Trash and isn't previewable until it's
+ * restored - and re-running "Use Template" against an already-trashed copy just creates another
+ * trashed one with a suffixed key (`contact-us2`, `contact-us3`, ...) instead of reusing it. Check
+ * Trash before creating, and restore whatever copy ends up there instead of leaving it stuck.
+ */
+Cypress.Commands.add( 'ensureContactUsFormExists', () => {
+	const RESTORE_LINK_SELECTOR = '#the-list tr:contains("Contact Us") a.frm-trash-link[href*="frm_action=untrash"]';
+
+	// Split the "is it there" check from the "click to restore" step - a .then() callback that
+	// queues cy commands (the click) can't also return a plain sync value (the found/not-found
+	// boolean) in the same callback, so each concern gets its own .then().
+	const restoreFromTrash = () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable&form_type=trash' );
+		return cy.get( 'body' )
+			.then( $trashBody => 0 < $trashBody.find( RESTORE_LINK_SELECTOR ).length )
+			.then( found => {
+				if ( ! found ) {
+					return cy.wrap( false );
+				}
+
+				cy.log( 'Restore the Contact Us form out of Trash instead of leaving it stuck there' );
+				// WP core only reveals row-actions on a real CSS `:hover` - the OFFSET is on the
+				// `.row-actions` wrapper itself (`position: relative; left: -9999em` until
+				// `tr:hover .row-actions { position: static }`, verified in
+				// wp-admin/css/list-tables.css), not on the link. The link is already `position:
+				// static` by browser default, so invoking that on the link alone is a no-op; the
+				// wrapper is what has to be reset. Cypress can't simulate the real hover before its
+				// own pre-click check, so reset the wrapper the same way the real hover would, then
+				// click the link normally.
+				cy.get( '#the-list tr:contains("Contact Us") .row-actions' )
+					.invoke( 'css', 'position', 'static' )
+					.find( 'a.frm-trash-link[href*="frm_action=untrash"]' )
+					.first()
+					.click();
+				return cy.wrap( true );
+			} );
+	};
+
+	cy.visit( '/wp-admin/admin.php?page=formidable' );
+	cy.get( 'body' ).then( $body => {
+		if ( $body.find( '#the-list tr:contains("Contact Us")' ).length > 0 ) {
+			cy.log( 'Contact Us form already exists' );
+			return;
+		}
+
+		restoreFromTrash().then( restored => {
+			if ( restored ) {
+				return;
+			}
+
+			cy.log( 'Create the Contact Us form from its template' );
+			cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
+			cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
+				.first()
+				// Wait for the template card itself to be visible first - the templates grid
+				// populates async. The button row is `display: none` until a real CSS `:hover`,
+				// which trigger( 'mouseover' ) can't produce, so reveal it the way the hover
+				// would (same as FormTemplates.cy.js), then click normally.
+				.should( 'be.visible' )
+				.find( '.frm-form-templates-item-buttons' )
+				.invoke( 'css', 'display', 'flex' )
+				.find( '.frm-form-templates-use-template-button' )
+				.should( 'contain', 'Use Template' )
+				.click();
+
+			// A successful install opens the new form in the builder, same as FormTemplates.cy.js.
+			cy.location( 'search', { timeout: 10000 } ).should( 'include', 'frm_action=edit' );
+			cy.get( '#frm_form_editor_container' ).should( 'be.visible' );
+
+			restoreFromTrash();
+		} );
+	} );
+} );
+
 Cypress.Commands.add( 'deleteForm', () => {
 	cy.log( 'Delete Form' );
 	cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
 		console.log( 'Hovered Row:', $row );
 		cy.wrap( $row ).within( () => {
-			cy.get( '.row-actions .trash .frm-trash-link' ).should( 'be.visible' ).click( { force: true } );
+			// Same real CSS `:hover` reveal as RESTORE_LINK_SELECTOR above - the offset lives on the
+			// `.row-actions` wrapper itself, not the link, so reset the wrapper's position before
+			// clicking the link.
+			cy.get( '.row-actions' )
+				.invoke( 'css', 'position', 'static' )
+				.find( '.trash .frm-trash-link' )
+				.click();
 		} );
 		cy.get( 'body' ).then( $body => {
 			if ( $body.find( "div[role='dialog']" ).length ) {
 				cy.get( "div[role='dialog']" ).should( 'be.visible' ).and( 'contain.text', 'Do you want to move this form to the trash?' );
-				cy.xpath( "//a[@id='frm-confirmed-click']" ).should( 'contain.text', 'Confirm' ).click( { force: true } );
+				// Use cy.get() (an id is unique) rather than cy.xpath() - the xpath-resolved
+				// element doesn't re-query the same way on Cypress's retry, which is what forced
+				// force here. Plain cy.get() on this id works unforced elsewhere in the suite.
+				cy.get( '#frm-confirmed-click' ).should( 'contain.text', 'Confirm' ).click();
 			} else {
 				cy.log( 'Dialog not found' );
 			}
 		} );
 	} );
+} );
+
+/**
+ * Reveal a builder field's action icons (Move, More Options) before clicking one.
+ *
+ * Until the row is hovered, selected or focused, the icons are transparent, positioned out of the
+ * label row, and `pointer-events: none` (see
+ * resources/scss/admin/components/builder/_ui-state-defaults.scss). Cypress can't produce a real
+ * `:hover`, so focus the More Options toggle instead. That applies the same reveal through the
+ * keyboard `:focus-within` rule. Forcing the styles inline is not enough: the row layout still
+ * changes on mousedown, when the toggle takes focus, and the click then lands on the container.
+ */
+Cypress.Commands.add( 'revealFieldActions', { prevSubject: 'element' }, subject => {
+	cy.wrap( subject ).find( '.frm-dropdown-toggle' ).focus();
+	return cy.wrap( subject );
 } );
 
 Cypress.Commands.add( 'openForm', () => {
@@ -60,7 +212,10 @@ Cypress.Commands.add( 'openForm', () => {
 		cy.wrap( $row ).within( () => {
 			cy.get( '.column-name .row-title' ).should( 'exist' ).and( 'be.visible' ).then( $elem => {
 				console.log( 'Element is:', $elem );
-				cy.wrap( $elem ).click( { force: true } );
+				// Plain click - the link is the topmost element at its own coordinates (verified via
+				// document.elementFromPoint(), not covered by the row-actions block below it), so no
+				// force is needed.
+				cy.wrap( $elem ).click();
 			} );
 		} );
 	} );
@@ -90,5 +245,24 @@ Cypress.Commands.add( 'emptyTrash', () => {
 		} else {
 			cy.log( 'No forms in the Trash.' );
 		}
+	} );
+} );
+
+// Scan every IBM rule. Only reviewed allowances for this page may pass.
+Cypress.Commands.add( 'checkIbmAccessibility', label => {
+	// IBM's reporter requires a unique scan label on retries.
+	return cy.getCompliance( `${ label }-retry-${ Cypress.currentRetry }` ).then( report => {
+		const failures = getIbmAccessibilityFailures( label, report.results, ibmAccessibilityBaseline );
+		const findings = report.results.filter( result => result.level !== 'pass' );
+		const summary = failures.map( ( { ruleId, message, path } ) =>
+			`${ ruleId }: ${ message } - ${ path?.dom ?? 'Unknown DOM path' }`
+		).join( '\n' );
+
+		// Persist all findings before asserting, including known and potential violations.
+		return cy.writeFile( `tests/cypress/reports/ibm-a11y/${ label }.json`, findings, { log: false } )
+			.then( () => {
+				expect( failures, `IBM accessibility failures (${ label }):\n${ summary }` ).to.have.lengthOf( 0 );
+				return report;
+			} );
 	} );
 } );

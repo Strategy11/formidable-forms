@@ -316,6 +316,13 @@ namespace {
 		 */
 		public static function is_field_visible_to_user( $field ) {
 		}
+		/**
+		 * @param array|int|object $field
+		 *
+		 * @return bool
+		 */
+		public static function field_on_current_page( $field ) {
+		}
 	}
 	class FrmViewsAppHelper {
 		/**
@@ -534,10 +541,148 @@ namespace {
 		}
 	}
 
-	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
+	class WP_UnitTest_Factory {
+		/**
+		 * @var WP_UnitTest_Factory_For_Post
+		 */
+		public $post;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Attachment
+		 */
+		public $attachment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Comment
+		 */
+		public $comment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_User
+		 */
+		public $user;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $term;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $category;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $tag;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Bookmark
+		 */
+		public $bookmark;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Blog
+		 */
+		public $blog;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Network
+		 */
+		public $network;
 	}
 
-	class WP_UnitTestCase extends WP_UnitTestCase_Base {
+	/**
+	 * The leaf *_For_* classes below are deliberately left abstract with no override of
+	 * create_object()/update_object()/get_object_by_id(): they exist only so property access
+	 * like $factory->post resolves to a type that inherits create()/create_and_get(), and an
+	 * abstract class is never instantiated from this file, so leaving them unimplemented is
+	 * fine for static analysis and avoids stubbing empty method bodies DeepSource flags as
+	 * PHP-W1080 (no body) with unused-parameter findings on top.
+	 */
+	abstract class WP_UnitTest_Factory_For_Thing {
+		public $default_generation_definitions;
+		public $factory;
+
+		public function __construct( $factory, $default_generation_definitions = array() ) {
+			$this->factory                        = $factory;
+			$this->default_generation_definitions = $default_generation_definitions;
+		}
+
+		abstract public function create_object( $args );
+		abstract public function update_object( $object_id, $fields );
+		abstract public function get_object_by_id( $object_id );
+
+		public function create( $args = array(), $generation_definitions = null ) {
+			if ( $generation_definitions === null ) {
+				$generation_definitions = $this->default_generation_definitions;
+			}
+
+			return $this->create_object( array_merge( (array) $generation_definitions, $args ) );
+		}
+
+		public function create_and_get( $args = array(), $generation_definitions = null ) {
+			return $this->get_object_by_id( $this->create( $args, $generation_definitions ) );
+		}
+
+		public function create_many( $count, $args = array(), $generation_definitions = null ) {
+			return array_fill( 0, $count, $this->create( $args, $generation_definitions ) );
+		}
+	}
+
+	abstract class WP_UnitTest_Factory_For_Post extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Comment extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_User extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Term extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Bookmark extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Blog extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	/**
+	 * frm_factory.php uses this to generate unique default values (field names, entry names).
+	 * mago.toml's [source] paths includes "tests" directly - unlike PHPStan, mago analyzes that
+	 * file itself and needs this class to exist, not just its name.
+	 */
+	class WP_UnitTest_Generator_Sequence {
+		public static $incr = -1;
+		public $next;
+		public $template_string;
+
+		public function __construct( $template_string = '%s', $start = null ) {
+		}
+
+		public function next() {
+		}
+
+		public function get_incr() {
+		}
+
+		public function get_template_string() {
+		}
+	}
+
+	/**
+	 * frm_factory.php uses this to generate a random entry value, for the same reason as
+	 * WP_UnitTest_Generator_Sequence above.
+	 */
+	function rand_str( $length = 32 ) {
 	}
 }
 

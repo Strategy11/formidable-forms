@@ -2,7 +2,11 @@
 
 /**
  * @group fields
+ *
+ * @covers FrmFieldCombo
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldCombo::class )]
 class test_FrmFieldCombo extends FrmUnitTest {
 
 	protected function get_combo_field_without_sub_field_options() {
@@ -27,9 +31,9 @@ class test_FrmFieldCombo extends FrmUnitTest {
 						'label'   => 'Third child',
 						'options' => array(),
 					),
-					'forth_child'  => array(
+					'fourth_child' => array(
 						'type'    => 'text',
-						'label'   => 'Forth child',
+						'label'   => 'Fourth child',
 						'options' => array(),
 					),
 				),
@@ -141,7 +145,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 						'name'    => 'another name',
 						'options' => array(),
 					),
-					'forth'  => true,
+					'fourth' => true,
 				),
 			)
 		);
@@ -203,7 +207,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 				'first_child'  => '',
 				'second_child' => '',
 				'third_child'  => '',
-				'forth_child'  => '',
+				'fourth_child' => '',
 			),
 			$this->run_private_method( array( $combo_field, 'get_default_value' ) )
 		);
@@ -220,9 +224,6 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmFieldCombo::print_input_atts
-	 */
 	public function test_print_input_atts() {
 		$combo_field = new FrmFieldCombo();
 
@@ -286,8 +287,8 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertSame( ' class="frm-class1 frm-class2 frm_optional"  ', $atts );
 
 		$sub_field = array(
-			'name'    => 'forth',
-			'label'   => 'Forth',
+			'name'    => 'fourth',
+			'label'   => 'Fourth',
 			'type'    => 'text',
 			'options' => array(),
 		);
@@ -313,16 +314,15 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$field_id   = $field['id'];
 		$field_name = $field['name'];
-		$field_key  = $field['field_key'];
 
 		$this->set_private_property( $combo_field, 'field', $field );
 
 		$this->assertSame(
 			array(
-				$field_id . '_first_child'  => $field_name . ' (' . $field_key . ') - First child',
-				$field_id . '_second_child' => $field_name . ' (' . $field_key . ') - Second child',
-				$field_id . '_third_child'  => $field_name . ' (' . $field_key . ') - Third child',
-				$field_id . '_forth_child'  => $field_name . ' (' . $field_key . ') - Forth child',
+				$field_id . '_first_child'  => $field_name . ' - First child',
+				$field_id . '_second_child' => $field_name . ' - Second child',
+				$field_id . '_third_child'  => $field_name . ' - Third child',
+				$field_id . '_fourth_child' => $field_name . ' - Fourth child',
 			),
 			$combo_field->get_export_headings()
 		);

@@ -64,12 +64,15 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * If test mode is running, save the id somewhere else
 	 *
+	 * @param string $mode 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
-	public static function get_customer_id_meta_name() {
-		$meta_name = '_frmstrp_customer_id';
+	public static function get_customer_id_meta_name( $mode = 'auto' ) {
+		$meta_name     = '_frmstrp_customer_id';
+		$resolved_mode = 'auto' === $mode ? self::active_mode() : $mode;
 
-		if ( 'test' === self::active_mode() ) {
+		if ( 'test' === $resolved_mode ) {
 			$meta_name .= '_test';
 		}
 
@@ -104,7 +107,7 @@ class FrmStrpLiteAppHelper {
 	 * @return void
 	 */
 	public static function fee_education( $content = 'tip', $gateway = false ) {
-		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
+		if ( ! FrmAddonsController::payment_fees_apply( 'stripe' ) ) {
 			return;
 		}
 

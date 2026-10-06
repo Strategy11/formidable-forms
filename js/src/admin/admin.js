@@ -5,6 +5,15 @@
  */
 const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
+const { initFieldListHoverPill } = require( './fieldListHoverPill' );
+const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
+const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
+const { processFieldLoadBatch } = require( './fieldLoadBatch' );
+const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
+const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
+
+// Footer scripts can restore placeholders before add-ons inspect the builder's fields.
+hydrateFieldPlaceholders();
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -119,6 +128,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 
 			if ( msg.success === true ) {
 				app.showAuthorized( true );
+				app.showLicenseType( msg );
 				app.showInlineSuccess();
 
 				/**
@@ -155,6 +165,35 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 					box.className = box.className.replace( `frm_${ from }_box`, `frm_${ to }_box` );
 				} );
 			}
+		},
+
+		/**
+		 * Update the license type message with the license that was just activated.
+		 * The message is printed before the license is known, so it would otherwise
+		 * keep showing the Lite copy until the page is reloaded.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object} msg The response from the authorize request.
+		 * @return {void}
+		 */
+		showLicenseType( msg ) {
+			if ( ! msg.license_type_info ) {
+				return;
+			}
+
+			document.querySelectorAll( '.frm_license_type_info' ).forEach( function( element ) {
+				element.textContent = msg.license_type_info;
+			} );
+
+			if ( msg.license_type !== 'Elite' ) {
+				return;
+			}
+
+			// There is nothing left to upgrade to.
+			document.querySelectorAll( '.frm_license_upgrade_cta' ).forEach( function( element ) {
+				element.remove();
+			} );
 		},
 
 		/**
@@ -248,7 +287,8 @@ window.frmAdminBuildJS = function() {
 		drag: svg( { href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] } )
 	};
 
-	const $newFields = jQuery( document.getElementById( 'frm-show-fields' ) );
+	const fieldsContainer = document.getElementById( 'frm-show-fields' );
+	const $newFields = jQuery( fieldsContainer );
 	const builderForm = document.getElementById( 'new_fields' );
 	const thisForm = document.getElementById( 'form_id' );
 	let copyHelper = false;
@@ -257,6 +297,10 @@ window.frmAdminBuildJS = function() {
 	let autoId = 0;
 	const optionMap = {};
 	let lastNewActionIdReturned = 0;
+	let fieldGroupMessageDismissed = false;
+
+	// Resolves once the Field Options tab is showing the selected field's settings. See showFieldOptionsTab.
+	let fieldOptionsTabShown = Promise.resolve();
 
 	const { __, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
@@ -264,8 +308,18 @@ window.frmAdminBuildJS = function() {
 	let $postBodyContent;
 
 	const dragState = {
-		dragging: false
+		dragging: false,
+		draggable: null,
+		offsetsRefreshed: false,
+		submitButtonRow: null
 	};
+
+	// How far past the visible field list a field gets its drag and drop widget. A full screen
+	// either way keeps the widgets ahead of the auto scroll while a field is being dragged.
+	const DRAG_DROP_ROOT_MARGIN = '100% 0px';
+	let dragDropObserver;
+	const dragDropAttachers = new WeakMap();
+	const dragDropDeferredDetach = new Set();
 
 	if ( thisForm ) {
 		thisFormId = thisForm.value;
@@ -539,6 +593,8 @@ window.frmAdminBuildJS = function() {
 	function loadTooltip( element, show = false ) {
 		let tooltipTarget = element;
 
+		resolveDeferredTooltip( tooltipTarget );
+
 		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
 		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
 			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
@@ -553,6 +609,28 @@ window.frmAdminBuildJS = function() {
 		if ( show ) {
 			deleteTooltips();
 			tooltip.show();
+		}
+	}
+
+	/**
+	 * Resolves a `data-tip-key` (set by `FrmAppHelper::get_tooltip_attr()` on the form builder
+	 * page) into the element's real `title` attribute, looked up from `frm_admin_js.tooltips`.
+	 * No-op for an element that already carries its own `title` (every other admin page).
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function resolveDeferredTooltip( element ) {
+		if ( ! element.hasAttribute( 'data-tip-key' ) ) {
+			return;
+		}
+
+		const key = element.getAttribute( 'data-tip-key' );
+		element.removeAttribute( 'data-tip-key' );
+
+		const text = window.frm_admin_js && frm_admin_js.tooltips && frm_admin_js.tooltips[ key ];
+		if ( text ) {
+			element.setAttribute( 'title', text );
 		}
 	}
 
@@ -617,6 +695,12 @@ window.frmAdminBuildJS = function() {
 		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 		bindFormActionsKeyboardHandlers( wrapClass );
+
+		// Resolve every tooltip trigger already in the DOM now, so an SVG-only icon carries a
+		// real accessible name from page-ready instead of only from the first mouse hover.
+		wrapClass.find( '[data-tip-key]' ).each( function() {
+			resolveDeferredTooltip( this );
+		} );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
@@ -883,22 +967,65 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Hides the tab panels in a container, apart from the one the clicked tab points at.
+	 * The active panel is matched by its literal id or class name so the tab href is never
+	 * turned into a selector.
+	 *
+	 * @since 6.34
+	 * @param {HTMLElement} container Element holding the tab panels as direct children.
+	 * @param {string}      targetId  Tab anchor with the leading # removed.
+	 * @return {void}
+	 */
+	function hideOtherTabPanels( container, targetId ) {
+		Array.from( container.children ).forEach( child => {
+			if ( child.classList.contains( 'tabs-panel' ) && child.id !== targetId && ! child.classList.contains( targetId ) ) {
+				child.style.display = 'none';
+			}
+		} );
+	}
+
+	/**
+	 * Shows a tab panel.
+	 * Panels are also hidden by the frm_hidden class in the markup, so the inline display has to be
+	 * set to a visible value. Clearing it would leave that class rule in charge and the panel empty.
+	 *
+	 * @since 6.34
+	 * @param {HTMLElement} panel Tab panel to show.
+	 * @return {void}
+	 */
+	function showTabPanel( panel ) {
+		panel.style.display = 'block';
+	}
+
 	function clickNewTab() {
 		/*jshint validthis:true */
 		const href = this.getAttribute( 'href' );
-		if ( href === null ) {
+		// A tab anchor always points at an in-page fragment (#anchor). Ignore anything else.
+		if ( href === null || href.charAt( 0 ) !== '#' ) {
 			return false;
 		}
 
-		const classSelector = href.replace( '#', '.' );
-		const $link = jQuery( this );
+		const targetId = href.slice( 1 );
 
-		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
-		$link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
+		const li = this.closest( 'li' );
+		if ( li ) {
+			li.classList.add( 'frm-tabs', 'active' );
+			Array.from( li.parentNode.children ).forEach( sibling => {
+				if ( sibling !== li && sibling.tagName === 'LI' ) {
+					sibling.classList.remove( 'frm-tabs', 'active', 'starttab' );
+				}
+			} );
+		}
 
-		const tabContent = document.getElementById( href.replace( '#', '' ) );
+		const container = this.closest( 'div' );
+		if ( container ) {
+			hideOtherTabPanels( container, targetId );
+		}
+
+		const tabContent = document.getElementById( targetId );
 		if ( tabContent ) {
-			tabContent.style.display = 'block';
+			showTabPanel( tabContent );
 		}
 
 		// clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
@@ -911,15 +1038,17 @@ window.frmAdminBuildJS = function() {
 	function clickTab( link, auto ) {
 		link = jQuery( link );
 		const href = link.attr( 'href' );
-		if ( href === undefined ) {
+		// A tab anchor always points at an in-page fragment (#anchor). Ignore anything else.
+		if ( href === undefined || href.charAt( 0 ) !== '#' ) {
 			return;
 		}
 
-		const classSelector = href.replace( '#', '.' );
+		const targetId = href.slice( 1 );
 
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
-		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
-			link.closest( 'div' ).children( '.tabs-panel' ).not( href ).not( classSelector ).hide();
+		const [ container ] = link.closest( 'div' );
+		if ( container?.querySelector( '.tabs-panel' ) ) {
+			hideOtherTabPanels( container, targetId );
 		} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 			/* global settings */
 			const ajax = link.data( 'frmajax' );
@@ -931,8 +1060,15 @@ window.frmAdminBuildJS = function() {
 			/* form settings page */
 			jQuery( '#frm-categorydiv .tabs-panel, .hide_with_tabs' ).hide();
 		}
-		jQuery( href ).show();
-		jQuery( classSelector ).show();
+
+		const targetEl = document.getElementById( targetId );
+		if ( targetEl ) {
+			showTabPanel( targetEl );
+		}
+
+		// A panel is not always given an id matching its tab anchor, so match on the class too.
+		// getElementsByClassName takes a literal class name, never a selector built from href.
+		Array.from( document.getElementsByClassName( targetId ) ).forEach( panel => showTabPanel( panel ) );
 
 		hideShortcodes();
 
@@ -947,25 +1083,179 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( jQuery( '.frm_form_settings' ).length ) {
-			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ href.replace( '#', '' ) }` );
+			jQuery( '.frm_form_settings' ).attr( 'action', `?page=formidable&frm_action=settings&id=${ jQuery( '.frm_form_settings input[name="id"]' ).val() }&t=${ targetId }` );
 		} else {
-			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ href.replace( '#', '' ) }` );
+			jQuery( '.frm_settings_form' ).attr( 'action', `?page=formidable-settings&t=${ targetId }` );
 		}
 	}
 
 	function setupSortable( sortableSelector ) {
-		document.querySelectorAll( sortableSelector ).forEach(
-			list => {
-				makeDroppable( list );
-				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) );
+		document.querySelectorAll( sortableSelector ).forEach( setupSortableList );
+	}
 
-				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
-				if ( $sectionTitle.length ) {
-					makeDroppable( $sectionTitle );
+	/**
+	 * Prepare one sorting list without searching for it again in the document.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} list The list containing draggable fields or field groups.
+	 * @return {void}
+	 */
+	function setupSortableList( list ) {
+		lazyMakeDroppable( list );
+		Array.from( list.children ).forEach( child => lazyMakeDraggable( child, '.frm-move' ) );
+
+		const sectionTitle = list.querySelector( ':scope > [data-type="divider"] > .divider_section_only' );
+		if ( sectionTitle ) {
+			lazyMakeDroppable( sectionTitle );
+		}
+	}
+
+	/**
+	 * Make a list droppable once it scrolls near the visible part of the builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} list The list that accepts dropped fields.
+	 * @return {void}
+	 */
+	function lazyMakeDroppable( list ) {
+		observeDragDropElement( list, () => makeDroppable( list ) );
+	}
+
+	/**
+	 * Make a field or field group draggable once it scrolls near the visible part of the builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}      draggable The field or field group to drag.
+	 * @param {string|undefined} handle    The selector for the drag handle, if the whole element should not start a drag.
+	 * @return {void}
+	 */
+	function lazyMakeDraggable( draggable, handle ) {
+		observeDragDropElement( draggable, () => makeDraggable( draggable, handle ) );
+	}
+
+	/**
+	 * Every jQuery UI draggable and droppable is a live widget, and jQuery UI walks all of the
+	 * droppables when a drag starts. On a form with a thousand fields, standing them all up at
+	 * page load is thousands of widgets before anyone drags anything. The widget is attached
+	 * as its element comes within a screen of the visible field list instead, and destroyed
+	 * again once it scrolls away, so the widget count follows what is on screen.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element The element to make draggable or droppable.
+	 * @param {Function}    attach  Attaches the widget to the element.
+	 * @return {void}
+	 */
+	function observeDragDropElement( element, attach ) {
+		if ( ! element ) {
+			return;
+		}
+
+		if ( ! dragDropObserver ) {
+			dragDropObserver = new IntersectionObserver(
+				handleDragDropIntersections,
+				{
+					root: postBodyContent,
+					rootMargin: DRAG_DROP_ROOT_MARGIN
 				}
+			);
+		}
+
+		dragDropAttachers.set( element, attach );
+		dragDropObserver.observe( element );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {IntersectionObserverEntry[]} entries The elements that moved into or out of range.
+	 * @return {void}
+	 */
+	function handleDragDropIntersections( entries ) {
+		let attachedDuringDrag = false;
+
+		entries.forEach(
+			( { target, isIntersecting } ) => {
+				if ( ! target.isConnected ) {
+					// The element was replaced or deleted, and jQuery removed its widget with it.
+					dragDropObserver.unobserve( target );
+					dragDropAttachers.delete( target );
+					return;
+				}
+
+				if ( isIntersecting ) {
+					if ( ! hasDragDropWidget( target ) ) {
+						dragDropAttachers.get( target )?.();
+						attachedDuringDrag = dragState.dragging;
+					}
+					return;
+				}
+
+				if ( ! hasDragDropWidget( target ) ) {
+					return;
+				}
+
+				if ( document.body.classList.contains( 'frm-dragging' ) ) {
+					// Pulling a widget out from under a drag leaves its hover state behind, so wait for the drop.
+					dragDropDeferredDetach.add( target );
+					return;
+				}
+
+				destroyDragDropWidget( target );
 			}
 		);
-		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
+
+		if ( attachedDuringDrag ) {
+			// Scrolling while dragging brought new drop targets into range. jQuery UI skips them until they are measured.
+			refreshDroppableOffsets();
+		}
+	}
+
+	/**
+	 * Take another look at the widgets that scrolled out of range during a drag.
+	 * Observing an element again reports where it is now, so anything that scrolled back
+	 * into view keeps its widget.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function recheckDeferredDragDropWidgets() {
+		dragDropDeferredDetach.forEach(
+			element => {
+				dragDropObserver.unobserve( element );
+				dragDropObserver.observe( element );
+			}
+		);
+		dragDropDeferredDetach.clear();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {boolean} True if the element has a live draggable or droppable widget.
+	 */
+	function hasDragDropWidget( element ) {
+		return element.classList.contains( 'ui-draggable' ) || element.classList.contains( 'ui-droppable' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @return {void}
+	 */
+	function destroyDragDropWidget( element ) {
+		const $element = jQuery( element );
+		if ( $element.draggable( 'instance' ) ) {
+			$element.draggable( 'destroy' );
+		}
+		if ( $element.droppable( 'instance' ) ) {
+			$element.droppable( 'destroy' );
+		}
 	}
 
 	function makeDroppable( list ) {
@@ -1021,7 +1311,6 @@ window.frmAdminBuildJS = function() {
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
-			refreshPositions: true,
 			cursorAt: {
 				top: 0,
 				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
@@ -1075,6 +1364,8 @@ window.frmAdminBuildJS = function() {
 		}
 
 		dragState.dragging = true;
+		dragState.draggable = null;
+		dragState.offsetsRefreshed = false;
 
 		const container = postBodyContent;
 		container.classList.add( 'frm-dragging-field' );
@@ -1093,6 +1384,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function handleDragStop() {
+		dragState.draggable = null;
+
 		const container = postBodyContent;
 		container.classList.remove( 'frm-dragging-field' );
 		document.body.classList.remove( 'frm-dragging' );
@@ -1101,9 +1394,19 @@ window.frmAdminBuildJS = function() {
 		if ( fade ) {
 			fade.classList.remove( 'frm-drag-fade' );
 		}
+
+		recheckDeferredDragDropWidgets();
 	}
 
 	function handleDrag( event, ui ) {
+		if ( ! dragState.offsetsRefreshed ) {
+			// The drag start handler tidies up the field list, so re-measure once before
+			// the first drop target is worked out.
+			dragState.offsetsRefreshed = true;
+			dragState.draggable = jQuery( event.target ).draggable( 'instance' ) || null;
+			refreshDroppableOffsets( event );
+		}
+
 		maybeScrollBuilder( event );
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
@@ -1139,6 +1442,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeScrollBuilder( event ) {
+		const scrollTopBefore = postBodyContent.scrollTop;
+
 		$postBodyContent.scrollTop(
 			( _, v ) => {
 				const moved = event.clientY;
@@ -1159,6 +1464,36 @@ window.frmAdminBuildJS = function() {
 				return v;
 			}
 		);
+
+		if ( scrollTopBefore !== postBodyContent.scrollTop ) {
+			refreshDroppableOffsets( event );
+		}
+	}
+
+	/**
+	 * Re-measure where every droppable sits on the page.
+	 *
+	 * The draggables deliberately leave jQuery UI's refreshPositions option off. With it on,
+	 * jQuery UI re-measures every droppable on every mouse move, which is one offset() read
+	 * per field group per event. On a form with hundreds of groups that is most of a second
+	 * per mouse move, so the drop placeholder ends up trailing seconds behind the cursor and
+	 * the narrow band between two field groups becomes impossible to hit.
+	 *
+	 * Dragging on its own does not move a droppable. The drop placeholder is laid out at zero
+	 * height between rows and absolutely positioned inside a row, so inserting it shifts
+	 * nothing. Two other things do move them: scrolling the field list, and a batch of
+	 * AJAX loaded fields arriving while a drag is already under way. The measurements are
+	 * refreshed on the first drag event and at those two points, and left alone otherwise.
+	 *
+	 * @param {Event} [event] The drag event, when the refresh is driven by one.
+	 * @return {void}
+	 */
+	function refreshDroppableOffsets( event ) {
+		if ( ! dragState.draggable ) {
+			return;
+		}
+
+		jQuery.ui.ddmanager.prepareOffsets( dragState.draggable, event );
 	}
 
 	function getDragOffset( $helper ) {
@@ -1166,9 +1501,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getDroppableTarget() {
-		let droppable = document.getElementById( 'frm-show-fields' );
-		while ( droppable.querySelector( '.frm-over-droppable' ) ) {
-			droppable = droppable.querySelector( '.frm-over-droppable' );
+		let droppable = fieldsContainer;
+		let nextDroppable = droppable.querySelector( '.frm-over-droppable' );
+		while ( nextDroppable ) {
+			droppable = nextDroppable;
+			nextDroppable = droppable.querySelector( '.frm-over-droppable' );
 		}
 		if ( 'frm-show-fields' === droppable.id && ! droppable.classList.contains( 'frm-over-droppable' ) ) {
 			droppable = false;
@@ -1305,15 +1642,15 @@ window.frmAdminBuildJS = function() {
 
 		let top;
 
-		const $children = $list.children().not( '.edit_field_type_end_divider' );
-		if ( 0 === $children.length ) {
+		const children = getRowsInList( $list );
+		if ( 0 === children.length ) {
 			$list.prepend( placeholder );
 			top = 0;
 		} else {
-			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y );
+			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y, children );
 
-			if ( insertAtIndex === $children.length ) {
-				const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
+			if ( insertAtIndex === children.length ) {
+				const $lastChild = jQuery( children[ insertAtIndex - 1 ] );
 				top = $lastChild.offset().top + $lastChild.outerHeight();
 				$list.append( placeholder );
 
@@ -1323,8 +1660,8 @@ window.frmAdminBuildJS = function() {
 					$list.append( $endDivider );
 				}
 			} else {
-				top = jQuery( $children.get( insertAtIndex ) ).offset().top;
-				jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+				top = jQuery( children[ insertAtIndex ] ).offset().top;
+				jQuery( children[ insertAtIndex ] ).before( placeholder );
 			}
 		}
 
@@ -1332,34 +1669,66 @@ window.frmAdminBuildJS = function() {
 		placeholder.style.top = `${ top }px`;
 	}
 
-	function determineIndexBasedOffOfMousePositionInList( $list, y ) {
-		const $items = $list.children().not( '.edit_field_type_end_divider' );
-		const { length } = $items;
+	/**
+	 * Get the rows of a sortable list as a plain array, skipping the end divider.
+	 *
+	 * @param {jQuery} $list The list to read the rows from.
+	 * @return {Array.<Element>} The rows that can accept a drop.
+	 */
+	function getRowsInList( $list ) {
+		const list = $list.get( 0 );
+		if ( ! list ) {
+			return [];
+		}
+		return Array.from( list.children ).filter( row => ! row.classList.contains( 'edit_field_type_end_divider' ) );
+	}
 
-		let index;
-		let item;
-		let itemTop;
-		let returnIndex;
-
+	/**
+	 * Work out where in a list the dragged field would be dropped.
+	 *
+	 * This runs on every drag event, and reading an item's position forces the browser to lay the
+	 * page out again. Walking the list one item at a time therefore costs a layout per item, and on
+	 * a long form dragging near the top of the list meant reading nearly every field before finding
+	 * the answer. The items are stacked down the page, so their tops only ever increase, and a
+	 * binary search finds the same item after a handful of reads instead of hundreds.
+	 *
+	 * @param {jQuery}          $list  The list being dragged over.
+	 * @param {number}          y      Mouse position, relative to the viewport.
+	 * @param {Array.<Element>} [rows] The rows of the list, when the caller has already read them.
+	 * @return {number} The index to insert at.
+	 */
+	function determineIndexBasedOffOfMousePositionInList( $list, y, rows ) {
 		if ( ! document.querySelector( '.frm-has-fields .frm_no_fields' ) ) {
 			// Always return 0 when there are no fields.
 			return 0;
 		}
 
-		returnIndex = 0;
-		for ( index = length - 1; index >= 0; --index ) {
-			item = $items.get( index );
-			itemTop = jQuery( item ).offset().top;
-			if ( y > itemTop ) {
-				returnIndex = index;
-				if ( y > itemTop + ( jQuery( item ).outerHeight() / 2 ) ) {
-					returnIndex = index + 1;
-				}
-				break;
+		const items = rows || getRowsInList( $list );
+
+		// Find the last item that starts above the cursor.
+		let low = 0;
+		let high = items.length - 1;
+		let match = -1;
+
+		while ( low <= high ) {
+			const middle = Math.floor( ( low + high ) / 2 );
+
+			if ( y > items[ middle ].getBoundingClientRect().top ) {
+				match = middle;
+				low = middle + 1;
+			} else {
+				high = middle - 1;
 			}
 		}
 
-		return returnIndex;
+		if ( -1 === match ) {
+			return 0;
+		}
+
+		const rect = items[ match ].getBoundingClientRect();
+
+		// Past the halfway point of that item means the field belongs after it.
+		return y > rect.top + ( rect.height / 2 ) ? match + 1 : match;
 	}
 
 	function handleDragOverFieldGroup( { droppable, x, placeholder } ) {
@@ -1541,6 +1910,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function updateFieldGroupControls( $row, count ) {
+		const row = $row.get( 0 );
+		if ( ! row || row.querySelector( ':scope > .frm_field_loading' ) ) {
+			return;
+		}
+
 		const rowOffset = $row.offset();
 
 		if ( rowOffset === undefined ) {
@@ -1661,13 +2035,14 @@ window.frmAdminBuildJS = function() {
 			}
 
 			moveFieldSettings( document.getElementById( `frm-single-settings-${ fieldId }` ) );
-			const layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
+			let layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
 
 			if ( ! layoutClassesInput ) {
 				// not every field type has a layout class input.
 				return;
 			}
 
+			const previousClasses = layoutClassesInput.value;
 			if ( false === activeLayoutClass ) {
 				if ( '' !== currentClassToAdd ) {
 					layoutClassesInput.value = layoutClassesInput.value.concat( ` ${ currentClassToAdd }` );
@@ -1687,6 +2062,13 @@ window.frmAdminBuildJS = function() {
 				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
 			}
 
+			if ( layoutClassesInput.closest( '.frm-deferred-settings-meta' ) ) {
+				if ( previousClasses === layoutClassesInput.value ) {
+					return;
+				}
+				moveFieldSettings( ensureFieldSettings( fieldId ) );
+				layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
+			}
 			jQuery( layoutClassesInput ).trigger( 'change' );
 		};
 	}
@@ -1695,7 +2077,17 @@ window.frmAdminBuildJS = function() {
 		return [ 'frm_full', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm1', 'frm2', 'frm3', 'frm4', 'frm5', 'frm6', 'frm7', 'frm8', 'frm9', 'frm10', 'frm11', 'frm12' ];
 	}
 
-	function setupFieldOptionSorting( sort ) {
+	// Scope sortable init to the one field whose panel just opened, instead of the whole
+	// builder, so jQuery UI's mousedown item scan only covers that field's own option list.
+	// Sortable's `items` option is matched against the whole document then filtered to
+	// descendants of the element passed to .sortable() - that element itself must be an
+	// ancestor of the '.frm_sortable_field_opts li' matches, not the list, so this takes
+	// fieldSettingsEl rather than the field's own option list. Guards against double-init
+	// since sortable's own item list is refreshed lazily, not just at setup time.
+	function setupFieldOptionSorting( fieldSettingsEl ) {
+		if ( fieldSettingsEl.classList.contains( 'ui-sortable' ) || ! fieldSettingsEl.querySelector( '.frm_sortable_field_opts' ) ) {
+			return;
+		}
 		const opts = {
 			items: '.frm_sortable_field_opts li',
 			axis: 'y',
@@ -1715,7 +2107,7 @@ window.frmAdminBuildJS = function() {
 				fieldUpdated();
 			}
 		};
-		jQuery( sort ).sortable( opts );
+		jQuery( fieldSettingsEl ).sortable( opts );
 	}
 
 	// Get the section where a field is dropped
@@ -2013,6 +2405,27 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Get the top level row that holds the submit button.
+	 *
+	 * The row is remembered between calls and only looked up again once it leaves the list.
+	 * allowDrop runs several times per drag event, and searching the whole field list every
+	 * time is a full DOM walk on a long form.
+	 *
+	 * @param {HTMLElement} list The top level field list.
+	 * @return {HTMLElement|null} The row holding the submit button, or null when the form has none.
+	 */
+	function getSubmitButtonRow( list ) {
+		if ( dragState.submitButtonRow && dragState.submitButtonRow.parentNode === list ) {
+			return dragState.submitButtonRow;
+		}
+
+		const submitButton = list.querySelector( '.edit_field_type_submit' );
+		dragState.submitButtonRow = submitButton ? submitButton.closest( '#frm-show-fields > li' ) : null;
+
+		return dragState.submitButtonRow;
+	}
+
+	/**
 	 * Determine if a draggable element can be droppable into a droppable element.
 	 *
 	 * Don't allow page break, embed form, or section inside section field
@@ -2053,8 +2466,12 @@ window.frmAdminBuildJS = function() {
 			}
 
 			// Do not allow dropping other fields to below submit button.
-			const submitButtonIndex = jQuery( droppable.querySelector( '.edit_field_type_submit' ).closest( '#frm-show-fields > li' ) ).index();
-			return draggableIndex <= submitButtonIndex;
+			const submitButtonRow = getSubmitButtonRow( droppable );
+			if ( ! submitButtonRow ) {
+				return true;
+			}
+
+			return draggableIndex <= Array.prototype.indexOf.call( droppable.children, submitButtonRow );
 		}
 
 		if ( isSubmitBtn ) {
@@ -2249,36 +2666,156 @@ window.frmAdminBuildJS = function() {
 		return 1 === jQuery( fieldsInRow ).filter( `[data-fid="${ fieldId }"]` ).length;
 	}
 
-	function loadFields( fieldId ) {
-		const thisField = document.getElementById( fieldId );
-		const $thisField = jQuery( thisField );
-		const field = [];
-		const addHtmlToField = element => {
-			const frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
+	/**
+	 * How many fields to ask for in a single frm_load_field request.
+	 *
+	 * A field costs about the same to render whether it arrives on its own or with others, so this
+	 * mostly decides how many times the browser pays for loading WordPress again. Fewer, larger
+	 * requests finish sooner, at the cost of a slightly longer wait for the first fields to appear.
+	 */
+	const FIELD_LOAD_BATCH_SIZE = 40;
+
+	/**
+	 * How many field batches may be downloading or rendering at once.
+	 *
+	 * Responses are safe to arrive in any order because every field replaces its own placeholder by
+	 * id, and the placeholders are already sitting in the page in the right order.
+	 */
+	const FIELD_LOAD_CONCURRENCY = 3;
+
+	let activeFieldLoadRequests = 0;
+	let fieldLoadStarted = false;
+	let placeholderSpinnerObserver;
+
+	/**
+	 * Give each field placeholder a spinner only while it is in the viewport.
+	 *
+	 * A long form can have hundreds of placeholders, and most of them are swapped for the real
+	 * field before anyone scrolls to them, so a placeholder that is never seen never gets one.
+	 * Remove spinners that leave the viewport so their animations do not keep running offscreen.
+	 * The placeholder holds the spinner's space, so adding or removing it does not move fields.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function observeFieldPlaceholders() {
+		const placeholders = fieldsContainer.querySelectorAll( '.frm_field_loading' );
+		if ( ! placeholders.length ) {
+			return;
+		}
+
+		placeholderSpinnerObserver = new IntersectionObserver( handlePlaceholderIntersections );
+		placeholders.forEach( placeholder => placeholderSpinnerObserver.observe( placeholder ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {IntersectionObserverEntry[]} entries The placeholders that moved into or out of view.
+	 * @return {void}
+	 */
+	function handlePlaceholderIntersections( entries ) {
+		entries.forEach(
+			( { target, isIntersecting } ) => {
+				if ( ! isIntersecting ) {
+					target.querySelector( '.frm_visible_spinner' )?.remove();
+					return;
+				}
+
+				// A placeholder that failed to load shows an error message instead.
+				if ( target.hasChildNodes() ) {
+					return;
+				}
+
+				// eslint-disable-next-line formidable/prefer-document-fragment -- each spinner goes into a different placeholder
+				target.append( span( { className: 'frm-wait frm_visible_spinner' } ) );
+			}
+		);
+	}
+
+	/**
+	 * Start as many field load requests as the concurrency limit allows, and finish up once the
+	 * last one has come back.
+	 *
+	 * Fields are flagged with frm_load_now as soon as a request claims them, so the search for the
+	 * next batch never hands the same field to two requests.
+	 */
+	function fillFieldLoadQueue() {
+		while ( activeFieldLoadRequests < FIELD_LOAD_CONCURRENCY ) {
+			const nextField = fieldsContainer.querySelector( '.frm_field_loading:not(.frm_load_now)' );
+			if ( ! nextField ) {
+				break;
+			}
+
+			loadFields( nextField );
+		}
+
+		// Only of interest on a form that actually loads fields over ajax. buildInit covers the rest.
+		if ( fieldLoadStarted && 0 === activeFieldLoadRequests ) {
+			afterAllFieldsLoad();
+		}
+	}
+
+	/**
+	 * Claim the next batch of placeholders and ask the server to render them.
+	 *
+	 * Only the field ids go up. The server already has the fields, so sending their data back to
+	 * it would mean the whole form travelled down to the page and straight back up again.
+	 *
+	 * @param {HTMLElement} thisField The first placeholder in the batch.
+	 * @return {void}
+	 */
+	function loadFields( thisField ) {
+		const fieldIds = [];
+		const claimField = element => {
 			element.classList.add( 'frm_load_now' );
-			if ( frmHiddenFdata !== null ) {
-				field.push( frmHiddenFdata.innerHTML );
+			if ( element.classList.contains( 'frm_field_loading' ) ) {
+				fieldIds.push( element.dataset.fid );
 			}
 		};
 
-		addHtmlToField( thisField );
+		claimField( thisField );
 
 		let nextField = getNextField( thisField );
-		while ( nextField && field.length < 15 ) {
-			addHtmlToField( nextField );
+		while ( nextField && fieldIds.length < FIELD_LOAD_BATCH_SIZE ) {
+			claimField( nextField );
 			nextField = getNextField( nextField );
 		}
+
+		if ( ! fieldIds.length ) {
+			// There is nothing to ask the server for. The fields are flagged either way, so the
+			// queue carries on past them instead of offering them up again.
+			return;
+		}
+
+		++activeFieldLoadRequests;
+		fieldLoadStarted = true;
 
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_load_field',
-				field,
+				field_ids: fieldIds,
 				form_id: thisFormId,
+				// Only acknowledge received definitions so concurrent batches remain independent.
+				known_tooltips: Object.keys( frm_admin_js.tooltips || {} ).join( ',' ),
+				known_select_options: Object.keys( frm_admin_js.selectOptions || {} ).join( ',' ),
+				defer_settings: 1,
 				nonce: frmGlobal.nonce
 			},
-			success: html => handleAjaxLoadFieldSuccess( html, $thisField, field )
+			success: async response => {
+				try {
+					await handleAjaxLoadFieldSuccess( response, fieldIds );
+				} finally {
+					completeFieldLoadRequest();
+				}
+			},
+			error: () => {
+				showFieldLoadError( fieldIds );
+				completeFieldLoadRequest();
+			}
 		} );
 	}
 
@@ -2289,51 +2826,197 @@ window.frmAdminBuildJS = function() {
 		return field.parentNode?.closest( '.frm_field_box' )?.nextElementSibling?.querySelector( '.form-field' );
 	}
 
-	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
-		let key;
-		let $nextSet;
+	/**
+	 * Release a queue slot only after its fields and their controls are ready.
+	 *
+	 * @since x.x
+	 * @return {void}
+	 */
+	function completeFieldLoadRequest() {
+		--activeFieldLoadRequests;
+		fillFieldLoadQueue();
+	}
 
-		html = html.replace( /^\s+|\s+$/g, '' );
-		if ( html.indexOf( '{' ) !== 0 ) {
-			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
+	/**
+	 * Keep failed placeholders claimed so they are not automatically requested again.
+	 *
+	 * @since x.x
+	 * @param {string[]} fieldIds The fields belonging to the failed request.
+	 * @return {void}
+	 */
+	function showFieldLoadError( fieldIds ) {
+		fieldIds.forEach( fieldId => {
+			const field = document.getElementById( `frm_field_id_${ fieldId }` );
+			if ( field?.classList.contains( 'frm_field_loading' ) ) {
+				placeholderSpinnerObserver?.unobserve( field );
+				field.textContent = __( 'Unable to load field.', 'formidable' );
+			}
+		} );
+	}
+
+	/**
+	 * Swap placeholders in short slices while keeping each slice's controls ready for input.
+	 *
+	 * @param {string}   response A JSON object of field HTML and shared option and tooltip maps.
+	 * @param {string[]} fieldIds The fields requested in this batch.
+	 * @return {Promise<void>|void} Resolves after the last slice has initialized.
+	 */
+	function handleAjaxLoadFieldSuccess( response, fieldIds ) {
+		let data;
+		try {
+			data = JSON.parse( response );
+		} catch {
+			showFieldLoadError( fieldIds );
+			return;
+		}
+		if ( ! data || typeof data !== 'object' || Array.isArray( data ) ) {
+			showFieldLoadError( fieldIds );
 			return;
 		}
 
-		html = JSON.parse( html );
-		for ( key in html ) {
-			if ( ! Object.hasOwn( html, key ) ) {
-				continue;
-			}
-			jQuery( `#frm_field_id_${ key }` ).replaceWith( html[ key ] );
-
-			const newReplacedField = document.getElementById( `frm_field_id_${ key }` );
-			if ( newReplacedField ) {
-				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
-				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
-			}
-
-			setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
-			makeDraggable( document.getElementById( `frm_field_id_${ key }` ) );
+		const { tooltips, selectOptions, ...loadedFields } = data;
+		if ( selectOptions ) {
+			frm_admin_js.selectOptions = { ...frm_admin_js.selectOptions, ...selectOptions };
+		}
+		if ( tooltips && window.frm_admin_js ) {
+			frm_admin_js.tooltips = { ...frm_admin_js.tooltips, ...tooltips };
 		}
 
-		$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
-		if ( $nextSet.length ) {
-			loadFields( $nextSet.attr( 'id' ) );
-		} else {
-			// go up a level
-			$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
-			if ( $nextSet.length ) {
-				loadFields( $nextSet.attr( 'id' ) );
-			}
+		return processFieldLoadBatch(
+			Object.entries( loadedFields ),
+			renderLoadedField,
+			initializeLoadedFieldSlice
+		);
+	}
+
+	/**
+	 * Replace one placeholder and prepare its builder interactions.
+	 *
+	 * @since x.x
+	 * @param {Array} entry The field ID and its rendered HTML and type.
+	 * @return {Object|null} The inserted field, or null if its placeholder was deleted.
+	 */
+	function renderLoadedField( entry ) {
+		const [ key, field ] = entry;
+		const oldField = document.getElementById( `frm_field_id_${ key }` );
+		if ( ! oldField ) {
+			return null;
+		}
+		placeholderSpinnerObserver?.unobserve( oldField );
+		dragDropObserver.unobserve( oldField );
+		dragDropAttachers.delete( oldField );
+		cacheFieldSettings( key, field.settingsHtml );
+		jQuery( oldField ).replaceWith( field.html );
+
+		const element = document.getElementById( `frm_field_id_${ key }` );
+		if ( ! element ) {
+			return null;
+		}
+		if ( field.settingsMeta ) {
+			addFieldSettingsMetadata( element, key, field.settingsMeta );
+		}
+		prepareLoadedFieldMarkup( element );
+		if ( element.classList.contains( 'edit_field_type_divider' ) ) {
+			element.querySelectorAll( 'ul.frm_sorting' ).forEach( setupSortableList );
+		}
+		lazyMakeDraggable( element );
+		return { id: key, type: field.type, element };
+	}
+
+	/**
+	 * Prepare deferred settings before selection or another interaction reads their inputs.
+	 *
+	 * @since x.x
+	 * @param {string} fieldId Numeric field ID.
+	 * @return {HTMLElement|null} The field settings panel, if the field has loaded.
+	 */
+	function ensureFieldSettings( fieldId ) {
+		return materializeFieldSettings( fieldId, prepareLoadedFieldMarkup );
+	}
+
+	/**
+	 * Resolve shared markup attributes for a field preview or its newly inserted settings.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} element The inserted preview or settings panel.
+	 * @return {void}
+	 */
+	function prepareLoadedFieldMarkup( element ) {
+		element.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+		element.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+		element.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
+	}
+
+	/**
+	 * Prepare settings before delegated preview handlers read or modify them.
+	 *
+	 * @since x.x
+	 * @param {Event} event The preview interaction.
+	 * @return {void}
+	 */
+	function prepareInteractedFieldSettings( event ) {
+		const field = event.target.closest( '#frm-show-fields li.form-field' );
+		if ( field && ! field.classList.contains( 'frm_field_loading' ) ) {
+			ensureFieldSettings( field.dataset.fid );
+		}
+	}
+
+	/**
+	 * Stop placeholder mouse events before delegated selection and hover handlers run.
+	 *
+	 * @since x.x
+	 * @param {MouseEvent} event The interaction inside the builder fields container.
+	 * @return {void}
+	 */
+	function ignoreLoadingFieldMouseEvent( event ) {
+		// A drag helper lets the pointer reach placeholders, so let jQuery UI track the drag.
+		if ( document.body.classList.contains( 'frm-dragging' ) || ! event.target.closest( '.frm_field_loading' ) ) {
+			return;
 		}
 
-		initiateMultiselect();
-		renumberPageBreaks();
-		maybeHideQuantityProductFieldOption();
+		// Clear the previous row before stopping the delegated hover cleanup.
+		if ( false !== maybeRemoveGroupHoverTarget() ) {
+			deleteTooltips();
+		}
+
+		event.preventDefault();
+		event.stopImmediatePropagation();
+	}
+
+	/**
+	 * Initialize only the fields inserted in this slice before yielding to user input.
+	 *
+	 * @since x.x
+	 * @param {Array} fields The inserted fields, including null for deleted placeholders.
+	 * @return {void}
+	 */
+	function initializeLoadedFieldSlice( fields ) {
+		const loadedFields = fields.filter( Boolean );
+		if ( ! loadedFields.length ) {
+			return;
+		}
+		initiateMultiselect( loadedFields.map( field => field.element ) );
+
+		if ( dragState.dragging ) {
+			refreshDroppableOffsets();
+		}
 
 		const loadedEvent = new Event( 'frm_ajax_loaded_field', { bubbles: false } );
-		loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
+		loadedEvent.frmFields = loadedFields.map( ( { id, type } ) => ( { id, type } ) );
 		document.dispatchEvent( loadedEvent );
+	}
+
+	/**
+	 * Handle the things that look at the form as a whole, once every field has arrived.
+	 *
+	 * These used to run after each batch, so a form loading in n batches did n passes over a
+	 * steadily growing page for a result only the last pass could get right.
+	 */
+	function afterAllFieldsLoad() {
+		placeholderSpinnerObserver?.disconnect();
+		renumberPageBreaks();
+		maybeHideQuantityProductFieldOption();
+		scheduleBulkOptionsOverlay();
 	}
 
 	function addFieldClick() {
@@ -2635,7 +3318,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
-		const originalSettings = document.getElementById( `frm-single-settings-${ originalFieldId }` );
+		const originalSettings = ensureFieldSettings( originalFieldId );
 		if ( ! originalSettings ) {
 			return;
 		}
@@ -2740,7 +3423,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		if ( null !== document.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
+		if ( null !== fieldsContainer.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
 			// do not set a hover target if a dropdown is open for the current hover target.
 			return;
 		}
@@ -2750,6 +3433,11 @@ window.frmAdminBuildJS = function() {
 			const list = elementFromPoint.closest( 'ul.frm_sorting' );
 
 			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
+				if ( list.querySelector( ':scope > .frm_field_loading' ) ) {
+					maybeRemoveGroupHoverTarget();
+					return;
+				}
+
 				const previousHoverTarget = maybeRemoveGroupHoverTarget();
 				if ( false !== previousHoverTarget && ! jQuery( previousHoverTarget ).is( list ) ) {
 					destroyFieldGroupPopup();
@@ -2767,7 +3455,7 @@ window.frmAdminBuildJS = function() {
 			controls.style.display = 'none';
 		}
 
-		const previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const previousHoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! previousHoverTarget ) {
 			return false;
 		}
@@ -3000,7 +3688,7 @@ window.frmAdminBuildJS = function() {
 		deselectFields();
 		initiateMultiselect();
 
-		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+		fieldsContainer.classList.remove( 'frm-over-droppable' );
 
 		maybeDisableFieldButtonAtLimit( type );
 
@@ -3251,6 +3939,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function hasExcludedOption( field, excludedOpts ) {
+		ensureFieldSettings( field.fieldId );
 		let hasOption = false;
 		for ( let i = 0; i < excludedOpts.length; i++ ) {
 			const inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
@@ -3268,6 +3957,12 @@ window.frmAdminBuildJS = function() {
 		return `field_options${ opt.substring( 0, at ) }_${ fieldId }${ opt.substring( at ) }`;
 	}
 
+	/**
+	 * Populates the calculation field list.
+	 *
+	 * @param {HTMLElement} element The calculation box element.
+	 * @param {boolean}     force   Whether to force the refresh.
+	 */
 	function popCalcFields( element, force ) {
 		const settingsBox = jQuery( element ).closest( '.frm-single-settings' );
 		const calc = settingsBox.find( '.frm-calc-field' );
@@ -3287,10 +3982,21 @@ window.frmAdminBuildJS = function() {
 			box = document.getElementById( `frm-calc-box-${ fieldId }` );
 		}
 
-		const exclude = getExcludeArray( box, isSummary );
+		const codeList = box.querySelector( '.frm_code_list' );
+		const exclude = getExcludeArray( codeList, isSummary );
 		const excludedOpts = extractExcludedOptions( exclude );
 
-		const fields = getFieldList();
+		/**
+		 * Filters the fields offered in a calculation box.
+		 *
+		 * Add-ons that own a calculation type can drop fields it can't use. When
+		 * nothing is hooked in, every field is offered, matching the behavior
+		 * before calculation-type specific filtering existed.
+		 *
+		 * @param {Array}  fields The candidate fields.
+		 * @param {Object} args   Context with the box, code list, and isSummary flag.
+		 */
+		const fields = wp.hooks.applyFilters( 'frm_calc_field_list', getFieldList(), { box, codeList, isSummary } );
 		const list = document.getElementById( `frm-calc-list-${ fieldId }` );
 		list.innerHTML = '';
 
@@ -3300,23 +4006,84 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
-			const anchor = document.createElement( 'a' );
-			anchor.setAttribute( 'href', '#' );
-			anchor.setAttribute( 'data-code', fields[ i ].fieldId );
-			anchor.classList.add( 'frm_insert_code' );
-			anchor.append( span( fields[ i ].fieldName ) );
-			anchor.append( span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ fields[ i ].fieldId }]` } ) );
+			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
 
-			const li = document.createElement( 'li' );
-			li.classList.add( `frm-field-list-${ fieldId }` );
-			li.classList.add( `frm-field-list-${ fields[ i ].fieldType }` );
-			li.append( anchor );
-			list.append( li );
+			if ( ! isSummary ) {
+				// The summary field list is a list of fields to exclude, not a list of shortcodes, so field parts don't belong in it.
+				addFieldPartShortcodes( fields[ i ], fieldId, list );
+			}
 		}
 	}
 
-	function getExcludeArray( calcBox, isSummary ) {
-		const codeList = calcBox.querySelector( '.frm_code_list' );
+	/**
+	 * Lets the plugin that owns the calculation type add shortcodes for the individual
+	 * parts of a multi-part field, like [25 show=last] for a Name field.
+	 *
+	 * Nothing in Lite renders a calculation box, so Lite offers the extension point and
+	 * leaves the parts themselves to whichever plugin owns the calculation.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
+	 * @param {string}      fieldId ID of the field the popup was opened for.
+	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
+	 *
+	 * @return {void}
+	 */
+	function addFieldPartShortcodes( field, fieldId, list ) {
+		/**
+		 * Allows add-ons to add field part shortcodes to calculation popup.
+		 *
+		 * @since 6.35
+		 *
+		 * @param {Object}      hookArgs                      Arguments passed to the hook.
+		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
+		 * @param {string}      hookArgs.fieldId              ID of the field triggering the popup.
+		 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
+		 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
+		 */
+		wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field, fieldId, list, addCalcFieldLiToList } );
+	}
+
+	/**
+	 * Adds a row to a calculation box's field shortcode list.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {HTMLElement} list      The 'ul' element that contains field shortcodes available for calculation.
+	 * @param {string}      fieldId   ID of the field the popup was opened for.
+	 * @param {string}      code      The shortcode to insert, without the brackets.
+	 * @param {string}      label     The name shown for the row.
+	 * @param {string}      fieldType Type of the field the shortcode belongs to.
+	 *
+	 * @return {void}
+	 */
+	function addCalcFieldLiToList( list, fieldId, code, label, fieldType ) {
+		const anchor = a( {
+			className: 'frm_insert_code',
+			children: [
+				span( label ),
+				span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ code }]` } )
+			],
+			data: { code }
+		} );
+
+		list.append(
+			tag( 'li', {
+				className: `frm-field-list-${ fieldId } frm-field-list-${ fieldType }`,
+				child: anchor
+			} )
+		);
+	}
+
+	/**
+	 * Gets the exclude array for the calculation box.
+	 *
+	 * @param {HTMLElement} codeList  The code list element.
+	 * @param {boolean}     isSummary Whether the calculation box is for a summary.
+	 * @return {Array} The exclude array.
+	 */
+	function getExcludeArray( codeList, isSummary ) {
 		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
@@ -3681,17 +4448,59 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function initBulkOptionsOverlay() {
-		/*jshint validthis:true */
-		const $info = initModal( '#frm-bulk-modal', '700px' );
-		if ( $info === false ) {
+	let bulkOptionsOverlay;
+	let bulkOptionsOverlayScheduled = false;
+
+	/**
+	 * Create the dialog once, either during idle time or on its first click.
+	 *
+	 * @since x.x
+	 * @return {jQuery|boolean} The dialog, or false when its markup is absent.
+	 */
+	function initializeBulkOptionsOverlay() {
+		if ( bulkOptionsOverlay === undefined ) {
+			bulkOptionsOverlay = initModal( '#frm-bulk-modal', '700px' );
+		}
+		return bulkOptionsOverlay;
+	}
+
+	/**
+	 * Wait for page assets and field rendering before scheduling optional dialog work.
+	 *
+	 * @since x.x
+	 * @return {void}
+	 */
+	function scheduleBulkOptionsOverlay() {
+		if ( bulkOptionsOverlayScheduled ) {
 			return;
 		}
+		bulkOptionsOverlayScheduled = true;
+
+		const schedule = () => {
+			if ( window.requestIdleCallback ) {
+				window.requestIdleCallback( initializeBulkOptionsOverlay );
+			} else {
+				setTimeout( initializeBulkOptionsOverlay, 0 );
+			}
+		};
+		if ( document.readyState === 'complete' ) {
+			schedule();
+		} else {
+			window.addEventListener( 'load', schedule, { once: true } );
+		}
+	}
+
+	function initBulkOptionsOverlay() {
+		/*jshint validthis:true */
 
 		jQuery( '.frm-insert-preset' ).on( 'click', insertBulkPreset );
 
 		jQuery( builderForm ).on( 'click', 'a.frm-bulk-edit-link', function( event ) {
 			event.preventDefault();
+			const $info = initializeBulkOptionsOverlay();
+			if ( $info === false ) {
+				return;
+			}
 			let content = '';
 			const fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' );
 			const separate = usingSeparateValues( fieldId );
@@ -3742,7 +4551,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			this.classList.add( 'frm_loading_button' );
-			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
+			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, initializeBulkOptionsOverlay() );
 			fieldUpdated();
 		} );
 	}
@@ -4011,12 +4820,69 @@ window.frmAdminBuildJS = function() {
 	 * Allow typing on form switcher click without an extra click to search.
 	 */
 	function focusSearchBox() {
+		populateFormSwitcher();
+
 		const searchBox = document.getElementById( 'dropform-search-input' );
 		if ( searchBox ) {
 			setTimeout( function() {
 				searchBox.focus();
 			}, 100 );
 		}
+	}
+
+	/**
+	 * Add switcher links after the menu is opened, yielding between batches.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function populateFormSwitcher() {
+		const menu = document.querySelector( '#frm_bs_dropdown .frm-dropdown-menu' );
+		const dataElement = document.getElementById( 'frm-form-switcher-data' );
+		if ( ! menu || ! dataElement ) {
+			return;
+		}
+
+		const forms = JSON.parse( dataElement.textContent );
+		dataElement.remove();
+
+		const searchBox = document.getElementById( 'dropform-search-input' );
+		const INITIAL_FORM_COUNT = 20;
+		const FORM_BATCH_SIZE = 200;
+		let index = 0;
+
+		function addBatch( batchSize ) {
+			const fragment = document.createDocumentFragment();
+			const end = Math.min( index + batchSize, forms.length );
+			const searchText = searchBox ? searchBox.value.toLowerCase() : '';
+
+			for ( ; index < end; index++ ) {
+				const form = forms[ index ];
+				const link = frmDom.a( {
+					className: 'frm-justify-between',
+					children: [
+						form.name,
+						frmDom.span( { text: menu.dataset.idLabel.replace( '%d', form.id ) } ),
+						frmDom.span( { className: 'frm_hidden', text: form.key } )
+					]
+				} );
+				link.href = form.url;
+				link.tabIndex = -1;
+				const item = frmDom.tag( 'li', { className: 'frm-dropdown-form', child: link } );
+				if ( searchText && ! item.textContent.toLowerCase().includes( searchText ) ) {
+					item.classList.add( 'frm_hidden' );
+				}
+				fragment.append( item );
+			}
+
+			menu.append( fragment );
+			if ( index < forms.length ) {
+				setTimeout( () => addBatch( FORM_BATCH_SIZE ), 0 );
+			}
+		}
+
+		addBatch( INITIAL_FORM_COUNT );
 	}
 
 	/**
@@ -4049,6 +4915,7 @@ window.frmAdminBuildJS = function() {
 	 * Delete a field option.
 	 */
 	function deleteFieldOption() {
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const parentLi = this.parentNode;
 		const parentUl = parentLi.parentNode;
 
@@ -4168,7 +5035,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickDeleteFieldGroup() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -4182,7 +5049,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function duplicateFieldGroup() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -4257,7 +5124,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickFieldGroupLayout() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 
 		if ( ! hoverTarget ) {
 			return;
@@ -4562,7 +5429,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleFieldGroupLayoutOptionClick() {
-		const row = document.querySelector( '.frm-field-group-hover-target' );
+		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! row ) {
 			// The field group layout options also get clicked when merging multiple rows.
 			// The following code isn't required for multiple rows though so just exit early.
@@ -4755,7 +5622,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function breakFieldGroupClick() {
-		const row = document.querySelector( '.frm-field-group-hover-target' );
+		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		breakRow( row );
 		destroyFieldGroupPopup();
 	}
@@ -4817,7 +5684,7 @@ window.frmAdminBuildJS = function() {
 		const $controls = jQuery( document.getElementById( 'frm_field_group_controls' ) );
 
 		if ( $controls.length && 'none' !== $controls.get( 0 ).style.display ) {
-			syncLayoutClasses( getFieldsInRow( jQuery( document.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
+			syncLayoutClasses( getFieldsInRow( jQuery( fieldsContainer.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
 		} else {
 			const $ul = mergeSelectedFieldGroups();
 			syncLayoutClasses( getFieldsInRow( $ul ).first(), syncDetails );
@@ -4830,33 +5697,26 @@ window.frmAdminBuildJS = function() {
 	function fieldGroupClick( e ) {
 		maybeShowFieldGroupMessage();
 
-		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
-			// only continue if the group itself was clicked / ignore when a field is clicked.
+		if ( e.target !== e.currentTarget ) {
+			// only continue if the group itself was clicked / ignore when a field or a nested group is clicked.
 			return;
 		}
 
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
 
 		const ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		const shiftKeyIsDown = e.shiftKey;
-		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
+		// Get the selected groups first so the selected field's group is included when checking if the clicked group is active.
 		const $selectedFieldGroups = getSelectedFieldGroups();
+		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
 
 		let numberOfSelectedGroups = $selectedFieldGroups.length;
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
-
-			const selectedField = getSelectedField();
-			if ( null !== selectedField && ! jQuery( selectedField ).siblings( 'li.form-field' ).length ) {
-				// count a selected field on its own as a selected field group when multiselecting.
-				selectedField.parentNode.classList.add( 'frm-selected-field-group' );
-				++numberOfSelectedGroups;
-			}
-
 			if ( ctrlOrCmdKeyIsDown ) {
 				if ( groupIsActive ) {
 					// unselect if holding ctrl or cmd and the group was already active.
@@ -4939,6 +5799,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function maybeShowFieldGroupMessage() {
+		if ( fieldGroupMessageDismissed ) {
+			return;
+		}
+
 		let fieldGroupMessage = document.getElementById( 'frm-field-group-message' );
 		const rows = document.querySelectorAll( '.edit_form_item:not(.edit_field_type_end_divider)' );
 
@@ -4973,6 +5837,7 @@ window.frmAdminBuildJS = function() {
 
 		// Set up a click event listener
 		document.getElementById( 'frm-field-group-message-dismiss' ).addEventListener( 'click', () => {
+			fieldGroupMessageDismissed = true;
 			hideFieldGroupMessage( document.getElementById( 'frm-field-group-message' ) );
 		} );
 	}
@@ -5011,7 +5876,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getSelectedField() {
-		return document.getElementById( 'frm-show-fields' ).querySelector( 'li.form-field.selected' );
+		return fieldsContainer.querySelector( 'li.form-field.selected' );
 	}
 
 	function getSelectedFieldGroups() {
@@ -5022,9 +5887,9 @@ window.frmAdminBuildJS = function() {
 
 		const selectedField = getSelectedField();
 		if ( selectedField ) {
-			// If there is only one field in a group and the field is selected, consider the field's group as selected for multi-select.
+			// When a field is selected, consider the field's group as selected for multi-select.
 			const selectedFieldGroup = selectedField.closest( 'ul' );
-			if ( selectedFieldGroup && 1 === getFieldsInRow( jQuery( selectedFieldGroup ) ).length ) {
+			if ( selectedFieldGroup ) {
 				selectedFieldGroup.classList.add( 'frm-selected-field-group' );
 				return jQuery( selectedFieldGroup );
 			}
@@ -5295,6 +6160,7 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success() {
+				forgetFieldSettings( fieldId );
 				const $thisField = jQuery( document.getElementById( `frm_field_id_${ fieldId }` ) );
 				const settings = jQuery( `#frm-single-settings-${ fieldId }` );
 
@@ -5377,7 +6243,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function countFieldTypeInForm( type ) {
-		return document.getElementById( 'frm-show-fields' ).querySelectorAll( `li.form-field[data-ftype="${ type }"]` ).length;
+		return fieldsContainer.querySelectorAll( `li.form-field[data-ftype="${ type }"]` ).length;
 	}
 
 	function addFieldLogicRow() {
@@ -5605,6 +6471,7 @@ window.frmAdminBuildJS = function() {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const fieldIds = [];
 		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		const rowLength = rows.length;
@@ -5785,7 +6652,7 @@ window.frmAdminBuildJS = function() {
 
 	function toggleCollapseFakePage() {
 		const topLevel = document.getElementById( 'frm-fake-page' );
-		const firstField = document.getElementById( 'frm-show-fields' ).firstElementChild;
+		const firstField = fieldsContainer.firstElementChild;
 		const toCollapse = getAllFieldsForPage( firstField );
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
@@ -5916,13 +6783,14 @@ window.frmAdminBuildJS = function() {
 
 			fieldTypeName = normalizeFieldName( fieldTypeName );
 
-			setTimeout( function() {
+			// The setting can't take focus until its tab is showing.
+			setTimeout( () => fieldOptionsTabShown.then( () => {
 				if ( setting.value.toLowerCase() === fieldTypeName ) {
 					setting.select();
 				} else {
 					setting.focus();
 				}
-			}, 50 );
+			} ), 50 );
 		}
 	}
 
@@ -5930,10 +6798,10 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		const setting = document.querySelectorAll( `[data-changeme="${ this.id }"]` )[ 0 ];
 		if ( setting !== undefined ) {
-			setTimeout( function() {
+			setTimeout( () => fieldOptionsTabShown.then( () => {
 				setting.focus();
 				autoExpandSettings( setting );
-			}, 50 );
+			} ), 50 );
 		}
 	}
 
@@ -6298,6 +7166,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		const rowLength = rows.length;
 
@@ -6355,6 +7224,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getFieldOptions( fieldId ) {
+		ensureFieldSettings( fieldId );
 		const options = [];
 		const optsContainer = document.getElementById( `frm_field_${ fieldId }_opts` );
 
@@ -6383,6 +7253,17 @@ window.frmAdminBuildJS = function() {
 		const id = `field_${ fieldKey }-${ opt.key }`;
 		const inputType = type === 'scale' ? 'radio' : type;
 
+		/*
+		 * 'radio' and 'checkbox' wrap the option input in its label with no
+		 * `for` attribute -- the wrap alone already associates them, and a
+		 * `for` pointing at the same id makes Safari VoiceOver announce the
+		 * label twice (radio-field.php, checkbox-field.php,
+		 * product-radio.php, the last covering both product data_types).
+		 * Keep in sync with those templates -- this preview template drifts
+		 * silently from the PHP output otherwise.
+		 */
+		const labelFor = [ 'radio', 'checkbox' ].includes( type ) ? '' : ` for="${ id }"`;
+
 		const other = `<input type="text" id="field_${ fieldKey }-${ opt.key }-otext" class="frm_other_input frm_pos_none" name="item_meta[other][${ fieldId }][${ opt.key }]" value="" />`;
 
 		this.getSingle = function() {
@@ -6402,7 +7283,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			return `<div class="frm_${ type } ${ type } ${ classes }" id="frm_${ type }_${ fieldId }-${ opt.key }">
-					<label for="${ id }">
+					<label${ labelFor }>
 						<input type="${ inputType }" name="item_meta[${ fieldId }]${ type === 'checkbox' ? '[]' : '' }" value="${ purifyHtml( opt.saved ) }" id="${ id }"${ isProduct ? ` data-price="${ opt.price }"` : '' }${ opt.checked ? ' checked="checked"' : '' }>
 						${ purifyHtml( opt.label ) }
 					</label>
@@ -6418,6 +7299,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 		const { sourceID } = atts;
+		ensureFieldSettings( sourceID );
 		const { placeholder } = atts;
 		const isProduct = isProductField( sourceID );
 		const showOther = atts.other;
@@ -6472,6 +7354,7 @@ window.frmAdminBuildJS = function() {
 	 * @param {boolean} showValueAsLabel Whether to show the value as label for empty labels.
 	 */
 	function getMultipleOpts( fieldId, showValueAsLabel = false ) {
+		ensureFieldSettings( fieldId );
 		let i;
 		let saved;
 		let labelName;
@@ -6844,12 +7727,12 @@ window.frmAdminBuildJS = function() {
 				field = self.getFieldOrderInputById( fieldId, fields[ i ] );
 
 				// get current field order, make sure we don't get the "field" reference as the "field" value will get updated later.
-				currentOrder = field ? Object.assign( {}, field.value )[ 0 ] : null;
+				currentOrder = field ? Number( field.value ) : null;
 				newOrder = i + 1;
 
 				if ( currentOrder != newOrder && null !== currentOrder ) {
 					field.value = newOrder;
-					singleField = fields[ i ].querySelector( `#frm-single-settings-${ fieldId }` );
+					singleField = ensureFieldSettings( fieldId );
 
 					// add field that needs to be moved to "updateFieldOrder.prototype.fieldSettingsForm"
 					moveFieldsClass.append( singleField );
@@ -6970,7 +7853,8 @@ window.frmAdminBuildJS = function() {
 		const fieldId = field.getAttribute( 'data-fid' );
 
 		if ( '' === replaceWith.trim() ) {
-			replaceWith = ` ${ setting.querySelector( 'option[data-align]' ).getAttribute( 'data-align' ) }`;
+			const alignOption = setting.querySelector( 'option[data-align]' );
+			replaceWith = alignOption ? ` ${ alignOption.getAttribute( 'data-align' ) }` : '';
 		}
 		// Include classes from multiple settings.
 		if ( fieldId !== undefined ) {
@@ -7002,7 +7886,86 @@ window.frmAdminBuildJS = function() {
 			replaceWith = replaceWith.trim();
 		}
 
+		const hadFrmFirstClass = field.classList.contains( 'frm_first' );
+
 		field.className = field.className.replace( replace, replaceWith );
+
+		if ( ! hadFrmFirstClass && field.classList.contains( 'frm_first' ) ) {
+			maybeBreakFieldGroup( field );
+		}
+	}
+
+	/**
+	 * Break a field out of its field group when the frm_first class gets added to it.
+	 *
+	 * frm_first starts a new row, so FrmFieldGridHelper opens a new field group for the field
+	 * the next time the builder loads. This applies the same split right away instead of
+	 * leaving the builder showing a row that the reloaded form will not match.
+	 *
+	 * Fields after the target field move into the new group as well, since the new row is
+	 * where they end up on reload too.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {HTMLElement} field The field that just had the frm_first class added to it.
+	 * @return {void}
+	 */
+	function maybeBreakFieldGroup( field ) {
+		const list = field.parentElement;
+
+		if ( ! list || 'UL' !== list.nodeName || list.classList.contains( 'start_divider' ) ) {
+			// A field only ever needs breaking out when it is in a field group list.
+			return;
+		}
+
+		const fieldGroup = list.parentElement;
+
+		if ( ! fieldGroup || ! isFieldGroup( fieldGroup ) ) {
+			return;
+		}
+
+		const fieldsInRow = getFieldsInRow( jQuery( list ) ).get();
+
+		if ( fieldsInRow.indexOf( field ) < 1 ) {
+			// The field already starts its row, so there is nothing to break out of.
+			return;
+		}
+
+		const newList = tag( 'ul', { className: 'frm_grid_container frm_sorting' } );
+		const newFieldGroup = tag( 'li', { className: 'frm_field_box', child: newList } );
+
+		fieldGroup.after( newFieldGroup );
+		newList.append( ...getFieldAndFollowingFields( field ) );
+
+		makeDroppable( newList );
+		makeDraggable( newFieldGroup, '.frm-move' );
+
+		updateFieldGroupControls( jQuery( list ), getFieldsInRow( jQuery( list ) ).length );
+	}
+
+	/**
+	 * Get a field along with every field that follows it in the same list.
+	 *
+	 * The field group controls are shared between every group and get appended to whichever
+	 * group is hovered, so only list items are included.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {HTMLElement} field The field to start from.
+	 * @return {Array.<HTMLElement>} The field and the fields after it.
+	 */
+	function getFieldAndFollowingFields( field ) {
+		const fields = [];
+
+		let sibling = field;
+		while ( sibling ) {
+			if ( 'LI' === sibling.nodeName ) {
+				fields.push( sibling );
+			}
+			sibling = sibling.nextElementSibling;
+		}
+
+		return fields;
 	}
 
 	function maybeShowInlineModal( e ) {
@@ -7420,6 +8383,9 @@ window.frmAdminBuildJS = function() {
 		container.classList.add( 'frmcenter' );
 
 		const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
+
+		// The message explains the heading, so it reads before the call to action, the same way it does in the modal.
+		appendClonedModalElementToContainer( 'frm-upgrade-message' );
 		appendClonedModalElementToContainer( 'frm-oneclick' );
 		appendClonedModalElementToContainer( 'frm-addon-status' );
 
@@ -7438,6 +8404,9 @@ window.frmAdminBuildJS = function() {
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
+			if ( element.dataset.gradientUpgrade ) {
+				upgradeButton.classList.add( 'frm-gradient' );
+			}
 			container.append( upgradeActions || upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
@@ -7448,8 +8417,6 @@ window.frmAdminBuildJS = function() {
 			appendClonedModalElementToContainer( 'frm-oneclick-button' );
 		}
 
-		appendClonedModalElementToContainer( 'frm-upgrade-message' );
-
 		let upgradeLabel = element.dataset.message;
 
 		if ( upgradeLabel === undefined ) {
@@ -7457,13 +8424,42 @@ window.frmAdminBuildJS = function() {
 		}
 		addOneClick( element, 'tab', upgradeLabel );
 
-		if ( element.dataset.screenshot ) {
+		if ( element.dataset.upsellImages ) {
+			container.append( getUpsellImagesWrapper( element.dataset.upsellImages, title ) );
+		} else if ( element.dataset.screenshot ) {
 			container.append( getScreenshotWrapper( element.dataset.screenshot ) );
 		}
 
 		function appendClonedModalElementToContainer( className ) {
 			container.append( upgradeModal.querySelector( `.${ className }` ).cloneNode( true ) );
 		}
+	}
+
+	/**
+	 * Build the previews shown below an upgrade tab's call to action.
+	 *
+	 * Unlike a screenshot, these images carry their own framing, so they get no
+	 * browser chrome around them. The first one takes a row to itself and the rest
+	 * share the row below it, scaled to keep their proportions.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {string} images Comma separated file names, relative to the images/upsell folder.
+	 * @param {string} alt    Name of the feature being previewed.
+	 * @return {Element} The wrapper to append to the tab.
+	 */
+	function getUpsellImagesWrapper( images, alt ) {
+		const folderUrl = `${ frmGlobal.url }/images/upsell/`;
+		const [ featured, ...rest ] = images.split( ',' ).map(
+			image => img( { src: folderUrl + image.trim(), alt } )
+		);
+		const children = [ featured ];
+
+		if ( rest.length ) {
+			children.push( div( { className: 'frm-upsell-images-row', children: rest } ) );
+		}
+
+		return div( { className: 'frm-upsell-images', children } );
 	}
 
 	function getScreenshotWrapper( screenshot ) {
@@ -7845,7 +8841,11 @@ window.frmAdminBuildJS = function() {
 			allFieldSettings[ i ].classList.add( 'frm_hidden' );
 		}
 
-		const singleField = document.getElementById( `frm-single-settings-${ fieldId }` );
+		const singleField = ensureFieldSettings( fieldId );
+		if ( ! singleField ) {
+			return;
+		}
+		hydrateBuilderSelectsIn( singleField );
 		moveFieldSettings( singleField );
 
 		if ( fieldType && 'quantity' === fieldType ) {
@@ -7859,6 +8859,7 @@ window.frmAdminBuildJS = function() {
 		} );
 
 		singleField.classList.remove( 'frm_hidden' );
+		initiateMultiselect( singleField );
 
 		// Cancel slide animation on expanded sections so screen readers
 		// can immediately access inputs after DOM re-insertion.
@@ -7866,11 +8867,10 @@ window.frmAdminBuildJS = function() {
 			section => section.style.animation = 'none'
 		);
 
-		document.getElementById( 'frm-options-panel-tab' ).click();
-
+		let editorReady = Promise.resolve();
 		const editor = singleField.querySelector( '.wp-editor-area' );
 		if ( editor ) {
-			frmDom.wysiwyg.init(
+			editorReady = frmDom.wysiwyg.init(
 				editor,
 				{ setupCallback: setupTinyMceEventHandlers }
 			);
@@ -7878,6 +8878,49 @@ window.frmAdminBuildJS = function() {
 
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
+
+		showFieldOptionsTab( obj, singleField, editorReady );
+	}
+
+	/**
+	 * Switch the sidebar to the Field Options tab, which slides the settings panel into view.
+	 *
+	 * The panel's setup work (deferred inits, TinyMCE, frmShowedFieldSettings listeners) all runs
+	 * before this. Starting the slide during that work drops its frames and makes it look shaky,
+	 * so the switch waits for TinyMCE to boot and then starts on a fresh frame.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}   obj         The selected field element.
+	 * @param {HTMLElement}   singleField The field settings element.
+	 * @param {Promise<void>} editorReady Resolves once the field's rich text editor has booted.
+	 * @return {void}
+	 */
+	function showFieldOptionsTab( obj, singleField, editorReady ) {
+		const optionsTab = document.getElementById( 'frm-options-panel-tab' );
+
+		if ( optionsTab.parentElement.classList.contains( 'frm-active' ) ) {
+			// The tab is already open, so there is no slide to protect.
+			optionsTab.click();
+			fieldOptionsTabShown = Promise.resolve();
+			return;
+		}
+
+		// Never hold the panel back for long, even if TinyMCE's scripts are slow to load.
+		const MAX_EDITOR_WAIT = 300;
+		const maxWait = new Promise( resolve => setTimeout( resolve, MAX_EDITOR_WAIT ) );
+
+		fieldOptionsTabShown = Promise.race( [ editorReady, maxWait ] ).then(
+			() => new Promise( resolve => {
+				requestAnimationFrame( () => {
+					// Skip it if another field was selected, or the Add Fields tab was clicked, while waiting.
+					if ( obj.classList.contains( 'selected' ) && ! singleField.classList.contains( 'frm_hidden' ) ) {
+						optionsTab.click();
+					}
+					resolve();
+				} );
+			} )
+		);
 	}
 
 	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
@@ -7885,14 +8928,13 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const fieldSettingsSelector = `#frm-single-settings-${ fieldId }`;
-		if ( document.querySelector( `${ fieldSettingsSelector } .frm-show-box` ) ) {
+		if ( singleField.querySelector( '.frm-show-box' ) ) {
 			return;
 		}
 		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textareas = document.querySelectorAll( `${ fieldSettingsSelector } .frm_has_shortcodes textarea` );
+			const textareas = singleField.querySelectorAll( '.frm_has_shortcodes textarea' );
 			textareas.forEach( textarea => {
 				const wrapperSpan = span( { className: 'frm-with-right-icon' } );
 				textarea.parentNode.insertBefore( wrapperSpan, textarea );
@@ -8251,7 +9293,13 @@ window.frmAdminBuildJS = function() {
 	function fillDyncontent() {
 		/*jshint validthis:true */
 		const selectedValue = jQuery( this ).val();
-		const $dyn = jQuery( document.getElementById( 'frm_dyncontent' ) );
+		// formidable-views renamed this id from frm_dyncontent to
+		// frm_post_action_custom_content in 2021 (formidable-views@70cde392).
+		// Older Views installs still render the old id, so check both.
+		const $dyn = jQuery(
+			document.getElementById( 'frm_post_action_custom_content' ) ||
+			document.getElementById( 'frm_dyncontent' )
+		);
 		if ( '' === selectedValue || 'new' === selectedValue ) {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
@@ -8911,6 +9959,7 @@ window.frmAdminBuildJS = function() {
 		if ( classes.includes( 'frm_close_icon' ) ) {
 			hideShortcodes( box );
 		} else {
+			hydrateDeferredCodeListIcons( box );
 			updateShortcodesPopupPosition( moreIcon );
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
@@ -8944,6 +9993,37 @@ window.frmAdminBuildJS = function() {
 			}
 			showOrHideContextualShortcodes( input );
 		}
+	}
+
+	/**
+	 * Add field shortcode icons when their code list is first shown.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} container The opened shortcode panel.
+	 * @return {void}
+	 */
+	function hydrateDeferredCodeListIcons( container ) {
+		const template = container.querySelector( 'template.frm-code-list-icons' );
+		if ( ! template ) {
+			return;
+		}
+
+		// FrmFormsHelper::print_deferred_code_list_icons() prints each field type's icon once.
+		const icons = {};
+		template.content.querySelectorAll( '[data-frm-icon-key]' ).forEach( wrapper => {
+			icons[ wrapper.dataset.frmIconKey ] = wrapper.firstElementChild;
+		} );
+
+		container.querySelectorAll( '.frm_customize_field_list [data-frm-icon]' ).forEach( item => {
+			const icon = icons[ item.dataset.frmIcon ];
+			if ( icon ) {
+				item.querySelectorAll( ':scope > a.frm_insert_code' ).forEach( anchor => {
+					// eslint-disable-next-line formidable/prefer-document-fragment -- Each icon belongs to a different link.
+					anchor.prepend( icon.cloneNode( true ) );
+				} );
+			}
+			item.removeAttribute( 'data-frm-icon' );
+		} );
 	}
 
 	/**
@@ -9212,6 +10292,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const htmlFieldIds = [ 'after_html', 'before_html', 'submit_html', 'field_custom_html' ];
+		// eslint-disable-next-line sonarjs/prefer-native-jquery-alternative -- jQuery API kept, not refactored
 		if ( jQuery.inArray( id, htmlFieldIds ) >= 0 ) {
 			jQuery( `.frm_code_list li:not(.show_${ id })` ).addClass( 'frm_hidden' );
 			jQuery( `.frm_code_list li.show_${ id }` ).removeClass( 'frm_hidden' );
@@ -9571,8 +10652,20 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).hide().each( frmDom.bootstrap.multiselect.init );
+	/**
+	 * @param {Array|Element|jQuery} [container] Limit the set up to the multiselects inside this,
+	 *                                           instead of every multiselect in the page.
+	 */
+	function initiateMultiselect( container ) {
+		// A field's own settings panel (.frm-single-settings) stays hidden until it's clicked, so a
+		// still-hidden panel's multiselect is skipped here and initiated later, when its panel is
+		// shown (showFieldOptions) - regardless of whether this run is scoped to a container (e.g.
+		// newly ajax-loaded fields) or the whole page.
+		const $multiselect = ( container ? jQuery( container ).find( '.frm_multiselect' ) : jQuery( '.frm_multiselect' ) )
+			.not( '.frm-single-settings.frm_hidden .frm_multiselect' );
+
+		$multiselect.toArray().forEach( hydrateBuilderSelect );
+		$multiselect.hide().each( frmDom.bootstrap.multiselect.init );
 	}
 
 	/* Addons page */
@@ -9723,6 +10816,66 @@ window.frmAdminBuildJS = function() {
 		if ( thresholdContainer ) {
 			thresholdContainer.classList.toggle( 'frm_hidden', 'v3' !== e.target.value );
 		}
+	}
+
+	/**
+	 * Syncs aria-selected and the roving tabindex of a radio-backed tablist with its checked radio.
+	 * The Tab stop is the checked tab, or the first visible tab when the checked one is hidden.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function syncTablistState( tablist ) {
+		const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]' ) );
+		const visibleTabs = tabs.filter( label => ! label.classList.contains( 'frm_hidden' ) );
+		const tabStop = visibleTabs.find( label => label.control.checked ) || visibleTabs[ 0 ];
+
+		tabs.forEach( label => {
+			label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
+			label.setAttribute( 'tabindex', label === tabStop ? '0' : '-1' );
+		} );
+	}
+
+	/**
+	 * Adds Enter, Space, arrow, Home and End key support to a tablist of radio labels.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function initTablistKeyboard( tablist ) {
+		tablist.addEventListener( 'keydown', function( event ) {
+			const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]:not(.frm_hidden)' ) );
+			const index = tabs.indexOf( event.target.closest( 'label' ) );
+			if ( -1 === index ) {
+				return;
+			}
+
+			let target;
+			switch ( event.key ) {
+				case 'Enter':
+				case ' ':
+					target = tabs[ index ];
+					break;
+				case 'ArrowRight':
+					target = tabs[ ( index + 1 ) % tabs.length ];
+					break;
+				case 'ArrowLeft':
+					target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
+					break;
+				case 'Home':
+					target = tabs[ 0 ];
+					break;
+				case 'End':
+					target = tabs[ tabs.length - 1 ];
+					break;
+				default:
+					return;
+			}
+
+			event.preventDefault();
+			target.focus();
+			target.click();
+		} );
 	}
 
 	function trashTemplate( e ) {
@@ -10063,6 +11216,7 @@ window.frmAdminBuildJS = function() {
 			const input = formData[ i ];
 			let key = input.name;
 			const { value } = input;
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			const names = key.match( /(.*)\[(.*)\]/ );
 
 			if ( ( input.type === 'radio' || input.type === 'checkbox' ) && ! input.checked ) {
@@ -10251,6 +11405,69 @@ window.frmAdminBuildJS = function() {
 		if ( liObject.newOption ) {
 			liObject.newOption = li;
 		}
+	}
+
+	/**
+	 * Fill in the add and remove buttons the server left off this field's options.
+	 *
+	 * Every option carries the same pair of buttons, so printing them for a whole form means a lot
+	 * of markup for something no one sees until they open a field. The server prints one copy, on
+	 * the hidden template row, and the real rows get theirs from here the first time the field is
+	 * opened.
+	 *
+	 * @since 6.34
+	 *
+	 * @param {number|string} fieldId The field whose options need their buttons.
+	 * @return {void}
+	 */
+	function addOptionControlsToField( fieldId ) {
+		const optionList = document.getElementById( `frm_field_${ fieldId }_opts` );
+		if ( ! optionList ) {
+			return;
+		}
+
+		const template = optionList.querySelector( '.frm_option_template' );
+		const templateRemove = template?.querySelector( '.frm_remove_tag' );
+		const templateAdd = template?.querySelector( '.frm_add_opt' );
+		if ( ! templateRemove || ! templateAdd ) {
+			return;
+		}
+
+		const rows = optionList.querySelectorAll( '.frm_single_option:not(.frm_option_template)' );
+
+		// The template row is printed before the option count is known, so it is always marked
+		// disabled. Removing an option is only off limits when it is the last one left.
+		const removingAllowed = rows.length > 1;
+
+		rows.forEach( row => {
+			if ( row.querySelector( '.frm_remove_tag' ) ) {
+				// This field has been opened before, or the server printed the buttons already.
+				return;
+			}
+
+			const optKey = row.dataset.optkey;
+			if ( undefined === optKey ) {
+				return;
+			}
+
+			const remove = templateRemove.cloneNode( true );
+			[ 'removeid', 'removemore' ].forEach( name => {
+				const value = remove.dataset[ name ];
+				if ( value ) {
+					remove.dataset[ name ] = value.replace( '-000', `-${ optKey }` );
+				}
+			} );
+			remove.classList.toggle( 'frm_disabled', ! removingAllowed );
+
+			// Keep the order the server uses: label input, remove, add, then the saved value box.
+			// Each row is its own parent, so there is nothing for a DocumentFragment to batch here.
+			const valueBox = row.querySelector( '.frm_option_key' );
+			if ( valueBox ) {
+				valueBox.before( remove, templateAdd.cloneNode( true ) );
+			} else {
+				row.append( remove, templateAdd.cloneNode( true ) );
+			}
+		} );
 	}
 
 	function maybeAddSaveAndDragIcons( fieldId ) {
@@ -10716,7 +11933,7 @@ window.frmAdminBuildJS = function() {
 				clickTab( this );
 				return false;
 			} );
-			clickTab( jQuery( '.starttab a' ), 'auto' );
+			clickTab( jQuery( '.frm-category-tabs .starttab a' ), 'auto' );
 
 			// submit the search form with dropdown
 			jQuery( document ).on( 'click', '#frm-fid-search-menu a', function() {
@@ -10783,11 +12000,13 @@ window.frmAdminBuildJS = function() {
 				}
 			);
 
-			document.querySelectorAll( '#frm-show-fields > li, .frm_grid_container li' ).forEach( ( el, _key ) => {
-				el.addEventListener( 'click', function() {
-					const fieldId = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
-					maybeAddSaveAndDragIcons( fieldId );
-				} );
+			// Listen on the list rather than on the rows. Most of a form's fields arrive over ajax
+			// after this runs, and binding to the rows that happen to be here now left those later
+			// fields without their drag and save icons for good.
+			$newFields.on( 'click', '> li, .frm_grid_container li', function() {
+				const fieldId = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
+				maybeAddSaveAndDragIcons( fieldId );
+				addOptionControlsToField( fieldId );
 			} );
 
 			const smallScreenProceedButton = document.getElementById( 'frm_small_screen_proceed_button' );
@@ -10821,22 +12040,31 @@ window.frmAdminBuildJS = function() {
 		},
 
 		buildInit() {
-			jQuery( '#frm_builder_page' ).on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
+			hydrateFieldPlaceholders();
+			[ 'click', 'dblclick', 'mousedown', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
+				fieldsContainer.addEventListener( eventType, ignoreLoadingFieldMouseEvent, true );
+			} );
+			document.addEventListener( 'click', prepareInteractedFieldSettings, true );
+			document.addEventListener( 'focusin', prepareInteractedFieldSettings, true );
 
-			let loadFieldId;
+			document.addEventListener( 'focusin', event => {
+				if ( event.target.matches( 'select[data-frm-options]' ) ) {
+					hydrateBuilderSelect( event.target );
+				}
+			} );
+			jQuery( '#frm_builder_page' ).on( 'mouseup', '*:not(.frm-show-box)', maybeHideShortcodes );
 
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 			postBodyContent = document.getElementById( 'post-body-content' );
 			$postBodyContent = jQuery( postBodyContent );
 
-			if ( jQuery( '.frm_field_loading' ).length ) {
-				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
-				loadFields( loadFieldId );
-			}
+			observeFieldPlaceholders();
+			fillFieldLoadQueue();
 
 			setupSortable( 'ul.frm_sorting' );
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
+			initFieldListHoverPill();
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
@@ -10864,7 +12092,16 @@ window.frmAdminBuildJS = function() {
 
 			const $builderForm = jQuery( builderForm );
 			const builderArea = document.getElementById( 'frm_form_editor_container' );
-			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
+
+			// Formidable Pro can take over adding a condition row itself (see its builder.js) once
+			// it no longer needs this fallback for sites running an older, incompatible Pro version.
+			// Checked at click time, not here at setup time, since Pro's script may not have run yet.
+			$builderForm.on( 'click', '.frm_add_logic_row', function() {
+				if ( wp.hooks.applyFilters( 'frm_should_add_logic_row_in_lite', true ) ) {
+					return addFieldLogicRow.call( this );
+				}
+			} );
+
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
@@ -11004,10 +12241,15 @@ window.frmAdminBuildJS = function() {
 			} );
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
+				setupFieldOptionSorting( fieldSettingsEl );
 			}, 9999 );
 
 			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
 				infoModal( frm_admin_js.pricingFieldsModal, '550px' );
+			}
+
+			if ( ! activeFieldLoadRequests ) {
+				scheduleBulkOptionsOverlay();
 			}
 		},
 
@@ -11097,13 +12339,16 @@ window.frmAdminBuildJS = function() {
 				} );
 			} );
 
-			// Handle Captcha checkbox toggle to show/hide warnings
-			const captchaCheckbox = document.getElementById( 'frm_include_captcha' );
-			if ( captchaCheckbox ) {
-				const initialState = captchaCheckbox.checked;
-				captchaCheckbox.addEventListener( 'change', function() {
-					const addWarning = document.getElementById( 'frm_captcha_add_warning' );
-					const removeWarning = document.getElementById( 'frm_captcha_remove_warning' );
+			// Handle Captcha and GDPR checkbox toggles to show/hide warnings
+			[ 'captcha', 'gdpr' ].forEach( function( fieldType ) {
+				const includeCheckbox = document.getElementById( `frm_include_${ fieldType }` );
+				if ( ! includeCheckbox ) {
+					return;
+				}
+				const initialState = includeCheckbox.checked;
+				includeCheckbox.addEventListener( 'change', function() {
+					const addWarning = document.getElementById( `frm_${ fieldType }_add_warning` );
+					const removeWarning = document.getElementById( `frm_${ fieldType }_remove_warning` );
 					if ( addWarning && removeWarning ) {
 						// Only show warning if current state differs from initial state
 						if ( this.checked !== initialState ) {
@@ -11121,7 +12366,7 @@ window.frmAdminBuildJS = function() {
 						}
 					}
 				} );
-			}
+			} );
 
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
@@ -11386,11 +12631,15 @@ window.frmAdminBuildJS = function() {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
 
-			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function( event ) {
+			const captchas = document.querySelector( '.frm_captchas' );
+			captchas.addEventListener( 'change', function( event ) {
 				const captchaValueOnLoad = document.querySelector( '.frm_captchas input[checked="checked"]' )?.value;
 				const showNote = event.target.value !== captchaValueOnLoad;
 				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden', ! showNote );
+
+				syncTablistState( captchas );
 			} );
+			initTablistKeyboard( captchas );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
@@ -11420,34 +12669,12 @@ window.frmAdminBuildJS = function() {
 
 			const paymentsSettings = document.getElementById( 'payments_settings' );
 			const paymentSettingsTabs = paymentsSettings?.querySelectorAll( '[name="frm_payment_section"]' );
-			if ( paymentSettingsTabs ) {
+			if ( paymentSettingsTabs?.length ) {
+				const paymentTablist = paymentSettingsTabs[ 0 ].closest( '[role="tablist"]' );
 				paymentSettingsTabs.forEach(
-					element => {
-						element.addEventListener( 'change', () => {
-							if ( ! element.checked ) {
-								return;
-							}
-
-							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
-							if ( label ) {
-								label.setAttribute( 'aria-selected', 'true' );
-							}
-
-							paymentSettingsTabs.forEach(
-								tab => {
-									if ( tab === element ) {
-										return;
-									}
-
-									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
-									if ( label ) {
-										label.setAttribute( 'aria-selected', 'false' );
-									}
-								}
-							);
-						} );
-					}
+					element => element.addEventListener( 'change', () => syncTablistState( paymentTablist ) )
 				);
+				initTablistKeyboard( paymentTablist );
 			}
 		},
 
@@ -11584,6 +12811,8 @@ window.frmAdminBuildJS = function() {
 			},
 		},
 
+		syncTablistState,
+		initTablistKeyboard,
 		applyZebraStriping,
 		initModal,
 		infoModal,
@@ -11614,6 +12843,8 @@ window.frmAdminBuild = frmAdminBuildJS();
 jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
+
+		initShowBoxIconSwap();
 
 		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
 		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );

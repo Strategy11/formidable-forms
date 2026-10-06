@@ -14,27 +14,45 @@ describe( 'Duplicating a form from the form list page', () => {
 
 			cy.log( 'Find the visible element with class duplicate within the hovered row and click it' );
 			cy.wrap( $row ).within( () => {
-				cy.get( '.row-actions .duplicate .frm-trash-link' ).should( 'be.visible' ).click( { force: true } );
+				// WP core only reveals row-actions on a real CSS `:hover` (`.row-actions` is
+				// `position: relative; left: -9999em` until `tr:hover`) - make it actionable the
+				// way the real hover would, then click normally. Chained in one continuous command
+				// so there's no window between the reset and the click for a re-render to undo it.
+				cy.get( '.row-actions' )
+					.invoke( 'css', 'position', 'static' )
+					.find( '.duplicate .frm-trash-link' )
+					.should( 'be.visible' )
+					.click();
 			} );
 
 			cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click();
 
 			cy.log( 'Locate rows containing the text - Test Form and count them' );
 			cy.get( '#the-list tr:contains("Test Form")' ).then( $rows => {
-				expect( $rows.length ).to.equal( 2 );
+				expect( $rows ).to.have.lengthOf( 2 );
 			} );
 		} );
+	} );
 
-		cy.log( 'Teardown - Delete Test Form and its duplicate' );
-		cy.deleteForm();
+	// A separate afterEach (rather than teardown steps at the end of the `it` block) so cleanup
+	// still runs even if the assertion above throws - otherwise a failed run leaves both the
+	// original and the duplicate "Test Form" behind for every later spec that assumes a clean
+	// list (see the cross-spec "Test Form" leakage this caused).
+	afterEach( () => {
+		cy.log( 'Teardown - Move every Test Form row to the trash, how many are left doesn\'t matter' );
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.get( 'body' ).then( $body => {
+			const testFormRows = $body.find( '#the-list tr' ).filter( ( _, element ) => Cypress.$( element ).text().includes( 'Test Form' ) );
 
-		cy.log( 'Delete duplicated form' );
-		cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
-			cy.wrap( $row ).within( () => {
-				cy.get( '.row-actions .trash .frm-trash-link' ).should( 'be.visible' ).click( { force: true } );
+			if ( testFormRows.length === 0 ) {
+				return;
+			}
+
+			cy.wrap( testFormRows ).each( $row => {
+				cy.wrap( $row ).find( '.check-column input[type="checkbox"]' ).check();
 			} );
-			cy.get( "div[role='dialog']" ).should( 'contain', 'Do you want to move this form to the trash?' );
-			cy.xpath( "//a[@id='frm-confirmed-click']" ).should( 'contain', 'Confirm' ).click( { force: true } );
+			cy.get( '#bulk-action-selector-top' ).select( 'Move to Trash' );
+			cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
 		} );
 	} );
 } );

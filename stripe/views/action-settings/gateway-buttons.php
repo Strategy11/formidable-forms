@@ -2,6 +2,17 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+// Roving tabindex: only one label is a Tab stop, and it can't be a hidden one. Fall back to the first visible gateway when none is selected yet.
+$visible_gateways = array();
+
+foreach ( $gateways as $gateway_name => $gateway ) {
+	if ( $gateway['recurring'] || 'recurring' !== $form_action->post_content['type'] ) {
+		$visible_gateways[ $gateway_name ] = $gateway;
+	}
+}
+$selected_gateways = array_intersect( array_keys( $visible_gateways ), (array) $form_action->post_content['gateway'] );
+$tab_stop          = $selected_gateways ? reset( $selected_gateways ) : (string) key( $visible_gateways );
 ?>
 <div class="frm-long-icon-buttons" role="tablist">
 <?php
@@ -14,7 +25,9 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 		$gateway_classes .= ' frm_hidden';
 	}
 
-	$toggle_id = "frm_toggle_{$gateway_name}_settings";
+	// Include the action number so a form with more than one payment action doesn't repeat these ids.
+	// A duplicate id would point every label at the first action's radio buttons.
+	$toggle_id = $action_control->get_field_id( 'frm_toggle_' . $gateway_name . '_settings' );
 
 	$input_params = array(
 		'id'    => $toggle_id,
@@ -30,7 +43,7 @@ foreach ( $gateways as $gateway_name => $gateway ) {
 	$label_params = array(
 		'for'           => $toggle_id,
 		'class'         => trim( 'frm_payment_settings_tab frm_gateway_opt ' . $gateway_classes ),
-		'tabindex'      => '0',
+		'tabindex'      => $gateway_name === $tab_stop ? '0' : '-1',
 		'role'          => 'tab',
 		'aria-selected' => $is_active ? 'true' : 'false',
 	);

@@ -288,6 +288,8 @@ class FrmFormsController {
 		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		self::handle_captcha_field( $id, $include_captcha );
 
+		self::maybe_handle_gdpr_field( $id );
+
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
 		self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
@@ -314,30 +316,68 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function handle_captcha_field( $form_id, $include_captcha ) {
+		self::toggle_field_in_form( $form_id, 'captcha', $include_captcha, __( 'Captcha', 'formidable' ) );
+	}
+
+	/**
+	 * Add or remove the GDPR field based on the "Include a GDPR agreement field" setting.
+	 * The field only works while GDPR is enabled globally, so it is left alone otherwise.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function maybe_handle_gdpr_field( $form_id ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_POST['frm_include_gdpr'] ) || FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return;
+		}
+
+		$include_gdpr = '1' === $_POST['frm_include_gdpr']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		self::toggle_field_in_form( $form_id, FrmFieldGdprHelper::FIELD_TYPE, $include_gdpr, __( 'GDPR', 'formidable' ) );
+	}
+
+	/**
+	 * Create a field of the given type just before the submit button, or delete it.
+	 *
+	 * @since x.x
+	 *
+	 * @param int    $form_id    Form ID.
+	 * @param string $field_type The field type to add or remove.
+	 * @param bool   $include    Whether the form should include the field.
+	 * @param string $field_name The name to give a newly created field.
+	 *
+	 * @return void
+	 */
+	private static function toggle_field_in_form( $form_id, $field_type, $include, $field_name ) {
 		$form_fields        = FrmField::get_all_for_form( $form_id, '', 'exclude' );
-		$captcha_field_id   = 0;
+		$existing_field_id  = 0;
 		$submit_field_order = 0;
+		$last_field_order   = 0;
 
 		foreach ( $form_fields as $field ) {
-			if ( 'captcha' === $field->type ) {
-				$captcha_field_id = $field->id;
+			if ( $field_type === $field->type ) {
+				$existing_field_id = $field->id;
 				break;
 			}
 
 			if ( 'submit' === $field->type ) {
 				$submit_field_order = $field->field_order;
 			}
+
+			$last_field_order = max( $last_field_order, (int) $field->field_order );
 		}
 
-		if ( $include_captcha && ! $captcha_field_id ) {
-			// Create captcha field just before submit button
-			$field_values                = FrmFieldsHelper::setup_new_vars( 'captcha', $form_id );
-			$field_values['name']        = __( 'Captcha', 'formidable' );
-			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : 0;
+		if ( $include && ! $existing_field_id ) {
+			// Create the field just before submit button, or after the last field when there is no submit button.
+			$field_values                = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+			$field_values['name']        = $field_name;
+			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : $last_field_order + 1;
 			FrmField::create( $field_values );
-		} elseif ( ! $include_captcha && $captcha_field_id ) {
-			// Delete captcha field
-			FrmField::destroy( $captcha_field_id );
+		} elseif ( ! $include && $existing_field_id ) {
+			FrmField::destroy( $existing_field_id );
 		}
 	}
 
@@ -1593,6 +1633,11 @@ class FrmFormsController {
 				'function' => array( self::class, 'spam_settings' ),
 				'icon'     => 'frmfont frm_shield_check2_icon',
 			),
+			'gdpr'        => array(
+				'name'     => __( 'GDPR', 'formidable' ),
+				'function' => array( self::class, 'gdpr_settings' ),
+				'icon'     => 'frmfont frm-gdpr-icon',
+			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
 				'icon'       => 'frmfont frm_lock_closed2_icon',
@@ -1723,6 +1768,17 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	public static function gdpr_settings( $values ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/gdpr-settings.php';
+	}
+
+	/**
 	 * @since 4.0
 	 *
 	 * @param array $values
@@ -1776,14 +1832,16 @@ class FrmFormsController {
 
 	/**
 	 * @since 6.27 Added $template_path parameter.
+	 * @since x.x Added $defer_icon parameter.
 	 *
 	 * @param int|string $form_id
 	 * @param string     $class
 	 * @param string     $template_path The path to a template file to use instead of the default.
+	 * @param bool       $defer_icon    True to leave the field icons out until JS adds them, for a list that is hidden until opened.
 	 *
 	 * @return void
 	 */
-	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default' ) {
+	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default', $defer_icon = false ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		/**
@@ -1849,6 +1907,125 @@ class FrmFormsController {
 		 * @param array $atts - Includes fields and form_id
 		 */
 		return apply_filters( 'frm_advanced_helpers', $advanced_helpers, $atts );
+	}
+
+	/**
+	 * Adds a shortcode for each part of a multi-part field to the field shortcode list,
+	 * so a single part can be used on its own, like [25 show=first] for a Name field.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array $atts Includes 'field'.
+	 *
+	 * @return void
+	 */
+	public static function field_part_shortcodes( $atts ) {
+		$field = $atts['field'];
+
+		foreach ( self::get_field_parts( $field ) as $part => $label ) {
+			FrmFormsHelper::insert_opt_html(
+				array(
+					'id'          => $field->id . ' show=' . $part,
+					'key'         => $field->field_key . ' show=' . $part,
+					// Keep the part label and the option out of the truncated text so they stay readable.
+					'key_label'   => $field->field_key,
+					'key_suffix'  => ' show=' . $part,
+					'name'        => $field->name,
+					'name_suffix' => ' (' . $label . ')',
+					'type'        => $field->type,
+					'class'       => 'frm-customize-list dropdown-item',
+					'defer_icon'  => ! empty( $atts['defer_icon'] ),
+				)
+			);
+			unset( $part, $label );
+		}
+	}
+
+	/**
+	 * Gets the parts of a multi-part field that can be shown on their own with a show= shortcode option.
+	 *
+	 * @since 6.35
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value.
+	 */
+	private static function get_field_parts( $field ) {
+		$parts = array();
+
+		if ( 'name' === $field->type ) {
+			$parts = self::get_name_field_parts( $field );
+		} elseif ( 'address' === $field->type ) {
+			$parts = self::get_address_field_parts( $field );
+		}
+
+		/**
+		 * Allows add-ons to add the parts of their own multi-part fields.
+		 *
+		 * @since 6.35
+		 *
+		 * @param array    $parts Part labels keyed by the show= option value.
+		 * @param stdClass $field The field the parts belong to.
+		 */
+		return apply_filters( 'frm_field_parts_for_shortcodes', $parts, $field );
+	}
+
+	/**
+	 * Gets the parts of a Name field that are in use. Only the parts included in the
+	 * selected name layout hold a value, so the rest would always show as blank.
+	 *
+	 * @since 6.35
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value, in layout order.
+	 */
+	private static function get_name_field_parts( $field ) {
+		$labels = array(
+			'first'  => __( 'First', 'formidable' ),
+			'middle' => __( 'Middle', 'formidable' ),
+			'last'   => __( 'Last', 'formidable' ),
+		);
+		$layout = FrmField::get_option( $field, 'name_layout' );
+
+		if ( ! $layout ) {
+			$layout = 'first_last';
+		}
+
+		// The layout option names the parts in use, in display order, like first_middle_last.
+		$parts = array();
+
+		foreach ( explode( '_', $layout ) as $part ) {
+			if ( isset( $labels[ $part ] ) ) {
+				$parts[ $part ] = $labels[ $part ];
+			}
+			unset( $part );
+		}
+
+		return $parts;
+	}
+
+	/**
+	 * Gets the parts of an Address field that are in use. The address type decides which
+	 * parts are on the form, so the rest would always show as blank.
+	 *
+	 * @since 6.35
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value.
+	 */
+	private static function get_address_field_parts( $field ) {
+		$parts        = FrmFieldAddress::get_part_labels();
+		$address_type = FrmField::get_option( $field, 'address_type' );
+
+		if ( in_array( $address_type, array( 'us', 'generic' ), true ) ) {
+			unset( $parts['country'] );
+		} elseif ( 'europe' === $address_type ) {
+			unset( $parts['state'] );
+		}
+
+		return $parts;
 	}
 
 	/**
@@ -3482,7 +3659,8 @@ class FrmFormsController {
 			$class   = FrmFormsHelper::form_error_class();
 		}
 
-		$message = FrmFormsHelper::get_success_message( compact( 'message', 'form', 'entry_id', 'class' ) );
+		$focusable = ! empty( $args['ajax'] );
+		$message   = FrmFormsHelper::get_success_message( compact( 'message', 'form', 'entry_id', 'class', 'focusable' ) );
 
 		return apply_filters( 'frm_main_feedback', $message, $form, $entry_id );
 	}

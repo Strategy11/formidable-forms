@@ -4,9 +4,13 @@
   "plugins": [
     "."
   ],
+  "mappings": {
+    "wp-content/mu-plugins": "./tests/mu-plugins"
+  },
   "env": {
     "tests": {
       "mappings": {
+        "wp-content/mu-plugins": "./tests/mu-plugins",
         "wp-cli.yml": "./tests/bin/wp-cli.yml"
       }
     }

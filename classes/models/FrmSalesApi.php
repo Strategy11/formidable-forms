@@ -29,12 +29,39 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	private static $best_sale;
 
+	/**
+	 * Flag to prevent the $this->set_sales() call in the constructor.
+	 *
+	 * @since 6.34
+	 *
+	 * @var bool
+	 */
+	private static $prevent_new_sales_request = false;
+
 	public function __construct() {
 		$this->set_cache_key();
 
-		if ( false === self::$sales ) {
+		if ( ! self::$prevent_new_sales_request && false === self::$sales ) {
 			$this->set_sales();
 		}
+	}
+
+	/**
+	 * @since 6.34
+	 *
+	 * @return void
+	 */
+	public static function prevent_new_sales_requests() {
+		self::$prevent_new_sales_request = true;
+	}
+
+	/**
+	 * @since 6.34
+	 *
+	 * @return void
+	 */
+	public static function allow_new_sales_requests() {
+		self::$prevent_new_sales_request = false;
 	}
 
 	/**
