@@ -14,7 +14,7 @@ describe( 'Builder selects share options until their settings open', () => {
 	} );
 
 	const openSettings = type => {
-		cy.get( `li[data-ftype="${ type }"] .frm-field-action-icons` ).invoke( 'css', 'opacity', 1 );
+		cy.get( `li[data-ftype="${ type }"] .frm-field-action-icons` ).revealFieldActions();
 		cy.get( `li[data-ftype="${ type }"] .frm-dropdown-toggle` ).click();
 		cy.get( `li[data-ftype="${ type }"] .frm_select_field` ).click();
 		// Cypress reads the fixed builder layout inside WordPress's zero-height #wpbody-content as
