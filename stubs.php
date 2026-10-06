@@ -857,7 +857,7 @@ namespace WP\MCP\Transport\Infrastructure {
 		 * @param int    $user_id    The user ID.
 		 * @param string $session_id The session ID.
 		 *
-		 * @return array|\WP_Error|false Session data on success, WP_Error on invalid input, false if not found or inactive.
+		 * @return array|false|\WP_Error Session data on success, WP_Error on invalid input, false if not found or inactive.
 		 */
 		public static function get_session( int $user_id, string $session_id ) {
 		}

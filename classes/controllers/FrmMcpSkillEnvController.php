@@ -72,6 +72,7 @@ class FrmMcpSkillEnvController {
 
 		if ( is_wp_error( $created ) ) {
 			wp_die( esc_html( $created->get_error_message() ), '', array( 'response' => 500 ) );
+			return;
 		}
 
 		$contents = self::build_env( home_url(), wp_get_current_user()->user_login, $created[0] );
