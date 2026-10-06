@@ -5020,6 +5020,9 @@ window.frmAdminBuildJS = function() {
 			confirmMsg = frmAdminJs.conf_delete_sec;
 		}
 
+		const fieldIds = getFieldIdsToDelete( [ String( fieldId ) ] );
+		confirmMsg = wp.hooks.applyFilters( 'frm_delete_fields_confirmation', confirmMsg, fieldIds );
+
 		this.setAttribute( 'data-frmverify', confirmMsg );
 		this.setAttribute( 'data-frmverify-btn', 'frm-button-red' );
 		this.setAttribute( 'data-deletefield', fieldId );
@@ -6035,7 +6038,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function deleteFieldGroupsClick() {
-		const fieldIdsToDelete = getSelectedFieldIds();
+		const fieldIdsToDelete = getFieldIdsToDelete( getSelectedFieldIds() );
 		const deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( fieldIdsToDelete );
 
 		const multiselectPopup = document.getElementById( 'frm_field_multiselect_popup' );
@@ -6043,7 +6046,12 @@ window.frmAdminBuildJS = function() {
 			multiselectPopup.remove();
 		}
 
-		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
+		const confirmMsg = wp.hooks.applyFilters(
+			'frm_delete_fields_confirmation',
+			confirmFieldsDeleteMessage( fieldIdsToDelete.length ),
+			fieldIdsToDelete
+		);
+		this.setAttribute( 'data-frmverify', confirmMsg );
 		confirmLinkClick( this );
 
 		const confirmedClick = document.getElementById( 'frm-confirmed-click' );
@@ -6079,9 +6087,10 @@ window.frmAdminBuildJS = function() {
 	function deleteAllSelectedFieldGroups( deleteFieldIds ) {
 		deleteFieldIds.forEach(
 			function( fieldId ) {
-				deleteFields( fieldId );
+				deleteField( fieldId );
 			}
 		);
+		toggleSectionHolder();
 	}
 
 	function deleteFieldConfirmed() {
@@ -6090,17 +6099,29 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function deleteFields( fieldId ) {
-		const field = jQuery( `#frm_field_id_${ fieldId }` );
+		deleteAllSelectedFieldGroups( getFieldIdsToDelete( [ String( fieldId ) ] ) );
+	}
 
-		deleteField( fieldId );
+	/**
+	 * Gets all fields removed by a deletion, including section children and related fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string[]} fieldIds The selected field IDs.
+	 * @return {string[]} The complete list of field IDs to delete.
+	 */
+	function getFieldIdsToDelete( fieldIds ) {
+		const ids = new Set( fieldIds );
+		fieldIds.forEach( fieldId => {
+			const field = document.getElementById( `frm_field_id_${ fieldId }` );
+			if ( field?.classList.contains( 'edit_field_type_divider' ) ) {
+				field.querySelectorAll( 'li.frm_field_box[data-fid]' ).forEach( child => {
+					ids.add( child.dataset.fid );
+				} );
+			}
+		} );
 
-		if ( field.hasClass( 'edit_field_type_divider' ) ) {
-			field.find( 'li.frm_field_box[data-fid]' ).each( function() {
-				deleteField( this.getAttribute( 'data-fid' ) );
-			} );
-		}
-
-		toggleSectionHolder();
+		return [ ...new Set( wp.hooks.applyFilters( 'frm_delete_field_ids', [ ...ids ] ) ) ];
 	}
 
 	/**
