@@ -4,7 +4,7 @@
  *   - Scoped to .frm_forms in the admin area (does not bleed into WordPress UI)
  *
  * The mechanism: the admin style editor loads the CSS endpoint with
- * ?frm_scope_custom_css=1, which wraps the custom CSS in a @scope (.frm_forms)
+ * ?frm_scope_custom_css=1, which wraps the custom CSS in a `@scope` (.frm_forms)
  * block so it only applies inside form containers. The frontend loads the same
  * endpoint without that parameter and receives the CSS unscoped.
  */

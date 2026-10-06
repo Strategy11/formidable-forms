@@ -4,12 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 FrmAntiSpam::maybe_init( $form->id );
+
+// Rendered on both branches below so JS can resolve focus/alert-role behavior for this
+// form even when it's embedded without its own <form> tag (see getErrorConfigForForm()
+// in js/formidable.js).
+$error_config_attr = esc_attr( wp_json_encode( FrmFormsHelper::get_error_config_for_form( $form ) ) );
 ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $values ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container" <?php echo wp_strip_all_tags( apply_filters( 'frm_form_div_attributes', '', $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 <?php if ( ! isset( $include_form_tag ) || $include_form_tag ) { ?>
-<form enctype="<?php echo esc_attr( apply_filters( 'frm_form_enctype', 'multipart/form-data', $form ) ); ?>" method="post" class="frm-show-form <?php do_action( 'frm_form_classes', $form ); ?>" id="form_<?php echo esc_attr( $form->form_key ); ?>" <?php echo wp_strip_all_tags( apply_filters( 'frm_form_attributes', '', $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+<form enctype="<?php echo esc_attr( apply_filters( 'frm_form_enctype', 'multipart/form-data', $form ) ); ?>" method="post" class="frm-show-form <?php do_action( 'frm_form_classes', $form ); ?>" id="form_<?php echo esc_attr( $form->form_key ); ?>" data-frm-error-config="<?php echo $error_config_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" <?php echo wp_strip_all_tags( apply_filters( 'frm_form_attributes', '', $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 <?php } else { ?>
-<div id="form_<?php echo esc_attr( $form->form_key ); ?>" class="frm-show-form <?php do_action( 'frm_form_classes', $form ); ?>" >
+<div id="form_<?php echo esc_attr( $form->form_key ); ?>" class="frm-show-form <?php do_action( 'frm_form_classes', $form ); ?>" data-frm-error-config="<?php echo $error_config_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 	<?php
 }
 

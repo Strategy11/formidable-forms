@@ -109,7 +109,7 @@
 					div( {
 						className: 'frm10 frm_clearfix',
 						children: [
-							img( { src: `${ getUrlToApplicationsImages() }folder.svg` } ),
+							img( { src: `${ getUrlToApplicationsImages() }folder.svg`, alt: '' } ),
 							tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
 							div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
 						]
@@ -439,7 +439,7 @@
 			);
 		}
 
-		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png` } );
+		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png`, alt: '' } );
 		if ( placeholderImage.complete ) {
 			setTimeout( maybeCenterViewApplicationModal, 0 );
 		} else {

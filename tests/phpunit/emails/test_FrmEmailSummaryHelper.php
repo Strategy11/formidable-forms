@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @covers FrmEmailSummaryHelper
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEmailSummaryHelper::class )]
 class test_FrmEmailSummaryHelper extends FrmUnitTest {
 
 	public static function wpSetUpBeforeClass() {
@@ -146,9 +150,6 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmEmailSummaryHelper::maybe_remove_recipients_from_api
-	 */
 	public function test_maybe_remove_recipients_from_api() {
 		// Clear the cache so our fake response gets used.
 		$api = new FrmFormApi();
@@ -182,9 +183,6 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$this->assertSame( 'recipient2@example.com', $recipients );
 	}
 
-	/**
-	 * @covers FrmEmailSummaryHelper::get_top_forms
-	 */
 	public function test_get_top_forms() {
 		$form_a = $this->factory->form->create_and_get();
 		$form_b = $this->factory->form->create_and_get();

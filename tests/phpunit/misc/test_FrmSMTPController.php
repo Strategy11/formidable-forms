@@ -2,12 +2,13 @@
 
 /**
  * @group misc
+ *
+ * @covers FrmSMTPController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'misc' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSMTPController::class )]
 class test_FrmSMTPController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmSMTPController::link
-	 */
 	public function test_link_tags_the_redirect_url() {
 		$controller = new FrmSMTPController();
 		$link       = $controller->link( 'https://wpmailsmtp.com/lite-upgrade/?foo=bar' );
@@ -21,7 +22,7 @@ class test_FrmSMTPController extends FrmUnitTest {
 	 * Reproduces the real input shape: wp-mail-smtp-pro's own Core::get_upgrade_link() already
 	 * tags the link before this filter runs, so a naive fill-the-gaps re-tag would be a no-op.
 	 *
-	 * @covers FrmSMTPController::link
+	 * @see FrmSMTPController::link
 	 */
 	public function test_link_overrides_preexisting_utm_params_from_wp_mail_smtp() {
 		$controller       = new FrmSMTPController();
