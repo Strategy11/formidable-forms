@@ -406,8 +406,10 @@ class FrmListHelper {
 			return;
 		}
 
-		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_html__( 'Select bulk action', 'formidable' ) . '</label>';
-		echo "<select name='action" . esc_attr( $two ) . "' id='bulk-action-selector-" . esc_attr( $which ) . "' aria-label='" . esc_attr__( 'Select bulk action', 'formidable' ) . "'>\n";
+		$bulk_action_label = __( 'Select bulk action', 'formidable' );
+
+		echo "<label for='bulk-action-selector-" . esc_attr( $which ) . "' class='screen-reader-text'>" . esc_html( $bulk_action_label ) . '</label>';
+		echo "<select name='action" . esc_attr( $two ) . "' id='bulk-action-selector-" . esc_attr( $which ) . "' aria-label='" . esc_attr( $bulk_action_label ) . "'>\n";
 		echo "<option value='-1' selected='selected'>" . esc_html__( 'Bulk Actions', 'formidable' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
