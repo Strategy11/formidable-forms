@@ -6,6 +6,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryMeta {
 
 	/**
+	 * Whether every entry meta write exposes the synchronization hooks.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function supports_entry_meta_change_hooks() {
+		return true;
+	}
+
+	/**
+	 * Notify integrations before changing entry metadata.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $entry_id Entry ID.
+	 * @param int $field_id Field ID.
+	 *
+	 * @return void
+	 */
+	private static function before_meta_change( $entry_id, $field_id ) {
+		do_action( 'frm_before_entry_meta_change', $entry_id, $field_id );
+	}
+
+	/**
 	 * @since 6.35 Added the $field parameter.
 	 *
 	 * @param int           $entry_id
@@ -33,7 +58,10 @@ class FrmEntryMeta {
 		);
 
 		self::set_value_before_save( $new_values, $field );
-		$new_values    = apply_filters( 'frm_add_entry_meta', $new_values );
+		$new_values = apply_filters( 'frm_add_entry_meta', $new_values );
+		$entry_id   = $new_values['item_id'];
+		$field_id   = $new_values['field_id'];
+		self::before_meta_change( $entry_id, $field_id );
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_item_metas', $new_values );
 
 		if ( $query_results ) {
@@ -52,6 +80,7 @@ class FrmEntryMeta {
 			return $meta_id;
 		}
 
+		do_action( 'frm_entry_meta_write_failed', $entry_id, $field_id );
 		return 0;
 	}
 
@@ -92,9 +121,12 @@ class FrmEntryMeta {
 		wp_cache_delete( $entry_id, 'frm_entry' );
 		self::clear_cache();
 
+		self::before_meta_change( $entry_id, $field_id );
 		$result = $wpdb->update( $wpdb->prefix . 'frm_item_metas', array( 'meta_value' => $meta_value ), $where_values );
 
-		if ( false !== $result ) {
+		if ( false === $result ) {
+			do_action( 'frm_entry_meta_write_failed', $entry_id, $field_id );
+		} else {
 			do_action( 'frm_after_entry_meta_change', $entry_id, $field_id );
 		}
 
@@ -215,6 +247,10 @@ class FrmEntryMeta {
 		);
 		FrmDb::get_where_clause_and_values( $where );
 
+		foreach ( $field_ids_to_remove as $field_id ) {
+			self::before_meta_change( $entry_id, $field_id );
+		}
+
 		// Delete any leftovers
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		self::clear_cache();
@@ -259,9 +295,12 @@ class FrmEntryMeta {
 		global $wpdb;
 		self::clear_cache();
 
+		self::before_meta_change( $entry_id, $field_id );
 		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE field_id = %d AND item_id = %d', $wpdb->prefix . 'frm_item_metas', $field_id, $entry_id ) );
 
-		if ( false !== $result ) {
+		if ( false === $result ) {
+			do_action( 'frm_entry_meta_write_failed', $entry_id, $field_id );
+		} else {
 			do_action( 'frm_after_entry_meta_change', $entry_id, $field_id );
 		}
 

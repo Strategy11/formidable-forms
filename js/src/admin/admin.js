@@ -9,6 +9,11 @@ const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
+const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
+const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
+
+// Footer scripts can restore placeholders before add-ons inspect the builder's fields.
+hydrateFieldPlaceholders();
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -282,7 +287,8 @@ window.frmAdminBuildJS = function() {
 		drag: svg( { href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] } )
 	};
 
-	const $newFields = jQuery( document.getElementById( 'frm-show-fields' ) );
+	const fieldsContainer = document.getElementById( 'frm-show-fields' );
+	const $newFields = jQuery( fieldsContainer );
 	const builderForm = document.getElementById( 'new_fields' );
 	const thisForm = document.getElementById( 'form_id' );
 	let copyHelper = false;
@@ -1084,17 +1090,24 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function setupSortable( sortableSelector ) {
-		document.querySelectorAll( sortableSelector ).forEach(
-			list => {
-				lazyMakeDroppable( list );
-				Array.from( list.children ).forEach( child => lazyMakeDraggable( child, '.frm-move' ) );
+		document.querySelectorAll( sortableSelector ).forEach( setupSortableList );
+	}
 
-				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
-				if ( $sectionTitle.length ) {
-					lazyMakeDroppable( $sectionTitle.get( 0 ) );
-				}
-			}
-		);
+	/**
+	 * Prepare one sorting list without searching for it again in the document.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} list The list containing draggable fields or field groups.
+	 * @return {void}
+	 */
+	function setupSortableList( list ) {
+		lazyMakeDroppable( list );
+		Array.from( list.children ).forEach( child => lazyMakeDraggable( child, '.frm-move' ) );
+
+		const sectionTitle = list.querySelector( ':scope > [data-type="divider"] > .divider_section_only' );
+		if ( sectionTitle ) {
+			lazyMakeDroppable( sectionTitle );
+		}
 	}
 
 	/**
@@ -1488,9 +1501,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getDroppableTarget() {
-		let droppable = document.getElementById( 'frm-show-fields' );
-		while ( droppable.querySelector( '.frm-over-droppable' ) ) {
-			droppable = droppable.querySelector( '.frm-over-droppable' );
+		let droppable = fieldsContainer;
+		let nextDroppable = droppable.querySelector( '.frm-over-droppable' );
+		while ( nextDroppable ) {
+			droppable = nextDroppable;
+			nextDroppable = droppable.querySelector( '.frm-over-droppable' );
 		}
 		if ( 'frm-show-fields' === droppable.id && ! droppable.classList.contains( 'frm-over-droppable' ) ) {
 			droppable = false;
@@ -1895,6 +1910,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function updateFieldGroupControls( $row, count ) {
+		const row = $row.get( 0 );
+		if ( ! row || row.querySelector( ':scope > .frm_field_loading' ) ) {
+			return;
+		}
+
 		const rowOffset = $row.offset();
 
 		if ( rowOffset === undefined ) {
@@ -2015,13 +2035,14 @@ window.frmAdminBuildJS = function() {
 			}
 
 			moveFieldSettings( document.getElementById( `frm-single-settings-${ fieldId }` ) );
-			const layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
+			let layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
 
 			if ( ! layoutClassesInput ) {
 				// not every field type has a layout class input.
 				return;
 			}
 
+			const previousClasses = layoutClassesInput.value;
 			if ( false === activeLayoutClass ) {
 				if ( '' !== currentClassToAdd ) {
 					layoutClassesInput.value = layoutClassesInput.value.concat( ` ${ currentClassToAdd }` );
@@ -2041,6 +2062,13 @@ window.frmAdminBuildJS = function() {
 				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
 			}
 
+			if ( layoutClassesInput.closest( '.frm-deferred-settings-meta' ) ) {
+				if ( previousClasses === layoutClassesInput.value ) {
+					return;
+				}
+				moveFieldSettings( ensureFieldSettings( fieldId ) );
+				layoutClassesInput = document.getElementById( `frm_classes_${ fieldId }` );
+			}
 			jQuery( layoutClassesInput ).trigger( 'change' );
 		};
 	}
@@ -2660,26 +2688,24 @@ window.frmAdminBuildJS = function() {
 	let placeholderSpinnerObserver;
 
 	/**
-	 * Give each field placeholder its spinner only once it scrolls into view.
+	 * Give each field placeholder a spinner only while it is in the viewport.
 	 *
 	 * A long form can have hundreds of placeholders, and most of them are swapped for the real
 	 * field before anyone scrolls to them, so a placeholder that is never seen never gets one.
-	 * The placeholder already holds the spinner's space, so adding it does not move anything.
+	 * Remove spinners that leave the viewport so their animations do not keep running offscreen.
+	 * The placeholder holds the spinner's space, so adding or removing it does not move fields.
 	 *
 	 * @since x.x
 	 *
 	 * @return {void}
 	 */
 	function observeFieldPlaceholders() {
-		const placeholders = document.querySelectorAll( '#frm-show-fields .frm_field_loading' );
+		const placeholders = fieldsContainer.querySelectorAll( '.frm_field_loading' );
 		if ( ! placeholders.length ) {
 			return;
 		}
 
-		placeholderSpinnerObserver = new IntersectionObserver(
-			handlePlaceholderIntersections,
-			{ root: postBodyContent }
-		);
+		placeholderSpinnerObserver = new IntersectionObserver( handlePlaceholderIntersections );
 		placeholders.forEach( placeholder => placeholderSpinnerObserver.observe( placeholder ) );
 	}
 
@@ -2693,10 +2719,9 @@ window.frmAdminBuildJS = function() {
 		entries.forEach(
 			( { target, isIntersecting } ) => {
 				if ( ! isIntersecting ) {
+					target.querySelector( '.frm_visible_spinner' )?.remove();
 					return;
 				}
-
-				placeholderSpinnerObserver.unobserve( target );
 
 				// A placeholder that failed to load shows an error message instead.
 				if ( target.hasChildNodes() ) {
@@ -2718,7 +2743,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function fillFieldLoadQueue() {
 		while ( activeFieldLoadRequests < FIELD_LOAD_CONCURRENCY ) {
-			const nextField = document.querySelector( '#frm-show-fields .frm_field_loading:not(.frm_load_now)' );
+			const nextField = fieldsContainer.querySelector( '.frm_field_loading:not(.frm_load_now)' );
 			if ( ! nextField ) {
 				break;
 			}
@@ -2774,6 +2799,10 @@ window.frmAdminBuildJS = function() {
 				action: 'frm_load_field',
 				field_ids: fieldIds,
 				form_id: thisFormId,
+				// Only acknowledge received definitions so concurrent batches remain independent.
+				known_tooltips: Object.keys( frm_admin_js.tooltips || {} ).join( ',' ),
+				known_select_options: Object.keys( frm_admin_js.selectOptions || {} ).join( ',' ),
+				defer_settings: 1,
 				nonce: frmGlobal.nonce
 			},
 			success: async response => {
@@ -2819,6 +2848,7 @@ window.frmAdminBuildJS = function() {
 		fieldIds.forEach( fieldId => {
 			const field = document.getElementById( `frm_field_id_${ fieldId }` );
 			if ( field?.classList.contains( 'frm_field_loading' ) ) {
+				placeholderSpinnerObserver?.unobserve( field );
 				field.textContent = __( 'Unable to load field.', 'formidable' );
 			}
 		} );
@@ -2875,18 +2905,82 @@ window.frmAdminBuildJS = function() {
 		placeholderSpinnerObserver?.unobserve( oldField );
 		dragDropObserver.unobserve( oldField );
 		dragDropAttachers.delete( oldField );
+		cacheFieldSettings( key, field.settingsHtml );
 		jQuery( oldField ).replaceWith( field.html );
 
 		const element = document.getElementById( `frm_field_id_${ key }` );
 		if ( ! element ) {
 			return null;
 		}
+		if ( field.settingsMeta ) {
+			addFieldSettingsMetadata( element, key, field.settingsMeta );
+		}
+		prepareLoadedFieldMarkup( element );
+		if ( element.classList.contains( 'edit_field_type_divider' ) ) {
+			element.querySelectorAll( 'ul.frm_sorting' ).forEach( setupSortableList );
+		}
+		lazyMakeDraggable( element );
+		return { id: key, type: field.type, element };
+	}
+
+	/**
+	 * Prepare deferred settings before selection or another interaction reads their inputs.
+	 *
+	 * @since x.x
+	 * @param {string} fieldId Numeric field ID.
+	 * @return {HTMLElement|null} The field settings panel, if the field has loaded.
+	 */
+	function ensureFieldSettings( fieldId ) {
+		return materializeFieldSettings( fieldId, prepareLoadedFieldMarkup );
+	}
+
+	/**
+	 * Resolve shared markup attributes for a field preview or its newly inserted settings.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} element The inserted preview or settings panel.
+	 * @return {void}
+	 */
+	function prepareLoadedFieldMarkup( element ) {
 		element.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 		element.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
 		element.querySelectorAll( '[data-tip-key]' ).forEach( resolveDeferredTooltip );
-		setupSortable( `#frm_field_id_${ key }.edit_field_type_divider ul.frm_sorting` );
-		lazyMakeDraggable( element );
-		return { id: key, type: field.type, element };
+	}
+
+	/**
+	 * Prepare settings before delegated preview handlers read or modify them.
+	 *
+	 * @since x.x
+	 * @param {Event} event The preview interaction.
+	 * @return {void}
+	 */
+	function prepareInteractedFieldSettings( event ) {
+		const field = event.target.closest( '#frm-show-fields li.form-field' );
+		if ( field && ! field.classList.contains( 'frm_field_loading' ) ) {
+			ensureFieldSettings( field.dataset.fid );
+		}
+	}
+
+	/**
+	 * Stop placeholder mouse events before delegated selection and hover handlers run.
+	 *
+	 * @since x.x
+	 * @param {MouseEvent} event The interaction inside the builder fields container.
+	 * @return {void}
+	 */
+	function ignoreLoadingFieldMouseEvent( event ) {
+		// A drag helper lets the pointer reach placeholders, so let jQuery UI track the drag.
+		if ( document.body.classList.contains( 'frm-dragging' ) || ! event.target.closest( '.frm_field_loading' ) ) {
+			return;
+		}
+
+		// Clear the previous row before stopping the delegated hover cleanup.
+		if ( false !== maybeRemoveGroupHoverTarget() ) {
+			deleteTooltips();
+		}
+
+		event.preventDefault();
+		event.stopImmediatePropagation();
 	}
 
 	/**
@@ -2922,6 +3016,7 @@ window.frmAdminBuildJS = function() {
 		placeholderSpinnerObserver?.disconnect();
 		renumberPageBreaks();
 		maybeHideQuantityProductFieldOption();
+		scheduleBulkOptionsOverlay();
 	}
 
 	function addFieldClick() {
@@ -3223,7 +3318,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
-		const originalSettings = document.getElementById( `frm-single-settings-${ originalFieldId }` );
+		const originalSettings = ensureFieldSettings( originalFieldId );
 		if ( ! originalSettings ) {
 			return;
 		}
@@ -3328,7 +3423,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		if ( null !== document.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
+		if ( null !== fieldsContainer.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
 			// do not set a hover target if a dropdown is open for the current hover target.
 			return;
 		}
@@ -3338,6 +3433,11 @@ window.frmAdminBuildJS = function() {
 			const list = elementFromPoint.closest( 'ul.frm_sorting' );
 
 			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
+				if ( list.querySelector( ':scope > .frm_field_loading' ) ) {
+					maybeRemoveGroupHoverTarget();
+					return;
+				}
+
 				const previousHoverTarget = maybeRemoveGroupHoverTarget();
 				if ( false !== previousHoverTarget && ! jQuery( previousHoverTarget ).is( list ) ) {
 					destroyFieldGroupPopup();
@@ -3355,7 +3455,7 @@ window.frmAdminBuildJS = function() {
 			controls.style.display = 'none';
 		}
 
-		const previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const previousHoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! previousHoverTarget ) {
 			return false;
 		}
@@ -3588,7 +3688,7 @@ window.frmAdminBuildJS = function() {
 		deselectFields();
 		initiateMultiselect();
 
-		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+		fieldsContainer.classList.remove( 'frm-over-droppable' );
 
 		maybeDisableFieldButtonAtLimit( type );
 
@@ -3839,6 +3939,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function hasExcludedOption( field, excludedOpts ) {
+		ensureFieldSettings( field.fieldId );
 		let hasOption = false;
 		for ( let i = 0; i < excludedOpts.length; i++ ) {
 			const inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
@@ -4347,17 +4448,59 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	function initBulkOptionsOverlay() {
-		/*jshint validthis:true */
-		const $info = initModal( '#frm-bulk-modal', '700px' );
-		if ( $info === false ) {
+	let bulkOptionsOverlay;
+	let bulkOptionsOverlayScheduled = false;
+
+	/**
+	 * Create the dialog once, either during idle time or on its first click.
+	 *
+	 * @since x.x
+	 * @return {jQuery|boolean} The dialog, or false when its markup is absent.
+	 */
+	function initializeBulkOptionsOverlay() {
+		if ( bulkOptionsOverlay === undefined ) {
+			bulkOptionsOverlay = initModal( '#frm-bulk-modal', '700px' );
+		}
+		return bulkOptionsOverlay;
+	}
+
+	/**
+	 * Wait for page assets and field rendering before scheduling optional dialog work.
+	 *
+	 * @since x.x
+	 * @return {void}
+	 */
+	function scheduleBulkOptionsOverlay() {
+		if ( bulkOptionsOverlayScheduled ) {
 			return;
 		}
+		bulkOptionsOverlayScheduled = true;
+
+		const schedule = () => {
+			if ( window.requestIdleCallback ) {
+				window.requestIdleCallback( initializeBulkOptionsOverlay );
+			} else {
+				setTimeout( initializeBulkOptionsOverlay, 0 );
+			}
+		};
+		if ( document.readyState === 'complete' ) {
+			schedule();
+		} else {
+			window.addEventListener( 'load', schedule, { once: true } );
+		}
+	}
+
+	function initBulkOptionsOverlay() {
+		/*jshint validthis:true */
 
 		jQuery( '.frm-insert-preset' ).on( 'click', insertBulkPreset );
 
 		jQuery( builderForm ).on( 'click', 'a.frm-bulk-edit-link', function( event ) {
 			event.preventDefault();
+			const $info = initializeBulkOptionsOverlay();
+			if ( $info === false ) {
+				return;
+			}
 			let content = '';
 			const fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' );
 			const separate = usingSeparateValues( fieldId );
@@ -4408,7 +4551,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			this.classList.add( 'frm_loading_button' );
-			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
+			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, initializeBulkOptionsOverlay() );
 			fieldUpdated();
 		} );
 	}
@@ -4772,6 +4915,7 @@ window.frmAdminBuildJS = function() {
 	 * Delete a field option.
 	 */
 	function deleteFieldOption() {
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const parentLi = this.parentNode;
 		const parentUl = parentLi.parentNode;
 
@@ -4891,7 +5035,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickDeleteFieldGroup() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -4905,7 +5049,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function duplicateFieldGroup() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -4980,7 +5124,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickFieldGroupLayout() {
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 
 		if ( ! hoverTarget ) {
 			return;
@@ -5285,7 +5429,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleFieldGroupLayoutOptionClick() {
-		const row = document.querySelector( '.frm-field-group-hover-target' );
+		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! row ) {
 			// The field group layout options also get clicked when merging multiple rows.
 			// The following code isn't required for multiple rows though so just exit early.
@@ -5478,7 +5622,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function breakFieldGroupClick() {
-		const row = document.querySelector( '.frm-field-group-hover-target' );
+		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		breakRow( row );
 		destroyFieldGroupPopup();
 	}
@@ -5540,7 +5684,7 @@ window.frmAdminBuildJS = function() {
 		const $controls = jQuery( document.getElementById( 'frm_field_group_controls' ) );
 
 		if ( $controls.length && 'none' !== $controls.get( 0 ).style.display ) {
-			syncLayoutClasses( getFieldsInRow( jQuery( document.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
+			syncLayoutClasses( getFieldsInRow( jQuery( fieldsContainer.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
 		} else {
 			const $ul = mergeSelectedFieldGroups();
 			syncLayoutClasses( getFieldsInRow( $ul ).first(), syncDetails );
@@ -5553,33 +5697,26 @@ window.frmAdminBuildJS = function() {
 	function fieldGroupClick( e ) {
 		maybeShowFieldGroupMessage();
 
-		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
-			// only continue if the group itself was clicked / ignore when a field is clicked.
+		if ( e.target !== e.currentTarget ) {
+			// only continue if the group itself was clicked / ignore when a field or a nested group is clicked.
 			return;
 		}
 
-		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget ) {
 			return;
 		}
 
 		const ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		const shiftKeyIsDown = e.shiftKey;
-		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
+		// Get the selected groups first so the selected field's group is included when checking if the clicked group is active.
 		const $selectedFieldGroups = getSelectedFieldGroups();
+		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
 
 		let numberOfSelectedGroups = $selectedFieldGroups.length;
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
-
-			const selectedField = getSelectedField();
-			if ( null !== selectedField && ! jQuery( selectedField ).siblings( 'li.form-field' ).length ) {
-				// count a selected field on its own as a selected field group when multiselecting.
-				selectedField.parentNode.classList.add( 'frm-selected-field-group' );
-				++numberOfSelectedGroups;
-			}
-
 			if ( ctrlOrCmdKeyIsDown ) {
 				if ( groupIsActive ) {
 					// unselect if holding ctrl or cmd and the group was already active.
@@ -5739,7 +5876,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getSelectedField() {
-		return document.getElementById( 'frm-show-fields' ).querySelector( 'li.form-field.selected' );
+		return fieldsContainer.querySelector( 'li.form-field.selected' );
 	}
 
 	function getSelectedFieldGroups() {
@@ -5750,9 +5887,9 @@ window.frmAdminBuildJS = function() {
 
 		const selectedField = getSelectedField();
 		if ( selectedField ) {
-			// If there is only one field in a group and the field is selected, consider the field's group as selected for multi-select.
+			// When a field is selected, consider the field's group as selected for multi-select.
 			const selectedFieldGroup = selectedField.closest( 'ul' );
-			if ( selectedFieldGroup && 1 === getFieldsInRow( jQuery( selectedFieldGroup ) ).length ) {
+			if ( selectedFieldGroup ) {
 				selectedFieldGroup.classList.add( 'frm-selected-field-group' );
 				return jQuery( selectedFieldGroup );
 			}
@@ -6023,6 +6160,7 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success() {
+				forgetFieldSettings( fieldId );
 				const $thisField = jQuery( document.getElementById( `frm_field_id_${ fieldId }` ) );
 				const settings = jQuery( `#frm-single-settings-${ fieldId }` );
 
@@ -6105,7 +6243,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function countFieldTypeInForm( type ) {
-		return document.getElementById( 'frm-show-fields' ).querySelectorAll( `li.form-field[data-ftype="${ type }"]` ).length;
+		return fieldsContainer.querySelectorAll( `li.form-field[data-ftype="${ type }"]` ).length;
 	}
 
 	function addFieldLogicRow() {
@@ -6333,6 +6471,7 @@ window.frmAdminBuildJS = function() {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const fieldIds = [];
 		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		const rowLength = rows.length;
@@ -6513,7 +6652,7 @@ window.frmAdminBuildJS = function() {
 
 	function toggleCollapseFakePage() {
 		const topLevel = document.getElementById( 'frm-fake-page' );
-		const firstField = document.getElementById( 'frm-show-fields' ).firstElementChild;
+		const firstField = fieldsContainer.firstElementChild;
 		const toCollapse = getAllFieldsForPage( firstField );
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
@@ -7027,6 +7166,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
+		materializeAllFieldSettings( prepareLoadedFieldMarkup );
 		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
 		const rowLength = rows.length;
 
@@ -7084,6 +7224,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getFieldOptions( fieldId ) {
+		ensureFieldSettings( fieldId );
 		const options = [];
 		const optsContainer = document.getElementById( `frm_field_${ fieldId }_opts` );
 
@@ -7158,6 +7299,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 		const { sourceID } = atts;
+		ensureFieldSettings( sourceID );
 		const { placeholder } = atts;
 		const isProduct = isProductField( sourceID );
 		const showOther = atts.other;
@@ -7212,6 +7354,7 @@ window.frmAdminBuildJS = function() {
 	 * @param {boolean} showValueAsLabel Whether to show the value as label for empty labels.
 	 */
 	function getMultipleOpts( fieldId, showValueAsLabel = false ) {
+		ensureFieldSettings( fieldId );
 		let i;
 		let saved;
 		let labelName;
@@ -7584,12 +7727,12 @@ window.frmAdminBuildJS = function() {
 				field = self.getFieldOrderInputById( fieldId, fields[ i ] );
 
 				// get current field order, make sure we don't get the "field" reference as the "field" value will get updated later.
-				currentOrder = field ? Object.assign( {}, field.value )[ 0 ] : null;
+				currentOrder = field ? Number( field.value ) : null;
 				newOrder = i + 1;
 
 				if ( currentOrder != newOrder && null !== currentOrder ) {
 					field.value = newOrder;
-					singleField = fields[ i ].querySelector( `#frm-single-settings-${ fieldId }` );
+					singleField = ensureFieldSettings( fieldId );
 
 					// add field that needs to be moved to "updateFieldOrder.prototype.fieldSettingsForm"
 					moveFieldsClass.append( singleField );
@@ -8698,7 +8841,10 @@ window.frmAdminBuildJS = function() {
 			allFieldSettings[ i ].classList.add( 'frm_hidden' );
 		}
 
-		const singleField = document.getElementById( `frm-single-settings-${ fieldId }` );
+		const singleField = ensureFieldSettings( fieldId );
+		if ( ! singleField ) {
+			return;
+		}
 		hydrateBuilderSelectsIn( singleField );
 		moveFieldSettings( singleField );
 
@@ -8782,14 +8928,13 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const fieldSettingsSelector = `#frm-single-settings-${ fieldId }`;
-		if ( document.querySelector( `${ fieldSettingsSelector } .frm-show-box` ) ) {
+		if ( singleField.querySelector( '.frm-show-box' ) ) {
 			return;
 		}
 		singleField.querySelector( '.wp-editor-container' )?.classList.add( 'frm_has_shortcodes' );
 
 		const wrapTextareaWithIconContainer = () => {
-			const textareas = document.querySelectorAll( `${ fieldSettingsSelector } .frm_has_shortcodes textarea` );
+			const textareas = singleField.querySelectorAll( '.frm_has_shortcodes textarea' );
 			textareas.forEach( textarea => {
 				const wrapperSpan = span( { className: 'frm-with-right-icon' } );
 				textarea.parentNode.insertBefore( wrapperSpan, textarea );
@@ -9986,6 +10131,31 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Track changes made in the Custom CSS CodeMirror editor for the unsaved changes pop up.
+	 * CodeMirror replaces the textarea, so edits there never fire a native change event.
+	 * The editor initializes on document ready, so retry a few times until it exists.
+	 *
+	 * @since x.x
+	 *
+	 * @param {number} retryCount The number of times this function has run while waiting for CodeMirror to initialize.
+	 * @return {void}
+	 */
+	function addCustomCSSEditorChangeListener( retryCount = 0 ) {
+		const retryLimit = 5;
+		const retryInterval = 500;
+		const editor = window.frm_codemirror_box_wp_editor;
+
+		if ( editor === undefined || editor.codemirror === undefined ) {
+			if ( retryCount < retryLimit ) {
+				setTimeout( () => addCustomCSSEditorChangeListener( retryCount + 1 ), retryInterval );
+			}
+			return;
+		}
+
+		editor.codemirror.on( 'change', fieldUpdated );
+	}
+
 	function buildSubmittedNoAjax() {
 		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
 		fieldsUpdated = 0;
@@ -10646,6 +10816,66 @@ window.frmAdminBuildJS = function() {
 		if ( thresholdContainer ) {
 			thresholdContainer.classList.toggle( 'frm_hidden', 'v3' !== e.target.value );
 		}
+	}
+
+	/**
+	 * Syncs aria-selected and the roving tabindex of a radio-backed tablist with its checked radio.
+	 * The Tab stop is the checked tab, or the first visible tab when the checked one is hidden.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function syncTablistState( tablist ) {
+		const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]' ) );
+		const visibleTabs = tabs.filter( label => ! label.classList.contains( 'frm_hidden' ) );
+		const tabStop = visibleTabs.find( label => label.control.checked ) || visibleTabs[ 0 ];
+
+		tabs.forEach( label => {
+			label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
+			label.setAttribute( 'tabindex', label === tabStop ? '0' : '-1' );
+		} );
+	}
+
+	/**
+	 * Adds Enter, Space, arrow, Home and End key support to a tablist of radio labels.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function initTablistKeyboard( tablist ) {
+		tablist.addEventListener( 'keydown', function( event ) {
+			const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]:not(.frm_hidden)' ) );
+			const index = tabs.indexOf( event.target.closest( 'label' ) );
+			if ( -1 === index ) {
+				return;
+			}
+
+			let target;
+			switch ( event.key ) {
+				case 'Enter':
+				case ' ':
+					target = tabs[ index ];
+					break;
+				case 'ArrowRight':
+					target = tabs[ ( index + 1 ) % tabs.length ];
+					break;
+				case 'ArrowLeft':
+					target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
+					break;
+				case 'Home':
+					target = tabs[ 0 ];
+					break;
+				case 'End':
+					target = tabs[ tabs.length - 1 ];
+					break;
+				default:
+					return;
+			}
+
+			event.preventDefault();
+			target.focus();
+			target.click();
+		} );
 	}
 
 	function trashTemplate( e ) {
@@ -11810,6 +12040,13 @@ window.frmAdminBuildJS = function() {
 		},
 
 		buildInit() {
+			hydrateFieldPlaceholders();
+			[ 'click', 'dblclick', 'mousedown', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
+				fieldsContainer.addEventListener( eventType, ignoreLoadingFieldMouseEvent, true );
+			} );
+			document.addEventListener( 'click', prepareInteractedFieldSettings, true );
+			document.addEventListener( 'focusin', prepareInteractedFieldSettings, true );
+
 			document.addEventListener( 'focusin', event => {
 				if ( event.target.matches( 'select[data-frm-options]' ) ) {
 					hydrateBuilderSelect( event.target );
@@ -12010,6 +12247,10 @@ window.frmAdminBuildJS = function() {
 			if ( frm_admin_js.pricingFieldsModal && 'object' === typeof frm_admin_js.pricingFieldsModal ) {
 				infoModal( frm_admin_js.pricingFieldsModal, '550px' );
 			}
+
+			if ( ! activeFieldLoadRequests ) {
+				scheduleBulkOptionsOverlay();
+			}
 		},
 
 		settingsInit() {
@@ -12098,13 +12339,16 @@ window.frmAdminBuildJS = function() {
 				} );
 			} );
 
-			// Handle Captcha checkbox toggle to show/hide warnings
-			const captchaCheckbox = document.getElementById( 'frm_include_captcha' );
-			if ( captchaCheckbox ) {
-				const initialState = captchaCheckbox.checked;
-				captchaCheckbox.addEventListener( 'change', function() {
-					const addWarning = document.getElementById( 'frm_captcha_add_warning' );
-					const removeWarning = document.getElementById( 'frm_captcha_remove_warning' );
+			// Handle Captcha and GDPR checkbox toggles to show/hide warnings
+			[ 'captcha', 'gdpr' ].forEach( function( fieldType ) {
+				const includeCheckbox = document.getElementById( `frm_include_${ fieldType }` );
+				if ( ! includeCheckbox ) {
+					return;
+				}
+				const initialState = includeCheckbox.checked;
+				includeCheckbox.addEventListener( 'change', function() {
+					const addWarning = document.getElementById( `frm_${ fieldType }_add_warning` );
+					const removeWarning = document.getElementById( `frm_${ fieldType }_remove_warning` );
 					if ( addWarning && removeWarning ) {
 						// Only show warning if current state differs from initial state
 						if ( this.checked !== initialState ) {
@@ -12122,7 +12366,7 @@ window.frmAdminBuildJS = function() {
 						}
 					}
 				} );
-			}
+			} );
 
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
@@ -12393,50 +12637,20 @@ window.frmAdminBuildJS = function() {
 				const showNote = event.target.value !== captchaValueOnLoad;
 				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden', ! showNote );
 
-				captchas.querySelectorAll( 'label' ).forEach( label => {
-					label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
-					label.setAttribute( 'tabindex', label.control.checked ? '0' : '-1' );
-				} );
+				syncTablistState( captchas );
 			} );
-
-			captchas.addEventListener( 'keydown', function( event ) {
-				const tabs = Array.from( captchas.querySelectorAll( 'label' ) );
-				const index = tabs.indexOf( event.target.closest( 'label' ) );
-				if ( -1 === index ) {
-					return;
-				}
-
-				let target;
-				switch ( event.key ) {
-					case 'Enter':
-					case ' ':
-						target = tabs[ index ];
-						break;
-					case 'ArrowRight':
-						target = tabs[ ( index + 1 ) % tabs.length ];
-						break;
-					case 'ArrowLeft':
-						target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
-						break;
-					case 'Home':
-						target = tabs[ 0 ];
-						break;
-					case 'End':
-						target = tabs[ tabs.length - 1 ];
-						break;
-					default:
-						return;
-				}
-
-				event.preventDefault();
-				target.focus();
-				target.click();
-			} );
+			initTablistKeyboard( captchas );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
 				fieldsUpdated = 0;
 			} );
+
+			// The uninstall checkbox only reveals its action, license keys save separately, and payment section inputs act as tabs.
+			// This is delegated from the wrap element, not the document, because hideShowItem returns false and stops change events from reaching the document.
+			jQuery( '#form_global_settings' ).on( 'change', 'input:not(#frm-uninstall-box):not(.frm-search-input):not(.frm_addon_license_key):not([name="frm_payment_section"]), select, textarea', fieldUpdated );
+
+			addCustomCSSEditorChangeListener();
 
 			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
 			if ( manageStyleSettings ) {
@@ -12455,34 +12669,12 @@ window.frmAdminBuildJS = function() {
 
 			const paymentsSettings = document.getElementById( 'payments_settings' );
 			const paymentSettingsTabs = paymentsSettings?.querySelectorAll( '[name="frm_payment_section"]' );
-			if ( paymentSettingsTabs ) {
+			if ( paymentSettingsTabs?.length ) {
+				const paymentTablist = paymentSettingsTabs[ 0 ].closest( '[role="tablist"]' );
 				paymentSettingsTabs.forEach(
-					element => {
-						element.addEventListener( 'change', () => {
-							if ( ! element.checked ) {
-								return;
-							}
-
-							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
-							if ( label ) {
-								label.setAttribute( 'aria-selected', 'true' );
-							}
-
-							paymentSettingsTabs.forEach(
-								tab => {
-									if ( tab === element ) {
-										return;
-									}
-
-									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
-									if ( label ) {
-										label.setAttribute( 'aria-selected', 'false' );
-									}
-								}
-							);
-						} );
-					}
+					element => element.addEventListener( 'change', () => syncTablistState( paymentTablist ) )
 				);
+				initTablistKeyboard( paymentTablist );
 			}
 		},
 
@@ -12619,6 +12811,8 @@ window.frmAdminBuildJS = function() {
 			},
 		},
 
+		syncTablistState,
+		initTablistKeyboard,
 		applyZebraStriping,
 		initModal,
 		infoModal,

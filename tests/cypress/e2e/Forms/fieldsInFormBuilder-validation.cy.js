@@ -30,7 +30,7 @@ describe( 'Fields in the form builder', () => {
 			// measures 1280x0 (formidable-forms#3397), same shape as the #js_validate race below.
 			// .scrollIntoView() first reliably clears it.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-				.invoke( 'css', 'opacity', 1 )
+				.revealFieldActions()
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 				.first()
 				.scrollIntoView()
@@ -117,7 +117,7 @@ describe( 'Fields in the form builder', () => {
 		// See the .frm-show-hover opacity note on the field-row "more options" toggle elsewhere in
 		// this file.
 		cy.get( `li[data-ftype="text"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-			.invoke( 'css', 'opacity', 1 )
+			.revealFieldActions()
 			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 			.first()
 			.should( 'be.visible' )
@@ -158,8 +158,8 @@ describe( 'Fields in the form builder', () => {
 		cy.get( '[id^="field_"]' ).filter( 'input, textarea' ).eq( 1 ).click();
 
 		cy.get( `[id^="frm_error_field_"]` ).eq( 0 ).should( 'contain', `Text cannot be blank.` );
-		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'contain', `Email is invalid` );
-		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'contain', `Phone is invalid` );
+		cy.get( `[id^="frm_error_field_"]` ).eq( 1 ).should( 'contain', 'Enter a valid email address, like name@example.com' );
+		cy.get( `[id^="frm_error_field_"]` ).eq( 2 ).should( 'contain', 'Enter a valid phone number' );
 		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
 
 		cy.log( 'Navigate back to the formidable form page' );
@@ -204,7 +204,7 @@ describe( 'Fields in the form builder', () => {
 		cy.log( 'Allow international domain names on the Website/URL field' );
 		// Same field-row "more options" toggle as the required-field test above.
 		cy.get( 'li[data-ftype="url"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons', { timeout: 10000 } )
-			.invoke( 'css', 'opacity', 1 )
+			.revealFieldActions()
 			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 			.first()
 			.scrollIntoView()
