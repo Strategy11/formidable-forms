@@ -147,7 +147,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php esc_html_e( 'About connection files', 'formidable' ); ?>
 						</a>
 					</p>
-					<?php wp_nonce_field( FrmMcpSkillEnvController::DOWNLOAD_ACTION, FrmMcpSkillEnvController::DOWNLOAD_ACTION . '_nonce' ); ?>
+					<?php wp_nonce_field( FrmMcpSkillEnvController::DOWNLOAD_ACTION, FrmMcpSkillEnvController::DOWNLOAD_ACTION . '_nonce', false ); ?>
 					<?php
 					// Once a file exists, step 2's copy button becomes the primary action.
 					$download_class = $env_created ? 'frm-button-secondary' : 'frm-button-primary';
@@ -162,7 +162,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}//end if
  ?>
 				<?php if ( $skill_passwords ) { ?>
-					<?php wp_nonce_field( FrmMcpSkillEnvController::REVOKE_ACTION, FrmMcpSkillEnvController::REVOKE_ACTION . '_nonce' ); ?>
+					<?php wp_nonce_field( FrmMcpSkillEnvController::REVOKE_ACTION, FrmMcpSkillEnvController::REVOKE_ACTION . '_nonce', false ); ?>
 					<details class="frm-mcp-disclosure">
 						<summary>
 							<svg class="frmsvg frm-mcp-disclosure-chevron" aria-hidden="true" focusable="false"><use href="#frm_arrowdown6_icon"></use></svg>
@@ -249,14 +249,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<p class="description" id="frm_mcp_client_label"><?php esc_html_e( 'Pick your assistant, then paste the setup prompt into it. The prompt installs the skill, adds your file, and tests the connection.', 'formidable' ); ?></p>
 				<?php
 				// Nothing is selected by default, and autocomplete is off so the browser
-				// cannot restore a choice on reload either. settings.js shows the
+				// cannot restore a choice on reload either. The parent settings form sets
+				// autocomplete because radio inputs do not support it. settings.js shows the
 				// prompt for whichever radio is checked. The radios stay in the tab
 				// order (visually hidden, not display:none) so the picker works from
 				// the keyboard.
 				?>
 				<div class="frm-mcp-clients" role="radiogroup" aria-labelledby="frm_mcp_client_label">
 					<?php foreach ( $prompt_clients as $client => $prompt_client ) { ?>
-						<input type="radio" name="frm_mcp_client_view" id="<?php echo esc_attr( 'frm-mcp-client-' . $client ); ?>" value="<?php echo esc_attr( $client ); ?>" autocomplete="off" />
+						<input type="radio" name="frm_mcp_client_view" id="<?php echo esc_attr( 'frm-mcp-client-' . $client ); ?>" value="<?php echo esc_attr( $client ); ?>" />
 						<label for="<?php echo esc_attr( 'frm-mcp-client-' . $client ); ?>">
 							<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/mcp-' . $client . '.svg' ); ?>" width="20" height="20" alt="" />
 							<?php echo esc_html( $prompt_client['name'] ); ?>
