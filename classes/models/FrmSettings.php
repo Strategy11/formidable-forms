@@ -563,6 +563,7 @@ class FrmSettings {
 	 * @return void
 	 */
 	public function update( $params ) {
+		$params = $this->keep_unposted_spam_handling( $params );
 		$this->fill_with_defaults( $params );
 		$this->update_settings( $params );
 
@@ -583,6 +584,26 @@ class FrmSettings {
 		// Save styling settings in case fallback setting changes.
 		$frm_style = new FrmStyle();
 		$frm_style->update( 'default' );
+	}
+
+	/**
+	 * A check that is turned off has a disabled select that is not submitted, so keep its saved handling.
+	 * This runs before fill_with_defaults() replaces the saved handling with the posted values.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $params The posted settings.
+	 *
+	 * @return array
+	 */
+	private function keep_unposted_spam_handling( $params ) {
+		if ( ! isset( $params['frm_spam_handling'] ) || ! is_array( $params['frm_spam_handling'] ) || ! is_array( $this->spam_handling ) ) {
+			return $params;
+		}
+
+		$params['frm_spam_handling'] = array_merge( $this->spam_handling, $params['frm_spam_handling'] );
+
+		return $params;
 	}
 
 	/**

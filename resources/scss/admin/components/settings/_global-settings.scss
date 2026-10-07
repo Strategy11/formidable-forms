@@ -82,6 +82,7 @@ label.frm-example-icon {
  * The checked rule below has the higher specificity, so a selected button keeps
  * its blue border while still picking up the hover surface.
  */
+
 /* Share the row evenly, so the last captcha button ends on the same edge as the fields below. */
 .frm_captchas.frm-long-icon-buttons > label {
 	flex: 1 1 0;
@@ -580,9 +581,11 @@ label.frm-example-icon {
 }
 
 .frm-spam-integration {
+
 	/* Lets the layout below follow the card's width, which tracks the settings column. */
 	container-type: inline-size;
 	margin-block: var(--gap-sm);
+
 	/* Less on top and bottom: the text's line height already adds space there. */
 	padding: 12px var(--gap-sm);
 	border: 1px solid var(--grey-300);

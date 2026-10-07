@@ -439,6 +439,86 @@ class test_FrmManualSpam extends FrmUnitTest {
 	}
 
 	/**
+	 * A repeated restore changes nothing, so a double submit cannot run the selected actions twice.
+	 *
+	 * @return void
+	 */
+	public function test_restore_from_spam_only_restores_once() {
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		wp_get_current_user()->add_cap( 'frm_edit_entries' );
+		$form   = $this->factory->form->create();
+		$parent = $this->factory->entry->create( array( 'form_id' => $form ) );
+		$this->factory->entry->create(
+			array(
+				'form_id'        => $form,
+				'parent_item_id' => $parent,
+			)
+		);
+		$this->assertTrue( FrmSpamEntriesHelper::mark_as_spam( $parent ) );
+
+		$this->assertFalse( FrmSpamEntriesHelper::restore_from_spam( 0 ) );
+		$this->assertSame( 2, FrmSpamEntriesHelper::restore_from_spam( $parent ), 'The parent and child should be restored.' );
+		$this->assertSame( 0, FrmSpamEntriesHelper::restore_from_spam( $parent ), 'A second restore should change nothing.' );
+		$this->assertSame( 0, (int) FrmEntry::getOne( $parent )->is_draft );
+	}
+
+	/**
+	 * Reloading the mark as spam URL reports success instead of a failure.
+	 *
+	 * @return void
+	 */
+	public function test_repeated_mark_spam_request_reports_success() {
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		wp_get_current_user()->add_cap( 'frm_delete_entries' );
+		wp_get_current_user()->add_cap( 'frm_view_entries' );
+		$entry_id     = $this->factory->entry->create( array( 'form_id' => $this->factory->form->create() ) );
+		$original_get = $_GET;
+		$_GET         = array(
+			'id'       => $entry_id,
+			'_wpnonce' => wp_create_nonce( 'frm_mark_spam_' . $entry_id ),
+		);
+		ob_start();
+
+		try {
+			FrmSpamEntriesController::mark_spam();
+			ob_clean();
+			FrmSpamEntriesController::mark_spam();
+			$html = ob_get_contents();
+		} finally {
+			ob_end_clean();
+			$_GET = $original_get;
+		}
+
+		$this->assertStringContainsString( 'The entry was marked as spam.', $html );
+		$this->assertStringNotContainsString( 'could not be marked as spam', $html );
+	}
+
+	/**
+	 * Moderating from an entry page returns to that entry's form.
+	 *
+	 * @return void
+	 */
+	public function test_moderation_from_entry_page_returns_to_its_form() {
+		$original = $_GET;
+		$_GET     = array(
+			'frm_action' => 'show',
+			'id'         => 456,
+		);
+		$entry    = (object) array(
+			'id'      => 456,
+			'form_id' => 123,
+		);
+
+		try {
+			$this->assertSame( 123, FrmSpamEntriesController::get_list_form_id( $entry ) );
+			$_GET = array();
+			$this->assertSame( 0, FrmSpamEntriesController::get_list_form_id( $entry ), 'The all forms list should stay unfiltered.' );
+		} finally {
+			$_GET = $original;
+		}
+	}
+
+	/**
 	 * Moderation links preserve the active list tab and form filter.
 	 *
 	 * @return void

@@ -90,6 +90,7 @@
 .frm-spam-entry-notice p {
 	flex: 1 1 320px;
 	margin: 0;
+
 	/* Use the warning style's own text color; the generic grey paragraph color is too light on yellow. */
 	color: inherit;
 	text-wrap: pretty;

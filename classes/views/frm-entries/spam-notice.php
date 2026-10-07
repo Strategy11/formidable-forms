@@ -29,7 +29,7 @@ $modal_attrs = array(
 $submit_url = add_query_arg(
 	'frm_action',
 	'not_spam',
-	FrmSpamEntriesController::get_tab_url( FrmSpamEntriesController::is_spam_tab(), FrmAppHelper::simple_get( 'form', 'absint' ) )
+	FrmSpamEntriesController::get_tab_url( FrmSpamEntriesController::is_spam_tab(), FrmSpamEntriesController::get_list_form_id( $entry ) )
 );
 
 if ( $open_modal ) {
@@ -108,7 +108,11 @@ if ( ! $can_moderate ) {
 						</fieldset>
 					<?php } ?>
 
-					<?php if ( ! $pending_actions ) { ?>
+					<?php if ( $manual_spam ) { ?>
+						<p class="howto">
+							<?php esc_html_e( 'Form actions already ran when this entry was submitted, so they will not run again.', 'formidable' ); ?>
+						</p>
+					<?php } elseif ( ! $pending_actions ) { ?>
 						<p class="howto">
 							<?php esc_html_e( 'This form has no actions waiting to run.', 'formidable' ); ?>
 						</p>

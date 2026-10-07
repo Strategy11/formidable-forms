@@ -144,6 +144,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample', 'spam_reason', 'spam_marked_at' ), true ) ) {
 				continue;
 			}
+
+			// An entry marked as not spam keeps its spam details, but they no longer apply.
+			if ( 'spam_source' === $k && ! FrmSpamEntriesHelper::is_spam( $entry ) ) {
+				continue;
+			}
+
 			$label = ucfirst( str_replace( '-', ' ', $k ) );
 			$icon  = 'frmfont frm_attach_file_icon';
 

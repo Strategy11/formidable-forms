@@ -521,32 +521,59 @@ class FrmSpamEntriesHelper {
 		}
 
 		$targets_entries = false;
+		$only_targets    = true;
 
 		foreach ( $where as $key => $value ) {
-			if ( is_numeric( $key ) || ! preg_match( '/(?:^|\.)(id|item_key|parent_item_id)$/', trim( $key ), $matches ) ) {
+			if ( 'or' === $key ) {
 				continue;
 			}
 
-			// Parent zero selects all top-level entries, rather than the children of a specific entry.
-			if ( 'parent_item_id' === $matches[1] ) {
-				$parent_ids = (array) $value;
-
-				if ( ! $parent_ids ) {
-					continue;
-				}
-
-				foreach ( $parent_ids as $parent_id ) {
-					if ( ! is_numeric( $parent_id ) || (int) $parent_id < 1 ) {
-						continue 2;
-					}
-				}
+			if ( self::targets_specific_entries( $key, $value ) ) {
+				$targets_entries = true;
+			} else {
+				$only_targets = false;
 			}
+		}
 
-			$targets_entries = true;
-			break;
-		}//end foreach
+		// An OR group only skips the exclusion when every branch selects specific entries, like the CSV export rows.
+		$exclude = ! empty( $where['or'] ) ? ! ( $targets_entries && $only_targets ) : ! $targets_entries;
 
-		return (bool) apply_filters( 'frm_exclude_spam_entries', ! $targets_entries || ! empty( $where['or'] ), $where );
+		return (bool) apply_filters( 'frm_exclude_spam_entries', $exclude, $where );
+	}
+
+	/**
+	 * Check if a where condition selects specific entries by ID, key or parent.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $key   The where key, which may include a table alias and operator.
+	 * @param mixed      $value The where value.
+	 *
+	 * @return bool
+	 */
+	private static function targets_specific_entries( $key, $value ) {
+		if ( is_numeric( $key ) || ! preg_match( '/(?:^|\.)(id|item_key|parent_item_id)$/', trim( $key ), $matches ) ) {
+			return false;
+		}
+
+		if ( 'parent_item_id' !== $matches[1] ) {
+			return true;
+		}
+
+		// Parent zero selects all top-level entries, rather than the children of a specific entry.
+		$parent_ids = (array) $value;
+
+		if ( ! $parent_ids ) {
+			return false;
+		}
+
+		foreach ( $parent_ids as $parent_id ) {
+			if ( ! is_numeric( $parent_id ) || (int) $parent_id < 1 ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -795,5 +822,43 @@ class FrmSpamEntriesHelper {
 
 		FrmEntry::clear_cache();
 		return true;
+	}
+
+	/**
+	 * Move a spam entry and its child entries back to submitted.
+	 * Only rows that are still spam change, so a repeated request cannot restore the entry twice.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $entry_id The parent entry ID.
+	 *
+	 * @return false|int The number of entries restored, or false when the update failed.
+	 */
+	public static function restore_from_spam( $entry_id ) {
+		global $wpdb;
+
+		$entry_id = (int) $entry_id;
+
+		if ( $entry_id < 1 ) {
+			return false;
+		}
+
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i SET is_draft = %d WHERE ( id = %d OR parent_item_id = %d ) AND is_draft = %d',
+				$wpdb->prefix . 'frm_items',
+				FrmEntriesHelper::SUBMITTED_ENTRY_STATUS,
+				$entry_id,
+				$entry_id,
+				self::SPAM_ENTRY_STATUS
+			)
+		);
+
+		if ( false === $updated ) {
+			return false;
+		}
+
+		FrmEntry::clear_cache();
+		return (int) $updated;
 	}
 }

@@ -57,6 +57,7 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 			array( array(), 'Not recorded' ),
 			array( array( 'spam_source' => 'unknown' ), 'Not recorded' ),
 		);
+
 		foreach ( $cases as $case ) {
 			$item = (object) array( 'description' => $case[0] );
 			$this->assertSame( $case[1], $this->column_value( $item, 'spam_reason' ) );

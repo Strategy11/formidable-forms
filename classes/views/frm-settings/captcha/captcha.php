@@ -226,12 +226,6 @@ $spam_source_tooltips = array(
  ?>
 			</p>
 			<p class="frm6 frm_form_field">
-				<?php if ( $setting ) { ?>
-					<?php
-// A disabled select is not submitted, so this keeps the saved handling while the check is off.
-					?>
-					<input type="hidden" name="<?php echo esc_attr( $handling_name ); ?>" value="<?php echo esc_attr( $spam_handling[ $spam_source ] ); ?>" />
-				<?php } ?>
 				<select id="<?php echo esc_attr( $select_id ); ?>" name="<?php echo esc_attr( $handling_name ); ?>" <?php echo $setting ? 'aria-labelledby="' . esc_attr( $select_id ) . '_label"' : ''; ?> <?php disabled( $is_off ); ?> class="<?php echo $is_off ? 'frm_hidden' : ''; ?>">
 					<option value="<?php echo esc_attr( FrmSpamEntriesHelper::SAVE ); ?>" <?php selected( $spam_handling[ $spam_source ], FrmSpamEntriesHelper::SAVE ); ?>>
 						<?php esc_html_e( 'Save as a spam entry', 'formidable' ); ?>

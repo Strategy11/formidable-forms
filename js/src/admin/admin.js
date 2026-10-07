@@ -12889,11 +12889,6 @@ window.frmAdminBuildJS = function() {
 			spamHandling?.addEventListener( 'change', event => {
 				const { target } = event;
 
-				// The hidden input before a select submits its value while the select is disabled, so keep them in sync.
-				if ( 'SELECT' === target.tagName && 'hidden' === target.previousElementSibling?.type ) {
-					target.previousElementSibling.value = target.value;
-				}
-
 				// A check's select only shows while its checkbox is on.
 				if ( target.dataset.spamCheck ) {
 					const select = document.getElementById( target.dataset.spamCheck );

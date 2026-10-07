@@ -102,6 +102,47 @@ class test_FrmAkismetSpam extends FrmUnitTest {
 	}
 
 	/**
+	 * A check that is turned off submits no handling, so its saved choice is kept.
+	 *
+	 * @return void
+	 */
+	public function test_disabled_check_keeps_saved_handling() {
+		$settings                            = new FrmSettings();
+		$settings->spam_handling             = FrmSpamEntriesHelper::get_default_handling();
+		$settings->spam_handling['honeypot'] = FrmSpamEntriesHelper::SAVE;
+		$posted                              = array(
+			'frm_spam_handling' => array( 'denylist' => FrmSpamEntriesHelper::BLOCK ),
+		);
+
+		$params = $this->run_private_method( array( $settings, 'keep_unposted_spam_handling' ), array( $posted ) );
+
+		// FrmSettings::update() then saves the sanitized handling.
+		$handling = FrmSpamEntriesHelper::sanitize_handling( $params['frm_spam_handling'] );
+		$this->assertSame( FrmSpamEntriesHelper::SAVE, $handling['honeypot'], 'The disabled check should keep its saved handling.' );
+		$this->assertSame( FrmSpamEntriesHelper::BLOCK, $handling['denylist'], 'The posted handling should be saved.' );
+	}
+
+	/**
+	 * Optional checks render a single handling control, so the settings form has no duplicate names.
+	 *
+	 * @return void
+	 */
+	public function test_optional_checks_render_one_handling_control() {
+		ob_start();
+
+		try {
+			FrmSettingsController::captcha_settings();
+			$html = ob_get_contents();
+		} finally {
+			ob_end_clean();
+		}
+
+		foreach ( array_keys( FrmSpamEntriesHelper::get_optional_sources() ) as $source ) {
+			$this->assertSame( 1, substr_count( $html, 'name="frm_spam_handling[' . $source . ']"' ), 'Each check should submit its handling once.' );
+		}
+	}
+
+	/**
 	 * A saved API key does not enable checks when the Akismet plugin is inactive.
 	 */
 	public function test_inactive_akismet_does_not_make_a_request() {

@@ -140,8 +140,8 @@ class FrmAbilitiesEntriesController {
 						'description' => __( 'Entry last update date in MySQL format', 'formidable' ),
 					),
 					'is_draft'   => array(
-						'type'        => array( 'string', 'boolean' ),
-						'description' => __( 'Whether the entry is a draft, returned as "0" or "1"', 'formidable' ),
+						'type'        => 'integer',
+						'description' => __( 'The entry status: 0 for submitted, 1 for draft and 4 for spam. Add-ons may use other values.', 'formidable' ),
 					),
 					'meta'       => array(
 						'type'                 => 'object',
@@ -204,8 +204,8 @@ class FrmAbilitiesEntriesController {
 							'description' => __( 'Entry last update date in MySQL format', 'formidable' ),
 						),
 						'is_draft'   => array(
-							'type'        => array( 'string', 'boolean' ),
-							'description' => __( 'Whether the entry is a draft, returned as "0" or "1"', 'formidable' ),
+							'type'        => 'integer',
+							'description' => __( 'The entry status: 0 for submitted, 1 for draft and 4 for spam. Add-ons may use other values.', 'formidable' ),
 						),
 						'meta'       => array(
 							'type'                 => 'object',

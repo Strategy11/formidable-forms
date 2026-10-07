@@ -83,6 +83,26 @@ class FrmSpamEntriesController {
 	}
 
 	/**
+	 * Get the form to return to after moderating an entry.
+	 * The list keeps its form filter, and the entry page returns to the entry's form.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $entry The entry being moderated.
+	 *
+	 * @return int The form ID, or 0 for all forms.
+	 */
+	public static function get_list_form_id( $entry ) {
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
+
+		if ( ! $form_id && 'show' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) {
+			return (int) ( $entry->form_id ?? 0 );
+		}
+
+		return (int) $form_id;
+	}
+
+	/**
 	 * Show the Entries and Spam tabs above the entries list.
 	 *
 	 * @since x.x
@@ -223,7 +243,8 @@ class FrmSpamEntriesController {
 			return;
 		}
 
-		$marked  = FrmSpamEntriesHelper::mark_as_spam( $entry_id );
+		// Reloading the page after marking the entry should not report a failure.
+		$marked  = FrmSpamEntriesHelper::mark_as_spam( $entry_id ) || FrmSpamEntriesHelper::is_spam( FrmEntry::getOne( $entry_id ) );
 		$message = $marked ? __( 'The entry was marked as spam.', 'formidable' ) : __( 'The entry could not be marked as spam.', 'formidable' );
 		FrmEntriesController::display_list( $message );
 	}
@@ -257,7 +278,7 @@ class FrmSpamEntriesController {
 				'frm_action' => 'mark_spam',
 				'id'         => $entry->id,
 			),
-			self::get_tab_url( self::is_spam_tab(), FrmAppHelper::simple_get( 'form', 'absint' ) )
+			self::get_tab_url( self::is_spam_tab(), self::get_list_form_id( $entry ) )
 		);
 
 		return wp_nonce_url( $url, 'frm_mark_spam_' . $entry->id );
@@ -328,7 +349,9 @@ class FrmSpamEntriesController {
 			return;
 		}
 
-		if ( ! FrmSpamEntriesHelper::try_set_status( $entry_id, FrmEntriesHelper::SUBMITTED_ENTRY_STATUS ) ) {
+		$restored = FrmSpamEntriesHelper::restore_from_spam( $entry_id );
+
+		if ( false === $restored ) {
 			FrmAppController::show_error_modal(
 				array(
 					'title'      => __( 'Unable to restore entry', 'formidable' ),
@@ -336,6 +359,12 @@ class FrmSpamEntriesController {
 					'cancel_url' => admin_url( 'admin.php?page=formidable-entries' ),
 				)
 			);
+			return;
+		}
+
+		if ( ! $restored ) {
+			// Another request restored the entry first, and it already ran the selected actions.
+			FrmEntriesController::display_list();
 			return;
 		}
 
@@ -461,7 +490,7 @@ class FrmSpamEntriesController {
 				'id'         => (int) $entry->id,
 				'not_spam'   => 1,
 			),
-			self::get_tab_url( self::is_spam_tab(), FrmAppHelper::simple_get( 'form', 'absint' ) )
+			self::get_tab_url( self::is_spam_tab(), self::get_list_form_id( $entry ) )
 		);
 	}
 

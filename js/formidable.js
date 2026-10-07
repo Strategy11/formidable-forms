@@ -1067,7 +1067,7 @@ function frmFrontFormJS() {
 		}
 
 		const recaptcha = formEl.querySelector( '.frm-g-recaptcha' );
-		if ( ! recaptcha || recaptcha.dataset.saveAsSpam === '1' ) {
+		if ( ! recaptcha ) {
 			return errors;
 		}
 
@@ -1077,7 +1077,8 @@ function frmFrontFormJS() {
 		try {
 			response = grecaptcha.getResponse( recaptchaID );
 		} catch ( e ) {
-			if ( formEl.querySelector( 'input[name="recaptcha_checked"]' ) ) {
+			// When reCAPTCHA cannot load and failures are saved as spam, let the server flag the entry.
+			if ( recaptcha.dataset.saveAsSpam === '1' || formEl.querySelector( 'input[name="recaptcha_checked"]' ) ) {
 				return errors;
 			}
 			response = '';

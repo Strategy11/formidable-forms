@@ -603,10 +603,19 @@ class FrmEntryValidate {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
 
-		if ( $spam_source && self::is_new_submission( $values ) && FrmSpamEntriesHelper::maybe_flag_submission( $values['form_id'], $spam_source ) ) {
-			// Save the entry as spam instead of showing an error, so the submitter sees the normal success response.
-			unset( $errors['spam'] );
+		if ( ! $spam_source || ! self::is_new_submission( $values ) || ! FrmSpamEntriesHelper::maybe_flag_submission( $values['form_id'], $spam_source ) ) {
+			return;
 		}
+
+		// Save the entry as spam instead of showing an error, so the submitter sees the normal success response.
+		unset( $errors['spam'] );
+
+		if ( 'honeypot' !== $spam_source ) {
+			return;
+		}
+
+		$honeypot = new FrmHoneypot( $values['form_id'] );
+		$honeypot->remove_posted_value();
 	}
 
 	/**
