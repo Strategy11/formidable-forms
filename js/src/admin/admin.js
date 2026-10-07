@@ -5705,7 +5705,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @param {HTMLElement} firstRow
 	 * @param {HTMLElement} lastRow
-	 * @return {jQuery}
+	 * @return {jQuery} The rows in the range, excluding the two given rows.
 	 */
 	function getFieldGroupRange( firstRow, lastRow ) {
 		const getRowChain = row => {
@@ -5726,7 +5726,8 @@ window.frmAdminBuildJS = function() {
 			return jQuery();
 		}
 
-		const isForward = Boolean( firstTop.compareDocumentPosition( lastTop ) & Node.DOCUMENT_POSITION_FOLLOWING );
+		// Both are siblings, so the position is exactly FOLLOWING or PRECEDING.
+		const isForward = firstTop.compareDocumentPosition( lastTop ) === Node.DOCUMENT_POSITION_FOLLOWING;
 		let $range = jQuery( firstTop )[ isForward ? 'nextUntil' : 'prevUntil' ]( lastTop );
 
 		// Add the rows that come after the first row, or before the last row, inside any Section they are nested in.
