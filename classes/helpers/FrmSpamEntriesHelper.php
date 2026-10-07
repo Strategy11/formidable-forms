@@ -25,7 +25,7 @@ class FrmSpamEntriesHelper {
 	 *
 	 * @var int
 	 */
-	const SPAM_ENTRY_STATUS = 4;
+	const SPAM_ENTRY_STATUS = FrmEntriesHelper::SPAM_ENTRY_STATUS;
 
 	/**
 	 * Supports all-status queries, retention guards and final spam output escaping.

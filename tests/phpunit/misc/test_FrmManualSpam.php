@@ -408,13 +408,25 @@ class test_FrmManualSpam extends FrmUnitTest {
 
 		try {
 			FrmSpamEntriesController::mark_spam();
+			$html = ob_get_contents();
+			$this->assertStringContainsString( 'id="form_entries_page"', $html );
+			$this->assertStringContainsString( 'The entry was marked as spam.', $html );
+			$this->assertStringNotContainsString( 'id="form_show_entry_page"', $html );
+			$this->assertStringNotContainsString( 'name="entry_status" value="spam"', $html );
+			ob_clean();
 			$this->assertTrue( FrmSpamEntriesHelper::is_spam( FrmEntry::getOne( $entry_id ) ) );
-			$_POST = array(
+			$_GET['entry_status'] = 'spam';
+			$_POST                = array(
 				'id'                   => $entry_id,
 				'frm_not_spam_nonce'   => wp_create_nonce( 'frm_not_spam' ),
 				'frm_not_spam_actions' => array( 123 ),
 			);
 			FrmSpamEntriesController::not_spam();
+			$html = ob_get_contents();
+			$this->assertStringContainsString( 'id="form_entries_page"', $html );
+			$this->assertStringContainsString( 'The entry was marked as not spam.', $html );
+			$this->assertStringContainsString( 'name="entry_status" value="spam"', $html );
+			$this->assertStringNotContainsString( 'id="form_show_entry_page"', $html );
 		} finally {
 			ob_end_clean();
 			$_GET  = $original_get;
@@ -424,6 +436,31 @@ class test_FrmManualSpam extends FrmUnitTest {
 		}
 		$this->assertSame( 0, (int) FrmEntry::getOne( $entry_id )->is_draft );
 		$this->assertSame( array(), $restored_actions );
+	}
+
+	/**
+	 * Moderation links preserve the active list tab and form filter.
+	 *
+	 * @return void
+	 */
+	public function test_moderation_links_preserve_list_context() {
+		$original = $_GET;
+		$_GET     = array(
+			'form'         => 123,
+			'entry_status' => 'spam',
+		);
+		$entry    = (object) array( 'id' => 456 );
+
+		try {
+			foreach ( array( 'get_mark_spam_url', 'get_not_spam_url' ) as $method ) {
+				$url = $this->run_private_method( array( 'FrmSpamEntriesController', $method ), array( $entry ) );
+				parse_str( wp_parse_url( html_entity_decode( $url ), PHP_URL_QUERY ), $query );
+				$this->assertSame( '123', $query['form'] );
+				$this->assertSame( 'spam', $query['entry_status'] );
+			}
+		} finally {
+			$_GET = $original;
+		}
 	}
 
 	/**

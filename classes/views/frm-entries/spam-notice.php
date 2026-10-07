@@ -26,6 +26,12 @@ $modal_attrs = array(
 	'aria-labelledby' => 'frm-not-spam-modal-title',
 );
 
+$submit_url = add_query_arg(
+	'frm_action',
+	'not_spam',
+	FrmSpamEntriesController::get_tab_url( FrmSpamEntriesController::is_spam_tab(), FrmAppHelper::simple_get( 'form', 'absint' ) )
+);
+
 if ( $open_modal ) {
 	$modal_attrs['data-open'] = '1';
 }
@@ -73,7 +79,7 @@ if ( ! $can_moderate ) {
 			</div>
 		</div>
 
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=formidable-entries&frm_action=not_spam' ) ); ?>">
+		<form method="post" action="<?php echo esc_url( $submit_url ); ?>">
 			<input type="hidden" name="id" value="<?php echo absint( $entry->id ); ?>" />
 			<?php wp_nonce_field( 'frm_not_spam', 'frm_not_spam_nonce' ); ?>
 

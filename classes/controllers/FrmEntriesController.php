@@ -100,7 +100,7 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate', 'mark_spam' ), true ) ) {
+		if ( in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
 			add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
 			return;
 		}
@@ -202,7 +202,7 @@ class FrmEntriesController {
 		$frm_vars['cols'] = $columns;
 		$action           = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ), true ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy', 'mark_spam', 'not_spam' ), true ) ) {
 			add_screen_option(
 				'per_page',
 				array(

@@ -225,7 +225,7 @@ class FrmSpamEntriesController {
 
 		$marked  = FrmSpamEntriesHelper::mark_as_spam( $entry_id );
 		$message = $marked ? __( 'The entry was marked as spam.', 'formidable' ) : __( 'The entry could not be marked as spam.', 'formidable' );
-		FrmEntriesController::show( $entry_id, $message );
+		FrmEntriesController::display_list( $message );
 	}
 
 	/**
@@ -257,7 +257,7 @@ class FrmSpamEntriesController {
 				'frm_action' => 'mark_spam',
 				'id'         => $entry->id,
 			),
-			admin_url( 'admin.php' )
+			self::get_tab_url( self::is_spam_tab(), FrmAppHelper::simple_get( 'form', 'absint' ) )
 		);
 
 		return wp_nonce_url( $url, 'frm_mark_spam_' . $entry->id );
@@ -324,7 +324,7 @@ class FrmSpamEntriesController {
 		$entry = FrmEntry::getOne( $entry_id );
 
 		if ( ! FrmSpamEntriesHelper::is_spam( $entry ) ) {
-			FrmEntriesController::show( $entry_id );
+			FrmEntriesController::display_list();
 			return;
 		}
 
@@ -355,7 +355,7 @@ class FrmSpamEntriesController {
 		 */
 		do_action( 'frm_entry_marked_not_spam', $entry_id, $action_ids );
 
-		FrmEntriesController::show( $entry_id, __( 'The entry was marked as not spam.', 'formidable' ) );
+		FrmEntriesController::display_list( __( 'The entry was marked as not spam.', 'formidable' ) );
 	}
 
 	/**
@@ -461,7 +461,7 @@ class FrmSpamEntriesController {
 				'id'         => (int) $entry->id,
 				'not_spam'   => 1,
 			),
-			admin_url( 'admin.php' )
+			self::get_tab_url( self::is_spam_tab(), FrmAppHelper::simple_get( 'form', 'absint' ) )
 		);
 	}
 

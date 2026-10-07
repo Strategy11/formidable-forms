@@ -131,7 +131,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		<?php } ?>
 
-		<?php if ( isset( $data['referrer'] ) ) { ?>
+		<?php if ( ! empty( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>

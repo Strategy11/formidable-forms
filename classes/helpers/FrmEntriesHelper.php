@@ -24,6 +24,11 @@ class FrmEntriesHelper {
 	const DRAFT_ENTRY_STATUS = 1;
 
 	/**
+	 * @since x.x
+	 */
+	const SPAM_ENTRY_STATUS = 4;
+
+	/**
 	 * @param mixed         $fields
 	 * @param object|string $form
 	 * @param bool          $reset
@@ -914,13 +919,8 @@ class FrmEntriesHelper {
 			return $status;
 		}
 
-		if ( ! $status ) {
-			// If the status is empty, let's default to 0.
-			return self::SUBMITTED_ENTRY_STATUS;
-		}
-
-		// If it has a value that isn't in the array, let's default to 1. There may be old entries that don't have a value for is_draft.
-		return self::DRAFT_ENTRY_STATUS;
+		// Empty statuses are submitted. Unknown nonempty statuses are treated as drafts for legacy entries.
+		return $status ? self::DRAFT_ENTRY_STATUS : self::SUBMITTED_ENTRY_STATUS;
 	}
 
 	/**
