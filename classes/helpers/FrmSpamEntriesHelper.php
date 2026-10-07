@@ -769,15 +769,27 @@ class FrmSpamEntriesHelper {
 		}
 
 		$entry_id = (int) $entry_id;
-		$updated  = $wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => $status ), array( 'id' => $entry_id ) );
+
+		if ( $entry_id < 1 ) {
+			return false;
+		}
+
+		// Update the family in one statement so a child failure cannot leave the parent restored.
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i SET is_draft = %d WHERE id = %d OR parent_item_id = %d',
+				$wpdb->prefix . 'frm_items',
+				$status,
+				$entry_id,
+				$entry_id
+			)
+		);
 
 		if ( false === $updated ) {
 			return false;
 		}
 
-		$children_updated = $wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => $status ), array( 'parent_item_id' => $entry_id ) );
-
 		FrmEntry::clear_cache();
-		return false !== $children_updated;
+		return true;
 	}
 }

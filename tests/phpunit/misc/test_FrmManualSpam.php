@@ -114,6 +114,80 @@ class test_FrmManualSpam extends FrmUnitTest {
 	}
 
 	/**
+	 * A failure affecting child updates must leave the whole family in spam.
+	 *
+	 * @return void
+	 */
+	public function test_failed_child_update_does_not_restore_parent() {
+		global $wpdb;
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		wp_get_current_user()->add_cap( 'frm_edit_entries' );
+		$form   = $this->factory->form->create();
+		$parent = $this->factory->entry->create( array( 'form_id' => $form ) );
+		$child  = $this->factory->entry->create(
+			array(
+				'form_id'        => $form,
+				'parent_item_id' => $parent,
+			)
+		);
+		$this->assertTrue( FrmSpamEntriesHelper::mark_as_spam( $parent ) );
+		FrmEntry::getOne( $parent );
+		FrmEntry::getOne( $child );
+		$fail_children = static function ( $query ) use ( $wpdb ) {
+			return str_starts_with( $query, 'UPDATE ' ) && str_contains( $query, $wpdb->prefix . 'frm_items' ) && str_contains( $query, 'parent_item_id' ) ? '' : $query;
+		};
+		add_filter( 'query', $fail_children );
+
+		try {
+			$this->assertFalse( FrmSpamEntriesHelper::try_set_status( $parent, 0 ) );
+		} finally {
+			remove_filter( 'query', $fail_children );
+		}
+
+		FrmEntry::clear_cache();
+
+		foreach ( array( $parent, $child ) as $id ) {
+			$this->assertTrue( FrmSpamEntriesHelper::is_spam( FrmEntry::getOne( $id ) ), 'A failed restore must leave parent and child statuses unchanged.' );
+		}
+	}
+
+	/**
+	 * Successful restoration updates every child, invalidates caches, and leaves unrelated entries alone.
+	 *
+	 * @return void
+	 */
+	public function test_status_update_restores_family_and_rejects_zero_id() {
+		global $wpdb;
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		wp_get_current_user()->add_cap( 'frm_edit_entries' );
+		$form   = $this->factory->form->create();
+		$parent = $this->factory->entry->create( array( 'form_id' => $form ) );
+		$child  = $this->factory->entry->create(
+			array(
+				'form_id'        => $form,
+				'parent_item_id' => $parent,
+			)
+		);
+		$other  = $this->factory->entry->create(
+			array(
+				'form_id'  => $form,
+				'is_draft' => 1,
+			)
+		);
+		$this->assertTrue( FrmSpamEntriesHelper::mark_as_spam( $parent ) );
+		FrmEntry::getOne( $parent );
+		FrmEntry::getOne( $child );
+		$queries = $wpdb->num_queries;
+		$this->assertFalse( FrmSpamEntriesHelper::try_set_status( 0, 0 ) );
+		$this->assertSame( $queries, $wpdb->num_queries, 'An invalid ID must not query or update all top-level entries.' );
+		$this->assertTrue( FrmSpamEntriesHelper::try_set_status( $parent, 0 ) );
+		$this->assertSame( 0, (int) FrmEntry::getOne( $parent )->is_draft );
+		$this->assertSame( 0, (int) FrmEntry::getOne( $child )->is_draft );
+		$this->assertSame( 1, (int) FrmEntry::getOne( $other )->is_draft );
+		$this->assertTrue( FrmSpamEntriesHelper::try_set_status( $parent, 0 ), 'An already restored family should succeed without changing any rows.' );
+	}
+
+	/**
 	 * Both query formats use the same status semantics.
 	 *
 	 * @return void
