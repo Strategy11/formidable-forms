@@ -155,7 +155,7 @@ class FrmTransLiteDb {
 	/**
 	 * @param int|string $id
 	 *
-	 * @return array|object|null
+	 * @return object|null
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
