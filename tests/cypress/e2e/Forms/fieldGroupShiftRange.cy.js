@@ -79,36 +79,45 @@ foreach ( $types as $name => $type ) {
 		clickGroup( second, true );
 	};
 
-	const expectSelected = names => {
-		cy.get( '#frm-show-fields ul.frm-selected-field-group > li.form-field:not([data-type="end_divider"])' ).should( $fields => {
-			const rows = Array.from( $fields[ 0 ].ownerDocument.querySelectorAll( ROW_SELECTOR ) );
-			const selected = $fields.toArray().map( field => ROWS[ rows.indexOf( field ) ] );
-			expect( selected ).to.have.members( names );
-		} );
+	const SELECTED_SELECTOR = '#frm-show-fields ul.frm-selected-field-group > li.form-field:not([data-type="end_divider"])';
+
+	const getRowNames = $fields => {
+		const rows = Array.from( $fields[ 0 ].ownerDocument.querySelectorAll( ROW_SELECTOR ) );
+		return $fields.toArray().map( field => ROWS[ rows.indexOf( field ) ] );
 	};
 
 	it( 'selects only the Section rows up to the clicked one when going from a field before the Section', () => {
 		shiftRange( 'A1', 'S2' );
-		expectSelected( [ 'A1', 'A2', 'A3', 'S1', 'S2' ] );
+		cy.get( SELECTED_SELECTOR ).should( $fields => {
+			expect( getRowNames( $fields ) ).to.have.members( [ 'A1', 'A2', 'A3', 'S1', 'S2' ] );
+		} );
 	} );
 
 	it( 'selects backward from a Section row to a field before the Section', () => {
 		shiftRange( 'S2', 'A1' );
-		expectSelected( [ 'A1', 'A2', 'A3', 'S1', 'S2' ] );
+		cy.get( SELECTED_SELECTOR ).should( $fields => {
+			expect( getRowNames( $fields ) ).to.have.members( [ 'A1', 'A2', 'A3', 'S1', 'S2' ] );
+		} );
 	} );
 
 	it( 'selects backward from a field after the Section to a Section row', () => {
 		shiftRange( 'B1', 'S2' );
-		expectSelected( [ 'S2', 'S3', 'B1' ] );
+		cy.get( SELECTED_SELECTOR ).should( $fields => {
+			expect( getRowNames( $fields ) ).to.have.members( [ 'S2', 'S3', 'B1' ] );
+		} );
 	} );
 
 	it( 'keeps selecting within a single Section the same way', () => {
 		shiftRange( 'S1', 'S3' );
-		expectSelected( [ 'S1', 'S2', 'S3' ] );
+		cy.get( SELECTED_SELECTOR ).should( $fields => {
+			expect( getRowNames( $fields ) ).to.have.members( [ 'S1', 'S2', 'S3' ] );
+		} );
 	} );
 
 	it( 'selects the whole Section when the range spans it', () => {
 		shiftRange( 'A1', 'B2' );
-		expectSelected( [ 'A1', 'A2', 'A3', 'Section', 'S1', 'S2', 'S3', 'B1', 'B2' ] );
+		cy.get( SELECTED_SELECTOR ).should( $fields => {
+			expect( getRowNames( $fields ) ).to.have.members( [ 'A1', 'A2', 'A3', 'Section', 'S1', 'S2', 'S3', 'B1', 'B2' ] );
+		} );
 	} );
 } );
