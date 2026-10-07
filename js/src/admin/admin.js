@@ -5697,6 +5697,51 @@ window.frmAdminBuildJS = function() {
 		destroyFieldGroupPopup();
 	}
 
+	/**
+	 * Get the rows between two rows, even when one or both of them are inside a Section.
+	 * Rows of a Section that is only partly covered are included, but the Section's own row is not.
+	 * Not covered: a Section and a row inside that same Section. Nothing is returned for that pair.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} firstRow
+	 * @param {HTMLElement} lastRow
+	 * @return {jQuery} The rows in the range, excluding the two given rows.
+	 */
+	function getFieldGroupRange( firstRow, lastRow ) {
+		const getRowChain = row => {
+			const chain = [];
+			while ( row ) {
+				chain.push( row );
+				row = row.parentNode.closest( 'li.frm_field_box' );
+			}
+			return chain;
+		};
+		const firstChain = getRowChain( firstRow );
+		const lastChain = getRowChain( lastRow );
+		const firstDepth = firstChain.findIndex( row => lastChain.some( other => other.parentNode === row.parentNode ) );
+		const lastDepth = lastChain.findIndex( row => row.parentNode === firstChain[ firstDepth ].parentNode );
+		const firstTop = firstChain[ firstDepth ];
+		const lastTop = lastChain[ lastDepth ];
+		if ( firstTop === lastTop ) {
+			return jQuery();
+		}
+
+		// Both are siblings, so the position is exactly FOLLOWING or PRECEDING.
+		const isForward = firstTop.compareDocumentPosition( lastTop ) === Node.DOCUMENT_POSITION_FOLLOWING;
+		let $range = jQuery( firstTop )[ isForward ? 'nextUntil' : 'prevUntil' ]( lastTop );
+
+		// Add the rows that come after the first row, or before the last row, inside any Section they are nested in.
+		firstChain.slice( 0, firstDepth ).forEach( row => {
+			$range = $range.add( jQuery( row )[ isForward ? 'nextAll' : 'prevAll' ]( '.frm_field_box' ) );
+		} );
+		lastChain.slice( 0, lastDepth ).forEach( row => {
+			$range = $range.add( jQuery( row )[ isForward ? 'prevAll' : 'nextAll' ]( '.frm_field_box' ) );
+		} );
+
+		return $range;
+	}
+
 	function fieldGroupClick( e ) {
 		maybeShowFieldGroupMessage();
 
@@ -5734,14 +5779,7 @@ window.frmAdminBuildJS = function() {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
 				const $firstGroup = $selectedFieldGroups.first();
 
-				let $range;
-				if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
-					$range = $firstGroup.parent().nextUntil( hoverTarget.parentNode );
-				} else {
-					$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
-				}
-
-				$range.each(
+				getFieldGroupRange( $firstGroup.parent().get( 0 ), hoverTarget.parentNode ).each(
 					function() {
 						const $fieldGroup = jQuery( this ).closest( 'li' ).find( 'ul.frm_sorting' );
 						if ( ! $fieldGroup.hasClass( 'frm-selected-field-group' ) ) {
