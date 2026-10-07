@@ -69,4 +69,55 @@ class test_FrmFieldName extends FrmUnitTest {
 		$this->assertSame( '', $errors[ $error_key . '-first' ] );
 		$this->assertSame( '', $errors[ $error_key . '-last' ] );
 	}
+
+	/**
+	 * Custom sub field descriptions must match in server errors and JS validation attributes.
+	 */
+	public function test_custom_sub_field_description_matches_validation_messages() {
+		$form  = $this->factory->form->create_and_get();
+		$field = $this->factory->field->create_and_get(
+			array(
+				'type'          => 'name',
+				'name'          => 'Name',
+				'required'      => 1,
+				'form_id'       => $form->id,
+				'field_options' => array(
+					'last_desc' => 'Last',
+					'blank'     => '[field_name] cannot be blank.',
+				),
+			)
+		);
+
+		$name_field = new FrmFieldName( $field );
+		$errors     = $name_field->validate(
+			array(
+				'id'    => $field->id,
+				'value' => array( 'first' => 'Ann' ),
+			)
+		);
+		$message    = $errors[ 'field' . $field->id . '-last' ];
+
+		$this->assertSame( 'Last cannot be blank.', $message, 'Server validation should use the custom description.' );
+
+		$html    = do_shortcode( '[formidable id="' . $form->id . '"]' );
+		$html_id = 'field_' . $field->field_key . '_last';
+		$matched = preg_match( '/<input\b[^>]*\bid="' . preg_quote( $html_id, '/' ) . '"[^>]*>/', $html, $matches );
+
+		$this->assertSame( 1, $matched, 'The last name input should render.' );
+		$this->assertStringContainsString( 'data-reqmsg="' . esc_attr( $message ) . '"', $matches[0], 'The rendered JS message should match the server error.' );
+
+		$prepared_field = FrmFieldsHelper::field_object_to_array( $field );
+
+		ob_start();
+		FrmComboFieldsController::add_atts_to_input(
+			array(
+				'field'     => $prepared_field,
+				'key'       => 'last',
+				'sub_field' => array( 'type' => 'text' ),
+			)
+		);
+		$attributes = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-reqmsg="' . esc_attr( $message ) . '"', $attributes, 'The combo controller JS message should match the server error.' );
+	}
 }
