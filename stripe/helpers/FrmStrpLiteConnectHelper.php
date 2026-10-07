@@ -802,12 +802,13 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string       $sub_id
 	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 * @param string       $mode        'auto', 'live', or 'test'.
 	 *
 	 * @return bool
 	 */
-	public static function cancel_subscription( $sub_id, $customer_id = false ) {
+	public static function cancel_subscription( $sub_id, $customer_id = false, $mode = 'auto' ) {
 		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
-		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
+		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ), $mode );
 		return false !== $data;
 	}
 
@@ -902,10 +903,12 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
+	 * @param string $mode 'auto', 'live', or 'test'.
+	 *
 	 * @return array
 	 */
-	public static function get_unprocessed_event_ids() {
-		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+	public static function get_unprocessed_event_ids( $mode = 'auto' ) {
+		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids', array(), $mode );
 
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();

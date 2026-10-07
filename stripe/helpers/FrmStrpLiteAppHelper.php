@@ -96,12 +96,43 @@ class FrmStrpLiteAppHelper {
 	 */
 	public static function active_mode() {
 		$mode = self::get_settings()->settings->test_mode ? 'test' : 'live';
+
 		/**
 		 * Filter the Stripe mode for the current request.
 		 *
+		 * @since x.x
+		 *
 		 * @param string $mode The configured Stripe mode.
 		 */
-		return apply_filters( 'frm_strp_active_mode', $mode );
+		$filtered_mode = apply_filters( 'frm_strp_active_mode', $mode );
+
+		return in_array( $filtered_mode, array( 'live', 'test' ), true ) ? $filtered_mode : $mode;
+	}
+
+	/**
+	 * Get the Stripe modes to poll for unprocessed webhook events.
+	 *
+	 * Only the active mode is checked by default. The Test Mode add-on adds the
+	 * other mode after a form preview has taken a payment with the opposite mode.
+	 *
+	 * @since x.x
+	 *
+	 * @return string[]
+	 */
+	public static function get_event_lookup_modes() {
+		$active_mode = self::active_mode();
+
+		/**
+		 * Filter the Stripe modes to poll for unprocessed webhook events.
+		 *
+		 * @since x.x
+		 *
+		 * @param string[] $modes The modes to check, in order. Defaults to the active mode.
+		 */
+		$modes = apply_filters( 'frm_strp_lookup_modes', array( $active_mode ) );
+		$modes = is_array( $modes ) ? array_values( array_unique( array_intersect( $modes, array( 'live', 'test' ) ) ) ) : array();
+
+		return $modes ? $modes : array( $active_mode );
 	}
 
 	/**

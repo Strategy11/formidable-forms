@@ -45,11 +45,12 @@ class FrmStrpLiteConnectApiAdapter {
 	 * @since 6.35
 	 *
 	 * @param string $sub_id
+	 * @param string $mode   'auto', 'live', or 'test'.
 	 *
 	 * @return bool
 	 */
-	public static function cancel_subscription_without_customer_check( $sub_id ) {
-		return FrmStrpLiteConnectHelper::cancel_subscription( $sub_id );
+	public static function cancel_subscription_without_customer_check( $sub_id, $mode = 'auto' ) {
+		return FrmStrpLiteConnectHelper::cancel_subscription( $sub_id, false, $mode );
 	}
 
 	/**
