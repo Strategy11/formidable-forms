@@ -10,6 +10,27 @@
 class test_FrmDb extends FrmUnitTest {
 
 	/**
+	 * Count queries omit the implicit limit while scalar queries and explicit limits keep it.
+	 */
+	public function test_count_limits() {
+		global $wpdb;
+
+		$form_id = $this->factory->form->create();
+		$this->factory->entry->create( array( 'form_id' => $form_id ) );
+		$this->factory->entry->create( array( 'form_id' => $form_id ) );
+		$where = array( 'form_id' => $form_id );
+
+		$this->assertSame( 2, FrmDb::get_count( 'frm_items', $where ) );
+		$this->assertStringNotContainsString( 'LIMIT', $wpdb->last_query );
+		$this->assertSame( 2, FrmDb::get_count( 'frm_items', $where, array( 'limit' => 1 ) ) );
+		$this->assertStringContainsString( 'LIMIT 1', $wpdb->last_query );
+		$this->assertSame( 2, FrmDb::get_count( 'frm_items', $where, array( 'group_by' => 'form_id' ) ) );
+		$this->assertStringContainsString( 'LIMIT 1', $wpdb->last_query );
+		FrmDb::get_var( 'frm_items', $where );
+		$this->assertStringContainsString( 'LIMIT 1', $wpdb->last_query );
+	}
+
+	/**
 	 * @dataProvider datetime_conditions
 	 */
 	#[\PHPUnit\Framework\Attributes\DataProvider( 'datetime_conditions' )]

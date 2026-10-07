@@ -470,6 +470,10 @@ class FrmSpamEntriesHelper {
 			return $where;
 		}
 
+		if ( empty( $where['or'] ) && in_array( self::get_exclude_spam_where( $prefix ), $where, true ) ) {
+			return $where;
+		}
+
 		if ( ! empty( $where['or'] ) ) {
 			$where = array( $where );
 		}
