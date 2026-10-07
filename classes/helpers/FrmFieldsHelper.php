@@ -464,6 +464,28 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Gets an error message with a different name in place of the field name.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|object $field
+	 * @param string       $error
+	 * @param string       $name  The name to use in the message.
+	 *
+	 * @return string
+	 */
+	public static function get_error_msg_for_name( $field, $error, $name ) {
+		if ( is_object( $field ) ) {
+			$field       = clone $field;
+			$field->name = $name;
+		} elseif ( is_array( $field ) ) {
+			$field['name'] = $name;
+		}
+
+		return self::get_error_msg( $field, $error );
+	}
+
+	/**
 	 * @since 2.0
 	 *
 	 * @param array|object $field

@@ -393,7 +393,18 @@ endif;
 
 /* A combo field error only marks the sub fields that failed, not optional or filled ones. */
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) input:not(:focus),
-.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) select:not(:focus) {
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) select:not(:focus),
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) textarea:not(:focus),
+<?php if ( $pro_is_installed ) { ?>
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .mce-edit-area iframe,
+<?php } ?>
+<?php if ( $use_chosen_js ) { ?>
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .chosen-container-multi .chosen-choices,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .chosen-container-single .chosen-single,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .frm-g-recaptcha iframe,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .g-recaptcha iframe,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .frm-card-element.StripeElement {
 	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
