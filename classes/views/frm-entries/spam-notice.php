@@ -35,24 +35,22 @@ if ( $open_modal ) {
 		<p>
 			<?php
 			if ( $manual_spam ) {
-				esc_html_e( 'This entry was manually marked as spam. It is hidden from views and other entry lists. Form actions that already ran are not reversed.', 'formidable' );
+				esc_html_e( 'This entry was manually marked as spam. It is hidden from views and other entry lists. Form actions that already ran were not reversed.', 'formidable' );
 			} elseif ( $source_label ) {
 				printf(
-					/* translators: %s: The name of the spam check, like Akismet. */
-					esc_html__( 'This entry was marked as spam by %s. Form actions did not run, and it is hidden from views and other entry lists.', 'formidable' ),
+					/* translators: %s: Why the entry was marked as spam, like Akismet spam. */
+					esc_html__( 'This entry was marked as spam, so form actions didn\'t run and it is hidden from views and other entry lists. Reason: %s.', 'formidable' ),
 					esc_html( $source_label )
 				);
 			} else {
-				esc_html_e( 'This entry is marked as spam. Form actions did not run, and it is hidden from views and other entry lists.', 'formidable' );
+				esc_html_e( 'This entry was marked as spam, so form actions didn\'t run and it is hidden from views and other entry lists.', 'formidable' );
 			}
 			?>
 		</p>
 		<?php if ( $can_moderate ) { ?>
-			<p>
-				<a href="#" class="button button-secondary frm-button-secondary frm-open-not-spam-modal">
-					<?php esc_html_e( 'Not spam', 'formidable' ); ?>
-				</a>
-			</p>
+			<a href="#" class="button button-secondary frm-button-secondary frm-open-not-spam-modal">
+				<?php esc_html_e( 'Mark as not spam', 'formidable' ); ?>
+			</a>
 		<?php } ?>
 	</div>
 </div>
@@ -79,35 +77,37 @@ if ( ! $can_moderate ) {
 			<input type="hidden" name="id" value="<?php echo absint( $entry->id ); ?>" />
 			<?php wp_nonce_field( 'frm_not_spam', 'frm_not_spam_nonce' ); ?>
 
-			<div class="inside">
-				<p>
-					<?php esc_html_e( 'This entry will move to the Entries tab, and it will be included in views and other entry lists.', 'formidable' ); ?>
-				</p>
-
-				<?php if ( $pending_actions ) { ?>
-					<fieldset>
-						<legend class="frm-mb-xs">
-							<strong><?php esc_html_e( 'Run these form actions now?', 'formidable' ); ?></strong>
-						</legend>
-						<?php foreach ( $pending_actions as $pending_action ) { ?>
-							<p>
-								<label>
-									<input type="checkbox" name="frm_not_spam_actions[]" value="<?php echo absint( $pending_action->ID ); ?>" />
-									<?php echo esc_html( $pending_action->post_title ); ?>
-								</label>
-							</p>
-						<?php } ?>
-						<p class="howto">
-							<?php esc_html_e( 'Actions with conditional logic only run when their conditions are met.', 'formidable' ); ?>
-						</p>
-					</fieldset>
-				<?php } ?>
-
-				<?php if ( ! $pending_actions ) { ?>
-					<p class="howto">
-						<?php esc_html_e( 'This form has no actions waiting to run.', 'formidable' ); ?>
+			<div class="frm_modal_content">
+				<div class="inside">
+					<p>
+						<?php esc_html_e( 'This entry will move to the Entries tab, and it will be included in views and other entry lists.', 'formidable' ); ?>
 					</p>
-				<?php } ?>
+
+					<?php if ( $pending_actions ) { ?>
+						<fieldset>
+							<legend>
+								<?php esc_html_e( 'Run these form actions now?', 'formidable' ); ?>
+							</legend>
+							<?php foreach ( $pending_actions as $pending_action ) { ?>
+								<p>
+									<label>
+										<input type="checkbox" name="frm_not_spam_actions[]" value="<?php echo absint( $pending_action->ID ); ?>" />
+										<?php echo esc_html( $pending_action->post_title ); ?>
+									</label>
+								</p>
+							<?php } ?>
+							<p class="howto">
+								<?php esc_html_e( 'Actions with conditional logic only run when their conditions are met.', 'formidable' ); ?>
+							</p>
+						</fieldset>
+					<?php } ?>
+
+					<?php if ( ! $pending_actions ) { ?>
+						<p class="howto">
+							<?php esc_html_e( 'This form has no actions waiting to run.', 'formidable' ); ?>
+						</p>
+					<?php } ?>
+				</div>
 			</div>
 
 			<div class="frm_modal_footer">

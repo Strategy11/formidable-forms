@@ -42,7 +42,8 @@
 	margin: 0;
 }
 
-.frm-entries-tab {
+/* .frm_wrap outranks the generic .frm_wrap a link color, so a tab stays grey until hovered or current. */
+.frm_wrap .frm-entries-tab {
 	display: block;
 	padding: var(--gap-xs) 0;
 	border-bottom: 2px solid transparent;
@@ -52,17 +53,17 @@
 	text-decoration: none;
 }
 
-.frm-entries-tab:hover,
-.frm-entries-tab[aria-current="page"] {
+.frm_wrap .frm-entries-tab:hover,
+.frm_wrap .frm-entries-tab[aria-current="page"] {
 	border-bottom-color: var(--primary-500);
 	color: var(--primary-500);
 }
 
-.frm-entries-tab[aria-current="page"] {
+.frm_wrap .frm-entries-tab[aria-current="page"] {
 	font-weight: 600;
 }
 
-.frm-entries-settings {
+.frm_wrap .frm-entries-settings {
 	margin-inline-start: auto;
 	padding-block: var(--gap-xs);
 	color: var(--grey-500);
@@ -76,8 +77,26 @@
 	outline-offset: 2px;
 }
 
-.frm-spam-entry-notice p:last-child {
-	margin-bottom: 0;
+/* Text and button on one row, the button wrapping below when space runs out. Even padding all round:
+ * the warning style adds room on the right for a dismiss button this notice does not have. */
+.frm_warning_style.frm-spam-entry-notice {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--gap-sm) var(--gap-md);
+	padding: var(--gap-sm) var(--gap-md);
+}
+
+.frm-spam-entry-notice p {
+	flex: 1 1 320px;
+	margin: 0;
+	/* Use the warning style's own text color; the generic grey paragraph color is too light on yellow. */
+	color: inherit;
+	text-wrap: pretty;
+}
+
+.frm-spam-entry-notice .button {
+	flex-shrink: 0;
 }
 
 #frm-create-footer {
@@ -119,4 +138,47 @@ li[data-preview] .frm-hover-icons .frm-preview-form {
 	display: inline-block;
 	width: 1em;
 	margin-left: -1em;
+}
+
+/* Mark as not spam modal: one left edge and one rhythm for the text, the actions and the footer. */
+#frm-not-spam-modal .inside > p:first-child {
+	margin-top: 0;
+}
+
+#frm-not-spam-modal fieldset {
+	margin: var(--gap-md) 0 0;
+	padding: 0;
+	border: 0;
+}
+
+#frm-not-spam-modal legend {
+	margin-bottom: var(--gap-xs);
+	padding: 0;
+	color: var(--grey-900);
+	font-weight: 600;
+}
+
+#frm-not-spam-modal fieldset > p {
+	margin: 0 0 var(--gap-xs);
+}
+
+#frm-not-spam-modal fieldset > .howto,
+#frm-not-spam-modal .inside > .howto {
+	margin: var(--gap-sm) 0 0;
+}
+
+/* A form button picks up a 10px right margin elsewhere; keep the buttons on the same right edge as the text. */
+#frm-not-spam-modal .frm_modal_footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--gap-xs);
+}
+
+#frm-not-spam-modal .frm_modal_footer > .button {
+	margin: 0;
+}
+
+/* WordPress adds a square box-shadow ring to focused links; the other modals' close button has none. */
+#frm-not-spam-modal .frm_modal_top a.dismiss:focus {
+	box-shadow: none;
 }

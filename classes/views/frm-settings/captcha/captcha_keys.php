@@ -11,24 +11,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	printf(
 		/* translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML */
-		esc_html__( '%1$s requires a Site and Private API key. Sign up for a %2$sfree %1$s key%3$s.', 'formidable' ),
+		esc_html__( '%1$s requires a site key and a secret key. Sign up for a %2$sfree %1$s key%3$s.', 'formidable' ),
 		esc_html( $settings->get_name() ),
-		'<a href="' . esc_url( $settings->get_documentation_url() ) . '" target="_blank">',
-		'</a>'
+		'<a href="' . esc_url( $settings->get_documentation_url() ) . '" target="_blank" rel="noopener noreferrer">',
+		'<span class="screen-reader-text"> ' . esc_html__( '(opens in a new tab)', 'formidable' ) . '</span></a>'
 	);
 	?>
 </p>
 <p class="frm6 frm_form_field">
-	<label class="frm_help" for="frm_<?php echo esc_attr( $prefix ); ?>pubkey" title="<?php echo esc_attr( $settings->get_site_key_tooltip() ); ?>">
-		<?php esc_html_e( 'Site Key', 'formidable' ); ?>
+	<label for="frm_<?php echo esc_attr( $prefix ); ?>pubkey">
+		<?php esc_html_e( 'Site key', 'formidable' ); ?>
 	</label>
-	<input type="text" name="frm_<?php echo esc_html( $prefix ); ?>pubkey" id="frm_<?php echo esc_html( $prefix ); ?>pubkey" size="42" value="<?php echo esc_attr( $settings->get_pubkey() ); ?>" />
+	<input type="text" autocomplete="off" spellcheck="false" name="frm_<?php echo esc_html( $prefix ); ?>pubkey" id="frm_<?php echo esc_html( $prefix ); ?>pubkey" size="42" value="<?php echo esc_attr( $settings->get_pubkey() ); ?>" />
 </p>
 
 <p class="frm6 frm_form_field">
 	<label for="frm_<?php echo esc_attr( $prefix ); ?>privkey">
-		<?php esc_html_e( 'Secret Key', 'formidable' ); ?>
-		<?php FrmAppHelper::tooltip_icon( __( 'The private key from your captcha provider, used to verify submissions on your server.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+		<?php esc_html_e( 'Secret key', 'formidable' ); ?>
 	</label>
-	<input type="text" name="frm_<?php echo esc_html( $prefix ); ?>privkey" id="frm_<?php echo esc_html( $prefix ); ?>privkey" size="42" value="<?php echo esc_attr( $settings->secret ); ?>" />
+	<input type="text" autocomplete="off" spellcheck="false" name="frm_<?php echo esc_html( $prefix ); ?>privkey" id="frm_<?php echo esc_html( $prefix ); ?>privkey" size="42" value="<?php echo esc_attr( $settings->secret ); ?>" />
 </p>
