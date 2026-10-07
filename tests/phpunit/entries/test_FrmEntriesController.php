@@ -2,14 +2,13 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntriesController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntriesController::class )]
 class test_FrmEntriesController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmEntriesController::delete_entry_after_save
-	 * @covers FrmEntriesController::_delete_entry
-	 * @covers FrmEntriesController::unlink_post
-	 */
 	public function test_delete_entry_after_save() {
 		$save_form = $this->create_form();
 		$this->assertEmpty( $save_form->options['no_save'] );
@@ -68,9 +67,6 @@ class test_FrmEntriesController extends FrmUnitTest {
 		return $new_post->ID;
 	}
 
-	/**
-	 * @covers FrmEntriesController::hidden_columns
-	 */
 	public function test_hidden_columns() {
 		// Confirm that a string option value doesn't trigger a fatal error.
 		$columns = FrmEntriesController::hidden_columns( '' );

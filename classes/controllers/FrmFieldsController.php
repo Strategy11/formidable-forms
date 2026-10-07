@@ -32,13 +32,14 @@ class FrmFieldsController {
 			wp_die();
 		}
 
-		$_GET['page'] = 'formidable';
-		$fields       = self::get_builder_fields_by_id( $form_id );
-		$values       = array(
+		$_GET['page']   = 'formidable';
+		$fields         = self::get_builder_fields_by_id( $form_id );
+		$values         = array(
 			'id'         => $form_id,
 			'doing_ajax' => true,
 		);
-		$field_html   = array();
+		$field_html     = array();
+		$defer_settings = FrmAppHelper::get_post_param( 'defer_settings', 0, 'absint' );
 
 		foreach ( $field_ids as $field_id ) {
 			if ( ! isset( $fields[ $field_id ] ) ) {
@@ -47,6 +48,16 @@ class FrmFieldsController {
 			}
 
 			$field = $fields[ $field_id ];
+			unset( $values['deferred_settings'] );
+
+			// Specialized and add-on fields keep their existing AJAX initialization contract.
+			if ( $defer_settings && in_array(
+				$field->type,
+				array( 'text', 'textarea', 'email', 'url', 'password', 'number', 'phone', 'date', 'time', 'checkbox', 'radio', 'select', 'hidden', 'html' ),
+				true
+			) ) {
+				$values['deferred_settings'] = (object) array( 'html' => '' );
+			}
 
 			ob_start();
 			self::load_single_field( $field, $values );
@@ -57,15 +68,43 @@ class FrmFieldsController {
 				'type' => $field->type,
 				'html' => ob_get_clean(),
 			);
+
+			if ( ! isset( $values['deferred_settings'] ) ) {
+				continue;
+			}
+
+			$field_html[ $field_id ]['settingsHtml'] = $values['deferred_settings']->html;
+			$field_html[ $field_id ]['settingsMeta'] = $values['deferred_settings']->meta;
 		}//end foreach
 
 		// admin_footer never fires here, so the deferred tooltip text rides along with the html.
 		// Field ids are numeric, so this key can never collide with one.
-		$field_html['tooltips'] = FrmAppHelper::get_deferred_tooltips();
+		$field_html['tooltips']      = self::get_missing_builder_definitions( FrmAppHelper::get_deferred_tooltips(), 'known_tooltips' );
+		$field_html['selectOptions'] = self::get_missing_builder_definitions( FrmBuilderSelectHelper::get_templates(), 'known_select_options' );
 
 		echo json_encode( $field_html );
 
 		wp_die();
+	}
+
+	/**
+	 * Omit definitions the browser has already received, including from the initial page.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $definitions Definitions keyed by their content hashes.
+	 * @param string $param       POST parameter containing comma-separated known hashes.
+	 *
+	 * @return array
+	 */
+	private static function get_missing_builder_definitions( $definitions, $param ) {
+		$known_keys = FrmAppHelper::get_post_param( $param, '', 'sanitize_text_field' );
+
+		if ( ! is_string( $known_keys ) || '' === $known_keys ) {
+			return $definitions;
+		}
+
+		return array_diff_key( $definitions, array_fill_keys( explode( ',', $known_keys ), true ) );
 	}
 
 	/**
@@ -221,6 +260,12 @@ class FrmFieldsController {
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
+
+			if ( isset( $values['placeholder_manifest'] ) ) {
+				self::add_builder_placeholder_to_manifest( $field_object, $display, $li_classes, $values['placeholder_manifest'] );
+				return;
+			}
+
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php';
 			return;
 		}
@@ -248,6 +293,32 @@ class FrmFieldsController {
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+	}
+
+	/**
+	 * Record shared attributes and leave a minimal placeholder in its grid row.
+	 *
+	 * @since x.x
+	 *
+	 * @param object                                              $field      Field object with its id and owning form.
+	 * @param array                                               $display    Field display options, including the builder type.
+	 * @param string                                              $li_classes Classes used by the original placeholder.
+	 * @param object{definitions: array, fields: array}&\stdClass $manifest Shared attribute definitions and ordered field records.
+	 *
+	 * @return void
+	 */
+	private static function add_builder_placeholder_to_manifest( $field, array $display, $li_classes, $manifest ) {
+		$definition = array( $li_classes . ' frm_field_loading', (int) $field->form_id, $display['type'] );
+		$index      = array_search( $definition, $manifest->definitions, true );
+
+		if ( false === $index ) {
+			$index                   = count( $manifest->definitions );
+			$manifest->definitions[] = $definition;
+		}
+
+		$placeholder        = count( $manifest->fields );
+		$manifest->fields[] = array( (int) $field->id, $index );
+		echo '<li data-frm-placeholder="' . esc_attr( $placeholder ) . '"></li>';
 	}
 
 	/**
@@ -482,13 +553,6 @@ class FrmFieldsController {
 				'/field-options/#kb-visibility'
 			);
 
-			$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
-				array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
-				'autocomplete',
-				__( 'Autocomplete options', 'formidable' ),
-				'/email-address/#kb-autocomplete-attribute'
-			);
-
 			$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
 				array(
 					'type'     => 'text',
@@ -506,7 +570,6 @@ class FrmFieldsController {
 			);
 			$show_upsell_for_read_only             = in_array( $field['type'], array( 'address', 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
 			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'quantity', 'select', 'tag', 'text', 'total', 'url' ), true );
-			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
 			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
 
 			$unique_values_label_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
@@ -524,6 +587,19 @@ class FrmFieldsController {
 		}//end if
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
+	}
+
+	/**
+	 * Display the autocomplete attribute setting.
+	 *
+	 * @since x.x This was moved from FrmProFieldsController::show_autocomplete_option.
+	 *
+	 * @param array $field The field settings.
+	 *
+	 * @return void
+	 */
+	public static function show_autocomplete_option( $field ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/autocomplete.php';
 	}
 
 	/**
@@ -690,6 +766,7 @@ class FrmFieldsController {
 		self::add_shortcodes_to_html( $field, $add_html );
 		self::add_pattern_attribute( $field, $add_html );
 		self::add_currency_field_attributes( $field, $add_html );
+		self::add_html_autocomplete( $field, $add_html );
 
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
@@ -1124,6 +1201,25 @@ class FrmFieldsController {
 		}
 
 		$add_html['aria-required'] = 'aria-required="true"';
+	}
+
+	/**
+	 * Add the autocomplete attribute to the field HTML.
+	 * Older versions of Pro add this attribute themselves, so it is skipped while Pro is active.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field    The field settings.
+	 * @param array $add_html The HTML attributes, keyed by attribute name.
+	 *
+	 * @return void
+	 */
+	private static function add_html_autocomplete( $field, array &$add_html ) {
+		if ( empty( $field['autocomplete'] ) || FrmAppHelper::pro_is_installed() || FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return;
+		}
+
+		$add_html['autocomplete'] = 'autocomplete="' . esc_attr( $field['autocomplete'] ) . '"';
 	}
 
 	/**

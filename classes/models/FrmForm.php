@@ -969,14 +969,59 @@ class FrmForm {
 	 * @return array|object Array of forms. A single form object is returned if $limit is set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
+		self::add_published_forms_where( $query, $inc_children );
+		return self::getAll( $query, 'name', $limit );
+	}
+
+	/**
+	 * Get the id, name and key of published forms, with an optional description, for lightweight lists.
+	 * This skips loading and unserializing the options column for every form.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $query Additional where conditions.
+	 * @param array $args  Query options, including include_description to also select the description.
+	 *
+	 * @return array Array of objects with id, name, form_key and optionally description properties.
+	 */
+	public static function get_published_form_names( $query = array(), $args = array() ) {
+		self::add_published_forms_where( $query, 'exclude' );
+
+		$columns = 'id, name, form_key';
+
+		if ( ! empty( $args['include_description'] ) ) {
+			$columns .= ', description';
+		}
+
+		$results = FrmDb::get_results(
+			'frm_forms',
+			$query,
+			$columns,
+			array(
+				'order_by' => 'name',
+			)
+		);
+
+		return wp_unslash( $results );
+	}
+
+	/**
+	 * Add the where conditions shared by all published form queries.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $query        Where conditions, modified by reference.
+	 * @param string $inc_children Set to 'exclude' to skip child forms.
+	 *
+	 * @return void
+	 */
+	private static function add_published_forms_where( &$query, $inc_children ) {
 		$query['is_template'] = 0;
 		$query['status']      = array( null, '', 'published' );
 
 		if ( $inc_children === 'exclude' ) {
 			$query['parent_form_id'] = array( null, 0 );
 		}
-
-		return self::getAll( $query, 'name', $limit );
 	}
 
 	/**

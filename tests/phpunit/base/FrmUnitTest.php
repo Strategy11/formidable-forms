@@ -2,6 +2,8 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
+	use FrmPHPUnitCompatibility;
+
 	/**
 	 * Track if an install has happened to avoid installing too often.
 	 *
@@ -40,6 +42,20 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function wpTearDownAfterClass() {
+	}
+
+	/**
+	 * Keep WordPress deprecation assertions working after PHPUnit 9.
+	 *
+	 * @return void
+	 */
+	public function expectDeprecated() {
+		if ( version_compare( \PHPUnit\Runner\Version::id(), '10.0', '<' ) ) {
+			parent::expectDeprecated();
+			return;
+		}
+
+		$this->set_up_deprecation_expectations();
 	}
 
 	public function setUp(): void {
@@ -108,9 +124,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-	/**
-	 * @covers FrmAppController::install()
-	 */
 	public static function frm_install() {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			// Set this to false so all our tests won't be done with this active
@@ -620,38 +633,29 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	protected function create_users() {
-		$has_user = get_user_by( 'email', 'admin@mail.com' );
+		$roles = array(
+			'admin'      => 'administrator',
+			'editor'     => 'editor',
+			'subscriber' => 'subscriber',
+		);
 
-		if ( $has_user ) {
-			return;
+		foreach ( $roles as $login => $role ) {
+			// The WP test install already creates the admin user, and the factory
+			// throws when a login is taken, so only add the users that are missing.
+			if ( username_exists( $login ) ) {
+				continue;
+			}
+
+			$user_id = $this->factory->user->create_object(
+				array(
+					'user_login' => $login,
+					'user_email' => $login . '@mail.com',
+					'user_pass'  => $login,
+					'role'       => $role,
+				)
+			);
+			$this->assertNotEmpty( $user_id );
 		}
-
-		$admin_args = array(
-			'user_login' => 'admin',
-			'user_email' => 'admin@mail.com',
-			'user_pass'  => 'admin',
-			'role'       => 'administrator',
-		);
-		$admin      = $this->factory->user->create_object( $admin_args );
-		$this->assertNotEmpty( $admin );
-
-		$editor_args = array(
-			'user_login' => 'editor',
-			'user_email' => 'editor@mail.com',
-			'user_pass'  => 'editor',
-			'role'       => 'editor',
-		);
-		$editor      = $this->factory->user->create_object( $editor_args );
-		$this->assertNotEmpty( $editor );
-
-		$subscriber_args = array(
-			'user_login' => 'subscriber',
-			'user_email' => 'subscriber@mail.com',
-			'user_pass'  => 'subscriber',
-			'role'       => 'subscriber',
-		);
-		$subscriber      = $this->factory->user->create_object( $subscriber_args );
-		$this->assertNotEmpty( $subscriber );
 	}
 
 	/**
@@ -728,6 +732,33 @@ class FrmUnitTest extends WP_UnitTestCase {
 				$this->set_user_by_role( $role );
 				break;
 		}
+	}
+
+	/**
+	 * Assert that every <aside> tag in some rendered HTML has a non-empty aria-label.
+	 * <aside> carries an implicit role="complementary", which the IBM Equal Access
+	 * checker flags as unlabelled complementary content otherwise (aria_complementary_labelled).
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html
+	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
+	 *                               passing vacuously (assertNotContains passes on an empty array).
+	 *
+	 * @return void
+	 */
+	protected function assert_complementary_landmarks_are_labelled( $html, $expected_count ) {
+		preg_match_all( '/<aside\b[^>]*>/', $html, $matches );
+		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <aside> elements' );
+
+		$labels = array();
+
+		foreach ( $matches[0] as $aside_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $aside_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every complementary landmark needs a non-empty accessible name' );
 	}
 
 	/**

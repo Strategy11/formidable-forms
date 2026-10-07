@@ -480,11 +480,21 @@
 	};
 
 	const wysiwyg = {
+		/**
+		 * @param {HTMLElement} editor                 The editor textarea.
+		 * @param {Object}      options
+		 * @param {Function}    options.setupCallback  Called with the TinyMCE editor when it is set up.
+		 * @param {number}      options.height         The TinyMCE editor height.
+		 * @param {boolean}     options.addFocusEvents Whether to trigger focusin on the textarea when TinyMCE gets focus.
+		 * @return {Promise<void>} Resolves once TinyMCE has finished booting, or right away when the text tab is active.
+		 */
 		init( editor, { setupCallback, height, addFocusEvents } = {} ) {
+			let ready;
 			if ( isTinyMceActive() ) {
-				setTimeout( resetTinyMce, 0 );
+				ready = new Promise( resolve => setTimeout( () => resolve( resetTinyMce() ), 0 ) );
 			} else {
 				initQuickTagsButtons();
+				ready = Promise.resolve();
 			}
 
 			setUpTinyMceVisualButtonListener();
@@ -541,7 +551,7 @@
 					settings.height = height;
 				}
 
-				tinymce.init( settings );
+				return tinymce.init( settings );
 			}
 
 			function removeRichText() {
@@ -550,7 +560,7 @@
 
 			function resetTinyMce() {
 				removeRichText();
-				initRichText();
+				return initRichText();
 			}
 
 			function isTinyMceActive() {
@@ -584,6 +594,8 @@
 				wrap.classList.add( 'tmce-active' );
 				wrap.classList.remove( 'html-active' );
 			}
+
+			return ready;
 		}
 	};
 

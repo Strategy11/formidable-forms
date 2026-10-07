@@ -293,7 +293,7 @@ class FrmFieldsHelper {
 				$frm_settings           = FrmAppHelper::get_settings();
 				$field_array['invalid'] = $frm_settings->re_msg;
 			} else {
-				$field_array['invalid'] = self::default_invalid_msg();
+				$field_array['invalid'] = self::default_invalid_msg( $field );
 			}
 		}
 
@@ -304,13 +304,30 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Default "invalid" validation message. Gives field-type-specific correction guidance
+	 * for field types where the format requirement isn't obvious from the label alone
+	 * (WCAG 3.3.1/3.3.3), and falls back to a generic message for every other type.
+	 *
 	 * @since 6.8.3
+	 * @since 6.35 Added the $field param for a type-specific message.
+	 *
+	 * @param array|object|null $field Optional. Field to check the type of.
 	 *
 	 * @return string
 	 */
-	public static function default_invalid_msg() {
+	public static function default_invalid_msg( $field = null ) {
+		$type     = $field ? FrmField::get_field_type( $field ) : '';
+		$messages = array(
+			'email'  => __( 'Enter a valid email address, like name@example.com', 'formidable' ),
+			'url'    => __( 'Enter a valid web address, like https://example.com', 'formidable' ),
+			'phone'  => __( 'Enter a valid phone number', 'formidable' ),
+			'number' => __( 'Enter a number', 'formidable' ),
+		);
+		// Quantity validates identically to number (FrmFieldQuantity extends FrmFieldNumber) but is a distinct stored type.
+		$messages['quantity'] = $messages['number'];
+
 		/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-		return sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
+		return $messages[ $type ] ?? sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
 	}
 
 	/**
@@ -465,8 +482,7 @@ class FrmFieldsHelper {
 			),
 			'invalid'    => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
-				/* translators: %s: Field name */
-				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
+				'part' => self::default_invalid_msg( $field ),
 			),
 			'blank'      => array(
 				'full' => $frm_settings->blank_msg,
@@ -1621,6 +1637,19 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Check if another plugin handles the text box for "Other" options.
+	 * Pro checks that this method exists to know the frm_prepare_other_input and
+	 * frm_include_other_input hooks are available.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function other_input_is_handled() {
+		return false !== has_filter( 'frm_prepare_other_input' ) && false !== has_action( 'frm_include_other_input' );
+	}
+
+	/**
 	 * Check if there is a saved value for the "Other" text field. If so, set it as the $other_val.
 	 * Intended for front-end use
 	 *
@@ -1637,6 +1666,34 @@ class FrmFieldsHelper {
 			'name'  => '',
 			'value' => '',
 		);
+
+		if ( self::other_input_is_handled() ) {
+			/**
+			 * Prepares the text box for an "Other" option, in place of the fallback below.
+			 *
+			 * @since x.x
+			 *
+			 * @param array $prepared {
+			 *
+			 *     @type array       $other_args The name and value for the text box.
+			 *     @type bool        $other_opt  True when this is an "Other" option.
+			 *     @type bool|string $checked    The checked attribute for the option.
+			 * }
+			 *
+			 * @param array $args Includes field, opt_key and field_name.
+			 */
+			$prepared = apply_filters( 'frm_prepare_other_input', compact( 'other_args', 'other_opt', 'checked' ), $args );
+
+			if ( is_array( $prepared ) && isset( $prepared['other_args'], $prepared['other_opt'] ) ) {
+				$other_opt = $prepared['other_opt'];
+				$checked   = $prepared['checked'] ?? $checked;
+
+				return $prepared['other_args'];
+			}
+		}//end if
+
+		// Fallback for when Pro is not active or is older than x.x. Remove the rest of this method,
+		// set_other_name() and set_other_value() once Pro is required for "Other" options.
 
 		// Check if this is an "Other" option.
 		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
@@ -1733,6 +1790,21 @@ class FrmFieldsHelper {
 		if ( ! $args['other_opt'] ) {
 			return;
 		}
+
+		if ( self::other_input_is_handled() ) {
+			/**
+			 * Shows the text box for an "Other" option, in place of the fallback below.
+			 *
+			 * @since x.x
+			 *
+			 * @param array $args Includes field, opt_key, html_id, name, value, checked and read_only.
+			 */
+			do_action( 'frm_include_other_input', $args );
+			return;
+		}
+
+		// Fallback for when Pro is not active or is older than x.x. Remove the rest of this method
+		// once Pro is required for "Other" options.
 
 		$classes = array( 'frm_other_input' );
 
@@ -3000,5 +3072,61 @@ class FrmFieldsHelper {
 		 * @param string $choice_key The option key.
 		 */
 		do_action( 'frm_after_choice_input', $field, $choice_key );
+	}
+
+	/**
+	 * Get the values available for the autocomplete HTML attribute.
+	 *
+	 * @since x.x This was moved from FrmProFieldsHelper::get_autocomplete_options.
+	 *
+	 * @param array<string> $filter_keys Only include these keys. An empty array will include every key.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function get_autocomplete_options( $filter_keys = array() ) {
+		$options = array(
+			'on'                   => __( 'On', 'formidable' ),
+			'off'                  => __( 'Off', 'formidable' ),
+			'additional-name'      => __( 'Additional name', 'formidable' ),
+			'bday'                 => __( 'Birthday', 'formidable' ),
+			'bday-day'             => __( 'Birthday day', 'formidable' ),
+			'bday-month'           => __( 'Birthday month', 'formidable' ),
+			'bday-year'            => __( 'Birthday year', 'formidable' ),
+			'country'              => __( 'Country', 'formidable' ),
+			'country-name'         => __( 'Country name', 'formidable' ),
+			'current-password'     => __( 'Current password', 'formidable' ),
+			'email'                => __( 'Email', 'formidable' ),
+			'family-name'          => __( 'Family name', 'formidable' ),
+			'given-name'           => __( 'Given name', 'formidable' ),
+			'honorific-prefix'     => __( 'Honorific prefix', 'formidable' ),
+			'honorific-suffix'     => __( 'Honorific suffix', 'formidable' ),
+			'impp'                 => __( 'IMPP', 'formidable' ),
+			'language'             => __( 'Language', 'formidable' ),
+			'name'                 => __( 'Name', 'formidable' ),
+			'new-password'         => __( 'New password', 'formidable' ),
+			'one-time-code'        => __( 'One time code', 'formidable' ),
+			'organization'         => __( 'Organization', 'formidable' ),
+			'organization-title'   => __( 'Organization title', 'formidable' ),
+			'photo'                => __( 'Photo', 'formidable' ),
+			'postal-code'          => __( 'Postal Code', 'formidable' ),
+			'sex'                  => __( 'Sex', 'formidable' ),
+			'street-address'       => __( 'Street address', 'formidable' ),
+			'tel'                  => __( 'Tel', 'formidable' ),
+			'tel-area-code'        => __( 'Tel area code', 'formidable' ),
+			'tel-country-code'     => __( 'Tel country code', 'formidable' ),
+			'tel-extension'        => __( 'Tel extension', 'formidable' ),
+			'tel-local'            => __( 'Tel local', 'formidable' ),
+			'tel-national'         => __( 'Tel national', 'formidable' ),
+			'transaction-amount'   => __( 'Transaction amount', 'formidable' ),
+			'transaction-currency' => __( 'Transaction currency', 'formidable' ),
+			'url'                  => __( 'URL', 'formidable' ),
+			'username'             => __( 'Username', 'formidable' ),
+		);
+
+		if ( ! $filter_keys ) {
+			return $options;
+		}
+
+		return array_intersect_key( $options, array_flip( $filter_keys ) );
 	}
 }

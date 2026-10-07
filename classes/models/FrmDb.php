@@ -91,7 +91,7 @@ class FrmDb {
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
 		$key = trim( $key );
 
-		if ( str_contains( $key, 'created_at' ) || str_contains( $key, 'updated_at' ) ) {
+		if ( ( str_contains( $key, 'created_at' ) || str_contains( $key, 'updated_at' ) ) && ! self::can_compare_as_datetime( $key, $value ) ) {
 			$k      = explode( ' ', $key );
 			$where .= ' CAST(' . reset( $k ) . ' as CHAR) ' . str_replace( reset( $k ), '', $key );
 		} else {
@@ -157,6 +157,34 @@ class FrmDb {
 
 			$values[] = $value;
 		}//end if
+	}
+
+	/**
+	 * Whether a date condition can use a native datetime comparison.
+	 *
+	 * @since x.x
+	 *
+	 * @param string            $key   Column and comparison operator.
+	 * @param array|string|null $value Comparison value.
+	 *
+	 * @return bool
+	 */
+	private static function can_compare_as_datetime( $key, $value ) {
+		$parts = explode( ' ', $key, 2 );
+
+		if ( ! preg_match( '/^(?:[a-zA-Z_][a-zA-Z0-9_]*\.)?(?:created_at|updated_at)$/D', $parts[0] ) ) {
+			return false;
+		}
+
+		if ( ! in_array( trim( $parts[1] ?? '' ), array( '', '>', '<', '!', '>-', '<-', '>=-', '<=-', '=-', '!=-', '<>-' ), true ) ) {
+			return false;
+		}
+
+		if ( ! is_string( $value ) || ! preg_match( '/^([1-9][0-9]{3})-([0-9]{2})-([0-9]{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/D', $value, $date ) ) {
+			return false;
+		}
+
+		return checkdate( (int) $date[2], (int) $date[3], (int) $date[1] );
 	}
 
 	/**

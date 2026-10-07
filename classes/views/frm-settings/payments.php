@@ -36,10 +36,12 @@ foreach ( $payment_sections as $key => $section ) {
 
 	$label_params = array(
 		'for'           => "frm_toggle_{$key}_settings",
+		'id'            => "frm_{$key}_settings_tab",
 		'class'         => 'frm_payment_settings_tab',
 		'role'          => 'tab',
-		'tabindex'      => '0',
+		'tabindex'      => $is_active ? '0' : '-1',
 		'aria-selected' => $is_active ? 'true' : 'false',
+		'aria-controls' => "frm_{$key}_settings_section",
 	);
 	?>
 	<input <?php FrmAppHelper::array_to_html_params( $input_params, true ); ?> />
@@ -63,7 +65,7 @@ foreach ( $payment_sections as $key => $section ) {
 		$section_classes .= ' frm_hidden';
 	}
 	?>
-	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="<?php echo esc_attr( $section_classes ); ?>" role="tabpanel">
+	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="<?php echo esc_attr( $section_classes ); ?>" role="tabpanel" aria-labelledby="frm_<?php echo esc_attr( $key ); ?>_settings_tab">
 		<?php if ( $include_h3 ) { ?>
 			<h3 style="margin-bottom: 0;">
 				<?php

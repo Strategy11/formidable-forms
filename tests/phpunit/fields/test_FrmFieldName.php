@@ -3,6 +3,7 @@
 /**
  * @group fields
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
 class test_FrmFieldName extends FrmUnitTest {
 
 	public function test_get_processed_sub_fields() {

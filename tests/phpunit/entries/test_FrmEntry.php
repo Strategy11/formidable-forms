@@ -2,7 +2,11 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntry
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntry::class )]
 class test_FrmEntry extends FrmUnitTest {
 
 	public static function wpSetUpBeforeClass() {
@@ -11,10 +15,6 @@ class test_FrmEntry extends FrmUnitTest {
 		self::frm_install();
 	}
 
-	/**
-	 * @covers FrmEntry::create
-	 * @covers FrmEntry::is_duplicate
-	 */
 	public function test_is_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$this->assertNotEmpty( $form, 'Form not found with id ' . $this->contact_form_key );
@@ -47,9 +47,6 @@ class test_FrmEntry extends FrmUnitTest {
 		$this->assertNotEmpty( $entry, 'False Positive for duplicate entry (A != A + B)' );
 	}
 
-	/**
-	 * @covers FrmEntry::getAll
-	 */
 	public function test_getAll() {
 		$form       = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );

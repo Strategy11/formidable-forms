@@ -733,7 +733,14 @@ function frmFrontFormJS() {
 		let fieldID;
 		const url = field.value;
 
-		if ( url !== '' && ! /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i.test( url ) ) {
+		// Keep in sync with FrmFieldUrl::get_url_pattern(), but the international ranges differ by design:
+		// JS matches UTF-16 code units, so it uses the u flag and a code point range where the PHP side
+		// matches raw UTF-8 bytes. PHP must NOT gain /u: preg_match() returns false on malformed UTF-8.
+		const pattern = field.hasAttribute( 'data-intl-domains' )
+			? /^http(s)?:\/\/(?:localhost|(?:[\da-z\u0080-\u{10FFFF}\.-]+\.[\da-z\u0080-\u{10FFFF}\.-]+))/iu
+			: /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i;
+
+		if ( url !== '' && ! pattern.test( url ) ) {
 			fieldID = getFieldId( field, true );
 			if ( ! ( fieldID in errors ) ) {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
@@ -1140,7 +1147,9 @@ function frmFrontFormJS() {
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
-						replaceContent.replaceWith( response.content );
+						const insertedContent = jQuery( jQuery.parseHTML( response.content ) );
+						replaceContent.replaceWith( insertedContent );
+						focusFormMessage( insertedContent );
 
 						addUrlParam( response );
 
@@ -1266,6 +1275,33 @@ function frmFrontFormJS() {
 		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
 	}
 
+	/**
+	 * Move focus to the top-level success message after an AJAX submit, so screen reader
+	 * users are notified it appeared. Scoped to `insertedContent` (the markup that just
+	 * replaced the form) rather than a wider ancestor, so an unrelated `.frm_message`-classed
+	 * element elsewhere on the page can never be focused instead.
+	 *
+	 * @since x.x
+	 *
+	 * @param {jQuery} insertedContent The markup that just replaced the form.
+	 * @return {void}
+	 */
+	function focusFormMessage( insertedContent ) {
+		let message;
+		for ( const node of insertedContent.get() ) {
+			if ( node.nodeType !== 1 ) {
+				continue;
+			}
+			message = node.matches( '.frm_message' ) ? node : node.querySelector( '.frm_message' );
+			if ( message ) {
+				break;
+			}
+		}
+		if ( message ) {
+			focusInput( message );
+		}
+	}
+
 	function afterFormSubmitted( object, response ) {
 		const tempDiv = document.createElement( 'div' );
 		tempDiv.innerHTML = response.content;
@@ -1387,6 +1423,26 @@ function frmFrontFormJS() {
 		return formEl.frmErrorConfigCache;
 	}
 
+	/**
+	 * Inserts error HTML into a field's container, tagging every inserted top-level
+	 * element with a data-frm-error attribute. removeFieldError()/removeAllErrors() rely
+	 * on that attribute (rather than the frm_error class) to find and remove the visible
+	 * error element again, since a site's own custom field HTML template can render the
+	 * [error] placeholder without a frm_error class or id. This only covers the visible
+	 * element — aria-describedby cleanup still depends on an id, which custom markup may
+	 * not have.
+	 *
+	 * @param {HTMLElement} container
+	 * @param {string}      errorHtml
+	 * @return {void}
+	 */
+	function insertErrorHtml( container, errorHtml ) {
+		const template = document.createElement( 'template' );
+		template.innerHTML = errorHtml;
+		Array.from( template.content.children ).forEach( el => el.setAttribute( 'data-frm-error', '' ) );
+		container.append( template.content );
+	}
+
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
@@ -1417,7 +1473,7 @@ function frmFrontFormJS() {
 				const roleString = config.includeAlertRole ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
-			container.insertAdjacentHTML( 'beforeend', errorHtml );
+			insertErrorHtml( container, errorHtml );
 			inputs.forEach( input => {
 				describedBy = input.getAttribute( 'aria-describedby' );
 				if ( ! describedBy ) {
@@ -1476,7 +1532,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const errorMessage = container.querySelector( '.frm_error' );
+		const errorMessages = container.querySelectorAll( '.frm_error, [data-frm-error]' );
 		const input = container.querySelector( 'input, select, textarea' );
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
@@ -1492,10 +1548,10 @@ function frmFrontFormJS() {
 			}
 		}
 
-		if ( errorMessage ) {
+		errorMessages.forEach( errorMessage => {
 			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
-		}
+		} );
 	}
 
 	/**
@@ -1526,7 +1582,7 @@ function frmFrontFormJS() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+		document.querySelectorAll( '.form-field .frm_error, .form-field [data-frm-error]' ).forEach( el => {
 			removeElementFromInputDescribedBy( el );
 			el.remove();
 		} );
@@ -1674,7 +1730,7 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error, .frm_form_field [data-frm-error]' );
 		if ( ! errors.length ) {
 			return;
 		}
@@ -1688,9 +1744,11 @@ function frmFrontFormJS() {
 				summary.focus();
 				return;
 			}
+			// No summary in the DOM (js_validate's client-side path never renders one): fall
+			// through to the first-errored-field focus below.
 		}
 
-		if ( ! config.focusFirstError ) {
+		if ( ! config.focusFirstError && ! config.focusErrorSummary ) {
 			return;
 		}
 
@@ -1698,6 +1756,9 @@ function frmFrontFormJS() {
 		let timeoutCallback;
 		do {
 			element = element.previousSibling;
+			if ( ! element ) {
+				break;
+			}
 			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
 				break;

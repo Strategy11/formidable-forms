@@ -15,6 +15,15 @@ class FrmFormsHelper {
 	private static $field_type_data_for_insert_opt_html;
 
 	/**
+	 * Icon classes for deferred code list items, keyed by field type, printed once each by print_deferred_code_list_icons().
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string, string>
+	 */
+	private static $deferred_code_list_icons = array();
+
+	/**
 	 * @since 2.2.10
 	 *
 	 * @return string
@@ -108,7 +117,7 @@ class FrmFormsHelper {
 	 */
 	public static function form_switcher( $selected = false ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms = FrmForm::get_published_forms( $where );
+		$forms = FrmForm::get_published_form_names( $where );
 
 		$args = array(
 			'id'   => 0,
@@ -169,6 +178,31 @@ class FrmFormsHelper {
 			<?php
 			return;
 		}
+
+		$switcher_forms = array();
+
+		foreach ( $forms as $form ) {
+			if ( $form->id === $form_id ) {
+				continue;
+			}
+
+			if ( isset( $args['id'] ) ) {
+				$args['id'] = $form->id;
+			}
+
+			if ( isset( $args['form'] ) ) {
+				$args['form'] = $form->id;
+			}
+
+			$switcher_forms[] = array(
+				'id'   => $form->id,
+				'name' => ! empty( $form->name ) ? $form->name : self::get_no_title_text(),
+				'key'  => $form->form_key,
+				'url'  => esc_url_raw( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ),
+			);
+		}
+		/* translators: %d: Form ID */
+		$id_label = __( '(ID %d)', 'formidable' );
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'dropdown-menu-right' : 'dropdown-menu-left' ); ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
@@ -179,7 +213,9 @@ class FrmFormsHelper {
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
-			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
+			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover"
+				role="menu" aria-labelledby="frm-navbarDrop"
+				data-id-label="<?php echo esc_attr( $id_label ); ?>">
 				<?php if ( count( $forms ) > 8 ) { ?>
 				<li class="frm-with-search">
 					<?php
@@ -195,44 +231,16 @@ class FrmFormsHelper {
 					?>
 				</li>
 				<?php } ?>
-				<?php
-				foreach ( $forms as $form ) {
-					if ( $form->id === $form_id ) {
-						// Don't include the selected form in the switcher since it does nothing.
-						continue;
-					}
-
-					if ( isset( $args['id'] ) ) {
-						$args['id'] = $form->id;
-					}
-
-					if ( isset( $args['form'] ) ) {
-						$args['form'] = $form->id;
-					}
-
-					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = ! empty( $form->name ) ? $form->name : self::get_no_title_text();
-					?>
-					<li class="frm-dropdown-form">
-						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
-							<?php echo esc_html( $form_name ); ?>
-							<span>
-							<?php
-							printf(
-								/* translators: %d: Form ID */
-								esc_html__( '(ID %d)', 'formidable' ),
-								esc_attr( $form->id )
-							);
-							?>
-							</span>
-							<span class="frm_hidden"><?php echo esc_html( $form->form_key ); ?></span>
-						</a>
-					</li>
-					<?php
-					unset( $form );
-				}//end foreach
-				?>
 			</ul>
+			<?php
+			wp_print_inline_script_tag(
+				wp_json_encode( $switcher_forms, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
+				array(
+					'type' => 'application/json',
+					'id'   => 'frm-form-switcher-data',
+				)
+			);
+			?>
 		</div>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
@@ -574,11 +582,16 @@ class FrmFormsHelper {
 
 		$message = do_shortcode( $message );
 		$role    = $atts['role'] ?? 'status';
-		// A focusable tabindex, plus a stable marker JS can select on regardless of the
-		// filterable wrapper class, lets JS move focus onto the error summary instead of
-		// the first field, when should_focus_error_summary() resolves true.
+		// A focusable tabindex lets js/formidable.js move focus onto the message after an
+		// AJAX submit without a screen reader user having to tab to it. An error summary
+		// (role="alert") is always focusable this way; any other message is only focusable
+		// when the caller marks it via $atts['focusable'] (the AJAX success path) — a
+		// plain page-rendered message is never focused, so it stays out of the tab order.
+		// The stable data-frm-error-summary marker additionally lets JS single out the
+		// error summary from any other focusable message on the page.
 		$is_error_summary = 'alert' === $role;
-		$tabindex         = $is_error_summary ? ' tabindex="-1"' : '';
+		$focusable        = $is_error_summary || ! empty( $atts['focusable'] );
+		$tabindex         = $focusable ? ' tabindex="-1"' : '';
 		$summary_marker   = $is_error_summary ? ' data-frm-error-summary="1"' : '';
 
 		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '"' . $tabindex . $summary_marker . '>' . $message . '</div>';
@@ -931,6 +944,9 @@ BEFORE_HTML;
 	 *                    and 'key_label' to show something other than the id or key, and
 	 *                    'name_suffix'/'key_suffix' for text appended after the name or key is
 	 *                    truncated, so a shortcode option like ' show=first' survives the truncation.
+	 *                    Set 'defer_icon' when the code list is hidden until opened, so the item
+	 *                    only names its field type and JS copies the icon in when the list opens.
+	 *                    Call print_deferred_code_list_icons() after the list when deferring.
 	 *
 	 * @return void
 	 */
@@ -960,10 +976,19 @@ BEFORE_HTML;
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<li class="<?php echo esc_attr( $class ); ?>">
+		<?php
+		$item_attrs = array( 'class' => $class );
+
+		if ( ! empty( $args['defer_icon'] ) ) {
+			// Only the field type goes on the item. Its icon is printed once in print_deferred_code_list_icons().
+			self::$deferred_code_list_icons[ $args['type'] ] = $field['icon'];
+			$item_attrs['data-frm-icon']                     = $args['type'];
+		}
+		?>
+		<li<?php FrmAppHelper::array_to_html_params( $item_attrs, true ); ?>>
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
@@ -977,7 +1002,7 @@ BEFORE_HTML;
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
@@ -992,6 +1017,28 @@ BEFORE_HTML;
 		</li>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Prints one hidden copy of each icon used by deferred code list items, for JS to copy into the list when it opens.
+	 * This keeps the markup for a form with many fields down to a field type per item.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function print_deferred_code_list_icons() {
+		if ( ! self::$deferred_code_list_icons ) {
+			return;
+		}
+		?>
+		<template class="frm-code-list-icons">
+		<?php foreach ( self::$deferred_code_list_icons as $type => $icon ) { ?>
+			<span data-frm-icon-key="<?php echo esc_attr( $type ); ?>"><?php FrmAppHelper::icon_by_class( $icon, array( 'aria-hidden' => 'true' ) ); ?></span>
+		<?php } ?>
+		</template>
+		<?php
+		self::$deferred_code_list_icons = array();
 	}
 
 	/**

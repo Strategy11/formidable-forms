@@ -214,6 +214,58 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			wp_die( esc_html__( 'Oops! That payment does not exist.', 'formidable' ) );
 		}
 
+		$result   = self::refund_payment_for_gateway( $payment );
+		$refunded = $result['refunded'];
+		$reason   = $result['reason'];
+		$debug_id = $result['debug_id'];
+
+		if ( $refunded ) {
+			$message = __( 'Refunded', 'formidable' );
+			// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
+		} else {
+			// If the reason is already a complete error message, use it directly
+			// instead of wrapping it redundantly in "Refund Failed (...)"
+			if ( $reason && ! preg_match( '/^[A-Z_]+$/', $reason ) ) {
+				$message = $reason;
+			} else {
+				$message = __( 'Refund Failed', 'formidable' );
+
+				if ( $reason ) {
+					$message .= ' (' . $reason . ')';
+				}
+			}
+		}
+
+		if ( $debug_id ) {
+			$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
+		}
+
+		wp_die(
+			sprintf(
+				'<div class="%1$s">%2$s</div>',
+				$refunded ? 'frm_updated_message' : 'frm_error_style',
+				wp_kses_post( $message )
+			)
+		);
+	}
+
+	/**
+	 * Dispatch a refund to the payment's original gateway, and mark the payment
+	 * refunded on success.
+	 *
+	 * Extracted from refund_payment() so the formidable-forms/refund-payment
+	 * ability can reuse the same gateway dispatch without duplicating it or
+	 * going through the AJAX/wp_die() request flow.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $payment The payment to refund.
+	 *
+	 * @return array{refunded: bool, reason: string, debug_id: string} refunded is whether the gateway
+	 *               confirmed the refund. reason is a gateway-provided failure reason, empty when
+	 *               refunded is true or none was given. debug_id is a gateway debug id, when given.
+	 */
+	public static function refund_payment_for_gateway( $payment ) {
 		$refunded = false;
 		$reason   = '';
 		$debug_id = '';
@@ -255,32 +307,12 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
 		if ( $refunded ) {
 			self::change_payment_status( $payment, 'refunded' );
-			$message = __( 'Refunded', 'formidable' );
-			// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
-		} else {
-			// If the reason is already a complete error message, use it directly
-			// instead of wrapping it redundantly in "Refund Failed (...)"
-			if ( $reason && ! preg_match( '/^[A-Z_]+$/', $reason ) ) {
-				$message = $reason;
-			} else {
-				$message = __( 'Refund Failed', 'formidable' );
-
-				if ( $reason ) {
-					$message .= ' (' . $reason . ')';
-				}
-			}
 		}
 
-		if ( $debug_id ) {
-			$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
-		}
-
-		wp_die(
-			sprintf(
-				'<div class="%1$s">%2$s</div>',
-				$refunded ? 'frm_updated_message' : 'frm_error_style',
-				wp_kses_post( $message )
-			)
+		return array(
+			'refunded' => (bool) $refunded,
+			'reason'   => (string) $reason,
+			'debug_id' => (string) $debug_id,
 		);
 	}
 

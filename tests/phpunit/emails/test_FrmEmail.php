@@ -3,7 +3,14 @@
 /**
  * @group emails
  * @group free
+ *
+ * @covers FrmEmail
+ * @covers FrmNotification
  */
+#[\PHPUnit\Framework\Attributes\Group( 'emails' )]
+#[\PHPUnit\Framework\Attributes\Group( 'free' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEmail::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmNotification::class )]
 class test_FrmEmail extends FrmUnitTest {
 
 	/**
@@ -62,7 +69,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 * Inc_user_info: false
 	 * Plaint_text: false
 	 *
-	 * @covers FrmNotification::trigger_email
+	 * @see FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_one() {
 		$pass_entry = clone $this->entry;
@@ -107,7 +114,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 * Inc_user_info: false
 	 * Plain_text: true
 	 *
-	 * @covers FrmNotification::trigger_email
+	 * @see FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_two() {
 		$entry_clone = clone $this->entry;
@@ -179,7 +186,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 * Inc_user_info: true
 	 * Plain_text: false
 	 *
-	 * @covers FrmNotification::trigger_email
+	 * @see FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_three() {
 		$entry_clone = clone $this->entry;
@@ -259,7 +266,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 * Inc_user_info: false
 	 * Plain_text: true
 	 *
-	 * @covers FrmNotification::trigger_email
+	 * @see FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_four() {
 		$entry_clone = clone $this->entry;
@@ -336,7 +343,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 * Inc_user_info: false
 	 * Plain_text: true
 	 *
-	 * @covers FrmNotification::trigger_email
+	 * @see FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_five() {
 		$entry_clone = clone $this->entry;
@@ -404,7 +411,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 * Reply_to:
 	 * From: [x] [y]
 	 *
-	 * @covers FrmNotification::trigger_email
+	 * @see FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_six() {
 		$name_id                         = FrmField::get_id_by_key( $this->name_field_key );
@@ -552,9 +559,6 @@ class test_FrmEmail extends FrmUnitTest {
 		return true;
 	}
 
-	/**
-	 * @covers FrmEmail::set_from
-	 */
 	public function test_set_from() {
 		$default_email = get_option( 'admin_email' );
 		$default_name  = FrmAppHelper::site_name();
@@ -569,9 +573,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_private_properties( $from, 'from' );
 	}
 
-	/**
-	 * @covers FrmEmail::set_reply_to
-	 */
 	public function test_set_reply_to() {
 		$default_email = get_option( 'admin_email' );
 		$reply_to      = array(
@@ -598,9 +599,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertSame( 'fromemail@example.com', $actual );
 	}
 
-	/**
-	 * @covers FrmEmail::set_is_plain_text
-	 */
 	public function test_set_is_plain_text() {
 		$settings = array(
 			'0' => false,
@@ -609,9 +607,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_private_properties( $settings, 'plain_text', 'is_plain_text' );
 	}
 
-	/**
-	 * @covers FrmEmail::set_include_user_info
-	 */
 	public function test_set_include_user_info() {
 		$settings = array(
 			'0' => 0,
@@ -620,9 +615,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_private_properties( $settings, 'inc_user_info', 'include_user_info' );
 	}
 
-	/**
-	 * @covers FrmEmail::set_content_type
-	 */
 	public function test_set_content_type() {
 		$settings = array(
 			'0' => 'text/html',
@@ -631,9 +623,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_private_properties( $settings, 'plain_text', 'content_type' );
 	}
 
-	/**
-	 * @covers FrmEmail::set_subject
-	 */
 	public function test_set_subject() {
 		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
 		$default  = $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name();
@@ -645,9 +634,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_private_properties( $settings, 'email_subject', 'subject' );
 	}
 
-	/**
-	 * @covers FrmEmail::set_message
-	 */
 	public function test_set_message() {
 		$name_id = FrmField::get_id_by_key( $this->name_field_key );
 		$default = FrmEntriesHelper::replace_default_message(
@@ -674,9 +660,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_private_properties( $settings, 'email_message', 'message' );
 	}
 
-	/**
-	 * @covers FrmEmail::add_autop
-	 */
 	public function test_add_autop() {
 		$action                             = $this->email_action;
 		$action->post_content['plain_text'] = '0';
@@ -695,9 +678,6 @@ LINE 1<br>LINE 2<br></body></html>'
 		}
 	}
 
-	/**
-	 * @covers FrmEmail::set_message
-	 */
 	public function test_message_user_info() {
 		$settings = array(
 			array(
@@ -730,9 +710,6 @@ LINE 1<br>LINE 2<br></body></html>'
 		}
 	}
 
-	/**
-	 * @covers FrmEmail::set_message
-	 */
 	public function test_plain_text_message() {
 		$action                                = $this->email_action;
 		$action->post_content['email_message'] = 'Value <br/>with HTML';
