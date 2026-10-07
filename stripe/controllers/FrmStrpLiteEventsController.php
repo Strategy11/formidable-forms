@@ -39,6 +39,15 @@ class FrmStrpLiteEventsController {
 	private $status;
 
 	/**
+	 * The Stripe mode the event being handled was polled from.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	private $mode = 'auto';
+
+	/**
 	 * @return void
 	 */
 	private function set_payment_status() {
@@ -325,7 +334,7 @@ class FrmStrpLiteEventsController {
 		add_filter( $hook, $filter, 99 );
 
 		// There is no logged in user when a webhook event is processed, so the customer check has to be skipped here.
-		$cancelled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription_without_customer_check', $sub->sub_id );
+		$cancelled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription_without_customer_check', $sub->sub_id, $this->mode );
 
 		if ( $cancelled ) {
 			FrmTransLiteSubscriptionsController::change_subscription_status(
@@ -463,10 +472,12 @@ class FrmStrpLiteEventsController {
 	public function process_connect_events() {
 		$this->flush_response();
 
-		$unprocessed_event_ids = FrmStrpLiteConnectHelper::get_unprocessed_event_ids();
+		foreach ( FrmStrpLiteAppHelper::get_event_lookup_modes() as $mode ) {
+			$unprocessed_event_ids = FrmStrpLiteConnectHelper::get_unprocessed_event_ids( $mode );
 
-		if ( $unprocessed_event_ids ) {
-			$this->process_event_ids( $unprocessed_event_ids );
+			if ( $unprocessed_event_ids ) {
+				$this->process_event_ids( $unprocessed_event_ids, $mode );
+			}
 		}
 
 		wp_send_json_success();
@@ -476,10 +487,13 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param array<string> $event_ids
+	 * @param string        $mode      The Stripe mode the event ids were polled from.
 	 *
 	 * @return void
 	 */
-	private function process_event_ids( $event_ids ) {
+	private function process_event_ids( $event_ids, $mode = 'auto' ) {
+		$this->mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
+
 		foreach ( $event_ids as $event_id ) {
 			if ( $this->should_skip_event( $event_id ) ) {
 				continue;
@@ -487,7 +501,7 @@ class FrmStrpLiteEventsController {
 
 			set_transient( 'frm_last_process_' . $event_id, time(), 60 );
 
-			$this->event = FrmStrpLiteConnectHelper::get_event( $event_id );
+			$this->event = FrmStrpLiteConnectHelper::get_event( $event_id, $this->mode );
 
 			if ( ! is_object( $this->event ) ) {
 				$this->count_failed_event( $event_id );
@@ -499,7 +513,7 @@ class FrmStrpLiteEventsController {
 			$this->track_handled_event( $event_id );
 
 			if ( $this->event_is_owned ) {
-				FrmStrpLiteConnectHelper::process_event( $event_id );
+				FrmStrpLiteConnectHelper::process_event( $event_id, $this->mode );
 			}
 		}//end foreach
 	}
@@ -650,7 +664,7 @@ class FrmStrpLiteEventsController {
 			return;
 		}
 
-		$updated = FrmStrpLiteLinkController::maybe_update_intent_description( $payment->receipt_id, $action, $entry );
+		$updated = FrmStrpLiteLinkController::maybe_update_intent_description( $payment->receipt_id, $action, $entry, $this->mode );
 
 		if ( ! $updated ) {
 			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'Unable to update the Stripe Link intent description.' );

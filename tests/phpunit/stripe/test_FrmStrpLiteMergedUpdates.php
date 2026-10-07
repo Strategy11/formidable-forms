@@ -177,7 +177,7 @@ class test_FrmStrpLiteMergedUpdates extends FrmUnitTest {
 				),
 			),
 		);
-		wp_cache_set( $event->id, $event, 'frm_strp' );
+		wp_cache_set( FrmStrpLiteAppHelper::active_mode() . '_' . $event->id, $event, 'frm_strp' );
 		$controller = new FrmStrpLiteEventsController();
 		$this->run_private_method( array( $controller, 'process_event_ids' ), array( array( $event->id ) ) );
 		$this->assertSame( array(), $this->requests );
@@ -224,13 +224,81 @@ class test_FrmStrpLiteMergedUpdates extends FrmUnitTest {
 				),
 			),
 		);
-		wp_cache_set( $event->id, $event, 'frm_strp' );
+		wp_cache_set( FrmStrpLiteAppHelper::active_mode() . '_' . $event->id, $event, 'frm_strp' );
 		$controller = new FrmStrpLiteEventsController();
 		$this->run_private_method( array( $controller, 'process_event_ids' ), array( array( $event->id ) ) );
 		$this->assertSame( 'complete', $model->get_one( $id )->status );
 		$requests_by_action = array_column( $this->requests, null, 'frm_strp_connect_action' );
 		$this->assertArrayHasKey( 'process_event', $requests_by_action );
 		$this->assertSame( 'Order ' . $entry->id, $requests_by_action['update_intent']['data']['description'] );
+	}
+
+	public function test_webhook_description_update_uses_the_event_mode() {
+		$form                                = $this->factory->form->create_and_get();
+		$action                              = $this->make_action( $form->id );
+		$action->post_content['description'] = 'Order [id]';
+		wp_update_post(
+			array(
+				'ID'           => $action->ID,
+				'post_content' => wp_json_encode( $action->post_content ),
+			)
+		);
+		FrmFormAction::clear_cache();
+		$entry = $this->factory->entry->create_and_get( $this->factory->field->generate_entry_array( $form ) );
+		( new FrmTransLitePayment() )->create(
+			array(
+				'item_id'    => $entry->id,
+				'action_id'  => $action->ID,
+				'receipt_id' => 'pi_fixture',
+				'status'     => 'pending',
+				'paysys'     => 'stripe',
+				'test'       => 1,
+			)
+		);
+		$event = (object) array(
+			'id'   => 'evt_test_mode_fixture',
+			'type' => 'payment_intent.succeeded',
+			'data' => (object) array(
+				'object' => (object) array(
+					'id'     => 'pi_fixture',
+					'object' => 'payment_intent',
+				),
+			),
+		);
+		wp_cache_set( 'test_' . $event->id, $event, 'frm_strp' );
+
+		// The override needs both modes connected.
+		foreach ( array( 'account_id', 'client_password', 'server_password', 'details_submitted' ) as $key ) {
+			update_option( 'frm_strp_connect_' . $key . '_live', 'live_fixture' );
+		}
+
+		// The site is live, so a description update that falls back to the active mode would use the wrong credentials.
+		$force_live = function () {
+			return 'live';
+		};
+		add_filter( 'frm_strp_active_mode', $force_live );
+		$controller = new FrmStrpLiteEventsController();
+		$this->run_private_method( array( $controller, 'process_event_ids' ), array( array( $event->id ), 'test' ) );
+		remove_filter( 'frm_strp_active_mode', $force_live );
+
+		$requests_by_action = array_column( $this->requests, null, 'frm_strp_connect_action' );
+		$this->assertArrayHasKey( 'update_intent', $requests_by_action );
+		$this->assertSame( 'test', $requests_by_action['update_intent']['frm_strp_connect_mode'] );
+	}
+
+	public function test_return_url_uses_the_mode_the_payment_was_made_in() {
+		$force_live = function () {
+			return 'live';
+		};
+		add_filter( 'frm_strp_active_mode', $force_live );
+
+		$this->run_private_method( array( 'FrmStrpLiteLinkController', 'use_payment_mode' ), array( (object) array( 'test' => '1' ) ) );
+		$this->assertSame( 'test', FrmStrpLiteAppHelper::active_mode(), 'A test payment should be returned to with test credentials on a live site.' );
+
+		$this->run_private_method( array( 'FrmStrpLiteLinkController', 'use_payment_mode' ), array( (object) array( 'test' => '0' ) ) );
+		$this->assertSame( 'live', FrmStrpLiteAppHelper::active_mode(), 'A live payment should keep the live mode.' );
+
+		remove_all_filters( 'frm_strp_active_mode' );
 	}
 
 	public function test_missing_plan_and_price_errors_are_recognized() {
@@ -476,7 +544,7 @@ class test_FrmStrpLiteMergedUpdates extends FrmUnitTest {
 				),
 			),
 		);
-		wp_cache_set( $event->id, $event, 'frm_strp' );
+		wp_cache_set( FrmStrpLiteAppHelper::active_mode() . '_' . $event->id, $event, 'frm_strp' );
 		return $event->id;
 	}
 

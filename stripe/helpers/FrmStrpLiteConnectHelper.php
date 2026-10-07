@@ -718,11 +718,13 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $action
 	 * @param array  $additional_body
+	 * @param string $mode Stripe mode.
 	 *
 	 * @return false|object
 	 */
-	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body = array_merge( self::get_standard_authenticated_body(), $additional_body );
+	private static function post_with_authenticated_body( $action, $additional_body = array(), $mode = 'auto' ) {
+		$resolved_mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
+		$body          = array_merge( self::get_body_for_mode( $resolved_mode ), $additional_body );
 
 		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'stripe', $body['frm_strp_connect_mode'] ) ) {
 			// There are no credentials for this mode, so the connect server would reject the request
@@ -800,12 +802,13 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string       $sub_id
 	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 * @param string       $mode        'auto', 'live', or 'test'.
 	 *
 	 * @return bool
 	 */
-	public static function cancel_subscription( $sub_id, $customer_id = false ) {
+	public static function cancel_subscription( $sub_id, $customer_id = false, $mode = 'auto' ) {
 		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
-		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
+		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ), $mode );
 		return false !== $data;
 	}
 
@@ -831,33 +834,37 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
+	 * @param string $mode Stripe mode.
 	 *
 	 * @return false|object
 	 */
-	public static function get_event( $event_id ) {
-		$event = wp_cache_get( $event_id, 'frm_strp' );
+	public static function get_event( $event_id, $mode = 'auto' ) {
+		$resolved_mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
+		$cache_key     = $resolved_mode . '_' . $event_id;
+		$event         = wp_cache_get( $cache_key, 'frm_strp' );
 
 		if ( is_object( $event ) ) {
 			return $event;
 		}
 
-		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ) );
+		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ), $resolved_mode );
 
 		if ( false === $event || empty( $event->event ) ) {
 			return false;
 		}
 
-		wp_cache_set( $event_id, $event->event, 'frm_strp' );
+		wp_cache_set( $cache_key, $event->event, 'frm_strp' );
 		return $event->event;
 	}
 
 	/**
 	 * @param string $event_id
+	 * @param string $mode Stripe mode.
 	 *
 	 * @return mixed
 	 */
-	public static function process_event( $event_id ) {
-		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
+	public static function process_event( $event_id, $mode = 'auto' ) {
+		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ), $mode );
 	}
 
 	/**
@@ -887,19 +894,22 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 * @param string $mode      'auto', 'live', or 'test'.
 	 *
 	 * @return bool
 	 */
-	public static function update_intent( $intent_id, $data ) {
-		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
+	public static function update_intent( $intent_id, $data, $mode = 'auto' ) {
+		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ), $mode );
 		return false !== $data;
 	}
 
 	/**
+	 * @param string $mode 'auto', 'live', or 'test'.
+	 *
 	 * @return array
 	 */
-	public static function get_unprocessed_event_ids() {
-		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+	public static function get_unprocessed_event_ids( $mode = 'auto' ) {
+		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids', array(), $mode );
 
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();

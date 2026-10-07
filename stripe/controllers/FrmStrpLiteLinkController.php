@@ -63,6 +63,8 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		self::use_payment_mode( $payment );
+
 		$intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
 
 		if ( ! is_object( $intent ) ) {
@@ -177,6 +179,31 @@ class FrmStrpLiteLinkController {
 	}
 
 	/**
+	 * Use the Stripe mode a payment was made in for the rest of a return URL request.
+	 *
+	 * The return URL does not carry the form preview state, so a payment made while the
+	 * Test Mode add-on overrides the mode would otherwise be looked up with the site's
+	 * configured mode, and Stripe would report that the intent does not exist.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $payment The payment row for the intent being returned to.
+	 *
+	 * @return void
+	 */
+	private static function use_payment_mode( $payment ) {
+		$mode = ! empty( $payment->test ) ? 'test' : 'live';
+
+		add_filter(
+			'frm_strp_active_mode',
+			function () use ( $mode ) {
+				return $mode;
+			},
+			99
+		);
+	}
+
+	/**
 	 * Try to add the description to a Stripe link payment after it was confirmed.
 	 *
 	 * @param object           $intent
@@ -210,6 +237,8 @@ class FrmStrpLiteLinkController {
 			$redirect_helper->handle_error( 'no_payment_record' );
 			die();
 		}
+
+		self::use_payment_mode( $payment );
 
 		// Verify the setup intent.
 		$setup_intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_setup_intent', $setup_id );
@@ -656,10 +685,11 @@ class FrmStrpLiteLinkController {
 	 * @param string           $intent_id
 	 * @param stdClass|WP_Post $action
 	 * @param stdClass         $entry
+	 * @param string           $mode      'auto', 'live', or 'test'.
 	 *
 	 * @return bool True if Stripe accepted the new description.
 	 */
-	public static function maybe_update_intent_description( $intent_id, $action, $entry ) {
+	public static function maybe_update_intent_description( $intent_id, $action, $entry, $mode = 'auto' ) {
 		if ( empty( $action->post_content['description'] ) ) {
 			return false;
 		}
@@ -671,6 +701,6 @@ class FrmStrpLiteLinkController {
 		);
 		$new_values     = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
 
-		return true === FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, $new_values );
+		return true === FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, $new_values, $mode );
 	}
 }

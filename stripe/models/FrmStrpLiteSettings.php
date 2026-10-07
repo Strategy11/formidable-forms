@@ -121,7 +121,7 @@ class FrmStrpLiteSettings {
 	 * @return string
 	 */
 	public function get_active_publishable_key( $mode = 'auto' ) {
-		$resolved_mode = 'auto' === $mode ? ( $this->settings->test_mode ? 'test' : 'live' ) : $mode;
+		$resolved_mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
 		return 'test' === $resolved_mode ? $this->get_frm_publishable_test_key() : $this->get_frm_publishable_live_key();
 	}
 
