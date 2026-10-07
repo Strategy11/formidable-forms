@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="form_global_settings" class="frm_wrap">
-	<form name="frm_settings_form" method="post" class="frm_settings_form"
+	<form name="frm_settings_form" method="post" class="frm_settings_form" autocomplete="off"
 		action="?page=formidable-settings<?php echo esc_html( $current ? '&amp;t=' . $current : '' ); ?>">
 		<div>
 
@@ -26,7 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 					<input type="hidden" name="frm_action" value="process-form"/>
-					<input type="hidden" name="action" value="process-form"/>
 					<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
 					<?php
