@@ -32,7 +32,7 @@ describe( 'Fields in the form builder', () => {
 			// measures 1280x0 (formidable-forms#3399), same shape as the #js_validate race in
 			// fieldsInFormBuilder-validation.cy.js. .scrollIntoView() first reliably clears it.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-				.invoke( 'css', 'opacity', 1 )
+				.revealFieldActions()
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 				.first()
 				.scrollIntoView()
@@ -65,7 +65,7 @@ describe( 'Fields in the form builder', () => {
 					// Same #wpbody-content 1280x0 race as createAndDuplicateField above
 					// (formidable-forms#3399) - .scrollIntoView() first reliably clears it.
 					cy.get( '.frm-field-action-icons' )
-						.invoke( 'css', 'opacity', 1 )
+						.revealFieldActions()
 						.find( '.dropdown .frm-hover-icon .frmsvg' )
 						.first()
 						.scrollIntoView()
@@ -139,7 +139,7 @@ describe( 'Fields in the form builder', () => {
 			cy.log( `Rename a ${ fieldType } field` );
 			// See the .frm-show-hover opacity note on the field-row "more options" toggle above.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-				.invoke( 'css', 'opacity', 1 )
+				.revealFieldActions()
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 				.first()
 				.should( 'be.visible' )

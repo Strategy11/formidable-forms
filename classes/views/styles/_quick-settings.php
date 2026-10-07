@@ -127,9 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
-	<label
-		for="frm_style_qsettings_field_margin"
-		class="frm-style-item-heading"><?php esc_html_e( 'Vertical Spacing', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_margin', 'frm_style_qsettings_field_margin-value', __( 'Vertical Spacing', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -148,9 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label
-		for="frm_style_qsettings_field_pad"
-		class="frm-style-item-heading"><?php esc_html_e( 'Input Field Padding', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_pad', 'frm_style_qsettings_field_pad-value', __( 'Input Field Padding', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -168,38 +164,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 <hr class="frm12"/>
+<?php if ( ! FrmStylesHelper::is_advanced_settings() ) : ?>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_base_font_size"
-		class="frm-style-item-heading"><?php esc_html_e( 'Base Font Size', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'base_font_size', 'frm_base_font_size-value', __( 'Base Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
-	if ( ! FrmStylesHelper::is_advanced_settings() ) {
-		// This is displayed only in "Quick Settings" and has a default value of "false." It is updated via JavaScript when the Base Font Size slider is adjusted.
-		// When set to false, the sizes in "Advanced Settings" will not be modified.
-		?>
-		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'use_base_font_size' ) ); ?>" value="false" />
-	<?php } ?>
+	// Updated via JavaScript when Base Font Size changes. Otherwise, preserve the font sizes in Advanced Settings.
+	?>
+	<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'use_base_font_size' ) ); ?>" value="false" />
 	<?php
 	new FrmSliderStyleComponent(
 		$frm_style->get_field_name( 'base_font_size' ),
 		$style->post_content['base_font_size'],
 		array(
-			'id'          => 'frm_base_font_size',
-			'max_value'   => 100,
-			'not_show_in' => 'advanced-settings',
-			'classname'   => 'frm-base-font-size',
+			'id'        => 'frm_base_font_size',
+			'max_value' => 100,
+			'classname' => 'frm-base-font-size',
 		)
 	);
 	?>
 </div>
 
+<?php endif; ?>
 <hr class="frm12"/>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_field_shape"
+	<label
+		for="frm-field-shape-regular"
 		class="frm-style-item-heading"><?php esc_html_e( 'Field Shape', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field frm-sm-z-index">
@@ -207,17 +199,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	new FrmFieldShapeStyleComponent(
 		$frm_style->get_field_name( 'field_shape_type' ),
 		$style->post_content['field_shape_type'],
-		array(
-			'id' => 'frm_field_shape',
-		)
+		array()
 	);
 	?>
 </div>
 
 <div class="frm5 frm_form_field frm_hidden" data-frm-element="field-shape-corner-radius">
-	<label
-		for="frm_style_qsettings_border_radius"
-		class="frm-style-item-heading"><?php esc_html_e( 'Corner Radius', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'border_radius', 'frm_style_qsettings_border_radius-value', __( 'Corner Radius', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field frm_hidden frm-md-z-index" data-frm-element="field-shape-corner-radius">
 	<?php

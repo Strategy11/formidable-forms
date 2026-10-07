@@ -105,6 +105,35 @@ foreach ( $form_fields as $field ) {
 			<?php esc_html_e( 'Check denylist data to validate for spam', 'formidable' ); ?>
 		</td>
 	</tr>
+	<tr>
+		<td>
+			<?php
+			/**
+			 * Filters the spam retention period shown in the form settings summary.
+			 *
+			 * @since x.x
+			 *
+			 * @param int $retention_days Days before automatic deletion. 0 disables cleanup.
+			 */
+			$retention_days = absint( apply_filters( 'frm_spam_retention_summary', 0 ) );
+			FrmHtmlHelper::show_readonly_setting_icon( FrmAppHelper::pro_is_installed() && $retention_days > 0 );
+			esc_html_e( 'Delete spam entries automatically', 'formidable' );
+
+			if ( FrmAppHelper::pro_is_installed() && $retention_days > 0 ) {
+				/* translators: %d: Number of days before spam entries are deleted. */
+				printf( ' ' . esc_html( _n( '(after %d day)', '(after %d days)', $retention_days, 'formidable' ) ), absint( $retention_days ) );
+			}
+
+			if ( ! FrmAppHelper::pro_is_installed() ) {
+				?>
+				<a href="#" class="frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Automatic spam cleanup', 'formidable' ); ?>" data-medium="spam-cleanup">
+					<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
+				</a>
+				<?php
+			}
+			?>
+		</td>
+	</tr>
 </table>
 
 <p>

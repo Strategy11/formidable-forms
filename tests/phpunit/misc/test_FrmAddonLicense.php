@@ -7,7 +7,11 @@
  * answers through pre_http_request.
  *
  * @group addons
+ *
+ * @covers FrmAddon
  */
+#[\PHPUnit\Framework\Attributes\Group( 'addons' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAddon::class )]
 class test_FrmAddonLicense extends FrmUnitTest {
 
 	/**
@@ -169,9 +173,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		return $result;
 	}
 
-	/**
-	 * @covers FrmAddon::send_mothership_request
-	 */
 	public function test_send_mothership_request_posts_license_details_to_store() {
 		$this->get_addon()->send_mothership_request( 'activate_license' );
 
@@ -193,9 +194,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmAddon::send_mothership_request
-	 */
 	public function test_send_mothership_request_uses_item_name_without_numeric_download_id() {
 		$addon              = $this->get_addon();
 		$addon->download_id = null;
@@ -209,13 +207,14 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::send_mothership_request
+	 * @see FrmAddon::send_mothership_request
 	 *
 	 * @dataProvider mothership_response_provider
 	 *
 	 * @param array|WP_Error $response The store response.
 	 * @param array|string   $expected The decoded result, or text the error message contains.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'mothership_response_provider' )]
 	public function test_send_mothership_request_decodes_response( $response, $expected ) {
 		$this->store_response = $response;
 
@@ -258,7 +257,7 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	/**
 	 * The rate limit checks read the response code from here.
 	 *
-	 * @covers FrmAddon::send_mothership_request
+	 * @see FrmAddon::send_mothership_request
 	 */
 	public function test_send_mothership_request_records_response_code() {
 		$this->store_response = self::json_response( array( 'error' => 'Too many requests' ), 429 );
@@ -270,9 +269,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertSame( 429, $save_status['response_code'], 'The response code should be recorded.' );
 	}
 
-	/**
-	 * @covers FrmAddon::get_license_status
-	 */
 	public function test_get_license_status_without_license_reports_missing_without_request() {
 		$response = $this->run_private_method( array( $this->get_addon( '' ), 'get_license_status' ) );
 
@@ -282,13 +278,14 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::get_license_status
+	 * @see FrmAddon::get_license_status
 	 *
 	 * @dataProvider reported_status_provider
 	 *
 	 * @param array  $response The store response.
 	 * @param string $status   The status the check should report.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'reported_status_provider' )]
 	public function test_get_license_status_reports_status_from_store( $response, $status ) {
 		$this->store_response = $response;
 
@@ -315,14 +312,15 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::get_license_status
-	 * @covers FrmAddon::update_last_checked
+	 * @see FrmAddon::get_license_status
+	 * @see FrmAddon::update_last_checked
 	 *
 	 * @dataProvider last_check_provider
 	 *
 	 * @param array|WP_Error $response The store response.
 	 * @param bool           $is_valid Whether the check should be recorded as valid.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'last_check_provider' )]
 	public function test_get_license_status_records_the_check( $response, $is_valid ) {
 		$this->store_response = $response;
 		$addon                = $this->get_addon();
@@ -348,9 +346,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmAddon::get_license_status
-	 */
 	public function test_get_license_status_valid_saves_status() {
 		$addon = $this->get_addon();
 
@@ -362,13 +357,14 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::get_license_status
+	 * @see FrmAddon::get_license_status
 	 *
 	 * @dataProvider unreachable_store_provider
 	 *
 	 * @param array|WP_Error $response The store response.
 	 * @param string         $message  Text the status should contain.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'unreachable_store_provider' )]
 	public function test_get_license_status_unreachable_store_reports_the_error( $response, $message ) {
 		$this->store_response = $response;
 
@@ -390,12 +386,13 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::is_license_revoked
+	 * @see FrmAddon::is_license_revoked
 	 *
 	 * @dataProvider revoked_status_provider
 	 *
 	 * @param string $status The status the store reports.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'revoked_status_provider' )]
 	public function test_is_license_revoked_clears_license_the_store_rejects( $status ) {
 		$this->store_response = self::json_response( array( 'error' => $status ) );
 		$addon                = $this->get_addon();
@@ -421,12 +418,13 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::is_license_revoked
+	 * @see FrmAddon::is_license_revoked
 	 *
 	 * @dataProvider kept_license_provider
 	 *
 	 * @param array|WP_Error $response The store response.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'kept_license_provider' )]
 	public function test_is_license_revoked_keeps_license( $response ) {
 		$this->store_response = $response;
 		$addon                = $this->get_addon();
@@ -460,13 +458,14 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	 * A check that fails still counts, so a site does not ask the store again on
 	 * every page load while the store is unreachable.
 	 *
-	 * @covers FrmAddon::is_license_revoked
-	 * @covers FrmAddon::checked_recently
+	 * @see FrmAddon::is_license_revoked
+	 * @see FrmAddon::checked_recently
 	 *
 	 * @dataProvider kept_license_provider
 	 *
 	 * @param array|WP_Error $response The store response.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'kept_license_provider' )]
 	public function test_is_license_revoked_checks_at_most_once_per_window( $response ) {
 		$this->store_response = $response;
 		$addon                = $this->get_addon();
@@ -477,9 +476,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertCount( 1, $this->store_requests, 'A second check right after the first should not reach the store.' );
 	}
 
-	/**
-	 * @covers FrmAddon::is_license_revoked
-	 */
 	public function test_is_license_revoked_skips_defined_license() {
 		$this->store_response = self::json_response( array( 'error' => 'revoked' ) );
 		$addon                = $this->get_addon();
@@ -491,9 +487,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertSame( 'SAVED-LICENSE-KEY', get_option( $addon->option_name . 'key' ), 'The license should be kept.' );
 	}
 
-	/**
-	 * @covers FrmAddon::is_license_revoked
-	 */
 	public function test_is_license_revoked_skips_when_checked_this_week() {
 		$addon = $this->get_addon();
 		$this->run_private_method( array( $addon, 'update_last_checked' ), array( true ) );
@@ -503,9 +496,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertCount( 0, $this->store_requests, 'A license checked this week should not be checked again.' );
 	}
 
-	/**
-	 * @covers FrmAddon::is_license_revoked
-	 */
 	public function test_is_license_revoked_skips_while_another_check_runs() {
 		$addon = $this->get_addon();
 		$this->run_private_method( array( $addon, 'set_running' ) );
@@ -515,9 +505,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertCount( 0, $this->store_requests, 'Only one check should run at a time.' );
 	}
 
-	/**
-	 * @covers FrmAddon::is_license_revoked
-	 */
 	public function test_is_license_revoked_skips_license_being_saved() {
 		$_POST['license'] = 'NEW-LICENSE-KEY';
 
@@ -526,19 +513,11 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertCount( 0, $this->store_requests, 'A license being saved should not be checked for revocation.' );
 	}
 
-	/**
-	 * @covers FrmAddon::is_license_revoked
-	 */
 	public function test_is_license_revoked_skips_without_license() {
 		$this->run_private_method( array( $this->get_addon( '' ), 'is_license_revoked' ) );
 		$this->assertCount( 0, $this->store_requests, 'Nothing should be checked without a license.' );
 	}
 
-	/**
-	 * @covers FrmAddon::activate_license_for_plugin
-	 * @covers FrmAddon::activate_license
-	 * @covers FrmAddon::maybe_set_active
-	 */
 	public function test_activate_license_valid_saves_license() {
 		$addon = $this->get_addon( '' );
 		$addon->expects( $this->once() )->method( 'set_active' )->with( 'valid' );
@@ -562,8 +541,8 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	/**
 	 * Pro adds the license type to the response through this method.
 	 *
-	 * @covers FrmAddon::activate_license
-	 * @covers FrmAddon::add_activation_response_data
+	 * @see FrmAddon::activate_license
+	 * @see FrmAddon::add_activation_response_data
 	 */
 	public function test_activate_license_valid_passes_response_through_activation_data() {
 		$addon = $this->get_addon( '', array( 'add_activation_response_data' ) );
@@ -583,14 +562,15 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::activate_license
-	 * @covers FrmAddon::maybe_set_active
+	 * @see FrmAddon::activate_license
+	 * @see FrmAddon::maybe_set_active
 	 *
 	 * @dataProvider rejected_license_provider
 	 *
 	 * @param array  $response The store response.
 	 * @param string $message  The message shown for the rejection.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'rejected_license_provider' )]
 	public function test_activate_license_rejected_discards_license( $response, $message ) {
 		$this->store_response = $response;
 		$addon                = $this->get_addon( 'OLD-LICENSE-KEY', array( 'add_activation_response_data' ) );
@@ -625,9 +605,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmAddon::activate_license
-	 */
 	public function test_activate_license_sanitizes_store_message() {
 		$this->store_response = self::json_response( array( 'error' => 'Renew <a href="https://formidableforms.com/">here</a><script>alert(1)</script>' ) );
 
@@ -638,13 +615,14 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::activate_license
+	 * @see FrmAddon::activate_license
 	 *
 	 * @dataProvider unreachable_store_provider
 	 *
 	 * @param array|WP_Error $response The store response.
 	 * @param string         $message  Text the message should contain.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'unreachable_store_provider' )]
 	public function test_activate_license_unreachable_store_does_not_activate( $response, $message ) {
 		$this->store_response = $response;
 		$addon                = $this->get_addon( '', array( 'add_activation_response_data' ) );
@@ -661,8 +639,8 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	/**
 	 * Retrying the same key within two minutes is refused before anything is sent.
 	 *
-	 * @covers FrmAddon::activate_license
-	 * @covers FrmAddon::die_if_not_allowed
+	 * @see FrmAddon::activate_license
+	 * @see FrmAddon::die_if_not_allowed
 	 */
 	public function test_activate_license_retry_within_two_minutes_is_refused() {
 		$this->store_response = self::json_response( array( 'license' => 'invalid' ) );
@@ -681,9 +659,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertCount( 1, $this->store_requests, 'The retry should not reach the store.' );
 	}
 
-	/**
-	 * @covers FrmAddon::maybe_set_active
-	 */
 	public function test_maybe_set_active_valid_activates_license() {
 		$addon = $this->get_addon();
 		$addon->expects( $this->once() )->method( 'set_active' )->with( 'valid' );
@@ -698,7 +673,7 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	/**
 	 * The last check is kept, so a rejected license is not sent again right away.
 	 *
-	 * @covers FrmAddon::maybe_set_active
+	 * @see FrmAddon::maybe_set_active
 	 */
 	public function test_maybe_set_active_invalid_discards_license_and_keeps_last_check() {
 		$addon = $this->get_addon();
@@ -715,9 +690,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertNotEmpty( is_multisite() ? get_site_option( $last_check_key ) : get_option( $last_check_key ), 'The last check should be kept.' );
 	}
 
-	/**
-	 * @covers FrmAddon::activate_defined_license
-	 */
 	public function test_activate_defined_license_without_defined_license_sends_nothing() {
 		$addon = $this->get_addon( '' );
 		$addon->method( 'get_defined_license' )->willReturn( false );
@@ -726,9 +698,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertCount( 0, $this->store_requests, 'Nothing should be sent without a defined license.' );
 	}
 
-	/**
-	 * @covers FrmAddon::activate_defined_license
-	 */
 	public function test_activate_defined_license_already_active_sends_nothing() {
 		$addon = $this->get_addon( '' );
 		$addon->method( 'get_defined_license' )->willReturn( 'DEFINED-LICENSE-KEY' );
@@ -738,9 +707,6 @@ class test_FrmAddonLicense extends FrmUnitTest {
 		$this->assertCount( 0, $this->store_requests, 'An active license should not be activated again.' );
 	}
 
-	/**
-	 * @covers FrmAddon::activate_defined_license
-	 */
 	public function test_activate_defined_license_valid_activates_license() {
 		$addon = $this->get_addon( '' );
 		$addon->method( 'get_defined_license' )->willReturn( 'DEFINED-LICENSE-KEY' );
@@ -753,12 +719,13 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::activate_defined_license
+	 * @see FrmAddon::activate_defined_license
 	 *
-	 * @dataProvider rejected_license_provider
+	 * @dataProvider rejected_defined_license_provider
 	 *
 	 * @param array $response The store response.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'rejected_defined_license_provider' )]
 	public function test_activate_defined_license_rejected_is_not_used( $response ) {
 		$this->store_response = $response;
 		$addon                = $this->get_addon( '' );
@@ -769,18 +736,34 @@ class test_FrmAddonLicense extends FrmUnitTest {
 	}
 
 	/**
+	 * Rejected responses without the status argument used by other tests.
+	 *
+	 * @return array
+	 */
+	public static function rejected_defined_license_provider(): array {
+		$cases = array();
+
+		foreach ( self::rejected_license_provider() as $name => $case ) {
+			$cases[ $name ] = array( $case[0] );
+		}
+
+		return $cases;
+	}
+
+	/**
 	 * Every add-on runs activate_defined_license while it loads, on every page, with
 	 * no license set yet. Whatever the first attempt returned, the next page loads
 	 * must neither ask the store again for a day nor end the request.
 	 *
-	 * @covers FrmAddon::activate_defined_license
-	 * @covers FrmAddon::activate_license
-	 * @covers FrmAddon::checked_recently
+	 * @see FrmAddon::activate_defined_license
+	 * @see FrmAddon::activate_license
+	 * @see FrmAddon::checked_recently
 	 *
 	 * @dataProvider defined_license_attempt_provider
 	 *
 	 * @param array|WP_Error $response The store response.
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'defined_license_attempt_provider' )]
 	public function test_activate_defined_license_is_attempted_once_per_day( $response ) {
 		$this->store_response = $response;
 

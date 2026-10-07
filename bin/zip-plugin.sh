@@ -49,6 +49,7 @@ zip -r $zipname $destination \
 	-x "*/.windsurf/*" \
 	-x "*/.devin/*" \
 	-x "*/.vscode/*" \
+	-x "*/.achecker.yml" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
@@ -146,8 +147,7 @@ zip -r $zipname $destination \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
-	-x "formidable-pro/resources/*" \
-	-x "formidable/lib/vendor/*"
+	-x "formidable-pro/resources/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

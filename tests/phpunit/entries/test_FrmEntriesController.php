@@ -2,14 +2,13 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntriesController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntriesController::class )]
 class test_FrmEntriesController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmEntriesController::delete_entry_after_save
-	 * @covers FrmEntriesController::_delete_entry
-	 * @covers FrmEntriesController::unlink_post
-	 */
 	public function test_delete_entry_after_save() {
 		$save_form = $this->create_form();
 		$this->assertEmpty( $save_form->options['no_save'] );
@@ -68,12 +67,59 @@ class test_FrmEntriesController extends FrmUnitTest {
 		return $new_post->ID;
 	}
 
-	/**
-	 * @covers FrmEntriesController::hidden_columns
-	 */
 	public function test_hidden_columns() {
 		// Confirm that a string option value doesn't trigger a fatal error.
 		$columns = FrmEntriesController::hidden_columns( '' );
 		$this->assertIsArray( $columns );
+	}
+	/**
+	 * Only the Spam tab replaces entry status with the reason column.
+	 */
+	public function test_spam_tab_columns() {
+		FrmAppHelper::set_current_screen_and_hook_suffix();
+		$original = $_GET;
+
+		try {
+			$_GET    = array();
+			$columns = FrmEntriesController::manage_columns( array() );
+			$this->assertArrayHasKey( '0_is_draft', $columns );
+			$this->assertArrayNotHasKey( '0_spam_reason', $columns );
+			$_GET['entry_status'] = 'spam';
+			$columns              = FrmEntriesController::manage_columns( array() );
+			$this->assertArrayHasKey( '0_spam_reason', $columns );
+			$this->assertArrayNotHasKey( '0_is_draft', $columns );
+		} finally {
+			$_GET = $original;
+		}
+	}
+	/**
+	 * Stored source keys are presented as readable spam reasons in the sidebar.
+	 */
+	public function test_spam_reason_in_sidebar() {
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		wp_get_current_user()->add_cap( 'frm_edit_entries' );
+		$form_id  = $this->factory->form->create();
+		$entry_id = $this->factory->entry->create(
+			array(
+				'form_id'     => $form_id,
+				'is_draft'    => 4,
+				'description' => array(
+					'spam_source' => 'denylist',
+					'test_sample' => true,
+				),
+			)
+		);
+		ob_start();
+
+		try {
+			FrmEntriesController::entry_sidebar( FrmEntry::getOne( $entry_id ) );
+			$html = ob_get_contents();
+		} finally {
+			ob_end_clean();
+		}
+		$this->assertStringContainsString( 'Spam reason', $html );
+		$this->assertStringContainsString( 'Denylist', $html );
+		$this->assertStringNotContainsString( 'Spam_source', $html );
+		$this->assertStringNotContainsString( 'Test_sample', $html );
 	}
 }

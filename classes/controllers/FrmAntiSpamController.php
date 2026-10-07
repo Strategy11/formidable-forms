@@ -21,14 +21,29 @@ class FrmAntiSpamController {
 	 * @return bool|string Return spam message if is spam or `false` if is not spam.
 	 */
 	public static function is_spam( $values ) {
+		$detected = self::detect_spam( $values );
+		return $detected ? $detected['message'] : false;
+	}
+
+	/**
+	 * Checks spam with WordPress disallowed words, the denylist, StopForumSpam and WordPress spam comments,
+	 * and returns which check flagged it.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return array{source: string, message: string}|false
+	 */
+	public static function detect_spam( $values ) {
 		$methods = array(
-			'contains_wp_disallowed_words',
-			'is_denylist_spam',
-			'is_stopforumspam_spam',
-			'is_wp_comment_spam',
+			'wp_disallowed_words' => 'contains_wp_disallowed_words',
+			'denylist'            => 'is_denylist_spam',
+			'stopforumspam'       => 'is_stopforumspam_spam',
+			'wp_comments'         => 'is_wp_comment_spam',
 		);
 
-		foreach ( $methods as $method ) {
+		foreach ( $methods as $source => $method ) {
 			if ( ! is_callable( array( self::class, $method ) ) ) {
 				continue;
 			}
@@ -36,7 +51,10 @@ class FrmAntiSpamController {
 			$is_spam = call_user_func( array( self::class, $method ), $values );
 
 			if ( $is_spam ) {
-				return $is_spam;
+				return array(
+					'source'  => $source,
+					'message' => is_string( $is_spam ) ? $is_spam : self::get_default_spam_message(),
+				);
 			}
 		}
 

@@ -127,6 +127,14 @@ class FrmEntriesController {
 			case 'destroy':
 				return self::$action();
 
+			case 'mark_spam':
+				FrmSpamEntriesController::mark_spam();
+				return null;
+
+			case 'not_spam':
+				FrmSpamEntriesController::not_spam();
+				return null;
+
 			default:
 				do_action( 'frm_entry_action_route', $action );
 
@@ -136,7 +144,7 @@ class FrmEntriesController {
 
 				self::display_list();
 				return null;
-		}
+		}//end switch
 	}
 
 	/**
@@ -181,7 +189,12 @@ class FrmEntriesController {
 			$columns[ $form_id . '_user_id' ] = esc_html__( 'Created By', 'formidable' );
 		}
 
-		$columns[ $form_id . '_is_draft' ]   = esc_html__( 'Entry Status', 'formidable' );
+		if ( FrmSpamEntriesController::is_spam_tab() ) {
+			$columns[ $form_id . '_spam_reason' ] = esc_html__( 'Spam reason', 'formidable' );
+		} else {
+			$columns[ $form_id . '_is_draft' ] = esc_html__( 'Entry Status', 'formidable' );
+		}
+
 		$columns[ $form_id . '_created_at' ] = esc_html__( 'Entry creation date', 'formidable' );
 		$columns[ $form_id . '_updated_at' ] = esc_html__( 'Entry update date', 'formidable' );
 		self::maybe_add_ip_col( $form_id, $columns );
@@ -189,7 +202,7 @@ class FrmEntriesController {
 		$frm_vars['cols'] = $columns;
 		$action           = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ), true ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy', 'mark_spam', 'not_spam' ), true ) ) {
 			add_screen_option(
 				'per_page',
 				array(
@@ -589,6 +602,10 @@ class FrmEntriesController {
 		$i            = $atts['i'];
 
 		foreach ( $cols as $col_key => $col ) {
+			if ( $col_key === $atts['form_id'] . '_spam_reason' ) {
+				continue;
+			}
+
 			if ( $i <= $atts['max_columns'] ) {
 				break;
 			}
@@ -669,11 +686,14 @@ class FrmEntriesController {
 	/**
 	 * Back End CRUD.
 	 *
-	 * @param int $id
+	 * @since x.x Added the $message param.
+	 *
+	 * @param int    $id      The entry ID. The id param in the URL is used when empty.
+	 * @param string $message A success message shown above the entry.
 	 *
 	 * @return void
 	 */
-	public static function show( $id = 0 ) {
+	public static function show( $id = 0, $message = '' ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
 
 		if ( ! $id ) {

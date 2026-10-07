@@ -1,3 +1,6 @@
+import ibmAccessibilityBaseline from '../fixtures/ibm-a11y-baseline.json';
+import { getIbmAccessibilityFailures } from './ibm-accessibility';
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -141,16 +144,20 @@ Cypress.Commands.add( 'ensureContactUsFormExists', () => {
 			cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 			cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
 				.first()
-				// Wait for the template card itself to be visible before triggering the hover -
-				// the templates grid populates async, and triggering on a not-yet-rendered card
-				// was the actual reason force was needed here, not the hover-only child button.
+				// Wait for the template card itself to be visible first - the templates grid
+				// populates async. The button row is `display: none` until a real CSS `:hover`,
+				// which trigger( 'mouseover' ) can't produce, so reveal it the way the hover
+				// would (same as FormTemplates.cy.js), then click normally.
 				.should( 'be.visible' )
-				.trigger( 'mouseover' )
+				.find( '.frm-form-templates-item-buttons' )
+				.invoke( 'css', 'display', 'flex' )
 				.find( '.frm-form-templates-use-template-button' )
 				.should( 'contain', 'Use Template' )
 				.click();
 
-			cy.get( "svg[aria-label='Close']", { timeout: 7000 } ).should( 'be.visible' ).click();
+			// A successful install opens the new form in the builder, same as FormTemplates.cy.js.
+			cy.location( 'search', { timeout: 10000 } ).should( 'include', 'frm_action=edit' );
+			cy.get( '#frm_form_editor_container' ).should( 'be.visible' );
 
 			restoreFromTrash();
 		} );
@@ -182,6 +189,21 @@ Cypress.Commands.add( 'deleteForm', () => {
 			}
 		} );
 	} );
+} );
+
+/**
+ * Reveal a builder field's action icons (Move, More Options) before clicking one.
+ *
+ * Until the row is hovered, selected or focused, the icons are transparent, positioned out of the
+ * label row, and `pointer-events: none` (see
+ * resources/scss/admin/components/builder/_ui-state-defaults.scss). Cypress can't produce a real
+ * `:hover`, so focus the More Options toggle instead. That applies the same reveal through the
+ * keyboard `:focus-within` rule. Forcing the styles inline is not enough: the row layout still
+ * changes on mousedown, when the toggle takes focus, and the click then lands on the container.
+ */
+Cypress.Commands.add( 'revealFieldActions', { prevSubject: 'element' }, subject => {
+	cy.wrap( subject ).find( '.frm-dropdown-toggle' ).focus();
+	return cy.wrap( subject );
 } );
 
 Cypress.Commands.add( 'openForm', () => {
@@ -226,27 +248,21 @@ Cypress.Commands.add( 'emptyTrash', () => {
 	} );
 } );
 
-// Runs the IBM Equal Access scan alongside the existing cypress-axe checks. Doesn't
-// fail the build yet (assertCompliance(false)) since the current admin/preview
-// markup hasn't been triaged against this rule set - see formidable-forms#3356.
+// Scan every IBM rule. Only reviewed allowances for this page may pass.
 Cypress.Commands.add( 'checkIbmAccessibility', label => {
-	cy.getCompliance( label ).then( report => {
-		const violations = report.results.filter( result => result.level !== 'pass' );
+	// IBM's reporter requires a unique scan label on retries.
+	return cy.getCompliance( `${ label }-retry-${ Cypress.currentRetry }` ).then( report => {
+		const failures = getIbmAccessibilityFailures( label, report.results, ibmAccessibilityBaseline );
+		const findings = report.results.filter( result => result.level !== 'pass' );
+		const summary = failures.map( ( { ruleId, message, path } ) =>
+			`${ ruleId }: ${ message } - ${ path?.dom ?? 'Unknown DOM path' }`
+		).join( '\n' );
 
-		if ( ! violations.length ) {
-			return report;
-		}
-
-		// Chain the logging tasks and resolve back to `report` at the end, rather than
-		// invoking cy commands and then returning `report` synchronously - Cypress
-		// treats mixing queued async commands with a sync return in the same callback
-		// as an error, which aborted the scan and (since retries are enabled) caused a
-		// same-labeled retry to collide with this scan's already-recorded label.
-		cy.task(
-			'log',
-			`${ violations.length } IBM Equal Access violation${ violations.length === 1 ? '' : 's' } detected (${ label })`
-		);
-
-		return cy.task( 'table', violations.map( ( { ruleId, level, message } ) => ( { ruleId, level, message } ) ) ).then( () => report );
-	} ).assertCompliance( false );
+		// Persist all findings before asserting, including known and potential violations.
+		return cy.writeFile( `tests/cypress/reports/ibm-a11y/${ label }.json`, findings, { log: false } )
+			.then( () => {
+				expect( failures, `IBM accessibility failures (${ label }):\n${ summary }` ).to.have.lengthOf( 0 );
+				return report;
+			} );
+	} );
 } );

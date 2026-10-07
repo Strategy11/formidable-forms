@@ -93,7 +93,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 *
 	 * @return void
 	 */
-	public static function cancel_subscription() { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+	public static function cancel_subscription() {
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_edit_entries' );
 
@@ -105,55 +105,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$sub     = $frm_sub->get_one( $sub_id );
 
 			if ( $sub ) {
-				$reason   = '';
-				$debug_id = '';
-
-				switch ( $sub->paysys ) {
-					case 'stripe':
-						$canceled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $sub->sub_id );
-						break;
-					case 'square':
-						$canceled = FrmSquareLiteConnectHelper::cancel_subscription( $sub->sub_id );
-						break;
-					case 'paypal':
-						$response = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
-
-						// Check for structured error response with message and debug_id (array or object)
-						$reason   = '';
-						$debug_id = '';
-						$canceled = false !== $response;
-
-						if ( is_array( $response ) || is_object( $response ) ) {
-							// Extract error details without type checks to avoid Mago type narrowing
-							$response_array = is_array( $response ) ? $response : (array) $response;
-							$reason         = $response_array['message'] ?? '';
-							// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
-							$debug_id = $response_array['debug_id'] ?? $response_array['debugId'] ?? '';
-
-							// If there's an error message or debug_id, the cancellation failed
-							if ( $reason || $debug_id ) {
-								$canceled = false;
-							}
-						} elseif ( false === $response ) {
-							// Response is false, get error from static properties
-							$reason   = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
-							$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
-							$canceled = false;
-						}
-						break;
-					default:
-						$canceled = false;
-						break;
-				}//end switch
+				$result   = self::cancel_subscription_for_gateway( $sub );
+				$canceled = $result['canceled'];
+				$reason   = $result['reason'];
+				$debug_id = $result['debug_id'];
 
 				if ( $canceled ) {
-					self::change_subscription_status(
-						array(
-							'status' => 'future_cancel',
-							'sub'    => $sub,
-						)
-					);
-
 					$message = __( 'Canceled', 'formidable' );
 					// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 				} else {
@@ -168,7 +125,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 							$message .= ' (' . $reason . ')';
 						}
 					}
-				}//end if
+				}
 
 				if ( $debug_id ) {
 					$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
@@ -186,6 +143,82 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 				$canceled ? 'frm_updated_message' : 'frm_error_style',
 				wp_kses_post( $message )
 			)
+		);
+	}
+
+	/**
+	 * Dispatch a cancelation to the subscription's original gateway, and mark
+	 * the subscription future_cancel on success.
+	 *
+	 * Extracted from cancel_subscription() so the
+	 * formidable-forms/cancel-subscription ability can reuse the same gateway
+	 * dispatch without duplicating it or going through the AJAX/wp_die()
+	 * request flow.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $subscription The subscription to cancel.
+	 *
+	 * @return array{canceled: bool, reason: string, debug_id: string} canceled is whether the gateway
+	 *               confirmed the cancelation. reason is a gateway-provided failure reason, empty when
+	 *               canceled is true or none was given. debug_id is a gateway debug id, when given.
+	 */
+	public static function cancel_subscription_for_gateway( $subscription ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+		$canceled = false;
+		$reason   = '';
+		$debug_id = '';
+
+		switch ( $subscription->paysys ) {
+			case 'stripe':
+				$canceled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $subscription->sub_id );
+				break;
+			case 'square':
+				$canceled = FrmSquareLiteConnectHelper::cancel_subscription( $subscription->sub_id );
+				break;
+			case 'paypal':
+				$response = FrmPayPalLiteConnectHelper::cancel_subscription( $subscription->sub_id );
+
+				// Check for structured error response with message and debug_id (array or object)
+				$reason   = '';
+				$debug_id = '';
+				$canceled = false !== $response;
+
+				if ( is_array( $response ) || is_object( $response ) ) {
+					// Extract error details without type checks to avoid Mago type narrowing
+					$response_array = is_array( $response ) ? $response : (array) $response;
+					$reason         = $response_array['message'] ?? '';
+					// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
+					$debug_id = $response_array['debug_id'] ?? $response_array['debugId'] ?? '';
+
+					// If there's an error message or debug_id, the cancellation failed
+					if ( $reason || $debug_id ) {
+						$canceled = false;
+					}
+				} elseif ( false === $response ) {
+					// Response is false, get error from static properties
+					$reason   = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+					$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
+					$canceled = false;
+				}
+				break;
+			default:
+				$canceled = false;
+				break;
+		}//end switch
+
+		if ( $canceled ) {
+			self::change_subscription_status(
+				array(
+					'status' => 'future_cancel',
+					'sub'    => $subscription,
+				)
+			);
+		}
+
+		return array(
+			'canceled' => (bool) $canceled,
+			'reason'   => (string) $reason,
+			'debug_id' => (string) $debug_id,
 		);
 	}
 

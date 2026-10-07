@@ -4,10 +4,11 @@
  *
  * @package Formidable
  *
- * @var stdClass $form   Form object.
- * @var stdClass $entry  Entry object.
- * @var array    $fields Field objects for the entry.
- * @var int      $id     Entry ID.
+ * @var stdClass $form    Form object.
+ * @var stdClass $entry   Entry object.
+ * @var array    $fields  Field objects for the entry.
+ * @var int      $id      Entry ID.
+ * @var string   $message A success message.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,6 +32,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div id="post-body-content" class="frm-fields">
 			<?php
+			require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
+
 			/**
 			 * Fires after the `#post-body-content` element on the entry show page.
 			 *

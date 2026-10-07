@@ -974,22 +974,29 @@ class FrmForm {
 	}
 
 	/**
-	 * Get only the id, name and key of published forms, for lightweight lists like the form switcher.
+	 * Get the id, name and key of published forms, with an optional description, for lightweight lists.
 	 * This skips loading and unserializing the options column for every form.
 	 *
 	 * @since x.x
 	 *
 	 * @param array $query Additional where conditions.
+	 * @param array $args  Query options, including include_description to also select the description.
 	 *
-	 * @return array Array of objects with id, name and form_key properties.
+	 * @return array Array of objects with id, name, form_key and optionally description properties.
 	 */
-	public static function get_published_form_names( $query = array() ) {
+	public static function get_published_form_names( $query = array(), $args = array() ) {
 		self::add_published_forms_where( $query, 'exclude' );
+
+		$columns = 'id, name, form_key';
+
+		if ( ! empty( $args['include_description'] ) ) {
+			$columns .= ', description';
+		}
 
 		$results = FrmDb::get_results(
 			'frm_forms',
 			$query,
-			'id, name, form_key',
+			$columns,
 			array(
 				'order_by' => 'name',
 			)

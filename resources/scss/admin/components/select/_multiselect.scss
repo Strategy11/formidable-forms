@@ -42,3 +42,18 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
+
+/*
+ * bootstrap-multiselect swaps the native <select multiple> for a toggle button on DOM ready, from a
+ * footer script. Until then the browser paints a tall listbox that collapses once the script runs.
+ * Give the native select the toggle's closed footprint, with its options hidden, so nothing jumps.
+ */
+.wp-admin .frm_wrap select.frm_multiselect[multiple] {
+	height: var(--h-md);
+	min-height: 0;
+	overflow: hidden;
+
+	option {
+		visibility: hidden;
+	}
+}
