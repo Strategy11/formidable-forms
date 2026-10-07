@@ -214,7 +214,7 @@ class FrmFieldValue {
 			return __( 'The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value().', 'formidable' );
 		}
 
-		return $this->displayed_value;
+		return FrmSpamEntriesHelper::is_spam( $this->entry ) ? FrmSpamEntriesHelper::escape_value( $this->displayed_value ) : $this->displayed_value;
 	}
 
 	/**

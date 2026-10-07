@@ -1201,6 +1201,11 @@ class FrmFieldsHelper {
 			return;
 		}
 
+		if ( isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ) {
+			$value = str_replace( '[', '&#91;', esc_html( $value ) );
+			return;
+		}
+
 		$atts['value']   = $value;
 		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
 
@@ -1400,7 +1405,9 @@ class FrmFieldsHelper {
 		$value = apply_filters( 'frm_get_display_value', $value, $field, $atts );
 		$value = self::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 
-		return apply_filters( 'frm_display_value', $value, $field, $atts );
+		$value = apply_filters( 'frm_display_value', $value, $field, $atts );
+
+		return isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ? FrmSpamEntriesHelper::escape_value( $value ) : $value;
 	}
 
 	/**

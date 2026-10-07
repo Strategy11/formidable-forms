@@ -220,7 +220,8 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function prepare_display_value( $entry, $field, $atts ) {
-		$field_value = $entry->metas[ $field->id ] ?? false;
+		$atts['entry'] = $entry;
+		$field_value   = $entry->metas[ $field->id ] ?? false;
 
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$empty = ! $field_value;
@@ -265,6 +266,7 @@ class FrmEntriesHelper {
 		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
+			$atts['entry']   = $child_entry;
 			$atts['item_id'] = $child_entry->id;
 			$atts['post_id'] = $child_entry->post_id;
 
@@ -367,7 +369,9 @@ class FrmEntriesHelper {
 			$value = FrmAppHelper::kses( $value, 'all' );
 		}
 
-		return apply_filters( 'frm_display_value', $value, $field, $atts );
+		$value = apply_filters( 'frm_display_value', $value, $field, $atts );
+
+		return isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ? FrmSpamEntriesHelper::escape_value( $value ) : $value;
 	}
 
 	/**

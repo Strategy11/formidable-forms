@@ -127,7 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="misc-pub-section">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_browser_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Browser/OS:', 'formidable' ); ?>
-				<b><?php echo wp_kses_post( $browser ); ?></b>
+				<b><?php echo esc_html( $browser ); ?></b>
 			</div>
 		<?php } ?>
 
@@ -135,7 +135,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="misc-pub-section frm_force_wrap">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
-				<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
+				<?php echo esc_html( $data['referrer'] ); ?>
 			</div>
 		<?php } ?>
 
@@ -160,7 +160,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="misc-pub-section">
 				<?php FrmAppHelper::icon_by_class( $icon, array( 'aria-hidden' => 'true' ) ); ?>
 				<?php echo esc_html( $label ); ?>:
-				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
+				<b><?php echo esc_html( implode( ', ', (array) $d ) ); ?></b>
 			</div>
 			<?php
 			unset( $k, $d );

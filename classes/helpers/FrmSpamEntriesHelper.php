@@ -28,6 +28,15 @@ class FrmSpamEntriesHelper {
 	const SPAM_ENTRY_STATUS = 4;
 
 	/**
+	 * Supports all-status queries, retention guards and final spam output escaping.
+	 *
+	 * @since x.x
+	 *
+	 * @var int
+	 */
+	const SPAM_ENTRIES_VERSION = 2;
+
+	/**
 	 * Save the submission as a spam entry and show the normal success response.
 	 *
 	 * @since x.x
@@ -83,13 +92,31 @@ class FrmSpamEntriesHelper {
 			}
 
 			$support = $class . '::SPAM_ENTRIES_SUPPORTED';
+			$version = $class . '::SPAM_ENTRIES_VERSION';
 
-			if ( ! defined( $support ) || true !== constant( $support ) ) {
+			if ( ! defined( $support ) || true !== constant( $support ) || ! defined( $version ) || constant( $version ) < 2 ) {
 				$incompatible[] = $name;
 			}
 		}
 
 		return $incompatible;
+	}
+
+	/**
+	 * Disable cleanup in older Pro builds that age manual spam from its creation date.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $days The configured retention period.
+	 *
+	 * @return int
+	 */
+	public static function guard_spam_retention( $days ) {
+		if ( class_exists( 'FrmProAppHelper' ) && ( ! defined( 'FrmProAppHelper::SPAM_ENTRIES_VERSION' ) || constant( 'FrmProAppHelper::SPAM_ENTRIES_VERSION' ) < 2 ) ) {
+			return 0;
+		}
+
+		return $days;
 	}
 
 	/**
@@ -411,12 +438,40 @@ class FrmSpamEntriesHelper {
 	 * @return array|string
 	 */
 	public static function exclude_spam( $where, $prefix = 'it.' ) {
+		if ( '' === $where ) {
+			$where = array();
+		}
+
 		if ( is_string( $where ) && preg_match( '/^' . preg_quote( $prefix, '/' ) . 'form_id=\d+$/', $where ) ) {
 			$where = array( $prefix . 'form_id' => (int) substr( $where, strlen( $prefix . 'form_id=' ) ) );
 		}
 
+		if ( is_string( $where ) ) {
+			// Preserve deliberate status and specific-entry queries. Wrap other raw conditions so OR cannot bypass exclusion.
+			// Ignore SQL string literals when checking which columns the query selects.
+			$columns       = preg_replace( "/'(?:[^'\\\\]|\\\\.|'')*'|\"(?:[^\"\\\\]|\\\\.|\"\")*\"/s", '', $where );
+			$has_status    = preg_match( '/\bis_draft`?\s*(?:[=<>!]|IN\s*\()/i', $columns );
+			$targets_entry = preg_match( '/^(?:`?\w+`?\.)?`?(?:id|parent_item_id)`?\s*=\s*[1-9]\d*$/i', trim( $columns ) )
+			|| preg_match( '/^(?:`?\w+`?\.)?`?item_key`?\s*=\s*$/i', trim( $columns ) );
+
+			if ( $has_status || $targets_entry || ! apply_filters( 'frm_exclude_spam_entries', true, $where ) ) {
+				return $where;
+			}
+
+			global $wpdb;
+			$exclude = $prefix
+			? $wpdb->prepare( '(%i.is_draft != %d OR %i.is_draft IS NULL)', rtrim( $prefix, '.' ), self::SPAM_ENTRY_STATUS, rtrim( $prefix, '.' ) )
+			: $wpdb->prepare( '(is_draft != %d OR is_draft IS NULL)', self::SPAM_ENTRY_STATUS );
+
+			return '(' . $where . ') AND ' . $exclude;
+		}
+
 		if ( ! is_array( $where ) || ! self::should_exclude_spam( $where ) ) {
 			return $where;
+		}
+
+		if ( ! empty( $where['or'] ) ) {
+			$where = array( $where );
 		}
 
 		$where[] = self::get_exclude_spam_where( $prefix );
@@ -449,11 +504,35 @@ class FrmSpamEntriesHelper {
 	 * @return bool
 	 */
 	private static function should_exclude_spam( $where ) {
-		if ( self::where_has_key( $where, array( 'is_draft' ) ) ) {
+		if ( ( empty( $where['or'] ) && self::where_has_key( $where, array( 'is_draft' ), false ) ) || self::where_explicitly_includes_spam( $where ) ) {
 			return false;
 		}
 
-		$targets_entries = self::where_has_key( $where, array( 'id', 'item_key', 'parent_item_id' ), false );
+		$targets_entries = false;
+
+		foreach ( $where as $key => $value ) {
+			if ( is_numeric( $key ) || ! preg_match( '/(?:^|\.)(id|item_key|parent_item_id)$/', trim( $key ), $matches ) ) {
+				continue;
+			}
+
+			// Parent zero selects all top-level entries, rather than the children of a specific entry.
+			if ( 'parent_item_id' === $matches[1] ) {
+				$parent_ids = (array) $value;
+
+				if ( ! $parent_ids ) {
+					continue;
+				}
+
+				foreach ( $parent_ids as $parent_id ) {
+					if ( ! is_numeric( $parent_id ) || (int) $parent_id < 1 ) {
+						continue 2;
+					}
+				}
+			}
+
+			$targets_entries = true;
+			break;
+		}//end foreach
 
 		/**
 		 * Allows including spam entries in an entry query that does not check the entry status.
@@ -463,7 +542,57 @@ class FrmSpamEntriesHelper {
 		 * @param bool  $exclude Whether to exclude spam entries.
 		 * @param array $where   The where query.
 		 */
-		return (bool) apply_filters( 'frm_exclude_spam_entries', ! $targets_entries, $where );
+		return (bool) apply_filters( 'frm_exclude_spam_entries', ! $targets_entries || ! empty( $where['or'] ), $where );
+	}
+
+	/**
+	 * Recognize deliberate spam or all-status selections without allowing an OR draft filter to bypass exclusion.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $where The entry query conditions.
+	 *
+	 * @return bool
+	 */
+	private static function where_explicitly_includes_spam( $where ) {
+		foreach ( $where as $key => $value ) {
+			if ( is_numeric( $key ) ) {
+				if ( is_array( $value ) && self::where_explicitly_includes_spam( $value ) ) {
+					return true;
+				}
+				continue;
+			}
+
+			if ( ! preg_match( '/(?:^|\.)is_draft(?:\s+([!<>]+))?$/', trim( $key ), $matches ) ) {
+				continue;
+			}
+
+			$operator = $matches[1] ?? '';
+
+			if ( '' === $operator ) {
+				foreach ( (array) $value as $status ) {
+					if ( is_numeric( $status ) && self::SPAM_ENTRY_STATUS === (int) $status ) {
+						return true;
+					}
+				}
+			}
+
+			if ( ! is_numeric( $value ) ) {
+				continue;
+			}
+
+			$status = (int) $value;
+
+			// FrmDb appends '=' to comparison operators.
+			if ( ( '>' === $operator && $status <= self::SPAM_ENTRY_STATUS )
+				|| ( '<' === $operator && $status >= self::SPAM_ENTRY_STATUS )
+				|| ( '!' === $operator && $status !== self::SPAM_ENTRY_STATUS )
+			) {
+				return true;
+			}
+		}//end foreach
+
+		return false;
 	}
 
 	/**

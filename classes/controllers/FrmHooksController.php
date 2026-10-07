@@ -116,6 +116,7 @@ class FrmHooksController {
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
 
 		// Summary emails.
+		add_filter( 'frm_spam_retention_days', 'FrmSpamEntriesHelper::guard_spam_retention', PHP_INT_MAX );
 		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
 
 		// Gated Content — daily cleanup of expired tokens.

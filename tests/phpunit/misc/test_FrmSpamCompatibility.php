@@ -84,5 +84,21 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 		require dirname( __DIR__ ) . '/fixtures/spam-compatibility/current-pro.php';
 		$this->assertSame( array(), FrmSpamEntriesHelper::get_incompatible_addons() );
 		$this->assertTrue( FrmSpamEntriesHelper::can_store_spam() );
+		$this->assertSame( 30, apply_filters( 'frm_spam_retention_days', 30 ) );
+	}
+	/**
+	 * Early feature builds must not enable unsafe cleanup merely by declaring spam support.
+	 *
+	 * @return void
+	 */
+	#[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+	#[\PHPUnit\Framework\Attributes\PreserveGlobalState( false )]
+	public function test_earlier_spam_pro_disables_storage_and_cleanup() {
+		if ( class_exists( 'FrmProAppHelper' ) ) {
+			$this->markTestSkipped( 'This test requires Pro to be inactive.' );
+		}
+		require dirname( __DIR__ ) . '/fixtures/spam-compatibility/earlier-spam-pro.php';
+		$this->assertFalse( FrmSpamEntriesHelper::can_store_spam() );
+		$this->assertSame( 0, apply_filters( 'frm_spam_retention_days', 30 ) );
 	}
 }
