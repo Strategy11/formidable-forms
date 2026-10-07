@@ -1797,6 +1797,7 @@ class FrmAppHelper {
 			'placeholder'   => $atts['placeholder'],
 			'class'         => $class,
 			'data-tosearch' => $atts['tosearch'],
+			'aria-label'    => $atts['text'],
 		);
 
 		if ( is_string( $atts['value'] ) ) {

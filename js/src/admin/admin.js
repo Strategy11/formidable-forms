@@ -5020,6 +5020,9 @@ window.frmAdminBuildJS = function() {
 			confirmMsg = frmAdminJs.conf_delete_sec;
 		}
 
+		const fieldIds = getFieldIdsToDelete( [ String( fieldId ) ] );
+		confirmMsg = wp.hooks.applyFilters( 'frm_delete_fields_confirmation', confirmMsg, fieldIds );
+
 		this.setAttribute( 'data-frmverify', confirmMsg );
 		this.setAttribute( 'data-frmverify-btn', 'frm-button-red' );
 		this.setAttribute( 'data-deletefield', fieldId );
@@ -6035,7 +6038,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function deleteFieldGroupsClick() {
-		const fieldIdsToDelete = getSelectedFieldIds();
+		const fieldIdsToDelete = getFieldIdsToDelete( getSelectedFieldIds() );
 		const deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( fieldIdsToDelete );
 
 		const multiselectPopup = document.getElementById( 'frm_field_multiselect_popup' );
@@ -6043,7 +6046,12 @@ window.frmAdminBuildJS = function() {
 			multiselectPopup.remove();
 		}
 
-		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
+		const confirmMsg = wp.hooks.applyFilters(
+			'frm_delete_fields_confirmation',
+			confirmFieldsDeleteMessage( fieldIdsToDelete.length ),
+			fieldIdsToDelete
+		);
+		this.setAttribute( 'data-frmverify', confirmMsg );
 		confirmLinkClick( this );
 
 		const confirmedClick = document.getElementById( 'frm-confirmed-click' );
@@ -6079,9 +6087,10 @@ window.frmAdminBuildJS = function() {
 	function deleteAllSelectedFieldGroups( deleteFieldIds ) {
 		deleteFieldIds.forEach(
 			function( fieldId ) {
-				deleteFields( fieldId );
+				deleteField( fieldId );
 			}
 		);
+		toggleSectionHolder();
 	}
 
 	function deleteFieldConfirmed() {
@@ -6090,17 +6099,29 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function deleteFields( fieldId ) {
-		const field = jQuery( `#frm_field_id_${ fieldId }` );
+		deleteAllSelectedFieldGroups( getFieldIdsToDelete( [ String( fieldId ) ] ) );
+	}
 
-		deleteField( fieldId );
+	/**
+	 * Gets all fields removed by a deletion, including section children and related fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string[]} fieldIds The selected field IDs.
+	 * @return {string[]} The complete list of field IDs to delete.
+	 */
+	function getFieldIdsToDelete( fieldIds ) {
+		const ids = new Set( fieldIds );
+		fieldIds.forEach( fieldId => {
+			const field = document.getElementById( `frm_field_id_${ fieldId }` );
+			if ( field?.classList.contains( 'edit_field_type_divider' ) ) {
+				field.querySelectorAll( 'li.frm_field_box[data-fid]' ).forEach( child => {
+					ids.add( child.dataset.fid );
+				} );
+			}
+		} );
 
-		if ( field.hasClass( 'edit_field_type_divider' ) ) {
-			field.find( 'li.frm_field_box[data-fid]' ).each( function() {
-				deleteField( this.getAttribute( 'data-fid' ) );
-			} );
-		}
-
-		toggleSectionHolder();
+		return [ ...new Set( wp.hooks.applyFilters( 'frm_delete_field_ids', [ ...ids ] ) ) ];
 	}
 
 	/**
@@ -10131,6 +10152,31 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Track changes made in the Custom CSS CodeMirror editor for the unsaved changes pop up.
+	 * CodeMirror replaces the textarea, so edits there never fire a native change event.
+	 * The editor initializes on document ready, so retry a few times until it exists.
+	 *
+	 * @since x.x
+	 *
+	 * @param {number} retryCount The number of times this function has run while waiting for CodeMirror to initialize.
+	 * @return {void}
+	 */
+	function addCustomCSSEditorChangeListener( retryCount = 0 ) {
+		const retryLimit = 5;
+		const retryInterval = 500;
+		const editor = window.frm_codemirror_box_wp_editor;
+
+		if ( editor === undefined || editor.codemirror === undefined ) {
+			if ( retryCount < retryLimit ) {
+				setTimeout( () => addCustomCSSEditorChangeListener( retryCount + 1 ), retryInterval );
+			}
+			return;
+		}
+
+		editor.codemirror.on( 'change', fieldUpdated );
+	}
+
 	function buildSubmittedNoAjax() {
 		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
 		fieldsUpdated = 0;
@@ -12620,6 +12666,12 @@ window.frmAdminBuildJS = function() {
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
 				fieldsUpdated = 0;
 			} );
+
+			// The uninstall checkbox only reveals its action, license keys save separately, and payment section inputs act as tabs.
+			// This is delegated from the wrap element, not the document, because hideShowItem returns false and stops change events from reaching the document.
+			jQuery( '#form_global_settings' ).on( 'change', 'input:not(#frm-uninstall-box):not(.frm-search-input):not(.frm_addon_license_key):not([name="frm_payment_section"]), select, textarea', fieldUpdated );
+
+			addCustomCSSEditorChangeListener();
 
 			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
 			if ( manageStyleSettings ) {
