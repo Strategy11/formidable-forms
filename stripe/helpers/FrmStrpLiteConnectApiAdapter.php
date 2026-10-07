@@ -213,11 +213,12 @@ class FrmStrpLiteConnectApiAdapter {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 * @param string $mode      'auto', 'live', or 'test'.
 	 *
 	 * @return mixed
 	 */
-	public static function update_intent( $intent_id, $data ) {
-		return FrmStrpLiteConnectHelper::update_intent( $intent_id, $data );
+	public static function update_intent( $intent_id, $data, $mode = 'auto' ) {
+		return FrmStrpLiteConnectHelper::update_intent( $intent_id, $data, $mode );
 	}
 
 	/**

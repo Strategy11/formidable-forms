@@ -1,4 +1,6 @@
 ( function() {
+	const SETUP_INTENT_PREFIX = 'seti_';
+	let stripeRequiresHttps = false;
 	let thisForm = false;
 	let formID = 0;
 	let event = false;
@@ -23,6 +25,10 @@
 
 		if ( shouldProcessForm() ) {
 			e.preventDefault();
+			if ( stripeRequiresHttps ) {
+				showHttpsError();
+				return;
+			}
 			event = e;
 			processForm();
 			return;
@@ -117,12 +123,7 @@
 				return;
 			}
 
-			window.onpageshow = function( event ) {
-				// Force the form to reload on back button after submitting.
-				if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[ 0 ].type === 'back_forward' ) ) {
-					window.location.reload();
-				}
-			};
+			reloadOnBackForward();
 
 			let params = {
 				elements,
@@ -134,6 +135,11 @@
 			params = addBillingDetailsToParams( params, meta );
 
 			const confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
+			const billingDetails = params.confirmParams.payment_method_data.billing_details;
+
+			if ( 'confirmPayment' === confirmFunction && billingDetails.address?.line1?.trim() && billingDetails.name?.trim() ) {
+				params.confirmParams.shipping = billingDetails;
+			}
 
 			frmstripe[ confirmFunction ]( params ).then( handleConfirmPromise );
 		}
@@ -153,12 +159,9 @@
 
 		function handleConfirmPaymentError( error ) {
 			running--;
-			enableSubmit();
 
 			const fieldset = jQuery( object ).find( '.frm_form_field' );
 			fieldset.removeClass( 'frm_doing_ajax' );
-
-			object.classList.remove( 'frm_loading_form' );
 
 			// Don't show validation_error here as those are added automatically to the email and postal code fields, etc.
 			if ( 'card_error' === error.type || 'invalid_request_error' === error.type || 'form_submit_error' === error.type ) {
@@ -167,6 +170,14 @@
 					cardErrors.textContent = error.message;
 				}
 			}
+
+			// Keep submit disabled until the failed records are cleaned up.
+			// Otherwise a fast retry could create a payment row that the cleanup then marks as failed.
+			const afterCleanup = () => {
+				enableSubmit();
+				object.classList.remove( 'frm_loading_form' );
+			};
+			checkFailedPayment( object, error ).then( afterCleanup, afterCleanup );
 		}
 
 		/**
@@ -540,8 +551,10 @@
 				form: JSON.stringify( form.serializeArray() ),
 				nonce: frm_stripe_vars.nonce
 			};
-			postAjax( data, function() {
-				// Amount has been conditionally updated.
+			postAjax( data, response => {
+				if ( response?.success && response.data?.intents?.some( intent => intent.changed ) && elements ) {
+					elements.fetchUpdates();
+				}
 			} );
 		};
 	}
@@ -576,6 +589,11 @@
 	}
 
 	function loadElements() {
+		if ( stripeRequiresHttps ) {
+			showHttpsError();
+			return;
+		}
+
 		if ( document.getElementsByClassName( 'frm-card-element' ).length ) {
 			maybeLoadStripeLink();
 		}
@@ -762,19 +780,20 @@
 
 	/**
 	 * Get the appearance rules to send to Stripe.
-	 * The Label font is limited to families the Stripe iframe can render, so the page can measure the same text.
+	 * Fonts are limited to families the Stripe iframe can render, so the page can measure the same Label text.
 	 *
-	 * @since 6.35
+	 * @since x.x
 	 *
 	 * @return {Object} Appearance rules.
 	 */
 	function getAppearanceRules() {
-		const rules = frm_stripe_vars.appearanceRules;
-		const label = rules[ '.Label' ];
-		if ( ! label || ! label.fontFamily ) {
-			return rules;
-		}
-		return Object.assign( {}, rules, { '.Label': Object.assign( {}, label, { fontFamily: removeWebFonts( label.fontFamily ) } ) } );
+		const rules = Object.assign( {}, frm_stripe_vars.appearanceRules );
+		[ '.Input', '.Label' ].forEach( selector => {
+			if ( rules[ selector ]?.fontFamily ) {
+				rules[ selector ] = Object.assign( {}, rules[ selector ], { fontFamily: removeWebFonts( rules[ selector ].fontFamily ) } );
+			}
+		} );
+		return rules;
 	}
 
 	/**
@@ -1198,6 +1217,124 @@
 		);
 	}
 
+	/**
+	 * Explain why live Stripe payments cannot load on an HTTP page.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function showHttpsError() {
+		document.querySelectorAll( '.frm-show-form' ).forEach( form => {
+			const formId = form.querySelector( 'input[name="form_id"]' );
+			if ( ! formId || formId.value !== String( frm_stripe_vars.form_id ) ) {
+				return;
+			}
+
+			form.querySelectorAll( '.frm-card-errors' ).forEach( error => {
+				error.textContent = frm_stripe_vars.https_error;
+			} );
+		} );
+	}
+
+	/**
+	 * Reuse the intent returned by confirmation, or retrieve its status directly from Stripe.
+	 * A failed lookup is not evidence that a payment failed.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} secret The intent's client secret.
+	 * @param {Object} error  The confirmation error, which may include the failed intent.
+	 * @return {Promise<string|false>} The client secret when the intent has failed.
+	 */
+	async function getFailedIntentSecret( secret, error ) {
+		const isSetupIntent = secret.startsWith( SETUP_INTENT_PREFIX );
+		const errorIntent = isSetupIntent ? error.setup_intent : error.payment_intent;
+		let intent = errorIntent;
+
+		if ( ! intent || intent.client_secret !== secret ) {
+			const retrieve = isSetupIntent ? 'retrieveSetupIntent' : 'retrievePaymentIntent';
+			let result;
+
+			try {
+				result = await frmstripe[ retrieve ]( secret );
+			} catch {
+				// Leave records alone when Stripe cannot tell us whether this intent failed.
+				return false;
+			}
+
+			intent = isSetupIntent ? result.setupIntent : result.paymentIntent;
+		}
+
+		if ( ! intent || intent.client_secret !== secret ) {
+			return false;
+		}
+
+		if ( 'canceled' === intent.status ) {
+			return secret;
+		}
+
+		return 'requires_payment_method' === intent.status &&
+			( intent.last_payment_error || intent.last_setup_error ) ? secret : false;
+	}
+
+	/**
+	 * Only ask PHP to clean up intents Stripe.js reports as failed.
+	 * PHP still verifies the current Stripe state before changing any records.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLFormElement} form  The form whose payment attempt failed.
+	 * @param {Object}          error The confirmation or form submission error.
+	 * @return {Promise<void>} Resolves once the cleanup request has finished, or right away when there is nothing to clean up.
+	 */
+	async function checkFailedPayment( form, error ) {
+		if ( 'form_submit_error' === error.type ) {
+			return;
+		}
+
+		const formId = form.querySelector( '[name="form_id"]' ).value;
+		const inputName = `frmintent${ formId }[]`;
+		const inputs = form.querySelectorAll( `input[name="${ inputName }"]` );
+		const secrets = [ ...new Set( Array.from( inputs, input => input.value ) ) ];
+		const failedInputs = [];
+
+		for ( const secret of secrets ) {
+			const failedSecret = await getFailedIntentSecret( secret, error );
+
+			if ( failedSecret ) {
+				failedInputs.push( { name: inputName, value: failedSecret } );
+			}
+		}
+
+		if ( ! failedInputs.length ) {
+			return;
+		}
+
+		const data = {
+			action: 'frm_failed_payment',
+			form: JSON.stringify( [ { name: 'form_id', value: formId }, ...failedInputs ] ),
+			nonce: frm_stripe_vars.nonce
+		};
+		const xmlHttp = postAjax( data, () => {} );
+		await new Promise( resolve => xmlHttp.addEventListener( 'loadend', resolve ) );
+	}
+
+	/**
+	 * Reload on back/forward so the form gets a fresh payment intent and an empty card field.
+	 * Registered after submitting, not on load, since a restored page only needs this once an intent is used.
+	 *
+	 * @return {void}
+	 */
+	function reloadOnBackForward() {
+		window.onpageshow = function( event ) {
+			// Force the form to reload on back button after submitting.
+			if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[ 0 ].type === 'back_forward' ) ) {
+				window.location.reload();
+			}
+		};
+	}
+
 	jQuery( document ).ready(
 		function() {
 			const stripeParams = {
@@ -1205,7 +1342,10 @@
 				stripeAccount: frm_stripe_vars.account_id
 			};
 
-			frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
+			stripeRequiresHttps = window.location.protocol === 'http:' && frm_stripe_vars.publishable_key.startsWith( 'pk_live_' );
+			if ( ! stripeRequiresHttps ) {
+				frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
+			}
 			loadElements();
 			jQuery( document ).on( 'frmPageChanged', onPageChange );
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );

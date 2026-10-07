@@ -792,7 +792,7 @@ class FrmStrpLiteConnectHelper {
 			return $data;
 		}
 
-		if ( isset( self::$latest_error_from_stripe_connect ) && str_starts_with( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
+		if ( isset( self::$latest_error_from_stripe_connect ) && self::is_missing_plan_error( self::$latest_error_from_stripe_connect ) ) {
 			return self::$latest_error_from_stripe_connect;
 		}
 
@@ -894,11 +894,12 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 * @param string $mode      'auto', 'live', or 'test'.
 	 *
 	 * @return bool
 	 */
-	public static function update_intent( $intent_id, $data ) {
-		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
+	public static function update_intent( $intent_id, $data, $mode = 'auto' ) {
+		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ), $mode );
 		return false !== $data;
 	}
 
@@ -976,5 +977,23 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		wp_send_json_error();
+	}
+
+	/**
+	 * Check whether a Stripe error string means the plan used to create a subscription does not
+	 * exist yet.
+	 *
+	 * Stripe's error used to always read "No such plan: '...'". Newer API versions describe the
+	 * same missing legacy Plan as "No such price: '...'" instead, even though the request used the
+	 * `plan` parameter, so both forms have to be recognized.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $message
+	 *
+	 * @return bool
+	 */
+	private static function is_missing_plan_error( $message ) {
+		return str_starts_with( $message, 'No such plan: ' ) || str_starts_with( $message, 'No such price: ' );
 	}
 }
