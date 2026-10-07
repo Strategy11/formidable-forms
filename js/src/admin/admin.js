@@ -12908,7 +12908,7 @@ window.frmAdminBuildJS = function() {
 
 			// The uninstall checkbox only reveals its action, license keys save separately, and payment section inputs act as tabs.
 			// This is delegated from the wrap element, not the document, because hideShowItem returns false and stops change events from reaching the document.
-			jQuery( '#form_global_settings' ).on( 'change', 'input:not(#frm-uninstall-box):not(.frm-search-input):not(.frm_addon_license_key):not([name="frm_payment_section"]), select, textarea', fieldUpdated );
+			jQuery( '#form_global_settings' ).on( 'change', 'input:not(#frm-uninstall-box):not(.frm-search-input):not(.frm_addon_license_key):not([name^="proplug-"]):not([name="frm_payment_section"]), select, textarea', fieldUpdated );
 
 			addCustomCSSEditorChangeListener();
 

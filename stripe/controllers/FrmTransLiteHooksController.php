@@ -9,8 +9,6 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
-		add_action( 'frm_add_form_option_section', 'FrmSquareLiteActionsController::actions_js' );
-
 		// Exit early, let the Payments submodule handle everything.
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			return;
@@ -19,7 +17,6 @@ class FrmTransLiteHooksController {
 		// Actions.
 		add_action( 'frm_payment_cron', 'FrmTransLiteAppController::run_payment_cron' );
 		add_filter( 'frm_registered_form_actions', 'FrmTransLiteActionsController::register_actions' );
-		add_action( 'frm_add_form_option_section', 'FrmTransLiteActionsController::actions_js' );
 		add_action( 'frm_trigger_payment_action', 'FrmTransLiteActionsController::trigger_action', 10, 3 );
 
 		// Filters.
@@ -37,6 +34,10 @@ class FrmTransLiteHooksController {
 	 */
 	public static function load_admin_hooks() {
 		add_action( 'frm_disconnected_gateway', 'FrmTransLiteAppController::maybe_remove_payment_cron', 10, 2 );
+
+		// frm_add_form_option_section only fires while rendering the form settings page, so these
+		// belong here rather than in load_hooks.
+		add_action( 'frm_add_form_option_section', 'FrmSquareLiteActionsController::actions_js' );
 
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
@@ -72,6 +73,8 @@ class FrmTransLiteHooksController {
 		if ( self::on_form_settings_page() ) {
 			add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
 		}
+
+		add_action( 'frm_add_form_option_section', 'FrmTransLiteActionsController::actions_js' );
 
 		// Actions.
 		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );

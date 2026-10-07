@@ -14,7 +14,13 @@ class FrmSquareLiteHooksController {
 
 		add_filter( 'frm_payment_gateways', 'FrmSquareLiteAppController::add_gateway' );
 
-		add_action( 'init', 'FrmSquareLiteConnectHelper::check_for_redirects' );
+		// Only hook this up on the OAuth return request. Registering it unconditionally made
+		// WordPress autoload FrmSquareLiteConnectHelper on every front end page view.
+		// Paired with FrmSquareLiteConnectHelper::user_landed_on_the_oauth_return_url, which
+		// checks the same query argument.
+		if ( isset( $_GET['frm_square_api_return_oauth'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			add_action( 'init', 'FrmSquareLiteConnectHelper::check_for_redirects' );
+		}
 
 		// Use 20 so this happens after the Stripe add-on.
 		add_filter( 'frm_pro_show_card_callback', 'FrmSquareLiteActionsController::maybe_show_card', 20, 2 );
