@@ -166,7 +166,7 @@ class FrmSpamEntriesController {
 		$not_spam = array(
 			'frm_not_spam' => array(
 				'url'   => self::get_not_spam_url( $entry ),
-				'label' => __( 'Not Spam', 'formidable' ),
+				'label' => __( 'Mark as Not Spam', 'formidable' ),
 				'class' => 'frm-open-not-spam-modal',
 				'icon'  => 'frmfont frm_checkmark_icon',
 			),

@@ -130,6 +130,21 @@ class FrmSpamEntriesHelper {
 	}
 
 	/**
+	 * Get the spam checks that can be turned off, with the global checkbox setting that turns each one on.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string, string> Setting names keyed by spam source.
+	 */
+	public static function get_optional_sources() {
+		return array(
+			'honeypot'    => 'honeypot',
+			'denylist'    => 'denylist_check',
+			'wp_comments' => 'wp_spam_check',
+		);
+	}
+
+	/**
 	 * Get every spam check that can flag a submission, keyed by source.
 	 * Each source is an array with a label and its default handling.
 	 *
