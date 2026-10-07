@@ -5020,6 +5020,9 @@ window.frmAdminBuildJS = function() {
 			confirmMsg = frmAdminJs.conf_delete_sec;
 		}
 
+		const fieldIds = getFieldIdsToDelete( [ String( fieldId ) ] );
+		confirmMsg = wp.hooks.applyFilters( 'frm_delete_fields_confirmation', confirmMsg, fieldIds );
+
 		this.setAttribute( 'data-frmverify', confirmMsg );
 		this.setAttribute( 'data-frmverify-btn', 'frm-button-red' );
 		this.setAttribute( 'data-deletefield', fieldId );
@@ -5697,8 +5700,8 @@ window.frmAdminBuildJS = function() {
 	function fieldGroupClick( e ) {
 		maybeShowFieldGroupMessage();
 
-		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
-			// only continue if the group itself was clicked / ignore when a field is clicked.
+		if ( e.target !== e.currentTarget ) {
+			// only continue if the group itself was clicked / ignore when a field or a nested group is clicked.
 			return;
 		}
 
@@ -5709,21 +5712,14 @@ window.frmAdminBuildJS = function() {
 
 		const ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		const shiftKeyIsDown = e.shiftKey;
-		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
+		// Get the selected groups first so the selected field's group is included when checking if the clicked group is active.
 		const $selectedFieldGroups = getSelectedFieldGroups();
+		const groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
 
 		let numberOfSelectedGroups = $selectedFieldGroups.length;
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
-
-			const selectedField = getSelectedField();
-			if ( null !== selectedField && ! jQuery( selectedField ).siblings( 'li.form-field' ).length ) {
-				// count a selected field on its own as a selected field group when multiselecting.
-				selectedField.parentNode.classList.add( 'frm-selected-field-group' );
-				++numberOfSelectedGroups;
-			}
-
 			if ( ctrlOrCmdKeyIsDown ) {
 				if ( groupIsActive ) {
 					// unselect if holding ctrl or cmd and the group was already active.
@@ -5894,9 +5890,9 @@ window.frmAdminBuildJS = function() {
 
 		const selectedField = getSelectedField();
 		if ( selectedField ) {
-			// If there is only one field in a group and the field is selected, consider the field's group as selected for multi-select.
+			// When a field is selected, consider the field's group as selected for multi-select.
 			const selectedFieldGroup = selectedField.closest( 'ul' );
-			if ( selectedFieldGroup && 1 === getFieldsInRow( jQuery( selectedFieldGroup ) ).length ) {
+			if ( selectedFieldGroup ) {
 				selectedFieldGroup.classList.add( 'frm-selected-field-group' );
 				return jQuery( selectedFieldGroup );
 			}
@@ -6042,7 +6038,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function deleteFieldGroupsClick() {
-		const fieldIdsToDelete = getSelectedFieldIds();
+		const fieldIdsToDelete = getFieldIdsToDelete( getSelectedFieldIds() );
 		const deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( fieldIdsToDelete );
 
 		const multiselectPopup = document.getElementById( 'frm_field_multiselect_popup' );
@@ -6050,7 +6046,12 @@ window.frmAdminBuildJS = function() {
 			multiselectPopup.remove();
 		}
 
-		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
+		const confirmMsg = wp.hooks.applyFilters(
+			'frm_delete_fields_confirmation',
+			confirmFieldsDeleteMessage( fieldIdsToDelete.length ),
+			fieldIdsToDelete
+		);
+		this.setAttribute( 'data-frmverify', confirmMsg );
 		confirmLinkClick( this );
 
 		const confirmedClick = document.getElementById( 'frm-confirmed-click' );
@@ -6086,9 +6087,10 @@ window.frmAdminBuildJS = function() {
 	function deleteAllSelectedFieldGroups( deleteFieldIds ) {
 		deleteFieldIds.forEach(
 			function( fieldId ) {
-				deleteFields( fieldId );
+				deleteField( fieldId );
 			}
 		);
+		toggleSectionHolder();
 	}
 
 	function deleteFieldConfirmed() {
@@ -6097,17 +6099,29 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function deleteFields( fieldId ) {
-		const field = jQuery( `#frm_field_id_${ fieldId }` );
+		deleteAllSelectedFieldGroups( getFieldIdsToDelete( [ String( fieldId ) ] ) );
+	}
 
-		deleteField( fieldId );
+	/**
+	 * Gets all fields removed by a deletion, including section children and related fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string[]} fieldIds The selected field IDs.
+	 * @return {string[]} The complete list of field IDs to delete.
+	 */
+	function getFieldIdsToDelete( fieldIds ) {
+		const ids = new Set( fieldIds );
+		fieldIds.forEach( fieldId => {
+			const field = document.getElementById( `frm_field_id_${ fieldId }` );
+			if ( field?.classList.contains( 'edit_field_type_divider' ) ) {
+				field.querySelectorAll( 'li.frm_field_box[data-fid]' ).forEach( child => {
+					ids.add( child.dataset.fid );
+				} );
+			}
+		} );
 
-		if ( field.hasClass( 'edit_field_type_divider' ) ) {
-			field.find( 'li.frm_field_box[data-fid]' ).each( function() {
-				deleteField( this.getAttribute( 'data-fid' ) );
-			} );
-		}
-
-		toggleSectionHolder();
+		return [ ...new Set( wp.hooks.applyFilters( 'frm_delete_field_ids', [ ...ids ] ) ) ];
 	}
 
 	/**
@@ -10353,6 +10367,31 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Track changes made in the Custom CSS CodeMirror editor for the unsaved changes pop up.
+	 * CodeMirror replaces the textarea, so edits there never fire a native change event.
+	 * The editor initializes on document ready, so retry a few times until it exists.
+	 *
+	 * @since x.x
+	 *
+	 * @param {number} retryCount The number of times this function has run while waiting for CodeMirror to initialize.
+	 * @return {void}
+	 */
+	function addCustomCSSEditorChangeListener( retryCount = 0 ) {
+		const retryLimit = 5;
+		const retryInterval = 500;
+		const editor = window.frm_codemirror_box_wp_editor;
+
+		if ( editor === undefined || editor.codemirror === undefined ) {
+			if ( retryCount < retryLimit ) {
+				setTimeout( () => addCustomCSSEditorChangeListener( retryCount + 1 ), retryInterval );
+			}
+			return;
+		}
+
+		editor.codemirror.on( 'change', fieldUpdated );
+	}
+
 	function buildSubmittedNoAjax() {
 		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
 		fieldsUpdated = 0;
@@ -11013,6 +11052,66 @@ window.frmAdminBuildJS = function() {
 		if ( thresholdContainer ) {
 			thresholdContainer.classList.toggle( 'frm_hidden', 'v3' !== e.target.value );
 		}
+	}
+
+	/**
+	 * Syncs aria-selected and the roving tabindex of a radio-backed tablist with its checked radio.
+	 * The Tab stop is the checked tab, or the first visible tab when the checked one is hidden.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function syncTablistState( tablist ) {
+		const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]' ) );
+		const visibleTabs = tabs.filter( label => ! label.classList.contains( 'frm_hidden' ) );
+		const tabStop = visibleTabs.find( label => label.control.checked ) || visibleTabs[ 0 ];
+
+		tabs.forEach( label => {
+			label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
+			label.setAttribute( 'tabindex', label === tabStop ? '0' : '-1' );
+		} );
+	}
+
+	/**
+	 * Adds Enter, Space, arrow, Home and End key support to a tablist of radio labels.
+	 *
+	 * @param {HTMLElement} tablist
+	 * @return {void}
+	 */
+	function initTablistKeyboard( tablist ) {
+		tablist.addEventListener( 'keydown', function( event ) {
+			const tabs = Array.from( tablist.querySelectorAll( 'label[role="tab"]:not(.frm_hidden)' ) );
+			const index = tabs.indexOf( event.target.closest( 'label' ) );
+			if ( -1 === index ) {
+				return;
+			}
+
+			let target;
+			switch ( event.key ) {
+				case 'Enter':
+				case ' ':
+					target = tabs[ index ];
+					break;
+				case 'ArrowRight':
+					target = tabs[ ( index + 1 ) % tabs.length ];
+					break;
+				case 'ArrowLeft':
+					target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
+					break;
+				case 'Home':
+					target = tabs[ 0 ];
+					break;
+				case 'End':
+					target = tabs[ tabs.length - 1 ];
+					break;
+				default:
+					return;
+			}
+
+			event.preventDefault();
+			target.focus();
+			target.click();
+		} );
 	}
 
 	function trashTemplate( e ) {
@@ -12484,13 +12583,16 @@ window.frmAdminBuildJS = function() {
 				} );
 			} );
 
-			// Handle Captcha checkbox toggle to show/hide warnings
-			const captchaCheckbox = document.getElementById( 'frm_include_captcha' );
-			if ( captchaCheckbox ) {
-				const initialState = captchaCheckbox.checked;
-				captchaCheckbox.addEventListener( 'change', function() {
-					const addWarning = document.getElementById( 'frm_captcha_add_warning' );
-					const removeWarning = document.getElementById( 'frm_captcha_remove_warning' );
+			// Handle Captcha and GDPR checkbox toggles to show/hide warnings
+			[ 'captcha', 'gdpr' ].forEach( function( fieldType ) {
+				const includeCheckbox = document.getElementById( `frm_include_${ fieldType }` );
+				if ( ! includeCheckbox ) {
+					return;
+				}
+				const initialState = includeCheckbox.checked;
+				includeCheckbox.addEventListener( 'change', function() {
+					const addWarning = document.getElementById( `frm_${ fieldType }_add_warning` );
+					const removeWarning = document.getElementById( `frm_${ fieldType }_remove_warning` );
 					if ( addWarning && removeWarning ) {
 						// Only show warning if current state differs from initial state
 						if ( this.checked !== initialState ) {
@@ -12508,7 +12610,7 @@ window.frmAdminBuildJS = function() {
 						}
 					}
 				} );
-			}
+			} );
 
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
@@ -12779,50 +12881,20 @@ window.frmAdminBuildJS = function() {
 				const showNote = event.target.value !== captchaValueOnLoad;
 				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden', ! showNote );
 
-				captchas.querySelectorAll( 'label' ).forEach( label => {
-					label.setAttribute( 'aria-selected', label.control.checked ? 'true' : 'false' );
-					label.setAttribute( 'tabindex', label.control.checked ? '0' : '-1' );
-				} );
+				syncTablistState( captchas );
 			} );
-
-			captchas.addEventListener( 'keydown', function( event ) {
-				const tabs = Array.from( captchas.querySelectorAll( 'label' ) );
-				const index = tabs.indexOf( event.target.closest( 'label' ) );
-				if ( -1 === index ) {
-					return;
-				}
-
-				let target;
-				switch ( event.key ) {
-					case 'Enter':
-					case ' ':
-						target = tabs[ index ];
-						break;
-					case 'ArrowRight':
-						target = tabs[ ( index + 1 ) % tabs.length ];
-						break;
-					case 'ArrowLeft':
-						target = tabs[ ( index + tabs.length - 1 ) % tabs.length ];
-						break;
-					case 'Home':
-						target = tabs[ 0 ];
-						break;
-					case 'End':
-						target = tabs[ tabs.length - 1 ];
-						break;
-					default:
-						return;
-				}
-
-				event.preventDefault();
-				target.focus();
-				target.click();
-			} );
+			initTablistKeyboard( captchas );
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
 				fieldsUpdated = 0;
 			} );
+
+			// The uninstall checkbox only reveals its action, license keys save separately, and payment section inputs act as tabs.
+			// This is delegated from the wrap element, not the document, because hideShowItem returns false and stops change events from reaching the document.
+			jQuery( '#form_global_settings' ).on( 'change', 'input:not(#frm-uninstall-box):not(.frm-search-input):not(.frm_addon_license_key):not([name="frm_payment_section"]), select, textarea', fieldUpdated );
+
+			addCustomCSSEditorChangeListener();
 
 			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
 			if ( manageStyleSettings ) {
@@ -12841,34 +12913,12 @@ window.frmAdminBuildJS = function() {
 
 			const paymentsSettings = document.getElementById( 'payments_settings' );
 			const paymentSettingsTabs = paymentsSettings?.querySelectorAll( '[name="frm_payment_section"]' );
-			if ( paymentSettingsTabs ) {
+			if ( paymentSettingsTabs?.length ) {
+				const paymentTablist = paymentSettingsTabs[ 0 ].closest( '[role="tablist"]' );
 				paymentSettingsTabs.forEach(
-					element => {
-						element.addEventListener( 'change', () => {
-							if ( ! element.checked ) {
-								return;
-							}
-
-							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
-							if ( label ) {
-								label.setAttribute( 'aria-selected', 'true' );
-							}
-
-							paymentSettingsTabs.forEach(
-								tab => {
-									if ( tab === element ) {
-										return;
-									}
-
-									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
-									if ( label ) {
-										label.setAttribute( 'aria-selected', 'false' );
-									}
-								}
-							);
-						} );
-					}
+					element => element.addEventListener( 'change', () => syncTablistState( paymentTablist ) )
 				);
+				initTablistKeyboard( paymentTablist );
 			}
 		},
 
@@ -13005,6 +13055,8 @@ window.frmAdminBuildJS = function() {
 			},
 		},
 
+		syncTablistState,
+		initTablistKeyboard,
 		applyZebraStriping,
 		initModal,
 		infoModal,

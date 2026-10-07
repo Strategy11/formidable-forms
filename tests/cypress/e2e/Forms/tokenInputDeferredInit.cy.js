@@ -23,7 +23,7 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 
 	const openFieldSettings = fieldId => {
 		cy.log( `Open settings panel for the ${ fieldId } field` );
-		cy.get( `li[data-ftype="${ fieldId }"] .frm-field-action-icons`, { timeout: 10000 } ).invoke( 'css', 'opacity', 1 );
+		cy.get( `li[data-ftype="${ fieldId }"] .frm-field-action-icons`, { timeout: 10000 } ).revealFieldActions();
 		cy.get( `li[data-ftype="${ fieldId }"] .frm-dropdown-toggle` ).click();
 		cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'contain', 'Field Settings' ).click();
 	};
