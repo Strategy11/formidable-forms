@@ -5700,6 +5700,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Get the rows between two rows, even when one or both of them are inside a Section.
 	 * Rows of a Section that is only partly covered are included, but the Section's own row is not.
+	 * Not covered: a Section and a row inside that same Section. Nothing is returned for that pair.
 	 *
 	 * @since x.x
 	 *
