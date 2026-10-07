@@ -1099,9 +1099,11 @@ class FrmAppHelper {
 		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 
 		if ( $included_button_action ) {
-			if ( str_contains( $html, '<input type="submit"' ) ) {
-				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
-				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
+			// Since WordPress 7.2, wp_kses sorts attributes and drops the self-closing slash from void tags.
+			$input_pattern = '/(<input\b[^>]*\btype="submit"[^>]*?)(\s*\/?>)/';
+
+			if ( preg_match( $input_pattern, $html ) ) {
+				$html = preg_replace( $input_pattern, '$1 [button_action]$2', $html, 1 );
 			} else {
 				$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
 				$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );

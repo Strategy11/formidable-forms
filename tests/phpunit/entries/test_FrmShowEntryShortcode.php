@@ -981,7 +981,18 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @param array $atts
 	 */
 	protected function get_field_plain_text_value( $entry, $field, $atts ) {
-		return $this->get_field_value( $entry, $field, $atts );
+		return $this->with_kses_line_endings( $this->get_field_value( $entry, $field, $atts ) );
+	}
+
+	/**
+	 * Since WordPress 7.2, wp_kses converts CRLF line endings to LF. Older versions keep them.
+	 *
+	 * @param mixed $value Expected field value.
+	 *
+	 * @return mixed
+	 */
+	protected function with_kses_line_endings( $value ) {
+		return is_string( $value ) ? str_replace( "\r\n", wp_kses_post( "\r\n" ), $value ) : $value;
 	}
 
 	/**
@@ -1184,7 +1195,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function expected_array( $entry, $atts ) {
 		$expected = array(
 			'free-text-field'         => 'Test Testerson',
-			'free-paragraph-field'    => "Test\r\nMiddle\r\nTesterson",
+			'free-paragraph-field'    => $this->with_kses_line_endings( "Test\r\nMiddle\r\nTesterson" ),
 			'free-checkboxes'         => array( 'Red', 'Green' ),
 			'free-radio-button-field' => 'cookies',
 			'free-dropdown-field'     => 'Ace Ventura',

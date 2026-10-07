@@ -28,7 +28,9 @@ class test_FrmSpamOutput extends FrmUnitTest {
 			} finally {
 				ob_end_clean();
 			}
-			$this->assertStringContainsString( "https://example.com/<br />\n&lt;img src=x onerror=alert(1)&gt;<br />\r\nLast line", $html );
+			// Since WordPress 7.2, wp_kses outputs <br> and converts CRLF line endings to LF.
+			$expected = wp_kses( "https://example.com/<br />\n&lt;img src=x onerror=alert(1)&gt;<br />\r\nLast line", array( 'br' => array() ) );
+			$this->assertStringContainsString( $expected, $html );
 			$this->assertStringNotContainsString( '<img src=x', $html );
 		}
 	}

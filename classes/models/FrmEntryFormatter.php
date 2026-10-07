@@ -554,9 +554,33 @@ class FrmEntryFormatter {
 		$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 		$has_separate_value                             = (bool) $field_value->get_field_option( 'separate_value' );
 
-		if ( $has_separate_value || $displayed_value !== $field_value->get_saved_value() ) {
+		if ( $has_separate_value || ! $this->is_same_value_ignoring_line_endings( $displayed_value, $field_value->get_saved_value() ) ) {
 			$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
 		}
+	}
+
+	/**
+	 * Compare a displayed value with its saved value, ignoring line ending differences.
+	 * Since WordPress 7.2, wp_kses converts CRLF line endings to LF, so a paragraph value
+	 * submitted from a textarea would otherwise always look different from its display value.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $displayed_value The value prepared for display.
+	 * @param mixed $saved_value     The value saved in the database.
+	 *
+	 * @return bool
+	 */
+	private function is_same_value_ignoring_line_endings( $displayed_value, $saved_value ) {
+		if ( $displayed_value === $saved_value ) {
+			return true;
+		}
+
+		if ( ! is_string( $displayed_value ) || ! is_string( $saved_value ) ) {
+			return false;
+		}
+
+		return str_replace( "\r\n", "\n", $displayed_value ) === str_replace( "\r\n", "\n", $saved_value );
 	}
 
 	/**

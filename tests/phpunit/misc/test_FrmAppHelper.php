@@ -252,7 +252,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	public function test_kses() {
-		$start_value    = '<script><script>';
+		$start_value    = '<script></script><script></script>';
 		$safe_value     = 'Hello, <a href="/test">click here</a>';
 		$start_value   .= $safe_value;
 		$stripped_value = FrmAppHelper::kses( $start_value );
@@ -264,9 +264,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	public function test_kses_submit_button() {
 		$default_submit_button_html = '<div class="frm_submit">
-[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
+[if back_button]<button class="frm_prev_page" [back_hook] formnovalidate="formnovalidate" name="frm_prev_page" type="submit">[back_label]</button>[/if back_button]
 <button class="frm_button_submit" type="submit" [button_action]>[button_label]</button>
-[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
+[if save_draft]<a class="frm_save_draft" [draft_hook] href="#" tabindex="0">[draft_label]</a>[/if save_draft]
 </div>';
 		$this->assertSame(
 			$default_submit_button_html,
@@ -274,9 +274,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		);
 
 		$with_custom_class = '<div class="frm_submit">
-[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
+[if back_button]<button class="frm_prev_page" [back_hook] formnovalidate="formnovalidate" name="frm_prev_page" type="submit">[back_label]</button>[/if back_button]
 <button class="frm_button_submit frm_inline_submit" type="submit" [button_action]>[button_label]</button>
-[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
+[if save_draft]<a class="frm_save_draft" [draft_hook] href="#" tabindex="0">[draft_label]</a>[/if save_draft]
 </div>';
 		$this->assertSame(
 			$with_custom_class,
@@ -284,14 +284,16 @@ class test_FrmAppHelper extends FrmUnitTest {
 		);
 
 		$previous_default_html = '<div class="frm_submit">
-[if back_button]<input type="button" value="[back_label]" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook] />[/if back_button]
+[if back_button]<input class="frm_prev_page" [back_hook] formnovalidate="formnovalidate" name="frm_prev_page" type="button" value="[back_label]" />[/if back_button]
 <input type="submit" value="[button_label]" [button_action] />
-<img class="frm_ajax_loading" src="[frmurl]/images/ajax_loader.gif" alt="Sending" style="visibility:hidden" />
+<img alt="Sending" class="frm_ajax_loading" src="[frmurl]/images/ajax_loader.gif" style="visibility:hidden" />
 [if save_draft]<a class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
 </div>';
+		// Since WordPress 7.2, wp_kses drops the self-closing slash from void tags.
 		$this->assertSame(
-			$previous_default_html,
-			FrmAppHelper::kses_submit_button( $previous_default_html )
+			str_replace( ' />', '>', $previous_default_html ),
+			str_replace( ' />', '>', FrmAppHelper::kses_submit_button( $previous_default_html ) ),
+			'The legacy submit button HTML should keep its shortcodes.'
 		);
 	}
 
@@ -305,10 +307,10 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use href="#frm_zapier_icon" /></svg>';
 		$this->assertSame( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use href="#frm_more_horiz_solid_icon" /></svg>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" tabindex="0" title="Toggle Options"><use href="#frm_more_horiz_solid_icon" /></svg>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$this->assertSame( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg" aria-label="WordPress" style="width:90px;height:90px"><use href="#frm_wordpress_icon" /></svg>';
+		$icon = '<svg aria-label="WordPress" class="frmsvg" style="width:90px;height:90px"><use href="#frm_wordpress_icon" /></svg>';
 		$this->assertSame( $icon, FrmAppHelper::kses_icon( $icon ) );
 	}
 
