@@ -7137,6 +7137,12 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
+		if ( isSingleProductField( fieldId ) ) {
+			updateSingleProductLabel( fieldId );
+			adjustConditionalLogicOptionOrders( fieldId );
+			return;
+		}
+
 		if ( input.is( 'select' ) ) {
 			const placeholder = document.getElementById( `frm_placeholder_${ fieldId }` );
 			if ( ! placeholder || placeholder.value === '' ) {
@@ -7165,6 +7171,215 @@ window.frmAdminBuildJS = function() {
 		}
 
 		adjustConditionalLogicOptionOrders( fieldId );
+	}
+
+	/**
+	 * Normalize a price string using the site's configured currency separators
+	 * before it's passed to Number(), mirroring FrmCurrencyHelper::prepare_price()'s
+	 * PHP-side logic so a comma-decimal locale (e.g. EUR) parses correctly instead
+	 * of producing NaN.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string|number} price    Raw price value.
+	 * @param {Object}        currency Currency settings object.
+	 * @return {string} Price string using '.' as the decimal separator, safe for Number().
+	 */
+	function normalizePriceString( price, currency ) {
+		price = String( price ).trim();
+		if ( ! price ) {
+			return '';
+		}
+
+		const matches = price.match( /-?[\d.,]+/g );
+		price = matches ? matches[ matches.length - 1 ] : '';
+		while ( /[.,]$/.test( price ) ) {
+			price = price.slice( 0, -1 );
+		}
+		if ( ! price ) {
+			return '';
+		}
+
+		const thousandSep = currency.thousand_separator ?? ',';
+		const decimalSep = currency.decimal_separator ?? '.';
+
+		// A '.' used as the thousand separator is ambiguous with a plain decimal point;
+		// treat it as decimal when it trails exactly 1-2 digits, same as the PHP side.
+		if ( thousandSep === '.' ) {
+			const parts = price.split( '.' );
+			if ( parts.length === 2 && [ 1, 2 ].includes( parts[ 1 ].length ) ) {
+				price = parts.join( decimalSep );
+			}
+		}
+
+		if ( thousandSep ) {
+			price = price.split( thousandSep ).join( '' );
+		}
+		return price.split( decimalSep ).join( '.' );
+	}
+
+	/**
+	 * Format a product price value for display in the builder preview using the
+	 * currency settings from frm_admin_js. Mirrors the logic in FrmCurrencyHelper::format_price().
+	 *
+	 * @since x.x
+	 *
+	 * @param {string|number} price Raw price value.
+	 * @return {string} Formatted price string.
+	 */
+	function formatProductPrice( price ) {
+		const currency = frm_admin_js?.currency;
+		if ( ! currency ) {
+			return String( price );
+		}
+
+		const normalized = normalizePriceString( price, currency );
+		const num = Number( normalized );
+		if ( ! normalized || isNaN( num ) ) {
+			return String( price );
+		}
+
+		const decimals = Number( currency.decimals ?? 2 );
+		const decimalSep = currency.decimal_separator ?? '.';
+		const thousandSep = currency.thousand_separator ?? ',';
+
+		let formatted = Math.abs( num ).toFixed( decimals ).replace( '.', decimalSep );
+
+		const parts = decimals > 0 ? formatted.split( decimalSep ) : [ formatted ];
+		if ( thousandSep ) {
+			let grouped = '';
+			for ( let end = parts[ 0 ].length; end > 0; end -= 3 ) {
+				grouped = parts[ 0 ].slice( Math.max( 0, end - 3 ), end ) + ( grouped ? thousandSep + grouped : '' );
+			}
+			parts[ 0 ] = grouped;
+		}
+		formatted = ( num < 0 ? '-' : '' ) + parts.join( decimalSep );
+
+		const symbolPadding = currency.symbol_padding ?? '';
+		const leftSymbol = currency.symbol_left ? ( currency.symbol_left + symbolPadding ) : '';
+		const rightSymbol = currency.symbol_right ? ( symbolPadding + currency.symbol_right ) : '';
+
+		return leftSymbol + formatted + rightSymbol;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {string|number} fieldId
+	 * @return {boolean} True if the field data type is 'single' product.
+	 */
+	function isSingleProductField( fieldId ) {
+		const el = document.querySelector( `select[name="field_options[data_type_${ fieldId }]"]` );
+		return Boolean( el ) && el.value === 'single';
+	}
+
+	/**
+	 * Update the .frm_single_product_label text in the builder preview to reflect
+	 * the current name and price values of the first product option.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string|number} fieldId
+	 */
+	function updateSingleProductLabel( fieldId ) {
+		const container = document.querySelector( `#field_${ fieldId }_inner_container > .frm_form_fields` );
+		if ( ! container ) {
+			return;
+		}
+
+		const firstRealOpt = document.querySelector( `#frm_field_${ fieldId }_opts .frm_single_option:not(.frm_option_template)` );
+		if ( ! firstRealOpt ) {
+			return;
+		}
+
+		const firstOptKey = firstRealOpt.dataset.optkey;
+		const optWrapper = document.getElementById( `frm_delete_field_${ fieldId }-${ firstOptKey }_container` );
+		if ( ! optWrapper ) {
+			return;
+		}
+
+		const label = optWrapper.querySelector( `.field_${ fieldId }_option:not(.frm_product_price)` )?.value ?? '';
+		const price = optWrapper.querySelector( '.frm_product_price' )?.value ?? '';
+
+		let labelEl = container.querySelector( '.frm_single_product_label' );
+		let hiddenInput = container.querySelector( 'input[type="hidden"][data-frmprice]' );
+
+		if ( ! labelEl || ! hiddenInput ) {
+			// The preview still shows the markup for whatever data type this field had when
+			// it was last rendered server-side (e.g. the default dropdown) - switching the
+			// "Product Type" setting to Single Product doesn't request a fresh render, so build
+			// the single-product preview markup here instead, mirroring product-single.php.
+			const existingInput = container.querySelector( `[name^="item_meta[${ fieldId }]"]` );
+			// Radio and checkbox inputs carry an option suffix in their id, and checkboxes a [] in their name.
+			const fieldName = `item_meta[${ fieldId }]`;
+			const fieldKey = document.getElementById( `frm_field_${ fieldId }_opts` )?.dataset.key;
+			const htmlId = fieldKey ? `field_${ fieldKey }` : ( existingInput?.getAttribute( 'id' ) ?? `field_${ fieldId }` );
+			const fieldVal = existingInput?.value ?? '';
+
+			// Not existingInput.cloneNode(true): the stale markup being replaced here is often
+			// a <select> (a fresh field's server-rendered default data type), whose children
+			// and tag semantics don't carry over to the hidden input product-single.php expects.
+			labelEl = tag( 'p', { className: 'frm_single_product_label' } );
+
+			hiddenInput = tag( 'input', { id: htmlId } );
+			frmDom.setAttributes( hiddenInput, {
+				type: 'hidden',
+				name: fieldName,
+				value: fieldVal
+			} );
+
+			// Pro renders this wrapper in product-single.php, and its frm_custom_reset_displayed_opts
+			// handler skips the preview update when the wrapper is missing.
+			container.replaceChildren(
+				div( {
+					className: 'frm_single_product_wrap',
+					children: [ labelEl, hiddenInput ]
+				} )
+			);
+		}
+
+		const parts = [];
+		if ( label ) {
+			parts.push( label );
+		}
+		if ( price ) {
+			parts.push( formatProductPrice( price ) );
+		}
+		labelEl.innerHTML = purifyHtml( parts.join( ': ' ) );
+		hiddenInput.dataset.frmprice = price;
+	}
+
+	/**
+	 * When a product field switches away from Single Product, swap the single product preview
+	 * for an input of the new type so resetDisplayedOpts rebuilds the options preview.
+	 * Without this, the leftover hidden input has no data-field-type and the preview breaks.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldId
+	 * @param {string} productType The new product type: select, radio or checkbox.
+	 */
+	function maybeReplaceSingleProductPreview( fieldId, productType ) {
+		const container = document.querySelector( `#field_${ fieldId }_inner_container > .frm_form_fields` );
+		const singleInput = container?.querySelector( 'input[type="hidden"][data-frmprice]' );
+		if ( ! singleInput ) {
+			return;
+		}
+
+		let input;
+		if ( 'select' === productType ) {
+			input = tag( 'select', { id: singleInput.id } );
+		} else {
+			input = tag( 'input', { id: singleInput.id } );
+			frmDom.setAttributes( input, {
+				type: 'hidden',
+				'data-field-type': productType
+			} );
+		}
+		input.setAttribute( 'name', singleInput.getAttribute( 'name' ) );
+
+		container.replaceChildren( input );
+		resetDisplayedOpts( fieldId );
 	}
 
 	/**
@@ -11192,6 +11407,7 @@ window.frmAdminBuildJS = function() {
 		const container = settings.find( '.frmjs_product_choices' );
 		const heading = settings.find( '.frm_prod_options_heading' );
 		const currentVal = this.options[ this.selectedIndex ].value;
+		const fieldId = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
 		const displayFormatOptions = settings[ 0 ].querySelector( '.frm_display_format_options' );
 		if ( displayFormatOptions ) {
@@ -11203,9 +11419,16 @@ window.frmAdminBuildJS = function() {
 
 		if ( 'single' === currentVal ) {
 			container.addClass( 'frm_prod_type_single' );
+
+			// Build the single-product preview right away instead of waiting for the user to
+			// also edit an option's label/price - the settings panel's option rows (and their
+			// current label/price values) already exist regardless of this setting's value.
+			updateSingleProductLabel( fieldId );
 		} else if ( 'user_def' === currentVal ) {
 			container.addClass( 'frm_prod_type_user_def' );
 			heading.addClass( 'frm_prod_user_def' );
+		} else {
+			maybeReplaceSingleProductPreview( fieldId, currentVal );
 		}
 
 		wp.hooks.doAction( 'frm_product_type_toggled', currentVal, settings[ 0 ] );
