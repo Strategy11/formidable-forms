@@ -454,6 +454,14 @@ class FrmSpamEntriesHelper {
 			$targets_entry = preg_match( '/^(?:`?\w+`?\.)?`?(?:id|parent_item_id)`?\s*=\s*[1-9]\d*$/i', trim( $columns ) )
 			|| preg_match( '/^(?:`?\w+`?\.)?`?item_key`?\s*=\s*$/i', trim( $columns ) );
 
+			/**
+			 * Allows including spam entries in an entry query that does not check the entry status.
+			 *
+			 * @since x.x
+			 *
+			 * @param bool         $exclude Whether to exclude spam entries.
+			 * @param array|string $where   The where query.
+			 */
 			if ( $has_status || $targets_entry || ! apply_filters( 'frm_exclude_spam_entries', true, $where ) ) {
 				return $where;
 			}
@@ -464,7 +472,7 @@ class FrmSpamEntriesHelper {
 			: $wpdb->prepare( '(is_draft != %d OR is_draft IS NULL)', self::SPAM_ENTRY_STATUS );
 
 			return '(' . $where . ') AND ' . $exclude;
-		}
+		}//end if
 
 		if ( ! is_array( $where ) || ! self::should_exclude_spam( $where ) ) {
 			return $where;
@@ -538,14 +546,6 @@ class FrmSpamEntriesHelper {
 			break;
 		}//end foreach
 
-		/**
-		 * Allows including spam entries in an entry query that does not check the entry status.
-		 *
-		 * @since x.x
-		 *
-		 * @param bool  $exclude Whether to exclude spam entries.
-		 * @param array $where   The where query.
-		 */
 		return (bool) apply_filters( 'frm_exclude_spam_entries', ! $targets_entries || ! empty( $where['or'] ), $where );
 	}
 

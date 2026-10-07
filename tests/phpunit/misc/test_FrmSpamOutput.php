@@ -8,6 +8,32 @@
  */
 class test_FrmSpamOutput extends FrmUnitTest {
 	/**
+	 * Referrers keep line breaks without rendering submitted markup for normal or spam entries.
+	 *
+	 * @return void
+	 */
+	public function test_sidebar_referrer_preserves_line_breaks() {
+		$form_id = $this->factory->form->create();
+		$id      = $this->factory->entry->create( array( 'form_id' => $form_id ) );
+		$entry   = FrmEntry::getOne( $id );
+		$data    = array( 'referrer' => "https://example.com/\n<img src=x onerror=alert(1)>\r\nLast line" );
+
+		foreach ( array( 0, 4 ) as $status ) {
+			$entry->is_draft = $status;
+			ob_start();
+
+			try {
+				include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php';
+				$html = ob_get_contents();
+			} finally {
+				ob_end_clean();
+			}
+			$this->assertStringContainsString( "https://example.com/<br />\n&lt;img src=x onerror=alert(1)&gt;<br />\r\nLast line", $html );
+			$this->assertStringNotContainsString( '<img src=x', $html );
+		}
+	}
+
+	/**
 	 * Late display filters must not reintroduce markup into spam values.
 	 *
 	 * @return void
