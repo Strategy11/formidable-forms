@@ -1035,6 +1035,11 @@ function frmFrontFormJS() {
 		const recaptcha = form.querySelector( '.frm-g-recaptcha[data-size="invisible"], .g-recaptcha[data-size="invisible"]' );
 		if ( recaptcha ) {
 			const recaptchaID = recaptcha.dataset.rid;
+			if ( recaptcha.dataset.saveAsSpam === '1' &&
+				( typeof grecaptcha === 'undefined' || recaptchaID === undefined ) ) {
+				return false;
+			}
+
 			const alreadyChecked = grecaptcha.getResponse( recaptchaID );
 			if ( alreadyChecked.length === 0 ) {
 				return recaptcha;
@@ -1072,7 +1077,8 @@ function frmFrontFormJS() {
 		try {
 			response = grecaptcha.getResponse( recaptchaID );
 		} catch ( e ) {
-			if ( formEl.querySelector( 'input[name="recaptcha_checked"]' ) ) {
+			// When reCAPTCHA cannot load and failures are saved as spam, let the server flag the entry.
+			if ( recaptcha.dataset.saveAsSpam === '1' || formEl.querySelector( 'input[name="recaptcha_checked"]' ) ) {
 				return errors;
 			}
 			response = '';

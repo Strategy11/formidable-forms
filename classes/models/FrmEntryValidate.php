@@ -177,7 +177,7 @@ class FrmEntryValidate {
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
 
 		self::validate_options( $errors, $posted_field, $value, $args );
-		self::validate_field_types( $errors, $posted_field, $value, $args );
+		self::validate_field_types( $errors, $posted_field, $value, array_merge( $args, array( 'is_new_submission' => self::is_new_submission( $values ) ) ) );
 
 		// Field might want to modify value before other parts of the system
 		// e.g. trim off excess values like in the case of fields with limit.
@@ -442,6 +442,19 @@ class FrmEntryValidate {
 
 		$new_errors = $field_obj->validate( $args );
 
+		if ( $new_errors && $field_obj instanceof FrmFieldCaptcha && ! empty( $args['is_new_submission'] ) ) {
+			$error_key = 'field' . $args['id'];
+			$reason    = $field_obj->get_validation_failure_reason();
+
+			if ( '' === $reason ) {
+				$reason = $new_errors[ $error_key ] ?? '';
+			}
+
+			if ( isset( $new_errors[ $error_key ] ) && FrmSpamEntriesHelper::maybe_flag_submission( $posted_field->form_id, 'captcha', $reason ) ) {
+				unset( $new_errors[ $error_key ] );
+			}
+		}
+
 		if ( $new_errors ) {
 			$errors = array_merge( $errors, $new_errors );
 		}
@@ -563,26 +576,59 @@ class FrmEntryValidate {
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
+		$spam_source    = '';
 
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
-		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
+			$spam_source    = 'antispam';
+		} elseif ( self::is_honeypot_spam( $values ) ) {
 			$errors['spam'] = $spam_msg;
+			$spam_source    = 'honeypot';
+		} elseif ( self::is_spam_bot() ) {
+			$errors['spam'] = $spam_msg;
+			$spam_source    = 'no_ip';
 		} else {
-			$is_spam = FrmAntiSpamController::is_spam( $values );
+			$detected = FrmAntiSpamController::detect_spam( $values );
 
-			if ( $is_spam ) {
-				$errors['spam'] = $is_spam;
+			if ( $detected ) {
+				$errors['spam'] = $detected['message'];
+				$spam_source    = $detected['source'];
 			}
 		}
 
-		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
+		if (
+			! isset( $errors['spam'] ) && ! self::form_is_in_progress( $values ) &&
+			self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values, $spam_source )
+		) {
+			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		}
+
+		if ( ! $spam_source || ! self::is_new_submission( $values ) || ! FrmSpamEntriesHelper::maybe_flag_submission( $values['form_id'], $spam_source ) ) {
 			return;
 		}
 
-		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		// Save the entry as spam instead of showing an error, so the submitter sees the normal success response.
+		unset( $errors['spam'] );
+
+		if ( 'honeypot' !== $spam_source ) {
+			return;
 		}
+
+		$honeypot = new FrmHoneypot( $values['form_id'] );
+		$honeypot->remove_posted_value();
+	}
+
+	/**
+	 * Spam is only saved as a spam entry when an entry is created. Edits keep showing the spam error.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values The submitted values.
+	 *
+	 * @return bool
+	 */
+	private static function is_new_submission( $values ) {
+		return empty( $values['id'] ) && 'update' !== ( $values['frm_action'] ?? '' );
 	}
 
 	/**
@@ -630,13 +676,21 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @param array $values
+	 * @param array  $values Entry values.
+	 * @param string $source The detected Akismet spam source.
 	 *
 	 * @return bool
 	 */
-	private static function is_akismet_spam( $values ) {
+	private static function is_akismet_spam( $values, &$source = '' ) {
 		global $wpcom_api_key;
-		return is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values );
+		$akismet_enabled = is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key );
+
+		if ( ! $akismet_enabled ) {
+			return false;
+		}
+
+		$source = self::get_akismet_spam_source( $values );
+		return '' !== $source;
 	}
 
 	/**
@@ -668,8 +722,21 @@ class FrmEntryValidate {
 	 * @return bool true if is spam
 	 */
 	public static function akismet( $values ) {
+		return '' !== self::get_akismet_spam_source( $values );
+	}
+
+	/**
+	 * Check Akismet and identify regular or blatant spam.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return string The spam source, or an empty string for a non-spam response.
+	 */
+	private static function get_akismet_spam_source( $values ) {
 		if ( empty( $values['item_meta'] ) ) {
-			return false;
+			return '';
 		}
 
 		$datas = array(
@@ -689,7 +756,34 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return is_array( $response ) && $response[1] === 'true';
+		return self::get_akismet_response_source( $response );
+	}
+
+	/**
+	 * Identify the spam source from an Akismet response.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $response Response headers and body returned by Akismet.
+	 *
+	 * @return string The spam source, or an empty string when Akismet did not flag spam.
+	 */
+	private static function get_akismet_response_source( $response ) {
+		if ( ! is_array( $response ) || 'true' !== ( $response[1] ?? '' ) ) {
+			return '';
+		}
+
+		$headers = $response[0] ?? array();
+
+		if ( is_array( $headers ) ) {
+			$headers = array_change_key_case( $headers, CASE_LOWER );
+		}
+
+		if ( ( is_array( $headers ) || $headers instanceof ArrayAccess ) && 'discard' === ( $headers['x-akismet-pro-tip'] ?? '' ) ) {
+			return 'akismet_discard';
+		}
+
+		return 'akismet';
 	}
 
 	/**

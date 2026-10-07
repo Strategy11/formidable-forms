@@ -235,7 +235,7 @@ class FrmDb {
 		self::get_group_and_table_name( $table, $group );
 		self::convert_options_to_array( $args, '', $limit );
 
-		if ( $type === 'var' && ! isset( $args['limit'] ) ) {
+		if ( $type === 'var' && ! isset( $args['limit'] ) && ( 'COUNT(*)' !== $field || ! empty( $args['group_by'] ) ) ) {
 			$args['limit'] = 1;
 		}
 

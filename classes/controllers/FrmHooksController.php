@@ -116,6 +116,7 @@ class FrmHooksController {
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
 
 		// Summary emails.
+		add_filter( 'frm_spam_retention_days', 'FrmSpamEntriesHelper::guard_spam_retention', PHP_INT_MAX );
 		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
 
 		// Gated Content — daily cleanup of expired tokens.
@@ -167,6 +168,11 @@ class FrmHooksController {
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
 		add_filter( 'update_user_metadata', 'FrmEntriesController::check_hidden_cols', 10, 5 );
 		add_action( 'updated_user_meta', 'FrmEntriesController::update_hidden_cols', 10, 4 );
+
+		// Spam Entries Controller.
+		add_filter( 'frm_row_actions', 'FrmSpamEntriesController::row_actions', 99, 2 );
+		add_filter( 'frm_entry_actions_dropdown', 'FrmSpamEntriesController::sidebar_actions', 99, 2 );
+		add_action( 'frm_show_entry_start_content', 'FrmSpamEntriesController::show_spam_notice', 5 );
 
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {

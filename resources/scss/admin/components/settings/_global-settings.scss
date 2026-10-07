@@ -22,6 +22,36 @@ label.frm-example-icon {
 	border-radius: 5px;
 }
 
+/* Section headings carry the hierarchy with size and weight, and sections are separated by space instead of rules. */
+#captcha_settings h3.frm-settings-section-heading {
+	font-size: var(--text-md);
+	font-weight: 600;
+	color: var(--grey-900);
+	text-transform: none;
+	border-top: 0;
+	padding-top: 0;
+	margin: var(--gap-xl) 0 var(--gap-sm);
+}
+
+#captcha_settings h2.frm-h2 + h3.frm-settings-section-heading {
+	margin-top: var(--gap-md);
+}
+
+/* The provider's keys start below its tab, with room to read them as that tab's content. */
+#captcha_settings [role="tabpanel"] {
+	margin-top: var(--gap-sm);
+}
+
+#captcha_settings h3.frm-settings-section-heading + .howto {
+	margin-top: calc(-1 * var(--gap-xs));
+}
+
+/* Center each label on its select instead of the top of the row. Pro adds its spam entries rows after the heading. */
+.frm-spam-handling-settings > .frm_form_field,
+#captcha_settings .frm-spam-entries-heading ~ .frm_grid_container > .frm_form_field {
+	align-self: center;
+}
+
 #captcha_settings .frm_primary_label {
 	margin-top: var(--gap-sm);
 }
@@ -52,6 +82,14 @@ label.frm-example-icon {
  * The checked rule below has the higher specificity, so a selected button keeps
  * its blue border while still picking up the hover surface.
  */
+
+/* Share the row evenly, so the last captcha button ends on the same edge as the fields below. */
+.frm_captchas.frm-long-icon-buttons > label {
+	flex: 1 1 0;
+	width: auto;
+	min-width: 0;
+}
+
 .frm-long-icon-buttons > label:hover {
 	background-color: var(--surface-hover);
 	color: var(--grey-900);
@@ -507,6 +545,159 @@ label.frm-example-icon {
 	height: 18px;
 	margin-left: 2px;
 	vertical-align: text-bottom;
+}
+
+/*
+ * Single blocks below the captcha settings end where its left column ends (the Site key field):
+ * half of the disclosure indent (12px chevron + gap) past the middle, minus half the grid gap.
+ */
+#captcha_settings {
+	--frm-captcha-column: calc(50% + (12px + var(--gap-xs) - var(--gap-md)) / 2);
+}
+
+.frm-spam-entries-warning,
+.frm-spam-integration,
+#captcha_settings .frm-spam-entries-heading + .howto,
+#captcha_settings .frm-spam-entries-heading ~ .frm_grid_container > .frm_form_field {
+	box-sizing: border-box;
+	width: var(--frm-captcha-column);
+}
+
+/* The grid stacks its columns at this width (frm_grids.css), so these go full width too. */
+@media only screen and (max-width: 600px) {
+
+	#captcha_settings {
+		--frm-captcha-column: 100%;
+	}
+}
+
+/* Pro and the Lite upsell put the setting in a grid; one block keeps the width above. */
+#captcha_settings .frm-spam-entries-heading ~ .frm_grid_container {
+	display: block;
+}
+
+.frm-spam-entries-warning {
+	text-wrap: pretty;
+}
+
+.frm-spam-integration {
+
+	/* Lets the layout below follow the card's width, which tracks the settings column. */
+	container-type: inline-size;
+	margin-block: var(--gap-sm);
+
+	/* Less on top and bottom: the text's line height already adds space there. */
+	padding: 12px var(--gap-sm);
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+}
+
+.frm-spam-integration-body {
+	display: grid;
+	grid-template-columns: 32px 1fr auto;
+	align-items: center;
+	gap: var(--gap-xs) var(--gap-sm);
+}
+
+.frm-spam-integration-logo {
+	width: 32px;
+	height: 32px;
+}
+
+.frm-spam-integration-text {
+	min-width: 0;
+}
+
+.frm-spam-integration-body > a {
+	white-space: nowrap;
+}
+
+/* Too narrow for the link beside the text: stack it under the description, logo at the top. */
+@container (max-width: 480px) {
+
+	.frm-spam-integration-body {
+		grid-template-columns: 32px 1fr;
+		align-items: start;
+	}
+
+	.frm-spam-integration-body > a {
+		grid-column: 2;
+		justify-self: start;
+	}
+}
+
+.frm-spam-integration-name {
+	display: block;
+	margin-bottom: 2px;
+	color: var(--grey-900);
+	font-weight: 500;
+}
+
+.frm-spam-integration-text p {
+	margin: 0;
+	color: var(--grey-600);
+	text-wrap: pretty;
+}
+
+.frm-spam-retention-upsell {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-sm);
+}
+
+.frm-spam-retention-upsell select {
+	flex: 1;
+	min-width: 0;
+}
+
+.frm-spam-retention-upsell a {
+	white-space: nowrap;
+}
+
+.frm-spam-disclosure {
+	margin-top: var(--gap-sm);
+}
+
+.frm-spam-disclosure > summary {
+	display: inline-flex;
+	align-items: center;
+	min-height: 24px;
+	gap: var(--gap-xs);
+	color: var(--grey-700);
+	font-weight: 500;
+	list-style: none;
+	cursor: pointer;
+	border-radius: var(--x-small-radius);
+}
+
+.frm-spam-disclosure > summary::-webkit-details-marker {
+	display: none;
+}
+
+.frm-spam-disclosure > summary:hover {
+	color: var(--grey-900);
+}
+
+.frm-spam-disclosure > summary:focus-visible {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
+}
+
+/* Scoped to the summary so it outranks the generic .frmsvg size (18px). */
+.frm-spam-disclosure > summary .frm-spam-disclosure-chevron {
+	flex-shrink: 0;
+	width: 12px;
+	height: 12px;
+	transform: rotate(-90deg);
+}
+
+.frm-spam-disclosure[open] > summary .frm-spam-disclosure-chevron {
+	transform: none;
+}
+
+/* Disclosure content lines up with the summary label, not the chevron: 12px chevron + 8px gap. */
+.frm-spam-disclosure > :not(summary) {
+	margin-inline-start: calc(12px + var(--gap-xs));
 }
 
 @import "global-payment-settings";

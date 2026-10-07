@@ -226,6 +226,15 @@ class FrmSettings {
 	public $denylist_check;
 
 	/**
+	 * Whether submissions flagged by each spam check are saved as spam entries or rejected.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string, string>
+	 */
+	public $spam_handling;
+
+	/**
 	 * @since 6.25.1
 	 *
 	 * @var int|null 1 if installed after welcome tour update, null otherwise.
@@ -340,6 +349,7 @@ class FrmSettings {
 			'honeypot'                  => 1,
 			'wp_spam_check'             => 0,
 			'denylist_check'            => 0,
+			'spam_handling'             => FrmSpamEntriesHelper::get_default_handling(),
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
 			'email_style'               => 'classic',
@@ -553,6 +563,7 @@ class FrmSettings {
 	 * @return void
 	 */
 	public function update( $params ) {
+		$params = $this->keep_unposted_spam_handling( $params );
 		$this->fill_with_defaults( $params );
 		$this->update_settings( $params );
 
@@ -576,6 +587,26 @@ class FrmSettings {
 	}
 
 	/**
+	 * A check that is turned off has a disabled select that is not submitted, so keep its saved handling.
+	 * This runs before fill_with_defaults() replaces the saved handling with the posted values.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $params The posted settings.
+	 *
+	 * @return array
+	 */
+	private function keep_unposted_spam_handling( $params ) {
+		if ( ! isset( $params['frm_spam_handling'] ) || ! is_array( $params['frm_spam_handling'] ) || ! is_array( $this->spam_handling ) ) {
+			return $params;
+		}
+
+		$params['frm_spam_handling'] = array_merge( $this->spam_handling, $params['frm_spam_handling'] );
+
+		return $params;
+	}
+
+	/**
 	 * @param array $params
 	 *
 	 * @return void
@@ -596,6 +627,10 @@ class FrmSettings {
 		$this->default_email     = $params['frm_default_email'];
 		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
+
+		if ( isset( $params['frm_spam_handling'] ) ) {
+			$this->spam_handling = FrmSpamEntriesHelper::sanitize_handling( $params['frm_spam_handling'] );
+		}
 
 		$checkboxes = array(
 			'mu_menu',

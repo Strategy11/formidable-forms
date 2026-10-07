@@ -12885,6 +12885,22 @@ window.frmAdminBuildJS = function() {
 			} );
 			initTablistKeyboard( captchas );
 
+			const spamHandling = document.querySelector( '.frm-spam-handling-settings' );
+			spamHandling?.addEventListener( 'change', event => {
+				const { target } = event;
+
+				// A check's select only shows while its checkbox is on.
+				if ( target.dataset.spamCheck ) {
+					const select = document.getElementById( target.dataset.spamCheck );
+					select.disabled = ! target.checked;
+					select.classList.toggle( 'frm_hidden', ! target.checked );
+
+					if ( 'frm_denylist_check' === target.name ) {
+						document.querySelector( '.frm-denylist-settings' )?.classList.toggle( 'frm_hidden', ! target.checked );
+					}
+				}
+			} );
+
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => {
 				fieldsUpdated = 0;

@@ -79,6 +79,23 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
+	 * Remove the honeypot value from the posted values, so a submission saved as a spam entry
+	 * does not store it as meta for a field that does not exist.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function remove_posted_value() {
+		$field_id = $this->get_honeypot_field_id();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( $field_id && isset( $_POST['item_meta'] ) && is_array( $_POST['item_meta'] ) ) {
+			unset( $_POST['item_meta'][ $field_id ] );
+		}
+	}
+
+	/**
 	 * Check the old frm_verify key. We'll continue to consider any entry with an frm_verify value as spam.
 	 *
 	 * @return bool
