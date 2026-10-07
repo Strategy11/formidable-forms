@@ -584,7 +584,8 @@ class FrmSpamEntriesHelper {
 			$description = array();
 		}
 
-		$description['spam_source'] = 'manual';
+		$description['spam_source']    = 'manual';
+		$description['spam_marked_at'] = time();
 
 		$updated = $wpdb->update(
 			$wpdb->prefix . 'frm_items',
@@ -618,17 +619,36 @@ class FrmSpamEntriesHelper {
 	 * @return void
 	 */
 	public static function set_status( $entry_id, $status ) {
+		self::try_set_status( $entry_id, $status );
+	}
+
+	/**
+	 * Change parent and child statuses, reporting database failures.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $entry_id The parent entry ID.
+	 * @param int|string $status The requested status.
+	 *
+	 * @return bool
+	 */
+	public static function try_set_status( $entry_id, $status ) {
 		global $wpdb;
 
 		if ( self::SPAM_ENTRY_STATUS === (int) $status && ! self::can_store_spam() ) {
-			return;
+			return false;
 		}
 
 		$entry_id = (int) $entry_id;
+		$updated  = $wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => $status ), array( 'id' => $entry_id ) );
 
-		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => $status ), array( 'id' => $entry_id ) );
-		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => $status ), array( 'parent_item_id' => $entry_id ) );
+		if ( false === $updated ) {
+			return false;
+		}
+
+		$children_updated = $wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => $status ), array( 'parent_item_id' => $entry_id ) );
 
 		FrmEntry::clear_cache();
+		return false !== $children_updated;
 	}
 }

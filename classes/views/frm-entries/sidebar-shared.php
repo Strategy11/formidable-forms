@@ -141,7 +141,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample', 'spam_reason' ), true ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample', 'spam_reason', 'spam_marked_at' ), true ) ) {
 				continue;
 			}
 			$label = ucfirst( str_replace( '-', ' ', $k ) );

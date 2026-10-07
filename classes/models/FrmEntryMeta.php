@@ -630,7 +630,7 @@ class FrmEntryMeta {
 				$where['e.is_draft'] = self::get_numeric_draft_status( $args['is_draft'] );
 			} elseif ( 'both' === $args['is_draft'] ) {
 				// Submitted and draft entries. Spam is left out.
-				$where['e.is_draft'] = array( FrmEntriesHelper::SUBMITTED_ENTRY_STATUS, FrmEntriesHelper::DRAFT_ENTRY_STATUS );
+				$where['e.is_draft'] = array( (string) FrmEntriesHelper::SUBMITTED_ENTRY_STATUS, (string) FrmEntriesHelper::DRAFT_ENTRY_STATUS );
 			} elseif ( str_contains( $args['is_draft'], ',' ) ) {
 				$is_draft = array_reduce(
 					explode( ',', $args['is_draft'] ),
@@ -668,7 +668,9 @@ class FrmEntryMeta {
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 0 );
 		} elseif ( is_numeric( $args['is_draft'] ) ) {
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', self::get_numeric_draft_status( $args['is_draft'] ) );
-		} else {
+		} elseif ( 'both' === $args['is_draft'] ) {
+			$draft_where = $wpdb->prepare( ' AND e.is_draft IN (%d, %d)', FrmEntriesHelper::SUBMITTED_ENTRY_STATUS, FrmEntriesHelper::DRAFT_ENTRY_STATUS );
+		} elseif ( 'all' !== $args['is_draft'] ) {
 			$draft_where = $wpdb->prepare( ' AND ( e.is_draft!=%d OR e.is_draft IS NULL )', FrmSpamEntriesHelper::SPAM_ENTRY_STATUS );
 		}
 

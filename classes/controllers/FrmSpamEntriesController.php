@@ -328,7 +328,16 @@ class FrmSpamEntriesController {
 			return;
 		}
 
-		FrmSpamEntriesHelper::set_status( $entry_id, FrmEntriesHelper::SUBMITTED_ENTRY_STATUS );
+		if ( ! FrmSpamEntriesHelper::try_set_status( $entry_id, FrmEntriesHelper::SUBMITTED_ENTRY_STATUS ) ) {
+			FrmAppController::show_error_modal(
+				array(
+					'title'      => __( 'Unable to restore entry', 'formidable' ),
+					'body'       => __( 'The entry could not be marked as not spam. Please try again.', 'formidable' ),
+					'cancel_url' => admin_url( 'admin.php?page=formidable-entries' ),
+				)
+			);
+			return;
+		}
 
 		$action_ids = FrmSpamEntriesHelper::is_manual_spam( $entry ) ? array() : self::get_selected_action_ids( $entry->form_id );
 

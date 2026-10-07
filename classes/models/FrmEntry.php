@@ -871,7 +871,7 @@ class FrmEntry {
 			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
 			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '', true ),
 			'ip'             => self::get_ip( $values ),
-			'is_draft'       => self::get_is_draft_value( $values ),
+			'is_draft'       => self::get_is_draft_value( $values, $type ),
 			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
 			'post_id'        => (int) self::get_entry_value( $values, 'post_id', 0 ),
 			'parent_item_id' => (int) self::get_entry_value( $values, 'parent_item_id', 0 ),
@@ -951,11 +951,12 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param array $values
+	 * @param array  $values
+	 * @param string $type The create/update type.
 	 *
 	 * @return int
 	 */
-	private static function get_is_draft_value( $values ) {
+	private static function get_is_draft_value( $values, $type = 'standard' ) {
 		if ( FrmSpamEntriesHelper::get_flagged_source( $values ) ) {
 			return FrmSpamEntriesHelper::SPAM_ENTRY_STATUS;
 		}
@@ -964,7 +965,13 @@ class FrmEntry {
 			return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
 		}
 
-		return isset( $values['is_draft'] ) ? absint( $values['is_draft'] ) : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+		$status = isset( $values['is_draft'] ) ? absint( $values['is_draft'] ) : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+
+		if ( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === $status && ! self::is_trusted_import( $type ) && ! FrmAppHelper::current_user_can( 'frm_edit_entries' ) ) {
+			return FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+		}
+
+		return $status;
 	}
 
 	/**
@@ -975,17 +982,25 @@ class FrmEntry {
 	 *
 	 * @param int|string $id
 	 * @param array      $values
+	 * @param string     $type The update type.
 	 *
 	 * @return int
 	 */
-	private static function get_is_draft_value_for_update( $id, $values ) {
-		$is_draft = self::get_is_draft_value( $values );
+	private static function get_is_draft_value_for_update( $id, $values, $type = 'standard' ) {
+		$is_draft            = self::get_is_draft_value( $values, $type );
+		$has_explicit_status = isset( $values['is_draft'] ) && FrmSpamEntriesHelper::SPAM_ENTRY_STATUS !== absint( $values['is_draft'] );
 
-		if ( FrmEntriesHelper::SUBMITTED_ENTRY_STATUS !== $is_draft || isset( $values['is_draft'] ) ) {
+		if ( FrmEntriesHelper::SUBMITTED_ENTRY_STATUS !== $is_draft || $has_explicit_status ) {
 			return $is_draft;
 		}
 
-		$current_status = (int) FrmDb::get_var( 'frm_items', array( 'id' => $id ), 'is_draft' );
+		$entry = FrmDb::check_cache( $id, 'frm_entry' );
+
+		if ( false === $entry ) {
+			$entry = self::getOne( $id );
+		}
+
+		$current_status = $entry ? (int) $entry->is_draft : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
 
 		return FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === $current_status ? $current_status : $is_draft;
 	}
@@ -1304,7 +1319,7 @@ class FrmEntry {
 		$new_values = array(
 			'name'       => FrmAppHelper::truncate( self::get_new_entry_name( $values ), 255, 1, '', true ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
-			'is_draft'   => self::get_is_draft_value_for_update( $id, $values ),
+			'is_draft'   => self::get_is_draft_value_for_update( $id, $values, $update_type ),
 			'updated_at' => current_time( 'mysql', 1 ),
 			'updated_by' => self::get_updated_by( $values, $update_type, get_current_user_id() ),
 		);

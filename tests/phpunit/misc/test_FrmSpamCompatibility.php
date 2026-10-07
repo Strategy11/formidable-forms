@@ -16,7 +16,9 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 			$this->markTestSkipped( 'This test requires Views to be inactive.' );
 		}
 
-		$form_id  = $this->factory->form->create();
+		$form_id = $this->factory->form->create();
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		wp_get_current_user()->add_cap( 'frm_edit_entries' );
 		$entry_id = $this->factory->entry->create( array( 'form_id' => $form_id ) );
 		require dirname( __DIR__ ) . '/fixtures/spam-compatibility/old-views.php';
 
@@ -24,6 +26,7 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 		$this->assertFalse( FrmSpamEntriesHelper::can_store_spam() );
 		$force_save = '__return_true';
 		add_filter( 'frm_save_spam_entry', $force_save );
+
 		try {
 			$this->assertFalse( FrmSpamEntriesHelper::should_save( 'denylist' ) );
 			$this->assertFalse( FrmSpamEntriesHelper::maybe_flag_submission( $form_id, 'denylist' ) );
@@ -43,13 +46,14 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 		FrmSpamEntriesHelper::set_status( $entry_id, 4 );
 		$this->assertSame( 0, (int) FrmEntry::getOne( $entry_id )->is_draft );
 		ob_start();
+
 		try {
 			FrmSettingsController::captcha_settings();
 			$html = ob_get_contents();
 		} finally {
 			ob_end_clean();
 		}
-		$this->assertStringContainsString( 'Update Formidable Views to enable spam entries.', $html );
+		$this->assertStringContainsString( 'Update Formidable Views to save spam entries.', $html );
 	}
 
 	/**

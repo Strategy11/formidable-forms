@@ -78,6 +78,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 	public function test_spam_tab_columns() {
 		FrmAppHelper::set_current_screen_and_hook_suffix();
 		$original = $_GET;
+
 		try {
 			$_GET    = array();
 			$columns = FrmEntriesController::manage_columns( array() );
@@ -95,6 +96,8 @@ class test_FrmEntriesController extends FrmUnitTest {
 	 * Stored source keys are presented as readable spam reasons in the sidebar.
 	 */
 	public function test_spam_reason_in_sidebar() {
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		wp_get_current_user()->add_cap( 'frm_edit_entries' );
 		$form_id  = $this->factory->form->create();
 		$entry_id = $this->factory->entry->create(
 			array(
@@ -107,6 +110,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 			)
 		);
 		ob_start();
+
 		try {
 			FrmEntriesController::entry_sidebar( FrmEntry::getOne( $entry_id ) );
 			$html = ob_get_contents();
