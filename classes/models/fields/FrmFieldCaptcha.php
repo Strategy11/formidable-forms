@@ -333,7 +333,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your captcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
 
-			$this->log_failure( $error_string, array() );
+			$this->record_validation_failure( $error_string, array() );
 
 			return $errors;
 		}
@@ -371,7 +371,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$reason = $this->get_failure_reason( $error_codes );
 		}
 
-		$this->log_failure( $reason, $error_codes );
+		$this->record_validation_failure( $reason, $error_codes );
 
 		$errors[ 'field' . $args['id'] ] = $this->get_invalid_message( $error_codes, $reason );
 
@@ -406,7 +406,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * Turn the error codes from the CAPTCHA service into a readable explanation.
 	 * Codes we do not have a translation for are passed through as is so the raw code
-	 * still reaches the log instead of being dropped.
+	 * is preserved in stored spam entries instead of being dropped.
 	 *
 	 * @since x.x
 	 *
@@ -448,8 +448,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * Get the message to show on the front end when a CAPTCHA fails.
 	 *
 	 * The reason is deliberately left out of the default message. Telling a bot exactly why
-	 * it was rejected helps it get past the next attempt, so the detail goes to the log and
-	 * to the frm_captcha_error_message filter instead. The one exception is a site
+	 * it was rejected helps it get past the next attempt, so the detail goes to stored spam
+	 * entries and to the frm_captcha_error_message filter instead. The one exception is a site
 	 * misconfiguration, where retrying cannot help and a real visitor needs to know that.
 	 *
 	 * @since x.x
@@ -490,11 +490,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * Report why a CAPTCHA failed so it does not disappear silently.
-	 * The reason never reaches the front end by default, so this action and the log are how
-	 * a site owner finds out that, for example, their secret key is wrong.
-	 * Logging requires the logging add-on. Without it there is nowhere to write to, so the
-	 * action is still fired and nothing else happens.
+	 * Record why a CAPTCHA failed for inclusion in a stored spam entry.
+	 * The reason never reaches the front end by default. The validation action lets
+	 * integrations respond to the failure without requiring the logging add-on.
 	 *
 	 * @since x.x
 	 *
@@ -503,14 +501,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 *
 	 * @return void
 	 */
-	private function log_failure( $reason, $error_codes ) {
+	private function record_validation_failure( $reason, $error_codes ) {
 		$this->validation_failure_reason = sanitize_text_field( $reason );
 
 		if ( $error_codes ) {
 			$this->validation_failure_reason .= ' (' . implode( ', ', $error_codes ) . ')';
 		}
-
-		$form_id = $this->get_form_id();
 
 		/**
 		 * Fires when a CAPTCHA fails validation, with the reason the service gave.
@@ -522,27 +518,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 * @param int    $form_id     The ID of the form being submitted.
 		 * @param array  $field       The CAPTCHA field.
 		 */
-		do_action( 'frm_captcha_validation_failed', $reason, $error_codes, $form_id, $this->field );
-
-		if ( ! class_exists( 'FrmLog' ) ) {
-			return;
-		}
-
-		// The form id is an int so the log list's "filter by form" meta query matches it.
-		$fields = array( 'form' => $form_id );
-
-		if ( $error_codes ) {
-			$fields['code'] = implode( ', ', $error_codes );
-		}
-
-		$log = new FrmLog();
-		$log->add(
-			array(
-				'title'   => FrmCaptchaFactory::get_settings_object()->get_name() . ' validation failed',
-				'content' => $reason,
-				'fields'  => $fields,
-			)
-		);
+		do_action( 'frm_captcha_validation_failed', $reason, $error_codes, $this->get_form_id(), $this->field );
 	}
 
 	/**
@@ -609,7 +585,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return void
 	 */
 	protected function report_missing_token() {
-		$this->log_failure(
+		$this->record_validation_failure(
 			__( 'No CAPTCHA response was submitted. The form may have been submitted before the CAPTCHA loaded, or it failed to load.', 'formidable' ),
 			array( 'missing-input-response' )
 		);
