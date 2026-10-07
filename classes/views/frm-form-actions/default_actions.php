@@ -57,6 +57,10 @@ if ( class_exists( 'FrmPaymentAction' ) ) {
 			// POST data namespace with the PayPal add-on's 'paypal' action, which would make
 			// both action controls save the same submission and create a duplicate action.
 			$this->option_name = 'frm_' . $this->id_base . '_action';
+
+			// Undo the single action cap that PayPal Commerce sets on 'frm_paypal_action_options',
+			// which this action picks up because it is constructed with the 'paypal' id_base.
+			$this->action_options['limit'] = 99;
 		}
 	}
 }

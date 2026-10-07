@@ -109,7 +109,7 @@
 					div( {
 						className: 'frm10 frm_clearfix',
 						children: [
-							img( { src: `${ getUrlToApplicationsImages() }folder.svg` } ),
+							img( { src: `${ getUrlToApplicationsImages() }folder.svg`, alt: '' } ),
 							tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
 							div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
 						]
@@ -331,7 +331,7 @@
 			const filenameToUse = data.hasLiteThumbnail ? data.key + ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
 			return div( {
 				className: 'frm-application-card-image-wrapper',
-				child: img( { src: thumbnailFolderUrl + filenameToUse } )
+				child: img( { src: thumbnailFolderUrl + filenameToUse, alt: data.name } )
 			} );
 		}
 
@@ -439,7 +439,7 @@
 			);
 		}
 
-		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png` } );
+		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png`, alt: '' } );
 		if ( placeholderImage.complete ) {
 			setTimeout( maybeCenterViewApplicationModal, 0 );
 		} else {
@@ -525,6 +525,8 @@
 		if ( data.upgradeUrl ) {
 			primaryActionButton.classList.remove( 'dismiss' );
 			primaryActionButton.setAttribute( 'href', data.upgradeUrl );
+			primaryActionButton.target = '_blank';
+			primaryActionButton.rel = 'noopener';
 		}
 
 		const hookName = 'frm_view_application_modal_primary_action_button';

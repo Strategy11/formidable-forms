@@ -19,10 +19,16 @@ if ( ! isset( $frm_style ) ) {
 
 $styles           = $frm_style->get_all();
 $default_style    = $frm_style->get_default_style( $styles );
-$defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
-$important        = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
-$use_chosen_js    = FrmStylesHelper::use_chosen_js();
+
+if ( ! $pro_is_installed && $default_style ) {
+	// Per-form styles are a Pro feature, so only the default style is ever used without Pro.
+	$styles = array( $default_style->ID => $default_style );
+}
+
+$defaults      = FrmStylesHelper::get_settings_for_output( $default_style );
+$important     = ! empty( $defaults['important_style'] ) ? ' !important' : '';
+$use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 ?>
 .with_frm_style{
@@ -569,7 +575,6 @@ legend.frm_hidden{
 	padding:5px;
 <?php } ?>
 <?php if ( ! empty( $defaults['border_radius'] ) ) { ?>
-	border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
 	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_font_size'] ) ) { ?>
@@ -1358,103 +1363,6 @@ select.frm_loading_lookup{
 .frm_grid_first .frm_checkbox,
 .frm_grid_odd .frm_checkbox{
 	display:inline;
-}
-
-.frm_grid_2 .frm_radio,
-.frm_grid_2 .frm_checkbox,
-.frm_grid_2 .frm_primary_label{
-	width:48% !important;
-}
-
-.frm_grid_2 .frm_radio,
-.frm_grid_2 .frm_checkbox{
-	margin-right:4%;
-}
-
-.frm_grid_3 .frm_radio,
-.frm_grid_3 .frm_checkbox,
-.frm_grid_3 .frm_primary_label{
-	width:30% !important;
-}
-
-.frm_grid_3 .frm_radio,
-.frm_grid_3 .frm_checkbox{
-	margin-right:3%;
-}
-
-.frm_grid_4 .frm_radio,
-.frm_grid_4 .frm_checkbox{
-	width:20% !important;
-}
-
-.frm_grid_4 .frm_primary_label{
-	width:28% !important;
-}
-
-.frm_grid_4 .frm_radio,
-.frm_grid_4 .frm_checkbox{
-	margin-right:4%;
-}
-
-.frm_grid_5 .frm_primary_label,
-.frm_grid_7 .frm_primary_label{
-	width:24% !important;
-}
-
-.frm_grid_5 .frm_radio,
-.frm_grid_5 .frm_checkbox{
-	width:17% !important;
-	margin-right:2%;
-}
-
-.frm_grid_6 .frm_primary_label{
-	width:25% !important;
-}
-
-.frm_grid_6 .frm_radio,
-.frm_grid_6 .frm_checkbox{
-	width:14% !important;
-	margin-right:1%;
-}
-
-.frm_grid_7 .frm_primary_label{
-	width:22% !important;
-}
-
-.frm_grid_7 .frm_radio,
-.frm_grid_7 .frm_checkbox{
-	width:12% !important;
-	margin-right:1%;
-}
-
-.frm_grid_8 .frm_primary_label{
-	width:23% !important;
-}
-
-.frm_grid_8 .frm_radio,
-.frm_grid_8 .frm_checkbox{
-	width:10% !important;
-	margin-right:1%;
-}
-
-.frm_grid_9 .frm_primary_label{
-	width:20% !important;
-}
-
-.frm_grid_9 .frm_radio,
-.frm_grid_9 .frm_checkbox{
-	width:9% !important;
-	margin-right:1%;
-}
-
-.frm_grid_10 .frm_primary_label{
-	width:19% !important;
-}
-
-.frm_grid_10 .frm_radio,
-.frm_grid_10 .frm_checkbox{
-	width:8% !important;
-	margin-right:1%;
 }
 
 .frm_form_field.frm_inline_container .frm_opt_container,

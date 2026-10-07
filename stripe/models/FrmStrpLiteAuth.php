@@ -291,21 +291,9 @@ class FrmStrpLiteAuth {
 	public static function update_intent_ajax() {
 		check_ajax_referer( 'frm_strp_ajax', 'nonce' );
 
-		if ( empty( $_POST['form'] ) ) {
-			wp_die();
-		}
-
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$form = json_decode( stripslashes( $_POST['form'] ), true );
-
-		if ( ! is_array( $form ) ) {
-			wp_die();
-		}
-
-		self::format_form_data( $form );
-
-		$form_id = absint( $form['form_id'] );
-		$intents = $form[ 'frmintent' . $form_id ] ?? array();
+		$form    = self::get_formatted_form_data();
+		$form_id = absint( $form['form_id'] ?? 0 );
+		$intents = self::get_posted_intents( $form );
 
 		if ( ! $intents ) {
 			wp_die();
@@ -323,7 +311,7 @@ class FrmStrpLiteAuth {
 
 		self::update_intent_pricing( $form_id, $intents, $form );
 
-		wp_die();
+		wp_send_json_success( array( 'intents' => $intents ) );
 	}
 
 	/**
@@ -367,21 +355,34 @@ class FrmStrpLiteAuth {
 				continue;
 			}
 
+			$intents[ $k ] = array(
+				'id'      => $intent,
+				'changed' => false,
+			);
+
+			if ( 1 === count( $actions ) && ! str_contains( reset( $actions )->post_content['amount'], '[' ) ) {
+				continue;
+			}
+
 			$saved = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+
+			if ( ! is_object( $saved ) || $saved->client_secret !== $intent ) {
+				continue;
+			}
 
 			if ( empty( $saved->metadata->action ) ) {
 				continue;
 			}
 
 			foreach ( $actions as $action ) {
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $saved->metadata->action != $action->ID ) {
+				if ( (int) $saved->metadata->action !== (int) $action->ID ) {
 					continue;
 				}
 
 				$intents[ $k ] = array(
-					'id'     => $intent,
-					'action' => $action->ID,
+					'id'      => $intent,
+					'action'  => $action->ID,
+					'changed' => false,
 				);
 
 				$amount = $action->post_content['amount'];
@@ -395,12 +396,11 @@ class FrmStrpLiteAuth {
 				$entry  = self::generate_false_entry( $form_data );
 				$amount = FrmStrpLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $saved->amount == $amount || $amount == '000' ) {
+				if ( (int) $saved->amount === (int) $amount || 0 === (int) $amount ) {
 					continue;
 				}
 
-				FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, array( 'amount' => $amount ) );
+				$intents[ $k ]['changed'] = (bool) FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, array( 'amount' => $amount ) );
 			}//end foreach
 		}//end foreach
 	}
@@ -505,6 +505,10 @@ class FrmStrpLiteAuth {
 		self::add_amount_to_actions( $form_id, $actions );
 
 		foreach ( $actions as $action ) {
+			if ( ! FrmStrpLiteFormIntentHelper::requires_intent_on_load( $action ) ) {
+				continue;
+			}
+
 			if ( is_array( $details ) && self::intent_has_failed_status( $details['intent'] ) ) {
 				$intents[] = array(
 					'id'     => $details['intent']->client_secret,
@@ -706,6 +710,7 @@ class FrmStrpLiteAuth {
 		$form = FrmForm::getOne( $form_id );
 
 		foreach ( $actions as $k => $action ) {
+			$actions[ $k ]                         = clone $action;
 			$amount                                = self::get_amount_before_submit( compact( 'action', 'form' ) );
 			$actions[ $k ]->post_content['amount'] = $amount;
 		}
@@ -873,5 +878,80 @@ class FrmStrpLiteAuth {
 		}
 		// The $intent will be "succeeded" with a failed payment when testing with the 4000000000000341 credit card.
 		return 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status;
+	}
+
+	/**
+	 * Returns posted intents.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|false $form
+	 *
+	 * @return array
+	 */
+	private static function get_posted_intents( $form = false ) {
+		if ( false === $form ) {
+			$form = self::get_formatted_form_data();
+		}
+
+		if ( ! $form ) {
+			return array();
+		}
+
+		$form_id = absint( $form['form_id'] ?? 0 );
+		return $form[ 'frmintent' . $form_id ] ?? array();
+	}
+
+	/**
+	 * Returns formatted form data.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_formatted_form_data() {
+		$posted_form = FrmAppHelper::get_post_param( 'form', '', 'strval' );
+
+		if ( ! is_string( $posted_form ) || '' === $posted_form ) {
+			return array();
+		}
+
+		$form = json_decode( $posted_form, true );
+
+		if ( ! is_array( $form ) ) {
+			return array();
+		}
+
+		foreach ( $form as $input ) {
+			if ( ! is_array( $input ) || ! isset( $input['name'], $input['value'] ) || ! is_string( $input['name'] ) ) {
+				return array();
+			}
+		}
+
+		self::format_form_data( $form );
+
+		return $form;
+	}
+
+	/**
+	 * Check for failed payments and delete entries related to them and mark the payment rows as failed.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function check_payment_status() {
+		check_ajax_referer( 'frm_strp_ajax', 'nonce' );
+		$intents = self::get_posted_intents();
+
+		if ( ! $intents ) {
+			wp_die();
+		}
+
+		foreach ( FrmStrpLiteFormIntentHelper::flatten_client_secrets( $intents ) as $intent ) {
+			FrmStrpLitePaymentFailureHelper::cleanup_failed_intent( $intent );
+		}
+
+		wp_send_json_success( array( 'intents' => $intents ) );
 	}
 }

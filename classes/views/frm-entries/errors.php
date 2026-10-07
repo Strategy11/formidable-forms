@@ -38,7 +38,7 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 		FrmFormsHelper::get_scroll_js( $form->id );
 	}
 	?>
-<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>" role="alert">
+<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>" role="alert" tabindex="-1" data-frm-error-summary="1">
 	<?php
 	$img = '';
 
@@ -50,7 +50,14 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 		}
 	}
 
-	FrmFormsHelper::show_errors( compact( 'img', 'errors', 'form' ) );
+	$error_args = compact( 'img', 'errors', 'form' );
+
+	if ( isset( $values['fields'] ) ) {
+		// Reuse the fields already prepared for this form so the summary needs no extra query.
+		$error_args['fields'] = $values['fields'];
+	}
+
+	FrmFormsHelper::show_errors( $error_args );
 
 	?>
 </div>

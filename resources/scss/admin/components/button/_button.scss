@@ -121,7 +121,7 @@
 			z-index: -1;
 			margin: -1px;
 			border-radius: inherit;
-			background: linear-gradient(90deg, #129efd 0%, #a334fd 100%);
+			background: linear-gradient(90deg, #0097f5 0%, #a334fd 100%);
 			transition: opacity 150ms ease-out;
 		}
 	}
@@ -149,8 +149,8 @@
 }
 
 .frm-button-tertiary.frm_loading_button::before {
-	border-right-color: var(--grey);
-	border-bottom-color: var(--grey);
+	border-right-color: var(--grey-500);
+	border-bottom-color: var(--grey-500);
 }
 
 .frm-button-red,
@@ -190,14 +190,24 @@
 	opacity: 0.65; /* Get close to grey-500 without overriding hover colors */
 }
 
+/* WordPress core and .frm-button-* set inline-block, which outranked the flex above. 4px gap per the Figma spec. */
+.wp-core-ui .button.frm-with-icon {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-2xs);
+}
+
+/* In a button the icon takes the label color at full strength, as in Figma. */
 .frm-with-icon.button svg {
-	height: var(--text-sm);
-	width: var(--text-sm);
+	flex-shrink: 0;
+	opacity: 1;
+	height: 20px;
+	width: 20px;
 }
 
 .frm-with-icon.frm-button-sm svg {
-	height: var(--text-xs);
-	width: var(--text-xs);
+	height: var(--text-md);
+	width: var(--text-md);
 }
 
 .frm-white-body .button.add_media {

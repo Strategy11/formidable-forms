@@ -175,6 +175,11 @@ namespace {
 		 */
 		public static function get_readable_license_type() {
 		}
+		/**
+		 * @return string Either grace, expired, expiring, or active.
+		 */
+		public static function get_license_status() {
+		}
 	}
 	class FrmProCurrencyHelper {
 		public static function normalize_formatted_numbers( $field, $formatted_value ) {}
@@ -277,8 +282,34 @@ namespace {
 	}
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
+	/**
+	 * The Registration add-on's entry controller. Constructing it is what lets a
+	 * registration form's entry run its user creation, and the abilities do that
+	 * behind a class_exists() guard.
+	 */
+	class FrmRegEntryController {
+	}
+	class FrmProField {
+		/**
+		 * @param int   $field_id ID of the repeater field, or 0 while it is being created.
+		 * @param array $args     Accepts parent_form_id and field_name.
+		 *
+		 * @return int ID of the child form that holds the repeater's fields.
+		 */
+		public static function create_repeat_form( $field_id, $args = array() ) {
+		}
+	}
 	class FrmProEntriesHelper {
 		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
+		}
+		/**
+		 * @param string     $search  The search term.
+		 * @param int|string $form_id The form to search in.
+		 * @param array      $args    Extra query args, such as is_draft.
+		 *
+		 * @return array Entry IDs matching the search.
+		 */
+		public static function get_search_ids( $search, $form_id, $args = array() ) {
 		}
 		/**
 		 * @param object           $field
@@ -315,6 +346,13 @@ namespace {
 		 * @return bool
 		 */
 		public static function is_field_visible_to_user( $field ) {
+		}
+		/**
+		 * @param array|int|object $field
+		 *
+		 * @return bool
+		 */
+		public static function field_on_current_page( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {
@@ -534,208 +572,6 @@ namespace {
 		}
 	}
 
-	/**
-	 * DeepSource's PHP analyzer excludes the vendor directory from its scan (see the
-	 * exclude_patterns in .deepsource.toml), so it never sees PHPUnit\Framework\TestCase's real
-	 * methods even though this class extends it - that extends clause only helps PHPStan, which
-	 * does load vendor/. Every PHPUnit method the plugin's tests actually call is therefore
-	 * re-declared concretely below, with a real (if simplified) body: an empty body would trip
-	 * DeepSource's PHP-W1080, and an unused parameter would trip PHP-W1037, on every one of these.
-	 */
-	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
-		/**
-		 * FrmUnitTest::setUp() actually replaces this with a FrmUnitTestFactory, but that class
-		 * lives under tests/, which phpstan.neon excludes from the analysis paths - PHPStan would
-		 * report "unknown class" for a type it can never load. WP_UnitTest_Factory is the real
-		 * base type and is declared below, so it resolves.
-		 *
-		 * @var WP_UnitTest_Factory
-		 */
-		protected $factory;
-
-		/**
-		 * Real PHPUnit\Framework\TestCase declares every assertion method static, so an override
-		 * has to match that or PHP fatals with "Cannot make static method ... non static".
-		 *
-		 * @param bool   $passed
-		 * @param string $message
-		 */
-		protected static function stub_check( $passed, $message = '' ) {
-			if ( ! $passed ) {
-				throw new Exception( $message );
-			}
-		}
-
-		/**
-		 * The parent parameter is array|ArrayAccess. Any concrete spelling of that PHPStan can
-		 * check - including a fully generic ArrayAccess<mixed,mixed> - reads as narrower than the
-		 * parent's bare, unparameterized ArrayAccess and trips the contravariance rule, so this is
-		 * typed mixed: the widest possible type, trivially at least as wide as the parent's.
-		 *
-		 * @param mixed $key
-		 * @param mixed $array
-		 */
-		public static function assertArrayHasKey( $key, $array, string $message = '' ): void {
-			self::stub_check( is_array( $array ) && array_key_exists( $key, $array ), $message );
-		}
-
-		/**
-		 * @param mixed $key
-		 * @param mixed $array
-		 */
-		public static function assertArrayNotHasKey( $key, $array, string $message = '' ): void {
-			self::stub_check( ! ( is_array( $array ) && array_key_exists( $key, $array ) ), $message );
-		}
-
-		public static function assertContains( $needle, iterable $haystack, string $message = '' ): void {
-			self::stub_check( in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), true ), $message );
-		}
-
-		public static function assertNotContains( $needle, iterable $haystack, string $message = '' ): void {
-			self::stub_check( ! in_array( $needle, is_array( $haystack ) ? $haystack : iterator_to_array( $haystack ), true ), $message );
-		}
-
-		public static function assertCount( int $expected_count, $haystack, string $message = '' ): void {
-			self::stub_check( is_countable( $haystack ) && count( $haystack ) === $expected_count, $message );
-		}
-
-		public static function assertEmpty( $actual, string $message = '' ): void {
-			self::stub_check( empty( $actual ), $message );
-		}
-
-		public static function assertNotEmpty( $actual, string $message = '' ): void {
-			self::stub_check( ! empty( $actual ), $message );
-		}
-
-		public static function assertEquals( $expected, $actual, string $message = '' ): void {
-			self::stub_check( $expected == $actual, $message ); // phpcs:ignore Universal.Operators.StrictComparisons
-		}
-
-		public static function assertTrue( $condition, string $message = '' ): void {
-			self::stub_check( $condition === true, $message );
-		}
-
-		public static function assertFalse( $condition, string $message = '' ): void {
-			self::stub_check( $condition === false, $message );
-		}
-
-		public static function assertNotFalse( $condition, string $message = '' ): void {
-			self::stub_check( $condition !== false, $message );
-		}
-
-		public static function assertFileExists( string $filename, string $message = '' ): void {
-			self::stub_check( file_exists( $filename ), $message );
-		}
-
-		public static function assertGreaterThan( $expected, $actual, string $message = '' ): void {
-			self::stub_check( $actual > $expected, $message );
-		}
-
-		public static function assertGreaterThanOrEqual( $expected, $actual, string $message = '' ): void {
-			self::stub_check( $actual >= $expected, $message );
-		}
-
-		public static function assertLessThan( $expected, $actual, string $message = '' ): void {
-			self::stub_check( $actual < $expected, $message );
-		}
-
-		public static function assertLessThanOrEqual( $expected, $actual, string $message = '' ): void {
-			self::stub_check( $actual <= $expected, $message );
-		}
-
-		public static function assertInstanceOf( string $expected, $actual, string $message = '' ): void {
-			self::stub_check( $actual instanceof $expected, $message );
-		}
-
-		public static function assertNotInstanceOf( string $expected, $actual, string $message = '' ): void {
-			self::stub_check( ! ( $actual instanceof $expected ), $message );
-		}
-
-		public static function assertIsArray( $actual, string $message = '' ): void {
-			self::stub_check( is_array( $actual ), $message );
-		}
-
-		public static function assertIsBool( $actual, string $message = '' ): void {
-			self::stub_check( is_bool( $actual ), $message );
-		}
-
-		public static function assertIsObject( $actual, string $message = '' ): void {
-			self::stub_check( is_object( $actual ), $message );
-		}
-
-		public static function assertIsString( $actual, string $message = '' ): void {
-			self::stub_check( is_string( $actual ), $message );
-		}
-
-		public static function assertIsNumeric( $actual, string $message = '' ): void {
-			self::stub_check( is_numeric( $actual ), $message );
-		}
-
-		public static function assertIsNotNumeric( $actual, string $message = '' ): void {
-			self::stub_check( ! is_numeric( $actual ), $message );
-		}
-
-		public static function assertNotNull( $actual, string $message = '' ): void {
-			self::stub_check( $actual !== null, $message );
-		}
-
-		public static function assertNull( $actual, string $message = '' ): void {
-			self::stub_check( $actual === null, $message );
-		}
-
-		public static function assertSame( $expected, $actual, string $message = '' ): void {
-			self::stub_check( $expected === $actual, $message );
-		}
-
-		public static function assertNotSame( $expected, $actual, string $message = '' ): void {
-			self::stub_check( $expected !== $actual, $message );
-		}
-
-		/**
-		 * assertObjectNotHasProperty is deliberately not overridden here: PHPUnit declares it
-		 * final, so any override at all is a fatal "Cannot override final method" - not just a
-		 * signature mismatch. It is only used in test_FrmEntry.php, which this stub rewrite does
-		 * not need to cover.
-		 */
-
-		public static function assertStringContainsString( string $needle, string $haystack, string $message = '' ): void {
-			self::stub_check( strpos( $haystack, $needle ) !== false, $message );
-		}
-
-		public static function assertStringNotContainsString( string $needle, string $haystack, string $message = '' ): void {
-			self::stub_check( strpos( $haystack, $needle ) === false, $message );
-		}
-
-		public static function assertStringStartsWith( string $prefix, string $string, string $message = '' ): void {
-			self::stub_check( strncmp( $string, $prefix, strlen( $prefix ) ) === 0, $message );
-		}
-
-		public static function fail( string $message = '' ): void {
-			throw new Exception( $message );
-		}
-
-		public static function markTestSkipped( string $message = '' ): void {
-			throw new Exception( $message );
-		}
-
-		/**
-		 * Real WP_UnitTestCase_Base declares this one an instance method, not static.
-		 */
-		public function go_to( $url ) {
-			self::stub_check( is_string( $url ) );
-		}
-
-		/**
-		 * Real WP_UnitTestCase_Base declares this one an instance method, not static.
-		 */
-		public function clean_up_global_scope() {
-			self::stub_check( true );
-		}
-	}
-
-	class WP_UnitTestCase extends WP_UnitTestCase_Base {
-	}
-
 	class WP_UnitTest_Factory {
 		/**
 		 * @var WP_UnitTest_Factory_For_Post
@@ -878,6 +714,153 @@ namespace {
 	 * WP_UnitTest_Generator_Sequence above.
 	 */
 	function rand_str( $length = 32 ) {
+	}
+	/**
+	 * The WordPress Abilities API, added in WordPress 7.0 and so absent from the
+	 * wordpress-stubs release this plugin pins.
+	 */
+	class WP_Ability {
+		/**
+		 * @return string
+		 */
+		public function get_name() {
+		}
+		/**
+		 * @return array
+		 */
+		public function get_input_schema() {
+		}
+		/**
+		 * @param array $input Ability input parameters.
+		 *
+		 * @return mixed
+		 */
+		public function execute( $input = array() ) {
+		}
+	}
+	class WP_Ability_Category {
+	}
+	class WP_Abilities_Registry {
+		/**
+		 * @return WP_Abilities_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $name Ability name.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $name ) {
+		}
+	}
+	class WP_Ability_Categories_Registry {
+		/**
+		 * @return WP_Ability_Categories_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $slug Category slug.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $slug ) {
+		}
+	}
+	/**
+	 * @param string $name Ability name, including its namespace prefix.
+	 * @param array  $args Ability definition.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_register_ability( $name, $args ) {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 * @param array  $args Category definition.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_register_ability_category( $slug, $args ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_has_ability( $name ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_get_ability( $name ) {
+	}
+	/**
+	 * @return array<string, WP_Ability>
+	 */
+	function wp_get_abilities() {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_get_ability_category( $slug ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_unregister_ability( $name ) {
+	}
+}
+
+/**
+ * The MCP adapter vendored in lib/vendor. Only what FrmMcpController and FrmMcpConnection call is
+ * stubbed: the adapter is loaded conditionally at runtime, so analysis cannot
+ * see it, and FrmMcpCompat checks for the real thing before any of this is used.
+ */
+namespace WP\MCP\Core {
+	class McpAdapter {
+		const VERSION = '';
+		/**
+		 * @return McpAdapter
+		 */
+		public static function instance() {
+		}
+		/**
+		 * @param string      $server_id             Unique server ID.
+		 * @param string      $server_route_namespace REST namespace to serve on.
+		 * @param string      $server_route          Route within the namespace.
+		 * @param string      $server_name           Human readable server name.
+		 * @param string      $server_description    Human readable server description.
+		 * @param string      $server_version        Server version string.
+		 * @param array       $mcp_transports        Transport class names.
+		 * @param string|null $error_handler         Error handler class name.
+		 * @param string|null $observability_handler Observability handler class name.
+		 * @param array       $tools                 Ability names exposed as tools.
+		 *
+		 * @return mixed True on success, or WP_Error on failure.
+		 */
+		public function create_server( $server_id, $server_route_namespace, $server_route, $server_name, $server_description, $server_version, $mcp_transports, $error_handler, $observability_handler = null, $tools = array() ) {
+		}
+	}
+}
+
+namespace WP\MCP\Transport\Infrastructure {
+	class SessionManager {
+		/**
+		 * @param int    $user_id    The user ID.
+		 * @param string $session_id The session ID.
+		 *
+		 * @return array|false|\WP_Error Session data on success, WP_Error on invalid input, false if not found or inactive.
+		 */
+		public static function get_session( int $user_id, string $session_id ) {
+		}
 	}
 }
 

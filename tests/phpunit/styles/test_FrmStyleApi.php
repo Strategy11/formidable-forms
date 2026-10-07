@@ -2,12 +2,13 @@
 
 /**
  * @group styles
+ *
+ * @covers FrmStyleApi
  */
+#[\PHPUnit\Framework\Attributes\Group( 'styles' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStyleApi::class )]
 class test_FrmStyleApi extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStyleApi::get_api_info
-	 */
 	public function test_get_api_info() {
 		$style_api = new FrmStyleApi();
 		$info      = $style_api->get_api_info();

@@ -409,10 +409,15 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function handle_oauth() {
-		$response_data = array(
-			'redirect_url' => self::get_oauth_redirect_url(),
-		);
-		wp_send_json_success( $response_data );
+		$redirect_url = self::get_oauth_redirect_url();
+
+		if ( false === $redirect_url ) {
+			// Nothing to redirect to — let the button re-render instead of sending a
+			// falsy redirect_url the frontend would otherwise navigate to as a string.
+			wp_send_json_success();
+		}
+
+		wp_send_json_success( array( 'redirect_url' => $redirect_url ) );
 	}
 
 	/**
@@ -713,11 +718,24 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $action
 	 * @param array  $additional_body
+	 * @param string $mode Stripe mode.
 	 *
 	 * @return false|object
 	 */
-	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+	private static function post_with_authenticated_body( $action, $additional_body = array(), $mode = 'auto' ) {
+		$resolved_mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
+		$body          = array_merge( self::get_body_for_mode( $resolved_mode ), $additional_body );
+
+		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'stripe', $body['frm_strp_connect_mode'] ) ) {
+			// There are no credentials for this mode, so the connect server would reject the request
+			// with an error about the signature. Report the missing connection instead.
+			// An account that has credentials but never finished onboarding is not blocked here,
+			// since the account status check is what moves it out of that state.
+			self::$latest_error_from_stripe_connect = FrmTransLiteAppHelper::get_gateway_connection_error( 'stripe', $body['frm_strp_connect_mode'] );
+			FrmTransLiteLog::log_message( 'Stripe Connect Error', self::$latest_error_from_stripe_connect );
+			return false;
+		}
+
 		$response = self::post_to_connect_server( $action, $body );
 
 		if ( is_object( $response ) ) {
@@ -774,7 +792,7 @@ class FrmStrpLiteConnectHelper {
 			return $data;
 		}
 
-		if ( isset( self::$latest_error_from_stripe_connect ) && str_starts_with( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
+		if ( isset( self::$latest_error_from_stripe_connect ) && self::is_missing_plan_error( self::$latest_error_from_stripe_connect ) ) {
 			return self::$latest_error_from_stripe_connect;
 		}
 
@@ -784,12 +802,13 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string       $sub_id
 	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 * @param string       $mode        'auto', 'live', or 'test'.
 	 *
 	 * @return bool
 	 */
-	public static function cancel_subscription( $sub_id, $customer_id = false ) {
+	public static function cancel_subscription( $sub_id, $customer_id = false, $mode = 'auto' ) {
 		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
-		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
+		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ), $mode );
 		return false !== $data;
 	}
 
@@ -815,33 +834,37 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
+	 * @param string $mode Stripe mode.
 	 *
 	 * @return false|object
 	 */
-	public static function get_event( $event_id ) {
-		$event = wp_cache_get( $event_id, 'frm_strp' );
+	public static function get_event( $event_id, $mode = 'auto' ) {
+		$resolved_mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
+		$cache_key     = $resolved_mode . '_' . $event_id;
+		$event         = wp_cache_get( $cache_key, 'frm_strp' );
 
 		if ( is_object( $event ) ) {
 			return $event;
 		}
 
-		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ) );
+		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ), $resolved_mode );
 
 		if ( false === $event || empty( $event->event ) ) {
 			return false;
 		}
 
-		wp_cache_set( $event_id, $event->event, 'frm_strp' );
+		wp_cache_set( $cache_key, $event->event, 'frm_strp' );
 		return $event->event;
 	}
 
 	/**
 	 * @param string $event_id
+	 * @param string $mode Stripe mode.
 	 *
 	 * @return mixed
 	 */
-	public static function process_event( $event_id ) {
-		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
+	public static function process_event( $event_id, $mode = 'auto' ) {
+		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ), $mode );
 	}
 
 	/**
@@ -871,19 +894,22 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 * @param string $mode      'auto', 'live', or 'test'.
 	 *
 	 * @return bool
 	 */
-	public static function update_intent( $intent_id, $data ) {
-		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
+	public static function update_intent( $intent_id, $data, $mode = 'auto' ) {
+		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ), $mode );
 		return false !== $data;
 	}
 
 	/**
+	 * @param string $mode 'auto', 'live', or 'test'.
+	 *
 	 * @return array
 	 */
-	public static function get_unprocessed_event_ids() {
-		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+	public static function get_unprocessed_event_ids( $mode = 'auto' ) {
+		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids', array(), $mode );
 
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
@@ -951,5 +977,23 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		wp_send_json_error();
+	}
+
+	/**
+	 * Check whether a Stripe error string means the plan used to create a subscription does not
+	 * exist yet.
+	 *
+	 * Stripe's error used to always read "No such plan: '...'". Newer API versions describe the
+	 * same missing legacy Plan as "No such price: '...'" instead, even though the request used the
+	 * `plan` parameter, so both forms have to be recognized.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $message
+	 *
+	 * @return bool
+	 */
+	private static function is_missing_plan_error( $message ) {
+		return str_starts_with( $message, 'No such plan: ' ) || str_starts_with( $message, 'No such price: ' );
 	}
 }

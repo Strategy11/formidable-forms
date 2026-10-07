@@ -86,7 +86,13 @@ class FrmHooksController {
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
 		// Clear embed posts transient when posts are updated.
-		add_action( 'wp_insert_post', 'FrmFormsHelper::maybe_clear_embed_posts_transient', 10, 2 );
+		// These call FrmFormEmbedsHelper directly so a front end post save does not have to load
+		// the FrmFormsListHelper admin list table.
+		add_action( 'wp_insert_post', 'FrmFormEmbedsHelper::maybe_clear_on_insert', 10, 3 );
+		add_action( 'post_updated', 'FrmFormEmbedsHelper::maybe_clear_on_update', 10, 3 );
+		add_action( 'trashed_post', 'FrmFormEmbedsHelper::maybe_clear_for_post' );
+		add_action( 'untrashed_post', 'FrmFormEmbedsHelper::maybe_clear_for_post' );
+		add_action( 'deleted_post', 'FrmFormEmbedsHelper::maybe_clear_for_post', 10, 2 );
 
 		// Form Shortcodes.
 		add_shortcode( 'formidable', 'FrmFormsController::get_form_shortcode' );
@@ -100,7 +106,6 @@ class FrmHooksController {
 		// Simple Blocks Controller.
 		add_action( 'init', 'FrmSimpleBlocksController::register_simple_form_block' );
 
-		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
 
 		/**
@@ -113,6 +118,7 @@ class FrmHooksController {
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
 
 		// Summary emails.
+		add_filter( 'frm_spam_retention_days', 'FrmSpamEntriesHelper::guard_spam_retention', PHP_INT_MAX );
 		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
 
 		// Gated Content — daily cleanup of expired tokens.
@@ -134,6 +140,11 @@ class FrmHooksController {
 		FrmSquareLiteHooksController::load_hooks();
 		FrmPayPalLiteHooksController::load_hooks();
 
+		// The MCP server and the abilities that drive it. Both stand down on a
+		// site where an API add-on that predates the move still owns them.
+		FrmMcpController::load_hooks();
+		FrmAbilitiesController::load_hooks();
+
 		// GDPR
 		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
 	}
@@ -147,6 +158,8 @@ class FrmHooksController {
 		add_action( 'admin_notices', 'FrmAppController::pro_get_started_headline' );
 		add_action( 'admin_init', 'FrmAppController::admin_init', 11 );
 		add_action( 'admin_enqueue_scripts', 'FrmAppController::admin_enqueue_scripts' );
+		add_action( 'admin_footer', 'FrmAppHelper::print_deferred_tooltips' );
+		add_action( 'admin_footer', 'FrmBuilderSelectHelper::print_templates' );
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
@@ -157,6 +170,11 @@ class FrmHooksController {
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
 		add_filter( 'update_user_metadata', 'FrmEntriesController::check_hidden_cols', 10, 5 );
 		add_action( 'updated_user_meta', 'FrmEntriesController::update_hidden_cols', 10, 4 );
+
+		// Spam Entries Controller.
+		add_filter( 'frm_row_actions', 'FrmSpamEntriesController::row_actions', 99, 2 );
+		add_filter( 'frm_entry_actions_dropdown', 'FrmSpamEntriesController::sidebar_actions', 99, 2 );
+		add_action( 'frm_show_entry_start_content', 'FrmSpamEntriesController::show_spam_notice', 5 );
 
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
@@ -240,6 +258,7 @@ class FrmHooksController {
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
+		FrmMcpSettingsController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 

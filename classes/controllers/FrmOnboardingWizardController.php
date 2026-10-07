@@ -131,8 +131,13 @@ class FrmOnboardingWizardController {
 			add_filter( 'option_frm_inbox', self::class . '::add_wizard_to_floating_links' );
 		}
 
-		// Load page if admin page is Onboarding Wizard.
-		self::maybe_load_page();
+		/**
+		 * Load page if admin page is Onboarding Wizard.
+		 * This waits for init because it reads the inbox option, and the filter above translates
+		 * when it does. Translating before the text domain is loaded triggers a
+		 * _load_textdomain_just_in_time notice in WordPress 6.7+.
+		 */
+		add_action( 'init', self::class . '::maybe_load_page' );
 	}
 
 	/**

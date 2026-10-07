@@ -5,6 +5,9 @@ function frmFrontFormJS() {
 
 	let jsErrors = [];
 
+	// Controls a field can hand focus to when an error summary link is clicked.
+	const FOCUSABLE_FIELD_SELECTOR = 'input:not([type="hidden"]), select, textarea, button, [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
 	/**
 	 * Triggers custom JS event.
 	 *
@@ -104,6 +107,14 @@ function frmFrontFormJS() {
 				fieldId = `${ fieldId }-${ nameParts[ 1 ].replace( '[', '' ) }`;
 			} else {
 				fieldId = `${ fieldId }-${ nameParts[ 0 ] }-${ nameParts[ 1 ].replace( '[', '' ) }`;
+
+				// Inside a repeating section, every sub field of the same combo field would
+				// otherwise collapse to this same key, since the sub field name is not part of
+				// it above. Add it so each sub field still gets its own distinct key/container.
+				const subFieldContainer = field.closest( '[data-sub-field-name]' );
+				if ( subFieldContainer ) {
+					fieldId += `-${ subFieldContainer.getAttribute( 'data-sub-field-name' ) }`;
+				}
 			}
 		}
 
@@ -207,6 +218,10 @@ function frmFrontFormJS() {
 					}
 				);
 			}
+		);
+
+		vanillaJsObject?.querySelectorAll( '.frm_required_field .frm_combo_inputs_container' ).forEach(
+			comboContainer => maybeCombineComboFieldErrors( comboContainer, errors )
 		);
 
 		vanillaJsObject?.querySelectorAll( 'input,select,textarea' ).forEach(
@@ -325,6 +340,12 @@ function frmFrontFormJS() {
 			return;
 		}
 
+		const comboContainer = field.closest( '.frm_combo_inputs_container' );
+		if ( comboContainer && ( isRequiredComboField( comboContainer ) || comboFieldHasFieldError( comboContainer ) ) ) {
+			validateComboField( comboContainer, field, addErrors );
+			return;
+		}
+
 		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
@@ -346,6 +367,279 @@ function frmFrontFormJS() {
 			// JS validation is off, so only remove existing errors once the field passes validation.
 			removeFieldError( fieldContainer );
 		}
+	}
+
+	/**
+	 * Gets the container to show the error for a key in.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} form
+	 * @param {string}      key
+	 * @return {HTMLElement|null} The container, or null if there is none.
+	 */
+	function getFieldContainerForErrorKey( form, key ) {
+		const container = form.querySelector( `#frm_field_${ key }_container` );
+		if ( container ) {
+			return container;
+		}
+
+		// A sub field container in a repeater does not have an ID that matches its key, so look it up from its input.
+		const inputs = Array.from( form.querySelectorAll( '.frm_combo_inputs_container' ) ).flatMap( getRequiredComboSubInputs );
+		const input = inputs.find( subInput => key === getFieldId( subInput, true ) );
+		return input ? input.closest( '.frm_form_field' ) : null;
+	}
+
+	/**
+	 * Gets the sub field inputs of a combo field, such as name or address, that must be filled in.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
+	 * @return {HTMLElement[]} Visible inputs that are not optional.
+	 */
+	function getRequiredComboSubInputs( comboContainer ) {
+		return Array.from( comboContainer.querySelectorAll( 'input, select, textarea' ) ).filter(
+			input => 'hidden' !== input.type && ! hasClass( input, 'frm_optional' ) && null !== input.offsetParent
+		);
+	}
+
+	/**
+	 * Gets the error key of the container for the whole combo field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} fieldContainer The container of the combo field.
+	 * @return {string} The key, like '12' or '12-5-0' in a repeater.
+	 */
+	function getFieldContainerErrorKey( fieldContainer ) {
+		return fieldContainer.id.replace( /^frm_field_/, '' ).replace( /_container$/, '' );
+	}
+
+	/**
+	 * When every required sub field of a combo field is empty, replace the errors for each sub field
+	 * with one error for the whole field. This matches the errors shown after submitting the form.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}   comboContainer The .frm_combo_inputs_container element.
+	 * @param {Object}        errors         Errors keyed by field container key, including the required errors of the sub fields. Updated in place.
+	 * @param {HTMLElement[]} inputs         Optional. The required sub inputs. Defaults to a query of the combo field.
+	 * @return {void}
+	 */
+	function maybeCombineComboFieldErrors( comboContainer, errors, inputs = getRequiredComboSubInputs( comboContainer ) ) {
+		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		if ( ! isRequiredComboField( comboContainer ) ) {
+			return;
+		}
+
+		const allEmpty = inputs.length && inputs.every( input => getFieldId( input, true ) in errors );
+		if ( ! allEmpty ) {
+			return;
+		}
+
+		const fieldKey = getFieldContainerErrorKey( fieldContainer );
+		let message = getComboFieldRequiredMessage( comboContainer, inputs[ 0 ] );
+
+		inputs.forEach( input => {
+			const key = getFieldId( input, true );
+			if ( '' === message && errors[ key ] ) {
+				// Fall back to the sub field message when the field has no message of its own.
+				message = errors[ key ];
+			}
+			// An empty error still flags the sub field, without repeating the message under it.
+			errors[ key ] = '';
+		} );
+
+		errors[ fieldKey ] = message;
+	}
+
+	/**
+	 * Gets the required message for a whole combo field, wrapped in the custom error HTML when the
+	 * form has any.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
+	 * @param {HTMLElement} subInput       A sub field input of the combo field.
+	 * @return {string} The message, or an empty string if there is none.
+	 */
+	function getComboFieldRequiredMessage( comboContainer, subInput ) {
+		const message = comboContainer.getAttribute( 'data-reqmsg' );
+		if ( ! message ) {
+			return '';
+		}
+
+		return wrapErrorHtml( message, subInput, getComboFieldErrorKey( subInput ) );
+	}
+
+	/**
+	 * Gets the key used in the error element ID for the whole combo field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} subInput A sub field input of the combo field.
+	 * @return {string} The field HTML ID without its 'field_' prefix.
+	 */
+	function getComboFieldErrorKey( subInput ) {
+		const subFieldContainer = subInput.closest( '[data-sub-field-name]' );
+		const subFieldName = subFieldContainer ? subFieldContainer.getAttribute( 'data-sub-field-name' ) : '';
+		// The sub input ID is the field HTML ID plus '_{sub field name}'.
+		let errorKey = subInput.id.replace( /^field_/, '' );
+		if ( subFieldName && errorKey.endsWith( `_${ subFieldName }` ) ) {
+			errorKey = errorKey.slice( 0, -( subFieldName.length + 1 ) );
+		}
+		return errorKey;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
+	 * @return {boolean} True if the combo field is required.
+	 */
+	function isRequiredComboField( comboContainer ) {
+		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		return null !== fieldContainer && hasClass( fieldContainer, 'frm_required_field' );
+	}
+
+	/**
+	 * Checks if a combo field, or any of its sub fields, is currently showing a required-field
+	 * error - either the combined error for the whole field, or a split-out error on one sub
+	 * field (see validateComboField).
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
+	 * @return {boolean} True if the field or one of its sub fields has an error.
+	 */
+	function comboFieldHasFieldError( comboContainer ) {
+		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		if ( fieldContainer && hasClass( fieldContainer, 'frm_blank_field' ) && null !== fieldContainer.querySelector( ':scope > .frm_error' ) ) {
+			return true;
+		}
+
+		// A sub field keeps its own frm_blank_field flag once the whole-field error has already
+		// been split into per sub field errors. Route through the combo-aware validation in that
+		// state too, so blurring another still-blank sub field does not wipe its error.
+		return null !== comboContainer.querySelector( '.frm_form_field.frm_blank_field' );
+	}
+
+	/**
+	 * Validates every sub field of a combo field together, so an error for the whole field can
+	 * change into errors for the sub fields that are still empty.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
+	 * @param {HTMLElement} field          The sub field input that changed.
+	 * @param {boolean}     addErrors      Whether to add new errors.
+	 * @return {void}
+	 */
+	function validateComboField( comboContainer, field, addErrors ) {
+		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		const hadError = comboFieldHasFieldError( comboContainer );
+		const inputs = getRequiredComboSubInputs( comboContainer );
+		let errors = {};
+
+		if ( isRequiredComboField( comboContainer ) ) {
+			inputs.forEach( input => {
+				errors = checkRequiredField( input, errors );
+			} );
+			maybeCombineComboFieldErrors( comboContainer, errors, inputs );
+		}
+
+		if ( ! ( getFieldId( field, true ) in errors ) ) {
+			validateFieldValue( field, errors, false );
+		}
+
+		const fieldKey = getFieldContainerErrorKey( fieldContainer );
+		const hasErrors = Object.keys( errors ).length > 0;
+		if ( ! addErrors && hasErrors ) {
+			// JS validation is off, so keep the existing errors until the whole field passes. Only
+			// unflag the sub field that changed, once it is no longer part of an error.
+			const subFieldContainer = field.closest( '.frm_form_field' );
+			if ( subFieldContainer !== fieldContainer && ! ( fieldKey in errors ) && ! ( getFieldId( field, true ) in errors ) ) {
+				removeFieldError( subFieldContainer );
+			}
+
+			if ( ! ( fieldKey in errors ) && hasClass( fieldContainer, 'frm_blank_field' ) ) {
+				// The error for the whole field no longer applies. Keep the flags on the sub fields that still fail.
+				const failing = inputs.filter( input => getFieldId( input, true ) in errors );
+				removeComboFieldErrors( comboContainer, field, inputs, errors );
+				failing.forEach( input => {
+					input.closest( '.frm_form_field' ).classList.add( 'frm_blank_field' );
+					input.setAttribute( 'aria-invalid', 'true' );
+				} );
+			}
+			return;
+		}
+
+		removeComboFieldErrors( comboContainer, field, inputs, errors );
+
+		if ( ! addErrors ) {
+			return;
+		}
+
+		// Resolve each sub field's real container straight from its input, instead of by id
+		// lookup - the id lookup can miss inside a repeating section, where a sub field
+		// container's id does not necessarily include the repeating row (see getFieldId()).
+		const subFieldContainers = {};
+		inputs.forEach( input => {
+			subFieldContainers[ getFieldId( input, true ) ] = input.closest( '.frm_form_field' );
+		} );
+
+		// The first time a combo field is validated, only flag the sub field that changed, not the
+		// ones the person has not reached yet.
+		const changedKey = getFieldId( field, true );
+		const keys = Object.keys( errors ).filter( key => hadError || key === changedKey || key === fieldKey );
+
+		const form = fieldContainer.closest( 'form' );
+		keys.forEach( key => {
+			const container = key === fieldKey ? fieldContainer : ( subFieldContainers[ key ] || ( form && getFieldContainerForErrorKey( form, key ) ) );
+			if ( container ) {
+				addFieldError( container, key, errors );
+			}
+		} );
+	}
+
+	/**
+	 * Removes the errors a combo field validation is about to recompute: the error for the whole
+	 * field, the error of the sub field that changed, and the error of any sub field that still
+	 * fails. Other sub fields keep their errors, like a server error the client cannot recompute.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement}   comboContainer The .frm_combo_inputs_container element.
+	 * @param {HTMLElement}   field          The sub field input that changed.
+	 * @param {HTMLElement[]} inputs         The required sub inputs.
+	 * @param {Object}        errors         Errors keyed by field container key.
+	 * @return {void}
+	 */
+	function removeComboFieldErrors( comboContainer, field, inputs, errors ) {
+		const fieldContainer = comboContainer.closest( '.frm_form_field' );
+		const subFieldContainers = [ field.closest( '.frm_form_field' ) ];
+
+		inputs.forEach( input => {
+			if ( getFieldId( input, true ) in errors ) {
+				subFieldContainers.push( input.closest( '.frm_form_field' ) );
+			}
+		} );
+		subFieldContainers.filter( container => container && container !== fieldContainer ).forEach( removeFieldError );
+
+		// Only the error placed on the field itself. The sub field errors inside it are handled above.
+		fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
+		fieldContainer.querySelectorAll( ':scope > .frm_error, :scope > [data-frm-error]' ).forEach( errorMessage => {
+			removeElementFromInputDescribedBy( errorMessage );
+			errorMessage.remove();
+		} );
+
+		// The error for the whole field flags every input, so unflag the ones without an error of their own.
+		comboContainer.querySelectorAll( '[aria-invalid="true"]' ).forEach( input => {
+			if ( null === input.closest( '.frm_form_field.frm_blank_field' ) ) {
+				input.setAttribute( 'aria-invalid', 'false' );
+			}
+		} );
 	}
 
 	/**
@@ -541,7 +835,14 @@ function frmFrontFormJS() {
 		let fieldID;
 		const url = field.value;
 
-		if ( url !== '' && ! /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i.test( url ) ) {
+		// Keep in sync with FrmFieldUrl::get_url_pattern(), but the international ranges differ by design:
+		// JS matches UTF-16 code units, so it uses the u flag and a code point range where the PHP side
+		// matches raw UTF-8 bytes. PHP must NOT gain /u: preg_match() returns false on malformed UTF-8.
+		const pattern = field.hasAttribute( 'data-intl-domains' )
+			? /^http(s)?:\/\/(?:localhost|(?:[\da-z\u0080-\u{10FFFF}\.-]+\.[\da-z\u0080-\u{10FFFF}\.-]+))/iu
+			: /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i;
+
+		if ( url !== '' && ! pattern.test( url ) ) {
 			fieldID = getFieldId( field, true );
 			if ( ! ( fieldID in errors ) ) {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
@@ -734,6 +1035,11 @@ function frmFrontFormJS() {
 		const recaptcha = form.querySelector( '.frm-g-recaptcha[data-size="invisible"], .g-recaptcha[data-size="invisible"]' );
 		if ( recaptcha ) {
 			const recaptchaID = recaptcha.dataset.rid;
+			if ( recaptcha.dataset.saveAsSpam === '1' &&
+				( typeof grecaptcha === 'undefined' || recaptchaID === undefined ) ) {
+				return false;
+			}
+
 			const alreadyChecked = grecaptcha.getResponse( recaptchaID );
 			if ( alreadyChecked.length === 0 ) {
 				return recaptcha;
@@ -771,7 +1077,8 @@ function frmFrontFormJS() {
 		try {
 			response = grecaptcha.getResponse( recaptchaID );
 		} catch ( e ) {
-			if ( formEl.querySelector( 'input[name="recaptcha_checked"]' ) ) {
+			// When reCAPTCHA cannot load and failures are saved as spam, let the server flag the entry.
+			if ( recaptcha.dataset.saveAsSpam === '1' || formEl.querySelector( 'input[name="recaptcha_checked"]' ) ) {
 				return errors;
 			}
 			response = '';
@@ -807,11 +1114,14 @@ function frmFrontFormJS() {
 	}
 
 	/**
+	 * @since x.x Added the `keyOverride` parameter.
+	 *
 	 * @param {string}      msg
 	 * @param {HTMLElement} field
+	 * @param {string}      keyOverride Optional. The key to use in the error element ID. Defaults to one based on the field.
 	 * @return {string} The error HTML to use.
 	 */
-	function wrapErrorHtml( msg, field ) {
+	function wrapErrorHtml( msg, field, keyOverride = '' ) {
 		let errorHtml = field.getAttribute( 'data-error-html' );
 		if ( null === errorHtml ) {
 			return msg;
@@ -819,6 +1129,9 @@ function frmFrontFormJS() {
 
 		errorHtml = errorHtml.replace( /\+/g, '%20' );
 		msg = decodeURIComponent( errorHtml ).replace( '[error]', msg );
+		if ( keyOverride ) {
+			return msg.replace( '[key]', keyOverride );
+		}
 		const fieldId = getFieldId( field, false );
 		const split = fieldId.split( '-' );
 		const fieldIdParts = field.id.split( '_' );
@@ -890,6 +1203,7 @@ function frmFrontFormJS() {
 				response = defaultResponse;
 			} else {
 				// Response is a string. Convert it to an object.
+				// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 				response = response.replace( /^\s+|\s+$/g, '' );
 				if ( response.indexOf( '{' ) === 0 ) {
 					response = JSON.parse( response );
@@ -941,7 +1255,9 @@ function frmFrontFormJS() {
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
-						replaceContent.replaceWith( response.content );
+						const insertedContent = jQuery( jQuery.parseHTML( response.content ) );
+						replaceContent.replaceWith( insertedContent );
+						focusFormMessage( insertedContent );
 
 						addUrlParam( response );
 
@@ -1067,6 +1383,33 @@ function frmFrontFormJS() {
 		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
 	}
 
+	/**
+	 * Move focus to the top-level success message after an AJAX submit, so screen reader
+	 * users are notified it appeared. Scoped to `insertedContent` (the markup that just
+	 * replaced the form) rather than a wider ancestor, so an unrelated `.frm_message`-classed
+	 * element elsewhere on the page can never be focused instead.
+	 *
+	 * @since x.x
+	 *
+	 * @param {jQuery} insertedContent The markup that just replaced the form.
+	 * @return {void}
+	 */
+	function focusFormMessage( insertedContent ) {
+		let message;
+		for ( const node of insertedContent.get() ) {
+			if ( node.nodeType !== 1 ) {
+				continue;
+			}
+			message = node.matches( '.frm_message' ) ? node : node.querySelector( '.frm_message' );
+			if ( message ) {
+				break;
+			}
+		}
+		if ( message ) {
+			focusInput( message );
+		}
+	}
+
 	function afterFormSubmitted( object, response ) {
 		const tempDiv = document.createElement( 'div' );
 		tempDiv.innerHTML = response.content;
@@ -1151,6 +1494,63 @@ function frmFrontFormJS() {
 		return kvp.join( '&' );
 	}
 
+	/**
+	 * Resolve the per-form error-announcement config rendered by
+	 * FrmFormsHelper::get_error_config_for_form() onto the form's `data-frm-error-config`
+	 * attribute. Falls back to the page-global frm_js defaults (and no summary focus) when
+	 * a form element isn't available, e.g. a `frm-show-form` div rendered without a `form`
+	 * tag around it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement|null} formEl
+	 * @return {{includeAlertRole: boolean, focusFirstError: boolean, focusErrorSummary: boolean}} The resolved config.
+	 */
+	function getErrorConfigForForm( formEl ) {
+		const fallback = {
+			includeAlertRole: !! frm_js.include_alert_role,
+			focusFirstError: !! frm_js.focus_first_error,
+			focusErrorSummary: false,
+		};
+
+		if ( ! formEl || ! formEl.dataset.frmErrorConfig ) {
+			return fallback;
+		}
+
+		// The config is static for the life of the page, so cache it on the form element
+		// instead of re-parsing on every field error (submit, and every change-event
+		// validation while the user is filling out the form).
+		if ( ! formEl.frmErrorConfigCache ) {
+			try {
+				formEl.frmErrorConfigCache = JSON.parse( formEl.dataset.frmErrorConfig );
+			} catch ( e ) {
+				formEl.frmErrorConfigCache = fallback;
+			}
+		}
+
+		return formEl.frmErrorConfigCache;
+	}
+
+	/**
+	 * Inserts error HTML into a field's container, tagging every inserted top-level
+	 * element with a data-frm-error attribute. removeFieldError()/removeAllErrors() rely
+	 * on that attribute (rather than the frm_error class) to find and remove the visible
+	 * error element again, since a site's own custom field HTML template can render the
+	 * [error] placeholder without a frm_error class or id. This only covers the visible
+	 * element — aria-describedby cleanup still depends on an id, which custom markup may
+	 * not have.
+	 *
+	 * @param {HTMLElement} container
+	 * @param {string}      errorHtml
+	 * @return {void}
+	 */
+	function insertErrorHtml( container, errorHtml ) {
+		const template = document.createElement( 'template' );
+		template.innerHTML = errorHtml;
+		Array.from( template.content.children ).forEach( el => el.setAttribute( 'data-frm-error', '' ) );
+		container.append( template.content );
+	}
+
 	function addFieldError( $fieldCont, key, jsErrors ) {
 		const container = $fieldCont instanceof jQuery ? $fieldCont.get( 0 ) : $fieldCont;
 
@@ -1159,22 +1559,31 @@ function frmFrontFormJS() {
 		}
 
 		container.classList.add( 'frm_blank_field' );
-		const inputs = container.querySelectorAll( 'input, select, textarea' );
-		const id = getErrorElementId( key, inputs[ 0 ] );
+		const allInputs = container.querySelectorAll( 'input, select, textarea' );
+		// Custom error HTML carries its own ID, so use that one for aria-describedby.
+		const htmlId = 'string' === typeof jsErrors[ key ] && jsErrors[ key ].includes( '<div' ) ? jsErrors[ key ].match( /\bid="([^"]+)"/ ) : null;
+		const id = htmlId ? htmlId[ 1 ] : getErrorElementId( key, allInputs[ 0 ] );
+		// An error for a whole combo field, such as an address, does not apply to its optional sub fields.
+		const inputs = Array.from( allInputs ).filter(
+			input => ! hasClass( input, 'frm_optional' ) || input.closest( '.frm_form_field' ) === container
+		);
 
 		let describedBy;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
+		} else if ( '' === jsErrors[ key ] ) {
+			// An empty error flags a combo sub field whose message is shown for the whole field.
 		} else {
 			let errorHtml;
 			if ( jsErrors[ key ].includes( '<div' ) ) {
 				errorHtml = jsErrors[ key ];
 			} else {
-				const roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+				const config = getErrorConfigForForm( container.closest( '.frm-show-form' ) );
+				const roleString = config.includeAlertRole ? 'role="alert"' : '';
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
-			container.insertAdjacentHTML( 'beforeend', errorHtml );
+			insertErrorHtml( container, errorHtml );
 			inputs.forEach( input => {
 				describedBy = input.getAttribute( 'aria-describedby' );
 				if ( ! describedBy ) {
@@ -1233,7 +1642,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const errorMessage = container.querySelector( '.frm_error' );
+		const errorMessages = container.querySelectorAll( '.frm_error, [data-frm-error]' );
 		const input = container.querySelector( 'input, select, textarea' );
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
@@ -1249,10 +1658,10 @@ function frmFrontFormJS() {
 			}
 		}
 
-		if ( errorMessage ) {
+		errorMessages.forEach( errorMessage => {
 			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
-		}
+		} );
 	}
 
 	/**
@@ -1283,7 +1692,7 @@ function frmFrontFormJS() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+		document.querySelectorAll( '.form-field .frm_error, .form-field [data-frm-error]' ).forEach( el => {
 			removeElementFromInputDescribedBy( el );
 			el.remove();
 		} );
@@ -1431,12 +1840,25 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		if ( ! frm_js.focus_first_error ) {
+		const errors = document.querySelectorAll( '.frm_form_field .frm_error, .frm_form_field [data-frm-error]' );
+		if ( ! errors.length ) {
 			return;
 		}
 
-		const errors = document.querySelectorAll( '.frm_form_field .frm_error' );
-		if ( ! errors.length ) {
+		const formContainer = errors[ 0 ].closest( '.frm-show-form' );
+		const config = getErrorConfigForForm( formContainer );
+
+		if ( config.focusErrorSummary ) {
+			const summary = formContainer ? formContainer.querySelector( '[data-frm-error-summary]' ) : null;
+			if ( summary ) {
+				summary.focus();
+				return;
+			}
+			// No summary in the DOM (js_validate's client-side path never renders one): fall
+			// through to the first-errored-field focus below.
+		}
+
+		if ( ! config.focusFirstError && ! config.focusErrorSummary ) {
 			return;
 		}
 
@@ -1444,6 +1866,9 @@ function frmFrontFormJS() {
 		let timeoutCallback;
 		do {
 			element = element.previousSibling;
+			if ( ! element ) {
+				break;
+			}
 			if ( [ 'input', 'select', 'textarea' ].includes( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
 				break;
@@ -1495,6 +1920,122 @@ function frmFrontFormJS() {
 		} else {
 			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input } );
 		}
+	}
+
+	/**
+	 * Move focus into the field that an error summary link points at.
+	 *
+	 * The link targets the field container, not an input, because the ID of the input inside it
+	 * varies by field type. Several types render no input matching the field key at all (name,
+	 * address, time, star, scale, GDPR, ranking), and others render one that cannot take focus
+	 * (the file field hides its input behind a dropzone, NPS and Likert use the field key on a
+	 * wrapping div). Resolving the input here keeps every field type working, including types
+	 * that come from add-ons.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event Click event on the summary link.
+	 * @return {void}
+	 */
+	function focusFieldFromErrorLink( event ) {
+		const href = this.getAttribute( 'href' );
+
+		if ( ! href || ! href.startsWith( '#' ) ) {
+			return;
+		}
+
+		const container = document.getElementById( href.substring( 1 ) );
+
+		if ( ! container ) {
+			return;
+		}
+
+		event.preventDefault();
+		container.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+
+		const input = getFocusableInputInField( container );
+
+		if ( input ) {
+			focusInput( input );
+			return;
+		}
+
+		// Nothing inside can take focus, so focus the container instead. Its label is read out,
+		// which is still better than leaving focus on the summary link.
+		container.setAttribute( 'tabindex', '-1' );
+		focusInput( container );
+	}
+
+	/**
+	 * Get the input an error summary link should move focus to.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} container Field container.
+	 * @return {HTMLElement|null} The input to focus, or null when the field has none.
+	 */
+	function getFocusableInputInField( container ) {
+		const inputs = Array.from( container.querySelectorAll( FOCUSABLE_FIELD_SELECTOR ) ).filter( inputCanTakeFocus );
+
+		if ( ! inputs.length ) {
+			return null;
+		}
+
+		// A combo field such as name or address marks the sub field that failed validation, so
+		// prefer it over the first sub field.
+		const invalidInput = inputs.find( input => 'true' === input.getAttribute( 'aria-invalid' ) );
+
+		if ( invalidInput ) {
+			return invalidInput;
+		}
+
+		// Nothing is flagged, which is what a required field with several inputs looks like when
+		// only some of them were filled in. Focus the first one still waiting on a value rather
+		// than the first input of the field, which the user has usually already completed.
+		return inputs.find( fieldInputIsEmpty ) || inputs[ 0 ];
+	}
+
+	/**
+	 * Check if an input is still waiting on a value.
+	 *
+	 * Only inputs that carry their own value count. A checkbox or radio is empty until the group
+	 * as a whole is answered, so the first one in a group is no more blank than the rest of it.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when the input has no value yet.
+	 */
+	function fieldInputIsEmpty( input ) {
+		if ( 'BUTTON' === input.nodeName || [ 'button', 'checkbox', 'file', 'radio', 'submit' ].includes( input.type ) ) {
+			return false;
+		}
+
+		return '' === String( input.value || '' ).trim();
+	}
+
+	/**
+	 * Check that an input is able to receive focus, so a summary link never focuses something
+	 * the user cannot see. A hidden or zero sized input is skipped in favour of the visible
+	 * control that stands in for it, for example the dropzone button of a file field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} input The input to test.
+	 * @return {boolean} True when focusing the input would put the cursor somewhere visible.
+	 */
+	function inputCanTakeFocus( input ) {
+		if ( input.disabled || 'hidden' === input.type ) {
+			return false;
+		}
+
+		const rect = input.getBoundingClientRect();
+
+		if ( ! rect.width && ! rect.height ) {
+			return false;
+		}
+
+		return 'hidden' !== getComputedStyle( input ).visibility;
 	}
 
 	/**
@@ -2165,6 +2706,7 @@ function frmFrontFormJS() {
 			: price.split( options.decimal_separator );
 
 		if ( options.thousand_separator ) {
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			split[ 0 ] = split[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, options.thousand_separator );
 		}
 
@@ -2205,6 +2747,9 @@ function frmFrontFormJS() {
 
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
+
+			// Move focus into the field when an error summary link is clicked.
+			documentOn( 'click', '.frm_error_link', focusFieldFromErrorLink );
 
 			initFloatingLabels();
 			maybeShowNewTabFallbackMessage();
@@ -2421,7 +2966,7 @@ function frmFrontFormJS() {
 			removeAllErrors();
 
 			for ( key in jsErrors ) {
-				const fieldCont = form ? form.querySelector( `#frm_field_${ key }_container` ) : null;
+				const fieldCont = form ? getFieldContainerForErrorKey( form, key ) : null;
 
 				if ( fieldCont ) {
 					addFieldError( fieldCont, key, jsErrors );

@@ -55,8 +55,14 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card .frm-dropdown-toggle svg,
-#frm_styling_form .frm-dropdown-toggle svg {
+#frm_styling_form .frm-dropdown-toggle:not(.frm-dark-style .frm-dropdown-toggle) svg {
 	color: var(--grey-500);
+}
+
+/* Paired with the rule above so the ID selector cannot outrank the hover. */
+.frm-style-card:not(.frm-dark-style) .frm-dropdown-toggle:hover svg,
+#frm_styling_form .frm-dropdown-toggle:hover:not(.frm-dark-style .frm-dropdown-toggle) svg {
+	color: var(--grey-900);
 }
 
 .frm-style-card.frm-currently-set-style-card .frm-style-card-title-wrapper svg {
@@ -220,13 +226,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 .frm-style-card-wrapper:not(.frm-styles-enabled) .frm-currently-set-style-card .frm-style-card-title-wrapper svg,
 .frm-style-card-wrapper:not(.frm-styles-enabled) .frm-currently-set-style-card .frm-style-card-info {
 	display: none;
-}
-
-/* Style the hamburger menu (used in Style cards, and on the Style "Edit" page beside the Style name. */
-.frm-style-options-menu {
-
-	/* The long "Reset to defaults" option name requires extra space. There's normally a 160px min-width. */
-	min-width: 200px;
 }
 
 #frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select:not(.flatpickr-monthDropdown-months) {

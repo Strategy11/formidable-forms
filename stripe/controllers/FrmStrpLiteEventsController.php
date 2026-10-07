@@ -4,6 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStrpLiteEventsController {
+	/**
+	 * Whether the current event belongs to a local payment or subscription.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private $event_is_owned = true;
 
 	/**
 	 * @var string
@@ -31,6 +39,15 @@ class FrmStrpLiteEventsController {
 	private $status;
 
 	/**
+	 * The Stripe mode the event being handled was polled from.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	private $mode = 'auto';
+
+	/**
 	 * @return void
 	 */
 	private function set_payment_status() {
@@ -47,13 +64,8 @@ class FrmStrpLiteEventsController {
 
 		if ( ! $payment && $this->status === 'refunded' ) {
 			// If the refunded payment doesn't exist, stop here.
+			$this->event_is_owned = false;
 			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken. The refunded payment does not exist' );
-			echo json_encode(
-				array(
-					'response' => 'no payment exists',
-					'success'  => false,
-				)
-			);
 			return;
 		}
 
@@ -88,26 +100,23 @@ class FrmStrpLiteEventsController {
 			$payment_status_still_does_not_match = $this->payment_status_still_does_not_match( $payment->id );
 			$updated                             = $frm_payment->update( $payment->id, $payment_values );
 
-			echo json_encode(
-				array(
-					'response' => 'Payment ' . $payment->id . ' was updated',
-					'success'  => true,
-				)
-			);
-
 			if ( ! $is_partial_refund && $payment_status_still_does_not_match && $updated ) {
 				$run_triggers = true;
 			}
 		}//end if
 
-		if ( $run_triggers && $payment && $payment->action_id ) {
-			FrmTransLiteActionsController::trigger_payment_status_change(
-				array(
-					'status'  => $this->status,
-					'payment' => $payment,
-				)
-			);
+		if ( ! $run_triggers || ! $payment || ! $payment->action_id ) {
+			return;
 		}
+
+		$this->maybe_update_intent_description( $payment );
+
+		FrmTransLiteActionsController::trigger_payment_status_change(
+			array(
+				'status'  => $this->status,
+				'payment' => $payment,
+			)
+		);
 	}
 
 	/**
@@ -115,7 +124,7 @@ class FrmStrpLiteEventsController {
 	 * This is to avoid running actions twice by mistake, since a Stripe Link
 	 * return URL and a webhook event can both process the same payment.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int $payment_id The id of the payment to check.
 	 *
@@ -207,6 +216,10 @@ class FrmStrpLiteEventsController {
 	 * @return void
 	 */
 	private function maybe_subscription_canceled() {
+		if ( ! $this->get_subscription( $this->invoice->id ) ) {
+			return;
+		}
+
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $this->invoice->cancel_at_period_end == true ) {
 			$this->subscription_canceled( 'future_cancel' );
@@ -227,12 +240,6 @@ class FrmStrpLiteEventsController {
 
 		if ( $sub->status === $status ) {
 			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since the subscription is already canceled.' );
-			echo json_encode(
-				array(
-					'response' => 'Already canceled',
-					'success'  => true,
-				)
-			);
 			return false;
 		}
 
@@ -251,12 +258,7 @@ class FrmStrpLiteEventsController {
 	private function prepare_from_invoice() {
 		if ( empty( $this->invoice->subscription ) ) {
 			// This isn't a subscription.
-			echo json_encode(
-				array(
-					'response' => 'Invoice missing',
-					'success'  => false,
-				)
-			);
+			$this->event_is_owned = false;
 			return false;
 		}
 
@@ -332,7 +334,7 @@ class FrmStrpLiteEventsController {
 		add_filter( $hook, $filter, 99 );
 
 		// There is no logged in user when a webhook event is processed, so the customer check has to be skipped here.
-		$cancelled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription_without_customer_check', $sub->sub_id );
+		$cancelled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription_without_customer_check', $sub->sub_id, $this->mode );
 
 		if ( $cancelled ) {
 			FrmTransLiteSubscriptionsController::change_subscription_status(
@@ -386,13 +388,7 @@ class FrmStrpLiteEventsController {
 
 		if ( ! $sub ) {
 			// If this isn't an existing subscription, it must be a charge for another site/plugin.
-			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since there is not a matching subscription for ' . $sub_id );
-			echo json_encode(
-				array(
-					'response' => 'Invoice missing',
-					'success'  => false,
-				)
-			);
+			$this->event_is_owned = false;
 		}
 
 		return $sub;
@@ -476,10 +472,12 @@ class FrmStrpLiteEventsController {
 	public function process_connect_events() {
 		$this->flush_response();
 
-		$unprocessed_event_ids = FrmStrpLiteConnectHelper::get_unprocessed_event_ids();
+		foreach ( FrmStrpLiteAppHelper::get_event_lookup_modes() as $mode ) {
+			$unprocessed_event_ids = FrmStrpLiteConnectHelper::get_unprocessed_event_ids( $mode );
 
-		if ( $unprocessed_event_ids ) {
-			$this->process_event_ids( $unprocessed_event_ids );
+			if ( $unprocessed_event_ids ) {
+				$this->process_event_ids( $unprocessed_event_ids, $mode );
+			}
 		}
 
 		wp_send_json_success();
@@ -489,10 +487,13 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param array<string> $event_ids
+	 * @param string        $mode      The Stripe mode the event ids were polled from.
 	 *
 	 * @return void
 	 */
-	private function process_event_ids( $event_ids ) {
+	private function process_event_ids( $event_ids, $mode = 'auto' ) {
+		$this->mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
+
 		foreach ( $event_ids as $event_id ) {
 			if ( $this->should_skip_event( $event_id ) ) {
 				continue;
@@ -500,17 +501,21 @@ class FrmStrpLiteEventsController {
 
 			set_transient( 'frm_last_process_' . $event_id, time(), 60 );
 
-			$this->event = FrmStrpLiteConnectHelper::get_event( $event_id );
+			$this->event = FrmStrpLiteConnectHelper::get_event( $event_id, $this->mode );
 
 			if ( ! is_object( $this->event ) ) {
 				$this->count_failed_event( $event_id );
 				continue;
 			}
 
+			$this->event_is_owned = true;
 			$this->handle_event();
 			$this->track_handled_event( $event_id );
-			FrmStrpLiteConnectHelper::process_event( $event_id );
-		}
+
+			if ( $this->event_is_owned ) {
+				FrmStrpLiteConnectHelper::process_event( $event_id, $this->mode );
+			}
+		}//end foreach
 	}
 
 	/**
@@ -614,6 +619,55 @@ class FrmStrpLiteEventsController {
 			$this->subscription_canceled();
 		} elseif ( $this->event->type === 'customer.subscription.updated' ) {
 			$this->maybe_subscription_canceled();
+		}
+	}
+
+	/**
+	 * Fill in the description for a Stripe Link payment intent.
+	 *
+	 * The intent is created when the form loads, before an entry exists, so it starts with no description.
+	 * FrmStrpLiteLinkController fills it in when the buyer returns to the return URL, but a buyer who never
+	 * returns leaves this webhook as the only place it can happen.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $payment The payment row for this event.
+	 *
+	 * @return void
+	 */
+	private function maybe_update_intent_description( $payment ) {
+		if ( 'complete' !== $this->status ) {
+			// A failed or refunded payment has no description worth adding.
+			return;
+		}
+
+		if ( ! str_starts_with( (string) $payment->receipt_id, 'pi_' ) ) {
+			// The receipt id holds a charge id for invoice and refund events, and that is not a payment intent.
+			return;
+		}
+
+		$action = FrmFormAction::get_single_action_type( $payment->action_id, 'payment' );
+
+		if ( ! $action || empty( $action->post_content['description'] ) ) {
+			return;
+		}
+
+		if ( 'recurring' === $action->post_content['type'] ) {
+			// A recurring Stripe Link action pays through a setup intent, which takes no description.
+			return;
+		}
+
+		$entry = FrmEntry::getOne( $payment->item_id );
+
+		if ( ! $entry ) {
+			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'Skipped description because the payment entry no longer exists.' );
+			return;
+		}
+
+		$updated = FrmStrpLiteLinkController::maybe_update_intent_description( $payment->receipt_id, $action, $entry, $this->mode );
+
+		if ( ! $updated ) {
+			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'Unable to update the Stripe Link intent description.' );
 		}
 	}
 }

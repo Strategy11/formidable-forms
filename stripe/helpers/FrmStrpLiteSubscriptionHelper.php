@@ -147,7 +147,6 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @return mixed
 	 */
 	public static function maybe_create_plan( $plan ) {
-		FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' );
 		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'maybe_create_plan', $plan );
 	}
 
@@ -183,8 +182,8 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @return false|object|string
 	 */
 	public static function maybe_create_missing_plan_and_create_subscription( $subscription, $charge_data, $action, $amount ) {
-		if ( ! is_string( $subscription ) || ! str_starts_with( $subscription, 'No such plan: ' ) ) {
-			// Only retry when there is a No such plan string error.
+		if ( ! is_string( $subscription ) || ! self::is_missing_plan_error( $subscription ) ) {
+			// Only retry when Stripe reports a missing plan or price.
 			return $subscription;
 		}
 
@@ -256,5 +255,23 @@ class FrmStrpLiteSubscriptionHelper {
 			/* translators: %s: Invalid payment limit value title */
 			sprintf( __( 'Invalid payment limit value %s', 'formidable' ), $payment_limit )
 		);
+	}
+
+	/**
+	 * Check whether a Stripe error string means the plan used to create a subscription does not
+	 * exist yet.
+	 *
+	 * Stripe's error used to always read "No such plan: '...'". Newer API versions describe the
+	 * same missing legacy Plan as "No such price: '...'" instead, even though the request used the
+	 * `plan` parameter, so both forms have to be recognized.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $message
+	 *
+	 * @return bool
+	 */
+	private static function is_missing_plan_error( $message ) {
+		return str_starts_with( $message, 'No such plan: ' ) || str_starts_with( $message, 'No such price: ' );
 	}
 }

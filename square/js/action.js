@@ -2,6 +2,7 @@
 	const hookNamespace = 'formidable-square';
 	wp.hooks.addAction( 'frm_trans_toggled_gateway', hookNamespace, onGatewayToggle );
 	wp.hooks.addAction( 'frm_filled_form_action', hookNamespace, onFilledFormAction );
+	wp.hooks.addAction( 'frm_added_form_action', hookNamespace, onAddedFormAction );
 
 	const actions = document.getElementById( 'frm_notification_settings' );
 	jQuery( actions ).on( 'change', '.frm_trans_type', onToggleSub );
@@ -85,7 +86,21 @@
 	}
 
 	function onFilledFormAction( $container ) {
-		const settings = $container.get( 0 ).closest( '.frm_form_action_settings' );
+		initPaymentSettings( $container.get( 0 ).closest( '.frm_form_action_settings' ) );
+	}
+
+	/**
+	 * A new action is added with its settings already rendered, so it never goes through
+	 * frm_filled_form_action and needs the same setup.
+	 *
+	 * @param {HTMLElement} newAction The form action element that was just added.
+	 * @return {void}
+	 */
+	function onAddedFormAction( newAction ) {
+		initPaymentSettings( newAction );
+	}
+
+	function initPaymentSettings( settings ) {
 		if ( ! settings || ! settings.classList.contains( 'frm_single_payment_settings' ) ) {
 			return;
 		}

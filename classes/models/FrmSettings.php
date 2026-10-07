@@ -226,6 +226,15 @@ class FrmSettings {
 	public $denylist_check;
 
 	/**
+	 * Whether submissions flagged by each spam check are saved as spam entries or rejected.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string, string>
+	 */
+	public $spam_handling;
+
+	/**
 	 * @since 6.25.1
 	 *
 	 * @var int|null 1 if installed after welcome tour update, null otherwise.
@@ -241,6 +250,21 @@ class FrmSettings {
 	 * @var string
 	 */
 	public $allowed_words;
+
+	/**
+	 * Whether the Formidable MCP server and the Formidable abilities are registered.
+	 *
+	 * Deliberately absent from default_options(), because "off" and "never set"
+	 * have to stay distinguishable. Until the MCP section is saved once this
+	 * stays null, and FrmMcpController::is_enabled() falls back to the API
+	 * add-on's own toggle so a site that already turned MCP on there keeps it
+	 * on. With no add-on setting to inherit either, MCP is off.
+	 *
+	 * @since x.x
+	 *
+	 * @var int|null 1 for enabled, 0 for disabled, null when never saved.
+	 */
+	public $mcp;
 
 	/**
 	 * @param array $args
@@ -325,6 +349,7 @@ class FrmSettings {
 			'honeypot'                  => 1,
 			'wp_spam_check'             => 0,
 			'denylist_check'            => 0,
+			'spam_handling'             => FrmSpamEntriesHelper::get_default_handling(),
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
 			'email_style'               => 'classic',
@@ -538,6 +563,7 @@ class FrmSettings {
 	 * @return void
 	 */
 	public function update( $params ) {
+		$params = $this->keep_unposted_spam_handling( $params );
 		$this->fill_with_defaults( $params );
 		$this->update_settings( $params );
 
@@ -558,6 +584,26 @@ class FrmSettings {
 		// Save styling settings in case fallback setting changes.
 		$frm_style = new FrmStyle();
 		$frm_style->update( 'default' );
+	}
+
+	/**
+	 * A check that is turned off has a disabled select that is not submitted, so keep its saved handling.
+	 * This runs before fill_with_defaults() replaces the saved handling with the posted values.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $params The posted settings.
+	 *
+	 * @return array
+	 */
+	private function keep_unposted_spam_handling( $params ) {
+		if ( ! isset( $params['frm_spam_handling'] ) || ! is_array( $params['frm_spam_handling'] ) || ! is_array( $this->spam_handling ) ) {
+			return $params;
+		}
+
+		$params['frm_spam_handling'] = array_merge( $this->spam_handling, $params['frm_spam_handling'] );
+
+		return $params;
 	}
 
 	/**
@@ -582,6 +628,10 @@ class FrmSettings {
 		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
+		if ( isset( $params['frm_spam_handling'] ) ) {
+			$this->spam_handling = FrmSpamEntriesHelper::sanitize_handling( $params['frm_spam_handling'] );
+		}
+
 		$checkboxes = array(
 			'mu_menu',
 			're_multi',
@@ -600,6 +650,16 @@ class FrmSettings {
 
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
+		}
+
+		// The MCP toggle is kept out of the loop above on purpose. That loop turns
+		// every checkbox it does not find in $params off, and the MCP section is
+		// not always on screen: it is hidden entirely while the API add-on still
+		// owns the toggle. Saving any other section would switch MCP off. The
+		// section renders a marker field, so the value only moves when the toggle
+		// was really there to move it.
+		if ( ! empty( $params['frm_mcp_settings_shown'] ) ) {
+			$this->mcp = empty( $params['frm_mcp'] ) ? 0 : 1;
 		}
 	}
 

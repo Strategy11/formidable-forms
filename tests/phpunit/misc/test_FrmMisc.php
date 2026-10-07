@@ -3,11 +3,9 @@
 /**
  * @group base
  */
+#[\PHPUnit\Framework\Attributes\Group( 'base' )]
 class test_FrmMisc extends FrmUnitTest {
 
-	/**
-	 * @covers ::load_formidable_forms
-	 */
 	public function test_load_formidable_forms() {
 		global $frm_vars;
 		$this->assertNotEmpty( $frm_vars );
@@ -17,10 +15,6 @@ class test_FrmMisc extends FrmUnitTest {
 		$this->assertSame( 0, has_action( 'init', 'FrmAppController::load_lang' ) );
 	}
 
-	/**
-	 * @covers ::frm_class_autoloader
-	 * @covers ::frm_forms_autoloader
-	 */
 	public function test_frm_class_autoloader() {
 		$test_classes = array( 'FrmTipsHelper', 'FrmFormActionsController', 'FrmEntryFactory', 'FrmFieldDefault' );
 

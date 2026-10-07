@@ -69,56 +69,12 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function render_settings_for_mode( $mode ) {
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		?>
-		<div class="frm-card-item frm4">
-			<div class="frm-flex-col" style="width: 100%;">
-				<div>
-					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
-						<?php
-						echo $mode === 'test' ? esc_html__( 'Test', 'formidable' ) : esc_html__( 'Live', 'formidable' );
-						?>
-					</span>
-					<?php
-
-					$connected   = (bool) self::get_merchant_id( $mode );
-					$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
-					?>
-					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
-						<?php
-						if ( $connected ) {
-							FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
-							echo 'Connected';
-						} else {
-							echo 'Not configured';
-						}
-						?>
-					</div>
-				</div>
-				<div style="margin-top: 5px; flex: 1;">
-					<?php
-					if ( 'live' === $mode ) {
-						esc_html_e( 'Live version to process real customer transactions', 'formidable' );
-					} else {
-						esc_html_e( 'Simulate payments and ensure everything works smoothly before going live.', 'formidable' );
-					}
-					?>
-				</div>
-				<div class="frm-card-bottom">
-					<?php if ( $connected ) { ?>
-						<a id="frm_disconnect_square_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
-							<?php esc_html_e( 'Disconnect', 'formidable' ); ?>
-						</a>
-					<?php } else { ?>
-						<a class="frm-connect-square-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
-							<?php esc_html_e( 'Connect', 'formidable' ); ?>
-						</a>
-					<?php } ?>
-				</div>
-			</div>
-		</div>
-		<?php
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		$connected              = (bool) self::get_merchant_id( $mode );
+		$column_class           = 'frm4';
+		$gateway_slug           = 'square';
+		$icon_font_class        = 'frmfont';
+		$extra_content_callback = null;
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/payment-connect-mode-box.php';
 	}
 
 	/**
@@ -524,7 +480,16 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$body = array_merge( self::get_standard_authenticated_body(), $additional_body );
+
+		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'square', $body['frm_square_api_mode'] ) ) {
+			// There are no credentials for this mode, so the connect server would reject the request
+			// with an error about the signature. Report the missing connection instead.
+			self::$latest_error_from_square_api = FrmTransLiteAppHelper::get_gateway_connection_error( 'square', $body['frm_square_api_mode'] );
+			FrmTransLiteLog::log_message( 'Square API Error', self::$latest_error_from_square_api );
+			return false;
+		}
+
 		$response = self::post_to_connect_server( $action, $body );
 
 		if ( is_object( $response ) ) {

@@ -67,7 +67,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<hr />
 
 	<div class="frm-flex frm-items-center frm-justify-between frm-mb-sm frm-pt-2xs">
-		<label for="frm-forms-list-show-desc"><?php esc_html_e( 'Description Excerpt', 'formidable' ); ?></label>
+		<label for="frm-forms-list-show-desc" id="frm-forms-list-show-desc_label"><?php esc_html_e( 'Description Excerpt', 'formidable' ); ?></label>
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm-forms-list-show-desc',
@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<hr />
 
-	<div style="text-align: right;" class="frm-pt-2xs frm-pb-xs">
+	<div class="frm-text-right frm-pt-2xs frm-pb-xs">
 		<button type="button" class="frm-button-primary button-primary" id="frm-save-forms-list-settings-btn"><?php esc_html_e( 'Apply', 'formidable' ); ?></button>
 	</div>
 </div>

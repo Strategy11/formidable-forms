@@ -208,20 +208,39 @@ class FrmStylesPreviewHelper {
 		// Force is_admin to false so the "Entry Key" field doesn't render in the preview.
 		add_filter( 'frm_is_admin', '__return_false' );
 
-		$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
+		// The styler edit page also renders its own settings form, so this preview's <form> landmark
+		// needs a distinct name to avoid tripping the aria_landmark_name_unique a11y rule.
+		add_filter( 'frm_form_attributes', array( $this, 'add_preview_landmark_label' ) );
 
-		$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
+		try {
+			$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
 
-		if ( $this->form_includes_captcha ) {
-			// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
-			wp_dequeue_script( 'captcha-api' );
+			$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
+
+			if ( $this->form_includes_captcha ) {
+				// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
+				wp_dequeue_script( 'captcha-api' );
+			}
+
+			return $target_form_preview_html;
+		} finally {
+			remove_filter( 'frm_form_attributes', array( $this, 'add_preview_landmark_label' ) );
+
+			// Return the is_admin status.
+			// Otherwise success messages won't use the proper mark up and will appear without the green background and padding.
+			remove_filter( 'frm_is_admin', '__return_false' );
 		}
+	}
 
-		// Return the is_admin status.
-		// Otherwise success messages won't use the proper mark up and will appear without the green background and padding.
-		remove_filter( 'frm_is_admin', '__return_false' );
-
-		return $target_form_preview_html;
+	/**
+	 * @since x.x
+	 *
+	 * @param string $attributes
+	 *
+	 * @return string
+	 */
+	public function add_preview_landmark_label( $attributes ) {
+		return $attributes . ' aria-label="' . esc_attr__( 'Form preview', 'formidable' ) . '"';
 	}
 
 	/**

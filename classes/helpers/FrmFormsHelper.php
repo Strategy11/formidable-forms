@@ -6,19 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsHelper {
 
 	/**
-	 * The transient name that stores data for which posts a form is embedded in.
-	 *
-	 * It lives here rather than in FrmFormsListHelper so the invalidation callback below can run
-	 * without autoloading that admin list table on a front end post insert.
-	 *
-	 * @since 6.32
-	 * @since 6.35 Moved here from FrmFormsListHelper.
-	 *
-	 * @var string
-	 */
-	const EMBED_POSTS_TRANSIENT = 'frm_posts_contain_form';
-
-	/**
 	 * Store and re-use field type data for the insert_opt_html function (to avoid multiple calls to FrmField::all_field_selection).
 	 *
 	 * @since 6.10
@@ -26,6 +13,15 @@ class FrmFormsHelper {
 	 * @var array|null
 	 */
 	private static $field_type_data_for_insert_opt_html;
+
+	/**
+	 * Icon classes for deferred code list items, keyed by field type, printed once each by print_deferred_code_list_icons().
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string, string>
+	 */
+	private static $deferred_code_list_icons = array();
 
 	/**
 	 * @since 2.2.10
@@ -121,7 +117,7 @@ class FrmFormsHelper {
 	 */
 	public static function form_switcher( $selected = false ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms = FrmForm::get_published_forms( $where );
+		$forms = FrmForm::get_published_form_names( $where );
 
 		$args = array(
 			'id'   => 0,
@@ -182,6 +178,31 @@ class FrmFormsHelper {
 			<?php
 			return;
 		}
+
+		$switcher_forms = array();
+
+		foreach ( $forms as $form ) {
+			if ( $form->id === $form_id ) {
+				continue;
+			}
+
+			if ( isset( $args['id'] ) ) {
+				$args['id'] = $form->id;
+			}
+
+			if ( isset( $args['form'] ) ) {
+				$args['form'] = $form->id;
+			}
+
+			$switcher_forms[] = array(
+				'id'   => $form->id,
+				'name' => ! empty( $form->name ) ? $form->name : self::get_no_title_text(),
+				'key'  => $form->form_key,
+				'url'  => esc_url_raw( isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args ) ),
+			);
+		}
+		/* translators: %d: Form ID */
+		$id_label = __( '(ID %d)', 'formidable' );
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'dropdown-menu-right' : 'dropdown-menu-left' ); ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
@@ -192,7 +213,9 @@ class FrmFormsHelper {
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
-			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
+			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover"
+				role="menu" aria-labelledby="frm-navbarDrop"
+				data-id-label="<?php echo esc_attr( $id_label ); ?>">
 				<?php if ( count( $forms ) > 8 ) { ?>
 				<li class="frm-with-search">
 					<?php
@@ -208,44 +231,16 @@ class FrmFormsHelper {
 					?>
 				</li>
 				<?php } ?>
-				<?php
-				foreach ( $forms as $form ) {
-					if ( $form->id === $form_id ) {
-						// Don't include the selected form in the switcher since it does nothing.
-						continue;
-					}
-
-					if ( isset( $args['id'] ) ) {
-						$args['id'] = $form->id;
-					}
-
-					if ( isset( $args['form'] ) ) {
-						$args['form'] = $form->id;
-					}
-
-					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = ! empty( $form->name ) ? $form->name : self::get_no_title_text();
-					?>
-					<li class="frm-dropdown-form">
-						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
-							<?php echo esc_html( $form_name ); ?>
-							<span>
-							<?php
-							printf(
-								/* translators: %d: Form ID */
-								esc_html__( '(ID %d)', 'formidable' ),
-								esc_attr( $form->id )
-							);
-							?>
-							</span>
-							<span class="frm_hidden"><?php echo esc_html( $form->form_key ); ?></span>
-						</a>
-					</li>
-					<?php
-					unset( $form );
-				}//end foreach
-				?>
 			</ul>
+			<?php
+			wp_print_inline_script_tag(
+				wp_json_encode( $switcher_forms, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
+				array(
+					'type' => 'application/json',
+					'id'   => 'frm-form-switcher-data',
+				)
+			);
+			?>
 		</div>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
@@ -301,9 +296,251 @@ class FrmFormsHelper {
 			$settings_args['current_form'] = $args['form']->id;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-		$invalid_msg  = do_shortcode( $frm_settings->invalid_msg );
+		$frm_settings         = FrmAppHelper::get_settings( $settings_args );
+		$field_error_messages = self::get_clickable_field_error_messages( $args );
+		$invalid_msg          = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+
+		if ( $field_error_messages ) {
+			$invalid_msg .= "<ul>$field_error_messages</ul>";
+		}
+
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
+	}
+
+	/**
+	 * Whether the clickable error summary is enabled for a form, independent of whether
+	 * that form currently has any validation errors. Used to resolve the per-form focus/
+	 * alert-role defaults in FrmAppHelper before a submission has happened.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 *
+	 * @return bool
+	 */
+	public static function is_error_summary_active_for_form( $form ) {
+		return (bool) apply_filters(
+			'frm_show_clickable_field_errors',
+			true,
+			array(
+				'form'   => $form,
+				'errors' => array(),
+			)
+		);
+	}
+
+	/**
+	 * Per-form error-announcement config rendered onto the form's own markup, so front-end
+	 * JS can resolve focus/alert-role behavior for a form without reading page-global
+	 * defaults that don't account for that form's own summary state.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 *
+	 * @return array{includeAlertRole: bool, focusFirstError: bool, focusErrorSummary: bool}
+	 */
+	public static function get_error_config_for_form( $form ) {
+		$focus = FrmAppHelper::resolve_error_focus_target( $form );
+
+		return array(
+			'includeAlertRole'  => FrmAppHelper::should_include_alert_role_on_field_errors( $form ),
+			'focusFirstError'   => $focus['focus_first_error'],
+			'focusErrorSummary' => $focus['focus_error_summary'],
+		);
+	}
+
+	/**
+	 * Get clickable field error messages.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	private static function get_clickable_field_error_messages( $args ) {
+		if ( empty( $args['errors'] ) ) {
+			return '';
+		}
+
+		/**
+		 * Allows the list of clickable field errors to be turned off, leaving only the invalid
+		 * message on its own. Return false to opt a site, or a single form, out of the summary.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  $show_summary Whether to list each field that failed validation.
+		 * @param array $args         Includes 'form' and 'errors'.
+		 */
+		if ( ! apply_filters( 'frm_show_clickable_field_errors', true, $args ) ) {
+			return '';
+		}
+
+		// Parse each error key once into its field ID and container ID, skipping
+		// non-field errors like 'form' or 'spam' that have no input to link to.
+		$parsed_errors = array();
+		$field_ids     = array();
+
+		foreach ( $args['errors'] as $field_plus_id => $error ) {
+			if ( ! str_starts_with( $field_plus_id, 'field' ) ) {
+				continue;
+			}
+
+			if ( ! is_string( $error ) || '' === trim( $error ) ) {
+				// A combo field flags a sub field that failed with an empty error, which is a marker
+				// for the input rather than a message. Listing it would add an empty link.
+				continue;
+			}
+
+			// Everything after the 'field' prefix identifies the field in the DOM. It is the field
+			// ID on its own, plus a '-{sub_field}' suffix for a combo sub field such as a name or
+			// address line, a '-{section_id}-{row}' suffix for a field in a repeater row, or both.
+			$key_parts = explode( '-', substr( $field_plus_id, strlen( 'field' ) ) );
+			$field_id  = $key_parts[0];
+
+			if ( ! is_numeric( $field_id ) ) {
+				continue;
+			}
+
+			if ( count( $key_parts ) > 3 ) {
+				// A combo sub field inside a repeater row has no container of its own, so link to
+				// the row's container for the whole field. The front end script picks the sub input
+				// that failed out of it.
+				$key_parts = array_slice( $key_parts, 0, 3 );
+			}
+
+			// Link to the field container rather than to an input. Every field type renders one,
+			// with the same suffixes the error key carries, while the ID of the input inside it
+			// differs per field type, and several types have no input matching the field key at
+			// all. The container is also what the front end script uses to find the input to
+			// focus, so this stays correct for field types this file knows nothing about.
+			$container_id = 'frm_field_' . implode( '-', $key_parts ) . '_container';
+
+			$field_ids[]     = (int) $field_id;
+			$parsed_errors[] = compact( 'field_id', 'container_id', 'error' );
+		}//end foreach
+
+		if ( ! $field_ids ) {
+			return '';
+		}
+
+		$fields_by_id = self::get_error_fields_by_id( $args, $field_ids );
+
+		// Error messages are admin configured and may include shortcodes, so allow the same
+		// inline formatting Formidable permits elsewhere while stripping anything unsafe. Anchors
+		// are intentionally excluded so a message link cannot nest inside the summary link.
+		$allowed_tags         = array( 'strong', 'b', 'em', 'i', 'u', 'span', 'code', 'br', 'sub', 'sup', 'mark', 'small' );
+		$field_error_messages = '';
+
+		foreach ( $parsed_errors as $parsed_error ) {
+			$field_id = (int) $parsed_error['field_id'];
+
+			if ( ! isset( $fields_by_id[ $field_id ] ) ) {
+				continue;
+			}
+
+			$field = $fields_by_id[ $field_id ];
+			$error = FrmAppHelper::kses( $parsed_error['error'], $allowed_tags );
+
+			if ( ! self::error_field_is_linkable( $field ) ) {
+				// The field has no focusable input on the page being shown (a hidden field, or a
+				// field on another page of a multi-page form), so list the error as plain text
+				// rather than a link that would go nowhere when clicked.
+				$field_error_messages .= '<li>' . $error . '</li>';
+				continue;
+			}
+
+			// The frm_error_link class is the hook the front end script uses to move focus into the
+			// field. Without JavaScript the browser still jumps to the container the link targets.
+			$field_error_messages .= '<li><a class="frm_error_link" href="#' . esc_attr( $parsed_error['container_id'] ) . '">' . $error . '</a></li>';
+		}//end foreach
+
+		return $field_error_messages;
+	}
+
+	/**
+	 * Map the errored field IDs to field data.
+	 *
+	 * The fields for the form have already been loaded to render or validate the submission,
+	 * so this reuses them (threaded down in $args, or the per-field cache warmed while
+	 * validating the entry) and only queries for any field it still cannot resolve, keeping
+	 * the error summary from adding a database round trip in the normal flow.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args      Includes optional 'fields'.
+	 * @param int[] $field_ids Field IDs referenced by the current errors.
+	 *
+	 * @return array Field objects keyed by field ID.
+	 */
+	private static function get_error_fields_by_id( $args, $field_ids ) {
+		$fields_by_id = array();
+
+		// Prefer the fields already prepared for the form being shown, threaded down in $args.
+		if ( ! empty( $args['fields'] ) && is_array( $args['fields'] ) ) {
+			foreach ( $args['fields'] as $field ) {
+				// Display fields arrive as arrays; normalize to the object shape used below.
+				$field = (object) $field;
+
+				if ( isset( $field->id ) ) {
+					$fields_by_id[ (int) $field->id ] = $field;
+				}
+			}
+		}
+
+		// Next, the per-field cache warmed while validating the entry (getAll caches every
+		// field by id), so an AJAX submit resolves its errored fields without a query.
+		foreach ( array_diff( $field_ids, array_keys( $fields_by_id ) ) as $field_id ) {
+			$cached = FrmDb::check_cache( $field_id, 'frm_field' );
+
+			if ( is_object( $cached ) ) {
+				$fields_by_id[ $field_id ] = $cached;
+			}
+		}
+
+		// Only touch the database for fields that are still unresolved.
+		$missing = array_diff( $field_ids, array_keys( $fields_by_id ) );
+
+		if ( ! $missing ) {
+			return $fields_by_id;
+		}
+
+		$fields = FrmDb::get_results( 'frm_fields', array( 'id' => array_values( $missing ) ), 'id,field_key,type,field_order,form_id' );
+
+		foreach ( $fields as $field ) {
+			$fields_by_id[ (int) $field->id ] = $field;
+		}
+
+		return $fields_by_id;
+	}
+
+	/**
+	 * Whether an error summary should link to the field, or just list its message as plain text.
+	 *
+	 * A link is only useful when the field renders a focusable input that is actually on the page
+	 * being shown. Hidden and user ID fields render as hidden inputs that cannot receive focus, and
+	 * a field on another page of a multi-page form is not visible, so neither should be linked.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field Field row with at least type, field_order and form_id.
+	 *
+	 * @return bool
+	 */
+	private static function error_field_is_linkable( $field ) {
+		if ( in_array( $field->type, array( 'hidden', 'user_id' ), true ) ) {
+			// Hidden inputs cannot receive focus, so there is nothing to link to.
+			return false;
+		}
+
+		if ( ! is_callable( 'FrmProFieldsHelper::field_on_current_page' ) ) {
+			// Multi-page forms are a Pro feature; in Lite every field is on the only page.
+			return true;
+		}
+
+		// On a multi-page form, do not link a field that is on a page other than the one being shown.
+		return FrmProFieldsHelper::field_on_current_page( $field );
 	}
 
 	/**
@@ -314,6 +551,9 @@ class FrmFormsHelper {
 	 *     @type stdClass $form
 	 *     @type int      $entry_id
 	 *     @type string   $class
+	 *     @type string   $role  Optional. ARIA live region role for the wrapper. Defaults to 'status'.
+	 *                           Pass 'alert' when the message reports a validation error so it is
+	 *                           announced assertively, matching the non-ajax error wrapper.
 	 * }
 	 *
 	 * @return string
@@ -341,7 +581,20 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
+		$role    = $atts['role'] ?? 'status';
+		// A focusable tabindex lets js/formidable.js move focus onto the message after an
+		// AJAX submit without a screen reader user having to tab to it. An error summary
+		// (role="alert") is always focusable this way; any other message is only focusable
+		// when the caller marks it via $atts['focusable'] (the AJAX success path) — a
+		// plain page-rendered message is never focused, so it stays out of the tab order.
+		// The stable data-frm-error-summary marker additionally lets JS single out the
+		// error summary from any other focusable message on the page.
+		$is_error_summary = 'alert' === $role;
+		$focusable        = $is_error_summary || ! empty( $atts['focusable'] );
+		$tabindex         = $focusable ? ' tabindex="-1"' : '';
+		$summary_marker   = $is_error_summary ? ' data-frm-error-summary="1"' : '';
+
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '"' . $tabindex . $summary_marker . '>' . $message . '</div>';
 	}
 
 	/**
@@ -691,6 +944,9 @@ BEFORE_HTML;
 	 *                    and 'key_label' to show something other than the id or key, and
 	 *                    'name_suffix'/'key_suffix' for text appended after the name or key is
 	 *                    truncated, so a shortcode option like ' show=first' survives the truncation.
+	 *                    Set 'defer_icon' when the code list is hidden until opened, so the item
+	 *                    only names its field type and JS copies the icon in when the list opens.
+	 *                    Call print_deferred_code_list_icons() after the list when deferring.
 	 *
 	 * @return void
 	 */
@@ -720,10 +976,19 @@ BEFORE_HTML;
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<li class="<?php echo esc_attr( $class ); ?>">
+		<?php
+		$item_attrs = array( 'class' => $class );
+
+		if ( ! empty( $args['defer_icon'] ) ) {
+			// Only the field type goes on the item. Its icon is printed once in print_deferred_code_list_icons().
+			self::$deferred_code_list_icons[ $args['type'] ] = $field['icon'];
+			$item_attrs['data-frm-icon']                     = $args['type'];
+		}
+		?>
+		<li<?php FrmAppHelper::array_to_html_params( $item_attrs, true ); ?>>
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
@@ -737,7 +1002,7 @@ BEFORE_HTML;
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
-				if ( isset( $field['icon'] ) ) {
+				if ( empty( $args['defer_icon'] ) && isset( $field['icon'] ) ) {
 					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
 				}
 
@@ -752,6 +1017,28 @@ BEFORE_HTML;
 		</li>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Prints one hidden copy of each icon used by deferred code list items, for JS to copy into the list when it opens.
+	 * This keeps the markup for a form with many fields down to a field type per item.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function print_deferred_code_list_icons() {
+		if ( ! self::$deferred_code_list_icons ) {
+			return;
+		}
+		?>
+		<template class="frm-code-list-icons">
+		<?php foreach ( self::$deferred_code_list_icons as $type => $icon ) { ?>
+			<span data-frm-icon-key="<?php echo esc_attr( $type ); ?>"><?php FrmAppHelper::icon_by_class( $icon, array( 'aria-hidden' => 'true' ) ); ?></span>
+		<?php } ?>
+		</template>
+		<?php
+		self::$deferred_code_list_icons = array();
 	}
 
 	/**
@@ -939,7 +1226,7 @@ BEFORE_HTML;
 			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
 			} elseif ( $code === 'entry_key' && ! empty( $_GET ) && isset( $_GET['entry'] ) ) {
-				$replace_with = FrmAppHelper::simple_get( 'entry' );
+				$replace_with = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
 			} else {
 				$replace_with = '';
 			}
@@ -2217,41 +2504,5 @@ BEFORE_HTML;
 		}
 
 		return FrmAppHelper::truncate( $form_name, $length );
-	}
-
-	/**
-	 * Maybe clear the embed posts transient.
-	 *
-	 * @since 6.32
-	 * @since 6.35 Moved here from FrmFormsListHelper.
-	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
-	 *
-	 * @return void
-	 */
-	public static function maybe_clear_embed_posts_transient( $post_id, $post ) {
-		if ( str_contains( $post->post_content, '[formidable ' ) || str_contains( $post->post_content, '<!-- wp:formidable/simple-form ' ) ) {
-			// New post contains the form shortcode, so clear the embed posts transient.
-			delete_transient( self::EMBED_POSTS_TRANSIENT );
-			return;
-		}
-
-		$cached_posts = get_transient( self::EMBED_POSTS_TRANSIENT );
-
-		if ( ! is_array( $cached_posts ) ) {
-			return;
-		}
-
-		// If the new post data of a cached post doesn't contain the Formidable forms, clear the transient.
-		foreach ( $cached_posts as $posts ) {
-			foreach ( $posts as $post_data ) {
-				if ( intval( $post_data->ID ) === intval( $post_id ) ) {
-					// This post contains the form shortcode before updating, so clear the embed posts transient.
-					delete_transient( self::EMBED_POSTS_TRANSIENT );
-					return;
-				}
-			}
-		}
 	}
 }

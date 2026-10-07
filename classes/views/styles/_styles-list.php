@@ -44,7 +44,7 @@ if ( $globally_disabled ) {
 	<?php
 	// This form isn't visible. It's just used for assigning the selected style id to the target form.
 	?>
-	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>">
+	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>" aria-label="<?php esc_attr_e( 'Assign style', 'formidable' ); ?>">
 		<input type="hidden" name="style_id" value="<?php echo absint( $enabled ? $active_style->ID : 0 ); ?>" />
 		<input type="hidden" name="form_id" value="<?php echo absint( $form->id ); ?>" />
 		<input type="hidden" name="frm_action" value="assign_style" />

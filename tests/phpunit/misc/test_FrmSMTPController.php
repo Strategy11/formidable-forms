@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @group misc
+ *
+ * @covers FrmSMTPController
+ */
+#[\PHPUnit\Framework\Attributes\Group( 'misc' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSMTPController::class )]
+class test_FrmSMTPController extends FrmUnitTest {
+
+	public function test_link_tags_the_redirect_url() {
+		$controller = new FrmSMTPController();
+		$link       = $controller->link( 'https://wpmailsmtp.com/lite-upgrade/?foo=bar' );
+
+		$this->assertStringContainsString( 'formidableforms.com/go-wp-mail-smtp/', $link );
+		$this->assertStringContainsString( 'utm_source=', $link );
+		$this->assertStringContainsString( 'utm_campaign=wp-mail-smtp-upsell', $link );
+	}
+
+	/**
+	 * Reproduces the real input shape: wp-mail-smtp-pro's own Core::get_upgrade_link() already
+	 * tags the link before this filter runs, so a naive fill-the-gaps re-tag would be a no-op.
+	 *
+	 * @see FrmSMTPController::link
+	 */
+	public function test_link_overrides_preexisting_utm_params_from_wp_mail_smtp() {
+		$controller       = new FrmSMTPController();
+		$preexisting_link = 'https://wpmailsmtp.com/lite-upgrade/?utm_source=WordPress&utm_medium=plugin-settings&utm_campaign=liteplugin&utm_locale=en_US&utm_content=general';
+		$link             = $controller->link( $preexisting_link );
+
+		$this->assertStringContainsString( 'formidableforms.com/go-wp-mail-smtp/', $link );
+		$this->assertStringContainsString( 'utm_campaign=wp-mail-smtp-upsell', $link );
+		$this->assertStringNotContainsString( 'utm_campaign=liteplugin', $link, 'Our own campaign should override the pre-existing one' );
+		$this->assertStringContainsString( 'urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade', $link, 'The hand-obfuscated redirect target must survive the utm re-tagging untouched' );
+	}
+
+	/**
+	 * The SMTP page renders two step-number <aside> badges (Install, Setup). Both need a
+	 * non-empty accessible name or they violate the aria_complementary_labelled a11y rule.
+	 *
+	 * @covers FrmSMTPController::output
+	 */
+	public function test_output_has_labelled_complementary_landmarks() {
+		$controller = new FrmSMTPController();
+
+		ob_start();
+		$controller->output();
+		$html = ob_get_clean();
+
+		$this->assert_complementary_landmarks_are_labelled( $html, 2 );
+	}
+}

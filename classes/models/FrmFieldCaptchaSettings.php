@@ -268,4 +268,42 @@ class FrmFieldCaptchaSettings {
 	public function get_class_prefix( $allow_multiple ) {
 		return '';
 	}
+
+	/**
+	 * Get readable explanations for the codes a CAPTCHA service returns in the
+	 * "error-codes" array of a siteverify response.
+	 * These codes are shared by every service we support. Child classes add their own.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,string>
+	 */
+	public function get_error_code_messages() {
+		return array(
+			'missing-input-secret'   => __( 'The secret key is missing from the global CAPTCHA settings.', 'formidable' ),
+			'invalid-input-secret'   => __( 'The secret key in the global CAPTCHA settings is not valid.', 'formidable' ),
+			'missing-input-response' => __( 'No CAPTCHA response was submitted with the form.', 'formidable' ),
+			'invalid-input-response' => __( 'The CAPTCHA response was not valid.', 'formidable' ),
+			'bad-request'            => __( 'The verification request was malformed.', 'formidable' ),
+			'timeout-or-duplicate'   => __( 'The CAPTCHA response expired or was already used.', 'formidable' ),
+			'internal-error'         => __( 'The CAPTCHA service reported an internal error.', 'formidable' ),
+		);
+	}
+
+	/**
+	 * Get the error codes that mean the site is set up incorrectly.
+	 * A person filling out the form cannot fix these by trying again, so they get a
+	 * different message than someone who actually failed the challenge.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<int,string>
+	 */
+	public function get_configuration_error_codes() {
+		return array(
+			'missing-input-secret',
+			'invalid-input-secret',
+			'bad-request',
+		);
+	}
 }

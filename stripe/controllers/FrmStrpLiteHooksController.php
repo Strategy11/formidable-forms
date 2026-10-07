@@ -63,7 +63,7 @@ class FrmStrpLiteHooksController {
 	 * Used to keep FrmStrpLiteConnectHelper out of ordinary page views. The helper still runs
 	 * its own narrower checks, this only decides whether it is worth loading at all.
 	 *
-	 * @since 6.35
+	 * @since x.x
 	 *
 	 * @return bool
 	 */
@@ -105,6 +105,8 @@ class FrmStrpLiteHooksController {
 	 */
 	private static function load_ajax_hooks() {
 		$frm_strp_events_controller = new FrmStrpLiteEventsController();
+		add_action( 'wp_ajax_nopriv_frm_failed_payment', 'FrmStrpLiteAuth::check_payment_status' );
+		add_action( 'wp_ajax_frm_failed_payment', 'FrmStrpLiteAuth::check_payment_status' );
 		add_action( 'wp_ajax_nopriv_frm_strp_process_events', array( &$frm_strp_events_controller, 'process_connect_events' ) );
 		add_action( 'wp_ajax_frm_strp_process_events', array( &$frm_strp_events_controller, 'process_connect_events' ) );
 		add_action( 'wp_ajax_nopriv_frm_strp_amount', 'FrmStrpLiteAuth::update_intent_ajax' );

@@ -64,12 +64,15 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * If test mode is running, save the id somewhere else
 	 *
+	 * @param string $mode 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
-	public static function get_customer_id_meta_name() {
-		$meta_name = '_frmstrp_customer_id';
+	public static function get_customer_id_meta_name( $mode = 'auto' ) {
+		$meta_name     = '_frmstrp_customer_id';
+		$resolved_mode = 'auto' === $mode ? self::active_mode() : $mode;
 
-		if ( 'test' === self::active_mode() ) {
+		if ( 'test' === $resolved_mode ) {
 			$meta_name .= '_test';
 		}
 
@@ -92,7 +95,44 @@ class FrmStrpLiteAppHelper {
 	 * @psalm-return 'live'|'test'
 	 */
 	public static function active_mode() {
-		return self::get_settings()->settings->test_mode ? 'test' : 'live';
+		$mode = self::get_settings()->settings->test_mode ? 'test' : 'live';
+
+		/**
+		 * Filter the Stripe mode for the current request.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $mode The configured Stripe mode.
+		 */
+		$filtered_mode = apply_filters( 'frm_strp_active_mode', $mode );
+
+		return in_array( $filtered_mode, array( 'live', 'test' ), true ) ? $filtered_mode : $mode;
+	}
+
+	/**
+	 * Get the Stripe modes to poll for unprocessed webhook events.
+	 *
+	 * Only the active mode is checked by default. The Test Mode add-on adds the
+	 * other mode after a form preview has taken a payment with the opposite mode.
+	 *
+	 * @since x.x
+	 *
+	 * @return string[]
+	 */
+	public static function get_event_lookup_modes() {
+		$active_mode = self::active_mode();
+
+		/**
+		 * Filter the Stripe modes to poll for unprocessed webhook events.
+		 *
+		 * @since x.x
+		 *
+		 * @param string[] $modes The modes to check, in order. Defaults to the active mode.
+		 */
+		$modes = apply_filters( 'frm_strp_lookup_modes', array( $active_mode ) );
+		$modes = is_array( $modes ) ? array_values( array_unique( array_intersect( $modes, array( 'live', 'test' ) ) ) ) : array();
+
+		return $modes ? $modes : array( $active_mode );
 	}
 
 	/**
@@ -104,7 +144,7 @@ class FrmStrpLiteAppHelper {
 	 * @return void
 	 */
 	public static function fee_education( $content = 'tip', $gateway = false ) {
-		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
+		if ( ! FrmAddonsController::payment_fees_apply( 'stripe' ) ) {
 			return;
 		}
 

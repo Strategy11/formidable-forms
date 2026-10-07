@@ -109,10 +109,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	grid-template-columns: auto <?php echo esc_html( $width ); ?>;
 }
 
-.frm_form_field.frm_right_container{
-	grid-template-columns: auto 25%;
-}
-
 .<?php echo esc_html( $style_class ); ?> .frm_inline_container.frm_dynamic_select_container .frm_data_container,
 .<?php echo esc_html( $style_class ); ?> .frm_inline_container.frm_dynamic_select_container .frm_opt_container{
 	display:inline<?php echo esc_html( $important ); ?>;
@@ -395,6 +391,27 @@ endif;
 	border-style:var(--border-style-error)<?php echo esc_html( $important ); ?>;
 }
 
+/* A combo field error only marks the sub fields that failed, not optional or filled ones. */
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) input:not(:focus),
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) select:not(:focus),
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) textarea:not(:focus),
+<?php if ( $pro_is_installed ) { ?>
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .mce-edit-area iframe,
+<?php } ?>
+<?php if ( $use_chosen_js ) { ?>
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .chosen-container-multi .chosen-choices,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .chosen-container-single .chosen-single,
+<?php } ?>
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .frm-g-recaptcha iframe,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .g-recaptcha iframe,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .frm-card-element.StripeElement {
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
+	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
+	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
+	border-style:var(--field-border-style)<?php echo esc_html( $important ); ?>;
+}
+
 <?php
 // Only include this style when the signatures add-on is active
 if ( class_exists( 'FrmSigField' ) ) :
@@ -420,6 +437,41 @@ endif;
 	font-size:var(--error-font-size)<?php echo esc_html( $important ); ?>;
 	margin:0;
 	margin-bottom:var(--field-margin);
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style span{
+	font-weight: bold<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul{
+	list-style: disc outside !important;
+	color: var(--error-text)<?php echo esc_html( $important ); ?>;
+	margin: 0 !important;
+	margin-block-start: 0.25em !important;
+	padding: 0 !important;
+	padding-inline-start: 1.25em !important;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li{
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li + li{
+	margin-block-start: 0.25em !important;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a{
+	color: var(--error-text)<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:hover{
+	text-decoration: underline<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:focus-visible{
+	outline: 2px solid var(--error-text) !important;
+	outline-offset: 2px !important;
 }
 
 <?php if ( $pro_is_installed ) { ?>

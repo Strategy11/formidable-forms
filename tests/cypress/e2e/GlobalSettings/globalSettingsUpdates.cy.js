@@ -25,7 +25,8 @@ describe( 'Updating global settings', () => {
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 
 		cy.log( `Create a text field` );
-		cy.get( `li[id="text"] a[title="Text"]` ).click( { force: true } );
+		// Plain, always-visible sidebar link - no hover gating involved.
+		cy.get( `li[id="text"] a[title="Text"]` ).should( 'be.visible' ).click();
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
@@ -49,7 +50,7 @@ describe( 'Updating global settings', () => {
 	} );
 	afterEach( () => {
 		cy.log( 'Teardown - Save the form and delete it' );
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click( { force: true } );
+		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
 		cy.deleteForm();
 	} );
 } );

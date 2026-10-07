@@ -82,6 +82,9 @@ class FrmEntry {
 
 		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
+		// A spam entry should not block a real submission with the same values.
+		$check_val[] = FrmSpamEntriesHelper::get_exclude_spam_where( '' );
+
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
@@ -349,7 +352,12 @@ class FrmEntry {
 			return false;
 		}
 
-		$new_values    = self::package_entry_to_update( $id, $values, $update_type );
+		$new_values = self::package_entry_to_update( $id, $values, $update_type );
+
+		if ( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === (int) $new_values['is_draft'] && ! FrmSpamEntriesHelper::can_store_spam() ) {
+			return false;
+		}
+
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_items', $new_values, compact( 'id' ) );
 
 		self::after_update_entry( $query_results, $id, $values, $new_values );
@@ -616,6 +624,7 @@ class FrmEntry {
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
 		global $wpdb;
 
+		$where     = FrmSpamEntriesHelper::exclude_spam( $where );
 		$limit     = FrmDb::esc_limit( $limit );
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit . $inc_form;
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
@@ -732,7 +741,9 @@ class FrmEntry {
 
 		if ( is_numeric( $where ) ) {
 			$table_join = 'frm_items';
-			$where      = array( 'form_id' => $where );
+			$where      = FrmSpamEntriesHelper::exclude_spam( array( 'form_id' => $where ), '' );
+		} else {
+			$where = FrmSpamEntriesHelper::exclude_spam( $where );
 		}
 
 		if ( is_array( $where ) ) {
@@ -796,6 +807,10 @@ class FrmEntry {
 	 * @return bool|int Entry ID.
 	 */
 	private static function continue_to_create_entry( $values, $new_values ) {
+		if ( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === (int) $new_values['is_draft'] && ! FrmSpamEntriesHelper::can_store_spam() ) {
+			return false;
+		}
+
 		$entry_id = self::insert_entry_into_database( $new_values );
 
 		if ( ! $entry_id ) {
@@ -856,7 +871,7 @@ class FrmEntry {
 			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
 			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '', true ),
 			'ip'             => self::get_ip( $values ),
-			'is_draft'       => self::get_is_draft_value( $values ),
+			'is_draft'       => self::get_is_draft_value( $values, $type ),
 			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
 			'post_id'        => (int) self::get_entry_value( $values, 'post_id', 0 ),
 			'parent_item_id' => (int) self::get_entry_value( $values, 'parent_item_id', 0 ),
@@ -866,7 +881,7 @@ class FrmEntry {
 			'user_id'        => self::get_entry_user_id( $values, $type ),
 		);
 
-		$new_values['updated_by'] = $values['updated_by'] ?? $new_values['user_id'];
+		$new_values['updated_by'] = self::get_updated_by( $values, $type, $new_values['user_id'] );
 
 		return $new_values;
 	}
@@ -880,6 +895,31 @@ class FrmEntry {
 	 */
 	private static function get_entry_value( $values, $name, $default ) {
 		return $values[ $name ] ?? $default;
+	}
+
+	/**
+	 * Get the updated_by value for an entry.
+	 *
+	 * The submitted value is only used during a trusted import, which restores the user who last
+	 * edited each entry. Every other save is being made by the current user, so a submitted
+	 * updated_by is ignored and cannot be pointed at another account. This matters because
+	 * updated_by is treated as a privilege signal when deciding how much HTML to strip from entry
+	 * values in FrmFieldType::should_strip_most_html().
+	 *
+	 * @since 6.35
+	 *
+	 * @param array      $values
+	 * @param string     $type    The create/update type. 'xml' for an import.
+	 * @param int|string $default The value to use when an import doesn't include updated_by.
+	 *
+	 * @return int
+	 */
+	private static function get_updated_by( $values, $type, $default ) {
+		if ( self::is_trusted_import( $type ) ) {
+			return absint( self::get_entry_value( $values, 'updated_by', $default ) );
+		}
+
+		return get_current_user_id();
 	}
 
 	/**
@@ -911,16 +951,58 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param array $values
+	 * @param array  $values
+	 * @param string $type The create/update type.
 	 *
 	 * @return int
 	 */
-	private static function get_is_draft_value( $values ) {
+	private static function get_is_draft_value( $values, $type = 'standard' ) {
+		if ( FrmSpamEntriesHelper::get_flagged_source( $values ) ) {
+			return FrmSpamEntriesHelper::SPAM_ENTRY_STATUS;
+		}
+
 		if ( isset( $values['frm_saving_draft'] ) && FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $values['frm_saving_draft'] ) {
 			return FrmEntriesHelper::DRAFT_ENTRY_STATUS;
 		}
 
-		return isset( $values['is_draft'] ) ? absint( $values['is_draft'] ) : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+		$status = isset( $values['is_draft'] ) ? absint( $values['is_draft'] ) : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+
+		if ( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === $status && ! self::is_trusted_import( $type ) && ! FrmAppHelper::current_user_can( 'frm_edit_entries' ) ) {
+			return FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+		}
+
+		return $status;
+	}
+
+	/**
+	 * Get the is_draft value for an updated entry.
+	 * A spam entry keeps its status unless the new status is set explicitly.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $id
+	 * @param array      $values
+	 * @param string     $type The update type.
+	 *
+	 * @return int
+	 */
+	private static function get_is_draft_value_for_update( $id, $values, $type = 'standard' ) {
+		$is_draft            = self::get_is_draft_value( $values, $type );
+		$has_explicit_status = isset( $values['is_draft'] ) && FrmSpamEntriesHelper::SPAM_ENTRY_STATUS !== absint( $values['is_draft'] );
+
+		if ( FrmEntriesHelper::SUBMITTED_ENTRY_STATUS !== $is_draft || $has_explicit_status ) {
+			return $is_draft;
+		}
+
+		$entry = FrmDb::check_cache( $id, 'frm_entry' );
+
+		if ( false === $entry ) {
+			$entry = self::getOne( $id );
+		}
+
+		$current_status = $entry ? (int) $entry->is_draft : FrmEntriesHelper::SUBMITTED_ENTRY_STATUS;
+
+		return FrmSpamEntriesHelper::SPAM_ENTRY_STATUS === $current_status ? $current_status : $is_draft;
 	}
 
 	/**
@@ -959,16 +1041,32 @@ class FrmEntry {
 	 * @return string
 	 */
 	private static function get_entry_description( $values ) {
-		if ( ! empty( $values['description'] ) ) {
+		$spam_source = FrmSpamEntriesHelper::get_flagged_source( $values );
+
+		if ( ! empty( $values['description'] ) && ! $spam_source ) {
 			return FrmAppHelper::maybe_json_encode( $values['description'] );
 		}
 
-		return json_encode(
-			array(
+		$description = $values['description'] ?? array();
+		FrmAppHelper::unserialize_or_decode( $description );
+
+		if ( ! is_array( $description ) || ! $description ) {
+			$description = array(
 				'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
 				'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
-			)
-		);
+			);
+		}
+
+		if ( $spam_source ) {
+			$description['spam_source'] = $spam_source;
+			$spam_reason                = FrmSpamEntriesHelper::get_flagged_reason( $values );
+
+			if ( '' !== $spam_reason ) {
+				$description['spam_reason'] = $spam_reason;
+			}
+		}
+
+		return json_encode( $description );
 	}
 
 	/**
@@ -1005,11 +1103,27 @@ class FrmEntry {
 	 * @return bool
 	 */
 	private static function can_set_entry_user_id_from_values( $type = 'standard' ) {
-		if ( 'xml' === $type || ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) ) {
+		if ( self::is_trusted_import( $type ) ) {
 			return true;
 		}
 
 		return current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' );
+	}
+
+	/**
+	 * Whether an entry is being saved by an import rather than by a normal request.
+	 *
+	 * An import is trusted to restore the values stored on each entry, including the columns that
+	 * are otherwise taken from the current request.
+	 *
+	 * @since 6.35
+	 *
+	 * @param string $type The create/update type. 'xml' for an import.
+	 *
+	 * @return bool
+	 */
+	private static function is_trusted_import( $type = 'standard' ) {
+		return 'xml' === $type || ( defined( 'WP_IMPORTING' ) && WP_IMPORTING );
 	}
 
 	/**
@@ -1205,9 +1319,9 @@ class FrmEntry {
 		$new_values = array(
 			'name'       => FrmAppHelper::truncate( self::get_new_entry_name( $values ), 255, 1, '', true ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
-			'is_draft'   => self::get_is_draft_value( $values ),
+			'is_draft'   => self::get_is_draft_value_for_update( $id, $values, $update_type ),
 			'updated_at' => current_time( 'mysql', 1 ),
-			'updated_by' => $values['updated_by'] ?? get_current_user_id(),
+			'updated_by' => self::get_updated_by( $values, $update_type, get_current_user_id() ),
 		);
 
 		if ( isset( $values['post_id'] ) ) {
