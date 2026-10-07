@@ -8,6 +8,10 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 
 	/**
 	 * An old active add-on prevents spam writes through every entry creation and moderation path.
+	 *
+	 * @runInSeparateProcess
+	 *
+	 * @preserveGlobalState disabled
 	 */
 	#[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
 	#[\PHPUnit\Framework\Attributes\PreserveGlobalState( false )]
@@ -58,6 +62,10 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 
 	/**
 	 * Old Pro is incompatible even when the active Views version supports spam.
+	 *
+	 * @runInSeparateProcess
+	 *
+	 * @preserveGlobalState disabled
 	 */
 	#[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
 	#[\PHPUnit\Framework\Attributes\PreserveGlobalState( false )]
@@ -73,6 +81,10 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 
 	/**
 	 * A current add-on explicitly declares support, so ordinary saved-spam handling still works.
+	 *
+	 * @runInSeparateProcess
+	 *
+	 * @preserveGlobalState disabled
 	 */
 	#[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
 	#[\PHPUnit\Framework\Attributes\PreserveGlobalState( false )]
@@ -88,6 +100,10 @@ class test_FrmSpamCompatibility extends FrmUnitTest {
 	}
 	/**
 	 * Early feature builds must not enable unsafe cleanup merely by declaring spam support.
+	 *
+	 * @runInSeparateProcess
+	 *
+	 * @preserveGlobalState disabled
 	 *
 	 * @return void
 	 */
