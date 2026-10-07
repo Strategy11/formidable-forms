@@ -199,7 +199,7 @@ class FrmStrpLiteLinkController {
 			function () use ( $mode ) {
 				return $mode;
 			},
-			PHP_INT_MAX
+			99
 		);
 	}
 
