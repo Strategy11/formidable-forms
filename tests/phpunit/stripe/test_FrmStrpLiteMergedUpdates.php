@@ -341,6 +341,170 @@ class test_FrmStrpLiteMergedUpdates extends FrmUnitTest {
 		}
 	}
 
+	public function test_cleanup_marks_every_row_on_a_verified_failed_intent() {
+		$form         = $this->factory->form->create_and_get();
+		$model        = new FrmTransLitePayment();
+		$entries      = array();
+		$ids          = array();
+		$this->intent = (object) array(
+			'id'                 => 'pi_fixture',
+			'client_secret'      => 'pi_fixture_secret_' . wp_generate_password( 24, false ),
+			'status'             => 'requires_payment_method',
+			'last_payment_error' => (object) array( 'message' => 'Declined' ),
+		);
+
+		foreach ( array( 'pending', 'failed' ) as $status ) {
+			$entry     = $this->factory->entry->create_and_get( $this->factory->field->generate_entry_array( $form ) );
+			$entries[] = $entry->id;
+			$ids[]     = $model->create(
+				array(
+					'item_id'    => $entry->id,
+					'receipt_id' => $this->intent->id,
+					'status'     => $status,
+					'paysys'     => 'stripe',
+				)
+			);
+		}
+
+		FrmStrpLitePaymentFailureHelper::cleanup_failed_intent( $this->intent->client_secret );
+
+		foreach ( $ids as $index => $id ) {
+			$this->assertSame( 'failed', $model->get_one( $id )->status );
+			$this->assertNull( FrmEntry::getOne( $entries[ $index ] ) );
+		}
+	}
+
+	public function test_cleanup_leaves_rows_alone_when_stripe_reports_no_failure() {
+		$form         = $this->factory->form->create_and_get();
+		$entry        = $this->factory->entry->create_and_get( $this->factory->field->generate_entry_array( $form ) );
+		$model        = new FrmTransLitePayment();
+		$id           = $model->create(
+			array(
+				'item_id'    => $entry->id,
+				'receipt_id' => 'pi_fixture',
+				'status'     => 'pending',
+				'paysys'     => 'stripe',
+			)
+		);
+		$this->intent = (object) array(
+			'id'            => 'pi_fixture',
+			'client_secret' => 'pi_fixture_secret_' . wp_generate_password( 24, false ),
+			'status'        => 'processing',
+		);
+
+		FrmStrpLitePaymentFailureHelper::cleanup_failed_intent( $this->intent->client_secret );
+		$this->assertSame( 'pending', $model->get_one( $id )->status );
+		$this->assertNotNull( FrmEntry::getOne( $entry->id ) );
+	}
+
+	public function test_verify_intent_rejects_payment_intents_that_already_moved_money() {
+		$form                             = $this->factory->form->create_and_get();
+		$action                           = $this->make_action( $form->id );
+		$secret                           = 'pi_fixture_secret_' . wp_generate_password( 24, false );
+		$_POST[ 'frmintent' . $form->id ] = array( $secret );
+
+		try {
+			foreach ( array( 'succeeded', 'requires_capture', 'processing' ) as $status ) {
+				$this->intent = (object) array(
+					'id'            => 'pi_fixture',
+					'client_secret' => $secret,
+					'status'        => $status,
+				);
+				$verified     = $this->run_private_method( array( 'FrmStrpLiteLinkController', 'verify_intent' ), array( $form->id, $action ) );
+				$this->assertFalse( $verified, $status . ' must not be reused.' );
+			}
+
+			$this->intent->status = 'requires_payment_method';
+			$this->assertSame( 'pi_fixture', $this->run_private_method( array( 'FrmStrpLiteLinkController', 'verify_intent' ), array( $form->id, $action ) ) );
+		} finally {
+			unset( $_POST[ 'frmintent' . $form->id ] );
+		}
+	}
+
+	public function test_verify_intent_rejects_an_intent_with_a_completed_payment() {
+		$form         = $this->factory->form->create_and_get();
+		$action       = $this->make_action( $form->id );
+		$this->intent = (object) array(
+			'id'            => 'pi_fixture',
+			'client_secret' => 'pi_fixture_secret_' . wp_generate_password( 24, false ),
+			'status'        => 'requires_payment_method',
+		);
+		$model        = new FrmTransLitePayment();
+		$id           = $model->create(
+			array(
+				'receipt_id' => $this->intent->id,
+				'status'     => 'complete',
+				'paysys'     => 'stripe',
+			)
+		);
+
+		$_POST[ 'frmintent' . $form->id ] = array( $this->intent->client_secret );
+
+		try {
+			$this->assertFalse( $this->run_private_method( array( 'FrmStrpLiteLinkController', 'verify_intent' ), array( $form->id, $action ) ) );
+			$this->assertSame( 'complete', $model->get_one( $id )->status );
+		} finally {
+			unset( $_POST[ 'frmintent' . $form->id ] );
+		}
+	}
+
+	public function test_action_for_payment_falls_back_to_the_form_link_action() {
+		$form   = $this->factory->form->create_and_get();
+		$action = $this->make_action( $form->id );
+		$entry  = (object) array( 'form_id' => $form->id );
+		$found  = $this->run_private_method( array( 'FrmStrpLiteLinkController', 'get_action_for_payment' ), array( (object) array( 'action_id' => $action->ID ), $entry ) );
+		$this->assertSame( $action->ID, $found->ID );
+
+		$found = $this->run_private_method( array( 'FrmStrpLiteLinkController', 'get_action_for_payment' ), array( (object) array( 'action_id' => 0 ), $entry ) );
+		$this->assertSame( $action->ID, $found->ID, 'A payment without an action id should use the form Stripe action.' );
+	}
+
+	/**
+	 * @param string $sub_id
+	 *
+	 * @return string The cached event id.
+	 */
+	private function cache_subscription_updated_event( $sub_id ) {
+		$event = (object) array(
+			'id'   => 'evt_sub_' . $sub_id,
+			'type' => 'customer.subscription.updated',
+			'data' => (object) array(
+				'object' => (object) array(
+					'id'                   => $sub_id,
+					'object'               => 'subscription',
+					'cancel_at_period_end' => true,
+				),
+			),
+		);
+		wp_cache_set( $event->id, $event, 'frm_strp' );
+		return $event->id;
+	}
+
+	public function test_subscription_update_for_an_unknown_subscription_is_not_owned() {
+		$event_id   = $this->cache_subscription_updated_event( 'sub_unknown' );
+		$controller = new FrmStrpLiteEventsController();
+		$this->run_private_method( array( $controller, 'process_event_ids' ), array( array( $event_id ) ) );
+		$this->assertSame( array(), $this->requests );
+		$this->assertContains( $event_id, get_option( FrmStrpLiteEventsController::$events_to_skip_option_name ) );
+	}
+
+	public function test_subscription_update_marks_a_known_subscription_for_future_cancel() {
+		$frm_sub = new FrmTransLiteSubscription();
+		$sub_id  = $frm_sub->create(
+			array(
+				'sub_id' => 'sub_fixture',
+				'status' => 'active',
+				'paysys' => 'stripe',
+			)
+		);
+
+		$event_id   = $this->cache_subscription_updated_event( 'sub_fixture' );
+		$controller = new FrmStrpLiteEventsController();
+		$this->run_private_method( array( $controller, 'process_event_ids' ), array( array( $event_id ) ) );
+		$this->assertSame( 'future_cancel', $frm_sub->get_one( $sub_id )->status );
+		$this->assertSame( array( 'process_event' ), array_column( $this->requests, 'frm_strp_connect_action' ) );
+	}
+
 	public function test_intent_waits_for_the_payment_field_page_when_pro_is_available() {
 		$form   = $this->factory->form->create_and_get();
 		$action = $this->make_action( $form->id );

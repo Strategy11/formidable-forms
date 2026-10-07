@@ -159,12 +159,9 @@
 
 		function handleConfirmPaymentError( error ) {
 			running--;
-			enableSubmit();
 
 			const fieldset = jQuery( object ).find( '.frm_form_field' );
 			fieldset.removeClass( 'frm_doing_ajax' );
-
-			object.classList.remove( 'frm_loading_form' );
 
 			// Don't show validation_error here as those are added automatically to the email and postal code fields, etc.
 			if ( 'card_error' === error.type || 'invalid_request_error' === error.type || 'form_submit_error' === error.type ) {
@@ -173,7 +170,14 @@
 					cardErrors.textContent = error.message;
 				}
 			}
-			checkFailedPayment( object, error );
+
+			// Keep submit disabled until the failed records are cleaned up.
+			// Otherwise a fast retry could create a payment row that the cleanup then marks as failed.
+			const afterCleanup = () => {
+				enableSubmit();
+				object.classList.remove( 'frm_loading_form' );
+			};
+			checkFailedPayment( object, error ).then( afterCleanup, afterCleanup );
 		}
 
 		/**
@@ -1282,7 +1286,7 @@
 	 *
 	 * @param {HTMLFormElement} form  The form whose payment attempt failed.
 	 * @param {Object}          error The confirmation or form submission error.
-	 * @return {Promise<void>}
+	 * @return {Promise<void>} Resolves once the cleanup request has finished, or right away when there is nothing to clean up.
 	 */
 	async function checkFailedPayment( form, error ) {
 		if ( 'form_submit_error' === error.type ) {
@@ -1312,7 +1316,8 @@
 			form: JSON.stringify( [ { name: 'form_id', value: formId }, ...failedInputs ] ),
 			nonce: frm_stripe_vars.nonce
 		};
-		postAjax( data, () => {} );
+		const xmlHttp = postAjax( data, () => {} );
+		await new Promise( resolve => xmlHttp.addEventListener( 'loadend', resolve ) );
 	}
 
 	/**
