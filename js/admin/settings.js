@@ -205,12 +205,12 @@
 		const styleEls = document.querySelectorAll( '.frm-email-style' );
 		styleEls.forEach( el => {
 			el.classList.remove( 'frm-email-style--selected' );
-			el.querySelector( '[data-action="choose"]' ).setAttribute( 'aria-pressed', 'false' );
 		} );
 
 		const styleEl = e.target.closest( '.frm-email-style' );
 		styleEl.classList.add( 'frm-email-style--selected' );
-		styleEl.querySelector( '[data-action="choose"]' ).setAttribute( 'aria-pressed', 'true' );
+		// The Choose button is hidden once its style is selected, so keep focus on the Selected button that replaces it.
+		styleEl.querySelector( '[data-action="selected"]' ).focus();
 
 		const { styleKey } = styleEl.dataset;
 		document.getElementById( 'frm-email-style-value' ).value = styleKey;
@@ -230,7 +230,10 @@
 
 		const showResult = ( msg, success, invalid = false ) => {
 			resultEl.textContent = msg;
-			emailInput.setAttribute( 'aria-invalid', String( invalid ) );
+			// A failed send is not always caused by the address, so only flag the field when it is known to be wrong.
+			if ( invalid ) {
+				emailInput.setAttribute( 'aria-invalid', 'true' );
+			}
 			emailInput.setAttribute( 'aria-describedby', success ? 'frm-test-email-help' : 'frm-test-email-help frm-send-test-email-result' );
 			resultEl.classList.add( success ? 'frm_updated_message' : 'frm_error_style' );
 		};

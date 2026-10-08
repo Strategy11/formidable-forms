@@ -43,21 +43,24 @@ $selected_style = FrmEmailStylesController::get_default_email_style();
 
 				<div class="frm-email-style__buttons">
 					<?php
-					$choose_attrs = array(
-						'aria-pressed' => $style_key === $selected_style ? 'true' : 'false',
-						/* translators: %s: Email style name. */
-						'aria-label'   => sprintf( __( 'Choose %s email style', 'formidable' ), $style['name'] ),
-					);
+					/* translators: %s: Email style name. */
+					$choose_label = sprintf( __( 'Choose %s email style', 'formidable' ), $style['name'] );
+					/* translators: %s: Email style name. */
+					$selected_label = sprintf( __( 'Selected %s email style', 'formidable' ), $style['name'] );
+					/* translators: %s: Email style name. */
+					$preview_label = sprintf( __( 'Preview %s email style', 'formidable' ), $style['name'] );
+
+					// The Selected button uses aria-disabled instead of disabled so it stays focusable, giving focus somewhere to land after choosing.
 					?>
-					<button type="button" class="frm-email-style__button frm-button-primary" data-action="choose"<?php FrmAppHelper::array_to_html_params( $choose_attrs, true ); ?>>
+					<button type="button" class="frm-email-style__button frm-button-primary" data-action="choose" aria-label="<?php echo esc_attr( $choose_label ); ?>">
 						<?php esc_html_e( 'Choose', 'formidable' ); ?>
 					</button>
 
-					<button type="button" class="frm-email-style__button frm-button-primary" disabled="disabled" aria-label="<?php /* translators: %s: Email style name. */ echo esc_attr( sprintf( __( 'Selected %s email style', 'formidable' ), $style['name'] ) ); ?>">
+					<button type="button" class="frm-email-style__button frm-button-primary" data-action="selected" aria-disabled="true" aria-label="<?php echo esc_attr( $selected_label ); ?>">
 						<?php esc_html_e( 'Selected', 'formidable' ); ?>
 					</button>
 
-					<a href="<?php echo esc_url( FrmEmailStylesController::get_email_style_preview_url( $style_key ) ); ?>" class="frm-email-style__button frm-button-secondary" data-action="preview" target="_blank" aria-label="<?php /* translators: %s: Email style name. */ echo esc_attr( sprintf( __( 'Preview %s email style', 'formidable' ), $style['name'] ) ); ?>">
+					<a href="<?php echo esc_url( FrmEmailStylesController::get_email_style_preview_url( $style_key ) ); ?>" class="frm-email-style__button frm-button-secondary" data-action="preview" target="_blank" aria-label="<?php echo esc_attr( $preview_label ); ?>">
 						<?php esc_html_e( 'Preview', 'formidable' ); ?>
 					</a>
 				</div>

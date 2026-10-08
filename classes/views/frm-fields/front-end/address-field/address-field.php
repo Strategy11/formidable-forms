@@ -100,7 +100,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				$temp_id = ! empty( $atts['field_id'] ) ? $atts['field_id'] : $field['id'];
 
 				// Don't show individual field errors when there is a combo field error
-				if ( $errors && isset( $errors[ 'field' . $temp_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $field['id'] ] ) ) {
+				if ( $errors && isset( $errors[ 'field' . $temp_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $temp_id ] ) ) {
 					?>
 					<div class="frm_error" role="alert" id="frm_error_<?php echo esc_attr( $html_id . '_' . $name ); ?>"><?php echo esc_html( $errors[ 'field' . $temp_id . '-' . $name ] ); ?></div>
 				<?php } ?>

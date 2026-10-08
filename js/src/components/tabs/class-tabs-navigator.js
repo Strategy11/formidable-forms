@@ -38,7 +38,10 @@ export class frmTabsNavigator {
 		const navList = this.navs[ 0 ]?.parentElement;
 		if ( navList ) {
 			navList.setAttribute( 'role', this.filterTarget ? 'group' : 'tablist' );
-			navList.setAttribute( 'aria-label', this.filterTarget ? __( 'Filters', 'formidable' ) : __( 'Sections', 'formidable' ) );
+			// Keep a name given in the markup. The generic one is only a fallback.
+			if ( ! navList.hasAttribute( 'aria-label' ) && ! navList.hasAttribute( 'aria-labelledby' ) ) {
+				navList.setAttribute( 'aria-label', this.filterTarget ? __( 'Filters', 'formidable' ) : __( 'Sections', 'formidable' ) );
+			}
 		}
 
 		const activeIndex = Array.from( this.navs ).findIndex( nav => nav.classList.contains( 'frm-active' ) );
