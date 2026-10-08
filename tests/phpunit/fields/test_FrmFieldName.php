@@ -6,6 +6,50 @@
 #[\PHPUnit\Framework\Attributes\Group( 'fields' )]
 class test_FrmFieldName extends FrmUnitTest {
 
+	/**
+	 * Rendered compound inputs keep their descriptions and reference only their own errors.
+	 */
+	public function test_sub_field_error_descriptions() {
+		$form  = $this->factory->form->create_and_get();
+		$field = $this->factory->field->create_and_get(
+			array(
+				'type'        => 'name',
+				'form_id'     => $form->id,
+				'description' => 'Your full name.',
+			)
+		);
+		$this->assertStringContainsString( 'field_' . $field->field_key . '_last', do_shortcode( '[formidable id="' . $form->id . '"]' ) );
+
+		foreach ( array( (string) $field->id, $field->id . '-10-0' ) as $rendered_id ) {
+			$html_id    = 'field_' . $field->field_key . '_' . $rendered_id;
+			$args       = array(
+				'field'      => FrmFieldsHelper::field_object_to_array( $field ),
+				'field_id'   => $rendered_id,
+				'html_id'    => $html_id,
+				'field_name' => 'item_meta[' . $rendered_id . ']',
+				'errors'     => array( 'field' . $rendered_id . '-last' => 'Enter your last name.' ),
+			);
+			$name_field = new FrmFieldName( $field );
+			$html       = $name_field->include_front_field_input( $args, array() );
+			$document   = new DOMDocument();
+			$document->loadHTML( $html );
+			$last     = $document->getElementById( $html_id . '_last' );
+			$first    = $document->getElementById( $html_id . '_first' );
+			$error_id = 'frm_error_' . $html_id . '_last';
+
+			$this->assertNotNull( $last );
+			$this->assertNotNull( $first );
+			$this->assertSame( 'Enter your last name.', $document->getElementById( $error_id )->textContent );
+			$this->assertStringContainsString( $error_id, $last->getAttribute( 'aria-describedby' ) );
+			$this->assertStringContainsString( 'frm_desc_' . $html_id, $last->getAttribute( 'aria-describedby' ) );
+			$this->assertStringNotContainsString( $error_id, $first->getAttribute( 'aria-describedby' ) );
+
+			$args['errors'] = array();
+			$corrected      = ( new FrmFieldName( $field ) )->include_front_field_input( $args, array() );
+			$this->assertStringNotContainsString( $error_id, $corrected );
+		}
+	}
+
 	public function test_get_processed_sub_fields() {
 		$field = $this->factory->field->create_and_get(
 			array(

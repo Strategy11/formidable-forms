@@ -727,7 +727,8 @@ class FrmAppController {
 		$settings_js_vars = array(
 			'currencies' => FrmCurrencyHelper::get_currencies(),
 		);
-		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
+		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array( 'wp-i18n' ), $version, true );
+		wp_set_script_translations( 'formidable_settings', 'formidable' );
 		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
 		wp_register_script( 'formidable-web-components', $plugin_url . '/js/formidable-web-components.js', $frm_components_dependencies, $version, true );
 

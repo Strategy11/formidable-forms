@@ -209,6 +209,8 @@
 
 		const styleEl = e.target.closest( '.frm-email-style' );
 		styleEl.classList.add( 'frm-email-style--selected' );
+		// The Choose button is hidden once its style is selected, so keep focus on the Selected button that replaces it.
+		styleEl.querySelector( '[data-action="selected"]' ).focus();
 
 		const { styleKey } = styleEl.dataset;
 		document.getElementById( 'frm-email-style-value' ).value = styleKey;
@@ -226,16 +228,23 @@
 		const emailInput = document.getElementById( 'frm-test-email-address' );
 		const resultEl = document.getElementById( 'frm-send-test-email-result' );
 
-		const showResult = ( msg, success ) => {
+		const showResult = ( msg, success, invalid = false ) => {
 			resultEl.textContent = msg;
+			// A failed send is not always caused by the address, so only flag the field when it is known to be wrong.
+			if ( invalid ) {
+				emailInput.setAttribute( 'aria-invalid', 'true' );
+			}
+			emailInput.setAttribute( 'aria-describedby', success ? 'frm-test-email-help' : 'frm-test-email-help frm-send-test-email-result' );
 			resultEl.classList.add( success ? 'frm_updated_message' : 'frm_error_style' );
 		};
 
 		resultEl.textContent = '';
+		emailInput.removeAttribute( 'aria-invalid' );
+		emailInput.setAttribute( 'aria-describedby', 'frm-test-email-help' );
 		resultEl.classList.remove( 'frm_error_style', 'frm_updated_message' );
 
 		if ( ! emailInput.value ) {
-			showResult( 'Empty email address' );
+			showResult( wp.i18n.__( 'Empty email address', 'formidable' ), false, true );
 			return;
 		}
 

@@ -1283,8 +1283,25 @@ DEFAULT_HTML;
 					return $matches[0];
 				}
 
-				$atts = $matches[2];
-				$this->add_aria_description( $args, $atts );
+				$atts       = $matches[2];
+				$input_args = $args;
+
+				// Compound fields share a description, but each subfield has its own error.
+				if ( ! isset( $args['errors'][ 'field' . $args['field_id'] ] ) && preg_match( '/(?:^|\s)id="([^"]+)"/', $atts, $input_id ) ) {
+					$prefix = $args['html_id'] . '_';
+
+					if ( str_starts_with( $input_id[1], $prefix ) ) {
+						$subfield  = substr( $input_id[1], strlen( $prefix ) );
+						$error_key = 'field' . $args['field_id'] . '-' . $subfield;
+
+						if ( isset( $args['errors'][ $error_key ] ) ) {
+							$input_args['errors'][ 'field' . $args['field_id'] ] = $args['errors'][ $error_key ];
+							$input_args['error_html_id']                         = $input_id[1];
+						}
+					}
+				}
+
+				$this->add_aria_description( $input_args, $atts );
 
 				return '<' . $matches[1] . $atts . $matches[3] . '>';
 			},
@@ -1676,9 +1693,9 @@ DEFAULT_HTML;
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
 			if ( $error_comes_first ) {
-				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
+				array_unshift( $describedby, 'frm_error_' . ( $args['error_html_id'] ?? $args['html_id'] ) );
 			} else {
-				array_push( $describedby, 'frm_error_' . $args['html_id'] );
+				array_push( $describedby, 'frm_error_' . ( $args['error_html_id'] ?? $args['html_id'] ) );
 			}
 		}
 

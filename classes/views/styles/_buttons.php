@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span class="frm-tabs-active-underline"></span>
 	</div>
 	<div class="frm-tabs-navs">
-		<ul class="frm-flex-box">
+		<ul class="frm-flex-box" aria-label="<?php esc_attr_e( 'Button states', 'formidable' ); ?>">
 			<li class="frm-active"><?php esc_html_e( 'Default', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'On Hover', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'On Click', 'formidable' ); ?></li>

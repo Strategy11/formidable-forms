@@ -53,11 +53,42 @@ class frmStyleOptions {
 	 * Init the dependent
 	 */
 	init() {
+		this.initControlLabels();
 		this.initCopyStatus();
 		this.initColorPickerDependentUpdaterComponents();
 		this.initStyleClassCopyToClipboard();
 		this.initStyleClassRename();
 		this.toggleVisibilityOfCustomCSSEditor();
+	}
+
+	/**
+	 * Includes the visible setting heading in the names of its value and unit controls.
+	 *
+	 * @since x.x
+	 * @return {void}
+	 */
+	initControlLabels() {
+		document.querySelectorAll( '.frm-style-item-heading' ).forEach( heading => {
+			const targetId = heading.dataset.sliderLabelFor || heading.htmlFor;
+			const target = document.getElementById( targetId );
+			const component = target?.closest( '.frm-style-component' );
+			if ( ! component ) {
+				return;
+			}
+
+			const name = heading.textContent.trim();
+			const radioGroup = component.querySelector( '.frm-radio-container' );
+			if ( radioGroup ) {
+				radioGroup.setAttribute( 'role', 'group' );
+				radioGroup.setAttribute( 'aria-label', name );
+				return;
+			}
+
+			component.querySelectorAll( 'input[aria-label], select[aria-label]' ).forEach( control => {
+				const label = control.getAttribute( 'aria-label' );
+				control.setAttribute( 'aria-label', control.id === targetId ? name : `${ name } ${ label }` );
+			} );
+		} );
 	}
 
 	/**
