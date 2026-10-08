@@ -1045,7 +1045,7 @@ window.frmAdminBuildJS = function() {
 
 		const targetId = href.slice( 1 );
 
-		const sectionLink = link[ 0 ];
+		const [ sectionLink ] = link;
 		if ( sectionLink ) {
 			sectionLink.closest( 'ul' )?.querySelectorAll( 'a[aria-current]' ).forEach( anchor => anchor.removeAttribute( 'aria-current' ) );
 			sectionLink.setAttribute( 'aria-current', 'true' );
