@@ -175,11 +175,12 @@
 /**
  * Fields with no label
  *
- * The submit button and other label-less fields have no row for the icons to share, so in flow
+ * Page breaks hide their labels. Like label-less fields, they have no row for the icons to share, so in flow
  * they pushed the content down by the height of the icon row. They return to the corner, which is
  * where they sat before the label row existed.
  */
-#frm-show-fields li.ui-state-default.frm_not_divider > .frm_inner_field_container:not(:has(> .frm_primary_label)) {
+#frm-show-fields li.ui-state-default.frm_not_divider > .frm_inner_field_container:not(:has(> .frm_primary_label)),
+#frm-show-fields li.ui-state-default.frm_not_divider.edit_field_type_break > .frm_inner_field_container {
 	position: relative;
 
 	> .frm-field-action-icons {
