@@ -51,7 +51,7 @@ describe( 'Slider style component', () => {
 
 		// Border Width lives directly in the General section, open by default.
 		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).within( () => {
-			cy.get( 'input[type="range"]' ).should( 'have.attr', 'aria-label', 'Field value' );
+			cy.get( 'input[type="range"]' ).should( 'have.attr', 'aria-label', 'Border Width Field value' );
 
 			// Typing a value into the text box should drive the range input and its aria-valuetext.
 			cy.get( '.frm-slider-value input[type="text"]' ).clear().type( '12' ).blur();
@@ -113,7 +113,7 @@ describe( 'Slider style component', () => {
 
 		cy.log( 'Adjusting the Bottom slider only updates the bottom position of the combined value' );
 		wrapper().find( '.frm-slider-component[data-type="bottom"]' ).within( () => {
-			cy.get( 'input[type="range"]' ).should( 'have.attr', 'aria-label', 'Bottom value' );
+			cy.get( 'input[type="range"]' ).should( 'have.attr', 'aria-label', 'Padding Bottom value' );
 			cy.get( '.frm-slider-value input[type="text"]' ).clear().type( '22' ).blur();
 			cy.get( 'input[type="range"]' ).should( 'have.value', '22' );
 		} );
