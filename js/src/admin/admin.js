@@ -1045,6 +1045,12 @@ window.frmAdminBuildJS = function() {
 
 		const targetId = href.slice( 1 );
 
+		const sectionLink = link[ 0 ];
+		if ( sectionLink ) {
+			sectionLink.closest( 'ul' )?.querySelectorAll( 'a[aria-current]' ).forEach( anchor => anchor.removeAttribute( 'aria-current' ) );
+			sectionLink.setAttribute( 'aria-current', 'true' );
+		}
+
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		const [ container ] = link.closest( 'div' );
 		if ( container?.querySelector( '.tabs-panel' ) ) {

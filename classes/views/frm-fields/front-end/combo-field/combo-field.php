@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $field        = $args['field'];
 $field_id     = $field['id'];
+$error_key_id = $args['field_id'] ?? $field_id;
 $field_label  = $field['name'];
 $field_value  = $field['value'];
 $sub_fields   = $args['sub_fields'];
@@ -42,7 +43,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 			$sub_field_class   = "frm_form_field form-field frm_form_subfield-{$name} {$sub_field['wrapper_classes']}";
 			$sub_field_desc    = FrmField::get_option( $field, $name . '_desc' );
 
-			if ( isset( $errors[ 'field' . $field_id . '-' . $name ] ) ) {
+			if ( isset( $errors[ 'field' . $error_key_id . '-' . $name ] ) ) {
 				$sub_field_class .= ' frm_blank_field';
 			}
 			?>
@@ -73,9 +74,9 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				}
 
 				// Don't show individual field errors when there is a combo field error.
-				if ( $errors && isset( $errors[ 'field' . $field_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $field_id ] ) ) {
+				if ( $errors && isset( $errors[ 'field' . $error_key_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $error_key_id ] ) ) {
 					?>
-					<div class="frm_error" role="alert"><?php echo esc_html( $errors[ 'field' . $field_id . '-' . $name ] ); ?></div>
+					<div class="frm_error" role="alert" id="frm_error_<?php echo esc_attr( $html_id . '_' . $name ); ?>"><?php echo esc_html( $errors[ 'field' . $error_key_id . '-' . $name ] ); ?></div>
 				<?php } ?>
 			</div>
 			<?php

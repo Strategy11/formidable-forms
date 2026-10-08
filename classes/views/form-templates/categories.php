@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<ul class="frm-page-skeleton-categories frm-flex-col frm-gap-xs" aria-label="<?php esc_attr_e( 'Categories', 'formidable' ); ?>">
+<ul role="group" class="frm-page-skeleton-categories frm-flex-col frm-gap-xs" aria-label="<?php esc_attr_e( 'Categories', 'formidable' ); ?>">
 	<?php foreach ( $categories as $category_slug => $category_data ) { ?>
 		<?php
 		$classes    = 'frm-page-skeleton-cat frm-flex-box frm-justify-between frm-font-medium';
@@ -21,12 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 
 		if ( 'all-items' === $category_slug ) {
-			echo '<li class="frm-page-skeleton-divider"></li>';
+			echo '<li aria-hidden="true" class="frm-page-skeleton-divider"></li>';
 			$classes .= ' frm-current';
 		}
+		$control_attrs = array(
+			'aria-pressed' => 'all-items' === $category_slug ? 'true' : 'false',
+		);
 		?>
 
-		<li class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>" tabindex="0" aria-label="<?php echo esc_attr( $aria_label ); ?>">
+		<li class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>" tabindex="0" role="button"<?php FrmAppHelper::array_to_html_params( $control_attrs, true ); ?> aria-label="<?php echo esc_attr( $aria_label ); ?>">
 			<span class="frm-page-skeleton-cat-text"><?php echo esc_html( $category_data['name'] ); ?></span>
 			<span class="frm-page-skeleton-cat-count">
 				<?php

@@ -1,5 +1,8 @@
+import { __ } from '@wordpress/i18n';
 import { applyContentFilter, getFilterTarget } from './filter.js';
 import { observeVisibility, disconnectVisibilityObserver } from 'core/utils/visibilityObserver';
+
+let tablistCount = 0;
 
 export class frmTabsNavigator {
 	constructor( wrapper ) {
@@ -34,13 +37,35 @@ export class frmTabsNavigator {
 
 		const navList = this.navs[ 0 ]?.parentElement;
 		if ( navList ) {
-			navList.setAttribute( 'role', 'tablist' );
+			navList.setAttribute( 'role', this.filterTarget ? 'group' : 'tablist' );
+			navList.setAttribute( 'aria-label', this.filterTarget ? __( 'Filters', 'formidable' ) : __( 'Sections', 'formidable' ) );
 		}
 
+		const activeIndex = Array.from( this.navs ).findIndex( nav => nav.classList.contains( 'frm-active' ) );
+		const selectedIndex = Math.max( activeIndex, 0 );
+		const root = this.wrapper.getRootNode();
+		let idPrefix;
+		do {
+			idPrefix = `frm-tablist-${ ++tablistCount }`;
+		} while ( root.getElementById( `${ idPrefix }-tab-0` ) || root.getElementById( `${ idPrefix }-panel-0` ) );
+
 		this.navs.forEach( ( nav, index ) => {
-			nav.setAttribute( 'tabindex', '0' );
-			nav.setAttribute( 'role', 'tab' );
-			nav.setAttribute( 'aria-selected', String( nav.classList.contains( 'frm-active' ) ) );
+			const isSelected = index === selectedIndex;
+			nav.classList.toggle( 'frm-active', isSelected );
+			nav.setAttribute( 'tabindex', this.filterTarget || isSelected ? '0' : '-1' );
+			nav.setAttribute( 'role', this.filterTarget ? 'button' : 'tab' );
+			nav.setAttribute( this.filterTarget ? 'aria-pressed' : 'aria-selected', String( isSelected ) );
+			nav.querySelectorAll( 'a' ).forEach( anchor => anchor.setAttribute( 'tabindex', '-1' ) );
+
+			if ( ! this.filterTarget && this.slides[ index ] ) {
+				const panel = this.slides[ index ];
+				nav.id = nav.id || `${ idPrefix }-tab-${ index }`;
+				panel.id = panel.id || `${ idPrefix }-panel-${ index }`;
+				nav.setAttribute( 'aria-controls', panel.id );
+				panel.setAttribute( 'role', 'tabpanel' );
+				panel.setAttribute( 'aria-labelledby', nav.id );
+				panel.setAttribute( 'tabindex', '0' );
+			}
 
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
 			nav.addEventListener( 'keydown', event => this.onNavKeydown( event, index ) );
@@ -52,6 +77,9 @@ export class frmTabsNavigator {
 				}
 			}
 		} );
+		if ( ! this.filterTarget ) {
+			this.changeSlide( selectedIndex );
+		}
 		this.slideTrackLine.style.display = 'block';
 
 		this.setupScrollbarObserver();
@@ -67,8 +95,12 @@ export class frmTabsNavigator {
 
 		this.removeActiveClassnameFromNavs();
 		navItem.classList.add( 'frm-active' );
-		this.navs.forEach( nav => nav.setAttribute( 'aria-selected', 'false' ) );
-		navItem.setAttribute( 'aria-selected', 'true' );
+		this.navs.forEach( nav => {
+			nav.setAttribute( this.filterTarget ? 'aria-pressed' : 'aria-selected', String( nav === navItem ) );
+			if ( ! this.filterTarget ) {
+				nav.setAttribute( 'tabindex', nav === navItem ? '0' : '-1' );
+			}
+		} );
 		this.initSlideTrackUnderline( navItem );
 
 		if ( this.filterTarget ) {
@@ -96,7 +128,27 @@ export class frmTabsNavigator {
 		if ( event.key === 'Enter' || event.key === ' ' ) {
 			event.preventDefault();
 			this.onNavClick( event, index );
+			return;
 		}
+
+		if ( this.filterTarget ) {
+			return;
+		}
+
+		const lastIndex = this.navs.length - 1;
+		const nextIndex = {
+			ArrowLeft: ( index + ( this.isRTL ? 1 : lastIndex ) ) % this.navs.length,
+			ArrowRight: ( index + ( this.isRTL ? lastIndex : 1 ) ) % this.navs.length,
+			Home: 0,
+			End: lastIndex,
+		}[ event.key ];
+		if ( nextIndex === undefined ) {
+			return;
+		}
+
+		event.preventDefault();
+		this.navs.forEach( ( nav, navIndex ) => nav.setAttribute( 'tabindex', navIndex === nextIndex ? '0' : '-1' ) );
+		this.navs[ nextIndex ].focus();
 	}
 
 	initSlideTrackUnderline( nav ) {
@@ -163,6 +215,11 @@ export class frmTabsNavigator {
 
 	changeSlide( index ) {
 		this.removeActiveClassnameFromSlides();
+		this.slides.forEach( ( panel, panelIndex ) => {
+			const inactive = panelIndex !== index;
+			panel.toggleAttribute( 'inert', inactive );
+			panel.setAttribute( 'aria-hidden', String( inactive ) );
+		} );
 		const translate = index == 0 ? '0px' : `calc( ( ${ index * 100 }% + ${ parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * ${ this.isRTL ? 1 : -1 } )`;
 		if ( '0px' !== translate ) {
 			this.slideTrack.style.transform = `translateX(${ translate })`;

@@ -39,7 +39,7 @@ const onCategoryClick = event => {
 		getState();
 
 	// If the selected category hasn't changed, return early
-	if ( selectedCategory === newSelectedCategory ) {
+	if ( selectedCategory === newSelectedCategory && ! notEmptySearchText ) {
 		return;
 	}
 
@@ -55,8 +55,10 @@ const onCategoryClick = event => {
 
 	// Highlight the newly clicked category and update the application state
 	selectedCategoryEl.classList.remove( CURRENT_CLASS );
+	selectedCategoryEl.setAttribute( 'aria-pressed', 'false' );
 	selectedCategoryEl = clickedCategory;
 	selectedCategoryEl.classList.add( CURRENT_CLASS );
+	selectedCategoryEl.setAttribute( 'aria-pressed', 'true' );
 	setState( { selectedCategory, selectedCategoryEl } );
 
 	// Reset the search input if it contains text

@@ -205,10 +205,12 @@
 		const styleEls = document.querySelectorAll( '.frm-email-style' );
 		styleEls.forEach( el => {
 			el.classList.remove( 'frm-email-style--selected' );
+			el.querySelector( '[data-action="choose"]' ).setAttribute( 'aria-pressed', 'false' );
 		} );
 
 		const styleEl = e.target.closest( '.frm-email-style' );
 		styleEl.classList.add( 'frm-email-style--selected' );
+		styleEl.querySelector( '[data-action="choose"]' ).setAttribute( 'aria-pressed', 'true' );
 
 		const { styleKey } = styleEl.dataset;
 		document.getElementById( 'frm-email-style-value' ).value = styleKey;
@@ -226,16 +228,20 @@
 		const emailInput = document.getElementById( 'frm-test-email-address' );
 		const resultEl = document.getElementById( 'frm-send-test-email-result' );
 
-		const showResult = ( msg, success ) => {
+		const showResult = ( msg, success, invalid = false ) => {
 			resultEl.textContent = msg;
+			emailInput.setAttribute( 'aria-invalid', String( invalid ) );
+			emailInput.setAttribute( 'aria-describedby', success ? 'frm-test-email-help' : 'frm-test-email-help frm-send-test-email-result' );
 			resultEl.classList.add( success ? 'frm_updated_message' : 'frm_error_style' );
 		};
 
 		resultEl.textContent = '';
+		emailInput.removeAttribute( 'aria-invalid' );
+		emailInput.setAttribute( 'aria-describedby', 'frm-test-email-help' );
 		resultEl.classList.remove( 'frm_error_style', 'frm_updated_message' );
 
 		if ( ! emailInput.value ) {
-			showResult( 'Empty email address' );
+			showResult( wp.i18n.__( 'Empty email address', 'formidable' ), false, true );
 			return;
 		}
 
