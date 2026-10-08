@@ -12720,7 +12720,7 @@ window.frmAdminBuildJS = function() {
 
 			const settingsPage = document.getElementById( 'form_settings_page' );
 			const viewPage = document.body.classList.contains( 'post-type-frm_display' );
-			const insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
+			const insertFieldsTab = document.getElementById( 'frm_insert_fields_box_tab' );
 
 			if ( settingsPage || viewPage || builderPage ) {
 				jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {

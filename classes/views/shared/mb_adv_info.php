@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ); ?>">
 	<ul id="frm-nav-tabs" class="frm-nav-tabs <?php echo esc_attr( $settings_tab ? '' : 'frm-compact-nav' ); ?>">
 		<li class="frm-tabs">
-			<a href="#frm-insert-fields-box" id="frm_insert_fields_tab">
+			<a href="#frm-insert-fields-box" id="frm_insert_fields_box_tab">
 				<?php esc_html_e( 'Fields', 'formidable' ); ?>
 			</a>
 		</li>

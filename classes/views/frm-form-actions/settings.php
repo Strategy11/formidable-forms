@@ -17,7 +17,7 @@ $single_action_attrs = array(
 		<div class="frm-style-tabs-wrapper" data-filter-target="#frm-actions-filter-content">
 			<div class="frm-tabs-delimiter"><span class="frm-tabs-active-underline"></span></div>
 			<div class="frm-tabs-navs">
-				<ul class="frm-h-stack-xs frm-children-px-sm">
+				<ul class="frm-h-stack-xs frm-children-px-sm" aria-label="<?php esc_attr_e( 'Action categories', 'formidable' ); ?>">
 					<li class="frm-active" data-filter="my_actions"><?php esc_html_e( 'My Actions', 'formidable' ); ?></li>
 					<li data-filter="all"><?php esc_html_e( 'All', 'formidable' ); ?></li>
 					<?php foreach ( $groups as $group_key => $group ) { ?>

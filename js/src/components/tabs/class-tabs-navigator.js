@@ -112,6 +112,7 @@ export class frmTabsNavigator {
 		}
 
 		this.changeSlide( index );
+		this.keepFocusOnTab( navItem );
 
 		// Handle special case for frm_insert_fields_tab
 		const navLink = navItem.querySelector( 'a' );
@@ -152,6 +153,23 @@ export class frmTabsNavigator {
 		event.preventDefault();
 		this.navs.forEach( ( nav, navIndex ) => nav.setAttribute( 'tabindex', navIndex === nextIndex ? '0' : '-1' ) );
 		this.navs[ nextIndex ].focus();
+	}
+
+	/**
+	 * Moves focus to the selected tab when switching would otherwise lose it.
+	 * That happens when focus was inside the panel that just became inert, on the tab's inner link, or nowhere at all.
+	 * Focus that is somewhere else, like a field selected in the builder, is left alone.
+	 *
+	 * @param {HTMLElement} navItem The selected tab.
+	 * @return {void}
+	 */
+	keepFocusOnTab( navItem ) {
+		// A shadow root reports null when focus is outside it, so fall back to the document.
+		const focused = this.wrapper.getRootNode().activeElement ?? document.activeElement;
+		const focusIsLost = ! focused || focused === document.body || null !== focused.closest( '[inert]' );
+		if ( focusIsLost || ( focused !== navItem && navItem.contains( focused ) ) ) {
+			navItem.focus( { preventScroll: true } );
+		}
 	}
 
 	initSlideTrackUnderline( nav ) {
