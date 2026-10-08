@@ -157,7 +157,7 @@ export class frmTabsNavigator {
 
 	/**
 	 * Moves focus to the selected tab when switching would otherwise lose it.
-	 * That happens when focus was inside the panel that just became inert, on the tab's inner link, or nowhere at all.
+	 * That happens when focus was inside the panel that just became inert, anywhere in the tab list, or nowhere at all.
 	 * Focus that is somewhere else, like a field selected in the builder, is left alone.
 	 *
 	 * @param {HTMLElement} navItem The selected tab.
@@ -167,7 +167,9 @@ export class frmTabsNavigator {
 		// A shadow root reports null when focus is outside it, so fall back to the document.
 		const focused = this.wrapper.getRootNode().activeElement ?? document.activeElement;
 		const focusIsLost = ! focused || focused === document.body || null !== focused.closest( '[inert]' );
-		if ( focusIsLost || ( focused !== navItem && navItem.contains( focused ) ) ) {
+		// Clicking a tab doesn't move focus to it, so focus can still be on the tab that was just deselected.
+		const focusIsInTabs = Array.from( this.navs ).some( nav => nav.contains( focused ) );
+		if ( focused !== navItem && ( focusIsLost || focusIsInTabs ) ) {
 			navItem.focus( { preventScroll: true } );
 		}
 	}
