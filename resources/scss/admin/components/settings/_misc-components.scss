@@ -2,12 +2,6 @@
  * Miscellaneous settings component styles
  */
 
-.frm-style-component label.frm-copy-text {
-	line-height: 32px;
-	cursor: pointer;
-	white-space: nowrap;
-}
-
 /* The style class row. The name is edited in place, with copy to clipboard inside the field. */
 .frm-style-class-component {
 
@@ -33,7 +27,8 @@
 		white-space: nowrap;
 	}
 
-	input#frm_style_class {
+	/* Specific enough to beat the admin text input rule (.frm-white-body .wrap input[type="text"]). */
+	.frm-style-class-editor input.frm-style-class-input[type="text"] {
 		flex: 1;
 		min-width: 0;
 		height: 100%;
