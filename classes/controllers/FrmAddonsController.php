@@ -1594,11 +1594,18 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	public static function connect_link() {
+		$user_id = get_current_user_id();
+
+		if ( ! self::user_can_connect_account( $user_id ) ) {
+			return '';
+		}
+
 		$auth = get_option( 'frm_connect_token' );
 
-		if ( ! $auth ) {
-			$auth = hash( 'sha512', wp_rand() );
+		if ( ! $auth || ! self::user_can_connect_account( (int) get_option( 'frm_connect_user' ) ) ) {
+			$auth = hash( 'sha512', wp_generate_password( 64, true, true ) );
 			update_option( 'frm_connect_token', $auth, false );
+			update_option( 'frm_connect_user', $user_id, false );
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
@@ -1617,6 +1624,23 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Check whether a user can authorize the account connection.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $user_id The user authorizing the account connection.
+	 *
+	 * @return bool
+	 */
+	private static function user_can_connect_account( $user_id ) {
+		if ( ! $user_id || ! user_can( $user_id, 'activate_plugins' ) ) {
+			return false;
+		}
+
+		return user_can( $user_id, 'install_plugins' ) || FrmAppHelper::pro_is_included() || self::is_installed( 'formidable-pro/formidable-pro.php' );
+	}
+
+	/**
 	 * Check the auth value for install permission.
 	 *
 	 * @since 4.08
@@ -1624,12 +1648,17 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function can_install_addon_api() {
+		// The external callback uses the permissions of the user who initiated the connection.
+		if ( ! self::user_can_connect_account( (int) get_option( 'frm_connect_user' ) ) ) {
+			return false;
+		}
+
 		// Verify params present (auth & download link).
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
 
 		// The download link is not required if already installed.
-		$is_installed = FrmAppHelper::pro_is_included();
+		$is_installed = FrmAppHelper::pro_is_included() || self::is_installed( 'formidable-pro/formidable-pro.php' );
 		$file_missing = ! $is_installed && ! $post_url;
 
 		if ( ! $post_auth || $file_missing ) {
@@ -1649,15 +1678,24 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	public static function install_addon_api() {
-		self::$plugin = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
+		self::$plugin        = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
+		$can_install_plugins = user_can( (int) get_option( 'frm_connect_user' ), 'install_plugins' );
 
 		// Delete so cannot replay.
 		delete_option( 'frm_connect_token' );
+		delete_option( 'frm_connect_user' );
 
 		// It's already installed and active.
 		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 
 		if ( is_wp_error( $active ) ) {
+			if ( ! $can_install_plugins ) {
+				return array(
+					'success' => false,
+					'message' => __( 'You do not have permission to install plugins.', 'formidable' ),
+				);
+			}
+
 			$response = self::maybe_download_and_activate();
 
 			if ( is_array( $response ) ) {

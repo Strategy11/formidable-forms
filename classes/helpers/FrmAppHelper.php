@@ -5047,7 +5047,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
-		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com/' );
 
 		if ( ! $file_is_in_expected_s3_bucket ) {
 			return false;
@@ -5057,6 +5057,12 @@ class FrmAppHelper {
 
 		if ( ! is_array( $parsed ) ) {
 			// URL is malformed.
+			return false;
+		}
+
+		$path = rawurldecode( $parsed['path'] );
+
+		if ( str_contains( $path, '\\' ) || preg_match( '#(?:^|/)\.\.?(?:/|$)#', $path ) ) {
 			return false;
 		}
 
