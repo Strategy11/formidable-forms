@@ -6,6 +6,7 @@
  * mirrors it while typing (see initStyleClassRename() in js/src/admin/styles.js).
  *
  * @package Formidable
+ *
  * @since x.x
  *
  * @var WP_Post $style      The style being edited.
