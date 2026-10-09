@@ -22,7 +22,11 @@ class FrmStrpLiteConnectApiAdapter {
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id ) {
-		if ( current_user_can( 'administrator' ) ) {
+		if ( ! FrmTransLiteSubscription::current_user_can_cancel( $sub_id, 'stripe' ) ) {
+			return false;
+		}
+
+		if ( FrmAppHelper::current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' ) ) {
 			$customer_id = false;
 		} else {
 			$customer = self::get_customer_by_id( get_current_user_id() );
