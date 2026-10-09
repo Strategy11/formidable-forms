@@ -15,19 +15,6 @@ const sanitizeStyleClassName = name => name
 	.replace( /[^a-z0-9_-]+/g, '-' );
 
 /**
- * Mirrors the class name into every label that shows it.
- * Both the quick settings and the advanced settings render one.
- *
- * @param {string} name The class name to show.
- * @return {void}
- */
-const updateStyleClassLabels = name => {
-	document.querySelectorAll( '.frm-style-class-name' ).forEach( label => {
-		label.textContent = name;
-	} );
-};
-
-/**
  * Represents the frmStyleOptions class.
  *
  * @class
@@ -56,7 +43,6 @@ class frmStyleOptions {
 		this.initControlLabels();
 		this.initCopyStatus();
 		this.initColorPickerDependentUpdaterComponents();
-		this.initStyleClassCopyToClipboard();
 		this.initStyleClassRename();
 		this.toggleVisibilityOfCustomCSSEditor();
 	}
@@ -107,53 +93,60 @@ class frmStyleOptions {
 
 	/**
 	 * Initializes renaming of the style class.
-	 * The name is edited in place, and mirrored into the read only label in the advanced
-	 * settings while it is typed. The warning only appears once the name actually changes.
+	 * The class is editable in both the quick settings and the advanced settings. Only the quick
+	 * settings input is submitted, so every input mirrors whichever one is being typed in.
+	 * The warning only appears once the name actually changes.
 	 *
 	 * @return {void}
 	 */
 	initStyleClassRename() {
-		const component = document.querySelector( '.frm-style-class-component' );
-		if ( ! component ) {
+		const components = document.querySelectorAll( '.frm-style-class-component' );
+		const inputs = [ ...document.querySelectorAll( '.frm-style-class-input' ) ];
+
+		if ( ! inputs.length ) {
 			return;
 		}
 
-		const copyButton = component.querySelector( '.frm-style-class-copy' );
-		const description = component.querySelector( '.frm-style-class-description' );
-		const input = component.querySelector( '#frm_style_class' );
+		const originalName = inputs[ 0 ].value;
+		const descriptions = document.querySelectorAll( '.frm-style-class-description' );
 
-		if ( ! input ) {
-			return;
-		}
+		const setName = name => {
+			inputs.forEach( input => {
+				if ( input.value !== name ) {
+					input.value = name;
+				}
+			} );
+			descriptions.forEach( description => description.classList.toggle( 'frm_hidden', name === originalName ) );
+		};
 
-		const originalName = input.value;
+		inputs.forEach( input => {
+			input.addEventListener( 'input', () => {
+				// An empty sanitized value saves as the unchanged original slug (get_post_name_to_save()),
+				// so keep the field showing that instead of a blank value nothing will actually save as.
+				setName( sanitizeStyleClassName( input.value ) || originalName );
+			} );
 
-		input.addEventListener( 'input', () => {
-			// An empty sanitized value saves as the unchanged original slug (get_post_name_to_save()),
-			// so keep the field showing that instead of a blank value nothing will actually save as.
-			input.value = sanitizeStyleClassName( input.value ) || originalName;
-			updateStyleClassLabels( input.value );
-			description?.classList.toggle( 'frm_hidden', input.value === originalName );
+			input.addEventListener( 'keydown', event => {
+				if ( 'Escape' === event.key ) {
+					setName( originalName );
+					return;
+				}
+
+				if ( 'Enter' === event.key ) {
+					// Don't submit the whole style form from this input.
+					event.preventDefault();
+				}
+			} );
 		} );
 
-		input.addEventListener( 'keydown', event => {
-			if ( 'Escape' === event.key ) {
-				input.value = originalName;
-				updateStyleClassLabels( originalName );
-				description?.classList.add( 'frm_hidden' );
-				return;
-			}
+		components.forEach( component => {
+			const copyButton = component.querySelector( '.frm-style-class-copy' );
+			const input = component.querySelector( '.frm-style-class-input' );
+			const confirmCopy = this.initCopyTooltip( copyButton );
 
-			if ( 'Enter' === event.key ) {
-				// Don't submit the whole style form from this input.
-				event.preventDefault();
-			}
-		} );
-
-		const confirmCopy = this.initCopyTooltip( copyButton );
-
-		copyButton?.addEventListener( 'click', () => {
-			this.copyToClipboard( `.frm_style_${ input.value }`, copyButton, confirmCopy );
+			copyButton?.addEventListener( 'click', () => {
+				this.copyToClipboard( `.frm_style_${ input.value }`, copyButton, confirmCopy );
+			} );
 		} );
 	}
 
@@ -280,28 +273,6 @@ class frmStyleOptions {
 		accordionitems.forEach( item => {
 			item.addEventListener( 'click', () => {
 				hoverElement.classList.add( 'frm_hidden' );
-			} );
-		} );
-	}
-
-	/**
-	 * Initializes the copy to clipboard functionality for style classes.
-	 * Adds a click event listener to the copyLabel element.
-	 * Copies the class name to the clipboard and displays a success message.
-	 *
-	 * @return {void} Initializes the copy to clipboard functionality for style classes.
-	 */
-	initStyleClassCopyToClipboard() {
-		const labels = document.querySelectorAll( '.frm-copy-text' );
-		labels.forEach( label => {
-			const confirmCopy = this.initCopyTooltip( label );
-
-			label.addEventListener( 'click', () => {
-				const name = label.querySelector( '.frm-style-class-name' );
-				// Read the name from its own element, so nothing else in the label creeps in.
-				const text = name ? `.frm_style_${ name.textContent }` : label.innerText;
-
-				this.copyToClipboard( text, label, confirmCopy );
 			} );
 		} );
 	}
