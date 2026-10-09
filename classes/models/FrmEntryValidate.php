@@ -27,6 +27,20 @@ class FrmEntryValidate {
 			return $errors;
 		}
 
+		/**
+		 * Allows adjusting entry values before required, type and visibility validation begins.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $values Submitted entry values.
+		 */
+		$filtered_values = apply_filters( 'frm_validate_entry_early', $values );
+
+		if ( is_array( $filtered_values ) && $values !== $filtered_values && isset( $filtered_values['form_id'], $filtered_values['item_meta'] ) ) {
+			$values = $filtered_values;
+			FrmEntry::sanitize_entry_post( $values );
+		}
+
 		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$frm_settings   = FrmAppHelper::get_settings();
 			$errors['form'] = $frm_settings->admin_permission;
