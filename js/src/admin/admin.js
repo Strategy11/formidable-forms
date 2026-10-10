@@ -2332,7 +2332,6 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 		$placeholder.replaceWith( replaceWith );
-		updateFieldOrder();
 		afterAddField( msg, false );
 		if ( $siblings.length ) {
 			syncLayoutClasses( $siblings.first() );
@@ -3149,7 +3148,6 @@ window.frmAdminBuildJS = function() {
 					resolve( msg );
 
 					setTimeout( () => {
-						updateFieldOrder();
 						afterAddField( msg, true );
 
 						const fieldId = checkMsgForFieldId( msg );
@@ -3283,7 +3281,6 @@ window.frmAdminBuildJS = function() {
 					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
 				}
 
-				updateFieldOrder();
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
@@ -3655,19 +3652,21 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
-		if ( msg.includes( 'frm-collapse-page' ) ) {
-			renumberPageBreaks();
-		}
-
 		addClass( field, 'frm-newly-added' );
 		setTimeout( function() {
 			field.classList.remove( 'frm-newly-added' );
 		}, 1000 );
 
+		// The server moves the submit row below the new field in the database, using the highest saved order.
+		// Copy those orders so the inputs match the database, then renumber from the builder.
+		// The saved orders can be lower than the builder positions, and the submit row would end up above other fields.
 		const lastRowOrderInput = field.querySelector( '#frm-last-row-fields-order' );
 		if ( lastRowOrderInput ) {
 			updateLastRowFieldsOrder( JSON.parse( lastRowOrderInput.value ) );
 		}
+
+		// This also renumbers page breaks.
+		updateFieldOrder();
 
 		if ( addFocus ) {
 			const bounding = field.getBoundingClientRect();
