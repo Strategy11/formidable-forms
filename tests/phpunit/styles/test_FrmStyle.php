@@ -286,4 +286,20 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertNotEmpty( $styles );
 		$this->assertSame( FrmStylesController::$post_type, reset( $styles )->post_type );
 	}
+
+	/**
+	 * The CSS version must be a zero-padded timestamp so distinct save times
+	 * never collide (e.g. 1 Jan 10:59 and 11 Jan 00:59 both produced "111059").
+	 */
+	public function test_save_settings_stores_padded_timestamp_version() {
+		$before = gmdate( 'YmdHis' );
+		( new FrmStyle() )->save_settings();
+		$after = gmdate( 'YmdHis' );
+
+		$version = get_option( 'frm_last_style_update' );
+
+		$this->assertMatchesRegularExpression( '/^\d{14}$/', $version );
+		$this->assertGreaterThanOrEqual( (int) $before, (int) $version );
+		$this->assertLessThanOrEqual( (int) $after, (int) $version );
+	}
 }
