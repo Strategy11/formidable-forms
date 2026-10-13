@@ -39,6 +39,7 @@ class FrmAbilitiesStylesController {
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
 				'input_schema'        => array(
+					'default'    => array(),
 					'type'       => 'object',
 					'properties' => array(
 						'page'      => array(

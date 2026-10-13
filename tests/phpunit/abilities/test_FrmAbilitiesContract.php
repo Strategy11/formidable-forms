@@ -29,7 +29,33 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 		'formidable-forms/list-forms',
 		'formidable-forms/list-entries',
 		'formidable-forms/list-styles',
+		'formidable-forms/list-payments',
+		'formidable-forms/list-subscriptions',
 	);
+
+	/**
+	 * @return void
+	 */
+	public function test_optional_input_abilities_accept_omitted_input() {
+		foreach ( self::$no_required_input_abilities as $name ) {
+			$this->assertNotWPError( wp_get_ability( $name )->execute(), $name . ' should accept omitted input.' );
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_required_input_abilities_reject_omitted_input() {
+		foreach ( $this->get_formidable_abilities() as $name => $ability ) {
+			$schema = $ability->get_input_schema();
+
+			if ( empty( $schema['required'] ) ) {
+				continue;
+			}
+
+			$this->assertWPError( $ability->execute(), $name . ' should require its input.' );
+		}
+	}
 
 	/**
 	 * @return void

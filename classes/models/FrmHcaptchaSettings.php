@@ -79,6 +79,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 			array(
 				'invalid-or-already-seen-response' => __( 'The CAPTCHA response expired or was already used.', 'formidable' ),
 				'not-using-dummy-passcode'         => __( 'A test site key is paired with a live secret key. Use a matching pair in the global CAPTCHA settings.', 'formidable' ),
+				'not-using-dummy-secret'           => __( 'A test site key is paired with a live secret key. Use a matching pair in the global CAPTCHA settings.', 'formidable' ),
 				'sitekey-secret-mismatch'          => __( 'The site key and secret key in the global CAPTCHA settings belong to different hCaptcha accounts.', 'formidable' ),
 				'invalid-sitekey'                  => __( 'The site key in the global CAPTCHA settings is not valid.', 'formidable' ),
 				'invalid-remoteip'                 => __( 'The visitor IP address sent for verification was not valid.', 'formidable' ),
@@ -96,6 +97,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 			parent::get_configuration_error_codes(),
 			array(
 				'not-using-dummy-passcode',
+				'not-using-dummy-secret',
 				'sitekey-secret-mismatch',
 				'invalid-sitekey',
 			)
