@@ -32,6 +32,55 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		remove_filter( 'frm_validate_entry', $add_a_custom_error );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @covers FrmEntryValidate::validate
+	 */
+	public function test_pre_validate_entry_filter() {
+		$form_id  = $this->factory->form->create();
+		$field_id = $this->factory->field->create(
+			array(
+				'type'     => 'text',
+				'form_id'  => $form_id,
+				'required' => '1',
+			)
+		);
+		$values   = array(
+			'form_id'   => $form_id,
+			'item_meta' => array( $field_id => '' ),
+		);
+
+		$this->assertArrayHasKey( 'field' . $field_id, FrmEntryValidate::validate( $values ), 'The blank required field fails without the filter.' );
+
+		$fill_value = function ( $filtered ) use ( $field_id ) {
+			$filtered['item_meta'][ $field_id ] = 'Filled before validation';
+			return $filtered;
+		};
+		add_filter( 'frm_pre_validate_entry', $fill_value );
+		$errors = FrmEntryValidate::validate( $values );
+		remove_filter( 'frm_pre_validate_entry', $fill_value );
+
+		$this->assertArrayNotHasKey( 'field' . $field_id, $errors, 'A value set by the filter is validated.' );
+
+		$drop_item_meta = function ( $filtered ) {
+			unset( $filtered['item_meta'] );
+			return $filtered;
+		};
+		add_filter( 'frm_pre_validate_entry', $drop_item_meta );
+		$errors = FrmEntryValidate::validate( $values );
+		remove_filter( 'frm_pre_validate_entry', $drop_item_meta );
+
+		$this->assertArrayHasKey( 'field' . $field_id, $errors, 'Filtered values without item_meta are ignored.' );
+
+		add_filter( 'frm_pre_validate_entry', '__return_false' );
+		$errors = FrmEntryValidate::validate( $values );
+		remove_filter( 'frm_pre_validate_entry', '__return_false' );
+
+		$this->assertArrayHasKey( 'field' . $field_id, $errors, 'A value that is not an array is ignored.' );
+		$this->assertArrayNotHasKey( 'form', $errors );
+	}
+
 	public function test_get_spam_check_user_info() {
 		$made_up_name_field_id  = 4;
 		$made_up_email_field_id = 12;

@@ -28,13 +28,16 @@ class FrmEntryValidate {
 		}
 
 		/**
-		 * Allows adjusting entry values before required, type and visibility validation begins.
+		 * Filters the entry values before required, type and visibility validation begins.
+		 *
+		 * Only the values that are validated change. A filtered array without "form_id" and
+		 * "item_meta" is ignored, and changed values are sanitized again.
 		 *
 		 * @since x.x
 		 *
-		 * @param array $values Submitted entry values.
+		 * @param array $values Submitted entry values, including "form_id" and "item_meta".
 		 */
-		$filtered_values = apply_filters( 'frm_validate_entry_early', $values );
+		$filtered_values = apply_filters( 'frm_pre_validate_entry', $values );
 
 		if ( is_array( $filtered_values ) && $values !== $filtered_values && isset( $filtered_values['form_id'], $filtered_values['item_meta'] ) ) {
 			$values = $filtered_values;
