@@ -1349,6 +1349,16 @@ function frmFrontFormJS() {
 				} else {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					addFormLevelErrors( object, formErrors );
+
+					if ( Object.keys( formErrors ).length ) {
+						const errorSummary = object.querySelector( '[data-frm-error-summary]' );
+
+						if ( errorSummary ) {
+							errorSummary.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+							errorSummary.focus();
+						}
+					}
+
 					checkForErrorsAndMaybeSetFocus();
 				}
 			} else if ( ! willRedirect ) { // Avoid double submission if redirecting to a page.

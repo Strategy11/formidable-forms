@@ -17,6 +17,11 @@ describe( 'AJAX form shows the spam message', () => {
 			cy.get( '#frm_form_key' ).invoke( 'val' ).then( formKey => {
 				cy.visit( `/wp-admin/admin-ajax.php?action=frm_forms_preview&form=${ formKey }` );
 
+				// Push the submit button below the fold so the summary lands above the viewport.
+				cy.get( '.frm_submit' ).then( $submit => {
+					$submit[ 0 ].insertAdjacentHTML( 'beforebegin', '<div style="height:2000px"></div>' );
+				} );
+
 				// A full page submit would reload the page and drop this marker.
 				cy.window().then( win => {
 					win.frmNoReload = true;
@@ -25,6 +30,7 @@ describe( 'AJAX form shows the spam message', () => {
 				cy.get( '.frm_button_submit' ).click();
 
 				cy.get( '.frm_error_style' ).should( 'contain.text', 'Your entry appears to be spam!' );
+				cy.get( '[data-frm-error-summary]' ).should( 'be.visible' ).and( 'have.focus' );
 				cy.window().its( 'frmNoReload' ).should( 'be.true' );
 			} );
 		} );
