@@ -1284,10 +1284,18 @@ function frmFrontFormJS() {
 				removeAllErrors();
 
 				let $fieldCont = null;
+				const formErrors = {};
 
 				for ( const key in response.errors ) {
 					const fieldContEl = object.querySelector( `#frm_field_${ key }_container` );
 					$fieldCont = fieldContEl ? jQuery( fieldContEl ) : jQuery();
+
+					if ( ! fieldContEl && isFormLevelErrorKey( key ) ) {
+						// An error like 'spam' has no field to show on, and a page submit would only lose the message.
+						formErrors[ key ] = response.errors[ key ];
+						contSubmit = false;
+						continue;
+					}
 
 					if ( $fieldCont.length ) {
 						if ( ! $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
@@ -1340,6 +1348,7 @@ function frmFrontFormJS() {
 					object.submit();
 				} else {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
+					addFormLevelErrors( object, formErrors );
 					checkForErrorsAndMaybeSetFocus();
 				}
 			} else if ( ! willRedirect ) { // Avoid double submission if redirecting to a page.
@@ -1359,6 +1368,35 @@ function frmFrontFormJS() {
 		};
 
 		postToAjaxUrl( object, data, success, error );
+	}
+
+	/**
+	 * Check if an AJAX error key is for the whole form, like 'spam' or 'form', rather than a field.
+	 *
+	 * @param {string} key
+	 * @return {boolean} True when the key is not a field ID.
+	 */
+	function isFormLevelErrorKey( key ) {
+		return ! /^\d/.test( key );
+	}
+
+	/**
+	 * Show errors that belong to the whole form in the error summary at the top of the form.
+	 *
+	 * @param {HTMLElement}           form
+	 * @param {Object<string,string>} formErrors
+	 * @return {void}
+	 */
+	function addFormLevelErrors( form, formErrors ) {
+		const summary = form.querySelector( '[data-frm-error-summary]' );
+
+		if ( ! summary ) {
+			return;
+		}
+
+		Object.keys( formErrors ).forEach( key => {
+			summary.insertAdjacentHTML( 'beforeend', `<div id="${ key }_error">${ formErrors[ key ] }</div>` );
+		} );
 	}
 
 	function postToAjaxUrl( form, data, success, error ) {
