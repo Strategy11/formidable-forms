@@ -133,11 +133,11 @@ class FrmEntriesHelper {
 			self::get_posted_value( $field, $new_value, $args );
 		}
 
-		if ( ! is_array( $new_value ) ) {
-			return str_replace( '"', '&quot;', $new_value );
+		if ( null === $new_value || is_array( $new_value ) ) {
+			return $new_value ?? '';
 		}
 
-		return $new_value;
+		return str_replace( '"', '&quot;', $new_value );
 	}
 
 	/**
