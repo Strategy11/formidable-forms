@@ -815,9 +815,14 @@ window.frmAdminBuildJS = function() {
 
 		const fadeEle = document.getElementById( id );
 		const $fadeEle = jQuery( fadeEle );
+		const logicRowsContainer = fadeEle?.classList.contains( 'frm_logic_row' ) ? fadeEle.closest( '[id^="frm_logic_row_"]' ) : null;
 		$fadeEle.fadeOut( 300, function() {
 			$fadeEle.remove();
 			fieldUpdated();
+
+			if ( logicRowsContainer ) {
+				triggerLogicRowEvent( 'frm_logic_row_removed', fadeEle, logicRowsContainer, deleteButton.get( 0 ) );
+			}
 
 			if ( hide !== '' ) {
 				jQuery( hide ).hide();
@@ -6273,8 +6278,53 @@ window.frmAdminBuildJS = function() {
 		return fieldsContainer.querySelectorAll( `li.form-field[data-ftype="${ type }"]` ).length;
 	}
 
+	/**
+	 * Tell other scripts that a conditional logic row was added or removed.
+	 *
+	 * The event is dispatched on the document. Its frmData (also in detail) holds the row, the
+	 * rows container (#frm_logic_row_{id}), the clicked element, the logic type ("field" or
+	 * "action") and the ID of the field or form action the logic belongs to.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string}           eventName          "frm_logic_row_added" or "frm_logic_row_removed".
+	 * @param {HTMLElement}      row                The condition row. It is detached from the page once removed.
+	 * @param {HTMLElement}      logicRowsContainer The element that holds the condition rows.
+	 * @param {HTMLElement|null} trigger            The element that was clicked to add or remove the row.
+	 * @return {void}
+	 */
+	function triggerLogicRowEvent( eventName, row, logicRowsContainer, trigger ) {
+		const frmData = {
+			row,
+			container: logicRowsContainer,
+			trigger: trigger || null,
+			type: logicRowsContainer.closest( '.frm_form_action_settings' ) ? 'action' : 'field',
+			id: logicRowsContainer.id.replace( 'frm_logic_row_', '' )
+		};
+		const event = new CustomEvent( eventName, { detail: frmData } );
+		event.frmData = frmData;
+		document.dispatchEvent( event );
+	}
+
+	/**
+	 * Get the condition row that was just appended to a rows container.
+	 *
+	 * The new row is the container's last child. A ".frm_logic_row:last-child" query would find the
+	 * last row of the first group instead when an add-on wraps rows in groups.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} logicRowsContainer The element that holds the condition rows.
+	 * @return {HTMLElement|null} The new row.
+	 */
+	function getAppendedLogicRow( logicRowsContainer ) {
+		const lastChild = logicRowsContainer.lastElementChild;
+		return lastChild?.classList.contains( 'frm_logic_row' ) ? lastChild : null;
+	}
+
 	function addFieldLogicRow() {
 		/*jshint validthis:true */
+		const trigger = this;
 		const id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		const formId = thisFormId;
 		const logicRows = document.getElementById( `frm_logic_row_${ id }` ).querySelectorAll( '.frm_logic_row' );
@@ -6294,7 +6344,8 @@ window.frmAdminBuildJS = function() {
 					const logicRow = document.getElementById( `frm_logic_row_${ id }` );
 					logicRow.insertAdjacentHTML( 'beforeend', html );
 
-					const logicRowText = logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' );
+					const newRow = getAppendedLogicRow( logicRow );
+					const logicRowText = newRow?.querySelector( '.frm-logic-rule-text' );
 					if ( logicRowText ) {
 						logicRowText.textContent = logicRow.dataset.ruleText;
 					}
@@ -6302,6 +6353,10 @@ window.frmAdminBuildJS = function() {
 					const logicRows = logicRow.closest( '.frm_logic_rows' );
 					logicRows.style.height = 'auto';
 					jQuery( logicRows ).fadeIn( 'fast' );
+
+					if ( newRow ) {
+						triggerLogicRowEvent( 'frm_logic_row_added', newRow, logicRow, trigger );
+					}
 				} );
 			}
 		} );
@@ -6309,10 +6364,15 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getNewRowId( rows, replace, defaultValue ) {
-		if ( ! rows.length ) {
+		// Rows are not always in number order, for example when an add-on moves them, so use the highest number.
+		const numbers = Array.from( rows )
+			.map( row => parseInt( row.id.replace( replace, '' ), 10 ) )
+			.filter( number => ! Number.isNaN( number ) );
+
+		if ( ! numbers.length ) {
 			return defaultValue !== undefined ? defaultValue : 0;
 		}
-		return parseInt( rows[ rows.length - 1 ].id.replace( replace, '' ), 10 ) + 1;
+		return Math.max( ...numbers ) + 1;
 	}
 
 	function addWatchLookupRow() {
@@ -7836,6 +7896,12 @@ window.frmAdminBuildJS = function() {
 			const fieldID = parentIDs[ 0 ];
 			const metaKey = parentIDs[ 1 ];
 			const valueField = document.getElementById( `frm_field_id_${ val }` );
+			if ( ! valueField ) {
+				// The condition checks something other than a field, like an add-on's option. Let the server render its value input.
+				frmGetFieldValues( val, fieldID, metaKey, this.getAttribute( 'data-type' ) );
+				return;
+			}
+
 			const valueFieldType = valueField.getAttribute( 'data-ftype' );
 			const fill = document.getElementById( `frm_show_selected_values_${ fieldID }_${ metaKey }` );
 			const optionName = `field_options[hide_opt_${ fieldID }][]`;
@@ -9438,7 +9504,7 @@ window.frmAdminBuildJS = function() {
 				placeholder.insertAdjacentHTML( 'beforebegin', html );
 				placeholder.remove();
 
-				const newRow = logicRowsContainer.querySelector( '.frm_logic_row:last-child' );
+				const newRow = getAppendedLogicRow( logicRowsContainer );
 				const ruleTextEl = newRow ? newRow.querySelector( '.frm-logic-rule-text' ) : null;
 				if ( ruleTextEl ) {
 					ruleTextEl.textContent = logicRowsContainer.dataset.ruleText || '';
@@ -9450,6 +9516,10 @@ window.frmAdminBuildJS = function() {
 				if ( oldRowsContainer ) {
 					oldRowsContainer.classList.remove( 'frm_hidden' );
 					oldRowsContainer.style.display = '';
+				}
+
+				if ( newRow ) {
+					triggerLogicRowEvent( 'frm_logic_row_added', newRow, logicRowsContainer, contextElement );
 				}
 			}
 		} );
@@ -13171,9 +13241,12 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 		return;
 	}
 
+	// Send the row's comparison, so the value input can match it.
+	const comparison = document.querySelector( `#frm_logic_${ cur }_${ rowNumber } [name*="hide_field_cond"]` )?.value ?? '';
+
 	jQuery.ajax( {
 		type: 'POST', url: ajaxurl,
-		data: `action=frm_get_field_values&current_field=${ cur }&field_id=${ fieldId }&name=${ htmlName }&t=${ fieldType }&form_action=${ jQuery( 'input[name="frm_action"]' ).val() }&nonce=${ frmGlobal.nonce }`,
+		data: `action=frm_get_field_values&current_field=${ cur }&field_id=${ encodeURIComponent( fieldId ) }&name=${ htmlName }&t=${ fieldType }&form_action=${ jQuery( 'input[name="frm_action"]' ).val() }&comparison=${ encodeURIComponent( comparison ) }&nonce=${ frmGlobal.nonce }`,
 		success( msg ) {
 			document.getElementById( `frm_show_selected_values_${ cur }_${ rowNumber }` ).innerHTML = msg;
 
