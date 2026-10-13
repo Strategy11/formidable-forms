@@ -1,4 +1,4 @@
-=== Formidable Forms – WordPress Form Builder for Contact Forms, Payment Forms, Calculators & Quizzes ===
+=== Formidable Forms – Contact Form, Survey, Quiz, Payment, Calculator Form & Custom Form Builder ===
 Contributors: formidableforms, sswells, srwells
 Tags: form builder, contact form, custom form, payment form, forms
 Requires at least: 6.3
