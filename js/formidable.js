@@ -1354,8 +1354,7 @@ function frmFrontFormJS() {
 						const errorSummary = object.querySelector( '[data-frm-error-summary]' );
 
 						if ( errorSummary ) {
-							errorSummary.scrollIntoView( { behavior: 'smooth', block: 'center' } );
-							errorSummary.focus();
+							frmFrontForm.scrollMsg( jQuery( errorSummary ), object, true );
 						}
 					}
 
