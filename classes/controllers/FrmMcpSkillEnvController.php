@@ -52,6 +52,18 @@ class FrmMcpSkillEnvController {
 
 		self::verify_nonce( self::DOWNLOAD_ACTION );
 
+		if ( FrmAppHelper::get_post_param( 'frm_mcp_settings_shown', 0, 'absint' ) ) {
+			$settings      = FrmAppHelper::get_settings();
+			$settings->mcp = FrmAppHelper::get_post_param( 'frm_mcp', array(), 'absint' ) ? 1 : 0;
+			$settings->store();
+			FrmMcpController::reset();
+		}
+
+		// MCP may have been enabled after init skipped loading the adapter.
+		if ( FrmMcpController::is_enabled() ) {
+			FrmMcpCompat::load_adapter();
+		}
+
 		if (
 			! FrmMcpController::is_enabled() ||
 			! FrmMcpCompat::is_usable() ||
