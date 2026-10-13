@@ -249,7 +249,7 @@ class FrmMcpCompat {
 		}
 
 		if ( array() !== self::missing_ability_functions() ) {
-			return __( 'The WordPress Abilities API the MCP server is built on is not available on this site. It is part of WordPress 7.0 and newer.', 'formidable' );
+			return __( 'The WordPress Abilities API the MCP server is built on is not available on this site. It is part of WordPress 6.9 and newer.', 'formidable' );
 		}
 
 		if ( ! class_exists( self::ADAPTER_CLASS ) ) {

@@ -41,6 +41,7 @@ class FrmAbilitiesEntriesController {
 				'description'         => __( 'Retrieve a list of Formidable entries (form submissions). Use list-forms to find the form_id.', 'formidable' ),
 				'category'            => FrmAbilitiesController::CATEGORY,
 				'input_schema'        => array(
+					'default'    => array(),
 					'type'       => 'object',
 					'properties' => array(
 						'form_id'    => array(

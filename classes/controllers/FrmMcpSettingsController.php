@@ -328,9 +328,7 @@ class FrmMcpSettingsController {
 				home_url()
 			),
 			$install_step . ' ' . __( 'If the skill only loads after a restart, tell me.', 'formidable' ),
-			// The config directory, not the skill's scripts directory: a plugin
-			// install keeps scripts in a versioned cache that every update replaces.
-			__( '2. Find the newest frm-mcp*.env file in my Downloads folder and move it to ~/.config/formidable-mcp/frm-mcp.env.', 'formidable' )
+			__( '2. Move the newest frm-mcp*.env file from my Downloads folder to frm-mcp.env beside the installed skill\'s scripts/frm-mcp helper.', 'formidable' )
 			. ' ' . __( 'Create the folder if needed, and replace any older file there.', 'formidable' )
 			. ' ' . __( 'Do not open, print, or paste the file or its credentials into chat.', 'formidable' ),
 			__( '3. Run the skill\'s scripts/frm-mcp-setup script to confirm the connection, then use the scripts/frm-mcp helper for my Formidable requests.', 'formidable' )

@@ -229,6 +229,36 @@ class test_FrmCaptchaSpam extends FrmUnitTest {
 		$this->assertStringContainsString( 'invalid-input-secret', $reason, 'The configuration error code should be stored.' );
 	}
 
+	/**
+	 * @return void
+	 */
+	public function test_hcaptcha_test_key_mismatch_keeps_configuration_message() {
+		$settings                   = FrmAppHelper::get_settings();
+		$settings->active_captcha   = 'hcaptcha';
+		$settings->hcaptcha_pubkey  = 'test-site-key';
+		$settings->hcaptcha_privkey = 'test-secret-key';
+		$_POST                      = array( 'h-captcha-response' => 'test-token' );
+
+		foreach ( array( 'not-using-dummy-passcode', 'not-using-dummy-secret' ) as $code ) {
+			FrmSpamEntriesHelper::reset_flags();
+			$settings->spam_handling['captcha'] = FrmSpamEntriesHelper::BLOCK;
+			$this->response                     = array(
+				'body' => wp_json_encode(
+					array(
+						'success'     => false,
+						'error-codes' => array( $code ),
+					)
+				),
+			);
+			$errors                             = $this->validate_captcha();
+			$this->assertStringContainsString( 'not set up correctly', $errors[ 'field' . $this->captcha->id ], $code );
+			$settings->spam_handling['captcha'] = FrmSpamEntriesHelper::SAVE;
+			$this->assertSame( array(), $this->validate_captcha() );
+			$reason = FrmSpamEntriesHelper::get_flagged_reason( array( 'form_id' => $this->captcha->form_id ) );
+			$this->assertStringContainsString( 'matching pair', $reason, $code );
+		}
+	}
+
 	public function test_unknown_service_error_code_is_preserved() {
 		FrmAppHelper::get_settings()->spam_handling['captcha'] = FrmSpamEntriesHelper::SAVE;
 		$this->response                                        = array(

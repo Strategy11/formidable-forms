@@ -45,6 +45,7 @@ class FrmAbilitiesSubscriptionsController {
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
 				'input_schema'        => array(
+					'default'    => array(),
 					'type'       => 'object',
 					'properties' => array(
 						'form_id'   => array(
