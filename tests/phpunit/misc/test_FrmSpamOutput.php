@@ -8,6 +8,58 @@
  */
 class test_FrmSpamOutput extends FrmUnitTest {
 	/**
+	 * Spam values retain line breaks while other submitted markup remains escaped.
+	 */
+	public function test_escape_value_preserves_line_breaks_and_escapes_markup() {
+		$value    = array( 'nested' => array( 'First<br>Second<br/>Third<br />Fourth<img src=x onerror=alert(1)>', '', null, 0 ) );
+		$expected = array( 'nested' => array( "First\nSecond\nThird\nFourth&lt;img src=x onerror=alert(1)&gt;", '', null, 0 ) );
+
+		$this->assertSame( $expected, FrmSpamEntriesHelper::escape_value( $value ), 'Breaks should become newlines without allowing other markup or changing non-string values.' );
+	}
+
+	/**
+	 * Address formatting remains readable in the entry table after marking an entry as spam.
+	 */
+	public function test_spam_address_displays_line_breaks_in_entry_table() {
+		$form  = $this->factory->form->create();
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form,
+				'type'    => 'address',
+			)
+		);
+		$id    = $this->factory->entry->create( array( 'form_id' => $form ) );
+		FrmEntryMeta::add_entry_meta(
+			$id,
+			$field->id,
+			'',
+			array(
+				'line1'   => '123 Main St',
+				'city'    => 'Baltimore',
+				'state'   => 'MD',
+				'zip'     => '12345',
+				'country' => 'United States',
+			)
+		);
+		$normal = FrmEntriesController::show_entry_shortcode( array( 'id' => $id ) );
+		$this->assertTrue( FrmSpamEntriesHelper::mark_as_spam( $id ), 'The entry should be marked as spam.' );
+		$spam = FrmEntriesController::show_entry_shortcode( array( 'id' => $id ) );
+
+		if ( $this->is_pro_active ) {
+			$this->assertSame( $spam, do_shortcode( '[frm-show-entry id="' . $id . '"]' ), 'The Pro shortcode should render the same spam entry table.' );
+		}
+
+		foreach ( array( $normal, $spam ) as $html ) {
+			$this->assertMatchesRegularExpression(
+				'/123 Main St\s*<br\s*\/?>\s*Baltimore, MD 12345\s*<br\s*\/?>United States/',
+				$html,
+				'Both normal and spam entries should display the address on separate lines.'
+			);
+			$this->assertStringNotContainsString( '&lt;br', $html, 'Formatting breaks should not appear as literal tags.' );
+		}
+	}
+
+	/**
 	 * Referrers keep line breaks without rendering submitted markup for normal or spam entries.
 	 *
 	 * @return void
