@@ -3056,7 +3056,13 @@ function frmFrontFormJS() {
 				scrollObj = id;
 			}
 
-			jQuery( scrollObj ).trigger( 'focus' );
+			const scrollElement = scrollObj instanceof jQuery ? scrollObj.get( 0 ) : scrollObj;
+			if (
+				! scrollElement?.hasAttribute( 'data-frm-error-summary' ) ||
+				getErrorConfigForForm( scrollElement.closest( '.frm-show-form' ) ).focusErrorSummary
+			) {
+				jQuery( scrollObj ).trigger( 'focus' );
+			}
 			newPos = scrollObj.offset().top;
 			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;

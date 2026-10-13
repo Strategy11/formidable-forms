@@ -27,10 +27,31 @@ describe( 'AJAX form shows the spam message', () => {
 					win.frmNoReload = true;
 				} );
 				cy.get( 'input.frm_verify' ).invoke( 'val', 'bot' );
+				cy.intercept( 'POST', '**/admin-ajax.php' ).as( 'submitForm' );
 				cy.get( '.frm_button_submit' ).click();
+				cy.wait( '@submitForm' );
 
 				cy.get( '.frm_error_style' ).should( 'contain.text', 'Your entry appears to be spam!' );
 				cy.get( '[data-frm-error-summary]' ).should( 'be.visible' ).and( 'have.focus' );
+				cy.window().its( 'frmNoReload' ).should( 'be.true' );
+
+				// Keep scrolling to the summary when automatic error focus is disabled.
+				cy.get( '.frm-show-form' ).then( $form => {
+					const [ form ] = $form;
+					const config = JSON.parse( form.dataset.frmErrorConfig );
+					config.focusErrorSummary = false;
+					config.focusFirstError = false;
+					form.dataset.frmErrorConfig = JSON.stringify( config );
+					delete form.frmErrorConfigCache;
+				} );
+				cy.get( '.frm_button_submit' ).focus().click();
+				cy.wait( '@submitForm' );
+				cy.get( '[data-frm-error-summary]' ).should( 'not.have.focus' ).and( 'contain.text', 'Your entry appears to be spam!' );
+				cy.get( '[data-frm-error-summary]' ).should( $summary => {
+					const { top } = $summary[ 0 ].getBoundingClientRect();
+					expect( top ).to.be.at.least( 0 );
+					expect( top ).to.be.lessThan( $summary[ 0 ].ownerDocument.defaultView.innerHeight );
+				} );
 				cy.window().its( 'frmNoReload' ).should( 'be.true' );
 			} );
 		} );
