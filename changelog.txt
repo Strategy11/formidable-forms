@@ -1,6 +1,6 @@
 == Changelog ==
 = 7.0 =
-* Security: Additional permission checks have been added to prevent unauthorized account connections and plugin installations.
+* Security: Additional permission checks have been added to prevent unauthorized plugin installations.
 * Security: Download URL validation has been hardened to prevent downloads from untrusted sources.
 * New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
 * New: Suspected spam can now be saved for review instead of blocking submissions.
