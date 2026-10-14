@@ -9,6 +9,40 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	public $singular   = 'subscription';
 
 	/**
+	 * Check whether the current user can cancel a subscription at its gateway.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $sub_id The gateway subscription ID.
+	 * @param string $paysys The gateway that owns the subscription.
+	 *
+	 * @return bool
+	 */
+	public static function current_user_can_cancel( $sub_id, $paysys ) {
+		$user_id = get_current_user_id();
+
+		if ( ! $user_id || ! $sub_id ) {
+			return false;
+		}
+
+		if ( FrmAppHelper::current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' ) ) {
+			return true;
+		}
+
+		global $wpdb;
+		return (bool) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT s.id FROM %i s INNER JOIN %i e ON e.id = s.item_id WHERE s.sub_id = %s AND s.paysys = %s AND e.user_id = %d LIMIT 1',
+				$wpdb->prefix . 'frm_subscriptions',
+				$wpdb->prefix . 'frm_items',
+				$sub_id,
+				$paysys,
+				$user_id
+			)
+		);
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_defaults() {
