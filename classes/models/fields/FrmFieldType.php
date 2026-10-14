@@ -1434,7 +1434,8 @@ DEFAULT_HTML;
 		$step = FrmField::get_option( $this->field, 'step' );
 
 		if ( ! is_numeric( $step ) && $step !== 'any' ) {
-			$step = 1;
+			$defaults = $this->extra_field_opts();
+			$step     = $defaults['step'] ?? 1;
 		}
 
 		$input_html .= ' min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" step="' . esc_attr( $step ) . '"';
