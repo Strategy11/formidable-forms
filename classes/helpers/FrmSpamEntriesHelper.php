@@ -673,7 +673,7 @@ class FrmSpamEntriesHelper {
 			return array_map( array( self::class, 'escape_value' ), $value );
 		}
 
-		return is_string( $value ) ? esc_html( $value ) : $value;
+		return is_string( $value ) ? esc_html( str_replace( array( '<br>', '<br/>', '<br />' ), "\n", $value ) ) : $value;
 	}
 
 	/**
