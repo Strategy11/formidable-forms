@@ -1,5 +1,11 @@
 describe( 'Fields in the form builder', () => {
 	beforeEach( () => {
+		cy.intercept( 'POST', '**/wp-admin/admin-ajax.php', req => {
+			if ( req.body?.includes( 'action=frm_insert_field' ) ) {
+				req.alias = 'insertField';
+			}
+		} );
+
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.createNewForm();
@@ -17,6 +23,7 @@ describe( 'Fields in the form builder', () => {
 		// real sidebar tab list (.frm-tabs-navs) to avoid it.
 		cy.get( '.frm-tabs-navs #frm_insert_fields_tab' ).click();
 		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
+		cy.wait( '@insertField' );
 	};
 
 	it( 'should set fields as required and validate them in frontend', () => {

@@ -75,7 +75,9 @@ Cypress.Commands.add( 'createNewForm', () => {
 	cy.get( '#frm-form-templates-modal' ).should( 'exist' );
 	cy.get( '.frm-modal-title' ).should( 'contain', 'Name your form' );
 	cy.get( '#frm_new_form_name_input' ).type( 'Test Form' );
+	cy.intercept( 'POST', '**/wp-admin/admin.php*' ).as( 'saveNewForm' );
 	cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
+	cy.wait( '@saveNewForm' );
 	cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
 } );
 

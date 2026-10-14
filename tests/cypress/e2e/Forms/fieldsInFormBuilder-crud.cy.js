@@ -17,6 +17,7 @@ describe( 'Fields in the form builder', () => {
 		// real sidebar tab list (.frm-tabs-navs) to avoid it.
 		cy.get( '.frm-tabs-navs #frm_insert_fields_tab' ).click();
 		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
+		cy.wait( '@insertField' );
 	};
 
 	it( 'should create, duplicate a field from each type and delete them', () => {
@@ -135,6 +136,12 @@ describe( 'Fields in the form builder', () => {
 	} );
 
 	it( 'should rename a field from each type', () => {
+		cy.intercept( 'POST', '**/wp-admin/admin-ajax.php', req => {
+			if ( req.body?.includes( 'action=frm_insert_field' ) ) {
+				req.alias = 'insertField';
+			}
+		} );
+
 		const renameField = ( fieldId, fieldType, fieldValue ) => {
 			cy.log( `Rename a ${ fieldType } field` );
 			// See the .frm-show-hover opacity note on the field-row "more options" toggle above.

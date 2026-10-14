@@ -1255,7 +1255,8 @@ function frmFrontFormJS() {
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
-						const insertedContent = jQuery( jQuery.parseHTML( response.content ) );
+						// Keep the field scripts returned with AJAX pages so their settings and libraries load.
+						const insertedContent = jQuery( jQuery.parseHTML( response.content, document, true ) );
 						replaceContent.replaceWith( insertedContent );
 						focusFormMessage( insertedContent );
 
