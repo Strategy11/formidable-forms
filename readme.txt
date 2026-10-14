@@ -366,6 +366,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 == Changelog ==
 = 7.0 =
+* Security: Additional permission checks have been added to prevent unauthorized account connections and plugin installations.
+* Security: Download URL validation has been hardened to prevent downloads from untrusted sources
 * New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
 * New: Suspected spam can now be saved for review instead of blocking submissions.
 * New: Entries can now be marked as spam or not spam, with details about failed spam checks.
