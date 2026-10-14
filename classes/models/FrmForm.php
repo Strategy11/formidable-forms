@@ -722,6 +722,15 @@ class FrmForm {
 
 		$id = $form->id;
 
+		/**
+		 * Fires before a form and its child forms are permanently deleted.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $id The form ID.
+		 */
+		do_action( 'frm_before_destroy_form', $id );
+
 		// Disconnect the entries from this form
 		$entries = FrmDb::get_col( 'frm_items', array( 'form_id' => $id ) );
 
