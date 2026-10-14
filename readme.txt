@@ -4,7 +4,7 @@ Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
 Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 6.35
+Stable tag: 7.0
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -365,6 +365,40 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 7.0 =
+* New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
+* New: Suspected spam can now be saved for review instead of blocking submissions.
+* New: Entries can now be marked as spam or not spam, with details about failed spam checks.
+* New: Autocomplete settings are now available in Lite.
+* New: Validation errors now include a clickable summary that focuses the input needing correction.
+* New: Default validation messages now provide guidance for email addresses, URLs, phone numbers, and numbers.
+* New: Name and Address inputs now display more specific validation errors for missing parts.
+* New: Form settings now include a GDPR section.
+* New: Style classes can now be renamed in the visual styler.
+* New: Global Settings now warns before leaving with unsaved changes.
+* New: PayPal Commerce actions now support conditional logic.
+* New: Website/URL inputs now include an option to accept international domain names.
+* New: Clicking a section header in the builder now selects the whole section.
+* New: Keyboard navigation, screen reader support, and color contrast have been improved across admin pages.
+* New: Payment connection errors now explain when the selected gateway or mode needs to be connected.
+* New: A new frm_show_clickable_field_errors filter has been added for disabling the validation error summary.
+* New: New frm_before_entry_meta_change, frm_after_entry_meta_change, and frm_entry_meta_write_failed hooks have been added for tracking entry data changes.
+* New: New frm_prepare_other_input and frm_include_other_input hooks have been added for customizing Other option text boxes.
+* Performance: The builder now loads faster and uses less memory when editing large forms.
+* Performance: The form switcher, form templates page, and forms list now use faster database queries.
+* Fix: Stripe Link payments could not be retried after a failed payment.
+* Fix: Stripe Link payment descriptions could remain blank when buyers did not return after paying.
+* Fix: Stripe subscriptions could fail with a No such price error.
+* Fix: Stripe payment amounts would not refresh correctly after pricing changes.
+* Fix: The license status shown while connecting would be wrong.
+* Fix: Resetting styles would use the wrong defaults and leave Quick Settings colors unchanged.
+* Fix: Spam and form errors would reload the page instead of showing on the form when submitting with AJAX.
+* Fix: In Pro, custom validation errors would remain visible after correcting a value.
+* Fix: Single Product names and prices would not update immediately in the builder preview.
+* Fix: Selecting groups inside a section could unexpectedly clear other selections in the builder.
+* Fix: AJAX submission success messages would not receive focus for screen reader users.
+* Fix: In Pro, validation errors in repeaters would not correctly set aria-invalid.
+
 = 6.35 =
 * Security: More strict sanitizing is now applied to entry key values before it gets used in the HTML of a form.
 * Security: The value that records who last saved an entry is now always set from the current user, not allowing for any custom values unless importing.
@@ -393,21 +427,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: The Embeds column would only update when a post was inserted, so it went stale when a page was updated or deleted.
 * The old hard coded widths for the frm_grid_2 through frm_grid_10 classes have been removed from the generated stylesheets, helping to reduce the file size of styles used on the front end.
 
-= 6.34 =
-* Security: Additional validation has been added to guarantee that submitted HTML in form data by untrusted users cannot be used for XSS.
-* New: Address fields are now included in Lite!
-* New: Address field data is included in PayPal Commerce credit card payments when defined in payment action settings to help prevent entries from incorrectly getting flagged as fraudulent.
-* New: Buttons on admin pages will now shrink slightly when clicked, to give a more tactile response.
-* Fix: Additional checks have been added to make sure that pages will not result in 404 errors when Gated Content actions are not actually defined for the page. In addition, when a custom permission is used for handling access to a private page, the custom permission is properly checked for.
-* Fix: Captcha field labels no longer use labels to prevent orphaned label issues since the label cannot reference the input in an iframe.
-* Fix: A JS error would occur when removing the last layout class from a field.
-* Fix: The JS spam token would get added to a form multiple times when multiple forms were on a page.
-
-= 6.33.1 =
-* Fix: Public taxonomy pages could result in 404 errors, caused by a missing check in the new Gated Content actions.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.35 =
+= 7.0 =
 This version fixes security-related bugs. Upgrade immediately.
