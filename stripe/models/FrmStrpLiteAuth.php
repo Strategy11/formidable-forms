@@ -883,7 +883,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Returns posted intents.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array|false $form
 	 *
@@ -905,7 +905,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Returns formatted form data.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -936,7 +936,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Check for failed payments and delete entries related to them and mark the payment rows as failed.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

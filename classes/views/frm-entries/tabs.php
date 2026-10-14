@@ -2,7 +2,7 @@
 /**
  * Entries and Spam tabs above the entries list.
  *
- * @since x.x
+ * @since 7.0
  *
  * @package Formidable
  *

@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the Formidable form action abilities for the WordPress Abilities API.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesFormActionsController {
 
 	/**
 	 * Register the form action abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -394,7 +394,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * List the actions configured on a form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -459,7 +459,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Get one form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -476,7 +476,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Create a form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -556,7 +556,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Update a form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -627,7 +627,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Delete a form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -658,7 +658,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Load one form action post.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $id Form action ID.
 	 *
@@ -681,7 +681,7 @@ class FrmAbilitiesFormActionsController {
 	 * registered controls when the type does not match a registered id_base, so
 	 * the result is narrowed to one control here rather than used as given.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $type The action type, such as email or on_submit.
 	 *
@@ -709,7 +709,7 @@ class FrmAbilitiesFormActionsController {
 	 * request without another round trip. Admin UI labels are a common wrong
 	 * guess, so "confirmation" and similar labels point to on_submit.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $type The sanitized action type that did not match.
 	 *
@@ -733,7 +733,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Let the action type expand its own stored settings before they are read.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param WP_Post $action The stored action post.
 	 *
@@ -760,7 +760,7 @@ class FrmAbilitiesFormActionsController {
 	 * set. Core sets it during its own settings migration, so a confirmation
 	 * action created through an ability would otherwise never fire.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object   $saved_action The saved action post object.
 	 * @param stdClass $form         The form the action belongs to.
@@ -790,7 +790,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Build the response shape for one form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $action The action to describe.
 	 *
@@ -818,7 +818,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Permission callback for list form actions.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -831,7 +831,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Permission callback for get form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -844,7 +844,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Permission callback for create form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -857,7 +857,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Permission callback for update form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -870,7 +870,7 @@ class FrmAbilitiesFormActionsController {
 	/**
 	 * Permission callback for delete form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *

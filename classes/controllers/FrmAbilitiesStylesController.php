@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the Formidable style abilities for the WordPress Abilities API.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesStylesController {
 
 	/**
 	 * Register the style abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -183,7 +183,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * List the styles on the site.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -212,7 +212,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Get one style.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -229,7 +229,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Update a style.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -299,7 +299,7 @@ class FrmAbilitiesStylesController {
 	 * Public because Pro's delete-style and assign-style-to-form abilities need
 	 * the same lookup, with the same post type guard.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $id Style ID, or 'default' for the default style.
 	 *
@@ -326,7 +326,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Load one style by its post_name.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $post_name The style's post_name.
 	 *
@@ -354,7 +354,7 @@ class FrmAbilitiesStylesController {
 	 * post on the site. Without this guard an unrelated post ID reads back as a
 	 * style, and the write abilities act on that post.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass|WP_Post $style The post to check.
 	 *
@@ -372,7 +372,7 @@ class FrmAbilitiesStylesController {
 	 *
 	 * Public because Pro's create-style ability normalizes the same way.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $post_content The style settings.
 	 *
@@ -391,7 +391,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Build the response shape for one style.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass|WP_Post $style The style to describe.
 	 *
@@ -412,7 +412,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Build the error returned when no style matches the given ID.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return WP_Error
 	 */
@@ -423,7 +423,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Permission callback for list styles.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -436,7 +436,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Permission callback for get style.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -449,7 +449,7 @@ class FrmAbilitiesStylesController {
 	/**
 	 * Permission callback for update style.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *

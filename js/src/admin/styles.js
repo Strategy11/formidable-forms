@@ -50,7 +50,7 @@ class frmStyleOptions {
 	/**
 	 * Includes the visible setting heading in the names of its value and unit controls.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @return {void}
 	 */
 	initControlLabels() {

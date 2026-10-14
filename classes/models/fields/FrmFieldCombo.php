@@ -483,7 +483,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * The sub field description is used when it is a short phrase, since that is the label shown
 	 * under the input. Otherwise the sub field label is combined with the field label, like "Address Line 1".
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $name Sub field name, like 'first' or 'line1'.
 	 *
@@ -510,7 +510,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Checks if text reads as a label, so it can be the subject of an error message. A sentence
 	 * would not.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $text
 	 *
@@ -525,7 +525,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Gets an error message for a single sub field, with the sub field label in place of the
 	 * field label.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $name  Sub field name, like 'first' or 'line1'.
 	 * @param string $error Error type, like 'blank'.

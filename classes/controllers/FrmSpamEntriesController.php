@@ -2,7 +2,7 @@
 /**
  * Spam entries controller.
  *
- * @since x.x
+ * @since 7.0
  *
  * @package Formidable
  */
@@ -16,14 +16,14 @@ class FrmSpamEntriesController {
 	/**
 	 * The GET param and value used for the Spam tab of the entries list.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
 	const TAB_PARAM = 'entry_status';
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -32,7 +32,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Form action types that need data from the original browser session, so they cannot run later.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string[]
 	 */
@@ -41,7 +41,7 @@ class FrmSpamEntriesController {
 	/**
 	 * The form actions selected in the "Not spam" modal while they are being triggered.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var int[]
 	 */
@@ -50,7 +50,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Check if the entries list is showing the Spam tab.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -61,7 +61,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Get the URL of an entries list tab.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param bool       $spam    True for the Spam tab.
 	 * @param int|string $form_id The form being filtered, if any.
@@ -86,7 +86,7 @@ class FrmSpamEntriesController {
 	 * Get the form to return to after moderating an entry.
 	 * The list keeps its form filter, and the entry page returns to the entry's form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $entry The entry being moderated.
 	 *
@@ -105,7 +105,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Show the Entries and Spam tabs above the entries list.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param false|object $form The form being filtered, if any.
 	 *
@@ -122,7 +122,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Spam entries can be viewed, marked as not spam or deleted. They cannot be edited or duplicated.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $actions Row action links keyed by action.
 	 * @param object $item    The entry in the row.
@@ -155,7 +155,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Remove the edit, duplicate and resend links from the sidebar of a spam entry, and add "Not spam".
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $actions Sidebar action links keyed by action.
 	 * @param array $args    Includes `id` and `entry`.
@@ -198,7 +198,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Show a notice and the "Not spam" modal at the top of a spam entry.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $args Includes `id` and `form`.
 	 *
@@ -224,7 +224,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Mark a submitted entry as spam after checking moderation permission and the nonce.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -250,7 +250,7 @@ class FrmSpamEntriesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object|null $entry The entry being moderated.
 	 *
@@ -265,7 +265,7 @@ class FrmSpamEntriesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $entry The entry being moderated.
 	 *
@@ -287,7 +287,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Get the form actions that would have run when the entry was created.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $form
 	 *
@@ -309,7 +309,7 @@ class FrmSpamEntriesController {
 		/**
 		 * Allows changing the form actions that can run when an entry is marked as not spam.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param WP_Post[] $pending Actions keyed by ID.
 		 * @param object    $form
@@ -323,7 +323,7 @@ class FrmSpamEntriesController {
 	 * Move a spam entry back to the entries list, and run the form actions that were selected.
 	 * Triggered by the form in the "Not spam" modal.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -377,7 +377,7 @@ class FrmSpamEntriesController {
 		/**
 		 * Fires after a spam entry is marked as not spam.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param int   $entry_id
 		 * @param int[] $action_ids The form actions that were triggered.
@@ -388,7 +388,7 @@ class FrmSpamEntriesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string The error message, or an empty string when the request is allowed.
 	 */
@@ -409,7 +409,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Get the posted action IDs that can run for the entry's form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $form_id
 	 *
@@ -438,7 +438,7 @@ class FrmSpamEntriesController {
 	 * Trigger the create actions for an entry, limited to the selected actions.
 	 * Conditional logic still applies.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int   $entry_id
 	 * @param int[] $action_ids
@@ -464,7 +464,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Skip every form action that was not selected in the "Not spam" modal.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param bool  $skip Whether the action is already being skipped.
 	 * @param array $args Includes `action`, `entry`, `form` and `event`.
@@ -476,7 +476,7 @@ class FrmSpamEntriesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $entry
 	 *
@@ -497,7 +497,7 @@ class FrmSpamEntriesController {
 	/**
 	 * Deciding whether an entry is spam is moderation, so it uses the same permission as deleting entries.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */

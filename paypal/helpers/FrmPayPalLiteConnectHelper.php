@@ -1011,7 +1011,7 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * Verify a site identifier is a match.
 	 *
-	 * @since x.x Moved the checks into FrmTransLiteConnectVerifyHelper.
+	 * @since 7.0 Moved the checks into FrmTransLiteConnectVerifyHelper.
 	 *
 	 * @return void
 	 */

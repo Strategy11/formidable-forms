@@ -29,7 +29,7 @@ class FrmAntiSpamController {
 	 * Checks spam with WordPress disallowed words, the denylist, StopForumSpam and WordPress spam comments,
 	 * and returns which check flagged it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values Entry values.
 	 *

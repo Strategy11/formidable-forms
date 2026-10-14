@@ -323,7 +323,7 @@ class FrmFormsController {
 	 * Add or remove the GDPR field based on the "Include a GDPR agreement field" setting.
 	 * The field only works while GDPR is enabled globally, so it is left alone otherwise.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $form_id Form ID.
 	 *
@@ -342,7 +342,7 @@ class FrmFormsController {
 	/**
 	 * Create a field of the given type just before the submit button, or delete it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int    $form_id    Form ID.
 	 * @param string $field_type The field type to add or remove.
@@ -1768,7 +1768,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values
 	 *
@@ -1832,7 +1832,7 @@ class FrmFormsController {
 
 	/**
 	 * @since 6.27 Added $template_path parameter.
-	 * @since x.x Added $defer_icon parameter.
+	 * @since 7.0 Added $defer_icon parameter.
 	 *
 	 * @param int|string $form_id
 	 * @param string     $class

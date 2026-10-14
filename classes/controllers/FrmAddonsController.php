@@ -172,7 +172,7 @@ class FrmAddonsController {
 	 * These are not installable plugins. The `built_in` flag gives them an active
 	 * status, keeps them unlocked, and limits the card footer to the docs link.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
@@ -214,7 +214,7 @@ class FrmAddonsController {
 	 * key, because API-sourced add-ons are keyed by a numeric download id
 	 * with the real slug in their `slug` field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<int|string,array<string,mixed>> $addons     The full addons array, keyed by slug or id.
 	 * @param string                                $slug       Normalized slug of the add-on to move.
@@ -254,7 +254,7 @@ class FrmAddonsController {
 	 * while a string key (built-in gateways, the fallback list) already is
 	 * the slug.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<int|string,array<string,mixed>> $addons The full addons array, keyed by slug or id.
 	 * @param string                                $slug   Normalized slug to find.
@@ -282,7 +282,7 @@ class FrmAddonsController {
 	 * extend them are presented as their Pro/Legacy tiers until the API reflects
 	 * it. Names only — the add-ons keep their original excerpts.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $addon The addon array that will be modified by reference.
 	 * @param string $slug  The addon slug.
@@ -1626,7 +1626,7 @@ class FrmAddonsController {
 	/**
 	 * Check whether a user can authorize the account connection.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $user_id The user authorizing the account connection.
 	 *

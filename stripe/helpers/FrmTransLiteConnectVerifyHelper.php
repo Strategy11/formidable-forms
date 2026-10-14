@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * the request must arrive within a short window of that request, and it must include the one time
  * token the site generated for it.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmTransLiteConnectVerifyHelper {
 
@@ -53,7 +53,7 @@ class FrmTransLiteConnectVerifyHelper {
 	 * Call this when building the request body for the Connect server. The server is expected to
 	 * echo the token back in its verify request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 *
@@ -78,7 +78,7 @@ class FrmTransLiteConnectVerifyHelper {
 	/**
 	 * Forget the pending onboarding request for a gateway.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 *
@@ -137,7 +137,7 @@ class FrmTransLiteConnectVerifyHelper {
 	 *
 	 * Sends a JSON response and exits.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 *

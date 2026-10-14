@@ -11,14 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * screen already supports. Create and edit are deliberately left out, since an
  * ability is not a way to originate a charge.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesPaymentsController {
 
 	/**
 	 * Register the payment abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -201,7 +201,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * List payments, optionally filtered by form and status.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -228,7 +228,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Get one payment.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -245,7 +245,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Delete a payment.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -271,7 +271,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Refund a payment through its original gateway.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -304,7 +304,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Load one payment by the id in the input, validating it is present.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -330,7 +330,7 @@ class FrmAbilitiesPaymentsController {
 	 * Shared shape with FrmAbilitiesSubscriptionsController::build_list_query(),
 	 * kept separate per table since the join/filter columns differ per domain.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $table Unprefixed table name, e.g. frm_payments.
 	 * @param array  $input Ability input parameters.
@@ -381,7 +381,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Build the response shape for one payment.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $payment The payment row to describe.
 	 *
@@ -408,7 +408,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Output schema properties shared by every payment ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -472,7 +472,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Permission callback for list payments.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -485,7 +485,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Permission callback for get payment.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -502,7 +502,7 @@ class FrmAbilitiesPaymentsController {
 	 * capability, so this matches rather than allowing a role that would only
 	 * hit that internal check and fail.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -515,7 +515,7 @@ class FrmAbilitiesPaymentsController {
 	/**
 	 * Permission callback for refund payment.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *

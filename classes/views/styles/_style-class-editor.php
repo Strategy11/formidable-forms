@@ -7,7 +7,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 7.0
  *
  * @var WP_Post $style      The style being edited.
  * @var string  $input_id   The id of the class input.

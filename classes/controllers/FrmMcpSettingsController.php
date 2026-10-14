@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * feature. That add-on's toggle keeps working, and Formidable reads it: see
  * FrmMcpController::is_enabled().
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpSettingsController {
 	const TAB_ANCHOR = 'mcp_settings';
@@ -22,7 +22,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Transient holding the latest skill release read from the GitHub API.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -34,7 +34,7 @@ class FrmMcpSettingsController {
 	 * The name is Lite's own rather than the API add-on's frm_api_skill_download,
 	 * so a site that has both never has one of them reading the other's record.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -43,14 +43,14 @@ class FrmMcpSettingsController {
 	/**
 	 * Value of the action query arg that sends a skill download through this site.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
 	const SKILL_DOWNLOAD_ACTION = 'frm_mcp_download_skill';
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -63,7 +63,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Add the MCP section to the global settings page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook frm_add_settings_section
 	 *
 	 * @param array<array> $sections Sections registered for the Global Settings page so far.
@@ -96,7 +96,7 @@ class FrmMcpSettingsController {
 	 * Hidden while an API add-on that still renders its own MCP toggle is
 	 * active, so the site has one toggle rather than two that disagree.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -111,7 +111,7 @@ class FrmMcpSettingsController {
 	 * and says so with FrmAPISettingsController::renders_mcp_toggle(). An older
 	 * copy has the class but not the method, and always renders one.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -130,7 +130,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Render the MCP section of the global settings page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -172,7 +172,7 @@ class FrmMcpSettingsController {
 	 * The file holds an application password, so the site has to allow them for
 	 * this user and serve them over HTTPS, apart from a local environment.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -187,7 +187,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Add a readable creation date to each skill application password.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<array> $skill_passwords Application passwords created for the skill env file.
 	 *
@@ -206,7 +206,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Get the documentation links shown in the MCP section.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string, string>
 	 */
@@ -222,7 +222,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Get a link to the MCP documentation page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $utm_content  The utm_content value that names the link.
 	 * @param string $utm_campaign The campaign that names where on the page the link sits.
@@ -250,7 +250,7 @@ class FrmMcpSettingsController {
 	 * Only the first step differs between the two, since each installs the skill its own way.
 	 * Both install from the same repository, which each CLI reads as a plugin marketplace.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string, string>
 	 */
@@ -290,7 +290,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Build the numbered step that installs or updates the skill.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<string> $install The two terminal commands that install the skill.
 	 * @param array<string> $update  The two terminal commands that update an installed skill.
@@ -314,7 +314,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Build a setup prompt around the step that installs the skill.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $install_step The numbered step that tells the assistant how to install the skill.
 	 *
@@ -341,7 +341,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Build the short release summary displayed beside the skill download.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array|false $release  The latest skill release.
 	 * @param array|false $download The current user's last skill download.
@@ -393,7 +393,7 @@ class FrmMcpSettingsController {
 	 * reflects the add-on's setting rather than one of its own, and saving here
 	 * is what takes it over.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -411,7 +411,7 @@ class FrmMcpSettingsController {
 	 * Get the download link for the Formidable skill, the instructions an AI
 	 * assistant loads so it knows how to drive the MCP server.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string
 	 */
@@ -426,7 +426,7 @@ class FrmMcpSettingsController {
 	 * version each user last took can be recorded and compared against the
 	 * current release. The handler redirects on to the GitHub asset.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string
 	 */
@@ -438,7 +438,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Record the download and send the browser on to the skill on GitHub.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook admin_post_frm_mcp_download_skill
 	 *
 	 * @return void
@@ -471,7 +471,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Allow the skill download host as a redirect target.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook allowed_redirect_hosts
 	 *
 	 * @param array $hosts Hosts a safe redirect may send the browser to.
@@ -491,7 +491,7 @@ class FrmMcpSettingsController {
 	/**
 	 * Get the time and version of the current user's last skill download.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array|false Time and version of the last download, or false when this user has never downloaded it.
 	 */
@@ -511,7 +511,7 @@ class FrmMcpSettingsController {
 	 * The two versions are compared for equality rather than order, so a tag
 	 * that does not read as a version number still reports the change.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array|false $release  The current release, from get_skill_release().
 	 * @param array|false $download The user's last download, from get_skill_download().
@@ -534,7 +534,7 @@ class FrmMcpSettingsController {
 	 * full date makes the line long enough to wrap. Today is named rather than
 	 * counted, since '4 hours ago' is more precision than the line needs.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $date A timestamp, or the date string the GitHub API returned.
 	 *
@@ -574,7 +574,7 @@ class FrmMcpSettingsController {
 	 * that GitHub allows, and a failure is cached for a shorter time so an
 	 * outage does not send a request on every load either.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param bool $refresh Whether to skip the cache and read the release from GitHub.
 	 *
@@ -613,7 +613,7 @@ class FrmMcpSettingsController {
 	 * The endpoint is public and skips drafts and prereleases, so a tagged
 	 * release candidate does not replace the last stable one.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array|false Version, publish date, and release page URL, or false when the release cannot be read.
 	 */

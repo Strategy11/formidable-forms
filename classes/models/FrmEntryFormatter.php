@@ -564,7 +564,7 @@ class FrmEntryFormatter {
 	 * Since WordPress 7.2, wp_kses converts CRLF line endings to LF, so a paragraph value
 	 * submitted from a textarea would otherwise always look different from its display value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $displayed_value The value prepared for display.
 	 * @param mixed $saved_value     The value saved in the database.

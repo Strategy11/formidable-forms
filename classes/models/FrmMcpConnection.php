@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * FrmMcpUsageController counts them in Formidable's usage tracking without
  * this class having to know about it.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpConnection {
 
@@ -53,7 +53,7 @@ class FrmMcpConnection {
 	const MAX_CLIENTS = 5;
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -69,7 +69,7 @@ class FrmMcpConnection {
 	 * rejected by an earlier filter are not recorded. The response is
 	 * always returned unchanged.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook rest_request_before_callbacks
 	 *
 	 * @param mixed                         $response Result to send to the client.
@@ -108,7 +108,7 @@ class FrmMcpConnection {
 		 * MCP server moved into Formidable, and a release of it that still does
 		 * is left to count them instead.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param array  $body     Decoded JSON-RPC request body.
 		 * @param string $endpoint Endpoint name, or an empty string for protocol requests.
@@ -127,7 +127,7 @@ class FrmMcpConnection {
 	 * the resource URI or prompt name. Protocol requests like initialize and
 	 * tools/list return an empty string so they only bump the last request time.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $body Decoded JSON-RPC request body.
 	 *
@@ -172,7 +172,7 @@ class FrmMcpConnection {
 	 * creates, so every later request is matched to its client through the
 	 * Mcp-Session-Id header it carries.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array                         $body    Decoded JSON-RPC request body.
 	 * @param WP_REST_Request<array<mixed>> $request Request used to generate the response.
@@ -204,7 +204,7 @@ class FrmMcpConnection {
 	/**
 	 * Get the client name from the parameters of an initialize handshake.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $params Parameters of the initialize request.
 	 *
@@ -225,7 +225,7 @@ class FrmMcpConnection {
 	 * cursor-vscode, so a name from a known product is shown by the product
 	 * name, and any other client is shown by the name it sent.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $client Name the client sent in its initialize handshake.
 	 *
@@ -295,7 +295,7 @@ class FrmMcpConnection {
 	 * belonging to an add-on this site does not have is still recognised as
 	 * ours rather than being mistaken for another plugin's.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Full ability name, including its namespace.
 	 *
@@ -326,7 +326,7 @@ class FrmMcpConnection {
 	/**
 	 * Record one MCP request for a user.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int    $user_id  ID of the connecting user.
 	 * @param string $endpoint Endpoint name, or an empty string for protocol requests.
@@ -359,7 +359,7 @@ class FrmMcpConnection {
 	 * Each client keeps its own endpoint list, so the settings page can show
 	 * what each assistant asked for rather than one list for the whole user.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<string, array{time: int, count: int, endpoints: array<string, array{time: int, count: int}>}> $clients  Client names mapped to their usage.
 	 * @param string                                                                                              $client   Name of the client that made the request.
@@ -390,7 +390,7 @@ class FrmMcpConnection {
 	/**
 	 * Record one use of an endpoint or client, keeping only the most recent ones.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<string, array{time: int, count: int}> $items Names mapped to time and count data.
 	 * @param string                                      $name  Name of the endpoint or client that was used.
@@ -416,7 +416,7 @@ class FrmMcpConnection {
 	/**
 	 * Drop the oldest names once the list grows past the limit.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @template T of array{time: int, count: int}
 	 *
@@ -451,7 +451,7 @@ class FrmMcpConnection {
 	/**
 	 * Get the stored MCP activity for one user.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $user_id ID of the user to look up.
 	 *
@@ -475,7 +475,7 @@ class FrmMcpConnection {
 	/**
 	 * Clean the stored client usage, including each client's endpoint list.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $clients Stored client usage.
 	 *
@@ -499,7 +499,7 @@ class FrmMcpConnection {
 	/**
 	 * Clean a stored list of names mapped to time and count data.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $items Stored endpoint or client usage.
 	 *
@@ -534,7 +534,7 @@ class FrmMcpConnection {
 	 * the most recently called first, limited to those called within the last
 	 * month.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<int, array{user_login: string, display_name: string, client: string, client_icon: string, last_request: int, endpoints: array<string, array{time: int, count: int}>}>
 	 */
@@ -582,7 +582,7 @@ class FrmMcpConnection {
 	 * clients were tracked or came from clients that did not name themselves,
 	 * gets a single row with no client.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array{last_request: int, endpoints: array<string, array{time: int, count: int}>, clients: array<string, array{time: int, count: int, endpoints: array<string, array{time: int, count: int}>}>} $activity The user's stored MCP activity.
 	 *
@@ -629,7 +629,7 @@ class FrmMcpConnection {
 	/**
 	 * Combine two endpoint lists, keeping the latest time and the total count of each.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<string, array{time: int, count: int}> $usage      Endpoint names mapped to time and count data.
 	 * @param array<string, array{time: int, count: int}> $more_usage Endpoint names mapped to time and count data to add.
@@ -653,7 +653,7 @@ class FrmMcpConnection {
 	/**
 	 * Sort two endpoint rows so the most recently called comes first.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array{time: int, count: int} $a First endpoint's time and count data.
 	 * @param array{time: int, count: int} $b Second endpoint's time and count data.
@@ -667,7 +667,7 @@ class FrmMcpConnection {
 	/**
 	 * Sort two connection rows so the most recent request comes first.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $a First connection row.
 	 * @param array $b Second connection row.
@@ -681,7 +681,7 @@ class FrmMcpConnection {
 	/**
 	 * Keep only the endpoints or clients used within the last month.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @template T of array{time: int, count: int}
 	 *

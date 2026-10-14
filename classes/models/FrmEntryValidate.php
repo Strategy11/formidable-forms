@@ -33,7 +33,7 @@ class FrmEntryValidate {
 		 * Only the values that are validated change. A filtered array without "form_id" and
 		 * "item_meta" is ignored, and changed values are sanitized again.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param array $values Submitted entry values, including "form_id" and "item_meta".
 		 */
@@ -638,7 +638,7 @@ class FrmEntryValidate {
 	/**
 	 * Spam is only saved as a spam entry when an entry is created. Edits keep showing the spam error.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values The submitted values.
 	 *
@@ -745,7 +745,7 @@ class FrmEntryValidate {
 	/**
 	 * Check Akismet and identify regular or blatant spam.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values Entry values.
 	 *
@@ -779,7 +779,7 @@ class FrmEntryValidate {
 	/**
 	 * Identify the spam source from an Akismet response.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $response Response headers and body returned by Akismet.
 	 *

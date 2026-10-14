@@ -274,7 +274,7 @@ class FrmFieldCaptchaSettings {
 	 * "error-codes" array of a siteverify response.
 	 * These codes are shared by every service we support. Child classes add their own.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,string>
 	 */
@@ -295,7 +295,7 @@ class FrmFieldCaptchaSettings {
 	 * A person filling out the form cannot fix these by trying again, so they get a
 	 * different message than someone who actually failed the challenge.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<int,string>
 	 */

@@ -18,7 +18,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * Details of the most recent CAPTCHA validation failure.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -27,7 +27,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * Get the service explanation and error codes for the validation failure.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string
 	 */
@@ -383,7 +383,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * Every service we support uses this key, but it is left out when the service does not
 	 * explain the failure, so an empty array is a normal result.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $response The decoded siteverify response.
 	 *
@@ -408,7 +408,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * Codes we do not have a translation for are passed through as is so the raw code
 	 * is preserved in stored spam entries instead of being dropped.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $error_codes The error codes returned by the CAPTCHA service.
 	 *
@@ -433,7 +433,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * Check if the failure was caused by the site's own CAPTCHA settings rather than by
 	 * the person filling out the form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $error_codes The error codes returned by the CAPTCHA service.
 	 *
@@ -452,7 +452,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * entries and to the frm_captcha_error_message filter instead. The one exception is a site
 	 * misconfiguration, where retrying cannot help and a real visitor needs to know that.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $error_codes The error codes returned by the CAPTCHA service.
 	 * @param string $reason      The readable explanation for the failure.
@@ -479,7 +479,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 * Use this to show the reason on the front end, keeping in mind that the reason is
 		 * also useful to whatever is trying to get past the CAPTCHA.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param string $message     The message shown to the person submitting the form.
 		 * @param string $reason      The readable explanation for the failure.
@@ -494,7 +494,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * The reason never reaches the front end by default. The validation action lets
 	 * integrations respond to the failure without requiring the logging add-on.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $reason      The readable explanation for the failure.
 	 * @param array  $error_codes The error codes returned by the CAPTCHA service.
@@ -511,7 +511,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		/**
 		 * Fires when a CAPTCHA fails validation, with the reason the service gave.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param string $reason      The readable explanation for the failure.
 		 * @param array  $error_codes The error codes returned by the CAPTCHA service.
@@ -524,7 +524,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * Get the ID of the form the CAPTCHA field belongs to.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return int
 	 */
@@ -580,7 +580,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * Pro overrides validate() and does not call the version above, so it calls this
 	 * directly. Keeping it here keeps the reason string in one place and one text domain.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

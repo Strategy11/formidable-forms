@@ -40,7 +40,7 @@ class FrmFieldEmail extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string>
 	 */
@@ -49,7 +49,7 @@ class FrmFieldEmail extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */

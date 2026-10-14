@@ -33,7 +33,7 @@
 	 * Focus the visible control when a styler heading labels a hidden toggle or radio input.
 	 * Radio headings focus the selected option without changing the setting.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {void}
 	 */

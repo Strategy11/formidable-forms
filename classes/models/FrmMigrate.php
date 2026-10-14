@@ -292,7 +292,7 @@ class FrmMigrate {
 	 * @since 6.6
 	 * @since 6.16.3 idx_form_id_is_draft was also added to frm_items.
 	 * @since 6.17 idx_form_id_type was also added to frm_fields.
-	 * @since x.x idx_form_id_created_at was added to frm_items, and idx_parent_form_id and frm_forms_template_status to frm_forms.
+	 * @since 7.0 idx_form_id_created_at was added to frm_items, and idx_parent_form_id and frm_forms_template_status to frm_forms.
 	 *
 	 * @return void
 	 */
@@ -542,7 +542,7 @@ class FrmMigrate {
 	 *
 	 * The verify endpoints no longer rate limit by timestamp, so these rows are unused.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

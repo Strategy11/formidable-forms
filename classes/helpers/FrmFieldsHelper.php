@@ -466,7 +466,7 @@ class FrmFieldsHelper {
 	/**
 	 * Gets an error message with a different name in place of the field name.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array|object $field
 	 * @param string       $error
@@ -1674,7 +1674,7 @@ class FrmFieldsHelper {
 	 * Pro checks that this method exists to know the frm_prepare_other_input and
 	 * frm_include_other_input hooks are available.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -1704,7 +1704,7 @@ class FrmFieldsHelper {
 			/**
 			 * Prepares the text box for an "Other" option, in place of the fallback below.
 			 *
-			 * @since x.x
+			 * @since 7.0
 			 *
 			 * @param array $prepared {
 			 *
@@ -1725,7 +1725,7 @@ class FrmFieldsHelper {
 			}
 		}//end if
 
-		// Fallback for when Pro is not active or is older than x.x. Remove the rest of this method,
+		// Fallback for when Pro is not active or is older than 7.0. Remove the rest of this method,
 		// set_other_name() and set_other_value() once Pro is required for "Other" options.
 
 		// Check if this is an "Other" option.
@@ -1828,7 +1828,7 @@ class FrmFieldsHelper {
 			/**
 			 * Shows the text box for an "Other" option, in place of the fallback below.
 			 *
-			 * @since x.x
+			 * @since 7.0
 			 *
 			 * @param array $args Includes field, opt_key, html_id, name, value, checked and read_only.
 			 */
@@ -1836,7 +1836,7 @@ class FrmFieldsHelper {
 			return;
 		}
 
-		// Fallback for when Pro is not active or is older than x.x. Remove the rest of this method
+		// Fallback for when Pro is not active or is older than 7.0. Remove the rest of this method
 		// once Pro is required for "Other" options.
 
 		$classes = array( 'frm_other_input' );
@@ -3110,7 +3110,7 @@ class FrmFieldsHelper {
 	/**
 	 * Get the values available for the autocomplete HTML attribute.
 	 *
-	 * @since x.x This was moved from FrmProFieldsHelper::get_autocomplete_options.
+	 * @since 7.0 This was moved from FrmProFieldsHelper::get_autocomplete_options.
 	 *
 	 * @param array<string> $filter_keys Only include these keys. An empty array will include every key.
 	 *

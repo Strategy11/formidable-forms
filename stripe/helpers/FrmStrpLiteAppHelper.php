@@ -100,7 +100,7 @@ class FrmStrpLiteAppHelper {
 		/**
 		 * Filter the Stripe mode for the current request.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param string $mode The configured Stripe mode.
 		 */
@@ -115,7 +115,7 @@ class FrmStrpLiteAppHelper {
 	 * Only the active mode is checked by default. The Test Mode add-on adds the
 	 * other mode after a form preview has taken a payment with the opposite mode.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string[]
 	 */
@@ -125,7 +125,7 @@ class FrmStrpLiteAppHelper {
 		/**
 		 * Filter the Stripe modes to poll for unprocessed webhook events.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param string[] $modes The modes to check, in order. Defaults to the active mode.
 		 */

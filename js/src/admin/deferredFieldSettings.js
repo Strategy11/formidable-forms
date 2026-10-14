@@ -11,7 +11,7 @@ const metadataInputs = {
 /**
  * Keep lightweight values available to layout code and field lists without shipping input HTML.
  *
- * @since x.x
+ * @since 7.0
  * @param {HTMLElement} field    The inserted field preview.
  * @param {string}      fieldId  Numeric field ID.
  * @param {Object}      metadata Saved name, type, key, order, classes, and alignment.
@@ -46,7 +46,7 @@ export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 /**
  * Cache server-rendered settings without parsing their HTML or creating controls.
  *
- * @since x.x
+ * @since 7.0
  * @param {string} fieldId Numeric field ID.
  * @param {string} html    Settings panel HTML returned by the builder endpoint.
  * @return {void}
@@ -60,7 +60,7 @@ export function cacheFieldSettings( fieldId, html ) {
 /**
  * Forget settings when a field is deleted so saving cannot restore its controls.
  *
- * @since x.x
+ * @since 7.0
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */
@@ -71,7 +71,7 @@ export function forgetFieldSettings( fieldId ) {
 /**
  * Insert a settings panel once, preserving any layout and order edits made before selection.
  *
- * @since x.x
+ * @since 7.0
  * @param {string}   fieldId    Numeric field ID.
  * @param {Function} initialize Prepares newly inserted settings controls.
  * @return {HTMLElement|null} The existing or newly inserted settings panel.
@@ -127,7 +127,7 @@ export function materializeFieldSettings( fieldId, initialize ) {
 /**
  * Restore panels beside their previews so dependent choice updates can find their controls.
  *
- * @since x.x
+ * @since 7.0
  * @param {Function} initialize Prepares newly inserted settings controls.
  * @return {void}
  */

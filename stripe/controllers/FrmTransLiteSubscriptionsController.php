@@ -154,7 +154,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * dispatch without duplicating it or going through the AJAX/wp_die()
 	 * request flow.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $subscription The subscription to cancel.
 	 *

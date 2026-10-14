@@ -91,7 +91,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Add the error codes that are specific to Turnstile.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,string>
 	 */
@@ -107,7 +107,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<int,string>
 	 */

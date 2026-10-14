@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * shown to whoever is driving the MCP server, which is not necessarily an
  * administrator.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpAbilityRegistry {
 
@@ -89,7 +89,7 @@ class FrmMcpAbilityRegistry {
 	 * list. Add-ons that ship after this can still add themselves on the filter,
 	 * which is what keeps this from having to be edited forever.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array Provider keys mapped to a title, plugin folder, and ability names grouped by domain.
 	 */
@@ -183,7 +183,7 @@ class FrmMcpAbilityRegistry {
 		 * the same names in the Abilities API is still what makes them work:
 		 * this list is only consulted when the name is missing.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param array $providers Provider keys mapped to a title, plugin folder, and ability names grouped by domain.
 		 */
@@ -197,7 +197,7 @@ class FrmMcpAbilityRegistry {
 	 *
 	 * Needed by tests, which move the filter within one process.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -214,7 +214,7 @@ class FrmMcpAbilityRegistry {
 	 * all, and it works on a name that is not registered, which is the case
 	 * this class exists to answer for.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Full ability name, including its namespace.
 	 *
@@ -231,7 +231,7 @@ class FrmMcpAbilityRegistry {
 	/**
 	 * Find the provider that owns one ability name.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Full ability name, including the formidable-forms prefix.
 	 *
@@ -250,7 +250,7 @@ class FrmMcpAbilityRegistry {
 	/**
 	 * Find the provider and the ability domain that own one ability name.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Full ability name, including the formidable-forms prefix.
 	 *
@@ -281,7 +281,7 @@ class FrmMcpAbilityRegistry {
 	 * Only meaningful for a name the Abilities API does not have. A registered
 	 * ability is answered by the Abilities API itself and never gets here.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Full ability name, including the formidable-forms prefix.
 	 *
@@ -326,7 +326,7 @@ class FrmMcpAbilityRegistry {
 	 * the claim is the signal for "the feature is here" and the missing ability
 	 * is the signal for "something stopped it".
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $domain Domain name, such as views or applications.
 	 *
@@ -340,7 +340,7 @@ class FrmMcpAbilityRegistry {
 	/**
 	 * Build the error a client gets for an ability it cannot reach.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Full ability name, including the formidable-forms prefix.
 	 * @param string $status       One of the STATUS_ constants, from status().
@@ -361,7 +361,7 @@ class FrmMcpAbilityRegistry {
 	/**
 	 * Map a status to the error code a client can branch on.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $status One of the STATUS_ constants.
 	 *
@@ -385,7 +385,7 @@ class FrmMcpAbilityRegistry {
 	 * Each message names the plugin and the next step, and none of them mentions
 	 * a license key or a path on disk.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $status       One of the STATUS_ constants.
 	 * @param string $title        Display title of the plugin that provides the ability.
@@ -408,7 +408,7 @@ class FrmMcpAbilityRegistry {
 	/**
 	 * Get the untranslated-argument template for one status.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $status One of the STATUS_ constants.
 	 *
@@ -445,7 +445,7 @@ class FrmMcpAbilityRegistry {
 	 * file has been renamed across versions of some of these add-ons and the
 	 * answer here only needs to be "is a copy of it on disk".
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $folder Plugin folder name, such as formidable-views.
 	 *
@@ -470,7 +470,7 @@ class FrmMcpAbilityRegistry {
 	/**
 	 * Check whether any of the given plugin files is active.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $basenames Plugin basenames, as returned by installed_basenames().
 	 *
@@ -503,7 +503,7 @@ class FrmMcpAbilityRegistry {
 	 * Only the status word is read. No license key is fetched, compared, or
 	 * reported anywhere in this class.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */

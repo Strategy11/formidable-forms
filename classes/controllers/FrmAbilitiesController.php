@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * old to have them. All three ask owns() first, which is what keeps two plugins
  * from claiming one ability name.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesController {
 
@@ -30,7 +30,7 @@ class FrmAbilitiesController {
 	const CATEGORY = 'formidable-forms';
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -52,7 +52,7 @@ class FrmAbilitiesController {
 	 * own domains, so the MCP setting is one switch for the whole AI surface
 	 * rather than one per plugin.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -74,7 +74,7 @@ class FrmAbilitiesController {
 	 * finds out whether a domain has an owner on this site or whether it should
 	 * keep serving that domain itself.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array Domain names mapped to the controller class that registers them.
 	 */
@@ -97,7 +97,7 @@ class FrmAbilitiesController {
 		 * that it registers every ability in it, and the API add-on stops
 		 * registering that domain in response.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param array<string, string> $domains Domain names mapped to the controller class that registers them.
 		 */
@@ -107,7 +107,7 @@ class FrmAbilitiesController {
 	/**
 	 * Check whether one ability domain has an owner on this site.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $domain Domain name, such as forms or view-layouts.
 	 *
@@ -126,7 +126,7 @@ class FrmAbilitiesController {
 	/**
 	 * Register the shared ability category.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook wp_abilities_api_categories_init
 	 *
 	 * @return void
@@ -157,7 +157,7 @@ class FrmAbilitiesController {
 	/**
 	 * Check whether the shared category has already been registered.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -174,7 +174,7 @@ class FrmAbilitiesController {
 	/**
 	 * Register every ability Formidable itself owns.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook wp_abilities_api_init
 	 *
 	 * @return void

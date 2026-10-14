@@ -162,7 +162,7 @@ class FrmDb {
 	/**
 	 * Whether a date condition can use a native datetime comparison.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string            $key   Column and comparison operator.
 	 * @param array|string|null $value Comparison value.

@@ -2,7 +2,7 @@
 /**
  * GDPR settings for form
  *
- * @since x.x
+ * @since 7.0
  *
  * @package Formidable
  *
@@ -58,7 +58,7 @@ if ( has_action( 'frm_add_form_gdpr_options' ) ) {
 	/**
 	 * Fires in the GDPR form settings so Pro can show the auto-delete entries setting.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values       Form values.
 	 * @param bool  $gdpr_enabled Whether GDPR is enabled in global settings.

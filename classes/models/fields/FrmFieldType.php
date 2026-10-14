@@ -826,7 +826,7 @@ DEFAULT_HTML;
 	/**
 	 * Get the autocomplete attribute values that can be selected for this field type.
 	 *
-	 * @since x.x This was moved from the FrmProFieldAutocompleteField trait.
+	 * @since 7.0 This was moved from the FrmProFieldAutocompleteField trait.
 	 *
 	 * @return array<string,string>
 	 */
@@ -837,7 +837,7 @@ DEFAULT_HTML;
 	/**
 	 * Limit the autocomplete options to the values that make sense for this field type.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string> An empty array will include every key.
 	 */
@@ -1210,7 +1210,7 @@ DEFAULT_HTML;
 	 * validation keys its errors by that same ID. The field object only knows the plain field ID,
 	 * which matches no error key inside a repeater, so prefer the ID the row is rendering with.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $args Rendering context. May include `field_id`.
 	 *
@@ -1738,7 +1738,7 @@ DEFAULT_HTML;
 	 * add_aria_description() itself and setting aria_description_added,
 	 * which short-circuits add_aria_description_to_inputs() entirely).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $args Rendering context. May include `html_id`.
 	 * @param string $input_html Full field HTML, passed by reference.

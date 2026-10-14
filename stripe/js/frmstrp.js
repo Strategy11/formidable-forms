@@ -782,7 +782,7 @@
 	 * Get the appearance rules to send to Stripe.
 	 * Fonts are limited to families the Stripe iframe can render, so the page can measure the same Label text.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {Object} Appearance rules.
 	 */
@@ -1220,7 +1220,7 @@
 	/**
 	 * Explain why live Stripe payments cannot load on an HTTP page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {void}
 	 */
@@ -1241,7 +1241,7 @@
 	 * Reuse the intent returned by confirmation, or retrieve its status directly from Stripe.
 	 * A failed lookup is not evidence that a payment failed.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string} secret The intent's client secret.
 	 * @param {Object} error  The confirmation error, which may include the failed intent.
@@ -1282,7 +1282,7 @@
 	 * Only ask PHP to clean up intents Stripe.js reports as failed.
 	 * PHP still verifies the current Stripe state before changing any records.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLFormElement} form  The form whose payment attempt failed.
 	 * @param {Object}          error The confirmation or form submission error.

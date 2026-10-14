@@ -6,7 +6,7 @@
  * reviewed in the Spam tab, but they are kept out of everything else by default: entry lists,
  * counts, views, dynamic fields, form actions and so on.
  *
- * @since x.x
+ * @since 7.0
  *
  * @package Formidable
  */
@@ -21,7 +21,7 @@ class FrmSpamEntriesHelper {
 	 * "Spam" entry status, saved in the is_draft column.
 	 * "2" and "3" are reserved by the abandonment add-on.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var int
 	 */
@@ -30,7 +30,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Supports all-status queries, retention guards and final spam output escaping.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var int
 	 */
@@ -39,7 +39,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Save the submission as a spam entry and show the normal success response.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -48,7 +48,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Reject the submission and show the spam error message.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -57,7 +57,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * The spam source detected for each form submitted in this request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array<int, string>
 	 */
@@ -66,7 +66,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Detailed spam reasons for forms flagged in this request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array<int, string>
 	 */
@@ -75,7 +75,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Get active add-ons that do not support the spam entry status.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string[] The add-on names that need an update.
 	 */
@@ -105,7 +105,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Disable cleanup in older Pro builds that age manual spam from its creation date.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $days The configured retention period.
 	 *
@@ -122,7 +122,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Spam entries may only be stored when every active add-on supports them.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -137,7 +137,7 @@ class FrmSpamEntriesHelper {
 	 * Content checks are saved by default so a false positive can be recovered from the Spam tab.
 	 * This runs while the global settings load, so it must not translate anything.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string, string>
 	 */
@@ -159,7 +159,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Get the spam checks that can be turned off, with the global checkbox setting that turns each one on.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string, string> Setting names keyed by spam source.
 	 */
@@ -175,7 +175,7 @@ class FrmSpamEntriesHelper {
 	 * Get every spam check that can flag a submission, keyed by source.
 	 * Each source is an array with a label and its default handling.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -206,7 +206,7 @@ class FrmSpamEntriesHelper {
 		 * Allows adding spam checks that can be saved as spam entries.
 		 * A custom check flags a submission with FrmSpamEntriesHelper::maybe_flag_submission().
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param array<string, array{label: string, default: string}> $sources
 		 */
@@ -218,7 +218,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Sanitize the posted spam handling setting.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $handling Posted values keyed by source.
 	 *
@@ -246,7 +246,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Check if submissions flagged by a source should be saved as spam entries.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $source The spam source key.
 	 *
@@ -264,7 +264,7 @@ class FrmSpamEntriesHelper {
 		/**
 		 * Allows changing whether a spam submission is saved as a spam entry or rejected.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param bool   $should_save
 		 * @param string $source
@@ -275,7 +275,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Flag the current submission of a form as spam so the entry is saved with the spam status.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $form_id The submitted form ID.
 	 * @param string     $source  The spam source key.
@@ -300,7 +300,7 @@ class FrmSpamEntriesHelper {
 	 * Get the spam source flagged for the entry being created, if any.
 	 * Child entries (repeaters and embedded forms) inherit the flag of their parent form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values The values for the entry being created.
 	 *
@@ -321,7 +321,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Get the detailed reason for a flagged entry, including inherited parent flags.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values The values for the entry being created.
 	 *
@@ -342,7 +342,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Clear the spam flags for this request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -355,7 +355,7 @@ class FrmSpamEntriesHelper {
 	 * Get the spam status and its label, to add to the entry statuses.
 	 * It is added last, so a spam entry is never labelled as a draft, even when a filter leaves it out.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<int, string>
 	 */
@@ -366,7 +366,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Get a copy of a spam entry with every value escaped. Other entries are returned as they are.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $entry
 	 *
@@ -384,7 +384,7 @@ class FrmSpamEntriesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object|null $entry
 	 *
@@ -397,7 +397,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Get the label of the spam check that flagged an entry.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $entry
 	 *
@@ -430,7 +430,7 @@ class FrmSpamEntriesHelper {
 	 * Exclude spam entries from an frm_items query unless the query already checks the entry status,
 	 * or targets specific entries by ID, key or parent.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array|string $where  The where query.
 	 * @param string       $prefix The frm_items table alias, including the dot. An empty string when there is no alias.
@@ -457,7 +457,7 @@ class FrmSpamEntriesHelper {
 			/**
 			 * Allows including spam entries in an entry query that does not check the entry status.
 			 *
-			 * @since x.x
+			 * @since 7.0
 			 *
 			 * @param bool         $exclude Whether to exclude spam entries.
 			 * @param array|string $where   The where query.
@@ -494,7 +494,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Get the where group that excludes spam entries. Entries without a status are kept.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $prefix The frm_items table alias, including the dot.
 	 *
@@ -509,7 +509,7 @@ class FrmSpamEntriesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $where
 	 *
@@ -544,7 +544,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Check if a where condition selects specific entries by ID, key or parent.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $key   The where key, which may include a table alias and operator.
 	 * @param mixed      $value The where value.
@@ -579,7 +579,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Recognize deliberate spam or all-status selections without allowing an OR draft filter to bypass exclusion.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $where The entry query conditions.
 	 *
@@ -629,7 +629,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Check if a where query includes a column.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array    $where
 	 * @param string[] $columns
@@ -662,7 +662,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Escape every submitted value of a spam entry so no HTML from the submission reaches the page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $value
 	 *
@@ -677,7 +677,7 @@ class FrmSpamEntriesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $form_id A form ID, or 0 for all top level forms.
 	 *
@@ -702,7 +702,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Check whether an entry was manually marked as spam.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $entry The entry to check.
 	 *
@@ -718,7 +718,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Move a submitted entry to spam without triggering form actions.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $entry_id The entry being moderated.
 	 *
@@ -771,7 +771,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Change the status of an entry and of its child entries.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $entry_id
 	 * @param int|string $status
@@ -785,7 +785,7 @@ class FrmSpamEntriesHelper {
 	/**
 	 * Change parent and child statuses, reporting database failures.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $entry_id The parent entry ID.
 	 * @param int|string $status The requested status.
@@ -828,7 +828,7 @@ class FrmSpamEntriesHelper {
 	 * Move a spam entry and its child entries back to submitted.
 	 * Only rows that are still spam change, so a repeated request cannot restore the entry twice.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $entry_id The parent entry ID.
 	 *

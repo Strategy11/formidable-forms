@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Shares repeated builder option lists while keeping saved selections in the form.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmBuilderSelectHelper {
 
@@ -19,7 +19,7 @@ class FrmBuilderSelectHelper {
 	/**
 	 * Render a select, deferring unselected options only when its registry can be delivered.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array                    $attributes        Select attributes.
 	 * @param array                    $options           Option labels keyed by value, in display order.
@@ -82,7 +82,7 @@ class FrmBuilderSelectHelper {
 	/**
 	 * Get option lists collected during this request, including AJAX field batches.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,array>
 	 */
@@ -93,7 +93,7 @@ class FrmBuilderSelectHelper {
 	/**
 	 * Deliver the initial page's shared options alongside the builder script.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

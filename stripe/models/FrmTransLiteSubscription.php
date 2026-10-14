@@ -11,7 +11,7 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	/**
 	 * Check whether the current user can cancel a subscription at its gateway.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $sub_id The gateway subscription ID.
 	 * @param string $paysys The gateway that owns the subscription.

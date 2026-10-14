@@ -977,7 +977,7 @@ class FrmForm {
 	 * Get the id, name and key of published forms, with an optional description, for lightweight lists.
 	 * This skips loading and unserializing the options column for every form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $query Additional where conditions.
 	 * @param array $args  Query options, including include_description to also select the description.
@@ -1008,7 +1008,7 @@ class FrmForm {
 	/**
 	 * Add the where conditions shared by all published form queries.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $query        Where conditions, modified by reference.
 	 * @param string $inc_children Set to 'exclude' to skip child forms.

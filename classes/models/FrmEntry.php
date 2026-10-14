@@ -978,7 +978,7 @@ class FrmEntry {
 	 * Get the is_draft value for an updated entry.
 	 * A spam entry keeps its status unless the new status is set explicitly.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $id
 	 * @param array      $values

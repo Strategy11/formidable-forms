@@ -965,7 +965,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * Verify a site identifier is a match.
 	 *
-	 * @since x.x Moved the checks into FrmTransLiteConnectVerifyHelper.
+	 * @since 7.0 Moved the checks into FrmTransLiteConnectVerifyHelper.
 	 *
 	 * @return void
 	 */
@@ -981,7 +981,7 @@ class FrmStrpLiteConnectHelper {
 	 * same missing legacy Plan as "No such price: '...'" instead, even though the request used the
 	 * `plan` parameter, so both forms have to be recognized.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $message
 	 *

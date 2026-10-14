@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the Formidable field abilities for the WordPress Abilities API.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesFieldsController {
 
 	/**
 	 * Register the field abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -323,7 +323,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * List the fields on a form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -351,7 +351,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Create one field on a form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -391,7 +391,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Update one field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -447,7 +447,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Delete one field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -506,7 +506,7 @@ class FrmAbilitiesFieldsController {
 	 * detection, repeater child form creation, and validation as one created on
 	 * its own.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array    $field Raw field input.
 	 * @param stdClass $form  The form the field is created on.
@@ -555,7 +555,7 @@ class FrmAbilitiesFieldsController {
 	 * Without this, an alias like "dropdown" is stored verbatim and the field
 	 * renders no input on the frontend.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $field Raw field input, possibly containing a type key.
 	 *
@@ -588,7 +588,7 @@ class FrmAbilitiesFieldsController {
 	 * mapped into field_options, where Formidable stores it, because
 	 * FrmField::create() only writes real columns and would drop it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $prepared Prepared field data from FrmFieldsHelper::setup_new_vars().
 	 * @param array $field    Raw field input.
@@ -621,7 +621,7 @@ class FrmAbilitiesFieldsController {
 	 * requests never run it. Call the Pro model directly instead of relying on
 	 * the hook context.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $prepared Prepared field data.
 	 * @param int   $form_id  Parent form ID.
@@ -653,7 +653,7 @@ class FrmAbilitiesFieldsController {
 	 * builder. When the caller gives no explicit order, the field goes right
 	 * after the last field of its section and the fields that follow shift down.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array    $prepared Prepared field data.
 	 * @param array    $field    Raw field input.
@@ -701,7 +701,7 @@ class FrmAbilitiesFieldsController {
 	 * field_options.form_select. Without a valid form there, the field is stored
 	 * but cannot add or remove rows, so the write is rejected instead.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $type          Field type being written.
 	 * @param array  $field_options Complete field_options for the field.
@@ -738,7 +738,7 @@ class FrmAbilitiesFieldsController {
 	 * separate values. Without the flag, entry validation compares submissions
 	 * against the labels and rejects the values.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $prepared Prepared field data.
 	 * @param array $field    Raw field input.
@@ -772,7 +772,7 @@ class FrmAbilitiesFieldsController {
 	 * setting (conditional logic, calculations, validation messages, and the
 	 * rest). A key sent explicitly set to an empty value still clears it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $field      The stored field object.
 	 * @param array    $field_data Field data to update, possibly with a partial field_options array.
@@ -790,7 +790,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Check whether a field is on a form, directly or inside one of its repeaters.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass   $field   The field object.
 	 * @param int|string $form_id The form ID.
@@ -810,7 +810,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Delete the fields inside a repeater's child form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $field Repeater field.
 	 *
@@ -833,7 +833,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Build the response shape for one field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $field The field to describe.
 	 *
@@ -859,7 +859,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Build the error returned when no field matches the given ID.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return WP_Error
 	 */
@@ -870,7 +870,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Permission callback for list fields.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -883,7 +883,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Permission callback for create field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -896,7 +896,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Permission callback for update field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -909,7 +909,7 @@ class FrmAbilitiesFieldsController {
 	/**
 	 * Permission callback for delete field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *

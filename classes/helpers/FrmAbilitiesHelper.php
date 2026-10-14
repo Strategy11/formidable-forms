@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Used by the Formidable abilities and by the ones Pro and Views register, so
  * every domain answers with the same shapes whichever plugin owns it.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesHelper {
 
@@ -23,7 +23,7 @@ class FrmAbilitiesHelper {
 	 * registered first is serving the name, and a notice in the log helps nobody
 	 * because neither plugin is at fault.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $name Ability name, including the formidable-forms prefix.
 	 * @param array  $args Arguments accepted by wp_register_ability().
@@ -47,7 +47,7 @@ class FrmAbilitiesHelper {
 	 * is what lets an assistant avoid a destructive call it did not mean to
 	 * make.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param bool $readonly    Whether the ability only reads data.
 	 * @param bool $destructive Whether the ability can remove data.
@@ -78,7 +78,7 @@ class FrmAbilitiesHelper {
 	 * what the permission callbacks are checked against, so it has to happen
 	 * before any capability check.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -105,7 +105,7 @@ class FrmAbilitiesHelper {
 	 * are excluded, and the schema aliases the create abilities normalize are
 	 * appended.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -135,7 +135,7 @@ class FrmAbilitiesHelper {
 	 * The input schemas accept both casings because clients (LLMs especially)
 	 * send DESC as often as desc, but internally one consistent case is used.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -157,7 +157,7 @@ class FrmAbilitiesHelper {
 	 * SQL. The page size is capped: an ability is answering a language model,
 	 * and an unbounded page is a way to exhaust memory by accident.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -192,7 +192,7 @@ class FrmAbilitiesHelper {
 	 * and the client is then told the output was malformed rather than which
 	 * field was wrong.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param WP_Error $error The error to flatten.
 	 *
@@ -220,7 +220,7 @@ class FrmAbilitiesHelper {
 	/**
 	 * Build the error returned when an ability needs a plugin that is not active.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $plugin_name Display name of the plugin the ability needs, such as Formidable Forms Pro.
 	 *
@@ -241,7 +241,7 @@ class FrmAbilitiesHelper {
 	/**
 	 * Look up a form by id or key, for the abilities that accept either.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $id Form ID or form_key.
 	 *

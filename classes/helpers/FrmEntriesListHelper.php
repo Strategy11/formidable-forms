@@ -191,7 +191,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	/**
 	 * Spam entries are only listed in the Spam tab.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $s_query
 	 *
