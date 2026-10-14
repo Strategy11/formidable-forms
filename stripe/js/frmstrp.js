@@ -10,6 +10,7 @@
 	let isStripeLink = false;
 	let linkAuthenticationElementIsComplete = false;
 	let stripeLinkElementIsComplete = false;
+	let linkSubmitController = false;
 	let priceChangedTimer = 0;
 
 	const triggerCustomEvent = function( el, eventName, data ) {
@@ -114,7 +115,13 @@
 	function stripeLinkSubmit( object, meta ) {
 		object.classList.add( 'frm_trigger_event_on_submit', 'frm_ajax_submit' );
 
-		object.addEventListener( 'frmSubmitEvent', confirmPayment );
+		// Replace the previous listener even when validation did not trigger a submit event.
+		if ( linkSubmitController ) {
+			linkSubmitController.abort();
+		}
+
+		linkSubmitController = new AbortController();
+		object.addEventListener( 'frmSubmitEvent', confirmPayment, { once: true, signal: linkSubmitController.signal } );
 		running = 0;
 		submitForm();
 
