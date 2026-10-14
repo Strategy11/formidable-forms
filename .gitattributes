@@ -1,5 +1,6 @@
 # Items to ignore when downloading a zip
 
+.achecker.yml export-ignore
 .babelrc export-ignore
 .editorconfig export-ignore
 .eslintignore export-ignore
