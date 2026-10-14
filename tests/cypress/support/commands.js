@@ -67,12 +67,12 @@ Cypress.Commands.add( 'dismissInboxBanners', ( remainingAttempts = 5 ) => {
 	} );
 } );
 
-Cypress.Commands.add( 'createNewForm', () => {
+Cypress.Commands.add( 'createNewForm', ( { deleteExisting = true } = {} ) => {
 	cy.get( '#the-list' ).then( list => {
 		const hasTestForm = [ ...list[ 0 ].querySelectorAll( '.row-title' ) ]
 			.some( link => link.textContent.trim() === 'Test Form' );
 
-		if ( hasTestForm ) {
+		if ( deleteExisting && hasTestForm ) {
 			cy.deleteForm();
 			cy.createNewForm();
 			return;

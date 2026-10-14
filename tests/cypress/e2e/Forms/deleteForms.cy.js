@@ -19,17 +19,23 @@ describe( 'Deleting forms', () => {
 
 	it( 'should create multiple forms and bulk delete them', () => {
 		cy.emptyTrash();
-
-		cy.log( 'Record the published form count so later assertions allow for forms this test did not create, like the default Contact Us form' );
-		let baselinePublishedCount = '(0)';
-		cy.get( '.published > a .count' ).invoke( 'text' ).then( text => {
-			baselinePublishedCount = text;
-		} );
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
 
 		cy.log( 'Create 5 new forms' );
 		for ( let i = 0; i < 5; i++ ) {
-			cy.createNewForm();
+			cy.createNewForm( { deleteExisting: i === 0 } );
 		}
+		cy.emptyTrash();
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.get( '#the-list .row-title' ).filter( ( index, element ) => {
+			return element.textContent.trim() === 'Test Form';
+		} ).should( 'have.length', 5 );
+
+		cy.log( 'Record the published form count excluding the 5 test forms' );
+		let baselinePublishedCount = '(0)';
+		cy.get( '.published > a .count' ).invoke( 'text' ).then( text => {
+			baselinePublishedCount = `(${ parseInt( text.slice( 1, -1 ), 10 ) - 5 })`;
+		} );
 
 		cy.log( 'Bulk delete all 5 new forms' );
 		checkTestFormRows();
@@ -37,7 +43,7 @@ describe( 'Deleting forms', () => {
 		cy.log( 'Click on Bulk Actions and select the Move to Trash option' );
 		cy.get( '#bulk-action-selector-top' ).select( 'Move to Trash' );
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
-		cy.get( '.frm_updated_message' ).should( 'contain', 'forms moved to the Trash.' );
+		cy.get( '.frm_updated_message' ).should( 'contain', '5 forms moved to the Trash.' );
 
 		cy.log( 'Restore deleted forms and the redelete them' );
 		cy.get( '.subsubsub > .trash > a' ).should( 'contain', 'Trash' ).click();
