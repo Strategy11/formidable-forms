@@ -4,7 +4,7 @@ Tags: form builder, contact form, custom form, payment form, forms
 Requires at least: 6.3
 Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 6.35
+Stable tag: 7.0
 
 The drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and AI-built web applications.
 
@@ -29,7 +29,7 @@ Start from one of 300+ pre-built form templates, build a custom form from scratc
 
 Describe a contact form or quiz in a sentence and Formidable builds it. The AI form builder (Pro) turns a plain-text prompt into a complete, editable contact form, registration form, or quiz, with fields, validation, and layout already in place. Add an AI field inside any form to show a ChatGPT-generated response based on what a visitor typed, then reuse that text in confirmation messages, email notifications, or Formidable Views.
 
-For those who want to build more advanced forms with AI, the Formidable API add-on includes a Model Context Protocol (MCP) server. Claude, ChatGPT, Cursor, or any MCP-compatible client can create and edit real forms, fields, styles, and Views directly on your WordPress site from a chat prompt. No separate MCP adapter plugin or Composer setup is required.
+Formidable also includes built-in Model Context Protocol (MCP) support, free in the plugin. Claude, ChatGPT, Cursor, or any MCP-compatible client can create and edit forms, entries, styles, form actions, payments, and subscriptions directly on your WordPress site from a chat prompt. No separate MCP adapter plugin or Composer setup is required.
 
 = Payment Forms with Stripe, PayPal, Square, and More =
 
@@ -73,7 +73,7 @@ Formidable connects contact forms, registration forms, and payment forms to the 
 
 Formidable includes a built-in visual style editor, so contact forms, survey forms, and payment forms can match your brand without custom CSS. Adjust colors, fonts, layouts, and field styles in a few clicks.
 
-Multi-page forms with progress bars, save-and-continue, cascading dropdowns, digital signatures, and invisible spam protection (honeypot, Akismet, reCAPTCHA, hCaptcha, Cloudflare Turnstile) are all included. Address fields with Google autofill and geolocation are available in the free version. Every form is WCAG-compliant and accessible by default.
+Pro adds multi-page forms with progress bars, save-and-continue, cascading dropdowns, and digital signatures. Invisible spam protection (honeypot, Akismet, reCAPTCHA, hCaptcha, Cloudflare Turnstile) is included. Address fields are included in the free version, and Google address autofill and geolocation are available with the Geolocation add-on. Every form is WCAG-compliant and accessible by default.
 
 = A WordPress Form Plugin for Every Industry =
 
@@ -123,7 +123,7 @@ Formidable Forms is a WordPress plugin built by Steve and Steph Wells and the St
 
 = Formidable Forms vs. Gravity Forms, WPForms, JotForm, and Typeform =
 
-If you've compared WordPress form plugins, you've probably looked at Gravity Forms, WPForms, JotForm, or Typeform. This plugin's free version includes calculator forms, quiz forms, and Formidable Views, features some of those tools only offer as paid add-ons or leave out entirely. Form data stays in your own WordPress database instead of an external SaaS platform, and Formidable Pro adds an MCP server so AI clients like Claude and ChatGPT can build and edit forms directly on your site.
+If you've compared WordPress form plugins, you've probably looked at Gravity Forms, WPForms, JotForm, or Typeform. Formidable brings calculator forms, quiz forms, and front-end data display with Formidable Views into one plugin, so you don't need separate tools for each. Form data stays in your own WordPress database instead of an external SaaS platform, and built-in MCP support lets AI clients like Claude and ChatGPT build and edit forms directly on your site.
 
 = Formidable Branding Guidelines =
 
@@ -162,7 +162,7 @@ Go to the Formidable page and click "add new". Choose the Contact Us form templa
 Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new web form and insert it into the WordPress page. Save the page and your WP contact form is ready to collect and store leads. The contact form template gets you up and running fast.
 
 = Can I build forms with ChatGPT, Claude, or an AI agent? =
-Yes. The AI form builder in Formidable Pro turns a plain-text description into a working form, and you can add an AI field inside any form to show a ChatGPT-generated response based on submitted data. For developers, the Formidable API add-on includes an MCP server, so an MCP-compatible AI client such as Claude, ChatGPT, or Cursor can create and edit forms, fields, and Views directly on your site.
+Yes. The AI form builder in Formidable Pro turns a plain-text description into a working form, and you can add an AI field inside any form to show a ChatGPT-generated response based on submitted data. Built-in MCP support also lets an MCP-compatible AI client such as Claude, ChatGPT, or Cursor create and edit forms, entries, styles, form actions, payments, and subscriptions directly on your site.
 
 = Why isn't WordPress sending emails? =
 When you do not receive emails, try the following steps:
@@ -362,44 +362,70 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all Formidable Zapier Integrations (https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 7.0 =
+* New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
+* New: Suspected spam can now be saved for review instead of blocking submissions.
+* New: Entries can now be marked as spam or not spam, with details about failed spam checks.
+* New: Autocomplete settings are now available in Lite.
+* New: Validation errors now include a clickable summary that focuses the input needing correction.
+* New: Default validation messages now provide guidance for email addresses, URLs, phone numbers, and numbers.
+* New: Name and Address inputs now display more specific validation errors for missing parts.
+* New: Form settings now include a GDPR section.
+* New: Style classes can now be renamed in the visual styler.
+* New: Global Settings now warns before leaving with unsaved changes.
+* New: PayPal Commerce actions now support conditional logic.
+* New: Website/URL inputs now include an option to accept international domain names.
+* New: Clicking a section header in the builder now selects the whole section.
+* New: Keyboard navigation, screen reader support, and color contrast have been improved across admin pages.
+* New: Payment connection errors now explain when the selected gateway or mode needs to be connected.
+* New: A new frm_show_clickable_field_errors filter has been added for disabling the validation error summary.
+* New: New frm_before_entry_meta_change, frm_after_entry_meta_change, and frm_entry_meta_write_failed hooks have been added for tracking entry data changes.
+* New: New frm_prepare_other_input and frm_include_other_input hooks have been added for customizing Other option text boxes.
+* Performance: The builder now loads faster and uses less memory when editing large forms.
+* Performance: The form switcher, form templates page, and forms list now use faster database queries.
+* Fix: Stripe Link payments could not be retried after a failed payment.
+* Fix: Stripe Link payment descriptions could remain blank when buyers did not return after paying.
+* Fix: Stripe subscriptions could fail with a No such price error.
+* Fix: Stripe payment amounts would not refresh correctly after pricing changes.
+* Fix: The license status shown while connecting would be wrong.
+* Fix: Resetting styles would use the wrong defaults and leave Quick Settings colors unchanged.
+* Fix: Spam and form errors would reload the page instead of showing on the form when submitting with AJAX.
+* Fix: In Pro, custom validation errors would remain visible after correcting a value.
+* Fix: Single Product names and prices would not update immediately in the builder preview.
+* Fix: Selecting groups inside a section could unexpectedly clear other selections in the builder.
+* Fix: AJAX submission success messages would not receive focus for screen reader users.
+* Fix: In Pro, validation errors in repeaters would not correctly set aria-invalid.
+
 = 6.35 =
-* New: A range slider's Default Value setting is now split into separate Start Value and End Value inputs, one for each handle. Either one accepts a shortcode instead of a number, and both are kept within the field's minimum and maximum. A single handle slider keeps the one Default Value box it has always had.
-* New: Address field subfields can now be used in text calculations, in the same way name field subfields already could.
-* New: More than one Square action can now be added to a single form. Conditional logic on form actions decides which one runs, so the one per form limit that applies in Lite is lifted while Pro is active.
-* New: Dates in a CSV import are now read from many more formats. The other rows in the file, the date field's own format setting and the WordPress date format are all used to work out whether a value is day first or month first. Dash and dot separated dates continue to be read day first, and slash separated dates month first.
-* New: A new frm_jquery_ui_base_url filter has been added for changing the CDN that jQuery UI theme stylesheets and i18n scripts load from.
-* Performance: Forms with a lot of conditional logic now open faster in the form builder.
-* Fix: Settings that point at another field would lose their reference when a form was imported and the field they point at had not been imported yet. Conditional logic, lookup watching, quantity product fields, summary field exclusions, lookup values, dynamic field sources, time range linked dates and section membership are all remapped correctly now.
-* Fix: Lookup fields would keep pointing at the original form rather than the copy when a form was duplicated.
-* Fix: A read only calculated Number field using the Currency format would submit an empty value when it had both a prepend and an append box and a comma decimal separator.
-* Fix: Calculation details would get lost when a second set of calculations was merged in, which happens when there are multiple forms on a page, or when moving between pages of a form submitted with ajax.
-* Fix: The datepicker would load with no styling at all in WordPress 7.1, which updated jQuery UI to 1.14.2 and left the theme stylesheet returning a 404. Theme fields are now loaded from the Cloudflare CDN instead of from Google.
-* Fix: Date styler settings would only partly apply to the Flatpickr calendar, leaving a blue border on the selected date and a blue date range whatever colors were set.
-* Fix: Flatpickr would hand phones the browser's own date input, which silently dropped blackout dates, day of the week restrictions and date ranges. The calendar is now used on mobile as well.
-* Fix: A locale with no matching Flatpickr localization file would request a file that does not exist and log a 404.
-* Fix: The slider field background would not match the default value in the form builder preview, and would jump to the correct value when editing an entry instead of showing it on load.
-* Fix: The See more dropdown on the applications page would not open when Bootstrap 5 was loaded.
-* Fix: Nested conditional shortcodes would close on the first closing tag rather than their own, so a stray [/if] or [/foreach] tag could show up in the output.
-* Fix: An [else] shortcode placed inside a nested condition would be treated as belonging to the outer condition, so the wrong content was displayed.
+* Security: More strict sanitizing is now applied to entry key values before it gets used in the HTML of a form.
+* Security: The value that records who last saved an entry is now always set from the current user, not allowing for any custom values unless importing.
+* New: The shortcodes list now offers show options for more types, and long names are truncated so the list stays readable.
+* New: The Processor column on the Payments list page can now be sorted.
+* New: A message is now shown on the Payments list page after bulk deleting.
+* New: The required email input used for Stripe Link payments will now display a required asterisk like other required inputs.
+* New: A new frm_builder_after_field_label hook has been added for adding content after a label in the builder.
+* New: A new frm_payment_user_id filter has been added for setting which user a payment belongs to.
+* Performance: The builder now loads much faster when there are a lot of fields. Fields loaded with AJAX are now loaded in asynchronous batches.
+* Performance: The way the denylist is checked has been optimized, so spam checks are much faster when a large amount of text is submitted.
+* Performance: Pricing updates for Stripe payments are now debounced, and are skipped on pages with no payment intents.
+* Fix: A subscription would not get cancelled after it reached its Recurring Payment Limit.
+* Fix: Payment status actions could run twice for the same Stripe Link payment.
+* Fix: Multiple customer objects would get created for Stripe Link recurring payments.
+* Fix: Subscription plan details would not update after changing the trial period.
+* Fix: A Stripe Link redirect would use the URL from Form settings instead of the URL in the confirmation action that ran.
+* Fix: Square payments would not correctly follow conditional logic when two Square actions were used.
+* Fix: The wrong amount would get used when verifying a buyer with Square.
+* Fix: Connecting and disconnecting Square would go by whichever mode was active instead of the mode that was selected.
+* Fix: In Pro, the dropdown on a style card would not populate, leaving no way to delete a style or set one as the default.
+* Fix: In Pro, a section added after a partially sized field would move into the previous row after a reload.
+* Fix: Adding the frm_first layout class would not start a new row for a group.
+* Fix: A field id used in a description would not get switched when a form was duplicated or imported.
+* Fix: Creating a field with a missing or invalid options value would raise a PHP warning and store null.
+* Fix: The Embeds column would only update when a post was inserted, so it went stale when a page was updated or deleted.
+* The old hard coded widths for the frm_grid_2 through frm_grid_10 classes have been removed from the generated stylesheets, helping to reduce the file size of styles used on the front end.
 
-= 6.34 =
-* New: Entry searches will now show results for matches in repeater entry data, and in embedded form entry data.
-* New: Options for inserting shortcodes into a Math calculation are now filtered to exclude field types that do not work in math calculations.
-* New: Scale fields now support before input and after input settings for easily placing descriptions for the left and right sides of a scale field.
-* New: The icons to toggle password visibility now use more user friendly alt text.
-* New: Datepicker styling for Today has been updated to make it easier to tell apart Today from a selected date.
-* Fix: File upload fields would incorrectly use the same HTML ids in some cases, resulting in invalid HTML.
-* Fix: Range sliders would not initialize properly in cases where the field is hidden on page load.
-* Fix: The "Show More" button in a rootline element would not work after a mobile viewport resize event, getting stuck in a disabled state.
-* Fix: Date range fields would incorrectly show both range values in the end date field when selecting the range using the end date field.
-* Fix: Temporary uploaded files would not always immediately change chmod values, allowing direct access to the file incorrectly.
-* Fix: Lookup fields would not always correctly map new field id settings in cases where an imported Lookup field is imported before the field it is watching.
-
-= 6.33.1 =
-* Fix: Text field lookup requests for text fields that watch lookup fields would incorrectly fail validation and get blocked.
-
-See changelog for all versions (https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
+[See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.35 =
-This version fixes a datepicker styling bug on WordPress 7.1 and several calculation and field-reference bugs. Upgrade recommended.
+= 7.0 =
+This version fixes security-related bugs. Upgrade immediately.
