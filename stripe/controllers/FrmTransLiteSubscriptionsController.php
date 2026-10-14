@@ -95,7 +95,6 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 */
 	public static function cancel_subscription() {
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
-		FrmAppHelper::permission_check( 'frm_edit_entries' );
 
 		$canceled = false;
 		$sub_id   = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
@@ -155,7 +154,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * dispatch without duplicating it or going through the AJAX/wp_die()
 	 * request flow.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $subscription The subscription to cancel.
 	 *
@@ -164,6 +163,14 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 *               canceled is true or none was given. debug_id is a gateway debug id, when given.
 	 */
 	public static function cancel_subscription_for_gateway( $subscription ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+		if ( ! FrmTransLiteSubscription::current_user_can_cancel( $subscription->sub_id, $subscription->paysys ) ) {
+			return array(
+				'canceled' => false,
+				'reason'   => FrmAppHelper::get_settings()->admin_permission,
+				'debug_id' => '',
+			);
+		}
+
 		$canceled = false;
 		$reason   = '';
 		$debug_id = '';

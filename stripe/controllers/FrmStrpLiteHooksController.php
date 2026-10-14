@@ -63,7 +63,7 @@ class FrmStrpLiteHooksController {
 	 * Used to keep FrmStrpLiteConnectHelper out of ordinary page views. The helper still runs
 	 * its own narrower checks, this only decides whether it is worth loading at all.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */

@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.35';
+	public static $plug_version = '7.0';
 
 	/**
 	 * @var bool
@@ -1371,7 +1371,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.02
 	 *
-	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since x.x.
+	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since 7.0.
 	 * @param array  $atts
 	 *
 	 * @return string|null
@@ -1410,7 +1410,7 @@ class FrmAppHelper {
 		$icon = implode( ' ', $icon_classes );
 
 		if ( $is_font_icon && $icon_classes ) {
-			_deprecated_argument( __METHOD__, 'x.x', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
+			_deprecated_argument( __METHOD__, '7.0', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
 		}
 
 		// Replace icons that have been removed or renamed.
@@ -1424,7 +1424,7 @@ class FrmAppHelper {
 		$icon_name = $icon_classes ? $icon_classes[0] : '';
 
 		if ( isset( $deprecated[ $icon_name ] ) ) {
-			_deprecated_argument( __METHOD__, 'x.x', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
+			_deprecated_argument( __METHOD__, '7.0', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
 
 			$class = str_replace( $icon_name, $deprecated[ $icon_name ], $class );
 			$icon  = str_replace( $icon_name, $deprecated[ $icon_name ], $icon );
@@ -4203,7 +4203,7 @@ class FrmAppHelper {
 	 * Returns whether or not the clickable error summary should receive focus when it's
 	 * active for a form (default true). No effect when the summary isn't active.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass|null $form
 	 *
@@ -4224,7 +4224,7 @@ class FrmAppHelper {
 	 * summary wins and a _doing_it_wrong() notice is triggered rather than silently
 	 * picking one.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $form
 	 *
@@ -4238,7 +4238,7 @@ class FrmAppHelper {
 			_doing_it_wrong(
 				__METHOD__,
 				esc_html__( 'frm_focus_first_error and frm_focus_error_summary cannot both resolve true for the same form. The error summary takes priority.', 'formidable' ),
-				'x.x'
+				'7.0'
 			);
 			$focus_first_error = false;
 		}
@@ -5047,7 +5047,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
-		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com/' );
 
 		if ( ! $file_is_in_expected_s3_bucket ) {
 			return false;
@@ -5057,6 +5057,12 @@ class FrmAppHelper {
 
 		if ( ! is_array( $parsed ) ) {
 			// URL is malformed.
+			return false;
+		}
+
+		$path = rawurldecode( $parsed['path'] );
+
+		if ( str_contains( $path, '\\' ) || preg_match( '#(?:^|/)\.\.?(?:/|$)#', $path ) ) {
 			return false;
 		}
 
@@ -5169,7 +5175,7 @@ class FrmAppHelper {
 	 * Tooltip strings deferred on the form builder page and its ajax field-load request,
 	 * keyed for `frm_admin_js.tooltips`.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array<string,string>
 	 */
@@ -5219,7 +5225,7 @@ class FrmAppHelper {
 	 * merged last would win. A hash gives identical text the same key everywhere, which makes
 	 * the client-side merge safe to repeat and dedupes repeated strings for free.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $tooltip_text Tooltip text.
 	 *
@@ -5244,7 +5250,7 @@ class FrmAppHelper {
 	 * request never sends `frm_action`. Other builder ajax requests are left out on purpose
 	 * since nothing ships their collected strings to the page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -5259,7 +5265,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the tooltip strings collected by `get_tooltip_attr()` so far in this request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,string> Tooltip text keyed by its `data-tip-key`.
 	 */
@@ -5271,7 +5277,7 @@ class FrmAppHelper {
 	 * Prints the tooltip strings collected by `get_tooltip_attr()` during this page's render,
 	 * merged into the already-localized `frm_admin_js.tooltips` object.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

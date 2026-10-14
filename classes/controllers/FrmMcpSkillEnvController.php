@@ -6,13 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Create and manage credentials for the Formidable MCP skill's HTTP helper.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpSkillEnvController {
 	/**
 	 * Marks skill downloads so only their passwords get the MCP scope and revoke controls.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -23,7 +23,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Register the download and the restrictions for issued passwords.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -38,7 +38,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Create a fresh password and send its only plaintext copy as an env file.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook admin_post_frm_mcp_download_env
 	 *
 	 * @return void
@@ -100,7 +100,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Revoke one of this user's Formidable MCP skill passwords.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook admin_post_frm_mcp_revoke_skill_password
 	 *
 	 * @return void
@@ -133,7 +133,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Check the action-specific POST nonce.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $action Download or revoke action.
 	 *
@@ -150,7 +150,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * List only the current user's passwords created by this download flow.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $user_id WordPress user ID.
 	 *
@@ -181,7 +181,7 @@ class FrmMcpSkillEnvController {
 	 * WordPress records the first use of an Application Password right away, so
 	 * a value here means an assistant has reached the site with the env file.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<array> $passwords Skill passwords from get_passwords().
 	 *
@@ -200,7 +200,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Describe whether an assistant has connected with a downloaded env file.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $last_used Timestamp of the latest skill password use, or 0.
 	 *
@@ -221,7 +221,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Report whether an assistant has connected, so the settings page can check off the last step.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook wp_ajax_frm_mcp_connection_status
 	 *
 	 * @return void
@@ -243,7 +243,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Block these passwords on XML-RPC and other non-REST transports.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook wp_authenticate_application_password_errors
 	 *
 	 * @param WP_Error $error    Authentication errors to add to.
@@ -266,7 +266,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Limit these passwords to the Formidable MCP route and abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook rest_pre_dispatch
 	 *
 	 * @param mixed                         $result  Earlier dispatch result.
@@ -302,7 +302,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Allow protocol setup and Formidable ability calls for a scoped password.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $body Decoded JSON-RPC request or batch.
 	 *
@@ -349,7 +349,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Format values as quoted shell assignments for the skill's env loader.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $url      Base site URL.
 	 * @param string $username WordPress login name.
@@ -367,7 +367,7 @@ class FrmMcpSkillEnvController {
 	/**
 	 * Quote a value for a POSIX shell file sourced by the skill.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $value Assignment value.
 	 *

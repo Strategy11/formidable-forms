@@ -74,7 +74,7 @@
 	/**
 	 * Copy an MCP setup instruction and confirm the result on its button.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLButtonElement} button Copy button.
 	 * @return {void}
@@ -126,7 +126,7 @@
 	 * Reads the checked radio rather than the event, so the prompt always matches
 	 * what is selected, however the selection happened.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {void}
 	 */
@@ -141,7 +141,7 @@
 	/**
 	 * Check off an MCP setup step.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string} stepKey Step key, the suffix of the step's frm_mcp_step_ id.
 	 * @return {void}
@@ -161,7 +161,7 @@
 	 *
 	 * Stops after ten minutes, and skips checks while the tab is hidden.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {void}
 	 */

@@ -98,7 +98,7 @@ class FrmFieldUrl extends FrmFieldType {
 	/**
 	 * Gets the regular expression used to validate the url format.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string
 	 */
@@ -115,7 +115,7 @@ class FrmFieldUrl extends FrmFieldType {
 	/**
 	 * Checks if the field accepts internationalized domain names.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -126,7 +126,7 @@ class FrmFieldUrl extends FrmFieldType {
 	/**
 	 * Flags the input so the javascript validation accepts internationalized domain names too.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $args       Field arguments.
 	 * @param string $input_html The HTML attributes for the input.

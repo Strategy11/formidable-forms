@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * create_server() signature this plugin calls. Asking that cannot go stale the
  * way a range does, on either end, so the version is kept for notices only.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpCompat {
 
@@ -146,7 +146,7 @@ class FrmMcpCompat {
 	 * off through the MCP setting, which is the one lever a site owner has when
 	 * the vendored code is the thing causing trouble.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool True when the adapter is loaded and looks compatible.
 	 */
@@ -177,7 +177,7 @@ class FrmMcpCompat {
 	 * plugin was built without lib/vendor, which should turn MCP off instead of
 	 * taking the site down.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -209,7 +209,7 @@ class FrmMcpCompat {
 	/**
 	 * Check that the loaded adapter is one this plugin can drive.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -220,7 +220,7 @@ class FrmMcpCompat {
 	/**
 	 * Explain why the adapter cannot be used, for a notice or a log line.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string Empty string when the adapter is usable.
 	 */
@@ -235,7 +235,7 @@ class FrmMcpCompat {
 	/**
 	 * Work out whether anything about the loaded adapter blocks MCP.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string Empty string when nothing blocks it.
 	 */
@@ -276,7 +276,7 @@ class FrmMcpCompat {
 	/**
 	 * List the functions in REQUIRED_ABILITY_FUNCTIONS this site does not have.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array Function names that are expected but absent.
 	 */
@@ -295,7 +295,7 @@ class FrmMcpCompat {
 	/**
 	 * List the classes in REQUIRED_CLASSES that the loaded adapter does not have.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array Class names that are expected but absent.
 	 */
@@ -319,7 +319,7 @@ class FrmMcpCompat {
 	 * wrong values. Both the arity and the parameter names are checked, since
 	 * this is what stands in for the version range the plugin used to gate on.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string Empty string when the signature accepts the call.
 	 */
@@ -375,7 +375,7 @@ class FrmMcpCompat {
 	 * it. To identify a copy for certain, read the wordpress/mcp-adapter entry
 	 * in the composer/installed.json of the vendor tree loaded_from() points into.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string Empty string when no adapter is loaded, or it has no version constant.
 	 */
@@ -392,7 +392,7 @@ class FrmMcpCompat {
 	/**
 	 * Get the file the loaded adapter class came from.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string Empty string when no adapter is loaded, or the file is unknown.
 	 */
@@ -419,7 +419,7 @@ class FrmMcpCompat {
 	 * explains why a working adapter sits in lib/vendor while a different one
 	 * is running.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -442,7 +442,7 @@ class FrmMcpCompat {
 	 * administrator can act on, since it is what they would deactivate or
 	 * update to change which copy wins.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return string Empty string when the adapter is not inside a plugin.
 	 */
@@ -481,7 +481,7 @@ class FrmMcpCompat {
 	 * Only needed by tests, which move the adapter in and out of the checks
 	 * within one process.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

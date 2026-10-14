@@ -7,7 +7,7 @@ class FrmStrpLiteEventsController {
 	/**
 	 * Whether the current event belongs to a local payment or subscription.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var bool
 	 */
@@ -41,7 +41,7 @@ class FrmStrpLiteEventsController {
 	/**
 	 * The Stripe mode the event being handled was polled from.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var string
 	 */
@@ -629,7 +629,7 @@ class FrmStrpLiteEventsController {
 	 * FrmStrpLiteLinkController fills it in when the buyer returns to the return URL, but a buyer who never
 	 * returns leaves this webhook as the only place it can happen.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $payment The payment row for this event.
 	 *

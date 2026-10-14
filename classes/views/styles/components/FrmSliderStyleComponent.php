@@ -82,7 +82,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * was already saved above the maximum still has to be reachable, otherwise the slider would sit
 	 * at a different value than the one shown in the text box beside it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string     $unit   The unit of measurement, for instance 'px', 'em' or '%'.
 	 * @param float|null $number The value about to be shown, or null when the value is not a number.
@@ -102,7 +102,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * Print a number the way an HTML attribute needs it, without a trailing run of zeros.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param float $number The number to print.
 	 *
@@ -117,7 +117,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * A range snaps its value to the step, so '1.5em' on the default step of 1 would move the
 	 * handle to 2. Whole numbers keep stepping by one so the arrow keys stay useful.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param float $number The value about to be shown.
 	 *
@@ -138,7 +138,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * Get the number at the start of a style value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed $value The value to read, for instance '10px', 12.5 or 'auto'.
 	 *
@@ -155,7 +155,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * Get the accessible label describing one part of a multi part slider.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $type The slider part, for instance 'top' or 'left'.
 	 *
@@ -179,7 +179,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * The max, the printed value and the disabled state all follow the unit that is currently selected,
 	 * so the range never offers a value the unit does not allow.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $label Accessible label describing what this slider controls.
 	 * @param mixed  $value The current value. It may carry a unit ('10px') or be a keyword ('auto').
@@ -265,7 +265,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * Whether a unit represents an actual measurement (has a numeric position on the track),
 	 * as opposed to a keyword like 'auto' or the unset "" state.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $unit The unit to check.
 	 *
@@ -281,7 +281,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * already says so, and the text box is disabled alongside the range, so it is left blank rather
 	 * than echoing the keyword or coercing it into a misleading 0.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed  $value The raw value, for instance '10px', 12.5 or 'auto'.
 	 * @param string $unit  The unit of measurement this value was detected to have.
@@ -298,7 +298,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * enabled - a draggable-looking track a visitor cannot actually drag - until the unit dropdown
 	 * is touched once and the matching JS handler adds these same classes itself.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $unit The unit of measurement.
 	 *
@@ -319,7 +319,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * set via aria-label instead of the option's own text, which is otherwise silent to a screen
 	 * reader landing on it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $unit The unit of measurement, e.g. 'px' or ''.
 	 *
@@ -374,7 +374,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * never receive focus, so a template deciding whether a <label for="..."> is safe to point at
 	 * it needs this rather than assuming the field always has a live value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $value Raw field value, e.g. '10px', '12.5' or 'auto'.
 	 *
@@ -387,7 +387,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * Print a slider label's target attributes, linking enabled value inputs.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $style    The style containing the saved values in post_content.
 	 * @param string $key      The style setting key.
@@ -409,7 +409,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	/**
 	 * Print a style item heading for a slider value input.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $style    The style containing the saved values in post_content.
 	 * @param string $key      The style setting key.

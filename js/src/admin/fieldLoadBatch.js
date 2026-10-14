@@ -7,7 +7,7 @@ const FIELD_RENDER_BUDGET = 8;
 /**
  * Separate the network batch size from the amount of synchronous browser work.
  *
- * @since x.x
+ * @since 7.0
  * @param {Array}    fields          The fields returned by one request, in insertion order.
  * @param {Function} renderField     Inserts a field and returns its initialization data.
  * @param {Function} initializeSlice Initializes all fields inserted since the last yield.

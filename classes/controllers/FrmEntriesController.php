@@ -686,7 +686,7 @@ class FrmEntriesController {
 	/**
 	 * Back End CRUD.
 	 *
-	 * @since x.x Added the $message param.
+	 * @since 7.0 Added the $message param.
 	 *
 	 * @param int    $id      The entry ID. The id param in the URL is used when empty.
 	 * @param string $message A success message shown above the entry.

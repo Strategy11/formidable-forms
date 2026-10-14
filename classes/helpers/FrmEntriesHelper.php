@@ -24,7 +24,7 @@ class FrmEntriesHelper {
 	const DRAFT_ENTRY_STATUS = 1;
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 */
 	const SPAM_ENTRY_STATUS = 4;
 

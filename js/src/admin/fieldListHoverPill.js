@@ -4,7 +4,7 @@
  * One shared element slides to whichever field button is hovered. The per-button hover in
  * _insert-fields.scss remains as the no-JS fallback.
  *
- * @since x.x
+ * @since 7.0
  */
 
 const PILL_CLASS = 'frm-insert-fields-hover';
@@ -37,7 +37,7 @@ const ANIMATING_GRACE = 60;
  *
  * Checked live rather than cached, since the CSS media query it mirrors can change mid-session.
  *
- * @since x.x
+ * @since 7.0
  *
  * @return {boolean} True if reduced motion is preferred.
  */
@@ -51,7 +51,7 @@ function prefersReducedMotion() {
  * Basic, Pricing and Advanced are separate lists, and each needs its own pill because positions
  * are measured against the list the button sits in.
  *
- * @since x.x
+ * @since 7.0
  *
  * @return {void}
  */
@@ -62,7 +62,7 @@ export function initFieldListHoverPill() {
 /**
  * Adds a pill to a single field list.
  *
- * @since x.x
+ * @since 7.0
  *
  * @param {HTMLElement} list The field list.
  * @return {void}

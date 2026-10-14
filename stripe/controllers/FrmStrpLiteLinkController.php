@@ -185,7 +185,7 @@ class FrmStrpLiteLinkController {
 	 * Test Mode add-on overrides the mode would otherwise be looked up with the site's
 	 * configured mode, and Stripe would report that the intent does not exist.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $payment The payment row for the intent being returned to.
 	 *
@@ -487,7 +487,7 @@ class FrmStrpLiteLinkController {
 	 * Verify a payment intent or setup intent client secret is in the POST data and is valid.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
-	 * @since x.x Picks the posted intent that belongs to the running action instead of the first one.
+	 * @since 7.0 Picks the posted intent that belongs to the running action instead of the first one.
 	 *
 	 * @param int|string   $form_id
 	 * @param WP_Post      $action       The payment action being verified.
@@ -641,7 +641,7 @@ class FrmStrpLiteLinkController {
 	 *
 	 * Use the recorded action when available. Older rows or deleted actions fall back to the form action.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object   $payment
 	 * @param stdClass $entry
@@ -665,7 +665,7 @@ class FrmStrpLiteLinkController {
 	 * earlier attempt can still be listed in the intent's charges. The intent's own status says
 	 * whether money has actually moved, so check that instead of whether any charge exists at all.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $intent
 	 *
@@ -680,7 +680,7 @@ class FrmStrpLiteLinkController {
 	 * The intent is created when the form loads, before there is an entry to read shortcode values from,
 	 * so the description can only be filled in once the payment is confirmed.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string           $intent_id
 	 * @param stdClass|WP_Post $action

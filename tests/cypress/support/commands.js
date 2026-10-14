@@ -68,15 +68,28 @@ Cypress.Commands.add( 'dismissInboxBanners', ( remainingAttempts = 5 ) => {
 } );
 
 Cypress.Commands.add( 'createNewForm', () => {
-	cy.log( 'Create a blank form' );
-	cy.contains( '.frm_nav_bar .button-primary', 'Add New' ).click();
-	cy.get( '.frm-list-grid-layout #frm-form-templates-create-form' ).should( 'contain', 'Create a blank form' ).click();
-	cy.get( '#frm_submit_side_top', { timeout: 5000 } ).should( 'contain', 'Save' ).click();
-	cy.get( '#frm-form-templates-modal' ).should( 'exist' );
-	cy.get( '.frm-modal-title' ).should( 'contain', 'Name your form' );
-	cy.get( '#frm_new_form_name_input' ).type( 'Test Form' );
-	cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
-	cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
+	cy.get( '#the-list' ).then( list => {
+		const hasTestForm = [ ...list[ 0 ].querySelectorAll( '.row-title' ) ]
+			.some( link => link.textContent.trim() === 'Test Form' );
+
+		if ( hasTestForm ) {
+			cy.deleteForm();
+			cy.createNewForm();
+			return;
+		}
+
+		cy.log( 'Create a blank form' );
+		cy.contains( '.frm_nav_bar .button-primary', 'Add New' ).click();
+		cy.get( '.frm-list-grid-layout #frm-form-templates-create-form' ).should( 'contain', 'Create a blank form' ).click();
+		cy.get( '#frm_submit_side_top', { timeout: 5000 } ).should( 'contain', 'Save' ).click();
+		cy.get( '#frm-form-templates-modal' ).should( 'exist' );
+		cy.get( '.frm-modal-title' ).should( 'contain', 'Name your form' );
+		cy.get( '#frm_new_form_name_input' ).type( 'Test Form' );
+		cy.intercept( 'POST', '**/wp-admin/admin.php*' ).as( 'saveNewForm' );
+		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
+		cy.wait( '@saveNewForm' );
+		cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
+	} );
 } );
 
 /**

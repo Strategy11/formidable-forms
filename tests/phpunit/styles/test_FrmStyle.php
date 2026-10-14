@@ -294,8 +294,7 @@ class test_FrmStyle extends FrmUnitTest {
 	public function test_save_settings_stores_padded_timestamp_version() {
 		$before = gmdate( 'YmdHis' );
 		( new FrmStyle() )->save_settings();
-		$after = gmdate( 'YmdHis' );
-
+		$after   = gmdate( 'YmdHis' );
 		$version = get_option( 'frm_last_style_update' );
 
 		$this->assertMatchesRegularExpression( '/^\d{14}$/', $version );

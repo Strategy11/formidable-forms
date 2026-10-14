@@ -229,18 +229,23 @@ class FrmDashboardHelper {
 			$upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 		}
 
-		return array(
-			array(
+		$buttons      = array();
+		$connect_link = FrmAddonsController::connect_link();
+
+		if ( $connect_link ) {
+			$buttons[] = array(
 				'label'   => __( 'Connect Account', 'formidable' ),
-				'link'    => FrmAddonsController::connect_link(),
+				'link'    => $connect_link,
 				'classes' => 'frm-button-primary frm-show-unauthorized',
-			),
-			array(
-				'label'   => $cta_text,
-				'link'    => $upgrade_link,
-				'classes' => 'frm-button-secondary frm-show-unauthorized',
-			),
+			);
+		}
+
+		$buttons[] = array(
+			'label'   => $cta_text,
+			'link'    => $upgrade_link,
+			'classes' => 'frm-button-secondary frm-show-unauthorized',
 		);
+		return $buttons;
 	}
 
 	/**

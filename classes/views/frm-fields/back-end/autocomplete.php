@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 /**
- * @since x.x This was moved from Pro.
+ * @since 7.0 This was moved from Pro.
  *
  * @var array $field
  */
@@ -16,7 +16,7 @@ $autocomplete_options = $field_obj->autocomplete_options();
  * Allows modifying the list of autocomplete attribute options.
  *
  * @since 5.4.1 This was added in Pro.
- * @since x.x   This was moved to Lite.
+ * @since 7.0   This was moved to Lite.
  *
  * @param array $autocomplete_options The list of autocomplete attribute options.
  * @param array $field                The form field.

@@ -172,7 +172,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 		 * The message is printed before the license is known, so it would otherwise
 		 * keep showing the Lite copy until the page is reloaded.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param {Object} msg The response from the authorize request.
 		 * @return {void}
@@ -1107,7 +1107,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Prepare one sorting list without searching for it again in the document.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {HTMLElement} list The list containing draggable fields or field groups.
 	 * @return {void}
 	 */
@@ -1124,7 +1124,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Make a list droppable once it scrolls near the visible part of the builder.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} list The list that accepts dropped fields.
 	 * @return {void}
@@ -1136,7 +1136,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Make a field or field group draggable once it scrolls near the visible part of the builder.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement}      draggable The field or field group to drag.
 	 * @param {string|undefined} handle    The selector for the drag handle, if the whole element should not start a drag.
@@ -1153,7 +1153,7 @@ window.frmAdminBuildJS = function() {
 	 * as its element comes within a screen of the visible field list instead, and destroyed
 	 * again once it scrolls away, so the widget count follows what is on screen.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} element The element to make draggable or droppable.
 	 * @param {Function}    attach  Attaches the widget to the element.
@@ -1179,7 +1179,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {IntersectionObserverEntry[]} entries The elements that moved into or out of range.
 	 * @return {void}
@@ -1229,7 +1229,7 @@ window.frmAdminBuildJS = function() {
 	 * Observing an element again reports where it is now, so anything that scrolled back
 	 * into view keeps its widget.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {void}
 	 */
@@ -1244,7 +1244,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} element
 	 * @return {boolean} True if the element has a live draggable or droppable widget.
@@ -1254,7 +1254,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} element
 	 * @return {void}
@@ -2705,7 +2705,7 @@ window.frmAdminBuildJS = function() {
 	 * Remove spinners that leave the viewport so their animations do not keep running offscreen.
 	 * The placeholder holds the spinner's space, so adding or removing it does not move fields.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {void}
 	 */
@@ -2720,7 +2720,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {IntersectionObserverEntry[]} entries The placeholders that moved into or out of view.
 	 * @return {void}
@@ -2839,7 +2839,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Release a queue slot only after its fields and their controls are ready.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @return {void}
 	 */
 	function completeFieldLoadRequest() {
@@ -2850,7 +2850,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Keep failed placeholders claimed so they are not automatically requested again.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {string[]} fieldIds The fields belonging to the failed request.
 	 * @return {void}
 	 */
@@ -2902,7 +2902,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Replace one placeholder and prepare its builder interactions.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {Array} entry The field ID and its rendered HTML and type.
 	 * @return {Object|null} The inserted field, or null if its placeholder was deleted.
 	 */
@@ -2936,7 +2936,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Prepare deferred settings before selection or another interaction reads their inputs.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {string} fieldId Numeric field ID.
 	 * @return {HTMLElement|null} The field settings panel, if the field has loaded.
 	 */
@@ -2947,7 +2947,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Resolve shared markup attributes for a field preview or its newly inserted settings.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {HTMLElement} element The inserted preview or settings panel.
 	 * @return {void}
 	 */
@@ -2960,7 +2960,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Prepare settings before delegated preview handlers read or modify them.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {Event} event The preview interaction.
 	 * @return {void}
 	 */
@@ -2974,7 +2974,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Stop placeholder mouse events before delegated selection and hover handlers run.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {MouseEvent} event The interaction inside the builder fields container.
 	 * @return {void}
 	 */
@@ -2996,7 +2996,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Initialize only the fields inserted in this slice before yielding to user input.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {Array} fields The inserted fields, including null for deleted placeholders.
 	 * @return {void}
 	 */
@@ -4464,7 +4464,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Create the dialog once, either during idle time or on its first click.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @return {jQuery|boolean} The dialog, or false when its markup is absent.
 	 */
 	function initializeBulkOptionsOverlay() {
@@ -4477,7 +4477,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Wait for page assets and field rendering before scheduling optional dialog work.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @return {void}
 	 */
 	function scheduleBulkOptionsOverlay() {
@@ -4843,7 +4843,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Add switcher links after the menu is opened, yielding between batches.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {void}
 	 */
@@ -6115,7 +6115,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Gets all fields removed by a deletion, including section children and related fields.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string[]} fieldIds The selected field IDs.
 	 * @return {string[]} The complete list of field IDs to delete.
@@ -6284,7 +6284,7 @@ window.frmAdminBuildJS = function() {
 	 * rows container (#frm_logic_row_{id}), the clicked element, the logic type ("field" or
 	 * "action") and the ID of the field or form action the logic belongs to.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string}           eventName          "frm_logic_row_added" or "frm_logic_row_removed".
 	 * @param {HTMLElement}      row                The condition row. It is detached from the page once removed.
@@ -6311,7 +6311,7 @@ window.frmAdminBuildJS = function() {
 	 * The new row is the container's last child. A ".frm_logic_row:last-child" query would find the
 	 * last row of the first group instead when an add-on wraps rows in groups.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} logicRowsContainer The element that holds the condition rows.
 	 * @return {HTMLElement|null} The new row.
@@ -7244,7 +7244,7 @@ window.frmAdminBuildJS = function() {
 	 * PHP-side logic so a comma-decimal locale (e.g. EUR) parses correctly instead
 	 * of producing NaN.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string|number} price    Raw price value.
 	 * @param {Object}        currency Currency settings object.
@@ -7287,7 +7287,7 @@ window.frmAdminBuildJS = function() {
 	 * Format a product price value for display in the builder preview using the
 	 * currency settings from frm_admin_js. Mirrors the logic in FrmCurrencyHelper::format_price().
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string|number} price Raw price value.
 	 * @return {string} Formatted price string.
@@ -7328,7 +7328,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string|number} fieldId
 	 * @return {boolean} True if the field data type is 'single' product.
@@ -7342,7 +7342,7 @@ window.frmAdminBuildJS = function() {
 	 * Update the .frm_single_product_label text in the builder preview to reflect
 	 * the current name and price values of the first product option.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string|number} fieldId
 	 */
@@ -7419,7 +7419,7 @@ window.frmAdminBuildJS = function() {
 	 * for an input of the new type so resetDisplayedOpts rebuilds the options preview.
 	 * Without this, the leftover hidden input has no data-field-type and the preview breaks.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {string} fieldId
 	 * @param {string} productType The new product type: select, radio or checkbox.
@@ -9196,7 +9196,7 @@ window.frmAdminBuildJS = function() {
 	 * before this. Starting the slide during that work drops its frames and makes it look shaky,
 	 * so the switch waits for TinyMCE to boot and then starts on a fresh frame.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement}   obj         The selected field element.
 	 * @param {HTMLElement}   singleField The field settings element.
@@ -10309,7 +10309,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Add field shortcode icons when their code list is first shown.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @param {HTMLElement} container The opened shortcode panel.
 	 * @return {void}
 	 */
@@ -10447,7 +10447,7 @@ window.frmAdminBuildJS = function() {
 	 * CodeMirror replaces the textarea, so edits there never fire a native change event.
 	 * The editor initializes on document ready, so retry a few times until it exists.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} retryCount The number of times this function has run while waiting for CodeMirror to initialize.
 	 * @return {void}

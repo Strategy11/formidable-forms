@@ -11,14 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * admin screen's Subscriptions view already supports. Create and edit are
  * deliberately left out, since an ability is not a way to start a subscription.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesSubscriptionsController {
 
 	/**
 	 * Register the subscription abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -201,7 +201,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * List subscriptions, optionally filtered by form and status.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -228,7 +228,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Get one subscription.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -245,7 +245,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Delete a subscription.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -271,7 +271,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Cancel a subscription through its original gateway.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -304,7 +304,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Load one subscription by the id in the input, validating it is present.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -330,7 +330,7 @@ class FrmAbilitiesSubscriptionsController {
 	 * Shared shape with FrmAbilitiesPaymentsController::build_list_query(),
 	 * kept separate per table since the join/filter columns differ per domain.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $table Unprefixed table name, e.g. frm_subscriptions.
 	 * @param array  $input Ability input parameters.
@@ -381,7 +381,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Build the response shape for one subscription.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $subscription The subscription row to describe.
 	 *
@@ -410,7 +410,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Output schema properties shared by every subscription ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -482,7 +482,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Permission callback for list subscriptions.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -495,7 +495,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Permission callback for get subscription.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -512,7 +512,7 @@ class FrmAbilitiesSubscriptionsController {
 	 * capability, so this matches rather than allowing a role that would only
 	 * hit that internal check and fail.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -525,7 +525,7 @@ class FrmAbilitiesSubscriptionsController {
 	/**
 	 * Permission callback for cancel subscription.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *

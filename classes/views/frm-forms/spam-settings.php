@@ -111,7 +111,7 @@ foreach ( $form_fields as $field ) {
 			/**
 			 * Filters the spam retention period shown in the form settings summary.
 			 *
-			 * @since x.x
+			 * @since 7.0
 			 *
 			 * @param int $retention_days Days before automatic deletion. 0 disables cleanup.
 			 */

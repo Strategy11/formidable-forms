@@ -1,7 +1,7 @@
 /**
  * Restore placeholder attributes before the builder scans its grid or starts requests.
  *
- * @since x.x
+ * @since 7.0
  * @return {void}
  */
 export function hydrateFieldPlaceholders() {

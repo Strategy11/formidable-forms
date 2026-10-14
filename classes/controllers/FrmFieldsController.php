@@ -90,7 +90,7 @@ class FrmFieldsController {
 	/**
 	 * Omit definitions the browser has already received, including from the initial page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $definitions Definitions keyed by their content hashes.
 	 * @param string $param       POST parameter containing comma-separated known hashes.
@@ -298,7 +298,7 @@ class FrmFieldsController {
 	/**
 	 * Record shared attributes and leave a minimal placeholder in its grid row.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object                                              $field      Field object with its id and owning form.
 	 * @param array                                               $display    Field display options, including the builder type.
@@ -592,7 +592,7 @@ class FrmFieldsController {
 	/**
 	 * Display the autocomplete attribute setting.
 	 *
-	 * @since x.x This was moved from FrmProFieldsController::show_autocomplete_option.
+	 * @since 7.0 This was moved from FrmProFieldsController::show_autocomplete_option.
 	 *
 	 * @param array $field The field settings.
 	 *
@@ -1206,7 +1206,7 @@ class FrmFieldsController {
 	 * Add the autocomplete attribute to the field HTML.
 	 * Older versions of Pro add this attribute themselves, so it is skipped while Pro is active.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $field    The field settings.
 	 * @param array $add_html The HTML attributes, keyed by attribute name.

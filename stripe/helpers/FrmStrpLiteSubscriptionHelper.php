@@ -265,7 +265,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * same missing legacy Plan as "No such price: '...'" instead, even though the request used the
 	 * `plan` parameter, so both forms have to be recognized.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $message
 	 *

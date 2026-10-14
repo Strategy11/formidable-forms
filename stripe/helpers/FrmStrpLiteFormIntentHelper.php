@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Identify Stripe Lite intents and delay them until the payment field is visible.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmStrpLiteFormIntentHelper {
 	/**
@@ -30,7 +30,7 @@ class FrmStrpLiteFormIntentHelper {
 	/**
 	 * Wait until the page containing the payment field has been reached.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param WP_Post $action The Stripe payment action.
 	 *
@@ -49,7 +49,7 @@ class FrmStrpLiteFormIntentHelper {
 	 *
 	 * Payment fields are cached per form id for the current request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $form_id
 	 *
@@ -86,7 +86,7 @@ class FrmStrpLiteFormIntentHelper {
 	 *
 	 * Passing an id that is already an intent id returns it unchanged.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $client_secret
 	 *
@@ -99,7 +99,7 @@ class FrmStrpLiteFormIntentHelper {
 	/**
 	 * Get the type of intent an id refers to.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $intent_id An intent id or a client secret.
 	 *
@@ -115,7 +115,7 @@ class FrmStrpLiteFormIntentHelper {
 	 * Repeated inputs sharing one name arrive nested one level deeper once the AJAX request has been
 	 * expanded back out, so both shapes have to be read.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array|string $client_secrets
 	 *
@@ -143,7 +143,7 @@ class FrmStrpLiteFormIntentHelper {
 	 *
 	 * Match the intent type required by the action, including nested posted values.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array   $client_secrets Posted client secrets, possibly nested one level deeper.
 	 * @param WP_Post $action

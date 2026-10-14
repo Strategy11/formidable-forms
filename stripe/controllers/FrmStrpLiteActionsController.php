@@ -15,7 +15,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Guarantees get_appearance_rules() and its border helpers always have every
 	 * key present, including the no-form-context case where there's no style to read settings from.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array
 	 */
@@ -200,7 +200,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Retrieve and verify the posted setup intent once for customer and payment validation.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $form_id The submitted form id.
 	 *
@@ -781,7 +781,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * Use the action recorded on the payment, even if the form settings changed after submission.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $payment A row from the payments table.
 	 *

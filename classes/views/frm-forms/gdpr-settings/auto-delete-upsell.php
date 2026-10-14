@@ -2,7 +2,7 @@
 /**
  * Show a disabled preview of the Pro auto-delete entries setting.
  *
- * @since x.x
+ * @since 7.0
  *
  * @package Formidable
  */

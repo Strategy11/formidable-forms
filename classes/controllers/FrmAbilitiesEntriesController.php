@@ -11,14 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * helpers they share are public here, since the data they write has to be
  * shaped the same way whichever plugin does the writing.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesEntriesController {
 
 	/**
 	 * Register the entry abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -102,7 +102,7 @@ class FrmAbilitiesEntriesController {
 	 * Kept out of the registrar because one entry carries enough properties
 	 * to bury everything else the registration declares.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -257,7 +257,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * List entries, optionally scoped to one form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -340,7 +340,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Get one entry, with its field values.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -357,7 +357,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Delete an entry.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -385,7 +385,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Load one entry with its field values attached.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $id Entry ID or item_key.
 	 *
@@ -433,7 +433,7 @@ class FrmAbilitiesEntriesController {
 	 * validation and the save only recognize numeric ids. When a value is present
 	 * under both the id and the key, the id-keyed value wins.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * Public because Pro's update-entry ability re-keys the same way before it
 	 * merges the submitted values over the stored ones.
@@ -470,7 +470,7 @@ class FrmAbilitiesEntriesController {
 	 * Public because Pro's update-entry ability puts its merged values through
 	 * the same conversions before saving them.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $entry  Raw entry input.
 	 * @param array $fields Fields on the form.
@@ -552,7 +552,7 @@ class FrmAbilitiesEntriesController {
 		/**
 		 * Filter the entry data an ability is about to save.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param array $data   Prepared entry data.
 		 * @param array $fields Fields on the form.
@@ -567,7 +567,7 @@ class FrmAbilitiesEntriesController {
 	 * new row by an 'i' prefixed index and lists every row in row_ids, so a row
 	 * under any other key is renumbered into a free index rather than dropped.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array    $rows  The repeater's rows, by reference.
 	 * @param stdClass $field The repeater field.
@@ -630,7 +630,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Run a submitted value through the field's own import conversion.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $field The field the value belongs to.
 	 * @param mixed    $value The value, by reference.
@@ -649,7 +649,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Turn a submitted file value into the attachment ID a file field stores.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param mixed    $value The value, by reference.
 	 * @param stdClass $field The file field.
@@ -689,7 +689,7 @@ class FrmAbilitiesEntriesController {
 	 * field's confirmation cannot be typed, so validating either would fail every
 	 * create on a form that has one.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook frm_is_field_hidden
 	 *
 	 * @param bool         $hidden Whether the field is treated as hidden.
@@ -704,7 +704,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Build the response shape for one entry.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $entry The entry to describe.
 	 *
@@ -731,7 +731,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Build the error returned when no entry matches the given ID.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return WP_Error
 	 */
@@ -742,7 +742,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Permission callback for list entries.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -755,7 +755,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Permission callback for get entry.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -768,7 +768,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Permission callback for delete entry.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *

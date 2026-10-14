@@ -67,6 +67,7 @@ zip -r $zipname $destination \
 	-x "*/.semgrepignore" \
 	-x "*/.gitmodules" \
 	-x "*/.oxlintrc.json" \
+	-x "*/.phpunit.cache/*" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -93,7 +94,7 @@ zip -r $zipname $destination \
 	-x "*/package.json" \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
-	-x "*/phpunit.xml" \
+	-x "*/phpunit*.xml" \
 	-x "*/phpunit.xml.dist" \
 	-x "*/psalm.xml" \
 	-x "*/phpstan.neon" \
@@ -147,7 +148,8 @@ zip -r $zipname $destination \
 	-x "*/phpcs-sniffs/*" \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
-	-x "formidable-pro/resources/*"
+	-x "formidable-pro/resources/*" \
+	-x "*/cypress/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

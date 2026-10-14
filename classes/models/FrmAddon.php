@@ -84,7 +84,7 @@ class FrmAddon {
 	/**
 	 * Whether the last license request returned a decoded JSON response.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var bool
 	 */
@@ -666,7 +666,7 @@ class FrmAddon {
 	 * Don't save an invalid license.
 	 *
 	 * @since 6.8.3
-	 * @since x.x Added the $is_conclusive param.
+	 * @since 7.0 Added the $is_conclusive param.
 	 *
 	 * @param bool|string $is_valid      If license activation was successful. May be a string 'valid'.
 	 * @param bool        $is_conclusive Whether the API reported on the license. False when the
@@ -1212,7 +1212,7 @@ class FrmAddon {
 	 * Pro overrides this to include the license type, so the license message
 	 * can be updated without reloading the page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $response The activation response.
 	 *
@@ -1242,7 +1242,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @since x.x Added the inconclusive key, so a check that never reached the API
+	 * @since 7.0 Added the inconclusive key, so a check that never reached the API
 	 *            can be told apart from one where the API reported on the license.
 	 *
 	 * @return array
@@ -1383,7 +1383,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @since x.x The return type covers the decoded body, which is an array when the
+	 * @since 7.0 The return type covers the decoded body, which is an array when the
 	 *            API answers with JSON, and an error message string otherwise.
 	 *
 	 * @param string $action The request to send, such as activate_license.

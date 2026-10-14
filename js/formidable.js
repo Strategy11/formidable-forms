@@ -372,7 +372,7 @@ function frmFrontFormJS() {
 	/**
 	 * Gets the container to show the error for a key in.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 * @param {string}      key
@@ -393,7 +393,7 @@ function frmFrontFormJS() {
 	/**
 	 * Gets the sub field inputs of a combo field, such as name or address, that must be filled in.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
 	 * @return {HTMLElement[]} Visible inputs that are not optional.
@@ -407,7 +407,7 @@ function frmFrontFormJS() {
 	/**
 	 * Gets the error key of the container for the whole combo field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} fieldContainer The container of the combo field.
 	 * @return {string} The key, like '12' or '12-5-0' in a repeater.
@@ -420,7 +420,7 @@ function frmFrontFormJS() {
 	 * When every required sub field of a combo field is empty, replace the errors for each sub field
 	 * with one error for the whole field. This matches the errors shown after submitting the form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement}   comboContainer The .frm_combo_inputs_container element.
 	 * @param {Object}        errors         Errors keyed by field container key, including the required errors of the sub fields. Updated in place.
@@ -458,7 +458,7 @@ function frmFrontFormJS() {
 	 * Gets the required message for a whole combo field, wrapped in the custom error HTML when the
 	 * form has any.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
 	 * @param {HTMLElement} subInput       A sub field input of the combo field.
@@ -476,7 +476,7 @@ function frmFrontFormJS() {
 	/**
 	 * Gets the key used in the error element ID for the whole combo field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} subInput A sub field input of the combo field.
 	 * @return {string} The field HTML ID without its 'field_' prefix.
@@ -493,7 +493,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
 	 * @return {boolean} True if the combo field is required.
@@ -508,7 +508,7 @@ function frmFrontFormJS() {
 	 * error - either the combined error for the whole field, or a split-out error on one sub
 	 * field (see validateComboField).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
 	 * @return {boolean} True if the field or one of its sub fields has an error.
@@ -529,7 +529,7 @@ function frmFrontFormJS() {
 	 * Validates every sub field of a combo field together, so an error for the whole field can
 	 * change into errors for the sub fields that are still empty.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} comboContainer The .frm_combo_inputs_container element.
 	 * @param {HTMLElement} field          The sub field input that changed.
@@ -608,7 +608,7 @@ function frmFrontFormJS() {
 	 * field, the error of the sub field that changed, and the error of any sub field that still
 	 * fails. Other sub fields keep their errors, like a server error the client cannot recompute.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement}   comboContainer The .frm_combo_inputs_container element.
 	 * @param {HTMLElement}   field          The sub field input that changed.
@@ -1114,7 +1114,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since x.x Added the `keyOverride` parameter.
+	 * @since 7.0 Added the `keyOverride` parameter.
 	 *
 	 * @param {string}      msg
 	 * @param {HTMLElement} field
@@ -1255,7 +1255,8 @@ function frmFrontFormJS() {
 					function() {
 						afterFormSubmittedBeforeReplace( object, response );
 
-						const insertedContent = jQuery( jQuery.parseHTML( response.content ) );
+						// Keep the field scripts returned with AJAX pages so their settings and libraries load.
+						const insertedContent = jQuery( jQuery.parseHTML( response.content, document, true ) );
 						replaceContent.replaceWith( insertedContent );
 						focusFormMessage( insertedContent );
 
@@ -1436,7 +1437,7 @@ function frmFrontFormJS() {
 	 * replaced the form) rather than a wider ancestor, so an unrelated `.frm_message`-classed
 	 * element elsewhere on the page can never be focused instead.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {jQuery} insertedContent The markup that just replaced the form.
 	 * @return {void}
@@ -1548,7 +1549,7 @@ function frmFrontFormJS() {
 	 * a form element isn't available, e.g. a `frm-show-form` div rendered without a `form`
 	 * tag around it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement|null} formEl
 	 * @return {{includeAlertRole: boolean, focusFirstError: boolean, focusErrorSummary: boolean}} The resolved config.
@@ -1979,7 +1980,7 @@ function frmFrontFormJS() {
 	 * wrapping div). Resolving the input here keeps every field type working, including types
 	 * that come from add-ons.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {Event} event Click event on the summary link.
 	 * @return {void}
@@ -2016,7 +2017,7 @@ function frmFrontFormJS() {
 	/**
 	 * Get the input an error summary link should move focus to.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} container Field container.
 	 * @return {HTMLElement|null} The input to focus, or null when the field has none.
@@ -2048,7 +2049,7 @@ function frmFrontFormJS() {
 	 * Only inputs that carry their own value count. A checkbox or radio is empty until the group
 	 * as a whole is answered, so the first one in a group is no more blank than the rest of it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} input The input to test.
 	 * @return {boolean} True when the input has no value yet.
@@ -2066,7 +2067,7 @@ function frmFrontFormJS() {
 	 * the user cannot see. A hidden or zero sized input is skipped in favour of the visible
 	 * control that stands in for it, for example the dropzone button of a file field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} input The input to test.
 	 * @return {boolean} True when focusing the input would put the cursor somewhere visible.

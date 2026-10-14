@@ -2,7 +2,7 @@
 /**
  * Spam notice and "Not spam" modal shown at the top of a spam entry.
  *
- * @since x.x
+ * @since 7.0
  *
  * @package Formidable
  *

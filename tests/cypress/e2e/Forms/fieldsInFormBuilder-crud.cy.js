@@ -1,5 +1,12 @@
 describe( 'Fields in the form builder', () => {
 	beforeEach( () => {
+		cy.intercept( 'POST', '**/wp-admin/admin-ajax.php', req => {
+			const action = new URLSearchParams( req.body ).get( 'action' );
+			if ( [ 'frm_insert_field', 'frm_duplicate_field', 'frm_delete_field' ].includes( action ) ) {
+				req.alias = action;
+			}
+		} );
+
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.createNewForm();
@@ -17,12 +24,14 @@ describe( 'Fields in the form builder', () => {
 		// real sidebar tab list (.frm-tabs-navs) to avoid it.
 		cy.get( '.frm-tabs-navs #frm_insert_fields_tab' ).click();
 		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
+		cy.wait( '@frm_insert_field' );
 	};
 
 	it( 'should create, duplicate a field from each type and delete them', () => {
 		const createAndDuplicateField = ( fieldId, fieldType ) => {
 			cy.log( `Create a ${ fieldType } field and duplicate it` );
 			cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).click();
+			cy.wait( '@frm_insert_field' );
 			// .frm-field-action-icons is also .frm-show-hover (opacity: 0 by default; see
 			// resources/scss/admin/components/sorting/_sorting-display.scss), only revealed on a
 			// real CSS :hover of the field row or when the field is .selected - it's still genuinely
@@ -42,6 +51,7 @@ describe( 'Fields in the form builder', () => {
 			// once it's open the item is genuinely clickable - wait for it to be visible instead of
 			// forcing through the open transition.
 			cy.get( `li[data-ftype="${ fieldId }"] .frm_clone_field > span` ).should( 'be.visible' ).and( 'contain', 'Duplicate' ).click();
+			cy.wait( '@frm_duplicate_field' );
 
 			cy.get( `li[data-type="${ fieldId }"]` ).should( 'have.length', 2 );
 			const originalField = cy.get( `li[data-type="${ fieldId }"]:first` );
@@ -88,6 +98,7 @@ describe( 'Fields in the form builder', () => {
 					.should( 'be.visible' )
 					.and( 'contain', 'Confirm' )
 					.click();
+				cy.wait( '@frm_delete_field' );
 
 				cy.get( `li[data-fid="${ fid }"]` ).should( 'not.exist' );
 			} );

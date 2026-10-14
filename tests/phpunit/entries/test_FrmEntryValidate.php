@@ -33,7 +33,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @covers FrmEntryValidate::validate
 	 */

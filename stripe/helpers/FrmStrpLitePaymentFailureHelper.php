@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Clean up local records after a verified Stripe payment failure.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmStrpLitePaymentFailureHelper {
 
@@ -14,7 +14,7 @@ class FrmStrpLitePaymentFailureHelper {
 	 * Returns intent object by calling 'get_intent' endpoint, or false if the request failed, the intent
 	 * wasn't found, or the posted value's client secret doesn't match the one Stripe has on the intent.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $intent The full posted intent value, including the client secret.
 	 *
@@ -36,7 +36,7 @@ class FrmStrpLitePaymentFailureHelper {
 	/**
 	 * Marks failed payment rows as failed and delete entries linked with a payment.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string     $intent_id      The failed intent id.
 	 * @param array|null $failed_payments Payment rows already loaded for this intent.
@@ -65,7 +65,7 @@ class FrmStrpLitePaymentFailureHelper {
 	/**
 	 * Verify a reported failure only when local payment records need cleanup.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $intent The reported intent's client secret.
 	 *
@@ -97,7 +97,7 @@ class FrmStrpLitePaymentFailureHelper {
 	/**
 	 * Returns if the payment or subscription with the provided intent object has error.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param false|object $intent_object
 	 *

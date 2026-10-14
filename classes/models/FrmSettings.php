@@ -228,7 +228,7 @@ class FrmSettings {
 	/**
 	 * Whether submissions flagged by each spam check are saved as spam entries or rejected.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array<string, string>
 	 */
@@ -260,7 +260,7 @@ class FrmSettings {
 	 * add-on's own toggle so a site that already turned MCP on there keeps it
 	 * on. With no add-on setting to inherit either, MCP is off.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var int|null 1 for enabled, 0 for disabled, null when never saved.
 	 */
@@ -590,7 +590,7 @@ class FrmSettings {
 	 * A check that is turned off has a disabled select that is not submitted, so keep its saved handling.
 	 * This runs before fill_with_defaults() replaces the saved handling with the posted values.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $params The posted settings.
 	 *

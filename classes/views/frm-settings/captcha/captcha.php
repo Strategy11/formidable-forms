@@ -327,7 +327,7 @@ if ( FrmAppHelper::pro_is_installed() ) {
 	/**
 	 * Fires after the spam entries settings, so Pro can add the spam cleanup setting.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param FrmSettings $frm_settings
 	 */

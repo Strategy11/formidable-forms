@@ -103,7 +103,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * Check if a payment action has conditional logic rules to evaluate.
 	 * Conditional logic on actions is a Pro feature, so an action never has any in Lite.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param WP_Post $payment_action The payment action to check.
 	 *
@@ -118,7 +118,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * The front end watches these fields, since a change to one can switch which
 	 * action applies, and with it the amount and the payment settings.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param WP_Post $payment_action The payment action to read the conditions from.
 	 *
@@ -147,7 +147,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * Filter payment actions down to the ones whose conditional logic is met.
 	 * An action without conditional logic always applies.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array    $payment_actions The payment actions to filter.
 	 * @param stdClass $entry           An entry object, either a real entry or one built from posted values.
@@ -175,7 +175,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * so the amount and the payment settings have to come from the action that the
 	 * submitted values actually match, not from whichever action happens to be first.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $form_id The form the actions belong to.
 	 * @param stdClass   $entry   An entry object, either a real entry or one built from posted values.

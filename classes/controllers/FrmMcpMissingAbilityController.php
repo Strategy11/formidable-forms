@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * then, so the documented pre-call filter never sees it. Decorating the two
  * callbacks as the abilities are registered gets in front of both.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpMissingAbilityController {
 
@@ -35,7 +35,7 @@ class FrmMcpMissingAbilityController {
 	private static $originals = array();
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -55,7 +55,7 @@ class FrmMcpMissingAbilityController {
 	 * Both of these take an ability name from the client, which is what makes
 	 * them the two places a name Formidable can explain shows up.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array Ability names mapped to a permission and an execute callback.
 	 */
@@ -79,7 +79,7 @@ class FrmMcpMissingAbilityController {
 	 * shape this does not recognize is a version that has moved on, where the
 	 * right thing to do is nothing at all rather than break execution.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook wp_register_ability_args
 	 *
 	 * @param array  $args Arguments accepted by wp_register_ability().
@@ -112,7 +112,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Permission callback standing in for mcp-adapter/execute-ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Input parameters, holding ability_name and parameters.
 	 *
@@ -125,7 +125,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Permission callback standing in for mcp-adapter/get-ability-info.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Input parameters, holding ability_name.
 	 *
@@ -138,7 +138,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Execute callback standing in for mcp-adapter/execute-ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Input parameters, holding ability_name and parameters.
 	 *
@@ -152,7 +152,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Execute callback standing in for mcp-adapter/get-ability-info.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Input parameters, holding ability_name.
 	 *
@@ -173,7 +173,7 @@ class FrmMcpMissingAbilityController {
 	 * message can be returned. Every other answer is passed through untouched,
 	 * so nothing here loosens a permission check.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $name  Name of the meta ability being called.
 	 * @param array  $input Input parameters, holding the requested ability_name.
@@ -193,7 +193,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Hand the call back to the adapter's own callback.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $name  Name of the meta ability being called.
 	 * @param string $which Either permission or execute.
@@ -220,7 +220,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Check whether Formidable should be answering for this request at all.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Input parameters, holding the requested ability_name.
 	 *
@@ -251,7 +251,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Build the answer for a request naming an ability this site cannot reach.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Input parameters, holding the requested ability_name.
 	 *
@@ -273,7 +273,7 @@ class FrmMcpMissingAbilityController {
 	/**
 	 * Read the ability name the client asked for.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Input parameters passed to the meta ability.
 	 *
@@ -296,7 +296,7 @@ class FrmMcpMissingAbilityController {
 	 * WP_DEBUG is on: an assistant retrying a call it cannot make is not a
 	 * reason to fill a production log.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Ability name the client asked for.
 	 * @param string $status       Status from FrmMcpAbilityRegistry::status().
@@ -322,7 +322,7 @@ class FrmMcpMissingAbilityController {
 	 * every attempt has the same cause, so one line per ability per window says
 	 * everything the repeats would.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $ability_name Ability name the client asked for.
 	 * @param string $status       Status from FrmMcpAbilityRegistry::status().

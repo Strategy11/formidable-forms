@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * before the MCP server moved into Formidable, so the numbers carry on from
  * where the add-on left them.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpUsageController {
 
@@ -59,7 +59,7 @@ class FrmMcpUsageController {
 	const ACTIVE_DAYS = 30;
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -76,7 +76,7 @@ class FrmMcpUsageController {
 	 * counts these requests itself is left to do so, so each request is only
 	 * counted once.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook frm_mcp_request
 	 *
 	 * @param array  $body     Decoded JSON-RPC request body.
@@ -99,7 +99,7 @@ class FrmMcpUsageController {
 	 * The add-on release that defers the MCP server to Formidable still hooks
 	 * its own counter to frm_mcp_request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -115,7 +115,7 @@ class FrmMcpUsageController {
 	 * and by which client, is counted in the flows data instead of being
 	 * repeated here.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook frm_usage_snapshot
 	 *
 	 * @param array $snapshot Usage snapshot data.
@@ -141,7 +141,7 @@ class FrmMcpUsageController {
 	 * registered ability or one of the adapter's own tools is counted as other.
 	 * That keeps a client from filling the flows data with names of its own.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $endpoint Endpoint name, or an empty string for protocol requests.
 	 *
@@ -162,7 +162,7 @@ class FrmMcpUsageController {
 	/**
 	 * Get the tools the MCP adapter registers alongside the abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<int, string>
 	 */
@@ -182,7 +182,7 @@ class FrmMcpUsageController {
 	 * client sent, like claude-code or cursor-vscode, rather than the label the
 	 * settings page groups it under, so the data keeps which app it was.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $body Decoded JSON-RPC request body.
 	 *
@@ -205,7 +205,7 @@ class FrmMcpUsageController {
 	/**
 	 * Get the most recent MCP request time of any user.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<int, array{last_request: int}> $connections Connection rows from FrmMcpConnection::get_connections().
 	 *
@@ -225,7 +225,7 @@ class FrmMcpUsageController {
 	/**
 	 * Count one flow event.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $key   Flow key.
 	 * @param string $value Name of the event to count.

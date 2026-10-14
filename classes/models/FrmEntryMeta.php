@@ -8,7 +8,7 @@ class FrmEntryMeta {
 	/**
 	 * Whether every entry meta write exposes the synchronization hooks.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -19,7 +19,7 @@ class FrmEntryMeta {
 	/**
 	 * Notify integrations before changing entry metadata.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int $entry_id Entry ID.
 	 * @param int $field_id Field ID.
@@ -71,7 +71,7 @@ class FrmEntryMeta {
 			/**
 			 * Fires after an entry meta value is inserted, updated, or deleted.
 			 *
-			 * @since x.x
+			 * @since 7.0
 			 *
 			 * @param int $entry_id Entry ID.
 			 * @param int $field_id Field ID.
@@ -567,7 +567,7 @@ class FrmEntryMeta {
 	/**
 	 * Get the entry status to query when a numeric is_draft value is requested.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param int|string $is_draft
 	 *

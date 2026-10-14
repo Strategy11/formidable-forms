@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the Formidable form abilities for the WordPress Abilities API.
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmAbilitiesFormsController {
 
 	/**
 	 * Register the form abilities.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -28,7 +28,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Register the list forms ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -117,7 +117,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Register the get form ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -158,7 +158,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Register the create form ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -219,7 +219,7 @@ class FrmAbilitiesFormsController {
 	 * Kept out of the registrar because the inline fields array makes it long
 	 * enough on its own to bury everything else the registration declares.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -295,7 +295,7 @@ class FrmAbilitiesFormsController {
 	 * The same shape create-field accepts, minus form_id, which the form
 	 * being created supplies.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array
 	 */
@@ -364,7 +364,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Register the update form ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -423,7 +423,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Register the delete form ability.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -458,7 +458,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * List the forms on the site.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -512,7 +512,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Get one form, as data or as rendered HTML.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -539,7 +539,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Create a form, and any fields sent with it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -612,7 +612,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Update a form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -681,7 +681,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Delete a form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -708,7 +708,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Build the response shape for one form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $form The form to describe.
 	 *
@@ -740,7 +740,7 @@ class FrmAbilitiesFormsController {
 	 * otherwise. Other scalars pass through, and anything that is not scalar
 	 * drops to an empty string.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $values Option values to sanitize.
 	 *
@@ -765,7 +765,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Permission callback for list forms.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -778,7 +778,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Permission callback for get form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -791,7 +791,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Permission callback for create form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -804,7 +804,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Permission callback for update form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -817,7 +817,7 @@ class FrmAbilitiesFormsController {
 	/**
 	 * Permission callback for delete form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $input Ability input parameters.
 	 *

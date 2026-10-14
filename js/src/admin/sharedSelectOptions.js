@@ -3,7 +3,7 @@ const templates = new Map();
 /**
  * Populate a builder select from an already delivered option list.
  *
- * @since x.x
+ * @since 7.0
  * @param {HTMLSelectElement} select The select whose saved options are already present.
  * @return {void}
  */
@@ -45,7 +45,7 @@ export function hydrateBuilderSelect( select ) {
 /**
  * Populate options before a settings panel's controls and multiselects are shown.
  *
- * @since x.x
+ * @since 7.0
  * @param {HTMLElement} container The settings panel being opened.
  * @return {void}
  */

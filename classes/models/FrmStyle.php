@@ -168,7 +168,7 @@ class FrmStyle {
 	 * because WordPress appends -2, -3, and so on to a duplicate slug, and the CSS scope that gets
 	 * nested into the custom CSS has to match the slug that actually gets stored.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $new_instance The style being saved.
 	 * @param bool  $is_existing  False for a new style, including a duplicate.

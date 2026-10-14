@@ -82,7 +82,7 @@ class FrmHoneypot extends FrmValidate {
 	 * Remove the honeypot value from the posted values, so a submission saved as a spam entry
 	 * does not store it as meta for a field that does not exist.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

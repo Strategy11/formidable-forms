@@ -17,7 +17,7 @@ class FrmFormsHelper {
 	/**
 	 * Icon classes for deferred code list items, keyed by field type, printed once each by print_deferred_code_list_icons().
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array<string, string>
 	 */
@@ -312,7 +312,7 @@ class FrmFormsHelper {
 	 * that form currently has any validation errors. Used to resolve the per-form focus/
 	 * alert-role defaults in FrmAppHelper before a submission has happened.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $form
 	 *
@@ -334,7 +334,7 @@ class FrmFormsHelper {
 	 * JS can resolve focus/alert-role behavior for a form without reading page-global
 	 * defaults that don't account for that form's own summary state.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $form
 	 *
@@ -353,7 +353,7 @@ class FrmFormsHelper {
 	/**
 	 * Get clickable field error messages.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $args
 	 *
@@ -368,7 +368,7 @@ class FrmFormsHelper {
 		 * Allows the list of clickable field errors to be turned off, leaving only the invalid
 		 * message on its own. Return false to opt a site, or a single form, out of the summary.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param bool  $show_summary Whether to list each field that failed validation.
 		 * @param array $args         Includes 'form' and 'errors'.
@@ -467,7 +467,7 @@ class FrmFormsHelper {
 	 * validating the entry) and only queries for any field it still cannot resolve, keeping
 	 * the error summary from adding a database round trip in the normal flow.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $args      Includes optional 'fields'.
 	 * @param int[] $field_ids Field IDs referenced by the current errors.
@@ -522,7 +522,7 @@ class FrmFormsHelper {
 	 * being shown. Hidden and user ID fields render as hidden inputs that cannot receive focus, and
 	 * a field on another page of a multi-page form is not visible, so neither should be linked.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $field Field row with at least type, field_order and form_id.
 	 *
@@ -1023,7 +1023,7 @@ BEFORE_HTML;
 	 * Prints one hidden copy of each icon used by deferred code list items, for JS to copy into the list when it opens.
 	 * This keeps the markup for a form with many fields down to a field type per item.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

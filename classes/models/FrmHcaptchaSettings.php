@@ -69,7 +69,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Add the error codes that are specific to hCaptcha.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,string>
 	 */
@@ -88,7 +88,7 @@ class FrmHcaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<int,string>
 	 */

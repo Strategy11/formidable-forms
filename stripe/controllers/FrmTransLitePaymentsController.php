@@ -257,7 +257,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * ability can reuse the same gateway dispatch without duplicating it or
 	 * going through the AJAX/wp_die() request flow.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param object $payment The payment to refund.
 	 *

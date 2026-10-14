@@ -739,7 +739,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * <aside> carries an implicit role="complementary", which the IBM Equal Access
 	 * checker flags as unlabelled complementary content otherwise (aria_complementary_labelled).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
@@ -766,7 +766,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * rendered HTML (aria_id_unique — a duplicate id breaks any ARIA property that
 	 * references it, since the reference can no longer resolve to a single element).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 * @param array  $ids
@@ -784,7 +784,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Assert that every <form> tag in some rendered HTML has a non-empty aria-label,
 	 * and that no two forms share the same one (aria_landmark_name_unique).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
@@ -814,7 +814,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * redundant `for`/id pair makes Safari VoiceOver announce the label twice
 	 * (label_name_visible / duplicate association).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 * @param string $field_description Used only in the failure message, e.g. "checkbox option" or "GDPR".

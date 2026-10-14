@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * stays out of the way entirely until the add-on is updated. See
  * FrmAbilitiesController::another_plugin_owns_abilities().
  *
- * @since x.x
+ * @since 7.0
  */
 class FrmMcpController {
 
@@ -46,7 +46,7 @@ class FrmMcpController {
 	private static $enabled;
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -86,7 +86,7 @@ class FrmMcpController {
 	 * An older copy has the class but not the method, and registers the whole
 	 * surface itself.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -109,7 +109,7 @@ class FrmMcpController {
 	 * Only call this on init or later. The settings are readable earlier, but
 	 * the add-on class this falls back to is not.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -145,7 +145,7 @@ class FrmMcpController {
 		 * Because the answer is memoized for the request, add this early
 		 * (mu-plugins or plugins_loaded), not on a later hook.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param bool $enabled Whether MCP defaults to on. Default false.
 		 */
@@ -166,7 +166,7 @@ class FrmMcpController {
 	 * question here. A site that never opened the add-on's settings page has no
 	 * stored value and inherits nothing.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool|null Null when the add-on has no stored MCP value to inherit.
 	 */
@@ -195,7 +195,7 @@ class FrmMcpController {
 	 * Needed after the global settings are saved, and by tests, which move the
 	 * setting within one process.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -216,7 +216,7 @@ class FrmMcpController {
 	 * This runs on init because the MCP setting cannot be read any earlier, and
 	 * the adapter only needs to exist by rest_api_init.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook init
 	 *
 	 * @return void
@@ -248,7 +248,7 @@ class FrmMcpController {
 	 * default server, so this server expects the
 	 * mcp_adapter_create_default_server filter to stay enabled.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook mcp_adapter_init
 	 *
 	 * @param WP\MCP\Core\McpAdapter $adapter The MCP Adapter instance.
@@ -306,7 +306,7 @@ class FrmMcpController {
 	 * else on the site keeps working, which is exactly why this would otherwise
 	 * go unnoticed.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see action hook admin_notices
 	 *
 	 * @return void
@@ -364,7 +364,7 @@ class FrmMcpController {
 	 * while nothing else serves under it, so another plugin's MCP server is never
 	 * shadowed by a Formidable setting.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 * @see filter hook rest_pre_dispatch
 	 *
 	 * @param mixed                         $result  Result to send to the client, or null to continue dispatching.
@@ -400,7 +400,7 @@ class FrmMcpController {
 	 * other plugins can register their own servers on it, so the namespace root
 	 * is only claimed while it is otherwise empty.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param WP_REST_Server $server Server instance handling the request.
 	 *
