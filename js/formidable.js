@@ -1348,7 +1348,9 @@ function frmFrontFormJS() {
 				if ( contSubmit ) {
 					object.submit();
 				} else {
-					object.insertAdjacentHTML( 'afterbegin', response.error_message );
+					if ( response.error_message ) {
+						object.insertAdjacentHTML( 'afterbegin', response.error_message );
+					}
 					addFormLevelErrors( object, formErrors );
 
 					if ( Object.keys( formErrors ).length ) {
