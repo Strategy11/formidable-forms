@@ -28,5 +28,21 @@ if ( ! empty( $can_fit_label_in_two_columns ) ) {
 		}
 		?>
 	</label>
-	<input type="text" class="frm_max_length_opt" name="field_options[max_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['max'] ); ?>" id="field_options_max_<?php echo esc_attr( $field['id'] ); ?>" size="5" data-fid="<?php echo intval( $field['id'] ); ?>" />
+	<?php
+	$max_input_atts = array(
+		'type'     => 'text',
+		'class'    => 'frm_max_length_opt',
+		'name'     => 'field_options[max_' . $field['id'] . ']',
+		'value'    => $field['max'],
+		'id'       => 'field_options_max_' . $field['id'],
+		'size'     => '5',
+		'data-fid' => $field['id'],
+	);
+
+	if ( in_array( $field['type'], array( 'textarea', 'rte' ), true ) ) {
+		$max_input_atts['data-changeme']  = 'field_' . $field['field_key'];
+		$max_input_atts['data-changeatt'] = 'rows';
+	}
+	?>
+	<input <?php FrmAppHelper::array_to_html_params( $max_input_atts, true ); ?> />
 </p>

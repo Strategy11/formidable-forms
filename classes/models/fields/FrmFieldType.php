@@ -300,8 +300,9 @@ DEFAULT_HTML;
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
-			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
+			<span class="frm_builder_field_name"><?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?></span>
+			<span id="frm_required_indicator_<?php echo esc_attr( $field['id'] ); ?>"
+				class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 				<?php echo esc_html( $field['required_indicator'] ); ?>
 			</span>
 			<span class="frm-sub-label frm-collapsed-label">

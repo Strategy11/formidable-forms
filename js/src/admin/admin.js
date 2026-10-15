@@ -10,6 +10,7 @@ const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
+const { updateSelectPlaceholder, updateAddressPreview } = require( './fieldPreview' );
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
 
 // Footer scripts can restore placeholders before add-ons inspect the builder's fields.
@@ -4241,7 +4242,6 @@ window.frmAdminBuildJS = function() {
 
 	function liveChanges() {
 		/*jshint validthis:true */
-		let option;
 		const newValue = this.value;
 		const changes = document.getElementById( this.getAttribute( 'data-changeme' ) );
 		const att = this.getAttribute( 'data-changeatt' );
@@ -4252,17 +4252,18 @@ window.frmAdminBuildJS = function() {
 
 		if ( att !== null ) {
 			if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
-				option = changes.options[ 0 ];
-				if ( option.value === '' ) {
-					option.innerHTML = newValue;
-				} else {
-					// Create a placeholder option if there are no blank values.
-					addBlankSelectOption( changes, newValue );
-				}
+				const fieldId = this.closest( '.frm-single-settings' ).dataset.fid;
+				const hasBlankChoice = changes.closest( '.frm_combo_inputs_container' ) !== null ||
+					getMultipleOpts( fieldId ).some( option => option.label === '' );
+				updateSelectPlaceholder( changes, newValue, hasBlankChoice );
 			} else if ( att === 'class' ) {
 				changeFieldClass( changes, this );
 			} else if ( isSliderField( changes ) ) {
 				updateSliderFieldPreview( changes, att, newValue );
+			} else if ( att === 'value' || att === 'textContent' ) {
+				changes[ att ] = newValue;
+			} else if ( att === 'rows' && newValue === '' ) {
+				changes.removeAttribute( att );
 			} else {
 				changes.setAttribute( att, newValue );
 			}
@@ -4270,14 +4271,19 @@ window.frmAdminBuildJS = function() {
 			if ( newValue !== '' ) {
 				changes.innerHTML = '<input type="text" value="" disabled />';
 			}
+		} else if ( changes.tagName === 'TEXTAREA' && ! changes.classList.contains( 'wp-editor-area' ) ) {
+			changes.value = newValue;
 		} else {
-			changes.innerHTML = purifyHtml( newValue );
+			const content = changes.classList.contains( 'frm_primary_label' )
+				? changes.querySelector( '.frm_builder_field_name' ) || changes
+				: changes;
+			content.innerHTML = purifyHtml( newValue );
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
 				jQuery( changes ).trigger( 'change' );
 			}
 
-			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling.getAttribute( 'data-ftype' ) ) {
+			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling?.getAttribute( 'data-ftype' ) ) {
 				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
 			}
 		}
@@ -4361,6 +4367,7 @@ window.frmAdminBuildJS = function() {
 			const $reqBox = jQuery( `input[name="field_options[required_indicator_${ fieldId }]"]` );
 			if ( $reqBox.val() === '' ) {
 				$reqBox.val( '*' );
+				liveChanges.call( $reqBox[ 0 ] );
 			}
 			label.removeClass( 'frm_hidden' );
 		} else {
@@ -12431,6 +12438,15 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
+			builderForm.addEventListener( 'input', event => {
+				if ( event.target.matches( '[data-changeme]' ) ) {
+					liveChanges.call( event.target );
+					fieldUpdated();
+				}
+			} );
+			frmDom.util.documentOn( 'change', '.frm-single-settings select[id^="address_type_"]', function() {
+				updateAddressPreview( this, liveChanges );
+			} );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 
