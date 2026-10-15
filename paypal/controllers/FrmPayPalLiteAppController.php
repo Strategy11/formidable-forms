@@ -118,17 +118,75 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @return array Array of products with prices and quantities.
 	 */
-	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	private static function get_pricing_data_from_posted_values( $form_id ) {
-		$products = array();
-		$fields   = FrmField::get_all_for_form( $form_id );
+		$fields = FrmField::get_all_for_form( $form_id );
 
 		if ( ! $fields ) {
-			return $products;
+			return array();
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$posted_data = $_POST['item_meta'] ?? array();
+
+		if ( ! is_array( $posted_data ) ) {
+			return array();
+		}
+
+		$value_sets = array_merge( array( $posted_data ), self::get_repeater_rows_from_posted_values( $fields, $posted_data ) );
+		$products   = array();
+
+		foreach ( $value_sets as $values ) {
+			$products = array_merge( $products, self::get_pricing_data_from_values( $fields, $values ) );
+		}
+
+		return $products;
+	}
+
+	/**
+	 * Get the posted values for each row of every repeater in the form.
+	 *
+	 * Fields inside a repeater are posted under the repeater's section ID,
+	 * one array of field values per row, so they are not found at the top level of item_meta.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $fields      The form fields, including fields inside repeaters.
+	 * @param array $posted_data The posted item_meta values.
+	 *
+	 * @return array Array of field values arrays, one per repeater row.
+	 */
+	private static function get_repeater_rows_from_posted_values( $fields, $posted_data ) {
+		$rows = array();
+
+		foreach ( $fields as $field ) {
+			if ( ! FrmField::is_repeating_field( $field ) || empty( $posted_data[ $field->id ] ) || ! is_array( $posted_data[ $field->id ] ) ) {
+				continue;
+			}
+
+			foreach ( $posted_data[ $field->id ] as $row_id => $row_values ) {
+				if ( in_array( $row_id, array( 'form', 'row_ids' ), true ) || ! is_array( $row_values ) ) {
+					continue;
+				}
+
+				$rows[] = $row_values;
+			}
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Extract pricing data from one set of field values, either the top level of the form or a single repeater row.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $fields The form fields.
+	 * @param array $values The posted values, keyed by field ID.
+	 *
+	 * @return array Array of products with prices and quantities.
+	 */
+	private static function get_pricing_data_from_values( $fields, $values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+		$products = array();
 
 		foreach ( $fields as $field ) {
 			if ( ! in_array( $field->type, array( 'product', 'quantity', 'total' ), true ) ) {
@@ -136,7 +194,7 @@ class FrmPayPalLiteAppController {
 			}
 
 			$field_id = $field->id;
-			$value    = $posted_data[ $field_id ] ?? '';
+			$value    = $values[ $field_id ] ?? '';
 
 			if ( ! $value ) {
 				continue;
