@@ -10,6 +10,8 @@ const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
+const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
+const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
 
 // Footer scripts can restore placeholders before add-ons inspect the builder's fields.
@@ -3231,6 +3233,12 @@ window.frmAdminBuildJS = function() {
 		closeOpenFieldDropdowns();
 		const fieldId = $field.data( 'fid' );
 		const children = fieldsInSection( fieldId );
+		const originalSettings = ensureFieldSettings( fieldId );
+		if ( originalSettings ) {
+			hydrateBuilderSelectsIn( originalSettings );
+		}
+		const settingsSnapshot = originalSettings
+			? captureFieldSettings( originalSettings, $field[ 0 ] ) : null;
 		let fieldOrder;
 
 		if ( null !== newRowId ) {
@@ -3248,6 +3256,7 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success( msg ) {
+				const duplicatedFieldId = checkMsgForFieldId( msg );
 				let newRow;
 
 				let replaceWith;
@@ -3261,6 +3270,9 @@ window.frmAdminBuildJS = function() {
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
+						afterAddField( msg, false );
+						maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
+						setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 						jQuery( newRow ).trigger(
 							'frm_added_duplicated_field_to_row',
 							{
@@ -3268,8 +3280,6 @@ window.frmAdminBuildJS = function() {
 								originalFieldId: fieldId
 							}
 						);
-						afterAddField( msg, false );
-						setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 						return;
 					}
 				}
@@ -3287,10 +3297,10 @@ window.frmAdminBuildJS = function() {
 				}
 
 				afterAddField( msg, false );
-				maybeDuplicateUnsavedSettings( fieldId, msg );
+				maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[ 0 ].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
-				setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
+				setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 			}
 		} );
 		return false;
@@ -3305,103 +3315,76 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function setLayoutClassesForDuplicatedFieldInGroup( field, newField ) {
-		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
-		if ( ! hoverTarget || ! isFieldGroup( hoverTarget.parentElement ) ) {
+		if ( ! newField || ! field.closest( 'li.frm_field_box:not(.form-field)' ) ) {
 			return;
 		}
-		const fieldId = field.dataset.fid;
-		let fieldClasses = document.getElementById( `frm_classes_${ fieldId }` )?.value;
-		if ( ! fieldClasses ) {
+		const classesInput = document.getElementById( `frm_classes_${ newField.dataset.fid }` );
+		if ( ! classesInput ) {
 			return;
 		}
-		fieldClasses = fieldClasses.replace( 'frm_first', '' );
-		if ( ! newField.className.includes( fieldClasses ) ) {
-			newField.className += ` ${ fieldClasses }`;
-
-			const classesInput = document.getElementById( `frm_classes_${ newField.dataset.fid }` );
-			if ( classesInput ) {
-				classesInput.value = fieldClasses;
-			}
-		}
-	}
-
-	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
-		const originalSettings = ensureFieldSettings( originalFieldId );
-		if ( ! originalSettings ) {
-			return;
-		}
-
-		const newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
-		if ( newFieldId === undefined ) {
-			return;
-		}
-
-		const copySettings = document.getElementById( `frm-single-settings-${ newFieldId }` );
-		if ( ! copySettings ) {
-			return;
-		}
-
-		const fieldOptionKeys = [
-			'name', 'required', 'unique', 'read_only', 'placeholder', 'description', 'size', 'max', 'format', 'prepend', 'append', 'separate_value'
-		];
-
-		originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ).forEach(
-			function( originalSetting ) {
-				const key = getKeyFromSettingInput( originalSetting );
-
-				if ( 'options' === key ) {
-					copyOption( originalSetting, copySettings, originalFieldId, newFieldId );
-					return;
-				}
-
-				if ( ! fieldOptionKeys.includes( key ) ) {
-					return;
-				}
-
-				const tagType = originalSetting.matches( 'input' ) ? 'input' : 'textarea';
-				const copySetting = copySettings.querySelector( `${ tagType }[name="field_options[${ key }_${ newFieldId }]"]` );
-				if ( null === copySetting ) {
-					return;
-				}
-
-				if ( 'checkbox' === originalSetting.type ) {
-					if ( originalSetting.checked !== copySetting.checked ) {
-						jQuery( copySetting ).trigger( 'click' );
-					}
-				} else if ( 'text' === originalSetting.type || 'textarea' === tagType ) {
-					if ( originalSetting.value !== copySetting.value ) {
-						copySetting.value = originalSetting.value;
-						jQuery( copySetting ).trigger( 'change' );
-					}
-				}
-			}
+		const layoutClasses = getLayoutClasses();
+		const fieldClasses = classesInput.value.split( /\s+/ ).filter(
+			name => name && name !== 'frm_first' && ! layoutClasses.includes( name )
 		);
+		const layoutClass = getLayoutClassName( field.classList );
+		if ( layoutClass ) {
+			fieldClasses.push( layoutClass );
+		}
+		classesInput.value = fieldClasses.join( ' ' );
+		classesInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+	}
 
-		const originalDefault = originalSettings.querySelector( `input[name="default_value_${ originalFieldId }"]` );
-		if ( null !== originalDefault ) {
-			const copyDefault = copySettings.querySelector( `input[name="default_value_${ newFieldId }"]` );
-			if ( null !== copyDefault && originalDefault.value !== copyDefault.value ) {
-				copyDefault.value = originalDefault.value;
-				jQuery( copyDefault ).trigger( 'change' );
+	/**
+	 * Overlay unsaved controls and refresh their UI after PHP creates the saved-value copy.
+	 *
+	 * @since x.x
+	 * @param {Object|null} snapshot   Source settings captured before the duplication request.
+	 * @param {number}      newFieldId The field ID returned by PHP.
+	 * @return {void}
+	 */
+	function maybeDuplicateUnsavedSettings( snapshot, newFieldId ) {
+		if ( ! snapshot ) {
+			return;
+		}
+		const settings = ensureFieldSettings( newFieldId );
+		const field = document.getElementById( `frm_field_id_${ newFieldId }` );
+		if ( ! settings || ! field ) {
+			return;
+		}
+		hydrateBuilderSelectsIn( settings );
+		moveFieldSettings( settings );
+		const changed = applyFieldSettings( snapshot, settings, field );
+		changed.forEach( input => {
+			if ( input.closest( '.frm_sortable_field_opts' ) ||
+				input.name === `field_options[type_${ newFieldId }]` ||
+				input.dataset.changeatt === 'class' ) {
+				return;
 			}
+			if ( input.classList.contains( 'wp-editor-area' ) ) {
+				window.tinymce?.get( input.id )?.setContent( input.value );
+			}
+			input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+		} );
+		// Handlers such as image toggles choose defaults. The source's values take precedence.
+		restoreFieldSettingValues( snapshot, settings );
+		const classesInput = settings.querySelector( '.frm_classes' );
+		if ( classesInput ) {
+			if ( field.closest( 'li.frm_field_box:not(.form-field)' ) ) {
+				classesInput.value = classesInput.value.replace( /\bfrm_first\b/g, '' ).trim();
+			}
+			classesInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 		}
-	}
-
-	function copyOption( originalSetting, copySettings, originalFieldId, newFieldId ) {
-		const remainingKeyDetails = originalSetting.name.substr( 23 + `${ originalFieldId }`.length );
-		const copyKey = `field_options[options_${ newFieldId }]${ remainingKeyDetails }`;
-		const copySetting = copySettings.querySelector( `input[name="${ copyKey }"]` );
-		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
-			copySetting.value = originalSetting.value;
-			jQuery( copySetting ).trigger( 'change' );
+		// Plain preview bindings also cover defaults read directly from TinyMCE before blur.
+		settings.querySelectorAll( '[data-changeme]:not(.frm_classes)' ).forEach( input => liveChanges.call( input ) );
+		const required = settings.querySelector( '.frm_req_field' );
+		if ( required ) {
+			field.querySelector( '.frm_required' )?.classList.toggle( 'frm_hidden', ! required.checked );
+			toggleValidationBox( required.checked, `.frm_required_details${ newFieldId }` );
 		}
-	}
-
-	function getKeyFromSettingInput( input ) {
-		const nameWithoutPrefix = input.name.substr( 14 );
-		const nameSplit = nameWithoutPrefix.split( '_' );
-		nameSplit.pop();
-		return nameSplit.join( '_' );
+		if ( settings.querySelector( '.frm_sortable_field_opts' ) ) {
+			resetDisplayedOpts( newFieldId );
+		}
+		fieldUpdated();
 	}
 
 	function closeOpenFieldDropdowns() {
@@ -4241,7 +4224,6 @@ window.frmAdminBuildJS = function() {
 
 	function liveChanges() {
 		/*jshint validthis:true */
-		let option;
 		const newValue = this.value;
 		const changes = document.getElementById( this.getAttribute( 'data-changeme' ) );
 		const att = this.getAttribute( 'data-changeatt' );
@@ -4251,18 +4233,19 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( att !== null ) {
-			if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
-				option = changes.options[ 0 ];
-				if ( option.value === '' ) {
-					option.innerHTML = newValue;
-				} else {
-					// Create a placeholder option if there are no blank values.
-					addBlankSelectOption( changes, newValue );
-				}
+			if ( changes.tagName === 'SELECT' && changes.hasAttribute( 'data-frm-preview-choices' ) &&
+				( att === 'value' || att === 'placeholder' ) ) {
+				updateComboSelectPreview( changes, this.closest( '.frm-single-settings' ) );
+			} else if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
+				resetDisplayedOpts( this.closest( '.frm-single-settings' ).dataset.fid );
 			} else if ( att === 'class' ) {
 				changeFieldClass( changes, this );
 			} else if ( isSliderField( changes ) ) {
 				updateSliderFieldPreview( changes, att, newValue );
+			} else if ( att === 'value' || att === 'textContent' ) {
+				changes[ att ] = newValue;
+			} else if ( att === 'rows' && newValue === '' ) {
+				changes.removeAttribute( att );
 			} else {
 				changes.setAttribute( att, newValue );
 			}
@@ -4270,14 +4253,19 @@ window.frmAdminBuildJS = function() {
 			if ( newValue !== '' ) {
 				changes.innerHTML = '<input type="text" value="" disabled />';
 			}
+		} else if ( changes.tagName === 'TEXTAREA' && ! changes.classList.contains( 'wp-editor-area' ) ) {
+			changes.value = newValue;
 		} else {
-			changes.innerHTML = purifyHtml( newValue );
+			const content = changes.classList.contains( 'frm_primary_label' )
+				? changes.querySelector( '.frm_builder_field_name' ) || changes
+				: changes;
+			content.innerHTML = purifyHtml( newValue );
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
 				jQuery( changes ).trigger( 'change' );
 			}
 
-			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling.getAttribute( 'data-ftype' ) ) {
+			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling?.getAttribute( 'data-ftype' ) ) {
 				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
 			}
 		}
@@ -4361,6 +4349,7 @@ window.frmAdminBuildJS = function() {
 			const $reqBox = jQuery( `input[name="field_options[required_indicator_${ fieldId }]"]` );
 			if ( $reqBox.val() === '' ) {
 				$reqBox.val( '*' );
+				liveChanges.call( $reqBox[ 0 ] );
 			}
 			label.removeClass( 'frm_hidden' );
 		} else {
@@ -5084,15 +5073,12 @@ window.frmAdminBuildJS = function() {
 		const injectedCloneOptions = [];
 
 		const expectedLength = $fields.length;
-		const originalFieldIdByDuplicatedFieldId = {};
 
 		let duplicatedCount = 0;
 
 		jQuery( newRow ).on(
 			'frm_added_duplicated_field_to_row',
-			function( _, args ) {
-				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
-
+			function() {
 				if ( expectedLength > ++duplicatedCount ) {
 					return;
 				}
@@ -5113,12 +5099,6 @@ window.frmAdminBuildJS = function() {
 				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
 				newRow.classList.remove( 'frm_hidden' );
 				updateFieldOrder();
-
-				getFieldsInRow( $newRowUl ).each(
-					function() {
-						maybeDuplicateUnsavedSettings( originalFieldIdByDuplicatedFieldId[ this.getAttribute( 'data-fid' ) ], jQuery( this ).prop( 'outerHTML' ) );
-					}
-				);
 			}
 		);
 
@@ -7078,11 +7058,6 @@ window.frmAdminBuildJS = function() {
 		if ( single.length < 1 ) {
 			resetDisplayedOpts( fieldId );
 
-			// Set the default value.
-			const defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
-			if ( defaultVal.is( ':checked' ) && label.length > 0 ) {
-				jQuery( `select[name^="item_meta[${ fieldId }]"]` ).val( label.val() );
-			}
 			return;
 		}
 
@@ -7605,8 +7580,12 @@ window.frmAdminBuildJS = function() {
 		const isProduct = isProductField( sourceID );
 		const showOther = atts.other;
 
-		removeDropdownOpts( field );
 		const opts = getMultipleOpts( sourceID, field.id.includes( 'frm_field_logic_opt' ) );
+		if ( field.closest( '#frm-show-fields .frm_form_fields' ) && ! field.closest( '.frm-single-settings' ) ) {
+			renderDropdownPreview( field, opts, placeholder );
+			return;
+		}
+		removeDropdownOpts( field );
 		let hasPlaceholder = placeholder !== undefined;
 
 		for ( let i = 0; i < opts.length; i++ ) {
@@ -12431,6 +12410,15 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
+			builderForm.addEventListener( 'input', event => {
+				if ( event.target.matches( '[data-changeme]' ) ) {
+					liveChanges.call( event.target );
+					fieldUpdated();
+				}
+			} );
+			frmDom.util.documentOn( 'change', '.frm-single-settings select[id^="address_type_"]', function() {
+				updateAddressPreview( this, liveChanges );
+			} );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 

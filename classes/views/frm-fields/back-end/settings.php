@@ -432,7 +432,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<label for="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Required Field Indicator', 'formidable' ); ?>
 				</label>
-				<input type="text" id="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
+				<input type="text" id="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" data-changeme="frm_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="textContent" />
 			</p>
 		<?php } ?>
 
