@@ -219,7 +219,7 @@ class FrmEntriesAJAXSubmitController {
 	private static function check_for_failed_form_submission( $response, $form ) {
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
-		if ( ! str_contains( $response['content'], $frm_settings->failed_msg ) ) {
+		if ( '' === $frm_settings->failed_msg || ! str_contains( $response['content'], $frm_settings->failed_msg ) ) {
 			return $response;
 		}
 
