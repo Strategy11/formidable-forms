@@ -402,7 +402,11 @@ See all Formidable Zapier Integrations (https://zapier.com/apps/formidable/integ
 * Fix: Selecting groups inside a section could unexpectedly clear other selections in the builder.
 * Fix: AJAX submission success messages would not receive focus for screen reader users.
 * Fix: In Pro, validation errors in repeaters would not correctly set aria-invalid.
+* Fix: Stripe Link payments can now be retried after a failure. The failed payment is marked failed, its entry is removed, and the submit button stays disabled until cleanup finishes.
 * Fix: A payment left pending by an earlier failed attempt no longer blocks a retry on the same intent.
+* Fix: Stripe Link payment descriptions are now filled in by the webhook when the buyer never returns to the site.
+* Fix: Stripe subscriptions no longer fail with a No such price error when the plan needs to be created.
+* Fix: The Stripe amount now refreshes after a conditional pricing change, and Stripe is only called when the amount actually changed.
 * Fix: A returning Stripe Link payment now uses the action saved on the payment, even if the form's settings changed after the buyer submitted.
 * Fix: Stripe webhook events that belong to another site or plugin are now ignored instead of returning errors and being passed on as handled.
 * Fix: A subscription cancel event for a subscription that isn't on this site no longer causes an error.
