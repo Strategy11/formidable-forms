@@ -267,6 +267,36 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
+	 * Drop the line items when they do not add up to the amount being charged.
+	 *
+	 * The line items are sent to PayPal with an item_total breakdown, and PayPal rejects any order
+	 * where the breakdown does not equal the order amount. That happens whenever the amount includes
+	 * more than the product fields, like a calculated tax, gratuity, fee, or discount.
+	 * Without line items, no breakdown is sent and the order is created with the amount alone.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $pricing_data The products with prices and quantities.
+	 * @param string $amount       The order amount, formatted with two decimals.
+	 *
+	 * @return array
+	 */
+	private static function maybe_remove_pricing_data_for_amount_mismatch( $pricing_data, $amount ) {
+		$item_total = 0;
+
+		foreach ( $pricing_data as $item ) {
+			// Match how the line items are rounded when the breakdown is built.
+			$item_total += floatval( number_format( floatval( $item['price'] ), 2, '.', '' ) ) * intval( $item['quantity'] );
+		}
+
+		if ( number_format( $item_total, 2, '.', '' ) !== $amount ) {
+			return array();
+		}
+
+		return $pricing_data;
+	}
+
+	/**
 	 * Create a PayPal order via AJAX.
 	 */
 	public static function create_order() {
@@ -319,8 +349,9 @@ class FrmPayPalLiteAppController {
 		}
 
 		// PayPal expects the amount in a format like 10.00, so format it.
-		$amount   = number_format( floatval( $amount ), 2, '.', '' );
-		$currency = strtoupper( $action->post_content['currency'] );
+		$amount       = number_format( floatval( $amount ), 2, '.', '' );
+		$currency     = strtoupper( $action->post_content['currency'] );
+		$pricing_data = self::maybe_remove_pricing_data_for_amount_mismatch( $pricing_data, $amount );
 
 		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data, $shipping, $description );
 
