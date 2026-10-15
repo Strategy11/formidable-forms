@@ -1,39 +1,58 @@
 /**
- * Update a select placeholder without retaining a synthetic blank choice when cleared.
+ * Render the displayed choices without populating an interactive option list.
  *
  * @since x.x
- * @param {HTMLSelectElement} field          The preview select.
- * @param {string}            value          The placeholder text.
- * @param {boolean}           hasBlankChoice Whether the field has a real blank choice.
+ * @param {HTMLSelectElement} field       The preview dropdown.
+ * @param {Array}             choices     Choices from the field settings.
+ * @param {string}            placeholder The current placeholder text.
  * @return {void}
  */
-export function updateSelectPlaceholder( field, value, hasBlankChoice ) {
-	let [ option ] = field.options;
-	const isPlaceholder = option?.dataset.placeholder === 'true' ||
-		option?.classList.contains( 'frm-select-placeholder' );
-	if ( ! value && ! hasBlankChoice ) {
-		if ( isPlaceholder ) {
-			option.remove();
+export function renderDropdownPreview( field, choices, placeholder = '' ) {
+	const available = choices.filter( choice => placeholder === '' || choice.label !== '' );
+	let displayed = available.filter( choice => choice.checked );
+	if ( ! field.multiple ) {
+		displayed = displayed.slice( -1 );
+	}
+	if ( ! displayed.length ) {
+		displayed = [ placeholder !== ''
+			? { saved: '', label: placeholder, placeholder: true }
+			: choices[ 0 ] || { saved: '', label: '' } ];
+	}
+	const options = displayed.map( choice => {
+		const option = frmDom.tag( 'option', {
+			value: choice.saved,
+			text: choice.label,
+			selected: true
+		} );
+		if ( choice.placeholder ) {
+			option.classList.add( 'frm-select-placeholder' );
+			option.dataset.placeholder = 'true';
 		}
-		return;
-	}
-
-	if ( ! option || option.value !== '' || ( ! hasBlankChoice && ! isPlaceholder ) ) {
-		option = frmDom.tag( 'option', { value: '' } );
-		const hasDefault = Array.from( field.options ).some( choice => choice.defaultSelected );
-		field.prepend( option );
-		if ( ! hasDefault ) {
-			field.selectedIndex = 0;
+		if ( choice.price !== undefined ) {
+			option.dataset.price = choice.price;
 		}
-	}
+		return option;
+	} );
+	field.replaceChildren( ...options );
+}
 
-	option.textContent = value;
-	option.classList.toggle( 'frm-select-placeholder', value !== '' );
-	if ( value ) {
-		option.dataset.placeholder = 'true';
-	} else {
-		delete option.dataset.placeholder;
-	}
+/**
+ * Refresh an address dropdown from its default and placeholder settings.
+ *
+ * @since x.x
+ * @param {HTMLSelectElement} field    The address preview dropdown.
+ * @param {HTMLElement}       settings The field settings panel.
+ * @return {void}
+ */
+export function updateComboSelectPreview( field, settings ) {
+	const inputs = Array.from( settings.querySelectorAll( '[data-changeme]' ) )
+		.filter( input => input.dataset.changeme === field.id );
+	const defaultInput = inputs.find( input => input.dataset.changeatt === 'value' );
+	const placeholderInput = inputs.find( input => input.dataset.changeatt === 'placeholder' );
+	const value = defaultInput?.value ?? field.value;
+	const values = JSON.parse( field.dataset.frmPreviewChoices );
+	const choices = values.includes( value ) ? [ { saved: value, label: value, checked: true } ] : [];
+	renderDropdownPreview( field, choices, placeholderInput?.value || '' );
 }
 
 /**

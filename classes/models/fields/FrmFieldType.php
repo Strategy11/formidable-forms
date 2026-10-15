@@ -346,9 +346,69 @@ DEFAULT_HTML;
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
 		$field['default_value'] = $this->maybe_decode_value( $field['default_value'] );
+		$this->prepare_builder_dropdown_options( $field );
 
 		$display = $this->display_field_settings();
 		include $this->include_form_builder_file();
+	}
+
+	/**
+	 * Keep only displayed choices in a dropdown preview. Settings retain every choice.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field The prepared builder field.
+	 *
+	 * @return void
+	 */
+	protected function prepare_builder_dropdown_options( array &$field ) {
+		$is_dropdown = 'select' === $field['type'] ||
+		( 'product' === $field['type'] && 'select' === ( $field['data_type'] ?? 'select' ) );
+
+		if ( ! $is_dropdown || ! is_array( $field['options'] ) ) {
+			return;
+		}
+
+		$placeholder = $field['placeholder'] ?? '';
+
+		if ( ! $placeholder ) {
+			$placeholder = FrmFieldsController::get_default_value_from_name( $field );
+		}
+
+		$selected = array();
+		$first    = array();
+
+		foreach ( $field['options'] as $key => $option ) {
+			if ( FrmFieldsHelper::should_hide_field_choice( $key, $field ) ) {
+				continue;
+			}
+
+			$label = FrmFieldsHelper::get_label_from_array( $option, $key, $field );
+
+			if ( '' !== $placeholder && '' === $label ) {
+				continue;
+			}
+
+			$value      = FrmFieldsHelper::get_value_from_array( $option, $key, $field );
+			$is_default = FrmAppHelper::check_selected( $field['value'], $value );
+
+			if ( $is_default ) {
+				$selected[ $key ] = $option;
+			}
+
+			if ( ! $first && ! FrmFieldsHelper::should_disable_choice( $key, $is_default, $field ) ) {
+				$first[ $key ] = $option;
+			}
+		}//end foreach
+
+		if ( $selected ) {
+			$field['options']     = ! empty( $field['multiple'] ) ? $selected : array_slice( $selected, -1, 1, true );
+			$field['placeholder'] = '';
+			$field['label']       = '';
+			return;
+		}
+
+		$field['options'] = '' !== $placeholder ? array() : $first;
 	}
 
 	/**
