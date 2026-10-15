@@ -68,7 +68,7 @@
 		cursor: pointer;
 		display: block;
 
-		&:disabled {
+		&[data-action="selected"] {
 			cursor: not-allowed;
 			display: none;
 			background: var(--primary-700) !important;
@@ -78,7 +78,7 @@
 
 	&--selected &__button {
 
-		&:disabled {
+		&[data-action="selected"] {
 			display: block;
 		}
 

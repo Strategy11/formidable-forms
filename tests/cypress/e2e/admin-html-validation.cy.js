@@ -6,6 +6,9 @@ describe( 'Run some HTML validation', function() {
 	// assertion the static analyzer can't see across the plugin boundary, not a missing check.
 	// eslint-disable-next-line sonarjs/assertions-in-tests
 	it( 'Check the form list has valid HTML', () => {
+		// An empty list omits search and bulk-action submit buttons. Supply the shared
+		// fixture explicitly instead of relying on another spec to populate the list.
+		cy.ensureContactUsFormExists();
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.get( '#wpbody-content' ).htmlvalidate( {
 			rules: {

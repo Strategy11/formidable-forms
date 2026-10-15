@@ -3,6 +3,7 @@
 /**
  * @group fields
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
 class test_FrmFieldAddress extends FrmUnitTest {
 
 	/**
@@ -268,6 +269,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @dataProvider address_type_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'address_type_provider' )]
 	public function test_get_sub_fields_for_different_address_types( $address_type, $expected_keys ) {
 		$field = array(
 			'id'           => 10,
@@ -289,7 +291,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array<string> | string)>>
 	 */
-	public function address_type_provider() {
+	public static function address_type_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
 		yield 'us' => array( 'us', array( 'line1', 'line2', 'city', 'state', 'zip' ) );
 		yield 'europe' => array( 'europe', array( 'line1', 'line2', 'city', 'zip', 'country' ) );
@@ -323,6 +325,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider us_zip_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'us_zip_provider' )]
 	public function test_validate_checks_us_zip_format( $zip, $is_valid ) {
 		$field_type = $this->create_address_field_type( 'us' );
 		$field_id   = $field_type->get_field()->id;
@@ -345,7 +348,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array<string> | string)>>
 	 */
-	public function us_zip_provider() {
+	public static function us_zip_provider() {
 		yield 'five digits' => array( '62704', true );
 		yield 'zip plus four' => array( '62704-1234', true );
 		yield 'too short' => array( '1234', false );
@@ -372,7 +375,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * Test validate flags empty required sub-fields but not the optional line2.
+	 * Test validate names each empty required sub-field on its own when only some are missing.
 	 */
 	public function test_validate_required_flags_empty_sub_fields() {
 		$field_type = $this->create_address_field_type( 'international', 1 );
@@ -388,10 +391,45 @@ class test_FrmFieldAddress extends FrmUnitTest {
 
 		$this->assertArrayNotHasKey( 'field' . $field_id . '-line1', $errors, 'A filled sub-field should not be flagged.' );
 		$this->assertArrayNotHasKey( 'field' . $field_id . '-line2', $errors, 'The optional line2 sub-field should not be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id . '-city', $errors, 'An empty required city should be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id . '-state', $errors, 'An empty required state should be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id . '-zip', $errors, 'An empty required zip should be flagged.' );
-		$this->assertArrayHasKey( 'field' . $field_id, $errors, 'The main field should get the blank message.' );
+		$this->assertStringContainsString( 'City', $errors[ 'field' . $field_id . '-city' ], 'An empty required city should be named in its own error.' );
+		$this->assertStringContainsString( 'State/Province', $errors[ 'field' . $field_id . '-state' ], 'An empty required state should be named in its own error.' );
+		$this->assertStringContainsString( 'Zip/Postal', $errors[ 'field' . $field_id . '-zip' ], 'An empty required zip should be named in its own error.' );
+		$this->assertArrayNotHasKey( 'field' . $field_id, $errors, 'The main field should not get an error when only some sub-fields are missing.' );
+	}
+
+	/**
+	 * Test validate shows one error for the whole field when every required sub-field is empty.
+	 */
+	public function test_validate_required_all_empty_shows_one_field_error() {
+		$field_type = $this->create_address_field_type( 'international', 1 );
+		$field_id   = $field_type->get_field()->id;
+
+		$errors = $field_type->validate(
+			array(
+				'errors' => array(),
+				'id'     => $field_id,
+				'value'  => array( 'line2' => 'Unit 4' ),
+			)
+		);
+
+		$this->assertSame( FrmFieldsHelper::get_error_msg( $field_type->get_field(), 'blank' ), $errors[ 'field' . $field_id ], 'The main field should get the blank message.' );
+		$this->assertSame( '', $errors[ 'field' . $field_id . '-line1' ], 'Each empty required sub-field should be flagged without a message.' );
+		$this->assertSame( '', $errors[ 'field' . $field_id . '-country' ], 'Each empty required sub-field should be flagged without a message.' );
+		$this->assertArrayNotHasKey( 'field' . $field_id . '-line2', $errors, 'The optional line2 sub-field should not be flagged.' );
+	}
+
+	/**
+	 * Test get_sub_field_label uses the sub-field description, or combines the labels without one.
+	 */
+	public function test_get_sub_field_label() {
+		$field_type = $this->create_address_field_type();
+
+		$this->assertSame( 'City', $field_type->get_sub_field_label( 'city' ), 'The description should be used when there is one.' );
+		$this->assertSame(
+			$field_type->get_field()->name . ' Line 1',
+			$field_type->get_sub_field_label( 'line1' ),
+			'The field label should be combined with the sub-field label without a description.'
+		);
 	}
 
 	/**
@@ -529,6 +567,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider address_string_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'address_string_provider' )]
 	public function test_address_string_to_array( $value, $expected ) {
 		$field_type = new FrmFieldAddress(
 			array(
@@ -544,7 +583,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array | string)>>
 	 */
-	public function address_string_provider() {
+	public static function address_string_provider() {
 		yield 'six parts map in order' => array(
 			'123 Main St, Apt 2, Springfield, IL, 62704, United States',
 			array(
@@ -600,6 +639,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider import_value_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'import_value_provider' )]
 	public function test_prepare_import_value( $value, $expected ) {
 		$field_type = new FrmFieldAddress(
 			array(
@@ -617,7 +657,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array | string)>>
 	 */
-	public function import_value_provider() {
+	public static function import_value_provider() {
 		yield 'six parts include line2 and country' => array(
 			'123 Main St, Apt 2, Springfield, IL, 62704, United States',
 			array(
@@ -698,6 +738,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	 *
 	 * @dataProvider processed_sub_fields_provider
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'processed_sub_fields_provider' )]
 	public function test_get_processed_sub_fields_per_address_type( $address_type, $expected_order ) {
 		$field_type = new FrmFieldAddress(
 			array(
@@ -716,7 +757,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	/**
 	 * @return void array<(array<string> | string)>>
 	 */
-	public function processed_sub_fields_provider() {
+	public static function processed_sub_fields_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
 		yield 'us' => array( 'us', array( 'line1', 'line2', 'city', 'state', 'zip' ) );
 		yield 'europe' => array( 'europe', array( 'line1', 'line2', 'zip', 'city', 'country' ) );

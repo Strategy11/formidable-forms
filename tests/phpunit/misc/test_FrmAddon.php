@@ -2,7 +2,11 @@
 
 /**
  * @group addons
+ *
+ * @covers FrmAddon
  */
+#[\PHPUnit\Framework\Attributes\Group( 'addons' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAddon::class )]
 class test_FrmAddon extends FrmUnitTest {
 
 	private $addon;
@@ -11,7 +15,7 @@ class test_FrmAddon extends FrmUnitTest {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )->setMethods()
+		$this->addon = $this->getMockBuilder( 'FrmTestAddon' )->onlyMethods( array() )
 							->getMock();
 	}
 
@@ -29,9 +33,6 @@ class test_FrmAddon extends FrmUnitTest {
 		return $this->license_http_response;
 	}
 
-	/**
-	 * @covers FrmAddon::__construct
-	 */
 	public function test_construct() {
 		$this->assertSame( 'signature', $this->addon->plugin_slug );
 		$this->assertSame( 'edd_signature_license_', $this->addon->option_name );
@@ -39,17 +40,11 @@ class test_FrmAddon extends FrmUnitTest {
 		// TODO: Test this line: $this->license = $this->get_license();
 	}
 
-	/**
-	 * @covers FrmAddon::insert_installed_addon
-	 */
 	public function test_insert_installed_addon() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		$this->assertArrayHasKey( 'signature', $plugins );
 	}
 
-	/**
-	 * @covers FrmAddon::get_defined_license
-	 */
 	public function test_get_defined_license() {
 		$license = $this->addon->get_defined_license();
 		$this->assertFalse( $license, 'Not defined, but license returned: ' . $license );
@@ -60,11 +55,6 @@ class test_FrmAddon extends FrmUnitTest {
 		$this->assertSame( $license_key, $license );
 	}
 
-	/**
-	 * @covers FrmAddon::checked_recently
-	 * @covers FrmAddon::last_checked
-	 * @covers FrmAddon::update_last_checked
-	 */
 	public function test_checked_recently() {
 		$times = array(
 			array(
@@ -118,7 +108,7 @@ class test_FrmAddon extends FrmUnitTest {
 	private function get_licensed_addon( $payload ) {
 		$addon = $this->getMockBuilder( 'FrmTestAddon' )
 						->disableOriginalConstructor()
-						->setMethods( array( 'clear_license', 'get_defined_license' ) )
+						->onlyMethods( array( 'clear_license', 'get_defined_license' ) )
 						->getMock();
 
 		$this->license_http_response = is_wp_error( $payload ) ? $payload : array(
@@ -147,7 +137,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 * A check that never got an answer about the license must report itself as
 	 * inconclusive, so nothing downstream treats it as a verdict.
 	 *
-	 * @covers FrmAddon::get_license_status
+	 * @see FrmAddon::get_license_status
 	 *
 	 * @dataProvider license_status_provider
 	 *
@@ -157,6 +147,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 *
 	 * @return void
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'license_status_provider' )]
 	public function test_get_license_status_only_reports_a_verdict_from_the_api( $payload, $is_inconclusive, $status ) {
 		$addon    = $this->get_licensed_addon( $payload );
 		$response = $this->run_private_method( array( $addon, 'get_license_status' ) );
@@ -173,7 +164,7 @@ class test_FrmAddon extends FrmUnitTest {
 	/**
 	 * @return \Iterator<string, array<int, mixed>>
 	 */
-	public function license_status_provider(): \Iterator {
+	public static function license_status_provider(): \Iterator {
 		return new \ArrayIterator(
 			array(
 				'valid'               => array( array( 'license' => 'valid' ), false, 'valid' ),
@@ -196,7 +187,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 * A license that activated before stays in place until the API says otherwise.
 	 * Losing the connection is not a revocation.
 	 *
-	 * @covers FrmAddon::is_license_revoked
+	 * @see FrmAddon::is_license_revoked
 	 *
 	 * @dataProvider revoked_license_provider
 	 *
@@ -205,6 +196,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 *
 	 * @return void
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'revoked_license_provider' )]
 	public function test_is_license_revoked_only_clears_on_a_reported_revocation( $payload, $should_clear ) {
 		$addon = $this->get_licensed_addon( $payload );
 
@@ -216,7 +208,7 @@ class test_FrmAddon extends FrmUnitTest {
 	/**
 	 * @return \Iterator<string, array<int, mixed>>
 	 */
-	public function revoked_license_provider(): \Iterator {
+	public static function revoked_license_provider(): \Iterator {
 		return new \ArrayIterator(
 			array(
 				'revoked'          => array( 'revoked', true ),
@@ -234,8 +226,8 @@ class test_FrmAddon extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::activate_license
-	 * @covers FrmAddon::maybe_set_active
+	 * @see FrmAddon::activate_license
+	 * @see FrmAddon::maybe_set_active
 	 *
 	 * @return void
 	 */
@@ -255,7 +247,7 @@ class test_FrmAddon extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::activate_defined_license
+	 * @see FrmAddon::activate_defined_license
 	 *
 	 * @return void
 	 */
@@ -268,7 +260,7 @@ class test_FrmAddon extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmAddon::activate_license
+	 * @see FrmAddon::activate_license
 	 *
 	 * @return void
 	 */
@@ -286,9 +278,6 @@ class test_FrmAddon extends FrmUnitTest {
 		$this->assertFalse( get_option( $addon->option_name . 'key' ), 'The rejected key should be removed.' );
 	}
 
-	/**
-	 * @covers FrmAddon::update_pro_capabilities
-	 */
 	public function test_update_pro_capabilities() {
 		// Remove the roles first so we're not getting false positives for data that already exists prior to running FrmAddon::update_pro_capabilities.
 		$caps       = array_keys( FrmAppHelper::frm_capabilities( 'pro_only' ) );

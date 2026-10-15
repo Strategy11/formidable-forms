@@ -17,31 +17,53 @@ jobs:
       && (github.event.action != 'labeled' || github.event.label.name == 'run tests' || github.event.label.name == 'full automated qa')
     runs-on: ubuntu-latest
     env:
+      WP_DEVELOP_DIR: /tmp/wordpress/
       WP_MULTISITE: ${{ matrix.multisite }}
     strategy:
       matrix:
         include:
-          - php: 7.4
+          - php: '7.4'
+            phpunit: '9.6'
+            config: phpunit9.xml
             wordpress: trunk
             multisite: 0
-          - php: 8.0
+          - php: '8.0'
+            phpunit: '9.6'
+            config: phpunit9.xml
             wordpress: trunk
             multisite: 0
 
-    name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
+          - php: '8.2'
+            phpunit: '11.5'
+            config: phpunit.xml
+            wordpress: trunk
+            multisite: 0
+          - php: '8.4'
+            phpunit: '12.5'
+            config: phpunit.xml
+            wordpress: trunk
+            multisite: 0
+
+    name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} tests in WP ${{ matrix.wordpress }}
     steps:
       - uses: actions/checkout@v3.5.0
 
       # get the PHP version
-      - uses: shivammathur/setup-php@2.24.0
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: phpunit-polyfills
+          tools: composer:v2
+          coverage: xdebug
+
+      - name: Installing test dependencies
+        run: |
+          jq -n --arg phpunit '${{ matrix.phpunit }}.*' '{"require-dev": {"phpunit/phpunit": $phpunit, "yoast/phpunit-polyfills": "^4.0"}}' > composer.tests.json
+          COMPOSER=composer.tests.json composer install --no-interaction --prefer-dist
 
       - name: Installing WordPress
         run: |
           export WP_DEVELOP_DIR=/tmp/wordpress/
-          git clone --depth=1 --branch="${{ matrix.wordpress }}" git://develop.git.wordpress.org/ /tmp/wordpress
+          git clone --depth=1 --branch="${{ matrix.wordpress }}" https://github.com/WordPress/wordpress-develop.git /tmp/wordpress
           cd ..
           cp -r "${GITHUB_REPOSITORY#*/}" "/tmp/wordpress/src/wp-content/plugins/formidable"
           cd /tmp/wordpress/
@@ -75,7 +97,7 @@ jobs:
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/formidable"
           pwd
-          phpunit --coverage-clover=coverage.xml
+          ./vendor/bin/phpunit -c "${{ matrix.config }}" --coverage-clover=coverage.xml
       - name: Send code coverage report to Codecov.io
         uses: codecov/codecov-action@v2
         with:

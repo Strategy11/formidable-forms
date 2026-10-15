@@ -168,7 +168,7 @@ class FrmStyle {
 	 * because WordPress appends -2, -3, and so on to a duplicate slug, and the CSS scope that gets
 	 * nested into the custom CSS has to match the slug that actually gets stored.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $new_instance The style being saved.
 	 * @param bool  $is_existing  False for a new style, including a duplicate.
@@ -439,7 +439,7 @@ class FrmStyle {
 	 */
 	public function save_settings() {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
-		update_option( 'frm_last_style_update', gmdate( 'njGi' ) );
+		update_option( 'frm_last_style_update', gmdate( 'YmdHis' ) );
 
 		if ( ! is_file( $filename ) ) {
 			return;
@@ -559,19 +559,24 @@ class FrmStyle {
 	/**
 	 * Delete a style by its post ID.
 	 *
-	 * @param int $id
+	 * @param int|string $id The id of the style to delete. REST and MCP callers pass it as a string.
 	 *
 	 * @return false|WP_Post|null
 	 */
 	public function destroy( $id ) {
-		if ( $id === $this->get_default_style()->ID ) {
+		$default_style = $this->get_default_style();
+
+		// The ID arrives as a string from REST and MCP callers, so it is compared
+		// as an int. A site with no default style set has nothing to protect.
+		if ( $default_style && (int) $id === $default_style->ID ) {
 			return false;
 		}
+
 		return wp_delete_post( $id );
 	}
 
 	/**
-	 * @return stdClass|WP_Post
+	 * @return stdClass|WP_Post|null Null when the style does not exist, or when no default style is set.
 	 */
 	public function get_one() {
 		if ( 'default' === $this->id ) {

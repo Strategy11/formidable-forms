@@ -38,13 +38,17 @@ if ( $unlock_more_upgrade_link ) {
 } else {
 	$unlock_more_upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 }
+
+$connect_link = FrmAddonsController::connect_link();
 ?>
 <div id="frm_license_top" class="frm_unauthorized_box">
 	<p id="frm-connect-btns" class="frm-show-unauthorized">
-		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary frm-button-sm" target="_blank" rel="noopener">
-			<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
-		</a>
-		<?php esc_html_e( 'or', 'formidable' ); ?>
+		<?php if ( $connect_link ) : ?>
+			<a href="<?php echo esc_url( $connect_link ); ?>" class="button-primary frm-button-primary frm-button-sm" target="_blank" rel="noopener">
+				<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
+			</a>
+			<?php esc_html_e( 'or', 'formidable' ); ?>
+		<?php endif; ?>
 		<a href="<?php echo esc_url( $button_upgrade_link ); ?>" target="_blank" class="button-secondary frm-button-secondary frm-button-sm">
 			<?php echo esc_html( $button_upgrade_text ); ?>
 		</a>

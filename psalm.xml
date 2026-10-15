@@ -536,6 +536,7 @@
 		<MissingClassConstType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
+				<directory name="stripe" />
 			</errorLevel>
 		</MissingClassConstType>
 		<ClassMustBeFinal>

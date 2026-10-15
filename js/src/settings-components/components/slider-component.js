@@ -144,7 +144,7 @@ export default class frmSliderComponent {
 	/**
 	 * Reads the unit currently selected for a slider.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} element - The slider component element.
 	 * @return {string} The selected unit, or an empty string when the slider has no unit dropdown.
@@ -161,7 +161,7 @@ export default class frmSliderComponent {
 	 * (for instance 1, 2, 3, 4, 6, 12 grid columns) is driven by the position in that list instead.
 	 * Every arrow key press then lands on an allowed value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLInputElement} rangeInput - The native range input element.
 	 * @param {number}           index      - The index of this slider in the options array.
@@ -185,7 +185,7 @@ export default class frmSliderComponent {
 	/**
 	 * Finds the position in the steps array holding the value closest to the one given.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} value - The value to look for.
 	 * @param {Array}  steps - The list of values the slider is allowed to take.
@@ -209,7 +209,7 @@ export default class frmSliderComponent {
 	/**
 	 * Reads the value a slider represents, resolving the step list when there is one.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLInputElement} rangeInput - The native range input element.
 	 * @param {number}           index      - The index of this slider in the options array.
@@ -228,7 +228,7 @@ export default class frmSliderComponent {
 	/**
 	 * Moves a slider to the position representing the given value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLInputElement} rangeInput - The native range input element.
 	 * @param {number}           index      - The index of this slider in the options array.
@@ -253,7 +253,7 @@ export default class frmSliderComponent {
 	 * A range snaps its value to the step, so a fractional value needs a step fine enough to land
 	 * on. Whole numbers keep stepping by one so the arrow keys stay useful.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLInputElement} rangeInput - The native range input element.
 	 * @param {number|string}    value      - The value about to be set.
@@ -267,7 +267,7 @@ export default class frmSliderComponent {
 	/**
 	 * Updates the track fill and the value screen readers announce.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLInputElement} rangeInput - The native range input element.
 	 * @param {HTMLElement}      element    - The slider component element.
@@ -301,7 +301,7 @@ export default class frmSliderComponent {
 	 * The ratio is read back from the range input itself so the fill can never disagree
 	 * with where the browser paints the thumb.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLInputElement} rangeInput - The native range input element.
 	 * @return {void}
@@ -319,7 +319,7 @@ export default class frmSliderComponent {
 	/**
 	 * Syncs grouped child sliders (top/bottom or left/right) to the parent group value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement}   element - The parent slider component element.
 	 * @param {number|string} value   - The new numeric value (without unit).
@@ -390,6 +390,7 @@ export default class frmSliderComponent {
 				// There is no number to show or edit once the unit itself is unset.
 				valueInput.value = '';
 				valueInput.disabled = true;
+				frmSliderComponent.updateLabelFocusTarget( valueInput, false );
 
 				// Drop the old unit from what is announced, the value no longer carries one.
 				frmSliderComponent.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
@@ -412,6 +413,7 @@ export default class frmSliderComponent {
 				// the text box blank rather than duplicating the word or coercing it into a number.
 				valueInput.value = '';
 				valueInput.disabled = true;
+				frmSliderComponent.updateLabelFocusTarget( valueInput, false );
 
 				// The slider no longer stands for a number, so announce the keyword that replaced it.
 				rangeInput.setAttribute( 'aria-valuetext', unit );
@@ -424,6 +426,7 @@ export default class frmSliderComponent {
 			element.classList.remove( 'frm-disabled', 'frm-empty' );
 			rangeInput.disabled = false;
 			valueInput.disabled = false;
+			frmSliderComponent.updateLabelFocusTarget( valueInput, true );
 
 			if ( ! this.options[ index ].steps ) {
 				rangeInput.max = this.getMaxValue( unit, index, this.getRangeValue( rangeInput, index ) );
@@ -439,6 +442,33 @@ export default class frmSliderComponent {
 			frmSliderComponent.refreshRange( rangeInput, element, value );
 			this.triggerValueChange( index );
 		} );
+	}
+
+	/**
+	 * Keep a slider label's `for` on its value input only while the input is enabled, since a label click never focuses a disabled control.
+	 * The label is found by `data-slider-label-for`, printed by `FrmSliderStyleComponent::echo_label_attributes()`.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} valueInput - The visible text input the label may target.
+	 * @param {boolean}          isMeasured - Whether the input is now enabled (a measured unit).
+	 * @return {void}
+	 */
+	static updateLabelFocusTarget( valueInput, isMeasured ) {
+		if ( ! valueInput.id ) {
+			return;
+		}
+
+		const label = document.querySelector( `[data-slider-label-for="${ valueInput.id }"]` );
+		if ( ! label ) {
+			return;
+		}
+
+		if ( isMeasured ) {
+			label.setAttribute( 'for', valueInput.id );
+		} else {
+			label.removeAttribute( 'for' );
+		}
 	}
 
 	/**
@@ -494,7 +524,7 @@ export default class frmSliderComponent {
 	/**
 	 * Returns the index of the specified slider element.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} slider - The slider element.
 	 * @return {number} The index of the slider element, or -1 when it is not tracked.

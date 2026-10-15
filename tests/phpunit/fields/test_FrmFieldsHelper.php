@@ -4,13 +4,19 @@
  * @group fields
  * @group conditional-logic
  * @group value-meets-condition
+ *
+ * @covers FrmFieldsHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\Group( 'conditional-logic' )]
+#[\PHPUnit\Framework\Attributes\Group( 'value-meets-condition' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsHelper::class )]
 class test_FrmFieldsHelper extends FrmUnitTest {
 
 	/**
 	 * Tests where $observed_value is a single value, not an array.
 	 *
-	 * @covers FrmFieldsHelper::value_meets_condition
+	 * @see FrmFieldsHelper::value_meets_condition
 	 */
 	public function test_value_meets_condition() {
 		$tests = array(
@@ -230,7 +236,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 	/**
 	 * Test the "sep" option for checkbox field shortcodes.
 	 *
-	 * @covers FrmFieldsHelper::replace_content_shortcodes
+	 * @see FrmFieldsHelper::replace_content_shortcodes
 	 */
 	public function test_sep_option() {
 		$form           = $this->factory->form->create_and_get();
@@ -266,9 +272,6 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmFieldsHelper::get_error_msg
-	 */
 	public function test_get_error_msg() {
 		$form_id = $this->factory->form->create();
 
@@ -309,5 +312,68 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'unique_msg' );
 		$this->assertSame( 'My example field must be unique', $error_message );
+	}
+
+	/**
+	 * @covers FrmFieldsHelper::get_error_msg
+	 * @covers FrmFieldsHelper::default_invalid_msg
+	 */
+	public function test_get_error_msg_invalid_is_field_type_specific() {
+		$form_id = $this->factory->form->create();
+
+		// Email, url, phone, number, and quantity fields get their own corrective message
+		// when no custom one is set; a type with no specific copy (text) keeps the
+		// original generic message.
+		$tests = array(
+			array(
+				'type'     => 'email',
+				'name'     => 'Email',
+				'expected' => 'Enter a valid email address, like name@example.com',
+			),
+			array(
+				'type'     => 'url',
+				'name'     => 'Website',
+				'expected' => 'Enter a valid web address, like https://example.com',
+			),
+			array(
+				'type'     => 'phone',
+				'name'     => 'Cell',
+				'expected' => 'Enter a valid phone number',
+			),
+			array(
+				'type'     => 'number',
+				'name'     => 'Age',
+				'expected' => 'Enter a number',
+			),
+			array(
+				'type'     => 'quantity',
+				'name'     => 'Amount',
+				'expected' => 'Enter a number',
+			),
+			array(
+				'type'     => 'text',
+				'name'     => 'Comment',
+				'expected' => 'Comment is invalid',
+			),
+		);
+
+		foreach ( $tests as $test ) {
+			$field = $this->factory->field->create_and_get(
+				array(
+					'name'    => $test['name'],
+					'form_id' => $form_id,
+					'type'    => $test['type'],
+				)
+			);
+
+			$error_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
+			$this->assertSame( $test['expected'], $error_message );
+		}
+
+		// A custom message saved on the field is never overridden by the type-specific default.
+		$field->field_options['invalid'] = 'Please fix [field_name]';
+
+		$error_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
+		$this->assertSame( 'Please fix Comment', $error_message );
 	}
 }

@@ -2,12 +2,13 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmTransLiteSubscriptionsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteSubscriptionsController::class )]
 class test_FrmTransLiteSubscriptionsController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmTransLiteSubscriptionsController::show_cancel_link
-	 */
 	public function test_show_cancel_link() {
 		$user_id = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 		wp_set_current_user( $user_id );

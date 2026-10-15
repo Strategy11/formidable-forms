@@ -10,17 +10,17 @@ describe( 'Form Templates page', () => {
 		cy.get( '#template-search-input' ).should( 'exist' );
 
 		cy.log( 'Validate template categories' );
-		cy.get( 'li[data-category="favorites"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="favorites"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Favorites' );
 			cy.get( '.frm-page-skeleton-cat-count' ).should( 'contain', '0' );
 		} );
 
-		cy.get( 'li[data-category="custom"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="custom"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Custom' );
 			cy.get( '.frm-page-skeleton-cat-count' ).should( 'contain', '0' );
 		} );
 
-		cy.get( 'li[data-category="all-items"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="all-items"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'All Templates' );
 		} );
 
@@ -321,7 +321,8 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Use Template' )
 			.click();
 
-		cy.get( 'svg[aria-label="Close"]' ).should( 'be.visible' ).click();
+		cy.location( 'search', { timeout: 10000 } ).should( 'include', 'frm_action=edit' );
+		cy.get( '#frm_form_editor_container' ).should( 'be.visible' );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 
@@ -462,7 +463,13 @@ describe( 'Form Templates page', () => {
 		cy.get( '#frm-confirmed-click' ).should( 'contain', 'Confirm' ).click();
 
 		cy.log( 'Delete forms' );
-		cy.get( '#cb-select-all-1' ).click();
+		// Skip the default contact-form rather than using the header "select all" checkbox. Specs
+		// later in the same shard preview it by key, and deleteForms.cy.js empties the Trash, so
+		// trashing it here deletes it for good.
+		cy.get( '#the-list tr' )
+			.filter( ( index, element ) => Cypress.$( element ).find( '.column-form_key' ).text().trim() !== 'contact-form' )
+			.find( '.check-column input[type="checkbox"]' )
+			.check();
 		cy.get( '#bulk-action-selector-top' ).select( 'Move to Trash' );
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
 	} );

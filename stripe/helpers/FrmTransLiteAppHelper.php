@@ -679,7 +679,7 @@ class FrmTransLiteAppHelper {
 	 * Every gateway stores its credentials per mode, so a site can be connected in test mode
 	 * and disconnected in live mode at the same time.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 * @param string $mode    'auto', 'test', or 'live'. 'auto' uses the mode the gateway is currently set to.
@@ -713,7 +713,7 @@ class FrmTransLiteAppHelper {
 	 * This is used both before sending anything to the connect server and when a payment action runs,
 	 * so an unconnected site gets a message about the connection instead of an unrelated API error.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 * @param string $mode    'auto', 'test', or 'live'. 'auto' uses the mode the gateway is currently set to.
@@ -752,7 +752,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Get the message for a gateway that is connected in the mode it is not currently using.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $label The gateway name, for example 'Stripe'.
 	 * @param string $mode  The mode the gateway is currently set to, either 'test' or 'live'.
@@ -778,7 +778,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Get the message for a gateway with credentials that never finished onboarding.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $label The gateway name, for example 'Stripe'.
 	 * @param string $mode  The mode the gateway is currently set to, either 'test' or 'live'.
@@ -806,7 +806,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * Everyone else gets the reason without the pointer to an admin page they cannot open.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $message       The message explaining the connection problem.
 	 * @param string $label         The gateway name, for example 'Stripe'.
@@ -839,7 +839,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Get the mode a gateway is currently set to use.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 * @param string $mode    'auto', 'test', or 'live'.
@@ -868,7 +868,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * Get the display name for a gateway.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $gateway 'stripe', 'square', or 'paypal'.
 	 *

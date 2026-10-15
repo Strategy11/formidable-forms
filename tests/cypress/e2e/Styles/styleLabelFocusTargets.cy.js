@@ -1,0 +1,117 @@
+describe( 'Style builder labels focus their visible/interactive control', () => {
+	// The Styles page is slow to render on a cold CI run, longer than the 4s default.
+	const STYLES_PAGE_TIMEOUT = 10000;
+
+	beforeEach( () => {
+		cy.login();
+		cy.viewport( 1280, 1600 );
+	} );
+
+	it( 'Clicking a color picker\'s own label focuses the visible swatch button, not the hidden text input', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
+
+		// "Primary" in Quick Settings - the label wraps a color picker whose original text
+		// input gets hidden by wpColorPicker() in favor of a `.wp-color-result` button.
+		// style.js repoints the label's `for` to `{id}_visible` once wpColorPicker() inits,
+		// which happens before this query runs - so the selector must target the post-init id.
+		// Confirm the original input is hidden *before* interacting with it - clicking the
+		// swatch button intentionally reveals it again afterward as WP core's own manual hex
+		// entry field (color-picker.js `open()` un-hides `.wp-picker-input-wrap`), so asserting
+		// it stays hidden post-click would fail against WP's own by-design behavior.
+		cy.get( '#frm_style_qsettings_submit_bg_color', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'not.be.visible' );
+		cy.get( 'label[for="frm_style_qsettings_submit_bg_color_visible"]' ).click();
+		cy.focused().should( 'have.class', 'wp-color-result' );
+	} );
+
+	it( 'Clicking a single-value slider\'s own label focuses the visible number input, not the hidden real input', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#general-style', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'have.class', 'open' );
+
+		// "Border Width" lives directly in the General section, open by default.
+		cy.get( 'label[for="frm_fieldset-value"]' ).click();
+		cy.get( '#frm_fieldset' ).should( 'not.be.visible' );
+		cy.focused().should( 'have.id', 'frm_fieldset-value' );
+	} );
+
+	it( 'A slider label outside Width/Height also drops its focus target once its unit is cleared to "Not set"', () => {
+		cy.intercept( 'POST', '**/admin-ajax.php', req => {
+			if ( req.body?.includes( 'action=frm_change_styling' ) ) {
+				req.alias = 'changeStyling';
+			}
+		} );
+
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#general-style', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'have.class', 'open' );
+
+		cy.log( '"Border Width" (frm_fieldset) ships with a measured default, so the label starts wired up' );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'have.attr', 'for', 'frm_fieldset-value' );
+
+		cy.log( 'Clearing the unit to "Not set" disables the value input and drops the label\'s focus target' );
+		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( '' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '#frm_fieldset-value' ).should( 'be.disabled' );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'not.have.attr', 'for' );
+
+		cy.log( 'Choosing a measured unit again re-associates the label with the now-enabled input' );
+		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( 'px' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'have.attr', 'for', 'frm_fieldset-value' );
+		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).click();
+		cy.focused().should( 'have.id', 'frm_fieldset-value' );
+	} );
+
+	it( 'A "Width"/"Height" label targets nothing while its unit defaults to "auto", and gets a working focus target once a measured unit is chosen', () => {
+		cy.intercept( 'POST', '**/admin-ajax.php', req => {
+			if ( req.body?.includes( 'action=frm_change_styling' ) ) {
+				req.alias = 'changeStyling';
+			}
+		} );
+
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#buttons-style button[aria-label="Buttons"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.get( '#frm_style_section_buttons-style' ).should( 'be.visible' );
+
+		cy.log( 'Width defaults to "auto" out of the box (FrmStyle.php), rendering the value input disabled' );
+		cy.get( '#frm_submit_width' ).should( 'have.value', 'auto' );
+		cy.get( '#frm_submit_width-value' ).should( 'be.disabled' );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).should( 'not.have.attr', 'for' );
+
+		cy.log( 'Choosing a measured unit re-associates the label with the now-enabled input' );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( 'px' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).should( 'have.attr', 'for', 'frm_submit_width-value' );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).click();
+		cy.focused().should( 'have.id', 'frm_submit_width-value' );
+
+		cy.log( 'Switching back to "auto" removes the focus target again, live, not just on the next server render' );
+		cy.get( '#frm_submit_width' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( 'auto' );
+		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.get( '[data-slider-label-for="frm_submit_width-value"]' ).should( 'not.have.attr', 'for' );
+	} );
+	it( 'Background labels focus their color swatch', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( 'label[for="frm_fieldset_bg_color_visible"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.focused().should( 'have.id', 'frm_fieldset_bg_color_visible' );
+	} );
+
+	it( 'Radio headings focus the selected option without changing it, and toggle headings focus the switch', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#general-style .frm-align-component label[for="frm_form_align-right"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.contains( '#general-style .frm-style-item-heading', 'Alignment' ).click();
+		cy.focused().prev().should( 'have.value', 'right' ).and( 'be.checked' );
+		cy.get( '#general-style .frm-align-component input[value="right"]' ).should( 'be.checked' );
+		cy.get( 'label[for="frm_important_style"]' ).click();
+		cy.focused().should( 'have.attr', 'role', 'switch' ).and( 'have.attr', 'aria-label', 'Override Theme' );
+	} );
+
+	it( 'Required Indicator Weight focuses its own dropdown', () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( '#field-labels-style button[aria-label="Field Labels"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.get( 'label[for="frm_weight"]' ).click();
+		cy.focused().should( 'have.id', 'frm_weight' );
+		cy.contains( '#field-labels-style .frm-tabs-navs li', 'Required Indicator' ).click();
+		cy.get( 'label[for="frm_required_weight"]' ).click();
+		cy.focused().should( 'have.id', 'frm_required_weight' );
+		cy.get( '[id="frm_required_weight"]' ).should( 'have.length', 1 );
+	} );
+} );

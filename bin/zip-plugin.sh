@@ -49,6 +49,7 @@ zip -r $zipname $destination \
 	-x "*/.windsurf/*" \
 	-x "*/.devin/*" \
 	-x "*/.vscode/*" \
+	-x "*/.achecker.yml" \
 	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
@@ -66,6 +67,7 @@ zip -r $zipname $destination \
 	-x "*/.semgrepignore" \
 	-x "*/.gitmodules" \
 	-x "*/.oxlintrc.json" \
+	-x "*/.phpunit.cache/*" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -92,7 +94,7 @@ zip -r $zipname $destination \
 	-x "*/package.json" \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
-	-x "*/phpunit.xml" \
+	-x "*/phpunit*.xml" \
 	-x "*/phpunit.xml.dist" \
 	-x "*/psalm.xml" \
 	-x "*/phpstan.neon" \
@@ -147,7 +149,7 @@ zip -r $zipname $destination \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
 	-x "formidable-pro/resources/*" \
-	-x "formidable/lib/vendor/*"
+	-x "*/cypress/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

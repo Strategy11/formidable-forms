@@ -2,12 +2,13 @@
 
 /**
  * @group applications
+ *
+ * @covers FrmApplicationsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'applications' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmApplicationsController::class )]
 class test_FrmApplicationsController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmApplicationsController::landing_page
-	 */
 	public function test_landing_page() {
 		ob_start();
 		FrmApplicationsController::landing_page();
@@ -15,9 +16,6 @@ class test_FrmApplicationsController extends FrmUnitTest {
 		$this->assertStringContainsString( 'id="frm_applications_container"', $html );
 	}
 
-	/**
-	 * @covers FrmApplicationsController::get_prepared_template_data
-	 */
 	public function test_get_prepared_template_data() {
 		$this->set_current_user_to_1(); // Set to admin so that locked templates get included in template data.
 
@@ -40,9 +38,6 @@ class test_FrmApplicationsController extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmApplicationsController', 'get_prepared_template_data' ) );
 	}
 
-	/**
-	 * @covers FrmApplicationsController::render_applications_header
-	 */
 	public function test_render_applications_header() {
 		ob_start();
 		$title = 'Applications';

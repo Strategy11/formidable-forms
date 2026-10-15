@@ -1,5 +1,12 @@
 describe( 'Fields in the form builder', () => {
 	beforeEach( () => {
+		cy.intercept( 'POST', '**/wp-admin/admin-ajax.php', req => {
+			const action = new URLSearchParams( req.body ).get( 'action' );
+			if ( [ 'frm_insert_field', 'frm_duplicate_field', 'frm_delete_field' ].includes( action ) ) {
+				req.alias = action;
+			}
+		} );
+
 		cy.login();
 		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.createNewForm();
@@ -17,12 +24,14 @@ describe( 'Fields in the form builder', () => {
 		// real sidebar tab list (.frm-tabs-navs) to avoid it.
 		cy.get( '.frm-tabs-navs #frm_insert_fields_tab' ).click();
 		cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).should( 'be.visible' ).click();
+		cy.wait( '@frm_insert_field' );
 	};
 
 	it( 'should create, duplicate a field from each type and delete them', () => {
 		const createAndDuplicateField = ( fieldId, fieldType ) => {
 			cy.log( `Create a ${ fieldType } field and duplicate it` );
 			cy.get( `li[id="${ fieldId }"] a[title="${ fieldType }"]` ).click();
+			cy.wait( '@frm_insert_field' );
 			// .frm-field-action-icons is also .frm-show-hover (opacity: 0 by default; see
 			// resources/scss/admin/components/sorting/_sorting-display.scss), only revealed on a
 			// real CSS :hover of the field row or when the field is .selected - it's still genuinely
@@ -32,7 +41,7 @@ describe( 'Fields in the form builder', () => {
 			// measures 1280x0 (formidable-forms#3399), same shape as the #js_validate race in
 			// fieldsInFormBuilder-validation.cy.js. .scrollIntoView() first reliably clears it.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-				.invoke( 'css', 'opacity', 1 )
+				.revealFieldActions()
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 				.first()
 				.scrollIntoView()
@@ -42,6 +51,7 @@ describe( 'Fields in the form builder', () => {
 			// once it's open the item is genuinely clickable - wait for it to be visible instead of
 			// forcing through the open transition.
 			cy.get( `li[data-ftype="${ fieldId }"] .frm_clone_field > span` ).should( 'be.visible' ).and( 'contain', 'Duplicate' ).click();
+			cy.wait( '@frm_duplicate_field' );
 
 			cy.get( `li[data-type="${ fieldId }"]` ).should( 'have.length', 2 );
 			const originalField = cy.get( `li[data-type="${ fieldId }"]:first` );
@@ -50,36 +60,48 @@ describe( 'Fields in the form builder', () => {
 		};
 
 		const removeField = field => {
-			field.within( () => {
-				// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
-				// Same #wpbody-content 1280x0 race as createAndDuplicateField above
-				// (formidable-forms#3399) - .scrollIntoView() first reliably clears it.
-				cy.get( '.frm-field-action-icons' )
-					.invoke( 'css', 'opacity', 1 )
-					.find( '.dropdown .frm-hover-icon .frmsvg' )
-					.first()
-					.scrollIntoView()
-					.should( 'be.visible' )
-					.click();
+			// data-type holds the field's type slug (e.g. "text"), shared by the original and its
+			// duplicate - not unique enough to prove *this* field is gone. data-fid is the field's
+			// own database id, so capture it before deleting to assert against afterward.
+			// Read via .then($field => ...) and scope every command to that jQuery element with
+			// cy.wrap() - re-deriving commands from the stored `field` chainable a second time here
+			// (after other fields' own removeField() calls have queued commands in between) doesn't
+			// reliably yield this field's own element.
+			field.then( $field => {
+				const fid = $field.attr( 'data-fid' );
 
-				// The menu is open via the click above (not hover-gated), so wait for the item to
-				// be visible instead of forcing through the open transition.
-				cy.get( '.frm-dropdown-menu .frm_delete_field' )
+				cy.wrap( $field ).within( () => {
+					// Same .frm-show-hover opacity gate as the toggle above - reveal it first.
+					// Same #wpbody-content 1280x0 race as createAndDuplicateField above
+					// (formidable-forms#3399) - .scrollIntoView() first reliably clears it.
+					cy.get( '.frm-field-action-icons' )
+						.revealFieldActions()
+						.find( '.dropdown .frm-hover-icon .frmsvg' )
+						.first()
+						.scrollIntoView()
+						.should( 'be.visible' )
+						.click();
+
+					// The menu is open via the click above (not hover-gated), so wait for the item to
+					// be visible instead of forcing through the open transition.
+					cy.get( '.frm-dropdown-menu .frm_delete_field' )
+						.should( 'be.visible' )
+						.and( 'contain', 'Delete' )
+						.click();
+				} );
+
+				// Plain cy.get() by id (an id is unique) rather than cy.get().contains() - the latter
+				// can resolve to a narrower descendant node than the clickable link itself, which is
+				// what forced force here. Plain cy.get() on this id works unforced elsewhere in the
+				// suite.
+				cy.get( '#frm-confirmed-click' )
 					.should( 'be.visible' )
-					.and( 'contain', 'Delete' )
+					.and( 'contain', 'Confirm' )
 					.click();
+				cy.wait( '@frm_delete_field' );
+
+				cy.get( `li[data-fid="${ fid }"]` ).should( 'not.exist' );
 			} );
-
-			// Plain cy.get() by id (an id is unique) rather than cy.get().contains() - the latter
-			// can resolve to a narrower descendant node than the clickable link itself, which is
-			// what forced force here. Plain cy.get() on this id works unforced elsewhere in the
-			// suite.
-			cy.get( '#frm-confirmed-click' )
-				.should( 'be.visible' )
-				.and( 'contain', 'Confirm' )
-				.click();
-
-			cy.get( `li[data-type="${ field }"]` ).should( 'not.exist' );
 		};
 
 		cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
@@ -128,7 +150,7 @@ describe( 'Fields in the form builder', () => {
 			cy.log( `Rename a ${ fieldType } field` );
 			// See the .frm-show-hover opacity note on the field-row "more options" toggle above.
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-				.invoke( 'css', 'opacity', 1 )
+				.revealFieldActions()
 				.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 				.first()
 				.should( 'be.visible' )

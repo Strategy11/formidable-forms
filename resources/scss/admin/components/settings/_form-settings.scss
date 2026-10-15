@@ -84,36 +84,48 @@ h2.frm-h2,
 }
 
 /**
- * Spam Settings styles
+ * Spam and GDPR Settings styles
  */
-.frm-spam-settings h3 {
+.frm-spam-settings h3,
+.frm-gdpr-settings h3 {
 	margin-bottom: 0.5em;
 }
 
-.frm-spam-settings h3 + .howto {
+.frm-spam-settings h3 + .howto,
+.frm-gdpr-settings h3 + .howto {
 	margin-top: 0;
 }
 
-.frm-spam-settings .frm-global-spam-table {
+.frm-spam-settings .frm-global-spam-table,
+.frm-gdpr-settings .frm-global-gdpr-table {
 	width: auto;
 }
 
-.frm-spam-settings .frm-global-spam-table td {
+.frm-spam-settings .frm-global-spam-table td,
+.frm-gdpr-settings .frm-global-gdpr-table td {
 	border-bottom: 1px solid var(--grey-200);
 	padding-bottom: 12px;
 }
 
-.frm-spam-settings .frm-global-spam-table tr:last-child td {
+.frm-spam-settings .frm-global-spam-table tr:last-child td,
+.frm-gdpr-settings .frm-global-gdpr-table tr:last-child td {
 	border-bottom: none;
 }
 
-.frm-spam-settings .frm-success-icon {
+.frm-spam-settings .frm-success-icon,
+.frm-gdpr-settings .frm-success-icon {
 	color: rgba(3, 152, 85, 1);
 	font-size: 16px;
 	margin-right: 8px;
 }
 
-.frm-spam-settings .frm-x-icon {
+.frm-spam-settings .frm-x-icon,
+.frm-gdpr-settings .frm-x-icon {
 	font-size: 16px;
 	margin-right: 8px;
+}
+
+.frm-gdpr-settings .frm-auto-delete-days {
+	width: 80px;
+	margin: 0 4px;
 }

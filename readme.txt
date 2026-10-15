@@ -363,6 +363,8 @@ See all Formidable Zapier Integrations (https://zapier.com/apps/formidable/integ
 
 == Changelog ==
 = 7.0 =
+* Security: Additional permission checks have been added to prevent unauthorized plugin installations.
+* Security: Download URL validation has been hardened to prevent downloads from untrusted sources.
 * New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
 * New: Suspected spam can now be saved for review instead of blocking submissions.
 * New: Entries can now be marked as spam or not spam, with details about failed spam checks.
@@ -381,6 +383,11 @@ See all Formidable Zapier Integrations (https://zapier.com/apps/formidable/integ
 * New: A new frm_show_clickable_field_errors filter has been added for disabling the validation error summary.
 * New: New frm_before_entry_meta_change, frm_after_entry_meta_change, and frm_entry_meta_write_failed hooks have been added for tracking entry data changes.
 * New: New frm_prepare_other_input and frm_include_other_input hooks have been added for customizing Other option text boxes.
+* New: A form can now have more than one Stripe Link action. A one-time and a recurring action each get their own Stripe intent, and each payment keeps the action that created it.
+* New: On multi-page forms, a Stripe intent is now only created when the buyer reaches the page with the payment field, so skipped pages don't leave unused intents.
+* New: Shipping details are now sent to Stripe for one-time payments when the billing name and address are filled in.
+* New: A clear error now shows when live Stripe payments are used on a page that isn't HTTPS.
+* New: The Stripe card and Link inputs now use the form style's input font, and fall back to defaults when a form has no style.
 * Performance: The builder now loads faster and uses less memory when editing large forms.
 * Performance: The form switcher, form templates page, and forms list now use faster database queries.
 * Fix: Stripe Link payments could not be retried after a failed payment.
@@ -395,6 +402,11 @@ See all Formidable Zapier Integrations (https://zapier.com/apps/formidable/integ
 * Fix: Selecting groups inside a section could unexpectedly clear other selections in the builder.
 * Fix: AJAX submission success messages would not receive focus for screen reader users.
 * Fix: In Pro, validation errors in repeaters would not correctly set aria-invalid.
+* Fix: A payment left pending by an earlier failed attempt no longer blocks a retry on the same intent.
+* Fix: A returning Stripe Link payment now uses the action saved on the payment, even if the form's settings changed after the buyer submitted.
+* Fix: Stripe webhook events that belong to another site or plugin are now ignored instead of returning errors and being passed on as handled.
+* Fix: A subscription cancel event for a subscription that isn't on this site no longer causes an error.
+* Fix: Posted Stripe client secrets are now checked against Stripe before they're trusted.
 
 = 6.35 =
 * Security: More strict sanitizing is now applied to entry key values before it gets used in the HTML of a form.

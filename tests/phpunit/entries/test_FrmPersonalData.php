@@ -2,7 +2,11 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmPersonalData
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmPersonalData::class )]
 class test_FrmPersonalData extends FrmUnitTest {
 
 	public static function wpSetUpBeforeClass() {
@@ -16,9 +20,6 @@ class test_FrmPersonalData extends FrmUnitTest {
 		$this->create_users();
 	}
 
-	/**
-	 * @covers FrmPersonalData::get_user_entries
-	 */
 	public function test_get_user_entries() {
 		$form       = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );

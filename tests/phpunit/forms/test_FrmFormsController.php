@@ -3,7 +3,12 @@
 /**
  * @group forms
  * @group forms-controller
+ *
+ * @covers FrmFormsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
+#[\PHPUnit\Framework\Attributes\Group( 'forms-controller' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormsController::class )]
 class test_FrmFormsController extends FrmUnitTest {
 
 	public function test_register_widgets() {
@@ -35,7 +40,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmFormsController::update
+	 * @see FrmFormsController::update
 	 * without ajax
 	 */
 	public function test_form_update_no_ajax() {
@@ -128,9 +133,6 @@ class test_FrmFormsController extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmFormsController::front_head
-	 */
 	public function test_front_head() {
 		$this->assertTrue( FrmFormsController::has_combo_js_file(), 'The combo file was not created' );
 
@@ -251,7 +253,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	/**
 	 * Test redirect after create
 	 *
-	 * @covers FrmFormsController::redirect_after_submit
+	 * @see FrmFormsController::redirect_after_submit
 	 */
 	public function test_redirect_after_create() {
 		$form_id  = $this->factory->form->create();
@@ -295,16 +297,10 @@ class test_FrmFormsController extends FrmUnitTest {
 		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
 	}
 
-	/**
-	 * @covers FrmFormsController::show_message_after_save
-	 */
 	public function test_message_after_create() {
 		$this->run_message_after_create( 0 );
 	}
 
-	/**
-	 * @covers FrmFormsController::show_message_after_save
-	 */
 	public function test_message_with_form_after_create() {
 		$this->run_message_after_create( 1 );
 	}

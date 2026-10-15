@@ -2,7 +2,15 @@
 
 /**
  * @group square
+ *
+ * @covers FrmSquareLiteActionsController
+ * @covers FrmSquareLiteAppController
+ * @covers FrmTransLiteActionsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'square' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSquareLiteActionsController::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSquareLiteAppController::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteActionsController::class )]
 class test_FrmSquareLiteAppController extends FrmUnitTest {
 
 	/**
@@ -29,7 +37,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * Square's 3DS challenge sheet show a shopper GBP 2,000.00 for a GBP 20.00 payment,
 	 * which only surfaced in live, where SCA regions actually render that sheet.
 	 *
-	 * @covers FrmSquareLiteAppController::get_amount_value_for_verification
+	 * @see FrmSquareLiteAppController::get_amount_value_for_verification
 	 */
 	public function test_get_amount_value_for_verification_returns_major_units() {
 		$form_id  = $this->factory->form->create();
@@ -54,7 +62,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * An amount typed straight into the action setting is already in major units, but it
 	 * may still carry a currency symbol and a thousands separator that Square will reject.
 	 *
-	 * @covers FrmSquareLiteAppController::get_amount_value_for_verification
+	 * @see FrmSquareLiteAppController::get_amount_value_for_verification
 	 */
 	public function test_get_amount_value_for_verification_normalizes_a_literal_amount() {
 		$form_id = $this->factory->form->create();
@@ -67,7 +75,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * The charge and the verification amounts are deliberately in different units.
 	 * Pin the charge side too, so the two never get collapsed onto one value.
 	 *
-	 * @covers FrmSquareLiteActionsController::prepare_amount
+	 * @see FrmSquareLiteActionsController::prepare_amount
 	 */
 	public function test_charge_amount_uses_the_smallest_denomination() {
 		$atts = array( 'currency' => 'gbp' );
@@ -80,7 +88,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * A currency with no fractional unit uses the same value on both paths, which is why
 	 * this was only ever reachable in currencies like GBP.
 	 *
-	 * @covers FrmSquareLiteActionsController::prepare_amount
+	 * @see FrmSquareLiteActionsController::prepare_amount
 	 */
 	public function test_zero_decimal_currency_amount_matches_on_both_paths() {
 		$atts = array( 'currency' => 'jpy' );
@@ -96,8 +104,8 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 *
 	 * @dataProvider amount_format_provider
 	 *
-	 * @covers FrmSquareLiteActionsController::prepare_amount
-	 * @covers FrmTransLiteActionsController::prepare_amount
+	 * @see FrmSquareLiteActionsController::prepare_amount
+	 * @see FrmTransLiteActionsController::prepare_amount
 	 *
 	 * @param string $currency        The three letter currency code.
 	 * @param string $amount          The amount as it reaches the payment action.
@@ -106,6 +114,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 *
 	 * @return void
 	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'amount_format_provider' )]
 	public function test_amount_formats( $currency, $amount, $expected_major, $expected_charge ) {
 		$atts    = array( 'currency' => $currency );
 		$message = $currency . ' amount ' . $amount;
@@ -117,7 +126,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	/**
 	 * @return void
 	 */
-	public function amount_format_provider(): \Iterator {
+	public static function amount_format_provider(): \Iterator {
 		// Comma thousands with a dot decimal, the GBP and USD convention.
 		yield 'GBP with no separators' => array( 'gbp', '20', '20.00', '2000' );
 		yield 'GBP with a symbol' => array( 'gbp', '£20.00', '20.00', '2000' );
@@ -160,7 +169,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * the amount silently loses its leading group and the shopper is undercharged.
 	 * This is shared code, so Stripe and PayPal drop the same digits.
 	 *
-	 * @covers FrmTransLiteActionsController::prepare_amount
+	 * @see FrmTransLiteActionsController::prepare_amount
 	 *
 	 * @return void
 	 */
@@ -177,7 +186,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * The same currency parses correctly once the space is gone, which isolates the
 	 * separator as the cause rather than anything to do with the comma decimal.
 	 *
-	 * @covers FrmTransLiteActionsController::prepare_amount
+	 * @see FrmTransLiteActionsController::prepare_amount
 	 *
 	 * @return void
 	 */
@@ -194,7 +203,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	 * off the list ignored conditional logic, so a buyer picking the second action's option
 	 * got a 3DS challenge for the first action's amount.
 	 *
-	 * @covers FrmSquareLiteAppController::get_action_for_verification
+	 * @see FrmSquareLiteAppController::get_action_for_verification
 	 */
 	public function test_get_action_for_verification_skips_an_action_with_unmet_conditions() {
 		if ( ! $this->is_pro_active ) {

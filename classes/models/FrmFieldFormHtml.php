@@ -323,7 +323,7 @@ class FrmFieldFormHtml {
 	 * carries no frm_error class or id (e.g. `[if error]<div>[error]</div>[/if error]`).
 	 * Mirrors insertErrorHtml() tagging every top-level element client-side.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */
@@ -348,7 +348,7 @@ class FrmFieldFormHtml {
 	 * fragment (direct children only, not nested descendants) by tracking open tags
 	 * on a stack through a single scan, rather than a full DOM parse.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 *

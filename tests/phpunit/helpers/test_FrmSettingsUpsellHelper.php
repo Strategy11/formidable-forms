@@ -2,12 +2,13 @@
 
 /**
  * @group settings
+ *
+ * @covers FrmSettingsUpsellHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'settings' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSettingsUpsellHelper::class )]
 class test_FrmSettingsUpsellHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmSettingsUpsellHelper::add_upgrade_modal_atts
-	 */
 	public function test_add_upgrade_modal_atts_tags_the_learn_more_link() {
 		$atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
 			array(),

@@ -2,7 +2,11 @@
 
 /**
  * @group form-templates
+ *
+ * @covers FrmFormTemplatesController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'form-templates' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormTemplatesController::class )]
 class test_FrmFormTemplatesController extends FrmUnitTest {
 	private $controller;
 
@@ -16,16 +20,10 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$this->controller = 'FrmFormTemplatesController';
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::menu
-	 */
 	public function test_menu() {
 		$this->assertSame( 14, has_action( 'admin_menu', $this->controller . '::menu' ) );
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::render
-	 */
 	public function test_render() {
 		// Prepare the necessary environment and data for the test.
 		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
@@ -58,9 +56,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$this->assertStringContainsString( 'id="post-body-content"', $output, 'The post body content (post-body-content) is missing from the output.' );
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::render_modal
-	 */
 	public function test_render_modal() {
 		// Simulate the is_templates_page method as true.
 		$this->set_admin_screen();
@@ -103,9 +98,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$this->assertEmpty( $output );
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::init_favorite_templates
-	 */
 	public function test_init_favorite_templates() {
 		// Define test data for favorite templates.
 		$test_favorites = array(
@@ -140,9 +132,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::fetch_and_format_custom_templates
-	 */
 	public function test_fetch_and_format_custom_templates() {
 		// Prepare the necessary environment and data for the test.
 		$this->run_private_method( array( $this->controller, 'init_template_resources' ) );
@@ -157,9 +146,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$this->assertContains( 'contact-db12', $keys, 'The custom templates array should contain an element with key "contact-db12".' );
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::organize_and_set_categories
-	 */
 	public function test_organize_and_set_categories() {
 		// Set up the testing environment by initializing template data and categorizing them.
 		$this->set_private_property( $this->controller, 'custom_templates', array() );
@@ -214,9 +200,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::append_new_template_to_nav
-	 */
 	public function test_append_new_template_to_nav() {
 		// Mock navigation items.
 		$nav_items = array(
@@ -248,9 +231,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::enqueue_assets
-	 */
 	public function test_enqueue_assets() {
 		global $wp_scripts, $wp_styles;
 

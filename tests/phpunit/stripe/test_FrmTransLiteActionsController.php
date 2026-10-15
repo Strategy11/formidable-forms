@@ -2,7 +2,11 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmTransLiteActionsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteActionsController::class )]
 class test_FrmTransLiteActionsController extends FrmUnitTest {
 
 	public function test_get_fields_for_price() {
@@ -42,9 +46,6 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmTransLiteActionsController', 'get_fields_for_price' ), array( $action ) );
 	}
 
-	/**
-	 * @covers FrmTransLiteActionsController::maybe_use_decimal
-	 */
 	public function test_maybe_use_decimal() {
 		// We need a currency with a . thousands separator.
 		$currency = array(

@@ -18,11 +18,15 @@ class FrmHtmlSanitizer {
 	 *
 	 * @since 6.34
 	 *
-	 * @param string $value HTML string to process.
+	 * @param string|null $value HTML string to process.
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public static function sanitize_url_attributes( $value ) {
+		if ( is_null( $value ) ) {
+			return $value;
+		}
+
 		if ( '' === $value || ( ! str_contains( $value, 'href' ) && ! str_contains( $value, 'src' ) ) ) {
 			return $value;
 		}

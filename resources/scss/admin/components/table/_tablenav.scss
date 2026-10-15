@@ -12,6 +12,29 @@
 	margin-right: var(--gap-xs);
 }
 
-.tablenav .actions .button {
-	margin-top: 1px;
+/* Center the bulk actions, item count and pagination in the row */
+.frm_wrap .tablenav .actions,
+.frm_wrap .tablenav .tablenav-pages,
+.frm_wrap .tablenav .pagination-links,
+.frm_wrap .tablenav .paging-input {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.frm_wrap .tablenav .tablenav-pages {
+	gap: var(--gap-xs);
+}
+
+/* Match the pagination buttons to the 32px current page input */
+.frm-white-body .tablenav .tablenav-pages .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-width: 32px;
+	min-height: 32px;
+	padding: 0 8px !important;
+	font-size: var(--text-md) !important;
+	vertical-align: middle;
 }

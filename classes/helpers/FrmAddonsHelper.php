@@ -269,7 +269,7 @@ class FrmAddonsHelper {
 	/**
 	 * Check if the add-on being rendered is built into Lite.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */

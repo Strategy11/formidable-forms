@@ -2,7 +2,13 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmTransLiteDb
+ * @covers FrmTransLiteSubscription
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteDb::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteSubscription::class )]
 class test_FrmTransLiteSubscription extends FrmUnitTest {
 
 	public function setUp(): void {
@@ -38,9 +44,6 @@ class test_FrmTransLiteSubscription extends FrmUnitTest {
 		return $subscription->create( array_merge( $defaults, $values ) );
 	}
 
-	/**
-	 * @covers FrmTransLiteSubscription::get_overdue_subscriptions
-	 */
 	public function test_get_overdue_subscriptions() {
 		$overdue_active_id = $this->create_subscription();
 		$overdue_cancel_id = $this->create_subscription( array( 'status' => 'future_cancel' ) );
@@ -60,14 +63,6 @@ class test_FrmTransLiteSubscription extends FrmUnitTest {
 		$this->assertNotContains( $canceled_id, $overdue_ids );
 	}
 
-	/**
-	 * @covers FrmTransLiteDb::get_one
-	 * @covers FrmTransLiteDb::get_one_by
-	 * @covers FrmTransLiteDb::get_all_by
-	 * @covers FrmTransLiteDb::get_count
-	 * @covers FrmTransLiteDb::update
-	 * @covers FrmTransLiteDb::destroy
-	 */
 	public function test_subscription_crud() {
 		$subscription = new FrmTransLiteSubscription();
 		$id           = $this->create_subscription(
@@ -100,9 +95,6 @@ class test_FrmTransLiteSubscription extends FrmUnitTest {
 		$this->assertNull( $subscription->get_one( $id ) );
 	}
 
-	/**
-	 * @covers FrmTransLiteDb::get_all_for_user
-	 */
 	public function test_get_all_for_user() {
 		$user_id = $this->factory->user->create( array( 'role' => 'subscriber' ) );
 		wp_set_current_user( $user_id );

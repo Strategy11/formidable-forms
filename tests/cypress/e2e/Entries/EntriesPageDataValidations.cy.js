@@ -158,6 +158,7 @@ describe( 'Entries submitted from a form', () => {
 			'Print Entry',
 			'Download as PDF',
 			'Resend Emails',
+			'Mark as spam',
 			'Delete Entry',
 		];
 		cy.get( '.frm_no_print > .inside > .misc-pub-section' ).should( 'have.length', entryActions.length );

@@ -102,6 +102,14 @@ if ( ! empty( $should_show_warning ) ) {
 			</div>
 		</label>
 	</div>
+	<?php
+	/**
+	 * Render add-on controls inside the Test Mode container.
+	 *
+	 * @param array $form_actions The form's configured actions.
+	 */
+	do_action( 'frm_test_mode_extra_controls', $form_actions );
+	?>
 	<hr>
 	<div>
 		<label id="frm_quick_jump_label"><?php esc_html_e( 'Quick jump to page:', 'formidable' ); ?></label>

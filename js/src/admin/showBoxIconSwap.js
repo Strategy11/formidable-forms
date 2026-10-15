@@ -5,7 +5,7 @@
  * changes in one frame with nothing to soften it. Watching for the attribute change covers every
  * call site without editing each one. Animation lives in _has-shortcodes.scss.
  *
- * @since x.x
+ * @since 7.0
  */
 
 const SWAP_CLASS = 'frm-icon-swapping';
@@ -20,7 +20,7 @@ const BOX_CLASSES = [ 'frm-show-box', 'frm-show-inline-modal' ];
 /**
  * Whether an element is one of the shortcode boxes.
  *
- * @since x.x
+ * @since 7.0
  *
  * @param {HTMLElement} element The element to test.
  * @return {boolean} True when it is a shortcode box.
@@ -32,7 +32,7 @@ function isShortcodeBox( element ) {
 /**
  * Watches every shortcode box for an icon change.
  *
- * @since x.x
+ * @since 7.0
  *
  * @return {void}
  */
@@ -71,7 +71,7 @@ export function initShowBoxIconSwap() {
 /**
  * Restarts the bloom on an icon that just changed.
  *
- * @since x.x
+ * @since 7.0
  *
  * @param {HTMLElement} svg The shortcode box element.
  * @return {void}

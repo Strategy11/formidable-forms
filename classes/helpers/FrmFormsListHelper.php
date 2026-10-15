@@ -97,17 +97,23 @@ class FrmFormsListHelper extends FrmListHelper {
 			$search_terms = array_map( 'trim', $matches[0] );
 
 			foreach ( $search_terms as $term ) {
-				$s_query[] = array(
+				$search_query = array(
 					'or'               => true,
 					'name LIKE'        => $term,
 					'description LIKE' => $term,
-					'created_at LIKE'  => $term,
 					'form_key LIKE'    => $term,
 					'id'               => $term,
 				);
+
+				// Keep partial date searches, but skip text that cannot occur in a datetime.
+				if ( preg_match( '/^[0-9 :\-]+$/D', $term ) ) {
+					$search_query['created_at LIKE'] = $term;
+				}
+
+				$s_query[] = $search_query;
 				unset( $term );
 			}
-		}
+		}//end if
 
 		$this->items       = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
 		$total_items       = FrmDb::get_count( 'frm_forms', $s_query );

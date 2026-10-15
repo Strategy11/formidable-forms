@@ -772,7 +772,7 @@
 	 * Get the submit buttons PayPal controls in a form.
 	 * Previous page buttons are left alone, they never submit the form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1659,7 +1659,7 @@
 	 * The container is what conditional logic shows and hides, so it is what gets
 	 * checked to know whether the payment field is available.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1683,7 +1683,7 @@
 	 * While it is hidden there is nothing to pay with, so PayPal must not disable
 	 * the submit button or take over form submission.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1713,7 +1713,7 @@
 	 * leave the form with nothing to pay for, so PayPal must not disable the submit
 	 * button or take over form submission.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1726,7 +1726,7 @@
 	/**
 	 * Resolve once conditional logic is no longer hiding the payment field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1773,7 +1773,7 @@
 	 * Toggle the submit button on and off as conditional logic shows or hides the
 	 * payment field or the section it belongs to.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1829,7 +1829,7 @@
 	 * conditions are met, with no knowledge of the payment field. Watch for that and
 	 * put it back until PayPal is ready for it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1873,7 +1873,7 @@
 	 * Watch an element for attribute changes.
 	 * An element is only observed once, so re-initializing does not stack observers.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} element
 	 * @param {Function}    mutationHandler
@@ -1903,7 +1903,7 @@
 	 * PayPal must not enable it in that case, whatever state the payment methods
 	 * are in.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} formId
 	 *
@@ -1925,7 +1925,7 @@
 	 * only disabling it. PayPal must not show it again in that case, even when the
 	 * payment field goes away and the native submit button would normally return.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} formId
 	 *
@@ -1938,7 +1938,7 @@
 	/**
 	 * Check the submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} formId
 	 *
@@ -1962,7 +1962,7 @@
 	/**
 	 * Check a form's form_id input for a form ID value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -2376,7 +2376,7 @@
 	/**
 	 * Get the IDs of the fields a payment action uses in its conditional logic.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {Object} setting A single entry from frmPayPalVars.settings.
 	 *
@@ -2391,7 +2391,7 @@
 	 * When one does, the applicable action, and the amount with it, can change as
 	 * the form is filled in, so the amount has to be refreshed on field changes.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {boolean} True when at least one action has conditional logic.
 	 */
@@ -2480,7 +2480,7 @@
 	 * With no action applying there is no payment to collect, so PayPal hides its
 	 * payment methods and hands the form back to the native submit button.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {boolean} matched True when a payment action applies.
 	 *

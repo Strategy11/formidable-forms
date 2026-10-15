@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span class="frm-tabs-active-underline"></span>
 	</div>
 	<div class="frm-tabs-navs">
-		<ul class="frm-flex-box">
+		<ul class="frm-flex-box" aria-label="<?php esc_attr_e( 'Field states', 'formidable' ); ?>">
 			<li class="frm-active"><?php esc_html_e( 'Default', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'Active', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'Read Only', 'formidable' ); ?></li>
@@ -74,9 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							for="frm_field_border_width"
-							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'field_border_width', 'frm_field_border_width-value', __( 'Border Width', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -175,7 +173,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label class="frm-style-item-heading"><?php esc_html_e( 'Remove Box Shadow', 'formidable' ); ?></label>
+						<label for="remove_box_shadow_active" class="frm-style-item-heading"><?php esc_html_e( 'Remove Box Shadow', 'formidable' ); ?></label>
 					</div>
 					<div class="frm7 frm_form_field frm-style-component">
 						<?php
@@ -309,9 +307,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							for="frm_border_width_error"
-							class="frm-style-item-heading"><?php esc_html_e( 'Border Width', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'border_width_error', 'frm_border_width_error-value', __( 'Border Width', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php

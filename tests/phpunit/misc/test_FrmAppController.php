@@ -1,7 +1,11 @@
 <?php
 /**
  * @group app
+ *
+ * @covers FrmAppController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'app' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAppController::class )]
 class test_FrmAppController extends FrmUnitTest {
 
 	public function setUp(): void {
@@ -60,10 +64,6 @@ class test_FrmAppController extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppController::add_admin_class
-	 * @covers FrmAppController::is_white_page
-	 */
 	public function test_add_admin_class() {
 		$this->set_admin_screen();
 		$class          = 'other-class';
@@ -78,9 +78,6 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->assertStringContainsString( ' frm-white-body', $filtered_class, '"frm-white-body" is missing from admin classes' );
 	}
 
-	/**
-	 * @covers FrmAppController::load_wp_admin_style
-	 */
 	public function test_load_wp_admin_style() {
 		$this->set_admin_screen();
 
@@ -93,17 +90,11 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->assertStringContainsString( FrmAppHelper::plugin_url() . '/css/frm_fonts.css', $styles, 'The frm_fonts stylesheet is missing' );
 	}
 
-	/**
-	 * @covers FrmAppController::needs_update
-	 */
 	public function test_needs_update() {
 		update_option( 'frm_db_version', 1 );
 		$this->assertTrue( FrmAppController::needs_update(), 'The DB needs update but is skipping it' );
 	}
 
-	/**
-	 * @covers FrmAppController::compare_for_update
-	 */
 	public function test_compare_for_update() {
 		$tests = array(
 			array(
@@ -175,9 +166,6 @@ class test_FrmAppController extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmAppController::api_install
-	 */
 	public function test_api_install() {
 		delete_option( 'frm_install_running' );
 
@@ -193,9 +181,6 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->assertSame( $current_db, $new_db, 'The DB did not update correctly' );
 	}
 
-	/**
-	 * @covers FrmAppController::network_upgrade_site
-	 */
 	public function test_network_upgrade_site() {
 		FrmAppController::network_upgrade_site();
 		$this->addToAssertionCount( 1 );

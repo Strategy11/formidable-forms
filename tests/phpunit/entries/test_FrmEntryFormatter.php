@@ -2,14 +2,15 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntryFormatter
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryFormatter::class )]
 class test_FrmEntryFormatter extends FrmUnitTest {
 
 	private $formatter;
 
-	/**
-	 * @covers FrmEntryFormatter::flatten_array
-	 */
 	public function test_flatten_array() {
 		$values     = array( 'Option 1', 'Option 2', 'Option 3' );
 		$form       = $this->factory->form->create_and_get();

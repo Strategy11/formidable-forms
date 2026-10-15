@@ -1022,7 +1022,7 @@ class FrmStylesController {
 	 * From the list view, it persists the reset immediately, and returns the default card style attributes so the style card can be reset as well.
 	 *
 	 * @since 6.0 When a style_id is passed to this action, the style will actually be reset.
-	 * @since x.x A style_id is now always expected, so the edit view can look up that style's own default template instead of the generic defaults. The list view now also sends persist=1 to trigger the actual database update.
+	 * @since 7.0 A style_id is now always expected, so the edit view can look up that style's own default template instead of the generic defaults. The list view now also sends persist=1 to trigger the actual database update.
 	 *
 	 * @return void
 	 */

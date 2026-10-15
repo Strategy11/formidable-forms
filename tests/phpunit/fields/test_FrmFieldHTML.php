@@ -1,11 +1,12 @@
 <?php
 /**
  * @group fields
+ *
+ * @covers FrmFieldHTML
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldHTML::class )]
 class test_FrmFieldHTML extends FrmUnitTest {
-	/**
-	 * @covers FrmFieldHTML::show_primary_options
-	 */
 	public function test_wp_editor_skips_init_on_render() {
 		// Force rich editing on so wp_editor() actually registers a TinyMCE
 		// entry for this field instead of quicktags-only.

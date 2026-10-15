@@ -6,14 +6,24 @@ form .form-field.frm_field_loading {
 	margin-bottom: 0;
 	min-height: 0;
 	padding: 0;
+	position: relative;
 	text-align: center;
 }
 
+/* The spinner is only added once a placeholder scrolls into view, so the placeholder that shows
+ * one holds the spinner's space on its own. The spinner sits outside the flow, and adding it
+ * never moves the fields below. */
+.frm_sorting > .frm_field_loading:not(.frm_field_loading ~ .frm_field_loading) {
+	min-height: 55px;
+}
+
 .frm_sorting > .frm_field_loading .frm_visible_spinner.frm-wait {
-	margin-bottom: 10px;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin: 20px 0 0 -10px;
 }
 
 .frm_sorting > .frm_field_loading ~ .frm_field_loading .frm_visible_spinner.frm-wait {
-	margin-bottom: 0;
 	display: none;
 }

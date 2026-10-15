@@ -446,6 +446,7 @@ DEFAULT_HTML;
 			'format'            => false,
 			'show_image'        => false,
 			'default'           => true,
+			'autocomplete'      => false,
 		);
 	}
 
@@ -823,6 +824,28 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Get the autocomplete attribute values that can be selected for this field type.
+	 *
+	 * @since 7.0 This was moved from the FrmProFieldAutocompleteField trait.
+	 *
+	 * @return array<string,string>
+	 */
+	public function autocomplete_options() {
+		return FrmFieldsHelper::get_autocomplete_options( $this->get_autocomplete_filter_keys() );
+	}
+
+	/**
+	 * Limit the autocomplete options to the values that make sense for this field type.
+	 *
+	 * @since 7.0
+	 *
+	 * @return array<string> An empty array will include every key.
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array();
+	}
+
+	/**
 	 * @since 4.0
 	 *
 	 * @param mixed $default_value Default value passed by reference.
@@ -929,6 +952,7 @@ DEFAULT_HTML;
 			'format'             => '',
 			'placeholder'        => '',
 			'draft'              => 0,
+			'autocomplete'       => '',
 		);
 		$opts        = array_merge( $opts, $this->extra_field_opts() );
 		$filter_args = array(
@@ -1186,7 +1210,7 @@ DEFAULT_HTML;
 	 * validation keys its errors by that same ID. The field object only knows the plain field ID,
 	 * which matches no error key inside a repeater, so prefer the ID the row is rendering with.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $args Rendering context. May include `field_id`.
 	 *
@@ -1212,6 +1236,7 @@ DEFAULT_HTML;
 		}
 
 		$this->add_aria_description_to_inputs( $args, $input );
+		$this->maybe_add_aria_labelledby_for_hidden_label( $args, $input );
 		$this->load_field_scripts( $args );
 
 		return $input;
@@ -1258,8 +1283,25 @@ DEFAULT_HTML;
 					return $matches[0];
 				}
 
-				$atts = $matches[2];
-				$this->add_aria_description( $args, $atts );
+				$atts       = $matches[2];
+				$input_args = $args;
+
+				// Compound fields share a description, but each subfield has its own error.
+				if ( ! isset( $args['errors'][ 'field' . $args['field_id'] ] ) && preg_match( '/(?:^|\s)id="([^"]+)"/', $atts, $input_id ) ) {
+					$prefix = $args['html_id'] . '_';
+
+					if ( str_starts_with( $input_id[1], $prefix ) ) {
+						$subfield  = substr( $input_id[1], strlen( $prefix ) );
+						$error_key = 'field' . $args['field_id'] . '-' . $subfield;
+
+						if ( isset( $args['errors'][ $error_key ] ) ) {
+							$input_args['errors'][ 'field' . $args['field_id'] ] = $args['errors'][ $error_key ];
+							$input_args['error_html_id']                         = $input_id[1];
+						}
+					}
+				}
+
+				$this->add_aria_description( $input_args, $atts );
 
 				return '<' . $matches[1] . $atts . $matches[3] . '>';
 			},
@@ -1651,9 +1693,9 @@ DEFAULT_HTML;
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
 			if ( $error_comes_first ) {
-				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
+				array_unshift( $describedby, 'frm_error_' . ( $args['error_html_id'] ?? $args['html_id'] ) );
 			} else {
-				array_push( $describedby, 'frm_error_' . $args['html_id'] );
+				array_push( $describedby, 'frm_error_' . ( $args['error_html_id'] ?? $args['html_id'] ) );
 			}
 		}
 
@@ -1678,6 +1720,59 @@ DEFAULT_HTML;
 		}
 
 		$this->aria_description_added = true;
+	}
+
+	/**
+	 * A "Hidden" label position still renders a real <label for>, only
+	 * visually hidden (visibility:hidden, to keep a sibling field's label
+	 * the same row height) - that also drops it from the accessibility
+	 * tree, so the input needs an explicit aria-labelledby (IBM Equal
+	 * Access input_label_exists). Skipped for field types with no
+	 * `for`-associated label (`$has_for_label = false`), which already get
+	 * an equivalent aria-labelledby from multiple_input_html()'s wrapper.
+	 *
+	 * Called unconditionally from include_front_field_input() rather than
+	 * nested inside add_aria_description_to_inputs()'s own callback, since
+	 * that method is designed to be skippable by an overriding field type
+	 * (e.g. Pro's FrmProFieldText::front_field_input() already calling
+	 * add_aria_description() itself and setting aria_description_added,
+	 * which short-circuits add_aria_description_to_inputs() entirely).
+	 *
+	 * @since 7.0
+	 *
+	 * @param array  $args Rendering context. May include `html_id`.
+	 * @param string $input_html Full field HTML, passed by reference.
+	 *
+	 * @return void
+	 */
+	protected function maybe_add_aria_labelledby_for_hidden_label( $args, &$input_html ) {
+		if ( '' === $input_html || ! $this->has_for_label || 'hidden' !== $this->get_field_column( 'label' ) ) {
+			return;
+		}
+
+		// Match the label's own id, which is always derived via html_id() (the frm_field_get_html_id filter), not FrmFieldsHelper::get_html_id()'s frm_field_html_id filter.
+		if ( empty( $args['html_id'] ) ) {
+			$args['html_id'] = $this->html_id();
+		}
+
+		$html_id = $args['html_id'];
+
+		$input_html = preg_replace_callback(
+			'/<(input|select|textarea)\b([^>]*?)(\s*\/?)>/i',
+			function ( $matches ) use ( $html_id ) {
+				if ( 'input' === strtolower( $matches[1] ) && preg_match( '/type\s*=\s*["\']hidden["\']/i', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				// aria-labelledby wins over aria-label per the accname spec - don't silently override an existing aria-label.
+				if ( preg_match( '/aria-label(?:ledby)?=/', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				return '<' . $matches[1] . $matches[2] . ' aria-labelledby="' . esc_attr( $html_id ) . '_label"' . $matches[3] . '>';
+			},
+			$input_html
+		);
 	}
 
 	/**

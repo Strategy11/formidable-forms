@@ -23,14 +23,9 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 
 	const openFieldSettings = fieldId => {
 		cy.log( `Open settings panel for the ${ fieldId } field` );
-		cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-			.invoke( 'css', 'opacity', 1 )
-			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
-			.first()
-			.scrollIntoView()
-			.should( 'be.visible' )
-			.click();
-		cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
+		cy.get( `li[data-ftype="${ fieldId }"] .frm-field-action-icons`, { timeout: 10000 } ).revealFieldActions();
+		cy.get( `li[data-ftype="${ fieldId }"] .frm-dropdown-toggle` ).click();
+		cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'contain', 'Field Settings' ).click();
 	};
 
 	it( 'initializes a field\'s CSS Layout Classes token input only once that field\'s settings panel is shown, not for every field on builder load', () => {
@@ -49,14 +44,45 @@ describe( 'CSS Layout Classes token input defers initialization until its settin
 		cy.log( 'Neither field\'s CSS Layout Classes input is tokenized before any settings panel has been opened' );
 		cy.get( '.frm-token-container' ).should( 'not.exist' );
 
+		cy.log( 'Loading a batch preserves the original inputs without initializing hidden token controls' );
+		cy.window().then( win => {
+			const fields = [ ...win.document.querySelectorAll( '.frm-single-settings.frm-type-text, .frm-single-settings.frm-type-textarea' ) ];
+			const inputs = fields.map( field => field.querySelector( '.frm-token-input-field' ) );
+			inputs.forEach( input => {
+				input.value = 'frm6';
+			} );
+			const loadedEvent = new win.Event( 'frm_ajax_loaded_field' );
+			loadedEvent.frmFields = fields.map( field => ( { id: field.dataset.fid } ) );
+			win.document.dispatchEvent( loadedEvent );
+
+			// The same named inputs, untouched, are what gets serialized once a panel opens.
+			fields.forEach( ( field, index ) => {
+				const input = win.document.querySelector( `[name="field_options[classes_${ field.dataset.fid }]"]` );
+				expect( input ).to.equal( inputs[ index ] );
+				expect( input.value ).to.equal( 'frm6' );
+			} );
+		} );
+		cy.get( '.frm-token-container' ).should( 'not.exist' );
+
 		openFieldSettings( 'text' );
 		cy.get( 'div[id^="frm-single-settings-"]:visible', { timeout: 10000 } ).find( '.frm-token-container' ).should( 'exist' );
 		cy.log( 'Only the opened field\'s token input is initialized - the other field\'s is still untouched' );
 		cy.get( '.frm-token-container' ).should( 'have.length', 1 );
+		cy.get( '.frm-type-text .frm-token-value' ).should( 'have.text', 'frm6' );
+		cy.get( '.frm-type-text .frm-token-proxy-input' ).invoke( 'attr', 'style' ).as( 'textProxyStyle', { type: 'static' } );
 
 		openFieldSettings( 'textarea' );
 		cy.get( 'div[id^="frm-single-settings-"]:visible', { timeout: 10000 } ).find( '.frm-token-container' ).should( 'exist' );
 		cy.get( '.frm-token-container' ).should( 'have.length', 2 );
+		cy.get( '@textProxyStyle' ).then( style => {
+			cy.get( '.frm-type-text .frm-token-proxy-input' ).should( 'have.attr', 'style', style );
+		} );
+
+		openFieldSettings( 'text' );
+		cy.get( '.frm-token-container' ).should( 'have.length', 2 );
+		cy.get( '.frm-type-text .frm-token-proxy-input' ).type( 'custom-class{enter}' );
+		cy.get( '.frm-type-text .frm-token-input-field' ).should( 'have.value', 'frm6 custom-class' );
+		cy.get( '.frm-type-text .frm-token' ).should( 'have.length', 2 );
 	} );
 
 	afterEach( () => {
