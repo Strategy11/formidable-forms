@@ -119,10 +119,11 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	public function test_list_fields_accepts_string_keyed_options_and_array_default_values() {
 		$select_id  = FrmField::create(
 			array(
-				'form_id' => $this->form->id,
-				'type'    => 'select',
-				'name'    => 'Location',
-				'options' => array(
+				'form_id'       => $this->form->id,
+				'type'          => 'select',
+				'name'          => 'Location',
+				'default_value' => '',
+				'options'       => array(
 					'1'         => array(
 						'label' => '',
 						'value' => '',
