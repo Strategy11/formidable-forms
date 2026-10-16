@@ -34,7 +34,7 @@ class FrmPluginSearch {
 	 */
 	public function start( $screen ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'plugin-install' !== $screen->base || ( isset( $_GET['paged'] ) && 1 !== intval( $_GET['paged'] ) ) ) {
+		if ( 'plugin-install' !== $screen->base || ( isset( $_GET['paged'] ) && 1 !== FrmAppHelper::simple_get( 'paged', 'intval' ) ) ) {
 			return;
 		}
 
