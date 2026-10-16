@@ -77,11 +77,14 @@ class FrmAbilitiesFieldsController {
 							),
 							'default_value' => array(
 								'type'        => array( 'string', 'array', 'object' ),
-								'description' => __( 'Default value for the field. An array or object for fields with several values, such as Address or a multi-select checkbox.', 'formidable' ),
+								'description' => __( 'Default value for the field. An array or object when the field holds several values, such as Address.', 'formidable' ),
 							),
 							'options'       => array(
 								'type'                 => array( 'array', 'object' ),
-								'description'          => __( 'Radio, dropdown, or checkbox choices: strings, or {"label", "value"} objects when using separate values. An object keyed by option key when the keys are not sequential.', 'formidable' ),
+								'description'          => __(
+									'Radio, dropdown, or checkbox choices: strings, or {"label", "value"} objects when using separate values. An object keyed by option key when the keys are not sequential.',
+									'formidable'
+								),
 								'items'                => array( 'type' => array( 'string', 'object' ) ),
 								'additionalProperties' => array( 'type' => array( 'string', 'object' ) ),
 							),
