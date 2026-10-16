@@ -82,7 +82,7 @@ class FrmAbilitiesFieldsController {
 							'options'       => array(
 								'type'                 => array( 'array', 'object' ),
 								'description'          => __(
-									'Radio, dropdown, or checkbox choices: strings, or {"label", "value"} objects when using separate values. An object keyed by option key when the keys are not sequential.',
+									'Radio, dropdown, or checkbox choices: strings, or {"label", "value"} objects when using separate values. Or an object keyed by option key.',
 									'formidable'
 								),
 								'items'                => array( 'type' => array( 'string', 'object' ) ),
