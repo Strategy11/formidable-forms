@@ -712,9 +712,9 @@
 			return color;
 		}
 
-		const rgba  = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
+		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
 		const alpha = isNaN( parseFloat( rgba[ 3 ] ) ) ? 1 : parseFloat( rgba[ 3 ] );
-		const hex   = [ 0, 1, 2 ].map( i => Math.round( alpha * parseInt( rgba[ i ], 10 ) + ( 1 - alpha ) * backdrop[ i ] ).toString( 16 ).padStart( 2, '0' ) );
+		const hex = [ 0, 1, 2 ].map( i => Math.round( ( alpha * parseInt( rgba[ i ], 10 ) ) + ( ( 1 - alpha ) * backdrop[ i ] ) ).toString( 16 ).padStart( 2, '0' ) );
 
 		return `#${ hex.join( '' ) }`;
 	}
