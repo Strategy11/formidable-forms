@@ -190,6 +190,7 @@ class test_FrmStrpLiteMergedUpdates extends FrmUnitTest {
 		$this->assertArrayHasKey( '.Input', $rules );
 		$this->assertArrayNotHasKey( 'fontFamily', $rules['.Input'] );
 		$this->assertArrayNotHasKey( 'fontFamily', $rules['.Label'] );
+		$this->assertArrayHasKey( 'borderColor', $rules['.Input:focus'] );
 	}
 
 	public function test_successful_webhook_updates_the_description_without_a_return_visit() {
