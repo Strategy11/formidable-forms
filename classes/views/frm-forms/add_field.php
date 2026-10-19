@@ -53,11 +53,7 @@ do_action( 'frm_extra_field_actions', $field['id'] );
 	<?php $field_obj->show_label_on_form_builder(); ?>
 
 	<div class="frm_form_fields frm_opt_container" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
-		<?php
-		// Share the address preview renderer when Pro supplies the settings object.
-		$preview_obj = 'address' === $field['type'] ? new FrmFieldAddress( (object) $field ) : $field_obj;
-		$preview_obj->show_on_form_builder();
-		?>
+		<?php $field_obj->show_on_form_builder(); ?>
 		<div class="clear"></div>
 	</div>
 	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ), true ) ) { ?>
