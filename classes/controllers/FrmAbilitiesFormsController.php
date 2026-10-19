@@ -339,10 +339,10 @@ class FrmAbilitiesFormsController {
 						'formidable'
 					),
 					'items'                => array(
-						'type' => array( 'string', 'object' ),
+						'type' => array( 'string', 'number', 'object' ),
 					),
 					'additionalProperties' => array(
-						'type' => array( 'string', 'object' ),
+						'type' => array( 'string', 'number', 'object' ),
 					),
 				),
 				'default_value' => array(
