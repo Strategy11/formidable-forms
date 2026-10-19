@@ -72,7 +72,13 @@ class FrmFormsHelper {
 		}
 
 		$where    = apply_filters( 'frm_forms_dropdown', $query, $field_name );
-		$forms    = FrmForm::get_published_forms( $where, 999, $args['inc_children'] );
+		$forms    = FrmForm::get_published_form_names(
+			$where,
+			array(
+				'limit'        => 999,
+				'inc_children' => $args['inc_children'],
+			)
+		);
 		$add_html = array();
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
