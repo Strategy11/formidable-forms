@@ -5246,8 +5246,8 @@ class FrmAppHelper {
 	/**
 	 * Checks if this request can hand its tooltip strings to `frm_admin_js.tooltips`.
 	 *
-	 * `is_form_builder_page()` alone misses the `frm_load_field` ajax request because that
-	 * request never sends `frm_action`. Other builder ajax requests are left out on purpose
+	 * `is_form_builder_page()` alone misses the `frm_load_field` and `frm_load_field_settings`
+	 * ajax requests because they never send `frm_action`. Other builder ajax requests are left out on purpose
 	 * since nothing ships their collected strings to the page.
 	 *
 	 * @since 7.0
@@ -5256,7 +5256,7 @@ class FrmAppHelper {
 	 */
 	private static function should_defer_tooltips() {
 		if ( wp_doing_ajax() ) {
-			return 'frm_load_field' === self::get_post_param( 'action', '', 'sanitize_text_field' );
+			return in_array( self::get_post_param( 'action', '', 'sanitize_text_field' ), array( 'frm_load_field', 'frm_load_field_settings' ), true );
 		}
 
 		return self::is_form_builder_page( false );
