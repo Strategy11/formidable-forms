@@ -439,7 +439,7 @@
 		return urlObj.toString();
 	}
 
-	function getEmbedExample( { label, example, link, linkLabel, description, loadExample } ) {
+	function getEmbedExample( { label, example, link, linkLabel, description } ) {
 		const unique = getAutoId();
 
 		const labelElement = getLabel( label );
@@ -449,7 +449,7 @@
 		element.append( labelElement );
 
 		let exampleElement;
-		if ( loadExample || example.length > 80 ) {
+		if ( example.length > 80 ) {
 			exampleElement = tag( 'textarea' );
 		} else {
 			exampleElement = tag( 'input' );
@@ -476,42 +476,9 @@
 		}
 
 		element.append( exampleElement );
-		const copyIcon = getCopyIcon( label );
-		element.append( copyIcon );
-
-		if ( loadExample ) {
-			copyIcon.style.display = 'none';
-			loadEmbedExample( loadExample, exampleElement, copyIcon );
-		}
+		element.append( getCopyIcon( label ) );
 
 		return element;
-	}
-
-	/**
-	 * Load a server-generated example without blocking the other embed choices.
-	 *
-	 * @since x.x
-	 *
-	 * @param {Function}    loadExample    The callback returning an example string.
-	 * @param {HTMLElement} exampleElement The example control.
-	 * @param {HTMLElement} copyIcon       The copy action.
-	 * @return {Promise<void>} Resolves after the example loads or fails.
-	 */
-	async function loadEmbedExample( loadExample, exampleElement, copyIcon ) {
-		exampleElement.value = __( 'Generating script tag…', 'formidable' );
-		let example;
-		try {
-			example = await loadExample();
-		} catch {
-			exampleElement.value = __( 'Unable to generate the script tag. Please try again.', 'formidable' );
-			return;
-		}
-		if ( typeof example !== 'string' || ! example ) {
-			exampleElement.value = __( 'Unable to generate the script tag. Please try again.', 'formidable' );
-			return;
-		}
-		exampleElement.value = example;
-		copyIcon.style.display = '';
 	}
 
 	function getLabel( text ) {
