@@ -97,7 +97,9 @@ export function requestFieldSettingsNow( fieldId ) {
  * @return {Promise<void>} Resolves once none of the fields has a request in progress.
  */
 export function waitForFieldSettings( fieldIds ) {
-	return Promise.allSettled( fieldIds.map( fieldId => requests.get( String( fieldId ) ) ) ).then( () => {} );
+	return Promise.allSettled( fieldIds.map( fieldId => requests.get( String( fieldId ) ) ) ).then( () => {
+		// Callers only wait for the requests, so the results are dropped.
+	} );
 }
 
 /**
@@ -129,13 +131,22 @@ function fillQueue() {
 	}
 
 	while ( activeRequests < CONCURRENCY && queuedFieldIds.size ) {
-		const fieldIds = [ ...queuedFieldIds ].slice( 0, BATCH_SIZE );
-		++activeRequests;
-		sendRequest( fieldIds ).finally( () => {
-			--activeRequests;
-			fillQueue();
-		} );
+		sendBackgroundRequest( [ ...queuedFieldIds ].slice( 0, BATCH_SIZE ) );
 	}
+}
+
+/**
+ * @param {string[]} fieldIds The fields to request.
+ * @return {void}
+ */
+function sendBackgroundRequest( fieldIds ) {
+	++activeRequests;
+	sendRequest( fieldIds ).finally( onBackgroundRequestDone );
+}
+
+function onBackgroundRequestDone() {
+	--activeRequests;
+	fillQueue();
 }
 
 /**
