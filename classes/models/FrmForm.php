@@ -983,20 +983,20 @@ class FrmForm {
 	}
 
 	/**
-	 * Get the id, name and key of published forms, with an optional description, for lightweight lists.
+	 * Get the id, name, key and parent form id of published forms, with an optional description, for lightweight lists.
 	 * This skips loading and unserializing the options column for every form.
 	 *
 	 * @since 7.0
 	 *
 	 * @param array $query Additional where conditions.
-	 * @param array $args  Query options, including include_description to also select the description.
+	 * @param array $args  Query options, including include_description, inc_children (default 'exclude') and limit (default unlimited).
 	 *
-	 * @return array Array of objects with id, name, form_key and optionally description properties.
+	 * @return array Array of objects with id, name, form_key, parent_form_id and optionally description properties.
 	 */
 	public static function get_published_form_names( $query = array(), $args = array() ) {
-		self::add_published_forms_where( $query, 'exclude' );
+		self::add_published_forms_where( $query, $args['inc_children'] ?? 'exclude' );
 
-		$columns = 'id, name, form_key';
+		$columns = 'id, name, form_key, parent_form_id';
 
 		if ( ! empty( $args['include_description'] ) ) {
 			$columns .= ', description';
@@ -1008,6 +1008,7 @@ class FrmForm {
 			$columns,
 			array(
 				'order_by' => 'name',
+				'limit'    => $args['limit'] ?? '',
 			)
 		);
 
