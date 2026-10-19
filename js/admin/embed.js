@@ -480,7 +480,7 @@
 		element.append( copyIcon );
 
 		if ( loadExample ) {
-			copyIcon.hidden = true;
+			copyIcon.style.display = 'none';
 			loadEmbedExample( loadExample, exampleElement, copyIcon );
 		}
 
@@ -511,7 +511,7 @@
 			return;
 		}
 		exampleElement.value = example;
-		copyIcon.hidden = false;
+		copyIcon.style.display = '';
 	}
 
 	function getLabel( text ) {
