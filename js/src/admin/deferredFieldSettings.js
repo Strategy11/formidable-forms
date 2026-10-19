@@ -121,6 +121,13 @@ export function materializeFieldSettings( fieldId, initialize ) {
 
 	forgetFieldSettings( key );
 	initialize( settings );
+	/**
+	 * Initialize controls after a deferred settings panel enters the DOM.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} settings The inserted field settings panel.
+	 */
+	wp.hooks.doAction( 'frm_field_settings_loaded', settings );
 	return settings;
 }
 

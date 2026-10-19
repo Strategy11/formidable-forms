@@ -2,21 +2,18 @@
  * Components - Field Loading
  */
 
-form .form-field.frm_field_loading {
-	margin-bottom: 0;
-	min-height: 0;
+#frm-show-fields li:is([data-frm-placeholder], [data-frm-preview], .frm_field_loading, .frm_field_preview_pending) {
+
+	/* Reserve a typical field card: 10px top padding, 21px label, 6px gap,
+	 * 36px input and 2px borders. Include placeholders before JS restores their classes. */
+	margin: 10px 0 20px;
+	min-height: 75px;
 	padding: 0;
 	position: relative;
 	text-align: center;
 }
 
-/* The spinner is only added once a placeholder scrolls into view, so the placeholder that shows
- * one holds the spinner's space on its own. The spinner sits outside the flow, and adding it
- * never moves the fields below. */
-.frm_sorting > .frm_field_loading:not(.frm_field_loading ~ .frm_field_loading) {
-	min-height: 55px;
-}
-
+/* Keep the spinner outside the flow so adding it never moves the fields below. */
 .frm_sorting > .frm_field_loading .frm_visible_spinner.frm-wait {
 	position: absolute;
 	top: 0;
