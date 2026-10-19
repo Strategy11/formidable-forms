@@ -44,6 +44,7 @@ zip -r $zipname $destination \
 	-x "*/.git" \
 	-x "*/.git/*" \
 	-x "*/.gitattributes" \
+	-x "*/.githooks/*" \
 	-x "*/.github/*" \
 	-x "*/.gitignore" \
 	-x "*/.windsurf/*" \
@@ -149,7 +150,12 @@ zip -r $zipname $destination \
 	-x "$source/venv/*" \
 	-x "formidable/resources/*" \
 	-x "formidable-pro/resources/*" \
-	-x "*/cypress/*"
+	-x "*/cypress/*" \
+	-x "*/AGENTS.md" \
+	-x "*/setup.bat" \
+	-x "*/phpstan.neon.dist" \
+	-x "*/phpcs.xml.dist" \
+	-x "*/webpack.config.cjs"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
