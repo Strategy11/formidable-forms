@@ -81,8 +81,11 @@ class FrmAbilitiesFieldsController {
 							),
 							'options'       => array(
 								'type'        => 'array',
-								'description' => __( 'Radio, dropdown, or checkbox choices: strings, or {"label", "value"} objects when using separate values.', 'formidable' ),
-								'items'       => array( 'type' => array( 'string', 'object' ) ),
+								'description' => __(
+									'Field choices: strings, or {"label", "value"} objects when using separate values. Star rating and scale choices are numbers.',
+									'formidable'
+								),
+								'items'       => array( 'type' => array( 'string', 'number', 'object' ) ),
 							),
 							'field_order'   => array(
 								'type'        => 'integer',
@@ -173,10 +176,10 @@ class FrmAbilitiesFieldsController {
 								'formidable'
 							),
 							'items'                => array(
-								'type' => array( 'string', 'object' ),
+								'type' => array( 'string', 'number', 'object' ),
 							),
 							'additionalProperties' => array(
-								'type' => array( 'string', 'object' ),
+								'type' => array( 'string', 'number', 'object' ),
 							),
 						),
 						'default_value' => array(

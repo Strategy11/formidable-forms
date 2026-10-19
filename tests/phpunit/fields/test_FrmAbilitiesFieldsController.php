@@ -121,6 +121,31 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Star rating and scale fields store their choices as numbers, and the
+	 * output schema used to reject the whole listing because of them.
+	 *
+	 * @return void
+	 */
+	public function test_numeric_options_pass_create_field_and_list_fields() {
+		$created = $this->execute(
+			'create-field',
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'radio',
+				'name'    => 'Rating',
+				'options' => array( 1, 2, 3, 4, 5 ),
+			)
+		);
+
+		$this->assertNotWPError( $created, 'create-field should accept numeric options.' );
+
+		$listed = $this->execute( 'list-fields', array( 'form_id' => $this->form->id ) );
+
+		$this->assertNotWPError( $listed, 'list-fields should not fail its output validation on numeric options.' );
+		$this->assertSame( array( 1, 2, 3, 4, 5 ), $listed[ $created['field_key'] ]['options'] );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_create_field_requires_a_type() {
