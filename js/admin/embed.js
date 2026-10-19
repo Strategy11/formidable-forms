@@ -329,7 +329,17 @@
 			}
 		];
 
-		options.forEach(
+		/**
+		 * Add embed choices with access to the panel they render into.
+		 *
+		 * @since x.x
+		 */
+		wp.hooks.applyFilters( 'frm_embed_modal_options', options, {
+			type: state.type,
+			objectId: state.objectId,
+			objectKey: state.objectKey,
+			content
+		} ).forEach(
 			option => content.append( getModalOption( option ) )
 		);
 
@@ -367,6 +377,12 @@
 				callback();
 			}
 		);
+		output.addEventListener( 'keydown', event => {
+			if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				output.click();
+			}
+		} );
 		return output;
 	}
 
@@ -423,7 +439,7 @@
 		return urlObj.toString();
 	}
 
-	function getEmbedExample( { label, example, link, linkLabel } ) {
+	function getEmbedExample( { label, example, link, linkLabel, description, loadExample } ) {
 		const unique = getAutoId();
 
 		const labelElement = getLabel( label );
@@ -433,7 +449,7 @@
 		element.append( labelElement );
 
 		let exampleElement;
-		if ( example.length > 80 ) {
+		if ( loadExample || example.length > 80 ) {
 			exampleElement = tag( 'textarea' );
 		} else {
 			exampleElement = tag( 'input' );
@@ -445,6 +461,11 @@
 		exampleElement.value = example;
 		exampleElement.readOnly = true;
 		exampleElement.setAttribute( 'tabindex', -1 );
+		labelElement.htmlFor = exampleElement.id;
+
+		if ( description ) {
+			element.append( tag( 'p', { className: 'description', text: description } ) );
+		}
 
 		if ( link !== undefined && linkLabel !== undefined ) {
 			const linkElement = tag( 'a' );
@@ -455,9 +476,42 @@
 		}
 
 		element.append( exampleElement );
-		element.append( getCopyIcon( label ) );
+		const copyIcon = getCopyIcon( label );
+		element.append( copyIcon );
+
+		if ( loadExample ) {
+			copyIcon.hidden = true;
+			loadEmbedExample( loadExample, exampleElement, copyIcon );
+		}
 
 		return element;
+	}
+
+	/**
+	 * Load a server-generated example without blocking the other embed choices.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Function}    loadExample    The callback returning an example string.
+	 * @param {HTMLElement} exampleElement The example control.
+	 * @param {HTMLElement} copyIcon       The copy action.
+	 * @return {Promise<void>} Resolves after the example loads or fails.
+	 */
+	async function loadEmbedExample( loadExample, exampleElement, copyIcon ) {
+		exampleElement.value = __( 'Generating script tag…', 'formidable' );
+		let example;
+		try {
+			example = await loadExample();
+		} catch {
+			exampleElement.value = __( 'Unable to generate the script tag. Please try again.', 'formidable' );
+			return;
+		}
+		if ( typeof example !== 'string' || ! example ) {
+			exampleElement.value = __( 'Unable to generate the script tag. Please try again.', 'formidable' );
+			return;
+		}
+		exampleElement.value = example;
+		copyIcon.hidden = false;
 	}
 
 	function getLabel( text ) {
