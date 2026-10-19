@@ -9,6 +9,11 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsController extends FrmUnitTest {
 
+	public function setUp(): void {
+		parent::setUp();
+		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
+	}
+
 	public function test_deferred_builder_settings_keep_preview_and_layout_inputs_available() {
 		$form_id = $this->factory->form->create();
 
@@ -44,6 +49,40 @@ class test_FrmFieldsController extends FrmUnitTest {
 			$this->assertStringContainsString( 'id="frm-single-settings-' . $field->id . '"', $settings->html );
 			$this->assertStringContainsString( 'name="frm_fields_submitted[]"', $settings->html );
 			$this->assertStringContainsString( 'name="field_options[type_' . $field->id . ']"', $settings->html );
+		}
+	}
+
+	public function test_settings_only_match_deferred_builder_settings() {
+		$form_id = $this->factory->form->create();
+		// Print the HTML editor's one-time styles before comparing repeated settings renders.
+		ob_start();
+		wp_editor( '', 'frm_settings_parity', array( 'media_buttons' => false ) );
+		ob_end_clean();
+
+		foreach ( array( 'text', 'textarea', 'hidden', 'html' ) as $type ) {
+			$field    = $this->factory->field->create_and_get(
+				array(
+					'form_id' => $form_id,
+					'type'    => $type,
+				)
+			);
+			$settings = (object) array( 'html' => '' );
+			$values   = array(
+				'id'         => $form_id,
+				'doing_ajax' => true,
+			);
+			ob_start();
+			FrmFieldsController::load_single_field( $field, $values + array( 'deferred_settings' => $settings ) );
+			ob_end_clean();
+
+			ob_start();
+			FrmFieldsController::load_single_field( $field, $values + array( 'settings_only' => true ) );
+			$html = ob_get_clean();
+
+			$this->assertNotSame( '', $html, 'Settings should be rendered for ' . $type . '.' );
+			$this->assertSame( $settings->html, $html, 'Both rendering paths should produce the same settings for ' . $type . '.' );
+			$this->assertStringNotContainsString( 'id="frm_field_id_', $html, 'A settings request should not render the preview.' );
+			$this->assertSame( $form_id, $field->parent_form_id, 'The shared setup should preserve the parent form ID.' );
 		}
 	}
 

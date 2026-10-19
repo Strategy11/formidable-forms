@@ -230,7 +230,13 @@ class FrmBuilderPreviewHelper {
 
 		self::add_hook_html( $data, $field, $display );
 
-		$data = array_filter( $data, array( self::class, 'is_set' ) );
+		// Keep values that change the preview, including a 0 that is printed as text.
+		$data = array_filter(
+			$data,
+			static function ( $value ) {
+				return null !== $value && '' !== $value && array() !== $value;
+			}
+		);
 
 		if ( '*' !== $field['required_indicator'] ) {
 			// An indicator removed on purpose stays empty instead of falling back to the default.
@@ -383,18 +389,5 @@ class FrmBuilderPreviewHelper {
 		$processor = new WP_HTML_Tag_Processor( '<input value="' . $value . '">' );
 		$processor->next_tag();
 		return (string) $processor->get_attribute( 'value' );
-	}
-
-	/**
-	 * Keep values that change the preview, including a 0 that is printed as text.
-	 *
-	 * @since x.x
-	 *
-	 * @param mixed $value A preview data value.
-	 *
-	 * @return bool
-	 */
-	private static function is_set( $value ) {
-		return null !== $value && '' !== $value && array() !== $value;
 	}
 }

@@ -110,15 +110,20 @@ class FrmFieldsController {
 		$_GET['page'] = 'formidable';
 		$fields       = self::get_builder_fields_by_id( $form_id );
 		$values       = array(
-			'id'         => $form_id,
-			'doing_ajax' => true,
+			'id'            => $form_id,
+			'doing_ajax'    => true,
+			'settings_only' => true,
 		);
 		$settings     = array();
 
 		foreach ( $field_ids as $field_id ) {
-			if ( isset( $fields[ $field_id ] ) ) {
-				$settings[ $field_id ] = self::get_field_settings_html( $fields[ $field_id ], $values );
+			if ( ! isset( $fields[ $field_id ] ) ) {
+				continue;
 			}
+
+			ob_start();
+			self::load_single_field( $fields[ $field_id ], $values );
+			$settings[ $field_id ] = ob_get_clean();
 		}
 
 		wp_send_json_success(
@@ -129,29 +134,6 @@ class FrmFieldsController {
 				'selectOptions' => self::get_missing_builder_definitions( FrmBuilderSelectHelper::get_templates(), 'known_select_options' ),
 			)
 		);
-	}
-
-	/**
-	 * Render a field settings panel without its preview.
-	 *
-	 * @since x.x
-	 *
-	 * @param object $field_object The field.
-	 * @param array  $values       The form id and ajax flag shared by the requested fields.
-	 *
-	 * @return string
-	 */
-	private static function get_field_settings_html( $field_object, $values ) {
-		global $frm_vars;
-		$frm_vars['is_admin']         = true;
-		$field_obj                    = FrmFieldFactory::get_field_factory( $field_object );
-		$display                      = self::display_field_options( array(), $field_obj );
-		$field_object->parent_form_id = $values['id'];
-		$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
-
-		ob_start();
-		self::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
-		return ob_get_clean();
 	}
 
 	/**
@@ -349,6 +331,11 @@ class FrmFieldsController {
 			// to a field id and break settings that resolve fields against the parent form.
 			$field_object->parent_form_id = $form_id ? $form_id : ( $values['id'] ?? $field_object->form_id );
 			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
+		}
+
+		if ( ! empty( $values['settings_only'] ) && isset( $field ) ) {
+			self::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
+			return;
 		}
 
 		/**

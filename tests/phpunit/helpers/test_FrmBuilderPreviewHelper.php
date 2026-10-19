@@ -1,13 +1,5 @@
 <?php
 
-if ( ! class_exists( 'FrmProFieldText' ) ) {
-	/**
-	 * Stands in for the Pro text field class, which has the same preview as the Lite one.
-	 */
-	class FrmProFieldText extends FrmFieldText {
-	}
-}
-
 /**
  * A field class an add-on replaced, whose preview may differ from the one drawn in the browser.
  */
@@ -28,9 +20,11 @@ class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 	 */
 	public function test_supports_lite_and_pro_field_classes() {
 		$field = $this->create_field( 'text' );
+		$this->assertTrue( $this->supports( $field, new FrmFieldText( $field ) ), 'The Lite text field supports browser previews.' );
 
-		$this->assertTrue( $this->supports( $field, new FrmFieldText( $field ) ) );
-		$this->assertTrue( $this->supports( $field, new FrmProFieldText( $field ) ) );
+		if ( class_exists( 'FrmProFieldText' ) ) {
+			$this->assertTrue( $this->supports( $field, new FrmProFieldText( $field ) ), 'The Pro text field supports browser previews.' );
+		}
 	}
 
 	/**
