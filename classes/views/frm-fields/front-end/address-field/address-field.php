@@ -28,6 +28,7 @@ $sub_fields   = $args['sub_fields'];
 $html_id      = $args['html_id'];
 $field_name   = $args['field_name'];
 $errors       = $args['errors'];
+$remove_names = ! empty( $args['remove_names'] );
 $atts         = $args['shortcode_atts'] ?? array();
 $inputs_attrs = $this->get_inputs_container_attrs();
 ?>
@@ -56,10 +57,14 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				</label>
 				<?php
 				if ( 'select' === $sub_field['type'] ) {
-					$select_attrs       = array(
-						'name' => $field_name . '[' . $name . ']',
-						'id'   => $html_id . '_' . $name,
+					$select_attrs = array(
+						'id' => $html_id . '_' . $name,
 					);
+
+					if ( ! $remove_names ) {
+						$select_attrs['name'] = $field_name . '[' . $name . ']';
+					}
+
 					$is_builder_preview = ! empty( $args['builder_preview'] );
 					$has_selection      = in_array( (string) ( $field['value'][ $name ] ?? '' ), $sub_field['options'], true );
 
@@ -97,7 +102,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 					</select>
 				<?php } else { ?>
 					<input type="<?php echo esc_attr( $sub_field['type'] ); ?>" id="<?php echo esc_attr( $html_id . '_' . $name ); ?>" value="<?php echo esc_attr( $field['value'][ $name ] ?? '' ); ?>" <?php
-					if ( empty( $remove_names ) ) {
+					if ( ! $remove_names ) {
 						echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
 					}
 					FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'key' ) );
@@ -107,7 +112,13 @@ $inputs_attrs = $this->get_inputs_container_attrs();
  ?>
 
 				<?php
-				if ( $sub_field['label'] ) {
+				if ( ! empty( $args['builder_preview'] ) ) {
+					?>
+					<div class="frm_description" id="field_<?php echo esc_attr( $name . '_desc_' . $field_id ); ?>">
+						<span id="frm_field_<?php echo esc_attr( $field_id . '_' . $name ); ?>_desc"><?php echo wp_kses_post( $field[ $name . '_desc' ] ?? '' ); ?></span>
+					</div>
+					<?php
+				} elseif ( $sub_field['label'] ) {
 					FrmComboFieldsController::include_sub_label(
 						array(
 							'field'       => $field,

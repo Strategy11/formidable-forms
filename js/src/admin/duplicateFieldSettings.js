@@ -50,6 +50,7 @@ export function captureFieldSettings( settings, field ) {
 	const preview = field.querySelector( ':scope > .frm_inner_field_container > .frm_form_fields' );
 	return {
 		fieldId: settings.dataset.fid,
+		fieldKey: settings.querySelector( `[name="field_options[field_key_${ settings.dataset.fid }]"]` )?.value,
 		controls,
 		choices: choices ? cloneCurrentMarkup( choices ) : null,
 		preview: preview && ! preview.querySelector( 'iframe, .wp-editor-wrap' )
@@ -179,6 +180,10 @@ export function applyFieldSettings( snapshot, settings, field ) {
 	const fromId = snapshot.fieldId;
 	const toId = settings.dataset.fid;
 	const references = [];
+	const fieldKey = settings.querySelector( `[name="field_options[field_key_${ toId }]"]` )?.value;
+	if ( snapshot.fieldKey && fieldKey ) {
+		references.push( [ `field_${ snapshot.fieldKey }`, `field_${ fieldKey }` ] );
+	}
 	const originalLabel = snapshot.preview?.querySelector( 'fieldset' )?.getAttribute( 'aria-labelledby' );
 	const copyLabel = field.querySelector( '.frm_form_fields fieldset' )?.getAttribute( 'aria-labelledby' );
 	if ( originalLabel && copyLabel ) {

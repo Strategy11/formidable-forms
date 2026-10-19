@@ -50,7 +50,7 @@ export function updateComboSelectPreview( field, settings ) {
 	const defaultInput = inputs.find( input => input.dataset.changeatt === 'value' );
 	const placeholderInput = inputs.find( input => input.dataset.changeatt === 'placeholder' );
 	const value = defaultInput?.value ?? field.value;
-	const values = JSON.parse( field.dataset.frmPreviewChoices );
+	const values = JSON.parse( field.dataset.frmPreviewChoices || '[]' );
 	const choices = values.includes( value ) ? [ { saved: value, label: value, checked: true } ] : [];
 	renderDropdownPreview( field, choices, placeholderInput?.value || '' );
 }

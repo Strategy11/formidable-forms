@@ -12410,9 +12410,10 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
+			const updatePreviewOnInput = debounce( liveChanges );
 			builderForm.addEventListener( 'input', event => {
 				if ( event.target.matches( '[data-changeme]' ) ) {
-					liveChanges.call( event.target );
+					updatePreviewOnInput.call( event.target );
 					fieldUpdated();
 				}
 			} );

@@ -10,6 +10,7 @@ class test_FrmBuilderPreview extends FrmUnitTest {
 	 * Alternate layouts match the address renderer and retain saved subfield content.
 	 */
 	public function test_address_preview_templates() {
+		FrmHooksController::trigger_load_form_hooks();
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
 			array(
@@ -19,10 +20,10 @@ class test_FrmBuilderPreview extends FrmUnitTest {
 				'field_options' => array( 'city_desc' => 'Your city' ),
 			)
 		);
-		$values  = FrmFieldsHelper::setup_edit_vars( $field );
-		$object  = new FrmFieldAddress( $field );
+		$object  = FrmFieldFactory::get_field_object( $field );
+		$this->assertInstanceOf( $this->is_pro_active ? 'FrmProFieldAddress' : 'FrmFieldAddress', $object, 'Use the active address settings class.' );
 		ob_start();
-		$object->show_primary_options( array( 'field' => $values ) );
+		FrmFieldsController::load_single_field( $field, array( 'id' => $form_id ) );
 		$html = ob_get_clean();
 
 		foreach ( array( 'international', 'us', 'europe', 'generic' ) as $type ) {
@@ -31,6 +32,8 @@ class test_FrmBuilderPreview extends FrmUnitTest {
 			$layout = $matches[1];
 			$this->assertStringContainsString( 'value="Halifax"', $layout );
 			$this->assertStringContainsString( 'Your city', $layout );
+			$this->assertStringContainsString( 'id="field_city_desc_' . $field->id . '"', $layout, 'Pro subfield descriptions should retain their preview target.' );
+			$this->assertStringContainsString( 'id="frm_field_' . $field->id . '_city_desc"', $layout, 'Lite subfield descriptions should retain their preview target.' );
 
 			if ( in_array( $type, array( 'us', 'generic' ), true ) ) {
 				$this->assertStringNotContainsString( 'data-sub-field-name="country"', $layout );
@@ -42,7 +45,7 @@ class test_FrmBuilderPreview extends FrmUnitTest {
 				$this->assertStringNotContainsString( 'data-sub-field-name="state"', $layout );
 				$this->assertLessThan( strpos( $layout, 'data-sub-field-name="city"' ), strpos( $layout, 'data-sub-field-name="zip"' ) );
 			} elseif ( 'us' === $type ) {
-				$this->assertMatchesRegularExpression( '/<select\s+name="item_meta\[' . $field->id . '\]\[state\]"/', $layout );
+				$this->assertMatchesRegularExpression( '/<select[^>]+name="item_meta\[' . $field->id . '\]\[state\]"/', $layout );
 			}
 		}
 	}
@@ -126,6 +129,8 @@ class test_FrmBuilderPreview extends FrmUnitTest {
 	 * Country and state previews avoid rendering a full list while keeping valid defaults.
 	 */
 	public function test_address_dropdown_preview_contains_one_option() {
+		FrmHooksController::trigger_load_form_hooks();
+
 		foreach ( array(
 			'international' => 'country',
 			'us'            => 'state',
@@ -140,14 +145,46 @@ class test_FrmBuilderPreview extends FrmUnitTest {
 					'field_options' => array( 'address_type' => $type ),
 				)
 			);
-			$object  = new FrmFieldAddress( $field );
 			ob_start();
-			$object->show_on_form_builder();
-			$preview = ob_get_clean();
+			FrmFieldsController::load_single_field( $field, array( 'id' => $form_id ) );
+			$html    = ob_get_clean();
+			$matched = preg_match( '/<fieldset.*?<\/fieldset>/s', $html, $matches );
+			$this->assertSame( 1, $matched, 'The visible address preview should render.' );
+			$preview = $matches[0];
 			$this->assertSame( 1, substr_count( $preview, '<option' ) );
 			$this->assertStringContainsString( '>' . $value . '</option>', $preview );
 			$this->assertStringContainsString( 'data-frm-preview-choices=', $preview );
 		}
+	}
+
+	/**
+	 * Address rendering honors requests to omit submission names for every input type.
+	 */
+	public function test_address_rendering_can_remove_names() {
+		$form_id         = $this->factory->form->create();
+		$field           = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'address',
+				'form_id' => $form_id,
+			)
+		);
+		$values          = FrmFieldsHelper::setup_edit_vars( $field );
+		$values['value'] = array();
+		$object          = new FrmFieldAddress( $field );
+		ob_start();
+		$this->run_private_method(
+			array( $object, 'load_field_output' ),
+			array(
+				array(
+					'field'        => $values,
+					'remove_names' => true,
+				),
+			)
+		);
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( '<select ', $html, 'The country dropdown should render.' );
+		$this->assertDoesNotMatchRegularExpression( '/<(?:input|select)\\b[^>]*\\sname=/', $html, 'Preview controls should omit submission names when requested.' );
 	}
 
 	/**
