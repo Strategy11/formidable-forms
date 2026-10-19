@@ -221,6 +221,119 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
+	 * @see FrmFieldsController::load_field_settings
+	 */
+	public function test_load_field_settings_requires_permission() {
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
+
+		$_POST    = $this->get_load_field_settings_request( array( $this->create_text_field() ) );
+		$response = $this->trigger_action( 'frm_load_field_settings' );
+		$this->assertSame( FrmAppHelper::get_settings()->admin_permission, $response );
+		$this->assertStringNotContainsString( 'frm-single-settings-', (string) $this->_last_response );
+	}
+
+	/**
+	 * @see FrmFieldsController::load_field_settings
+	 */
+	public function test_load_field_settings_requires_nonce() {
+		$field_id = $this->create_text_field();
+
+		foreach ( array( 'invalid', null ) as $nonce ) {
+			$_POST = $this->get_load_field_settings_request( array( $field_id ) );
+
+			if ( null === $nonce ) {
+				unset( $_POST['nonce'] );
+			} else {
+				$_POST['nonce'] = $nonce;
+			}
+
+			$_REQUEST = $_POST;
+
+			$this->_last_response = '';
+			$this->assertSame( '-1', $this->trigger_action( 'frm_load_field_settings' ) );
+		}
+	}
+
+	/**
+	 * @see FrmFieldsController::load_field_settings
+	 */
+	public function test_load_field_settings_rejects_incomplete_request() {
+		$field_id = $this->create_text_field();
+		$requests = array(
+			'missing form id'   => array( 'form_id' => 0 ),
+			'empty field ids'   => array( 'field_ids' => array() ),
+			'missing field ids' => array( 'field_ids' => null ),
+		);
+
+		foreach ( $requests as $label => $changes ) {
+			$_POST = array_filter(
+				array_merge( $this->get_load_field_settings_request( array( $field_id ) ), $changes ),
+				static function ( $value ) {
+					return null !== $value;
+				}
+			);
+
+			$this->_last_response = '';
+			$response             = json_decode( $this->trigger_action( 'frm_load_field_settings' ), true );
+			$this->assertSame( array( 'success' => false ), $response, $label );
+		}
+	}
+
+	/**
+	 * @see FrmFieldsController::load_field_settings
+	 */
+	public function test_load_field_settings_returns_requested_fields() {
+		$field_ids     = array( $this->create_text_field(), $this->create_text_field( 'textarea' ) );
+		$other_form_id = $this->factory->form->create();
+		$other_field   = $this->create_text_field( 'text', $other_form_id );
+		$_POST         = $this->get_load_field_settings_request( array_merge( $field_ids, array( $other_field ) ) );
+		$response      = json_decode( $this->trigger_action( 'frm_load_field_settings' ), true );
+		$this->assertTrue( $response['success'] );
+
+		$settings = $response['data']['settings'];
+		$this->assertSame( $field_ids, array_keys( $settings ) );
+		$this->assertArrayNotHasKey( $other_field, $settings, 'A field from another form must not be returned.' );
+
+		foreach ( $field_ids as $field_id ) {
+			$this->assertStringContainsString( 'id="frm-single-settings-' . $field_id . '"', $settings[ $field_id ] );
+			// Only the settings are sent, since the browser already drew the preview.
+			$this->assertStringNotContainsString( 'id="frm_field_id_' . $field_id . '"', $settings[ $field_id ] );
+		}
+
+		$this->assertArrayHasKey( 'tooltips', $response['data'] );
+		$this->assertArrayHasKey( 'selectOptions', $response['data'] );
+	}
+
+	/**
+	 * @param string $type    The field type.
+	 * @param int    $form_id The form to add the field to. Defaults to the test form.
+	 *
+	 * @return int
+	 */
+	private function create_text_field( $type = 'text', $form_id = 0 ) {
+		return $this->factory->field->create(
+			array(
+				'form_id' => $form_id ? $form_id : $this->form_id,
+				'type'    => $type,
+			)
+		);
+	}
+
+	/**
+	 * @param int[] $field_ids The fields to request settings for.
+	 *
+	 * @return array
+	 */
+	private function get_load_field_settings_request( $field_ids ) {
+		return array(
+			'action'    => 'frm_load_field_settings',
+			'nonce'     => wp_create_nonce( 'frm_ajax' ),
+			'form_id'   => $this->form_id,
+			'field_ids' => $field_ids,
+		);
+	}
+
+	/**
 	 * Get a field object by key.
 	 *
 	 * @param string $field_key

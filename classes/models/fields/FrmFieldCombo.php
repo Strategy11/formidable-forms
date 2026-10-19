@@ -252,7 +252,13 @@ class FrmFieldCombo extends FrmFieldType {
 
 		$field_name = $this->html_name( $name );
 
-		$this->load_field_output( compact( 'field', 'field_name' ) );
+		$this->load_field_output(
+			array(
+				'field'           => $field,
+				'field_name'      => $field_name,
+				'builder_preview' => true,
+			)
+		);
 	}
 
 	/**

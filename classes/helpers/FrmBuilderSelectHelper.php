@@ -52,7 +52,7 @@ class FrmBuilderSelectHelper {
 		}
 
 		$defer = wp_doing_ajax()
-		? 'frm_load_field' === FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' )
+		? in_array( FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ), array( 'frm_load_field', 'frm_load_field_settings' ), true )
 		: FrmAppHelper::is_form_builder_page( false );
 
 		if ( $defer && $records ) {
