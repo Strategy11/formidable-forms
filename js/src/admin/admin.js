@@ -3381,6 +3381,10 @@ window.frmAdminBuildJS = function() {
 			field.querySelector( '.frm_required' )?.classList.toggle( 'frm_hidden', ! required.checked );
 			toggleValidationBox( required.checked, `.frm_required_details${ newFieldId }` );
 		}
+		const unique = settings.querySelector( '.frm_mark_unique' );
+		if ( unique ) {
+			toggleValidationBox( unique.checked, `.frm_unique_details${ newFieldId }` );
+		}
 		if ( settings.querySelector( '.frm_sortable_field_opts' ) ) {
 			resetDisplayedOpts( newFieldId );
 		}
@@ -12410,10 +12414,14 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
-			const updatePreviewOnInput = debounce( liveChanges );
+			const previewInputHandlers = new WeakMap();
 			builderForm.addEventListener( 'input', event => {
-				if ( event.target.matches( '[data-changeme]' ) ) {
-					updatePreviewOnInput.call( event.target );
+				const input = event.target;
+				if ( input.matches( '[data-changeme]' ) ) {
+					if ( ! previewInputHandlers.has( input ) ) {
+						previewInputHandlers.set( input, debounce( liveChanges ) );
+					}
+					previewInputHandlers.get( input ).call( input );
 					fieldUpdated();
 				}
 			} );
