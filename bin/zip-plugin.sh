@@ -55,6 +55,8 @@ zip -r $zipname $destination \
 	-x "*/.php-cs-fixer.cache" \
 	-x "*/.php-cs-fixer.php" \
 	-x "*/.phpunit.result.cache" \
+	-x "*.cache" \
+	-x "*.cache.*" \
 	-x "*/.stylelintrc.json" \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
@@ -76,6 +78,8 @@ zip -r $zipname $destination \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \
 	-x "*/composer.lock" \
+	-x "*/composer.ci.json" \
+	-x "*/composer.ci.lock" \
 	-x "*/crowdin.yml" \
 	-x "*/formidableforms.css" \
 	-x "*/formidableforms[0-9]*.css" \
@@ -96,9 +100,9 @@ zip -r $zipname $destination \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit*.xml" \
-	-x "*/phpunit.xml.dist" \
+	-x "*/phpunit*.xml.dist" \
 	-x "*/psalm.xml" \
-	-x "*/phpstan.neon" \
+	-x "*/phpstan*.neon" \
 	-x "*/*.stubs.php" \
 	-x "*/stubs.php" \
 	-x "*/stubs" \
@@ -150,6 +154,9 @@ zip -r $zipname $destination \
 	-x "*/report-task.txt" \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
+	-x "*/infection.json5" \
+	-x "*/scripts/install-hooks.sh" \
+	-x "*/scripts/pre-push" \
 	-x "*/mago.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
@@ -161,8 +168,8 @@ zip -r $zipname $destination \
 	-x "*/cypress/*" \
 	-x "*/AGENTS.md" \
 	-x "*/setup.bat" \
-	-x "*/phpstan.neon.dist" \
-	-x "*/phpcs.xml.dist" \
+	-x "*/phpstan*.neon.dist" \
+	-x "*/phpcs*.xml.dist" \
 	-x "*/webpack.config.cjs"
 
 if [ ! -z "$3" ]; then
