@@ -170,7 +170,8 @@ zip -r $zipname $destination \
 	-x "*/setup.bat" \
 	-x "*/phpstan*.neon.dist" \
 	-x "*/phpcs*.xml.dist" \
-	-x "*/webpack.config.cjs"
+	-x "*/webpack.config.cjs" \
+	-x "*/cypress.preview.config.js"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
