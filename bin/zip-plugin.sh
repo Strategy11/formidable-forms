@@ -105,6 +105,14 @@ zip -r $zipname $destination \
 	-x "*/stubs-*" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
+	-x "*.md" \
+	-x "*/docs/*" \
+	-x "*/baseline-*/*" \
+	-x "*/.lint-tools/*" \
+	-x "*/.core-snapshot/*" \
+	-x "*/.playwright-cli/*" \
+	-x "*/qa-*.ps1" \
+	-x "*/screens*.json" \
 	-x "*/tests/*" \
 	-x "formidable-api/lib/vendor/*/docs/*" \
 	-x "formidable-api/lib/vendor/*/generator/*" \
@@ -119,8 +127,8 @@ zip -r $zipname $destination \
 	-x "formidable-api/lib/vendor/*/.wp-env.json" \
 	-x "formidable-api/lib/vendor/*/phpcs.xml.dist" \
 	-x "formidable-api/lib/vendor/*/phpstan.neon.dist" \
-	-x "$source/vendor/*" \
-	-x "$source/formidable-payments/vendor/*" \
+	-x "$destination/vendor/*" \
+	-x "$destination/formidable-payments/vendor/*" \
 	-x "*/temp.xml" \
 	-x "formidable-pro/views/*" \
 	-x "formidable-views/js/dom.js" \
@@ -147,7 +155,7 @@ zip -r $zipname $destination \
 	-x "*/webpack.dev.js" \
 	-x "*/eslint-rules/*" \
 	-x "*/phpcs-sniffs/*" \
-	-x "$source/venv/*" \
+	-x "$destination/venv/*" \
 	-x "formidable/resources/*" \
 	-x "formidable-pro/resources/*" \
 	-x "*/cypress/*" \
