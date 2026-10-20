@@ -1482,6 +1482,9 @@ class FrmFormsController {
 		 */
 		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
 
+		// This replaces the old ajax_load form setting, so the saved option is ignored.
+		$values['ajax_load'] = FrmFormsHelper::should_ajax_load_builder( FrmFormsHelper::count_fields_without_submit( $values['fields'] ), (int) $form->id );
+
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 
 		if ( $form->is_template && $message === $edit_message ) {
@@ -2336,7 +2339,11 @@ class FrmFormsController {
 	public static function route() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
-		FrmAppHelper::include_svg();
+
+		// The AJAX form save only returns a message, so skip the icon sprite there.
+		if ( ! wp_doing_ajax() ) {
+			FrmAppHelper::include_svg();
+		}
 
 		if ( isset( $_POST['frm_compact_fields'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::permission_check( 'frm_edit_forms' );

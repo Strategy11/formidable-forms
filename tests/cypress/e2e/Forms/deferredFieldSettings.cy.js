@@ -29,18 +29,9 @@ describe( 'Deferred settings without Pro', { retries: 0 }, () => {
 	} );
 
 	it( 'initializes each inserted panel once and preserves edits made to its metadata', () => {
-		cy.url().then( builderUrl => {
-			cy.visit( builderUrl.replace( 'frm_action=edit', 'frm_action=settings' ) );
-			cy.get( '#ajax_load' ).then( inputs => {
-				if ( ! inputs[ 0 ].checked ) {
-					inputs[ 0 ].click();
-				}
-			} );
-			cy.intercept( 'POST', '**/wp-admin/admin.php*' ).as( 'saveAjaxBuilder' );
-			cy.get( '#frm_submit_side_top' ).then( button => button[ 0 ].click() );
-			cy.wait( '@saveAjaxBuilder' );
-			cy.visit( builderUrl );
-		} );
+		// Force AJAX loading for this short form. See tests/mu-plugins/frm-force-ajax-builder.php.
+		cy.setCookie( 'frm_e2e_ajax_builder', '1' );
+		cy.reload();
 		cy.get( 'li#text a.frm_add_field' ).then( button => button[ 0 ].click() );
 		cy.get( '#frm-show-fields li[data-ftype="text"]' ).invoke( 'attr', 'data-fid' ).then( id => {
 			cy.reload();
