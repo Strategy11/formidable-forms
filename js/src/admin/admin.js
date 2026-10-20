@@ -8596,18 +8596,35 @@ window.frmAdminBuildJS = function() {
 			data: { action: 'frm_save_form', frm_compact_fields: v, nonce: frmGlobal.nonce },
 			success( msg ) {
 				afterFormSave( $thisEle );
-
-				const $postStuff = document.getElementById( 'post-body-content' );
-				const $html = document.createElement( 'div' );
-				$html.setAttribute( 'class', 'frm_updated_message' );
-				$html.innerHTML = msg;
-				$postStuff.insertBefore( $html, $postStuff.firstChild );
+				showFormSavedMessage( msg );
 				reloadIfAddonActivatedAjaxSubmitOnly();
 			},
 			error() {
 				triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 			}
 		} );
+	}
+
+	/**
+	 * Show the message returned after saving the form with AJAX.
+	 * A plain success message pops up as a toast. A message with a link, like the
+	 * form too long warning, stays at the top of the builder so there is time to read it.
+	 *
+	 * @param {string} msg The message HTML returned by the save request.
+	 * @return {void}
+	 */
+	function showFormSavedMessage( msg ) {
+		const content = span( {} );
+		content.innerHTML = msg;
+
+		if ( ! content.querySelector( 'a' ) ) {
+			frmDom.success( content );
+			return;
+		}
+
+		const postStuff = document.getElementById( 'post-body-content' );
+		const message = div( { className: 'frm_updated_message', child: content } );
+		postStuff.insertBefore( message, postStuff.firstChild );
 	}
 
 	function triggerSubmit( form ) {
