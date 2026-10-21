@@ -175,6 +175,82 @@ class test_FrmAbilitiesFormsController extends FrmUnitTest {
 	}
 
 	/**
+	 * The builder turns anti-spam on and adds the default email action to every
+	 * new form, so a form made through the ability has to match.
+	 *
+	 * @return void
+	 */
+	public function test_create_form_defaults_to_antispam_and_one_email_action() {
+		$created = $this->execute( 'create-form', array( 'name' => 'Form With Defaults' ) );
+
+		$this->assertNotWPError( $created );
+
+		$form = FrmForm::getOne( $created['id'] );
+		$this->assertSame( 1, (int) ( $form->options['antispam'] ?? 0 ), 'Anti-spam should be on by default.' );
+		$this->assertCount( 1, FrmFormAction::get_action_for_form( $created['id'], 'email' ), 'The default email action should be created.' );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_create_form_keeps_antispam_off_when_the_caller_turns_it_off() {
+		$created = $this->execute(
+			'create-form',
+			array(
+				'name'    => 'Form Without Antispam',
+				'options' => array( 'antispam' => 0 ),
+			)
+		);
+
+		$this->assertNotWPError( $created );
+
+		$form = FrmForm::getOne( $created['id'] );
+		$this->assertSame( 0, (int) ( $form->options['antispam'] ?? 1 ), 'An explicit antispam of 0 should be kept.' );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_create_form_skips_the_email_action_for_templates_and_child_forms() {
+		$template = $this->execute(
+			'create-form',
+			array(
+				'name'        => 'Template Form',
+				'is_template' => 1,
+			)
+		);
+		$this->assertNotWPError( $template );
+		$this->assertCount( 0, FrmFormAction::get_action_for_form( $template['id'], 'email' ), 'A template should not get an email action.' );
+
+		$parent = $this->execute( 'create-form', array( 'name' => 'Parent Form' ) );
+		$this->assertNotWPError( $parent );
+
+		$child = $this->execute(
+			'create-form',
+			array(
+				'name'           => 'Child Form',
+				'parent_form_id' => $parent['id'],
+			)
+		);
+		$this->assertNotWPError( $child );
+		$this->assertCount( 0, FrmFormAction::get_action_for_form( $child['id'], 'email' ), 'A child form should not get an email action.' );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_create_form_respects_the_default_email_action_filter() {
+		add_filter( 'frm_create_default_email_action', '__return_false' );
+
+		$created = $this->execute( 'create-form', array( 'name' => 'Form With Filter' ) );
+
+		remove_filter( 'frm_create_default_email_action', '__return_false' );
+
+		$this->assertNotWPError( $created );
+		$this->assertCount( 0, FrmFormAction::get_action_for_form( $created['id'], 'email' ), 'The filter should be able to stop the default email action.' );
+	}
+
+	/**
 	 * A partial options update has to merge over what is stored, not replace
 	 * it outright, or every option left out of the request would reset to
 	 * its default and the form would lose its assigned style.
