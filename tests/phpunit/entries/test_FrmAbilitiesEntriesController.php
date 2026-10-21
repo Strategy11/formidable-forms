@@ -96,8 +96,7 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 	public function test_mark_entry_spam_sets_the_spam_status_and_returns_the_entry() {
 		$entry_id = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
 		$entry    = $this->factory->entry->get_object_by_id( $entry_id );
-
-		$marked = $this->execute( 'mark-entry-spam', array( 'id' => $entry->item_key ) );
+		$marked   = $this->execute( 'mark-entry-spam', array( 'id' => $entry->item_key ) );
 		$this->assertNotWPError( $marked, 'An item_key should resolve like an ID.' );
 		$this->assertSame( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS, $marked['is_draft'] );
 		$this->assertSame( (int) $entry_id, $marked['id'] );

@@ -811,9 +811,11 @@ class FrmAbilitiesEntriesController {
 	 * @return WP_Error
 	 */
 	private static function get_mark_spam_error() {
-		$message = FrmSpamEntriesHelper::can_store_spam()
-			? __( 'Only a submitted entry can be marked as spam.', 'formidable' )
-			: __( 'Spam entries cannot be stored while an active add-on does not support them.', 'formidable' );
+		if ( FrmSpamEntriesHelper::can_store_spam() ) {
+			$message = __( 'Only a submitted entry can be marked as spam.', 'formidable' );
+		} else {
+			$message = __( 'Spam entries cannot be stored while an active add-on does not support them.', 'formidable' );
+		}
 
 		return new WP_Error( 'frm_entry_not_markable', $message, array( 'status' => 400 ) );
 	}
