@@ -187,7 +187,7 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 			)
 		);
 		$this->assertNotWPError( $spam_only );
-		$this->assertSame( array( (string) $spam_id ), array_map( 'strval', wp_list_pluck( $spam_only, 'id' ) ), 'is_draft=4 should return only spam entries.' );
+		$this->assertSame( array( (string) $spam_id ), array_values( array_map( 'strval', wp_list_pluck( $spam_only, 'id' ) ) ), 'is_draft=4 should return only spam entries.' );
 
 		foreach ( array( 0, 1 ) as $status ) {
 			$listed = $this->execute(
