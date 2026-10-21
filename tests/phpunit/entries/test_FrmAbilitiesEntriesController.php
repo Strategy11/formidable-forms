@@ -131,12 +131,73 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 		);
 
 		$draft = $this->execute( 'mark-entry-spam', array( 'id' => $draft_id ) );
-		$this->assertWPError( $draft, 'Only a submitted entry can be marked as spam.' );
+		$this->assertWPError( $draft );
+		$this->assertSame( 'frm_entry_not_markable', $draft->get_error_code() );
+		$this->assertSame( 400, $draft->get_error_data()['status'] ?? null );
 		$this->assertSame( 1, (int) FrmEntry::getOne( $draft_id )->is_draft, 'A refused draft should keep its status.' );
 
 		$missing = $this->execute( 'mark-entry-spam', array( 'id' => 0 ) );
 		$this->assertWPError( $missing );
 		$this->assertSame( 404, $missing->get_error_data()['status'] ?? null );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_mark_entry_spam_moves_child_entries_with_their_parent() {
+		$parent_id = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
+		$child_id  = $this->factory->entry->create(
+			array(
+				'form_id'        => $this->form->id,
+				'parent_item_id' => $parent_id,
+			)
+		);
+
+		$this->assertNotWPError( $this->execute( 'mark-entry-spam', array( 'id' => $parent_id ) ) );
+
+		FrmEntry::clear_cache();
+		$this->assertTrue( FrmSpamEntriesHelper::is_spam( FrmEntry::getOne( $child_id ) ), 'A child entry should follow its parent.' );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_mark_entry_spam_refuses_a_child_entry() {
+		$parent_id = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
+		$child_id  = $this->factory->entry->create(
+			array(
+				'form_id'        => $this->form->id,
+				'parent_item_id' => $parent_id,
+			)
+		);
+
+		$child = $this->execute( 'mark-entry-spam', array( 'id' => $child_id ) );
+		$this->assertWPError( $child );
+		$this->assertSame( 'frm_entry_not_markable', $child->get_error_code() );
+		$this->assertSame( 400, $child->get_error_data()['status'] ?? null );
+
+		FrmEntry::clear_cache();
+
+		foreach ( array( $parent_id, $child_id ) as $id ) {
+			$this->assertSame( 0, (int) FrmEntry::getOne( $id )->is_draft, 'A refused child should leave its parent and itself submitted.' );
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_mark_entry_spam_succeeds_when_another_request_marks_it_first() {
+		global $wpdb;
+
+		$entry_id = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
+
+		// Prime the cache so this call still sees the entry as submitted after the other request wins.
+		FrmEntry::getOne( $entry_id );
+		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => FrmSpamEntriesHelper::SPAM_ENTRY_STATUS ), array( 'id' => $entry_id ) );
+
+		$marked = $this->execute( 'mark-entry-spam', array( 'id' => $entry_id ) );
+		$this->assertNotWPError( $marked );
+		$this->assertSame( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS, $marked['is_draft'] );
 	}
 
 	/**

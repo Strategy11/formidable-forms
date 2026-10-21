@@ -408,9 +408,18 @@ class FrmAbilitiesEntriesController {
 			return self::get_invalid_entry_error();
 		}
 
-		// An entry that is already spam is the result the caller asked for.
+		// A repeater or embedded form row moves to spam with its parent, never on its own.
+		if ( (int) $entry->parent_item_id > 0 ) {
+			return new WP_Error( 'frm_entry_not_markable', __( 'A child entry cannot be marked as spam on its own. Mark its parent entry instead.', 'formidable' ), array( 'status' => 400 ) );
+		}
+
+		// An entry that is already spam, even from a concurrent request, is the result the caller asked for.
 		if ( ! FrmSpamEntriesHelper::is_spam( $entry ) && ! FrmSpamEntriesHelper::mark_as_spam( $entry->id ) ) {
-			return self::get_mark_spam_error();
+			FrmEntry::clear_cache();
+
+			if ( ! FrmSpamEntriesHelper::is_spam( FrmEntry::getOne( $entry->id ) ) ) {
+				return self::get_mark_spam_error();
+			}
 		}
 
 		$entry = self::get_entry_with_meta( $entry->id );
