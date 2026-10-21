@@ -29,6 +29,8 @@ describe( 'Run some HTML validation', function() {
 		cy.visit( '/wp-admin/admin.php?page=formidable-settings' );
 		cy.get( '#wpbody-content' ).htmlvalidate( {
 			rules: {
+				// The hidden `action` field and the MCP buttons' `action` share a name on purpose.
+				'form-dup-name': 'off',
 				'element-permitted-content': 'off',
 				'valid-id': 'off',
 				'prefer-button': 'off',
