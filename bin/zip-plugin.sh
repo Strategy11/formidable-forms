@@ -30,6 +30,7 @@ fi
 
 # TODO: there is no need to create a zip for the Lite version. Instead, rsync to the svn repo folder
 
+# Arguments after the destination are exclusions supplied by the plugin wrapper.
 # Generate the plugin zip file.
 status "Creating archive..."
 zip -r $zipname $destination \
@@ -89,7 +90,6 @@ zip -r $zipname $destination \
 	-x "*/js/frm.min.js" \
 	-x "formidable/js/frmstrp.min.js" \
 	-x "formidable/stripe/js/frmstrp.js" \
-	-x "formidable-pro/js/frmstrp.js" \
 	-x "*/dropzone.js" \
 	-x "*/formidable-js.pot" \
 	-x "*/jest.config.js" \
@@ -118,34 +118,9 @@ zip -r $zipname $destination \
 	-x "*/qa-*.ps1" \
 	-x "*/screens*.json" \
 	-x "*/tests/*" \
-	-x "formidable-api/lib/vendor/*/docs/*" \
-	-x "formidable-api/lib/vendor/*/generator/*" \
-	-x "formidable-api/lib/vendor/*/skill/*" \
-	-x "formidable-api/lib/vendor/*/CHANGELOG.md" \
-	-x "formidable-api/lib/vendor/*/CLAUDE.md" \
-	-x "formidable-api/lib/vendor/*/CONTRIBUTING.md" \
-	-x "formidable-api/lib/vendor/*/README-INITIAL.md" \
-	-x "formidable-api/lib/vendor/*/.nvmrc" \
-	-x "formidable-api/lib/vendor/*/.prettierignore" \
-	-x "formidable-api/lib/vendor/*/.prettierrc.js" \
-	-x "formidable-api/lib/vendor/*/.wp-env.json" \
-	-x "formidable-api/lib/vendor/*/phpcs.xml.dist" \
-	-x "formidable-api/lib/vendor/*/phpstan.neon.dist" \
 	-x "$destination/vendor/*" \
 	-x "$destination/formidable-payments/vendor/*" \
 	-x "*/temp.xml" \
-	-x "formidable-pro/views/*" \
-	-x "formidable-views/js/dom.js" \
-	-x "formidable-views/js/editor.js" \
-	-x "formidable-views/js/index.js" \
-	-x "formidable-views/js/pagination.js" \
-	-x "formidable-chat/js/chat.js" \
-	-x "formidable-chat/js/stripe.js" \
-	-x "formidable-api/js/embed.js" \
-	-x "formidable-api/js/iframe-embed.js" \
-	-x "formidable-hubspot/js/admin.js" \
-	-x "formidable-coupons/js/frontend.js" \
-	-x "formidable-coupons/js/admin.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip" \
 	-x "*/rector.php" \
@@ -158,20 +133,19 @@ zip -r $zipname $destination \
 	-x "*/scripts/install-hooks.sh" \
 	-x "*/scripts/pre-push" \
 	-x "*/mago.toml" \
-	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js" \
 	-x "*/eslint-rules/*" \
 	-x "*/phpcs-sniffs/*" \
 	-x "$destination/venv/*" \
 	-x "formidable/resources/*" \
-	-x "formidable-pro/resources/*" \
 	-x "*/cypress/*" \
 	-x "*/AGENTS.md" \
 	-x "*/setup.bat" \
 	-x "*/phpstan*.neon.dist" \
 	-x "*/phpcs*.xml.dist" \
 	-x "*/webpack.config.cjs" \
-	-x "*/cypress.preview.config.js"
+	-x "*/cypress.preview.config.js" \
+	"${@:4}"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
