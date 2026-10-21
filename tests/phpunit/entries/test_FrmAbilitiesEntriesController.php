@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Behavior tests for the entry abilities Formidable itself owns: reading and
- * deleting only. create-entry and update-entry are Pro features and are
+ * Behavior tests for the entry abilities Formidable itself owns: reading,
+ * marking as spam and deleting. create-entry and update-entry are Pro features and are
  * covered on that plugin.
  */
 class test_FrmAbilitiesEntriesController extends FrmUnitTest {
@@ -88,6 +88,56 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 		$after = $this->execute( 'get-entry', array( 'id' => $entry_id ) );
 		$this->assertWPError( $after, 'A deleted entry should no longer be found.' );
 		$this->assertSame( 404, $after->get_error_data()['status'] ?? null );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_mark_entry_spam_sets_the_spam_status_and_returns_the_entry() {
+		$entry_id = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
+		$entry    = $this->factory->entry->get_object_by_id( $entry_id );
+
+		$marked = $this->execute( 'mark-entry-spam', array( 'id' => $entry->item_key ) );
+		$this->assertNotWPError( $marked, 'An item_key should resolve like an ID.' );
+		$this->assertSame( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS, $marked['is_draft'] );
+		$this->assertSame( $entry_id, $marked['id'] );
+		$this->assertSame( $marked, $this->execute( 'get-entry', array( 'id' => $entry_id ) ), 'The response should match get-entry.' );
+
+		$stored = FrmEntry::getOne( $entry_id );
+		$this->assertTrue( FrmSpamEntriesHelper::is_manual_spam( $stored ), 'It should be recorded as marked by hand, like the Entries screen does.' );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_mark_entry_spam_succeeds_again_on_a_spam_entry() {
+		$entry_id = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
+
+		$this->assertNotWPError( $this->execute( 'mark-entry-spam', array( 'id' => $entry_id ) ) );
+
+		$again = $this->execute( 'mark-entry-spam', array( 'id' => $entry_id ) );
+		$this->assertNotWPError( $again );
+		$this->assertSame( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS, $again['is_draft'] );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_mark_entry_spam_refuses_drafts_and_unknown_entries() {
+		$draft_id = $this->factory->entry->create(
+			array(
+				'form_id'  => $this->form->id,
+				'is_draft' => 1,
+			)
+		);
+
+		$draft = $this->execute( 'mark-entry-spam', array( 'id' => $draft_id ) );
+		$this->assertWPError( $draft, 'Only a submitted entry can be marked as spam.' );
+		$this->assertSame( 1, (int) FrmEntry::getOne( $draft_id )->is_draft, 'A refused draft should keep its status.' );
+
+		$missing = $this->execute( 'mark-entry-spam', array( 'id' => 0 ) );
+		$this->assertWPError( $missing );
+		$this->assertSame( 404, $missing->get_error_data()['status'] ?? null );
 	}
 
 	/**
@@ -186,12 +236,14 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 	 */
 	public function test_permission_follows_the_frm_view_and_delete_entries_capabilities() {
 		$entry_for_view   = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
+		$entry_for_spam   = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
 		$entry_for_delete = $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
 
 		$cases = array(
-			'list-entries' => array( 'frm_view_entries', array( 'form_id' => $this->form->id ) ),
-			'get-entry'    => array( 'frm_view_entries', array( 'id' => $entry_for_view ) ),
-			'delete-entry' => array( 'frm_delete_entries', array( 'id' => $entry_for_delete ) ),
+			'list-entries'    => array( 'frm_view_entries', array( 'form_id' => $this->form->id ) ),
+			'get-entry'       => array( 'frm_view_entries', array( 'id' => $entry_for_view ) ),
+			'mark-entry-spam' => array( 'frm_delete_entries', array( 'id' => $entry_for_spam ) ),
+			'delete-entry'    => array( 'frm_delete_entries', array( 'id' => $entry_for_delete ) ),
 		);
 
 		foreach ( $cases as $slug => list( $capability, $input ) ) {
