@@ -26,6 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 					<input type="hidden" name="frm_action" value="process-form"/>
+					<?php // Add-ons read `action` in their own settings routes. ?>
+					<input type="hidden" name="action" value="process-form"/>
 					<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
 					<?php
