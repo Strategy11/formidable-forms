@@ -84,7 +84,7 @@ class FrmAbilitiesEntriesController {
 						'is_draft'   => array(
 							'type'        => 'integer',
 							'enum'        => array( 0, 1, FrmSpamEntriesHelper::SPAM_ENTRY_STATUS ),
-							'description' => __( 'Filter by entry status: 0 returns only submitted entries, 1 returns only drafts and 4 returns only spam. Submitted entries and drafts are included, and spam is left out, when omitted.', 'formidable' ),
+							'description' => __( 'Filter by status: 0 returns only submitted entries, 1 only drafts, 4 only spam. Submitted entries and drafts, but not spam, are included when omitted.', 'formidable' ),
 						),
 					),
 				),
