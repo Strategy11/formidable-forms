@@ -100,7 +100,7 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 		$marked = $this->execute( 'mark-entry-spam', array( 'id' => $entry->item_key ) );
 		$this->assertNotWPError( $marked, 'An item_key should resolve like an ID.' );
 		$this->assertSame( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS, $marked['is_draft'] );
-		$this->assertSame( $entry_id, $marked['id'] );
+		$this->assertSame( (int) $entry_id, $marked['id'] );
 		$this->assertSame( $marked, $this->execute( 'get-entry', array( 'id' => $entry_id ) ), 'The response should match get-entry.' );
 
 		$stored = FrmEntry::getOne( $entry_id );
