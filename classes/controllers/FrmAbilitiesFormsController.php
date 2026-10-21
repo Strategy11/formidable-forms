@@ -567,6 +567,13 @@ class FrmAbilitiesFormsController {
 			$form['options'] = array_merge( $stored, self::sanitize_option_values( $input['options'] ) );
 		}
 
+		if ( ! isset( $input['options']['antispam'] ) ) {
+			// The builder turns anti-spam on for every new form, while the plain
+			// default is off. Only a caller who sets it explicitly keeps it off.
+			$form['options']             = isset( $form['options'] ) && is_array( $form['options'] ) ? $form['options'] : array();
+			$form['options']['antispam'] = 1;
+		}
+
 		if ( empty( $input['form_key'] ) && ! empty( $input['name'] ) ) {
 			// The builder derives the form key from the form name whenever the
 			// name is set, in FrmFormsController::update_form_name(). It cannot
@@ -585,6 +592,11 @@ class FrmAbilitiesFormsController {
 		}
 
 		$new_form = FrmForm::getOne( $form_id );
+
+		if ( empty( $input['is_template'] ) && empty( $input['parent_form_id'] ) ) {
+			// Same default notification the builder adds to a new form.
+			FrmFormsController::create_default_email_action( $new_form );
+		}
 
 		if ( ! empty( $input['fields'] ) && is_array( $input['fields'] ) ) {
 			foreach ( $input['fields'] as $field ) {
