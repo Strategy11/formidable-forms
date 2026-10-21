@@ -410,7 +410,8 @@ class FrmAbilitiesEntriesController {
 
 		// A repeater or embedded form row moves to spam with its parent, never on its own.
 		if ( (int) $entry->parent_item_id > 0 ) {
-			return new WP_Error( 'frm_entry_not_markable', __( 'A child entry cannot be marked as spam on its own. Mark its parent entry instead.', 'formidable' ), array( 'status' => 400 ) );
+			$message = __( 'A child entry cannot be marked as spam on its own. Mark its parent entry instead.', 'formidable' );
+			return new WP_Error( 'frm_entry_not_markable', $message, array( 'status' => 400 ) );
 		}
 
 		// An entry that is already spam, even from a concurrent request, is the result the caller asked for.
