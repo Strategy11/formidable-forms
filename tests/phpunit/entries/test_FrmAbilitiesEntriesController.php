@@ -156,6 +156,60 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 	}
 
 	/**
+	 * Spam entries are left out of a listing unless is_draft asks for them.
+	 *
+	 * @return void
+	 */
+	public function test_list_entries_can_filter_spam_entries() {
+		global $wpdb;
+
+		$entry_data            = $this->factory->field->generate_entry_array( $this->form );
+		$entry_data['form_id'] = $this->form->id;
+		$entry_id              = $this->factory->entry->create( $entry_data );
+
+		$draft_data             = $entry_data;
+		$draft_data['is_draft'] = 1;
+		$draft_data['item_key'] = 'ability-entries-draft-for-spam';
+		$draft_id               = $this->factory->entry->create( $draft_data );
+
+		$spam_data             = $entry_data;
+		$spam_data['item_key'] = 'ability-entries-spam';
+		$spam_id               = $this->factory->entry->create( $spam_data );
+
+		// Set the status directly so the test does not depend on spam storage being available.
+		$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => FrmSpamEntriesHelper::SPAM_ENTRY_STATUS ), array( 'id' => $spam_id ) );
+
+		$spam_only = $this->execute(
+			'list-entries',
+			array(
+				'form_id'  => $this->form->id,
+				'is_draft' => FrmSpamEntriesHelper::SPAM_ENTRY_STATUS,
+			)
+		);
+		$this->assertNotWPError( $spam_only );
+		$this->assertSame( array( (string) $spam_id ), array_map( 'strval', wp_list_pluck( $spam_only, 'id' ) ), 'is_draft=4 should return only spam entries.' );
+
+		foreach ( array( 0, 1 ) as $status ) {
+			$listed = $this->execute(
+				'list-entries',
+				array(
+					'form_id'  => $this->form->id,
+					'is_draft' => $status,
+				)
+			);
+			$this->assertNotWPError( $listed );
+			$this->assertNotContains( (string) $spam_id, array_map( 'strval', wp_list_pluck( $listed, 'id' ) ), 'is_draft=' . $status . ' should not return spam.' );
+		}
+
+		$default = $this->execute( 'list-entries', array( 'form_id' => $this->form->id ) );
+		$this->assertNotWPError( $default );
+		$default_ids = array_map( 'strval', wp_list_pluck( $default, 'id' ) );
+		$this->assertContains( (string) $entry_id, $default_ids );
+		$this->assertContains( (string) $draft_id, $default_ids );
+		$this->assertNotContains( (string) $spam_id, $default_ids, 'Spam should stay out of the default listing.' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_entries_order_accepts_any_casing() {
