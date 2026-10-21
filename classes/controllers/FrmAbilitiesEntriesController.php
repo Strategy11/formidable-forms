@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registers the Formidable entry abilities for the WordPress Abilities API.
  *
- * Reading and removing entries only. Creating and editing one through an
+ * Reading, marking as spam and removing entries. Creating and editing one through an
  * ability are Pro features, and live in FrmProAbilitiesEntriesController. The
  * helpers they share are public here, since the data they write has to be
  * shaped the same way whichever plugin does the writing.
@@ -25,6 +25,7 @@ class FrmAbilitiesEntriesController {
 	public static function register_abilities() {
 		self::register_list_entries_ability();
 		self::register_get_entry_ability();
+		self::register_mark_entry_spam_ability();
 		self::register_delete_entry_ability();
 	}
 
@@ -223,6 +224,41 @@ class FrmAbilitiesEntriesController {
 	}
 
 	/**
+	 * Register the mark entry as spam ability.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function register_mark_entry_spam_ability() {
+		FrmAbilitiesHelper::register(
+			'formidable-forms/mark-entry-spam',
+			array(
+				'label'               => __( 'Mark Entry as Spam', 'formidable' ),
+				'description'         => __( 'Move a submitted Formidable entry to spam. The entry is kept and can be restored from the Spam tab.', 'formidable' ),
+				'category'            => FrmAbilitiesController::CATEGORY,
+				'input_schema'        => array(
+					'type'       => 'object',
+					'required'   => array( 'id' ),
+					'properties' => array(
+						'id' => array(
+							'type'        => array( 'string', 'integer' ),
+							'description' => __( 'Entry ID or item_key. Required.', 'formidable' ),
+						),
+					),
+				),
+				'output_schema'       => array(
+					'type'        => 'object',
+					'description' => __( 'The entry, with is_draft set to 4.', 'formidable' ),
+				),
+				'execute_callback'    => 'FrmAbilitiesEntriesController::execute_mark_entry_spam',
+				'permission_callback' => 'FrmAbilitiesEntriesController::can_mark_entry_spam',
+				'meta'                => FrmAbilitiesHelper::meta( false, false, true ),
+			)
+		);
+	}
+
+	/**
 	 * Register the delete entry ability.
 	 *
 	 * @return void
@@ -350,6 +386,44 @@ class FrmAbilitiesEntriesController {
 		FrmAbilitiesHelper::set_current_user();
 
 		$entry = self::get_entry_with_meta( $input['id'] );
+
+		return is_wp_error( $entry ) ? $entry : self::prepare_entry_for_response( $entry );
+	}
+
+	/**
+	 * Mark a submitted entry as spam.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $input Ability input parameters.
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function execute_mark_entry_spam( $input ) {
+		FrmAbilitiesHelper::set_current_user();
+
+		$entry = FrmEntry::getOne( $input['id'] );
+
+		if ( ! $entry ) {
+			return self::get_invalid_entry_error();
+		}
+
+		// A repeater or embedded form row moves to spam with its parent, never on its own.
+		if ( (int) $entry->parent_item_id > 0 ) {
+			$message = __( 'A child entry cannot be marked as spam on its own. Mark its parent entry instead.', 'formidable' );
+			return new WP_Error( 'frm_entry_not_markable', $message, array( 'status' => 400 ) );
+		}
+
+		// An entry that is already spam, even from a concurrent request, is the result the caller asked for.
+		if ( ! FrmSpamEntriesHelper::is_spam( $entry ) && ! FrmSpamEntriesHelper::mark_as_spam( $entry->id ) ) {
+			FrmEntry::clear_cache();
+
+			if ( ! FrmSpamEntriesHelper::is_spam( FrmEntry::getOne( $entry->id ) ) ) {
+				return self::get_mark_spam_error();
+			}
+		}
+
+		$entry = self::get_entry_with_meta( $entry->id );
 
 		return is_wp_error( $entry ) ? $entry : self::prepare_entry_for_response( $entry );
 	}
@@ -740,6 +814,23 @@ class FrmAbilitiesEntriesController {
 	}
 
 	/**
+	 * Build the error returned when an entry cannot be moved to spam.
+	 *
+	 * @since x.x
+	 *
+	 * @return WP_Error
+	 */
+	private static function get_mark_spam_error() {
+		if ( FrmSpamEntriesHelper::can_store_spam() ) {
+			$message = __( 'Only a submitted entry can be marked as spam.', 'formidable' );
+		} else {
+			$message = __( 'Spam entries cannot be stored while an active add-on does not support them.', 'formidable' );
+		}
+
+		return new WP_Error( 'frm_entry_not_markable', $message, array( 'status' => 400 ) );
+	}
+
+	/**
 	 * Permission callback for list entries.
 	 *
 	 * @since 7.0
@@ -763,6 +854,19 @@ class FrmAbilitiesEntriesController {
 	 */
 	public static function can_get_entry( $input ) {
 		return current_user_can( 'frm_view_entries' ) || current_user_can( 'administrator' );
+	}
+
+	/**
+	 * Permission callback for mark entry as spam.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $input Ability input parameters.
+	 *
+	 * @return bool
+	 */
+	public static function can_mark_entry_spam( $input ) {
+		return FrmSpamEntriesController::current_user_can_moderate() || current_user_can( 'administrator' );
 	}
 
 	/**
