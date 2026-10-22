@@ -1416,7 +1416,14 @@ class FrmField {
 	 * @return string[]
 	 */
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', 'drafts', FrmSubmitHelper::FIELD_TYPE );
+		/**
+		 * Filters the field types that do not store entry metadata.
+		 *
+		 * @since x.x
+		 *
+		 * @param string[] $field_types Display-only field types.
+		 */
+		return apply_filters( 'frm_no_save_fields', array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE ) );
 	}
 
 	/**
