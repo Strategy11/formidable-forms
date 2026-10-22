@@ -17,6 +17,13 @@ $back_button_attr = array_intersect_key( array_filter( $back_button_args ), arra
 	<span id="frm_style_name"><?php echo esc_html( $back_button_args['title'] ); ?></span>
 </h2>
 
+<div class="frm-style-search-wrapper <?php echo esc_attr( FrmStylesHelper::style_editor_get_wrapper_classname( 'advanced-settings' ) ); ?>">
+	<input type="search" id="frm-style-search" class="frm-style-search" autocomplete="off"
+		placeholder="<?php esc_attr_e( 'Search styles', 'formidable' ); ?>"
+		aria-label="<?php esc_attr_e( 'Search style settings', 'formidable' ); ?>" />
+	<p id="frm-style-search-empty" class="howto frm-search-hidden"><?php esc_html_e( 'No settings found.', 'formidable' ); ?></p>
+</div>
+
 <div class="styling_settings <?php echo esc_attr( FrmStylesHelper::style_editor_get_wrapper_classname( 'advanced-settings' ) ); ?>">
 	<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
 </div>

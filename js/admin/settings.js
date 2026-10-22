@@ -20,61 +20,6 @@
 	}
 
 	/**
-	 * Wrap occurrences of the query inside an element with <mark>.
-	 *
-	 * Clears marks from a previous search first. Only text nodes are touched,
-	 * so icons and tooltips inside the element are left alone.
-	 *
-	 * @param {Element|null} element Element to highlight.
-	 * @param {string}       query   Lowercase search term, empty to only clear.
-	 * @return {void}
-	 */
-	function highlightText( element, query ) {
-		if ( ! element ) {
-			return;
-		}
-
-		const marks = element.querySelectorAll( 'mark.frm-search-highlight' );
-		marks.forEach( mark => mark.replaceWith( document.createTextNode( mark.textContent ) ) );
-		if ( marks.length ) {
-			element.normalize();
-		}
-
-		if ( ! query ) {
-			return;
-		}
-
-		const walker = document.createTreeWalker( element, NodeFilter.SHOW_TEXT );
-		const nodes = [];
-		while ( walker.nextNode() ) {
-			if ( walker.currentNode.textContent.toLowerCase().includes( query ) ) {
-				nodes.push( walker.currentNode );
-			}
-		}
-
-		nodes.forEach( node => {
-			const text = node.textContent;
-			const lower = text.toLowerCase();
-			const fragment = document.createDocumentFragment();
-			let position = 0;
-			let index = lower.indexOf( query );
-
-			while ( index !== -1 ) {
-				fragment.append( text.slice( position, index ) );
-				const mark = document.createElement( 'mark' );
-				mark.className = 'frm-search-highlight';
-				mark.textContent = text.slice( index, index + query.length );
-				fragment.append( mark );
-				position = index + query.length;
-				index = lower.indexOf( query, position );
-			}
-
-			fragment.append( text.slice( position ) );
-			node.replaceWith( fragment );
-		} );
-	}
-
-	/**
 	 * Filter the settings tabs and rows by the search term.
 	 *
 	 * Tabs without a match are hidden, and the first matching tab is opened
@@ -97,7 +42,7 @@
 			}
 
 			const rows = Array.from( panel.querySelectorAll( '.frm_grid_container, h3, .frm_license_box' ) ).filter( row => ! row.parentElement.closest( '.frm_license_box' ) );
-			highlightText( tab.querySelector( 'span' ), query );
+			frmDom.util.highlightText( tab.querySelector( 'span' ), query );
 			const tabNameMatches = tab.textContent.toLowerCase().includes( query );
 			let matches = ! query || tabNameMatches;
 
@@ -105,7 +50,7 @@
 				const label = row.querySelector( 'label' ) || row;
 				const rowMatches = ! query || tabNameMatches || label.textContent.toLowerCase().includes( query );
 				row.classList.toggle( 'frm_hidden', ! rowMatches );
-				highlightText( row.matches( 'h3, .frm_license_box' ) ? row : row.querySelector( 'label' ), query );
+				frmDom.util.highlightText( row.matches( 'h3, .frm_license_box' ) ? row : row.querySelector( 'label' ), query );
 				matches = matches || rowMatches;
 			} );
 
