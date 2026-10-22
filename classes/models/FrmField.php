@@ -1416,7 +1416,7 @@ class FrmField {
 	 * @return string[]
 	 */
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE );
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', 'drafts', FrmSubmitHelper::FIELD_TYPE );
 	}
 
 	/**
