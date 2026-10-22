@@ -120,12 +120,13 @@ class FrmFormsController {
 	 * Create the default email action
 	 *
 	 * @since 2.02.11
+	 * @since x.x Changed from private to public.
 	 *
 	 * @param int|object $form
 	 *
 	 * @return void
 	 */
-	private static function create_default_email_action( $form ) {
+	public static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
 
 		if ( ! is_object( $form ) ) {
