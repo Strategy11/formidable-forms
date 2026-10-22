@@ -36,7 +36,8 @@
 
 		tabs.forEach( tab => {
 			const link = tab.querySelector( 'a' );
-			const panel = document.querySelector( link?.getAttribute( 'href' ) || 'x' );
+			const href = link?.getAttribute( 'href' );
+			const panel = href ? document.querySelector( href ) : null;
 			if ( ! panel ) {
 				return;
 			}
@@ -49,12 +50,12 @@
 			rows.forEach( row => {
 				const label = row.querySelector( 'label' ) || row;
 				const rowMatches = ! query || tabNameMatches || label.textContent.toLowerCase().includes( query );
-				row.classList.toggle( 'frm_hidden', ! rowMatches );
+				row.classList.toggle( 'frm-search-hidden', ! rowMatches );
 				frmDom.util.highlightText( row.matches( 'h3, .frm_license_box' ) ? row : row.querySelector( 'label' ), query );
 				matches = matches || rowMatches;
 			} );
 
-			tab.classList.toggle( 'frm_hidden', ! matches );
+			tab.classList.toggle( 'frm-search-hidden', ! matches );
 			if ( matches && ! firstMatch ) {
 				firstMatch = link;
 			}
@@ -63,7 +64,7 @@
 			}
 		} );
 
-		document.getElementById( 'frm-settings-search-empty' ).classList.toggle( 'frm_hidden', !! firstMatch );
+		document.getElementById( 'frm-settings-search-empty' ).classList.toggle( 'frm-search-hidden', !! firstMatch );
 		if ( firstMatch && ! activeMatches ) {
 			firstMatch.click();
 		}

@@ -564,7 +564,3 @@ body.rtl .frm-style-card-separator {
 	width: 100%;
 	margin: 0 0 var(--gap-xs);
 }
-
-.frm-search-hidden {
-	display: none !important;
-}
