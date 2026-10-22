@@ -268,6 +268,10 @@ class FrmForm {
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 		$new_values  = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
+		if ( isset( $values['editable'] ) ) {
+			$new_values['editable'] = (int) ! empty( $values['editable'] );
+		}
+
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
 				$new_values[ $value_key ] = 'name' === $value_key ? FrmAppHelper::truncate( $value, 255, 1, '', true ) : $value;

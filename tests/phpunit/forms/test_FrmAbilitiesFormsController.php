@@ -353,4 +353,34 @@ class test_FrmAbilitiesFormsController extends FrmUnitTest {
 
 		$this->set_current_user_to_1();
 	}
+	/**
+	 * @covers FrmAbilitiesFormsController::execute_update_form
+	 *
+	 * @return void
+	 */
+	public function test_update_form_persists_explicit_editable_flag() {
+		$form_id = $this->factory->form->create( array( 'editable' => 0 ) );
+		$result  = FrmAbilitiesFormsController::execute_update_form(
+			array(
+				'id'       => $form_id,
+				'editable' => 1,
+			)
+		);
+		$this->assertIsArray( $result, 'Updating the editing flag must succeed.' );
+		$this->assertSame( 1, (int) FrmForm::getOne( $form_id )->editable, 'The editing flag must be persisted.' );
+		FrmAbilitiesFormsController::execute_update_form(
+			array(
+				'id'   => $form_id,
+				'name' => 'Renamed form',
+			)
+		);
+		$this->assertSame( 1, (int) FrmForm::getOne( $form_id )->editable, 'An unrelated update must preserve the editing flag.' );
+		FrmAbilitiesFormsController::execute_update_form(
+			array(
+				'id'       => $form_id,
+				'editable' => 0,
+			)
+		);
+		$this->assertSame( 0, (int) FrmForm::getOne( $form_id )->editable, 'The editing flag must also be disableable.' );
+	}
 }
