@@ -6,6 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmField {
 
 	/**
+	 * Version of the persistent field write hooks available to derived indexes.
+	 *
+	 * @since x.x
+	 */
+	const WRITE_HOOKS_VERSION = 1;
+
+	/**
 	 * @var bool
 	 */
 	public static $use_cache = true;
@@ -511,13 +518,22 @@ class FrmField {
 			return false;
 		}
 
+		$new_id = $wpdb->insert_id;
+
 		self::delete_form_transient( $new_values['form_id'] );
+
+		/**
+		 * Fires after a field is saved to the database.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $new_id Created field ID.
+		 */
+		do_action( 'frm_field_created', $new_id );
 
 		if ( ! $return ) {
 			return false;
 		}
-
-		$new_id = $wpdb->insert_id;
 
 		if ( isset( $values['id'] ) ) {
 			$frm_duplicate_ids[ $values['id'] ] = $new_id;
@@ -810,6 +826,17 @@ class FrmField {
 			}
 		}
 
+		if ( false !== $query_results ) {
+			/**
+			 * Fires after a field update succeeds, including updates with unchanged values.
+			 *
+			 * @since x.x
+			 *
+			 * @param int $id Updated field ID.
+			 */
+			do_action( 'frm_field_updated', $id );
+		}
+
 		return $query_results;
 	}
 
@@ -849,7 +876,20 @@ class FrmField {
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id=%d', $id ) );
 
-		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
+		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
+
+		if ( $result ) {
+			/**
+			 * Fires after a field is deleted from the database.
+			 *
+			 * @since x.x
+			 *
+			 * @param int $id Deleted field ID.
+			 */
+			do_action( 'frm_field_destroyed', $id );
+		}
+
+		return $result;
 	}
 
 	/**
