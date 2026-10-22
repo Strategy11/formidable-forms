@@ -123,6 +123,54 @@ class FrmCSVExportHelper {
 	}
 
 	/**
+	 * Gets selectable column groups, including combo sub-fields and repeated columns.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $form The form being exported.
+	 *
+	 * @return array
+	 */
+	public static function get_column_options( $form ) {
+		$columns = array();
+
+		foreach ( FrmXMLController::get_fields_for_csv_export( $form->id, $form ) as $field ) {
+			$columns += self::field_headings( $field );
+		}
+
+		$columns['comment']            = __( 'Comment', 'formidable' );
+		$columns['comment_user_id']    = __( 'Comment User', 'formidable' );
+		$columns['comment_created_at'] = __( 'Comment Date', 'formidable' );
+		$columns                      += self::entry_column_options();
+
+		if ( $form->parent_form_id > 0 ) {
+			$columns['parent_id'] = __( 'Parent ID', 'formidable' );
+		}
+
+		return apply_filters( 'frm_export_csv_headings', $columns );
+	}
+
+	/**
+	 * Gets the standard entry metadata columns.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function entry_column_options() {
+		return array(
+			'created_at' => __( 'Timestamp', 'formidable' ),
+			'updated_at' => __( 'Last Updated', 'formidable' ),
+			'user_id'    => __( 'Created By', 'formidable' ),
+			'updated_by' => __( 'Updated By', 'formidable' ),
+			'is_draft'   => __( 'Entry Status', 'formidable' ),
+			'ip'         => __( 'IP', 'formidable' ),
+			'id'         => __( 'ID', 'formidable' ),
+			'item_key'   => __( 'Key', 'formidable' ),
+		);
+	}
+
+	/**
 	 * @param array $atts
 	 *
 	 * @return false|string|null returns a string file path or false if $atts['mode'] is set to 'file'.
@@ -454,14 +502,7 @@ class FrmCSVExportHelper {
 			unset( $i );
 		}
 
-		$headings['created_at'] = __( 'Timestamp', 'formidable' );
-		$headings['updated_at'] = __( 'Last Updated', 'formidable' );
-		$headings['user_id']    = __( 'Created By', 'formidable' );
-		$headings['updated_by'] = __( 'Updated By', 'formidable' );
-		$headings['is_draft']   = __( 'Entry Status', 'formidable' );
-		$headings['ip']         = __( 'IP', 'formidable' );
-		$headings['id']         = __( 'ID', 'formidable' );
-		$headings['item_key']   = __( 'Key', 'formidable' );
+		$headings += self::entry_column_options();
 
 		if ( self::has_parent_id() ) {
 			$headings['parent_id'] = __( 'Parent ID', 'formidable' );

@@ -1,0 +1,40 @@
+#frm-csv-export {
+	border: 1px solid #d0d5dd;
+	border-radius: 12px;
+	box-sizing: border-box;
+	max-height: 90vh;
+	max-width: 95vw;
+	padding: 24px;
+	width: 640px;
+}
+
+#frm-csv-export::backdrop {
+	background: rgba( 16, 24, 40, 0.6 );
+}
+
+#frm-csv-export .frm-csv-columns {
+	border-block: 1px solid #d0d5dd;
+	max-height: 45vh;
+	overflow-y: auto;
+	padding: 8px 0;
+}
+
+#frm-csv-export .frm-csv-columns li {
+	align-items: center;
+	border-bottom: 1px solid #eee;
+	display: flex;
+	gap: 8px;
+	margin: 0;
+	padding: 8px;
+}
+
+#frm-csv-export .frm-csv-columns label {
+	flex: 1;
+	overflow-wrap: anywhere;
+}
+
+#frm-csv-export .frm-csv-export-actions {
+	display: flex;
+	gap: 12px;
+	justify-content: flex-end;
+}

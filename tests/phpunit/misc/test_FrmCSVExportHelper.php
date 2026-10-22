@@ -114,6 +114,54 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		}
 	}
 
+	public function test_custom_combo_columns_export_values_in_selected_order() {
+		if ( ! $this->is_pro_active ) {
+			$this->markTestSkipped( 'Custom CSV column filtering requires Pro.' );
+		}
+
+		$form     = $this->factory->form->create_and_get();
+		$field    = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'name',
+				'name'    => 'Name',
+			)
+		);
+		$entry    = $this->factory->entry->create(
+			array(
+				'form_id'   => $form->id,
+				'item_meta' => array(
+					$field->id => array(
+						'first' => 'Ada',
+						'last'  => 'Lovelace',
+					),
+				),
+			)
+		);
+		$original = $_GET;
+
+		try {
+			$_GET['columns'] = 'id,' . $field->id . '_last,' . $field->id . '_first';
+			$path            = FrmCSVExportHelper::generate_csv(
+				array(
+					'form'      => $form,
+					'form_cols' => FrmXMLController::get_fields_for_csv_export( $form->id, $form ),
+					'entry_ids' => array( $entry ),
+					'mode'      => 'file',
+				)
+			);
+			$handle          = fopen( $path, 'r' );
+			$headings        = fgetcsv( $handle, 0, ',', '"', '\\' );
+			$values          = fgetcsv( $handle, 0, ',', '"', '\\' );
+			fclose( $handle );
+			unlink( $path );
+			$this->assertSame( array( 'ID', 'Name - Last Name', 'Name - First Name' ), $headings, 'Combo headings should follow the requested order.' );
+			$this->assertSame( array( (string) $entry, 'Lovelace', 'Ada' ), $values, 'Combo column selection should retain field data in the same order.' );
+		} finally {
+			$_GET = $original;
+		}
+	}
+
 	private function set_form( $form ) {
 		$this->form = $form;
 		$this->set_private_property( 'FrmCSVExportHelper', 'form_id', $form->id );

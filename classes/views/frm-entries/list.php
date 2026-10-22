@@ -53,6 +53,7 @@ $should_show_add_new_button = $form && $pro_is_installed && current_user_can( 'f
 				<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 				<?php $wp_list_table->display(); ?>
 			</form>
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/csv-export.php'; ?>
 			<?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 		</div>
 </div>
