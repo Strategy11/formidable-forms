@@ -374,7 +374,7 @@ class FrmAbilitiesFormsController {
 			array(
 				'label'               => __( 'Update Form', 'formidable' ),
 				'description'         => __(
-					'Update an existing Formidable form: name, description, status, options, or parent_form_id (for repeater child forms).',
+					'Update an existing Formidable form: name, description, status, editable, options, or parent_form_id (for repeater child forms).',
 					'formidable'
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
@@ -402,6 +402,11 @@ class FrmAbilitiesFormsController {
 						'options'        => array(
 							'type'        => 'object',
 							'description' => __( 'Form options to merge (submit_value, success_msg, etc.).', 'formidable' ),
+						),
+						'editable'       => array(
+							'type'        => 'integer',
+							'enum'        => array( 0, 1 ),
+							'description' => __( 'Whether entries may be edited from the front end. Existing editing permissions are preserved.', 'formidable' ),
 						),
 						'parent_form_id' => array(
 							'type'        => array( 'string', 'integer' ),
@@ -674,6 +679,10 @@ class FrmAbilitiesFormsController {
 
 		if ( isset( $input['parent_form_id'] ) ) {
 			$values['parent_form_id'] = absint( $input['parent_form_id'] );
+		}
+
+		if ( isset( $input['editable'] ) ) {
+			$values['editable'] = (int) ! empty( $input['editable'] );
 		}
 
 		if ( ! $values ) {
