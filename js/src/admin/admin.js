@@ -6805,6 +6805,7 @@ window.frmAdminBuildJS = function() {
 
 		if ( this.value === '' ) {
 			fieldSelect.options.length = 1;
+			updateOrderFieldSelection( fieldID, [] );
 		} else {
 			const formID = this.value;
 			jQuery.ajax( {
@@ -6817,9 +6818,33 @@ window.frmAdminBuildJS = function() {
 				},
 				success( fields ) {
 					fieldSelect.innerHTML = fields;
+					updateOrderFieldSelection( fieldID, fieldSelect.options );
 				}
 			} );
 		}
+	}
+
+	/**
+	 * Refresh the source fields available for ordering linked choices.
+	 *
+	 * @param {string|number}               fieldId The linked choice field ID.
+	 * @param {HTMLOptionsCollection|Array} options Source field options.
+	 * @return {void}
+	 */
+	function updateOrderFieldSelection( fieldId, options ) {
+		const orderSelect = document.getElementById( `frm_order_field_${ fieldId }` );
+		if ( ! orderSelect ) {
+			return;
+		}
+
+		orderSelect.options.length = 1;
+		const newOptions = Array.from( options ).filter( option => option.value ).map( option => {
+			const copy = option.cloneNode( true );
+			copy.selected = false;
+			copy.removeAttribute( 'selected' );
+			return copy;
+		} );
+		orderSelect.append( ...newOptions );
 	}
 
 	// Clear the Watch Fields option when Lookup field switches to "Text" option
@@ -8136,6 +8161,8 @@ window.frmAdminBuildJS = function() {
 					const $selectedFields = jQuery( `#frm_show_selected_fields_${ fieldId }` );
 					$selectedFields.toggleClass( 'frm6', ! msg.includes( 'frm-inline-message' ) );
 					$selectedFields.html( msg ).show();
+					const sourceSelect = $selectedFields.get( 0 ).querySelector( 'select' );
+					updateOrderFieldSelection( fieldId, sourceSelect ? sourceSelect.options : [] );
 				}
 			} );
 		}
