@@ -46,6 +46,31 @@ function frmFrontFormJS() {
 		}
 
 		fieldName = field.name;
+		if ( /^item_meta\[\d+\]\[i?\d+\]\[\d+\]\[(form|row_ids)\]/.test( fieldName ) ) {
+			return 0;
+		}
+
+		const embeddedRepeater = fieldName?.match(
+			/^item_meta\[\d+\]\[i?\d+\]\[(\d+)\]\[(i?\d+)\]\[(\d+|other|form|row_ids)\]/
+		);
+		if ( embeddedRepeater ) {
+			let [ , sectionId, rowId, nestedId ] = embeddedRepeater;
+			if ( nestedId === 'form' || nestedId === 'row_ids' ) {
+				return 0;
+			}
+			if ( nestedId === 'other' ) {
+				nestedId = fieldName.slice( embeddedRepeater[ 0 ].length ).match( /^\[(\d+)\]/ )?.[ 1 ];
+				if ( ! nestedId ) {
+					return 0;
+				}
+			}
+			if ( ! fullID ) {
+				return nestedId;
+			}
+			const container = field.closest( '[data-sub-field-name]' );
+			const suffix = container ? `-${ container.getAttribute( 'data-sub-field-name' ) }` : '';
+			return `${ nestedId }-${ sectionId }-${ rowId }${ suffix }`;
+		}
 
 		if ( fieldName === undefined ) {
 			fieldName = '';
