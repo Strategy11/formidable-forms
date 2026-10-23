@@ -70,6 +70,33 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		$this->assertSame( '111.500', $amount );
 	}
 
+	public function test_echo_capture_payment_upsell_is_hidden_unless_stripe_is_selected() {
+		$action = new FrmTransLiteAction();
+
+		$this->assertStringContainsString( 'display: none', $this->get_capture_payment_upsell( $action, array( 'paypal' ) ) );
+		$this->assertStringContainsString( 'display: none', $this->get_capture_payment_upsell( $action, array( 'square' ) ) );
+		$this->assertStringNotContainsString( 'display: none', $this->get_capture_payment_upsell( $action, array( 'stripe' ) ) );
+	}
+
+	public function test_actions_js_localizes_the_refunded_label() {
+		FrmTransLiteActionsController::actions_js();
+
+		$data = wp_scripts()->get_data( 'frmtrans_admin', 'data' );
+		$this->assertStringContainsString( '"refunded":"' . FrmTransLiteAppHelper::show_status( 'refunded' ) . '"', $data );
+	}
+
+	/**
+	 * @param FrmTransLiteAction $action
+	 * @param array              $gateway
+	 *
+	 * @return string
+	 */
+	private function get_capture_payment_upsell( $action, $gateway ) {
+		ob_start();
+		$action->echo_capture_payment_upsell( $gateway );
+		return ob_get_clean();
+	}
+
 	/**
 	 * @param string $amount
 	 * @param array  $currency
