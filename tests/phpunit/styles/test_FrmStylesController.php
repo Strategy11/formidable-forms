@@ -185,4 +185,16 @@ class test_FrmStylesController extends FrmUnitTest {
 		$updated_style = $frm_style->get_one();
 		$this->assertSame( $style->post_title . ' Updated', $updated_style->post_title );
 	}
+
+	public function test_get_form_style_class_falls_back_to_default_style_when_style_is_deleted() {
+		$default_style = ( new FrmStyle( 'default' ) )->get_one();
+		$this->assertNotEmpty( $default_style );
+
+		$deleted_style_id = $default_style->ID + 100000;
+		$this->assertNull( ( new FrmStyle( $deleted_style_id ) )->get_one() );
+
+		$class = FrmStylesController::get_form_style_class( ' with_frm_style', $deleted_style_id );
+
+		$this->assertSame( ' with_frm_style frm_style_' . $default_style->post_name, $class );
+	}
 }
