@@ -43,10 +43,9 @@ class FrmEntriesHelper {
 		$values     = array(
 			'name'        => '',
 			'description' => '',
-			'item_key'    => ( ! $reset && is_string( $posted_key ) ) ? $posted_key : '',
+			'item_key'    => ! $reset && is_string( $posted_key ) ? $posted_key : '',
+			'fields'      => array(),
 		);
-
-		$values['fields'] = array();
 
 		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
