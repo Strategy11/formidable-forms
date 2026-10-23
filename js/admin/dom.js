@@ -340,7 +340,7 @@
 					className: 'frm-search',
 					children: [
 						label,
-						span( { className: 'frmfont frm_search_icon' } ),
+						svg( { href: '#frm_search_icon', classList: [ 'frm_search_icon', 'frm_svg20' ] } ),
 						searchInput
 					]
 				}
