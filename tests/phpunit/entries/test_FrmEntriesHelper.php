@@ -37,8 +37,7 @@ class test_FrmEntriesHelper extends FrmUnitTest {
 		$fields = FrmField::get_all_for_form( $form_id );
 
 		$_POST['item_key'] = 'My Typed Key';
-
-		$values = FrmEntriesHelper::setup_new_vars( $fields );
+		$values            = FrmEntriesHelper::setup_new_vars( $fields );
 		$this->assertSame( 'my-typed-key', $values['item_key'] );
 
 		$values = FrmEntriesHelper::setup_new_vars( $fields, '', true );
