@@ -57,4 +57,24 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		// Assert that the 'redirect' key exists in the response.
 		$this->assertArrayHasKey( 'redirect', $response_array, 'The response should have a redirect key.' );
 	}
+
+	public function test_ajax_create_template_redirects_to_edit_the_new_template() {
+		$_POST    = array(
+			'action' => 'frm_create_template',
+			'nonce'  => wp_create_nonce( 'frm_ajax' ),
+			'xml'    => '1',
+			'name'   => 'Contact Us Template',
+			'desc'   => 'Lorem ipsum dolor sit amet consectetur.',
+		);
+		$response = $this->trigger_action( $_POST['action'] );
+		$redirect = json_decode( $response, true )['redirect'];
+
+		$this->assertStringContainsString( 'frm_action=edit', $redirect );
+		$this->assertStringNotContainsString( 'frm_action=duplicate', $redirect );
+
+		parse_str( wp_parse_url( $redirect, PHP_URL_QUERY ), $query );
+		$template = FrmForm::getOne( absint( $query['id'] ) );
+
+		$this->assertEquals( 1, $template->is_template, 'The redirect should open the new template, not a copy of it.' );
+	}
 }
