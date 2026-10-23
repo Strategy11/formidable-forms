@@ -42,7 +42,7 @@ class FrmEntriesHelper {
 		$values = array(
 			'name'        => '',
 			'description' => '',
-			'item_key'    => '',
+			'item_key'    => $reset ? '' : FrmAppHelper::get_post_param( 'item_key', '', 'sanitize_title' ),
 		);
 
 		$values['fields'] = array();
