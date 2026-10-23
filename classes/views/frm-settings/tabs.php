@@ -3,10 +3,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<input type="search" id="frm-settings-search" class="frm-settings-search" autocomplete="off"
-	placeholder="<?php esc_attr_e( 'Search settings', 'formidable' ); ?>"
-	aria-label="<?php esc_attr_e( 'Search settings', 'formidable' ); ?>" />
-<p id="frm-settings-search-empty" class="howto frm-search-hidden"><?php esc_html_e( 'No settings found.', 'formidable' ); ?></p>
+<?php if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) ) { ?>
+	<input type="search" id="frm-settings-search" class="frm-settings-search" autocomplete="off"
+		placeholder="<?php esc_attr_e( 'Search settings', 'formidable' ); ?>"
+		aria-label="<?php esc_attr_e( 'Search settings', 'formidable' ); ?>" />
+	<p id="frm-settings-search-empty" class="howto frm-search-hidden"><?php esc_html_e( 'No settings found.', 'formidable' ); ?></p>
+<?php } ?>
 <ul class="frm-category-tabs frm-form-setting-tabs">
 	<?php foreach ( $sections as $section ) { ?>
 		<li class="<?php echo esc_attr( $current === $section['anchor'] ? 'tabs active starttab' : '' ); ?>">

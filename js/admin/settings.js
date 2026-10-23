@@ -48,10 +48,11 @@
 			let matches = ! query || tabNameMatches;
 
 			rows.forEach( row => {
-				const label = row.querySelector( 'label' ) || row;
-				const rowMatches = ! query || tabNameMatches || label.textContent.toLowerCase().includes( query );
+				const labels = row.matches( 'h3, .frm_license_box' ) ? [ row ] : Array.from( row.querySelectorAll( 'label' ) );
+				const searchable = labels.length ? labels : [ row ];
+				const rowMatches = ! query || tabNameMatches || searchable.some( element => element.textContent.toLowerCase().includes( query ) );
 				row.classList.toggle( 'frm-search-hidden', ! rowMatches );
-				frmDom.util.highlightText( row.matches( 'h3, .frm_license_box' ) ? row : row.querySelector( 'label' ), query );
+				labels.forEach( label => frmDom.util.highlightText( label, query ) );
 				matches = matches || rowMatches;
 			} );
 
@@ -81,9 +82,15 @@
 	}
 
 	function handleKeyDownEvent( e ) {
-		switch ( e.key ) { // eslint-disable-line sonarjs/no-small-switch
+		switch ( e.key ) {
 			case ' ':
 				handleSpaceDownEvent( e );
+				break;
+			case 'Enter':
+				// Enter in the search box would submit the settings form.
+				if ( 'frm-settings-search' === e.target.id ) {
+					e.preventDefault();
+				}
 				break;
 		}
 	}
