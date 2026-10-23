@@ -9,6 +9,11 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmEntriesHelper::class )]
 class test_FrmEntriesHelper extends FrmUnitTest {
 
+	public function tearDown(): void {
+		unset( $_POST['item_key'] );
+		parent::tearDown();
+	}
+
 	public function test_display_value() {
 		$value         = serialize( array( 'Option 1', 'Option 2' ) );
 		$field         = $this->factory->field->create_and_get(
@@ -41,6 +46,10 @@ class test_FrmEntriesHelper extends FrmUnitTest {
 
 		$values = FrmEntriesHelper::setup_new_vars( $fields, '', true );
 		$this->assertSame( '', $values['item_key'], 'A reset form must not carry the posted key.' );
+
+		$_POST['item_key'] = array( 'x' );
+		$values            = FrmEntriesHelper::setup_new_vars( $fields );
+		$this->assertSame( '', $values['item_key'], 'An array posted as the key must not reach the view.' );
 
 		unset( $_POST['item_key'] );
 
