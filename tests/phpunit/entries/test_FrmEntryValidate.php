@@ -33,11 +33,6 @@ class test_FrmEntryValidate extends FrmUnitTest {
 	}
 
 	/**
-	 * @since 7.0
-	 *
-	 * @covers FrmEntryValidate::validate
-	 */
-	/**
 	 * @covers FrmEntryValidate::validate_phone_field
 	 */
 	public function test_validate_phone_field_rejects_array_value() {
@@ -54,6 +49,11 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertArrayHasKey( 'field' . $field->id, $errors );
 	}
 
+	/**
+	 * @since 7.0
+	 *
+	 * @covers FrmEntryValidate::validate
+	 */
 	public function test_pre_validate_entry_filter() {
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create(
