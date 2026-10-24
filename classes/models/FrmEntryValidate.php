@@ -478,10 +478,10 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @param array  $errors
-	 * @param object $field
-	 * @param string $value
-	 * @param array  $args
+	 * @param array        $errors
+	 * @param object       $field
+	 * @param array|string $value
+	 * @param array        $args
 	 *
 	 * @return void
 	 */
