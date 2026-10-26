@@ -22,7 +22,7 @@ describe( 'Form loading state is cleared when going to the previous page', () =>
 					win.frmFrontForm.removeSubmitLoading( win.jQuery( form ) );
 
 					expect( ended ).to.equal( 1 );
-					expect( form.classList.contains( 'frm_loading_prev' ) ).to.be.false;
+					expect( form.classList.contains( 'frm_loading_prev' ) ).to.equal( false );
 				} );
 			} );
 		} );
