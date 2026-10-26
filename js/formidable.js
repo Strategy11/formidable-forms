@@ -1792,7 +1792,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		document.querySelectorAll( '.frm_loading_form' ).forEach( function( form ) {
+		document.querySelectorAll( '.frm_loading_form, .frm_loading_prev' ).forEach( function( form ) {
 			form.classList.remove( 'frm_loading_form', 'frm_loading_prev' );
 			jQuery( form ).trigger( 'frmEndFormLoading' );
 
