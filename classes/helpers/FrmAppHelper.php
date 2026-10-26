@@ -2781,8 +2781,7 @@ class FrmAppHelper {
 			$key = self::generate_new_key( $num_chars );
 		}
 
-		$key = self::prevent_numeric_and_reserved_keys( $key );
-
+		$key          = self::prevent_numeric_and_reserved_keys( $key );
 		$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
 
 		// Create a unique field id if it has already been used.
