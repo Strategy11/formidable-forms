@@ -376,4 +376,31 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		$this->assertSame( 'Please fix Comment', $error_message );
 	}
+
+	/**
+	 * @covers FrmFieldsHelper::include_other_input
+	 */
+	public function test_include_other_input_full_width_for_dropdowns() {
+		$args = array(
+			'other_opt' => true,
+			'field'     => array(
+				'id'       => 1,
+				'name'     => 'Test',
+				'type'     => 'select',
+				'multiple' => false,
+			),
+			'opt_key'   => 'other_1',
+			'html_id'   => 'field_test',
+			'name'      => 'item_meta[other][1]',
+			'value'     => '',
+			'checked'   => '',
+			'read_only' => false,
+		);
+
+		ob_start();
+		FrmFieldsHelper::include_other_input( $args );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'frm_other_full', $html );
+	}
 }
