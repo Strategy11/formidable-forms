@@ -2783,14 +2783,7 @@ class FrmAppHelper {
 
 		$key = self::prevent_numeric_and_reserved_keys( $key );
 
-		$similar_keys = FrmDb::get_col(
-			$table_name,
-			array(
-				$column . ' like%' => $key,
-				'ID !'             => $id,
-			),
-			$column
-		);
+		$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
 
 		// Create a unique field id if it has already been used.
 		if ( ! in_array( $key, $similar_keys, true ) ) {
@@ -2802,14 +2795,7 @@ class FrmAppHelper {
 		if ( $truncated_key !== $key ) {
 			// Keys already created from the truncated key aren't in the list loaded for the full key.
 			$key          = $truncated_key;
-			$similar_keys = FrmDb::get_col(
-				$table_name,
-				array(
-					$column . ' like%' => $key,
-					'ID !'             => $id,
-				),
-				$column
-			);
+			$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
 		}
 
 		/**
@@ -2829,6 +2815,25 @@ class FrmAppHelper {
 		} while ( in_array( $key_check, $similar_keys, true ) );
 
 		return $key_check;
+	}
+
+	/**
+	 * @param string $key
+	 * @param string $table_name
+	 * @param string $column
+	 * @param int    $id
+	 *
+	 * @return array<string>
+	 */
+	private static function get_similar_keys( $key, $table_name, $column, $id ) {
+		return FrmDb::get_col(
+			$table_name,
+			array(
+				$column . ' like%' => $key,
+				'ID !'             => $id,
+			),
+			$column
+		);
 	}
 
 	/**
