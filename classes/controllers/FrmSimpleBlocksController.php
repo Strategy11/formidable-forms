@@ -118,19 +118,7 @@ class FrmSimpleBlocksController {
 	 * @return array
 	 */
 	private static function get_forms_options() {
-		$forms = FrmForm::getAll(
-			array(
-				'is_template' => 0,
-				'status'      => 'published',
-				array(
-					'or'               => 1,
-					'parent_form_id'   => null,
-					'parent_form_id <' => 1,
-				),
-			),
-			'name'
-		);
-
+		$forms = FrmForm::get_published_form_names();
 		return array_map( 'FrmSimpleBlocksController::set_form_options', $forms );
 	}
 

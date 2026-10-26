@@ -411,7 +411,15 @@ namespace {
 		 */
 		public static function get_display_ids_by_form( $form_id ) {
 		}
-	}
+	/**
+	 * @param int    $form_id
+	 * @param string $show_count
+	 * @param string $name
+	 *
+	 * @return int view id
+	 */
+	public static function create( $form_id = 0, $show_count = 'all', $name = '' ) {}
+}
 	class FrmProCreditCardsController {
 		/**
 		 * @param array  $field
@@ -977,4 +985,48 @@ namespace WPMailSMTP\Providers {
 		public function get_mailer( $provider, $phpmailer ) {
 		}
 	}
+}
+
+namespace {
+class FrmViewsTypeSettingsHelper {
+	/**
+	 * @param object $view   View being edited.
+	 * @param array  $values Submitted settings.
+	 *
+	 * @return array
+	 */
+	public static function sanitize( $view, $values ) {}
+}
+
+}
+
+namespace {
+class FrmViewsSetupHelper {
+	/** @return string */
+	public static function view_block( $view_id ) {}
+
+	/** @return string */
+	public static function replace_view_embed( $content, $old_id, $new_id ) {}
+
+}
+}
+
+namespace {
+
+class FrmTransLitePayment {
+	/**
+	 * @param array $values Native offline record values.
+	 * @return int
+	 */
+	public function create( $values ) {}
+}
+
+class FrmTransLiteSubscription {
+	/**
+	 * @param array $values Native offline record values.
+	 * @return int
+	 */
+	public function create( $values ) {}
+}
+
 }

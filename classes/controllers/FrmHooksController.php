@@ -59,6 +59,7 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		add_action( 'frm_after_destroy_entry', array( 'FrmObjectStorage', 'delete_entry' ) );
 		// Use 0 so this gets triggered before FrmFormActionsController::register_post_types.
 		add_action( 'init', 'FrmAppController::load_lang', 0 );
 

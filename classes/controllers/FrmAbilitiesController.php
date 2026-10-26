@@ -87,6 +87,9 @@ class FrmAbilitiesController {
 			'form-actions'  => 'FrmAbilitiesFormActionsController',
 			'payments'      => 'FrmAbilitiesPaymentsController',
 			'subscriptions' => 'FrmAbilitiesSubscriptionsController',
+			'pages'         => 'FrmAbilitiesPagesController',
+			'media'         => 'FrmAbilitiesMediaController',
+			'site-users'    => 'FrmAbilitiesUsersController',
 		);
 
 		/**
@@ -191,5 +194,9 @@ class FrmAbilitiesController {
 		FrmAbilitiesFormActionsController::register_abilities();
 		FrmAbilitiesPaymentsController::register_abilities();
 		FrmAbilitiesSubscriptionsController::register_abilities();
+		FrmAbilitiesPagesController::register_abilities();
+		FrmAbilitiesMediaController::register_abilities();
+		FrmAbilitiesUsersController::register_abilities();
+		FrmAbilitiesOfflinePaymentsController::register_abilities();
 	}
 }
