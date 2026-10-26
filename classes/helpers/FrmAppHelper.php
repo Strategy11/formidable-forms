@@ -2797,7 +2797,20 @@ class FrmAppHelper {
 			return $key;
 		}
 
-		$key = self::maybe_truncate_key_before_appending( $column, $key );
+		$truncated_key = self::maybe_truncate_key_before_appending( $column, $key );
+
+		if ( $truncated_key !== $key ) {
+			// Keys already created from the truncated key aren't in the list loaded for the full key.
+			$key          = $truncated_key;
+			$similar_keys = FrmDb::get_col(
+				$table_name,
+				array(
+					$column . ' like%' => $key,
+					'ID !'             => $id,
+				),
+				$column
+			);
+		}
 
 		/**
 		 * Allow for a custom separator between the attempted key and the generated suffix.
