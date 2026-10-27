@@ -39,6 +39,37 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( strpos( $form, '<form ' ), 'The form is missing' );
 	}
 
+	public function test_post_exceeds_max_size() {
+		$limit = wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) );
+
+		if ( $limit <= 0 ) {
+			$this->markTestSkipped( 'post_max_size is unlimited' );
+		}
+
+		$server = $_SERVER;
+		$post   = $_POST;
+
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST                     = array();
+
+		$_SERVER['CONTENT_LENGTH'] = $limit + 1;
+		$this->assertTrue( FrmFormsController::post_exceeds_max_size(), 'An empty POST larger than the limit should be flagged' );
+
+		$_SERVER['CONTENT_LENGTH'] = $limit;
+		$this->assertFalse( FrmFormsController::post_exceeds_max_size(), 'A POST within the limit should not be flagged' );
+
+		$_SERVER['CONTENT_LENGTH'] = $limit + 1;
+		$_POST                     = array( 'id' => 1 );
+		$this->assertFalse( FrmFormsController::post_exceeds_max_size(), 'A POST that PHP parsed should not be flagged' );
+
+		$_POST                     = array();
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$this->assertFalse( FrmFormsController::post_exceeds_max_size(), 'A GET request should not be flagged' );
+
+		$_SERVER = $server;
+		$_POST   = $post;
+	}
+
 	/**
 	 * @see FrmFormsController::update
 	 * without ajax
