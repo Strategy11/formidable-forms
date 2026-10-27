@@ -2307,11 +2307,11 @@
 	 * When the address is on an earlier page, the dropdown is a hidden input holding the country name instead.
 	 * US type address fields have no country field, so US is assumed for them.
 	 *
-	 * @since x.x Added the addressType param and the hidden input lookup.
+	 * @since 6.34
 	 *
 	 * @param {Element} addressContainer
 	 * @param {string}  prefix
-	 * @param {string}  addressType The address field type, such as us or international.
+	 * @param {string}  addressType      The address field type, such as us or international.
 	 * @return {string} Country code, or an empty string when the country is unknown.
 	 */
 	function getCountryCode( addressContainer, prefix, addressType ) {
