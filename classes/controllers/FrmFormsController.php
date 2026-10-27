@@ -2352,7 +2352,7 @@ class FrmFormsController {
 
 		$message = sprintf(
 			/* translators: %1$s: The post_max_size limit, %2$s: Start link HTML, %3$s: end link HTML */
-			__( 'Your changes were not saved because the form is larger than the %1$s your server accepts (post_max_size). Ask your host to raise this limit, or %2$sread how to fix server limits%3$s.', 'formidable' ),
+			__( 'Your changes were not saved because the form is larger than the %1$s your server accepts (post_max_size). Ask your host to raise this limit, or %2$sread how to fix server limits%3$s.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			size_format( wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) ) ),
 			'<a href="' . esc_url( self::get_form_too_long_docs_url() ) . '" target="_blank" rel="noopener">',
 			'</a>'
