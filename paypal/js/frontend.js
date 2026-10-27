@@ -2325,7 +2325,8 @@
 		const countryInput = addressContainer.querySelector( `input[name$="[${ prefix }country]"]` );
 
 		if ( countryInput?.value ) {
-			return frmPayPalVars.countryCodes?.[ countryInput.value ] || '';
+			const code = frmPayPalVars.countryCodes?.[ countryInput.value ];
+			return 'string' === typeof code ? code : '';
 		}
 
 		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
