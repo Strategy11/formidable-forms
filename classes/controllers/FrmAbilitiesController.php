@@ -191,6 +191,5 @@ class FrmAbilitiesController {
 		FrmAbilitiesFormActionsController::register_abilities();
 		FrmAbilitiesPaymentsController::register_abilities();
 		FrmAbilitiesSubscriptionsController::register_abilities();
-		FrmAbilitiesOfflinePaymentsController::register_abilities();
 	}
 }
