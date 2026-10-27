@@ -124,7 +124,7 @@ class test_FrmSquareLiteAppController extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void
+	 * @return \Iterator<string, array<string>>
 	 */
 	public static function amount_format_provider(): \Iterator {
 		// Comma thousands with a dot decimal, the GBP and USD convention.

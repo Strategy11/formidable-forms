@@ -38,7 +38,7 @@ class FrmAbilitiesFormsController {
 			array(
 				'label'               => __( 'List Forms', 'formidable' ),
 				'description'         => __(
-					'Retrieve all Formidable forms. Returns id, form_key, name, and description. Use the form_key or id for create-entry, list-fields, or get-form.',
+					'Retrieve all Formidable forms. Returns id, form_key, name, and description. Use the form_key or id for list-entries, list-fields, or get-form.',
 					'formidable'
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
@@ -339,10 +339,10 @@ class FrmAbilitiesFormsController {
 						'formidable'
 					),
 					'items'                => array(
-						'type' => array( 'string', 'object' ),
+						'type' => array( 'string', 'number', 'object' ),
 					),
 					'additionalProperties' => array(
-						'type' => array( 'string', 'object' ),
+						'type' => array( 'string', 'number', 'object' ),
 					),
 				),
 				'default_value' => array(
@@ -374,7 +374,7 @@ class FrmAbilitiesFormsController {
 			array(
 				'label'               => __( 'Update Form', 'formidable' ),
 				'description'         => __(
-					'Update an existing Formidable form: name, description, status, options, or parent_form_id (for repeater child forms).',
+					'Update an existing Formidable form: name, description, status, editable, options, or parent_form_id (for repeater child forms).',
 					'formidable'
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
@@ -402,6 +402,11 @@ class FrmAbilitiesFormsController {
 						'options'        => array(
 							'type'        => 'object',
 							'description' => __( 'Form options to merge (submit_value, success_msg, etc.).', 'formidable' ),
+						),
+						'editable'       => array(
+							'type'        => 'integer',
+							'enum'        => array( 0, 1 ),
+							'description' => __( 'Whether entries may be edited from the front end. Existing editing permissions are preserved.', 'formidable' ),
 						),
 						'parent_form_id' => array(
 							'type'        => array( 'string', 'integer' ),
@@ -567,6 +572,13 @@ class FrmAbilitiesFormsController {
 			$form['options'] = array_merge( $stored, self::sanitize_option_values( $input['options'] ) );
 		}
 
+		if ( ! isset( $input['options']['antispam'] ) ) {
+			// The builder turns anti-spam on for every new form, while the plain
+			// default is off. Only a caller who sets it explicitly keeps it off.
+			$form['options']             = isset( $form['options'] ) && is_array( $form['options'] ) ? $form['options'] : array();
+			$form['options']['antispam'] = 1;
+		}
+
 		if ( empty( $input['form_key'] ) && ! empty( $input['name'] ) ) {
 			// The builder derives the form key from the form name whenever the
 			// name is set, in FrmFormsController::update_form_name(). It cannot
@@ -585,6 +597,11 @@ class FrmAbilitiesFormsController {
 		}
 
 		$new_form = FrmForm::getOne( $form_id );
+
+		if ( empty( $input['is_template'] ) && empty( $input['parent_form_id'] ) ) {
+			// Same default notification the builder adds to a new form.
+			FrmFormsController::create_default_email_action( $new_form );
+		}
 
 		if ( ! empty( $input['fields'] ) && is_array( $input['fields'] ) ) {
 			foreach ( $input['fields'] as $field ) {
@@ -662,6 +679,10 @@ class FrmAbilitiesFormsController {
 
 		if ( isset( $input['parent_form_id'] ) ) {
 			$values['parent_form_id'] = absint( $input['parent_form_id'] );
+		}
+
+		if ( isset( $input['editable'] ) ) {
+			$values['editable'] = (int) ! empty( $input['editable'] );
 		}
 
 		if ( ! $values ) {

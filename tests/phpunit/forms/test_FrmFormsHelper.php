@@ -600,4 +600,36 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		);
 		$this->assertStringContainsString( 'tabindex="-1"', $focusable_html );
 	}
+
+	/**
+	 * @covers FrmFormsHelper::should_ajax_load_builder
+	 */
+	public function test_should_ajax_load_builder() {
+		$threshold = FrmFormsHelper::AJAX_BUILDER_FIELD_THRESHOLD;
+
+		$this->assertFalse( FrmFormsHelper::should_ajax_load_builder( $threshold, 1 ), 'A form at the threshold should not load with AJAX.' );
+		$this->assertTrue( FrmFormsHelper::should_ajax_load_builder( $threshold + 1, 1 ), 'A form over the threshold should load with AJAX.' );
+
+		add_filter( 'frm_ajax_load_form_builder', '__return_false' );
+		$this->assertFalse( FrmFormsHelper::should_ajax_load_builder( 1000, 1 ), '__return_false should turn AJAX loading off for long forms.' );
+		remove_filter( 'frm_ajax_load_form_builder', '__return_false' );
+
+		add_filter( 'frm_ajax_load_form_builder', '__return_true' );
+		$this->assertTrue( FrmFormsHelper::should_ajax_load_builder( 1, 1 ), '__return_true should turn AJAX loading on for short forms.' );
+		remove_filter( 'frm_ajax_load_form_builder', '__return_true' );
+	}
+
+	/**
+	 * @covers FrmFormsHelper::count_fields_without_submit
+	 */
+	public function test_count_fields_without_submit() {
+		$fields = array(
+			(object) array( 'type' => 'text' ),
+			array( 'type' => 'email' ),
+			(object) array( 'type' => FrmSubmitHelper::FIELD_TYPE ),
+		);
+
+		$this->assertSame( 2, FrmFormsHelper::count_fields_without_submit( $fields ) );
+		$this->assertSame( 0, FrmFormsHelper::count_fields_without_submit( array() ) );
+	}
 }

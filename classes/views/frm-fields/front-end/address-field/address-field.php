@@ -28,6 +28,7 @@ $sub_fields   = $args['sub_fields'];
 $html_id      = $args['html_id'];
 $field_name   = $args['field_name'];
 $errors       = $args['errors'];
+$remove_names = ! empty( $args['remove_names'] );
 $atts         = $args['shortcode_atts'] ?? array();
 $inputs_attrs = $this->get_inputs_container_attrs();
 ?>
@@ -54,15 +55,38 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				<label for="<?php echo esc_attr( $html_id . '_' . $name ); ?>" class="frm_screen_reader frm_hidden">
 					<?php echo esc_html( ! empty( $field[ $name . '_desc' ] ) ? $field[ $name . '_desc' ] : $field['name'] ); ?>
 				</label>
-				<?php if ( 'select' === $sub_field['type'] ) { ?>
-					<select name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $name ); ?>]" id="<?php echo esc_attr( $html_id . '_' . $name ); ?>" <?php FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'key' ) ); ?>>
+				<?php
+				if ( 'select' === $sub_field['type'] ) {
+					$select_attrs = array(
+						'id' => $html_id . '_' . $name,
+					);
+
+					if ( ! $remove_names ) {
+						$select_attrs['name'] = $field_name . '[' . $name . ']';
+					}
+
+					$is_builder_preview = ! empty( $args['builder_preview'] );
+					$has_selection      = in_array( (string) ( $field['value'][ $name ] ?? '' ), $sub_field['options'], true );
+
+					if ( $is_builder_preview ) {
+						$select_attrs['data-frm-preview-choices'] = wp_json_encode( array_values( $sub_field['options'] ) );
+					}
+					?>
+					<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?> <?php FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'key' ) ); ?>>
+						<?php if ( ! $is_builder_preview || ! $has_selection ) { ?>
 						<option value="" class="<?php echo esc_attr( ! empty( $field['placeholder'][ $name ] ) ? 'frm-select-placeholder' : '' ); ?>">
 							<?php echo esc_html( FrmComboFieldsController::get_dropdown_label( compact( 'field', 'key', 'sub_field' ) ) ); ?>
 						</option>
 						<?php
+						}
+
 						foreach ( $sub_field['options'] as $option ) {
 							$selected = isset( $field['value'][ $name ] ) && (string) $field['value'][ $name ] === (string) $option;
-							$params   = array( 'value' => $option );
+
+							if ( $is_builder_preview && ! $selected ) {
+								continue;
+							}
+							$params = array( 'value' => $option );
 
 							if ( 'address' === $field['type'] && 'country' === $name ) {
 								$code = FrmAddressesController::get_country_code( $option );
@@ -78,7 +102,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 					</select>
 				<?php } else { ?>
 					<input type="<?php echo esc_attr( $sub_field['type'] ); ?>" id="<?php echo esc_attr( $html_id . '_' . $name ); ?>" value="<?php echo esc_attr( $field['value'][ $name ] ?? '' ); ?>" <?php
-					if ( empty( $remove_names ) ) {
+					if ( ! $remove_names ) {
 						echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
 					}
 					FrmComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'key' ) );
@@ -88,7 +112,13 @@ $inputs_attrs = $this->get_inputs_container_attrs();
  ?>
 
 				<?php
-				if ( $sub_field['label'] ) {
+				if ( ! empty( $args['builder_preview'] ) ) {
+					?>
+					<div class="frm_description" id="field_<?php echo esc_attr( $name . '_desc_' . $field_id ); ?>">
+						<span id="frm_field_<?php echo esc_attr( $field_id . '_' . $name ); ?>_desc"><?php echo wp_kses_post( $field[ $name . '_desc' ] ?? '' ); ?></span>
+					</div>
+					<?php
+				} elseif ( $sub_field['label'] ) {
 					FrmComboFieldsController::include_sub_label(
 						array(
 							'field'       => $field,

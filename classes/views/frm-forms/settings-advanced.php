@@ -100,12 +100,34 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 </h3>
 
 <table class="form-table">
+	<?php
+	// Temporary notice where the removed "Load and save form builder page with AJAX" setting used to be.
+	$builder_field_count = FrmFormsHelper::count_fields_without_submit( $values['fields'] );
+	?>
 	<tr>
 		<td>
-			<label for="ajax_load" class="frm_inline_block">
-				<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo $values['ajax_load'] ? ' checked="checked"' : ''; ?> /> <?php esc_html_e( 'Load and save form builder page with AJAX', 'formidable' ); ?>
-				<?php FrmAppHelper::tooltip_icon( __( 'Recommended for long forms.', 'formidable' ) ); ?>
-			</label>
+			<div id="frm_ajax_load_notice" class="frm_note_style">
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %d: Number of fields */
+						__( 'The form builder now loads and saves with AJAX automatically once a form has more than %d fields.', 'formidable' ),
+						FrmFormsHelper::AJAX_BUILDER_FIELD_THRESHOLD
+					)
+				);
+				echo ' ';
+
+				if ( FrmFormsHelper::should_ajax_load_builder( $builder_field_count, (int) $values['id'] ) ) {
+					/* translators: %d: Number of fields */
+					$ajax_load_status = _n( 'This form has %d field, so AJAX loading is on.', 'This form has %d fields, so AJAX loading is on.', $builder_field_count, 'formidable' );
+				} else {
+					/* translators: %d: Number of fields */
+					$ajax_load_status = _n( 'This form has %d field, so AJAX loading is off.', 'This form has %d fields, so AJAX loading is off.', $builder_field_count, 'formidable' );
+				}
+
+				echo esc_html( sprintf( $ajax_load_status, $builder_field_count ) );
+				?>
+			</div>
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_ajax_options', $values ); ?>

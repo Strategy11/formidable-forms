@@ -138,6 +138,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 			'delete-field',
 			'list-entries',
 			'get-entry',
+			'mark-entry-spam',
 			'delete-entry',
 			'list-styles',
 			'get-style',
