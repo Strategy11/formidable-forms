@@ -2151,7 +2151,7 @@
 	/**
 	 * Check if the form is going to the previous page or saving a draft, using Pro's helpers when available.
 	 *
-	 * @return {boolean}
+	 * @return {boolean} True if the form is going back or saving a draft.
 	 */
 	function goingBackOrSavingDraft() {
 		const proForm = window.frmProForm;
