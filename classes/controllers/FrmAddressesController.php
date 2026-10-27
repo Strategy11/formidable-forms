@@ -205,7 +205,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 *
 	 * @since x.x
 	 *
-	 * @return array<string,string>
+	 * @return array
 	 */
 	public static function get_country_codes() {
 		self::maybe_define_country_codes();
