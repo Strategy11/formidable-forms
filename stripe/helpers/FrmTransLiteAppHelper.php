@@ -170,38 +170,12 @@ class FrmTransLiteAppHelper {
 		$atts['payment'] = (array) $atts['payment'];
 
 		if ( empty( $atts['payment']['action_id'] ) ) {
-			return self::manual_payment_settings( $atts['payment'] );
+			return array();
 		}
 
 		$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
 
 		return $form_action ? $form_action->post_content : array();
-	}
-
-	/**
-	 * Read validated currency metadata on offline records without a gateway action.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $payment Offline payment or subscription record.
-	 *
-	 * @return array
-	 */
-	private static function manual_payment_settings( $payment ) {
-		if ( 'manual' !== ( $payment['paysys'] ?? '' ) ) {
-			return array();
-		}
-
-		$meta = $payment['meta_value'] ?? array();
-		$meta = FrmAppHelper::maybe_unserialize_array( $meta );
-
-		if ( ! is_array( $meta ) || ! is_string( $meta['currency'] ?? null ) ) {
-			return array();
-		}
-
-		$currency   = strtoupper( $meta['currency'] );
-		$currencies = FrmCurrencyHelper::get_currencies();
-		return isset( $currencies[ $currency ] ) ? array( 'currency' => $currency ) : array();
 	}
 
 	/**
