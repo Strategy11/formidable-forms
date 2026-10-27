@@ -52,7 +52,7 @@
 				const searchable = labels.length ? labels : [ row ];
 				const rowMatches = ! query || tabNameMatches || searchable.some( element => element.textContent.toLowerCase().includes( query ) );
 				row.classList.toggle( 'frm-search-hidden', ! rowMatches );
-				labels.forEach( label => frmDom.util.highlightText( label, query ) );
+				searchable.forEach( element => frmDom.util.highlightText( element, query ) );
 				matches = matches || rowMatches;
 			} );
 
@@ -91,6 +91,8 @@
 				if ( 'frm-settings-search' === e.target.id ) {
 					e.preventDefault();
 				}
+				break;
+			default:
 				break;
 		}
 	}
