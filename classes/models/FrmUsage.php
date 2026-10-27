@@ -590,8 +590,10 @@ class FrmUsage {
 		$fields = FrmDb::get_results( 'frm_fields', array(), 'id, form_id, name, type, field_options', $args );
 
 		foreach ( $fields as $k => $field ) {
-			FrmAppHelper::unserialize_or_decode( $field->field_options );
-			$fields[ $k ]->field_options = $field->field_options;
+			$field = (array) $field;
+
+			FrmAppHelper::unserialize_or_decode( $field['field_options'] );
+			$fields[ $k ] = $field;
 		}
 
 		return $fields;
