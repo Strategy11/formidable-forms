@@ -223,6 +223,28 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
+	 * Test get_country_codes returns the name to code map.
+	 *
+	 * @covers FrmAddressesController::get_country_codes
+	 */
+	public function test_get_country_codes_returns_name_to_code_map() {
+		$codes = FrmAddressesController::get_country_codes();
+		$this->assertSame( 'US', $codes['United States'] );
+		$this->assertSame( 'CA', $codes['Canada'] );
+	}
+
+	/**
+	 * Test get_country_code and get_country_codes read from the same source.
+	 *
+	 * @covers FrmAddressesController::get_country_codes
+	 */
+	public function test_get_country_codes_matches_get_country_code() {
+		foreach ( array( 'United Kingdom', 'Germany' ) as $country ) {
+			$this->assertSame( FrmAddressesController::get_country_code( $country ), FrmAddressesController::get_country_codes()[ $country ] );
+		}
+	}
+
+	/**
 	 * Test get_export_headings adds address columns.
 	 */
 	public function test_get_export_headings_adds_address_columns() {

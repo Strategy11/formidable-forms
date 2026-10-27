@@ -2238,10 +2238,12 @@
 	 */
 	function getBillingAddress() {
 		let addressID = '';
+		let addressType = '';
 
 		getPayPalSettings().forEach( function( setting ) {
 			if ( setting.address ) {
 				addressID = setting.address;
+				addressType = setting.addressType || '';
 			}
 		} );
 
@@ -2290,7 +2292,7 @@
 			return null;
 		}
 
-		const countryCode = getCountryCode( addressContainer, prefix );
+		const countryCode = getCountryCode( addressContainer, prefix, addressType );
 
 		if ( countryCode ) {
 			billingAddress.countryCode = countryCode;
@@ -2302,15 +2304,17 @@
 	/**
 	 * Get the two letter country code for the filled address.
 	 * The country dropdown holds the code in a data-code attribute.
-	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
+	 * When the address is on an earlier page, the dropdown is a hidden input holding the country name instead.
+	 * US type address fields have no country field, so US is assumed for them.
 	 *
-	 * @since 6.34
+	 * @since x.x Added the addressType param and the hidden input lookup.
 	 *
 	 * @param {Element} addressContainer
 	 * @param {string}  prefix
+	 * @param {string}  addressType The address field type, such as us or international.
 	 * @return {string} Country code, or an empty string when the country is unknown.
 	 */
-	function getCountryCode( addressContainer, prefix ) {
+	function getCountryCode( addressContainer, prefix, addressType ) {
 		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
 
 		if ( countryDropdown ) {
@@ -2318,8 +2322,14 @@
 			return countryOption?.getAttribute( 'data-code' ) || '';
 		}
 
+		const countryInput = addressContainer.querySelector( `input[name$="[${ prefix }country]"]` );
+
+		if ( countryInput?.value ) {
+			return frmPayPalVars.countryCodes?.[ countryInput.value ] || '';
+		}
+
 		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
-		return stateDropdown ? 'US' : '';
+		return stateDropdown || 'us' === addressType ? 'US' : '';
 	}
 
 	// ---- Price / Pay Later ----
