@@ -67,6 +67,63 @@ class test_FrmEntriesController extends FrmUnitTest {
 		return $new_post->ID;
 	}
 
+	/**
+	 * A POST that PHP truncated at max_input_vars has no item_key and must show an error, not the failed message.
+	 */
+	public function test_process_entry_adds_error_when_input_vars_truncated() {
+		global $frm_vars;
+		$form_id        = $this->factory->form->create();
+		$original_post  = $_POST;
+		$original_state = $frm_vars['created_entries'] ?? null;
+
+		try {
+			unset( $frm_vars['created_entries'] );
+			$_POST = array(
+				'form_id'   => $form_id,
+				'item_meta' => array_fill( 0, (int) ini_get( 'max_input_vars' ), 'a' ),
+			);
+			FrmEntriesController::process_entry();
+
+			$this->assertNotEmpty( $frm_vars['created_entries'][ $form_id ]['errors']['form'] );
+			$this->assertArrayNotHasKey( 'entry_id', $frm_vars['created_entries'][ $form_id ] );
+		} finally {
+			$_POST = $original_post;
+			unset( $frm_vars['created_entries'] );
+
+			if ( null !== $original_state ) {
+				$frm_vars['created_entries'] = $original_state;
+			}
+		}
+	}
+
+	/**
+	 * A POST under the limit with no item_key is not a truncated request.
+	 */
+	public function test_process_entry_ignores_missing_item_key_under_input_limit() {
+		global $frm_vars;
+		$form_id        = $this->factory->form->create();
+		$original_post  = $_POST;
+		$original_state = $frm_vars['created_entries'] ?? null;
+
+		try {
+			unset( $frm_vars['created_entries'] );
+			$_POST = array(
+				'form_id'   => $form_id,
+				'item_meta' => array( 'a' ),
+			);
+			FrmEntriesController::process_entry();
+
+			$this->assertArrayNotHasKey( $form_id, $frm_vars['created_entries'] ?? array() );
+		} finally {
+			$_POST = $original_post;
+			unset( $frm_vars['created_entries'] );
+
+			if ( null !== $original_state ) {
+				$frm_vars['created_entries'] = $original_state;
+			}
+		}
+	}
+
 	public function test_hidden_columns() {
 		// Confirm that a string option value doesn't trigger a fatal error.
 		$columns = FrmEntriesController::hidden_columns( '' );
