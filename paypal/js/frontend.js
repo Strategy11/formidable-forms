@@ -2157,6 +2157,11 @@
 		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
 
 		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
+			// Pro's frmpplite.js may not be enqueued, but going back must never submit the card.
+			if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.goingToPreviousPage && window.frmProForm.goingToPreviousPage( thisForm ) ) {
+				return false;
+			}
+
 			return 'create' === action;
 		}
 
