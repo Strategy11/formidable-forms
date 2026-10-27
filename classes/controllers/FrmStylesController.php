@@ -1348,6 +1348,11 @@ class FrmStylesController {
 		$frm_style = new FrmStyle( $style );
 		$style     = $frm_style->get_one();
 
+		if ( ! $style ) {
+			// The style was deleted, so use the default style.
+			$style = ( new FrmStyle( 'default' ) )->get_one();
+		}
+
 		if ( $style ) {
 			$class .= ' frm_style_' . $style->post_name;
 			self::maybe_add_rtl_class( $style, $class );
