@@ -2149,6 +2149,25 @@
 	}
 
 	/**
+	 * Check if the form is going to the previous page or saving a draft, using Pro's helpers when available.
+	 *
+	 * @return {boolean}
+	 */
+	function goingBackOrSavingDraft() {
+		const proForm = window.frmProForm;
+
+		if ( 'object' !== typeof proForm ) {
+			return false;
+		}
+
+		if ( 'function' === typeof proForm.goingToPreviousPage && proForm.goingToPreviousPage( thisForm ) ) {
+			return true;
+		}
+
+		return 'function' === typeof proForm.savingDraft && 1 === parseInt( proForm.savingDraft( thisForm ), 10 );
+	}
+
+	/**
 	 * Check if the current form action type should trigger payment processing.
 	 *
 	 * @return {boolean} True if current action type should be processed.
@@ -2157,12 +2176,8 @@
 		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
 
 		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
-			// Pro's frmpplite.js may not be enqueued, but going back must never submit the card.
-			if ( 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.goingToPreviousPage && window.frmProForm.goingToPreviousPage( thisForm ) ) {
-				return false;
-			}
-
-			return 'create' === action;
+			// Pro's frmpplite.js may not be enqueued, but going back or saving a draft must never submit the card.
+			return 'create' === action && ! goingBackOrSavingDraft();
 		}
 
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
