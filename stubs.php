@@ -1002,6 +1002,13 @@ class FrmViewsTypeSettingsHelper {
 
 namespace {
 class FrmViewsSetupHelper {
+	/**
+	 * @param int $view_id View ID.
+	 * @param array $options View defaults.
+	 * @param array $args Source metadata.
+	 * @return array
+	 */
+	public static function initialize_view( $view_id, $options = array(), $args = array() ) {}
 	/** @return string */
 	public static function view_block( $view_id ) {}
 
@@ -1029,4 +1036,30 @@ class FrmTransLiteSubscription {
 	public function create( $values ) {}
 }
 
+}
+
+namespace {
+class FrmViewsRecordScreenHelper {
+	/**
+	 * @param array $types Existing types.
+	 * @param array $screens Screen definitions.
+	 * @param array $shared Category metadata.
+	 * @return array
+	 */
+	public static function register( $types, $screens, $shared ) {}
+}
+class FrmViewsTypeHelper {
+	/** @return void */
+	public static function reset_cache() {}
+}
+}
+
+namespace {
+class FrmProFileField {
+	/**
+	 * @param int $file_id Native attachment ID.
+	 * @return int
+	 */
+	public static function get_form_id_from_file_id( $file_id ) {}
+}
 }
