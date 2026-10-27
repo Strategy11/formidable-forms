@@ -209,7 +209,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	 */
 	public static function get_country_codes() {
 		self::maybe_define_country_codes();
-		return self::$country_codes;
+		return self::$country_codes ?? array();
 	}
 
 	/**
