@@ -223,7 +223,9 @@ export function initFormOutline() {
 		builder.querySelectorAll( '.frm-builder-outline-target' ).forEach( item => item.classList.remove( 'frm-builder-outline-target' ) );
 		field.classList.add( 'frm-builder-outline-target' );
 		field.click();
-		field.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+		window.requestAnimationFrame( () => {
+			field.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+		} );
 		window.setTimeout( () => field.classList.remove( 'frm-builder-outline-target' ), 1800 );
 	} );
 }
