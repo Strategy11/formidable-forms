@@ -54,10 +54,16 @@ class FrmFieldPhone extends FrmFieldType {
 	 * @return array
 	 */
 	public function get_default_field_options() {
-		$options = parent::get_default_field_options();
-		$format  = is_array( $this->field ) || is_object( $this->field ) ? FrmField::get_option( $this->field, 'format' ) : '';
+		$options               = parent::get_default_field_options();
+		$format                = is_array( $this->field ) || is_object( $this->field ) ? FrmField::get_option( $this->field, 'format' ) : '';
+		$field_options         = $this->get_field_column( 'field_options' );
+		$has_saved_autocomplete = is_array( $field_options ) && array_key_exists( 'autocomplete', $field_options );
 
-		if ( ! $format && empty( $options['autocomplete'] ) ) {
+		if ( is_object( $field_options ) && property_exists( $field_options, 'autocomplete' ) ) {
+			$has_saved_autocomplete = true;
+		}
+
+		if ( ! $format && ! $has_saved_autocomplete && empty( $options['autocomplete'] ) ) {
 			$options['autocomplete'] = 'tel';
 		}
 
