@@ -1315,6 +1315,9 @@ class FrmAppController {
 		$tables[] = $wpdb->prefix . 'frm_forms';
 		$tables[] = $wpdb->prefix . 'frm_items';
 		$tables[] = $wpdb->prefix . 'frm_item_metas';
+		$tables[] = $wpdb->prefix . 'frm_payments';
+		$tables[] = $wpdb->prefix . 'frm_subscriptions';
+		$tables[] = $wpdb->prefix . 'frm_gated_tokens';
 
 		return $tables;
 	}
