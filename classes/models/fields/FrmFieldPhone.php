@@ -35,7 +35,33 @@ class FrmFieldPhone extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
+			'autocomplete'   => true,
 		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array( 'on', 'off', 'tel' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_default_field_options() {
+		$options = parent::get_default_field_options();
+		$format  = is_array( $this->field ) || is_object( $this->field ) ? FrmField::get_option( $this->field, 'format' ) : '';
+
+		if ( ! $format && empty( $options['autocomplete'] ) ) {
+			$options['autocomplete'] = 'tel';
+		}
+
+		return $options;
 	}
 
 	/**
