@@ -46,20 +46,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 
-	<?php if ( ! empty( $values['fields'] ) && count( $values['fields'] ) >= 10 ) : ?>
-		<details id="frm-builder-outline" class="frm-builder-outline">
-			<summary><?php esc_html_e( 'Form outline', 'formidable' ); ?></summary>
-			<div class="frm-builder-outline-content">
-				<label for="frm-builder-outline-search"><?php esc_html_e( 'Search pages and fields', 'formidable' ); ?></label>
-				<input id="frm-builder-outline-search" type="search" class="frm-search-input" />
-				<nav aria-label="<?php esc_attr_e( 'Form outline', 'formidable' ); ?>">
-					<ul class="frm-builder-outline-list"></ul>
-				</nav>
-				<p class="screen-reader-text frm-builder-outline-status" aria-live="polite"></p>
-			</div>
-		</details>
-	<?php endif; ?>
-
 	<ul id="frm-show-fields" class="frm_sorting inside">
 		<?php
 		if ( ! empty( $values['fields'] ) ) {

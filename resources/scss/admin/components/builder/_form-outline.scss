@@ -1,35 +1,17 @@
 .frm-builder-outline {
-	margin: 0 0 16px;
-	border: 1px solid var(--grey-300);
-	border-radius: var(--small-radius);
-	background: #fff;
+	.frm-search {
+		float: none;
+		width: 100%;
+		margin: 0 0 var(--gap-md);
 
-	> summary {
-		padding: 10px 12px;
-		color: var(--grey-700);
-		font-weight: 600;
-		cursor: pointer;
+		&.frm_hidden {
+			display: none;
+		}
 	}
 
-	.frm-builder-outline-content {
-		padding: 0 12px 12px;
-	}
-
-	label {
-		display: block;
-		margin-bottom: 4px;
-		color: var(--grey-700);
-	}
-
-	input[type="search"] {
+	.frm-search-input {
 		width: 100%;
 		max-width: none;
-	}
-
-	nav {
-		max-height: 260px;
-		margin-top: 8px;
-		overflow-y: auto;
 	}
 
 	ul {
@@ -41,31 +23,103 @@
 	}
 
 	button {
+		display: flex;
+		align-items: center;
+		gap: var(--gap-xs);
 		width: 100%;
 		min-height: 36px;
-		padding: 6px 8px;
+		padding: 6px var(--gap-xs);
 		border: 0;
-		border-radius: 4px;
+		border-radius: var(--small-radius);
 		background: transparent;
 		color: var(--grey-700);
+		font-size: var(--text-sm);
 		text-align: left;
 		cursor: pointer;
 
 		&:hover,
 		&:focus-visible {
-			background: var(--surface-hover);
+			background: var(--grey-100);
 			color: var(--primary-700);
 		}
 	}
 
+	.frm-builder-outline-label {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.frm-builder-outline-count {
+		flex-shrink: 0;
+		min-width: 20px;
+		padding: 0 6px;
+		border-radius: var(--border-radius);
+		background: var(--grey-100);
+		color: var(--grey-500);
+		font-size: var(--text-xs);
+		font-weight: 500;
+		line-height: 20px;
+		text-align: center;
+	}
+
+	li:not(:first-child) > .frm-builder-outline-page {
+		margin-top: var(--gap-xs);
+	}
+
+	.frm-builder-outline-page {
+		color: var(--grey-900);
+		font-weight: 600;
+
+		&:hover .frm-builder-outline-count,
+		&:focus-visible .frm-builder-outline-count {
+			background: #fff;
+		}
+	}
+
+	// Sections and matching fields hang off a guide line under their page.
+	.frm-builder-outline-section,
 	.frm-builder-outline-field {
-		padding-left: 24px;
+		width: calc(100% - var(--gap-sm));
+		margin-left: var(--gap-sm);
+		border-left: 1px solid var(--grey-200);
+		border-radius: 0 var(--small-radius) var(--small-radius) 0;
 		font-weight: 400;
 	}
 
-	.frm-builder-outline-section {
-		padding-left: 16px;
-		font-weight: 500;
+	.frm-builder-outline-field {
+		color: var(--grey-600);
+	}
+
+	// Matches the empty Field Options panel.
+	.frm-builder-outline-empty {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--gap-xs);
+		margin: 1px;
+		padding: var(--gap-lg) var(--gap-md);
+		border-radius: var(--small-radius);
+		box-shadow: var(--box-shadow-sm);
+		background: #fff;
+		color: var(--grey-500);
+		text-align: center;
+
+		&.frm_hidden {
+			display: none;
+		}
+
+		img {
+			height: 100px;
+			margin-bottom: var(--gap-xs);
+		}
+
+		strong {
+			color: var(--grey-800);
+			font-size: var(--text-md);
+		}
 	}
 }
 
