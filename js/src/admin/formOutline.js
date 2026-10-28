@@ -224,11 +224,10 @@ export function initFormOutline() {
 		field.classList.add( 'frm-builder-outline-target' );
 		field.click();
 		window.requestAnimationFrame( () => {
-			field.scrollIntoView( { behavior: 'instant', block: 'start' } );
 			const navigation = document.getElementById( 'frm-nav-tabs' );
-			const topOffset = navigation?.getBoundingClientRect().bottom || 0;
-			const scrollOffset = field.getBoundingClientRect().top - topOffset;
-			window.scrollBy( { top: scrollOffset, behavior: 'smooth' } );
+			const topOffset = navigation?.getBoundingClientRect().height || 0;
+			const fieldTop = field.getBoundingClientRect().top + window.scrollY;
+			window.scrollTo( { top: fieldTop - topOffset, behavior: 'smooth' } );
 		} );
 		window.setTimeout( () => field.classList.remove( 'frm-builder-outline-target' ), 1800 );
 	} );
