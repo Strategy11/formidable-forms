@@ -7,6 +7,7 @@ const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
+const { initFormOutline } = require( './formOutline' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
@@ -13387,6 +13388,7 @@ window.frmAdminBuild = frmAdminBuildJS();
 jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
+		initFormOutline();
 
 		initShowBoxIconSwap();
 
