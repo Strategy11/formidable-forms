@@ -16,8 +16,17 @@ const getFieldText = field => {
 		return headingText;
 	}
 
-	const label = field.querySelector( '.frm-label-text' ) || field.querySelector( '.frm_primary_label' );
-	const labelText = label?.textContent.trim();
+	const label = field.querySelector( '.frm-label-text, .frm_builder_field_name' ) ||
+		field.querySelector( '.frm_primary_label' );
+	if ( ! label ) {
+		return '';
+	}
+
+	const labelClone = label.cloneNode( true );
+	labelClone.querySelectorAll( '.frm-collapsed-label' ).forEach(
+		collapsedLabel => collapsedLabel.remove()
+	);
+	const labelText = labelClone.textContent.trim();
 	if ( labelText && ( field.dataset.type !== HTML_FIELD_TYPE || labelText !== 'HTML' ) ) {
 		return labelText;
 	}
