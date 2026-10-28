@@ -1,6 +1,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 const PAGE_BREAK_TYPE = 'break';
+const SECTION_TYPE = 'divider';
 const HTML_FIELD_TYPE = 'html';
 const MAX_FIELD_RESULTS = 60;
 
@@ -99,6 +100,32 @@ export function initFormOutline() {
 			pageButton.dataset.fieldId = firstField.dataset.fid;
 			pageButton.dataset.pageIndex = page.index;
 			children.push( tag( 'li', { child: pageButton } ) );
+
+			page.fields.filter( field => {
+				if ( field.dataset.type !== SECTION_TYPE ) {
+					return false;
+				}
+				if ( query === '' || pageMatches ) {
+					return true;
+				}
+
+				const sectionText = getFieldText( field ).toLocaleLowerCase();
+				return sectionText.includes( query ) || field.dataset.fid.includes( query );
+			} ).forEach( field => {
+				const sectionText = getFieldText( field );
+				if ( ! sectionText ) {
+					return;
+				}
+
+				const sectionButton = tag( 'button', {
+					className: 'frm-builder-outline-section',
+					text: sectionText
+				} );
+				sectionButton.type = 'button';
+				sectionButton.dataset.fieldId = field.dataset.fid;
+				sectionButton.dataset.pageIndex = page.index;
+				children.push( tag( 'li', { child: sectionButton } ) );
+			} );
 
 			if ( query === '' || fieldResultCount >= MAX_FIELD_RESULTS ) {
 				return;
