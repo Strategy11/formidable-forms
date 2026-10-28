@@ -147,8 +147,7 @@
 		// Prevent handleConfirmedClick from triggering when the current modal is closed so that it won't be run by other elements.
 		const unbindHandleConfirmedClick = e => {
 			if ( e.target.matches( '.ui-widget-overlay, .dismiss' ) ) {
-				// eslint-disable-next-line no-jquery/no-bind
-				jQuery( '#frm-confirmed-click' ).unbind( 'click', handleConfirmedClick );
+				jQuery( '#frm-confirmed-click' ).off( 'click', handleConfirmedClick );
 				document.removeEventListener( 'click', unbindHandleConfirmedClick );
 			}
 		};
