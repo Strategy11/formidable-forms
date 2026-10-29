@@ -4692,6 +4692,15 @@ window.frmAdminBuildJS = function() {
 				if ( key !== '000' ) {
 					const label = document.getElementsByName( `field_options[options_${ fieldId }][${ key }][label]` )[ 0 ];
 					if ( label !== undefined ) {
+						/**
+						 * Allows adding text, like a group heading line, before an option in the Bulk Edit Options text.
+						 *
+						 * @since x.x
+						 *
+						 * @param {string} prefix Text to add before the option line.
+						 * @param {Object} args   Includes fieldId and the option's list item, optionEl.
+						 */
+						content += wp.hooks.applyFilters( 'frm_bulk_edit_before_option_line', '', { fieldId, optionEl: opts[ i ] } );
 						content += label.value;
 						if ( separate ) {
 							content += `|${ document.getElementsByName( `field_options[options_${ fieldId }][${ key }][value]` )[ 0 ].value }`;

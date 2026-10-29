@@ -85,6 +85,16 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 			$option_params['disabled'] = 'disabled';
 		}
 
+		/**
+		 * Fires before each option in a dropdown field is printed.
+		 *
+		 * @since x.x
+		 *
+		 * @param array      $field   The field being displayed.
+		 * @param int|string $opt_key The key of the option about to be printed.
+		 */
+		do_action( 'frm_dropdown_field_before_option', $field, $opt_key );
+
 		echo '<option ';
 		FrmAppHelper::array_to_html_params( $option_params, true );
 		selected( (bool) $selected );
@@ -96,6 +106,15 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 		unset( $option_params );
 	}//end foreach
+
+	/**
+	 * Fires after the last option in a dropdown field is printed.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field The field being displayed.
+	 */
+	do_action( 'frm_dropdown_field_after_options', $field );
 	?>
 	</select>
 	<?php
