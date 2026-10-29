@@ -329,6 +329,9 @@ describe( 'Applications page', () => {
 	} );
 
 	it( 'should search for application templates', () => {
+		cy.log( 'Search box shows the magnifier icon' );
+		cy.get( '.frm-application-templates-nav .frm-search svg.frm_search_icon use[href="#frm_search_icon"]' ).should( 'exist' );
+
 		cy.log( 'Search for valid application templates' );
 		cy.get( '#frm-application-search' ).type( 'Business Hours' );
 		cy.get( '#frm_application_templates_grid' )
