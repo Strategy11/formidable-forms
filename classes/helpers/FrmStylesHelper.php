@@ -754,9 +754,30 @@ class FrmStylesHelper {
 			return $settings;
 		}
 
-		$base_font_size       = (int) $settings['base_font_size'];
-		$font_size            = $defaults['font_size'];
-		$font_sizes_to_update = array(
+		$base_font_size = (int) $settings['base_font_size'];
+		$font_size      = $defaults['font_size'];
+
+		array_map(
+			function ( $key ) use ( $defaults, $font_size, $base_font_size, &$settings ) {
+				if ( isset( $settings[ $key ] ) ) {
+					$settings[ $key ] = round( self::get_base_font_size_scale( $key, $font_size, $defaults ) * $base_font_size ) . 'px';
+				}
+			},
+			self::get_base_font_size_settings()
+		);
+
+		return $settings;
+	}
+
+	/**
+	 * Get the font size settings that are scaled from the "Base Font Size" value.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	public static function get_base_font_size_settings() {
+		return array(
 			'font_size',
 			'field_font_size',
 			'check_font_size',
@@ -769,17 +790,87 @@ class FrmStylesHelper {
 			'error_font_size',
 			'progress_size',
 		);
+	}
 
-		array_map(
-			function ( $key ) use ( $defaults, $font_size, $base_font_size, &$settings ) {
-				if ( isset( $settings[ $key ] ) ) {
-					$settings[ $key ] = round( self::get_base_font_size_scale( $key, $font_size, $defaults ) * $base_font_size ) . 'px';
-				}
-			},
-			$font_sizes_to_update
+	/**
+	 * Get the style settings that the styler preview can update with JavaScript, without requesting new CSS.
+	 * A setting only belongs here when its value is output as a CSS variable and nothing else.
+	 * Settings used directly in a CSS template (in a condition, a calculation, or a raw value) need the server.
+	 * This includes the templates from Pro versions that are still supported, so those settings are left out until Pro outputs them only as CSS variables.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	public static function get_live_preview_settings() {
+		$settings = array(
+			'form_width',
+			'form_align',
+			'fieldset',
+			'fieldset_color',
+			'fieldset_padding',
+			'fieldset_bg_color',
+			'title_size',
+			'title_color',
+			'title_margin_top',
+			'title_margin_bottom',
+			'form_desc_size',
+			'form_desc_color',
+			'form_desc_margin_top',
+			'form_desc_margin_bottom',
+			'form_desc_padding',
+			'weight',
+			'position',
+			'align',
+			'required_color',
+			'required_weight',
+			'label_padding',
+			'field_font_size',
+			'line_height',
+			'field_weight',
+			'field_border_style',
+			'bg_color',
+			'bg_color_active',
+			'text_color_error',
+			'bg_color_error',
+			'border_color_error',
+			'border_style_error',
+			'bg_color_disabled',
+			'border_color_disabled',
+			'text_color_disabled',
+			'section_font_size',
+			'section_color',
+			'section_weight',
+			'section_pad',
+			'section_bg_color',
+			'repeat_icon_color',
+			'submit_hover_bg_color',
+			'submit_hover_color',
+			'submit_hover_border_color',
+			'submit_active_bg_color',
+			'submit_active_color',
+			'submit_active_border_color',
+			'error_bg',
+			'error_border',
+			'error_font_size',
+			'success_bg_color',
+			'success_border_color',
+			'success_font_size',
+			'progress_border_size',
 		);
 
-		return $settings;
+		/**
+		 * Filter the style settings that the styler preview can update with JavaScript.
+		 * Remove any setting that a frm_output_single_style callback uses directly, so it still gets new CSS from the server.
+		 * Add a setting only when every template outputs it as a CSS variable and nothing else.
+		 *
+		 * @since x.x
+		 *
+		 * @param array<string> $settings Style setting keys.
+		 */
+		$settings = apply_filters( 'frm_style_live_preview_settings', $settings );
+
+		return array_values( array_unique( array_filter( (array) $settings, 'is_string' ) ) );
 	}
 
 	/**
