@@ -796,6 +796,7 @@ class FrmStylesHelper {
 	 * Get the style settings that the styler preview can update with JavaScript, without requesting new CSS.
 	 * A setting only belongs here when its value is output as a CSS variable and nothing else.
 	 * Settings used directly in a CSS template (in a condition, a calculation, or a raw value) need the server.
+	 * This includes the templates from Pro versions that are still supported, so those settings are left out until Pro outputs them only as CSS variables.
 	 *
 	 * @since x.x
 	 *
@@ -818,8 +819,6 @@ class FrmStylesHelper {
 			'form_desc_margin_top',
 			'form_desc_margin_bottom',
 			'form_desc_padding',
-			'font_size',
-			'label_color',
 			'weight',
 			'position',
 			'align',
@@ -828,7 +827,6 @@ class FrmStylesHelper {
 			'label_padding',
 			'field_font_size',
 			'line_height',
-			'field_pad',
 			'field_weight',
 			'field_border_style',
 			'bg_color',
@@ -844,14 +842,7 @@ class FrmStylesHelper {
 			'section_color',
 			'section_weight',
 			'section_pad',
-			'section_mar_top',
-			'section_mar_bottom',
 			'section_bg_color',
-			'section_border_color',
-			'section_border_width',
-			'section_border_style',
-			'section_border_loc',
-			'collapse_pos',
 			'repeat_icon_color',
 			'submit_hover_bg_color',
 			'submit_hover_color',
@@ -861,24 +852,17 @@ class FrmStylesHelper {
 			'submit_active_border_color',
 			'error_bg',
 			'error_border',
-			'error_text',
 			'error_font_size',
 			'success_bg_color',
 			'success_border_color',
-			'success_text_color',
 			'success_font_size',
-			'progress_bg_color',
-			'progress_color',
-			'progress_active_bg_color',
-			'progress_active_color',
-			'progress_border_color',
 			'progress_border_size',
-			'progress_size',
 		);
 
 		/**
 		 * Filter the style settings that the styler preview can update with JavaScript.
 		 * Remove any setting that a frm_output_single_style callback uses directly, so it still gets new CSS from the server.
+		 * Add a setting only when every template outputs it as a CSS variable and nothing else.
 		 *
 		 * @since x.x
 		 *

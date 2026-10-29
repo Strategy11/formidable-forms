@@ -235,4 +235,70 @@ class test_FrmStylesHelper extends FrmUnitTest {
 			$this->assertSame( $output, FrmStylesHelper::get_bottom_value( $input ) );
 		}
 	}
+
+	/**
+	 * @covers FrmStylesHelper::get_live_preview_settings
+	 */
+	public function test_get_live_preview_settings() {
+		$settings = FrmStylesHelper::get_live_preview_settings();
+
+		$this->assertContains( 'title_color', $settings );
+		$this->assertContains( 'fieldset_bg_color', $settings );
+		$this->assertSame( array_values( array_unique( $settings ) ), $settings );
+
+		// Pro versions that are still supported use these directly in their CSS templates.
+		$used_directly_by_pro = array(
+			'font_size',
+			'label_color',
+			'field_pad',
+			'collapse_pos',
+			'error_text',
+			'success_text_color',
+			'section_border_color',
+			'progress_border_color',
+			'progress_size',
+		);
+
+		foreach ( $used_directly_by_pro as $key ) {
+			$this->assertNotContains( $key, $settings );
+		}
+
+		$filter = function ( $settings ) {
+			$settings   = array_diff( $settings, array( 'title_color' ) );
+			$settings[] = 'toggle_on_color';
+			$settings[] = 'toggle_on_color';
+			$settings[] = 123;
+			$settings[] = array( 'not_a_key' );
+			return $settings;
+		};
+		add_filter( 'frm_style_live_preview_settings', $filter );
+		$filtered = FrmStylesHelper::get_live_preview_settings();
+		remove_filter( 'frm_style_live_preview_settings', $filter );
+
+		$this->assertNotContains( 'title_color', $filtered );
+		$this->assertContains( 'toggle_on_color', $filtered );
+		$this->assertSame( array_values( array_unique( $filtered ) ), $filtered );
+		$this->assertCount( count( $settings ), $filtered );
+
+		foreach ( $filtered as $key ) {
+			$this->assertIsString( $key );
+		}
+
+		add_filter( 'frm_style_live_preview_settings', '__return_null' );
+		$this->assertSame( array(), FrmStylesHelper::get_live_preview_settings() );
+		remove_filter( 'frm_style_live_preview_settings', '__return_null' );
+	}
+
+	/**
+	 * @covers FrmStylesHelper::get_base_font_size_settings
+	 */
+	public function test_get_base_font_size_settings() {
+		$settings = FrmStylesHelper::get_base_font_size_settings();
+		$this->assertContains( 'font_size', $settings );
+		$this->assertContains( 'field_font_size', $settings );
+
+		foreach ( $settings as $key ) {
+			$this->assertIsString( $key );
+		}
+	}
 }
