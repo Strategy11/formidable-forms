@@ -382,7 +382,7 @@ class FrmFormTemplatesController {
 
 			// Send a success response with redirect URL.
 			$response = array(
-				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ) . '&_wpnonce=' . wp_create_nonce(),
+				'redirect' => FrmForm::get_edit_link( $new_form_id ),
 			);
 		} else {
 			// Send an error response if form duplication fails.
