@@ -6,6 +6,17 @@ ul.frm-category-tabs {
 	margin-top: 2px;
 }
 
+// Matches the 8px side margin of the tab links below it.
+.frm-white-body .frm-right-panel input.frm-settings-search[type="search"] {
+	box-sizing: border-box;
+	width: calc(100% - 16px);
+	margin: 8px 8px 0;
+}
+
+.frm-search-hidden {
+	display: none !important;
+}
+
 .frm-category-tabs > li a,
 .frm-category-tabs > li a:active {
 	outline: none;
