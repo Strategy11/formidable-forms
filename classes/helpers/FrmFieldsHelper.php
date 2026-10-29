@@ -1846,7 +1846,7 @@ class FrmFieldsHelper {
 			$classes[] = 'frm_pos_none';
 		}
 
-		if ( $args['field']['type'] === 'select' && ! empty( $args['field']['multiple'] ) ) {
+		if ( $args['field']['type'] === 'select' ) {
 			$classes[] = 'frm_other_full';
 		}
 
