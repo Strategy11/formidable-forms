@@ -2978,6 +2978,7 @@ window.frmAdminBuildJS = function() {
 		fieldHtmlTemplate.innerHTML = field.html;
 		const element = fieldHtmlTemplate.content.firstElementChild;
 		if ( ! element ) {
+			oldField.remove();
 			return null;
 		}
 		if ( field.settingsMeta ) {
