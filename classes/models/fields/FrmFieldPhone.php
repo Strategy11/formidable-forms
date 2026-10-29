@@ -49,25 +49,21 @@ class FrmFieldPhone extends FrmFieldType {
 	}
 
 	/**
+	 * Default new phone fields to tel autocomplete. Saved fields without the
+	 * setting keep the empty parent default so their output does not change.
+	 *
 	 * @since x.x
 	 *
 	 * @return array
 	 */
-	public function get_default_field_options() {
-		$options               = parent::get_default_field_options();
-		$format                = is_array( $this->field ) || is_object( $this->field ) ? FrmField::get_option( $this->field, 'format' ) : '';
-		$field_options         = $this->get_field_column( 'field_options' );
-		$has_saved_autocomplete = is_array( $field_options ) && array_key_exists( 'autocomplete', $field_options );
-
-		if ( is_object( $field_options ) && property_exists( $field_options, 'autocomplete' ) ) {
-			$has_saved_autocomplete = true;
+	protected function extra_field_opts() {
+		if ( $this->field ) {
+			return array();
 		}
 
-		if ( ! $format && ! $has_saved_autocomplete && empty( $options['autocomplete'] ) ) {
-			$options['autocomplete'] = 'tel';
-		}
-
-		return $options;
+		return array(
+			'autocomplete' => 'tel',
+		);
 	}
 
 	/**
