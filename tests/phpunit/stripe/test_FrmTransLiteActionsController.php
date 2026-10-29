@@ -71,6 +71,94 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmTransLiteActionsController::trigger_payment_status_change
+	 */
+	public function test_trigger_payment_status_change_keeps_passed_payment() {
+		$entry    = $this->create_entry_with_payments( array( 'complete', 'pending' ) );
+		$older_id = $entry['payment_ids'][0];
+		$older    = ( new FrmTransLitePayment() )->get_one( $older_id );
+
+		$atts = $this->trigger_payment_status_change(
+			array(
+				'status'  => 'refunded',
+				'payment' => $older,
+			)
+		);
+
+		$this->assertNotNull( $atts );
+		$this->assertEquals( $older_id, $atts['payment']->id );
+		$this->assertEquals( $entry['id'], $atts['entry_id'] );
+	}
+
+	/**
+	 * @covers FrmTransLiteActionsController::trigger_payment_status_change
+	 */
+	public function test_trigger_payment_status_change_loads_payment_for_entry() {
+		$entry = $this->create_entry_with_payments( array( 'complete' ) );
+
+		$atts = $this->trigger_payment_status_change(
+			array(
+				'status' => 'refunded',
+				'entry'  => (object) array( 'id' => $entry['id'] ),
+			)
+		);
+
+		$this->assertNotNull( $atts );
+		$this->assertEquals( $entry['payment_ids'][0], $atts['payment']->id );
+	}
+
+	/**
+	 * @param array $atts
+	 *
+	 * @return array|null The atts passed to the frm_payment_status_refunded hook.
+	 */
+	private function trigger_payment_status_change( $atts ) {
+		$received = null;
+		$callback = function ( $hook_atts ) use ( &$received ) {
+			$received = $hook_atts;
+		};
+
+		add_action( 'frm_payment_status_refunded', $callback );
+		FrmTransLiteActionsController::trigger_payment_status_change( $atts );
+		remove_action( 'frm_payment_status_refunded', $callback );
+
+		return $received;
+	}
+
+	/**
+	 * @param string[] $statuses One payment is created per status, oldest first.
+	 *
+	 * @return array{id: int, payment_ids: int[]}
+	 */
+	private function create_entry_with_payments( $statuses ) {
+		( new FrmTransLiteDb() )->upgrade();
+
+		$form        = $this->factory->form->create_and_get();
+		$entry       = $this->factory->entry->create_and_get( $this->factory->field->generate_entry_array( $form ) );
+		$frm_payment = new FrmTransLitePayment();
+		$payment_ids = array();
+
+		foreach ( $statuses as $index => $status ) {
+			$payment_ids[] = $frm_payment->create(
+				array(
+					'item_id'    => $entry->id,
+					'action_id'  => 1,
+					'amount'     => '10.00',
+					'paysys'     => 'stripe',
+					'receipt_id' => 'pi_test_' . $index,
+					'status'     => $status,
+					'created_at' => gmdate( 'Y-m-d H:i:s', strtotime( '+' . $index . ' day' ) ),
+				)
+			);
+		}
+
+		return array(
+			'id'          => $entry->id,
+			'payment_ids' => $payment_ids,
+		);
+	}
+
+	/**
 	 * @param string $amount
 	 * @param array  $currency
 	 *
