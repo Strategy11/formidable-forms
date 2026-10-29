@@ -22,6 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php esc_html_e( 'Field Options', 'formidable' ); ?>
 						</a>
 					</li>
+					<li class="hide-if-no-js">
+						<a href="#frm-builder-outline" id="frm-builder-outline-tab">
+							<?php esc_html_e( 'Form Outline', 'formidable' ); ?>
+						</a>
+					</li>
 					<?php do_action( 'frm_extra_form_instruction_tabs' ); ?>
 				</ul>
 			</div>
@@ -221,6 +226,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 								);
 								?>
 							</form>
+						</div>
+					</div>
+
+					<div>
+						<div id="frm-builder-outline" class="tabs-panel frm-builder-outline">
+							<p class="frm-search">
+								<label class="screen-reader-text" for="frm-builder-outline-search-input">
+									<?php esc_html_e( 'Search pages and fields', 'formidable' ); ?>
+								</label>
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_search_icon frm_svg20' ); ?>
+								<input type="search" id="frm-builder-outline-search-input" class="frm-search-input" autocomplete="off" placeholder="<?php esc_attr_e( 'Search pages and fields', 'formidable' ); ?>" />
+							</p>
+							<nav aria-label="<?php esc_attr_e( 'Form outline', 'formidable' ); ?>">
+								<ul class="frm-builder-outline-list"></ul>
+							</nav>
+							<div class="frm-builder-outline-empty frm_hidden">
+								<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/page-skeleton/empty-state.svg' ); ?>" alt="" />
+								<strong class="frm-builder-outline-empty-title"></strong>
+								<span class="frm-builder-outline-empty-text"></span>
+							</div>
+							<p class="screen-reader-text frm-builder-outline-status" aria-live="polite"></p>
 						</div>
 					</div>
 					<?php

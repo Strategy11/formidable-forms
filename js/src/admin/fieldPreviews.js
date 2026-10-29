@@ -186,7 +186,7 @@ function createFieldTemplate( strings ) {
 	const label = tag( 'label', {
 		className: 'frm_primary_label',
 		children: [
-			span( { className: 'frm-label-text' } ),
+			span( { className: 'frm_builder_field_name' } ),
 			' ',
 			span( { className: 'frm_required' } ),
 			' ',
@@ -230,9 +230,8 @@ function createField( template, data, strings ) {
 
 	const label = container.querySelector( '.frm_primary_label' );
 	label.id = `field_label_${ id }`;
-	const labelText = label.firstElementChild;
-	labelText.insertAdjacentHTML( 'beforebegin', data.label || '' );
-	labelText.remove();
+	// Keep the name in its own span, like the PHP markup, so other code can read or update it without the required and collapsed markers.
+	label.firstElementChild.innerHTML = data.label || '';
 
 	const required = label.querySelector( '.frm_required' );
 	required.textContent = data.indicator ?? '*';
