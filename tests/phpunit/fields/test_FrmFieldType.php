@@ -5,13 +5,76 @@
  *
  * @covers FrmFieldCombo
  * @covers FrmFieldNumber
+ * @covers FrmFieldPhone
  * @covers FrmFieldType
  */
 #[\PHPUnit\Framework\Attributes\Group( 'fields' )]
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldCombo::class )]
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldNumber::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldPhone::class )]
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldType::class )]
 class test_FrmFieldType extends FrmUnitTest {
+
+	public function test_phone_autocomplete_defaults_to_tel_without_format() {
+		$field_type = FrmFieldFactory::get_field_type( 'phone' );
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( 'tel', $options['autocomplete'], 'Phone fields without a format should default to tel autocomplete.' );
+	}
+
+	public function test_phone_autocomplete_default_is_empty_with_format() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'type'          => 'phone',
+				'field_options' => array( 'format' => 'custom' ),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'Phone fields with a format should keep autocomplete empty by default.' );
+	}
+
+	public function test_phone_saved_empty_autocomplete_stays_empty() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'type'          => 'phone',
+				'field_options' => array( 'autocomplete' => '' ),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'A saved empty autocomplete value should stay empty.' );
+	}
+
+	public function test_phone_saved_field_without_autocomplete_key_stays_empty() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'id'            => 1,
+				'type'          => 'phone',
+				'field_options' => array(),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'Saved phone fields without an autocomplete setting should not gain tel autocomplete.' );
+	}
+
+	public function test_phone_autocomplete_default_can_be_filtered() {
+		$filter = function ( $options ) {
+			$options['autocomplete'] = '';
+			return $options;
+		};
+		add_filter( 'frm_default_field_options', $filter );
+
+		$options = FrmFieldFactory::get_field_type( 'phone' )->get_default_field_options();
+
+		remove_filter( 'frm_default_field_options', $filter );
+
+		$this->assertSame( '', $options['autocomplete'], 'The frm_default_field_options filter should be able to clear the tel default.' );
+	}
 
 	public function test_html_min_number() {
 		$form_id = $this->factory->form->create();

@@ -35,6 +35,34 @@ class FrmFieldPhone extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
+			'autocomplete'   => true,
+		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array( 'on', 'off', 'tel' );
+	}
+
+	/**
+	 * Default new phone fields to tel autocomplete. Saved fields without the
+	 * setting keep the empty parent default so their output does not change.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	protected function extra_field_opts() {
+		if ( $this->field ) {
+			return array();
+		}
+
+		return array(
+			'autocomplete' => 'tel',
 		);
 	}
 

@@ -7108,9 +7108,20 @@ window.frmAdminBuildJS = function() {
 	function maybeUpdateFormatInput( event ) {
 		const formatElement = event.target;
 		const type = formatElement.value;
+		const fieldId = formatElement.dataset.fieldId;
+
+		if ( formatElement.classList.contains( 'frm_phone_type_dropdown' ) ) {
+			const autocompleteElement = document.getElementById( `field_options_autocomplete_${ fieldId }` );
+			const hasFormat = 'custom' === type || 'international' === type;
+
+			if ( autocompleteElement && 'none' === type && ! autocompleteElement.value ) {
+				autocompleteElement.value = 'tel';
+			} else if ( autocompleteElement && hasFormat && 'tel' === autocompleteElement.value ) {
+				autocompleteElement.value = '';
+			}
+		}
 
 		if ( 'custom' === type ) {
-			const { fieldId } = formatElement.dataset;
 			const formatInput = document.getElementById( `frm-field-format-custom-${ fieldId }` ).querySelector( '.frm_format_opt' );
 
 			if ( 'international' === formatInput.value || 'currency' === formatInput.value || 'number' === formatInput.value ) {
