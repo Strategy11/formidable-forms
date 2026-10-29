@@ -11,7 +11,7 @@ $wrapper_atts = array_merge(
 	$upgrade_params
 );
 
-if ( isset( $selected_gateway ) && 'stripe' !== $selected_gateway ) {
+if ( isset( $selected_gateway ) && ! in_array( 'stripe', (array) $selected_gateway, true ) ) {
 	$wrapper_atts['style'] = 'display: none;';
 }
 ?>

@@ -5,6 +5,10 @@
 		slideOpts( this, show, '.frm_trans_sub_opts' );
 		toggleOpts( this, ! show, '.frm_gateway_no_recur' );
 
+		if ( ! show ) {
+			hideOtherGatewayRows( jQuery( this ).closest( '.frm_form_action_settings' ) );
+		}
+
 		// Hiding the selected gateway would leave the tablist without a Tab stop.
 		const tablist = this.closest( '.frm_form_action_settings' ).querySelector( '.frm-long-icon-buttons[role="tablist"]' );
 		if ( tablist ) {
@@ -30,6 +34,18 @@
 			opts.css( 'display', 'none' );
 			opts.addClass( 'frm_hidden' );
 		}
+	}
+
+	function hideOtherGatewayRows( settings ) {
+		const selected = settings.find( 'input[name$="[gateway]"]:checked' ).val();
+
+		settings.find( '.frm_gateway_no_recur' ).each(
+			( i, row ) => {
+				if ( /\bshow_(stripe|square|paypal)\b/.test( row.className ) && ! row.classList.contains( `show_${ selected }` ) ) {
+					row.style.display = 'none';
+				}
+			}
+		);
 	}
 
 	function toggleGateway() {
@@ -133,6 +149,11 @@
 				},
 				success( html ) {
 					jQuery( loadingImage ).replaceWith( html );
+
+					const status = document.querySelector( '.frm-payment-status' );
+					if ( status && href.includes( 'action=frm_trans_refund' ) && html.includes( 'frm_updated_message' ) ) {
+						status.textContent = frm_trans_vars.refunded;
+					}
 				}
 			} );
 		};

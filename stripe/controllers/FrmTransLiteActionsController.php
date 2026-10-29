@@ -43,7 +43,8 @@ class FrmTransLiteActionsController {
 			'frmtrans_admin',
 			'frm_trans_vars',
 			array(
-				'nonce' => wp_create_nonce( 'frm_trans_ajax' ),
+				'nonce'    => wp_create_nonce( 'frm_trans_ajax' ),
+				'refunded' => FrmTransLiteAppHelper::show_status( 'refunded' ),
 			)
 		);
 	}
