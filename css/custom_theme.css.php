@@ -734,6 +734,19 @@ legend.frm_hidden{
 	gap: 2%;
 }
 
+.with_frm_style.frm_inline_top .frm_submit.frm_flex,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit {
+	align-items: flex-start;
+	align-content: flex-start;
+	row-gap: 0;
+}
+
+.with_frm_style.frm_inline_top .frm_submit.frm_flex::before,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit::before {
+	flex-basis: 100%;
+	order: -2;
+}
+
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;
