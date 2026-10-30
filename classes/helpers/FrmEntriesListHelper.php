@@ -421,7 +421,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 				if ( $is_action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
-					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
+					$link_text = self::get_row_title_text( $val, $item );
+					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $link_text . '</a> ';
 					$r        .= $action_links;
 				} else {
 					$r .= $val;
@@ -432,6 +433,29 @@ class FrmEntriesListHelper extends FrmListHelper {
 			unset( $val );
 		}//end foreach
 		return $r . '</tr>';
+	}
+
+	/**
+	 * Get the content of the row title link, so the link is never empty for screen readers.
+	 *
+	 * A link nested inside the row title link (like a field or custom column value with its own link) is invalid markup,
+	 * and browsers close the row title link before it, leaving the row title link with no text.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed    $val  The column value.
+	 * @param stdClass $item The entry.
+	 *
+	 * @return string
+	 */
+	private static function get_row_title_text( $val, $item ) {
+		$val = preg_replace( '/<\/?a\b[^>]*>/i', '', (string) $val );
+
+		if ( '' === trim( wp_strip_all_tags( $val ) ) ) {
+			$val .= '<span class="screen-reader-text">' . esc_html( self::get_entry_label( $item ) ) . '</span>';
+		}
+
+		return $val;
 	}
 
 	/**
@@ -499,15 +523,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				}
 				break;
 			case 'post_id':
-				if ( $is_action_col ) {
-					// Same reasoning as the form_id case above: post_edit_link() builds its
-					// own nested <a>, which breaks the outer row-title link when this column
-					// is the action column.
-					$post = get_post( $item->post_id );
-					$val  = $post ? FrmAppHelper::truncate( $post->post_title, 50 ) : FrmFormsHelper::get_no_title_text();
-				} else {
-					$val = FrmAppHelper::post_edit_link( $item->post_id );
-				}
+				$val = $this->get_post_column_value( $item, $is_action_col );
 				break;
 			case 'user_id':
 				$user = get_userdata( $item->user_id );
@@ -517,9 +533,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = $item->parent_item_id;
 				break;
 			default:
-				// Note: $is_action_col isn't passed to these filters, so a custom column that
-				// builds its own <a> here can hit the same nested-anchor bug as form_id/post_id
-				// above if it ever becomes the row's action column.
+				// $is_action_col isn't passed to these filters. If a custom column value with its own <a>
+				// becomes the row's action column, single_row() strips the nested link in get_row_title_text().
 				$val = apply_filters( 'frm_entries_' . $col_name . '_column', false, compact( 'item' ) );
 
 				if ( $val === false ) {
@@ -538,6 +553,28 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}//end switch
 
 		return $val;
+	}
+
+	/**
+	 * Get the Post column value.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $item          The entry.
+	 * @param bool   $is_action_col Whether this column is the row's primary/action column.
+	 *
+	 * @return string
+	 */
+	private function get_post_column_value( $item, $is_action_col ) {
+		if ( ! $is_action_col ) {
+			return FrmAppHelper::post_edit_link( $item->post_id );
+		}
+
+		// Same reasoning as the form_id case in column_value(): post_edit_link() builds its
+		// own nested <a>, which breaks the outer row-title link when this column
+		// is the action column.
+		$post = get_post( $item->post_id );
+		return $post ? FrmAppHelper::truncate( $post->post_title, 50 ) : FrmFormsHelper::get_no_title_text();
 	}
 
 	/**

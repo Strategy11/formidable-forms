@@ -155,6 +155,56 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * The row title link must never contain a nested link or be left without text,
+	 * whichever column ends up as the row title column.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6662
+	 *
+	 * @covers FrmEntriesListHelper::single_row
+	 */
+	public function test_single_row_title_link_has_no_nested_link() {
+		FrmAppHelper::set_current_screen_and_hook_suffix();
+		wp_set_current_user( 1 );
+
+		$item = (object) array(
+			'id'      => 5,
+			'name'    => '',
+			'ip'      => '',
+			'form_id' => $this->factory->form->create( array( 'name' => 'My Form' ) ),
+		);
+
+		$row = $this->single_row( $item, array( '0_form_id' => 'Form' ) );
+		$this->assertMatchesRegularExpression( '/<a [^>]*class="row-title" >My Form<\/a>/', $row );
+		$this->assertSame( 1, substr_count( $row, '>My Form<' ) );
+
+		// A custom column value with its own link is reduced to its text.
+		$custom_column = static function () {
+			return '<a href="https://example.com">Custom value</a>';
+		};
+		add_filter( 'frm_entries_custom_column', $custom_column );
+		$row = $this->single_row( $item, array( '0_custom' => 'Custom' ) );
+		remove_filter( 'frm_entries_custom_column', $custom_column );
+		$this->assertStringContainsString( 'class="row-title" >Custom value</a>', $row );
+		$this->assertStringNotContainsString( 'example.com', $row );
+
+		// An empty value still gives the link an accessible name.
+		$row = $this->single_row( $item, array( '0_ip' => 'IP' ) );
+		$this->assertStringContainsString( 'class="row-title" ><span class="screen-reader-text">Entry 5</span></a>', $row );
+	}
+
+	/**
+	 * @param stdClass $item
+	 * @param array    $columns
+	 *
+	 * @return string
+	 */
+	private function single_row( $item, $columns ) {
+		$list_helper = new FrmEntriesListHelper( array( 'params' => array( 'form' => 0 ) ) );
+		$this->set_private_property( $list_helper, '_column_headers', array( $columns, array(), array(), key( $columns ) ) );
+		return $list_helper->single_row( $item );
+	}
+
+	/**
 	 * @param stdClass $item
 	 * @param string   $column_name
 	 * @param bool     $is_action_col
