@@ -71,6 +71,52 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	/**
+	 * A builder save larger than post_max_size redraws the builder with a message instead of silently dropping the changes.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6921
+	 *
+	 * @covers FrmFormsController::route
+	 *
+	 * @return void
+	 */
+	public function test_route_shows_post_max_size_error() {
+		$limit = wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) );
+
+		if ( $limit <= 0 ) {
+			$this->markTestSkipped( 'post_max_size is unlimited' );
+		}
+
+		$this->set_current_user_to_1();
+		$form_id = $this->factory->form->create();
+		$server  = $_SERVER;
+		$get     = $_GET;
+		$post    = $_POST;
+		$request = $_REQUEST;
+
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_SERVER['CONTENT_LENGTH'] = $limit + 1;
+		$_POST                     = array();
+		$_GET                      = array(
+			'page'       => 'formidable',
+			'frm_action' => 'edit',
+			'id'         => $form_id,
+		);
+		$_REQUEST = $_GET;
+
+		ob_start();
+		FrmFormsController::route();
+		$html = ob_get_clean();
+
+		$_SERVER  = $server;
+		$_GET     = $get;
+		$_POST    = $post;
+		$_REQUEST = $request;
+
+		$this->assertStringContainsString( 'Your changes were not saved', $html );
+		$this->assertStringContainsString( 'post_max_size', $html );
+	}
+
+	/**
 	 * @see FrmFormsController::update
 	 * without ajax
 	 */
