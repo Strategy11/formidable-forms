@@ -375,8 +375,9 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$dismiss_attrs = array(
-			'href'  => '#',
-			'class' => 'dismiss',
+			'href'       => '#',
+			'class'      => 'dismiss',
+			'aria-label' => __( 'Close', 'formidable' ),
 		);
 
 		$content_attrs = array();
