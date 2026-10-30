@@ -251,6 +251,17 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $values['content'], wp_kses_post( $values['content'] ) );
 	}
 
+	/**
+	 * @covers FrmAppHelper::sanitize_request
+	 */
+	public function test_sanitize_request_ignores_array_value() {
+		$values = array( 'frm_action' => array( 'x' ) );
+
+		FrmAppHelper::sanitize_request( array( 'frm_action' => 'sanitize_title' ), $values );
+
+		$this->assertSame( '', $values['frm_action'] );
+	}
+
 	public function test_kses() {
 		$start_value    = '<script></script><script></script>';
 		$safe_value     = 'Hello, <a href="/test">click here</a>';

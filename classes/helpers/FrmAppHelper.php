@@ -929,7 +929,7 @@ class FrmAppHelper {
 
 		foreach ( $temp_values as $k => $val ) {
 			if ( isset( $sanitize_method[ $k ] ) ) {
-				$values[ $k ] = call_user_func( $sanitize_method[ $k ], $val );
+				$values[ $k ] = is_array( $val ) ? '' : call_user_func( $sanitize_method[ $k ], $val );
 			}
 		}
 	}
