@@ -101,12 +101,11 @@ class test_FrmFormsController extends FrmUnitTest {
 			'frm_action' => 'edit',
 			'id'         => $form_id,
 		);
-		$_REQUEST = $_GET;
+		$_REQUEST                  = $_GET;
 
 		ob_start();
 		FrmFormsController::route();
-		$html = ob_get_clean();
-
+		$html     = ob_get_clean();
 		$_SERVER  = $server;
 		$_GET     = $get;
 		$_POST    = $post;
