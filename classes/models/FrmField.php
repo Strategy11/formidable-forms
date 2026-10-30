@@ -904,8 +904,9 @@ class FrmField {
 		delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
 		delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
 
-		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		if ( ! wp_using_ext_object_cache() ) {
+			self::delete_chunked_form_transients( $form_id );
+		}
 
 		FrmDb::cache_delete_group( 'frm_field' );
 
@@ -914,6 +915,35 @@ class FrmField {
 		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
 		}
+	}
+
+	/**
+	 * Delete the extra chunks saved by set_field_transient() for large forms.
+	 *
+	 * The LIKE prefixes are escaped so the underscores are matched literally.
+	 * Unescaped, the leading underscore is a wildcard and MySQL scans the whole options table.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function delete_chunked_form_transients( $form_id ) {
+		global $wpdb;
+
+		$base_name = 'frm_form_fields_' . $form_id;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				'DELETE FROM %i WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s',
+				$wpdb->options,
+				$wpdb->esc_like( '_transient_timeout_' . $base_name . 'ex' ) . '%',
+				$wpdb->esc_like( '_transient_' . $base_name . 'ex' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_' . $base_name . 'in' ) . '%',
+				$wpdb->esc_like( '_transient_' . $base_name . 'in' ) . '%'
+			)
+		);
 	}
 
 	/**

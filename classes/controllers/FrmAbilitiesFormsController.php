@@ -38,7 +38,7 @@ class FrmAbilitiesFormsController {
 			array(
 				'label'               => __( 'List Forms', 'formidable' ),
 				'description'         => __(
-					'Retrieve all Formidable forms. Returns id, form_key, name, and description. Use the form_key or id for create-entry, list-fields, or get-form.',
+					'Retrieve all Formidable forms. Returns id, form_key, name, and description. Use the form_key or id for list-entries, list-fields, or get-form.',
 					'formidable'
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
